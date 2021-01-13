@@ -1,7 +1,7 @@
 import Head from "next/head";
 import PropTypes from "prop-types";
-import Footer from "./footer";
-import Header from "./header";
+import Footer from "./Footer";
+import Header from "./Header";
 
 const Layout = ({ children }) => {
   return (
