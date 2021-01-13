@@ -3,10 +3,39 @@ import Head from "next/head";
 import Link from "next/link";
 import Layout from "../components/layout";
 import Leaderboard from "../components/Leaderboard";
-import useAuth from "../hooks/useAuth";
 import TokenGrid from "../components/TokenGrid";
+import Iron from "@hapi/iron";
+import CookieService from "../lib/cookie";
 
 export async function getServerSideProps(context) {
+  //Get user from encrypted cookie
+  const getUserFromContext = async (context) => {
+    let user = null;
+    let cookieDict;
+    try {
+      if (context.req.headers.cookie) {
+        cookieDict = context.req.headers.cookie
+          .split("; ")
+          .reduce((prev, current) => {
+            const [name, value] = current.split("=");
+            prev[name] = value;
+            return prev;
+          }, {});
+
+        if (cookieDict.api_token) {
+          user = await Iron.unseal(
+            CookieService.getAuthToken(cookieDict),
+            process.env.ENCRYPTION_SECRET,
+            Iron.defaults
+          );
+        }
+      }
+    } catch (error) {}
+
+    return user;
+  };
+  const user = await getUserFromContext(context);
+
   const res_featured = await fetch(`${process.env.BACKEND_URL}/v1/featured`);
   const data_featured = await res_featured.json();
 
@@ -15,25 +44,18 @@ export async function getServerSideProps(context) {
   );
   const data_leaderboard = await res_leaderboard.json();
 
-  /* do error handling
-  if (!data) {
-    return {
-      notFound: true,
-    };
-  }*/
-
   return {
     props: {
+      user: user,
       featured_items: data_featured.data,
       leaderboard: data_leaderboard.data,
     }, // will be passed to the page component as props
   };
 }
 
-export default function Home({ featured_items, leaderboard }) {
-  const { user } = useAuth();
+export default function Home({ featured_items, leaderboard, user }) {
   return (
-    <Layout>
+    <Layout user={user}>
       <Head>
         <title>Digital Art</title>
       </Head>

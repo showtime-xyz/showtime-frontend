@@ -1,9 +1,10 @@
 import React from "react";
 import Link from "next/link";
-import useAuth from "../hooks/useAuth";
+//import useAuth from "../hooks/useAuth";
 
-const Header = () => {
-  const { user } = useAuth();
+const Header = ({ user }) => {
+  //const { user } = useAuth();
+  //const user = null;
 
   return (
     <header className="showtime-bg-surface">
