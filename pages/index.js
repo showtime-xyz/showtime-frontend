@@ -1,10 +1,10 @@
 import Head from "next/head";
 //import styles from "../styles/Home.module.css";
 import Link from "next/link";
-import Layout from "../components/Layout";
-import Leaderboard from "../components/Leaderboard";
+import Layout from "../components/layout";
+import Leaderboard from "../components/leaderboard";
 import useAuth from "../hooks/useAuth";
-import TokenGrid from "../components/TokenGrid";
+import TokenGrid from "../components/tokenGrid";
 
 export async function getServerSideProps(context) {
   const res_featured = await fetch(`${process.env.BACKEND_URL}/v1/featured`);
