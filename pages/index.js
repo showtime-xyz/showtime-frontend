@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>Showtime</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -14,9 +14,7 @@ export default function Home() {
         <Link href="/login">
           <a>Login</a>
         </Link>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <h1 className={styles.title}>Welcome to Showtime!</h1>
 
         <p className={styles.description}>
           Get started by editing{" "}
