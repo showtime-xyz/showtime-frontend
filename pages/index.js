@@ -1,14 +1,16 @@
+import { useState, useEffect } from "react";
 import Head from "next/head";
-//import styles from "../styles/Home.module.css";
 import Link from "next/link";
+import _ from "lodash";
+import Iron from "@hapi/iron";
 import Layout from "../components/layout";
 import Leaderboard from "../components/Leaderboard";
 import TokenGrid from "../components/TokenGrid";
-import Iron from "@hapi/iron";
 import CookieService from "../lib/cookie";
+//import styles from "../styles/Home.module.css";
 
 export async function getServerSideProps(context) {
-  //Get user from encrypted cookie
+  // Get user
   const getUserFromContext = async (context) => {
     let user = null;
     let cookieDict;
@@ -36,24 +38,70 @@ export async function getServerSideProps(context) {
   };
   const user = await getUserFromContext(context);
 
-  const res_featured = await fetch(`${process.env.BACKEND_URL}/v1/featured`);
+  // Get mylikes
+  let mylikes = [];
+  if (user) {
+    const res_mylikes = await fetch(
+      `${process.env.BACKEND_URL}/v1/mylikes?address=${user.publicAddress}`
+    );
+    const data_mylikes = await res_mylikes.json();
+    mylikes = data_mylikes.data;
+  }
+
+  // Get featured
+  const res_featured = await fetch(
+    `${process.env.BACKEND_URL}/v1/featured?maxItemCount=9`
+  );
   const data_featured = await res_featured.json();
 
+  // Get leaderboard
   const res_leaderboard = await fetch(
-    `${process.env.BACKEND_URL}/v1/leaderboard`
+    `${process.env.BACKEND_URL}/v1/leaderboard?maxItemCount=9`
   );
   const data_leaderboard = await res_leaderboard.json();
 
   return {
     props: {
       user: user,
+      mylikes: mylikes,
       featured_items: data_featured.data,
       leaderboard: data_leaderboard.data,
     }, // will be passed to the page component as props
   };
 }
 
-export default function Home({ featured_items, leaderboard, user }) {
+export default function Home({ featured_items, leaderboard, user, mylikes }) {
+  const [myLikes, setMyLikes] = useState(mylikes);
+
+  /*
+  const [featuredLikedItems, setFeaturedLikedItems] = useState([]);
+  
+
+  // Augment content with my like status
+  // Doing client-side, so we can update the interactions
+  useEffect(() => {
+    var newFeaturedLikedItems = [];
+
+    if (featured_items.length > 0 && myLikes) {
+      _.forEach(featured_items, function (item) {
+        item.liked = false;
+
+        _.forEach(myLikes, function (like) {
+          if (
+            item.asset_contract.address === like.contract &&
+            item.token_id === like.token_id
+          ) {
+            item.liked = true;
+          }
+        });
+
+        newFeaturedLikedItems.push(item);
+      });
+      setFeaturedLikedItems(newFeaturedLikedItems);
+    }
+  }, [featured_items, myLikes]);
+  */
+
   return (
     <Layout user={user}>
       <Head>
@@ -63,7 +111,8 @@ export default function Home({ featured_items, leaderboard, user }) {
         className="showtime-title text-center mx-auto"
         style={{ maxWidth: 1000 }}
       >
-        Discover and showcase your favorite digital art
+        Discover and showcase your favorite digital art{" "}
+        {myLikes ? myLikes.length : null}
       </h1>
       <>
         <div className="flex justify-center">
@@ -78,7 +127,13 @@ export default function Home({ featured_items, leaderboard, user }) {
           )}
         </div>
       </>
-      <TokenGrid items={featured_items} />
+      <TokenGrid
+        hasHero
+        columnCount={2}
+        items={featured_items}
+        myLikes={myLikes}
+        setMyLikes={setMyLikes}
+      />
       <Leaderboard topCreators={leaderboard} />
 
       {/*<Link href="/login">
