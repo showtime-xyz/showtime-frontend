@@ -14,11 +14,7 @@ const TokenSquare = ({ item, handleLike, handleUnlike }) => {
         <div>
           <div className="float-right showtime-square-created">
             {item.last_sale && item.last_sale.payment_token
-              ? " Ξ " +
-                parseFloat(item.last_sale.payment_token.eth_price).toFixed(3) +
-                " ETH ($" +
-                parseInt(item.last_sale.payment_token.usd_price) +
-                ")"
+              ? " Ξ 123 ETH"
               : null}
           </div>
           <h2 className="showtime-square-created">

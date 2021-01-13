@@ -40,71 +40,91 @@ export async function getServerSideProps(context) {
 
   // Get mylikes
   let mylikes = [];
+  let name = null;
+  let img_url = null;
+  let owned_items = [];
+  let liked_items = [];
+
   if (user) {
     const res_mylikes = await fetch(
       `${process.env.BACKEND_URL}/v1/mylikes?address=${user.publicAddress}`
     );
     const data_mylikes = await res_mylikes.json();
     mylikes = data_mylikes.data.like_list;
+    name = data_mylikes.data.my_name;
+    img_url = data_mylikes.data.my_img_url;
+
+    // Get owned items
+    const res_owned = await fetch(
+      `${process.env.BACKEND_URL}/v1/owned?address=${user.publicAddress}&maxItemCount=9`
+    );
+    const data_owned = await res_owned.json();
+    owned_items = data_owned.data;
+
+    // Get liked items
+    const res_liked = await fetch(
+      `${process.env.BACKEND_URL}/v1/liked?address=${user.publicAddress}&maxItemCount=9`
+    );
+    const data_liked = await res_liked.json();
+    liked_items = data_liked.data;
   }
-
-  // Get featured
-  const res_featured = await fetch(
-    `${process.env.BACKEND_URL}/v1/featured?maxItemCount=9`
-  );
-  const data_featured = await res_featured.json();
-
-  // Get leaderboard
-  const res_leaderboard = await fetch(
-    `${process.env.BACKEND_URL}/v1/leaderboard?maxItemCount=9`
-  );
-  const data_leaderboard = await res_leaderboard.json();
 
   return {
     props: {
-      user: user,
-      mylikes: mylikes,
-      featured_items: data_featured.data,
-      leaderboard: data_leaderboard.data,
+      user,
+      mylikes,
+      name,
+      img_url,
+      owned_items,
+      liked_items,
     }, // will be passed to the page component as props
   };
 }
 
-export default function Home({ featured_items, leaderboard, user, mylikes }) {
+export default function Profile({
+  user,
+  name,
+  img_url,
+  mylikes,
+  owned_items,
+  liked_items,
+}) {
   const [myLikes, setMyLikes] = useState(mylikes);
 
   return (
     <Layout user={user}>
       <Head>
-        <title>Digital Art</title>
+        <title>Profile</title>
       </Head>
-      <h1
-        className="showtime-title text-center mx-auto"
-        style={{ maxWidth: 1000 }}
-      >
-        Discover and showcase your favorite digital art
-      </h1>
-      <>
-        <div className="flex justify-center">
-          {user ? (
-            <Link href="/profile">
-              <a className="showtime-pink-button-outline">Go to My Profile</a>
-            </Link>
-          ) : (
-            <button className="showtime-pink-button">
-              Continue with Email
-            </button>
-          )}
-        </div>
-      </>
+      <div className="mx-auto flex pt-20 pb-10 flex-col items-center">
+        <img
+          alt="artist"
+          className="showtime-avatar object-cover object-center "
+          src={img_url}
+        />
+        <div className="text-3xl mt-4">{name ? name : user.publicAddress}</div>
+      </div>
+      <div className="flex flex-col text-center w-full">
+        <div className="showtime-title text-center mx-auto">Owned Items</div>
+      </div>
+
       <TokenGrid
         hasHero
         columnCount={2}
-        items={featured_items}
+        items={owned_items}
+        myLikes={myLikes}
+        setMyLikes={setMyLikes}
+        allHeros={true}
+      />
+      <div className="flex flex-col text-center w-full">
+        <div className="showtime-title text-center mx-auto">Liked Items</div>
+      </div>
+      <TokenGrid
+        columnCount={2}
+        items={liked_items}
         myLikes={myLikes}
         setMyLikes={setMyLikes}
       />
-      <Leaderboard topCreators={leaderboard} />
 
       {/*<Link href="/login">
         <a>Login</a>
