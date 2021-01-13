@@ -56,7 +56,8 @@ export async function getServerSideProps(context) {
 
     // Get owned items
     const res_owned = await fetch(
-      `${process.env.BACKEND_URL}/v1/owned?address=${user.publicAddress}&maxItemCount=9`
+      //`${process.env.BACKEND_URL}/v1/owned?address=${user.publicAddress}&maxItemCount=9`
+      `${process.env.BACKEND_URL}/v1/owned?address=0x73113a65011acbad72730577defd95aaf268e22a&maxItemCount=9`
     );
     const data_owned = await res_owned.json();
     owned_items = data_owned.data;

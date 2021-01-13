@@ -7,7 +7,7 @@ const Header = ({ user }) => {
   //const user = null;
 
   return (
-    <header className="showtime-bg-surface">
+    <header className="">
       <div className="w-10/12 mx-auto flex flex-wrap py-5 flex-col md:flex-row items-center ">
         <Link href="/">
           <a className="flex items-center showtime-header-link mb-4 md:mb-0 uppercase">

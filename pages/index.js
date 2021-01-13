@@ -84,7 +84,7 @@ export default function Home({ featured_items, leaderboard, user, mylikes }) {
       >
         Discover and showcase your favorite digital art
       </h1>
-      <>
+      <div className="mt-10 mb-24">
         <div className="flex justify-center">
           {user ? (
             <Link href="/profile">
@@ -96,7 +96,7 @@ export default function Home({ featured_items, leaderboard, user, mylikes }) {
             </button>
           )}
         </div>
-      </>
+      </div>
       <TokenGrid
         hasHero
         columnCount={2}
@@ -104,7 +104,21 @@ export default function Home({ featured_items, leaderboard, user, mylikes }) {
         myLikes={myLikes}
         setMyLikes={setMyLikes}
       />
-      <Leaderboard topCreators={leaderboard} />
+      <div className="text-center pt-8 pb-16">
+        <Link href="/discover?collection=superrare">
+          <a className="showtime-purple-button-icon">
+            <span>Discover more artwork</span>
+            <img
+              style={{ paddingLeft: 6 }}
+              src={"/icons/arrow-right.svg"}
+              alt="arrow"
+            />
+          </a>
+        </Link>
+      </div>
+      <div className="mb-16">
+        <Leaderboard topCreators={leaderboard} />
+      </div>
 
       {/*<Link href="/login">
         <a>Login</a>
