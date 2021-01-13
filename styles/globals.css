@@ -1,9 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@400;700&family=Inter:wght@400;600&display=swap");
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background-color: #010101;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+main {
+  flex: 1; /* Or flex-grow: 1;*/
 }
 
 a {
@@ -13,4 +29,349 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+.showtime-bg-base {
+  background-color: #010101;
+}
+
+.showtime-bg-surface {
+  background-color: #222222;
+}
+
+.showtime-bg-overlay {
+  background-color: #343434;
+}
+
+.showtime-bg-pink {
+  background-color: #e45cff;
+}
+
+.showtime-text-pink {
+  color: #e45cff;
+}
+
+.showtime-bg-purple {
+  background-color: #7d5cff;
+}
+
+.showtime-text-purple {
+  color: #7d5cff;
+}
+
+.showtime-bg-green {
+  background-color: #35bb5b;
+}
+
+.showtime-text-green {
+  color: #35bb5b;
+}
+
+.showtime-box-shadow {
+  box-shadow: 0px -1px 10px rgba(0, 0, 0, 0.04),
+    0px 3px 10px rgba(0, 0, 0, 0.05), 0px 12px 16px rgba(0, 0, 0, 0.14);
+}
+
+.showtime-bg-white {
+  background-color: #fff;
+}
+
+.showtime-bg-white-90 {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.showtime-bg-white-40 {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.showtime-text-white {
+  color: #fff;
+}
+
+.showtime-text-white-90 {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.showtime-text-white-40 {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.showtime-title {
+  font-family: "Darker Grotesque", sans-serif;
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 83px;
+  padding-top: 32px;
+  padding-bottom: 32px;
+  text-transform: uppercase;
+}
+
+.showtime-hero-title {
+  font-family: "Darker Grotesque", sans-serif;
+  font-weight: 700;
+  font-size: 36px;
+}
+
+.showtime-square-title {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 36px;
+}
+
+.showtime-square-owned {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+}
+
+.showtime-square-created {
+  font-family: "Darker Grotesque", sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+}
+
+.showtime-pink-button {
+  background-color: #e45cff;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 25px;
+  padding-right: 25px;
+  border-radius: 7px;
+}
+
+.showtime-purple-button {
+  background-color: #7d5cff;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 25px;
+  padding-right: 25px;
+  border-radius: 7px;
+}
+
+.showtime-green-button {
+  background-color: #35bb5b;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 25px;
+  padding-right: 25px;
+  border-radius: 7px;
+}
+
+.showtime-white-button {
+  background-color: #fff;
+  color: #222222;
+  font-size: 16px;
+  font-weight: 600;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 25px;
+  padding-right: 25px;
+  border-radius: 7px;
+}
+
+.showtime-pink-button-outline {
+  border: 2px solid #e45cff;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 25px;
+  padding-right: 25px;
+  border-radius: 7px;
+  box-sizing: border-box;
+}
+
+.showtime-pink-button-outline:hover {
+  color: #e45cff;
+  border: 2px solid #e45cff;
+}
+
+.showtime-purple-button-outline {
+  border: 2px solid #7d5cff;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 25px;
+  padding-right: 25px;
+  border-radius: 7px;
+  box-sizing: border-box;
+}
+
+.showtime-green-button-outline {
+  border: 2px solid #35bb5b;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 25px;
+  padding-right: 25px;
+  border-radius: 7px;
+  box-sizing: border-box;
+}
+
+.showtime-white-button-outline {
+  border: 2px solid #fff;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 25px;
+  padding-right: 25px;
+  border-radius: 7px;
+  box-sizing: border-box;
+}
+
+.showtime-white-button-outline:hover {
+  color: #e45cff;
+  border: 2px solid #e45cff;
+}
+
+.showtime-pink-button-icon {
+  background-color: #e45cff;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 7px;
+  display: inline-flex;
+}
+
+.showtime-purple-button-icon {
+  background-color: #7d5cff;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 7px;
+  display: inline-flex;
+}
+
+.showtime-green-button-icon {
+  background-color: #35bb5b;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 7px;
+  display: inline-flex;
+}
+
+.showtime-white-button-icon {
+  background-color: #fff;
+  color: #222222;
+  font-size: 16px;
+  font-weight: 600;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 7px;
+  display: inline-flex;
+}
+
+.showtime-pink-button-outline-icon {
+  border: 2px solid #e45cff;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 7px;
+  box-sizing: border-box;
+  display: inline-flex;
+}
+
+.showtime-purple-button-outline-icon {
+  border: 2px solid #7d5cff;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 7px;
+  box-sizing: border-box;
+  display: inline-flex;
+}
+
+.showtime-green-button-outline-icon {
+  border: 2px solid #35bb5b;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 7px;
+  box-sizing: border-box;
+  display: inline-flex;
+}
+
+.showtime-white-button-outline-icon {
+  border: 2px solid #fff;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 7px;
+  box-sizing: border-box;
+  display: inline-flex;
+}
+
+.showtime-avatar {
+  height: 150px;
+  width: 150px;
+  border-radius: 75px;
+}
+
+.react-dropdown-select {
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  color: #222222;
+  border-radius: 7px !important;
+  background: white;
+}
+
+.react-dropdown-select-content {
+  padding-left: 12px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.showtime-header-link {
+  color: #fff;
+}
+
+.showtime-header-link:hover {
+  color: #e45cff;
 }
