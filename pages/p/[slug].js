@@ -10,6 +10,7 @@ import CookieService from "../../lib/cookie";
 //import styles from "../styles/Home.module.css";
 import { useRouter } from "next/router";
 import useAuth from "../../hooks/useAuth";
+import useMyLikes from "../../hooks/useMyLikes";
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
@@ -100,9 +101,28 @@ export default function Profile({
   //const { slug } = router.query;
 
   const { user } = useAuth();
+
   const [myLikes, setMyLikes] = useState([]);
+  const [myLikesLoaded, setMyLikesLoaded] = useState(false);
+  const { data } = useMyLikes(user, myLikesLoaded);
+  useEffect(() => {
+    if (data) {
+      setMyLikesLoaded(true);
+      setMyLikes(data.data.like_list);
+    }
+  }, [data]);
+
   const [ownedItems, setOwnedItems] = useState(owned_items);
 
+  /*
+  useEffect(() => {
+    if (my_likes && !myLikesLoaded) {
+      setMyLikes(my_likes);
+      setMyLikesLoaded(true);
+    }
+  }, [my_likes, myLikesLoaded]);*/
+
+  /*
   useEffect(() => {
     if (user) {
       const getMyLikes = async () => {
@@ -117,6 +137,7 @@ export default function Profile({
       setMyLikes([]);
     }
   }, [user]);
+  */
 
   useEffect(() => {
     const refetchOwnedItems = async () => {
