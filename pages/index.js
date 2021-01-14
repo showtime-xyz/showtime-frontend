@@ -2,14 +2,11 @@ import { useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import _ from "lodash";
-import Iron from "@hapi/iron";
 import Layout from "../components/layout";
 import Leaderboard from "../components/Leaderboard";
 import TokenGrid from "../components/TokenGrid";
-import CookieService from "../lib/cookie";
 import useAuth from "../hooks/useAuth";
 import useMyLikes from "../hooks/useMyLikes";
-
 //import styles from "../styles/Home.module.css";
 
 export async function getServerSideProps(context) {
@@ -35,11 +32,9 @@ export async function getServerSideProps(context) {
 
 export default function Home({ featured_items, leaderboard }) {
   const { user } = useAuth();
-  //const user = null;
 
   // Set up my likes
   const [myLikes, setMyLikes] = useState([]);
-
   const [myLikesLoaded, setMyLikesLoaded] = useState(false);
   const { data } = useMyLikes(user, myLikesLoaded);
   useEffect(() => {
@@ -52,7 +47,7 @@ export default function Home({ featured_items, leaderboard }) {
   return (
     <Layout>
       <Head>
-        <title>Digital Art</title>
+        <title>Showtime | Digital Art</title>
       </Head>
       <h1
         className="showtime-title text-center mx-auto"
@@ -81,7 +76,7 @@ export default function Home({ featured_items, leaderboard }) {
         setMyLikes={setMyLikes}
       />
       <div className="text-center pt-8 pb-16">
-        <Link href="/discover?collection=superrare">
+        <Link href="/c/superrare">
           <a className="showtime-purple-button-icon">
             <span>Discover more artwork</span>
             <img

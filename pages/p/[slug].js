@@ -3,43 +3,12 @@ import Head from "next/head";
 import _ from "lodash";
 import Layout from "../../components/layout";
 import TokenGrid from "../../components/TokenGrid";
-//import styles from "../styles/Home.module.css";
 import useAuth from "../../hooks/useAuth";
 import useMyLikes from "../../hooks/useMyLikes";
 import useOwned from "../../hooks/useOwned";
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
-
-  /*
-  // Get user
-  const getUserFromContext = async (context) => {
-    let user = null;
-    let cookieDict;
-    try {
-      if (context.req.headers.cookie) {
-        cookieDict = context.req.headers.cookie
-          .split("; ")
-          .reduce((prev, current) => {
-            const [name, value] = current.split("=");
-            prev[name] = value;
-            return prev;
-          }, {});
-
-        if (cookieDict.api_token) {
-          user = await Iron.unseal(
-            CookieService.getAuthToken(cookieDict),
-            process.env.ENCRYPTION_SECRET,
-            Iron.defaults
-          );
-        }
-      }
-    } catch (error) {}
-
-    return user;
-  };
-  const user = await getUserFromContext(context);
-  */
 
   // Get mylikes
   let name = null;
@@ -62,7 +31,7 @@ export async function getServerSideProps(context) {
 
   // Get owned items
   const res_owned = await fetch(
-    //`${process.env.BACKEND_URL}/v1/owned?address=${user.publicAddress}&maxItemCount=9`
+    //`${process.env.BACKEND_URL}/v1/owned?address=${slug}&maxItemCount=9&useCached=1`
     `${process.env.BACKEND_URL}/v1/owned?address=0x73113a65011acbad72730577defd95aaf268e22a&maxItemCount=9&useCached=1`
   );
   const data_owned = await res_owned.json();
@@ -109,14 +78,13 @@ export default function Profile({
     }
   }, [like_data]);
 
+  // Immediate try to refresh the owned items without the cache
   const [ownedItems, setOwnedItems] = useState(owned_items);
   const [ownedRefreshed, setOwnedRefreshed] = useState(false);
-
   const { data: owned_data } = useOwned(
     "0x73113a65011acbad72730577defd95aaf268e22a",
     ownedRefreshed
   );
-
   useEffect(() => {
     if (owned_data) {
       setOwnedRefreshed(true);
@@ -158,11 +126,6 @@ export default function Profile({
         myLikes={myLikes}
         setMyLikes={setMyLikes}
       />
-
-      {/*<Link href="/login">
-        <a>Login</a>
-      </Link>
-  <h1>Welcome to Showtime!</h1>*/}
     </Layout>
   );
 }

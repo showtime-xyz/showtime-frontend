@@ -14,7 +14,7 @@ const Header = () => {
           </a>
         </Link>
         <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
-          <Link href="/discover?collection=superrare">
+          <Link href="/c/superrare">
             <a className="showtime-header-link mr-5">Discover</a>
           </Link>
           <Link href="/#leaderboard">
