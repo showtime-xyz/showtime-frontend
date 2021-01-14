@@ -86,7 +86,7 @@ export default function Home({ featured_items, leaderboard }) {
           `${process.env.BACKEND_URL}/v1/mylikes?address=${user.publicAddress}`
         );
         const data_mylikes = await res_mylikes.json();
-        setMyLikes(data_mylikes.data.like_list);
+        setMyLikes(data_mylikes.data);
       };
       getMyLikes();
     } else {

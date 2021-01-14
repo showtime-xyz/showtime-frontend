@@ -108,7 +108,7 @@ export default function Profile({
   useEffect(() => {
     if (data) {
       setMyLikesLoaded(true);
-      setMyLikes(data.data.like_list);
+      setMyLikes(data.data);
     }
   }, [data]);
 
