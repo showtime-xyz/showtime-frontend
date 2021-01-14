@@ -23,7 +23,7 @@ export default function Login() {
       // We successfully logged in, our API
       // set authorization cookies and now we
       // can redirect to the dashboard!
-      router.push("/dashboard");
+      router.push("/");
     } else {
       /* handle errors */
     }
@@ -31,9 +31,12 @@ export default function Login() {
 
   return (
     <form onSubmit={handleSubmit}>
+      <h1>Temporary login form</h1>
       <label htmlFor="email">Email</label>
-      <input name="email" type="email" />
-      <button>Log in</button>
+      <br />
+      <input name="email" type="email" style={{ color: "black" }} />
+      <br />
+      <button className="showtime-pink-button">Log in</button>
     </form>
   );
 }

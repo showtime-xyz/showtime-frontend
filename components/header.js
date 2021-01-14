@@ -28,10 +28,8 @@ const Header = () => {
             </button>
           </Link>
         ) : (
-          <Link href="/#auth">
-            <button type="button" className="showtime-white-button">
-              Sign in / Sign up
-            </button>
+          <Link href="/login">
+            <a className="showtime-white-button">Sign in / Sign up</a>
           </Link>
         )}
       </div>

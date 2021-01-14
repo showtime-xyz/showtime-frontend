@@ -1,16 +1,12 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
-import Link from "next/link";
 import _ from "lodash";
-import Iron from "@hapi/iron";
 import Layout from "../../components/layout";
-import Leaderboard from "../../components/Leaderboard";
 import TokenGrid from "../../components/TokenGrid";
-import CookieService from "../../lib/cookie";
 //import styles from "../styles/Home.module.css";
-import { useRouter } from "next/router";
 import useAuth from "../../hooks/useAuth";
 import useMyLikes from "../../hooks/useMyLikes";
+import useOwned from "../../hooks/useOwned";
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
@@ -93,7 +89,7 @@ export async function getServerSideProps(context) {
 export default function Profile({
   name,
   img_url,
-  public_address,
+  wallet_addresses,
   owned_items,
   liked_items,
 }) {
@@ -105,56 +101,31 @@ export default function Profile({
   // Set up my likes
   const [myLikes, setMyLikes] = useState([]);
   const [myLikesLoaded, setMyLikesLoaded] = useState(false);
-  const { data } = useMyLikes(user, myLikesLoaded);
+  const { data: like_data } = useMyLikes(user, myLikesLoaded);
   useEffect(() => {
-    if (data) {
+    if (like_data) {
       setMyLikesLoaded(true);
-      setMyLikes(data.data);
+      setMyLikes(like_data.data);
     }
-  }, [data]);
+  }, [like_data]);
 
   const [ownedItems, setOwnedItems] = useState(owned_items);
+  const [ownedRefreshed, setOwnedRefreshed] = useState(false);
 
-  /*
+  const { data: owned_data } = useOwned(
+    "0x73113a65011acbad72730577defd95aaf268e22a",
+    ownedRefreshed
+  );
+
   useEffect(() => {
-    if (my_likes && !myLikesLoaded) {
-      setMyLikes(my_likes);
-      setMyLikesLoaded(true);
+    if (owned_data) {
+      setOwnedRefreshed(true);
+      setOwnedItems(owned_data.data);
     }
-  }, [my_likes, myLikesLoaded]);*/
-
-  /*
-  useEffect(() => {
-    if (user) {
-      const getMyLikes = async () => {
-        const res_mylikes = await fetch(
-          `${process.env.BACKEND_URL}/v1/mylikes?address=${user.publicAddress}`
-        );
-        const data_mylikes = await res_mylikes.json();
-        setMyLikes(data_mylikes.data.like_list);
-      };
-      getMyLikes();
-    } else {
-      setMyLikes([]);
-    }
-  }, [user]);
-  */
-
-  useEffect(() => {
-    const refetchOwnedItems = async () => {
-      // Get owned items
-      const res_owned = await fetch(
-        `${process.env.BACKEND_URL}/v1/owned?address=0x73113a65011acbad72730577defd95aaf268e22a&maxItemCount=9`
-      );
-      const data_owned = await res_owned.json();
-      owned_items = data_owned.data;
-      setOwnedItems(owned_items);
-    };
-    refetchOwnedItems();
-  }, []);
+  }, [owned_data]);
 
   return (
-    <Layout user={user}>
+    <Layout>
       <Head>
         <title>Profile</title>
       </Head>
@@ -164,7 +135,7 @@ export default function Profile({
           className="showtime-avatar object-cover object-center "
           src={img_url}
         />
-        <div className="text-3xl mt-4">{name ? name : public_address}</div>
+        <div className="text-3xl mt-4">{name ? name : wallet_addresses[0]}</div>
       </div>
       <div className="flex flex-col text-center w-full">
         <div className="showtime-title text-center mx-auto">Owned Items</div>

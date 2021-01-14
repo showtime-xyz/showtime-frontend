@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Footer from "./footer";
 import Header from "./header";
 
-const Layout = ({ children, user }) => {
+const Layout = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen">
       <Head>
@@ -15,7 +15,7 @@ const Layout = ({ children, user }) => {
         <meta name="keywords" content="showtime, ethereum, token, nft" />
       </Head>
 
-      <Header user={user} />
+      <Header />
 
       <main className="w-10/12 mx-auto">{children}</main>
 

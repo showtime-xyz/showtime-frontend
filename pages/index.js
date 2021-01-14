@@ -13,47 +13,6 @@ import useMyLikes from "../hooks/useMyLikes";
 //import styles from "../styles/Home.module.css";
 
 export async function getServerSideProps(context) {
-  // Get user
-
-  /*
-  const getUserFromContext = async (context) => {
-    let user = null;
-    let cookieDict;
-    try {
-      if (context.req.headers.cookie) {
-        cookieDict = context.req.headers.cookie
-          .split("; ")
-          .reduce((prev, current) => {
-            const [name, value] = current.split("=");
-            prev[name] = value;
-            return prev;
-          }, {});
-
-        if (cookieDict.api_token) {
-          user = await Iron.unseal(
-            CookieService.getAuthToken(cookieDict),
-            process.env.ENCRYPTION_SECRET,
-            Iron.defaults
-          );
-        }
-      }
-    } catch (error) {}
-
-    return user;
-  };
-  const user = await getUserFromContext(context);
-
-  // Get mylikes
-  let mylikes = [];
-  if (user) {
-    const res_mylikes = await fetch(
-      `${process.env.BACKEND_URL}/v1/mylikes?address=${user.publicAddress}`
-    );
-    const data_mylikes = await res_mylikes.json();
-    mylikes = data_mylikes.data.like_list;
-  }
-  */
-
   // Get featured
   const res_featured = await fetch(
     `${process.env.BACKEND_URL}/v1/featured?maxItemCount=9`
@@ -76,9 +35,11 @@ export async function getServerSideProps(context) {
 
 export default function Home({ featured_items, leaderboard }) {
   const { user } = useAuth();
+  //const user = null;
 
   // Set up my likes
   const [myLikes, setMyLikes] = useState([]);
+
   const [myLikesLoaded, setMyLikesLoaded] = useState(false);
   const { data } = useMyLikes(user, myLikesLoaded);
   useEffect(() => {
@@ -88,29 +49,8 @@ export default function Home({ featured_items, leaderboard }) {
     }
   }, [data]);
 
-  /*
-  const [myLikes, setMyLikes] = useState([]);
-
-  useEffect(() => {
-    if (user) {
-      console.log(
-        `${process.env.BACKEND_URL}/v1/mylikes?address=${user.publicAddress}`
-      );
-      const getMyLikes = async () => {
-        const res_mylikes = await fetch(
-          `${process.env.BACKEND_URL}/v1/mylikes?address=${user.publicAddress}`
-        );
-        const data_mylikes = await res_mylikes.json();
-        setMyLikes(data_mylikes.data);
-      };
-      getMyLikes();
-    } else {
-      setMyLikes([]);
-    }
-  }, [user]);*/
-
   return (
-    <Layout user={user}>
+    <Layout>
       <Head>
         <title>Digital Art</title>
       </Head>
@@ -127,9 +67,9 @@ export default function Home({ featured_items, leaderboard }) {
               <a className="showtime-pink-button-outline">Go to My Profile</a>
             </Link>
           ) : (
-            <button className="showtime-pink-button">
-              Continue with Email
-            </button>
+            <Link href="/login">
+              <a className="showtime-pink-button">Continue with Email</a>
+            </Link>
           )}
         </div>
       </div>
@@ -155,11 +95,6 @@ export default function Home({ featured_items, leaderboard }) {
       <div className="mb-16">
         <Leaderboard topCreators={leaderboard} />
       </div>
-
-      {/*<Link href="/login">
-        <a>Login</a>
-      </Link>
-  <h1>Welcome to Showtime!</h1>*/}
     </Layout>
   );
 }

@@ -11,11 +11,8 @@ export default async (req, res) => {
     );
   } catch (error) {
     res.status(401).end();
+    return { props: {} };
   }
-
-  // now we have access to the data inside of user
-  // and we could make database calls or just send back what we have
-  // in the token.
 
   res.json(user);
 };
