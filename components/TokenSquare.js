@@ -1,6 +1,7 @@
 import React from "react";
 import LikeButton from "../components/LikeButton";
 import ShareButton from "../components/ShareButton";
+import Link from "next/link";
 
 const TokenSquare = ({ item, handleLike, handleUnlike }) => {
   return (
@@ -18,11 +19,17 @@ const TokenSquare = ({ item, handleLike, handleUnlike }) => {
               : null}
           </div>
           <h2 className="showtime-square-created">
-            {item.creator
-              ? item.creator.user && item.creator.user.username
-                ? item.creator.user.username
-                : "[Unnamed]"
-              : "WHAT"}
+            {item.creator ? (
+              <Link href={`/p/${item.creator.address}`}>
+                <a className="showtime-link">
+                  {item.creator.user && item.creator.user.username
+                    ? item.creator.user.username
+                    : "[Unnamed]"}
+                </a>
+              </Link>
+            ) : (
+              "\u00A0"
+            )}
           </h2>
         </div>
         <div>
@@ -54,7 +61,14 @@ const TokenSquare = ({ item, handleLike, handleUnlike }) => {
           <h1 className="showtime-square-title">{item.name}</h1>
 
           <p className="showtime-square-owned">
-            Owned by {item.owner.user ? item.owner.user.username : "[Unnamed]"}
+            Owned by{" "}
+            {item.owner ? (
+              <Link href={`/p/${item.owner.address}`}>
+                <a className="showtime-link">
+                  {item.owner.user ? item.owner.user.username : "[Unnamed]"}
+                </a>
+              </Link>
+            ) : null}
           </p>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import LikeButton from "../components/LikeButton";
 import ShareButton from "../components/ShareButton";
+import Link from "next/link";
 
 const TokenHero = ({ item, handleLike, handleUnlike }) => {
   return (
@@ -52,11 +53,20 @@ const TokenHero = ({ item, handleLike, handleUnlike }) => {
 
         <div className="showtime-hero-title">
           {item.name}{" "}
-          {item.creator
-            ? item.creator.user && item.creator.user.username
-              ? ` by ${item.creator.user.username}`
-              : "by [Unnamed]"
-            : null}
+          {item.creator ? (
+            <>
+              {" by "}
+              <Link href={`/p/${item.creator.address}`}>
+                <a className="showtime-link">
+                  {item.creator.user && item.creator.user.username
+                    ? item.creator.user.username
+                    : "[Unnamed]"}
+                </a>
+              </Link>
+            </>
+          ) : (
+            "\u00A0"
+          )}
         </div>
 
         {/*<p className="leading-relaxed mb-3 text-gray-200">

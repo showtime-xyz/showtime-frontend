@@ -1,10 +1,9 @@
 import React from "react";
 import Link from "next/link";
-//import useAuth from "../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 
-const Header = ({ user }) => {
-  //const { user } = useAuth();
-  //const user = null;
+const Header = () => {
+  const { user } = useAuth();
 
   return (
     <header className="">
@@ -23,7 +22,7 @@ const Header = ({ user }) => {
           </Link>
         </nav>
         {user ? (
-          <Link href="/profile">
+          <Link href={`/p/${user.publicAddress}`}>
             <button type="button" className="showtime-white-button-outline">
               Profile
             </button>
