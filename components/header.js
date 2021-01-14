@@ -10,6 +10,11 @@ const Header = () => {
       <div className="w-10/12 mx-auto flex flex-wrap py-5 flex-col md:flex-row items-center ">
         <Link href="/">
           <a className="flex items-center showtime-header-link mb-4 md:mb-0 uppercase">
+            <img
+              src="/logo_sm.jpg"
+              style={{ height: 48, width: 48 }}
+              className="mr-4"
+            />
             Showtime
           </a>
         </Link>
