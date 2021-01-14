@@ -8,6 +8,8 @@ import Leaderboard from "../components/Leaderboard";
 import TokenGrid from "../components/TokenGrid";
 import CookieService from "../lib/cookie";
 import useAuth from "../hooks/useAuth";
+import useMyLikes from "../hooks/useMyLikes";
+
 //import styles from "../styles/Home.module.css";
 
 export async function getServerSideProps(context) {
@@ -74,6 +76,19 @@ export async function getServerSideProps(context) {
 
 export default function Home({ featured_items, leaderboard }) {
   const { user } = useAuth();
+
+  // Set up my likes
+  const [myLikes, setMyLikes] = useState([]);
+  const [myLikesLoaded, setMyLikesLoaded] = useState(false);
+  const { data } = useMyLikes(user, myLikesLoaded);
+  useEffect(() => {
+    if (data) {
+      setMyLikesLoaded(true);
+      setMyLikes(data.data);
+    }
+  }, [data]);
+
+  /*
   const [myLikes, setMyLikes] = useState([]);
 
   useEffect(() => {
@@ -92,7 +107,7 @@ export default function Home({ featured_items, leaderboard }) {
     } else {
       setMyLikes([]);
     }
-  }, [user]);
+  }, [user]);*/
 
   return (
     <Layout user={user}>

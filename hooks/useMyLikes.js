@@ -15,7 +15,7 @@ export default function useMyLikes(user, myLikesLoaded) {
       : null,
     fetcher
   );
-*/
+  */
 
   const { data, error, mutate } = useSWR(
     user && !myLikesLoaded ? "/api/mylikes" : null,

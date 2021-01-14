@@ -102,6 +102,7 @@ export default function Profile({
 
   const { user } = useAuth();
 
+  // Set up my likes
   const [myLikes, setMyLikes] = useState([]);
   const [myLikesLoaded, setMyLikesLoaded] = useState(false);
   const { data } = useMyLikes(user, myLikesLoaded);
