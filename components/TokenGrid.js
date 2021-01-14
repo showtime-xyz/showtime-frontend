@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Masonry from "react-masonry-css";
 import TokenHero from "../components/TokenHero";
 import TokenSquare from "../components/TokenSquare";
+import useAuth from "../hooks/useAuth";
+import axios from "axios";
 
 const TokenGrid = ({
   items,
@@ -13,6 +15,8 @@ const TokenGrid = ({
 }) => {
   const [itemsList, setItemsList] = useState(items);
   const [itemsLikedList, setItemsLikedList] = useState([]);
+
+  const { user } = useAuth();
 
   const handleLike = async ({
     contract,
@@ -43,7 +47,14 @@ const TokenGrid = ({
     });
     setItemsList(newItemsList);
 
-    // TBD: Post changes to the API
+    // Post changes to the API
+    await axios.post(
+      `${process.env.BACKEND_URL}/v1/token/${contract}/${token_id}`,
+      {
+        action: "like",
+        user_address: user.publicAddress,
+      }
+    );
   };
 
   const handleUnlike = async ({ contract, token_id }) => {
@@ -66,7 +77,14 @@ const TokenGrid = ({
     });
     setItemsList(newItemsList);
 
-    // TBD: Post changes to the API
+    // Post changes to the API
+    await axios.post(
+      `${process.env.BACKEND_URL}/v1/token/${contract}/${token_id}`,
+      {
+        action: "unlike",
+        user_address: user.publicAddress,
+      }
+    );
   };
 
   // Augment content with my like status

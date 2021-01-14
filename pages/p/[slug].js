@@ -31,8 +31,7 @@ export async function getServerSideProps(context) {
 
   // Get owned items
   const res_owned = await fetch(
-    //`${process.env.BACKEND_URL}/v1/owned?address=${slug}&maxItemCount=9&useCached=1`
-    `${process.env.BACKEND_URL}/v1/owned?address=0x73113a65011acbad72730577defd95aaf268e22a&maxItemCount=9&useCached=1`
+    `${process.env.BACKEND_URL}/v1/owned?address=${slug}&maxItemCount=9&useCached=1`
   );
   const data_owned = await res_owned.json();
   owned_items = data_owned.data;
@@ -51,6 +50,7 @@ export async function getServerSideProps(context) {
       wallet_addresses,
       owned_items,
       liked_items,
+      slug,
     }, // will be passed to the page component as props
   };
 }
@@ -61,6 +61,7 @@ export default function Profile({
   wallet_addresses,
   owned_items,
   liked_items,
+  slug,
 }) {
   //const router = useRouter();
   //const { slug } = router.query;
@@ -81,10 +82,7 @@ export default function Profile({
   // Immediate try to refresh the owned items without the cache
   const [ownedItems, setOwnedItems] = useState(owned_items);
   const [ownedRefreshed, setOwnedRefreshed] = useState(false);
-  const { data: owned_data } = useOwned(
-    "0x73113a65011acbad72730577defd95aaf268e22a",
-    ownedRefreshed
-  );
+  const { data: owned_data } = useOwned(slug, ownedRefreshed);
   useEffect(() => {
     if (owned_data) {
       setOwnedRefreshed(true);
@@ -95,7 +93,7 @@ export default function Profile({
   return (
     <Layout>
       <Head>
-        <title>Profile</title>
+        <title>Profile | {name ? name : "[Unnamed]"}</title>
       </Head>
       <div className="mx-auto flex pt-20 pb-10 flex-col items-center">
         <img

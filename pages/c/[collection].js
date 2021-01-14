@@ -13,7 +13,7 @@ export async function getServerSideProps(context) {
 
   // Get collection items
   const res_collection_items = await fetch(
-    `${process.env.BACKEND_URL}/v1/collection?collection=${collection}`
+    `${process.env.BACKEND_URL}/v1/collection?collection=${collection}&maxItemCount=20`
   );
   const data_collection_items = await res_collection_items.json();
   const collection_items = data_collection_items.data;
