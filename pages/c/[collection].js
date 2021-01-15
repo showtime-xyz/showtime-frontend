@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
-import _, { set } from "lodash";
+import _ from "lodash";
 import Layout from "../../components/layout";
 import TokenGrid from "../../components/TokenGrid";
 import useAuth from "../../hooks/useAuth";
 import useMyLikes from "../../hooks/useMyLikes";
 import { useRouter } from "next/router";
 import Select from "react-dropdown-select";
-import backend from "../../api/backend";
+import backend from "../../lib/backend";
 
 export async function getServerSideProps(context) {
   const { collection } = context.query;

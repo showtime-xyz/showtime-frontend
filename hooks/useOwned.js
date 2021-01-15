@@ -7,7 +7,7 @@ function fetcher(route) {
     .then((user) => user || null);
 }
 
-export default function useMyLikes(address, ownedRefreshed) {
+export default function useOwned(address, ownedRefreshed) {
   const { data, error, mutate } = useSWR(
     !ownedRefreshed ? `/api/owned/${address}` : null,
     fetcher

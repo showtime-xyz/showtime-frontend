@@ -6,7 +6,7 @@ import TokenGrid from "../../components/TokenGrid";
 import useAuth from "../../hooks/useAuth";
 import useMyLikes from "../../hooks/useMyLikes";
 import useOwned from "../../hooks/useOwned";
-import backend from "../../api/backend";
+import backend from "../../lib/backend";
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;

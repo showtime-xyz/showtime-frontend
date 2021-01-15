@@ -8,7 +8,7 @@ import TokenGrid from "../components/TokenGrid";
 import useAuth from "../hooks/useAuth";
 import useMyLikes from "../hooks/useMyLikes";
 //import styles from "../styles/Home.module.css";
-import backend from "../api/backend";
+import backend from "../lib/backend";
 
 export async function getServerSideProps(context) {
   // Get featured
