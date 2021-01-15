@@ -20,6 +20,7 @@ export default async (req, res) => {
         headers: {
           UserAddress: user.publicAddress,
           "Content-Type": "application/json",
+          "X-API-Key": process.env.SHOWTIME_FRONTEND_API_KEY,
         },
         body: JSON.stringify({
           action: "like",

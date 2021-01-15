@@ -6,42 +6,30 @@ import TokenGrid from "../../components/TokenGrid";
 import useAuth from "../../hooks/useAuth";
 import useMyLikes from "../../hooks/useMyLikes";
 import useOwned from "../../hooks/useOwned";
+import backend from "../../lib/backend";
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
 
-  // Get mylikes
-  let name = null;
-  let img_url = null;
-  let wallet_addresses = [];
-
-  let owned_items = [];
-  let liked_items = [];
-
   // Get profile metadata
-  const res_profile = await fetch(
-    `${process.env.BACKEND_URL}/v1/profile?address=${slug}`
-  );
-  const data_profile = await res_profile.json();
+  const response_profile = await backend.get(`/v1/profile?address=${slug}`);
+  const data_profile = response_profile.data.data;
 
-  const profile_metadata = data_profile.data;
-  name = profile_metadata.name;
-  img_url = profile_metadata.img_url;
-  wallet_addresses = profile_metadata.wallet_addresses;
+  const name = data_profile.name;
+  const img_url = data_profile.img_url;
+  const wallet_addresses = data_profile.wallet_addresses;
 
   // Get owned items
-  const res_owned = await fetch(
-    `${process.env.BACKEND_URL}/v1/owned?address=${slug}&maxItemCount=9&useCached=1`
+  const response_owned = await backend.get(
+    `/v1/owned?address=${slug}&maxItemCount=9&useCached=1`
   );
-  const data_owned = await res_owned.json();
-  owned_items = data_owned.data;
+  const owned_items = response_owned.data.data;
 
   // Get liked items
-  const res_liked = await fetch(
-    `${process.env.BACKEND_URL}/v1/liked?address=${slug}&maxItemCount=9`
+  const response_liked = await backend.get(
+    `/v1/liked?address=${slug}&maxItemCount=9`
   );
-  const data_liked = await res_liked.json();
-  liked_items = data_liked.data;
+  const liked_items = response_liked.data.data;
 
   return {
     props: {
