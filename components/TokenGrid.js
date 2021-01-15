@@ -4,6 +4,14 @@ import TokenHero from "../components/TokenHero";
 import TokenSquare from "../components/TokenSquare";
 import useAuth from "../hooks/useAuth";
 import axios from "axios";
+import useSWR from "swr";
+
+function fetcher(route) {
+  /* our token cookie gets sent with this request */
+  return fetch(route)
+    .then((r) => r.ok && r.json())
+    .then((user) => user || null);
+}
 
 const TokenGrid = ({
   items,
@@ -48,13 +56,27 @@ const TokenGrid = ({
     setItemsList(newItemsList);
 
     // Post changes to the API
+
+    /*
     await axios.post(
       `${process.env.BACKEND_URL}/v1/token/${contract}/${token_id}`,
       {
         action: "like",
         user_address: user.publicAddress,
       }
-    );
+    );*/
+
+    /*
+    const { data: user, error, mutate } = useSWR(
+      `/api/like/${contract}_${token_id}`,
+      fetcher
+    );*/
+    //await axios.post(`/api/like/${contract}_${token_id}`);
+
+    // Post changes to the API
+    await fetch(`/api/like/${contract}_${token_id}`, {
+      method: "post",
+    });
   };
 
   const handleUnlike = async ({ contract, token_id }) => {
@@ -78,13 +100,18 @@ const TokenGrid = ({
     setItemsList(newItemsList);
 
     // Post changes to the API
+    /*
     await axios.post(
       `${process.env.BACKEND_URL}/v1/token/${contract}/${token_id}`,
       {
         action: "unlike",
         user_address: user.publicAddress,
       }
-    );
+    );*/
+    // Post changes to the API
+    await fetch(`/api/unlike/${contract}_${token_id}`, {
+      method: "post",
+    });
   };
 
   // Augment content with my like status
