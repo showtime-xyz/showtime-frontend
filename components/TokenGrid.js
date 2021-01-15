@@ -73,6 +73,7 @@ const TokenGrid = ({
     );*/
     //await axios.post(`/api/like/${contract}_${token_id}`);
 
+    // Post changes to the API
     await fetch(`/api/like/${contract}_${token_id}`, {
       method: "post",
     });
@@ -107,6 +108,10 @@ const TokenGrid = ({
         user_address: user.publicAddress,
       }
     );*/
+    // Post changes to the API
+    await fetch(`/api/unlike/${contract}_${token_id}`, {
+      method: "post",
+    });
   };
 
   // Augment content with my like status
