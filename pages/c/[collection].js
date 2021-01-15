@@ -7,23 +7,20 @@ import useAuth from "../../hooks/useAuth";
 import useMyLikes from "../../hooks/useMyLikes";
 import { useRouter } from "next/router";
 import Select from "react-dropdown-select";
+import backend from "../../api/backend";
 
 export async function getServerSideProps(context) {
   const { collection } = context.query;
 
   // Get collection items
-  const res_collection_items = await fetch(
-    `${process.env.BACKEND_URL}/v1/collection?collection=${collection}&maxItemCount=20`
+  const response_collection_items = await backend.get(
+    `/v1/collection?collection=${collection}&maxItemCount=40`
   );
-  const data_collection_items = await res_collection_items.json();
-  const collection_items = data_collection_items.data;
+  const collection_items = response_collection_items.data.data;
 
   // Get list of collections
-  const res_collection_list = await fetch(
-    `${process.env.BACKEND_URL}/v1/collection_list`
-  );
-  const data_collection_list = await res_collection_list.json();
-  const collection_list = data_collection_list.data;
+  const response_collection_list = await backend.get(`/v1/collection_list`);
+  const collection_list = response_collection_list.data.data;
 
   return {
     props: {

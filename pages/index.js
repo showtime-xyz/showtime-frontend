@@ -8,24 +8,23 @@ import TokenGrid from "../components/TokenGrid";
 import useAuth from "../hooks/useAuth";
 import useMyLikes from "../hooks/useMyLikes";
 //import styles from "../styles/Home.module.css";
+import backend from "../api/backend";
 
 export async function getServerSideProps(context) {
   // Get featured
-  const res_featured = await fetch(
-    `${process.env.BACKEND_URL}/v1/featured?maxItemCount=9`
-  );
-  const data_featured = await res_featured.json();
+  const response_featured = await backend.get("/v1/featured?maxItemCount=9");
+  const data_featured = response_featured.data.data;
 
   // Get leaderboard
-  const res_leaderboard = await fetch(
-    `${process.env.BACKEND_URL}/v1/leaderboard?maxItemCount=9`
+  const response_leaderboard = await backend.get(
+    "/v1/leaderboard?maxItemCount=9"
   );
-  const data_leaderboard = await res_leaderboard.json();
+  const data_leaderboard = response_leaderboard.data.data;
 
   return {
     props: {
-      featured_items: data_featured.data,
-      leaderboard: data_leaderboard.data,
+      featured_items: data_featured,
+      leaderboard: data_leaderboard,
     }, // will be passed to the page component as props
   };
 }

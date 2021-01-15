@@ -13,7 +13,12 @@ export default async (req, res) => {
     );
 
     const res_mylikes = await fetch(
-      `${process.env.BACKEND_URL}/v1/mylikes?address=${user.publicAddress}`
+      `${process.env.BACKEND_URL}/v1/mylikes?address=${user.publicAddress}`,
+      {
+        headers: {
+          "X-API-Key": process.env.SHOWTIME_FRONTEND_API_KEY,
+        },
+      }
     );
     data_mylikes = await res_mylikes.json();
   } catch {}
