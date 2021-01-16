@@ -7,6 +7,7 @@ import useAuth from "../../hooks/useAuth";
 import useMyLikes from "../../hooks/useMyLikes";
 import useOwned from "../../hooks/useOwned";
 import backend from "../../lib/backend";
+import Link from "next/link";
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
@@ -20,6 +21,7 @@ export async function getServerSideProps(context) {
   const wallet_addresses = data_profile.wallet_addresses;
 
   // Get owned items
+
   const response_owned = await backend.get(
     `/v1/owned?address=${slug}&maxItemCount=9&useCached=1`
   );
@@ -55,6 +57,15 @@ export default function Profile({
   //const { slug } = router.query;
 
   const { user } = useAuth();
+  const [isMyProfile, setIsMyProfile] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      if (wallet_addresses.includes(user.publicAddress)) {
+        setIsMyProfile(true);
+      }
+    }
+  }, [user, wallet_addresses]);
 
   // Set up my likes
   const [myLikes, setMyLikes] = useState([]);
@@ -94,8 +105,17 @@ export default function Profile({
       <div className="flex flex-col text-center w-full">
         <div className="showtime-title text-center mx-auto">Owned Items</div>
       </div>
-
+      {!owned_data &&
+      typeof ownedItems !== "undefined" &&
+      ownedItems.length === 0
+        ? "Loading..."
+        : owned_data && ownedItems.length === 0
+        ? `We couldn't find any items owned by ${
+            isMyProfile ? "you" : "this person"
+          }.`
+        : null}
       <TokenGrid
+        key={owned_data ? 1 : 0}
         hasHero
         columnCount={2}
         items={ownedItems}
@@ -106,7 +126,19 @@ export default function Profile({
       <div className="flex flex-col text-center w-full">
         <div className="showtime-title text-center mx-auto">Liked Items</div>
       </div>
+      {liked_items ? null : (
+        <p>
+          {isMyProfile ? "You haven't" : "This person hasn't"} liked any items
+          yet.{" "}
+          {isMyProfile ? (
+            <Link href="/c/superrare">
+              <a className="showtime-link">Go explore!</a>
+            </Link>
+          ) : null}
+        </p>
+      )}
       <TokenGrid
+        key={owned_data ? 11 : 10}
         columnCount={2}
         items={liked_items}
         myLikes={myLikes}
