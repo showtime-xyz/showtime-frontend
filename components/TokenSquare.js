@@ -20,7 +20,7 @@ const TokenSquare = ({ item, handleLike, handleUnlike }) => {
           </div>
           <h2 className="showtime-square-created">
             {item.creator ? (
-              <Link href={`/p/${item.creator.address}`}>
+              <Link href="/p/[slug]" as={`/p/${item.creator.address}`}>
                 <a className="showtime-link">
                   {item.creator.user && item.creator.user.username
                     ? item.creator.user.username
@@ -63,7 +63,7 @@ const TokenSquare = ({ item, handleLike, handleUnlike }) => {
           <p className="showtime-square-owned">
             Owned by{" "}
             {item.owner ? (
-              <Link href={`/p/${item.owner.address}`}>
+              <Link href="/p/[slug]" as={`/p/${item.owner.address}`}>
                 <a className="showtime-link">
                   {item.owner.user ? item.owner.user.username : "[Unnamed]"}
                 </a>

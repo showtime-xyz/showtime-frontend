@@ -23,14 +23,12 @@ export async function getServerSideProps(context) {
   // Get owned items
 
   const response_owned = await backend.get(
-    `/v1/owned?address=${slug}&maxItemCount=9&useCached=1`
+    `/v1/owned?address=${slug}&limit=9&use_cached=1`
   );
   const owned_items = response_owned.data.data;
 
   // Get liked items
-  const response_liked = await backend.get(
-    `/v1/liked?address=${slug}&maxItemCount=9`
-  );
+  const response_liked = await backend.get(`/v1/liked?address=${slug}&limit=9`);
   const liked_items = response_liked.data.data;
 
   return {
@@ -45,14 +43,14 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function Profile({
+const Profile = ({
   name,
   img_url,
   wallet_addresses,
   owned_items,
   liked_items,
   slug,
-}) {
+}) => {
   //const router = useRouter();
   //const { slug } = router.query;
 
@@ -90,7 +88,7 @@ export default function Profile({
   }, [owned_data]);
 
   return (
-    <Layout>
+    <Layout key={slug}>
       <Head>
         <title>Profile | {name ? name : "[Unnamed]"}</title>
       </Head>
@@ -98,10 +96,23 @@ export default function Profile({
         <img
           alt="artist"
           className="showtime-avatar object-cover object-center "
-          src={img_url}
+          src={
+            img_url
+              ? img_url
+              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+          }
         />
         <div className="text-3xl mt-4">{name ? name : wallet_addresses[0]}</div>
       </div>
+      {/*<div>
+        DEBUG <br />
+        Name: {name} <br />
+        URL: {img_url} <br />
+        ADDRESS: {wallet_addresses[0]} <br />
+        OWNED: {owned_items.length} <br />
+        LIKED: {liked_items.length} <br />
+        SLUG: {slug} <br />
+      </div>*/}
       <div className="flex flex-col text-center w-full">
         <div className="showtime-title text-center mx-auto">Owned Items</div>
       </div>
@@ -115,18 +126,16 @@ export default function Profile({
           }.`
         : null}
       <TokenGrid
-        key={owned_data ? 1 : 0}
-        hasHero
+        key={owned_data ? slug + "1" : slug + "0"}
         columnCount={2}
         items={ownedItems}
         myLikes={myLikes}
         setMyLikes={setMyLikes}
-        allHeros={true}
       />
       <div className="flex flex-col text-center w-full">
         <div className="showtime-title text-center mx-auto">Liked Items</div>
       </div>
-      {liked_items ? null : (
+      {liked_items.length > 0 ? null : (
         <p>
           {isMyProfile ? "You haven't" : "This person hasn't"} liked any items
           yet.{" "}
@@ -138,7 +147,7 @@ export default function Profile({
         </p>
       )}
       <TokenGrid
-        key={owned_data ? 11 : 10}
+        key={owned_data ? slug + "11" : slug + "10"}
         columnCount={2}
         items={liked_items}
         myLikes={myLikes}
@@ -146,4 +155,6 @@ export default function Profile({
       />
     </Layout>
   );
-}
+};
+
+export default Profile;

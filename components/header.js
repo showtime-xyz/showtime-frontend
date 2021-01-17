@@ -27,7 +27,7 @@ const Header = () => {
           </Link>
         </nav>
         {user ? (
-          <Link href={`/p/${user.publicAddress}`}>
+          <Link href="/p/[slug]" as={`/p/${user.publicAddress}`}>
             <button type="button" className="showtime-white-button-outline">
               Profile
             </button>

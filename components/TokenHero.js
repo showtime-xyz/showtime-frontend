@@ -56,7 +56,7 @@ const TokenHero = ({ item, handleLike, handleUnlike }) => {
           {item.creator ? (
             <>
               {" by "}
-              <Link href={`/p/${item.creator.address}`}>
+              <Link href="/p/[slug]" as={`/p/${item.creator.address}`}>
                 <a className="showtime-link">
                   {item.creator.user && item.creator.user.username
                     ? item.creator.user.username

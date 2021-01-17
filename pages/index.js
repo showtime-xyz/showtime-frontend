@@ -12,13 +12,11 @@ import backend from "../lib/backend";
 
 export async function getServerSideProps(context) {
   // Get featured
-  const response_featured = await backend.get("/v1/featured?maxItemCount=9");
+  const response_featured = await backend.get("/v1/featured?limit=9");
   const data_featured = response_featured.data.data;
 
   // Get leaderboard
-  const response_leaderboard = await backend.get(
-    "/v1/leaderboard?maxItemCount=9"
-  );
+  const response_leaderboard = await backend.get("/v1/leaderboard?limit=9");
   const data_leaderboard = response_leaderboard.data.data;
 
   return {
@@ -57,7 +55,7 @@ export default function Home({ featured_items, leaderboard }) {
       <div className="mt-10 mb-24">
         <div className="flex justify-center">
           {user ? (
-            <Link href={`/p/${user.publicAddress}`}>
+            <Link href="/p/[slug]" as={`/p/${user.publicAddress}`}>
               <a className="showtime-pink-button-outline">Go to My Profile</a>
             </Link>
           ) : (
@@ -75,7 +73,7 @@ export default function Home({ featured_items, leaderboard }) {
         setMyLikes={setMyLikes}
       />
       <div className="text-center pt-8 pb-16">
-        <Link href="/c/superrare">
+        <Link href="/c/[collection]" as="/c/superrare">
           <a className="showtime-purple-button-icon">
             <span>Discover more artwork</span>
             <img
