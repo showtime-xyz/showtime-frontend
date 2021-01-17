@@ -11,7 +11,9 @@ const TokenGrid = ({
   setMyLikes,
   allHeros,
 }) => {
-  const [itemsList, setItemsList] = useState(items);
+  const [itemsList, setItemsList] = useState(
+    items.filter((item) => item.showtime.hide !== true)
+  );
   const [itemsLikedList, setItemsLikedList] = useState([]);
 
   const handleLike = async ({ contract, token_id }) => {
