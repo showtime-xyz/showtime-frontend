@@ -3,15 +3,27 @@ import LikeButton from "../components/LikeButton";
 import ShareButton from "../components/ShareButton";
 import Link from "next/link";
 
-const TokenHero = ({ item, handleLike, handleUnlike }) => {
+const TokenHero = ({ item, handleLike, handleUnlike, isDetail }) => {
   return (
     <div>
-      <img
-        className="object-cover object-center h-full w-full"
-        style={{ maxHeight: 600 }}
-        src={item.image_url}
-        alt="nft"
-      />
+      {isDetail ? (
+        <img className="w-full" src={item.image_url} alt="nft" />
+      ) : (
+        <Link
+          href="/t/[...token]"
+          as={`/t/${item.asset_contract.address}/${item.token_id}`}
+        >
+          <a>
+            <img
+              className="object-cover object-center h-full w-full"
+              style={{ maxHeight: 600 }}
+              src={item.image_url}
+              alt="nft"
+            />
+          </a>
+        </Link>
+      )}
+
       <div className="mt-6 p-1">
         <div className="float-right text-right">
           <div>
@@ -51,23 +63,30 @@ const TokenHero = ({ item, handleLike, handleUnlike }) => {
             </div>*/}
         </div>
 
-        <div className="showtime-hero-title">
-          {item.name}{" "}
-          {item.creator ? (
-            <>
-              {" by "}
-              <Link href="/p/[slug]" as={`/p/${item.creator.address}`}>
-                <a className="showtime-link">
-                  {item.creator.user && item.creator.user.username
-                    ? item.creator.user.username
-                    : "[Unnamed]"}
-                </a>
-              </Link>
-            </>
-          ) : (
-            "\u00A0"
-          )}
-        </div>
+        {isDetail ? null : (
+          <div className="showtime-hero-title">
+            <Link
+              href="/t/[...token]"
+              as={`/t/${item.asset_contract.address}/${item.token_id}`}
+            >
+              <a className="showtime-link">{item.name}</a>
+            </Link>{" "}
+            {item.creator ? (
+              <>
+                {" by "}
+                <Link href="/p/[slug]" as={`/p/${item.creator.address}`}>
+                  <a className="showtime-link">
+                    {item.creator.user && item.creator.user.username
+                      ? item.creator.user.username
+                      : "[Unnamed]"}
+                  </a>
+                </Link>
+              </>
+            ) : (
+              "\u00A0"
+            )}
+          </div>
+        )}
 
         {/*<p className="leading-relaxed mb-3 text-gray-200">
           Owned by {item.owner.user ? item.owner.user.username : "[Unnamed]"}

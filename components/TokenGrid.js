@@ -10,6 +10,7 @@ const TokenGrid = ({
   myLikes,
   setMyLikes,
   allHeros,
+  isDetail,
 }) => {
   const [itemsList, setItemsList] = useState(
     items.filter((item) => item.showtime.hide !== true)
@@ -109,6 +110,7 @@ const TokenGrid = ({
             item={heroItem}
             handleLike={handleLike}
             handleUnlike={handleUnlike}
+            isDetail={isDetail}
           />
         </div>
       ) : null}

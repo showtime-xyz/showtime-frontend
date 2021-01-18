@@ -304,6 +304,10 @@ a {
   display: inline-flex;
 }
 
+.showtime-white-button-icon:hover {
+  color: #e45cff;
+}
+
 .showtime-pink-button-outline-icon {
   border: 2px solid #e45cff;
   color: #fff;
@@ -390,4 +394,8 @@ a {
 
 .showtime-link:hover {
   color: #e45cff;
+}
+
+.ril__toolbar {
+  background-color: rgba(0, 0, 0, 0) !important;
 }

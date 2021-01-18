@@ -6,17 +6,24 @@ import Link from "next/link";
 const TokenSquare = ({ item, handleLike, handleUnlike }) => {
   return (
     <div>
-      <img
-        className="w-full object-cover object-center"
-        src={item.image_url}
-        alt="nft"
-      />
+      <Link
+        href="/t/[...token]"
+        as={`/t/${item.asset_contract.address}/${item.token_id}`}
+      >
+        <a>
+          <img
+            className="w-full object-cover object-center"
+            src={item.image_url}
+            alt="nft"
+          />
+        </a>
+      </Link>
       <div className="mt-6 p-1">
         <div>
           <div className="float-right showtime-square-created">
-            {item.last_sale && item.last_sale.payment_token
+            {/*{item.last_sale && item.last_sale.payment_token
               ? " Ξ 123 ETH"
-              : null}
+            : null}*/}
           </div>
           <h2 className="showtime-square-created">
             {item.creator ? (
@@ -58,7 +65,14 @@ const TokenSquare = ({ item, handleLike, handleUnlike }) => {
               }}
             />
           </div>
-          <h1 className="showtime-square-title">{item.name}</h1>
+          <h1 className="showtime-square-title">
+            <Link
+              href="/t/[...token]"
+              as={`/t/${item.asset_contract.address}/${item.token_id}`}
+            >
+              <a className="showtime-link">{item.name}</a>
+            </Link>
+          </h1>
 
           <p className="showtime-square-owned">
             Owned by{" "}
