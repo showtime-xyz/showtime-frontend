@@ -137,7 +137,7 @@ export default function Token({ token }) {
                     : { opacity: 0.7, fontSize: 14 }
                 }
               >
-                Fullsize
+                Original size
               </div>
             </button>
             <TokenGrid
