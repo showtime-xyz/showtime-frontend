@@ -96,7 +96,7 @@ export default function Collection({
           />
         </div>
       ) : null}
-      <p class="mb-12 mt-6 text-center">
+      <p className="mb-12 mt-6 text-center">
         {isChanging ? "Loading..." : "\u00A0"}
       </p>
       <TokenGrid

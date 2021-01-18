@@ -73,6 +73,9 @@ export default function Token({ token }) {
     <Layout key={item.asset_contract.address + "_" + item.token_id}>
       <Head>
         <title>{item.name}</title>
+        {item.image_original_url ? (
+          <link rel="prefetch" href={item.image_original_url} as="image" />
+        ) : null}
       </Head>
 
       <div className="flex flex-col text-center w-full">
@@ -81,7 +84,9 @@ export default function Token({ token }) {
 
       {lightboxOpen && (
         <Lightbox
-          mainSrc={item.image_original_url}
+          mainSrc={
+            item.image_original_url ? item.image_original_url : item.image_url
+          }
           //nextSrc={images[(photoIndex + 1) % images.length]}
           //prevSrc={images[(photoIndex + images.length - 1) % images.length]}
           onCloseRequest={() => setLightboxOpen(false)}
@@ -181,7 +186,7 @@ export default function Token({ token }) {
             <a
               href={`https://opensea.io/assets/${item.asset_contract.address}/${item.token_id}`}
               target="_blank"
-              class="showtime-white-button-icon"
+              className="showtime-white-button-icon"
             >
               <span>View on OpenSea</span>
               <img

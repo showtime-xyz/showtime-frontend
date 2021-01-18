@@ -10,7 +10,7 @@ export default async (req, res) => {
       Iron.defaults
     );
   } catch (error) {
-    res.status(401).end();
+    res.status(200).end();
     return { props: {} };
   }
 
