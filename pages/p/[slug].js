@@ -24,14 +24,13 @@ export async function getServerSideProps(context) {
   const wallet_addresses = data_profile.wallet_addresses;
 
   // Get owned items
-
   const response_owned = await backend.get(
-    `/v1/owned?address=${slug}&limit=9&use_cached=1`
+    `/v1/owned?address=${slug}&use_cached=1`
   );
   const owned_items = response_owned.data.data;
 
   // Get liked items
-  const response_liked = await backend.get(`/v1/liked?address=${slug}&limit=9`);
+  const response_liked = await backend.get(`/v1/liked?address=${slug}`);
   const liked_items = response_liked.data.data;
 
   return {
@@ -55,9 +54,11 @@ const Profile = ({
   slug,
 }) => {
   const { user } = useAuth();
+
+  const [isMyProfile, setIsMyProfile] = useState(false);
+
   const [ownedItems, setOwnedItems] = useState([]);
   const [ownedRefreshed, setOwnedRefreshed] = useState(false);
-  const [isMyProfile, setIsMyProfile] = useState(false);
 
   useEffect(() => {
     setOwnedItems(owned_items);
@@ -89,11 +90,11 @@ const Profile = ({
 
   useEffect(() => {
     const refreshOwned = async () => {
-      const response_owned = await backend.get(
-        `/v1/owned?address=${slug}&limit=9`
-      );
-      if (response_owned.data.data !== owned_items) {
-        setOwnedItems(response_owned.data.data);
+      if (slug !== "0x0000000000000000000000000000000000000000") {
+        const response_owned = await backend.get(`/v1/owned?address=${slug}`);
+        if (response_owned.data.data !== owned_items) {
+          setOwnedItems(response_owned.data.data);
+        }
       }
 
       setOwnedRefreshed(true);

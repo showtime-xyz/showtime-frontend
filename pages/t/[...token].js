@@ -24,41 +24,59 @@ export async function getServerSideProps(context) {
   );
   const token = response_token.data.data;
 
-  /*
-  // Get list of collections
-  const response_collection_list = await backend.get(`/v1/collection_list`);
-  const collection_list = response_collection_list.data.data;
-
-  const selected_collection =
-    collection_list.filter((item) => item.value === collection).length > 0
-      ? collection_list.filter((item) => item.value === collection)[0]
-      : null;
-
-  // Get collection items
-  const response_collection_items = await backend.get(
-    `/v1/collection?collection=${collection}&limit=40&order_by=${selected_collection.order_by}&order_direction=${selected_collection.order_direction}`
-  );
-  const collection_items = response_collection_items.data.data;
-*/
+  // Get owned items
+  let same_owner_items = [];
+  if (token.owner && token.owner.address) {
+    const response_owned = await backend.get(
+      `/v1/owned?address=${token.owner.address}&use_cached=1`
+    );
+    same_owner_items = response_owned.data.data.filter(
+      (item) =>
+        !(
+          item.token_id === token_id &&
+          item.asset_contract.address === contract_address
+        )
+    );
+  }
 
   return {
     props: {
       token,
+      same_owner_items,
     }, // will be passed to the page component as props
   };
 }
 
-export default function Token({ token }) {
+export default function Token({ token, same_owner_items }) {
   //const [isChanging, setIsChanging] = useState(false);
   //const { collection } = router.query;
 
   const { user } = useAuth();
+
+  const [isMyProfile, setIsMyProfile] = useState(false);
+
+  useEffect(() => {
+    if (user && token.owner && token.owner.address) {
+      if (token.owner.address === user.publicAddress) {
+        setIsMyProfile(true);
+      } else {
+        setIsMyProfile(false);
+      }
+    } else {
+      setIsMyProfile(false);
+    }
+  }, [same_owner_items, user]);
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
   // Set up my likes
   const [item, setItem] = useState(token);
+
+  useEffect(() => {
+    setItem(token);
+  }, [token]);
+
   const [myLikes, setMyLikes] = useState([]);
   const [myLikesLoaded, setMyLikesLoaded] = useState(false);
   const { data: like_data } = useMyLikes(user, myLikesLoaded);
@@ -68,6 +86,42 @@ export default function Token({ token }) {
       setMyLikes(like_data.data);
     }
   }, [like_data]);
+
+  const [ownedItems, setOwnedItems] = useState([]);
+  const [ownedRefreshed, setOwnedRefreshed] = useState(false);
+
+  useEffect(() => {
+    setOwnedItems(same_owner_items);
+    setOwnedRefreshed(false);
+  }, [same_owner_items]);
+
+  useEffect(() => {
+    const refreshOwned = async () => {
+      if (
+        token.owner.address !== "0x0000000000000000000000000000000000000000"
+      ) {
+        const response_owned = await backend.get(
+          `/v1/owned?address=${token.owner.address}`
+        );
+        if (response_owned.data.data !== same_owner_items) {
+          setOwnedItems(
+            response_owned.data.data.filter(
+              (item) =>
+                !(
+                  item.token_id === token.token_id &&
+                  item.asset_contract.address === token.asset_contract.address
+                )
+            )
+          );
+        }
+      }
+
+      setOwnedRefreshed(true);
+    };
+    if (token.owner && token.owner.address) {
+      refreshOwned();
+    }
+  }, [same_owner_items, token]);
 
   return (
     <Layout key={item.asset_contract.address + "_" + item.token_id}>
@@ -198,6 +252,29 @@ export default function Token({ token }) {
           </p>
         </div>
       </div>
+
+      <div className="flex flex-col text-center w-full">
+        <div className="showtime-title text-center mx-auto">
+          More from this owner
+        </div>
+      </div>
+      <div className="text-center">
+        {ownedRefreshed
+          ? ownedItems.length === 0
+            ? `We couldn't find any more items owned by ${
+                isMyProfile ? "you" : "this person"
+              }.`
+            : null
+          : ownedItems.length === 0
+          ? "Loading..."
+          : null}
+      </div>
+      <TokenGrid
+        columnCount={2}
+        items={ownedItems}
+        myLikes={myLikes}
+        setMyLikes={setMyLikes}
+      />
     </Layout>
   );
 }
