@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Masonry from "react-masonry-css";
 import TokenHero from "../components/TokenHero";
 import TokenSquare from "../components/TokenSquare";
+import _ from "lodash";
 
 const TokenGrid = ({
   items,
@@ -12,10 +13,14 @@ const TokenGrid = ({
   allHeros,
   isDetail,
 }) => {
-  const [itemsList, setItemsList] = useState(
-    items.filter((item) => item.showtime.hide !== true)
-  );
+  const [itemsList, setItemsList] = useState([]);
   const [itemsLikedList, setItemsLikedList] = useState([]);
+  const [heroItem, setHeroItem] = useState(null);
+  const [squareItems, setSquareItems] = useState([]);
+
+  useEffect(() => {
+    setItemsList(items.filter((item) => item.showtime.hide !== true));
+  }, [items]);
 
   const handleLike = async ({ contract, token_id }) => {
     // Change myLikes via setMyLikes
@@ -95,17 +100,21 @@ const TokenGrid = ({
     }
   }, [itemsList, myLikes]);
 
-  const heroItem =
-    hasHero && itemsLikedList.length > 0 ? itemsLikedList[0] : null;
-  const squareItems =
-    hasHero && itemsLikedList.length > 0
-      ? itemsLikedList.slice(1)
-      : itemsLikedList;
+  useEffect(() => {
+    setHeroItem(
+      hasHero && itemsLikedList.length > 0 ? itemsLikedList[0] : null
+    );
+    setSquareItems(
+      hasHero && itemsLikedList.length > 0
+        ? itemsLikedList.slice(1)
+        : itemsLikedList
+    );
+  }, [itemsLikedList, hasHero]);
 
   return (
     <>
       {heroItem ? (
-        <div key={heroItem.id} style={{ paddingBottom: 75 }}>
+        <div key={heroItem.token_id} style={{ paddingBottom: 75 }}>
           <TokenHero
             item={heroItem}
             handleLike={handleLike}
@@ -118,7 +127,7 @@ const TokenGrid = ({
       {allHeros ? (
         squareItems.map((item) => {
           return (
-            <div style={{ paddingBottom: 75 }} key={item.id}>
+            <div style={{ paddingBottom: 75 }} key={item.token_id}>
               <TokenHero
                 item={item}
                 handleLike={handleLike}
@@ -135,7 +144,7 @@ const TokenGrid = ({
         >
           {squareItems.map((item) => {
             return (
-              <div style={{ paddingBottom: 75 }} key={item.id}>
+              <div style={{ paddingBottom: 75 }} key={item.token_id}>
                 <TokenSquare
                   item={item}
                   handleLike={handleLike}

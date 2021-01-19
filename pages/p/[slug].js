@@ -2,12 +2,16 @@ import { useState, useEffect } from "react";
 import Head from "next/head";
 import _ from "lodash";
 import Layout from "../../components/layout";
-import TokenGrid from "../../components/TokenGrid";
+//import TokenGrid from "../../components/TokenGrid";
+
+import TokenGrid2 from "../../components/TokenGrid2";
+
 import useAuth from "../../hooks/useAuth";
 import useMyLikes from "../../hooks/useMyLikes";
-import useOwned from "../../hooks/useOwned";
+//import useOwned from "../../hooks/useOwned";
 import backend from "../../lib/backend";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
@@ -51,44 +55,32 @@ const Profile = ({
   liked_items,
   slug,
 }) => {
-  //const router = useRouter();
-  //const { slug } = router.query;
-
   const { user } = useAuth();
-  const [isMyProfile, setIsMyProfile] = useState(false);
-
-  useEffect(() => {
-    if (user) {
-      if (wallet_addresses.includes(user.publicAddress)) {
-        setIsMyProfile(true);
-      }
-    }
-  }, [user, wallet_addresses]);
-
-  // Set up my likes
-  const [myLikes, setMyLikes] = useState([]);
-  const [myLikesLoaded, setMyLikesLoaded] = useState(false);
-  const { data: like_data } = useMyLikes(user, myLikesLoaded);
-  useEffect(() => {
-    if (like_data) {
-      setMyLikesLoaded(true);
-      setMyLikes(like_data.data);
-    }
-  }, [like_data]);
-
-  // Immediate try to refresh the owned items without the cache
-  const [ownedItems, setOwnedItems] = useState(owned_items);
+  const [ownedItems, setOwnedItems] = useState([]);
   const [ownedRefreshed, setOwnedRefreshed] = useState(false);
-  const { data: owned_data } = useOwned(slug, ownedRefreshed);
+
   useEffect(() => {
-    if (owned_data) {
+    setOwnedItems(owned_items);
+    setOwnedRefreshed(false);
+  }, [owned_items]);
+
+  /*
+  useEffect(() => {
+    const refreshOwned = async () => {
+      const response_owned = await backend.get(
+        `/v1/owned?address=${slug}&limit=9`
+      );
+      if (response_owned.data.data !== owned_items) {
+        setOwnedItems(response_owned.data.data);
+      }
+
       setOwnedRefreshed(true);
-      setOwnedItems(owned_data.data);
-    }
-  }, [owned_data]);
+    };
+    refreshOwned();
+  }, [owned_items]);*/
 
   return (
-    <Layout key={slug}>
+    <Layout>
       <Head>
         <title>Profile | {name ? name : "[Unnamed]"}</title>
       </Head>
@@ -104,54 +96,54 @@ const Profile = ({
         />
         <div className="text-3xl mt-4">{name ? name : wallet_addresses[0]}</div>
       </div>
-      {/*<div>
-        DEBUG <br />
-        Name: {name} <br />
-        URL: {img_url} <br />
-        ADDRESS: {wallet_addresses[0]} <br />
-        OWNED: {owned_items.length} <br />
-        LIKED: {liked_items.length} <br />
-        SLUG: {slug} <br />
-      </div>*/}
       <div className="flex flex-col text-center w-full">
         <div className="showtime-title text-center mx-auto">Owned Items</div>
       </div>
-      {!owned_data &&
-      typeof ownedItems !== "undefined" &&
-      ownedItems.length === 0
-        ? "Loading..."
-        : owned_data && ownedItems.length === 0
-        ? `We couldn't find any items owned by ${
-            isMyProfile ? "you" : "this person"
-          }.`
-        : null}
-      <TokenGrid
-        key={owned_data ? slug + "1" : slug + "0"}
+      <div>{ownedRefreshed ? "Refreshed" : "Not fresh"}</div>
+
+      <div>
+        owned_items:{" "}
+        {owned_items.map((item) => (
+          <div key={item.token_id}>
+            {item.token_id}
+            <br />
+          </div>
+        ))}
+        <br />
+        <br />
+        <br />
+      </div>
+      <div>
+        ownedItems:{" "}
+        {ownedItems.map((item) => (
+          <div key={item.token_id}>
+            {item.token_id}
+            <br />
+          </div>
+        ))}
+        <br />
+        <br />
+        <br />
+      </div>
+
+      <Link href="/p/[slug]" as="/p/0xfa6E0aDDF68267b8b6fF2dA55Ce01a53Fad6D8e2">
+        0xfa6E0aDDF68267b8b6fF2dA55Ce01a53Fad6D8e2
+      </Link>
+      <br />
+      <Link href="/p/[slug]" as="/p/0x9D23d6DA969460bD6374e7dBd6E6c5CdA032F017">
+        0x9D23d6DA969460bD6374e7dBd6E6c5CdA032F017
+      </Link>
+      <br />
+      <Link href="/p/[slug]" as="/p/0xF6522d1cb83Be982a5d9BF2612d427Da216f960c">
+        0xF6522d1cb83Be982a5d9BF2612d427Da216f960c
+      </Link>
+      <br />
+      <br />
+      <TokenGrid2
         columnCount={2}
         items={ownedItems}
-        myLikes={myLikes}
-        setMyLikes={setMyLikes}
-      />
-      <div className="flex flex-col text-center w-full">
-        <div className="showtime-title text-center mx-auto">Liked Items</div>
-      </div>
-      {liked_items.length > 0 ? null : (
-        <p>
-          {isMyProfile ? "You haven't" : "This person hasn't"} liked any items
-          yet.{" "}
-          {isMyProfile ? (
-            <Link href="/c/superrare">
-              <a className="showtime-link">Go explore!</a>
-            </Link>
-          ) : null}
-        </p>
-      )}
-      <TokenGrid
-        key={owned_data ? slug + "11" : slug + "10"}
-        columnCount={2}
-        items={liked_items}
-        myLikes={myLikes}
-        setMyLikes={setMyLikes}
+        myLikes={[]}
+        setMyLikes={() => {}}
       />
     </Layout>
   );
