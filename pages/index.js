@@ -60,7 +60,9 @@ export default function Home({ featured_items, leaderboard }) {
             </Link>
           ) : (
             <Link href="/login">
-              <a className="showtime-pink-button">Continue with Email</a>
+              <a className="showtime-pink-button">
+                Sign up with Email or Wallet
+              </a>
             </Link>
           )}
         </div>

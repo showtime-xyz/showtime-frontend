@@ -113,8 +113,8 @@ export default function Login() {
   return (
     <Layout>
       <div className="text-center">
+        <div>Select a login method:</div>
         <form onSubmit={handleSubmit}>
-          <div>Temporary Login Form:</div>
           <br />
           <br />
           <label htmlFor="email">Email</label>
@@ -122,7 +122,7 @@ export default function Login() {
           <input name="email" type="email" style={{ color: "black" }} />
           <br />
           <br />
-          <button className="showtime-pink-button">Log in</button>
+          <button className="showtime-pink-button">Log in with Email</button>
         </form>
         <br />
         __________________________________
@@ -134,7 +134,7 @@ export default function Login() {
             connect();
           }}
         >
-          Or Connect Wallet
+          Log in with Wallet
         </button>
         <br />
         <br />
