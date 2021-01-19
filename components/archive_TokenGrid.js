@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Masonry from "react-masonry-css";
 import TokenHero from "../components/TokenHero";
 import TokenSquare from "../components/TokenSquare";
@@ -15,15 +15,12 @@ const TokenGrid = ({
 }) => {
   const [itemsList, setItemsList] = useState([]);
   const [itemsLikedList, setItemsLikedList] = useState([]);
-  const [myItemLikes, setMyItemLikes] = useState([]);
+  const [heroItem, setHeroItem] = useState(null);
+  const [squareItems, setSquareItems] = useState([]);
 
   useEffect(() => {
     setItemsList(items.filter((item) => item.showtime.hide !== true));
   }, [items]);
-
-  useEffect(() => {
-    setMyItemLikes(myLikes);
-  }, [myLikes]);
 
   const handleLike = async ({ contract, token_id }) => {
     // Change myLikes via setMyLikes
@@ -82,29 +79,37 @@ const TokenGrid = ({
 
   // Augment content with my like status
   useEffect(() => {
-    const newItemsLikedList = [];
-    _.forEach([...itemsList], function (item) {
-      item.liked = false;
-      _.forEach([...myItemLikes], function (like) {
-        if (
-          item.asset_contract.address === like.contract &&
-          item.token_id === like.token_id
-        ) {
-          item.liked = true;
-        }
+    var newItemsLikedList = [];
+
+    if (itemsList.length > 0 && myLikes) {
+      _.forEach(itemsList, function (item) {
+        item.liked = false;
+
+        _.forEach(myLikes, function (like) {
+          if (
+            item.asset_contract.address === like.contract &&
+            item.token_id === like.token_id
+          ) {
+            item.liked = true;
+          }
+        });
+
+        newItemsLikedList.push(item);
       });
+      setItemsLikedList(newItemsLikedList);
+    }
+  }, [itemsList, myLikes]);
 
-      newItemsLikedList.push(item);
-    });
-    setItemsLikedList(newItemsLikedList);
-  }, [itemsList, myItemLikes]);
-
-  const heroItem =
-    hasHero && itemsLikedList.length > 0 ? itemsLikedList[0] : null;
-  const squareItems =
-    hasHero && itemsLikedList.length > 0
-      ? itemsLikedList.slice(1)
-      : itemsLikedList;
+  useEffect(() => {
+    setHeroItem(
+      hasHero && itemsLikedList.length > 0 ? itemsLikedList[0] : null
+    );
+    setSquareItems(
+      hasHero && itemsLikedList.length > 0
+        ? itemsLikedList.slice(1)
+        : itemsLikedList
+    );
+  }, [itemsLikedList, hasHero]);
 
   return (
     <>

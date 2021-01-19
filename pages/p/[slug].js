@@ -2,9 +2,8 @@ import { useState, useEffect } from "react";
 import Head from "next/head";
 import _ from "lodash";
 import Layout from "../../components/layout";
-//import TokenGrid from "../../components/TokenGrid";
 
-import TokenGrid2 from "../../components/TokenGrid2";
+import TokenGrid from "../../components/TokenGrid";
 
 import useAuth from "../../hooks/useAuth";
 import useMyLikes from "../../hooks/useMyLikes";
@@ -58,13 +57,36 @@ const Profile = ({
   const { user } = useAuth();
   const [ownedItems, setOwnedItems] = useState([]);
   const [ownedRefreshed, setOwnedRefreshed] = useState(false);
+  const [isMyProfile, setIsMyProfile] = useState(false);
 
   useEffect(() => {
     setOwnedItems(owned_items);
     setOwnedRefreshed(false);
   }, [owned_items]);
 
-  /*
+  useEffect(() => {
+    if (user) {
+      if (slug === user.publicAddress) {
+        setIsMyProfile(true);
+      } else {
+        setIsMyProfile(false);
+      }
+    } else {
+      setIsMyProfile(false);
+    }
+  }, [owned_items, user]);
+
+  // Set up my likes
+  const [myLikes, setMyLikes] = useState([]);
+  const [myLikesLoaded, setMyLikesLoaded] = useState(false);
+  const { data: like_data } = useMyLikes(user, myLikesLoaded);
+  useEffect(() => {
+    if (like_data) {
+      setMyLikesLoaded(true);
+      setMyLikes(like_data.data);
+    }
+  }, [like_data]);
+
   useEffect(() => {
     const refreshOwned = async () => {
       const response_owned = await backend.get(
@@ -77,7 +99,7 @@ const Profile = ({
       setOwnedRefreshed(true);
     };
     refreshOwned();
-  }, [owned_items]);*/
+  }, [owned_items]);
 
   return (
     <Layout>
@@ -99,51 +121,45 @@ const Profile = ({
       <div className="flex flex-col text-center w-full">
         <div className="showtime-title text-center mx-auto">Owned Items</div>
       </div>
-      <div>{ownedRefreshed ? "Refreshed" : "Not fresh"}</div>
-
-      <div>
-        owned_items:{" "}
-        {owned_items.map((item) => (
-          <div key={item.token_id}>
-            {item.token_id}
-            <br />
-          </div>
-        ))}
-        <br />
-        <br />
-        <br />
-      </div>
-      <div>
-        ownedItems:{" "}
-        {ownedItems.map((item) => (
-          <div key={item.token_id}>
-            {item.token_id}
-            <br />
-          </div>
-        ))}
-        <br />
-        <br />
-        <br />
+      <div className="text-center">
+        {ownedRefreshed
+          ? ownedItems.length === 0
+            ? `We couldn't find any items owned by ${
+                isMyProfile ? "you" : "this person"
+              }.`
+            : null
+          : ownedItems.length === 0
+          ? "Loading..."
+          : null}
       </div>
 
-      <Link href="/p/[slug]" as="/p/0xfa6E0aDDF68267b8b6fF2dA55Ce01a53Fad6D8e2">
-        0xfa6E0aDDF68267b8b6fF2dA55Ce01a53Fad6D8e2
-      </Link>
-      <br />
-      <Link href="/p/[slug]" as="/p/0x9D23d6DA969460bD6374e7dBd6E6c5CdA032F017">
-        0x9D23d6DA969460bD6374e7dBd6E6c5CdA032F017
-      </Link>
-      <br />
-      <Link href="/p/[slug]" as="/p/0xF6522d1cb83Be982a5d9BF2612d427Da216f960c">
-        0xF6522d1cb83Be982a5d9BF2612d427Da216f960c
-      </Link>
-      <br />
-      <br />
-      <TokenGrid2
+      <TokenGrid
         columnCount={2}
         items={ownedItems}
-        myLikes={[]}
-        setMyLikes={() => {}}
+        myLikes={myLikes}
+        setMyLikes={setMyLikes}
+      />
+
+      <div className="flex flex-col text-center w-full">
+        <div className="showtime-title text-center mx-auto">Liked Items</div>
+      </div>
+
+      {liked_items.length > 0 ? null : (
+        <div className="text-center">
+          {isMyProfile ? "You haven't" : "This person hasn't"} liked any items
+          yet.{" "}
+          {isMyProfile ? (
+            <Link href="/c/superrare">
+              <a className="showtime-link">Go explore!</a>
+            </Link>
+          ) : null}
+        </div>
+      )}
+      <TokenGrid
+        columnCount={2}
+        items={liked_items}
+        myLikes={myLikes}
+        setMyLikes={setMyLikes}
       />
     </Layout>
   );
