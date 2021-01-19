@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Magic } from "magic-sdk";
-
+import WalletButton from "../components/WalletButton";
+import AppContext from "../context/app-context";
 import Web3Modal from "web3modal";
 import Web3 from "web3";
 import Layout from "../components/layout";
@@ -128,14 +129,7 @@ export default function Login() {
         __________________________________
         <br />
         <br />
-        <button
-          className="showtime-white-button"
-          onClick={() => {
-            connect();
-          }}
-        >
-          Log in with Wallet
-        </button>
+        <WalletButton  className="bg-white text-black"/>
         <br />
         <br />
         <p>

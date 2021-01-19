@@ -4,6 +4,8 @@ import Layout from "../components/layout";
 import Web3Modal from "web3modal";
 import Web3 from "web3";
 import { useRouter } from "next/router";
+import WalletButton from "../../components/WalletButton";
+import AppContext from "../../context/app-context";
 
 export async function getServerSideProps(context) {
   return {
@@ -86,25 +88,12 @@ export default function Home() {
       >
         Auth Test
       </h1>
-      <button
-        className="showtime-white-button"
-        onClick={() => {
-          connect();
-        }}
-      >
-        Connect Wallet
-      </button>
-      <button
-        className="showtime-white-button"
-        onClick={() => {
-          disconnect();
-        }}
-      >
-        Disconnect
-      </button>
-      <p>
-        Cached provider: {web3Modal ? web3Modal.cachedProvider : "No web3Modal"}
-      </p>
+              <WalletButton  />
+              <button 
+                disabled
+              >
+                {'user.walletAddress'}
+              </button>
       <p>Account: {account}</p>
     </Layout>
   );

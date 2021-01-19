@@ -5,7 +5,7 @@ module.exports = (phase, { defaultConfig }) => {
     return {
       /* development only config options here */
       env: {
-        BACKEND_URL: "http://localhost:8001/api",
+        BACKEND_URL: "https://showtimenft.wl.r.appspot.com/api",
       },
     };
   }
