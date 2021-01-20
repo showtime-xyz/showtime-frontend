@@ -14,7 +14,7 @@ const Header = () => {
           <a className="flex items-center showtime-header-link mb-4 md:mb-0 uppercase">
             <img
               src="/logo_sm.jpg"
-              style={{ height: 48, width: 48 }}
+              style={{ height: 48, width: 48, borderRadius: 5 }}
               className="mr-4"
             />
             Showtime

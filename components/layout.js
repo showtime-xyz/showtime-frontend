@@ -19,7 +19,35 @@ const Layout = ({ children }) => {
           name="og:title"
           content="Showtime - Discover and showcase digital art"
         />
+
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Showtime" />
+        <meta
+          name="twitter:description"
+          content="Discover and showcase digital art"
+        />
+        <meta
+          name="twitter:image"
+          content="https://showtime.kilkka.vercel.app/banner.png"
+        />
+
         <meta name="keywords" content="showtime, ethereum, token, nft" />
+
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-EJP74KCP4M"
+        />
+
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-EJP74KCP4M');
+        `,
+          }}
+        />
       </Head>
 
       <Header />
