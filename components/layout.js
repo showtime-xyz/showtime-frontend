@@ -26,7 +26,10 @@ const Layout = ({ children }) => {
           name="twitter:description"
           content="Discover and showcase digital art"
         />
-        <meta name="twitter:image" content="/banner.png" />
+        <meta
+          name="twitter:image"
+          content="https://showtime.kilkka.vercel.app/banner.png"
+        />
 
         <meta name="keywords" content="showtime, ethereum, token, nft" />
 
