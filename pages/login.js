@@ -57,7 +57,7 @@ export default function Login() {
     } catch (err) {
       console.error(err);
     }
-  }; 
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -88,13 +88,21 @@ export default function Login() {
   return (
     <Layout>
       <div className="text-center">
-        <div>Select a login method:</div>
+        <div className="text-3xl mt-10">Select a login method:</div>
         <form onSubmit={handleSubmit}>
           <br />
           <br />
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email" className="pb-4">
+            Email (with Magic Link)
+          </label>
           <br />
-          <input name="email" type="email" style={{ color: "black" }} />
+          <br />
+          <input
+            name="email"
+            placeholder="Email"
+            type="email"
+            style={{ color: "black", padding: 10, borderRadius: 7, width: 300 }}
+          />
           <br />
           <br />
           <button className="showtime-pink-button">Log in with Email</button>
@@ -103,13 +111,13 @@ export default function Login() {
         __________________________________
         <br />
         <br />
-        <WalletButton className="bg-white text-black hover:bg-gray-300 rounded-lg py-2 px-5"/>
+        <WalletButton className="bg-white text-black hover:bg-gray-300 rounded-lg py-2 px-5" />
         <br />
         <br />
-        <p>
+        {/*<p>
           Select this option if you are using providers like Metamask, Dapper,
           Gnosis Safe, Frame, Web3 Browsers, etc.
-        </p>
+        </p>*/}
       </div>
     </Layout>
   );

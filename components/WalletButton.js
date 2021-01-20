@@ -29,6 +29,24 @@ export default function WalletButton({
       context.setWeb3Provider(new Web3Provider(provider));
       console.log(new Web3Provider(provider));
       if (redirect) router.push("/");
+
+      const address = await new Web3Provider(provider).getSigner().getAddress();
+      //console.log(address);
+
+      // login with our own API
+      const authRequest = await fetch("/api/loginwallet", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${address}` },
+      });
+
+      if (authRequest.ok) {
+        // We successfully logged in, our API
+        // set authorization cookies and now we
+        // can redirect to the dashboard!
+        router.push("/");
+      } else {
+        /* handle errors */
+      }
     }
   };
 
@@ -46,7 +64,7 @@ export default function WalletButton({
 
   let linkText = "Disconnect Wallet";
   if (web3Modal && !web3Modal.cachedProvider) {
-    linkText = text ? text : "Connect Wallet";
+    linkText = text ? text : "Log in with Wallet";
   } else if (web3Modal && web3Modal.cachedProvider) {
     linkText = text ? text : "Disconnect Wallet";
   } else if (!web3Modal) linkText = "Not connected properly";
@@ -56,18 +74,12 @@ export default function WalletButton({
   return (
     <>
       {linkType === "button" && (
-        <button
-          onClick={buttonOnClick}
-          className={className}
-        >
+        <button onClick={buttonOnClick} className={"showtime-white-button"}>
           {linkText}
         </button>
       )}
       {linkType === "text" && (
-        <button
-          onClick={logoutOfWeb3Modal}
-          className={className}
-        >
+        <button onClick={logoutOfWeb3Modal} className={"showtime-white-button"}>
           {linkText}
         </button>
       )}
