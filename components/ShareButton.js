@@ -3,7 +3,8 @@ import React, { useState } from "react";
 const ShareButton = () => {
   const [isHovering, setIsHovering] = useState(false);
   return (
-    <button
+    <>
+      {/*<button
       className="inline-flex mr-4 px-2 py-2 rounded-md"
       onMouseOver={() => setIsHovering(true)}
       onMouseOut={() => setIsHovering(false)}
@@ -14,7 +15,8 @@ const ShareButton = () => {
         alt="share-button"
         className="h-6 w-6 items-center flex"
       />
-    </button>
+    </button>*/}
+    </>
   );
 };
 

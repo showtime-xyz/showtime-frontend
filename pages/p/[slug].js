@@ -33,6 +33,10 @@ export async function getServerSideProps(context) {
   const response_liked = await backend.get(`/v1/liked?address=${slug}`);
   const liked_items = response_liked.data.data;
 
+  const logout = () => {
+    console.log("Log out");
+  };
+
   return {
     props: {
       name,
@@ -107,7 +111,23 @@ const Profile = ({
       <Head>
         <title>Profile | {name ? name : "[Unnamed]"}</title>
       </Head>
-      <div className="mx-auto flex pt-20 pb-10 flex-col items-center">
+
+      <div className="text-right">
+        {isMyProfile ? (
+          <a
+            href="#"
+            onClick={() => {
+              logout();
+            }}
+            className="showtime-header-link"
+          >
+            Log out
+          </a>
+        ) : (
+          "\u00A0"
+        )}
+      </div>
+      <div className="mx-auto flex pt-16 pb-10 flex-col items-center">
         <img
           alt="artist"
           className="showtime-avatar object-cover object-center "
