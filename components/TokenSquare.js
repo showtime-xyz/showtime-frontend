@@ -25,7 +25,7 @@ const TokenSquare = ({ item, handleLike, handleUnlike }) => {
               ? " Ξ 123 ETH"
             : null}*/}
           </div>
-          <h2 className="showtime-square-created">
+          <h2 className="showtime-square-created text-lg md:text-2xl">
             {item.creator ? (
               <Link href="/p/[slug]" as={`/p/${item.creator.address}`}>
                 <a className="showtime-link">
@@ -65,7 +65,7 @@ const TokenSquare = ({ item, handleLike, handleUnlike }) => {
               }}
             />
           </div>
-          <h1 className="showtime-square-title">
+          <h1 className="showtime-square-title text-2xl md:text-4xl md:leading-relaxed">
             <Link
               href="/t/[...token]"
               as={`/t/${item.asset_contract.address}/${item.token_id}`}
@@ -74,11 +74,11 @@ const TokenSquare = ({ item, handleLike, handleUnlike }) => {
             </Link>
           </h1>
 
-          <p className="showtime-square-owned">
+          <p className="showtime-square-owned text-base md:text-xl">
             Owned by{" "}
             {item.owner ? (
               <Link href="/p/[slug]" as={`/p/${item.owner.address}`}>
-                <a className="showtime-link">
+                <a className="showtime-link ">
                   {item.owner.user ? item.owner.user.username : "[Unnamed]"}
                 </a>
               </Link>

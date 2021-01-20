@@ -111,35 +111,35 @@ a {
 .showtime-title {
   font-family: "Darker Grotesque", sans-serif;
   font-weight: 700;
-  font-size: 64px;
-  line-height: 83px;
+  /*font-size: 64px;*/
+  /*line-height: 83px;*/
   padding-top: 32px;
   padding-bottom: 32px;
-  text-transform: uppercase;
+  /*text-transform: uppercase;*/
 }
 
 .showtime-hero-title {
   font-family: "Darker Grotesque", sans-serif;
   font-weight: 700;
-  font-size: 36px;
+  /*font-size: 36px;*/
 }
 
 .showtime-square-title {
   font-family: "Inter", sans-serif;
   font-weight: 600;
-  font-size: 36px;
+  /*font-size: 36px;*/
 }
 
 .showtime-square-owned {
   font-family: "Inter", sans-serif;
   font-weight: 400;
-  font-size: 24px;
+  /*font-size: 24px;*/
 }
 
 .showtime-square-created {
   font-family: "Darker Grotesque", sans-serif;
   font-weight: 400;
-  font-size: 24px;
+  /*font-size: 24px;*/
 }
 
 .showtime-pink-button {
