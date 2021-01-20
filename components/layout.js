@@ -9,12 +9,16 @@ const Layout = ({ children }) => {
       <Head>
         <link rel="icon" href="/logo_sm.jpg" />
         <meta name="description" content="Discover and showcase digital art" />
-        <meta property="og:image" content={"/logo.svg"} />
+        <meta property="og:type" content="website" />
+        <meta
+          name="og:description"
+          content="Discover and showcase digital art"
+        />
+        <meta property="og:image" content="/banner.png" />
         <meta
           name="og:title"
           content="Showtime - Discover and showcase digital art"
         />
-        <meta name="twitter:card" content="summary_large_image" />
         <meta name="keywords" content="showtime, ethereum, token, nft" />
       </Head>
 
