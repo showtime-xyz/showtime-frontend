@@ -2,9 +2,7 @@ import { useState, useEffect } from "react";
 import Head from "next/head";
 import _ from "lodash";
 import Layout from "../../components/layout";
-
 import TokenGrid from "../../components/TokenGrid";
-
 import useAuth from "../../hooks/useAuth";
 import useMyLikes from "../../hooks/useMyLikes";
 //import useOwned from "../../hooks/useOwned";
@@ -24,18 +22,15 @@ export async function getServerSideProps(context) {
   const wallet_addresses = data_profile.wallet_addresses;
 
   // Get owned items
+
   const response_owned = await backend.get(
-    `/v1/owned?address=${slug}&use_cached=1`
+    `/v1/owned?address=${slug}&limit=9&use_cached=1`
   );
   const owned_items = response_owned.data.data;
 
   // Get liked items
-  const response_liked = await backend.get(`/v1/liked?address=${slug}`);
+  const response_liked = await backend.get(`/v1/liked?address=${slug}&limit=9`);
   const liked_items = response_liked.data.data;
-
-  const logout = () => {
-    console.log("Log out");
-  };
 
   return {
     props: {
@@ -44,7 +39,6 @@ export async function getServerSideProps(context) {
       wallet_addresses,
       owned_items,
       liked_items,
-      slug,
     }, // will be passed to the page component as props
   };
 }
@@ -55,31 +49,20 @@ const Profile = ({
   wallet_addresses,
   owned_items,
   liked_items,
-  slug,
 }) => {
+  const router = useRouter();
+  const { slug } = router.query;
+
   const { user } = useAuth();
-
   const [isMyProfile, setIsMyProfile] = useState(false);
-
-  const [ownedItems, setOwnedItems] = useState([]);
-  const [ownedRefreshed, setOwnedRefreshed] = useState(false);
-
-  useEffect(() => {
-    setOwnedItems(owned_items);
-    setOwnedRefreshed(false);
-  }, [owned_items]);
 
   useEffect(() => {
     if (user) {
       if (slug === user.publicAddress) {
         setIsMyProfile(true);
-      } else {
-        setIsMyProfile(false);
       }
-    } else {
-      setIsMyProfile(false);
     }
-  }, [owned_items, user]);
+  }, [user, slug]);
 
   // Set up my likes
   const [myLikes, setMyLikes] = useState([]);
@@ -92,42 +75,27 @@ const Profile = ({
     }
   }, [like_data]);
 
+  // Immediate try to refresh the owned items without the cache
+  const [ownedItems, setOwnedItems] = useState(owned_items);
+  const [ownedRefreshed, setOwnedRefreshed] = useState(false);
+
   useEffect(() => {
     const refreshOwned = async () => {
-      if (slug !== "0x0000000000000000000000000000000000000000") {
-        const response_owned = await backend.get(`/v1/owned?address=${slug}`);
-        if (response_owned.data.data !== owned_items) {
-          setOwnedItems(response_owned.data.data);
-        }
-      }
-
+      const response_owned = await backend.get(
+        `/v1/owned?address=${slug}&limit=9`
+      );
+      setOwnedItems(response_owned.data.data);
       setOwnedRefreshed(true);
     };
     refreshOwned();
-  }, [owned_items]);
+  }, [slug]);
 
   return (
-    <Layout>
+    <Layout key={slug}>
       <Head>
         <title>Profile | {name ? name : "[Unnamed]"}</title>
       </Head>
-
-      <div className="text-right">
-        {isMyProfile ? (
-          <a
-            href="#"
-            onClick={() => {
-              logout();
-            }}
-            className="showtime-header-link"
-          >
-            Log out
-          </a>
-        ) : (
-          "\u00A0"
-        )}
-      </div>
-      <div className="mx-auto flex pt-16 pb-10 flex-col items-center">
+      <div className="mx-auto flex pt-20 pb-10 flex-col items-center">
         <img
           alt="artist"
           className="showtime-avatar object-cover object-center "
@@ -139,34 +107,50 @@ const Profile = ({
         />
         <div className="text-3xl mt-4">{name ? name : wallet_addresses[0]}</div>
       </div>
+      <div>
+        DEBUG <br />
+        Slug: {slug}
+        <br />
+        Name: {name} <br />
+        URL: {img_url} <br />
+        ADDRESS: {wallet_addresses[0]} <br />
+        OWNED: {owned_items.length} <br />
+        LIKED: {liked_items.length} <br />
+        SLUG: {slug} <br />
+        Type of owned items: {typeof ownedItems} <br />
+        Owned Items lenght: {ownedItems.length}
+        <br />
+        Owned Refreshed: {ownedRefreshed === true ? "True" : "False"}
+        {/*<br />
+        Show loading?:{" "}
+        {!owned_data &&
+        typeof ownedItems !== "undefined" &&
+        ownedItems.length === 0
+          ? "Loading..."
+        : "Not loading"}*/}
+      </div>
       <div className="flex flex-col text-center w-full">
         <div className="showtime-title text-center mx-auto">Owned Items</div>
       </div>
-      <div className="text-center">
-        {ownedRefreshed
-          ? ownedItems.length === 0
-            ? `We couldn't find any items owned by ${
-                isMyProfile ? "you" : "this person"
-              }.`
-            : null
-          : ownedItems.length === 0
-          ? "Loading..."
-          : null}
-      </div>
-
+      {ownedRefreshed === false && ownedItems.length === 0
+        ? "Loading..."
+        : ownedRefreshed && ownedItems.length === 0
+        ? `We couldn't find any items owned by ${
+            isMyProfile ? "you" : "this person"
+          }.`
+        : null}
       <TokenGrid
+        key={ownedRefreshed ? slug + "1" : slug + "0"}
         columnCount={2}
         items={ownedItems}
         myLikes={myLikes}
         setMyLikes={setMyLikes}
       />
-
       <div className="flex flex-col text-center w-full">
         <div className="showtime-title text-center mx-auto">Liked Items</div>
       </div>
-
       {liked_items.length > 0 ? null : (
-        <div className="text-center">
+        <p>
           {isMyProfile ? "You haven't" : "This person hasn't"} liked any items
           yet.{" "}
           {isMyProfile ? (
@@ -174,9 +158,10 @@ const Profile = ({
               <a className="showtime-link">Go explore!</a>
             </Link>
           ) : null}
-        </div>
+        </p>
       )}
       <TokenGrid
+        key={ownedRefreshed ? slug + "11" : slug + "10"}
         columnCount={2}
         items={liked_items}
         myLikes={myLikes}
