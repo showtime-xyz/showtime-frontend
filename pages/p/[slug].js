@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
-import _ from "lodash";
+import _, { remove } from "lodash";
 import Layout from "../../components/layout";
 
 import TokenGrid from "../../components/TokenGrid";
@@ -10,7 +10,7 @@ import useMyLikes from "../../hooks/useMyLikes";
 //import useOwned from "../../hooks/useOwned";
 import backend from "../../lib/backend";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useCookies } from "react-cookie";
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
@@ -32,10 +32,6 @@ export async function getServerSideProps(context) {
   // Get liked items
   const response_liked = await backend.get(`/v1/liked?address=${slug}`);
   const liked_items = response_liked.data.data;
-
-  const logout = () => {
-    console.log("Log out");
-  };
 
   return {
     props: {
@@ -60,6 +56,11 @@ const Profile = ({
   const { user } = useAuth();
 
   const [isMyProfile, setIsMyProfile] = useState(false);
+
+  const [cookies, setCookie, removeCookie] = useCookies([
+    "api_token",
+    "authed",
+  ]);
 
   const [ownedItems, setOwnedItems] = useState([]);
   const [ownedRefreshed, setOwnedRefreshed] = useState(false);
@@ -106,6 +107,10 @@ const Profile = ({
     refreshOwned();
   }, [owned_items]);
 
+  const logout = () => {
+    console.log("Log out");
+  };
+
   return (
     <Layout>
       <Head>
@@ -113,7 +118,7 @@ const Profile = ({
       </Head>
 
       <div className="text-right">
-        {isMyProfile ? (
+        {/*isMyProfile ? (
           <a
             href="#"
             onClick={() => {
@@ -123,9 +128,11 @@ const Profile = ({
           >
             Log out
           </a>
+          
         ) : (
           "\u00A0"
-        )}
+        )*/}
+        {"\u00A0"}
       </div>
       <div className="mx-auto flex pt-16 pb-10 flex-col items-center">
         <img
@@ -137,7 +144,9 @@ const Profile = ({
               : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
           }
         />
-        <div className="text-3xl mt-4">{name ? name : wallet_addresses[0]}</div>
+        <div className={name ? "text-3xl mt-4" : "text-xl mt-4"}>
+          {name ? name : wallet_addresses[0]}
+        </div>
       </div>
       <div className="flex flex-col text-center w-full">
         <div className="showtime-title text-center mx-auto">Owned Items</div>

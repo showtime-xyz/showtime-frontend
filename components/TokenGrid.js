@@ -109,7 +109,10 @@ const TokenGrid = ({
   return (
     <>
       {heroItem ? (
-        <div key={heroItem.token_id} style={{ paddingBottom: 75 }}>
+        <div
+          key={heroItem.asset_contract.address + "_" + heroItem.token_id}
+          style={{ paddingBottom: 75 }}
+        >
           <TokenHero
             item={heroItem}
             handleLike={handleLike}
@@ -122,7 +125,10 @@ const TokenGrid = ({
       {allHeros ? (
         squareItems.map((item) => {
           return (
-            <div style={{ paddingBottom: 75 }} key={item.token_id}>
+            <div
+              style={{ paddingBottom: 75 }}
+              key={item.asset_contract.address + "_" + item.token_id}
+            >
               <TokenHero
                 item={item}
                 handleLike={handleLike}
@@ -139,7 +145,10 @@ const TokenGrid = ({
         >
           {squareItems.map((item) => {
             return (
-              <div style={{ paddingBottom: 75 }} key={item.token_id}>
+              <div
+                style={{ paddingBottom: 75 }}
+                key={item.asset_contract.address + "_" + item.token_id}
+              >
                 <TokenSquare
                   item={item}
                   handleLike={handleLike}

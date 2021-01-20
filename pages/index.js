@@ -52,6 +52,7 @@ export default function Home({ featured_items, leaderboard }) {
       >
         Discover and showcase your favorite digital art
       </h1>
+
       <div className="mt-10 mb-24">
         <div className="flex justify-center">
           {user ? (
