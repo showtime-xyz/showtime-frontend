@@ -58,6 +58,7 @@ export default function WalletButton({
       {linkType === "button" && (
         <button
           onClick={buttonOnClick}
+          className={className}
         >
           {linkText}
         </button>
@@ -65,6 +66,7 @@ export default function WalletButton({
       {linkType === "text" && (
         <button
           onClick={logoutOfWeb3Modal}
+          className={className}
         >
           {linkText}
         </button>

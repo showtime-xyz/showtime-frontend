@@ -2,11 +2,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Magic } from "magic-sdk";
 import WalletButton from "../components/WalletButton";
-import AppContext from "../context/app-context";
 import Web3Modal from "web3modal";
 import Web3 from "web3";
 import Layout from "../components/layout";
-import WalletConnectProvider from "@walletconnect/web3-provider";
 
 export default function Login() {
   const router = useRouter();
@@ -16,7 +14,7 @@ export default function Login() {
   const [web3Modal, setWeb3modal] = useState(null);
   const [provider, setProvider] = useState("");
 
-  useEffect(() => {
+  /*useEffect(() => {
     // window is accessible here.
     setWeb3modal(
       new Web3Modal({
@@ -25,7 +23,7 @@ export default function Login() {
         providerOptions, // required
       })
     );
-  }, []);
+  }, []);*/
 
   const providerOptions = {
     /*walletconnect: {
@@ -38,8 +36,6 @@ export default function Login() {
 
   const connect = async () => {
     try {
-      const newProvider = await web3Modal.connect();
-      const web3 = new Web3(newProvider);
       const accounts = await web3.eth.getAccounts();
       setAccount(accounts[0]);
       setProvider(newProvider);
@@ -61,29 +57,7 @@ export default function Login() {
     } catch (err) {
       console.error(err);
     }
-  };
-
-  /*
-  useEffect(() => {
-    if (web3Modal && window.web3) {
-      connect();
-    }
-  }, [web3Modal]);*/
-
-  async function disconnect() {
-    if (provider.disconnect) {
-      await provider.disconnect();
-
-      // If the cached provider is not cleared,
-      // WalletConnect will default to the existing session
-      // and does not allow to re-scan the QR code with a new wallet.
-      // Depending on your use case you may want or want not his behavir.
-      await web3Modal.clearCachedProvider();
-      setProvider(null);
-    }
-    window.location.reload();
-  }
-  // END WALLET LOGIN
+  }; 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -129,7 +103,7 @@ export default function Login() {
         __________________________________
         <br />
         <br />
-        <WalletButton  className="bg-white text-black"/>
+        <WalletButton className="bg-white text-black hover:bg-gray-300 rounded-lg py-2 px-5"/>
         <br />
         <br />
         <p>

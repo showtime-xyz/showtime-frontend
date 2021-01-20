@@ -34,7 +34,7 @@ export default class MyApp extends React.Component {
     };
 
     const web3Modal = new Web3Modal({
-      network: "rinkeby", // optional
+			network: 'mainnet', // optional
       cacheProvider: true, // optional
       providerOptions, // required
     });
@@ -86,9 +86,7 @@ export default class MyApp extends React.Component {
 
     return (
       <AppContext.Provider value={injectedGlobalContext}>
-          <UseWalletProvider chainId={4}>
             <Component {...pageProps} />
-          </UseWalletProvider>
       </AppContext.Provider>
     );
   }
