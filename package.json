@@ -33,6 +33,6 @@
     "web3modal": "^1.9.3"
   },
   "engines": {
-    "node": "12.14"
+    "node": "12.x"
   }
 }
