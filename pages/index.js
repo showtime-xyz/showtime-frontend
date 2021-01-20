@@ -9,6 +9,7 @@ import useAuth from "../hooks/useAuth";
 import useMyLikes from "../hooks/useMyLikes";
 //import styles from "../styles/Home.module.css";
 import backend from "../lib/backend";
+import useWindowSize from "../hooks/useWindowSize";
 
 export async function getServerSideProps(context) {
   // Get featured
@@ -41,14 +42,24 @@ export default function Home({ featured_items, leaderboard }) {
     }
   }, [data]);
 
+  const [columns, setColumns] = useState(2);
+
+  const size = useWindowSize();
+  useEffect(() => {
+    if (size && size.width < 500) {
+      setColumns(1);
+    } else {
+      setColumns(2);
+    }
+  }, [size]);
   return (
     <Layout>
       <Head>
         <title>Showtime | Digital Art</title>
       </Head>
       <h1
-        className="showtime-title text-center mx-auto"
-        style={{ maxWidth: 1000 }}
+        className="showtime-title text-center mx-auto text-3xl md:text-6xl md:leading-snug"
+        style={{ maxWidth: 800 }}
       >
         Discover and showcase your favorite digital art
       </h1>
@@ -70,7 +81,7 @@ export default function Home({ featured_items, leaderboard }) {
       </div>
       <TokenGrid
         hasHero
-        columnCount={2}
+        columnCount={columns}
         items={featured_items}
         myLikes={myLikes}
         setMyLikes={setMyLikes}

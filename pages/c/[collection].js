@@ -8,6 +8,7 @@ import useMyLikes from "../../hooks/useMyLikes";
 import { useRouter } from "next/router";
 import Select from "react-dropdown-select";
 import backend from "../../lib/backend";
+import useWindowSize from "../../hooks/useWindowSize";
 
 export async function getServerSideProps(context) {
   const { collection } = context.query;
@@ -72,6 +73,17 @@ export default function Collection({
     }
   }, [collection_items]);
 
+  const [columns, setColumns] = useState(2);
+
+  const size = useWindowSize();
+  useEffect(() => {
+    if (size && size.width < 500) {
+      setColumns(1);
+    } else {
+      setColumns(2);
+    }
+  }, [size]);
+
   return (
     <Layout key={collection}>
       <Head>
@@ -79,7 +91,7 @@ export default function Collection({
       </Head>
 
       <div className="flex flex-col text-center w-full">
-        <div className="showtime-title text-center mx-auto">
+        <div className="showtime-title text-center mx-auto text-3xl md:text-6xl">
           Discover Collections
         </div>
       </div>
@@ -100,7 +112,7 @@ export default function Collection({
         {isChanging ? "Loading..." : "\u00A0"}
       </p>
       <TokenGrid
-        columnCount={2}
+        columnCount={columns}
         items={collection_items}
         myLikes={myLikes}
         setMyLikes={setMyLikes}

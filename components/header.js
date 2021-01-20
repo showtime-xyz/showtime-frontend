@@ -1,13 +1,15 @@
 import React from "react";
 import Link from "next/link";
 import useAuth from "../hooks/useAuth";
+import useWindowSize from "../hooks/useWindowSize";
 
 const Header = () => {
   const { user } = useAuth();
+  const size = useWindowSize();
 
   return (
     <header className="">
-      <div className="w-10/12 mx-auto flex flex-wrap py-5 flex-col md:flex-row items-center ">
+      <div className="w-10/12 mx-auto flex flex-wrap py-5 flex-row items-center ">
         <Link href="/">
           <a className="flex items-center showtime-header-link mb-4 md:mb-0 uppercase">
             <img
@@ -34,7 +36,9 @@ const Header = () => {
           </Link>
         ) : (
           <Link href="/login">
-            <a className="showtime-white-button">Sign in / Sign up</a>
+            <a className="showtime-white-button">
+              {size && size.width > 500 ? "Sign in / Sign up" : "Sign in"}
+            </a>
           </Link>
         )}
       </div>

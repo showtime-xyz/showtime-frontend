@@ -25,7 +25,7 @@ const TokenHero = ({ item, handleLike, handleUnlike, isDetail }) => {
       )}
 
       <div className="mt-6 p-1">
-        <div className="float-right text-right">
+        <div className="float-right text-right ">
           <div>
             <ShareButton />
             <LikeButton
@@ -64,7 +64,7 @@ const TokenHero = ({ item, handleLike, handleUnlike, isDetail }) => {
         </div>
 
         {isDetail ? null : (
-          <div className="showtime-hero-title">
+          <div className="showtime-hero-title text-2xl md:text-4xl">
             <Link
               href="/t/[...token]"
               as={`/t/${item.asset_contract.address}/${item.token_id}`}

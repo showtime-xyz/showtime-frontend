@@ -11,6 +11,7 @@ import useMyLikes from "../../hooks/useMyLikes";
 import backend from "../../lib/backend";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
+import useWindowSize from "../../hooks/useWindowSize";
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
@@ -111,6 +112,17 @@ const Profile = ({
     console.log("Log out");
   };
 
+  const [columns, setColumns] = useState(2);
+
+  const size = useWindowSize();
+  useEffect(() => {
+    if (size && size.width < 500) {
+      setColumns(1);
+    } else {
+      setColumns(2);
+    }
+  }, [size]);
+
   return (
     <Layout>
       <Head>
@@ -137,19 +149,21 @@ const Profile = ({
       <div className="mx-auto flex pt-16 pb-10 flex-col items-center">
         <img
           alt="artist"
-          className="showtime-avatar object-cover object-center "
+          className="showtime-avatar object-cover object-center w-12 h-12 md:w-30 md:h-30"
           src={
             img_url
               ? img_url
               : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
           }
         />
-        <div className={name ? "text-3xl mt-4" : "text-xl mt-4"}>
+        <div className={name ? "text-3xl mt-4" : "text-xs md:text-xl mt-4"}>
           {name ? name : wallet_addresses[0]}
         </div>
       </div>
       <div className="flex flex-col text-center w-full">
-        <div className="showtime-title text-center mx-auto">Owned Items</div>
+        <div className="showtime-title text-center mx-auto text-3xl md:text-6xl">
+          Owned Items
+        </div>
       </div>
       <div className="text-center">
         {ownedRefreshed
@@ -164,14 +178,16 @@ const Profile = ({
       </div>
 
       <TokenGrid
-        columnCount={2}
+        columnCount={columns}
         items={ownedItems}
         myLikes={myLikes}
         setMyLikes={setMyLikes}
       />
 
       <div className="flex flex-col text-center w-full">
-        <div className="showtime-title text-center mx-auto">Liked Items</div>
+        <div className="showtime-title text-center mx-auto text-3xl md:text-6xl">
+          Liked Items
+        </div>
       </div>
 
       {liked_items.length > 0 ? null : (
@@ -186,7 +202,7 @@ const Profile = ({
         </div>
       )}
       <TokenGrid
-        columnCount={2}
+        columnCount={columns}
         items={liked_items}
         myLikes={myLikes}
         setMyLikes={setMyLikes}

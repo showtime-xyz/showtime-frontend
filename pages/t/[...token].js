@@ -14,6 +14,8 @@ import TokenGrid from "../../components/TokenGrid";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css"; // This only needs to be imported once in your app
 
+import useWindowSize from "../../hooks/useWindowSize";
+
 export async function getServerSideProps(context) {
   const { token: token_array } = context.query;
   const contract_address = token_array[0];
@@ -123,6 +125,17 @@ export default function Token({ token, same_owner_items }) {
     }
   }, [same_owner_items, token]);
 
+  const [columns, setColumns] = useState(2);
+
+  const size = useWindowSize();
+  useEffect(() => {
+    if (size && size.width < 500) {
+      setColumns(1);
+    } else {
+      setColumns(2);
+    }
+  }, [size]);
+
   return (
     <Layout key={item.asset_contract.address + "_" + item.token_id}>
       <Head>
@@ -133,7 +146,9 @@ export default function Token({ token, same_owner_items }) {
       </Head>
 
       <div className="flex flex-col text-center w-full">
-        <div className="showtime-title text-center mx-auto">{item.name}</div>
+        <div className="showtime-title text-center mx-auto text-3xl md:text-6xl">
+          {item.name}
+        </div>
       </div>
 
       {lightboxOpen && (
@@ -159,8 +174,8 @@ export default function Token({ token, same_owner_items }) {
         />
       )}
 
-      <div className="flex flex-row mt-8">
-        <div className="flex w-2/3 pr-4">
+      <div className="flex flex-col md:flex-row mt-8">
+        <div className="flex md:w-2/3 md:pr-4">
           <div className="w-full" style={{ position: "relative" }}>
             <button
               style={{
@@ -209,8 +224,8 @@ export default function Token({ token, same_owner_items }) {
             />
           </div>
         </div>
-        <div className="flex w-1/3  pl-4">
-          <p>
+        <div className="flex text-center md:w-1/3  md:pl-4 md:text-left">
+          <div className="w-full">
             {item.creator ? (
               <>
                 {"Created by "}
@@ -249,12 +264,12 @@ export default function Token({ token, same_owner_items }) {
                 alt="external"
               />
             </a>
-          </p>
+          </div>
         </div>
       </div>
 
       <div className="flex flex-col text-center w-full">
-        <div className="showtime-title text-center mx-auto">
+        <div className="showtime-title text-center mx-auto text-3xl md:text-6xl">
           More from this owner
         </div>
       </div>
@@ -270,7 +285,7 @@ export default function Token({ token, same_owner_items }) {
           : null}
       </div>
       <TokenGrid
-        columnCount={2}
+        columnCount={columns}
         items={ownedItems}
         myLikes={myLikes}
         setMyLikes={setMyLikes}
