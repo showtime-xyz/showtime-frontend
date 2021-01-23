@@ -95,8 +95,8 @@ export default function Collection({
           name="og:description"
           content="Discover and showcase digital art"
         />
-        {collection_list && collection_list.length > 0 ? (
-          <meta property="og:image" content={collection_list[0].image_url} />
+        {collection_items && collection_items.length > 0 ? (
+          <meta property="og:image" content={collection_items[0].image_url} />
         ) : null}
         <meta
           name="og:title"
@@ -112,8 +112,8 @@ export default function Collection({
           name="twitter:description"
           content="Discover and showcase digital art"
         />
-        {collection_list && collection_list.length > 0 ? (
-          <meta name="twitter:image" content={collection_list[0].image_url} />
+        {collection_items && collection_items.length > 0 ? (
+          <meta name="twitter:image" content={collection_items[0].image_url} />
         ) : null}
       </Head>
 
