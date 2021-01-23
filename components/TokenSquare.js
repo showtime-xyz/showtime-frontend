@@ -3,7 +3,7 @@ import LikeButton from "../components/LikeButton";
 import ShareButton from "../components/ShareButton";
 import Link from "next/link";
 
-const TokenSquare = ({ item, handleLike, handleUnlike }) => {
+const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
   return (
     <div>
       <Link
@@ -63,6 +63,7 @@ const TokenSquare = ({ item, handleLike, handleUnlike }) => {
                 contract: item.asset_contract.address,
                 token_id: item.token_id,
               }}
+              showTooltip={isMobile === false}
             />
           </div>
           <h1 className="showtime-square-title text-2xl md:text-4xl md:leading-relaxed">

@@ -8,39 +8,48 @@ const Header = () => {
   const size = useWindowSize();
 
   return (
-    <header className="">
-      <div className="w-10/12 mx-auto flex flex-wrap py-5 flex-row items-center ">
+    <header>
+      <div className="w-10/12 mx-auto py-5 flex flex-col md:flex-row items-center ">
         <Link href="/">
-          <a className="flex items-center showtime-header-link mb-4 md:mb-0 uppercase">
+          <a className="flex flex-row showtime-header-link mb-4 md:mb-0 uppercase items-center text-left mr-auto">
             <img
               src="/logo_sm.jpg"
               style={{ height: 48, width: 48, borderRadius: 5 }}
               className="mr-4"
             />
-            Showtime
+            <div className="">Showtime</div>
           </a>
         </Link>
-        <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
-          <Link href="/c/superrare">
-            <a className="showtime-header-link mr-5">Discover</a>
-          </Link>
-          <Link href="/#leaderboard">
-            <a className="showtime-header-link mr-5">Top Creators</a>
-          </Link>
-        </nav>
-        {user ? (
-          <Link href="/p/[slug]" as={`/p/${user.publicAddress}`}>
-            <button type="button" className="showtime-white-button-outline">
-              Profile
-            </button>
-          </Link>
-        ) : (
-          <Link href="/login">
-            <a className="showtime-white-button">
-              {size && size.width > 500 ? "Sign in / Sign up" : "Sign in"}
-            </a>
-          </Link>
-        )}
+        <div className="flex-grow items-center text-right">
+          <nav className="text-base">
+            <Link href="/c/superrare">
+              <a className="showtime-header-link mr-5 text-sm md:text-base">
+                Discover
+              </a>
+            </Link>
+            <Link href="/#leaderboard">
+              <a className="showtime-header-link mr-5 text-sm md:text-base">
+                Top Creators
+              </a>
+            </Link>
+            {user ? (
+              <Link href="/p/[slug]" as={`/p/${user.publicAddress}`}>
+                <button
+                  type="button"
+                  className="showtime-login-button-outline text-sm px-4 py-2 md:text-base md:px-5 md:py-3"
+                >
+                  Profile
+                </button>
+              </Link>
+            ) : (
+              <Link href="/login">
+                <a className="showtime-login-button-solid text-sm px-4 py-2 md:text-base  md:px-5 md:py-3">
+                  {size && size.width > 500 ? "Sign in / Sign up" : "Sign in"}
+                </a>
+              </Link>
+            )}
+          </nav>
+        </div>
       </div>
     </header>
   );

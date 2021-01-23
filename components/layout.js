@@ -8,28 +8,6 @@ const Layout = ({ children }) => {
     <div className="flex flex-col min-h-screen">
       <Head>
         <link rel="icon" href="/logo_sm.jpg" />
-        <meta name="description" content="Discover and showcase digital art" />
-        <meta property="og:type" content="website" />
-        <meta
-          name="og:description"
-          content="Discover and showcase digital art"
-        />
-        <meta property="og:image" content="/banner.png" />
-        <meta
-          name="og:title"
-          content="Showtime - Discover and showcase digital art"
-        />
-
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content="Showtime" />
-        <meta
-          name="twitter:description"
-          content="Discover and showcase digital art"
-        />
-        <meta
-          name="twitter:image"
-          content="https://showtime.kilkka.vercel.app/banner.png"
-        />
 
         <meta name="keywords" content="showtime, ethereum, token, nft" />
 

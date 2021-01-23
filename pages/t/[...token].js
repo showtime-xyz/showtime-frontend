@@ -4,12 +4,8 @@ import _ from "lodash";
 import Layout from "../../components/layout";
 import useAuth from "../../hooks/useAuth";
 import useMyLikes from "../../hooks/useMyLikes";
-import { useRouter } from "next/router";
-import Select from "react-dropdown-select";
 import backend from "../../lib/backend";
 import Link from "next/link";
-import LikeButton from "../../components/LikeButton";
-import ShareButton from "../../components/ShareButton";
 import TokenGrid from "../../components/TokenGrid";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css"; // This only needs to be imported once in your app
@@ -126,13 +122,16 @@ export default function Token({ token, same_owner_items }) {
   }, [same_owner_items, token]);
 
   const [columns, setColumns] = useState(2);
+  const [isMobile, setIsMobile] = useState(false);
 
   const size = useWindowSize();
   useEffect(() => {
     if (size && size.width < 500) {
       setColumns(1);
+      setIsMobile(true);
     } else {
       setColumns(2);
+      setIsMobile(false);
     }
   }, [size]);
 
@@ -143,6 +142,17 @@ export default function Token({ token, same_owner_items }) {
         {item.image_original_url ? (
           <link rel="prefetch" href={item.image_original_url} as="image" />
         ) : null}
+
+        <meta name="description" content={item.description} />
+        <meta property="og:type" content="website" />
+        <meta name="og:description" content={item.description} />
+        <meta property="og:image" content={item.image_url} />
+        <meta name="og:title" content={item.name} />
+
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={item.name} />
+        <meta name="twitter:description" content={item.description} />
+        <meta name="twitter:image" content={item.image_url} />
       </Head>
 
       <div className="flex flex-col text-center w-full">
@@ -221,11 +231,15 @@ export default function Token({ token, same_owner_items }) {
               items={[item]}
               myLikes={myLikes}
               setMyLikes={setMyLikes}
+              isMobile={isMobile}
             />
           </div>
         </div>
         <div className="flex text-center md:w-1/3  md:pl-4 md:text-left">
           <div className="w-full">
+            {item.description}
+            <br />
+            <br />
             {item.creator ? (
               <>
                 {"Created by "}
@@ -252,7 +266,8 @@ export default function Token({ token, same_owner_items }) {
             ) : null}
             <br />
             <br />
-            <a
+            <br />
+            {/*<a
               href={`https://opensea.io/assets/${item.asset_contract.address}/${item.token_id}`}
               target="_blank"
               className="showtime-white-button-icon"
@@ -263,7 +278,25 @@ export default function Token({ token, same_owner_items }) {
                 src={"/icons/external-link-alt-solid.svg"}
                 alt="external"
               />
+            </a>*/}
+            <a
+              href={`https://opensea.io/assets/${item.asset_contract.address}/${item.token_id}`}
+              title="Buy on OpenSea"
+              target="_blank"
+            >
+              <img
+                style={{
+                  width: 160,
+                  borderRadius: 7,
+                  boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.25)",
+                }}
+                src="https://storage.googleapis.com/opensea-static/opensea-brand/listed-button-white.png"
+                alt="Listed on OpenSea badge"
+                className={isMobile ? "mx-auto" : "mr-auto"}
+              />
             </a>
+            <br />
+            <br />
           </div>
         </div>
       </div>
@@ -289,6 +322,7 @@ export default function Token({ token, same_owner_items }) {
         items={ownedItems}
         myLikes={myLikes}
         setMyLikes={setMyLikes}
+        isMobile={isMobile}
       />
     </Layout>
   );

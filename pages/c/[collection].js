@@ -88,6 +88,33 @@ export default function Collection({
     <Layout key={collection}>
       <Head>
         <title>Collection | {selected_collection.name}</title>
+
+        <meta name="description" content="Discover and showcase digital art" />
+        <meta property="og:type" content="website" />
+        <meta
+          name="og:description"
+          content="Discover and showcase digital art"
+        />
+        {collection_list && collection_list.length > 0 ? (
+          <meta property="og:image" content={collection_list[0].image_url} />
+        ) : null}
+        <meta
+          name="og:title"
+          content={`${selected_collection.name} Collection`}
+        />
+
+        <meta name="twitter:card" content="summary" />
+        <meta
+          name="twitter:title"
+          content={`${selected_collection.name} Collection`}
+        />
+        <meta
+          name="twitter:description"
+          content="Discover and showcase digital art"
+        />
+        {collection_list && collection_list.length > 0 ? (
+          <meta name="twitter:image" content={collection_list[0].image_url} />
+        ) : null}
       </Head>
 
       <div className="flex flex-col text-center w-full">

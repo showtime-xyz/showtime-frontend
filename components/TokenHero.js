@@ -3,7 +3,7 @@ import LikeButton from "../components/LikeButton";
 import ShareButton from "../components/ShareButton";
 import Link from "next/link";
 
-const TokenHero = ({ item, handleLike, handleUnlike, isDetail }) => {
+const TokenHero = ({ item, handleLike, handleUnlike, isDetail, isMobile }) => {
   return (
     <div>
       {isDetail ? (
@@ -49,6 +49,7 @@ const TokenHero = ({ item, handleLike, handleUnlike, isDetail }) => {
                 contract: item.asset_contract.address,
                 token_id: item.token_id,
               }}
+              showTooltip={isMobile === false}
             />
           </div>
 

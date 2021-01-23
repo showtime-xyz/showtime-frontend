@@ -43,19 +43,41 @@ export default function Home({ featured_items, leaderboard }) {
   }, [data]);
 
   const [columns, setColumns] = useState(2);
+  const [isMobile, setIsMobile] = useState(false);
 
   const size = useWindowSize();
   useEffect(() => {
     if (size && size.width < 500) {
       setColumns(1);
+      setIsMobile(true);
     } else {
       setColumns(2);
+      setIsMobile(false);
     }
   }, [size]);
   return (
     <Layout>
       <Head>
         <title>Showtime | Digital Art</title>
+        <meta name="description" content="Discover and showcase digital art" />
+        <meta property="og:type" content="website" />
+        <meta
+          name="og:description"
+          content="Discover and showcase digital art"
+        />
+        <meta property="og:image" content="/banner.png" />
+        <meta name="og:title" content="Showtime" />
+
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Showtime" />
+        <meta
+          name="twitter:description"
+          content="Discover and showcase digital art"
+        />
+        <meta
+          name="twitter:image"
+          content="https://showtime.kilkka.vercel.app/banner.png"
+        />
       </Head>
       <h1
         className="showtime-title text-center mx-auto text-3xl md:text-6xl md:leading-snug"
@@ -85,6 +107,7 @@ export default function Home({ featured_items, leaderboard }) {
         items={featured_items}
         myLikes={myLikes}
         setMyLikes={setMyLikes}
+        isMobile={isMobile}
       />
       <div className="text-center pt-8 pb-16">
         <Link href="/c/[collection]" as="/c/superrare">

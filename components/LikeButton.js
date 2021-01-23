@@ -9,6 +9,7 @@ const LikeButton = ({
   handleLikeArgs,
   handleUnlike,
   handleUnlikeArgs,
+  showTooltip,
 }) => {
   const [isHovering, setIsHovering] = useState(false);
   const { user } = useAuth();
@@ -24,13 +25,15 @@ const LikeButton = ({
             : router.push("/login")
         }
         className={
-          isLiked ? "showtime-pink-button-icon" : "showtime-white-button-icon"
+          isLiked
+            ? "showtime-like-button-pink text-sm px-3 py-2 md:text-base md:px-5 md:py-3 flex flex-row items-center"
+            : "showtime-like-button-white text-sm px-3 py-2 md:text-base md:px-5 md:py-3 flex flex-row items-center"
         }
         onMouseOver={() => setIsHovering(true)}
         onMouseOut={() => setIsHovering(false)}
       >
         <img
-          style={{ paddingRight: 6, marginTop: 3 }}
+          style={{ paddingRight: 6 }}
           src={
             isLiked
               ? "/icons/heart-white.svg"
@@ -39,21 +42,24 @@ const LikeButton = ({
               : "/icons/heart-black-outline.svg"
           }
           alt="heart"
+          className="flex"
         />
         <span
-          className={isLiked ? null : isHovering ? "showtime-text-pink" : null}
+          className={
+            isLiked ? "flex" : isHovering ? "showtime-text-pink flex" : "flex"
+          }
         >
           {likeCount} like{likeCount === 1 ? null : "s"}
         </span>
       </button>
-      {user ? null : (
+      {user ? null : showTooltip ? (
         <span
-          style={{ fontSize: 12, opacity: 0.9 }}
+          style={{ fontSize: 12, opacity: 0.9, width: 90 }}
           className="tooltip-text bg-white p-3 -mt-6 -ml-24 rounded text-black"
         >
-          Login to like
+          Log in to like
         </span>
-      )}
+      ) : null}
     </div>
   );
 };

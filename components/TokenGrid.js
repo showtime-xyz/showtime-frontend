@@ -12,6 +12,7 @@ const TokenGrid = ({
   setMyLikes,
   allHeros,
   isDetail,
+  isMobile,
 }) => {
   const [itemsList, setItemsList] = useState([]);
   const [itemsLikedList, setItemsLikedList] = useState([]);
@@ -118,6 +119,7 @@ const TokenGrid = ({
             handleLike={handleLike}
             handleUnlike={handleUnlike}
             isDetail={isDetail}
+            isMobile={isMobile}
           />
         </div>
       ) : null}
@@ -133,6 +135,7 @@ const TokenGrid = ({
                 item={item}
                 handleLike={handleLike}
                 handleUnlike={handleUnlike}
+                isMobile={isMobile}
               />
             </div>
           );
@@ -153,6 +156,7 @@ const TokenGrid = ({
                   item={item}
                   handleLike={handleLike}
                   handleUnlike={handleUnlike}
+                  isMobile={isMobile}
                 />
               </div>
             );

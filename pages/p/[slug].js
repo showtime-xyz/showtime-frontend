@@ -1,16 +1,12 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
-import _, { remove } from "lodash";
+import _ from "lodash";
+import Link from "next/link";
 import Layout from "../../components/layout";
-
 import TokenGrid from "../../components/TokenGrid";
-
 import useAuth from "../../hooks/useAuth";
 import useMyLikes from "../../hooks/useMyLikes";
-//import useOwned from "../../hooks/useOwned";
 import backend from "../../lib/backend";
-import Link from "next/link";
-import { useCookies } from "react-cookie";
 import useWindowSize from "../../hooks/useWindowSize";
 
 export async function getServerSideProps(context) {
@@ -57,11 +53,6 @@ const Profile = ({
   const { user } = useAuth();
 
   const [isMyProfile, setIsMyProfile] = useState(false);
-
-  const [cookies, setCookie, removeCookie] = useCookies([
-    "api_token",
-    "authed",
-  ]);
 
   const [ownedItems, setOwnedItems] = useState([]);
   const [ownedRefreshed, setOwnedRefreshed] = useState(false);
@@ -127,6 +118,37 @@ const Profile = ({
     <Layout>
       <Head>
         <title>Profile | {name ? name : "[Unnamed]"}</title>
+
+        <meta name="description" content="Digital art owned and liked" />
+        <meta property="og:type" content="website" />
+        <meta name="og:description" content="Digital art owned and liked" />
+        <meta
+          property="og:image"
+          content={
+            img_url
+              ? img_url
+              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+          }
+        />
+        <meta name="og:title" content={name ? name : wallet_addresses[0]} />
+
+        <meta name="twitter:card" content="summary" />
+        <meta
+          name="twitter:title"
+          content={name ? name : wallet_addresses[0]}
+        />
+        <meta
+          name="twitter:description"
+          content="Digital art owned and liked"
+        />
+        <meta
+          name="twitter:image"
+          content={
+            img_url
+              ? img_url
+              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+          }
+        />
       </Head>
 
       <div className="text-right">
