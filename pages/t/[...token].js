@@ -129,8 +129,11 @@ export default function Token({ token, same_owner_items }) {
     if (size && size.width < 500) {
       setColumns(1);
       setIsMobile(true);
-    } else {
+    } else if (size && size.width < 1400) {
       setColumns(2);
+      setIsMobile(false);
+    } else {
+      setColumns(3);
       setIsMobile(false);
     }
   }, [size]);
@@ -185,7 +188,7 @@ export default function Token({ token, same_owner_items }) {
       )}
 
       <div className="flex flex-col md:flex-row mt-8">
-        <div className="flex md:w-2/3 md:pr-4">
+        <div className="flex md:w-1/2 md:pr-4">
           <div className="w-full" style={{ position: "relative" }}>
             <button
               style={{
@@ -235,9 +238,9 @@ export default function Token({ token, same_owner_items }) {
             />
           </div>
         </div>
-        <div className="flex text-center md:w-1/3  md:pl-4 md:text-left">
+        <div className="flex text-center md:w-1/2  md:pl-4 md:text-left">
           <div className="w-full">
-            {item.description}
+            <div className="showtime-token-description">{item.description}</div>
             <br />
             <br />
             {item.creator ? (

@@ -15,9 +15,8 @@ const Header = () => {
             <img
               src="/logo_sm.jpg"
               style={{ height: 48, width: 48, borderRadius: 5 }}
-              className="mr-4"
             />
-            <div className="">Showtime</div>
+            <div className="mx-4">Showtime</div>
           </a>
         </Link>
         <div className="flex-grow items-center text-right">

@@ -50,8 +50,11 @@ export default function Home({ featured_items, leaderboard }) {
     if (size && size.width < 500) {
       setColumns(1);
       setIsMobile(true);
-    } else {
+    } else if (size && size.width < 1400) {
       setColumns(2);
+      setIsMobile(false);
+    } else {
+      setColumns(3);
       setIsMobile(false);
     }
   }, [size]);
