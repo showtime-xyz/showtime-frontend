@@ -458,3 +458,17 @@ a {
   border-radius: 7px;
   display: inline-flex;
 }
+
+.showtime-token-description {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+}
+
+.showtime-logout-link {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+}
+
+.showtime-logout-link:hover {
+  color: #e45cff;
+}

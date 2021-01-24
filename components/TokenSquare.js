@@ -25,7 +25,7 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
               ? " Ξ 123 ETH"
             : null}*/}
           </div>
-          <h2 className="showtime-square-created text-lg md:text-2xl">
+          <h2 className="showtime-square-created text-lg md:text-xl">
             {item.creator ? (
               <Link href="/p/[slug]" as={`/p/${item.creator.address}`}>
                 <a className="showtime-link">
@@ -66,7 +66,7 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
               showTooltip={isMobile === false}
             />
           </div>
-          <h1 className="showtime-square-title text-2xl md:text-4xl md:leading-relaxed">
+          <h1 className="showtime-square-title text-2xl md:text-3xl md:leading-relaxed">
             <Link
               href="/t/[...token]"
               as={`/t/${item.asset_contract.address}/${item.token_id}`}
@@ -75,7 +75,7 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
             </Link>
           </h1>
 
-          <p className="showtime-square-owned text-base md:text-xl">
+          <p className="showtime-square-owned text-base md:text-lg">
             Owned by{" "}
             {item.owner ? (
               <Link href="/p/[slug]" as={`/p/${item.owner.address}`}>
