@@ -30,6 +30,23 @@ const Header = () => {
     context.setWindowSize(windowSize);
   }, [windowSize]);
 
+  useEffect(() => {
+    const getMyLikes = async () => {
+      // get our likes
+      const myLikesRequest = await fetch("/api/mylikes");
+      try {
+        const my_like_data = await myLikesRequest.json();
+        context.setMyLikes(my_like_data.data);
+      } catch {
+        //
+      }
+    };
+
+    if (!context?.myLikes) {
+      getMyLikes();
+    }
+  }, [context?.myLikes]);
+
   return (
     <header>
       <div className="w-10/12 mx-auto py-5 flex flex-col md:flex-row items-center ">

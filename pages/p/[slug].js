@@ -4,7 +4,6 @@ import _ from "lodash";
 import Link from "next/link";
 import Layout from "../../components/layout";
 import TokenGrid from "../../components/TokenGrid";
-import useMyLikes from "../../hooks/useMyLikes";
 import backend from "../../lib/backend";
 import AppContext from "../../context/app-context";
 import ShareButton from "../../components/ShareButton";
@@ -80,17 +79,6 @@ const Profile = ({
       setIsMyProfile(false);
     }
   }, [owned_items, context.user]);
-
-  // Set up my likes
-  const [myLikes, setMyLikes] = useState([]);
-  const [myLikesLoaded, setMyLikesLoaded] = useState(false);
-  const { data: like_data } = useMyLikes(context.user, myLikesLoaded);
-  useEffect(() => {
-    if (like_data) {
-      setMyLikesLoaded(true);
-      setMyLikes(like_data.data);
-    }
-  }, [like_data]);
 
   useEffect(() => {
     const refreshOwned = async () => {
@@ -233,13 +221,7 @@ const Profile = ({
           : null}
       </div>
 
-      <TokenGrid
-        columnCount={columns}
-        items={ownedItems}
-        myLikes={myLikes}
-        setMyLikes={setMyLikes}
-        isMobile={isMobile}
-      />
+      <TokenGrid columnCount={columns} items={ownedItems} isMobile={isMobile} />
 
       <div className="flex flex-col text-center w-full">
         <div className="showtime-title text-center mx-auto text-3xl md:text-6xl">
@@ -261,8 +243,6 @@ const Profile = ({
       <TokenGrid
         columnCount={columns}
         items={liked_items}
-        myLikes={myLikes}
-        setMyLikes={setMyLikes}
         isMobile={isMobile}
       />
     </Layout>

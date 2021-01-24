@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import _ from "lodash";
 import Layout from "../../components/layout";
-import useMyLikes from "../../hooks/useMyLikes";
 import backend from "../../lib/backend";
 import Link from "next/link";
 import TokenGrid from "../../components/TokenGrid";
@@ -72,16 +71,6 @@ export default function Token({ token, same_owner_items }) {
   useEffect(() => {
     setItem(token);
   }, [token]);
-
-  const [myLikes, setMyLikes] = useState([]);
-  const [myLikesLoaded, setMyLikesLoaded] = useState(false);
-  const { data: like_data } = useMyLikes(context.user, myLikesLoaded);
-  useEffect(() => {
-    if (like_data) {
-      setMyLikesLoaded(true);
-      setMyLikes(like_data.data);
-    }
-  }, [like_data]);
 
   const [ownedItems, setOwnedItems] = useState([]);
   const [ownedRefreshed, setOwnedRefreshed] = useState(false);
@@ -232,8 +221,6 @@ export default function Token({ token, same_owner_items }) {
               isDetail
               columnCount={1}
               items={[item]}
-              myLikes={myLikes}
-              setMyLikes={setMyLikes}
               isMobile={isMobile}
             />
           </div>
@@ -327,13 +314,7 @@ export default function Token({ token, same_owner_items }) {
           ? "Loading..."
           : null}
       </div>
-      <TokenGrid
-        columnCount={columns}
-        items={ownedItems}
-        myLikes={myLikes}
-        setMyLikes={setMyLikes}
-        isMobile={isMobile}
-      />
+      <TokenGrid columnCount={columns} items={ownedItems} isMobile={isMobile} />
     </Layout>
   );
 }

@@ -5,7 +5,6 @@ import _ from "lodash";
 import Layout from "../components/layout";
 import Leaderboard from "../components/Leaderboard";
 import TokenGrid from "../components/TokenGrid";
-import useMyLikes from "../hooks/useMyLikes";
 //import styles from "../styles/Home.module.css";
 import backend from "../lib/backend";
 import AppContext from "../context/app-context";
@@ -29,17 +28,6 @@ export async function getServerSideProps(context) {
 
 export default function Home({ featured_items, leaderboard }) {
   const context = useContext(AppContext);
-
-  // Set up my likes
-  const [myLikes, setMyLikes] = useState([]);
-  const [myLikesLoaded, setMyLikesLoaded] = useState(false);
-  const { data } = useMyLikes(context.user, myLikesLoaded);
-  useEffect(() => {
-    if (data) {
-      setMyLikesLoaded(true);
-      setMyLikes(data.data);
-    }
-  }, [data]);
 
   const [columns, setColumns] = useState(2);
   const [isMobile, setIsMobile] = useState(false);
@@ -107,8 +95,6 @@ export default function Home({ featured_items, leaderboard }) {
         hasHero
         columnCount={columns}
         items={featured_items}
-        myLikes={myLikes}
-        setMyLikes={setMyLikes}
         isMobile={isMobile}
       />
       <div className="text-center pt-8 pb-16">

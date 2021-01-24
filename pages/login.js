@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { Magic } from "magic-sdk";
+import Head from "next/head";
 import WalletButton from "../components/WalletButton";
 import Layout from "../components/layout";
 
@@ -34,6 +35,28 @@ export default function Login() {
 
   return (
     <Layout>
+      <Head>
+        <title>Showtime | Login</title>
+        <meta name="description" content="Discover and showcase digital art" />
+        <meta property="og:type" content="website" />
+        <meta
+          name="og:description"
+          content="Discover and showcase digital art"
+        />
+        <meta property="og:image" content="/banner.png" />
+        <meta name="og:title" content="Showtime | Login" />
+
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Showtime | Login" />
+        <meta
+          name="twitter:description"
+          content="Discover and showcase digital art"
+        />
+        <meta
+          name="twitter:image"
+          content="https://showtime.kilkka.vercel.app/banner.png"
+        />
+      </Head>
       <div className="text-center">
         <div className="text-3xl mt-10">Select a login method:</div>
         <form onSubmit={handleSubmit}>

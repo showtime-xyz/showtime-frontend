@@ -3,7 +3,6 @@ import Head from "next/head";
 import _ from "lodash";
 import Layout from "../../components/layout";
 import TokenGrid from "../../components/TokenGrid";
-import useMyLikes from "../../hooks/useMyLikes";
 import { useRouter } from "next/router";
 import Select from "react-dropdown-select";
 import backend from "../../lib/backend";
@@ -55,17 +54,6 @@ export default function Collection({
       shallow: false,
     });
   };
-
-  // Set up my likes
-  const [myLikes, setMyLikes] = useState([]);
-  const [myLikesLoaded, setMyLikesLoaded] = useState(false);
-  const { data: like_data } = useMyLikes(context.user, myLikesLoaded);
-  useEffect(() => {
-    if (like_data) {
-      setMyLikesLoaded(true);
-      setMyLikes(like_data.data);
-    }
-  }, [like_data]);
 
   useEffect(() => {
     if (collection_items) {
@@ -153,8 +141,6 @@ export default function Collection({
       <TokenGrid
         columnCount={columns}
         items={collection_items}
-        myLikes={myLikes}
-        setMyLikes={setMyLikes}
         isMobile={isMobile}
       />
     </Layout>
