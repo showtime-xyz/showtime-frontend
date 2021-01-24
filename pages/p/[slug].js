@@ -104,13 +104,19 @@ const Profile = ({
   };
 
   const [columns, setColumns] = useState(2);
+  const [isMobile, setIsMobile] = useState(false);
 
   const size = useWindowSize();
   useEffect(() => {
     if (size && size.width < 500) {
       setColumns(1);
-    } else {
+      setIsMobile(true);
+    } else if (size && size.width < 1400) {
       setColumns(2);
+      setIsMobile(false);
+    } else {
+      setColumns(3);
+      setIsMobile(false);
     }
   }, [size]);
 

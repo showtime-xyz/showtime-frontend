@@ -19,7 +19,9 @@ const TokenGrid = ({
   const [myItemLikes, setMyItemLikes] = useState([]);
 
   useEffect(() => {
-    setItemsList(items.filter((item) => item.showtime.hide !== true));
+    setItemsList(
+      items.filter((item) => item.showtime.hide !== true && item.image_url)
+    );
   }, [items]);
 
   useEffect(() => {
