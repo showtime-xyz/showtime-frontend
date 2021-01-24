@@ -1,15 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import _ from "lodash";
 import Layout from "../../components/layout";
 import TokenGrid from "../../components/TokenGrid";
-import useAuth from "../../hooks/useAuth";
 import useMyLikes from "../../hooks/useMyLikes";
 import { useRouter } from "next/router";
 import Select from "react-dropdown-select";
 import backend from "../../lib/backend";
-import useWindowSize from "../../hooks/useWindowSize";
 import ShareButton from "../../components/ShareButton";
+import AppContext from "../../context/app-context";
 
 export async function getServerSideProps(context) {
   const { collection } = context.query;
@@ -45,6 +44,8 @@ export default function Collection({
   collection,
   selected_collection,
 }) {
+  const context = useContext(AppContext);
+
   const router = useRouter();
   const [isChanging, setIsChanging] = useState(false);
   //const { collection } = router.query;
@@ -55,12 +56,10 @@ export default function Collection({
     });
   };
 
-  const { user } = useAuth();
-
   // Set up my likes
   const [myLikes, setMyLikes] = useState([]);
   const [myLikesLoaded, setMyLikesLoaded] = useState(false);
-  const { data: like_data } = useMyLikes(user, myLikesLoaded);
+  const { data: like_data } = useMyLikes(context.user, myLikesLoaded);
   useEffect(() => {
     if (like_data) {
       setMyLikesLoaded(true);
@@ -77,19 +76,18 @@ export default function Collection({
   const [columns, setColumns] = useState(2);
   const [isMobile, setIsMobile] = useState(false);
 
-  const size = useWindowSize();
   useEffect(() => {
-    if (size && size.width < 500) {
+    if (context.windowSize && context.windowSize.width < 500) {
       setColumns(1);
       setIsMobile(true);
-    } else if (size && size.width < 1400) {
+    } else if (context.windowSize && context.windowSize.width < 1400) {
       setColumns(2);
       setIsMobile(false);
     } else {
       setColumns(3);
       setIsMobile(false);
     }
-  }, [size]);
+  }, [context.windowSize]);
 
   return (
     <Layout key={collection}>

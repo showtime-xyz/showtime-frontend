@@ -1,11 +1,34 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import Link from "next/link";
-import useAuth from "../hooks/useAuth";
 import useWindowSize from "../hooks/useWindowSize";
+import AppContext from "../context/app-context";
 
 const Header = () => {
-  const { user } = useAuth();
-  const size = useWindowSize();
+  const context = useContext(AppContext);
+
+  // Try to log us in if it's not already in state
+  useEffect(() => {
+    const getUserFromCookies = async () => {
+      // login with our own API
+      const userRequest = await fetch("/api/user");
+      try {
+        const user_data = await userRequest.json();
+        context.setUser(user_data);
+      } catch {
+        // Not logged in
+      }
+    };
+
+    if (!context?.user) {
+      getUserFromCookies();
+    }
+  }, [context?.user]);
+
+  // Keep track of window size
+  const windowSize = useWindowSize();
+  useEffect(() => {
+    context.setWindowSize(windowSize);
+  }, [windowSize]);
 
   return (
     <header>
@@ -31,8 +54,8 @@ const Header = () => {
                 Top Creators
               </a>
             </Link>
-            {user ? (
-              <Link href="/p/[slug]" as={`/p/${user.publicAddress}`}>
+            {context.user ? (
+              <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
                 <button
                   type="button"
                   className="showtime-login-button-outline text-sm px-3 py-2 md:text-base md:px-5 md:py-3"
@@ -43,7 +66,9 @@ const Header = () => {
             ) : (
               <Link href="/login">
                 <a className="showtime-login-button-solid text-sm px-3 py-2 md:text-base  md:px-5 md:py-3">
-                  {size && size.width > 500 ? "Sign in / Sign up" : "Sign in"}
+                  {context.windowSize && context.windowSize.width > 500
+                    ? "Sign in / Sign up"
+                    : "Sign in"}
                 </a>
               </Link>
             )}

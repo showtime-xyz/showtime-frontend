@@ -4,13 +4,11 @@ import _ from "lodash";
 import Link from "next/link";
 import Layout from "../../components/layout";
 import TokenGrid from "../../components/TokenGrid";
-import useAuth from "../../hooks/useAuth";
 import useMyLikes from "../../hooks/useMyLikes";
 import backend from "../../lib/backend";
-import useWindowSize from "../../hooks/useWindowSize";
 import AppContext from "../../context/app-context";
-//import { useRouter } from "next/router";
 import ShareButton from "../../components/ShareButton";
+//import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
@@ -53,7 +51,6 @@ const Profile = ({
   liked_items,
   slug,
 }) => {
-  const { user } = useAuth();
   //const router = useRouter();
   const context = useContext(AppContext);
   const web3Modal = context?.web3Modal;
@@ -73,8 +70,8 @@ const Profile = ({
   }, [owned_items]);
 
   useEffect(() => {
-    if (user) {
-      if (slug === user.publicAddress) {
+    if (context.user) {
+      if (slug === context.user.publicAddress) {
         setIsMyProfile(true);
       } else {
         setIsMyProfile(false);
@@ -82,12 +79,12 @@ const Profile = ({
     } else {
       setIsMyProfile(false);
     }
-  }, [owned_items, user]);
+  }, [owned_items, context.user]);
 
   // Set up my likes
   const [myLikes, setMyLikes] = useState([]);
   const [myLikesLoaded, setMyLikesLoaded] = useState(false);
-  const { data: like_data } = useMyLikes(user, myLikesLoaded);
+  const { data: like_data } = useMyLikes(context.user, myLikesLoaded);
   useEffect(() => {
     if (like_data) {
       setMyLikesLoaded(true);
@@ -120,7 +117,9 @@ const Profile = ({
       // can redirect to the dashboard!
       //router.push("/");
       logoutOfWeb3Modal();
-      window.location.href = "/";
+      context.setUser(null);
+      //router.push("/");
+      //window.location.href = "/";
     } else {
       /* handle errors */
     }
@@ -129,19 +128,18 @@ const Profile = ({
   const [columns, setColumns] = useState(2);
   const [isMobile, setIsMobile] = useState(false);
 
-  const size = useWindowSize();
   useEffect(() => {
-    if (size && size.width < 500) {
+    if (context.windowSize && context.windowSize.width < 500) {
       setColumns(1);
       setIsMobile(true);
-    } else if (size && size.width < 1400) {
+    } else if (context.windowSize && context.windowSize.width < 1400) {
       setColumns(2);
       setIsMobile(false);
     } else {
       setColumns(3);
       setIsMobile(false);
     }
-  }, [size]);
+  }, [context.windowSize]);
 
   return (
     <Layout>

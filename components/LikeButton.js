@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useRouter } from "next/router";
-import useAuth from "../hooks/useAuth";
+import AppContext from "../context/app-context";
 
 const LikeButton = ({
   isLiked,
@@ -11,14 +11,15 @@ const LikeButton = ({
   handleUnlikeArgs,
   showTooltip,
 }) => {
+  const context = useContext(AppContext);
+
   const [isHovering, setIsHovering] = useState(false);
-  const { user } = useAuth();
   const router = useRouter();
   return (
     <div className="tooltip">
       <button
         onClick={() =>
-          user
+          context.user
             ? isLiked
               ? handleUnlike(handleUnlikeArgs)
               : handleLike(handleLikeArgs)
@@ -52,7 +53,7 @@ const LikeButton = ({
           {likeCount} like{likeCount === 1 ? null : "s"}
         </span>
       </button>
-      {user ? null : showTooltip ? (
+      {context.user ? null : showTooltip ? (
         <span
           style={{ fontSize: 12, opacity: 0.9, width: 90 }}
           className="tooltip-text bg-white p-3 -mt-6 -ml-24 rounded text-black"

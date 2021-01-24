@@ -1,15 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import _ from "lodash";
 import Layout from "../components/layout";
 import Leaderboard from "../components/Leaderboard";
 import TokenGrid from "../components/TokenGrid";
-import useAuth from "../hooks/useAuth";
 import useMyLikes from "../hooks/useMyLikes";
 //import styles from "../styles/Home.module.css";
 import backend from "../lib/backend";
-import useWindowSize from "../hooks/useWindowSize";
+import AppContext from "../context/app-context";
 
 export async function getServerSideProps(context) {
   // Get featured
@@ -29,12 +28,12 @@ export async function getServerSideProps(context) {
 }
 
 export default function Home({ featured_items, leaderboard }) {
-  const { user } = useAuth();
+  const context = useContext(AppContext);
 
   // Set up my likes
   const [myLikes, setMyLikes] = useState([]);
   const [myLikesLoaded, setMyLikesLoaded] = useState(false);
-  const { data } = useMyLikes(user, myLikesLoaded);
+  const { data } = useMyLikes(context.user, myLikesLoaded);
   useEffect(() => {
     if (data) {
       setMyLikesLoaded(true);
@@ -45,19 +44,19 @@ export default function Home({ featured_items, leaderboard }) {
   const [columns, setColumns] = useState(2);
   const [isMobile, setIsMobile] = useState(false);
 
-  const size = useWindowSize();
   useEffect(() => {
-    if (size && size.width < 500) {
+    if (context.windowSize && context.windowSize.width < 500) {
       setColumns(1);
       setIsMobile(true);
-    } else if (size && size.width < 1400) {
+    } else if (context.windowSize && context.windowSize.width < 1400) {
       setColumns(2);
       setIsMobile(false);
     } else {
       setColumns(3);
       setIsMobile(false);
     }
-  }, [size]);
+  }, [context.windowSize]);
+
   return (
     <Layout>
       <Head>
@@ -91,8 +90,8 @@ export default function Home({ featured_items, leaderboard }) {
 
       <div className="mt-10 mb-24">
         <div className="flex justify-center">
-          {user ? (
-            <Link href="/p/[slug]" as={`/p/${user.publicAddress}`}>
+          {context.user ? (
+            <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
               <a className="showtime-pink-button-outline">Go to My Profile</a>
             </Link>
           ) : (

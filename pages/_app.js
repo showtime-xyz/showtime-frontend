@@ -1,13 +1,12 @@
 import React from "react";
 import "../styles/globals.css";
 import AppContext from "../context/app-context";
-import { useWallet, UseWalletProvider } from "use-wallet";
+//import { useWallet, UseWalletProvider } from "use-wallet";
 import Web3Modal from "web3modal";
 import { Web3Provider } from "@ethersproject/providers";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import Authereum from "authereum";
 import ethProvider from "eth-provider";
-
 
 export default class MyApp extends React.Component {
   state = {
@@ -15,6 +14,8 @@ export default class MyApp extends React.Component {
     web3Modal: null,
     web3Provider: null,
     address: "",
+    user: null,
+    windowSize: null,
   };
 
   componentDidMount() {
@@ -34,7 +35,7 @@ export default class MyApp extends React.Component {
     };
 
     const web3Modal = new Web3Modal({
-			network: 'mainnet', // optional
+      network: "mainnet", // optional
       cacheProvider: true, // optional
       providerOptions, // required
     });
@@ -71,6 +72,14 @@ export default class MyApp extends React.Component {
     this.setState({ address });
   }
 
+  setUser(user) {
+    this.setState({ user });
+  }
+
+  setWindowSize(windowSize) {
+    this.setState({ windowSize });
+  }
+
   render() {
     const { Component, pageProps } = this.props;
 
@@ -79,14 +88,18 @@ export default class MyApp extends React.Component {
       web3Modal: this.state.web3Modal,
       web3Provider: this.state.web3Provider,
       address: this.state.address,
+      user: this.state.user,
+      windowSize: this.state.windowSize,
       setWeb3Modal: (web3Modal) => this.setWeb3Modal(web3Modal),
       setWeb3Provider: (web3Provider) => this.setWeb3Provider(web3Provider),
       setAddress: (address) => this.setAddress(address),
+      setUser: (user) => this.setUser(user),
+      setWindowSize: (windowSize) => this.setWindowSize(windowSize),
     };
 
     return (
       <AppContext.Provider value={injectedGlobalContext}>
-            <Component {...pageProps} />
+        <Component {...pageProps} />
       </AppContext.Provider>
     );
   }
