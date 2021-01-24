@@ -31,7 +31,7 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
                 <a className="showtime-link">
                   {item.creator.user && item.creator.user.username
                     ? item.creator.user.username
-                    : "[Unnamed]"}
+                    : "Unnamed"}
                 </a>
               </Link>
             ) : (
@@ -86,11 +86,15 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
           <p className="showtime-square-owned text-base md:text-lg">
             Owned by{" "}
             {item.owner ? (
-              <Link href="/p/[slug]" as={`/p/${item.owner.address}`}>
-                <a className="showtime-link ">
-                  {item.owner.user ? item.owner.user.username : "[Unnamed]"}
-                </a>
-              </Link>
+              item.owner.user && item.owner.user.username === "NullAddress" ? (
+                " multiple owners"
+              ) : (
+                <Link href="/p/[slug]" as={`/p/${item.owner.address}`}>
+                  <a className="showtime-link" style={{ fontWeight: 600 }}>
+                    {item.owner.user ? item.owner.user.username : "Unnamed"}
+                  </a>
+                </Link>
+              )
             ) : null}
           </p>
         </div>

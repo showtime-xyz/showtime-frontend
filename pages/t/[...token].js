@@ -245,13 +245,13 @@ export default function Token({ token, same_owner_items }) {
             <br />
             {item.creator ? (
               <>
-                {"Created by "}
+                <span style={{ fontWeight: 400 }}>{"Created by "}</span>
 
                 <Link href="/p/[slug]" as={`/p/${item.creator.address}`}>
                   <a className="showtime-link">
                     {item.creator.user && item.creator.user.username
                       ? item.creator.user.username
-                      : "[Unnamed]"}
+                      : "Unnamed"}
                   </a>
                 </Link>
               </>
@@ -259,14 +259,21 @@ export default function Token({ token, same_owner_items }) {
               "\u00A0"
             )}
             <br />
-            Owned by{" "}
-            {item.owner ? (
-              <Link href="/p/[slug]" as={`/p/${item.owner.address}`}>
-                <a className="showtime-link">
-                  {item.owner.user ? item.owner.user.username : "[Unnamed]"}
-                </a>
-              </Link>
-            ) : null}
+            <span style={{ fontWeight: 400 }}>
+              Owned by
+              {item.owner ? (
+                item.owner.user &&
+                item.owner.user.username === "NullAddress" ? (
+                  " multiple owners"
+                ) : (
+                  <Link href="/p/[slug]" as={`/p/${item.owner.address}`}>
+                    <a className="showtime-link">
+                      {item.owner.user ? item.owner.user.username : "Unnamed"}
+                    </a>
+                  </Link>
+                )
+              ) : null}
+            </span>
             <br />
             <br />
             <br />

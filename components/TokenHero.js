@@ -82,12 +82,12 @@ const TokenHero = ({ item, handleLike, handleUnlike, isDetail, isMobile }) => {
             </Link>{" "}
             {item.creator ? (
               <>
-                {" by "}
+                <span style={{ fontWeight: 400 }}>{" by "}</span>
                 <Link href="/p/[slug]" as={`/p/${item.creator.address}`}>
                   <a className="showtime-link">
                     {item.creator.user && item.creator.user.username
                       ? item.creator.user.username
-                      : "[Unnamed]"}
+                      : "Unnamed"}
                   </a>
                 </Link>
               </>
@@ -96,10 +96,6 @@ const TokenHero = ({ item, handleLike, handleUnlike, isDetail, isMobile }) => {
             )}
           </div>
         )}
-
-        {/*<p className="leading-relaxed mb-3 text-gray-200">
-          Owned by {item.owner.user ? item.owner.user.username : "[Unnamed]"}
-          </p>*/}
       </div>
     </div>
   );

@@ -146,7 +146,7 @@ const Profile = ({
   return (
     <Layout>
       <Head>
-        <title>Profile | {name ? name : "[Unnamed]"}</title>
+        <title>Profile | {name ? name : "Unnamed"}</title>
 
         <meta name="description" content="Digital art owned and liked" />
         <meta property="og:type" content="website" />

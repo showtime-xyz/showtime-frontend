@@ -22,7 +22,7 @@ const Leaderboard = ({ topCreators }) => {
               />
               <div className="pl-2 md:pl-8 flex-grow-0">
                 <h3 className="text-white font-bol text-xl md:text-3xl">
-                  {creator.name ? creator.name : "[Unnamed]"}
+                  {creator.name ? creator.name : "Unnamed"}
                 </h3>
               </div>
               <div className="text-right flex-grow ">
