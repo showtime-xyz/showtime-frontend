@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import Select from "react-dropdown-select";
 import backend from "../../lib/backend";
 import useWindowSize from "../../hooks/useWindowSize";
+import ShareButton from "../../components/ShareButton";
 
 export async function getServerSideProps(context) {
   const { collection } = context.query;
@@ -130,15 +131,22 @@ export default function Collection({
       </div>
 
       {collection_list && collection_list.length > 0 ? (
-        <div className="mx-auto mt-10" style={{ maxWidth: 240 }}>
-          <Select
-            options={collection_list}
-            labelField="name"
-            valueField="value"
-            values={collection_list.filter((item) => item.value === collection)}
-            searchable={false}
-            onChange={(values) => onChange(values)}
+        <div className="flex flex-row mx-auto mt-10" style={{ width: 260 }}>
+          <ShareButton
+            url={typeof window !== "undefined" ? window.location.href : null}
           />
+          <div className="text-left" style={{ width: 230 }}>
+            <Select
+              options={collection_list}
+              labelField="name"
+              valueField="value"
+              values={collection_list.filter(
+                (item) => item.value === collection
+              )}
+              searchable={false}
+              onChange={(values) => onChange(values)}
+            />
+          </div>
         </div>
       ) : null}
       <p className="mb-12 mt-6 text-center">

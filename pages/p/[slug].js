@@ -10,6 +10,7 @@ import backend from "../../lib/backend";
 import useWindowSize from "../../hooks/useWindowSize";
 import AppContext from "../../context/app-context";
 //import { useRouter } from "next/router";
+import ShareButton from "../../components/ShareButton";
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
@@ -190,8 +191,16 @@ const Profile = ({
               : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
           }
         />
-        <div className={name ? "text-3xl mt-4" : "text-xs md:text-xl mt-4"}>
-          {name ? name : wallet_addresses[0]}
+        <div className=" mt-4 flex flex-row center-items">
+          <ShareButton
+            url={typeof window !== "undefined" ? window.location.href : null}
+          />
+          <div className="text-3xl" style={{ marginRight: 40 }}>
+            {name ? name : "Unnamed"}
+          </div>
+        </div>
+        <div className="text-xs mt-4 showtime-profile-address">
+          {wallet_addresses[0]}
         </div>
         <div className="mt-2">
           {isMyProfile ? (
