@@ -21,6 +21,7 @@ const Header = () => {
 
     if (!context?.user) {
       getUserFromCookies();
+      getMyLikes();
     }
   }, [context?.user]);
 
@@ -30,18 +31,18 @@ const Header = () => {
     context.setWindowSize(windowSize);
   }, [windowSize]);
 
-  useEffect(() => {
-    const getMyLikes = async () => {
-      // get our likes
-      const myLikesRequest = await fetch("/api/mylikes");
-      try {
-        const my_like_data = await myLikesRequest.json();
-        context.setMyLikes(my_like_data.data);
-      } catch {
-        //
-      }
-    };
+  const getMyLikes = async () => {
+    // get our likes
+    const myLikesRequest = await fetch("/api/mylikes");
+    try {
+      const my_like_data = await myLikesRequest.json();
+      context.setMyLikes(my_like_data.data);
+    } catch {
+      //
+    }
+  };
 
+  useEffect(() => {
     if (!context?.myLikes) {
       getMyLikes();
     }
