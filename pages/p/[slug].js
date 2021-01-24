@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import _ from "lodash";
 import Link from "next/link";
@@ -8,6 +8,8 @@ import useAuth from "../../hooks/useAuth";
 import useMyLikes from "../../hooks/useMyLikes";
 import backend from "../../lib/backend";
 import useWindowSize from "../../hooks/useWindowSize";
+import AppContext from "../../context/app-context";
+//import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
@@ -51,6 +53,13 @@ const Profile = ({
   slug,
 }) => {
   const { user } = useAuth();
+  //const router = useRouter();
+  const context = useContext(AppContext);
+  const web3Modal = context?.web3Modal;
+
+  const logoutOfWeb3Modal = function () {
+    if (web3Modal) web3Modal.clearCachedProvider();
+  };
 
   const [isMyProfile, setIsMyProfile] = useState(false);
 
@@ -99,8 +108,21 @@ const Profile = ({
     refreshOwned();
   }, [owned_items]);
 
-  const logout = () => {
-    console.log("Log out");
+  const logout = async () => {
+    const authRequest = await fetch("/api/logout", {
+      method: "POST",
+    });
+
+    if (authRequest.ok) {
+      // We successfully logged in, our API
+      // set authorization cookies and now we
+      // can redirect to the dashboard!
+      //router.push("/");
+      logoutOfWeb3Modal();
+      window.location.href = "/";
+    } else {
+      /* handle errors */
+    }
   };
 
   const [columns, setColumns] = useState(2);
@@ -157,23 +179,7 @@ const Profile = ({
         />
       </Head>
 
-      <div className="text-right">
-        {/*isMyProfile ? (
-          <a
-            href="#"
-            onClick={() => {
-              logout();
-            }}
-            className="showtime-header-link"
-          >
-            Log out
-          </a>
-          
-        ) : (
-          "\u00A0"
-        )*/}
-        {"\u00A0"}
-      </div>
+      <div className="text-right">{"\u00A0"}</div>
       <div className="mx-auto flex pt-16 pb-10 flex-col items-center">
         <img
           alt="artist"
@@ -186,6 +192,21 @@ const Profile = ({
         />
         <div className={name ? "text-3xl mt-4" : "text-xs md:text-xl mt-4"}>
           {name ? name : wallet_addresses[0]}
+        </div>
+        <div className="mt-2">
+          {isMyProfile ? (
+            <a
+              href="#"
+              onClick={() => {
+                logout();
+              }}
+              className="showtime-logout-link"
+            >
+              Log out
+            </a>
+          ) : (
+            "\u00A0"
+          )}
         </div>
       </div>
       <div className="flex flex-col text-center w-full">
@@ -210,6 +231,7 @@ const Profile = ({
         items={ownedItems}
         myLikes={myLikes}
         setMyLikes={setMyLikes}
+        isMobile={isMobile}
       />
 
       <div className="flex flex-col text-center w-full">
@@ -234,6 +256,7 @@ const Profile = ({
         items={liked_items}
         myLikes={myLikes}
         setMyLikes={setMyLikes}
+        isMobile={isMobile}
       />
     </Layout>
   );

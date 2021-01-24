@@ -1,20 +1,21 @@
-import { useState, useEffect } from "react";
+//import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Magic } from "magic-sdk";
 import WalletButton from "../components/WalletButton";
-import Web3Modal from "web3modal";
-import Web3 from "web3";
+//import Web3Modal from "web3modal";
+//import Web3 from "web3";
 import Layout from "../components/layout";
 
 export default function Login() {
   const router = useRouter();
 
   // START WALLET LOGIN
+  /*
   const [account, setAccount] = useState("");
   const [web3Modal, setWeb3modal] = useState(null);
   const [provider, setProvider] = useState("");
 
-  /*useEffect(() => {
+  useEffect(() => {
     // window is accessible here.
     setWeb3modal(
       new Web3Modal({
@@ -23,16 +24,9 @@ export default function Login() {
         providerOptions, // required
       })
     );
-  }, []);*/
+  }, []);
 
-  const providerOptions = {
-    /*walletconnect: {
-      package: WalletConnectProvider, // required
-      options: {
-        infuraId: "INFURA_ID" // required
-      }
-    }*/
-  };
+  const providerOptions = {};
 
   const connect = async () => {
     try {
@@ -52,12 +46,12 @@ export default function Login() {
         // can redirect to the dashboard!
         router.push("/");
       } else {
-        /* handle errors */
+        
       }
     } catch (err) {
       console.error(err);
     }
-  };
+  };*/
 
   const handleSubmit = async (event) => {
     event.preventDefault();
