@@ -1,16 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import _ from "lodash";
 import Layout from "../../components/layout";
-import useAuth from "../../hooks/useAuth";
-import useMyLikes from "../../hooks/useMyLikes";
 import backend from "../../lib/backend";
 import Link from "next/link";
 import TokenGrid from "../../components/TokenGrid";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css"; // This only needs to be imported once in your app
-
-import useWindowSize from "../../hooks/useWindowSize";
+import AppContext from "../../context/app-context";
 
 export async function getServerSideProps(context) {
   const { token: token_array } = context.query;
@@ -49,13 +46,13 @@ export default function Token({ token, same_owner_items }) {
   //const [isChanging, setIsChanging] = useState(false);
   //const { collection } = router.query;
 
-  const { user } = useAuth();
+  const context = useContext(AppContext);
 
   const [isMyProfile, setIsMyProfile] = useState(false);
 
   useEffect(() => {
-    if (user && token.owner && token.owner.address) {
-      if (token.owner.address === user.publicAddress) {
+    if (context.user && token.owner && token.owner.address) {
+      if (token.owner.address === context.user.publicAddress) {
         setIsMyProfile(true);
       } else {
         setIsMyProfile(false);
@@ -63,7 +60,7 @@ export default function Token({ token, same_owner_items }) {
     } else {
       setIsMyProfile(false);
     }
-  }, [same_owner_items, user]);
+  }, [same_owner_items, context.user]);
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
@@ -74,16 +71,6 @@ export default function Token({ token, same_owner_items }) {
   useEffect(() => {
     setItem(token);
   }, [token]);
-
-  const [myLikes, setMyLikes] = useState([]);
-  const [myLikesLoaded, setMyLikesLoaded] = useState(false);
-  const { data: like_data } = useMyLikes(user, myLikesLoaded);
-  useEffect(() => {
-    if (like_data) {
-      setMyLikesLoaded(true);
-      setMyLikes(like_data.data);
-    }
-  }, [like_data]);
 
   const [ownedItems, setOwnedItems] = useState([]);
   const [ownedRefreshed, setOwnedRefreshed] = useState(false);
@@ -124,19 +111,18 @@ export default function Token({ token, same_owner_items }) {
   const [columns, setColumns] = useState(2);
   const [isMobile, setIsMobile] = useState(false);
 
-  const size = useWindowSize();
   useEffect(() => {
-    if (size && size.width < 500) {
+    if (context.windowSize && context.windowSize.width < 500) {
       setColumns(1);
       setIsMobile(true);
-    } else if (size && size.width < 1400) {
+    } else if (context.windowSize && context.windowSize.width < 1400) {
       setColumns(2);
       setIsMobile(false);
     } else {
       setColumns(3);
       setIsMobile(false);
     }
-  }, [size]);
+  }, [context.windowSize]);
 
   return (
     <Layout key={item.asset_contract.address + "_" + item.token_id}>
@@ -235,8 +221,6 @@ export default function Token({ token, same_owner_items }) {
               isDetail
               columnCount={1}
               items={[item]}
-              myLikes={myLikes}
-              setMyLikes={setMyLikes}
               isMobile={isMobile}
             />
           </div>
@@ -330,13 +314,7 @@ export default function Token({ token, same_owner_items }) {
           ? "Loading..."
           : null}
       </div>
-      <TokenGrid
-        columnCount={columns}
-        items={ownedItems}
-        myLikes={myLikes}
-        setMyLikes={setMyLikes}
-        isMobile={isMobile}
-      />
+      <TokenGrid columnCount={columns} items={ownedItems} isMobile={isMobile} />
     </Layout>
   );
 }

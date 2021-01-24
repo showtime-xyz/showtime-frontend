@@ -1,19 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import LikeButton from "../components/LikeButton";
 import ShareButton from "../components/ShareButton";
 import Link from "next/link";
-
-import useWindowSize from "../hooks/useWindowSize";
+import AppContext from "../context/app-context";
 import ReactPlayer from "react-player";
 
 const TokenHero = ({ item, handleLike, handleUnlike, isDetail, isMobile }) => {
-  const size = useWindowSize();
-  const videoWidth = size
+  const context = useContext(AppContext);
+  const videoWidth = context.windowSize
     ? isMobile
       ? 320
-      : size.width < 768
-      ? size.width * (10 / 12)
-      : (size.width * (10 / 12)) / 2 - 16
+      : context.windowSize < 768
+      ? context.windowSize * (10 / 12)
+      : (context.windowSize * (10 / 12)) / 2 - 16
     : 640;
 
   return (

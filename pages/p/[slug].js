@@ -4,13 +4,10 @@ import _ from "lodash";
 import Link from "next/link";
 import Layout from "../../components/layout";
 import TokenGrid from "../../components/TokenGrid";
-import useAuth from "../../hooks/useAuth";
-import useMyLikes from "../../hooks/useMyLikes";
 import backend from "../../lib/backend";
-import useWindowSize from "../../hooks/useWindowSize";
 import AppContext from "../../context/app-context";
-//import { useRouter } from "next/router";
 import ShareButton from "../../components/ShareButton";
+//import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
@@ -53,7 +50,6 @@ const Profile = ({
   liked_items,
   slug,
 }) => {
-  const { user } = useAuth();
   //const router = useRouter();
   const context = useContext(AppContext);
   const web3Modal = context?.web3Modal;
@@ -73,8 +69,8 @@ const Profile = ({
   }, [owned_items]);
 
   useEffect(() => {
-    if (user) {
-      if (slug === user.publicAddress) {
+    if (context.user) {
+      if (slug === context.user.publicAddress) {
         setIsMyProfile(true);
       } else {
         setIsMyProfile(false);
@@ -82,18 +78,7 @@ const Profile = ({
     } else {
       setIsMyProfile(false);
     }
-  }, [owned_items, user]);
-
-  // Set up my likes
-  const [myLikes, setMyLikes] = useState([]);
-  const [myLikesLoaded, setMyLikesLoaded] = useState(false);
-  const { data: like_data } = useMyLikes(user, myLikesLoaded);
-  useEffect(() => {
-    if (like_data) {
-      setMyLikesLoaded(true);
-      setMyLikes(like_data.data);
-    }
-  }, [like_data]);
+  }, [owned_items, context.user]);
 
   useEffect(() => {
     const refreshOwned = async () => {
@@ -120,7 +105,10 @@ const Profile = ({
       // can redirect to the dashboard!
       //router.push("/");
       logoutOfWeb3Modal();
-      window.location.href = "/";
+      context.setUser(null);
+      context.setMyLikes([]);
+      //router.push("/");
+      //window.location.href = "/";
     } else {
       /* handle errors */
     }
@@ -129,19 +117,18 @@ const Profile = ({
   const [columns, setColumns] = useState(2);
   const [isMobile, setIsMobile] = useState(false);
 
-  const size = useWindowSize();
   useEffect(() => {
-    if (size && size.width < 500) {
+    if (context.windowSize && context.windowSize.width < 500) {
       setColumns(1);
       setIsMobile(true);
-    } else if (size && size.width < 1400) {
+    } else if (context.windowSize && context.windowSize.width < 1400) {
       setColumns(2);
       setIsMobile(false);
     } else {
       setColumns(3);
       setIsMobile(false);
     }
-  }, [size]);
+  }, [context.windowSize]);
 
   return (
     <Layout>
@@ -235,13 +222,7 @@ const Profile = ({
           : null}
       </div>
 
-      <TokenGrid
-        columnCount={columns}
-        items={ownedItems}
-        myLikes={myLikes}
-        setMyLikes={setMyLikes}
-        isMobile={isMobile}
-      />
+      <TokenGrid columnCount={columns} items={ownedItems} isMobile={isMobile} />
 
       <div className="flex flex-col text-center w-full">
         <div className="showtime-title text-center mx-auto text-3xl md:text-6xl">
@@ -263,8 +244,6 @@ const Profile = ({
       <TokenGrid
         columnCount={columns}
         items={liked_items}
-        myLikes={myLikes}
-        setMyLikes={setMyLikes}
         isMobile={isMobile}
       />
     </Layout>

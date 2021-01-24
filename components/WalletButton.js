@@ -27,7 +27,7 @@ export default function WalletButton({
     const provider = await web3Modal?.connect();
     if (context?.setWeb3Provider) {
       context.setWeb3Provider(new Web3Provider(provider));
-      console.log(new Web3Provider(provider));
+      //console.log(new Web3Provider(provider));
       if (redirect) router.push("/");
 
       const address = await new Web3Provider(provider).getSigner().getAddress();

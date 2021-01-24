@@ -1,19 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Masonry from "react-masonry-css";
 import TokenHero from "../components/TokenHero";
 import TokenSquare from "../components/TokenSquare";
 import _ from "lodash";
+import AppContext from "../context/app-context";
 
 const TokenGrid = ({
   items,
   hasHero,
   columnCount,
-  myLikes,
-  setMyLikes,
   allHeros,
   isDetail,
   isMobile,
 }) => {
+  const context = useContext(AppContext);
+
   const [itemsList, setItemsList] = useState([]);
   const [itemsLikedList, setItemsLikedList] = useState([]);
   const [myItemLikes, setMyItemLikes] = useState([]);
@@ -25,14 +26,14 @@ const TokenGrid = ({
   }, [items]);
 
   useEffect(() => {
-    setMyItemLikes(myLikes);
-  }, [myLikes]);
+    setMyItemLikes(context.myLikes ? context.myLikes : []);
+  }, [context.myLikes]);
 
   const handleLike = async ({ contract, token_id }) => {
     // Change myLikes via setMyLikes
 
-    setMyLikes([
-      ...myLikes,
+    context.setMyLikes([
+      ...context.myLikes,
       {
         contract: contract,
         token_id: token_id,
@@ -59,8 +60,8 @@ const TokenGrid = ({
 
   const handleUnlike = async ({ contract, token_id }) => {
     // Change myLikes via setMyLikes
-    setMyLikes(
-      myLikes.filter(
+    context.setMyLikes(
+      context.myLikes.filter(
         (item) => !(item.contract === contract && item.token_id === token_id)
       )
     );
