@@ -106,6 +106,7 @@ const Profile = ({
       //router.push("/");
       logoutOfWeb3Modal();
       context.setUser(null);
+      context.setMyLikes([]);
       //router.push("/");
       //window.location.href = "/";
     } else {
