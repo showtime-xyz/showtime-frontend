@@ -190,43 +190,46 @@ export default function Token({ token, same_owner_items }) {
       <div className="flex flex-col md:flex-row mt-8">
         <div className="flex md:w-1/2 md:pr-4">
           <div className="w-full" style={{ position: "relative" }}>
-            <button
-              style={{
-                position: "absolute",
-                top: 0,
-                right: 0,
-                padding: 10,
-                margin: 10,
-                backgroundColor: "rgba(0,0,0,0.2)",
-                borderRadius: 7,
-              }}
-              type="button"
-              onClick={() => setLightboxOpen(true)}
-              onMouseOver={() => setIsHovering(true)}
-              onMouseOut={() => setIsHovering(false)}
-              className="flex flex-row"
-            >
-              <img
-                style={
-                  isHovering
-                    ? { opacity: 1, width: 20 }
-                    : { opacity: 0.7, width: 20 }
-                }
-                src={"/icons/expand-white.svg"}
-                alt="expand"
-                className="flex"
-              />
-              <div
-                className="flex ml-2"
-                style={
-                  isHovering
-                    ? { opacity: 1, fontSize: 14 }
-                    : { opacity: 0.7, fontSize: 14 }
-                }
+            {item.animation_url &&
+            item.animation_url.includes(".mp4") ? null : (
+              <button
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  padding: 10,
+                  margin: 10,
+                  backgroundColor: "rgba(0,0,0,0.2)",
+                  borderRadius: 7,
+                }}
+                type="button"
+                onClick={() => setLightboxOpen(true)}
+                onMouseOver={() => setIsHovering(true)}
+                onMouseOut={() => setIsHovering(false)}
+                className="flex flex-row"
               >
-                Original size
-              </div>
-            </button>
+                <img
+                  style={
+                    isHovering
+                      ? { opacity: 1, width: 20 }
+                      : { opacity: 0.7, width: 20 }
+                  }
+                  src={"/icons/expand-white.svg"}
+                  alt="expand"
+                  className="flex"
+                />
+                <div
+                  className="flex ml-2"
+                  style={
+                    isHovering
+                      ? { opacity: 1, fontSize: 14 }
+                      : { opacity: 0.7, fontSize: 14 }
+                  }
+                >
+                  Original size
+                </div>
+              </button>
+            )}
             <TokenGrid
               hasHero
               isDetail
@@ -267,8 +270,8 @@ export default function Token({ token, same_owner_items }) {
                   " multiple owners"
                 ) : (
                   <Link href="/p/[slug]" as={`/p/${item.owner.address}`}>
-                    <a className="showtime-link">
-                      {item.owner.user ? item.owner.user.username : "Unnamed"}
+                    <a className="showtime-link" style={{ fontWeight: 600 }}>
+                      {item.owner.user ? item.owner.user.username : " Unnamed"}
                     </a>
                   </Link>
                 )

@@ -3,11 +3,35 @@ import LikeButton from "../components/LikeButton";
 import ShareButton from "../components/ShareButton";
 import Link from "next/link";
 
+import useWindowSize from "../hooks/useWindowSize";
+import ReactPlayer from "react-player";
+
 const TokenHero = ({ item, handleLike, handleUnlike, isDetail, isMobile }) => {
+  const size = useWindowSize();
+  const videoWidth = size
+    ? isMobile
+      ? 320
+      : size.width < 768
+      ? size.width * (10 / 12)
+      : (size.width * (10 / 12)) / 2 - 16
+    : 640;
+
   return (
     <div>
       {isDetail ? (
-        <img className="w-full" src={item.image_url} alt="nft" />
+        item.animation_url && item.animation_url.includes(".mp4") ? (
+          <ReactPlayer
+            url={item.animation_url}
+            playing
+            loop
+            controls
+            muted
+            height={videoWidth}
+            width={videoWidth}
+          />
+        ) : (
+          <img className="w-full" src={item.image_url} alt="nft" />
+        )
       ) : (
         <Link
           href="/t/[...token]"
