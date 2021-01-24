@@ -472,3 +472,8 @@ a {
 .showtime-logout-link:hover {
   color: #e45cff;
 }
+
+.showtime-profile-address {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+}

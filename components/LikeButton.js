@@ -26,8 +26,8 @@ const LikeButton = ({
         }
         className={
           isLiked
-            ? "showtime-like-button-pink text-sm px-3 py-2 md:text-base md:px-4 md:py-2 flex flex-row items-center"
-            : "showtime-like-button-white text-sm px-3 py-2 md:text-base md:px-4 md:py-2 flex flex-row items-center"
+            ? "showtime-like-button-pink text-sm px-3 py-2 md:text-base flex flex-row items-center"
+            : "showtime-like-button-white text-sm px-3 py-2 md:text-base flex flex-row items-center"
         }
         onMouseOver={() => setIsHovering(true)}
         onMouseOut={() => setIsHovering(false)}

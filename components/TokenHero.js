@@ -26,8 +26,16 @@ const TokenHero = ({ item, handleLike, handleUnlike, isDetail, isMobile }) => {
 
       <div className="mt-6 p-1">
         <div className="float-right text-right ">
-          <div>
-            <ShareButton />
+          <div className="flex flex-row">
+            <ShareButton
+              url={
+                window.location.protocol +
+                "//" +
+                window.location.hostname +
+                (window.location.port ? ":" + window.location.port : "") +
+                `/t/${item.asset_contract.address}/${item.token_id}`
+              }
+            />
             <LikeButton
               isLiked={item.liked}
               likeCount={item.showtime.like_count}

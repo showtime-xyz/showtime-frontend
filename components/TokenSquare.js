@@ -40,8 +40,16 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
           </h2>
         </div>
         <div>
-          <div className="float-right text-right pt-8">
-            <ShareButton />
+          <div className="float-right text-right pt-8 flex flex-row">
+            <ShareButton
+              url={
+                window.location.protocol +
+                "//" +
+                window.location.hostname +
+                (window.location.port ? ":" + window.location.port : "") +
+                `/t/${item.asset_contract.address}/${item.token_id}`
+              }
+            />
             <LikeButton
               isLiked={item.liked}
               likeCount={item.showtime.like_count}
@@ -66,7 +74,7 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
               showTooltip={isMobile === false}
             />
           </div>
-          <h1 className="showtime-square-title text-2xl md:text-3xl md:leading-relaxed">
+          <h1 className="showtime-square-title text-2xl md:text-3xl my-1">
             <Link
               href="/t/[...token]"
               as={`/t/${item.asset_contract.address}/${item.token_id}`}

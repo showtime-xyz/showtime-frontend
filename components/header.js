@@ -35,14 +35,14 @@ const Header = () => {
               <Link href="/p/[slug]" as={`/p/${user.publicAddress}`}>
                 <button
                   type="button"
-                  className="showtime-login-button-outline text-sm px-4 py-2 md:text-base md:px-5 md:py-3"
+                  className="showtime-login-button-outline text-sm px-3 py-2 md:text-base md:px-5 md:py-3"
                 >
                   Profile
                 </button>
               </Link>
             ) : (
               <Link href="/login">
-                <a className="showtime-login-button-solid text-sm px-4 py-2 md:text-base  md:px-5 md:py-3">
+                <a className="showtime-login-button-solid text-sm px-3 py-2 md:text-base  md:px-5 md:py-3">
                   {size && size.width > 500 ? "Sign in / Sign up" : "Sign in"}
                 </a>
               </Link>

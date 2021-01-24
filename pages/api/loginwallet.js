@@ -3,7 +3,6 @@ import CookieService from "../../lib/cookie";
 
 export default async (req, res) => {
   if (req.method !== "POST") return res.status(405).end();
-  console.log(req);
 
   // exchange the did from Magic for some user data
   const publicAddress = req.headers.authorization.split("Bearer").pop().trim();
