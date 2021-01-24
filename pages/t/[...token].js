@@ -263,15 +263,15 @@ export default function Token({ token, same_owner_items }) {
             )}
             <br />
             <span style={{ fontWeight: 400 }}>
-              Owned by
+              {"Owned by "}
               {item.owner ? (
                 item.owner.user &&
                 item.owner.user.username === "NullAddress" ? (
-                  " multiple owners"
+                  "multiple owners"
                 ) : (
                   <Link href="/p/[slug]" as={`/p/${item.owner.address}`}>
                     <a className="showtime-link" style={{ fontWeight: 600 }}>
-                      {item.owner.user ? item.owner.user.username : " Unnamed"}
+                      {item.owner.user ? item.owner.user.username : "Unnamed"}
                     </a>
                   </Link>
                 )
