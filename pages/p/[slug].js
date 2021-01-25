@@ -27,7 +27,9 @@ export async function getServerSideProps(context) {
   const owned_items = response_owned.data.data;
 
   // Get liked items
-  const response_liked = await backend.get(`/v1/liked?address=${slug}`);
+  const response_liked = await backend.get(
+    `/v1/liked?address=${slug}&use_cached_only=1`
+  );
   const liked_items = response_liked.data.data;
 
   return {
@@ -59,6 +61,14 @@ const Profile = ({
   };
 
   const [isMyProfile, setIsMyProfile] = useState(false);
+
+  const [likedItems, setLikedItems] = useState([]);
+  const [likedRefreshed, setLikedRefreshed] = useState(false);
+
+  useEffect(() => {
+    setLikedItems(liked_items);
+    setLikedRefreshed(false);
+  }, [liked_items]);
 
   const [ownedItems, setOwnedItems] = useState([]);
   const [ownedRefreshed, setOwnedRefreshed] = useState(false);
@@ -92,6 +102,20 @@ const Profile = ({
       setOwnedRefreshed(true);
     };
     refreshOwned();
+  }, [owned_items]);
+
+  useEffect(() => {
+    const refreshLiked = async () => {
+      if (slug !== "0x0000000000000000000000000000000000000000") {
+        const response_liked = await backend.get(`/v1/liked?address=${slug}`);
+        if (response_liked.data.data !== liked_items) {
+          setLikedItems(response_liked.data.data);
+        }
+      }
+
+      setLikedRefreshed(true);
+    };
+    refreshLiked();
   }, [owned_items]);
 
   const logout = async () => {
@@ -229,23 +253,22 @@ const Profile = ({
           Liked Items
         </div>
       </div>
-
-      {liked_items.length > 0 ? null : (
-        <div className="text-center">
-          {isMyProfile ? "You haven't" : "This person hasn't"} liked any items
-          yet.{" "}
-          {isMyProfile ? (
-            <Link href="/c/superrare">
-              <a className="showtime-link">Go explore!</a>
-            </Link>
-          ) : null}
-        </div>
-      )}
-      <TokenGrid
-        columnCount={columns}
-        items={liked_items}
-        isMobile={isMobile}
-      />
+      <div className="text-center">
+        {likedRefreshed
+          ? likedItems.length === 0
+            ? isMyProfile
+              ? "You haven't liked any items yet. "(
+                  <Link href="/c/superrare">
+                    <a className="showtime-link">Go explore!</a>
+                  </Link>
+                )
+              : "This person hasn't liked any items yet."
+            : null
+          : likedItems.length === 0
+          ? "Loading..."
+          : null}
+      </div>
+      <TokenGrid columnCount={columns} items={likedItems} isMobile={isMobile} />
     </Layout>
   );
 };
