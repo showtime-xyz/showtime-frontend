@@ -74,12 +74,9 @@ const Header = () => {
             </Link>
             {context.user ? (
               <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
-                <button
-                  type="button"
-                  className="showtime-login-button-outline text-sm px-3 py-2 md:text-base md:px-5 md:py-3"
-                >
+                <a className="showtime-login-button-outline text-sm px-3 py-2 md:text-base md:px-5 md:py-3">
                   Profile
-                </button>
+                </a>
               </Link>
             ) : (
               <Link href="/login">
