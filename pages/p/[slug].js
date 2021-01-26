@@ -254,19 +254,22 @@ const Profile = ({
         </div>
       </div>
       <div className="text-center">
-        {likedRefreshed
-          ? likedItems.length === 0
-            ? isMyProfile
-              ? "You haven't liked any items yet. "(
-                  <Link href="/c/superrare">
-                    <a className="showtime-link">Go explore!</a>
-                  </Link>
-                )
-              : "This person hasn't liked any items yet."
-            : null
-          : likedItems.length === 0
-          ? "Loading..."
-          : null}
+        {likedRefreshed ? (
+          likedItems.length === 0 ? (
+            isMyProfile ? (
+              <>
+                {`You haven't liked any items yet. `}
+                <Link href="/c/superrare">
+                  <a className="showtime-link">Go explore!</a>
+                </Link>
+              </>
+            ) : (
+              "This person hasn't liked any items yet."
+            )
+          ) : null
+        ) : likedItems.length === 0 ? (
+          "Loading..."
+        ) : null}
       </div>
       <TokenGrid columnCount={columns} items={likedItems} isMobile={isMobile} />
     </Layout>
