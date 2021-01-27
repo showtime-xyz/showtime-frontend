@@ -8,6 +8,7 @@ import TokenGrid from "../components/TokenGrid";
 //import styles from "../styles/Home.module.css";
 import backend from "../lib/backend";
 import AppContext from "../context/app-context";
+import mixpanel from "mixpanel-browser";
 
 export async function getServerSideProps(context) {
   // Get featured
@@ -28,6 +29,12 @@ export async function getServerSideProps(context) {
 
 export default function Home({ featured_items, leaderboard }) {
   const context = useContext(AppContext);
+  useEffect(() => {
+    // Wait for identity to resolve before recording the view
+    if (typeof context.user !== "undefined") {
+      mixpanel.track("Home page view");
+    }
+  }, [typeof context.user]);
 
   const [columns, setColumns] = useState(2);
   const [isMobile, setIsMobile] = useState(false);
@@ -80,7 +87,14 @@ export default function Home({ featured_items, leaderboard }) {
         <div className="flex justify-center">
           {context.user ? (
             <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
-              <a className="showtime-pink-button-outline">Go to My Profile</a>
+              <a
+                className="showtime-pink-button-outline"
+                onClick={() => {
+                  mixpanel.track("Go to My Profile button click");
+                }}
+              >
+                Go to My Profile
+              </a>
             </Link>
           ) : (
             <Link href="/login">

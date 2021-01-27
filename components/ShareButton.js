@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import mixpanel from "mixpanel-browser";
 
-const ShareButton = ({ url }) => {
+const ShareButton = ({ url, type }) => {
   const [isHovering, setIsHovering] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
 
   return (
     <div className="tooltip">
-      <CopyToClipboard text={url} onCopy={() => setIsCopied(true)}>
+      <CopyToClipboard
+        text={url}
+        onCopy={() => {
+          setIsCopied(true);
+          mixpanel.track("Copy link click", { type: type });
+        }}
+      >
         <button
           className="inline-flex mr-1 px-2 py-2 rounded-md"
           onMouseOver={() => setIsHovering(true)}

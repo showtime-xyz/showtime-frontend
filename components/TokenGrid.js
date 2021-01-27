@@ -4,6 +4,7 @@ import TokenHero from "../components/TokenHero";
 import TokenSquare from "../components/TokenSquare";
 import _ from "lodash";
 import AppContext from "../context/app-context";
+import mixpanel from "mixpanel-browser";
 
 const TokenGrid = ({
   items,
@@ -56,6 +57,8 @@ const TokenGrid = ({
     await fetch(`/api/like/${contract}_${token_id}`, {
       method: "post",
     });
+
+    mixpanel.track("Liked item");
   };
 
   const handleUnlike = async ({ contract, token_id }) => {
@@ -82,6 +85,8 @@ const TokenGrid = ({
     await fetch(`/api/unlike/${contract}_${token_id}`, {
       method: "post",
     });
+
+    mixpanel.track("Unliked item");
   };
 
   // Augment content with my like status

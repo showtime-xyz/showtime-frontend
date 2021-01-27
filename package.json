@@ -18,6 +18,7 @@
     "eth-provider": "^0.5.3",
     "lodash": "^4.17.20",
     "magic-sdk": "^4.0.2",
+    "mixpanel-browser": "^2.40.1",
     "next": "10.0.5",
     "postcss": "^8.2.4",
     "prettier": "^2.2.1",

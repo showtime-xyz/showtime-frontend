@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useRouter } from "next/router";
 import AppContext from "../context/app-context";
+import mixpanel from "mixpanel-browser";
 
 const LikeButton = ({
   isLiked,
@@ -15,6 +16,12 @@ const LikeButton = ({
 
   const [isHovering, setIsHovering] = useState(false);
   const router = useRouter();
+
+  const handleLoggedOutLike = () => {
+    mixpanel.track("Liked but logged out");
+    router.push("/login");
+  };
+
   return (
     <div className="tooltip">
       <button
@@ -23,7 +30,7 @@ const LikeButton = ({
             ? isLiked
               ? handleUnlike(handleUnlikeArgs)
               : handleLike(handleLikeArgs)
-            : router.push("/login")
+            : handleLoggedOutLike()
         }
         className={
           isLiked

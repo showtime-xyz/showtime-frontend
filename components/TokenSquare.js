@@ -49,6 +49,7 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
                 (window.location.port ? ":" + window.location.port : "") +
                 `/t/${item.asset_contract.address}/${item.token_id}`
               }
+              type={"item"}
             />
             <LikeButton
               isLiked={item.liked}

@@ -1,13 +1,20 @@
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { Magic } from "magic-sdk";
 import Head from "next/head";
 import WalletButton from "../components/WalletButton";
 import Layout from "../components/layout";
+import mixpanel from "mixpanel-browser";
 
 export default function Login() {
   const router = useRouter();
 
+  useEffect(() => {
+    mixpanel.track("Login page view");
+  }, []);
+
   const handleSubmit = async (event) => {
+    mixpanel.track("Login - email button click");
     event.preventDefault();
 
     const { elements } = event.target;
@@ -27,6 +34,7 @@ export default function Login() {
       // We successfully logged in, our API
       // set authorization cookies and now we
       // can redirect to the dashboard!
+      mixpanel.track("Login success - email");
       router.push("/");
     } else {
       /* handle errors */
