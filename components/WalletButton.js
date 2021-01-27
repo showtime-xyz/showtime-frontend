@@ -5,6 +5,7 @@ import Web3Modal from "web3modal";
 import AppContext from "../context/app-context";
 
 import { Web3Provider } from "@ethersproject/providers";
+import mixpanel from "mixpanel-browser";
 
 export default function WalletButton({
   user,
@@ -43,6 +44,7 @@ export default function WalletButton({
         // We successfully logged in, our API
         // set authorization cookies and now we
         // can redirect to the dashboard!
+        mixpanel.track("Login success - wallet");
         router.push("/");
       } else {
         /* handle errors */
@@ -51,6 +53,8 @@ export default function WalletButton({
   };
 
   const buttonOnClick = function () {
+    mixpanel.track("Login - wallet button click");
+
     if (!web3Modal?.cachedProvider) {
       loadWeb3Modal();
     } else {

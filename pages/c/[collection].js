@@ -8,6 +8,7 @@ import Select from "react-dropdown-select";
 import backend from "../../lib/backend";
 import ShareButton from "../../components/ShareButton";
 import AppContext from "../../context/app-context";
+import mixpanel from "mixpanel-browser";
 
 export async function getServerSideProps(context) {
   const { collection } = context.query;
@@ -43,6 +44,10 @@ export default function Collection({
   collection,
   selected_collection,
 }) {
+  useEffect(() => {
+    mixpanel.track("Collection page view", { collection: collection });
+  }, []);
+
   const context = useContext(AppContext);
 
   const router = useRouter();
@@ -53,6 +58,7 @@ export default function Collection({
     router.push("/c/[collection]", `/c/${values[0]["value"]}`, {
       shallow: false,
     });
+    mixpanel.track("Collection dropdown select");
   };
 
   useEffect(() => {
@@ -120,6 +126,7 @@ export default function Collection({
         <div className="flex flex-row mx-auto mt-10" style={{ width: 260 }}>
           <ShareButton
             url={typeof window !== "undefined" ? window.location.href : null}
+            type={"collection"}
           />
           <div className="text-left" style={{ width: 230 }}>
             <Select

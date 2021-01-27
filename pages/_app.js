@@ -7,6 +7,8 @@ import { Web3Provider } from "@ethersproject/providers";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import Authereum from "authereum";
 import ethProvider from "eth-provider";
+import mixpanel from "mixpanel-browser";
+mixpanel.init("9b14512bc76f3f349c708f67ab189941");
 
 export default class MyApp extends React.Component {
   state = {

@@ -7,6 +7,7 @@ import TokenGrid from "../../components/TokenGrid";
 import backend from "../../lib/backend";
 import AppContext from "../../context/app-context";
 import ShareButton from "../../components/ShareButton";
+import mixpanel from "mixpanel-browser";
 //import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
@@ -60,7 +61,7 @@ const Profile = ({
     if (web3Modal) web3Modal.clearCachedProvider();
   };
 
-  const [isMyProfile, setIsMyProfile] = useState(false);
+  const [isMyProfile, setIsMyProfile] = useState();
 
   const [likedItems, setLikedItems] = useState([]);
   const [likedRefreshed, setLikedRefreshed] = useState(false);
@@ -80,13 +81,18 @@ const Profile = ({
 
   useEffect(() => {
     if (context.user) {
+      // Logged in?
       if (slug === context.user.publicAddress) {
         setIsMyProfile(true);
+        mixpanel.track("Self profile view", { slug: slug });
       } else {
         setIsMyProfile(false);
+        mixpanel.track("Profile view", { slug: slug });
       }
     } else {
+      // Logged out
       setIsMyProfile(false);
+      mixpanel.track("Profile view", { slug: slug });
     }
   }, [owned_items, context.user]);
 
@@ -133,6 +139,7 @@ const Profile = ({
       context.setMyLikes([]);
       //router.push("/");
       //window.location.href = "/";
+      mixpanel.track("Logout");
     } else {
       /* handle errors */
     }
@@ -205,6 +212,7 @@ const Profile = ({
         <div className=" mt-4 flex flex-row center-items">
           <ShareButton
             url={typeof window !== "undefined" ? window.location.href : null}
+            type={"profile"}
           />
           <div className="text-3xl" style={{ marginRight: 40 }}>
             {name ? name : "Unnamed"}

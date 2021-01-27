@@ -8,6 +8,7 @@ import TokenGrid from "../../components/TokenGrid";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css"; // This only needs to be imported once in your app
 import AppContext from "../../context/app-context";
+import mixpanel from "mixpanel-browser";
 
 export async function getServerSideProps(context) {
   const { token: token_array } = context.query;
@@ -45,6 +46,10 @@ export async function getServerSideProps(context) {
 export default function Token({ token, same_owner_items }) {
   //const [isChanging, setIsChanging] = useState(false);
   //const { collection } = router.query;
+
+  useEffect(() => {
+    mixpanel.track("NFT page view");
+  }, []);
 
   const context = useContext(AppContext);
 
@@ -189,7 +194,10 @@ export default function Token({ token, same_owner_items }) {
                   borderRadius: 7,
                 }}
                 type="button"
-                onClick={() => setLightboxOpen(true)}
+                onClick={() => {
+                  setLightboxOpen(true);
+                  mixpanel.track("Original size clicked");
+                }}
                 onMouseOver={() => setIsHovering(true)}
                 onMouseOut={() => setIsHovering(false)}
                 className="flex flex-row"
@@ -280,6 +288,9 @@ export default function Token({ token, same_owner_items }) {
               href={`https://opensea.io/assets/${item.asset_contract.address}/${item.token_id}`}
               title="Buy on OpenSea"
               target="_blank"
+              onClick={() => {
+                mixpanel.track("OpenSea link click");
+              }}
             >
               <img
                 style={{

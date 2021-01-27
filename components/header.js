@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import Link from "next/link";
 import useWindowSize from "../hooks/useWindowSize";
 import AppContext from "../context/app-context";
+import mixpanel from "mixpanel-browser";
 
 const Header = () => {
   const context = useContext(AppContext);
@@ -14,6 +15,16 @@ const Header = () => {
       try {
         const user_data = await userRequest.json();
         context.setUser(user_data);
+
+        mixpanel.identify(user_data.publicAddress);
+        if (user_data.email) {
+          mixpanel.people.set({
+            $email: user_data.email, // only reserved properties need the $
+            USER_ID: user_data.publicAddress, // use human-readable names
+            //"Sign up date": USER_SIGNUP_DATE,    // Send dates in ISO timestamp format (e.g. "2020-01-02T21:07:03Z")
+            //"credits": 150    // ...or numbers
+          });
+        }
       } catch {
         // Not logged in
       }
@@ -52,7 +63,12 @@ const Header = () => {
     <header>
       <div className="w-10/12 mx-auto py-5 flex flex-col md:flex-row items-center ">
         <Link href="/">
-          <a className="flex flex-row showtime-header-link mb-4 md:mb-0 uppercase items-center text-left mr-auto">
+          <a
+            className="flex flex-row showtime-header-link mb-4 md:mb-0 uppercase items-center text-left mr-auto"
+            onClick={() => {
+              mixpanel.track("Logo button click");
+            }}
+          >
             <img
               src="/logo_sm.jpg"
               style={{ height: 48, width: 48, borderRadius: 5 }}
@@ -63,18 +79,33 @@ const Header = () => {
         <div className="flex-grow items-center text-right">
           <nav className="text-base">
             <Link href="/c/superrare">
-              <a className="showtime-header-link mr-5 text-sm md:text-base">
+              <a
+                className="showtime-header-link mr-5 text-sm md:text-base"
+                onClick={() => {
+                  mixpanel.track("Discover button click");
+                }}
+              >
                 Discover
               </a>
             </Link>
             <Link href="/#leaderboard">
-              <a className="showtime-header-link mr-5 text-sm md:text-base">
+              <a
+                className="showtime-header-link mr-5 text-sm md:text-base"
+                onClick={() => {
+                  mixpanel.track("Top creators button click");
+                }}
+              >
                 Top Creators
               </a>
             </Link>
             {context.user ? (
               <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
-                <a className="showtime-login-button-outline text-sm px-3 py-2 md:text-base md:px-5 md:py-3">
+                <a
+                  className="showtime-login-button-outline text-sm px-3 py-2 md:text-base md:px-5 md:py-3"
+                  onClick={() => {
+                    mixpanel.track("Profile button click");
+                  }}
+                >
                   Profile
                 </a>
               </Link>
