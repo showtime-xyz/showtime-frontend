@@ -24,6 +24,13 @@ const Header = () => {
             //"Sign up date": USER_SIGNUP_DATE,    // Send dates in ISO timestamp format (e.g. "2020-01-02T21:07:03Z")
             //"credits": 150    // ...or numbers
           });
+        } else {
+          mixpanel.people.set({
+            //$email: user_data.email, // only reserved properties need the $
+            USER_ID: user_data.publicAddress, // use human-readable names
+            //"Sign up date": USER_SIGNUP_DATE,    // Send dates in ISO timestamp format (e.g. "2020-01-02T21:07:03Z")
+            //"credits": 150    // ...or numbers
+          });
         }
       } catch {
         // Not logged in
