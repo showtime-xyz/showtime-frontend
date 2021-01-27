@@ -16,7 +16,7 @@ export default class MyApp extends React.Component {
     web3Modal: null,
     web3Provider: null,
     address: "",
-    user: null,
+    user: undefined,
     windowSize: null,
     myLikes: null,
   };

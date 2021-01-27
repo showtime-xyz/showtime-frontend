@@ -47,11 +47,13 @@ export default function Token({ token, same_owner_items }) {
   //const [isChanging, setIsChanging] = useState(false);
   //const { collection } = router.query;
 
-  useEffect(() => {
-    mixpanel.track("NFT page view");
-  }, []);
-
   const context = useContext(AppContext);
+  useEffect(() => {
+    // Wait for identity to resolve before recording the view
+    if (typeof context.user !== "undefined") {
+      mixpanel.track("NFT page view");
+    }
+  }, [typeof context.user]);
 
   const [isMyProfile, setIsMyProfile] = useState(false);
 

@@ -44,11 +44,13 @@ export default function Collection({
   collection,
   selected_collection,
 }) {
-  useEffect(() => {
-    mixpanel.track("Collection page view", { collection: collection });
-  }, []);
-
   const context = useContext(AppContext);
+  useEffect(() => {
+    // Wait for identity to resolve before recording the view
+    if (typeof context.user !== "undefined") {
+      mixpanel.track("Collection page view", { collection: collection });
+    }
+  }, [typeof context.user]);
 
   const router = useRouter();
   const [isChanging, setIsChanging] = useState(false);

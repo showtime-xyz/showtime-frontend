@@ -27,6 +27,8 @@ const Header = () => {
         }
       } catch {
         // Not logged in
+        // Switch from undefined to null
+        context.setUser(null);
       }
     };
 

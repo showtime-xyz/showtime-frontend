@@ -28,11 +28,13 @@ export async function getServerSideProps(context) {
 }
 
 export default function Home({ featured_items, leaderboard }) {
-  useEffect(() => {
-    mixpanel.track("Home page view");
-  }, []);
-
   const context = useContext(AppContext);
+  useEffect(() => {
+    // Wait for identity to resolve before recording the view
+    if (typeof context.user !== "undefined") {
+      mixpanel.track("Home page view");
+    }
+  }, [typeof context.user]);
 
   const [columns, setColumns] = useState(2);
   const [isMobile, setIsMobile] = useState(false);

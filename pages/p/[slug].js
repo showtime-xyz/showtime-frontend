@@ -55,6 +55,7 @@ const Profile = ({
 }) => {
   //const router = useRouter();
   const context = useContext(AppContext);
+
   const web3Modal = context?.web3Modal;
 
   const logoutOfWeb3Modal = function () {
@@ -80,21 +81,24 @@ const Profile = ({
   }, [owned_items]);
 
   useEffect(() => {
-    if (context.user) {
-      // Logged in?
-      if (slug === context.user.publicAddress) {
-        setIsMyProfile(true);
-        mixpanel.track("Self profile view", { slug: slug });
+    // Wait for identity to resolve before recording the view
+    if (typeof context.user !== "undefined") {
+      if (context.user) {
+        // Logged in?
+        if (slug === context.user.publicAddress) {
+          setIsMyProfile(true);
+          mixpanel.track("Self profile view", { slug: slug });
+        } else {
+          setIsMyProfile(false);
+          mixpanel.track("Profile view", { slug: slug });
+        }
       } else {
+        // Logged out
         setIsMyProfile(false);
         mixpanel.track("Profile view", { slug: slug });
       }
-    } else {
-      // Logged out
-      setIsMyProfile(false);
-      mixpanel.track("Profile view", { slug: slug });
     }
-  }, [owned_items, context.user]);
+  }, [owned_items, typeof context.user]);
 
   useEffect(() => {
     const refreshOwned = async () => {
