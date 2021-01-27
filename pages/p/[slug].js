@@ -144,6 +144,7 @@ const Profile = ({
       //router.push("/");
       //window.location.href = "/";
       mixpanel.track("Logout");
+      setIsMyProfile(false);
     } else {
       /* handle errors */
     }
