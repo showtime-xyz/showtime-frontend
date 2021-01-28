@@ -403,7 +403,11 @@ const Profile = ({
                 <FollowGrid people={following} />
               </>
             ) : (
-              "Not following anyone yet"
+              <div>
+                Not following anyone yet
+                <br />
+                <br />
+              </div>
             )}
           </div>
         </div>
