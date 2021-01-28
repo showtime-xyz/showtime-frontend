@@ -19,6 +19,7 @@ export default class MyApp extends React.Component {
     user: undefined,
     windowSize: null,
     myLikes: null,
+    myFollows: null,
   };
 
   componentDidMount() {
@@ -87,6 +88,10 @@ export default class MyApp extends React.Component {
     this.setState({ myLikes });
   }
 
+  setMyFollows(myFollows) {
+    this.setState({ myFollows });
+  }
+
   render() {
     const { Component, pageProps } = this.props;
 
@@ -98,12 +103,14 @@ export default class MyApp extends React.Component {
       user: this.state.user,
       windowSize: this.state.windowSize,
       myLikes: this.state.myLikes,
+      myFollows: this.state.myFollows,
       setWeb3Modal: (web3Modal) => this.setWeb3Modal(web3Modal),
       setWeb3Provider: (web3Provider) => this.setWeb3Provider(web3Provider),
       setAddress: (address) => this.setAddress(address),
       setUser: (user) => this.setUser(user),
       setWindowSize: (windowSize) => this.setWindowSize(windowSize),
       setMyLikes: (myLikes) => this.setMyLikes(myLikes),
+      setMyFollows: (myFollows) => this.setMyFollows(myFollows),
     };
 
     return (

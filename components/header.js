@@ -42,6 +42,7 @@ const Header = () => {
     if (!context?.user) {
       getUserFromCookies();
       getMyLikes();
+      getMyFollows();
     }
   }, [context?.user]);
 
@@ -67,6 +68,23 @@ const Header = () => {
       getMyLikes();
     }
   }, [context?.myLikes]);
+
+  const getMyFollows = async () => {
+    // get our follows
+    const myFollowsRequest = await fetch("/api/myfollows");
+    try {
+      const my_follows_data = await myFollowsRequest.json();
+      context.setMyFollows(my_follows_data.data);
+    } catch {
+      //
+    }
+  };
+
+  useEffect(() => {
+    if (!context?.myFollows) {
+      getMyFollows();
+    }
+  }, [context?.myFollows]);
 
   return (
     <header>
