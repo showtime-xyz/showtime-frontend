@@ -171,10 +171,6 @@ a {
   color: #fff;
   font-size: 16px;
   font-weight: 600;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-left: 25px;
-  padding-right: 25px;
   border-radius: 7px;
 }
 
@@ -230,10 +226,6 @@ a {
   color: #fff;
   font-size: 16px;
   font-weight: 600;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-left: 25px;
-  padding-right: 25px;
   border-radius: 7px;
   box-sizing: border-box;
 }
@@ -451,6 +443,18 @@ a {
   color: #e45cff;
 }
 
+.showtime-like-button-white-green-hover {
+  background-color: #fff;
+  color: #222222;
+  font-weight: 600;
+  border-radius: 7px;
+  display: inline-flex;
+}
+
+.showtime-like-button-white-green-hover:hover {
+  color: #35bb5b;
+}
+
 .showtime-like-button-pink {
   background-color: #e45cff;
   color: #fff;
@@ -476,4 +480,21 @@ a {
 .showtime-profile-address {
   font-family: "Inter", sans-serif;
   font-weight: 400;
+}
+
+.showtime-follower-button {
+  border: 1px solid #fff;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 6px;
+  padding-right: 8px;
+  box-sizing: border-box;
+}
+
+.showtime-follower-button:hover {
+  color: #e45cff;
+  border: 1px solid #e45cff;
 }
