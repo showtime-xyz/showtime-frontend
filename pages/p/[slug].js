@@ -382,7 +382,12 @@ const Profile = ({
           <div>
             {followers && followers.length > 0 ? (
               <>
-                <div className="mb-2">Followed by</div>
+                <div className="mb-2">
+                  Followed by{" "}
+                  {followers.length > 1
+                    ? `${followers.length} people`
+                    : "1 person"}
+                </div>
 
                 <FollowGrid people={followers} />
               </>
@@ -398,7 +403,12 @@ const Profile = ({
           <div>
             {following && following.length > 0 ? (
               <>
-                <div className="mb-2">Following</div>
+                <div className="mb-2">
+                  Following{" "}
+                  {following.length > 1
+                    ? `${following.length} people`
+                    : "1 person"}
+                </div>
 
                 <FollowGrid people={following} />
               </>
