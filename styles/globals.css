@@ -470,7 +470,7 @@ a {
 
 .showtime-logout-link {
   font-family: "Inter", sans-serif;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 .showtime-logout-link:hover {
@@ -497,4 +497,18 @@ a {
 .showtime-follower-button:hover {
   color: #e45cff;
   border: 1px solid #e45cff;
+}
+
+.showtime-black-button-outline {
+  border: 2px solid #000;
+  color: #000;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 7px;
+  box-sizing: border-box;
+}
+
+.showtime-black-button-outline:hover {
+  color: #666;
+  border: 2px solid #666;
 }
