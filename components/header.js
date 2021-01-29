@@ -43,6 +43,7 @@ const Header = () => {
       getUserFromCookies();
       getMyLikes();
       getMyFollows();
+      getMyProfile();
     }
   }, [context?.user]);
 

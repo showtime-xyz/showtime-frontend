@@ -17,7 +17,7 @@ const Leaderboard = ({ topCreators }) => {
               className="pt-4 pb-4 w-full flex justify-center items-center border-b-2 border-gray-600"
             >
               <Link href="/p/[slug]" as={`/p/${creator.address}`}>
-                <a class="flex flex-row items-center">
+                <a class="flex flex-row items-center flex-grow">
                   <img
                     alt="artist"
                     className="rounded-full w-12 h-12 md:w-24 md:h-24 object-cover object-center flex-grow-0"
