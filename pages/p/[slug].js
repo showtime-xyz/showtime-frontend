@@ -271,7 +271,8 @@ const Profile = ({
 
     setFollowers(
       followers.filter(
-        (follower) => follower.wallet_address !== context.user.publicAddress
+        (follower) =>
+          !context.myProfile.wallet_addresses.includes(follower.wallet_address)
       )
     );
 
@@ -288,7 +289,20 @@ const Profile = ({
   return (
     <Layout>
       <Head>
-        <title>Profile | {name ? name : "Unnamed"}</title>
+        <title>
+          Profile |{" "}
+          {isMyProfile
+            ? context.myProfile
+              ? context.myProfile.name
+                ? context.myProfile.name
+                : "Unnamed"
+              : name
+              ? name
+              : "Unnamed"
+            : name
+            ? name
+            : "Unnamed"}
+        </title>
 
         <meta name="description" content="Digital art owned and liked" />
         <meta property="og:type" content="website" />
@@ -336,7 +350,7 @@ const Profile = ({
               }}
               className="showtime-logout-link"
             >
-              Edit profile
+              Edit name
             </a>
             {" \u00A0\u00A0\u00A0 "}
             <a
@@ -417,7 +431,7 @@ const Profile = ({
                   }}
                   className="showtime-logout-link"
                 >
-                  Edit profile
+                  Edit name
                 </a>
                 {" \u00A0\u00A0\u00A0 "}
                 <a
@@ -440,7 +454,17 @@ const Profile = ({
             </div>
           </div>
           <div className="text-left text-3xl md:text-6xl mb-4 pb-4 border-b-2 border-gray-600">
-            {name ? name : "Unnamed"}
+            {isMyProfile
+              ? context.myProfile
+                ? context.myProfile.name
+                  ? context.myProfile.name
+                  : "Unnamed"
+                : name
+                ? name
+                : "Unnamed"
+              : name
+              ? name
+              : "Unnamed"}
           </div>
 
           <div>

@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 const Leaderboard = ({ topCreators }) => {
   return (
@@ -15,16 +16,26 @@ const Leaderboard = ({ topCreators }) => {
               key={creator.profile_id}
               className="pt-4 pb-4 w-full flex justify-center items-center border-b-2 border-gray-600"
             >
-              <img
-                alt="artist"
-                className="rounded-full w-12 h-12 md:w-24 md:h-24 object-cover object-center flex-grow-0"
-                src={creator.image_url}
-              />
-              <div className="pl-2 md:pl-8 flex-grow-0">
-                <h3 className="text-white font-bol text-xl md:text-3xl">
-                  {creator.name ? creator.name : "Unnamed"}
-                </h3>
-              </div>
+              <Link href="/p/[slug]" as={`/p/${creator.address}`}>
+                <a class="flex flex-row items-center">
+                  <img
+                    alt="artist"
+                    className="rounded-full w-12 h-12 md:w-24 md:h-24 object-cover object-center flex-grow-0"
+                    src={
+                      creator.image_url
+                        ? creator.image_url
+                        : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                    }
+                  />
+                  <div className="pl-2 md:pl-8 flex-grow-0">
+                    <h3 className="text-white font-bol text-xl md:text-3xl">
+                      <a className="showtime-link">
+                        {creator.name ? creator.name : "Unnamed"}
+                      </a>
+                    </h3>
+                  </div>
+                </a>
+              </Link>
               <div className="text-right flex-grow ">
                 <div className="float-right flex flex-inline">
                   <img
