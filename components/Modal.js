@@ -66,13 +66,14 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   <button
                     type="submit"
                     className="showtime-green-button px-5 py-3 float-right"
+                    style={{ borderColor: "#35bb5b", borderWidth: 2 }}
                     //onClick={() => setEditModalOpen(false)}
                   >
                     Save changes
                   </button>
                   <button
                     type="button"
-                    className="showtime-black-button-outline"
+                    className="showtime-black-button-outline px-5 py-3"
                     onClick={() => {
                       setEditModalOpen(false);
                       setNameValue(context.myProfile.name);

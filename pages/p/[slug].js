@@ -340,7 +340,7 @@ const Profile = ({
         <Modal isOpen={editModalOpen} setEditModalOpen={setEditModalOpen} />
       ) : null}
 
-      <div className="text-xs showtime-profile-address text-left pt-2 visible md:invisible">
+      <div className="text-sm showtime-profile-address text-left pt-2 visible md:invisible">
         {isMyProfile ? (
           <>
             <a
