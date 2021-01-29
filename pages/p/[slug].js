@@ -338,7 +338,7 @@ const Profile = ({
                       : handleLoggedOutFollow()
                   }
                 >
-                  {isFollowed ? "Followed" : "Follow"}
+                  {isFollowed ? "Following" : "Follow"}
                 </button>
                 {context.user ? null : (
                   <span

@@ -77,34 +77,36 @@ export default function Home({ featured_items, leaderboard }) {
         />
       </Head>
       <h1
-        className="showtime-title text-center mx-auto text-3xl md:text-6xl md:leading-snug"
+        className="showtime-title text-center mx-auto text-3xl md:text-6xl md:leading-snug mb-10"
         style={{ maxWidth: 800 }}
       >
         Discover and showcase your favorite digital art
       </h1>
 
-      <div className="mt-10 mb-24">
-        <div className="flex justify-center">
-          {context.user ? (
-            <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
-              <a
-                className="showtime-pink-button-outline"
-                onClick={() => {
-                  mixpanel.track("Go to My Profile button click");
-                }}
-              >
-                Go to My Profile
-              </a>
-            </Link>
-          ) : (
-            <Link href="/login">
-              <a className="showtime-pink-button">
-                Sign up with Email or Wallet
-              </a>
-            </Link>
-          )}
+      {context.user ? null : (
+        <div className=" mb-24">
+          <div className="flex justify-center">
+            {context.user ? (
+              <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
+                <a
+                  className="showtime-pink-button-outline"
+                  onClick={() => {
+                    mixpanel.track("Go to My Profile button click");
+                  }}
+                >
+                  Go to My Profile
+                </a>
+              </Link>
+            ) : (
+              <Link href="/login">
+                <a className="showtime-pink-button">
+                  Sign up with Email or Wallet
+                </a>
+              </Link>
+            )}
+          </div>
         </div>
-      </div>
+      )}
       <TokenGrid
         hasHero
         columnCount={columns}
