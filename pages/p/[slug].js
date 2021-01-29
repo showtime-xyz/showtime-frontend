@@ -10,6 +10,7 @@ import AppContext from "../../context/app-context";
 import ShareButton from "../../components/ShareButton";
 import FollowGrid from "../../components/FollowGrid";
 import { useRouter } from "next/router";
+import Modal from "../../components/Modal";
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
@@ -238,6 +239,19 @@ const Profile = ({
       ...context.myFollows,
     ]);
 
+    setFollowers([
+      {
+        profile_id: null,
+        wallet_address: context.user.publicAddress,
+        name: context.myProfile.name,
+        img_url: context.myProfile.img_url
+          ? context.myProfile.img_url
+          : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png",
+        timestamp: null,
+      },
+      ...followers,
+    ]);
+
     // Post changes to the API
     await fetch(`/api/follow/${slug}`, {
       method: "post",
@@ -255,6 +269,12 @@ const Profile = ({
       )
     );
 
+    setFollowers(
+      followers.filter(
+        (follower) => follower.wallet_address !== context.user.publicAddress
+      )
+    );
+
     // Post changes to the API
     await fetch(`/api/unfollow/${slug}`, {
       method: "post",
@@ -262,6 +282,8 @@ const Profile = ({
 
     mixpanel.track("Unfollowed profile");
   };
+
+  const [editModalOpen, setEditModalOpen] = useState(false);
 
   return (
     <Layout>
@@ -299,6 +321,38 @@ const Profile = ({
           }
         />
       </Head>
+
+      {typeof document !== "undefined" ? (
+        <Modal isOpen={editModalOpen} setEditModalOpen={setEditModalOpen} />
+      ) : null}
+
+      <div className="text-xs showtime-profile-address text-left pt-2 visible md:invisible">
+        {isMyProfile ? (
+          <>
+            <a
+              href="#"
+              onClick={() => {
+                setEditModalOpen(true);
+              }}
+              className="showtime-logout-link"
+            >
+              Edit profile
+            </a>
+            {" \u00A0\u00A0\u00A0 "}
+            <a
+              href="#"
+              onClick={() => {
+                logout();
+              }}
+              className="showtime-logout-link"
+            >
+              Log out
+            </a>
+          </>
+        ) : (
+          "\u00A0"
+        )}
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 mt-8">
         <div className="col-span-1 text-center">
@@ -353,25 +407,35 @@ const Profile = ({
           </div>
         </div>
         <div className="col-span-3">
-          <div
-            className="text-xs showtime-profile-address float-right text-right pt-2"
-            style={{ color: "#ccc" }}
-          >
+          <div className="text-sm showtime-profile-address float-right text-right hidden md:block">
             {isMyProfile ? (
-              <a
-                href="#"
-                onClick={() => {
-                  logout();
-                }}
-                className="showtime-logout-link"
-              >
-                Log out
-              </a>
+              <>
+                <a
+                  href="#"
+                  onClick={() => {
+                    setEditModalOpen(true);
+                  }}
+                  className="showtime-logout-link"
+                >
+                  Edit profile
+                </a>
+                {" \u00A0\u00A0\u00A0 "}
+                <a
+                  href="#"
+                  onClick={() => {
+                    logout();
+                  }}
+                  className="showtime-logout-link"
+                >
+                  Log out
+                </a>
+              </>
             ) : (
               "\u00A0"
             )}
-            <div className="hidden md:block">
-              <br />
+            <br />
+            <br />
+            <div className="text-xs" style={{ color: "#999" }}>
               {wallet_addresses[0]}
             </div>
           </div>

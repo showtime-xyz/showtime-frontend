@@ -86,6 +86,23 @@ const Header = () => {
     }
   }, [context?.myFollows]);
 
+  const getMyProfile = async () => {
+    // get our follows
+    const myProfileRequest = await fetch("/api/myprofile");
+    try {
+      const my_profile_data = await myProfileRequest.json();
+      context.setMyProfile(my_profile_data.data);
+    } catch {
+      //
+    }
+  };
+
+  useEffect(() => {
+    if (!context?.myProfile) {
+      getMyProfile();
+    }
+  }, [context?.myProfile]);
+
   return (
     <header>
       <div className="w-10/12 mx-auto py-5 flex flex-col md:flex-row items-center ">
@@ -104,7 +121,7 @@ const Header = () => {
           </a>
         </Link>
         <div className="flex-grow items-center text-right">
-          <nav className="text-base">
+          <nav className="text-base flex inline-flex items-center">
             <Link href="/c/superrare">
               <a
                 className="showtime-header-link mr-5 text-sm md:text-base"
@@ -128,12 +145,45 @@ const Header = () => {
             {context.user ? (
               <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
                 <a
-                  className="showtime-login-button-outline text-sm px-3 py-2 md:text-base md:px-5 md:py-3"
+                  className="showtime-login-button-outline text-sm px-3 py-2 md:text-base md:px-3 md:py-2 flex flex-row items-center"
                   onClick={() => {
                     mixpanel.track("Profile button click");
                   }}
                 >
-                  Profile
+                  {context.myProfile === undefined ? null : (
+                    <>
+                      <div
+                        className={
+                          context.windowSize
+                            ? context.windowSize.width < 350
+                              ? "hidden"
+                              : null
+                            : null
+                        }
+                      >
+                        <img
+                          alt="profile pic"
+                          src={
+                            context.myProfile
+                              ? context.myProfile.img_url
+                                ? context.myProfile.img_url
+                                : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                          }
+                          className="rounded-full mr-2"
+                          style={{ height: 24, width: 24 }}
+                        />
+                      </div>
+                      <div className="hidden sm:block">
+                        {context.myProfile
+                          ? context.myProfile.name
+                            ? context.myProfile.name
+                            : "Profile"
+                          : "Profile"}
+                      </div>
+                    </>
+                  )}
+                  <div className="block sm:hidden">Profile</div>
                 </a>
               </Link>
             ) : (
