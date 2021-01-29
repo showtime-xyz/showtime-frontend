@@ -340,7 +340,7 @@ const Profile = ({
         <Modal isOpen={editModalOpen} setEditModalOpen={setEditModalOpen} />
       ) : null}
 
-      <div className="text-sm showtime-profile-address text-left pt-2 visible md:invisible">
+      <div className="text-sm showtime-profile-address text-right pt-2 visible lg:invisible">
         {isMyProfile ? (
           <>
             <a
@@ -373,7 +373,7 @@ const Profile = ({
           <div>
             <img
               alt="artist"
-              className="rounded-full object-cover object-center w-40 h-40 mx-auto"
+              className="rounded-full object-cover object-center w-28 h-28 lg:w-40 lg:h-40 mx-auto"
               src={
                 img_url
                   ? img_url
@@ -381,7 +381,7 @@ const Profile = ({
               }
             />
           </div>
-          <div className="mt-4 mb-8">
+          <div className="mt-4 mb-8" style={{ whiteSpace: "nowrap" }}>
             <div className="inline-flex">
               <ShareButton
                 url={
@@ -421,7 +421,7 @@ const Profile = ({
           </div>
         </div>
         <div className="col-span-3">
-          <div className="text-sm showtime-profile-address float-right text-right hidden md:block">
+          <div className="text-sm showtime-profile-address float-right text-right hidden lg:block">
             {isMyProfile ? (
               <>
                 <a
@@ -449,8 +449,8 @@ const Profile = ({
             )}
             <br />
             <br />
-            <div className="text-xs" style={{ color: "#999" }}>
-              {wallet_addresses[0]}
+            <div className="text-xs " style={{ color: "#999" }}>
+              {columns > 2 ? wallet_addresses[0] : null}
             </div>
           </div>
           <div className="text-left text-3xl md:text-6xl mb-4 pb-4 border-b-2 border-gray-600">
