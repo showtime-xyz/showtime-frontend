@@ -349,6 +349,7 @@ const Profile = ({
                 setEditModalOpen(true);
               }}
               className="showtime-logout-link"
+              style={{ whiteSpace: "nowrap" }}
             >
               Edit name
             </a>
@@ -359,6 +360,7 @@ const Profile = ({
                 logout();
               }}
               className="showtime-logout-link"
+              style={{ whiteSpace: "nowrap" }}
             >
               Log out
             </a>
@@ -430,6 +432,7 @@ const Profile = ({
                     setEditModalOpen(true);
                   }}
                   className="showtime-logout-link"
+                  style={{ whiteSpace: "nowrap" }}
                 >
                   Edit name
                 </a>
@@ -440,6 +443,7 @@ const Profile = ({
                     logout();
                   }}
                   className="showtime-logout-link"
+                  style={{ whiteSpace: "nowrap" }}
                 >
                   Log out
                 </a>
