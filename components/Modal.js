@@ -25,7 +25,10 @@ export default function Modal({ isOpen, setEditModalOpen }) {
       }),
     });
 
-    context.setMyProfile({ ...context.myProfile, name: nameValue });
+    context.setMyProfile({
+      ...context.myProfile,
+      name: nameValue ? (nameValue.trim() ? nameValue.trim() : null) : null, // handle names with all whitespaces
+    });
     setEditModalOpen(false);
   };
   return (
