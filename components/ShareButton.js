@@ -34,7 +34,7 @@ const ShareButton = ({ url, type }) => {
         >
           <img
             src={
-              isHovering ? "/icons/share-black.svg" : "/icons/share-black.svg"
+              isHovering ? "/icons/share-pink.svg" : "/icons/share-black.svg"
             }
             alt="share-button"
             className="h-6 w-6 items-center flex"

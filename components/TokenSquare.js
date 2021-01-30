@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import LikeButton from "../components/LikeButton";
 import ShareButton from "../components/ShareButton";
 import Link from "next/link";
+import _ from "lodash";
 
 function truncateWithEllipses(text, max) {
   return text.substr(0, max - 1) + (text.length > max ? "..." : "");
@@ -11,12 +12,25 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
   const [moreShown, setMoreShown] = useState(false);
   const max_description_length = 105;
 
+  const [isHovering, setIsHovering] = useState(false);
+
   return (
     <div
-      style={{
-        backgroundColor: "white",
-        borderWidth: 1,
-        borderColor: "rgb(219,219,219)",
+      style={_.merge(
+        {
+          backgroundColor: "white",
+          borderWidth: 1,
+          borderColor: "rgb(219,219,219)",
+        },
+        isHovering
+          ? {
+              boxShadow: "1px 1px 10px 6px #e9e9e9",
+            }
+          : null
+      )}
+      onMouseOver={() => setIsHovering(true)}
+      onMouseOut={() => {
+        setIsHovering(false);
       }}
     >
       <Link
@@ -28,17 +42,16 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
             className="w-full object-cover object-center mb-1"
             src={item.image_url}
             alt="nft"
-            style={{ boxShadow: "1px 2px 5px #bbb" }}
           />
         </a>
       </Link>
       <div className="p-2">
         <div>
-          <div className="flex items-center">
-            <div className="flex-grow p-1">
+          <div className="flex flex-row items-center">
+            <div className="flex-shrink">
               {item.creator ? (
                 <Link href="/p/[slug]" as={`/p/${item.creator.address}`}>
-                  <a className="flex flex-row items-center">
+                  <a className="flex flex-row items-center p-1 ">
                     <div>
                       <img
                         alt={
@@ -49,11 +62,11 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
                         src={
                           "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                         }
-                        className="rounded-full mr-1"
+                        className="rounded-full "
                         style={{ height: 24, width: 24 }}
                       />
                     </div>
-                    <div className="showtime-card-profile-link">
+                    <div className="showtime-card-profile-link ml-1">
                       {item.creator.user && item.creator.user.username
                         ? truncateWithEllipses(item.creator.user.username, 22)
                         : "Unnamed"}
@@ -63,7 +76,7 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
               ) : null}
             </div>
 
-            <div>
+            <div className="flex-grow text-right">
               <LikeButton
                 isLiked={item.liked}
                 likeCount={item.showtime.like_count}
@@ -122,6 +135,8 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
                 fontWeight: 400,
                 color: "#888",
                 fontSize: 12,
+                overflowWrap: "break-word",
+                wordWrap: "break-word",
               }}
             >
               {moreShown ? (

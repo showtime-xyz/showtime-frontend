@@ -157,7 +157,7 @@ const TokenGrid = ({
           {squareItems.map((item) => {
             return (
               <div
-                style={{ paddingBottom: 75 }}
+                style={{ paddingBottom: 30 }}
                 key={item.asset_contract.address + "_" + item.token_id}
               >
                 <TokenSquare

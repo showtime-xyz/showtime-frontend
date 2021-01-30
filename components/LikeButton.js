@@ -39,6 +39,7 @@ const LikeButton = ({
         }
         onMouseOver={() => setIsHovering(true)}
         onMouseOut={() => setIsHovering(false)}
+        style={likeCount === 1 ? { minWidth: 82 } : { minWidth: 96 }}
       >
         <img
           style={{ paddingRight: 6 }}
