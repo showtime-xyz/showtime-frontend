@@ -16,7 +16,7 @@ const ShareButton = ({ url, type }) => {
         }}
       >
         <button
-          className="inline-flex mr-1 px-2 py-1 rounded-md"
+          className="inline-flex px-1 py-1 ml-1 rounded-md"
           onMouseOver={() => setIsHovering(true)}
           onMouseOut={() => {
             setIsHovering(false);

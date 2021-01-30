@@ -80,8 +80,8 @@ export default function Home({ featured_items, leaderboard }) {
         />
       </Head>
       <h1
-        className="showtime-title text-center mx-auto text-3xl md:text-6xl md:leading-snug mb-10"
-        style={{ maxWidth: 800 }}
+        className="showtime-title text-center mx-auto text-2xl md:text-5xl md:leading-snug mb-10 mt-5"
+        style={{ maxWidth: 700 }}
       >
         Discover and showcase your favorite digital art
       </h1>

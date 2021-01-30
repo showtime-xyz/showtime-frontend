@@ -106,10 +106,10 @@ const Header = () => {
 
   return (
     <header style={{ backgroundColor: "#010101" }}>
-      <div className="w-10/12 mx-auto py-5 flex flex-col md:flex-row items-center ">
+      <div className="w-10/12 mx-auto py-3 flex flex-col md:flex-row items-center ">
         <Link href="/">
           <a
-            className="flex flex-row showtime-header-link mb-4 md:mb-0 uppercase items-center text-left mr-auto"
+            className="flex flex-row showtime-header-link mb-4 md:mb-0 items-center text-left mr-auto"
             onClick={() => {
               mixpanel.track("Logo button click");
             }}

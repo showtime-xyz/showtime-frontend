@@ -122,17 +122,16 @@ export default function Collection({
       </Head>
 
       <div className="flex flex-col text-center w-full">
-        <div className="showtime-title text-center mx-auto text-3xl md:text-6xl">
+        <div className="showtime-title text-center mx-auto text-2xl md:text-5xl mt-5">
           Discover Collections
         </div>
       </div>
 
       {collection_list && collection_list.length > 0 ? (
-        <div className="flex flex-row mx-auto mt-10" style={{ width: 260 }}>
-          <ShareButton
-            url={typeof window !== "undefined" ? window.location.href : null}
-            type={"collection"}
-          />
+        <div
+          className="flex flex-row mx-auto mt-6 items-center"
+          style={{ width: 260 }}
+        >
           <div className="text-left" style={{ width: 230 }}>
             <Select
               options={collection_list}
@@ -145,9 +144,15 @@ export default function Collection({
               onChange={(values) => onChange(values)}
             />
           </div>
+          <div className="">
+            <ShareButton
+              url={typeof window !== "undefined" ? window.location.href : null}
+              type={"collection"}
+            />
+          </div>
         </div>
       ) : null}
-      <p className="mb-12 mt-6 text-center">
+      <p className="mb-6 mt-4 text-center">
         {isChanging ? "Loading..." : "\u00A0"}
       </p>
       <TokenGrid

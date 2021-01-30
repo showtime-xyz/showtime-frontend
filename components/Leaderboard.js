@@ -5,7 +5,7 @@ const Leaderboard = ({ topCreators }) => {
   return (
     <div id="leaderboard">
       <div className="flex flex-col text-center w-full">
-        <div className="showtime-title text-center mx-auto text-3xl md:text-6xl">
+        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-8">
           Top Creators
         </div>
       </div>
@@ -14,7 +14,7 @@ const Leaderboard = ({ topCreators }) => {
           return (
             <div
               key={creator.profile_id}
-              className="pt-4 pb-4 w-full flex justify-center items-center border-b-2 border-gray-600"
+              className="pt-4 pb-4 w-full flex justify-center items-center border-b-2 border-gray-200"
             >
               <Link href="/p/[slug]" as={`/p/${creator.address}`}>
                 <a class="flex flex-row items-center flex-grow">

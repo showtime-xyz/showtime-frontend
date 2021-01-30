@@ -344,14 +344,15 @@ const Profile = ({
       ) : null}
 
       <div
-        className=" text-sm showtime-profile-address text-left mt-2 p-1 px-4 visible lg:invisible"
+        className=" text-sm showtime-profile-address text-left mt-3 py-2 px-4 visible lg:invisible"
         style={
           isMyProfile
             ? {
-                backgroundColor: "#f0f0f0",
+                backgroundColor: "#fff",
                 borderRadius: 7,
                 borderWidth: 1,
                 color: "#333",
+                borderColor: "#ccc",
               }
             : {
                 borderWidth: 1,
@@ -401,22 +402,18 @@ const Profile = ({
               }
             />
           </div>
-          <div className="mt-4 mb-8" style={{ whiteSpace: "nowrap" }}>
-            <div className="inline-flex">
-              <ShareButton
-                url={
-                  typeof window !== "undefined" ? window.location.href : null
-                }
-                type={"profile"}
-              />
-            </div>
+          <div
+            className="mt-4 mb-8 flex flex-row"
+            style={{ whiteSpace: "nowrap" }}
+          >
+            <div className="flex-grow"></div>
             {isMyProfile ? null : (
-              <div className="tooltip inline-flex">
+              <div className="tooltip ">
                 <button
                   className={
                     isFollowed
-                      ? "showtime-green-button text-sm px-3 py-1 md:text-base items-center mr-11"
-                      : "showtime-like-button-white-green-hover text-sm px-3 py-1 md:text-base items-center mr-11"
+                      ? "showtime-green-button text-sm px-3 py-1 md:text-base items-center ml-8"
+                      : "showtime-like-button-white-green-hover text-sm px-3 py-1 md:text-base items-center ml-8"
                   }
                   onClick={() =>
                     context.user
@@ -438,6 +435,15 @@ const Profile = ({
                 )}
               </div>
             )}
+            <div>
+              <ShareButton
+                url={
+                  typeof window !== "undefined" ? window.location.href : null
+                }
+                type={"profile"}
+              />
+            </div>
+            <div className="flex-grow"></div>
           </div>
         </div>
         <div className="col-span-3">
@@ -469,13 +475,11 @@ const Profile = ({
             ) : (
               "\u00A0"
             )}
-            <br />
-            <br />
-            <div className="text-xs " style={{ color: "#999" }}>
+            <div className="text-xs mt-2" style={{ color: "#999" }}>
               {columns > 2 ? wallet_addresses[0] : null}
             </div>
           </div>
-          <div className="text-left text-3xl md:text-6xl mb-4 pb-4 border-b-2 border-gray-300">
+          <div className="text-left text-3xl md:text-5xl mb-4 pb-4 border-b-2 border-gray-300">
             {isMyProfile
               ? context.myProfile
                 ? context.myProfile.name
@@ -534,7 +538,7 @@ const Profile = ({
       </div>
 
       <div className="flex flex-col text-center w-full border-t-2 border-gray-300">
-        <div className="showtime-title text-center mx-auto text-3xl md:text-6xl">
+        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl">
           Owned Items
         </div>
       </div>
@@ -553,7 +557,7 @@ const Profile = ({
       <TokenGrid columnCount={columns} items={ownedItems} isMobile={isMobile} />
 
       <div className="flex flex-col text-center w-full  border-t-2 border-gray-300 mt-8">
-        <div className="showtime-title text-center mx-auto text-3xl md:text-6xl">
+        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl">
           Liked Items
         </div>
       </div>

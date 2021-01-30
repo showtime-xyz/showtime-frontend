@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@400;700&family=Inter:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
 
 html,
 body {
@@ -10,7 +10,7 @@ body {
   margin: 0;
   /*background-color: #010101;
   color: rgba(255, 255, 255, 0.9);*/
-  background-color: #fafafa;
+  background-color: #f4f2f1; /* #fafafa; */
   color: #010101;
   font-family: "Inter", sans-serif;
   font-weight: 600;
@@ -111,7 +111,6 @@ a {
 }
 
 .showtime-title {
-  font-family: "Darker Grotesque", sans-serif;
   font-weight: 700;
   /*font-size: 64px;*/
   /*line-height: 83px;*/
@@ -121,8 +120,7 @@ a {
 }
 
 .showtime-hero-title {
-  font-family: "Darker Grotesque", sans-serif;
-  font-weight: 700;
+  font-weight: 600;
   /*font-size: 36px;*/
 }
 
@@ -139,7 +137,6 @@ a {
 }
 
 .showtime-square-created {
-  font-family: "Darker Grotesque", sans-serif;
   font-weight: 400;
   /*font-size: 24px;*/
 }

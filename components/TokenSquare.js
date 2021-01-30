@@ -25,9 +25,10 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
       >
         <a>
           <img
-            className="w-full object-cover object-center"
+            className="w-full object-cover object-center mb-1"
             src={item.image_url}
             alt="nft"
+            style={{ boxShadow: "1px 2px 5px #bbb" }}
           />
         </a>
       </Link>
@@ -61,19 +62,8 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
                 </Link>
               ) : null}
             </div>
+
             <div>
-              <ShareButton
-                url={
-                  window.location.protocol +
-                  "//" +
-                  window.location.hostname +
-                  (window.location.port ? ":" + window.location.port : "") +
-                  `/t/${item.asset_contract.address}/${item.token_id}`
-                }
-                type={"item"}
-              />
-            </div>
-            <div className="flex-shrink">
               <LikeButton
                 isLiked={item.liked}
                 likeCount={item.showtime.like_count}
@@ -98,6 +88,18 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
                 showTooltip={isMobile === false}
               />
             </div>
+            <div className="flex-shrink">
+              <ShareButton
+                url={
+                  window.location.protocol +
+                  "//" +
+                  window.location.hostname +
+                  (window.location.port ? ":" + window.location.port : "") +
+                  `/t/${item.asset_contract.address}/${item.token_id}`
+                }
+                type={"item"}
+              />
+            </div>
           </div>
           <div className="mt-2 px-1 py-2">
             <Link
@@ -106,7 +108,7 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
             >
               <a className="showtime-card-title">{item.name}</a>
             </Link>
-            {item.animation_url ? (
+            {item.animation_url && item.animation_url.includes(".mp4") ? (
               <img
                 style={{ display: "inline-block" }}
                 src="/icons/video-solid.svg"
@@ -156,7 +158,7 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
       <div
         className="px-3 py-2 text-right flex items-center"
         style={{
-          backgroundColor: "#f6f6f6",
+          backgroundColor: "#ffffff",
           borderTopWidth: 1,
           borderColor: "rgb(219,219,219)",
         }}
@@ -191,7 +193,11 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
                   />
                 </div>
                 <div className="showtime-card-profile-link">
-                  {item.owner.user ? item.owner.user.username : "Unnamed"}
+                  {item.owner.user
+                    ? item.owner.user.username
+                      ? item.owner.user.username
+                      : "Unnamed"
+                    : "Unnamed"}
                 </div>
               </a>
             </Link>

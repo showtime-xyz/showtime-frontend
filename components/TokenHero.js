@@ -27,7 +27,12 @@ const TokenHero = ({ item, handleLike, handleUnlike, isDetail, isMobile }) => {
             width={videoWidth}
           />
         ) : (
-          <img className="w-full" src={item.image_url} alt="nft" />
+          <img
+            className="w-full"
+            src={item.image_url}
+            alt="nft"
+            style={{ boxShadow: "1px 2px 5px #bbb" }}
+          />
         )
       ) : (
         <Link
@@ -48,16 +53,6 @@ const TokenHero = ({ item, handleLike, handleUnlike, isDetail, isMobile }) => {
       <div className="mt-6 p-1">
         <div className="float-right text-right ">
           <div className="flex flex-row">
-            <ShareButton
-              url={
-                window.location.protocol +
-                "//" +
-                window.location.hostname +
-                (window.location.port ? ":" + window.location.port : "") +
-                `/t/${item.asset_contract.address}/${item.token_id}`
-              }
-              type={"item"}
-            />
             <LikeButton
               isLiked={item.liked}
               likeCount={item.showtime.like_count}
@@ -80,6 +75,16 @@ const TokenHero = ({ item, handleLike, handleUnlike, isDetail, isMobile }) => {
                 token_id: item.token_id,
               }}
               showTooltip={isMobile === false}
+            />
+            <ShareButton
+              url={
+                window.location.protocol +
+                "//" +
+                window.location.hostname +
+                (window.location.port ? ":" + window.location.port : "") +
+                `/t/${item.asset_contract.address}/${item.token_id}`
+              }
+              type={"item"}
             />
           </div>
 

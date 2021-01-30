@@ -155,7 +155,7 @@ export default function Token({ token, same_owner_items }) {
       </Head>
 
       <div className="flex flex-col text-center w-full">
-        <div className="showtime-title text-center mx-auto text-3xl md:text-6xl">
+        <div className="showtime-title text-center mx-auto text-2xl md:text-5xl mt-5">
           {item.name}
         </div>
       </div>
@@ -289,25 +289,27 @@ export default function Token({ token, same_owner_items }) {
                 alt="external"
               />
             </a>*/}
-            <a
-              href={`https://opensea.io/assets/${item.asset_contract.address}/${item.token_id}`}
-              title="Buy on OpenSea"
-              target="_blank"
-              onClick={() => {
-                mixpanel.track("OpenSea link click");
-              }}
-            >
-              <img
-                style={{
-                  width: 160,
-                  borderRadius: 7,
-                  boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.25)",
+            <div style={{ width: 160 }}>
+              <a
+                href={`https://opensea.io/assets/${item.asset_contract.address}/${item.token_id}`}
+                title="Buy on OpenSea"
+                target="_blank"
+                onClick={() => {
+                  mixpanel.track("OpenSea link click");
                 }}
-                src="https://storage.googleapis.com/opensea-static/opensea-brand/listed-button-white.png"
-                alt="Listed on OpenSea badge"
-                className={isMobile ? "mx-auto" : "mr-auto"}
-              />
-            </a>
+              >
+                <img
+                  style={{
+                    width: 160,
+                    borderRadius: 7,
+                    boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.25)",
+                  }}
+                  src="https://storage.googleapis.com/opensea-static/opensea-brand/listed-button-white.png"
+                  alt="Listed on OpenSea badge"
+                  className={isMobile ? "mx-auto" : "mr-auto"}
+                />
+              </a>
+            </div>
             <br />
             <br />
           </div>
@@ -315,7 +317,7 @@ export default function Token({ token, same_owner_items }) {
       </div>
 
       <div className="flex flex-col text-center w-full">
-        <div className="showtime-title text-center mx-auto text-3xl md:text-6xl">
+        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-4">
           More from this owner
         </div>
       </div>
