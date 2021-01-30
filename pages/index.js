@@ -55,6 +55,8 @@ export default function Home({ featured_items, leaderboard }) {
     }
   }, [context.windowSize]);
 
+  const [isHovering, setIsHovering] = useState(false);
+
   return (
     <Layout>
       <Head>
@@ -80,14 +82,14 @@ export default function Home({ featured_items, leaderboard }) {
         />
       </Head>
       <h1
-        className="showtime-title text-center mx-auto text-2xl md:text-5xl md:leading-snug mb-10 mt-5"
+        className="showtime-title text-center mx-auto text-2xl md:text-5xl md:leading-snug mb-5 mt-5"
         style={{ maxWidth: 700 }}
       >
         Discover and showcase your favorite digital art
       </h1>
 
       {context.user ? null : (
-        <div className=" mb-24">
+        <div className=" mb-16">
           <div className="flex justify-center">
             {context.user ? (
               <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
@@ -117,11 +119,19 @@ export default function Home({ featured_items, leaderboard }) {
       />
       <div className="text-center pt-8 pb-16">
         <Link href="/c/[collection]" as="/c/superrare">
-          <a className="showtime-purple-button-icon">
+          <a
+            className="showtime-purple-button-icon"
+            onMouseOver={() => setIsHovering(true)}
+            onMouseOut={() => setIsHovering(false)}
+          >
             <span>Browse collections</span>
             <img
               style={{ paddingLeft: 6 }}
-              src={"/icons/arrow-right.svg"}
+              src={
+                isHovering
+                  ? "/icons/arrow-right-purple.svg"
+                  : "/icons/arrow-right.svg"
+              }
               alt="arrow"
             />
           </a>

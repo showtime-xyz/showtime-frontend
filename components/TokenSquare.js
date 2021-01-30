@@ -10,7 +10,7 @@ function truncateWithEllipses(text, max) {
 
 const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
   const [moreShown, setMoreShown] = useState(false);
-  const max_description_length = 105;
+  const max_description_length = 102;
 
   const [isHovering, setIsHovering] = useState(false);
 

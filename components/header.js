@@ -121,7 +121,7 @@ const Header = () => {
             <div className="mx-4">Showtime</div>
           </a>
         </Link>
-        <div className="items-center flex flex-row w-full">
+        <div className="items-center flex flex-row w-full my-1 md:my-0">
           <div className="flex-grow hidden md:block"></div>
           <div className="flex-shrink">
             <Link href="/#leaderboard">

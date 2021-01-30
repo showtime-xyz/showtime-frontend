@@ -412,8 +412,8 @@ const Profile = ({
                 <button
                   className={
                     isFollowed
-                      ? "showtime-green-button text-sm px-3 py-1 md:text-base items-center ml-8"
-                      : "showtime-like-button-white-green-hover text-sm px-3 py-1 md:text-base items-center ml-8"
+                      ? "showtime-green-button text-sm px-3 py-1 md:text-base items-center ml-10"
+                      : "showtime-like-button-white-green-hover text-sm px-3 py-1 md:text-base items-center ml-10"
                   }
                   onClick={() =>
                     context.user

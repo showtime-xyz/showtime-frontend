@@ -28,7 +28,7 @@ const Leaderboard = ({ topCreators }) => {
                     }
                   />
                   <div className="pl-2 md:pl-8 flex-grow-0">
-                    <h3 className="font-bol text-xl md:text-3xl">
+                    <h3 className="md:text-3xl">
                       <div className="showtime-link">
                         {creator.name ? creator.name : "Unnamed"}
                       </div>
@@ -36,8 +36,11 @@ const Leaderboard = ({ topCreators }) => {
                   </div>
                 </a>
               </Link>
-              <div className="text-right flex-shrink ">
-                <div className="float-right flex flex-inline">
+              <div className="text-right flex-shrink text-right">
+                <div
+                  className="float-right flex flex-inline text-right text-sm"
+                  style={{ whiteSpace: "nowrap" }}
+                >
                   <img
                     style={{ paddingRight: 6, marginTop: 3 }}
                     src={"/icons/heart-black-outline.svg"}

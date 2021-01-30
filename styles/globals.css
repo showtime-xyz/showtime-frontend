@@ -146,11 +146,18 @@ a {
   color: #fff;
   font-size: 16px;
   font-weight: 600;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-left: 25px;
-  padding-right: 25px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 23px;
+  padding-right: 23px;
   border-radius: 7px;
+  border: 2px solid #e45cff;
+}
+
+.showtime-pink-button:hover {
+  background-color: #fff;
+  color: #e45cff;
+  border: 2px solid #e45cff;
 }
 
 .showtime-purple-button {
@@ -158,11 +165,18 @@ a {
   color: #fff;
   font-size: 16px;
   font-weight: 600;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-left: 25px;
-  padding-right: 25px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 23px;
+  padding-right: 23px;
   border-radius: 7px;
+  border: 2px solid #7d5cff;
+}
+
+.showtime-purple-button:hover {
+  background-color: #fff;
+  color: #7d5cff;
+  border: 2px solid #7d5cff;
 }
 
 .showtime-green-button {
@@ -268,12 +282,19 @@ a {
   color: #fff;
   font-size: 16px;
   font-weight: 600;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 18px;
+  padding-right: 18px;
   border-radius: 7px;
   display: inline-flex;
+  border: 2px solid #7d5cff;
+}
+
+.showtime-purple-button-icon:hover {
+  background-color: #fff;
+  color: #7d5cff;
+  border: 2px solid #7d5cff;
 }
 
 .showtime-green-button-icon {
