@@ -206,14 +206,17 @@ const Profile = ({
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    if (context.windowSize && context.windowSize.width < 500) {
+    if (context.windowSize && context.windowSize.width < 800) {
       setColumns(1);
       setIsMobile(true);
     } else if (context.windowSize && context.windowSize.width < 1400) {
       setColumns(2);
       setIsMobile(false);
-    } else {
+    } else if (context.windowSize && context.windowSize.width < 1800) {
       setColumns(3);
+      setIsMobile(false);
+    } else {
+      setColumns(4);
       setIsMobile(false);
     }
   }, [context.windowSize]);
@@ -340,7 +343,22 @@ const Profile = ({
         <Modal isOpen={editModalOpen} setEditModalOpen={setEditModalOpen} />
       ) : null}
 
-      <div className="text-sm showtime-profile-address text-right pt-2 visible lg:invisible">
+      <div
+        className=" text-sm showtime-profile-address text-left mt-2 p-1 px-4 visible lg:invisible"
+        style={
+          isMyProfile
+            ? {
+                backgroundColor: "#f0f0f0",
+                borderRadius: 7,
+                borderWidth: 1,
+                color: "#333",
+              }
+            : {
+                borderWidth: 1,
+                borderColor: "rgba(255,255,255,0)",
+              }
+        }
+      >
         {isMyProfile ? (
           <>
             <a
@@ -349,7 +367,7 @@ const Profile = ({
                 setEditModalOpen(true);
               }}
               className="showtime-logout-link"
-              style={{ whiteSpace: "nowrap" }}
+              style={{ whiteSpace: "nowrap", fontWeight: 400 }}
             >
               Edit name
             </a>
@@ -359,8 +377,8 @@ const Profile = ({
               onClick={() => {
                 logout();
               }}
-              className="showtime-logout-link"
-              style={{ whiteSpace: "nowrap" }}
+              className="showtime-logout-link float-right"
+              style={{ whiteSpace: "nowrap", fontWeight: 400 }}
             >
               Log out
             </a>
@@ -370,7 +388,7 @@ const Profile = ({
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-4 mt-4">
         <div className="col-span-1 text-center">
           <div>
             <img
@@ -397,8 +415,8 @@ const Profile = ({
                 <button
                   className={
                     isFollowed
-                      ? "showtime-green-button text-sm px-3 py-2 md:text-base items-center mr-11"
-                      : "showtime-like-button-white-green-hover text-sm px-3 py-2 md:text-base items-center mr-11"
+                      ? "showtime-green-button text-sm px-3 py-1 md:text-base items-center mr-11"
+                      : "showtime-like-button-white-green-hover text-sm px-3 py-1 md:text-base items-center mr-11"
                   }
                   onClick={() =>
                     context.user
@@ -413,7 +431,7 @@ const Profile = ({
                 {context.user ? null : (
                   <span
                     style={{ fontSize: 12, opacity: 0.9, width: 110 }}
-                    className="tooltip-text bg-white p-3 -mt-7 -ml-4 rounded text-black"
+                    className="tooltip-text bg-black p-3 -mt-7 -ml-4 rounded text-white"
                   >
                     Log in to follow
                   </span>
@@ -457,7 +475,7 @@ const Profile = ({
               {columns > 2 ? wallet_addresses[0] : null}
             </div>
           </div>
-          <div className="text-left text-3xl md:text-6xl mb-4 pb-4 border-b-2 border-gray-600">
+          <div className="text-left text-3xl md:text-6xl mb-4 pb-4 border-b-2 border-gray-300">
             {isMyProfile
               ? context.myProfile
                 ? context.myProfile.name
@@ -515,7 +533,7 @@ const Profile = ({
         </div>
       </div>
 
-      <div className="flex flex-col text-center w-full border-t-2 border-gray-600">
+      <div className="flex flex-col text-center w-full border-t-2 border-gray-300">
         <div className="showtime-title text-center mx-auto text-3xl md:text-6xl">
           Owned Items
         </div>
@@ -534,7 +552,7 @@ const Profile = ({
 
       <TokenGrid columnCount={columns} items={ownedItems} isMobile={isMobile} />
 
-      <div className="flex flex-col text-center w-full  border-t-2 border-gray-600 mt-8">
+      <div className="flex flex-col text-center w-full  border-t-2 border-gray-300 mt-8">
         <div className="showtime-title text-center mx-auto text-3xl md:text-6xl">
           Liked Items
         </div>

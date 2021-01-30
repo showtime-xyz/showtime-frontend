@@ -119,14 +119,17 @@ export default function Token({ token, same_owner_items }) {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    if (context.windowSize && context.windowSize.width < 500) {
+    if (context.windowSize && context.windowSize.width < 800) {
       setColumns(1);
       setIsMobile(true);
     } else if (context.windowSize && context.windowSize.width < 1400) {
       setColumns(2);
       setIsMobile(false);
-    } else {
+    } else if (context.windowSize && context.windowSize.width < 1800) {
       setColumns(3);
+      setIsMobile(false);
+    } else {
+      setColumns(4);
       setIsMobile(false);
     }
   }, [context.windowSize]);
@@ -180,8 +183,8 @@ export default function Token({ token, same_owner_items }) {
         />
       )}
 
-      <div className="flex flex-col md:flex-row mt-8">
-        <div className="flex md:w-1/2 md:pr-4">
+      <div className="flex flex-col lg:flex-row mt-8 xl:w-3/4 xl:mx-auto">
+        <div className="flex lg:w-1/2 lg:pr-4 ">
           <div className="w-full" style={{ position: "relative" }}>
             {item.animation_url &&
             item.animation_url.includes(".mp4") ? null : (
@@ -218,8 +221,8 @@ export default function Token({ token, same_owner_items }) {
                   className="flex ml-2"
                   style={
                     isHovering
-                      ? { opacity: 1, fontSize: 14 }
-                      : { opacity: 0.7, fontSize: 14 }
+                      ? { opacity: 1, fontSize: 14, color: "white" }
+                      : { opacity: 0.7, fontSize: 14, color: "white" }
                   }
                 >
                   Original size
@@ -235,7 +238,7 @@ export default function Token({ token, same_owner_items }) {
             />
           </div>
         </div>
-        <div className="flex text-center md:w-1/2  md:pl-4 md:text-left">
+        <div className="flex text-center lg:w-1/2 lg:pl-4 lg:text-left">
           <div className="w-full">
             <div className="showtime-token-description">{item.description}</div>
             <br />

@@ -40,14 +40,17 @@ export default function Home({ featured_items, leaderboard }) {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    if (context.windowSize && context.windowSize.width < 500) {
+    if (context.windowSize && context.windowSize.width < 800) {
       setColumns(1);
       setIsMobile(true);
     } else if (context.windowSize && context.windowSize.width < 1400) {
       setColumns(2);
       setIsMobile(false);
-    } else {
+    } else if (context.windowSize && context.windowSize.width < 1800) {
       setColumns(3);
+      setIsMobile(false);
+    } else {
+      setColumns(4);
       setIsMobile(false);
     }
   }, [context.windowSize]);
@@ -108,7 +111,6 @@ export default function Home({ featured_items, leaderboard }) {
         </div>
       )}
       <TokenGrid
-        hasHero
         columnCount={columns}
         items={featured_items}
         isMobile={isMobile}
@@ -116,7 +118,7 @@ export default function Home({ featured_items, leaderboard }) {
       <div className="text-center pt-8 pb-16">
         <Link href="/c/[collection]" as="/c/superrare">
           <a className="showtime-purple-button-icon">
-            <span>Discover more artwork</span>
+            <span>Browse collections</span>
             <img
               style={{ paddingLeft: 6 }}
               src={"/icons/arrow-right.svg"}

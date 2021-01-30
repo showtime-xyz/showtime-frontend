@@ -34,8 +34,8 @@ const LikeButton = ({
         }
         className={
           isLiked
-            ? "showtime-like-button-pink text-sm px-3 py-2 md:text-base flex flex-row items-center"
-            : "showtime-like-button-white text-sm px-3 py-2 md:text-base flex flex-row items-center"
+            ? "showtime-like-button-pink text-sm px-2 py-1 flex flex-row items-center"
+            : "showtime-like-button-white text-sm px-2 py-1 flex flex-row items-center"
         }
         onMouseOver={() => setIsHovering(true)}
         onMouseOut={() => setIsHovering(false)}
@@ -56,6 +56,7 @@ const LikeButton = ({
           className={
             isLiked ? "flex" : isHovering ? "showtime-text-pink flex" : "flex"
           }
+          style={{ whiteSpace: "nowrap" }}
         >
           {likeCount} like{likeCount === 1 ? null : "s"}
         </span>
@@ -63,7 +64,7 @@ const LikeButton = ({
       {context.user ? null : showTooltip ? (
         <span
           style={{ fontSize: 12, opacity: 0.9, width: 90 }}
-          className="tooltip-text bg-white p-3 -mt-6 -ml-24 rounded text-black"
+          className="tooltip-text bg-black p-3 -mt-6 -ml-24 rounded text-white"
         >
           Log in to like
         </span>

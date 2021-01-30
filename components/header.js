@@ -105,7 +105,7 @@ const Header = () => {
   }, [context?.myProfile]);
 
   return (
-    <header>
+    <header style={{ backgroundColor: "#010101" }}>
       <div className="w-10/12 mx-auto py-5 flex flex-col md:flex-row items-center ">
         <Link href="/">
           <a
@@ -121,82 +121,88 @@ const Header = () => {
             <div className="mx-4">Showtime</div>
           </a>
         </Link>
-        <div className="flex-grow items-center text-right">
-          <nav className="text-base flex inline-flex items-center">
-            <Link href="/c/superrare">
-              <a
-                className="showtime-header-link mr-5 text-sm md:text-base"
-                onClick={() => {
-                  mixpanel.track("Discover button click");
-                }}
-              >
-                Discover
-              </a>
-            </Link>
+        <div className="items-center flex flex-row w-full">
+          <div className="flex-grow hidden md:block"></div>
+          <div className="flex-shrink">
             <Link href="/#leaderboard">
               <a
                 className="showtime-header-link mr-5 text-sm md:text-base"
                 onClick={() => {
-                  mixpanel.track("Top creators button click");
+                  mixpanel.track("Collections button click");
                 }}
               >
                 Top Creators
               </a>
             </Link>
-            {context.user ? (
-              <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
-                <a
-                  className="showtime-login-button-outline text-sm px-3 py-2 md:text-base md:px-3 md:py-2 flex flex-row items-center"
-                  onClick={() => {
-                    mixpanel.track("Profile button click");
-                  }}
-                >
-                  {context.myProfile === undefined ? null : (
-                    <>
-                      <div
-                        className={
-                          context.windowSize
-                            ? context.windowSize.width < 350
-                              ? "hidden"
+            <Link href="/c/superrare">
+              <a
+                className="showtime-header-link md:mr-5 text-sm md:text-base"
+                onClick={() => {
+                  mixpanel.track("Discover button click");
+                }}
+              >
+                Collections
+              </a>
+            </Link>
+          </div>
+          <div className="flex-grow md:hidden"></div>
+          <div>
+            <div>
+              {context.user ? (
+                <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
+                  <a
+                    className="showtime-login-button-outline text-sm px-3 py-2 md:text-base md:px-3 md:py-2 flex flex-row items-center"
+                    onClick={() => {
+                      mixpanel.track("Profile button click");
+                    }}
+                  >
+                    {context.myProfile === undefined ? null : (
+                      <>
+                        <div
+                          className={
+                            context.windowSize
+                              ? context.windowSize.width < 350
+                                ? "hidden"
+                                : null
                               : null
-                            : null
-                        }
-                      >
-                        <img
-                          alt="profile pic"
-                          src={
-                            context.myProfile
-                              ? context.myProfile.img_url
-                                ? context.myProfile.img_url
-                                : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                           }
-                          className="rounded-full mr-2"
-                          style={{ height: 24, width: 24 }}
-                        />
-                      </div>
-                      <div className="hidden sm:block">
-                        {context.myProfile
-                          ? context.myProfile.name
+                        >
+                          <img
+                            alt="profile pic"
+                            src={
+                              context.myProfile
+                                ? context.myProfile.img_url
+                                  ? context.myProfile.img_url
+                                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                                : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                            }
+                            className="rounded-full mr-2"
+                            style={{ height: 24, width: 24 }}
+                          />
+                        </div>
+                        <div className="hidden sm:block">
+                          {context.myProfile
                             ? context.myProfile.name
-                            : "Profile"
-                          : "Profile"}
-                      </div>
-                    </>
-                  )}
-                  <div className="block sm:hidden">Profile</div>
-                </a>
-              </Link>
-            ) : (
-              <Link href="/login">
-                <a className="showtime-login-button-solid text-sm px-3 py-2 md:text-base  md:px-5 md:py-3">
-                  {context.windowSize && context.windowSize.width > 500
-                    ? "Sign in / Sign up"
-                    : "Sign in"}
-                </a>
-              </Link>
-            )}
-          </nav>
+                              ? context.myProfile.name
+                              : "Profile"
+                            : "Profile"}
+                        </div>
+                      </>
+                    )}
+                    <div className="block sm:hidden">Profile</div>
+                  </a>
+                </Link>
+              ) : (
+                <Link href="/login">
+                  <a className="showtime-login-button-solid text-sm px-3 py-2 md:text-base  md:px-5 md:py-3">
+                    {context.windowSize && context.windowSize.width > 500
+                      ? "Sign in / Sign up"
+                      : "Sign in"}
+                  </a>
+                </Link>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </header>

@@ -8,9 +8,7 @@ import ReactPlayer from "react-player";
 const TokenHero = ({ item, handleLike, handleUnlike, isDetail, isMobile }) => {
   const context = useContext(AppContext);
   const videoWidth = context.windowSize
-    ? isMobile
-      ? 320
-      : context.windowSize < 768
+    ? context.windowSize < 768
       ? context.windowSize * (10 / 12)
       : (context.windowSize * (10 / 12)) / 2 - 16
     : 640;

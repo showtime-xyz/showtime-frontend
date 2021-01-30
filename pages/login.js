@@ -70,7 +70,7 @@ export default function Login() {
         <form onSubmit={handleSubmit}>
           <br />
           <br />
-          <label htmlFor="email" className="pb-4">
+          <label htmlFor="email" className="pb-4 ">
             Email (with Magic Link)
           </label>
           <br />
@@ -79,6 +79,7 @@ export default function Login() {
             name="email"
             placeholder="Email"
             type="email"
+            className="border-2"
             style={{ color: "black", padding: 10, borderRadius: 7, width: 300 }}
           />
           <br />
