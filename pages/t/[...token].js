@@ -149,6 +149,12 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
     }
   }, [context.windowSize]);
 
+  function removeTags(str) {
+    if (str === null || str === "") return false;
+    else str = str.toString();
+    return str.replace(/(<([^>]+)>)/gi, " ");
+  }
+
   return (
     <Layout key={item.tid}>
       <Head>
@@ -257,7 +263,9 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
         <div className="flex lg:w-1/2 lg:pl-4 lg:text-left">
           <div className="w-full">
             <div className="showtime-token-description">
-              {item.token_description}
+              {item.token_description
+                ? removeTags(item.token_description)
+                : null}
             </div>
             <br />
             <br />

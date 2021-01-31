@@ -14,6 +14,12 @@ const TokenSquareV2 = ({ item, handleLike, handleUnlike, isMobile }) => {
 
   const [isHovering, setIsHovering] = useState(false);
 
+  function removeTags(str) {
+    if (str === null || str === "") return false;
+    else str = str.toString();
+    return str.replace(/(<([^>]+)>)/gi, " ");
+  }
+
   return (
     <div
       style={_.merge(
@@ -126,14 +132,14 @@ const TokenSquareV2 = ({ item, handleLike, handleUnlike, isMobile }) => {
               }}
             >
               {moreShown ? (
-                <div>{item.token_description}</div>
+                <div>{removeTags(item.token_description)}</div>
               ) : (
                 <div>
                   {item.token_description ? (
                     item.token_description.length > max_description_length ? (
                       <>
                         {truncateWithEllipses(
-                          item.token_description,
+                          removeTags(item.token_description),
                           max_description_length
                         )}{" "}
                         <a
@@ -147,7 +153,7 @@ const TokenSquareV2 = ({ item, handleLike, handleUnlike, isMobile }) => {
                         </a>
                       </>
                     ) : (
-                      <div>{item.token_description}</div>
+                      <div>{removeTags(item.token_description)}</div>
                     )
                   ) : null}
                 </div>
