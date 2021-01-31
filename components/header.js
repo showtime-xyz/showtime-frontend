@@ -41,9 +41,7 @@ const Header = () => {
 
     if (!context?.user) {
       getUserFromCookies();
-      getMyLikes();
-      getMyFollows();
-      getMyProfile();
+      getMyInfo();
     }
   }, [context?.user]);
 
@@ -53,56 +51,19 @@ const Header = () => {
     context.setWindowSize(windowSize);
   }, [windowSize]);
 
-  const getMyLikes = async () => {
+  const getMyInfo = async () => {
     // get our likes
-    const myLikesRequest = await fetch("/api/mylikes");
+    const myInfoRequest = await fetch("/api/myinfo");
     try {
-      const my_like_data = await myLikesRequest.json();
-      context.setMyLikes(my_like_data.data);
+      const my_info_data = await myInfoRequest.json();
+
+      context.setMyLikes(my_info_data.data.likes);
+      context.setMyFollows(my_info_data.data.follows);
+      context.setMyProfile(my_info_data.data.profile);
     } catch {
       //
     }
   };
-
-  useEffect(() => {
-    if (!context?.myLikes) {
-      getMyLikes();
-    }
-  }, [context?.myLikes]);
-
-  const getMyFollows = async () => {
-    // get our follows
-    const myFollowsRequest = await fetch("/api/myfollows");
-    try {
-      const my_follows_data = await myFollowsRequest.json();
-      context.setMyFollows(my_follows_data.data);
-    } catch {
-      //
-    }
-  };
-
-  useEffect(() => {
-    if (!context?.myFollows) {
-      getMyFollows();
-    }
-  }, [context?.myFollows]);
-
-  const getMyProfile = async () => {
-    // get our follows
-    const myProfileRequest = await fetch("/api/myprofile");
-    try {
-      const my_profile_data = await myProfileRequest.json();
-      context.setMyProfile(my_profile_data.data);
-    } catch {
-      //
-    }
-  };
-
-  useEffect(() => {
-    if (!context?.myProfile) {
-      getMyProfile();
-    }
-  }, [context?.myProfile]);
 
   return (
     <header style={{ backgroundColor: "#010101" }}>
@@ -148,7 +109,7 @@ const Header = () => {
           <div className="flex-grow md:hidden"></div>
           <div>
             <div>
-              {context.user ? (
+              {context.user && context.myProfile !== undefined ? (
                 <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
                   <a
                     className="showtime-login-button-outline text-sm px-3 py-2 md:text-base md:px-3 md:py-2 flex flex-row items-center"
@@ -156,45 +117,43 @@ const Header = () => {
                       mixpanel.track("Profile button click");
                     }}
                   >
-                    {context.myProfile === undefined ? null : (
-                      <>
-                        <div
-                          className={
-                            context.windowSize
-                              ? context.windowSize.width < 350
-                                ? "hidden"
-                                : null
+                    <>
+                      <div
+                        className={
+                          context.windowSize
+                            ? context.windowSize.width < 350
+                              ? "hidden"
                               : null
-                          }
-                        >
-                          <img
-                            alt="profile pic"
-                            src={
-                              context.myProfile
+                            : null
+                        }
+                      >
+                        <img
+                          alt="profile pic"
+                          src={
+                            context.myProfile
+                              ? context.myProfile.img_url
                                 ? context.myProfile.img_url
-                                  ? context.myProfile.img_url
-                                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                                 : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                            }
-                            className="rounded-full mr-2"
-                            style={{ height: 24, width: 24 }}
-                          />
-                        </div>
-                        <div className="hidden sm:block">
-                          {context.myProfile
+                              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                          }
+                          className="rounded-full mr-2"
+                          style={{ height: 24, width: 24 }}
+                        />
+                      </div>
+                      <div className="hidden sm:block">
+                        {context.myProfile
+                          ? context.myProfile.name
                             ? context.myProfile.name
-                              ? context.myProfile.name
-                              : "Profile"
-                            : "Profile"}
-                        </div>
-                      </>
-                    )}
+                            : "Profile"
+                          : "Profile"}
+                      </div>
+                    </>
                     <div className="block sm:hidden">Profile</div>
                   </a>
                 </Link>
               ) : (
                 <Link href="/login">
-                  <a className="showtime-login-button-solid text-sm px-3 py-2 md:text-base  md:px-5 md:py-3">
+                  <a className="showtime-login-button-solid text-sm px-3 py-2 md:text-base  md:px-3 md:py-2">
                     {context.windowSize && context.windowSize.width > 500
                       ? "Sign in / Sign up"
                       : "Sign in"}

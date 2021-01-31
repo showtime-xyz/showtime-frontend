@@ -114,8 +114,6 @@ a {
   font-weight: 700;
   /*font-size: 64px;*/
   /*line-height: 83px;*/
-  padding-top: 32px;
-  padding-bottom: 32px;
   /*text-transform: uppercase;*/
 }
 
@@ -435,10 +433,12 @@ a {
   color: #222222;
   font-weight: 600;
   border-radius: 7px;
+  border: 2px solid #fff;
 }
 
 .showtime-login-button-solid:hover {
   color: #e45cff;
+  border: 2px solid #e45cff;
 }
 
 .showtime-login-button-outline {

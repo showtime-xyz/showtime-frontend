@@ -5,6 +5,7 @@ import Link from "next/link";
 import mixpanel from "mixpanel-browser";
 import Layout from "../../components/layout";
 import TokenGrid from "../../components/TokenGrid";
+import TokenGridV2 from "../../components/TokenGridV2";
 import backend from "../../lib/backend";
 import AppContext from "../../context/app-context";
 import ShareButton from "../../components/ShareButton";
@@ -16,24 +17,15 @@ export async function getServerSideProps(context) {
   const { slug } = context.query;
 
   // Get profile metadata
-  const response_profile = await backend.get(`/v1/profile?address=${slug}`);
+  const response_profile = await backend.get(`/v2/profile/${slug}`);
   const data_profile = response_profile.data.data;
 
-  const name = data_profile.name;
-  const img_url = data_profile.img_url;
-  const wallet_addresses = data_profile.wallet_addresses;
-
-  // Get owned items
-  const response_owned = await backend.get(
-    `/v1/owned?address=${slug}&use_cached=1`
-  );
-  const owned_items = response_owned.data.data;
-
-  // Get liked items
-  const response_liked = await backend.get(
-    `/v1/liked?address=${slug}&use_cached_only=1`
-  );
-  const liked_items = response_liked.data.data;
+  const name = data_profile.profile.name;
+  const img_url = data_profile.profile.img_url;
+  const wallet_addresses = data_profile.profile.wallet_addresses;
+  const created_items = data_profile.created;
+  const owned_items = data_profile.owned;
+  const liked_items = data_profile.liked;
 
   // Get followers
   const response_followers = await backend.get(`/v1/followers?address=${slug}`);
@@ -48,6 +40,7 @@ export async function getServerSideProps(context) {
       name,
       img_url,
       wallet_addresses,
+      created_items,
       owned_items,
       liked_items,
       slug,
@@ -61,6 +54,7 @@ const Profile = ({
   name,
   img_url,
   wallet_addresses,
+  created_items,
   owned_items,
   liked_items,
   slug,
@@ -101,6 +95,14 @@ const Profile = ({
     setLikedRefreshed(false);
   }, [liked_items]);
 
+  const [createdItems, setCreatedItems] = useState([]);
+  const [createdRefreshed, setCreatedRefreshed] = useState(false);
+
+  useEffect(() => {
+    setCreatedItems(created_items);
+    setCreatedRefreshed(false);
+  }, [created_items]);
+
   const [ownedItems, setOwnedItems] = useState([]);
   const [ownedRefreshed, setOwnedRefreshed] = useState(false);
 
@@ -139,6 +141,7 @@ const Profile = ({
     }
   }, [owned_items, typeof context.user]);
 
+  /*
   useEffect(() => {
     let isSubscribed = true;
 
@@ -178,6 +181,7 @@ const Profile = ({
 
     return () => (isSubscribed = false);
   }, [owned_items]);
+  */
 
   const logout = async () => {
     const authRequest = await fetch("/api/logout", {
@@ -479,7 +483,7 @@ const Profile = ({
               {columns > 2 ? wallet_addresses[0] : null}
             </div>
           </div>
-          <div className="text-left text-3xl md:text-5xl mb-4 pb-4 border-b-2 border-gray-300">
+          <div className="text-left text-3xl md:text-5xl mb-4 pb-4 border-b-2 border-gray-300 showtime-title">
             {isMyProfile
               ? context.myProfile
                 ? context.myProfile.name
@@ -497,10 +501,9 @@ const Profile = ({
             {followers && followers.length > 0 ? (
               <>
                 <div className="mb-2">
-                  Followed by{" "}
                   {followers.length > 1
-                    ? `${followers.length} people`
-                    : "1 person"}
+                    ? `${followers.length} Followers`
+                    : "1 Follower"}
                 </div>
 
                 <FollowGrid people={followers} />
@@ -518,10 +521,9 @@ const Profile = ({
             {following && following.length > 0 ? (
               <>
                 <div className="mb-2">
-                  Following{" "}
                   {following.length > 1
-                    ? `${following.length} people`
-                    : "1 person"}
+                    ? `${following.length} Following`
+                    : "1 Following"}
                 </div>
 
                 <FollowGrid people={following} />
@@ -538,12 +540,36 @@ const Profile = ({
       </div>
 
       <div className="flex flex-col text-center w-full border-t-2 border-gray-300">
-        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl">
+        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl py-10">
+          Created Items
+        </div>
+      </div>
+      <div className="text-center mb-4">
+        {createdItems.length === 0
+          ? `We couldn't find any items created by ${
+              isMyProfile ? "you" : "this person"
+            }.`
+          : null}
+      </div>
+
+      <TokenGridV2
+        columnCount={columns}
+        items={createdItems}
+        isMobile={isMobile}
+      />
+
+      <div className="flex flex-col text-center w-full border-t-2 border-gray-300 mt-8">
+        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl py-10">
           Owned Items
         </div>
       </div>
       <div className="text-center mb-4">
-        {ownedRefreshed
+        {ownedItems.length === 0
+          ? `We couldn't find any items owned by ${
+              isMyProfile ? "you" : "this person"
+            }.`
+          : null}
+        {/*ownedRefreshed
           ? ownedItems.length === 0
             ? `We couldn't find any items owned by ${
                 isMyProfile ? "you" : "this person"
@@ -551,18 +577,22 @@ const Profile = ({
             : null
           : ownedItems.length === 0
           ? "Loading..."
-          : null}
+            : null*/}
       </div>
 
-      <TokenGrid columnCount={columns} items={ownedItems} isMobile={isMobile} />
+      <TokenGridV2
+        columnCount={columns}
+        items={ownedItems}
+        isMobile={isMobile}
+      />
 
       <div className="flex flex-col text-center w-full  border-t-2 border-gray-300 mt-8">
-        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl">
+        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl py-10">
           Liked Items
         </div>
       </div>
       <div className="text-center mb-4">
-        {likedRefreshed ? (
+        {/*likedRefreshed ? (
           likedItems.length === 0 ? (
             isMyProfile ? (
               <>
@@ -577,9 +607,26 @@ const Profile = ({
           ) : null
         ) : likedItems.length === 0 ? (
           "Loading..."
+        ) : null*/}
+
+        {likedItems.length === 0 ? (
+          isMyProfile ? (
+            <>
+              {`You haven't liked any items yet. `}
+              <Link href="/c/superrare">
+                <a className="showtime-link">Go explore!</a>
+              </Link>
+            </>
+          ) : (
+            "This person hasn't liked any items yet."
+          )
         ) : null}
       </div>
-      <TokenGrid columnCount={columns} items={likedItems} isMobile={isMobile} />
+      <TokenGridV2
+        columnCount={columns}
+        items={likedItems}
+        isMobile={isMobile}
+      />
     </Layout>
   );
 };

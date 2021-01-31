@@ -122,7 +122,7 @@ export default function Collection({
       </Head>
 
       <div className="flex flex-col text-center w-full">
-        <div className="showtime-title text-center mx-auto text-2xl md:text-5xl mt-5">
+        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mt-5 py-10">
           Discover Collections
         </div>
       </div>

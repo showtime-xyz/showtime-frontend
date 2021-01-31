@@ -53,7 +53,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       setNameValue(e.target.value);
                     }}
                     type="text"
-                    maxLength="100"
+                    maxLength="50"
                     className="w-full"
                     style={{
                       color: "black",
