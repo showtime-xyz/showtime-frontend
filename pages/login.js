@@ -66,7 +66,7 @@ export default function Login() {
         />
       </Head>
       <div className="text-center">
-        <div className="showtime-title text-center mx-auto text-2xl md:text-5xl md:leading-snug mb-5 mt-5">
+        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mt-5 py-10">
           Select a login method
         </div>
         <form onSubmit={handleSubmit}>

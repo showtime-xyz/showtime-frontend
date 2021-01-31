@@ -432,7 +432,7 @@ const Profile = ({
                 {context.user ? null : (
                   <span
                     style={{ fontSize: 12, opacity: 0.9, width: 110 }}
-                    className="tooltip-text bg-black p-3 -mt-7 -ml-4 rounded text-white"
+                    className="tooltip-text bg-black p-3 -mt-7 -ml-24 rounded text-white"
                   >
                     Log in to follow
                   </span>

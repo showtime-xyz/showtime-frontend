@@ -88,7 +88,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
   const [ownedRefreshed, setOwnedRefreshed] = useState(false);
 
   useEffect(() => {
-    setOwnedItems(same_owner_items);
+    setOwnedItems(same_owner_items.filter((c) => c.tid !== item.tid));
     setOwnedRefreshed(false);
   }, [same_owner_items]);
 
@@ -96,7 +96,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
   const [createdRefreshed, setCreatedRefreshed] = useState(false);
 
   useEffect(() => {
-    setCreatedItems(same_creator_items);
+    setCreatedItems(same_creator_items.filter((c) => c.tid !== item.tid));
     setCreatedRefreshed(false);
   }, [same_creator_items]);
 
@@ -254,7 +254,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
             />
           </div>
         </div>
-        <div className="flex text-center lg:w-1/2 lg:pl-4 lg:text-left">
+        <div className="flex lg:w-1/2 lg:pl-4 lg:text-left">
           <div className="w-full">
             <div className="showtime-token-description">
               {item.token_description}
