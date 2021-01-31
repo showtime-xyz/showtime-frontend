@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import _ from "lodash";
 import Layout from "../../components/layout";
-import TokenGrid from "../../components/TokenGrid";
+import TokenGridV2 from "../../components/TokenGridV2";
 import { useRouter } from "next/router";
 import Select from "react-dropdown-select";
 import backend from "../../lib/backend";
@@ -24,7 +24,7 @@ export async function getServerSideProps(context) {
 
   // Get collection items
   const response_collection_items = await backend.get(
-    `/v1/collection?collection=${collection}&limit=40&order_by=${selected_collection.order_by}&order_direction=${selected_collection.order_direction}`
+    `/v2/collection?collection=${collection}`
   );
   const collection_items = response_collection_items.data.data;
 
@@ -100,7 +100,10 @@ export default function Collection({
           content="Discover and showcase digital art"
         />
         {collection_items && collection_items.length > 0 ? (
-          <meta property="og:image" content={collection_items[0].image_url} />
+          <meta
+            property="og:image"
+            content={collection_items[0].token_img_url}
+          />
         ) : null}
         <meta
           name="og:title"
@@ -117,7 +120,10 @@ export default function Collection({
           content="Discover and showcase digital art"
         />
         {collection_items && collection_items.length > 0 ? (
-          <meta name="twitter:image" content={collection_items[0].image_url} />
+          <meta
+            name="twitter:image"
+            content={collection_items[0].token_img_url}
+          />
         ) : null}
       </Head>
 
@@ -155,7 +161,7 @@ export default function Collection({
       <p className="mb-6 mt-4 text-center">
         {isChanging ? "Loading..." : "\u00A0"}
       </p>
-      <TokenGrid
+      <TokenGridV2
         columnCount={columns}
         items={collection_items}
         isMobile={isMobile}

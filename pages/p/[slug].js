@@ -539,18 +539,22 @@ const Profile = ({
         </div>
       </div>
 
-      <div className="flex flex-col text-center w-full border-t-2 border-gray-300">
-        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl py-10">
-          Created Items
-        </div>
-      </div>
-      <div className="text-center mb-4">
-        {createdItems.length === 0
-          ? `We couldn't find any items created by ${
-              isMyProfile ? "you" : "this person"
-            }.`
-          : null}
-      </div>
+      {createdItems.length === 0 ? null : (
+        <>
+          <div className="flex flex-col text-center w-full border-t-2 border-gray-300">
+            <div className="showtime-title text-center mx-auto text-3xl md:text-5xl py-10">
+              Created Items
+            </div>
+          </div>
+          <div className="text-center mb-4">
+            {createdItems.length === 0
+              ? `We couldn't find any items created by ${
+                  isMyProfile ? "you" : "this person"
+                }.`
+              : null}
+          </div>
+        </>
+      )}
 
       <TokenGridV2
         columnCount={columns}
@@ -558,18 +562,20 @@ const Profile = ({
         isMobile={isMobile}
       />
 
-      <div className="flex flex-col text-center w-full border-t-2 border-gray-300 mt-8">
-        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl py-10">
-          Owned Items
-        </div>
-      </div>
-      <div className="text-center mb-4">
-        {ownedItems.length === 0
-          ? `We couldn't find any items owned by ${
-              isMyProfile ? "you" : "this person"
-            }.`
-          : null}
-        {/*ownedRefreshed
+      {ownedItems.length === 0 ? null : (
+        <>
+          <div className="flex flex-col text-center w-full border-t-2 border-gray-300 mt-8">
+            <div className="showtime-title text-center mx-auto text-3xl md:text-5xl py-10">
+              Owned Items
+            </div>
+          </div>
+          <div className="text-center mb-4">
+            {ownedItems.length === 0
+              ? `We couldn't find any items owned by ${
+                  isMyProfile ? "you" : "this person"
+                }.`
+              : null}
+            {/*ownedRefreshed
           ? ownedItems.length === 0
             ? `We couldn't find any items owned by ${
                 isMyProfile ? "you" : "this person"
@@ -578,21 +584,24 @@ const Profile = ({
           : ownedItems.length === 0
           ? "Loading..."
             : null*/}
-      </div>
+          </div>
+          <TokenGridV2
+            columnCount={columns}
+            items={ownedItems}
+            isMobile={isMobile}
+          />{" "}
+        </>
+      )}
 
-      <TokenGridV2
-        columnCount={columns}
-        items={ownedItems}
-        isMobile={isMobile}
-      />
-
-      <div className="flex flex-col text-center w-full  border-t-2 border-gray-300 mt-8">
-        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl py-10">
-          Liked Items
-        </div>
-      </div>
-      <div className="text-center mb-4">
-        {/*likedRefreshed ? (
+      {likedItems.length === 0 ? null : (
+        <>
+          <div className="flex flex-col text-center w-full  border-t-2 border-gray-300 mt-8">
+            <div className="showtime-title text-center mx-auto text-3xl md:text-5xl py-10">
+              Liked Items
+            </div>
+          </div>
+          <div className="text-center mb-4">
+            {/*likedRefreshed ? (
           likedItems.length === 0 ? (
             isMyProfile ? (
               <>
@@ -609,24 +618,26 @@ const Profile = ({
           "Loading..."
         ) : null*/}
 
-        {likedItems.length === 0 ? (
-          isMyProfile ? (
-            <>
-              {`You haven't liked any items yet. `}
-              <Link href="/c/superrare">
-                <a className="showtime-link">Go explore!</a>
-              </Link>
-            </>
-          ) : (
-            "This person hasn't liked any items yet."
-          )
-        ) : null}
-      </div>
-      <TokenGridV2
-        columnCount={columns}
-        items={likedItems}
-        isMobile={isMobile}
-      />
+            {likedItems.length === 0 ? (
+              isMyProfile ? (
+                <>
+                  {`You haven't liked any items yet. `}
+                  <Link href="/c/superrare">
+                    <a className="showtime-link">Go explore!</a>
+                  </Link>
+                </>
+              ) : (
+                "This person hasn't liked any items yet."
+              )
+            ) : null}
+          </div>
+          <TokenGridV2
+            columnCount={columns}
+            items={likedItems}
+            isMobile={isMobile}
+          />
+        </>
+      )}
     </Layout>
   );
 };
