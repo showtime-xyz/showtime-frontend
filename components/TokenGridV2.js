@@ -1,12 +1,12 @@
 import { useState, useEffect, useContext } from "react";
 import Masonry from "react-masonry-css";
-import TokenHero from "../components/TokenHero";
-import TokenSquare from "../components/TokenSquare";
+import TokenSquareV2 from "../components/TokenSquareV2";
+import TokenHeroV2 from "../components/TokenHeroV2";
 import _ from "lodash";
 import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
 
-const TokenGrid = ({
+const TokenGridV2 = ({
   items,
   hasHero,
   columnCount,
@@ -22,7 +22,7 @@ const TokenGrid = ({
 
   useEffect(() => {
     setItemsList(
-      items.filter((item) => item.showtime.hide !== true && item.image_url)
+      items.filter((item) => item.token_hidden !== true && item.token_img_url)
     );
   }, [items]);
 
@@ -30,59 +30,43 @@ const TokenGrid = ({
     setMyItemLikes(context.myLikes ? context.myLikes : []);
   }, [context.myLikes]);
 
-  const handleLike = async ({ contract, token_id }) => {
+  const handleLike = async ({ tid }) => {
     // Change myLikes via setMyLikes
 
-    context.setMyLikes([
-      ...context.myLikes,
-      {
-        contract: contract,
-        token_id: token_id,
-      },
-    ]);
+    context.setMyLikes([...context.myLikes, tid]);
 
     // Update the like counts for each item
     var newItemsList = [...itemsList];
     _.forEach(newItemsList, function (item) {
-      if (
-        item.asset_contract.address === contract &&
-        item.token_id === token_id
-      ) {
-        item.showtime.like_count = item.showtime.like_count + 1;
+      if (item.tid === tid) {
+        item.like_count = item.like_count + 1;
       }
     });
     setItemsList(newItemsList);
 
     // Post changes to the API
-    await fetch(`/api/like/${contract}_${token_id}`, {
+    await fetch(`/api/like/${tid}`, {
       method: "post",
     });
 
     mixpanel.track("Liked item");
   };
 
-  const handleUnlike = async ({ contract, token_id }) => {
+  const handleUnlike = async ({ tid }) => {
     // Change myLikes via setMyLikes
-    context.setMyLikes(
-      context.myLikes.filter(
-        (item) => !(item.contract === contract && item.token_id === token_id)
-      )
-    );
+    context.setMyLikes(context.myLikes.filter((item) => !(item === tid)));
 
     // Update the like counts for each item
     var newItemsList = [...itemsList];
     _.forEach(newItemsList, function (item) {
-      if (
-        item.asset_contract.address === contract &&
-        item.token_id === token_id
-      ) {
-        item.showtime.like_count = item.showtime.like_count - 1;
+      if (item.tid === tid) {
+        item.like_count = item.like_count - 1;
       }
     });
     setItemsList(newItemsList);
 
     // Post changes to the API
-    await fetch(`/api/unlike/${contract}_${token_id}`, {
+    await fetch(`/api/unlike/${tid}`, {
       method: "post",
     });
 
@@ -95,10 +79,7 @@ const TokenGrid = ({
     _.forEach([...itemsList], function (item) {
       item.liked = false;
       _.forEach([...myItemLikes], function (like) {
-        if (
-          item.asset_contract.address === like.contract &&
-          item.token_id === like.token_id
-        ) {
+        if (item.tid === like) {
           item.liked = true;
         }
       });
@@ -118,11 +99,8 @@ const TokenGrid = ({
   return (
     <>
       {heroItem ? (
-        <div
-          key={heroItem.asset_contract.address + "_" + heroItem.token_id}
-          style={{ paddingBottom: 75 }}
-        >
-          <TokenHero
+        <div key={heroItem.tid} style={{ paddingBottom: 75 }}>
+          <TokenHeroV2
             item={heroItem}
             handleLike={handleLike}
             handleUnlike={handleUnlike}
@@ -135,11 +113,8 @@ const TokenGrid = ({
       {allHeros ? (
         squareItems.map((item) => {
           return (
-            <div
-              style={{ paddingBottom: 75 }}
-              key={item.asset_contract.address + "_" + item.token_id}
-            >
-              <TokenHero
+            <div style={{ paddingBottom: 75 }} key={item.tid}>
+              <TokenHeroV2
                 item={item}
                 handleLike={handleLike}
                 handleUnlike={handleUnlike}
@@ -156,11 +131,8 @@ const TokenGrid = ({
         >
           {squareItems.map((item) => {
             return (
-              <div
-                style={{ paddingBottom: 30 }}
-                key={item.asset_contract.address + "_" + item.token_id}
-              >
-                <TokenSquare
+              <div style={{ paddingBottom: 30 }} key={item.tid}>
+                <TokenSquareV2
                   item={item}
                   handleLike={handleLike}
                   handleUnlike={handleUnlike}
@@ -175,4 +147,4 @@ const TokenGrid = ({
   );
 };
 
-export default TokenGrid;
+export default TokenGridV2;

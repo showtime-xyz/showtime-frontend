@@ -23,7 +23,7 @@ const FollowGrid = ({ people }) => {
                   />
                 </div>
                 <div style={{ fontWeight: 400 }}>
-                  {profile.name ? profile.name : "Unknown"}
+                  {profile.name ? profile.name : "Unnamed"}
                 </div>
               </a>
             </Link>

@@ -5,7 +5,13 @@ import Link from "next/link";
 import AppContext from "../context/app-context";
 import ReactPlayer from "react-player";
 
-const TokenHero = ({ item, handleLike, handleUnlike, isDetail, isMobile }) => {
+const TokenHeroV2 = ({
+  item,
+  handleLike,
+  handleUnlike,
+  isDetail,
+  isMobile,
+}) => {
   const context = useContext(AppContext);
   const videoWidth = context.windowSize
     ? context.windowSize < 768
@@ -16,9 +22,9 @@ const TokenHero = ({ item, handleLike, handleUnlike, isDetail, isMobile }) => {
   return (
     <div>
       {isDetail ? (
-        item.animation_url && item.animation_url.includes(".mp4") ? (
+        item.token_has_video ? (
           <ReactPlayer
-            url={item.animation_url}
+            url={item.token_animation_url}
             playing
             loop
             controls
@@ -29,21 +35,20 @@ const TokenHero = ({ item, handleLike, handleUnlike, isDetail, isMobile }) => {
         ) : (
           <img
             className="w-full"
-            src={item.image_url}
-            alt="nft"
-            style={{ boxShadow: "1px 2px 5px #bbb" }}
+            src={item.token_img_url}
+            alt={item.token_name}
           />
         )
       ) : (
         <Link
           href="/t/[...token]"
-          as={`/t/${item.asset_contract.address}/${item.token_id}`}
+          as={`/t/${item.contract_address}/${item.token_id}`}
         >
           <a>
             <img
               className="object-cover object-center h-full w-full"
               style={{ maxHeight: 600 }}
-              src={item.image_url}
+              src={item.token_img_url}
               alt="nft"
             />
           </a>
@@ -55,24 +60,14 @@ const TokenHero = ({ item, handleLike, handleUnlike, isDetail, isMobile }) => {
           <div className="flex flex-row">
             <LikeButton
               isLiked={item.liked}
-              likeCount={item.showtime.like_count}
+              likeCount={item.like_count}
               handleLike={handleLike}
               handleLikeArgs={{
-                contract: item.asset_contract.address,
-                token_id: item.token_id,
-                creator_address: item.creator ? item.creator.address : null,
-                creator_name:
-                  item.creator && item.creator.user
-                    ? item.creator.user.username
-                    : null,
-                creator_img_url: item.creator
-                  ? item.creator.profile_img_url
-                  : null,
+                tid: item.tid,
               }}
               handleUnlike={handleUnlike}
               handleUnlikeArgs={{
-                contract: item.asset_contract.address,
-                token_id: item.token_id,
+                tid: item.tid,
               }}
               showTooltip={isMobile === false}
             />
@@ -82,7 +77,7 @@ const TokenHero = ({ item, handleLike, handleUnlike, isDetail, isMobile }) => {
                 "//" +
                 window.location.hostname +
                 (window.location.port ? ":" + window.location.port : "") +
-                `/t/${item.asset_contract.address}/${item.token_id}`
+                `/t/${item.contract_address}/${item.token_id}`
               }
               type={"item"}
             />
@@ -103,19 +98,15 @@ const TokenHero = ({ item, handleLike, handleUnlike, isDetail, isMobile }) => {
           <div className="showtime-hero-title text-2xl md:text-4xl">
             <Link
               href="/t/[...token]"
-              as={`/t/${item.asset_contract.address}/${item.token_id}`}
+              as={`/t/${item.contract_address}/${item.token_id}`}
             >
-              <a className="showtime-link">{item.name}</a>
+              <a className="showtime-link">{item.token_name}</a>
             </Link>{" "}
-            {item.creator ? (
+            {item.creator_address ? (
               <>
                 <span style={{ fontWeight: 400 }}>{" by "}</span>
-                <Link href="/p/[slug]" as={`/p/${item.creator.address}`}>
-                  <a className="showtime-link">
-                    {item.creator.user && item.creator.user.username
-                      ? item.creator.user.username
-                      : "Unnamed"}
-                  </a>
+                <Link href="/p/[slug]" as={`/p/${item.creator_address}`}>
+                  <a className="showtime-link">{item.creator_name}</a>
                 </Link>
               </>
             ) : (
@@ -128,4 +119,4 @@ const TokenHero = ({ item, handleLike, handleUnlike, isDetail, isMobile }) => {
   );
 };
 
-export default TokenHero;
+export default TokenHeroV2;

@@ -41,9 +41,7 @@ const Header = () => {
 
     if (!context?.user) {
       getUserFromCookies();
-      getMyLikes();
-      getMyFollows();
-      getMyProfile();
+      getMyInfo();
     }
   }, [context?.user]);
 
@@ -53,63 +51,26 @@ const Header = () => {
     context.setWindowSize(windowSize);
   }, [windowSize]);
 
-  const getMyLikes = async () => {
+  const getMyInfo = async () => {
     // get our likes
-    const myLikesRequest = await fetch("/api/mylikes");
+    const myInfoRequest = await fetch("/api/myinfo");
     try {
-      const my_like_data = await myLikesRequest.json();
-      context.setMyLikes(my_like_data.data);
+      const my_info_data = await myInfoRequest.json();
+
+      context.setMyLikes(my_info_data.data.likes);
+      context.setMyFollows(my_info_data.data.follows);
+      context.setMyProfile(my_info_data.data.profile);
     } catch {
       //
     }
   };
-
-  useEffect(() => {
-    if (!context?.myLikes) {
-      getMyLikes();
-    }
-  }, [context?.myLikes]);
-
-  const getMyFollows = async () => {
-    // get our follows
-    const myFollowsRequest = await fetch("/api/myfollows");
-    try {
-      const my_follows_data = await myFollowsRequest.json();
-      context.setMyFollows(my_follows_data.data);
-    } catch {
-      //
-    }
-  };
-
-  useEffect(() => {
-    if (!context?.myFollows) {
-      getMyFollows();
-    }
-  }, [context?.myFollows]);
-
-  const getMyProfile = async () => {
-    // get our follows
-    const myProfileRequest = await fetch("/api/myprofile");
-    try {
-      const my_profile_data = await myProfileRequest.json();
-      context.setMyProfile(my_profile_data.data);
-    } catch {
-      //
-    }
-  };
-
-  useEffect(() => {
-    if (!context?.myProfile) {
-      getMyProfile();
-    }
-  }, [context?.myProfile]);
 
   return (
-    <header>
-      <div className="w-10/12 mx-auto py-5 flex flex-col md:flex-row items-center ">
+    <header style={{ backgroundColor: "#010101" }}>
+      <div className="w-10/12 mx-auto py-3 flex flex-col md:flex-row items-center ">
         <Link href="/">
           <a
-            className="flex flex-row showtime-header-link mb-4 md:mb-0 uppercase items-center text-left mr-auto"
+            className="flex flex-row showtime-header-link mb-4 md:mb-0 items-center text-left mr-auto"
             onClick={() => {
               mixpanel.track("Logo button click");
             }}
@@ -121,37 +82,41 @@ const Header = () => {
             <div className="mx-4">Showtime</div>
           </a>
         </Link>
-        <div className="flex-grow items-center text-right">
-          <nav className="text-base flex inline-flex items-center">
-            <Link href="/c/superrare">
-              <a
-                className="showtime-header-link mr-5 text-sm md:text-base"
-                onClick={() => {
-                  mixpanel.track("Discover button click");
-                }}
-              >
-                Discover
-              </a>
-            </Link>
+        <div className="items-center flex flex-row w-full my-1 md:my-0">
+          <div className="flex-grow hidden md:block"></div>
+          <div className="flex-shrink">
             <Link href="/#leaderboard">
               <a
                 className="showtime-header-link mr-5 text-sm md:text-base"
                 onClick={() => {
-                  mixpanel.track("Top creators button click");
+                  mixpanel.track("Collections button click");
                 }}
               >
                 Top Creators
               </a>
             </Link>
-            {context.user ? (
-              <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
-                <a
-                  className="showtime-login-button-outline text-sm px-3 py-2 md:text-base md:px-3 md:py-2 flex flex-row items-center"
-                  onClick={() => {
-                    mixpanel.track("Profile button click");
-                  }}
-                >
-                  {context.myProfile === undefined ? null : (
+            <Link href="/c/superrare">
+              <a
+                className="showtime-header-link md:mr-5 text-sm md:text-base"
+                onClick={() => {
+                  mixpanel.track("Discover button click");
+                }}
+              >
+                Collections
+              </a>
+            </Link>
+          </div>
+          <div className="flex-grow md:hidden"></div>
+          <div>
+            <div>
+              {context.user && context.myProfile !== undefined ? (
+                <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
+                  <a
+                    className="showtime-login-button-outline text-sm px-3 py-2 md:text-base md:px-3 md:py-2 flex flex-row items-center"
+                    onClick={() => {
+                      mixpanel.track("Profile button click");
+                    }}
+                  >
                     <>
                       <div
                         className={
@@ -183,20 +148,20 @@ const Header = () => {
                           : "Profile"}
                       </div>
                     </>
-                  )}
-                  <div className="block sm:hidden">Profile</div>
-                </a>
-              </Link>
-            ) : (
-              <Link href="/login">
-                <a className="showtime-login-button-solid text-sm px-3 py-2 md:text-base  md:px-5 md:py-3">
-                  {context.windowSize && context.windowSize.width > 500
-                    ? "Sign in / Sign up"
-                    : "Sign in"}
-                </a>
-              </Link>
-            )}
-          </nav>
+                    <div className="block sm:hidden">Profile</div>
+                  </a>
+                </Link>
+              ) : (
+                <Link href="/login">
+                  <a className="showtime-login-button-solid text-sm px-3 py-2 md:text-base  md:px-3 md:py-2">
+                    {context.windowSize && context.windowSize.width > 500
+                      ? "Sign in / Sign up"
+                      : "Sign in"}
+                  </a>
+                </Link>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </header>

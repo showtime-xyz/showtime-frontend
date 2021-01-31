@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import _ from "lodash";
 import Layout from "../../components/layout";
-import TokenGrid from "../../components/TokenGrid";
+import TokenGridV2 from "../../components/TokenGridV2";
 import { useRouter } from "next/router";
 import Select from "react-dropdown-select";
 import backend from "../../lib/backend";
@@ -24,7 +24,7 @@ export async function getServerSideProps(context) {
 
   // Get collection items
   const response_collection_items = await backend.get(
-    `/v1/collection?collection=${collection}&limit=40&order_by=${selected_collection.order_by}&order_direction=${selected_collection.order_direction}`
+    `/v2/collection?collection=${collection}`
   );
   const collection_items = response_collection_items.data.data;
 
@@ -73,14 +73,17 @@ export default function Collection({
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    if (context.windowSize && context.windowSize.width < 500) {
+    if (context.windowSize && context.windowSize.width < 800) {
       setColumns(1);
       setIsMobile(true);
     } else if (context.windowSize && context.windowSize.width < 1400) {
       setColumns(2);
       setIsMobile(false);
-    } else {
+    } else if (context.windowSize && context.windowSize.width < 1800) {
       setColumns(3);
+      setIsMobile(false);
+    } else {
+      setColumns(4);
       setIsMobile(false);
     }
   }, [context.windowSize]);
@@ -97,7 +100,10 @@ export default function Collection({
           content="Discover and showcase digital art"
         />
         {collection_items && collection_items.length > 0 ? (
-          <meta property="og:image" content={collection_items[0].image_url} />
+          <meta
+            property="og:image"
+            content={collection_items[0].token_img_url}
+          />
         ) : null}
         <meta
           name="og:title"
@@ -114,22 +120,24 @@ export default function Collection({
           content="Discover and showcase digital art"
         />
         {collection_items && collection_items.length > 0 ? (
-          <meta name="twitter:image" content={collection_items[0].image_url} />
+          <meta
+            name="twitter:image"
+            content={collection_items[0].token_img_url}
+          />
         ) : null}
       </Head>
 
       <div className="flex flex-col text-center w-full">
-        <div className="showtime-title text-center mx-auto text-3xl md:text-6xl">
+        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mt-5 py-10">
           Discover Collections
         </div>
       </div>
 
       {collection_list && collection_list.length > 0 ? (
-        <div className="flex flex-row mx-auto mt-10" style={{ width: 260 }}>
-          <ShareButton
-            url={typeof window !== "undefined" ? window.location.href : null}
-            type={"collection"}
-          />
+        <div
+          className="flex flex-row mx-auto mt-6 items-center"
+          style={{ width: 260 }}
+        >
           <div className="text-left" style={{ width: 230 }}>
             <Select
               options={collection_list}
@@ -142,12 +150,18 @@ export default function Collection({
               onChange={(values) => onChange(values)}
             />
           </div>
+          <div className="">
+            <ShareButton
+              url={typeof window !== "undefined" ? window.location.href : null}
+              type={"collection"}
+            />
+          </div>
         </div>
       ) : null}
-      <p className="mb-12 mt-6 text-center">
+      <p className="mb-6 mt-4 text-center">
         {isChanging ? "Loading..." : "\u00A0"}
       </p>
-      <TokenGrid
+      <TokenGridV2
         columnCount={columns}
         items={collection_items}
         isMobile={isMobile}

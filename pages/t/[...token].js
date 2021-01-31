@@ -4,6 +4,7 @@ import _ from "lodash";
 import Layout from "../../components/layout";
 import backend from "../../lib/backend";
 import Link from "next/link";
+import TokenGridV2 from "../../components/TokenGridV2";
 import TokenGrid from "../../components/TokenGrid";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css"; // This only needs to be imported once in your app
@@ -16,10 +17,13 @@ export async function getServerSideProps(context) {
   const token_id = token_array[1];
 
   const response_token = await backend.get(
-    `/v1/token/${contract_address}/${token_id}`
+    `/v2/token/${contract_address}/${token_id}`
   );
-  const token = response_token.data.data;
+  const token = response_token.data.data.item;
+  const same_creator_items = response_token.data.data.same_creator;
+  const same_owner_items = response_token.data.data.same_owner;
 
+  /*
   // Get owned items
   let same_owner_items = [];
   if (token.owner && token.owner.address) {
@@ -33,17 +37,18 @@ export async function getServerSideProps(context) {
           item.asset_contract.address === contract_address
         )
     );
-  }
+  }*/
 
   return {
     props: {
       token,
+      same_creator_items,
       same_owner_items,
     }, // will be passed to the page component as props
   };
 }
 
-export default function Token({ token, same_owner_items }) {
+export default function Token({ token, same_owner_items, same_creator_items }) {
   //const [isChanging, setIsChanging] = useState(false);
   //const { collection } = router.query;
 
@@ -58,8 +63,8 @@ export default function Token({ token, same_owner_items }) {
   const [isMyProfile, setIsMyProfile] = useState(false);
 
   useEffect(() => {
-    if (context.user && token.owner && token.owner.address) {
-      if (token.owner.address === context.user.publicAddress) {
+    if (context.user && token.owner_address) {
+      if (token.owner_address === context.user.publicAddress) {
         setIsMyProfile(true);
       } else {
         setIsMyProfile(false);
@@ -83,17 +88,26 @@ export default function Token({ token, same_owner_items }) {
   const [ownedRefreshed, setOwnedRefreshed] = useState(false);
 
   useEffect(() => {
-    setOwnedItems(same_owner_items);
+    setOwnedItems(same_owner_items.filter((c) => c.tid !== item.tid));
     setOwnedRefreshed(false);
   }, [same_owner_items]);
 
+  const [createdItems, setCreatedItems] = useState([]);
+  const [createdRefreshed, setCreatedRefreshed] = useState(false);
+
+  useEffect(() => {
+    setCreatedItems(same_creator_items.filter((c) => c.tid !== item.tid));
+    setCreatedRefreshed(false);
+  }, [same_creator_items]);
+
+  /*
   useEffect(() => {
     const refreshOwned = async () => {
       if (
-        token.owner.address !== "0x0000000000000000000000000000000000000000"
+        token.owner_address !== "0x0000000000000000000000000000000000000000"
       ) {
         const response_owned = await backend.get(
-          `/v1/owned?address=${token.owner.address}`
+          `/v1/owned?address=${token.owner_address}`
         );
         if (response_owned.data.data !== same_owner_items) {
           setOwnedItems(
@@ -101,7 +115,7 @@ export default function Token({ token, same_owner_items }) {
               (item) =>
                 !(
                   item.token_id === token.token_id &&
-                  item.asset_contract.address === token.asset_contract.address
+                  item.asset_contract.address === token.contract_address
                 )
             )
           );
@@ -110,57 +124,63 @@ export default function Token({ token, same_owner_items }) {
 
       setOwnedRefreshed(true);
     };
-    if (token.owner && token.owner.address) {
+    if (token.owner_address) {
       refreshOwned();
     }
   }, [same_owner_items, token]);
+  */
 
   const [columns, setColumns] = useState(2);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    if (context.windowSize && context.windowSize.width < 500) {
+    if (context.windowSize && context.windowSize.width < 800) {
       setColumns(1);
       setIsMobile(true);
     } else if (context.windowSize && context.windowSize.width < 1400) {
       setColumns(2);
       setIsMobile(false);
-    } else {
+    } else if (context.windowSize && context.windowSize.width < 1800) {
       setColumns(3);
+      setIsMobile(false);
+    } else {
+      setColumns(4);
       setIsMobile(false);
     }
   }, [context.windowSize]);
 
   return (
-    <Layout key={item.asset_contract.address + "_" + item.token_id}>
+    <Layout key={item.tid}>
       <Head>
-        <title>{item.name}</title>
-        {item.image_original_url ? (
-          <link rel="prefetch" href={item.image_original_url} as="image" />
+        <title>{item.token_name}</title>
+        {item.token_img_original_url ? (
+          <link rel="prefetch" href={item.token_img_original_url} as="image" />
         ) : null}
 
-        <meta name="description" content={item.description} />
+        <meta name="description" content={item.token_description} />
         <meta property="og:type" content="website" />
-        <meta name="og:description" content={item.description} />
-        <meta property="og:image" content={item.image_url} />
-        <meta name="og:title" content={item.name} />
+        <meta name="og:description" content={item.token_description} />
+        <meta property="og:image" content={item.token_img_url} />
+        <meta name="og:title" content={item.token_name} />
 
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content={item.name} />
-        <meta name="twitter:description" content={item.description} />
-        <meta name="twitter:image" content={item.image_url} />
+        <meta name="twitter:title" content={item.token_name} />
+        <meta name="twitter:description" content={item.token_description} />
+        <meta name="twitter:image" content={item.token_img_url} />
       </Head>
 
       <div className="flex flex-col text-center w-full">
-        <div className="showtime-title text-center mx-auto text-3xl md:text-6xl">
-          {item.name}
+        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mt-5 py-10">
+          {item.token_name}
         </div>
       </div>
 
       {lightboxOpen && (
         <Lightbox
           mainSrc={
-            item.image_original_url ? item.image_original_url : item.image_url
+            item.token_img_original_url
+              ? item.token_img_original_url
+              : item.token_img_url
           }
           //nextSrc={images[(photoIndex + 1) % images.length]}
           //prevSrc={images[(photoIndex + images.length - 1) % images.length]}
@@ -180,11 +200,10 @@ export default function Token({ token, same_owner_items }) {
         />
       )}
 
-      <div className="flex flex-col md:flex-row mt-8">
-        <div className="flex md:w-1/2 md:pr-4">
+      <div className="flex flex-col lg:flex-row mt-8 xl:w-3/4 xl:mx-auto">
+        <div className="flex lg:w-1/2 lg:pr-4 ">
           <div className="w-full" style={{ position: "relative" }}>
-            {item.animation_url &&
-            item.animation_url.includes(".mp4") ? null : (
+            {item.token_has_video ? null : (
               <button
                 style={{
                   position: "absolute",
@@ -218,15 +237,15 @@ export default function Token({ token, same_owner_items }) {
                   className="flex ml-2"
                   style={
                     isHovering
-                      ? { opacity: 1, fontSize: 14 }
-                      : { opacity: 0.7, fontSize: 14 }
+                      ? { opacity: 1, fontSize: 14, color: "white" }
+                      : { opacity: 0.7, fontSize: 14, color: "white" }
                   }
                 >
                   Original size
                 </div>
               </button>
             )}
-            <TokenGrid
+            <TokenGridV2
               hasHero
               isDetail
               columnCount={1}
@@ -235,21 +254,19 @@ export default function Token({ token, same_owner_items }) {
             />
           </div>
         </div>
-        <div className="flex text-center md:w-1/2  md:pl-4 md:text-left">
+        <div className="flex lg:w-1/2 lg:pl-4 lg:text-left">
           <div className="w-full">
-            <div className="showtime-token-description">{item.description}</div>
+            <div className="showtime-token-description">
+              {item.token_description}
+            </div>
             <br />
             <br />
-            {item.creator ? (
+            {item.creator_id ? (
               <>
                 <span style={{ fontWeight: 400 }}>{"Created by "}</span>
 
-                <Link href="/p/[slug]" as={`/p/${item.creator.address}`}>
-                  <a className="showtime-link">
-                    {item.creator.user && item.creator.user.username
-                      ? item.creator.user.username
-                      : "Unnamed"}
-                  </a>
+                <Link href="/p/[slug]" as={`/p/${item.creator_address}`}>
+                  <a className="showtime-link">{item.creator_name}</a>
                 </Link>
               </>
             ) : (
@@ -258,17 +275,15 @@ export default function Token({ token, same_owner_items }) {
             <br />
             <span style={{ fontWeight: 400 }}>
               {"Owned by "}
-              {item.owner ? (
-                item.owner.user &&
-                item.owner.user.username === "NullAddress" ? (
-                  "multiple owners"
-                ) : (
-                  <Link href="/p/[slug]" as={`/p/${item.owner.address}`}>
-                    <a className="showtime-link" style={{ fontWeight: 600 }}>
-                      {item.owner.user ? item.owner.user.username : "Unnamed"}
-                    </a>
-                  </Link>
-                )
+
+              {item.multiple_owners ? (
+                "multiple owners"
+              ) : item.owner_id ? (
+                <Link href="/p/[slug]" as={`/p/${item.owner_address}`}>
+                  <a className="showtime-link" style={{ fontWeight: 600 }}>
+                    {item.owner_name}
+                  </a>
+                </Link>
               ) : null}
             </span>
             <br />
@@ -286,25 +301,27 @@ export default function Token({ token, same_owner_items }) {
                 alt="external"
               />
             </a>*/}
-            <a
-              href={`https://opensea.io/assets/${item.asset_contract.address}/${item.token_id}`}
-              title="Buy on OpenSea"
-              target="_blank"
-              onClick={() => {
-                mixpanel.track("OpenSea link click");
-              }}
-            >
-              <img
-                style={{
-                  width: 160,
-                  borderRadius: 7,
-                  boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.25)",
+            <div style={{ width: 160 }}>
+              <a
+                href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}`}
+                title="Buy on OpenSea"
+                target="_blank"
+                onClick={() => {
+                  mixpanel.track("OpenSea link click");
                 }}
-                src="https://storage.googleapis.com/opensea-static/opensea-brand/listed-button-white.png"
-                alt="Listed on OpenSea badge"
-                className={isMobile ? "mx-auto" : "mr-auto"}
-              />
-            </a>
+              >
+                <img
+                  style={{
+                    width: 160,
+                    borderRadius: 7,
+                    boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.25)",
+                  }}
+                  src="https://storage.googleapis.com/opensea-static/opensea-brand/listed-button-white.png"
+                  alt="Listed on OpenSea badge"
+                  className={isMobile ? "mx-auto" : "mr-auto"}
+                />
+              </a>
+            </div>
             <br />
             <br />
           </div>
@@ -312,12 +329,12 @@ export default function Token({ token, same_owner_items }) {
       </div>
 
       <div className="flex flex-col text-center w-full">
-        <div className="showtime-title text-center mx-auto text-3xl md:text-6xl">
-          More from this owner
+        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-4 py-10">
+          More from this creator
         </div>
       </div>
       <div className="text-center">
-        {ownedRefreshed
+        {/*ownedRefreshed
           ? ownedItems.length === 0
             ? `We couldn't find any more items owned by ${
                 isMyProfile ? "you" : "this person"
@@ -325,9 +342,49 @@ export default function Token({ token, same_owner_items }) {
             : null
           : ownedItems.length === 0
           ? "Loading..."
+            : null*/}
+        {createdItems.length === 0
+          ? `We couldn't find any more items created by ${
+              isMyProfile ? "you" : "this person"
+            }.`
           : null}
       </div>
-      <TokenGrid columnCount={columns} items={ownedItems} isMobile={isMobile} />
+      <TokenGridV2
+        columnCount={columns}
+        items={createdItems}
+        isMobile={isMobile}
+      />
+      {item.multiple_owners ? null : (
+        <>
+          <div className="flex flex-col text-center w-full mt-8">
+            <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-4 py-10">
+              More from this owner
+            </div>
+          </div>
+          <div className="text-center">
+            {/*ownedRefreshed
+          ? ownedItems.length === 0
+            ? `We couldn't find any more items owned by ${
+                isMyProfile ? "you" : "this person"
+              }.`
+            : null
+          : ownedItems.length === 0
+          ? "Loading..."
+            : null*/}
+            {ownedItems.length === 0
+              ? `We couldn't find any more items owned by ${
+                  isMyProfile ? "you" : "this person"
+                }.`
+              : null}
+          </div>
+          <TokenGridV2
+            columnCount={columns}
+            items={ownedItems}
+            isMobile={isMobile}
+          />
+        </>
+      )}
+      <div className="mb-16"></div>
     </Layout>
   );
 }

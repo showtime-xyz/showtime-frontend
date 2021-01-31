@@ -8,7 +8,7 @@ function truncateWithEllipses(text, max) {
   return text.substr(0, max - 1) + (text.length > max ? "..." : "");
 }
 
-const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
+const TokenSquareV2 = ({ item, handleLike, handleUnlike, isMobile }) => {
   const [moreShown, setMoreShown] = useState(false);
   const max_description_length = 102;
 
@@ -35,12 +35,12 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
     >
       <Link
         href="/t/[...token]"
-        as={`/t/${item.asset_contract.address}/${item.token_id}`}
+        as={`/t/${item.contract_address}/${item.token_id}`}
       >
         <a>
           <img
             className="w-full object-cover object-center mb-1"
-            src={item.image_url}
+            src={item.token_img_url}
             alt="nft"
           />
         </a>
@@ -49,27 +49,23 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
         <div>
           <div className="flex flex-row items-center">
             <div className="flex-shrink">
-              {item.creator ? (
-                <Link href="/p/[slug]" as={`/p/${item.creator.address}`}>
+              {item.creator_address ? (
+                <Link href="/p/[slug]" as={`/p/${item.creator_address}`}>
                   <a className="flex flex-row items-center p-1 ">
                     <div>
                       <img
-                        alt={
-                          item.creator.user && item.creator.user.username
-                            ? item.creator.user.username
-                            : "Unnamed"
-                        }
+                        alt={item.creator_name}
                         src={
-                          "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                          item.creator_img_url
+                            ? item.creator_img_url
+                            : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                         }
                         className="rounded-full "
                         style={{ height: 24, width: 24 }}
                       />
                     </div>
                     <div className="showtime-card-profile-link ml-1">
-                      {item.creator.user && item.creator.user.username
-                        ? truncateWithEllipses(item.creator.user.username, 22)
-                        : "Unnamed"}
+                      {truncateWithEllipses(item.creator_name, 22)}
                     </div>
                   </a>
                 </Link>
@@ -79,24 +75,14 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
             <div className="flex-grow text-right">
               <LikeButton
                 isLiked={item.liked}
-                likeCount={item.showtime.like_count}
+                likeCount={item.like_count}
                 handleLike={handleLike}
                 handleLikeArgs={{
-                  contract: item.asset_contract.address,
-                  token_id: item.token_id,
-                  creator_address: item.creator ? item.creator.address : null,
-                  creator_name:
-                    item.creator && item.creator.user
-                      ? item.creator.user.username
-                      : null,
-                  creator_img_url: item.creator
-                    ? item.creator.profile_img_url
-                    : null,
+                  tid: item.tid,
                 }}
                 handleUnlike={handleUnlike}
                 handleUnlikeArgs={{
-                  contract: item.asset_contract.address,
-                  token_id: item.token_id,
+                  tid: item.tid,
                 }}
                 showTooltip={isMobile === false}
               />
@@ -108,7 +94,7 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
                   "//" +
                   window.location.hostname +
                   (window.location.port ? ":" + window.location.port : "") +
-                  `/t/${item.asset_contract.address}/${item.token_id}`
+                  `/t/${item.contract_address}/${item.token_id}`
                 }
                 type={"item"}
               />
@@ -117,11 +103,11 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
           <div className="mt-2 px-1 py-2">
             <Link
               href="/t/[...token]"
-              as={`/t/${item.asset_contract.address}/${item.token_id}`}
+              as={`/t/${item.contract_address}/${item.token_id}`}
             >
-              <a className="showtime-card-title">{item.name}</a>
+              <a className="showtime-card-title">{item.token_name}</a>
             </Link>
-            {item.animation_url && item.animation_url.includes(".mp4") ? (
+            {item.token_has_video ? (
               <img
                 style={{ display: "inline-block" }}
                 src="/icons/video-solid.svg"
@@ -140,14 +126,14 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
               }}
             >
               {moreShown ? (
-                <div>{item.description}</div>
+                <div>{item.token_description}</div>
               ) : (
                 <div>
-                  {item.description ? (
-                    item.description.length > max_description_length ? (
+                  {item.token_description ? (
+                    item.token_description.length > max_description_length ? (
                       <>
                         {truncateWithEllipses(
-                          item.description,
+                          item.token_description,
                           max_description_length
                         )}{" "}
                         <a
@@ -161,7 +147,7 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
                         </a>
                       </>
                     ) : (
-                      <div>{item.description}</div>
+                      <div>{item.token_description}</div>
                     )
                   ) : null}
                 </div>
@@ -184,43 +170,36 @@ const TokenSquare = ({ item, handleLike, handleUnlike, isMobile }) => {
             fontWeight: 400,
             fontSize: 12,
             color: "#666",
-            paddingTop: 3,
           }}
         >
           Owned by
         </span>
-        {item.owner ? (
-          item.owner.user && item.owner.user.username === "NullAddress" ? (
-            <span style={{ fontSize: 14, fontWeight: 400 }}>
-              multiple owners
-            </span>
-          ) : (
-            <Link href="/p/[slug]" as={`/p/${item.owner.address}`}>
-              <a className="flex flex-row items-center inline-flex">
-                <div>
-                  <img
-                    alt={item.owner.user ? item.owner.user.username : "Unnamed"}
-                    src={
-                      "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                    }
-                    className="rounded-full mr-1"
-                    style={{ height: 24, width: 24 }}
-                  />
-                </div>
-                <div className="showtime-card-profile-link">
-                  {item.owner.user
-                    ? item.owner.user.username
-                      ? item.owner.user.username
-                      : "Unnamed"
-                    : "Unnamed"}
-                </div>
-              </a>
-            </Link>
-          )
+        {item.multiple_owners ? (
+          <span style={{ fontSize: 14, fontWeight: 400 }}>multiple owners</span>
+        ) : item.owner_id ? (
+          <Link href="/p/[slug]" as={`/p/${item.owner_address}`}>
+            <a className="flex flex-row items-center inline-flex">
+              <div>
+                <img
+                  alt={item.owner_name}
+                  src={
+                    item.owner_img_url
+                      ? item.owner_img_url
+                      : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                  }
+                  className="rounded-full mr-1"
+                  style={{ height: 24, width: 24 }}
+                />
+              </div>
+              <div className="showtime-card-profile-link">
+                {item.owner_name}
+              </div>
+            </a>
+          </Link>
         ) : null}
       </div>
     </div>
   );
 };
 
-export default TokenSquare;
+export default TokenSquareV2;

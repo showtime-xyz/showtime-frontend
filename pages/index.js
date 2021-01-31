@@ -4,7 +4,8 @@ import Link from "next/link";
 import _ from "lodash";
 import Layout from "../components/layout";
 import Leaderboard from "../components/Leaderboard";
-import TokenGrid from "../components/TokenGrid";
+import TokenGridV2 from "../components/TokenGridV2";
+
 //import styles from "../styles/Home.module.css";
 import backend from "../lib/backend";
 import AppContext from "../context/app-context";
@@ -12,7 +13,7 @@ import mixpanel from "mixpanel-browser";
 
 export async function getServerSideProps(context) {
   // Get featured
-  const response_featured = await backend.get("/v1/featured?limit=9");
+  const response_featured = await backend.get("/v2/featured");
   const data_featured = response_featured.data.data;
 
   // Get leaderboard
@@ -40,17 +41,22 @@ export default function Home({ featured_items, leaderboard }) {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    if (context.windowSize && context.windowSize.width < 500) {
+    if (context.windowSize && context.windowSize.width < 800) {
       setColumns(1);
       setIsMobile(true);
     } else if (context.windowSize && context.windowSize.width < 1400) {
       setColumns(2);
       setIsMobile(false);
-    } else {
+    } else if (context.windowSize && context.windowSize.width < 1800) {
       setColumns(3);
+      setIsMobile(false);
+    } else {
+      setColumns(4);
       setIsMobile(false);
     }
   }, [context.windowSize]);
+
+  const [isHovering, setIsHovering] = useState(false);
 
   return (
     <Layout>
@@ -77,14 +83,14 @@ export default function Home({ featured_items, leaderboard }) {
         />
       </Head>
       <h1
-        className="showtime-title text-center mx-auto text-3xl md:text-6xl md:leading-snug mb-10"
-        style={{ maxWidth: 800 }}
+        className="showtime-title text-center mx-auto text-2xl md:text-5xl md:leading-snug mb-5 mt-5 py-10"
+        style={{ maxWidth: 700 }}
       >
         Discover and showcase your favorite digital art
       </h1>
 
       {context.user ? null : (
-        <div className=" mb-24">
+        <div className=" mb-16">
           <div className="flex justify-center">
             {context.user ? (
               <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
@@ -107,19 +113,26 @@ export default function Home({ featured_items, leaderboard }) {
           </div>
         </div>
       )}
-      <TokenGrid
-        hasHero
+      <TokenGridV2
         columnCount={columns}
         items={featured_items}
         isMobile={isMobile}
       />
       <div className="text-center pt-8 pb-16">
         <Link href="/c/[collection]" as="/c/superrare">
-          <a className="showtime-purple-button-icon">
-            <span>Discover more artwork</span>
+          <a
+            className="showtime-purple-button-icon"
+            onMouseOver={() => setIsHovering(true)}
+            onMouseOut={() => setIsHovering(false)}
+          >
+            <span>Browse collections</span>
             <img
               style={{ paddingLeft: 6 }}
-              src={"/icons/arrow-right.svg"}
+              src={
+                isHovering
+                  ? "/icons/arrow-right-purple.svg"
+                  : "/icons/arrow-right.svg"
+              }
               alt="arrow"
             />
           </a>

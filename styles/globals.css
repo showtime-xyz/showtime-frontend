@@ -2,14 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@400;700&family=Inter:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
 
 html,
 body {
   padding: 0;
   margin: 0;
-  background-color: #010101;
-  color: rgba(255, 255, 255, 0.9);
+  /*background-color: #010101;
+  color: rgba(255, 255, 255, 0.9);*/
+  background-color: #f4f2f1; /* #fafafa; */
+  color: #010101;
   font-family: "Inter", sans-serif;
   font-weight: 600;
   font-size: 16px;
@@ -109,18 +111,14 @@ a {
 }
 
 .showtime-title {
-  font-family: "Darker Grotesque", sans-serif;
   font-weight: 700;
   /*font-size: 64px;*/
   /*line-height: 83px;*/
-  padding-top: 32px;
-  padding-bottom: 32px;
   /*text-transform: uppercase;*/
 }
 
 .showtime-hero-title {
-  font-family: "Darker Grotesque", sans-serif;
-  font-weight: 700;
+  font-weight: 600;
   /*font-size: 36px;*/
 }
 
@@ -137,7 +135,6 @@ a {
 }
 
 .showtime-square-created {
-  font-family: "Darker Grotesque", sans-serif;
   font-weight: 400;
   /*font-size: 24px;*/
 }
@@ -147,11 +144,18 @@ a {
   color: #fff;
   font-size: 16px;
   font-weight: 600;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-left: 25px;
-  padding-right: 25px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 23px;
+  padding-right: 23px;
   border-radius: 7px;
+  border: 2px solid #e45cff;
+}
+
+.showtime-pink-button:hover {
+  background-color: #fff;
+  color: #e45cff;
+  border: 2px solid #e45cff;
 }
 
 .showtime-purple-button {
@@ -159,11 +163,18 @@ a {
   color: #fff;
   font-size: 16px;
   font-weight: 600;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-left: 25px;
-  padding-right: 25px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 23px;
+  padding-right: 23px;
   border-radius: 7px;
+  border: 2px solid #7d5cff;
+}
+
+.showtime-purple-button:hover {
+  background-color: #fff;
+  color: #7d5cff;
+  border: 2px solid #7d5cff;
 }
 
 .showtime-green-button {
@@ -172,6 +183,7 @@ a {
   font-size: 16px;
   font-weight: 600;
   border-radius: 7px;
+  border: 2px solid #35bb5b;
 }
 
 .showtime-white-button {
@@ -184,10 +196,12 @@ a {
   padding-left: 25px;
   padding-right: 25px;
   border-radius: 7px;
+  border: 2px solid #222222;
 }
 
 .showtime-white-button:hover {
   color: #e45cff;
+  border: 2px solid #e45cff;
 }
 
 .showtime-pink-button-outline {
@@ -266,12 +280,19 @@ a {
   color: #fff;
   font-size: 16px;
   font-weight: 600;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 18px;
+  padding-right: 18px;
   border-radius: 7px;
   display: inline-flex;
+  border: 2px solid #7d5cff;
+}
+
+.showtime-purple-button-icon:hover {
+  background-color: #fff;
+  color: #7d5cff;
+  border: 2px solid #7d5cff;
 }
 
 .showtime-green-button-icon {
@@ -412,10 +433,12 @@ a {
   color: #222222;
   font-weight: 600;
   border-radius: 7px;
+  border: 2px solid #fff;
 }
 
 .showtime-login-button-solid:hover {
   color: #e45cff;
+  border: 2px solid #e45cff;
 }
 
 .showtime-login-button-outline {
@@ -437,10 +460,12 @@ a {
   font-weight: 600;
   border-radius: 7px;
   display: inline-flex;
+  border: 2px solid #222222;
 }
 
 .showtime-like-button-white:hover {
   color: #e45cff;
+  border: 2px solid #e45cff;
 }
 
 .showtime-like-button-white-green-hover {
@@ -449,10 +474,12 @@ a {
   font-weight: 600;
   border-radius: 7px;
   display: inline-flex;
+  border: 2px solid#222222;
 }
 
 .showtime-like-button-white-green-hover:hover {
   color: #35bb5b;
+  border: 2px solid #35bb5b;
 }
 
 .showtime-like-button-pink {
@@ -461,6 +488,7 @@ a {
   font-weight: 600;
   border-radius: 7px;
   display: inline-flex;
+  border: 2px solid #e45cff;
 }
 
 .showtime-token-description {
@@ -483,8 +511,8 @@ a {
 }
 
 .showtime-follower-button {
-  border: 1px solid #fff;
-  color: #fff;
+  border: 2px solid rgba(153, 153, 153, 0.712);
+  color: #000;
   font-size: 14px;
   font-weight: 400;
   padding-top: 6px;
@@ -492,11 +520,12 @@ a {
   padding-left: 6px;
   padding-right: 8px;
   box-sizing: border-box;
+  background-color: white;
 }
 
 .showtime-follower-button:hover {
   color: #e45cff;
-  border: 1px solid #e45cff;
+  border: 2px solid #e45cff;
 }
 
 .showtime-black-button-outline {
@@ -511,4 +540,19 @@ a {
 .showtime-black-button-outline:hover {
   color: #666;
   border: 2px solid #666;
+}
+
+.showtime-card-profile-link {
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.showtime-card-profile-link:hover {
+  color: #e45cff;
+}
+
+.showtime-card-title {
+}
+.showtime-card-title:hover {
+  color: #e45cff;
 }

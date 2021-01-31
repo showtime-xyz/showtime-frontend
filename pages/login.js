@@ -66,11 +66,12 @@ export default function Login() {
         />
       </Head>
       <div className="text-center">
-        <div className="text-3xl mt-10">Select a login method:</div>
+        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mt-5 py-10">
+          Select a login method
+        </div>
         <form onSubmit={handleSubmit}>
           <br />
-          <br />
-          <label htmlFor="email" className="pb-4">
+          <label htmlFor="email" className="pb-4 ">
             Email (with Magic Link)
           </label>
           <br />
@@ -79,6 +80,7 @@ export default function Login() {
             name="email"
             placeholder="Email"
             type="email"
+            className="border-2"
             style={{ color: "black", padding: 10, borderRadius: 7, width: 300 }}
           />
           <br />
@@ -86,7 +88,16 @@ export default function Login() {
           <button className="showtime-pink-button">Log in with Email</button>
         </form>
         <br />
-        __________________________________
+
+        <br />
+        <hr
+          style={{
+            borderColor: "#666",
+            maxWidth: 500,
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+        />
         <br />
         <br />
         <WalletButton className="bg-white text-black hover:bg-gray-300 rounded-lg py-2 px-5" />
