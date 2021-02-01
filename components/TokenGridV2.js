@@ -22,7 +22,13 @@ const TokenGridV2 = ({
 
   useEffect(() => {
     setItemsList(
-      items.filter((item) => item.token_hidden !== true && item.token_img_url)
+      items.filter(
+        (item) =>
+          item.token_hidden !== true &&
+          (item.token_img_url ||
+            item.contract_address ===
+              "0xc2c747e0f7004f9e8817db2ca4997657a7746928")
+      )
     );
   }, [items]);
 

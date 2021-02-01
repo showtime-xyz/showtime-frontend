@@ -46,11 +46,19 @@ const TokenSquareV2 = ({ item, handleLike, handleUnlike, isMobile }) => {
         <a>
           <img
             className="w-full object-cover object-center mb-1"
-            src={item.token_img_url}
-            alt="nft"
+            src={
+              item.token_img_url
+                ? item.token_img_url
+                : item.contract_address ===
+                  "0xc2c747e0f7004f9e8817db2ca4997657a7746928"
+                ? "https://lh3.googleusercontent.com/L7Q_7aQGYfn8PYOrZwwA4400_EEScTOX9f3ut67oHy1Tjk0SSt85z_ekBjwtfXBQxT8epJHcbEbb-8njMZiGDMzgqjZYHVQwle5sQA=s500"
+                : null
+            }
+            alt={item.token_name}
           />
         </a>
       </Link>
+
       <div className="p-2">
         <div>
           <div className="flex flex-row items-center">

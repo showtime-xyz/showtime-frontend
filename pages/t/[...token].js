@@ -209,7 +209,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
       <div className="flex flex-col lg:flex-row mt-8 xl:w-3/4 xl:mx-auto">
         <div className="flex lg:w-1/2 lg:pr-4 ">
           <div className="w-full" style={{ position: "relative" }}>
-            {item.token_has_video ? null : (
+            {item.token_has_video ? null : item.token_img_url ? (
               <button
                 style={{
                   position: "absolute",
@@ -250,25 +250,29 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
                   Original size
                 </div>
               </button>
-            )}
-            <TokenGridV2
-              hasHero
-              isDetail
-              columnCount={1}
-              items={[item]}
-              isMobile={isMobile}
-            />
+            ) : null}
+            <div style={item.token_img_url ? null : { marginTop: -24 }}>
+              <TokenGridV2
+                hasHero
+                isDetail
+                columnCount={1}
+                items={[item]}
+                isMobile={isMobile}
+              />
+            </div>
           </div>
         </div>
         <div className="flex lg:w-1/2 lg:pl-4 lg:text-left">
           <div className="w-full">
-            <div className="showtime-token-description">
-              {item.token_description
-                ? removeTags(item.token_description)
-                : null}
-            </div>
-            <br />
-            <br />
+            {item.token_description ? (
+              <>
+                <div className="showtime-token-description">
+                  {removeTags(item.token_description)}
+                </div>
+                <br />
+                <br />
+              </>
+            ) : null}
             {item.creator_id ? (
               <>
                 <span style={{ fontWeight: 400 }}>{"Created by "}</span>
@@ -336,13 +340,15 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
         </div>
       </div>
 
-      <div className="flex flex-col text-center w-full">
-        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-4 py-10">
-          More from this creator
-        </div>
-      </div>
-      <div className="text-center">
-        {/*ownedRefreshed
+      {createdItems.length === 0 ? null : (
+        <>
+          <div className="flex flex-col text-center w-full">
+            <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-4 py-10">
+              More from this creator
+            </div>
+          </div>
+          <div className="text-center">
+            {/*ownedRefreshed
           ? ownedItems.length === 0
             ? `We couldn't find any more items owned by ${
                 isMyProfile ? "you" : "this person"
@@ -351,18 +357,20 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
           : ownedItems.length === 0
           ? "Loading..."
             : null*/}
-        {createdItems.length === 0
-          ? `We couldn't find any more items created by ${
-              isMyProfile ? "you" : "this person"
-            }.`
-          : null}
-      </div>
-      <TokenGridV2
-        columnCount={columns}
-        items={createdItems}
-        isMobile={isMobile}
-      />
-      {item.multiple_owners ? null : (
+            {createdItems.length === 0
+              ? `We couldn't find any more items created by ${
+                  isMyProfile ? "you" : "this person"
+                }.`
+              : null}
+          </div>
+          <TokenGridV2
+            columnCount={columns}
+            items={createdItems}
+            isMobile={isMobile}
+          />
+        </>
+      )}
+      {item.multiple_owners ? null : ownedItems.length === 0 ? null : (
         <>
           <div className="flex flex-col text-center w-full mt-8">
             <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-4 py-10">

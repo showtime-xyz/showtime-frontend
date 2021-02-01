@@ -91,7 +91,10 @@ export default function Collection({
   return (
     <Layout key={collection}>
       <Head>
-        <title>Collection | {selected_collection.name}</title>
+        <title>
+          Collection |{" "}
+          {selected_collection ? selected_collection.name : collection}
+        </title>
 
         <meta name="description" content="Discover and showcase digital art" />
         <meta property="og:type" content="website" />
@@ -107,13 +110,17 @@ export default function Collection({
         ) : null}
         <meta
           name="og:title"
-          content={`${selected_collection.name} Collection`}
+          content={`${
+            selected_collection ? selected_collection.name : collection
+          } Collection`}
         />
 
         <meta name="twitter:card" content="summary" />
         <meta
           name="twitter:title"
-          content={`${selected_collection.name} Collection`}
+          content={`${
+            selected_collection ? selected_collection.name : collection
+          } Collection`}
         />
         <meta
           name="twitter:description"
@@ -148,6 +155,7 @@ export default function Collection({
               )}
               searchable={false}
               onChange={(values) => onChange(values)}
+              style={{ fontSize: 16 }}
             />
           </div>
           <div className="">

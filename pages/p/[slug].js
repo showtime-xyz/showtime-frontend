@@ -311,9 +311,15 @@ const Profile = ({
             : "Unnamed"}
         </title>
 
-        <meta name="description" content="Digital art owned and liked" />
+        <meta
+          name="description"
+          content="Explore digital art I've created, owned, and liked"
+        />
         <meta property="og:type" content="website" />
-        <meta name="og:description" content="Digital art owned and liked" />
+        <meta
+          name="og:description"
+          content="Explore digital art I've created, owned, and liked"
+        />
         <meta
           property="og:image"
           content={
@@ -331,7 +337,7 @@ const Profile = ({
         />
         <meta
           name="twitter:description"
-          content="Digital art owned and liked"
+          content="Explore digital art I've created, owned, and liked"
         />
         <meta
           name="twitter:image"
