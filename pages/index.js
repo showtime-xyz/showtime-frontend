@@ -5,6 +5,7 @@ import _ from "lodash";
 import Layout from "../components/layout";
 import Leaderboard from "../components/Leaderboard";
 import TokenGridV2 from "../components/TokenGridV2";
+import TokenGridV3 from "../components/TokenGridV3";
 
 //import styles from "../styles/Home.module.css";
 import backend from "../lib/backend";
@@ -113,11 +114,13 @@ export default function Home({ featured_items, leaderboard }) {
           </div>
         </div>
       )}
-      <TokenGridV2
+      {/*<TokenGridV2
         columnCount={columns}
         items={featured_items}
         isMobile={isMobile}
-      />
+      />*/}
+
+      <TokenGridV3 items={featured_items} />
       <div className="text-center pt-8 pb-16">
         <Link href="/c/[collection]" as="/c/superrare">
           <a
