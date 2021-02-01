@@ -166,13 +166,33 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
         <meta name="description" content={item.token_description} />
         <meta property="og:type" content="website" />
         <meta name="og:description" content={item.token_description} />
-        <meta property="og:image" content={item.token_img_url} />
+        <meta
+          property="og:image"
+          content={
+            item.token_img_url
+              ? item.token_img_url
+              : item.contract_address ===
+                "0xc2c747e0f7004f9e8817db2ca4997657a7746928"
+              ? "https://lh3.googleusercontent.com/L7Q_7aQGYfn8PYOrZwwA4400_EEScTOX9f3ut67oHy1Tjk0SSt85z_ekBjwtfXBQxT8epJHcbEbb-8njMZiGDMzgqjZYHVQwle5sQA=s500"
+              : null
+          }
+        />
         <meta name="og:title" content={item.token_name} />
 
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={item.token_name} />
         <meta name="twitter:description" content={item.token_description} />
-        <meta name="twitter:image" content={item.token_img_url} />
+        <meta
+          name="twitter:image"
+          content={
+            item.token_img_url
+              ? item.token_img_url
+              : item.contract_address ===
+                "0xc2c747e0f7004f9e8817db2ca4997657a7746928"
+              ? "https://lh3.googleusercontent.com/L7Q_7aQGYfn8PYOrZwwA4400_EEScTOX9f3ut67oHy1Tjk0SSt85z_ekBjwtfXBQxT8epJHcbEbb-8njMZiGDMzgqjZYHVQwle5sQA=s500"
+              : null
+          }
+        />
       </Head>
 
       <div className="flex flex-col text-center w-full">
