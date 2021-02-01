@@ -5,7 +5,6 @@ import Layout from "../../components/layout";
 import backend from "../../lib/backend";
 import Link from "next/link";
 import TokenGridV2 from "../../components/TokenGridV2";
-import TokenGrid from "../../components/TokenGrid";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css"; // This only needs to be imported once in your app
 import AppContext from "../../context/app-context";

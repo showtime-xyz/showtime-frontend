@@ -4,7 +4,6 @@ import _ from "lodash";
 import Link from "next/link";
 import mixpanel from "mixpanel-browser";
 import Layout from "../../components/layout";
-import TokenGrid from "../../components/TokenGrid";
 import TokenGridV2 from "../../components/TokenGridV2";
 import backend from "../../lib/backend";
 import AppContext from "../../context/app-context";
