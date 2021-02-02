@@ -2,7 +2,7 @@ module.exports = {
   purge: {
     content: ["./components/**/*.js", "./pages/**/*.js"],
     options: {
-      whitelist: [
+      safelist: [
         "grid-cols-1",
         "grid-cols-2",
         "grid-cols-3",
