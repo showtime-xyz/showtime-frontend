@@ -143,9 +143,9 @@ export default function Collection({
       {collection_list && collection_list.length > 0 ? (
         <div
           className="flex flex-row mx-auto mt-6 items-center"
-          style={{ width: 260 }}
+          style={{ width: 280 }}
         >
-          <div className="text-left" style={{ width: 230 }}>
+          <div className="text-left" style={{ width: 250 }}>
             <Select
               options={collection_list}
               labelField="name"

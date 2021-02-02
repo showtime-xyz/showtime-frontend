@@ -4,7 +4,7 @@ import _ from "lodash";
 import Link from "next/link";
 import mixpanel from "mixpanel-browser";
 import Layout from "../../components/layout";
-import TokenGridV2 from "../../components/TokenGridV2";
+import TokenGridV3 from "../../components/TokenGridV3";
 import backend from "../../lib/backend";
 import AppContext from "../../context/app-context";
 import ShareButton from "../../components/ShareButton";
@@ -351,202 +351,214 @@ const Profile = ({
       {typeof document !== "undefined" ? (
         <Modal isOpen={editModalOpen} setEditModalOpen={setEditModalOpen} />
       ) : null}
-
-      <div
-        className=" text-sm showtime-profile-address text-left mt-3 py-2 px-4 visible lg:invisible"
-        style={
-          isMyProfile
-            ? {
-                backgroundColor: "#fff",
-                borderRadius: 7,
-                borderWidth: 1,
-                color: "#333",
-                borderColor: "#ccc",
-              }
-            : {
-                borderWidth: 1,
-                borderColor: "rgba(255,255,255,0)",
-              }
-        }
-      >
-        {isMyProfile ? (
-          <>
-            <a
-              href="#"
-              onClick={() => {
-                setEditModalOpen(true);
-              }}
-              className="showtime-logout-link"
-              style={{ whiteSpace: "nowrap", fontWeight: 400 }}
-            >
-              Edit name
-            </a>
-            {" \u00A0\u00A0\u00A0 "}
-            <a
-              href="#"
-              onClick={() => {
-                logout();
-              }}
-              className="showtime-logout-link float-right"
-              style={{ whiteSpace: "nowrap", fontWeight: 400 }}
-            >
-              Log out
-            </a>
-          </>
-        ) : (
-          "\u00A0"
-        )}
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-4 mt-4">
-        <div className="col-span-1 text-center">
-          <div>
-            <img
-              alt="artist"
-              className="rounded-full object-cover object-center w-28 h-28 lg:w-40 lg:h-40 mx-auto"
-              src={
-                img_url
-                  ? img_url
-                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-              }
-            />
-          </div>
-          <div
-            className="mt-4 mb-8 flex flex-row"
-            style={{ whiteSpace: "nowrap" }}
-          >
-            <div className="flex-grow"></div>
-            {isMyProfile ? null : (
-              <div className="tooltip ">
-                <button
-                  className={
-                    isFollowed
-                      ? "showtime-green-button text-sm px-3 py-1 md:text-base items-center ml-10"
-                      : "showtime-like-button-white-green-hover text-sm px-3 py-1 md:text-base items-center ml-10"
-                  }
-                  onClick={() =>
-                    context.user
-                      ? isFollowed
-                        ? handleUnfollow()
-                        : handleFollow()
-                      : handleLoggedOutFollow()
-                  }
-                >
-                  {isFollowed ? "Following" : "Follow"}
-                </button>
-                {context.user ? null : (
-                  <span
-                    style={{ fontSize: 12, opacity: 0.9, width: 110 }}
-                    className="tooltip-text bg-black p-3 -mt-7 -ml-24 rounded text-white"
-                  >
-                    Log in to follow
-                  </span>
-                )}
-              </div>
-            )}
-            <div>
-              <ShareButton
-                url={
-                  typeof window !== "undefined" ? window.location.href : null
+      <div className="py-3">
+        <div
+          className="text-sm showtime-profile-address text-left py-2 px-4 visible lg:invisible mx-3 mb-6"
+          style={
+            isMyProfile
+              ? {
+                  backgroundColor: "#fff",
+                  borderRadius: 7,
+                  borderWidth: 1,
+                  color: "#333",
+                  borderColor: "#ccc",
                 }
-                type={"profile"}
+              : {
+                  borderWidth: 1,
+                  borderColor: "rgba(255,255,255,0)",
+                }
+          }
+        >
+          {isMyProfile ? (
+            <>
+              <a
+                href="#"
+                onClick={() => {
+                  setEditModalOpen(true);
+                }}
+                className="showtime-logout-link"
+                style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+              >
+                Edit name
+              </a>
+              {" \u00A0\u00A0\u00A0 "}
+              <a
+                href="#"
+                onClick={() => {
+                  logout();
+                }}
+                className="showtime-logout-link float-right"
+                style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+              >
+                Log out
+              </a>
+            </>
+          ) : (
+            "\u00A0"
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 mt-3">
+          <div className="col-span-1 text-center">
+            <div>
+              <img
+                alt="artist"
+                className="rounded-full object-cover object-center w-28 h-28 lg:w-40 lg:h-40 mx-auto"
+                src={
+                  img_url
+                    ? img_url
+                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                }
               />
             </div>
-            <div className="flex-grow"></div>
-          </div>
-        </div>
-        <div className="col-span-3">
-          <div className="text-sm showtime-profile-address float-right text-right hidden lg:block">
-            {isMyProfile ? (
-              <>
-                <a
-                  href="#"
-                  onClick={() => {
-                    setEditModalOpen(true);
-                  }}
-                  className="showtime-logout-link"
-                  style={{ whiteSpace: "nowrap" }}
-                >
-                  Edit name
-                </a>
-                {" \u00A0\u00A0\u00A0 "}
-                <a
-                  href="#"
-                  onClick={() => {
-                    logout();
-                  }}
-                  className="showtime-logout-link"
-                  style={{ whiteSpace: "nowrap" }}
-                >
-                  Log out
-                </a>
-              </>
-            ) : (
-              "\u00A0"
-            )}
-            <div className="text-xs mt-2" style={{ color: "#999" }}>
-              {columns > 2 ? wallet_addresses[0] : null}
+            <div
+              className="mt-4 mb-8 flex flex-row"
+              style={{ whiteSpace: "nowrap" }}
+            >
+              <div className="flex-grow"></div>
+              {isMyProfile ? null : (
+                <div className="tooltip ">
+                  <button
+                    className={
+                      isFollowed
+                        ? "showtime-green-button text-sm px-3 py-1 md:text-base items-center"
+                        : "showtime-like-button-white-green-hover text-sm px-3 py-1 md:text-base items-center"
+                    }
+                    onClick={() =>
+                      context.user
+                        ? isFollowed
+                          ? handleUnfollow()
+                          : handleFollow()
+                        : handleLoggedOutFollow()
+                    }
+                  >
+                    {isFollowed ? "Following" : "Follow"}
+                  </button>
+                  {context.user ? null : (
+                    <span
+                      style={{ fontSize: 12, opacity: 0.9, width: 110 }}
+                      className="tooltip-text bg-black p-3 -mt-7 -ml-24 rounded text-white"
+                    >
+                      Log in to follow
+                    </span>
+                  )}
+                </div>
+              )}
+
+              <div className="flex-grow"></div>
             </div>
           </div>
-          <div className="text-left text-3xl md:text-5xl mb-4 pb-4 border-b-2 border-gray-300 showtime-title">
-            {isMyProfile
-              ? context.myProfile
-                ? context.myProfile.name
-                  ? context.myProfile.name
-                  : "Unnamed"
-                : name
-                ? name
-                : "Unnamed"
-              : name
-              ? name
-              : "Unnamed"}
-          </div>
-
-          <div>
-            {followers && followers.length > 0 ? (
-              <>
-                <div className="mb-2">
-                  {followers.length > 1
-                    ? `${followers.length} Followers`
-                    : "1 Follower"}
+          <div className="col-span-3">
+            <div className="flex flex-row border-b-2 border-gray-300 mr-8">
+              <div className="flex-grow">
+                <div className="text-left flex flex-row items-center">
+                  <div className="text-3xl md:text-5xl showtime-title">
+                    {isMyProfile
+                      ? context.myProfile
+                        ? context.myProfile.name
+                          ? context.myProfile.name
+                          : "Unnamed"
+                        : name
+                        ? name
+                        : "Unnamed"
+                      : name
+                      ? name
+                      : "Unnamed"}
+                  </div>
+                  <div>
+                    <ShareButton
+                      url={
+                        typeof window !== "undefined"
+                          ? window.location.href
+                          : null
+                      }
+                      type={"profile"}
+                    />
+                  </div>
                 </div>
-
-                <FollowGrid people={followers} />
-              </>
-            ) : (
-              <div>
-                No followers yet
-                <br />
-                <br />
               </div>
-            )}
-          </div>
-
-          <div>
-            {following && following.length > 0 ? (
-              <>
-                <div className="mb-2">
-                  {following.length > 1
-                    ? `${following.length} Following`
-                    : "1 Following"}
+              <div>
+                <div className="text-sm showtime-profile-address float-right text-right hidden lg:block">
+                  {isMyProfile ? (
+                    <>
+                      <a
+                        href="#"
+                        onClick={() => {
+                          setEditModalOpen(true);
+                        }}
+                        className="showtime-logout-link"
+                        style={{ whiteSpace: "nowrap" }}
+                      >
+                        Edit name
+                      </a>
+                      {" \u00A0\u00A0\u00A0 "}
+                      <a
+                        href="#"
+                        onClick={() => {
+                          logout();
+                        }}
+                        className="showtime-logout-link"
+                        style={{ whiteSpace: "nowrap" }}
+                      >
+                        Log out
+                      </a>
+                    </>
+                  ) : (
+                    "\u00A0"
+                  )}
+                  <div className="text-xs mt-2" style={{ color: "#999" }}>
+                    {columns > 2 ? wallet_addresses[0] : null}
+                  </div>
                 </div>
-
-                <FollowGrid people={following} />
-              </>
-            ) : (
-              <div>
-                Not following anyone yet
-                <br />
-                <br />
               </div>
-            )}
+            </div>
+
+            <div className="mt-3">
+              {followers && followers.length > 0 ? (
+                <>
+                  <div className="mb-2">
+                    {followers.length > 1
+                      ? `${followers.length} Followers`
+                      : "1 Follower"}
+                  </div>
+
+                  <FollowGrid people={followers} />
+                </>
+              ) : (
+                <div>
+                  No followers yet
+                  <br />
+                  <br />
+                </div>
+              )}
+            </div>
+
+            <div>
+              {following && following.length > 0 ? (
+                <>
+                  <div className="mb-2">
+                    {following.length > 1
+                      ? `${following.length} Following`
+                      : "1 Following"}
+                  </div>
+
+                  <FollowGrid people={following} />
+                </>
+              ) : (
+                <div>
+                  Not following anyone yet
+                  <br />
+                  <br />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
       {createdItems.length === 0 ? null : (
         <>
-          <div className="flex flex-col text-center w-full border-t-2 border-gray-300">
+          <div className="flex flex-col text-center w-full ">
             <div className="showtime-title text-center mx-auto text-3xl md:text-5xl py-10">
               Created Items
             </div>
@@ -561,15 +573,11 @@ const Profile = ({
         </>
       )}
 
-      <TokenGridV2
-        columnCount={columns}
-        items={createdItems}
-        isMobile={isMobile}
-      />
+      <TokenGridV3 items={createdItems} />
 
       {ownedItems.length === 0 ? null : (
         <>
-          <div className="flex flex-col text-center w-full border-t-2 border-gray-300 mt-8">
+          <div className="flex flex-col text-center w-full mt-8">
             <div className="showtime-title text-center mx-auto text-3xl md:text-5xl py-10">
               Owned Items
             </div>
@@ -590,17 +598,13 @@ const Profile = ({
           ? "Loading..."
             : null*/}
           </div>
-          <TokenGridV2
-            columnCount={columns}
-            items={ownedItems}
-            isMobile={isMobile}
-          />{" "}
+          <TokenGridV3 items={ownedItems} />{" "}
         </>
       )}
 
       {likedItems.length === 0 ? null : (
         <>
-          <div className="flex flex-col text-center w-full  border-t-2 border-gray-300 mt-8">
+          <div className="flex flex-col text-center w-full   mt-8">
             <div className="showtime-title text-center mx-auto text-3xl md:text-5xl py-10">
               Liked Items
             </div>
@@ -636,11 +640,7 @@ const Profile = ({
               )
             ) : null}
           </div>
-          <TokenGridV2
-            columnCount={columns}
-            items={likedItems}
-            isMobile={isMobile}
-          />
+          <TokenGridV3 items={likedItems} />
         </>
       )}
     </Layout>

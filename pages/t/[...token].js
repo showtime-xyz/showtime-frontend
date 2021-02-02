@@ -5,6 +5,7 @@ import Layout from "../../components/layout";
 import backend from "../../lib/backend";
 import Link from "next/link";
 import TokenGridV2 from "../../components/TokenGridV2";
+import TokenGridV3 from "../../components/TokenGridV3";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css"; // This only needs to be imported once in your app
 import AppContext from "../../context/app-context";
@@ -225,7 +226,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
         />
       )}
 
-      <div className="flex flex-col lg:flex-row mt-8 xl:w-3/4 xl:mx-auto">
+      <div className="flex flex-col lg:flex-row mt-8 lg:w-2/3 mx-auto">
         <div className="flex lg:w-1/2 lg:pr-4 ">
           <div className="w-full" style={{ position: "relative" }}>
             {item.token_has_video ? null : item.token_img_url ? (
@@ -271,17 +272,11 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
               </button>
             ) : null}
             <div style={item.token_img_url ? null : { marginTop: -24 }}>
-              <TokenGridV2
-                hasHero
-                isDetail
-                columnCount={1}
-                items={[item]}
-                isMobile={isMobile}
-              />
+              <TokenGridV3 isDetail items={[item]} />
             </div>
           </div>
         </div>
-        <div className="flex lg:w-1/2 lg:pl-4 lg:text-left">
+        <div className="flex lg:w-1/2 p-4 lg:text-left ">
           <div className="w-full">
             {item.token_description ? (
               <>
@@ -320,18 +315,6 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
             <br />
             <br />
             <br />
-            {/*<a
-              href={`https://opensea.io/assets/${item.asset_contract.address}/${item.token_id}`}
-              target="_blank"
-              className="showtime-white-button-icon"
-            >
-              <span>View on OpenSea</span>
-              <img
-                style={{ paddingLeft: 6, width: 20, height: 20 }}
-                src={"/icons/external-link-alt-solid.svg"}
-                alt="external"
-              />
-            </a>*/}
             <div style={{ width: 160 }}>
               <a
                 href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}`}
@@ -382,11 +365,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
                 }.`
               : null}
           </div>
-          <TokenGridV2
-            columnCount={columns}
-            items={createdItems}
-            isMobile={isMobile}
-          />
+          <TokenGridV3 items={createdItems} />
         </>
       )}
       {item.multiple_owners ? null : ownedItems.length === 0 ? null : (
@@ -412,11 +391,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
                 }.`
               : null}
           </div>
-          <TokenGridV2
-            columnCount={columns}
-            items={ownedItems}
-            isMobile={isMobile}
-          />
+          <TokenGridV3 items={ownedItems} />
         </>
       )}
       <div className="mb-16"></div>

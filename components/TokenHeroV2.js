@@ -19,6 +19,19 @@ const TokenHeroV2 = ({
       : (context.windowSize * (10 / 12)) / 2 - 16
     : 640;
 
+  const getImageUrl = () => {
+    var img_url = item.token_img_url
+      ? item.token_img_url
+      : item.contract_address === "0xc2c747e0f7004f9e8817db2ca4997657a7746928"
+      ? "https://lh3.googleusercontent.com/L7Q_7aQGYfn8PYOrZwwA4400_EEScTOX9f3ut67oHy1Tjk0SSt85z_ekBjwtfXBQxT8epJHcbEbb-8njMZiGDMzgqjZYHVQwle5sQA"
+      : null;
+
+    if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
+      img_url = img_url.split("=")[0] + "=s375";
+    }
+    return img_url;
+  };
+
   return (
     <div>
       {isDetail ? (
@@ -33,18 +46,7 @@ const TokenHeroV2 = ({
             width={videoWidth}
           />
         ) : (
-          <img
-            className="w-full"
-            src={
-              item.token_img_url
-                ? item.token_img_url
-                : item.contract_address ===
-                  "0xc2c747e0f7004f9e8817db2ca4997657a7746928"
-                ? "https://lh3.googleusercontent.com/L7Q_7aQGYfn8PYOrZwwA4400_EEScTOX9f3ut67oHy1Tjk0SSt85z_ekBjwtfXBQxT8epJHcbEbb-8njMZiGDMzgqjZYHVQwle5sQA=s500"
-                : null
-            }
-            alt={item.token_name}
-          />
+          <img className="w-full" src={getImageUrl()} alt={item.token_name} />
         )
       ) : (
         <Link
@@ -69,7 +71,7 @@ const TokenHeroV2 = ({
         </Link>
       )}
 
-      <div className="mt-6 p-1">
+      <div className="mt-4 p-1 mr-1">
         <div className="float-right text-right ">
           <div className="flex flex-row">
             <LikeButton

@@ -3,8 +3,9 @@ import _ from "lodash";
 import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
 import TokenSquareV3 from "./TokenSquareV3";
+import TokenHeroV2 from "./TokenHeroV2";
 
-const TokenGridV3 = ({ items }) => {
+const TokenGridV3 = ({ items, isDetail }) => {
   const context = useContext(AppContext);
 
   const [itemsList, setItemsList] = useState([]);
@@ -108,22 +109,33 @@ const TokenGridV3 = ({ items }) => {
   }, [context.windowSize]);
 
   return columns ? (
-    <div
-      className={`grid grid-cols-${columns} mx-auto`}
-      style={columns === 1 ? null : { width: columns * (375 + 20) }}
-    >
-      {itemsLikedList.map((item) => {
-        return (
-          <TokenSquareV3
-            key={item.tid}
-            item={item}
-            handleLike={handleLike}
-            handleUnlike={handleUnlike}
-            columns={columns}
-          />
-        );
-      })}
-    </div>
+    isDetail ? (
+      itemsLikedList && itemsLikedList.length > 0 ? (
+        <TokenHeroV2
+          item={itemsLikedList[0]}
+          handleLike={handleLike}
+          handleUnlike={handleUnlike}
+          isDetail={isDetail}
+        />
+      ) : null
+    ) : (
+      <div
+        className={`grid grid-cols-${columns} mx-auto`}
+        style={columns === 1 ? null : { width: columns * (375 + 20) }}
+      >
+        {itemsLikedList.map((item) => {
+          return (
+            <TokenSquareV3
+              key={item.tid}
+              item={item}
+              handleLike={handleLike}
+              handleUnlike={handleUnlike}
+              columns={columns}
+            />
+          );
+        })}
+      </div>
+    )
   ) : null;
 };
 
