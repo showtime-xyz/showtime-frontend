@@ -102,9 +102,6 @@ export default function Home({ featured_items, leaderboard }) {
       />*/}
 
       <TokenGridV3 items={featured_items} />
-      <div className="grid grid-cols-1">
-        <div className="row-span-1">test</div>
-      </div>
       <div className="text-center pt-8 pb-16">
         <Link href="/c/[collection]" as="/c/superrare">
           <a
