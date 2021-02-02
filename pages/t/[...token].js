@@ -226,7 +226,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
         />
       )}
 
-      <div className="flex flex-col lg:flex-row mt-8 lg:w-2/3 mx-auto">
+      <div className="flex flex-col lg:flex-row mt-6 lg:w-2/3 mx-auto">
         <div className="flex lg:w-1/2 lg:pr-4 ">
           <div className="w-full" style={{ position: "relative" }}>
             {item.token_has_video ? null : item.token_img_url ? (

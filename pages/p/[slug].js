@@ -448,8 +448,8 @@ const Profile = ({
               <div className="flex-grow"></div>
             </div>
           </div>
-          <div className="col-span-3">
-            <div className="flex flex-row border-b-2 border-gray-300 mr-8">
+          <div className="col-span-3 px-3">
+            <div className="flex flex-row border-b-2 border-gray-300 ">
               <div className="flex-grow">
                 <div className="text-left flex flex-row items-center">
                   <div className="text-3xl md:text-5xl showtime-title">

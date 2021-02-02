@@ -14,15 +14,13 @@ const TokenGridV3 = ({ items, isDetail }) => {
 
   useEffect(() => {
     setItemsList(
-      items
-        .slice(0, 8)
-        .filter(
-          (item) =>
-            item.token_hidden !== true &&
-            (item.token_img_url ||
-              item.contract_address ===
-                "0xc2c747e0f7004f9e8817db2ca4997657a7746928")
-        )
+      items.filter(
+        (item) =>
+          item.token_hidden !== true &&
+          (item.token_img_url ||
+            item.contract_address ===
+              "0xc2c747e0f7004f9e8817db2ca4997657a7746928")
+      )
     );
   }, [items]);
 

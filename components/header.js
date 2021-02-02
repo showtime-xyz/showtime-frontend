@@ -267,7 +267,7 @@ const Header = () => {
                     </div>*/}
       </header>
       <div
-        className="block md:hidden p-2 pl-3"
+        className="block md:hidden pb-3 pl-3"
         style={{ backgroundColor: "#010101" }}
       >
         <Link href="/#leaderboard">
