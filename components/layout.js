@@ -30,7 +30,7 @@ const Layout = ({ children }) => {
 
       <Header />
 
-      <main className="w-10/12 mx-auto">{children}</main>
+      <main className="mx-auto">{children}</main>
 
       <Footer />
     </div>

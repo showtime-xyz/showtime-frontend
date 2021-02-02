@@ -38,25 +38,6 @@ export default function Home({ featured_items, leaderboard }) {
     }
   }, [typeof context.user]);
 
-  const [columns, setColumns] = useState(2);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    if (context.windowSize && context.windowSize.width < 800) {
-      setColumns(1);
-      setIsMobile(true);
-    } else if (context.windowSize && context.windowSize.width < 1400) {
-      setColumns(2);
-      setIsMobile(false);
-    } else if (context.windowSize && context.windowSize.width < 1800) {
-      setColumns(3);
-      setIsMobile(false);
-    } else {
-      setColumns(4);
-      setIsMobile(false);
-    }
-  }, [context.windowSize]);
-
   const [isHovering, setIsHovering] = useState(false);
 
   return (
