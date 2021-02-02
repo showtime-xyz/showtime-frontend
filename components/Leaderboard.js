@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const Leaderboard = ({ topCreators }) => {
   return (
-    <div id="leaderboard">
+    <div id="leaderboard" className="p-3">
       <div className="flex flex-col text-center w-full">
         <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-8 py-10">
           Top Creators

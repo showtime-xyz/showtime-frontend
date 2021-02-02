@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import _ from "lodash";
 import Layout from "../../components/layout";
-import TokenGridV2 from "../../components/TokenGridV2";
+import TokenGridV3 from "../../components/TokenGridV3";
 import { useRouter } from "next/router";
 import Select from "react-dropdown-select";
 import backend from "../../lib/backend";
@@ -143,9 +143,9 @@ export default function Collection({
       {collection_list && collection_list.length > 0 ? (
         <div
           className="flex flex-row mx-auto mt-6 items-center"
-          style={{ width: 260 }}
+          style={{ width: 280 }}
         >
-          <div className="text-left" style={{ width: 230 }}>
+          <div className="text-left" style={{ width: 250 }}>
             <Select
               options={collection_list}
               labelField="name"
@@ -169,11 +169,7 @@ export default function Collection({
       <p className="mb-6 mt-4 text-center">
         {isChanging ? "Loading..." : "\u00A0"}
       </p>
-      <TokenGridV2
-        columnCount={columns}
-        items={collection_items}
-        isMobile={isMobile}
-      />
+      <TokenGridV3 items={collection_items} />
     </Layout>
   );
 }
