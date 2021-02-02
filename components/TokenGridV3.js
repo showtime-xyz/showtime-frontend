@@ -95,10 +95,10 @@ const TokenGridV3 = ({ items }) => {
     if (context.windowSize && context.windowSize.width < 820) {
       setColumns(1);
       setIsMobile(true);
-    } else if (context.windowSize && context.windowSize.width < 1190) {
+    } else if (context.windowSize && context.windowSize.width < 1200) {
       setColumns(2);
       setIsMobile(false);
-    } else if (context.windowSize && context.windowSize.width < 1590) {
+    } else if (context.windowSize && context.windowSize.width < 1600) {
       setColumns(3);
       setIsMobile(false);
     } else {
@@ -108,7 +108,10 @@ const TokenGridV3 = ({ items }) => {
   }, [context.windowSize]);
 
   return columns ? (
-    <div className={`grid grid-cols-${columns}`}>
+    <div
+      className={`grid grid-cols-${columns} mx-auto`}
+      style={columns === 1 ? null : { width: columns * (375 + 20) }}
+    >
       {itemsLikedList.map((item) => {
         return (
           <TokenSquareV3

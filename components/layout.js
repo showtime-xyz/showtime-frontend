@@ -10,6 +10,10 @@ const Layout = ({ children }) => {
         <link rel="icon" href="/logo_sm.jpg" />
 
         <meta name="keywords" content="showtime, ethereum, token, nft" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0"
+        />
 
         <script
           async
@@ -30,7 +34,7 @@ const Layout = ({ children }) => {
 
       <Header />
 
-      <main className="mx-auto">{children}</main>
+      <main>{children}</main>
 
       <Footer />
     </div>
