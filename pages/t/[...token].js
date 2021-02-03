@@ -18,7 +18,7 @@ export async function getServerSideProps(context) {
   const token_id = token_array[1];
 
   const response_token = await backend.get(
-    `/v2/token/${contract_address}/${token_id}`
+    `/v2/token/${contract_address}/${token_id}?limit=200`
   );
   const token = response_token.data.data.item;
   const same_creator_items = response_token.data.data.same_creator;
