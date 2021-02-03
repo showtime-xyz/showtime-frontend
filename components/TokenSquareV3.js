@@ -23,7 +23,8 @@ class TokenSquareV3 extends React.Component {
 
   componentDidMount() {
     //this.setState({ elementHeight: this.divRef.clientHeight });
-    //this.setSpans;
+
+    this.setSpans();
     this.imageRef.current.addEventListener("load", this.setSpans);
   }
 
@@ -112,18 +113,17 @@ class TokenSquareV3 extends React.Component {
           >
             <a>
               {!this.state.imageLoaded ? (
-                <img
-                  style={{
-                    height: 96,
-                    width: 96,
-                    marginLeft: 139, // 77,
-                    marginRight: 139,
-                    marginTop: 139,
-                    marginBottom: 139,
-                  }}
-                  onLoad={() => this.setSpans()}
-                  src="/icons/96x96.gif"
-                />
+                <div className="lds-grid" style={{ margin: 148 }}>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
               ) : null}
 
               <img
