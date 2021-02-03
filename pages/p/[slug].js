@@ -5,6 +5,7 @@ import Link from "next/link";
 import mixpanel from "mixpanel-browser";
 import Layout from "../../components/layout";
 import TokenGridV3 from "../../components/TokenGridV3";
+import TokenGridV4 from "../../components/TokenGridV4";
 import backend from "../../lib/backend";
 import AppContext from "../../context/app-context";
 import ShareButton from "../../components/ShareButton";
@@ -16,7 +17,7 @@ export async function getServerSideProps(context) {
   const { slug } = context.query;
 
   // Get profile metadata
-  const response_profile = await backend.get(`/v2/profile/${slug}`);
+  const response_profile = await backend.get(`/v2/profile/${slug}?limit=200`);
   const data_profile = response_profile.data.data;
 
   const name = data_profile.profile.name;
@@ -640,7 +641,7 @@ const Profile = ({
               )
             ) : null}
           </div>
-          <TokenGridV3 items={likedItems} />
+          <TokenGridV4 items={likedItems} />
         </>
       )}
     </Layout>

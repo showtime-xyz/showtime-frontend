@@ -3,9 +3,8 @@ import Head from "next/head";
 import Link from "next/link";
 import _ from "lodash";
 import Layout from "../components/layout";
-import Leaderboard from "../components/Leaderboard";
-import TokenGridV2 from "../components/TokenGridV2";
-import TokenGridV3 from "../components/TokenGridV3";
+//import Leaderboard from "../components/Leaderboard";
+import TokenGridV4 from "../components/TokenGridV4";
 
 //import styles from "../styles/Home.module.css";
 import backend from "../lib/backend";
@@ -14,22 +13,25 @@ import mixpanel from "mixpanel-browser";
 
 export async function getServerSideProps(context) {
   // Get featured
-  const response_featured = await backend.get("/v2/featured");
+  const response_featured = await backend.get("/v2/featured?limit=200");
   const data_featured = response_featured.data.data;
 
   // Get leaderboard
-  const response_leaderboard = await backend.get("/v1/leaderboard?limit=9");
-  const data_leaderboard = response_leaderboard.data.data;
+  //const response_leaderboard = await backend.get("/v1/leaderboard");
+  //const data_leaderboard = response_leaderboard.data.data;
 
   return {
     props: {
       featured_items: data_featured,
-      leaderboard: data_leaderboard,
+      //leaderboard: data_leaderboard,
     }, // will be passed to the page component as props
   };
 }
 
-export default function Home({ featured_items, leaderboard }) {
+export default function Home({
+  featured_items,
+  //leaderboard
+}) {
   const context = useContext(AppContext);
   useEffect(() => {
     // Wait for identity to resolve before recording the view
@@ -101,7 +103,7 @@ export default function Home({ featured_items, leaderboard }) {
         isMobile={isMobile}
       />*/}
 
-      <TokenGridV3 items={featured_items} />
+      <TokenGridV4 items={featured_items} />
       <div className="text-center pt-8 pb-16">
         <Link href="/c/[collection]" as="/c/superrare">
           <a
@@ -122,9 +124,9 @@ export default function Home({ featured_items, leaderboard }) {
           </a>
         </Link>
       </div>
-      <div className="mb-16">
+      {/*<div className="mb-16">
         <Leaderboard topCreators={leaderboard} />
-      </div>
+            </div>*/}
     </Layout>
   );
 }

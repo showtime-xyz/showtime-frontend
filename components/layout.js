@@ -2,6 +2,7 @@ import Head from "next/head";
 import PropTypes from "prop-types";
 import Footer from "./footer";
 import Header from "./header";
+import ScrollUpButton from "react-scroll-up-button";
 
 const Layout = ({ children }) => {
   return (
@@ -33,6 +34,7 @@ const Layout = ({ children }) => {
       </Head>
 
       <Header />
+      <ScrollUpButton style={{ borderRadius: 7 }} />
 
       <main>{children}</main>
 

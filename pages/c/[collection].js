@@ -3,6 +3,7 @@ import Head from "next/head";
 import _ from "lodash";
 import Layout from "../../components/layout";
 import TokenGridV3 from "../../components/TokenGridV3";
+import TokenGridV4 from "../../components/TokenGridV4";
 import { useRouter } from "next/router";
 import Select from "react-dropdown-select";
 import backend from "../../lib/backend";
@@ -24,7 +25,7 @@ export async function getServerSideProps(context) {
 
   // Get collection items
   const response_collection_items = await backend.get(
-    `/v2/collection?collection=${collection}`
+    `/v2/collection?limit=200&collection=${collection}`
   );
   const collection_items = response_collection_items.data.data;
 
@@ -136,7 +137,7 @@ export default function Collection({
 
       <div className="flex flex-col text-center w-full">
         <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mt-5 py-10">
-          Discover Collections
+          Featured Collections
         </div>
       </div>
 
@@ -169,7 +170,7 @@ export default function Collection({
       <p className="mb-6 mt-4 text-center">
         {isChanging ? "Loading..." : "\u00A0"}
       </p>
-      <TokenGridV3 items={collection_items} />
+      <TokenGridV4 items={collection_items} />
     </Layout>
   );
 }

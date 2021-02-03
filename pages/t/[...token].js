@@ -6,6 +6,7 @@ import backend from "../../lib/backend";
 import Link from "next/link";
 import TokenGridV2 from "../../components/TokenGridV2";
 import TokenGridV3 from "../../components/TokenGridV3";
+import TokenGridV4 from "../../components/TokenGridV4";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css"; // This only needs to be imported once in your app
 import AppContext from "../../context/app-context";
@@ -365,10 +366,11 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
                 }.`
               : null}
           </div>
-          <TokenGridV3 items={createdItems} />
+          <TokenGridV4 items={createdItems} />
         </>
       )}
-      {item.multiple_owners ? null : ownedItems.length === 0 ? null : (
+      {item.multiple_owners ? null : ownedItems.length ===
+        0 ? null : createdItems.length > 0 ? null : (
         <>
           <div className="flex flex-col text-center w-full mt-8">
             <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-4 py-10">
@@ -391,7 +393,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
                 }.`
               : null}
           </div>
-          <TokenGridV3 items={ownedItems} />
+          <TokenGridV4 items={ownedItems} />
         </>
       )}
       <div className="mb-16"></div>
