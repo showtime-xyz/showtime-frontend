@@ -11,17 +11,19 @@ class TokenSquareV3 extends React.Component {
       spans: 0,
       moreShown: false,
       isHovering: false,
+      imageLoaded: false,
     };
     this.handleHover = this.handleHover.bind(this);
     this.handleUnhover = this.handleUnhover.bind(this);
     this.handleMoreShown = this.handleMoreShown.bind(this);
     this.divRef = React.createRef();
     this.imageRef = React.createRef();
+    this.setSpans = this.setSpans.bind(this);
   }
 
   componentDidMount() {
     //this.setState({ elementHeight: this.divRef.clientHeight });
-
+    //this.setSpans;
     this.imageRef.current.addEventListener("load", this.setSpans);
   }
 
@@ -31,7 +33,7 @@ class TokenSquareV3 extends React.Component {
 
   setSpans = () => {
     const height = this.divRef.current.clientHeight;
-    const spans = Math.min(Math.ceil(height / 30 + 1), 40);
+    const spans = Math.min(Math.ceil(height / 30 + 1), 50);
     this.setState({ spans });
   };
 
@@ -109,11 +111,28 @@ class TokenSquareV3 extends React.Component {
             as={`/t/${this.props.item.contract_address}/${this.props.item.token_id}`}
           >
             <a>
+              {!this.state.imageLoaded ? (
+                <img
+                  style={{
+                    height: 96,
+                    width: 96,
+                    marginLeft: 139, // 77,
+                    marginRight: 139,
+                    marginTop: 139,
+                    marginBottom: 139,
+                  }}
+                  onLoad={() => this.setSpans()}
+                  src="/icons/96x96.gif"
+                />
+              ) : null}
+
               <img
                 className="w-full object-cover object-center mb-1"
                 ref={this.imageRef}
                 src={this.getImageUrl()}
                 alt={this.props.item.token_name}
+                onLoad={() => this.setState({ imageLoaded: true })}
+                style={!this.state.imageLoaded ? { display: "none" } : {}}
               />
             </a>
           </Link>

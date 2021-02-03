@@ -89,9 +89,9 @@ const Header = () => {
             </a>
           </Link>
         </div>
-        <div className="flex-grow"></div>
-        <div className="hidden md:block">
-          <Link href="/#leaderboard">
+
+        <div className="hidden md:block ml-8">
+          {/*<Link href="/#leaderboard">
             <a
               className="showtime-header-link mr-5 text-sm md:text-base"
               onClick={() => {
@@ -99,6 +99,16 @@ const Header = () => {
               }}
             >
               Top Creators
+            </a>
+            </Link>*/}
+          <Link href="/">
+            <a
+              className="showtime-header-link mr-5 text-sm md:text-base"
+              onClick={() => {
+                mixpanel.track("Home button click");
+              }}
+            >
+              Home
             </a>
           </Link>
           <Link href="/c/superrare">
@@ -112,6 +122,7 @@ const Header = () => {
             </a>
           </Link>
         </div>
+        <div className="flex-grow"></div>
         <div>
           {context.user && context.myProfile !== undefined ? (
             <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
@@ -270,7 +281,7 @@ const Header = () => {
         className="block md:hidden pb-3 pl-3"
         style={{ backgroundColor: "#010101" }}
       >
-        <Link href="/#leaderboard">
+        {/*<Link href="/#leaderboard">
           <a
             className="showtime-header-link mr-5 text-sm md:text-base"
             onClick={() => {
@@ -278,6 +289,16 @@ const Header = () => {
             }}
           >
             Top Creators
+          </a>
+          </Link>*/}
+        <Link href="/">
+          <a
+            className="showtime-header-link mr-5 text-sm md:text-base"
+            onClick={() => {
+              mixpanel.track("Most liked button click");
+            }}
+          >
+            Home
           </a>
         </Link>
         <Link href="/c/superrare">

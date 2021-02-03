@@ -5,6 +5,7 @@ import Link from "next/link";
 import mixpanel from "mixpanel-browser";
 import Layout from "../../components/layout";
 import TokenGridV3 from "../../components/TokenGridV3";
+import TokenGridV4 from "../../components/TokenGridV4";
 import backend from "../../lib/backend";
 import AppContext from "../../context/app-context";
 import ShareButton from "../../components/ShareButton";
@@ -16,7 +17,7 @@ export async function getServerSideProps(context) {
   const { slug } = context.query;
 
   // Get profile metadata
-  const response_profile = await backend.get(`/v2/profile/${slug}`);
+  const response_profile = await backend.get(`/v2/profile/${slug}?limit=200`);
   const data_profile = response_profile.data.data;
 
   const name = data_profile.profile.name;
@@ -72,6 +73,10 @@ const Profile = ({
   const [isMyProfile, setIsMyProfile] = useState();
   const [isFollowed, setIsFollowed] = useState(false);
 
+  // For infinite scroll
+  const [createdFinished, setCreatedFinished] = useState(false);
+  const [ownedFinished, setOwnedFinished] = useState(false);
+
   useEffect(() => {
     const checkIfFollowed = async () => {
       var it_is_followed = false;
@@ -100,6 +105,11 @@ const Profile = ({
   useEffect(() => {
     setCreatedItems(created_items);
     setCreatedRefreshed(false);
+    if (created_items.length === 0) {
+      setCreatedFinished(true);
+    } else {
+      setCreatedFinished(false);
+    }
   }, [created_items]);
 
   const [ownedItems, setOwnedItems] = useState([]);
@@ -108,6 +118,11 @@ const Profile = ({
   useEffect(() => {
     setOwnedItems(owned_items);
     setOwnedRefreshed(false);
+    if (owned_items.length === 0) {
+      setOwnedFinished(true);
+    } else {
+      setOwnedFinished(false);
+    }
   }, [owned_items]);
 
   const [followers, setFollowers] = useState([]);
@@ -292,6 +307,10 @@ const Profile = ({
 
   const [editModalOpen, setEditModalOpen] = useState(false);
 
+  const onFinish = () => {
+    console.log("ON FINISH");
+  };
+
   return (
     <Layout>
       <Head>
@@ -449,7 +468,7 @@ const Profile = ({
             </div>
           </div>
           <div className="col-span-3 px-3">
-            <div className="flex flex-row border-b-2 border-gray-300 ">
+            <div className="flex flex-row border-b-2 border-gray-300 lg:mr-8">
               <div className="flex-grow">
                 <div className="text-left flex flex-row items-center">
                   <div className="text-3xl md:text-5xl showtime-title">
@@ -478,7 +497,7 @@ const Profile = ({
                 </div>
               </div>
               <div>
-                <div className="text-sm showtime-profile-address float-right text-right hidden lg:block">
+                <div className="text-sm showtime-profile-address float-right text-right hidden lg:block ">
                   {isMyProfile ? (
                     <>
                       <a
@@ -573,9 +592,14 @@ const Profile = ({
         </>
       )}
 
-      <TokenGridV3 items={createdItems} />
+      <TokenGridV4
+        onFinish={() => {
+          setCreatedFinished(true);
+        }}
+        items={createdItems}
+      />
 
-      {ownedItems.length === 0 ? null : (
+      {ownedItems.length === 0 || !createdFinished ? null : (
         <>
           <div className="flex flex-col text-center w-full mt-8">
             <div className="showtime-title text-center mx-auto text-3xl md:text-5xl py-10">
@@ -598,11 +622,16 @@ const Profile = ({
           ? "Loading..."
             : null*/}
           </div>
-          <TokenGridV3 items={ownedItems} />{" "}
+          <TokenGridV4
+            onFinish={() => {
+              setOwnedFinished(true);
+            }}
+            items={ownedItems}
+          />{" "}
         </>
       )}
 
-      {likedItems.length === 0 ? null : (
+      {likedItems.length === 0 || !createdFinished || !ownedFinished ? null : (
         <>
           <div className="flex flex-col text-center w-full   mt-8">
             <div className="showtime-title text-center mx-auto text-3xl md:text-5xl py-10">
@@ -640,7 +669,7 @@ const Profile = ({
               )
             ) : null}
           </div>
-          <TokenGridV3 items={likedItems} />
+          <TokenGridV4 onFinish={onFinish} items={likedItems} />
         </>
       )}
     </Layout>
