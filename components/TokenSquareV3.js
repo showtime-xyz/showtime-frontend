@@ -33,7 +33,7 @@ class TokenSquareV3 extends React.Component {
 
   setSpans = () => {
     const height = this.divRef.current.clientHeight;
-    const spans = Math.min(Math.ceil(height / 30 + 1), 40);
+    const spans = Math.min(Math.ceil(height / 30 + 1), 50);
     this.setState({ spans });
   };
 

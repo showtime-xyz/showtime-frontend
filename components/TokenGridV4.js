@@ -6,7 +6,7 @@ import TokenSquareV3 from "./TokenSquareV3";
 import TokenHeroV2 from "./TokenHeroV2";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-const TokenGridV4 = ({ items, isDetail }) => {
+const TokenGridV4 = ({ items, isDetail, onFinish }) => {
   const context = useContext(AppContext);
 
   const [itemsList, setItemsList] = useState([]);
@@ -50,10 +50,9 @@ const TokenGridV4 = ({ items, isDetail }) => {
   };
 
   const fetchMoreData = () => {
-    console.log("FETCH");
-    console.log(hasMore);
     if (itemsShowing + 8 > itemsLikedList.length) {
       setHasMore(false);
+      onFinish ? onFinish() : null;
     }
     setItemsShowing(itemsShowing + 8);
   };
