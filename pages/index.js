@@ -13,8 +13,8 @@ import mixpanel from "mixpanel-browser";
 
 export async function getServerSideProps(context) {
   // Get featured
-  const response_featured = await backend.get("/v2/featured?limit=200");
-  const data_featured = response_featured.data.data;
+  //const response_featured = await backend.get("/v2/featured?limit=200");
+  //const data_featured = response_featured.data.data;
 
   // Get leaderboard
   //const response_leaderboard = await backend.get("/v1/leaderboard");
@@ -22,16 +22,18 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      featured_items: data_featured,
+      //featured_items: data_featured,
       //leaderboard: data_leaderboard,
     }, // will be passed to the page component as props
   };
 }
 
-export default function Home({
-  featured_items,
-  //leaderboard
-}) {
+export default function Home(
+  {
+    //featured_items,
+    //leaderboard
+  }
+) {
   const context = useContext(AppContext);
   useEffect(() => {
     // Wait for identity to resolve before recording the view
@@ -41,6 +43,37 @@ export default function Home({
   }, [typeof context.user]);
 
   const [isHovering, setIsHovering] = useState(false);
+
+  const [gridWidth, setGridWidth] = useState(0);
+
+  const [featuredItems, setFeaturedItems] = useState([]);
+
+  const [featuredDays, setFeaturedDays] = useState(1);
+  const [reachedBottom, setReachedBottom] = useState(false);
+
+  useEffect(() => {
+    const getFeatured = async () => {
+      const response_featured = await backend.get(
+        `/v2/featured?limit=200&days=${featuredDays}`
+      );
+      const data_featured = response_featured.data.data;
+      setFeaturedItems(data_featured);
+    };
+    getFeatured();
+    setReachedBottom(false);
+  }, [featuredDays]);
+
+  useEffect(() => {
+    if (context.windowSize && context.windowSize.width < 820) {
+      setGridWidth(context.windowSize.width);
+    } else if (context.windowSize && context.windowSize.width < 1200) {
+      setGridWidth(790 - 18);
+    } else if (context.windowSize && context.windowSize.width < 1600) {
+      setGridWidth(1185 - 18);
+    } else {
+      setGridWidth(1580 - 18);
+    }
+  }, [context.windowSize]);
 
   return (
     <Layout>
@@ -73,7 +106,7 @@ export default function Home({
         Discover and showcase your favorite digital art
       </h1>
 
-      {context.user ? null : (
+      {/*context.user ? null : (
         <div className=" mb-16">
           <div className="flex justify-center">
             {context.user ? (
@@ -96,34 +129,104 @@ export default function Home({
             )}
           </div>
         </div>
-      )}
+            )*/}
       {/*<TokenGridV2
         columnCount={columns}
         items={featured_items}
         isMobile={isMobile}
       />*/}
 
-      <TokenGridV4 items={featured_items} />
-      <div className="text-center pt-8 pb-16">
-        <Link href="/c/[collection]" as="/c/superrare">
-          <a
-            className="showtime-purple-button-icon"
-            onMouseOver={() => setIsHovering(true)}
-            onMouseOut={() => setIsHovering(false)}
-          >
-            <span>Browse collections</span>
-            <img
-              style={{ paddingLeft: 6 }}
-              src={
-                isHovering
-                  ? "/icons/arrow-right-purple.svg"
-                  : "/icons/arrow-right.svg"
-              }
-              alt="arrow"
-            />
-          </a>
-        </Link>
+      <div
+        className="mx-auto text-center mb-6 text-xs sm:text-sm"
+        style={{ width: gridWidth }}
+      >
+        <span className="mr-1 text-sm sm:text-base">Top Likes: </span>
+        {context.windowSize ? (
+          context.windowSize.width < 375 ? (
+            <>
+              <br />
+              <br />
+            </>
+          ) : null
+        ) : null}
+        <button
+          className={
+            featuredDays === 1
+              ? "showtime-like-button-pink px-2 py-1"
+              : "showtime-like-button-white px-2 py-1"
+          }
+          style={{
+            borderBottomRightRadius: 0,
+            borderTopRightRadius: 0,
+            borderRightWidth: 1,
+          }}
+          onClick={() => {
+            setFeaturedDays(1);
+          }}
+        >
+          Last 24 Hours
+        </button>
+        <button
+          className={
+            featuredDays === 7
+              ? "showtime-like-button-pink px-2 py-1"
+              : "showtime-like-button-white px-2 py-1"
+          }
+          style={{ borderRadius: 0, borderLeftWidth: 1, borderRightWidth: 1 }}
+          onClick={() => {
+            setFeaturedDays(7);
+          }}
+        >
+          Last 7 Days
+        </button>
+        <button
+          className={
+            featuredDays === 30
+              ? "showtime-like-button-pink px-2 py-1"
+              : "showtime-like-button-white px-2 py-1"
+          }
+          style={{
+            borderTopLeftRadius: 0,
+            borderBottomLeftRadius: 0,
+            borderLeftWidth: 1,
+          }}
+          onClick={() => {
+            setFeaturedDays(30);
+          }}
+        >
+          Last 30 Days
+        </button>
       </div>
+
+      <TokenGridV4
+        items={featuredItems}
+        onFinish={() => {
+          setReachedBottom(true);
+        }}
+      />
+
+      {featuredItems.length > 0 && reachedBottom ? (
+        <div className="text-center pt-8 pb-16">
+          <Link href="/c/[collection]" as="/c/superrare">
+            <a
+              className="showtime-purple-button-icon"
+              onMouseOver={() => setIsHovering(true)}
+              onMouseOut={() => setIsHovering(false)}
+            >
+              <span>Browse collections</span>
+              <img
+                style={{ paddingLeft: 6 }}
+                src={
+                  isHovering
+                    ? "/icons/arrow-right-purple.svg"
+                    : "/icons/arrow-right.svg"
+                }
+                alt="arrow"
+              />
+            </a>
+          </Link>
+        </div>
+      ) : null}
       {/*<div className="mb-16">
         <Leaderboard topCreators={leaderboard} />
             </div>*/}

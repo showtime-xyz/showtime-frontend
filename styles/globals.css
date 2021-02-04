@@ -625,3 +625,12 @@ a {
     opacity: 0.2;
   }
 }
+
+.showtime-card {
+  border-color: rgb(219, 219, 219);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.showtime-card:hover {
+  box-shadow: 1px 3px 10px 6px #e9e9e9;
+}
