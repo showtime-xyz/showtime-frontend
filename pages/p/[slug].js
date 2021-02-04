@@ -4,7 +4,7 @@ import _ from "lodash";
 import Link from "next/link";
 import mixpanel from "mixpanel-browser";
 import Layout from "../../components/layout";
-import TokenGridV3 from "../../components/TokenGridV3";
+//import TokenGridV3 from "../../components/TokenGridV3";
 import TokenGridV4 from "../../components/TokenGridV4";
 import backend from "../../lib/backend";
 import AppContext from "../../context/app-context";
@@ -307,9 +307,22 @@ const Profile = ({
 
   const [editModalOpen, setEditModalOpen] = useState(false);
 
-  const onFinish = () => {
-    console.log("ON FINISH");
-  };
+  const [selectedGrid, setSelectedGrid] = useState("created");
+
+  const [showFollowers, setShowFollowers] = useState(false);
+  const [showFollowing, setShowFollowing] = useState(false);
+
+  useEffect(() => {
+    if (createdItems.length > 0 && createdItems.length > ownedItems.length) {
+      setSelectedGrid("created");
+    } else if (ownedItems.length > 0) {
+      setSelectedGrid("owned");
+    } else {
+      setSelectedGrid("liked");
+    }
+    setShowFollowers(false);
+    setShowFollowing(false);
+  }, [wallet_addresses, createdItems.length, ownedItems.length]);
 
   return (
     <Layout>
@@ -539,7 +552,7 @@ const Profile = ({
         <div className="flex-shrink">
           <img
             alt="artist"
-            className="rounded-full object-cover object-center w-20 h-20 lg:w-24 lg:h-24 mx-auto mb-1 md:mb-0 md:mr-4"
+            className="rounded-full object-cover object-center w-24 h-24 lg:w-24 lg:h-24 mx-auto mb-1 md:mb-0 md:mr-4"
             src={
               img_url
                 ? img_url
@@ -698,17 +711,30 @@ const Profile = ({
           ) : null}
         </div>
       </div>
-      <div className="bg-white border-b-2 border-t-2 px-4 md:px-16 mb-4">
+      <div className="bg-white border-b-2 border-t-2 px-4 md:px-16 mb-4 text-sm">
         <div className="mt-6">
           {followers && followers.length > 0 ? (
             <>
               <div className="mb-2">
                 {followers.length > 1
-                  ? `${followers.length} Followers`
-                  : "1 Follower"}
+                  ? `${followers.length} followers`
+                  : "1 follower"}
+
+                <span
+                  onClick={() => {
+                    setShowFollowers(!showFollowers);
+                  }}
+                  className="text-xs ml-3 view-hide-toggle"
+                >
+                  {showFollowers ? "Hide" : "View"}
+                </span>
               </div>
 
-              <FollowGrid people={followers} />
+              {showFollowers ? (
+                <FollowGrid people={followers} />
+              ) : (
+                <div className="mb-4"></div>
+              )}
             </>
           ) : (
             <div>
@@ -724,11 +750,24 @@ const Profile = ({
             <>
               <div className="mb-2">
                 {following.length > 1
-                  ? `${following.length} Following`
-                  : "1 Following"}
+                  ? `${following.length} following`
+                  : "1 following"}
+
+                <span
+                  onClick={() => {
+                    setShowFollowing(!showFollowing);
+                  }}
+                  className="text-xs ml-3 view-hide-toggle"
+                >
+                  {showFollowing ? "Hide" : "View"}
+                </span>
               </div>
 
-              <FollowGrid people={following} />
+              {showFollowing ? (
+                <FollowGrid people={following} />
+              ) : (
+                <div className="mb-6"></div>
+              )}
             </>
           ) : (
             <div>
@@ -744,103 +783,82 @@ const Profile = ({
         ) : null}*/}
       </div>
 
-      {createdItems.length === 0 ? null : (
-        <>
-          <div className="flex flex-col text-center w-full ">
-            <div className="showtime-title text-center mx-auto text-3xl md:text-5xl py-10">
-              Created Items
-            </div>
-          </div>
-          <div className="text-center mb-4">
-            {createdItems.length === 0
-              ? `We couldn't find any items created by ${
-                  isMyProfile ? "you" : "this person"
-                }.`
-              : null}
-          </div>
-        </>
-      )}
+      {createdItems.length > 0 ||
+      ownedItems.length > 0 ||
+      likedItems.length > 0 ? (
+        <div className="mx-auto text-center mb-6 mt-7 text-xs sm:text-sm">
+          {context.windowSize ? (
+            context.windowSize.width < 375 ? (
+              <>
+                <br />
+                <br />
+              </>
+            ) : null
+          ) : null}
+          <button
+            className={
+              selectedGrid === "created"
+                ? "showtime-like-button-pink px-4 py-1"
+                : "showtime-like-button-white px-4 py-1"
+            }
+            style={{
+              borderBottomRightRadius: 0,
+              borderTopRightRadius: 0,
+              borderRightWidth: 1,
+            }}
+            onClick={() => {
+              setSelectedGrid("created");
+            }}
+          >
+            {createdItems.length < 200 ? createdItems.length : "200+"} Created
+          </button>
+          <button
+            className={
+              selectedGrid === "owned"
+                ? "showtime-like-button-pink px-4 py-1"
+                : "showtime-like-button-white px-4 py-1"
+            }
+            style={{ borderRadius: 0, borderLeftWidth: 1, borderRightWidth: 1 }}
+            onClick={() => {
+              setSelectedGrid("owned");
+            }}
+          >
+            {ownedItems.length < 200 ? ownedItems.length : "200+"} Owned
+          </button>
+          <button
+            className={
+              selectedGrid === "liked"
+                ? "showtime-like-button-pink px-4 py-1"
+                : "showtime-like-button-white px-4 py-1"
+            }
+            style={{
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+              borderLeftWidth: 1,
+            }}
+            onClick={() => {
+              setSelectedGrid("liked");
+            }}
+          >
+            {likedItems.length < 200 ? likedItems.length : "200+"} Liked
+          </button>
+        </div>
+      ) : null}
 
       <TokenGridV4
         onFinish={() => {
           setCreatedFinished(true);
         }}
-        items={createdItems}
-      />
-
-      {ownedItems.length === 0 || !createdFinished ? null : (
-        <>
-          <div className="flex flex-col text-center w-full mt-8">
-            <div className="showtime-title text-center mx-auto text-3xl md:text-5xl py-10">
-              Owned Items
-            </div>
-          </div>
-          <div className="text-center mb-4">
-            {ownedItems.length === 0
-              ? `We couldn't find any items owned by ${
-                  isMyProfile ? "you" : "this person"
-                }.`
-              : null}
-            {/*ownedRefreshed
-          ? ownedItems.length === 0
-            ? `We couldn't find any items owned by ${
-                isMyProfile ? "you" : "this person"
-              }.`
+        items={
+          selectedGrid === "created"
+            ? createdItems
+            : selectedGrid === "owned"
+            ? ownedItems
+            : selectedGrid === "liked"
+            ? likedItems
             : null
-          : ownedItems.length === 0
-          ? "Loading..."
-            : null*/}
-          </div>
-          <TokenGridV4
-            onFinish={() => {
-              setOwnedFinished(true);
-            }}
-            items={ownedItems}
-          />{" "}
-        </>
-      )}
-
-      {likedItems.length === 0 || !createdFinished || !ownedFinished ? null : (
-        <>
-          <div className="flex flex-col text-center w-full   mt-8">
-            <div className="showtime-title text-center mx-auto text-3xl md:text-5xl py-10">
-              Liked Items
-            </div>
-          </div>
-          <div className="text-center mb-4">
-            {/*likedRefreshed ? (
-          likedItems.length === 0 ? (
-            isMyProfile ? (
-              <>
-                {`You haven't liked any items yet. `}
-                <Link href="/c/superrare">
-                  <a className="showtime-link">Go explore!</a>
-                </Link>
-              </>
-            ) : (
-              "This person hasn't liked any items yet."
-            )
-          ) : null
-        ) : likedItems.length === 0 ? (
-          "Loading..."
-        ) : null*/}
-
-            {likedItems.length === 0 ? (
-              isMyProfile ? (
-                <>
-                  {`You haven't liked any items yet. `}
-                  <Link href="/c/superrare">
-                    <a className="showtime-link">Go explore!</a>
-                  </Link>
-                </>
-              ) : (
-                "This person hasn't liked any items yet."
-              )
-            ) : null}
-          </div>
-          <TokenGridV4 onFinish={onFinish} items={likedItems} />
-        </>
-      )}
+        }
+      />
     </Layout>
   );
 };
