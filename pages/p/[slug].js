@@ -224,13 +224,13 @@ const Profile = ({
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    if (context.windowSize && context.windowSize.width < 800) {
+    if (context.windowSize && context.windowSize.width < 820) {
       setColumns(1);
       setIsMobile(true);
-    } else if (context.windowSize && context.windowSize.width < 1400) {
+    } else if (context.windowSize && context.windowSize.width < 1200) {
       setColumns(2);
       setIsMobile(false);
-    } else if (context.windowSize && context.windowSize.width < 1800) {
+    } else if (context.windowSize && context.windowSize.width < 1600) {
       setColumns(3);
       setIsMobile(false);
     } else {
@@ -370,7 +370,7 @@ const Profile = ({
       {typeof document !== "undefined" ? (
         <Modal isOpen={editModalOpen} setEditModalOpen={setEditModalOpen} />
       ) : null}
-      <div className="py-3">
+      {/*<div className="py-3">
         <div
           className="text-sm showtime-profile-address text-left py-2 px-4 visible lg:invisible mx-3 mb-6"
           style={
@@ -531,48 +531,217 @@ const Profile = ({
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+                  </div>*/}
 
-            <div className="mt-3">
-              {followers && followers.length > 0 ? (
-                <>
-                  <div className="mb-2">
-                    {followers.length > 1
-                      ? `${followers.length} Followers`
-                      : "1 Follower"}
-                  </div>
-
-                  <FollowGrid people={followers} />
-                </>
-              ) : (
-                <div>
-                  No followers yet
-                  <br />
-                  <br />
+      <div className="px-4 md:px-16 flex flex-col md:flex-row items-center pb-12 pt-12">
+        <div className="flex-shrink">
+          <img
+            alt="artist"
+            className="rounded-full object-cover object-center w-20 h-20 lg:w-24 lg:h-24 mx-auto mb-1 md:mb-0 md:mr-4"
+            src={
+              img_url
+                ? img_url
+                : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+            }
+          />
+        </div>
+        <div className="flex-grow flex flex-row items-center">
+          <div className="flex flex-col">
+            <div className="flex flex-row items-center">
+              <div className="text-3xl md:text-5xl showtime-title ml-4 md:ml-0">
+                {isMyProfile
+                  ? context.myProfile
+                    ? context.myProfile.name
+                      ? context.myProfile.name
+                      : "Unnamed"
+                    : name
+                    ? name
+                    : "Unnamed"
+                  : name
+                  ? name
+                  : "Unnamed"}
+              </div>
+              {isMyProfile ? null : columns > 2 ? (
+                <div className="tooltip ml-4">
+                  <button
+                    className={
+                      isFollowed
+                        ? "showtime-green-button text-sm px-3 py-1  items-center"
+                        : "showtime-like-button-white-green-hover text-sm px-3 py-1  items-center"
+                    }
+                    onClick={() =>
+                      context.user
+                        ? isFollowed
+                          ? handleUnfollow()
+                          : handleFollow()
+                        : handleLoggedOutFollow()
+                    }
+                  >
+                    {isFollowed ? "Following" : "Follow"}
+                  </button>
+                  {context.user ? null : (
+                    <span
+                      style={{ fontSize: 12, opacity: 0.9, width: 110 }}
+                      className="tooltip-text bg-black p-3 -mt-7 -ml-24 rounded text-white"
+                    >
+                      Log in to follow
+                    </span>
+                  )}
                 </div>
-              )}
+              ) : null}
+              <div>
+                <ShareButton
+                  url={
+                    typeof window !== "undefined" ? window.location.href : null
+                  }
+                  type={"profile"}
+                />
+              </div>
             </div>
-
-            <div>
-              {following && following.length > 0 ? (
-                <>
-                  <div className="mb-2">
-                    {following.length > 1
-                      ? `${following.length} Following`
-                      : "1 Following"}
-                  </div>
-
-                  <FollowGrid people={following} />
-                </>
+            <div
+              style={{
+                fontWeight: 400,
+                fontSize: 12,
+                marginTop: 8,
+                color: "#999",
+              }}
+            >
+              {columns > 2 ? (
+                wallet_addresses[0]
+              ) : isMyProfile ? (
+                <div className="text-center md:text-left">
+                  <a
+                    href="#"
+                    onClick={() => {
+                      setEditModalOpen(true);
+                    }}
+                    className="showtime-logout-link"
+                    style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+                  >
+                    Edit name
+                  </a>
+                  {" \u00A0\u00A0\u00A0 "}
+                  <a
+                    href="#"
+                    onClick={() => {
+                      logout();
+                    }}
+                    className="showtime-logout-link "
+                    style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+                  >
+                    Log out
+                  </a>
+                </div>
               ) : (
-                <div>
-                  Not following anyone yet
-                  <br />
-                  <br />
+                <div className="tooltip text-center md:text-left">
+                  <button
+                    className={
+                      isFollowed
+                        ? "showtime-green-button text-sm px-3 py-1  items-center"
+                        : "showtime-like-button-white-green-hover text-sm px-3 py-1  items-center"
+                    }
+                    onClick={() =>
+                      context.user
+                        ? isFollowed
+                          ? handleUnfollow()
+                          : handleFollow()
+                        : handleLoggedOutFollow()
+                    }
+                  >
+                    {isFollowed ? "Following" : "Follow"}
+                  </button>
+                  {context.user ? null : (
+                    <span
+                      style={{ fontSize: 12, opacity: 0.9, width: 110 }}
+                      className="tooltip-text bg-black p-3 -mt-7 -ml-24 rounded text-white"
+                    >
+                      Log in to follow
+                    </span>
+                  )}
                 </div>
               )}
             </div>
           </div>
         </div>
+
+        <div className="place-self-start text-sm">
+          {columns > 2 ? (
+            isMyProfile ? (
+              <>
+                <a
+                  href="#"
+                  onClick={() => {
+                    setEditModalOpen(true);
+                  }}
+                  className="showtime-logout-link"
+                  style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+                >
+                  Edit name
+                </a>
+                {" \u00A0\u00A0\u00A0 "}
+                <a
+                  href="#"
+                  onClick={() => {
+                    logout();
+                  }}
+                  className="showtime-logout-link float-right"
+                  style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+                >
+                  Log out
+                </a>
+              </>
+            ) : (
+              "\u00A0"
+            )
+          ) : null}
+        </div>
+      </div>
+      <div className="bg-white border-b-2 border-t-2 px-4 md:px-16 mb-4">
+        <div className="mt-6">
+          {followers && followers.length > 0 ? (
+            <>
+              <div className="mb-2">
+                {followers.length > 1
+                  ? `${followers.length} Followers`
+                  : "1 Follower"}
+              </div>
+
+              <FollowGrid people={followers} />
+            </>
+          ) : (
+            <div>
+              No followers yet
+              <br />
+              <br />
+            </div>
+          )}
+        </div>
+
+        <div>
+          {following && following.length > 0 ? (
+            <>
+              <div className="mb-2">
+                {following.length > 1
+                  ? `${following.length} Following`
+                  : "1 Following"}
+              </div>
+
+              <FollowGrid people={following} />
+            </>
+          ) : (
+            <div>
+              Not following anyone yet
+              <br />
+              <br />
+            </div>
+          )}
+        </div>
+        {/*<div>Featured items</div>
+        {likedItems.length > 0 ? (
+          <img src={likedItems[0].token_img_url} />
+        ) : null}*/}
       </div>
 
       {createdItems.length === 0 ? null : (
