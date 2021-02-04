@@ -136,67 +136,69 @@ export default function Home(
         isMobile={isMobile}
       />*/}
 
-      <div
-        className="mx-auto text-center mb-6 text-xs sm:text-sm"
-        style={{ width: gridWidth }}
-      >
-        <span className="mr-1 text-sm sm:text-base">Top Likes: </span>
-        {context.windowSize ? (
-          context.windowSize.width < 375 ? (
-            <>
-              <br />
-              <br />
-            </>
-          ) : null
-        ) : null}
-        <button
-          className={
-            featuredDays === 1
-              ? "showtime-like-button-pink px-2 py-1"
-              : "showtime-like-button-white px-2 py-1"
-          }
-          style={{
-            borderBottomRightRadius: 0,
-            borderTopRightRadius: 0,
-            borderRightWidth: 1,
-          }}
-          onClick={() => {
-            setFeaturedDays(1);
-          }}
+      {gridWidth > 0 ? (
+        <div
+          className="mx-auto text-center mb-6 text-xs sm:text-sm"
+          style={{ width: gridWidth }}
         >
-          Last 24 Hours
-        </button>
-        <button
-          className={
-            featuredDays === 7
-              ? "showtime-like-button-pink px-2 py-1"
-              : "showtime-like-button-white px-2 py-1"
-          }
-          style={{ borderRadius: 0, borderLeftWidth: 1, borderRightWidth: 1 }}
-          onClick={() => {
-            setFeaturedDays(7);
-          }}
-        >
-          Last 7 Days
-        </button>
-        <button
-          className={
-            featuredDays === 30
-              ? "showtime-like-button-pink px-2 py-1"
-              : "showtime-like-button-white px-2 py-1"
-          }
-          style={{
-            borderTopLeftRadius: 0,
-            borderBottomLeftRadius: 0,
-            borderLeftWidth: 1,
-          }}
-          onClick={() => {
-            setFeaturedDays(30);
-          }}
-        >
-          Last 30 Days
-        </button>
-      </div>
+          <span className="mr-1 text-sm sm:text-base">Top Likes: </span>
+          {context.windowSize ? (
+            context.windowSize.width < 375 ? (
+              <>
+                <br />
+                <br />
+              </>
+            ) : null
+          ) : null}
+          <button
+            className={
+              featuredDays === 1
+                ? "showtime-like-button-pink px-2 py-1"
+                : "showtime-like-button-white px-2 py-1"
+            }
+            style={{
+              borderBottomRightRadius: 0,
+              borderTopRightRadius: 0,
+              borderRightWidth: 1,
+            }}
+            onClick={() => {
+              setFeaturedDays(1);
+            }}
+          >
+            Last 24 Hours
+          </button>
+          <button
+            className={
+              featuredDays === 7
+                ? "showtime-like-button-pink px-2 py-1"
+                : "showtime-like-button-white px-2 py-1"
+            }
+            style={{ borderRadius: 0, borderLeftWidth: 1, borderRightWidth: 1 }}
+            onClick={() => {
+              setFeaturedDays(7);
+            }}
+          >
+            Last 7 Days
+          </button>
+          <button
+            className={
+              featuredDays === 30
+                ? "showtime-like-button-pink px-2 py-1"
+                : "showtime-like-button-white px-2 py-1"
+            }
+            style={{
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+              borderLeftWidth: 1,
+            }}
+            onClick={() => {
+              setFeaturedDays(30);
+            }}
+          >
+            Last 30 Days
+          </button>
+        </div>
+      ) : null}
 
       <TokenGridV4
         items={featuredItems}
