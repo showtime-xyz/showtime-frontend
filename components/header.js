@@ -67,10 +67,7 @@ const Header = () => {
 
   return (
     <>
-      <header
-        style={{ backgroundColor: "#010101" }}
-        className="flex flex-row items-center p-3"
-      >
+      <header className="flex flex-row items-center p-3 bg-white md:border-b-2 md:px-8">
         <div>
           <Link href="/">
             <a
@@ -278,8 +275,8 @@ const Header = () => {
                     </div>*/}
       </header>
       <div
-        className="block md:hidden pb-3 pl-3"
-        style={{ backgroundColor: "#010101" }}
+        className="block md:hidden pb-3 pl-3 border-b-2"
+        style={{ backgroundColor: "white" }}
       >
         {/*<Link href="/#leaderboard">
           <a

@@ -402,7 +402,7 @@ a {
 }
 
 .showtime-header-link {
-  color: #fff;
+  color: #010101;
 }
 
 .showtime-header-link:hover {
@@ -433,7 +433,7 @@ a {
   color: #222222;
   font-weight: 600;
   border-radius: 7px;
-  border: 2px solid #fff;
+  border: 2px solid #222222;
 }
 
 .showtime-login-button-solid:hover {

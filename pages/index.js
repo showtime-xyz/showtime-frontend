@@ -44,8 +44,6 @@ export default function Home(
 
   const [isHovering, setIsHovering] = useState(false);
 
-  const [gridWidth, setGridWidth] = useState(0);
-
   const [featuredItems, setFeaturedItems] = useState([]);
 
   const [featuredDays, setFeaturedDays] = useState(1);
@@ -63,6 +61,7 @@ export default function Home(
     setReachedBottom(false);
   }, [featuredDays]);
 
+  const [gridWidth, setGridWidth] = useState();
   useEffect(() => {
     if (context.windowSize && context.windowSize.width < 820) {
       setGridWidth(context.windowSize.width);
@@ -78,12 +77,12 @@ export default function Home(
   return (
     <Layout>
       <Head>
-        <title>Showtime | Digital Art</title>
-        <meta name="description" content="Discover and showcase digital art" />
+        <title>Showtime | Crypto Art</title>
+        <meta name="description" content="Discover and showcase crypto art" />
         <meta property="og:type" content="website" />
         <meta
           name="og:description"
-          content="Discover and showcase digital art"
+          content="Discover and showcase crypto art"
         />
         <meta property="og:image" content="/banner.png" />
         <meta name="og:title" content="Showtime" />
@@ -92,7 +91,7 @@ export default function Home(
         <meta name="twitter:title" content="Showtime" />
         <meta
           name="twitter:description"
-          content="Discover and showcase digital art"
+          content="Discover and showcase crypto art"
         />
         <meta
           name="twitter:image"
@@ -103,7 +102,7 @@ export default function Home(
         className="showtime-title text-center mx-auto text-2xl md:text-5xl md:leading-snug mb-5 mt-5 py-10"
         style={{ maxWidth: 700 }}
       >
-        Discover and showcase your favorite digital art
+        Discover and showcase your favorite crypto art
       </h1>
 
       {/*context.user ? null : (
@@ -141,7 +140,9 @@ export default function Home(
           className="mx-auto text-center mb-6 text-xs sm:text-sm"
           style={{ width: gridWidth }}
         >
-          <span className="mr-1 text-sm sm:text-base">Top Likes: </span>
+          <div className="mr-1 text-sm sm:text-base uppercase mb-2">
+            Most Likes
+          </div>
           {context.windowSize ? (
             context.windowSize.width < 375 ? (
               <>
@@ -153,8 +154,8 @@ export default function Home(
           <button
             className={
               featuredDays === 1
-                ? "showtime-like-button-pink px-2 py-1"
-                : "showtime-like-button-white px-2 py-1"
+                ? "showtime-like-button-pink px-3 py-1"
+                : "showtime-like-button-white px-3 py-1"
             }
             style={{
               borderBottomRightRadius: 0,
@@ -170,8 +171,8 @@ export default function Home(
           <button
             className={
               featuredDays === 7
-                ? "showtime-like-button-pink px-2 py-1"
-                : "showtime-like-button-white px-2 py-1"
+                ? "showtime-like-button-pink px-3 py-1"
+                : "showtime-like-button-white px-3 py-1"
             }
             style={{ borderRadius: 0, borderLeftWidth: 1, borderRightWidth: 1 }}
             onClick={() => {
@@ -183,8 +184,8 @@ export default function Home(
           <button
             className={
               featuredDays === 30
-                ? "showtime-like-button-pink px-2 py-1"
-                : "showtime-like-button-white px-2 py-1"
+                ? "showtime-like-button-pink px-3 py-1"
+                : "showtime-like-button-white px-3 py-1"
             }
             style={{
               borderTopLeftRadius: 0,

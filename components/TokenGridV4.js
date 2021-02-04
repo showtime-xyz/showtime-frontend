@@ -136,6 +136,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
             handleLike={handleLike}
             handleUnlike={handleUnlike}
             columns={columns}
+            isMobile={isMobile}
           />
         ))}
       </div>
