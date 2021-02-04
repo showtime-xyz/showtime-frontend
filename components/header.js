@@ -67,7 +67,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="flex flex-row items-center p-3 bg-white md:border-b-2 md:px-8">
+      <header className="flex flex-row items-center p-3 bg-white md:border-b-2 md:px-16">
         <div>
           <Link href="/">
             <a
