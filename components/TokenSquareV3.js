@@ -10,11 +10,8 @@ class TokenSquareV3 extends React.Component {
     this.state = {
       spans: 0,
       moreShown: false,
-      isHovering: false,
       imageLoaded: false,
     };
-    this.handleHover = this.handleHover.bind(this);
-    this.handleUnhover = this.handleUnhover.bind(this);
     this.handleMoreShown = this.handleMoreShown.bind(this);
     this.divRef = React.createRef();
     this.imageRef = React.createRef();
@@ -47,14 +44,6 @@ class TokenSquareV3 extends React.Component {
   truncateWithEllipses(text, max) {
     return text.substr(0, max - 1) + (text.length > max ? "..." : "");
   }
-
-  handleHover = () => {
-    this.setState({ isHovering: true });
-  };
-
-  handleUnhover = () => {
-    this.setState({ isHovering: false });
-  };
 
   handleMoreShown = () => {
     this.setState({ moreShown: true }, this.setSpans);
@@ -89,23 +78,18 @@ class TokenSquareV3 extends React.Component {
             {
               backgroundColor: "white",
             },
-            this.state.isHovering
-              ? {
-                  boxShadow: "1px 1px 10px 6px #e9e9e9",
-                }
-              : null,
             this.props.columns === 1
               ? {
                   borderTopWidth: 1,
                   borderBottomWidth: 1,
-                  borderColor: "rgb(219,219,219)",
                 }
-              : { width: 375, borderWidth: 1, borderColor: "rgb(219,219,219)" }
+              : {
+                  width: 375,
+                  borderWidth: 1,
+                }
           )}
-          onMouseOver={this.handleHover}
-          onMouseOut={this.handleUnhover}
           ref={this.divRef}
-          className="mx-auto"
+          className="mx-auto showtime-card"
         >
           <Link
             href="/t/[...token]"
@@ -113,16 +97,21 @@ class TokenSquareV3 extends React.Component {
           >
             <a>
               {!this.state.imageLoaded ? (
-                <div className="lds-grid" style={{ margin: 148 }}>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
+                <div className="w-full text-center">
+                  <div
+                    className="lds-grid"
+                    style={{ marginTop: 148, marginBottom: 148 }}
+                  >
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                  </div>
                 </div>
               ) : null}
 

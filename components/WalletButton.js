@@ -68,7 +68,7 @@ export default function WalletButton({
 
   let linkText = "Disconnect Wallet";
   if (web3Modal && !web3Modal.cachedProvider) {
-    linkText = text ? text : "Log in with Wallet";
+    linkText = text ? text : "Sign in with Wallet";
   } else if (web3Modal && web3Modal.cachedProvider) {
     linkText = text ? text : "Disconnect Wallet";
   } else if (!web3Modal) linkText = "Not connected properly";

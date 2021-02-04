@@ -44,7 +44,7 @@ export default function Login() {
   return (
     <Layout>
       <Head>
-        <title>Showtime | Login</title>
+        <title>Showtime | Sign in</title>
         <meta name="description" content="Discover and showcase digital art" />
         <meta property="og:type" content="website" />
         <meta
@@ -66,8 +66,11 @@ export default function Login() {
         />
       </Head>
       <div className="text-center">
-        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mt-5 py-10">
-          Select a login method
+        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mt-5 py-10 pb-4">
+          Sign in / Sign up
+        </div>
+        <div className="mb-6" style={{ fontWeight: 400 }}>
+          Select a method below:
         </div>
         <form onSubmit={handleSubmit}>
           <br />
@@ -85,7 +88,7 @@ export default function Login() {
           />
           <br />
           <br />
-          <button className="showtime-pink-button">Log in with Email</button>
+          <button className="showtime-pink-button">Sign in with Email</button>
         </form>
         <br />
 
