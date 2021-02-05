@@ -4,13 +4,14 @@ import _ from "lodash";
 import Layout from "../../components/layout";
 import backend from "../../lib/backend";
 import Link from "next/link";
-import TokenGridV2 from "../../components/TokenGridV2";
+//import TokenGridV2 from "../../components/TokenGridV2";
 import TokenGridV3 from "../../components/TokenGridV3";
 import TokenGridV4 from "../../components/TokenGridV4";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css"; // This only needs to be imported once in your app
 import AppContext from "../../context/app-context";
 import mixpanel from "mixpanel-browser";
+import ModalReportItem from "../../components/ModalReportItem";
 
 export async function getServerSideProps(context) {
   const { token: token_array } = context.query;
@@ -156,6 +157,8 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
     return str.replace(/(<([^>]+)>)/gi, " ");
   }
 
+  const [reportModalOpen, setReportModalOpen] = useState(false);
+
   return (
     <Layout key={item.tid}>
       <Head>
@@ -195,6 +198,16 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
           }
         />
       </Head>
+
+      {typeof document !== "undefined" ? (
+        <>
+          <ModalReportItem
+            isOpen={reportModalOpen}
+            setReportModalOpen={setReportModalOpen}
+            tid={item.tid}
+          />
+        </>
+      ) : null}
 
       <div className="flex flex-col text-center w-full">
         <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mt-5 py-10">
@@ -338,7 +351,16 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
               </a>
             </div>
             <br />
-            <br />
+
+            <div
+              className="text-xs"
+              style={{ color: "#666", fontWeight: 400, cursor: "pointer" }}
+              onClick={() => {
+                setReportModalOpen(true);
+              }}
+            >
+              Report item
+            </div>
           </div>
         </div>
       </div>
