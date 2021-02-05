@@ -22,7 +22,6 @@ export default async (req, res) => {
         return response.json();
       })
       .then(function (myJson) {
-        console.log(myJson);
         res.json(myJson);
       });
   } catch (error) {
