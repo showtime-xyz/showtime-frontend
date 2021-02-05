@@ -562,7 +562,13 @@ const Profile = ({
             alt="artist"
             className="rounded-full object-cover object-center w-24 h-24 lg:w-24 lg:h-24 mx-auto mb-1 md:mb-0 md:mr-4"
             src={
-              img_url
+              isMyProfile
+                ? context.myProfile
+                  ? context.myProfile.img_url
+                    ? context.myProfile.img_url
+                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                : img_url
                 ? img_url
                 : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
             }
@@ -571,7 +577,7 @@ const Profile = ({
         <div className="flex-grow flex flex-row items-center">
           <div className="flex flex-col">
             <div className="flex flex-row items-center">
-              <div className="text-3xl md:text-5xl showtime-title ml-4 md:ml-0">
+              <div className="text-3xl md:text-5xl showtime-title ml-4 md:ml-0 mt-2 md:mt-0">
                 {isMyProfile
                   ? context.myProfile
                     ? context.myProfile.name
@@ -642,7 +648,11 @@ const Profile = ({
                     className="showtime-logout-link"
                     style={{ whiteSpace: "nowrap", fontWeight: 400 }}
                   >
-                    Edit photo
+                    {context.myProfile &&
+                    context.myProfile.img_url &&
+                    !context.myProfile.img_url.includes("opensea-profile")
+                      ? "Edit photo"
+                      : "Add photo"}
                   </a>
                   {" \u00A0\u00A0\u00A0 "}
                   <a
@@ -654,7 +664,9 @@ const Profile = ({
                     className="showtime-logout-link"
                     style={{ whiteSpace: "nowrap", fontWeight: 400 }}
                   >
-                    Edit name
+                    {context.myProfile && context.myProfile.name
+                      ? "Edit name"
+                      : "Add name"}
                   </a>
                   {" \u00A0\u00A0\u00A0 "}
                   <a
@@ -713,7 +725,11 @@ const Profile = ({
                   className="showtime-logout-link"
                   style={{ whiteSpace: "nowrap", fontWeight: 400 }}
                 >
-                  Edit photo
+                  {context.myProfile &&
+                  context.myProfile.img_url &&
+                  !context.myProfile.img_url.includes("opensea-profile")
+                    ? "Edit photo"
+                    : "Add photo"}
                 </a>
                 {" \u00A0\u00A0\u00A0 "}
                 <a
@@ -725,7 +741,9 @@ const Profile = ({
                   className="showtime-logout-link"
                   style={{ whiteSpace: "nowrap", fontWeight: 400 }}
                 >
-                  Edit name
+                  {context.myProfile && context.myProfile.name
+                    ? "Edit name"
+                    : "Add name"}
                 </a>
                 {" \u00A0\u00A0\u00A0 "}
                 <a

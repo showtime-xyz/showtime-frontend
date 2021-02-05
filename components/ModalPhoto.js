@@ -41,6 +41,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 
   const [image, setImage] = useState("");
   const [croppie, setCroppie] = useState(null);
+  const [saveInProgress, setSaveInProgress] = useState(false);
 
   const formRef = useRef();
 
@@ -69,32 +70,59 @@ export default function Modal({ isOpen, setEditModalOpen }) {
     }
   }
 
-  function handleSubmit(event) {
+  const handleSubmit = async (event) => {
     mixpanel.track("Save photo edit");
-    event.preventDefault();
-    if (croppie !== null) {
-      croppie
-        .result({
-          type: "base64",
-          size: {
-            width: 480,
-            height: 480,
-          },
-          format: "jpeg",
-          //rotate: 90,
-        })
-        .then((blob) => {
-          console.log(blob);
+    if (!saveInProgress) {
+      setSaveInProgress(true);
+      event.preventDefault();
 
-          // post to the api here
+      try {
+        if (croppie !== null) {
+          croppie
+            .result({
+              type: "base64",
+              size: {
+                width: 300,
+                height: 300,
+              },
+              format: "jpeg",
+              circle: false,
+              //rotate: 90,
+            })
+            .then((blob) => {
+              //console.log(blob);
 
-          // if successful
-          setEditModalOpen(false);
-          setCroppie(null);
-          setImage("");
-        });
+              // Post changes to the API
+              fetch(`/api/editphoto`, {
+                method: "post",
+                body: blob,
+              })
+                .then(function (response) {
+                  return response.json();
+                })
+                .then(function (myJson) {
+                  const url = myJson["data"];
+
+                  context.setMyProfile({
+                    ...context.myProfile,
+                    img_url: url,
+                  });
+
+                  setEditModalOpen(false);
+                  if (croppie) {
+                    croppie.destroy();
+                  }
+                  setCroppie(null);
+                  setImage("");
+                });
+            });
+        }
+      } catch {
+      } finally {
+        setSaveInProgress(false);
+      }
     }
-  }
+  };
 
   const onChangePicture = (e) => {
     if (e.target.files[0]) {
@@ -123,12 +151,16 @@ export default function Modal({ isOpen, setEditModalOpen }) {
           <div
             className="backdrop"
             onClick={() => {
-              setEditModalOpen(false);
-              if (croppie) {
-                croppie.destroy();
+              if (!saveInProgress) {
+                setEditModalOpen(false);
+                if (croppie) {
+                  try {
+                    croppie.destroy();
+                  } catch {}
+                }
+                setCroppie(null);
+                setImage("");
               }
-              setCroppie(null);
-              setImage("");
             }}
           >
             <div
@@ -145,11 +177,17 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       {/*<ImageUpload image={image} setImage={handleImage} />*/}
 
                       <div
-                        className="showtime-pink-button text-sm text-center my-16"
+                        className="showtime-pink-button text-sm text-center mt-16"
                         style={{ cursor: "pointer" }}
                         onClick={handleClick}
                       >
-                        Upload a picture
+                        Upload a photo
+                      </div>
+                      <div
+                        className="text-center text-xs mb-16 mt-4"
+                        style={{ fontWeight: 400, color: "#666" }}
+                      >
+                        Accepts JPEG, PNG, and GIF (non-animated)
                       </div>
 
                       <input
@@ -169,15 +207,19 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 
                   {image !== "" && (
                     <div
-                      className="text-sm"
+                      className="text-sm text-center"
                       onClick={() => {
-                        if (croppie) {
-                          croppie.destroy();
+                        if (!saveInProgress) {
+                          if (croppie) {
+                            try {
+                              croppie.destroy();
+                            } catch {}
+                          }
+                          setCroppie(null);
+                          setImage("");
                         }
-                        setCroppie(null);
-                        setImage("");
                       }}
-                      style={{ fontWeight: 400, cursor: "pointer", width: 90 }}
+                      style={{ fontWeight: 400, cursor: "pointer" }}
                     >
                       Clear
                     </div>
@@ -197,22 +239,26 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                           }
                         : { borderColor: "#35bb5b", borderWidth: 2, opacity: 1 }
                     }
-                    //onClick={() => setEditModalOpen(false)}
                     disabled={image === ""}
                   >
-                    Save changes
+                    {saveInProgress ? "Saving..." : "Save changes"}
                   </button>
+
                   <button
                     type="button"
                     className="showtime-black-button-outline px-5 py-3"
                     onClick={() => {
-                      setEditModalOpen(false);
-                      if (croppie) {
-                        croppie.destroy();
-                      }
+                      if (!saveInProgress) {
+                        setEditModalOpen(false);
+                        if (croppie) {
+                          try {
+                            croppie.destroy();
+                          } catch {}
+                        }
 
-                      setCroppie(null);
-                      setImage("");
+                        setCroppie(null);
+                        setImage("");
+                      }
                     }}
                   >
                     Cancel
