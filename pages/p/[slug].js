@@ -1,7 +1,7 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import Head from "next/head";
 import _ from "lodash";
-import Link from "next/link";
+//import Link from "next/link";
 import mixpanel from "mixpanel-browser";
 import Layout from "../../components/layout";
 //import TokenGridV3 from "../../components/TokenGridV3";
@@ -12,6 +12,7 @@ import ShareButton from "../../components/ShareButton";
 import FollowGrid from "../../components/FollowGrid";
 import { useRouter } from "next/router";
 import Modal from "../../components/Modal";
+import ModalPhoto from "../../components/ModalPhoto";
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
@@ -306,6 +307,7 @@ const Profile = ({
   };
 
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [pictureModalOpen, setPictureModalOpen] = useState(false);
 
   const [selectedGrid, setSelectedGrid] = useState("created");
 
@@ -381,7 +383,13 @@ const Profile = ({
       </Head>
 
       {typeof document !== "undefined" ? (
-        <Modal isOpen={editModalOpen} setEditModalOpen={setEditModalOpen} />
+        <>
+          <Modal isOpen={editModalOpen} setEditModalOpen={setEditModalOpen} />
+          <ModalPhoto
+            isOpen={pictureModalOpen}
+            setEditModalOpen={setPictureModalOpen}
+          />
+        </>
       ) : null}
       {/*<div className="py-3">
         <div
@@ -554,7 +562,13 @@ const Profile = ({
             alt="artist"
             className="rounded-full object-cover object-center w-24 h-24 lg:w-24 lg:h-24 mx-auto mb-1 md:mb-0 md:mr-4"
             src={
-              img_url
+              isMyProfile
+                ? context.myProfile
+                  ? context.myProfile.img_url
+                    ? context.myProfile.img_url
+                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                : img_url
                 ? img_url
                 : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
             }
@@ -563,7 +577,7 @@ const Profile = ({
         <div className="flex-grow flex flex-row items-center">
           <div className="flex flex-col">
             <div className="flex flex-row items-center">
-              <div className="text-3xl md:text-5xl showtime-title ml-4 md:ml-0">
+              <div className="text-3xl md:text-5xl showtime-title ml-4 md:ml-0 mt-2 md:mt-0">
                 {isMyProfile
                   ? context.myProfile
                     ? context.myProfile.name
@@ -628,12 +642,31 @@ const Profile = ({
                   <a
                     href="#"
                     onClick={() => {
-                      setEditModalOpen(true);
+                      setPictureModalOpen(true);
+                      mixpanel.track("Open edit photo");
                     }}
                     className="showtime-logout-link"
                     style={{ whiteSpace: "nowrap", fontWeight: 400 }}
                   >
-                    Edit name
+                    {context.myProfile &&
+                    context.myProfile.img_url &&
+                    !context.myProfile.img_url.includes("opensea-profile")
+                      ? "Edit photo"
+                      : "Add photo"}
+                  </a>
+                  {" \u00A0\u00A0\u00A0 "}
+                  <a
+                    href="#"
+                    onClick={() => {
+                      setEditModalOpen(true);
+                      mixpanel.track("Open edit name");
+                    }}
+                    className="showtime-logout-link"
+                    style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+                  >
+                    {context.myProfile && context.myProfile.name
+                      ? "Edit name"
+                      : "Add name"}
                   </a>
                   {" \u00A0\u00A0\u00A0 "}
                   <a
@@ -686,12 +719,31 @@ const Profile = ({
                 <a
                   href="#"
                   onClick={() => {
-                    setEditModalOpen(true);
+                    setPictureModalOpen(true);
+                    mixpanel.track("Open edit photo");
                   }}
                   className="showtime-logout-link"
                   style={{ whiteSpace: "nowrap", fontWeight: 400 }}
                 >
-                  Edit name
+                  {context.myProfile &&
+                  context.myProfile.img_url &&
+                  !context.myProfile.img_url.includes("opensea-profile")
+                    ? "Edit photo"
+                    : "Add photo"}
+                </a>
+                {" \u00A0\u00A0\u00A0 "}
+                <a
+                  href="#"
+                  onClick={() => {
+                    setEditModalOpen(true);
+                    mixpanel.track("Open edit name");
+                  }}
+                  className="showtime-logout-link"
+                  style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+                >
+                  {context.myProfile && context.myProfile.name
+                    ? "Edit name"
+                    : "Add name"}
                 </a>
                 {" \u00A0\u00A0\u00A0 "}
                 <a
