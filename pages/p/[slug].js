@@ -1,7 +1,7 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import Head from "next/head";
 import _ from "lodash";
-import Link from "next/link";
+//import Link from "next/link";
 import mixpanel from "mixpanel-browser";
 import Layout from "../../components/layout";
 //import TokenGridV3 from "../../components/TokenGridV3";
@@ -12,6 +12,7 @@ import ShareButton from "../../components/ShareButton";
 import FollowGrid from "../../components/FollowGrid";
 import { useRouter } from "next/router";
 import Modal from "../../components/Modal";
+import ModalPhoto from "../../components/ModalPhoto";
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
@@ -306,6 +307,7 @@ const Profile = ({
   };
 
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [pictureModalOpen, setPictureModalOpen] = useState(false);
 
   const [selectedGrid, setSelectedGrid] = useState("created");
 
@@ -381,7 +383,13 @@ const Profile = ({
       </Head>
 
       {typeof document !== "undefined" ? (
-        <Modal isOpen={editModalOpen} setEditModalOpen={setEditModalOpen} />
+        <>
+          <Modal isOpen={editModalOpen} setEditModalOpen={setEditModalOpen} />
+          <ModalPhoto
+            isOpen={pictureModalOpen}
+            setEditModalOpen={setPictureModalOpen}
+          />
+        </>
       ) : null}
       {/*<div className="py-3">
         <div
@@ -628,7 +636,20 @@ const Profile = ({
                   <a
                     href="#"
                     onClick={() => {
+                      setPictureModalOpen(true);
+                      mixpanel.track("Open edit photo");
+                    }}
+                    className="showtime-logout-link"
+                    style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+                  >
+                    Edit photo
+                  </a>
+                  {" \u00A0\u00A0\u00A0 "}
+                  <a
+                    href="#"
+                    onClick={() => {
                       setEditModalOpen(true);
+                      mixpanel.track("Open edit name");
                     }}
                     className="showtime-logout-link"
                     style={{ whiteSpace: "nowrap", fontWeight: 400 }}
@@ -686,7 +707,20 @@ const Profile = ({
                 <a
                   href="#"
                   onClick={() => {
+                    setPictureModalOpen(true);
+                    mixpanel.track("Open edit photo");
+                  }}
+                  className="showtime-logout-link"
+                  style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+                >
+                  Edit photo
+                </a>
+                {" \u00A0\u00A0\u00A0 "}
+                <a
+                  href="#"
+                  onClick={() => {
                     setEditModalOpen(true);
+                    mixpanel.track("Open edit name");
                   }}
                   className="showtime-logout-link"
                   style={{ whiteSpace: "nowrap", fontWeight: 400 }}
