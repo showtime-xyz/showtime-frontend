@@ -23,7 +23,6 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
     );
     setItemsShowing(8);
     setHasMore(true);
-    console.log(items);
   }, [items]);
 
   useEffect(() => {

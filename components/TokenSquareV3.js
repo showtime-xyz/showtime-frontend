@@ -66,6 +66,17 @@ class TokenSquareV3 extends React.Component {
 
   max_description_length = 102;
 
+  getBackgroundColor = (item) => {
+    if (
+      item.token_background_color &&
+      item.token_background_color.length === 6
+    ) {
+      return `#${item.token_background_color}`;
+    } else {
+      return null;
+    }
+  };
+
   render() {
     return (
       <div
@@ -114,15 +125,20 @@ class TokenSquareV3 extends React.Component {
                   </div>
                 </div>
               ) : null}
-
-              <img
-                className="w-full object-cover object-center mb-1"
-                ref={this.imageRef}
-                src={this.getImageUrl()}
-                alt={this.props.item.token_name}
-                onLoad={() => this.setState({ imageLoaded: true })}
-                style={!this.state.imageLoaded ? { display: "none" } : {}}
-              />
+              <div
+                style={{
+                  backgroundColor: this.getBackgroundColor(this.props.item),
+                }}
+              >
+                <img
+                  className="w-full object-cover object-center mb-1"
+                  ref={this.imageRef}
+                  src={this.getImageUrl()}
+                  alt={this.props.item.token_name}
+                  onLoad={() => this.setState({ imageLoaded: true })}
+                  style={!this.state.imageLoaded ? { display: "none" } : {}}
+                />
+              </div>
             </a>
           </Link>
 

@@ -32,6 +32,17 @@ const TokenHeroV2 = ({
     return img_url;
   };
 
+  const getBackgroundColor = () => {
+    if (
+      item.token_background_color &&
+      item.token_background_color.length === 6
+    ) {
+      return `#${item.token_background_color}`;
+    } else {
+      return null;
+    }
+  };
+
   return (
     <div>
       {isDetail ? (
@@ -46,7 +57,12 @@ const TokenHeroV2 = ({
             width={videoWidth}
           />
         ) : (
-          <img className="w-full" src={getImageUrl()} alt={item.token_name} />
+          <img
+            className="w-full"
+            style={{ backgroundColor: getBackgroundColor() }}
+            src={getImageUrl()}
+            alt={item.token_name}
+          />
         )
       ) : (
         <Link
