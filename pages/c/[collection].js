@@ -101,10 +101,10 @@ export default function Collection({
         {selected_collection ? (
           <meta property="og:image" content={selected_collection.img_url} />
         ) : null}
-        <meta name="og:title" content={pageTitle} />
+        <meta name="og:title" content={`Showtime | ${pageTitle}`} />
 
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:title" content={`Showtime | ${pageTitle}`} />
         <meta
           name="twitter:description"
           content="Discover and showcase digital art"
