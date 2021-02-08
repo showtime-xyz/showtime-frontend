@@ -46,7 +46,7 @@ export default function Collection({
   selected_collection,
 }) {
   const [pageTitle, setPageTitle] = useState(
-    `${selected_collection ? selected_collection.name : collection}`
+    `${selected_collection ? selected_collection.name : collection} Collection`
   );
 
   const context = useContext(AppContext);
@@ -76,8 +76,9 @@ export default function Collection({
     router.push("/c/[collection]", `/c/${values[0]["value"]}`, {
       shallow: true,
     });
-    setPageTitle(`${values[0]["name"]}`);
+    setPageTitle(`${values[0]["name"]} Collection`);
     await getCollectionItems(values[0]["value"]);
+    mixpanel.track("Collection page view", { collection: values[0]["value"] });
   };
 
   const [collectionItems, setCollectionItems] = useState([]);
