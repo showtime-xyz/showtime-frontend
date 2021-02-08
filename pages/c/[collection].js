@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import _ from "lodash";
 import Layout from "../../components/layout";
-import TokenGridV3 from "../../components/TokenGridV3";
+//import TokenGridV3 from "../../components/TokenGridV3";
 import TokenGridV4 from "../../components/TokenGridV4";
 import { useRouter } from "next/router";
 import Select from "react-dropdown-select";
@@ -24,14 +24,14 @@ export async function getServerSideProps(context) {
       : null;
 
   // Get collection items
-  const response_collection_items = await backend.get(
-    `/v2/collection?limit=200&collection=${collection}`
-  );
-  const collection_items = response_collection_items.data.data;
+  //const response_collection_items = await backend.get(
+  //  `/v2/collection?limit=200&collection=${collection}`
+  //);
+  //const collection_items = response_collection_items.data.data;
 
   return {
     props: {
-      collection_items,
+      //collection_items,
       collection_list,
       collection,
       selected_collection,
@@ -40,11 +40,15 @@ export async function getServerSideProps(context) {
 }
 
 export default function Collection({
-  collection_items,
+  //collection_items,
   collection_list,
   collection,
   selected_collection,
 }) {
+  const [pageTitle, setPageTitle] = useState(
+    `${selected_collection ? selected_collection.name : collection} Collection`
+  );
+
   const context = useContext(AppContext);
   useEffect(() => {
     // Wait for identity to resolve before recording the view
@@ -53,49 +57,40 @@ export default function Collection({
     }
   }, [typeof context.user]);
 
-  const router = useRouter();
-  const [isChanging, setIsChanging] = useState(false);
-  //const { collection } = router.query;
-  const onChange = (values) => {
-    setIsChanging(true);
-    router.push("/c/[collection]", `/c/${values[0]["value"]}`, {
-      shallow: false,
-    });
-    mixpanel.track("Collection dropdown select");
+  const getCollectionItems = async (collection_name) => {
+    const response_collection_items = await backend.get(
+      `/v2/collection?limit=200&collection=${collection_name}`
+    );
+    setCollectionItems(response_collection_items.data.data);
+    setIsChanging(false);
   };
 
-  useEffect(() => {
-    if (collection_items) {
-      setIsChanging(false);
-    }
-  }, [collection_items]);
+  const router = useRouter();
+  const [isChanging, setIsChanging] = useState(true);
+  //const { collection } = router.query;
 
-  const [columns, setColumns] = useState(2);
-  const [isMobile, setIsMobile] = useState(false);
+  const onChange = async (values) => {
+    setIsChanging(true);
+
+    mixpanel.track("Collection dropdown select");
+    router.push("/c/[collection]", `/c/${values[0]["value"]}`, {
+      shallow: true,
+    });
+    setPageTitle(`${values[0]["name"]} Collection`);
+    await getCollectionItems(values[0]["value"]);
+    mixpanel.track("Collection page view", { collection: values[0]["value"] });
+  };
+
+  const [collectionItems, setCollectionItems] = useState([]);
 
   useEffect(() => {
-    if (context.windowSize && context.windowSize.width < 800) {
-      setColumns(1);
-      setIsMobile(true);
-    } else if (context.windowSize && context.windowSize.width < 1400) {
-      setColumns(2);
-      setIsMobile(false);
-    } else if (context.windowSize && context.windowSize.width < 1800) {
-      setColumns(3);
-      setIsMobile(false);
-    } else {
-      setColumns(4);
-      setIsMobile(false);
-    }
-  }, [context.windowSize]);
+    getCollectionItems(collection);
+  }, [collection]);
 
   return (
     <Layout key={collection}>
       <Head>
-        <title>
-          Collection |{" "}
-          {selected_collection ? selected_collection.name : collection}
-        </title>
+        <title>{pageTitle}</title>
 
         <meta name="description" content="Discover and showcase digital art" />
         <meta property="og:type" content="website" />
@@ -103,35 +98,19 @@ export default function Collection({
           name="og:description"
           content="Discover and showcase digital art"
         />
-        {collection_items && collection_items.length > 0 ? (
-          <meta
-            property="og:image"
-            content={collection_items[0].token_img_url}
-          />
+        {selected_collection ? (
+          <meta property="og:image" content={selected_collection.img_url} />
         ) : null}
-        <meta
-          name="og:title"
-          content={`${
-            selected_collection ? selected_collection.name : collection
-          } Collection`}
-        />
+        <meta name="og:title" content={`Showtime | ${pageTitle}`} />
 
         <meta name="twitter:card" content="summary" />
-        <meta
-          name="twitter:title"
-          content={`${
-            selected_collection ? selected_collection.name : collection
-          } Collection`}
-        />
+        <meta name="twitter:title" content={`Showtime | ${pageTitle}`} />
         <meta
           name="twitter:description"
           content="Discover and showcase digital art"
         />
-        {collection_items && collection_items.length > 0 ? (
-          <meta
-            name="twitter:image"
-            content={collection_items[0].token_img_url}
-          />
+        {selected_collection ? (
+          <meta name="twitter:image" content={selected_collection.img_url} />
         ) : null}
       </Head>
 
@@ -170,7 +149,7 @@ export default function Collection({
       <p className="mb-6 mt-4 text-center">
         {isChanging ? "Loading..." : "\u00A0"}
       </p>
-      <TokenGridV4 items={collection_items} />
+      <TokenGridV4 items={collectionItems} />
     </Layout>
   );
 }
