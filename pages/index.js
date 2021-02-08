@@ -141,7 +141,7 @@ export default function Home(
           style={{ width: gridWidth }}
         >
           <div className="mr-1 text-sm sm:text-base uppercase mb-2">
-            Most Liked
+            Trending
           </div>
           {context.windowSize ? (
             context.windowSize.width < 375 ? (
