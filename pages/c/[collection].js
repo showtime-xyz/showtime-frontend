@@ -128,7 +128,7 @@ export default function Collection({
   useEffect(() => {
     if (context.windowSize && context.windowSize.width < 820) {
       setGridWidth(context.windowSize.width);
-      setMenuPadding(20);
+      setMenuPadding(0);
     } else if (context.windowSize && context.windowSize.width < 1200) {
       setGridWidth(790 - 18);
       setMenuPadding(0);
@@ -244,7 +244,7 @@ export default function Collection({
 
       {gridWidth > 0 ? (
         <div
-          className="mx-auto mb-6 text-xs sm:text-sm flex flex-col sm:flex-row items-center"
+          className="mx-auto mb-6 text-xs sm:text-sm flex flex-col md:flex-row items-center"
           style={{
             width: gridWidth,
             paddingLeft: menuPadding,
@@ -253,7 +253,7 @@ export default function Collection({
         >
           {collection_list && collection_list.length > 0 ? (
             <div
-              className="flex flex-row items-center mb-6 sm:mb-0"
+              className="flex flex-row items-center mb-6 md:mb-0"
               style={{ width: 250 }}
             >
               <div className="text-left" style={{ width: 250 }}>
@@ -295,8 +295,8 @@ export default function Collection({
             <button
               className={
                 sortBy === "random"
-                  ? "showtime-like-button-pink px-3 py-1"
-                  : "showtime-like-button-white px-3 py-1"
+                  ? "showtime-like-button-pink px-2 sm:px-3 py-1"
+                  : "showtime-like-button-white px-2 sm:px-3 py-1"
               }
               style={{
                 borderBottomRightRadius: 0,
@@ -316,9 +316,28 @@ export default function Collection({
             </button>
             <button
               className={
+                sortBy === "sold"
+                  ? "showtime-like-button-pink px-2 py-1"
+                  : "showtime-like-button-white px-2 py-1"
+              }
+              style={{
+                borderRadius: 0,
+                borderLeftWidth: 1,
+                borderRightWidth: 1,
+              }}
+              onClick={() => {
+                setSortby("sold");
+              }}
+            >
+              {context.windowSize && context.windowSize.width < 370
+                ? "Sold"
+                : "Recently Sold"}
+            </button>
+            <button
+              className={
                 sortBy === "newest"
-                  ? "showtime-like-button-pink px-3 py-1"
-                  : "showtime-like-button-white px-3 py-1"
+                  ? "showtime-like-button-pink px-2 py-1"
+                  : "showtime-like-button-white px-2 py-1"
               }
               style={{
                 borderRadius: 0,
@@ -334,8 +353,8 @@ export default function Collection({
             <button
               className={
                 sortBy === "oldest"
-                  ? "showtime-like-button-pink px-3 py-1"
-                  : "showtime-like-button-white px-3 py-1"
+                  ? "showtime-like-button-pink px-2 py-1"
+                  : "showtime-like-button-white px-2 py-1"
               }
               style={{
                 borderRadius: 0,
@@ -351,8 +370,8 @@ export default function Collection({
             <button
               className={
                 sortBy === "trending"
-                  ? "showtime-like-button-pink px-3 py-1"
-                  : "showtime-like-button-white px-3 py-1"
+                  ? "showtime-like-button-pink px-2 py-1"
+                  : "showtime-like-button-white px-2 py-1"
               }
               style={{
                 borderTopLeftRadius: 0,
