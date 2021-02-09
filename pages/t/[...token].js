@@ -173,8 +173,8 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
         <meta
           property="og:image"
           content={
-            item.token_img_url
-              ? item.token_img_url
+            item.token_img_preview_url
+              ? item.token_img_preview_url
               : item.contract_address ===
                 "0xc2c747e0f7004f9e8817db2ca4997657a7746928"
               ? "https://lh3.googleusercontent.com/L7Q_7aQGYfn8PYOrZwwA4400_EEScTOX9f3ut67oHy1Tjk0SSt85z_ekBjwtfXBQxT8epJHcbEbb-8njMZiGDMzgqjZYHVQwle5sQA=s500"
@@ -189,8 +189,8 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
         <meta
           name="twitter:image"
           content={
-            item.token_img_url
-              ? item.token_img_url
+            item.token_img_preview_url
+              ? item.token_img_preview_url
               : item.contract_address ===
                 "0xc2c747e0f7004f9e8817db2ca4997657a7746928"
               ? "https://lh3.googleusercontent.com/L7Q_7aQGYfn8PYOrZwwA4400_EEScTOX9f3ut67oHy1Tjk0SSt85z_ekBjwtfXBQxT8epJHcbEbb-8njMZiGDMzgqjZYHVQwle5sQA=s500"
