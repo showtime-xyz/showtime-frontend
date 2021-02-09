@@ -108,14 +108,14 @@ const Header = () => {
               Home
             </a>
           </Link>
-          <Link href="/c/superrare">
+          <Link href="/c/all">
             <a
               className="showtime-header-link mr-5 text-sm md:text-base"
               onClick={() => {
-                mixpanel.track("Discover button click");
+                mixpanel.track("Explore button click");
               }}
             >
-              Collections
+              Explore
             </a>
           </Link>
         </div>
@@ -298,14 +298,14 @@ const Header = () => {
             Home
           </a>
         </Link>
-        <Link href="/c/superrare">
+        <Link href="/c/all">
           <a
             className="showtime-header-link mr-5 text-sm md:text-base"
             onClick={() => {
-              mixpanel.track("Discover button click");
+              mixpanel.track("Explore button click");
             }}
           >
-            Collections
+            Explore
           </a>
         </Link>
       </div>
