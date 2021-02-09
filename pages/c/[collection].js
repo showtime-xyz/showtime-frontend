@@ -105,6 +105,13 @@ export default function Collection({
       const response_collection_items = await backend.get(
         `/v2/collection?limit=200&order_by=${sortBy}&collection=${collection_name}`
       );
+
+      if (sortBy == "random" && collection_name == "all") {
+        backend.get(
+          `/v2/collection?limit=200&recache=1&order_by=${sortBy}&collection=${collection_name}`
+        );
+      }
+
       if (isSubscribed) {
         setCollectionItems(response_collection_items.data.data);
       }
@@ -117,15 +124,20 @@ export default function Collection({
   }, [currentCollectionSlug, sortBy, randomNumber]);
 
   const [gridWidth, setGridWidth] = useState();
+  const [menuPadding, setMenuPadding] = useState(0);
   useEffect(() => {
     if (context.windowSize && context.windowSize.width < 820) {
       setGridWidth(context.windowSize.width);
+      setMenuPadding(20);
     } else if (context.windowSize && context.windowSize.width < 1200) {
       setGridWidth(790 - 18);
+      setMenuPadding(0);
     } else if (context.windowSize && context.windowSize.width < 1600) {
       setGridWidth(1185 - 18);
+      setMenuPadding(0);
     } else {
       setGridWidth(1580 - 18);
+      setMenuPadding(0);
     }
   }, [context.windowSize]);
 
@@ -232,11 +244,18 @@ export default function Collection({
 
       {gridWidth > 0 ? (
         <div
-          className="mx-auto mb-6 text-xs sm:text-sm flex flex-row items-center"
-          style={{ width: gridWidth }}
+          className="mx-auto mb-6 text-xs sm:text-sm flex flex-col sm:flex-row items-center"
+          style={{
+            width: gridWidth,
+            paddingLeft: menuPadding,
+            paddingRight: menuPadding,
+          }}
         >
           {collection_list && collection_list.length > 0 ? (
-            <div className="flex flex-row items-center" style={{ width: 280 }}>
+            <div
+              className="flex flex-row items-center mb-6 sm:mb-0"
+              style={{ width: 250 }}
+            >
               <div className="text-left" style={{ width: 250 }}>
                 <Select
                   options={collection_list}
