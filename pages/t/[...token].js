@@ -210,7 +210,13 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
       ) : null}
 
       <div className="flex flex-col text-center w-full">
-        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mt-5 py-10">
+        <div
+          className="showtime-title text-center mx-auto w-full text-3xl md:text-5xl mt-5 py-10"
+          style={{
+            overflowWrap: "break-word",
+            wordWrap: "break-word",
+          }}
+        >
           {item.token_name}
         </div>
       </div>
@@ -291,7 +297,13 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
           </div>
         </div>
         <div className="flex lg:w-1/2 p-4 lg:text-left ">
-          <div className="w-full">
+          <div
+            className="w-full"
+            style={{
+              overflowWrap: "break-word",
+              wordWrap: "break-word",
+            }}
+          >
             {item.token_description ? (
               <>
                 <div className="showtime-token-description">
