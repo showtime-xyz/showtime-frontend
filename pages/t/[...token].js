@@ -331,7 +331,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
             <br />
             <div style={{ width: 160 }}>
               <a
-                href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}`}
+                href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
                 title="Buy on OpenSea"
                 target="_blank"
                 onClick={() => {
