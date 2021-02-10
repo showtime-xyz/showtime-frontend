@@ -73,8 +73,19 @@ export default function Collection({
   }, [typeof context.user]);
 
   const router = useRouter();
+
   const [isChanging, setIsChanging] = useState(true);
-  //const { collection } = router.query;
+
+  useEffect(() => {
+    setCurrentCollectionSlug(router.query.collection);
+    if (router.query.collection == "all") {
+      setPageTitle("Explore");
+      setCurrentCollectionSlug("all");
+      mixpanel.track("Collection page view", {
+        collection: router.query.collection,
+      });
+    }
+  }, [router.query.collection]);
 
   const onChange = async (values) => {
     mixpanel.track("Collection dropdown select");
@@ -262,7 +273,7 @@ export default function Collection({
                   labelField="name"
                   valueField="value"
                   values={collection_list.filter(
-                    (item) => item.value === collection
+                    (item) => item.value === currentCollectionSlug
                   )}
                   searchable={false}
                   onChange={(values) => onChange(values)}

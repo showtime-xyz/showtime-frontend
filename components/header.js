@@ -108,7 +108,7 @@ const Header = () => {
               Home
             </a>
           </Link>
-          <Link href="/c/all">
+          <Link href="/c/[collection]" as="/c/all">
             <a
               className="showtime-header-link mr-5 text-sm md:text-base"
               onClick={() => {
@@ -298,7 +298,7 @@ const Header = () => {
             Home
           </a>
         </Link>
-        <Link href="/c/all">
+        <Link href="/c/[collection]" as="/c/all">
           <a
             className="showtime-header-link mr-5 text-sm md:text-base"
             onClick={() => {
