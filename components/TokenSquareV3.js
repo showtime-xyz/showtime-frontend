@@ -208,7 +208,13 @@ class TokenSquareV3 extends React.Component {
                   href="/t/[...token]"
                   as={`/t/${this.props.item.contract_address}/${this.props.item.token_id}`}
                 >
-                  <a className="showtime-card-title">
+                  <a
+                    className="showtime-card-title"
+                    style={{
+                      overflowWrap: "break-word",
+                      wordWrap: "break-word",
+                    }}
+                  >
                     {this.props.item.token_name}
                   </a>
                 </Link>
