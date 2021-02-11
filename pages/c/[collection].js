@@ -32,15 +32,8 @@ export async function getServerSideProps(context) {
       ? collection_list.filter((item) => item.value === collection)[0]
       : null;
 
-  // Get collection items
-  //const response_collection_items = await backend.get(
-  //  `/v2/collection?limit=200&collection=${collection}`
-  //);
-  //const collection_items = response_collection_items.data.data;
-
   return {
     props: {
-      //collection_items,
       collection_list,
       collection,
       selected_collection,
@@ -65,12 +58,6 @@ export default function Collection({
   );
 
   const context = useContext(AppContext);
-  useEffect(() => {
-    // Wait for identity to resolve before recording the view
-    if (typeof context.user !== "undefined") {
-      mixpanel.track("Collection page view", { collection: collection });
-    }
-  }, [typeof context.user]);
 
   const router = useRouter();
 
@@ -81,14 +68,13 @@ export default function Collection({
     if (router.query.collection == "all") {
       setPageTitle("Explore");
       setCurrentCollectionSlug("all");
-      mixpanel.track("Collection page view", {
-        collection: router.query.collection,
-      });
     }
   }, [router.query.collection]);
 
   const onChange = async (values) => {
-    mixpanel.track("Collection dropdown select");
+    mixpanel.track("Collection filter dropdown select", {
+      collection: values[0]["value"],
+    });
     router.push("/c/[collection]", `/c/${values[0]["value"]}`, {
       shallow: true,
     });
@@ -98,8 +84,6 @@ export default function Collection({
         : `Explore ${values[0]["name"]}`
     );
     setCurrentCollectionSlug(values[0]["value"]);
-    //await getCollectionItems(values[0]["value"]);
-    mixpanel.track("Collection page view", { collection: values[0]["value"] });
   };
 
   const [collectionItems, setCollectionItems] = useState([]);
@@ -117,7 +101,13 @@ export default function Collection({
         `/v2/collection?limit=200&order_by=${sortBy}&collection=${collection_name}`
       );
 
+      mixpanel.track("Explore page view", {
+        collection: collection_name,
+        sortby: sortBy,
+      });
+
       if (sortBy == "random" && collection_name == "all") {
+        // Resetting the cache for random items - for next load
         backend.get(
           `/v2/collection?limit=200&recache=1&order_by=${sortBy}&collection=${collection_name}`
         );
@@ -198,61 +188,6 @@ export default function Collection({
         </div>
       </div>
 
-      {/*collection_list && collection_list.length > 0 ? (
-        <div
-          className="flex flex-row mx-auto mt-6 items-center"
-          style={{ width: 280 }}
-        >
-          <div className="text-left" style={{ width: 250 }}>
-            <Select
-              options={collection_list}
-              labelField="name"
-              valueField="value"
-              values={collection_list.filter(
-                (item) => item.value === collection
-              )}
-              searchable={false}
-              onChange={(values) => onChange(values)}
-              style={{ fontSize: 16 }}
-            />
-          </div>
-          <div className="">
-            <ShareButton
-              url={typeof window !== "undefined" ? window.location.href : null}
-              type={"collection"}
-            />
-          </div>
-        </div>
-              ) : null*/}
-
-      {/*<div>
-        {collection_list.map((item, index) => {
-          return (
-            <button
-              key={item.value}
-              className="text-xs p-2 showtime-like-button-white items-center"
-              style={{
-                backgroundColor: "white",
-                borderLeftWidth: 1,
-                borderRightWidth: 1,
-                borderTopWidth: 2,
-                borderBottomWidth: 2,
-                width: context.windowSize / 12,
-                borderColor: "black",
-              }}
-            >
-              <img
-                alt="collection"
-                className="rounded-full object-cover object-center w-8 h-8 mx-auto mr-1"
-                src={item.img_url}
-              />
-
-              <div>{item.name}</div>
-            </button>
-          );
-        })}
-      </div>*/}
-
       {gridWidth > 0 ? (
         <div
           className="mx-auto mb-6 text-xs sm:text-sm flex flex-col md:flex-row items-center"
@@ -291,9 +226,6 @@ export default function Collection({
             </div>
           ) : null}
 
-          {/*<div className="mr-1 text-sm sm:text-base uppercase mb-2">
-            Sort by
-      </div>*/}
           <div className="text-right flex-grow">
             {context.windowSize ? (
               context.windowSize.width < 375 ? (
@@ -318,8 +250,10 @@ export default function Collection({
                 if (sortBy === "random") {
                   // Rerun the random tab
                   setRandomNumber(Math.random());
+                  mixpanel.track("Random button re-clicked");
                 } else {
                   setSortby("random");
+                  mixpanel.track("Random button clicked");
                 }
               }}
             >
@@ -338,6 +272,7 @@ export default function Collection({
               }}
               onClick={() => {
                 setSortby("sold");
+                mixpanel.track("Recently sold button clicked");
               }}
             >
               {context.windowSize && context.windowSize.width < 370
@@ -357,6 +292,7 @@ export default function Collection({
               }}
               onClick={() => {
                 setSortby("newest");
+                mixpanel.track("Newest button clicked");
               }}
             >
               Newest
@@ -374,6 +310,7 @@ export default function Collection({
               }}
               onClick={() => {
                 setSortby("oldest");
+                mixpanel.track("Oldest button clicked");
               }}
             >
               Oldest
@@ -391,6 +328,7 @@ export default function Collection({
               }}
               onClick={() => {
                 setSortby("trending");
+                mixpanel.track("Trending button clicked");
               }}
             >
               Trending
