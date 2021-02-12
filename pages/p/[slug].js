@@ -4,7 +4,6 @@ import _ from "lodash";
 //import Link from "next/link";
 import mixpanel from "mixpanel-browser";
 import Layout from "../../components/layout";
-//import TokenGridV3 from "../../components/TokenGridV3";
 import TokenGridV4 from "../../components/TokenGridV4";
 import backend from "../../lib/backend";
 import AppContext from "../../context/app-context";
@@ -154,48 +153,6 @@ const Profile = ({
     }
   }, [owned_items, typeof context.user]);
 
-  /*
-  useEffect(() => {
-    let isSubscribed = true;
-
-    const refreshOwned = async () => {
-      if (slug !== "0x0000000000000000000000000000000000000000") {
-        const response_owned = await backend.get(`/v1/owned?address=${slug}`);
-        if (response_owned.data.data !== owned_items) {
-          if (isSubscribed) {
-            setOwnedItems(response_owned.data.data);
-          }
-        }
-      }
-
-      setOwnedRefreshed(true);
-    };
-    refreshOwned();
-
-    return () => (isSubscribed = false);
-  }, [owned_items]);
-
-  useEffect(() => {
-    let isSubscribed = true;
-
-    const refreshLiked = async () => {
-      if (slug !== "0x0000000000000000000000000000000000000000") {
-        const response_liked = await backend.get(`/v1/liked?address=${slug}`);
-        if (response_liked.data.data !== liked_items) {
-          if (isSubscribed) {
-            setLikedItems(response_liked.data.data);
-          }
-        }
-      }
-
-      setLikedRefreshed(true);
-    };
-    refreshLiked();
-
-    return () => (isSubscribed = false);
-  }, [owned_items]);
-  */
-
   const logout = async () => {
     const authRequest = await fetch("/api/logout", {
       method: "POST",
@@ -220,21 +177,16 @@ const Profile = ({
   };
 
   const [columns, setColumns] = useState(2);
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     if (context.windowSize && context.windowSize.width < 820) {
       setColumns(1);
-      setIsMobile(true);
     } else if (context.windowSize && context.windowSize.width < 1200) {
       setColumns(2);
-      setIsMobile(false);
     } else if (context.windowSize && context.windowSize.width < 1600) {
       setColumns(3);
-      setIsMobile(false);
     } else {
       setColumns(4);
-      setIsMobile(false);
     }
   }, [context.windowSize]);
 
@@ -597,11 +549,14 @@ const Profile = ({
           ) : null}
         </div>
       </div>
-      <div className="bg-white border-b-2 border-t-2 px-4 md:px-16 mb-4 text-sm">
-        <div className="mt-6">
+      <div
+        className="bg-white px-4 md:px-16 py-6 text-sm"
+        style={{ boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 2%)" }}
+      >
+        <div className="mb-4">
           {followers && followers.length > 0 ? (
             <>
-              <div className="mb-2">
+              <div className="">
                 {followers.length > 1
                   ? `${followers.length} followers`
                   : "1 follower"}
@@ -617,24 +572,22 @@ const Profile = ({
               </div>
 
               {showFollowers ? (
-                <FollowGrid people={followers} />
+                <div className="mt-2">
+                  <FollowGrid people={followers} />
+                </div>
               ) : (
-                <div className="mb-4"></div>
+                <div className=""></div>
               )}
             </>
           ) : (
-            <div>
-              No followers yet
-              <br />
-              <br />
-            </div>
+            <div className="">No followers yet</div>
           )}
         </div>
 
         <div>
           {following && following.length > 0 ? (
             <>
-              <div className="mb-2">
+              <div className="">
                 {following.length > 1
                   ? `${following.length} following`
                   : "1 following"}
@@ -650,29 +603,23 @@ const Profile = ({
               </div>
 
               {showFollowing ? (
-                <FollowGrid people={following} />
+                <div className="mt-2">
+                  <FollowGrid people={following} />
+                </div>
               ) : (
-                <div className="mb-6"></div>
+                <div className=""></div>
               )}
             </>
           ) : (
-            <div>
-              Not following anyone yet
-              <br />
-              <br />
-            </div>
+            <div>Not following anyone yet</div>
           )}
         </div>
-        {/*<div>Featured items</div>
-        {likedItems.length > 0 ? (
-          <img src={likedItems[0].token_img_url} />
-        ) : null}*/}
       </div>
 
       {createdItems.length > 0 ||
       ownedItems.length > 0 ||
       likedItems.length > 0 ? (
-        <div className="mx-auto text-center mb-6 mt-7 text-xs sm:text-sm">
+        <div className="mx-auto text-center mb-6 mt-8 text-xs sm:text-sm">
           {context.windowSize ? (
             context.windowSize.width < 375 ? (
               <>

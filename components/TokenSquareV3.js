@@ -107,36 +107,37 @@ class TokenSquareV3 extends React.Component {
               : "mx-auto showtime-card sm:rounded-md"
           }
         >
-          <div className="p-4">
-            {this.props.item.creator_address ? (
-              <Link
-                href="/p/[slug]"
-                as={`/p/${this.props.item.creator_address}`}
-              >
-                <a className="flex flex-row items-center ">
-                  <div>
-                    <img
-                      alt={this.props.item.creator_name}
-                      src={
-                        this.props.item.creator_img_url
-                          ? this.props.item.creator_img_url
-                          : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                      }
-                      className="rounded-full "
-                      style={{ height: 24, width: 24 }}
-                    />
-                  </div>
-                  <div className="showtime-card-profile-link ml-2">
-                    {this.truncateWithEllipses(
-                      this.props.item.creator_name,
-                      22
-                    )}
-                  </div>
-                </a>
-              </Link>
-            ) : (
-              <div>&nbsp;</div>
-            )}
+          <div className="p-4 flex flex-row">
+            <div className="flex-shrink">
+              {this.props.item.creator_address ? (
+                <Link
+                  href="/p/[slug]"
+                  as={`/p/${this.props.item.creator_address}`}
+                >
+                  <a className="flex flex-row items-center ">
+                    <div>
+                      <img
+                        alt={this.props.item.creator_name}
+                        src={
+                          this.props.item.creator_img_url
+                            ? this.props.item.creator_img_url
+                            : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                        }
+                        className="rounded-full "
+                        style={{ height: 24, width: 24 }}
+                      />
+                    </div>
+                    <div className="showtime-card-profile-link ml-2">
+                      {this.truncateWithEllipses(
+                        this.props.item.creator_name,
+                        22
+                      )}
+                    </div>
+                  </a>
+                </Link>
+              ) : null}
+            </div>
+            <div>&nbsp;</div>
           </div>
           <Link
             href="/t/[...token]"
@@ -302,7 +303,7 @@ class TokenSquareV3 extends React.Component {
               Owned by{" "}
               {this.props.item.multiple_owners ? "multiple owners" : null}
             </div>
-            <div className="flex-grow">
+            <div>
               {this.props.item.multiple_owners ? null : this.props.item
                   .owner_id ? (
                 <Link
@@ -332,6 +333,7 @@ class TokenSquareV3 extends React.Component {
                 </Link>
               ) : null}
             </div>
+            <div className="flex-grow"></div>
             <div style={{ fontSize: 12, fontWeight: 400 }}>
               <a
                 href={`https://opensea.io/assets/${this.props.item.contract_address}/${this.props.item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}

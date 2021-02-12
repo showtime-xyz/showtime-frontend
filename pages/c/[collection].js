@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import _ from "lodash";
 import Layout from "../../components/layout";
-//import TokenGridV3 from "../../components/TokenGridV3";
 import TokenGridV4 from "../../components/TokenGridV4";
 import { useRouter } from "next/router";
 import Select from "react-dropdown-select";
