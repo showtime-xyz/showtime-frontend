@@ -67,28 +67,32 @@ const Header = () => {
 
   return (
     <>
-      <header className="flex flex-row items-center p-3 bg-white md:border-b-2 md:px-16">
-        <div>
-          <Link href="/">
-            <a
-              className="flex flex-row showtime-header-link items-center text-left mr-auto"
-              onClick={() => {
-                mixpanel.track("Logo button click");
-              }}
-            >
-              <img
-                src="/logo_sm.jpg"
-                style={{ height: 44, width: 44, borderRadius: 5 }}
-              />
-              <div className="mx-2" style={{ fontWeight: 700 }}>
-                Showtime
-              </div>
-            </a>
-          </Link>
-        </div>
+      <header
+        className="p-4 bg-white md:px-16"
+        style={{ boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)" }}
+      >
+        <div class="flex flex-row items-center ">
+          <div>
+            <Link href="/">
+              <a
+                className="flex flex-row showtime-header-link items-center text-left mr-auto"
+                onClick={() => {
+                  mixpanel.track("Logo button click");
+                }}
+              >
+                <img
+                  src="/logo_sm.jpg"
+                  style={{ height: 44, width: 44, borderRadius: 5 }}
+                />
+                <div className="mx-2" style={{ fontWeight: 700 }}>
+                  Showtime
+                </div>
+              </a>
+            </Link>
+          </div>
 
-        <div className="hidden md:block ml-8">
-          {/*<Link href="/#leaderboard">
+          <div className="hidden md:block ml-8">
+            {/*<Link href="/#leaderboard">
             <a
               className="showtime-header-link mr-5 text-sm md:text-base"
               onClick={() => {
@@ -98,11 +102,104 @@ const Header = () => {
               Top Creators
             </a>
             </Link>*/}
+            <Link href="/">
+              <a
+                className="showtime-header-link mr-5 text-sm md:text-base"
+                onClick={() => {
+                  mixpanel.track("Home button click");
+                }}
+              >
+                Home
+              </a>
+            </Link>
+            <Link href="/c/[collection]" as="/c/all">
+              <a
+                className="showtime-header-link mr-5 text-sm md:text-base"
+                onClick={() => {
+                  mixpanel.track("Explore button click");
+                }}
+              >
+                Explore
+              </a>
+            </Link>
+          </div>
+          <div className="flex-grow"></div>
+          <div>
+            {context.user && context.myProfile !== undefined ? (
+              <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
+                <a
+                  className="showtime-login-button-outline text-sm px-2 py-2 md:text-base flex flex-row items-center"
+                  onClick={() => {
+                    mixpanel.track("Profile button click");
+                  }}
+                >
+                  <>
+                    <div
+                      className={
+                        context.windowSize
+                          ? context.windowSize.width < 350
+                            ? "hidden"
+                            : null
+                          : null
+                      }
+                    >
+                      <img
+                        alt="profile pic"
+                        src={
+                          context.myProfile
+                            ? context.myProfile.img_url
+                              ? context.myProfile.img_url
+                              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                            : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                        }
+                        className="rounded-full mr-2"
+                        style={{ height: 24, width: 24 }}
+                      />
+                    </div>
+                    <div className="hidden sm:block">
+                      {context.myProfile
+                        ? context.myProfile.name
+                          ? context.myProfile.name
+                          : "Profile"
+                        : "Profile"}
+                    </div>
+                  </>
+                  <div className="block sm:hidden">Profile</div>
+                </a>
+              </Link>
+            ) : (
+              <Link href="/login">
+                <a className="showtime-login-button-solid text-sm px-3 py-2 md:text-base  md:px-3 md:py-2">
+                  {context.windowSize && context.windowSize.width > 500
+                    ? "Sign in / Sign up"
+                    : "Sign in"}
+                </a>
+              </Link>
+            )}
+          </div>
+        </div>
+
+        <div
+          className="block md:hidden pt-4"
+          style={{
+            backgroundColor: "white",
+          }}
+        >
+          {/*<Link href="/#leaderboard">
+          <a
+            className="showtime-header-link mr-5 text-sm md:text-base"
+            onClick={() => {
+              mixpanel.track("Collections button click");
+            }}
+          >
+            Top Creators
+          </a>
+          </Link>*/}
           <Link href="/">
             <a
               className="showtime-header-link mr-5 text-sm md:text-base"
               onClick={() => {
-                mixpanel.track("Home button click");
+                mixpanel.track("Most liked button click");
               }}
             >
               Home
@@ -119,196 +216,7 @@ const Header = () => {
             </a>
           </Link>
         </div>
-        <div className="flex-grow"></div>
-        <div>
-          {context.user && context.myProfile !== undefined ? (
-            <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
-              <a
-                className="showtime-login-button-outline text-sm px-2 py-2 md:text-base flex flex-row items-center"
-                onClick={() => {
-                  mixpanel.track("Profile button click");
-                }}
-              >
-                <>
-                  <div
-                    className={
-                      context.windowSize
-                        ? context.windowSize.width < 350
-                          ? "hidden"
-                          : null
-                        : null
-                    }
-                  >
-                    <img
-                      alt="profile pic"
-                      src={
-                        context.myProfile
-                          ? context.myProfile.img_url
-                            ? context.myProfile.img_url
-                            : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                          : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                      }
-                      className="rounded-full mr-2"
-                      style={{ height: 24, width: 24 }}
-                    />
-                  </div>
-                  <div className="hidden sm:block">
-                    {context.myProfile
-                      ? context.myProfile.name
-                        ? context.myProfile.name
-                        : "Profile"
-                      : "Profile"}
-                  </div>
-                </>
-                <div className="block sm:hidden">Profile</div>
-              </a>
-            </Link>
-          ) : (
-            <Link href="/login">
-              <a className="showtime-login-button-solid text-sm px-3 py-2 md:text-base  md:px-3 md:py-2">
-                {context.windowSize && context.windowSize.width > 500
-                  ? "Sign in / Sign up"
-                  : "Sign in"}
-              </a>
-            </Link>
-          )}
-        </div>
-
-        {/*<div className="flex flex-col md:flex-row items-center ">
-        <Link href="/">
-          <a
-            className="flex flex-row showtime-header-link items-center text-left mr-auto p-3"
-            onClick={() => {
-              mixpanel.track("Logo button click");
-            }}
-          >
-            <img
-              src="/logo_sm.jpg"
-              style={{ height: 40, width: 40, borderRadius: 5 }}
-            />
-            <div className="mx-2" style={{ fontWeight: 700 }}>
-              Showtime
-            </div>
-          </a>
-        </Link>
-        <div className="items-center flex flex-row w-full px-3 mb-1 md:mb-0">
-          <div className="flex-grow hidden md:block"></div>
-          <div className="flex-shrink">
-            <Link href="/#leaderboard">
-              <a
-                className="showtime-header-link mr-5 text-sm md:text-base"
-                onClick={() => {
-                  mixpanel.track("Collections button click");
-                }}
-              >
-                Top Creators
-              </a>
-            </Link>
-            <Link href="/c/superrare">
-              <a
-                className="showtime-header-link md:mr-5 text-sm md:text-base"
-                onClick={() => {
-                  mixpanel.track("Discover button click");
-                }}
-              >
-                Collections
-              </a>
-            </Link>
-          </div>
-          <div className="flex-grow md:hidden"></div>
-          <div>
-            <div>
-              {context.user && context.myProfile !== undefined ? (
-                <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
-                  <a
-                    className="showtime-login-button-outline text-sm px-3 py-2 md:text-base md:px-3 md:py-2 flex flex-row items-center"
-                    onClick={() => {
-                      mixpanel.track("Profile button click");
-                    }}
-                  >
-                    <>
-                      <div
-                        className={
-                          context.windowSize
-                            ? context.windowSize.width < 350
-                              ? "hidden"
-                              : null
-                            : null
-                        }
-                      >
-                        <img
-                          alt="profile pic"
-                          src={
-                            context.myProfile
-                              ? context.myProfile.img_url
-                                ? context.myProfile.img_url
-                                : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                          }
-                          className="rounded-full mr-2"
-                          style={{ height: 24, width: 24 }}
-                        />
-                      </div>
-                      <div className="hidden sm:block">
-                        {context.myProfile
-                          ? context.myProfile.name
-                            ? context.myProfile.name
-                            : "Profile"
-                          : "Profile"}
-                      </div>
-                    </>
-                    <div className="block sm:hidden">Profile</div>
-                  </a>
-                </Link>
-              ) : (
-                <Link href="/login">
-                  <a className="showtime-login-button-solid text-sm px-3 py-2 md:text-base  md:px-3 md:py-2">
-                    {context.windowSize && context.windowSize.width > 500
-                      ? "Sign in / Sign up"
-                      : "Sign in"}
-                  </a>
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
-                    </div>*/}
       </header>
-      <div
-        className="block md:hidden pb-3 pl-3 border-b-2"
-        style={{ backgroundColor: "white" }}
-      >
-        {/*<Link href="/#leaderboard">
-          <a
-            className="showtime-header-link mr-5 text-sm md:text-base"
-            onClick={() => {
-              mixpanel.track("Collections button click");
-            }}
-          >
-            Top Creators
-          </a>
-          </Link>*/}
-        <Link href="/">
-          <a
-            className="showtime-header-link mr-5 text-sm md:text-base"
-            onClick={() => {
-              mixpanel.track("Most liked button click");
-            }}
-          >
-            Home
-          </a>
-        </Link>
-        <Link href="/c/[collection]" as="/c/all">
-          <a
-            className="showtime-header-link mr-5 text-sm md:text-base"
-            onClick={() => {
-              mixpanel.track("Explore button click");
-            }}
-          >
-            Explore
-          </a>
-        </Link>
-      </div>
     </>
   );
 };

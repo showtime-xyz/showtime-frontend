@@ -10,7 +10,7 @@ body {
   margin: 0;
   /*background-color: #010101;
   color: rgba(255, 255, 255, 0.9);*/
-  background-color: #f4f2f1; /* #fafafa; */
+  background-color: #f5f5f5; /* #fafafa; */
   color: #010101;
   font-family: "Inter", sans-serif;
   font-weight: 600;
@@ -458,7 +458,7 @@ a {
   background-color: #fff;
   color: #222222;
   font-weight: 600;
-  border-radius: 7px;
+  border-radius: 5px;
   display: inline-flex;
   border: 2px solid #222222;
 }
@@ -486,7 +486,7 @@ a {
   background-color: #e45cff;
   color: #fff;
   font-weight: 600;
-  border-radius: 7px;
+  border-radius: 5px;
   display: inline-flex;
   border: 2px solid #e45cff;
 }
@@ -543,8 +543,9 @@ a {
 }
 
 .showtime-card-profile-link {
-  font-weight: 400;
-  font-size: 13px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #223043;
 }
 
 .showtime-card-profile-link:hover {
@@ -552,8 +553,16 @@ a {
 }
 
 .showtime-card-title {
+  color: #223043;
 }
 .showtime-card-title:hover {
+  color: #e45cff;
+}
+
+.showtime-card-bid {
+  color: #888888;
+}
+.showtime-card-bid:hover {
   color: #e45cff;
 }
 
@@ -627,12 +636,13 @@ a {
 }
 
 .showtime-card {
-  border-color: rgb(219, 219, 219);
+  border-color: #f2f5f9;
   transition: box-shadow 0.3s ease-in-out;
+  box-shadow: 0px 4px 10px 6px rgba(34, 48, 67, 2%);
 }
 
 .showtime-card:hover {
-  box-shadow: 1px 3px 10px 6px #e9e9e9;
+  box-shadow: 0px 4px 10px 6px rgba(34, 48, 67, 5%);
 }
 
 .view-hide-toggle {

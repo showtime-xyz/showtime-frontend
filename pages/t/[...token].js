@@ -4,7 +4,6 @@ import _ from "lodash";
 import Layout from "../../components/layout";
 import backend from "../../lib/backend";
 import Link from "next/link";
-//import TokenGridV2 from "../../components/TokenGridV2";
 import TokenGridV3 from "../../components/TokenGridV3";
 import TokenGridV4 from "../../components/TokenGridV4";
 import Lightbox from "react-image-lightbox";

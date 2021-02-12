@@ -88,8 +88,8 @@ const TokenHeroV2 = ({
       )}
 
       <div className="mt-4 p-1 mr-1">
-        <div className="float-right text-right ">
-          <div className="flex flex-row">
+        <div className="flex flex-row">
+          <div className="flex-grow">
             <LikeButton
               isLiked={item.liked}
               likeCount={item.like_count}
@@ -103,6 +103,8 @@ const TokenHeroV2 = ({
               }}
               showTooltip={isMobile === false}
             />
+          </div>
+          <div>
             <ShareButton
               url={
                 window.location.protocol +

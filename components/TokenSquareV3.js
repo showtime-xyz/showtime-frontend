@@ -11,6 +11,7 @@ class TokenSquareV3 extends React.Component {
       spans: 0,
       moreShown: false,
       imageLoaded: false,
+      isHovering: false,
     };
     this.handleMoreShown = this.handleMoreShown.bind(this);
     this.divRef = React.createRef();
@@ -100,8 +101,43 @@ class TokenSquareV3 extends React.Component {
                 }
           )}
           ref={this.divRef}
-          className="mx-auto showtime-card"
+          className={
+            this.props.columns === 1
+              ? "mx-auto showtime-card"
+              : "mx-auto showtime-card sm:rounded-md"
+          }
         >
+          <div className="p-4">
+            {this.props.item.creator_address ? (
+              <Link
+                href="/p/[slug]"
+                as={`/p/${this.props.item.creator_address}`}
+              >
+                <a className="flex flex-row items-center ">
+                  <div>
+                    <img
+                      alt={this.props.item.creator_name}
+                      src={
+                        this.props.item.creator_img_url
+                          ? this.props.item.creator_img_url
+                          : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                      }
+                      className="rounded-full "
+                      style={{ height: 24, width: 24 }}
+                    />
+                  </div>
+                  <div className="showtime-card-profile-link ml-2">
+                    {this.truncateWithEllipses(
+                      this.props.item.creator_name,
+                      22
+                    )}
+                  </div>
+                </a>
+              </Link>
+            ) : (
+              <div>&nbsp;</div>
+            )}
+          </div>
           <Link
             href="/t/[...token]"
             as={`/t/${this.props.item.contract_address}/${this.props.item.token_id}`}
@@ -131,7 +167,7 @@ class TokenSquareV3 extends React.Component {
                 }}
               >
                 <img
-                  className="w-full object-cover object-center mb-1"
+                  className="w-full object-cover object-center "
                   ref={this.imageRef}
                   src={this.getImageUrl()}
                   alt={this.props.item.token_name}
@@ -142,40 +178,10 @@ class TokenSquareV3 extends React.Component {
             </a>
           </Link>
 
-          <div className="p-2">
+          <div className="p-4">
             <div>
               <div className="flex flex-row items-center">
                 <div className="flex-shrink">
-                  {this.props.item.creator_address ? (
-                    <Link
-                      href="/p/[slug]"
-                      as={`/p/${this.props.item.creator_address}`}
-                    >
-                      <a className="flex flex-row items-center p-1 ">
-                        <div>
-                          <img
-                            alt={this.props.item.creator_name}
-                            src={
-                              this.props.item.creator_img_url
-                                ? this.props.item.creator_img_url
-                                : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                            }
-                            className="rounded-full "
-                            style={{ height: 24, width: 24 }}
-                          />
-                        </div>
-                        <div className="showtime-card-profile-link ml-1">
-                          {this.truncateWithEllipses(
-                            this.props.item.creator_name,
-                            22
-                          )}
-                        </div>
-                      </a>
-                    </Link>
-                  ) : null}
-                </div>
-
-                <div className="flex-grow text-right">
                   <LikeButton
                     isLiked={this.props.item.liked}
                     likeCount={this.props.item.like_count}
@@ -190,6 +196,8 @@ class TokenSquareV3 extends React.Component {
                     showTooltip={this.props.isMobile === false}
                   />
                 </div>
+
+                <div className="flex-grow text-right"></div>
                 <div className="flex-shrink">
                   <ShareButton
                     url={
@@ -203,7 +211,7 @@ class TokenSquareV3 extends React.Component {
                   />
                 </div>
               </div>
-              <div className="mt-2 px-1 py-2">
+              <div className="mt-4 ">
                 <Link
                   href="/t/[...token]"
                   as={`/t/${this.props.item.contract_address}/${this.props.item.token_id}`}
@@ -213,6 +221,8 @@ class TokenSquareV3 extends React.Component {
                     style={{
                       overflowWrap: "break-word",
                       wordWrap: "break-word",
+                      fontSize: 18,
+                      fontWeight: 600,
                     }}
                   >
                     {this.props.item.token_name}
@@ -227,23 +237,24 @@ class TokenSquareV3 extends React.Component {
                     className=" pl-1"
                   />
                 ) : null}
-                <div
-                  style={{
-                    fontWeight: 400,
-                    color: "#888",
-                    fontSize: 12,
-                    overflowWrap: "break-word",
-                    wordWrap: "break-word",
-                  }}
-                >
-                  {this.state.moreShown ? (
-                    <div>
-                      {this.removeTags(this.props.item.token_description)}
-                    </div>
-                  ) : (
-                    <div>
-                      {this.props.item.token_description ? (
-                        this.props.item.token_description.length >
+                {this.props.item.token_description ? (
+                  <div
+                    style={{
+                      fontWeight: 400,
+                      color: "#888",
+                      fontSize: 12,
+                      overflowWrap: "break-word",
+                      wordWrap: "break-word",
+                    }}
+                    className="pt-1  pb-2"
+                  >
+                    {this.state.moreShown ? (
+                      <div>
+                        {this.removeTags(this.props.item.token_description)}
+                      </div>
+                    ) : (
+                      <div>
+                        {this.props.item.token_description.length >
                         this.max_description_length ? (
                           <>
                             {this.truncateWithEllipses(
@@ -264,57 +275,84 @@ class TokenSquareV3 extends React.Component {
                           <div>
                             {this.removeTags(this.props.item.token_description)}
                           </div>
-                        )
-                      ) : null}
-                    </div>
-                  )}
-                </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>
           <div
-            className="px-3 py-2 text-right flex items-center"
+            className="mx-4 py-4 flex items-center"
             style={{
               backgroundColor: "#ffffff",
               borderTopWidth: 1,
               borderColor: "rgb(219,219,219)",
             }}
           >
-            <span
-              className="flex-grow pr-1"
+            <div
+              className="flex-shrink pr-2"
               style={{
                 fontWeight: 400,
                 fontSize: 12,
-                color: "#666",
+                color: "#888",
               }}
             >
-              Owned by
-            </span>
-            {this.props.item.multiple_owners ? (
-              <span style={{ fontSize: 14, fontWeight: 400 }}>
-                multiple owners
-              </span>
-            ) : this.props.item.owner_id ? (
-              <Link href="/p/[slug]" as={`/p/${this.props.item.owner_address}`}>
-                <a className="flex flex-row items-center inline-flex">
-                  <div>
-                    <img
-                      alt={this.props.item.owner_name}
-                      src={
-                        this.props.item.owner_img_url
-                          ? this.props.item.owner_img_url
-                          : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                      }
-                      className="rounded-full mr-1"
-                      style={{ height: 24, width: 24 }}
-                    />
-                  </div>
-                  <div className="showtime-card-profile-link">
-                    {this.truncateWithEllipses(this.props.item.owner_name, 30)}
-                  </div>
-                </a>
-              </Link>
-            ) : null}
+              Owned by{" "}
+              {this.props.item.multiple_owners ? "multiple owners" : null}
+            </div>
+            <div className="flex-grow">
+              {this.props.item.multiple_owners ? null : this.props.item
+                  .owner_id ? (
+                <Link
+                  href="/p/[slug]"
+                  as={`/p/${this.props.item.owner_address}`}
+                >
+                  <a className="flex flex-row items-center">
+                    <div>
+                      <img
+                        alt={this.props.item.owner_name}
+                        src={
+                          this.props.item.owner_img_url
+                            ? this.props.item.owner_img_url
+                            : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                        }
+                        className="rounded-full mr-2"
+                        style={{ height: 24, width: 24 }}
+                      />
+                    </div>
+                    <div className="showtime-card-profile-link">
+                      {this.truncateWithEllipses(
+                        this.props.item.owner_name,
+                        30
+                      )}
+                    </div>
+                  </a>
+                </Link>
+              ) : null}
+            </div>
+            <div style={{ fontSize: 12, fontWeight: 400 }}>
+              <a
+                href={`https://opensea.io/assets/${this.props.item.contract_address}/${this.props.item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
+                target="_blank"
+                className="flex flex-row items-center showtime-card-bid"
+                onMouseOver={() => this.setState({ isHovering: true })}
+                onMouseOut={() => this.setState({ isHovering: false })}
+              >
+                <div className="mr-1 ">Bid</div>
+                <div className="mb-1">
+                  <img
+                    src={
+                      this.state.isHovering
+                        ? "/icons/external-link-alt-solid-pink.svg"
+                        : "/icons/external-link-alt-solid-gray.svg"
+                    }
+                    width={12}
+                  />
+                </div>
+              </a>
+            </div>
           </div>
         </div>
       </div>
