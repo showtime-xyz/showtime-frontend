@@ -326,7 +326,7 @@ class TokenSquareV3 extends React.Component {
                     <div className="showtime-card-profile-link">
                       {this.truncateWithEllipses(
                         this.props.item.owner_name,
-                        30
+                        24
                       )}
                     </div>
                   </a>
