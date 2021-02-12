@@ -34,12 +34,11 @@ const LikeButton = ({
         }
         className={
           isLiked
-            ? "showtime-like-button-pink text-sm px-2 py-1 flex flex-row items-center"
-            : "showtime-like-button-white text-sm px-2 py-1 flex flex-row items-center"
+            ? "showtime-like-button-pink text-sm px-3 py-1 flex flex-row items-center"
+            : "showtime-like-button-white text-sm px-3 py-1 flex flex-row items-center"
         }
         onMouseOver={() => setIsHovering(true)}
         onMouseOut={() => setIsHovering(false)}
-        style={likeCount === 1 ? { minWidth: 82 } : { minWidth: 96 }}
       >
         <img
           style={{ paddingRight: 6 }}

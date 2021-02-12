@@ -77,12 +77,12 @@ export default function Home(
   return (
     <Layout>
       <Head>
-        <title>Showtime | Crypto Art</title>
-        <meta name="description" content="Discover and showcase crypto art" />
+        <title>Showtime | Digital Art</title>
+        <meta name="description" content="Discover and showcase digital art" />
         <meta property="og:type" content="website" />
         <meta
           name="og:description"
-          content="Discover and showcase crypto art"
+          content="Discover and showcase digital art"
         />
         <meta property="og:image" content="/banner.png" />
         <meta name="og:title" content="Showtime" />
@@ -91,7 +91,7 @@ export default function Home(
         <meta name="twitter:title" content="Showtime" />
         <meta
           name="twitter:description"
-          content="Discover and showcase crypto art"
+          content="Discover and showcase digital art"
         />
         <meta
           name="twitter:image"
@@ -102,7 +102,7 @@ export default function Home(
         className="showtime-title text-center mx-auto text-2xl md:text-5xl md:leading-snug mb-5 mt-5 py-10"
         style={{ maxWidth: 700 }}
       >
-        Discover and showcase your favorite crypto art
+        Discover and showcase your favorite digital art
       </h1>
 
       {/*context.user ? null : (
@@ -129,11 +129,6 @@ export default function Home(
           </div>
         </div>
             )*/}
-      {/*<TokenGridV2
-        columnCount={columns}
-        items={featured_items}
-        isMobile={isMobile}
-      />*/}
 
       {gridWidth > 0 ? (
         <div
