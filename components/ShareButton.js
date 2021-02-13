@@ -24,13 +24,6 @@ const ShareButton = ({ url, type }) => {
               setIsCopied(false);
             }, 3000);
           }}
-          style={
-            isHovering
-              ? {
-                  /* backgroundColor: "rgba(125,92,255,0.4)" */
-                }
-              : null
-          }
         >
           <img
             src={

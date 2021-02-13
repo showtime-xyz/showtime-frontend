@@ -1,8 +1,8 @@
 import Head from "next/head";
 import PropTypes from "prop-types";
+import ScrollUpButton from "react-scroll-up-button";
 import Footer from "./footer";
 import Header from "./header";
-import ScrollUpButton from "react-scroll-up-button";
 
 const Layout = ({ children }) => {
   return (

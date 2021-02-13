@@ -3,37 +3,20 @@ import Head from "next/head";
 import Link from "next/link";
 import _ from "lodash";
 import Layout from "../components/layout";
-//import Leaderboard from "../components/Leaderboard";
 import TokenGridV4 from "../components/TokenGridV4";
-
-//import styles from "../styles/Home.module.css";
 import backend from "../lib/backend";
 import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 export async function getServerSideProps(context) {
-  // Get featured
-  //const response_featured = await backend.get("/v2/featured?limit=200");
-  //const data_featured = response_featured.data.data;
-
-  // Get leaderboard
-  //const response_leaderboard = await backend.get("/v1/leaderboard");
-  //const data_leaderboard = response_leaderboard.data.data;
-
   return {
-    props: {
-      //featured_items: data_featured,
-      //leaderboard: data_leaderboard,
-    }, // will be passed to the page component as props
+    props: {},
   };
 }
 
-export default function Home(
-  {
-    //featured_items,
-    //leaderboard
-  }
-) {
+export default function Home() {
   const context = useContext(AppContext);
   useEffect(() => {
     // Wait for identity to resolve before recording the view
@@ -42,10 +25,7 @@ export default function Home(
     }
   }, [typeof context.user]);
 
-  const [isHovering, setIsHovering] = useState(false);
-
   const [featuredItems, setFeaturedItems] = useState([]);
-
   const [featuredDays, setFeaturedDays] = useState(1);
   const [reachedBottom, setReachedBottom] = useState(false);
 
@@ -104,31 +84,6 @@ export default function Home(
       >
         Discover and showcase your favorite digital art
       </h1>
-
-      {/*context.user ? null : (
-        <div className=" mb-16">
-          <div className="flex justify-center">
-            {context.user ? (
-              <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
-                <a
-                  className="showtime-pink-button-outline"
-                  onClick={() => {
-                    mixpanel.track("Go to My Profile button click");
-                  }}
-                >
-                  Go to My Profile
-                </a>
-              </Link>
-            ) : (
-              <Link href="/login">
-                <a className="showtime-pink-button">
-                  Sign up with Email or Wallet
-                </a>
-              </Link>
-            )}
-          </div>
-        </div>
-            )*/}
 
       {gridWidth > 0 ? (
         <div
@@ -206,28 +161,13 @@ export default function Home(
       {featuredItems.length > 0 && reachedBottom ? (
         <div className="text-center pt-8 pb-16">
           <Link href="/c/[collection]" as="/c/superrare">
-            <a
-              className="showtime-purple-button-icon"
-              onMouseOver={() => setIsHovering(true)}
-              onMouseOut={() => setIsHovering(false)}
-            >
-              <span>Browse collections</span>
-              <img
-                style={{ paddingLeft: 6 }}
-                src={
-                  isHovering
-                    ? "/icons/arrow-right-purple.svg"
-                    : "/icons/arrow-right.svg"
-                }
-                alt="arrow"
-              />
+            <a className="showtime-purple-button-icon flex flex-row items-center">
+              <div className="mr-2">Explore more</div>
+              <FontAwesomeIcon height={18} icon={faArrowRight} />
             </a>
           </Link>
         </div>
       ) : null}
-      {/*<div className="mb-16">
-        <Leaderboard topCreators={leaderboard} />
-            </div>*/}
     </Layout>
   );
 }

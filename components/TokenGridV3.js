@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import _ from "lodash";
-import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
+import AppContext from "../context/app-context";
 import TokenSquareV3 from "./TokenSquareV3";
 import TokenHeroV2 from "./TokenHeroV2";
 
@@ -14,13 +14,7 @@ const TokenGridV3 = ({ items, isDetail }) => {
 
   useEffect(() => {
     setItemsList(
-      items.filter(
-        (item) =>
-          item.token_hidden !== true &&
-          (item.token_img_url ||
-            item.contract_address ===
-              "0xc2c747e0f7004f9e8817db2ca4997657a7746928")
-      )
+      items.filter((item) => item.token_hidden !== true && item.token_img_url)
     );
   }, [items]);
 
@@ -29,11 +23,10 @@ const TokenGridV3 = ({ items, isDetail }) => {
   }, [context.myLikes]);
 
   const handleLike = async ({ tid }) => {
-    // Change myLikes via setMyLikes
-
+    // Update global state via setMyLikes
     context.setMyLikes([...context.myLikes, tid]);
 
-    // Update the like counts for each item
+    // Update the like counts for each item on page
     var newItemsList = [...itemsList];
     _.forEach(newItemsList, function (item) {
       if (item.tid === tid) {
@@ -51,10 +44,10 @@ const TokenGridV3 = ({ items, isDetail }) => {
   };
 
   const handleUnlike = async ({ tid }) => {
-    // Change myLikes via setMyLikes
+    // Update global state via setMyLikes
     context.setMyLikes(context.myLikes.filter((item) => !(item === tid)));
 
-    // Update the like counts for each item
+    // Update the like counts for each item on page
     var newItemsList = [...itemsList];
     _.forEach(newItemsList, function (item) {
       if (item.tid === tid) {
@@ -88,21 +81,16 @@ const TokenGridV3 = ({ items, isDetail }) => {
   }, [itemsList, myItemLikes]);
 
   const [columns, setColumns] = useState(null);
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     if (context.windowSize && context.windowSize.width < 820) {
       setColumns(1);
-      setIsMobile(true);
     } else if (context.windowSize && context.windowSize.width < 1200) {
       setColumns(2);
-      setIsMobile(false);
     } else if (context.windowSize && context.windowSize.width < 1600) {
       setColumns(3);
-      setIsMobile(false);
     } else {
       setColumns(4);
-      setIsMobile(false);
     }
   }, [context.windowSize]);
 

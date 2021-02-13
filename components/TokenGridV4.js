@@ -1,10 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import _ from "lodash";
-import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
-import TokenSquareV3 from "./TokenSquareV3";
-import TokenHeroV2 from "./TokenHeroV2";
 import InfiniteScroll from "react-infinite-scroll-component";
+import AppContext from "../context/app-context";
+import TokenSquareV3 from "./TokenSquareV3";
 
 const TokenGridV4 = ({ items, isDetail, onFinish }) => {
   const context = useContext(AppContext);
@@ -31,7 +30,6 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
 
   const handleLike = async ({ tid }) => {
     // Change myLikes via setMyLikes
-
     context.setMyLikes([...context.myLikes, tid]);
 
     // Update the like counts for each item
@@ -120,12 +118,11 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
       dataLength={itemsShowing}
       next={fetchMoreData}
       hasMore={hasMore}
-
-      //loader={
-      //  <div>
-      //    <h4 className="w-full text-center">Loading more...</h4>
-      //  </div>
-      //}
+      /*loader={
+        <div>
+          <h4 className="w-full text-center">Loading more...</h4>
+        </div>
+      }*/
     >
       <div
         className={`grid grid-cols-${columns} mx-auto`}
@@ -144,36 +141,6 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
       </div>
     </InfiniteScroll>
   );
-
-  return columns ? (
-    isDetail ? (
-      itemsLikedList && itemsLikedList.length > 0 ? (
-        <TokenHeroV2
-          item={itemsLikedList[0]}
-          handleLike={handleLike}
-          handleUnlike={handleUnlike}
-          isDetail={isDetail}
-        />
-      ) : null
-    ) : (
-      <div
-        className={`grid grid-cols-${columns} mx-auto`}
-        style={columns === 1 ? null : { width: columns * (375 + 20) }}
-      >
-        {itemsLikedList.map((item) => {
-          return (
-            <TokenSquareV3
-              key={item.tid}
-              item={item}
-              handleLike={handleLike}
-              handleUnlike={handleUnlike}
-              columns={columns}
-            />
-          );
-        })}
-      </div>
-    )
-  ) : null;
 };
 
 export default TokenGridV4;

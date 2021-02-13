@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from "react";
 import Link from "next/link";
+import mixpanel from "mixpanel-browser";
 import useWindowSize from "../hooks/useWindowSize";
 import AppContext from "../context/app-context";
-import mixpanel from "mixpanel-browser";
 
 const Header = () => {
   const context = useContext(AppContext);
@@ -10,7 +10,7 @@ const Header = () => {
   // Try to log us in if it's not already in state
   useEffect(() => {
     const getUserFromCookies = async () => {
-      // login with our own API
+      // log in with our own API
       const userRequest = await fetch("/api/user");
       try {
         const user_data = await userRequest.json();
@@ -60,9 +60,7 @@ const Header = () => {
       context.setMyLikes(my_info_data.data.likes);
       context.setMyFollows(my_info_data.data.follows);
       context.setMyProfile(my_info_data.data.profile);
-    } catch {
-      //
-    }
+    } catch {}
   };
 
   return (
@@ -90,18 +88,8 @@ const Header = () => {
               </a>
             </Link>
           </div>
-
+          {/* Start desktop-only menu */}
           <div className="hidden md:block ml-8">
-            {/*<Link href="/#leaderboard">
-            <a
-              className="showtime-header-link mr-5 text-sm md:text-base"
-              onClick={() => {
-                mixpanel.track("Collections button click");
-              }}
-            >
-              Top Creators
-            </a>
-            </Link>*/}
             <Link href="/">
               <a
                 className="showtime-header-link mr-5 text-sm md:text-base"
@@ -123,6 +111,7 @@ const Header = () => {
               </a>
             </Link>
           </div>
+          {/* End desktop-only menu */}
           <div className="flex-grow"></div>
           <div>
             {context.user && context.myProfile !== undefined ? (
@@ -178,23 +167,13 @@ const Header = () => {
             )}
           </div>
         </div>
-
+        {/* Start mobile-only menu */}
         <div
           className="block md:hidden pt-4"
           style={{
             backgroundColor: "white",
           }}
         >
-          {/*<Link href="/#leaderboard">
-          <a
-            className="showtime-header-link mr-5 text-sm md:text-base"
-            onClick={() => {
-              mixpanel.track("Collections button click");
-            }}
-          >
-            Top Creators
-          </a>
-          </Link>*/}
           <Link href="/">
             <a
               className="showtime-header-link mr-5 text-sm md:text-base"
@@ -216,6 +195,7 @@ const Header = () => {
             </a>
           </Link>
         </div>
+        {/* End mobile-only menu */}
       </header>
     </>
   );
