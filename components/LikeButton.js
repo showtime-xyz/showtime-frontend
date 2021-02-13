@@ -1,7 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { useRouter } from "next/router";
 import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 
 const LikeButton = ({
   isLiked,
@@ -14,7 +17,6 @@ const LikeButton = ({
 }) => {
   const context = useContext(AppContext);
 
-  const [isHovering, setIsHovering] = useState(false);
   const router = useRouter();
 
   const handleLoggedOutLike = () => {
@@ -37,28 +39,15 @@ const LikeButton = ({
             ? "showtime-like-button-pink text-sm px-3 py-1 flex flex-row items-center"
             : "showtime-like-button-white text-sm px-3 py-1 flex flex-row items-center"
         }
-        onMouseOver={() => setIsHovering(true)}
-        onMouseOut={() => setIsHovering(false)}
       >
-        <img
-          style={{ paddingRight: 6 }}
-          src={
-            isLiked
-              ? "/icons/heart-white.svg"
-              : isHovering
-              ? "/icons/heart-pink-outline.svg"
-              : "/icons/heart-black-outline.svg"
-          }
-          alt="heart"
-          className="flex"
-        />
-        <span
-          className={
-            isLiked ? "flex" : isHovering ? "showtime-text-pink flex" : "flex"
-          }
-          style={{ whiteSpace: "nowrap" }}
-        >
-          {likeCount} like{likeCount === 1 ? null : "s"}
+        <div className="mr-2">
+          <FontAwesomeIcon
+            height={18}
+            icon={isLiked ? faHeartSolid : faHeartOutline}
+          />
+        </div>
+        <span style={{ whiteSpace: "nowrap" }}>
+          {likeCount} like{likeCount === 1 ? null : "s"}{" "}
         </span>
       </button>
       {context.user ? null : showTooltip ? (

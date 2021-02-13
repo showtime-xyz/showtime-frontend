@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
+import mixpanel from "mixpanel-browser";
 import ClientOnlyPortal from "./ClientOnlyPortal";
 import AppContext from "../context/app-context";
-import mixpanel from "mixpanel-browser";
 
 export default function Modal({ isOpen, setEditModalOpen }) {
   const context = useContext(AppContext);
@@ -25,10 +25,12 @@ export default function Modal({ isOpen, setEditModalOpen }) {
       }),
     });
 
+    // Update state to immediately show changes
     context.setMyProfile({
       ...context.myProfile,
       name: nameValue ? (nameValue.trim() ? nameValue.trim() : null) : null, // handle names with all whitespaces
     });
+
     setEditModalOpen(false);
   };
   return (

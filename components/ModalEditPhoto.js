@@ -1,43 +1,12 @@
-import { useContext, useState, useEffect, useRef } from "react";
-import ClientOnlyPortal from "./ClientOnlyPortal";
-import AppContext from "../context/app-context";
+import { useContext, useState, useRef } from "react";
 import mixpanel from "mixpanel-browser";
 import "croppie/croppie.css";
 import Croppie from "croppie";
+import ClientOnlyPortal from "./ClientOnlyPortal";
+import AppContext from "../context/app-context";
 
 export default function Modal({ isOpen, setEditModalOpen }) {
   const context = useContext(AppContext);
-
-  {
-    /*
-  const [nameValue, setNameValue] = useState(null);
-
-  useEffect(() => {
-    if (context.myProfile) {
-      setNameValue(context.myProfile.name);
-    }
-  }, [context.myProfile]);
-
-  const handleSubmit = async (event) => {
-    mixpanel.track("Save profile name edit");
-    event.preventDefault();
-
-    // Post changes to the API
-    await fetch(`/api/editname`, {
-      method: "post",
-      body: JSON.stringify({
-        name: nameValue,
-      }),
-    });
-
-    context.setMyProfile({
-      ...context.myProfile,
-      name: nameValue ? (nameValue.trim() ? nameValue.trim() : null) : null, // handle names with all whitespaces
-    });
-    setEditModalOpen(false);
-  };
-*/
-  }
 
   const [image, setImage] = useState("");
   const [croppie, setCroppie] = useState(null);
@@ -90,8 +59,6 @@ export default function Modal({ isOpen, setEditModalOpen }) {
               //rotate: 90,
             })
             .then((blob) => {
-              //console.log(blob);
-
               // Post changes to the API
               fetch(`/api/editphoto`, {
                 method: "post",

@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
+import Link from "next/link";
+import ReactPlayer from "react-player";
+import AppContext from "../context/app-context";
 import LikeButton from "../components/LikeButton";
 import ShareButton from "../components/ShareButton";
-import Link from "next/link";
-import AppContext from "../context/app-context";
-import ReactPlayer from "react-player";
 
 const TokenHeroV2 = ({
   item,
@@ -20,11 +20,7 @@ const TokenHeroV2 = ({
     : 640;
 
   const getImageUrl = () => {
-    var img_url = item.token_img_url
-      ? item.token_img_url
-      : item.contract_address === "0xc2c747e0f7004f9e8817db2ca4997657a7746928"
-      ? "https://lh3.googleusercontent.com/L7Q_7aQGYfn8PYOrZwwA4400_EEScTOX9f3ut67oHy1Tjk0SSt85z_ekBjwtfXBQxT8epJHcbEbb-8njMZiGDMzgqjZYHVQwle5sQA"
-      : null;
+    var img_url = item.token_img_url ? item.token_img_url : null;
 
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
       img_url = img_url.split("=")[0] + "=s375";
@@ -73,14 +69,7 @@ const TokenHeroV2 = ({
             <img
               className="object-cover object-center h-full w-full"
               style={{ maxHeight: 600 }}
-              src={
-                item.token_img_url
-                  ? item.token_img_url
-                  : item.contract_address ===
-                    "0xc2c747e0f7004f9e8817db2ca4997657a7746928"
-                  ? "https://lh3.googleusercontent.com/L7Q_7aQGYfn8PYOrZwwA4400_EEScTOX9f3ut67oHy1Tjk0SSt85z_ekBjwtfXBQxT8epJHcbEbb-8njMZiGDMzgqjZYHVQwle5sQA=s500"
-                  : null
-              }
+              src={item.token_img_url ? item.token_img_url : null}
               alt={item.token_name}
             />
           </a>

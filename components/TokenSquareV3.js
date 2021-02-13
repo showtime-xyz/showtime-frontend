@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import LikeButton from "../components/LikeButton";
-import ShareButton from "../components/ShareButton";
+import React from "react";
 import Link from "next/link";
 import _ from "lodash";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExternalLinkAlt, faVideo } from "@fortawesome/free-solid-svg-icons";
+import LikeButton from "../components/LikeButton";
+import ShareButton from "../components/ShareButton";
 
 class TokenSquareV3 extends React.Component {
   constructor(props) {
@@ -11,7 +13,6 @@ class TokenSquareV3 extends React.Component {
       spans: 0,
       moreShown: false,
       imageLoaded: false,
-      isHovering: false,
     };
     this.handleMoreShown = this.handleMoreShown.bind(this);
     this.divRef = React.createRef();
@@ -20,8 +21,6 @@ class TokenSquareV3 extends React.Component {
   }
 
   componentDidMount() {
-    //this.setState({ elementHeight: this.divRef.clientHeight });
-
     this.setSpans();
     this.imageRef.current.addEventListener("load", this.setSpans);
   }
@@ -53,9 +52,6 @@ class TokenSquareV3 extends React.Component {
   getImageUrl = () => {
     var img_url = this.props.item.token_img_url
       ? this.props.item.token_img_url
-      : this.props.item.contract_address ===
-        "0xc2c747e0f7004f9e8817db2ca4997657a7746928"
-      ? "https://lh3.googleusercontent.com/L7Q_7aQGYfn8PYOrZwwA4400_EEScTOX9f3ut67oHy1Tjk0SSt85z_ekBjwtfXBQxT8epJHcbEbb-8njMZiGDMzgqjZYHVQwle5sQA"
       : null;
 
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
@@ -130,7 +126,7 @@ class TokenSquareV3 extends React.Component {
                     <div className="showtime-card-profile-link ml-2">
                       {this.truncateWithEllipses(
                         this.props.item.creator_name,
-                        22
+                        30
                       )}
                     </div>
                   </a>
@@ -230,12 +226,10 @@ class TokenSquareV3 extends React.Component {
                   </a>
                 </Link>
                 {this.props.item.token_has_video ? (
-                  <img
-                    style={{ display: "inline-block" }}
-                    src="/icons/video-solid.svg"
-                    width="16"
-                    height="16"
-                    className=" pl-1"
+                  <FontAwesomeIcon
+                    className="ml-1 mb-1 inline"
+                    height={12}
+                    icon={faVideo}
                   />
                 ) : null}
                 {this.props.item.token_description ? (
@@ -326,7 +320,7 @@ class TokenSquareV3 extends React.Component {
                     <div className="showtime-card-profile-link">
                       {this.truncateWithEllipses(
                         this.props.item.owner_name,
-                        24
+                        22
                       )}
                     </div>
                   </a>
@@ -339,19 +333,10 @@ class TokenSquareV3 extends React.Component {
                 href={`https://opensea.io/assets/${this.props.item.contract_address}/${this.props.item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
                 target="_blank"
                 className="flex flex-row items-center showtime-card-bid"
-                onMouseOver={() => this.setState({ isHovering: true })}
-                onMouseOut={() => this.setState({ isHovering: false })}
               >
-                <div className="mr-1 ">Bid</div>
+                <div className="mr-1">Bid</div>
                 <div className="mb-1">
-                  <img
-                    src={
-                      this.state.isHovering
-                        ? "/icons/external-link-alt-solid-pink.svg"
-                        : "/icons/external-link-alt-solid-gray.svg"
-                    }
-                    width={12}
-                  />
+                  <FontAwesomeIcon height={12} icon={faExternalLinkAlt} />
                 </div>
               </a>
             </div>

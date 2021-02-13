@@ -10,8 +10,8 @@ import AppContext from "../../context/app-context";
 import ShareButton from "../../components/ShareButton";
 import FollowGrid from "../../components/FollowGrid";
 import { useRouter } from "next/router";
-import Modal from "../../components/Modal";
-import ModalPhoto from "../../components/ModalPhoto";
+import ModalEditName from "../../components/ModalEditName";
+import ModalEditPhoto from "../../components/ModalEditPhoto";
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
@@ -334,8 +334,11 @@ const Profile = ({
 
       {typeof document !== "undefined" ? (
         <>
-          <Modal isOpen={editModalOpen} setEditModalOpen={setEditModalOpen} />
-          <ModalPhoto
+          <ModalEditName
+            isOpen={editModalOpen}
+            setEditModalOpen={setEditModalOpen}
+          />
+          <ModalEditPhoto
             isOpen={pictureModalOpen}
             setEditModalOpen={setPictureModalOpen}
           />
