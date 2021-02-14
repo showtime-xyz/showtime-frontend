@@ -20,12 +20,15 @@ export default async (req, res) => {
 
     //console.log(email);
 
-    const res_myinfo = await fetch(`${process.env.BACKEND_URL}/v2/myinfo`, {
-      headers: {
-        UserAddress: user.publicAddress,
-        UserEmail: email,
-      },
-    });
+    const res_myinfo = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v2/myinfo`,
+      {
+        headers: {
+          UserAddress: user.publicAddress,
+          UserEmail: email,
+        },
+      }
+    );
     data_myinfo = await res_myinfo.json();
   } catch {}
 

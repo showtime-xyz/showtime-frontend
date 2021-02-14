@@ -12,7 +12,7 @@ export default async (req, res) => {
     );
 
     await fetch(
-      `${process.env.BACKEND_URL}/v1/profile?address=${following_address}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/profile?address=${following_address}`,
       {
         method: "POST",
         headers: {

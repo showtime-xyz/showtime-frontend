@@ -9,7 +9,7 @@ export default async (req, res) => {
       Iron.defaults
     );
 
-    await fetch(`${process.env.BACKEND_URL}/v1/editphoto`, {
+    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/editphoto`, {
       method: "POST",
       headers: {
         UserAddress: user.publicAddress,

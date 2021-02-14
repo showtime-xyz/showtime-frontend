@@ -14,7 +14,7 @@ export default async (req, res) => {
   } catch (error) {
   } finally {
     try {
-      await fetch(`${process.env.BACKEND_URL}/v1/reportitem`, {
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/reportitem`, {
         method: "POST",
         headers: {
           UserAddress: publicAddress, // may be null if logged out
