@@ -24,8 +24,9 @@ export default async (req, res) => {
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/v2/myinfo`,
       {
         headers: {
-          UserAddress: user.publicAddress,
-          UserEmail: email,
+          "X-Authenticated-User": user.publicAddress,
+          "X-Authenticated-Email": email,
+          "X-API-Key": process.env.SHOWTIME_FRONTEND_API_KEY,
         },
       }
     );

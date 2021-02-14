@@ -26,14 +26,16 @@ export async function getServerSideProps(context) {
   const created_items = data_profile.created;
   const owned_items = data_profile.owned;
   const liked_items = data_profile.liked;
+  const followers_list = data_profile.followers;
+  const following_list = data_profile.following;
 
   // Get followers
-  const response_followers = await backend.get(`/v1/followers?address=${slug}`);
-  const followers_list = response_followers.data.data;
+  //const response_followers = await backend.get(`/v1/followers?address=${slug}`);
+  //const followers_list = response_followers.data.data;
 
   // Get following
-  const response_following = await backend.get(`/v1/myfollows?address=${slug}`);
-  const following_list = response_following.data.data;
+  //const response_following = await backend.get(`/v1/myfollows?address=${slug}`);
+  //const following_list = response_following.data.data;
 
   return {
     props: {

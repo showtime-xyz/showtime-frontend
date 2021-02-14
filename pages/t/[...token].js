@@ -1,18 +1,18 @@
 import { useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import _ from "lodash";
-import Layout from "../../components/layout";
-import backend from "../../lib/backend";
 import Link from "next/link";
-import TokenGridV3 from "../../components/TokenGridV3";
-import TokenGridV4 from "../../components/TokenGridV4";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css"; // This only needs to be imported once in your app
-import AppContext from "../../context/app-context";
 import mixpanel from "mixpanel-browser";
-import ModalReportItem from "../../components/ModalReportItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExpand } from "@fortawesome/free-solid-svg-icons";
+import Layout from "../../components/layout";
+import backend from "../../lib/backend";
+import TokenGridV3 from "../../components/TokenGridV3";
+import TokenGridV4 from "../../components/TokenGridV4";
+import AppContext from "../../context/app-context";
+import ModalReportItem from "../../components/ModalReportItem";
 
 export async function getServerSideProps(context) {
   const { token: token_array } = context.query;
@@ -26,22 +26,6 @@ export async function getServerSideProps(context) {
   const same_creator_items = response_token.data.data.same_creator;
   const same_owner_items = response_token.data.data.same_owner;
 
-  /*
-  // Get owned items
-  let same_owner_items = [];
-  if (token.owner && token.owner.address) {
-    const response_owned = await backend.get(
-      `/v1/owned?address=${token.owner.address}&use_cached=1`
-    );
-    same_owner_items = response_owned.data.data.filter(
-      (item) =>
-        !(
-          item.token_id === token_id &&
-          item.asset_contract.address === contract_address
-        )
-    );
-  }*/
-
   return {
     props: {
       token,
@@ -52,9 +36,6 @@ export async function getServerSideProps(context) {
 }
 
 export default function Token({ token, same_owner_items, same_creator_items }) {
-  //const [isChanging, setIsChanging] = useState(false);
-  //const { collection } = router.query;
-
   const context = useContext(AppContext);
   useEffect(() => {
     // Wait for identity to resolve before recording the view
@@ -88,66 +69,27 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
   }, [token]);
 
   const [ownedItems, setOwnedItems] = useState([]);
-  const [ownedRefreshed, setOwnedRefreshed] = useState(false);
 
   useEffect(() => {
     setOwnedItems(same_owner_items.filter((c) => c.tid !== item.tid));
-    setOwnedRefreshed(false);
   }, [same_owner_items]);
 
   const [createdItems, setCreatedItems] = useState([]);
-  const [createdRefreshed, setCreatedRefreshed] = useState(false);
 
   useEffect(() => {
     setCreatedItems(same_creator_items.filter((c) => c.tid !== item.tid));
-    setCreatedRefreshed(false);
   }, [same_creator_items]);
 
-  /*
-  useEffect(() => {
-    const refreshOwned = async () => {
-      if (
-        token.owner_address !== "0x0000000000000000000000000000000000000000"
-      ) {
-        const response_owned = await backend.get(
-          `/v1/owned?address=${token.owner_address}`
-        );
-        if (response_owned.data.data !== same_owner_items) {
-          setOwnedItems(
-            response_owned.data.data.filter(
-              (item) =>
-                !(
-                  item.token_id === token.token_id &&
-                  item.asset_contract.address === token.contract_address
-                )
-            )
-          );
-        }
-      }
-
-      setOwnedRefreshed(true);
-    };
-    if (token.owner_address) {
-      refreshOwned();
-    }
-  }, [same_owner_items, token]);
-  */
-
-  const [columns, setColumns] = useState(2);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     if (context.windowSize && context.windowSize.width < 800) {
-      setColumns(1);
       setIsMobile(true);
     } else if (context.windowSize && context.windowSize.width < 1400) {
-      setColumns(2);
       setIsMobile(false);
     } else if (context.windowSize && context.windowSize.width < 1800) {
-      setColumns(3);
       setIsMobile(false);
     } else {
-      setColumns(4);
       setIsMobile(false);
     }
   }, [context.windowSize]);
