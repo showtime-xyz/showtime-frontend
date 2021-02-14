@@ -9,12 +9,12 @@ export default async (req, res) => {
       Iron.defaults
     );
 
-    await fetch(`${process.env.BACKEND_URL}/v1/editname`, {
+    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/editname`, {
       method: "POST",
       headers: {
-        UserAddress: user.publicAddress,
-        "Content-Type": "application/json",
+        "X-Authenticated-User": user.publicAddress,
         "X-API-Key": process.env.SHOWTIME_FRONTEND_API_KEY,
+        "Content-Type": "application/json",
       },
       body: req.body,
     });

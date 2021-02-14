@@ -69,7 +69,7 @@ const Header = () => {
         className="p-4 bg-white md:px-16"
         style={{ boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)" }}
       >
-        <div class="flex flex-row items-center ">
+        <div className="flex flex-row items-center ">
           <div>
             <Link href="/">
               <a

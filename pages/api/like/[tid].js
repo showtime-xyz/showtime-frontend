@@ -11,10 +11,10 @@ export default async (req, res) => {
       Iron.defaults
     );
 
-    await fetch(`${process.env.BACKEND_URL}/v2/like/${tid}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v2/like/${tid}`, {
       method: "POST",
       headers: {
-        UserAddress: user.publicAddress,
+        "X-Authenticated-User": user.publicAddress,
         "X-API-Key": process.env.SHOWTIME_FRONTEND_API_KEY,
       },
     });
