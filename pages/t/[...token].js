@@ -262,8 +262,11 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
                 className="flex flex-row items-center"
               >
                 <FontAwesomeIcon
-                  style={isHovering ? { opacity: 1 } : { opacity: 0.7 }}
-                  height={22}
+                  style={
+                    isHovering
+                      ? { opacity: 1, height: 22 }
+                      : { opacity: 0.7, height: 22 }
+                  }
                   icon={faExpand}
                 />
                 <div

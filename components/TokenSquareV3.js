@@ -227,8 +227,8 @@ class TokenSquareV3 extends React.Component {
                 </Link>
                 {this.props.item.token_has_video ? (
                   <FontAwesomeIcon
-                    className="ml-1 mb-1 inline"
-                    height={12}
+                    className="ml-1 inline"
+                    style={{ height: 12, marginBottom: 2 }}
                     icon={faVideo}
                   />
                 ) : null}
@@ -336,7 +336,10 @@ class TokenSquareV3 extends React.Component {
               >
                 <div className="mr-1">Bid</div>
                 <div className="mb-1">
-                  <FontAwesomeIcon height={12} icon={faExternalLinkAlt} />
+                  <FontAwesomeIcon
+                    style={{ height: 12 }}
+                    icon={faExternalLinkAlt}
+                  />
                 </div>
               </a>
             </div>

@@ -42,7 +42,7 @@ const LikeButton = ({
       >
         <div className="mr-2">
           <FontAwesomeIcon
-            height={18}
+            style={{ height: 18 }}
             icon={isLiked ? faHeartSolid : faHeartOutline}
           />
         </div>
