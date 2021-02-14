@@ -261,14 +261,16 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
                 onMouseOut={() => setIsHovering(false)}
                 className="flex flex-row items-center"
               >
-                <FontAwesomeIcon
-                  style={
-                    isHovering
-                      ? { opacity: 1, height: 22 }
-                      : { opacity: 0.7, height: 22 }
-                  }
-                  icon={faExpand}
-                />
+                <div className="flex">
+                  <FontAwesomeIcon
+                    style={
+                      isHovering
+                        ? { opacity: 1, height: 22 }
+                        : { opacity: 0.7, height: 22 }
+                    }
+                    icon={faExpand}
+                  />
+                </div>
                 <div
                   className="flex ml-2"
                   style={

@@ -335,7 +335,7 @@ class TokenSquareV3 extends React.Component {
                 className="flex flex-row items-center showtime-card-bid"
               >
                 <div className="mr-1">Bid</div>
-                <div className="mb-1">
+                <div className="mb-1 flex">
                   <FontAwesomeIcon
                     style={{ height: 12 }}
                     icon={faExternalLinkAlt}
