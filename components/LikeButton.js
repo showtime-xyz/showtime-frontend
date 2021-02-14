@@ -35,20 +35,23 @@ const LikeButton = ({
             : handleLoggedOutLike()
         }
         className={
-          isLiked
-            ? "showtime-like-button-pink text-sm px-3 py-1 flex flex-row items-center"
-            : "showtime-like-button-white text-sm px-3 py-1 flex flex-row items-center"
+          isLiked ? "showtime-like-button-pink" : "showtime-like-button-white"
         }
       >
-        <div className="mr-2">
-          <FontAwesomeIcon
-            style={{ height: 18 }}
-            icon={isLiked ? faHeartSolid : faHeartOutline}
-          />
+        <div className="flex flex-row items-center text-sm px-3 py-1">
+          <div className="flex">
+            <FontAwesomeIcon
+              style={{
+                height: 18,
+                width: 18,
+              }}
+              icon={isLiked ? faHeartSolid : faHeartOutline}
+            />
+          </div>
+          <div className="ml-2" style={{ whiteSpace: "nowrap" }}>
+            {likeCount} like{likeCount === 1 ? null : "s"}{" "}
+          </div>
         </div>
-        <span style={{ whiteSpace: "nowrap" }}>
-          {likeCount} like{likeCount === 1 ? null : "s"}{" "}
-        </span>
       </button>
       {context.user ? null : showTooltip ? (
         <span

@@ -163,7 +163,9 @@ export default function Home() {
           <Link href="/c/[collection]" as="/c/superrare">
             <a className="showtime-purple-button-icon flex flex-row items-center">
               <div className="mr-2">Explore more</div>
-              <FontAwesomeIcon style={{ height: 18 }} icon={faArrowRight} />
+              <div className="flex">
+                <FontAwesomeIcon style={{ height: 18 }} icon={faArrowRight} />
+              </div>
             </a>
           </Link>
         </div>
