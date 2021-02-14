@@ -82,14 +82,14 @@ const Header = () => {
                   src="/logo_sm.jpg"
                   style={{ height: 44, width: 44, borderRadius: 5 }}
                 />
-                <div className="mx-2" style={{ fontWeight: 700 }}>
+                <div className="mx-2" style={{ fontWeight: 600 }}>
                   Showtime
                 </div>
               </a>
             </Link>
           </div>
           {/* Start desktop-only menu */}
-          <div className="hidden md:block ml-8">
+          <div className="hidden md:block ml-8" style={{ fontWeight: 400 }}>
             <Link href="/">
               <a
                 className="showtime-header-link mr-5 text-sm md:text-base"

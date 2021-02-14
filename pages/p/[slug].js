@@ -368,7 +368,10 @@ const Profile = ({
         <div className="flex-grow flex flex-row items-center">
           <div className="flex flex-col">
             <div className="flex flex-row items-center">
-              <div className="text-3xl md:text-5xl showtime-title ml-4 md:ml-0 mt-2 md:mt-0">
+              <div
+                className="text-3xl md:text-5xl showtime-title ml-4 md:ml-0 mt-2 md:mt-0"
+                style={{ fontWeight: 600 }}
+              >
                 {isMyProfile
                   ? context.myProfile
                     ? context.myProfile.name
@@ -556,7 +559,10 @@ const Profile = ({
       </div>
       <div
         className="bg-white px-4 md:px-16 py-6 text-sm"
-        style={{ boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 2%)" }}
+        style={{
+          boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 2%)",
+          fontWeight: 400,
+        }}
       >
         <div className="mb-4">
           {followers && followers.length > 0 ? (

@@ -290,7 +290,7 @@ class TokenSquareV3 extends React.Component {
               className="flex-shrink pr-2"
               style={{
                 fontWeight: 400,
-                fontSize: 12,
+                fontSize: 14,
                 color: "#888",
               }}
             >
@@ -328,14 +328,14 @@ class TokenSquareV3 extends React.Component {
               ) : null}
             </div>
             <div className="flex-grow"></div>
-            <div style={{ fontSize: 12, fontWeight: 400 }}>
+            <div style={{ fontSize: 14, fontWeight: 400 }}>
               <a
                 href={`https://opensea.io/assets/${this.props.item.contract_address}/${this.props.item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
                 target="_blank"
                 className="flex flex-row items-center showtime-card-bid"
               >
                 <div className="mr-1">Bid</div>
-                <div className="mb-1 flex">
+                <div className="mb-0 flex">
                   <FontAwesomeIcon
                     style={{ height: 12 }}
                     icon={faExternalLinkAlt}
