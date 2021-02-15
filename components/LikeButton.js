@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useRouter } from "next/router";
+//import { useRouter } from "next/router";
 import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,11 +17,12 @@ const LikeButton = ({
 }) => {
   const context = useContext(AppContext);
 
-  const router = useRouter();
+  //const router = useRouter();
 
   const handleLoggedOutLike = () => {
     mixpanel.track("Liked but logged out");
-    router.push("/login");
+    //router.push("/login");
+    context.setLoginModalOpen(true);
   };
 
   return (
@@ -58,7 +59,7 @@ const LikeButton = ({
           style={{ fontSize: 12, opacity: 0.9, width: 90 }}
           className="tooltip-text bg-black p-3 -mt-6 -ml-24 rounded text-white"
         >
-          Log in to like
+          Sign in to like
         </span>
       ) : null}
     </div>

@@ -422,7 +422,7 @@ a {
   text-align: center;
   padding: 2px 6px;
   position: absolute;
-  z-index: 100;
+  z-index: 1;
 }
 .tooltip:hover .tooltip-text {
   visibility: visible;
@@ -731,4 +731,8 @@ a {
   100% {
     opacity: 0;
   }
+}
+
+.backdrop {
+  z-index: 2;
 }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import ClientOnlyPortal from "./ClientOnlyPortal";
 //import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
+import CloseButton from "./CloseButton";
 
 export default function Modal({ isOpen, setReportModalOpen, tid }) {
   //const context = useContext(AppContext);
@@ -46,7 +47,13 @@ export default function Modal({ isOpen, setReportModalOpen, tid }) {
               onClick={(e) => e.stopPropagation()}
             >
               <form onSubmit={handleSubmit}>
-                <div className="text-3xl border-b-2 pb-2">Report item</div>
+                <CloseButton setEditModalOpen={setReportModalOpen} />
+                <div
+                  className="text-3xl border-b-2 pb-2"
+                  style={{ fontWeight: 600 }}
+                >
+                  Report item
+                </div>
                 {confirmationShowing ? (
                   <div className="my-8">
                     We received your report. Thank you!
