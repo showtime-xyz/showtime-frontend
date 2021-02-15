@@ -21,6 +21,7 @@ export default class MyApp extends React.Component {
     myLikes: null,
     myFollows: null,
     myProfile: undefined,
+    loginModalOpen: false,
   };
 
   componentDidMount() {
@@ -97,6 +98,10 @@ export default class MyApp extends React.Component {
     this.setState({ myProfile });
   }
 
+  setLoginModalOpen(loginModalOpen) {
+    this.setState({ loginModalOpen });
+  }
+
   render() {
     const { Component, pageProps } = this.props;
 
@@ -110,6 +115,7 @@ export default class MyApp extends React.Component {
       myLikes: this.state.myLikes,
       myFollows: this.state.myFollows,
       myProfile: this.state.myProfile,
+      loginModalOpen: this.state.loginModalOpen,
       setWeb3Modal: (web3Modal) => this.setWeb3Modal(web3Modal),
       setWeb3Provider: (web3Provider) => this.setWeb3Provider(web3Provider),
       setAddress: (address) => this.setAddress(address),
@@ -118,6 +124,8 @@ export default class MyApp extends React.Component {
       setMyLikes: (myLikes) => this.setMyLikes(myLikes),
       setMyFollows: (myFollows) => this.setMyFollows(myFollows),
       setMyProfile: (myProfile) => this.setMyProfile(myProfile),
+      setLoginModalOpen: (loginModalOpen) =>
+        this.setLoginModalOpen(loginModalOpen),
     };
 
     return (

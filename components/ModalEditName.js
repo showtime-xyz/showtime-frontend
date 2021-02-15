@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import mixpanel from "mixpanel-browser";
 import ClientOnlyPortal from "./ClientOnlyPortal";
 import AppContext from "../context/app-context";
+import CloseButton from "./CloseButton";
 
 export default function Modal({ isOpen, setEditModalOpen }) {
   const context = useContext(AppContext);
@@ -44,7 +45,13 @@ export default function Modal({ isOpen, setEditModalOpen }) {
               onClick={(e) => e.stopPropagation()}
             >
               <form onSubmit={handleSubmit}>
-                <div className="text-3xl border-b-2 pb-2">Edit name</div>
+                <CloseButton setEditModalOpen={setEditModalOpen} />
+                <div
+                  className="text-3xl border-b-2 pb-2"
+                  style={{ fontWeight: 600 }}
+                >
+                  Edit name
+                </div>
                 <div className="my-8">
                   <input
                     name="name"

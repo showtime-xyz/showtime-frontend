@@ -9,7 +9,7 @@ import backend from "../../lib/backend";
 import AppContext from "../../context/app-context";
 import ShareButton from "../../components/ShareButton";
 import FollowGrid from "../../components/FollowGrid";
-import { useRouter } from "next/router";
+//import { useRouter } from "next/router";
 import ModalEditName from "../../components/ModalEditName";
 import ModalEditPhoto from "../../components/ModalEditPhoto";
 
@@ -63,7 +63,7 @@ const Profile = ({
   followers_list,
   following_list,
 }) => {
-  const router = useRouter();
+  //const router = useRouter();
   const context = useContext(AppContext);
 
   const web3Modal = context?.web3Modal;
@@ -153,7 +153,11 @@ const Profile = ({
         mixpanel.track("Profile view", { slug: slug });
       }
     }
-  }, [owned_items, typeof context.user]);
+  }, [
+    owned_items,
+    typeof context.user,
+    context.user ? context.user.publicAddress : null,
+  ]);
 
   const logout = async () => {
     const authRequest = await fetch("/api/logout", {
@@ -194,7 +198,8 @@ const Profile = ({
 
   const handleLoggedOutFollow = () => {
     mixpanel.track("Follow but logged out");
-    router.push("/login");
+    //router.push("/login");
+    context.setLoginModalOpen(true);
   };
 
   const handleFollow = async () => {
@@ -365,9 +370,10 @@ const Profile = ({
             }
           />
         </div>
-        <div className="flex-grow flex flex-row items-center">
-          <div className="flex flex-col">
-            <div className="flex flex-row items-center">
+        <div className="flex-grow flex flex-row items-center ">
+          <div className="flex flex-col ">
+            <div className="flex flex-row items-center text-center">
+              <div className="flex-grow sm:hidden"></div>
               <div
                 className="text-3xl md:text-5xl showtime-title ml-4 md:ml-0 mt-2 md:mt-0"
                 style={{ fontWeight: 600 }}
@@ -407,7 +413,7 @@ const Profile = ({
                       style={{ fontSize: 12, opacity: 0.9, width: 110 }}
                       className="tooltip-text bg-black p-3 -mt-7 -ml-24 rounded text-white"
                     >
-                      Log in to follow
+                      Sign in to follow
                     </span>
                   )}
                 </div>
@@ -420,6 +426,7 @@ const Profile = ({
                   type={"profile"}
                 />
               </div>
+              <div className="flex-grow"></div>
             </div>
             <div
               style={{
@@ -497,7 +504,7 @@ const Profile = ({
                       style={{ fontSize: 12, opacity: 0.9, width: 110 }}
                       className="tooltip-text bg-black p-3 -mt-7 -ml-24 rounded text-white"
                     >
-                      Log in to follow
+                      Sign in to follow
                     </span>
                   )}
                 </div>

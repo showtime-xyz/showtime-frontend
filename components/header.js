@@ -1,8 +1,9 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import mixpanel from "mixpanel-browser";
 import useWindowSize from "../hooks/useWindowSize";
 import AppContext from "../context/app-context";
+import ModalLogin from "./ModalLogin";
 
 const Header = () => {
   const context = useContext(AppContext);
@@ -65,6 +66,14 @@ const Header = () => {
 
   return (
     <>
+      {typeof document !== "undefined" ? (
+        <>
+          <ModalLogin
+            isOpen={context.loginModalOpen}
+            setEditModalOpen={context.setLoginModalOpen}
+          />
+        </>
+      ) : null}
       <header
         className="p-4 bg-white md:px-16"
         style={{ boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)" }}
@@ -145,7 +154,7 @@ const Header = () => {
                         style={{ height: 24, width: 24 }}
                       />
                     </div>
-                    <div className="hidden sm:block">
+                    <div className="">
                       {context.myProfile
                         ? context.myProfile.name
                           ? context.myProfile.name
@@ -153,17 +162,29 @@ const Header = () => {
                         : "Profile"}
                     </div>
                   </>
-                  <div className="block sm:hidden">Profile</div>
                 </a>
               </Link>
             ) : (
-              <Link href="/login">
-                <a className="showtime-login-button-solid text-sm px-3 py-2 md:text-base  md:px-3 md:py-2">
+              <>
+                {/*<Link href="/login">
+                  <a className="showtime-login-button-solid text-sm px-3 py-2 md:text-base  md:px-3 md:py-2">
+                    {context.windowSize && context.windowSize.width > 500
+                      ? "Sign in / Sign up"
+                      : "Sign in"}
+                  </a>
+                    </Link>*/}
+                <a
+                  className="showtime-login-button-solid text-sm px-3 py-2 md:text-base  md:px-3 md:py-2"
+                  onClick={() => {
+                    context.setLoginModalOpen(!context.loginModalOpen);
+                  }}
+                  style={{ cursor: "pointer" }}
+                >
                   {context.windowSize && context.windowSize.width > 500
                     ? "Sign in / Sign up"
                     : "Sign in"}
                 </a>
-              </Link>
+              </>
             )}
           </div>
         </div>
