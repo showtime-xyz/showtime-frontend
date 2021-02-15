@@ -82,7 +82,7 @@ export default function Home() {
         className="showtime-title text-center mx-auto text-2xl md:text-5xl md:leading-snug mb-5 mt-5 py-10"
         style={{ maxWidth: 700 }}
       >
-        Discover and showcase your favorite digital art
+        Discover and showcase your favorite digital art.
       </h1>
 
       {gridWidth > 0 ? (
@@ -91,7 +91,7 @@ export default function Home() {
           style={{ width: gridWidth }}
         >
           <div className="mr-1 text-sm sm:text-base uppercase mb-2">
-            Trending
+            T r e n d i n g
           </div>
           {context.windowSize ? (
             context.windowSize.width < 375 ? (
@@ -111,6 +111,7 @@ export default function Home() {
               borderBottomRightRadius: 0,
               borderTopRightRadius: 0,
               borderRightWidth: 1,
+              fontWeight: 400,
             }}
             onClick={() => {
               setFeaturedDays(1);
@@ -124,7 +125,12 @@ export default function Home() {
                 ? "showtime-like-button-pink px-3 py-1"
                 : "showtime-like-button-white px-3 py-1"
             }
-            style={{ borderRadius: 0, borderLeftWidth: 1, borderRightWidth: 1 }}
+            style={{
+              borderRadius: 0,
+              borderLeftWidth: 1,
+              borderRightWidth: 1,
+              fontWeight: 400,
+            }}
             onClick={() => {
               setFeaturedDays(7);
             }}
@@ -141,6 +147,7 @@ export default function Home() {
               borderTopLeftRadius: 0,
               borderBottomLeftRadius: 0,
               borderLeftWidth: 1,
+              fontWeight: 400,
             }}
             onClick={() => {
               setFeaturedDays(30);

@@ -252,7 +252,9 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
                 <span style={{ fontWeight: 400 }}>{"Created by "}</span>
 
                 <Link href="/p/[slug]" as={`/p/${item.creator_address}`}>
-                  <a className="showtime-link">{item.creator_name}</a>
+                  <a className="showtime-link" style={{ fontWeight: 600 }}>
+                    {item.creator_name}
+                  </a>
                 </Link>
               </>
             ) : (

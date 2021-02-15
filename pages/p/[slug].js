@@ -649,6 +649,7 @@ const Profile = ({
               borderBottomRightRadius: 0,
               borderTopRightRadius: 0,
               borderRightWidth: 1,
+              fontWeight: 400,
             }}
             onClick={() => {
               setSelectedGrid("created");
@@ -662,7 +663,12 @@ const Profile = ({
                 ? "showtime-like-button-pink px-4 py-1"
                 : "showtime-like-button-white px-4 py-1"
             }
-            style={{ borderRadius: 0, borderLeftWidth: 1, borderRightWidth: 1 }}
+            style={{
+              borderRadius: 0,
+              borderLeftWidth: 1,
+              borderRightWidth: 1,
+              fontWeight: 400,
+            }}
             onClick={() => {
               setSelectedGrid("owned");
             }}
@@ -679,6 +685,7 @@ const Profile = ({
               borderTopLeftRadius: 0,
               borderBottomLeftRadius: 0,
               borderLeftWidth: 1,
+              fontWeight: 400,
             }}
             onClick={() => {
               setSelectedGrid("liked");
