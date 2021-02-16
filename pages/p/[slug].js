@@ -95,7 +95,9 @@ const Profile = ({
   useEffect(() => {
     setLikedItems(
       liked_items.filter(
-        (item) => item.token_hidden !== 1 && item.token_img_url
+        (item) =>
+          item.token_hidden !== 1 &&
+          (item.token_img_url || item.token_animation_url)
       )
     );
     //setLikedRefreshed(false);
@@ -107,7 +109,9 @@ const Profile = ({
   useEffect(() => {
     setCreatedItems(
       created_items.filter(
-        (item) => item.token_hidden !== 1 && item.token_img_url
+        (item) =>
+          item.token_hidden !== 1 &&
+          (item.token_img_url || item.token_animation_url)
       )
     );
     //setCreatedRefreshed(false);
@@ -119,7 +123,9 @@ const Profile = ({
   useEffect(() => {
     setOwnedItems(
       owned_items.filter(
-        (item) => item.token_hidden !== 1 && item.token_img_url
+        (item) =>
+          item.token_hidden !== 1 &&
+          (item.token_img_url || item.token_animation_url)
       )
     );
     //setOwnedRefreshed(false);

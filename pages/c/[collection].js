@@ -340,7 +340,7 @@ export default function Collection({
         {isChanging ? (
           "Loading..."
         ) : (
-          <div class="text-left">
+          <div className="text-left">
             <TokenGridV4 items={collectionItems} />
           </div>
         )}

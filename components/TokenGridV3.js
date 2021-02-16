@@ -14,7 +14,11 @@ const TokenGridV3 = ({ items, isDetail }) => {
 
   useEffect(() => {
     setItemsList(
-      items.filter((item) => item.token_hidden !== true && item.token_img_url)
+      items.filter(
+        (item) =>
+          item.token_hidden !== true &&
+          (item.token_img_url || item.token_animation_url)
+      )
     );
   }, [items]);
 
