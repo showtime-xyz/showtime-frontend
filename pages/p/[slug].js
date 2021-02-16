@@ -17,7 +17,7 @@ export async function getServerSideProps(context) {
   const { slug } = context.query;
 
   // Get profile metadata
-  const response_profile = await backend.get(`/v2/profile/${slug}?limit=200`);
+  const response_profile = await backend.get(`/v2/profile/${slug}?limit=180`);
   const data_profile = response_profile.data.data;
 
   const name = data_profile.profile.name;

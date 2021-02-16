@@ -97,7 +97,7 @@ export default function Collection({
     const getCollectionItems = async (collection_name) => {
       setIsChanging(true);
       const response_collection_items = await backend.get(
-        `/v2/collection?limit=200&order_by=${sortBy}&collection=${collection_name}`
+        `/v2/collection?limit=180&order_by=${sortBy}&collection=${collection_name}`
       );
 
       mixpanel.track("Explore page view", {
@@ -108,7 +108,7 @@ export default function Collection({
       if (sortBy == "random" && collection_name == "all") {
         // Resetting the cache for random items - for next load
         backend.get(
-          `/v2/collection?limit=200&recache=1&order_by=${sortBy}&collection=${collection_name}`
+          `/v2/collection?limit=180&recache=1&order_by=${sortBy}&collection=${collection_name}`
         );
       }
 

@@ -32,7 +32,7 @@ export default function Home() {
   useEffect(() => {
     const getFeatured = async () => {
       const response_featured = await backend.get(
-        `/v2/featured?limit=200&days=${featuredDays}`
+        `/v2/featured?limit=180&days=${featuredDays}`
       );
       const data_featured = response_featured.data.data;
       setFeaturedItems(data_featured);
