@@ -3,7 +3,8 @@ import _ from "lodash";
 import mixpanel from "mixpanel-browser";
 import InfiniteScroll from "react-infinite-scroll-component";
 import AppContext from "../context/app-context";
-import TokenSquareV3 from "./TokenSquareV3";
+import TokenCard from "./TokenCard";
+import useKeyPress from "../hooks/useKeyPress";
 
 const TokenGridV4 = ({ items, isDetail, onFinish }) => {
   const context = useContext(AppContext);
@@ -15,6 +16,38 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
   const [hasMore, setHasMore] = useState(true);
   const [isMobile, setIsMobile] = useState(null);
   const [currentlyPlayingVideo, setCurrentlyPlayingVideo] = useState(null);
+  const [currentlyOpenModal, setCurrentlyOpenModal] = useState(null);
+
+  const leftPress = useKeyPress("ArrowLeft");
+  const rightPress = useKeyPress("ArrowRight");
+  const escPress = useKeyPress("Escape");
+
+  useEffect(() => {
+    if (escPress) {
+      setCurrentlyOpenModal(null);
+      setCurrentlyPlayingVideo(null);
+    }
+  }, [escPress]);
+
+  useEffect(() => {
+    if (rightPress && currentlyOpenModal) {
+      const flattened = itemsLikedList.map((item) => item.tid);
+      const currentIndex = flattened.indexOf(currentlyOpenModal);
+      if (currentIndex + 1 <= flattened.length) {
+        setCurrentlyOpenModal(itemsLikedList[currentIndex + 1].tid);
+      }
+    }
+  }, [rightPress, itemsLikedList]);
+
+  useEffect(() => {
+    if (leftPress && currentlyOpenModal) {
+      const flattened = itemsLikedList.map((item) => item.tid);
+      const currentIndex = flattened.indexOf(currentlyOpenModal);
+      if (currentIndex - 1 >= 0) {
+        setCurrentlyOpenModal(itemsLikedList[currentIndex - 1].tid);
+      }
+    }
+  }, [leftPress, itemsLikedList]);
 
   useEffect(() => {
     setItemsList(
@@ -122,34 +155,38 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
   }, [context.windowSize]);
 
   return (
-    <InfiniteScroll
-      dataLength={itemsShowing}
-      next={fetchMoreData}
-      hasMore={hasMore}
-      /*loader={
+    <>
+      <InfiniteScroll
+        dataLength={itemsShowing}
+        next={fetchMoreData}
+        hasMore={hasMore}
+        /*loader={
         <div>
           <h4 className="w-full text-center">Loading more...</h4>
         </div>
       }*/
-    >
-      <div
-        className={`grid grid-cols-${columns} mx-auto`}
-        style={columns === 1 ? null : { width: columns * (375 + 20) }}
       >
-        {itemsLikedList.slice(0, itemsShowing).map((item) => (
-          <TokenSquareV3
-            key={item.tid}
-            item={item}
-            handleLike={handleLike}
-            handleUnlike={handleUnlike}
-            columns={columns}
-            isMobile={isMobile}
-            currentlyPlayingVideo={currentlyPlayingVideo}
-            setCurrentlyPlayingVideo={setCurrentlyPlayingVideo}
-          />
-        ))}
-      </div>
-    </InfiniteScroll>
+        <div
+          className={`grid grid-cols-${columns} mx-auto`}
+          style={columns === 1 ? null : { width: columns * (375 + 20) }}
+        >
+          {itemsLikedList.slice(0, itemsShowing).map((item) => (
+            <TokenCard
+              key={item.tid}
+              item={item}
+              handleLike={handleLike}
+              handleUnlike={handleUnlike}
+              columns={columns}
+              isMobile={isMobile}
+              currentlyPlayingVideo={currentlyPlayingVideo}
+              setCurrentlyPlayingVideo={setCurrentlyPlayingVideo}
+              currentlyOpenModal={currentlyOpenModal}
+              setCurrentlyOpenModal={setCurrentlyOpenModal}
+            />
+          ))}
+        </div>
+      </InfiniteScroll>
+    </>
   );
 };
 

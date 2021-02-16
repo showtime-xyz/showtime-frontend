@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import _ from "lodash";
 import mixpanel from "mixpanel-browser";
 import AppContext from "../context/app-context";
-import TokenSquareV3 from "./TokenSquareV3";
+import TokenCard from "./TokenCard";
 import TokenHeroV2 from "./TokenHeroV2";
 
 const TokenGridV3 = ({ items, isDetail }) => {
@@ -115,7 +115,7 @@ const TokenGridV3 = ({ items, isDetail }) => {
       >
         {itemsLikedList.map((item) => {
           return (
-            <TokenSquareV3
+            <TokenCard
               key={item.tid}
               item={item}
               handleLike={handleLike}
