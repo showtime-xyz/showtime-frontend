@@ -13,16 +13,25 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
   const [myItemLikes, setMyItemLikes] = useState([]);
   const [itemsShowing, setItemsShowing] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const [isMobile, setIsMobile] = useState(null);
+  const [currentlyPlayingVideo, setCurrentlyPlayingVideo] = useState(null);
 
   useEffect(() => {
     setItemsList(
       items.filter(
-        (item) => (item.token_hidden !== 1 || isDetail) && item.token_img_url
+        (item) =>
+          (item.token_hidden !== 1 || isDetail) &&
+          (item.token_img_url || item.token_animation_url)
       )
     );
-    setItemsShowing(8);
+    if (isMobile) {
+      setItemsShowing(4);
+    } else {
+      setItemsShowing(8);
+    }
+
     setHasMore(true);
-  }, [items]);
+  }, [items, isMobile]);
 
   useEffect(() => {
     setMyItemLikes(context.myLikes ? context.myLikes : []);
@@ -95,7 +104,6 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
   }, [itemsList, myItemLikes]);
 
   const [columns, setColumns] = useState(null);
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     if (context.windowSize && context.windowSize.width < 820) {
@@ -136,6 +144,8 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
             handleUnlike={handleUnlike}
             columns={columns}
             isMobile={isMobile}
+            currentlyPlayingVideo={currentlyPlayingVideo}
+            setCurrentlyPlayingVideo={setCurrentlyPlayingVideo}
           />
         ))}
       </div>

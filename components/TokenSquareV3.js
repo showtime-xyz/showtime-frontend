@@ -2,9 +2,14 @@ import React from "react";
 import Link from "next/link";
 import _ from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExternalLinkAlt, faVideo } from "@fortawesome/free-solid-svg-icons";
+import {
+  faExternalLinkAlt,
+  faVideo,
+  faPlay,
+} from "@fortawesome/free-solid-svg-icons";
 import LikeButton from "../components/LikeButton";
 import ShareButton from "../components/ShareButton";
+import ReactPlayer from "react-player";
 
 class TokenSquareV3 extends React.Component {
   constructor(props) {
@@ -13,6 +18,8 @@ class TokenSquareV3 extends React.Component {
       spans: 0,
       moreShown: false,
       imageLoaded: false,
+      showVideo: false,
+      muted: true,
     };
     this.handleMoreShown = this.handleMoreShown.bind(this);
     this.divRef = React.createRef();
@@ -22,11 +29,19 @@ class TokenSquareV3 extends React.Component {
 
   componentDidMount() {
     this.setSpans();
-    this.imageRef.current.addEventListener("load", this.setSpans);
+    if (this.props.item.token_has_video && !this.props.item.token_img_url) {
+      this.setState({ showVideo: true });
+    } else {
+      this.imageRef.current.addEventListener("load", this.setSpans);
+    }
   }
 
   componentWillUnmount() {
-    this.imageRef.current.removeEventListener("load", this.setSpans);
+    if (this.props.item.token_has_video && !this.props.item.token_img_url) {
+    } else if (this.state.showVideo === true) {
+    } else {
+      this.imageRef.current.removeEventListener("load", this.setSpans);
+    }
   }
 
   setSpans = () => {
@@ -56,7 +71,6 @@ class TokenSquareV3 extends React.Component {
 
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
       img_url = img_url.split("=")[0] + "=s375";
-      console.log(img_url);
     }
     return img_url;
   };
@@ -135,45 +149,94 @@ class TokenSquareV3 extends React.Component {
             </div>
             <div>&nbsp;</div>
           </div>
-          <Link
-            href="/t/[...token]"
-            as={`/t/${this.props.item.contract_address}/${this.props.item.token_id}`}
-          >
-            <a>
-              {!this.state.imageLoaded ? (
-                <div className="w-full text-center">
+          {(this.props.item.token_has_video &&
+            this.state.showVideo &&
+            this.props.currentlyPlayingVideo === this.props.item.tid) ||
+          (this.props.item.token_has_video &&
+            !this.props.item.token_img_url) ? (
+            <ReactPlayer
+              url={this.props.item.token_animation_url}
+              playing={
+                this.props.currentlyPlayingVideo === this.props.item.tid ||
+                (this.props.item.token_has_video &&
+                  !this.props.item.token_img_url)
+              }
+              loop
+              controls
+              muted={this.state.muted}
+              width={this.props.columns === 1 ? window.innerWidth : 375}
+              height={
+                this.imageRef.current ? this.imageRef.current.height : null
+              }
+            />
+          ) : (
+            <div style={{ position: "relative" }}>
+              <Link
+                href="/t/[...token]"
+                as={`/t/${this.props.item.contract_address}/${this.props.item.token_id}`}
+              >
+                <a>
+                  {!this.state.imageLoaded ? (
+                    <div className="w-full text-center">
+                      <div
+                        className="lds-grid"
+                        style={{ marginTop: 148, marginBottom: 148 }}
+                      >
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
+                    </div>
+                  ) : null}
                   <div
-                    className="lds-grid"
-                    style={{ marginTop: 148, marginBottom: 148 }}
+                    style={{
+                      backgroundColor: this.getBackgroundColor(this.props.item),
+                    }}
                   >
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
+                    <img
+                      className="w-full object-cover object-center "
+                      ref={this.imageRef}
+                      src={this.getImageUrl()}
+                      alt={this.props.item.token_name}
+                      onLoad={() => this.setState({ imageLoaded: true })}
+                      style={!this.state.imageLoaded ? { display: "none" } : {}}
+                    />
                   </div>
+                </a>
+              </Link>
+              {this.props.item.token_has_video ? (
+                <div
+                  className="p-4 playbutton"
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    right: 0,
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    this.setState({ showVideo: true, muted: false });
+                    this.props.setCurrentlyPlayingVideo(this.props.item.tid);
+                  }}
+                >
+                  <FontAwesomeIcon
+                    style={{
+                      height: 20,
+                      width: 20,
+                      color: "white",
+                      filter: "drop-shadow(0px 0px 10px grey)",
+                    }}
+                    icon={faPlay}
+                  />
                 </div>
               ) : null}
-              <div
-                style={{
-                  backgroundColor: this.getBackgroundColor(this.props.item),
-                }}
-              >
-                <img
-                  className="w-full object-cover object-center "
-                  ref={this.imageRef}
-                  src={this.getImageUrl()}
-                  alt={this.props.item.token_name}
-                  onLoad={() => this.setState({ imageLoaded: true })}
-                  style={!this.state.imageLoaded ? { display: "none" } : {}}
-                />
-              </div>
-            </a>
-          </Link>
+            </div>
+          )}
 
           <div className="p-4">
             <div>
