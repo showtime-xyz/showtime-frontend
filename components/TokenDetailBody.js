@@ -14,14 +14,14 @@ const TokenDetailBody = ({
   showTooltip,
   setEditModalOpen,
 }) => {
-  const getBackgroundColor = (item) => {
+  const getBackgroundColor = () => {
     if (
       item.token_background_color &&
       item.token_background_color.length === 6
     ) {
       return `#${item.token_background_color}`;
     } else {
-      return null;
+      return "black";
     }
   };
   const getImageUrl = () => {
@@ -64,7 +64,7 @@ const TokenDetailBody = ({
       modalRef.current.clientWidth * (2 / 3)
     ) {
       mediaWidth = aspectRatio * targetRef.current.clientHeight;
-      setMediaHeight(targetRef.current.clientHeight - 1);
+      setMediaHeight(targetRef.current.clientHeight);
       setMediaWidth(mediaWidth);
     } else {
       mediaWidth = modalRef.current.clientWidth * (2 / 3);
@@ -99,7 +99,7 @@ const TokenDetailBody = ({
                 }
               : {
                   flexShrink: 0,
-                  backgroundColor: "black",
+                  backgroundColor: getBackgroundColor(),
                   borderBottomLeftRadius: 7,
                   borderTopLeftRadius: 7,
                 }
@@ -129,7 +129,7 @@ const TokenDetailBody = ({
                 style={
                   setEditModalOpen &&
                   targetRef.current &&
-                  mediaHeight === targetRef.current.clientHeight - 1
+                  mediaHeight === targetRef.current.clientHeight
                     ? {
                         width: mediaWidth,
                         height: mediaHeight,
