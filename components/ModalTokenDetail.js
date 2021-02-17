@@ -37,6 +37,7 @@ export default function Modal({
                 handleUnlike={handleUnlike}
                 showTooltip={showTooltip}
                 className="w-full"
+                setEditModalOpen={setEditModalOpen}
                 //originalImageDimensions={originalImageDimensions}
               />
             </div>
@@ -59,7 +60,7 @@ export default function Modal({
                 right: 8%;
                 left: 8%;
                 bottom: 5%;
-                padding: 1em;
+
                 border-radius: 7px;
                 //max-width: 400px;
                 margin-left: auto;

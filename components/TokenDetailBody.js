@@ -12,6 +12,7 @@ const TokenDetailBody = ({
   handleLike,
   handleUnlike,
   showTooltip,
+  setEditModalOpen,
 }) => {
   const getBackgroundColor = (item) => {
     if (
@@ -39,9 +40,11 @@ const TokenDetailBody = ({
   const modalRef = useRef();
   const [mediaHeight, setMediaHeight] = useState(0);
   const [mediaWidth, setMediaWidth] = useState(0);
+  const [metadataWidth, setMetadataWidth] = useState(0);
 
   useEffect(() => {
     var aspectRatio = 1;
+    var hasImageDimensions = false;
 
     // Try to use current image's aspect ratio
     if (item.imageRef.current) {
@@ -49,20 +52,28 @@ const TokenDetailBody = ({
         aspectRatio =
           item.imageRef.current.clientWidth /
           item.imageRef.current.clientHeight;
+
+        hasImageDimensions = true;
       }
     }
 
     // Set full height
+    var mediaWidth = 0;
     if (
       aspectRatio * targetRef.current.clientHeight <
       modalRef.current.clientWidth * (2 / 3)
     ) {
-      setMediaHeight(targetRef.current.clientHeight);
-      setMediaWidth(aspectRatio * targetRef.current.clientHeight);
+      mediaWidth = aspectRatio * targetRef.current.clientHeight;
+      setMediaHeight(targetRef.current.clientHeight - 1);
+      setMediaWidth(mediaWidth);
     } else {
-      setMediaWidth(modalRef.current.clientWidth * (2 / 3));
+      mediaWidth = modalRef.current.clientWidth * (2 / 3);
+      setMediaWidth(mediaWidth);
       setMediaHeight((modalRef.current.clientWidth * (2 / 3)) / aspectRatio);
     }
+
+    const metadata = modalRef.current.clientWidth - mediaWidth;
+    setMetadataWidth(metadata);
   }, [targetRef, item]);
   //console.log(mediaWidth);
 
@@ -77,10 +88,22 @@ const TokenDetailBody = ({
           />
         </>
       ) : null}
-      <div className="flex flex-row h-full" ref={modalRef}>
+      <div className="flex h-full" ref={modalRef}>
         <div
           className="h-full flex items-center"
-          style={{ flexShrink: 0 }}
+          style={
+            item.token_has_video
+              ? {
+                  flexShrink: 0,
+                  backgroundColor: "black",
+                }
+              : {
+                  flexShrink: 0,
+                  backgroundColor: "black",
+                  borderBottomLeftRadius: 7,
+                  borderTopLeftRadius: 7,
+                }
+          }
           ref={targetRef}
         >
           {item.token_has_video ? (
@@ -96,25 +119,43 @@ const TokenDetailBody = ({
           ) : (
             <div
               style={{
-                backgroundColor: "red", // getBackgroundColor(item),
-                margin: "auto",
+                borderBottomLeftRadius: 7,
+                borderTopLeftRadius: 7,
               }}
             >
               <img
                 src={getImageUrl()}
                 alt={item.token_name}
-                style={{
-                  width: mediaWidth,
-                  height: mediaHeight,
-                }}
+                style={
+                  setEditModalOpen &&
+                  targetRef.current &&
+                  mediaHeight === targetRef.current.clientHeight - 1
+                    ? {
+                        width: mediaWidth,
+                        height: mediaHeight,
+                        borderBottomLeftRadius: 7,
+                        borderTopLeftRadius: 7,
+                      }
+                    : {
+                        width: mediaWidth,
+                        height: mediaHeight,
+                      }
+                }
               />
             </div>
           )}
         </div>
-        <div className="pr-4 pl-8 pt-4 w-full">
+        <div
+          className="pr-8 pl-8 pt-4 "
+          style={{ width: metadataWidth, overflow: "auto" }}
+        >
           <div
             className="text-3xl border-b-2 pb-2 text-left mb-4"
-            style={{ fontWeight: 600 }}
+            style={{
+              fontWeight: 600,
+              overflowWrap: "break-word",
+              wordWrap: "break-word",
+            }}
           >
             {item.token_name}
           </div>
@@ -168,7 +209,14 @@ const TokenDetailBody = ({
                 <div className="flex flex-row  mt-1">
                   <div className="flex-shrink">
                     <Link href="/p/[slug]" as={`/p/${item.creator_address}`}>
-                      <a className="flex flex-row items-center showtime-follower-button rounded-full">
+                      <a
+                        className="flex flex-row items-center showtime-follower-button rounded-full"
+                        onClick={() => {
+                          if (setEditModalOpen) {
+                            setEditModalOpen(false);
+                          }
+                        }}
+                      >
                         <div>
                           <img
                             alt={item.creator_name}
@@ -205,7 +253,14 @@ const TokenDetailBody = ({
                 <div className="flex flex-row  mt-1">
                   <div className="flex-shrink">
                     <Link href="/p/[slug]" as={`/p/${item.owner_address}`}>
-                      <a className="flex flex-row items-center showtime-follower-button rounded-full ">
+                      <a
+                        className="flex flex-row items-center showtime-follower-button rounded-full "
+                        onClick={() => {
+                          if (setEditModalOpen) {
+                            setEditModalOpen(false);
+                          }
+                        }}
+                      >
                         <div>
                           <img
                             alt={item.owner_name}
@@ -249,7 +304,7 @@ const TokenDetailBody = ({
             </a>
           </div>
           <div
-            className="text-xs mt-4"
+            className="text-xs mt-4 mb-12"
             style={{
               color: "rgb(136, 136, 136)",
               fontWeight: 400,

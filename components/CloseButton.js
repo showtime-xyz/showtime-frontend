@@ -7,8 +7,8 @@ const CloseButton = ({ setEditModalOpen }) => {
     <div
       style={{
         position: "absolute",
-        top: 14,
-        right: 14,
+        top: 20,
+        right: 20,
         cursor: "pointer",
       }}
       onClick={() => {

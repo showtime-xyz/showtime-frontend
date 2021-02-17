@@ -35,7 +35,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
       //const flattened = itemsLikedList.map((item) => item.tid);
       const currentIndex = itemsLikedList.indexOf(currentlyOpenModal);
       if (currentIndex < itemsLikedList.length - 1) {
-        if (itemsShowing < currentIndex - 1 - 4) {
+        if (itemsShowing - 6 < currentIndex - 1) {
           fetchMoreData();
         }
         setCurrentlyOpenModal(itemsLikedList[currentIndex + 1]);
