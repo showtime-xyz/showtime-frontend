@@ -9,8 +9,6 @@ export default function Modal({
   item,
   isOpen,
   setEditModalOpen,
-  likeButton,
-  shareButton,
   handleLike,
   handleUnlike,
   showTooltip,

@@ -32,12 +32,26 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
 
   useEffect(() => {
     if (rightPress && currentlyOpenModal) {
-      //const flattened = itemsLikedList.map((item) => item.tid);
       const currentIndex = itemsLikedList.indexOf(currentlyOpenModal);
       if (currentIndex < itemsLikedList.length - 1) {
         if (itemsShowing - 6 < currentIndex - 1) {
           fetchMoreData();
         }
+
+        // Get position of next card image and scroll down
+        const bodyRect = document.body.getBoundingClientRect();
+        if (itemsLikedList[currentIndex + 1].imageRef.current) {
+          window.scrollTo({
+            top:
+              itemsLikedList[
+                currentIndex + 1
+              ].imageRef.current.getBoundingClientRect().top -
+              bodyRect.top -
+              70,
+            behavior: "smooth",
+          });
+        }
+
         setCurrentlyOpenModal(itemsLikedList[currentIndex + 1]);
       }
     }
@@ -45,9 +59,22 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
 
   useEffect(() => {
     if (leftPress && currentlyOpenModal) {
-      //const flattened = itemsLikedList.map((item) => item.tid);
       const currentIndex = itemsLikedList.indexOf(currentlyOpenModal);
       if (currentIndex - 1 >= 0) {
+        // Get position of previous card image and scroll up
+        const bodyRect = document.body.getBoundingClientRect();
+        if (itemsLikedList[currentIndex - 1].imageRef.current) {
+          window.scrollTo({
+            top:
+              itemsLikedList[
+                currentIndex - 1
+              ].imageRef.current.getBoundingClientRect().top -
+              bodyRect.top -
+              70,
+            behavior: "smooth",
+          });
+        }
+
         setCurrentlyOpenModal(itemsLikedList[currentIndex - 1]);
       }
     }

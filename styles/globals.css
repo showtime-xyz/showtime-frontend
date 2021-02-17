@@ -734,7 +734,7 @@ a {
 }
 
 .backdrop {
-  z-index: 2;
+  z-index: 3;
 }
 
 .playbutton {
@@ -742,4 +742,8 @@ a {
 }
 .playbutton:hover {
   opacity: 1;
+}
+
+.ScrollUpButton__Container {
+  z-index: 3 !important;
 }

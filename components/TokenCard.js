@@ -30,16 +30,16 @@ class TokenCard extends React.Component {
   componentDidMount() {
     this.setSpans();
     if (this.props.item.token_has_video && !this.props.item.token_img_url) {
-      this.setState({ showVideo: true });
+      // If it's a video with missing thumbnail, just assume
+      // it's a square for grid purposes
+      this.setState({ showVideo: true, spans: 23 });
     } else {
       this.props.item.imageRef.current.addEventListener("load", this.setSpans);
     }
   }
 
   componentWillUnmount() {
-    if (this.props.item.token_has_video && !this.props.item.token_img_url) {
-    } else if (this.state.showVideo === true) {
-    } else {
+    if (this.props.item.imageRef.current) {
       this.props.item.imageRef.current.removeEventListener(
         "load",
         this.setSpans

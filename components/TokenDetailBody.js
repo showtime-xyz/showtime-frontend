@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  createRef,
+  useLayoutEffect,
+} from "react";
 import Link from "next/link";
 import mixpanel from "mixpanel-browser";
 import ModalReportItem from "./ModalReportItem";
@@ -38,9 +44,9 @@ const TokenDetailBody = ({
   // Set dimensions of the media based on available space and original aspect ratio
   const targetRef = useRef();
   const modalRef = useRef();
-  const [mediaHeight, setMediaHeight] = useState(0);
-  const [mediaWidth, setMediaWidth] = useState(0);
-  const [metadataWidth, setMetadataWidth] = useState(0);
+  const [mediaHeight, setMediaHeight] = useState(null);
+  const [mediaWidth, setMediaWidth] = useState(null);
+  const [metadataWidth, setMetadataWidth] = useState(null);
 
   useEffect(() => {
     var aspectRatio = 1;
@@ -75,7 +81,12 @@ const TokenDetailBody = ({
     const metadata = modalRef.current.clientWidth - mediaWidth;
     setMetadataWidth(metadata);
   }, [targetRef, item]);
-  //console.log(mediaWidth);
+
+  const [fullResLoaded, setFullResLoaded] = useState(null);
+  useEffect(() => {
+    setFullResLoaded(false);
+  }, [item]);
+  console.log(fullResLoaded);
 
   return (
     <>
@@ -126,21 +137,46 @@ const TokenDetailBody = ({
               <img
                 src={getImageUrl()}
                 alt={item.token_name}
-                style={
+                style={_.merge(
+                  {
+                    width: mediaWidth,
+                    height: mediaHeight,
+                  },
                   setEditModalOpen &&
-                  targetRef.current &&
-                  mediaHeight === targetRef.current.clientHeight
+                    targetRef.current &&
+                    mediaHeight === targetRef.current.clientHeight
+                    ? {
+                        borderBottomLeftRadius: 7,
+                        borderTopLeftRadius: 7,
+                      }
+                    : null,
+                  fullResLoaded === true ? { display: "none" } : null
+                )}
+              />
+
+              <img
+                src={item.token_img_url}
+                alt={item.token_name}
+                style={_.merge(
+                  {
+                    width: mediaWidth,
+                    height: mediaHeight,
+                  },
+                  setEditModalOpen &&
+                    targetRef.current &&
+                    mediaHeight === targetRef.current.clientHeight
                     ? {
                         width: mediaWidth,
                         height: mediaHeight,
                         borderBottomLeftRadius: 7,
                         borderTopLeftRadius: 7,
                       }
-                    : {
-                        width: mediaWidth,
-                        height: mediaHeight,
-                      }
-                }
+                    : null,
+                  fullResLoaded ? null : { display: "none" }
+                )}
+                onLoad={() => {
+                  setFullResLoaded(true);
+                }}
               />
             </div>
           )}
