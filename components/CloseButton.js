@@ -10,6 +10,7 @@ const CloseButton = ({ setEditModalOpen }) => {
         top: 20,
         right: 20,
         cursor: "pointer",
+        zIndex: 4,
       }}
       onClick={() => {
         setEditModalOpen(false);
@@ -17,8 +18,8 @@ const CloseButton = ({ setEditModalOpen }) => {
     >
       <FontAwesomeIcon
         style={{
-          height: 20,
-          width: 20,
+          height: 24,
+          width: 24,
           color: "#ccc",
         }}
         icon={faTimes}

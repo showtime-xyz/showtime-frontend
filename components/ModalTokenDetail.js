@@ -2,8 +2,14 @@ import { useContext, useEffect, useState } from "react";
 import mixpanel from "mixpanel-browser";
 import ClientOnlyPortal from "./ClientOnlyPortal";
 import AppContext from "../context/app-context";
-import CloseButton from "./CloseButton";
+//import CloseButton from "./CloseButton";
 import TokenDetailBody from "./TokenDetailBody";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faAngleRight,
+  faAngleLeft,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function Modal({
   item,
@@ -12,6 +18,8 @@ export default function Modal({
   handleLike,
   handleUnlike,
   showTooltip,
+  goToNext,
+  goToPrevious,
   //originalImageDimensions,
 }) {
   const context = useContext(AppContext);
@@ -20,13 +28,33 @@ export default function Modal({
     <>
       {isOpen && (
         <ClientOnlyPortal selector="#modal">
-          <div className="backdrop" onClick={() => setEditModalOpen(false)}>
+          <div
+            className="backdrop flex flex-row items-center"
+            onClick={() => setEditModalOpen(false)}
+          >
             <div
-              className="modal"
-              style={{ color: "black" }}
+              className="flex-shrink p-12 modal-arrow"
+              style={{ cursor: "pointer" }}
+              onClick={(e) => {
+                e.stopPropagation();
+                goToPrevious();
+              }}
+            >
+              <FontAwesomeIcon icon={faAngleLeft} style={{ width: 30 }} />
+            </div>
+            <div
+              className="modal flex-grow my-8"
+              style={{
+                color: "black",
+                height: "90%",
+                //, top: "5%",
+                //right: 8%;
+                //left: 8%;
+                //bottom: 5%;
+              }}
               onClick={(e) => e.stopPropagation()}
             >
-              <CloseButton setEditModalOpen={setEditModalOpen} />
+              {/*<CloseButton setEditModalOpen={setEditModalOpen} />*/}
 
               <TokenDetailBody
                 item={item}
@@ -38,6 +66,16 @@ export default function Modal({
                 setEditModalOpen={setEditModalOpen}
                 //originalImageDimensions={originalImageDimensions}
               />
+            </div>
+            <div
+              className="flex-shrink p-12 modal-arrow"
+              style={{ cursor: "pointer" }}
+              onClick={(e) => {
+                e.stopPropagation();
+                goToNext();
+              }}
+            >
+              <FontAwesomeIcon icon={faAngleRight} style={{ width: 30 }} />
             </div>
             <style jsx>{`
               :global(body) {
@@ -53,16 +91,22 @@ export default function Modal({
               }
               .modal {
                 background-color: white;
-                position: absolute;
-                top: 5%;
-                right: 8%;
-                left: 8%;
-                bottom: 5%;
+                //position: absolute;
+                //top: 5%;
+                //right: 8%;
+                //left: 8%;
+                //bottom: 5%;
 
                 border-radius: 7px;
                 //max-width: 400px;
-                margin-left: auto;
-                margin-right: auto;
+                //margin-left: auto;
+                //margin-right: auto;
+              }
+              .modal-arrow {
+                color: #888;
+              }
+              .modal-arrow:hover {
+                color: #ccc;
               }
             `}</style>
           </div>

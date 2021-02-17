@@ -11,6 +11,7 @@ import ModalReportItem from "./ModalReportItem";
 import ReactPlayer from "react-player";
 import LikeButton from "./LikeButton";
 import ShareButton from "./ShareButton";
+import CloseButton from "./CloseButton";
 
 const TokenDetailBody = ({
   item,
@@ -99,7 +100,14 @@ const TokenDetailBody = ({
           />
         </>
       ) : null}
-      <div className="flex h-full" ref={modalRef}>
+      <div
+        className="flex h-full"
+        ref={modalRef}
+        style={{ position: "relative" }}
+      >
+        {setEditModalOpen ? (
+          <CloseButton setEditModalOpen={setEditModalOpen} />
+        ) : null}
         <div
           className="h-full flex items-center"
           style={
@@ -183,7 +191,11 @@ const TokenDetailBody = ({
         </div>
         <div
           className="pr-8 pl-8 pt-4 "
-          style={{ width: metadataWidth, overflow: "auto" }}
+          style={{
+            width: metadataWidth,
+            overflow: "auto",
+            position: "relative",
+          }}
         >
           <div
             className="text-3xl border-b-2 pb-2 text-left mb-4"
