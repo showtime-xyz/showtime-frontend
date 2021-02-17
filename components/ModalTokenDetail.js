@@ -11,7 +11,10 @@ export default function Modal({
   setEditModalOpen,
   likeButton,
   shareButton,
-  originalImageDimensions,
+  handleLike,
+  handleUnlike,
+  showTooltip,
+  //originalImageDimensions,
 }) {
   const context = useContext(AppContext);
 
@@ -29,10 +32,12 @@ export default function Modal({
 
               <TokenDetailBody
                 item={item}
-                likeButton={likeButton}
-                shareButton={shareButton}
                 muted={false}
-                originalImageDimensions={originalImageDimensions}
+                handleLike={handleLike}
+                handleUnlike={handleUnlike}
+                showTooltip={showTooltip}
+                className="w-full"
+                //originalImageDimensions={originalImageDimensions}
               />
             </div>
             <style jsx>{`

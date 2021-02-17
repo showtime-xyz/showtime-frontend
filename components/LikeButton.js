@@ -6,15 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 
-const LikeButton = ({
-  isLiked,
-  likeCount,
-  handleLike,
-  handleLikeArgs,
-  handleUnlike,
-  handleUnlikeArgs,
-  showTooltip,
-}) => {
+const LikeButton = ({ item, handleLike, handleUnlike, showTooltip }) => {
   const context = useContext(AppContext);
 
   //const router = useRouter();
@@ -30,13 +22,15 @@ const LikeButton = ({
       <button
         onClick={() =>
           context.user
-            ? isLiked
-              ? handleUnlike(handleUnlikeArgs)
-              : handleLike(handleLikeArgs)
+            ? item.liked
+              ? handleUnlike(item.tid)
+              : handleLike(item.tid)
             : handleLoggedOutLike()
         }
         className={
-          isLiked ? "showtime-like-button-pink" : "showtime-like-button-white"
+          item.liked
+            ? "showtime-like-button-pink"
+            : "showtime-like-button-white"
         }
       >
         <div className="flex flex-row items-center text-sm px-3 py-1">
@@ -46,11 +40,11 @@ const LikeButton = ({
                 height: 18,
                 width: 18,
               }}
-              icon={isLiked ? faHeartSolid : faHeartOutline}
+              icon={item.liked ? faHeartSolid : faHeartOutline}
             />
           </div>
           <div className="ml-2" style={{ whiteSpace: "nowrap" }}>
-            {likeCount} like{likeCount === 1 ? null : "s"}{" "}
+            {item.like_count} like{item.like_count === 1 ? null : "s"}{" "}
           </div>
         </div>
       </button>

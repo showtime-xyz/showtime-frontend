@@ -10,7 +10,6 @@ import {
 import LikeButton from "./LikeButton";
 import ShareButton from "./ShareButton";
 import ReactPlayer from "react-player";
-import ModalTokenDetail from "./ModalTokenDetail";
 
 class TokenCard extends React.Component {
   constructor(props) {
@@ -24,7 +23,7 @@ class TokenCard extends React.Component {
     };
     this.handleMoreShown = this.handleMoreShown.bind(this);
     this.divRef = React.createRef();
-    this.imageRef = React.createRef();
+    //this.imageRef = React.createRef();
     this.setSpans = this.setSpans.bind(this);
   }
 
@@ -33,7 +32,7 @@ class TokenCard extends React.Component {
     if (this.props.item.token_has_video && !this.props.item.token_img_url) {
       this.setState({ showVideo: true });
     } else {
-      this.imageRef.current.addEventListener("load", this.setSpans);
+      this.props.item.imageRef.current.addEventListener("load", this.setSpans);
     }
   }
 
@@ -41,7 +40,10 @@ class TokenCard extends React.Component {
     if (this.props.item.token_has_video && !this.props.item.token_img_url) {
     } else if (this.state.showVideo === true) {
     } else {
-      this.imageRef.current.removeEventListener("load", this.setSpans);
+      this.props.item.imageRef.current.removeEventListener(
+        "load",
+        this.setSpans
+      );
     }
   }
 
@@ -92,50 +94,6 @@ class TokenCard extends React.Component {
   render() {
     return (
       <>
-        {typeof document !== "undefined" ? (
-          <>
-            <ModalTokenDetail
-              isOpen={this.props.currentlyOpenModal === this.props.item.tid}
-              setEditModalOpen={this.props.setCurrentlyOpenModal}
-              item={this.props.item}
-              likeButton={
-                <LikeButton
-                  isLiked={this.props.item.liked}
-                  likeCount={this.props.item.like_count}
-                  handleLike={this.props.handleLike}
-                  handleLikeArgs={{
-                    tid: this.props.item.tid,
-                  }}
-                  handleUnlike={this.props.handleUnlike}
-                  handleUnlikeArgs={{
-                    tid: this.props.item.tid,
-                  }}
-                  showTooltip={this.props.isMobile === false}
-                />
-              }
-              shareButton={
-                <ShareButton
-                  url={
-                    window.location.protocol +
-                    "//" +
-                    window.location.hostname +
-                    (window.location.port ? ":" + window.location.port : "") +
-                    `/t/${this.props.item.contract_address}/${this.props.item.token_id}`
-                  }
-                  type={"item"}
-                />
-              }
-              originalImageDimensions={
-                this.imageRef && this.imageRef.current
-                  ? {
-                      height: this.imageRef.current.clientHeight,
-                      width: this.imageRef.current.clientWidth,
-                    }
-                  : { height: null, width: null }
-              }
-            />
-          </>
-        ) : null}
         <div
           className={`row-span-${this.state.spans} ${
             this.props.columns === 1 ? "pb-0" : "p-2"
@@ -212,14 +170,16 @@ class TokenCard extends React.Component {
                 muted={this.state.muted}
                 width={this.props.columns === 1 ? window.innerWidth : 373}
                 height={
-                  this.imageRef.current ? this.imageRef.current.height : null
+                  this.props.item.imageRef.current
+                    ? this.props.item.imageRef.current.height
+                    : null
                 }
               />
             ) : (
               <div style={{ position: "relative" }}>
                 <div
                   onClick={() => {
-                    this.props.setCurrentlyOpenModal(this.props.item.tid);
+                    this.props.setCurrentlyOpenModal(this.props.item);
                     this.setState({ showVideo: false, muted: true });
                     this.props.setCurrentlyPlayingVideo(null);
                   }}
@@ -250,7 +210,7 @@ class TokenCard extends React.Component {
                   >
                     <img
                       className="w-full object-cover object-center "
-                      ref={this.imageRef}
+                      ref={this.props.item.imageRef}
                       src={this.getImageUrl()}
                       alt={this.props.item.token_name}
                       onLoad={() => this.setState({ imageLoaded: true })}
@@ -291,16 +251,9 @@ class TokenCard extends React.Component {
                 <div className="flex flex-row items-center">
                   <div className="flex-shrink">
                     <LikeButton
-                      isLiked={this.props.item.liked}
-                      likeCount={this.props.item.like_count}
+                      item={this.props.item}
                       handleLike={this.props.handleLike}
-                      handleLikeArgs={{
-                        tid: this.props.item.tid,
-                      }}
                       handleUnlike={this.props.handleUnlike}
-                      handleUnlikeArgs={{
-                        tid: this.props.item.tid,
-                      }}
                       showTooltip={this.props.isMobile === false}
                     />
                   </div>
@@ -324,7 +277,7 @@ class TokenCard extends React.Component {
                 <div className="mt-4 ">
                   <div
                     onClick={() => {
-                      this.props.setCurrentlyOpenModal(this.props.item.tid);
+                      this.props.setCurrentlyOpenModal(this.props.item);
                       this.setState({ showVideo: false, muted: true });
                       this.props.setCurrentlyPlayingVideo(null);
                     }}

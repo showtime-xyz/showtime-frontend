@@ -26,7 +26,7 @@ const TokenGridV3 = ({ items, isDetail }) => {
     setMyItemLikes(context.myLikes ? context.myLikes : []);
   }, [context.myLikes]);
 
-  const handleLike = async ({ tid }) => {
+  const handleLike = async (tid) => {
     // Update global state via setMyLikes
     context.setMyLikes([...context.myLikes, tid]);
 
@@ -47,7 +47,7 @@ const TokenGridV3 = ({ items, isDetail }) => {
     mixpanel.track("Liked item");
   };
 
-  const handleUnlike = async ({ tid }) => {
+  const handleUnlike = async (tid) => {
     // Update global state via setMyLikes
     context.setMyLikes(context.myLikes.filter((item) => !(item === tid)));
 

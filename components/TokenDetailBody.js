@@ -3,13 +3,15 @@ import Link from "next/link";
 import mixpanel from "mixpanel-browser";
 import ModalReportItem from "./ModalReportItem";
 import ReactPlayer from "react-player";
+import LikeButton from "./LikeButton";
+import ShareButton from "./ShareButton";
 
 const TokenDetailBody = ({
   item,
-  likeButton,
-  shareButton,
   muted,
-  originalImageDimensions,
+  handleLike,
+  handleUnlike,
+  showTooltip,
 }) => {
   const getBackgroundColor = (item) => {
     if (
@@ -34,20 +36,35 @@ const TokenDetailBody = ({
 
   // Set dimensions of the media based on available space and original aspect ratio
   const targetRef = useRef();
+  const modalRef = useRef();
   const [mediaHeight, setMediaHeight] = useState(0);
   const [mediaWidth, setMediaWidth] = useState(0);
 
   useEffect(() => {
-    setMediaHeight(targetRef.current.clientHeight);
+    var aspectRatio = 1;
 
-    if (originalImageDimensions.height) {
-      const aspectRatio =
-        originalImageDimensions.width / originalImageDimensions.height;
+    // Try to use current image's aspect ratio
+    if (item.imageRef.current) {
+      if (item.imageRef.current.clientHeight) {
+        aspectRatio =
+          item.imageRef.current.clientWidth /
+          item.imageRef.current.clientHeight;
+      }
+    }
+
+    // Set full height
+    if (
+      aspectRatio * targetRef.current.clientHeight <
+      modalRef.current.clientWidth * (2 / 3)
+    ) {
+      setMediaHeight(targetRef.current.clientHeight);
       setMediaWidth(aspectRatio * targetRef.current.clientHeight);
     } else {
-      setMediaWidth(1 * targetRef.current.clientHeight);
+      setMediaWidth(modalRef.current.clientWidth * (2 / 3));
+      setMediaHeight((modalRef.current.clientWidth * (2 / 3)) / aspectRatio);
     }
-  }, [targetRef]);
+  }, [targetRef, item]);
+  //console.log(mediaWidth);
 
   return (
     <>
@@ -60,8 +77,12 @@ const TokenDetailBody = ({
           />
         </>
       ) : null}
-      <div className="flex flex-row h-full">
-        <div className="h-full" style={{ flexShrink: 0 }} ref={targetRef}>
+      <div className="flex flex-row h-full" ref={modalRef}>
+        <div
+          className="h-full flex items-center"
+          style={{ flexShrink: 0 }}
+          ref={targetRef}
+        >
           {item.token_has_video ? (
             <ReactPlayer
               url={item.token_animation_url}
@@ -75,14 +96,13 @@ const TokenDetailBody = ({
           ) : (
             <div
               style={{
-                backgroundColor: getBackgroundColor(item),
+                backgroundColor: "red", // getBackgroundColor(item),
+                margin: "auto",
               }}
-              className="h-full"
             >
               <img
                 src={getImageUrl()}
                 alt={item.token_name}
-                className="h-full"
                 style={{
                   width: mediaWidth,
                   height: mediaHeight,
@@ -91,7 +111,7 @@ const TokenDetailBody = ({
             </div>
           )}
         </div>
-        <div className="pr-4 pl-8 pt-4 flex-grow">
+        <div className="pr-4 pl-8 pt-4 w-full">
           <div
             className="text-3xl border-b-2 pb-2 text-left mb-4"
             style={{ fontWeight: 600 }}
@@ -99,14 +119,41 @@ const TokenDetailBody = ({
             {item.token_name}
           </div>
           {item.token_description ? (
-            <div className="mb-10 " style={{ color: "#333" }}>
+            <div
+              className="mb-10 "
+              style={{
+                color: "#333",
+                overflowWrap: "break-word",
+                wordWrap: "break-word",
+              }}
+            >
               {item.token_description}
             </div>
           ) : null}
 
           <div className="mb-12 flex flex-row">
-            <div className="mr-2">{likeButton}</div> <div>{shareButton}</div>
+            <div className="mr-2">
+              <LikeButton
+                item={item}
+                handleLike={handleLike}
+                handleUnlike={handleUnlike}
+                showTooltip={showTooltip}
+              />
+            </div>
+            <div>
+              <ShareButton
+                url={
+                  window.location.protocol +
+                  "//" +
+                  window.location.hostname +
+                  (window.location.port ? ":" + window.location.port : "") +
+                  `/t/${item.contract_address}/${item.token_id}`
+                }
+                type={"item"}
+              />
+            </div>
           </div>
+
           <div className="flex flex-row">
             {item.creator_address ? (
               <div
