@@ -124,6 +124,35 @@ const TokenDetailBody = ({
         {setEditModalOpen && columns !== 1 ? (
           <CloseButton setEditModalOpen={setEditModalOpen} />
         ) : null}
+
+        {columns === 1 ? (
+          <div className="p-4 flex flex-row">
+            <div className="flex-shrink">
+              {item.creator_address ? (
+                <Link href="/p/[slug]" as={`/p/${item.creator_address}`}>
+                  <a className="flex flex-row items-center ">
+                    <div>
+                      <img
+                        alt={item.creator_name}
+                        src={
+                          item.creator_img_url
+                            ? item.creator_img_url
+                            : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                        }
+                        className="rounded-full "
+                        style={{ height: 24, width: 24 }}
+                      />
+                    </div>
+                    <div className="showtime-card-profile-link ml-2">
+                      {truncateWithEllipses(item.creator_name, 30)}
+                    </div>
+                  </a>
+                </Link>
+              ) : null}
+            </div>
+            <div>&nbsp;</div>
+          </div>
+        ) : null}
         <div
           className="lg:h-full flex items-center"
           style={_.merge(
@@ -153,6 +182,7 @@ const TokenDetailBody = ({
               height={mediaHeight}
               width={mediaWidth}
               style={{ margin: "auto" }}
+              playsinline
             />
           ) : (
             <div
@@ -220,7 +250,7 @@ const TokenDetailBody = ({
           )}
         </div>
         <div
-          className="pr-8 pl-8 pt-4 "
+          className="px-4 md:pr-8 md:pl-8 pt-4 "
           style={_.merge(
             {
               overflow: "auto",
@@ -280,7 +310,7 @@ const TokenDetailBody = ({
           </div>
 
           <div className="flex flex-col xl:flex-row">
-            {item.creator_address ? (
+            {item.creator_address && columns !== 1 ? (
               <div
                 className="flex-1 pb-2 xl:pb-0"
                 style={{

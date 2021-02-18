@@ -64,7 +64,10 @@ export default function Modal({
                 goToPrevious();
               }}
             >
-              <FontAwesomeIcon icon={faAngleLeft} style={{ width: 30 }} />
+              <FontAwesomeIcon
+                icon={faAngleLeft}
+                style={{ width: 30, height: 60 }}
+              />
             </div>
             <div
               className="modal flex-grow my-8"
@@ -87,12 +90,12 @@ export default function Modal({
                 <div
                   style={{
                     position: "absolute",
-                    top: 14,
-                    right: 14,
+                    top: 10,
+                    right: 10,
                     cursor: "pointer",
                     zIndex: 4,
                     backgroundColor: "black",
-                    padding: 8,
+                    padding: 6,
                     borderRadius: 40,
                     opacity: 0.4,
                   }}
@@ -102,8 +105,8 @@ export default function Modal({
                 >
                   <FontAwesomeIcon
                     style={{
-                      height: 30,
-                      width: 30,
+                      height: 24,
+                      width: 24,
                       color: "#ccc",
                     }}
                     icon={faTimes}
@@ -146,7 +149,10 @@ export default function Modal({
                 goToNext();
               }}
             >
-              <FontAwesomeIcon icon={faAngleRight} style={{ width: 30 }} />
+              <FontAwesomeIcon
+                icon={faAngleRight}
+                style={{ width: 30, height: 60 }}
+              />
             </div>
             <style jsx>{`
               :global(body) {

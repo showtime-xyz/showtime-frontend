@@ -174,6 +174,7 @@ class TokenCard extends React.Component {
                     ? this.props.item.imageRef.current.height
                     : null
                 }
+                playsinline
               />
             ) : (
               <div style={{ position: "relative" }}>
