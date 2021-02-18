@@ -63,7 +63,6 @@ const TokenDetailBody = ({
         hasImageDimensions = true;
       }
     }
-
     // Set full height
     var mWidth = 0;
 
@@ -309,10 +308,10 @@ const TokenDetailBody = ({
             </div>
           </div>
 
-          <div className="flex flex-col xl:flex-row">
+          <div className="flex flex-col 2xl:flex-row">
             {item.creator_address && columns !== 1 ? (
               <div
-                className="flex-1 pb-2 xl:pb-0"
+                className="flex-1 pb-2 2xl:pb-0"
                 style={{
                   fontWeight: 400,
                   fontSize: 14,
