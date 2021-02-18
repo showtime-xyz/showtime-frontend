@@ -657,12 +657,11 @@ const Profile = ({
           ) : null}
 
           {isMyProfile && context.myProfile ? (
-            !context.myProfile.website_url &&
-            !context.myProfile.website_url ? null : (
-              <div className="pb-8 sm:pb-0"></div>
+            !context.myProfile.bio && !context.myProfile.website_url ? null : (
+              <hr className="pb-4 block sm:hidden" />
             )
           ) : !bio && !website_url ? null : (
-            <div className="pb-8 sm:pb-0"></div>
+            <hr className="pb-4 block sm:hidden" />
           )}
         </div>
 
