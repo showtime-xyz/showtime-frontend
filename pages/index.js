@@ -167,7 +167,7 @@ export default function Home() {
 
       {featuredItems.length > 0 && reachedBottom ? (
         <div className="text-center pt-8 pb-16">
-          <Link href="/c/[collection]" as="/c/superrare">
+          <Link href="/c/[collection]" as="/c/all">
             <a className="showtime-purple-button-icon flex flex-row items-center">
               <div className="mr-2">Explore more</div>
               <div className="flex">
