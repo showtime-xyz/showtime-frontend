@@ -382,7 +382,7 @@ const Profile = ({
               <div className="flex-grow sm:hidden"></div>
               <div
                 className="text-3xl md:text-5xl showtime-title ml-4 md:ml-0 mt-2 md:mt-0"
-                style={{ fontWeight: 600 }}
+                style={{ fontWeight: 600, wordBreak: "break-word" }}
               >
                 {isMyProfile
                   ? context.myProfile

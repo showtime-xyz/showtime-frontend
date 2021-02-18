@@ -1,17 +1,13 @@
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  createRef,
-  useLayoutEffect,
-} from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import Link from "next/link";
 import mixpanel from "mixpanel-browser";
+import _ from "lodash";
 import ModalReportItem from "./ModalReportItem";
 import ReactPlayer from "react-player";
 import LikeButton from "./LikeButton";
 import ShareButton from "./ShareButton";
 import CloseButton from "./CloseButton";
+import AppContext from "../context/app-context";
 
 const TokenDetailBody = ({
   item,
@@ -20,7 +16,11 @@ const TokenDetailBody = ({
   handleUnlike,
   showTooltip,
   setEditModalOpen,
+  isStacked,
+  columns,
 }) => {
+  const context = useContext(AppContext);
+
   const getBackgroundColor = () => {
     if (
       item.token_background_color &&
@@ -65,29 +65,45 @@ const TokenDetailBody = ({
     }
 
     // Set full height
-    var mediaWidth = 0;
-    if (
-      aspectRatio * targetRef.current.clientHeight <
-      modalRef.current.clientWidth * (2 / 3)
-    ) {
-      mediaWidth = aspectRatio * targetRef.current.clientHeight;
-      setMediaHeight(targetRef.current.clientHeight);
-      setMediaWidth(mediaWidth);
+    var mWidth = 0;
+
+    if (isStacked) {
+      mWidth = modalRef.current.clientWidth;
+      setMediaWidth(mWidth);
+      setMediaHeight(mWidth / aspectRatio);
     } else {
-      mediaWidth = modalRef.current.clientWidth * (2 / 3);
-      setMediaWidth(mediaWidth);
-      setMediaHeight((modalRef.current.clientWidth * (2 / 3)) / aspectRatio);
+      if (
+        aspectRatio * targetRef.current.clientHeight <
+        modalRef.current.clientWidth * (2 / 3)
+      ) {
+        mWidth = aspectRatio * targetRef.current.clientHeight;
+        setMediaHeight(targetRef.current.clientHeight);
+        setMediaWidth(mWidth);
+      } else {
+        mWidth = modalRef.current.clientWidth * (2 / 3);
+        setMediaWidth(mWidth);
+        setMediaHeight((modalRef.current.clientWidth * (2 / 3)) / aspectRatio);
+      }
     }
 
-    const metadata = modalRef.current.clientWidth - mediaWidth;
+    const metadata = modalRef.current.clientWidth - mWidth;
     setMetadataWidth(metadata);
-  }, [targetRef, item]);
+  }, [targetRef, item, isStacked, context.windowSize]);
 
   const [fullResLoaded, setFullResLoaded] = useState(null);
   useEffect(() => {
     setFullResLoaded(false);
   }, [item]);
-  console.log(fullResLoaded);
+
+  const removeTags = (str) => {
+    if (str === null || str === "") return false;
+    else str = str.toString();
+    return str.replace(/(<([^>]+)>)/gi, " ");
+  };
+
+  const truncateWithEllipses = (text, max) => {
+    return text.substr(0, max - 1) + (text.length > max ? "..." : "");
+  };
 
   return (
     <>
@@ -101,28 +117,30 @@ const TokenDetailBody = ({
         </>
       ) : null}
       <div
-        className="flex h-full"
+        className="flex lg:h-full flex-col lg:flex-row "
         ref={modalRef}
         style={{ position: "relative" }}
       >
-        {setEditModalOpen ? (
+        {setEditModalOpen && columns !== 1 ? (
           <CloseButton setEditModalOpen={setEditModalOpen} />
         ) : null}
         <div
-          className="h-full flex items-center"
-          style={
+          className="lg:h-full flex items-center"
+          style={_.merge(
+            { flexShrink: 0 },
             item.token_has_video
               ? {
-                  flexShrink: 0,
                   backgroundColor: "black",
                 }
               : {
-                  flexShrink: 0,
                   backgroundColor: getBackgroundColor(),
-                  borderBottomLeftRadius: 7,
-                  borderTopLeftRadius: 7,
-                }
-          }
+                },
+            setEditModalOpen
+              ? isStacked
+                ? null
+                : { borderBottomLeftRadius: 7, borderTopLeftRadius: 7 }
+              : null
+          )}
           ref={targetRef}
         >
           {item.token_has_video ? (
@@ -134,13 +152,23 @@ const TokenDetailBody = ({
               muted={muted}
               height={mediaHeight}
               width={mediaWidth}
+              style={{ margin: "auto" }}
             />
           ) : (
             <div
-              style={{
-                borderBottomLeftRadius: 7,
-                borderTopLeftRadius: 7,
-              }}
+              style={_.merge(
+                setEditModalOpen
+                  ? isStacked
+                    ? null
+                    : {
+                        borderBottomLeftRadius: 7,
+                        borderTopLeftRadius: 7,
+                      }
+                  : null,
+                {
+                  margin: "auto",
+                }
+              )}
             >
               <img
                 src={getImageUrl()}
@@ -153,10 +181,12 @@ const TokenDetailBody = ({
                   setEditModalOpen &&
                     targetRef.current &&
                     mediaHeight === targetRef.current.clientHeight
-                    ? {
-                        borderBottomLeftRadius: 7,
-                        borderTopLeftRadius: 7,
-                      }
+                    ? isStacked
+                      ? null
+                      : {
+                          borderBottomLeftRadius: 7,
+                          borderTopLeftRadius: 7,
+                        }
                     : null,
                   fullResLoaded === true ? { display: "none" } : null
                 )}
@@ -173,12 +203,12 @@ const TokenDetailBody = ({
                   setEditModalOpen &&
                     targetRef.current &&
                     mediaHeight === targetRef.current.clientHeight
-                    ? {
-                        width: mediaWidth,
-                        height: mediaHeight,
-                        borderBottomLeftRadius: 7,
-                        borderTopLeftRadius: 7,
-                      }
+                    ? isStacked
+                      ? null
+                      : {
+                          borderBottomLeftRadius: 7,
+                          borderTopLeftRadius: 7,
+                        }
                     : null,
                   fullResLoaded ? null : { display: "none" }
                 )}
@@ -191,14 +221,20 @@ const TokenDetailBody = ({
         </div>
         <div
           className="pr-8 pl-8 pt-4 "
-          style={{
-            width: metadataWidth,
-            overflow: "auto",
-            position: "relative",
-          }}
+          style={_.merge(
+            {
+              overflow: "auto",
+              position: "relative",
+            },
+            isStacked
+              ? null
+              : {
+                  width: metadataWidth,
+                }
+          )}
         >
           <div
-            className="text-3xl border-b-2 pb-2 text-left mb-4"
+            className="text-2xl md:text-3xl border-b-2 pb-2 text-left mb-4"
             style={{
               fontWeight: 600,
               overflowWrap: "break-word",
@@ -209,14 +245,14 @@ const TokenDetailBody = ({
           </div>
           {item.token_description ? (
             <div
-              className="mb-10 "
+              className="mb-10 text-sm md:text-base"
               style={{
                 color: "#333",
                 overflowWrap: "break-word",
                 wordWrap: "break-word",
               }}
             >
-              {item.token_description}
+              {removeTags(item.token_description)}
             </div>
           ) : null}
 
@@ -243,10 +279,10 @@ const TokenDetailBody = ({
             </div>
           </div>
 
-          <div className="flex flex-row">
+          <div className="flex flex-col xl:flex-row">
             {item.creator_address ? (
               <div
-                className="flex-1"
+                className="flex-1 pb-2 xl:pb-0"
                 style={{
                   fontWeight: 400,
                   fontSize: 14,
@@ -278,7 +314,7 @@ const TokenDetailBody = ({
                           />
                         </div>
                         <div style={{ fontWeight: 400 }}>
-                          {item.creator_name}
+                          {truncateWithEllipses(item.creator_name, 26)}
                         </div>
                       </a>
                     </Link>
@@ -321,7 +357,9 @@ const TokenDetailBody = ({
                             style={{ height: 24, width: 24 }}
                           />
                         </div>
-                        <div style={{ fontWeight: 400 }}>{item.owner_name}</div>
+                        <div style={{ fontWeight: 400 }}>
+                          {truncateWithEllipses(item.owner_name, 26)}
+                        </div>
                       </a>
                     </Link>
                   </div>

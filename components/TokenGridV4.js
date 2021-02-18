@@ -219,6 +219,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
             showTooltip={isMobile === false}
             goToNext={goToNext}
             goToPrevious={goToPrevious}
+            columns={columns}
 
             /*likeButton={
               <LikeButton

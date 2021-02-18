@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import mixpanel from "mixpanel-browser";
 import ClientOnlyPortal from "./ClientOnlyPortal";
 import AppContext from "../context/app-context";
-//import CloseButton from "./CloseButton";
+import CloseButton from "./CloseButton";
 import TokenDetailBody from "./TokenDetailBody";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -20,9 +20,19 @@ export default function Modal({
   showTooltip,
   goToNext,
   goToPrevious,
+  columns,
   //originalImageDimensions,
 }) {
   const context = useContext(AppContext);
+
+  const [isStacked, setIsStacked] = useState(false);
+  useEffect(() => {
+    if (context.windowSize && context.windowSize.width < 1024) {
+      setIsStacked(true);
+    } else {
+      setIsStacked(false);
+    }
+  }, [context.windowSize]);
 
   return (
     <>
@@ -33,8 +43,22 @@ export default function Modal({
             onClick={() => setEditModalOpen(false)}
           >
             <div
-              className="flex-shrink p-12 modal-arrow"
-              style={{ cursor: "pointer" }}
+              className="flex-shrink md:p-4 lg:p-8 xl:p-12 modal-arrow"
+              style={_.merge(
+                { cursor: "pointer" },
+                isStacked && columns === 1
+                  ? {
+                      marginRight: -48,
+                      zIndex: 2,
+                      padding: 8,
+                      opacity: 0.4,
+                      backgroundColor: "black",
+                      borderTopRightRadius: 70,
+                      borderBottomRightRadius: 70,
+                      marginTop: 400,
+                    }
+                  : null
+              )}
               onClick={(e) => {
                 e.stopPropagation();
                 goToPrevious();
@@ -44,17 +68,48 @@ export default function Modal({
             </div>
             <div
               className="modal flex-grow my-8"
-              style={{
-                color: "black",
-                height: "90%",
-                //, top: "5%",
-                //right: 8%;
-                //left: 8%;
-                //bottom: 5%;
-              }}
+              style={
+                isStacked
+                  ? { color: "black", height: "100%", overflow: "auto" }
+                  : {
+                      color: "black",
+                      height: "90%",
+                      borderRadius: 7,
+                      //, top: "5%",
+                      //right: 8%;
+                      //left: 8%;
+                      //bottom: 5%;
+                    }
+              }
               onClick={(e) => e.stopPropagation()}
             >
-              {/*<CloseButton setEditModalOpen={setEditModalOpen} />*/}
+              {columns === 1 ? (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 14,
+                    right: 14,
+                    cursor: "pointer",
+                    zIndex: 4,
+                    backgroundColor: "black",
+                    padding: 8,
+                    borderRadius: 40,
+                    opacity: 0.4,
+                  }}
+                  onClick={() => {
+                    setEditModalOpen(false);
+                  }}
+                >
+                  <FontAwesomeIcon
+                    style={{
+                      height: 30,
+                      width: 30,
+                      color: "#ccc",
+                    }}
+                    icon={faTimes}
+                  />
+                </div>
+              ) : null}
 
               <TokenDetailBody
                 item={item}
@@ -64,12 +119,28 @@ export default function Modal({
                 showTooltip={showTooltip}
                 className="w-full"
                 setEditModalOpen={setEditModalOpen}
+                isStacked={isStacked}
+                columns={columns}
                 //originalImageDimensions={originalImageDimensions}
               />
             </div>
             <div
-              className="flex-shrink p-12 modal-arrow"
-              style={{ cursor: "pointer" }}
+              className="flex-shrink md:p-4 lg:p-8 xl:p-12 modal-arrow"
+              style={_.merge(
+                { cursor: "pointer" },
+                isStacked && columns === 1
+                  ? {
+                      marginLeft: -48,
+                      zIndex: 2,
+                      padding: 8,
+                      opacity: 0.4,
+                      backgroundColor: "black",
+                      borderTopLeftRadius: 70,
+                      borderBottomLeftRadius: 70,
+                      marginTop: 400,
+                    }
+                  : null
+              )}
               onClick={(e) => {
                 e.stopPropagation();
                 goToNext();
@@ -97,7 +168,7 @@ export default function Modal({
                 //left: 8%;
                 //bottom: 5%;
 
-                border-radius: 7px;
+                //border-radius: 7px;
                 //max-width: 400px;
                 //margin-left: auto;
                 //margin-right: auto;
