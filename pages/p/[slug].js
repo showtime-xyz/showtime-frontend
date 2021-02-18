@@ -10,8 +10,11 @@ import AppContext from "../../context/app-context";
 import ShareButton from "../../components/ShareButton";
 import FollowGrid from "../../components/FollowGrid";
 //import { useRouter } from "next/router";
-import ModalEditName from "../../components/ModalEditName";
+import ModalEditProfile from "../../components/ModalEditProfile";
 import ModalEditPhoto from "../../components/ModalEditPhoto";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
@@ -28,6 +31,9 @@ export async function getServerSideProps(context) {
   const liked_items = data_profile.liked;
   const followers_list = data_profile.followers;
   const following_list = data_profile.following;
+
+  const bio = data_profile.profile.bio;
+  const website_url = data_profile.profile.website_url;
 
   //console.log(owned_items.length);
 
@@ -50,6 +56,8 @@ export async function getServerSideProps(context) {
       slug,
       followers_list,
       following_list,
+      bio,
+      website_url,
     }, // will be passed to the page component as props
   };
 }
@@ -64,6 +72,8 @@ const Profile = ({
   slug,
   followers_list,
   following_list,
+  bio,
+  website_url,
 }) => {
   //const router = useRouter();
   const context = useContext(AppContext);
@@ -349,7 +359,7 @@ const Profile = ({
 
       {typeof document !== "undefined" ? (
         <>
-          <ModalEditName
+          <ModalEditProfile
             isOpen={editModalOpen}
             setEditModalOpen={setEditModalOpen}
           />
@@ -473,9 +483,7 @@ const Profile = ({
                     className="showtime-logout-link"
                     style={{ whiteSpace: "nowrap", fontWeight: 400 }}
                   >
-                    {context.myProfile && context.myProfile.name
-                      ? "Edit name"
-                      : "Add name"}
+                    Edit profile
                   </a>
                   {" \u00A0\u00A0\u00A0 "}
                   <a
@@ -550,9 +558,7 @@ const Profile = ({
                   className="showtime-logout-link"
                   style={{ whiteSpace: "nowrap", fontWeight: 400 }}
                 >
-                  {context.myProfile && context.myProfile.name
-                    ? "Edit name"
-                    : "Add name"}
+                  Edit profile
                 </a>
                 {" \u00A0\u00A0\u00A0 "}
                 <a
@@ -573,72 +579,162 @@ const Profile = ({
         </div>
       </div>
       <div
-        className="bg-white px-4 md:px-16 py-6 text-sm"
+        className="bg-white px-4 md:px-16 py-6 text-sm flex flex-col sm:flex-row"
         style={{
           boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 2%)",
           fontWeight: 400,
         }}
       >
-        <div className="mb-4">
-          {followers && followers.length > 0 ? (
-            <>
-              <div className="">
-                {followers.length > 1
-                  ? `${followers.length} followers`
-                  : "1 follower"}
-
-                <span
-                  onClick={() => {
-                    setShowFollowers(!showFollowers);
-                  }}
-                  className="text-xs ml-3 view-hide-toggle"
-                >
-                  {showFollowers ? "Hide" : "View"}
-                </span>
+        <div
+          className={
+            isMyProfile && context.myProfile
+              ? !context.myProfile.bio && !context.myProfile.website_url
+                ? null
+                : "flex-1"
+              : !bio && !website_url
+              ? null
+              : "flex-1"
+          }
+        >
+          {isMyProfile && context.myProfile ? (
+            context.myProfile.bio ? (
+              <div className="pb-4 sm:mr-16">
+                <div className="">{context.myProfile.bio}</div>
               </div>
+            ) : null
+          ) : bio ? (
+            <div className="pb-4 sm:mr-16">
+              <div className="">{bio}</div>
+            </div>
+          ) : null}
 
-              {showFollowers ? (
-                <div className="mt-2">
-                  <FollowGrid people={followers} />
+          {isMyProfile && context.myProfile ? (
+            context.myProfile.website_url ? (
+              <div className="pb-4 sm:pb-0">
+                <a
+                  href={
+                    context.myProfile.website_url.slice(0, 4) === "http"
+                      ? context.myProfile.website_url
+                      : "https://" + context.myProfile.website_url
+                  }
+                  target="_blank"
+                  className="flex flex-row"
+                  style={{ color: "rgb(81, 125, 228)" }}
+                  onClick={() => {
+                    mixpanel.track("Clicked profile website link", {
+                      slug: slug,
+                    });
+                  }}
+                >
+                  <div>{context.myProfile.website_url}</div>
+                  <div className="ml-1 mt-1">
+                    <FontAwesomeIcon
+                      style={{ height: 12 }}
+                      icon={faExternalLinkAlt}
+                    />
+                  </div>
+                </a>
+              </div>
+            ) : null
+          ) : website_url ? (
+            <div className="pb-4 sm:pb-0">
+              <a
+                href={
+                  website_url.slice(0, 4) === "http"
+                    ? website_url
+                    : "https://" + website_url
+                }
+                target="_blank"
+                className="flex flex-row"
+                style={{ color: "rgb(81, 125, 228)" }}
+                onClick={() => {
+                  mixpanel.track("Clicked profile website link", {
+                    slug: slug,
+                  });
+                }}
+              >
+                <div style={{ wordWrap: "break-word" }}>{website_url}</div>
+                <div className="ml-1 mt-1">
+                  <FontAwesomeIcon
+                    style={{ height: 12 }}
+                    icon={faExternalLinkAlt}
+                  />
                 </div>
-              ) : (
-                <div className=""></div>
-              )}
-            </>
-          ) : (
-            <div className="">No followers yet</div>
+              </a>
+            </div>
+          ) : null}
+
+          {isMyProfile && context.myProfile ? (
+            !context.myProfile.bio && !context.myProfile.website_url ? null : (
+              <hr className="pb-4 block sm:hidden" />
+            )
+          ) : !bio && !website_url ? null : (
+            <hr className="pb-4 block sm:hidden" />
           )}
         </div>
 
-        <div>
-          {following && following.length > 0 ? (
-            <>
-              <div className="">
-                {following.length > 1
-                  ? `${following.length} following`
-                  : "1 following"}
+        <div className="flex-1">
+          <div className="mb-4">
+            {followers && followers.length > 0 ? (
+              <>
+                <div className="">
+                  {followers.length > 1
+                    ? `${followers.length} followers`
+                    : "1 follower"}
 
-                <span
-                  onClick={() => {
-                    setShowFollowing(!showFollowing);
-                  }}
-                  className="text-xs ml-3 view-hide-toggle"
-                >
-                  {showFollowing ? "Hide" : "View"}
-                </span>
-              </div>
-
-              {showFollowing ? (
-                <div className="mt-2">
-                  <FollowGrid people={following} />
+                  <span
+                    onClick={() => {
+                      setShowFollowers(!showFollowers);
+                    }}
+                    className="text-xs ml-3 view-hide-toggle"
+                  >
+                    {showFollowers ? "Hide" : "View"}
+                  </span>
                 </div>
-              ) : (
-                <div className=""></div>
-              )}
-            </>
-          ) : (
-            <div>Not following anyone yet</div>
-          )}
+
+                {showFollowers ? (
+                  <div className="mt-2">
+                    <FollowGrid people={followers} />
+                  </div>
+                ) : (
+                  <div className=""></div>
+                )}
+              </>
+            ) : (
+              <div className="">No followers yet</div>
+            )}
+          </div>
+
+          <div>
+            {following && following.length > 0 ? (
+              <>
+                <div className="">
+                  {following.length > 1
+                    ? `${following.length} following`
+                    : "1 following"}
+
+                  <span
+                    onClick={() => {
+                      setShowFollowing(!showFollowing);
+                    }}
+                    className="text-xs ml-3 view-hide-toggle"
+                  >
+                    {showFollowing ? "Hide" : "View"}
+                  </span>
+                </div>
+
+                {showFollowing ? (
+                  <div className="mt-2">
+                    <FollowGrid people={following} />
+                  </div>
+                ) : (
+                  <div className=""></div>
+                )}
+              </>
+            ) : (
+              <div>Not following anyone yet</div>
+            )}
+          </div>
         </div>
       </div>
 
