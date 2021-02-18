@@ -59,9 +59,11 @@ export default function Modal({
                       padding: 8,
                       opacity: 0.4,
                       backgroundColor: "black",
-                      borderTopRightRadius: 70,
-                      borderBottomRightRadius: 70,
+                      borderTopRightRadius: 38,
+                      borderBottomRightRadius: 38,
                       marginTop: 400,
+                      width: 46,
+                      height: 76,
                     }
                   : null
               )}
@@ -102,8 +104,10 @@ export default function Modal({
                     zIndex: 4,
                     backgroundColor: "black",
                     padding: 6,
-                    borderRadius: 40,
+                    borderRadius: 18,
                     opacity: 0.4,
+                    width: 36,
+                    height: 36,
                   }}
                   onClick={() => {
                     setEditModalOpen(false);
@@ -148,8 +152,10 @@ export default function Modal({
                       padding: 8,
                       opacity: 0.4,
                       backgroundColor: "black",
-                      borderTopLeftRadius: 70,
-                      borderBottomLeftRadius: 70,
+                      borderTopLeftRadius: 38,
+                      borderBottomLeftRadius: 38,
+                      width: 46,
+                      height: 76,
                       marginTop: 400,
                     }
                   : null
