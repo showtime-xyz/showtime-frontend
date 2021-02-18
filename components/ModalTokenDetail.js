@@ -21,6 +21,8 @@ export default function Modal({
   goToNext,
   goToPrevious,
   columns,
+  hasNext,
+  hasPrevious,
   //originalImageDimensions,
 }) {
   const context = useContext(AppContext);
@@ -43,7 +45,11 @@ export default function Modal({
             onClick={() => setEditModalOpen(false)}
           >
             <div
-              className="flex-shrink md:p-4 lg:p-8 xl:p-12 modal-arrow"
+              className={
+                hasPrevious
+                  ? "visible flex-shrink md:p-4 lg:p-8 xl:p-12 modal-arrow"
+                  : "invisible flex-shrink md:p-4 lg:p-8 xl:p-12 modal-arrow"
+              }
               style={_.merge(
                 { cursor: "pointer" },
                 isStacked && columns === 1
@@ -128,7 +134,11 @@ export default function Modal({
               />
             </div>
             <div
-              className="flex-shrink md:p-4 lg:p-8 xl:p-12 modal-arrow"
+              className={
+                hasNext
+                  ? "visible flex-shrink md:p-4 lg:p-8 xl:p-12 modal-arrow"
+                  : "invisible flex-shrink md:p-4 lg:p-8 xl:p-12 modal-arrow"
+              }
               style={_.merge(
                 { cursor: "pointer" },
                 isStacked && columns === 1

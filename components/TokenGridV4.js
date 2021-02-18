@@ -88,6 +88,24 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
     }
   }, [leftPress, itemsLikedList]);
 
+  const [hasNext, setHasNext] = useState(false);
+  const [hasPrevious, setHasPrevious] = useState(false);
+
+  useEffect(() => {
+    const currentIndex = itemsLikedList.indexOf(currentlyOpenModal);
+    if (currentIndex === 0) {
+      setHasPrevious(false);
+    } else {
+      setHasPrevious(true);
+    }
+
+    if (currentIndex === itemsLikedList.length - 1) {
+      setHasNext(false);
+    } else {
+      setHasNext(true);
+    }
+  }, [currentlyOpenModal]);
+
   const addRefs = (list) => {
     var newList = [];
     _.forEach(list, function (item) {
@@ -220,6 +238,8 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
             goToNext={goToNext}
             goToPrevious={goToPrevious}
             columns={columns}
+            hasNext={hasNext}
+            hasPrevious={hasPrevious}
 
             /*likeButton={
               <LikeButton

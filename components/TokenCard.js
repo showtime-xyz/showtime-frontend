@@ -48,9 +48,11 @@ class TokenCard extends React.Component {
   }
 
   setSpans = () => {
-    const height = this.divRef.current.clientHeight;
-    const spans = Math.min(Math.ceil(height / 30 + 1), 50);
-    this.setState({ spans });
+    if (this.divRef.current) {
+      const height = this.divRef.current.clientHeight;
+      const spans = Math.min(Math.ceil(height / 30 + 1), 50);
+      this.setState({ spans });
+    }
   };
 
   removeTags(str) {
