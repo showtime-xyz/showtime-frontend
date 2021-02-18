@@ -184,8 +184,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                 background-color: white;
                 position: absolute;
                 top: 10%;
-                right: 10%;
-                left: 10%;
+                right: 5%;
+                left: 5%;
                 padding: 1em;
                 border-radius: 7px;
                 max-width: 400px;

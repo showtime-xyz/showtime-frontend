@@ -734,7 +734,7 @@ a {
 }
 
 .backdrop {
-  z-index: 3;
+  z-index: 2;
 }
 
 .playbutton {
@@ -745,5 +745,5 @@ a {
 }
 
 .ScrollUpButton__Container {
-  z-index: 3 !important;
+  z-index: 2 !important;
 }
