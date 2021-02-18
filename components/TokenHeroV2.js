@@ -80,16 +80,9 @@ const TokenHeroV2 = ({
         <div className="flex flex-row">
           <div className="flex-grow">
             <LikeButton
-              isLiked={item.liked}
-              likeCount={item.like_count}
+              item={item}
               handleLike={handleLike}
-              handleLikeArgs={{
-                tid: item.tid,
-              }}
               handleUnlike={handleUnlike}
-              handleUnlikeArgs={{
-                tid: item.tid,
-              }}
               showTooltip={isMobile === false}
             />
           </div>

@@ -32,7 +32,7 @@ export default function Home() {
   useEffect(() => {
     const getFeatured = async () => {
       const response_featured = await backend.get(
-        `/v2/featured?limit=180&days=${featuredDays}`
+        `/v2/featured?limit=150&days=${featuredDays}`
       );
       const data_featured = response_featured.data.data;
       setFeaturedItems(data_featured);
@@ -167,7 +167,7 @@ export default function Home() {
 
       {featuredItems.length > 0 && reachedBottom ? (
         <div className="text-center pt-8 pb-16">
-          <Link href="/c/[collection]" as="/c/superrare">
+          <Link href="/c/[collection]" as="/c/all">
             <a className="showtime-purple-button-icon flex flex-row items-center">
               <div className="mr-2">Explore more</div>
               <div className="flex">

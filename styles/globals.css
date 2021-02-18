@@ -743,3 +743,7 @@ a {
 .playbutton:hover {
   opacity: 1;
 }
+
+.ScrollUpButton__Container {
+  z-index: 2 !important;
+}

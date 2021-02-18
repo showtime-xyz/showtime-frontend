@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import _ from "lodash";
 import mixpanel from "mixpanel-browser";
 import AppContext from "../context/app-context";
-import TokenSquareV3 from "./TokenSquareV3";
+import TokenCard from "./TokenCard";
 import TokenHeroV2 from "./TokenHeroV2";
 
 const TokenGridV3 = ({ items, isDetail }) => {
@@ -26,7 +26,7 @@ const TokenGridV3 = ({ items, isDetail }) => {
     setMyItemLikes(context.myLikes ? context.myLikes : []);
   }, [context.myLikes]);
 
-  const handleLike = async ({ tid }) => {
+  const handleLike = async (tid) => {
     // Update global state via setMyLikes
     context.setMyLikes([...context.myLikes, tid]);
 
@@ -47,7 +47,7 @@ const TokenGridV3 = ({ items, isDetail }) => {
     mixpanel.track("Liked item");
   };
 
-  const handleUnlike = async ({ tid }) => {
+  const handleUnlike = async (tid) => {
     // Update global state via setMyLikes
     context.setMyLikes(context.myLikes.filter((item) => !(item === tid)));
 
@@ -115,7 +115,7 @@ const TokenGridV3 = ({ items, isDetail }) => {
       >
         {itemsLikedList.map((item) => {
           return (
-            <TokenSquareV3
+            <TokenCard
               key={item.tid}
               item={item}
               handleLike={handleLike}

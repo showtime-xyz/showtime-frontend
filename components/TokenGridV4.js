@@ -1,9 +1,11 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, createRef } from "react";
 import _ from "lodash";
 import mixpanel from "mixpanel-browser";
 import InfiniteScroll from "react-infinite-scroll-component";
 import AppContext from "../context/app-context";
-import TokenSquareV3 from "./TokenSquareV3";
+import TokenCard from "./TokenCard";
+import useKeyPress from "../hooks/useKeyPress";
+import ModalTokenDetail from "./ModalTokenDetail";
 
 const TokenGridV4 = ({ items, isDetail, onFinish }) => {
   const context = useContext(AppContext);
@@ -15,13 +17,114 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
   const [hasMore, setHasMore] = useState(true);
   const [isMobile, setIsMobile] = useState(null);
   const [currentlyPlayingVideo, setCurrentlyPlayingVideo] = useState(null);
+  const [currentlyOpenModal, setCurrentlyOpenModal] = useState(null);
+
+  const leftPress = useKeyPress("ArrowLeft");
+  const rightPress = useKeyPress("ArrowRight");
+  const escPress = useKeyPress("Escape");
+
+  useEffect(() => {
+    if (escPress) {
+      setCurrentlyOpenModal(null);
+      setCurrentlyPlayingVideo(null);
+    }
+  }, [escPress]);
+
+  const goToNext = () => {
+    const currentIndex = itemsLikedList.indexOf(currentlyOpenModal);
+    if (currentIndex < itemsLikedList.length - 1) {
+      if (itemsShowing - 6 < currentIndex - 1) {
+        fetchMoreData();
+      }
+
+      // Get position of next card image and scroll down
+      const bodyRect = document.body.getBoundingClientRect();
+      if (itemsLikedList[currentIndex + 1].imageRef.current) {
+        window.scrollTo({
+          top:
+            itemsLikedList[
+              currentIndex + 1
+            ].imageRef.current.getBoundingClientRect().top -
+            bodyRect.top -
+            70,
+          behavior: "smooth",
+        });
+      }
+
+      setCurrentlyOpenModal(itemsLikedList[currentIndex + 1]);
+    }
+  };
+
+  useEffect(() => {
+    if (rightPress && currentlyOpenModal) {
+      mixpanel.track("Next NFT - keyboard");
+      goToNext();
+    }
+  }, [rightPress, itemsLikedList]);
+
+  const goToPrevious = () => {
+    const currentIndex = itemsLikedList.indexOf(currentlyOpenModal);
+    if (currentIndex - 1 >= 0) {
+      // Get position of previous card image and scroll up
+      const bodyRect = document.body.getBoundingClientRect();
+      if (itemsLikedList[currentIndex - 1].imageRef.current) {
+        window.scrollTo({
+          top:
+            itemsLikedList[
+              currentIndex - 1
+            ].imageRef.current.getBoundingClientRect().top -
+            bodyRect.top -
+            70,
+          behavior: "smooth",
+        });
+      }
+
+      setCurrentlyOpenModal(itemsLikedList[currentIndex - 1]);
+    }
+  };
+
+  useEffect(() => {
+    if (leftPress && currentlyOpenModal) {
+      mixpanel.track("Prior NFT - keyboard");
+      goToPrevious();
+    }
+  }, [leftPress, itemsLikedList]);
+
+  const [hasNext, setHasNext] = useState(false);
+  const [hasPrevious, setHasPrevious] = useState(false);
+
+  useEffect(() => {
+    const currentIndex = itemsLikedList.indexOf(currentlyOpenModal);
+    if (currentIndex === 0) {
+      setHasPrevious(false);
+    } else {
+      setHasPrevious(true);
+    }
+
+    if (currentIndex === itemsLikedList.length - 1) {
+      setHasNext(false);
+    } else {
+      setHasNext(true);
+    }
+  }, [currentlyOpenModal]);
+
+  const addRefs = (list) => {
+    var newList = [];
+    _.forEach(list, function (item) {
+      item.imageRef = createRef();
+      newList.push(item);
+    });
+    return newList;
+  };
 
   useEffect(() => {
     setItemsList(
-      items.filter(
-        (item) =>
-          (item.token_hidden !== 1 || isDetail) &&
-          (item.token_img_url || item.token_animation_url)
+      addRefs(
+        items.filter(
+          (item) =>
+            (item.token_hidden !== 1 || isDetail) &&
+            (item.token_img_url || item.token_animation_url)
+        )
       )
     );
     if (isMobile) {
@@ -37,7 +140,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
     setMyItemLikes(context.myLikes ? context.myLikes : []);
   }, [context.myLikes]);
 
-  const handleLike = async ({ tid }) => {
+  const handleLike = async (tid) => {
     // Change myLikes via setMyLikes
     context.setMyLikes([...context.myLikes, tid]);
 
@@ -66,7 +169,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
     setItemsShowing(itemsShowing + 8);
   };
 
-  const handleUnlike = async ({ tid }) => {
+  const handleUnlike = async (tid) => {
     // Change myLikes via setMyLikes
     context.setMyLikes(context.myLikes.filter((item) => !(item === tid)));
 
@@ -98,6 +201,8 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
         }
       });
 
+      // Add ref to the image for getting dimensions
+
       newItemsLikedList.push(item);
     });
     setItemsLikedList(newItemsLikedList);
@@ -122,34 +227,91 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
   }, [context.windowSize]);
 
   return (
-    <InfiniteScroll
-      dataLength={itemsShowing}
-      next={fetchMoreData}
-      hasMore={hasMore}
-      /*loader={
+    <>
+      {typeof document !== "undefined" ? (
+        <>
+          <ModalTokenDetail
+            isOpen={currentlyOpenModal}
+            setEditModalOpen={setCurrentlyOpenModal}
+            item={currentlyOpenModal}
+            handleLike={handleLike}
+            handleUnlike={handleUnlike}
+            showTooltip={isMobile === false}
+            goToNext={goToNext}
+            goToPrevious={goToPrevious}
+            columns={columns}
+            hasNext={hasNext}
+            hasPrevious={hasPrevious}
+
+            /*likeButton={
+              <LikeButton
+                isLiked={this.props.item.liked}
+                likeCount={this.props.item.like_count}
+                handleLike={this.props.handleLike}
+                handleLikeArgs={{
+                  tid: this.props.item.tid,
+                }}
+                handleUnlike={this.props.handleUnlike}
+                handleUnlikeArgs={{
+                  tid: this.props.item.tid,
+                }}
+                showTooltip={this.props.isMobile === false}
+              />
+            }
+            shareButton={
+              <ShareButton
+                url={
+                  window.location.protocol +
+                  "//" +
+                  window.location.hostname +
+                  (window.location.port ? ":" + window.location.port : "") +
+                  `/t/${this.props.item.contract_address}/${this.props.item.token_id}`
+                }
+                type={"item"}
+              />
+            }
+            originalImageDimensions={
+              this.imageRef && this.imageRef.current
+                ? {
+                    height: this.imageRef.current.clientHeight,
+                    width: this.imageRef.current.clientWidth,
+                  }
+                : { height: null, width: null }
+            }*/
+          />
+        </>
+      ) : null}
+      <InfiniteScroll
+        dataLength={itemsShowing}
+        next={fetchMoreData}
+        hasMore={hasMore}
+        /*loader={
         <div>
           <h4 className="w-full text-center">Loading more...</h4>
         </div>
       }*/
-    >
-      <div
-        className={`grid grid-cols-${columns} mx-auto`}
-        style={columns === 1 ? null : { width: columns * (375 + 20) }}
       >
-        {itemsLikedList.slice(0, itemsShowing).map((item) => (
-          <TokenSquareV3
-            key={item.tid}
-            item={item}
-            handleLike={handleLike}
-            handleUnlike={handleUnlike}
-            columns={columns}
-            isMobile={isMobile}
-            currentlyPlayingVideo={currentlyPlayingVideo}
-            setCurrentlyPlayingVideo={setCurrentlyPlayingVideo}
-          />
-        ))}
-      </div>
-    </InfiniteScroll>
+        <div
+          className={`grid grid-cols-${columns} mx-auto`}
+          style={columns === 1 ? null : { width: columns * (375 + 20) }}
+        >
+          {itemsLikedList.slice(0, itemsShowing).map((item) => (
+            <TokenCard
+              key={item.tid}
+              item={item}
+              handleLike={handleLike}
+              handleUnlike={handleUnlike}
+              columns={columns}
+              isMobile={isMobile}
+              currentlyPlayingVideo={currentlyPlayingVideo}
+              setCurrentlyPlayingVideo={setCurrentlyPlayingVideo}
+              currentlyOpenModal={currentlyOpenModal}
+              setCurrentlyOpenModal={setCurrentlyOpenModal}
+            />
+          ))}
+        </div>
+      </InfiniteScroll>
+    </>
   );
 };
 
