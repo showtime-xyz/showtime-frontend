@@ -612,7 +612,11 @@ const Profile = ({
             context.myProfile.website_url ? (
               <div className="pb-4 sm:pb-0">
                 <a
-                  href={context.myProfile.website_url}
+                  href={
+                    context.myProfile.website_url.slice(0, 4) === "http"
+                      ? context.myProfile.website_url
+                      : "https://" + context.myProfile.website_url
+                  }
                   target="_blank"
                   className="flex flex-row"
                   style={{ color: "rgb(81, 125, 228)" }}
@@ -635,7 +639,11 @@ const Profile = ({
           ) : website_url ? (
             <div className="pb-4 sm:pb-0">
               <a
-                href={website_url}
+                href={
+                  website_url.slice(0, 4) === "http"
+                    ? website_url
+                    : "https://" + website_url
+                }
                 target="_blank"
                 className="flex flex-row"
                 style={{ color: "rgb(81, 125, 228)" }}
