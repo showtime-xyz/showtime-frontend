@@ -135,7 +135,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   <button className="showtime-pink-button">
                     Sign in with Email
                   </button>
-                  <div className="pt-4" style={{ color: "#444", fontSize: 12 }}>
+                  <div className="pt-4" style={{ color: "#444", fontSize: 13 }}>
                     You will receive a sign in link in your inbox
                   </div>
                   <div className="py-8" style={{ color: "#444" }}>

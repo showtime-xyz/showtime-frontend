@@ -17,7 +17,7 @@ export async function getServerSideProps(context) {
   const { slug } = context.query;
 
   // Get profile metadata
-  const response_profile = await backend.get(`/v2/profile/${slug}?limit=180`);
+  const response_profile = await backend.get(`/v2/profile/${slug}?limit=150`);
   const data_profile = response_profile.data.data;
 
   const name = data_profile.profile.name;
@@ -28,6 +28,8 @@ export async function getServerSideProps(context) {
   const liked_items = data_profile.liked;
   const followers_list = data_profile.followers;
   const following_list = data_profile.following;
+
+  //console.log(owned_items.length);
 
   // Get followers
   //const response_followers = await backend.get(`/v1/followers?address=${slug}`);
@@ -668,7 +670,7 @@ const Profile = ({
               setSelectedGrid("created");
             }}
           >
-            {createdItems.length < 200 ? createdItems.length : "200+"} Created
+            {createdItems.length < 150 ? createdItems.length : "150+"} Created
           </button>
           <button
             className={
@@ -686,7 +688,7 @@ const Profile = ({
               setSelectedGrid("owned");
             }}
           >
-            {ownedItems.length < 200 ? ownedItems.length : "200+"} Owned
+            {ownedItems.length < 150 ? ownedItems.length : "150+"} Owned
           </button>
           <button
             className={
@@ -704,7 +706,7 @@ const Profile = ({
               setSelectedGrid("liked");
             }}
           >
-            {likedItems.length < 200 ? likedItems.length : "200+"} Liked
+            {likedItems.length < 150 ? likedItems.length : "150+"} Liked
           </button>
         </div>
       ) : null}
