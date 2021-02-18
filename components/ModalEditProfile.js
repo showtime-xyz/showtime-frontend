@@ -68,7 +68,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                 >
                   Edit profile
                 </div>
-                <div className="my-8">
+                <div className="my-4">
                   <label htmlFor="name" style={{ fontWeight: 600 }}>
                     Name
                   </label>
@@ -190,9 +190,9 @@ export default function Modal({ isOpen, setEditModalOpen }) {
               .modal {
                 background-color: white;
                 position: absolute;
-                top: 10%;
-                right: 10%;
-                left: 10%;
+                top: 5%;
+                right: 5%;
+                left: 5%;
                 padding: 1em;
                 border-radius: 7px;
                 max-width: 400px;
