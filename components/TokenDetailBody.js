@@ -121,7 +121,7 @@ const TokenDetailBody = ({
         style={{ position: "relative" }}
       >
         {setEditModalOpen && columns !== 1 ? (
-          <CloseButton setEditModalOpen={setEditModalOpen} />
+          <CloseButton setEditModalOpen={setEditModalOpen} isDetailModal />
         ) : null}
 
         {columns === 1 ? (

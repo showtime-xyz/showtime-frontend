@@ -10,6 +10,7 @@ import {
 import LikeButton from "./LikeButton";
 import ShareButton from "./ShareButton";
 import ReactPlayer from "react-player";
+import mixpanel from "mixpanel-browser";
 
 class TokenCard extends React.Component {
   constructor(props) {
@@ -182,6 +183,7 @@ class TokenCard extends React.Component {
               <div style={{ position: "relative" }}>
                 <div
                   onClick={() => {
+                    mixpanel.track("Open NFT modal");
                     this.props.setCurrentlyOpenModal(this.props.item);
                     this.setState({ showVideo: false, muted: true });
                     this.props.setCurrentlyPlayingVideo(null);
@@ -231,6 +233,7 @@ class TokenCard extends React.Component {
                       cursor: "pointer",
                     }}
                     onClick={() => {
+                      mixpanel.track("Play card video");
                       this.setState({ showVideo: true, muted: false });
                       this.props.setCurrentlyPlayingVideo(this.props.item.tid);
                     }}
@@ -280,6 +283,7 @@ class TokenCard extends React.Component {
                 <div className="mt-4 ">
                   <div
                     onClick={() => {
+                      mixpanel.track("Open NFT modal");
                       this.props.setCurrentlyOpenModal(this.props.item);
                       this.setState({ showVideo: false, muted: true });
                       this.props.setCurrentlyPlayingVideo(null);

@@ -1,8 +1,9 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import mixpanel from "mixpanel-browser";
 
-const CloseButton = ({ setEditModalOpen }) => {
+const CloseButton = ({ setEditModalOpen, isDetailModal }) => {
   return (
     <div
       style={{
@@ -14,6 +15,9 @@ const CloseButton = ({ setEditModalOpen }) => {
       }}
       onClick={() => {
         setEditModalOpen(false);
+        if (isDetailModal) {
+          mixpanel.track("Close NFT modal - x button");
+        }
       }}
     >
       <FontAwesomeIcon

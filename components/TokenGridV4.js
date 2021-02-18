@@ -57,6 +57,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
 
   useEffect(() => {
     if (rightPress && currentlyOpenModal) {
+      mixpanel.track("Next NFT - keyboard");
       goToNext();
     }
   }, [rightPress, itemsLikedList]);
@@ -84,6 +85,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
 
   useEffect(() => {
     if (leftPress && currentlyOpenModal) {
+      mixpanel.track("Prior NFT - keyboard");
       goToPrevious();
     }
   }, [leftPress, itemsLikedList]);

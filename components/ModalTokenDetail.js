@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import mixpanel from "mixpanel-browser";
 import ClientOnlyPortal from "./ClientOnlyPortal";
 import AppContext from "../context/app-context";
-import CloseButton from "./CloseButton";
+//import CloseButton from "./CloseButton";
 import TokenDetailBody from "./TokenDetailBody";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -42,7 +42,10 @@ export default function Modal({
         <ClientOnlyPortal selector="#modal">
           <div
             className="backdrop flex flex-row items-center"
-            onClick={() => setEditModalOpen(false)}
+            onClick={() => {
+              mixpanel.track("Close NFT modal - backdrop click");
+              setEditModalOpen(false);
+            }}
           >
             <div
               className={
@@ -69,6 +72,7 @@ export default function Modal({
               )}
               onClick={(e) => {
                 e.stopPropagation();
+                mixpanel.track("Prior NFT - arrow button");
                 goToPrevious();
               }}
             >
@@ -110,6 +114,7 @@ export default function Modal({
                     height: 36,
                   }}
                   onClick={() => {
+                    mixpanel.track("Close NFT modal - x button");
                     setEditModalOpen(false);
                   }}
                 >
@@ -162,6 +167,7 @@ export default function Modal({
               )}
               onClick={(e) => {
                 e.stopPropagation();
+                mixpanel.track("Next NFT - arrow button");
                 goToNext();
               }}
             >
