@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useState } from "react";
 import mixpanel from "mixpanel-browser";
 import ClientOnlyPortal from "./ClientOnlyPortal";
 import { Magic } from "magic-sdk";
@@ -12,8 +12,9 @@ import ethProvider from "eth-provider";
 import _ from "lodash";
 import backend from "../lib/backend";
 
-export default function Modal({ isOpen, setEditModalOpen }) {
+export default function Modal({ isOpen }) {
   const context = useContext(AppContext);
+  const [signaturePending, setSignaturePending] = useState(false);
 
   const handleSubmitEmail = async (event) => {
     mixpanel.track("Login - email button click");
@@ -83,6 +84,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
     const response_nonce = await backend.get(`/v1/getnonce?address=${address}`);
 
     try {
+      setSignaturePending(true);
       const signature = await web3Provider
         .getSigner()
         .signMessage(
@@ -111,6 +113,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
     } catch (err) {
       //throw new Error("You need to sign the message to be able to log in.");
       //console.log(err);
+    } finally {
+      setSignaturePending(false);
     }
   };
 
@@ -127,61 +131,71 @@ export default function Modal({ isOpen, setEditModalOpen }) {
               style={{ color: "black" }}
               onClick={(e) => e.stopPropagation()}
             >
-              <form onSubmit={handleSubmitEmail}>
-                <CloseButton setEditModalOpen={context.setLoginModalOpen} />
-                <div
-                  className="text-3xl border-b-2 pb-2 text-center"
-                  style={{ fontWeight: 600 }}
-                >
-                  Sign in / Sign up
-                </div>
-                <div className="text-center pt-8">
-                  <label
-                    htmlFor="email"
-                    className="pb-4 "
-                    style={{ fontWeight: 600 }}
-                  >
-                    Please enter your email:
-                  </label>
-                  <br />
-                  <br />
-                  <input
-                    name="email"
-                    placeholder="Email"
-                    type="email"
-                    className="border-2 w-full"
-                    autoFocus
-                    style={{
-                      color: "black",
-                      padding: 10,
-                      borderRadius: 7,
-                    }}
-                  />
-                  <br />
-                  <br />
-                  <button className="showtime-pink-button">
-                    Sign in with Email
-                  </button>
-                  <div className="pt-4" style={{ color: "#444", fontSize: 13 }}>
-                    You will receive a sign in link in your inbox
-                  </div>
-                  <div className="py-8" style={{ color: "#444" }}>
-                    — or —
-                  </div>
-                </div>
-              </form>
-
-              <div className="mb-4 text-center">
-                {/*<WalletButton className="bg-white text-black hover:bg-gray-300 rounded-lg py-2 px-5" />*/}
-                <button
-                  className="showtime-white-button bg-white text-black hover:bg-gray-300 rounded-lg py-2 px-5"
-                  onClick={() => {
-                    handleSubmitWallet();
-                  }}
-                >
-                  Sign in with Wallet
-                </button>
+              <CloseButton setEditModalOpen={context.setLoginModalOpen} />
+              <div
+                className="text-3xl border-b-2 pb-2 text-center"
+                style={{ fontWeight: 600 }}
+              >
+                Sign in / Sign up
               </div>
+              {signaturePending ? (
+                <div className="text-center py-40">
+                  Please sign with your wallet...
+                </div>
+              ) : (
+                <>
+                  <form onSubmit={handleSubmitEmail}>
+                    <div className="text-center pt-8">
+                      <label
+                        htmlFor="email"
+                        className="pb-4 "
+                        style={{ fontWeight: 600 }}
+                      >
+                        Please enter your email:
+                      </label>
+                      <br />
+                      <br />
+                      <input
+                        name="email"
+                        placeholder="Email"
+                        type="email"
+                        className="border-2 w-full"
+                        autoFocus
+                        style={{
+                          color: "black",
+                          padding: 10,
+                          borderRadius: 7,
+                        }}
+                      />
+                      <br />
+                      <br />
+                      <button className="showtime-pink-button">
+                        Sign in with Email
+                      </button>
+                      <div
+                        className="pt-4"
+                        style={{ color: "#444", fontSize: 13 }}
+                      >
+                        You will receive a sign in link in your inbox
+                      </div>
+                      <div className="py-8" style={{ color: "#444" }}>
+                        — or —
+                      </div>
+                    </div>
+                  </form>
+
+                  <div className="mb-4 text-center">
+                    <button
+                      className="showtime-white-button bg-white text-black hover:bg-gray-300 rounded-lg py-2 px-5"
+                      onClick={() => {
+                        handleSubmitWallet();
+                      }}
+                    >
+                      Sign in with Wallet
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
             <style jsx>{`
               :global(body) {
