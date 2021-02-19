@@ -1,16 +1,16 @@
 import { useContext, useState } from "react";
 import mixpanel from "mixpanel-browser";
-import ClientOnlyPortal from "./ClientOnlyPortal";
 import { Magic } from "magic-sdk";
-import AppContext from "../context/app-context";
-import CloseButton from "./CloseButton";
 import Web3Modal from "web3modal";
 import { Web3Provider } from "@ethersproject/providers";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import Authereum from "authereum";
 import ethProvider from "eth-provider";
 import _ from "lodash";
+import ClientOnlyPortal from "./ClientOnlyPortal";
 import backend from "../lib/backend";
+import AppContext from "../context/app-context";
+import CloseButton from "./CloseButton";
 
 export default function Modal({ isOpen }) {
   const context = useContext(AppContext);
