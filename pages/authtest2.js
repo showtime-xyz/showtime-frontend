@@ -8,6 +8,7 @@ import _ from "lodash";
 import backend from "../lib/backend";
 import mixpanel from "mixpanel-browser";
 import AppContext from "../context/app-context";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
   return {
@@ -17,8 +18,7 @@ export async function getServerSideProps(context) {
 
 export default function AuthTest() {
   const context = useContext(AppContext);
-
-  const [web3Modal, setWeb3Modal] = useState(null);
+  const router = useRouter();
 
   const loadWeb3Modal = async function () {
     const providerOptions = {
@@ -41,7 +41,6 @@ export default function AuthTest() {
       cacheProvider: false, // optional
       providerOptions, // required
     });
-    setWeb3Modal(web3Modal);
 
     const provider = await web3Modal.connect();
     const web3Provider = new Web3Provider(provider);
@@ -76,7 +75,7 @@ export default function AuthTest() {
         // We successfully logged in, our API
         // set authorization cookies and now we
         // can redirect to the dashboard!
-        mixpanel.track("Login success - email");
+        mixpanel.track("Login success - wallet signature");
         //router.push("/");
 
         const getUserFromCookies = async () => {
@@ -122,9 +121,10 @@ export default function AuthTest() {
         };
 
         if (!context?.user) {
-          getUserFromCookies();
-          getMyInfo();
+          await getUserFromCookies();
+          await getMyInfo();
           console.log("success");
+          router.push("/");
         }
       } else {
         // handle errors
