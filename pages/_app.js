@@ -25,6 +25,7 @@ export default class MyApp extends React.Component {
   };
 
   componentDidMount() {
+    /*
     const providerOptions = {
       walletconnect: {
         package: WalletConnectProvider,
@@ -49,7 +50,7 @@ export default class MyApp extends React.Component {
 
     if (web3Modal.cachedProvider) {
       this.loadWeb3Modal(web3Modal);
-    }
+    }*/
   }
 
   async loadWeb3Modal(web3Modal) {
