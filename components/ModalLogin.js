@@ -3,13 +3,19 @@ import mixpanel from "mixpanel-browser";
 import ClientOnlyPortal from "./ClientOnlyPortal";
 import { Magic } from "magic-sdk";
 import AppContext from "../context/app-context";
-import WalletButton from "../components/WalletButton";
 import CloseButton from "./CloseButton";
+import Web3Modal from "web3modal";
+import { Web3Provider } from "@ethersproject/providers";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import Authereum from "authereum";
+import ethProvider from "eth-provider";
+import _ from "lodash";
+import backend from "../lib/backend";
 
 export default function Modal({ isOpen, setEditModalOpen }) {
   const context = useContext(AppContext);
 
-  const handleSubmit = async (event) => {
+  const handleSubmitEmail = async (event) => {
     mixpanel.track("Login - email button click");
     event.preventDefault();
 
@@ -27,63 +33,84 @@ export default function Modal({ isOpen, setEditModalOpen }) {
     });
 
     if (authRequest.ok) {
-      // We successfully logged in, our API
-      // set authorization cookies and now we
-      // can redirect to the dashboard!
       mixpanel.track("Login success - email");
-      //router.push("/");
-
-      const getUserFromCookies = async () => {
-        // log in with our own API
-        const userRequest = await fetch("/api/user");
-        try {
-          const user_data = await userRequest.json();
-          context.setUser(user_data);
-
-          mixpanel.identify(user_data.publicAddress);
-          if (user_data.email) {
-            mixpanel.people.set({
-              $email: user_data.email, // only reserved properties need the $
-              USER_ID: user_data.publicAddress, // use human-readable names
-              //"Sign up date": USER_SIGNUP_DATE,    // Send dates in ISO timestamp format (e.g. "2020-01-02T21:07:03Z")
-              //"credits": 150    // ...or numbers
-            });
-          } else {
-            mixpanel.people.set({
-              //$email: user_data.email, // only reserved properties need the $
-              USER_ID: user_data.publicAddress, // use human-readable names
-              //"Sign up date": USER_SIGNUP_DATE,    // Send dates in ISO timestamp format (e.g. "2020-01-02T21:07:03Z")
-              //"credits": 150    // ...or numbers
-            });
-          }
-        } catch {
-          // Not logged in
-          // Switch from undefined to null
-          context.setUser(null);
-        }
-      };
-
-      const getMyInfo = async () => {
-        // get our likes
-        const myInfoRequest = await fetch("/api/myinfo");
-        try {
-          const my_info_data = await myInfoRequest.json();
-
-          context.setMyLikes(my_info_data.data.likes);
-          context.setMyFollows(my_info_data.data.follows);
-          context.setMyProfile(my_info_data.data.profile);
-        } catch {}
-      };
 
       if (!context?.user) {
-        getUserFromCookies();
-        getMyInfo();
+        context.getUserFromCookies();
       }
-
-      //setEditModalOpen(false);
       context.setLoginModalOpen(false);
     } else {
       /* handle errors */
+    }
+  };
+
+  const handleSubmitWallet = async () => {
+    mixpanel.track("Login - wallet button click");
+
+    const providerOptions = {
+      walletconnect: {
+        package: WalletConnectProvider,
+        options: {
+          infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
+        },
+      },
+      authereum: {
+        package: Authereum,
+      },
+      frame: {
+        package: ethProvider,
+      },
+    };
+
+    const web3Modal = new Web3Modal({
+      network: "mainnet", // optional
+      cacheProvider: false, // optional
+      providerOptions, // required
+    });
+
+    const provider = await web3Modal.connect();
+    const web3Provider = new Web3Provider(provider);
+
+    /*
+    provider.on("accountsChanged", (accounts) => {
+      // Do something with the new account
+      console.log("ACCOUNTS CHANGED");
+      console.log(accounts[0]);
+    });
+    */
+
+    const address = await web3Provider.getSigner().getAddress();
+    const response_nonce = await backend.get(`/v1/getnonce?address=${address}`);
+
+    try {
+      const signature = await web3Provider
+        .getSigner()
+        .signMessage(
+          process.env.NEXT_PUBLIC_SIGNING_MESSAGE + response_nonce.data.data
+        );
+
+      // login with our own API
+      const authRequest = await fetch("/api/loginsignature", {
+        method: "POST",
+        body: JSON.stringify({
+          signature,
+          address,
+        }),
+      });
+
+      if (authRequest.ok) {
+        mixpanel.track("Login success - wallet signature");
+
+        if (!context?.user) {
+          context.getUserFromCookies();
+        }
+        context.setLoginModalOpen(false);
+      } else {
+        // handle errors
+      }
+    } catch (err) {
+      //throw new Error("You need to sign the message to be able to log in.");
+      //console.log(err);
     }
   };
 
@@ -100,7 +127,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
               style={{ color: "black" }}
               onClick={(e) => e.stopPropagation()}
             >
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmitEmail}>
                 <CloseButton setEditModalOpen={context.setLoginModalOpen} />
                 <div
                   className="text-3xl border-b-2 pb-2 text-center"
@@ -145,28 +172,16 @@ export default function Modal({ isOpen, setEditModalOpen }) {
               </form>
 
               <div className="mb-4 text-center">
-                <WalletButton className="bg-white text-black hover:bg-gray-300 rounded-lg py-2 px-5" />
+                {/*<WalletButton className="bg-white text-black hover:bg-gray-300 rounded-lg py-2 px-5" />*/}
+                <button
+                  className="showtime-white-button bg-white text-black hover:bg-gray-300 rounded-lg py-2 px-5"
+                  onClick={() => {
+                    handleSubmitWallet();
+                  }}
+                >
+                  Sign in with Wallet
+                </button>
               </div>
-              {/*<div className="border-t-2 pt-4">
-                  <button
-                    type="submit"
-                    className="showtime-green-button px-5 py-3 float-right"
-                    style={{ borderColor: "#35bb5b", borderWidth: 2 }}
-                    //onClick={() => setEditModalOpen(false)}
-                  >
-                    Save changes
-                  </button>
-                  <button
-                    type="button"
-                    className="showtime-black-button-outline px-5 py-3"
-                    onClick={() => {
-                      setEditModalOpen(false);
-                      setNameValue(context.myProfile.name);
-                    }}
-                  >
-                    Cancel
-                  </button>
-                  </div>*/}
             </div>
             <style jsx>{`
               :global(body) {

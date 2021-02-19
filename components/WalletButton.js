@@ -46,51 +46,9 @@ export default function WalletButton({
         // can redirect to the dashboard!
         mixpanel.track("Login success - wallet");
         //router.push("/");
-        const getUserFromCookies = async () => {
-          // log in with our own API
-          const userRequest = await fetch("/api/user");
-          try {
-            const user_data = await userRequest.json();
-            context.setUser(user_data);
-
-            mixpanel.identify(user_data.publicAddress);
-            if (user_data.email) {
-              mixpanel.people.set({
-                $email: user_data.email, // only reserved properties need the $
-                USER_ID: user_data.publicAddress, // use human-readable names
-                //"Sign up date": USER_SIGNUP_DATE,    // Send dates in ISO timestamp format (e.g. "2020-01-02T21:07:03Z")
-                //"credits": 150    // ...or numbers
-              });
-            } else {
-              mixpanel.people.set({
-                //$email: user_data.email, // only reserved properties need the $
-                USER_ID: user_data.publicAddress, // use human-readable names
-                //"Sign up date": USER_SIGNUP_DATE,    // Send dates in ISO timestamp format (e.g. "2020-01-02T21:07:03Z")
-                //"credits": 150    // ...or numbers
-              });
-            }
-          } catch {
-            // Not logged in
-            // Switch from undefined to null
-            context.setUser(null);
-          }
-        };
-
-        const getMyInfo = async () => {
-          // get our likes
-          const myInfoRequest = await fetch("/api/myinfo");
-          try {
-            const my_info_data = await myInfoRequest.json();
-
-            context.setMyLikes(my_info_data.data.likes);
-            context.setMyFollows(my_info_data.data.follows);
-            context.setMyProfile(my_info_data.data.profile);
-          } catch {}
-        };
 
         if (!context?.user) {
-          getUserFromCookies();
-          getMyInfo();
+          context.getUserFromCookies();
         }
 
         //setEditModalOpen(false);

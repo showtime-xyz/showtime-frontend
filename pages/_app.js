@@ -38,7 +38,7 @@ export default class MyApp extends React.Component {
         });
       }
 
-      // get our likes
+      // get our likes, follows, profile
       const myInfoRequest = await fetch("/api/myinfo");
       try {
         const my_info_data = await myInfoRequest.json();
@@ -62,6 +62,22 @@ export default class MyApp extends React.Component {
         height: window.innerHeight,
       },
     });
+  };
+
+  logOut = async () => {
+    const authRequest = await fetch("/api/logout", {
+      method: "POST",
+    });
+
+    if (authRequest.ok) {
+      this.setUser(null);
+      this.setMyLikes([]);
+      this.setMyFollows([]);
+
+      mixpanel.track("Logout");
+    } else {
+      /* handle errors */
+    }
   };
 
   componentDidMount() {
@@ -120,6 +136,9 @@ export default class MyApp extends React.Component {
       setMyProfile: (myProfile) => this.setMyProfile(myProfile),
       setLoginModalOpen: (loginModalOpen) =>
         this.setLoginModalOpen(loginModalOpen),
+
+      getUserFromCookies: () => this.getUserFromCookies(),
+      logOut: () => this.logOut(),
     };
 
     return (
