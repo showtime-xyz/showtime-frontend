@@ -1,68 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import Link from "next/link";
 import mixpanel from "mixpanel-browser";
-import useWindowSize from "../hooks/useWindowSize";
 import AppContext from "../context/app-context";
 import ModalLogin from "./ModalLogin";
 
 const Header = () => {
   const context = useContext(AppContext);
-
-  // Try to log us in if it's not already in state
-  useEffect(() => {
-    const getUserFromCookies = async () => {
-      // log in with our own API
-      const userRequest = await fetch("/api/user");
-      try {
-        const user_data = await userRequest.json();
-        context.setUser(user_data);
-
-        mixpanel.identify(user_data.publicAddress);
-        if (user_data.email) {
-          mixpanel.people.set({
-            $email: user_data.email, // only reserved properties need the $
-            USER_ID: user_data.publicAddress, // use human-readable names
-            //"Sign up date": USER_SIGNUP_DATE,    // Send dates in ISO timestamp format (e.g. "2020-01-02T21:07:03Z")
-            //"credits": 150    // ...or numbers
-          });
-        } else {
-          mixpanel.people.set({
-            //$email: user_data.email, // only reserved properties need the $
-            USER_ID: user_data.publicAddress, // use human-readable names
-            //"Sign up date": USER_SIGNUP_DATE,    // Send dates in ISO timestamp format (e.g. "2020-01-02T21:07:03Z")
-            //"credits": 150    // ...or numbers
-          });
-        }
-      } catch {
-        // Not logged in
-        // Switch from undefined to null
-        context.setUser(null);
-      }
-    };
-
-    if (!context?.user) {
-      getUserFromCookies();
-      getMyInfo();
-    }
-  }, [context?.user]);
-
-  // Keep track of window size
-  const windowSize = useWindowSize();
-  useEffect(() => {
-    context.setWindowSize(windowSize);
-  }, [windowSize]);
-
-  const getMyInfo = async () => {
-    // get our likes
-    const myInfoRequest = await fetch("/api/myinfo");
-    try {
-      const my_info_data = await myInfoRequest.json();
-
-      context.setMyLikes(my_info_data.data.likes);
-      context.setMyFollows(my_info_data.data.follows);
-      context.setMyProfile(my_info_data.data.profile);
-    } catch {}
-  };
 
   return (
     <>
@@ -166,13 +109,6 @@ const Header = () => {
               </Link>
             ) : (
               <>
-                {/*<Link href="/login">
-                  <a className="showtime-login-button-solid text-sm px-3 py-2 md:text-base  md:px-3 md:py-2">
-                    {context.windowSize && context.windowSize.width > 500
-                      ? "Sign in / Sign up"
-                      : "Sign in"}
-                  </a>
-                    </Link>*/}
                 <a
                   className="showtime-login-button-solid text-sm px-3 py-2 md:text-base  md:px-3 md:py-2"
                   onClick={() => {
