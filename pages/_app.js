@@ -1,21 +1,11 @@
 import React from "react";
 import "../styles/globals.css";
 import AppContext from "../context/app-context";
-//import { useWallet, UseWalletProvider } from "use-wallet";
-import Web3Modal from "web3modal";
-import { Web3Provider } from "@ethersproject/providers";
-import WalletConnectProvider from "@walletconnect/web3-provider";
-import Authereum from "authereum";
-import ethProvider from "eth-provider";
 import mixpanel from "mixpanel-browser";
 mixpanel.init("9b14512bc76f3f349c708f67ab189941");
 
 export default class MyApp extends React.Component {
   state = {
-    initialized: false,
-    web3Modal: null,
-    web3Provider: null,
-    address: "",
     user: undefined,
     windowSize: null,
     myLikes: null,
@@ -24,58 +14,84 @@ export default class MyApp extends React.Component {
     loginModalOpen: false,
   };
 
-  componentDidMount() {
-    const providerOptions = {
-      walletconnect: {
-        package: WalletConnectProvider,
-        options: {
-          infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
-        },
-      },
-      authereum: {
-        package: Authereum,
-      },
-      frame: {
-        package: ethProvider,
-      },
-    };
+  getUserFromCookies = async () => {
+    // log in with our own API
+    const userRequest = await fetch("/api/user");
+    try {
+      const user_data = await userRequest.json();
+      this.setUser(user_data);
 
-    const web3Modal = new Web3Modal({
-      network: "mainnet", // optional
-      cacheProvider: true, // optional
-      providerOptions, // required
-    });
-    this.setWeb3Modal(web3Modal);
+      mixpanel.identify(user_data.publicAddress);
+      if (user_data.email) {
+        mixpanel.people.set({
+          $email: user_data.email, // only reserved properties need the $
+          USER_ID: user_data.publicAddress, // use human-readable names
+          //"Sign up date": USER_SIGNUP_DATE,    // Send dates in ISO timestamp format (e.g. "2020-01-02T21:07:03Z")
+          //"credits": 150    // ...or numbers
+        });
+      } else {
+        mixpanel.people.set({
+          //$email: user_data.email, // only reserved properties need the $
+          USER_ID: user_data.publicAddress, // use human-readable names
+          //"Sign up date": USER_SIGNUP_DATE,    // Send dates in ISO timestamp format (e.g. "2020-01-02T21:07:03Z")
+          //"credits": 150    // ...or numbers
+        });
+      }
 
-    if (web3Modal.cachedProvider) {
-      this.loadWeb3Modal(web3Modal);
+      // get our likes, follows, profile
+      const myInfoRequest = await fetch("/api/myinfo");
+      try {
+        const my_info_data = await myInfoRequest.json();
+
+        this.setMyLikes(my_info_data.data.likes);
+        this.setMyFollows(my_info_data.data.follows);
+        this.setMyProfile(my_info_data.data.profile);
+      } catch {}
+    } catch {
+      // Not logged in
+      // Switch from undefined to null
+      this.setUser(null);
     }
-  }
+  };
 
-  async loadWeb3Modal(web3Modal) {
-    const provider = await web3Modal.connect();
-    const web3Provider = new Web3Provider(provider);
+  handleResize = () => {
+    // Set window width/height to state
+    this.setState({
+      windowSize: {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      },
+    });
+  };
 
-    provider.on("accountsChanged", (accounts) => {
-      this.setAddress(accounts[0]);
+  logOut = async () => {
+    const authRequest = await fetch("/api/logout", {
+      method: "POST",
     });
 
-    const address = await web3Provider.getSigner().getAddress();
-    this.setAddress(address);
+    if (authRequest.ok) {
+      this.setUser(null);
+      this.setMyLikes([]);
+      this.setMyFollows([]);
 
-    this.setWeb3Provider(web3Provider);
+      mixpanel.track("Logout");
+    } else {
+      /* handle errors */
+    }
+  };
+
+  componentDidMount() {
+    this.getUserFromCookies();
+
+    // Add event listener
+    window.addEventListener("resize", this.handleResize);
+
+    // Call handler right away so state gets updated with initial window size
+    this.handleResize();
   }
 
-  setWeb3Modal(web3Modal) {
-    this.setState({ web3Modal }, () => this.setState({ initialized: true }));
-  }
-
-  setWeb3Provider(web3Provider) {
-    this.setState({ web3Provider });
-  }
-
-  setAddress(address) {
-    this.setState({ address });
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
   }
 
   setUser(user) {
@@ -106,19 +122,13 @@ export default class MyApp extends React.Component {
     const { Component, pageProps } = this.props;
 
     const injectedGlobalContext = {
-      initialized: this.state.initialized,
-      web3Modal: this.state.web3Modal,
-      web3Provider: this.state.web3Provider,
-      address: this.state.address,
       user: this.state.user,
       windowSize: this.state.windowSize,
       myLikes: this.state.myLikes,
       myFollows: this.state.myFollows,
       myProfile: this.state.myProfile,
       loginModalOpen: this.state.loginModalOpen,
-      setWeb3Modal: (web3Modal) => this.setWeb3Modal(web3Modal),
-      setWeb3Provider: (web3Provider) => this.setWeb3Provider(web3Provider),
-      setAddress: (address) => this.setAddress(address),
+
       setUser: (user) => this.setUser(user),
       setWindowSize: (windowSize) => this.setWindowSize(windowSize),
       setMyLikes: (myLikes) => this.setMyLikes(myLikes),
@@ -126,6 +136,9 @@ export default class MyApp extends React.Component {
       setMyProfile: (myProfile) => this.setMyProfile(myProfile),
       setLoginModalOpen: (loginModalOpen) =>
         this.setLoginModalOpen(loginModalOpen),
+
+      getUserFromCookies: () => this.getUserFromCookies(),
+      logOut: () => this.logOut(),
     };
 
     return (

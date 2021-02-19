@@ -78,12 +78,6 @@ const Profile = ({
   //const router = useRouter();
   const context = useContext(AppContext);
 
-  const web3Modal = context?.web3Modal;
-
-  const logoutOfWeb3Modal = function () {
-    if (web3Modal) web3Modal.clearCachedProvider();
-  };
-
   const [isMyProfile, setIsMyProfile] = useState();
   const [isFollowed, setIsFollowed] = useState(false);
 
@@ -178,26 +172,8 @@ const Profile = ({
   ]);
 
   const logout = async () => {
-    const authRequest = await fetch("/api/logout", {
-      method: "POST",
-    });
-
-    if (authRequest.ok) {
-      // We successfully logged in, our API
-      // set authorization cookies and now we
-      // can redirect to the dashboard!
-      //router.push("/");
-      logoutOfWeb3Modal();
-      context.setUser(null);
-      context.setMyLikes([]);
-      context.setMyFollows([]);
-      //router.push("/");
-      //window.location.href = "/";
-      mixpanel.track("Logout");
-      setIsMyProfile(false);
-    } else {
-      /* handle errors */
-    }
+    await context.logOut();
+    setIsMyProfile(false);
   };
 
   const [columns, setColumns] = useState(2);
