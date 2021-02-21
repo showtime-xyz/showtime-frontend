@@ -14,7 +14,7 @@ export async function getServerSideProps(context) {
   if (slug === "youngadz1") {
     error = null;
     profile_pic =
-      "https://pbs.twimg.com/media/EudKXKdXUAMZmVc?format=jpg&name=large";
+      "https://showtime-git-youngadz-showtime.vercel.app/artists/youngadz.jpeg";
     name = "Young Adz";
   } else {
     error = "Page not found";
@@ -86,8 +86,7 @@ const Profile = ({ slug, error, profile_pic, name }) => {
         style={{
           height: 500,
           backgroundColor: "black",
-          backgroundImage:
-            "url(https://pbs.twimg.com/media/Et-IBH0XMAY0BIb?format=jpg&name=large)",
+          backgroundImage: `url(https://pbs.twimg.com/media/Et-IBH0XMAY0BIb?format=jpg&name=large)`,
           backgroundPosition: "center top",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
