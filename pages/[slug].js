@@ -8,21 +8,31 @@ import AppContext from "../context/app-context";
 export async function getServerSideProps(context) {
   const { slug } = context.query;
   let error;
+  let profile_pic;
+  let name;
+
   if (slug === "youngadz1") {
     error = null;
+    profile_pic =
+      "https://pbs.twimg.com/media/EudKXKdXUAMZmVc?format=jpg&name=large";
+    name = "Young Adz";
   } else {
     error = "Page not found";
+    profile_pic = null;
+    name = null;
   }
   //https://i1.sndcdn.com/visuals-000204324090-sqz3Ni-t2480x520.jpg
   return {
     props: {
       slug,
       error,
+      profile_pic,
+      name,
     },
   };
 }
 
-const Profile = ({ slug, error }) => {
+const Profile = ({ slug, error, profile_pic, name }) => {
   const context = useContext(AppContext);
 
   const [isFollowed, setIsFollowed] = useState(false);
@@ -55,7 +65,23 @@ const Profile = ({ slug, error }) => {
   }
   return (
     <Layout>
-      <Head></Head>
+      <Head>
+        <title>{name}</title>
+
+        <meta name="description" content="Fans exclusive photography drop" />
+        <meta property="og:type" content="website" />
+        <meta name="og:description" content="Fans exclusive photography drop" />
+        <meta property="og:image" content={profile_pic} />
+        <meta name="og:title" content={name} />
+
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={name} />
+        <meta
+          name="twitter:description"
+          content="Fans exclusive photography drop"
+        />
+        <meta name="twitter:image" content={profile_pic} />
+      </Head>
       <div
         style={{
           height: 500,
@@ -76,9 +102,7 @@ const Profile = ({ slug, error }) => {
           <img
             alt="artist"
             className="rounded-full object-cover object-center w-32 h-32"
-            src={
-              "https://pbs.twimg.com/media/EudKXKdXUAMZmVc?format=jpg&name=large"
-            }
+            src={profile_pic}
           />
           <div className="ml-8">
             <div className="text-3xl" style={{ fontWeight: 600 }}>
