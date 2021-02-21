@@ -2,9 +2,11 @@ import React, { useContext, useState, useEffect } from "react";
 import Layout from "../components/layout";
 import Head from "next/head";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock } from "@fortawesome/free-solid-svg-icons";
+import { faLock, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
+import TokenGridV4 from "../components/TokenGridV4";
+import backend from "../lib/backend";
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
@@ -12,18 +14,30 @@ export async function getServerSideProps(context) {
   let profile_pic;
   let name;
   let wallet_addresses;
+  let restrictedItems;
 
   if (slug === "youngadz1") {
     error = null;
     profile_pic =
       "https://showtime-git-youngadz-showtime.vercel.app/artists/youngadz.jpeg";
     name = "Young Adz";
-    wallet_addresses = ["0x2645FC9eE4f6242083dC078343d9176F60B2Ee63"];
+    wallet_addresses = ["0x78e2426d33b365665c82a9f5aba1b7b488930d38"];
+
+    const response_profile = await backend.get(
+      `/v2/profile/${wallet_addresses[0]}?limit=150`
+    );
+    const data_profile = response_profile.data.data;
+    const created_items = data_profile.created.sort((a, b) =>
+      a.token_name.localeCompare(b.token_name)
+    );
+
+    restrictedItems = created_items;
   } else {
     error = "Page not found";
     profile_pic = null;
     name = null;
     wallet_addresses = null;
+    restrictedItems = null;
   }
   //https://i1.sndcdn.com/visuals-000204324090-sqz3Ni-t2480x520.jpg
   return {
@@ -33,11 +47,19 @@ export async function getServerSideProps(context) {
       profile_pic,
       name,
       wallet_addresses,
+      restrictedItems,
     },
   };
 }
 
-const Profile = ({ slug, error, profile_pic, name, wallet_addresses }) => {
+const Profile = ({
+  slug,
+  error,
+  profile_pic,
+  name,
+  wallet_addresses,
+  restrictedItems,
+}) => {
   const context = useContext(AppContext);
 
   const [isFollowed, setIsFollowed] = useState(false);
@@ -160,7 +182,7 @@ const Profile = ({ slug, error, profile_pic, name, wallet_addresses }) => {
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
         }}
-        className="flex flex-col w-full p-4 md:p-8"
+        className="flex flex-col w-full p-4"
       >
         <div className="flex-grow"></div>
         <div
@@ -211,79 +233,160 @@ const Profile = ({ slug, error, profile_pic, name, wallet_addresses }) => {
           </div>
         </div>
       </div>
-      <div className="m-4 md:m-16 text-center">
-        <div
-          className="text-3xl mt-16 sm:mt-8 md:mt-0"
-          style={{ fontWeight: 600 }}
-        >
-          Fans Exclusive Photography Drop
-        </div>
-        <div className="my-8">
-          You need to <span style={{ fontWeight: 600 }}>follow</span> Young Adz
-          👆 to access this collection
-        </div>
-        <div className="flex flex-col sm:flex-row w-full">
-          <div className="flex flex-col lg:flex-row w-full">
-            <div
-              style={{
-                backgroundColor: "white",
-                height: 400,
+      {isFollowed ? (
+        <>
+          <div
+            className="text-3xl mt-16 text-center"
+            style={{ fontWeight: 600 }}
+          >
+            Fans Exclusive Photography Drop
+          </div>
+          <div className="text-center mt-8 mx-4">
+            Each photo is a unique digital asset (NFT) and up for sale on
+            OpenSea.{" "}
+            <a
+              href="https://opensea.io/collection/d-block-europe-february-shoot"
+              target="_blank"
+              className="flex flex-row"
+              style={{ color: "rgb(22 138 193)", display: "inline-block" }}
+              onClick={() => {
+                mixpanel.track("Bid now link click - drop page");
               }}
-              className="rounded-md border-2 flex-1 mr-0 sm:mr-4 flex flex-col mb-4"
             >
-              <div className="flex-grow"></div>
-              <div>
-                <FontAwesomeIcon
-                  style={{ height: 48, margin: "auto", color: "#ccc" }}
-                  icon={faLock}
-                />
+              <div style={{ display: "inline-block", marginRight: 4 }}>
+                Bid now
               </div>
-              <div className="flex-grow"></div>
-            </div>
-            <div
-              style={{ backgroundColor: "white", height: 400 }}
-              className="rounded-md border-2 flex-1 mr-0 sm:mr-4 flex flex-col mb-4"
-            >
-              <div className="flex-grow"></div>
-              <div>
-                <FontAwesomeIcon
-                  style={{ height: 48, margin: "auto", color: "#ccc" }}
-                  icon={faLock}
-                />
-              </div>
-              <div className="flex-grow"></div>
-            </div>
+
+              <FontAwesomeIcon
+                style={{
+                  height: 16,
+                  margin: "auto",
+                  marginBottom: 4,
+                  display: "inline-block",
+                }}
+                icon={faExternalLinkAlt}
+              />
+            </a>
           </div>
-          <div className="flex flex-col lg:flex-row w-full">
-            <div
-              style={{ backgroundColor: "white", height: 400 }}
-              className="rounded-md border-2 flex-1 mr-0 sm:mr-4 flex flex-col mb-4"
-            >
-              <div className="flex-grow"></div>
-              <div>
-                <FontAwesomeIcon
-                  style={{ height: 48, margin: "auto", color: "#ccc" }}
-                  icon={faLock}
-                />
-              </div>
-              <div className="flex-grow"></div>
-            </div>
-            <div
-              style={{ backgroundColor: "white", height: 400 }}
-              className="rounded-md border-2 flex-1 mr-0 sm:mr-4 flex flex-col  mb-4"
-            >
-              <div className="flex-grow"></div>
-              <div>
-                <FontAwesomeIcon
-                  style={{ height: 48, margin: "auto", color: "#ccc" }}
-                  icon={faLock}
-                />
-              </div>
-              <div className="flex-grow"></div>
-            </div>
+          <div className="text-left mt-8">
+            <TokenGridV4 items={restrictedItems} />
           </div>
+        </>
+      ) : (
+        <div className="m-4 md:m-16 text-center">
+          <div
+            className="text-3xl mt-16 sm:mt-8 md:mt-0"
+            style={{ fontWeight: 600 }}
+          >
+            Fans Exclusive Photography Drop
+          </div>
+
+          <>
+            <div className="my-8">
+              <span style={{ fontWeight: 600 }}>Follow</span> Young Adz 👆 to
+              access this collection
+            </div>
+            <div className="flex flex-col sm:flex-row w-full">
+              <div className="flex flex-col lg:flex-row w-full">
+                <div
+                  style={{
+                    backgroundColor: "white",
+                    height: 400,
+                    color: "#aaa",
+                  }}
+                  className="rounded-md border-2 flex-1 mr-0 sm:mr-4 flex flex-col mb-4"
+                >
+                  <div className="flex-grow"></div>
+                  <div>
+                    <FontAwesomeIcon
+                      style={{
+                        height: 48,
+                        margin: "auto",
+                        color: "#ccc",
+                        marginBottom: 4,
+                      }}
+                      icon={faLock}
+                    />
+                    Followers only
+                  </div>
+                  <div className="flex-grow"></div>
+                </div>
+                <div
+                  style={{
+                    backgroundColor: "white",
+                    height: 400,
+                    color: "#aaa",
+                  }}
+                  className="rounded-md border-2 flex-1 mr-0 sm:mr-4 flex flex-col mb-4"
+                >
+                  <div className="flex-grow"></div>
+                  <div>
+                    <FontAwesomeIcon
+                      style={{
+                        height: 48,
+                        margin: "auto",
+                        color: "#ccc",
+                        marginBottom: 4,
+                      }}
+                      icon={faLock}
+                    />
+                    Followers only
+                  </div>
+                  <div className="flex-grow"></div>
+                </div>
+              </div>
+              <div className="flex flex-col lg:flex-row w-full">
+                <div
+                  style={{
+                    backgroundColor: "white",
+                    height: 400,
+                    color: "#aaa",
+                  }}
+                  className="rounded-md border-2 flex-1 mr-0 sm:mr-4 flex flex-col mb-4"
+                >
+                  <div className="flex-grow"></div>
+                  <div>
+                    <FontAwesomeIcon
+                      style={{
+                        height: 48,
+                        margin: "auto",
+                        color: "#ccc",
+                        marginBottom: 4,
+                      }}
+                      icon={faLock}
+                    />
+                    Followers only
+                  </div>
+                  <div className="flex-grow"></div>
+                </div>
+                <div
+                  style={{
+                    backgroundColor: "white",
+                    height: 400,
+                    color: "#aaa",
+                  }}
+                  className="rounded-md border-2 flex-1 mr-0 sm:mr-4 flex flex-col  mb-4"
+                >
+                  <div className="flex-grow"></div>
+                  <div>
+                    <FontAwesomeIcon
+                      style={{
+                        height: 48,
+                        margin: "auto",
+                        color: "#ccc",
+                        marginBottom: 4,
+                      }}
+                      icon={faLock}
+                    />
+                    Followers only
+                  </div>
+                  <div className="flex-grow"></div>
+                </div>
+              </div>
+            </div>
+          </>
         </div>
-      </div>
+      )}
     </Layout>
   );
 };
