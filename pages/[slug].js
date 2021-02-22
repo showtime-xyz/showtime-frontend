@@ -3,6 +3,7 @@ import Layout from "../components/layout";
 import Head from "next/head";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
+import { faInstagram } from "@fortawesome/free-brands-svg-icons";
 import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
 import TokenGridV4 from "../components/TokenGridV4";
@@ -157,7 +158,7 @@ const Profile = ({
   return (
     <Layout>
       <Head>
-        <title>{name}</title>
+        <title>{name} NFT Drop</title>
 
         <meta
           name="description"
@@ -183,7 +184,7 @@ const Profile = ({
         style={{
           height: 620,
           backgroundColor: "black",
-          backgroundImage: `url(/artists/dblock_bg.jpg)`,
+          backgroundImage: `url(/artists/dblock_bg2.jpg)`,
           backgroundPosition: "center top",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
@@ -201,16 +202,23 @@ const Profile = ({
             src={profile_pic}
           />
           <div className="ml-0 sm:ml-8  text-center sm:text-left">
-            <div className="text-3xl pt-2 sm:pt-2" style={{ fontWeight: 600 }}>
-              {name}
+            <div
+              className="text-3xl pt-2 sm:pt-2 flex flex-row items-center"
+              style={{ fontWeight: 600 }}
+            >
+              <div>{name}</div>
+              <img
+                src="/icons/verified.png"
+                style={{ width: 36, height: 36 }}
+              />
             </div>
             <div className="text-sm mt-2">
               Official page for artist signed to legendary *JADAKISS* @YoungAdz1
               @dirtbike_lb BOOKINGS: Craig@primarytalent.com ENQUIRIES:
               Dblock_Europe@hotmail.com
             </div>
-            <div className="mt-4">
-              <div className="tooltip text-center sm:text-left">
+            <div className="mt-4 flex flex-row items-center">
+              <div className="tooltip text-center sm:text-left ">
                 <button
                   className={
                     isFollowed
@@ -227,6 +235,7 @@ const Profile = ({
                 >
                   {isFollowed ? "Following" : "Follow"}
                 </button>
+
                 {context.user ? null : (
                   <span
                     style={{ fontSize: 12, opacity: 0.9, width: 110 }}
@@ -235,6 +244,25 @@ const Profile = ({
                     Sign in to follow
                   </span>
                 )}
+              </div>
+              <div>
+                <a
+                  href="https://www.instagram.com/dblock_europe/"
+                  target="_blank"
+                  style={{ fontSize: 14, color: "rgb(81, 125, 228)" }}
+                  className="flex flex-row items-center"
+                >
+                  <FontAwesomeIcon
+                    style={{
+                      height: 20,
+                      margin: "auto",
+                      marginLeft: 16,
+                      marginRight: 4,
+                    }}
+                    icon={faInstagram}
+                  />
+                  <div>dblock_europe</div>
+                </a>
               </div>
             </div>
           </div>

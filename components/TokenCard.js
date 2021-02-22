@@ -6,6 +6,7 @@ import {
   faExternalLinkAlt,
   faVideo,
   faPlay,
+  faClock,
 } from "@fortawesome/free-solid-svg-icons";
 import LikeButton from "./LikeButton";
 import ShareButton from "./ShareButton";
@@ -126,7 +127,7 @@ class TokenCard extends React.Component {
                 : "mx-auto showtime-card sm:rounded-md"
             }
           >
-            <div className="p-4 flex flex-row">
+            <div className="p-4 flex flex-row items-center">
               <div className="flex-shrink">
                 {this.props.item.creator_address ? (
                   <Link
@@ -156,7 +157,32 @@ class TokenCard extends React.Component {
                   </Link>
                 ) : null}
               </div>
-              <div>&nbsp;</div>
+              <div className="flex-grow">&nbsp;</div>
+
+              {/*[1266458, 1266463, 1320881, 1320889].includes(
+                this.props.item.tid
+              ) ? (
+                <div
+                  className="flex flex-row text-xs"
+                  style={{ color: "#333" }}
+                >
+                  <div>
+                    <FontAwesomeIcon
+                      style={{
+                        height: 14,
+                        margin: "auto",
+                        marginBottom: 4,
+                        marginRight: 4,
+                      }}
+                      icon={faClock}
+                    />
+                  </div>
+                  <div>
+                    Sale ends in{" "}
+                    <span style={{ fontWeight: 600 }}>3 hours</span>
+                  </div>
+                </div>
+                    ) : null*/}
             </div>
             {(this.props.item.token_has_video &&
               this.state.showVideo &&
