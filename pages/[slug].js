@@ -182,9 +182,9 @@ const Profile = ({
       </Head>
       <div
         style={{
-          height: 620,
+          height: 550,
           backgroundColor: "black",
-          backgroundImage: `url(/artists/dblock_bg2.jpg)`,
+          backgroundImage: `url(/artists/dblock_bg4.jpg)`,
           backgroundPosition: "center top",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
@@ -194,31 +194,77 @@ const Profile = ({
         <div className="flex-grow"></div>
         <div
           style={{ backgroundColor: "white", opacity: 0.9 }}
-          className="p-4 md:p-6 rounded-lg sm:mx-16 sm:my-8 flex flex-col sm:flex-row items-center w-full sm:w-4/5 md:w-3/5 lg:w-2/5"
+          className="p-4 md:p-6 rounded-lg sm:mx-16 sm:my-8 flex flex-col sm:flex-row items-center w-full sm:w-4/5 md:w-3/5 xl:w-2/5"
         >
           <img
             alt="artist"
-            className="rounded-full object-cover object-center w-32 h-32"
+            className="rounded-full object-cover object-center w-24 h-24 md:w-32 md:h-32"
             src={profile_pic}
           />
-          <div className="ml-0 sm:ml-8  text-center sm:text-left">
+          <div className="ml-0 sm:ml-4 lg:ml-8  text-center sm:text-left">
             <div
-              className="text-3xl pt-2 sm:pt-2 flex flex-row items-center"
+              className="text-2xl md:text-3xl pt-0 sm:pt-2"
               style={{ fontWeight: 600 }}
             >
-              <div>{name}</div>
+              {name}
               <img
                 src="/icons/verified.png"
-                style={{ width: 36, height: 36 }}
+                style={{
+                  width: 36,
+                  height: 36,
+                  display: "inline-block",
+                  marginBottom: 4,
+                }}
               />
             </div>
             <div className="text-sm mt-2">
               Official page for artist signed to legendary *JADAKISS* @YoungAdz1
-              @dirtbike_lb BOOKINGS: Craig@primarytalent.com ENQUIRIES:
-              Dblock_Europe@hotmail.com
+              @dirtbike_lb
             </div>
-            <div className="mt-4 flex flex-row items-center">
-              <div className="tooltip text-center sm:text-left ">
+            <div className="inline-block sm:hidden text-center">
+              <div className="flex flex-row my-4">
+                <div className="flex-grow"></div>
+                <a
+                  href="https://www.instagram.com/dblock_europe/"
+                  target="_blank"
+                  style={{
+                    fontSize: 14,
+                    color: "rgb(81, 125, 228)",
+                  }}
+                  className="flex flex-row items-center"
+                >
+                  <FontAwesomeIcon
+                    style={{
+                      height: 16,
+                      margin: "auto",
+                      marginLeft: 16,
+                      marginRight: 4,
+                    }}
+                    icon={faInstagram}
+                  />
+                  <div style={{ marginRight: 14 }}>dblock_europe</div>
+                </a>
+                <div className="flex-grow"></div>
+              </div>
+              <button
+                className={
+                  isFollowed
+                    ? "showtime-green-button text-base px-3 py-1  items-center"
+                    : "showtime-like-button-white-green-hover text-base px-3 py-1  items-center"
+                }
+                onClick={() =>
+                  context.user
+                    ? isFollowed
+                      ? handleUnfollow()
+                      : handleFollow()
+                    : handleLoggedOutFollow()
+                }
+              >
+                {isFollowed ? "Following" : "Follow"}
+              </button>
+            </div>
+            <div className="mt-4  flex-row items-center hidden sm:flex">
+              <div className="tooltip text-center sm:text-left">
                 <button
                   className={
                     isFollowed
@@ -270,12 +316,12 @@ const Profile = ({
       </div>
       <div className="m-4 md:m-16 text-center">
         <div
-          className="text-3xl mt-16 sm:mt-8 md:mt-0"
+          className="text-2xl sm:text-3xl mt-16 sm:mt-8 md:mt-0"
           style={{ fontWeight: 600 }}
         >
           D-Block Europe NFTs - First Collectible Drop
         </div>
-        <div className="p-4 md:w-1/2" style={{ margin: "auto" }}>
+        <div className="p-4 sm:w-4/5 lg:w-1/2" style={{ margin: "auto" }}>
           This is the first NFT drop of D-Block Europe (Young Adz X Dirtbike
           LB). There is ONLY 4 collectibles from this drop, and that will never
           change. You can own a piece of history forever. There is a 10% royalty
@@ -342,7 +388,7 @@ const Profile = ({
               )}
             </div>
             {isFollowed ? null : (
-              <div className="mt-4 mb-16">
+              <div className="mt-6 mb-16">
                 <span style={{ fontWeight: 600 }}>Follow</span> {name} 👆 to bid
                 on the NFTs
               </div>
