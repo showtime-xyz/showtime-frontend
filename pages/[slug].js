@@ -16,11 +16,11 @@ export async function getServerSideProps(context) {
   let wallet_addresses;
   let restrictedItems;
 
-  if (slug === "youngadz1") {
+  if (slug === "d-block-europe") {
     error = null;
     profile_pic =
-      "https://showtime-git-youngadz-showtime.vercel.app/artists/youngadz.jpeg";
-    name = "Young Adz";
+      "https://showtime-git-youngadz-showtime.vercel.app/artists/dblock.jpg";
+    name = "D-Block Europe";
     wallet_addresses = ["0x78e2426d33b365665c82a9f5aba1b7b488930d38"];
 
     const response_profile = await backend.get(
@@ -159,9 +159,15 @@ const Profile = ({
       <Head>
         <title>{name}</title>
 
-        <meta name="description" content="Fans exclusive photography drop" />
+        <meta
+          name="description"
+          content="D-Block Europe NFTs - First Collectible Drop"
+        />
         <meta property="og:type" content="website" />
-        <meta name="og:description" content="Fans exclusive photography drop" />
+        <meta
+          name="og:description"
+          content="D-Block Europe NFTs - First Collectible Drop"
+        />
         <meta property="og:image" content={profile_pic} />
         <meta name="og:title" content={name} />
 
@@ -169,15 +175,15 @@ const Profile = ({
         <meta name="twitter:title" content={name} />
         <meta
           name="twitter:description"
-          content="Fans exclusive photography drop"
+          content="D-Block Europe NFTs - First Collectible Drop"
         />
         <meta name="twitter:image" content={profile_pic} />
       </Head>
       <div
         style={{
-          height: 500,
+          height: 600,
           backgroundColor: "black",
-          backgroundImage: `url(https://pbs.twimg.com/media/Et-IBH0XMAY0BIb?format=jpg&name=large)`,
+          backgroundImage: `url(/artists/dblock_bg.jpg)`,
           backgroundPosition: "center top",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
@@ -196,11 +202,12 @@ const Profile = ({
           />
           <div className="ml-0 sm:ml-8  text-center sm:text-left">
             <div className="text-3xl pt-2 sm:pt-2" style={{ fontWeight: 600 }}>
-              Young Adz
+              {name}
             </div>
             <div className="text-sm mt-2">
-              BANDO BABY NEW ALBUM OUT NOW #TheBlueprint @dirtbike_lb @dbegaming
-              @dblock_europe
+              Official page for artist signed to legendary *JADAKISS* @YoungAdz1
+              @dirtbike_lb BOOKINGS:Craig@primarytalent.com
+              ENQUIRIES:Dblock_Europe@hotmail.com
             </div>
             <div className="mt-4">
               <div className="tooltip text-center sm:text-left">
@@ -233,60 +240,81 @@ const Profile = ({
           </div>
         </div>
       </div>
-      {isFollowed ? (
+      <div className="m-4 md:m-16 text-center">
+        <div
+          className="text-3xl mt-16 sm:mt-8 md:mt-0"
+          style={{ fontWeight: 600 }}
+        >
+          D-Block Europe NFTs - First Collectible Drop
+        </div>
+        <div className="p-4 md:w-1/2" style={{ margin: "auto" }}>
+          This is the first NFT drop of D-Block Europe (Young Adz X Dirtbike
+          LB). There is ONLY 4 collectibles from this drop, and that will never
+          change. You can own a piece of history forever. There is a 10% royalty
+          fees that will be paid back to D-Block for future resales.
+        </div>
+
         <>
-          <div
-            className="text-3xl mt-16 text-center"
-            style={{ fontWeight: 600 }}
-          >
-            Fans Exclusive Photography Drop
-          </div>
-          <div className="text-center mt-8 mx-4">
-            Each photo is a unique digital asset (NFT) and up for sale on
-            OpenSea.{" "}
-            <a
-              href="https://opensea.io/collection/d-block-europe-february-shoot"
-              target="_blank"
-              className="flex flex-row"
-              style={{ color: "rgb(22 138 193)", display: "inline-block" }}
-              onClick={() => {
-                mixpanel.track("Bid now link click - drop page");
-              }}
-            >
-              <div style={{ display: "inline-block", marginRight: 4 }}>
-                Bid now
-              </div>
+          <div className="my-8">
+            <div className="tooltip">
+              <button
+                className="showtime-pink-button"
+                style={
+                  isFollowed
+                    ? { width: 180, margin: "auto", cursor: "pointer" }
+                    : {
+                        width: 180,
+                        margin: "auto",
+                        cursor: "not-allowed",
+                        opacity: 0.7,
+                      }
+                }
+              >
+                {isFollowed ? null : (
+                  <FontAwesomeIcon
+                    style={{
+                      height: 16,
+                      margin: "auto",
+                      marginBottom: 4,
+                      marginRight: 6,
+                      display: "inline-block",
+                    }}
+                    icon={faLock}
+                  />
+                )}
+                <div style={{ display: "inline-block", marginRight: 6 }}>
+                  Bid on items
+                </div>
 
-              <FontAwesomeIcon
-                style={{
-                  height: 16,
-                  margin: "auto",
-                  marginBottom: 4,
-                  display: "inline-block",
-                }}
-                icon={faExternalLinkAlt}
-              />
-            </a>
-          </div>
-          <div className="text-left mt-8">
-            <TokenGridV4 items={restrictedItems} />
-          </div>
-        </>
-      ) : (
-        <div className="m-4 md:m-16 text-center">
-          <div
-            className="text-3xl mt-16 sm:mt-8 md:mt-0"
-            style={{ fontWeight: 600 }}
-          >
-            Fans Exclusive Photography Drop
-          </div>
-
-          <>
-            <div className="my-8">
-              <span style={{ fontWeight: 600 }}>Follow</span> Young Adz 👆 to
-              access this collection
+                {isFollowed ? (
+                  <FontAwesomeIcon
+                    style={{
+                      height: 16,
+                      margin: "auto",
+                      marginBottom: 4,
+                      display: "inline-block",
+                    }}
+                    icon={faExternalLinkAlt}
+                  />
+                ) : null}
+              </button>
+              {isFollowed ? null : (
+                <span
+                  style={{ fontSize: 12, opacity: 0.9, width: 200 }}
+                  className="tooltip-text bg-black p-3 -mt-6 -ml-48 rounded text-white"
+                >
+                  Follow {name} to unlock
+                </span>
+              )}
             </div>
-            <div className="flex flex-col sm:flex-row w-full">
+            {isFollowed ? null : (
+              <div className="mt-4 mb-16">
+                <span style={{ fontWeight: 600 }}>Follow</span> {name} 👆 to
+                unlock the bid link
+              </div>
+            )}
+          </div>
+          {/*<div className="flex flex-col sm:flex-row w-full">
               <div className="flex flex-col lg:flex-row w-full">
                 <div
                   style={{
@@ -383,9 +411,12 @@ const Profile = ({
                   <div className="flex-grow"></div>
                 </div>
               </div>
-            </div>
-          </>
-        </div>
+                    </div>*/}
+        </>
+      </div>
+      <div className="text-left mt-8">
+        <TokenGridV4 items={restrictedItems} />
+      </div>
       )}
     </Layout>
   );

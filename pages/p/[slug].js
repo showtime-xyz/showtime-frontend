@@ -80,6 +80,15 @@ const Profile = ({
 
   const [isMyProfile, setIsMyProfile] = useState();
   const [isFollowed, setIsFollowed] = useState(false);
+  const [hasFollowerOnlyItems, setHasFollowerOnlyItems] = useState(false);
+
+  useEffect(() => {
+    _.forEach(created_items, (item) => {
+      if (item.token_creator_followers_only === 1) {
+        setHasFollowerOnlyItems(true);
+      }
+    });
+  }, [created_items]);
 
   useEffect(() => {
     const checkIfFollowed = async () => {
@@ -117,11 +126,13 @@ const Profile = ({
       created_items.filter(
         (item) =>
           item.token_hidden !== 1 &&
-          (item.token_img_url || item.token_animation_url)
+          (item.token_img_url || item.token_animation_url) &&
+          (item.token_creator_followers_only === 0 ||
+            (item.token_creator_followers_only && isFollowed))
       )
     );
     //setCreatedRefreshed(false);
-  }, [created_items]);
+  }, [created_items, isFollowed]);
 
   const [ownedItems, setOwnedItems] = useState([]);
   //const [ownedRefreshed, setOwnedRefreshed] = useState(false);
@@ -131,11 +142,17 @@ const Profile = ({
       owned_items.filter(
         (item) =>
           item.token_hidden !== 1 &&
-          (item.token_img_url || item.token_animation_url)
+          (item.token_img_url || item.token_animation_url) &&
+          (item.token_creator_followers_only === 0 ||
+            (item.token_creator_followers_only &&
+              item.creator_id !== item.owner_id) ||
+            (item.token_creator_followers_only &&
+              item.creator_id === item.owner_id &&
+              isFollowed))
       )
     );
     //setOwnedRefreshed(false);
-  }, [owned_items]);
+  }, [owned_items, isFollowed]);
 
   const [followers, setFollowers] = useState([]);
   useEffect(() => {
@@ -243,10 +260,13 @@ const Profile = ({
     );
 
     setFollowers(
-      followers.filter(
-        (follower) =>
-          !context.myProfile.wallet_addresses.includes(follower.wallet_address)
-      )
+      followers.filter((follower) => {
+        //console.log(context.myProfile.wallet_addresses);
+
+        return !context.myProfile.wallet_addresses.includes(
+          follower.wallet_address
+        );
+      })
     );
 
     // Post changes to the API
@@ -713,6 +733,13 @@ const Profile = ({
           </div>
         </div>
       </div>
+
+      {!isFollowed && hasFollowerOnlyItems ? (
+        <div className="text-center py-8">
+          This creator has <span style={{ fontWeight: 600 }}>more content</span>{" "}
+          you can unlock by <span style={{ fontWeight: 600 }}>Following</span>.
+        </div>
+      ) : null}
 
       {createdItems.length > 0 ||
       ownedItems.length > 0 ||
