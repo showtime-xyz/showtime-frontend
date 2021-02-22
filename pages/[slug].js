@@ -218,8 +218,7 @@ const Profile = ({
               />
             </div>
             <div className="text-sm mt-2">
-              Official page for artist signed to legendary *JADAKISS* @YoungAdz1
-              @dirtbike_lb
+              Official page for artists @YoungAdz1 @dirtbike_lb
             </div>
             <div className="inline-block sm:hidden text-center">
               <div className="flex flex-row my-4">
