@@ -31,12 +31,10 @@ class TokenCard extends React.Component {
   }
 
   componentDidMount() {
-    //this.setSpans();
+    // Set to square at first, then adjust when media loads
+    this.setState({ showVideo: true, spans: 23 });
     if (this.props.item.token_has_video && !this.props.item.token_img_url) {
-      // If it's a video with missing thumbnail, just assume
-      // it's a square at first, then the onReady callback
-      // will kick in with more precise dimensions
-      this.setState({ showVideo: true, spans: 23 });
+      // If it's a video with missing thumbnail, use onReady instead
     } else {
       this.props.item.imageRef.current.addEventListener("load", this.setSpans);
     }
