@@ -186,10 +186,11 @@ export default function Modal({ isOpen }) {
 
                   <div className="mb-4 text-center">
                     <button
-                      className="showtime-white-button bg-white text-black hover:bg-gray-300 rounded-lg py-2 px-5"
+                      className="showtime-white-button bg-white text-black hover:bg-gray-300 py-2 px-4 text-sm"
                       onClick={() => {
                         handleSubmitWallet();
                       }}
+                      style={{ borderRadius: 7 }}
                     >
                       Sign in with Wallet
                     </button>
