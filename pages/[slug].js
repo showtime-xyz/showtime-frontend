@@ -181,7 +181,7 @@ const Profile = ({
       </Head>
       <div
         style={{
-          height: 600,
+          height: 620,
           backgroundColor: "black",
           backgroundImage: `url(/artists/dblock_bg.jpg)`,
           backgroundPosition: "center top",
@@ -192,8 +192,8 @@ const Profile = ({
       >
         <div className="flex-grow"></div>
         <div
-          style={{ backgroundColor: "white", opacity: 0.95 }}
-          className="p-4 md:p-6 rounded-lg sm:m-16 flex flex-col sm:flex-row items-center w-full sm:w-4/5 md:w-3/5 lg:w-2/5"
+          style={{ backgroundColor: "white", opacity: 0.9 }}
+          className="p-4 md:p-6 rounded-lg sm:mx-16 sm:my-8 flex flex-col sm:flex-row items-center w-full sm:w-4/5 md:w-3/5 lg:w-2/5"
         >
           <img
             alt="artist"
@@ -206,8 +206,8 @@ const Profile = ({
             </div>
             <div className="text-sm mt-2">
               Official page for artist signed to legendary *JADAKISS* @YoungAdz1
-              @dirtbike_lb BOOKINGS:Craig@primarytalent.com
-              ENQUIRIES:Dblock_Europe@hotmail.com
+              @dirtbike_lb BOOKINGS: Craig@primarytalent.com ENQUIRIES:
+              Dblock_Europe@hotmail.com
             </div>
             <div className="mt-4">
               <div className="tooltip text-center sm:text-left">
@@ -257,7 +257,7 @@ const Profile = ({
         <>
           <div className="my-8">
             <div className="tooltip">
-              <button
+              <a
                 className="showtime-pink-button"
                 style={
                   isFollowed
@@ -269,6 +269,12 @@ const Profile = ({
                         opacity: 0.7,
                       }
                 }
+                href={
+                  isFollowed
+                    ? "https://opensea.io/collection/d-block-europe"
+                    : null
+                }
+                target={isFollowed ? "_blank" : null}
               >
                 {isFollowed ? null : (
                   <FontAwesomeIcon
@@ -297,20 +303,20 @@ const Profile = ({
                     icon={faExternalLinkAlt}
                   />
                 ) : null}
-              </button>
+              </a>
               {isFollowed ? null : (
                 <span
-                  style={{ fontSize: 12, opacity: 0.9, width: 200 }}
-                  className="tooltip-text bg-black p-3 -mt-6 -ml-48 rounded text-white"
+                  style={{ fontSize: 12, opacity: 0.9, width: 220 }}
+                  className="tooltip-text bg-black p-3 -mt-9 -ml-48 rounded text-white"
                 >
-                  Follow {name} to unlock
+                  Follow {name} to unlock link
                 </span>
               )}
             </div>
             {isFollowed ? null : (
               <div className="mt-4 mb-16">
-                <span style={{ fontWeight: 600 }}>Follow</span> {name} 👆 to
-                unlock the bid link
+                <span style={{ fontWeight: 600 }}>Follow</span> {name} 👆 to bid
+                on the NFTs
               </div>
             )}
           </div>
@@ -417,7 +423,6 @@ const Profile = ({
       <div className="text-left mt-8">
         <TokenGridV4 items={restrictedItems} />
       </div>
-      )}
     </Layout>
   );
 };

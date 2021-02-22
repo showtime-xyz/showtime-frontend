@@ -80,8 +80,9 @@ const Profile = ({
 
   const [isMyProfile, setIsMyProfile] = useState();
   const [isFollowed, setIsFollowed] = useState(false);
-  const [hasFollowerOnlyItems, setHasFollowerOnlyItems] = useState(false);
+  //const [hasFollowerOnlyItems, setHasFollowerOnlyItems] = useState(false);
 
+  /*
   useEffect(() => {
     _.forEach(created_items, (item) => {
       if (item.token_creator_followers_only === 1) {
@@ -89,6 +90,7 @@ const Profile = ({
       }
     });
   }, [created_items]);
+  */
 
   useEffect(() => {
     const checkIfFollowed = async () => {
@@ -126,13 +128,15 @@ const Profile = ({
       created_items.filter(
         (item) =>
           item.token_hidden !== 1 &&
-          (item.token_img_url || item.token_animation_url) &&
-          (item.token_creator_followers_only === 0 ||
-            (item.token_creator_followers_only && isFollowed))
+          (item.token_img_url || item.token_animation_url)
+        //&& (item.token_creator_followers_only === 0 || (item.token_creator_followers_only && isFollowed))
       )
     );
     //setCreatedRefreshed(false);
-  }, [created_items, isFollowed]);
+  }, [
+    created_items,
+    //isFollowed
+  ]);
 
   const [ownedItems, setOwnedItems] = useState([]);
   //const [ownedRefreshed, setOwnedRefreshed] = useState(false);
@@ -142,17 +146,22 @@ const Profile = ({
       owned_items.filter(
         (item) =>
           item.token_hidden !== 1 &&
-          (item.token_img_url || item.token_animation_url) &&
-          (item.token_creator_followers_only === 0 ||
+          (item.token_img_url || item.token_animation_url)
+        /*
+          && (item.token_creator_followers_only === 0 || 
             (item.token_creator_followers_only &&
               item.creator_id !== item.owner_id) ||
             (item.token_creator_followers_only &&
               item.creator_id === item.owner_id &&
               isFollowed))
+          */
       )
     );
     //setOwnedRefreshed(false);
-  }, [owned_items, isFollowed]);
+  }, [
+    owned_items,
+    //isFollowed
+  ]);
 
   const [followers, setFollowers] = useState([]);
   useEffect(() => {
@@ -734,12 +743,12 @@ const Profile = ({
         </div>
       </div>
 
-      {!isFollowed && hasFollowerOnlyItems ? (
+      {/*!isFollowed && hasFollowerOnlyItems ? (
         <div className="text-center py-8">
           This creator has <span style={{ fontWeight: 600 }}>more content</span>{" "}
           you can unlock by <span style={{ fontWeight: 600 }}>Following</span>.
         </div>
-      ) : null}
+      ) : null*/}
 
       {createdItems.length > 0 ||
       ownedItems.length > 0 ||
