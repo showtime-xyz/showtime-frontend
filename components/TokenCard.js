@@ -6,11 +6,13 @@ import {
   faExternalLinkAlt,
   faVideo,
   faPlay,
+  faClock,
 } from "@fortawesome/free-solid-svg-icons";
 import LikeButton from "./LikeButton";
 import ShareButton from "./ShareButton";
 import ReactPlayer from "react-player";
 import mixpanel from "mixpanel-browser";
+import AppContext from "../context/app-context";
 
 class TokenCard extends React.Component {
   constructor(props) {
@@ -125,7 +127,7 @@ class TokenCard extends React.Component {
                 : "mx-auto showtime-card sm:rounded-md"
             }
           >
-            <div className="p-4 flex flex-row">
+            <div className="p-4 flex flex-row items-center">
               <div className="flex-shrink">
                 {this.props.item.creator_address ? (
                   <Link
@@ -155,7 +157,32 @@ class TokenCard extends React.Component {
                   </Link>
                 ) : null}
               </div>
-              <div>&nbsp;</div>
+              <div className="flex-grow">&nbsp;</div>
+
+              {/*[1266458, 1266463, 1320881, 1320889].includes(
+                this.props.item.tid
+              ) ? (
+                <div
+                  className="flex flex-row text-xs"
+                  style={{ color: "#333" }}
+                >
+                  <div>
+                    <FontAwesomeIcon
+                      style={{
+                        height: 14,
+                        margin: "auto",
+                        marginBottom: 4,
+                        marginRight: 4,
+                      }}
+                      icon={faClock}
+                    />
+                  </div>
+                  <div>
+                    Sale ends in{" "}
+                    <span style={{ fontWeight: 600 }}>3 hours</span>
+                  </div>
+                </div>
+                    ) : null*/}
             </div>
             {(this.props.item.token_has_video &&
               this.state.showVideo &&
@@ -265,6 +292,32 @@ class TokenCard extends React.Component {
                       showTooltip={this.props.isMobile === false}
                     />
                   </div>
+                  {this.props.item.token_creator_followers_only ? (
+                    this.context.myFollows ? (
+                      this.context.myFollows
+                        .map((item) => item.wallet_address)
+                        .includes(this.props.item.creator_address) ? (
+                        <div>
+                          <a
+                            className="showtime-white-button ml-2 text-sm px-4 py-1 flex flex-row"
+                            style={{ cursor: "pointer" }}
+                            target="_blank"
+                            href={`https://opensea.io/assets/${this.props.item.contract_address}/${this.props.item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
+                          >
+                            <div style={{ marginRight: 6 }}>Bid</div>
+                            <FontAwesomeIcon
+                              style={{
+                                height: 14,
+                                margin: "auto",
+                                marginBottom: 4,
+                              }}
+                              icon={faExternalLinkAlt}
+                            />
+                          </a>
+                        </div>
+                      ) : null
+                    ) : null
+                  ) : null}
 
                   <div className="flex-grow text-right"></div>
                   <div className="flex-shrink">
@@ -408,19 +461,21 @@ class TokenCard extends React.Component {
               </div>
               <div className="flex-grow"></div>
               <div style={{ fontSize: 14, fontWeight: 400 }}>
-                <a
-                  href={`https://opensea.io/assets/${this.props.item.contract_address}/${this.props.item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
-                  target="_blank"
-                  className="flex flex-row items-center showtime-card-bid"
-                >
-                  <div className="mr-1">Bid</div>
-                  <div className="mb-0 flex">
-                    <FontAwesomeIcon
-                      style={{ height: 12 }}
-                      icon={faExternalLinkAlt}
-                    />
-                  </div>
-                </a>
+                {this.props.item.token_creator_followers_only ? null : (
+                  <a
+                    href={`https://opensea.io/assets/${this.props.item.contract_address}/${this.props.item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
+                    target="_blank"
+                    className="flex flex-row items-center showtime-card-bid"
+                  >
+                    <div className="mr-1">Bid</div>
+                    <div className="mb-0 flex">
+                      <FontAwesomeIcon
+                        style={{ height: 12 }}
+                        icon={faExternalLinkAlt}
+                      />
+                    </div>
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -429,5 +484,6 @@ class TokenCard extends React.Component {
     );
   }
 }
+TokenCard.contextType = AppContext;
 
 export default TokenCard;

@@ -189,13 +189,8 @@ a {
 .showtime-white-button {
   background-color: #fff;
   color: #222222;
-  font-size: 16px;
   font-weight: 600;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-left: 25px;
-  padding-right: 25px;
-  border-radius: 7px;
+  border-radius: 5px;
   border: 2px solid #222222;
 }
 

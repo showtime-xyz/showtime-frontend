@@ -277,28 +277,63 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
             <br />
             <br />
             <br />
-            <div style={{ width: 160 }}>
-              <a
-                href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
-                title="Buy on OpenSea"
-                target="_blank"
-                onClick={() => {
-                  mixpanel.track("OpenSea link click");
-                }}
-              >
-                <img
-                  style={{
-                    width: 160,
-                    borderRadius: 7,
-                    boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.25)",
-                  }}
-                  src="https://storage.googleapis.com/opensea-static/opensea-brand/listed-button-white.png"
-                  alt="Listed on OpenSea badge"
-                  className={isMobile ? "mx-auto" : "mr-auto"}
-                />
-              </a>
-            </div>
-            <br />
+            {item.token_creator_followers_only ? (
+              context.myFollows ? (
+                context.myFollows
+                  .map((item) => item.wallet_address)
+                  .includes(item.creator_address) ? (
+                  <>
+                    <div style={{ width: 160 }}>
+                      <a
+                        href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
+                        title="Buy on OpenSea"
+                        target="_blank"
+                        onClick={() => {
+                          mixpanel.track("OpenSea link click");
+                        }}
+                      >
+                        <img
+                          style={{
+                            width: 160,
+                            borderRadius: 7,
+                            boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.25)",
+                          }}
+                          src="https://storage.googleapis.com/opensea-static/opensea-brand/listed-button-white.png"
+                          alt="Listed on OpenSea badge"
+                          className={isMobile ? "mx-auto" : "mr-auto"}
+                        />
+                      </a>
+                    </div>
+                    <br />
+                  </>
+                ) : null
+              ) : null
+            ) : (
+              <>
+                <div style={{ width: 160 }}>
+                  <a
+                    href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
+                    title="Buy on OpenSea"
+                    target="_blank"
+                    onClick={() => {
+                      mixpanel.track("OpenSea link click");
+                    }}
+                  >
+                    <img
+                      style={{
+                        width: 160,
+                        borderRadius: 7,
+                        boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.25)",
+                      }}
+                      src="https://storage.googleapis.com/opensea-static/opensea-brand/listed-button-white.png"
+                      alt="Listed on OpenSea badge"
+                      className={isMobile ? "mx-auto" : "mr-auto"}
+                    />
+                  </a>
+                </div>
+                <br />
+              </>
+            )}
 
             <div
               className="text-xs"
