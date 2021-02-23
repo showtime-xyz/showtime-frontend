@@ -1,6 +1,6 @@
 import Head from "next/head";
 import PropTypes from "prop-types";
-import ScrollUpButton from "react-scroll-up-button";
+import ScrollUpButton from "./scrollUpButton";
 import Footer from "./footer";
 import Header from "./header";
 
@@ -34,8 +34,7 @@ const Layout = ({ children }) => {
       </Head>
 
       <Header />
-      <ScrollUpButton style={{ borderRadius: 7 }} />
-
+      <ScrollUpButton />
       <main>{children}</main>
 
       <Footer />
