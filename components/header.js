@@ -41,10 +41,11 @@ const Header = () => {
             </Link>
           </div>
           {/* Start desktop-only menu */}
-          <div className="hidden md:block ml-8" style={{ fontWeight: 400 }}>
+          <div className="flex-grow"></div>
+          <div className="hidden md:block mr-8" style={{ fontWeight: 400 }}>
             <Link href="/">
               <a
-                className="showtime-header-link mr-5 text-sm md:text-base"
+                className="showtime-header-link ml-6 text-sm md:text-base"
                 onClick={() => {
                   mixpanel.track("Home button click");
                 }}
@@ -54,7 +55,7 @@ const Header = () => {
             </Link>
             <Link href="/c/[collection]" as="/c/all">
               <a
-                className="showtime-header-link mr-5 text-sm md:text-base"
+                className="showtime-header-link ml-6 text-sm md:text-base"
                 onClick={() => {
                   mixpanel.track("Explore button click");
                 }}
@@ -64,7 +65,6 @@ const Header = () => {
             </Link>
           </div>
           {/* End desktop-only menu */}
-          <div className="flex-grow"></div>
           <div>
             {context.user && context.myProfile !== undefined ? (
               <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
