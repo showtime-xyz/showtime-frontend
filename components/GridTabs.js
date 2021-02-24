@@ -23,7 +23,7 @@ const Tab = styled.div`
   cursor: pointer;
   border-bottom: ${(p) =>
     p.isActive ? "3px solid #e45cff" : "3px solid transparent"};
-  transition: all 200ms ease;
+  transition: all 300ms ease;
   color: ${(p) => (p.isActive ? "#e45cff" : "inherit")};
   &:hover {
     opacity: ${(p) => (p.isActive ? null : 0.6)};
@@ -47,14 +47,23 @@ function GridTabs({ children, title }) {
 }
 
 function GridTab({ label, itemCount, isActive, onClickTab }) {
+  const cleanItemCount = () => {
+    if (itemCount === null || itemCount === undefined) {
+      return null;
+    }
+    if (itemCount === 0) {
+      return "0";
+    }
+    return Number(itemCount) < 150 ? Number(itemCount) : "150+";
+  };
   return (
     <Tab
       onClick={onClickTab}
       isActive={isActive}
       className="text-sm md:text-base"
     >
-      {itemCount && (
-        <ItemCountSpan isActive={isActive}>{itemCount}</ItemCountSpan>
+      {cleanItemCount() && (
+        <ItemCountSpan isActive={isActive}>{cleanItemCount()}</ItemCountSpan>
       )}
       <span>{label}</span>
     </Tab>
