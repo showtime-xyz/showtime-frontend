@@ -11,14 +11,14 @@ const GridTabsContainer = styled.div`
   margin: 20px 10px;
 `;
 const GridTabsTitle = styled.h3`
-  padding: 5px;
+  padding: 10px 0px;
   font-weight: 600;
 `;
 
 const Tab = styled.div`
   width: max-content;
-  padding: 20px 5px;
-  margin-right: 15px;
+  padding: 15px 0px;
+  margin-right: 25px;
   white-space: nowrap;
   cursor: pointer;
   border-bottom: ${(p) =>
@@ -48,7 +48,11 @@ function GridTabs({ children, title }) {
 
 function GridTab({ label, itemCount, isActive, onClickTab }) {
   return (
-    <Tab onClick={onClickTab} isActive={isActive}>
+    <Tab
+      onClick={onClickTab}
+      isActive={isActive}
+      className="text-sm md:text-base"
+    >
       {itemCount && (
         <ItemCountSpan isActive={isActive}>{itemCount}</ItemCountSpan>
       )}
