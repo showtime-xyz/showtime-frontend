@@ -220,19 +220,9 @@ class TokenCard extends React.Component {
                   {!this.state.imageLoaded ? (
                     <div className="w-full text-center">
                       <div
-                        className="lds-grid"
+                        className="loading-card-spinner"
                         style={{ marginTop: 148, marginBottom: 148 }}
-                      >
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                      </div>
+                      />
                     </div>
                   ) : null}
                   <div

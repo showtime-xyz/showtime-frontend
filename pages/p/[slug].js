@@ -12,6 +12,7 @@ import FollowGrid from "../../components/FollowGrid";
 //import { useRouter } from "next/router";
 import ModalEditProfile from "../../components/ModalEditProfile";
 import ModalEditPhoto from "../../components/ModalEditPhoto";
+import { GridTabs, GridTab } from "../../components/GridTabs";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
@@ -305,6 +306,35 @@ const Profile = ({
     setShowFollowers(false);
     setShowFollowing(false);
   }, [wallet_addresses, createdItems.length, ownedItems.length]);
+
+  const FilterTabs = (
+    <GridTabs>
+      <GridTab
+        label="Created"
+        itemCount={createdItems.length}
+        isActive={selectedGrid === "created"}
+        onClickTab={() => {
+          setSelectedGrid("created");
+        }}
+      />
+      <GridTab
+        label="Owned"
+        itemCount={ownedItems.length}
+        isActive={selectedGrid === "owned"}
+        onClickTab={() => {
+          setSelectedGrid("owned");
+        }}
+      />
+      <GridTab
+        label="Liked"
+        itemCount={likedItems.length}
+        isActive={selectedGrid === "liked"}
+        onClickTab={() => {
+          setSelectedGrid("liked");
+        }}
+      />
+    </GridTabs>
+  );
 
   return (
     <Layout>
@@ -750,76 +780,8 @@ const Profile = ({
         </div>
       ) : null*/}
 
-      {createdItems.length > 0 ||
-      ownedItems.length > 0 ||
-      likedItems.length > 0 ? (
-        <div className="mx-auto text-center mb-6 mt-8 text-xs sm:text-sm">
-          {context.windowSize ? (
-            context.windowSize.width < 375 ? (
-              <>
-                <br />
-                <br />
-              </>
-            ) : null
-          ) : null}
-          <button
-            className={
-              selectedGrid === "created"
-                ? "showtime-like-button-pink px-4 py-1"
-                : "showtime-like-button-white px-4 py-1"
-            }
-            style={{
-              borderBottomRightRadius: 0,
-              borderTopRightRadius: 0,
-              borderRightWidth: 1,
-              fontWeight: 400,
-            }}
-            onClick={() => {
-              setSelectedGrid("created");
-            }}
-          >
-            {createdItems.length < 150 ? createdItems.length : "150+"} Created
-          </button>
-          <button
-            className={
-              selectedGrid === "owned"
-                ? "showtime-like-button-pink px-4 py-1"
-                : "showtime-like-button-white px-4 py-1"
-            }
-            style={{
-              borderRadius: 0,
-              borderLeftWidth: 1,
-              borderRightWidth: 1,
-              fontWeight: 400,
-            }}
-            onClick={() => {
-              setSelectedGrid("owned");
-            }}
-          >
-            {ownedItems.length < 150 ? ownedItems.length : "150+"} Owned
-          </button>
-          <button
-            className={
-              selectedGrid === "liked"
-                ? "showtime-like-button-pink px-4 py-1"
-                : "showtime-like-button-white px-4 py-1"
-            }
-            style={{
-              borderTopLeftRadius: 0,
-              borderBottomLeftRadius: 0,
-              borderLeftWidth: 1,
-              fontWeight: 400,
-            }}
-            onClick={() => {
-              setSelectedGrid("liked");
-            }}
-          >
-            {likedItems.length < 150 ? likedItems.length : "150+"} Liked
-          </button>
-        </div>
-      ) : null}
-
       <TokenGridV4
+        filterTabs={FilterTabs}
         items={
           selectedGrid === "created"
             ? createdItems

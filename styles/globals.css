@@ -29,8 +29,16 @@ a {
   text-decoration: none;
 }
 
+a:focus,
+button:focus,
+input:focus,
+textarea:focus {
+  outline: none;
+}
+
 * {
   box-sizing: border-box;
+  outline: none;
 }
 
 .my-masonry-grid {
@@ -561,72 +569,20 @@ a {
   color: #e45cff;
 }
 
-.lds-grid {
+.loading-card-spinner {
   display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
-}
-.lds-grid div {
-  position: absolute;
-  width: 16px;
-  height: 16px;
+  width: 50px;
+  height: 50px;
+  border: 4px solid #eee;
   border-radius: 50%;
-  background: #5d87f6;
-  animation: lds-grid 1.2s linear infinite;
+  border-top-color: #223043;
+  animation: spin 1s cubic-bezier(0.75, 0, 0.25, 1) infinite;
+  -webkit-animation: spin 1s cubic-bezier(0.75, 0, 0.25, 1) infinite;
 }
-.lds-grid div:nth-child(1) {
-  top: 8px;
-  left: 8px;
-  animation-delay: 0s;
-}
-.lds-grid div:nth-child(2) {
-  top: 8px;
-  left: 32px;
-  animation-delay: -0.4s;
-}
-.lds-grid div:nth-child(3) {
-  top: 8px;
-  left: 56px;
-  animation-delay: -0.8s;
-}
-.lds-grid div:nth-child(4) {
-  top: 32px;
-  left: 8px;
-  animation-delay: -0.4s;
-}
-.lds-grid div:nth-child(5) {
-  top: 32px;
-  left: 32px;
-  animation-delay: -0.8s;
-}
-.lds-grid div:nth-child(6) {
-  top: 32px;
-  left: 56px;
-  animation-delay: -1.2s;
-}
-.lds-grid div:nth-child(7) {
-  top: 56px;
-  left: 8px;
-  animation-delay: -0.8s;
-}
-.lds-grid div:nth-child(8) {
-  top: 56px;
-  left: 32px;
-  animation-delay: -1.2s;
-}
-.lds-grid div:nth-child(9) {
-  top: 56px;
-  left: 56px;
-  animation-delay: -1.6s;
-}
-@keyframes lds-grid {
-  0%,
-  100% {
-    opacity: 0.8;
-  }
-  50% {
-    opacity: 0.2;
+
+@keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
   }
 }
 
@@ -649,85 +605,6 @@ a {
   color: #e45cff;
 }
 
-.lds-spinner {
-  color: official;
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
-}
-.lds-spinner div {
-  transform-origin: 40px 40px;
-  animation: lds-spinner 1.2s linear infinite;
-}
-.lds-spinner div:after {
-  content: " ";
-  display: block;
-  position: absolute;
-  top: 3px;
-  left: 37px;
-  width: 6px;
-  height: 18px;
-  border-radius: 20%;
-  background: black;
-}
-.lds-spinner div:nth-child(1) {
-  transform: rotate(0deg);
-  animation-delay: -1.1s;
-}
-.lds-spinner div:nth-child(2) {
-  transform: rotate(30deg);
-  animation-delay: -1s;
-}
-.lds-spinner div:nth-child(3) {
-  transform: rotate(60deg);
-  animation-delay: -0.9s;
-}
-.lds-spinner div:nth-child(4) {
-  transform: rotate(90deg);
-  animation-delay: -0.8s;
-}
-.lds-spinner div:nth-child(5) {
-  transform: rotate(120deg);
-  animation-delay: -0.7s;
-}
-.lds-spinner div:nth-child(6) {
-  transform: rotate(150deg);
-  animation-delay: -0.6s;
-}
-.lds-spinner div:nth-child(7) {
-  transform: rotate(180deg);
-  animation-delay: -0.5s;
-}
-.lds-spinner div:nth-child(8) {
-  transform: rotate(210deg);
-  animation-delay: -0.4s;
-}
-.lds-spinner div:nth-child(9) {
-  transform: rotate(240deg);
-  animation-delay: -0.3s;
-}
-.lds-spinner div:nth-child(10) {
-  transform: rotate(270deg);
-  animation-delay: -0.2s;
-}
-.lds-spinner div:nth-child(11) {
-  transform: rotate(300deg);
-  animation-delay: -0.1s;
-}
-.lds-spinner div:nth-child(12) {
-  transform: rotate(330deg);
-  animation-delay: 0s;
-}
-@keyframes lds-spinner {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
 .backdrop {
   z-index: 2;
 }
@@ -739,6 +616,28 @@ a {
   opacity: 1;
 }
 
-.ScrollUpButton__Container {
+.scrollUpButton {
+  position: fixed;
+  right: 20px;
+  bottom: -100px;
+  transition: bottom 400ms cubic-bezier(1, 0, 0, 1), box-shadow 400ms ease,
+    transform 200ms ease;
+  cursor: pointer;
+  background-color: #333;
+  font-size: 20px;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 50px;
+  width: 50px;
   z-index: 2 !important;
+  box-shadow: 0px 10px 20px rgb(0 0 0 / 15%);
+}
+
+.scrollUpButton:hover {
+  transform: translateY(-5px);
+}
+
+.scrollUpButtonTransition {
+  bottom: 20px;
 }

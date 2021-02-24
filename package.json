@@ -43,6 +43,7 @@
     "react-masonry-css": "^1.0.14",
     "react-player": "^2.8.1",
     "react-scroll-up-button": "^1.6.4",
+    "styled-components": "^5.2.1",
     "swr": "^0.4.0",
     "tailwindcss": "^2.0.2",
     "use-wallet": "^0.8.1",
@@ -50,5 +51,8 @@
   },
   "engines": {
     "node": "12.x"
+  },
+  "devDependencies": {
+    "babel-plugin-styled-components": "^1.12.0"
   }
 }
