@@ -9,6 +9,7 @@ import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { GridTab, GridTabs } from "../components/GridTabs";
 
 export async function getServerSideProps(context) {
   return {
@@ -54,6 +55,35 @@ export default function Home() {
     }
   }, [context.windowSize]);
 
+  const FilterTabs =
+    gridWidth > 0 ? (
+      <>
+        <GridTabs title="Trending">
+          <GridTab
+            label="24 Hours"
+            isActive={featuredDays === 1}
+            onClickTab={() => {
+              setFeaturedDays(1);
+            }}
+          />
+          <GridTab
+            label="7 Days"
+            isActive={featuredDays === 7}
+            onClickTab={() => {
+              setFeaturedDays(7);
+            }}
+          />
+          <GridTab
+            label="30 Days"
+            isActive={featuredDays === 30}
+            onClickTab={() => {
+              setFeaturedDays(30);
+            }}
+          />
+        </GridTabs>
+      </>
+    ) : null;
+
   return (
     <Layout>
       <Head>
@@ -85,84 +115,12 @@ export default function Home() {
         Discover and showcase your favorite digital art.
       </h1>
 
-      {gridWidth > 0 ? (
-        <div
-          className="mx-auto text-center mb-6 text-xs sm:text-sm"
-          style={{ width: gridWidth }}
-        >
-          <div className="mr-1 text-sm sm:text-base uppercase mb-2">
-            T r e n d i n g
-          </div>
-          {context.windowSize ? (
-            context.windowSize.width < 375 ? (
-              <>
-                <br />
-                <br />
-              </>
-            ) : null
-          ) : null}
-          <button
-            className={
-              featuredDays === 1
-                ? "showtime-like-button-pink px-3 py-1"
-                : "showtime-like-button-white px-3 py-1"
-            }
-            style={{
-              borderBottomRightRadius: 0,
-              borderTopRightRadius: 0,
-              borderRightWidth: 1,
-              fontWeight: 400,
-            }}
-            onClick={() => {
-              setFeaturedDays(1);
-            }}
-          >
-            Last 24 Hours
-          </button>
-          <button
-            className={
-              featuredDays === 7
-                ? "showtime-like-button-pink px-3 py-1"
-                : "showtime-like-button-white px-3 py-1"
-            }
-            style={{
-              borderRadius: 0,
-              borderLeftWidth: 1,
-              borderRightWidth: 1,
-              fontWeight: 400,
-            }}
-            onClick={() => {
-              setFeaturedDays(7);
-            }}
-          >
-            Last 7 Days
-          </button>
-          <button
-            className={
-              featuredDays === 30
-                ? "showtime-like-button-pink px-3 py-1"
-                : "showtime-like-button-white px-3 py-1"
-            }
-            style={{
-              borderTopLeftRadius: 0,
-              borderBottomLeftRadius: 0,
-              borderLeftWidth: 1,
-              fontWeight: 400,
-            }}
-            onClick={() => {
-              setFeaturedDays(30);
-            }}
-          >
-            Last 30 Days
-          </button>
-        </div>
-      ) : null}
-
       <TokenGridV4
         items={featuredItems}
         onFinish={() => {
           setReachedBottom(true);
         }}
+        filterTabs={FilterTabs}
       />
 
       {featuredItems.length > 0 && reachedBottom ? (

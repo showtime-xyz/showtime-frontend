@@ -7,7 +7,7 @@ import TokenCard from "./TokenCard";
 import useKeyPress from "../hooks/useKeyPress";
 import ModalTokenDetail from "./ModalTokenDetail";
 
-const TokenGridV4 = ({ items, isDetail, onFinish }) => {
+const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs }) => {
   const context = useContext(AppContext);
 
   const [itemsList, setItemsList] = useState([]);
@@ -291,6 +291,12 @@ const TokenGridV4 = ({ items, isDetail, onFinish }) => {
         </div>
       }*/
       >
+        <div
+          className={`mx-auto`}
+          style={columns === 1 ? null : { width: columns * (375 + 20) }}
+        >
+          {filterTabs}
+        </div>
         <div
           className={`grid grid-cols-${columns} mx-auto`}
           style={columns === 1 ? null : { width: columns * (375 + 20) }}
