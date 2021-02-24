@@ -7,7 +7,7 @@ import TokenCard from "./TokenCard";
 import useKeyPress from "../hooks/useKeyPress";
 import ModalTokenDetail from "./ModalTokenDetail";
 
-const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs }) => {
+const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
   const context = useContext(AppContext);
 
   const [itemsList, setItemsList] = useState([]);
@@ -297,25 +297,34 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs }) => {
         >
           {filterTabs}
         </div>
-        <div
-          className={`grid grid-cols-${columns} mx-auto`}
-          style={columns === 1 ? null : { width: columns * (375 + 20) }}
-        >
-          {itemsLikedList.slice(0, itemsShowing).map((item) => (
-            <TokenCard
-              key={item.tid}
-              item={item}
-              handleLike={handleLike}
-              handleUnlike={handleUnlike}
-              columns={columns}
-              isMobile={isMobile}
-              currentlyPlayingVideo={currentlyPlayingVideo}
-              setCurrentlyPlayingVideo={setCurrentlyPlayingVideo}
-              currentlyOpenModal={currentlyOpenModal}
-              setCurrentlyOpenModal={setCurrentlyOpenModal}
-            />
-          ))}
-        </div>
+        {isLoading ? (
+          <div
+            className="mx-auto items-center flex justify-center overflow-hidden"
+            style={columns === 1 ? null : { width: columns * (375 + 20) }}
+          >
+            <div className="loading-card-spinner" />
+          </div>
+        ) : (
+          <div
+            className={`grid grid-cols-${columns} mx-auto overflow-hidden`}
+            style={columns === 1 ? null : { width: columns * (375 + 20) }}
+          >
+            {itemsLikedList.slice(0, itemsShowing).map((item) => (
+              <TokenCard
+                key={item.tid}
+                item={item}
+                handleLike={handleLike}
+                handleUnlike={handleUnlike}
+                columns={columns}
+                isMobile={isMobile}
+                currentlyPlayingVideo={currentlyPlayingVideo}
+                setCurrentlyPlayingVideo={setCurrentlyPlayingVideo}
+                currentlyOpenModal={currentlyOpenModal}
+                setCurrentlyOpenModal={setCurrentlyOpenModal}
+              />
+            ))}
+          </div>
+        )}
       </InfiniteScroll>
     </>
   );

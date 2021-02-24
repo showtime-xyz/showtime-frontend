@@ -9,6 +9,7 @@ import backend from "../../lib/backend";
 //import ShareButton from "../../components/ShareButton";
 import AppContext from "../../context/app-context";
 import mixpanel from "mixpanel-browser";
+import { GridTabs, GridTab } from "../../components/GridTabs";
 
 export async function getServerSideProps(context) {
   const { collection } = context.query;
@@ -141,6 +142,63 @@ export default function Collection({
     }
   }, [context.windowSize]);
 
+  const FilterTabs = (
+    <GridTabs>
+      <GridTab
+        label="Random"
+        isActive={sortBy === "random"}
+        onClickTab={() => {
+          if (sortBy === "random") {
+            // Rerun the random tab
+            setRandomNumber(Math.random());
+            mixpanel.track("Random button re-clicked");
+          } else {
+            setSortby("random");
+            mixpanel.track("Random button clicked");
+          }
+        }}
+      />
+      <GridTab
+        label={
+          context.windowSize && context.windowSize.width > 820
+            ? "Last Sold"
+            : "Sold"
+        }
+        isActive={sortBy === "sold"}
+        onClickTab={() => {
+          setSortby("sold");
+          mixpanel.track("Recently sold button clicked");
+        }}
+      />
+      <GridTab
+        label="Newest"
+        isActive={sortBy === "newest"}
+        onClickTab={() => {
+          setSortby("newest");
+          mixpanel.track("Newest button clicked");
+        }}
+      />
+      {context.windowSize && context.windowSize.width > 820 && (
+        <GridTab
+          label="Oldest"
+          isActive={sortBy === "oldest"}
+          onClickTab={() => {
+            setSortby("oldest");
+            mixpanel.track("Oldest button clicked");
+          }}
+        />
+      )}
+      <GridTab
+        label="Trending"
+        isActive={sortBy === "trending"}
+        onClickTab={() => {
+          setSortby("trending");
+          mixpanel.track("Trending button clicked");
+        }}
+      />
+    </GridTabs>
+  );
+
   return (
     <Layout key={collection}>
       <Head>
@@ -197,10 +255,7 @@ export default function Collection({
           }}
         >
           {collection_list && collection_list.length > 0 ? (
-            <div
-              className="flex flex-row items-center mb-6 md:mb-0"
-              style={{ width: 250 }}
-            >
+            <div className="flex flex-row items-center" style={{ width: 250 }}>
               <div className="text-left" style={{ width: 250 }}>
                 <Select
                   options={collection_list}
@@ -224,126 +279,17 @@ export default function Collection({
                 </div>*/}
             </div>
           ) : null}
-
-          <div className="text-right flex-grow">
-            {context.windowSize ? (
-              context.windowSize.width < 375 ? (
-                <>
-                  <br />
-                  <br />
-                </>
-              ) : null
-            ) : null}
-            <button
-              className={
-                sortBy === "random"
-                  ? "showtime-like-button-pink px-2 sm:px-3 py-1"
-                  : "showtime-like-button-white px-2 sm:px-3 py-1"
-              }
-              style={{
-                borderBottomRightRadius: 0,
-                borderTopRightRadius: 0,
-                borderRightWidth: 1,
-              }}
-              onClick={() => {
-                if (sortBy === "random") {
-                  // Rerun the random tab
-                  setRandomNumber(Math.random());
-                  mixpanel.track("Random button re-clicked");
-                } else {
-                  setSortby("random");
-                  mixpanel.track("Random button clicked");
-                }
-              }}
-            >
-              Random
-            </button>
-            <button
-              className={
-                sortBy === "sold"
-                  ? "showtime-like-button-pink px-2 py-1"
-                  : "showtime-like-button-white px-2 py-1"
-              }
-              style={{
-                borderRadius: 0,
-                borderLeftWidth: 1,
-                borderRightWidth: 1,
-              }}
-              onClick={() => {
-                setSortby("sold");
-                mixpanel.track("Recently sold button clicked");
-              }}
-            >
-              {context.windowSize && context.windowSize.width < 370
-                ? "Sold"
-                : "Recently Sold"}
-            </button>
-            <button
-              className={
-                sortBy === "newest"
-                  ? "showtime-like-button-pink px-2 py-1"
-                  : "showtime-like-button-white px-2 py-1"
-              }
-              style={{
-                borderRadius: 0,
-                borderLeftWidth: 1,
-                borderRightWidth: 1,
-              }}
-              onClick={() => {
-                setSortby("newest");
-                mixpanel.track("Newest button clicked");
-              }}
-            >
-              Newest
-            </button>
-            <button
-              className={
-                sortBy === "oldest"
-                  ? "showtime-like-button-pink px-2 py-1"
-                  : "showtime-like-button-white px-2 py-1"
-              }
-              style={{
-                borderRadius: 0,
-                borderLeftWidth: 1,
-                borderRightWidth: 1,
-              }}
-              onClick={() => {
-                setSortby("oldest");
-                mixpanel.track("Oldest button clicked");
-              }}
-            >
-              Oldest
-            </button>
-            <button
-              className={
-                sortBy === "trending"
-                  ? "showtime-like-button-pink px-2 py-1"
-                  : "showtime-like-button-white px-2 py-1"
-              }
-              style={{
-                borderTopLeftRadius: 0,
-                borderBottomLeftRadius: 0,
-                borderLeftWidth: 1,
-              }}
-              onClick={() => {
-                setSortby("trending");
-                mixpanel.track("Trending button clicked");
-              }}
-            >
-              Trending
-            </button>
-          </div>
         </div>
       ) : null}
 
       <div className="mb-6 mt-4 text-center">
-        {isChanging ? (
-          "Loading..."
-        ) : (
-          <div className="text-left">
-            <TokenGridV4 items={collectionItems} />
-          </div>
-        )}
+        <div className="text-left">
+          <TokenGridV4
+            items={collectionItems}
+            filterTabs={FilterTabs}
+            isLoading={isChanging}
+          />
+        </div>
       </div>
     </Layout>
   );
