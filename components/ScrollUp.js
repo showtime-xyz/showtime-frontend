@@ -11,8 +11,8 @@ export default function ScrollUp() {
     >
       <FontAwesomeIcon
         style={{
-          height: 32,
-          width: 32,
+          height: 30,
+          width: 30,
           color: "#fff",
         }}
         icon={faChevronUp}
