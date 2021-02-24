@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import AppContext from "../context/app-context";
 
 const GridTabsWrapper = styled.div`
   display: flex;
@@ -8,7 +9,7 @@ const GridTabsWrapper = styled.div`
   //   overflow-x: scroll;
 `;
 const GridTabsContainer = styled.div`
-  margin: 20px 16px;
+  margin: ${(p) => (p.isMobile ? "20px 16px" : "20px 10px")};
 `;
 const GridTabsTitle = styled.h3`
   padding: 10px 0px;
@@ -36,8 +37,10 @@ const ItemCountSpan = styled.span`
 `;
 
 function GridTabs({ children, title }) {
+  const context = useContext(AppContext);
+  const isMobile = context.windowSize && context.windowSize.width < 820;
   return (
-    <GridTabsContainer>
+    <GridTabsContainer isMobile={isMobile}>
       {title && (
         <GridTabsTitle className="text-2xl md:text-4xl">{title}</GridTabsTitle>
       )}
