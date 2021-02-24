@@ -1,6 +1,6 @@
 import Head from "next/head";
 import PropTypes from "prop-types";
-import ScrollUpButton from "./scrollUpButton";
+import ScrollUp from "./ScrollUp";
 import Footer from "./footer";
 import Header from "./header";
 
@@ -34,7 +34,7 @@ const Layout = ({ children }) => {
       </Head>
 
       <Header />
-      <ScrollUpButton />
+      <ScrollUp />
       <main>{children}</main>
 
       <Footer />
