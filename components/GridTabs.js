@@ -10,10 +10,9 @@ const GridTabsWrapper = styled.div`
 const GridTabsContainer = styled.div`
   margin: 20px 10px;
 `;
-const GridTabsTitle = styled.h2`
+const GridTabsTitle = styled.h3`
   padding: 5px;
-  font-weight: 700;
-  font-size: 2rem;
+  font-weight: 600;
 `;
 
 const Tab = styled.div`
@@ -30,19 +29,30 @@ const Tab = styled.div`
     opacity: ${(p) => (p.isActive ? null : 0.6)};
   }
 `;
+
+const ItemCountSpan = styled.span`
+  color: ${(p) => (p.isActive ? null : "#a6a6a6")};
+  margin-right: 5px;
+`;
+
 function GridTabs({ children, title }) {
   return (
     <GridTabsContainer>
-      {title && <GridTabsTitle>{title}</GridTabsTitle>}
+      {title && (
+        <GridTabsTitle className="text-2xl md:text-4xl">{title}</GridTabsTitle>
+      )}
       <GridTabsWrapper>{children}</GridTabsWrapper>
     </GridTabsContainer>
   );
 }
 
-function GridTab({ label, isActive, onClickTab }) {
+function GridTab({ label, itemCount, isActive, onClickTab }) {
   return (
     <Tab onClick={onClickTab} isActive={isActive}>
-      {label}
+      {itemCount && (
+        <ItemCountSpan isActive={isActive}>{itemCount}</ItemCountSpan>
+      )}
+      <span>{label}</span>
     </Tab>
   );
 }
