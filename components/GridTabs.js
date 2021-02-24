@@ -8,7 +8,7 @@ const GridTabsWrapper = styled.div`
   //   overflow-x: scroll;
 `;
 const GridTabsContainer = styled.div`
-  margin: 20px 10px;
+  margin: 20px 16px;
 `;
 const GridTabsTitle = styled.h3`
   padding: 10px 0px;
