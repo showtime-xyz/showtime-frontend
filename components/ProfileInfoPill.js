@@ -59,9 +59,9 @@ export default function ProfileInfoPill({
             </div>
           </>
         )}
-        <div className="flex flex-col justify-center items-center w-max h-max md:ml-6 my-2 md:my-0">
+        {/* <div className="flex flex-col justify-center items-center w-max h-max md:ml-6 my-2 md:my-0">
           <FontAwesomeIcon size="lg" icon={faEllipsisH} color="#bbb" />
-        </div>
+        </div> */}
       </div>
     </div>
   );
