@@ -13,6 +13,7 @@ import FollowGrid from "../../components/FollowGrid";
 import ModalEditProfile from "../../components/ModalEditProfile";
 import ModalEditPhoto from "../../components/ModalEditPhoto";
 import { GridTabs, GridTab } from "../../components/GridTabs";
+import ProfileInfoPill from "../../components/ProfileInfoPill";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
@@ -405,25 +406,8 @@ const Profile = ({
         </>
       ) : null}
 
-      <div className="px-4 md:px-16 flex flex-col md:flex-row items-center pb-12 pt-12">
-        <div className="flex-shrink">
-          <img
-            alt="artist"
-            className="rounded-full object-cover object-center w-24 h-24 lg:w-24 lg:h-24 mx-auto mb-1 md:mb-0 md:mr-4"
-            src={
-              isMyProfile
-                ? context.myProfile
-                  ? context.myProfile.img_url
-                    ? context.myProfile.img_url
-                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                : img_url
-                ? img_url
-                : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-            }
-          />
-        </div>
-        <div className="flex-grow flex flex-row items-center ">
+      <div className="px-4 md:px-16 flex flex-col md:flex-row items-center md:pb-6 pt-12">
+        <div className="flex-grow flex flex-row items-center">
           <div className="flex flex-col ">
             <div className="flex flex-row items-center text-center">
               <div className="flex-grow sm:hidden"></div>
@@ -443,34 +427,6 @@ const Profile = ({
                   ? name
                   : "Unnamed"}
               </div>
-              {isMyProfile ? null : columns > 2 ? (
-                <div className="tooltip ml-4">
-                  <button
-                    className={
-                      isFollowed
-                        ? "showtime-green-button text-sm px-3 py-1  items-center"
-                        : "showtime-like-button-white-green-hover text-sm px-3 py-1  items-center"
-                    }
-                    onClick={() =>
-                      context.user
-                        ? isFollowed
-                          ? handleUnfollow()
-                          : handleFollow()
-                        : handleLoggedOutFollow()
-                    }
-                  >
-                    {isFollowed ? "Following" : "Follow"}
-                  </button>
-                  {context.user ? null : (
-                    <span
-                      style={{ fontSize: 12, opacity: 0.9, width: 110 }}
-                      className="tooltip-text bg-black p-3 -mt-7 -ml-24 rounded text-white"
-                    >
-                      Sign in to follow
-                    </span>
-                  )}
-                </div>
-              ) : null}
               <div>
                 <ShareButton
                   url={
@@ -532,34 +488,100 @@ const Profile = ({
                     Log out
                   </a>
                 </div>
-              ) : (
-                <div className="tooltip text-center md:text-left">
-                  <button
-                    className={
-                      isFollowed
-                        ? "showtime-green-button text-sm px-3 py-1  items-center"
-                        : "showtime-like-button-white-green-hover text-sm px-3 py-1  items-center"
-                    }
-                    onClick={() =>
-                      context.user
-                        ? isFollowed
-                          ? handleUnfollow()
-                          : handleFollow()
-                        : handleLoggedOutFollow()
-                    }
-                  >
-                    {isFollowed ? "Following" : "Follow"}
-                  </button>
-                  {context.user ? null : (
-                    <span
-                      style={{ fontSize: 12, opacity: 0.9, width: 110 }}
-                      className="tooltip-text bg-black p-3 -mt-7 -ml-24 rounded text-white"
+              ) : null}
+              <div
+                className={`${
+                  isMyProfile && context.myProfile
+                    ? !context.myProfile.bio && !context.myProfile.website_url
+                      ? "hidden"
+                      : "flex-1"
+                    : !bio && !website_url
+                    ? "hidden"
+                    : "flex-1"
+                } mt-8 text-base align-center flex flex-col justify-center items-center md:items-start`}
+              >
+                <h4 className="text-black mb-2 text-lg font-semibold">About</h4>
+                {isMyProfile && context.myProfile ? (
+                  context.myProfile.bio ? (
+                    <div className="pb-2 sm:mr-16 max-w-xl">
+                      <div className="text-center md:text-left">
+                        {context.myProfile.bio}
+                      </div>
+                    </div>
+                  ) : null
+                ) : bio ? (
+                  <div className="pb-2 sm:mr-16 max-w-xl">
+                    <div className="">{bio}</div>
+                  </div>
+                ) : null}
+
+                {isMyProfile && context.myProfile ? (
+                  context.myProfile.website_url ? (
+                    <div className="pb-4 sm:pb-0 w-min">
+                      <a
+                        href={
+                          context.myProfile.website_url.slice(0, 4) === "http"
+                            ? context.myProfile.website_url
+                            : "https://" + context.myProfile.website_url
+                        }
+                        target="_blank"
+                        className="flex flex-row items-center"
+                        style={{ color: "rgb(81, 125, 228)" }}
+                        onClick={() => {
+                          mixpanel.track("Clicked profile website link", {
+                            slug: slug,
+                          });
+                        }}
+                      >
+                        <div>{context.myProfile.website_url}</div>
+                        <div className="ml-1 mt-1">
+                          <FontAwesomeIcon
+                            style={{ height: 12 }}
+                            icon={faExternalLinkAlt}
+                          />
+                        </div>
+                      </a>
+                    </div>
+                  ) : null
+                ) : website_url ? (
+                  <div className="pb-0">
+                    <a
+                      href={
+                        website_url.slice(0, 4) === "http"
+                          ? website_url
+                          : "https://" + website_url
+                      }
+                      target="_blank"
+                      className="flex flex-row"
+                      style={{ color: "rgb(81, 125, 228)" }}
+                      onClick={() => {
+                        mixpanel.track("Clicked profile website link", {
+                          slug: slug,
+                        });
+                      }}
                     >
-                      Sign in to follow
-                    </span>
-                  )}
-                </div>
-              )}
+                      <div style={{ wordWrap: "break-word" }}>
+                        {website_url}
+                      </div>
+                      <div className="ml-1 mt-1">
+                        <FontAwesomeIcon
+                          style={{ height: 12 }}
+                          icon={faExternalLinkAlt}
+                        />
+                      </div>
+                    </a>
+                  </div>
+                ) : null}
+
+                {/* {isMyProfile && context.myProfile ? (
+                  !context.myProfile.bio &&
+                  !context.myProfile.website_url ? null : (
+                    <hr className="pb-4 block sm:hidden" />
+                  )
+                ) : !bio && !website_url ? null : (
+                  <hr className="pb-4 block sm:hidden" />
+                )} */}
+              </div>
             </div>
           </div>
         </div>
@@ -613,165 +635,30 @@ const Profile = ({
           ) : null}
         </div>
       </div>
-      <div
-        className="bg-white px-4 md:px-16 py-6 text-sm flex flex-col sm:flex-row"
-        style={{
-          boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 2%)",
-          fontWeight: 400,
-        }}
-      >
-        <div
-          className={
-            isMyProfile && context.myProfile
-              ? !context.myProfile.bio && !context.myProfile.website_url
-                ? null
-                : "flex-1"
-              : !bio && !website_url
-              ? null
-              : "flex-1"
-          }
-        >
-          {isMyProfile && context.myProfile ? (
-            context.myProfile.bio ? (
-              <div className="pb-4 sm:mr-16">
-                <div className="">{context.myProfile.bio}</div>
-              </div>
-            ) : null
-          ) : bio ? (
-            <div className="pb-4 sm:mr-16">
-              <div className="">{bio}</div>
-            </div>
-          ) : null}
-
-          {isMyProfile && context.myProfile ? (
-            context.myProfile.website_url ? (
-              <div className="pb-4 sm:pb-0">
-                <a
-                  href={
-                    context.myProfile.website_url.slice(0, 4) === "http"
-                      ? context.myProfile.website_url
-                      : "https://" + context.myProfile.website_url
-                  }
-                  target="_blank"
-                  className="flex flex-row"
-                  style={{ color: "rgb(81, 125, 228)" }}
-                  onClick={() => {
-                    mixpanel.track("Clicked profile website link", {
-                      slug: slug,
-                    });
-                  }}
-                >
-                  <div>{context.myProfile.website_url}</div>
-                  <div className="ml-1 mt-1">
-                    <FontAwesomeIcon
-                      style={{ height: 12 }}
-                      icon={faExternalLinkAlt}
-                    />
-                  </div>
-                </a>
-              </div>
-            ) : null
-          ) : website_url ? (
-            <div className="pb-4 sm:pb-0">
-              <a
-                href={
-                  website_url.slice(0, 4) === "http"
-                    ? website_url
-                    : "https://" + website_url
-                }
-                target="_blank"
-                className="flex flex-row"
-                style={{ color: "rgb(81, 125, 228)" }}
-                onClick={() => {
-                  mixpanel.track("Clicked profile website link", {
-                    slug: slug,
-                  });
-                }}
-              >
-                <div style={{ wordWrap: "break-word" }}>{website_url}</div>
-                <div className="ml-1 mt-1">
-                  <FontAwesomeIcon
-                    style={{ height: 12 }}
-                    icon={faExternalLinkAlt}
-                  />
-                </div>
-              </a>
-            </div>
-          ) : null}
-
-          {isMyProfile && context.myProfile ? (
-            !context.myProfile.bio && !context.myProfile.website_url ? null : (
-              <hr className="pb-4 block sm:hidden" />
-            )
-          ) : !bio && !website_url ? null : (
-            <hr className="pb-4 block sm:hidden" />
-          )}
-        </div>
-
-        <div className="flex-1">
-          <div className="mb-4">
-            {followers && followers.length > 0 ? (
-              <>
-                <div className="">
-                  {followers.length > 1
-                    ? `${followers.length} followers`
-                    : "1 follower"}
-
-                  <span
-                    onClick={() => {
-                      setShowFollowers(!showFollowers);
-                    }}
-                    className="text-xs ml-3 view-hide-toggle"
-                  >
-                    {showFollowers ? "Hide" : "View"}
-                  </span>
-                </div>
-
-                {showFollowers ? (
-                  <div className="mt-2">
-                    <FollowGrid people={followers} />
-                  </div>
-                ) : (
-                  <div className=""></div>
-                )}
-              </>
-            ) : (
-              <div className="">No followers yet</div>
-            )}
-          </div>
-
-          <div>
-            {following && following.length > 0 ? (
-              <>
-                <div className="">
-                  {following.length > 1
-                    ? `${following.length} following`
-                    : "1 following"}
-
-                  <span
-                    onClick={() => {
-                      setShowFollowing(!showFollowing);
-                    }}
-                    className="text-xs ml-3 view-hide-toggle"
-                  >
-                    {showFollowing ? "Hide" : "View"}
-                  </span>
-                </div>
-
-                {showFollowing ? (
-                  <div className="mt-2">
-                    <FollowGrid people={following} />
-                  </div>
-                ) : (
-                  <div className=""></div>
-                )}
-              </>
-            ) : (
-              <div>Not following anyone yet</div>
-            )}
-          </div>
-        </div>
-      </div>
+      <ProfileInfoPill
+        isFollowed={isFollowed}
+        isMyProfile={isMyProfile}
+        onClickFollow={
+          context.user
+            ? isFollowed
+              ? handleUnfollow
+              : handleFollow
+            : handleLoggedOutFollow
+        }
+        numFollowers={followers && followers.length}
+        numFollowing={following && following.length}
+        profileImageUrl={
+          isMyProfile
+            ? context.myProfile
+              ? context.myProfile.img_url
+                ? context.myProfile.img_url
+                : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+            : img_url
+            ? img_url
+            : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+        }
+      />
 
       {/*!isFollowed && hasFollowerOnlyItems ? (
         <div className="text-center py-8">
