@@ -21,7 +21,7 @@ export default function ProfileInfoPill({
     : 0;
 
   return (
-    <div className="md:pl-16 md:pr-16">
+    <div>
       <div className="p-6 rounded-xl bg-white m-4 md:m-0 md:w-max flex flex-col md:flex-row justify-center items-center md:items-stretch">
         <div className="w-14 h-14 md:w-12 md:h-12 flex items-center justify-center rounded-full my-2 md:my-0">
           <img
