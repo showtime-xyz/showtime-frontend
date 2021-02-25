@@ -525,7 +525,7 @@ const Profile = ({
                             : "https://" + context.myProfile.website_url
                         }
                         target="_blank"
-                        className="flex flex-row items-center"
+                        className="flex flex-row items-center justify-center"
                         style={{ color: "rgb(81, 125, 228)" }}
                         onClick={() => {
                           mixpanel.track("Clicked profile website link", {
@@ -534,7 +534,7 @@ const Profile = ({
                         }}
                       >
                         <div>{context.myProfile.website_url}</div>
-                        <div className="ml-1 mt-1">
+                        <div className="ml-1">
                           <FontAwesomeIcon
                             style={{ height: 12 }}
                             icon={faExternalLinkAlt}
