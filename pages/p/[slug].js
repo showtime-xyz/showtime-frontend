@@ -1,19 +1,17 @@
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import _ from "lodash";
-//import Link from "next/link";
 import mixpanel from "mixpanel-browser";
 import Layout from "../../components/layout";
 import TokenGridV4 from "../../components/TokenGridV4";
 import backend from "../../lib/backend";
 import AppContext from "../../context/app-context";
 import ShareButton from "../../components/ShareButton";
-import FollowGrid from "../../components/FollowGrid";
-//import { useRouter } from "next/router";
 import ModalEditProfile from "../../components/ModalEditProfile";
 import ModalEditPhoto from "../../components/ModalEditPhoto";
 import { GridTabs, GridTab } from "../../components/GridTabs";
 import ProfileInfoPill from "../../components/ProfileInfoPill";
+import ModalUserList from "../../components/ModalUserList";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
@@ -409,6 +407,24 @@ const Profile = ({
             isOpen={pictureModalOpen}
             setEditModalOpen={setPictureModalOpen}
           />
+          {/* Followers modal */}
+          <ModalUserList
+            title="Followers"
+            isOpen={showFollowers}
+            users={followers ? followers : []}
+            closeModal={() => {
+              setShowFollowers(false);
+            }}
+          />
+          {/* Following modal */}
+          <ModalUserList
+            title="Following"
+            isOpen={showFollowing}
+            users={following ? following : []}
+            closeModal={() => {
+              setShowFollowing(false);
+            }}
+          />
         </>
       ) : null}
       <div className="m-auto" style={{ width: gridWidth }}>
@@ -657,6 +673,12 @@ const Profile = ({
           }
           numFollowers={followers && followers.length}
           numFollowing={following && following.length}
+          showFollowers={() => {
+            setShowFollowers(true);
+          }}
+          showFollowing={() => {
+            setShowFollowing(true);
+          }}
           profileImageUrl={
             isMyProfile
               ? context.myProfile

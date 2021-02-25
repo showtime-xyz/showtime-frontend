@@ -1,6 +1,6 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 
 const GraySeparator = () => <div className="w-0.5 bg-gray-200 mx-6"></div>;
 const ClearSeparator = () => <div className="w-0.5 mx-4"></div>;
@@ -12,6 +12,8 @@ export default function ProfileInfoPill({
   isMyProfile,
   isFollowed,
   onClickFollow,
+  showFollowers,
+  showFollowing,
 }) {
   const cleanNumFollowers = numFollowers
     ? Number(numFollowers).toLocaleString()
@@ -30,12 +32,18 @@ export default function ProfileInfoPill({
           />
         </div>
         <GraySeparator />
-        <div className="flex flex-col justify-center my-2 md:my-0 items-center md:items-start">
+        <div
+          className="flex flex-col justify-center my-2 md:my-0 items-center md:items-start cursor-pointer"
+          onClick={showFollowing}
+        >
           <div className="text-sm text-gray-500">Following</div>
           <div className="text-xl">{cleanNumFollowing}</div>
         </div>
         <ClearSeparator />
-        <div className="flex flex-col justify-center my-2 md:my-0 items-center md:items-start">
+        <div
+          className="flex flex-col justify-center my-2 md:my-0 items-center md:items-start cursor-pointer"
+          onClick={showFollowers}
+        >
           <div className="text-sm text-gray-500">Followers</div>
           <div className="text-xl">{cleanNumFollowers}</div>
         </div>
