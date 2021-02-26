@@ -22,7 +22,7 @@ export default function ModalUserList({ isOpen, title, users, closeModal }) {
               >
                 {title}
               </div>
-              <div className="flex flex-col h-60 overflow-y-scroll">
+              <div className="flex flex-col h-60 overflow-y-auto">
                 {users.length === 0 && (
                   <div className="text-center mt-6">Nothing here yet!</div>
                 )}
