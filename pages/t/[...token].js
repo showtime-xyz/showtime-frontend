@@ -80,20 +80,6 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
     setCreatedItems(same_creator_items.filter((c) => c.tid !== item.tid));
   }, [same_creator_items]);
 
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    if (context.windowSize && context.windowSize.width < 800) {
-      setIsMobile(true);
-    } else if (context.windowSize && context.windowSize.width < 1400) {
-      setIsMobile(false);
-    } else if (context.windowSize && context.windowSize.width < 1800) {
-      setIsMobile(false);
-    } else {
-      setIsMobile(false);
-    }
-  }, [context.windowSize]);
-
   function removeTags(str) {
     if (str === null || str === "") return false;
     else str = str.toString();
@@ -300,7 +286,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
                           }}
                           src="https://storage.googleapis.com/opensea-static/opensea-brand/listed-button-white.png"
                           alt="Listed on OpenSea badge"
-                          className={isMobile ? "mx-auto" : "mr-auto"}
+                          className={context.isMobile ? "mx-auto" : "mr-auto"}
                         />
                       </a>
                     </div>
@@ -327,7 +313,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
                       }}
                       src="https://storage.googleapis.com/opensea-static/opensea-brand/listed-button-white.png"
                       alt="Listed on OpenSea badge"
-                      className={isMobile ? "mx-auto" : "mr-auto"}
+                      className={context.isMobile ? "mx-auto" : "mr-auto"}
                     />
                   </a>
                 </div>

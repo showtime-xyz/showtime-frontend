@@ -14,6 +14,7 @@ export default class MyApp extends React.Component {
     loginModalOpen: false,
     gridWidth: null,
     columns: null,
+    isMobile: null,
   };
 
   getUserFromCookies = async () => {
@@ -130,17 +131,25 @@ export default class MyApp extends React.Component {
     this.setState({ columns });
   }
 
+  setIsMobile(isMobile) {
+    this.setState({ isMobile });
+  }
+
   adjustGridProperties(windowWidth) {
     if (windowWidth < 820) {
+      this.setIsMobile(true);
       this.setGridWidth(windowWidth);
       this.setColumns(1);
     } else if (windowWidth < 1200) {
+      this.setIsMobile(false);
       this.setGridWidth(790 - 18);
       this.setColumns(2);
     } else if (windowWidth < 1600) {
+      this.setIsMobile(false);
       this.setGridWidth(1185 - 18);
       this.setColumns(3);
     } else {
+      this.setIsMobile(false);
       this.setGridWidth(1580 - 18);
       this.setColumns(4);
     }
@@ -158,6 +167,7 @@ export default class MyApp extends React.Component {
       loginModalOpen: this.state.loginModalOpen,
       gridWidth: this.state.gridWidth,
       columns: this.state.columns,
+      isMobile: this.state.isMobile,
       setUser: (user) => this.setUser(user),
       setWindowSize: (windowSize) => this.setWindowSize(windowSize),
       setMyLikes: (myLikes) => this.setMyLikes(myLikes),

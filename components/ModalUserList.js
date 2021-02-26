@@ -1,9 +1,8 @@
-import React, { useState, useContext, useEffect } from "react";
+import React from "react";
 import ClientOnlyPortal from "./ClientOnlyPortal";
 import _ from "lodash";
 import Link from "next/link";
 import CloseButton from "./CloseButton";
-import AppContext from "../context/app-context";
 
 export default function ModalUserList({
   isOpen,
@@ -12,15 +11,6 @@ export default function ModalUserList({
   closeModal,
   emptyMessage,
 }) {
-  const context = useContext(AppContext);
-  const [isMobile, setIsMobile] = useState(true);
-  console.log("isMobile", isMobile);
-  useEffect(() => {
-    if (context.windowSize) {
-      setIsMobile(context.windowSize.width < 820);
-    }
-  }, [context.windowSize]);
-
   return (
     <>
       {isOpen && (

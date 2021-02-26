@@ -141,11 +141,7 @@ export default function Collection({
         }}
       />
       <GridTab
-        label={
-          context.windowSize && context.windowSize.width > 820
-            ? "Last Sold"
-            : "Sold"
-        }
+        label={!context.isMobile ? "Last Sold" : "Sold"}
         isActive={sortBy === "sold"}
         onClickTab={() => {
           setSortby("sold");
@@ -160,7 +156,7 @@ export default function Collection({
           mixpanel.track("Newest button clicked");
         }}
       />
-      {context.windowSize && context.windowSize.width > 820 && (
+      {!context.isMobile && (
         <GridTab
           label="Oldest"
           isActive={sortBy === "oldest"}

@@ -38,9 +38,8 @@ const ItemCountSpan = styled.span`
 
 function GridTabs({ children, title }) {
   const context = useContext(AppContext);
-  const isMobile = context.windowSize && context.windowSize.width < 820;
   return (
-    <GridTabsContainer isMobile={isMobile}>
+    <GridTabsContainer isMobile={context.isMobile}>
       {title && (
         <GridTabsTitle className="text-2xl md:text-4xl">{title}</GridTabsTitle>
       )}
