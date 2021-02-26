@@ -137,7 +137,9 @@ const Header = () => {
         </div>
         {/* Start mobile-only menu */}
         <div
-          className="block md:hidden pt-4"
+          className={`block md:hidden pt-4 ${
+            !context.gridWidth ? "invisible" : ""
+          }`}
           style={{
             backgroundColor: "white",
           }}
