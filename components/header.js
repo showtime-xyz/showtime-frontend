@@ -18,10 +18,21 @@ const Header = () => {
         </>
       ) : null}
       <header
-        className="p-4 bg-white md:px-16"
-        style={{ boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)" }}
+        className="p-4 bg-white"
+        style={{
+          boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
+        }}
       >
-        <div className="flex flex-row items-center ">
+        <div
+          className={`flex flex-row items-center ${
+            !context.gridWidth ? "invisible" : ""
+          }`}
+          style={
+            context.isMobile
+              ? {}
+              : { maxWidth: context.gridWidth, margin: "auto" }
+          }
+        >
           <div>
             <Link href="/">
               <a
@@ -126,7 +137,9 @@ const Header = () => {
         </div>
         {/* Start mobile-only menu */}
         <div
-          className="block md:hidden pt-4"
+          className={`block md:hidden pt-4 ${
+            !context.gridWidth ? "invisible" : ""
+          }`}
           style={{
             backgroundColor: "white",
           }}

@@ -42,21 +42,8 @@ export default function Home() {
     setReachedBottom(false);
   }, [featuredDays]);
 
-  const [gridWidth, setGridWidth] = useState();
-  useEffect(() => {
-    if (context.windowSize && context.windowSize.width < 820) {
-      setGridWidth(context.windowSize.width);
-    } else if (context.windowSize && context.windowSize.width < 1200) {
-      setGridWidth(790 - 18);
-    } else if (context.windowSize && context.windowSize.width < 1600) {
-      setGridWidth(1185 - 18);
-    } else {
-      setGridWidth(1580 - 18);
-    }
-  }, [context.windowSize]);
-
   const FilterTabs =
-    gridWidth > 0 ? (
+    context.gridWidth > 0 ? (
       <>
         <GridTabs title="Trending">
           <GridTab

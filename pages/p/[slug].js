@@ -13,9 +13,6 @@ import { GridTabs, GridTab } from "../../components/GridTabs";
 import ProfileInfoPill from "../../components/ProfileInfoPill";
 import ModalUserList from "../../components/ModalUserList";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
-
 export async function getServerSideProps(context) {
   const { slug } = context.query;
 
@@ -201,26 +198,6 @@ const Profile = ({
     await context.logOut();
     setIsMyProfile(false);
   };
-
-  const [columns, setColumns] = useState(2);
-  const [gridWidth, setGridWidth] = useState();
-
-  useEffect(() => {
-    if (context.windowSize && context.windowSize.width < 820) {
-      setGridWidth(context.windowSize.width);
-      setColumns(1);
-    } else if (context.windowSize && context.windowSize.width < 1200) {
-      setGridWidth(790 - 18);
-
-      setColumns(2);
-    } else if (context.windowSize && context.windowSize.width < 1600) {
-      setGridWidth(1185 - 18);
-      setColumns(3);
-    } else {
-      setGridWidth(1580 - 18);
-      setColumns(4);
-    }
-  }, [context.windowSize]);
 
   const handleLoggedOutFollow = () => {
     mixpanel.track("Follow but logged out");
@@ -432,9 +409,9 @@ const Profile = ({
 
       {/* Start Page Body */}
       {/* Wait until @gridWidth is populated to display page's body */}
-      {gridWidth && (
+      {context.gridWidth && (
         <>
-          <div className="m-auto" style={{ width: gridWidth }}>
+          <div className="m-auto" style={{ width: context.gridWidth }}>
             <div className="px-4 md:px-0 flex flex-col md:flex-row items-center md:pb-6 pt-12">
               <div className="flex-grow flex flex-row items-center">
                 <div className="flex flex-col ">
@@ -476,7 +453,7 @@ const Profile = ({
                       color: "#999",
                     }}
                   >
-                    {columns > 2 ? (
+                    {context.columns > 2 ? (
                       wallet_addresses[0]
                     ) : isMyProfile ? (
                       <div className="text-center md:text-left">
@@ -610,7 +587,7 @@ const Profile = ({
               </div>
 
               <div className="place-self-start text-sm">
-                {columns > 2 ? (
+                {context.columns > 2 ? (
                   isMyProfile ? (
                     <>
                       <a

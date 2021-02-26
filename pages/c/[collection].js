@@ -124,24 +124,6 @@ export default function Collection({
     return () => (isSubscribed = false);
   }, [currentCollectionSlug, sortBy, randomNumber]);
 
-  const [gridWidth, setGridWidth] = useState();
-  const [menuPadding, setMenuPadding] = useState(0);
-  useEffect(() => {
-    if (context.windowSize && context.windowSize.width < 820) {
-      setGridWidth(context.windowSize.width);
-      setMenuPadding(0);
-    } else if (context.windowSize && context.windowSize.width < 1200) {
-      setGridWidth(790 - 18);
-      setMenuPadding(0);
-    } else if (context.windowSize && context.windowSize.width < 1600) {
-      setGridWidth(1185 - 18);
-      setMenuPadding(0);
-    } else {
-      setGridWidth(1580 - 18);
-      setMenuPadding(0);
-    }
-  }, [context.windowSize]);
-
   const FilterTabs = (
     <GridTabs>
       <GridTab
@@ -159,11 +141,7 @@ export default function Collection({
         }}
       />
       <GridTab
-        label={
-          context.windowSize && context.windowSize.width > 820
-            ? "Last Sold"
-            : "Sold"
-        }
+        label={!context.isMobile ? "Last Sold" : "Sold"}
         isActive={sortBy === "sold"}
         onClickTab={() => {
           setSortby("sold");
@@ -178,7 +156,7 @@ export default function Collection({
           mixpanel.track("Newest button clicked");
         }}
       />
-      {context.windowSize && context.windowSize.width > 820 && (
+      {!context.isMobile && (
         <GridTab
           label="Oldest"
           isActive={sortBy === "oldest"}
@@ -245,13 +223,11 @@ export default function Collection({
         </div>
       </div>
 
-      {gridWidth > 0 ? (
+      {context.gridWidth > 0 ? (
         <div
           className="mx-auto mb-6 text-xs sm:text-sm flex flex-col md:flex-row items-center"
           style={{
-            width: gridWidth,
-            paddingLeft: menuPadding,
-            paddingRight: menuPadding,
+            width: context.gridWidth,
           }}
         >
           {collection_list && collection_list.length > 0 ? (

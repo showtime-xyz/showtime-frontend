@@ -15,7 +15,6 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
   const [myItemLikes, setMyItemLikes] = useState([]);
   const [itemsShowing, setItemsShowing] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  const [isMobile, setIsMobile] = useState(null);
   const [currentlyPlayingVideo, setCurrentlyPlayingVideo] = useState(null);
   const [currentlyOpenModal, setCurrentlyOpenModal] = useState(null);
 
@@ -127,14 +126,14 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
         )
       )
     );
-    if (isMobile) {
+    if (context.isMobile) {
       setItemsShowing(4);
     } else {
       setItemsShowing(8);
     }
 
     setHasMore(true);
-  }, [items, isMobile]);
+  }, [items, context.isMobile]);
 
   useEffect(() => {
     setMyItemLikes(context.myLikes ? context.myLikes : []);
@@ -208,24 +207,6 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
     setItemsLikedList(newItemsLikedList);
   }, [itemsList, myItemLikes]);
 
-  const [columns, setColumns] = useState(null);
-
-  useEffect(() => {
-    if (context.windowSize && context.windowSize.width < 820) {
-      setColumns(1);
-      setIsMobile(true);
-    } else if (context.windowSize && context.windowSize.width < 1200) {
-      setColumns(2);
-      setIsMobile(false);
-    } else if (context.windowSize && context.windowSize.width < 1600) {
-      setColumns(3);
-      setIsMobile(false);
-    } else {
-      setColumns(4);
-      setIsMobile(false);
-    }
-  }, [context.windowSize]);
-
   return (
     <>
       {typeof document !== "undefined" ? (
@@ -236,10 +217,10 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
             item={currentlyOpenModal}
             handleLike={handleLike}
             handleUnlike={handleUnlike}
-            showTooltip={isMobile === false}
+            showTooltip={context.isMobile === false}
             goToNext={goToNext}
             goToPrevious={goToPrevious}
-            columns={columns}
+            columns={context.columns}
             hasNext={hasNext}
             hasPrevious={hasPrevious}
 
@@ -293,21 +274,33 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
       >
         <div
           className={`mx-auto`}
-          style={columns === 1 ? null : { width: columns * (375 + 20) }}
+          style={
+            context.columns === 1
+              ? null
+              : { width: context.columns * (375 + 20) }
+          }
         >
           {filterTabs}
         </div>
         {isLoading ? (
           <div
             className="mx-auto items-center flex justify-center overflow-hidden"
-            style={columns === 1 ? null : { width: columns * (375 + 20) }}
+            style={
+              context.columns === 1
+                ? null
+                : { width: context.columns * (375 + 20) }
+            }
           >
             <div className="loading-card-spinner" />
           </div>
         ) : (
           <div
-            className={`grid grid-cols-${columns} mx-auto overflow-hidden`}
-            style={columns === 1 ? null : { width: columns * (375 + 20) }}
+            className={`grid grid-cols-${context.columns} mx-auto overflow-hidden`}
+            style={
+              context.columns === 1
+                ? null
+                : { width: context.columns * (375 + 20) }
+            }
           >
             {itemsLikedList.slice(0, itemsShowing).map((item) => (
               <TokenCard
@@ -315,8 +308,8 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
                 item={item}
                 handleLike={handleLike}
                 handleUnlike={handleUnlike}
-                columns={columns}
-                isMobile={isMobile}
+                columns={context.columns}
+                isMobile={context.isMobile}
                 currentlyPlayingVideo={currentlyPlayingVideo}
                 setCurrentlyPlayingVideo={setCurrentlyPlayingVideo}
                 currentlyOpenModal={currentlyOpenModal}

@@ -12,6 +12,9 @@ export default class MyApp extends React.Component {
     myFollows: null,
     myProfile: undefined,
     loginModalOpen: false,
+    gridWidth: null,
+    columns: null,
+    isMobile: null,
   };
 
   getUserFromCookies = async () => {
@@ -62,6 +65,8 @@ export default class MyApp extends React.Component {
         height: window.innerHeight,
       },
     });
+    //update grid width / columns
+    this.adjustGridProperties(window.innerWidth);
   };
 
   logOut = async () => {
@@ -118,6 +123,38 @@ export default class MyApp extends React.Component {
     this.setState({ loginModalOpen });
   }
 
+  setGridWidth(gridWidth) {
+    this.setState({ gridWidth });
+  }
+
+  setColumns(columns) {
+    this.setState({ columns });
+  }
+
+  setIsMobile(isMobile) {
+    this.setState({ isMobile });
+  }
+
+  adjustGridProperties(windowWidth) {
+    if (windowWidth < 820) {
+      this.setIsMobile(true);
+      this.setGridWidth(windowWidth);
+      this.setColumns(1);
+    } else if (windowWidth < 1200) {
+      this.setIsMobile(false);
+      this.setGridWidth(790 - 18);
+      this.setColumns(2);
+    } else if (windowWidth < 1600) {
+      this.setIsMobile(false);
+      this.setGridWidth(1185 - 18);
+      this.setColumns(3);
+    } else {
+      this.setIsMobile(false);
+      this.setGridWidth(1580 - 18);
+      this.setColumns(4);
+    }
+  }
+
   render() {
     const { Component, pageProps } = this.props;
 
@@ -128,7 +165,9 @@ export default class MyApp extends React.Component {
       myFollows: this.state.myFollows,
       myProfile: this.state.myProfile,
       loginModalOpen: this.state.loginModalOpen,
-
+      gridWidth: this.state.gridWidth,
+      columns: this.state.columns,
+      isMobile: this.state.isMobile,
       setUser: (user) => this.setUser(user),
       setWindowSize: (windowSize) => this.setWindowSize(windowSize),
       setMyLikes: (myLikes) => this.setMyLikes(myLikes),
