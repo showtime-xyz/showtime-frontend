@@ -24,7 +24,9 @@ const Header = () => {
         }}
       >
         <div
-          className="flex flex-row items-center"
+          className={`flex flex-row items-center ${
+            !context.gridWidth ? "invisible" : ""
+          }`}
           style={
             context.isMobile
               ? {}
