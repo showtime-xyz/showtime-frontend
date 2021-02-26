@@ -560,12 +560,6 @@ const Profile = ({
                           }}
                         >
                           <div>{context.myProfile.website_url}</div>
-                          <div className="ml-1">
-                            <FontAwesomeIcon
-                              style={{ height: 12 }}
-                              icon={faExternalLinkAlt}
-                            />
-                          </div>
                         </a>
                       </div>
                     ) : null
@@ -588,12 +582,6 @@ const Profile = ({
                       >
                         <div style={{ wordWrap: "break-word" }}>
                           {website_url}
-                        </div>
-                        <div className="ml-1 mt-1">
-                          <FontAwesomeIcon
-                            style={{ height: 12 }}
-                            icon={faExternalLinkAlt}
-                          />
                         </div>
                       </a>
                     </div>
