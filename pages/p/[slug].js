@@ -427,167 +427,174 @@ const Profile = ({
           />
         </>
       ) : null}
-      <div className="m-auto" style={{ width: gridWidth }}>
-        <div className="px-4 md:px-0 flex flex-col md:flex-row items-center md:pb-6 pt-12">
-          <div className="flex-grow flex flex-row items-center">
-            <div className="flex flex-col ">
-              <div className="flex flex-row items-center text-center">
-                <div className="flex-grow sm:hidden"></div>
-                <div
-                  className="text-3xl md:text-5xl showtime-title ml-4 md:ml-0 mt-2 md:mt-0"
-                  style={{ fontWeight: 600, wordBreak: "break-word" }}
-                >
-                  {isMyProfile
-                    ? context.myProfile
-                      ? context.myProfile.name
-                        ? context.myProfile.name
-                        : "Unnamed"
-                      : name
-                      ? name
-                      : "Unnamed"
-                    : name
-                    ? name
-                    : "Unnamed"}
-                </div>
-                <div>
-                  <ShareButton
-                    url={
-                      typeof window !== "undefined"
-                        ? window.location.href
-                        : null
-                    }
-                    type={"profile"}
-                  />
-                </div>
-                <div className="flex-grow"></div>
-              </div>
-              <div
-                style={{
-                  fontWeight: 400,
-                  fontSize: 12,
-                  marginTop: 8,
-                  color: "#999",
-                }}
-              >
-                {columns > 2 ? (
-                  wallet_addresses[0]
-                ) : isMyProfile ? (
-                  <div className="text-center md:text-left">
-                    <a
-                      href="#"
-                      onClick={() => {
-                        setPictureModalOpen(true);
-                        mixpanel.track("Open edit photo");
-                      }}
-                      className="showtime-logout-link"
-                      style={{ whiteSpace: "nowrap", fontWeight: 400 }}
-                    >
-                      {context.myProfile &&
-                      context.myProfile.img_url &&
-                      !context.myProfile.img_url.includes("opensea-profile")
-                        ? "Edit photo"
-                        : "Add photo"}
-                    </a>
-                    {" \u00A0\u00A0\u00A0 "}
-                    <a
-                      href="#"
-                      onClick={() => {
-                        setEditModalOpen(true);
-                        mixpanel.track("Open edit name");
-                      }}
-                      className="showtime-logout-link"
-                      style={{ whiteSpace: "nowrap", fontWeight: 400 }}
-                    >
-                      Edit profile
-                    </a>
-                    {" \u00A0\u00A0\u00A0 "}
-                    <a
-                      href="#"
-                      onClick={() => {
-                        logout();
-                      }}
-                      className="showtime-logout-link "
-                      style={{ whiteSpace: "nowrap", fontWeight: 400 }}
-                    >
-                      Log out
-                    </a>
-                  </div>
-                ) : null}
-                <div
-                  className={`${
-                    isMyProfile && context.myProfile
-                      ? !context.myProfile.bio && !context.myProfile.website_url
-                        ? "hidden"
-                        : "flex-1"
-                      : !bio && !website_url
-                      ? "hidden"
-                      : "flex-1"
-                  } mt-8 text-base align-center flex flex-col justify-center items-center md:items-start`}
-                >
-                  <h4 className="text-black mb-2 text-lg font-semibold">
-                    About
-                  </h4>
-                  {isMyProfile && context.myProfile ? (
-                    context.myProfile.bio ? (
-                      <div className="pb-2 sm:mr-16 max-w-xl">
-                        <div className="text-center md:text-left">
-                          {context.myProfile.bio}
-                        </div>
-                      </div>
-                    ) : null
-                  ) : bio ? (
-                    <div className="pb-2 sm:mr-16 max-w-xl">
-                      <div className="">{bio}</div>
-                    </div>
-                  ) : null}
 
-                  {isMyProfile && context.myProfile ? (
-                    context.myProfile.website_url ? (
-                      <div className="pb-4 sm:pb-0 w-min">
+      {/* Start Page Body */}
+      {/* Wait until @gridWidth is populated to display page's body */}
+      {gridWidth && (
+        <>
+          <div className="m-auto" style={{ width: gridWidth }}>
+            <div className="px-4 md:px-0 flex flex-col md:flex-row items-center md:pb-6 pt-12">
+              <div className="flex-grow flex flex-row items-center">
+                <div className="flex flex-col ">
+                  <div className="flex flex-row items-center text-center">
+                    <div className="flex-grow sm:hidden"></div>
+                    <div
+                      className="text-3xl md:text-5xl showtime-title ml-4 md:ml-0 mt-2 md:mt-0"
+                      style={{ fontWeight: 600, wordBreak: "break-word" }}
+                    >
+                      {isMyProfile
+                        ? context.myProfile
+                          ? context.myProfile.name
+                            ? context.myProfile.name
+                            : "Unnamed"
+                          : name
+                          ? name
+                          : "Unnamed"
+                        : name
+                        ? name
+                        : "Unnamed"}
+                    </div>
+                    <div>
+                      <ShareButton
+                        url={
+                          typeof window !== "undefined"
+                            ? window.location.href
+                            : null
+                        }
+                        type={"profile"}
+                      />
+                    </div>
+                    <div className="flex-grow"></div>
+                  </div>
+                  <div
+                    style={{
+                      fontWeight: 400,
+                      fontSize: 12,
+                      marginTop: 8,
+                      color: "#999",
+                    }}
+                  >
+                    {columns > 2 ? (
+                      wallet_addresses[0]
+                    ) : isMyProfile ? (
+                      <div className="text-center md:text-left">
                         <a
-                          href={
-                            context.myProfile.website_url.slice(0, 4) === "http"
-                              ? context.myProfile.website_url
-                              : "https://" + context.myProfile.website_url
-                          }
-                          target="_blank"
-                          className="flex flex-row items-center justify-center"
-                          style={{ color: "rgb(81, 125, 228)" }}
+                          href="#"
                           onClick={() => {
-                            mixpanel.track("Clicked profile website link", {
-                              slug: slug,
-                            });
+                            setPictureModalOpen(true);
+                            mixpanel.track("Open edit photo");
                           }}
+                          className="showtime-logout-link"
+                          style={{ whiteSpace: "nowrap", fontWeight: 400 }}
                         >
-                          <div>{context.myProfile.website_url}</div>
+                          {context.myProfile &&
+                          context.myProfile.img_url &&
+                          !context.myProfile.img_url.includes("opensea-profile")
+                            ? "Edit photo"
+                            : "Add photo"}
+                        </a>
+                        {" \u00A0\u00A0\u00A0 "}
+                        <a
+                          href="#"
+                          onClick={() => {
+                            setEditModalOpen(true);
+                            mixpanel.track("Open edit name");
+                          }}
+                          className="showtime-logout-link"
+                          style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+                        >
+                          Edit profile
+                        </a>
+                        {" \u00A0\u00A0\u00A0 "}
+                        <a
+                          href="#"
+                          onClick={() => {
+                            logout();
+                          }}
+                          className="showtime-logout-link "
+                          style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+                        >
+                          Log out
                         </a>
                       </div>
-                    ) : null
-                  ) : website_url ? (
-                    <div className="pb-0">
-                      <a
-                        href={
-                          website_url.slice(0, 4) === "http"
-                            ? website_url
-                            : "https://" + website_url
-                        }
-                        target="_blank"
-                        className="flex flex-row"
-                        style={{ color: "rgb(81, 125, 228)" }}
-                        onClick={() => {
-                          mixpanel.track("Clicked profile website link", {
-                            slug: slug,
-                          });
-                        }}
-                      >
-                        <div style={{ wordWrap: "break-word" }}>
-                          {website_url}
+                    ) : null}
+                    <div
+                      className={`${
+                        isMyProfile && context.myProfile
+                          ? !context.myProfile.bio &&
+                            !context.myProfile.website_url
+                            ? "hidden"
+                            : "flex-1"
+                          : !bio && !website_url
+                          ? "hidden"
+                          : "flex-1"
+                      } mt-8 text-base align-center flex flex-col justify-center items-center md:items-start`}
+                    >
+                      <h4 className="text-black mb-2 text-lg font-semibold">
+                        About
+                      </h4>
+                      {isMyProfile && context.myProfile ? (
+                        context.myProfile.bio ? (
+                          <div className="pb-2 sm:mr-16 max-w-xl">
+                            <div className="text-center md:text-left">
+                              {context.myProfile.bio}
+                            </div>
+                          </div>
+                        ) : null
+                      ) : bio ? (
+                        <div className="pb-2 sm:mr-16 max-w-xl">
+                          <div className="">{bio}</div>
                         </div>
-                      </a>
-                    </div>
-                  ) : null}
+                      ) : null}
 
-                  {/* {isMyProfile && context.myProfile ? (
+                      {isMyProfile && context.myProfile ? (
+                        context.myProfile.website_url ? (
+                          <div className="pb-4 sm:pb-0 w-min">
+                            <a
+                              href={
+                                context.myProfile.website_url.slice(0, 4) ===
+                                "http"
+                                  ? context.myProfile.website_url
+                                  : "https://" + context.myProfile.website_url
+                              }
+                              target="_blank"
+                              className="flex flex-row items-center justify-center"
+                              style={{ color: "rgb(81, 125, 228)" }}
+                              onClick={() => {
+                                mixpanel.track("Clicked profile website link", {
+                                  slug: slug,
+                                });
+                              }}
+                            >
+                              <div>{context.myProfile.website_url}</div>
+                            </a>
+                          </div>
+                        ) : null
+                      ) : website_url ? (
+                        <div className="pb-0">
+                          <a
+                            href={
+                              website_url.slice(0, 4) === "http"
+                                ? website_url
+                                : "https://" + website_url
+                            }
+                            target="_blank"
+                            className="flex flex-row"
+                            style={{ color: "rgb(81, 125, 228)" }}
+                            onClick={() => {
+                              mixpanel.track("Clicked profile website link", {
+                                slug: slug,
+                              });
+                            }}
+                          >
+                            <div style={{ wordWrap: "break-word" }}>
+                              {website_url}
+                            </div>
+                          </a>
+                        </div>
+                      ) : null}
+
+                      {/* {isMyProfile && context.myProfile ? (
                   !context.myProfile.bio &&
                   !context.myProfile.website_url ? null : (
                     <hr className="pb-4 block sm:hidden" />
@@ -595,111 +602,114 @@ const Profile = ({
                 ) : !bio && !website_url ? null : (
                   <hr className="pb-4 block sm:hidden" />
                 )} */}
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              <div className="place-self-start text-sm">
+                {columns > 2 ? (
+                  isMyProfile ? (
+                    <>
+                      <a
+                        href="#"
+                        onClick={() => {
+                          setPictureModalOpen(true);
+                          mixpanel.track("Open edit photo");
+                        }}
+                        className="showtime-logout-link"
+                        style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+                      >
+                        {context.myProfile &&
+                        context.myProfile.img_url &&
+                        !context.myProfile.img_url.includes("opensea-profile")
+                          ? "Edit photo"
+                          : "Add photo"}
+                      </a>
+                      {" \u00A0\u00A0\u00A0 "}
+                      <a
+                        href="#"
+                        onClick={() => {
+                          setEditModalOpen(true);
+                          mixpanel.track("Open edit name");
+                        }}
+                        className="showtime-logout-link"
+                        style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+                      >
+                        Edit profile
+                      </a>
+                      {" \u00A0\u00A0\u00A0 "}
+                      <a
+                        href="#"
+                        onClick={() => {
+                          logout();
+                        }}
+                        className="showtime-logout-link float-right"
+                        style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+                      >
+                        Log out
+                      </a>
+                    </>
+                  ) : (
+                    "\u00A0"
+                  )
+                ) : null}
+              </div>
             </div>
-          </div>
-
-          <div className="place-self-start text-sm">
-            {columns > 2 ? (
-              isMyProfile ? (
-                <>
-                  <a
-                    href="#"
-                    onClick={() => {
-                      setPictureModalOpen(true);
-                      mixpanel.track("Open edit photo");
-                    }}
-                    className="showtime-logout-link"
-                    style={{ whiteSpace: "nowrap", fontWeight: 400 }}
-                  >
-                    {context.myProfile &&
-                    context.myProfile.img_url &&
-                    !context.myProfile.img_url.includes("opensea-profile")
-                      ? "Edit photo"
-                      : "Add photo"}
-                  </a>
-                  {" \u00A0\u00A0\u00A0 "}
-                  <a
-                    href="#"
-                    onClick={() => {
-                      setEditModalOpen(true);
-                      mixpanel.track("Open edit name");
-                    }}
-                    className="showtime-logout-link"
-                    style={{ whiteSpace: "nowrap", fontWeight: 400 }}
-                  >
-                    Edit profile
-                  </a>
-                  {" \u00A0\u00A0\u00A0 "}
-                  <a
-                    href="#"
-                    onClick={() => {
-                      logout();
-                    }}
-                    className="showtime-logout-link float-right"
-                    style={{ whiteSpace: "nowrap", fontWeight: 400 }}
-                  >
-                    Log out
-                  </a>
-                </>
-              ) : (
-                "\u00A0"
-              )
-            ) : null}
-          </div>
-        </div>
-        <ProfileInfoPill
-          isFollowed={isFollowed}
-          isMyProfile={isMyProfile}
-          onClickFollow={
-            context.user
-              ? isFollowed
-                ? handleUnfollow
-                : handleFollow
-              : handleLoggedOutFollow
-          }
-          numFollowers={followers && followers.length}
-          numFollowing={following && following.length}
-          showFollowers={() => {
-            setShowFollowers(true);
-          }}
-          showFollowing={() => {
-            setShowFollowing(true);
-          }}
-          profileImageUrl={
-            isMyProfile
-              ? context.myProfile
-                ? context.myProfile.img_url
-                  ? context.myProfile.img_url
+            <ProfileInfoPill
+              isFollowed={isFollowed}
+              isMyProfile={isMyProfile}
+              onClickFollow={
+                context.user
+                  ? isFollowed
+                    ? handleUnfollow
+                    : handleFollow
+                  : handleLoggedOutFollow
+              }
+              numFollowers={followers && followers.length}
+              numFollowing={following && following.length}
+              showFollowers={() => {
+                setShowFollowers(true);
+              }}
+              showFollowing={() => {
+                setShowFollowing(true);
+              }}
+              profileImageUrl={
+                isMyProfile
+                  ? context.myProfile
+                    ? context.myProfile.img_url
+                      ? context.myProfile.img_url
+                      : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                  : img_url
+                  ? img_url
                   : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-              : img_url
-              ? img_url
-              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-          }
-        />
-      </div>
+              }
+            />
+          </div>
 
-      {/*!isFollowed && hasFollowerOnlyItems ? (
+          {/*!isFollowed && hasFollowerOnlyItems ? (
         <div className="text-center py-8">
           This creator has <span style={{ fontWeight: 600 }}>more content</span>{" "}
           you can unlock by <span style={{ fontWeight: 600 }}>Following</span>.
         </div>
       ) : null*/}
 
-      <TokenGridV4
-        filterTabs={FilterTabs}
-        items={
-          selectedGrid === "created"
-            ? createdItems
-            : selectedGrid === "owned"
-            ? ownedItems
-            : selectedGrid === "liked"
-            ? likedItems
-            : null
-        }
-      />
+          <TokenGridV4
+            filterTabs={FilterTabs}
+            items={
+              selectedGrid === "created"
+                ? createdItems
+                : selectedGrid === "owned"
+                ? ownedItems
+                : selectedGrid === "liked"
+                ? likedItems
+                : null
+            }
+          />
+        </>
+      )}
+      {/* End Page Body */}
     </Layout>
   );
 };
