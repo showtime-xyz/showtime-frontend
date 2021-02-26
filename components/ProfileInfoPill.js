@@ -14,6 +14,7 @@ export default function ProfileInfoPill({
   onClickFollow,
   showFollowers,
   showFollowing,
+  onClickPhoto,
 }) {
   const cleanNumFollowers = numFollowers
     ? Number(numFollowers).toLocaleString()
@@ -25,7 +26,12 @@ export default function ProfileInfoPill({
   return (
     <div>
       <div className="p-6 rounded-xl bg-white m-4 md:m-0 md:w-max flex flex-col md:flex-row justify-center items-center md:items-stretch">
-        <div className="w-14 h-14 md:w-12 md:h-12 flex items-center justify-center rounded-full my-2 md:my-0">
+        <div
+          className={`w-14 h-14 md:w-12 md:h-12 flex items-center justify-center rounded-full my-2 md:my-0 ${
+            isMyProfile ? "cursor-pointer hover:opacity-60 transition" : ""
+          }`}
+          onClick={isMyProfile ? onClickPhoto : null}
+        >
           <img
             src={profileImageUrl}
             className="w-full h-full overflow-hidden rounded-full"
@@ -33,7 +39,7 @@ export default function ProfileInfoPill({
         </div>
         <GraySeparator />
         <div
-          className="flex flex-col justify-center my-2 md:my-0 items-center md:items-start cursor-pointer"
+          className="flex flex-col justify-center my-2 md:my-0 items-center md:items-start cursor-pointer hover:opacity-60 transition"
           onClick={showFollowing}
         >
           <div className="text-sm text-gray-500">Following</div>
@@ -41,7 +47,9 @@ export default function ProfileInfoPill({
         </div>
         <ClearSeparator />
         <div
-          className="flex flex-col justify-center my-2 md:my-0 items-center md:items-start cursor-pointer"
+          className={
+            "flex flex-col justify-center my-2 md:my-0 items-center md:items-start cursor-pointer hover:opacity-60 transition"
+          }
           onClick={showFollowers}
         >
           <div className="text-sm text-gray-500">Followers</div>

@@ -666,6 +666,10 @@ const Profile = ({
                     : handleFollow
                   : handleLoggedOutFollow
               }
+              onClickPhoto={() => {
+                setPictureModalOpen(true);
+                mixpanel.track("Open edit photo");
+              }}
               numFollowers={followers && followers.length}
               numFollowing={following && following.length}
               showFollowers={() => {
