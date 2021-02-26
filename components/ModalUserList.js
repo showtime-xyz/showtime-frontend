@@ -1,17 +1,33 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
 import ClientOnlyPortal from "./ClientOnlyPortal";
 import _ from "lodash";
 import Link from "next/link";
 import CloseButton from "./CloseButton";
+import AppContext from "../context/app-context";
 
-export default function ModalUserList({ isOpen, title, users, closeModal }) {
+export default function ModalUserList({
+  isOpen,
+  title,
+  users,
+  closeModal,
+  emptyMessage,
+}) {
+  const context = useContext(AppContext);
+  const [isMobile, setIsMobile] = useState(true);
+  console.log("isMobile", isMobile);
+  useEffect(() => {
+    if (context.windowSize) {
+      setIsMobile(context.windowSize.width < 820);
+    }
+  }, [context.windowSize]);
+
   return (
     <>
       {isOpen && (
         <ClientOnlyPortal selector="#modal">
           <div className="backdrop" onClick={closeModal}>
             <div
-              className="modal max-h-80"
+              className="modal flex flex-col"
               style={{ color: "black" }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -22,9 +38,11 @@ export default function ModalUserList({ isOpen, title, users, closeModal }) {
               >
                 {title}
               </div>
-              <div className="flex flex-col h-60 overflow-y-auto">
+              <div className="flex flex-col overflow-y-auto">
                 {users.length === 0 && (
-                  <div className="text-center mt-6">Nothing here yet!</div>
+                  <div className="text-center mx-2 my-8 text-gray-400">
+                    {emptyMessage}
+                  </div>
                 )}
                 {users.map((profile) => {
                   return (
@@ -79,6 +97,7 @@ export default function ModalUserList({ isOpen, title, users, closeModal }) {
                 max-width: 400px;
                 margin-left: auto;
                 margin-right: auto;
+                max-height: 80vh;
               }
             `}</style>
           </div>

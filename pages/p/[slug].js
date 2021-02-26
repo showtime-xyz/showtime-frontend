@@ -415,6 +415,7 @@ const Profile = ({
             closeModal={() => {
               setShowFollowers(false);
             }}
+            emptyMessage="No followers yet."
           />
           {/* Following modal */}
           <ModalUserList
@@ -424,6 +425,7 @@ const Profile = ({
             closeModal={() => {
               setShowFollowing(false);
             }}
+            emptyMessage="Not following anyone yet."
           />
         </>
       ) : null}
