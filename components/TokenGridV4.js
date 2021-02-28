@@ -139,21 +139,21 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
     setMyItemLikes(context.myLikes ? context.myLikes : []);
   }, [context.myLikes]);
 
-  const handleLike = async (tid) => {
+  const handleLike = async (nft_id) => {
     // Change myLikes via setMyLikes
-    context.setMyLikes([...context.myLikes, tid]);
+    context.setMyLikes([...context.myLikes, nft_id]);
 
     // Update the like counts for each item
     var newItemsList = [...itemsList];
     _.forEach(newItemsList, function (item) {
-      if (item.tid === tid) {
+      if (item.nft_id === nft_id) {
         item.like_count = item.like_count + 1;
       }
     });
     setItemsList(newItemsList);
 
     // Post changes to the API
-    await fetch(`/api/like/${tid}`, {
+    await fetch(`/api/like_v3/${nft_id}`, {
       method: "post",
     });
 
@@ -168,21 +168,21 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
     setItemsShowing(itemsShowing + 8);
   };
 
-  const handleUnlike = async (tid) => {
+  const handleUnlike = async (nft_id) => {
     // Change myLikes via setMyLikes
-    context.setMyLikes(context.myLikes.filter((item) => !(item === tid)));
+    context.setMyLikes(context.myLikes.filter((item) => !(item === nft_id)));
 
     // Update the like counts for each item
     var newItemsList = [...itemsList];
     _.forEach(newItemsList, function (item) {
-      if (item.tid === tid) {
+      if (item.nft_id === nft_id) {
         item.like_count = item.like_count - 1;
       }
     });
     setItemsList(newItemsList);
 
     // Post changes to the API
-    await fetch(`/api/unlike/${tid}`, {
+    await fetch(`/api/unlike_v3/${nft_id}`, {
       method: "post",
     });
 
@@ -195,7 +195,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
     _.forEach([...itemsList], function (item) {
       item.liked = false;
       _.forEach([...myItemLikes], function (like) {
-        if (item.tid === like) {
+        if (item.nft_id === like) {
           item.liked = true;
         }
       });
@@ -223,42 +223,6 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
             columns={context.columns}
             hasNext={hasNext}
             hasPrevious={hasPrevious}
-
-            /*likeButton={
-              <LikeButton
-                isLiked={this.props.item.liked}
-                likeCount={this.props.item.like_count}
-                handleLike={this.props.handleLike}
-                handleLikeArgs={{
-                  tid: this.props.item.tid,
-                }}
-                handleUnlike={this.props.handleUnlike}
-                handleUnlikeArgs={{
-                  tid: this.props.item.tid,
-                }}
-                showTooltip={this.props.isMobile === false}
-              />
-            }
-            shareButton={
-              <ShareButton
-                url={
-                  window.location.protocol +
-                  "//" +
-                  window.location.hostname +
-                  (window.location.port ? ":" + window.location.port : "") +
-                  `/t/${this.props.item.contract_address}/${this.props.item.token_id}`
-                }
-                type={"item"}
-              />
-            }
-            originalImageDimensions={
-              this.imageRef && this.imageRef.current
-                ? {
-                    height: this.imageRef.current.clientHeight,
-                    width: this.imageRef.current.clientWidth,
-                  }
-                : { height: null, width: null }
-            }*/
           />
         </>
       ) : null}
@@ -304,7 +268,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
           >
             {itemsLikedList.slice(0, itemsShowing).map((item) => (
               <TokenCard
-                key={item.tid}
+                key={item.nft_id}
                 item={item}
                 handleLike={handleLike}
                 handleUnlike={handleUnlike}

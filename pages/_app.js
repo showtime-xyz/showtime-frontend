@@ -46,7 +46,7 @@ export default class MyApp extends React.Component {
       try {
         const my_info_data = await myInfoRequest.json();
 
-        this.setMyLikes(my_info_data.data.likes);
+        this.setMyLikes(my_info_data.data.likes_nft);
         this.setMyFollows(my_info_data.data.follows);
         this.setMyProfile(my_info_data.data.profile);
       } catch {}

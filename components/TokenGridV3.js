@@ -26,42 +26,42 @@ const TokenGridV3 = ({ items, isDetail }) => {
     setMyItemLikes(context.myLikes ? context.myLikes : []);
   }, [context.myLikes]);
 
-  const handleLike = async (tid) => {
+  const handleLike = async (nft_id) => {
     // Update global state via setMyLikes
-    context.setMyLikes([...context.myLikes, tid]);
+    context.setMyLikes([...context.myLikes, nft_id]);
 
     // Update the like counts for each item on page
     var newItemsList = [...itemsList];
     _.forEach(newItemsList, function (item) {
-      if (item.tid === tid) {
+      if (item.nft_id === nft_id) {
         item.like_count = item.like_count + 1;
       }
     });
     setItemsList(newItemsList);
 
     // Post changes to the API
-    await fetch(`/api/like/${tid}`, {
+    await fetch(`/api/like_v3/${nft_id}`, {
       method: "post",
     });
 
     mixpanel.track("Liked item");
   };
 
-  const handleUnlike = async (tid) => {
+  const handleUnlike = async (nft_id) => {
     // Update global state via setMyLikes
-    context.setMyLikes(context.myLikes.filter((item) => !(item === tid)));
+    context.setMyLikes(context.myLikes.filter((item) => !(item === nft_id)));
 
     // Update the like counts for each item on page
     var newItemsList = [...itemsList];
     _.forEach(newItemsList, function (item) {
-      if (item.tid === tid) {
+      if (item.nft_id === nft_id) {
         item.like_count = item.like_count - 1;
       }
     });
     setItemsList(newItemsList);
 
     // Post changes to the API
-    await fetch(`/api/unlike/${tid}`, {
+    await fetch(`/api/unlike_v3/${nft_id}`, {
       method: "post",
     });
 
@@ -74,7 +74,7 @@ const TokenGridV3 = ({ items, isDetail }) => {
     _.forEach([...itemsList], function (item) {
       item.liked = false;
       _.forEach([...myItemLikes], function (like) {
-        if (item.tid === like) {
+        if (item.nft_id === like) {
           item.liked = true;
         }
       });
@@ -116,7 +116,7 @@ const TokenGridV3 = ({ items, isDetail }) => {
         {itemsLikedList.map((item) => {
           return (
             <TokenCard
-              key={item.tid}
+              key={item.nft_id}
               item={item}
               handleLike={handleLike}
               handleUnlike={handleUnlike}

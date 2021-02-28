@@ -71,13 +71,13 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
   const [ownedItems, setOwnedItems] = useState([]);
 
   useEffect(() => {
-    setOwnedItems(same_owner_items.filter((c) => c.tid !== item.tid));
+    setOwnedItems(same_owner_items.filter((c) => c.nft_id !== item.nft_id));
   }, [same_owner_items]);
 
   const [createdItems, setCreatedItems] = useState([]);
 
   useEffect(() => {
-    setCreatedItems(same_creator_items.filter((c) => c.tid !== item.tid));
+    setCreatedItems(same_creator_items.filter((c) => c.nft_id !== item.nft_id));
   }, [same_creator_items]);
 
   function removeTags(str) {
@@ -89,7 +89,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
   const [reportModalOpen, setReportModalOpen] = useState(false);
 
   return (
-    <Layout key={item.tid}>
+    <Layout key={item.nft_id}>
       <Head>
         <title>{item.token_name}</title>
         {item.token_img_original_url ? (
@@ -123,7 +123,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
           <ModalReportItem
             isOpen={reportModalOpen}
             setReportModalOpen={setReportModalOpen}
-            tid={item.tid}
+            nftId={item.nft_id}
           />
         </>
       ) : null}

@@ -111,7 +111,7 @@ const TokenDetailBody = ({
           <ModalReportItem
             isOpen={reportModalOpen}
             setReportModalOpen={setReportModalOpen}
-            tid={item.tid}
+            nftId={item.nft_id}
           />
         </>
       ) : null}

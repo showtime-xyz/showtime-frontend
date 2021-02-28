@@ -23,8 +23,8 @@ const LikeButton = ({ item, handleLike, handleUnlike, showTooltip }) => {
         onClick={() =>
           context.user
             ? item.liked
-              ? handleUnlike(item.tid)
-              : handleLike(item.tid)
+              ? handleUnlike(item.nft_id)
+              : handleLike(item.nft_id)
             : handleLoggedOutLike()
         }
         className={
