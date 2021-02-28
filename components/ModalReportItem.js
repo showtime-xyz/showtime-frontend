@@ -4,7 +4,7 @@ import ClientOnlyPortal from "./ClientOnlyPortal";
 import mixpanel from "mixpanel-browser";
 import CloseButton from "./CloseButton";
 
-export default function Modal({ isOpen, setReportModalOpen, tid }) {
+export default function Modal({ isOpen, setReportModalOpen, nftId }) {
   //const context = useContext(AppContext);
   const [inputValue, setInputValue] = useState("");
   const [confirmationShowing, setConfirmationShowing] = useState(false);
@@ -14,10 +14,10 @@ export default function Modal({ isOpen, setReportModalOpen, tid }) {
     event.preventDefault();
 
     // Post changes to the API
-    await fetch(`/api/reportitem`, {
+    await fetch(`/api/reportitem_v2`, {
       method: "post",
       body: JSON.stringify({
-        tid: tid,
+        nft_id: nftId,
         description: inputValue,
       }),
     });

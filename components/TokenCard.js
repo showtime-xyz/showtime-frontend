@@ -156,41 +156,16 @@ class TokenCard extends React.Component {
                 ) : null}
               </div>
               <div className="flex-grow">&nbsp;</div>
-
-              {/*[1266458, 1266463, 1320881, 1320889].includes(
-                this.props.item.tid
-              ) ? (
-                <div
-                  className="flex flex-row text-xs"
-                  style={{ color: "#333" }}
-                >
-                  <div>
-                    <FontAwesomeIcon
-                      style={{
-                        height: 14,
-                        margin: "auto",
-                        marginBottom: 4,
-                        marginRight: 4,
-                      }}
-                      icon={faClock}
-                    />
-                  </div>
-                  <div>
-                    Sale ends in{" "}
-                    <span style={{ fontWeight: 600 }}>3 hours</span>
-                  </div>
-                </div>
-                    ) : null*/}
             </div>
             {(this.props.item.token_has_video &&
               this.state.showVideo &&
-              this.props.currentlyPlayingVideo === this.props.item.tid) ||
+              this.props.currentlyPlayingVideo === this.props.item.nft_id) ||
             (this.props.item.token_has_video &&
               !this.props.item.token_img_url) ? (
               <ReactPlayer
                 url={this.props.item.token_animation_url}
                 playing={
-                  this.props.currentlyPlayingVideo === this.props.item.tid ||
+                  this.props.currentlyPlayingVideo === this.props.item.nft_id ||
                   (this.props.item.token_has_video &&
                     !this.props.item.token_img_url)
                 }
@@ -252,7 +227,9 @@ class TokenCard extends React.Component {
                     onClick={() => {
                       mixpanel.track("Play card video");
                       this.setState({ showVideo: true, muted: false });
-                      this.props.setCurrentlyPlayingVideo(this.props.item.tid);
+                      this.props.setCurrentlyPlayingVideo(
+                        this.props.item.nft_id
+                      );
                     }}
                   >
                     <FontAwesomeIcon
