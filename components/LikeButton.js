@@ -17,6 +17,7 @@ const LikeButton = ({ item, handleLike, handleUnlike, showTooltip }) => {
     context.setLoginModalOpen(true);
   };
 
+  console.log("item", item);
   return (
     <div className="tooltip">
       <button
@@ -27,24 +28,25 @@ const LikeButton = ({ item, handleLike, handleUnlike, showTooltip }) => {
               : handleLike(item.nft_id)
             : handleLoggedOutLike()
         }
-        className={
-          item.liked
-            ? "showtime-like-button-pink"
-            : "showtime-like-button-white"
-        }
+        // className={
+        //   item.liked
+        //     ? "showtime-like-button-pink"
+        //     : "showtime-like-button-white"
+        // }
       >
-        <div className="flex flex-row items-center text-sm px-3 py-1">
+        <div className="flex flex-row items-center p-1 pl-2 rounded-md hover:bg-gray-100 transition">
+          <div className="mr-2" style={{ whiteSpace: "nowrap" }}>
+            {item.like_count}
+          </div>
           <div className="flex">
             <FontAwesomeIcon
               style={{
-                height: 18,
-                width: 18,
+                height: 22,
+                width: 22,
               }}
               icon={item.liked ? faHeartSolid : faHeartOutline}
+              color={item.liked ? "#e45cff" : "black"}
             />
-          </div>
-          <div className="ml-2" style={{ whiteSpace: "nowrap" }}>
-            {item.like_count} like{item.like_count === 1 ? null : "s"}{" "}
           </div>
         </div>
       </button>

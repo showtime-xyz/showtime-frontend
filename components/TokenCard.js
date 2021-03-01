@@ -9,7 +9,7 @@ import {
   faClock,
 } from "@fortawesome/free-solid-svg-icons";
 import LikeButton from "./LikeButton";
-import ShareButton from "./ShareButton";
+// import ShareButton from "./ShareButton";
 import ReactPlayer from "react-player";
 import mixpanel from "mixpanel-browser";
 import AppContext from "../context/app-context";
@@ -122,41 +122,9 @@ class TokenCard extends React.Component {
             className={
               this.props.columns === 1
                 ? "mx-auto showtime-card"
-                : "mx-auto showtime-card sm:rounded-md"
+                : "mx-auto showtime-card sm:rounded-md overflow-hidden"
             }
           >
-            <div className="p-4 flex flex-row items-center">
-              <div className="flex-shrink">
-                {this.props.item.creator_address ? (
-                  <Link
-                    href="/p/[slug]"
-                    as={`/p/${this.props.item.creator_address}`}
-                  >
-                    <a className="flex flex-row items-center ">
-                      <div>
-                        <img
-                          alt={this.props.item.creator_name}
-                          src={
-                            this.props.item.creator_img_url
-                              ? this.props.item.creator_img_url
-                              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                          }
-                          className="rounded-full "
-                          style={{ height: 24, width: 24 }}
-                        />
-                      </div>
-                      <div className="showtime-card-profile-link ml-2">
-                        {this.truncateWithEllipses(
-                          this.props.item.creator_name,
-                          30
-                        )}
-                      </div>
-                    </a>
-                  </Link>
-                ) : null}
-              </div>
-              <div className="flex-grow">&nbsp;</div>
-            </div>
             {(this.props.item.token_has_video &&
               this.state.showVideo &&
               this.props.currentlyPlayingVideo === this.props.item.nft_id) ||
@@ -246,61 +214,9 @@ class TokenCard extends React.Component {
               </div>
             )}
 
-            <div className="p-4">
+            <div className="p-4 pt-6 pb-2">
               <div>
-                <div className="flex flex-row items-center">
-                  <div className="flex-shrink">
-                    <LikeButton
-                      item={this.props.item}
-                      handleLike={this.props.handleLike}
-                      handleUnlike={this.props.handleUnlike}
-                      showTooltip={this.props.isMobile === false}
-                    />
-                  </div>
-                  {this.props.item.token_creator_followers_only ? (
-                    this.context.myFollows ? (
-                      this.context.myFollows
-                        .map((item) => item.wallet_address)
-                        .includes(this.props.item.creator_address) ? (
-                        <div>
-                          <a
-                            className="showtime-white-button ml-2 text-sm px-4 py-1 flex flex-row"
-                            style={{ cursor: "pointer" }}
-                            target="_blank"
-                            href={`https://opensea.io/assets/${this.props.item.contract_address}/${this.props.item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
-                          >
-                            <div style={{ marginRight: 6 }}>Bid</div>
-                            <FontAwesomeIcon
-                              style={{
-                                height: 14,
-                                margin: "auto",
-                                marginBottom: 4,
-                              }}
-                              icon={faExternalLinkAlt}
-                            />
-                          </a>
-                        </div>
-                      ) : null
-                    ) : null
-                  ) : null}
-
-                  <div className="flex-grow text-right"></div>
-                  <div className="flex-shrink">
-                    <ShareButton
-                      url={
-                        window.location.protocol +
-                        "//" +
-                        window.location.hostname +
-                        (window.location.port
-                          ? ":" + window.location.port
-                          : "") +
-                        `/t/${this.props.item.contract_address}/${this.props.item.token_id}`
-                      }
-                      type={"item"}
-                    />
-                  </div>
-                </div>
-                <div className="mt-4 ">
+                <div className="">
                   <div
                     onClick={() => {
                       mixpanel.track("Open NFT modal");
@@ -312,31 +228,29 @@ class TokenCard extends React.Component {
                     style={{
                       overflowWrap: "break-word",
                       wordWrap: "break-word",
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: 600,
                       cursor: "pointer",
                     }}
                   >
                     {this.props.item.token_name}
 
-                    {this.props.item.token_has_video ? (
+                    {/* {this.props.item.token_has_video ? (
                       <FontAwesomeIcon
                         className="ml-1 inline"
                         style={{ height: 12, marginBottom: 2 }}
                         icon={faVideo}
                       />
-                    ) : null}
+                    ) : null} */}
                   </div>
                   {this.props.item.token_description ? (
                     <div
                       style={{
-                        fontWeight: 400,
-                        color: "#888",
-                        fontSize: 12,
+                        fontSize: 14,
                         overflowWrap: "break-word",
                         wordWrap: "break-word",
                       }}
-                      className="pt-1  pb-2"
+                      className="pt-2  pb-1 text-gray-500"
                     >
                       {this.state.moreShown ? (
                         <div>
@@ -372,37 +286,79 @@ class TokenCard extends React.Component {
                       )}
                     </div>
                   ) : null}
+                  <div className="py-2 flex flex-row items-center">
+                    <div className="flex-shrink">
+                      {this.props.item.creator_address ? (
+                        <Link
+                          href="/p/[slug]"
+                          as={`/p/${this.props.item.creator_address}`}
+                        >
+                          <a className="flex flex-row items-center ">
+                            <div>
+                              <img
+                                alt={this.props.item.creator_name}
+                                src={
+                                  this.props.item.creator_img_url
+                                    ? this.props.item.creator_img_url
+                                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                                }
+                                className="rounded-full"
+                                style={{ height: 24, width: 24 }}
+                              />
+                            </div>
+                            <div className="showtime-card-profile-link ml-2">
+                              {this.truncateWithEllipses(
+                                this.props.item.creator_name,
+                                30
+                              )}
+                            </div>
+                          </a>
+                        </Link>
+                      ) : null}
+                    </div>
+                    <div className="flex-grow">&nbsp;</div>
+                    <div className="flex-shrink">
+                      <LikeButton
+                        item={this.props.item}
+                        handleLike={this.props.handleLike}
+                        handleUnlike={this.props.handleUnlike}
+                        showTooltip={this.props.isMobile === false}
+                      />
+                    </div>
+                  </div>
+                  {/*  */}
                 </div>
               </div>
             </div>
             <div
-              className="mx-4 py-4 flex items-center"
+              class="flex items-end"
               style={{
                 backgroundColor: "#ffffff",
                 borderTopWidth: 1,
                 borderColor: "rgb(219,219,219)",
               }}
             >
-              <div
-                className="flex-shrink pr-2"
-                style={{
-                  fontWeight: 400,
-                  fontSize: 14,
-                  color: "#888",
-                }}
-              >
-                Owned by{" "}
-                {this.props.item.multiple_owners ? "multiple owners" : null}
-              </div>
-              <div>
-                {this.props.item.multiple_owners ? null : this.props.item
-                    .owner_id ? (
-                  <Link
-                    href="/p/[slug]"
-                    as={`/p/${this.props.item.owner_address}`}
-                  >
-                    <a className="flex flex-row items-center">
-                      <div>
+              <div className="mx-4 py-4 flex flex-col">
+                <div
+                  className="flex-shrink pr-2"
+                  style={{
+                    fontWeight: 400,
+                    fontSize: 14,
+                    color: "#888",
+                  }}
+                >
+                  Owned by{" "}
+                  {this.props.item.multiple_owners ? "multiple owners" : null}
+                </div>
+                <div>
+                  {this.props.item.multiple_owners ? null : this.props.item
+                      .owner_id ? (
+                    <Link
+                      href="/p/[slug]"
+                      as={`/p/${this.props.item.owner_address}`}
+                    >
+                      <a className="flex flex-row items-center">
+                        {/* <div>
                         <img
                           alt={this.props.item.owner_name}
                           src={
@@ -413,34 +369,37 @@ class TokenCard extends React.Component {
                           className="rounded-full mr-2"
                           style={{ height: 24, width: 24 }}
                         />
-                      </div>
-                      <div className="showtime-card-profile-link">
-                        {this.truncateWithEllipses(
-                          this.props.item.owner_name,
-                          22
-                        )}
-                      </div>
-                    </a>
-                  </Link>
-                ) : null}
+                      </div> */}
+                        <div className="showtime-card-profile-link">
+                          {this.truncateWithEllipses(
+                            this.props.item.owner_name,
+                            22
+                          )}
+                        </div>
+                      </a>
+                    </Link>
+                  ) : null}
+                </div>
               </div>
               <div className="flex-grow"></div>
-              <div style={{ fontSize: 14, fontWeight: 400 }}>
-                {this.props.item.token_creator_followers_only ? null : (
-                  <a
-                    href={`https://opensea.io/assets/${this.props.item.contract_address}/${this.props.item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
-                    target="_blank"
-                    className="flex flex-row items-center showtime-card-bid"
-                  >
-                    <div className="mr-1">Bid</div>
-                    <div className="mb-0 flex">
-                      <FontAwesomeIcon
-                        style={{ height: 12 }}
-                        icon={faExternalLinkAlt}
-                      />
-                    </div>
-                  </a>
-                )}
+
+              <div
+                style={{ fontSize: 16, fontWeight: 400 }}
+                className="mx-4 py-4"
+              >
+                <a
+                  href={`https://opensea.io/assets/${this.props.item.contract_address}/${this.props.item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
+                  target="_blank"
+                  className="flex flex-row items-center showtime-card-bid"
+                >
+                  <div className="mr-1">Bid</div>
+                  <div className="mb-0 flex">
+                    <FontAwesomeIcon
+                      style={{ height: 14 }}
+                      icon={faExternalLinkAlt}
+                    />
+                  </div>
+                </a>
               </div>
             </div>
           </div>
