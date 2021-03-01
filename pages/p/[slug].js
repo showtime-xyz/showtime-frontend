@@ -17,15 +17,17 @@ export async function getServerSideProps(context) {
   const { slug } = context.query;
 
   // Get profile metadata
-  const response_profile = await backend.get(`/v2/profile/${slug}?limit=150`);
+  const response_profile = await backend.get(
+    `/v2/profile_server/${slug}?limit=150`
+  );
   const data_profile = response_profile.data.data;
 
   const name = data_profile.profile.name;
   const img_url = data_profile.profile.img_url;
   const wallet_addresses = data_profile.profile.wallet_addresses;
-  const created_items = data_profile.created;
-  const owned_items = data_profile.owned;
-  const liked_items = data_profile.liked;
+  //const created_items = data_profile.created;
+  //const owned_items = data_profile.owned;
+  //const liked_items = data_profile.liked;
   const followers_list = data_profile.followers;
   const following_list = data_profile.following;
 
@@ -47,9 +49,9 @@ export async function getServerSideProps(context) {
       name,
       img_url,
       wallet_addresses,
-      created_items,
-      owned_items,
-      liked_items,
+      //created_items,
+      //owned_items,
+      //liked_items,
       slug,
       followers_list,
       following_list,
@@ -63,9 +65,9 @@ const Profile = ({
   name,
   img_url,
   wallet_addresses,
-  created_items,
-  owned_items,
-  liked_items,
+  //created_items,
+  //owned_items,
+  //liked_items,
   slug,
   followers_list,
   following_list,
@@ -77,17 +79,6 @@ const Profile = ({
 
   const [isMyProfile, setIsMyProfile] = useState();
   const [isFollowed, setIsFollowed] = useState(false);
-  //const [hasFollowerOnlyItems, setHasFollowerOnlyItems] = useState(false);
-
-  /*
-  useEffect(() => {
-    _.forEach(created_items, (item) => {
-      if (item.token_creator_followers_only === 1) {
-        setHasFollowerOnlyItems(true);
-      }
-    });
-  }, [created_items]);
-  */
 
   useEffect(() => {
     const checkIfFollowed = async () => {
@@ -104,61 +95,45 @@ const Profile = ({
   }, [context.myFollows, wallet_addresses]);
 
   const [likedItems, setLikedItems] = useState([]);
-  //const [likedRefreshed, setLikedRefreshed] = useState(false);
-
-  useEffect(() => {
-    setLikedItems(
-      liked_items.filter(
-        (item) =>
-          item.token_hidden !== 1 &&
-          (item.token_img_url || item.token_animation_url)
-      )
-    );
-    //setLikedRefreshed(false);
-  }, [liked_items]);
-
   const [createdItems, setCreatedItems] = useState([]);
-  //const [createdRefreshed, setCreatedRefreshed] = useState(false);
-
-  useEffect(() => {
-    setCreatedItems(
-      created_items.filter(
-        (item) =>
-          item.token_hidden !== 1 &&
-          (item.token_img_url || item.token_animation_url)
-        //&& (item.token_creator_followers_only === 0 || (item.token_creator_followers_only && isFollowed))
-      )
-    );
-    //setCreatedRefreshed(false);
-  }, [
-    created_items,
-    //isFollowed
-  ]);
-
   const [ownedItems, setOwnedItems] = useState([]);
-  //const [ownedRefreshed, setOwnedRefreshed] = useState(false);
 
+  // Fetch the created/owned/liked items
   useEffect(() => {
-    setOwnedItems(
-      owned_items.filter(
-        (item) =>
-          item.token_hidden !== 1 &&
-          (item.token_img_url || item.token_animation_url)
-        /*
-          && (item.token_creator_followers_only === 0 || 
-            (item.token_creator_followers_only &&
-              item.creator_id !== item.owner_id) ||
-            (item.token_creator_followers_only &&
-              item.creator_id === item.owner_id &&
-              isFollowed))
-          */
-      )
-    );
-    //setOwnedRefreshed(false);
-  }, [
-    owned_items,
-    //isFollowed
-  ]);
+    const fetchItems = async () => {
+      // clear out existing from page (if switching profiles)
+      setCreatedItems([]);
+      setOwnedItems([]);
+      setLikedItems([]);
+
+      const response_profile = await backend.get(
+        `/v2/profile_client/${slug}?limit=150`
+      );
+      const data_profile = response_profile.data.data;
+      setCreatedItems(
+        data_profile.created.filter(
+          (item) =>
+            item.token_hidden !== 1 &&
+            (item.token_img_url || item.token_animation_url)
+        )
+      );
+      setOwnedItems(
+        data_profile.owned.filter(
+          (item) =>
+            item.token_hidden !== 1 &&
+            (item.token_img_url || item.token_animation_url)
+        )
+      );
+      setLikedItems(
+        data_profile.liked.filter(
+          (item) =>
+            item.token_hidden !== 1 &&
+            (item.token_img_url || item.token_animation_url)
+        )
+      );
+    };
+    fetchItems();
+  }, [wallet_addresses]);
 
   const [followers, setFollowers] = useState([]);
   useEffect(() => {
@@ -189,7 +164,7 @@ const Profile = ({
       }
     }
   }, [
-    owned_items,
+    wallet_addresses,
     typeof context.user,
     context.user ? context.user.publicAddress : null,
   ]);
@@ -278,6 +253,7 @@ const Profile = ({
   const [showFollowing, setShowFollowing] = useState(false);
 
   useEffect(() => {
+    // Pick an initial tab to display
     if (createdItems.length > 0 && createdItems.length > ownedItems.length) {
       setSelectedGrid("created");
     } else if (ownedItems.length > 0) {
