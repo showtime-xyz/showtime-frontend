@@ -45,7 +45,7 @@ const LikeButton = ({ item, handleLike, handleUnlike, showTooltip }) => {
                 width: 22,
               }}
               icon={item.liked ? faHeartSolid : faHeartOutline}
-              // color={item.liked ? "#e45cff" : "black"}
+              color={item.liked ? "#e45cff" : "inherit"}
             />
           </div>
         </div>
