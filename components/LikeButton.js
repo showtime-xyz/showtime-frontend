@@ -34,7 +34,7 @@ const LikeButton = ({ item, handleLike, handleUnlike, showTooltip }) => {
         //     : "showtime-like-button-white"
         // }
       >
-        <div className="flex flex-row items-center p-1 pl-2 rounded-md hover:bg-gray-100 transition">
+        <div className="flex flex-row items-center rounded-md py-1 hover:opacity-75 transition">
           <div className="mr-2" style={{ whiteSpace: "nowrap" }}>
             {item.like_count}
           </div>
