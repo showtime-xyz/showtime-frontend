@@ -39,6 +39,10 @@ export async function getServerSideProps(context) {
     name = null;
     wallet_addresses = null;
     restrictedItems = null;
+
+    const { res } = context;
+    res.writeHead(301, { location: `/p/${slug}` });
+    res.end();
   }
   //https://i1.sndcdn.com/visuals-000204324090-sqz3Ni-t2480x520.jpg
   return {
