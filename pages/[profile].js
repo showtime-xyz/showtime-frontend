@@ -2,23 +2,30 @@ import { useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import _ from "lodash";
 import mixpanel from "mixpanel-browser";
-import Layout from "../../components/layout";
-import TokenGridV4 from "../../components/TokenGridV4";
-import backend from "../../lib/backend";
-import AppContext from "../../context/app-context";
-import ShareButton from "../../components/ShareButton";
-import ModalEditProfile from "../../components/ModalEditProfile";
-import ModalEditPhoto from "../../components/ModalEditPhoto";
-import { GridTabs, GridTab } from "../../components/GridTabs";
-import ProfileInfoPill from "../../components/ProfileInfoPill";
-import ModalUserList from "../../components/ModalUserList";
+import Layout from "../components/layout";
+import TokenGridV4 from "../components/TokenGridV4";
+import backend from "../lib/backend";
+import AppContext from "../context/app-context";
+import ShareButton from "../components/ShareButton";
+import ModalEditProfile from "../components/ModalEditProfile";
+import ModalEditPhoto from "../components/ModalEditPhoto";
+import { GridTabs, GridTab } from "../components/GridTabs";
+import ProfileInfoPill from "../components/ProfileInfoPill";
+import ModalUserList from "../components/ModalUserList";
 
 export async function getServerSideProps(context) {
-  const { slug } = context.query;
+  const { profile } = context.query;
+
+  let slug_address;
+  if (profile === "d-block-europe") {
+    slug_address = "0x78e2426d33b365665c82a9f5aba1b7b488930d38";
+  } else {
+    slug_address = profile;
+  }
 
   // Get profile metadata
   const response_profile = await backend.get(
-    `/v2/profile_server/${slug}?limit=150`
+    `/v2/profile_server/${slug_address}?limit=150`
   );
   const data_profile = response_profile.data.data;
 
@@ -36,7 +43,7 @@ export async function getServerSideProps(context) {
       name,
       img_url,
       wallet_addresses,
-      slug,
+      slug_address,
       followers_list,
       following_list,
       bio,
@@ -49,7 +56,7 @@ const Profile = ({
   name,
   img_url,
   wallet_addresses,
-  slug,
+  slug_address,
   followers_list,
   following_list,
   bio,
@@ -88,7 +95,7 @@ const Profile = ({
       setLikedItems([]);
 
       const response_profile = await backend.get(
-        `/v2/profile_client/${slug}?limit=150`
+        `/v2/profile_client/${slug_address}?limit=150`
       );
       const data_profile = response_profile.data.data;
       setCreatedItems(
@@ -131,17 +138,17 @@ const Profile = ({
     if (typeof context.user !== "undefined") {
       if (context.user) {
         // Logged in?
-        if (slug === context.user.publicAddress) {
+        if (slug_address === context.user.publicAddress) {
           setIsMyProfile(true);
-          mixpanel.track("Self profile view", { slug: slug });
+          mixpanel.track("Self profile view", { slug: slug_address });
         } else {
           setIsMyProfile(false);
-          mixpanel.track("Profile view", { slug: slug });
+          mixpanel.track("Profile view", { slug: slug_address });
         }
       } else {
         // Logged out
         setIsMyProfile(false);
-        mixpanel.track("Profile view", { slug: slug });
+        mixpanel.track("Profile view", { slug: slug_address });
       }
     }
   }, [
@@ -191,7 +198,7 @@ const Profile = ({
     ]);
 
     // Post changes to the API
-    await fetch(`/api/follow/${slug}`, {
+    await fetch(`/api/follow/${slug_address}`, {
       method: "post",
     });
 
@@ -218,7 +225,7 @@ const Profile = ({
     );
 
     // Post changes to the API
-    await fetch(`/api/unfollow/${slug}`, {
+    await fetch(`/api/unfollow/${slug_address}`, {
       method: "post",
     });
 
@@ -498,7 +505,7 @@ const Profile = ({
                               style={{ color: "rgb(81, 125, 228)" }}
                               onClick={() => {
                                 mixpanel.track("Clicked profile website link", {
-                                  slug: slug,
+                                  slug: slug_address,
                                 });
                               }}
                             >
@@ -519,7 +526,7 @@ const Profile = ({
                             style={{ color: "rgb(81, 125, 228)" }}
                             onClick={() => {
                               mixpanel.track("Clicked profile website link", {
-                                slug: slug,
+                                slug: slug_address,
                               });
                             }}
                           >
