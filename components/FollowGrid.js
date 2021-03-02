@@ -8,7 +8,7 @@ const FollowGrid = ({ people }) => {
       {people.map((profile) => {
         return (
           <div key={profile.wallet_address} className="mr-2 mb-1">
-            <Link href="/p/[slug]" as={`/p/${profile.wallet_address}`}>
+            <Link href="/[profile]" as={`/${profile.wallet_address}`}>
               <a className="flex flex-row items-center showtime-follower-button rounded-full">
                 <div>
                   <img

@@ -129,8 +129,8 @@ class TokenCard extends React.Component {
               <div className="flex-shrink">
                 {this.props.item.creator_address ? (
                   <Link
-                    href="/p/[slug]"
-                    as={`/p/${this.props.item.creator_address}`}
+                    href="/[profile]"
+                    as={`/${this.props.item.creator_address}`}
                   >
                     <a className="flex flex-row items-center ">
                       <div>
@@ -398,8 +398,8 @@ class TokenCard extends React.Component {
                 {this.props.item.multiple_owners ? null : this.props.item
                     .owner_id ? (
                   <Link
-                    href="/p/[slug]"
-                    as={`/p/${this.props.item.owner_address}`}
+                    href="/[profile]"
+                    as={`/${this.props.item.owner_address}`}
                   >
                     <a className="flex flex-row items-center">
                       <div>
