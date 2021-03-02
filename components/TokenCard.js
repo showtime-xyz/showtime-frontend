@@ -82,7 +82,7 @@ class TokenCard extends React.Component {
     return img_url;
   };
 
-  max_description_length = 102;
+  max_description_length = 85;
 
   getBackgroundColor = (item) => {
     if (
