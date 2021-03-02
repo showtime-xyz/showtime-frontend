@@ -3,6 +3,10 @@ export async function getServerSideProps(context) {
   const { res } = context;
   res.writeHead(301, { location: `/${slug}` });
   res.end();
+
+  return {
+    props: {},
+  };
 }
 
 const RedirectURL = () => {
