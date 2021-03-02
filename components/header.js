@@ -78,7 +78,7 @@ const Header = () => {
           {/* End desktop-only menu */}
           <div>
             {context.user && context.myProfile !== undefined ? (
-              <Link href="/p/[slug]" as={`/p/${context.user.publicAddress}`}>
+              <Link href="/[profile]" as={`/${context.user.publicAddress}`}>
                 <a
                   className="showtime-login-button-outline text-sm px-2 py-2 md:text-base flex flex-row items-center"
                   onClick={() => {

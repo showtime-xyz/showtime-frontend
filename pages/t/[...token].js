@@ -237,7 +237,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
               <>
                 <span style={{ fontWeight: 400 }}>{"Created by "}</span>
 
-                <Link href="/p/[slug]" as={`/p/${item.creator_address}`}>
+                <Link href="/[profile]" as={`/${item.creator_address}`}>
                   <a className="showtime-link" style={{ fontWeight: 600 }}>
                     {item.creator_name}
                   </a>
@@ -253,7 +253,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
               {item.multiple_owners ? (
                 "multiple owners"
               ) : item.owner_id ? (
-                <Link href="/p/[slug]" as={`/p/${item.owner_address}`}>
+                <Link href="/[profile]" as={`/${item.owner_address}`}>
                   <a className="showtime-link" style={{ fontWeight: 600 }}>
                     {item.owner_name}
                   </a>
