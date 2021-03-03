@@ -9,10 +9,8 @@ import ModalTokenDetail from "./ModalTokenDetail";
 
 const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
   const context = useContext(AppContext);
-
   const [itemsList, setItemsList] = useState([]);
-  const [itemsLikedList, setItemsLikedList] = useState([]);
-  const [myItemLikes, setMyItemLikes] = useState([]);
+  const [showDuplicateNFTs, setShowDuplicateNFTs] = useState({});
   const [itemsShowing, setItemsShowing] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [currentlyPlayingVideo, setCurrentlyPlayingVideo] = useState(null);
@@ -30,18 +28,18 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
   }, [escPress]);
 
   const goToNext = () => {
-    const currentIndex = itemsLikedList.indexOf(currentlyOpenModal);
-    if (currentIndex < itemsLikedList.length - 1) {
+    const currentIndex = itemsList.indexOf(currentlyOpenModal);
+    if (currentIndex < itemsList.length - 1) {
       if (itemsShowing - 6 < currentIndex - 1) {
         fetchMoreData();
       }
 
       // Get position of next card image and scroll down
       const bodyRect = document.body.getBoundingClientRect();
-      if (itemsLikedList[currentIndex + 1].imageRef.current) {
+      if (itemsList[currentIndex + 1].imageRef.current) {
         window.scrollTo({
           top:
-            itemsLikedList[
+            itemsList[
               currentIndex + 1
             ].imageRef.current.getBoundingClientRect().top -
             bodyRect.top -
@@ -50,7 +48,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
         });
       }
 
-      setCurrentlyOpenModal(itemsLikedList[currentIndex + 1]);
+      setCurrentlyOpenModal(itemsList[currentIndex + 1]);
     }
   };
 
@@ -59,17 +57,17 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
       mixpanel.track("Next NFT - keyboard");
       goToNext();
     }
-  }, [rightPress, itemsLikedList]);
+  }, [rightPress, itemsList]);
 
   const goToPrevious = () => {
-    const currentIndex = itemsLikedList.indexOf(currentlyOpenModal);
+    const currentIndex = itemsList.indexOf(currentlyOpenModal);
     if (currentIndex - 1 >= 0) {
       // Get position of previous card image and scroll up
       const bodyRect = document.body.getBoundingClientRect();
-      if (itemsLikedList[currentIndex - 1].imageRef.current) {
+      if (itemsList[currentIndex - 1].imageRef.current) {
         window.scrollTo({
           top:
-            itemsLikedList[
+            itemsList[
               currentIndex - 1
             ].imageRef.current.getBoundingClientRect().top -
             bodyRect.top -
@@ -78,7 +76,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
         });
       }
 
-      setCurrentlyOpenModal(itemsLikedList[currentIndex - 1]);
+      setCurrentlyOpenModal(itemsList[currentIndex - 1]);
     }
   };
 
@@ -87,45 +85,45 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
       mixpanel.track("Prior NFT - keyboard");
       goToPrevious();
     }
-  }, [leftPress, itemsLikedList]);
+  }, [leftPress, itemsList]);
 
   const [hasNext, setHasNext] = useState(false);
   const [hasPrevious, setHasPrevious] = useState(false);
 
   useEffect(() => {
-    const currentIndex = itemsLikedList.indexOf(currentlyOpenModal);
+    const currentIndex = itemsList.indexOf(currentlyOpenModal);
     if (currentIndex === 0) {
       setHasPrevious(false);
     } else {
       setHasPrevious(true);
     }
 
-    if (currentIndex === itemsLikedList.length - 1) {
+    if (currentIndex === itemsList.length - 1) {
       setHasNext(false);
     } else {
       setHasNext(true);
     }
   }, [currentlyOpenModal]);
 
-  const addRefs = (list) => {
-    var newList = [];
-    _.forEach(list, function (item) {
-      item.imageRef = createRef();
-      newList.push(item);
-    });
-    return newList;
-  };
-
   useEffect(() => {
-    setItemsList(
-      addRefs(
-        items.filter(
-          (item) =>
-            (item.token_hidden !== 1 || isDetail) &&
-            (item.token_img_url || item.token_animation_url)
-        )
-      )
+    const validItems = items.filter(
+      item =>
+        (item.token_hidden !== 1 || isDetail) &&
+        (item.token_img_url || item.token_animation_url)
     );
+    const groupedItems = _.groupBy(validItems, item => item.token_img_url || item.token_animation_url);
+    const uniqueItems = Object.values(groupedItems).map(itemGroup => {
+      return itemGroup.length > 1
+        ? itemGroup.map((item, index) => ({ ...item, hidden_duplicate: index !== 0, duplicate_count: itemGroup.length }))
+        : itemGroup[0];
+    }).flat();
+    const itemsWithRefs = [];
+    _.forEach(uniqueItems, (item) => {
+      item.imageRef = createRef();
+      itemsWithRefs.push(item);
+    });
+    setItemsList(itemsWithRefs);
+
     if (context.isMobile) {
       setItemsShowing(4);
     } else {
@@ -136,21 +134,22 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
   }, [items, context.isMobile]);
 
   useEffect(() => {
-    setMyItemLikes(context.myLikes ? context.myLikes : []);
+    const myLikes = context.myLikes || [];
+    const itemsWithLikeMetadata = itemsList.map(item => ({ ...item, liked: myLikes.includes(item.nft_id) }));
+    setItemsList(itemsWithLikeMetadata);
   }, [context.myLikes]);
+
+  const fetchMoreData = () => {
+    if (itemsShowing + 8 > itemsList.length) {
+      setHasMore(false);
+      onFinish ? onFinish() : null;
+    }
+    setItemsShowing(itemsShowing + 8);
+  };
 
   const handleLike = async (nft_id) => {
     // Change myLikes via setMyLikes
     context.setMyLikes([...context.myLikes, nft_id]);
-
-    // Update the like counts for each item
-    var newItemsList = [...itemsList];
-    _.forEach(newItemsList, function (item) {
-      if (item.nft_id === nft_id) {
-        item.like_count = item.like_count + 1;
-      }
-    });
-    setItemsList(newItemsList);
 
     // Post changes to the API
     await fetch(`/api/like_v3/${nft_id}`, {
@@ -160,26 +159,9 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
     mixpanel.track("Liked item");
   };
 
-  const fetchMoreData = () => {
-    if (itemsShowing + 8 > itemsLikedList.length) {
-      setHasMore(false);
-      onFinish ? onFinish() : null;
-    }
-    setItemsShowing(itemsShowing + 8);
-  };
-
   const handleUnlike = async (nft_id) => {
     // Change myLikes via setMyLikes
     context.setMyLikes(context.myLikes.filter((item) => !(item === nft_id)));
-
-    // Update the like counts for each item
-    var newItemsList = [...itemsList];
-    _.forEach(newItemsList, function (item) {
-      if (item.nft_id === nft_id) {
-        item.like_count = item.like_count - 1;
-      }
-    });
-    setItemsList(newItemsList);
 
     // Post changes to the API
     await fetch(`/api/unlike_v3/${nft_id}`, {
@@ -188,24 +170,6 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
 
     mixpanel.track("Unliked item");
   };
-
-  // Augment content with my like status
-  useEffect(() => {
-    const newItemsLikedList = [];
-    _.forEach([...itemsList], function (item) {
-      item.liked = false;
-      _.forEach([...myItemLikes], function (like) {
-        if (item.nft_id === like) {
-          item.liked = true;
-        }
-      });
-
-      // Add ref to the image for getting dimensions
-
-      newItemsLikedList.push(item);
-    });
-    setItemsLikedList(newItemsLikedList);
-  }, [itemsList, myItemLikes]);
 
   return (
     <>
@@ -230,11 +194,6 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
         dataLength={itemsShowing}
         next={fetchMoreData}
         hasMore={hasMore}
-        /*loader={
-        <div>
-          <h4 className="w-full text-center">Loading more...</h4>
-        </div>
-      }*/
       >
         <div
           className={`mx-auto`}
@@ -266,20 +225,28 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
                 : { width: context.columns * (375 + 20) }
             }
           >
-            {itemsLikedList.slice(0, itemsShowing).map((item) => (
-              <TokenCard
-                key={item.nft_id}
-                item={item}
-                handleLike={handleLike}
-                handleUnlike={handleUnlike}
-                columns={context.columns}
-                isMobile={context.isMobile}
-                currentlyPlayingVideo={currentlyPlayingVideo}
-                setCurrentlyPlayingVideo={setCurrentlyPlayingVideo}
-                currentlyOpenModal={currentlyOpenModal}
-                setCurrentlyOpenModal={setCurrentlyOpenModal}
-              />
-            ))}
+            {itemsList
+              .filter(item => {
+                const hash = item.token_img_url || item.token_animation_url;
+                return !item.hidden_duplicate ? true : showDuplicateNFTs[hash];
+              })
+              .slice(0, itemsShowing)
+              .map((item) => (
+                <TokenCard
+                  key={item.nft_id}
+                  item={item}
+                  handleLike={handleLike}
+                  handleUnlike={handleUnlike}
+                  columns={context.columns}
+                  isMobile={context.isMobile}
+                  currentlyPlayingVideo={currentlyPlayingVideo}
+                  setCurrentlyPlayingVideo={setCurrentlyPlayingVideo}
+                  currentlyOpenModal={currentlyOpenModal}
+                  setCurrentlyOpenModal={setCurrentlyOpenModal}
+                  showDuplicateNFTs={showDuplicateNFTs}
+                  setShowDuplicateNFTs={setShowDuplicateNFTs}
+                />
+              ))}
           </div>
         )}
       </InfiniteScroll>

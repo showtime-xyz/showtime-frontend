@@ -96,12 +96,13 @@ class TokenCard extends React.Component {
   };
 
   render() {
+    const { item, showDuplicateNFTs, setShowDuplicateNFTs } = this.props;
+    const hash = item.token_img_url || item.token_animation_url;
     return (
       <>
         <div
-          className={`row-span-${this.state.spans} ${
-            this.props.columns === 1 ? "pb-0" : "p-2"
-          }`}
+          className={`row-span-${this.state.spans} ${this.props.columns === 1 ? "pb-0" : "p-2"
+            }`}
         >
           <div
             style={_.merge(
@@ -110,13 +111,13 @@ class TokenCard extends React.Component {
               },
               this.props.columns === 1
                 ? {
-                    borderTopWidth: 1,
-                    borderBottomWidth: 1,
-                  }
+                  borderTopWidth: 1,
+                  borderBottomWidth: 1,
+                }
                 : {
-                    width: 375,
-                    borderWidth: 1,
-                  }
+                  width: 375,
+                  borderWidth: 1,
+                }
             )}
             ref={this.divRef}
             className={
@@ -126,19 +127,19 @@ class TokenCard extends React.Component {
             }
           >
             <div className="p-4 flex flex-row items-center">
-              <div className="flex-shrink">
-                {this.props.item.creator_address ? (
+              {item.creator_address ? (
+                <div className="w-full flex flex-row items-center justify-between">
                   <Link
                     href="/[profile]"
                     as={`/${this.props.item.creator_address}`}
                   >
-                    <a className="flex flex-row items-center ">
+                    <a className="flex flex-row items-center">
                       <div>
                         <img
-                          alt={this.props.item.creator_name}
+                          alt={item.creator_name}
                           src={
-                            this.props.item.creator_img_url
-                              ? this.props.item.creator_img_url
+                            item.creator_img_url
+                              ? item.creator_img_url
                               : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                           }
                           className="rounded-full "
@@ -147,35 +148,48 @@ class TokenCard extends React.Component {
                       </div>
                       <div className="showtime-card-profile-link ml-2">
                         {this.truncateWithEllipses(
-                          this.props.item.creator_name,
+                          item.creator_name,
                           30
                         )}
                       </div>
                     </a>
                   </Link>
-                ) : null}
-              </div>
+                  {item.duplicate_count > 1 && (
+                    <div
+                      onClick={() => {
+                        setShowDuplicateNFTs(
+                          {
+                            ...showDuplicateNFTs,
+                            [hash]: !showDuplicateNFTs[hash]
+                          }
+                        )
+                      }}
+                      className="showtime-card-profile-link ml-2 cursor-pointer">
+                      {`${showDuplicateNFTs[hash] ? "Hide" : "Show"} ${item.duplicate_count} more similar`}
+                    </div>)}
+                </div>
+              ) : null}
               <div className="flex-grow">&nbsp;</div>
             </div>
-            {(this.props.item.token_has_video &&
+            {(item.token_has_video &&
               this.state.showVideo &&
-              this.props.currentlyPlayingVideo === this.props.item.nft_id) ||
-            (this.props.item.token_has_video &&
-              !this.props.item.token_img_url) ? (
+              this.props.currentlyPlayingVideo === item.nft_id) ||
+              (item.token_has_video &&
+                !item.token_img_url) ? (
               <ReactPlayer
-                url={this.props.item.token_animation_url}
+                url={item.token_animation_url}
                 playing={
-                  this.props.currentlyPlayingVideo === this.props.item.nft_id ||
-                  (this.props.item.token_has_video &&
-                    !this.props.item.token_img_url)
+                  this.props.currentlyPlayingVideo === item.nft_id ||
+                  (item.token_has_video &&
+                    !item.token_img_url)
                 }
                 loop
                 controls
                 muted={this.state.muted}
                 width={this.props.columns === 1 ? window.innerWidth : 373}
                 height={
-                  this.props.item.imageRef.current
-                    ? this.props.item.imageRef.current.height
+                  item.imageRef.current
+                    ? item.imageRef.current.height
                     : null
                 }
                 playsinline
@@ -186,7 +200,7 @@ class TokenCard extends React.Component {
                 <div
                   onClick={() => {
                     mixpanel.track("Open NFT modal");
-                    this.props.setCurrentlyOpenModal(this.props.item);
+                    this.props.setCurrentlyOpenModal(item);
                     this.setState({ showVideo: false, muted: true });
                     this.props.setCurrentlyPlayingVideo(null);
                   }}
@@ -202,20 +216,20 @@ class TokenCard extends React.Component {
                   ) : null}
                   <div
                     style={{
-                      backgroundColor: this.getBackgroundColor(this.props.item),
+                      backgroundColor: this.getBackgroundColor(item),
                     }}
                   >
                     <img
                       className="w-full object-cover object-center "
-                      ref={this.props.item.imageRef}
+                      ref={item.imageRef}
                       src={this.getImageUrl()}
-                      alt={this.props.item.token_name}
+                      alt={item.token_name}
                       onLoad={() => this.setState({ imageLoaded: true })}
                       style={!this.state.imageLoaded ? { display: "none" } : {}}
                     />
                   </div>
                 </div>
-                {this.props.item.token_has_video ? (
+                {item.token_has_video ? (
                   <div
                     className="p-4 playbutton"
                     style={{
@@ -228,7 +242,7 @@ class TokenCard extends React.Component {
                       mixpanel.track("Play card video");
                       this.setState({ showVideo: true, muted: false });
                       this.props.setCurrentlyPlayingVideo(
-                        this.props.item.nft_id
+                        item.nft_id
                       );
                     }}
                   >
@@ -251,23 +265,23 @@ class TokenCard extends React.Component {
                 <div className="flex flex-row items-center">
                   <div className="flex-shrink">
                     <LikeButton
-                      item={this.props.item}
+                      item={item}
                       handleLike={this.props.handleLike}
                       handleUnlike={this.props.handleUnlike}
                       showTooltip={this.props.isMobile === false}
                     />
                   </div>
-                  {this.props.item.token_creator_followers_only ? (
+                  {item.token_creator_followers_only ? (
                     this.context.myFollows ? (
                       this.context.myFollows
                         .map((item) => item.wallet_address)
-                        .includes(this.props.item.creator_address) ? (
+                        .includes(item.creator_address) ? (
                         <div>
                           <a
                             className="showtime-white-button ml-2 text-sm px-4 py-1 flex flex-row"
                             style={{ cursor: "pointer" }}
                             target="_blank"
-                            href={`https://opensea.io/assets/${this.props.item.contract_address}/${this.props.item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
+                            href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
                           >
                             <div style={{ marginRight: 6 }}>Bid</div>
                             <FontAwesomeIcon
@@ -294,7 +308,7 @@ class TokenCard extends React.Component {
                         (window.location.port
                           ? ":" + window.location.port
                           : "") +
-                        `/t/${this.props.item.contract_address}/${this.props.item.token_id}`
+                        `/t/${item.contract_address}/${item.token_id}`
                       }
                       type={"item"}
                     />
@@ -304,7 +318,7 @@ class TokenCard extends React.Component {
                   <div
                     onClick={() => {
                       mixpanel.track("Open NFT modal");
-                      this.props.setCurrentlyOpenModal(this.props.item);
+                      this.props.setCurrentlyOpenModal(item);
                       this.setState({ showVideo: false, muted: true });
                       this.props.setCurrentlyPlayingVideo(null);
                     }}
@@ -317,9 +331,9 @@ class TokenCard extends React.Component {
                       cursor: "pointer",
                     }}
                   >
-                    {this.props.item.token_name}
+                    {item.token_name}
 
-                    {this.props.item.token_has_video ? (
+                    {item.token_has_video ? (
                       <FontAwesomeIcon
                         className="ml-1 inline"
                         style={{ height: 12, marginBottom: 2 }}
@@ -327,7 +341,7 @@ class TokenCard extends React.Component {
                       />
                     ) : null}
                   </div>
-                  {this.props.item.token_description ? (
+                  {item.token_description ? (
                     <div
                       style={{
                         fontWeight: 400,
@@ -340,16 +354,16 @@ class TokenCard extends React.Component {
                     >
                       {this.state.moreShown ? (
                         <div>
-                          {this.removeTags(this.props.item.token_description)}
+                          {this.removeTags(item.token_description)}
                         </div>
                       ) : (
                         <div>
-                          {this.props.item.token_description.length >
-                          this.max_description_length ? (
+                          {item.token_description.length >
+                            this.max_description_length ? (
                             <>
                               {this.truncateWithEllipses(
                                 this.removeTags(
-                                  this.props.item.token_description
+                                  item.token_description
                                 ),
                                 this.max_description_length
                               )}{" "}
@@ -364,7 +378,7 @@ class TokenCard extends React.Component {
                           ) : (
                             <div>
                               {this.removeTags(
-                                this.props.item.token_description
+                                item.token_description
                               )}
                             </div>
                           )}
@@ -392,11 +406,11 @@ class TokenCard extends React.Component {
                 }}
               >
                 Owned by{" "}
-                {this.props.item.multiple_owners ? "multiple owners" : null}
+                {item.multiple_owners ? "multiple owners" : null}
               </div>
               <div>
-                {this.props.item.multiple_owners ? null : this.props.item
-                    .owner_id ? (
+                {item.multiple_owners ? null : item
+                  .owner_id ? (
                   <Link
                     href="/[profile]"
                     as={`/${this.props.item.owner_address}`}
@@ -404,10 +418,10 @@ class TokenCard extends React.Component {
                     <a className="flex flex-row items-center">
                       <div>
                         <img
-                          alt={this.props.item.owner_name}
+                          alt={item.owner_name}
                           src={
-                            this.props.item.owner_img_url
-                              ? this.props.item.owner_img_url
+                            item.owner_img_url
+                              ? item.owner_img_url
                               : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                           }
                           className="rounded-full mr-2"
@@ -416,7 +430,7 @@ class TokenCard extends React.Component {
                       </div>
                       <div className="showtime-card-profile-link">
                         {this.truncateWithEllipses(
-                          this.props.item.owner_name,
+                          item.owner_name,
                           22
                         )}
                       </div>
@@ -426,9 +440,9 @@ class TokenCard extends React.Component {
               </div>
               <div className="flex-grow"></div>
               <div style={{ fontSize: 14, fontWeight: 400 }}>
-                {this.props.item.token_creator_followers_only ? null : (
+                {item.token_creator_followers_only ? null : (
                   <a
-                    href={`https://opensea.io/assets/${this.props.item.contract_address}/${this.props.item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
+                    href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
                     target="_blank"
                     className="flex flex-row items-center showtime-card-bid"
                   >
