@@ -85,11 +85,13 @@ const Profile = ({
   const [likedItems, setLikedItems] = useState([]);
   const [createdItems, setCreatedItems] = useState([]);
   const [ownedItems, setOwnedItems] = useState([]);
+  const [isLoadingCards, setIsLoadingCards] = useState(false);
 
   // Fetch the created/owned/liked items
   useEffect(() => {
     const fetchItems = async () => {
       // clear out existing from page (if switching profiles)
+      setIsLoadingCards(true);
       setCreatedItems([]);
       setOwnedItems([]);
       setLikedItems([]);
@@ -119,6 +121,7 @@ const Profile = ({
             (item.token_img_url || item.token_animation_url)
         )
       );
+      setIsLoadingCards(false);
     };
     fetchItems();
   }, [wallet_addresses]);
@@ -242,22 +245,32 @@ const Profile = ({
 
   useEffect(() => {
     // Pick an initial tab to display
-    if (createdItems.length > 0 && createdItems.length > ownedItems.length) {
+    if (isLoadingCards) {
       setSelectedGrid("created");
-    } else if (ownedItems.length > 0) {
-      setSelectedGrid("owned");
     } else {
-      setSelectedGrid("liked");
+      if (createdItems.length > 0 && createdItems.length > ownedItems.length) {
+        setSelectedGrid("created");
+      } else if (ownedItems.length > 0) {
+        setSelectedGrid("owned");
+      } else {
+        setSelectedGrid("liked");
+      }
     }
+
     setShowFollowers(false);
     setShowFollowing(false);
-  }, [wallet_addresses, createdItems.length, ownedItems.length]);
+  }, [
+    wallet_addresses,
+    createdItems.length,
+    ownedItems.length,
+    isLoadingCards,
+  ]);
 
   const FilterTabs = (
     <GridTabs>
       <GridTab
         label="Created"
-        itemCount={createdItems.length}
+        itemCount={isLoadingCards ? null : createdItems.length}
         isActive={selectedGrid === "created"}
         onClickTab={() => {
           setSelectedGrid("created");
@@ -265,7 +278,7 @@ const Profile = ({
       />
       <GridTab
         label="Owned"
-        itemCount={ownedItems.length}
+        itemCount={isLoadingCards ? null : ownedItems.length}
         isActive={selectedGrid === "owned"}
         onClickTab={() => {
           setSelectedGrid("owned");
@@ -273,7 +286,7 @@ const Profile = ({
       />
       <GridTab
         label="Liked"
-        itemCount={likedItems.length}
+        itemCount={isLoadingCards ? null : likedItems.length}
         isActive={selectedGrid === "liked"}
         onClickTab={() => {
           setSelectedGrid("liked");
@@ -637,6 +650,7 @@ const Profile = ({
                 ? likedItems
                 : null
             }
+            isLoading={isLoadingCards}
           />
         </>
       )}
