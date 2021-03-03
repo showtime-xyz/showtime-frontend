@@ -8,12 +8,11 @@ import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 
 const LikeButton = ({ item, handleLike, handleUnlike, showTooltip }) => {
   const context = useContext(AppContext);
-
-  //const router = useRouter();
+  const like_count = context.myLikeCounts && context.myLikeCounts[item?.nft_id] || item.like_count;
+  const liked = context.myLikes?.includes(item.nft_id);
 
   const handleLoggedOutLike = () => {
     mixpanel.track("Liked but logged out");
-    //router.push("/login");
     context.setLoginModalOpen(true);
   };
 
@@ -22,13 +21,13 @@ const LikeButton = ({ item, handleLike, handleUnlike, showTooltip }) => {
       <button
         onClick={() =>
           context.user
-            ? item.liked
+            ? liked
               ? handleUnlike(item.nft_id)
               : handleLike(item.nft_id)
             : handleLoggedOutLike()
         }
         className={
-          item.liked
+          liked
             ? "showtime-like-button-pink"
             : "showtime-like-button-white"
         }
@@ -40,11 +39,11 @@ const LikeButton = ({ item, handleLike, handleUnlike, showTooltip }) => {
                 height: 18,
                 width: 18,
               }}
-              icon={item.liked ? faHeartSolid : faHeartOutline}
+              icon={liked ? faHeartSolid : faHeartOutline}
             />
           </div>
           <div className="ml-2" style={{ whiteSpace: "nowrap" }}>
-            {item.like_count + (item.liked || 0)} like{item.like_count === 1 ? null : "s"}{" "}
+            {like_count} like{like_count === 1 ? null : "s"}{" "}
           </div>
         </div>
       </button>
