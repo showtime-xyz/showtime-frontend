@@ -37,7 +37,7 @@ const LikeButton = ({ item, handleLike, handleUnlike, showTooltip }) => {
       >
         <div className="flex flex-row items-center rounded-md py-1 hover:text-stpink">
           <div className="mr-2" style={{ whiteSpace: "nowrap" }}>
-            {item.like_count}
+            {like_count}
           </div>
           <div className="flex">
             <FontAwesomeIcon
@@ -45,8 +45,8 @@ const LikeButton = ({ item, handleLike, handleUnlike, showTooltip }) => {
                 height: 22,
                 width: 22,
               }}
-              icon={item.liked ? faHeartSolid : faHeartOutline}
-              color={item.liked ? "#e45cff" : "inherit"}
+              icon={liked ? faHeartSolid : faHeartOutline}
+              color={liked ? "#e45cff" : "inherit"}
             />
           </div>
         </div>

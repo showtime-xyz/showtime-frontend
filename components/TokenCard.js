@@ -2,12 +2,7 @@ import React from "react";
 import Link from "next/link";
 import _ from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faExternalLinkAlt,
-  faVideo,
-  faPlay,
-  faClock,
-} from "@fortawesome/free-solid-svg-icons";
+import { faExternalLinkAlt, faPlay } from "@fortawesome/free-solid-svg-icons";
 import LikeButton from "./LikeButton";
 // import ShareButton from "./ShareButton";
 import ReactPlayer from "react-player";
@@ -277,10 +272,7 @@ class TokenCard extends React.Component {
                   <div className="py-2 flex flex-row items-center">
                     <div className="flex-shrink">
                       {item.creator_address ? (
-                        <Link
-                          href="/p/[slug]"
-                          as={`/p/${item.creator_address}`}
-                        >
+                        <Link href="/[profile]" as={`/${item.creator_address}`}>
                           <a className="flex flex-row items-center ">
                             <div>
                               <img
@@ -311,12 +303,11 @@ class TokenCard extends React.Component {
                       />
                     </div>
                   </div>
-                  {/*  */}
                 </div>
               </div>
             </div>
             <div
-              class="flex items-end"
+              className="flex items-end"
               style={{
                 backgroundColor: "#ffffff",
                 borderTopWidth: 1,
@@ -336,7 +327,7 @@ class TokenCard extends React.Component {
                 </div>
                 <div>
                   {item.multiple_owners ? null : item.owner_id ? (
-                    <Link href="/p/[slug]" as={`/p/${item.owner_address}`}>
+                    <Link href="/[profile]" as={`/${item.owner_address}`}>
                       <a className="flex flex-row items-center">
                         {/* <div>
                         <img
