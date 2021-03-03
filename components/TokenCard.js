@@ -164,7 +164,7 @@ class TokenCard extends React.Component {
                       style={{ fontWeight: 400 }}
                     >
                       {`${showDuplicateNFTs[hash] ? "Hide" : "Show"} ${
-                        item.duplicate_count
+                        item.duplicate_count - 1
                       } more similar`}
                     </div>
                   )}
