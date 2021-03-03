@@ -11,6 +11,11 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
   const context = useContext(AppContext);
   const [itemsList, setItemsList] = useState([]);
   const [showDuplicateNFTs, setShowDuplicateNFTs] = useState({});
+  const filteredItemsList = itemsList
+    .filter((item) => {
+      const hash = item?.token_img_url || item?.token_animation_url;
+      return !item?.hidden_duplicate ? true : showDuplicateNFTs[hash];
+    });
   const [itemsShowing, setItemsShowing] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [currentlyPlayingVideo, setCurrentlyPlayingVideo] = useState(null);
@@ -28,18 +33,18 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
   }, [escPress]);
 
   const goToNext = () => {
-    const currentIndex = itemsList.indexOf(currentlyOpenModal);
-    if (currentIndex < itemsList.length - 1) {
+    const currentIndex = filteredItemsList.indexOf(currentlyOpenModal);
+    if (currentIndex < filteredItemsList.length - 1) {
       if (itemsShowing - 6 < currentIndex - 1) {
         fetchMoreData();
       }
 
       // Get position of next card image and scroll down
       const bodyRect = document.body.getBoundingClientRect();
-      if (itemsList[currentIndex + 1].imageRef.current) {
+      if (filteredItemsList[currentIndex + 1].imageRef.current) {
         window.scrollTo({
           top:
-            itemsList[currentIndex + 1].imageRef.current.getBoundingClientRect()
+            filteredItemsList[currentIndex + 1].imageRef.current.getBoundingClientRect()
               .top -
             bodyRect.top -
             70,
@@ -47,7 +52,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
         });
       }
 
-      setCurrentlyOpenModal(itemsList[currentIndex + 1]);
+      setCurrentlyOpenModal(filteredItemsList[currentIndex + 1]);
     }
   };
 
@@ -59,14 +64,14 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
   }, [rightPress, itemsList]);
 
   const goToPrevious = () => {
-    const currentIndex = itemsList.indexOf(currentlyOpenModal);
+    const currentIndex = filteredItemsList.indexOf(currentlyOpenModal);
     if (currentIndex - 1 >= 0) {
       // Get position of previous card image and scroll up
       const bodyRect = document.body.getBoundingClientRect();
-      if (itemsList[currentIndex - 1].imageRef.current) {
+      if (filteredItemsList[currentIndex - 1].imageRef.current) {
         window.scrollTo({
           top:
-            itemsList[currentIndex - 1].imageRef.current.getBoundingClientRect()
+            filteredItemsList[currentIndex - 1].imageRef.current.getBoundingClientRect()
               .top -
             bodyRect.top -
             70,
@@ -74,7 +79,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
         });
       }
 
-      setCurrentlyOpenModal(itemsList[currentIndex - 1]);
+      setCurrentlyOpenModal(filteredItemsList[currentIndex - 1]);
     }
   };
 
@@ -96,15 +101,14 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
       (item) => item.token_img_url || item.token_animation_url
     );
     const uniqueItems = Object.values(groupedItems)
-      .map((itemGroup) => {
-        return itemGroup.length > 1
-          ? itemGroup.map((item, index) => ({
-              ...item,
-              hidden_duplicate: index !== 0,
-              duplicate_count: itemGroup.length,
-            }))
-          : itemGroup[0];
-      })
+      .map((itemGroup) => itemGroup.length > 1
+        ? itemGroup.map((item, index) => ({
+          ...item,
+          hidden_duplicate: index !== 0,
+          duplicate_count: itemGroup.length,
+        }))
+        : itemGroup[0]
+      )
       .flat();
     const itemsWithRefs = [];
     _.forEach(uniqueItems, (item) => {
@@ -170,7 +174,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
 
     mixpanel.track("Unliked item");
   };
-  const currentIndex = itemsList.findIndex(
+  const currentIndex = filteredItemsList.findIndex(
     (i) => i.nft_id === currentlyOpenModal?.nft_id
   );
   return (
@@ -187,7 +191,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
             goToNext={goToNext}
             goToPrevious={goToPrevious}
             columns={context.columns}
-            hasNext={!(currentIndex === itemsList.length - 1)}
+            hasNext={!(currentIndex === filteredItemsList.length - 1)}
             hasPrevious={!(currentIndex === 0)}
           />
         </>
@@ -227,11 +231,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
                 : { width: context.columns * (375 + 20) }
             }
           >
-            {itemsList
-              .filter((item) => {
-                const hash = item.token_img_url || item.token_animation_url;
-                return !item.hidden_duplicate ? true : showDuplicateNFTs[hash];
-              })
+            {filteredItemsList
               .slice(0, itemsShowing)
               .map((item) => (
                 <TokenCard
