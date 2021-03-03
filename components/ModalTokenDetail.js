@@ -82,7 +82,7 @@ export default function Modal({
               />
             </div>
             <div
-              className="modal flex-grow my-8"
+              className="modal flex-grow my-8 overflow-auto"
               style={
                 isStacked
                   ? { color: "black", height: "100%", overflow: "auto" }

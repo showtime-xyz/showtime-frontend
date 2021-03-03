@@ -9,6 +9,9 @@ import ShareButton from "./ShareButton";
 import CloseButton from "./CloseButton";
 import AppContext from "../context/app-context";
 
+// how wide the media will be
+const TOKEN_MEDIA_WIDTH = 500;
+
 const TokenDetailBody = ({
   item,
   muted,
@@ -16,10 +19,10 @@ const TokenDetailBody = ({
   handleUnlike,
   showTooltip,
   setEditModalOpen,
-  isStacked,
   columns,
 }) => {
   const context = useContext(AppContext);
+  const { isMobile } = context;
 
   const getBackgroundColor = () => {
     if (
@@ -66,28 +69,18 @@ const TokenDetailBody = ({
     // Set full height
     var mWidth = 0;
 
-    if (isStacked) {
+    if (isMobile) {
       mWidth = modalRef.current.clientWidth;
       setMediaWidth(mWidth);
       setMediaHeight(mWidth / aspectRatio);
     } else {
-      if (
-        aspectRatio * targetRef.current.clientHeight <
-        modalRef.current.clientWidth * (2 / 3)
-      ) {
-        mWidth = aspectRatio * targetRef.current.clientHeight;
-        setMediaHeight(targetRef.current.clientHeight);
-        setMediaWidth(mWidth);
-      } else {
-        mWidth = modalRef.current.clientWidth * (2 / 3);
-        setMediaWidth(mWidth);
-        setMediaHeight((modalRef.current.clientWidth * (2 / 3)) / aspectRatio);
-      }
+      setMediaWidth(TOKEN_MEDIA_WIDTH);
+      setMediaHeight(TOKEN_MEDIA_WIDTH / aspectRatio);
     }
 
     const metadata = modalRef.current.clientWidth - mWidth;
     setMetadataWidth(metadata);
-  }, [targetRef, item, isStacked, context.windowSize]);
+  }, [targetRef, item, context.windowSize, isMobile]);
 
   const [fullResLoaded, setFullResLoaded] = useState(null);
   useEffect(() => {
@@ -116,7 +109,7 @@ const TokenDetailBody = ({
         </>
       ) : null}
       <div
-        className="flex lg:h-full flex-col lg:flex-row "
+        className="flex flex-col"
         ref={modalRef}
         style={{ position: "relative" }}
       >
@@ -128,7 +121,10 @@ const TokenDetailBody = ({
           <div className="p-4 flex flex-row">
             <div className="flex-shrink">
               {item.creator_address ? (
-                <Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
+                <Link
+                  href="/[profile]"
+                  as={`/${item?.creator_username || item.creator_address}`}
+                >
                   <a className="flex flex-row items-center ">
                     <div>
                       <img
@@ -153,21 +149,16 @@ const TokenDetailBody = ({
           </div>
         ) : null}
         <div
-          className="lg:h-full flex items-center"
+          className="flex items-center md:p-12"
           style={_.merge(
             { flexShrink: 0 },
             item.token_has_video
               ? {
-                backgroundColor: "black",
-              }
+                  backgroundColor: "black",
+                }
               : {
-                backgroundColor: getBackgroundColor(),
-              },
-            setEditModalOpen
-              ? isStacked
-                ? null
-                : { borderBottomLeftRadius: 7, borderTopLeftRadius: 7 }
-              : null
+                  backgroundColor: getBackgroundColor(),
+                }
           )}
           ref={targetRef}
         >
@@ -185,19 +176,9 @@ const TokenDetailBody = ({
             />
           ) : (
             <div
-              style={_.merge(
-                setEditModalOpen
-                  ? isStacked
-                    ? null
-                    : {
-                      borderBottomLeftRadius: 7,
-                      borderTopLeftRadius: 7,
-                    }
-                  : null,
-                {
-                  margin: "auto",
-                }
-              )}
+              style={{
+                margin: "auto",
+              }}
             >
               <img
                 src={getImageUrl()}
@@ -207,16 +188,6 @@ const TokenDetailBody = ({
                     width: mediaWidth,
                     height: mediaHeight,
                   },
-                  setEditModalOpen &&
-                    targetRef.current &&
-                    mediaHeight === targetRef.current.clientHeight
-                    ? isStacked
-                      ? null
-                      : {
-                        borderBottomLeftRadius: 7,
-                        borderTopLeftRadius: 7,
-                      }
-                    : null,
                   fullResLoaded === true ? { display: "none" } : null
                 )}
               />
@@ -229,16 +200,6 @@ const TokenDetailBody = ({
                     width: mediaWidth,
                     height: mediaHeight,
                   },
-                  setEditModalOpen &&
-                    targetRef.current &&
-                    mediaHeight === targetRef.current.clientHeight
-                    ? isStacked
-                      ? null
-                      : {
-                        borderBottomLeftRadius: 7,
-                        borderTopLeftRadius: 7,
-                      }
-                    : null,
                   fullResLoaded ? null : { display: "none" }
                 )}
                 onLoad={() => {
@@ -249,21 +210,14 @@ const TokenDetailBody = ({
           )}
         </div>
         <div
-          className="px-4 md:pr-8 md:pl-8 pt-4 "
-          style={_.merge(
-            {
-              overflow: "auto",
-              position: "relative",
-            },
-            isStacked
-              ? null
-              : {
-                width: metadataWidth,
-              }
-          )}
+          className="p-6 md:p-8"
+          style={{
+            overflow: "auto",
+            position: "relative",
+          }}
         >
           <div
-            className="text-2xl md:text-3xl border-b-2 pb-2 text-left mb-4"
+            className="text-2xl md:text-4xl border-b-2 pb-2 text-left mb-4"
             style={{
               fontWeight: 600,
               overflowWrap: "break-word",
@@ -321,7 +275,10 @@ const TokenDetailBody = ({
                 Created by
                 <div className="flex flex-row  mt-1">
                   <div className="flex-shrink">
-                    <Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
+                    <Link
+                      href="/[profile]"
+                      as={`/${item?.creator_username || item.creator_address}`}
+                    >
                       <a
                         className="flex flex-row items-center showtime-follower-button rounded-full"
                         onClick={() => {
@@ -365,7 +322,10 @@ const TokenDetailBody = ({
                 Owned by
                 <div className="flex flex-row  mt-1">
                   <div className="flex-shrink">
-                    <Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
+                    <Link
+                      href="/[profile]"
+                      as={`/${item?.owner_username || item.owner_address}`}
+                    >
                       <a
                         className="flex flex-row items-center showtime-follower-button rounded-full "
                         onClick={() => {
