@@ -150,7 +150,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
   const handleLike = async (nft_id) => {
     // Change myLikes via setMyLikes
     context.setMyLikes([...context.myLikes, nft_id]);
-    if (currentlyOpenModal.nft_id === nft_id) {
+    if (currentlyOpenModal && currentlyOpenModal.nft_id === nft_id) {
       setCurrentlyOpenModal({ ...currentlyOpenModal, liked: true })
     }
     // Post changes to the API
@@ -164,7 +164,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
   const handleUnlike = async (nft_id) => {
     // Change myLikes via setMyLikes
     context.setMyLikes(context.myLikes.filter((item) => !(item === nft_id)));
-    if (currentlyOpenModal.nft_id === nft_id) {
+    if (currentlyOpenModal && currentlyOpenModal.nft_id === nft_id) {
       setCurrentlyOpenModal({ ...currentlyOpenModal, liked: false })
     }
     // Post changes to the API
