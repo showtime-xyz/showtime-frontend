@@ -117,8 +117,12 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
         ? itemGroup.map((item, index) => ({ ...item, hidden_duplicate: index !== 0, duplicate_count: itemGroup.length }))
         : itemGroup[0];
     }).flat();
+    const myLikes = context.myLikes || [];
+    const itemsWithLikedMetadata = myLikes.length > 0
+      ? uniqueItems.map(item => ({ ...item, liked: myLikes.includes(item.nft_id) }))
+      : uniqueItems;
     const itemsWithRefs = [];
-    _.forEach(uniqueItems, (item) => {
+    _.forEach(itemsWithLikedMetadata, (item) => {
       item.imageRef = createRef();
       itemsWithRefs.push(item);
     });
@@ -131,13 +135,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
     }
 
     setHasMore(true);
-  }, [items, context.isMobile]);
-
-  useEffect(() => {
-    const myLikes = context.myLikes || [];
-    const itemsWithLikeMetadata = itemsList.map(item => ({ ...item, liked: myLikes.includes(item.nft_id) }));
-    setItemsList(itemsWithLikeMetadata);
-  }, [context.myLikes]);
+  }, [items, context.isMobile, context.myLikes]);
 
   const fetchMoreData = () => {
     if (itemsShowing + 8 > itemsList.length) {
