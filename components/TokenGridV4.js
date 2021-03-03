@@ -127,15 +127,17 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
       itemsWithRefs.push(item);
     });
     setItemsList(itemsWithRefs);
+    setHasMore(true);
+  }, [items, context.myLikes]);
 
+  useEffect(() => {
     if (context.isMobile) {
       setItemsShowing(4);
     } else {
       setItemsShowing(8);
     }
+  }, [context.isMobile]);
 
-    setHasMore(true);
-  }, [items, context.isMobile, context.myLikes]);
 
   const fetchMoreData = () => {
     if (itemsShowing + 8 > itemsList.length) {
