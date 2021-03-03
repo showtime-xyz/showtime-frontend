@@ -96,9 +96,8 @@ class TokenCard extends React.Component {
     return (
       <>
         <div
-          className={`row-span-${this.state.spans} ${
-            this.props.columns === 1 ? "pb-4" : "p-2"
-          }`}
+          className={`row-span-${this.state.spans} ${this.props.columns === 1 ? "pb-4" : "p-2"
+            }`}
         >
           <div
             style={_.merge(
@@ -107,13 +106,13 @@ class TokenCard extends React.Component {
               },
               this.props.columns === 1
                 ? {
-                    borderTopWidth: 1,
-                    borderBottomWidth: 1,
-                  }
+                  borderTopWidth: 1,
+                  borderBottomWidth: 1,
+                }
                 : {
-                    width: 375,
-                    borderWidth: 1,
-                  }
+                  width: 375,
+                  borderWidth: 1,
+                }
             )}
             ref={this.divRef}
             className={
@@ -151,7 +150,7 @@ class TokenCard extends React.Component {
             {(item.token_has_video &&
               this.state.showVideo &&
               this.props.currentlyPlayingVideo === item.nft_id) ||
-            (item.token_has_video && !item.token_img_url) ? (
+              (item.token_has_video && !item.token_img_url) ? (
               <ReactPlayer
                 url={item.token_animation_url}
                 playing={
@@ -274,7 +273,7 @@ class TokenCard extends React.Component {
                       ) : (
                         <div>
                           {item.token_description.length >
-                          this.max_description_length ? (
+                            this.max_description_length ? (
                             <>
                               {this.truncateWithEllipses(
                                 this.removeTags(item.token_description),
@@ -403,9 +402,8 @@ class TokenCard extends React.Component {
                 className="showtime-card-profile-link ml-2 cursor-pointer"
                 style={{ fontWeight: 400 }}
               >
-                {`${showDuplicateNFTs[hash] ? "Hide" : "Show"} ${
-                  item.duplicate_count
-                } more similar`}
+                {`${showDuplicateNFTs[hash] ? "Hide" : "Show"} ${item.duplicate_count - 1
+                  } more similar`}
               </div>
             )}
           </div>
