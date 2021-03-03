@@ -11,12 +11,11 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
   const context = useContext(AppContext);
   const [itemsList, setItemsList] = useState([]);
   const [showDuplicateNFTs, setShowDuplicateNFTs] = useState({});
-  const filteredItemsList = itemsList
-    .filter((item) => {
-      const hash = item?.token_img_url || item?.token_animation_url;
-      return !item?.hidden_duplicate ? true : showDuplicateNFTs[hash];
-    });
   const [itemsShowing, setItemsShowing] = useState(0);
+  const deduplicatedItemsList = itemsList.filter((item) => {
+    const hash = item?.token_img_url || item?.token_animation_url;
+    return !item?.hidden_duplicate ? true : showDuplicateNFTs[hash];
+  });
   const [hasMore, setHasMore] = useState(true);
   const [currentlyPlayingVideo, setCurrentlyPlayingVideo] = useState(null);
   const [currentlyOpenModal, setCurrentlyOpenModal] = useState(null);
@@ -33,26 +32,27 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
   }, [escPress]);
 
   const goToNext = () => {
-    const currentIndex = filteredItemsList.indexOf(currentlyOpenModal);
-    if (currentIndex < filteredItemsList.length - 1) {
+    const currentIndex = deduplicatedItemsList.indexOf(currentlyOpenModal);
+    if (currentIndex < deduplicatedItemsList.length - 1) {
       if (itemsShowing - 6 < currentIndex - 1) {
         fetchMoreData();
       }
 
       // Get position of next card image and scroll down
       const bodyRect = document.body.getBoundingClientRect();
-      if (filteredItemsList[currentIndex + 1].imageRef.current) {
+      if (deduplicatedItemsList[currentIndex + 1].imageRef.current) {
         window.scrollTo({
           top:
-            filteredItemsList[currentIndex + 1].imageRef.current.getBoundingClientRect()
-              .top -
+            deduplicatedItemsList[
+              currentIndex + 1
+            ].imageRef.current.getBoundingClientRect().top -
             bodyRect.top -
             70,
           behavior: "smooth",
         });
       }
 
-      setCurrentlyOpenModal(filteredItemsList[currentIndex + 1]);
+      setCurrentlyOpenModal(deduplicatedItemsList[currentIndex + 1]);
     }
   };
 
@@ -64,22 +64,23 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
   }, [rightPress, itemsList]);
 
   const goToPrevious = () => {
-    const currentIndex = filteredItemsList.indexOf(currentlyOpenModal);
+    const currentIndex = deduplicatedItemsList.indexOf(currentlyOpenModal);
     if (currentIndex - 1 >= 0) {
       // Get position of previous card image and scroll up
       const bodyRect = document.body.getBoundingClientRect();
-      if (filteredItemsList[currentIndex - 1].imageRef.current) {
+      if (deduplicatedItemsList[currentIndex - 1].imageRef.current) {
         window.scrollTo({
           top:
-            filteredItemsList[currentIndex - 1].imageRef.current.getBoundingClientRect()
-              .top -
+            deduplicatedItemsList[
+              currentIndex - 1
+            ].imageRef.current.getBoundingClientRect().top -
             bodyRect.top -
             70,
           behavior: "smooth",
         });
       }
 
-      setCurrentlyOpenModal(filteredItemsList[currentIndex - 1]);
+      setCurrentlyOpenModal(deduplicatedItemsList[currentIndex - 1]);
     }
   };
 
@@ -101,13 +102,14 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
       (item) => item.token_img_url || item.token_animation_url
     );
     const uniqueItems = Object.values(groupedItems)
-      .map((itemGroup) => itemGroup.length > 1
-        ? itemGroup.map((item, index) => ({
-          ...item,
-          hidden_duplicate: index !== 0,
-          duplicate_count: itemGroup.length,
-        }))
-        : itemGroup[0]
+      .map((itemGroup) =>
+        itemGroup.length > 1
+          ? itemGroup.map((item, index) => ({
+              ...item,
+              hidden_duplicate: index !== 0,
+              duplicate_count: itemGroup.length,
+            }))
+          : itemGroup[0]
       )
       .flat();
     const itemsWithRefs = [];
@@ -174,7 +176,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
 
     mixpanel.track("Unliked item");
   };
-  const currentIndex = filteredItemsList.findIndex(
+  const currentIndex = deduplicatedItemsList.findIndex(
     (i) => i.nft_id === currentlyOpenModal?.nft_id
   );
   return (
@@ -191,7 +193,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
             goToNext={goToNext}
             goToPrevious={goToPrevious}
             columns={context.columns}
-            hasNext={!(currentIndex === filteredItemsList.length - 1)}
+            hasNext={!(currentIndex === deduplicatedItemsList.length - 1)}
             hasPrevious={!(currentIndex === 0)}
           />
         </>
@@ -231,24 +233,22 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
                 : { width: context.columns * (375 + 20) }
             }
           >
-            {filteredItemsList
-              .slice(0, itemsShowing)
-              .map((item) => (
-                <TokenCard
-                  key={item.nft_id}
-                  item={item}
-                  handleLike={handleLike}
-                  handleUnlike={handleUnlike}
-                  columns={context.columns}
-                  isMobile={context.isMobile}
-                  currentlyPlayingVideo={currentlyPlayingVideo}
-                  setCurrentlyPlayingVideo={setCurrentlyPlayingVideo}
-                  currentlyOpenModal={currentlyOpenModal}
-                  setCurrentlyOpenModal={setCurrentlyOpenModal}
-                  showDuplicateNFTs={showDuplicateNFTs}
-                  setShowDuplicateNFTs={setShowDuplicateNFTs}
-                />
-              ))}
+            {deduplicatedItemsList.slice(0, itemsShowing).map((item) => (
+              <TokenCard
+                key={item.nft_id}
+                item={item}
+                handleLike={handleLike}
+                handleUnlike={handleUnlike}
+                columns={context.columns}
+                isMobile={context.isMobile}
+                currentlyPlayingVideo={currentlyPlayingVideo}
+                setCurrentlyPlayingVideo={setCurrentlyPlayingVideo}
+                currentlyOpenModal={currentlyOpenModal}
+                setCurrentlyOpenModal={setCurrentlyOpenModal}
+                showDuplicateNFTs={showDuplicateNFTs}
+                setShowDuplicateNFTs={setShowDuplicateNFTs}
+              />
+            ))}
           </div>
         )}
       </InfiniteScroll>
