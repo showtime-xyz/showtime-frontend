@@ -128,7 +128,7 @@ const TokenDetailBody = ({
           <div className="p-4 flex flex-row">
             <div className="flex-shrink">
               {item.creator_address ? (
-                <Link href="/p/[slug]" as={`/p/${item.creator_address}`}>
+                <Link href="/[profile]" as={`/${item.creator_address}`}>
                   <a className="flex flex-row items-center ">
                     <div>
                       <img
@@ -321,7 +321,7 @@ const TokenDetailBody = ({
                 Created by
                 <div className="flex flex-row  mt-1">
                   <div className="flex-shrink">
-                    <Link href="/p/[slug]" as={`/p/${item.creator_address}`}>
+                    <Link href="/[profile]" as={`/${item.creator_address}`}>
                       <a
                         className="flex flex-row items-center showtime-follower-button rounded-full"
                         onClick={() => {
@@ -365,7 +365,7 @@ const TokenDetailBody = ({
                 Owned by
                 <div className="flex flex-row  mt-1">
                   <div className="flex-shrink">
-                    <Link href="/p/[slug]" as={`/p/${item.owner_address}`}>
+                    <Link href="/[profile]" as={`/${item.owner_address}`}>
                       <a
                         className="flex flex-row items-center showtime-follower-button rounded-full "
                         onClick={() => {

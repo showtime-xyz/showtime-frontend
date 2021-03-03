@@ -17,7 +17,6 @@ const LikeButton = ({ item, handleLike, handleUnlike, showTooltip }) => {
     context.setLoginModalOpen(true);
   };
 
-  console.log("item", item);
   return (
     <div className="tooltip">
       <button
