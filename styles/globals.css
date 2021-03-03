@@ -457,20 +457,6 @@ textarea:focus {
   border: 2px solid #e45cff;
 }
 
-.showtime-like-button-white {
-  background-color: #fff;
-  color: #222222;
-  font-weight: 600;
-  border-radius: 5px;
-  display: inline-flex;
-  border: 2px solid #222222;
-}
-
-.showtime-like-button-white:hover {
-  color: #e45cff;
-  border: 2px solid #e45cff;
-}
-
 .showtime-like-button-white-green-hover {
   background-color: #fff;
   color: #222222;
@@ -483,15 +469,6 @@ textarea:focus {
 .showtime-like-button-white-green-hover:hover {
   color: #35bb5b;
   border: 2px solid #35bb5b;
-}
-
-.showtime-like-button-pink {
-  background-color: #e45cff;
-  color: #fff;
-  font-weight: 600;
-  border-radius: 5px;
-  display: inline-flex;
-  border: 2px solid #e45cff;
 }
 
 .showtime-token-description {
@@ -547,7 +524,6 @@ textarea:focus {
 
 .showtime-card-profile-link {
   font-weight: 600;
-  font-size: 14px;
   color: #223043;
 }
 

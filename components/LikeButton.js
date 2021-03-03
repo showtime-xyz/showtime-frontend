@@ -8,7 +8,9 @@ import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 
 const LikeButton = ({ item, handleLike, handleUnlike, showTooltip }) => {
   const context = useContext(AppContext);
-  const like_count = context.myLikeCounts && context.myLikeCounts[item?.nft_id] || item.like_count;
+  const like_count =
+    (context.myLikeCounts && context.myLikeCounts[item?.nft_id]) ||
+    item.like_count;
   const liked = context.myLikes?.includes(item.nft_id);
 
   const handleLoggedOutLike = () => {
@@ -26,24 +28,26 @@ const LikeButton = ({ item, handleLike, handleUnlike, showTooltip }) => {
               : handleLike(item.nft_id)
             : handleLoggedOutLike()
         }
-        className={
-          liked
-            ? "showtime-like-button-pink"
-            : "showtime-like-button-white"
-        }
+
+        // className={
+        //   item.liked
+        //     ? "showtime-like-button-pink"
+        //     : "showtime-like-button-white"
+        // }
       >
-        <div className="flex flex-row items-center text-sm px-3 py-1">
+        <div className="flex flex-row items-center rounded-md py-1 hover:text-stpink">
+          <div className="mr-2" style={{ whiteSpace: "nowrap" }}>
+            {like_count}
+          </div>
           <div className="flex">
             <FontAwesomeIcon
               style={{
-                height: 18,
-                width: 18,
+                height: 22,
+                width: 22,
               }}
               icon={liked ? faHeartSolid : faHeartOutline}
+              color={liked ? "#e45cff" : "inherit"}
             />
-          </div>
-          <div className="ml-2" style={{ whiteSpace: "nowrap" }}>
-            {like_count} like{like_count === 1 ? null : "s"}{" "}
           </div>
         </div>
       </button>

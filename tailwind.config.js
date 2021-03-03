@@ -63,6 +63,9 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      colors: {
+        stpink: "#e45cff",
+      },
       gridRow: {
         "span-7": "span 7 / span 7",
         "span-8": "span 8 / span 8",
