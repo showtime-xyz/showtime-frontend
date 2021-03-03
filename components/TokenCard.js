@@ -4,7 +4,7 @@ import _ from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExternalLinkAlt, faPlay } from "@fortawesome/free-solid-svg-icons";
 import LikeButton from "./LikeButton";
-// import ShareButton from "./ShareButton";
+import ShareButton from "./ShareButton";
 import ReactPlayer from "react-player";
 import mixpanel from "mixpanel-browser";
 import AppContext from "../context/app-context";
@@ -122,6 +122,32 @@ class TokenCard extends React.Component {
                 : "mx-auto showtime-card sm:rounded-md overflow-hidden"
             }
           >
+            <div className="p-4 flex flex-row items-center">
+              <div className="flex-shrink">
+                {item.creator_address ? (
+                  <Link href="/[profile]" as={`/${item.creator_address}`}>
+                    <a className="flex flex-row items-center ">
+                      <div>
+                        <img
+                          alt={item.creator_name}
+                          src={
+                            item.creator_img_url
+                              ? item.creator_img_url
+                              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                          }
+                          className="rounded-full"
+                          style={{ height: 24, width: 24 }}
+                        />
+                      </div>
+                      <div className="showtime-card-profile-link ml-2">
+                        {this.truncateWithEllipses(item.creator_name, 30)}
+                      </div>
+                    </a>
+                  </Link>
+                ) : null}
+              </div>
+              <div className="flex-grow">&nbsp;</div>
+            </div>
             {(item.token_has_video &&
               this.state.showVideo &&
               this.props.currentlyPlayingVideo === item.nft_id) ||
@@ -205,7 +231,7 @@ class TokenCard extends React.Component {
               </div>
             )}
 
-            <div className="p-4 pt-6 pb-2">
+            <div className="p-4 pb-3">
               <div>
                 <div className="">
                   <div
@@ -241,7 +267,7 @@ class TokenCard extends React.Component {
                         overflowWrap: "break-word",
                         wordWrap: "break-word",
                       }}
-                      className="pt-2  pb-1 text-gray-500"
+                      className="py-2 text-gray-500"
                     >
                       {this.state.moreShown ? (
                         <div>{this.removeTags(item.token_description)}</div>
@@ -269,37 +295,27 @@ class TokenCard extends React.Component {
                       )}
                     </div>
                   ) : null}
-                  <div className="py-2 flex flex-row items-center">
-                    <div className="flex-shrink">
-                      {item.creator_address ? (
-                        <Link href="/[profile]" as={`/${item.creator_address}`}>
-                          <a className="flex flex-row items-center ">
-                            <div>
-                              <img
-                                alt={item.creator_name}
-                                src={
-                                  item.creator_img_url
-                                    ? item.creator_img_url
-                                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                                }
-                                className="rounded-full"
-                                style={{ height: 24, width: 24 }}
-                              />
-                            </div>
-                            <div className="showtime-card-profile-link ml-2">
-                              {this.truncateWithEllipses(item.creator_name, 30)}
-                            </div>
-                          </a>
-                        </Link>
-                      ) : null}
-                    </div>
-                    <div className="flex-grow">&nbsp;</div>
-                    <div className="flex-shrink">
+                  <div className="flex items-center">
+                    <div className="mr-2">
                       <LikeButton
                         item={item}
                         handleLike={this.props.handleLike}
                         handleUnlike={this.props.handleUnlike}
                         showTooltip={this.props.isMobile === false}
+                      />
+                    </div>
+                    <div>
+                      <ShareButton
+                        url={
+                          window.location.protocol +
+                          "//" +
+                          window.location.hostname +
+                          (window.location.port
+                            ? ":" + window.location.port
+                            : "") +
+                          `/t/${item.contract_address}/${item.token_id}`
+                        }
+                        type={"item"}
                       />
                     </div>
                   </div>
@@ -328,19 +344,19 @@ class TokenCard extends React.Component {
                 <div>
                   {item.multiple_owners ? null : item.owner_id ? (
                     <Link href="/[profile]" as={`/${item.owner_address}`}>
-                      <a className="flex flex-row items-center">
-                        {/* <div>
-                        <img
-                          alt={item.owner_name}
-                          src={
-                            item.owner_img_url
-                              ? item.owner_img_url
-                              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                          }
-                          className="rounded-full mr-2"
-                          style={{ height: 24, width: 24 }}
-                        />
-                      </div> */}
+                      <a className="flex flex-row items-center pt-1">
+                        <div>
+                          <img
+                            alt={item.owner_name}
+                            src={
+                              item.owner_img_url
+                                ? item.owner_img_url
+                                : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                            }
+                            className="rounded-full mr-2"
+                            style={{ height: 24, width: 24 }}
+                          />
+                        </div>
                         <div className="showtime-card-profile-link">
                           {this.truncateWithEllipses(item.owner_name, 22)}
                         </div>
