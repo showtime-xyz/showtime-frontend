@@ -101,8 +101,9 @@ class TokenCard extends React.Component {
     return (
       <>
         <div
-          className={`row-span-${this.state.spans} ${this.props.columns === 1 ? "pb-0" : "p-2"
-            }`}
+          className={`row-span-${this.state.spans} ${
+            this.props.columns === 1 ? "pb-4" : "p-2"
+          }`}
         >
           <div
             style={_.merge(
@@ -111,13 +112,13 @@ class TokenCard extends React.Component {
               },
               this.props.columns === 1
                 ? {
-                  borderTopWidth: 1,
-                  borderBottomWidth: 1,
-                }
+                    borderTopWidth: 1,
+                    borderBottomWidth: 1,
+                  }
                 : {
-                  width: 375,
-                  borderWidth: 1,
-                }
+                    width: 375,
+                    borderWidth: 1,
+                  }
             )}
             ref={this.divRef}
             className={
@@ -147,26 +148,26 @@ class TokenCard extends React.Component {
                         />
                       </div>
                       <div className="showtime-card-profile-link ml-2">
-                        {this.truncateWithEllipses(
-                          item.creator_name,
-                          30
-                        )}
+                        {this.truncateWithEllipses(item.creator_name, 30)}
                       </div>
                     </a>
                   </Link>
                   {item.duplicate_count > 1 && (
                     <div
                       onClick={() => {
-                        setShowDuplicateNFTs(
-                          {
-                            ...showDuplicateNFTs,
-                            [hash]: !showDuplicateNFTs[hash]
-                          }
-                        )
+                        setShowDuplicateNFTs({
+                          ...showDuplicateNFTs,
+                          [hash]: !showDuplicateNFTs[hash],
+                        });
                       }}
-                      className="showtime-card-profile-link ml-2 cursor-pointer">
-                      {`${showDuplicateNFTs[hash] ? "Hide" : "Show"} ${item.duplicate_count} more similar`}
-                    </div>)}
+                      className="showtime-card-profile-link ml-2 cursor-pointer"
+                      style={{ fontWeight: 400 }}
+                    >
+                      {`${showDuplicateNFTs[hash] ? "Hide" : "Show"} ${
+                        item.duplicate_count
+                      } more similar`}
+                    </div>
+                  )}
                 </div>
               ) : null}
               <div className="flex-grow">&nbsp;</div>
@@ -174,23 +175,19 @@ class TokenCard extends React.Component {
             {(item.token_has_video &&
               this.state.showVideo &&
               this.props.currentlyPlayingVideo === item.nft_id) ||
-              (item.token_has_video &&
-                !item.token_img_url) ? (
+            (item.token_has_video && !item.token_img_url) ? (
               <ReactPlayer
                 url={item.token_animation_url}
                 playing={
                   this.props.currentlyPlayingVideo === item.nft_id ||
-                  (item.token_has_video &&
-                    !item.token_img_url)
+                  (item.token_has_video && !item.token_img_url)
                 }
                 loop
                 controls
                 muted={this.state.muted}
                 width={this.props.columns === 1 ? window.innerWidth : 373}
                 height={
-                  item.imageRef.current
-                    ? item.imageRef.current.height
-                    : null
+                  item.imageRef.current ? item.imageRef.current.height : null
                 }
                 playsinline
                 onReady={this.setSpans}
@@ -241,9 +238,7 @@ class TokenCard extends React.Component {
                     onClick={() => {
                       mixpanel.track("Play card video");
                       this.setState({ showVideo: true, muted: false });
-                      this.props.setCurrentlyPlayingVideo(
-                        item.nft_id
-                      );
+                      this.props.setCurrentlyPlayingVideo(item.nft_id);
                     }}
                   >
                     <FontAwesomeIcon
@@ -353,18 +348,14 @@ class TokenCard extends React.Component {
                       className="pt-1  pb-2"
                     >
                       {this.state.moreShown ? (
-                        <div>
-                          {this.removeTags(item.token_description)}
-                        </div>
+                        <div>{this.removeTags(item.token_description)}</div>
                       ) : (
                         <div>
                           {item.token_description.length >
-                            this.max_description_length ? (
+                          this.max_description_length ? (
                             <>
                               {this.truncateWithEllipses(
-                                this.removeTags(
-                                  item.token_description
-                                ),
+                                this.removeTags(item.token_description),
                                 this.max_description_length
                               )}{" "}
                               <a
@@ -376,11 +367,7 @@ class TokenCard extends React.Component {
                               </a>
                             </>
                           ) : (
-                            <div>
-                              {this.removeTags(
-                                item.token_description
-                              )}
-                            </div>
+                            <div>{this.removeTags(item.token_description)}</div>
                           )}
                         </div>
                       )}
@@ -405,12 +392,10 @@ class TokenCard extends React.Component {
                   color: "#888",
                 }}
               >
-                Owned by{" "}
-                {item.multiple_owners ? "multiple owners" : null}
+                Owned by {item.multiple_owners ? "multiple owners" : null}
               </div>
               <div>
-                {item.multiple_owners ? null : item
-                  .owner_id ? (
+                {item.multiple_owners ? null : item.owner_id ? (
                   <Link
                     href="/[profile]"
                     as={`/${this.props.item.owner_address}`}
@@ -429,10 +414,7 @@ class TokenCard extends React.Component {
                         />
                       </div>
                       <div className="showtime-card-profile-link">
-                        {this.truncateWithEllipses(
-                          item.owner_name,
-                          22
-                        )}
+                        {this.truncateWithEllipses(item.owner_name, 22)}
                       </div>
                     </a>
                   </Link>
