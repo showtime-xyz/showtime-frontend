@@ -44,7 +44,7 @@ const LikeButton = ({ item, handleLike, handleUnlike, showTooltip }) => {
             />
           </div>
           <div className="ml-2" style={{ whiteSpace: "nowrap" }}>
-            {item.like_count} like{item.like_count === 1 ? null : "s"}{" "}
+            {item.like_count + (item.liked || 0)} like{item.like_count === 1 ? null : "s"}{" "}
           </div>
         </div>
       </button>
