@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import mixpanel from "mixpanel-browser";
 import { Magic } from "magic-sdk";
 import Web3Modal from "web3modal";
-import { Web3Provider } from "@ethersproject/providers";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import Authereum from "authereum";
 import ethProvider from "eth-provider";
@@ -11,6 +10,7 @@ import ClientOnlyPortal from "./ClientOnlyPortal";
 import backend from "../lib/backend";
 import AppContext from "../context/app-context";
 import CloseButton from "./CloseButton";
+import Web3 from "web3";
 
 export default function Modal({ isOpen }) {
   const context = useContext(AppContext);
@@ -70,26 +70,19 @@ export default function Modal({ isOpen }) {
     });
 
     const provider = await web3Modal.connect();
-    const web3Provider = new Web3Provider(provider);
 
-    /*
-    provider.on("accountsChanged", (accounts) => {
-      // Do something with the new account
-      console.log("ACCOUNTS CHANGED");
-      console.log(accounts[0]);
-    });
-    */
-
-    const address = await web3Provider.getSigner().getAddress();
+    const web3 = new Web3(provider);
+    const coinbase = await web3.eth.getCoinbase();
+    const address = coinbase.toLowerCase();
     const response_nonce = await backend.get(`/v1/getnonce?address=${address}`);
 
     try {
       setSignaturePending(true);
-      const signature = await web3Provider
-        .getSigner()
-        .signMessage(
-          process.env.NEXT_PUBLIC_SIGNING_MESSAGE + response_nonce.data.data
-        );
+      const signature = await web3.eth.personal.sign(
+        process.env.NEXT_PUBLIC_SIGNING_MESSAGE + response_nonce.data.data,
+        address,
+        "" // MetaMask will ignore the password argument here
+      );
 
       // login with our own API
       const authRequest = await fetch("/api/loginsignature", {
