@@ -29,14 +29,19 @@ export default function Home() {
   const [featuredItems, setFeaturedItems] = useState([]);
   const [featuredDays, setFeaturedDays] = useState(1);
   const [reachedBottom, setReachedBottom] = useState(false);
+  const [isLoadingCards, setIsLoadingCards] = useState(false);
 
   useEffect(() => {
     const getFeatured = async () => {
+      if (featuredItems.length == 0) {
+        setIsLoadingCards(true);
+      }
       const response_featured = await backend.get(
         `/v2/featured?limit=150&days=${featuredDays}`
       );
       const data_featured = response_featured.data.data;
       setFeaturedItems(data_featured);
+      setIsLoadingCards(false);
     };
     getFeatured();
     setReachedBottom(false);
@@ -108,6 +113,7 @@ export default function Home() {
           setReachedBottom(true);
         }}
         filterTabs={FilterTabs}
+        isLoading={isLoadingCards}
       />
 
       {featuredItems.length > 0 && reachedBottom ? (
