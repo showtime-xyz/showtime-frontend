@@ -9,6 +9,7 @@ export default class MyApp extends React.Component {
     user: undefined,
     windowSize: null,
     myLikes: null,
+    myLikeCounts: null,
     myFollows: null,
     myProfile: undefined,
     loginModalOpen: false,
@@ -45,11 +46,10 @@ export default class MyApp extends React.Component {
       const myInfoRequest = await fetch("/api/myinfo");
       try {
         const my_info_data = await myInfoRequest.json();
-
         this.setMyLikes(my_info_data.data.likes_nft);
         this.setMyFollows(my_info_data.data.follows);
         this.setMyProfile(my_info_data.data.profile);
-      } catch {}
+      } catch { }
     } catch {
       // Not logged in
       // Switch from undefined to null
@@ -77,6 +77,8 @@ export default class MyApp extends React.Component {
     if (authRequest.ok) {
       this.setUser(null);
       this.setMyLikes([]);
+      this.setMyLikeCounts({});
+
       this.setMyFollows([]);
 
       mixpanel.track("Logout");
@@ -109,6 +111,10 @@ export default class MyApp extends React.Component {
 
   setMyLikes(myLikes) {
     this.setState({ myLikes });
+  }
+
+  setMyLikeCounts(myLikeCounts) {
+    this.setState({ myLikeCounts });
   }
 
   setMyFollows(myFollows) {
@@ -162,6 +168,7 @@ export default class MyApp extends React.Component {
       user: this.state.user,
       windowSize: this.state.windowSize,
       myLikes: this.state.myLikes,
+      myLikeCounts: this.state.myLikeCounts,
       myFollows: this.state.myFollows,
       myProfile: this.state.myProfile,
       loginModalOpen: this.state.loginModalOpen,
@@ -171,6 +178,7 @@ export default class MyApp extends React.Component {
       setUser: (user) => this.setUser(user),
       setWindowSize: (windowSize) => this.setWindowSize(windowSize),
       setMyLikes: (myLikes) => this.setMyLikes(myLikes),
+      setMyLikeCounts: (myLikeCounts) => this.setMyLikeCounts(myLikeCounts),
       setMyFollows: (myFollows) => this.setMyFollows(myFollows),
       setMyProfile: (myProfile) => this.setMyProfile(myProfile),
       setLoginModalOpen: (loginModalOpen) =>

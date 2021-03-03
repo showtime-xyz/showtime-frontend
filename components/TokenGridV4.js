@@ -39,9 +39,8 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
       if (itemsList[currentIndex + 1].imageRef.current) {
         window.scrollTo({
           top:
-            itemsList[
-              currentIndex + 1
-            ].imageRef.current.getBoundingClientRect().top -
+            itemsList[currentIndex + 1].imageRef.current.getBoundingClientRect()
+              .top -
             bodyRect.top -
             70,
           behavior: "smooth",
@@ -67,9 +66,8 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
       if (itemsList[currentIndex - 1].imageRef.current) {
         window.scrollTo({
           top:
-            itemsList[
-              currentIndex - 1
-            ].imageRef.current.getBoundingClientRect().top -
+            itemsList[currentIndex - 1].imageRef.current.getBoundingClientRect()
+              .top -
             bodyRect.top -
             70,
           behavior: "smooth",
@@ -87,48 +85,35 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
     }
   }, [leftPress, itemsList]);
 
-  const [hasNext, setHasNext] = useState(false);
-  const [hasPrevious, setHasPrevious] = useState(false);
-
-  useEffect(() => {
-    const currentIndex = itemsList.indexOf(currentlyOpenModal);
-    if (currentIndex === 0) {
-      setHasPrevious(false);
-    } else {
-      setHasPrevious(true);
-    }
-
-    if (currentIndex === itemsList.length - 1) {
-      setHasNext(false);
-    } else {
-      setHasNext(true);
-    }
-  }, [currentlyOpenModal]);
-
   useEffect(() => {
     const validItems = items.filter(
-      item =>
+      (item) =>
         (item.token_hidden !== 1 || isDetail) &&
         (item.token_img_url || item.token_animation_url)
     );
-    const groupedItems = _.groupBy(validItems, item => item.token_img_url || item.token_animation_url);
-    const uniqueItems = Object.values(groupedItems).map(itemGroup => {
-      return itemGroup.length > 1
-        ? itemGroup.map((item, index) => ({ ...item, hidden_duplicate: index !== 0, duplicate_count: itemGroup.length }))
-        : itemGroup[0];
-    }).flat();
-    const myLikes = context.myLikes || [];
-    const itemsWithLikedMetadata = myLikes.length > 0
-      ? uniqueItems.map(item => ({ ...item, liked: myLikes.includes(item.nft_id) }))
-      : uniqueItems;
+    const groupedItems = _.groupBy(
+      validItems,
+      (item) => item.token_img_url || item.token_animation_url
+    );
+    const uniqueItems = Object.values(groupedItems)
+      .map((itemGroup) => {
+        return itemGroup.length > 1
+          ? itemGroup.map((item, index) => ({
+              ...item,
+              hidden_duplicate: index !== 0,
+              duplicate_count: itemGroup.length,
+            }))
+          : itemGroup[0];
+      })
+      .flat();
     const itemsWithRefs = [];
-    _.forEach(itemsWithLikedMetadata, (item) => {
+    _.forEach(uniqueItems, (item) => {
       item.imageRef = createRef();
       itemsWithRefs.push(item);
     });
     setItemsList(itemsWithRefs);
     setHasMore(true);
-  }, [items, context.myLikes]);
+  }, [items]);
 
   useEffect(() => {
     if (context.isMobile) {
@@ -137,7 +122,6 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
       setItemsShowing(8);
     }
   }, [context.isMobile]);
-
 
   const fetchMoreData = () => {
     if (itemsShowing + 8 > itemsList.length) {
@@ -151,6 +135,14 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
     // Change myLikes via setMyLikes
     context.setMyLikes([...context.myLikes, nft_id]);
 
+    const likedItem = itemsList.find((i) => i.nft_id === nft_id);
+    const myLikeCounts = context.myLikeCounts;
+    context.setMyLikeCounts({
+      ...context.myLikeCounts,
+      [nft_id]:
+        ((myLikeCounts && myLikeCounts[nft_id]) || likedItem.like_count) + 1,
+    });
+
     // Post changes to the API
     await fetch(`/api/like_v3/${nft_id}`, {
       method: "post",
@@ -163,6 +155,14 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
     // Change myLikes via setMyLikes
     context.setMyLikes(context.myLikes.filter((item) => !(item === nft_id)));
 
+    const likedItem = itemsList.find((i) => i.nft_id === nft_id);
+    const myLikeCounts = context.myLikeCounts;
+    context.setMyLikeCounts({
+      ...context.myLikeCounts,
+      [nft_id]:
+        ((myLikeCounts && myLikeCounts[nft_id]) || likedItem.like_count) - 1,
+    });
+
     // Post changes to the API
     await fetch(`/api/unlike_v3/${nft_id}`, {
       method: "post",
@@ -170,7 +170,9 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
 
     mixpanel.track("Unliked item");
   };
-
+  const currentIndex = itemsList.findIndex(
+    (i) => i.nft_id === currentlyOpenModal?.nft_id
+  );
   return (
     <>
       {typeof document !== "undefined" ? (
@@ -185,8 +187,8 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
             goToNext={goToNext}
             goToPrevious={goToPrevious}
             columns={context.columns}
-            hasNext={hasNext}
-            hasPrevious={hasPrevious}
+            hasNext={!(currentIndex === itemsList.length - 1)}
+            hasPrevious={!(currentIndex === 0)}
           />
         </>
       ) : null}
@@ -226,7 +228,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
             }
           >
             {itemsList
-              .filter(item => {
+              .filter((item) => {
                 const hash = item.token_img_url || item.token_animation_url;
                 return !item.hidden_duplicate ? true : showDuplicateNFTs[hash];
               })
