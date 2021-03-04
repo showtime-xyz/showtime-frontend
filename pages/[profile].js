@@ -22,6 +22,29 @@ export async function getServerSideProps(context) {
   let response_profile;
   try {
     response_profile = await backend.get(`/v2/profile_server/${slug_address}`);
+
+    const data_profile = response_profile.data.data;
+    const name = data_profile.profile.name;
+    const img_url = data_profile.profile.img_url;
+    const wallet_addresses = data_profile.profile.wallet_addresses;
+    const followers_list = data_profile.followers;
+    const following_list = data_profile.following;
+
+    const bio = data_profile.profile.bio;
+    const website_url = data_profile.profile.website_url;
+
+    return {
+      props: {
+        name,
+        img_url,
+        wallet_addresses,
+        slug_address,
+        followers_list,
+        following_list,
+        bio,
+        website_url,
+      }, // will be passed to the page component as props
+    };
   } catch (err) {
     if (err.response.status == 404) {
       // Redirect to homepage
@@ -29,30 +52,6 @@ export async function getServerSideProps(context) {
       res.end();
     }
   }
-
-  const data_profile = response_profile.data.data;
-
-  const name = data_profile.profile.name;
-  const img_url = data_profile.profile.img_url;
-  const wallet_addresses = data_profile.profile.wallet_addresses;
-  const followers_list = data_profile.followers;
-  const following_list = data_profile.following;
-
-  const bio = data_profile.profile.bio;
-  const website_url = data_profile.profile.website_url;
-
-  return {
-    props: {
-      name,
-      img_url,
-      wallet_addresses,
-      slug_address,
-      followers_list,
-      following_list,
-      bio,
-      website_url,
-    }, // will be passed to the page component as props
-  };
 }
 
 const Profile = ({
