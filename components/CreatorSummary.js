@@ -1,32 +1,54 @@
 import React from "react";
 import Link from "next/link";
+import { truncateWithEllipses } from "../lib/utilities";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
-export default function CreatorSummary() {
+export default function CreatorSummary({
+  name,
+  address,
+  imageUrl,
+  closeModal,
+  bio,
+}) {
   return (
     <>
-      <Link href="/[profile]" as={`/${item.creator_address}`}>
-        <a
-          className="flex flex-row items-center showtime-follower-button rounded-full"
-          onClick={() => {
-            if (setEditModalOpen) {
-              setEditModalOpen(false);
-            }
-          }}
-        >
-          <div>
+      <div>
+        <Link href="/[profile]" as={`/${address}`}>
+          <a onClick={closeModal}>
             <img
-              alt={item.creator_name}
+              alt={name}
               src={
-                item.creator_img_url
-                  ? item.creator_img_url
+                imageUrl
+                  ? imageUrl
                   : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
               }
-              className="rounded-full mr-1"
-              style={{ height: 24, width: 24 }}
+              className="rounded-full mr-1 inline-block"
+              style={{ height: 64, width: 64 }}
             />
-          </div>
-          <div style={{ fontWeight: 400 }}>
-            {truncateWithEllipses(item.creator_name, 26)}
+          </a>
+        </Link>
+      </div>
+      <Link href="/[profile]" as={`/${address}`}>
+        <a onClick={closeModal}>
+          <p className="text-xl md:text-3xl py-4 inline-block hover:text-stpink">
+            {truncateWithEllipses(name, 26)}
+          </p>
+        </a>
+      </Link>
+      {bio && <div className="py-4 text-gray-500">{bio}</div>}
+      <Link href="/[profile]" as={`/${address}`}>
+        <a onClick={closeModal}>
+          <div className="px-6 py-2 mt-2 border-2 border-gray-300 rounded-xl flex items-center justify-center w-max text-gray-300 hover:border-stpink transition hover:text-stpink">
+            <span className="mr-2 text-black">Artist Profile</span>
+            <FontAwesomeIcon
+              style={{
+                height: 18,
+                width: 18,
+              }}
+              icon={faArrowRight}
+              color="inherit"
+            />
           </div>
         </a>
       </Link>
