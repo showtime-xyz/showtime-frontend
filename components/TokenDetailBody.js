@@ -8,6 +8,9 @@ import LikeButton from "./LikeButton";
 import ShareButton from "./ShareButton";
 import CloseButton from "./CloseButton";
 import AppContext from "../context/app-context";
+import CreatorSummary from "./CreatorSummary";
+import { removeTags, truncateWithEllipses } from "../lib/utilities";
+import UserTimestampCard from "./UserTimestampCard";
 
 // how wide the media will be
 const TOKEN_MEDIA_WIDTH = 500;
@@ -86,16 +89,6 @@ const TokenDetailBody = ({
   useEffect(() => {
     setFullResLoaded(false);
   }, [item]);
-
-  const removeTags = (str) => {
-    if (str === null || str === "") return false;
-    else str = str.toString();
-    return str.replace(/(<([^>]+)>)/gi, " ");
-  };
-
-  const truncateWithEllipses = (text, max) => {
-    return text.substr(0, max - 1) + (text.length > max ? "..." : "");
-  };
 
   return (
     <>
@@ -218,7 +211,7 @@ const TokenDetailBody = ({
           }}
         >
           {/* Title and description section */}
-          <div className="flex flex-col md:flex-row">
+          <div className="flex flex-col md:flex-row pb-10">
             <div
               className="text-2xl md:text-4xl pb-0 text-left flex-1 p-4"
               style={{
@@ -229,20 +222,22 @@ const TokenDetailBody = ({
             >
               {item.token_name}
             </div>
-            {item.token_description ? (
-              <div className="flex-1 p-4">
-                <div className="md:text-lg py-2">Description</div>
-                <div
-                  className="mb-10 text-sm md:text-base text-gray-500"
-                  style={{
-                    overflowWrap: "break-word",
-                    wordWrap: "break-word",
-                  }}
-                >
-                  {removeTags(item.token_description)}
-                </div>
-              </div>
-            ) : null}
+            <div className="flex-1 p-4 pb-0">
+              {item.token_description && (
+                <>
+                  <div className="md:text-lg py-2">Description</div>
+                  <div
+                    className="text-sm md:text-base text-gray-500"
+                    style={{
+                      overflowWrap: "break-word",
+                      wordWrap: "break-word",
+                    }}
+                  >
+                    {removeTags(item.token_description)}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
           {/* separator */}
           <hr />
@@ -272,218 +267,76 @@ const TokenDetailBody = ({
           {/*  */}
           {/* Artist and Owned by Section */}
 
-          <div className="flex flex-col md:flex-row">
+          <div className="flex flex-col md:flex-row mt-4">
             {/* artist section */}
-            {item.creator_address && (
-              <div className="flex-1 p-4">
-                <div className="md:text-lg py-2">Artist</div>
-                <Link href="/[profile]" as={`/${item.creator_address}`}>
-                  <a
-                    className="flex flex-row items-center showtime-follower-button rounded-full"
-                    onClick={() => {
+            <div className="flex-1 p-4">
+              {item.creator_address && (
+                <>
+                  <div className="md:text-lg py-4">Creator</div>
+                  <CreatorSummary
+                    address={item.creator_address}
+                    name={item.creator_name}
+                    imageUrl={item.creator_img_url}
+                    closeModal={() => {
                       if (setEditModalOpen) {
                         setEditModalOpen(false);
                       }
                     }}
-                  >
-                    <div>
-                      <img
-                        alt={item.creator_name}
-                        src={
-                          item.creator_img_url
-                            ? item.creator_img_url
-                            : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                        }
-                        className="rounded-full mr-1"
-                        style={{ height: 24, width: 24 }}
-                      />
-                    </div>
-                    <div style={{ fontWeight: 400 }}>
-                      {truncateWithEllipses(item.creator_name, 26)}
-                    </div>
-                  </a>
-                </Link>
-              </div>
-            )}
-            {/* owned by section */}
-            {item.owner_address && (
-              <div className="flex-1 p-4">
-                <div className="md:text-lg py-2">Owned By</div>
-                <Link href="/[profile]" as={`/${item.owner_address}`}>
-                  <a
-                    className="flex flex-row items-center showtime-follower-button rounded-full "
-                    onClick={() => {
-                      if (setEditModalOpen) {
-                        setEditModalOpen(false);
-                      }
-                    }}
-                  >
-                    <div>
-                      <img
-                        alt={item.owner_name}
-                        src={
-                          item.owner_img_url
-                            ? item.owner_img_url
-                            : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                        }
-                        className="rounded-full mr-1"
-                        style={{ height: 24, width: 24 }}
-                      />
-                    </div>
-                    <div style={{ fontWeight: 400 }}>
-                      {truncateWithEllipses(item.owner_name, 26)}
-                    </div>
-                  </a>
-                </Link>
-              </div>
-            )}
-          </div>
-
-          {/* <div className="flex flex-col 2xl:flex-row">
-            {item.creator_address && columns !== 1 ? (
-              <div
-                className="flex-1 pb-2 2xl:pb-0"
-                style={{
-                  fontWeight: 400,
-                  fontSize: 14,
-                  color: "rgb(136, 136, 136)",
-                }}
-              >
-                Created by
-                <div className="flex flex-row  mt-1">
-                  <div className="flex-shrink">
-                    <Link
-                      href="/[profile]"
-                      as={`/${item?.creator_username || item.creator_address}`}
-                    >
-                      <a
-                        className="flex flex-row items-center showtime-follower-button rounded-full"
-                        onClick={() => {
-                          if (setEditModalOpen) {
-                            setEditModalOpen(false);
-                          }
-                        }}
-                      >
-                        <div>
-                          <img
-                            alt={item.creator_name}
-                            src={
-                              item.creator_img_url
-                                ? item.creator_img_url
-                                : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                            }
-                            className="rounded-full mr-1"
-                            style={{ height: 24, width: 24 }}
-                          />
-                        </div>
-                        <div style={{ fontWeight: 400 }}>
-                          {truncateWithEllipses(item.creator_name, 26)}
-                        </div>
-                      </a>
-                    </Link>
-                  </div>
-                  <div className="flex-grow"></div>
-                </div>
-              </div>
-            ) : null}
-
-            {item.owner_address ? (
-              <div
-                className="flex-1"
-                style={{
-                  fontWeight: 400,
-                  fontSize: 14,
-                  color: "rgb(136, 136, 136)",
-                }}
-              >
-                Owned by
-                <div className="flex flex-row  mt-1">
-                  <div className="flex-shrink">
-                    <Link
-                      href="/[profile]"
-                      as={`/${item?.owner_username || item.owner_address}`}
-                    >
-                      <a
-                        className="flex flex-row items-center showtime-follower-button rounded-full "
-                        onClick={() => {
-                          if (setEditModalOpen) {
-                            setEditModalOpen(false);
-                          }
-                        }}
-                      >
-                        <div>
-                          <img
-                            alt={item.owner_name}
-                            src={
-                              item.owner_img_url
-                                ? item.owner_img_url
-                                : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                            }
-                            className="rounded-full mr-1"
-                            style={{ height: 24, width: 24 }}
-                          />
-                        </div>
-                        <div style={{ fontWeight: 400 }}>
-                          {truncateWithEllipses(item.owner_name, 26)}
-                        </div>
-                      </a>
-                    </Link>
-                  </div>
-                  <div className="flex-grow"></div>
-                </div>
-              </div>
-            ) : null}
-          </div> */}
-
-          {item.token_creator_followers_only ? (
-            context.myFollows ? (
-              context.myFollows
-                .map((item) => item.wallet_address)
-                .includes(item.creator_address) ? (
-                <div style={{ width: 160 }} className="mt-12">
-                  <a
-                    href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
-                    title="Buy on OpenSea"
-                    target="_blank"
-                    onClick={() => {
-                      mixpanel.track("OpenSea link click");
-                    }}
-                  >
-                    <img
-                      style={{
-                        width: 160,
-                        borderRadius: 7,
-                        boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.25)",
-                      }}
-                      src="https://storage.googleapis.com/opensea-static/opensea-brand/listed-button-white.png"
-                      alt="Listed on OpenSea badge"
-                    />
-                  </a>
-                </div>
-              ) : null
-            ) : null
-          ) : (
-            <div style={{ width: 160 }} className="mt-12">
-              <a
-                href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
-                title="Buy on OpenSea"
-                target="_blank"
-                onClick={() => {
-                  mixpanel.track("OpenSea link click");
-                }}
-              >
-                <img
-                  style={{
-                    width: 160,
-                    borderRadius: 7,
-                    boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.25)",
-                  }}
-                  src="https://storage.googleapis.com/opensea-static/opensea-brand/listed-button-white.png"
-                  alt="Listed on OpenSea badge"
-                />
-              </a>
+                  />
+                </>
+              )}
             </div>
-          )}
+
+            {/* owned by section */}
+            <div className="flex-1 p-4">
+              {item.owner_address && (
+                <div>
+                  <div className="md:text-lg py-2">Owned By</div>
+                  <div className="inline-block">
+                    <Link href="/[profile]" as={`/${item.owner_address}`}>
+                      <a
+                        onClick={() => {
+                          if (setEditModalOpen) {
+                            setEditModalOpen(false);
+                          }
+                        }}
+                      >
+                        <UserTimestampCard
+                          name={item.owner_name}
+                          imageUrl={item.owner_img_url}
+                          // timestamp={Date.now()}
+                        />
+                      </a>
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          {/* History Section */}
+          {/*  */}
+
+          {/* OpenSea Link */}
+          <div style={{ width: 160 }} className="mt-12">
+            <a
+              href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
+              title="Buy on OpenSea"
+              target="_blank"
+              onClick={() => {
+                mixpanel.track("OpenSea link click");
+              }}
+            >
+              <img
+                style={{
+                  width: 160,
+                  borderRadius: 7,
+                  boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.25)",
+                }}
+                src="https://storage.googleapis.com/opensea-static/opensea-brand/listed-button-white.png"
+                alt="Listed on OpenSea badge"
+              />
+            </a>
+          </div>
 
           <div
             className="text-xs mt-4 mb-12"
