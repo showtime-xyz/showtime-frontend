@@ -248,7 +248,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       color: "black",
                       padding: 10,
                       borderRadius: 7,
-                      height: 114,
+                      height: context.windowSize?.height < 800 ? 72 : 114,
                       borderWidth: 2,
                       fontSize: 15,
                       borderColor: "#999",
@@ -325,7 +325,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
               .modal {
                 background-color: white;
                 position: absolute;
-                top: 5%;
+                top: ${context.isMobile ? 2 : 10}%;
                 right: 3%;
                 left: 3%;
                 padding: 1em;
