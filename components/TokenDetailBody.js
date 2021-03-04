@@ -209,37 +209,45 @@ const TokenDetailBody = ({
             </div>
           )}
         </div>
+        {/* Details wrapper */}
         <div
-          className="p-6 md:p-8"
+          className="p-2 md:p-8"
           style={{
             overflow: "auto",
             position: "relative",
           }}
         >
-          <div
-            className="text-2xl md:text-4xl border-b-2 pb-2 text-left mb-4"
-            style={{
-              fontWeight: 600,
-              overflowWrap: "break-word",
-              wordWrap: "break-word",
-            }}
-          >
-            {item.token_name}
-          </div>
-          {item.token_description ? (
+          {/* Title and description section */}
+          <div className="flex flex-col md:flex-row">
             <div
-              className="mb-10 text-sm md:text-base"
+              className="text-2xl md:text-4xl pb-0 text-left flex-1 p-4"
               style={{
-                color: "#333",
+                fontWeight: 600,
                 overflowWrap: "break-word",
                 wordWrap: "break-word",
               }}
             >
-              {removeTags(item.token_description)}
+              {item.token_name}
             </div>
-          ) : null}
-
-          <div className="mb-12 flex flex-row">
+            {item.token_description ? (
+              <div className="flex-1 p-4">
+                <div className="md:text-lg py-2">Description</div>
+                <div
+                  className="mb-10 text-sm md:text-base text-gray-500"
+                  style={{
+                    overflowWrap: "break-word",
+                    wordWrap: "break-word",
+                  }}
+                >
+                  {removeTags(item.token_description)}
+                </div>
+              </div>
+            ) : null}
+          </div>
+          {/* separator */}
+          <hr />
+          {/* Likes & Share */}
+          {/* <div className="mb-12 flex flex-row">
             <div className="mr-2">
               <LikeButton
                 item={item}
@@ -260,9 +268,78 @@ const TokenDetailBody = ({
                 type={"item"}
               />
             </div>
+          </div> */}
+          {/*  */}
+          {/* Artist and Owned by Section */}
+
+          <div className="flex flex-col md:flex-row">
+            {/* artist section */}
+            {item.creator_address && (
+              <div className="flex-1 p-4">
+                <div className="md:text-lg py-2">Artist</div>
+                <Link href="/[profile]" as={`/${item.creator_address}`}>
+                  <a
+                    className="flex flex-row items-center showtime-follower-button rounded-full"
+                    onClick={() => {
+                      if (setEditModalOpen) {
+                        setEditModalOpen(false);
+                      }
+                    }}
+                  >
+                    <div>
+                      <img
+                        alt={item.creator_name}
+                        src={
+                          item.creator_img_url
+                            ? item.creator_img_url
+                            : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                        }
+                        className="rounded-full mr-1"
+                        style={{ height: 24, width: 24 }}
+                      />
+                    </div>
+                    <div style={{ fontWeight: 400 }}>
+                      {truncateWithEllipses(item.creator_name, 26)}
+                    </div>
+                  </a>
+                </Link>
+              </div>
+            )}
+            {/* owned by section */}
+            {item.owner_address && (
+              <div className="flex-1 p-4">
+                <div className="md:text-lg py-2">Owned By</div>
+                <Link href="/[profile]" as={`/${item.owner_address}`}>
+                  <a
+                    className="flex flex-row items-center showtime-follower-button rounded-full "
+                    onClick={() => {
+                      if (setEditModalOpen) {
+                        setEditModalOpen(false);
+                      }
+                    }}
+                  >
+                    <div>
+                      <img
+                        alt={item.owner_name}
+                        src={
+                          item.owner_img_url
+                            ? item.owner_img_url
+                            : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                        }
+                        className="rounded-full mr-1"
+                        style={{ height: 24, width: 24 }}
+                      />
+                    </div>
+                    <div style={{ fontWeight: 400 }}>
+                      {truncateWithEllipses(item.owner_name, 26)}
+                    </div>
+                  </a>
+                </Link>
+              </div>
+            )}
           </div>
 
-          <div className="flex flex-col 2xl:flex-row">
+          {/* <div className="flex flex-col 2xl:flex-row">
             {item.creator_address && columns !== 1 ? (
               <div
                 className="flex-1 pb-2 2xl:pb-0"
@@ -356,7 +433,7 @@ const TokenDetailBody = ({
                 </div>
               </div>
             ) : null}
-          </div>
+          </div> */}
 
           {item.token_creator_followers_only ? (
             context.myFollows ? (
