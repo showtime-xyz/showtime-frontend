@@ -18,7 +18,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 
   useEffect(() => {
     if (context.myProfile) {
-      setCustomURLValue(SHOWTIME_PROD_URL + context.myProfile.username);
+      setCustomURLValue(SHOWTIME_PROD_URL + (context.myProfile.username || ""));
       setNameValue(context.myProfile.name);
       setBioValue(context.myProfile.bio);
       setWebsiteValue(context.myProfile.website_url);
@@ -137,7 +137,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       }
                       const prefix = e.target.value.substring(0, SHOWTIME_PROD_URL.length);
                       const suffix = e.target.value.substring(SHOWTIME_PROD_URL.length, e.target.value.length);
-                      const urlRegex = /^[a-zA-Z0-9_-]*$/;
+                      const urlRegex = /^[a-zA-Z0-9-]*$/;
                       if (prefix === SHOWTIME_PROD_URL && urlRegex.test(suffix)) {
                         setCustomURLError("");
                         setCustomURLValue(e.target.value);
