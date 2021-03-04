@@ -29,9 +29,9 @@ const handleUsernameLookup = async (value, context, setCustomURLError) => {
     validUsername
       ? {
           isError: false,
-          message: username === null ? "" : "Username is available",
+          message: username === null ? "" : "URL is available",
         }
-      : { isError: true, message: "Username is not available" }
+      : { isError: true, message: "URL is not available" }
   );
   return validUsername;
 };
@@ -134,8 +134,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   </label>
                   <input
                     name="name"
-                    placeholder="Your Name"
-                    value={nameValue}
+                    placeholder="Your name"
+                    value={nameValue ? nameValue : ""}
                     autoFocus
                     onChange={(e) => {
                       setNameValue(e.target.value);
@@ -171,8 +171,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   >
                     <input
                       name="customURL"
-                      placeholder="Enter custom URL"
-                      value={customURLValue}
+                      placeholder="Your custom URL"
+                      value={customURLValue ? customURLValue : ""}
                       onChange={(e) => {
                         const value = e.target.value;
                         const urlRegex = /^[a-zA-Z0-9-]*$/;
@@ -272,7 +272,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   <input
                     name="website_url"
                     placeholder=""
-                    value={websiteValue}
+                    value={websiteValue ? websiteValue : ""}
                     onChange={(e) => {
                       setWebsiteValue(e.target.value);
                     }}

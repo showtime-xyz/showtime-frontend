@@ -146,7 +146,7 @@ const Profile = ({
             .map((a) => a.toLowerCase())
             .includes(slug_address.toLowerCase()) ||
           slug_address.toLowerCase() ===
-            context.myProfile?.username.toLowerCase()
+            context.myProfile?.username?.toLowerCase()
         ) {
           setIsMyProfile(true);
           mixpanel.track("Self profile view", { slug: slug_address });
