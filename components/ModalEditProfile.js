@@ -26,7 +26,7 @@ const handleUsernameLookup = async (value, context, setCustomURLError) => {
   }
   setCustomURLError(
     validUsername
-      ? { isError: false, message: "Username is available" }
+      ? { isError: false, message: username === null ? "" : "Username is available" }
       : { isError: true, message: "This username is not available" }
   );
   return validUsername;
@@ -147,7 +147,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                     borderRadius: 7,
                     borderWidth: 2,
                     borderColor: "#999",
-                    marginBottom: customURLError ? "4px" : "1.5rem",
+                    marginBottom: customURLError.message ? "4px" : "1.5rem",
                   }}>
                     <input
                       name="customURL"
