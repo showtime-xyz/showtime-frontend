@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import AwesomeDebouncePromise from 'awesome-debounce-promise';
+import AwesomeDebouncePromise from "awesome-debounce-promise";
 import { useRouter } from "next/router";
 import mixpanel from "mixpanel-browser";
 import ClientOnlyPortal from "./ClientOnlyPortal";
@@ -8,17 +8,18 @@ import AppContext from "../context/app-context";
 import CloseButton from "./CloseButton";
 
 const handleUsernameLookup = async (value, context, setCustomURLError) => {
-  const username = value
-    ? value.trim()
-    : null;
+  const username = value ? value.trim() : null;
   let validUsername;
   try {
     if (username === null || username === context.myProfile?.username) {
       validUsername = true;
     } else {
-      const result = await backend.get(`/v1/username_available?username=${username}`, {
-        method: "get",
-      });
+      const result = await backend.get(
+        `/v1/username_available?username=${username}`,
+        {
+          method: "get",
+        }
+      );
       validUsername = result?.data?.data;
     }
   } catch {
@@ -26,11 +27,14 @@ const handleUsernameLookup = async (value, context, setCustomURLError) => {
   }
   setCustomURLError(
     validUsername
-      ? { isError: false, message: username === null ? "" : "Username is available" }
-      : { isError: true, message: "This username is not available" }
+      ? {
+          isError: false,
+          message: username === null ? "" : "Username is available",
+        }
+      : { isError: true, message: "Username is not available" }
   );
   return validUsername;
-}
+};
 const handleDebouncedUsernameLookup = AwesomeDebouncePromise(
   handleUsernameLookup,
   400
@@ -42,7 +46,10 @@ export default function Modal({ isOpen, setEditModalOpen }) {
   const context = useContext(AppContext);
   const [nameValue, setNameValue] = useState(null);
   const [customURLValue, setCustomURLValue] = useState("");
-  const [customURLError, setCustomURLError] = useState({ isError: false, message: "" });
+  const [customURLError, setCustomURLError] = useState({
+    isError: false,
+    message: "",
+  });
   const [bioValue, setBioValue] = useState(null);
   const [websiteValue, setWebsiteValue] = useState(null);
 
@@ -59,10 +66,12 @@ export default function Modal({ isOpen, setEditModalOpen }) {
     event.preventDefault();
     mixpanel.track("Save profile edit");
 
-    const username = customURLValue
-      ? customURLValue.trim()
-      : null;
-    const validUsername = await handleUsernameLookup(customURLValue, context, setCustomURLError);
+    const username = customURLValue ? customURLValue.trim() : null;
+    const validUsername = await handleUsernameLookup(
+      customURLValue,
+      context,
+      setCustomURLError
+    );
     if (!validUsername) {
       return;
     }
@@ -96,7 +105,10 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 
     setEditModalOpen(false);
     const wallet_addresses = context.myProfile?.wallet_addresses;
-    router.push(`/${username || (wallet_addresses && wallet_addresses[0]) || ""}`);
+
+    router.push(
+      `/${username || (wallet_addresses && wallet_addresses[0]) || ""}`
+    );
   };
   return (
     <>
@@ -140,26 +152,36 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                     }}
                   />
                   <label htmlFor="customURL" style={{ fontWeight: 600 }}>
-                    Custom URL
+                    Custom URL{" "}
+                    <span
+                      style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
+                    >
+                      (optional)
+                    </span>
                   </label>
-                  <div style={{
-                    position: "relative",
-                    borderRadius: 7,
-                    borderWidth: 2,
-                    borderColor: "#999",
-                    marginBottom: customURLError.message ? "4px" : "1.5rem",
-                  }}>
+                  <div
+                    style={{
+                      position: "relative",
+                      borderRadius: 7,
+                      borderWidth: 2,
+                      borderColor: "#999",
+                      marginBottom: customURLError.message ? "4px" : "1.5rem",
+                    }}
+                  >
                     <input
                       name="customURL"
                       placeholder="Enter custom URL"
                       value={customURLValue}
-                      autoFocus
                       onChange={(e) => {
                         const value = e.target.value;
                         const urlRegex = /^[a-zA-Z0-9-]*$/;
                         if (urlRegex.test(value)) {
                           setCustomURLValue(value);
-                          handleDebouncedUsernameLookup(value, context, setCustomURLError);
+                          handleDebouncedUsernameLookup(
+                            value,
+                            context,
+                            setCustomURLError
+                          );
                         }
                       }}
                       type="text"
@@ -169,20 +191,41 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         color: "black",
                         borderRadius: 7,
                         padding: 10,
-                        paddingLeft: 195,
+                        paddingLeft: 175,
                       }}
+                      autoComplete="false"
                     />
-                    <div style={{ position: "absolute", top: 0, left: 0, padding: 10, color: "#e45cff" }}>{SHOWTIME_PROD_URL}</div>
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        paddingLeft: 10,
+                        paddingTop: 13,
+                        paddingBottom: 12,
+                        paddingRight: 10,
+                        borderBottomLeftRadius: 7,
+                        borderTopLeftRadius: 7,
+                        backgroundColor: "#eee",
+                        color: "#666",
+                        fontSize: 13,
+                      }}
+                    >
+                      {SHOWTIME_PROD_URL}
+                    </div>
                   </div>
-                  {customURLError.message &&
+                  {customURLError.message && (
                     <div
                       style={{
                         color: customURLError.isError ? "red" : "#35bb5b",
                         fontSize: 12,
                         marginBottom: "1.5rem",
-                      }}>
+                      }}
+                      className="text-right"
+                    >
                       {customURLError.message}
-                    </div>}
+                    </div>
+                  )}
                   <label htmlFor="bio" style={{ fontWeight: 600 }}>
                     About me{" "}
                     <span
@@ -249,7 +292,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                     type="submit"
                     className="showtime-green-button px-5 py-3 float-right"
                     style={{ borderColor: "#35bb5b", borderWidth: 2 }}
-                  //onClick={() => setEditModalOpen(false)}
+                    //onClick={() => setEditModalOpen(false)}
                   >
                     Save changes
                   </button>

@@ -141,7 +141,12 @@ const Profile = ({
     if (typeof context.user !== "undefined") {
       if (context.user) {
         // Logged in?
-        if (slug_address === context.user.publicAddress || slug_address === context.myProfile?.username) {
+        if (
+          context.myProfile?.wallet_addresses
+            .map((a) => a.toLowerCase())
+            .includes(slug_address.toLowerCase()) ||
+          slug_address === context.myProfile?.username
+        ) {
           setIsMyProfile(true);
           mixpanel.track("Self profile view", { slug: slug_address });
         } else {
@@ -307,11 +312,11 @@ const Profile = ({
                 ? context.myProfile.name
                 : "Unnamed"
               : name
-                ? name
-                : "Unnamed"
-            : name
               ? name
-              : "Unnamed"}
+              : "Unnamed"
+            : name
+            ? name
+            : "Unnamed"}
         </title>
 
         <meta
@@ -405,11 +410,11 @@ const Profile = ({
                             ? context.myProfile.name
                             : "Unnamed"
                           : name
-                            ? name
-                            : "Unnamed"
-                        : name
                           ? name
-                          : "Unnamed"}
+                          : "Unnamed"
+                        : name
+                        ? name
+                        : "Unnamed"}
                     </div>
                     <div>
                       <ShareButton
@@ -445,8 +450,8 @@ const Profile = ({
                           style={{ whiteSpace: "nowrap", fontWeight: 400 }}
                         >
                           {context.myProfile &&
-                            context.myProfile.img_url &&
-                            !context.myProfile.img_url.includes("opensea-profile")
+                          context.myProfile.img_url &&
+                          !context.myProfile.img_url.includes("opensea-profile")
                             ? "Edit photo"
                             : "Add photo"}
                         </a>
@@ -476,15 +481,16 @@ const Profile = ({
                       </div>
                     ) : null}
                     <div
-                      className={`${isMyProfile && context.myProfile
-                        ? !context.myProfile.bio &&
-                          !context.myProfile.website_url
+                      className={`${
+                        isMyProfile && context.myProfile
+                          ? !context.myProfile.bio &&
+                            !context.myProfile.website_url
+                            ? "hidden"
+                            : "flex-1"
+                          : !bio && !website_url
                           ? "hidden"
                           : "flex-1"
-                        : !bio && !website_url
-                          ? "hidden"
-                          : "flex-1"
-                        } mt-8 text-base align-center flex flex-col justify-center items-center md:items-start`}
+                      } mt-8 text-base align-center flex flex-col justify-center items-center md:items-start`}
                     >
                       <h4 className="text-black mb-2 text-lg font-semibold">
                         About
@@ -509,7 +515,7 @@ const Profile = ({
                             <a
                               href={
                                 context.myProfile.website_url.slice(0, 4) ===
-                                  "http"
+                                "http"
                                   ? context.myProfile.website_url
                                   : "https://" + context.myProfile.website_url
                               }
@@ -568,8 +574,8 @@ const Profile = ({
                         style={{ whiteSpace: "nowrap", fontWeight: 400 }}
                       >
                         {context.myProfile &&
-                          context.myProfile.img_url &&
-                          !context.myProfile.img_url.includes("opensea-profile")
+                        context.myProfile.img_url &&
+                        !context.myProfile.img_url.includes("opensea-profile")
                           ? "Edit photo"
                           : "Add photo"}
                       </a>
@@ -633,8 +639,8 @@ const Profile = ({
                       : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                     : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                   : img_url
-                    ? img_url
-                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                  ? img_url
+                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
               }
             />
           </div>
@@ -645,10 +651,10 @@ const Profile = ({
               selectedGrid === "created"
                 ? createdItems
                 : selectedGrid === "owned"
-                  ? ownedItems
-                  : selectedGrid === "liked"
-                    ? likedItems
-                    : null
+                ? ownedItems
+                : selectedGrid === "liked"
+                ? likedItems
+                : null
             }
             isLoading={isLoadingCards}
           />
