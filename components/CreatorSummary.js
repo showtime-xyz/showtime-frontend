@@ -36,7 +36,7 @@ export default function CreatorSummary({
           </p>
         </a>
       </Link>
-      {bio && <div className="py-4 text-gray-500">{bio}</div>}
+      {bio && <div className="pb-4 text-gray-500">{bio}</div>}
       <Link href="/[profile]" as={`/${address}`}>
         <a onClick={closeModal}>
           <div className="px-6 py-2 mt-2 border-2 border-gray-300 rounded-xl flex items-center justify-center w-max text-gray-300 hover:border-stpink transition hover:text-stpink">

@@ -23,10 +23,13 @@ const TokenDetailBody = ({
   handleUnlike,
   showTooltip,
   setEditModalOpen,
+  ownershipDetails,
   columns,
 }) => {
   const context = useContext(AppContext);
   const { isMobile } = context;
+  console.log(ownershipDetails);
+  console.log(item);
 
   const getBackgroundColor = () => {
     if (
@@ -268,66 +271,82 @@ const TokenDetailBody = ({
           {/*  */}
           {/* Artist and Owned by Section */}
 
-          <div className="flex flex-col md:flex-row mt-4">
-            {/* artist section */}
-            <div className="flex-1 p-4">
-              {item.creator_address && (
-                <>
-                  <div className="md:text-lg py-4">Creator</div>
-                  <CreatorSummary
-                    address={item.creator_address}
-                    name={item.creator_name}
-                    imageUrl={item.creator_img_url}
-                    closeModal={() => {
-                      if (setEditModalOpen) {
-                        setEditModalOpen(false);
-                      }
-                    }}
-                  />
-                </>
-              )}
-            </div>
+          {ownershipDetails ? (
+            <div className="flex flex-col md:flex-row mt-4">
+              {/* artist section */}
+              <div className="flex-1 p-4">
+                {item.creator_address && (
+                  <>
+                    <div className="md:text-lg py-4">Creator</div>
+                    <CreatorSummary
+                      address={item.creator_address}
+                      name={item.creator_name}
+                      imageUrl={item.creator_img_url}
+                      bio={ownershipDetails.creator_bio}
+                      closeModal={() => {
+                        if (setEditModalOpen) {
+                          setEditModalOpen(false);
+                        }
+                      }}
+                    />
+                  </>
+                )}
+              </div>
 
-            {/* owned by section */}
-            <div className="flex-1 p-4">
-              {item.owner_address && (
-                <div>
-                  <div className="md:text-lg py-2">Owned By</div>
-                  <div className="inline-block">
-                    <Link href="/[profile]" as={`/${item.owner_address}`}>
-                      <a
-                        onClick={() => {
-                          if (setEditModalOpen) {
-                            setEditModalOpen(false);
-                          }
-                        }}
-                      >
-                        <UserTimestampCard
-                          name={item.owner_name}
-                          imageUrl={item.owner_img_url}
-                          // timestamp={Date.now()}
-                        />
-                      </a>
-                    </Link>
+              {/* owned by section */}
+              <div className="flex-1 p-4">
+                {item.owner_address && (
+                  <div>
+                    <div className="md:text-lg py-2">Owned By</div>
+                    <div>
+                      <Link href="/[profile]" as={`/${item.owner_address}`}>
+                        <a
+                          onClick={() => {
+                            if (setEditModalOpen) {
+                              setEditModalOpen(false);
+                            }
+                          }}
+                        >
+                          <UserTimestampCard
+                            name={item.owner_name}
+                            imageUrl={item.owner_img_url}
+                            timestamp={
+                              ownershipDetails.transfers.length > 0
+                                ? ownershipDetails.transfers[0].timestamp
+                                : item.token_created
+                            }
+                          />
+                        </a>
+                      </Link>
+                    </div>
                   </div>
+                )}
+                {/* History Section */}
+                {/*  */}
+                <div className="mt-8">
+                  <div className="md:text-lg py-2">History</div>
+                  <TokenHistoryCard
+                    history={[
+                      ...ownershipDetails.transfers.map((transfer) => ({
+                        address: transfer.to_address,
+                        name: transfer.to_name ? transfer.to_name : "Unnamed",
+                        timestamp: transfer.timestamp,
+                      })),
+                      // {
+                      //   address: item.creator_address,
+                      //   name: item.creator_name,
+                      //   timestamp: item.token_created,
+                      // },
+                    ]}
+                  />
                 </div>
-              )}
-              {/* History Section */}
-              {/*  */}
-              {/* <div className="mt-8">
-                <div className="md:text-lg py-2">History</div>
-                <TokenHistoryCard
-                  history={[
-                    {
-                      name: "Test Name",
-                      address: "0xe38171c839d3ff70147829d843ee8f9794bc2299",
-                      timestamp: "February 11 at 12:35pm",
-                    },
-                  ]}
-                />
-              </div> */}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex items-center justify-center mt-8">
+              <div className="loading-card-spinner" />
+            </div>
+          )}
 
           {/* OpenSea Link */}
           <div style={{ width: 160 }} className="mt-12">

@@ -4,6 +4,7 @@ import ClientOnlyPortal from "./ClientOnlyPortal";
 import AppContext from "../context/app-context";
 //import CloseButton from "./CloseButton";
 import TokenDetailBody from "./TokenDetailBody";
+import backend from "../lib/backend";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleRight,
@@ -28,6 +29,7 @@ export default function Modal({
   const context = useContext(AppContext);
 
   const [isStacked, setIsStacked] = useState(false);
+  const [ownershipDetails, setOwnershipDetails] = useState(null);
   useEffect(() => {
     if (context.windowSize && context.windowSize.width < 1024) {
       setIsStacked(true);
@@ -35,6 +37,21 @@ export default function Modal({
       setIsStacked(false);
     }
   }, [context.windowSize]);
+
+  useEffect(() => {
+    setOwnershipDetails(null);
+    const getOwnershipDetails = async (nftId) => {
+      const detailsData = await backend.get(`/v1/nft_detail/${nftId}`);
+      const {
+        data: { data: details },
+      } = detailsData;
+      setOwnershipDetails(details);
+    };
+    if (item && isOpen) {
+      getOwnershipDetails(item.nft_id);
+    }
+    return () => setOwnershipDetails(null);
+  }, [isOpen, item]);
 
   return (
     <>
@@ -139,6 +156,7 @@ export default function Modal({
                 setEditModalOpen={setEditModalOpen}
                 isStacked={isStacked}
                 columns={columns}
+                ownershipDetails={ownershipDetails}
                 //originalImageDimensions={originalImageDimensions}
               />
             </div>
