@@ -157,6 +157,7 @@ const Profile = ({
   }, [
     wallet_addresses,
     typeof context.user,
+    context.myProfile,
     context.user ? context.user.publicAddress : null,
   ]);
 
