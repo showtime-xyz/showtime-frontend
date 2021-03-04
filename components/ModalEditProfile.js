@@ -13,7 +13,7 @@ const handleUsernameLookup = async (value, context, setCustomURLError) => {
     : null;
   let validUsername;
   try {
-    if (username === context.myProfile?.username) {
+    if (username === null || username === context.myProfile?.username) {
       validUsername = true;
     } else {
       const result = await backend.get(`/v1/username_available?username=${username}`, {
