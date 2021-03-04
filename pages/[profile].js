@@ -14,19 +14,22 @@ import ProfileInfoPill from "../components/ProfileInfoPill";
 import ModalUserList from "../components/ModalUserList";
 
 export async function getServerSideProps(context) {
-  const { profile } = context.query;
+  const { res, query } = context;
 
-  let slug_address;
-  if (profile === "d-block-europe") {
-    slug_address = "0x78e2426d33b365665c82a9f5aba1b7b488930d38";
-  } else {
-    slug_address = profile;
-  }
+  const slug_address = query.profile;
 
   // Get profile metadata
-  const response_profile = await backend.get(
-    `/v2/profile_server/${slug_address}?limit=150`
-  );
+  let response_profile;
+  try {
+    response_profile = await backend.get(`/v2/profile_server/${slug_address}`);
+  } catch (err) {
+    if (err.response.status == 404) {
+      // Redirect to homepage
+      res.writeHead(302, { location: "/" });
+      res.end();
+    }
+  }
+
   const data_profile = response_profile.data.data;
 
   const name = data_profile.profile.name;
@@ -141,7 +144,13 @@ const Profile = ({
     if (typeof context.user !== "undefined") {
       if (context.user) {
         // Logged in?
-        if (slug_address === context.user.publicAddress) {
+        if (
+          context.myProfile?.wallet_addresses
+            .map((a) => a.toLowerCase())
+            .includes(slug_address.toLowerCase()) ||
+          slug_address.toLowerCase() ===
+            context.myProfile?.username?.toLowerCase()
+        ) {
           setIsMyProfile(true);
           mixpanel.track("Self profile view", { slug: slug_address });
         } else {
@@ -157,6 +166,7 @@ const Profile = ({
   }, [
     wallet_addresses,
     typeof context.user,
+    context.myProfile,
     context.user ? context.user.publicAddress : null,
   ]);
 

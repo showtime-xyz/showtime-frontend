@@ -24,9 +24,8 @@ const Header = () => {
         }}
       >
         <div
-          className={`flex flex-row items-center ${
-            !context.gridWidth ? "invisible" : ""
-          }`}
+          className={`flex flex-row items-center ${!context.gridWidth ? "invisible" : ""
+            }`}
           style={
             context.isMobile
               ? {}
@@ -78,7 +77,7 @@ const Header = () => {
           {/* End desktop-only menu */}
           <div>
             {context.user && context.myProfile !== undefined ? (
-              <Link href="/[profile]" as={`/${context.user.publicAddress}`}>
+              <Link href="/[profile]" as={`/${context.myProfile.username || context.user.publicAddress}`}>
                 <a
                   className="showtime-login-button-outline text-sm px-2 py-2 md:text-base flex flex-row items-center"
                   onClick={() => {
@@ -137,9 +136,8 @@ const Header = () => {
         </div>
         {/* Start mobile-only menu */}
         <div
-          className={`block md:hidden pt-4 ${
-            !context.gridWidth ? "invisible" : ""
-          }`}
+          className={`block md:hidden pt-4 ${!context.gridWidth ? "invisible" : ""
+            }`}
           style={{
             backgroundColor: "white",
           }}

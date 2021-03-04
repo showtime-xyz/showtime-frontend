@@ -128,7 +128,7 @@ const TokenDetailBody = ({
           <div className="p-4 flex flex-row">
             <div className="flex-shrink">
               {item.creator_address ? (
-                <Link href="/[profile]" as={`/${item.creator_address}`}>
+                <Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
                   <a className="flex flex-row items-center ">
                     <div>
                       <img
@@ -158,11 +158,11 @@ const TokenDetailBody = ({
             { flexShrink: 0 },
             item.token_has_video
               ? {
-                  backgroundColor: "black",
-                }
+                backgroundColor: "black",
+              }
               : {
-                  backgroundColor: getBackgroundColor(),
-                },
+                backgroundColor: getBackgroundColor(),
+              },
             setEditModalOpen
               ? isStacked
                 ? null
@@ -190,9 +190,9 @@ const TokenDetailBody = ({
                   ? isStacked
                     ? null
                     : {
-                        borderBottomLeftRadius: 7,
-                        borderTopLeftRadius: 7,
-                      }
+                      borderBottomLeftRadius: 7,
+                      borderTopLeftRadius: 7,
+                    }
                   : null,
                 {
                   margin: "auto",
@@ -213,9 +213,9 @@ const TokenDetailBody = ({
                     ? isStacked
                       ? null
                       : {
-                          borderBottomLeftRadius: 7,
-                          borderTopLeftRadius: 7,
-                        }
+                        borderBottomLeftRadius: 7,
+                        borderTopLeftRadius: 7,
+                      }
                     : null,
                   fullResLoaded === true ? { display: "none" } : null
                 )}
@@ -235,9 +235,9 @@ const TokenDetailBody = ({
                     ? isStacked
                       ? null
                       : {
-                          borderBottomLeftRadius: 7,
-                          borderTopLeftRadius: 7,
-                        }
+                        borderBottomLeftRadius: 7,
+                        borderTopLeftRadius: 7,
+                      }
                     : null,
                   fullResLoaded ? null : { display: "none" }
                 )}
@@ -258,8 +258,8 @@ const TokenDetailBody = ({
             isStacked
               ? null
               : {
-                  width: metadataWidth,
-                }
+                width: metadataWidth,
+              }
           )}
         >
           <div
@@ -321,7 +321,7 @@ const TokenDetailBody = ({
                 Created by
                 <div className="flex flex-row  mt-1">
                   <div className="flex-shrink">
-                    <Link href="/[profile]" as={`/${item.creator_address}`}>
+                    <Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
                       <a
                         className="flex flex-row items-center showtime-follower-button rounded-full"
                         onClick={() => {
@@ -365,7 +365,7 @@ const TokenDetailBody = ({
                 Owned by
                 <div className="flex flex-row  mt-1">
                   <div className="flex-shrink">
-                    <Link href="/[profile]" as={`/${item.owner_address}`}>
+                    <Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
                       <a
                         className="flex flex-row items-center showtime-follower-button rounded-full "
                         onClick={() => {

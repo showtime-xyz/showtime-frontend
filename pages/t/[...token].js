@@ -150,18 +150,18 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
           //nextSrc={images[(photoIndex + 1) % images.length]}
           //prevSrc={images[(photoIndex + images.length - 1) % images.length]}
           onCloseRequest={() => setLightboxOpen(false)}
-          //enableZoom={false}
-          /*
-          onMovePrevRequest={() =>
-            this.setState({
-              photoIndex: (photoIndex + images.length - 1) % images.length,
-            })
-          }
-          onMoveNextRequest={() =>
-            this.setState({
-              photoIndex: (photoIndex + 1) % images.length,
-            })
-          }*/
+        //enableZoom={false}
+        /*
+        onMovePrevRequest={() =>
+          this.setState({
+            photoIndex: (photoIndex + images.length - 1) % images.length,
+          })
+        }
+        onMoveNextRequest={() =>
+          this.setState({
+            photoIndex: (photoIndex + 1) % images.length,
+          })
+        }*/
         />
       )}
 
@@ -237,7 +237,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
               <>
                 <span style={{ fontWeight: 400 }}>{"Created by "}</span>
 
-                <Link href="/[profile]" as={`/${item.creator_address}`}>
+                <Link href="/[profile]" as={`/${item.creator_username || item.creator_address}`}>
                   <a className="showtime-link" style={{ fontWeight: 600 }}>
                     {item.creator_name}
                   </a>
@@ -253,7 +253,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
               {item.multiple_owners ? (
                 "multiple owners"
               ) : item.owner_id ? (
-                <Link href="/[profile]" as={`/${item.owner_address}`}>
+                <Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
                   <a className="showtime-link" style={{ fontWeight: 600 }}>
                     {item.owner_name}
                   </a>
@@ -343,9 +343,8 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
           </div>
           <div className="text-center">
             {createdItems.length === 0
-              ? `We couldn't find any more items created by ${
-                  isMyProfile ? "you" : "this person"
-                }.`
+              ? `We couldn't find any more items created by ${isMyProfile ? "you" : "this person"
+              }.`
               : null}
           </div>
           <TokenGridV4 items={createdItems} />
@@ -353,22 +352,21 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
       )}
       {item.multiple_owners ? null : ownedItems.length ===
         0 ? null : createdItems.length > 0 ? null : (
-        <>
-          <div className="flex flex-col text-center w-full mt-8">
-            <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-4 py-10">
-              More from this owner
+          <>
+            <div className="flex flex-col text-center w-full mt-8">
+              <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-4 py-10">
+                More from this owner
             </div>
-          </div>
-          <div className="text-center">
-            {ownedItems.length === 0
-              ? `We couldn't find any more items owned by ${
-                  isMyProfile ? "you" : "this person"
+            </div>
+            <div className="text-center">
+              {ownedItems.length === 0
+                ? `We couldn't find any more items owned by ${isMyProfile ? "you" : "this person"
                 }.`
-              : null}
-          </div>
-          <TokenGridV4 items={ownedItems} />
-        </>
-      )}
+                : null}
+            </div>
+            <TokenGridV4 items={ownedItems} />
+          </>
+        )}
       <div className="mb-16"></div>
     </Layout>
   );
