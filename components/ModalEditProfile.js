@@ -128,7 +128,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                 >
                   Edit profile
                 </div>
-                <div className="my-4">
+                <div className="mt-4">
                   <label htmlFor="name" style={{ fontWeight: 600 }}>
                     Name
                   </label>
@@ -149,6 +149,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       borderRadius: 7,
                       borderWidth: 2,
                       borderColor: "#999",
+                      fontSize: 15,
                     }}
                   />
                   <label htmlFor="customURL" style={{ fontWeight: 600 }}>
@@ -165,7 +166,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       borderRadius: 7,
                       borderWidth: 2,
                       borderColor: "#999",
-                      marginBottom: customURLError.message ? "4px" : "1.5rem",
+                      marginBottom: "4px",
                     }}
                   >
                     <input
@@ -192,6 +193,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         borderRadius: 7,
                         padding: 10,
                         paddingLeft: 175,
+                        fontSize: 15,
                       }}
                       autoComplete="false"
                     />
@@ -201,7 +203,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         top: 0,
                         left: 0,
                         paddingLeft: 10,
-                        paddingTop: 13,
+                        paddingTop: 11,
                         paddingBottom: 12,
                         paddingRight: 10,
                         borderBottomLeftRadius: 7,
@@ -214,18 +216,16 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       {SHOWTIME_PROD_URL}
                     </div>
                   </div>
-                  {customURLError.message && (
-                    <div
-                      style={{
-                        color: customURLError.isError ? "red" : "#35bb5b",
-                        fontSize: 12,
-                        marginBottom: "1.5rem",
-                      }}
-                      className="text-right"
-                    >
-                      {customURLError.message}
-                    </div>
-                  )}
+                  <div
+                    style={{
+                      color: customURLError.isError ? "red" : "#35bb5b",
+                      fontSize: 12,
+                      visibility: customURLError.message ? "visible" : "hidden",
+                    }}
+                    className="text-right"
+                  >
+                    &nbsp;{customURLError.message}
+                  </div>
                   <label htmlFor="bio" style={{ fontWeight: 600 }}>
                     About me{" "}
                     <span
@@ -237,7 +237,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   <textarea
                     name="bio"
                     placeholder=""
-                    value={bioValue}
+                    value={bioValue ? bioValue : ""}
                     onChange={(e) => {
                       setBioValue(e.target.value);
                     }}
@@ -248,8 +248,9 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       color: "black",
                       padding: 10,
                       borderRadius: 7,
-                      height: 160,
+                      height: 114,
                       borderWidth: 2,
+                      fontSize: 15,
                       borderColor: "#999",
                     }}
                   ></textarea>
@@ -281,7 +282,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       color: "black",
                       padding: 10,
                       borderRadius: 7,
-
+                      fontSize: 15,
                       borderWidth: 2,
                       borderColor: "#999",
                     }}
@@ -325,8 +326,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                 background-color: white;
                 position: absolute;
                 top: 5%;
-                right: 5%;
-                left: 5%;
+                right: 3%;
+                left: 3%;
                 padding: 1em;
                 border-radius: 7px;
                 max-width: 400px;
