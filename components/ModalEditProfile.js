@@ -1,4 +1,5 @@
 import { useContext, useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import mixpanel from "mixpanel-browser";
 import ClientOnlyPortal from "./ClientOnlyPortal";
 import backend from "../lib/backend";
@@ -6,6 +7,7 @@ import AppContext from "../context/app-context";
 import CloseButton from "./CloseButton";
 
 export default function Modal({ isOpen, setEditModalOpen }) {
+  const router = useRouter();
   const SHOWTIME_PROD_URL = "alpha.tryshowtime.com/";
   const context = useContext(AppContext);
   const [nameValue, setNameValue] = useState(null);
@@ -77,6 +79,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
     });
 
     setEditModalOpen(false);
+    router.push(`/${username}`);
   };
   return (
     <>
