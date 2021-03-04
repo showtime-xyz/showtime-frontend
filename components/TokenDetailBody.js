@@ -11,6 +11,7 @@ import AppContext from "../context/app-context";
 import CreatorSummary from "./CreatorSummary";
 import { removeTags, truncateWithEllipses } from "../lib/utilities";
 import UserTimestampCard from "./UserTimestampCard";
+import TokenHistoryCard from "./TokenHistoryCard";
 
 // how wide the media will be
 const TOKEN_MEDIA_WIDTH = 500;
@@ -311,10 +312,22 @@ const TokenDetailBody = ({
                   </div>
                 </div>
               )}
+              {/* History Section */}
+              {/*  */}
+              {/* <div className="mt-8">
+                <div className="md:text-lg py-2">History</div>
+                <TokenHistoryCard
+                  history={[
+                    {
+                      name: "Test Name",
+                      address: "0xe38171c839d3ff70147829d843ee8f9794bc2299",
+                      timestamp: "February 11 at 12:35pm",
+                    },
+                  ]}
+                />
+              </div> */}
             </div>
           </div>
-          {/* History Section */}
-          {/*  */}
 
           {/* OpenSea Link */}
           <div style={{ width: 160 }} className="mt-12">
