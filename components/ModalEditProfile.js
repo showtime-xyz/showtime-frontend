@@ -24,6 +24,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
   }, [context.myProfile]);
 
   const handleSubmit = async (event) => {
+    setCustomURLError("");
     mixpanel.track("Save profile edit");
     event.preventDefault();
 
@@ -32,10 +33,14 @@ export default function Modal({ isOpen, setEditModalOpen }) {
       : null;
     let validUsername;
     try {
-      const result = await backend.get(`/v1/username_available?username=${username}`, {
-        method: "get",
-      });
-      validUsername = result?.data?.data;
+      if (username === context.myProfile?.username) {
+        validUsername = true;
+      } else {
+        const result = await backend.get(`/v1/username_available?username=${username}`, {
+          method: "get",
+        });
+        validUsername = result?.data?.data;
+      }
     } catch {
       validUsername = false;
     }
