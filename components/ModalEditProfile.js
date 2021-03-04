@@ -154,11 +154,11 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   />
                   <label htmlFor="customURL" style={{ fontWeight: 600 }}>
                     Custom URL{" "}
-                    <span
+                    {/*<span
                       style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
                     >
                       (optional)
-                    </span>
+                    </span>*/}
                   </label>
                   <div
                     style={{
@@ -168,6 +168,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       borderColor: "#999",
                       marginBottom: "4px",
                     }}
+                    className="mt-1"
                   >
                     <input
                       name="customURL"
@@ -192,7 +193,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         color: "black",
                         borderRadius: 7,
                         padding: 10,
-                        paddingLeft: 175,
+                        paddingLeft: 170,
                         fontSize: 15,
                       }}
                       autoComplete="false"
@@ -205,7 +206,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         paddingLeft: 10,
                         paddingTop: 11,
                         paddingBottom: 12,
-                        paddingRight: 10,
+                        paddingRight: 7,
                         borderBottomLeftRadius: 7,
                         borderTopLeftRadius: 7,
                         backgroundColor: "#eee",
