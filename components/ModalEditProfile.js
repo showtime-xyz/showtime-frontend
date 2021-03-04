@@ -1,4 +1,5 @@
 import { useContext, useState, useEffect } from "react";
+import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import { useRouter } from "next/router";
 import mixpanel from "mixpanel-browser";
 import ClientOnlyPortal from "./ClientOnlyPortal";
@@ -6,19 +7,48 @@ import backend from "../lib/backend";
 import AppContext from "../context/app-context";
 import CloseButton from "./CloseButton";
 
+const handleUsernameLookup = async (value, context, setCustomURLError) => {
+  const username = value
+    ? value.trim()
+    : null;
+  let validUsername;
+  try {
+    if (username === context.myProfile?.username) {
+      validUsername = true;
+    } else {
+      const result = await backend.get(`/v1/username_available?username=${username}`, {
+        method: "get",
+      });
+      validUsername = result?.data?.data;
+    }
+  } catch {
+    validUsername = false;
+  }
+  setCustomURLError(
+    validUsername
+      ? { isError: false, message: "Username is available" }
+      : { isError: true, message: "This username is not available" }
+  );
+  return validUsername;
+}
+const handleDebouncedUsernameLookup = AwesomeDebouncePromise(
+  handleUsernameLookup,
+  400
+);
+
 export default function Modal({ isOpen, setEditModalOpen }) {
   const router = useRouter();
   const SHOWTIME_PROD_URL = "alpha.tryshowtime.com/";
   const context = useContext(AppContext);
   const [nameValue, setNameValue] = useState(null);
-  const [customURLValue, setCustomURLValue] = useState(SHOWTIME_PROD_URL);
-  const [customURLError, setCustomURLError] = useState("");
+  const [customURLValue, setCustomURLValue] = useState("");
+  const [customURLError, setCustomURLError] = useState({ isError: false, message: "" });
   const [bioValue, setBioValue] = useState(null);
   const [websiteValue, setWebsiteValue] = useState(null);
 
   useEffect(() => {
     if (context.myProfile) {
-      setCustomURLValue(SHOWTIME_PROD_URL + (context.myProfile.username || ""));
+      setCustomURLValue(context.myProfile.username || "");
       setNameValue(context.myProfile.name);
       setBioValue(context.myProfile.bio);
       setWebsiteValue(context.myProfile.website_url);
@@ -26,28 +56,14 @@ export default function Modal({ isOpen, setEditModalOpen }) {
   }, [context.myProfile]);
 
   const handleSubmit = async (event) => {
-    setCustomURLError("");
-    mixpanel.track("Save profile edit");
     event.preventDefault();
+    mixpanel.track("Save profile edit");
 
     const username = customURLValue
-      ? customURLValue.substring(SHOWTIME_PROD_URL.length, customURLValue.length).trim()
+      ? customURLValue.trim()
       : null;
-    let validUsername;
-    try {
-      if (username === context.myProfile?.username) {
-        validUsername = true;
-      } else {
-        const result = await backend.get(`/v1/username_available?username=${username}`, {
-          method: "get",
-        });
-        validUsername = result?.data?.data;
-      }
-    } catch {
-      validUsername = false;
-    }
+    const validUsername = await handleUsernameLookup(customURLValue, context, setCustomURLError);
     if (!validUsername) {
-      setCustomURLError("This username is not available");
       return;
     }
     // Post changes to the API
@@ -79,7 +95,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
     });
 
     setEditModalOpen(false);
-    router.push(`/${username}`);
+    const wallet_addresses = context.myProfile?.wallet_addresses;
+    router.push(`/${username || (wallet_addresses && wallet_addresses[0]) || ""}`);
   };
   return (
     <>
@@ -125,44 +142,46 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   <label htmlFor="customURL" style={{ fontWeight: 600 }}>
                     Custom URL
                   </label>
-                  <input
-                    name="customURL"
-                    placeholder="Enter your custom URL"
-                    value={customURLValue}
-                    autoFocus
-                    onChange={(e) => {
-                      if (e.target.value === "") {
-                        setCustomURLError("");
-                        setCustomURLValue(SHOWTIME_PROD_URL)
-                      }
-                      const prefix = e.target.value.substring(0, SHOWTIME_PROD_URL.length);
-                      const suffix = e.target.value.substring(SHOWTIME_PROD_URL.length, e.target.value.length);
-                      const urlRegex = /^[a-zA-Z0-9-]*$/;
-                      if (prefix === SHOWTIME_PROD_URL && urlRegex.test(suffix)) {
-                        setCustomURLError("");
-                        setCustomURLValue(e.target.value);
-                      }
-                    }}
-                    type="text"
-                    maxLength={30 + SHOWTIME_PROD_URL.length}
-                    className="w-full mt-1"
-                    style={{
-                      color: "black",
-                      padding: 10,
-                      borderRadius: 7,
-                      borderWidth: 2,
-                      borderColor: "#999",
-                      marginBottom: customURLError ? "4px" : "1.5rem",
-                    }}
-                  />
-                  {customURLError &&
+                  <div style={{
+                    position: "relative",
+                    borderRadius: 7,
+                    borderWidth: 2,
+                    borderColor: "#999",
+                    marginBottom: customURLError ? "4px" : "1.5rem",
+                  }}>
+                    <input
+                      name="customURL"
+                      placeholder="Enter custom URL"
+                      value={customURLValue}
+                      autoFocus
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        const urlRegex = /^[a-zA-Z0-9-]*$/;
+                        if (urlRegex.test(value)) {
+                          setCustomURLValue(value);
+                          handleDebouncedUsernameLookup(value, context, setCustomURLError);
+                        }
+                      }}
+                      type="text"
+                      maxLength={30}
+                      className="w-full"
+                      style={{
+                        color: "black",
+                        borderRadius: 7,
+                        padding: 10,
+                        paddingLeft: 195,
+                      }}
+                    />
+                    <div style={{ position: "absolute", top: 0, left: 0, padding: 10, color: "#e45cff" }}>{SHOWTIME_PROD_URL}</div>
+                  </div>
+                  {customURLError.message &&
                     <div
                       style={{
-                        color: "red",
+                        color: customURLError.isError ? "red" : "#35bb5b",
                         fontSize: 12,
                         marginBottom: "1.5rem",
                       }}>
-                      {customURLError}
+                      {customURLError.message}
                     </div>}
                   <label htmlFor="bio" style={{ fontWeight: 600 }}>
                     About me{" "}
