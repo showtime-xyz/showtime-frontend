@@ -18,6 +18,12 @@ export async function getServerSideProps(context) {
 
   const slug_address = query.profile;
 
+  if (slug_address.includes("apple-touch-icon")) {
+    res.writeHead(404);
+    res.end();
+    return { props: {} };
+  }
+
   // Get profile metadata
   let response_profile;
   try {
