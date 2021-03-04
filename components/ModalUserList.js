@@ -37,7 +37,7 @@ export default function ModalUserList({
                 {users.map((profile) => {
                   return (
                     <div key={profile.wallet_address}>
-                      <Link href="/[profile]" as={`/${profile.wallet_address}`}>
+                      <Link href="/[profile]" as={`/${profile?.username || profile.wallet_address}`}>
                         <a className="flex flex-row items-center py-3 transition rounded-lg px-1 hover:bg-gray-100">
                           <div>
                             <img

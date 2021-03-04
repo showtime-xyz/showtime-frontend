@@ -121,7 +121,7 @@ const TokenHeroV2 = ({
             {item.creator_address ? (
               <>
                 <span style={{ fontWeight: 400 }}>{" by "}</span>
-                <Link href="/[profile]" as={`/${item.creator_address}`}>
+                <Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
                   <a className="showtime-link">{item.creator_name}</a>
                 </Link>
               </>
