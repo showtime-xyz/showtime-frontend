@@ -46,10 +46,15 @@ export async function getServerSideProps(context) {
       }, // will be passed to the page component as props
     };
   } catch (err) {
-    if (err.response.status == 404) {
+    if (err.response.status == 400) {
       // Redirect to homepage
       res.writeHead(302, { location: "/" });
       res.end();
+      return { props: {} };
+    } else {
+      res.writeHead(404);
+      res.end();
+      return { props: {} };
     }
   }
 }
