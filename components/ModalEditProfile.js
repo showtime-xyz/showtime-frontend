@@ -11,7 +11,10 @@ const handleUsernameLookup = async (value, context, setCustomURLError) => {
   const username = value ? value.trim() : null;
   let validUsername;
   try {
-    if (username === null || username === context.myProfile?.username) {
+    if (
+      username === null ||
+      username.toLowerCase() === context.myProfile?.username?.toLowerCase()
+    ) {
       validUsername = true;
     } else {
       const result = await backend.get(
@@ -29,9 +32,9 @@ const handleUsernameLookup = async (value, context, setCustomURLError) => {
     validUsername
       ? {
           isError: false,
-          message: username === null ? "" : "URL is available",
+          message: username === null ? "" : "Username is available",
         }
-      : { isError: true, message: "URL is not available" }
+      : { isError: true, message: "Username is not available" }
   );
   return validUsername;
 };
