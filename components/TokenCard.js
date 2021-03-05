@@ -300,7 +300,6 @@ class TokenCard extends React.Component {
                         item={item}
                         handleLike={this.props.handleLike}
                         handleUnlike={this.props.handleUnlike}
-                        showTooltip={this.props.isMobile === false}
                       />
                     </div>
                     <div>

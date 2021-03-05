@@ -18,7 +18,6 @@ export default function Modal({
   setEditModalOpen,
   handleLike,
   handleUnlike,
-  showTooltip,
   goToNext,
   goToPrevious,
   columns,
@@ -149,11 +148,8 @@ export default function Modal({
                 muted={false}
                 handleLike={handleLike}
                 handleUnlike={handleUnlike}
-                showTooltip={showTooltip}
                 className="w-full"
                 setEditModalOpen={setEditModalOpen}
-                isStacked={isStacked}
-                columns={columns}
                 ownershipDetails={ownershipDetails}
                 //originalImageDimensions={originalImageDimensions}
               />

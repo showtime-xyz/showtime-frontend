@@ -83,7 +83,6 @@ const TokenHeroV2 = ({
               item={item}
               handleLike={handleLike}
               handleUnlike={handleUnlike}
-              showTooltip={isMobile === false}
             />
           </div>
           <div>

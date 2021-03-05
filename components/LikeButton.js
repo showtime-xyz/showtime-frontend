@@ -6,8 +6,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 
-const LikeButton = ({ item, handleLike, handleUnlike, showTooltip }) => {
+const LikeButton = ({ item, handleLike, handleUnlike }) => {
   const context = useContext(AppContext);
+  const { isMobile } = context;
   const like_count =
     (context.myLikeCounts && context.myLikeCounts[item?.nft_id]) ||
     item.like_count;
@@ -51,7 +52,7 @@ const LikeButton = ({ item, handleLike, handleUnlike, showTooltip }) => {
           </div>
         </div>
       </button>
-      {context.user ? null : showTooltip ? (
+      {context.user ? null : !isMobile ? (
         <span
           style={{ fontSize: 12, opacity: 0.9, width: 90 }}
           className="tooltip-text bg-black p-3 -mt-6 -ml-24 rounded text-white"
