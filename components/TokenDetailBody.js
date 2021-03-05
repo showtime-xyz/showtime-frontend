@@ -53,7 +53,6 @@ const TokenDetailBody = ({
   const modalRef = useRef();
   const [mediaHeight, setMediaHeight] = useState(null);
   const [mediaWidth, setMediaWidth] = useState(null);
-  const [metadataWidth, setMetadataWidth] = useState(null);
 
   useEffect(() => {
     var aspectRatio = 1;
@@ -80,9 +79,6 @@ const TokenDetailBody = ({
       setMediaWidth(TOKEN_MEDIA_WIDTH);
       setMediaHeight(TOKEN_MEDIA_WIDTH / aspectRatio);
     }
-
-    const metadata = modalRef.current.clientWidth - mWidth;
-    setMetadataWidth(metadata);
   }, [targetRef, item, context.windowSize, isMobile]);
 
   const [fullResLoaded, setFullResLoaded] = useState(null);
