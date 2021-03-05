@@ -12,6 +12,7 @@ import ModalEditPhoto from "../components/ModalEditPhoto";
 import { GridTabs, GridTab } from "../components/GridTabs";
 import ProfileInfoPill from "../components/ProfileInfoPill";
 import ModalUserList from "../components/ModalUserList";
+import ModalAddWallet from "../components/ModalAddWallet";
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
@@ -256,6 +257,7 @@ const Profile = ({
   };
 
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [walletModalOpen, setWalletModalOpen] = useState(false);
   const [pictureModalOpen, setPictureModalOpen] = useState(false);
 
   const [selectedGrid, setSelectedGrid] = useState("created");
@@ -373,6 +375,10 @@ const Profile = ({
 
       {typeof document !== "undefined" ? (
         <>
+          <ModalAddWallet
+            isOpen={walletModalOpen}
+            setWalletModalOpen={setWalletModalOpen}
+          />
           <ModalEditProfile
             isOpen={editModalOpen}
             setEditModalOpen={setEditModalOpen}
@@ -451,7 +457,9 @@ const Profile = ({
                     }}
                   >
                     {context.columns > 2 ? (
-                      wallet_addresses[0]
+                      wallet_addresses.map((address) => {
+                        return <div>{address}</div>;
+                      })
                     ) : isMyProfile ? (
                       <div className="text-center md:text-left">
                         <a
@@ -578,6 +586,18 @@ const Profile = ({
                 {context.columns > 2 ? (
                   isMyProfile ? (
                     <>
+                      <a
+                        href="#"
+                        onClick={() => {
+                          setWalletModalOpen(true);
+                          mixpanel.track("Open add wallet");
+                        }}
+                        className="showtime-logout-link"
+                        style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+                      >
+                        Add wallet [NEW]
+                      </a>
+                      {" \u00A0\u00A0\u00A0 "}
                       <a
                         href="#"
                         onClick={() => {
