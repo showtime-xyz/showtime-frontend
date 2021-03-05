@@ -204,12 +204,12 @@ const TokenDetailBody = ({
           style={{
             overflow: "auto",
             position: "relative",
-            maxWidth: gridWidth,
+            width: gridWidth,
             margin: "auto",
           }}
         >
           {/* Title and description section */}
-          <div className="flex flex-col md:flex-row pb-10">
+          <div className="flex flex-col md:flex-row pb-10 items-stretch w-full">
             <div
               className="pb-0 text-left flex-1 p-4"
               style={{
@@ -318,13 +318,7 @@ const TokenDetailBody = ({
                           <UserTimestampCard
                             name={item.owner_name}
                             imageUrl={item.owner_img_url}
-                            timestamp={
-                              ownershipDetails &&
-                              ownershipDetails.transfers &&
-                              ownershipDetails.transfers.length > 0
-                                ? ownershipDetails.transfers[0].timestamp
-                                : item.token_created
-                            }
+                            timestamp={ownershipDetails.token_last_transferred}
                           />
                         </a>
                       </Link>
@@ -333,7 +327,7 @@ const TokenDetailBody = ({
                 )}
                 {/* History Section */}
                 {/*  */}
-                {ownershipDetails.transfers &&
+                {/* {ownershipDetails.transfers &&
                   ownershipDetails.transfers.length > 0 && (
                     <div className="mt-8">
                       <div className="md:text-lg py-2">History</div>
@@ -355,7 +349,7 @@ const TokenDetailBody = ({
                         ]}
                       />
                     </div>
-                  )}
+                  )} */}
               </div>
             </div>
           ) : (
