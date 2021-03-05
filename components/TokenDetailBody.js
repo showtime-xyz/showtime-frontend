@@ -14,7 +14,7 @@ import UserTimestampCard from "./UserTimestampCard";
 import TokenHistoryCard from "./TokenHistoryCard";
 
 // how wide the media will be
-const TOKEN_MEDIA_WIDTH = 500;
+const TOKEN_MEDIA_WIDTH = 600;
 
 const TokenDetailBody = ({
   item,
@@ -56,7 +56,6 @@ const TokenDetailBody = ({
 
   useEffect(() => {
     var aspectRatio = 1;
-    var hasImageDimensions = false;
 
     // Try to use current image's aspect ratio
     if (item.imageRef && item.imageRef.current) {
@@ -64,8 +63,6 @@ const TokenDetailBody = ({
         aspectRatio =
           item.imageRef.current.clientWidth /
           item.imageRef.current.clientHeight;
-
-        hasImageDimensions = true;
       }
     }
     // Set full height
@@ -171,7 +168,7 @@ const TokenDetailBody = ({
                 style={_.merge(
                   {
                     width: mediaWidth,
-                    height: mediaHeight,
+                    maxWidth: 500,
                   },
                   fullResLoaded === true ? { display: "none" } : null
                 )}
@@ -183,7 +180,6 @@ const TokenDetailBody = ({
                 style={_.merge(
                   {
                     width: mediaWidth,
-                    height: mediaHeight,
                   },
                   fullResLoaded ? null : { display: "none" }
                 )}
