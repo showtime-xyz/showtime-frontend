@@ -13,6 +13,7 @@ import TokenGridV3 from "../../components/TokenGridV3";
 import TokenGridV4 from "../../components/TokenGridV4";
 import AppContext from "../../context/app-context";
 import ModalReportItem from "../../components/ModalReportItem";
+import TokenDetailBody from "../../components/TokenDetailBody";
 
 export async function getServerSideProps(context) {
   const { token: token_array } = context.query;
@@ -128,16 +129,16 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
         </>
       ) : null}
 
-      <div className="flex flex-col text-center w-full">
-        <div
-          className="showtime-title text-center mx-auto w-full text-3xl md:text-5xl mt-5 py-10"
-          style={{
-            overflowWrap: "break-word",
-            wordWrap: "break-word",
-          }}
-        >
-          {item.token_name}
-        </div>
+      <div className="flex flex-col w-full">
+        <TokenDetailBody
+          item={item}
+          muted={false}
+          handleLike={() => {}}
+          handleUnlike={() => {}}
+          className="w-full"
+          setEditModalOpen={() => {}}
+          ownershipDetails={{}}
+        />
       </div>
 
       {lightboxOpen && (
@@ -150,8 +151,8 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
           //nextSrc={images[(photoIndex + 1) % images.length]}
           //prevSrc={images[(photoIndex + images.length - 1) % images.length]}
           onCloseRequest={() => setLightboxOpen(false)}
-        //enableZoom={false}
-        /*
+          //enableZoom={false}
+          /*
         onMovePrevRequest={() =>
           this.setState({
             photoIndex: (photoIndex + images.length - 1) % images.length,
@@ -211,127 +212,9 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
                 </div>
               </button>
             ) : null}
-            <div style={item.token_img_url ? null : { marginTop: -24 }}>
-              <TokenGridV3 isDetail items={[item]} />
-            </div>
           </div>
         </div>
-        <div className="flex lg:w-1/2 p-4 lg:text-left ">
-          <div
-            className="w-full"
-            style={{
-              overflowWrap: "break-word",
-              wordWrap: "break-word",
-            }}
-          >
-            {item.token_description ? (
-              <>
-                <div className="showtime-token-description">
-                  {removeTags(item.token_description)}
-                </div>
-                <br />
-                <br />
-              </>
-            ) : null}
-            {item.creator_id ? (
-              <>
-                <span style={{ fontWeight: 400 }}>{"Created by "}</span>
-
-                <Link href="/[profile]" as={`/${item.creator_username || item.creator_address}`}>
-                  <a className="showtime-link" style={{ fontWeight: 600 }}>
-                    {item.creator_name}
-                  </a>
-                </Link>
-              </>
-            ) : (
-              "\u00A0"
-            )}
-            <br />
-            <span style={{ fontWeight: 400 }}>
-              {"Owned by "}
-
-              {item.multiple_owners ? (
-                "multiple owners"
-              ) : item.owner_id ? (
-                <Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
-                  <a className="showtime-link" style={{ fontWeight: 600 }}>
-                    {item.owner_name}
-                  </a>
-                </Link>
-              ) : null}
-            </span>
-            <br />
-            <br />
-            <br />
-            {item.token_creator_followers_only ? (
-              context.myFollows ? (
-                context.myFollows
-                  .map((item) => item.wallet_address)
-                  .includes(item.creator_address) ? (
-                  <>
-                    <div style={{ width: 160 }}>
-                      <a
-                        href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
-                        title="Buy on OpenSea"
-                        target="_blank"
-                        onClick={() => {
-                          mixpanel.track("OpenSea link click");
-                        }}
-                      >
-                        <img
-                          style={{
-                            width: 160,
-                            borderRadius: 7,
-                            boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.25)",
-                          }}
-                          src="https://storage.googleapis.com/opensea-static/opensea-brand/listed-button-white.png"
-                          alt="Listed on OpenSea badge"
-                          className={context.isMobile ? "mx-auto" : "mr-auto"}
-                        />
-                      </a>
-                    </div>
-                    <br />
-                  </>
-                ) : null
-              ) : null
-            ) : (
-              <>
-                <div style={{ width: 160 }}>
-                  <a
-                    href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
-                    title="Buy on OpenSea"
-                    target="_blank"
-                    onClick={() => {
-                      mixpanel.track("OpenSea link click");
-                    }}
-                  >
-                    <img
-                      style={{
-                        width: 160,
-                        borderRadius: 7,
-                        boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.25)",
-                      }}
-                      src="https://storage.googleapis.com/opensea-static/opensea-brand/listed-button-white.png"
-                      alt="Listed on OpenSea badge"
-                      className={context.isMobile ? "mx-auto" : "mr-auto"}
-                    />
-                  </a>
-                </div>
-                <br />
-              </>
-            )}
-
-            <div
-              className="text-xs"
-              style={{ color: "#666", fontWeight: 400, cursor: "pointer" }}
-              onClick={() => {
-                setReportModalOpen(true);
-              }}
-            >
-              Report item
-            </div>
-          </div>
-        </div>
+        <div></div>
       </div>
 
       {createdItems.length === 0 ? null : (
@@ -343,8 +226,9 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
           </div>
           <div className="text-center">
             {createdItems.length === 0
-              ? `We couldn't find any more items created by ${isMyProfile ? "you" : "this person"
-              }.`
+              ? `We couldn't find any more items created by ${
+                  isMyProfile ? "you" : "this person"
+                }.`
               : null}
           </div>
           <TokenGridV4 items={createdItems} />
@@ -352,21 +236,22 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
       )}
       {item.multiple_owners ? null : ownedItems.length ===
         0 ? null : createdItems.length > 0 ? null : (
-          <>
-            <div className="flex flex-col text-center w-full mt-8">
-              <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-4 py-10">
-                More from this owner
+        <>
+          <div className="flex flex-col text-center w-full mt-8">
+            <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-4 py-10">
+              More from this owner
             </div>
-            </div>
-            <div className="text-center">
-              {ownedItems.length === 0
-                ? `We couldn't find any more items owned by ${isMyProfile ? "you" : "this person"
+          </div>
+          <div className="text-center">
+            {ownedItems.length === 0
+              ? `We couldn't find any more items owned by ${
+                  isMyProfile ? "you" : "this person"
                 }.`
-                : null}
-            </div>
-            <TokenGridV4 items={ownedItems} />
-          </>
-        )}
+              : null}
+          </div>
+          <TokenGridV4 items={ownedItems} />
+        </>
+      )}
       <div className="mb-16"></div>
     </Layout>
   );

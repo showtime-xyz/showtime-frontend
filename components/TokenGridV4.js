@@ -189,7 +189,6 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
             item={currentlyOpenModal}
             handleLike={handleLike}
             handleUnlike={handleUnlike}
-            showTooltip={context.isMobile === false}
             goToNext={goToNext}
             goToPrevious={goToPrevious}
             columns={context.columns}

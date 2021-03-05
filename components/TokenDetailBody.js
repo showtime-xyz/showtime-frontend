@@ -21,15 +21,11 @@ const TokenDetailBody = ({
   muted,
   handleLike,
   handleUnlike,
-  showTooltip,
   setEditModalOpen,
   ownershipDetails,
-  columns,
 }) => {
   const context = useContext(AppContext);
-  const { isMobile } = context;
-  console.log(ownershipDetails);
-  console.log(item);
+  const { isMobile, columns, gridWidth } = context;
 
   const getBackgroundColor = () => {
     if (
@@ -64,7 +60,7 @@ const TokenDetailBody = ({
     var hasImageDimensions = false;
 
     // Try to use current image's aspect ratio
-    if (item.imageRef.current) {
+    if (item.imageRef && item.imageRef.current) {
       if (item.imageRef.current.clientHeight) {
         aspectRatio =
           item.imageRef.current.clientWidth /
@@ -110,10 +106,6 @@ const TokenDetailBody = ({
         ref={modalRef}
         style={{ position: "relative" }}
       >
-        {/* {setEditModalOpen && columns !== 1 ? (
-          <CloseButton setEditModalOpen={setEditModalOpen} isDetailModal />
-        ) : null} */}
-
         {columns === 1 ? (
           <div className="p-4 flex flex-row">
             <div className="flex-shrink">
@@ -212,6 +204,8 @@ const TokenDetailBody = ({
           style={{
             overflow: "auto",
             position: "relative",
+            maxWidth: gridWidth,
+            margin: "auto",
           }}
         >
           {/* Title and description section */}
@@ -225,13 +219,14 @@ const TokenDetailBody = ({
               }}
             >
               <div className="text-2xl md:text-4xl">{item.token_name}</div>
+              {/* Likes & Share */}
+              {/*  */}
               <div className="flex items-center pt-2">
                 <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
                   <LikeButton
                     item={item}
                     handleLike={handleLike}
                     handleUnlike={handleUnlike}
-                    showTooltip={showTooltip}
                   />
                 </div>
                 <a
@@ -249,11 +244,14 @@ const TokenDetailBody = ({
                 <div className="px-4 py-2 rounded-full shadow-md">
                   <ShareButton
                     url={
+                      typeof window !== "undefined" &&
                       window.location.protocol +
-                      "//" +
-                      window.location.hostname +
-                      (window.location.port ? ":" + window.location.port : "") +
-                      `/t/${item.contract_address}/${item.token_id}`
+                        "//" +
+                        window.location.hostname +
+                        (window.location.port
+                          ? ":" + window.location.port
+                          : "") +
+                        `/t/${item.contract_address}/${item.token_id}`
                     }
                     type={"item"}
                   />
@@ -269,6 +267,7 @@ const TokenDetailBody = ({
                     style={{
                       overflowWrap: "break-word",
                       wordWrap: "break-word",
+                      // whiteSpace: "pre-wrap",
                     }}
                   >
                     {removeTags(item.token_description)}
@@ -279,10 +278,7 @@ const TokenDetailBody = ({
           </div>
           {/* separator */}
           <hr />
-          {/* Likes & Share */}
-          {/*  */}
           {/* Artist and Owned by Section */}
-
           {ownershipDetails ? (
             <div className="flex flex-col md:flex-row mt-4">
               {/* artist section */}
@@ -323,6 +319,8 @@ const TokenDetailBody = ({
                             name={item.owner_name}
                             imageUrl={item.owner_img_url}
                             timestamp={
+                              ownershipDetails &&
+                              ownershipDetails.transfers &&
                               ownershipDetails.transfers.length > 0
                                 ? ownershipDetails.transfers[0].timestamp
                                 : item.token_created
@@ -335,25 +333,29 @@ const TokenDetailBody = ({
                 )}
                 {/* History Section */}
                 {/*  */}
-                {ownershipDetails.transfers > 0 && (
-                  <div className="mt-8">
-                    <div className="md:text-lg py-2">History</div>
-                    <TokenHistoryCard
-                      history={[
-                        ...ownershipDetails.transfers.map((transfer) => ({
-                          address: transfer.to_address,
-                          name: transfer.to_name ? transfer.to_name : "Unnamed",
-                          timestamp: transfer.timestamp,
-                        })),
-                        // {
-                        //   address: item.creator_address,
-                        //   name: item.creator_name,
-                        //   timestamp: item.token_created,
-                        // },
-                      ]}
-                    />
-                  </div>
-                )}
+                {ownershipDetails.transfers &&
+                  ownershipDetails.transfers.length > 0 && (
+                    <div className="mt-8">
+                      <div className="md:text-lg py-2">History</div>
+                      <TokenHistoryCard
+                        history={[
+                          ...(ownershipDetails &&
+                            ownershipDetails.transfers.map((transfer) => ({
+                              address: transfer.to_address,
+                              name: transfer.to_name
+                                ? transfer.to_name
+                                : "Unnamed",
+                              timestamp: transfer.timestamp,
+                            }))),
+                          // {
+                          //   address: item.creator_address,
+                          //   name: item.creator_name,
+                          //   timestamp: item.token_created,
+                          // },
+                        ]}
+                      />
+                    </div>
+                  )}
               </div>
             </div>
           ) : (
