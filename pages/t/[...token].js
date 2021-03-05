@@ -36,7 +36,7 @@ export async function getServerSideProps(context) {
 
 export default function Token({ token, same_owner_items, same_creator_items }) {
   const context = useContext(AppContext);
-  const { isMobile } = context;
+  const { isMobile, gridWidth } = context;
   useEffect(() => {
     // Wait for identity to resolve before recording the view
     if (typeof context.user !== "undefined") {
@@ -177,114 +177,119 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
         </>
       ) : null}
 
-      <div className="flex flex-col w-full relative">
-        <div
-          className="w-max p"
-          style={{
-            position: "absolute",
-            top: isMobile ? 57 : 0,
-            right: 0,
-            margin: 10,
-            zIndex: 20,
-          }}
-        >
-          {item.token_has_video ? null : item.token_img_url ? (
-            <button
+      {gridWidth && (
+        <div>
+          <div className="flex flex-col w-full relative bg-white">
+            <div
+              className="w-max p"
               style={{
-                borderRadius: 7,
-                color: "white",
-                padding: 12,
-                backgroundColor: "#52525278",
+                position: "absolute",
+                top: isMobile ? 57 : 0,
+                right: 0,
+                margin: 10,
+                zIndex: 20,
               }}
-              type="button"
-              onClick={() => {
-                setLightboxOpen(true);
-                mixpanel.track("Original size clicked");
-              }}
-              className="flex flex-row items-center"
             >
-              <div className="flex">
-                <FontAwesomeIcon icon={faExpand} />
-              </div>
-              {!isMobile && (
-                <div className="flex ml-2" style={{ fontSize: 14 }}>
-                  Original size
-                </div>
-              )}
-            </button>
-          ) : null}
-          <div></div>
-        </div>
-        <TokenDetailBody
-          item={item}
-          muted={false}
-          handleLike={handleLike}
-          handleUnlike={handleUnlike}
-          className="w-full"
-          ownershipDetails={ownershipDetails}
-        />
-      </div>
+              {item.token_has_video ? null : item.token_img_url ? (
+                <button
+                  style={{
+                    borderRadius: 7,
+                    color: "white",
+                    padding: 12,
+                    backgroundColor: "#52525278",
+                  }}
+                  type="button"
+                  onClick={() => {
+                    setLightboxOpen(true);
+                    mixpanel.track("Original size clicked");
+                  }}
+                  className="flex flex-row items-center"
+                >
+                  <div className="flex">
+                    <FontAwesomeIcon icon={faExpand} />
+                  </div>
+                  {!isMobile && (
+                    <div className="flex ml-2" style={{ fontSize: 14 }}>
+                      Original size
+                    </div>
+                  )}
+                </button>
+              ) : null}
+              <div></div>
+            </div>
+            <TokenDetailBody
+              item={item}
+              muted={false}
+              handleLike={handleLike}
+              handleUnlike={handleUnlike}
+              className="w-full"
+              ownershipDetails={ownershipDetails}
+            />
+          </div>
 
-      {lightboxOpen && (
-        <Lightbox
-          mainSrc={
-            item.token_img_original_url
-              ? item.token_img_original_url
-              : item.token_img_url
+          {lightboxOpen && (
+            <Lightbox
+              mainSrc={
+                item.token_img_original_url
+                  ? item.token_img_original_url
+                  : item.token_img_url
+              }
+              //nextSrc={images[(photoIndex + 1) % images.length]}
+              //prevSrc={images[(photoIndex + images.length - 1) % images.length]}
+              onCloseRequest={() => setLightboxOpen(false)}
+              //enableZoom={false}
+              /*
+          onMovePrevRequest={() =>
+            this.setState({
+              photoIndex: (photoIndex + images.length - 1) % images.length,
+            })
           }
-          //nextSrc={images[(photoIndex + 1) % images.length]}
-          //prevSrc={images[(photoIndex + images.length - 1) % images.length]}
-          onCloseRequest={() => setLightboxOpen(false)}
-          //enableZoom={false}
-          /*
-        onMovePrevRequest={() =>
-          this.setState({
-            photoIndex: (photoIndex + images.length - 1) % images.length,
-          })
-        }
-        onMoveNextRequest={() =>
-          this.setState({
-            photoIndex: (photoIndex + 1) % images.length,
-          })
-        }*/
-        />
+          onMoveNextRequest={() =>
+            this.setState({
+              photoIndex: (photoIndex + 1) % images.length,
+            })
+          }*/
+            />
+          )}
+
+          {createdItems.length === 0 ? null : (
+            <>
+              <div className="flex flex-col text-center w-full">
+                <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-4 py-10">
+                  More from this creator
+                </div>
+              </div>
+              <div className="text-center">
+                {createdItems.length === 0
+                  ? `We couldn't find any more items created by ${
+                      isMyProfile ? "you" : "this person"
+                    }.`
+                  : null}
+              </div>
+              <TokenGridV4 items={createdItems} />
+            </>
+          )}
+          {item.multiple_owners ? null : ownedItems.length ===
+            0 ? null : createdItems.length > 0 ? null : (
+            <>
+              <div className="flex flex-col text-center w-full mt-8">
+                <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-4 py-10">
+                  More from this owner
+                </div>
+              </div>
+              <div className="text-center">
+                {ownedItems.length === 0
+                  ? `We couldn't find any more items owned by ${
+                      isMyProfile ? "you" : "this person"
+                    }.`
+                  : null}
+              </div>
+              <TokenGridV4 items={ownedItems} />
+            </>
+          )}
+        </div>
       )}
 
-      {createdItems.length === 0 ? null : (
-        <>
-          <div className="flex flex-col text-center w-full">
-            <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-4 py-10">
-              More from this creator
-            </div>
-          </div>
-          <div className="text-center">
-            {createdItems.length === 0
-              ? `We couldn't find any more items created by ${
-                  isMyProfile ? "you" : "this person"
-                }.`
-              : null}
-          </div>
-          <TokenGridV4 items={createdItems} />
-        </>
-      )}
-      {item.multiple_owners ? null : ownedItems.length ===
-        0 ? null : createdItems.length > 0 ? null : (
-        <>
-          <div className="flex flex-col text-center w-full mt-8">
-            <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-4 py-10">
-              More from this owner
-            </div>
-          </div>
-          <div className="text-center">
-            {ownedItems.length === 0
-              ? `We couldn't find any more items owned by ${
-                  isMyProfile ? "you" : "this person"
-                }.`
-              : null}
-          </div>
-          <TokenGridV4 items={ownedItems} />
-        </>
-      )}
       <div className="mb-16"></div>
     </Layout>
   );
