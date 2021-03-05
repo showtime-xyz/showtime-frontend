@@ -335,23 +335,25 @@ const TokenDetailBody = ({
                 )}
                 {/* History Section */}
                 {/*  */}
-                <div className="mt-8">
-                  <div className="md:text-lg py-2">History</div>
-                  <TokenHistoryCard
-                    history={[
-                      ...ownershipDetails.transfers.map((transfer) => ({
-                        address: transfer.to_address,
-                        name: transfer.to_name ? transfer.to_name : "Unnamed",
-                        timestamp: transfer.timestamp,
-                      })),
-                      // {
-                      //   address: item.creator_address,
-                      //   name: item.creator_name,
-                      //   timestamp: item.token_created,
-                      // },
-                    ]}
-                  />
-                </div>
+                {ownershipDetails.transfers > 0 && (
+                  <div className="mt-8">
+                    <div className="md:text-lg py-2">History</div>
+                    <TokenHistoryCard
+                      history={[
+                        ...ownershipDetails.transfers.map((transfer) => ({
+                          address: transfer.to_address,
+                          name: transfer.to_name ? transfer.to_name : "Unnamed",
+                          timestamp: transfer.timestamp,
+                        })),
+                        // {
+                        //   address: item.creator_address,
+                        //   name: item.creator_name,
+                        //   timestamp: item.token_created,
+                        // },
+                      ]}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           ) : (
