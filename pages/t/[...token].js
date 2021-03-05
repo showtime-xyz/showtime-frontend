@@ -65,8 +65,22 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
   // Set up my likes
   const [item, setItem] = useState(token);
 
+  const [ownershipDetails, setOwnershipDetails] = useState();
+
   useEffect(() => {
     setItem(token);
+    setOwnershipDetails(null);
+    const getOwnershipDetails = async (nftId) => {
+      const detailsData = await backend.get(`/v1/nft_detail/${nftId}`);
+      const {
+        data: { data: details },
+      } = detailsData;
+      setOwnershipDetails(details);
+    };
+    if (item) {
+      getOwnershipDetails(item.nft_id);
+    }
+    return () => setOwnershipDetails(null);
   }, [token]);
 
   const [ownedItems, setOwnedItems] = useState([]);
@@ -136,8 +150,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
           handleLike={() => {}}
           handleUnlike={() => {}}
           className="w-full"
-          setEditModalOpen={() => {}}
-          ownershipDetails={{}}
+          ownershipDetails={ownershipDetails}
         />
       </div>
 
