@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import _ from "lodash";
-import Link from "next/link";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css"; // This only needs to be imported once in your app
 import mixpanel from "mixpanel-browser";
@@ -9,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExpand } from "@fortawesome/free-solid-svg-icons";
 import Layout from "../../components/layout";
 import backend from "../../lib/backend";
-import TokenGridV3 from "../../components/TokenGridV3";
 import TokenGridV4 from "../../components/TokenGridV4";
 import AppContext from "../../context/app-context";
 import ModalReportItem from "../../components/ModalReportItem";
@@ -38,6 +36,7 @@ export async function getServerSideProps(context) {
 
 export default function Token({ token, same_owner_items, same_creator_items }) {
   const context = useContext(AppContext);
+  const { isMobile } = context;
   useEffect(() => {
     // Wait for identity to resolve before recording the view
     if (typeof context.user !== "undefined") {
@@ -60,7 +59,6 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
   }, [same_owner_items, context.user]);
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [isHovering, setIsHovering] = useState(false);
 
   // Set up my likes
   const [item, setItem] = useState(token);
@@ -143,7 +141,44 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
         </>
       ) : null}
 
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full relative">
+        <div
+          className="w-max p"
+          style={{
+            position: "absolute",
+            top: isMobile ? 55 : 0,
+            right: 0,
+            margin: 10,
+            zIndex: 20,
+          }}
+        >
+          {item.token_has_video ? null : item.token_img_url ? (
+            <button
+              style={{
+                borderRadius: 7,
+                color: "white",
+                padding: 12,
+                backgroundColor: "#52525278",
+              }}
+              type="button"
+              onClick={() => {
+                setLightboxOpen(true);
+                mixpanel.track("Original size clicked");
+              }}
+              className="flex flex-row items-center"
+            >
+              <div className="flex">
+                <FontAwesomeIcon icon={faExpand} />
+              </div>
+              {!isMobile && (
+                <div className="flex ml-2" style={{ fontSize: 14 }}>
+                  Original size
+                </div>
+              )}
+            </button>
+          ) : null}
+          <div></div>
+        </div>
         <TokenDetailBody
           item={item}
           muted={false}
@@ -178,57 +213,6 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
         }*/
         />
       )}
-
-      <div className="flex flex-col lg:flex-row mt-6 lg:w-2/3 mx-auto">
-        <div className="flex lg:w-1/2 lg:pr-4 ">
-          <div className="w-full" style={{ position: "relative" }}>
-            {item.token_has_video ? null : item.token_img_url ? (
-              <button
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  padding: 10,
-                  margin: 10,
-                  backgroundColor: "rgba(0,0,0,0.2)",
-                  borderRadius: 7,
-                  color: "white",
-                }}
-                type="button"
-                onClick={() => {
-                  setLightboxOpen(true);
-                  mixpanel.track("Original size clicked");
-                }}
-                onMouseOver={() => setIsHovering(true)}
-                onMouseOut={() => setIsHovering(false)}
-                className="flex flex-row items-center"
-              >
-                <div className="flex">
-                  <FontAwesomeIcon
-                    style={
-                      isHovering
-                        ? { opacity: 1, height: 22 }
-                        : { opacity: 0.7, height: 22 }
-                    }
-                    icon={faExpand}
-                  />
-                </div>
-                <div
-                  className="flex ml-2"
-                  style={
-                    isHovering
-                      ? { opacity: 1, fontSize: 14 }
-                      : { opacity: 0.7, fontSize: 14 }
-                  }
-                >
-                  Original size
-                </div>
-              </button>
-            ) : null}
-          </div>
-        </div>
-        <div></div>
-      </div>
 
       {createdItems.length === 0 ? null : (
         <>
