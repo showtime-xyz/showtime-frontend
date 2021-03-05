@@ -110,9 +110,9 @@ const TokenDetailBody = ({
         ref={modalRef}
         style={{ position: "relative" }}
       >
-        {setEditModalOpen && columns !== 1 ? (
+        {/* {setEditModalOpen && columns !== 1 ? (
           <CloseButton setEditModalOpen={setEditModalOpen} isDetailModal />
-        ) : null}
+        ) : null} */}
 
         {columns === 1 ? (
           <div className="p-4 flex flex-row">

@@ -115,36 +115,34 @@ export default function Modal({
               }
               onClick={(e) => e.stopPropagation()}
             >
-              {columns === 1 ? (
-                <div
+              <div
+                style={{
+                  position: "absolute",
+                  top: 10,
+                  right: 10,
+                  cursor: "pointer",
+                  zIndex: 4,
+                  backgroundColor: "black",
+                  padding: 6,
+                  borderRadius: 18,
+                  width: 36,
+                  height: 36,
+                }}
+                onClick={() => {
+                  mixpanel.track("Close NFT modal - x button");
+                  setEditModalOpen(false);
+                }}
+                className="opacity-50 hover:opacity-80"
+              >
+                <FontAwesomeIcon
                   style={{
-                    position: "absolute",
-                    top: 10,
-                    right: 10,
-                    cursor: "pointer",
-                    zIndex: 4,
-                    backgroundColor: "black",
-                    padding: 6,
-                    borderRadius: 18,
-                    opacity: 0.4,
-                    width: 36,
-                    height: 36,
+                    height: 24,
+                    width: 24,
+                    color: "#fff",
                   }}
-                  onClick={() => {
-                    mixpanel.track("Close NFT modal - x button");
-                    setEditModalOpen(false);
-                  }}
-                >
-                  <FontAwesomeIcon
-                    style={{
-                      height: 24,
-                      width: 24,
-                      color: "#ccc",
-                    }}
-                    icon={faTimes}
-                  />
-                </div>
-              ) : null}
+                  icon={faTimes}
+                />
+              </div>
 
               <TokenDetailBody
                 item={item}
