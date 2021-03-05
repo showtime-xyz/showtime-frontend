@@ -99,6 +99,42 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
     return str.replace(/(<([^>]+)>)/gi, " ");
   }
 
+  const handleLike = async (nft_id) => {
+    // Change myLikes via setMyLikes
+    context.setMyLikes([...context.myLikes, nft_id]);
+
+    const myLikeCounts = context.myLikeCounts;
+    context.setMyLikeCounts({
+      ...context.myLikeCounts,
+      [nft_id]: ((myLikeCounts && myLikeCounts[nft_id]) || item.like_count) + 1,
+    });
+
+    // Post changes to the API
+    await fetch(`/api/like_v3/${nft_id}`, {
+      method: "post",
+    });
+
+    mixpanel.track("Liked item");
+  };
+
+  const handleUnlike = async (nft_id) => {
+    // Change myLikes via setMyLikes
+    context.setMyLikes(context.myLikes.filter((item) => !(item === nft_id)));
+
+    const myLikeCounts = context.myLikeCounts;
+    context.setMyLikeCounts({
+      ...context.myLikeCounts,
+      [nft_id]: ((myLikeCounts && myLikeCounts[nft_id]) || item.like_count) - 1,
+    });
+
+    // Post changes to the API
+    await fetch(`/api/unlike_v3/${nft_id}`, {
+      method: "post",
+    });
+
+    mixpanel.track("Unliked item");
+  };
+
   const [reportModalOpen, setReportModalOpen] = useState(false);
 
   return (
@@ -146,7 +182,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
           className="w-max p"
           style={{
             position: "absolute",
-            top: isMobile ? 55 : 0,
+            top: isMobile ? 57 : 0,
             right: 0,
             margin: 10,
             zIndex: 20,
@@ -182,8 +218,8 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
         <TokenDetailBody
           item={item}
           muted={false}
-          handleLike={() => {}}
-          handleUnlike={() => {}}
+          handleLike={handleLike}
+          handleUnlike={handleUnlike}
           className="w-full"
           ownershipDetails={ownershipDetails}
         />
