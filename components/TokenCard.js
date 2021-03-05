@@ -295,7 +295,7 @@ class TokenCard extends React.Component {
                     </div>
                   ) : null}
                   <div className="flex items-center">
-                    <div className="mr-2">
+                    <div className="mr-3">
                       <LikeButton
                         item={item}
                         handleLike={this.props.handleLike}
