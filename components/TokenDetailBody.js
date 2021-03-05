@@ -217,14 +217,48 @@ const TokenDetailBody = ({
           {/* Title and description section */}
           <div className="flex flex-col md:flex-row pb-10">
             <div
-              className="text-2xl md:text-4xl pb-0 text-left flex-1 p-4"
+              className="pb-0 text-left flex-1 p-4"
               style={{
                 fontWeight: 600,
                 overflowWrap: "break-word",
                 wordWrap: "break-word",
               }}
             >
-              {item.token_name}
+              <div className="text-2xl md:text-4xl">{item.token_name}</div>
+              <div className="flex items-center pt-2">
+                <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
+                  <LikeButton
+                    item={item}
+                    handleLike={handleLike}
+                    handleUnlike={handleUnlike}
+                    showTooltip={showTooltip}
+                  />
+                </div>
+                <a
+                  href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
+                  title="Buy on OpenSea"
+                  target="_blank"
+                  onClick={() => {
+                    mixpanel.track("OpenSea link click");
+                  }}
+                >
+                  <div className="text-base font-normal px-4 py-3 mr-2 rounded-full shadow-md hover:text-stpink">
+                    Bid / Buy
+                  </div>
+                </a>
+                <div className="px-4 py-2 rounded-full shadow-md">
+                  <ShareButton
+                    url={
+                      window.location.protocol +
+                      "//" +
+                      window.location.hostname +
+                      (window.location.port ? ":" + window.location.port : "") +
+                      `/t/${item.contract_address}/${item.token_id}`
+                    }
+                    type={"item"}
+                  />
+                </div>
+              </div>
             </div>
             <div className="flex-1 p-4 pb-0">
               {item.token_description && (
@@ -246,28 +280,6 @@ const TokenDetailBody = ({
           {/* separator */}
           <hr />
           {/* Likes & Share */}
-          {/* <div className="mb-12 flex flex-row">
-            <div className="mr-2">
-              <LikeButton
-                item={item}
-                handleLike={handleLike}
-                handleUnlike={handleUnlike}
-                showTooltip={showTooltip}
-              />
-            </div>
-            <div>
-              <ShareButton
-                url={
-                  window.location.protocol +
-                  "//" +
-                  window.location.hostname +
-                  (window.location.port ? ":" + window.location.port : "") +
-                  `/t/${item.contract_address}/${item.token_id}`
-                }
-                type={"item"}
-              />
-            </div>
-          </div> */}
           {/*  */}
           {/* Artist and Owned by Section */}
 
@@ -349,7 +361,7 @@ const TokenDetailBody = ({
           )}
 
           {/* OpenSea Link */}
-          <div style={{ width: 160 }} className="mt-12">
+          {/* <div style={{ width: 160 }} className="mt-12">
             <a
               href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
               title="Buy on OpenSea"
@@ -368,20 +380,32 @@ const TokenDetailBody = ({
                 alt="Listed on OpenSea badge"
               />
             </a>
-          </div>
+          </div> */}
 
-          <div
-            className="text-xs mt-4 mb-12"
-            style={{
-              color: "rgb(136, 136, 136)",
-              fontWeight: 400,
-              cursor: "pointer",
-            }}
-            onClick={() => {
-              setReportModalOpen(true);
-            }}
-          >
-            Report item
+          <div className="m-4 flex">
+            <a
+              href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
+              title="Buy on OpenSea"
+              target="_blank"
+              onClick={() => {
+                mixpanel.track("OpenSea link click");
+              }}
+              className="mr-4 text-gray-500 hover:text-stpink"
+            >
+              <div>View on OpenSea</div>
+            </a>
+            <div className="mr-4">·</div>
+            <div
+              style={{
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                setReportModalOpen(true);
+              }}
+              className="text-gray-500 hover:text-stpink"
+            >
+              Report Item
+            </div>
           </div>
         </div>
       </div>
