@@ -200,11 +200,11 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
               {step == 1 ? (
                 <>
                   <div className="my-4 py-4" style={{ fontWeight: 600 }}>
-                    Now you can showcase all your NFT wallets under one profile!
+                    Showcase all your NFTs on one profile!
                   </div>
 
                   <div className="my-4 py-4" style={{}}>
-                    If you've previously signed in with that wallet, your other
+                    If you previously signed in with that wallet, your other
                     profile will get merged with this profile.
                   </div>
                   {/*<div className="pb-4" style={{}}>
