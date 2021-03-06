@@ -459,7 +459,7 @@ const Profile = ({
                   >
                     {context.columns > 2 ? (
                       wallet_addresses.map((address) => {
-                        return <div>{address}</div>;
+                        return <div key={address}>{address}</div>;
                       })
                     ) : isMyProfile ? (
                       <div className="text-center md:text-left">
