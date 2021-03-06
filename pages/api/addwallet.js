@@ -22,7 +22,7 @@ export default async (req, res) => {
   const nonce = response_nonce.data.data;
 
   // If it checks out, save to a cookie
-  const msg = process.env.NEXT_PUBLIC_SIGNING_MESSAGE + nonce;
+  const msg = process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + nonce;
 
   // We now are in possession of msg, publicAddress and signature. We
   // will use a helper from eth-sig-util to extract the address from the signature
@@ -37,7 +37,6 @@ export default async (req, res) => {
   // sigUtil.recoverPersonalSignature matches the initial publicAddress
   if (verifiedAddress.toLowerCase() === address.toLowerCase()) {
     // Post the merge request to the backend securely
-    console.log(verifiedAddress.toLowerCase());
 
     await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/addwallet`, {
       method: "POST",

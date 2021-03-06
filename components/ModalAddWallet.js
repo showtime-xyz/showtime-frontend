@@ -116,7 +116,8 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
     try {
       setSignaturePending(true);
       const signature = await web3.eth.personal.sign(
-        process.env.NEXT_PUBLIC_SIGNING_MESSAGE + response_nonce.data.data,
+        process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET +
+          response_nonce.data.data,
         addressDetected,
         "" // MetaMask will ignore the password argument here
       );
@@ -165,6 +166,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
       myWeb3Modal.clearCachedProvider();
       myWeb3Modal.off();
     }
+    setSignaturePending(false);
   };
 
   return (
