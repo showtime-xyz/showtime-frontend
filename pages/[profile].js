@@ -378,6 +378,7 @@ const Profile = ({
           <ModalAddWallet
             isOpen={walletModalOpen}
             setWalletModalOpen={setWalletModalOpen}
+            walletAddresses={wallet_addresses}
           />
           <ModalEditProfile
             isOpen={editModalOpen}
@@ -465,6 +466,18 @@ const Profile = ({
                         <a
                           href="#"
                           onClick={() => {
+                            setEditModalOpen(true);
+                            mixpanel.track("Open edit name");
+                          }}
+                          className="showtime-logout-link"
+                          style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+                        >
+                          Edit profile
+                        </a>
+                        {" \u00A0\u00A0\u00A0 "}
+                        <a
+                          href="#"
+                          onClick={() => {
                             setPictureModalOpen(true);
                             mixpanel.track("Open edit photo");
                           }}
@@ -481,15 +494,16 @@ const Profile = ({
                         <a
                           href="#"
                           onClick={() => {
-                            setEditModalOpen(true);
-                            mixpanel.track("Open edit name");
+                            setWalletModalOpen(true);
+                            mixpanel.track("Open add wallet");
                           }}
                           className="showtime-logout-link"
                           style={{ whiteSpace: "nowrap", fontWeight: 400 }}
                         >
-                          Edit profile
+                          Add wallet
                         </a>
                         {" \u00A0\u00A0\u00A0 "}
+
                         <a
                           href="#"
                           onClick={() => {
@@ -589,13 +603,13 @@ const Profile = ({
                       <a
                         href="#"
                         onClick={() => {
-                          setWalletModalOpen(true);
-                          mixpanel.track("Open add wallet");
+                          setEditModalOpen(true);
+                          mixpanel.track("Open edit name");
                         }}
                         className="showtime-logout-link"
                         style={{ whiteSpace: "nowrap", fontWeight: 400 }}
                       >
-                        Add wallet [NEW]
+                        Edit profile
                       </a>
                       {" \u00A0\u00A0\u00A0 "}
                       <a
@@ -617,13 +631,13 @@ const Profile = ({
                       <a
                         href="#"
                         onClick={() => {
-                          setEditModalOpen(true);
-                          mixpanel.track("Open edit name");
+                          setWalletModalOpen(true);
+                          mixpanel.track("Open add wallet");
                         }}
                         className="showtime-logout-link"
                         style={{ whiteSpace: "nowrap", fontWeight: 400 }}
                       >
-                        Edit profile
+                        Add wallet
                       </a>
                       {" \u00A0\u00A0\u00A0 "}
                       <a

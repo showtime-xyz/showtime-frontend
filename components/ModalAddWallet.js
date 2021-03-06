@@ -7,12 +7,13 @@ import ethProvider from "eth-provider";
 import _ from "lodash";
 import ClientOnlyPortal from "./ClientOnlyPortal";
 import backend from "../lib/backend";
-//import AppContext from "../context/app-context";
+import AppContext from "../context/app-context";
 import CloseButton from "./CloseButton";
 import Web3 from "web3";
+import { useRouter } from "next/router";
 
-export default function Modal({ isOpen, setWalletModalOpen }) {
-  //const context = useContext(AppContext);
+export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
+  const context = useContext(AppContext);
   const [signaturePending, setSignaturePending] = useState(false);
   const [step, setStep] = useState(1);
 
@@ -20,7 +21,7 @@ export default function Modal({ isOpen, setWalletModalOpen }) {
 
   const [myWeb3Modal, setMyWeb3Modal] = useState(null);
   const [myProvider, setMyProvider] = useState(null);
-  const [isMetaMask, setIsMetaMask] = useState(true);
+  const router = useRouter();
 
   const connect = async () => {
     const web3 = new Web3(myProvider);
@@ -119,6 +120,8 @@ export default function Modal({ isOpen, setWalletModalOpen }) {
         addressDetected,
         "" // MetaMask will ignore the password argument here
       );
+      setSignaturePending(false);
+      setStep(3);
 
       // login with our own API
       const authRequest = await fetch("/api/addwallet", {
@@ -127,13 +130,26 @@ export default function Modal({ isOpen, setWalletModalOpen }) {
           signature,
           addressDetected,
         }),
-      });
+      })
+        .then(function (response) {
+          setStep(4);
+          return response.json();
+        })
+        .then(async function (myJson) {
+          // get our likes, follows, profile
+          const myInfoRequest = await fetch("/api/myinfo");
+          try {
+            const my_info_data = await myInfoRequest.json();
+            context.setMyLikes(my_info_data.data.likes_nft);
+            context.setMyFollows(my_info_data.data.follows);
+            context.setMyProfile(my_info_data.data.profile);
+          } catch {}
 
-      if (authRequest.ok) {
-        setStep(4); // Success
-      } else {
-        // handle errors
-      }
+          const redirect = myJson["data"];
+          router.push(`/${redirect}`);
+          setWalletModalOpen(false);
+          setStep(1);
+        });
     } catch (err) {
       //throw new Error("You need to sign the message to be able to log in.");
       //console.log(err);
@@ -172,6 +188,10 @@ export default function Modal({ isOpen, setWalletModalOpen }) {
                   ? "Success!"
                   : signaturePending
                   ? "Almost there!"
+                  : walletAddresses
+                      .map((item) => item.toLowerCase())
+                      .includes(addressDetected?.toLowerCase())
+                  ? "Switch Wallet"
                   : "Confirm Wallet"}
               </div>
               {step == 1 ? (
@@ -181,7 +201,7 @@ export default function Modal({ isOpen, setWalletModalOpen }) {
                   </div>
 
                   <div className="my-4" style={{}}>
-                    If you've previously signed in with that wallet, your old
+                    If you've previously signed in with that wallet, your other
                     profile (including likes and follows) will get combined with
                     this profile.
                   </div>
@@ -194,31 +214,60 @@ export default function Modal({ isOpen, setWalletModalOpen }) {
                 <div className="text-center py-32 px-10">
                   Successfully added the wallet to your profile
                 </div>
-              ) : (
+              ) : step == 3 ? null : (
                 <div style={{}}>
                   {addressDetected ? (
                     signaturePending ? null : (
                       <>
                         <div style={{ fontWeight: 600 }} className="mt-4">
-                          We found this wallet address:
+                          We found{" "}
+                          {walletAddresses
+                            .map((item) => item.toLowerCase())
+                            .includes(addressDetected.toLowerCase()) ? (
+                            <span style={{ color: "red" }}>an existing</span>
+                          ) : (
+                            <span style={{ color: "green" }}>a new</span>
+                          )}{" "}
+                          wallet address:
                         </div>
                         <div
                           style={{ color: "rgb(81, 125, 228)", fontSize: 13 }}
+                          className="mb-6"
                         >
                           <pre>{addressDetected}</pre>
                         </div>
                         <>
-                          <div className="py-4">
-                            If that's not the right wallet, please switch to the
-                            desired wallet in your provider's menu.
-                            <br />
-                            <br />
-                            For MetaMask, switch wallets by clicking on the
-                            extension icon, then clicking the circle icon on the
-                            top right (the account switcher). If you get a
-                            warning "Your current account is not connected,"
-                            make sure to click "Connect."
-                          </div>
+                          {walletAddresses
+                            .map((item) => item.toLowerCase())
+                            .includes(addressDetected.toLowerCase()) ? (
+                            <div className="py-4">
+                              <div style={{ fontWeight: 600 }}>
+                                This wallet has already been added to your
+                                Showtime profile. Please switch to a different
+                                wallet in your provider's menu.
+                              </div>
+                              <br />
+                              For MetaMask, switch wallets by clicking on the
+                              MetaMask icon in the toolbar, then clicking the
+                              circle icon on the top right (the account
+                              switcher). If you get a warning "Your current
+                              account is not connected," make sure to click
+                              "Connect."
+                            </div>
+                          ) : (
+                            <div className="py-4">
+                              If that's not the right wallet, please switch to
+                              the desired wallet in your provider's menu.
+                              <br />
+                              <br />
+                              For MetaMask, switch wallets by clicking on the
+                              MetaMask icon in the toolbar, then clicking the
+                              circle icon on the top right (the account
+                              switcher). If you get a warning "Your current
+                              account is not connected," make sure to click
+                              "Connect."
+                            </div>
+                          )}
 
                           <div className="text-center">
                             <button
@@ -245,6 +294,10 @@ export default function Modal({ isOpen, setWalletModalOpen }) {
                 <div className="text-center py-40 px-10">
                   Please sign the message we're sending to your wallet...
                 </div>
+              ) : step == 3 ? (
+                <div className="text-center py-40 px-10">
+                  Adding wallet and any history, please wait...
+                </div>
               ) : (
                 <>
                   <div className="mt-4 mb-2 pt-4 text-center border-t-2">
@@ -260,16 +313,21 @@ export default function Modal({ isOpen, setWalletModalOpen }) {
                       >
                         Select wallet
                       </button>
-                    ) : step == 4 ? null : addressDetected ? (
-                      <button
-                        className="showtime-pink-button bg-white text-black hover:bg-gray-300 py-2 px-4"
-                        onClick={() => {
-                          signMessage();
-                        }}
-                        style={{ borderRadius: 7 }}
-                      >
-                        Sign to finish
-                      </button>
+                    ) : step == 4 ? null : step ==
+                      3 ? null : addressDetected ? (
+                      walletAddresses
+                        .map((item) => item.toLowerCase())
+                        .includes(addressDetected.toLowerCase()) ? null : (
+                        <button
+                          className="showtime-pink-button bg-white text-black hover:bg-gray-300 py-2 px-4"
+                          onClick={() => {
+                            signMessage();
+                          }}
+                          style={{ borderRadius: 7 }}
+                        >
+                          Sign to finish
+                        </button>
+                      )
                     ) : null}
                   </div>
                 </>

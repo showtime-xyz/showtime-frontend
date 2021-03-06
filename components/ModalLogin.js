@@ -72,6 +72,7 @@ export default function Modal({ isOpen }) {
     const provider = await web3Modal.connect();
 
     const web3 = new Web3(provider);
+
     const coinbase = await web3.eth.getCoinbase();
     const address = coinbase.toLowerCase();
     const response_nonce = await backend.get(`/v1/getnonce?address=${address}`);
