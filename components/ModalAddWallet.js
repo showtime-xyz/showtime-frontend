@@ -20,49 +20,68 @@ export default function Modal({ isOpen, setWalletModalOpen }) {
 
   const [myWeb3Modal, setMyWeb3Modal] = useState(null);
   const [myProvider, setMyProvider] = useState(null);
+  const [isMetaMask, setIsMetaMask] = useState(true);
 
-  useEffect(() => {
-    console.log(myProvider);
+  const connect = async () => {
+    const web3 = new Web3(myProvider);
+    const accounts = await web3.eth.getAccounts();
+    setAddressDetected(accounts[0]);
 
-    const connect = async () => {
-      const web3 = new Web3(myProvider);
-      const accounts = await web3.eth.getAccounts();
+    myProvider.on("accountsChanged", async (accounts) => {
+      //console.log(accounts);
       setAddressDetected(accounts[0]);
-
-      myProvider.on("accountsChanged", async (accounts) => {
-        //console.log(accounts);
-        setAddressDetected(accounts[0]);
-      });
-    };
-    connect();
-  }, [myProvider]);
+    });
+  };
 
   useEffect(() => {
-    const providerOptions = {
-      walletconnect: {
-        package: WalletConnectProvider,
-        options: {
-          infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
-        },
-      },
-      authereum: {
-        package: Authereum,
-      },
-      frame: {
-        package: ethProvider,
-      },
-    };
+    if (isOpen && myProvider) {
+      console.log(myProvider);
 
-    const web3Modal = new Web3Modal({
-      cacheProvider: false, // optional
-      providerOptions, // required
-      disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
-    });
-    setMyWeb3Modal(web3Modal);
-  }, []);
+      connect();
+    }
+
+    return function cleanup() {
+      if (myProvider && myProvider.close) {
+        myProvider.close();
+      }
+    };
+  }, [myProvider, isOpen]);
+
+  useEffect(() => {
+    if (isOpen) {
+      const providerOptions = {
+        walletconnect: {
+          package: WalletConnectProvider,
+          options: {
+            infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
+          },
+        },
+        authereum: {
+          package: Authereum,
+        },
+        frame: {
+          package: ethProvider,
+        },
+      };
+
+      const web3Modal = new Web3Modal({
+        cacheProvider: false, // optional
+        providerOptions, // required
+        disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
+      });
+      setMyWeb3Modal(web3Modal);
+    }
+
+    return function cleanup() {
+      if (myWeb3Modal) {
+        myWeb3Modal.clearCachedProvider();
+        myWeb3Modal.off();
+      }
+    };
+  }, [isOpen]);
 
   const tryAgain = async () => {
-    if (myProvider.close) {
+    if (myProvider && myProvider.close) {
       await myProvider.close();
 
       // If the cached provider is not cleared,
@@ -72,20 +91,7 @@ export default function Modal({ isOpen, setWalletModalOpen }) {
       await myWeb3Modal.clearCachedProvider();
       setMyProvider(null);
     }
-  };
-
-  const fetchAccountData = async () => {
-    // Get a Web3 instance for the wallet
-    const web3 = new Web3(myProvider);
-
-    console.log("Web3 instance is", web3);
-
-    // Get list of accounts of the connected wallet
-    const accounts = await web3.eth.getAccounts();
-
-    // MetaMask does not give you all accounts, only the selected account
-    console.log("Got accounts", accounts);
-    setAddressDetected(accounts[0]);
+    onConnect();
   };
 
   const onConnect = async () => {
@@ -94,141 +100,40 @@ export default function Modal({ isOpen, setWalletModalOpen }) {
       setMyProvider(await myWeb3Modal.connect());
     } catch (e) {
       console.log("Could not get a wallet connection", e);
+      setStep(1);
       return;
     }
-
-    // Subscribe to accounts change
-    //provider.on("accountsChanged", async (accounts) => {
-    //const web3 = new Web3(myProvider);
-    //const accounts = await web3.eth.getAccounts();
-    //console.log("Got accounts", accounts);
-    //setAddressDetected(accounts[0]);
-    //});
-
-    /*
-    // Subscribe to chainId change
-    provider.on("chainChanged", (chainId) => {
-      fetchAccountData();
-    });
-
-    // Subscribe to networkId change
-    provider.on("networkChanged", (networkId) => {
-      fetchAccountData();
-    });
-    */
-
-    //setMyProvider(provider);
-
-    //await fetchAccountData();
   };
 
-  /**
-   * Disconnect wallet button pressed.
-   */
-  const onDisconnect = async () => {
-    console.log("Killing the wallet connection", myProvider);
+  const signMessage = async () => {
+    const response_nonce = await backend.get(
+      `/v1/getnonce?address=${addressDetected.toLowerCase()}`
+    );
 
-    // TODO: Which providers have close method?
-    if (myProvider.close) {
-      await myProvider.close();
-
-      // If the cached provider is not cleared,
-      // WalletConnect will default to the existing session
-      // and does not allow to re-scan the QR code with a new wallet.
-      // Depending on your use case you may want or want not his behavir.
-      await myWeb3Modal.clearCachedProvider();
-      setMyProvider(null);
-    }
-
-    setAddressDetected(null);
-  };
-
-  const pickWallet = async () => {
-    const providerOptions = {
-      walletconnect: {
-        package: WalletConnectProvider,
-        options: {
-          infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
-        },
-      },
-      authereum: {
-        package: Authereum,
-      },
-      frame: {
-        package: ethProvider,
-      },
-    };
-
-    const web3Modal = new Web3Modal({
-      network: "mainnet", // optional
-      cacheProvider: false, // optional
-      providerOptions, // required
-    });
-
-    web3Modal.clearCachedProvider();
-
-    const provider = await web3Modal?.connect();
-    const web3 = new Web3(provider);
-    console.log(web3.eth);
-    const coinbase = await web3.eth.getCoinbase();
-    setAddressDetected(coinbase);
-  };
-
-  const handleSelectWallet = async () => {
-    mixpanel.track("Add wallet - select wallet button clicked");
-
-    const providerOptions = {
-      walletconnect: {
-        package: WalletConnectProvider,
-        options: {
-          infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
-        },
-      },
-      authereum: {
-        package: Authereum,
-      },
-      frame: {
-        package: ethProvider,
-      },
-    };
-
-    const web3Modal = new Web3Modal({
-      network: "mainnet", // optional
-      cacheProvider: false, // optional
-      providerOptions, // required
-    });
-
-    const provider = await web3Modal.connect();
-
-    const web3 = new Web3(provider);
-    console.log(web3.eth);
-    const coinbase = await web3.eth.getCoinbase();
-    const address = coinbase.toLowerCase();
-    const response_nonce = await backend.get(`/v1/getnonce?address=${address}`);
+    const web3 = new Web3(myProvider);
 
     try {
       setSignaturePending(true);
       const signature = await web3.eth.personal.sign(
         process.env.NEXT_PUBLIC_SIGNING_MESSAGE + response_nonce.data.data,
-        address,
+        addressDetected,
         "" // MetaMask will ignore the password argument here
       );
 
-      /*
       // login with our own API
-      const authRequest = await fetch("/api/loginsignature", {
+      const authRequest = await fetch("/api/addwallet", {
         method: "POST",
         body: JSON.stringify({
           signature,
-          address,
+          addressDetected,
         }),
       });
 
       if (authRequest.ok) {
+        setStep(4); // Success
       } else {
         // handle errors
       }
-      */
     } catch (err) {
       //throw new Error("You need to sign the message to be able to log in.");
       //console.log(err);
@@ -237,74 +142,108 @@ export default function Modal({ isOpen, setWalletModalOpen }) {
     }
   };
 
+  const handleModalClose = () => {
+    setWalletModalOpen(false);
+    setStep(1);
+    if (myWeb3Modal) {
+      myWeb3Modal.clearCachedProvider();
+      myWeb3Modal.off();
+    }
+  };
+
   return (
     <>
       {isOpen && (
         <ClientOnlyPortal selector="#modal">
-          <div className="backdrop" onClick={() => setWalletModalOpen(false)}>
+          <div className="backdrop" onClick={() => handleModalClose()}>
             <div
               className="modal"
               style={{ color: "black" }}
               onClick={(e) => e.stopPropagation()}
             >
-              <CloseButton setEditModalOpen={setWalletModalOpen} />
+              <CloseButton setEditModalOpen={handleModalClose} />
               <div
                 className="text-3xl border-b-2 pb-2 text-center"
                 style={{ fontWeight: 600 }}
               >
-                {step == 1 ? "Add Wallet" : "Confirm Wallet"}
+                {step == 1
+                  ? "Add Wallet"
+                  : step == 4
+                  ? "Success!"
+                  : signaturePending
+                  ? "Almost there!"
+                  : "Confirm Wallet"}
               </div>
               {step == 1 ? (
                 <>
-                  <div
-                    className="my-4 py-4 text-center"
-                    style={{ fontWeight: 400, fontSize: 18 }}
-                  >
-                    See all your NFTs under one profile!
+                  <div className="my-4 py-4" style={{ fontWeight: "bold" }}>
+                    Now you can showcase all your wallets under one profile!
                   </div>
 
-                  <div className="my-4" style={{ fontSize: 14 }}>
+                  <div className="my-4" style={{}}>
                     If you've previously signed in with that wallet, your old
                     profile (including likes and follows) will get combined with
                     this profile.
                   </div>
-                  <div className="pb-4" style={{ fontSize: 14 }}>
+                  <div className="pb-4" style={{}}>
                     Going forward, you can log in with any of the wallets or
                     emails associated with your profile.
                   </div>
                 </>
+              ) : step == 4 ? (
+                <div className="text-center py-32 px-10">
+                  Successfully added the wallet to your profile
+                </div>
               ) : (
-                <div style={{ fontSize: 14 }}>
+                <div style={{}}>
                   {addressDetected ? (
-                    <>
-                      <div style={{ fontWeight: 600 }} className="mt-4">
-                        We found this wallet address:
-                      </div>
-                      <div>{addressDetected}</div>
+                    signaturePending ? null : (
+                      <>
+                        <div style={{ fontWeight: 600 }} className="mt-4">
+                          We found this wallet address:
+                        </div>
+                        <div
+                          style={{ color: "rgb(81, 125, 228)", fontSize: 13 }}
+                        >
+                          <pre>{addressDetected}</pre>
+                        </div>
+                        <>
+                          <div className="py-4">
+                            If that's not the right wallet, please switch to the
+                            desired wallet in your provider's menu.
+                            <br />
+                            <br />
+                            For MetaMask, switch wallets by clicking on the
+                            extension icon, then clicking the circle icon on the
+                            top right (the account switcher). If you get a
+                            warning "Your current account is not connected,"
+                            make sure to click "Connect."
+                          </div>
 
-                      <div className="py-4">
-                        If that's not the right wallet, please switch to the
-                        desired account in the MetaMask dropdown.
-                      </div>
-                    </>
-                  ) : null}
-
-                  <div>
-                    <button
-                      className="showtime-white-button px-3 py-1"
-                      onClick={() => {
-                        tryAgain();
-                      }}
-                    >
-                      Try again
-                    </button>
-                  </div>
+                          <div className="text-center">
+                            <button
+                              className="showtime-white-button px-3 py-1"
+                              onClick={() => {
+                                tryAgain();
+                              }}
+                            >
+                              Try again
+                            </button>
+                          </div>
+                        </>
+                      </>
+                    )
+                  ) : (
+                    <div className="my-16 text-center">
+                      Select a wallet provider...
+                    </div>
+                  )}
                 </div>
               )}
 
               {signaturePending ? (
-                <div className="text-center py-40">
-                  Please sign with your wallet...
+                <div className="text-center py-40 px-10">
+                  Please sign the message we're sending to your wallet...
                 </div>
               ) : (
                 <>
@@ -319,19 +258,19 @@ export default function Modal({ isOpen, setWalletModalOpen }) {
                         }}
                         style={{ borderRadius: 7 }}
                       >
-                        Select wallet...
+                        Select wallet
                       </button>
-                    ) : (
+                    ) : step == 4 ? null : addressDetected ? (
                       <button
                         className="showtime-pink-button bg-white text-black hover:bg-gray-300 py-2 px-4"
                         onClick={() => {
-                          setStep(1);
+                          signMessage();
                         }}
                         style={{ borderRadius: 7 }}
                       >
                         Sign to finish
                       </button>
-                    )}
+                    ) : null}
                   </div>
                 </>
               )}
@@ -352,8 +291,8 @@ export default function Modal({ isOpen, setWalletModalOpen }) {
                 background-color: white;
                 position: absolute;
                 top: 10%;
-                right: 5%;
-                left: 5%;
+                right: 3%;
+                left: 3%;
                 padding: 1em;
                 border-radius: 7px;
                 max-width: 400px;
