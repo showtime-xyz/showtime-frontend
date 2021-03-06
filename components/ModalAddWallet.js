@@ -18,7 +18,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
   const [step, setStep] = useState(1);
 
   const [addressDetected, setAddressDetected] = useState(null);
-
+  const [showInstructions, setShowInstructions] = useState(false);
   const [myWeb3Modal, setMyWeb3Modal] = useState(null);
   const [myProvider, setMyProvider] = useState(null);
   const router = useRouter();
@@ -167,6 +167,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
       myWeb3Modal.off();
     }
     setSignaturePending(false);
+    setShowInstructions(false);
   };
 
   return (
@@ -198,19 +199,18 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
               </div>
               {step == 1 ? (
                 <>
-                  <div className="my-4 py-4" style={{ fontWeight: "bold" }}>
-                    Now you can showcase all your wallets under one profile!
+                  <div className="my-4 py-4" style={{ fontWeight: 600 }}>
+                    Now you can showcase all your NFT wallets under one profile!
                   </div>
 
-                  <div className="my-4" style={{}}>
+                  <div className="my-4 py-4" style={{}}>
                     If you've previously signed in with that wallet, your other
-                    profile (including likes and follows) will get combined with
-                    this profile.
+                    profile will get merged with this profile.
                   </div>
-                  <div className="pb-4" style={{}}>
+                  {/*<div className="pb-4" style={{}}>
                     Going forward, you can log in with any of the wallets or
                     emails associated with your profile.
-                  </div>
+              </div>*/}
                 </>
               ) : step == 4 ? (
                 <div className="text-center py-32 px-10">
@@ -225,7 +225,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
                           We found{" "}
                           {walletAddresses
                             .map((item) => item.toLowerCase())
-                            .includes(addressDetected.toLowerCase()) ? (
+                            .includes(addressDetected?.toLowerCase()) ? (
                             <span style={{ color: "red" }}>an existing</span>
                           ) : (
                             <span style={{ color: "green" }}>a new</span>
@@ -234,53 +234,109 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
                         </div>
                         <div
                           style={{ color: "rgb(81, 125, 228)", fontSize: 13 }}
-                          className="mb-6"
+                          className="mb-4"
                         >
                           <pre>{addressDetected}</pre>
                         </div>
                         <>
                           {walletAddresses
                             .map((item) => item.toLowerCase())
-                            .includes(addressDetected.toLowerCase()) ? (
-                            <div className="py-4">
-                              <div style={{ fontWeight: 600 }}>
-                                This wallet has already been added to your
-                                Showtime profile. Please switch to a different
-                                wallet in your provider's menu.
+                            .includes(addressDetected?.toLowerCase()) ? (
+                            <>
+                              <div className="py-4">
+                                <span style={{ fontWeight: 600 }}>
+                                  This wallet is already on your Showtime
+                                  profile. Please switch to a different wallet
+                                  in your provider's menu.
+                                </span>
                               </div>
-                              <br />
-                              For MetaMask, switch wallets by clicking on the
-                              MetaMask icon in the toolbar, then clicking the
-                              circle icon on the top right (the account
-                              switcher). If you get a warning "Your current
-                              account is not connected," make sure to click
-                              "Connect."
-                            </div>
+                              <div className="py-4">
+                                <span style={{ fontWeight: 600 }}>
+                                  For MetaMask: <br />
+                                </span>{" "}
+                                Switch wallets by clicking on the MetaMask icon
+                                in the toolbar, then clicking the circle icon on
+                                the top right (the account switcher). If you get
+                                a warning "Your current account is not
+                                connected," make sure to click "Connect."
+                              </div>
+                              <div className="py-4">
+                                <span style={{ fontWeight: 600 }}>
+                                  For Wallet Connect & others: <br />
+                                </span>
+                                <a
+                                  href="#"
+                                  onClick={() => {
+                                    tryAgain();
+                                  }}
+                                  style={{ color: "rgb(81, 125, 228)" }}
+                                >
+                                  Click here
+                                </a>{" "}
+                                to start over and pick a new wallet.
+                              </div>
+                            </>
                           ) : (
-                            <div className="py-4">
-                              If that's not the right wallet, please switch to
-                              the desired wallet in your provider's menu.
-                              <br />
-                              <br />
-                              For MetaMask, switch wallets by clicking on the
-                              MetaMask icon in the toolbar, then clicking the
-                              circle icon on the top right (the account
-                              switcher). If you get a warning "Your current
-                              account is not connected," make sure to click
-                              "Connect."
-                            </div>
+                            <>
+                              <div className="py-4">
+                                Please confirm this is the correct wallet and
+                                click "Sign to finish" below.
+                              </div>
+                              {showInstructions ? (
+                                <>
+                                  <div
+                                    className="py-4"
+                                    style={{ fontSize: 14 }}
+                                  >
+                                    <span style={{ fontWeight: 600 }}>
+                                      For MetaMask: <br />
+                                    </span>{" "}
+                                    Switch wallets by clicking on the MetaMask
+                                    icon in the toolbar, then clicking the
+                                    circle icon on the top right (the account
+                                    switcher). If you get a warning "Your
+                                    current account is not connected," make sure
+                                    to click "Connect."
+                                  </div>
+                                  <div
+                                    className="py-4"
+                                    style={{ fontSize: 14 }}
+                                  >
+                                    <span style={{ fontWeight: 600 }}>
+                                      For Wallet Connect & others: <br />
+                                    </span>
+                                    <a
+                                      href="#"
+                                      onClick={() => {
+                                        tryAgain();
+                                      }}
+                                      style={{ color: "rgb(81, 125, 228)" }}
+                                    >
+                                      Click here
+                                    </a>{" "}
+                                    to start over and pick a new wallet.
+                                  </div>
+                                </>
+                              ) : (
+                                <div
+                                  className="pt-4 pb-2"
+                                  style={{ fontSize: 14 }}
+                                >
+                                  Wrong wallet?
+                                  <a
+                                    href="#"
+                                    onClick={() => {
+                                      setShowInstructions(true);
+                                    }}
+                                    style={{ color: "rgb(81, 125, 228)" }}
+                                  >
+                                    {" "}
+                                    Learn how to switch
+                                  </a>
+                                </div>
+                              )}
+                            </>
                           )}
-
-                          <div className="text-center">
-                            <button
-                              className="showtime-white-button px-3 py-1"
-                              onClick={() => {
-                                tryAgain();
-                              }}
-                            >
-                              Try again
-                            </button>
-                          </div>
                         </>
                       </>
                     )
@@ -300,7 +356,10 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
                 <div className="text-center py-40 px-10">
                   Adding wallet and any history, please wait...
                 </div>
-              ) : (
+              ) : walletAddresses
+                  .map((item) => item.toLowerCase())
+                  .includes(addressDetected?.toLowerCase()) &&
+                step != 1 ? null : (
                 <>
                   <div className="mt-4 mb-2 pt-4 text-center border-t-2">
                     {step == 1 ? (
@@ -319,7 +378,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
                       3 ? null : addressDetected ? (
                       walletAddresses
                         .map((item) => item.toLowerCase())
-                        .includes(addressDetected.toLowerCase()) ? null : (
+                        .includes(addressDetected?.toLowerCase()) ? null : (
                         <button
                           className="showtime-pink-button bg-white text-black hover:bg-gray-300 py-2 px-4"
                           onClick={() => {
@@ -350,7 +409,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
               .modal {
                 background-color: white;
                 position: absolute;
-                top: 10%;
+                top: 5%;
                 right: 3%;
                 left: 3%;
                 padding: 1em;

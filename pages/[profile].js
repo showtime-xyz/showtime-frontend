@@ -34,6 +34,8 @@ export async function getServerSideProps(context) {
     const name = data_profile.profile.name;
     const img_url = data_profile.profile.img_url;
     const wallet_addresses = data_profile.profile.wallet_addresses;
+    const wallet_addresses_excluding_email =
+      data_profile.profile.wallet_addresses_excluding_email;
     const followers_list = data_profile.followers;
     const following_list = data_profile.following;
 
@@ -45,6 +47,7 @@ export async function getServerSideProps(context) {
         name,
         img_url,
         wallet_addresses,
+        wallet_addresses_excluding_email,
         slug_address,
         followers_list,
         following_list,
@@ -70,6 +73,7 @@ const Profile = ({
   name,
   img_url,
   wallet_addresses,
+  wallet_addresses_excluding_email,
   slug_address,
   followers_list,
   following_list,
@@ -437,7 +441,7 @@ const Profile = ({
                         ? name
                         : "Unnamed"}
                     </div>
-                    <div>
+                    <div className="mt-2 sm:mt-0">
                       <ShareButton
                         url={
                           typeof window !== "undefined"
@@ -458,7 +462,7 @@ const Profile = ({
                     }}
                   >
                     {context.columns > 2 ? (
-                      wallet_addresses.map((address) => {
+                      wallet_addresses_excluding_email.map((address) => {
                         return <div key={address}>{address}</div>;
                       })
                     ) : isMyProfile ? (
