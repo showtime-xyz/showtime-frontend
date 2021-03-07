@@ -12,6 +12,7 @@ import ModalEditPhoto from "../components/ModalEditPhoto";
 import { GridTabs, GridTab } from "../components/GridTabs";
 import ProfileInfoPill from "../components/ProfileInfoPill";
 import ModalUserList from "../components/ModalUserList";
+import ModalAddWallet from "../components/ModalAddWallet";
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
@@ -33,6 +34,8 @@ export async function getServerSideProps(context) {
     const name = data_profile.profile.name;
     const img_url = data_profile.profile.img_url;
     const wallet_addresses = data_profile.profile.wallet_addresses;
+    const wallet_addresses_excluding_email =
+      data_profile.profile.wallet_addresses_excluding_email;
     const followers_list = data_profile.followers;
     const following_list = data_profile.following;
 
@@ -44,6 +47,7 @@ export async function getServerSideProps(context) {
         name,
         img_url,
         wallet_addresses,
+        wallet_addresses_excluding_email,
         slug_address,
         followers_list,
         following_list,
@@ -69,6 +73,7 @@ const Profile = ({
   name,
   img_url,
   wallet_addresses,
+  wallet_addresses_excluding_email,
   slug_address,
   followers_list,
   following_list,
@@ -256,6 +261,7 @@ const Profile = ({
   };
 
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [walletModalOpen, setWalletModalOpen] = useState(false);
   const [pictureModalOpen, setPictureModalOpen] = useState(false);
 
   const [selectedGrid, setSelectedGrid] = useState("created");
@@ -373,6 +379,11 @@ const Profile = ({
 
       {typeof document !== "undefined" ? (
         <>
+          <ModalAddWallet
+            isOpen={walletModalOpen}
+            setWalletModalOpen={setWalletModalOpen}
+            walletAddresses={wallet_addresses}
+          />
           <ModalEditProfile
             isOpen={editModalOpen}
             setEditModalOpen={setEditModalOpen}
@@ -430,7 +441,7 @@ const Profile = ({
                         ? name
                         : "Unnamed"}
                     </div>
-                    <div>
+                    <div className="mt-2 sm:mt-0">
                       <ShareButton
                         url={
                           typeof window !== "undefined"
@@ -451,9 +462,23 @@ const Profile = ({
                     }}
                   >
                     {context.columns > 2 ? (
-                      wallet_addresses[0]
+                      wallet_addresses_excluding_email.map((address) => {
+                        return <div key={address}>{address}</div>;
+                      })
                     ) : isMyProfile ? (
                       <div className="text-center md:text-left">
+                        <a
+                          href="#"
+                          onClick={() => {
+                            setEditModalOpen(true);
+                            mixpanel.track("Open edit name");
+                          }}
+                          className="showtime-logout-link"
+                          style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+                        >
+                          Edit profile
+                        </a>
+                        {" \u00A0\u00A0\u00A0 "}
                         <a
                           href="#"
                           onClick={() => {
@@ -473,15 +498,16 @@ const Profile = ({
                         <a
                           href="#"
                           onClick={() => {
-                            setEditModalOpen(true);
-                            mixpanel.track("Open edit name");
+                            setWalletModalOpen(true);
+                            mixpanel.track("Open add wallet");
                           }}
                           className="showtime-logout-link"
                           style={{ whiteSpace: "nowrap", fontWeight: 400 }}
                         >
-                          Edit profile
+                          Add wallet
                         </a>
                         {" \u00A0\u00A0\u00A0 "}
+
                         <a
                           href="#"
                           onClick={() => {
@@ -581,6 +607,18 @@ const Profile = ({
                       <a
                         href="#"
                         onClick={() => {
+                          setEditModalOpen(true);
+                          mixpanel.track("Open edit name");
+                        }}
+                        className="showtime-logout-link"
+                        style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+                      >
+                        Edit profile
+                      </a>
+                      {" \u00A0\u00A0\u00A0 "}
+                      <a
+                        href="#"
+                        onClick={() => {
                           setPictureModalOpen(true);
                           mixpanel.track("Open edit photo");
                         }}
@@ -597,13 +635,13 @@ const Profile = ({
                       <a
                         href="#"
                         onClick={() => {
-                          setEditModalOpen(true);
-                          mixpanel.track("Open edit name");
+                          setWalletModalOpen(true);
+                          mixpanel.track("Open add wallet");
                         }}
                         className="showtime-logout-link"
                         style={{ whiteSpace: "nowrap", fontWeight: 400 }}
                       >
-                        Edit profile
+                        Add wallet
                       </a>
                       {" \u00A0\u00A0\u00A0 "}
                       <a
