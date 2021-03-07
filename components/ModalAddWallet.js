@@ -36,7 +36,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 
   useEffect(() => {
     if (isOpen && myProvider) {
-      console.log(myProvider);
+      //console.log(myProvider);
 
       connect();
     }
@@ -96,11 +96,11 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
   };
 
   const onConnect = async () => {
-    console.log("Opening a dialog", myWeb3Modal);
+    //console.log("Opening a dialog", myWeb3Modal);
     try {
       setMyProvider(await myWeb3Modal.connect());
     } catch (e) {
-      console.log("Could not get a wallet connection", e);
+      //console.log("Could not get a wallet connection", e);
       setStep(1);
       return;
     }
@@ -200,12 +200,13 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
               {step == 1 ? (
                 <>
                   <div className="my-4 py-4" style={{ fontWeight: 600 }}>
-                    Showcase all your NFTs on one profile!
+                    Add one or more wallets to showcase all your NFTs in one
+                    place.
                   </div>
 
                   <div className="my-4 py-4" style={{}}>
-                    If you previously signed in with that wallet, your other
-                    profile will get merged with this profile.
+                    If you previously signed in with the wallet you are adding,
+                    your other profile will get merged into this profile.
                   </div>
                   {/*<div className="pb-4" style={{}}>
                     Going forward, you can log in with any of the wallets or
@@ -222,15 +223,8 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
                     signaturePending ? null : (
                       <>
                         <div style={{ fontWeight: 600 }} className="mt-4">
-                          We found{" "}
-                          {walletAddresses
-                            .map((item) => item.toLowerCase())
-                            .includes(addressDetected?.toLowerCase()) ? (
-                            <span style={{ color: "red" }}>an existing</span>
-                          ) : (
-                            <span style={{ color: "green" }}>a new</span>
-                          )}{" "}
-                          wallet address:
+                          Your wallet provider is giving us a wallet with the
+                          address:
                         </div>
                         <div
                           style={{ color: "rgb(81, 125, 228)", fontSize: 13 }}
@@ -245,9 +239,12 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
                             <>
                               <div className="py-4">
                                 <span style={{ fontWeight: 600 }}>
-                                  This wallet is already on your Showtime
-                                  profile. Please switch to a different wallet
-                                  in your provider's menu.
+                                  <span style={{ color: "red" }}>
+                                    This wallet is already on your Showtime
+                                    profile.
+                                  </span>{" "}
+                                  Please switch to a different wallet in your
+                                  provider's menu.
                                 </span>
                               </div>
                               <div className="py-4">
@@ -372,7 +369,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
                         }}
                         style={{ borderRadius: 7 }}
                       >
-                        Select wallet
+                        Select wallet to add
                       </button>
                     ) : step == 4 ? null : step ==
                       3 ? null : addressDetected ? (
