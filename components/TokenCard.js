@@ -202,7 +202,7 @@ class TokenCard extends React.Component {
               </div>
               <div className="flex-grow">&nbsp;</div>
               <div>
-                {isMyProfile ? (
+                {isMyProfile && listId !== 3 ? (
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
