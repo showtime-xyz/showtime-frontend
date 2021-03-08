@@ -18,7 +18,7 @@ import UserTimestampCard from "./UserTimestampCard";
 import TokenHistoryCard from "./TokenHistoryCard";
 
 // how wide the media will be
-const TOKEN_MEDIA_HEIGHT = 600;
+const TOKEN_MEDIA_HEIGHT = 500;
 
 const TokenDetailBody = ({
   item,
