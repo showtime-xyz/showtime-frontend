@@ -443,7 +443,7 @@ const Profile = ({
                         ? name
                         : "Unnamed"}
                     </div>
-                    <div className="mt-2 sm:mt-0">
+                    <div className="mt-1 sm:mt-0 ml-2">
                       <ShareButton
                         url={
                           typeof window !== "undefined"
@@ -540,14 +540,26 @@ const Profile = ({
                       {isMyProfile && context.myProfile ? (
                         context.myProfile.bio ? (
                           <div className="pb-2 sm:mr-16 max-w-xl">
-                            <div className="text-center md:text-left">
+                            <div
+                              className="text-center md:text-left"
+                              style={{
+                                wordWrap: "break-word",
+                              }}
+                            >
                               {context.myProfile.bio}
                             </div>
                           </div>
                         ) : null
                       ) : bio ? (
                         <div className="pb-2 sm:mr-16 max-w-xl">
-                          <div className="">{bio}</div>
+                          <div
+                            className=""
+                            style={{
+                              wordWrap: "break-word",
+                            }}
+                          >
+                            {bio}
+                          </div>
                         </div>
                       ) : null}
 
@@ -563,14 +575,23 @@ const Profile = ({
                               }
                               target="_blank"
                               className="flex flex-row items-center justify-center"
-                              style={{ color: "rgb(81, 125, 228)" }}
+                              style={{
+                                color: "rgb(81, 125, 228)",
+                                wordWrap: "break-word",
+                              }}
                               onClick={() => {
                                 mixpanel.track("Clicked profile website link", {
                                   slug: slug_address,
                                 });
                               }}
                             >
-                              <div>{context.myProfile.website_url}</div>
+                              <div
+                                style={{
+                                  wordWrap: "break-word",
+                                }}
+                              >
+                                {context.myProfile.website_url}
+                              </div>
                             </a>
                           </div>
                         ) : null
@@ -584,14 +605,21 @@ const Profile = ({
                             }
                             target="_blank"
                             className="flex flex-row"
-                            style={{ color: "rgb(81, 125, 228)" }}
+                            style={{
+                              color: "rgb(81, 125, 228)",
+                              wordWrap: "break-word",
+                            }}
                             onClick={() => {
                               mixpanel.track("Clicked profile website link", {
                                 slug: slug_address,
                               });
                             }}
                           >
-                            <div style={{ wordWrap: "break-word" }}>
+                            <div
+                              style={{
+                                overflowWrap: "anywhere",
+                              }}
+                            >
                               {website_url}
                             </div>
                           </a>

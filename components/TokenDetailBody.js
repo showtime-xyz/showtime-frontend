@@ -233,6 +233,7 @@ const TokenDetailBody = ({
                 style={_.merge(
                   {
                     width: mediaWidth,
+                    height: mediaHeight,
                   },
                   fullResLoaded === true ? { display: "none" } : null
                 )}
@@ -244,6 +245,7 @@ const TokenDetailBody = ({
                 style={_.merge(
                   {
                     width: mediaWidth,
+                    height: mediaHeight,
                   },
                   fullResLoaded ? null : { display: "none" }
                 )}
