@@ -18,7 +18,7 @@ import UserTimestampCard from "./UserTimestampCard";
 import TokenHistoryCard from "./TokenHistoryCard";
 
 // how wide the media will be
-const TOKEN_MEDIA_WIDTH = 500;
+const TOKEN_MEDIA_HEIGHT = 600;
 
 const TokenDetailBody = ({
   item,
@@ -79,8 +79,8 @@ const TokenDetailBody = ({
       setMediaWidth(mWidth);
       setMediaHeight(mWidth / aspectRatio);
     } else {
-      setMediaWidth(TOKEN_MEDIA_WIDTH);
-      setMediaHeight(TOKEN_MEDIA_WIDTH / aspectRatio);
+      setMediaHeight(TOKEN_MEDIA_HEIGHT);
+      setMediaWidth(TOKEN_MEDIA_HEIGHT * aspectRatio);
     }
   }, [targetRef, item, context.windowSize, isMobile]);
 

@@ -22,7 +22,6 @@ export default function Modal({
   columns,
   hasNext,
   hasPrevious,
-  //originalImageDimensions,
 }) {
   const context = useContext(AppContext);
 
