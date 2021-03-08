@@ -88,6 +88,7 @@ const Profile = ({
 }) => {
   //const router = useRouter();
   const context = useContext(AppContext);
+  const { columns, gridWidth } = context;
 
   const [isMyProfile, setIsMyProfile] = useState();
   const [isFollowed, setIsFollowed] = useState(false);
@@ -419,9 +420,9 @@ const Profile = ({
 
       {/* Start Page Body */}
       {/* Wait until @gridWidth is populated to display page's body */}
-      {context.gridWidth && (
+      {gridWidth && (
         <>
-          <div className="m-auto" style={{ width: context.gridWidth }}>
+          <div className="m-auto" style={{ width: gridWidth }}>
             <div className="px-4 md:px-0 flex flex-col md:flex-row items-center md:pb-6 pt-12">
               <div className="flex-grow flex flex-row items-center">
                 <div className="flex flex-col ">
@@ -463,7 +464,7 @@ const Profile = ({
                       color: "#999",
                     }}
                   >
-                    {context.columns > 2 ? (
+                    {columns > 2 ? (
                       wallet_addresses_excluding_email.map((address) => {
                         return <div key={address}>{address}</div>;
                       })
@@ -603,7 +604,7 @@ const Profile = ({
               </div>
 
               <div className="place-self-start text-sm">
-                {context.columns > 2 ? (
+                {columns > 2 ? (
                   isMyProfile ? (
                     <>
                       <a
@@ -698,9 +699,16 @@ const Profile = ({
               }
             />
           </div>
+          {columns && (
+            <div
+              className="mx-auto"
+              style={columns === 1 ? null : { width: columns * (375 + 20) }}
+            >
+              {FilterTabs}
+            </div>
+          )}
 
           <TokenGridV4
-            filterTabs={FilterTabs}
             items={
               selectedGrid === "created"
                 ? createdItems
