@@ -36,7 +36,7 @@ const ShareButton = ({ url, type }) => {
       </CopyToClipboard>
       <span
         style={{ fontSize: 12, opacity: 0.9, width: 70 }}
-        className="tooltip-text bg-black p-3 -mt-6 -ml-16 rounded text-white"
+        className="tooltip-text bg-black p-3 -mt-6 -ml-12 rounded text-white"
       >
         {isCopied ? "Copied!" : "Copy link"}
       </span>
