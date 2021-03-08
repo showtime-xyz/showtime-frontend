@@ -253,8 +253,24 @@ class TokenCard extends React.Component {
                       {this.props.userHiddenItems.includes(
                         this.props.item.nft_id
                       )
-                        ? "Unhide item from Liked"
-                        : "Hide item from Liked"}
+                        ? `Unhide item from ${
+                            listId === 1
+                              ? "Created"
+                              : listId === 2
+                              ? "Owned"
+                              : listId === 3
+                              ? "Liked"
+                              : "List"
+                          }`
+                        : `Hide item from ${
+                            listId === 1
+                              ? "Created"
+                              : listId === 2
+                              ? "Owned"
+                              : listId === 3
+                              ? "Liked"
+                              : "List"
+                          }`}
                     </div>
                   </div>
                 ) : null}
