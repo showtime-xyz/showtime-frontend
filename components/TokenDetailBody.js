@@ -281,6 +281,7 @@ const TokenDetailBody = ({
                     <CreatorSummary
                       address={item.creator_address}
                       name={item.creator_name}
+                      username={item.creator_username}
                       imageUrl={item.creator_img_url}
                       bio={ownershipDetails.creator_bio}
                       closeModal={() => {
