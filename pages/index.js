@@ -19,6 +19,7 @@ export async function getServerSideProps(context) {
 
 export default function Home() {
   const context = useContext(AppContext);
+  const { columns, gridWidth } = context;
   useEffect(() => {
     // Wait for identity to resolve before recording the view
     if (typeof context.user !== "undefined") {
@@ -48,7 +49,7 @@ export default function Home() {
   }, [featuredDays]);
 
   const FilterTabs =
-    context.gridWidth > 0 ? (
+    gridWidth > 0 ? (
       <>
         <GridTabs title="Trending">
           <GridTab
@@ -107,12 +108,20 @@ export default function Home() {
         Discover and showcase your favorite digital art.
       </h1>
 
+      {columns && (
+        <div
+          className="mx-auto"
+          style={columns === 1 ? null : { width: columns * (375 + 20) }}
+        >
+          {FilterTabs}
+        </div>
+      )}
+
       <TokenGridV4
         items={featuredItems}
         onFinish={() => {
           setReachedBottom(true);
         }}
-        filterTabs={FilterTabs}
         isLoading={isLoadingCards}
       />
 

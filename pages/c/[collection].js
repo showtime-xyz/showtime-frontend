@@ -47,6 +47,8 @@ export default function Collection({
   collection,
   selected_collection,
 }) {
+  const context = useContext(AppContext);
+  const { isMobile, gridWidth, columns } = context;
   const [sortBy, setSortby] = useState("random");
 
   const [pageTitle, setPageTitle] = useState(
@@ -56,8 +58,6 @@ export default function Collection({
         : `Explore ${selected_collection.name}`
       : `Explore ${collection}`
   );
-
-  const context = useContext(AppContext);
 
   const router = useRouter();
 
@@ -141,7 +141,7 @@ export default function Collection({
         }}
       />
       <GridTab
-        label={!context.isMobile ? "Last Sold" : "Sold"}
+        label={!isMobile ? "Last Sold" : "Sold"}
         isActive={sortBy === "sold"}
         onClickTab={() => {
           setSortby("sold");
@@ -156,7 +156,7 @@ export default function Collection({
           mixpanel.track("Newest button clicked");
         }}
       />
-      {!context.isMobile && (
+      {!isMobile && (
         <GridTab
           label="Oldest"
           isActive={sortBy === "oldest"}
@@ -223,11 +223,11 @@ export default function Collection({
         </div>
       </div>
 
-      {context.gridWidth > 0 ? (
+      {gridWidth > 0 ? (
         <div
           className="mx-auto mb-6 text-xs sm:text-sm flex flex-col md:flex-row items-center"
           style={{
-            width: context.gridWidth,
+            width: gridWidth,
           }}
         >
           {collection_list && collection_list.length > 0 ? (
@@ -258,13 +258,17 @@ export default function Collection({
         </div>
       ) : null}
 
+      {columns && (
+        <div
+          className="mx-auto"
+          style={columns === 1 ? null : { width: columns * (375 + 20) }}
+        >
+          {FilterTabs}
+        </div>
+      )}
       <div className="mb-6 mt-4 text-center">
         <div className="text-left">
-          <TokenGridV4
-            items={collectionItems}
-            filterTabs={FilterTabs}
-            isLoading={isChanging}
-          />
+          <TokenGridV4 items={collectionItems} isLoading={isChanging} />
         </div>
       </div>
     </Layout>
