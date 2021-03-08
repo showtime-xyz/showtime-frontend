@@ -2,7 +2,12 @@ import React from "react";
 import Link from "next/link";
 import _ from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExternalLinkAlt, faPlay } from "@fortawesome/free-solid-svg-icons";
+import {
+  faExternalLinkAlt,
+  faPlay,
+  faEllipsisH,
+} from "@fortawesome/free-solid-svg-icons";
+//import { faEdit } from "@fortawesome/free-regular-svg-icons";
 import LikeButton from "./LikeButton";
 import ShareButton from "./ShareButton";
 import ReactPlayer from "react-player";
@@ -66,6 +71,27 @@ class TokenCard extends React.Component {
     this.setState({ moreShown: true }, this.setSpans);
   };
 
+  handleHide = async () => {
+    // Post changes to the API
+    await fetch(`/api/hidenft/${this.props.item.nft_id}/${this.props.listId}`, {
+      method: "post",
+    });
+
+    mixpanel.track("Hid item");
+  };
+
+  handleUnhide = async () => {
+    // Post changes to the API
+    await fetch(
+      `/api/unhidenft/${this.props.item.nft_id}/${this.props.listId}`,
+      {
+        method: "post",
+      }
+    );
+
+    mixpanel.track("Unhid item");
+  };
+
   getImageUrl = () => {
     var img_url = this.props.item.token_img_url
       ? this.props.item.token_img_url
@@ -91,13 +117,20 @@ class TokenCard extends React.Component {
   };
 
   render() {
-    const { item, showDuplicateNFTs, setShowDuplicateNFTs } = this.props;
+    const {
+      item,
+      showDuplicateNFTs,
+      setShowDuplicateNFTs,
+      isMyProfile,
+      listId,
+    } = this.props;
     const hash = item.token_img_url || item.token_animation_url;
     return (
       <>
         <div
-          className={`row-span-${this.state.spans} ${this.props.columns === 1 ? "pb-4" : "p-2"
-            }`}
+          className={`row-span-${this.state.spans} ${
+            this.props.columns === 1 ? "pb-4" : "p-2"
+          }`}
         >
           <div
             style={_.merge(
@@ -106,13 +139,13 @@ class TokenCard extends React.Component {
               },
               this.props.columns === 1
                 ? {
-                  borderTopWidth: 1,
-                  borderBottomWidth: 1,
-                }
+                    borderTopWidth: 1,
+                    borderBottomWidth: 1,
+                  }
                 : {
-                  width: 375,
-                  borderWidth: 1,
-                }
+                    width: 375,
+                    borderWidth: 1,
+                  }
             )}
             ref={this.divRef}
             className={
@@ -121,10 +154,16 @@ class TokenCard extends React.Component {
                 : "mx-auto showtime-card sm:rounded-md overflow-hidden"
             }
           >
-            <div className="p-4 flex flex-row items-center">
+            <div
+              className="p-4 flex flex-row items-center"
+              style={{ position: "relative" }}
+            >
               <div className="flex-shrink">
                 {item.creator_address ? (
-                  <Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
+                  <Link
+                    href="/[profile]"
+                    as={`/${item?.creator_username || item.creator_address}`}
+                  >
                     <a className="flex flex-row items-center ">
                       <div>
                         <img
@@ -146,11 +185,51 @@ class TokenCard extends React.Component {
                 ) : null}
               </div>
               <div className="flex-grow">&nbsp;</div>
+              <div>
+                {isMyProfile ? (
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      this.props.setOpenCardMenu(item.nft_id + "_" + listId);
+                    }}
+                    className="card-menu-button"
+                  >
+                    <FontAwesomeIcon
+                      style={{
+                        height: 20,
+                        width: 20,
+                      }}
+                      icon={faEllipsisH}
+                    />
+                  </div>
+                ) : null}
+
+                {this.props.openCardMenu == item.nft_id + "_" + listId ? (
+                  <div
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "#ccc",
+                      position: "absolute",
+                      top: 40,
+                      right: 15,
+                      backgroundColor: "white",
+                      borderRadius: 5,
+                      zIndex: 1,
+                      fontSize: 14,
+                    }}
+                    className="py-1 px-3"
+                  >
+                    <div className="card-menu-item" onClick={this.handleHide}>
+                      Hide item from Liked
+                    </div>
+                  </div>
+                ) : null}
+              </div>
             </div>
             {(item.token_has_video &&
               this.state.showVideo &&
               this.props.currentlyPlayingVideo === item.nft_id) ||
-              (item.token_has_video && !item.token_img_url) ? (
+            (item.token_has_video && !item.token_img_url) ? (
               <ReactPlayer
                 url={item.token_animation_url}
                 playing={
@@ -273,7 +352,7 @@ class TokenCard extends React.Component {
                       ) : (
                         <div>
                           {item.token_description.length >
-                            this.max_description_length ? (
+                          this.max_description_length ? (
                             <>
                               {this.truncateWithEllipses(
                                 this.removeTags(item.token_description),
@@ -342,7 +421,10 @@ class TokenCard extends React.Component {
                 </div>
                 <div>
                   {item.multiple_owners ? null : item.owner_id ? (
-                    <Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
+                    <Link
+                      href="/[profile]"
+                      as={`/${item?.owner_username || item.owner_address}`}
+                    >
                       <a className="flex flex-row items-center pt-1">
                         <div>
                           <img
@@ -402,8 +484,9 @@ class TokenCard extends React.Component {
                 className="showtime-card-profile-link ml-2 cursor-pointer"
                 style={{ fontWeight: 400 }}
               >
-                {`${showDuplicateNFTs[hash] ? "Hide" : "Show"} ${item.duplicate_count - 1
-                  } more similar`}
+                {`${showDuplicateNFTs[hash] ? "Hide" : "Show"} ${
+                  item.duplicate_count - 1
+                } more similar`}
               </div>
             )}
           </div>

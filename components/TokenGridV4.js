@@ -7,7 +7,16 @@ import TokenCard from "./TokenCard";
 import useKeyPress from "../hooks/useKeyPress";
 import ModalTokenDetail from "./ModalTokenDetail";
 
-const TokenGridV4 = ({ items, isDetail, onFinish, isLoading }) => {
+const TokenGridV4 = ({
+  items,
+  isDetail,
+  onFinish,
+  isLoading,
+  listId,
+  isMyProfile,
+  openCardMenu,
+  setOpenCardMenu,
+}) => {
   const context = useContext(AppContext);
   const [itemsList, setItemsList] = useState([]);
   const [showDuplicateNFTs, setShowDuplicateNFTs] = useState({});
@@ -237,6 +246,10 @@ const TokenGridV4 = ({ items, isDetail, onFinish, isLoading }) => {
                 setCurrentlyOpenModal={setCurrentlyOpenModal}
                 showDuplicateNFTs={showDuplicateNFTs}
                 setShowDuplicateNFTs={setShowDuplicateNFTs}
+                isMyProfile={isMyProfile}
+                listId={listId}
+                openCardMenu={openCardMenu}
+                setOpenCardMenu={setOpenCardMenu}
               />
             ))}
           </div>

@@ -2,7 +2,7 @@ import Iron from "@hapi/iron";
 import CookieService from "../../../lib/cookie";
 
 export default async (req, res) => {
-  const { nft_list } = context.query;
+  const { nft_list } = req.query;
   const nft_id = nft_list[0];
   const list_id = nft_list[1];
 
