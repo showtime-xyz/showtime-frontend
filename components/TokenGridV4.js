@@ -7,7 +7,7 @@ import TokenCard from "./TokenCard";
 import useKeyPress from "../hooks/useKeyPress";
 import ModalTokenDetail from "./ModalTokenDetail";
 
-const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
+const TokenGridV4 = ({ items, isDetail, onFinish, isLoading }) => {
   const context = useContext(AppContext);
   const [itemsList, setItemsList] = useState([]);
   const [showDuplicateNFTs, setShowDuplicateNFTs] = useState({});
@@ -203,16 +203,6 @@ const TokenGridV4 = ({ items, isDetail, onFinish, filterTabs, isLoading }) => {
         next={fetchMoreData}
         hasMore={hasMore}
       >
-        <div
-          className={`mx-auto`}
-          style={
-            context.columns === 1
-              ? null
-              : { width: context.columns * (375 + 20) }
-          }
-        >
-          {filterTabs}
-        </div>
         {isLoading ? (
           <div
             className="mx-auto items-center flex justify-center overflow-hidden"
