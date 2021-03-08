@@ -364,7 +364,14 @@ const TokenDetailBody = ({
                   <div>
                     <div className="md:text-lg py-2">Owned By</div>
                     <div>
-                      <Link href="/[profile]" as={`/${item.owner_address}`}>
+                      <Link
+                        href="/[profile]"
+                        as={
+                          item.owner_username
+                            ? `/${item.owner_username}`
+                            : `/${item.owner_address}`
+                        }
+                      >
                         <a
                           onClick={() => {
                             if (setEditModalOpen) {

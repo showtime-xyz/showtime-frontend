@@ -41,7 +41,7 @@ export default function CreatorSummary({
       <Link href="/[profile]" as={username ? `/${username}` : `/${address}`}>
         <a onClick={closeModal}>
           <div className="px-6 py-2 mt-2 border-2 border-gray-300 rounded-xl flex items-center justify-center w-max text-gray-300 hover:border-stpink hover:text-stpink">
-            <span className="mr-2 text-black">Artist Profile</span>
+            <span className="mr-2 text-black">Creator Profile</span>
             <FontAwesomeIcon
               style={{
                 height: 18,
