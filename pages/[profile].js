@@ -12,6 +12,7 @@ import ModalEditPhoto from "../components/ModalEditPhoto";
 import { GridTabs, GridTab } from "../components/GridTabs";
 import ProfileInfoPill from "../components/ProfileInfoPill";
 import ModalUserList from "../components/ModalUserList";
+import ModalAddWallet from "../components/ModalAddWallet";
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
@@ -33,22 +34,29 @@ export async function getServerSideProps(context) {
     const name = data_profile.profile.name;
     const img_url = data_profile.profile.img_url;
     const wallet_addresses = data_profile.profile.wallet_addresses;
+    const wallet_addresses_excluding_email =
+      data_profile.profile.wallet_addresses_excluding_email;
     const followers_list = data_profile.followers;
     const following_list = data_profile.following;
 
     const bio = data_profile.profile.bio;
     const website_url = data_profile.profile.website_url;
+    const profile_id = data_profile.profile.profile_id;
+    const username = data_profile.profile.username;
 
     return {
       props: {
         name,
         img_url,
         wallet_addresses,
+        wallet_addresses_excluding_email,
         slug_address,
         followers_list,
         following_list,
         bio,
         website_url,
+        profile_id,
+        username,
       }, // will be passed to the page component as props
     };
   } catch (err) {
@@ -69,11 +77,14 @@ const Profile = ({
   name,
   img_url,
   wallet_addresses,
+  wallet_addresses_excluding_email,
   slug_address,
   followers_list,
   following_list,
   bio,
   website_url,
+  profile_id,
+  username,
 }) => {
   //const router = useRouter();
   const context = useContext(AppContext);
@@ -196,32 +207,34 @@ const Profile = ({
     // Change myFollows via setMyFollows
     context.setMyFollows([
       {
-        profile_id: null,
+        profile_id: profile_id,
         wallet_address: wallet_addresses[0],
         name: name,
         img_url: img_url
           ? img_url
           : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png",
         timestamp: null,
+        username: username,
       },
       ...context.myFollows,
     ]);
 
     setFollowers([
       {
-        profile_id: null,
+        profile_id: context.myProfile.profile_id,
         wallet_address: context.user.publicAddress,
         name: context.myProfile.name,
         img_url: context.myProfile.img_url
           ? context.myProfile.img_url
           : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png",
         timestamp: null,
+        username: context.myProfile.username,
       },
       ...followers,
     ]);
 
     // Post changes to the API
-    await fetch(`/api/follow/${slug_address}`, {
+    await fetch(`/api/follow_v2/${profile_id}`, {
       method: "post",
     });
 
@@ -232,23 +245,17 @@ const Profile = ({
     setIsFollowed(false);
     // Change myLikes via setMyLikes
     context.setMyFollows(
-      context.myFollows.filter(
-        (item) => !wallet_addresses.includes(item.wallet_address)
-      )
+      context.myFollows.filter((item) => item.profile_id != profile_id)
     );
 
     setFollowers(
       followers.filter((follower) => {
-        //console.log(context.myProfile.wallet_addresses);
-
-        return !context.myProfile.wallet_addresses.includes(
-          follower.wallet_address
-        );
+        return context.myProfile.profile_id != follower.profile_id;
       })
     );
 
     // Post changes to the API
-    await fetch(`/api/unfollow/${slug_address}`, {
+    await fetch(`/api/unfollow_v2/${profile_id}`, {
       method: "post",
     });
 
@@ -256,6 +263,7 @@ const Profile = ({
   };
 
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [walletModalOpen, setWalletModalOpen] = useState(false);
   const [pictureModalOpen, setPictureModalOpen] = useState(false);
 
   const [selectedGrid, setSelectedGrid] = useState("created");
@@ -373,6 +381,11 @@ const Profile = ({
 
       {typeof document !== "undefined" ? (
         <>
+          <ModalAddWallet
+            isOpen={walletModalOpen}
+            setWalletModalOpen={setWalletModalOpen}
+            walletAddresses={wallet_addresses}
+          />
           <ModalEditProfile
             isOpen={editModalOpen}
             setEditModalOpen={setEditModalOpen}
@@ -430,7 +443,7 @@ const Profile = ({
                         ? name
                         : "Unnamed"}
                     </div>
-                    <div>
+                    <div className="mt-2 sm:mt-0">
                       <ShareButton
                         url={
                           typeof window !== "undefined"
@@ -451,9 +464,23 @@ const Profile = ({
                     }}
                   >
                     {context.columns > 2 ? (
-                      wallet_addresses[0]
+                      wallet_addresses_excluding_email.map((address) => {
+                        return <div key={address}>{address}</div>;
+                      })
                     ) : isMyProfile ? (
                       <div className="text-center md:text-left">
+                        <a
+                          href="#"
+                          onClick={() => {
+                            setEditModalOpen(true);
+                            mixpanel.track("Open edit name");
+                          }}
+                          className="showtime-logout-link"
+                          style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+                        >
+                          Edit profile
+                        </a>
+                        {" \u00A0\u00A0\u00A0 "}
                         <a
                           href="#"
                           onClick={() => {
@@ -473,15 +500,16 @@ const Profile = ({
                         <a
                           href="#"
                           onClick={() => {
-                            setEditModalOpen(true);
-                            mixpanel.track("Open edit name");
+                            setWalletModalOpen(true);
+                            mixpanel.track("Open add wallet");
                           }}
                           className="showtime-logout-link"
                           style={{ whiteSpace: "nowrap", fontWeight: 400 }}
                         >
-                          Edit profile
+                          Add wallet
                         </a>
                         {" \u00A0\u00A0\u00A0 "}
+
                         <a
                           href="#"
                           onClick={() => {
@@ -581,6 +609,18 @@ const Profile = ({
                       <a
                         href="#"
                         onClick={() => {
+                          setEditModalOpen(true);
+                          mixpanel.track("Open edit name");
+                        }}
+                        className="showtime-logout-link"
+                        style={{ whiteSpace: "nowrap", fontWeight: 400 }}
+                      >
+                        Edit profile
+                      </a>
+                      {" \u00A0\u00A0\u00A0 "}
+                      <a
+                        href="#"
+                        onClick={() => {
                           setPictureModalOpen(true);
                           mixpanel.track("Open edit photo");
                         }}
@@ -597,13 +637,13 @@ const Profile = ({
                       <a
                         href="#"
                         onClick={() => {
-                          setEditModalOpen(true);
-                          mixpanel.track("Open edit name");
+                          setWalletModalOpen(true);
+                          mixpanel.track("Open add wallet");
                         }}
                         className="showtime-logout-link"
                         style={{ whiteSpace: "nowrap", fontWeight: 400 }}
                       >
-                        Edit profile
+                        Add wallet
                       </a>
                       {" \u00A0\u00A0\u00A0 "}
                       <a

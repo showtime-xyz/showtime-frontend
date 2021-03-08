@@ -2,7 +2,7 @@ import Iron from "@hapi/iron";
 import CookieService from "../../../lib/cookie";
 
 export default async (req, res) => {
-  const tid = req.query.tid;
+  const profile_id = req.query.profile_id;
 
   try {
     const user = await Iron.unseal(
@@ -11,13 +11,16 @@ export default async (req, res) => {
       Iron.defaults
     );
 
-    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v2/unlike/${tid}`, {
-      method: "POST",
-      headers: {
-        "X-Authenticated-User": user.publicAddress,
-        "X-API-Key": process.env.SHOWTIME_FRONTEND_API_KEY,
-      },
-    });
+    await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v2/unfollow/${profile_id}`,
+      {
+        method: "POST",
+        headers: {
+          "X-Authenticated-User": user.publicAddress,
+          "X-API-Key": process.env.SHOWTIME_FRONTEND_API_KEY,
+        },
+      }
+    );
   } catch (error) {
     console.log(error);
   }

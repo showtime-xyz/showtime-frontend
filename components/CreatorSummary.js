@@ -6,6 +6,7 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 export default function CreatorSummary({
   name,
+  username,
   address,
   imageUrl,
   closeModal,
@@ -14,7 +15,7 @@ export default function CreatorSummary({
   return (
     <>
       <div>
-        <Link href="/[profile]" as={`/${address}`}>
+        <Link href="/[profile]" as={username ? `/${username}` : `/${address}`}>
           <a onClick={closeModal}>
             <img
               alt={name}
@@ -29,7 +30,7 @@ export default function CreatorSummary({
           </a>
         </Link>
       </div>
-      <Link href="/[profile]" as={`/${address}`}>
+      <Link href="/[profile]" as={username ? `/${username}` : `/${address}`}>
         <a onClick={closeModal}>
           <p className="text-xl md:text-3xl py-4 inline-block hover:text-stpink">
             {truncateWithEllipses(name, 26)}
@@ -37,7 +38,7 @@ export default function CreatorSummary({
         </a>
       </Link>
       {bio && <div className="pb-4 text-gray-500">{bio}</div>}
-      <Link href="/[profile]" as={`/${address}`}>
+      <Link href="/[profile]" as={username ? `/${username}` : `/${address}`}>
         <a onClick={closeModal}>
           <div className="px-6 py-2 mt-2 border-2 border-gray-300 rounded-xl flex items-center justify-center w-max text-gray-300 hover:border-stpink hover:text-stpink">
             <span className="mr-2 text-black">Artist Profile</span>
