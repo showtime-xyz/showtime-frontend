@@ -169,7 +169,6 @@ const TokenDetailBody = ({
                 style={_.merge(
                   {
                     width: mediaWidth,
-                    maxWidth: 500,
                   },
                   fullResLoaded === true ? { display: "none" } : null
                 )}
