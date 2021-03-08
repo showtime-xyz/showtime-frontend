@@ -23,6 +23,7 @@ const TokenDetailBody = ({
   handleUnlike,
   setEditModalOpen,
   ownershipDetails,
+  isInModal,
 }) => {
   const context = useContext(AppContext);
   const { isMobile, columns, gridWidth } = context;
@@ -196,7 +197,7 @@ const TokenDetailBody = ({
           style={{
             overflow: "auto",
             position: "relative",
-            width: gridWidth,
+            width: isInModal ? "100%" : gridWidth,
             margin: "auto",
           }}
         >

@@ -151,7 +151,7 @@ export default function Modal({
                 className="w-full"
                 setEditModalOpen={setEditModalOpen}
                 ownershipDetails={ownershipDetails}
-                //originalImageDimensions={originalImageDimensions}
+                isInModal
               />
             </div>
             <div
