@@ -127,7 +127,7 @@ const TokenDetailBody = ({
       <div
         className="flex flex-col"
         ref={modalRef}
-        style={{ position: "relative" }}
+        style={{ position: "relative", marginTop: -1 }}
       >
         {columns === 1 ? (
           <div className="p-4 flex flex-row">
@@ -207,7 +207,6 @@ const TokenDetailBody = ({
                   <button
                     style={{
                       borderRadius: 7,
-                      color: "white",
                       padding: 12,
                     }}
                     type="button"
@@ -215,7 +214,7 @@ const TokenDetailBody = ({
                       setLightboxOpen(true);
                       mixpanel.track("Original size clicked");
                     }}
-                    className="flex flex-row items-center bg-gray-800 hover:bg-gray-700"
+                    className="flex flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white"
                   >
                     <div className="">
                       <FontAwesomeIcon icon={faExpand} width={18} height={18} />
