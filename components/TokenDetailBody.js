@@ -88,7 +88,6 @@ const TokenDetailBody = ({
   useEffect(() => {
     setFullResLoaded(false);
   }, [item]);
-  console.log("item", item);
 
   return (
     <>
@@ -203,7 +202,8 @@ const TokenDetailBody = ({
                   zIndex: 20,
                 }}
               >
-                {item.token_has_video ? null : item.token_img_url ? (
+                {isMobile ||
+                item.token_has_video ? null : item.token_img_url ? (
                   <button
                     style={{
                       borderRadius: 7,
@@ -220,11 +220,9 @@ const TokenDetailBody = ({
                     <div className="">
                       <FontAwesomeIcon icon={faExpand} width={18} height={18} />
                     </div>
-                    {!isMobile && (
-                      <div className="ml-2" style={{ fontSize: 14 }}>
-                        Original size
-                      </div>
-                    )}
+                    <div className="ml-2" style={{ fontSize: 14 }}>
+                      Original size
+                    </div>
                   </button>
                 ) : null}
                 <div></div>
