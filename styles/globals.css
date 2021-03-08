@@ -633,3 +633,12 @@ textarea:focus {
 .card-menu-item:hover {
   color: #e45cff;
 }
+
+.hidden-items-link {
+  cursor: pointer;
+  color: #999;
+}
+
+.hidden-items-link:hover {
+  color: #e45cff;
+}

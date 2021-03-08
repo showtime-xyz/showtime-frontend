@@ -6,10 +6,11 @@ const GridTabsWrapper = styled.div`
   display: flex;
   flex-direction: row;
   border-bottom: 1px solid #ddd;
+  margin-right: 0px;
   //   overflow-x: scroll;
 `;
 const GridTabsContainer = styled.div`
-  margin: ${(p) => (p.isMobile ? "20px 16px" : "20px 10px")};
+  padding: ${(p) => (p.isMobile ? "20px 16px" : "20px 2px")};
 `;
 const GridTabsTitle = styled.h3`
   padding: 10px 0px;

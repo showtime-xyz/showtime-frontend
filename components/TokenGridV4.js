@@ -16,15 +16,26 @@ const TokenGridV4 = ({
   isMyProfile,
   openCardMenu,
   setOpenCardMenu,
+  userHiddenItems,
+  setUserHiddenItems,
+  showUserHiddenItems,
 }) => {
   const context = useContext(AppContext);
   const [itemsList, setItemsList] = useState([]);
   const [showDuplicateNFTs, setShowDuplicateNFTs] = useState({});
   const [itemsShowing, setItemsShowing] = useState(0);
-  const deduplicatedItemsList = itemsList.filter((item) => {
-    const hash = item?.token_img_url || item?.token_animation_url;
-    return !item?.hidden_duplicate ? true : showDuplicateNFTs[hash];
-  });
+  const deduplicatedItemsList = itemsList
+    .filter((item) => {
+      return showUserHiddenItems
+        ? true
+        : !userHiddenItems
+        ? true
+        : !userHiddenItems.includes(item.nft_id);
+    })
+    .filter((item) => {
+      const hash = item?.token_img_url || item?.token_animation_url;
+      return !item?.hidden_duplicate ? true : showDuplicateNFTs[hash];
+    });
   const [hasMore, setHasMore] = useState(true);
   const [currentlyPlayingVideo, setCurrentlyPlayingVideo] = useState(null);
   const [currentlyOpenModal, setCurrentlyOpenModal] = useState(null);
@@ -250,6 +261,8 @@ const TokenGridV4 = ({
                 listId={listId}
                 openCardMenu={openCardMenu}
                 setOpenCardMenu={setOpenCardMenu}
+                userHiddenItems={userHiddenItems}
+                setUserHiddenItems={setUserHiddenItems}
               />
             ))}
           </div>

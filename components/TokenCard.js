@@ -72,6 +72,11 @@ class TokenCard extends React.Component {
   };
 
   handleHide = async () => {
+    this.props.setUserHiddenItems([
+      ...this.props.userHiddenItems,
+      this.props.item.nft_id,
+    ]);
+
     // Post changes to the API
     await fetch(`/api/hidenft/${this.props.item.nft_id}/${this.props.listId}`, {
       method: "post",
@@ -81,6 +86,12 @@ class TokenCard extends React.Component {
   };
 
   handleUnhide = async () => {
+    this.props.setUserHiddenItems([
+      ...this.props.userHiddenItems.filter(
+        (nft_id) => nft_id != this.props.item.nft_id
+      ),
+    ]);
+
     // Post changes to the API
     await fetch(
       `/api/unhidenft/${this.props.item.nft_id}/${this.props.listId}`,
@@ -145,7 +156,12 @@ class TokenCard extends React.Component {
                 : {
                     width: 375,
                     borderWidth: 1,
-                  }
+                  },
+
+              this.props.userHiddenItems &&
+                this.props.userHiddenItems.includes(this.props.item.nft_id)
+                ? { opacity: 0.7, backgroundColor: "#ddd" }
+                : null
             )}
             ref={this.divRef}
             className={
@@ -190,7 +206,12 @@ class TokenCard extends React.Component {
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
-                      this.props.setOpenCardMenu(item.nft_id + "_" + listId);
+
+                      this.props.setOpenCardMenu(
+                        this.props.openCardMenu == item.nft_id + "_" + listId
+                          ? null
+                          : item.nft_id + "_" + listId
+                      );
                     }}
                     className="card-menu-button"
                   >
@@ -213,14 +234,27 @@ class TokenCard extends React.Component {
                       top: 40,
                       right: 15,
                       backgroundColor: "white",
-                      borderRadius: 5,
+                      borderRadius: 7,
                       zIndex: 1,
                       fontSize: 14,
                     }}
-                    className="py-1 px-3"
+                    className="py-2 px-4"
                   >
-                    <div className="card-menu-item" onClick={this.handleHide}>
-                      Hide item from Liked
+                    <div
+                      className="card-menu-item"
+                      onClick={
+                        this.props.userHiddenItems.includes(
+                          this.props.item.nft_id
+                        )
+                          ? this.handleUnhide
+                          : this.handleHide
+                      }
+                    >
+                      {this.props.userHiddenItems.includes(
+                        this.props.item.nft_id
+                      )
+                        ? "Unhide item from Liked"
+                        : "Hide item from Liked"}
                     </div>
                   </div>
                 ) : null}
@@ -403,7 +437,6 @@ class TokenCard extends React.Component {
             <div
               className="flex items-end"
               style={{
-                backgroundColor: "#ffffff",
                 borderTopWidth: 1,
                 borderColor: "rgb(219,219,219)",
               }}

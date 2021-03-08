@@ -144,24 +144,24 @@ const Profile = ({
         data_profile.created.filter(
           (item) =>
             item.token_hidden !== 1 &&
-            (item.token_img_url || item.token_animation_url) &&
-            !data_profile.created_hidden.includes(item.nft_id)
+            (item.token_img_url || item.token_animation_url)
+          //&& !data_profile.created_hidden.includes(item.nft_id)
         )
       );
       setOwnedItems(
         data_profile.owned.filter(
           (item) =>
             item.token_hidden !== 1 &&
-            (item.token_img_url || item.token_animation_url) &&
-            !data_profile.owned_hidden.includes(item.nft_id)
+            (item.token_img_url || item.token_animation_url)
+          //&& !data_profile.owned_hidden.includes(item.nft_id)
         )
       );
       setLikedItems(
         data_profile.liked.filter(
           (item) =>
             item.token_hidden !== 1 &&
-            (item.token_img_url || item.token_animation_url) &&
-            !data_profile.liked_hidden.includes(item.nft_id)
+            (item.token_img_url || item.token_animation_url)
+          //&& !data_profile.liked_hidden.includes(item.nft_id)
         )
       );
       setIsLoadingCards(false);
@@ -291,6 +291,7 @@ const Profile = ({
   const [showFollowing, setShowFollowing] = useState(false);
 
   const [openCardMenu, setOpenCardMenu] = useState(null);
+  const [showUserHiddenItems, setShowUserHiddenItems] = useState(false);
 
   useEffect(() => {
     // Pick an initial tab to display
@@ -322,9 +323,13 @@ const Profile = ({
         itemCount={
           isLoadingCards
             ? null
-            : createdItems.length + createdHiddenItems.length == 150
+            : showUserHiddenItems
+            ? createdItems.length
+            : createdItems.length == 150 // go ahead and say 150+ if we are at max items
             ? 150
-            : createdItems.length
+            : createdItems.filter(
+                (item) => !createdHiddenItems.includes(item.nft_id)
+              ).length
         }
         isActive={selectedGrid === "created"}
         onClickTab={() => {
@@ -336,9 +341,13 @@ const Profile = ({
         itemCount={
           isLoadingCards
             ? null
-            : ownedItems.length + ownedHiddenItems.length == 150
+            : showUserHiddenItems
+            ? ownedItems.length
+            : ownedItems.length == 150 // go ahead and say 150+ if we are at max items
             ? 150
-            : ownedItems.length
+            : ownedItems.filter(
+                (item) => !ownedHiddenItems.includes(item.nft_id)
+              ).length
         }
         isActive={selectedGrid === "owned"}
         onClickTab={() => {
@@ -350,9 +359,13 @@ const Profile = ({
         itemCount={
           isLoadingCards
             ? null
-            : likedItems.length + likedHiddenItems.length == 150
+            : showUserHiddenItems
+            ? likedItems.length
+            : likedItems.length == 150 // go ahead and say 150+ if we are at max items
             ? 150
-            : likedItems.length
+            : likedItems.filter(
+                (item) => !likedHiddenItems.includes(item.nft_id)
+              ).length
         }
         isActive={selectedGrid === "liked"}
         onClickTab={() => {
@@ -465,8 +478,17 @@ const Profile = ({
         {/* Wait until @gridWidth is populated to display page's body */}
         {gridWidth && (
           <div>
-            <div className="m-auto" style={{ width: gridWidth }}>
-              <div className="px-4 md:px-0 flex flex-col md:flex-row items-center md:pb-6 pt-12">
+            <div
+              className="m-auto"
+              style={
+                context.windowSize &&
+                context.columns == 1 &&
+                context.windowSize.width >= 768
+                  ? { width: gridWidth, marginLeft: 16 }
+                  : { width: gridWidth }
+              }
+            >
+              <div className="px-4 md:px-0 flex flex-col md:flex-row items-center md:pb-6 pt-12 mx-0">
                 <div className="flex-grow flex flex-row items-center">
                   <div className="flex flex-col ">
                     <div className="flex flex-row items-center text-center">
@@ -747,12 +769,40 @@ const Profile = ({
                 }
               />
             </div>
-            {columns && (
-              <div
-                className="mx-auto"
-                style={columns === 1 ? null : { width: columns * (375 + 20) }}
-              >
+            {context.gridWidth && (
+              <div className="mx-auto" style={{ width: gridWidth }}>
                 {FilterTabs}
+                <div className="flex">
+                  <div className="flex-grow"></div>
+                  <div
+                    className="text-right pr-3 text-sm hidden-items-link pb-1"
+                    onClick={() => {
+                      setShowUserHiddenItems(!showUserHiddenItems);
+                    }}
+                    style={
+                      context.windowSize && context.windowSize.width < 600
+                        ? {
+                            fontWeight: 400,
+                            fontSize: 12,
+                            marginTop: -10,
+                            marginBottom: 4,
+                          }
+                        : {
+                            fontWeight: 400,
+                            fontSize: 12,
+                            marginTop: -59,
+                          }
+                    }
+                  >
+                    {createdHiddenItems.length === 0 &&
+                    ownedHiddenItems.length === 0 &&
+                    likedHiddenItems.length === 0
+                      ? null
+                      : showUserHiddenItems
+                      ? "Hide hidden items"
+                      : "Show hidden items"}
+                  </div>
+                </div>
               </div>
             )}
 
@@ -779,6 +829,25 @@ const Profile = ({
               isMyProfile={isMyProfile}
               openCardMenu={openCardMenu}
               setOpenCardMenu={setOpenCardMenu}
+              userHiddenItems={
+                selectedGrid === "created"
+                  ? createdHiddenItems
+                  : selectedGrid === "owned"
+                  ? ownedHiddenItems
+                  : selectedGrid === "liked"
+                  ? likedHiddenItems
+                  : null
+              }
+              setUserHiddenItems={
+                selectedGrid === "created"
+                  ? setCreatedHiddenItems
+                  : selectedGrid === "owned"
+                  ? setOwnedHiddenItems
+                  : selectedGrid === "liked"
+                  ? setLikedHiddenItems
+                  : null
+              }
+              showUserHiddenItems={showUserHiddenItems}
             />
           </div>
         )}
