@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import Link from "next/link";
 import mixpanel from "mixpanel-browser";
+import Lightbox from "react-image-lightbox";
+import "react-image-lightbox/style.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExpand } from "@fortawesome/free-solid-svg-icons";
 import _ from "lodash";
 import ModalReportItem from "./ModalReportItem";
 import ReactPlayer from "react-player";
@@ -14,7 +18,7 @@ import UserTimestampCard from "./UserTimestampCard";
 import TokenHistoryCard from "./TokenHistoryCard";
 
 // how wide the media will be
-const TOKEN_MEDIA_WIDTH = 600;
+const TOKEN_MEDIA_WIDTH = 500;
 
 const TokenDetailBody = ({
   item,
@@ -54,6 +58,7 @@ const TokenDetailBody = ({
   const modalRef = useRef();
   const [mediaHeight, setMediaHeight] = useState(null);
   const [mediaWidth, setMediaWidth] = useState(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   useEffect(() => {
     var aspectRatio = 1;
@@ -83,6 +88,7 @@ const TokenDetailBody = ({
   useEffect(() => {
     setFullResLoaded(false);
   }, [item]);
+  console.log("item", item);
 
   return (
     <>
@@ -95,6 +101,30 @@ const TokenDetailBody = ({
           />
         </>
       ) : null}
+      {lightboxOpen && (
+        <Lightbox
+          mainSrc={
+            item.token_img_original_url
+              ? item.token_img_original_url
+              : item.token_img_url
+          }
+          //nextSrc={images[(photoIndex + 1) % images.length]}
+          //prevSrc={images[(photoIndex + images.length - 1) % images.length]}
+          onCloseRequest={() => setLightboxOpen(false)}
+          //enableZoom={false}
+          /*
+          onMovePrevRequest={() =>
+            this.setState({
+              photoIndex: (photoIndex + images.length - 1) % images.length,
+            })
+          }
+          onMoveNextRequest={() =>
+            this.setState({
+              photoIndex: (photoIndex + 1) % images.length,
+            })
+          }*/
+        />
+      )}
       <div
         className="flex flex-col"
         ref={modalRef}
@@ -163,6 +193,42 @@ const TokenDetailBody = ({
                 margin: "auto",
               }}
             >
+              <div
+                className="w-max p"
+                style={{
+                  position: "absolute",
+                  top: isMobile ? 57 : 0,
+                  right: 0,
+                  margin: 10,
+                  zIndex: 20,
+                }}
+              >
+                {item.token_has_video ? null : item.token_img_url ? (
+                  <button
+                    style={{
+                      borderRadius: 7,
+                      color: "white",
+                      padding: 12,
+                    }}
+                    type="button"
+                    onClick={() => {
+                      setLightboxOpen(true);
+                      mixpanel.track("Original size clicked");
+                    }}
+                    className="flex flex-row items-center bg-gray-800 hover:bg-gray-700"
+                  >
+                    <div className="">
+                      <FontAwesomeIcon icon={faExpand} width={18} height={18} />
+                    </div>
+                    {!isMobile && (
+                      <div className="ml-2" style={{ fontSize: 14 }}>
+                        Original size
+                      </div>
+                    )}
+                  </button>
+                ) : null}
+                <div></div>
+              </div>
               <img
                 src={getImageUrl()}
                 alt={item.token_name}

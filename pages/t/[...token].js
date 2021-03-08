@@ -1,11 +1,8 @@
 import { useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import _ from "lodash";
-import Lightbox from "react-image-lightbox";
-import "react-image-lightbox/style.css"; // This only needs to be imported once in your app
+// import "react-image-lightbox/style.css"; // This only needs to be imported once in your app
 import mixpanel from "mixpanel-browser";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExpand } from "@fortawesome/free-solid-svg-icons";
 import Layout from "../../components/layout";
 import backend from "../../lib/backend";
 import TokenGridV4 from "../../components/TokenGridV4";
@@ -57,8 +54,6 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
       setIsMyProfile(false);
     }
   }, [same_owner_items, context.user]);
-
-  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   // Set up my likes
   const [item, setItem] = useState(token);
@@ -180,43 +175,6 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
       {gridWidth && (
         <div>
           <div className="flex flex-col w-full relative bg-white">
-            <div
-              className="w-max p"
-              style={{
-                position: "absolute",
-                top: isMobile ? 57 : 0,
-                right: 0,
-                margin: 10,
-                zIndex: 20,
-              }}
-            >
-              {item.token_has_video ? null : item.token_img_url ? (
-                <button
-                  style={{
-                    borderRadius: 7,
-                    color: "white",
-                    padding: 12,
-                    backgroundColor: "#52525278",
-                  }}
-                  type="button"
-                  onClick={() => {
-                    setLightboxOpen(true);
-                    mixpanel.track("Original size clicked");
-                  }}
-                  className="flex flex-row items-center"
-                >
-                  <div className="flex">
-                    <FontAwesomeIcon icon={faExpand} />
-                  </div>
-                  {!isMobile && (
-                    <div className="flex ml-2" style={{ fontSize: 14 }}>
-                      Original size
-                    </div>
-                  )}
-                </button>
-              ) : null}
-              <div></div>
-            </div>
             <TokenDetailBody
               item={item}
               muted={false}
@@ -226,32 +184,6 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
               ownershipDetails={ownershipDetails}
             />
           </div>
-
-          {lightboxOpen && (
-            <Lightbox
-              mainSrc={
-                item.token_img_original_url
-                  ? item.token_img_original_url
-                  : item.token_img_url
-              }
-              //nextSrc={images[(photoIndex + 1) % images.length]}
-              //prevSrc={images[(photoIndex + images.length - 1) % images.length]}
-              onCloseRequest={() => setLightboxOpen(false)}
-              //enableZoom={false}
-              /*
-          onMovePrevRequest={() =>
-            this.setState({
-              photoIndex: (photoIndex + images.length - 1) % images.length,
-            })
-          }
-          onMoveNextRequest={() =>
-            this.setState({
-              photoIndex: (photoIndex + 1) % images.length,
-            })
-          }*/
-            />
-          )}
-
           {createdItems.length === 0 ? null : (
             <>
               <div className="flex flex-col text-center w-full">
