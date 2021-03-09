@@ -41,12 +41,15 @@ const Header = () => {
                   mixpanel.track("Logo button click");
                 }}
               >
-                <img
+                {/* <img
                   src="/logo_sm.jpg"
                   style={{ height: 44, width: 44, borderRadius: 5 }}
-                />
-                <div className="mx-2" style={{ fontWeight: 600 }}>
-                  Showtime
+                /> */}
+                <div
+                  className="mx-2 text-2xl py-2"
+                  style={{ fontWeight: 400, fontFamily: "Regular" }}
+                >
+                  {context.isMobile ? "ST" : "SHOWTIME"}
                 </div>
               </a>
             </Link>
