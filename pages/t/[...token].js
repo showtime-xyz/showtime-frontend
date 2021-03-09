@@ -198,7 +198,11 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
                     }.`
                   : null}
               </div>
-              <TokenGridV4 items={createdItems} />
+              {gridWidth && (
+                <div className="m-auto" style={{ width: gridWidth }}>
+                  <TokenGridV4 items={createdItems} />
+                </div>
+              )}
             </>
           )}
           {item.multiple_owners ? null : ownedItems.length ===
@@ -216,7 +220,11 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
                     }.`
                   : null}
               </div>
-              <TokenGridV4 items={ownedItems} />
+              {gridWidth && (
+                <div className="m-auto" style={{ width: gridWidth }}>
+                  <TokenGridV4 items={ownedItems} />
+                </div>
+              )}
             </>
           )}
         </div>

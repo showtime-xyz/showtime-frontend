@@ -117,13 +117,17 @@ export default function Home() {
         </div>
       )}
 
-      <TokenGridV4
-        items={featuredItems}
-        onFinish={() => {
-          setReachedBottom(true);
-        }}
-        isLoading={isLoadingCards}
-      />
+      {gridWidth && (
+        <div className="m-auto" style={{ width: gridWidth }}>
+          <TokenGridV4
+            items={featuredItems}
+            onFinish={() => {
+              setReachedBottom(true);
+            }}
+            isLoading={isLoadingCards}
+          />
+        </div>
+      )}
 
       {featuredItems.length > 0 && reachedBottom ? (
         <div className="text-center pt-8 pb-16">

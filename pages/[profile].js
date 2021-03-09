@@ -107,9 +107,14 @@ const Profile = ({
     checkIfFollowed();
   }, [context.myFollows, wallet_addresses]);
 
-  const [likedItems, setLikedItems] = useState([]);
   const [createdItems, setCreatedItems] = useState([]);
   const [ownedItems, setOwnedItems] = useState([]);
+  const [likedItems, setLikedItems] = useState([]);
+
+  const [createdHiddenItems, setCreatedHiddenItems] = useState([]);
+  const [ownedHiddenItems, setOwnedHiddenItems] = useState([]);
+  const [likedHiddenItems, setLikedHiddenItems] = useState([]);
+
   const [isLoadingCards, setIsLoadingCards] = useState(false);
 
   // Fetch the created/owned/liked items
@@ -117,19 +122,30 @@ const Profile = ({
     const fetchItems = async () => {
       // clear out existing from page (if switching profiles)
       setIsLoadingCards(true);
+
       setCreatedItems([]);
       setOwnedItems([]);
       setLikedItems([]);
+
+      setCreatedHiddenItems([]);
+      setOwnedHiddenItems([]);
+      setLikedHiddenItems([]);
 
       const response_profile = await backend.get(
         `/v2/profile_client/${slug_address}?limit=150`
       );
       const data_profile = response_profile.data.data;
+
+      setCreatedHiddenItems(data_profile.created_hidden);
+      setOwnedHiddenItems(data_profile.owned_hidden);
+      setLikedHiddenItems(data_profile.liked_hidden);
+
       setCreatedItems(
         data_profile.created.filter(
           (item) =>
             item.token_hidden !== 1 &&
             (item.token_img_url || item.token_animation_url)
+          //&& !data_profile.created_hidden.includes(item.nft_id)
         )
       );
       setOwnedItems(
@@ -137,6 +153,7 @@ const Profile = ({
           (item) =>
             item.token_hidden !== 1 &&
             (item.token_img_url || item.token_animation_url)
+          //&& !data_profile.owned_hidden.includes(item.nft_id)
         )
       );
       setLikedItems(
@@ -144,6 +161,7 @@ const Profile = ({
           (item) =>
             item.token_hidden !== 1 &&
             (item.token_img_url || item.token_animation_url)
+          //&& !data_profile.liked_hidden.includes(item.nft_id)
         )
       );
       setIsLoadingCards(false);
@@ -194,7 +212,6 @@ const Profile = ({
 
   const handleLoggedOutFollow = () => {
     mixpanel.track("Follow but logged out");
-    //router.push("/login");
     context.setLoginModalOpen(true);
   };
 
@@ -267,6 +284,9 @@ const Profile = ({
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
 
+  const [openCardMenu, setOpenCardMenu] = useState(null);
+  const [showUserHiddenItems, setShowUserHiddenItems] = useState(false);
+
   useEffect(() => {
     // Pick an initial tab to display
     if (isLoadingCards) {
@@ -315,7 +335,17 @@ const Profile = ({
     <GridTabs>
       <GridTab
         label="Created"
-        itemCount={isLoadingCards ? null : createdItems.length}
+        itemCount={
+          isLoadingCards
+            ? null
+            : showUserHiddenItems
+            ? createdItems.length
+            : createdItems.length == 150 // go ahead and say 150+ if we are at max items
+            ? 150
+            : createdItems.filter(
+                (item) => !createdHiddenItems.includes(item.nft_id)
+              ).length
+        }
         isActive={selectedGrid === "created"}
         onClickTab={() => {
           setSelectedGrid("created");
@@ -323,7 +353,17 @@ const Profile = ({
       />
       <GridTab
         label="Owned"
-        itemCount={isLoadingCards ? null : ownedItems.length}
+        itemCount={
+          isLoadingCards
+            ? null
+            : showUserHiddenItems
+            ? ownedItems.length
+            : ownedItems.length == 150 // go ahead and say 150+ if we are at max items
+            ? 150
+            : ownedItems.filter(
+                (item) => !ownedHiddenItems.includes(item.nft_id)
+              ).length
+        }
         isActive={selectedGrid === "owned"}
         onClickTab={() => {
           setSelectedGrid("owned");
@@ -331,7 +371,17 @@ const Profile = ({
       />
       <GridTab
         label="Liked"
-        itemCount={isLoadingCards ? null : likedItems.length}
+        itemCount={
+          isLoadingCards
+            ? null
+            : showUserHiddenItems
+            ? likedItems.length
+            : likedItems.length == 150 // go ahead and say 150+ if we are at max items
+            ? 150
+            : likedItems.filter(
+                (item) => !likedHiddenItems.includes(item.nft_id)
+              ).length
+        }
         isActive={selectedGrid === "liked"}
         onClickTab={() => {
           setSelectedGrid("liked");
@@ -341,319 +391,352 @@ const Profile = ({
   );
 
   return (
-    <Layout>
-      <Head>
-        <title>
-          Profile |{" "}
-          {isMyProfile
-            ? context.myProfile
-              ? context.myProfile.name
+    <div
+      onClick={() => {
+        setOpenCardMenu(null);
+      }}
+    >
+      <Layout>
+        <Head>
+          <title>
+            Profile |{" "}
+            {isMyProfile
+              ? context.myProfile
                 ? context.myProfile.name
+                  ? context.myProfile.name
+                  : "Unnamed"
+                : name
+                ? name
                 : "Unnamed"
               : name
               ? name
-              : "Unnamed"
-            : name
-            ? name
-            : "Unnamed"}
-        </title>
+              : "Unnamed"}
+          </title>
 
-        <meta
-          name="description"
-          content="Explore digital art I've created, owned, and liked"
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          name="og:description"
-          content="Explore digital art I've created, owned, and liked"
-        />
-        <meta
-          property="og:image"
-          content={
-            img_url
-              ? img_url
-              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-          }
-        />
-        <meta name="og:title" content={name ? name : wallet_addresses[0]} />
+          <meta
+            name="description"
+            content="Explore digital art I've created, owned, and liked"
+          />
+          <meta property="og:type" content="website" />
+          <meta
+            name="og:description"
+            content="Explore digital art I've created, owned, and liked"
+          />
+          <meta
+            property="og:image"
+            content={
+              img_url
+                ? img_url
+                : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+            }
+          />
+          <meta name="og:title" content={name ? name : wallet_addresses[0]} />
 
-        <meta name="twitter:card" content="summary" />
-        <meta
-          name="twitter:title"
-          content={name ? name : wallet_addresses[0]}
-        />
-        <meta
-          name="twitter:description"
-          content="Explore digital art I've created, owned, and liked"
-        />
-        <meta
-          name="twitter:image"
-          content={
-            img_url
-              ? img_url
-              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-          }
-        />
-      </Head>
+          <meta name="twitter:card" content="summary" />
+          <meta
+            name="twitter:title"
+            content={name ? name : wallet_addresses[0]}
+          />
+          <meta
+            name="twitter:description"
+            content="Explore digital art I've created, owned, and liked"
+          />
+          <meta
+            name="twitter:image"
+            content={
+              img_url
+                ? img_url
+                : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+            }
+          />
+        </Head>
 
-      {typeof document !== "undefined" ? (
-        <>
-          <ModalAddWallet
-            isOpen={walletModalOpen}
-            setWalletModalOpen={setWalletModalOpen}
-            walletAddresses={wallet_addresses}
-          />
-          <ModalEditProfile
-            isOpen={editModalOpen}
-            setEditModalOpen={setEditModalOpen}
-          />
-          <ModalEditPhoto
-            isOpen={pictureModalOpen}
-            setEditModalOpen={setPictureModalOpen}
-          />
-          {/* Followers modal */}
-          <ModalUserList
-            title="Followers"
-            isOpen={showFollowers}
-            users={followers ? followers : []}
-            closeModal={() => {
-              setShowFollowers(false);
-            }}
-            emptyMessage="No followers yet."
-          />
-          {/* Following modal */}
-          <ModalUserList
-            title="Following"
-            isOpen={showFollowing}
-            users={following ? following : []}
-            closeModal={() => {
-              setShowFollowing(false);
-            }}
-            emptyMessage="Not following anyone yet."
-          />
-        </>
-      ) : null}
+        {typeof document !== "undefined" ? (
+          <>
+            <ModalAddWallet
+              isOpen={walletModalOpen}
+              setWalletModalOpen={setWalletModalOpen}
+              walletAddresses={wallet_addresses}
+            />
+            <ModalEditProfile
+              isOpen={editModalOpen}
+              setEditModalOpen={setEditModalOpen}
+            />
+            <ModalEditPhoto
+              isOpen={pictureModalOpen}
+              setEditModalOpen={setPictureModalOpen}
+            />
+            {/* Followers modal */}
+            <ModalUserList
+              title="Followers"
+              isOpen={showFollowers}
+              users={followers ? followers : []}
+              closeModal={() => {
+                setShowFollowers(false);
+              }}
+              emptyMessage="No followers yet."
+            />
+            {/* Following modal */}
+            <ModalUserList
+              title="Following"
+              isOpen={showFollowing}
+              users={following ? following : []}
+              closeModal={() => {
+                setShowFollowing(false);
+              }}
+              emptyMessage="Not following anyone yet."
+            />
+          </>
+        ) : null}
 
-      {/* Start Page Body */}
-      {/* Wait until @gridWidth is populated to display page's body */}
-      {gridWidth && (
-        <>
+        {/* Start Page Body */}
+        {/* Wait until @gridWidth is populated to display page's body */}
+
+        {gridWidth && (
           <div className="m-auto" style={{ width: gridWidth }}>
-            <div className="px-4 md:px-0 flex flex-col md:flex-row items-center md:pb-6 pt-12">
-              <div className="flex-grow flex flex-row items-center">
-                <div className="flex flex-col ">
-                  <div className="flex flex-row items-center text-center">
-                    <div className="flex-grow sm:hidden"></div>
-                    <div
-                      className="text-3xl md:text-5xl showtime-title ml-4 md:ml-0 mt-2 md:mt-0"
-                      style={{ fontWeight: 600, wordBreak: "break-word" }}
-                    >
-                      {isMyProfile
-                        ? context.myProfile
-                          ? context.myProfile.name
-                            ? context.myProfile.name
-                            : "Unnamed"
-                          : name
-                          ? name
-                          : "Unnamed"
-                        : name
-                        ? name
-                        : "Unnamed"}
+            <div
+              style={
+                context.columns == 1
+                  ? { marginLeft: 16, marginRight: 16 }
+                  : { marginLeft: 12, marginRight: 12 }
+              }
+            >
+              <div
+                className="float-right mt-16 text-right"
+                style={{
+                  fontWeight: 400,
+                  fontSize: 12,
+                  color: "#999",
+                }}
+              >
+                {columns > 2
+                  ? wallet_addresses_excluding_email.map((address) => {
+                      return <div key={address}>{address}</div>;
+                    })
+                  : null}
+              </div>
+              <div className="flex flex-row items-center text-center mx-0 px-0  pt-10">
+                <div className="flex-grow sm:hidden"></div>
+                <div
+                  className="showtime-title text-center mx-auto text-2xl md:text-5xl md:leading-snug mt-5"
+                  style={{ fontWeight: 600, wordBreak: "break-word" }}
+                >
+                  {isMyProfile
+                    ? context.myProfile
+                      ? context.myProfile.name
+                        ? context.myProfile.name
+                        : "Unnamed"
+                      : name
+                      ? name
+                      : "Unnamed"
+                    : name
+                    ? name
+                    : "Unnamed"}
+                </div>
+                <div className="ml-1 sm:ml-2 mt-4 sm:mt-8">
+                  <ShareButton
+                    url={
+                      typeof window !== "undefined"
+                        ? window.location.href
+                        : null
+                    }
+                    type={"profile"}
+                  />
+                </div>
+                <div className="flex-grow"></div>
+              </div>
+              <div
+                className={`${
+                  isMyProfile && context.myProfile
+                    ? !context.myProfile.bio && !context.myProfile.website_url
+                      ? "hidden"
+                      : "flex-1"
+                    : !bio && !website_url
+                    ? "hidden"
+                    : "flex-1"
+                } mt-4 text-base align-center flex flex-col justify-center items-center md:items-start`}
+              >
+                {/*<h4 className="text-black mb-2 text-lg font-semibold">About</h4>*/}
+                {isMyProfile && context.myProfile ? (
+                  context.myProfile.bio ? (
+                    <div className="pb-2 sm:mr-16 max-w-xl">
+                      <div className="text-center md:text-left">
+                        {context.myProfile.bio}
+                      </div>
                     </div>
-                    <div className="mt-1 sm:mt-0 ml-2">
-                      <ShareButton
-                        url={
-                          typeof window !== "undefined"
-                            ? window.location.href
-                            : null
-                        }
-                        type={"profile"}
-                      />
+                  ) : null
+                ) : bio ? (
+                  <div className="pb-2 sm:mr-16 max-w-xl">
+                    <div className="text-center md:text-left">
+                      <div className="">{bio}</div>
                     </div>
-                    <div className="flex-grow"></div>
                   </div>
-                  <div
-                    style={{
-                      fontWeight: 400,
-                      fontSize: 12,
-                      marginTop: 8,
-                      color: "#999",
-                    }}
-                  >
-                    {columns > 2
-                      ? wallet_addresses_excluding_email.map((address) => {
-                          return <div key={address}>{address}</div>;
-                        })
-                      : null}
-                    <div
-                      className={`${
-                        isMyProfile && context.myProfile
-                          ? !context.myProfile.bio &&
-                            !context.myProfile.website_url
-                            ? "hidden"
-                            : "flex-1"
-                          : !bio && !website_url
-                          ? "hidden"
-                          : "flex-1"
-                      } mt-8 text-base align-center flex flex-col justify-center items-center md:items-start`}
-                    >
-                      <h4 className="text-black mb-2 text-lg font-semibold">
-                        About
-                      </h4>
-                      {isMyProfile && context.myProfile ? (
-                        context.myProfile.bio ? (
-                          <div className="pb-2 sm:mr-16 max-w-xl">
-                            <div
-                              className="text-center md:text-left"
-                              style={{
-                                wordWrap: "break-word",
-                              }}
-                            >
-                              {context.myProfile.bio}
-                            </div>
-                          </div>
-                        ) : null
-                      ) : bio ? (
-                        <div className="pb-2 sm:mr-16 max-w-xl">
-                          <div
-                            className=""
-                            style={{
-                              wordWrap: "break-word",
-                            }}
-                          >
-                            {bio}
-                          </div>
-                        </div>
-                      ) : null}
+                ) : null}
 
-                      {isMyProfile && context.myProfile ? (
-                        context.myProfile.website_url ? (
-                          <div className="pb-4 sm:pb-0 w-min">
-                            <a
-                              href={
-                                context.myProfile.website_url.slice(0, 4) ===
-                                "http"
-                                  ? context.myProfile.website_url
-                                  : "https://" + context.myProfile.website_url
-                              }
-                              target="_blank"
-                              className="flex flex-row items-center justify-center"
-                              style={{
-                                color: "rgb(81, 125, 228)",
-                                wordWrap: "break-word",
-                              }}
-                              onClick={() => {
-                                mixpanel.track("Clicked profile website link", {
-                                  slug: slug_address,
-                                });
-                              }}
-                            >
-                              <div
-                                style={{
-                                  wordWrap: "break-word",
-                                }}
-                              >
-                                {context.myProfile.website_url}
-                              </div>
-                            </a>
-                          </div>
-                        ) : null
-                      ) : website_url ? (
-                        <div className="pb-0">
-                          <a
-                            href={
-                              website_url.slice(0, 4) === "http"
-                                ? website_url
-                                : "https://" + website_url
-                            }
-                            target="_blank"
-                            className="flex flex-row"
-                            style={{
-                              color: "rgb(81, 125, 228)",
-                              wordWrap: "break-word",
-                            }}
-                            onClick={() => {
-                              mixpanel.track("Clicked profile website link", {
-                                slug: slug_address,
-                              });
-                            }}
-                          >
-                            <div
-                              style={{
-                                overflowWrap: "anywhere",
-                              }}
-                            >
-                              {website_url}
-                            </div>
-                          </a>
-                        </div>
-                      ) : null}
+                {isMyProfile && context.myProfile ? (
+                  context.myProfile.website_url ? (
+                    <div className="w-min">
+                      <a
+                        href={
+                          context.myProfile.website_url.slice(0, 4) === "http"
+                            ? context.myProfile.website_url
+                            : "https://" + context.myProfile.website_url
+                        }
+                        target="_blank"
+                        className="flex flex-row items-center justify-center"
+                        style={{ color: "rgb(81, 125, 228)" }}
+                        onClick={() => {
+                          mixpanel.track("Clicked profile website link", {
+                            slug: slug_address,
+                          });
+                        }}
+                      >
+                        <div>{context.myProfile.website_url}</div>
+                      </a>
                     </div>
+                  ) : null
+                ) : website_url ? (
+                  <div className="w-min">
+                    <a
+                      href={
+                        website_url.slice(0, 4) === "http"
+                          ? website_url
+                          : "https://" + website_url
+                      }
+                      target="_blank"
+                      className="flex flex-row"
+                      style={{ color: "rgb(81, 125, 228)" }}
+                      onClick={() => {
+                        mixpanel.track("Clicked profile website link", {
+                          slug: slug_address,
+                        });
+                      }}
+                    >
+                      <div style={{ wordWrap: "break-word" }}>
+                        {website_url}
+                      </div>
+                    </a>
                   </div>
+                ) : null}
+              </div>
+
+              <ProfileInfoPill
+                isFollowed={isFollowed}
+                isMyProfile={isMyProfile}
+                onClickFollow={
+                  context.user
+                    ? isFollowed
+                      ? handleUnfollow
+                      : handleFollow
+                    : handleLoggedOutFollow
+                }
+                onClickPhoto={() => {
+                  setPictureModalOpen(true);
+                  mixpanel.track("Open edit photo");
+                }}
+                numFollowers={followers && followers.length}
+                numFollowing={following && following.length}
+                showFollowers={() => {
+                  setShowFollowers(true);
+                }}
+                showFollowing={() => {
+                  setShowFollowing(true);
+                }}
+                profileImageUrl={
+                  isMyProfile
+                    ? context.myProfile
+                      ? context.myProfile.img_url
+                      : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                    : img_url
+                    ? img_url
+                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                }
+                profileActions={{ editAccount, editPhoto, addWallet, logout }}
+              />
+            </div>
+            <div className="mx-auto" style={{ width: gridWidth }}>
+              {FilterTabs}
+              <div className="flex">
+                <div className="flex-grow"></div>
+                <div
+                  className="text-right pr-3 text-sm hidden-items-link pb-1"
+                  onClick={() => {
+                    setShowUserHiddenItems(!showUserHiddenItems);
+                  }}
+                  style={
+                    context.windowSize && context.windowSize.width < 600
+                      ? {
+                          fontWeight: 400,
+                          fontSize: 12,
+                          marginTop: -10,
+                          marginBottom: 4,
+                        }
+                      : {
+                          fontWeight: 400,
+                          fontSize: 12,
+                          marginTop: -59,
+                        }
+                  }
+                >
+                  {createdHiddenItems.length === 0 &&
+                  ownedHiddenItems.length === 0 &&
+                  likedHiddenItems.length === 0
+                    ? null
+                    : showUserHiddenItems
+                    ? "Hide hidden items"
+                    : "Show hidden items"}
                 </div>
               </div>
             </div>
-            <ProfileInfoPill
-              isFollowed={isFollowed}
+
+            <TokenGridV4
+              items={
+                selectedGrid === "created"
+                  ? createdItems
+                  : selectedGrid === "owned"
+                  ? ownedItems
+                  : selectedGrid === "liked"
+                  ? likedItems
+                  : null
+              }
+              isLoading={isLoadingCards}
+              listId={
+                selectedGrid === "created"
+                  ? 1
+                  : selectedGrid === "owned"
+                  ? 2
+                  : selectedGrid === "liked"
+                  ? 3
+                  : null
+              }
               isMyProfile={isMyProfile}
-              onClickFollow={
-                context.user
-                  ? isFollowed
-                    ? handleUnfollow
-                    : handleFollow
-                  : handleLoggedOutFollow
+              openCardMenu={openCardMenu}
+              setOpenCardMenu={setOpenCardMenu}
+              userHiddenItems={
+                selectedGrid === "created"
+                  ? createdHiddenItems
+                  : selectedGrid === "owned"
+                  ? ownedHiddenItems
+                  : selectedGrid === "liked"
+                  ? likedHiddenItems
+                  : null
               }
-              onClickPhoto={() => {
-                setPictureModalOpen(true);
-                mixpanel.track("Open edit photo");
-              }}
-              numFollowers={followers && followers.length}
-              numFollowing={following && following.length}
-              showFollowers={() => {
-                setShowFollowers(true);
-              }}
-              showFollowing={() => {
-                setShowFollowing(true);
-              }}
-              profileImageUrl={
-                isMyProfile
-                  ? context.myProfile
-                    ? context.myProfile.img_url
-                      ? context.myProfile.img_url
-                      : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                  : img_url
-                  ? img_url
-                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+              setUserHiddenItems={
+                selectedGrid === "created"
+                  ? setCreatedHiddenItems
+                  : selectedGrid === "owned"
+                  ? setOwnedHiddenItems
+                  : selectedGrid === "liked"
+                  ? setLikedHiddenItems
+                  : null
               }
-              profileActions={{ editAccount, editPhoto, addWallet, logout }}
+              showUserHiddenItems={showUserHiddenItems}
             />
           </div>
-          {columns && (
-            <div
-              className="mx-auto"
-              style={columns === 1 ? null : { width: columns * (375 + 20) }}
-            >
-              {FilterTabs}
-            </div>
-          )}
-
-          <TokenGridV4
-            items={
-              selectedGrid === "created"
-                ? createdItems
-                : selectedGrid === "owned"
-                ? ownedItems
-                : selectedGrid === "liked"
-                ? likedItems
-                : null
-            }
-            isLoading={isLoadingCards}
-          />
-        </>
-      )}
-      {/* End Page Body */}
-    </Layout>
+        )}
+        {/* End Page Body */}
+      </Layout>
+    </div>
   );
 };
 

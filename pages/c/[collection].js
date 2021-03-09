@@ -231,8 +231,15 @@ export default function Collection({
           }}
         >
           {collection_list && collection_list.length > 0 ? (
-            <div className="flex flex-row items-center" style={{ width: 250 }}>
-              <div className="text-left" style={{ width: 250 }}>
+            <div className="flex flex-row items-center">
+              <div
+                className="text-left"
+                style={
+                  context.columns === 1
+                    ? { width: 250, marginLeft: 16, marginRight: 16 }
+                    : { width: 250, marginLeft: 12, marginRight: 12 }
+                }
+              >
                 <Select
                   options={collection_list}
                   labelField="name"
@@ -266,11 +273,11 @@ export default function Collection({
           {FilterTabs}
         </div>
       )}
-      <div className="mb-6 mt-4 text-center">
-        <div className="text-left">
+      {gridWidth && (
+        <div className="m-auto" style={{ width: gridWidth }}>
           <TokenGridV4 items={collectionItems} isLoading={isChanging} />
         </div>
-      </div>
+      )}
     </Layout>
   );
 }

@@ -10,14 +10,14 @@ import ModalReportItem from "./ModalReportItem";
 import ReactPlayer from "react-player";
 import LikeButton from "./LikeButton";
 import ShareButton from "./ShareButton";
-import CloseButton from "./CloseButton";
+//import CloseButton from "./CloseButton";
 import AppContext from "../context/app-context";
 import CreatorSummary from "./CreatorSummary";
 import { removeTags, truncateWithEllipses } from "../lib/utilities";
 import UserTimestampCard from "./UserTimestampCard";
 import TokenHistoryCard from "./TokenHistoryCard";
 
-// how wide the media will be
+// how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500;
 
 const TokenDetailBody = ({
@@ -230,11 +230,14 @@ const TokenDetailBody = ({
                 src={getImageUrl()}
                 alt={item.token_name}
                 style={_.merge(
-                  {
-                    width: mediaWidth,
-                    height: mediaHeight,
-                  },
-                  fullResLoaded === true ? { display: "none" } : null
+                  fullResLoaded === true ? { display: "none" } : null,
+                  context.isMobile
+                    ? {
+                        width: mediaWidth,
+                      }
+                    : {
+                        height: TOKEN_MEDIA_HEIGHT,
+                      }
                 )}
               />
 
@@ -242,11 +245,14 @@ const TokenDetailBody = ({
                 src={item.token_img_url}
                 alt={item.token_name}
                 style={_.merge(
-                  {
-                    width: mediaWidth,
-                    height: mediaHeight,
-                  },
-                  fullResLoaded ? null : { display: "none" }
+                  fullResLoaded ? null : { display: "none" },
+                  context.isMobile
+                    ? {
+                        width: mediaWidth,
+                      }
+                    : {
+                        height: TOKEN_MEDIA_HEIGHT,
+                      }
                 )}
                 onLoad={() => {
                   setFullResLoaded(true);

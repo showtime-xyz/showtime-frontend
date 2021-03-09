@@ -49,7 +49,7 @@ export default class MyApp extends React.Component {
         this.setMyLikes(my_info_data.data.likes_nft);
         this.setMyFollows(my_info_data.data.follows);
         this.setMyProfile(my_info_data.data.profile);
-      } catch { }
+      } catch {}
     } catch {
       // Not logged in
       // Switch from undefined to null
@@ -142,21 +142,21 @@ export default class MyApp extends React.Component {
   }
 
   adjustGridProperties(windowWidth) {
-    if (windowWidth < 820) {
+    if (windowWidth < 790 + 30) {
       this.setIsMobile(true);
       this.setGridWidth(windowWidth);
       this.setColumns(1);
-    } else if (windowWidth < 1200) {
+    } else if (windowWidth < 1185 + 45) {
       this.setIsMobile(false);
-      this.setGridWidth(790 - 18);
+      this.setGridWidth(790);
       this.setColumns(2);
-    } else if (windowWidth < 1600) {
+    } else if (windowWidth < 1580 + 40) {
       this.setIsMobile(false);
-      this.setGridWidth(1185 - 18);
+      this.setGridWidth(1185);
       this.setColumns(3);
     } else {
       this.setIsMobile(false);
-      this.setGridWidth(1580 - 18);
+      this.setGridWidth(1580);
       this.setColumns(4);
     }
   }

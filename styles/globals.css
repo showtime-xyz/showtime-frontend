@@ -617,3 +617,28 @@ textarea:focus {
 .scrollUpButtonTransition {
   bottom: 20px;
 }
+
+.card-menu-button {
+  cursor: pointer;
+}
+
+.card-menu-button:hover {
+  color: #e45cff;
+}
+
+.card-menu-item {
+  cursor: pointer;
+}
+
+.card-menu-item:hover {
+  color: #e45cff;
+}
+
+.hidden-items-link {
+  cursor: pointer;
+  color: #999;
+}
+
+.hidden-items-link:hover {
+  color: #e45cff;
+}

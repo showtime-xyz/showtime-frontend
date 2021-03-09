@@ -7,15 +7,35 @@ import TokenCard from "./TokenCard";
 import useKeyPress from "../hooks/useKeyPress";
 import ModalTokenDetail from "./ModalTokenDetail";
 
-const TokenGridV4 = ({ items, isDetail, onFinish, isLoading }) => {
+const TokenGridV4 = ({
+  items,
+  isDetail,
+  onFinish,
+  isLoading,
+  listId,
+  isMyProfile,
+  openCardMenu,
+  setOpenCardMenu,
+  userHiddenItems,
+  setUserHiddenItems,
+  showUserHiddenItems,
+}) => {
   const context = useContext(AppContext);
   const [itemsList, setItemsList] = useState([]);
   const [showDuplicateNFTs, setShowDuplicateNFTs] = useState({});
   const [itemsShowing, setItemsShowing] = useState(0);
-  const deduplicatedItemsList = itemsList.filter((item) => {
-    const hash = item?.token_img_url || item?.token_animation_url;
-    return !item?.hidden_duplicate ? true : showDuplicateNFTs[hash];
-  });
+  const deduplicatedItemsList = itemsList
+    .filter((item) => {
+      return showUserHiddenItems
+        ? true
+        : !userHiddenItems
+        ? true
+        : !userHiddenItems.includes(item.nft_id);
+    })
+    .filter((item) => {
+      const hash = item?.token_img_url || item?.token_animation_url;
+      return !item?.hidden_duplicate ? true : showDuplicateNFTs[hash];
+    });
   const [hasMore, setHasMore] = useState(true);
   const [currentlyPlayingVideo, setCurrentlyPlayingVideo] = useState(null);
   const [currentlyOpenModal, setCurrentlyOpenModal] = useState(null);
@@ -205,21 +225,19 @@ const TokenGridV4 = ({ items, isDetail, onFinish, isLoading }) => {
         {isLoading ? (
           <div
             className="mx-auto items-center flex justify-center overflow-hidden"
-            style={
-              context.columns === 1
-                ? null
-                : { width: context.columns * (375 + 20) }
-            }
+            style={context.columns === 1 ? null : { width: context.gridWidth }}
           >
             <div className="loading-card-spinner" />
           </div>
         ) : (
           <div
-            className={`grid grid-cols-${context.columns} mx-auto overflow-hidden`}
+            className={`grid grid-cols-${context.columns} overflow-hidden`}
             style={
               context.columns === 1
                 ? null
-                : { width: context.columns * (375 + 20) }
+                : {
+                    width: context.gridWidth,
+                  }
             }
           >
             {deduplicatedItemsList.slice(0, itemsShowing).map((item) => (
@@ -236,6 +254,12 @@ const TokenGridV4 = ({ items, isDetail, onFinish, isLoading }) => {
                 setCurrentlyOpenModal={setCurrentlyOpenModal}
                 showDuplicateNFTs={showDuplicateNFTs}
                 setShowDuplicateNFTs={setShowDuplicateNFTs}
+                isMyProfile={isMyProfile}
+                listId={listId}
+                openCardMenu={openCardMenu}
+                setOpenCardMenu={setOpenCardMenu}
+                userHiddenItems={userHiddenItems}
+                setUserHiddenItems={setUserHiddenItems}
               />
             ))}
           </div>
