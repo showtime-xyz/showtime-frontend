@@ -34,9 +34,8 @@ export default function Home() {
 
   useEffect(() => {
     const getFeatured = async () => {
-      if (featuredItems.length == 0) {
-        setIsLoadingCards(true);
-      }
+      setIsLoadingCards(true);
+
       const response_featured = await backend.get(
         `/v2/featured?limit=150&days=${featuredDays}`
       );
