@@ -2,7 +2,22 @@ import React from "react";
 import "../styles/globals.css";
 import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
+import Router from "next/router";
+import ProgressBar from "@badrap/bar-of-progress";
+
 mixpanel.init("9b14512bc76f3f349c708f67ab189941");
+
+// Progress bar during Routing changes
+const progress = new ProgressBar({
+  size: 2,
+  color: "#e45cff",
+  className: "bar-of-progress",
+  delay: 100,
+});
+
+Router.events.on("routeChangeStart", progress.start);
+Router.events.on("routeChangeComplete", progress.finish);
+Router.events.on("routeChangeError", progress.finish);
 
 export default class MyApp extends React.Component {
   state = {
