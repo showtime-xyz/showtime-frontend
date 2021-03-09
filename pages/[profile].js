@@ -192,11 +192,6 @@ const Profile = ({
     context.user ? context.user.publicAddress : null,
   ]);
 
-  const logout = async () => {
-    await context.logOut();
-    setIsMyProfile(false);
-  };
-
   const handleLoggedOutFollow = () => {
     mixpanel.track("Follow but logged out");
     //router.push("/login");
@@ -294,6 +289,27 @@ const Profile = ({
     ownedItems.length,
     isLoadingCards,
   ]);
+
+  // profilePill Edit profile actions
+  const editAccount = () => {
+    setEditModalOpen(true);
+    mixpanel.track("Open edit name");
+  };
+
+  const editPhoto = () => {
+    setPictureModalOpen(true);
+    mixpanel.track("Open edit photo");
+  };
+
+  const addWallet = () => {
+    setWalletModalOpen(true);
+    mixpanel.track("Open add wallet");
+  };
+
+  const logout = async () => {
+    await context.logOut();
+    setIsMyProfile(false);
+  };
 
   const FilterTabs = (
     <GridTabs>
@@ -464,65 +480,11 @@ const Profile = ({
                       color: "#999",
                     }}
                   >
-                    {columns > 2 ? (
-                      wallet_addresses_excluding_email.map((address) => {
-                        return <div key={address}>{address}</div>;
-                      })
-                    ) : isMyProfile ? (
-                      <div className="text-center md:text-left">
-                        <a
-                          href="#"
-                          onClick={() => {
-                            setEditModalOpen(true);
-                            mixpanel.track("Open edit name");
-                          }}
-                          className="showtime-logout-link"
-                          style={{ whiteSpace: "nowrap", fontWeight: 400 }}
-                        >
-                          Edit profile
-                        </a>
-                        {" \u00A0\u00A0\u00A0 "}
-                        <a
-                          href="#"
-                          onClick={() => {
-                            setPictureModalOpen(true);
-                            mixpanel.track("Open edit photo");
-                          }}
-                          className="showtime-logout-link"
-                          style={{ whiteSpace: "nowrap", fontWeight: 400 }}
-                        >
-                          {context.myProfile &&
-                          context.myProfile.img_url &&
-                          !context.myProfile.img_url.includes("opensea-profile")
-                            ? "Edit photo"
-                            : "Add photo"}
-                        </a>
-                        {" \u00A0\u00A0\u00A0 "}
-                        <a
-                          href="#"
-                          onClick={() => {
-                            setWalletModalOpen(true);
-                            mixpanel.track("Open add wallet");
-                          }}
-                          className="showtime-logout-link"
-                          style={{ whiteSpace: "nowrap", fontWeight: 400 }}
-                        >
-                          Add wallet
-                        </a>
-                        {" \u00A0\u00A0\u00A0 "}
-
-                        <a
-                          href="#"
-                          onClick={() => {
-                            logout();
-                          }}
-                          className="showtime-logout-link "
-                          style={{ whiteSpace: "nowrap", fontWeight: 400 }}
-                        >
-                          Log out
-                        </a>
-                      </div>
-                    ) : null}
+                    {columns > 2
+                      ? wallet_addresses_excluding_email.map((address) => {
+                          return <div key={address}>{address}</div>;
+                        })
+                      : null}
                     <div
                       className={`${
                         isMyProfile && context.myProfile
@@ -630,67 +592,6 @@ const Profile = ({
                   </div>
                 </div>
               </div>
-
-              <div className="place-self-start text-sm">
-                {columns > 2 ? (
-                  isMyProfile ? (
-                    <>
-                      <a
-                        href="#"
-                        onClick={() => {
-                          setEditModalOpen(true);
-                          mixpanel.track("Open edit name");
-                        }}
-                        className="showtime-logout-link"
-                        style={{ whiteSpace: "nowrap", fontWeight: 400 }}
-                      >
-                        Edit profile
-                      </a>
-                      {" \u00A0\u00A0\u00A0 "}
-                      <a
-                        href="#"
-                        onClick={() => {
-                          setPictureModalOpen(true);
-                          mixpanel.track("Open edit photo");
-                        }}
-                        className="showtime-logout-link"
-                        style={{ whiteSpace: "nowrap", fontWeight: 400 }}
-                      >
-                        {context.myProfile &&
-                        context.myProfile.img_url &&
-                        !context.myProfile.img_url.includes("opensea-profile")
-                          ? "Edit photo"
-                          : "Add photo"}
-                      </a>
-                      {" \u00A0\u00A0\u00A0 "}
-                      <a
-                        href="#"
-                        onClick={() => {
-                          setWalletModalOpen(true);
-                          mixpanel.track("Open add wallet");
-                        }}
-                        className="showtime-logout-link"
-                        style={{ whiteSpace: "nowrap", fontWeight: 400 }}
-                      >
-                        Add wallet
-                      </a>
-                      {" \u00A0\u00A0\u00A0 "}
-                      <a
-                        href="#"
-                        onClick={() => {
-                          logout();
-                        }}
-                        className="showtime-logout-link float-right"
-                        style={{ whiteSpace: "nowrap", fontWeight: 400 }}
-                      >
-                        Log out
-                      </a>
-                    </>
-                  ) : (
-                    "\u00A0"
-                  )
-                ) : null}
-              </div>
             </div>
             <ProfileInfoPill
               isFollowed={isFollowed}
@@ -725,6 +626,7 @@ const Profile = ({
                   ? img_url
                   : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
               }
+              profileActions={{ editAccount, editPhoto, addWallet, logout }}
             />
           </div>
           {columns && (
