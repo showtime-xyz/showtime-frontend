@@ -141,7 +141,7 @@ export default function Home() {
         </h1>
         <h1
           className="text-4xl md:text-7xl xl:text-8xl"
-          style={{ fontFamily: "Regular" }}
+          style={{ fontFamily: "Afronaut" }}
         >
           Your Favorite
         </h1>

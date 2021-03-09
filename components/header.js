@@ -47,7 +47,7 @@ const Header = () => {
                 /> */}
                 <div
                   className="mx-2 text-2xl py-2"
-                  style={{ fontWeight: 400, fontFamily: "Regular" }}
+                  style={{ fontWeight: 400, fontFamily: "Afronaut" }}
                 >
                   {context.isMobile ? "ST" : "SHOWTIME"}
                 </div>
