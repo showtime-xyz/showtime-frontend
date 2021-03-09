@@ -32,7 +32,12 @@ export default function ProfileInfoPill({
 
   return (
     <div>
-      <div className="p-6 rounded-xl bg-white m-4 md:m-0 md:w-max flex shadow-lg flex-col md:flex-row justify-center items-center md:items-stretch">
+      <div
+        className="p-6 rounded-xl bg-white m-4 md:m-0 md:w-max flex flex-col md:flex-row justify-center items-center md:items-stretch"
+        style={{
+          boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
+        }}
+      >
         <div
           className={`w-14 h-14 md:w-12 md:h-12 flex items-center justify-center rounded-full my-2 md:my-0 ${
             isMyProfile ? "cursor-pointer hover:opacity-60 transition" : ""
@@ -93,23 +98,23 @@ export default function ProfileInfoPill({
               </div>
               <div
                 ref={dropdownRef}
-                className={`absolute text-center top-20 bg-white z-10 w-max py-2 px-2 shadow-lg rounded-xl transition-all text-md transform ${
+                className={`absolute text-center top-20 bg-white z-10 py-2 px-2 shadow-lg rounded-xl transition-all text-md transform ${
                   isActive
                     ? "visible opacity-1 translate-y-2"
                     : "invisible opacity-0"
                 }`}
               >
                 <div
-                  className="py-2 px-8 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer"
+                  className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
                   onClick={() => {
                     setIsActive(false);
                     editAccount();
                   }}
                 >
-                  Edit Account
+                  Edit Info
                 </div>
                 <div
-                  className="py-2 px-8 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer"
+                  className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
                   onClick={() => {
                     setIsActive(false);
                     editPhoto();
@@ -122,7 +127,7 @@ export default function ProfileInfoPill({
                     : "Add Photo"}
                 </div>
                 <div
-                  className="py-2 px-8 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer"
+                  className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
                   onClick={() => {
                     setIsActive(false);
                     addWallet();
@@ -131,7 +136,7 @@ export default function ProfileInfoPill({
                   Add Wallet
                 </div>
                 <div
-                  className="py-2 px-8 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer"
+                  className="py-2 px-8 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
                   onClick={() => {
                     setIsActive(false);
                     logout();

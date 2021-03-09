@@ -142,7 +142,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   className="text-3xl border-b-2 pb-2"
                   style={{ fontWeight: 600 }}
                 >
-                  Edit photo
+                  Edit Photo
                 </div>
                 <div className="my-8">
                   {image === "" && (
