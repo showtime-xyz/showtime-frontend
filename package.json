@@ -22,6 +22,7 @@
     "awesome-debounce-promise": "^2.1.0",
     "axios": "^0.21.1",
     "croppie": "^2.6.5",
+    "date-fns": "^2.18.0",
     "eth-provider": "^0.5.3",
     "eth-sig-util": "^3.0.1",
     "ethereumjs-util": "^7.0.8",

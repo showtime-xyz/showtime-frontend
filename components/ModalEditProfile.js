@@ -129,7 +129,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   className="text-3xl border-b-2 pb-2"
                   style={{ fontWeight: 600 }}
                 >
-                  Edit profile
+                  Edit Info
                 </div>
                 <div className="mt-4">
                   <label htmlFor="name" style={{ fontWeight: 600 }}>

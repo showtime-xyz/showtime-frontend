@@ -2,8 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import mixpanel from "mixpanel-browser";
 import ClientOnlyPortal from "./ClientOnlyPortal";
 import AppContext from "../context/app-context";
-//import CloseButton from "./CloseButton";
 import TokenDetailBody from "./TokenDetailBody";
+import backend from "../lib/backend";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleRight,
@@ -17,17 +17,16 @@ export default function Modal({
   setEditModalOpen,
   handleLike,
   handleUnlike,
-  showTooltip,
   goToNext,
   goToPrevious,
   columns,
   hasNext,
   hasPrevious,
-  //originalImageDimensions,
 }) {
   const context = useContext(AppContext);
 
   const [isStacked, setIsStacked] = useState(false);
+  const [ownershipDetails, setOwnershipDetails] = useState(null);
   useEffect(() => {
     if (context.windowSize && context.windowSize.width < 1024) {
       setIsStacked(true);
@@ -35,6 +34,21 @@ export default function Modal({
       setIsStacked(false);
     }
   }, [context.windowSize]);
+
+  useEffect(() => {
+    setOwnershipDetails(null);
+    const getOwnershipDetails = async (nftId) => {
+      const detailsData = await backend.get(`/v1/nft_detail/${nftId}`);
+      const {
+        data: { data: details },
+      } = detailsData;
+      setOwnershipDetails(details);
+    };
+    if (item && isOpen) {
+      getOwnershipDetails(item.nft_id);
+    }
+    return () => setOwnershipDetails(null);
+  }, [isOpen, item]);
 
   return (
     <>
@@ -82,7 +96,7 @@ export default function Modal({
               />
             </div>
             <div
-              className="modal flex-grow my-8"
+              className="modal flex-grow my-8 overflow-auto"
               style={
                 isStacked
                   ? { color: "black", height: "100%", overflow: "auto" }
@@ -98,48 +112,44 @@ export default function Modal({
               }
               onClick={(e) => e.stopPropagation()}
             >
-              {columns === 1 ? (
-                <div
+              <div
+                style={{
+                  position: "absolute",
+                  top: 10,
+                  right: 10,
+                  cursor: "pointer",
+                  zIndex: 4,
+                  backgroundColor: "black",
+                  padding: 6,
+                  borderRadius: 18,
+                  width: 36,
+                  height: 36,
+                }}
+                onClick={() => {
+                  mixpanel.track("Close NFT modal - x button");
+                  setEditModalOpen(false);
+                }}
+                className="opacity-50 hover:opacity-80"
+              >
+                <FontAwesomeIcon
                   style={{
-                    position: "absolute",
-                    top: 10,
-                    right: 10,
-                    cursor: "pointer",
-                    zIndex: 4,
-                    backgroundColor: "black",
-                    padding: 6,
-                    borderRadius: 18,
-                    opacity: 0.4,
-                    width: 36,
-                    height: 36,
+                    height: 24,
+                    width: 24,
+                    color: "#fff",
                   }}
-                  onClick={() => {
-                    mixpanel.track("Close NFT modal - x button");
-                    setEditModalOpen(false);
-                  }}
-                >
-                  <FontAwesomeIcon
-                    style={{
-                      height: 24,
-                      width: 24,
-                      color: "#ccc",
-                    }}
-                    icon={faTimes}
-                  />
-                </div>
-              ) : null}
+                  icon={faTimes}
+                />
+              </div>
 
               <TokenDetailBody
                 item={item}
                 muted={false}
                 handleLike={handleLike}
                 handleUnlike={handleUnlike}
-                showTooltip={showTooltip}
                 className="w-full"
                 setEditModalOpen={setEditModalOpen}
-                isStacked={isStacked}
-                columns={columns}
-                //originalImageDimensions={originalImageDimensions}
+                ownershipDetails={ownershipDetails}
+                isInModal
               />
             </div>
             <div

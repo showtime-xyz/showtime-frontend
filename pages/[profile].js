@@ -210,14 +210,8 @@ const Profile = ({
     context.user ? context.user.publicAddress : null,
   ]);
 
-  const logout = async () => {
-    await context.logOut();
-    setIsMyProfile(false);
-  };
-
   const handleLoggedOutFollow = () => {
     mixpanel.track("Follow but logged out");
-    //router.push("/login");
     context.setLoginModalOpen(true);
   };
 
@@ -315,6 +309,27 @@ const Profile = ({
     ownedItems.length,
     isLoadingCards,
   ]);
+
+  // profilePill Edit profile actions
+  const editAccount = () => {
+    setEditModalOpen(true);
+    mixpanel.track("Open edit name");
+  };
+
+  const editPhoto = () => {
+    setPictureModalOpen(true);
+    mixpanel.track("Open edit photo");
+  };
+
+  const addWallet = () => {
+    setWalletModalOpen(true);
+    mixpanel.track("Open add wallet");
+  };
+
+  const logout = async () => {
+    await context.logOut();
+    setIsMyProfile(false);
+  };
 
   const FilterTabs = (
     <GridTabs>
@@ -476,7 +491,144 @@ const Profile = ({
 
         {/* Start Page Body */}
         {/* Wait until @gridWidth is populated to display page's body */}
+
         {gridWidth && (
+          <div className="m-auto" style={{ width: gridWidth }}>
+            <div className="flex flex-row items-center text-center">
+              <div className="flex-grow sm:hidden"></div>
+              <div
+                className="text-3xl md:text-5xl showtime-title ml-4 md:ml-0 mt-2 md:mt-0"
+                style={{ fontWeight: 600, wordBreak: "break-word" }}
+              >
+                {isMyProfile
+                  ? context.myProfile
+                    ? context.myProfile.name
+                      ? context.myProfile.name
+                      : "Unnamed"
+                    : name
+                    ? name
+                    : "Unnamed"
+                  : name
+                  ? name
+                  : "Unnamed"}
+              </div>
+              <div className="mt-2 sm:mt-0">
+                <ShareButton
+                  url={
+                    typeof window !== "undefined" ? window.location.href : null
+                  }
+                  type={"profile"}
+                />
+              </div>
+              <div className="flex-grow"></div>
+            </div>
+            <div
+              className={`${
+                isMyProfile && context.myProfile
+                  ? !context.myProfile.bio && !context.myProfile.website_url
+                    ? "hidden"
+                    : "flex-1"
+                  : !bio && !website_url
+                  ? "hidden"
+                  : "flex-1"
+              } mt-8 text-base align-center flex flex-col justify-center items-center md:items-start`}
+            >
+              <h4 className="text-black mb-2 text-lg font-semibold">About</h4>
+              {isMyProfile && context.myProfile ? (
+                context.myProfile.bio ? (
+                  <div className="pb-2 sm:mr-16 max-w-xl">
+                    <div className="text-center md:text-left">
+                      {context.myProfile.bio}
+                    </div>
+                  </div>
+                ) : null
+              ) : bio ? (
+                <div className="pb-2 sm:mr-16 max-w-xl">
+                  <div className="">{bio}</div>
+                </div>
+              ) : null}
+
+              {isMyProfile && context.myProfile ? (
+                context.myProfile.website_url ? (
+                  <div className="pb-4 sm:pb-0 w-min">
+                    <a
+                      href={
+                        context.myProfile.website_url.slice(0, 4) === "http"
+                          ? context.myProfile.website_url
+                          : "https://" + context.myProfile.website_url
+                      }
+                      target="_blank"
+                      className="flex flex-row items-center justify-center"
+                      style={{ color: "rgb(81, 125, 228)" }}
+                      onClick={() => {
+                        mixpanel.track("Clicked profile website link", {
+                          slug: slug_address,
+                        });
+                      }}
+                    >
+                      <div>{context.myProfile.website_url}</div>
+                    </a>
+                  </div>
+                ) : null
+              ) : website_url ? (
+                <div className="pb-0">
+                  <a
+                    href={
+                      website_url.slice(0, 4) === "http"
+                        ? website_url
+                        : "https://" + website_url
+                    }
+                    target="_blank"
+                    className="flex flex-row"
+                    style={{ color: "rgb(81, 125, 228)" }}
+                    onClick={() => {
+                      mixpanel.track("Clicked profile website link", {
+                        slug: slug_address,
+                      });
+                    }}
+                  >
+                    <div style={{ wordWrap: "break-word" }}>{website_url}</div>
+                  </a>
+                </div>
+              ) : null}
+            </div>
+
+            <ProfileInfoPill
+              isFollowed={isFollowed}
+              isMyProfile={isMyProfile}
+              onClickFollow={
+                context.user
+                  ? isFollowed
+                    ? handleUnfollow
+                    : handleFollow
+                  : handleLoggedOutFollow
+              }
+              onClickPhoto={() => {
+                setPictureModalOpen(true);
+                mixpanel.track("Open edit photo");
+              }}
+              numFollowers={followers && followers.length}
+              numFollowing={following && following.length}
+              showFollowers={() => {
+                setShowFollowers(true);
+              }}
+              showFollowing={() => {
+                setShowFollowing(true);
+              }}
+              profileImageUrl={
+                isMyProfile
+                  ? context.myProfile
+                    ? context.myProfile.img_url
+                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                  : img_url
+                  ? img_url
+                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+              }
+            />
+          </div>
+        )}
+
+        {/* gridWidth && (
           <div>
             <div
               className="m-auto"
@@ -669,6 +821,15 @@ const Profile = ({
                           </div>
                         ) : null}
                       </div>
+                    <div className="mt-1 sm:mt-0 ml-2">
+                      <ShareButton
+                        url={
+                          typeof window !== "undefined"
+                            ? window.location.href
+                            : null
+                        }
+                        type={"profile"}
+                      />
                     </div>
                   </div>
                 </div>
@@ -759,6 +920,153 @@ const Profile = ({
                 profileImageUrl={
                   isMyProfile
                     ? context.myProfile
+                  <div
+                    style={{
+                      fontWeight: 400,
+                      fontSize: 12,
+                      marginTop: 8,
+                      color: "#999",
+                    }}
+                  >
+                    {columns > 2
+                      ? wallet_addresses_excluding_email.map((address) => {
+                          return <div key={address}>{address}</div>;
+                        })
+                      : null}
+                    <div
+                      className={`${
+                        isMyProfile && context.myProfile
+                          ? !context.myProfile.bio &&
+                            !context.myProfile.website_url
+                            ? "hidden"
+                            : "flex-1"
+                          : !bio && !website_url
+                          ? "hidden"
+                          : "flex-1"
+                      } mt-8 text-base align-center flex flex-col justify-center items-center md:items-start`}
+                    >
+                      <h4 className="text-black mb-2 text-lg font-semibold">
+                        About
+                      </h4>
+                      {isMyProfile && context.myProfile ? (
+                        context.myProfile.bio ? (
+                          <div className="pb-2 sm:mr-16 max-w-xl">
+                            <div
+                              className="text-center md:text-left"
+                              style={{
+                                wordWrap: "break-word",
+                              }}
+                            >
+                              {context.myProfile.bio}
+                            </div>
+                          </div>
+                        ) : null
+                      ) : bio ? (
+                        <div className="pb-2 sm:mr-16 max-w-xl">
+                          <div
+                            className=""
+                            style={{
+                              wordWrap: "break-word",
+                            }}
+                          >
+                            {bio}
+                          </div>
+                        </div>
+                      ) : null}
+
+                      {isMyProfile && context.myProfile ? (
+                        context.myProfile.website_url ? (
+                          <div className="pb-4 sm:pb-0 w-min">
+                            <a
+                              href={
+                                context.myProfile.website_url.slice(0, 4) ===
+                                "http"
+                                  ? context.myProfile.website_url
+                                  : "https://" + context.myProfile.website_url
+                              }
+                              target="_blank"
+                              className="flex flex-row items-center justify-center"
+                              style={{
+                                color: "rgb(81, 125, 228)",
+                                wordWrap: "break-word",
+                              }}
+                              onClick={() => {
+                                mixpanel.track("Clicked profile website link", {
+                                  slug: slug_address,
+                                });
+                              }}
+                            >
+                              <div
+                                style={{
+                                  wordWrap: "break-word",
+                                }}
+                              >
+                                {context.myProfile.website_url}
+                              </div>
+                            </a>
+                          </div>
+                        ) : null
+                      ) : website_url ? (
+                        <div className="pb-0">
+                          <a
+                            href={
+                              website_url.slice(0, 4) === "http"
+                                ? website_url
+                                : "https://" + website_url
+                            }
+                            target="_blank"
+                            className="flex flex-row"
+                            style={{
+                              color: "rgb(81, 125, 228)",
+                              wordWrap: "break-word",
+                            }}
+                            onClick={() => {
+                              mixpanel.track("Clicked profile website link", {
+                                slug: slug_address,
+                              });
+                            }}
+                          >
+                            <div
+                              style={{
+                                overflowWrap: "anywhere",
+                              }}
+                            >
+                              {website_url}
+                            </div>
+                          </a>
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ProfileInfoPill
+              isFollowed={isFollowed}
+              isMyProfile={isMyProfile}
+              onClickFollow={
+                context.user
+                  ? isFollowed
+                    ? handleUnfollow
+                    : handleFollow
+                  : handleLoggedOutFollow
+              }
+              onClickPhoto={() => {
+                setPictureModalOpen(true);
+                mixpanel.track("Open edit photo");
+              }}
+              numFollowers={followers && followers.length}
+              numFollowing={following && following.length}
+              showFollowers={() => {
+                setShowFollowers(true);
+              }}
+              showFollowing={() => {
+                setShowFollowing(true);
+              }}
+              profileImageUrl={
+                isMyProfile
+                  ? context.myProfile
+                    ? context.myProfile.img_url
                       ? context.myProfile.img_url
                         ? context.myProfile.img_url
                         : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
@@ -848,9 +1156,10 @@ const Profile = ({
                   : null
               }
               showUserHiddenItems={showUserHiddenItems}
+              profileActions={{ editAccount, editPhoto, addWallet, logout }}
             />
           </div>
-        )}
+            )*/}
         {/* End Page Body */}
       </Layout>
     </div>
