@@ -644,7 +644,7 @@ const Profile = ({
                 }}
                 profileImageUrl={
                   isMyProfile
-                    ? context.myProfile
+                    ? context.myProfile && context.myProfile.img_url
                       ? context.myProfile.img_url
                       : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                     : img_url
