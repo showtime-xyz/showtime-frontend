@@ -4,6 +4,9 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
 
+/* Showtime fonts */
+@import url("../fonts/web/showtime.css");
+
 html,
 body {
   padding: 0;
@@ -12,7 +15,7 @@ body {
   color: rgba(255, 255, 255, 0.9);*/
   background-color: #f5f5f5; /* #fafafa; */
   color: #010101;
-  font-family: "Inter", sans-serif;
+  font-family: "Tomato Grotesk", sans-serif;
   font-weight: 400;
   font-size: 16px;
 
