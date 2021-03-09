@@ -30,7 +30,7 @@ const Header = () => {
           style={
             context.isMobile
               ? {}
-              : { maxWidth: context.gridWidth, margin: "auto" }
+              : { maxWidth: context.gridWidth - 24, margin: "auto" }
           }
         >
           <div>

@@ -140,7 +140,7 @@ class TokenCard extends React.Component {
       <>
         <div
           className={`row-span-${this.state.spans}  ${
-            this.props.columns === 1 ? "pb-4" : "pb-2"
+            this.props.columns === 1 ? "pb-4" : "p-2"
           }`}
         >
           <div

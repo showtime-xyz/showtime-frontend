@@ -236,8 +236,7 @@ const TokenGridV4 = ({
               context.columns === 1
                 ? null
                 : {
-                    width: context.gridWidth + 12,
-                    marginLeft: -12,
+                    width: context.gridWidth,
                   }
             }
           >

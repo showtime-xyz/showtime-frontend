@@ -237,7 +237,7 @@ export default function Collection({
                 style={
                   context.columns === 1
                     ? { width: 250, marginLeft: 16, marginRight: 16 }
-                    : { width: 250 }
+                    : { width: 250, marginLeft: 12, marginRight: 12 }
                 }
               >
                 <Select

@@ -498,7 +498,7 @@ const Profile = ({
               style={
                 context.columns == 1
                   ? { marginLeft: 16, marginRight: 16 }
-                  : null
+                  : { marginLeft: 12, marginRight: 12 }
               }
             >
               <div
