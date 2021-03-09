@@ -97,11 +97,12 @@ export default function ProfileInfoPill({
             </div>
             <div
               ref={dropdownRef}
-              className={`absolute text-center top-20 bg-white z-10 py-2 px-2 shadow-lg rounded-xl transition-all text-md transform ${
+              className={`absolute text-center top-20 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-md transform ${
                 isActive
                   ? "visible opacity-1 translate-y-2"
                   : "invisible opacity-0"
               }`}
+              style={{ zIndex: 1 }}
             >
               <div
                 className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
