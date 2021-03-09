@@ -656,37 +656,39 @@ const Profile = ({
             </div>
             <div className="mx-auto" style={{ width: gridWidth }}>
               {FilterTabs}
-              <div className="flex">
-                <div className="flex-grow"></div>
-                <div
-                  className="text-right pr-3 text-sm hidden-items-link pb-1"
-                  onClick={() => {
-                    setShowUserHiddenItems(!showUserHiddenItems);
-                  }}
-                  style={
-                    context.windowSize && context.windowSize.width < 600
-                      ? {
-                          fontWeight: 400,
-                          fontSize: 12,
-                          marginTop: -10,
-                          marginBottom: 4,
-                        }
-                      : {
-                          fontWeight: 400,
-                          fontSize: 12,
-                          marginTop: -59,
-                        }
-                  }
-                >
-                  {createdHiddenItems.length === 0 &&
-                  ownedHiddenItems.length === 0 &&
-                  likedHiddenItems.length === 0
-                    ? null
-                    : showUserHiddenItems
-                    ? "Hide hidden items"
-                    : "Show hidden items"}
+              {isMyProfile ? (
+                <div className="flex">
+                  <div className="flex-grow"></div>
+                  <div
+                    className="text-right pr-3 text-sm hidden-items-link pb-1"
+                    onClick={() => {
+                      setShowUserHiddenItems(!showUserHiddenItems);
+                    }}
+                    style={
+                      context.windowSize && context.windowSize.width < 600
+                        ? {
+                            fontWeight: 400,
+                            fontSize: 12,
+                            marginTop: -10,
+                            marginBottom: 4,
+                          }
+                        : {
+                            fontWeight: 400,
+                            fontSize: 12,
+                            marginTop: -59,
+                          }
+                    }
+                  >
+                    {createdHiddenItems.length === 0 &&
+                    ownedHiddenItems.length === 0 &&
+                    likedHiddenItems.length === 0
+                      ? null
+                      : showUserHiddenItems
+                      ? "Hide hidden items"
+                      : "Show hidden items"}
+                  </div>
                 </div>
-              </div>
+              ) : null}
             </div>
 
             <TokenGridV4
