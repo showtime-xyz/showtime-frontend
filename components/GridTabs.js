@@ -10,7 +10,7 @@ const GridTabsWrapper = styled.div`
   //   overflow-x: scroll;
 `;
 const GridTabsContainer = styled.div`
-  padding: ${(p) => (p.isMobile ? "20px 16px" : "20px 2px")};
+  padding: ${(p) => (p.isMobile ? "20px 16px" : "20px 0px")};
 `;
 const GridTabsTitle = styled.h3`
   padding: 10px 0px;

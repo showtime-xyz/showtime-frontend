@@ -139,8 +139,8 @@ class TokenCard extends React.Component {
     return (
       <>
         <div
-          className={`row-span-${this.state.spans} ${
-            this.props.columns === 1 ? "pb-4" : "p-2"
+          className={`row-span-${this.state.spans}  ${
+            this.props.columns === 1 ? "pb-4" : "pb-2"
           }`}
         >
           <div
@@ -213,7 +213,7 @@ class TokenCard extends React.Component {
                           : item.nft_id + "_" + listId
                       );
                     }}
-                    className="card-menu-button"
+                    className="card-menu-button text-right"
                   >
                     <FontAwesomeIcon
                       style={{
@@ -226,52 +226,97 @@ class TokenCard extends React.Component {
                 ) : null}
 
                 {this.props.openCardMenu == item.nft_id + "_" + listId ? (
-                  <div
-                    style={{
-                      borderWidth: 1,
-                      borderColor: "#ccc",
-                      position: "absolute",
-                      top: 40,
-                      right: 15,
-                      backgroundColor: "white",
-                      borderRadius: 7,
-                      zIndex: 1,
-                      fontSize: 14,
-                    }}
-                    className="py-2 px-4"
-                  >
-                    <div
-                      className="card-menu-item"
-                      onClick={
-                        this.props.userHiddenItems.includes(
+                  <div className="">
+                    <div className="flex justify-end relative z-10">
+                      <div
+                        className={`absolute text-center top-2 bg-white shadow-lg py-2 px-2 rounded-xl transition-all text-md transform  ${
+                          this.props.openCardMenu == item.nft_id + "_" + listId
+                            ? "visible opacity-1 "
+                            : "invisible opacity-0"
+                        }`}
+                        style={{ border: "1px solid #f0f0f0" }}
+                      >
+                        <div
+                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                          onClick={
+                            this.props.userHiddenItems.includes(
+                              this.props.item.nft_id
+                            )
+                              ? this.handleUnhide
+                              : this.handleHide
+                          }
+                        >
+                          {this.props.userHiddenItems.includes(
+                            this.props.item.nft_id
+                          )
+                            ? `Unhide from ${
+                                listId === 1
+                                  ? "Created"
+                                  : listId === 2
+                                  ? "Owned"
+                                  : listId === 3
+                                  ? "Liked"
+                                  : "List"
+                              }`
+                            : `Hide from ${
+                                listId === 1
+                                  ? "Created"
+                                  : listId === 2
+                                  ? "Owned"
+                                  : listId === 3
+                                  ? "Liked"
+                                  : "List"
+                              }`}
+                        </div>
+                      </div>
+                    </div>
+                    {/*<div
+                      style={{
+                        borderWidth: 1,
+                        borderColor: "#ccc",
+                        position: "absolute",
+                        top: 40,
+                        right: 15,
+                        backgroundColor: "white",
+                        borderRadius: 7,
+                        zIndex: 1,
+                        fontSize: 14,
+                      }}
+                      className="py-2 px-4"
+                    >
+                      <div
+                        className="card-menu-item"
+                        onClick={
+                          this.props.userHiddenItems.includes(
+                            this.props.item.nft_id
+                          )
+                            ? this.handleUnhide
+                            : this.handleHide
+                        }
+                      >
+                        {this.props.userHiddenItems.includes(
                           this.props.item.nft_id
                         )
-                          ? this.handleUnhide
-                          : this.handleHide
-                      }
-                    >
-                      {this.props.userHiddenItems.includes(
-                        this.props.item.nft_id
-                      )
-                        ? `Unhide item from ${
-                            listId === 1
-                              ? "Created"
-                              : listId === 2
-                              ? "Owned"
-                              : listId === 3
-                              ? "Liked"
-                              : "List"
-                          }`
-                        : `Hide item from ${
-                            listId === 1
-                              ? "Created"
-                              : listId === 2
-                              ? "Owned"
-                              : listId === 3
-                              ? "Liked"
-                              : "List"
-                          }`}
-                    </div>
+                          ? `Unhide item from ${
+                              listId === 1
+                                ? "Created"
+                                : listId === 2
+                                ? "Owned"
+                                : listId === 3
+                                ? "Liked"
+                                : "List"
+                            }`
+                          : `Hide item from ${
+                              listId === 1
+                                ? "Created"
+                                : listId === 2
+                                ? "Owned"
+                                : listId === 3
+                                ? "Liked"
+                                : "List"
+                            }`}
+                      </div>
+                          </div>*/}
                   </div>
                 ) : null}
               </div>

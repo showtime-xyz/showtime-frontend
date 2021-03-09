@@ -225,21 +225,20 @@ const TokenGridV4 = ({
         {isLoading ? (
           <div
             className="mx-auto items-center flex justify-center overflow-hidden"
-            style={
-              context.columns === 1
-                ? null
-                : { width: context.columns * (375 + 20) }
-            }
+            style={context.columns === 1 ? null : { width: context.gridWidth }}
           >
             <div className="loading-card-spinner" />
           </div>
         ) : (
           <div
-            className={`grid grid-cols-${context.columns} mx-auto overflow-hidden`}
+            className={`grid grid-cols-${context.columns} overflow-hidden`}
             style={
               context.columns === 1
                 ? null
-                : { width: context.columns * (375 + 20) }
+                : {
+                    width: context.gridWidth + 12,
+                    marginLeft: -12,
+                  }
             }
           >
             {deduplicatedItemsList.slice(0, itemsShowing).map((item) => (
