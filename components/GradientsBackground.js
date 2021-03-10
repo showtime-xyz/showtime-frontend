@@ -46,7 +46,7 @@ export default function GradientsBackground() {
             #93ffeb 0%,
             rgba(49, 218, 255, 0) 100%
           );
-          opacity: 0.4;
+          opacity: 0.5;
           //   filter: blur(121px);
         }
       `}</style>
