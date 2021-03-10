@@ -118,35 +118,31 @@ export default function Home() {
           content="https://showtime.kilkka.vercel.app/banner.png"
         />
       </Head>
-      {/* <h1
-        className="showtime-title text-center mx-auto text-2xl md:text-5xl md:leading-snug mb-5 mt-5 py-10"
-        style={{ maxWidth: 700 }}
-      >
-        Discover and showcase your favorite digital art.
-      </h1> */}
 
-      <div
-        className="mx-auto mt-16 my-12 md:my-20 md:mt-24 text-center md:text-left"
-        style={
-          columns === 1
-            ? { padding: "0px 16px" }
-            : { width: columns * (375 + 20) }
-        }
-      >
-        <h1
-          className="text-xl md:text-3xl xl:text-4xl mt-5"
-          style={{ maxWidth: 700 }}
+      {columns && (
+        <div
+          className="mx-auto mt-16 my-12 md:my-20 md:mt-24 text-center md:text-left"
+          style={
+            columns === 1
+              ? { padding: "0px 16px" }
+              : { width: columns * (375 + 20) }
+          }
         >
-          Discover & Showcase
-        </h1>
-        <h1
-          className="text-4xl md:text-7xl xl:text-8xl"
-          style={{ fontFamily: "Afronaut" }}
-        >
-          Your Favorite
-        </h1>
-        <h1 className="text-4xl md:text-7xl xl:text-8xl">CRYPTO ART.</h1>
-      </div>
+          <h1
+            className="text-xl md:text-3xl xl:text-4xl mt-5"
+            style={{ maxWidth: 700 }}
+          >
+            Discover & Showcase
+          </h1>
+          <h1
+            className="text-4xl md:text-7xl xl:text-8xl"
+            style={{ fontFamily: "Afronaut" }}
+          >
+            Your Favorite
+          </h1>
+          <h1 className="text-4xl md:text-7xl xl:text-8xl">CRYPTO ART.</h1>
+        </div>
+      )}
 
       {gridWidth && (
         <div

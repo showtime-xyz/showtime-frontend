@@ -4,9 +4,6 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
 
-/* Showtime fonts */
-@import url("../fonts/web/showtime.css");
-
 html {
   overflow: hidden scroll;
 }
