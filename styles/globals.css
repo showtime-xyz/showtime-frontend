@@ -2,17 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
-
+html {
+  overflow: hidden scroll;
+}
 html,
 body {
   padding: 0;
   margin: 0;
   /*background-color: #010101;
   color: rgba(255, 255, 255, 0.9);*/
-  background-color: #f5f5f5; /* #fafafa; */
+  background-color: white;
   color: #010101;
-  font-family: "Inter", sans-serif;
+  font-family: "Tomato Grotesk", sans-serif;
   font-weight: 400;
   font-size: 16px;
 
@@ -22,6 +23,9 @@ body {
 }
 main {
   flex: 1; /* Or flex-grow: 1;*/
+}
+* {
+  letter-spacing: 0.02em;
 }
 
 a {
@@ -131,13 +135,11 @@ textarea:focus {
 }
 
 .showtime-square-title {
-  font-family: "Inter", sans-serif;
   font-weight: 600;
   /*font-size: 36px;*/
 }
 
 .showtime-square-owned {
-  font-family: "Inter", sans-serif;
   font-weight: 400;
   /*font-size: 24px;*/
 }
@@ -391,7 +393,6 @@ textarea:focus {
 }
 
 .react-dropdown-select {
-  font-family: "Inter", sans-serif;
   font-size: 16px;
   color: #222222;
   border-radius: 7px !important;
@@ -472,12 +473,10 @@ textarea:focus {
 }
 
 .showtime-token-description {
-  font-family: "Inter", sans-serif;
   font-weight: 400;
 }
 
 .showtime-logout-link {
-  font-family: "Inter", sans-serif;
   font-weight: 600;
 }
 
@@ -486,7 +485,6 @@ textarea:focus {
 }
 
 .showtime-profile-address {
-  font-family: "Inter", sans-serif;
   font-weight: 400;
 }
 
@@ -523,7 +521,7 @@ textarea:focus {
 }
 
 .showtime-card-profile-link {
-  font-weight: 600;
+  /* font-weight: 600; */
   color: #223043;
 }
 
@@ -563,13 +561,8 @@ textarea:focus {
 }
 
 .showtime-card {
-  border-color: #dbdddf;
+  border-color: #e0e0e0;
   transition: box-shadow 0.3s ease-in-out;
-  box-shadow: 0px 4px 10px 6px rgba(34, 48, 67, 2%);
-}
-
-.showtime-card:hover {
-  box-shadow: 0px 4px 10px 6px rgba(34, 48, 67, 5%);
 }
 
 .view-hide-toggle {

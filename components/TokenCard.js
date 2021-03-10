@@ -167,7 +167,7 @@ class TokenCard extends React.Component {
             className={
               this.props.columns === 1
                 ? "mx-auto showtime-card"
-                : "mx-auto showtime-card sm:rounded-md overflow-hidden"
+                : "mx-auto showtime-card sm:rounded-md overflow-hidden hover:shadow-xl"
             }
           >
             <div
@@ -419,7 +419,6 @@ class TokenCard extends React.Component {
                       overflowWrap: "break-word",
                       wordWrap: "break-word",
                       fontSize: 20,
-                      fontWeight: 600,
                       cursor: "pointer",
                     }}
                   >

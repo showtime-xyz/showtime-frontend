@@ -20,7 +20,8 @@ const Header = () => {
       <header
         className="p-4 bg-white"
         style={{
-          boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
+          //boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
+          borderBottom: "1px solid #ddd",
         }}
       >
         <div
@@ -41,12 +42,15 @@ const Header = () => {
                   mixpanel.track("Logo button click");
                 }}
               >
-                <img
+                {/* <img
                   src="/logo_sm.jpg"
                   style={{ height: 44, width: 44, borderRadius: 5 }}
-                />
-                <div className="mx-2" style={{ fontWeight: 600 }}>
-                  Showtime
+                /> */}
+                <div
+                  className="text-2xl py-2"
+                  style={{ fontWeight: 400, fontFamily: "Afronaut" }}
+                >
+                  {context.isMobile ? "SHOWTIME" : "SHOWTIME"}
                 </div>
               </a>
             </Link>
