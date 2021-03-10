@@ -123,7 +123,7 @@ export default function Home() {
 
       {columns && (
         <div
-          className="mx-auto relative mt-16 my-12 md:my-20 md:mt-24 text-center md:text-left"
+          className="mx-auto relative my-32 md:my-24 text-center md:text-left"
           style={{
             ...(columns === 1
               ? { padding: "0px 16px" }
