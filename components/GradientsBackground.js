@@ -15,8 +15,8 @@ export default function GradientsBackground() {
             #fffb93 0%,
             rgba(189, 255, 48, 0) 100%
           );
-          //   opacity: 0.3;
-          filter: blur(121px);
+          opacity: 0.3;
+          //   filter: blur(121px);
           pointer-events: none;
         }
         #red-ellipse-background {
@@ -31,7 +31,7 @@ export default function GradientsBackground() {
             rgba(255, 49, 185, 0) 100%
           );
           opacity: 0.2;
-          filter: blur(121px);
+          //   filter: blur(121px);
           pointer-events: none;
         }
         #blue-ellipse-background {
@@ -47,7 +47,7 @@ export default function GradientsBackground() {
             rgba(49, 218, 255, 0) 100%
           );
           opacity: 0.4;
-          filter: blur(121px);
+          //   filter: blur(121px);
         }
       `}</style>
       <div id="yellow-ellipse-background" />
