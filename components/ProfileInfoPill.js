@@ -32,12 +32,12 @@ export default function ProfileInfoPill({
 
   return (
     <div
-      className="p-6 rounded-xl shadow-xl bg-white md:w-max flex flex-col md:flex-row justify-center items-center md:items-stretch mt-8 mb-4"
-      style={
-        {
-          // boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
-        }
-      }
+      className="p-6 rounded-xl hover:shadow-xl bg-white md:w-max flex flex-col md:flex-row justify-center items-center md:items-stretch mt-8 mb-4 "
+      style={{
+        // boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
+        border: "1px solid #ddd",
+        transition: "box-shadow 0.3s ease-in-out",
+      }}
     >
       <div
         className={`w-14 h-14 md:w-12 md:h-12 flex items-center justify-center rounded-full my-2 md:my-0 ${

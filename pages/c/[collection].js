@@ -182,11 +182,11 @@ export default function Collection({
       <Head>
         <title>{pageTitle}</title>
 
-        <meta name="description" content="Discover and showcase digital art" />
+        <meta name="description" content="Discover and showcase crypto art" />
         <meta property="og:type" content="website" />
         <meta
           name="og:description"
-          content="Discover and showcase digital art"
+          content="Discover and showcase crypto art"
         />
 
         <meta
@@ -204,7 +204,7 @@ export default function Collection({
         <meta name="twitter:title" content={`Showtime | ${pageTitle}`} />
         <meta
           name="twitter:description"
-          content="Discover and showcase digital art"
+          content="Discover and showcase crypto art"
         />
 
         <meta
@@ -274,7 +274,7 @@ export default function Collection({
         </div>
       )}
       {gridWidth && (
-        <div className="m-auto" style={{ width: gridWidth }}>
+        <div className="m-auto" style={{ width: gridWidth, minHeight: 900 }}>
           <TokenGridV4 items={collectionItems} isLoading={isChanging} />
         </div>
       )}

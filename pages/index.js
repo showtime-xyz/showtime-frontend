@@ -97,12 +97,12 @@ export default function Home() {
   return (
     <Layout>
       <Head>
-        <title>Showtime | Digital Art</title>
-        <meta name="description" content="Discover and showcase digital art" />
+        <title>Showtime | Crypto Art</title>
+        <meta name="description" content="Discover and showcase crypto art" />
         <meta property="og:type" content="website" />
         <meta
           name="og:description"
-          content="Discover and showcase digital art"
+          content="Discover and showcase crypto art"
         />
         <meta property="og:image" content="/banner.png" />
         <meta name="og:title" content="Showtime" />
@@ -111,7 +111,7 @@ export default function Home() {
         <meta name="twitter:title" content="Showtime" />
         <meta
           name="twitter:description"
-          content="Discover and showcase digital art"
+          content="Discover and showcase crypto art"
         />
         <meta
           name="twitter:image"
@@ -125,7 +125,7 @@ export default function Home() {
           style={
             columns === 1
               ? { padding: "0px 16px" }
-              : { width: columns * (375 + 20) }
+              : { width: gridWidth, paddingLeft: 16 }
           }
         >
           <h1
@@ -150,8 +150,8 @@ export default function Home() {
             context.isMobile
               ? null
               : {
-                  backgroundColor: "#fff",
-                  boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
+                  //backgroundColor: "#fff",
+                  //boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
                   paddingTop: 40,
                   paddingBottom: 40,
                   marginBottom: 30,
@@ -190,7 +190,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="m-auto" style={{ width: gridWidth }}>
+          <div className="m-auto" style={{ width: gridWidth, minHeight: 700 }}>
             <TokenGridV4
               items={heroItems.slice(0, context.columns)}
               isLoading={isLoadingHero}
@@ -209,7 +209,7 @@ export default function Home() {
       )}
 
       {gridWidth && (
-        <div className="m-auto" style={{ width: gridWidth }}>
+        <div className="m-auto" style={{ width: gridWidth, minHeight: 900 }}>
           <TokenGridV4
             items={featuredItems}
             onFinish={() => {
