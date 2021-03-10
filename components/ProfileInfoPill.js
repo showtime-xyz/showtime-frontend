@@ -82,8 +82,8 @@ export default function ProfileInfoPill({
               } rounded-full px-6 py-2 cursor-pointer border-2 hover:opacity-70 transition-all`}
               onClick={onClickFollow}
             >
-              {!isFollowed && <span className="pr-3 text-lg">＋</span>}
-              <span className="text-lg">
+              {!isFollowed && <span className="pr-2 text-md">＋</span>}
+              <span className="text-base">
                 {isFollowed ? "Following" : "Follow"}
               </span>
             </div>
@@ -97,7 +97,7 @@ export default function ProfileInfoPill({
               className="bg-white text-black border-black rounded-full px-6 py-2 cursor-pointer border-2 hover:opacity-70 transition-all"
               onClick={onClick}
             >
-              <span className="text-lg">Edit Profile</span>
+              <span className="text-base">Edit Profile</span>
             </div>
             <div
               ref={dropdownRef}

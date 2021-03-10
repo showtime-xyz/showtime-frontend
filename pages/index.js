@@ -172,15 +172,14 @@ export default function Home() {
               </h3>
               <div className="flex-grow sm:hidden"></div>
               <div className="self-end">
-                <button
-                  className="showtime-random-button px-3 py-1 ml-3"
-                  style={{ fontSize: 14, fontWeight: 600 }}
+                <div
+                  className="ml-4 bg-white text-black border-black rounded-full px-5 py-1 cursor-pointer border-2 hover:text-stpink hover:border-stpink transition-all showtime-random-button"
                   onClick={() => {
                     getHero();
                   }}
                 >
-                  🎲 Random
-                </button>
+                  <span className="text-sm md:text-base">🎲 Random</span>
+                </div>
               </div>
               <div className="hidden sm:flex flex-grow"></div>
               <div className="self-end hidden sm:flex">

@@ -154,11 +154,6 @@ textarea:focus {
   color: #fff;
   font-size: 16px;
   font-weight: 600;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 23px;
-  padding-right: 23px;
-  border-radius: 7px;
   border: 2px solid #e45cff;
 }
 
@@ -192,7 +187,6 @@ textarea:focus {
   color: #fff;
   font-size: 16px;
   font-weight: 600;
-  border-radius: 7px;
   border: 2px solid #35bb5b;
 }
 
@@ -200,7 +194,6 @@ textarea:focus {
   background-color: #fff;
   color: #222222;
   font-weight: 600;
-  border-radius: 5px;
   border: 2px solid #222222;
 }
 
@@ -449,7 +442,6 @@ textarea:focus {
   border: 2px solid #222;
   color: #222;
   font-weight: 600;
-  border-radius: 7px;
   box-sizing: border-box;
 }
 
@@ -511,7 +503,6 @@ textarea:focus {
   color: #000;
   font-size: 16px;
   font-weight: 600;
-  border-radius: 7px;
   box-sizing: border-box;
 }
 
@@ -648,10 +639,7 @@ textarea:focus {
 .showtime-random-button {
   background-color: #fff;
   color: #7d5cff;
-  font-weight: 600;
-  border-radius: 7px;
   border: 2px solid #7d5cff;
-  display: inline-flex;
 }
 
 .showtime-random-button:hover {

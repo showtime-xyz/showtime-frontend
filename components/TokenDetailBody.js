@@ -300,7 +300,7 @@ const TokenDetailBody = ({
                     mixpanel.track("OpenSea link click");
                   }}
                 >
-                  <div className="text-base font-normal px-4 py-3 mr-2 rounded-full shadow-md bg-stpink text-white hover:opacity-80">
+                  <div className="text-base font-normal px-4 py-3 mr-2 rounded-full shadow-md hover:text-stpink">
                     {isMobile ? "Collect" : "Bid on OpenSea"}
                   </div>
                 </a>

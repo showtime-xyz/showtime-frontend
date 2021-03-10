@@ -148,7 +148,7 @@ export default function Modal({ isOpen }) {
                         Enter your email to receive a sign in link.
                       </label>
                       <div
-                        className="pt-1"
+                        className="pt-1 pb-1"
                         style={{ color: "#444", fontSize: 13 }}
                       >
                         If this is your first time, you will create a new
@@ -159,7 +159,7 @@ export default function Modal({ isOpen }) {
                         name="email"
                         placeholder="Email"
                         type="email"
-                        className="border-2 w-full"
+                        className="border-2 w-full mb-8"
                         autoFocus
                         style={{
                           color: "black",
@@ -167,10 +167,10 @@ export default function Modal({ isOpen }) {
                           borderRadius: 7,
                         }}
                       />
-                      <br />
-                      <br />
-                      <button className="showtime-pink-button">
-                        Sign in with Email
+                      <button className="bg-stpink text-white rounded-full px-6 py-2 cursor-pointer border-2 hover:text-stpink hover:bg-white border-stpink transition-all">
+                        <span className="text-sm md:text-base">
+                          Sign in with Email
+                        </span>
                       </button>
                       <div className="py-8" style={{ color: "#444" }}>
                         — or —
@@ -180,13 +180,14 @@ export default function Modal({ isOpen }) {
 
                   <div className="mb-4 text-center">
                     <button
-                      className="showtime-white-button bg-white text-black hover:bg-gray-300 py-2 px-4 text-sm"
+                      className="bg-black text-white border-black rounded-full px-6 py-2 cursor-pointer border-2 hover:text-black hover:bg-white transition-all"
                       onClick={() => {
                         handleSubmitWallet();
                       }}
-                      style={{ borderRadius: 7 }}
                     >
-                      Sign in with Wallet
+                      <span className="text-sm md:text-base">
+                        Sign in with Wallet
+                      </span>
                     </button>
                   </div>
                 </>

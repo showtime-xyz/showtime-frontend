@@ -57,7 +57,7 @@ const Header = () => {
           </div>
           {/* Start desktop-only menu */}
           <div className="flex-grow"></div>
-          <div className="hidden md:block mr-8" style={{ fontWeight: 400 }}>
+          <div className="hidden md:block mr-6" style={{ fontWeight: 400 }}>
             <Link href="/">
               <a
                 className="showtime-header-link ml-6 text-sm md:text-base"
@@ -89,7 +89,7 @@ const Header = () => {
                 }`}
               >
                 <a
-                  className="showtime-login-button-outline text-sm px-2 py-2 md:text-base flex flex-row items-center"
+                  className="showtime-login-button-outline text-sm px-3 py-2 md:text-base flex flex-row items-center rounded-full "
                   onClick={() => {
                     mixpanel.track("Profile button click");
                   }}
@@ -129,15 +129,14 @@ const Header = () => {
               </Link>
             ) : (
               <>
-                <a
-                  className="showtime-login-button-solid text-sm px-3 py-2 md:text-base  md:px-3 md:py-2"
+                <div
+                  className="bg-white text-black border-black rounded-full px-5 py-1 cursor-pointer border-2 hover:text-stpink hover:border-stpink transition-all"
                   onClick={() => {
                     context.setLoginModalOpen(!context.loginModalOpen);
                   }}
-                  style={{ cursor: "pointer" }}
                 >
-                  Sign in
-                </a>
+                  <span className="text-sm md:text-base">Sign in</span>
+                </div>
               </>
             )}
           </div>
