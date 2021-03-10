@@ -31,6 +31,9 @@ export default function Home() {
   const [featuredDays, setFeaturedDays] = useState(1);
   const [reachedBottom, setReachedBottom] = useState(false);
   const [isLoadingCards, setIsLoadingCards] = useState(false);
+  const [isLoadingHero, setIsLoadingHero] = useState(false);
+
+  const [heroItems, setHeroItems] = useState([]);
 
   useEffect(() => {
     const getFeatured = async () => {
@@ -46,6 +49,21 @@ export default function Home() {
     getFeatured();
     setReachedBottom(false);
   }, [featuredDays]);
+
+  const getHero = async () => {
+    setIsLoadingHero(true);
+    const response_hero = await backend.get(`/v1/hero`);
+    const data_hero = response_hero.data.data;
+    setHeroItems(data_hero);
+    setIsLoadingHero(false);
+
+    // Reset cache for next load
+    backend.get(`/v1/hero?recache=1`);
+  };
+
+  useEffect(() => {
+    getHero();
+  }, []);
 
   const FilterTabs =
     gridWidth > 0 ? (
@@ -106,6 +124,49 @@ export default function Home() {
       >
         Discover and showcase your favorite digital art.
       </h1>
+
+      {gridWidth && (
+        <>
+          <div className="m-auto" style={{ width: gridWidth }}>
+            <div
+              className="flex flex-row ml-0 mr-0"
+              style={
+                context.isMobile
+                  ? { padding: "0px 16px", marginBottom: 30 }
+                  : { padding: "0px 12px", marginBottom: 30 }
+              }
+            >
+              <h3 className="text-2xl md:text-4xl" style={{ fontWeight: 600 }}>
+                Newly created{" "}
+              </h3>
+              <div className="flex-grow sm:hidden"></div>
+              <div className="self-end">
+                <button
+                  className="showtime-white-button px-3 py-1 ml-3"
+                  style={{ fontSize: 14, fontWeight: 400 }}
+                  onClick={() => {
+                    getHero();
+                  }}
+                >
+                  🎲 Random
+                </button>
+              </div>
+              <div className="hidden sm:flex flex-grow"></div>
+              <div className="self-end hidden sm:flex">
+                <Link href="/c/[collection]" as="/c/all">
+                  <a className="explore-more-link">Explore more pieces</a>
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="m-auto" style={{ width: gridWidth }}>
+            <TokenGridV4
+              items={heroItems.slice(0, context.columns)}
+              isLoading={isLoadingHero}
+            />
+          </div>
+        </>
+      )}
 
       {columns && (
         <div

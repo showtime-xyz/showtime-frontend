@@ -642,3 +642,12 @@ textarea:focus {
 .hidden-items-link:hover {
   color: #e45cff;
 }
+
+.explore-more-link {
+  cursor: pointer;
+  color: rgb(81, 125, 228);
+}
+
+.explore-more-link:hover {
+  color: #e45cff;
+}
