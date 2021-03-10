@@ -24,25 +24,25 @@ export default class MyDocument extends Document {
           <link rel="stylesheet" href="/fonts/showtime.css" />
           <link
             rel="preload"
-            href="/fonts/web/woff2/Tomato Grotesk Medium.woff2"
+            href="/fonts/woff2/Tomato Grotesk Medium.woff2"
             as="font"
             type="font/woff2"
           />
           <link
             rel="preload"
-            href="/fonts/web/woff/Tomato Grotesk Medium.woff"
+            href="/fonts/woff/Tomato Grotesk Medium.woff"
             as="font"
             type="font/woff"
           />
           <link
             rel="preload"
-            href="/fonts/web/woff2/Afronaut.woff2"
+            href="/fonts/woff2/Afronaut.woff2"
             as="font"
             type="font/woff2"
           />
           <link
             rel="preload"
-            href="/fonts/web/woff/Afronaut.woff"
+            href="/fonts/woff/Afronaut.woff"
             as="font"
             type="font/woff"
           />
