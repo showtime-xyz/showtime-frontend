@@ -130,7 +130,7 @@ export default function Modal({ isOpen }) {
                 className="text-3xl border-b-2 pb-2 text-center"
                 style={{ fontWeight: 600 }}
               >
-                Sign in / Sign up
+                Sign in
               </div>
               {signaturePending ? (
                 <div className="text-center py-40">
@@ -186,7 +186,7 @@ export default function Modal({ isOpen }) {
                       }}
                       style={{ borderRadius: 7 }}
                     >
-                      Sign in with Wallet
+                      Connect Wallet
                     </button>
                   </div>
                 </>

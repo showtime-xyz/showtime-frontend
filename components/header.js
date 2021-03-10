@@ -132,9 +132,7 @@ const Header = () => {
                   }}
                   style={{ cursor: "pointer" }}
                 >
-                  {context.windowSize && context.windowSize.width > 500
-                    ? "Sign in / Sign up"
-                    : "Sign in"}
+                  Sign in
                 </a>
               </>
             )}
