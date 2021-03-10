@@ -117,7 +117,7 @@ export default function ProfileInfoPill({
     <>
       <div className="pt-4 flex sm:hidden justify-center">{actionButton()}</div>
       <div
-        className={`px-6 py-4 rounded-xl  bg-white md:w-max flex flex-row justify-center items-center sm:items-stretch mt-8 mb-4 ${
+        className={`px-6 relative py-4 rounded-xl  bg-white md:w-max flex flex-row justify-center items-center sm:items-stretch mt-8 mb-4 ${
           context.isMobile ? null : "hover:shadow-xl"
         }`}
         style={{

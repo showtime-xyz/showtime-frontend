@@ -15,6 +15,7 @@ import ModalUserList from "../components/ModalUserList";
 import ModalAddWallet from "../components/ModalAddWallet";
 //import { formatAddressShort, copyToClipBoard } from "../lib/utilities";
 import AddressButton from "../components/AddressButton";
+import GradientsBackground from "../components/GradientsBackground";
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
@@ -480,12 +481,13 @@ const Profile = ({
             />
           </>
         ) : null}
+        <GradientsBackground />
 
         {/* Start Page Body */}
         {/* Wait until @gridWidth is populated to display page's body */}
 
         {gridWidth && (
-          <div className="m-auto" style={{ width: gridWidth }}>
+          <div className="m-auto relative" style={{ width: gridWidth }}>
             <div
               style={
                 context.columns == 1

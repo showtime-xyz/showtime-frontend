@@ -10,6 +10,7 @@ import backend from "../../lib/backend";
 import AppContext from "../../context/app-context";
 import mixpanel from "mixpanel-browser";
 import { GridTabs, GridTab } from "../../components/GridTabs";
+import GradientsBackground from "../../components/GradientsBackground";
 
 export async function getServerSideProps(context) {
   const { collection } = context.query;
@@ -216,10 +217,13 @@ export default function Collection({
           }
         />
       </Head>
+      <GradientsBackground />
 
-      <h1 className="text-4xl md:text-6xl text-center mt-12 sm:mt-20 mb-12 ">
-        {pageTitle}
-      </h1>
+      <div className="flex flex-col text-center w-full">
+        <h1 className="text-4xl md:text-6xl text-center mt-12 sm:mt-20 mb-12 relative">
+          {pageTitle}
+        </h1>
+      </div>
 
       {gridWidth > 0 ? (
         <div
@@ -265,14 +269,17 @@ export default function Collection({
 
       {columns && (
         <div
-          className="mx-auto"
+          className="mx-auto relative"
           style={columns === 1 ? null : { width: columns * (375 + 20) }}
         >
           {FilterTabs}
         </div>
       )}
       {gridWidth && (
-        <div className="m-auto" style={{ width: gridWidth, minHeight: 900 }}>
+        <div
+          className="m-auto relative"
+          style={{ width: gridWidth, minHeight: 900 }}
+        >
           <TokenGridV4 items={collectionItems} isLoading={isChanging} />
         </div>
       )}

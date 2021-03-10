@@ -10,6 +10,7 @@ import mixpanel from "mixpanel-browser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { GridTab, GridTabs } from "../components/GridTabs";
+import GradientsBackground from "../components/GradientsBackground";
 
 export async function getServerSideProps(context) {
   return {
@@ -118,15 +119,16 @@ export default function Home() {
           content="https://showtime.kilkka.vercel.app/banner.png"
         />
       </Head>
+      <GradientsBackground />
 
       {columns && (
         <div
-          className="mx-auto mt-16 my-12 md:my-20 md:mt-24 text-center md:text-left"
-          style={
-            columns === 1
+          className="mx-auto relative mt-16 my-12 md:my-20 md:mt-24 text-center md:text-left"
+          style={{
+            ...(columns === 1
               ? { padding: "0px 16px" }
-              : { width: gridWidth, paddingLeft: 16 }
-          }
+              : { width: gridWidth, paddingLeft: 16 }),
+          }}
         >
           <h1
             className="text-xl md:text-3xl xl:text-4xl"
