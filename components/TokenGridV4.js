@@ -231,7 +231,9 @@ const TokenGridV4 = ({
           </div>
         ) : (
           <div
-            className={`grid grid-cols-${context.columns} overflow-hidden`}
+            className={`grid grid-cols-${context.columns} overflow-hidden ${
+              context.isMobile ? "bg-gray-100" : ""
+            }`}
             style={
               context.columns === 1
                 ? null
