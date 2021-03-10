@@ -97,12 +97,12 @@ export default function Home() {
   return (
     <Layout>
       <Head>
-        <title>Showtime | Digital Art</title>
-        <meta name="description" content="Discover and showcase digital art" />
+        <title>Showtime | Crypto Art</title>
+        <meta name="description" content="Discover and showcase crypto art" />
         <meta property="og:type" content="website" />
         <meta
           name="og:description"
-          content="Discover and showcase digital art"
+          content="Discover and showcase crypto art"
         />
         <meta property="og:image" content="/banner.png" />
         <meta name="og:title" content="Showtime" />
@@ -111,19 +111,38 @@ export default function Home() {
         <meta name="twitter:title" content="Showtime" />
         <meta
           name="twitter:description"
-          content="Discover and showcase digital art"
+          content="Discover and showcase crypto art"
         />
         <meta
           name="twitter:image"
           content="https://showtime.kilkka.vercel.app/banner.png"
         />
       </Head>
-      <h1
-        className="showtime-title text-center mx-auto text-2xl md:text-5xl md:leading-snug my-5  py-10"
-        style={{ maxWidth: 700 }}
-      >
-        Discover and showcase your favorite digital art.
-      </h1>
+
+      {columns && (
+        <div
+          className="mx-auto mt-16 my-12 md:my-20 md:mt-24 text-center md:text-left"
+          style={
+            columns === 1
+              ? { padding: "0px 16px" }
+              : { width: gridWidth, paddingLeft: 16 }
+          }
+        >
+          <h1
+            className="text-xl md:text-3xl xl:text-4xl mt-5"
+            style={{ maxWidth: 700 }}
+          >
+            Discover & Showcase
+          </h1>
+          <h1
+            className="text-4xl md:text-7xl xl:text-8xl"
+            style={{ fontFamily: "Afronaut" }}
+          >
+            Your Favorite
+          </h1>
+          <h1 className="text-4xl md:text-7xl xl:text-8xl">CRYPTO ART.</h1>
+        </div>
+      )}
 
       {gridWidth && (
         <div
@@ -131,8 +150,8 @@ export default function Home() {
             context.isMobile
               ? null
               : {
-                  backgroundColor: "#fff",
-                  boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
+                  //backgroundColor: "#fff",
+                  //boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
                   paddingTop: 40,
                   paddingBottom: 40,
                   marginBottom: 30,
@@ -171,7 +190,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="m-auto" style={{ width: gridWidth }}>
+          <div className="m-auto" style={{ width: gridWidth, minHeight: 700 }}>
             <TokenGridV4
               items={heroItems.slice(0, context.columns)}
               isLoading={isLoadingHero}
@@ -190,7 +209,7 @@ export default function Home() {
       )}
 
       {gridWidth && (
-        <div className="m-auto" style={{ width: gridWidth }}>
+        <div className="m-auto" style={{ width: gridWidth, minHeight: 900 }}>
           <TokenGridV4
             items={featuredItems}
             onFinish={() => {

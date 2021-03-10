@@ -9,7 +9,7 @@ mixpanel.init("9b14512bc76f3f349c708f67ab189941");
 
 // Progress bar during Routing changes
 const progress = new ProgressBar({
-  size: 2,
+  size: 3,
   color: "#e45cff",
   className: "bar-of-progress",
   delay: 100,

@@ -399,7 +399,6 @@ const Profile = ({
       <Layout>
         <Head>
           <title>
-            Profile |{" "}
             {isMyProfile
               ? context.myProfile
                 ? context.myProfile.name
@@ -415,12 +414,12 @@ const Profile = ({
 
           <meta
             name="description"
-            content="Explore digital art I've created, owned, and liked"
+            content="Explore crypto art I've created, owned, and liked"
           />
           <meta property="og:type" content="website" />
           <meta
             name="og:description"
-            content="Explore digital art I've created, owned, and liked"
+            content="Explore crypto art I've created, owned, and liked"
           />
           <meta
             property="og:image"
@@ -439,7 +438,7 @@ const Profile = ({
           />
           <meta
             name="twitter:description"
-            content="Explore digital art I've created, owned, and liked"
+            content="Explore crypto art I've created, owned, and liked"
           />
           <meta
             name="twitter:image"
