@@ -119,31 +119,43 @@ export default function Home() {
         />
       </Head>
       <h1
-        className="showtime-title text-center mx-auto text-2xl md:text-5xl md:leading-snug mb-5 mt-5 py-10"
+        className="showtime-title text-center mx-auto text-2xl md:text-5xl md:leading-snug my-5  py-10"
         style={{ maxWidth: 700 }}
       >
         Discover and showcase your favorite digital art.
       </h1>
 
       {gridWidth && (
-        <>
+        <div
+          style={
+            context.isMobile
+              ? null
+              : {
+                  backgroundColor: "#fff",
+                  boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
+                  paddingTop: 40,
+                  paddingBottom: 40,
+                  marginBottom: 30,
+                }
+          }
+        >
           <div className="m-auto" style={{ width: gridWidth }}>
             <div
               className="flex flex-row ml-0 mr-0"
               style={
                 context.isMobile
-                  ? { padding: "0px 16px", marginBottom: 30 }
-                  : { padding: "0px 12px", marginBottom: 30 }
+                  ? { padding: "0px 16px", marginBottom: 20 }
+                  : { padding: "0px 12px", marginBottom: 16 }
               }
             >
               <h3 className="text-2xl md:text-4xl" style={{ fontWeight: 600 }}>
-                Newly created{" "}
+                Latest{" "}
               </h3>
               <div className="flex-grow sm:hidden"></div>
               <div className="self-end">
                 <button
-                  className="showtime-white-button px-3 py-1 ml-3"
-                  style={{ fontSize: 14, fontWeight: 400 }}
+                  className="showtime-random-button px-3 py-1 ml-3"
+                  style={{ fontSize: 14, fontWeight: 600 }}
                   onClick={() => {
                     getHero();
                   }}
@@ -165,7 +177,7 @@ export default function Home() {
               isLoading={isLoadingHero}
             />
           </div>
-        </>
+        </div>
       )}
 
       {columns && (
