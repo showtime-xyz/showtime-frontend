@@ -167,7 +167,7 @@ class TokenCard extends React.Component {
             className={
               this.props.columns === 1
                 ? "mx-auto showtime-card"
-                : "mx-auto showtime-card sm:rounded-md overflow-hidden"
+                : "mx-auto showtime-card sm:rounded-md overflow-hidden hover:shadow-xl"
             }
           >
             <div

@@ -566,13 +566,8 @@ textarea:focus {
 }
 
 .showtime-card {
-  border-color: #dbdddf;
+  border-color: #e0e0e0;
   transition: box-shadow 0.3s ease-in-out;
-  box-shadow: 0px 4px 10px 6px rgba(34, 48, 67, 2%);
-}
-
-.showtime-card:hover {
-  box-shadow: 0px 4px 10px 6px rgba(34, 48, 67, 5%);
 }
 
 .view-hide-toggle {
