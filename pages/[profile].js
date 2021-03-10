@@ -531,41 +531,26 @@ const Profile = ({
                 </div> */}
                 <div className="flex-grow"></div>
               </div>
-              <div
-                className={`${
-                  isMyProfile && context.myProfile
-                    ? !context.myProfile.username
-                      ? "hidden"
-                      : "flex-1"
-                    : !username
-                    ? "hidden"
-                    : "flex-1"
-                } text-base md:text-xl flex flex-col md:flex-row justify-center items-center md:justify-start text-gray-500 mb-8`}
-              >
-                <div>
-                  @
-                  {(isMyProfile &&
-                    context.myProfile &&
-                    context.myProfile.username) ||
-                    username ||
-                    null}
+              {(username || wallet_addresses_excluding_email.length > 0) && (
+                <div className="text-base md:text-xl flex flex-col md:flex-row justify-center items-center md:justify-start text-gray-500 mb-8">
+                  {username && <div className="md:mr-2">@{username}</div>}
+                  <div className="flex text-base text-gray-600 my-2 md:my-0">
+                    {wallet_addresses_excluding_email.map((address) => {
+                      return (
+                        <div
+                          className="py-2 px-3 bg-gray-100 rounded-full mx-1 md:mr-2 cursor-copy hover:bg-gray-200 active:bg-gray-100 transition"
+                          key={address}
+                          onClick={() => {
+                            copyToClipBoard(address);
+                          }}
+                        >
+                          {formatAddressShort(address)}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-                <div className="flex text-sm ml-2 text-gray-600">
-                  {wallet_addresses_excluding_email.map((address) => {
-                    return (
-                      <div
-                        className="py-2 px-4 bg-gray-100 rounded-full mr-2 cursor-copy hover:bg-gray-200 active:bg-gray-100 transition"
-                        key={address}
-                        onClick={() => {
-                          copyToClipBoard(address);
-                        }}
-                      >
-                        {formatAddressShort(address)}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
+              )}
               <div
                 className={`${
                   isMyProfile && context.myProfile
