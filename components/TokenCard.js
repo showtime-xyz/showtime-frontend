@@ -419,7 +419,6 @@ class TokenCard extends React.Component {
                       overflowWrap: "break-word",
                       wordWrap: "break-word",
                       fontSize: 20,
-                      fontWeight: 600,
                       cursor: "pointer",
                     }}
                   >

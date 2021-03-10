@@ -24,6 +24,9 @@ body {
 main {
   flex: 1; /* Or flex-grow: 1;*/
 }
+* {
+  letter-spacing: 0.02em;
+}
 
 a {
   color: inherit;
@@ -518,7 +521,7 @@ textarea:focus {
 }
 
 .showtime-card-profile-link {
-  font-weight: 600;
+  /* font-weight: 600; */
   color: #223043;
 }
 
