@@ -13,6 +13,7 @@ import { GridTabs, GridTab } from "../components/GridTabs";
 import ProfileInfoPill from "../components/ProfileInfoPill";
 import ModalUserList from "../components/ModalUserList";
 import ModalAddWallet from "../components/ModalAddWallet";
+import { formatAddressShort, copyToClipBoard } from "../lib/utilities";
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
@@ -492,7 +493,7 @@ const Profile = ({
         {/* Wait until @gridWidth is populated to display page's body */}
 
         {gridWidth && (
-          <div className="m-auto" style={{ width: gridWidth }}>
+          <div className="m-auto  pt-10" style={{ width: gridWidth }}>
             <div
               style={
                 context.columns == 1
@@ -500,24 +501,10 @@ const Profile = ({
                   : { marginLeft: 12, marginRight: 12 }
               }
             >
-              <div
-                className="float-right mt-16 text-right"
-                style={{
-                  fontWeight: 400,
-                  fontSize: 12,
-                  color: "#999",
-                }}
-              >
-                {columns > 2
-                  ? wallet_addresses_excluding_email.map((address) => {
-                      return <div key={address}>{address}</div>;
-                    })
-                  : null}
-              </div>
-              <div className="flex flex-row items-center text-center mx-0 px-0  pt-10">
+              <div className="flex flex-row items-center text-center mx-0 px-0">
                 <div className="flex-grow sm:hidden"></div>
                 <div
-                  className="showtime-title text-center mx-auto text-2xl md:text-5xl md:leading-snug mt-5"
+                  className="showtime-title text-center mx-auto text-2xl md:text-5xl md:leading-snug"
                   style={{ fontWeight: 600, wordBreak: "break-word" }}
                 >
                   {isMyProfile
@@ -532,7 +519,7 @@ const Profile = ({
                     ? name
                     : "Unnamed"}
                 </div>
-                <div className="ml-1 sm:ml-2 mt-4 sm:mt-8">
+                {/* <div className="ml-1 sm:ml-2 mt-4 sm:mt-8">
                   <ShareButton
                     url={
                       typeof window !== "undefined"
@@ -541,8 +528,43 @@ const Profile = ({
                     }
                     type={"profile"}
                   />
-                </div>
+                </div> */}
                 <div className="flex-grow"></div>
+              </div>
+              <div
+                className={`${
+                  isMyProfile && context.myProfile
+                    ? !context.myProfile.username
+                      ? "hidden"
+                      : "flex-1"
+                    : !username
+                    ? "hidden"
+                    : "flex-1"
+                } text-base md:text-xl flex flex-col md:flex-row justify-center items-center md:justify-start text-gray-500 mb-8`}
+              >
+                <div>
+                  @
+                  {(isMyProfile &&
+                    context.myProfile &&
+                    context.myProfile.username) ||
+                    username ||
+                    null}
+                </div>
+                <div className="flex text-sm ml-2 text-gray-600">
+                  {wallet_addresses_excluding_email.map((address) => {
+                    return (
+                      <div
+                        className="py-2 px-4 bg-gray-100 rounded-full mr-2 cursor-copy hover:bg-gray-200 active:bg-gray-100 transition"
+                        key={address}
+                        onClick={() => {
+                          copyToClipBoard(address);
+                        }}
+                      >
+                        {formatAddressShort(address)}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
               <div
                 className={`${

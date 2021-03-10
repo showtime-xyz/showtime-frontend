@@ -66,6 +66,9 @@ module.exports = {
       colors: {
         stpink: "#e45cff",
       },
+      cursor: {
+        copy: "copy",
+      },
       gridRow: {
         "span-7": "span 7 / span 7",
         "span-8": "span 8 / span 8",
@@ -115,7 +118,9 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ["active"],
+    },
   },
   plugins: [],
   corePlugins: {},
