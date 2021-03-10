@@ -32,7 +32,9 @@ export default function ProfileInfoPill({
 
   return (
     <div
-      className="p-6 rounded-xl hover:shadow-xl bg-white md:w-max flex flex-col md:flex-row justify-center items-center md:items-stretch mt-8 mb-4 "
+      className={`p-6 rounded-xl  bg-white md:w-max flex flex-col md:flex-row justify-center items-center md:items-stretch mt-8 mb-4 ${
+        context.isMobile ? null : "hover:shadow-xl"
+      }`}
       style={{
         // boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
         border: "1px solid #ddd",
