@@ -145,9 +145,15 @@ export default function Modal({ isOpen }) {
                         className="pb-4 "
                         style={{ fontWeight: 600 }}
                       >
-                        Please enter your email:
+                        Enter your email to receive a sign in link.
                       </label>
-                      <br />
+                      <div
+                        className="pt-1"
+                        style={{ color: "#444", fontSize: 13 }}
+                      >
+                        If this is your first time, you will create a new
+                        account.
+                      </div>
                       <br />
                       <input
                         name="email"
@@ -166,12 +172,6 @@ export default function Modal({ isOpen }) {
                       <button className="showtime-pink-button">
                         Sign in with Email
                       </button>
-                      <div
-                        className="pt-4"
-                        style={{ color: "#444", fontSize: 13 }}
-                      >
-                        You will receive a sign in link in your inbox
-                      </div>
                       <div className="py-8" style={{ color: "#444" }}>
                         — or —
                       </div>
@@ -186,7 +186,7 @@ export default function Modal({ isOpen }) {
                       }}
                       style={{ borderRadius: 7 }}
                     >
-                      Connect Wallet
+                      Sign in with Wallet
                     </button>
                   </div>
                 </>
