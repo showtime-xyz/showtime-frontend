@@ -1,6 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart, faUser } from "@fortawesome/free-regular-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import mixpanel from "mixpanel-browser";
 import Link from "next/link";
 import useKeyPress from "../hooks/useKeyPress";
@@ -59,11 +62,12 @@ const Metadata = styled.div`
     }
 `;
 
-const MetadataIcon = styled.img`
+const MetadataIcon = styled.div`
     width: 16px;
     height: 16px;
     margin-left: 16px;
     margin-right: 8px;
+    color: #BDBDBD;
 `;
 
 const MetadataText = styled.h6`
@@ -135,17 +139,19 @@ const FollowButton = styled.button`
     }
 `;
 
-const PlusIcon = styled.img`
-    width: 16px;
-    height: 16px;
+const PlusIcon = styled.div`
+    display: flex;
+    margin-bottom: 1px;
+    width: 14px;
+    height: 14px;
     margin-right: 12px;
+    color: #BDBDBD;
 `;
 
 const FollowText = styled.h6`
     font-size: 13px;
     font-weight: 400;
 `;
-
 
 const LeaderboardItem = ({ item }) => {
     const context = useContext(AppContext);
@@ -298,7 +304,10 @@ const LeaderboardItem = ({ item }) => {
                                                 : handleFollow
                                             : handleLoggedOutFollow
                                     }>
-                                        {!isFollowed && <PlusIcon src="/icons/plus.svg" />}
+                                        {!isFollowed &&
+                                            <PlusIcon>
+                                                <FontAwesomeIcon icon={faPlus} />
+                                            </PlusIcon>}
                                         <FollowText>
                                             {isFollowed ? "Following" : "Follow"}
                                         </FollowText>
@@ -306,9 +315,13 @@ const LeaderboardItem = ({ item }) => {
                                     <GraySeparator />
                                 </>}
                             <Metadata>
-                                <MetadataIcon src="/icons/user.svg" />
+                                <MetadataIcon>
+                                    <FontAwesomeIcon icon={faUser} />
+                                </MetadataIcon>
                                 <MetadataText>{item?.follower_count}</MetadataText>
-                                <MetadataIcon src="/icons/heart.svg" />
+                                <MetadataIcon>
+                                    <FontAwesomeIcon icon={faHeart} />
+                                </MetadataIcon>
                                 <MetadataText>{item?.like_count_total}</MetadataText>
                             </Metadata>
                         </ProfileBottomSection>
