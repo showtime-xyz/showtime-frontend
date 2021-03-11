@@ -57,12 +57,14 @@ const ProfileTitle = styled.h4`
 
 const Metadata = styled.div`
     display: flex;
+    align-items: center;
     @media screen and (max-width: 600px) {
         margin-left: -16px;
     }
 `;
 
 const MetadataIcon = styled.div`
+    display: flex;
     width: 16px;
     height: 16px;
     margin-left: 16px;
