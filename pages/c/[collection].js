@@ -217,11 +217,9 @@ export default function Collection({
         />
       </Head>
 
-      <div className="flex flex-col text-center w-full">
-        <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mt-5 py-10">
-          {pageTitle}
-        </div>
-      </div>
+      <h1 className="text-4xl md:text-6xl text-center mt-12 sm:mt-20 mb-12 ">
+        {pageTitle}
+      </h1>
 
       {gridWidth > 0 ? (
         <div
