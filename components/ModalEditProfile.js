@@ -172,7 +172,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       value={customURLValue ? customURLValue : ""}
                       onChange={(e) => {
                         const value = e.target.value;
-                        const urlRegex = /^[a-zA-Z0-9-]*$/;
+                        const urlRegex = /^[a-zA-Z0-9_]*$/;
                         if (urlRegex.test(value)) {
                           setCustomURLValue(value);
                           handleDebouncedUsernameLookup(

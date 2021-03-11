@@ -206,6 +206,7 @@ const Profile = ({
     typeof context.user,
     context.myProfile,
     context.user ? context.user.publicAddress : null,
+    slug_address,
   ]);
 
   const handleLoggedOutFollow = () => {
