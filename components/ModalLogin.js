@@ -126,10 +126,7 @@ export default function Modal({ isOpen }) {
               onClick={(e) => e.stopPropagation()}
             >
               <CloseButton setEditModalOpen={context.setLoginModalOpen} />
-              <div
-                className="text-3xl border-b-2 pb-2 text-center"
-                style={{ fontWeight: 600 }}
-              >
+              <div className="text-3xl border-b-2 pb-2 text-center">
                 Sign in
               </div>
               {signaturePending ? (
@@ -147,11 +144,7 @@ export default function Modal({ isOpen }) {
                             : null
                         }
                       >
-                        <label
-                          htmlFor="email"
-                          className="pb-4 "
-                          style={{ fontWeight: 600 }}
-                        >
+                        <label htmlFor="email" className="pb-4 ">
                           Enter your email to receive a sign in link.
                         </label>
                         <div

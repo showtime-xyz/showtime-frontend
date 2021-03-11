@@ -138,12 +138,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
             >
               <form onSubmit={handleSubmit} ref={formRef}>
                 <CloseButton setEditModalOpen={setEditModalOpen} />
-                <div
-                  className="text-3xl border-b-2 pb-2"
-                  style={{ fontWeight: 600 }}
-                >
-                  Edit Photo
-                </div>
+                <div className="text-3xl border-b-2 pb-2">Edit Photo</div>
                 <div className="my-8">
                   {image === "" && (
                     <div>

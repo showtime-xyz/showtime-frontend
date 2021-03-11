@@ -276,7 +276,6 @@ const TokenDetailBody = ({
             <div
               className="pb-0 text-left flex-1 p-4"
               style={{
-                fontWeight: 600,
                 overflowWrap: "break-word",
                 wordWrap: "break-word",
                 ...(isMobile ? {} : { maxWidth: "50%" }),
