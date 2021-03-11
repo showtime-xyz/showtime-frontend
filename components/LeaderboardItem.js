@@ -290,19 +290,21 @@ const LeaderboardItem = ({ item }) => {
                         </Link>
                         <ProfileBottomSection>
                             {!isMyProfile &&
-                                <FollowButton onClick={
-                                    context.user
-                                        ? isFollowed
-                                            ? handleUnfollow
-                                            : handleFollow
-                                        : handleLoggedOutFollow
-                                }>
-                                    {!isFollowed && <PlusIcon src="/icons/plus.svg" />}
-                                    <FollowText>
-                                        {isFollowed ? "Following" : "Follow"}
-                                    </FollowText>
-                                </FollowButton>}
-                            <GraySeparator />
+                                <>
+                                    <FollowButton onClick={
+                                        context.user
+                                            ? isFollowed
+                                                ? handleUnfollow
+                                                : handleFollow
+                                            : handleLoggedOutFollow
+                                    }>
+                                        {!isFollowed && <PlusIcon src="/icons/plus.svg" />}
+                                        <FollowText>
+                                            {isFollowed ? "Following" : "Follow"}
+                                        </FollowText>
+                                    </FollowButton>
+                                    <GraySeparator />
+                                </>}
                             <Metadata>
                                 <MetadataIcon src="/icons/user.svg" />
                                 <MetadataText>{item?.follower_count}</MetadataText>

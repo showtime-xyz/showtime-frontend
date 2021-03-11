@@ -94,18 +94,14 @@ const Profile = ({
   const [isFollowed, setIsFollowed] = useState(false);
 
   useEffect(() => {
-    const checkIfFollowed = async () => {
-      var it_is_followed = false;
-      await _.forEach(context.myFollows, (follow) => {
-        if (wallet_addresses.includes(follow.wallet_address)) {
-          it_is_followed = true;
-        }
-      });
-      setIsFollowed(it_is_followed);
-    };
-
-    checkIfFollowed();
-  }, [context.myFollows, wallet_addresses]);
+    var it_is_followed = false;
+    _.forEach(context.myFollows, (follow) => {
+      if (follow?.profile_id === profile_id) {
+        it_is_followed = true;
+      }
+    });
+    setIsFollowed(it_is_followed);
+  }, [context.myFollows]);
 
   const [createdItems, setCreatedItems] = useState([]);
   const [ownedItems, setOwnedItems] = useState([]);
@@ -189,7 +185,7 @@ const Profile = ({
             .map((a) => a.toLowerCase())
             .includes(slug_address.toLowerCase()) ||
           slug_address.toLowerCase() ===
-            context.myProfile?.username?.toLowerCase()
+          context.myProfile?.username?.toLowerCase()
         ) {
           setIsMyProfile(true);
           mixpanel.track("Self profile view", { slug: slug_address });
@@ -339,12 +335,12 @@ const Profile = ({
           isLoadingCards
             ? null
             : showUserHiddenItems
-            ? createdItems.length
-            : createdItems.length == 150 // go ahead and say 150+ if we are at max items
-            ? 150
-            : createdItems.filter(
-                (item) => !createdHiddenItems.includes(item.nft_id)
-              ).length
+              ? createdItems.length
+              : createdItems.length == 150 // go ahead and say 150+ if we are at max items
+                ? 150
+                : createdItems.filter(
+                  (item) => !createdHiddenItems.includes(item.nft_id)
+                ).length
         }
         isActive={selectedGrid === "created"}
         onClickTab={() => {
@@ -357,12 +353,12 @@ const Profile = ({
           isLoadingCards
             ? null
             : showUserHiddenItems
-            ? ownedItems.length
-            : ownedItems.length == 150 // go ahead and say 150+ if we are at max items
-            ? 150
-            : ownedItems.filter(
-                (item) => !ownedHiddenItems.includes(item.nft_id)
-              ).length
+              ? ownedItems.length
+              : ownedItems.length == 150 // go ahead and say 150+ if we are at max items
+                ? 150
+                : ownedItems.filter(
+                  (item) => !ownedHiddenItems.includes(item.nft_id)
+                ).length
         }
         isActive={selectedGrid === "owned"}
         onClickTab={() => {
@@ -375,12 +371,12 @@ const Profile = ({
           isLoadingCards
             ? null
             : showUserHiddenItems
-            ? likedItems.length
-            : likedItems.length == 150 // go ahead and say 150+ if we are at max items
-            ? 150
-            : likedItems.filter(
-                (item) => !likedHiddenItems.includes(item.nft_id)
-              ).length
+              ? likedItems.length
+              : likedItems.length == 150 // go ahead and say 150+ if we are at max items
+                ? 150
+                : likedItems.filter(
+                  (item) => !likedHiddenItems.includes(item.nft_id)
+                ).length
         }
         isActive={selectedGrid === "liked"}
         onClickTab={() => {
@@ -405,11 +401,11 @@ const Profile = ({
                   ? context.myProfile.name
                   : "Unnamed"
                 : name
-                ? name
-                : "Unnamed"
+                  ? name
+                  : "Unnamed"
               : name
-              ? name
-              : "Unnamed"}
+                ? name
+                : "Unnamed"}
           </title>
 
           <meta
@@ -510,8 +506,8 @@ const Profile = ({
               >
                 {columns > 2
                   ? wallet_addresses_excluding_email.map((address) => {
-                      return <div key={address}>{address}</div>;
-                    })
+                    return <div key={address}>{address}</div>;
+                  })
                   : null}
               </div>
               <div className="flex flex-row items-center text-center mx-0 px-0  pt-10">
@@ -526,11 +522,11 @@ const Profile = ({
                         ? context.myProfile.name
                         : "Unnamed"
                       : name
-                      ? name
-                      : "Unnamed"
+                        ? name
+                        : "Unnamed"
                     : name
-                    ? name
-                    : "Unnamed"}
+                      ? name
+                      : "Unnamed"}
                 </div>
                 <div className="ml-1 sm:ml-2 mt-4 sm:mt-8">
                   <ShareButton
@@ -545,15 +541,14 @@ const Profile = ({
                 <div className="flex-grow"></div>
               </div>
               <div
-                className={`${
-                  isMyProfile && context.myProfile
-                    ? !context.myProfile.bio && !context.myProfile.website_url
-                      ? "hidden"
-                      : "flex-1"
-                    : !bio && !website_url
+                className={`${isMyProfile && context.myProfile
+                  ? !context.myProfile.bio && !context.myProfile.website_url
                     ? "hidden"
                     : "flex-1"
-                } mt-4 text-base align-center flex flex-col justify-center items-center md:items-start`}
+                  : !bio && !website_url
+                    ? "hidden"
+                    : "flex-1"
+                  } mt-4 text-base align-center flex flex-col justify-center items-center md:items-start`}
               >
                 {/*<h4 className="text-black mb-2 text-lg font-semibold">About</h4>*/}
                 {isMyProfile && context.myProfile ? (
@@ -647,8 +642,8 @@ const Profile = ({
                       ? context.myProfile.img_url
                       : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                     : img_url
-                    ? img_url
-                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                      ? img_url
+                      : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                 }
                 profileActions={{ editAccount, editPhoto, addWallet, logout }}
               />
@@ -666,25 +661,25 @@ const Profile = ({
                     style={
                       context.windowSize && context.windowSize.width < 600
                         ? {
-                            fontWeight: 400,
-                            fontSize: 12,
-                            marginTop: -10,
-                            marginBottom: 4,
-                          }
+                          fontWeight: 400,
+                          fontSize: 12,
+                          marginTop: -10,
+                          marginBottom: 4,
+                        }
                         : {
-                            fontWeight: 400,
-                            fontSize: 12,
-                            marginTop: -59,
-                          }
+                          fontWeight: 400,
+                          fontSize: 12,
+                          marginTop: -59,
+                        }
                     }
                   >
                     {createdHiddenItems.length === 0 &&
-                    ownedHiddenItems.length === 0 &&
-                    likedHiddenItems.length === 0
+                      ownedHiddenItems.length === 0 &&
+                      likedHiddenItems.length === 0
                       ? null
                       : showUserHiddenItems
-                      ? "Hide hidden items"
-                      : "Show hidden items"}
+                        ? "Hide hidden items"
+                        : "Show hidden items"}
                   </div>
                 </div>
               ) : null}
@@ -695,20 +690,20 @@ const Profile = ({
                 selectedGrid === "created"
                   ? createdItems
                   : selectedGrid === "owned"
-                  ? ownedItems
-                  : selectedGrid === "liked"
-                  ? likedItems
-                  : null
+                    ? ownedItems
+                    : selectedGrid === "liked"
+                      ? likedItems
+                      : null
               }
               isLoading={isLoadingCards}
               listId={
                 selectedGrid === "created"
                   ? 1
                   : selectedGrid === "owned"
-                  ? 2
-                  : selectedGrid === "liked"
-                  ? 3
-                  : null
+                    ? 2
+                    : selectedGrid === "liked"
+                      ? 3
+                      : null
               }
               isMyProfile={isMyProfile}
               openCardMenu={openCardMenu}
@@ -717,19 +712,19 @@ const Profile = ({
                 selectedGrid === "created"
                   ? createdHiddenItems
                   : selectedGrid === "owned"
-                  ? ownedHiddenItems
-                  : selectedGrid === "liked"
-                  ? likedHiddenItems
-                  : null
+                    ? ownedHiddenItems
+                    : selectedGrid === "liked"
+                      ? likedHiddenItems
+                      : null
               }
               setUserHiddenItems={
                 selectedGrid === "created"
                   ? setCreatedHiddenItems
                   : selectedGrid === "owned"
-                  ? setOwnedHiddenItems
-                  : selectedGrid === "liked"
-                  ? setLikedHiddenItems
-                  : null
+                    ? setOwnedHiddenItems
+                    : selectedGrid === "liked"
+                      ? setLikedHiddenItems
+                      : null
               }
               showUserHiddenItems={showUserHiddenItems}
             />
