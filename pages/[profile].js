@@ -13,6 +13,8 @@ import { GridTabs, GridTab } from "../components/GridTabs";
 import ProfileInfoPill from "../components/ProfileInfoPill";
 import ModalUserList from "../components/ModalUserList";
 import ModalAddWallet from "../components/ModalAddWallet";
+//import { formatAddressShort, copyToClipBoard } from "../lib/utilities";
+import AddressButton from "../components/AddressButton";
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
@@ -185,7 +187,7 @@ const Profile = ({
             .map((a) => a.toLowerCase())
             .includes(slug_address.toLowerCase()) ||
           slug_address.toLowerCase() ===
-          context.myProfile?.username?.toLowerCase()
+            context.myProfile?.username?.toLowerCase()
         ) {
           setIsMyProfile(true);
           mixpanel.track("Self profile view", { slug: slug_address });
@@ -335,12 +337,12 @@ const Profile = ({
           isLoadingCards
             ? null
             : showUserHiddenItems
-              ? createdItems.length
-              : createdItems.length == 150 // go ahead and say 150+ if we are at max items
-                ? 150
-                : createdItems.filter(
-                  (item) => !createdHiddenItems.includes(item.nft_id)
-                ).length
+            ? createdItems.length
+            : createdItems.length == 150 // go ahead and say 150+ if we are at max items
+            ? 150
+            : createdItems.filter(
+                (item) => !createdHiddenItems.includes(item.nft_id)
+              ).length
         }
         isActive={selectedGrid === "created"}
         onClickTab={() => {
@@ -353,12 +355,12 @@ const Profile = ({
           isLoadingCards
             ? null
             : showUserHiddenItems
-              ? ownedItems.length
-              : ownedItems.length == 150 // go ahead and say 150+ if we are at max items
-                ? 150
-                : ownedItems.filter(
-                  (item) => !ownedHiddenItems.includes(item.nft_id)
-                ).length
+            ? ownedItems.length
+            : ownedItems.length == 150 // go ahead and say 150+ if we are at max items
+            ? 150
+            : ownedItems.filter(
+                (item) => !ownedHiddenItems.includes(item.nft_id)
+              ).length
         }
         isActive={selectedGrid === "owned"}
         onClickTab={() => {
@@ -371,12 +373,12 @@ const Profile = ({
           isLoadingCards
             ? null
             : showUserHiddenItems
-              ? likedItems.length
-              : likedItems.length == 150 // go ahead and say 150+ if we are at max items
-                ? 150
-                : likedItems.filter(
-                  (item) => !likedHiddenItems.includes(item.nft_id)
-                ).length
+            ? likedItems.length
+            : likedItems.length == 150 // go ahead and say 150+ if we are at max items
+            ? 150
+            : likedItems.filter(
+                (item) => !likedHiddenItems.includes(item.nft_id)
+              ).length
         }
         isActive={selectedGrid === "liked"}
         onClickTab={() => {
@@ -401,11 +403,11 @@ const Profile = ({
                   ? context.myProfile.name
                   : "Unnamed"
                 : name
-                  ? name
-                  : "Unnamed"
-              : name
                 ? name
-                : "Unnamed"}
+                : "Unnamed"
+              : name
+              ? name
+              : "Unnamed"}
           </title>
 
           <meta
@@ -496,71 +498,95 @@ const Profile = ({
                   : { marginLeft: 12, marginRight: 12 }
               }
             >
-              <div
-                className="float-right mt-16 text-right"
-                style={{
-                  fontWeight: 400,
-                  fontSize: 12,
-                  color: "#999",
-                }}
+              <h1
+                className={`text-4xl md:text-6xl sm:mb-2 text-center md:text-left mt-12 sm:mt-20 ${
+                  (wallet_addresses_excluding_email.length === 0 ||
+                    context.columns === 1) &&
+                  !username
+                    ? "mb-8"
+                    : "mb-0"
+                }`}
               >
-                {columns > 2
-                  ? wallet_addresses_excluding_email.map((address) => {
-                    return <div key={address}>{address}</div>;
-                  })
-                  : null}
-              </div>
-              <div className="flex flex-row items-center text-center mx-0 px-0  pt-10">
-                <div className="flex-grow sm:hidden"></div>
-                <div
-                  className="showtime-title text-center mx-auto text-2xl md:text-5xl md:leading-snug mt-5"
-                  style={{ fontWeight: 600, wordBreak: "break-word" }}
-                >
-                  {isMyProfile
-                    ? context.myProfile
+                {isMyProfile
+                  ? context.myProfile
+                    ? context.myProfile.name
                       ? context.myProfile.name
-                        ? context.myProfile.name
-                        : "Unnamed"
-                      : name
-                        ? name
-                        : "Unnamed"
+                      : "Unnamed"
                     : name
-                      ? name
-                      : "Unnamed"}
+                    ? name
+                    : "Unnamed"
+                  : name
+                  ? name
+                  : "Unnamed"}
+              </h1>
+              {(username ||
+                (wallet_addresses_excluding_email.length > 0 &&
+                  context.columns > 1)) && (
+                <div className="flex flex-row justify-center items-center md:justify-start mb-12">
+                  {username && (
+                    <div className="mr-2 text-base text-gray-500">
+                      @{username}
+                    </div>
+                  )}
+                  {context.columns === 1 ? null : (
+                    <div className="flex mr-2 md:mr-0">
+                      {wallet_addresses_excluding_email.map((address) => {
+                        return (
+                          <AddressButton key={address} address={address} />
+                        );
+                        /*
+                       return (
+                        <div
+                          className="py-2 px-3 bg-gray-100 rounded-full mx-1 md:mr-2 cursor-copy hover:bg-gray-200 active:bg-gray-100 transition"
+                          key={address}
+                          onClick={() => {
+                            copyToClipBoard(address);
+                          }}
+                        >
+                          {formatAddressShort(address)}
+                        </div>
+                      );
+                      */
+                      })}
+                    </div>
+                  )}
                 </div>
-                <div className="ml-1 sm:ml-2 mt-4 sm:mt-8">
-                  <ShareButton
-                    url={
-                      typeof window !== "undefined"
-                        ? window.location.href
-                        : null
-                    }
-                    type={"profile"}
-                  />
-                </div>
-                <div className="flex-grow"></div>
-              </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {gridWidth && (
+          <div className="m-auto" style={{ width: gridWidth }}>
+            <div
+              style={
+                context.columns == 1
+                  ? { marginLeft: 16, marginRight: 16 }
+                  : { marginLeft: 12, marginRight: 12 }
+              }
+            >
               <div
-                className={`${isMyProfile && context.myProfile
-                  ? !context.myProfile.bio && !context.myProfile.website_url
+                className={`${
+                  isMyProfile && context.myProfile
+                    ? !context.myProfile.bio && !context.myProfile.website_url
+                      ? "hidden"
+                      : "flex-1"
+                    : !bio && !website_url
                     ? "hidden"
                     : "flex-1"
-                  : !bio && !website_url
-                    ? "hidden"
-                    : "flex-1"
-                  } mt-4 text-base align-center flex flex-col justify-center items-center md:items-start`}
+                } mt-4 pb-2 text-base align-center flex flex-col justify-center items-center md:items-start`}
               >
                 {/*<h4 className="text-black mb-2 text-lg font-semibold">About</h4>*/}
                 {isMyProfile && context.myProfile ? (
                   context.myProfile.bio ? (
-                    <div className="pb-2 sm:mr-16 max-w-xl">
+                    <div className="max-w-xl">
                       <div className="text-center md:text-left">
                         {context.myProfile.bio}
                       </div>
                     </div>
                   ) : null
                 ) : bio ? (
-                  <div className="pb-2 sm:mr-16 max-w-xl">
+                  <div className="max-w-xl">
                     <div className="text-center md:text-left">
                       <div className="">{bio}</div>
                     </div>
@@ -569,36 +595,14 @@ const Profile = ({
 
                 {isMyProfile && context.myProfile ? (
                   context.myProfile.website_url ? (
-                    <div className="w-min">
-                      <a
-                        href={
-                          context.myProfile.website_url.slice(0, 4) === "http"
-                            ? context.myProfile.website_url
-                            : "https://" + context.myProfile.website_url
-                        }
-                        target="_blank"
-                        className="flex flex-row items-center justify-center"
-                        style={{ color: "rgb(81, 125, 228)" }}
-                        onClick={() => {
-                          mixpanel.track("Clicked profile website link", {
-                            slug: slug_address,
-                          });
-                        }}
-                      >
-                        <div>{context.myProfile.website_url}</div>
-                      </a>
-                    </div>
-                  ) : null
-                ) : website_url ? (
-                  <div className="w-min">
                     <a
                       href={
-                        website_url.slice(0, 4) === "http"
-                          ? website_url
-                          : "https://" + website_url
+                        context.myProfile.website_url.slice(0, 4) === "http"
+                          ? context.myProfile.website_url
+                          : "https://" + context.myProfile.website_url
                       }
                       target="_blank"
-                      className="flex flex-row"
+                      className="flex flex-row items-center justify-center"
                       style={{ color: "rgb(81, 125, 228)" }}
                       onClick={() => {
                         mixpanel.track("Clicked profile website link", {
@@ -606,11 +610,29 @@ const Profile = ({
                         });
                       }}
                     >
-                      <div style={{ wordWrap: "break-word" }}>
-                        {website_url}
+                      <div style={{ wordBreak: "break-all" }}>
+                        {context.myProfile.website_url}
                       </div>
                     </a>
-                  </div>
+                  ) : null
+                ) : website_url ? (
+                  <a
+                    href={
+                      website_url.slice(0, 4) === "http"
+                        ? website_url
+                        : "https://" + website_url
+                    }
+                    target="_blank"
+                    className="flex flex-row"
+                    style={{ color: "rgb(81, 125, 228)" }}
+                    onClick={() => {
+                      mixpanel.track("Clicked profile website link", {
+                        slug: slug_address,
+                      });
+                    }}
+                  >
+                    <div style={{ wordBreak: "break-all" }}>{website_url}</div>
+                  </a>
                 ) : null}
               </div>
 
@@ -642,8 +664,8 @@ const Profile = ({
                       ? context.myProfile.img_url
                       : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                     : img_url
-                      ? img_url
-                      : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                    ? img_url
+                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                 }
                 profileActions={{ editAccount, editPhoto, addWallet, logout }}
               />
@@ -661,25 +683,25 @@ const Profile = ({
                     style={
                       context.windowSize && context.windowSize.width < 600
                         ? {
-                          fontWeight: 400,
-                          fontSize: 12,
-                          marginTop: -10,
-                          marginBottom: 4,
-                        }
+                            fontWeight: 400,
+                            fontSize: 12,
+                            marginTop: -10,
+                            marginBottom: 4,
+                          }
                         : {
-                          fontWeight: 400,
-                          fontSize: 12,
-                          marginTop: -59,
-                        }
+                            fontWeight: 400,
+                            fontSize: 12,
+                            marginTop: -59,
+                          }
                     }
                   >
                     {createdHiddenItems.length === 0 &&
-                      ownedHiddenItems.length === 0 &&
-                      likedHiddenItems.length === 0
+                    ownedHiddenItems.length === 0 &&
+                    likedHiddenItems.length === 0
                       ? null
                       : showUserHiddenItems
-                        ? "Hide hidden items"
-                        : "Show hidden items"}
+                      ? "Hide hidden items"
+                      : "Show hidden items"}
                   </div>
                 </div>
               ) : null}
@@ -690,20 +712,20 @@ const Profile = ({
                 selectedGrid === "created"
                   ? createdItems
                   : selectedGrid === "owned"
-                    ? ownedItems
-                    : selectedGrid === "liked"
-                      ? likedItems
-                      : null
+                  ? ownedItems
+                  : selectedGrid === "liked"
+                  ? likedItems
+                  : null
               }
               isLoading={isLoadingCards}
               listId={
                 selectedGrid === "created"
                   ? 1
                   : selectedGrid === "owned"
-                    ? 2
-                    : selectedGrid === "liked"
-                      ? 3
-                      : null
+                  ? 2
+                  : selectedGrid === "liked"
+                  ? 3
+                  : null
               }
               isMyProfile={isMyProfile}
               openCardMenu={openCardMenu}
@@ -712,19 +734,19 @@ const Profile = ({
                 selectedGrid === "created"
                   ? createdHiddenItems
                   : selectedGrid === "owned"
-                    ? ownedHiddenItems
-                    : selectedGrid === "liked"
-                      ? likedHiddenItems
-                      : null
+                  ? ownedHiddenItems
+                  : selectedGrid === "liked"
+                  ? likedHiddenItems
+                  : null
               }
               setUserHiddenItems={
                 selectedGrid === "created"
                   ? setCreatedHiddenItems
                   : selectedGrid === "owned"
-                    ? setOwnedHiddenItems
-                    : selectedGrid === "liked"
-                      ? setLikedHiddenItems
-                      : null
+                  ? setOwnedHiddenItems
+                  : selectedGrid === "liked"
+                  ? setLikedHiddenItems
+                  : null
               }
               showUserHiddenItems={showUserHiddenItems}
             />

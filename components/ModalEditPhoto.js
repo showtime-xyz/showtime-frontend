@@ -151,7 +151,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       {/*<ImageUpload image={image} setImage={handleImage} />*/}
 
                       <div
-                        className="showtime-pink-button text-sm text-center mt-16"
+                        className="showtime-pink-button text-sm text-center mt-16  px-4 py-3  rounded-full"
                         style={{ cursor: "pointer" }}
                         onClick={handleClick}
                       >
@@ -202,7 +202,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                 <div className="border-t-2 pt-4">
                   <button
                     type="submit"
-                    className="showtime-green-button px-5 py-3 float-right"
+                    className="showtime-green-button  px-4 py-2  rounded-full float-right"
                     style={
                       image === ""
                         ? {
@@ -220,7 +220,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 
                   <button
                     type="button"
-                    className="showtime-black-button-outline px-5 py-3"
+                    className="showtime-black-button-outline  px-4 py-2  rounded-full"
                     onClick={() => {
                       if (!saveInProgress) {
                         setEditModalOpen(false);
