@@ -199,7 +199,7 @@ const TokenDetailBody = ({
                   top: isMobile ? 57 : 0,
                   right: 0,
                   margin: 10,
-                  zIndex: 20,
+                  zIndex: 1,
                 }}
               >
                 {isMobile ||
