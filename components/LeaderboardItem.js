@@ -83,7 +83,7 @@ const ProfileImage = styled.img`
   height: 72px;
   border-radius: 50%;
   margin-right: 20px;
-
+  cursor: pointer;
   box-sizing: border-box;
   margin-left: ${(p) => (p.isMobile ? "12px" : "0px")};
 `;
@@ -321,10 +321,12 @@ const LeaderboardItem = ({ item }) => {
       ) : null}
       <LeaderboardItemRow>
         <ProfileSection>
-          <ProfileImage
-            isMobile={context.isMobile}
-            src={getImageUrl(item?.img_url)}
-          />
+          <Link href="/[profile]" as={`/${item?.username || item.address}`}>
+            <ProfileImage
+              isMobile={context.isMobile}
+              src={getImageUrl(item?.img_url)}
+            />
+          </Link>
           <ProfileSectionContent>
             <Link href="/[profile]" as={`/${item?.username || item.address}`}>
               <ProfileTitle>

@@ -58,7 +58,7 @@ const Leaderboard = () => {
   return (
     <Layout>
       <Head>
-        <title>{"Showtime | Leaderboard"}</title>
+        <title>Leaderboard</title>
         <meta name="description" content="Most popular creators" />
         <meta property="og:type" content="website" />
         <meta name="og:description" content="Most popular creators" />
