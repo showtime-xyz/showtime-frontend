@@ -96,14 +96,14 @@ export default function Modal({
               />
             </div>
             <div
-              className="modal flex-grow my-8 overflow-auto"
+              className="modal flex-grow my-8 overflow-hidden"
               style={
                 isStacked
                   ? { color: "black", height: "100%", overflow: "auto" }
                   : {
                       color: "black",
                       height: "90%",
-                      borderRadius: 7,
+                      borderRadius: 15,
                       //, top: "5%",
                       //right: 8%;
                       //left: 8%;
@@ -140,17 +140,21 @@ export default function Modal({
                   icon={faTimes}
                 />
               </div>
-
-              <TokenDetailBody
-                item={item}
-                muted={false}
-                handleLike={handleLike}
-                handleUnlike={handleUnlike}
-                className="w-full"
-                setEditModalOpen={setEditModalOpen}
-                ownershipDetails={ownershipDetails}
-                isInModal
-              />
+              <div
+                className="overflow-y-scroll h-full"
+                style={context.isMobile ? {} : { borderRadius: 10 }}
+              >
+                <TokenDetailBody
+                  item={item}
+                  muted={false}
+                  handleLike={handleLike}
+                  handleUnlike={handleUnlike}
+                  className="w-full"
+                  setEditModalOpen={setEditModalOpen}
+                  ownershipDetails={ownershipDetails}
+                  isInModal
+                />
+              </div>
             </div>
             <div
               className={
