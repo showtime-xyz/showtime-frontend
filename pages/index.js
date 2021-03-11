@@ -129,7 +129,7 @@ export default function Home() {
           }
         >
           <h1
-            className="text-xl md:text-3xl xl:text-4xl mt-5"
+            className="text-xl md:text-3xl xl:text-4xl"
             style={{ maxWidth: 700 }}
           >
             Discover & Showcase

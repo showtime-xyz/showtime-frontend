@@ -66,6 +66,9 @@ module.exports = {
       colors: {
         stpink: "#e45cff",
       },
+      cursor: {
+        copy: "copy",
+      },
       fontSize: {
         sm: [".875rem", "1.7rem"],
       },
@@ -118,7 +121,9 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ["active"],
+    },
   },
   plugins: [],
   corePlugins: {},

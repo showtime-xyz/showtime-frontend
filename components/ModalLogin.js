@@ -140,19 +140,27 @@ export default function Modal({ isOpen }) {
                 <>
                   <form onSubmit={handleSubmitEmail}>
                     <div className="text-center pt-8">
-                      <label
-                        htmlFor="email"
-                        className="pb-4 "
-                        style={{ fontWeight: 600 }}
-                      >
-                        Enter your email to receive a sign in link.
-                      </label>
                       <div
-                        className="pt-1 pb-1"
-                        style={{ color: "#444", fontSize: 13 }}
+                        style={
+                          context.windowSize && context.windowSize.width < 400
+                            ? { maxWidth: 215, margin: "auto" }
+                            : null
+                        }
                       >
-                        If this is your first time, you will create a new
-                        account.
+                        <label
+                          htmlFor="email"
+                          className="pb-4 "
+                          style={{ fontWeight: 600 }}
+                        >
+                          Enter your email to receive a sign in link.
+                        </label>
+                        <div
+                          className="pt-1 pb-1"
+                          style={{ color: "#444", fontSize: 13 }}
+                        >
+                          If this is your first time, it will create a new
+                          account.
+                        </div>
                       </div>
                       <br />
                       <input
