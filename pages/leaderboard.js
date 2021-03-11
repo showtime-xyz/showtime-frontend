@@ -9,6 +9,7 @@ import backend from "../lib/backend";
 import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
 import { GridTab, GridTabs } from "../components/GridTabs";
+import GradientsBackground from "../components/GradientsBackground";
 
 const Content = styled.div`
   display: flex;
@@ -73,10 +74,11 @@ const Leaderboard = () => {
           content="https://showtime.kilkka.vercel.app/banner.png"
         />
       </Head>
+      <GradientsBackground />
       {columns && (
         <>
           <div
-            className="mx-auto mt-16 my-12 md:my-20 md:mt-24 text-center md:text-left"
+            className="mx-auto mt-16 my-12 md:my-20 md:mt-24 text-center md:text-left relative"
             style={
               columns === 1
                 ? { padding: "0px 16px" }
@@ -103,7 +105,7 @@ const Leaderboard = () => {
             </h1>
           </div>
 
-          <div className="m-auto" style={{ width: gridWidth }}>
+          <div className="m-auto relative" style={{ width: gridWidth }}>
             <GridTabs title="">
               <GridTab
                 label="24 Hours"

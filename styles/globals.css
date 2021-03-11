@@ -25,6 +25,7 @@ body {
 }
 main {
   flex: 1; /* Or flex-grow: 1;*/
+  position: relative;
 }
 * {
   letter-spacing: 0.02em;
