@@ -154,7 +154,7 @@ export default function Home() {
               : {
                   //backgroundColor: "#fff",
                   //boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
-                  paddingTop: 40,
+                  paddingTop: 20,
                   paddingBottom: 40,
                   marginBottom: 30,
                 }
