@@ -96,18 +96,14 @@ const Profile = ({
   const [isFollowed, setIsFollowed] = useState(false);
 
   useEffect(() => {
-    const checkIfFollowed = async () => {
-      var it_is_followed = false;
-      await _.forEach(context.myFollows, (follow) => {
-        if (wallet_addresses.includes(follow.wallet_address)) {
-          it_is_followed = true;
-        }
-      });
-      setIsFollowed(it_is_followed);
-    };
-
-    checkIfFollowed();
-  }, [context.myFollows, wallet_addresses]);
+    var it_is_followed = false;
+    _.forEach(context.myFollows, (follow) => {
+      if (follow?.profile_id === profile_id) {
+        it_is_followed = true;
+      }
+    });
+    setIsFollowed(it_is_followed);
+  }, [context.myFollows]);
 
   const [createdItems, setCreatedItems] = useState([]);
   const [ownedItems, setOwnedItems] = useState([]);

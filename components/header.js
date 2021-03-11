@@ -68,6 +68,16 @@ const Header = () => {
                 Home
               </a>
             </Link>
+            <Link href="/leaderboard">
+              <a
+                className="showtime-header-link ml-6 text-sm md:text-base"
+                onClick={() => {
+                  mixpanel.track("Leaderboard button click");
+                }}
+              >
+                Leaderboard
+              </a>
+            </Link>
             <Link href="/c/[collection]" as="/c/all">
               <a
                 className="showtime-header-link ml-6 text-sm md:text-base"
@@ -158,6 +168,17 @@ const Header = () => {
               }}
             >
               Home
+            </a>
+          </Link>
+
+          <Link href="/leaderboard">
+            <a
+              className="showtime-header-link mr-5 text-sm md:text-base"
+              onClick={() => {
+                mixpanel.track("Leaderboard button click");
+              }}
+            >
+              Leaderboard
             </a>
           </Link>
           <Link href="/c/[collection]" as="/c/all">
