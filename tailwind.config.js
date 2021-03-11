@@ -69,6 +69,9 @@ module.exports = {
       cursor: {
         copy: "copy",
       },
+      fontSize: {
+        sm: [".875rem", "1.7rem"],
+      },
       gridRow: {
         "span-7": "span 7 / span 7",
         "span-8": "span 8 / span 8",

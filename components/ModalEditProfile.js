@@ -295,7 +295,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                 <div className="border-t-2 pt-4">
                   <button
                     type="submit"
-                    className="showtime-green-button px-5 py-3 float-right"
+                    className="showtime-green-button px-4 py-2 float-right rounded-full"
                     style={{ borderColor: "#35bb5b", borderWidth: 2 }}
                     //onClick={() => setEditModalOpen(false)}
                   >
@@ -303,7 +303,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   </button>
                   <button
                     type="button"
-                    className="showtime-black-button-outline px-5 py-3"
+                    className="showtime-black-button-outline px-4 py-2  rounded-full"
                     onClick={() => {
                       setEditModalOpen(false);
                       setNameValue(context.myProfile.name);
