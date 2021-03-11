@@ -167,23 +167,32 @@ export default function Home() {
                   : { padding: "0px 12px", marginBottom: 16 }
               }
             >
-              <h3 className="text-2xl md:text-4xl" style={{ fontWeight: 600 }}>
+              <h3
+                className="self-end text-2xl md:text-4xl"
+                style={{ fontWeight: 600 }}
+              >
                 Latest{" "}
               </h3>
               <div className="flex-grow sm:hidden"></div>
               <div className="self-end">
-                <button
-                  className="showtime-random-button px-3 py-1 ml-3"
-                  style={{ fontSize: 14, fontWeight: 600 }}
+                <div
+                  className="ml-4 bg-white text-black border-black rounded-full px-5 py-1 cursor-pointer border-2 hover:text-stpink hover:border-stpink transition-all showtime-random-button"
                   onClick={() => {
                     getHero();
                   }}
                 >
-                  🎲 Random
-                </button>
+                  <span className="text-sm md:text-base">🎲 Random</span>
+                </div>
               </div>
               <div className="hidden sm:flex flex-grow"></div>
-              <div className="self-end hidden sm:flex">
+              <div
+                className="self-end hidden sm:flex"
+                style={
+                  context.isMobile
+                    ? { padding: "0px 16px" }
+                    : { padding: "0px 12px" }
+                }
+              >
                 <Link href="/c/[collection]" as="/c/all">
                   <a className="explore-more-link">Explore more pieces</a>
                 </Link>
