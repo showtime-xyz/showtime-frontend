@@ -167,7 +167,10 @@ export default function Home() {
                   : { padding: "0px 12px", marginBottom: 16 }
               }
             >
-              <h3 className="text-2xl md:text-4xl" style={{ fontWeight: 600 }}>
+              <h3
+                className="self-end text-2xl md:text-4xl"
+                style={{ fontWeight: 600 }}
+              >
                 Latest{" "}
               </h3>
               <div className="flex-grow sm:hidden"></div>
@@ -182,7 +185,14 @@ export default function Home() {
                 </div>
               </div>
               <div className="hidden sm:flex flex-grow"></div>
-              <div className="self-end hidden sm:flex">
+              <div
+                className="self-end hidden sm:flex"
+                style={
+                  context.isMobile
+                    ? { padding: "0px 16px" }
+                    : { padding: "0px 12px" }
+                }
+              >
                 <Link href="/c/[collection]" as="/c/all">
                   <a className="explore-more-link">Explore more pieces</a>
                 </Link>
