@@ -35,7 +35,7 @@ const ProfileSectionContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-width: 300px;
+
   @media screen and (max-width: 600px) {
     justify-content: space-around;
   }
