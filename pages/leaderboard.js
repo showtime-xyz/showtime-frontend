@@ -44,7 +44,7 @@ const Leaderboard = () => {
             const result = await backend.get(
                 `/v1/leaderboard?days=${leaderboardDays}&recache=1`
             );
-            const data = result.data.data;
+            const data = result?.data?.data;
             setLeaderboardItems(data);
             setIsLoading(false);
         };
