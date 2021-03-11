@@ -103,7 +103,7 @@ const Profile = ({
       }
     });
     setIsFollowed(it_is_followed);
-  }, [context.myFollows]);
+  }, [context.myFollows, profile_id]);
 
   const [createdItems, setCreatedItems] = useState([]);
   const [ownedItems, setOwnedItems] = useState([]);
@@ -165,7 +165,7 @@ const Profile = ({
       setIsLoadingCards(false);
     };
     fetchItems();
-  }, [wallet_addresses]);
+  }, [profile_id]);
 
   const [followers, setFollowers] = useState([]);
   useEffect(() => {
@@ -202,7 +202,7 @@ const Profile = ({
       }
     }
   }, [
-    wallet_addresses,
+    profile_id,
     typeof context.user,
     context.myProfile,
     context.user ? context.user.publicAddress : null,
@@ -301,12 +301,7 @@ const Profile = ({
 
     setShowFollowers(false);
     setShowFollowing(false);
-  }, [
-    wallet_addresses,
-    createdItems.length,
-    ownedItems.length,
-    isLoadingCards,
-  ]);
+  }, [profile_id, createdItems.length, ownedItems.length, isLoadingCards]);
 
   // profilePill Edit profile actions
   const editAccount = () => {
