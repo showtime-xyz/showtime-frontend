@@ -18,7 +18,7 @@ class TokenCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      spans: 0,
+      spans: 1,
       moreShown: false,
       imageLoaded: false,
       showVideo: false,
@@ -27,34 +27,38 @@ class TokenCard extends React.Component {
     this.handleMoreShown = this.handleMoreShown.bind(this);
     this.divRef = React.createRef();
     //this.imageRef = React.createRef();
-    this.setSpans = this.setSpans.bind(this);
+    //this.setSpans = this.setSpans.bind(this);
   }
 
   componentDidMount() {
     // Set to square at first, then adjust when media loads
+    /*
     this.setState({ showVideo: true, spans: 23 });
     if (this.props.item.token_has_video && !this.props.item.token_img_url) {
       // If it's a video with missing thumbnail, use onReady instead
     } else {
       this.props.item.imageRef.current.addEventListener("load", this.setSpans);
-    }
+    }*/
   }
 
   componentWillUnmount() {
+    /*
     if (this.props.item.imageRef.current) {
       this.props.item.imageRef.current.removeEventListener(
         "load",
         this.setSpans
       );
-    }
+    }*/
   }
 
   setSpans = () => {
+    //this.setState({ spans: 1 });
+    /*
     if (this.divRef.current) {
       const height = this.divRef.current.clientHeight;
       const spans = Math.min(Math.ceil(height / 30 + 1), 50);
       this.setState({ spans });
-    }
+    }*/
   };
 
   removeTags(str) {
@@ -68,7 +72,10 @@ class TokenCard extends React.Component {
   }
 
   handleMoreShown = () => {
-    this.setState({ moreShown: true }, this.setSpans);
+    this.setState(
+      { moreShown: true }
+      //this.setSpans
+    );
   };
 
   handleHide = async () => {
@@ -344,7 +351,7 @@ class TokenCard extends React.Component {
                     : 373
                 }
                 playsinline
-                onReady={this.setSpans}
+                //onReady={this.setSpans}
               />
             ) : (
               <div style={{ position: "relative" }}>
@@ -455,8 +462,10 @@ class TokenCard extends React.Component {
                         fontSize: 14,
                         overflowWrap: "break-word",
                         wordWrap: "break-word",
+                        display: "block",
+                        minHeight: "3.5rem",
                       }}
-                      className="py-2 text-gray-500 md:h-16"
+                      className="py-2 text-gray-500"
                     >
                       {this.state.moreShown ? (
                         <div>{this.removeTags(item.token_description)}</div>
@@ -526,10 +535,12 @@ class TokenCard extends React.Component {
                     color: "#888",
                   }}
                 >
-                  Owned by {item.multiple_owners ? "multiple owners" : null}
+                  Owned by {item.multiple_owners ? null : null}
                 </div>
                 <div>
-                  {item.multiple_owners ? null : item.owner_id ? (
+                  {item.multiple_owners ? (
+                    <span style={{ color: "#888" }}>Multiple owners</span>
+                  ) : item.owner_id ? (
                     <Link
                       href="/[profile]"
                       as={`/${item?.owner_username || item.owner_address}`}
@@ -578,7 +589,7 @@ class TokenCard extends React.Component {
             </div>
           </div>
           <div
-            className="text-right mr-2 mt-1 mb-2 flex flex-row"
+            className="text-right mr-2 mt-1 mb-4 flex flex-row"
             style={{ fontWeight: 400, fontSize: 14 }}
           >
             <div className="flex-grow"></div>

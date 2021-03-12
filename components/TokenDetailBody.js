@@ -326,12 +326,21 @@ const TokenDetailBody = ({
                 <>
                   <div className="md:text-lg py-2">Description</div>
                   <div
-                    className="text-sm md:text-base text-gray-500"
-                    style={{
-                      overflowWrap: "break-word",
-                      wordWrap: "break-word",
-                      // whiteSpace: "pre-wrap",
-                    }}
+                    className={`${
+                      context.isMobile ? null : "text-base"
+                    } text-gray-500`}
+                    style={
+                      context.isMobile
+                        ? {
+                            overflowWrap: "break-word",
+                            wordWrap: "break-word",
+                            fontSize: 14,
+                          }
+                        : {
+                            overflowWrap: "break-word",
+                            wordWrap: "break-word",
+                          }
+                    }
                   >
                     {removeTags(item.token_description)}
                   </div>
@@ -451,7 +460,7 @@ const TokenDetailBody = ({
             </a>
           </div> */}
 
-          <div className="m-4 flex">
+          <div className="m-4 flex text-sm">
             <a
               href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
               title="Buy on OpenSea"
