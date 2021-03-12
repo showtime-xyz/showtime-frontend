@@ -140,7 +140,7 @@ export default function Home() {
           >
             Your Favorite
           </h1>
-          <h1 className="text-4xl md:text-7xl xl:text-8xl">CRYPTO ART.</h1>
+          <h1 className="text-4xl md:text-7xl xl:text-8xl">Crypto Art.</h1>
         </div>
       )}
 

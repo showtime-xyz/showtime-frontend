@@ -248,10 +248,7 @@ export default function Collection({
           >
             {currentCollectionName ? currentCollectionName : "Leading NFT"}
           </h1>
-          <h1
-            className="text-4xl md:text-7xl xl:text-8xl"
-            style={{ fontFamily: "Afronaut" }}
-          >
+          <h1 className="text-4xl md:text-7xl xl:text-8xl">
             {currentCollectionName ? "collection." : "collections."}
           </h1>
         </div>

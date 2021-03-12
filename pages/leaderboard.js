@@ -94,12 +94,7 @@ const Leaderboard = () => {
           >
             Most popular
           </h1>
-          <h1
-            className="text-4xl md:text-7xl xl:text-8xl"
-            style={{ fontFamily: "Afronaut" }}
-          >
-            creators.
-          </h1>
+          <h1 className="text-4xl md:text-7xl xl:text-8xl">creators.</h1>
         </div>
       )}
 
