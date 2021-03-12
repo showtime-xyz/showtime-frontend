@@ -22,12 +22,7 @@ export default function ModalUserList({
               onClick={(e) => e.stopPropagation()}
             >
               <CloseButton setEditModalOpen={closeModal} />
-              <div
-                className="text-3xl border-b-2 pb-2"
-                style={{ fontWeight: 600 }}
-              >
-                {title}
-              </div>
+              <div className="text-3xl border-b-2 pb-2">{title}</div>
               <div className="flex flex-col overflow-y-auto">
                 {users.length === 0 && (
                   <div className="text-center mx-2 my-8 text-gray-400">
@@ -37,7 +32,10 @@ export default function ModalUserList({
                 {users.map((profile) => {
                   return (
                     <div key={profile.wallet_address}>
-                      <Link href="/[profile]" as={`/${profile?.username || profile.wallet_address}`}>
+                      <Link
+                        href="/[profile]"
+                        as={`/${profile?.username || profile.wallet_address}`}
+                      >
                         <a className="flex flex-row items-center py-3 transition rounded-lg px-1 hover:bg-gray-100">
                           <div>
                             <img
@@ -51,7 +49,7 @@ export default function ModalUserList({
                               style={{ height: 36, width: 36 }}
                             />
                           </div>
-                          <div style={{ fontWeight: 600 }} className="ml-2">
+                          <div className="ml-2">
                             {profile.name ? profile.name : "Unnamed"}
                           </div>
                         </a>

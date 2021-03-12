@@ -48,12 +48,7 @@ export default function Modal({ isOpen, setReportModalOpen, nftId }) {
             >
               <form onSubmit={handleSubmit}>
                 <CloseButton setEditModalOpen={setReportModalOpen} />
-                <div
-                  className="text-3xl border-b-2 pb-2"
-                  style={{ fontWeight: 600 }}
-                >
-                  Report item
-                </div>
+                <div className="text-3xl border-b-2 pb-2">Report item</div>
                 {confirmationShowing ? (
                   <div className="my-8">
                     We received your report. Thank you!
@@ -86,7 +81,7 @@ export default function Modal({ isOpen, setReportModalOpen, nftId }) {
                     <div className="border-t-2 pt-4">
                       <button
                         type="submit"
-                        className="showtime-green-button px-5 py-3 float-right"
+                        className="showtime-green-button  px-4 py-2  rounded-full float-right"
                         style={{ borderColor: "#35bb5b", borderWidth: 2 }}
                         //onClick={() => setEditModalOpen(false)}
                       >
@@ -94,7 +89,7 @@ export default function Modal({ isOpen, setReportModalOpen, nftId }) {
                       </button>
                       <button
                         type="button"
-                        className="showtime-black-button-outline px-5 py-3"
+                        className="showtime-black-button-outline  px-4 py-2  rounded-full"
                         onClick={() => {
                           setReportModalOpen(false);
                           setInputValue("");

@@ -202,10 +202,7 @@ const Profile = ({
             src={profile_pic}
           />
           <div className="ml-0 sm:ml-4 lg:ml-8  text-center sm:text-left">
-            <div
-              className="text-2xl md:text-3xl pt-0 sm:pt-2"
-              style={{ fontWeight: 600 }}
-            >
+            <div className="text-2xl md:text-3xl pt-0 sm:pt-2">
               {name}
               <img
                 src="/icons/verified.png"
@@ -314,10 +311,7 @@ const Profile = ({
         </div>
       </div>
       <div className="m-4 md:m-16 text-center">
-        <div
-          className="text-2xl sm:text-3xl mt-16 sm:mt-8 md:mt-0"
-          style={{ fontWeight: 600 }}
-        >
+        <div className="text-2xl sm:text-3xl mt-16 sm:mt-8 md:mt-0">
           D-Block Europe NFTs - First Collectible Drop
         </div>
         <div className="p-4 sm:w-4/5 lg:w-1/2" style={{ margin: "auto" }}>
@@ -388,8 +382,7 @@ const Profile = ({
             </div>
             {isFollowed ? null : (
               <div className="mt-6 mb-16">
-                <span style={{ fontWeight: 600 }}>Follow</span> {name} 👆 to bid
-                on the NFTs
+                <span>Follow</span> {name} 👆 to bid on the NFTs
               </div>
             )}
           </div>

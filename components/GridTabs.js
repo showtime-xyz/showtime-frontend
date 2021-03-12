@@ -15,7 +15,6 @@ const GridTabsContainer = styled.div`
 `;
 const GridTabsTitle = styled.h3`
   padding: 10px 0px;
-  font-weight: 600;
 `;
 
 const Tab = styled.div`

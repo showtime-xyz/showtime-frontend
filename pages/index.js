@@ -169,12 +169,7 @@ export default function Home() {
                   : { padding: "0px 12px", marginBottom: 16 }
               }
             >
-              <h3
-                className="self-end text-2xl md:text-4xl"
-                style={{ fontWeight: 600 }}
-              >
-                Latest{" "}
-              </h3>
+              <h3 className="self-end text-2xl md:text-4xl">Latest </h3>
               <div className="flex-grow sm:hidden"></div>
               <div className="self-end">
                 <div
