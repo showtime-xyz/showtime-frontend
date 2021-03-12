@@ -15,7 +15,6 @@ import ModalUserList from "../components/ModalUserList";
 import ModalAddWallet from "../components/ModalAddWallet";
 //import { formatAddressShort, copyToClipBoard } from "../lib/utilities";
 import AddressButton from "../components/AddressButton";
-import GradientsBackground from "../components/GradientsBackground";
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
@@ -482,7 +481,6 @@ const Profile = ({
             />
           </>
         ) : null}
-        {/*<GradientsBackground />*/}
 
         {/* Start Page Body */}
         {/* Wait until @gridWidth is populated to display page's body */}

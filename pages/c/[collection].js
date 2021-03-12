@@ -10,7 +10,6 @@ import backend from "../../lib/backend";
 import AppContext from "../../context/app-context";
 import mixpanel from "mixpanel-browser";
 import { GridTabs, GridTab } from "../../components/GridTabs";
-import GradientsBackground from "../../components/GradientsBackground";
 
 export async function getServerSideProps(context) {
   const { collection } = context.query;
@@ -227,11 +226,10 @@ export default function Collection({
           }
         />
       </Head>
-      <GradientsBackground />
 
       {columns && (
         <div
-          className="mx-auto relative my-24 md:my-24 text-center md:text-left"
+          className="mx-auto relative my-16 md:my-24 text-center md:text-left"
           style={{
             ...(columns === 1
               ? { padding: "0px 16px" }
