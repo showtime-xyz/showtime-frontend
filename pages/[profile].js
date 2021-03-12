@@ -482,7 +482,7 @@ const Profile = ({
             />
           </>
         ) : null}
-        <GradientsBackground />
+        {/*<GradientsBackground />*/}
 
         {/* Start Page Body */}
         {/* Wait until @gridWidth is populated to display page's body */}

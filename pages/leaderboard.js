@@ -76,35 +76,37 @@ const Leaderboard = () => {
       </Head>
       <GradientsBackground />
       {columns && (
-        <>
-          <div
-            className="mx-auto mt-16 my-12 md:my-20 md:mt-24 text-center md:text-left relative"
-            style={
-              columns === 1
-                ? { padding: "0px 16px" }
-                : { width: gridWidth, paddingLeft: 16 }
-            }
+        <div
+          className="mx-auto relative my-24 md:my-24 text-center md:text-left"
+          style={{
+            ...(columns === 1
+              ? { padding: "0px 16px" }
+              : { width: gridWidth, paddingLeft: 16 }),
+          }}
+        >
+          <h1
+            className="text-xl md:text-3xl xl:text-4xl"
+            style={{ maxWidth: 700 }}
           >
-            <h1
-              className="text-xl md:text-3xl xl:text-4xl mt-5"
-              style={{ maxWidth: 700 }}
-            >
-              {"Leaderboard"}
-            </h1>
-            <h1
-              className="text-4xl md:text-7xl xl:text-8xl"
-              style={{ fontFamily: "Afronaut" }}
-            >
-              {"Most popular "}
-            </h1>
-            <h1
-              className="text-4xl md:text-7xl xl:text-8xl"
-              style={{ fontFamily: "Afronaut" }}
-            >
-              {"creators."}
-            </h1>
-          </div>
+            Leaderboard
+          </h1>
+          <h1
+            className="text-4xl md:text-7xl xl:text-8xl"
+            style={{ fontFamily: "Afronaut" }}
+          >
+            Most popular
+          </h1>
+          <h1
+            className="text-4xl md:text-7xl xl:text-8xl"
+            style={{ fontFamily: "Afronaut" }}
+          >
+            creators.
+          </h1>
+        </div>
+      )}
 
+      {columns && (
+        <>
           <div className="m-auto relative" style={{ width: gridWidth }}>
             <GridTabs title="">
               <GridTab

@@ -6,10 +6,10 @@ export default function GradientsBackground() {
       <style jsx>{`
         #yellow-ellipse-background {
           position: absolute;
-          width: 100%;
+          width: 80%;
           height: 500px;
-          left: 10%;
-          top: -250px;
+          left: 28%;
+          top: -350px;
           background: radial-gradient(
             50% 50% at 50% 50%,
             #fffb93 0%,
@@ -22,31 +22,31 @@ export default function GradientsBackground() {
         #red-ellipse-background {
           position: absolute;
           width: 100%;
-          height: 900px;
-          right: -50%;
-          top: -450px;
+          height: 550px;
+          right: -55%;
+          top: -150px;
           background: radial-gradient(
             50% 50% at 50% 50%,
             #fc51ff 0%,
             rgba(255, 49, 185, 0) 100%
           );
-          opacity: 0.3;
+          opacity: 0.2;
           //   filter: blur(121px);
           pointer-events: none;
         }
         #blue-ellipse-background {
           position: absolute;
           width: 100%;
-          height: 900px;
+          height: 700px;
           left: -50%;
-          top: -450px;
+          top: -350px;
           pointer-events: none;
           background: radial-gradient(
             50% 50% at 50% 50%,
-            #93ffeb 0%,
-            rgba(49, 218, 255, 0) 100%
+            #92eeff 0%,
+            rgba(29, 29, 255, 0) 100%
           );
-          opacity: 0.7;
+          opacity: 0.5;
           //   filter: blur(121px);
         }
       `}</style>

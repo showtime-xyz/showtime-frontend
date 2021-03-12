@@ -22,7 +22,7 @@ const Header = () => {
         style={{
           //boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
           borderBottom: "1px solid #ddd",
-          backgroundColor: "rgb(255 255 255 / 66%)",
+          backgroundColor: "rgb(255 255 255 / 100%)",
           zIndex: 1,
         }}
       >

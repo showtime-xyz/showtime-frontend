@@ -85,11 +85,21 @@ export default function Collection({
         : `Explore ${values[0]["name"]}`
     );
     setCurrentCollectionSlug(values[0]["value"]);
+    setCurrentCollectionName(
+      values[0]["name"] === "Filter by collection" ? null : values[0]["name"]
+    );
   };
 
   const [collectionItems, setCollectionItems] = useState([]);
   const [currentCollectionSlug, setCurrentCollectionSlug] = useState(
     collection
+  );
+  const [currentCollectionName, setCurrentCollectionName] = useState(
+    selected_collection
+      ? selected_collection.name === "Filter by collection"
+        ? null
+        : selected_collection.name
+      : collection
   );
   const [randomNumber, setRandomNumber] = useState(1);
 
@@ -219,15 +229,39 @@ export default function Collection({
       </Head>
       <GradientsBackground />
 
-      <div className="flex flex-col text-center w-full">
-        <h1 className="text-4xl md:text-6xl text-center mt-12 sm:mt-20 mb-12 relative">
-          {pageTitle}
-        </h1>
-      </div>
+      {columns && (
+        <div
+          className="mx-auto relative my-24 md:my-24 text-center md:text-left"
+          style={{
+            ...(columns === 1
+              ? { padding: "0px 16px" }
+              : { width: gridWidth, paddingLeft: 16 }),
+          }}
+        >
+          <h1
+            className="text-xl md:text-3xl xl:text-4xl"
+            style={{ maxWidth: 700 }}
+          >
+            Explore
+          </h1>
+          <h1
+            className="text-4xl md:text-7xl xl:text-8xl"
+            style={{ fontFamily: "Afronaut" }}
+          >
+            {currentCollectionName ? currentCollectionName : "Leading NFT"}
+          </h1>
+          <h1
+            className="text-4xl md:text-7xl xl:text-8xl"
+            style={{ fontFamily: "Afronaut" }}
+          >
+            {currentCollectionName ? "collection." : "collections."}
+          </h1>
+        </div>
+      )}
 
       {gridWidth > 0 ? (
         <div
-          className="mx-auto mb-6 text-xs sm:text-sm flex flex-col md:flex-row items-center"
+          className="mx-auto mb-4 text-xs sm:text-sm flex flex-col md:flex-row items-center"
           style={{
             width: gridWidth,
           }}
