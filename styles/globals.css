@@ -20,9 +20,12 @@ body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
+  overflow-x: hidden;
+  position: relative;
 }
 main {
   flex: 1; /* Or flex-grow: 1;*/
+  position: relative;
 }
 * {
   letter-spacing: 0.02em;
@@ -407,7 +410,6 @@ textarea:focus {
 }
 
 .showtime-login-button-solid {
-  background-color: #fff;
   color: #222222;
   border-radius: 7px;
   border: 2px solid #222222;

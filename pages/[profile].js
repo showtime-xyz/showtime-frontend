@@ -486,7 +486,7 @@ const Profile = ({
         {/* Wait until @gridWidth is populated to display page's body */}
 
         {gridWidth && (
-          <div className="m-auto" style={{ width: gridWidth }}>
+          <div className="m-auto relative" style={{ width: gridWidth }}>
             <div
               style={
                 context.columns == 1
