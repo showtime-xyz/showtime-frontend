@@ -114,7 +114,7 @@ class TokenCard extends React.Component {
     return img_url;
   };
 
-  max_description_length = 85;
+  max_description_length = 75;
 
   getBackgroundColor = (item) => {
     if (
@@ -136,6 +136,7 @@ class TokenCard extends React.Component {
       listId,
     } = this.props;
     const hash = item.token_img_url || item.token_animation_url;
+    const { isMobile } = this.context;
     return (
       <>
         <div
@@ -180,7 +181,7 @@ class TokenCard extends React.Component {
                     href="/[profile]"
                     as={`/${item?.creator_username || item.creator_address}`}
                   >
-                    <a className="flex flex-row items-center ">
+                    <a className="flex flex-row items-center">
                       <div>
                         <img
                           alt={item.creator_name}
@@ -336,7 +337,11 @@ class TokenCard extends React.Component {
                 muted={this.state.muted}
                 width={this.props.columns === 1 ? window.innerWidth : 373}
                 height={
-                  item.imageRef.current ? item.imageRef.current.height : null
+                  this.props.columns === 1
+                    ? item.imageRef.current
+                      ? item.imageRef.current.height
+                      : null
+                    : 373
                 }
                 playsinline
                 onReady={this.setSpans}
@@ -353,11 +358,15 @@ class TokenCard extends React.Component {
                   style={{ cursor: "pointer" }}
                 >
                   {!this.state.imageLoaded ? (
-                    <div className="w-full text-center">
-                      <div
-                        className="loading-card-spinner"
-                        style={{ marginTop: 148, marginBottom: 148 }}
-                      />
+                    <div
+                      className="w-full text-center flex items-center justify-center"
+                      style={
+                        this.props.columns === 1
+                          ? { height: window.innerWidth }
+                          : { height: 373 }
+                      }
+                    >
+                      <div className="loading-card-spinner" />
                     </div>
                   ) : null}
                   <div
@@ -371,7 +380,12 @@ class TokenCard extends React.Component {
                       src={this.getImageUrl()}
                       alt={item.token_name}
                       onLoad={() => this.setState({ imageLoaded: true })}
-                      style={!this.state.imageLoaded ? { display: "none" } : {}}
+                      style={{
+                        ...(!this.state.imageLoaded ? { display: "none" } : {}),
+                        ...(this.props.columns === 1
+                          ? { height: window.innerWidth }
+                          : { height: 373 }),
+                      }}
                     />
                   </div>
                 </div>
@@ -420,6 +434,9 @@ class TokenCard extends React.Component {
                       wordWrap: "break-word",
                       fontSize: 20,
                       cursor: "pointer",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
                     }}
                   >
                     {item.token_name}
@@ -432,20 +449,20 @@ class TokenCard extends React.Component {
                       />
                     ) : null} */}
                   </div>
-                  {item.token_description ? (
+                  {!isMobile || item.token_description ? (
                     <div
                       style={{
                         fontSize: 14,
                         overflowWrap: "break-word",
                         wordWrap: "break-word",
                       }}
-                      className="py-2 text-gray-500"
+                      className="py-2 text-gray-500 md:h-16"
                     >
                       {this.state.moreShown ? (
                         <div>{this.removeTags(item.token_description)}</div>
                       ) : (
                         <div>
-                          {item.token_description.length >
+                          {item.token_description?.length >
                           this.max_description_length ? (
                             <>
                               {this.truncateWithEllipses(
@@ -494,7 +511,7 @@ class TokenCard extends React.Component {
               </div>
             </div>
             <div
-              className="flex items-end"
+              className="flex items-end md:h-20"
               style={{
                 borderTopWidth: 1,
                 borderColor: "rgb(219,219,219)",
