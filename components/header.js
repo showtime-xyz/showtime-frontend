@@ -18,10 +18,12 @@ const Header = () => {
         </>
       ) : null}
       <header
-        className="p-4 bg-white"
+        className="p-4"
         style={{
           //boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
           borderBottom: "1px solid #ddd",
+          backgroundColor: "rgb(255 255 255 / 100%)",
+          zIndex: 1,
         }}
       >
         <div
@@ -140,7 +142,7 @@ const Header = () => {
             ) : (
               <>
                 <div
-                  className="bg-white text-black border-black rounded-full px-5 py-1 cursor-pointer border-2 hover:text-stpink hover:border-stpink transition-all"
+                  className="text-black border-black rounded-full px-5 py-1 cursor-pointer border-2 hover:text-stpink hover:border-stpink transition-all"
                   onClick={() => {
                     context.setLoginModalOpen(!context.loginModalOpen);
                   }}
@@ -156,9 +158,6 @@ const Header = () => {
           className={`block md:hidden pt-4 ${
             !context.gridWidth ? "invisible" : ""
           }`}
-          style={{
-            backgroundColor: "white",
-          }}
         >
           <Link href="/">
             <a

@@ -11,11 +11,11 @@ const GridTabsWrapper = styled.div`
 `;
 const GridTabsContainer = styled.div`
   width: 100%;
-  padding: ${(p) => (p.isMobile ? "20px 16px" : "1.75rem 12px")};
+  padding: ${(p) =>
+    p.isMobile ? "0px 16px 20px 16px" : "0px 12px 1.75rem 12px"};
 `;
 const GridTabsTitle = styled.h3`
   padding: 10px 0px;
-  font-weight: 600;
 `;
 
 const Tab = styled.div`

@@ -20,9 +20,12 @@ body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
+  overflow-x: hidden;
+  position: relative;
 }
 main {
   flex: 1; /* Or flex-grow: 1;*/
+  position: relative;
 }
 * {
   letter-spacing: 0.02em;
@@ -123,19 +126,16 @@ textarea:focus {
 }
 
 .showtime-title {
-  font-weight: 600;
   /*font-size: 64px;*/
   /*line-height: 83px;*/
   /*text-transform: uppercase;*/
 }
 
 .showtime-hero-title {
-  font-weight: 600;
   /*font-size: 36px;*/
 }
 
 .showtime-square-title {
-  font-weight: 600;
   /*font-size: 36px;*/
 }
 
@@ -153,7 +153,6 @@ textarea:focus {
   background-color: #e45cff;
   color: #fff;
   font-size: 16px;
-  font-weight: 600;
   border: 2px solid #e45cff;
 }
 
@@ -167,7 +166,6 @@ textarea:focus {
   background-color: #7d5cff;
   color: #fff;
   font-size: 16px;
-  font-weight: 600;
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 23px;
@@ -186,14 +184,12 @@ textarea:focus {
   background-color: #35bb5b;
   color: #fff;
   font-size: 16px;
-  font-weight: 600;
   border: 2px solid #35bb5b;
 }
 
 .showtime-white-button {
   background-color: #fff;
   color: #222222;
-  font-weight: 600;
   border: 2px solid #222222;
 }
 
@@ -206,7 +202,6 @@ textarea:focus {
   border: 2px solid #e45cff;
   color: #fff;
   font-size: 16px;
-  font-weight: 600;
   padding-top: 12px;
   padding-bottom: 12px;
   padding-left: 25px;
@@ -224,7 +219,6 @@ textarea:focus {
   border: 2px solid #7d5cff;
   color: #fff;
   font-size: 16px;
-  font-weight: 600;
   padding-top: 12px;
   padding-bottom: 12px;
   padding-left: 25px;
@@ -237,7 +231,6 @@ textarea:focus {
   border: 2px solid #35bb5b;
   color: #fff;
   font-size: 16px;
-  font-weight: 600;
   border-radius: 7px;
   box-sizing: border-box;
 }
@@ -246,7 +239,6 @@ textarea:focus {
   border: 2px solid #fff;
   color: #fff;
   font-size: 16px;
-  font-weight: 600;
   padding-top: 12px;
   padding-bottom: 12px;
   padding-left: 25px;
@@ -264,7 +256,6 @@ textarea:focus {
   background-color: #e45cff;
   color: #fff;
   font-size: 16px;
-  font-weight: 600;
   padding-top: 12px;
   padding-bottom: 12px;
   padding-left: 20px;
@@ -277,7 +268,6 @@ textarea:focus {
   background-color: #7d5cff;
   color: #fff;
   font-size: 16px;
-  font-weight: 600;
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 18px;
@@ -297,7 +287,6 @@ textarea:focus {
   background-color: #35bb5b;
   color: #fff;
   font-size: 16px;
-  font-weight: 600;
   padding-top: 12px;
   padding-bottom: 12px;
   padding-left: 20px;
@@ -310,7 +299,6 @@ textarea:focus {
   background-color: #fff;
   color: #222222;
   font-size: 16px;
-  font-weight: 600;
   padding-top: 12px;
   padding-bottom: 12px;
   padding-left: 20px;
@@ -327,7 +315,6 @@ textarea:focus {
   border: 2px solid #e45cff;
   color: #fff;
   font-size: 16px;
-  font-weight: 600;
   padding-top: 12px;
   padding-bottom: 12px;
   padding-left: 20px;
@@ -341,7 +328,6 @@ textarea:focus {
   border: 2px solid #7d5cff;
   color: #fff;
   font-size: 16px;
-  font-weight: 600;
   padding-top: 12px;
   padding-bottom: 12px;
   padding-left: 20px;
@@ -355,7 +341,6 @@ textarea:focus {
   border: 2px solid #35bb5b;
   color: #fff;
   font-size: 16px;
-  font-weight: 600;
   padding-top: 12px;
   padding-bottom: 12px;
   padding-left: 20px;
@@ -369,7 +354,6 @@ textarea:focus {
   border: 2px solid #fff;
   color: #fff;
   font-size: 16px;
-  font-weight: 600;
   padding-top: 12px;
   padding-bottom: 12px;
   padding-left: 20px;
@@ -426,9 +410,7 @@ textarea:focus {
 }
 
 .showtime-login-button-solid {
-  background-color: #fff;
   color: #222222;
-  font-weight: 600;
   border-radius: 7px;
   border: 2px solid #222222;
 }
@@ -441,7 +423,6 @@ textarea:focus {
 .showtime-login-button-outline {
   border: 2px solid #222;
   color: #222;
-  font-weight: 600;
   box-sizing: border-box;
 }
 
@@ -453,7 +434,6 @@ textarea:focus {
 .showtime-like-button-white-green-hover {
   background-color: #fff;
   color: #222222;
-  font-weight: 600;
   border-radius: 7px;
   display: inline-flex;
   border: 2px solid#222222;
@@ -469,7 +449,6 @@ textarea:focus {
 }
 
 .showtime-logout-link {
-  font-weight: 600;
 }
 
 .showtime-logout-link:hover {
@@ -502,7 +481,6 @@ textarea:focus {
   border: 2px solid #000;
   color: #000;
   font-size: 16px;
-  font-weight: 600;
   box-sizing: border-box;
 }
 
@@ -512,7 +490,6 @@ textarea:focus {
 }
 
 .showtime-card-profile-link {
-  /* font-weight: 600; */
   color: #223043;
 }
 

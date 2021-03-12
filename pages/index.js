@@ -121,12 +121,12 @@ export default function Home() {
 
       {columns && (
         <div
-          className="mx-auto mt-16 my-12 md:my-20 md:mt-24 text-center md:text-left"
-          style={
-            columns === 1
+          className="mx-auto relative my-16 md:my-24 text-center md:text-left"
+          style={{
+            ...(columns === 1
               ? { padding: "0px 16px" }
-              : { width: gridWidth, paddingLeft: 16 }
-          }
+              : { width: gridWidth, paddingLeft: 16 }),
+          }}
         >
           <h1
             className="text-xl md:text-3xl xl:text-4xl"
@@ -152,7 +152,7 @@ export default function Home() {
               : {
                   //backgroundColor: "#fff",
                   //boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
-                  paddingTop: 40,
+                  paddingTop: 20,
                   paddingBottom: 40,
                   marginBottom: 30,
                 }
@@ -167,12 +167,7 @@ export default function Home() {
                   : { padding: "0px 12px", marginBottom: 16 }
               }
             >
-              <h3
-                className="self-end text-2xl md:text-4xl"
-                style={{ fontWeight: 600 }}
-              >
-                Latest{" "}
-              </h3>
+              <h3 className="self-end text-2xl md:text-4xl">Latest </h3>
               <div className="flex-grow sm:hidden"></div>
               <div className="self-end">
                 <div

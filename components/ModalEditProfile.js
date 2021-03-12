@@ -125,16 +125,9 @@ export default function Modal({ isOpen, setEditModalOpen }) {
             >
               <form onSubmit={handleSubmit}>
                 <CloseButton setEditModalOpen={setEditModalOpen} />
-                <div
-                  className="text-3xl border-b-2 pb-2"
-                  style={{ fontWeight: 600 }}
-                >
-                  Edit Info
-                </div>
+                <div className="text-3xl border-b-2 pb-2">Edit Info</div>
                 <div className="mt-4">
-                  <label htmlFor="name" style={{ fontWeight: 600 }}>
-                    Name
-                  </label>
+                  <label htmlFor="name">Name</label>
                   <input
                     name="name"
                     placeholder="Your name"
@@ -155,7 +148,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       fontSize: 15,
                     }}
                   />
-                  <label htmlFor="customURL" style={{ fontWeight: 600 }}>
+                  <label htmlFor="customURL">
                     Custom URL{" "}
                     {/*<span
                       style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
@@ -179,7 +172,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       value={customURLValue ? customURLValue : ""}
                       onChange={(e) => {
                         const value = e.target.value;
-                        const urlRegex = /^[a-zA-Z0-9-]*$/;
+                        const urlRegex = /^[a-zA-Z0-9_]*$/;
                         if (urlRegex.test(value)) {
                           setCustomURLValue(value);
                           handleDebouncedUsernameLookup(
@@ -230,7 +223,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   >
                     &nbsp;{customURLError.message}
                   </div>
-                  <label htmlFor="bio" style={{ fontWeight: 600 }}>
+                  <label htmlFor="bio">
                     About me{" "}
                     <span
                       style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
@@ -265,7 +258,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   >
                     160 character limit
                   </div>
-                  <label htmlFor="website_url" style={{ fontWeight: 600 }}>
+                  <label htmlFor="website_url">
                     Website URL{" "}
                     <span
                       style={{ fontWeight: 400, color: "#999", fontSize: 12 }}

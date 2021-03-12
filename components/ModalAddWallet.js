@@ -181,10 +181,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
               onClick={(e) => e.stopPropagation()}
             >
               <CloseButton setEditModalOpen={handleModalClose} />
-              <div
-                className="text-3xl border-b-2 pb-2 text-center"
-                style={{ fontWeight: 600 }}
-              >
+              <div className="text-3xl border-b-2 pb-2 text-center">
                 {step == 1
                   ? "Add Wallet"
                   : step == 4
@@ -199,7 +196,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
               </div>
               {step == 1 ? (
                 <>
-                  <div className="my-4 py-4" style={{ fontWeight: 600 }}>
+                  <div className="my-4 py-4">
                     Add one or more wallets to showcase all your NFTs in one
                     place.
                   </div>
@@ -222,7 +219,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
                   {addressDetected ? (
                     signaturePending ? null : (
                       <>
-                        <div style={{ fontWeight: 600 }} className="mt-4">
+                        <div className="mt-4">
                           Your wallet provider is giving us a wallet with the
                           address:
                         </div>
@@ -238,7 +235,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
                             .includes(addressDetected?.toLowerCase()) ? (
                             <>
                               <div className="py-4">
-                                <span style={{ fontWeight: 600 }}>
+                                <span>
                                   <span style={{ color: "red" }}>
                                     This wallet is already on your Showtime
                                     profile.
@@ -248,7 +245,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
                                 </span>
                               </div>
                               <div className="py-4">
-                                <span style={{ fontWeight: 600 }}>
+                                <span>
                                   For MetaMask: <br />
                                 </span>{" "}
                                 Switch wallets by clicking on the MetaMask icon
@@ -258,7 +255,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
                                 connected," make sure to click "Connect."
                               </div>
                               <div className="py-4">
-                                <span style={{ fontWeight: 600 }}>
+                                <span>
                                   For Wallet Connect & others: <br />
                                 </span>
                                 <a
@@ -285,7 +282,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
                                     className="py-4"
                                     style={{ fontSize: 14 }}
                                   >
-                                    <span style={{ fontWeight: 600 }}>
+                                    <span>
                                       For MetaMask: <br />
                                     </span>{" "}
                                     Switch wallets by clicking on the MetaMask
@@ -299,7 +296,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
                                     className="py-4"
                                     style={{ fontSize: 14 }}
                                   >
-                                    <span style={{ fontWeight: 600 }}>
+                                    <span>
                                       For Wallet Connect & others: <br />
                                     </span>
                                     <a

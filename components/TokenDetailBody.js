@@ -199,7 +199,7 @@ const TokenDetailBody = ({
                   top: isMobile ? 57 : 0,
                   right: 0,
                   margin: 10,
-                  zIndex: 20,
+                  zIndex: 1,
                 }}
               >
                 {isMobile ||
@@ -272,13 +272,13 @@ const TokenDetailBody = ({
           }}
         >
           {/* Title and description section */}
-          <div className="flex flex-col md:flex-row pb-10 items-stretch w-full">
+          <div className="flex flex-col md:flex-row pb-10 items-stretch w-full max-w-full">
             <div
               className="pb-0 text-left flex-1 p-4"
               style={{
-                fontWeight: 600,
                 overflowWrap: "break-word",
                 wordWrap: "break-word",
+                ...(isMobile ? {} : { maxWidth: "50%" }),
               }}
             >
               <div className="text-2xl md:text-4xl">{item.token_name}</div>
@@ -321,7 +321,10 @@ const TokenDetailBody = ({
                 </div>
               </div>
             </div>
-            <div className="flex-1 p-4 pb-0">
+            <div
+              className="flex-1 p-4 pb-0"
+              style={isMobile ? {} : { maxWidth: "50%" }}
+            >
               {item.token_description && (
                 <>
                   <div className="md:text-lg py-2">Description</div>
