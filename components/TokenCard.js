@@ -589,7 +589,7 @@ class TokenCard extends React.Component {
             </div>
           </div>
           <div
-            className="text-right mr-2 mt-1 mb-4 flex flex-row"
+            className="text-right mr-2 mt-1 sm:mb-5 flex flex-row"
             style={{ fontWeight: 400, fontSize: 14 }}
           >
             <div className="flex-grow"></div>
