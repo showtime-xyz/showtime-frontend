@@ -372,17 +372,15 @@ const LeaderboardItem = ({ item }) => {
         </ProfileSection>
         <NFTTiles>
           {topItems.map((topItem, index) => (
-            <>
+            <div key={topItem?.nft_id}>
               {topItem?.token_img_thumbnail_url ? (
                 <NFTTile
-                  key={topItem?.nft_id}
                   onClick={() => setCurrentlyOpenModal(topItem)}
                   src={topItem?.token_img_thumbnail_url}
                   style={{ width: squareWidth, height: squareWidth }}
                 />
               ) : (
                 <NFTVideoTile
-                  key={topItem?.nft_id}
                   onClick={() => setCurrentlyOpenModal(topItem)}
                   width={squareWidth}
                   height={squareWidth}
@@ -398,7 +396,7 @@ const LeaderboardItem = ({ item }) => {
                   />
                 </NFTVideoTile>
               )}
-            </>
+            </div>
           ))}
         </NFTTiles>
       </LeaderboardItemRow>
