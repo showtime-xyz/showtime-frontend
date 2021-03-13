@@ -46,7 +46,7 @@ const TokenDetailBody = ({
     var img_url = item.token_img_url ? item.token_img_url : null;
 
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
-      img_url = img_url.split("=")[0] + "=s375";
+      img_url = img_url.split("=")[0] + "=w375";
     }
     return img_url;
   };
