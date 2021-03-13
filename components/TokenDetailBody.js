@@ -16,6 +16,7 @@ import CreatorSummary from "./CreatorSummary";
 import { removeTags, truncateWithEllipses } from "../lib/utilities";
 import UserTimestampCard from "./UserTimestampCard";
 import TokenHistoryCard from "./TokenHistoryCard";
+import CommentsSection from "./CommentsSection";
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500;
@@ -433,6 +434,18 @@ const TokenDetailBody = ({
                       />
                     </div>
                   )} */}
+
+                {/* Comments section */}
+                <div className="mt-4 flex">
+                  <CommentsSection
+                    nftId={item.nft_id}
+                    closeModal={() => {
+                      if (setEditModalOpen) {
+                        setEditModalOpen(false);
+                      }
+                    }}
+                  />
+                </div>
               </div>
             </div>
           ) : (

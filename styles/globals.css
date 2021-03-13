@@ -522,6 +522,17 @@ textarea:focus {
   -webkit-animation: spin 1s cubic-bezier(0.75, 0, 0.25, 1) infinite;
 }
 
+.loading-card-spinner-small {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #eee;
+  border-radius: 50%;
+  border-top-color: #223043;
+  animation: spin 1s cubic-bezier(0.75, 0, 0.25, 1) infinite;
+  -webkit-animation: spin 1s cubic-bezier(0.75, 0, 0.25, 1) infinite;
+}
+
 @keyframes spin {
   to {
     -webkit-transform: rotate(360deg);
