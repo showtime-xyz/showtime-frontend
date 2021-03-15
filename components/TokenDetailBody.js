@@ -299,7 +299,7 @@ const TokenDetailBody = ({
                   to="CommentsSectionScroll"
                   containerId={isInModal ? "ModalTokenDetailWrapper" : null}
                   smooth={true}
-                  offset={-70}
+                  offset={isInModal ? 70 : -70}
                   duration={500}
                 >
                   <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
