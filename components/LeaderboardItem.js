@@ -10,6 +10,7 @@ import useKeyPress from "../hooks/useKeyPress";
 import { getImageUrl, truncateWithEllipses } from "../lib/utilities";
 import ModalTokenDetail from "./ModalTokenDetail";
 import AppContext from "../context/app-context";
+import { formatAddressShort } from "../lib/utilities";
 
 const LeaderboardItemRow = styled.div`
   display: flex;
@@ -321,23 +322,35 @@ const LeaderboardItem = ({ item, index }) => {
       ) : null}
       <LeaderboardItemRow>
         <ProfileSection>
-          <Link
-            href="/[profile]"
-            className="relative"
-            as={`/${item?.username || item.address}`}
-          >
-            <>
+          <Link href="/[profile]" as={`/${item?.username || item.address}`}>
+            <div className="relative">
               <div
-                className="absolute rounded-full bg-white text-center self-center ml-12 mt-6"
-                style={{
-                  border: "1px solid rgba(0, 0, 0, 0.16)",
-                  fontSize: 13,
-                  fontWeight: 500,
-                  paddingTop: 1,
-                  height: 24,
-                  width: 24,
-                  color: "rgba(0, 0, 0, 0.80)",
-                }}
+                className="absolute rounded-full bg-white text-center self-center"
+                style={
+                  context.isMobile
+                    ? {
+                        border: "1px solid rgba(0, 0, 0, 0.16)",
+                        fontSize: 12,
+                        fontWeight: 500,
+                        paddingTop: 1,
+                        height: 22,
+                        width: 22,
+                        color: "#010101",
+                        bottom: 4,
+                        right: 19,
+                      }
+                    : {
+                        border: "1px solid rgba(0, 0, 0, 0.16)",
+                        fontSize: 13,
+                        fontWeight: 500,
+                        paddingTop: 1,
+                        height: 24,
+                        width: 24,
+                        color: "#010101",
+                        bottom: 0,
+                        right: 20,
+                      }
+                }
               >
                 {index + 1}
               </div>
@@ -345,12 +358,14 @@ const LeaderboardItem = ({ item, index }) => {
                 isMobile={context.isMobile}
                 src={getImageUrl(item?.img_url)}
               />
-            </>
+            </div>
           </Link>
           <ProfileSectionContent>
             <Link href="/[profile]" as={`/${item?.username || item.address}`}>
               <ProfileTitle>
-                {truncateWithEllipses(item?.name, 30) || "Unnamed"}
+                {truncateWithEllipses(item?.name, context.isMobile ? 20 : 30) ||
+                  formatAddressShort(item.address) ||
+                  "Unnamed"}
               </ProfileTitle>
             </Link>
             <ProfileBottomSection>
