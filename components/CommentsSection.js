@@ -105,9 +105,12 @@ export default function CommentsSection({ nftId, closeModal }) {
                           </div>
                         </Link>
                         <div className="text-gray-400 text-sm">
-                          {formatDistanceToNowStrict(new Date(comment.added), {
-                            addSuffix: true,
-                          })}
+                          {formatDistanceToNowStrict(
+                            new Date(`${comment.added}Z`),
+                            {
+                              addSuffix: true,
+                            }
+                          )}
                         </div>
                       </div>
                       <div className="text-gray-500 text-sm leading-5">
