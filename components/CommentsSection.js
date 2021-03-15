@@ -61,7 +61,6 @@ export default function CommentsSection({ nftId, closeModal, modalRef }) {
     mixpanel.track("Commented but logged out");
   };
 
-  console.log(comments);
   return (
     <div className="w-full">
       {/* Comments */}
