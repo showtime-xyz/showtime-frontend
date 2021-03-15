@@ -36,7 +36,7 @@ export default async (req, res) => {
     };
     const token = await Iron.seal(
       user,
-      process.env.ENCRYPTION_SECRET,
+      process.env.ENCRYPTION_SECRET_V2,
       Iron.defaults
     );
     CookieService.setTokenCookie(res, token);
