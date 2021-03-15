@@ -6,7 +6,7 @@ import Comment from "./Comment";
 
 export default function CommentsSection({ nftId, closeModal, modalRef }) {
   const context = useContext(AppContext);
-  const { user } = context;
+  const { user, myProfile } = context;
   const [loadingComments, setLoadingComments] = useState(true);
   const [comments, setComments] = useState();
   const [commentText, setCommentText] = useState("");
@@ -42,6 +42,7 @@ export default function CommentsSection({ nftId, closeModal, modalRef }) {
     setCommentText("");
     setIsSubmitting(false);
   };
+  console.log("comments", comments);
 
   const deleteComment = async (commentId) => {
     // post new comment
