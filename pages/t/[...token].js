@@ -151,7 +151,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
         />
         <meta name="og:title" content={item.token_name} />
 
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={item.token_name} />
         <meta name="twitter:description" content={item.token_description} />
         <meta

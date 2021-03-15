@@ -158,7 +158,7 @@ const FollowText = styled.h6`
   font-weight: 400;
 `;
 
-const LeaderboardItem = ({ item }) => {
+const LeaderboardItem = ({ item, index }) => {
   const context = useContext(AppContext);
 
   const [squareWidth, setSquareWidth] = useState(0);
@@ -321,11 +321,31 @@ const LeaderboardItem = ({ item }) => {
       ) : null}
       <LeaderboardItemRow>
         <ProfileSection>
-          <Link href="/[profile]" as={`/${item?.username || item.address}`}>
-            <ProfileImage
-              isMobile={context.isMobile}
-              src={getImageUrl(item?.img_url)}
-            />
+          <Link
+            href="/[profile]"
+            className="relative"
+            as={`/${item?.username || item.address}`}
+          >
+            <>
+              <div
+                className="absolute rounded-full bg-white text-center self-center ml-12 mt-6"
+                style={{
+                  border: "1px solid rgba(0, 0, 0, 0.16)",
+                  fontSize: 13,
+                  fontWeight: 500,
+                  paddingTop: 1,
+                  height: 24,
+                  width: 24,
+                  color: "rgba(0, 0, 0, 0.80)",
+                }}
+              >
+                {index + 1}
+              </div>
+              <ProfileImage
+                isMobile={context.isMobile}
+                src={getImageUrl(item?.img_url)}
+              />
+            </>
           </Link>
           <ProfileSectionContent>
             <Link href="/[profile]" as={`/${item?.username || item.address}`}>

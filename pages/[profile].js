@@ -425,7 +425,7 @@ const Profile = ({
           />
           <meta name="og:title" content={name ? name : wallet_addresses[0]} />
 
-          <meta name="twitter:card" content="summary" />
+          <meta name="twitter:card" content="summary_large_image" />
           <meta
             name="twitter:title"
             content={name ? name : wallet_addresses[0]}
