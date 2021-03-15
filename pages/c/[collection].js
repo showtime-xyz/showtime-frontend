@@ -210,7 +210,7 @@ export default function Collection({
 
         <meta name="og:title" content={`Showtime | ${pageTitle}`} />
 
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`Showtime | ${pageTitle}`} />
         <meta
           name="twitter:description"

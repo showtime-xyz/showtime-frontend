@@ -65,7 +65,7 @@ const Leaderboard = () => {
         <meta property="og:image" content="/banner.png" />
         <meta name="og:title" content="Showtime | Leaderboard" />
 
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Showtime | Leaderboard" />
         <meta name="twitter:description" content="Most popular creators" />
         <meta
@@ -130,8 +130,12 @@ const Leaderboard = () => {
                   <LoadingSpinner />
                 </div>
               ) : (
-                leaderboardItems.map((item) => (
-                  <LeaderboardItem key={item.profile_id} item={item} />
+                leaderboardItems.map((item, index) => (
+                  <LeaderboardItem
+                    key={item.profile_id}
+                    item={item}
+                    index={index}
+                  />
                 ))
               )}
             </Content>

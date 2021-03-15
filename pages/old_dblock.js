@@ -172,7 +172,7 @@ const Profile = ({
         <meta property="og:image" content={profile_pic} />
         <meta name="og:title" content={name} />
 
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={name} />
         <meta
           name="twitter:description"

@@ -10,6 +10,7 @@ import useKeyPress from "../hooks/useKeyPress";
 import { getImageUrl, truncateWithEllipses } from "../lib/utilities";
 import ModalTokenDetail from "./ModalTokenDetail";
 import AppContext from "../context/app-context";
+import { formatAddressShort } from "../lib/utilities";
 
 const LeaderboardItemRow = styled.div`
   display: flex;
@@ -158,7 +159,7 @@ const FollowText = styled.h6`
   font-weight: 400;
 `;
 
-const LeaderboardItem = ({ item }) => {
+const LeaderboardItem = ({ item, index }) => {
   const context = useContext(AppContext);
 
   const [squareWidth, setSquareWidth] = useState(0);
@@ -322,15 +323,49 @@ const LeaderboardItem = ({ item }) => {
       <LeaderboardItemRow>
         <ProfileSection>
           <Link href="/[profile]" as={`/${item?.username || item.address}`}>
-            <ProfileImage
-              isMobile={context.isMobile}
-              src={getImageUrl(item?.img_url)}
-            />
+            <div className="relative">
+              <div
+                className="absolute rounded-full bg-white text-center self-center"
+                style={
+                  context.isMobile
+                    ? {
+                        border: "1px solid rgba(0, 0, 0, 0.16)",
+                        fontSize: 12,
+                        fontWeight: 500,
+                        paddingTop: 1,
+                        height: 22,
+                        width: 22,
+                        color: "#010101",
+                        bottom: 4,
+                        right: 19,
+                      }
+                    : {
+                        border: "1px solid rgba(0, 0, 0, 0.16)",
+                        fontSize: 13,
+                        fontWeight: 500,
+                        paddingTop: 1,
+                        height: 24,
+                        width: 24,
+                        color: "#010101",
+                        bottom: 0,
+                        right: 20,
+                      }
+                }
+              >
+                {index + 1}
+              </div>
+              <ProfileImage
+                isMobile={context.isMobile}
+                src={getImageUrl(item?.img_url)}
+              />
+            </div>
           </Link>
           <ProfileSectionContent>
             <Link href="/[profile]" as={`/${item?.username || item.address}`}>
               <ProfileTitle>
-                {truncateWithEllipses(item?.name, 30) || "Unnamed"}
+                {truncateWithEllipses(item?.name, context.isMobile ? 20 : 30) ||
+                  formatAddressShort(item.address) ||
+                  "Unnamed"}
               </ProfileTitle>
             </Link>
             <ProfileBottomSection>

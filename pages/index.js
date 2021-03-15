@@ -107,7 +107,7 @@ export default function Home() {
         <meta property="og:image" content="/banner.png" />
         <meta name="og:title" content="Showtime" />
 
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Showtime" />
         <meta
           name="twitter:description"
@@ -182,11 +182,7 @@ export default function Home() {
               <div className="hidden sm:flex flex-grow"></div>
               <div
                 className="self-end hidden sm:flex"
-                style={
-                  context.isMobile
-                    ? { padding: "0px 16px" }
-                    : { padding: "0px 12px" }
-                }
+                style={context.isMobile ? { padding: "0px 16px" } : null}
               >
                 <Link href="/c/[collection]" as="/c/all">
                   <a className="explore-more-link">Explore more pieces</a>
