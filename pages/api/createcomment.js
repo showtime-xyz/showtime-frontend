@@ -19,6 +19,7 @@ export default async (req, res) => {
         method: "POST",
         headers: {
           "X-Authenticated-User": user.publicAddress,
+          "X-API-Key": process.env.SHOWTIME_FRONTEND_API_KEY,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ message }),
