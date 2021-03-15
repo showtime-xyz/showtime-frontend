@@ -127,7 +127,7 @@ export default function CommentsSection({ nftId, closeModal }) {
               <textarea
                 value={commentText}
                 disabled={isSubmitting}
-                className={`border-2 border-gray-300 text-sm flex-grow rounded-xl p-2 px-3 md:mr-2 focus:border-gray-400${
+                className={`border-2 border-gray-300 text-sm md:h-12 flex-grow rounded-xl p-2 px-3 md:mr-2 focus:border-gray-400${
                   isSubmitting ? " bg-gray-100" : ""
                 }`}
                 rows="2"
