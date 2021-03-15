@@ -249,7 +249,7 @@ export default function Collection({
             {currentCollectionName ? currentCollectionName : "Leading NFT"}
           </h1>
           <h1 className="text-4xl md:text-7xl xl:text-8xl">
-            {currentCollectionName ? "collection." : "collections."}
+            {currentCollectionName ? "Collection." : "Collections."}
           </h1>
         </div>
       )}

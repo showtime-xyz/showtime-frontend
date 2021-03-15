@@ -68,7 +68,9 @@ class TokenCard extends React.Component {
   }
 
   truncateWithEllipses(text, max) {
-    return text.substr(0, max - 1) + (text.length > max ? "..." : "");
+    if (text) {
+      return text.substr(0, max - 1) + (text.length > max ? "..." : "");
+    }
   }
 
   handleMoreShown = () => {

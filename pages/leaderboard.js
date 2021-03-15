@@ -92,9 +92,9 @@ const Leaderboard = () => {
             className="text-4xl md:text-7xl xl:text-8xl"
             style={{ fontFamily: "Afronaut" }}
           >
-            Most popular
+            Trending
           </h1>
-          <h1 className="text-4xl md:text-7xl xl:text-8xl">creators.</h1>
+          <h1 className="text-4xl md:text-7xl xl:text-8xl">Creators.</h1>
         </div>
       )}
 
