@@ -143,6 +143,7 @@ export default function Modal({
               <div
                 className="overflow-y-scroll h-full"
                 style={context.isMobile ? {} : { borderRadius: 10 }}
+                id="ModalTokenDetailWrapper"
               >
                 <TokenDetailBody
                   item={item}

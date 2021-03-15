@@ -297,6 +297,7 @@ const TokenDetailBody = ({
                 </div>
                 <SmoothScroll
                   to="CommentsSectionScroll"
+                  containerId={isInModal ? "ModalTokenDetailWrapper" : null}
                   smooth={true}
                   offset={-70}
                   duration={500}
