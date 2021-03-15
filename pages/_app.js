@@ -25,6 +25,8 @@ export default class MyApp extends React.Component {
     windowSize: null,
     myLikes: null,
     myLikeCounts: null,
+    myComments: null,
+    myCommentCounts: null,
     myFollows: null,
     myProfile: undefined,
     loginModalOpen: false,
@@ -62,6 +64,7 @@ export default class MyApp extends React.Component {
       try {
         const my_info_data = await myInfoRequest.json();
         this.setMyLikes(my_info_data.data.likes_nft);
+        this.setMyComments(my_info_data.data.comments);
         this.setMyFollows(my_info_data.data.follows);
         this.setMyProfile(my_info_data.data.profile);
       } catch {}
@@ -93,7 +96,8 @@ export default class MyApp extends React.Component {
       this.setUser(null);
       this.setMyLikes([]);
       this.setMyLikeCounts({});
-
+      this.setMyComments([]);
+      this.setMyCommentCounts({});
       this.setMyFollows([]);
 
       mixpanel.track("Logout");
@@ -130,6 +134,13 @@ export default class MyApp extends React.Component {
 
   setMyLikeCounts(myLikeCounts) {
     this.setState({ myLikeCounts });
+  }
+
+  setMyComments(myComments) {
+    this.setState({ myComments });
+  }
+  setMyCommentCounts(myCommentCounts) {
+    this.setState({ myCommentCounts });
   }
 
   setMyFollows(myFollows) {
@@ -184,6 +195,8 @@ export default class MyApp extends React.Component {
       windowSize: this.state.windowSize,
       myLikes: this.state.myLikes,
       myLikeCounts: this.state.myLikeCounts,
+      myComments: this.state.myComments,
+      myCommentCounts: this.state.myCommentCounts,
       myFollows: this.state.myFollows,
       myProfile: this.state.myProfile,
       loginModalOpen: this.state.loginModalOpen,
@@ -194,6 +207,9 @@ export default class MyApp extends React.Component {
       setWindowSize: (windowSize) => this.setWindowSize(windowSize),
       setMyLikes: (myLikes) => this.setMyLikes(myLikes),
       setMyLikeCounts: (myLikeCounts) => this.setMyLikeCounts(myLikeCounts),
+      setMyComments: (myComments) => this.setMyComments(myComments),
+      setMyCommentCounts: (myCommentCounts) =>
+        this.setMyCommentCounts(myCommentCounts),
       setMyFollows: (myFollows) => this.setMyFollows(myFollows),
       setMyProfile: (myProfile) => this.setMyProfile(myProfile),
       setLoginModalOpen: (loginModalOpen) =>

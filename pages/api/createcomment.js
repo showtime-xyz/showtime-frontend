@@ -24,7 +24,13 @@ export default async (req, res) => {
         },
         body: JSON.stringify({ message }),
       }
-    );
+    )
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (myJson) {
+        res.json(myJson);
+      });
   } catch (error) {
     console.log(error);
   }

@@ -10,6 +10,7 @@ import ModalReportItem from "./ModalReportItem";
 import ReactPlayer from "react-player";
 import LikeButton from "./LikeButton";
 import ShareButton from "./ShareButton";
+import CommentButton from "./CommentButton";
 //import CloseButton from "./CloseButton";
 import AppContext from "../context/app-context";
 import CreatorSummary from "./CreatorSummary";
@@ -293,6 +294,9 @@ const TokenDetailBody = ({
                     handleUnlike={handleUnlike}
                   />
                 </div>
+                <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
+                  <CommentButton item={item} handleComment={() => {}} />
+                </div>
                 <a
                   href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
                   title="Buy on OpenSea"
@@ -439,6 +443,7 @@ const TokenDetailBody = ({
                 <div className="mt-4 flex">
                   <CommentsSection
                     nftId={item.nft_id}
+                    commentCount={item.comment_count}
                     closeModal={() => {
                       if (setEditModalOpen) {
                         setEditModalOpen(false);

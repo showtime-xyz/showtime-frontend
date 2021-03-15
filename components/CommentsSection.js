@@ -4,9 +4,14 @@ import backend from "../lib/backend";
 import mixpanel from "mixpanel-browser";
 import Comment from "./Comment";
 
-export default function CommentsSection({ nftId, closeModal, modalRef }) {
+export default function CommentsSection({
+  nftId,
+  closeModal,
+  modalRef,
+  commentCount,
+}) {
   const context = useContext(AppContext);
-  const { user, myProfile } = context;
+  const { user } = context;
   const [loadingComments, setLoadingComments] = useState(true);
   const [comments, setComments] = useState();
   const [commentText, setCommentText] = useState("");
@@ -35,6 +40,7 @@ export default function CommentsSection({ nftId, closeModal, modalRef }) {
         message: commentText,
       }),
     });
+    await storeCommentInContext();
     mixpanel.track("Comment created");
     // pull new comments
     await refreshComments();
@@ -42,7 +48,6 @@ export default function CommentsSection({ nftId, closeModal, modalRef }) {
     setCommentText("");
     setIsSubmitting(false);
   };
-  console.log("comments", comments);
 
   const deleteComment = async (commentId) => {
     // post new comment
@@ -52,6 +57,7 @@ export default function CommentsSection({ nftId, closeModal, modalRef }) {
         commentId,
       }),
     });
+    removeCommentFromContext();
     mixpanel.track("Comment deleted");
     // pull new comments
     await refreshComments();
@@ -62,6 +68,34 @@ export default function CommentsSection({ nftId, closeModal, modalRef }) {
     mixpanel.track("Commented but logged out");
   };
 
+  const storeCommentInContext = async () => {
+    const myCommentCounts = context.myCommentCounts;
+    const newAmountOfMyComments =
+      ((myCommentCounts && myCommentCounts[nftId]) || commentCount) + 1;
+
+    context.setMyCommentCounts({
+      ...context.myCommentCounts,
+      [nftId]: newAmountOfMyComments,
+    });
+    if (newAmountOfMyComments === 1) {
+      context.setMyComments([...context.myComments, nftId]);
+    }
+  };
+
+  const removeCommentFromContext = async () => {
+    const myCommentCounts = context.myCommentCounts;
+    const newAmountOfMyComments =
+      ((myCommentCounts && myCommentCounts[nftId]) || commentCount) - 1;
+    context.setMyCommentCounts({
+      ...context.myCommentCounts,
+      [nftId]: newAmountOfMyComments,
+    });
+    if (newAmountOfMyComments === 0) {
+      context.setMyComments(
+        context.myComments.filter((item) => !(item === nftId))
+      );
+    }
+  };
   return (
     <div className="w-full">
       {/* Comments */}
