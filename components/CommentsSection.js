@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
-import { formatDistanceToNowStrict } from "date-fns";
 import AppContext from "../context/app-context";
 import backend from "../lib/backend";
-import Link from "next/link";
 import mixpanel from "mixpanel-browser";
+import Comment from "./Comment";
 
-export default function CommentsSection({ nftId, closeModal }) {
+export default function CommentsSection({ nftId, closeModal, modalRef }) {
   const context = useContext(AppContext);
   const { user } = context;
   const [loadingComments, setLoadingComments] = useState(true);
@@ -61,63 +60,12 @@ export default function CommentsSection({ nftId, closeModal }) {
             <div className="mb-4">
               {comments.length > 0 ? (
                 comments.map((comment, index) => (
-                  <div
+                  <Comment
+                    comment={comment}
                     key={index}
-                    className="p-2 my-1 flex rounded-xl hover:bg-gray-100"
-                  >
-                    <div className="mr-3 mt-1">
-                      <Link
-                        href="/[profile]"
-                        as={
-                          comment.username
-                            ? `/${comment.username}`
-                            : `/${comment.address}`
-                        }
-                      >
-                        <img
-                          alt={comment.username || comment.name || "Unnamed"}
-                          src={
-                            comment.img_url
-                              ? comment.img_url
-                              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                          }
-                          className="rounded-full cursor-pointer"
-                          style={{ height: 32, width: 32 }}
-                          onClick={closeModal}
-                        />
-                      </Link>
-                    </div>
-                    <div className="flex flex-col flex-1">
-                      <div className="flex items-center justify-between">
-                        <Link
-                          href="/[profile]"
-                          as={
-                            comment.username
-                              ? `/${comment.username}`
-                              : `/${comment.address}`
-                          }
-                        >
-                          <div
-                            className="hover:text-stpink cursor-pointer"
-                            onClick={closeModal}
-                          >
-                            {comment.username || comment.name || "Unnamed"}
-                          </div>
-                        </Link>
-                        <div className="text-gray-400 text-sm">
-                          {formatDistanceToNowStrict(
-                            new Date(`${comment.added}Z`),
-                            {
-                              addSuffix: true,
-                            }
-                          )}
-                        </div>
-                      </div>
-                      <div className="text-gray-500 text-sm leading-5">
-                        {comment.text}
-                      </div>
-                    </div>
-                  </div>
+                    closeModal={closeModal}
+                    modalRef={modalRef}
+                  />
                 ))
               ) : (
                 <div className="my-2 mb-3 p-3 bg-gray-100 rounded-xl">

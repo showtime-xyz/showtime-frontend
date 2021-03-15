@@ -444,6 +444,7 @@ const TokenDetailBody = ({
                         setEditModalOpen(false);
                       }
                     }}
+                    modalRef={modalRef}
                   />
                 </div>
               </div>
