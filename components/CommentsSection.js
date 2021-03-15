@@ -123,13 +123,14 @@ export default function CommentsSection({ nftId, closeModal }) {
               )}
             </div>
             {/* New Comment */}
-            <div className="my-2 flex align-stretch">
-              <input
+            <div className="my-2 flex items-stretch flex-col md:flex-row">
+              <textarea
                 value={commentText}
                 disabled={isSubmitting}
-                className={`border-2 border-gray-300 flex-grow rounded-xl p-2 mr-2 focus:border-gray-400${
+                className={`border-2 border-gray-300 text-sm flex-grow rounded-xl p-2 px-3 md:mr-2 focus:border-gray-400${
                   isSubmitting ? " bg-gray-100" : ""
                 }`}
+                rows="2"
                 placeholder="Your comment..."
                 onChange={(e) => {
                   setCommentText(e.target.value);
@@ -144,7 +145,7 @@ export default function CommentsSection({ nftId, closeModal }) {
                   commentText === "" ||
                   commentText.trim() === ""
                 }
-                className="px-4 py-2 bg-black rounded-xl text-white flex items-center cursor-pointer hover:bg-stpink disabled:bg-gray-700"
+                className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink disabled:bg-gray-700"
               >
                 {isSubmitting ? (
                   <div className="loading-card-spinner-small" />
