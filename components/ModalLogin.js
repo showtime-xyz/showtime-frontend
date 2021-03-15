@@ -55,12 +55,12 @@ export default function Modal({ isOpen }) {
           infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
         },
       },
-      authereum: {
-        package: Authereum,
-      },
-      frame: {
-        package: ethProvider,
-      },
+      //authereum: {
+      //  package: Authereum,
+      //},
+      //frame: {
+      //  package: ethProvider,
+      //},
     };
 
     const web3Modal = new Web3Modal({

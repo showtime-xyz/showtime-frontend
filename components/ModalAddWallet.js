@@ -57,12 +57,12 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
             infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
           },
         },
-        authereum: {
-          package: Authereum,
-        },
-        frame: {
-          package: ethProvider,
-        },
+        //authereum: {
+        //  package: Authereum,
+        //},
+        //frame: {
+        //  package: ethProvider,
+        //},
       };
 
       const web3Modal = new Web3Modal({
@@ -238,36 +238,35 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
                                 <span>
                                   <span style={{ color: "red" }}>
                                     This wallet is already on your Showtime
-                                    profile.
+                                    profile. Please switch to a different wallet
+                                    in your provider's menu.
                                   </span>{" "}
-                                  Please switch to a different wallet in your
-                                  provider's menu.
                                 </span>
                               </div>
-                              <div className="py-4">
-                                <span>
-                                  For MetaMask: <br />
-                                </span>{" "}
-                                Switch wallets by clicking on the MetaMask icon
-                                in the toolbar, then clicking the circle icon on
-                                the top right (the account switcher). If you get
-                                a warning "Your current account is not
-                                connected," make sure to click "Connect."
+                              <div className="py-4 ">
+                                <div>For MetaMask:</div>
+                                <div className="text-gray-500">
+                                  Switch wallets by clicking on the MetaMask
+                                  icon in the toolbar, then clicking the circle
+                                  icon on the top right (the account switcher).
+                                  If you get a warning "Your current account is
+                                  not connected," make sure to click "Connect."
+                                </div>
                               </div>
                               <div className="py-4">
-                                <span>
-                                  For Wallet Connect & others: <br />
-                                </span>
-                                <a
-                                  href="#"
-                                  onClick={() => {
-                                    tryAgain();
-                                  }}
-                                  style={{ color: "rgb(81, 125, 228)" }}
-                                >
-                                  Click here
-                                </a>{" "}
-                                to start over and pick a new wallet.
+                                <div>For WalletConnect:</div>
+                                <div className="text-gray-500">
+                                  <a
+                                    href="#"
+                                    onClick={() => {
+                                      tryAgain();
+                                    }}
+                                    style={{ color: "rgb(81, 125, 228)" }}
+                                  >
+                                    Click here
+                                  </a>{" "}
+                                  to start over and pick a new wallet.
+                                </div>
                               </div>
                             </>
                           ) : (
@@ -285,30 +284,34 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
                                     <span>
                                       For MetaMask: <br />
                                     </span>{" "}
-                                    Switch wallets by clicking on the MetaMask
-                                    icon in the toolbar, then clicking the
-                                    circle icon on the top right (the account
-                                    switcher). If you get a warning "Your
-                                    current account is not connected," make sure
-                                    to click "Connect."
+                                    <div className="text-gray-500">
+                                      Switch wallets by clicking on the MetaMask
+                                      icon in the toolbar, then clicking the
+                                      circle icon on the top right (the account
+                                      switcher). If you get a warning "Your
+                                      current account is not connected," make
+                                      sure to click "Connect."
+                                    </div>
                                   </div>
                                   <div
                                     className="py-4"
                                     style={{ fontSize: 14 }}
                                   >
                                     <span>
-                                      For Wallet Connect & others: <br />
+                                      For Wallet Connect: <br />
                                     </span>
-                                    <a
-                                      href="#"
-                                      onClick={() => {
-                                        tryAgain();
-                                      }}
-                                      style={{ color: "rgb(81, 125, 228)" }}
-                                    >
-                                      Click here
-                                    </a>{" "}
-                                    to start over and pick a new wallet.
+                                    <div className="text-gray-500">
+                                      <a
+                                        href="#"
+                                        onClick={() => {
+                                          tryAgain();
+                                        }}
+                                        style={{ color: "rgb(81, 125, 228)" }}
+                                      >
+                                        Click here
+                                      </a>{" "}
+                                      to start over and pick a new wallet.
+                                    </div>
                                   </div>
                                 </>
                               ) : (
