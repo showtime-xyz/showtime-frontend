@@ -100,7 +100,9 @@ export default function CommentsSection({
     <div className="w-full">
       {/* Comments */}
       <div>
-        <div className="md:text-lg py-2">Comments</div>
+        <div className="md:text-lg py-2" id="CommentsSectionScroll">
+          Comments
+        </div>
         {loadingComments ? (
           <div className="text-center my-4">
             <div className="loading-card-spinner" />

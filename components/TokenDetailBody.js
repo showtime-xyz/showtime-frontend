@@ -6,6 +6,7 @@ import "react-image-lightbox/style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExpand } from "@fortawesome/free-solid-svg-icons";
 import _ from "lodash";
+import { Link as SmoothScroll } from "react-scroll";
 import ModalReportItem from "./ModalReportItem";
 import ReactPlayer from "react-player";
 import LikeButton from "./LikeButton";
@@ -294,9 +295,16 @@ const TokenDetailBody = ({
                     handleUnlike={handleUnlike}
                   />
                 </div>
-                <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
-                  <CommentButton item={item} handleComment={() => {}} />
-                </div>
+                <SmoothScroll
+                  to="CommentsSectionScroll"
+                  smooth={true}
+                  offset={-70}
+                  duration={500}
+                >
+                  <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
+                    <CommentButton item={item} handleComment={() => {}} />
+                  </div>
+                </SmoothScroll>
                 <a
                   href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
                   title="Buy on OpenSea"

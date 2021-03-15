@@ -505,7 +505,15 @@ class TokenCard extends React.Component {
                       />
                     </div>
                     <div className="mr-3">
-                      <CommentButton item={item} handleComment={() => {}} />
+                      <CommentButton
+                        item={item}
+                        handleComment={() => {
+                          mixpanel.track("Open NFT modal via comment button");
+                          this.props.setCurrentlyOpenModal(item);
+                          this.setState({ showVideo: false, muted: true });
+                          this.props.setCurrentlyPlayingVideo(null);
+                        }}
+                      />
                     </div>
                     <div>
                       <ShareButton

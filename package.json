@@ -45,6 +45,7 @@
     "react-infinite-scroll-component": "^5.1.0",
     "react-masonry-css": "^1.0.14",
     "react-player": "^2.8.1",
+    "react-scroll": "^1.8.2",
     "react-scroll-up-button": "^1.6.4",
     "styled-components": "^5.2.1",
     "swr": "^0.4.0",
