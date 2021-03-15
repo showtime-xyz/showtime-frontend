@@ -1,12 +1,18 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Link from "next/link";
 import { formatDistanceToNowStrict } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import useDetectOutsideClick from "../hooks/useDetectOutsideClick";
 
-export default function Comment({ comment, closeModal, modalRef }) {
+export default function Comment({
+  comment,
+  closeModal,
+  modalRef,
+  deleteComment,
+}) {
   const dropdownRef = useRef(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [isActive, setIsActive] = useDetectOutsideClick(
     dropdownRef,
     false,
@@ -78,11 +84,20 @@ export default function Comment({ comment, closeModal, modalRef }) {
             >
               <div
                 className="py-1 px-4 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
-                onClick={() => {
+                onClick={async () => {
+                  setIsDeleting(true);
+                  await deleteComment(comment.comment_id);
                   setIsActive(false);
+                  setIsDeleting(false);
                 }}
               >
-                Delete
+                {isDeleting ? (
+                  <div className="flex items-center justify-center">
+                    <div className="loading-card-spinner-small" />
+                  </div>
+                ) : (
+                  "Delete"
+                )}
               </div>
             </div>
           </div>

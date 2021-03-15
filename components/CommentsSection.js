@@ -35,6 +35,7 @@ export default function CommentsSection({ nftId, closeModal, modalRef }) {
         message: commentText,
       }),
     });
+    mixpanel.track("Comment created");
     // pull new comments
     await refreshComments();
     // clear state
@@ -42,10 +43,25 @@ export default function CommentsSection({ nftId, closeModal, modalRef }) {
     setIsSubmitting(false);
   };
 
+  const deleteComment = async (commentId) => {
+    // post new comment
+    await fetch(`/api/deletecomment`, {
+      method: "post",
+      body: JSON.stringify({
+        commentId,
+      }),
+    });
+    mixpanel.track("Comment deleted");
+    // pull new comments
+    await refreshComments();
+  };
+
   const handleLoggedOutComment = () => {
     context.setLoginModalOpen(true);
     mixpanel.track("Commented but logged out");
   };
+
+  console.log(comments);
   return (
     <div className="w-full">
       {/* Comments */}
@@ -59,12 +75,13 @@ export default function CommentsSection({ nftId, closeModal, modalRef }) {
           <div className="py-2 px-4 border-2 border-gray-300 rounded-xl">
             <div className="mb-4">
               {comments.length > 0 ? (
-                comments.map((comment, index) => (
+                comments.map((comment) => (
                   <Comment
                     comment={comment}
-                    key={index}
+                    key={comment.comment_id}
                     closeModal={closeModal}
                     modalRef={modalRef}
+                    deleteComment={deleteComment}
                   />
                 ))
               ) : (
