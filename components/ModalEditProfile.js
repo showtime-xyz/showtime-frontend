@@ -45,7 +45,7 @@ const handleDebouncedUsernameLookup = AwesomeDebouncePromise(
 
 export default function Modal({ isOpen, setEditModalOpen }) {
   const router = useRouter();
-  const SHOWTIME_PROD_URL = "alpha.tryshowtime.com/";
+  const SHOWTIME_PROD_URL = "tryshowtime.com/";
   const context = useContext(AppContext);
   const [nameValue, setNameValue] = useState(null);
   const [customURLValue, setCustomURLValue] = useState("");
