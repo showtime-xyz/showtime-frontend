@@ -315,7 +315,7 @@ const TokenDetailBody = ({
                   }}
                 >
                   <div className="text-base font-normal px-4 py-3 mr-2 rounded-full shadow-md hover:text-stpink">
-                    {isMobile ? "Collect" : "Bid on OpenSea"}
+                    {context.columns > 2 ? "Bid on OpenSea" : "Collect"}
                   </div>
                 </a>
                 <div className="px-4 py-2 rounded-full shadow-md">
