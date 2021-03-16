@@ -9,7 +9,7 @@ export default async (req, res) => {
 
   const user = await Iron.unseal(
     CookieService.getAuthToken(req.cookies),
-    process.env.ENCRYPTION_SECRET,
+    process.env.ENCRYPTION_SECRET_V2,
     Iron.defaults
   );
 
@@ -42,7 +42,7 @@ export default async (req, res) => {
       method: "POST",
       headers: {
         "X-Authenticated-User": user.publicAddress,
-        "X-API-Key": process.env.SHOWTIME_FRONTEND_API_KEY,
+        "X-API-Key": process.env.SHOWTIME_FRONTEND_API_KEY_V2,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
