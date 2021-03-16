@@ -40,7 +40,7 @@ const CommentButton = ({ item, handleComment }) => {
       </button>
       {context.user ? null : !isMobile ? (
         <span
-          style={{ fontSize: 12, opacity: 0.9, width: 90 }}
+          style={{ fontSize: 12, opacity: 0.9, width: "max-content" }}
           className="tooltip-text bg-black p-3 -mt-6 -ml-16 rounded text-white"
         >
           Sign in to comment
