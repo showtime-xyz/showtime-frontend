@@ -31,6 +31,7 @@ export default function TokenHistoryCard({ nftId }) {
       </div>
     );
   }
+  console.log(nftHistory);
   return (
     <div className="px-4 py-2 flex flex-col border-2 border-gray-300 rounded-xl w-full">
       {nftHistory && nftHistory.history ? (
@@ -62,7 +63,9 @@ export default function TokenHistoryCard({ nftId }) {
                       </div>
                     </a>
                   </Link>
-                  <div className="px-3">{" → "}</div>
+                  <div className="px-3 w-max text-gray-400">{`${
+                    nftHistory.multiple ? entry.quantity : ""
+                  } → `}</div>
                 </>
               ) : (
                 <div className="mr-2">Created by</div>
