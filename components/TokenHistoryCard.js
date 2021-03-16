@@ -46,7 +46,10 @@ export default function TokenHistoryCard({ nftId }) {
                     <a>
                       <div className="flex items-center hover:text-stpink">
                         <img
-                          src={entry.from_img_url}
+                          src={
+                            entry.from_img_url ||
+                            "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                          }
                           style={{ width: 24, height: 24 }}
                           className="rounded-full mr-2"
                         />
@@ -71,7 +74,10 @@ export default function TokenHistoryCard({ nftId }) {
                 <a>
                   <div className="flex items-center hover:text-stpink">
                     <img
-                      src={entry.to_img_url}
+                      src={
+                        entry.to_img_url ||
+                        "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                      }
                       style={{ width: 24, height: 24 }}
                       className="rounded-full mr-2"
                     />
