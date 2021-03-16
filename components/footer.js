@@ -6,7 +6,7 @@ import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 function Footer() {
   return (
     <footer className="text-center mt-12" style={{ backgroundColor: "#000" }}>
-      <div className="text-sm my-8 py-8 text-gray-500  text-center">
+      <div className="text-sm my-8 py-4 text-gray-500  text-center">
         <div className="flex flex-row">
           <div className="flex-grow"></div>
           <div className="px-1">
@@ -19,9 +19,17 @@ function Footer() {
               <FontAwesomeIcon style={{ height: 18 }} icon={faTwitter} />
             </a>
           </div>
+
           <div className="flex-grow"></div>
         </div>
-
+        <div className="">
+          <a
+            href="https://www.notion.so/Showtime-Legal-c407e36eb7cd414ca190245ca8621e68"
+            target="_blank"
+          >
+            Terms & Conditions
+          </a>
+        </div>
         <div>© 2021 Showtime Technologies, Inc.</div>
       </div>
     </footer>

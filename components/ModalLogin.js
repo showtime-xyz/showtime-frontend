@@ -137,13 +137,7 @@ export default function Modal({ isOpen }) {
                 <>
                   <form onSubmit={handleSubmitEmail}>
                     <div className="text-center pt-8">
-                      <div
-                        style={
-                          context.windowSize && context.windowSize.width < 400
-                            ? { maxWidth: 215, margin: "auto" }
-                            : null
-                        }
-                      >
+                      <div>
                         <label htmlFor="email" className="pb-4 ">
                           Enter your email to receive a sign in link.
                         </label>
@@ -160,7 +154,7 @@ export default function Modal({ isOpen }) {
                         name="email"
                         placeholder="Email"
                         type="email"
-                        className="border-2 w-full mb-8"
+                        className="border-2 w-full"
                         autoFocus
                         style={{
                           color: "black",
@@ -168,12 +162,27 @@ export default function Modal({ isOpen }) {
                           borderRadius: 7,
                         }}
                       />
+
+                      <div
+                        className="pt-8 pb-8"
+                        style={{ color: "#444", fontSize: 13 }}
+                      >
+                        By signing in you agree to our{" "}
+                        <a
+                          href="https://www.notion.so/Showtime-Legal-c407e36eb7cd414ca190245ca8621e68"
+                          target="_blank"
+                        >
+                          Terms & Conditions
+                        </a>
+                        .
+                      </div>
+
                       <button className="bg-stpink text-white rounded-full px-6 py-2 cursor-pointer border-2 hover:text-stpink hover:bg-white border-stpink transition-all">
                         <span className="text-sm md:text-base">
                           Sign in with Email
                         </span>
                       </button>
-                      <div className="py-8" style={{ color: "#444" }}>
+                      <div className="py-6" style={{ color: "#444" }}>
                         — or —
                       </div>
                     </div>
@@ -209,9 +218,9 @@ export default function Modal({ isOpen }) {
               .modal {
                 background-color: white;
                 position: absolute;
-                top: 10%;
-                right: 5%;
-                left: 5%;
+                top: ${context.isMobile ? 5 : 10}%;
+                right: 3%;
+                left: 3%;
                 padding: 1em;
                 border-radius: 7px;
                 max-width: 400px;
