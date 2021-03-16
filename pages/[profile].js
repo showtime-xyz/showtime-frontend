@@ -291,7 +291,7 @@ const Profile = ({
     if (isLoadingCards) {
       setSelectedGrid("created");
     } else {
-      if (createdItems.length > 0 && createdItems.length > ownedItems.length) {
+      if (createdItems.length > 0 && createdItems.length >= ownedItems.length) {
         setSelectedGrid("created");
       } else if (ownedItems.length > 0) {
         setSelectedGrid("owned");
