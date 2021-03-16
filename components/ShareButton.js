@@ -24,6 +24,7 @@ const ShareButton = ({ url, type }) => {
               setIsCopied(false);
             }, 3000);
           }}
+          style={{ paddingLeft: 2, paddingRight: 2 }}
         >
           <img
             src={

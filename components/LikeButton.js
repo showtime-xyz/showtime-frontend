@@ -40,7 +40,7 @@ const LikeButton = ({ item, handleLike, handleUnlike }) => {
           <div className="mr-2" style={{ whiteSpace: "nowrap" }}>
             {like_count}
           </div>
-          <div className="flex">
+          <div className="flex" style={{ paddingRight: 2 }}>
             <FontAwesomeIcon
               style={{
                 height: 22,
