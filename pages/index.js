@@ -104,7 +104,10 @@ export default function Home() {
           name="og:description"
           content="Discover and showcase crypto art"
         />
-        <meta property="og:image" content="/banner.png" />
+        <meta
+          property="og:image"
+          content="https://storage.googleapis.com/nft-public-profile-pics/showtime_screenshot.jpg"
+        />
         <meta name="og:title" content="Showtime" />
 
         <meta name="twitter:card" content="summary_large_image" />
@@ -115,7 +118,7 @@ export default function Home() {
         />
         <meta
           name="twitter:image"
-          content="https://showtime.kilkka.vercel.app/banner.png"
+          content="https://storage.googleapis.com/nft-public-profile-pics/showtime_screenshot.jpg"
         />
       </Head>
 
