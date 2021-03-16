@@ -20,7 +20,7 @@ export default function UserTimestampCard({ name, imageUrl, timestamp }) {
       <div className="">
         <div className="text-lg">{truncateWithEllipses(name, 26)}</div>
         {timestamp && (
-          <div className="text-gray-500">
+          <div className="text-gray-500 text-sm">
             {format(new Date(timestamp), "PPp")}
           </div>
         )}
