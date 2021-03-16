@@ -26,7 +26,7 @@ const CommentButton = ({ item, handleComment }) => {
           <div className="mr-2" style={{ whiteSpace: "nowrap" }}>
             {comment_count}
           </div>
-          <div className="flex">
+          <div className="flex" style={{ paddingRight: 2 }}>
             <FontAwesomeIcon
               style={{
                 height: 22,
