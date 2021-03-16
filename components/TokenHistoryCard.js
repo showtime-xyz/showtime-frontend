@@ -38,29 +38,33 @@ export default function TokenHistoryCard({ nftId }) {
         nftHistory.history.map((entry) => (
           <div className="py-2" key={entry.timestamp}>
             <div className="flex">
-              {entry.from_address && (
-                <Link
-                  href="/[profile]"
-                  as={`/${entry.from_username || entry.from_address}`}
-                >
-                  <a>
-                    <div className="flex items-center hover:text-stpink">
-                      <img
-                        src={entry.from_img_url}
-                        style={{ width: 24, height: 24 }}
-                        className="rounded-full mr-2"
-                      />
-                      <div>
-                        {truncateWithEllipses(
-                          entry.from_username || entry.from_name,
-                          26
-                        )}
+              {entry.from_address ? (
+                <>
+                  <Link
+                    href="/[profile]"
+                    as={`/${entry.from_username || entry.from_address}`}
+                  >
+                    <a>
+                      <div className="flex items-center hover:text-stpink">
+                        <img
+                          src={entry.from_img_url}
+                          style={{ width: 24, height: 24 }}
+                          className="rounded-full mr-2"
+                        />
+                        <div>
+                          {truncateWithEllipses(
+                            entry.from_username || entry.from_name,
+                            26
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </a>
-                </Link>
+                    </a>
+                  </Link>
+                  <div className="px-3">{" → "}</div>
+                </>
+              ) : (
+                <div className="mr-2">Created by</div>
               )}
-              {entry.from_address && <div className="px-3">{" → "}</div>}
               <Link
                 href="/[profile]"
                 as={`/${entry.to_username || entry.to_address}`}
