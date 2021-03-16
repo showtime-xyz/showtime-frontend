@@ -34,7 +34,6 @@ const TokenDetailBody = ({
 }) => {
   const context = useContext(AppContext);
   const { isMobile, columns, gridWidth } = context;
-
   const getBackgroundColor = () => {
     if (
       item.token_background_color &&
@@ -370,10 +369,12 @@ const TokenDetailBody = ({
           {/* Artist and Owned by Section */}
           {ownershipDetails ? (
             <div className="flex flex-col md:flex-row mt-4">
-              {/* artist section */}
+              {/* left column section */}
               <div className="flex-1 p-4">
+                {/* artist section */}
+
                 {item.creator_address && (
-                  <>
+                  <div>
                     <div className="md:text-lg py-4">Creator</div>
                     <CreatorSummary
                       address={item.creator_address}
@@ -387,15 +388,12 @@ const TokenDetailBody = ({
                         }
                       }}
                     />
-                  </>
+                  </div>
                 )}
-              </div>
-
-              {/* owned by section */}
-              <div className="flex-1 p-4">
+                {/* Owned by Section */}
                 {item.owner_address && (
-                  <div>
-                    <div className="md:text-lg py-2">Owned By</div>
+                  <div className="mt-8">
+                    <div className="md:text-lg py-4">Owned By</div>
                     <div>
                       <Link
                         href="/[profile]"
@@ -423,33 +421,16 @@ const TokenDetailBody = ({
                   </div>
                 )}
                 {/* History Section */}
-                {/*  */}
-                {/* {ownershipDetails.transfers &&
-                  ownershipDetails.transfers.length > 0 && (
-                    <div className="mt-8">
-                      <div className="md:text-lg py-2">History</div>
-                      <TokenHistoryCard
-                        history={[
-                          ...(ownershipDetails &&
-                            ownershipDetails.transfers.map((transfer) => ({
-                              address: transfer.to_address,
-                              name: transfer.to_name
-                                ? transfer.to_name
-                                : "Unnamed",
-                              timestamp: transfer.timestamp,
-                            }))),
-                          // {
-                          //   address: item.creator_address,
-                          //   name: item.creator_name,
-                          //   timestamp: item.token_created,
-                          // },
-                        ]}
-                      />
-                    </div>
-                  )} */}
+                <div className="mt-8">
+                  <div className="md:text-lg py-4">History</div>
+                    <TokenHistoryCard nftId={item.nft_id} />
+                </div>
+              </div>
 
+              {/* right column section */}
+              <div className="flex-1 p-4 order-first md:order-last">
                 {/* Comments section */}
-                <div className="mt-4 flex">
+                <div className="flex">
                   <CommentsSection
                     nftId={item.nft_id}
                     commentCount={item.comment_count}
