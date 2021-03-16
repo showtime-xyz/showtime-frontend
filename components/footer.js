@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faTwitter, faInstagram } from "@fortawesome/free-brands-svg-icons";
 
 function Footer() {
   return (
@@ -17,6 +17,11 @@ function Footer() {
           <div className="px-1">
             <a href="https://twitter.com/tryShowtime" target="_blank">
               <FontAwesomeIcon style={{ height: 18 }} icon={faTwitter} />
+            </a>
+          </div>
+          <div className="px-1">
+            <a href="https://www.instagram.com/tryshowtime/" target="_blank">
+              <FontAwesomeIcon style={{ height: 18 }} icon={faInstagram} />
             </a>
           </div>
 
