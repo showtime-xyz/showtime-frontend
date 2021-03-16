@@ -9,6 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 //import { faEdit } from "@fortawesome/free-regular-svg-icons";
 import LikeButton from "./LikeButton";
+import CommentButton from "./CommentButton";
 import ShareButton from "./ShareButton";
 import ReactPlayer from "react-player";
 import mixpanel from "mixpanel-browser";
@@ -501,6 +502,17 @@ class TokenCard extends React.Component {
                         item={item}
                         handleLike={this.props.handleLike}
                         handleUnlike={this.props.handleUnlike}
+                      />
+                    </div>
+                    <div className="mr-3">
+                      <CommentButton
+                        item={item}
+                        handleComment={() => {
+                          mixpanel.track("Open NFT modal via comment button");
+                          this.props.setCurrentlyOpenModal(item);
+                          this.setState({ showVideo: false, muted: true });
+                          this.props.setCurrentlyPlayingVideo(null);
+                        }}
                       />
                     </div>
                     <div>

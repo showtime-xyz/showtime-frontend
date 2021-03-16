@@ -5,8 +5,9 @@ import { useState, useEffect } from "react";
  * @param {React.node} el
  * @param {boolean} initialState
  */
-export default function useDetectOutsideClick(el, initialState) {
+export default function useDetectOutsideClick(el, initialState, container) {
   const [isActive, setIsActive] = useState(initialState);
+  const background = container ? container.current : window;
 
   useEffect(() => {
     const onClick = (e) => {
@@ -18,11 +19,11 @@ export default function useDetectOutsideClick(el, initialState) {
 
     // If the item is active (ie open) then listen for clicks outside
     if (isActive) {
-      window.addEventListener("click", onClick);
+      background.addEventListener("click", onClick);
     }
 
     return () => {
-      window.removeEventListener("click", onClick);
+      background.removeEventListener("click", onClick);
     };
   }, [isActive, el]);
 
