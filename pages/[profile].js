@@ -530,19 +530,6 @@ const Profile = ({
                         return (
                           <AddressButton key={address} address={address} />
                         );
-                        /*
-                       return (
-                        <div
-                          className="py-2 px-3 bg-gray-100 rounded-full mx-1 md:mr-2 cursor-copy hover:bg-gray-200 active:bg-gray-100 transition"
-                          key={address}
-                          onClick={() => {
-                            copyToClipBoard(address);
-                          }}
-                        >
-                          {formatAddressShort(address)}
-                        </div>
-                      );
-                      */
                       })}
                     </div>
                   )}
