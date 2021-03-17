@@ -50,7 +50,6 @@ export default function TokenHistoryCard({ nftId }) {
       </div>
     );
   }
-  console.log(nftHistory);
   return (
     <div className="p-2 md:p-4 flex flex-col border-2 border-gray-300 rounded-xl w-full">
       {nftHistory && nftHistory.history && nftHistory.history.length > 0 ? (
