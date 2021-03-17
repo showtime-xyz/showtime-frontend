@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { truncateWithEllipses } from "../lib/utilities";
+import { truncateWithEllipses, formatAddressShort } from "../lib/utilities";
 import Link from "next/link";
 import { format } from "date-fns";
 import backend from "../lib/backend";
@@ -56,7 +56,9 @@ export default function TokenHistoryCard({ nftId }) {
                         />
                         <div>
                           {truncateWithEllipses(
-                            entry.from_username || entry.from_name,
+                            entry.from_username ||
+                              entry.from_name ||
+                              formatAddressShort(entry.from_address),
                             26
                           )}
                         </div>
@@ -86,7 +88,9 @@ export default function TokenHistoryCard({ nftId }) {
                     />
                     <div>
                       {truncateWithEllipses(
-                        entry.to_username || entry.to_name,
+                        entry.to_username ||
+                          entry.to_name ||
+                          formatAddressShort(entry.to_address),
                         26
                       )}
                     </div>
@@ -96,7 +100,7 @@ export default function TokenHistoryCard({ nftId }) {
             </div>
             {entry.timestamp && (
               <div className="text-gray-500 text-sm">
-                {format(new Date(`${entry.timestamp}Z`), "PPp")}
+                {format(new Date(entry.timestamp), "PPp")}
               </div>
             )}
           </div>
