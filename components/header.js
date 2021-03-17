@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import Link from "next/link";
 import mixpanel from "mixpanel-browser";
+import SearchBar from "./SearchBar"
 import AppContext from "../context/app-context";
 import ModalLogin from "./ModalLogin";
 
@@ -27,9 +28,8 @@ const Header = () => {
         }}
       >
         <div
-          className={`flex flex-row items-center ${
-            !context.gridWidth ? "invisible" : ""
-          }`}
+          className={`flex flex-row items-center ${!context.gridWidth ? "invisible" : ""
+            }`}
           style={
             context.isMobile
               ? {}
@@ -52,13 +52,15 @@ const Header = () => {
                   className="text-2xl py-2"
                   style={{ fontWeight: 400, fontFamily: "Afronaut" }}
                 >
-                  {context.isMobile ? "SHOWTIME" : "SHOWTIME"}
+                  {"SHOWTIME"}
                 </div>
               </a>
             </Link>
           </div>
           {/* Start desktop-only menu */}
-          <div className="flex-grow"></div>
+          <div className="flex-grow" style={{ width: "100%" }}>
+            <SearchBar />
+          </div>
           <div className="hidden md:block mr-6" style={{ fontWeight: 400 }}>
             <Link href="/">
               <a
@@ -96,9 +98,8 @@ const Header = () => {
             {context.user && context.myProfile !== undefined ? (
               <Link
                 href="/[profile]"
-                as={`/${
-                  context.myProfile.username || context.user.publicAddress
-                }`}
+                as={`/${context.myProfile.username || context.user.publicAddress
+                  }`}
               >
                 <a
                   className="showtime-login-button-outline text-sm px-3 py-2 md:text-base flex flex-row items-center rounded-full "
@@ -126,7 +127,7 @@ const Header = () => {
                             : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                         }
                         className="rounded-full mr-2"
-                        style={{ height: 24, width: 24 }}
+                        style={{ height: 24, width: 24, minWidth: 24 }}
                       />
                     </div>
                     <div className="">
@@ -146,6 +147,7 @@ const Header = () => {
                   onClick={() => {
                     context.setLoginModalOpen(!context.loginModalOpen);
                   }}
+                  style={{ minWidth: 96 }}
                 >
                   <span className="text-sm md:text-base">Sign in</span>
                 </div>
@@ -155,9 +157,8 @@ const Header = () => {
         </div>
         {/* Start mobile-only menu */}
         <div
-          className={`block md:hidden pt-4 ${
-            !context.gridWidth ? "invisible" : ""
-          }`}
+          className={`block md:hidden pt-4 ${!context.gridWidth ? "invisible" : ""
+            }`}
         >
           <Link href="/">
             <a
