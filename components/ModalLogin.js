@@ -63,7 +63,7 @@ export default function Modal({ isOpen }) {
           description: 'Use Coinbase Wallet app on mobile device',
         },
         options: {
-          appName: 'Coinvise', // Your app name
+          appName: 'Showtime', // Your app name
           networkUrl: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`,
           chainId: process.env.NEXT_PUBLIC_CHAINID,
         },
