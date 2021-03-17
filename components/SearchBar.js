@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import AwesomeDebouncePromise from "awesome-debounce-promise";
 import mixpanel from "mixpanel-browser";
@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import AppContext from "../context/app-context";
 import backend from "../lib/backend";
 import { getImageUrl } from "../lib/utilities"
 import useKeyPress from "../hooks/useKeyPress";
@@ -39,7 +40,7 @@ const MobileSearchWrapper = styled.div`
         justify-content: flex-end;
         padding-right: 32px;
     }
-    @media (max-width: 360px) {
+    @media (max-width: 420px) {
         margin-left: 4px;
         padding-right: 12px;
     }
@@ -97,6 +98,7 @@ const SearchInput = styled.input`
     width: 100%;
     &:focus {
         padding-left: 39px;
+        margin-top: -1px;
         border: 2px solid #000;
     }
 `;
@@ -112,6 +114,7 @@ const SearchIcon = styled.div`
     height: 14px;
     margin-right: 12px;
     color: #000;
+    margin-top: ${p => p.isFocused ? -1 : 0}px;
 `;
 
 const CloseButton = styled.div`
@@ -126,6 +129,7 @@ const CloseButton = styled.div`
     border-radius: 50%;
     padding: 16px;
     cursor: pointer;
+    margin-top: ${p => p.isFocused ? -1 : 0}px;
     &:hover {
         color: #e45cff;
         border: 2px solid #e45cff;
@@ -225,8 +229,10 @@ const handleDebouncedSearchQuery = AwesomeDebouncePromise(
 );
 
 const SearchBar = () => {
+    const context = useContext(AppContext);
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+    const [searchInputFocused, setSearchInputFocused] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
     const [showSearchResults, setShowSearchResults] = useState(false);
     const [isMobileSearchOverlayOpen, toggleMobileSearchOverlay] = useState(false);
@@ -277,9 +283,15 @@ const SearchBar = () => {
                     <FontAwesomeIcon icon={faSearch} />
                 </SearchIcon>
                 <SearchInput
-                    placeholder="Search by name or wallet address"
+                    placeholder={context.gridWidth < 400 ? "Search by name" : "Search by name or wallet address"}
                     value={searchText}
-                    onFocus={() => setShowSearchResults(true)}
+                    onFocus={() => {
+                        setShowSearchResults(true);
+                        setSearchInputFocused(true);
+                    }}
+                    onBlur={() => {
+                        setSearchInputFocused(false);
+                    }}
                     onChange={(e) => {
                         setShowSearchResults(true);
                         setSearchText(e.currentTarget.value);
@@ -331,17 +343,23 @@ const SearchBar = () => {
         {isMobileSearchOverlayOpen &&
             <OverlaySearchContainer>
                 <OverlaySearchInputContainer>
-                    <CloseButton onClick={() => toggleMobileSearchOverlay(false)}>
+                    <CloseButton isFocused={searchInputFocused} onClick={() => toggleMobileSearchOverlay(false)}>
                         <FontAwesomeIcon icon={faTimes} />
                     </CloseButton>
                     <SearchInputContainer ref={searchInputContainerRef}>
-                        <SearchIcon>
+                        <SearchIcon isFocused={searchInputFocused}>
                             <FontAwesomeIcon icon={faSearch} />
                         </SearchIcon>
                         <SearchInput
-                            placeholder="Search by creator or wallet address"
+                            placeholder={context.gridWidth < 400 ? "Search by name" : "Search by name or wallet address"}
                             value={searchText}
-                            onFocus={() => setShowSearchResults(true)}
+                            onFocus={() => {
+                                setShowSearchResults(true);
+                                setSearchInputFocused(true);
+                            }}
+                            onBlur={() => {
+                                setSearchInputFocused(false);
+                            }}
                             onChange={(e) => {
                                 setShowSearchResults(true);
                                 setSearchText(e.currentTarget.value);
@@ -380,7 +398,7 @@ const SearchBar = () => {
                                         </SearchResult>
                                     </Link>
                                 ))}
-                                {searchResults.length === 0 && <EmptySearchText>{"No matching creators"}</EmptySearchText>}
+                                {searchResults.length === 0 && <EmptySearchText>{"No matching people"}</EmptySearchText>}
                             </>}
 
                     </OverlaySearchResults>}

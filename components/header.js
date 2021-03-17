@@ -130,7 +130,7 @@ const Header = () => {
                         style={{ height: 24, width: 24, minWidth: 24 }}
                       />
                     </div>
-                    <div className="">
+                    <div className="" style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap", maxWidth: context.gridWidth < 500 ? 50 : 200 }}>
                       {context.myProfile
                         ? context.myProfile.name
                           ? context.myProfile.name
