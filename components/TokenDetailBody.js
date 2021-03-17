@@ -370,7 +370,7 @@ const TokenDetailBody = ({
           {ownershipDetails ? (
             <div className="flex flex-col md:flex-row mt-4">
               {/* left column section */}
-              <div className="flex-1 p-4">
+              <div className="flex-1 p-4 md:w-0">
                 {/* artist section */}
 
                 {item.creator_address && (
@@ -422,8 +422,8 @@ const TokenDetailBody = ({
                 )}
                 {/* History Section */}
                 <div className="mt-8">
-                  <div className="md:text-lg py-4">History</div>
-                    <TokenHistoryCard nftId={item.nft_id} />
+                  <div className="md:text-lg py-4">Ownership History</div>
+                  <TokenHistoryCard nftId={item.nft_id} />
                 </div>
               </div>
 
