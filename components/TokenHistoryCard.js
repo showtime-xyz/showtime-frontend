@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { truncateWithEllipses, formatAddressShort } from "../lib/utilities";
 import Link from "next/link";
 import { format } from "date-fns";
 import backend from "../lib/backend";
+import AppContext from "../context/app-context";
 
 export default function TokenHistoryCard({ nftId }) {
+  const context = useContext(AppContext);
+  const { isMobile } = context;
   const [nftHistory, setNftHistory] = useState();
   const [loadingHistory, setLoadingHistory] = useState(true);
   const [loadingMoreHistory, setLoadingMoreHistory] = useState(false);
@@ -14,7 +17,7 @@ export default function TokenHistoryCard({ nftId }) {
 
   const getNFTHistory = async (nftId) => {
     const historyData = await backend.get(
-      `/v1/nft_history/${nftId}${hasMoreHistory ? "" : "?limit=10"}`
+      `/v1/nft_history/${nftId}${hasMoreHistory ? "" : "?limit=2"}`
     );
     const {
       data: {
@@ -47,15 +50,16 @@ export default function TokenHistoryCard({ nftId }) {
       </div>
     );
   }
+  console.log(nftHistory);
   return (
-    <div className="px-4 py-2 flex flex-col border-2 border-gray-300 rounded-xl w-full">
+    <div className="p-2 md:p-4 flex flex-col border-2 border-gray-300 rounded-xl w-full">
       {nftHistory && nftHistory.history && nftHistory.history.length > 0 ? (
         nftHistory.history.map((entry) => (
           <div
-            className="py-2"
+            className="p-3 hover:bg-gray-100 rounded-xl"
             key={`${entry.timestamp}${entry.from_address}${entry.to_address}`}
           >
-            <div className="flex">
+            <div className="flex flex-col md:flex-row">
               {entry.from_address ? (
                 <>
                   <Link
@@ -83,9 +87,15 @@ export default function TokenHistoryCard({ nftId }) {
                       </div>
                     </a>
                   </Link>
-                  <div className="px-3 w-max text-gray-400">{`${
-                    nftHistory.multiple ? entry.quantity : ""
-                  } → `}</div>
+                  {isMobile ? (
+                    <div className="p-2 w-max text-gray-400">{`Sent ${
+                      nftHistory.multiple ? entry.quantity : ""
+                    } to ↓ `}</div>
+                  ) : (
+                    <div className="px-3 w-max text-gray-400">{`${
+                      nftHistory.multiple ? entry.quantity : ""
+                    } → `}</div>
+                  )}
                 </>
               ) : (
                 <div className="mr-2">Created by</div>
@@ -124,7 +134,7 @@ export default function TokenHistoryCard({ nftId }) {
           </div>
         ))
       ) : (
-        <div className="p-4 my-2 bg-gray-100 rounded-xl">No history found.</div>
+        <div className="p-4 bg-gray-100 rounded-xl">No history found.</div>
       )}
       {hasMoreHistory && (
         <div className="flex flex-row items-center my-2 justify-center">
@@ -139,7 +149,7 @@ export default function TokenHistoryCard({ nftId }) {
               </div>
             </div>
           ) : (
-            <div className="py-2">
+            <div className="p-1">
               <div className="loading-card-spinner-small" />
             </div>
           )}
