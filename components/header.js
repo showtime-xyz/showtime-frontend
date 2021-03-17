@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Link from "next/link";
 import mixpanel from "mixpanel-browser";
-import SearchBar from "./SearchBar"
+import SearchBar from "./SearchBar";
 import AppContext from "../context/app-context";
 import ModalLogin from "./ModalLogin";
 
@@ -28,8 +28,9 @@ const Header = () => {
         }}
       >
         <div
-          className={`flex flex-row items-center ${!context.gridWidth ? "invisible" : ""
-            }`}
+          className={`flex flex-row items-center ${
+            !context.gridWidth ? "invisible" : ""
+          }`}
           style={
             context.isMobile
               ? {}
@@ -98,11 +99,12 @@ const Header = () => {
             {context.user && context.myProfile !== undefined ? (
               <Link
                 href="/[profile]"
-                as={`/${context.myProfile.username || context.user.publicAddress
-                  }`}
+                as={`/${
+                  context.myProfile.username || context.user.publicAddress
+                }`}
               >
                 <a
-                  className="showtime-login-button-outline text-sm px-3 py-2 md:text-base flex flex-row items-center rounded-full "
+                  className="showtime-login-button-outline text-sm px-2 py-1 md:px-3 md:py-2 md:text-base flex flex-row items-center rounded-full "
                   onClick={() => {
                     mixpanel.track("Profile button click");
                   }}
@@ -130,7 +132,15 @@ const Header = () => {
                         style={{ height: 24, width: 24, minWidth: 24 }}
                       />
                     </div>
-                    <div className="" style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap", maxWidth: context.gridWidth < 500 ? 50 : 200 }}>
+                    <div
+                      className=""
+                      style={{
+                        textOverflow: "ellipsis",
+                        overflow: "hidden",
+                        whiteSpace: "nowrap",
+                        maxWidth: context.gridWidth < 500 ? 76 : 200,
+                      }}
+                    >
                       {context.myProfile
                         ? context.myProfile.name
                           ? context.myProfile.name
@@ -143,7 +153,7 @@ const Header = () => {
             ) : (
               <>
                 <div
-                  className="text-black border-black rounded-full px-5 py-1 cursor-pointer border-2 hover:text-stpink hover:border-stpink transition-all"
+                  className="text-black border-black rounded-full px-5 py-1 cursor-pointer border-2 hover:text-stpink hover:border-stpink transition-all text-center"
                   onClick={() => {
                     context.setLoginModalOpen(!context.loginModalOpen);
                   }}
@@ -157,8 +167,9 @@ const Header = () => {
         </div>
         {/* Start mobile-only menu */}
         <div
-          className={`block md:hidden pt-4 ${!context.gridWidth ? "invisible" : ""
-            }`}
+          className={`block md:hidden pt-4 ${
+            !context.gridWidth ? "invisible" : ""
+          }`}
         >
           <Link href="/">
             <a
