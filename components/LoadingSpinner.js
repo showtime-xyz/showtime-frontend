@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 const LoadingSpinner = styled.div`
     display: inline-block;
-    width: 50px;
-    height: 50px;
+    width: ${p => p.dimensions || 50}px;
+    height: ${p => p.dimensions || 50}px;
     border: 4px solid #eee;
     border-radius: 50%;
     border-top-color: #223043;
