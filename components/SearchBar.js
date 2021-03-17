@@ -140,6 +140,8 @@ const SearchResults = styled.div`
     display: flex;
     flex-direction: column;
     margin-top: 16px;
+    max-height: 80vh;
+    overflow-y: scroll;
     position: absolute;
     top: 40px;
     left: 0;
@@ -154,6 +156,8 @@ const OverlaySearchResults = styled.div`
     display: flex;
     flex-direction: column;
     margin-top: 16px;
+    max-height: 80vh;
+    overflow-y: scroll;
     position: absolute;
     top: 60px;
     left: 68px;
