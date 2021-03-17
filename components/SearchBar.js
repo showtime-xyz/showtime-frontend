@@ -42,7 +42,7 @@ const MobileSearchWrapper = styled.div`
   }
   @media (max-width: 420px) {
     margin-left: 4px;
-    padding-right: 12px;
+    padding-right: 16px;
   }
 `;
 
