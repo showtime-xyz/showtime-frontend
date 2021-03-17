@@ -17,7 +17,7 @@ export default function TokenHistoryCard({ nftId }) {
 
   const getNFTHistory = async (nftId) => {
     const historyData = await backend.get(
-      `/v1/nft_history/${nftId}${hasMoreHistory ? "" : "?limit=2"}`
+      `/v1/nft_history/${nftId}${hasMoreHistory ? "" : "?limit=10"}`
     );
     const {
       data: {
