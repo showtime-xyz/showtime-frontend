@@ -77,7 +77,7 @@ export default function TokenHistoryCard({ nftId }) {
               {nftHistory.multiple && (
                 <HistoryTableHeader>Amount</HistoryTableHeader>
               )}
-              <HistoryTableHeader>Date</HistoryTableHeader>
+              <HistoryTableHeader>Transfer Date</HistoryTableHeader>
             </tr>
             {nftHistory.history.map((entry) => (
               <tr
