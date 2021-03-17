@@ -1,6 +1,6 @@
 import React, { useRef, useState, useContext } from "react";
 import Link from "next/link";
-import { formatDistanceToNowStrict } from "date-fns";
+import { formatDistanceToNowStrict, subSeconds } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import useDetectOutsideClick from "../hooks/useDetectOutsideClick";
@@ -63,9 +63,12 @@ export default function Comment({
           </Link>
           <div className="flex-grow" />
           <div className="text-gray-400 text-sm flex-shink">
-            {formatDistanceToNowStrict(new Date(`${comment.added}Z`), {
-              addSuffix: true,
-            })}
+            {formatDistanceToNowStrict(
+              subSeconds(new Date(`${comment.added}Z`), 1),
+              {
+                addSuffix: true,
+              }
+            )}
           </div>
           {userWroteComment && (
             <div className="flex items-center justify-center my-2 md:my-0 relative">
