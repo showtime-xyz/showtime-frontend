@@ -13,6 +13,7 @@ import { GridTabs, GridTab } from "../components/GridTabs";
 import ProfileInfoPill from "../components/ProfileInfoPill";
 import ModalUserList from "../components/ModalUserList";
 import ModalAddWallet from "../components/ModalAddWallet";
+import ModalAddEmail from "../components/ModalAddEmail.js";
 //import { formatAddressShort, copyToClipBoard } from "../lib/utilities";
 import AddressButton from "../components/AddressButton";
 
@@ -187,7 +188,7 @@ const Profile = ({
             .map((a) => a.toLowerCase())
             .includes(slug_address.toLowerCase()) ||
           slug_address.toLowerCase() ===
-            context.myProfile?.username?.toLowerCase()
+          context.myProfile?.username?.toLowerCase()
         ) {
           setIsMyProfile(true);
           mixpanel.track("Self profile view", { slug: slug_address });
@@ -276,6 +277,7 @@ const Profile = ({
 
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [walletModalOpen, setWalletModalOpen] = useState(false);
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
   const [pictureModalOpen, setPictureModalOpen] = useState(false);
 
   const [selectedGrid, setSelectedGrid] = useState("created");
@@ -320,6 +322,11 @@ const Profile = ({
     mixpanel.track("Open add wallet");
   };
 
+  const addEmail = () => {
+    setEmailModalOpen(true);
+    mixpanel.track("Open add email");
+  };
+
   const logout = async () => {
     await context.logOut();
     setIsMyProfile(false);
@@ -333,12 +340,12 @@ const Profile = ({
           isLoadingCards
             ? null
             : showUserHiddenItems
-            ? createdItems.length
-            : createdItems.length == 150 // go ahead and say 150+ if we are at max items
-            ? 150
-            : createdItems.filter(
-                (item) => !createdHiddenItems.includes(item.nft_id)
-              ).length
+              ? createdItems.length
+              : createdItems.length == 150 // go ahead and say 150+ if we are at max items
+                ? 150
+                : createdItems.filter(
+                  (item) => !createdHiddenItems.includes(item.nft_id)
+                ).length
         }
         isActive={selectedGrid === "created"}
         onClickTab={() => {
@@ -351,12 +358,12 @@ const Profile = ({
           isLoadingCards
             ? null
             : showUserHiddenItems
-            ? ownedItems.length
-            : ownedItems.length == 150 // go ahead and say 150+ if we are at max items
-            ? 150
-            : ownedItems.filter(
-                (item) => !ownedHiddenItems.includes(item.nft_id)
-              ).length
+              ? ownedItems.length
+              : ownedItems.length == 150 // go ahead and say 150+ if we are at max items
+                ? 150
+                : ownedItems.filter(
+                  (item) => !ownedHiddenItems.includes(item.nft_id)
+                ).length
         }
         isActive={selectedGrid === "owned"}
         onClickTab={() => {
@@ -369,12 +376,12 @@ const Profile = ({
           isLoadingCards
             ? null
             : showUserHiddenItems
-            ? likedItems.length
-            : likedItems.length == 150 // go ahead and say 150+ if we are at max items
-            ? 150
-            : likedItems.filter(
-                (item) => !likedHiddenItems.includes(item.nft_id)
-              ).length
+              ? likedItems.length
+              : likedItems.length == 150 // go ahead and say 150+ if we are at max items
+                ? 150
+                : likedItems.filter(
+                  (item) => !likedHiddenItems.includes(item.nft_id)
+                ).length
         }
         isActive={selectedGrid === "liked"}
         onClickTab={() => {
@@ -399,11 +406,11 @@ const Profile = ({
                   ? context.myProfile.name
                   : "Unnamed"
                 : name
-                ? name
-                : "Unnamed"
+                  ? name
+                  : "Unnamed"
               : name
-              ? name
-              : "Unnamed"}
+                ? name
+                : "Unnamed"}
           </title>
 
           <meta
@@ -451,6 +458,11 @@ const Profile = ({
               setWalletModalOpen={setWalletModalOpen}
               walletAddresses={wallet_addresses}
             />
+            <ModalAddEmail
+              isOpen={emailModalOpen}
+              setEmailModalOpen={setEmailModalOpen}
+              walletAddresses={wallet_addresses}
+            />
             <ModalEditProfile
               isOpen={editModalOpen}
               setEditModalOpen={setEditModalOpen}
@@ -496,13 +508,12 @@ const Profile = ({
             >
               <h1
                 style={{ wordWrap: "break-word" }}
-                className={`text-4xl md:text-6xl sm:mb-2 text-center md:text-left mt-12 sm:mt-20 ${
-                  (wallet_addresses_excluding_email.length === 0 ||
+                className={`text-4xl md:text-6xl sm:mb-2 text-center md:text-left mt-12 sm:mt-20 ${(wallet_addresses_excluding_email.length === 0 ||
                     context.columns === 1) &&
-                  !username
+                    !username
                     ? "mb-8"
                     : "mb-0"
-                }`}
+                  }`}
               >
                 {isMyProfile
                   ? context.myProfile
@@ -510,45 +521,45 @@ const Profile = ({
                       ? context.myProfile.name
                       : "Unnamed"
                     : name
-                    ? name
-                    : "Unnamed"
+                      ? name
+                      : "Unnamed"
                   : name
-                  ? name
-                  : "Unnamed"}
+                    ? name
+                    : "Unnamed"}
               </h1>
               {(username ||
                 (wallet_addresses_excluding_email.length > 0 &&
                   context.columns > 1)) && (
-                <div className="flex flex-row justify-center items-center md:justify-start mb-12">
-                  {username && (
-                    <div className="mr-2 text-base text-gray-500">
-                      @{username}
-                    </div>
-                  )}
-                  {context.columns === 1 ? null : (
-                    <div className="flex mr-2 md:mr-0">
-                      {wallet_addresses_excluding_email.map((address) => {
-                        return (
-                          <AddressButton key={address} address={address} />
+                  <div className="flex flex-row justify-center items-center md:justify-start mb-12">
+                    {username && (
+                      <div className="mr-2 text-base text-gray-500">
+                        @{username}
+                      </div>
+                    )}
+                    {context.columns === 1 ? null : (
+                      <div className="flex mr-2 md:mr-0">
+                        {wallet_addresses_excluding_email.map((address) => {
+                          return (
+                            <AddressButton key={address} address={address} />
+                          );
+                          /*
+                         return (
+                          <div
+                            className="py-2 px-3 bg-gray-100 rounded-full mx-1 md:mr-2 cursor-copy hover:bg-gray-200 active:bg-gray-100 transition"
+                            key={address}
+                            onClick={() => {
+                              copyToClipBoard(address);
+                            }}
+                          >
+                            {formatAddressShort(address)}
+                          </div>
                         );
-                        /*
-                       return (
-                        <div
-                          className="py-2 px-3 bg-gray-100 rounded-full mx-1 md:mr-2 cursor-copy hover:bg-gray-200 active:bg-gray-100 transition"
-                          key={address}
-                          onClick={() => {
-                            copyToClipBoard(address);
-                          }}
-                        >
-                          {formatAddressShort(address)}
-                        </div>
-                      );
-                      */
-                      })}
-                    </div>
-                  )}
-                </div>
-              )}
+                        */
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )}
             </div>
           </div>
         )}
@@ -563,15 +574,14 @@ const Profile = ({
               }
             >
               <div
-                className={`${
-                  isMyProfile && context.myProfile
-                    ? !context.myProfile.bio && !context.myProfile.website_url
-                      ? "hidden"
-                      : "flex-1"
-                    : !bio && !website_url
+                className={`${isMyProfile && context.myProfile
+                  ? !context.myProfile.bio && !context.myProfile.website_url
                     ? "hidden"
                     : "flex-1"
-                } mt-4 pb-2 text-base align-center flex flex-col justify-center items-center md:items-start`}
+                  : !bio && !website_url
+                    ? "hidden"
+                    : "flex-1"
+                  } mt-4 pb-2 text-base align-center flex flex-col justify-center items-center md:items-start`}
               >
                 {/*<h4 className="text-black mb-2 text-lg font-semibold">About</h4>*/}
                 {isMyProfile && context.myProfile ? (
@@ -661,10 +671,10 @@ const Profile = ({
                       ? context.myProfile.img_url
                       : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                     : img_url
-                    ? img_url
-                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                      ? img_url
+                      : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                 }
-                profileActions={{ editAccount, editPhoto, addWallet, logout }}
+                profileActions={{ editAccount, editPhoto, addWallet, addEmail, logout }}
               />
             </div>
             <div className="mx-auto" style={{ width: gridWidth }}>
@@ -680,25 +690,25 @@ const Profile = ({
                     style={
                       context.windowSize && context.windowSize.width < 600
                         ? {
-                            fontWeight: 400,
-                            fontSize: 12,
-                            marginTop: -10,
-                            marginBottom: 4,
-                          }
+                          fontWeight: 400,
+                          fontSize: 12,
+                          marginTop: -10,
+                          marginBottom: 4,
+                        }
                         : {
-                            fontWeight: 400,
-                            fontSize: 12,
-                            marginTop: -59,
-                          }
+                          fontWeight: 400,
+                          fontSize: 12,
+                          marginTop: -59,
+                        }
                     }
                   >
                     {createdHiddenItems.length === 0 &&
-                    ownedHiddenItems.length === 0 &&
-                    likedHiddenItems.length === 0
+                      ownedHiddenItems.length === 0 &&
+                      likedHiddenItems.length === 0
                       ? null
                       : showUserHiddenItems
-                      ? "Hide hidden items"
-                      : "Show hidden items"}
+                        ? "Hide hidden items"
+                        : "Show hidden items"}
                   </div>
                 </div>
               ) : null}
@@ -709,20 +719,20 @@ const Profile = ({
                 selectedGrid === "created"
                   ? createdItems
                   : selectedGrid === "owned"
-                  ? ownedItems
-                  : selectedGrid === "liked"
-                  ? likedItems
-                  : null
+                    ? ownedItems
+                    : selectedGrid === "liked"
+                      ? likedItems
+                      : null
               }
               isLoading={isLoadingCards}
               listId={
                 selectedGrid === "created"
                   ? 1
                   : selectedGrid === "owned"
-                  ? 2
-                  : selectedGrid === "liked"
-                  ? 3
-                  : null
+                    ? 2
+                    : selectedGrid === "liked"
+                      ? 3
+                      : null
               }
               isMyProfile={isMyProfile}
               openCardMenu={openCardMenu}
@@ -731,19 +741,19 @@ const Profile = ({
                 selectedGrid === "created"
                   ? createdHiddenItems
                   : selectedGrid === "owned"
-                  ? ownedHiddenItems
-                  : selectedGrid === "liked"
-                  ? likedHiddenItems
-                  : null
+                    ? ownedHiddenItems
+                    : selectedGrid === "liked"
+                      ? likedHiddenItems
+                      : null
               }
               setUserHiddenItems={
                 selectedGrid === "created"
                   ? setCreatedHiddenItems
                   : selectedGrid === "owned"
-                  ? setOwnedHiddenItems
-                  : selectedGrid === "liked"
-                  ? setLikedHiddenItems
-                  : null
+                    ? setOwnedHiddenItems
+                    : selectedGrid === "liked"
+                      ? setLikedHiddenItems
+                      : null
               }
               showUserHiddenItems={showUserHiddenItems}
             />
