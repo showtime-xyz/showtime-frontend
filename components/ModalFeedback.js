@@ -15,7 +15,7 @@ export default function ModalFeedback({ isOpen, closeModal }) {
     await fetch(`/api/websitefeedback`, {
       method: "post",
       body: JSON.stringify({
-        feedback: inputValue,
+        description: inputValue,
       }),
     });
 
@@ -54,11 +54,11 @@ export default function ModalFeedback({ isOpen, closeModal }) {
                   <>
                     <div className="my-4">
                       <div className="my-4 mx-1">
-                        Please let us know how we can improve Showtime! Every
-                        message is reviewed by the team.
+                        Please let us know how we can improve Showtime! The team
+                        reviews every message.
                       </div>
                       <textarea
-                        name="details"
+                        name="description"
                         placeholder="Your feedback here..."
                         value={inputValue}
                         autoFocus

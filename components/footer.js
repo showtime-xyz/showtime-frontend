@@ -22,7 +22,10 @@ function Footer() {
         </>
       ) : null}
       <footer className="text-center mt-12" style={{ backgroundColor: "#000" }}>
-        <div className="text-sm my-8 py-4 text-gray-500  text-center">
+        <div
+          className="text-sm my-8 py-4 text-center"
+          style={{ color: "#999" }}
+        >
           <div className="flex flex-row">
             <div className="flex-grow"></div>
             <div className="px-1">
@@ -84,16 +87,13 @@ function Footer() {
             >
               Terms & Conditions
             </a>
-          </div>
-          <div
-            className="cursor-pointer hover:text-gray-300"
-            onClick={
-              user
-                ? () => setIsFeedbackModalOpen(true)
-                : () => setLoginModalOpen(true)
-            }
-          >
-            Feedback
+            {"  ·  "}
+            <span
+              className="cursor-pointer hover:text-gray-300"
+              onClick={() => setIsFeedbackModalOpen(true)}
+            >
+              Feedback
+            </span>
           </div>
           <div>© 2021 Showtime Technologies, Inc.</div>
         </div>

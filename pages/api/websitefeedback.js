@@ -14,7 +14,7 @@ export default async (req, res) => {
   } catch (error) {
   } finally {
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v2/feedback`, {
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/feedback`, {
         method: "POST",
         headers: {
           "X-Authenticated-User": publicAddress,
