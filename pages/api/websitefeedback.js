@@ -17,7 +17,7 @@ export default async (req, res) => {
       await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v2/feedback`, {
         method: "POST",
         headers: {
-          "X-Authenticated-User": publicAddress, // may be null if logged out
+          "X-Authenticated-User": publicAddress,
           "X-API-Key": process.env.SHOWTIME_FRONTEND_API_KEY_V2,
           "Content-Type": "application/json",
         },

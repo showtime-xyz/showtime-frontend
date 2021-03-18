@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -7,8 +7,9 @@ import {
   faDiscord,
 } from "@fortawesome/free-brands-svg-icons";
 import ModalFeedback from "./ModalFeedback";
-
+import AppContext from "../context/app-context";
 function Footer() {
+  const { user, setLoginModalOpen } = useContext(AppContext);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   return (
     <>
@@ -86,7 +87,11 @@ function Footer() {
           </div>
           <div
             className="cursor-pointer hover:text-gray-300"
-            onClick={() => setIsFeedbackModalOpen(true)}
+            onClick={
+              user
+                ? () => setIsFeedbackModalOpen(true)
+                : () => setLoginModalOpen(true)
+            }
           >
             Feedback
           </div>
