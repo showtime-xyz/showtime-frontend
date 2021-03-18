@@ -87,7 +87,8 @@ const TokenDetailBody = ({
     }
   }, [targetRef, item, context.windowSize, isMobile]);
 
-  const [fullResLoaded, setFullResLoaded] = useState(null);
+  const [fullResLoaded, setFullResLoaded] = useState(false);
+
   useEffect(() => {
     setFullResLoaded(false);
   }, [item]);
@@ -258,7 +259,9 @@ const TokenDetailBody = ({
                       }
                 )}
                 onLoad={() => {
-                  setFullResLoaded(true);
+                  setTimeout(function () {
+                    setFullResLoaded(true);
+                  }, 10);
                 }}
               />
             </div>
