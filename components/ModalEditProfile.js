@@ -136,7 +136,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       color: "#ccc",
                     }}
                     icon={faTimes}
-                    className="m-1"
+                    className="m-1 cursor-pointer"
+                    onClick={() => setEditModalOpen(false)}
                   />
                 </div>
 
