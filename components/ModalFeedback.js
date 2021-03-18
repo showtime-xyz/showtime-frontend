@@ -52,7 +52,11 @@ export default function ModalFeedback({ isOpen, closeModal }) {
                   </div>
                 ) : (
                   <>
-                    <div className="my-8">
+                    <div className="my-4">
+                      <div className="my-4 mx-1">
+                        Please let us know how we can improve Showtime! Every
+                        message is reviewed by the team.
+                      </div>
                       <textarea
                         name="details"
                         placeholder="Your feedback here..."
