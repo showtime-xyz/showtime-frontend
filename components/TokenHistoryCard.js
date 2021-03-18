@@ -9,13 +9,15 @@ import AppContext from "../context/app-context";
 import styled from "styled-components";
 
 const HistoryTableHeader = styled.td`
+  white-space: nowrap;
   width: fit-content;
-  padding: 1em;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  text-overflow: ellipsis;
 `;
 
 const HistoryTableData = styled.td`
   white-space: nowrap;
-  padding: 1em;
+  padding: 0.75rem 1rem;
   text-overflow: ellipsis;
 `;
 
@@ -65,17 +67,17 @@ export default function TokenHistoryCard({ nftId }) {
   return (
     <>
       <div
-        className={`p-2 flex flex-col border-2 border-gray-300 rounded-xl overflow-x-scroll w-full ${
+        className={`py-2 flex flex-col border-2 border-gray-300 rounded-xl overflow-x-scroll w-full ${
           isMobile ? "overflow-x-scroll" : ""
         }`}
       >
         {nftHistory && nftHistory.history && nftHistory.history.length > 0 ? (
-          <table className="table-auto" style={{ borderSpacing: 50 }}>
-            <tr className="text-left text-gray-400">
+          <table className="table-auto text-sm" style={{ borderSpacing: 50 }}>
+            <tr className="text-left text-gray-400 text-base">
               <HistoryTableHeader>From</HistoryTableHeader>
               <HistoryTableHeader>To</HistoryTableHeader>
               {nftHistory.multiple && (
-                <HistoryTableHeader>Amount</HistoryTableHeader>
+                <HistoryTableHeader>Qty</HistoryTableHeader>
               )}
               <HistoryTableHeader>Transfer Date</HistoryTableHeader>
             </tr>
@@ -83,7 +85,9 @@ export default function TokenHistoryCard({ nftId }) {
               <tr
                 key={`${entry.timestamp}${entry.from_address}${entry.to_address}`}
               >
-                <HistoryTableData>
+                <HistoryTableData
+                  className={!entry.from_address ? "bg-gray-100" : ""}
+                >
                   {entry.from_address ? (
                     <Link
                       href="/[profile]"
@@ -114,7 +118,9 @@ export default function TokenHistoryCard({ nftId }) {
                     <p>Created</p>
                   )}
                 </HistoryTableData>
-                <HistoryTableData>
+                <HistoryTableData
+                  className={!entry.from_address ? "bg-gray-100" : ""}
+                >
                   <Link
                     href="/[profile]"
                     as={`/${entry.to_username || entry.to_address}`}
@@ -142,9 +148,15 @@ export default function TokenHistoryCard({ nftId }) {
                   </Link>
                 </HistoryTableData>
                 {nftHistory.multiple && (
-                  <HistoryTableData>{entry.quantity}</HistoryTableData>
+                  <HistoryTableData
+                    className={!entry.from_address ? "bg-gray-100" : ""}
+                  >
+                    {entry.quantity}
+                  </HistoryTableData>
                 )}
-                <HistoryTableData>
+                <HistoryTableData
+                  className={!entry.from_address ? "bg-gray-100" : ""}
+                >
                   {format(new Date(entry.timestamp), "PPp")}
                 </HistoryTableData>
               </tr>

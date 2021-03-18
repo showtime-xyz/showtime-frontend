@@ -391,7 +391,7 @@ const TokenDetailBody = ({
                   </div>
                 )}
                 {/* Owned by Section */}
-                {item.owner_address && (
+                {!isMobile && item.owner_address && (
                   <div className="mt-8">
                     <div className="md:text-lg py-4">Owned By</div>
                     <div>
@@ -429,6 +429,36 @@ const TokenDetailBody = ({
 
               {/* right column section */}
               <div className="flex-1 p-4 order-first md:order-last">
+                {/* Owned by section ONLY ON MOBILE */}
+                {isMobile && item.owner_address && (
+                  <div className="mb-8">
+                    <div className="md:text-lg py-4">Owned By</div>
+                    <div>
+                      <Link
+                        href="/[profile]"
+                        as={
+                          item.owner_username
+                            ? `/${item.owner_username}`
+                            : `/${item.owner_address}`
+                        }
+                      >
+                        <a
+                          onClick={() => {
+                            if (setEditModalOpen) {
+                              setEditModalOpen(false);
+                            }
+                          }}
+                        >
+                          <UserTimestampCard
+                            name={item.owner_name}
+                            imageUrl={item.owner_img_url}
+                            timestamp={ownershipDetails.token_last_transferred}
+                          />
+                        </a>
+                      </Link>
+                    </div>
+                  </div>
+                )}
                 {/* Comments section */}
                 <div className="flex">
                   <CommentsSection
