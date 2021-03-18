@@ -66,7 +66,7 @@ export default function ModalFeedback({ isOpen, closeModal }) {
                           setInputValue(e.target.value);
                         }}
                         type="text"
-                        maxLength="200"
+                        maxLength="400"
                         className="w-full"
                         rows={4}
                         style={{
