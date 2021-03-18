@@ -1,7 +1,11 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { faTwitter, faInstagram } from "@fortawesome/free-brands-svg-icons";
+import {
+  faTwitter,
+  faInstagram,
+  faDiscord,
+} from "@fortawesome/free-brands-svg-icons";
 
 function Footer() {
   return (
@@ -30,6 +34,14 @@ function Footer() {
               <FontAwesomeIcon
                 style={{ height: 18, width: 18 }}
                 icon={faInstagram}
+              />
+            </a>
+          </div>
+          <div className="px-1">
+            <a href="https://discord.gg/FBSxXrcnsm" target="_blank">
+              <FontAwesomeIcon
+                style={{ height: 18, width: 18 }}
+                icon={faDiscord}
               />
             </a>
           </div>
