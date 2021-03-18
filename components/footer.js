@@ -11,17 +11,26 @@ function Footer() {
           <div className="flex-grow"></div>
           <div className="px-1">
             <a href="mailto:help@tryshowtime.com" target="_blank">
-              <FontAwesomeIcon style={{ height: 18 }} icon={faEnvelope} />
+              <FontAwesomeIcon
+                style={{ height: 18, width: 18 }}
+                icon={faEnvelope}
+              />
             </a>
           </div>
           <div className="px-1">
             <a href="https://twitter.com/tryShowtime" target="_blank">
-              <FontAwesomeIcon style={{ height: 18 }} icon={faTwitter} />
+              <FontAwesomeIcon
+                style={{ height: 18, width: 18 }}
+                icon={faTwitter}
+              />
             </a>
           </div>
           <div className="px-1">
             <a href="https://www.instagram.com/tryshowtime/" target="_blank">
-              <FontAwesomeIcon style={{ height: 18 }} icon={faInstagram} />
+              <FontAwesomeIcon
+                style={{ height: 18, width: 18 }}
+                icon={faInstagram}
+              />
             </a>
           </div>
 

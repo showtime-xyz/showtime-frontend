@@ -45,11 +45,16 @@ const TokenDetailBody = ({
       return "black";
     }
   };
-  const getImageUrl = () => {
-    var img_url = item.token_img_url ? item.token_img_url : null;
-
+  const getImageUrl = (img_url) => {
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
       img_url = img_url.split("=")[0] + "=w375";
+    }
+    return img_url;
+  };
+
+  const getBiggerImageUrl = (img_url) => {
+    if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
+      img_url = img_url.split("=")[0] + "=h500";
     }
     return img_url;
   };
@@ -87,7 +92,8 @@ const TokenDetailBody = ({
     }
   }, [targetRef, item, context.windowSize, isMobile]);
 
-  const [fullResLoaded, setFullResLoaded] = useState(null);
+  const [fullResLoaded, setFullResLoaded] = useState(false);
+
   useEffect(() => {
     setFullResLoaded(false);
   }, [item]);
@@ -230,7 +236,7 @@ const TokenDetailBody = ({
                 <div></div>
               </div>
               <img
-                src={getImageUrl()}
+                src={getImageUrl(item.token_img_url)}
                 alt={item.token_name}
                 style={_.merge(
                   fullResLoaded === true ? { display: "none" } : null,
@@ -245,7 +251,11 @@ const TokenDetailBody = ({
               />
 
               <img
-                src={item.token_img_url}
+                src={
+                  context.isMobile
+                    ? getImageUrl(item.token_img_url)
+                    : getBiggerImageUrl(item.token_img_url)
+                }
                 alt={item.token_name}
                 style={_.merge(
                   fullResLoaded ? null : { display: "none" },
@@ -258,7 +268,9 @@ const TokenDetailBody = ({
                       }
                 )}
                 onLoad={() => {
-                  setFullResLoaded(true);
+                  setTimeout(function () {
+                    setFullResLoaded(true);
+                  }, 100);
                 }}
               />
             </div>
