@@ -14,7 +14,7 @@ import ShareButton from "./ShareButton";
 import ReactPlayer from "react-player";
 import mixpanel from "mixpanel-browser";
 import AppContext from "../context/app-context";
-
+import { getBidLink } from "../lib/utilities";
 class TokenCard extends React.Component {
   constructor(props) {
     super(props);
@@ -587,7 +587,7 @@ class TokenCard extends React.Component {
                 className="mx-4 py-4"
               >
                 <a
-                  href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
+                  href={getBidLink(item)}
                   target="_blank"
                   className="flex flex-row items-center showtime-card-bid"
                 >
