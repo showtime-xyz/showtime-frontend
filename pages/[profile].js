@@ -285,18 +285,25 @@ const Profile = ({
 
   const [openCardMenu, setOpenCardMenu] = useState(null);
   const [showUserHiddenItems, setShowUserHiddenItems] = useState(false);
-
   useEffect(() => {
-    // Pick an initial tab to display
-    if (isLoadingCards) {
-      setSelectedGrid("created");
+    // if user has a default_tab configured, use it
+    if (context.myProfile && context.myProfile.default_tab) {
+      setSelectedGrid(context.myProfile.default_tab);
     } else {
-      if (createdItems.length > 0 && createdItems.length >= ownedItems.length) {
+      // If use doesn't have default_tab, pick first non-empty tab
+      if (isLoadingCards) {
         setSelectedGrid("created");
-      } else if (ownedItems.length > 0) {
-        setSelectedGrid("owned");
       } else {
-        setSelectedGrid("liked");
+        if (
+          createdItems.length > 0 &&
+          createdItems.length >= ownedItems.length
+        ) {
+          setSelectedGrid("created");
+        } else if (ownedItems.length > 0) {
+          setSelectedGrid("owned");
+        } else {
+          setSelectedGrid("liked");
+        }
       }
     }
 
