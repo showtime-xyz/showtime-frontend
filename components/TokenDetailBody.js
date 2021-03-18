@@ -19,6 +19,7 @@ import { removeTags, truncateWithEllipses } from "../lib/utilities";
 import UserTimestampCard from "./UserTimestampCard";
 import TokenHistoryCard from "./TokenHistoryCard";
 import CommentsSection from "./CommentsSection";
+import { getBidLink, getContractName } from "../lib/utilities";
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500;
@@ -34,7 +35,6 @@ const TokenDetailBody = ({
 }) => {
   const context = useContext(AppContext);
   const { isMobile, columns, gridWidth } = context;
-
   const getBackgroundColor = () => {
     if (
       item.token_background_color &&
@@ -319,15 +319,17 @@ const TokenDetailBody = ({
                   </div>
                 </SmoothScroll>
                 <a
-                  href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
-                  title="Buy on OpenSea"
+                  href={getBidLink(item)}
+                  title={`Buy on ${getContractName(item)}`}
                   target="_blank"
                   onClick={() => {
                     mixpanel.track("OpenSea link click");
                   }}
                 >
                   <div className="text-base font-normal px-4 py-3 mr-2 rounded-full shadow-md hover:text-stpink">
-                    {context.columns > 2 ? "Bid on OpenSea" : "Bid"}
+                    {context.columns > 2
+                      ? `Bid on ${getContractName(item)}`
+                      : "Bid"}
                   </div>
                 </a>
                 <div className="px-4 py-2 rounded-full shadow-md">
