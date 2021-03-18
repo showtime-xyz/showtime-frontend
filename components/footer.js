@@ -35,7 +35,7 @@ function Footer() {
                 className="hover:text-gray-300"
               >
                 <FontAwesomeIcon
-                  style={{ height: 18, width: 18 }}
+                  style={{ height: 20, width: 20 }}
                   icon={faEnvelope}
                 />
               </a>
@@ -47,7 +47,7 @@ function Footer() {
                 className="hover:text-gray-300"
               >
                 <FontAwesomeIcon
-                  style={{ height: 18, width: 18 }}
+                  style={{ height: 20, width: 20 }}
                   icon={faTwitter}
                 />
               </a>
@@ -59,7 +59,7 @@ function Footer() {
                 className="hover:text-gray-300"
               >
                 <FontAwesomeIcon
-                  style={{ height: 18, width: 18 }}
+                  style={{ height: 20, width: 20 }}
                   icon={faInstagram}
                 />
               </a>
@@ -71,7 +71,7 @@ function Footer() {
                 className="hover:text-gray-300"
               >
                 <FontAwesomeIcon
-                  style={{ height: 18, width: 18 }}
+                  style={{ height: 20, width: 20 }}
                   icon={faDiscord}
                 />
               </a>
