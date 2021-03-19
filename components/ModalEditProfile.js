@@ -175,7 +175,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         name="name"
                         placeholder="Your name"
                         value={nameValue ? nameValue : ""}
-                        autoFocus
+                        //autoFocus
                         onChange={(e) => {
                           setNameValue(e.target.value);
                         }}
@@ -284,7 +284,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         style={{
                           color: "black",
                           borderRadius: 7,
-                          height: context.windowSize?.height < 800 ? 72 : 114,
+                          height: 114,
                           fontSize: 16,
 
                           paddingTop: 10,
@@ -327,7 +327,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   <div className="w-4 flex-shrink" />
                   <div className="my-4 flex-1">
                     <div className="text-xl text-purple-500">Page Settings</div>
-                    <div className="py-2">
+                    <div className="py-2  mb-12">
                       <label className="text-gray-500 text-sm">
                         Default NFT List
                       </label>
@@ -390,13 +390,13 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                 background-color: white;
                 position: absolute;
                 top: ${context.isMobile ? 2 : 10}%;
+                ${context.isMobile ? "bottom:  2%;" : " "}
                 right: 3%;
                 left: 3%;
                 border-radius: 7px;
                 max-width: 700px;
                 margin-left: auto;
                 margin-right: auto;
-                max-height: 80vh;
               }
             `}</style>
           </div>
