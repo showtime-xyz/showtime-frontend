@@ -17,7 +17,8 @@ export default function CommentsSection({
   const [commentText, setCommentText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const refreshComments = async () => {
+  const refreshComments = async (showLoading = true) => {
+    setLoadingComments(showLoading);
     const commentsData = await backend.get(`/v1/getcomments/${nftId}`);
     const {
       data: { data },
@@ -28,7 +29,7 @@ export default function CommentsSection({
 
   useEffect(() => {
     refreshComments();
-  }, []);
+  }, [nftId]);
 
   const createComment = async () => {
     setIsSubmitting(true);
@@ -43,7 +44,7 @@ export default function CommentsSection({
     await storeCommentInContext();
     mixpanel.track("Comment created");
     // pull new comments
-    await refreshComments();
+    await refreshComments(false);
     // clear state
     setCommentText("");
     setIsSubmitting(false);
@@ -60,7 +61,7 @@ export default function CommentsSection({
     removeCommentFromContext();
     mixpanel.track("Comment deleted");
     // pull new comments
-    await refreshComments();
+    await refreshComments(false);
   };
 
   const handleLoggedOutComment = () => {
@@ -100,7 +101,7 @@ export default function CommentsSection({
     <div className="w-full">
       {/* Comments */}
       <div>
-        <div className="md:text-lg py-2" id="CommentsSectionScroll">
+        <div className="md:text-lg py-4" id="CommentsSectionScroll">
           Comments
         </div>
         {loadingComments ? (
