@@ -495,6 +495,7 @@ const Profile = ({
               }
             >
               <h1
+                style={{ wordWrap: "break-word" }}
                 className={`text-4xl md:text-6xl sm:mb-2 text-center md:text-left mt-12 sm:mt-20 ${
                   (wallet_addresses_excluding_email.length === 0 ||
                     context.columns === 1) &&

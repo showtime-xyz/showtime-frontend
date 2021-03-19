@@ -19,6 +19,7 @@ import { removeTags, truncateWithEllipses } from "../lib/utilities";
 import UserTimestampCard from "./UserTimestampCard";
 import TokenHistoryCard from "./TokenHistoryCard";
 import CommentsSection from "./CommentsSection";
+import { getBidLink, getContractName } from "../lib/utilities";
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500;
@@ -44,11 +45,16 @@ const TokenDetailBody = ({
       return "black";
     }
   };
-  const getImageUrl = () => {
-    var img_url = item.token_img_url ? item.token_img_url : null;
-
+  const getImageUrl = (img_url) => {
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
       img_url = img_url.split("=")[0] + "=w375";
+    }
+    return img_url;
+  };
+
+  const getBiggerImageUrl = (img_url) => {
+    if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
+      img_url = img_url.split("=")[0] + "=h500";
     }
     return img_url;
   };
@@ -86,7 +92,8 @@ const TokenDetailBody = ({
     }
   }, [targetRef, item, context.windowSize, isMobile]);
 
-  const [fullResLoaded, setFullResLoaded] = useState(null);
+  const [fullResLoaded, setFullResLoaded] = useState(false);
+
   useEffect(() => {
     setFullResLoaded(false);
   }, [item]);
@@ -229,7 +236,7 @@ const TokenDetailBody = ({
                 <div></div>
               </div>
               <img
-                src={getImageUrl()}
+                src={getImageUrl(item.token_img_url)}
                 alt={item.token_name}
                 style={_.merge(
                   fullResLoaded === true ? { display: "none" } : null,
@@ -244,7 +251,11 @@ const TokenDetailBody = ({
               />
 
               <img
-                src={item.token_img_url}
+                src={
+                  context.isMobile
+                    ? getImageUrl(item.token_img_url)
+                    : getBiggerImageUrl(item.token_img_url)
+                }
                 alt={item.token_name}
                 style={_.merge(
                   fullResLoaded ? null : { display: "none" },
@@ -257,7 +268,9 @@ const TokenDetailBody = ({
                       }
                 )}
                 onLoad={() => {
-                  setFullResLoaded(true);
+                  setTimeout(function () {
+                    setFullResLoaded(true);
+                  }, 100);
                 }}
               />
             </div>
@@ -306,15 +319,17 @@ const TokenDetailBody = ({
                   </div>
                 </SmoothScroll>
                 <a
-                  href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
-                  title="Buy on OpenSea"
+                  href={getBidLink(item)}
+                  title={`Buy on ${getContractName(item)}`}
                   target="_blank"
                   onClick={() => {
                     mixpanel.track("OpenSea link click");
                   }}
                 >
                   <div className="text-base font-normal px-4 py-3 mr-2 rounded-full shadow-md hover:text-stpink">
-                    {context.columns > 2 ? "Bid on OpenSea" : "Collect"}
+                    {context.columns > 2
+                      ? `Bid on ${getContractName(item)}`
+                      : "Bid"}
                   </div>
                 </a>
                 <div className="px-4 py-2 rounded-full shadow-md">

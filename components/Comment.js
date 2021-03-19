@@ -55,14 +55,14 @@ export default function Comment({
             }
           >
             <div
-              className="hover:text-stpink cursor-pointer"
+              className="hover:text-stpink cursor-pointer flex-1"
               onClick={closeModal}
+              style={{ overflow: "hidden", textOverflow: "ellipsis" }}
             >
               {comment.username || comment.name || "Unnamed"}
             </div>
           </Link>
-          <div className="flex-grow" />
-          <div className="text-gray-400 text-sm flex-shink">
+          <div className="text-gray-400 text-sm flex-0">
             {formatDistanceToNowStrict(
               subSeconds(new Date(`${comment.added}Z`), 1),
               {
@@ -114,7 +114,12 @@ export default function Comment({
             </div>
           )}
         </div>
-        <div className="text-gray-500 text-sm leading-5">{comment.text}</div>
+        <div
+          className="text-gray-500 text-sm leading-5"
+          style={{ wordBreak: "break-word" }}
+        >
+          {comment.text}
+        </div>
       </div>
     </div>
   );
