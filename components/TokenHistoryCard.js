@@ -67,9 +67,24 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
   }
   return (
     <>
-      <div className="overflow-auto flex flex-col border-2 border-gray-300 rounded-xl overscroll-none w-full">
+      <div
+        className="overflow-auto flex flex-col border-2 border-gray-300 rounded-xl overscroll-none w-full"
+        style={{
+          height: "100%",
+          width: "100%",
+          overflow: "auto",
+        }}
+      >
         {nftHistory && nftHistory.history && nftHistory.history.length > 0 ? (
-          <table className="table-auto text-sm" style={{ borderSpacing: 50 }}>
+          <table
+            className="table-auto text-sm"
+            style={{
+              borderSpacing: 50,
+              height: "100%",
+              width: "100%",
+              overflow: "auto",
+            }}
+          >
             <tbody>
               {nftHistory.history.length == 1 &&
               !nftHistory.history[0].from_address ? null : (
