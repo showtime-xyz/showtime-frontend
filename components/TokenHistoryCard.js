@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
+import { faArrowDown, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { truncateWithEllipses, formatAddressShort } from "../lib/utilities";
 import Link from "next/link";
 import { format } from "date-fns";
 import backend from "../lib/backend";
 import AppContext from "../context/app-context";
 import styled from "styled-components";
+import { formatDistanceToNowStrict, subSeconds } from "date-fns";
 
 const HistoryTableHeader = styled.td`
   white-space: nowrap;
@@ -21,7 +22,7 @@ const HistoryTableData = styled.td`
   text-overflow: ellipsis;
 `;
 
-export default function TokenHistoryCard({ nftId }) {
+export default function TokenHistoryCard({ nftId, closeModal }) {
   const context = useContext(AppContext);
   const { isMobile } = context;
   const [nftHistory, setNftHistory] = useState();
@@ -31,7 +32,7 @@ export default function TokenHistoryCard({ nftId }) {
 
   const getNFTHistory = async (nftId) => {
     const historyData = await backend.get(
-      `/v1/nft_history/${nftId}${hasMoreHistory ? "" : "?limit=10"}`
+      `/v1/nft_history/${nftId}${hasMoreHistory ? "" : "?limit=7"}`
     );
     const {
       data: {
@@ -67,37 +68,86 @@ export default function TokenHistoryCard({ nftId }) {
   return (
     <>
       <div
-        className={`py-2 flex flex-col border-2 border-gray-300 rounded-xl overflow-x-scroll w-full ${
-          isMobile ? "overflow-x-scroll" : ""
+        className={`overflow-auto flex flex-col border-2 border-gray-300 rounded-xl w-full ${
+          context.columns <= 2 ? "" : ""
         }`}
       >
         {nftHistory && nftHistory.history && nftHistory.history.length > 0 ? (
           <table className="table-auto text-sm" style={{ borderSpacing: 50 }}>
-            <tr className="text-left text-gray-400 text-base">
-              <HistoryTableHeader>From</HistoryTableHeader>
-              <HistoryTableHeader>To</HistoryTableHeader>
-              {nftHistory.multiple && (
-                <HistoryTableHeader>Qty</HistoryTableHeader>
+            <tbody>
+              {nftHistory.history.length == 1 &&
+              !nftHistory.history[0].from_address ? null : (
+                <tr className="text-left text-gray-400 text-sm">
+                  <HistoryTableHeader>From</HistoryTableHeader>
+                  <HistoryTableHeader>To</HistoryTableHeader>
+                  {nftHistory.multiple && (
+                    <HistoryTableHeader className="text-right">
+                      Qty
+                    </HistoryTableHeader>
+                  )}
+                  <HistoryTableHeader>Date</HistoryTableHeader>
+                </tr>
               )}
-              <HistoryTableHeader>Transfer Date</HistoryTableHeader>
-            </tr>
-            {nftHistory.history.map((entry) => (
-              <tr
-                key={`${entry.timestamp}${entry.from_address}${entry.to_address}`}
-              >
-                <HistoryTableData
-                  className={!entry.from_address ? "bg-gray-100" : ""}
+              {nftHistory.history.map((entry) => (
+                <tr
+                  key={`${entry.timestamp}${entry.from_address}${entry.to_address}`}
                 >
-                  {entry.from_address ? (
+                  <HistoryTableData
+                    className={
+                      !entry.from_address
+                        ? `bg-gray-100 rounded-bl-xl ${
+                            nftHistory.history.length == 1
+                              ? "rounded-tl-xl"
+                              : null
+                          }`
+                        : ""
+                    }
+                  >
+                    {entry.from_address ? (
+                      <Link
+                        href="/[profile]"
+                        as={`/${entry.from_username || entry.from_address}`}
+                      >
+                        <a onClick={closeModal}>
+                          <div className="flex items-center hover:text-stpink w-max">
+                            <img
+                              src={
+                                entry.from_img_url ||
+                                "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                              }
+                              style={{ width: 24, height: 24 }}
+                              className="rounded-full mr-2"
+                            />
+                            <div>
+                              {truncateWithEllipses(
+                                entry.from_name ||
+                                  entry.from_username ||
+                                  formatAddressShort(entry.from_address),
+                                26
+                              )}
+                            </div>
+                          </div>
+                        </a>
+                      </Link>
+                    ) : (
+                      <div>Created</div>
+                    )}
+                  </HistoryTableData>
+                  <HistoryTableData
+                    className={
+                      !entry.from_address ? "bg-gray-100 flex flex-row" : ""
+                    }
+                    //colSpan={!entry.from_address ? 3 : 1}
+                  >
                     <Link
                       href="/[profile]"
-                      as={`/${entry.from_username || entry.from_address}`}
+                      as={`/${entry.to_username || entry.to_address}`}
                     >
-                      <a>
+                      <a onClick={closeModal}>
                         <div className="flex items-center hover:text-stpink w-max">
                           <img
                             src={
-                              entry.from_img_url ||
+                              entry.to_img_url ||
                               "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                             }
                             style={{ width: 24, height: 24 }}
@@ -105,65 +155,50 @@ export default function TokenHistoryCard({ nftId }) {
                           />
                           <div>
                             {truncateWithEllipses(
-                              entry.from_username ||
-                                entry.from_name ||
-                                formatAddressShort(entry.from_address),
+                              entry.to_name ||
+                                entry.to_username ||
+                                formatAddressShort(entry.to_address),
                               26
                             )}
                           </div>
                         </div>
                       </a>
                     </Link>
-                  ) : (
-                    <p>Created</p>
-                  )}
-                </HistoryTableData>
-                <HistoryTableData
-                  className={!entry.from_address ? "bg-gray-100" : ""}
-                >
-                  <Link
-                    href="/[profile]"
-                    as={`/${entry.to_username || entry.to_address}`}
-                  >
-                    <a>
-                      <div className="flex items-center hover:text-stpink w-max">
-                        <img
-                          src={
-                            entry.to_img_url ||
-                            "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                          }
-                          style={{ width: 24, height: 24 }}
-                          className="rounded-full mr-2"
-                        />
-                        <div>
-                          {truncateWithEllipses(
-                            entry.to_username ||
-                              entry.to_name ||
-                              formatAddressShort(entry.to_address),
-                            26
-                          )}
-                        </div>
-                      </div>
-                    </a>
-                  </Link>
-                </HistoryTableData>
-                {nftHistory.multiple && (
-                  <HistoryTableData
-                    className={!entry.from_address ? "bg-gray-100" : ""}
-                  >
-                    {entry.quantity}
                   </HistoryTableData>
-                )}
-                <HistoryTableData
-                  className={!entry.from_address ? "bg-gray-100" : ""}
-                >
-                  {format(new Date(entry.timestamp), "PPp")}
-                </HistoryTableData>
-              </tr>
-            ))}
+                  {nftHistory.multiple && (
+                    <HistoryTableData
+                      className={
+                        !entry.from_address
+                          ? "bg-gray-100 text-right"
+                          : "text-right"
+                      }
+                    >
+                      {entry.quantity}
+                    </HistoryTableData>
+                  )}
+                  <HistoryTableData
+                    className={
+                      !entry.from_address
+                        ? `bg-gray-100 rounded-br-xl ${
+                            nftHistory.history.length == 1
+                              ? "rounded-tr-xl"
+                              : null
+                          }`
+                        : ""
+                    }
+                  >
+                    {/*format(new Date(entry.timestamp), "PPp")*/}
+
+                    {formatDistanceToNowStrict(new Date(entry.timestamp), {
+                      addSuffix: true,
+                    })}
+                  </HistoryTableData>
+                </tr>
+              ))}
+            </tbody>
           </table>
         ) : (
-          <div className="p-4 m-2 bg-gray-100 rounded-xl">
+          <div className="py-2 px-4 bg-gray-100 rounded-xl text-sm">
             No history found.
           </div>
         )}
@@ -172,7 +207,7 @@ export default function TokenHistoryCard({ nftId }) {
         <div className="flex flex-row items-center my-2 justify-center">
           {!loadingMoreHistory ? (
             <div
-              className="text-center px-4 py-1 flex items-center w-max border-2 border-gray-200 rounded-full hover:text-stpink hover:border-stpink cursor-pointer"
+              className="text-center px-4 py-1 flex items-center w-max border-2 border-gray-300 rounded-full hover:text-stpink hover:border-stpink cursor-pointer"
               onClick={handleGetMoreHistory}
             >
               <div className="mr-2 text-sm text-black">Show All</div>

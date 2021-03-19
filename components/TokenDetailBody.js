@@ -422,8 +422,15 @@ const TokenDetailBody = ({
                 )}
                 {/* History Section */}
                 <div className="mt-8">
-                  <div className="md:text-lg py-4">Ownership History</div>
-                  <TokenHistoryCard nftId={item.nft_id} />
+                  <div className="md:text-lg py-4">Owner History</div>
+                  <TokenHistoryCard
+                    nftId={item.nft_id}
+                    closeModal={() => {
+                      if (setEditModalOpen) {
+                        setEditModalOpen(false);
+                      }
+                    }}
+                  />
                 </div>
               </div>
 
