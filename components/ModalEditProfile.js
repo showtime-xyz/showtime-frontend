@@ -7,6 +7,8 @@ import backend from "../lib/backend";
 import AppContext from "../context/app-context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import Select from "react-dropdown-select";
+
 const handleUsernameLookup = async (value, context, setCustomURLError) => {
   const username = value ? value.trim() : null;
   let validUsername;
@@ -56,6 +58,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
   const [bioValue, setBioValue] = useState(null);
   const [websiteValue, setWebsiteValue] = useState(null);
   const [defaultTab, setDefaultTab] = useState("");
+
   useEffect(() => {
     if (context.myProfile) {
       setCustomURLValue(context.myProfile.username || "");
@@ -91,7 +94,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
             ? websiteValue.trim()
             : null
           : null,
-        default_tab: defaultTab ? defaultTab : null,
+        default_tab: defaultTab ? defaultTab : "",
       }),
     });
 
@@ -106,7 +109,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
           ? websiteValue.trim()
           : null
         : null,
-      default_tab: defaultTab ? defaultTab : null,
+      default_tab: defaultTab ? defaultTab : "",
     });
 
     setEditModalOpen(false);
@@ -116,6 +119,26 @@ export default function Modal({ isOpen, setEditModalOpen }) {
       `/${username || (wallet_addresses && wallet_addresses[0]) || ""}`
     );
   };
+
+  const tab_list = [
+    {
+      name: "Select...",
+      value: "",
+    },
+    {
+      name: "Created",
+      value: "created",
+    },
+    {
+      name: "Owned",
+      value: "owned",
+    },
+    {
+      name: "Liked",
+      value: "liked",
+    },
+  ];
+
   return (
     <>
       {isOpen && (
@@ -158,12 +181,13 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         }}
                         type="text"
                         maxLength="50"
-                        className="w-full mt-1 mb-6 border-2 border-gray-400"
+                        className="w-full mt-1 mb-6 border-2 border-gray-400 px-3 "
                         style={{
                           color: "black",
-                          padding: 10,
                           borderRadius: 7,
-                          fontSize: 15,
+                          fontSize: 16,
+                          paddingTop: 10,
+                          paddingBottom: 10,
                         }}
                       />
                       <label htmlFor="customURL" className="text-gray-500">
@@ -206,7 +230,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                             borderRadius: 7,
                             padding: 10,
                             paddingLeft: 140,
-                            fontSize: 15,
+                            fontSize: 16,
                           }}
                           autoComplete="false"
                         />
@@ -216,7 +240,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                             top: 0,
                             left: 0,
                             paddingLeft: 10,
-                            paddingTop: 11,
+                            paddingTop: 13,
                             paddingBottom: 12,
                             paddingRight: 7,
                             borderBottomLeftRadius: 7,
@@ -262,13 +286,15 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         }}
                         type="text"
                         maxLength="160"
-                        className="w-full mt-1 border-2 border-gray-400"
+                        className="w-full mt-1 border-2 border-gray-400 px-3"
                         style={{
                           color: "black",
-                          padding: 10,
                           borderRadius: 7,
                           height: context.windowSize?.height < 800 ? 72 : 114,
-                          fontSize: 15,
+                          fontSize: 16,
+
+                          paddingTop: 10,
+                          paddingBottom: 10,
                         }}
                       ></textarea>
 
@@ -298,12 +324,14 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                           setWebsiteValue(e.target.value);
                         }}
                         type="text"
-                        className="w-full mt-1 border-2 border-gray-400"
+                        className="w-full mt-1 border-2 border-gray-400 px-3 "
                         style={{
                           color: "black",
-                          padding: 10,
                           borderRadius: 7,
-                          fontSize: 15,
+                          fontSize: 16,
+
+                          paddingTop: 10,
+                          paddingBottom: 10,
                         }}
                       />
                     </div>
@@ -312,25 +340,26 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   <div className="my-4 flex-1">
                     <div className="text-xl">Page Settings</div>
                     <div className="py-2">
-                      <label htmlFor="customURL" className="text-gray-500">
-                        Default Tab
-                        {/*<span
-                      style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
-                    >
-                      (optional)
-                    </span>*/}
-                      </label>
-                      <select
-                        name="defaultTab"
-                        value={defaultTab}
-                        onChange={(e) => setDefaultTab(e.target.value)}
-                        className="w-full mt-1 border-2 border-gray-400 px-2 py-3 rounded-lg text-sm"
-                      >
-                        <option value={""}>Select...</option>
-                        <option value="created">Created</option>
-                        <option value="owned">Owned</option>
-                        <option value="liked">Liked</option>
-                      </select>
+                      <label className="text-gray-500  ">Default List</label>
+
+                      <Select
+                        options={tab_list}
+                        labelField="name"
+                        valueField="value"
+                        values={tab_list.filter(
+                          (item) => item.value === defaultTab
+                        )}
+                        searchable={false}
+                        onChange={(values) => setDefaultTab(values[0]["value"])}
+                        style={{
+                          fontSize: 16,
+                          borderWidth: 2,
+                          borderRadius: 4,
+                          borderColor: "rgb(156, 163, 175)",
+                          paddingRight: 8,
+                        }}
+                        className="mt-1"
+                      />
                     </div>
                   </div>
                 </div>
