@@ -68,11 +68,10 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
   return (
     <>
       <div
-        className="overflow-auto flex flex-col border-2 border-gray-300 rounded-xl overscroll-none w-full"
+        className="overflow-x-auto overflow-y-hidden flex flex-col border-2 border-gray-300 rounded-xl w-full"
         style={{
           height: "100%",
           width: "100%",
-          overflow: "auto",
         }}
       >
         {nftHistory && nftHistory.history && nftHistory.history.length > 0 ? (
@@ -106,7 +105,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
                   <HistoryTableData
                     className={
                       !entry.from_address
-                        ? `bg-gray-100 rounded-bl-xl ${
+                        ? `border-t-2 border-gray-100  rounded-bl-xl ${
                             nftHistory.history.length == 1
                               ? "rounded-tl-xl"
                               : null
@@ -141,12 +140,14 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
                         </a>
                       </Link>
                     ) : (
-                      <div>Created</div>
+                      <div className="text-gray-400">Created</div>
                     )}
                   </HistoryTableData>
                   <HistoryTableData
                     className={
-                      !entry.from_address ? "bg-gray-100 flex flex-row" : ""
+                      !entry.from_address
+                        ? "border-t-2 border-gray-100 flex flex-row"
+                        : ""
                     }
                     //colSpan={!entry.from_address ? 3 : 1}
                   >
@@ -180,7 +181,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
                     <HistoryTableData
                       className={
                         !entry.from_address
-                          ? "bg-gray-100 text-right"
+                          ? "border-t-2 border-gray-100  text-right"
                           : "text-right"
                       }
                     >
@@ -190,7 +191,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
                   <HistoryTableData
                     className={
                       !entry.from_address
-                        ? `bg-gray-100 rounded-br-xl ${
+                        ? `border-t-2 border-gray-100  rounded-br-xl ${
                             nftHistory.history.length == 1
                               ? "rounded-tr-xl"
                               : null
@@ -209,7 +210,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
             </tbody>
           </table>
         ) : (
-          <div className="py-2 px-4 bg-gray-100 rounded-xl text-sm">
+          <div className="py-2 px-4 border-t-2 border-gray-100  rounded-xl text-sm">
             No history found.
           </div>
         )}
