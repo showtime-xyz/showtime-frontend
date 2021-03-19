@@ -166,9 +166,9 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 
                 <div className="flex flex-col md:flex-row">
                   <div className="flex-1 my-4">
-                    <div className="text-xl">Profile</div>
+                    <div className="text-xl text-purple-500">Profile</div>
                     <div className="py-2">
-                      <label htmlFor="name" className="text-gray-500">
+                      <label htmlFor="name" className="text-gray-500 text-sm">
                         Name
                       </label>
                       <input
@@ -190,7 +190,10 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                           paddingBottom: 10,
                         }}
                       />
-                      <label htmlFor="customURL" className="text-gray-500">
+                      <label
+                        htmlFor="customURL"
+                        className="text-gray-500  text-sm"
+                      >
                         Custom URL{" "}
                         {/*<span
                       style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
@@ -265,17 +268,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       >
                         &nbsp;{customURLError.message}
                       </div>
-                      <label htmlFor="bio" className="text-gray-500">
-                        About me{" "}
-                        <span
-                          style={{
-                            fontWeight: 400,
-                            fontSize: 12,
-                          }}
-                          className="text-gray-500"
-                        >
-                          (optional)
-                        </span>
+                      <label htmlFor="bio" className="text-gray-500 text-sm">
+                        About me (optional)
                       </label>
                       <textarea
                         name="bio"
@@ -299,22 +293,16 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       ></textarea>
 
                       <div
-                        className="text-right"
-                        style={{ fontSize: 12, fontWeight: 400, color: "#999" }}
+                        className="text-right text-gray-500"
+                        style={{ fontSize: 12, fontWeight: 400 }}
                       >
                         160 character limit
                       </div>
-                      <label htmlFor="website_url" className="text-gray-500">
-                        Website URL{" "}
-                        <span
-                          style={{
-                            fontWeight: 400,
-                            fontSize: 12,
-                          }}
-                          className="text-gray-500"
-                        >
-                          (optional)
-                        </span>
+                      <label
+                        htmlFor="website_url"
+                        className="text-gray-500 text-sm"
+                      >
+                        Website URL (optional)
                       </label>
                       <input
                         name="website_url"
@@ -338,9 +326,11 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   </div>
                   <div className="w-4 flex-shrink" />
                   <div className="my-4 flex-1">
-                    <div className="text-xl">Page Settings</div>
+                    <div className="text-xl text-purple-500">Page Settings</div>
                     <div className="py-2">
-                      <label className="text-gray-500  ">Default List</label>
+                      <label className="text-gray-500 text-sm">
+                        Default NFT List
+                      </label>
 
                       <Select
                         options={tab_list}
