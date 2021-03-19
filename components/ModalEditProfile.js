@@ -141,11 +141,13 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   />
                 </div>
 
-                <div className="">
-                  <div className="my-4">
+                <div className="flex flex-col md:flex-row">
+                  <div className="flex-1 my-4">
                     <div className="text-xl">Profile</div>
                     <div className="py-2">
-                      <label htmlFor="name">Name</label>
+                      <label htmlFor="name" className="text-gray-500">
+                        Name
+                      </label>
                       <input
                         name="name"
                         placeholder="Your name"
@@ -156,17 +158,15 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         }}
                         type="text"
                         maxLength="50"
-                        className="w-full mt-1 mb-6"
+                        className="w-full mt-1 mb-6 border-2 border-gray-400"
                         style={{
                           color: "black",
                           padding: 10,
                           borderRadius: 7,
-                          borderWidth: 2,
-                          borderColor: "#999",
                           fontSize: 15,
                         }}
                       />
-                      <label htmlFor="customURL">
+                      <label htmlFor="customURL" className="text-gray-500">
                         Custom URL{" "}
                         {/*<span
                       style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
@@ -178,11 +178,9 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         style={{
                           position: "relative",
                           borderRadius: 7,
-                          borderWidth: 2,
-                          borderColor: "#999",
                           marginBottom: "4px",
                         }}
-                        className="mt-1"
+                        className="mt-1 border-2 border-gray-400"
                       >
                         <input
                           name="customURL"
@@ -207,7 +205,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                             color: "black",
                             borderRadius: 7,
                             padding: 10,
-                            paddingLeft: 170,
+                            paddingLeft: 140,
                             fontSize: 15,
                           }}
                           autoComplete="false"
@@ -243,14 +241,14 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       >
                         &nbsp;{customURLError.message}
                       </div>
-                      <label htmlFor="bio">
+                      <label htmlFor="bio" className="text-gray-500">
                         About me{" "}
                         <span
                           style={{
                             fontWeight: 400,
-                            color: "#999",
                             fontSize: 12,
                           }}
+                          className="text-gray-500"
                         >
                           (optional)
                         </span>
@@ -264,15 +262,13 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         }}
                         type="text"
                         maxLength="160"
-                        className="w-full mt-1"
+                        className="w-full mt-1 border-2 border-gray-400"
                         style={{
                           color: "black",
                           padding: 10,
                           borderRadius: 7,
                           height: context.windowSize?.height < 800 ? 72 : 114,
-                          borderWidth: 2,
                           fontSize: 15,
-                          borderColor: "#999",
                         }}
                       ></textarea>
 
@@ -282,14 +278,14 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       >
                         160 character limit
                       </div>
-                      <label htmlFor="website_url">
+                      <label htmlFor="website_url" className="text-gray-500">
                         Website URL{" "}
                         <span
                           style={{
                             fontWeight: 400,
-                            color: "#999",
                             fontSize: 12,
                           }}
+                          className="text-gray-500"
                         >
                           (optional)
                         </span>
@@ -302,22 +298,21 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                           setWebsiteValue(e.target.value);
                         }}
                         type="text"
-                        className="w-full mt-1 mb-6"
+                        className="w-full mt-1 border-2 border-gray-400"
                         style={{
                           color: "black",
                           padding: 10,
                           borderRadius: 7,
                           fontSize: 15,
-                          borderWidth: 2,
-                          borderColor: "#999",
                         }}
                       />
                     </div>
                   </div>
-                  <div className="my-4">
+                  <div className="w-4 flex-shrink" />
+                  <div className="my-4 flex-1">
                     <div className="text-xl">Page Settings</div>
                     <div className="py-2">
-                      <label htmlFor="customURL">
+                      <label htmlFor="customURL" className="text-gray-500">
                         Default Tab
                         {/*<span
                       style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
@@ -329,7 +324,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         name="defaultTab"
                         value={defaultTab}
                         onChange={(e) => setDefaultTab(e.target.value)}
-                        className="w-full mt-1 border-2 border-gray-400 px-2 py-3 rounded-lg"
+                        className="w-full mt-1 border-2 border-gray-400 px-2 py-3 rounded-lg text-sm"
                       >
                         <option disabled value={""}>
                           Select...
@@ -381,7 +376,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                 right: 3%;
                 left: 3%;
                 border-radius: 7px;
-                max-width: 400px;
+                max-width: 700px;
                 margin-left: auto;
                 margin-right: auto;
                 max-height: 80vh;
