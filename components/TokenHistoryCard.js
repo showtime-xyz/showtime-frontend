@@ -71,6 +71,9 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
         className={`overflow-auto flex flex-col border-2 border-gray-300 rounded-xl w-full ${
           context.columns <= 2 ? "" : ""
         }`}
+        style={{
+          overscrollBehaviorX: "none",
+        }}
       >
         {nftHistory && nftHistory.history && nftHistory.history.length > 0 ? (
           <table className="table-auto text-sm" style={{ borderSpacing: 50 }}>
