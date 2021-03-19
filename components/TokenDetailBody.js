@@ -33,6 +33,7 @@ const TokenDetailBody = ({
   ownershipDetails,
   isInModal,
 }) => {
+  console.log("item", item);
   const context = useContext(AppContext);
   const { isMobile, columns, gridWidth } = context;
   const getBackgroundColor = () => {
