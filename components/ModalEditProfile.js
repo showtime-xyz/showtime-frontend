@@ -326,9 +326,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         onChange={(e) => setDefaultTab(e.target.value)}
                         className="w-full mt-1 border-2 border-gray-400 px-2 py-3 rounded-lg text-sm"
                       >
-                        <option disabled value={""}>
-                          Select...
-                        </option>
+                        <option value={""}>Select...</option>
                         <option value="created">Created</option>
                         <option value="owned">Owned</option>
                         <option value="liked">Liked</option>
