@@ -57,7 +57,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
   });
   const [bioValue, setBioValue] = useState(null);
   const [websiteValue, setWebsiteValue] = useState(null);
-  const [defaultTab, setDefaultTab] = useState("");
+  const [defaultListId, setDefaultListId] = useState("");
 
   useEffect(() => {
     if (context.myProfile) {
@@ -65,7 +65,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
       setNameValue(context.myProfile.name);
       setBioValue(context.myProfile.bio);
       setWebsiteValue(context.myProfile.website_url);
-      setDefaultTab(context.myProfile.default_tab || "");
+      setDefaultListId(context.myProfile.default_list_id || "");
     }
   }, [context.myProfile]);
 
@@ -74,14 +74,18 @@ export default function Modal({ isOpen, setEditModalOpen }) {
     mixpanel.track("Save profile edit");
 
     const username = customURLValue ? customURLValue.trim() : null;
-    const validUsername = await handleUsernameLookup(
-      customURLValue,
-      context,
-      setCustomURLError
-    );
-    if (!validUsername) {
-      return;
+
+    if (username?.toLowerCase() != context.myProfile.username?.toLowerCase()) {
+      const validUsername = await handleUsernameLookup(
+        customURLValue,
+        context,
+        setCustomURLError
+      );
+      if (!validUsername) {
+        return;
+      }
     }
+
     // Post changes to the API
     await fetch(`/api/editprofile`, {
       method: "post",
@@ -94,7 +98,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
             ? websiteValue.trim()
             : null
           : null,
-        default_tab: defaultTab ? defaultTab : "",
+        default_list_id: defaultListId ? defaultListId : "",
       }),
     });
 
@@ -109,7 +113,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
           ? websiteValue.trim()
           : null
         : null,
-      default_tab: defaultTab ? defaultTab : "",
+      default_list_id: defaultListId ? defaultListId : "",
     });
 
     setEditModalOpen(false);
@@ -127,15 +131,15 @@ export default function Modal({ isOpen, setEditModalOpen }) {
     },
     {
       name: "Created",
-      value: "created",
+      value: 1,
     },
     {
       name: "Owned",
-      value: "owned",
+      value: 2,
     },
     {
       name: "Liked",
-      value: "liked",
+      value: 3,
     },
   ];
 
@@ -337,10 +341,12 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         labelField="name"
                         valueField="value"
                         values={tab_list.filter(
-                          (item) => item.value === defaultTab
+                          (item) => item.value === defaultListId
                         )}
                         searchable={false}
-                        onChange={(values) => setDefaultTab(values[0]["value"])}
+                        onChange={(values) =>
+                          setDefaultListId(values[0]["value"])
+                        }
                         style={{
                           fontSize: 16,
                           borderWidth: 2,

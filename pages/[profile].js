@@ -45,6 +45,7 @@ export async function getServerSideProps(context) {
     const website_url = data_profile.profile.website_url;
     const profile_id = data_profile.profile.profile_id;
     const username = data_profile.profile.username;
+    const default_list_id = data_profile.profile.default_list_id;
 
     return {
       props: {
@@ -59,6 +60,7 @@ export async function getServerSideProps(context) {
         website_url,
         profile_id,
         username,
+        default_list_id,
       }, // will be passed to the page component as props
     };
   } catch (err) {
@@ -87,6 +89,7 @@ const Profile = ({
   website_url,
   profile_id,
   username,
+  default_list_id,
 }) => {
   //const router = useRouter();
   const context = useContext(AppContext);
@@ -278,38 +281,45 @@ const Profile = ({
   const [walletModalOpen, setWalletModalOpen] = useState(false);
   const [pictureModalOpen, setPictureModalOpen] = useState(false);
 
-  const [selectedGrid, setSelectedGrid] = useState("created");
+  const [selectedGrid, setSelectedGrid] = useState(1);
 
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
 
   const [openCardMenu, setOpenCardMenu] = useState(null);
   const [showUserHiddenItems, setShowUserHiddenItems] = useState(false);
+
   useEffect(() => {
-    // if user has a default_tab configured, use it
-    if (context.myProfile && context.myProfile.default_tab) {
-      setSelectedGrid(context.myProfile.default_tab);
+    // if user has a default_list_id configured, use it
+    if (default_list_id) {
+      setSelectedGrid(default_list_id);
     } else {
       // If use doesn't have default_tab, pick first non-empty tab
       if (isLoadingCards) {
-        setSelectedGrid("created");
+        setSelectedGrid(1);
       } else {
         if (
           createdItems.length > 0 &&
           createdItems.length >= ownedItems.length
         ) {
-          setSelectedGrid("created");
+          setSelectedGrid(1);
         } else if (ownedItems.length > 0) {
-          setSelectedGrid("owned");
+          setSelectedGrid(2);
         } else {
-          setSelectedGrid("liked");
+          setSelectedGrid(3);
         }
       }
     }
 
     setShowFollowers(false);
     setShowFollowing(false);
-  }, [profile_id, createdItems.length, ownedItems.length, isLoadingCards]);
+  }, [
+    profile_id,
+    default_list_id,
+    createdItems.length,
+    ownedItems.length,
+    isLoadingCards,
+  ]);
 
   // profilePill Edit profile actions
   const editAccount = () => {
@@ -347,9 +357,9 @@ const Profile = ({
                 (item) => !createdHiddenItems.includes(item.nft_id)
               ).length
         }
-        isActive={selectedGrid === "created"}
+        isActive={selectedGrid === 1}
         onClickTab={() => {
-          setSelectedGrid("created");
+          setSelectedGrid(1);
         }}
       />
       <GridTab
@@ -365,9 +375,9 @@ const Profile = ({
                 (item) => !ownedHiddenItems.includes(item.nft_id)
               ).length
         }
-        isActive={selectedGrid === "owned"}
+        isActive={selectedGrid === 2}
         onClickTab={() => {
-          setSelectedGrid("owned");
+          setSelectedGrid(2);
         }}
       />
       <GridTab
@@ -383,9 +393,9 @@ const Profile = ({
                 (item) => !likedHiddenItems.includes(item.nft_id)
               ).length
         }
-        isActive={selectedGrid === "liked"}
+        isActive={selectedGrid === 3}
         onClickTab={() => {
-          setSelectedGrid("liked");
+          setSelectedGrid(3);
         }}
       />
     </GridTabs>
@@ -713,21 +723,21 @@ const Profile = ({
 
             <TokenGridV4
               items={
-                selectedGrid === "created"
+                selectedGrid === 1
                   ? createdItems
-                  : selectedGrid === "owned"
+                  : selectedGrid === 2
                   ? ownedItems
-                  : selectedGrid === "liked"
+                  : selectedGrid === 3
                   ? likedItems
                   : null
               }
               isLoading={isLoadingCards}
               listId={
-                selectedGrid === "created"
+                selectedGrid === 1
                   ? 1
-                  : selectedGrid === "owned"
+                  : selectedGrid === 2
                   ? 2
-                  : selectedGrid === "liked"
+                  : selectedGrid === 3
                   ? 3
                   : null
               }
@@ -735,20 +745,20 @@ const Profile = ({
               openCardMenu={openCardMenu}
               setOpenCardMenu={setOpenCardMenu}
               userHiddenItems={
-                selectedGrid === "created"
+                selectedGrid === 1
                   ? createdHiddenItems
-                  : selectedGrid === "owned"
+                  : selectedGrid === 2
                   ? ownedHiddenItems
-                  : selectedGrid === "liked"
+                  : selectedGrid === 3
                   ? likedHiddenItems
                   : null
               }
               setUserHiddenItems={
-                selectedGrid === "created"
+                selectedGrid === 1
                   ? setCreatedHiddenItems
-                  : selectedGrid === "owned"
+                  : selectedGrid === 2
                   ? setOwnedHiddenItems
-                  : selectedGrid === "liked"
+                  : selectedGrid === 3
                   ? setLikedHiddenItems
                   : null
               }
