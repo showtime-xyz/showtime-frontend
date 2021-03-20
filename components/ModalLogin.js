@@ -5,6 +5,7 @@ import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import Authereum from "authereum";
 import ethProvider from "eth-provider";
+import { WalletLink } from "walletlink";
 import _ from "lodash";
 import ClientOnlyPortal from "./ClientOnlyPortal";
 import backend from "../lib/backend";
@@ -48,20 +49,41 @@ export default function Modal({ isOpen }) {
   const handleSubmitWallet = async () => {
     mixpanel.track("Login - wallet button click");
 
-    const providerOptions = {
+    var providerOptions = {
       walletconnect: {
         package: WalletConnectProvider,
         options: {
           infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
         },
       },
-      //authereum: {
-      //  package: Authereum,
-      //},
-      //frame: {
-      //  package: ethProvider,
-      //},
     };
+    if (!context.isMobile) {
+      providerOptions = {
+        ...providerOptions,
+        "custom-walletlink": {
+          display: {
+            logo: "/coinbase.svg",
+            name: "Coinbase",
+            description: "Use Coinbase Wallet app on mobile device",
+          },
+          options: {
+            appName: "Showtime", // Your app name
+            networkUrl: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`,
+            chainId: process.env.NEXT_PUBLIC_CHAINID,
+          },
+          package: WalletLink,
+          connector: async (_, options) => {
+            const { appName, networkUrl, chainId } = options;
+            const walletLink = new WalletLink({
+              appName,
+            });
+            const provider = walletLink.makeWeb3Provider(networkUrl, chainId);
+            await provider.enable();
+            return provider;
+          },
+        },
+      };
+    }
 
     const web3Modal = new Web3Modal({
       network: "mainnet", // optional
@@ -131,7 +153,7 @@ export default function Modal({ isOpen }) {
               </div>
               {signaturePending ? (
                 <div className="text-center py-40">
-                  Please sign with your wallet...
+                  Pushed a request to your wallet...
                 </div>
               ) : (
                 <>
