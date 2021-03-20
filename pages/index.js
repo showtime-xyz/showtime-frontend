@@ -106,7 +106,7 @@ export default function Home() {
         />
         <meta
           property="og:image"
-          content="https://storage.googleapis.com/nft-public-profile-pics/showtime_screenshot.jpg"
+          content="https://storage.googleapis.com/showtime-nft-thumbnails/home_og_card.jpg"
         />
         <meta name="og:title" content="Showtime" />
 
@@ -118,7 +118,7 @@ export default function Home() {
         />
         <meta
           name="twitter:image"
-          content="https://storage.googleapis.com/nft-public-profile-pics/showtime_screenshot.jpg"
+          content="https://storage.googleapis.com/showtime-nft-thumbnails/home_twitter_card_2.jpg"
         />
       </Head>
 

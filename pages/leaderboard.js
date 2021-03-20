@@ -59,18 +59,21 @@ const Leaderboard = () => {
     <Layout>
       <Head>
         <title>Leaderboard</title>
-        <meta name="description" content="Most popular creators" />
+        <meta name="description" content="Trending creators" />
         <meta property="og:type" content="website" />
-        <meta name="og:description" content="Most popular creators" />
-        <meta property="og:image" content="/banner.png" />
+        <meta name="og:description" content="Trending creators" />
+        <meta
+          property="og:image"
+          content="https://storage.googleapis.com/showtime-nft-thumbnails/trending_og_card.jpg"
+        />
         <meta name="og:title" content="Showtime | Leaderboard" />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Showtime | Leaderboard" />
-        <meta name="twitter:description" content="Most popular creators" />
+        <meta name="twitter:description" content="Trending creators" />
         <meta
           name="twitter:image"
-          content="https://showtime.kilkka.vercel.app/banner.png"
+          content="https://storage.googleapis.com/showtime-nft-thumbnails/trending_twitter_card2.jpg"
         />
       </Head>
       {columns && (
