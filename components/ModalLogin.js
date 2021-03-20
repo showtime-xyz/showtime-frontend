@@ -3,6 +3,8 @@ import mixpanel from "mixpanel-browser";
 import { Magic } from "magic-sdk";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
+import Authereum from "authereum";
+import ethProvider from "eth-provider";
 import { WalletLink } from 'walletlink'
 import _ from "lodash";
 import ClientOnlyPortal from "./ClientOnlyPortal";
@@ -14,10 +16,6 @@ import Web3 from "web3";
 export default function Modal({ isOpen }) {
   const context = useContext(AppContext);
   const [signaturePending, setSignaturePending] = useState(false);
-
-  const [addressDetected, setAddressDetected] = useState(null);
-  const [myProvider, setMyProvider] = useState(null);
-
 
   const handleSubmitEmail = async (event) => {
     mixpanel.track("Login - email button click");
@@ -89,17 +87,12 @@ export default function Modal({ isOpen }) {
     });
 
     const provider = await web3Modal.connect();
-    setMyProvider(provider)
-    const web3 = new Web3(myProvider);
+
+    const web3 = new Web3(provider);
 
     const coinbase = await web3.eth.getCoinbase();
     const address = coinbase.toLowerCase();
-    setAddressDetected(address);
     const response_nonce = await backend.get(`/v1/getnonce?address=${address}`);
-
-    myProvider.on("accountsChanged", async (address) => {
-      setAddressDetected(address);
-    });
 
     try {
       setSignaturePending(true);
