@@ -73,7 +73,7 @@ const Leaderboard = () => {
         <meta name="twitter:description" content="Trending creators" />
         <meta
           name="twitter:image"
-          content="https://storage.googleapis.com/showtime-nft-thumbnails/trending_twitter_card_2.jpg"
+          content="https://storage.googleapis.com/showtime-nft-thumbnails/trending_twitter_card2.jpg"
         />
       </Head>
       {columns && (
