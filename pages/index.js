@@ -118,7 +118,7 @@ export default function Home() {
         />
         <meta
           name="twitter:image"
-          content="https://storage.googleapis.com/showtime-nft-thumbnails/home_twitter_card.jpg"
+          content="https://storage.googleapis.com/showtime-nft-thumbnails/home_twitter_card_2.jpg"
         />
       </Head>
 
