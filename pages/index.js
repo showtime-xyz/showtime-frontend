@@ -195,7 +195,7 @@ export default function Home() {
           </div>
           <div className="m-auto" style={{ width: gridWidth, minHeight: 700 }}>
             <TokenGridV4
-              items={heroItems.slice(0, context.columns)}
+              items={heroItems.slice(0, context.columns * 2)}
               isLoading={isLoadingHero}
             />
           </div>
