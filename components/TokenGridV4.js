@@ -3,7 +3,7 @@ import _ from "lodash";
 import mixpanel from "mixpanel-browser";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinusCircle } from "@fortawesome/free-solid-svg-icons";
+import { faThLarge } from "@fortawesome/free-solid-svg-icons";
 import AppContext from "../context/app-context";
 import TokenCard from "./TokenCard";
 import useKeyPress from "../hooks/useKeyPress";
@@ -207,16 +207,13 @@ const TokenGridV4 = ({
       <div className="flex flex-col items-center justify-center text-gray-400 mt-20 mb-24">
         <div>
           {" "}
-          <FontAwesomeIcon
-            style={{ height: 48, width: 48 }}
-            icon={faMinusCircle}
-          />
+          <FontAwesomeIcon style={{ height: 48, width: 48 }} icon={faThLarge} />
         </div>
         <div
           style={context.columns === 1 ? null : { width: context.gridWidth }}
           className="p-3 text-center"
         >
-          No items here.
+          No items found.
         </div>
       </div>
     );
