@@ -113,6 +113,12 @@ class TokenCard extends React.Component {
     mixpanel.track("Unhid item");
   };
 
+  handleRefreshNFTMetadata = async () => {
+    await fetch(`/api/refreshmetadata/${this.props.item.nft_id}`, {
+      method: "post",
+    });
+  };
+
   getImageUrl = () => {
     var img_url = this.props.item.token_img_url
       ? this.props.item.token_img_url
@@ -278,6 +284,12 @@ class TokenCard extends React.Component {
                                   ? "Liked"
                                   : "List"
                               }`}
+                        </div>
+                        <div
+                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                          onClick={this.handleRefreshNFTMetadata}
+                        >
+                          Refresh Metadata
                         </div>
                       </div>
                     </div>
