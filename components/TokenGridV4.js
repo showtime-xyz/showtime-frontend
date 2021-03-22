@@ -224,7 +224,7 @@ const TokenGridV4 = ({
       >
         {isLoading ? (
           <div
-            className="mx-auto items-center flex justify-center overflow-hidden"
+            className="mx-auto items-center flex justify-center overflow-hidden py-4"
             style={context.columns === 1 ? null : { width: context.gridWidth }}
           >
             <div className="loading-card-spinner" />

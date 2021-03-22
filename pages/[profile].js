@@ -15,6 +15,8 @@ import ModalUserList from "../components/ModalUserList";
 import ModalAddWallet from "../components/ModalAddWallet";
 //import { formatAddressShort, copyToClipBoard } from "../lib/utilities";
 import AddressButton from "../components/AddressButton";
+import { SORT_FIELDS } from "../lib/constants";
+import Select from "react-dropdown-select";
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
@@ -46,6 +48,9 @@ export async function getServerSideProps(context) {
     const profile_id = data_profile.profile.profile_id;
     const username = data_profile.profile.username;
     const default_list_id = data_profile.profile.default_list_id;
+    const default_created_sort_id =
+      data_profile.profile.default_created_sort_id;
+    const default_owned_sort_id = data_profile.profile.default_owned_sort_id;
 
     return {
       props: {
@@ -61,6 +66,8 @@ export async function getServerSideProps(context) {
         profile_id,
         username,
         default_list_id,
+        default_created_sort_id,
+        default_owned_sort_id,
       }, // will be passed to the page component as props
     };
   } catch (err) {
@@ -90,6 +97,8 @@ const Profile = ({
   profile_id,
   username,
   default_list_id,
+  default_created_sort_id,
+  default_owned_sort_id,
 }) => {
   //const router = useRouter();
   const context = useContext(AppContext);
@@ -136,26 +145,29 @@ const Profile = ({
         `/v2/profile_client/${slug_address}?limit=150`
       );
       const data_profile = response_profile.data.data;
-
       setCreatedHiddenItems(data_profile.created_hidden);
       setOwnedHiddenItems(data_profile.owned_hidden);
       setLikedHiddenItems(data_profile.liked_hidden);
 
       setCreatedItems(
-        data_profile.created.filter(
-          (item) =>
-            item.token_hidden !== 1 &&
-            (item.token_img_url || item.token_animation_url)
-          //&& !data_profile.created_hidden.includes(item.nft_id)
-        )
+        data_profile.created
+          .filter(
+            (item) =>
+              item.token_hidden !== 1 &&
+              (item.token_img_url || item.token_animation_url)
+            //&& !data_profile.created_hidden.includes(item.nft_id)
+          )
+          .sort(sortCreatedGriditems)
       );
       setOwnedItems(
-        data_profile.owned.filter(
-          (item) =>
-            item.token_hidden !== 1 &&
-            (item.token_img_url || item.token_animation_url)
-          //&& !data_profile.owned_hidden.includes(item.nft_id)
-        )
+        data_profile.owned
+          .filter(
+            (item) =>
+              item.token_hidden !== 1 &&
+              (item.token_img_url || item.token_animation_url)
+            //&& !data_profile.owned_hidden.includes(item.nft_id)
+          )
+          .sort(sortOwnedGriditems)
       );
       setLikedItems(
         data_profile.liked.filter(
@@ -282,12 +294,76 @@ const Profile = ({
   const [pictureModalOpen, setPictureModalOpen] = useState(false);
 
   const [selectedGrid, setSelectedGrid] = useState(1);
+  const sortFieldOptions = Object.keys(SORT_FIELDS);
+  const [selectedCreatedSortField, setSelectedCreatedSortField] = useState(
+    default_created_sort_id === null ? 0 : default_created_sort_id
+  );
+  const [selectedOwnedSortField, setSelectedOwnedSortField] = useState(
+    default_owned_sort_id === null ? 1 : default_owned_sort_id
+  );
 
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
 
   const [openCardMenu, setOpenCardMenu] = useState(null);
   const [showUserHiddenItems, setShowUserHiddenItems] = useState(false);
+
+  const sortGridItems = (a, b, tabSortField = null) => {
+    let currentTabSortField;
+    if (tabSortField) {
+      currentTabSortField = tabSortField;
+    } else {
+      switch (selectedGrid) {
+        case 1:
+          currentTabSortField = selectedCreatedSortField;
+          break;
+        case 2:
+          currentTabSortField = selectedOwnedSortField;
+          break;
+        default:
+          currentTabSortField = 1;
+          break;
+      }
+    }
+    if (
+      SORT_FIELDS[sortFieldOptions[currentTabSortField]].key ===
+      SORT_FIELDS.LAST_TRANSFERRED.key
+    ) {
+      return (
+        new Date(b[SORT_FIELDS[sortFieldOptions[currentTabSortField]].key]) -
+        new Date(a[SORT_FIELDS[sortFieldOptions[currentTabSortField]].key])
+      );
+    }
+
+    return (
+      b[SORT_FIELDS[sortFieldOptions[currentTabSortField]].key] -
+      a[SORT_FIELDS[sortFieldOptions[currentTabSortField]].key]
+    );
+  };
+
+  const sortCreatedGriditems = (a, b) => {
+    return sortGridItems(a, b, selectedCreatedSortField);
+  };
+  const sortOwnedGriditems = (a, b) => {
+    return sortGridItems(a, b, selectedOwnedSortField);
+  };
+
+  const handleChangeSort = (newValues) => {
+    if (selectedGrid === 1) {
+      setSelectedCreatedSortField(newValues[0].id);
+    }
+    if (selectedGrid === 2) {
+      setSelectedOwnedSortField(newValues[0].id);
+    }
+  };
+
+  useEffect(() => {
+    setCreatedItems([...createdItems].sort(sortGridItems));
+  }, [selectedCreatedSortField]);
+
+  useEffect(() => {
+    setOwnedItems([...ownedItems].sort(sortGridItems));
+  }, [selectedOwnedSortField]);
 
   useEffect(() => {
     // if user has a default_list_id configured, use it
@@ -343,7 +419,7 @@ const Profile = ({
   };
 
   const FilterTabs = (
-    <GridTabs>
+    <GridTabs sortingBar={selectedGrid !== 3}>
       <GridTab
         label="Created"
         itemCount={
@@ -673,6 +749,31 @@ const Profile = ({
             </div>
             <div className="mx-auto" style={{ width: gridWidth }}>
               {FilterTabs}
+              {!isLoadingCards && selectedGrid !== 3 && (
+                <div className="flex items-center p-2 mb-2 md:mb-0 text-sm md:text-base">
+                  <div className="flex-1"></div>
+                  <div className="py-2 px-2 w-max cursor-pointer mr-2">
+                    Sort by:
+                  </div>
+                  <Select
+                    options={sortFieldOptions.map((key) => SORT_FIELDS[key])}
+                    labelField="label"
+                    valueField="key"
+                    values={[
+                      SORT_FIELDS[
+                        sortFieldOptions[
+                          selectedGrid === 1
+                            ? selectedCreatedSortField
+                            : selectedOwnedSortField
+                        ]
+                      ],
+                    ]}
+                    searchable={false}
+                    onChange={handleChangeSort}
+                    style={{ fontSize: context.isMobile ? 14 : 16 }}
+                  />
+                </div>
+              )}
               {isMyProfile ? (
                 <div className="flex">
                   <div className="flex-grow"></div>

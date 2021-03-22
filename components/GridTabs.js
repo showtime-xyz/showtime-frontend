@@ -12,7 +12,13 @@ const GridTabsWrapper = styled.div`
 const GridTabsContainer = styled.div`
   width: 100%;
   padding: ${(p) =>
-    p.isMobile ? "0px 16px 20px 16px" : "0px 12px 1.75rem 12px"};
+    p.isMobile
+      ? p.sortingBar
+        ? "0px 16px 10px 16px"
+        : "0px 16px 20px 16px"
+      : p.sortingBar
+      ? "0px 12px 8px 12px"
+      : "0px 12px 1.75rem 12px"};
 `;
 const GridTabsTitle = styled.h3`
   padding: 10px 0px;
@@ -38,10 +44,10 @@ const ItemCountSpan = styled.span`
   margin-right: 5px;
 `;
 
-function GridTabs({ children, title }) {
+function GridTabs({ children, title, sortingBar }) {
   const context = useContext(AppContext);
   return (
-    <GridTabsContainer isMobile={context.isMobile}>
+    <GridTabsContainer isMobile={context.isMobile} sortingBar={sortingBar}>
       {title && (
         <GridTabsTitle className="text-2xl md:text-4xl">{title}</GridTabsTitle>
       )}
