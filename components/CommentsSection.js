@@ -23,13 +23,10 @@ export default function CommentsSection({
 
   const refreshComments = async (showLoading = true) => {
     const commentsData = await backend.get(
-      `/v1/getcomments/${nftId}${hasMoreComments ? "" : "?limit=7"}`
+      `/v2/comments/${nftId}${hasMoreComments ? "" : "?limit=10"}`
     );
-    const {
-      data: { comments, has_more },
-    } = commentsData;
-    setComments(comments);
-    setHasMoreComments(has_more);
+    setComments(commentsData.data.data.comments);
+    setHasMoreComments(commentsData.data.data.has_more);
     setLoadingComments(false);
   };
 
