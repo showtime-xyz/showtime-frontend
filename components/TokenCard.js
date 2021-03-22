@@ -24,6 +24,7 @@ class TokenCard extends React.Component {
       imageLoaded: false,
       showVideo: false,
       muted: true,
+      refreshing: false,
     };
     this.handleMoreShown = this.handleMoreShown.bind(this);
     this.divRef = React.createRef();
@@ -114,9 +115,12 @@ class TokenCard extends React.Component {
   };
 
   handleRefreshNFTMetadata = async () => {
+    this.setState({ refreshing: true });
     await fetch(`/api/refreshmetadata/${this.props.item.nft_id}`, {
       method: "post",
     });
+    await this.props.refreshItems();
+    this.setState({ refreshing: false });
   };
 
   getImageUrl = () => {
@@ -461,7 +465,7 @@ class TokenCard extends React.Component {
                       textOverflow: "ellipsis",
                     }}
                   >
-                    {item.token_name}
+                    {this.state.refreshing ? "Refreshing..." : item.token_name}
 
                     {/* {this.props.item.token_has_video ? (
                       <FontAwesomeIcon
