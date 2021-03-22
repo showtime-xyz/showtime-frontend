@@ -12,7 +12,7 @@ export default async (req, res) => {
     );
 
     await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/refreshmetadata/${nft_id}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/refresh_metadata/${nft_id}`,
       {
         method: "POST",
         headers: {
