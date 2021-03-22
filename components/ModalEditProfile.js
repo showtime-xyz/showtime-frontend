@@ -397,7 +397,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         className="mt-1"
                       />
                     </div>
-                    <div className="py-2  mb-12">
+                    <div className="py-2  mb-2">
                       <label className="text-gray-500 text-sm">
                         Default Owned List Sort
                       </label>
