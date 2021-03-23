@@ -46,6 +46,7 @@ export async function getServerSideProps(context) {
     const website_url = data_profile.profile.website_url;
     const profile_id = data_profile.profile.profile_id;
     const username = data_profile.profile.username;
+    const default_list_id = data_profile.profile.default_list_id;
 
     return {
       props: {
@@ -60,6 +61,7 @@ export async function getServerSideProps(context) {
         website_url,
         profile_id,
         username,
+        default_list_id,
       }, // will be passed to the page component as props
     };
   } catch (err) {
@@ -88,6 +90,7 @@ const Profile = ({
   website_url,
   profile_id,
   username,
+  default_list_id,
 }) => {
   //const router = useRouter();
   const context = useContext(AppContext);
@@ -188,7 +191,7 @@ const Profile = ({
             .map((a) => a.toLowerCase())
             .includes(slug_address.toLowerCase()) ||
           slug_address.toLowerCase() ===
-          context.myProfile?.username?.toLowerCase()
+            context.myProfile?.username?.toLowerCase()
         ) {
           setIsMyProfile(true);
           mixpanel.track("Self profile view", { slug: slug_address });
@@ -280,7 +283,7 @@ const Profile = ({
   const [emailModalOpen, setEmailModalOpen] = useState(false);
   const [pictureModalOpen, setPictureModalOpen] = useState(false);
 
-  const [selectedGrid, setSelectedGrid] = useState("created");
+  const [selectedGrid, setSelectedGrid] = useState(1);
 
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
@@ -289,22 +292,36 @@ const Profile = ({
   const [showUserHiddenItems, setShowUserHiddenItems] = useState(false);
 
   useEffect(() => {
-    // Pick an initial tab to display
-    if (isLoadingCards) {
-      setSelectedGrid("created");
+    // if user has a default_list_id configured, use it
+    if (default_list_id) {
+      setSelectedGrid(default_list_id);
     } else {
-      if (createdItems.length > 0 && createdItems.length >= ownedItems.length) {
-        setSelectedGrid("created");
-      } else if (ownedItems.length > 0) {
-        setSelectedGrid("owned");
+      // If use doesn't have default_tab, pick first non-empty tab
+      if (isLoadingCards) {
+        setSelectedGrid(1);
       } else {
-        setSelectedGrid("liked");
+        if (
+          createdItems.length > 0 &&
+          createdItems.length >= ownedItems.length
+        ) {
+          setSelectedGrid(1);
+        } else if (ownedItems.length > 0) {
+          setSelectedGrid(2);
+        } else {
+          setSelectedGrid(3);
+        }
       }
     }
 
     setShowFollowers(false);
     setShowFollowing(false);
-  }, [profile_id, createdItems.length, ownedItems.length, isLoadingCards]);
+  }, [
+    profile_id,
+    default_list_id,
+    createdItems.length,
+    ownedItems.length,
+    isLoadingCards,
+  ]);
 
   // profilePill Edit profile actions
   const editAccount = () => {
@@ -340,16 +357,16 @@ const Profile = ({
           isLoadingCards
             ? null
             : showUserHiddenItems
-              ? createdItems.length
-              : createdItems.length == 150 // go ahead and say 150+ if we are at max items
-                ? 150
-                : createdItems.filter(
-                  (item) => !createdHiddenItems.includes(item.nft_id)
-                ).length
+            ? createdItems.length
+            : createdItems.length == 150 // go ahead and say 150+ if we are at max items
+            ? 150
+            : createdItems.filter(
+                (item) => !createdHiddenItems.includes(item.nft_id)
+              ).length
         }
-        isActive={selectedGrid === "created"}
+        isActive={selectedGrid === 1}
         onClickTab={() => {
-          setSelectedGrid("created");
+          setSelectedGrid(1);
         }}
       />
       <GridTab
@@ -358,16 +375,16 @@ const Profile = ({
           isLoadingCards
             ? null
             : showUserHiddenItems
-              ? ownedItems.length
-              : ownedItems.length == 150 // go ahead and say 150+ if we are at max items
-                ? 150
-                : ownedItems.filter(
-                  (item) => !ownedHiddenItems.includes(item.nft_id)
-                ).length
+            ? ownedItems.length
+            : ownedItems.length == 150 // go ahead and say 150+ if we are at max items
+            ? 150
+            : ownedItems.filter(
+                (item) => !ownedHiddenItems.includes(item.nft_id)
+              ).length
         }
-        isActive={selectedGrid === "owned"}
+        isActive={selectedGrid === 2}
         onClickTab={() => {
-          setSelectedGrid("owned");
+          setSelectedGrid(2);
         }}
       />
       <GridTab
@@ -376,16 +393,16 @@ const Profile = ({
           isLoadingCards
             ? null
             : showUserHiddenItems
-              ? likedItems.length
-              : likedItems.length == 150 // go ahead and say 150+ if we are at max items
-                ? 150
-                : likedItems.filter(
-                  (item) => !likedHiddenItems.includes(item.nft_id)
-                ).length
+            ? likedItems.length
+            : likedItems.length == 150 // go ahead and say 150+ if we are at max items
+            ? 150
+            : likedItems.filter(
+                (item) => !likedHiddenItems.includes(item.nft_id)
+              ).length
         }
-        isActive={selectedGrid === "liked"}
+        isActive={selectedGrid === 3}
         onClickTab={() => {
-          setSelectedGrid("liked");
+          setSelectedGrid(3);
         }}
       />
     </GridTabs>
@@ -406,11 +423,11 @@ const Profile = ({
                   ? context.myProfile.name
                   : "Unnamed"
                 : name
-                  ? name
-                  : "Unnamed"
-              : name
                 ? name
-                : "Unnamed"}
+                : "Unnamed"
+              : name
+              ? name
+              : "Unnamed"}
           </title>
 
           <meta
@@ -508,12 +525,13 @@ const Profile = ({
             >
               <h1
                 style={{ wordWrap: "break-word" }}
-                className={`text-4xl md:text-6xl sm:mb-2 text-center md:text-left mt-12 sm:mt-20 ${(wallet_addresses_excluding_email.length === 0 ||
+                className={`text-4xl md:text-6xl sm:mb-2 text-center md:text-left mt-12 sm:mt-20 ${
+                  (wallet_addresses_excluding_email.length === 0 ||
                     context.columns === 1) &&
-                    !username
+                  !username
                     ? "mb-8"
                     : "mb-0"
-                  }`}
+                }`}
               >
                 {isMyProfile
                   ? context.myProfile
@@ -521,45 +539,32 @@ const Profile = ({
                       ? context.myProfile.name
                       : "Unnamed"
                     : name
-                      ? name
-                      : "Unnamed"
-                  : name
                     ? name
-                    : "Unnamed"}
+                    : "Unnamed"
+                  : name
+                  ? name
+                  : "Unnamed"}
               </h1>
               {(username ||
                 (wallet_addresses_excluding_email.length > 0 &&
                   context.columns > 1)) && (
-                  <div className="flex flex-row justify-center items-center md:justify-start mb-12">
-                    {username && (
-                      <div className="mr-2 text-base text-gray-500">
-                        @{username}
-                      </div>
-                    )}
-                    {context.columns === 1 ? null : (
-                      <div className="flex mr-2 md:mr-0">
-                        {wallet_addresses_excluding_email.map((address) => {
-                          return (
-                            <AddressButton key={address} address={address} />
-                          );
-                          /*
-                         return (
-                          <div
-                            className="py-2 px-3 bg-gray-100 rounded-full mx-1 md:mr-2 cursor-copy hover:bg-gray-200 active:bg-gray-100 transition"
-                            key={address}
-                            onClick={() => {
-                              copyToClipBoard(address);
-                            }}
-                          >
-                            {formatAddressShort(address)}
-                          </div>
+                <div className="flex flex-row justify-center items-center md:justify-start mb-12">
+                  {username && (
+                    <div className="mr-2 text-base text-gray-500">
+                      @{username}
+                    </div>
+                  )}
+                  {context.columns === 1 ? null : (
+                    <div className="flex mr-2 md:mr-0">
+                      {wallet_addresses_excluding_email.map((address) => {
+                        return (
+                          <AddressButton key={address} address={address} />
                         );
-                        */
-                        })}
-                      </div>
-                    )}
-                  </div>
-                )}
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -574,14 +579,15 @@ const Profile = ({
               }
             >
               <div
-                className={`${isMyProfile && context.myProfile
-                  ? !context.myProfile.bio && !context.myProfile.website_url
+                className={`${
+                  isMyProfile && context.myProfile
+                    ? !context.myProfile.bio && !context.myProfile.website_url
+                      ? "hidden"
+                      : "flex-1"
+                    : !bio && !website_url
                     ? "hidden"
                     : "flex-1"
-                  : !bio && !website_url
-                    ? "hidden"
-                    : "flex-1"
-                  } mt-4 pb-2 text-base align-center flex flex-col justify-center items-center md:items-start`}
+                } mt-4 pb-2 text-base align-center flex flex-col justify-center items-center md:items-start`}
               >
                 {/*<h4 className="text-black mb-2 text-lg font-semibold">About</h4>*/}
                 {isMyProfile && context.myProfile ? (
@@ -671,10 +677,16 @@ const Profile = ({
                       ? context.myProfile.img_url
                       : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                     : img_url
-                      ? img_url
-                      : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                    ? img_url
+                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                 }
-                profileActions={{ editAccount, editPhoto, addWallet, addEmail, logout }}
+                profileActions={{
+                  editAccount,
+                  editPhoto,
+                  addWallet,
+                  addEmail,
+                  logout,
+                }}
               />
             </div>
             <div className="mx-auto" style={{ width: gridWidth }}>
@@ -690,25 +702,25 @@ const Profile = ({
                     style={
                       context.windowSize && context.windowSize.width < 600
                         ? {
-                          fontWeight: 400,
-                          fontSize: 12,
-                          marginTop: -10,
-                          marginBottom: 4,
-                        }
+                            fontWeight: 400,
+                            fontSize: 12,
+                            marginTop: -10,
+                            marginBottom: 4,
+                          }
                         : {
-                          fontWeight: 400,
-                          fontSize: 12,
-                          marginTop: -59,
-                        }
+                            fontWeight: 400,
+                            fontSize: 12,
+                            marginTop: -59,
+                          }
                     }
                   >
                     {createdHiddenItems.length === 0 &&
-                      ownedHiddenItems.length === 0 &&
-                      likedHiddenItems.length === 0
+                    ownedHiddenItems.length === 0 &&
+                    likedHiddenItems.length === 0
                       ? null
                       : showUserHiddenItems
-                        ? "Hide hidden items"
-                        : "Show hidden items"}
+                      ? "Hide hidden items"
+                      : "Show hidden items"}
                   </div>
                 </div>
               ) : null}
@@ -716,44 +728,44 @@ const Profile = ({
 
             <TokenGridV4
               items={
-                selectedGrid === "created"
+                selectedGrid === 1
                   ? createdItems
-                  : selectedGrid === "owned"
-                    ? ownedItems
-                    : selectedGrid === "liked"
-                      ? likedItems
-                      : null
+                  : selectedGrid === 2
+                  ? ownedItems
+                  : selectedGrid === 3
+                  ? likedItems
+                  : null
               }
               isLoading={isLoadingCards}
               listId={
-                selectedGrid === "created"
+                selectedGrid === 1
                   ? 1
-                  : selectedGrid === "owned"
-                    ? 2
-                    : selectedGrid === "liked"
-                      ? 3
-                      : null
+                  : selectedGrid === 2
+                  ? 2
+                  : selectedGrid === 3
+                  ? 3
+                  : null
               }
               isMyProfile={isMyProfile}
               openCardMenu={openCardMenu}
               setOpenCardMenu={setOpenCardMenu}
               userHiddenItems={
-                selectedGrid === "created"
+                selectedGrid === 1
                   ? createdHiddenItems
-                  : selectedGrid === "owned"
-                    ? ownedHiddenItems
-                    : selectedGrid === "liked"
-                      ? likedHiddenItems
-                      : null
+                  : selectedGrid === 2
+                  ? ownedHiddenItems
+                  : selectedGrid === 3
+                  ? likedHiddenItems
+                  : null
               }
               setUserHiddenItems={
-                selectedGrid === "created"
+                selectedGrid === 1
                   ? setCreatedHiddenItems
-                  : selectedGrid === "owned"
-                    ? setOwnedHiddenItems
-                    : selectedGrid === "liked"
-                      ? setLikedHiddenItems
-                      : null
+                  : selectedGrid === 2
+                  ? setOwnedHiddenItems
+                  : selectedGrid === 3
+                  ? setLikedHiddenItems
+                  : null
               }
               showUserHiddenItems={showUserHiddenItems}
             />

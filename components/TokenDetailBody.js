@@ -19,6 +19,7 @@ import { removeTags, truncateWithEllipses } from "../lib/utilities";
 import UserTimestampCard from "./UserTimestampCard";
 import TokenHistoryCard from "./TokenHistoryCard";
 import CommentsSection from "./CommentsSection";
+import { getBidLink, getContractName } from "../lib/utilities";
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500;
@@ -32,9 +33,9 @@ const TokenDetailBody = ({
   ownershipDetails,
   isInModal,
 }) => {
+  //console.log("item", item);
   const context = useContext(AppContext);
   const { isMobile, columns, gridWidth } = context;
-
   const getBackgroundColor = () => {
     if (
       item.token_background_color &&
@@ -45,11 +46,16 @@ const TokenDetailBody = ({
       return "black";
     }
   };
-  const getImageUrl = () => {
-    var img_url = item.token_img_url ? item.token_img_url : null;
-
+  const getImageUrl = (img_url) => {
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
       img_url = img_url.split("=")[0] + "=w375";
+    }
+    return img_url;
+  };
+
+  const getBiggerImageUrl = (img_url) => {
+    if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
+      img_url = img_url.split("=")[0] + "=h500";
     }
     return img_url;
   };
@@ -87,7 +93,8 @@ const TokenDetailBody = ({
     }
   }, [targetRef, item, context.windowSize, isMobile]);
 
-  const [fullResLoaded, setFullResLoaded] = useState(null);
+  const [fullResLoaded, setFullResLoaded] = useState(false);
+
   useEffect(() => {
     setFullResLoaded(false);
   }, [item]);
@@ -230,7 +237,7 @@ const TokenDetailBody = ({
                 <div></div>
               </div>
               <img
-                src={getImageUrl()}
+                src={getImageUrl(item.token_img_url)}
                 alt={item.token_name}
                 style={_.merge(
                   fullResLoaded === true ? { display: "none" } : null,
@@ -245,7 +252,11 @@ const TokenDetailBody = ({
               />
 
               <img
-                src={item.token_img_url}
+                src={
+                  context.isMobile
+                    ? getImageUrl(item.token_img_url)
+                    : getBiggerImageUrl(item.token_img_url)
+                }
                 alt={item.token_name}
                 style={_.merge(
                   fullResLoaded ? null : { display: "none" },
@@ -258,7 +269,9 @@ const TokenDetailBody = ({
                       }
                 )}
                 onLoad={() => {
-                  setFullResLoaded(true);
+                  setTimeout(function () {
+                    setFullResLoaded(true);
+                  }, 100);
                 }}
               />
             </div>
@@ -307,15 +320,17 @@ const TokenDetailBody = ({
                   </div>
                 </SmoothScroll>
                 <a
-                  href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
-                  title="Buy on OpenSea"
+                  href={getBidLink(item)}
+                  title={`Buy on ${getContractName(item)}`}
                   target="_blank"
                   onClick={() => {
                     mixpanel.track("OpenSea link click");
                   }}
                 >
                   <div className="text-base font-normal px-4 py-3 mr-2 rounded-full shadow-md hover:text-stpink">
-                    {context.columns > 2 ? "Bid on OpenSea" : "Bid"}
+                    {context.columns > 2
+                      ? `Bid on ${getContractName(item)}`
+                      : "Bid"}
                   </div>
                 </a>
                 <div className="px-4 py-2 rounded-full shadow-md">
@@ -370,10 +385,12 @@ const TokenDetailBody = ({
           {/* Artist and Owned by Section */}
           {ownershipDetails ? (
             <div className="flex flex-col md:flex-row mt-4">
-              {/* artist section */}
-              <div className="flex-1 p-4">
+              {/* left column section */}
+              <div className="flex-1 p-4 md:w-0">
+                {/* artist section */}
+
                 {item.creator_address && (
-                  <>
+                  <div>
                     <div className="md:text-lg py-4">Creator</div>
                     <CreatorSummary
                       address={item.creator_address}
@@ -387,15 +404,12 @@ const TokenDetailBody = ({
                         }
                       }}
                     />
-                  </>
+                  </div>
                 )}
-              </div>
-
-              {/* owned by section */}
-              <div className="flex-1 p-4">
-                {item.owner_address && (
-                  <div>
-                    <div className="md:text-lg py-2">Owned By</div>
+                {/* Owned by Section */}
+                {!isMobile && item.owner_address && (
+                  <div className="mt-8">
+                    <div className="md:text-lg py-4">Owned By</div>
                     <div>
                       <Link
                         href="/[profile]"
@@ -423,33 +437,53 @@ const TokenDetailBody = ({
                   </div>
                 )}
                 {/* History Section */}
-                {/*  */}
-                {/* {ownershipDetails.transfers &&
-                  ownershipDetails.transfers.length > 0 && (
-                    <div className="mt-8">
-                      <div className="md:text-lg py-2">History</div>
-                      <TokenHistoryCard
-                        history={[
-                          ...(ownershipDetails &&
-                            ownershipDetails.transfers.map((transfer) => ({
-                              address: transfer.to_address,
-                              name: transfer.to_name
-                                ? transfer.to_name
-                                : "Unnamed",
-                              timestamp: transfer.timestamp,
-                            }))),
-                          // {
-                          //   address: item.creator_address,
-                          //   name: item.creator_name,
-                          //   timestamp: item.token_created,
-                          // },
-                        ]}
-                      />
-                    </div>
-                  )} */}
+                <div className="mt-8">
+                  <div className="md:text-lg py-4">Owner History</div>
+                  <TokenHistoryCard
+                    nftId={item.nft_id}
+                    closeModal={() => {
+                      if (setEditModalOpen) {
+                        setEditModalOpen(false);
+                      }
+                    }}
+                  />
+                </div>
+              </div>
 
+              {/* right column section */}
+              <div className="flex-1 p-4 order-first md:order-last">
+                {/* Owned by section ONLY ON MOBILE */}
+                {isMobile && item.owner_address && (
+                  <div className="mb-8">
+                    <div className="md:text-lg py-4">Owned By</div>
+                    <div>
+                      <Link
+                        href="/[profile]"
+                        as={
+                          item.owner_username
+                            ? `/${item.owner_username}`
+                            : `/${item.owner_address}`
+                        }
+                      >
+                        <a
+                          onClick={() => {
+                            if (setEditModalOpen) {
+                              setEditModalOpen(false);
+                            }
+                          }}
+                        >
+                          <UserTimestampCard
+                            name={item.owner_name}
+                            imageUrl={item.owner_img_url}
+                            timestamp={ownershipDetails.token_last_transferred}
+                          />
+                        </a>
+                      </Link>
+                    </div>
+                  </div>
+                )}
                 {/* Comments section */}
-                <div className="mt-4 flex">
+                <div className="flex">
                   <CommentsSection
                     nftId={item.nft_id}
                     commentCount={item.comment_count}

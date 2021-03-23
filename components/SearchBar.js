@@ -17,8 +17,8 @@ const SearchContainer = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  margin-left: 16px;
-  padding-right: 16px;
+  margin-left: 1.5rem;
+  padding-right: 1.5rem;
   width: 100%;
   max-width: 700px;
   @media (max-width: 1229px) {
