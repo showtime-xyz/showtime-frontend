@@ -363,7 +363,7 @@ const LeaderboardItem = ({ item, index }) => {
           <ProfileSectionContent>
             <Link href="/[profile]" as={`/${item?.username || item.address}`}>
               <ProfileTitle>
-                {truncateWithEllipses(item?.name, context.isMobile ? 20 : 30) ||
+                {truncateWithEllipses(item?.name, context.isMobile ? 19 : 30) ||
                   formatAddressShort(item.address) ||
                   "Unnamed"}
               </ProfileTitle>

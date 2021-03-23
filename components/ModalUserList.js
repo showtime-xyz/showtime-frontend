@@ -3,6 +3,7 @@ import ClientOnlyPortal from "./ClientOnlyPortal";
 import _ from "lodash";
 import Link from "next/link";
 import CloseButton from "./CloseButton";
+import { truncateWithEllipses } from "../lib/utilities";
 
 export default function ModalUserList({
   isOpen,
@@ -36,7 +37,7 @@ export default function ModalUserList({
                         href="/[profile]"
                         as={`/${profile?.username || profile.wallet_address}`}
                       >
-                        <a className="flex flex-row items-center py-3 transition rounded-lg px-1 hover:bg-gray-100">
+                        <a className="flex flex-row items-center py-3 transition rounded-lg px-1 hover:bg-gray-100 overflow-hidden">
                           <div>
                             <img
                               alt={profile.name}
@@ -50,7 +51,9 @@ export default function ModalUserList({
                             />
                           </div>
                           <div className="ml-2">
-                            {profile.name ? profile.name : "Unnamed"}
+                            {profile.name
+                              ? truncateWithEllipses(profile.name, 25)
+                              : "Unnamed"}
                           </div>
                         </a>
                       </Link>
