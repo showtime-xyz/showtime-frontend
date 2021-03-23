@@ -59,8 +59,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
   const [bioValue, setBioValue] = useState(null);
   const [websiteValue, setWebsiteValue] = useState(null);
   const [defaultListId, setDefaultListId] = useState("");
-  const [defaultCreatedSortId, SetDefaultCreatedSortId] = useState("");
-  const [defaultOwnedSortId, setDefaultOwnedSortId] = useState("");
+  const [defaultCreatedSortId, SetDefaultCreatedSortId] = useState(1);
+  const [defaultOwnedSortId, setDefaultOwnedSortId] = useState(1);
 
   useEffect(() => {
     if (context.myProfile) {
@@ -69,6 +69,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
       setBioValue(context.myProfile.bio);
       setWebsiteValue(context.myProfile.website_url);
       setDefaultListId(context.myProfile.default_list_id || "");
+      SetDefaultCreatedSortId(context.myProfile.default_created_sort_id || 1);
+      setDefaultOwnedSortId(context.myProfile.default_owned_sort_id || 1);
     }
   }, [context.myProfile]);
 
@@ -102,14 +104,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
             : null
           : null,
         default_list_id: defaultListId ? defaultListId : "",
-        default_created_sort_id:
-          defaultCreatedSortId || defaultCreatedSortId === 0
-            ? defaultCreatedSortId
-            : "",
-        default_owned_sort_id:
-          defaultOwnedSortId || defaultOwnedSortId === 0
-            ? defaultOwnedSortId
-            : "",
+        default_created_sort_id: defaultCreatedSortId,
+        default_owned_sort_id: defaultOwnedSortId,
       }),
     });
 
@@ -125,6 +121,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
           : null
         : null,
       default_list_id: defaultListId ? defaultListId : "",
+      default_created_sort_id: defaultCreatedSortId,
+      default_owned_sort_id: defaultOwnedSortId,
     });
 
     setEditModalOpen(false);
@@ -155,7 +153,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
   ];
 
   const sortingOptionsList = [
-    { label: "Select...", key: "" },
+    //{ label: "Select...", key: "" },
     ...Object.keys(SORT_FIELDS).map((key) => SORT_FIELDS[key]),
   ];
 
@@ -289,7 +287,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         &nbsp;{customURLError.message}
                       </div>
                       <label htmlFor="bio" className="text-gray-500 text-sm">
-                        About me (optional)
+                        About Me (optional)
                       </label>
                       <textarea
                         name="bio"
@@ -374,7 +372,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                     </div>
                     <div className="py-2 mb-2">
                       <label className="text-gray-500 text-sm">
-                        Default Created List Sort
+                        Sort Created By
                       </label>
                       <Select
                         options={sortingOptionsList}
@@ -397,9 +395,9 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         className="mt-1"
                       />
                     </div>
-                    <div className="py-2  mb-2">
+                    <div className="py-2  mb-2 mb-12">
                       <label className="text-gray-500 text-sm">
-                        Default Owned List Sort
+                        Sort Owned By
                       </label>
                       <Select
                         options={sortingOptionsList}

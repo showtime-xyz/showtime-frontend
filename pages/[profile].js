@@ -128,6 +128,14 @@ const Profile = ({
   const [likedHiddenItems, setLikedHiddenItems] = useState([]);
 
   const [isLoadingCards, setIsLoadingCards] = useState(false);
+  const [isRefreshingCards, setIsRefreshingCards] = useState(false);
+
+  const [selectedCreatedSortField, setSelectedCreatedSortField] = useState(
+    default_created_sort_id || 1
+  );
+  const [selectedOwnedSortField, setSelectedOwnedSortField] = useState(
+    default_owned_sort_id || 1
+  );
 
   // Fetch the created/owned/liked items
   useEffect(() => {
@@ -143,6 +151,9 @@ const Profile = ({
       setOwnedHiddenItems([]);
       setLikedHiddenItems([]);
 
+      setSelectedCreatedSortField(default_created_sort_id || 1);
+      setSelectedOwnedSortField(default_owned_sort_id || 1);
+
       const response_profile = await backend.get(
         `/v2/profile_client/${slug_address}?limit=150`
       );
@@ -152,24 +163,22 @@ const Profile = ({
       setLikedHiddenItems(data_profile.liked_hidden);
 
       setCreatedItems(
-        data_profile.created
-          .filter(
-            (item) =>
-              item.token_hidden !== 1 &&
-              (item.token_img_url || item.token_animation_url)
-            //&& !data_profile.created_hidden.includes(item.nft_id)
-          )
-          .sort(sortCreatedGriditems)
+        data_profile.created.filter(
+          (item) =>
+            item.token_hidden !== 1 &&
+            (item.token_img_url || item.token_animation_url)
+          //&& !data_profile.created_hidden.includes(item.nft_id)
+        )
+        //.sort(sortCreatedGriditems)
       );
       setOwnedItems(
-        data_profile.owned
-          .filter(
-            (item) =>
-              item.token_hidden !== 1 &&
-              (item.token_img_url || item.token_animation_url)
-            //&& !data_profile.owned_hidden.includes(item.nft_id)
-          )
-          .sort(sortOwnedGriditems)
+        data_profile.owned.filter(
+          (item) =>
+            item.token_hidden !== 1 &&
+            (item.token_img_url || item.token_animation_url)
+          //&& !data_profile.owned_hidden.includes(item.nft_id)
+        )
+        //.sort(sortOwnedGriditems)
       );
       setLikedItems(
         data_profile.liked.filter(
@@ -207,15 +216,11 @@ const Profile = ({
             context.myProfile?.username?.toLowerCase()
         ) {
           setIsMyProfile(true);
-          console.log(wallet_addresses.length);
-          console.log(wallet_addresses_excluding_email.length);
           if (
             wallet_addresses.length === wallet_addresses_excluding_email.length
           ) {
-            console.log(false);
             setHasEmailAddress(false);
           } else {
-            console.log(true);
             setHasEmailAddress(true);
           }
           mixpanel.track("Self profile view", { slug: slug_address });
@@ -309,12 +314,58 @@ const Profile = ({
 
   const [selectedGrid, setSelectedGrid] = useState(1);
   const sortFieldOptions = Object.keys(SORT_FIELDS);
-  const [selectedCreatedSortField, setSelectedCreatedSortField] = useState(
-    default_created_sort_id === null ? 0 : default_created_sort_id
-  );
-  const [selectedOwnedSortField, setSelectedOwnedSortField] = useState(
-    default_owned_sort_id === null ? 1 : default_owned_sort_id
-  );
+
+  useEffect(() => {
+    const updateCreated = async (selectedCreatedSortField) => {
+      console.log("NEED TO UPDATE CREATED");
+
+      setIsRefreshingCards(true);
+      const response_profile = await backend.get(
+        `/v2/profile_client/${slug_address}?limit=150&tab=created&sort=${selectedCreatedSortField}`
+      );
+      const data_profile = response_profile.data.data;
+
+      setCreatedItems(
+        data_profile.created.filter(
+          (item) =>
+            item.token_hidden !== 1 &&
+            (item.token_img_url || item.token_animation_url)
+          //&& !data_profile.created_hidden.includes(item.nft_id)
+        )
+        //.sort(sortCreatedGriditems)
+      );
+      setIsRefreshingCards(false);
+    };
+    if (default_created_sort_id !== selectedCreatedSortField) {
+      updateCreated(selectedCreatedSortField);
+    }
+  }, [default_created_sort_id, selectedCreatedSortField]);
+
+  useEffect(() => {
+    const updateOwned = async (selectedOwnedSortField) => {
+      console.log("NEED TO UPDATE OWNED");
+      setIsRefreshingCards(true);
+      const response_profile = await backend.get(
+        `/v2/profile_client/${slug_address}?limit=150&tab=owned&sort=${selectedOwnedSortField}`
+      );
+      const data_profile = response_profile.data.data;
+
+      setOwnedItems(
+        data_profile.owned.filter(
+          (item) =>
+            item.token_hidden !== 1 &&
+            (item.token_img_url || item.token_animation_url)
+          //&& !data_profile.owned_hidden.includes(item.nft_id)
+        )
+        //.sort(sortOwnedGriditems)
+      );
+      setIsRefreshingCards(false);
+    };
+
+    if (default_owned_sort_id !== selectedOwnedSortField) {
+      updateOwned(selectedOwnedSortField);
+    }
+  }, [default_owned_sort_id, selectedOwnedSortField]);
 
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
@@ -322,6 +373,8 @@ const Profile = ({
   const [openCardMenu, setOpenCardMenu] = useState(null);
   const [showUserHiddenItems, setShowUserHiddenItems] = useState(false);
 
+  {
+    /*
   const sortGridItems = (a, b, tabSortField = null) => {
     let currentTabSortField;
     if (tabSortField) {
@@ -361,12 +414,15 @@ const Profile = ({
   const sortOwnedGriditems = (a, b) => {
     return sortGridItems(a, b, selectedOwnedSortField);
   };
+  
 
   const handleChangeSort = (newValues) => {
     if (selectedGrid === 1) {
+      console.log(newValues);
       setSelectedCreatedSortField(newValues[0].id);
     }
     if (selectedGrid === 2) {
+      console.log(newValues);
       setSelectedOwnedSortField(newValues[0].id);
     }
   };
@@ -378,6 +434,8 @@ const Profile = ({
   useEffect(() => {
     setOwnedItems([...ownedItems].sort(sortGridItems));
   }, [selectedOwnedSortField]);
+  */
+  }
 
   useEffect(() => {
     // if user has a default_list_id configured, use it
@@ -408,7 +466,7 @@ const Profile = ({
     default_list_id,
     createdItems.length,
     ownedItems.length,
-    isLoadingCards,
+    //isLoadingCards,
   ]);
 
   // profilePill Edit profile actions
@@ -438,7 +496,7 @@ const Profile = ({
   };
 
   const FilterTabs = (
-    <GridTabs sortingBar={selectedGrid !== 3}>
+    <GridTabs>
       <GridTab
         label="Created"
         itemCount={
@@ -780,13 +838,65 @@ const Profile = ({
               />
             </div>
             <div className="mx-auto" style={{ width: gridWidth }}>
-              {FilterTabs}
-              {!isLoadingCards && selectedGrid !== 3 && (
-                <div className="flex items-center p-2 mb-2 md:mb-0 text-sm md:text-base">
+              <div className="pt-4">{FilterTabs}</div>
+
+              <div>
+                {isMyProfile ? (
+                  <div className="flex">
+                    <div className="flex-grow"></div>
+                    <div
+                      className="text-right pr-4 text-sm hidden-items-link pb-1"
+                      onClick={() => {
+                        setShowUserHiddenItems(!showUserHiddenItems);
+                      }}
+                      // style={
+                      //   context.windowSize && context.windowSize.width < 600
+                      //     ? {
+                      //         fontWeight: 400,
+                      //         fontSize: 12,
+                      //         marginTop: -10,
+                      //         marginBottom: 4,
+                      //       }
+                      //     : {
+                      //         fontWeight: 400,
+                      //         fontSize: 12,
+                      //         marginTop: -59,
+                      //       }
+                      // }
+                      style={{
+                        fontWeight: 400,
+                        fontSize: 12,
+                        marginTop: -64,
+                      }}
+                    >
+                      {createdHiddenItems.length === 0 &&
+                      ownedHiddenItems.length === 0 &&
+                      likedHiddenItems.length === 0
+                        ? null
+                        : showUserHiddenItems
+                        ? "Hide hidden"
+                        : "Show hidden"}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+
+              {!isLoadingCards && (
+                <div
+                  className={`flex items-center text-sm rounded-md md:text-base ${
+                    selectedGrid === 3 ? "invisible" : null
+                  }`}
+                  style={
+                    context.columns === 1
+                      ? { marginTop: -12, marginRight: 16, marginBottom: 8 }
+                      : { marginTop: -18, marginRight: 12, marginBottom: 0 }
+                  }
+                >
                   <div className="flex-1"></div>
-                  <div className="py-2 px-2 w-max cursor-pointer mr-2">
+                  <div className="py-2 px-2 w-max cursor-pointer mr-1">
                     Sort by:
                   </div>
+
                   <Select
                     options={sortFieldOptions.map((key) => SORT_FIELDS[key])}
                     labelField="label"
@@ -795,50 +905,25 @@ const Profile = ({
                       SORT_FIELDS[
                         sortFieldOptions[
                           selectedGrid === 1
-                            ? selectedCreatedSortField
-                            : selectedOwnedSortField
+                            ? selectedCreatedSortField - 1
+                            : selectedOwnedSortField - 1
                         ]
                       ],
                     ]}
                     searchable={false}
-                    onChange={handleChangeSort}
-                    style={{ fontSize: context.isMobile ? 14 : 16 }}
+                    onChange={(values) => {
+                      selectedGrid === 1
+                        ? setSelectedCreatedSortField(values[0]["id"])
+                        : setSelectedOwnedSortField(values[0]["id"]);
+                    }}
+                    style={{
+                      fontSize: 16,
+                      width: 140,
+                    }}
+                    key={selectedGrid}
                   />
                 </div>
               )}
-              {isMyProfile ? (
-                <div className="flex">
-                  <div className="flex-grow"></div>
-                  <div
-                    className="text-right pr-3 text-sm hidden-items-link pb-1"
-                    onClick={() => {
-                      setShowUserHiddenItems(!showUserHiddenItems);
-                    }}
-                    style={
-                      context.windowSize && context.windowSize.width < 600
-                        ? {
-                            fontWeight: 400,
-                            fontSize: 12,
-                            marginTop: -10,
-                            marginBottom: 4,
-                          }
-                        : {
-                            fontWeight: 400,
-                            fontSize: 12,
-                            marginTop: -59,
-                          }
-                    }
-                  >
-                    {createdHiddenItems.length === 0 &&
-                    ownedHiddenItems.length === 0 &&
-                    likedHiddenItems.length === 0
-                      ? null
-                      : showUserHiddenItems
-                      ? "Hide hidden items"
-                      : "Show hidden items"}
-                  </div>
-                </div>
-              ) : null}
             </div>
 
             <TokenGridV4
@@ -851,7 +936,7 @@ const Profile = ({
                   ? likedItems
                   : null
               }
-              isLoading={isLoadingCards}
+              isLoading={isLoadingCards || isRefreshingCards}
               listId={
                 selectedGrid === 1
                   ? 1
