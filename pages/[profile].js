@@ -150,6 +150,9 @@ const Profile = ({
       setCreatedHiddenItems([]);
       setOwnedHiddenItems([]);
       setLikedHiddenItems([]);
+
+      setSelectedCreatedSortField(default_created_sort_id || 1);
+      setSelectedOwnedSortField(default_owned_sort_id || 1);
     }
 
     const response_profile = await backend.get(
