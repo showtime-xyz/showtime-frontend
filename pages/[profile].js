@@ -315,57 +315,39 @@ const Profile = ({
   const [selectedGrid, setSelectedGrid] = useState(1);
   const sortFieldOptions = Object.keys(SORT_FIELDS);
 
-  useEffect(() => {
-    const updateCreated = async (selectedCreatedSortField) => {
-      console.log("NEED TO UPDATE CREATED");
+  const updateCreated = async (selectedCreatedSortField) => {
+    setIsRefreshingCards(true);
+    const response_profile = await backend.get(
+      `/v2/profile_client/${slug_address}?limit=150&tab=created&sort=${selectedCreatedSortField}`
+    );
+    const data_profile = response_profile.data.data;
 
-      setIsRefreshingCards(true);
-      const response_profile = await backend.get(
-        `/v2/profile_client/${slug_address}?limit=150&tab=created&sort=${selectedCreatedSortField}`
-      );
-      const data_profile = response_profile.data.data;
+    setCreatedItems(
+      data_profile.created.filter(
+        (item) =>
+          item.token_hidden !== 1 &&
+          (item.token_img_url || item.token_animation_url)
+      )
+    );
+    setIsRefreshingCards(false);
+  };
 
-      setCreatedItems(
-        data_profile.created.filter(
-          (item) =>
-            item.token_hidden !== 1 &&
-            (item.token_img_url || item.token_animation_url)
-          //&& !data_profile.created_hidden.includes(item.nft_id)
-        )
-        //.sort(sortCreatedGriditems)
-      );
-      setIsRefreshingCards(false);
-    };
-    if (default_created_sort_id !== selectedCreatedSortField) {
-      updateCreated(selectedCreatedSortField);
-    }
-  }, [default_created_sort_id, selectedCreatedSortField]);
+  const updateOwned = async (selectedOwnedSortField) => {
+    setIsRefreshingCards(true);
+    const response_profile = await backend.get(
+      `/v2/profile_client/${slug_address}?limit=150&tab=owned&sort=${selectedOwnedSortField}`
+    );
+    const data_profile = response_profile.data.data;
 
-  useEffect(() => {
-    const updateOwned = async (selectedOwnedSortField) => {
-      console.log("NEED TO UPDATE OWNED");
-      setIsRefreshingCards(true);
-      const response_profile = await backend.get(
-        `/v2/profile_client/${slug_address}?limit=150&tab=owned&sort=${selectedOwnedSortField}`
-      );
-      const data_profile = response_profile.data.data;
-
-      setOwnedItems(
-        data_profile.owned.filter(
-          (item) =>
-            item.token_hidden !== 1 &&
-            (item.token_img_url || item.token_animation_url)
-          //&& !data_profile.owned_hidden.includes(item.nft_id)
-        )
-        //.sort(sortOwnedGriditems)
-      );
-      setIsRefreshingCards(false);
-    };
-
-    if (default_owned_sort_id !== selectedOwnedSortField) {
-      updateOwned(selectedOwnedSortField);
-    }
-  }, [default_owned_sort_id, selectedOwnedSortField]);
+    setOwnedItems(
+      data_profile.owned.filter(
+        (item) =>
+          item.token_hidden !== 1 &&
+          (item.token_img_url || item.token_animation_url)
+      )
+    );
+    setIsRefreshingCards(false);
+  };
 
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
@@ -912,13 +894,17 @@ const Profile = ({
                     ]}
                     searchable={false}
                     onChange={(values) => {
-                      selectedGrid === 1
-                        ? setSelectedCreatedSortField(values[0]["id"])
-                        : setSelectedOwnedSortField(values[0]["id"]);
+                      if (selectedGrid === 1) {
+                        setSelectedCreatedSortField(values[0]["id"]);
+                        updateCreated(values[0]["id"]);
+                      } else {
+                        setSelectedOwnedSortField(values[0]["id"]);
+                        updateOwned(values[0]["id"]);
+                      }
                     }}
                     style={{
                       fontSize: 16,
-                      width: 140,
+                      width: 150,
                     }}
                     key={selectedGrid}
                   />
