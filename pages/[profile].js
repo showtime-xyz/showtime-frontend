@@ -319,8 +319,11 @@ const Profile = ({
   const [selectedGrid, setSelectedGrid] = useState(1);
   const sortFieldOptions = Object.keys(SORT_FIELDS);
 
-  const updateCreated = async (selectedCreatedSortField) => {
-    setIsRefreshingCards(true);
+  const updateCreated = async (selectedCreatedSortField, showCardRefresh) => {
+    if (showCardRefresh) {
+      setIsRefreshingCards(true);
+    }
+
     const response_profile = await backend.get(
       `/v2/profile_client/${slug_address}?limit=150&tab=created&sort=${selectedCreatedSortField}`
     );
@@ -333,11 +336,16 @@ const Profile = ({
           (item.token_img_url || item.token_animation_url)
       )
     );
-    setIsRefreshingCards(false);
+    if (showCardRefresh) {
+      setIsRefreshingCards(false);
+    }
   };
 
-  const updateOwned = async (selectedOwnedSortField) => {
-    setIsRefreshingCards(true);
+  const updateOwned = async (selectedOwnedSortField, showCardRefresh) => {
+    if (showCardRefresh) {
+      setIsRefreshingCards(true);
+    }
+
     const response_profile = await backend.get(
       `/v2/profile_client/${slug_address}?limit=150&tab=owned&sort=${selectedOwnedSortField}`
     );
@@ -350,7 +358,9 @@ const Profile = ({
           (item.token_img_url || item.token_animation_url)
       )
     );
-    setIsRefreshingCards(false);
+    if (showCardRefresh) {
+      setIsRefreshingCards(false);
+    }
   };
 
   const [showFollowers, setShowFollowers] = useState(false);
@@ -834,10 +844,10 @@ const Profile = ({
                     onChange={(values) => {
                       if (selectedGrid === 1) {
                         setSelectedCreatedSortField(values[0]["id"]);
-                        updateCreated(values[0]["id"]);
+                        updateCreated(values[0]["id"], true);
                       } else {
                         setSelectedOwnedSortField(values[0]["id"]);
-                        updateOwned(values[0]["id"]);
+                        updateOwned(values[0]["id"], true);
                       }
                     }}
                     style={
@@ -899,7 +909,11 @@ const Profile = ({
                   : null
               }
               showUserHiddenItems={showUserHiddenItems}
-              refreshItems={fetchItems}
+              refreshItems={
+                selectedGrid === 1
+                  ? () => updateCreated(selectedCreatedSortField, false)
+                  : () => updateOwned(selectedOwnedSortField, false)
+              }
             />
           </div>
         )}
