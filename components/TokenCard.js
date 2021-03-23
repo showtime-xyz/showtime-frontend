@@ -441,6 +441,26 @@ class TokenCard extends React.Component {
                     />
                   </div>
                 ) : null}
+                {this.state.refreshing && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      cursor: "pointer",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: "#fffffff0",
+                    }}
+                  >
+                    <div className="loading-card-spinner-small mb-2" />
+                    <div>Refreshing...</div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -465,8 +485,7 @@ class TokenCard extends React.Component {
                       textOverflow: "ellipsis",
                     }}
                   >
-                    {this.state.refreshing ? "Refreshing..." : item.token_name}
-
+                    {item.token_name}
                     {/* {this.props.item.token_has_video ? (
                       <FontAwesomeIcon
                         className="ml-1 inline"
