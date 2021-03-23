@@ -8,6 +8,7 @@ import AppContext from "../context/app-context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import Select from "react-dropdown-select";
+import { SORT_FIELDS } from "../lib/constants";
 
 const handleUsernameLookup = async (value, context, setCustomURLError) => {
   const username = value ? value.trim() : null;
@@ -58,6 +59,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
   const [bioValue, setBioValue] = useState(null);
   const [websiteValue, setWebsiteValue] = useState(null);
   const [defaultListId, setDefaultListId] = useState("");
+  const [defaultCreatedSortId, SetDefaultCreatedSortId] = useState(1);
+  const [defaultOwnedSortId, setDefaultOwnedSortId] = useState(1);
 
   useEffect(() => {
     if (context.myProfile) {
@@ -66,6 +69,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
       setBioValue(context.myProfile.bio);
       setWebsiteValue(context.myProfile.website_url);
       setDefaultListId(context.myProfile.default_list_id || "");
+      SetDefaultCreatedSortId(context.myProfile.default_created_sort_id || 1);
+      setDefaultOwnedSortId(context.myProfile.default_owned_sort_id || 1);
     }
   }, [context.myProfile]);
 
@@ -99,6 +104,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
             : null
           : null,
         default_list_id: defaultListId ? defaultListId : "",
+        default_created_sort_id: defaultCreatedSortId,
+        default_owned_sort_id: defaultOwnedSortId,
       }),
     });
 
@@ -114,6 +121,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
           : null
         : null,
       default_list_id: defaultListId ? defaultListId : "",
+      default_created_sort_id: defaultCreatedSortId,
+      default_owned_sort_id: defaultOwnedSortId,
     });
 
     setEditModalOpen(false);
@@ -141,6 +150,11 @@ export default function Modal({ isOpen, setEditModalOpen }) {
       name: "Liked",
       value: 3,
     },
+  ];
+
+  const sortingOptionsList = [
+    //{ label: "Select...", key: "" },
+    ...Object.keys(SORT_FIELDS).map((key) => SORT_FIELDS[key]),
   ];
 
   return (
@@ -273,7 +287,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         &nbsp;{customURLError.message}
                       </div>
                       <label htmlFor="bio" className="text-gray-500 text-sm">
-                        About me (optional)
+                        About Me (optional)
                       </label>
                       <textarea
                         name="bio"
@@ -331,11 +345,10 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   <div className="w-4 flex-shrink" />
                   <div className="my-4 flex-1">
                     <div className="text-xl text-purple-500">Page Settings</div>
-                    <div className="py-2  mb-12">
+                    <div className="py-2 mb-2">
                       <label className="text-gray-500 text-sm">
                         Default NFT List
                       </label>
-
                       <Select
                         options={tab_list}
                         labelField="name"
@@ -346,6 +359,56 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         searchable={false}
                         onChange={(values) =>
                           setDefaultListId(values[0]["value"])
+                        }
+                        style={{
+                          fontSize: 16,
+                          borderWidth: 2,
+                          borderRadius: 4,
+                          borderColor: "rgb(156, 163, 175)",
+                          paddingRight: 8,
+                        }}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div className="py-2 mb-2">
+                      <label className="text-gray-500 text-sm">
+                        Sort Created By
+                      </label>
+                      <Select
+                        options={sortingOptionsList}
+                        labelField="label"
+                        valueField="id"
+                        values={sortingOptionsList.filter(
+                          (item) => item.id === defaultCreatedSortId
+                        )}
+                        searchable={false}
+                        onChange={(values) =>
+                          SetDefaultCreatedSortId(values[0]["id"])
+                        }
+                        style={{
+                          fontSize: 16,
+                          borderWidth: 2,
+                          borderRadius: 4,
+                          borderColor: "rgb(156, 163, 175)",
+                          paddingRight: 8,
+                        }}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div className="py-2  mb-2 mb-12">
+                      <label className="text-gray-500 text-sm">
+                        Sort Owned By
+                      </label>
+                      <Select
+                        options={sortingOptionsList}
+                        labelField="label"
+                        valueField="id"
+                        values={sortingOptionsList.filter(
+                          (item) => item.id === defaultOwnedSortId
+                        )}
+                        searchable={false}
+                        onChange={(values) =>
+                          setDefaultOwnedSortId(values[0]["id"])
                         }
                         style={{
                           fontSize: 16,

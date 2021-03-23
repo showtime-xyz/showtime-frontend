@@ -276,11 +276,6 @@ input[type="text"] {
   background-color: #7d5cff;
   color: #fff;
   font-size: 16px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 18px;
-  padding-right: 18px;
-  border-radius: 7px;
   display: inline-flex;
   border: 2px solid #7d5cff;
 }

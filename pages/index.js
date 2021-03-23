@@ -148,41 +148,40 @@ export default function Home() {
       )}
 
       {gridWidth && (
-        <div
-          style={
-            context.isMobile
-              ? null
-              : {
-                  //backgroundColor: "#fff",
-                  //boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
-                  paddingTop: 20,
-                  paddingBottom: 40,
-                  marginBottom: 30,
+        <>
+          <div
+            style={
+              context.isMobile
+                ? null
+                : {
+                    //backgroundColor: "#fff",
+                    //boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
+                    paddingTop: 20,
+                  }
+            }
+          >
+            <div className="m-auto" style={{ width: gridWidth }}>
+              <div
+                className="flex flex-row ml-0 mr-0"
+                style={
+                  context.isMobile
+                    ? { padding: "0px 16px", marginBottom: 20 }
+                    : { padding: "0px 12px", marginBottom: 16 }
                 }
-          }
-        >
-          <div className="m-auto" style={{ width: gridWidth }}>
-            <div
-              className="flex flex-row ml-0 mr-0"
-              style={
-                context.isMobile
-                  ? { padding: "0px 16px", marginBottom: 20 }
-                  : { padding: "0px 12px", marginBottom: 16 }
-              }
-            >
-              <h3 className="self-end text-2xl md:text-4xl">Latest </h3>
-              <div className="flex-grow sm:hidden"></div>
-              <div className="self-end">
-                <div
-                  className="ml-4 bg-white text-black border-black rounded-full px-5 py-1 cursor-pointer border-2 hover:text-stpink hover:border-stpink transition-all showtime-random-button"
-                  onClick={() => {
-                    getHero();
-                  }}
-                >
-                  <span className="text-sm md:text-base">🎲 Random</span>
+              >
+                <h3 className="self-end text-2xl md:text-4xl">Latest </h3>
+                <div className="flex-grow "></div>
+                <div className="self-end">
+                  <div
+                    className="ml-4 bg-white text-black border-black rounded-full px-5 py-1 cursor-pointer border-2 hover:text-stpink hover:border-stpink transition-all showtime-random-button"
+                    onClick={() => {
+                      getHero();
+                    }}
+                  >
+                    <span className="text-sm md:text-base">🎲 Random</span>
+                  </div>
                 </div>
-              </div>
-              <div className="hidden sm:flex flex-grow"></div>
+                {/*<div className="hidden sm:flex flex-grow"></div>
               <div
                 className="self-end hidden sm:flex"
                 style={context.isMobile ? { padding: "0px 16px" } : null}
@@ -190,16 +189,38 @@ export default function Home() {
                 <Link href="/c/[collection]" as="/c/all">
                   <a className="explore-more-link">Explore more pieces</a>
                 </Link>
+                </div>*/}
               </div>
             </div>
+            <div
+              className="m-auto"
+              style={{ width: gridWidth, minHeight: 700 }}
+            >
+              <TokenGridV4
+                items={heroItems.slice(0, context.columns * 2)}
+                isLoading={isLoadingHero}
+              />
+            </div>
           </div>
-          <div className="m-auto" style={{ width: gridWidth, minHeight: 700 }}>
-            <TokenGridV4
-              items={heroItems.slice(0, context.columns * 2)}
-              isLoading={isLoadingHero}
-            />
+
+          <div
+            className="text-center pb-10 pt-4"
+            style={
+              context.columns === 1
+                ? { backgroundColor: "rgb(243, 244, 246)" }
+                : null
+            }
+          >
+            <Link href="/c/[collection]" as="/c/all">
+              <a className="showtime-purple-button-icon flex flex-row items-center px-4 py-2 rounded-full">
+                <div className="mr-2">Explore Collections</div>
+                <div className="flex">
+                  <FontAwesomeIcon style={{ height: 18 }} icon={faArrowRight} />
+                </div>
+              </a>
+            </Link>
           </div>
-        </div>
+        </>
       )}
 
       {columns && (
@@ -226,8 +247,8 @@ export default function Home() {
       {featuredItems.length > 0 && reachedBottom ? (
         <div className="text-center pt-8 pb-16">
           <Link href="/c/[collection]" as="/c/all">
-            <a className="showtime-purple-button-icon flex flex-row items-center">
-              <div className="mr-2">Explore more</div>
+            <a className="showtime-purple-button-icon flex flex-row items-center px-4 py-2 rounded-full">
+              <div className="mr-2">Explore Collections</div>
               <div className="flex">
                 <FontAwesomeIcon style={{ height: 18 }} icon={faArrowRight} />
               </div>
