@@ -24,6 +24,7 @@ class TokenCard extends React.Component {
       imageLoaded: false,
       showVideo: false,
       muted: true,
+      refreshing: false,
     };
     this.handleMoreShown = this.handleMoreShown.bind(this);
     this.divRef = React.createRef();
@@ -111,6 +112,15 @@ class TokenCard extends React.Component {
     );
 
     mixpanel.track("Unhid item");
+  };
+
+  handleRefreshNFTMetadata = async () => {
+    this.setState({ refreshing: true });
+    await fetch(`/api/refreshmetadata/${this.props.item.nft_id}`, {
+      method: "post",
+    });
+    await this.props.refreshItems();
+    this.setState({ refreshing: false });
   };
 
   getImageUrl = () => {
@@ -279,6 +289,12 @@ class TokenCard extends React.Component {
                                   : "List"
                               }`}
                         </div>
+                        <div
+                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                          onClick={this.handleRefreshNFTMetadata}
+                        >
+                          Refresh Metadata
+                        </div>
                       </div>
                     </div>
                     {/*<div
@@ -425,6 +441,26 @@ class TokenCard extends React.Component {
                     />
                   </div>
                 ) : null}
+                {this.state.refreshing && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      cursor: "pointer",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: "#fffffff0",
+                    }}
+                  >
+                    <div className="loading-card-spinner-small mb-2" />
+                    <div>Refreshing...</div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -450,7 +486,6 @@ class TokenCard extends React.Component {
                     }}
                   >
                     {item.token_name}
-
                     {/* {this.props.item.token_has_video ? (
                       <FontAwesomeIcon
                         className="ml-1 inline"

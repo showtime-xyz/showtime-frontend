@@ -21,6 +21,7 @@ const TokenGridV4 = ({
   userHiddenItems,
   setUserHiddenItems,
   showUserHiddenItems,
+  refreshItems,
 }) => {
   const context = useContext(AppContext);
   const [itemsList, setItemsList] = useState([]);
@@ -281,6 +282,7 @@ const TokenGridV4 = ({
                 setOpenCardMenu={setOpenCardMenu}
                 userHiddenItems={userHiddenItems}
                 setUserHiddenItems={setUserHiddenItems}
+                refreshItems={refreshItems}
               />
             ))}
           </div>

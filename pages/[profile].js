@@ -138,9 +138,9 @@ const Profile = ({
   );
 
   // Fetch the created/owned/liked items
-  useEffect(() => {
-    const fetchItems = async () => {
-      // clear out existing from page (if switching profiles)
+  const fetchItems = async (initial_load) => {
+    // clear out existing from page (if switching profiles)
+    if (initial_load) {
       setIsLoadingCards(true);
 
       setCreatedItems([]);
@@ -153,42 +153,48 @@ const Profile = ({
 
       setSelectedCreatedSortField(default_created_sort_id || 1);
       setSelectedOwnedSortField(default_owned_sort_id || 1);
+    }
 
-      const response_profile = await backend.get(
-        `/v2/profile_client/${slug_address}?limit=150`
-      );
-      const data_profile = response_profile.data.data;
-      setCreatedHiddenItems(data_profile.created_hidden);
-      setOwnedHiddenItems(data_profile.owned_hidden);
-      setLikedHiddenItems(data_profile.liked_hidden);
+    const response_profile = await backend.get(
+      `/v2/profile_client/${slug_address}?limit=150`
+    );
+    const data_profile = response_profile.data.data;
 
-      setCreatedItems(
-        data_profile.created.filter(
-          (item) =>
-            item.token_hidden !== 1 &&
-            (item.token_img_url || item.token_animation_url)
-          //&& !data_profile.created_hidden.includes(item.nft_id)
-        )
-      );
-      setOwnedItems(
-        data_profile.owned.filter(
-          (item) =>
-            item.token_hidden !== 1 &&
-            (item.token_img_url || item.token_animation_url)
-          //&& !data_profile.owned_hidden.includes(item.nft_id)
-        )
-      );
-      setLikedItems(
-        data_profile.liked.filter(
-          (item) =>
-            item.token_hidden !== 1 &&
-            (item.token_img_url || item.token_animation_url)
-          //&& !data_profile.liked_hidden.includes(item.nft_id)
-        )
-      );
+    setCreatedHiddenItems(data_profile.created_hidden);
+    setOwnedHiddenItems(data_profile.owned_hidden);
+    setLikedHiddenItems(data_profile.liked_hidden);
+
+    setCreatedItems(
+      data_profile.created.filter(
+        (item) =>
+          item.token_hidden !== 1 &&
+          (item.token_img_url || item.token_animation_url)
+        //&& !data_profile.created_hidden.includes(item.nft_id)
+      )
+    );
+    setOwnedItems(
+      data_profile.owned.filter(
+        (item) =>
+          item.token_hidden !== 1 &&
+          (item.token_img_url || item.token_animation_url)
+        //&& !data_profile.owned_hidden.includes(item.nft_id)
+      )
+    );
+    setLikedItems(
+      data_profile.liked.filter(
+        (item) =>
+          item.token_hidden !== 1 &&
+          (item.token_img_url || item.token_animation_url)
+        //&& !data_profile.liked_hidden.includes(item.nft_id)
+      )
+    );
+    if (initial_load) {
       setIsLoadingCards(false);
-    };
-    fetchItems();
+    }
+  };
+
+  useEffect(() => {
+    fetchItems(true);
   }, [profile_id]);
 
   const [followers, setFollowers] = useState([]);
@@ -313,8 +319,11 @@ const Profile = ({
   const [selectedGrid, setSelectedGrid] = useState(1);
   const sortFieldOptions = Object.keys(SORT_FIELDS);
 
-  const updateCreated = async (selectedCreatedSortField) => {
-    setIsRefreshingCards(true);
+  const updateCreated = async (selectedCreatedSortField, showCardRefresh) => {
+    if (showCardRefresh) {
+      setIsRefreshingCards(true);
+    }
+
     const response_profile = await backend.get(
       `/v2/profile_client/${slug_address}?limit=150&tab=created&sort=${selectedCreatedSortField}`
     );
@@ -327,11 +336,16 @@ const Profile = ({
           (item.token_img_url || item.token_animation_url)
       )
     );
-    setIsRefreshingCards(false);
+    if (showCardRefresh) {
+      setIsRefreshingCards(false);
+    }
   };
 
-  const updateOwned = async (selectedOwnedSortField) => {
-    setIsRefreshingCards(true);
+  const updateOwned = async (selectedOwnedSortField, showCardRefresh) => {
+    if (showCardRefresh) {
+      setIsRefreshingCards(true);
+    }
+
     const response_profile = await backend.get(
       `/v2/profile_client/${slug_address}?limit=150&tab=owned&sort=${selectedOwnedSortField}`
     );
@@ -344,7 +358,9 @@ const Profile = ({
           (item.token_img_url || item.token_animation_url)
       )
     );
-    setIsRefreshingCards(false);
+    if (showCardRefresh) {
+      setIsRefreshingCards(false);
+    }
   };
 
   const [showFollowers, setShowFollowers] = useState(false);
@@ -380,8 +396,8 @@ const Profile = ({
   }, [
     profile_id,
     default_list_id,
-    createdItems.length,
-    ownedItems.length,
+    //createdItems.length,
+    //ownedItems.length,
     //isLoadingCards,
   ]);
 
@@ -828,10 +844,10 @@ const Profile = ({
                     onChange={(values) => {
                       if (selectedGrid === 1) {
                         setSelectedCreatedSortField(values[0]["id"]);
-                        updateCreated(values[0]["id"]);
+                        updateCreated(values[0]["id"], true);
                       } else {
                         setSelectedOwnedSortField(values[0]["id"]);
-                        updateOwned(values[0]["id"]);
+                        updateOwned(values[0]["id"], true);
                       }
                     }}
                     style={
@@ -893,6 +909,11 @@ const Profile = ({
                   : null
               }
               showUserHiddenItems={showUserHiddenItems}
+              refreshItems={
+                selectedGrid === 1
+                  ? () => updateCreated(selectedCreatedSortField, false)
+                  : () => updateOwned(selectedOwnedSortField, false)
+              }
             />
           </div>
         )}
