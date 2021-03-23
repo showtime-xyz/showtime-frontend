@@ -16,6 +16,7 @@ export default function ProfileInfoPill({
   showFollowing,
   onClickPhoto,
   profileActions,
+  hasEmailAddress,
 }) {
   const context = useContext(AppContext);
   const cleanNumFollowers = numFollowers
@@ -28,17 +29,24 @@ export default function ProfileInfoPill({
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
   const onClick = () => setIsActive(!isActive);
 
-  const { editAccount, editPhoto, addWallet, addEmail, logout } = profileActions;
+  const {
+    editAccount,
+    editPhoto,
+    addWallet,
+    addEmail,
+    logout,
+  } = profileActions;
 
   const actionButton = () => {
     return !isMyProfile ? (
       <>
         <div className="flex items-center justify-center my-2 md:my-0">
           <div
-            className={`${isFollowed
-              ? "bg-white text-black border-gray-300"
-              : "bg-black text-white border-black"
-              } rounded-full px-6 py-2 cursor-pointer border-2 hover:opacity-70 transition-all`}
+            className={`${
+              isFollowed
+                ? "bg-white text-black border-gray-300"
+                : "bg-black text-white border-black"
+            } rounded-full px-6 py-2 cursor-pointer border-2 hover:opacity-70 transition-all`}
             onClick={onClickFollow}
           >
             {!isFollowed && <span className="pr-2 text-md">＋</span>}
@@ -59,10 +67,11 @@ export default function ProfileInfoPill({
           </div>
           <div
             ref={dropdownRef}
-            className={`absolute text-center top-20 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-md transform ${isActive
-              ? "visible opacity-1 translate-y-2"
-              : "invisible opacity-0"
-              }`}
+            className={`absolute text-center top-20 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-md transform ${
+              isActive
+                ? "visible opacity-1 translate-y-2"
+                : "invisible opacity-0"
+            }`}
             style={{ zIndex: 1 }}
           >
             <div
@@ -82,8 +91,8 @@ export default function ProfileInfoPill({
               }}
             >
               {context.myProfile &&
-                context.myProfile.img_url &&
-                !context.myProfile.img_url.includes("opensea-profile")
+              context.myProfile.img_url &&
+              !context.myProfile.img_url.includes("opensea-profile")
                 ? "Edit Photo"
                 : "Add Photo"}
             </div>
@@ -96,15 +105,17 @@ export default function ProfileInfoPill({
             >
               Add Wallet
             </div>
-            <div
-              className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
-              onClick={() => {
-                setIsActive(false);
-                addEmail();
-              }}
-            >
-              Add Email
-            </div>
+            {hasEmailAddress ? null : (
+              <div
+                className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                onClick={() => {
+                  setIsActive(false);
+                  addEmail();
+                }}
+              >
+                Add Email
+              </div>
+            )}
             <div
               className="py-2 px-8 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
               onClick={() => {
@@ -124,8 +135,9 @@ export default function ProfileInfoPill({
     <>
       <div className="pt-4 flex sm:hidden justify-center">{actionButton()}</div>
       <div
-        className={`px-6 relative py-4 rounded-xl  bg-white md:w-max flex flex-row justify-center items-center sm:items-stretch mt-8 mb-4 ${context.isMobile ? null : "hover:shadow-xl"
-          }`}
+        className={`px-6 relative py-4 rounded-xl  bg-white md:w-max flex flex-row justify-center items-center sm:items-stretch mt-8 mb-4 ${
+          context.isMobile ? null : "hover:shadow-xl"
+        }`}
         style={{
           // boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
           border: "1px solid #ddd",
@@ -133,8 +145,9 @@ export default function ProfileInfoPill({
         }}
       >
         <div
-          className={`w-14 h-14 flex items-center justify-center rounded-full my-2 md:my-0 ${isMyProfile ? "cursor-pointer hover:opacity-60 transition" : ""
-            }`}
+          className={`w-14 h-14 flex items-center justify-center rounded-full my-2 md:my-0 ${
+            isMyProfile ? "cursor-pointer hover:opacity-60 transition" : ""
+          }`}
           onClick={isMyProfile ? onClickPhoto : null}
         >
           <img

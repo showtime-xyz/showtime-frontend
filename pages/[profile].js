@@ -6,7 +6,7 @@ import Layout from "../components/layout";
 import TokenGridV4 from "../components/TokenGridV4";
 import backend from "../lib/backend";
 import AppContext from "../context/app-context";
-import ShareButton from "../components/ShareButton";
+//import ShareButton from "../components/ShareButton";
 import ModalEditProfile from "../components/ModalEditProfile";
 import ModalEditPhoto from "../components/ModalEditPhoto";
 import { GridTabs, GridTab } from "../components/GridTabs";
@@ -98,6 +98,7 @@ const Profile = ({
 
   const [isMyProfile, setIsMyProfile] = useState();
   const [isFollowed, setIsFollowed] = useState(false);
+  const [hasEmailAddress, setHasEmailAddress] = useState(false);
 
   useEffect(() => {
     var it_is_followed = false;
@@ -194,6 +195,17 @@ const Profile = ({
             context.myProfile?.username?.toLowerCase()
         ) {
           setIsMyProfile(true);
+          console.log(wallet_addresses.length);
+          console.log(wallet_addresses_excluding_email.length);
+          if (
+            wallet_addresses.length === wallet_addresses_excluding_email.length
+          ) {
+            console.log(false);
+            setHasEmailAddress(false);
+          } else {
+            console.log(true);
+            setHasEmailAddress(true);
+          }
           mixpanel.track("Self profile view", { slug: slug_address });
         } else {
           setIsMyProfile(false);
@@ -479,6 +491,7 @@ const Profile = ({
               isOpen={emailModalOpen}
               setEmailModalOpen={setEmailModalOpen}
               walletAddresses={wallet_addresses}
+              setHasEmailAddress={setHasEmailAddress}
             />
             <ModalEditProfile
               isOpen={editModalOpen}
@@ -687,6 +700,7 @@ const Profile = ({
                   addEmail,
                   logout,
                 }}
+                hasEmailAddress={hasEmailAddress}
               />
             </div>
             <div className="mx-auto" style={{ width: gridWidth }}>
