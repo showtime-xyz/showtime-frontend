@@ -213,7 +213,7 @@ export default function Home() {
           >
             <Link href="/c/[collection]" as="/c/all">
               <a className="showtime-purple-button-icon flex flex-row items-center px-4 py-2 rounded-full">
-                <div className="mr-2">Explore more</div>
+                <div className="mr-2">Explore Collections</div>
                 <div className="flex">
                   <FontAwesomeIcon style={{ height: 18 }} icon={faArrowRight} />
                 </div>
@@ -248,7 +248,7 @@ export default function Home() {
         <div className="text-center pt-8 pb-16">
           <Link href="/c/[collection]" as="/c/all">
             <a className="showtime-purple-button-icon flex flex-row items-center px-4 py-2 rounded-full">
-              <div className="mr-2">Explore more</div>
+              <div className="mr-2">Explore Collections</div>
               <div className="flex">
                 <FontAwesomeIcon style={{ height: 18 }} icon={faArrowRight} />
               </div>
