@@ -169,7 +169,6 @@ const Profile = ({
             (item.token_img_url || item.token_animation_url)
           //&& !data_profile.created_hidden.includes(item.nft_id)
         )
-        //.sort(sortCreatedGriditems)
       );
       setOwnedItems(
         data_profile.owned.filter(
@@ -178,7 +177,6 @@ const Profile = ({
             (item.token_img_url || item.token_animation_url)
           //&& !data_profile.owned_hidden.includes(item.nft_id)
         )
-        //.sort(sortOwnedGriditems)
       );
       setLikedItems(
         data_profile.liked.filter(
@@ -354,70 +352,6 @@ const Profile = ({
 
   const [openCardMenu, setOpenCardMenu] = useState(null);
   const [showUserHiddenItems, setShowUserHiddenItems] = useState(false);
-
-  {
-    /*
-  const sortGridItems = (a, b, tabSortField = null) => {
-    let currentTabSortField;
-    if (tabSortField) {
-      currentTabSortField = tabSortField;
-    } else {
-      switch (selectedGrid) {
-        case 1:
-          currentTabSortField = selectedCreatedSortField;
-          break;
-        case 2:
-          currentTabSortField = selectedOwnedSortField;
-          break;
-        default:
-          currentTabSortField = 1;
-          break;
-      }
-    }
-    if (
-      SORT_FIELDS[sortFieldOptions[currentTabSortField]].key ===
-      SORT_FIELDS.LAST_TRANSFERRED.key
-    ) {
-      return (
-        new Date(b[SORT_FIELDS[sortFieldOptions[currentTabSortField]].key]) -
-        new Date(a[SORT_FIELDS[sortFieldOptions[currentTabSortField]].key])
-      );
-    }
-
-    return (
-      b[SORT_FIELDS[sortFieldOptions[currentTabSortField]].key] -
-      a[SORT_FIELDS[sortFieldOptions[currentTabSortField]].key]
-    );
-  };
-
-  const sortCreatedGriditems = (a, b) => {
-    return sortGridItems(a, b, selectedCreatedSortField);
-  };
-  const sortOwnedGriditems = (a, b) => {
-    return sortGridItems(a, b, selectedOwnedSortField);
-  };
-  
-
-  const handleChangeSort = (newValues) => {
-    if (selectedGrid === 1) {
-      console.log(newValues);
-      setSelectedCreatedSortField(newValues[0].id);
-    }
-    if (selectedGrid === 2) {
-      console.log(newValues);
-      setSelectedOwnedSortField(newValues[0].id);
-    }
-  };
-
-  useEffect(() => {
-    setCreatedItems([...createdItems].sort(sortGridItems));
-  }, [selectedCreatedSortField]);
-
-  useEffect(() => {
-    setOwnedItems([...ownedItems].sort(sortGridItems));
-  }, [selectedOwnedSortField]);
-  */
-  }
 
   useEffect(() => {
     // if user has a default_list_id configured, use it
@@ -831,24 +765,10 @@ const Profile = ({
                       onClick={() => {
                         setShowUserHiddenItems(!showUserHiddenItems);
                       }}
-                      // style={
-                      //   context.windowSize && context.windowSize.width < 600
-                      //     ? {
-                      //         fontWeight: 400,
-                      //         fontSize: 12,
-                      //         marginTop: -10,
-                      //         marginBottom: 4,
-                      //       }
-                      //     : {
-                      //         fontWeight: 400,
-                      //         fontSize: 12,
-                      //         marginTop: -59,
-                      //       }
-                      // }
                       style={{
                         fontWeight: 400,
                         fontSize: 12,
-                        marginTop: -64,
+                        marginTop: -65,
                       }}
                     >
                       {createdHiddenItems.length === 0 &&
@@ -866,12 +786,24 @@ const Profile = ({
               {!isLoadingCards && (
                 <div
                   className={`flex items-center text-sm rounded-md md:text-base ${
-                    selectedGrid === 3 ? "invisible" : null
+                    selectedGrid === 3
+                      ? "invisible"
+                      : selectedGrid === 1 &&
+                        createdItems.filter(
+                          (item) => !createdHiddenItems.includes(item.nft_id)
+                        ).length === 0
+                      ? "invisible"
+                      : selectedGrid === 2 &&
+                        ownedItems.filter(
+                          (item) => !ownedHiddenItems.includes(item.nft_id)
+                        ).length === 0
+                      ? "invisible"
+                      : null
                   }`}
                   style={
                     context.columns === 1
                       ? { marginTop: -12, marginRight: 16, marginBottom: 8 }
-                      : { marginTop: -18, marginRight: 12, marginBottom: 0 }
+                      : { marginTop: -20, marginRight: 12, marginBottom: 0 }
                   }
                 >
                   <div className="flex-1"></div>
@@ -902,10 +834,17 @@ const Profile = ({
                         updateOwned(values[0]["id"]);
                       }
                     }}
-                    style={{
-                      fontSize: 16,
-                      width: 150,
-                    }}
+                    style={
+                      context.columns === 1
+                        ? {
+                            fontSize: 14,
+                            width: 140,
+                          }
+                        : {
+                            fontSize: 16,
+                            width: 150,
+                          }
+                    }
                     key={selectedGrid}
                   />
                 </div>
