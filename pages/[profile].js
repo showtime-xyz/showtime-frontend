@@ -16,6 +16,8 @@ import ModalAddWallet from "../components/ModalAddWallet";
 import ModalAddEmail from "../components/ModalAddEmail.js";
 //import { formatAddressShort, copyToClipBoard } from "../lib/utilities";
 import AddressButton from "../components/AddressButton";
+import { SORT_FIELDS } from "../lib/constants";
+import Select from "react-dropdown-select";
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
@@ -47,6 +49,9 @@ export async function getServerSideProps(context) {
     const profile_id = data_profile.profile.profile_id;
     const username = data_profile.profile.username;
     const default_list_id = data_profile.profile.default_list_id;
+    const default_created_sort_id =
+      data_profile.profile.default_created_sort_id;
+    const default_owned_sort_id = data_profile.profile.default_owned_sort_id;
 
     return {
       props: {
@@ -62,6 +67,8 @@ export async function getServerSideProps(context) {
         profile_id,
         username,
         default_list_id,
+        default_created_sort_id,
+        default_owned_sort_id,
       }, // will be passed to the page component as props
     };
   } catch (err) {
@@ -91,6 +98,8 @@ const Profile = ({
   profile_id,
   username,
   default_list_id,
+  default_created_sort_id,
+  default_owned_sort_id,
 }) => {
   //const router = useRouter();
   const context = useContext(AppContext);
@@ -119,6 +128,14 @@ const Profile = ({
   const [likedHiddenItems, setLikedHiddenItems] = useState([]);
 
   const [isLoadingCards, setIsLoadingCards] = useState(false);
+  const [isRefreshingCards, setIsRefreshingCards] = useState(false);
+
+  const [selectedCreatedSortField, setSelectedCreatedSortField] = useState(
+    default_created_sort_id || 1
+  );
+  const [selectedOwnedSortField, setSelectedOwnedSortField] = useState(
+    default_owned_sort_id || 1
+  );
 
   // Fetch the created/owned/liked items
   useEffect(() => {
@@ -134,11 +151,13 @@ const Profile = ({
       setOwnedHiddenItems([]);
       setLikedHiddenItems([]);
 
+      setSelectedCreatedSortField(default_created_sort_id || 1);
+      setSelectedOwnedSortField(default_owned_sort_id || 1);
+
       const response_profile = await backend.get(
         `/v2/profile_client/${slug_address}?limit=150`
       );
       const data_profile = response_profile.data.data;
-
       setCreatedHiddenItems(data_profile.created_hidden);
       setOwnedHiddenItems(data_profile.owned_hidden);
       setLikedHiddenItems(data_profile.liked_hidden);
@@ -195,15 +214,11 @@ const Profile = ({
             context.myProfile?.username?.toLowerCase()
         ) {
           setIsMyProfile(true);
-          console.log(wallet_addresses.length);
-          console.log(wallet_addresses_excluding_email.length);
           if (
             wallet_addresses.length === wallet_addresses_excluding_email.length
           ) {
-            console.log(false);
             setHasEmailAddress(false);
           } else {
-            console.log(true);
             setHasEmailAddress(true);
           }
           mixpanel.track("Self profile view", { slug: slug_address });
@@ -296,6 +311,41 @@ const Profile = ({
   const [pictureModalOpen, setPictureModalOpen] = useState(false);
 
   const [selectedGrid, setSelectedGrid] = useState(1);
+  const sortFieldOptions = Object.keys(SORT_FIELDS);
+
+  const updateCreated = async (selectedCreatedSortField) => {
+    setIsRefreshingCards(true);
+    const response_profile = await backend.get(
+      `/v2/profile_client/${slug_address}?limit=150&tab=created&sort=${selectedCreatedSortField}`
+    );
+    const data_profile = response_profile.data.data;
+
+    setCreatedItems(
+      data_profile.created.filter(
+        (item) =>
+          item.token_hidden !== 1 &&
+          (item.token_img_url || item.token_animation_url)
+      )
+    );
+    setIsRefreshingCards(false);
+  };
+
+  const updateOwned = async (selectedOwnedSortField) => {
+    setIsRefreshingCards(true);
+    const response_profile = await backend.get(
+      `/v2/profile_client/${slug_address}?limit=150&tab=owned&sort=${selectedOwnedSortField}`
+    );
+    const data_profile = response_profile.data.data;
+
+    setOwnedItems(
+      data_profile.owned.filter(
+        (item) =>
+          item.token_hidden !== 1 &&
+          (item.token_img_url || item.token_animation_url)
+      )
+    );
+    setIsRefreshingCards(false);
+  };
 
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
@@ -332,7 +382,7 @@ const Profile = ({
     default_list_id,
     createdItems.length,
     ownedItems.length,
-    isLoadingCards,
+    //isLoadingCards,
   ]);
 
   // profilePill Edit profile actions
@@ -704,40 +754,101 @@ const Profile = ({
               />
             </div>
             <div className="mx-auto" style={{ width: gridWidth }}>
-              {FilterTabs}
-              {isMyProfile ? (
-                <div className="flex">
-                  <div className="flex-grow"></div>
-                  <div
-                    className="text-right pr-3 text-sm hidden-items-link pb-1"
-                    onClick={() => {
-                      setShowUserHiddenItems(!showUserHiddenItems);
+              <div className="pt-4">{FilterTabs}</div>
+
+              <div>
+                {isMyProfile ? (
+                  <div className="flex">
+                    <div className="flex-grow"></div>
+                    <div
+                      className="text-right pr-4 text-sm hidden-items-link pb-1"
+                      onClick={() => {
+                        setShowUserHiddenItems(!showUserHiddenItems);
+                      }}
+                      style={{
+                        fontWeight: 400,
+                        fontSize: 12,
+                        marginTop: -65,
+                      }}
+                    >
+                      {createdHiddenItems.length === 0 &&
+                      ownedHiddenItems.length === 0 &&
+                      likedHiddenItems.length === 0
+                        ? null
+                        : showUserHiddenItems
+                        ? "Hide hidden"
+                        : "Show hidden"}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+
+              {!isLoadingCards && (
+                <div
+                  className={`flex items-center text-sm rounded-md md:text-base ${
+                    selectedGrid === 3
+                      ? "invisible"
+                      : selectedGrid === 1 &&
+                        createdItems.filter(
+                          (item) => !createdHiddenItems.includes(item.nft_id)
+                        ).length === 0
+                      ? "invisible"
+                      : selectedGrid === 2 &&
+                        ownedItems.filter(
+                          (item) => !ownedHiddenItems.includes(item.nft_id)
+                        ).length === 0
+                      ? "invisible"
+                      : null
+                  }`}
+                  style={
+                    context.columns === 1
+                      ? { marginTop: -12, marginRight: 16, marginBottom: 8 }
+                      : { marginTop: -20, marginRight: 12, marginBottom: 0 }
+                  }
+                >
+                  <div className="flex-1"></div>
+                  <div className="py-2 px-2 w-max cursor-pointer mr-1">
+                    Sort by:
+                  </div>
+
+                  <Select
+                    options={sortFieldOptions.map((key) => SORT_FIELDS[key])}
+                    labelField="label"
+                    valueField="key"
+                    values={[
+                      SORT_FIELDS[
+                        sortFieldOptions[
+                          selectedGrid === 1
+                            ? selectedCreatedSortField - 1
+                            : selectedOwnedSortField - 1
+                        ]
+                      ],
+                    ]}
+                    searchable={false}
+                    onChange={(values) => {
+                      if (selectedGrid === 1) {
+                        setSelectedCreatedSortField(values[0]["id"]);
+                        updateCreated(values[0]["id"]);
+                      } else {
+                        setSelectedOwnedSortField(values[0]["id"]);
+                        updateOwned(values[0]["id"]);
+                      }
                     }}
                     style={
-                      context.windowSize && context.windowSize.width < 600
+                      context.columns === 1
                         ? {
-                            fontWeight: 400,
-                            fontSize: 12,
-                            marginTop: -10,
-                            marginBottom: 4,
+                            fontSize: 14,
+                            width: 140,
                           }
                         : {
-                            fontWeight: 400,
-                            fontSize: 12,
-                            marginTop: -59,
+                            fontSize: 16,
+                            width: 150,
                           }
                     }
-                  >
-                    {createdHiddenItems.length === 0 &&
-                    ownedHiddenItems.length === 0 &&
-                    likedHiddenItems.length === 0
-                      ? null
-                      : showUserHiddenItems
-                      ? "Hide hidden items"
-                      : "Show hidden items"}
-                  </div>
+                    key={selectedGrid}
+                  />
                 </div>
-              ) : null}
+              )}
             </div>
 
             <TokenGridV4
@@ -750,7 +861,7 @@ const Profile = ({
                   ? likedItems
                   : null
               }
-              isLoading={isLoadingCards}
+              isLoading={isLoadingCards || isRefreshingCards}
               listId={
                 selectedGrid === 1
                   ? 1
