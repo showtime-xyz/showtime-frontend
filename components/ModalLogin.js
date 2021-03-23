@@ -3,8 +3,8 @@ import mixpanel from "mixpanel-browser";
 import { Magic } from "magic-sdk";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import Authereum from "authereum";
-import ethProvider from "eth-provider";
+//import Authereum from "authereum";
+//import ethProvider from "eth-provider";
 import { WalletLink } from "walletlink";
 import _ from "lodash";
 import ClientOnlyPortal from "./ClientOnlyPortal";
@@ -24,24 +24,28 @@ export default function Modal({ isOpen }) {
     const { elements } = event.target;
 
     // the magic code
-    const did = await new Magic(
-      process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
-    ).auth.loginWithMagicLink({ email: elements.email.value });
+    try {
+      const did = await new Magic(
+        process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
+      ).auth.loginWithMagicLink({ email: elements.email.value });
 
-    // Once we have the did from magic, login with our own API
-    const authRequest = await fetch("/api/login", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${did}` },
-    });
+      // Once we have the did from magic, login with our own API
+      const authRequest = await fetch("/api/login", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${did}` },
+      });
 
-    if (authRequest.ok) {
-      mixpanel.track("Login success - email");
+      if (authRequest.ok) {
+        mixpanel.track("Login success - email");
 
-      if (!context?.user) {
-        context.getUserFromCookies();
+        if (!context?.user) {
+          context.getUserFromCookies();
+        }
+        context.setLoginModalOpen(false);
+      } else {
+        /* handle errors */
       }
-      context.setLoginModalOpen(false);
-    } else {
+    } catch {
       /* handle errors */
     }
   };

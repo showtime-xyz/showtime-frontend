@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useRef, useContext } from "react";
 import useDetectOutsideClick from "../hooks/useDetectOutsideClick";
 import AppContext from "../context/app-context";
 
@@ -16,6 +16,7 @@ export default function ProfileInfoPill({
   showFollowing,
   onClickPhoto,
   profileActions,
+  hasEmailAddress,
 }) {
   const context = useContext(AppContext);
   const cleanNumFollowers = numFollowers
@@ -28,7 +29,13 @@ export default function ProfileInfoPill({
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
   const onClick = () => setIsActive(!isActive);
 
-  const { editAccount, editPhoto, addWallet, logout } = profileActions;
+  const {
+    editAccount,
+    editPhoto,
+    addWallet,
+    addEmail,
+    logout,
+  } = profileActions;
 
   const actionButton = () => {
     return !isMyProfile ? (
@@ -98,6 +105,17 @@ export default function ProfileInfoPill({
             >
               Add Wallet
             </div>
+            {hasEmailAddress ? null : (
+              <div
+                className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                onClick={() => {
+                  setIsActive(false);
+                  addEmail();
+                }}
+              >
+                Add Email
+              </div>
+            )}
             <div
               className="py-2 px-8 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
               onClick={() => {
