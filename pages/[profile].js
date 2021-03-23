@@ -398,7 +398,7 @@ const Profile = ({
     default_list_id,
     //createdItems.length,
     //ownedItems.length,
-    //isLoadingCards,
+    isLoadingCards,
   ]);
 
   // profilePill Edit profile actions
