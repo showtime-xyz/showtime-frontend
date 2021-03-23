@@ -6,13 +6,14 @@ import Layout from "../components/layout";
 import TokenGridV4 from "../components/TokenGridV4";
 import backend from "../lib/backend";
 import AppContext from "../context/app-context";
-import ShareButton from "../components/ShareButton";
+//import ShareButton from "../components/ShareButton";
 import ModalEditProfile from "../components/ModalEditProfile";
 import ModalEditPhoto from "../components/ModalEditPhoto";
 import { GridTabs, GridTab } from "../components/GridTabs";
 import ProfileInfoPill from "../components/ProfileInfoPill";
 import ModalUserList from "../components/ModalUserList";
 import ModalAddWallet from "../components/ModalAddWallet";
+import ModalAddEmail from "../components/ModalAddEmail.js";
 //import { formatAddressShort, copyToClipBoard } from "../lib/utilities";
 import AddressButton from "../components/AddressButton";
 
@@ -97,6 +98,7 @@ const Profile = ({
 
   const [isMyProfile, setIsMyProfile] = useState();
   const [isFollowed, setIsFollowed] = useState(false);
+  const [hasEmailAddress, setHasEmailAddress] = useState(false);
 
   useEffect(() => {
     var it_is_followed = false;
@@ -193,6 +195,17 @@ const Profile = ({
             context.myProfile?.username?.toLowerCase()
         ) {
           setIsMyProfile(true);
+          console.log(wallet_addresses.length);
+          console.log(wallet_addresses_excluding_email.length);
+          if (
+            wallet_addresses.length === wallet_addresses_excluding_email.length
+          ) {
+            console.log(false);
+            setHasEmailAddress(false);
+          } else {
+            console.log(true);
+            setHasEmailAddress(true);
+          }
           mixpanel.track("Self profile view", { slug: slug_address });
         } else {
           setIsMyProfile(false);
@@ -279,6 +292,7 @@ const Profile = ({
 
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [walletModalOpen, setWalletModalOpen] = useState(false);
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
   const [pictureModalOpen, setPictureModalOpen] = useState(false);
 
   const [selectedGrid, setSelectedGrid] = useState(1);
@@ -335,6 +349,11 @@ const Profile = ({
   const addWallet = () => {
     setWalletModalOpen(true);
     mixpanel.track("Open add wallet");
+  };
+
+  const addEmail = () => {
+    setEmailModalOpen(true);
+    mixpanel.track("Open add email");
   };
 
   const logout = async () => {
@@ -467,6 +486,12 @@ const Profile = ({
               isOpen={walletModalOpen}
               setWalletModalOpen={setWalletModalOpen}
               walletAddresses={wallet_addresses}
+            />
+            <ModalAddEmail
+              isOpen={emailModalOpen}
+              setEmailModalOpen={setEmailModalOpen}
+              walletAddresses={wallet_addresses}
+              setHasEmailAddress={setHasEmailAddress}
             />
             <ModalEditProfile
               isOpen={editModalOpen}
@@ -668,7 +693,14 @@ const Profile = ({
                     ? img_url
                     : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                 }
-                profileActions={{ editAccount, editPhoto, addWallet, logout }}
+                profileActions={{
+                  editAccount,
+                  editPhoto,
+                  addWallet,
+                  addEmail,
+                  logout,
+                }}
+                hasEmailAddress={hasEmailAddress}
               />
             </div>
             <div className="mx-auto" style={{ width: gridWidth }}>
