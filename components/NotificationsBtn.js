@@ -45,6 +45,9 @@ const updateNotificationsLastOpened = async () => {
 
 export default function NotificationsBtn() {
   const context = useContext(AppContext);
+  const myNotificationsLastOpened =
+    context.myProfile && context.myProfile.notifications_last_opened;
+  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
   const [loadingNotifications, setLoadingNotifications] = useState(true);
   const [notifications, setNotifications] = useState([]);
   const dropdownRef = useRef(null);
@@ -52,6 +55,7 @@ export default function NotificationsBtn() {
   const toggleOpen = () => {
     if (!isActive) {
       updateNotificationsLastOpened();
+      setHasUnreadNotifications(false);
     }
     setIsActive(!isActive);
   };
@@ -62,6 +66,13 @@ export default function NotificationsBtn() {
       const notifs = await res.json();
       setNotifications(notifs);
       setLoadingNotifications(false);
+      setHasUnreadNotifications(
+        (notifs && notifs[0] && myNotificationsLastOpened === null) ||
+          (notifs &&
+            notifs[0] &&
+            new Date(notifs[0].to_timestamp) >
+              new Date(myNotificationsLastOpened))
+      );
     };
     getNotifications();
   }, []);
@@ -72,7 +83,7 @@ export default function NotificationsBtn() {
         onClick={() => {
           toggleOpen();
         }}
-        className="hover:text-stpink border-gray-900 hover:border-stpink border-2 rounded-full h-9 w-9 flex items-center justify-center cursor-pointer"
+        className="hover:text-stpink border-gray-900 hover:border-stpink border-2 rounded-full h-9 w-9 flex items-center justify-center cursor-pointer relative"
       >
         <FontAwesomeIcon
           style={{
@@ -81,6 +92,19 @@ export default function NotificationsBtn() {
           }}
           icon={faBell}
         />
+        {hasUnreadNotifications && (
+          <div
+            className="bg-stpink"
+            style={{
+              position: "absolute",
+              height: 10,
+              width: 10,
+              top: 0,
+              left: 0,
+              borderRadius: "50%",
+            }}
+          />
+        )}
       </div>
       <div
         ref={dropdownRef}
