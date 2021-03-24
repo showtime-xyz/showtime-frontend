@@ -7,7 +7,11 @@ import { useState, useEffect } from "react";
  */
 export default function useDetectOutsideClick(el, initialState, container) {
   const [isActive, setIsActive] = useState(initialState);
-  const background = container ? container.current : window;
+  const background = container
+    ? container.current
+    : typeof window !== "undefined"
+    ? window
+    : null;
 
   useEffect(() => {
     const onClick = (e) => {
