@@ -106,7 +106,12 @@ export default function NotificationsBtn() {
         style={{
           zIndex: 1,
           maxWidth: context.isMobile ? "92vw" : 500,
-          width: context.isMobile ? "92vw" : 500,
+          width:
+            loadingNotifications || !notifications || notifications.length === 0
+              ? "unset"
+              : context.isMobile
+              ? "92vw"
+              : 500,
         }}
       >
         {loadingNotifications && (
