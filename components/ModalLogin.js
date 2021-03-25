@@ -56,6 +56,9 @@ export default function Modal({ isOpen }) {
 
     var providerOptions = {
       walletconnect: {
+        display: {
+          description: "Use Rainbow & other popular wallets",
+        },
         package: WalletConnectProvider,
         options: {
           infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
