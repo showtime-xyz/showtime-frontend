@@ -1,12 +1,8 @@
 import React, { useRef, useState, useEffect, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
-import {
-  faBell,
-  faComment,
-  faHeart,
-  faUser,
-} from "@fortawesome/free-regular-svg-icons";
+import { faBell } from "@fortawesome/free-regular-svg-icons";
+import { faComment, faHeart, faUser } from "@fortawesome/free-solid-svg-icons";
 import useDetectOutsideClick from "../hooks/useDetectOutsideClick";
 import { formatDistanceToNowStrict } from "date-fns";
 // import { truncateWithEllipses } from "../lib/utilities";
@@ -105,11 +101,11 @@ export default function NotificationsBtn() {
         }`}
         style={{
           zIndex: 1,
-          maxWidth: context.isMobile ? "92vw" : 500,
+          maxWidth: context.windowSize.width < 768 ? "92vw" : 500,
           width:
             loadingNotifications || !notifications || notifications.length === 0
               ? "unset"
-              : context.isMobile
+              : context.windowSize.width < 768
               ? "92vw"
               : 500,
         }}
@@ -154,7 +150,12 @@ export default function NotificationsBtn() {
                     className="rounded-full mr-1 mt-1"
                     style={{ height: 36, width: 36 }}
                   />
-                  <div className="absolute bottom-0 right-0 bg-white rounded-full h-5 w-5 flex items-center justify-center shadow">
+                  <div
+                    className="absolute bottom-0 right-0 rounded-full h-5 w-5 flex items-center justify-center shadow"
+                    style={{
+                      backgroundColor: getNotificationInfo(notif.type_id).color,
+                    }}
+                  >
                     <FontAwesomeIcon
                       style={{
                         height: 12,
@@ -163,6 +164,7 @@ export default function NotificationsBtn() {
                       icon={
                         iconObjects[getNotificationInfo(notif.type_id).icon]
                       }
+                      color="white"
                     />
                   </div>
                 </div>
