@@ -12,6 +12,7 @@ import backend from "../lib/backend";
 import AppContext from "../context/app-context";
 import CloseButton from "./CloseButton";
 import Web3 from "web3";
+import Fortmatic from "fortmatic";
 
 export default function Modal({ isOpen }) {
   const context = useContext(AppContext);
@@ -58,6 +59,12 @@ export default function Modal({ isOpen }) {
         package: WalletConnectProvider,
         options: {
           infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
+        },
+      },
+      fortmatic: {
+        package: Fortmatic, // required
+        options: {
+          key: process.env.NEXT_PUBLIC_FORTMATIC_PUB_KEY, // required
         },
       },
     };
