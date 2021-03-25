@@ -11,36 +11,12 @@ import useDetectOutsideClick from "../hooks/useDetectOutsideClick";
 import { formatDistanceToNowStrict } from "date-fns";
 import { truncateWithEllipses } from "../lib/utilities";
 import AppContext from "../context/app-context";
-import backend from "../lib/backend";
-
-//should get the types from db
-const getNotificationInfo = (type) => {
-  switch (type) {
-    case 1:
-      return { type: "followed_me", icon: "user", goTo: "profile" };
-    case 2:
-      return { type: "liked_my_creation", icon: "heart", goTo: "nft" };
-    case 3:
-      return { type: "liked_my_owned", icon: "heart", goTo: "nft" };
-    case 4:
-      return { type: "commented_my_creation", icon: "comment", goTo: "nft" };
-    case 5:
-      return { type: "commented_my_owned", icon: "comment", goTo: "nft" };
-    default:
-      return { type: "no_type", icon: "user", goTo: "profile" };
-  }
-};
+import { getNotificationInfo } from "../lib/constants";
 
 const iconObjects = {
   comment: faComment,
   heart: faHeart,
   user: faUser,
-};
-
-const updateNotificationsLastOpened = async () => {
-  await fetch(`/api/updatenotificationslastopened`, {
-    method: "post",
-  });
 };
 
 export default function NotificationsBtn() {
@@ -52,12 +28,23 @@ export default function NotificationsBtn() {
   const [notifications, setNotifications] = useState([]);
   const dropdownRef = useRef(null);
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
+
   const toggleOpen = () => {
     if (!isActive) {
       updateNotificationsLastOpened();
       setHasUnreadNotifications(false);
     }
     setIsActive(!isActive);
+  };
+
+  const updateNotificationsLastOpened = async () => {
+    await fetch(`/api/updatenotificationslastopened`, {
+      method: "post",
+    });
+    context.setMyProfile({
+      ...context.myProfile,
+      notifications_last_opened: new Date(),
+    });
   };
 
   const getNotifications = async () => {
