@@ -24,9 +24,11 @@ export default function NotificationsBtn() {
   const [notifications, setNotifications] = useState([]);
   const dropdownRef = useRef(null);
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
+  const [previouslyLastOpened, setPreviouslyLastOpened] = useState();
 
-  const toggleOpen = () => {
+  const toggleOpen = async () => {
     if (!isActive) {
+      setPreviouslyLastOpened(myNotificationsLastOpened);
       updateNotificationsLastOpened();
       setHasUnreadNotifications(false);
     }
@@ -138,6 +140,11 @@ export default function NotificationsBtn() {
               <div
                 className="py-3 px-4 hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full"
                 key={notif.id}
+                style={
+                  new Date(notif.to_timestamp) > new Date(previouslyLastOpened)
+                    ? { backgroundColor: "#f3f4ff" }
+                    : {}
+                }
               >
                 <div className="w-max mr-1 relative" style={{ minWidth: 36 }}>
                   <img
