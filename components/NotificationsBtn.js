@@ -123,7 +123,9 @@ export default function NotificationsBtn() {
               }
               as={
                 getNotificationInfo(notif.type_id).goTo === "profile"
-                  ? context.myProfile.username || context.user.publicAddress
+                  ? `/${
+                      context.myProfile.username || context.user.publicAddress
+                    }`
                   : `/t/${notif.nft__contract__address}/${notif.nft__token_identifier}`
               }
               key={notif.id}
