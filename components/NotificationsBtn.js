@@ -60,22 +60,28 @@ export default function NotificationsBtn() {
     setIsActive(!isActive);
   };
 
+  const getNotifications = async () => {
+    const res = await fetch("/api/getnotifications");
+    const notifs = await res.json();
+    setNotifications(notifs);
+    setLoadingNotifications(false);
+    setHasUnreadNotifications(
+      (notifs && notifs[0] && myNotificationsLastOpened === null) ||
+        (notifs &&
+          notifs[0] &&
+          new Date(notifs[0].to_timestamp) >
+            new Date(myNotificationsLastOpened))
+    );
+  };
+
   useEffect(() => {
-    const getNotifications = async () => {
-      const res = await fetch("/api/getnotifications");
-      const notifs = await res.json();
-      setNotifications(notifs);
-      setLoadingNotifications(false);
-      setHasUnreadNotifications(
-        (notifs && notifs[0] && myNotificationsLastOpened === null) ||
-          (notifs &&
-            notifs[0] &&
-            new Date(notifs[0].to_timestamp) >
-              new Date(myNotificationsLastOpened))
-      );
-    };
     getNotifications();
+    const interval = setInterval(() => {
+      getNotifications();
+    }, 30000);
+    return () => clearInterval(interval);
   }, []);
+
   return (
     <div className="relative">
       <div
