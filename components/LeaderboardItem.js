@@ -3,12 +3,12 @@ import ReactPlayer from "react-player";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faUser } from "@fortawesome/free-regular-svg-icons";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import mixpanel from "mixpanel-browser";
 import Link from "next/link";
 import useKeyPress from "../hooks/useKeyPress";
 import { getImageUrl, truncateWithEllipses } from "../lib/utilities";
 import ModalTokenDetail from "./ModalTokenDetail";
+import FollowButton from "./FollowButton";
 import AppContext from "../context/app-context";
 import { formatAddressShort } from "../lib/utilities";
 
@@ -81,6 +81,7 @@ const MetadataText = styled.h6`
 
 const ProfileImage = styled.img`
   width: 72px;
+  min-width: 72px;
   height: 72px;
   border-radius: 50%;
   margin-right: 20px;
@@ -128,46 +129,18 @@ const GraySeparator = styled.div`
   }
 `;
 
-const FollowButton = styled.button`
+const FollowButtonWrapper = styled.div`
   display: flex;
-  flex-direction: row;
   align-items: center;
-  border-radius: 24px;
-  border: 1px solid rgba(0, 0, 0, 0.16);
-  box-sizing: border-box;
-  border-radius: 41px;
-  padding: 8px 16px;
-  &:hover {
-    opacity: 0.7;
-  }
   @media screen and (max-width: 600px) {
     display: none;
   }
-`;
-
-const PlusIcon = styled.div`
-  display: flex;
-  margin-bottom: 1px;
-  width: 14px;
-  height: 14px;
-  margin-right: 12px;
-  color: #bdbdbd;
-`;
-
-const FollowText = styled.h6`
-  font-size: 13px;
-  font-weight: 400;
-`;
+`
 
 const LeaderboardItem = ({ item, index }) => {
   const context = useContext(AppContext);
-
   const [squareWidth, setSquareWidth] = useState(0);
   const [followerCount, setFollowerCount] = useState();
-
-  useEffect(() => {
-    setFollowerCount(parseInt(item.follower_count));
-  }, [item]);
 
   useEffect(() => {
     if (context.windowSize) {
@@ -189,49 +162,7 @@ const LeaderboardItem = ({ item, index }) => {
     context.columns > 2
       ? item?.top_items.slice(0, 7)
       : item?.top_items.slice(0, 6);
-  const [isFollowed, setIsFollowed] = useState(false);
-  const myFollows = context?.myFollows || [];
   const isMyProfile = context?.myProfile?.profile_id === item?.profile_id;
-  useEffect(() => {
-    var it_is_followed = false;
-    _.forEach(myFollows, (follow) => {
-      if (follow?.profile_id === item?.profile_id) {
-        it_is_followed = true;
-      }
-    });
-    setIsFollowed(it_is_followed);
-  }, [myFollows]);
-  const handleFollow = async () => {
-    setIsFollowed(true);
-    setFollowerCount(followerCount + 1);
-    // Change myFollows via setMyFollows
-    context.setMyFollows([
-      { profile_id: item?.profile_id },
-      ...context.myFollows,
-    ]);
-    // Post changes to the API
-    await fetch(`/api/follow_v2/${item?.profile_id}`, {
-      method: "post",
-    });
-    mixpanel.track("Followed profile");
-  };
-  const handleUnfollow = async () => {
-    setIsFollowed(false);
-    setFollowerCount(followerCount - 1);
-    // Change myLikes via setMyLikes
-    context.setMyFollows(
-      context.myFollows.filter((i) => i?.profile_id !== item?.profile_id)
-    );
-    // Post changes to the API
-    await fetch(`/api/unfollow_v2/${item?.profile_id}`, {
-      method: "post",
-    });
-    mixpanel.track("Unfollowed profile");
-  };
-  const handleLoggedOutFollow = () => {
-    mixpanel.track("Follow but logged out");
-    context.setLoginModalOpen(true);
-  };
   const [currentlyOpenModal, setCurrentlyOpenModal] = useState(null);
   const currentIndex = topItems?.findIndex(
     (i) => i.nft_id === currentlyOpenModal?.nft_id
@@ -329,27 +260,27 @@ const LeaderboardItem = ({ item, index }) => {
                 style={
                   context.isMobile
                     ? {
-                        border: "1px solid rgba(0, 0, 0, 0.16)",
-                        fontSize: 12,
-                        fontWeight: 500,
-                        paddingTop: 1,
-                        height: 22,
-                        width: 22,
-                        color: "#010101",
-                        bottom: 4,
-                        right: 19,
-                      }
+                      border: "1px solid rgba(0, 0, 0, 0.16)",
+                      fontSize: 12,
+                      fontWeight: 500,
+                      paddingTop: 1,
+                      height: 22,
+                      width: 22,
+                      color: "#010101",
+                      bottom: 4,
+                      right: 19,
+                    }
                     : {
-                        border: "1px solid rgba(0, 0, 0, 0.16)",
-                        fontSize: 13,
-                        fontWeight: 500,
-                        paddingTop: 1,
-                        height: 24,
-                        width: 24,
-                        color: "#010101",
-                        bottom: 0,
-                        right: 20,
-                      }
+                      border: "1px solid rgba(0, 0, 0, 0.16)",
+                      fontSize: 13,
+                      fontWeight: 500,
+                      paddingTop: 1,
+                      height: 24,
+                      width: 24,
+                      color: "#010101",
+                      bottom: 0,
+                      right: 20,
+                    }
                 }
               >
                 {index + 1}
@@ -370,27 +301,13 @@ const LeaderboardItem = ({ item, index }) => {
             </Link>
             <ProfileBottomSection>
               {!isMyProfile && (
-                <>
+                <FollowButtonWrapper>
                   <FollowButton
-                    onClick={
-                      context.user
-                        ? isFollowed
-                          ? handleUnfollow
-                          : handleFollow
-                        : handleLoggedOutFollow
-                    }
-                  >
-                    {!isFollowed && (
-                      <PlusIcon>
-                        <FontAwesomeIcon icon={faPlus} />
-                      </PlusIcon>
-                    )}
-                    <FollowText>
-                      {isFollowed ? "Following" : "Follow"}
-                    </FollowText>
-                  </FollowButton>
+                    item={item}
+                    followerCount={followerCount}
+                    setFollowerCount={setFollowerCount} />
                   <GraySeparator />
-                </>
+                </FollowButtonWrapper>
               )}
               <Metadata>
                 <MetadataIcon>

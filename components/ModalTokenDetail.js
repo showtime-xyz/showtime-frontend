@@ -71,17 +71,17 @@ export default function Modal({
                 { cursor: "pointer" },
                 isStacked && columns === 1
                   ? {
-                      marginRight: -48,
-                      zIndex: 2,
-                      padding: 8,
-                      opacity: 0.4,
-                      backgroundColor: "black",
-                      borderTopRightRadius: 38,
-                      borderBottomRightRadius: 38,
-                      marginTop: 400,
-                      width: 46,
-                      height: 76,
-                    }
+                    marginRight: -48,
+                    zIndex: 2,
+                    padding: 8,
+                    opacity: 0.4,
+                    backgroundColor: "black",
+                    borderTopRightRadius: 38,
+                    borderBottomRightRadius: 38,
+                    marginTop: 400,
+                    width: 46,
+                    height: 76,
+                  }
                   : null
               )}
               onClick={(e) => {
@@ -101,22 +101,22 @@ export default function Modal({
                 isStacked
                   ? { color: "black", height: "100%", overflow: "auto" }
                   : {
-                      color: "black",
-                      height: "90%",
-                      borderRadius: 15,
-                      //, top: "5%",
-                      //right: 8%;
-                      //left: 8%;
-                      //bottom: 5%;
-                    }
+                    color: "black",
+                    height: "90%",
+                    borderRadius: 15,
+                    //, top: "5%",
+                    //right: 8%;
+                    //left: 8%;
+                    //bottom: 5%;
+                  }
               }
               onClick={(e) => e.stopPropagation()}
             >
               <div
                 style={{
                   position: "absolute",
-                  top: 10,
-                  right: 10,
+                  top: 14,
+                  right: 14,
                   cursor: "pointer",
                   zIndex: 4,
                   backgroundColor: "black",
@@ -167,17 +167,17 @@ export default function Modal({
                 { cursor: "pointer" },
                 isStacked && columns === 1
                   ? {
-                      marginLeft: -48,
-                      zIndex: 2,
-                      padding: 8,
-                      opacity: 0.4,
-                      backgroundColor: "black",
-                      borderTopLeftRadius: 38,
-                      borderBottomLeftRadius: 38,
-                      width: 46,
-                      height: 76,
-                      marginTop: 400,
-                    }
+                    marginLeft: -48,
+                    zIndex: 2,
+                    padding: 8,
+                    opacity: 0.4,
+                    backgroundColor: "black",
+                    borderTopLeftRadius: 38,
+                    borderBottomLeftRadius: 38,
+                    width: 46,
+                    height: 76,
+                    marginTop: 400,
+                  }
                   : null
               )}
               onClick={(e) => {
