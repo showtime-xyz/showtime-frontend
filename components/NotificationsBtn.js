@@ -76,7 +76,6 @@ export default function NotificationsBtn() {
     };
     getNotifications();
   }, []);
-
   return (
     <div className="relative">
       <div
@@ -132,7 +131,7 @@ export default function NotificationsBtn() {
               as={
                 getNotificationInfo(notif.type_id).goTo === "profile"
                   ? context.myProfile.username || context.user.publicAddress
-                  : "t/0x06012c8cf97bead5deae237070f9587f8e7a266d/1275300"
+                  : `/t/${notif.nft__contract__address}/${notif.nft__token_identifier}`
               }
               key={notif.id}
             >
