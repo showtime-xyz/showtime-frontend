@@ -107,10 +107,10 @@ export default function NotificationsBtn() {
       </div>
       <div
         ref={dropdownRef}
-        className={`text-black absolute text-center top-10 right-0 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-sm transform ${
+        className={`text-black absolute text-center top-10 right-0 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-sm transform border border-gray-200 ${
           isActive ? "visible opacity-1 translate-y-2" : "invisible opacity-0"
         }`}
-        style={{ zIndex: 1 }}
+        style={{ zIndex: 1, maxWidth: "92vw" }}
       >
         {loadingNotifications && (
           <div className="flex items-center justify-center">
@@ -136,10 +136,10 @@ export default function NotificationsBtn() {
               key={notif.id}
             >
               <div
-                className="py-2  px-4 hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full"
+                className="py-2  px-4 hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full"
                 key={notif.id}
               >
-                <div className="flex-shrink w-max mr-1 relative">
+                <div className="w-max mr-1 relative" style={{ minWidth: 36 }}>
                   <img
                     alt={notif.name}
                     src={
@@ -162,8 +162,16 @@ export default function NotificationsBtn() {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-start">
-                  <div>{truncateWithEllipses(notif.description, 50)}</div>
+                <div className="flex-1 flex-col items-start overflow-hidden text-left">
+                  <div
+                    style={{
+                      textOverflow: "ellipsis",
+                      overflow: "hidden",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {truncateWithEllipses(notif.description, 50)}
+                  </div>
                   <div className="text-gray-400 text-xs">
                     {formatDistanceToNowStrict(new Date(notif.to_timestamp), {
                       addSuffix: true,
