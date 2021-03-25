@@ -100,7 +100,7 @@ export default function NotificationsBtn() {
       </div>
       <div
         ref={dropdownRef}
-        className={`text-black absolute text-center top-10 right-0 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-sm transform border border-gray-200 ${
+        className={`text-black absolute text-center top-10 right-0 bg-white py-2 px-2 shadow-lg rounded-xl transition-all transform border border-gray-200 ${
           isActive ? "visible opacity-1 translate-y-2" : "invisible opacity-0"
         }`}
         style={{
@@ -140,7 +140,7 @@ export default function NotificationsBtn() {
               key={notif.id}
             >
               <div
-                className="py-2  px-4 hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full"
+                className="py-3 px-4 hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full"
                 key={notif.id}
               >
                 <div className="w-max mr-1 relative" style={{ minWidth: 36 }}>
@@ -172,6 +172,7 @@ export default function NotificationsBtn() {
                       // textOverflow: "ellipsis",
                       // overflow: "hidden",
                       whiteSpace: "break-spaces",
+                      fontSize: 14,
                     }}
                   >
                     {notif.description}
