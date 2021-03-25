@@ -88,7 +88,7 @@ const RecommendFollowersVariants = {
 
 const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, items }) => {
     const context = useContext(AppContext);
-    const myFollows = context?.myFollows?.map(follow => follow?.profile_id) || [];
+    const [myFollows, setMyFollows] = useState([]);
     const [showAllItems, setShowAllItems] = useState(false);
     const [recommendFollowersModalOpen, setRecommendFollowersModalOpen] = useState(true);
     const removeAlreadyFollowedItems = items.filter(item => !myFollows.includes(item.profile_id));
@@ -103,6 +103,9 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
         });
         setRecommendFollowersModalOpen(false);
     }
+    useEffect(() => {
+        setMyFollows(context?.myFollows?.map(follow => follow?.profile_id) || [])
+    }, []);
     useEffect(() => {
         if (items.length > 0 && items.every(item => myFollows.includes(item.profile_id))) {
             closeModal();
