@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import useDetectOutsideClick from "../hooks/useDetectOutsideClick";
 import { formatDistanceToNowStrict } from "date-fns";
-import { truncateWithEllipses } from "../lib/utilities";
+// import { truncateWithEllipses } from "../lib/utilities";
 import AppContext from "../context/app-context";
 import { getNotificationInfo } from "../lib/constants";
 
@@ -103,7 +103,11 @@ export default function NotificationsBtn() {
         className={`text-black absolute text-center top-10 right-0 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-sm transform border border-gray-200 ${
           isActive ? "visible opacity-1 translate-y-2" : "invisible opacity-0"
         }`}
-        style={{ zIndex: 1, maxWidth: "92vw" }}
+        style={{
+          zIndex: 1,
+          maxWidth: context.isMobile ? "92vw" : 500,
+          width: context.isMobile ? "92vw" : 500,
+        }}
       >
         {loadingNotifications && (
           <div className="flex items-center justify-center">
@@ -157,15 +161,15 @@ export default function NotificationsBtn() {
                     />
                   </div>
                 </div>
-                <div className="flex-1 flex-col items-start overflow-hidden text-left">
+                <div className="flex-1 flex-col items-start text-left">
                   <div
                     style={{
-                      textOverflow: "ellipsis",
-                      overflow: "hidden",
-                      whiteSpace: "nowrap",
+                      // textOverflow: "ellipsis",
+                      // overflow: "hidden",
+                      whiteSpace: "break-spaces",
                     }}
                   >
-                    {truncateWithEllipses(notif.description, 50)}
+                    {notif.description}
                   </div>
                   <div className="text-gray-400 text-xs">
                     {formatDistanceToNowStrict(new Date(notif.to_timestamp), {
