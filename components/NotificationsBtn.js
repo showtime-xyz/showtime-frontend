@@ -64,7 +64,7 @@ export default function NotificationsBtn() {
   useEffect(() => {
     getNotifications();
   }, []);
-  useInterval(getNotifications, 30000);
+  useInterval(getNotifications, 60000);
 
   return (
     <div className="relative">
