@@ -6,6 +6,7 @@ import { faComment, faHeart, faUser } from "@fortawesome/free-solid-svg-icons";
 import useDetectOutsideClick from "../hooks/useDetectOutsideClick";
 import { formatDistanceToNowStrict } from "date-fns";
 // import { truncateWithEllipses } from "../lib/utilities";
+import useInterval from "../hooks/useInterval";
 import AppContext from "../context/app-context";
 import { getNotificationInfo } from "../lib/constants";
 
@@ -17,8 +18,8 @@ const iconObjects = {
 
 export default function NotificationsBtn() {
   const context = useContext(AppContext);
-  const myNotificationsLastOpened =
-    context.myProfile && context.myProfile.notifications_last_opened;
+  // const myNotificationsLastOpened =
+  //   context.myProfile && context.myProfile.notifications_last_opened;
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
   const [loadingNotifications, setLoadingNotifications] = useState(true);
   const [notifications, setNotifications] = useState([]);
@@ -28,7 +29,7 @@ export default function NotificationsBtn() {
 
   const toggleOpen = async () => {
     if (!isActive) {
-      setPreviouslyLastOpened(myNotificationsLastOpened);
+      setPreviouslyLastOpened(context.myProfile.notifications_last_opened);
       updateNotificationsLastOpened();
       setHasUnreadNotifications(false);
     }
@@ -39,7 +40,7 @@ export default function NotificationsBtn() {
     await fetch(`/api/updatenotificationslastopened`, {
       method: "post",
     });
-    context.setMyProfile({
+    await context.setMyProfile({
       ...context.myProfile,
       notifications_last_opened: new Date(),
     });
@@ -51,21 +52,19 @@ export default function NotificationsBtn() {
     setNotifications(notifs);
     setLoadingNotifications(false);
     setHasUnreadNotifications(
-      (notifs && notifs[0] && myNotificationsLastOpened === null) ||
+      (notifs &&
+        notifs[0] &&
+        context.myProfile.notifications_last_opened === null) ||
         (notifs &&
           notifs[0] &&
           new Date(notifs[0].to_timestamp) >
-            new Date(myNotificationsLastOpened))
+            new Date(context.myProfile.notifications_last_opened))
     );
   };
-
   useEffect(() => {
     getNotifications();
-    const interval = setInterval(() => {
-      getNotifications();
-    }, 30000);
-    return () => clearInterval(interval);
   }, []);
+  useInterval(getNotifications, 30000);
 
   return (
     <div className="relative">
@@ -138,13 +137,17 @@ export default function NotificationsBtn() {
               key={notif.id}
             >
               <div
-                className="py-3 px-4 hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full"
-                key={notif.id}
-                style={
+                className={`py-3 px-4 hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full ${
                   new Date(notif.to_timestamp) > new Date(previouslyLastOpened)
-                    ? { backgroundColor: "#f3f4ff" }
-                    : {}
-                }
+                    ? "bg-gray-100 hover:bg-gray-200"
+                    : ""
+                }`}
+                key={notif.id}
+                // style={
+                //   new Date(notif.to_timestamp) > new Date(previouslyLastOpened)
+                //     ? { backgroundColor: "#f3f4ff" }
+                //     : {}
+                // }
               >
                 <div className="w-max mr-1 relative" style={{ minWidth: 36 }}>
                   <img
