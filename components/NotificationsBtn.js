@@ -37,29 +37,37 @@ export default function NotificationsBtn() {
   };
 
   const updateNotificationsLastOpened = async () => {
-    await fetch(`/api/updatenotificationslastopened`, {
-      method: "post",
-    });
-    await context.setMyProfile({
-      ...context.myProfile,
-      notifications_last_opened: new Date(),
-    });
+    try {
+      await fetch(`/api/updatenotificationslastopened`, {
+        method: "post",
+      });
+      await context.setMyProfile({
+        ...context.myProfile,
+        notifications_last_opened: new Date(),
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const getNotifications = async () => {
-    const res = await fetch("/api/getnotifications");
-    const notifs = await res.json();
-    setNotifications(notifs);
-    setLoadingNotifications(false);
-    setHasUnreadNotifications(
-      (notifs &&
-        notifs[0] &&
-        context.myProfile.notifications_last_opened === null) ||
+    try {
+      const res = await fetch("/api/getnotifications");
+      const notifs = await res.json();
+      setNotifications(notifs);
+      setLoadingNotifications(false);
+      setHasUnreadNotifications(
         (notifs &&
           notifs[0] &&
-          new Date(notifs[0].to_timestamp) >
-            new Date(context.myProfile.notifications_last_opened))
-    );
+          context.myProfile.notifications_last_opened === null) ||
+          (notifs &&
+            notifs[0] &&
+            new Date(notifs[0].to_timestamp) >
+              new Date(context.myProfile.notifications_last_opened))
+      );
+    } catch (err) {
+      console.log(err);
+    }
   };
   useEffect(() => {
     getNotifications();
