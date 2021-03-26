@@ -142,6 +142,7 @@ export default function NotificationsBtn() {
                     ? "bg-gray-100 hover:bg-gray-200"
                     : ""
                 }`}
+                onClick={() => setIsActive(!isActive)}
                 key={notif.id}
                 // style={
                 //   new Date(notif.to_timestamp) > new Date(previouslyLastOpened)
