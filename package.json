@@ -28,6 +28,7 @@
     "eth-sig-util": "^3.0.1",
     "ethereumjs-util": "^7.0.8",
     "exif-js": "^2.3.0",
+    "fortmatic": "^2.2.1",
     "lodash": "^4.17.20",
     "magic-sdk": "^4.0.2",
     "mixpanel-browser": "^2.40.1",

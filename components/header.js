@@ -4,6 +4,7 @@ import mixpanel from "mixpanel-browser";
 import SearchBar from "./SearchBar";
 import AppContext from "../context/app-context";
 import ModalLogin from "./ModalLogin";
+import NotificationsBtn from "./NotificationsBtn";
 
 const Header = () => {
   const context = useContext(AppContext);
@@ -62,8 +63,11 @@ const Header = () => {
           <div className="flex-grow" style={{ width: "100%" }}>
             <SearchBar />
           </div>
-          <div className="hidden md:block mr-6" style={{ fontWeight: 400 }}>
-            <Link href="/">
+          <div
+            className="hidden md:flex mr-6 items-center"
+            style={{ fontWeight: 400 }}
+          >
+            {/*<Link href="/">
               <a
                 className="showtime-header-link ml-6 text-sm md:text-base"
                 onClick={() => {
@@ -71,6 +75,17 @@ const Header = () => {
                 }}
               >
                 Home
+              </a>
+              </Link>*/}
+
+            <Link href="/c/[collection]" as="/c/all">
+              <a
+                className="showtime-header-link ml-6 text-sm md:text-base"
+                onClick={() => {
+                  mixpanel.track("Explore button click");
+                }}
+              >
+                Explore
               </a>
             </Link>
             <Link href="/leaderboard">
@@ -83,17 +98,13 @@ const Header = () => {
                 Leaderboard
               </a>
             </Link>
-            <Link href="/c/[collection]" as="/c/all">
-              <a
-                className="showtime-header-link ml-6 text-sm md:text-base"
-                onClick={() => {
-                  mixpanel.track("Explore button click");
-                }}
-              >
-                Explore
-              </a>
-            </Link>
+            {context.user && context.myProfile !== undefined && (
+              <div className="flex-shrink ml-6">
+                <NotificationsBtn />
+              </div>
+            )}
           </div>
+
           {/* End desktop-only menu */}
           <div>
             {context.user && context.myProfile !== undefined ? (
@@ -167,41 +178,47 @@ const Header = () => {
         </div>
         {/* Start mobile-only menu */}
         <div
-          className={`block md:hidden pt-4 ${
+          className={`flex md:hidden justify-between items-center pt-4 ${
             !context.gridWidth ? "invisible" : ""
           }`}
         >
-          <Link href="/">
-            <a
-              className="showtime-header-link mr-5 text-sm md:text-base"
-              onClick={() => {
-                mixpanel.track("Most liked button click");
-              }}
-            >
-              Home
-            </a>
-          </Link>
-
-          <Link href="/leaderboard">
-            <a
-              className="showtime-header-link mr-5 text-sm md:text-base"
-              onClick={() => {
-                mixpanel.track("Leaderboard button click");
-              }}
-            >
-              Leaderboard
-            </a>
-          </Link>
-          <Link href="/c/[collection]" as="/c/all">
-            <a
-              className="showtime-header-link mr-5 text-sm md:text-base"
-              onClick={() => {
-                mixpanel.track("Explore button click");
-              }}
-            >
-              Explore
-            </a>
-          </Link>
+          <div>
+            {/*<Link href="/">
+              <a
+                className="showtime-header-link mr-5 text-sm md:text-base"
+                onClick={() => {
+                  mixpanel.track("Most liked button click");
+                }}
+              >
+                Home
+              </a>
+              </Link>*/}
+            <Link href="/c/[collection]" as="/c/all">
+              <a
+                className="showtime-header-link mr-5 text-sm md:text-base"
+                onClick={() => {
+                  mixpanel.track("Explore button click");
+                }}
+              >
+                Explore
+              </a>
+            </Link>
+            <Link href="/leaderboard">
+              <a
+                className="showtime-header-link mr-5 text-sm md:text-base"
+                onClick={() => {
+                  mixpanel.track("Leaderboard button click");
+                }}
+              >
+                Leaderboard
+              </a>
+            </Link>
+          </div>
+          {context.isMobile && context.user && context.myProfile !== undefined && (
+            <div className="flex-shrink">
+              <NotificationsBtn />
+            </div>
+          )}
         </div>
         {/* End mobile-only menu */}
       </header>

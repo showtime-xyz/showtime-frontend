@@ -116,7 +116,7 @@ export default function Collection({
         sortby: sortBy,
       });
 
-      if (sortBy == "random" && collection_name == "all") {
+      if (sortBy == "random") {
         // Resetting the cache for random items - for next load
         backend.get(
           `/v2/collection?limit=150&recache=1&order_by=${sortBy}&collection=${collection_name}`
