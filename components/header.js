@@ -67,7 +67,7 @@ const Header = () => {
             className="hidden md:flex mr-6 items-center"
             style={{ fontWeight: 400 }}
           >
-            <Link href="/">
+            {/*<Link href="/">
               <a
                 className="showtime-header-link ml-6 text-sm md:text-base"
                 onClick={() => {
@@ -75,6 +75,17 @@ const Header = () => {
                 }}
               >
                 Home
+              </a>
+              </Link>*/}
+
+            <Link href="/c/[collection]" as="/c/all">
+              <a
+                className="showtime-header-link ml-6 text-sm md:text-base"
+                onClick={() => {
+                  mixpanel.track("Explore button click");
+                }}
+              >
+                Explore
               </a>
             </Link>
             <Link href="/leaderboard">
@@ -85,16 +96,6 @@ const Header = () => {
                 }}
               >
                 Leaderboard
-              </a>
-            </Link>
-            <Link href="/c/[collection]" as="/c/all">
-              <a
-                className="showtime-header-link ml-6 text-sm md:text-base"
-                onClick={() => {
-                  mixpanel.track("Explore button click");
-                }}
-              >
-                Explore
               </a>
             </Link>
             {context.user && context.myProfile !== undefined && (
@@ -182,7 +183,7 @@ const Header = () => {
           }`}
         >
           <div>
-            <Link href="/">
+            {/*<Link href="/">
               <a
                 className="showtime-header-link mr-5 text-sm md:text-base"
                 onClick={() => {
@@ -191,18 +192,7 @@ const Header = () => {
               >
                 Home
               </a>
-            </Link>
-
-            <Link href="/leaderboard">
-              <a
-                className="showtime-header-link mr-5 text-sm md:text-base"
-                onClick={() => {
-                  mixpanel.track("Leaderboard button click");
-                }}
-              >
-                Leaderboard
-              </a>
-            </Link>
+              </Link>*/}
             <Link href="/c/[collection]" as="/c/all">
               <a
                 className="showtime-header-link mr-5 text-sm md:text-base"
@@ -211,6 +201,16 @@ const Header = () => {
                 }}
               >
                 Explore
+              </a>
+            </Link>
+            <Link href="/leaderboard">
+              <a
+                className="showtime-header-link mr-5 text-sm md:text-base"
+                onClick={() => {
+                  mixpanel.track("Leaderboard button click");
+                }}
+              >
+                Leaderboard
               </a>
             </Link>
           </div>

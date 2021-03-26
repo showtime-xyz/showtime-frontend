@@ -137,7 +137,7 @@ export default function NotificationsBtn() {
               key={notif.id}
             >
               <div
-                className={`py-3 px-4 hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full ${
+                className={`py-3 px-3 hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full ${
                   new Date(notif.to_timestamp) > new Date(previouslyLastOpened)
                     ? "bg-gray-100 hover:bg-gray-200"
                     : ""
@@ -150,7 +150,7 @@ export default function NotificationsBtn() {
                 //     : {}
                 // }
               >
-                <div className="w-max mr-1 relative" style={{ minWidth: 36 }}>
+                <div className="w-max mr-2 relative" style={{ minWidth: 36 }}>
                   <img
                     alt={notif.name}
                     src={
