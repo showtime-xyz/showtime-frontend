@@ -56,6 +56,7 @@ const OverlaySearchContainer = styled.div`
   width: 100%;
   left: 0;
   top: 0;
+  z-index: 1;
 `;
 
 const SearchToggleButton = styled.div`

@@ -66,7 +66,14 @@ export default class MyApp extends React.Component {
         this.setMyLikes(my_info_data.data.likes_nft);
         this.setMyComments(my_info_data.data.comments);
         this.setMyFollows(my_info_data.data.follows);
-        this.setMyProfile(my_info_data.data.profile);
+        this.setMyProfile({
+          ...my_info_data.data.profile,
+          // turn notifications_last_opened into Date before storing in context
+          notifications_last_opened: my_info_data.data.profile
+            .notifications_last_opened
+            ? new Date(my_info_data.data.profile.notifications_last_opened)
+            : null,
+        });
       } catch {}
     } catch {
       // Not logged in
