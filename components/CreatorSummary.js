@@ -11,11 +11,21 @@ export default function CreatorSummary({
   imageUrl,
   closeModal,
   bio,
+  collectionSlug,
 }) {
   return (
     <>
       <div>
-        <Link href="/[profile]" as={username ? `/${username}` : `/${address}`}>
+        <Link
+          href={collectionSlug ? "/c/[collection]" : "/[profile]"}
+          as={
+            collectionSlug
+              ? `/c/${collectionSlug}`
+              : username
+              ? `/${username}`
+              : `/${address}`
+          }
+        >
           <a onClick={closeModal}>
             <img
               alt={name}
@@ -30,7 +40,16 @@ export default function CreatorSummary({
           </a>
         </Link>
       </div>
-      <Link href="/[profile]" as={username ? `/${username}` : `/${address}`}>
+      <Link
+        href={collectionSlug ? "/c/[collection]" : "/[profile]"}
+        as={
+          collectionSlug
+            ? `/c/${collectionSlug}`
+            : username
+            ? `/${username}`
+            : `/${address}`
+        }
+      >
         <a onClick={closeModal}>
           <p className="text-xl md:text-3xl py-4 inline-block hover:text-stpink">
             {truncateWithEllipses(name, 26)}
@@ -38,10 +57,21 @@ export default function CreatorSummary({
         </a>
       </Link>
       {bio && <div className="pb-4 text-gray-500">{bio}</div>}
-      <Link href="/[profile]" as={username ? `/${username}` : `/${address}`}>
+      <Link
+        href={collectionSlug ? "/c/[collection]" : "/[profile]"}
+        as={
+          collectionSlug
+            ? `/c/${collectionSlug}`
+            : username
+            ? `/${username}`
+            : `/${address}`
+        }
+      >
         <a onClick={closeModal}>
           <div className="px-4 py-2 mt-2 border-2 border-gray-300 rounded-full rounded-xl flex items-center justify-center w-max text-gray-300 hover:border-stpink hover:text-stpink">
-            <span className="mr-2 text-black">Creator Profile</span>
+            <span className="mr-2 text-black">
+              {collectionSlug ? "Collection" : "Creator Profile"}
+            </span>
             <FontAwesomeIcon
               style={{
                 height: 18,
