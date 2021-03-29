@@ -136,9 +136,6 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
     <Layout key={item.nft_id}>
       <Head>
         <title>{item.token_name}</title>
-        {item.token_img_original_url ? (
-          <link rel="prefetch" href={item.token_img_original_url} as="image" />
-        ) : null}
 
         <meta name="description" content={item.token_description} />
         <meta property="og:type" content="website" />

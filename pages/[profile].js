@@ -53,6 +53,8 @@ export async function getServerSideProps(context) {
       data_profile.profile.default_created_sort_id;
     const default_owned_sort_id = data_profile.profile.default_owned_sort_id;
 
+    const featured_nft_img_url = data_profile.profile.featured_nft_img_url;
+
     return {
       props: {
         name,
@@ -69,6 +71,7 @@ export async function getServerSideProps(context) {
         default_list_id,
         default_created_sort_id,
         default_owned_sort_id,
+        featured_nft_img_url,
       }, // will be passed to the page component as props
     };
   } catch (err) {
@@ -100,6 +103,7 @@ const Profile = ({
   default_list_id,
   default_created_sort_id,
   default_owned_sort_id,
+  featured_nft_img_url,
 }) => {
   //const router = useRouter();
   const context = useContext(AppContext);
@@ -520,7 +524,9 @@ const Profile = ({
           <meta
             property="og:image"
             content={
-              img_url
+              featured_nft_img_url
+                ? featured_nft_img_url
+                : img_url
                 ? img_url
                 : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
             }
@@ -539,7 +545,9 @@ const Profile = ({
           <meta
             name="twitter:image"
             content={
-              img_url
+              featured_nft_img_url
+                ? featured_nft_img_url
+                : img_url
                 ? img_url
                 : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
             }
