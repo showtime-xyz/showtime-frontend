@@ -196,7 +196,31 @@ class TokenCard extends React.Component {
               style={{ position: "relative" }}
             >
               <div className="flex-shrink">
-                {item.creator_address ? (
+                {item.contract_is_creator ? (
+                  <Link
+                    href="/c/[collection]"
+                    as={`/c/${item.collection_slug}`}
+                  >
+                    <a className="flex flex-row items-center">
+                      <div>
+                        <img
+                          alt={item.collection_name}
+                          src={
+                            item.collection_img_url
+                              ? item.collection_img_url
+                              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                          }
+                          className="rounded-full"
+                          style={{ height: 24, width: 24 }}
+                        />
+                      </div>
+                      <div className="showtime-card-profile-link ml-2">
+                        {this.truncateWithEllipses(item.collection_name, 30)}{" "}
+                        Collection
+                      </div>
+                    </a>
+                  </Link>
+                ) : item.creator_address ? (
                   <Link
                     href="/[profile]"
                     as={`/${item?.creator_username || item.creator_address}`}
