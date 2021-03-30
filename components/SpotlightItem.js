@@ -360,12 +360,7 @@ class SpotlightItem extends React.Component {
                       <div className="loading-card-spinner" />
                     </div>
                   ) : null}
-                  <div
-                    style={{
-                      backgroundColor: this.getBackgroundColor(item),
-                    }}
-                    className="h-full md:flex md:items-center md:justify-center "
-                  >
+                  <div className="h-full md:flex md:items-center md:justify-center ">
                     <img
                       className={
                         this.context.isMobile
@@ -377,7 +372,9 @@ class SpotlightItem extends React.Component {
                       alt={item.token_name}
                       onLoad={() => this.setState({ imageLoaded: true })}
                       style={{
-                        ...(!this.state.imageLoaded ? { display: "none" } : {}),
+                        ...(!this.state.imageLoaded
+                          ? { display: "none" }
+                          : { backgroundColor: this.getBackgroundColor(item) }),
                         ...(columns === 1 ? { height: window.innerWidth } : {}),
                       }}
                     />
