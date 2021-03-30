@@ -7,6 +7,7 @@ import {
   faPlay,
   faEllipsisH,
 } from "@fortawesome/free-solid-svg-icons";
+import { faSun } from "@fortawesome/free-regular-svg-icons";
 //import { faEdit } from "@fortawesome/free-regular-svg-icons";
 import LikeButton from "./LikeButton";
 import CommentButton from "./CommentButton";
@@ -169,28 +170,30 @@ class SpotlightItem extends React.Component {
           >
             {(item.token_has_video &&
               this.state.showVideo &&
-              this.props.currentlyPlayingVideo) ||
+              this.state.currentlyPlayingVideo) ||
             (item.token_has_video && !item.token_img_url) ? (
-              <ReactPlayer
-                url={item.token_animation_url}
-                playing={
-                  this.props.currentlyPlayingVideo ||
-                  (item.token_has_video && !item.token_img_url)
-                }
-                loop
-                controls
-                muted={this.state.muted}
-                width={columns === 1 ? window.innerWidth : 373}
-                height={
-                  columns === 1
-                    ? item.imageRef.current
-                      ? item.imageRef.current.height
-                      : null
-                    : 373
-                }
-                playsinline
-                //onReady={this.setSpans}
-              />
+              <div className="sm:flex-1 md:w-2/4 bg-black">
+                <ReactPlayer
+                  url={item.token_animation_url}
+                  playing={
+                    this.state.currentlyPlayingVideo ||
+                    (item.token_has_video && !item.token_img_url)
+                  }
+                  loop
+                  controls
+                  muted={this.state.muted}
+                  width={columns === 1 ? window.innerWidth : "100%"}
+                  height={
+                    columns === 1
+                      ? item.imageRef.current
+                        ? item.imageRef.current.height
+                        : null
+                      : "100%"
+                  }
+                  playsinline
+                  //onReady={this.setSpans}
+                />
+              </div>
             ) : (
               <div
                 className="sm:flex-1 md:w-2/4"
@@ -295,6 +298,68 @@ class SpotlightItem extends React.Component {
             <div className="p-4 md:p-6 sm:flex-1 md:w-2/4">
               <div>
                 <div className="">
+                  {!isMobile && (
+                    <div className="flex items-top justify-between">
+                      <div className="text-gray-500 flex items-center">
+                        <FontAwesomeIcon
+                          style={{
+                            height: 22,
+                            width: 22,
+                          }}
+                          icon={faSun}
+                        />
+                        <div className="text-lg ml-1">Spotlight</div>
+                      </div>
+                      {isMyProfile && (
+                        <div className="relative">
+                          <div
+                            onClick={(e) => {
+                              e.stopPropagation();
+
+                              this.props.setOpenCardMenu(
+                                this.props.openCardMenu ==
+                                  item.nft_id + "_" + listId
+                                  ? null
+                                  : item.nft_id + "_" + listId
+                              );
+                            }}
+                            className="card-menu-button text-right flex items-center justify-center ml-4"
+                          >
+                            <FontAwesomeIcon
+                              style={{
+                                height: 20,
+                                width: 20,
+                              }}
+                              icon={faEllipsisH}
+                            />
+                          </div>
+                          {this.props.openCardMenu ==
+                          item.nft_id + "_" + listId ? (
+                            <div className="">
+                              <div className="flex justify-end relative z-10">
+                                <div
+                                  className={`absolute text-center top-2 bg-white shadow-lg py-2 px-2 rounded-xl transition-all text-md transform  ${
+                                    this.props.openCardMenu ==
+                                    item.nft_id + "_" + listId
+                                      ? "visible opacity-1 "
+                                      : "invisible opacity-0"
+                                  }`}
+                                  style={{ border: "1px solid #f0f0f0" }}
+                                >
+                                  <div
+                                    className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                                    onClick={this.handleRefreshNFTMetadata}
+                                  >
+                                    Refresh Metadata
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ) : null}
+                        </div>
+                      )}
+                    </div>
+                  )}
                   <div
                     onClick={() => {
                       mixpanel.track("Open NFT modal");
@@ -345,7 +410,9 @@ class SpotlightItem extends React.Component {
                               this.max_description_length
                             )}{" "}
                             <a
-                              onClick={() => {}}
+                              onClick={() => {
+                                this.setState({ currentlyOpenModal: true });
+                              }}
                               style={{ color: "#111", cursor: "pointer" }}
                             >
                               {" "}
@@ -395,52 +462,55 @@ class SpotlightItem extends React.Component {
                       />
                     </div>
                     <div>
-                      {isMyProfile && (
-                        <div
-                          onClick={(e) => {
-                            e.stopPropagation();
+                      {isMyProfile && isMobile && (
+                        <>
+                          <div
+                            onClick={(e) => {
+                              e.stopPropagation();
 
-                            this.props.setOpenCardMenu(
-                              this.props.openCardMenu ==
-                                item.nft_id + "_" + listId
-                                ? null
-                                : item.nft_id + "_" + listId
-                            );
-                          }}
-                          className="card-menu-button text-right flex items-center justify-center ml-4"
-                        >
-                          <FontAwesomeIcon
-                            style={{
-                              height: 20,
-                              width: 20,
-                            }}
-                            icon={faEllipsisH}
-                          />
-                        </div>
-                      )}
-
-                      {this.props.openCardMenu == item.nft_id + "_" + listId ? (
-                        <div className="">
-                          <div className="flex justify-end relative z-10">
-                            <div
-                              className={`absolute text-center top-2 bg-white shadow-lg py-2 px-2 rounded-xl transition-all text-md transform  ${
+                              this.props.setOpenCardMenu(
                                 this.props.openCardMenu ==
-                                item.nft_id + "_" + listId
-                                  ? "visible opacity-1 "
-                                  : "invisible opacity-0"
-                              }`}
-                              style={{ border: "1px solid #f0f0f0" }}
-                            >
-                              <div
-                                className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
-                                onClick={this.handleRefreshNFTMetadata}
-                              >
-                                Refresh Metadata
+                                  item.nft_id + "_" + listId
+                                  ? null
+                                  : item.nft_id + "_" + listId
+                              );
+                            }}
+                            className="card-menu-button text-right flex items-center justify-center ml-4"
+                          >
+                            <FontAwesomeIcon
+                              style={{
+                                height: 20,
+                                width: 20,
+                              }}
+                              icon={faEllipsisH}
+                            />
+                          </div>
+
+                          {this.props.openCardMenu ==
+                          item.nft_id + "_" + listId ? (
+                            <div className="">
+                              <div className="flex justify-end relative z-10">
+                                <div
+                                  className={`absolute text-center top-2 bg-white shadow-lg py-2 px-2 rounded-xl transition-all text-md transform  ${
+                                    this.props.openCardMenu ==
+                                    item.nft_id + "_" + listId
+                                      ? "visible opacity-1 "
+                                      : "invisible opacity-0"
+                                  }`}
+                                  style={{ border: "1px solid #f0f0f0" }}
+                                >
+                                  <div
+                                    className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                                    onClick={this.handleRefreshNFTMetadata}
+                                  >
+                                    Refresh Metadata
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                      ) : null}
+                          ) : null}
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>

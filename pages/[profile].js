@@ -19,6 +19,8 @@ import AddressButton from "../components/AddressButton";
 import { SORT_FIELDS } from "../lib/constants";
 import Select from "react-dropdown-select";
 import SpotlightItem from "../components/SpotlightItem";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSun } from "@fortawesome/free-regular-svg-icons";
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
@@ -53,7 +55,7 @@ export async function getServerSideProps(context) {
     const default_created_sort_id =
       data_profile.profile.default_created_sort_id;
     const default_owned_sort_id = data_profile.profile.default_owned_sort_id;
-    const featured_nft_id = 2272765;
+    const featured_nft_id = data_profile.profile.featured_nft_id;
 
     const featured_nft_img_url = data_profile.profile.featured_nft_img_url;
 
@@ -168,6 +170,7 @@ const Profile = ({
       `/v2/profile_client/${slug_address}?limit=150`
     );
     const data_profile = response_profile.data.data;
+    console.log(data_profile);
     setCreatedHiddenItems(data_profile.created_hidden);
     setOwnedHiddenItems(data_profile.owned_hidden);
     setLikedHiddenItems(data_profile.liked_hidden);
@@ -796,7 +799,18 @@ const Profile = ({
 
             {featured_nft_id && (
               <div className="mt-12 mb-8 flex flex-col justify-center items-center md:items-start w-full">
-                <div className="text-2xl md:text-3xl mb-3 mx-3">Spotlight</div>
+                {context.isMobile && (
+                  <div className="text-xl mb-4 mx-3 flex items-center text-gray-500">
+                    <FontAwesomeIcon
+                      style={{
+                        height: 22,
+                        width: 22,
+                      }}
+                      icon={faSun}
+                    />
+                    <div className="ml-1">Spotlight</div>
+                  </div>
+                )}
                 {spotlightItem ? (
                   <SpotlightItem
                     item={spotlightItem}
@@ -809,11 +823,10 @@ const Profile = ({
                       updateOwned(selectedOwnedSortField, false);
                     }}
                   />
-                ) : (
-                  <div className="flex items-center justify-center">
-                    <div className="loading-card-spinner-small" />
-                  </div>
-                )}
+                ) : // <div className="flex items-center justify-center">
+                //   <div className="loading-card-spinner-small" />
+                // </div>
+                null}
               </div>
             )}
 
