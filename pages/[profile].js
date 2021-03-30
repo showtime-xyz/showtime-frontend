@@ -170,7 +170,6 @@ const Profile = ({
       `/v2/profile_client/${slug_address}?limit=150`
     );
     const data_profile = response_profile.data.data;
-    console.log(data_profile);
     setCreatedHiddenItems(data_profile.created_hidden);
     setOwnedHiddenItems(data_profile.owned_hidden);
     setLikedHiddenItems(data_profile.liked_hidden);
@@ -423,6 +422,19 @@ const Profile = ({
     //ownedItems.length,
     isLoadingCards,
   ]);
+
+  const handleChangeSpotlightItem = async (nft) => {
+    const nftId = nft ? nft.nft_id : null;
+    setSpotlightItem(nft);
+
+    // Post changes to the API
+    await fetch("/api/updatespotlight", {
+      method: "post",
+      body: JSON.stringify({
+        nft_id: nftId,
+      }),
+    });
+  };
 
   // profilePill Edit profile actions
   const editAccount = () => {
@@ -797,36 +809,20 @@ const Profile = ({
               />
             </div>
 
-            {featured_nft_id && (
+            {featured_nft_id && spotlightItem && (
               <div className="mt-12 mb-8 flex flex-col justify-center items-center md:items-start w-full">
-                {context.isMobile && (
-                  <div className="text-xl mb-4 mx-3 flex items-center text-gray-500">
-                    <FontAwesomeIcon
-                      style={{
-                        height: 22,
-                        width: 22,
-                      }}
-                      icon={faSun}
-                    />
-                    <div className="ml-1">Spotlight</div>
-                  </div>
-                )}
-                {spotlightItem ? (
-                  <SpotlightItem
-                    item={spotlightItem}
-                    isMyProfile={isMyProfile}
-                    openCardMenu={openCardMenu}
-                    setOpenCardMenu={setOpenCardMenu}
-                    listId={0}
-                    refreshItems={() => {
-                      updateCreated(selectedCreatedSortField, false);
-                      updateOwned(selectedOwnedSortField, false);
-                    }}
-                  />
-                ) : // <div className="flex items-center justify-center">
-                //   <div className="loading-card-spinner-small" />
-                // </div>
-                null}
+                <SpotlightItem
+                  item={spotlightItem}
+                  removeSpotlightItem={() => handleChangeSpotlightItem(null)}
+                  isMyProfile={isMyProfile}
+                  openCardMenu={openCardMenu}
+                  setOpenCardMenu={setOpenCardMenu}
+                  listId={0}
+                  refreshItems={() => {
+                    updateCreated(selectedCreatedSortField, false);
+                    updateOwned(selectedOwnedSortField, false);
+                  }}
+                />
               </div>
             )}
 
@@ -975,6 +971,7 @@ const Profile = ({
                   ? () => updateCreated(selectedCreatedSortField, false)
                   : () => updateOwned(selectedOwnedSortField, false)
               }
+              changeSpotlightItem={handleChangeSpotlightItem}
             />
           </div>
         )}

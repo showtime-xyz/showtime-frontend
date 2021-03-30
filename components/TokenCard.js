@@ -319,6 +319,14 @@ class TokenCard extends React.Component {
                         >
                           Refresh Metadata
                         </div>
+                        <div
+                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                          onClick={() =>
+                            this.props.changeSpotlightItem(this.props.item)
+                          }
+                        >
+                          Set as Spotlight
+                        </div>
                       </div>
                     </div>
                     {/*<div

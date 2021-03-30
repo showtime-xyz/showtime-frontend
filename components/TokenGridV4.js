@@ -22,6 +22,7 @@ const TokenGridV4 = ({
   setUserHiddenItems,
   showUserHiddenItems,
   refreshItems,
+  changeSpotlightItem,
 }) => {
   const context = useContext(AppContext);
   const [itemsList, setItemsList] = useState([]);
@@ -283,6 +284,7 @@ const TokenGridV4 = ({
                 userHiddenItems={userHiddenItems}
                 setUserHiddenItems={setUserHiddenItems}
                 refreshItems={refreshItems}
+                changeSpotlightItem={changeSpotlightItem}
               />
             ))}
           </div>
