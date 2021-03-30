@@ -215,8 +215,10 @@ class TokenCard extends React.Component {
                         />
                       </div>
                       <div className="showtime-card-profile-link ml-2">
-                        {this.truncateWithEllipses(item.collection_name, 30)}{" "}
-                        Collection
+                        {this.truncateWithEllipses(
+                          item.collection_name + " Collection",
+                          30
+                        )}
                       </div>
                     </a>
                   </Link>
@@ -318,6 +320,14 @@ class TokenCard extends React.Component {
                           onClick={this.handleRefreshNFTMetadata}
                         >
                           Refresh Metadata
+                        </div>
+                        <div
+                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                          onClick={() =>
+                            this.props.changeSpotlightItem(this.props.item)
+                          }
+                        >
+                          Set as Spotlight
                         </div>
                       </div>
                     </div>

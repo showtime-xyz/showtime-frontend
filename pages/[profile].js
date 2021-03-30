@@ -18,6 +18,10 @@ import ModalAddEmail from "../components/ModalAddEmail.js";
 import AddressButton from "../components/AddressButton";
 import { SORT_FIELDS } from "../lib/constants";
 import Select from "react-dropdown-select";
+import SpotlightItem from "../components/SpotlightItem";
+//import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+//import { faSun } from "@fortawesome/free-regular-svg-icons";
+//import styled from "styled-components";
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
@@ -52,6 +56,7 @@ export async function getServerSideProps(context) {
     const default_created_sort_id =
       data_profile.profile.default_created_sort_id;
     const default_owned_sort_id = data_profile.profile.default_owned_sort_id;
+    const featured_nft_id = data_profile.profile.featured_nft_id;
 
     const featured_nft_img_url = data_profile.profile.featured_nft_img_url;
 
@@ -72,6 +77,7 @@ export async function getServerSideProps(context) {
         default_created_sort_id,
         default_owned_sort_id,
         featured_nft_img_url,
+        featured_nft_id,
       }, // will be passed to the page component as props
     };
   } catch (err) {
@@ -104,6 +110,7 @@ const Profile = ({
   default_created_sort_id,
   default_owned_sort_id,
   featured_nft_img_url,
+  featured_nft_id,
 }) => {
   //const router = useRouter();
   const context = useContext(AppContext);
@@ -126,6 +133,7 @@ const Profile = ({
   const [createdItems, setCreatedItems] = useState([]);
   const [ownedItems, setOwnedItems] = useState([]);
   const [likedItems, setLikedItems] = useState([]);
+  const [spotlightItem, setSpotlightItem] = useState();
 
   const [createdHiddenItems, setCreatedHiddenItems] = useState([]);
   const [ownedHiddenItems, setOwnedHiddenItems] = useState([]);
@@ -154,6 +162,7 @@ const Profile = ({
       setCreatedHiddenItems([]);
       setOwnedHiddenItems([]);
       setLikedHiddenItems([]);
+      setSpotlightItem();
 
       setSelectedCreatedSortField(default_created_sort_id || 1);
       setSelectedOwnedSortField(default_owned_sort_id || 1);
@@ -163,7 +172,6 @@ const Profile = ({
       `/v2/profile_client/${slug_address}?limit=150`
     );
     const data_profile = response_profile.data.data;
-
     setCreatedHiddenItems(data_profile.created_hidden);
     setOwnedHiddenItems(data_profile.owned_hidden);
     setLikedHiddenItems(data_profile.liked_hidden);
@@ -192,6 +200,18 @@ const Profile = ({
         //&& !data_profile.liked_hidden.includes(item.nft_id)
       )
     );
+
+    // look for spotlight item
+    let spotlight;
+    spotlight = data_profile.created.find(
+      (item) => item.nft_id === featured_nft_id
+    );
+    if (!spotlight) {
+      spotlight = data_profile.owned.find(
+        (item) => item.nft_id === featured_nft_id
+      );
+    }
+    setSpotlightItem(spotlight);
     if (initial_load) {
       setIsLoadingCards(false);
     }
@@ -404,6 +424,19 @@ const Profile = ({
     //ownedItems.length,
     isLoadingCards,
   ]);
+
+  const handleChangeSpotlightItem = async (nft) => {
+    const nftId = nft ? nft.nft_id : null;
+    setSpotlightItem(nft);
+
+    // Post changes to the API
+    await fetch("/api/updatespotlight", {
+      method: "post",
+      body: JSON.stringify({
+        nft_id: nftId,
+      }),
+    });
+  };
 
   // profilePill Edit profile actions
   const editAccount = () => {
@@ -777,7 +810,78 @@ const Profile = ({
                 hasEmailAddress={hasEmailAddress}
               />
             </div>
-            <div className="mx-auto" style={{ width: gridWidth }}>
+            {featured_nft_id && spotlightItem && (
+              <>
+                <div className="mx-auto" style={{ width: gridWidth }}>
+                  <div
+                    style={
+                      context.isMobile
+                        ? { padding: "0px 16px 20px 16px" }
+                        : { padding: "0px 12px 0px 12px" }
+                    }
+                  >
+                    <div
+                      className="mt-8"
+                      style={{ borderBottom: "1px solid #ddd" }}
+                    >
+                      <div
+                        className="flex flex-row"
+                        style={{
+                          width: "max-content",
+                          padding: "15px 0px",
+                          marginRight: 25,
+                          whiteSpace: "nowrap",
+                          borderBottom: "3px solid #e45cff",
+                          transition: "all 300ms ease",
+                          color: "#e45cff",
+                        }}
+                      >
+                        <div>Spotlight</div>
+                        <div>
+                          <img
+                            src="/icons/spotlight_flip.png"
+                            style={{
+                              height: 20,
+                              width: 20,
+                              marginLeft: 8,
+                            }}
+                            width={20}
+                            height={20}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  className="mx-auto flex flex-col justify-center items-center md:items-start"
+                  style={{ maxWidth: 1185 }}
+                >
+                  <SpotlightItem
+                    item={spotlightItem}
+                    removeSpotlightItem={() => handleChangeSpotlightItem(null)}
+                    isMyProfile={isMyProfile}
+                    openCardMenu={openCardMenu}
+                    setOpenCardMenu={setOpenCardMenu}
+                    listId={0}
+                    refreshItems={() => {
+                      updateCreated(selectedCreatedSortField, false);
+                      updateOwned(selectedOwnedSortField, false);
+                    }}
+                  />
+                </div>
+              </>
+            )}
+
+            <div
+              className="mx-auto"
+              style={
+                context.isMobile && featured_nft_id && spotlightItem
+                  ? { width: gridWidth, borderTopWidth: 1 }
+                  : { width: gridWidth }
+              }
+            >
               <div className="pt-4">{FilterTabs}</div>
 
               <div>
@@ -922,6 +1026,7 @@ const Profile = ({
                   ? () => updateCreated(selectedCreatedSortField, false)
                   : () => updateOwned(selectedOwnedSortField, false)
               }
+              changeSpotlightItem={handleChangeSpotlightItem}
             />
           </div>
         )}
