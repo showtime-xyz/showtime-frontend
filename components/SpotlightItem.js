@@ -671,7 +671,7 @@ class SpotlightItem extends React.Component {
                 >
                   <div
                     className={
-                      isMobile ? "mt-3 items-center mb-4" : "mt-6 mt-16 mb-0 "
+                      isMobile ? "mt-2 items-center mb-5" : "mt-6 mt-16 mb-0 "
                     }
                   >
                     <a
