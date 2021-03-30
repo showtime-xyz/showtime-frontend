@@ -603,7 +603,8 @@ class SpotlightItem extends React.Component {
                         </div>
                       </div>
                     ) : null}
-                    {item.owner_id && item.owner_id != item.creator_id ? (
+                    {item.owner_id &&
+                    (item.owner_id != item.creator_id || isMobile) ? (
                       <div
                         className={
                           this.context.isMobile ? "mx-4 mt-1" : "flex-1"
@@ -671,7 +672,7 @@ class SpotlightItem extends React.Component {
                 >
                   <div
                     className={
-                      isMobile ? "mt-2 items-center mb-5" : "mt-6 mt-16 mb-0 "
+                      isMobile ? "mt-6 items-center mb-4" : "mt-6 mt-16 mb-0 "
                     }
                   >
                     <a
