@@ -19,12 +19,11 @@ export default function Modal({
   handleUnlike,
   goToNext,
   goToPrevious,
-  columns,
   hasNext,
   hasPrevious,
 }) {
   const context = useContext(AppContext);
-
+  const { columns } = context;
   const [isStacked, setIsStacked] = useState(false);
   const [ownershipDetails, setOwnershipDetails] = useState(null);
   useEffect(() => {

@@ -18,6 +18,7 @@ import ModalAddEmail from "../components/ModalAddEmail.js";
 import AddressButton from "../components/AddressButton";
 import { SORT_FIELDS } from "../lib/constants";
 import Select from "react-dropdown-select";
+import SpotlightItem from "../components/SpotlightItem";
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
@@ -52,6 +53,7 @@ export async function getServerSideProps(context) {
     const default_created_sort_id =
       data_profile.profile.default_created_sort_id;
     const default_owned_sort_id = data_profile.profile.default_owned_sort_id;
+    const featured_nft_id = 2272765;
 
     const featured_nft_img_url = data_profile.profile.featured_nft_img_url;
 
@@ -72,6 +74,7 @@ export async function getServerSideProps(context) {
         default_created_sort_id,
         default_owned_sort_id,
         featured_nft_img_url,
+        featured_nft_id,
       }, // will be passed to the page component as props
     };
   } catch (err) {
@@ -104,6 +107,7 @@ const Profile = ({
   default_created_sort_id,
   default_owned_sort_id,
   featured_nft_img_url,
+  featured_nft_id,
 }) => {
   //const router = useRouter();
   const context = useContext(AppContext);
@@ -126,6 +130,7 @@ const Profile = ({
   const [createdItems, setCreatedItems] = useState([]);
   const [ownedItems, setOwnedItems] = useState([]);
   const [likedItems, setLikedItems] = useState([]);
+  const [spotlightItem, setSpotlightItem] = useState();
 
   const [createdHiddenItems, setCreatedHiddenItems] = useState([]);
   const [ownedHiddenItems, setOwnedHiddenItems] = useState([]);
@@ -163,7 +168,6 @@ const Profile = ({
       `/v2/profile_client/${slug_address}?limit=150`
     );
     const data_profile = response_profile.data.data;
-
     setCreatedHiddenItems(data_profile.created_hidden);
     setOwnedHiddenItems(data_profile.owned_hidden);
     setLikedHiddenItems(data_profile.liked_hidden);
@@ -192,6 +196,18 @@ const Profile = ({
         //&& !data_profile.liked_hidden.includes(item.nft_id)
       )
     );
+
+    // look for spotlight item
+    let spotlight;
+    spotlight = data_profile.created.find(
+      (item) => item.nft_id === featured_nft_id
+    );
+    if (!spotlight) {
+      spotlight = data_profile.owned.find(
+        (item) => item.nft_id === featured_nft_id
+      );
+    }
+    setSpotlightItem(spotlight);
     if (initial_load) {
       setIsLoadingCards(false);
     }
@@ -777,6 +793,30 @@ const Profile = ({
                 hasEmailAddress={hasEmailAddress}
               />
             </div>
+
+            {featured_nft_id && (
+              <div className="mt-12 mb-8 flex flex-col justify-center items-center md:items-start w-full">
+                <div className="text-2xl md:text-3xl mb-3 mx-3">Spotlight</div>
+                {spotlightItem ? (
+                  <SpotlightItem
+                    item={spotlightItem}
+                    isMyProfile={isMyProfile}
+                    openCardMenu={openCardMenu}
+                    setOpenCardMenu={setOpenCardMenu}
+                    listId={0}
+                    refreshItems={() => {
+                      updateCreated(selectedCreatedSortField, false);
+                      updateOwned(selectedOwnedSortField, false);
+                    }}
+                  />
+                ) : (
+                  <div className="flex items-center justify-center">
+                    <div className="loading-card-spinner-small" />
+                  </div>
+                )}
+              </div>
+            )}
+
             <div className="mx-auto" style={{ width: gridWidth }}>
               <div className="pt-4">{FilterTabs}</div>
 
