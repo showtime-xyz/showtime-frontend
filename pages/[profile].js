@@ -846,6 +846,7 @@ const Profile = ({
                             src="/icons/spotlight_flip.png"
                             style={{
                               height: 20,
+                              width: 20,
                               marginLeft: 8,
                             }}
                           />
