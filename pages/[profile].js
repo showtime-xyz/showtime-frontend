@@ -19,9 +19,9 @@ import AddressButton from "../components/AddressButton";
 import { SORT_FIELDS } from "../lib/constants";
 import Select from "react-dropdown-select";
 import SpotlightItem from "../components/SpotlightItem";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSun } from "@fortawesome/free-regular-svg-icons";
-import styled from "styled-components";
+//import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+//import { faSun } from "@fortawesome/free-regular-svg-icons";
+//import styled from "styled-components";
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
@@ -162,6 +162,7 @@ const Profile = ({
       setCreatedHiddenItems([]);
       setOwnedHiddenItems([]);
       setLikedHiddenItems([]);
+      setSpotlightItem();
 
       setSelectedCreatedSortField(default_created_sort_id || 1);
       setSelectedOwnedSortField(default_owned_sort_id || 1);
@@ -522,28 +523,6 @@ const Profile = ({
     </GridTabs>
   );
 
-  const GridTabsContainer = styled.div`
-    width: 100%;
-    padding: ${(p) =>
-      p.isMobile
-        ? p.sortingBar
-          ? "0px 16px 10px 16px"
-          : "0px 16px 20px 16px"
-        : p.sortingBar
-        ? "0px 12px 0px 12px"
-        : "0px 12px 0px 12px"};
-  `;
-
-  const Tab = styled.div`
-    width: max-content;
-    padding: 15px 0px;
-    margin-right: 25px;
-    white-space: nowrap;
-    border-bottom: 3px solid #e45cff;
-    transition: all 300ms ease;
-    color: #e45cff;
-  `;
-
   return (
     <div
       onClick={() => {
@@ -834,12 +813,29 @@ const Profile = ({
             {featured_nft_id && spotlightItem && (
               <>
                 <div className="mx-auto" style={{ width: gridWidth }}>
-                  <GridTabsContainer>
+                  <div
+                    style={
+                      context.isMobile
+                        ? { padding: "0px 16px 20px 16px" }
+                        : { padding: "0px 12px 0px 12px" }
+                    }
+                  >
                     <div
                       className="mt-8"
                       style={{ borderBottom: "1px solid #ddd" }}
                     >
-                      <Tab className="flex flex-row">
+                      <div
+                        className="flex flex-row"
+                        style={{
+                          width: "max-content",
+                          padding: "15px 0px",
+                          marginRight: 25,
+                          whiteSpace: "nowrap",
+                          borderBottom: "3px solid #e45cff",
+                          transition: "all 300ms ease",
+                          color: "#e45cff",
+                        }}
+                      >
                         <div>Spotlight</div>
                         <div>
                           <img
@@ -849,11 +845,13 @@ const Profile = ({
                               width: 20,
                               marginLeft: 8,
                             }}
+                            width={20}
+                            height={20}
                           />
                         </div>
-                      </Tab>
+                      </div>
                     </div>
-                  </GridTabsContainer>
+                  </div>
                 </div>
 
                 <div
