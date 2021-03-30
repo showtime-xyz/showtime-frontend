@@ -215,8 +215,10 @@ class TokenCard extends React.Component {
                         />
                       </div>
                       <div className="showtime-card-profile-link ml-2">
-                        {this.truncateWithEllipses(item.collection_name, 30)}{" "}
-                        Collection
+                        {this.truncateWithEllipses(
+                          item.collection_name + " Collection",
+                          30
+                        )}
                       </div>
                     </a>
                   </Link>

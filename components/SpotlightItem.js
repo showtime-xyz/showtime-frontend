@@ -149,34 +149,62 @@ class SpotlightItem extends React.Component {
         {this.context.isMobile && (
           <div
             className="flex justify-between items-center w-full px-4 py-4 "
-            style={{ borderTopWidth: 2, marginTop: -2 }}
+            style={{ borderTopWidth: 1, marginTop: -1 }}
           >
             <div className="flex-shrink">
-              <Link
-                href="/[profile]"
-                as={`/${item?.creator_username || item.creator_address}`}
-              >
-                <a className="flex flex-row items-center pt-1">
-                  <div>
-                    <img
-                      alt={item.creator_name}
-                      src={
-                        item.creator_img_url
-                          ? item.creator_img_url
-                          : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                      }
-                      className="rounded-full"
-                      style={{
-                        height: isMobile ? 24 : 30,
-                        width: isMobile ? 24 : 30,
-                      }}
-                    />
-                  </div>
-                  <div className="showtime-card-profile-link ml-2 md:text-lg">
-                    {this.truncateWithEllipses(item.creator_name, 30)}
-                  </div>
-                </a>
-              </Link>
+              {item.contract_is_creator ? (
+                <Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
+                  <a className="flex flex-row items-center pt-1">
+                    <div>
+                      <img
+                        alt={item.collection_name}
+                        src={
+                          item.collection_img_url
+                            ? item.collection_img_url
+                            : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                        }
+                        className="rounded-full"
+                        style={{
+                          height: isMobile ? 24 : 30,
+                          width: isMobile ? 24 : 30,
+                        }}
+                      />
+                    </div>
+                    <div className="showtime-card-profile-link ml-2 md:text-lg">
+                      {this.truncateWithEllipses(
+                        item.collection_name + " Collection",
+                        30
+                      )}
+                    </div>
+                  </a>
+                </Link>
+              ) : (
+                <Link
+                  href="/[profile]"
+                  as={`/${item?.creator_username || item.creator_address}`}
+                >
+                  <a className="flex flex-row items-center pt-1">
+                    <div>
+                      <img
+                        alt={item.creator_name}
+                        src={
+                          item.creator_img_url
+                            ? item.creator_img_url
+                            : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                        }
+                        className="rounded-full"
+                        style={{
+                          height: isMobile ? 24 : 30,
+                          width: isMobile ? 24 : 30,
+                        }}
+                      />
+                    </div>
+                    <div className="showtime-card-profile-link ml-2 md:text-lg">
+                      {this.truncateWithEllipses(item.creator_name, 30)}
+                    </div>
+                  </a>
+                </Link>
+              )}
             </div>
 
             {isMyProfile && isMobile && (
@@ -223,7 +251,7 @@ class SpotlightItem extends React.Component {
                           className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
                           onClick={this.props.removeSpotlightItem}
                         >
-                          Remove from Spotlight
+                          Remove Spotlight
                         </div>
                       </div>
                     </div>
@@ -301,7 +329,7 @@ class SpotlightItem extends React.Component {
                           className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
                           onClick={this.props.removeSpotlightItem}
                         >
-                          Remove from Spotlight
+                          Remove Spotlight
                         </div>
                       </div>
                     </div>
@@ -547,15 +575,56 @@ class SpotlightItem extends React.Component {
                     : null
                 }
               >
-                <div className="flex  w-full">
+                <div className="flex w-full">
                   <div
                     className={
-                      isMobile
-                        ? "mt-3"
-                        : "flex flex-row mt-16 w-full items-center"
+                      isMobile ? "mt-3" : "flex flex-row mt-16 w-full "
                     }
                   >
-                    {item.creator_id && !this.context.isMobile ? (
+                    {item.contract_is_creator && !this.context.isMobile ? (
+                      <div className="flex-col flex-1">
+                        <div
+                          className="flex-shrink pr-2"
+                          style={{
+                            fontWeight: 400,
+                            fontSize: 14,
+                            color: "#888",
+                          }}
+                        >
+                          Created by
+                        </div>
+                        <div className="flex-shrink">
+                          <Link
+                            href="/c/[collection]"
+                            as={`/c/${item.collection_slug}`}
+                          >
+                            <a className="flex flex-row items-center pt-1">
+                              <div style={{ width: 30 }}>
+                                <img
+                                  alt={item.collection_name}
+                                  src={
+                                    item.collection_img_url
+                                      ? item.collection_img_url
+                                      : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                                  }
+                                  className="rounded-full"
+                                  style={{
+                                    height: isMobile ? 24 : 30,
+                                    width: isMobile ? 24 : 30,
+                                  }}
+                                />
+                              </div>
+                              <div className="showtime-card-profile-link mx-2 md:text-lg">
+                                {this.truncateWithEllipses(
+                                  item.collection_name + " Collection",
+                                  25
+                                )}{" "}
+                              </div>
+                            </a>
+                          </Link>
+                        </div>
+                      </div>
+                    ) : item.creator_id && !this.context.isMobile ? (
                       <div className="flex-col flex-1">
                         <div
                           className="flex-shrink pr-2"
@@ -604,7 +673,9 @@ class SpotlightItem extends React.Component {
                       </div>
                     ) : null}
                     {item.owner_id &&
-                    (item.owner_id != item.creator_id || isMobile) ? (
+                    (item.owner_id != item.creator_id ||
+                      isMobile ||
+                      item.contract_is_creator) ? (
                       <div
                         className={
                           this.context.isMobile ? "mx-4 mt-1" : "flex-1"
@@ -672,7 +743,7 @@ class SpotlightItem extends React.Component {
                 >
                   <div
                     className={
-                      isMobile ? "mt-6 items-center mb-4" : "mt-6 mt-16 mb-0 "
+                      isMobile ? "mt-6 items-center mb-6" : "mt-6 mt-16 mb-0 "
                     }
                   >
                     <a
