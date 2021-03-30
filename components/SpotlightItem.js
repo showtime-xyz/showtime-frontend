@@ -25,11 +25,10 @@ class SpotlightItem extends React.Component {
       spans: 1,
       moreShown: false,
       imageLoaded: false,
-      showVideo: false,
       muted: true,
       refreshing: false,
       currentlyOpenModal: false,
-      currentlyPlayingVideo: false,
+      currentlyPlayingVideo: true,
     };
     this.divRef = React.createRef();
   }
@@ -226,28 +225,23 @@ class SpotlightItem extends React.Component {
                     borderBottomWidth: 1,
                   }
                 : {
-                    height: 500,
-                    borderWidth: 1,
+                    minHeight: 400,
+                    maxHeight: 600,
+                    // borderWidth: 1,
                   }
             )}
             ref={this.divRef}
             className={
               isMobile
                 ? "mx-auto shadow-lg"
-                : "mx-3 flex sm:rounded-md overflow-hidden hover:shadow-xl transition border-gray-300"
+                : "mx-3 flex sm:rounded-md overflow-hidden"
             }
           >
-            {(item.token_has_video &&
-              this.state.showVideo &&
-              this.state.currentlyPlayingVideo) ||
-            (item.token_has_video && !item.token_img_url) ? (
-              <div className="sm:flex-1 md:w-2/4 bg-black">
+            {item.token_has_video ? (
+              <div className="sm:flex-1 md:w-2/4 md:p-6">
                 <ReactPlayer
                   url={item.token_animation_url}
-                  playing={
-                    this.state.currentlyPlayingVideo ||
-                    (item.token_has_video && !item.token_img_url)
-                  }
+                  playing={this.state.currentlyPlayingVideo}
                   loop
                   controls
                   muted={this.state.muted}
@@ -273,7 +267,6 @@ class SpotlightItem extends React.Component {
                     mixpanel.track("Open NFT modal");
                     this.setState({
                       currentlyOpenModal: true,
-                      showVideo: false,
                       muted: true,
                       currentlyPlayingVideo: false,
                     });
@@ -297,10 +290,14 @@ class SpotlightItem extends React.Component {
                     style={{
                       backgroundColor: this.getBackgroundColor(item),
                     }}
-                    className="h-full"
+                    className="h-full md:flex md:items-center md:justify-center md:p-6"
                   >
                     <img
-                      className="w-full object-cover object-center h-full"
+                      className={
+                        this.context.isMobile
+                          ? "w-full object-cover object-center h-full"
+                          : "w-max object-center h-max max-w-full max-h-full"
+                      }
                       ref={item.imageRef}
                       src={this.getImageUrl()}
                       alt={item.token_name}
@@ -324,7 +321,6 @@ class SpotlightItem extends React.Component {
                     onClick={() => {
                       mixpanel.track("Play card video");
                       this.setState({
-                        showVideo: true,
                         muted: false,
                         currentlyPlayingVideo: true,
                       });
@@ -440,7 +436,6 @@ class SpotlightItem extends React.Component {
                       mixpanel.track("Open NFT modal");
                       this.setState({
                         currentlyOpenModal: true,
-                        showVideo: false,
                         muted: true,
                         currentlyPlayingVideo: false,
                       });
@@ -472,7 +467,7 @@ class SpotlightItem extends React.Component {
                         overflowWrap: "break-word",
                         wordWrap: "break-word",
                         display: "block",
-                        minHeight: "3.5rem",
+                        minHeight: this.context.isMobile ? "3.5rem" : null,
                       }}
                       className="pb-2 md:pb-4 text-gray-500"
                     >
@@ -515,7 +510,6 @@ class SpotlightItem extends React.Component {
                           mixpanel.track("Open NFT modal via comment button");
                           this.setState({
                             currentlyOpenModal: true,
-                            showVideo: false,
                             muted: true,
                             currentlyPlayingVideo: false,
                           });

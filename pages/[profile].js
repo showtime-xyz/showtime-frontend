@@ -810,7 +810,10 @@ const Profile = ({
             </div>
 
             {featured_nft_id && spotlightItem && (
-              <div className="mt-12 mb-8 flex flex-col justify-center items-center md:items-start w-full">
+              <div
+                className="mx-auto mt-12 mb-8 flex flex-col justify-center items-center md:items-start"
+                style={{ maxWidth: 1185 }}
+              >
                 <SpotlightItem
                   item={spotlightItem}
                   removeSpotlightItem={() => handleChangeSpotlightItem(null)}
