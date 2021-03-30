@@ -104,12 +104,12 @@ class SpotlightItem extends React.Component {
       : null;
 
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
-      img_url = img_url.split("=")[0] + "=w375";
+      img_url = img_url.split("=")[0] + "=h500";
     }
     return img_url;
   };
 
-  max_description_length = 150;
+  max_description_length = 200;
 
   getBackgroundColor = (item) => {
     if (
@@ -147,18 +147,38 @@ class SpotlightItem extends React.Component {
           </>
         ) : null}
         {this.context.isMobile && (
-          <div className="flex justify-between items-center w-full px-4 py-4">
-            <div style={{ width: 20 }} />
-            <div className="text-xl mx-3 flex items-center text-gray-500">
-              <FontAwesomeIcon
-                style={{
-                  height: 22,
-                  width: 22,
-                }}
-                icon={faSun}
-              />
-              <div className="ml-1">Spotlight</div>
+          <div
+            className="flex justify-between items-center w-full px-4 py-4 "
+            style={{ borderTopWidth: 2, marginTop: -2 }}
+          >
+            <div className="flex-shrink">
+              <Link
+                href="/[profile]"
+                as={`/${item?.creator_username || item.creator_address}`}
+              >
+                <a className="flex flex-row items-center pt-1">
+                  <div>
+                    <img
+                      alt={item.creator_name}
+                      src={
+                        item.creator_img_url
+                          ? item.creator_img_url
+                          : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                      }
+                      className="rounded-full"
+                      style={{
+                        height: isMobile ? 24 : 30,
+                        width: isMobile ? 24 : 30,
+                      }}
+                    />
+                  </div>
+                  <div className="showtime-card-profile-link ml-2 md:text-lg">
+                    {this.truncateWithEllipses(item.creator_name, 30)}
+                  </div>
+                </a>
+              </Link>
             </div>
+
             {isMyProfile && isMobile && (
               <div>
                 <div
@@ -213,7 +233,7 @@ class SpotlightItem extends React.Component {
             )}
           </div>
         )}
-        <div className="w-full">
+        <div className={`w-full ${isMobile ? "bg-gray-100" : null} `}>
           <div
             style={_.merge(
               {
@@ -227,18 +247,70 @@ class SpotlightItem extends React.Component {
                 : {
                     minHeight: 400,
                     maxHeight: 600,
-                    // borderWidth: 1,
+                    //borderWidth: 1,
                   }
             )}
             ref={this.divRef}
             className={
               isMobile
-                ? "mx-auto shadow-lg"
-                : "mx-3 flex sm:rounded-md overflow-hidden"
+                ? "mx-auto relative mb-4"
+                : "mx-3 flex items-center sm:rounded-md overflow-hidden relative"
             }
           >
+            {isMyProfile && (
+              <div className="absolute top-0 right-0 mt-12">
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    this.props.setOpenCardMenu(
+                      this.props.openCardMenu == item.nft_id + "_" + listId
+                        ? null
+                        : item.nft_id + "_" + listId
+                    );
+                  }}
+                  className="card-menu-button text-right flex items-center justify-center ml-4"
+                >
+                  <FontAwesomeIcon
+                    style={{
+                      height: 20,
+                      width: 20,
+                    }}
+                    icon={faEllipsisH}
+                  />
+                </div>
+                {this.props.openCardMenu == item.nft_id + "_" + listId &&
+                !this.context.isMobile ? (
+                  <div className="">
+                    <div className="flex justify-end relative z-10">
+                      <div
+                        className={`absolute text-center top-2 bg-white shadow-lg py-2 px-2 rounded-xl transition-all text-md transform  ${
+                          this.props.openCardMenu == item.nft_id + "_" + listId
+                            ? "visible opacity-1 "
+                            : "invisible opacity-0"
+                        }`}
+                        style={{ border: "1px solid #f0f0f0" }}
+                      >
+                        <div
+                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                          onClick={this.handleRefreshNFTMetadata}
+                        >
+                          Refresh Metadata
+                        </div>
+                        <div
+                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                          onClick={this.props.removeSpotlightItem}
+                        >
+                          Remove from Spotlight
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            )}
             {item.token_has_video ? (
-              <div className="sm:flex-1 md:w-2/4 md:p-6">
+              <div className={isMobile ? null : "w-2/4 m-12 shadow-xl"}>
                 <ReactPlayer
                   url={item.token_animation_url}
                   playing={this.state.currentlyPlayingVideo}
@@ -248,8 +320,10 @@ class SpotlightItem extends React.Component {
                   width={columns === 1 ? window.innerWidth : "100%"}
                   height={
                     columns === 1
-                      ? item.imageRef.current
-                        ? item.imageRef.current.height
+                      ? item.imageRef
+                        ? item.imageRef.current
+                          ? item.imageRef.current.height
+                          : null
                         : null
                       : "100%"
                   }
@@ -259,7 +333,7 @@ class SpotlightItem extends React.Component {
               </div>
             ) : (
               <div
-                className="sm:flex-1 md:w-2/4"
+                className={isMobile ? null : "w-2/4"}
                 style={{ position: "relative" }}
               >
                 <div
@@ -290,13 +364,13 @@ class SpotlightItem extends React.Component {
                     style={{
                       backgroundColor: this.getBackgroundColor(item),
                     }}
-                    className="h-full md:flex md:items-center md:justify-center md:p-6"
+                    className="h-full md:flex md:items-center md:justify-center "
                   >
                     <img
                       className={
                         this.context.isMobile
                           ? "w-full object-cover object-center h-full"
-                          : "w-max object-center h-max max-w-full max-h-full"
+                          : "w-max object-center h-max max-w-full max-h-full shadow-xl md:m-12"
                       }
                       ref={item.imageRef}
                       src={this.getImageUrl()}
@@ -360,77 +434,9 @@ class SpotlightItem extends React.Component {
               </div>
             )}
 
-            <div className="p-4 md:p-6 sm:flex-1 md:w-2/4">
-              <div>
+            <div className={isMobile ? null : "p-6 w-2/4"}>
+              <div className={isMobile ? "p-4" : null}>
                 <div className="">
-                  {!isMobile && (
-                    <div className="flex items-top justify-between">
-                      <div className="text-gray-500 flex items-center">
-                        <FontAwesomeIcon
-                          style={{
-                            height: 22,
-                            width: 22,
-                          }}
-                          icon={faSun}
-                        />
-                        <div className="text-lg ml-1">Spotlight</div>
-                      </div>
-                      {isMyProfile && (
-                        <div className="relative">
-                          <div
-                            onClick={(e) => {
-                              e.stopPropagation();
-
-                              this.props.setOpenCardMenu(
-                                this.props.openCardMenu ==
-                                  item.nft_id + "_" + listId
-                                  ? null
-                                  : item.nft_id + "_" + listId
-                              );
-                            }}
-                            className="card-menu-button text-right flex items-center justify-center ml-4"
-                          >
-                            <FontAwesomeIcon
-                              style={{
-                                height: 20,
-                                width: 20,
-                              }}
-                              icon={faEllipsisH}
-                            />
-                          </div>
-                          {this.props.openCardMenu ==
-                          item.nft_id + "_" + listId ? (
-                            <div className="">
-                              <div className="flex justify-end relative z-10">
-                                <div
-                                  className={`absolute text-center top-2 bg-white shadow-lg py-2 px-2 rounded-xl transition-all text-md transform  ${
-                                    this.props.openCardMenu ==
-                                    item.nft_id + "_" + listId
-                                      ? "visible opacity-1 "
-                                      : "invisible opacity-0"
-                                  }`}
-                                  style={{ border: "1px solid #f0f0f0" }}
-                                >
-                                  <div
-                                    className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
-                                    onClick={this.handleRefreshNFTMetadata}
-                                  >
-                                    Refresh Metadata
-                                  </div>
-                                  <div
-                                    className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
-                                    onClick={this.props.removeSpotlightItem}
-                                  >
-                                    Remove from Spotlight
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          ) : null}
-                        </div>
-                      )}
-                    </div>
-                  )}
                   <div
                     onClick={() => {
                       mixpanel.track("Open NFT modal");
@@ -444,7 +450,7 @@ class SpotlightItem extends React.Component {
                     style={{
                       overflowWrap: "break-word",
                       wordWrap: "break-word",
-                      fontSize: isMobile ? 24 : 36,
+                      fontSize: isMobile ? 20 : 36,
                       cursor: "pointer",
                       whiteSpace: "nowrap",
                       overflow: "hidden",
@@ -460,10 +466,10 @@ class SpotlightItem extends React.Component {
                       />
                     ) : null} */}
                   </div>
-                  {!isMobile && item.token_description ? (
+                  {item.token_description ? (
                     <div
                       style={{
-                        fontSize: isMobile ? 14 : 18,
+                        fontSize: isMobile ? 14 : 16,
                         overflowWrap: "break-word",
                         wordWrap: "break-word",
                         display: "block",
@@ -471,7 +477,7 @@ class SpotlightItem extends React.Component {
                       }}
                       className="pb-2 md:pb-4 text-gray-500"
                     >
-                      <div>
+                      <div className={isMobile ? "py-2" : null}>
                         {item.token_description?.length >
                         this.max_description_length ? (
                           <>
@@ -486,7 +492,7 @@ class SpotlightItem extends React.Component {
                               style={{ color: "#111", cursor: "pointer" }}
                             >
                               {" "}
-                              more
+                              view all
                             </a>
                           </>
                         ) : (
@@ -536,62 +542,24 @@ class SpotlightItem extends React.Component {
               <div
                 className="flex flex-col items-start"
                 style={
-                  {
-                    // borderTopWidth: 1,
-                    // borderColor: "rgb(219,219,219)",
-                  }
+                  this.context.isMobile
+                    ? {
+                        borderTopWidth: 1,
+                        borderColor: "rgb(219,219,219)",
+                      }
+                    : null
                 }
               >
-                <div className="flex flex-col mt-3 md:mt-4">
-                  <div>
-                    <div
-                      className="flex-shrink pr-2"
-                      style={{
-                        fontWeight: 400,
-                        fontSize: 14,
-                        color: "#888",
-                      }}
-                    >
-                      Owned by
-                    </div>
-                    <div className="md:text-lg">
-                      {item.multiple_owners ? (
-                        <span style={{ color: "#888" }}>Multiple owners</span>
-                      ) : item.owner_id ? (
-                        <Link
-                          href="/[profile]"
-                          as={`/${item?.owner_username || item.owner_address}`}
-                        >
-                          <a className="flex flex-row items-center pt-1">
-                            <div>
-                              <img
-                                alt={item.owner_name}
-                                src={
-                                  item.owner_img_url
-                                    ? item.owner_img_url
-                                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                                }
-                                className="rounded-full mr-2"
-                                style={{
-                                  height: isMobile ? 24 : 30,
-                                  width: isMobile ? 24 : 30,
-                                }}
-                              />
-                            </div>
-                            <div className="showtime-card-profile-link">
-                              {this.truncateWithEllipses(item.owner_name, 22)}
-                            </div>
-                          </a>
-                        </Link>
-                      ) : null}
-                    </div>
-                  </div>
+                <div className="flex  w-full">
                   <div
-                    className="py-4 flex flex-col items-start"
-                    style={{ position: "relative" }}
+                    className={
+                      isMobile
+                        ? "mt-3"
+                        : "flex flex-row mt-16 w-full items-center"
+                    }
                   >
-                    {item.creator_address ? (
-                      <>
+                    {item.creator_id && !this.context.isMobile ? (
+                      <div className="flex-col flex-1">
                         <div
                           className="flex-shrink pr-2"
                           style={{
@@ -600,7 +568,9 @@ class SpotlightItem extends React.Component {
                             color: "#888",
                           }}
                         >
-                          Created by
+                          {item.owner_id == item.creator_id
+                            ? "Created & Owned By"
+                            : "Created by"}
                         </div>
                         <div className="flex-shrink">
                           <Link
@@ -634,15 +604,79 @@ class SpotlightItem extends React.Component {
                             </a>
                           </Link>
                         </div>
-                      </>
+                      </div>
+                    ) : null}
+                    {item.owner_id && item.owner_id != item.creator_id ? (
+                      <div
+                        className={
+                          this.context.isMobile ? "mx-4 mt-1" : "flex-1"
+                        }
+                      >
+                        <div
+                          className="flex-shrink pr-2"
+                          style={{
+                            fontWeight: 400,
+                            fontSize: 14,
+                            color: "#888",
+                          }}
+                        >
+                          Owned by
+                        </div>
+                        <div className="md:text-lg">
+                          {item.multiple_owners ? (
+                            <span style={{ color: "#888" }}>
+                              Multiple owners
+                            </span>
+                          ) : item.owner_id ? (
+                            <Link
+                              href="/[profile]"
+                              as={`/${
+                                item?.owner_username || item.owner_address
+                              }`}
+                            >
+                              <a className="flex flex-row items-center pt-1">
+                                <div>
+                                  <img
+                                    alt={item.owner_name}
+                                    src={
+                                      item.owner_img_url
+                                        ? item.owner_img_url
+                                        : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                                    }
+                                    className="rounded-full mr-2 "
+                                    style={{
+                                      height: isMobile ? 24 : 30,
+                                      width: isMobile ? 24 : 30,
+                                    }}
+                                  />
+                                </div>
+                                <div className="showtime-card-profile-link">
+                                  {this.truncateWithEllipses(
+                                    item.owner_name,
+                                    22
+                                  )}
+                                </div>
+                              </a>
+                            </Link>
+                          ) : null}
+                        </div>
+                      </div>
                     ) : null}
                   </div>
                 </div>
                 <div
                   style={{ fontSize: 16, fontWeight: 400 }}
-                  className="flex items-center justify-center md:justify-start w-full"
+                  className={
+                    isMobile
+                      ? "flex items-center justify-center  w-full"
+                      : "flex items-center justify-start w-full"
+                  }
                 >
-                  <div>
+                  <div
+                    className={
+                      isMobile ? "mt-3 items-center mb-4" : "mt-6 mt-16 mb-0 "
+                    }
+                  >
                     <a
                       href={getBidLink(item)}
                       title={`Buy on ${getContractName(item)}`}
@@ -651,7 +685,7 @@ class SpotlightItem extends React.Component {
                         mixpanel.track("OpenSea link click");
                       }}
                     >
-                      <div className="flex mt-2 mb-4 md:mb-0 items-center bg-stpink text-white px-6 py-3 rounded-full border-2 border-stpink hover:text-stpink hover:bg-white transition">
+                      <div className="flex items-center bg-stpink text-white px-4 py-2 sm:px-6 sm:py-3 rounded-full border-2 border-stpink hover:text-stpink hover:bg-white transition">
                         <div className="mr-2">
                           Bid on {getContractName(item)}
                         </div>

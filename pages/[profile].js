@@ -21,6 +21,7 @@ import Select from "react-dropdown-select";
 import SpotlightItem from "../components/SpotlightItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSun } from "@fortawesome/free-regular-svg-icons";
+import styled from "styled-components";
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
@@ -521,6 +522,28 @@ const Profile = ({
     </GridTabs>
   );
 
+  const GridTabsContainer = styled.div`
+    width: 100%;
+    padding: ${(p) =>
+      p.isMobile
+        ? p.sortingBar
+          ? "0px 16px 10px 16px"
+          : "0px 16px 20px 16px"
+        : p.sortingBar
+        ? "0px 12px 0px 12px"
+        : "0px 12px 0px 12px"};
+  `;
+
+  const Tab = styled.div`
+    width: max-content;
+    padding: 15px 0px;
+    margin-right: 25px;
+    white-space: nowrap;
+    border-bottom: 3px solid #e45cff;
+    transition: all 300ms ease;
+    color: #e45cff;
+  `;
+
   return (
     <div
       onClick={() => {
@@ -808,28 +831,58 @@ const Profile = ({
                 hasEmailAddress={hasEmailAddress}
               />
             </div>
-
             {featured_nft_id && spotlightItem && (
-              <div
-                className="mx-auto mt-12 mb-8 flex flex-col justify-center items-center md:items-start"
-                style={{ maxWidth: 1185 }}
-              >
-                <SpotlightItem
-                  item={spotlightItem}
-                  removeSpotlightItem={() => handleChangeSpotlightItem(null)}
-                  isMyProfile={isMyProfile}
-                  openCardMenu={openCardMenu}
-                  setOpenCardMenu={setOpenCardMenu}
-                  listId={0}
-                  refreshItems={() => {
-                    updateCreated(selectedCreatedSortField, false);
-                    updateOwned(selectedOwnedSortField, false);
-                  }}
-                />
-              </div>
+              <>
+                <div className="mx-auto" style={{ width: gridWidth }}>
+                  <GridTabsContainer>
+                    <div
+                      className="mt-8"
+                      style={{ borderBottom: "1px solid #ddd" }}
+                    >
+                      <Tab className="flex flex-row">
+                        <div>Spotlight</div>
+                        <div>
+                          <img
+                            src="/icons/spotlight_flip.png"
+                            style={{
+                              height: 20,
+                              marginLeft: 8,
+                            }}
+                          />
+                        </div>
+                      </Tab>
+                    </div>
+                  </GridTabsContainer>
+                </div>
+
+                <div
+                  className="mx-auto flex flex-col justify-center items-center md:items-start"
+                  style={{ maxWidth: 1185 }}
+                >
+                  <SpotlightItem
+                    item={spotlightItem}
+                    removeSpotlightItem={() => handleChangeSpotlightItem(null)}
+                    isMyProfile={isMyProfile}
+                    openCardMenu={openCardMenu}
+                    setOpenCardMenu={setOpenCardMenu}
+                    listId={0}
+                    refreshItems={() => {
+                      updateCreated(selectedCreatedSortField, false);
+                      updateOwned(selectedOwnedSortField, false);
+                    }}
+                  />
+                </div>
+              </>
             )}
 
-            <div className="mx-auto" style={{ width: gridWidth }}>
+            <div
+              className="mx-auto"
+              style={
+                context.isMobile && featured_nft_id && spotlightItem
+                  ? { width: gridWidth, borderTopWidth: 1 }
+                  : { width: gridWidth }
+              }
+            >
               <div className="pt-4">{FilterTabs}</div>
 
               <div>
