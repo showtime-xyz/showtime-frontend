@@ -38,7 +38,6 @@ export async function getServerSideProps(context) {
   let response_profile;
   try {
     response_profile = await backend.get(`/v2/profile_server/${slug_address}`);
-
     const data_profile = response_profile.data.data;
     const name = data_profile.profile.name;
     const img_url = data_profile.profile.img_url;
@@ -1028,6 +1027,7 @@ const Profile = ({
                   ? () => updateCreated(selectedCreatedSortField, false)
                   : () => updateOwned(selectedOwnedSortField, false)
               }
+              detailsModalCloseOnKeyChange={slug_address}
               changeSpotlightItem={handleChangeSpotlightItem}
             />
           </div>

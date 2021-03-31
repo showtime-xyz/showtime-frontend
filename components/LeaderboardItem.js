@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import _ from "lodash";
 import ReactPlayer from "react-player";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -272,7 +273,9 @@ const LeaderboardItem = ({ item, index }) => {
     context.setMyLikeCounts({
       ...context.myLikeCounts,
       [nft_id]:
-        ((myLikeCounts && myLikeCounts[nft_id]) || likedItem.like_count) + 1,
+        (myLikeCounts && !_.isNil(myLikeCounts[nft_id])
+          ? myLikeCounts[nft_id]
+          : likedItem.like_count) + 1,
     });
 
     // Post changes to the API
@@ -291,7 +294,9 @@ const LeaderboardItem = ({ item, index }) => {
     context.setMyLikeCounts({
       ...context.myLikeCounts,
       [nft_id]:
-        ((myLikeCounts && myLikeCounts[nft_id]) || likedItem.like_count) - 1,
+        (myLikeCounts && !_.isNil(myLikeCounts[nft_id])
+          ? myLikeCounts[nft_id]
+          : likedItem.like_count) - 1,
     });
 
     // Post changes to the API

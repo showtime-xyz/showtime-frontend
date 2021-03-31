@@ -101,7 +101,10 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
     const myLikeCounts = context.myLikeCounts;
     context.setMyLikeCounts({
       ...context.myLikeCounts,
-      [nft_id]: ((myLikeCounts && myLikeCounts[nft_id]) || item.like_count) + 1,
+      [nft_id]:
+        (myLikeCounts && !_.isNil(myLikeCounts[nft_id])
+          ? myLikeCounts[nft_id]
+          : item.like_count) + 1,
     });
 
     // Post changes to the API
@@ -119,7 +122,10 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
     const myLikeCounts = context.myLikeCounts;
     context.setMyLikeCounts({
       ...context.myLikeCounts,
-      [nft_id]: ((myLikeCounts && myLikeCounts[nft_id]) || item.like_count) - 1,
+      [nft_id]:
+        (myLikeCounts && !_.isNil(myLikeCounts[nft_id])
+          ? myLikeCounts[nft_id]
+          : item.like_count) - 1,
     });
 
     // Post changes to the API
