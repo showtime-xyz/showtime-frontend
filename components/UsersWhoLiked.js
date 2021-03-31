@@ -1,0 +1,88 @@
+import React, { useState } from "react";
+import Link from "next/link";
+import ModalUserList from "./ModalUserList";
+
+export default function UsersWhoLiked({ users, closeModal }) {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  return (
+    <div className="text-xs md:text-sm mt-3 text-gray-400">
+      {users.length === 1 && (
+        <>
+          Liked by{" "}
+          <Link
+            href="/[profile]"
+            as={`/${users[0]?.username || users[0].wallet_address}`}
+            onClick={closeModal}
+          >
+            <span className="text-black cursor-pointer hover:text-stpink">
+              {users[0].name}
+            </span>
+          </Link>
+        </>
+      )}
+      {users.length === 2 && (
+        <>
+          Liked by{" "}
+          <Link
+            href="/[profile]"
+            as={`/${users[0]?.username || users[0].wallet_address}`}
+            onClick={closeModal}
+          >
+            <span className="text-black cursor-pointer hover:text-stpink">
+              {users[0].name}
+            </span>
+          </Link>{" "}
+          and{" "}
+          <Link
+            href="/[profile]"
+            as={`/${users[1]?.username || users[1].wallet_address}`}
+            onClick={closeModal}
+          >
+            <span className="text-black cursor-pointer hover:text-stpink">
+              {users[1].name}
+            </span>
+          </Link>
+        </>
+      )}
+      {users.length > 2 && (
+        <>
+          Liked by{" "}
+          <Link
+            href="/[profile]"
+            as={`/${users[1]?.username || users[1].wallet_address}`}
+            onClick={closeModal}
+          >
+            <span className="text-black cursor-pointer hover:text-stpink">
+              {users[0].name}
+            </span>
+          </Link>
+          ,{" "}
+          <Link
+            href="/[profile]"
+            as={`/${users[1]?.username || users[1].wallet_address}`}
+            onClick={closeModal}
+          >
+            <span className="text-black cursor-pointer hover:text-stpink">
+              {users[1].name}
+            </span>
+          </Link>{" "}
+          and{" "}
+          <span
+            className="text-black cursor-pointer hover:text-stpink"
+            onClick={() => setModalIsOpen(true)}
+          >
+            {users.length - 2} others
+          </span>
+          <ModalUserList
+            isOpen={modalIsOpen}
+            title="Liked By"
+            users={users}
+            closeModal={() => setModalIsOpen(false)}
+            emptyMessage="No likes yet."
+            onRedirect={closeModal}
+          />
+        </>
+      )}
+    </div>
+  );
+}

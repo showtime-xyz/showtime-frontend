@@ -20,6 +20,8 @@ import UserTimestampCard from "./UserTimestampCard";
 import TokenHistoryCard from "./TokenHistoryCard";
 import CommentsSection from "./CommentsSection";
 import { getBidLink, getContractName } from "../lib/utilities";
+import backend from "../lib/backend";
+import UsersWhoLiked from "./UsersWhoLiked";
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500;
@@ -33,7 +35,6 @@ const TokenDetailBody = ({
   ownershipDetails,
   isInModal,
 }) => {
-  //console.log("item", item);
   const context = useContext(AppContext);
   const { isMobile, columns, gridWidth } = context;
   const getBackgroundColor = () => {
@@ -94,9 +95,20 @@ const TokenDetailBody = ({
   }, [targetRef, item, context.windowSize, isMobile]);
 
   const [fullResLoaded, setFullResLoaded] = useState(false);
+  const [usersWhoLiked, setUsersWhoLiked] = useState();
+
+  const getUsersWhoLiked = async () => {
+    const {
+      data: {
+        data: { likers },
+      },
+    } = await backend.get(`/v1/likes/${item.nft_id}`);
+    setUsersWhoLiked(likers);
+  };
 
   useEffect(() => {
     setFullResLoaded(false);
+    getUsersWhoLiked();
   }, [item]);
 
   return (
@@ -370,6 +382,12 @@ const TokenDetailBody = ({
                   />
                 </div>
               </div>
+              {usersWhoLiked && (
+                <UsersWhoLiked
+                  users={usersWhoLiked}
+                  closeModal={() => setEditModalOpen(false)}
+                />
+              )}
             </div>
             <div
               className="flex-1 p-4 pb-0"
