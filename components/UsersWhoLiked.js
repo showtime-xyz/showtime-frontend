@@ -12,9 +12,11 @@ export default function UsersWhoLiked({ users, closeModal }) {
           <Link
             href="/[profile]"
             as={`/${users[0]?.username || users[0].wallet_address}`}
-            onClick={closeModal}
           >
-            <span className="text-black cursor-pointer hover:text-stpink">
+            <span
+              className="text-black cursor-pointer hover:text-stpink"
+              onClick={closeModal}
+            >
               {users[0].name}
             </span>
           </Link>
@@ -26,9 +28,11 @@ export default function UsersWhoLiked({ users, closeModal }) {
           <Link
             href="/[profile]"
             as={`/${users[0]?.username || users[0].wallet_address}`}
-            onClick={closeModal}
           >
-            <span className="text-black cursor-pointer hover:text-stpink">
+            <span
+              className="text-black cursor-pointer hover:text-stpink"
+              onClick={closeModal}
+            >
               {users[0].name}
             </span>
           </Link>{" "}
@@ -36,9 +40,11 @@ export default function UsersWhoLiked({ users, closeModal }) {
           <Link
             href="/[profile]"
             as={`/${users[1]?.username || users[1].wallet_address}`}
-            onClick={closeModal}
           >
-            <span className="text-black cursor-pointer hover:text-stpink">
+            <span
+              className="text-black cursor-pointer hover:text-stpink"
+              onClick={closeModal}
+            >
               {users[1].name}
             </span>
           </Link>
@@ -50,9 +56,11 @@ export default function UsersWhoLiked({ users, closeModal }) {
           <Link
             href="/[profile]"
             as={`/${users[1]?.username || users[1].wallet_address}`}
-            onClick={closeModal}
           >
-            <span className="text-black cursor-pointer hover:text-stpink">
+            <span
+              className="text-black cursor-pointer hover:text-stpink"
+              onClick={closeModal}
+            >
               {users[0].name}
             </span>
           </Link>
@@ -60,9 +68,11 @@ export default function UsersWhoLiked({ users, closeModal }) {
           <Link
             href="/[profile]"
             as={`/${users[1]?.username || users[1].wallet_address}`}
-            onClick={closeModal}
           >
-            <span className="text-black cursor-pointer hover:text-stpink">
+            <span
+              className="text-black cursor-pointer hover:text-stpink"
+              onClick={closeModal}
+            >
               {users[1].name}
             </span>
           </Link>{" "}
@@ -79,6 +89,7 @@ export default function UsersWhoLiked({ users, closeModal }) {
             users={users}
             closeModal={() => setModalIsOpen(false)}
             emptyMessage="No likes yet."
+            onRedirect={closeModal}
           />
         </>
       )}
