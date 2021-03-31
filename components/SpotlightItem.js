@@ -109,7 +109,7 @@ class SpotlightItem extends React.Component {
     return img_url;
   };
 
-  max_description_length = 200;
+  max_description_length = 160;
 
   getBackgroundColor = (item) => {
     if (
@@ -338,7 +338,9 @@ class SpotlightItem extends React.Component {
               </div>
             )}
             {item.token_has_video ? (
-              <div className={isMobile ? null : "w-2/4 m-12 shadow-xl"}>
+              <div
+                className={isMobile ? null : "w-2/4 m-12 justify-end shadow-xl"}
+              >
                 <ReactPlayer
                   url={item.token_animation_url}
                   playing={this.state.currentlyPlayingVideo}
@@ -388,7 +390,7 @@ class SpotlightItem extends React.Component {
                       <div className="loading-card-spinner" />
                     </div>
                   ) : null}
-                  <div className="h-full md:flex md:items-center md:justify-center ">
+                  <div className="h-full md:flex md:items-center justify-end">
                     <img
                       className={
                         this.context.isMobile
@@ -578,7 +580,7 @@ class SpotlightItem extends React.Component {
                 <div className="flex w-full">
                   <div
                     className={
-                      isMobile ? "mt-3" : "flex flex-row mt-16 w-full "
+                      isMobile ? "mt-3" : "flex flex-row mt-12 w-full "
                     }
                   >
                     {item.contract_is_creator && !this.context.isMobile ? (
