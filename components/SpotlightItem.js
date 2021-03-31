@@ -578,7 +578,7 @@ class SpotlightItem extends React.Component {
                 <div className="flex w-full">
                   <div
                     className={
-                      isMobile ? "mt-3" : "flex flex-row mt-16 w-full "
+                      isMobile ? "mt-3" : "flex flex-row mt-12 w-full "
                     }
                   >
                     {item.contract_is_creator && !this.context.isMobile ? (
