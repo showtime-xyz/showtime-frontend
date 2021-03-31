@@ -11,7 +11,6 @@ export default function ModalUserList({
   users,
   closeModal,
   emptyMessage,
-  onRedirect,
 }) {
   return (
     <>
@@ -38,10 +37,7 @@ export default function ModalUserList({
                         href="/[profile]"
                         as={`/${profile?.username || profile.wallet_address}`}
                       >
-                        <a
-                          className="flex flex-row items-center py-3 transition rounded-lg px-1 hover:bg-gray-100 overflow-hidden"
-                          onClick={onRedirect}
-                        >
+                        <a className="flex flex-row items-center py-3 transition rounded-lg px-1 hover:bg-gray-100 overflow-hidden">
                           <div>
                             <img
                               alt={profile.name}

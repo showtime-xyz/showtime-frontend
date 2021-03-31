@@ -22,6 +22,7 @@ const TokenGridV4 = ({
   setUserHiddenItems,
   showUserHiddenItems,
   refreshItems,
+  detailsModalCloseOnKeyChange,
 }) => {
   const context = useContext(AppContext);
   const [itemsList, setItemsList] = useState([]);
@@ -53,6 +54,10 @@ const TokenGridV4 = ({
       setCurrentlyPlayingVideo(null);
     }
   }, [escPress]);
+
+  useEffect(() => {
+    setCurrentlyOpenModal(null);
+  }, [detailsModalCloseOnKeyChange]);
 
   const goToNext = () => {
     const currentIndex = deduplicatedItemsList.indexOf(currentlyOpenModal);

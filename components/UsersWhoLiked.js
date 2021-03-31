@@ -79,7 +79,6 @@ export default function UsersWhoLiked({ users, closeModal }) {
             users={users}
             closeModal={() => setModalIsOpen(false)}
             emptyMessage="No likes yet."
-            onRedirect={closeModal}
           />
         </>
       )}

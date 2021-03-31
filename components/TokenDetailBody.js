@@ -108,6 +108,7 @@ const TokenDetailBody = ({
 
   useEffect(() => {
     setFullResLoaded(false);
+    setUsersWhoLiked(null);
     getUsersWhoLiked();
   }, [item]);
 

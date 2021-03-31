@@ -922,6 +922,7 @@ const Profile = ({
                   ? () => updateCreated(selectedCreatedSortField, false)
                   : () => updateOwned(selectedOwnedSortField, false)
               }
+              detailsModalCloseOnKeyChange={slug_address}
             />
           </div>
         )}
