@@ -50,7 +50,47 @@ export default function UsersWhoLiked({ users, closeModal }) {
           </Link>
         </>
       )}
-      {users.length > 2 && (
+      {users.length === 3 && (
+        <>
+          Liked by{" "}
+          <Link
+            href="/[profile]"
+            as={`/${users[0]?.username || users[0].wallet_address}`}
+          >
+            <span
+              className="text-black cursor-pointer hover:text-stpink"
+              onClick={closeModal}
+            >
+              {users[0].name}
+            </span>
+          </Link>
+          ,{" "}
+          <Link
+            href="/[profile]"
+            as={`/${users[1]?.username || users[1].wallet_address}`}
+          >
+            <span
+              className="text-black cursor-pointer hover:text-stpink"
+              onClick={closeModal}
+            >
+              {users[1].name}
+            </span>
+          </Link>{" "}
+          and{" "}
+          <Link
+            href="/[profile]"
+            as={`/${users[2]?.username || users[2].wallet_address}`}
+          >
+            <span
+              className="text-black cursor-pointer hover:text-stpink"
+              onClick={closeModal}
+            >
+              {users[2].name}
+            </span>
+          </Link>
+        </>
+      )}
+      {users.length > 3 && (
         <>
           Liked by{" "}
           <Link
