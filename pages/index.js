@@ -174,7 +174,20 @@ export default function Home() {
                 }
               >
                 <h3 className="self-end text-2xl md:text-4xl flex flex-row">
-                  <div>User Spotlights</div>
+                  <div>
+                    <span
+                      style={
+                        context.windowSize && context.windowSize.width < 375
+                          ? {
+                              display: "none",
+                            }
+                          : null
+                      }
+                    >
+                      User
+                    </span>{" "}
+                    Spotlights{" "}
+                  </div>
                   {/*<div>
                     <img
                       src="/icons/spotlight_black.png"
@@ -276,7 +289,13 @@ export default function Home() {
                     : { padding: "0px 12px", marginBottom: 16 }
                 }
               >
-                <h3 className="self-end text-2xl md:text-4xl  pt-7">Latest </h3>
+                <h3
+                  className={`self-end text-2xl md:text-4xl  ${
+                    context.isMobile ? "pt-7" : null
+                  }`}
+                >
+                  Latest{" "}
+                </h3>
                 <div className="flex-grow "></div>
                 <div className="self-end">
                   <div
