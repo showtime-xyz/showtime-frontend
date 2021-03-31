@@ -856,7 +856,9 @@ const Profile = ({
 
                 <div
                   className="mx-auto flex flex-col justify-center items-center md:items-start"
-                  style={{ maxWidth: 1185 }}
+                  style={{
+                    maxWidth: context.columns == 4 ? 1185 : gridWidth,
+                  }}
                 >
                   <SpotlightItem
                     item={spotlightItem}

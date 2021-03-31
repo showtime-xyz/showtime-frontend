@@ -338,7 +338,9 @@ class SpotlightItem extends React.Component {
               </div>
             )}
             {item.token_has_video ? (
-              <div className={isMobile ? null : "w-2/4 m-12 shadow-xl"}>
+              <div
+                className={isMobile ? null : "w-2/4 m-12 justify-end shadow-xl"}
+              >
                 <ReactPlayer
                   url={item.token_animation_url}
                   playing={this.state.currentlyPlayingVideo}
@@ -388,7 +390,7 @@ class SpotlightItem extends React.Component {
                       <div className="loading-card-spinner" />
                     </div>
                   ) : null}
-                  <div className="h-full md:flex md:items-center md:justify-center ">
+                  <div className="h-full md:flex md:items-center justify-end">
                     <img
                       className={
                         this.context.isMobile
