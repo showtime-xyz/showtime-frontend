@@ -174,10 +174,7 @@ export default function Home() {
                 }
               >
                 <h3 className="self-end text-2xl md:text-4xl flex flex-row">
-                  <div>
-                    <span className="hidden sm:inline-block">Community</span>{" "}
-                    Spotlight{" "}
-                  </div>
+                  <div>User Spotlights</div>
                   {/*<div>
                     <img
                       src="/icons/spotlight_black.png"
@@ -189,13 +186,22 @@ export default function Home() {
                     </div>*/}
                   <div className="tooltip">
                     <FontAwesomeIcon
-                      style={{
-                        height: 18,
-                        color: "#bbb",
-                        cursor: "pointer",
-                      }}
+                      style={
+                        context.isMobile
+                          ? {
+                              height: 18,
+                              color: "#bbb",
+                              cursor: "pointer",
+                              marginBottom: 2,
+                            }
+                          : {
+                              height: 18,
+                              color: "#bbb",
+                              cursor: "pointer",
+                              marginBottom: 8,
+                            }
+                      }
                       icon={faInfoCircle}
-                      className="mb-1 md:mb-2"
                     />
                     <span
                       style={{
@@ -262,11 +268,15 @@ export default function Home() {
                 className="flex flex-row ml-0 mr-0"
                 style={
                   context.isMobile
-                    ? { padding: "0px 16px", marginBottom: 20 }
+                    ? {
+                        padding: "0px 16px",
+                        marginBottom: 20,
+                        borderTopWidth: 1,
+                      }
                     : { padding: "0px 12px", marginBottom: 16 }
                 }
               >
-                <h3 className="self-end text-2xl md:text-4xl">Latest </h3>
+                <h3 className="self-end text-2xl md:text-4xl  pt-7">Latest </h3>
                 <div className="flex-grow "></div>
                 <div className="self-end">
                   <div
@@ -313,8 +323,12 @@ export default function Home() {
 
       {columns && (
         <div
-          className="mx-auto"
-          style={columns === 1 ? null : { width: columns * (375 + 20) }}
+          className="mx-auto pt-2"
+          style={
+            columns === 1
+              ? { borderTopWidth: 1 }
+              : { width: columns * (375 + 20) }
+          }
         >
           {FilterTabs}
         </div>
