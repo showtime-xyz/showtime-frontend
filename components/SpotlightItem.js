@@ -109,7 +109,7 @@ class SpotlightItem extends React.Component {
     return img_url;
   };
 
-  max_description_length = 200;
+  max_description_length = 160;
 
   getBackgroundColor = (item) => {
     if (
