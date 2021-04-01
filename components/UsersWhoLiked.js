@@ -95,7 +95,7 @@ export default function UsersWhoLiked({ users, closeModal }) {
           Liked by{" "}
           <Link
             href="/[profile]"
-            as={`/${users[1]?.username || users[1].wallet_address}`}
+            as={`/${users[0]?.username || users[0].wallet_address}`}
           >
             <span
               className="text-black cursor-pointer hover:text-stpink"
