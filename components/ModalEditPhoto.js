@@ -139,7 +139,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
               <form onSubmit={handleSubmit} ref={formRef}>
                 <CloseButton setEditModalOpen={setEditModalOpen} />
                 <div className="text-3xl border-b-2 pb-2">Edit Photo</div>
-                <div className="my-8">
+                <div className="mt-4 mb-4">
                   {image === "" && (
                     <div>
                       {/* Your image upload functionality here */}
@@ -250,9 +250,9 @@ export default function Modal({ isOpen, setEditModalOpen }) {
               .modal {
                 background-color: white;
                 position: absolute;
-                top: 10%;
-                right: 5%;
-                left: 5%;
+                top: ${context.isMobile ? 2 : 10}%;
+                right: 3%;
+                left: 3%;
                 padding: 1em;
                 border-radius: 7px;
                 max-width: 400px;

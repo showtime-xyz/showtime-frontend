@@ -22,6 +22,8 @@ const TokenGridV4 = ({
   setUserHiddenItems,
   showUserHiddenItems,
   refreshItems,
+  detailsModalCloseOnKeyChange,
+  changeSpotlightItem,
 }) => {
   const context = useContext(AppContext);
   const [itemsList, setItemsList] = useState([]);
@@ -53,6 +55,10 @@ const TokenGridV4 = ({
       setCurrentlyPlayingVideo(null);
     }
   }, [escPress]);
+
+  useEffect(() => {
+    setCurrentlyOpenModal(null);
+  }, [detailsModalCloseOnKeyChange]);
 
   const goToNext = () => {
     const currentIndex = deduplicatedItemsList.indexOf(currentlyOpenModal);
@@ -163,13 +169,14 @@ const TokenGridV4 = ({
   const handleLike = async (nft_id) => {
     // Change myLikes via setMyLikes
     context.setMyLikes([...context.myLikes, nft_id]);
-
     const likedItem = itemsList.find((i) => i.nft_id === nft_id);
     const myLikeCounts = context.myLikeCounts;
     context.setMyLikeCounts({
-      ...context.myLikeCounts,
+      ...myLikeCounts,
       [nft_id]:
-        ((myLikeCounts && myLikeCounts[nft_id]) || likedItem.like_count) + 1,
+        (myLikeCounts && !_.isNil(myLikeCounts[nft_id])
+          ? myLikeCounts[nft_id]
+          : likedItem.like_count) + 1,
     });
 
     // Post changes to the API
@@ -189,7 +196,9 @@ const TokenGridV4 = ({
     context.setMyLikeCounts({
       ...context.myLikeCounts,
       [nft_id]:
-        ((myLikeCounts && myLikeCounts[nft_id]) || likedItem.like_count) - 1,
+        (myLikeCounts && !_.isNil(myLikeCounts[nft_id])
+          ? myLikeCounts[nft_id]
+          : likedItem.like_count) - 1,
     });
 
     // Post changes to the API
@@ -283,6 +292,7 @@ const TokenGridV4 = ({
                 userHiddenItems={userHiddenItems}
                 setUserHiddenItems={setUserHiddenItems}
                 refreshItems={refreshItems}
+                changeSpotlightItem={changeSpotlightItem}
               />
             ))}
           </div>

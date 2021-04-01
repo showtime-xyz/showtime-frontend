@@ -6,6 +6,7 @@ import {
   faExternalLinkAlt,
   faPlay,
   faEllipsisH,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
 //import { faEdit } from "@fortawesome/free-regular-svg-icons";
 import LikeButton from "./LikeButton";
@@ -196,7 +197,33 @@ class TokenCard extends React.Component {
               style={{ position: "relative" }}
             >
               <div className="flex-shrink">
-                {item.creator_address ? (
+                {item.contract_is_creator ? (
+                  <Link
+                    href="/c/[collection]"
+                    as={`/c/${item.collection_slug}`}
+                  >
+                    <a className="flex flex-row items-center">
+                      <div>
+                        <img
+                          alt={item.collection_name}
+                          src={
+                            item.collection_img_url
+                              ? item.collection_img_url
+                              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                          }
+                          className="rounded-full"
+                          style={{ height: 24, width: 24 }}
+                        />
+                      </div>
+                      <div className="showtime-card-profile-link ml-2">
+                        {this.truncateWithEllipses(
+                          item.collection_name + " Collection",
+                          30
+                        )}
+                      </div>
+                    </a>
+                  </Link>
+                ) : item.creator_address ? (
                   <Link
                     href="/[profile]"
                     as={`/${item?.creator_username || item.creator_address}`}
@@ -258,6 +285,21 @@ class TokenCard extends React.Component {
                         style={{ border: "1px solid #f0f0f0" }}
                       >
                         <div
+                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap flex flew-row"
+                          onClick={() =>
+                            this.props.changeSpotlightItem(this.props.item)
+                          }
+                        >
+                          <div>
+                            <FontAwesomeIcon
+                              style={{ height: 18, width: 18, marginRight: 6 }}
+                              icon={faStar}
+                            />
+                          </div>
+                          <div>Spotlight Item</div>
+                        </div>
+
+                        <div
                           className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
                           onClick={
                             this.props.userHiddenItems.includes(
@@ -270,7 +312,7 @@ class TokenCard extends React.Component {
                           {this.props.userHiddenItems.includes(
                             this.props.item.nft_id
                           )
-                            ? `Unhide from ${
+                            ? `Unhide From ${
                                 listId === 1
                                   ? "Created"
                                   : listId === 2
@@ -279,7 +321,7 @@ class TokenCard extends React.Component {
                                   ? "Liked"
                                   : "List"
                               }`
-                            : `Hide from ${
+                            : `Hide From ${
                                 listId === 1
                                   ? "Created"
                                   : listId === 2

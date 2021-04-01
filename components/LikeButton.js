@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 //import { useRouter } from "next/router";
 import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
+import _ from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
@@ -10,8 +11,9 @@ const LikeButton = ({ item, handleLike, handleUnlike }) => {
   const context = useContext(AppContext);
   const { isMobile } = context;
   const like_count =
-    (context.myLikeCounts && context.myLikeCounts[item?.nft_id]) ||
-    item.like_count;
+    context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id])
+      ? context.myLikeCounts[item?.nft_id]
+      : item.like_count;
   const liked = context.myLikes?.includes(item.nft_id);
 
   const handleLoggedOutLike = () => {

@@ -20,6 +20,8 @@ import UserTimestampCard from "./UserTimestampCard";
 import TokenHistoryCard from "./TokenHistoryCard";
 import CommentsSection from "./CommentsSection";
 import { getBidLink, getContractName } from "../lib/utilities";
+import backend from "../lib/backend";
+import UsersWhoLiked from "./UsersWhoLiked";
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500;
@@ -33,7 +35,6 @@ const TokenDetailBody = ({
   ownershipDetails,
   isInModal,
 }) => {
-  //console.log("item", item);
   const context = useContext(AppContext);
   const { isMobile, columns, gridWidth } = context;
   const getBackgroundColor = () => {
@@ -94,9 +95,21 @@ const TokenDetailBody = ({
   }, [targetRef, item, context.windowSize, isMobile]);
 
   const [fullResLoaded, setFullResLoaded] = useState(false);
+  const [usersWhoLiked, setUsersWhoLiked] = useState();
+
+  const getUsersWhoLiked = async () => {
+    const {
+      data: {
+        data: { likers },
+      },
+    } = await backend.get(`/v1/likes/${item.nft_id}`);
+    setUsersWhoLiked(likers);
+  };
 
   useEffect(() => {
     setFullResLoaded(false);
+    setUsersWhoLiked(null);
+    getUsersWhoLiked();
   }, [item]);
 
   return (
@@ -142,7 +155,28 @@ const TokenDetailBody = ({
         {columns === 1 ? (
           <div className="p-4 flex flex-row">
             <div className="flex-shrink">
-              {item.creator_address ? (
+              {item.contract_is_creator ? (
+                <Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
+                  <a className="flex flex-row items-center ">
+                    <div>
+                      <img
+                        alt={item.collection_name}
+                        src={
+                          item.collection_img_url
+                            ? item.collection_img_url
+                            : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                        }
+                        className="rounded-full "
+                        style={{ height: 24, width: 24 }}
+                      />
+                    </div>
+                    <div className="showtime-card-profile-link ml-2">
+                      {truncateWithEllipses(item.collection_name, 30)}{" "}
+                      Collection
+                    </div>
+                  </a>
+                </Link>
+              ) : item.creator_address ? (
                 <Link
                   href="/[profile]"
                   as={`/${item?.creator_username || item.creator_address}`}
@@ -349,6 +383,12 @@ const TokenDetailBody = ({
                   />
                 </div>
               </div>
+              {usersWhoLiked && (
+                <UsersWhoLiked
+                  users={usersWhoLiked}
+                  closeModal={() => setEditModalOpen(false)}
+                />
+              )}
             </div>
             <div
               className="flex-1 p-4 pb-0"
@@ -389,23 +429,46 @@ const TokenDetailBody = ({
               <div className="flex-1 p-4 md:w-0">
                 {/* artist section */}
 
-                {item.creator_address && (
-                  <div>
-                    <div className="md:text-lg py-4">Creator</div>
-                    <CreatorSummary
-                      address={item.creator_address}
-                      name={item.creator_name}
-                      username={item.creator_username}
-                      imageUrl={item.creator_img_url}
-                      bio={ownershipDetails.creator_bio}
-                      closeModal={() => {
-                        if (setEditModalOpen) {
-                          setEditModalOpen(false);
-                        }
-                      }}
-                    />
-                  </div>
-                )}
+                {item.contract_is_creator
+                  ? item.contract_is_creator && (
+                      <div>
+                        <div className="md:text-lg py-4">Creator</div>
+                        <CreatorSummary
+                          //address={item.creator_address}
+                          name={`${item.collection_name} Collection`}
+                          //username={item.creator_username}
+                          imageUrl={
+                            item.collection_img_url
+                              ? item.collection_img_url
+                              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                          }
+                          collectionSlug={item.collection_slug}
+                          //bio={ownershipDetails.creator_bio}
+                          closeModal={() => {
+                            if (setEditModalOpen) {
+                              setEditModalOpen(false);
+                            }
+                          }}
+                        />
+                      </div>
+                    )
+                  : item.creator_address && (
+                      <div>
+                        <div className="md:text-lg py-4">Creator</div>
+                        <CreatorSummary
+                          address={item.creator_address}
+                          name={item.creator_name}
+                          username={item.creator_username}
+                          imageUrl={item.creator_img_url}
+                          bio={ownershipDetails.creator_bio}
+                          closeModal={() => {
+                            if (setEditModalOpen) {
+                              setEditModalOpen(false);
+                            }
+                          }}
+                        />
+                      </div>
+                    )}
                 {/* Owned by Section */}
                 {!isMobile && item.owner_address && (
                   <div className="mt-8">

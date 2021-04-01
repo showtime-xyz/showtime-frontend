@@ -8,7 +8,7 @@ import backend from "../lib/backend";
 import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { GridTab, GridTabs } from "../components/GridTabs";
 
 export async function getServerSideProps(context) {
@@ -32,8 +32,10 @@ export default function Home() {
   const [reachedBottom, setReachedBottom] = useState(false);
   const [isLoadingCards, setIsLoadingCards] = useState(false);
   const [isLoadingHero, setIsLoadingHero] = useState(false);
+  const [isLoadingSpotlight, setIsLoadingSpotlight] = useState(false);
 
   const [heroItems, setHeroItems] = useState([]);
+  const [spotlightItems, setSpotlightItems] = useState([]);
 
   useEffect(() => {
     const getFeatured = async () => {
@@ -61,8 +63,20 @@ export default function Home() {
     backend.get(`/v1/hero?recache=1`);
   };
 
+  const getSpotlight = async () => {
+    setIsLoadingSpotlight(true);
+    const response_spotlight = await backend.get(`/v1/spotlight`);
+    const data_spotlight = response_spotlight.data.data;
+    setSpotlightItems(data_spotlight);
+    setIsLoadingSpotlight(false);
+
+    // Reset cache for next load
+    backend.get(`/v1/spotlight?recache=1`);
+  };
+
   useEffect(() => {
     getHero();
+    getSpotlight();
   }, []);
 
   const FilterTabs =
@@ -149,17 +163,7 @@ export default function Home() {
 
       {gridWidth && (
         <>
-          <div
-            style={
-              context.isMobile
-                ? null
-                : {
-                    //backgroundColor: "#fff",
-                    //boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
-                    paddingTop: 20,
-                  }
-            }
-          >
+          <div style={context.isMobile ? null : { paddingTop: 20 }}>
             <div className="m-auto" style={{ width: gridWidth }}>
               <div
                 className="flex flex-row ml-0 mr-0"
@@ -169,7 +173,129 @@ export default function Home() {
                     : { padding: "0px 12px", marginBottom: 16 }
                 }
               >
-                <h3 className="self-end text-2xl md:text-4xl">Latest </h3>
+                <h3 className="self-end text-2xl md:text-4xl flex flex-row">
+                  <div>
+                    <span
+                      style={
+                        context.windowSize && context.windowSize.width < 375
+                          ? {
+                              display: "none",
+                            }
+                          : null
+                      }
+                    >
+                      User
+                    </span>{" "}
+                    Spotlights{" "}
+                  </div>
+                  {/*<div>
+                    <img
+                      src="/icons/spotlight_black.png"
+                      style={{
+                        marginLeft: 8,
+                      }}
+                      className="w-7 h-7 md:w-10 md:h-10"
+                    />
+                    </div>*/}
+                  <div className="tooltip">
+                    <FontAwesomeIcon
+                      style={
+                        context.isMobile
+                          ? {
+                              height: 18,
+                              color: "#bbb",
+                              cursor: "pointer",
+                              marginBottom: 2,
+                            }
+                          : {
+                              height: 18,
+                              color: "#bbb",
+                              cursor: "pointer",
+                              marginBottom: 8,
+                            }
+                      }
+                      icon={faInfoCircle}
+                    />
+                    <span
+                      style={{
+                        fontSize: 12,
+                        opacity: 0.9,
+                        width: 200,
+                        lineHeight: 1.75,
+                      }}
+                      className="tooltip-text bg-black p-3 -mt-9 -ml-28 rounded text-white"
+                    >
+                      Users can pick one item from their profile to spotlight
+                    </span>
+                  </div>
+                </h3>
+                <div className="flex-grow "></div>
+                <div className="self-end">
+                  <div
+                    className="ml-4 bg-white text-black border-black rounded-full px-5 py-1 cursor-pointer border-2 hover:text-stpink hover:border-stpink transition-all showtime-random-button"
+                    onClick={() => {
+                      getSpotlight();
+                    }}
+                  >
+                    <span className="text-sm md:text-base">🎲&nbsp;Random</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="m-auto"
+              style={{ width: gridWidth, minHeight: 700 }}
+            >
+              <TokenGridV4
+                items={spotlightItems.slice(0, context.columns * 2)}
+                isLoading={isLoadingSpotlight}
+              />
+            </div>
+          </div>
+
+          <div
+            className="text-center pb-10 pt-4"
+            style={
+              context.columns === 1
+                ? { backgroundColor: "rgb(243, 244, 246)" }
+                : null
+            }
+          >
+            <Link href="/c/[collection]" as="/c/spotlights">
+              <a className="showtime-purple-button-icon flex flex-row items-center px-4 py-2 rounded-full">
+                <div className="mr-2">Explore User Spotlights</div>
+                <div className="flex">
+                  <FontAwesomeIcon style={{ height: 18 }} icon={faArrowRight} />
+                </div>
+              </a>
+            </Link>
+          </div>
+        </>
+      )}
+
+      {gridWidth && (
+        <>
+          <div style={context.isMobile ? null : { paddingTop: 20 }}>
+            <div className="m-auto" style={{ width: gridWidth }}>
+              <div
+                className="flex flex-row ml-0 mr-0"
+                style={
+                  context.isMobile
+                    ? {
+                        padding: "0px 16px",
+                        marginBottom: 20,
+                        borderTopWidth: 1,
+                      }
+                    : { padding: "0px 12px", marginBottom: 16 }
+                }
+              >
+                <h3
+                  className={`self-end text-2xl md:text-4xl  ${
+                    context.isMobile ? "pt-7" : null
+                  }`}
+                >
+                  Latest{" "}
+                </h3>
                 <div className="flex-grow "></div>
                 <div className="self-end">
                   <div
@@ -181,15 +307,6 @@ export default function Home() {
                     <span className="text-sm md:text-base">🎲 Random</span>
                   </div>
                 </div>
-                {/*<div className="hidden sm:flex flex-grow"></div>
-              <div
-                className="self-end hidden sm:flex"
-                style={context.isMobile ? { padding: "0px 16px" } : null}
-              >
-                <Link href="/c/[collection]" as="/c/all">
-                  <a className="explore-more-link">Explore more pieces</a>
-                </Link>
-                </div>*/}
               </div>
             </div>
             <div
@@ -225,8 +342,12 @@ export default function Home() {
 
       {columns && (
         <div
-          className="mx-auto"
-          style={columns === 1 ? null : { width: columns * (375 + 20) }}
+          className="mx-auto pt-2"
+          style={
+            columns === 1
+              ? { borderTopWidth: 1 }
+              : { width: columns * (375 + 20) }
+          }
         >
           {FilterTabs}
         </div>

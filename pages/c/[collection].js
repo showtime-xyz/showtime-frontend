@@ -99,6 +99,8 @@ export default function Collection({
         ? null
         : selected_collection.name
       : collection
+      ? collection.replace(/-/g, " ")
+      : collection
   );
   const [randomNumber, setRandomNumber] = useState(1);
 
@@ -244,7 +246,7 @@ export default function Collection({
           </h1>
           <h1
             className="text-4xl md:text-7xl xl:text-8xl"
-            style={{ fontFamily: "Afronaut" }}
+            style={{ fontFamily: "Afronaut", textTransform: "capitalize" }}
           >
             {currentCollectionName ? currentCollectionName : "Leading NFT"}
           </h1>
@@ -275,9 +277,20 @@ export default function Collection({
                   options={collection_list}
                   labelField="name"
                   valueField="value"
-                  values={collection_list.filter(
-                    (item) => item.value === currentCollectionSlug
-                  )}
+                  values={
+                    collection_list
+                      .map((item) => item.value)
+                      .includes(currentCollectionSlug)
+                      ? collection_list.filter(
+                          (item) => item.value === currentCollectionSlug
+                        )
+                      : [
+                          {
+                            value: "all",
+                            name: "Filter by collection",
+                          },
+                        ]
+                  }
                   searchable={false}
                   onChange={(values) => onChange(values)}
                   style={{ fontSize: 16 }}
