@@ -7,27 +7,30 @@ import ScrollUp from "./ScrollUp";
 import Footer from "./footer";
 import Header from "./header";
 import RecommendFollowers from "./RecommendFollowers";
+import { useRouter } from "next/router";
 
 const Layout = ({ children }) => {
   const context = useContext(AppContext);
   const [recommendedItems, setRecommendedItems] = useState([]);
   const { myProfile } = context;
   const has_onboarded = myProfile?.has_onboarded;
-  useEffect(() => {
-    const getRecommended = async () => {
-      if (has_onboarded === false) {
-        const result = await backend.get(
-          `/v1/leaderboard?days=30`
-        );
-        const data = result?.data?.data;
-        setRecommendedItems(data);
+  const router = useRouter();
 
-        // Reset cache for next load
-        backend.get(`/v1/leaderboard?days=30&recache=1`);
-      }
+  const getRecommended = async () => {
+    if (has_onboarded === false) {
+      const result = await backend.get(`/v1/leaderboard?days=30`);
+      const data = result?.data?.data;
+      setRecommendedItems(data);
+    }
+  };
+
+  useEffect(() => {
+    const handleRouterChange = () => {
+      getRecommended();
     };
-    getRecommended();
-  }, [has_onboarded]);
+    router.events.on("routeChangeComplete", handleRouterChange);
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen">
       <Head>
@@ -58,14 +61,10 @@ const Layout = ({ children }) => {
 
       <Header />
       <ScrollUp />
-      {typeof document !== "undefined" && recommendedItems.length > 0
-        ? (
-          <RecommendFollowers items={recommendedItems} />
-        )
-        : null}
-      <main>
-        {children}
-      </main>
+      {typeof document !== "undefined" && recommendedItems.length > 0 ? (
+        <RecommendFollowers items={recommendedItems} />
+      ) : null}
+      <main>{children}</main>
 
       <Footer />
     </div>
