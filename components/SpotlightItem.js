@@ -243,15 +243,15 @@ class SpotlightItem extends React.Component {
                       >
                         <div
                           className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
-                          onClick={this.handleRefreshNFTMetadata}
-                        >
-                          Refresh Metadata
-                        </div>
-                        <div
-                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
                           onClick={this.props.removeSpotlightItem}
                         >
                           Remove Spotlight
+                        </div>
+                        <div
+                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                          onClick={this.handleRefreshNFTMetadata}
+                        >
+                          Refresh Metadata
                         </div>
                       </div>
                     </div>
@@ -321,15 +321,15 @@ class SpotlightItem extends React.Component {
                       >
                         <div
                           className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
-                          onClick={this.handleRefreshNFTMetadata}
-                        >
-                          Refresh Metadata
-                        </div>
-                        <div
-                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
                           onClick={this.props.removeSpotlightItem}
                         >
                           Remove Spotlight
+                        </div>
+                        <div
+                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                          onClick={this.handleRefreshNFTMetadata}
+                        >
+                          Refresh Metadata
                         </div>
                       </div>
                     </div>

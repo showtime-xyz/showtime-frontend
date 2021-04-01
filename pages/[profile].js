@@ -19,8 +19,8 @@ import AddressButton from "../components/AddressButton";
 import { SORT_FIELDS } from "../lib/constants";
 import Select from "react-dropdown-select";
 import SpotlightItem from "../components/SpotlightItem";
-//import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-//import { faSun } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 //import styled from "styled-components";
 
 export async function getServerSideProps(context) {
@@ -835,9 +835,8 @@ const Profile = ({
                           color: "#e45cff",
                         }}
                       >
-                        <div>Spotlight</div>
                         <div>
-                          <img
+                          {/*<img
                             src="/icons/spotlight_flip.png"
                             style={{
                               height: 20,
@@ -846,8 +845,13 @@ const Profile = ({
                             }}
                             width={20}
                             height={20}
+                          />*/}
+                          <FontAwesomeIcon
+                            style={{ height: 20, width: 20, marginRight: 6 }}
+                            icon={faStar}
                           />
                         </div>
+                        <div>Spotlight</div>
                       </div>
                     </div>
                   </div>

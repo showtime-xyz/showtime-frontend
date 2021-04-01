@@ -6,6 +6,7 @@ import {
   faExternalLinkAlt,
   faPlay,
   faEllipsisH,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
 //import { faEdit } from "@fortawesome/free-regular-svg-icons";
 import LikeButton from "./LikeButton";
@@ -284,6 +285,21 @@ class TokenCard extends React.Component {
                         style={{ border: "1px solid #f0f0f0" }}
                       >
                         <div
+                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap flex flew-row"
+                          onClick={() =>
+                            this.props.changeSpotlightItem(this.props.item)
+                          }
+                        >
+                          <div>
+                            <FontAwesomeIcon
+                              style={{ height: 20, width: 20, marginRight: 6 }}
+                              icon={faStar}
+                            />
+                          </div>
+                          <div>Spotlight Item</div>
+                        </div>
+
+                        <div
                           className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
                           onClick={
                             this.props.userHiddenItems.includes(
@@ -296,7 +312,7 @@ class TokenCard extends React.Component {
                           {this.props.userHiddenItems.includes(
                             this.props.item.nft_id
                           )
-                            ? `Unhide from ${
+                            ? `Unhide From ${
                                 listId === 1
                                   ? "Created"
                                   : listId === 2
@@ -305,7 +321,7 @@ class TokenCard extends React.Component {
                                   ? "Liked"
                                   : "List"
                               }`
-                            : `Hide from ${
+                            : `Hide From ${
                                 listId === 1
                                   ? "Created"
                                   : listId === 2
@@ -320,14 +336,6 @@ class TokenCard extends React.Component {
                           onClick={this.handleRefreshNFTMetadata}
                         >
                           Refresh Metadata
-                        </div>
-                        <div
-                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
-                          onClick={() =>
-                            this.props.changeSpotlightItem(this.props.item)
-                          }
-                        >
-                          Set as Spotlight
                         </div>
                       </div>
                     </div>
