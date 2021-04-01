@@ -261,14 +261,14 @@ export default function Home() {
                 : null
             }
           >
-            {/*<Link href="/c/[collection]" as="/c/all">
+            <Link href="/c/[collection]" as="/c/spotlights">
               <a className="showtime-purple-button-icon flex flex-row items-center px-4 py-2 rounded-full">
-                <div className="mr-2">Explore Collections</div>
+                <div className="mr-2">Explore User Spotlights</div>
                 <div className="flex">
                   <FontAwesomeIcon style={{ height: 18 }} icon={faArrowRight} />
                 </div>
               </a>
-            </Link>*/}
+            </Link>
           </div>
         </>
       )}
