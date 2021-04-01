@@ -847,7 +847,7 @@ const Profile = ({
                             height={20}
                           />*/}
                           <FontAwesomeIcon
-                            style={{ height: 20, width: 20, marginRight: 6 }}
+                            style={{ height: 18, width: 18, marginRight: 6 }}
                             icon={faStar}
                           />
                         </div>
