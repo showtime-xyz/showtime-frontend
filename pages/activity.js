@@ -6,24 +6,10 @@ import _ from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import Layout from "../components/layout";
-import LoadingSpinner from "../components/LoadingSpinner";
-import LeaderboardItem from "../components/LeaderboardItem";
 import backend from "../lib/backend";
 import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
-import { GridTab, GridTabs } from "../components/GridTabs";
-
-// how many leaders to show on first load
-const LEADERBOARD_LIMIT = 15;
-
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: ${(p) => (p.isMobile ? "4px 16px" : "10px 12px")};
-`;
+import ActivityFeed from "../components/ActivityFeed";
 
 export async function getServerSideProps() {
   return {
@@ -41,32 +27,45 @@ const Activity = () => {
     }
   }, [typeof context.user]);
 
-  const [leaderboardItems, setLeaderboardItems] = useState([]);
-  const [showAllLeaderboardItems, setShowAllLeaderboardItems] = useState(false);
-  const [leaderboardDays, setLeaderboardDays] = useState(1);
+  const ACTIVITY_FEED = [
+    {
+      type: "LIKE",
+      timestamp: "2021-02-14T14:14:41",
+      actor_data: {
+        wallet_address: "0xc986ca9476edc3c021c04e3306f9e37eed9071ab",
+        username: "blonded",
+        name: "blonded",
+        profile_img_url:
+          "https://storage.googleapis.com/nft-public-profile-pics/138698_1613232609.jpg",
+      },
+      activity_data: {
+        amount: 1,
+        nft_id: "1234",
+        nft_img_url: [
+          "https://lh3.googleusercontent.com/MlhWuUVejA3dpoNqrfwJbPkFF6azVVvtiTRG2WhIQzi7RtCs6Ih56iRbLc-RfZr1fjIKG29a7Zgb-1ratEj2oRLnBv_EqEC3vM6bew=w375",
+        ],
+      },
+    },
+  ];
+
+  const [activity, setActivity] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const getFeatured = async () => {
+    const getActivity = async () => {
       setIsLoading(true);
-      setShowAllLeaderboardItems(false);
-      const result = await backend.get(
-        `/v1/leaderboard?days=${leaderboardDays}`
-      );
-      const data = result?.data?.data;
-      setLeaderboardItems(data);
+      // const result = await backend.get(
+      //   `/v1/leaderboard?days=${leaderboardDays}`
+      // );
+      // const data = result?.data?.data;
+      setActivity(ACTIVITY_FEED);
       setIsLoading(false);
 
       // Reset cache for next load
-      backend.get(`/v1/leaderboard?days=${leaderboardDays}&recache=1`);
+      // backend.get(`/v1/activity?days=${leaderboardDays}&recache=1`);
     };
-    getFeatured();
-  }, [leaderboardDays]);
-
-  const shownLeaderboardItems = showAllLeaderboardItems
-    ? leaderboardItems
-    : leaderboardItems.slice(0, LEADERBOARD_LIMIT);
-
+    getActivity();
+  }, []);
   return (
     <Layout>
       <Head>
@@ -88,123 +87,47 @@ const Activity = () => {
           content="https://storage.googleapis.com/showtime-nft-thumbnails/trending_twitter_card2.jpg"
         />
       </Head>
-      {columns && (
-        <div
-          className="mx-auto relative my-16 md:my-24 text-center md:text-left"
-          style={{
-            ...(columns === 1
-              ? { padding: "0px 16px" }
-              : { width: gridWidth, paddingLeft: 16 }),
-          }}
-        >
-          <h1
-            className="text-xl md:text-3xl xl:text-4xl"
-            style={{ maxWidth: 700 }}
-          >
-            Activity
-          </h1>
-          <h1
-            className="text-4xl md:text-7xl xl:text-8xl"
-            style={{ fontFamily: "Afronaut" }}
-          >
-            Trending
-          </h1>
-          <h1 className="text-4xl md:text-7xl xl:text-8xl">Creators.</h1>
-        </div>
-      )}
 
-      {columns && (
+      {gridWidth && (
         <>
-          <div className="m-auto relative" style={{ width: gridWidth }}>
-            <GridTabs title="">
-              <GridTab
-                label="24 Hours"
-                isActive={leaderboardDays === 1}
-                onClickTab={() => {
-                  setLeaderboardDays(1);
-                }}
-              />
-              <GridTab
-                label="7 Days"
-                isActive={leaderboardDays === 7}
-                onClickTab={() => {
-                  setLeaderboardDays(7);
-                }}
-              />
-              <GridTab
-                label="30 Days"
-                isActive={leaderboardDays === 30}
-                onClickTab={() => {
-                  setLeaderboardDays(30);
-                }}
-              />
-            </GridTabs>
-            <Content isMobile={context.isMobile}>
-              {isLoading ? (
-                <div style={{ minHeight: 700 }}>
-                  <LoadingSpinner />
-                </div>
-              ) : (
-                shownLeaderboardItems.map((item, index) => (
-                  <LeaderboardItem
-                    key={item.profile_id}
-                    item={item}
-                    index={index}
-                  />
-                ))
-              )}
-            </Content>
+          <div
+            className="m-auto relative mt-4"
+            style={{ width: gridWidth < 900 ? gridWidth : 900 }}
+          >
+            <div className="mx-auto relative mt-16 md:mt-24 text-center md:text-left p-4 md:px-0">
+              <h1
+                className="text-2xl md:text-3xl xl:text-4xl"
+                style={{ maxWidth: 700 }}
+              >
+                Activity
+              </h1>
+            </div>
+            {/* Page Content */}
+            <div className="grid gap-8 grid-cols-1 md:grid-cols-3">
+              {/* Left Column */}
+              <div className="flex flex-col md:col-span-2">
+                <div className="border-t border-b h-2 bg-gray-100 border-gray-200" />
 
-            {/* show more button */}
-            {!isLoading && (
-              <div className="flex flex-row items-center my-2 justify-center">
-                {!showAllLeaderboardItems ? (
-                  <div
-                    className="text-center px-6 py-2 mt-2 flex items-center w-max border-2 border-gray-300 rounded-full hover:text-stpink hover:border-stpink cursor-pointer"
-                    onClick={() => {
-                      setShowAllLeaderboardItems(true);
-                    }}
-                  >
-                    <div className="mr-2 ">Show More</div>
-                    <div>
-                      <FontAwesomeIcon
-                        style={{ height: 14 }}
-                        icon={faArrowDown}
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <Link href="/c/[collection]" as="/c/all">
-                    {/*<a
-                      className="my-12"
-                      onClick={() => {
-                        mixpanel.track("Explore button click");
-                      }}
-                    >
-                      <div className="text-center px-5 py-3 text-white flex items-center w-max bg-black rounded-full hover:bg-stpink cursor-pointer">
-                        <div className="mr-2">Explore Collections</div>
-                        <div>
-                          <FontAwesomeIcon
-                            style={{ height: 14 }}
-                            icon={faArrowRight}
-                          />
-                        </div>
-                      </div>
-                      
-                    </a>*/}
-                    <a className="showtime-purple-button-icon flex flex-row items-center px-4 py-2 rounded-full my-12">
-                      <div className="mr-2">Explore Collections</div>
-                      <div className="flex">
-                        <FontAwesomeIcon
-                          style={{ height: 18 }}
-                          icon={faArrowRight}
-                        />
-                      </div>
-                    </a>
-                  </Link>
-                )}
+                <ActivityFeed
+                  activity={[
+                    ...activity,
+                    ...activity,
+                    ...activity,
+                    ...activity,
+                    ...activity,
+                    ...activity,
+                    ...activity,
+                    ...activity,
+                  ]}
+                />
               </div>
-            )}
+              {/* Right Column */}
+              <div className="flex flex-col">
+                <div className="p-4 h-max bg-gray-100 rounded-lg sticky top-0">
+                  <div>Recommended Follows</div>
+                </div>
+              </div>
+            </div>
           </div>
         </>
       )}
