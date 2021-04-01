@@ -6,7 +6,7 @@ import Link from "next/link";
 // const Like = React.lazy(() => import("./ActivityTypes/Like"));
 
 export default function ActivityCard({ act }) {
-  const actor = act.actor_data;
+  const actor = act.actor;
   let content = null;
   switch (act.type) {
     case ACTIVITY_TYPES.LIKE:
@@ -30,7 +30,7 @@ export default function ActivityCard({ act }) {
             />
           </a>
         </Link>
-        <div className="flex flex-col">
+        <div className="flex flex-col flex-1">
           <div className="flex items-start">
             <Link
               href="/[profile]"
@@ -47,11 +47,11 @@ export default function ActivityCard({ act }) {
                 as={`/${actor?.username || actor?.wallet_address}`}
               >
                 <a>
-                  <div className="text-gray-400 mr-2">@{actor.username}</div>
+                  <div className="text-gray-500 mr-2">@{actor.username}</div>
                 </a>
               </Link>
             )}
-            <div className="text-gray-400">
+            <div className="text-gray-500">
               <span className="mr-2">·</span>
               {formatDistanceToNowStrict(new Date(act.timestamp), {
                 addSuffix: true,

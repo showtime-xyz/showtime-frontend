@@ -30,21 +30,52 @@ const Activity = () => {
   const ACTIVITY_FEED = [
     {
       type: "LIKE",
+      id: 1,
       timestamp: "2021-02-14T14:14:41",
-      actor_data: {
+      actor: {
         wallet_address: "0xc986ca9476edc3c021c04e3306f9e37eed9071ab",
         username: "blonded",
         name: "blonded",
         profile_img_url:
           "https://storage.googleapis.com/nft-public-profile-pics/138698_1613232609.jpg",
       },
-      activity_data: {
-        amount: 1,
-        nft_id: "1234",
-        nft_img_url: [
-          "https://lh3.googleusercontent.com/MlhWuUVejA3dpoNqrfwJbPkFF6azVVvtiTRG2WhIQzi7RtCs6Ih56iRbLc-RfZr1fjIKG29a7Zgb-1ratEj2oRLnBv_EqEC3vM6bew=w375",
-        ],
+      nfts: [
+        {
+          title: "CrpytoPunk #4301",
+          token_id: "1234",
+          contract_address: "0x658a0253da9bf18bea77c0c85bc4280829ad98c4",
+          nft_img_url:
+            "https://lh3.googleusercontent.com/MlhWuUVejA3dpoNqrfwJbPkFF6azVVvtiTRG2WhIQzi7RtCs6Ih56iRbLc-RfZr1fjIKG29a7Zgb-1ratEj2oRLnBv_EqEC3vM6bew=w375",
+        },
+      ],
+    },
+    {
+      type: "LIKE",
+      id: 2,
+      timestamp: "2021-02-14T14:14:41",
+      actor: {
+        wallet_address: "0x658a0253da9bf18bea77c0c85bc4280829ad98c4",
+        username: "Alex",
+        name: "Alex Kilkka",
+        profile_img_url:
+          "https://storage.googleapis.com/nft-public-profile-pics/51_1612510386.jpg",
       },
+      nfts: [
+        {
+          title: "CrpytoPunk #4301",
+          token_id: "1234",
+          contract_address: "0x658a0253da9bf18bea77c0c85bc4280829ad98c4",
+          nft_img_url:
+            "https://lh3.googleusercontent.com/MlhWuUVejA3dpoNqrfwJbPkFF6azVVvtiTRG2WhIQzi7RtCs6Ih56iRbLc-RfZr1fjIKG29a7Zgb-1ratEj2oRLnBv_EqEC3vM6bew=w375",
+        },
+        {
+          title: "CrpytoPunk #4301",
+          token_id: "1234",
+          contract_address: "0x658a0253da9bf18bea77c0c85bc4280829ad98c4",
+          nft_img_url:
+            "https://lh3.googleusercontent.com/MlhWuUVejA3dpoNqrfwJbPkFF6azVVvtiTRG2WhIQzi7RtCs6Ih56iRbLc-RfZr1fjIKG29a7Zgb-1ratEj2oRLnBv_EqEC3vM6bew=w375",
+        },
+      ],
     },
   ];
 
@@ -108,23 +139,15 @@ const Activity = () => {
               <div className="flex flex-col md:col-span-2">
                 <div className="border-t border-b h-2 bg-gray-100 border-gray-200" />
 
-                <ActivityFeed
-                  activity={[
-                    ...activity,
-                    ...activity,
-                    ...activity,
-                    ...activity,
-                    ...activity,
-                    ...activity,
-                    ...activity,
-                    ...activity,
-                  ]}
-                />
+                <ActivityFeed activity={[...activity]} />
               </div>
               {/* Right Column */}
               <div className="flex flex-col">
-                <div className="p-4 h-max bg-gray-100 rounded-lg sticky top-0">
-                  <div>Recommended Follows</div>
+                <div className="p-6 h-max bg-gray-100 rounded-lg sticky top-0">
+                  <div className="text-xl">Recommended Follows</div>
+                  <div className="bg-gray-200 p-4 rounded-lg">
+                    [Recommended follows comp here]
+                  </div>
                 </div>
               </div>
             </div>
