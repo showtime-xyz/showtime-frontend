@@ -25,11 +25,11 @@ const Button = styled.button`
 
 const PlusIcon = styled.div`
   display: flex;
-  margin-bottom: 2px;
+  margin-bottom: 3px;
   width: 14px;
   height: 14px;
-  margin-right: 12px;
-  color: #adadad;
+  margin-right: 8px;
+  //color: #adadad;
 `;
 
 const FollowText = styled.h6`

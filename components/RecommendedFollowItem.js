@@ -10,7 +10,7 @@ import ModalTokenDetail from "./ModalTokenDetail";
 import { getImageUrl } from "../lib/utilities";
 import FollowButton from "./FollowButton";
 import AppContext from "../context/app-context";
-import { formatAddressShort } from "../lib/utilities";
+import { formatAddressShort, truncateWithEllipses } from "../lib/utilities";
 
 const RecommendedFollowRowItem = styled.div`
   display: flex;
@@ -298,7 +298,12 @@ const RecommendedFollowItem = ({ item, closeModal }) => {
                 }}
               >
                 <ProfileTitle>
-                  {item?.name || formatAddressShort(item.address) || "Unnamed"}
+                  {truncateWithEllipses(
+                    item?.name,
+                    context.isMobile ? 19 : 30
+                  ) ||
+                    formatAddressShort(item.address) ||
+                    "Unnamed"}
                 </ProfileTitle>
               </a>
             </Link>
@@ -332,10 +337,10 @@ const RecommendedFollowItem = ({ item, closeModal }) => {
             topItems={topItems.slice(0, 3)}
             setCurrentlyOpenModal={setCurrentlyOpenModal}
           />
-          <Tiles
+          {/*<Tiles
             topItems={topItems.slice(3, 6)}
             setCurrentlyOpenModal={setCurrentlyOpenModal}
-          />
+          />*/}
         </>
       ) : (
         <Tiles
