@@ -19,25 +19,16 @@ const Layout = ({ children }) => {
 
   const getRecommended = async () => {
     if (has_onboarded === false && recInProgress == false) {
-      setRecInProgress(true);
-      await fetch(`/api/follow_recommendations_onboarding`, {
-        method: "post",
-      })
-        .then(function (response) {
-          return response.json();
-        })
-        .then(function (myJson) {
-          const mydata = myJson["data"];
-          setRecommendedItems(mydata);
-        });
-
-      setRecInProgress(false);
+      if (context.myRecommendations) {
+        setRecInProgress(true);
+        setRecommendedItems(context.myRecommendations);
+        setRecInProgress(false);
+      }
     }
   };
 
   useEffect(() => {
     const handleRouterChange = () => {
-      console.log("handleRouterChange");
       getRecommended();
     };
     router.events.on("routeChangeComplete", handleRouterChange);

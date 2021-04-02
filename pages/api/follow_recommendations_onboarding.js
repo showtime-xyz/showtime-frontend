@@ -11,6 +11,7 @@ export default async (req, res) => {
     );
 
     await fetch(
+      //`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/leaderboard?days=30`,
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/follow_recommendations_onboarding`,
       {
         method: "POST",

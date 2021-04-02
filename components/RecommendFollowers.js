@@ -143,7 +143,9 @@ const RecommendFollowers = ({
                 </CloseIcon>
               </CloseIconWrapper>
               <Title>
-                {context.isMobile ? "Follow Suggestions" : "Follow Suggestions"}
+                {context.isMobile
+                  ? "Follow Suggestions"
+                  : "Suggested People to Follow"}
               </Title>
               <GraySeparator />
               {filteredItems.map((item, index) => (
@@ -173,7 +175,7 @@ const RecommendFollowers = ({
               )}
 
               <div
-                className="float-right px-6 py-2 mt-4 flex items-center w-max border-2 border-gray-300 hover:bg-white hover:text-green-500 rounded-full cursor-pointer showtime-green-button"
+                className="mx-auto px-6 py-2 mt-4 flex items-center w-max border-2 border-gray-300 hover:bg-white hover:text-green-500 rounded-full cursor-pointer showtime-green-button"
                 onClick={() => {
                   mixpanel.track(
                     "Close Recommended Followers modal - bottom button"
@@ -181,7 +183,7 @@ const RecommendFollowers = ({
                   closeModal();
                 }}
               >
-                {"Done"}
+                {"All Done"}
               </div>
             </Modal>
           </Backdrop>
