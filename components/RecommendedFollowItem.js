@@ -181,7 +181,7 @@ const Tiles = ({ topItems, setCurrentlyOpenModal }) => {
   );
 };
 
-const RecommendedFollowItem = ({ item }) => {
+const RecommendedFollowItem = ({ item, closeModal }) => {
   const context = useContext(AppContext);
   const [followerCount, setFollowerCount] = useState();
   const isMyProfile = context?.myProfile?.profile_id === item?.profile_id;
@@ -277,16 +277,30 @@ const RecommendedFollowItem = ({ item }) => {
       <RecommendedFollowHeader>
         <ProfileSection>
           <Link href="/[profile]" as={`/${item?.username || item.address}`}>
-            <ProfileImage
-              isMobile={context.isMobile}
-              src={getImageUrl(item?.img_url)}
-            />
+            <a
+              onClick={() => {
+                closeModal();
+                console.log("Close modal");
+              }}
+            >
+              <ProfileImage
+                isMobile={context.isMobile}
+                src={getImageUrl(item?.img_url)}
+              />
+            </a>
           </Link>
           <ProfileSectionContent>
             <Link href="/[profile]" as={`/${item?.username || item.address}`}>
-              <ProfileTitle>
-                {item?.name || formatAddressShort(item.address) || "Unnamed"}
-              </ProfileTitle>
+              <a
+                onClick={() => {
+                  closeModal();
+                  console.log("Close modal");
+                }}
+              >
+                <ProfileTitle>
+                  {item?.name || formatAddressShort(item.address) || "Unnamed"}
+                </ProfileTitle>
+              </a>
             </Link>
             <ProfileBottomSection>
               <Metadata>

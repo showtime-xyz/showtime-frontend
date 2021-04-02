@@ -151,6 +151,7 @@ const RecommendFollowers = ({
                   key={item.profile_id}
                   item={item}
                   index={index}
+                  closeModal={() => closeModal()}
                 />
               ))}
 
