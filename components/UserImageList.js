@@ -1,0 +1,20 @@
+import Link from "next/link";
+import React from "react";
+
+export default function UserImageList({ users }) {
+  return (
+    <>
+      {users.map((user) => (
+        <Link
+          href="/[profile]"
+          as={`/${user?.username || user?.wallet_address}`}
+          key={user.wallet_address}
+        >
+          <a className="mr-1">
+            <img src={user.profile_img_url} className="h-8 w-8 rounded-full" />
+          </a>
+        </Link>
+      ))}
+    </>
+  );
+}

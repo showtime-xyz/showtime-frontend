@@ -28,10 +28,140 @@ const Activity = () => {
   }, [typeof context.user]);
 
   const ACTIVITY_FEED = [
+    // four follows
+    {
+      type: "FOLLOW",
+      id: 23242,
+      timestamp: "2021-02-14T14:14:41",
+      actor: {
+        wallet_address: "0xc986ca9476edc3c021c04e3306f9e37eed9071ab",
+        username: "blonded",
+        name: "blonded",
+        profile_img_url:
+          "https://storage.googleapis.com/nft-public-profile-pics/138698_1613232609.jpg",
+      },
+      followed: [
+        {
+          wallet_address: "0xc986ca9476edc3c021c04e3306f9e37eed0071ab",
+          username: "blonded",
+          name: "blonded",
+          profile_img_url:
+            "https://storage.googleapis.com/nft-public-profile-pics/138698_1613232609.jpg",
+        },
+        {
+          wallet_address: "0xc986ca9476edc3c02001c04e3306f9e37eed9071ab",
+          username: "blonded",
+          name: "blonded",
+          profile_img_url:
+            "https://storage.googleapis.com/nft-public-profile-pics/138698_1613232609.jpg",
+        },
+        {
+          wallet_address: "0x658a0253da9bf1888bea77c0c85bc4280829ad98c4",
+          username: "Alex",
+          name: "Alex Kilkka",
+          profile_img_url:
+            "https://storage.googleapis.com/nft-public-profile-pics/51_1612510386.jpg",
+        },
+        {
+          wallet_address: "0x658a0253d09a9bf18bea77c0c85bc4280829ad98c4",
+          username: "Alex",
+          name: "Alex Kilkka",
+          profile_img_url:
+            "https://storage.googleapis.com/nft-public-profile-pics/51_1612510386.jpg",
+        },
+      ],
+    },
+    // three follows
+    {
+      type: "FOLLOW",
+      id: 53498,
+      timestamp: "2021-02-14T14:14:41",
+      actor: {
+        wallet_address: "0xc986ca9476edc3c021c04e3306f9e37eed9071ab",
+        username: "blonded",
+        name: "blonded",
+        profile_img_url:
+          "https://storage.googleapis.com/nft-public-profile-pics/138698_1613232609.jpg",
+      },
+      followed: [
+        {
+          wallet_address: "0xc986ca9476098edc3c021c04e3306f9e37eed9071ab",
+          username: "blonded",
+          name: "blonded",
+          profile_img_url:
+            "https://storage.googleapis.com/nft-public-profile-pics/138698_1613232609.jpg",
+        },
+        {
+          wallet_address: "0xc986ca9476ed098c3c021c04e3306f9e37eed9071ab",
+          username: "blonded",
+          name: "blonded",
+          profile_img_url:
+            "https://storage.googleapis.com/nft-public-profile-pics/138698_1613232609.jpg",
+        },
+        {
+          wallet_address: "0x658a0253da9bf09818bea77c0c85bc4280829ad98c4",
+          username: "Alex",
+          name: "Alex Kilkka",
+          profile_img_url:
+            "https://storage.googleapis.com/nft-public-profile-pics/51_1612510386.jpg",
+        },
+      ],
+    },
+    // two follows
+    {
+      type: "FOLLOW",
+      id: 34230,
+      timestamp: "2021-02-14T14:14:41",
+      actor: {
+        wallet_address: "0xc986ca9476edc3c021c04e3306f9e37eed9071ab",
+        username: "blonded",
+        name: "blonded",
+        profile_img_url:
+          "https://storage.googleapis.com/nft-public-profile-pics/138698_1613232609.jpg",
+      },
+      followed: [
+        {
+          wallet_address: "0xc986ca9476edc3c009821c04e3306f9e37eed9071ab",
+          username: "blonded",
+          name: "blonded",
+          profile_img_url:
+            "https://storage.googleapis.com/nft-public-profile-pics/138698_1613232609.jpg",
+        },
+        {
+          wallet_address: "0x658a0253da9bf18b098ea77c0c85bc4280829ad98c4",
+          username: "Alex",
+          name: "Alex Kilkka",
+          profile_img_url:
+            "https://storage.googleapis.com/nft-public-profile-pics/51_1612510386.jpg",
+        },
+      ],
+    },
+    // one follow
+    {
+      type: "FOLLOW",
+      id: 986335,
+      timestamp: "2021-02-14T14:14:41",
+      actor: {
+        wallet_address: "0xc986ca9476edc3c021980c04e3306f9e37eed9071ab",
+        username: "blonded",
+        name: "blonded",
+        profile_img_url:
+          "https://storage.googleapis.com/nft-public-profile-pics/138698_1613232609.jpg",
+      },
+      followed: [
+        {
+          wallet_address: "0xc986ca9476edc3c098021c04e3306f9e37eed9071ab",
+          username: "blonded",
+          name: "blonded",
+          profile_img_url:
+            "https://storage.googleapis.com/nft-public-profile-pics/138698_1613232609.jpg",
+        },
+      ],
+    },
     // multiple buy
     {
       type: "BUY",
-      id: 234,
+      id: 2965434,
       timestamp: "2021-02-14T14:14:41",
       actor: {
         wallet_address: "0xc986ca9476edc3c021c04e3306f9e37eed9071ab",
@@ -77,7 +207,7 @@ const Activity = () => {
     // one buy
     {
       type: "BUY",
-      id: 9865,
+      id: 923423465,
       timestamp: "2021-02-14T14:14:41",
       actor: {
         wallet_address: "0xc986ca9476edc3c021c04e3306f9e37eed9071ab",
