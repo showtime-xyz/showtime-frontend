@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import ActivityImages from "../ActivityImages";
 
 export default function Comment({ act }) {
@@ -9,7 +10,13 @@ export default function Comment({ act }) {
       <div className="text-gray-500">
         Commented on{" "}
         <span className="text-black">
-          {count === 1 ? nfts[0].title + ":" : `${count} items.`}
+          {count === 1 ? (
+            <Link href={`/t/${nfts[0].contract_address}/${nfts[0].token_id}`}>
+              <a className="hover:text-stpink">{nfts[0].title}</a>
+            </Link>
+          ) : (
+            `${count} items`
+          )}
         </span>
       </div>
       {count === 1 && (

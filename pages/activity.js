@@ -29,6 +29,43 @@ const Activity = () => {
 
   const ACTIVITY_FEED = [
     {
+      type: "SALE",
+      id: 50,
+      timestamp: "2021-02-14T14:14:41",
+      actor: {
+        wallet_address: "0xc986ca9476edc3c021c04e3306f9e37eed9071ab",
+        username: "blonded",
+        name: "blonded",
+        profile_img_url:
+          "https://storage.googleapis.com/nft-public-profile-pics/138698_1613232609.jpg",
+      },
+      buyer: {
+        wallet_address: "0xc986ca9476edc3c021c04e3306f9e37eed9071ab",
+        username: "buyer",
+        name: "Buyer Person",
+        profile_img_url:
+          "https://storage.googleapis.com/nft-public-profile-pics/138698_1613232609.jpg",
+      },
+      nfts: [
+        {
+          id: 1,
+          title: "CryptoPunk #4301",
+          token_id: "1234",
+          contract_address: "0x658a0253da9bf18bea77c0c85bc4280829ad98c4",
+          nft_img_url:
+            "https://lh3.googleusercontent.com/3n5UwqFOUwRWc7SzQwrNj11mBSeCFnaHaGT0bW3B19uUd9f2vJJgGqLoqeukbjg_eK9XsZNGKuIawdUjfWZ9jHu9jtIOKK6eKWV4LVI=w375",
+        },
+        {
+          id: 2,
+          title: "CryptoPunk #4301",
+          token_id: "1234",
+          contract_address: "0x658a0253da9bf18bea77c0c85bc4280829ad98c4",
+          nft_img_url:
+            "https://lh3.googleusercontent.com/3n5UwqFOUwRWc7SzQwrNj11mBSeCFnaHaGT0bW3B19uUd9f2vJJgGqLoqeukbjg_eK9XsZNGKuIawdUjfWZ9jHu9jtIOKK6eKWV4LVI=w375",
+        },
+      ],
+    },
+    {
       type: "LIKE",
       id: 1,
       timestamp: "2021-02-14T14:14:41",

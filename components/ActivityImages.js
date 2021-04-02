@@ -6,7 +6,7 @@ export default function ActivityImages({ nfts }) {
   return (
     <>
       {count < 3 && (
-        <div className="flex">
+        <div className="flex flex-1">
           {nfts.map((nft, index) => (
             <ActivityImage
               nft={nft}
@@ -19,14 +19,14 @@ export default function ActivityImages({ nfts }) {
       )}
 
       {count === 3 && (
-        <div className="flex flex-col">
+        <div className="flex flex-col flex-1">
           <ActivityImage
             nft={nfts[0]}
             index={0}
             key={nfts[0].id}
             numberOfImages={1}
           />
-          <div className="flex mt-1">
+          <div className="flex mt-1 flex-1">
             {[nfts[1], nfts[2]].map((nft, index) => (
               <ActivityImage
                 nft={nft}
