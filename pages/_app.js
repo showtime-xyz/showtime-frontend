@@ -29,6 +29,7 @@ export default class MyApp extends React.Component {
     myCommentCounts: null,
     myFollows: null,
     myProfile: undefined,
+    myRecommendations: undefined,
     loginModalOpen: false,
     gridWidth: null,
     columns: null,
@@ -74,7 +75,23 @@ export default class MyApp extends React.Component {
             ? new Date(my_info_data.data.profile.notifications_last_opened)
             : null,
         });
-      } catch {}
+
+        // Load up the recommendations async if we are onboarding
+        //console.log(my_info_data.data.profile.has_onboarded);
+        if (my_info_data.data.profile.has_onboarded == false) {
+          //console.log("NEED TO ONBOARD");
+
+          const myRecRequest = await fetch(
+            "/api/follow_recommendations_onboarding"
+          );
+          const my_rec_data = await myRecRequest.json();
+          this.setMyRecommendations(my_rec_data.data);
+          //console.log("FINISHED LOADING ONBAORDING DATA");
+          //console.log(my_rec_data.data);
+        }
+      } catch (e) {
+        //console.log(e);
+      }
     } catch {
       // Not logged in
       // Switch from undefined to null
@@ -106,6 +123,7 @@ export default class MyApp extends React.Component {
       this.setMyComments([]);
       this.setMyCommentCounts({});
       this.setMyFollows([]);
+      this.setMyRecommendations([]);
 
       mixpanel.track("Logout");
     } else {
@@ -158,6 +176,10 @@ export default class MyApp extends React.Component {
     this.setState({ myProfile });
   }
 
+  setMyRecommendations(myRecommendations) {
+    this.setState({ myRecommendations });
+  }
+
   setLoginModalOpen(loginModalOpen) {
     this.setState({ loginModalOpen });
   }
@@ -206,6 +228,7 @@ export default class MyApp extends React.Component {
       myCommentCounts: this.state.myCommentCounts,
       myFollows: this.state.myFollows,
       myProfile: this.state.myProfile,
+      myRecommendations: this.state.myRecommendations,
       loginModalOpen: this.state.loginModalOpen,
       gridWidth: this.state.gridWidth,
       columns: this.state.columns,
@@ -219,6 +242,8 @@ export default class MyApp extends React.Component {
         this.setMyCommentCounts(myCommentCounts),
       setMyFollows: (myFollows) => this.setMyFollows(myFollows),
       setMyProfile: (myProfile) => this.setMyProfile(myProfile),
+      setMyRecommendations: (myRecommendations) =>
+        this.setMyRecommendations(myRecommendations),
       setLoginModalOpen: (loginModalOpen) =>
         this.setLoginModalOpen(loginModalOpen),
 

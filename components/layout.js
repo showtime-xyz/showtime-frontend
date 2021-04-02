@@ -1,10 +1,39 @@
+import React, { useContext, useEffect, useState } from "react";
 import Head from "next/head";
 import PropTypes from "prop-types";
+import backend from "../lib/backend";
+import AppContext from "../context/app-context";
 import ScrollUp from "./ScrollUp";
 import Footer from "./footer";
 import Header from "./header";
+import RecommendFollowers from "./RecommendFollowers";
+import { useRouter } from "next/router";
 
 const Layout = ({ children }) => {
+  const context = useContext(AppContext);
+  const [recommendedItems, setRecommendedItems] = useState([]);
+  const { myProfile } = context;
+  const has_onboarded = myProfile?.has_onboarded;
+  const router = useRouter();
+  const [recInProgress, setRecInProgress] = useState(false);
+
+  const getRecommended = async () => {
+    if (has_onboarded === false && recInProgress == false) {
+      if (context.myRecommendations) {
+        setRecInProgress(true);
+        setRecommendedItems(context.myRecommendations);
+        setRecInProgress(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const handleRouterChange = () => {
+      getRecommended();
+    };
+    router.events.on("routeChangeComplete", handleRouterChange);
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen">
       <Head>
@@ -35,6 +64,11 @@ const Layout = ({ children }) => {
 
       <Header />
       <ScrollUp />
+      {typeof document !== "undefined" &&
+      recommendedItems &&
+      recommendedItems.length > 0 ? (
+        <RecommendFollowers items={recommendedItems} />
+      ) : null}
       <main>{children}</main>
 
       <Footer />
