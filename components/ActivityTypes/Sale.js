@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import ActivityImages from "../ActivityImages";
 
 export default function Sale({ act }) {
@@ -9,8 +10,18 @@ export default function Sale({ act }) {
       <div className="text-gray-500">
         {count === 1 && (
           <>
-            Sold <span className="text-black">{nfts[0].title}</span> to{" "}
-            <span className="text-black">{act.buyer?.name}</span>.
+            Sold{" "}
+            <Link href={`/t/${nfts[0].contract_address}/${nfts[0].token_id}`}>
+              <a className="text-black hover:text-stpink">{nfts[0].title}</a>
+            </Link>{" "}
+            to{" "}
+            <Link
+              href="/[profile]"
+              as={`/${act.buyer?.username || act.buyer?.wallet_address}`}
+            >
+              <a className="text-black hover:text-stpink">{act.buyer?.name}</a>
+            </Link>
+            .
           </>
         )}
         {count > 1 && (

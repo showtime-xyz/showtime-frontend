@@ -55,14 +55,6 @@ const Activity = () => {
           nft_img_url:
             "https://lh3.googleusercontent.com/3n5UwqFOUwRWc7SzQwrNj11mBSeCFnaHaGT0bW3B19uUd9f2vJJgGqLoqeukbjg_eK9XsZNGKuIawdUjfWZ9jHu9jtIOKK6eKWV4LVI=w375",
         },
-        {
-          id: 2,
-          title: "CryptoPunk #4301",
-          token_id: "1234",
-          contract_address: "0x658a0253da9bf18bea77c0c85bc4280829ad98c4",
-          nft_img_url:
-            "https://lh3.googleusercontent.com/3n5UwqFOUwRWc7SzQwrNj11mBSeCFnaHaGT0bW3B19uUd9f2vJJgGqLoqeukbjg_eK9XsZNGKuIawdUjfWZ9jHu9jtIOKK6eKWV4LVI=w375",
-        },
       ],
     },
     {
