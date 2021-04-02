@@ -123,7 +123,7 @@ const RecommendFollowers = ({
   };
 
   const handleFollowAll = async () => {
-    setFollowAllClicked(!followAllClicked);
+    setFollowAllClicked(true);
 
     const newProfiles = items.filter(
       (item) =>
@@ -181,10 +181,12 @@ const RecommendFollowers = ({
                     : "hover:text-stpink text-white border-stpink bg-stpink hover:bg-white cursor-pointer"
                 }  `}
                 onClick={() => {
-                  mixpanel.track(
-                    "Clicked Follow All on Recommended Followers modal"
-                  );
-                  handleFollowAll();
+                  if (!followAllClicked) {
+                    mixpanel.track(
+                      "Clicked Follow All on Recommended Followers modal"
+                    );
+                    handleFollowAll();
+                  }
                 }}
               >
                 {!followAllClicked ? (
