@@ -157,7 +157,7 @@ const RecommendFollowers = ({
               {!showAllItems && removeAlreadyFollowedItems.length > 3 && (
                 <>
                   <div
-                    className="text-center mx-auto px-6 py-2 my-4 flex items-center w-max border-2 rounded-full bg-stpink hover:text-stpink hover:bg-white text-white border-stpink  cursor-pointer"
+                    className="text-center mx-auto px-6 py-2 my-4 flex items-center w-max border-2 rounded-full hover:bg-stpink text-stpink bg-white hover:text-white border-stpink  cursor-pointer"
                     onClick={() => {
                       setShowAllItems(true);
                     }}
@@ -173,7 +173,7 @@ const RecommendFollowers = ({
               )}
 
               <div
-                className="float-right px-6 py-2 mt-4 flex items-center w-max border-2 border-gray-300 rounded-full hover:text-stpink hover:border-stpink cursor-pointer"
+                className="float-right px-6 py-2 mt-4 flex items-center w-max border-2 border-gray-300 hover:bg-white hover:text-green-500 rounded-full cursor-pointer showtime-green-button"
                 onClick={() => {
                   mixpanel.track(
                     "Close Recommended Followers modal - bottom button"
@@ -181,7 +181,7 @@ const RecommendFollowers = ({
                   closeModal();
                 }}
               >
-                {"Close"}
+                {"Done"}
               </div>
             </Modal>
           </Backdrop>

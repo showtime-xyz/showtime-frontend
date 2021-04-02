@@ -15,17 +15,29 @@ const Layout = ({ children }) => {
   const { myProfile } = context;
   const has_onboarded = myProfile?.has_onboarded;
   const router = useRouter();
+  const [recInProgress, setRecInProgress] = useState(false);
 
   const getRecommended = async () => {
-    if (has_onboarded === false) {
-      const result = await backend.get(`/v1/leaderboard?days=30`);
-      const data = result?.data?.data;
-      setRecommendedItems(data);
+    if (has_onboarded === false && recInProgress == false) {
+      setRecInProgress(true);
+      await fetch(`/api/follow_recommendations_onboarding`, {
+        method: "post",
+      })
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (myJson) {
+          const mydata = myJson["data"];
+          setRecommendedItems(mydata);
+        });
+
+      setRecInProgress(false);
     }
   };
 
   useEffect(() => {
     const handleRouterChange = () => {
+      console.log("handleRouterChange");
       getRecommended();
     };
     router.events.on("routeChangeComplete", handleRouterChange);
@@ -61,7 +73,9 @@ const Layout = ({ children }) => {
 
       <Header />
       <ScrollUp />
-      {typeof document !== "undefined" && recommendedItems.length > 0 ? (
+      {typeof document !== "undefined" &&
+      recommendedItems &&
+      recommendedItems.length > 0 ? (
         <RecommendFollowers items={recommendedItems} />
       ) : null}
       <main>{children}</main>
