@@ -332,10 +332,10 @@ const RecommendedFollowItem = ({ item, closeModal }) => {
             topItems={topItems.slice(0, 3)}
             setCurrentlyOpenModal={setCurrentlyOpenModal}
           />
-          <Tiles
+          {/*<Tiles
             topItems={topItems.slice(3, 6)}
             setCurrentlyOpenModal={setCurrentlyOpenModal}
-          />
+          />*/}
         </>
       ) : (
         <Tiles

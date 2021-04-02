@@ -2,7 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import mixpanel from "mixpanel-browser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDown, faTimes } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowDown,
+  faTimes,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import AppContext from "../context/app-context";
 import ClientOnlyPortal from "./ClientOnlyPortal";
 import RecommendedFollowItem from "./RecommendedFollowItem";
@@ -93,6 +97,7 @@ const RecommendFollowers = ({
   const context = useContext(AppContext);
   const [myFollows, setMyFollows] = useState([]);
   const [showAllItems, setShowAllItems] = useState(false);
+  const [followAllClicked, setFollowAllClicked] = useState(false);
   const [
     recommendFollowersModalOpen,
     setRecommendFollowersModalOpen,
@@ -104,15 +109,37 @@ const RecommendFollowers = ({
     ? removeAlreadyFollowedItems
     : removeAlreadyFollowedItems.slice(0, 7);
   const closeModal = async () => {
-    await fetch(`/api/finishonboarding`, {
-      method: "post",
-    });
-    context.setMyProfile({
-      ...context.myProfile,
-      has_onboarded: true,
-    });
+    if (!context.myProfile.has_onboarded) {
+      await fetch(`/api/finishonboarding`, {
+        method: "post",
+      });
+      context.setMyProfile({
+        ...context.myProfile,
+        has_onboarded: true,
+      });
+    }
+
     setRecommendFollowersModalOpen(false);
   };
+
+  const handleFollowAll = async () => {
+    setFollowAllClicked(!followAllClicked);
+
+    const newProfiles = items.filter(
+      (item) =>
+        !context.myFollows.map((f) => f.profile_id).includes(item.profile_id)
+    );
+
+    // UPDATE CONTEXT
+    context.setMyFollows([...newProfiles, ...context.myFollows]);
+
+    // Post changes to the API
+    await fetch(`/api/bulkfollow`, {
+      method: "post",
+      body: JSON.stringify(newProfiles.map((item) => item.profile_id)),
+    });
+  };
+
   useEffect(() => {
     setMyFollows(context?.myFollows?.map((follow) => follow?.profile_id) || []);
   }, []);
@@ -146,6 +173,30 @@ const RecommendFollowers = ({
                 {context.isMobile ? "Suggested for you" : "Suggested for you"}
               </Title>
               <GraySeparator />
+
+              <div
+                className={`text-center text-sm sm:text-base mx-auto px-5 py-1 sm:px-6 sm:py-2 my-4 flex items-center w-max border-2 rounded-full ${
+                  followAllClicked
+                    ? "bg-white"
+                    : "hover:text-stpink text-white border-stpink bg-stpink hover:bg-white cursor-pointer"
+                }  `}
+                onClick={() => {
+                  mixpanel.track(
+                    "Clicked Follow All on Recommended Followers modal"
+                  );
+                  handleFollowAll();
+                }}
+              >
+                {!followAllClicked ? (
+                  <FontAwesomeIcon
+                    style={{ height: 14, marginRight: 8 }}
+                    icon={faPlus}
+                  />
+                ) : null}
+                {followAllClicked ? "Following All" : "Follow All"}
+              </div>
+              <GraySeparator />
+
               {filteredItems.map((item, index) => (
                 <RecommendedFollowItem
                   key={item.profile_id}
