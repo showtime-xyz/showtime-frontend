@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import { ACTIVITY_TYPES } from "../lib/constants";
-import { Like, Comment, Sale } from "./ActivityTypes";
+import { Like, Comment, Sell, Create } from "./ActivityTypes";
 import { formatDistanceToNowStrict } from "date-fns";
 import Link from "next/link";
 // const Like = React.lazy(() => import("./ActivityTypes/Like"));
@@ -15,8 +15,11 @@ export default function ActivityCard({ act }) {
     case ACTIVITY_TYPES.COMMENT:
       content = <Comment act={act} />;
       break;
-    case ACTIVITY_TYPES.SALE:
-      content = <Sale act={act} />;
+    case ACTIVITY_TYPES.SELL:
+      content = <Sell act={act} />;
+      break;
+    case ACTIVITY_TYPES.CREATE:
+      content = <Create act={act} />;
       break;
     default:
       break;

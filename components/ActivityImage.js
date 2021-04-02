@@ -14,10 +14,7 @@ export default function ActivityImage({ nft, index, numberOfImages }) {
           height: aRef?.current?.clientWidth,
         }}
       >
-        <img
-          src={nft.nft_img_url}
-          className="object-cover w-full h-full hover:opacity-90"
-        />
+        <img src={nft.nft_img_url} className="object-cover w-full h-full" />
       </a>
     </Link>
   );

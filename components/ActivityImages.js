@@ -26,7 +26,7 @@ export default function ActivityImages({ nfts }) {
             key={nfts[0].id}
             numberOfImages={1}
           />
-          <div className="flex mt-1 flex-1">
+          <div className="flex mt-1 w-full">
             {[nfts[1], nfts[2]].map((nft, index) => (
               <ActivityImage
                 nft={nft}
