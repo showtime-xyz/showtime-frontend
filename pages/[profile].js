@@ -865,7 +865,10 @@ const Profile = ({
                 >
                   <SpotlightItem
                     item={spotlightItem}
-                    removeSpotlightItem={() => handleChangeSpotlightItem(null)}
+                    removeSpotlightItem={() => {
+                      handleChangeSpotlightItem(null);
+                      mixpanel.track("Removed Spotlight Item");
+                    }}
                     isMyProfile={isMyProfile}
                     openCardMenu={openCardMenu}
                     setOpenCardMenu={setOpenCardMenu}

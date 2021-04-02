@@ -286,9 +286,10 @@ class TokenCard extends React.Component {
                       >
                         <div
                           className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap flex flew-row"
-                          onClick={() =>
-                            this.props.changeSpotlightItem(this.props.item)
-                          }
+                          onClick={() => {
+                            mixpanel.track("Clicked Spotlight Item");
+                            this.props.changeSpotlightItem(this.props.item);
+                          }}
                         >
                           <div>
                             <FontAwesomeIcon

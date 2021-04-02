@@ -159,6 +159,9 @@ const RecommendFollowers = ({
                   <div
                     className="text-center mx-auto px-6 py-2 my-4 flex items-center w-max border-2 rounded-full hover:text-stpink hover:border-stpink bg-white   cursor-pointer"
                     onClick={() => {
+                      mixpanel.track(
+                        "Clicked Show More on Recommended Followers modal"
+                      );
                       setShowAllItems(true);
                     }}
                   >
