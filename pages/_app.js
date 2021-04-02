@@ -79,14 +79,14 @@ export default class MyApp extends React.Component {
         // Load up the recommendations async if we are onboarding
         //console.log(my_info_data.data.profile.has_onboarded);
         if (my_info_data.data.profile.has_onboarded == false) {
-          console.log("NEED TO ONBOARD");
+          //console.log("NEED TO ONBOARD");
 
           const myRecRequest = await fetch(
             "/api/follow_recommendations_onboarding"
           );
           const my_rec_data = await myRecRequest.json();
           this.setMyRecommendations(my_rec_data.data);
-          console.log("FINISHED LOADING ONBAORDING DATA");
+          //console.log("FINISHED LOADING ONBAORDING DATA");
           //console.log(my_rec_data.data);
         }
       } catch (e) {
