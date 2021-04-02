@@ -354,7 +354,7 @@ const SearchBar = () => {
                   <Link
                     href="/[profile]"
                     as={`/${searchResult?.username || searchResult.address0}`}
-                    key={searchResult.profile_id}
+                    key={searchResult.id}
                   >
                     <SearchResult
                       roundedTop={index === 0}
@@ -364,6 +364,7 @@ const SearchBar = () => {
                       onClick={() => {
                         setShowSearchResults(false);
                         setSearchText("");
+                        mixpanel.track("Clicked Search result");
                       }}
                       className="items-center"
                     >

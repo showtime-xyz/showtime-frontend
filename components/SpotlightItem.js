@@ -7,7 +7,7 @@ import {
   faPlay,
   faEllipsisH,
 } from "@fortawesome/free-solid-svg-icons";
-import { faSun } from "@fortawesome/free-regular-svg-icons";
+//import { faSun } from "@fortawesome/free-regular-svg-icons";
 //import { faEdit } from "@fortawesome/free-regular-svg-icons";
 import LikeButton from "./LikeButton";
 import CommentButton from "./CommentButton";
@@ -88,6 +88,7 @@ class SpotlightItem extends React.Component {
   }
 
   handleRefreshNFTMetadata = async () => {
+    mixpanel.track("Clicked refresh metadata");
     this.setState({ refreshing: true });
     await fetch(`/api/refreshmetadata/${this.props.item.nft_id}`, {
       method: "post",

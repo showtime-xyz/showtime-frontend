@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import Head from "next/head";
 import PropTypes from "prop-types";
-import backend from "../lib/backend";
+//import backend from "../lib/backend";
 import AppContext from "../context/app-context";
 import ScrollUp from "./ScrollUp";
 import Footer from "./footer";
 import Header from "./header";
 import RecommendFollowers from "./RecommendFollowers";
 import { useRouter } from "next/router";
+import mixpanel from "mixpanel-browser";
 
 const Layout = ({ children }) => {
   const context = useContext(AppContext);
@@ -21,6 +22,7 @@ const Layout = ({ children }) => {
     if (has_onboarded === false && recInProgress == false) {
       if (context.myRecommendations) {
         setRecInProgress(true);
+        mixpanel.track("Trigger open Recommended Followers modal");
         setRecommendedItems(context.myRecommendations);
         setRecInProgress(false);
       }
