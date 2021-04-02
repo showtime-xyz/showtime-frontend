@@ -2,7 +2,6 @@ import Iron from "@hapi/iron";
 import CookieService from "../../lib/cookie";
 
 export default async (req, res) => {
-  console.log("rec");
   try {
     const user = await Iron.unseal(
       CookieService.getAuthToken(req.cookies),

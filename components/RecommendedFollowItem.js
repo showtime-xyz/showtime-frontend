@@ -135,183 +135,202 @@ const NFTVideoTile = styled.div`
     max-width: 27vw;
     max-height: 27vw;
   }
-
 `;
 
 const Tiles = ({ topItems, setCurrentlyOpenModal }) => {
-    const context = useContext(AppContext);
-    return <NFTTiles>
-        {topItems.map((topItem, index) => (
-            <div key={topItem?.nft_id}>
-                {topItem?.token_img_thumbnail_url ? (
-                    <NFTTile
-                        style={{ marginRight: index === topItems.length - 1 || context.gridWidth <= 420 ? 0 : 14 }}
-                        onClick={() => setCurrentlyOpenModal(topItem)}
-                        src={topItem?.token_img_thumbnail_url}
-                    />
-                ) : (
-                    <NFTVideoTile
-                        style={{ marginRight: index === topItems.length - 1 || context.gridWidth <= 420 ? 0 : 14 }}
-                        onClick={() => setCurrentlyOpenModal(topItem)}
-                    >
-                        <ReactPlayer
-                            url={topItem?.token_animation_url}
-                            playing={false}
-                            loop
-                            muted={true}
-                            width={"100%"}
-                            height={"100%"}
-                            playsinline
-                        />
-                    </NFTVideoTile>
-                )}
-            </div>
-        ))}
+  const context = useContext(AppContext);
+  return (
+    <NFTTiles>
+      {topItems.map((topItem, index) => (
+        <div key={topItem?.nft_id}>
+          {topItem?.token_img_thumbnail_url ? (
+            <NFTTile
+              style={{
+                marginRight:
+                  index === topItems.length - 1 || context.gridWidth <= 420
+                    ? 0
+                    : 14,
+              }}
+              onClick={() => setCurrentlyOpenModal(topItem)}
+              src={topItem?.token_img_thumbnail_url}
+            />
+          ) : (
+            <NFTVideoTile
+              style={{
+                marginRight:
+                  index === topItems.length - 1 || context.gridWidth <= 420
+                    ? 0
+                    : 14,
+              }}
+              onClick={() => setCurrentlyOpenModal(topItem)}
+            >
+              <ReactPlayer
+                url={topItem?.token_animation_url}
+                playing={false}
+                loop
+                muted={true}
+                width={"100%"}
+                height={"100%"}
+                playsinline
+              />
+            </NFTVideoTile>
+          )}
+        </div>
+      ))}
     </NFTTiles>
-
-}
+  );
+};
 
 const RecommendedFollowItem = ({ item }) => {
-    const context = useContext(AppContext);
-    const [followerCount, setFollowerCount] = useState();
-    const isMyProfile = context?.myProfile?.profile_id === item?.profile_id;
-    const topItems = item?.top_items.slice(0, 6);
-    const [currentlyOpenModal, setCurrentlyOpenModal] = useState(null);
-    const currentIndex = topItems?.findIndex(
-        (i) => i.nft_id === currentlyOpenModal?.nft_id
-    );
-    const goToNext = () => {
-        if (currentIndex < topItems.length - 1) {
-            setCurrentlyOpenModal(topItems[currentIndex + 1]);
-        }
-    };
-    const goToPrevious = () => {
-        if (currentIndex - 1 >= 0) {
-            setCurrentlyOpenModal(topItems[currentIndex - 1]);
-        }
-    };
-    const leftPress = useKeyPress("ArrowLeft");
-    const rightPress = useKeyPress("ArrowRight");
-    const escPress = useKeyPress("Escape");
-    useEffect(() => {
-        if (escPress) {
-            setCurrentlyOpenModal(null);
-        }
-        if (rightPress && currentlyOpenModal) {
-            mixpanel.track("Next NFT - keyboard");
-            goToNext();
-        }
-        if (leftPress && currentlyOpenModal) {
-            mixpanel.track("Prior NFT - keyboard");
-            goToPrevious();
-        }
-    }, [escPress, leftPress, rightPress]);
+  const context = useContext(AppContext);
+  const [followerCount, setFollowerCount] = useState();
+  const isMyProfile = context?.myProfile?.profile_id === item?.profile_id;
+  const topItems = item?.top_items.slice(0, 6);
+  const [currentlyOpenModal, setCurrentlyOpenModal] = useState(null);
+  const currentIndex = topItems?.findIndex(
+    (i) => i.nft_id === currentlyOpenModal?.nft_id
+  );
+  const goToNext = () => {
+    if (currentIndex < topItems.length - 1) {
+      setCurrentlyOpenModal(topItems[currentIndex + 1]);
+    }
+  };
+  const goToPrevious = () => {
+    if (currentIndex - 1 >= 0) {
+      setCurrentlyOpenModal(topItems[currentIndex - 1]);
+    }
+  };
+  const leftPress = useKeyPress("ArrowLeft");
+  const rightPress = useKeyPress("ArrowRight");
+  const escPress = useKeyPress("Escape");
+  useEffect(() => {
+    if (escPress) {
+      setCurrentlyOpenModal(null);
+    }
+    if (rightPress && currentlyOpenModal) {
+      mixpanel.track("Next NFT - keyboard");
+      goToNext();
+    }
+    if (leftPress && currentlyOpenModal) {
+      mixpanel.track("Prior NFT - keyboard");
+      goToPrevious();
+    }
+  }, [escPress, leftPress, rightPress]);
 
-    const handleLike = async (nft_id) => {
-        // Change myLikes via setMyLikes
-        context.setMyLikes([...context.myLikes, nft_id]);
+  const handleLike = async (nft_id) => {
+    // Change myLikes via setMyLikes
+    context.setMyLikes([...context.myLikes, nft_id]);
 
-        const likedItem = topItems.find((i) => i.nft_id === nft_id);
-        const myLikeCounts = context.myLikeCounts;
-        context.setMyLikeCounts({
-            ...context.myLikeCounts,
-            [nft_id]:
-                ((myLikeCounts && myLikeCounts[nft_id]) || likedItem.like_count) + 1,
-        });
+    const likedItem = topItems.find((i) => i.nft_id === nft_id);
+    const myLikeCounts = context.myLikeCounts;
+    context.setMyLikeCounts({
+      ...context.myLikeCounts,
+      [nft_id]:
+        ((myLikeCounts && myLikeCounts[nft_id]) || likedItem.like_count) + 1,
+    });
 
-        // Post changes to the API
-        await fetch(`/api/like_v3/${nft_id}`, {
-            method: "post",
-        });
+    // Post changes to the API
+    await fetch(`/api/like_v3/${nft_id}`, {
+      method: "post",
+    });
 
-        mixpanel.track("Liked item");
-    };
-    const handleUnlike = async (nft_id) => {
-        // Change myLikes via setMyLikes
-        context.setMyLikes(context.myLikes.filter((item) => !(item === nft_id)));
+    mixpanel.track("Liked item");
+  };
+  const handleUnlike = async (nft_id) => {
+    // Change myLikes via setMyLikes
+    context.setMyLikes(context.myLikes.filter((item) => !(item === nft_id)));
 
-        const likedItem = topItems.find((i) => i.nft_id === nft_id);
-        const myLikeCounts = context.myLikeCounts;
-        context.setMyLikeCounts({
-            ...context.myLikeCounts,
-            [nft_id]:
-                ((myLikeCounts && myLikeCounts[nft_id]) || likedItem.like_count) - 1,
-        });
+    const likedItem = topItems.find((i) => i.nft_id === nft_id);
+    const myLikeCounts = context.myLikeCounts;
+    context.setMyLikeCounts({
+      ...context.myLikeCounts,
+      [nft_id]:
+        ((myLikeCounts && myLikeCounts[nft_id]) || likedItem.like_count) - 1,
+    });
 
-        // Post changes to the API
-        await fetch(`/api/unlike_v3/${nft_id}`, {
-            method: "post",
-        });
+    // Post changes to the API
+    await fetch(`/api/unlike_v3/${nft_id}`, {
+      method: "post",
+    });
 
-        mixpanel.track("Unliked item");
-    };
+    mixpanel.track("Unliked item");
+  };
 
-    return (
-        <RecommendedFollowRowItem>
-            {typeof document !== "undefined" ? (
-                <>
-                    <ModalTokenDetail
-                        isOpen={currentlyOpenModal}
-                        setEditModalOpen={setCurrentlyOpenModal}
-                        item={currentlyOpenModal}
-                        handleLike={handleLike}
-                        handleUnlike={handleUnlike}
-                        goToNext={goToNext}
-                        goToPrevious={goToPrevious}
-                        columns={context.columns}
-                        hasNext={!(currentIndex === topItems.length - 1)}
-                        hasPrevious={!(currentIndex === 0)}
-                    />
-                </>
-            ) : null}
-            <RecommendedFollowHeader>
-                <ProfileSection>
-                    <Link href="/[profile]" as={`/${item?.username || item.address}`}>
-                        <ProfileImage
-                            isMobile={context.isMobile}
-                            src={getImageUrl(item?.img_url)}
-                        />
-                    </Link>
-                    <ProfileSectionContent>
-                        <Link href="/[profile]" as={`/${item?.username || item.address}`}>
-                            <ProfileTitle>
-                                {item?.name ||
-                                    formatAddressShort(item.address) ||
-                                    "Unnamed"}
-                            </ProfileTitle>
-                        </Link>
-                        <ProfileBottomSection>
-                            <Metadata>
-                                <MetadataIcon>
-                                    <FontAwesomeIcon icon={faUser} />
-                                </MetadataIcon>
-                                <MetadataText>{followerCount}</MetadataText>
-                                <MetadataIcon>
-                                    <FontAwesomeIcon icon={faHeart} />
-                                </MetadataIcon>
-                                <MetadataText>{item?.like_count_total}</MetadataText>
-                            </Metadata>
-                        </ProfileBottomSection>
-                    </ProfileSectionContent>
-                </ProfileSection>
-                {!isMyProfile && (
-                    <FollowButtonWrapper>
-                        <FollowButton
-                            item={item}
-                            followerCount={followerCount}
-                            setFollowerCount={setFollowerCount} />
-                    </FollowButtonWrapper>
-                )}
-            </RecommendedFollowHeader>
-            {context.gridWidth <= 420
-                ?
-                <>
-                    <Tiles topItems={topItems.slice(0, 3)} setCurrentlyOpenModal={setCurrentlyOpenModal} />
-                    <Tiles topItems={topItems.slice(3, 6)} setCurrentlyOpenModal={setCurrentlyOpenModal} />
-                </>
-                : <Tiles topItems={topItems} setCurrentlyOpenModal={setCurrentlyOpenModal} />}
-        </RecommendedFollowRowItem>
-    );
+  return (
+    <RecommendedFollowRowItem>
+      {typeof document !== "undefined" ? (
+        <>
+          <ModalTokenDetail
+            isOpen={currentlyOpenModal}
+            setEditModalOpen={setCurrentlyOpenModal}
+            item={currentlyOpenModal}
+            handleLike={handleLike}
+            handleUnlike={handleUnlike}
+            goToNext={goToNext}
+            goToPrevious={goToPrevious}
+            columns={context.columns}
+            hasNext={!(currentIndex === topItems.length - 1)}
+            hasPrevious={!(currentIndex === 0)}
+          />
+        </>
+      ) : null}
+      <RecommendedFollowHeader>
+        <ProfileSection>
+          <Link href="/[profile]" as={`/${item?.username || item.address}`}>
+            <ProfileImage
+              isMobile={context.isMobile}
+              src={getImageUrl(item?.img_url)}
+            />
+          </Link>
+          <ProfileSectionContent>
+            <Link href="/[profile]" as={`/${item?.username || item.address}`}>
+              <ProfileTitle>
+                {item?.name || formatAddressShort(item.address) || "Unnamed"}
+              </ProfileTitle>
+            </Link>
+            <ProfileBottomSection>
+              <Metadata>
+                <MetadataIcon>
+                  <FontAwesomeIcon icon={faUser} />
+                </MetadataIcon>
+                <MetadataText>{followerCount}</MetadataText>
+                <MetadataIcon>
+                  <FontAwesomeIcon icon={faHeart} />
+                </MetadataIcon>
+                <MetadataText>{item?.like_count_total}</MetadataText>
+              </Metadata>
+            </ProfileBottomSection>
+          </ProfileSectionContent>
+        </ProfileSection>
+        {!isMyProfile && (
+          <FollowButtonWrapper>
+            <FollowButton
+              item={item}
+              followerCount={followerCount}
+              setFollowerCount={setFollowerCount}
+            />
+          </FollowButtonWrapper>
+        )}
+      </RecommendedFollowHeader>
+      {context.gridWidth <= 420 ? (
+        <>
+          <Tiles
+            topItems={topItems.slice(0, 3)}
+            setCurrentlyOpenModal={setCurrentlyOpenModal}
+          />
+          <Tiles
+            topItems={topItems.slice(3, 6)}
+            setCurrentlyOpenModal={setCurrentlyOpenModal}
+          />
+        </>
+      ) : (
+        <Tiles
+          topItems={topItems}
+          setCurrentlyOpenModal={setCurrentlyOpenModal}
+        />
+      )}
+    </RecommendedFollowRowItem>
+  );
 };
 
 export default RecommendedFollowItem;
