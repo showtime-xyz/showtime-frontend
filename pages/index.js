@@ -31,10 +31,10 @@ export default function Home() {
   const [featuredDays, setFeaturedDays] = useState(1);
   const [reachedBottom, setReachedBottom] = useState(false);
   const [isLoadingCards, setIsLoadingCards] = useState(false);
-  const [isLoadingHero, setIsLoadingHero] = useState(false);
+  //const [isLoadingHero, setIsLoadingHero] = useState(false);
   const [isLoadingSpotlight, setIsLoadingSpotlight] = useState(false);
 
-  const [heroItems, setHeroItems] = useState([]);
+  //const [heroItems, setHeroItems] = useState([]);
   const [spotlightItems, setSpotlightItems] = useState([]);
 
   useEffect(() => {
@@ -52,6 +52,7 @@ export default function Home() {
     setReachedBottom(false);
   }, [featuredDays]);
 
+  /*
   const getHero = async () => {
     setIsLoadingHero(true);
     const response_hero = await backend.get(`/v1/hero`);
@@ -62,6 +63,7 @@ export default function Home() {
     // Reset cache for next load
     backend.get(`/v1/hero?recache=1`);
   };
+  */
 
   const getSpotlight = async () => {
     setIsLoadingSpotlight(true);
@@ -75,7 +77,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    getHero();
+    //getHero();
     getSpotlight();
   }, []);
 
@@ -273,7 +275,7 @@ export default function Home() {
         </>
       )}
 
-      {gridWidth && (
+      {/*gridWidth && (
         <>
           <div style={context.isMobile ? null : { paddingTop: 20 }}>
             <div className="m-auto" style={{ width: gridWidth }}>
@@ -338,7 +340,7 @@ export default function Home() {
             </Link>
           </div>
         </>
-      )}
+          )*/}
 
       {columns && (
         <div
