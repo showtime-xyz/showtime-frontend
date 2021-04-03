@@ -7,7 +7,6 @@ import Link from "next/link";
 import mixpanel from "mixpanel-browser";
 import useKeyPress from "../hooks/useKeyPress";
 import ModalTokenDetail from "./ModalTokenDetail";
-import { getImageUrl } from "../lib/utilities";
 import FollowButton from "./FollowButton";
 import AppContext from "../context/app-context";
 import { formatAddressShort, truncateWithEllipses } from "../lib/utilities";
@@ -285,7 +284,11 @@ const RecommendedFollowItem = ({ item, closeModal }) => {
             >
               <ProfileImage
                 isMobile={context.isMobile}
-                src={getImageUrl(item?.img_url)}
+                src={
+                  item?.img_url
+                    ? item?.img_url
+                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                }
               />
             </a>
           </Link>
