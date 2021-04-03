@@ -8,7 +8,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import AppContext from "../context/app-context";
 import backend from "../lib/backend";
-import { getImageUrl } from "../lib/utilities";
 import useKeyPress from "../hooks/useKeyPress";
 import useOnClickOutside from "../hooks/useOnClickOutside";
 import LoadingSpinner from "./LoadingSpinner";
@@ -368,7 +367,7 @@ const SearchBar = () => {
                       }}
                       className="items-center"
                     >
-                      <SearchProfile src={getImageUrl(searchResult?.img_url)} />
+                      <SearchProfile src={searchResult?.img_url} />
                       <SearchResultText>
                         {searchResult?.name || searchResult.address0}
                       </SearchResultText>
@@ -461,9 +460,7 @@ const SearchBar = () => {
                         }}
                         className="items-center"
                       >
-                        <SearchProfile
-                          src={getImageUrl(searchResult?.img_url)}
-                        />
+                        <SearchProfile src={searchResult?.img_url} />
                         <SearchResultText className="flex-0">
                           {searchResult?.name || searchResult.address0}
                         </SearchResultText>

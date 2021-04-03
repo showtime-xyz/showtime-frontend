@@ -47,9 +47,13 @@ const TokenDetailBody = ({
       return "black";
     }
   };
-  const getImageUrl = (img_url) => {
+  const getImageUrl = (img_url, token_aspect_ratio) => {
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
-      img_url = img_url.split("=")[0] + "=w375";
+      if (token_aspect_ratio && token_aspect_ratio > 1) {
+        img_url = img_url.split("=")[0] + "=h375";
+      } else {
+        img_url = img_url.split("=")[0] + "=w375";
+      }
     }
     return img_url;
   };
@@ -271,7 +275,7 @@ const TokenDetailBody = ({
                 <div></div>
               </div>
               <img
-                src={getImageUrl(item.token_img_url)}
+                src={getImageUrl(item.token_img_url, item.token_aspect_ratio)}
                 alt={item.token_name}
                 style={_.merge(
                   fullResLoaded === true ? { display: "none" } : null,

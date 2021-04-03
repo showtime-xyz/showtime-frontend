@@ -7,7 +7,6 @@ import Link from "next/link";
 import mixpanel from "mixpanel-browser";
 import useKeyPress from "../hooks/useKeyPress";
 import ModalTokenDetail from "./ModalTokenDetail";
-import { getImageUrl } from "../lib/utilities";
 import FollowButton from "./FollowButton";
 import AppContext from "../context/app-context";
 import { formatAddressShort, truncateWithEllipses } from "../lib/utilities";
@@ -283,10 +282,7 @@ const RecommendedFollowItem = ({ item, closeModal }) => {
                 console.log("Close modal");
               }}
             >
-              <ProfileImage
-                isMobile={context.isMobile}
-                src={getImageUrl(item?.img_url)}
-              />
+              <ProfileImage isMobile={context.isMobile} src={item?.img_url} />
             </a>
           </Link>
           <ProfileSectionContent>

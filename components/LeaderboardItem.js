@@ -136,7 +136,7 @@ const FollowButtonWrapper = styled.div`
   @media screen and (max-width: 600px) {
     display: none;
   }
-`
+`;
 
 const LeaderboardItem = ({ item, index }) => {
   const context = useContext(AppContext);
@@ -265,35 +265,32 @@ const LeaderboardItem = ({ item, index }) => {
                 style={
                   context.isMobile
                     ? {
-                      border: "1px solid rgba(0, 0, 0, 0.16)",
-                      fontSize: 12,
-                      fontWeight: 500,
-                      paddingTop: 1,
-                      height: 22,
-                      width: 22,
-                      color: "#010101",
-                      bottom: 4,
-                      right: 19,
-                    }
+                        border: "1px solid rgba(0, 0, 0, 0.16)",
+                        fontSize: 12,
+                        fontWeight: 500,
+                        paddingTop: 1,
+                        height: 22,
+                        width: 22,
+                        color: "#010101",
+                        bottom: 4,
+                        right: 19,
+                      }
                     : {
-                      border: "1px solid rgba(0, 0, 0, 0.16)",
-                      fontSize: 13,
-                      fontWeight: 500,
-                      paddingTop: 1,
-                      height: 24,
-                      width: 24,
-                      color: "#010101",
-                      bottom: 0,
-                      right: 20,
-                    }
+                        border: "1px solid rgba(0, 0, 0, 0.16)",
+                        fontSize: 13,
+                        fontWeight: 500,
+                        paddingTop: 1,
+                        height: 24,
+                        width: 24,
+                        color: "#010101",
+                        bottom: 0,
+                        right: 20,
+                      }
                 }
               >
                 {index + 1}
               </div>
-              <ProfileImage
-                isMobile={context.isMobile}
-                src={getImageUrl(item?.img_url)}
-              />
+              <ProfileImage isMobile={context.isMobile} src={item?.img_url} />
             </div>
           </Link>
           <ProfileSectionContent>
@@ -310,7 +307,8 @@ const LeaderboardItem = ({ item, index }) => {
                   <FollowButton
                     item={item}
                     followerCount={followerCount}
-                    setFollowerCount={setFollowerCount} />
+                    setFollowerCount={setFollowerCount}
+                  />
                   <GraySeparator />
                 </FollowButtonWrapper>
               )}

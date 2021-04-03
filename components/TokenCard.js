@@ -124,13 +124,17 @@ class TokenCard extends React.Component {
     this.setState({ refreshing: false });
   };
 
-  getImageUrl = () => {
+  getImageUrl = (token_aspect_ratio) => {
     var img_url = this.props.item.token_img_url
       ? this.props.item.token_img_url
       : null;
 
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
-      img_url = img_url.split("=")[0] + "=w375";
+      if (token_aspect_ratio && token_aspect_ratio > 1) {
+        img_url = img_url.split("=")[0] + "=h375";
+      } else {
+        img_url = img_url.split("=")[0] + "=w375";
+      }
     }
     return img_url;
   };
@@ -446,7 +450,7 @@ class TokenCard extends React.Component {
                     <img
                       className="w-full object-cover object-center "
                       ref={item.imageRef}
-                      src={this.getImageUrl()}
+                      src={this.getImageUrl(item.token_aspect_ratio)}
                       alt={item.token_name}
                       onLoad={() => this.setState({ imageLoaded: true })}
                       style={{
