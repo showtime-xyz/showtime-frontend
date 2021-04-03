@@ -367,7 +367,13 @@ const SearchBar = () => {
                       }}
                       className="items-center"
                     >
-                      <SearchProfile src={searchResult?.img_url} />
+                      <SearchProfile
+                        src={
+                          searchResult?.img_url
+                            ? searchResult?.img_url
+                            : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                        }
+                      />
                       <SearchResultText>
                         {searchResult?.name || searchResult.address0}
                       </SearchResultText>
@@ -460,7 +466,13 @@ const SearchBar = () => {
                         }}
                         className="items-center"
                       >
-                        <SearchProfile src={searchResult?.img_url} />
+                        <SearchProfile
+                          src={
+                            searchResult?.img_url
+                              ? searchResult?.img_url
+                              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                          }
+                        />
                         <SearchResultText className="flex-0">
                           {searchResult?.name || searchResult.address0}
                         </SearchResultText>

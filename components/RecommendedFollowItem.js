@@ -282,7 +282,14 @@ const RecommendedFollowItem = ({ item, closeModal }) => {
                 console.log("Close modal");
               }}
             >
-              <ProfileImage isMobile={context.isMobile} src={item?.img_url} />
+              <ProfileImage
+                isMobile={context.isMobile}
+                src={
+                  item?.img_url
+                    ? item?.img_url
+                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                }
+              />
             </a>
           </Link>
           <ProfileSectionContent>

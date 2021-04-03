@@ -7,7 +7,7 @@ import { faHeart, faUser } from "@fortawesome/free-regular-svg-icons";
 import mixpanel from "mixpanel-browser";
 import Link from "next/link";
 import useKeyPress from "../hooks/useKeyPress";
-import { getImageUrl, truncateWithEllipses } from "../lib/utilities";
+import { truncateWithEllipses } from "../lib/utilities";
 import ModalTokenDetail from "./ModalTokenDetail";
 import FollowButton from "./FollowButton";
 import AppContext from "../context/app-context";
@@ -290,7 +290,14 @@ const LeaderboardItem = ({ item, index }) => {
               >
                 {index + 1}
               </div>
-              <ProfileImage isMobile={context.isMobile} src={item?.img_url} />
+              <ProfileImage
+                isMobile={context.isMobile}
+                src={
+                  item?.img_url
+                    ? item?.img_url
+                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                }
+              />
             </div>
           </Link>
           <ProfileSectionContent>
