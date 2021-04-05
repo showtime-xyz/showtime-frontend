@@ -750,7 +750,7 @@ const Activity = () => {
               </div>
               {/* Right Column */}
               <div className="flex flex-col md:col-span-2">
-                <div className="p-6 h-max bg-gray-100 rounded-lg sticky top-0">
+                <div className="p-6 h-max bg-gray-100 rounded-lg sticky top-10">
                   <div className="text-xl">Recommended Follows</div>
                   <div className="bg-gray-200 p-4 rounded-lg">
                     [Recommended follows comp here]
