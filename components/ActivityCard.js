@@ -9,15 +9,18 @@ import {
   Follow,
   Transfer,
 } from "./ActivityTypes";
+import { activityIconObjects } from "../lib/constants";
 import { formatDistanceToNowStrict } from "date-fns";
 import Link from "next/link";
 import AppContext from "../context/app-context";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function ActivityCard({ act }) {
   const { isMobile } = useContext(AppContext);
   const actor = act.actor;
   let content = null;
-  switch (act.type) {
+  const { type } = act;
+  switch (type) {
     case ACTIVITY_TYPES.LIKE:
       content = <Like act={act} />;
       break;
@@ -54,12 +57,27 @@ export default function ActivityCard({ act }) {
           href="/[profile]"
           as={`/${actor?.username || actor?.wallet_address}`}
         >
-          <a>
+          <a className="relative">
             <img
               src={actor.profile_img_url}
               style={{ width: 48, height: 48 }}
               className="rounded-full mr-2"
             />
+            <div
+              className="absolute bottom-0 left-0 rounded-full h-5 w-5 flex items-center justify-center shadow"
+              style={{
+                backgroundColor: activityIconObjects[type].color,
+              }}
+            >
+              <FontAwesomeIcon
+                style={{
+                  height: 12,
+                  width: 12,
+                }}
+                icon={activityIconObjects[type].icon}
+                color="white"
+              />
+            </div>
           </a>
         </Link>
         <div className="flex flex-col flex-1">
