@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { useContext } from "react";
 import { ACTIVITY_TYPES } from "../lib/constants";
 import {
   Like,
@@ -11,9 +11,10 @@ import {
 } from "./ActivityTypes";
 import { formatDistanceToNowStrict } from "date-fns";
 import Link from "next/link";
-// const Like = React.lazy(() => import("./ActivityTypes/Like"));
+import AppContext from "../context/app-context";
 
 export default function ActivityCard({ act }) {
+  const { isMobile } = useContext(AppContext);
   const actor = act.actor;
   let content = null;
   switch (act.type) {
@@ -43,7 +44,10 @@ export default function ActivityCard({ act }) {
       break;
   }
   return (
-    <div className="flex flex-col flex-1 px-4 py-6 border-b border-gray-200 hover:bg-gray-100 text-sm md:text-base">
+    <div
+      className="flex flex-col flex-1 px-4 py-6 border-b border-gray-200 hover:bg-gray-100"
+      style={{ fontSize: isMobile ? "0.875rem" : "1rem" }}
+    >
       {/* actor data */}
       <div className="flex items-start">
         <Link
@@ -86,10 +90,10 @@ export default function ActivityCard({ act }) {
               })}
             </div>
           </div>
+          {/* content */}
           <div>{content}</div>
         </div>
       </div>
-      {/* content */}
     </div>
   );
 }
