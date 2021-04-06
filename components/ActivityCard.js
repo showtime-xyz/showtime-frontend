@@ -105,7 +105,7 @@ export default function ActivityCard({ act }) {
               as={`/${actor?.username || actor?.wallet_address}`}
             >
               <a>
-                <div className="mr-2">{actor.name}</div>
+                <div className="mr-2 hover:text-stpink">{actor.name}</div>
               </a>
             </Link>
 
