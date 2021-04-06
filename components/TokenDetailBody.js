@@ -390,7 +390,9 @@ const TokenDetailBody = ({
               {usersWhoLiked && (
                 <UsersWhoLiked
                   users={usersWhoLiked}
-                  closeModal={() => setEditModalOpen(false)}
+                  closeModal={() =>
+                    setEditModalOpen ? setEditModalOpen(false) : null
+                  }
                 />
               )}
             </div>
