@@ -14,11 +14,14 @@ import { formatDistanceToNowStrict } from "date-fns";
 import Link from "next/link";
 import AppContext from "../context/app-context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import LikeButton from "./LikeButton";
 
 export default function ActivityCard({ act }) {
   const { isMobile } = useContext(AppContext);
-  const actor = act.actor;
+  const { actor, nfts } = act;
+  const single = act.nfts?.length === 1;
   let content = null;
+
   const { type } = act;
   switch (type) {
     case ACTIVITY_TYPES.LIKE:
@@ -110,6 +113,7 @@ export default function ActivityCard({ act }) {
           </div>
           {/* content */}
           <div>{content}</div>
+          {single && <LikeButton item={nfts[0]} />}
         </div>
       </div>
     </div>

@@ -166,48 +166,6 @@ const TokenGridV4 = ({
     setItemsShowing(itemsShowing + 8);
   };
 
-  const handleLike = async (nft_id) => {
-    // Change myLikes via setMyLikes
-    context.setMyLikes([...context.myLikes, nft_id]);
-    const likedItem = itemsList.find((i) => i.nft_id === nft_id);
-    const myLikeCounts = context.myLikeCounts;
-    context.setMyLikeCounts({
-      ...myLikeCounts,
-      [nft_id]:
-        (myLikeCounts && !_.isNil(myLikeCounts[nft_id])
-          ? myLikeCounts[nft_id]
-          : likedItem.like_count) + 1,
-    });
-
-    // Post changes to the API
-    await fetch(`/api/like_v3/${nft_id}`, {
-      method: "post",
-    });
-
-    mixpanel.track("Liked item");
-  };
-
-  const handleUnlike = async (nft_id) => {
-    // Change myLikes via setMyLikes
-    context.setMyLikes(context.myLikes.filter((item) => !(item === nft_id)));
-
-    const likedItem = itemsList.find((i) => i.nft_id === nft_id);
-    const myLikeCounts = context.myLikeCounts;
-    context.setMyLikeCounts({
-      ...context.myLikeCounts,
-      [nft_id]:
-        (myLikeCounts && !_.isNil(myLikeCounts[nft_id])
-          ? myLikeCounts[nft_id]
-          : likedItem.like_count) - 1,
-    });
-
-    // Post changes to the API
-    await fetch(`/api/unlike_v3/${nft_id}`, {
-      method: "post",
-    });
-
-    mixpanel.track("Unliked item");
-  };
   const currentIndex = deduplicatedItemsList.findIndex(
     (i) => i.nft_id === currentlyOpenModal?.nft_id
   );
@@ -236,8 +194,6 @@ const TokenGridV4 = ({
             isOpen={currentlyOpenModal}
             setEditModalOpen={setCurrentlyOpenModal}
             item={currentlyOpenModal}
-            handleLike={handleLike}
-            handleUnlike={handleUnlike}
             goToNext={goToNext}
             goToPrevious={goToPrevious}
             columns={context.columns}
@@ -275,8 +231,6 @@ const TokenGridV4 = ({
               <TokenCard
                 key={item.nft_id}
                 item={item}
-                handleLike={handleLike}
-                handleUnlike={handleUnlike}
                 columns={context.columns}
                 isMobile={context.isMobile}
                 currentlyPlayingVideo={currentlyPlayingVideo}

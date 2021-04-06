@@ -29,8 +29,6 @@ const TOKEN_MEDIA_HEIGHT = 500;
 const TokenDetailBody = ({
   item,
   muted,
-  handleLike,
-  handleUnlike,
   setEditModalOpen,
   ownershipDetails,
   isInModal,
@@ -340,11 +338,7 @@ const TokenDetailBody = ({
               {/*  */}
               <div className="flex items-center pt-2">
                 <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
-                  <LikeButton
-                    item={item}
-                    handleLike={handleLike}
-                    handleUnlike={handleUnlike}
-                  />
+                  <LikeButton item={item} />
                 </div>
                 <SmoothScroll
                   to="CommentsSectionScroll"

@@ -590,11 +590,7 @@ class TokenCard extends React.Component {
                   ) : null}
                   <div className="flex items-center">
                     <div className="mr-4">
-                      <LikeButton
-                        item={item}
-                        handleLike={this.props.handleLike}
-                        handleUnlike={this.props.handleUnlike}
-                      />
+                      <LikeButton item={item} />
                     </div>
                     <div className="mr-4">
                       <CommentButton

@@ -204,49 +204,6 @@ const LeaderboardItem = ({ item, index }) => {
     }
   }, [escPress, leftPress, rightPress]);
 
-  const handleLike = async (nft_id) => {
-    // Change myLikes via setMyLikes
-    context.setMyLikes([...context.myLikes, nft_id]);
-
-    const likedItem = topItems.find((i) => i.nft_id === nft_id);
-    const myLikeCounts = context.myLikeCounts;
-    context.setMyLikeCounts({
-      ...context.myLikeCounts,
-      [nft_id]:
-        (myLikeCounts && !_.isNil(myLikeCounts[nft_id])
-          ? myLikeCounts[nft_id]
-          : likedItem.like_count) + 1,
-    });
-
-    // Post changes to the API
-    await fetch(`/api/like_v3/${nft_id}`, {
-      method: "post",
-    });
-
-    mixpanel.track("Liked item");
-  };
-  const handleUnlike = async (nft_id) => {
-    // Change myLikes via setMyLikes
-    context.setMyLikes(context.myLikes.filter((item) => !(item === nft_id)));
-
-    const likedItem = topItems.find((i) => i.nft_id === nft_id);
-    const myLikeCounts = context.myLikeCounts;
-    context.setMyLikeCounts({
-      ...context.myLikeCounts,
-      [nft_id]:
-        (myLikeCounts && !_.isNil(myLikeCounts[nft_id])
-          ? myLikeCounts[nft_id]
-          : likedItem.like_count) - 1,
-    });
-
-    // Post changes to the API
-    await fetch(`/api/unlike_v3/${nft_id}`, {
-      method: "post",
-    });
-
-    mixpanel.track("Unliked item");
-  };
-
   return (
     <>
       {typeof document !== "undefined" ? (
@@ -255,8 +212,6 @@ const LeaderboardItem = ({ item, index }) => {
             isOpen={currentlyOpenModal}
             setEditModalOpen={setCurrentlyOpenModal}
             item={currentlyOpenModal}
-            handleLike={handleLike}
-            handleUnlike={handleUnlike}
             goToNext={goToNext}
             goToPrevious={goToPrevious}
             columns={context.columns}

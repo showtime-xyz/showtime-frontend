@@ -15,8 +15,6 @@ export default function Modal({
   item,
   isOpen,
   setEditModalOpen,
-  handleLike,
-  handleUnlike,
   goToNext,
   goToPrevious,
   hasNext,
@@ -147,8 +145,6 @@ export default function Modal({
                 <TokenDetailBody
                   item={item}
                   muted={false}
-                  handleLike={handleLike}
-                  handleUnlike={handleUnlike}
                   className="w-full"
                   setEditModalOpen={setEditModalOpen}
                   ownershipDetails={ownershipDetails}

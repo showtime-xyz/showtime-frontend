@@ -33,48 +33,6 @@ class SpotlightItem extends React.Component {
     this.divRef = React.createRef();
   }
 
-  handleLike = async (nft_id) => {
-    // Change myLikes via setMyLikes
-    this.context.setMyLikes([...this.context.myLikes, nft_id]);
-
-    const likedItem = this.props.item;
-    const myLikeCounts = this.context.myLikeCounts;
-    this.context.setMyLikeCounts({
-      ...this.context.myLikeCounts,
-      [nft_id]:
-        ((myLikeCounts && myLikeCounts[nft_id]) || likedItem.like_count) + 1,
-    });
-
-    // Post changes to the API
-    await fetch(`/api/like_v3/${nft_id}`, {
-      method: "post",
-    });
-
-    mixpanel.track("Liked item");
-  };
-
-  handleUnlike = async (nft_id) => {
-    // Change myLikes via setMyLikes
-    this.context.setMyLikes(
-      this.context.myLikes.filter((item) => !(item === nft_id))
-    );
-
-    const likedItem = this.props.item;
-    const myLikeCounts = this.context.myLikeCounts;
-    this.context.setMyLikeCounts({
-      ...this.context.myLikeCounts,
-      [nft_id]:
-        ((myLikeCounts && myLikeCounts[nft_id]) || likedItem.like_count) - 1,
-    });
-
-    // Post changes to the API
-    await fetch(`/api/unlike_v3/${nft_id}`, {
-      method: "post",
-    });
-
-    mixpanel.track("Unliked item");
-  };
-
   removeTags(str) {
     if (str === null || str === "") return false;
     else str = str.toString();
@@ -137,8 +95,6 @@ class SpotlightItem extends React.Component {
                 this.setState({ currentlyOpenModal: false })
               }
               item={this.props.item}
-              handleLike={this.handleLike}
-              handleUnlike={this.handleUnlike}
               // goToNext={goToNext}
               // goToPrevious={goToPrevious}
               // columns={context.columns}
@@ -533,8 +489,6 @@ class SpotlightItem extends React.Component {
                     <div className="mr-3">
                       <LikeButton
                         item={item}
-                        handleLike={this.handleLike}
-                        handleUnlike={this.handleUnlike}
                       />
                     </div>
                     <div className="mr-3">
