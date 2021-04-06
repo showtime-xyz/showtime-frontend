@@ -72,7 +72,7 @@ export default function ActivityCard({ act }) {
           href="/[profile]"
           as={`/${actor?.username || actor?.wallet_address}`}
         >
-          <a className="relative">
+          <a className="relative w-max flex-shrink-0">
             <img
               src={
                 actor.profile_img_url ||
@@ -98,7 +98,7 @@ export default function ActivityCard({ act }) {
             </div>
           </a>
         </Link>
-        <div className="flex flex-col flex-1">
+        <div className="flex flex-col flex-1 max-w-full">
           <div className="flex items-start">
             <Link
               href="/[profile]"
@@ -121,13 +121,13 @@ export default function ActivityCard({ act }) {
             )}
             <div className="text-gray-500">
               <span className="mr-2">·</span>
-              {formatDistanceToNowStrict(new Date(act.timestamp), {
+              {formatDistanceToNowStrict(new Date(`${act.timestamp}Z`), {
                 addSuffix: true,
               })}
             </div>
           </div>
           {/* content */}
-          <div>{content}</div>
+          <div className="max-w-full">{content}</div>
           {single && <LikeButton item={nfts[0]} />}
         </div>
       </div>

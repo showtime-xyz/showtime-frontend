@@ -1,16 +1,13 @@
-import { useState, useEffect, useContext } from "react";
-import styled from "styled-components";
+import { useState, useEffect, useContext, useRef } from "react";
 import Head from "next/head";
-import Link from "next/link";
 import _ from "lodash";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDown, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import Layout from "../components/layout";
-import backend from "../lib/backend";
+import InfiniteScroll from "react-infinite-scroll-component";
 import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
 import ActivityFeed from "../components/ActivityFeed";
 
+const ACTIVITY_PAGE_LENGTH = 5; // 5 activity items per activity page
 export async function getServerSideProps() {
   return {
     props: {},
@@ -28,25 +25,33 @@ const Activity = () => {
   }, [typeof context.user]);
 
   const [activity, setActivity] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [activityPage, setActivityPage] = useState(1);
-
+  const [isLoading, setIsLoading] = useState(true);
+  const activityPage = useRef(1);
+  const [hasMoreScrolling, setHasMoreScrolling] = useState(true);
+  const getActivity = async () => {
+    setIsLoading(true);
+    const result = await fetch(`/api/getactivity`, {
+      method: "POST",
+      body: JSON.stringify({
+        page: activityPage.current,
+      }),
+    });
+    const resultJson = await result.json();
+    const { data } = resultJson;
+    if (_.isEmpty(data) || data.length < ACTIVITY_PAGE_LENGTH) {
+      setHasMoreScrolling(false);
+    }
+    setActivity([...activity, ...data]);
+    setIsLoading(false);
+  };
   useEffect(() => {
-    const getActivity = async () => {
-      setIsLoading(true);
-      const result = await fetch(`/api/getactivity`, {
-        method: "POST",
-        body: JSON.stringify({
-          page: activityPage,
-        }),
-      });
-      const resultJson = await result.json();
-      const { data } = resultJson;
-      setActivity(data);
-      setIsLoading(false);
-    };
     getActivity();
-  }, [activityPage]);
+  }, []);
+
+  const getNext = () => {
+    activityPage.current = activityPage.current + 1;
+    getActivity();
+  };
   return (
     <Layout>
       <Head>
@@ -93,11 +98,21 @@ const Activity = () => {
               <div className="flex flex-col md:col-span-2">
                 <div className="border-t border-b h-2 bg-gray-100 border-gray-200" />
 
-                {isLoading ? (
-                  <div className="loading-card-spinner"></div>
-                ) : (
+                <InfiniteScroll
+                  dataLength={activity.length}
+                  next={getNext}
+                  hasMore={hasMoreScrolling}
+                  endMessage={
+                    <div className="flex flex-1 items-center justify-center my-4">
+                      <div className="text-gray-400">No more activity.</div>
+                    </div>
+                  }
+                >
                   <ActivityFeed activity={[...activity]} />
-                )}
+                </InfiniteScroll>
+                <div className="flex h-16 items-center justify-center mt-6">
+                  {isLoading && <div className="loading-card-spinner" />}
+                </div>
               </div>
               {/* Right Column */}
               <div className="flex flex-col md:col-span-2">
