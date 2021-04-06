@@ -11,7 +11,7 @@ export default function UserImageList({ users }) {
           key={user.wallet_address}
         >
           <a className="mr-1">
-            <img src={user.profile_img_url} className="h-8 w-8 rounded-full" />
+            <img src={user.img_url} className="h-8 w-8 rounded-full" />
           </a>
         </Link>
       ))}

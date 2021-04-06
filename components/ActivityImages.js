@@ -11,7 +11,7 @@ export default function ActivityImages({ nfts }) {
             <ActivityImage
               nft={nft}
               index={index}
-              key={nft.id}
+              key={nft.nft_id}
               numberOfImages={count}
             />
           ))}
@@ -23,7 +23,7 @@ export default function ActivityImages({ nfts }) {
           <ActivityImage
             nft={nfts[0]}
             index={0}
-            key={nfts[0].id}
+            key={nfts[0].nft_id}
             numberOfImages={1}
           />
           <div className="flex mt-1 w-full">
@@ -31,7 +31,7 @@ export default function ActivityImages({ nfts }) {
               <ActivityImage
                 nft={nft}
                 index={index}
-                key={nft.id}
+                key={nft.nft_id}
                 numberOfImages={2}
               />
             ))}
@@ -46,7 +46,7 @@ export default function ActivityImages({ nfts }) {
               <ActivityImage
                 nft={nft}
                 index={index}
-                key={nft.id}
+                key={nft.nft_id}
                 numberOfImages={2}
               />
             ))}
@@ -56,7 +56,7 @@ export default function ActivityImages({ nfts }) {
               <ActivityImage
                 nft={nft}
                 index={index}
-                key={nft.id}
+                key={nft.nft_id}
                 numberOfImages={2}
               />
             ))}

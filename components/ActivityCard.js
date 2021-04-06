@@ -18,7 +18,19 @@ import LikeButton from "./LikeButton";
 
 export default function ActivityCard({ act }) {
   const { isMobile } = useContext(AppContext);
-  const { actor, nfts } = act;
+  const {
+    nfts,
+    actor_img_url,
+    actor_name,
+    actor_username,
+    actor_wallet_address,
+  } = act;
+  const actor = {
+    profile_img_url: actor_img_url,
+    name: actor_name,
+    username: actor_username,
+    wallet_address: actor_wallet_address,
+  };
   const single = act.nfts?.length === 1;
   let content = null;
 
@@ -62,7 +74,10 @@ export default function ActivityCard({ act }) {
         >
           <a className="relative">
             <img
-              src={actor.profile_img_url}
+              src={
+                actor.profile_img_url ||
+                "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+              }
               style={{ width: 48, height: 48 }}
               className="rounded-full mr-2"
             />

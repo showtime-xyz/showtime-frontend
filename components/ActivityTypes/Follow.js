@@ -3,8 +3,8 @@ import Link from "next/link";
 import UserImageList from "../UserImageList";
 
 export default function Follow({ act }) {
-  const { followed } = act;
-  const count = followed?.length;
+  const { counterparties } = act;
+  const count = counterparties?.length;
   return (
     <div className="flex flex-col">
       <div className="text-gray-500">
@@ -13,9 +13,13 @@ export default function Follow({ act }) {
             Followed{" "}
             <Link
               href="/[profile]"
-              as={`/${followed[0]?.username || followed[0]?.wallet_address}`}
+              as={`/${
+                counterparties[0]?.username || counterparties[0]?.wallet_address
+              }`}
             >
-              <a className="text-black hover:text-stpink">{followed[0].name}</a>
+              <a className="text-black hover:text-stpink">
+                {counterparties[0].name}
+              </a>
             </Link>
             .
           </>
@@ -25,16 +29,24 @@ export default function Follow({ act }) {
             Followed{" "}
             <Link
               href="/[profile]"
-              as={`/${followed[0]?.username || followed[0]?.wallet_address}`}
+              as={`/${
+                counterparties[0]?.username || counterparties[0]?.wallet_address
+              }`}
             >
-              <a className="text-black hover:text-stpink">{followed[0].name}</a>
+              <a className="text-black hover:text-stpink">
+                {counterparties[0].name}
+              </a>
             </Link>{" "}
             and{" "}
             <Link
               href="/[profile]"
-              as={`/${followed[1]?.username || followed[1]?.wallet_address}`}
+              as={`/${
+                counterparties[1]?.username || counterparties[1]?.wallet_address
+              }`}
             >
-              <a className="text-black hover:text-stpink">{followed[1].name}</a>
+              <a className="text-black hover:text-stpink">
+                {counterparties[1].name}
+              </a>
             </Link>
             .
           </>
@@ -44,23 +56,35 @@ export default function Follow({ act }) {
             Followed{" "}
             <Link
               href="/[profile]"
-              as={`/${followed[0]?.username || followed[0]?.wallet_address}`}
+              as={`/${
+                counterparties[0]?.username || counterparties[0]?.wallet_address
+              }`}
             >
-              <a className="text-black hover:text-stpink">{followed[0].name}</a>
+              <a className="text-black hover:text-stpink">
+                {counterparties[0].name}
+              </a>
             </Link>
             ,{" "}
             <Link
               href="/[profile]"
-              as={`/${followed[1]?.username || followed[1]?.wallet_address}`}
+              as={`/${
+                counterparties[1]?.username || counterparties[1]?.wallet_address
+              }`}
             >
-              <a className="text-black hover:text-stpink">{followed[1].name}</a>
+              <a className="text-black hover:text-stpink">
+                {counterparties[1].name}
+              </a>
             </Link>{" "}
             and{" "}
             <Link
               href="/[profile]"
-              as={`/${followed[2]?.username || followed[2]?.wallet_address}`}
+              as={`/${
+                counterparties[2]?.username || counterparties[2]?.wallet_address
+              }`}
             >
-              <a className="text-black hover:text-stpink">{followed[2].name}</a>
+              <a className="text-black hover:text-stpink">
+                {counterparties[2].name}
+              </a>
             </Link>
             .
           </>
@@ -70,23 +94,31 @@ export default function Follow({ act }) {
             Followed{" "}
             <Link
               href="/[profile]"
-              as={`/${followed[0]?.username || followed[0]?.wallet_address}`}
+              as={`/${
+                counterparties[0]?.username || counterparties[0]?.wallet_address
+              }`}
             >
-              <a className="text-black hover:text-stpink">{followed[0].name}</a>
+              <a className="text-black hover:text-stpink">
+                {counterparties[0].name}
+              </a>
             </Link>
             ,{" "}
             <Link
               href="/[profile]"
-              as={`/${followed[1]?.username || followed[1]?.wallet_address}`}
+              as={`/${
+                counterparties[1]?.username || counterparties[1]?.wallet_address
+              }`}
             >
-              <a className="text-black hover:text-stpink">{followed[1].name}</a>
+              <a className="text-black hover:text-stpink">
+                {counterparties[1].name}
+              </a>
             </Link>{" "}
             and {count - 2} others.
           </>
         )}
       </div>
       <div className="flex mt-2">
-        <UserImageList users={followed} />
+        <UserImageList users={counterparties} />
       </div>
     </div>
   );

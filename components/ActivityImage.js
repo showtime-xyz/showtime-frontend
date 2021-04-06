@@ -3,6 +3,12 @@ import Link from "next/link";
 
 export default function ActivityImage({ nft, index, numberOfImages }) {
   const aRef = useRef();
+  const [imgWidth, setImgWidth] = useState(null);
+
+  useEffect(() => {
+    setImgWidth(aRef?.current?.clientWidth);
+  }, [aRef?.current?.clientWidth]);
+
   return (
     <Link href={`/t/${nft.contract_address}/${nft.token_id}`}>
       <a
@@ -11,10 +17,11 @@ export default function ActivityImage({ nft, index, numberOfImages }) {
         }`}
         ref={aRef}
         style={{
-          height: aRef?.current?.clientWidth,
+          height: imgWidth,
+          backgroundColor: `#${nft.token_background_color}`,
         }}
       >
-        <img src={nft.nft_img_url} className="object-cover w-full h-full" />
+        <img src={nft.token_img_url} className="object-cover w-full h-full" />
       </a>
     </Link>
   );
