@@ -68,9 +68,6 @@ export default function Sell({ act }) {
           </>
         )}
       </div>
-      <div className="flex mt-2">
-        <ActivityImages nfts={nfts} />
-      </div>
     </div>
   );
 }

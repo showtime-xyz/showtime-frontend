@@ -6,6 +6,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
 import ActivityFeed from "../components/ActivityFeed";
+import ModalTokenDetail from "../components/ModalTokenDetail";
 
 const ACTIVITY_PAGE_LENGTH = 5; // 5 activity items per activity page
 export async function getServerSideProps() {
@@ -28,6 +29,7 @@ const Activity = () => {
   const [isLoading, setIsLoading] = useState(true);
   const activityPage = useRef(1);
   const [hasMoreScrolling, setHasMoreScrolling] = useState(true);
+
   const getActivity = async () => {
     setIsLoading(true);
     const result = await fetch(`/api/getactivity`, {
@@ -52,6 +54,11 @@ const Activity = () => {
     activityPage.current = activityPage.current + 1;
     getActivity();
   };
+
+  const [itemOpenInModal, setItemOpenInModal] = useState(null);
+  const handleSetItemOpenInModal = ({ index, nftGroup }) => {
+    setItemOpenInModal({ index, nftGroup });
+  };
   return (
     <Layout>
       <Head>
@@ -73,6 +80,40 @@ const Activity = () => {
           content="https://storage.googleapis.com/showtime-nft-thumbnails/trending_twitter_card2.jpg"
         />
       </Head>
+      {typeof document !== "undefined" ? (
+        <>
+          <ModalTokenDetail
+            isOpen={itemOpenInModal}
+            setEditModalOpen={setItemOpenInModal}
+            item={
+              itemOpenInModal?.nftGroup
+                ? itemOpenInModal.nftGroup[itemOpenInModal?.index]
+                : null
+            }
+            goToNext={() => {}}
+            goToPrevious={() => {}}
+            goToNext={() => {
+              setItemOpenInModal({
+                nftGroup: itemOpenInModal?.nftGroup,
+                index: itemOpenInModal?.index + 1,
+              });
+            }}
+            goToPrevious={() => {
+              setItemOpenInModal({
+                nftGroup: itemOpenInModal?.nftGroup,
+                index: itemOpenInModal?.index - 1,
+              });
+            }}
+            hasNext={
+              !(
+                itemOpenInModal?.index ===
+                itemOpenInModal?.nftGroup?.length - 1
+              )
+            }
+            hasPrevious={!(itemOpenInModal?.index === 0)}
+          />
+        </>
+      ) : null}
 
       {gridWidth && (
         <>
@@ -108,7 +149,10 @@ const Activity = () => {
                     </div>
                   }
                 >
-                  <ActivityFeed activity={[...activity]} />
+                  <ActivityFeed
+                    activity={[...activity]}
+                    setItemOpenInModal={handleSetItemOpenInModal}
+                  />
                 </InfiniteScroll>
                 <div className="flex h-16 items-center justify-center mt-6">
                   {isLoading && <div className="loading-card-spinner" />}

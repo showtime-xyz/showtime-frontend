@@ -15,8 +15,9 @@ import Link from "next/link";
 import AppContext from "../context/app-context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LikeButton from "./LikeButton";
+import ActivityImages from "./ActivityImages";
 
-export default function ActivityCard({ act }) {
+export default function ActivityCard({ act, setItemOpenInModal }) {
   const { isMobile } = useContext(AppContext);
   const {
     nfts,
@@ -33,6 +34,9 @@ export default function ActivityCard({ act }) {
   };
   const single = act.nfts?.length === 1;
   let content = null;
+  const handleOpenModal = (index) => {
+    setItemOpenInModal({ nftGroup: nfts, index });
+  };
 
   const { type } = act;
   switch (type) {
@@ -63,7 +67,7 @@ export default function ActivityCard({ act }) {
   }
   return (
     <div
-      className="flex flex-col flex-1 px-4 py-6 border-b border-gray-200 hover:bg-gray-100"
+      className="flex flex-col flex-1 px-4 py-6 border-b border-gray-200"
       style={{ fontSize: isMobile ? "0.875rem" : "1rem" }}
     >
       {/* actor data */}
@@ -128,7 +132,14 @@ export default function ActivityCard({ act }) {
           </div>
           {/* content */}
           <div className="max-w-full">{content}</div>
-          {single && <LikeButton item={nfts[0]} />}
+          <div className="flex mt-2 max-w-full">
+            <ActivityImages nfts={nfts} openModal={handleOpenModal} />
+          </div>
+          {single && (
+            <div className="px-3 py-1 mt-2 bg-gray-100 w-max rounded-xl">
+              <LikeButton item={nfts[0]} />
+            </div>
+          )}
         </div>
       </div>
     </div>

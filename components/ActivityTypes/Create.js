@@ -77,9 +77,6 @@ export default function Create({ act }) {
           </>
         )}
       </div>
-      <div className="flex mt-2">
-        <ActivityImages nfts={nfts} />
-      </div>
     </div>
   );
 }

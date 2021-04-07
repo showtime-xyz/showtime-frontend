@@ -33,9 +33,6 @@ export default function Transfer({ act }) {
           </>
         )}
       </div>
-      <div className="flex mt-2">
-        <ActivityImages nfts={nfts} />
-      </div>
     </div>
   );
 }

@@ -84,9 +84,6 @@ export default function Comment({ act }) {
           </div>
         </div>
       )}
-      <div className="flex mt-2">
-        <ActivityImages nfts={nfts} />
-      </div>
     </div>
   );
 }

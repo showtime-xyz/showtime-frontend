@@ -7,7 +7,7 @@ export default function Like({ act }) {
   const count = nfts?.length;
   return (
     <div className="flex flex-col">
-      <div className="mb-2 text-gray-500">
+      <div className="text-gray-500">
         {count === 1 && (
           <>
             Liked{" "}
@@ -77,7 +77,6 @@ export default function Like({ act }) {
           </>
         )}
       </div>
-      <ActivityImages nfts={nfts} />
     </div>
   );
 }
