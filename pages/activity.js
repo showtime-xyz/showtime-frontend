@@ -7,6 +7,7 @@ import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
 import ActivityFeed from "../components/ActivityFeed";
 import ModalTokenDetail from "../components/ModalTokenDetail";
+import ActivityRecommendedFollows from "../components/ActivityRecommendedFollows";
 
 const ACTIVITY_PAGE_LENGTH = 5; // 5 activity items per activity page
 export async function getServerSideProps() {
@@ -161,10 +162,7 @@ const Activity = () => {
               {/* Right Column */}
               <div className="flex flex-col md:col-span-2">
                 <div className="p-6 h-max bg-gray-100 rounded-lg sticky top-10">
-                  <div className="text-xl">Recommended Follows</div>
-                  <div className="bg-gray-200 p-4 rounded-lg">
-                    [Recommended follows comp here]
-                  </div>
+                  <ActivityRecommendedFollows />
                 </div>
               </div>
             </div>
