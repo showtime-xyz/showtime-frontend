@@ -32,6 +32,8 @@ const Activity = () => {
   const [hasMoreScrolling, setHasMoreScrolling] = useState(true);
 
   const getActivity = async () => {
+    console.log("getting activity: ***************");
+    console.log("activityPage: ", activityPage.current);
     setIsLoading(true);
     const result = await fetch(`/api/getactivity`, {
       method: "POST",
@@ -44,6 +46,9 @@ const Activity = () => {
     if (_.isEmpty(data) || data.length < ACTIVITY_PAGE_LENGTH) {
       setHasMoreScrolling(false);
     }
+    console.log("activity: ", activity);
+    console.log("ned data: ", data);
+    console.log("combined: ", [...activity, ...data]);
     setActivity([...activity, ...data]);
     setIsLoading(false);
   };
