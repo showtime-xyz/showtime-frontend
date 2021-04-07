@@ -8,7 +8,6 @@ export default async (req, res) => {
       process.env.ENCRYPTION_SECRET_V2,
       Iron.defaults
     );
-    console.log(req.body);
 
     await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/bulkfollow`, {
       method: "POST",
