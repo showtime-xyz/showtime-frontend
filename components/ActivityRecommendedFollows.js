@@ -37,14 +37,17 @@ export default function ActivityRecommendedFollows() {
   }, []);
   return (
     <div>
-      <div className="mt-5 pb-2 text-gray-500 text-lg border-b items-center border-gray-300 flex justify-between">
+      <div className="mt-5 py-4 pt-2 text-gray-500 text-lg border-b items-center border-gray-300 flex justify-between">
         <div>Recommended for You</div>
-        <div
-          className="bg-gray-200 text-gray-500 px-2 py-1 rounded-lg text-sm cursor-pointer hover:bg-gray-300"
-          onClick={getActivityRecommendedFollows}
-        >
-          Refresh
-        </div>
+        <div />
+        {!loading && (
+          <div
+            className="bg-gray-200 text-gray-500 px-2 py-0 rounded-lg text-sm cursor-pointer hover:bg-gray-300"
+            onClick={getActivityRecommendedFollows}
+          >
+            Refresh
+          </div>
+        )}
       </div>
       {!loading &&
         recommendedFollows &&
