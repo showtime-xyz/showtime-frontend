@@ -6,6 +6,7 @@ export default function ActivityImage({
   index,
   numberOfImages,
   openModal,
+  spacingIndex,
 }) {
   const aRef = useRef();
   const [imgWidth, setImgWidth] = useState(null);
@@ -17,7 +18,7 @@ export default function ActivityImage({
   return (
     <div
       className={`flex-1 cursor-pointer overflow-hidden hover:opacity-90 ${
-        index !== numberOfImages - 1 ? "mr-1" : ""
+        spacingIndex !== numberOfImages - 1 ? "mr-1" : ""
       }`}
       ref={aRef}
       style={{
