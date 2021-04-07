@@ -161,7 +161,10 @@ const Activity = () => {
               </div>
               {/* Right Column */}
               <div className="flex flex-col md:col-span-2">
-                <div className="p-6 h-max bg-gray-100 rounded-lg sticky top-10">
+                <div className="px-6 h-max bg-gray-100 rounded-lg sticky top-10 border border-gray-200">
+                  <div className="mt-5 pb-2 text-gray-400 text-lg border-b border-gray-300">
+                    Recommended for You
+                  </div>
                   <ActivityRecommendedFollows />
                 </div>
               </div>

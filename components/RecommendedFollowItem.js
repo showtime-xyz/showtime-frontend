@@ -81,10 +81,10 @@ const MetadataText = styled.h6`
 `;
 
 const ProfileImage = styled.img`
-  width: 72px;
-  height: 72px;
+  width: ${(p) => (p.liteVersion ? "42px" : "72px")};
+  height: ${(p) => (p.liteVersion ? "42px" : "72px")};
   border-radius: 50%;
-  margin-right: 20px;
+  margin-right: ${(p) => (p.liteVersion ? "10px" : "20px")};
   cursor: pointer;
   box-sizing: border-box;
 `;
@@ -180,7 +180,7 @@ const Tiles = ({ topItems, setCurrentlyOpenModal }) => {
   );
 };
 
-const RecommendedFollowItem = ({ item, closeModal }) => {
+const RecommendedFollowItem = ({ item, closeModal, liteVersion }) => {
   const context = useContext(AppContext);
   const [followerCount, setFollowerCount] = useState();
   const isMyProfile = context?.myProfile?.profile_id === item?.profile_id;
@@ -284,6 +284,7 @@ const RecommendedFollowItem = ({ item, closeModal }) => {
             >
               <ProfileImage
                 isMobile={context.isMobile}
+                liteVersion={liteVersion}
                 src={
                   item?.img_url
                     ? item?.img_url
@@ -310,18 +311,20 @@ const RecommendedFollowItem = ({ item, closeModal }) => {
                 </ProfileTitle>
               </a>
             </Link>
-            <ProfileBottomSection>
-              <Metadata>
-                <MetadataIcon>
-                  <FontAwesomeIcon icon={faUser} />
-                </MetadataIcon>
-                <MetadataText>{followerCount}</MetadataText>
-                <MetadataIcon>
-                  <FontAwesomeIcon icon={faHeart} />
-                </MetadataIcon>
-                <MetadataText>{item?.like_count_total}</MetadataText>
-              </Metadata>
-            </ProfileBottomSection>
+            {!liteVersion && (
+              <ProfileBottomSection>
+                <Metadata>
+                  <MetadataIcon>
+                    <FontAwesomeIcon icon={faUser} />
+                  </MetadataIcon>
+                  <MetadataText>{followerCount}</MetadataText>
+                  <MetadataIcon>
+                    <FontAwesomeIcon icon={faHeart} />
+                  </MetadataIcon>
+                  <MetadataText>{item?.like_count_total}</MetadataText>
+                </Metadata>
+              </ProfileBottomSection>
+            )}
           </ProfileSectionContent>
         </ProfileSection>
         {!isMyProfile && (
