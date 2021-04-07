@@ -573,30 +573,10 @@ const TokenDetailBody = ({
           )}
 
           {/* OpenSea Link */}
-          {/* <div style={{ width: 160 }} className="mt-12">
-            <a
-              href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
-              title="Buy on OpenSea"
-              target="_blank"
-              onClick={() => {
-                mixpanel.track("OpenSea link click");
-              }}
-            >
-              <img
-                style={{
-                  width: 160,
-                  borderRadius: 7,
-                  boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.25)",
-                }}
-                src="https://storage.googleapis.com/opensea-static/opensea-brand/listed-button-white.png"
-                alt="Listed on OpenSea badge"
-              />
-            </a>
-          </div> */}
 
           <div className="m-4 flex text-sm">
             <a
-              href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0x0c7f6405bf7299a9ebdccfd6841feac6c91e5541`}
+              href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`}
               title="Buy on OpenSea"
               target="_blank"
               onClick={() => {
