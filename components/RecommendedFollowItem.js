@@ -10,6 +10,7 @@ import ModalTokenDetail from "./ModalTokenDetail";
 import FollowButton from "./FollowButton";
 import AppContext from "../context/app-context";
 import { formatAddressShort, truncateWithEllipses } from "../lib/utilities";
+import RemoveRecommendationButton from "./RemoveRecommendationButton";
 
 const RecommendedFollowRowItem = styled.div`
   display: flex;
@@ -89,6 +90,8 @@ const ProfileImage = styled.img`
   box-sizing: border-box;
 `;
 
+const RemoveButtonWrapper = styled.div``;
+
 const FollowButtonWrapper = styled.div`
   @media screen and (max-width: 600px) {
     margin-top: 20px;
@@ -139,48 +142,55 @@ const NFTVideoTile = styled.div`
 const Tiles = ({ topItems, setCurrentlyOpenModal }) => {
   const context = useContext(AppContext);
   return (
-    <NFTTiles>
-      {topItems.map((topItem, index) => (
-        <div key={topItem?.nft_id}>
-          {topItem?.token_img_thumbnail_url ? (
-            <NFTTile
-              style={{
-                marginRight:
-                  index === topItems.length - 1 || context.gridWidth <= 420
-                    ? 0
-                    : 14,
-              }}
-              onClick={() => setCurrentlyOpenModal(topItem)}
-              src={topItem?.token_img_thumbnail_url}
-            />
-          ) : (
-            <NFTVideoTile
-              style={{
-                marginRight:
-                  index === topItems.length - 1 || context.gridWidth <= 420
-                    ? 0
-                    : 14,
-              }}
-              onClick={() => setCurrentlyOpenModal(topItem)}
-            >
-              <ReactPlayer
-                url={topItem?.token_animation_url}
-                playing={false}
-                loop
-                muted={true}
-                width={"100%"}
-                height={"100%"}
-                playsinline
+    topItems?.length > 0 && (
+      <NFTTiles>
+        {topItems.map((topItem, index) => (
+          <div key={topItem?.nft_id}>
+            {topItem?.token_img_thumbnail_url ? (
+              <NFTTile
+                style={{
+                  marginRight:
+                    index === topItems.length - 1 || context.gridWidth <= 420
+                      ? 0
+                      : 14,
+                }}
+                onClick={() => setCurrentlyOpenModal(topItem)}
+                src={topItem?.token_img_thumbnail_url}
               />
-            </NFTVideoTile>
-          )}
-        </div>
-      ))}
-    </NFTTiles>
+            ) : (
+              <NFTVideoTile
+                style={{
+                  marginRight:
+                    index === topItems.length - 1 || context.gridWidth <= 420
+                      ? 0
+                      : 14,
+                }}
+                onClick={() => setCurrentlyOpenModal(topItem)}
+              >
+                <ReactPlayer
+                  url={topItem?.token_animation_url}
+                  playing={false}
+                  loop
+                  muted={true}
+                  width={"100%"}
+                  height={"100%"}
+                  playsinline
+                />
+              </NFTVideoTile>
+            )}
+          </div>
+        ))}
+      </NFTTiles>
+    )
   );
 };
 
-const RecommendedFollowItem = ({ item, closeModal, liteVersion }) => {
+const RecommendedFollowItem = ({
+  item,
+  closeModal,
+  liteVersion,
+  removeRecommendation,
+}) => {
   const context = useContext(AppContext);
   const [followerCount, setFollowerCount] = useState();
   const isMyProfile = context?.myProfile?.profile_id === item?.profile_id;
@@ -216,45 +226,6 @@ const RecommendedFollowItem = ({ item, closeModal, liteVersion }) => {
     }
   }, [escPress, leftPress, rightPress]);
 
-  const handleLike = async (nft_id) => {
-    // Change myLikes via setMyLikes
-    context.setMyLikes([...context.myLikes, nft_id]);
-
-    const likedItem = topItems.find((i) => i.nft_id === nft_id);
-    const myLikeCounts = context.myLikeCounts;
-    context.setMyLikeCounts({
-      ...context.myLikeCounts,
-      [nft_id]:
-        ((myLikeCounts && myLikeCounts[nft_id]) || likedItem.like_count) + 1,
-    });
-
-    // Post changes to the API
-    await fetch(`/api/like_v3/${nft_id}`, {
-      method: "post",
-    });
-
-    mixpanel.track("Liked item");
-  };
-  const handleUnlike = async (nft_id) => {
-    // Change myLikes via setMyLikes
-    context.setMyLikes(context.myLikes.filter((item) => !(item === nft_id)));
-
-    const likedItem = topItems.find((i) => i.nft_id === nft_id);
-    const myLikeCounts = context.myLikeCounts;
-    context.setMyLikeCounts({
-      ...context.myLikeCounts,
-      [nft_id]:
-        ((myLikeCounts && myLikeCounts[nft_id]) || likedItem.like_count) - 1,
-    });
-
-    // Post changes to the API
-    await fetch(`/api/unlike_v3/${nft_id}`, {
-      method: "post",
-    });
-
-    mixpanel.track("Unliked item");
-  };
-
   return (
     <RecommendedFollowRowItem>
       {typeof document !== "undefined" ? (
@@ -263,8 +234,6 @@ const RecommendedFollowItem = ({ item, closeModal, liteVersion }) => {
             isOpen={currentlyOpenModal}
             setEditModalOpen={setCurrentlyOpenModal}
             item={currentlyOpenModal}
-            handleLike={handleLike}
-            handleUnlike={handleUnlike}
             goToNext={goToNext}
             goToPrevious={goToPrevious}
             columns={context.columns}
@@ -279,7 +248,6 @@ const RecommendedFollowItem = ({ item, closeModal, liteVersion }) => {
             <a
               onClick={() => {
                 closeModal();
-                console.log("Close modal");
               }}
             >
               <ProfileImage
@@ -298,7 +266,6 @@ const RecommendedFollowItem = ({ item, closeModal, liteVersion }) => {
               <a
                 onClick={() => {
                   closeModal();
-                  console.log("Close modal");
                 }}
               >
                 <ProfileTitle>
@@ -327,15 +294,26 @@ const RecommendedFollowItem = ({ item, closeModal, liteVersion }) => {
             )}
           </ProfileSectionContent>
         </ProfileSection>
-        {!isMyProfile && (
-          <FollowButtonWrapper>
-            <FollowButton
-              item={item}
-              followerCount={followerCount}
-              setFollowerCount={setFollowerCount}
-            />
-          </FollowButtonWrapper>
-        )}
+        <div className="flex flex-col md:flex-row w-full md:w-auto">
+          {!isMyProfile && (
+            <FollowButtonWrapper>
+              <FollowButton
+                item={item}
+                followerCount={followerCount}
+                setFollowerCount={setFollowerCount}
+              />
+            </FollowButtonWrapper>
+          )}
+
+          {liteVersion && (
+            <RemoveButtonWrapper>
+              <RemoveRecommendationButton
+                item={item}
+                removeRecommendation={removeRecommendation}
+              />
+            </RemoveButtonWrapper>
+          )}
+        </div>
       </RecommendedFollowHeader>
       {context.gridWidth <= 420 ? (
         <>
