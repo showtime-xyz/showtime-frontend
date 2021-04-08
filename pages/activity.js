@@ -45,7 +45,15 @@ const Activity = () => {
     if (_.isEmpty(data) || data.length < ACTIVITY_PAGE_LENGTH) {
       setHasMoreScrolling(false);
     }
-    setActivity([...activity, ...data]);
+
+    // filter out possible repeats
+    let filteredData = [];
+    await data.forEach((newItem) => {
+      if (!activity.find((actItem) => actItem.id === newItem.id)) {
+        filteredData.push(newItem);
+      }
+    });
+    setActivity([...activity, ...filteredData]);
     setIsLoading(false);
   };
   useEffect(() => {
