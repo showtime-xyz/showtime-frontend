@@ -181,6 +181,7 @@ const Activity = () => {
                       <div className="text-gray-400">No more activity.</div>
                     </div>
                   }
+                  scrollThreshold={0.5}
                 >
                   <ActivityFeed
                     activity={[...activity]}
