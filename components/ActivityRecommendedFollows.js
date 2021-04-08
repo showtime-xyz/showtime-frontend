@@ -35,19 +35,18 @@ export default function ActivityRecommendedFollows() {
   useEffect(() => {
     getActivityRecommendedFollows();
   }, []);
+
+  // get more recs when we reject all recs
+  useEffect(() => {
+    if (recommendedFollows?.length === 0) {
+      getActivityRecommendedFollows();
+    }
+  }, [recommendedFollows?.length]);
+
   return (
     <div>
-      <div className="mt-5 py-4 pt-2 text-gray-500 text-lg border-b items-center border-gray-300 flex justify-between">
+      <div className="mt-5 py-4 pt-2 text-gray-500 text-lg border-b items-center border-gray-300 flex">
         <div>Recommended for You</div>
-        <div />
-        {!loading && (
-          <div
-            className="bg-gray-200 text-gray-500 px-2 py-0 rounded-lg text-sm cursor-pointer hover:bg-gray-300"
-            onClick={getActivityRecommendedFollows}
-          >
-            Refresh
-          </div>
-        )}
       </div>
       {!loading &&
         recommendedFollows &&
@@ -57,6 +56,7 @@ export default function ActivityRecommendedFollows() {
             liteVersion
             removeRecommendation={removeRecommendation}
             closeModal={() => {}}
+            key={recFollow?.profile_id}
           />
         ))}
       {!loading && recommendedFollows && recommendedFollows.length === 0 && (
