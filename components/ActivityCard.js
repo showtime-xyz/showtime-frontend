@@ -113,7 +113,7 @@ export default function ActivityCard({ act, setItemOpenInModal }) {
               </a>
             </Link>
 
-            {actor.username && (
+            {actor.username && !isMobile && (
               <Link
                 href="/[profile]"
                 as={`/${actor?.username || actor?.wallet_address}`}
