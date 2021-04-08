@@ -14,6 +14,10 @@ export default function ActivityImage({
     setImgWidth(aRef?.current?.clientWidth);
   }, [aRef?.current?.clientWidth]);
 
+  useEffect(() => {
+    setImgWidth(aRef?.current?.clientWidth);
+  }, []);
+
   const getImageUrl = (img_url, token_aspect_ratio) => {
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
       if (token_aspect_ratio && token_aspect_ratio > 1) {
