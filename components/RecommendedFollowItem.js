@@ -43,6 +43,11 @@ const ProfileSectionContent = styled.div`
   justify-content: space-around;
   overflow: hidden;
   text-overflow: ellipsis;
+  ${(p) =>
+    p.liteVersion
+      ? `white-space: nowrap;
+  max-width: 120px;`
+      : ""},
 `;
 
 const ProfileBottomSection = styled.div`
@@ -263,7 +268,7 @@ const RecommendedFollowItem = ({
               />
             </a>
           </Link>
-          <ProfileSectionContent>
+          <ProfileSectionContent liteVersion={liteVersion}>
             <Link href="/[profile]" as={`/${item?.username || item.address}`}>
               <a
                 onClick={() => {
