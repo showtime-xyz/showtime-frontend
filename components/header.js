@@ -26,6 +26,8 @@ const Header = () => {
           borderBottom: "1px solid #ddd",
           backgroundColor: "rgb(255 255 255 / 100%)",
           zIndex: 1,
+          position: "sticky",
+          top: 0,
         }}
       >
         <div

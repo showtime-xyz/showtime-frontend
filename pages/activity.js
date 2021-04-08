@@ -194,7 +194,7 @@ const Activity = () => {
               {/* Right Column */}
               {context.columns > 2 && (
                 <div className="flex flex-col ml-12" style={{ width: 360 }}>
-                  <div className="px-6 h-max bg-gray-100 rounded-lg sticky top-10 border border-gray-200">
+                  <div className="px-6 h-max bg-gray-100 rounded-lg sticky top-24 border border-gray-200">
                     <ActivityRecommendedFollows />
                   </div>
                 </div>
