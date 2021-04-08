@@ -59,6 +59,8 @@ export async function getServerSideProps(context) {
 
     const featured_nft_img_url = data_profile.profile.featured_nft_img_url;
 
+    const featured_nft = data_profile.featured_nft;
+
     return {
       props: {
         name,
@@ -77,6 +79,7 @@ export async function getServerSideProps(context) {
         default_owned_sort_id,
         featured_nft_img_url,
         featured_nft_id,
+        featured_nft,
       }, // will be passed to the page component as props
     };
   } catch (err) {
@@ -110,6 +113,7 @@ const Profile = ({
   default_owned_sort_id,
   featured_nft_img_url,
   featured_nft_id,
+  featured_nft,
 }) => {
   //const router = useRouter();
   const context = useContext(AppContext);
@@ -161,10 +165,11 @@ const Profile = ({
       setCreatedHiddenItems([]);
       setOwnedHiddenItems([]);
       setLikedHiddenItems([]);
-      setSpotlightItem();
+      //setSpotlightItem();
 
       setSelectedCreatedSortField(default_created_sort_id || 1);
       setSelectedOwnedSortField(default_owned_sort_id || 1);
+      setSpotlightItem(featured_nft);
     }
 
     const response_profile = await backend.get(
@@ -201,6 +206,7 @@ const Profile = ({
     );
 
     // look for spotlight item
+    /*
     let spotlight;
     spotlight = data_profile.created.find(
       (item) => item.nft_id === featured_nft_id
@@ -210,7 +216,8 @@ const Profile = ({
         (item) => item.nft_id === featured_nft_id
       );
     }
-    setSpotlightItem(spotlight);
+    */
+
     if (initial_load) {
       setIsLoadingCards(false);
     }
