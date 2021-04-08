@@ -113,7 +113,7 @@ const Profile = ({
 }) => {
   //const router = useRouter();
   const context = useContext(AppContext);
-  const { columns, gridWidth } = context;
+  const { gridWidth } = context;
 
   const [isMyProfile, setIsMyProfile] = useState();
   const [isFollowed, setIsFollowed] = useState(false);
@@ -425,6 +425,8 @@ const Profile = ({
   ]);
 
   const handleChangeSpotlightItem = async (nft) => {
+    console.log(nft);
+
     const nftId = nft ? nft.nft_id : null;
     setSpotlightItem(nft);
 
@@ -809,7 +811,7 @@ const Profile = ({
                 hasEmailAddress={hasEmailAddress}
               />
             </div>
-            {featured_nft_id && spotlightItem && (
+            {spotlightItem && (
               <>
                 <div className="mx-auto" style={{ width: gridWidth }}>
                   <div
@@ -885,7 +887,7 @@ const Profile = ({
             <div
               className="mx-auto"
               style={
-                context.isMobile && featured_nft_id && spotlightItem
+                context.isMobile && spotlightItem
                   ? { width: gridWidth, borderTopWidth: 1 }
                   : { width: gridWidth }
               }
