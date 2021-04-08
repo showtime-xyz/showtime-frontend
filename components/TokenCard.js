@@ -511,7 +511,7 @@ class TokenCard extends React.Component {
               </div>
             )}
 
-            <div className="p-4 pb-4">
+            <div className="p-4 pb-3 sm:pb-4">
               <div>
                 <div className="">
                   <div
@@ -543,14 +543,24 @@ class TokenCard extends React.Component {
                   </div>
                   {!isMobile || item.token_description ? (
                     <div
-                      style={{
-                        fontSize: 14,
-                        overflowWrap: "break-word",
-                        wordWrap: "break-word",
-                        display: "block",
-                        minHeight: "4.75rem",
-                      }}
-                      className="py-4 text-gray-500"
+                      style={
+                        isMobile
+                          ? {
+                              fontSize: 14,
+                              overflowWrap: "break-word",
+                              wordWrap: "break-word",
+                              display: "block",
+                              minHeight: "3.5rem",
+                            }
+                          : {
+                              fontSize: 14,
+                              overflowWrap: "break-word",
+                              wordWrap: "break-word",
+                              display: "block",
+                              minHeight: "4.75rem",
+                            }
+                      }
+                      className="py-2 sm:py-4 text-gray-500"
                     >
                       {this.state.moreShown ? (
                         <div>{this.removeTags(item.token_description)}</div>

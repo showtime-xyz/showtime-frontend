@@ -425,8 +425,6 @@ const Profile = ({
   ]);
 
   const handleChangeSpotlightItem = async (nft) => {
-    console.log(nft);
-
     const nftId = nft ? nft.nft_id : null;
     setSpotlightItem(nft);
 
