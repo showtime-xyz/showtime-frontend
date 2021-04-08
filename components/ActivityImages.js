@@ -45,7 +45,7 @@ export default function ActivityImages({ nfts, openModal }) {
         </div>
       )}
 
-      {count === 4 && (
+      {count > 3 && (
         <div className="flex flex-col">
           <div className="flex mb-1">
             {[nfts[0], nfts[1]].map((nft, index) => (
