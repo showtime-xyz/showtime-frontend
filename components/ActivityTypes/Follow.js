@@ -118,7 +118,7 @@ export default function Follow({ act }) {
         )}
       </div>
       <div className="flex mt-2">
-        <UserImageList users={counterparties} />
+        <UserImageList users={counterparties.slice(0, 5)} />
       </div>
     </div>
   );
