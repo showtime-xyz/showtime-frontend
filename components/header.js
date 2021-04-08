@@ -78,6 +78,26 @@ const Header = () => {
               </a>
               </Link>*/}
 
+            {context.myProfile && (
+              <div className="relative">
+                <Link href="/activity">
+                  <a
+                    className="showtime-header-link ml-6 text-sm md:text-base"
+                    onClick={() => {
+                      mixpanel.track("Activity button click");
+                    }}
+                  >
+                    Activity
+                  </a>
+                </Link>
+                <div
+                  className="absolute -top-2 -right-3 bg-stpink rounded text-white flex items-center"
+                  style={{ fontSize: 9, padding: "0px 2px" }}
+                >
+                  New!
+                </div>
+              </div>
+            )}
             <Link href="/c/[collection]" as="/c/all">
               <a
                 className="showtime-header-link ml-6 text-sm md:text-base"
@@ -86,16 +106,6 @@ const Header = () => {
                 }}
               >
                 Explore
-              </a>
-            </Link>
-            <Link href="/activity">
-              <a
-                className="showtime-header-link ml-6 text-sm md:text-base"
-                onClick={() => {
-                  mixpanel.track("Activity button click");
-                }}
-              >
-                Activity
               </a>
             </Link>
             <Link href="/leaderboard">
@@ -203,6 +213,26 @@ const Header = () => {
                 Home
               </a>
               </Link>*/}
+            {context.myProfile && (
+              <span className="relative">
+                <Link href="/activity">
+                  <a
+                    className="showtime-header-link mr-5 text-sm md:text-base"
+                    onClick={() => {
+                      mixpanel.track("Activity button click");
+                    }}
+                  >
+                    Activity
+                  </a>
+                </Link>
+                <div
+                  className="absolute -top-1 right-2 bg-stpink rounded text-white flex items-center"
+                  style={{ fontSize: 7, padding: "0px 2px" }}
+                >
+                  New!
+                </div>
+              </span>
+            )}
             <Link href="/c/[collection]" as="/c/all">
               <a
                 className="showtime-header-link mr-5 text-sm md:text-base"
@@ -211,16 +241,6 @@ const Header = () => {
                 }}
               >
                 Explore
-              </a>
-            </Link>
-            <Link href="/activity">
-              <a
-                className="showtime-header-link mr-5 text-sm md:text-base"
-                onClick={() => {
-                  mixpanel.track("Activity button click");
-                }}
-              >
-                Activity
               </a>
             </Link>
             <Link href="/leaderboard">
