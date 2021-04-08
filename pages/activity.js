@@ -5,6 +5,7 @@ import Layout from "../components/layout";
 import InfiniteScroll from "react-infinite-scroll-component";
 import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
+import useKeyPress from "../hooks/useKeyPress";
 import ActivityFeed from "../components/ActivityFeed";
 import ModalTokenDetail from "../components/ModalTokenDetail";
 import ActivityRecommendedFollows from "../components/ActivityRecommendedFollows";
@@ -60,6 +61,38 @@ const Activity = () => {
   const handleSetItemOpenInModal = ({ index, nftGroup }) => {
     setItemOpenInModal({ index, nftGroup });
   };
+
+  const goToNext = () => {
+    setItemOpenInModal({
+      nftGroup: itemOpenInModal?.nftGroup,
+      index: itemOpenInModal?.index + 1,
+    });
+  };
+
+  const goToPrevious = () => {
+    setItemOpenInModal({
+      nftGroup: itemOpenInModal?.nftGroup,
+      index: itemOpenInModal?.index - 1,
+    });
+  };
+
+  const leftPress = useKeyPress("ArrowLeft");
+  const rightPress = useKeyPress("ArrowRight");
+  const escPress = useKeyPress("Escape");
+
+  useEffect(() => {
+    if (escPress) {
+      setItemOpenInModal(null);
+    }
+    if (rightPress && itemOpenInModal) {
+      mixpanel.track("Next NFT - keyboard");
+      goToNext();
+    }
+    if (leftPress && itemOpenInModal) {
+      mixpanel.track("Prior NFT - keyboard");
+      goToPrevious();
+    }
+  }, [escPress, leftPress, rightPress]);
   return (
     <Layout>
       <Head>
@@ -91,20 +124,8 @@ const Activity = () => {
                 ? itemOpenInModal.nftGroup[itemOpenInModal?.index]
                 : null
             }
-            goToNext={() => {}}
-            goToPrevious={() => {}}
-            goToNext={() => {
-              setItemOpenInModal({
-                nftGroup: itemOpenInModal?.nftGroup,
-                index: itemOpenInModal?.index + 1,
-              });
-            }}
-            goToPrevious={() => {
-              setItemOpenInModal({
-                nftGroup: itemOpenInModal?.nftGroup,
-                index: itemOpenInModal?.index - 1,
-              });
-            }}
+            goToNext={goToNext}
+            goToPrevious={goToPrevious}
             hasNext={
               !(
                 itemOpenInModal?.index ===
