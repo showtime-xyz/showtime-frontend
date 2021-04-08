@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import ReactPlayer from "react-player";
 
 export default function ActivityImage({
   nft,
@@ -10,7 +11,6 @@ export default function ActivityImage({
 }) {
   const aRef = useRef();
   const [imgWidth, setImgWidth] = useState(null);
-
   useEffect(() => {
     setImgWidth(aRef?.current?.clientWidth);
   }, [aRef?.current?.clientWidth]);
@@ -23,13 +23,28 @@ export default function ActivityImage({
       ref={aRef}
       style={{
         height: imgWidth,
-        backgroundColor: `#${nft.token_background_color}`,
+        backgroundColor: nft.token_background_color
+          ? `#${nft.token_background_color}`
+          : "black",
       }}
       onClick={() => {
         openModal(index);
       }}
     >
-      <img src={nft.token_img_url} className="object-cover w-full h-full" />
+      {nft.token_img_url && (
+        <img src={nft.token_img_url} className="object-cover w-full h-full" />
+      )}
+      {nft.token_has_video && !nft.token_img_url && (
+        <ReactPlayer
+          url={nft?.token_animation_url}
+          playing={true}
+          loop
+          muted={true}
+          width={imgWidth}
+          height={imgWidth}
+          playsinline
+        />
+      )}
     </div>
   );
 }
