@@ -45,18 +45,36 @@ const RemoveRecommendationButton = ({ item, removeRecommendation }) => {
   };
   const context = useContext(AppContext);
 
+  const myFollows = context?.myFollows || [];
+  const [isFollowed, setIsFollowed] = useState(false);
+
+  useEffect(() => {
+    var it_is_followed = false;
+    _.forEach(myFollows, (follow) => {
+      if (follow?.profile_id === item?.profile_id) {
+        it_is_followed = true;
+      }
+    });
+    setIsFollowed(it_is_followed);
+  }, [myFollows]);
+
   return (
-    <div className="ml-0 md:ml-1">
-      <Button onClick={handleRemove}>
-        <CrossIcon>
-          {context.isMobile ? (
-            <RemoveText>Remove</RemoveText>
-          ) : (
-            <FontAwesomeIcon icon={faTimes} style={{ height: 16, width: 16 }} />
-          )}
-        </CrossIcon>
-      </Button>
-    </div>
+    !isFollowed && (
+      <div className="ml-0 md:ml-1">
+        <Button onClick={handleRemove}>
+          <CrossIcon>
+            {context.isMobile ? (
+              <RemoveText>Remove</RemoveText>
+            ) : (
+              <FontAwesomeIcon
+                icon={faTimes}
+                style={{ height: 16, width: 16 }}
+              />
+            )}
+          </CrossIcon>
+        </Button>
+      </div>
+    )
   );
 };
 
