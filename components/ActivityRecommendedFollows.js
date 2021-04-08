@@ -45,7 +45,7 @@ export default function ActivityRecommendedFollows() {
 
   return (
     <div>
-      <div className="mt-5 py-4 pt-2 text-gray-500 text-lg border-b items-center border-gray-300 flex">
+      <div className="mt-5 py-2 text-gray-500 text-lg border-b items-center border-gray-300 flex">
         <div>Recommended for You</div>
       </div>
       {!loading &&

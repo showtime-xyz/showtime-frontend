@@ -135,9 +135,12 @@ const Activity = () => {
               <h1 className="text-xl md:text-3xl xl:text-4xl">Activity</h1>
             </div>
             {/* Page Content */}
-            <div className="grid gap-8 grid-cols-1 md:grid-cols-4">
+            <div className="flex">
               {/* Left Column */}
-              <div className="flex flex-col md:col-span-2">
+              <div
+                className="flex flex-col"
+                style={{ width: context.isMobile ? "100%" : 463 }}
+              >
                 <div className="border-t border-b h-2 bg-gray-100 border-gray-200" />
 
                 <InfiniteScroll
@@ -160,11 +163,13 @@ const Activity = () => {
                 </div>
               </div>
               {/* Right Column */}
-              <div className="flex flex-col md:col-span-2">
-                <div className="px-6 h-max bg-gray-100 rounded-lg sticky top-10 border border-gray-200">
-                  <ActivityRecommendedFollows />
+              {!context.isMobile && (
+                <div className="flex flex-col ml-12" style={{ width: 360 }}>
+                  <div className="px-6 h-max bg-gray-100 rounded-lg sticky top-10 border border-gray-200">
+                    <ActivityRecommendedFollows />
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </>

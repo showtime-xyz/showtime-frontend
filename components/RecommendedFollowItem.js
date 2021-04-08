@@ -52,10 +52,11 @@ const ProfileBottomSection = styled.div`
 `;
 
 const ProfileTitle = styled.h4`
-  font-size: 20px;
+  font-size: ${(p) => (p.liteVersion ? "16px" : "20px")};
   font-weight: 500;
   cursor: pointer;
   overflow: hidden;
+  margin-right: ${(p) => (p.liteVersion ? "20px" : "unset")};
   text-overflow: ellipsis;
   &:hover {
     color: #e45cff;
@@ -249,6 +250,7 @@ const RecommendedFollowItem = ({
               onClick={() => {
                 closeModal();
               }}
+              style={{ minWidth: 42 }}
             >
               <ProfileImage
                 isMobile={context.isMobile}
@@ -268,7 +270,7 @@ const RecommendedFollowItem = ({
                   closeModal();
                 }}
               >
-                <ProfileTitle>
+                <ProfileTitle liteVersion={liteVersion}>
                   {truncateWithEllipses(
                     item?.name,
                     context.isMobile ? 19 : 30
