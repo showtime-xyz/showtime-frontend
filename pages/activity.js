@@ -160,7 +160,7 @@ const Activity = () => {
               {/* Left Column */}
               <div
                 className="flex flex-col"
-                style={{ width: context.isMobile ? "100%" : 463 }}
+                style={{ width: context.columns < 2 ? "100%" : 600 }}
               >
                 <div className="border-t border-b h-2 bg-gray-100 border-gray-200" />
 
@@ -184,7 +184,7 @@ const Activity = () => {
                 </div>
               </div>
               {/* Right Column */}
-              {!context.isMobile && (
+              {context.columns > 2 && (
                 <div className="flex flex-col ml-12" style={{ width: 360 }}>
                   <div className="px-6 h-max bg-gray-100 rounded-lg sticky top-10 border border-gray-200">
                     <ActivityRecommendedFollows />
