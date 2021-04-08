@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
+//import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import AppContext from "../context/app-context";
 import backend from "../lib/backend";
 import mixpanel from "mixpanel-browser";
@@ -125,6 +125,28 @@ export default function CommentsSection({
         ) : (
           <>
             <div className="py-2 px-4 border-2 border-gray-300 rounded-xl">
+              {hasMoreComments && (
+                <div className="flex flex-row items-center my-2 justify-center">
+                  {!loadingMoreComments ? (
+                    <div
+                      className="text-center px-4 py-1 flex items-center w-max border-2 border-gray-300 rounded-full hover:text-stpink hover:border-stpink cursor-pointer hover:text-stpink"
+                      onClick={handleGetMoreComments}
+                    >
+                      <div className="mr-2 text-sm">Show Earlier Comments</div>
+                      {/*<div>
+                        <FontAwesomeIcon
+                          style={{ height: 12 }}
+                          icon={faArrowUp}
+                        />
+                      </div>*/}
+                    </div>
+                  ) : (
+                    <div className="p-1">
+                      <div className="loading-card-spinner-small" />
+                    </div>
+                  )}
+                </div>
+              )}
               <div className="mb-4">
                 {comments.length > 0 ? (
                   comments.map((comment) => (
@@ -175,28 +197,6 @@ export default function CommentsSection({
                 </button>
               </div>
             </div>
-            {hasMoreComments && (
-              <div className="flex flex-row items-center my-2 justify-center">
-                {!loadingMoreComments ? (
-                  <div
-                    className="text-center px-4 py-1 flex items-center w-max border-2 border-gray-300 rounded-full hover:text-stpink hover:border-stpink cursor-pointer hover:text-stpink"
-                    onClick={handleGetMoreComments}
-                  >
-                    <div className="mr-2 text-sm">Show All</div>
-                    <div>
-                      <FontAwesomeIcon
-                        style={{ height: 12 }}
-                        icon={faArrowDown}
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <div className="p-1">
-                    <div className="loading-card-spinner-small" />
-                  </div>
-                )}
-              </div>
-            )}
           </>
         )}
       </div>

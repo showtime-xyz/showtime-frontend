@@ -138,6 +138,15 @@ const FollowButtonWrapper = styled.div`
   }
 `;
 
+const FollowButtonWrapperMobile = styled.div`
+  display: none;
+  @media screen and (max-width: 600px) {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+  }
+`;
+
 const LeaderboardItem = ({ item, index }) => {
   const context = useContext(AppContext);
   const [squareWidth, setSquareWidth] = useState(0);
@@ -162,7 +171,7 @@ const LeaderboardItem = ({ item, index }) => {
   const topItems =
     context.columns > 2
       ? item?.top_items.slice(0, 7)
-      : item?.top_items.slice(0, 6);
+      : item?.top_items.slice(0, 3);
   const isMyProfile = context?.myProfile?.profile_id === item?.profile_id;
   const [currentlyOpenModal, setCurrentlyOpenModal] = useState(null);
   const currentIndex = topItems?.findIndex(
@@ -310,14 +319,16 @@ const LeaderboardItem = ({ item, index }) => {
             </Link>
             <ProfileBottomSection>
               {!isMyProfile && (
-                <FollowButtonWrapper>
-                  <FollowButton
-                    item={item}
-                    followerCount={followerCount}
-                    setFollowerCount={setFollowerCount}
-                  />
-                  <GraySeparator />
-                </FollowButtonWrapper>
+                <>
+                  <FollowButtonWrapper>
+                    <FollowButton
+                      item={item}
+                      followerCount={followerCount}
+                      setFollowerCount={setFollowerCount}
+                    />
+                    <GraySeparator />
+                  </FollowButtonWrapper>
+                </>
               )}
               <Metadata>
                 <MetadataIcon>
@@ -332,6 +343,7 @@ const LeaderboardItem = ({ item, index }) => {
             </ProfileBottomSection>
           </ProfileSectionContent>
         </ProfileSection>
+
         <NFTTiles>
           {topItems.map((topItem, index) => (
             <div key={topItem?.nft_id}>
@@ -361,6 +373,14 @@ const LeaderboardItem = ({ item, index }) => {
             </div>
           ))}
         </NFTTiles>
+        <FollowButtonWrapperMobile>
+          <FollowButton
+            item={item}
+            followerCount={followerCount}
+            setFollowerCount={setFollowerCount}
+          />
+          <GraySeparator />
+        </FollowButtonWrapperMobile>
       </LeaderboardItemRow>
     </>
   );

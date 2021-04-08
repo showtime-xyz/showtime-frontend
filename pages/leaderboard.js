@@ -175,23 +175,6 @@ const Leaderboard = () => {
                   </div>
                 ) : (
                   <Link href="/c/[collection]" as="/c/all">
-                    {/*<a
-                      className="my-12"
-                      onClick={() => {
-                        mixpanel.track("Explore button click");
-                      }}
-                    >
-                      <div className="text-center px-5 py-3 text-white flex items-center w-max bg-black rounded-full hover:bg-stpink cursor-pointer">
-                        <div className="mr-2">Explore Collections</div>
-                        <div>
-                          <FontAwesomeIcon
-                            style={{ height: 14 }}
-                            icon={faArrowRight}
-                          />
-                        </div>
-                      </div>
-                      
-                    </a>*/}
                     <a className="showtime-purple-button-icon flex flex-row items-center px-4 py-2 rounded-full my-12">
                       <div className="mr-2">Explore Collections</div>
                       <div className="flex">
