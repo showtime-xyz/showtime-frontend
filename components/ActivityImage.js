@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import Link from "next/link";
 import ReactPlayer from "react-player";
 
 export default function ActivityImage({
@@ -14,6 +13,17 @@ export default function ActivityImage({
   useEffect(() => {
     setImgWidth(aRef?.current?.clientWidth);
   }, [aRef?.current?.clientWidth]);
+
+  const getImageUrl = (img_url, token_aspect_ratio) => {
+    if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
+      if (token_aspect_ratio && token_aspect_ratio > 1) {
+        img_url = img_url.split("=")[0] + "=h375";
+      } else {
+        img_url = img_url.split("=")[0] + "=w375";
+      }
+    }
+    return img_url;
+  };
 
   return (
     <div
@@ -32,7 +42,14 @@ export default function ActivityImage({
       }}
     >
       {nft.token_img_url && (
-        <img src={nft.token_img_url} className="object-cover w-full h-full" />
+        <img
+          src={
+            numberOfImages === 1
+              ? nft.token_img_url
+              : getImageUrl(nft.token_img_url, nft.token_aspect_ratio)
+          }
+          className="object-cover w-full h-full"
+        />
       )}
       {nft.token_has_video && !nft.token_img_url && (
         <ReactPlayer
