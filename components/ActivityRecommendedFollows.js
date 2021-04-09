@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import AppContext from "../context/app-context";
 import RecommendedFollowItem from "./RecommendedFollowItem";
 
 export default function ActivityRecommendedFollows() {
+  const context = useContext(AppContext);
   const [loading, setLoading] = useState(true);
   const [recommendedFollows, setRecommendedFollows] = useState(null);
   const removeRecommendation = async (recommendation) => {
@@ -43,10 +45,42 @@ export default function ActivityRecommendedFollows() {
     }
   }, [recommendedFollows?.length]);
 
+  const [followAllClicked, setFollowAllClicked] = useState(false);
+  const handleFollowAll = async () => {
+    setFollowAllClicked(true);
+
+    const newProfiles = recommendedFollows.filter(
+      (item) =>
+        !context.myFollows.map((f) => f.profile_id).includes(item.profile_id)
+    );
+
+    // UPDATE CONTEXT
+    context.setMyFollows([...newProfiles, ...context.myFollows]);
+
+    // Post changes to the API
+    await fetch(`/api/bulkfollow`, {
+      method: "post",
+      body: JSON.stringify(newProfiles.map((item) => item.profile_id)),
+    });
+  };
+
   return (
     <div>
-      <div className="mt-5 py-2 text-gray-500 text-lg border-b items-center border-gray-300 flex">
-        <div>Recommended for You</div>
+      <div className="mt-1 py-3 text-gray-600 border-b border-gray-300 flex justify-between align-start">
+        <div className="py-2">Recommended for You</div>
+        <div />
+        {!loading && (
+          <div
+            onClick={followAllClicked ? () => {} : handleFollowAll}
+            className={`px-4 py-1 text-sm rounded-full border w-max flex items-center justify-center hover:opacity-80 cursor-pointer ${
+              followAllClicked
+                ? "border-gray-300 text-black"
+                : "border-stpink bg-stpink text-white"
+            }`}
+          >
+            {followAllClicked ? "Followed All" : "Follow All"}
+          </div>
+        )}
       </div>
       {!loading &&
         recommendedFollows &&
