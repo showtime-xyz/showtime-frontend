@@ -15,8 +15,6 @@ const Button = styled.button`
   box-sizing: border-box;
   border-radius: 41px;
   padding: 4px 10px;
-  background-color: ${(p) => (p.isFollowed ? "#333" : "")};
-  color: ${(p) => (p.isFollowed ? "white" : "")};
   &:hover {
     opacity: 0.7;
   }
@@ -25,6 +23,11 @@ const Button = styled.button`
 const FollowText = styled.h6`
   font-size: 12px;
   font-weight: 400;
+`;
+const PlusIcon = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 6px;
 `;
 
 const MiniFollowButton = ({ profileId }) => {
@@ -83,6 +86,11 @@ const MiniFollowButton = ({ profileId }) => {
       }
       isFollowed={isFollowed}
     >
+      {!isFollowed && (
+        <PlusIcon>
+          <FontAwesomeIcon icon={faPlus} style={{ width: 12, height: 12 }} />
+        </PlusIcon>
+      )}
       <FollowText>{isFollowed ? "Following" : "Follow"}</FollowText>
     </Button>
   );
