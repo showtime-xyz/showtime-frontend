@@ -156,6 +156,7 @@ const Profile = ({
   const fetchItems = async (initial_load) => {
     // clear out existing from page (if switching profiles)
     if (initial_load) {
+      setSpotlightItem(featured_nft);
       setIsLoadingCards(true);
 
       setCreatedItems([]);
@@ -169,7 +170,6 @@ const Profile = ({
 
       setSelectedCreatedSortField(default_created_sort_id || 1);
       setSelectedOwnedSortField(default_owned_sort_id || 1);
-      setSpotlightItem(featured_nft);
     }
 
     const response_profile = await backend.get(
