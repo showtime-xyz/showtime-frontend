@@ -72,7 +72,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
       SetDefaultCreatedSortId(context.myProfile.default_created_sort_id || 1);
       setDefaultOwnedSortId(context.myProfile.default_owned_sort_id || 1);
     }
-  }, [context.myProfile]);
+  }, [context.myProfile, isOpen]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
