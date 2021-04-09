@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import mixpanel from "mixpanel-browser";
 
 export default function Comment({ act }) {
   const { nfts, comments } = act;
@@ -11,7 +12,12 @@ export default function Comment({ act }) {
           <>
             Commented on{" "}
             <Link href={`/t/${nfts[0].contract_address}/${nfts[0].token_id}`}>
-              <a className="text-black hover:text-stpink">
+              <a
+                className="text-black hover:text-stpink"
+                onClick={() => {
+                  mixpanel.track("Activity - Click on NFT title");
+                }}
+              >
                 {nfts[0].token_name}
               </a>
             </Link>
@@ -22,13 +28,23 @@ export default function Comment({ act }) {
           <>
             Commented on{" "}
             <Link href={`/t/${nfts[0].contract_address}/${nfts[0].token_id}`}>
-              <a className="text-black hover:text-stpink">
+              <a
+                className="text-black hover:text-stpink"
+                onClick={() => {
+                  mixpanel.track("Activity - Click on NFT title");
+                }}
+              >
                 {nfts[0].token_name}
               </a>
             </Link>{" "}
             and{" "}
             <Link href={`/t/${nfts[1].contract_address}/${nfts[1].token_id}`}>
-              <a className="text-black hover:text-stpink">
+              <a
+                className="text-black hover:text-stpink"
+                onClick={() => {
+                  mixpanel.track("Activity - Click on NFT title");
+                }}
+              >
                 {nfts[1].token_name}
               </a>
             </Link>
@@ -39,19 +55,34 @@ export default function Comment({ act }) {
           <>
             Commented on{" "}
             <Link href={`/t/${nfts[0].contract_address}/${nfts[0].token_id}`}>
-              <a className="text-black hover:text-stpink">
+              <a
+                className="text-black hover:text-stpink"
+                onClick={() => {
+                  mixpanel.track("Activity - Click on NFT title");
+                }}
+              >
                 {nfts[0].token_name}
               </a>
             </Link>
             ,{" "}
             <Link href={`/t/${nfts[1].contract_address}/${nfts[1].token_id}`}>
-              <a className="text-black hover:text-stpink">
+              <a
+                className="text-black hover:text-stpink"
+                onClick={() => {
+                  mixpanel.track("Activity - Click on NFT title");
+                }}
+              >
                 {nfts[1].token_name}
               </a>
             </Link>{" "}
             and{" "}
             <Link href={`/t/${nfts[2].contract_address}/${nfts[2].token_id}`}>
               <a className="text-black hover:text-stpink">
+                {" "}
+                onClick=
+                {() => {
+                  mixpanel.track("Activity - Click on NFT title");
+                }}
                 {nfts[2].token_name}
               </a>
             </Link>
@@ -62,13 +93,23 @@ export default function Comment({ act }) {
           <>
             Commented on{" "}
             <Link href={`/t/${nfts[0].contract_address}/${nfts[0].token_id}`}>
-              <a className="text-black hover:text-stpink">
+              <a
+                className="text-black hover:text-stpink"
+                onClick={() => {
+                  mixpanel.track("Activity - Click on NFT title");
+                }}
+              >
                 {nfts[0].token_name}
               </a>
             </Link>
             ,{" "}
             <Link href={`/t/${nfts[1].contract_address}/${nfts[1].token_id}`}>
-              <a className="text-black hover:text-stpink">
+              <a
+                className="text-black hover:text-stpink"
+                onClick={() => {
+                  mixpanel.track("Activity - Click on NFT title");
+                }}
+              >
                 {nfts[1].token_name}
               </a>
             </Link>{" "}

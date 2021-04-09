@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { ACTIVITY_TYPES } from "../../lib/constants";
+import mixpanel from "mixpanel-browser";
 
 export default function Transfer({ act }) {
   const { nfts, type } = act;
@@ -15,7 +16,14 @@ export default function Transfer({ act }) {
           <>
             {verb}{" "}
             <Link href={`/t/${nfts[0].contract_address}/${nfts[0].token_id}`}>
-              <a className="text-black hover:text-stpink">{nfts[0].title}</a>
+              <a
+                className="text-black hover:text-stpink"
+                onClick={() => {
+                  mixpanel.track("Activity - Click on NFT title");
+                }}
+              >
+                {nfts[0].title}
+              </a>
             </Link>{" "}
             {preposition}{" "}
             <Link
@@ -24,7 +32,14 @@ export default function Transfer({ act }) {
                 act.counterparty?.username || act.counterparty?.wallet_address
               }`}
             >
-              <a className="text-black hover:text-stpink">
+              <a
+                className="text-black hover:text-stpink"
+                onClick={() => {
+                  mixpanel.track(
+                    "Activity - Click on person transferred to's name"
+                  );
+                }}
+              >
                 {act.counterparty?.name}
               </a>
             </Link>
