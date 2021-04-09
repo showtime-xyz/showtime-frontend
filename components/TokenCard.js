@@ -254,7 +254,7 @@ class TokenCard extends React.Component {
                 ) : null}
               </div>
               <div className="flex-grow">&nbsp;</div>
-              {!isMyProfile && item.creator_address && (
+              {!isMyProfile && item.creator_id && (
                 <MiniFollowButton profileId={item.creator_id} />
               )}
               <div>
