@@ -200,7 +200,7 @@ const Header = () => {
         </div>
         {/* Start mobile-only menu */}
         <div
-          className={`flex md:hidden justify-between items-center pt-4 ${
+          className={`flex md:hidden justify-between items-center pt-3 ${
             !context.gridWidth ? "invisible" : ""
           }`}
         >
