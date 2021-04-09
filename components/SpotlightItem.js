@@ -286,7 +286,7 @@ class SpotlightItem extends React.Component {
                 : "mx-3 flex items-center sm:rounded-md overflow-hidden relative"
             }
           >
-            {isMyProfile && (
+            {isMyProfile && !isMobile && (
               <div className="absolute top-0 right-0 mt-12">
                 <div
                   onClick={(e) => {
@@ -341,6 +341,7 @@ class SpotlightItem extends React.Component {
             {item.token_has_video ? (
               <div
                 className={isMobile ? null : "w-2/4 m-12 justify-end shadow-xl"}
+                style={isMobile ? {} : { maxHeight: 472 }}
               >
                 <ReactPlayer
                   url={item.token_animation_url}
@@ -356,7 +357,7 @@ class SpotlightItem extends React.Component {
                           ? item.imageRef.current.height
                           : null
                         : null
-                      : "100%"
+                      : 472
                   }
                   playsinline
                   //onReady={this.setSpans}
