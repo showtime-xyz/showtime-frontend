@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import ActivityImages from "../ActivityImages";
 import { ACTIVITY_TYPES } from "../../lib/constants";
 
 export default function Transfer({ act }) {

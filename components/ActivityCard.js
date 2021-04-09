@@ -16,6 +16,7 @@ import AppContext from "../context/app-context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LikeButton from "./LikeButton";
 import ActivityImages from "./ActivityImages";
+import mixpanel from "mixpanel-browser";
 
 export default function ActivityCard({ act, setItemOpenInModal }) {
   const { isMobile } = useContext(AppContext);
@@ -76,7 +77,12 @@ export default function ActivityCard({ act, setItemOpenInModal }) {
           href="/[profile]"
           as={`/${actor?.username || actor?.wallet_address}`}
         >
-          <a className="relative w-max flex-shrink-0">
+          <a
+            className="relative w-max flex-shrink-0"
+            onClick={() => {
+              mixpanel.track("Activity - Click on user profile");
+            }}
+          >
             <img
               src={
                 actor.profile_img_url ||
@@ -108,7 +114,11 @@ export default function ActivityCard({ act, setItemOpenInModal }) {
               href="/[profile]"
               as={`/${actor?.username || actor?.wallet_address}`}
             >
-              <a>
+              <a
+                onClick={() => {
+                  mixpanel.track("Activity - Click on user profile");
+                }}
+              >
                 <div className="mr-2 hover:text-stpink">{actor.name}</div>
               </a>
             </Link>
@@ -118,7 +128,11 @@ export default function ActivityCard({ act, setItemOpenInModal }) {
                 href="/[profile]"
                 as={`/${actor?.username || actor?.wallet_address}`}
               >
-                <a>
+                <a
+                  onClick={() => {
+                    mixpanel.track("Activity - Click on user profile");
+                  }}
+                >
                   <div className="text-gray-500 mr-2">@{actor.username}</div>
                 </a>
               </Link>

@@ -43,6 +43,7 @@ export default function ActivityImage({
       }}
       onClick={() => {
         openModal(index);
+        mixpanel.track("Activity - Click on NFT image, open modal");
       }}
     >
       {nft.token_img_url && (

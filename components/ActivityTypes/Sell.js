@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import ActivityImages from "../ActivityImages";
 
 export default function Sell({ act }) {
   const { nfts } = act;

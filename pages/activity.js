@@ -90,14 +90,15 @@ const Activity = () => {
 
   useEffect(() => {
     if (escPress) {
+      mixpanel.track("Activity - Close NFT Modal - keyboard");
       setItemOpenInModal(null);
     }
     if (rightPress && itemOpenInModal) {
-      mixpanel.track("Next NFT - keyboard");
+      mixpanel.track("Activity - Next NFT - keyboard");
       goToNext();
     }
     if (leftPress && itemOpenInModal) {
-      mixpanel.track("Prior NFT - keyboard");
+      mixpanel.track("Activity - Prior NFT - keyboard");
       goToPrevious();
     }
   }, [escPress, leftPress, rightPress]);

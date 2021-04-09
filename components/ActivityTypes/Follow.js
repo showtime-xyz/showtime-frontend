@@ -1,6 +1,10 @@
 import React from "react";
 import Link from "next/link";
 import UserImageList from "../UserImageList";
+import mixpanel from "mixpanel-browser";
+import { truncateWithEllipses } from "../../lib/utilities";
+
+const TRUNCATE_NAME_LENGTH = 24;
 
 export default function Follow({ act }) {
   const { counterparties } = act;
@@ -17,8 +21,16 @@ export default function Follow({ act }) {
                 counterparties[0]?.username || counterparties[0]?.wallet_address
               }`}
             >
-              <a className="text-black hover:text-stpink">
-                {counterparties[0].name}
+              <a
+                className="text-black hover:text-stpink"
+                onClick={() => {
+                  mixpanel.track("Activity - Clicked on Followed user's name");
+                }}
+              >
+                {truncateWithEllipses(
+                  counterparties[0].name,
+                  TRUNCATE_NAME_LENGTH
+                )}
               </a>
             </Link>
             .
@@ -33,8 +45,16 @@ export default function Follow({ act }) {
                 counterparties[0]?.username || counterparties[0]?.wallet_address
               }`}
             >
-              <a className="text-black hover:text-stpink">
-                {counterparties[0].name}
+              <a
+                className="text-black hover:text-stpink"
+                onClick={() => {
+                  mixpanel.track("Activity - Clicked on Followed user's name");
+                }}
+              >
+                {truncateWithEllipses(
+                  counterparties[0].name,
+                  TRUNCATE_NAME_LENGTH
+                )}
               </a>
             </Link>{" "}
             and{" "}
@@ -44,8 +64,16 @@ export default function Follow({ act }) {
                 counterparties[1]?.username || counterparties[1]?.wallet_address
               }`}
             >
-              <a className="text-black hover:text-stpink">
-                {counterparties[1].name}
+              <a
+                className="text-black hover:text-stpink"
+                onClick={() => {
+                  mixpanel.track("Activity - Clicked on Followed user's name");
+                }}
+              >
+                {truncateWithEllipses(
+                  counterparties[1].name,
+                  TRUNCATE_NAME_LENGTH
+                )}
               </a>
             </Link>
             .
@@ -60,8 +88,16 @@ export default function Follow({ act }) {
                 counterparties[0]?.username || counterparties[0]?.wallet_address
               }`}
             >
-              <a className="text-black hover:text-stpink">
-                {counterparties[0].name}
+              <a
+                className="text-black hover:text-stpink"
+                onClick={() => {
+                  mixpanel.track("Activity - Clicked on Followed user's name");
+                }}
+              >
+                {truncateWithEllipses(
+                  counterparties[0].name,
+                  TRUNCATE_NAME_LENGTH
+                )}
               </a>
             </Link>
             ,{" "}
@@ -71,8 +107,16 @@ export default function Follow({ act }) {
                 counterparties[1]?.username || counterparties[1]?.wallet_address
               }`}
             >
-              <a className="text-black hover:text-stpink">
-                {counterparties[1].name}
+              <a
+                className="text-black hover:text-stpink"
+                onClick={() => {
+                  mixpanel.track("Activity - Clicked on Followed user's name");
+                }}
+              >
+                {truncateWithEllipses(
+                  counterparties[1].name,
+                  TRUNCATE_NAME_LENGTH
+                )}
               </a>
             </Link>{" "}
             and{" "}
@@ -82,8 +126,16 @@ export default function Follow({ act }) {
                 counterparties[2]?.username || counterparties[2]?.wallet_address
               }`}
             >
-              <a className="text-black hover:text-stpink">
-                {counterparties[2].name}
+              <a
+                className="text-black hover:text-stpink"
+                onClick={() => {
+                  mixpanel.track("Activity - Clicked on Followed user's name");
+                }}
+              >
+                {truncateWithEllipses(
+                  counterparties[2].name,
+                  TRUNCATE_NAME_LENGTH
+                )}
               </a>
             </Link>
             .
@@ -98,8 +150,16 @@ export default function Follow({ act }) {
                 counterparties[0]?.username || counterparties[0]?.wallet_address
               }`}
             >
-              <a className="text-black hover:text-stpink">
-                {counterparties[0].name}
+              <a
+                className="text-black hover:text-stpink"
+                onClick={() => {
+                  mixpanel.track("Activity - Clicked on Followed user's name");
+                }}
+              >
+                {truncateWithEllipses(
+                  counterparties[0].name,
+                  TRUNCATE_NAME_LENGTH
+                )}
               </a>
             </Link>
             ,{" "}
@@ -109,8 +169,16 @@ export default function Follow({ act }) {
                 counterparties[1]?.username || counterparties[1]?.wallet_address
               }`}
             >
-              <a className="text-black hover:text-stpink">
-                {counterparties[1].name}
+              <a
+                className="text-black hover:text-stpink"
+                onClick={() => {
+                  mixpanel.track("Activity - Clicked on Followed user's name");
+                }}
+              >
+                {truncateWithEllipses(
+                  counterparties[1].name,
+                  TRUNCATE_NAME_LENGTH
+                )}
               </a>
             </Link>{" "}
             and {count - 2} others.

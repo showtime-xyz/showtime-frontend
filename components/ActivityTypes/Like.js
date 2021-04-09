@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import ActivityImages from "../ActivityImages";
 
 export default function Like({ act }) {
   const { nfts } = act;
