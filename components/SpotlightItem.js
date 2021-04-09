@@ -391,12 +391,12 @@ class SpotlightItem extends React.Component {
                       <div className="loading-card-spinner" />
                     </div>
                   ) : null}
-                  <div className="h-full md:flex md:items-center justify-end">
+                  <div className="h-full md:flex md:items-center justify-end md:m-12">
                     <img
                       className={
                         this.context.isMobile
                           ? "w-full object-cover object-center h-full"
-                          : "w-max object-center h-max max-w-full max-h-full shadow-xl md:m-12"
+                          : "w-max object-center h-max max-w-full max-h-full shadow-xl"
                       }
                       ref={item.imageRef}
                       src={this.getImageUrl()}
