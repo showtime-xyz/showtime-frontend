@@ -48,6 +48,7 @@ const handleDebouncedUsernameLookup = AwesomeDebouncePromise(
 
 export default function Modal({ isOpen, setEditModalOpen }) {
   const router = useRouter();
+  const [submitting, setSubmitting] = useState(false);
   const SHOWTIME_PROD_URL = "tryshowtime.com/";
   const context = useContext(AppContext);
   const [nameValue, setNameValue] = useState(null);
@@ -76,6 +77,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setSubmitting(true);
     mixpanel.track("Save profile edit");
 
     const username = customURLValue ? customURLValue.trim() : null;
@@ -124,7 +126,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
       default_created_sort_id: defaultCreatedSortId,
       default_owned_sort_id: defaultOwnedSortId,
     });
-
+    setSubmitting(false);
     setEditModalOpen(false);
     const wallet_addresses = context.myProfile?.wallet_addresses;
 
@@ -427,10 +429,17 @@ export default function Modal({ isOpen, setEditModalOpen }) {
               <div className="border-t-2 pt-4">
                 <button
                   type="submit"
+                  disabled={submitting}
                   className="showtime-green-button px-4 py-2 float-right rounded-full"
                   style={{ borderColor: "#35bb5b", borderWidth: 2 }}
                 >
-                  Save changes
+                  {submitting ? (
+                    <div className="flex items-center justify-center">
+                      <div className="loading-card-spinner-small" />
+                    </div>
+                  ) : (
+                    "Save changes"
+                  )}
                 </button>
                 <button
                   type="button"
@@ -439,6 +448,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                     setEditModalOpen(false);
                     setNameValue(context.myProfile.name);
                   }}
+                  disabled={submitting}
                 >
                   Cancel
                 </button>
