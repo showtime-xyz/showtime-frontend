@@ -36,6 +36,7 @@ const MiniFollowButton = ({ profileId }) => {
   const context = useContext(AppContext);
   const myFollows = context?.myFollows || [];
   const [isFollowed, setIsFollowed] = useState(false);
+  const [newlyFollowed, setNewlyFollowed] = useState(false);
   //console.log(profileId);
   //console.log(myFollows);
   useEffect(() => {
@@ -49,6 +50,7 @@ const MiniFollowButton = ({ profileId }) => {
   }, [myFollows]);
 
   const handleFollow = async () => {
+    setNewlyFollowed(true);
     setIsFollowed(true);
     // Change myFollows via setMyFollows
     context.setMyFollows([{ profile_id: profileId }, ...context.myFollows]);
@@ -57,6 +59,10 @@ const MiniFollowButton = ({ profileId }) => {
       method: "post",
     });
     mixpanel.track("Followed profile - Card button");
+
+    setTimeout(function () {
+      setNewlyFollowed(false);
+    }, 1000);
   };
 
   const handleUnfollow = async () => {
@@ -102,17 +108,19 @@ const MiniFollowButton = ({ profileId }) => {
               icon={faUserFriends}
               style={{ width: 18, height: 18 }}
             />
-            <span
-              style={{
-                fontSize: 12,
-                opacity: 0.9,
-                width: 170,
-                lineHeight: 1.75,
-              }}
-              className="tooltip-text bg-black p-3 mb-9 -ml-48 rounded text-white"
-            >
-              Following. Click to unfollow.
-            </span>
+            {newlyFollowed ? null : (
+              <span
+                style={{
+                  fontSize: 12,
+                  opacity: 0.9,
+                  width: 170,
+                  lineHeight: 1.75,
+                }}
+                className="tooltip-text bg-black p-3 mb-9 -ml-48 rounded text-white"
+              >
+                Following. Click to unfollow.
+              </span>
+            )}
           </div>
         </PlusIcon>
       )}
