@@ -124,6 +124,7 @@ export default class MyApp extends React.Component {
       this.setMyCommentCounts({});
       this.setMyFollows([]);
       this.setMyRecommendations([]);
+      this.setMyProfile(null);
 
       mixpanel.track("Logout");
     } else {

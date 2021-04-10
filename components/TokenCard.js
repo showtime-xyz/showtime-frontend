@@ -254,9 +254,11 @@ class TokenCard extends React.Component {
                 ) : null}
               </div>
               <div className="flex-grow">&nbsp;</div>
-              {!isMyProfile && item.creator_id && (
-                <MiniFollowButton profileId={item.creator_id} />
-              )}
+
+              {this.context.myProfile?.profile_id !== item.creator_id &&
+                !(isMyProfile && listId !== 3) && (
+                  <MiniFollowButton profileId={item.creator_id} />
+                )}
               <div>
                 {isMyProfile && listId !== 3 ? (
                   <div

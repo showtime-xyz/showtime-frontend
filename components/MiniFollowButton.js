@@ -23,19 +23,21 @@ const Button = styled.button`
 const FollowText = styled.h6`
   font-size: 12px;
   font-weight: 400;
+  color: #888;
 `;
 const PlusIcon = styled.div`
   display: flex;
   align-items: center;
   margin-right: 6px;
+  color: #888;
 `;
 
 const MiniFollowButton = ({ profileId }) => {
   const context = useContext(AppContext);
   const myFollows = context?.myFollows || [];
   const [isFollowed, setIsFollowed] = useState(false);
-  console.log(profileId);
-  console.log(myFollows);
+  //console.log(profileId);
+  //console.log(myFollows);
   useEffect(() => {
     var it_is_followed = false;
     _.forEach(myFollows, (follow) => {
