@@ -193,7 +193,7 @@ const Activity = () => {
 
       <>
         <div className="m-auto relative">
-          <div className="mb-8 mt-36 text-left">
+          <div className="mb-8 mt-16 text-left">
             <h1 className="text-4xl" style={{ fontFamily: "Afronaut" }}>
               News Feed
             </h1>

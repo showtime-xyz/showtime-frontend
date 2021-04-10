@@ -14,6 +14,9 @@ import { formatDistanceToNowStrict } from "date-fns";
 import Link from "next/link";
 import AppContext from "../context/app-context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
+
 import LikeButton from "./LikeButton";
 import ActivityImages from "./ActivityImages";
 import mixpanel from "mixpanel-browser";
@@ -150,7 +153,21 @@ export default function ActivityCard({ act, setItemOpenInModal }) {
               </div>
             </div>
           </div>
-          <div className="flex-grow text-right">***</div>
+          <div className="flex-grow"></div>
+          <div>
+            <div
+              onClick={(e) => {}}
+              className="card-menu-button text-right text-gray-300"
+            >
+              <FontAwesomeIcon
+                style={{
+                  height: 20,
+                  width: 20,
+                }}
+                icon={faEllipsisH}
+              />
+            </div>
+          </div>
         </div>
       </div>
       <>

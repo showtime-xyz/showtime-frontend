@@ -644,7 +644,7 @@ const Profile = ({
           <div>
             <h1
               style={{ wordWrap: "break-word" }}
-              className={`text-6xl text-left mt-32  ${
+              className={`text-6xl text-left mt-24  ${
                 (wallet_addresses_excluding_email.length === 0 ||
                   context.columns === 1) &&
                 !username

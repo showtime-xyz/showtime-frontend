@@ -19,7 +19,14 @@ const Header = () => {
           />
         </>
       ) : null}
-      <header className="p-4 fixed bg-white w-full z-10  shadow-md">
+      <header
+        className="p-4 bg-white w-full  shadow-md"
+        style={{
+          zIndex: 1,
+          position: "sticky",
+          top: 0,
+        }}
+      >
         <div className="flex flex-row items-center max-w-screen-2xl mx-auto sm:px-16 ">
           <div>
             <Link href="/">
