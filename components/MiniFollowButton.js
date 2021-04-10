@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import mixpanel from "mixpanel-browser";
 import AppContext from "../context/app-context";
 
@@ -10,11 +10,11 @@ const Button = styled.button`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  border-radius: 24px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  //border-radius: 24px;
+  //border: 1px solid rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
-  border-radius: 41px;
-  padding: 4px 10px;
+  //border-radius: 41px;
+  //padding: 4px 10px;
   &:hover {
     opacity: 0.7;
   }
@@ -88,12 +88,34 @@ const MiniFollowButton = ({ profileId }) => {
       }
       isFollowed={isFollowed}
     >
-      {!isFollowed && (
+      {!isFollowed ? (
+        <>
+          {/*<PlusIcon>
+            <FontAwesomeIcon icon={faPlus} style={{ width: 12, height: 12 }} />
+          </PlusIcon>*/}
+          <FollowText>Follow</FollowText>
+        </>
+      ) : (
         <PlusIcon>
-          <FontAwesomeIcon icon={faPlus} style={{ width: 12, height: 12 }} />
+          <div className="tooltip">
+            <FontAwesomeIcon
+              icon={faUserFriends}
+              style={{ width: 18, height: 18 }}
+            />
+            <span
+              style={{
+                fontSize: 12,
+                opacity: 0.9,
+                width: 170,
+                lineHeight: 1.75,
+              }}
+              className="tooltip-text bg-black p-3 mb-9 -ml-48 rounded text-white"
+            >
+              Following. Click to unfollow.
+            </span>
+          </div>
         </PlusIcon>
       )}
-      <FollowText>{isFollowed ? "Following" : "Follow"}</FollowText>
     </Button>
   );
 };
