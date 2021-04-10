@@ -3,6 +3,7 @@ import AppContext from "../context/app-context";
 import RecommendedFollowItem from "./RecommendedFollowItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import mixpanel from "mixpanel-browser";
 
 export default function ActivityRecommendedFollows() {
   const context = useContext(AppContext);
@@ -49,21 +50,26 @@ export default function ActivityRecommendedFollows() {
 
   const [followAllClicked, setFollowAllClicked] = useState(false);
   const handleFollowAll = async () => {
-    setFollowAllClicked(true);
+    if (context.user && context.myProfile !== undefined) {
+      setFollowAllClicked(true);
 
-    const newProfiles = recommendedFollows.filter(
-      (item) =>
-        !context.myFollows.map((f) => f.profile_id).includes(item.profile_id)
-    );
+      const newProfiles = recommendedFollows.filter(
+        (item) =>
+          !context.myFollows.map((f) => f.profile_id).includes(item.profile_id)
+      );
 
-    // UPDATE CONTEXT
-    context.setMyFollows([...newProfiles, ...context.myFollows]);
+      // UPDATE CONTEXT
+      context.setMyFollows([...newProfiles, ...context.myFollows]);
 
-    // Post changes to the API
-    await fetch(`/api/bulkfollow`, {
-      method: "post",
-      body: JSON.stringify(newProfiles.map((item) => item.profile_id)),
-    });
+      // Post changes to the API
+      await fetch(`/api/bulkfollow`, {
+        method: "post",
+        body: JSON.stringify(newProfiles.map((item) => item.profile_id)),
+      });
+    } else {
+      mixpanel.track("Follow but logged out");
+      context.setLoginModalOpen(true);
+    }
   };
 
   return (

@@ -6,11 +6,16 @@ export default async (req, res) => {
   const recache = body.recache || false;
 
   try {
-    const user = await Iron.unseal(
-      CookieService.getAuthToken(req.cookies),
-      process.env.ENCRYPTION_SECRET_V2,
-      Iron.defaults
-    );
+    let publicAddress;
+
+    try {
+      const user = await Iron.unseal(
+        CookieService.getAuthToken(req.cookies),
+        process.env.ENCRYPTION_SECRET_V2,
+        Iron.defaults
+      );
+      publicAddress = user.publicAddress;
+    } catch {}
 
     await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/get_follow_suggestions${
@@ -19,7 +24,7 @@ export default async (req, res) => {
       {
         method: "POST",
         headers: {
-          "X-Authenticated-User": user.publicAddress,
+          "X-Authenticated-User": publicAddress,
           "X-API-Key": process.env.SHOWTIME_FRONTEND_API_KEY_V2,
         },
       }

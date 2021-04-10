@@ -64,10 +64,12 @@ const Activity = () => {
     setIsLoading(false);
   };
   useEffect(() => {
+    setActivity([]);
     getActivity();
-  }, []);
+  }, [context.user]);
 
   const getNext = () => {
+    console.log("getnext");
     activityPage.current = activityPage.current + 1;
     getActivity();
   };
@@ -78,17 +80,21 @@ const Activity = () => {
   };
 
   const goToNext = () => {
-    setItemOpenInModal({
-      nftGroup: itemOpenInModal?.nftGroup,
-      index: itemOpenInModal?.index + 1,
-    });
+    if (itemOpenInModal?.index < itemOpenInModal?.nftGroup.length - 1) {
+      setItemOpenInModal({
+        nftGroup: itemOpenInModal?.nftGroup,
+        index: itemOpenInModal?.index + 1,
+      });
+    }
   };
 
   const goToPrevious = () => {
-    setItemOpenInModal({
-      nftGroup: itemOpenInModal?.nftGroup,
-      index: itemOpenInModal?.index - 1,
-    });
+    if (itemOpenInModal?.index - 1 >= 0) {
+      setItemOpenInModal({
+        nftGroup: itemOpenInModal?.nftGroup,
+        index: itemOpenInModal?.index - 1,
+      });
+    }
   };
 
   const leftPress = useKeyPress("ArrowLeft");
@@ -110,10 +116,12 @@ const Activity = () => {
     }
   }, [escPress, leftPress, rightPress]);
 
+  /*
   const handleOpenModal = (index) => {
     setItemOpenInModal({ nftGroup: spotlightItems, index });
   };
 
+  
   const [spotlightItems, setSpotlightItems] = useState([]);
 
   const getSpotlight = async () => {
@@ -131,6 +139,7 @@ const Activity = () => {
     //getHero();
     getSpotlight();
   }, []);
+  */
 
   return (
     <Layout>
@@ -226,7 +235,19 @@ const Activity = () => {
                 hasMore={hasMoreScrolling}
                 endMessage={
                   <div className="flex flex-1 items-center justify-center my-4">
-                    <div className="text-gray-400">No more activity.</div>
+                    {context.user ? (
+                      <div className="text-gray-400">No more activity.</div>
+                    ) : (
+                      <div className="text-gray-400">
+                        <span
+                          className="cursor-pointer text-gray-800 hover:text-stpink"
+                          onClick={() => context.setLoginModalOpen(true)}
+                        >
+                          Sign in
+                        </span>{" "}
+                        to view more & customize
+                      </div>
+                    )}
                   </div>
                 }
                 scrollThreshold={0.5}
