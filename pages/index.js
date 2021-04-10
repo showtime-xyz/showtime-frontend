@@ -16,6 +16,12 @@ import {
   faHeart,
   faUser,
 } from "@fortawesome/free-regular-svg-icons";
+import {
+  faComment as fasComment,
+  faHeart as fasHeart,
+  fas,
+  faUser as fasUser,
+} from "@fortawesome/free-solid-svg-icons";
 import { faFingerprint } from "@fortawesome/free-solid-svg-icons";
 
 const ACTIVITY_PAGE_LENGTH = 5; // 5 activity items per activity page
@@ -215,7 +221,7 @@ const Activity = () => {
       <>
         <div className="m-auto relative">
           <div className="mb-8 mt-16 text-left">
-            <h1 className="text-4xl" style={{ fontFamily: "Afronaut" }}>
+            <h1 className="text-5xl" style={{ fontFamily: "Afronaut" }}>
               News Feed
             </h1>
           </div>
@@ -257,7 +263,10 @@ const Activity = () => {
                     activityTypeFilter === 1 ? "text-pink-500" : "text-gray-500"
                   } hover:text-pink-500 cursor-pointer flex flex-row items-center`}
                 >
-                  <FontAwesomeIcon icon={faHeart} className="mr-2 w-4 h-4" />
+                  <FontAwesomeIcon
+                    icon={activityTypeFilter === 1 ? fasHeart : faHeart}
+                    className="mr-2 w-4 h-4"
+                  />
                   <div>Likes</div>
                 </div>
                 <div
@@ -268,7 +277,10 @@ const Activity = () => {
                     activityTypeFilter === 2 ? "text-blue-500" : "text-gray-500"
                   } hover:text-blue-500 cursor-pointer flex flex-row items-center`}
                 >
-                  <FontAwesomeIcon icon={faComment} className="mr-2 w-4 h-4" />
+                  <FontAwesomeIcon
+                    icon={activityTypeFilter === 2 ? fasComment : faComment}
+                    className="mr-2 w-4 h-4"
+                  />
                   <div>Comments</div>
                 </div>
                 <div
@@ -281,7 +293,10 @@ const Activity = () => {
                       : "text-gray-500"
                   } hover:text-green-600 cursor-pointer flex flex-row items-center`}
                 >
-                  <FontAwesomeIcon icon={faUser} className="mr-2 w-4 h-4" />
+                  <FontAwesomeIcon
+                    icon={activityTypeFilter === 4 ? fasUser : faUser}
+                    className="mr-2 w-4 h-4"
+                  />
                   <div>Follows</div>
                 </div>
               </div>
@@ -311,7 +326,9 @@ const Activity = () => {
                 endMessage={
                   <div className="flex flex-1 items-center justify-center my-4">
                     {context.user ? (
-                      <div className="text-gray-400">No more activity.</div>
+                      <div className="text-gray-400">
+                        No more activity. Follow more people.
+                      </div>
                     ) : (
                       <div className="text-gray-400 shadow-md bg-white rounded-lg w-full px-4 py-6 mx-4 text-center">
                         <span

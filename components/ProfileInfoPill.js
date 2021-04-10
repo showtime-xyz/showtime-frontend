@@ -135,27 +135,8 @@ export default function ProfileInfoPill({
     <>
       <div className="pt-4 flex sm:hidden justify-center">{actionButton()}</div>
       <div
-        className={` shadow-lg px-6 relative py-4 rounded-xl  bg-white md:w-max flex flex-row justify-center items-center sm:items-stretch mt-8 mb-4 ${
-          context.isMobile ? null : "hover:shadow-xl"
-        }`}
-        style={{
-          // boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
-
-          transition: "box-shadow 0.3s ease-in-out",
-        }}
+        className={` shadow-lg px-6 relative py-4 rounded-xl  bg-white md:w-max flex flex-row justify-center items-center sm:items-stretch mt-8 mb-4`}
       >
-        <div
-          className={`w-14 h-14 flex items-center justify-center rounded-full my-2 md:my-0 ${
-            isMyProfile ? "cursor-pointer hover:opacity-60 transition" : ""
-          }`}
-          onClick={isMyProfile ? onClickPhoto : null}
-        >
-          <img
-            src={profileImageUrl}
-            className="w-full h-full overflow-hidden rounded-full"
-          />
-        </div>
-        <GraySeparator />
         <div
           className="flex flex-col justify-center my-2 md:my-0 items-center md:items-start cursor-pointer hover:opacity-60 transition"
           onClick={showFollowing}

@@ -20,7 +20,7 @@ const Header = () => {
         </>
       ) : null}
       <header
-        className="p-4 bg-white w-full  shadow-md"
+        className="p-2 bg-white w-full  shadow-md"
         style={{
           zIndex: 1,
           position: "sticky",

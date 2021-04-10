@@ -58,7 +58,7 @@ const TokenDetailBody = ({
 
   const getBiggerImageUrl = (img_url) => {
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
-      img_url = img_url.split("=")[0] + "=h500";
+      img_url = img_url.split("=")[0] + "=h1000";
     }
     return img_url;
   };
