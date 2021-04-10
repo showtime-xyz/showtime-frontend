@@ -18,6 +18,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 
 import LikeButton from "./LikeButton";
+import CommentButton from "./CommentButton";
 import ActivityImages from "./ActivityImages";
 import mixpanel from "mixpanel-browser";
 
@@ -194,8 +195,19 @@ export default function ActivityCard({ act, setItemOpenInModal }) {
               <ActivityImages nfts={nfts} openModal={handleOpenModal} />
             </div>
             {single ? (
-              <div className="py-1 mt-2 w-max  px-6 ">
-                <LikeButton item={nfts[0]} />
+              <div className="flex items-center pt-2 ml-3">
+                <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
+                  <LikeButton item={nfts[0]} />
+                </div>
+
+                <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
+                  <CommentButton
+                    item={nfts[0]}
+                    handleComment={() => {
+                      setItemOpenInModal({ nftGroup: nfts, index: 0 });
+                    }}
+                  />
+                </div>
               </div>
             ) : null}
           </>

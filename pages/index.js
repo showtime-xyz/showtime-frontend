@@ -9,7 +9,7 @@ import useKeyPress from "../hooks/useKeyPress";
 import ActivityFeed from "../components/ActivityFeed";
 import ModalTokenDetail from "../components/ModalTokenDetail";
 import ActivityRecommendedFollows from "../components/ActivityRecommendedFollows";
-import backend from "../lib/backend";
+//import backend from "../lib/backend";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faComment,
@@ -30,48 +30,58 @@ const Activity = () => {
   useEffect(() => {
     // Wait for identity to resolve before recording the view
     if (typeof context.user !== "undefined") {
-      mixpanel.track("Leaderboard page view");
+      mixpanel.track("Home page view");
     }
   }, [typeof context.user]);
 
   const [activity, setActivity] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const activityPage = useRef(1);
+  const [activityPage, setActivityPage] = useState(1);
   const [hasMoreScrolling, setHasMoreScrolling] = useState(true);
+  const [activityTypeFilter, setActivityTypeFilter] = useState(0);
 
-  const getActivity = async () => {
+  const getActivity = async (type_id, page) => {
     setIsLoading(true);
     const result = await fetch(`/api/getactivity`, {
       method: "POST",
       body: JSON.stringify({
-        page: activityPage.current,
+        page: page,
+        activityTypeId: type_id,
       }),
     });
     const resultJson = await result.json();
     const { data } = resultJson;
+
     if (_.isEmpty(data) || data.length < ACTIVITY_PAGE_LENGTH) {
       setHasMoreScrolling(false);
     }
 
-    // filter out possible repeats
-    let filteredData = [];
-    await data.forEach((newItem) => {
-      if (!activity.find((actItem) => actItem.id === newItem.id)) {
-        filteredData.push(newItem);
-      }
-    });
-    setActivity([...activity, ...filteredData]);
+    if (page == 1) {
+      setActivity(data);
+    } else {
+      // filter out possible repeats
+      let filteredData = [];
+      await data.forEach((newItem) => {
+        if (!activity.find((actItem) => actItem.id === newItem.id)) {
+          filteredData.push(newItem);
+        }
+      });
+      setActivity([...activity, ...filteredData]);
+    }
+
     setIsLoading(false);
   };
   useEffect(() => {
     setHasMoreScrolling(true);
     setActivity([]);
-    getActivity();
-  }, [context.user]);
+    setActivityPage(1);
+    getActivity(activityTypeFilter, 1);
+  }, [context.user, activityTypeFilter]);
 
   const getNext = () => {
-    activityPage.current = activityPage.current + 1;
-    getActivity();
+    setHasMoreScrolling(true);
+    getActivity(activityTypeFilter, activityPage + 1);
+    setActivityPage(activityPage + 1);
   };
 
   const [itemOpenInModal, setItemOpenInModal] = useState(null);
@@ -141,6 +151,17 @@ const Activity = () => {
   }, []);
   */
 
+  const handleFilterClick = (typeId) => {
+    if (activityTypeFilter != typeId) {
+      window.scroll({ top: 0, behavior: "smooth" });
+      setActivity([]);
+      setActivityTypeFilter(typeId);
+    }
+
+    //setActivityPage(1);
+    //setHasMoreScrolling(true);
+  };
+
   return (
     <Layout>
       <Head>
@@ -202,25 +223,64 @@ const Activity = () => {
           <div className="grid grid-cols-4 gap-4">
             <div>
               <div className="px-4 py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
-                <div className="hover:bg-blue-100 p-2 rounded-lg px-3 text-blue-500 cursor-pointer">
+                <div
+                  onClick={() => {
+                    handleFilterClick(0);
+                  }}
+                  className={`hover:bg-blue-100 p-2 rounded-lg px-3 ${
+                    activityTypeFilter === 0 ? "text-blue-500" : "text-gray-500"
+                  }  cursor-pointer`}
+                >
                   All News
                 </div>
-                <div className="hover:bg-purple-100 p-2 rounded-lg px-3 text-gray-500 hover:text-purple-500 cursor-pointer flex flex-row items-center">
+                <div
+                  onClick={() => {
+                    handleFilterClick(3);
+                  }}
+                  className={`hover:bg-purple-100 p-2 rounded-lg px-3 ${
+                    activityTypeFilter === 3
+                      ? "text-purple-500"
+                      : "text-gray-500"
+                  } hover:text-purple-500 cursor-pointer flex flex-row items-center`}
+                >
                   <FontAwesomeIcon
                     icon={faFingerprint}
                     className="mr-2 w-4 h-4"
                   />
                   <div>Creations</div>
                 </div>
-                <div className="hover:bg-pink-100 p-2 rounded-lg px-3 text-gray-500 hover:text-pink-500 cursor-pointer flex flex-row items-center">
+                <div
+                  onClick={() => {
+                    handleFilterClick(1);
+                  }}
+                  className={`hover:bg-pink-100 p-2 rounded-lg px-3 ${
+                    activityTypeFilter === 1 ? "text-pink-500" : "text-gray-500"
+                  } hover:text-pink-500 cursor-pointer flex flex-row items-center`}
+                >
                   <FontAwesomeIcon icon={faHeart} className="mr-2 w-4 h-4" />
                   <div>Likes</div>
                 </div>
-                <div className="hover:bg-blue-100 p-2 rounded-lg px-3 text-gray-500 hover:text-blue-500 cursor-pointer flex flex-row items-center">
+                <div
+                  onClick={() => {
+                    handleFilterClick(2);
+                  }}
+                  className={`hover:bg-blue-100 p-2 rounded-lg px-3 ${
+                    activityTypeFilter === 2 ? "text-blue-500" : "text-gray-500"
+                  } hover:text-blue-500 cursor-pointer flex flex-row items-center`}
+                >
                   <FontAwesomeIcon icon={faComment} className="mr-2 w-4 h-4" />
                   <div>Comments</div>
                 </div>
-                <div className="hover:bg-green-100 p-2 rounded-lg px-3 text-gray-500 hover:text-green-600 cursor-pointer flex flex-row items-center">
+                <div
+                  onClick={() => {
+                    handleFilterClick(4);
+                  }}
+                  className={`hover:bg-green-100 p-2 rounded-lg px-3 ${
+                    activityTypeFilter === 4
+                      ? "text-green-500"
+                      : "text-gray-500"
+                  } hover:text-green-600 cursor-pointer flex flex-row items-center`}
+                >
                   <FontAwesomeIcon icon={faUser} className="mr-2 w-4 h-4" />
                   <div>Follows</div>
                 </div>
@@ -229,7 +289,7 @@ const Activity = () => {
             <div className="col-span-2">
               <div className="" />
 
-              {context.user ? null : (
+              {context.user === undefined ? null : context.user === null ? (
                 <div className="flex flex-1 items-center justify-center mb-6">
                   <div className="text-gray-400 shadow-md bg-white rounded-lg w-full px-4 py-6 mx-4 text-center">
                     News feed preview 👇 Please{" "}
@@ -239,10 +299,10 @@ const Activity = () => {
                     >
                       sign in
                     </span>{" "}
-                    to view & follow people
+                    to view & follow
                   </div>
                 </div>
-              )}
+              ) : null}
 
               <InfiniteScroll
                 dataLength={activity.length}
@@ -260,7 +320,7 @@ const Activity = () => {
                         >
                           Sign in
                         </span>{" "}
-                        to view & follow people
+                        to view & follow
                       </div>
                     )}
                   </div>
@@ -268,8 +328,9 @@ const Activity = () => {
                 scrollThreshold={0.5}
               >
                 <ActivityFeed
-                  activity={[...activity]}
+                  activity={activity}
                   setItemOpenInModal={handleSetItemOpenInModal}
+                  key={activityTypeFilter}
                 />
               </InfiniteScroll>
               <div className="flex h-16 items-center justify-center mt-6">
