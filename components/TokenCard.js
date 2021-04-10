@@ -132,9 +132,9 @@ class TokenCard extends React.Component {
 
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
       if (token_aspect_ratio && token_aspect_ratio > 1) {
-        img_url = img_url.split("=")[0] + "=h375";
+        img_url = img_url.split("=")[0] + "=h660";
       } else {
-        img_url = img_url.split("=")[0] + "=w375";
+        img_url = img_url.split("=")[0] + "=w660";
       }
     }
     return img_url;

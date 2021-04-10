@@ -73,7 +73,7 @@ class SpotlightItem extends React.Component {
     return img_url;
   };
 
-  max_description_length = 160;
+  max_description_length = 180;
   aspect_ratio_cutoff = 1.6;
 
   getBackgroundColor = (item) => {
@@ -331,18 +331,18 @@ class SpotlightItem extends React.Component {
             </div>
           </div>
           <div
-            className={`flex-1  text-left
+            className={`flex-1  text-left pr-6
           
           ${
             item.token_aspect_ratio &&
             Number(item.token_aspect_ratio) > this.aspect_ratio_cutoff
               ? "pl-6"
-              : "pt-6 pr-6 pb-6"
+              : "pt-6 "
           }
           
           `}
           >
-            <div>
+            <div class="flex flex-col h-full">
               {this.props.item.token_aspect_ratio &&
               Number(this.props.item.token_aspect_ratio) >
                 this.aspect_ratio_cutoff ? null : (
@@ -350,280 +350,221 @@ class SpotlightItem extends React.Component {
                   <FontAwesomeIcon icon={faStar} /> Spotlight{" "}
                 </div>
               )}
-              <div>
-                <div className="">
-                  <div
-                    onClick={() => {
-                      mixpanel.track("Open NFT modal");
+
+              <div className="flex flex-row">
+                <div
+                  onClick={() => {
+                    mixpanel.track("Open NFT modal");
+                    this.setState({
+                      currentlyOpenModal: true,
+                      muted: true,
+                      currentlyPlayingVideo: false,
+                    });
+                  }}
+                  className="mb-4 text-4xl hover:text-stpink"
+                  style={{
+                    overflowWrap: "break-word",
+                    wordWrap: "break-word",
+
+                    cursor: "pointer",
+                  }}
+                >
+                  {item.token_name}
+                </div>
+                <div className="flex-grow"></div>
+              </div>
+
+              {item.token_description ? (
+                <div
+                  style={{
+                    overflowWrap: "break-word",
+                    wordWrap: "break-word",
+                  }}
+                  className="pb-2 pb-4 text-gray-500"
+                >
+                  <div>
+                    {item.token_description?.length >
+                      this.max_description_length && !this.state.moreShown ? (
+                      <>
+                        {this.truncateWithEllipses(
+                          this.removeTags(item.token_description),
+                          this.max_description_length
+                        )}{" "}
+                        <a
+                          onClick={() => {
+                            this.setState({ moreShown: true });
+                          }}
+                          className="text-gray-900 hover:text-gray-500 cursor-pointer"
+                        >
+                          {" "}
+                          more
+                        </a>
+                      </>
+                    ) : (
+                      <div>{this.removeTags(item.token_description)}</div>
+                    )}
+                  </div>
+                </div>
+              ) : null}
+              <div className="flex items-center">
+                <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
+                  <LikeButton item={item} />
+                </div>
+                <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
+                  <CommentButton
+                    item={item}
+                    handleComment={() => {
+                      mixpanel.track("Open NFT modal via comment button");
                       this.setState({
                         currentlyOpenModal: true,
                         muted: true,
                         currentlyPlayingVideo: false,
                       });
                     }}
-                    className="showtime-card-title md:mb-2"
-                    style={{
-                      overflowWrap: "break-word",
-                      wordWrap: "break-word",
-                      fontSize: 36,
-                      cursor: "pointer",
-                    }}
-                  >
-                    {item.token_name}
-                  </div>
-                  {item.token_description ? (
-                    <div
-                      style={{
-                        fontSize: 16,
-                        overflowWrap: "break-word",
-                        wordWrap: "break-word",
-                        display: "block",
-                      }}
-                      className="pb-2 md:pb-4 text-gray-500"
-                    >
-                      <div>
-                        {item.token_description?.length >
-                          this.max_description_length &&
-                        !this.state.moreShown ? (
-                          <>
-                            {this.truncateWithEllipses(
-                              this.removeTags(item.token_description),
-                              this.max_description_length
-                            )}{" "}
-                            <a
-                              onClick={() => {
-                                this.setState({ moreShown: true });
-                              }}
-                              style={{ color: "#111", cursor: "pointer" }}
-                            >
-                              {" "}
-                              more
-                            </a>
-                          </>
-                        ) : (
-                          <div>{this.removeTags(item.token_description)}</div>
-                        )}
-                      </div>
-                    </div>
-                  ) : null}
-                  <div className="flex items-center">
-                    <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
-                      <LikeButton item={item} />
-                    </div>
-                    <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
-                      <CommentButton
-                        item={item}
-                        handleComment={() => {
-                          mixpanel.track("Open NFT modal via comment button");
-                          this.setState({
-                            currentlyOpenModal: true,
-                            muted: true,
-                            currentlyPlayingVideo: false,
-                          });
-                        }}
-                      />
-                    </div>
-                    <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
-                      <ShareButton
-                        url={
-                          window.location.protocol +
-                          "//" +
-                          window.location.hostname +
-                          (window.location.port
-                            ? ":" + window.location.port
-                            : "") +
-                          `/t/${item.contract_address}/${item.token_id}`
-                        }
-                        type={"item"}
-                      />
-                    </div>
-                  </div>
+                  />
                 </div>
-              </div>
-              <div className="flex flex-col items-start">
-                <div className="flex w-full">
-                  <div className="flex flex-row mt-12 w-full ">
-                    {item.contract_is_creator ? (
-                      <div className="flex-col flex-1">
-                        <div
-                          className="flex-shrink pr-2"
-                          style={{
-                            fontWeight: 400,
-                            fontSize: 14,
-                            color: "#888",
-                          }}
-                        >
-                          Created by
-                        </div>
-                        <div className="flex-shrink">
-                          <Link
-                            href="/c/[collection]"
-                            as={`/c/${item.collection_slug}`}
-                          >
-                            <a className="flex flex-row items-center pt-1">
-                              <div style={{ width: 30 }}>
-                                <img
-                                  alt={item.collection_name}
-                                  src={
-                                    item.collection_img_url
-                                      ? item.collection_img_url
-                                      : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                                  }
-                                  className="rounded-full"
-                                  style={{
-                                    height: isMobile ? 24 : 30,
-                                    width: isMobile ? 24 : 30,
-                                  }}
-                                />
-                              </div>
-                              <div className="showtime-card-profile-link mx-2 md:text-lg">
-                                {this.truncateWithEllipses(
-                                  item.collection_name + " Collection",
-                                  25
-                                )}{" "}
-                              </div>
-                            </a>
-                          </Link>
-                        </div>
-                      </div>
-                    ) : item.creator_id ? (
-                      <div className="flex-col flex-1">
-                        <div
-                          className="flex-shrink pr-2"
-                          style={{
-                            fontWeight: 400,
-                            fontSize: 14,
-                            color: "#888",
-                          }}
-                        >
-                          {item.owner_id == item.creator_id
-                            ? "Created & Owned By"
-                            : "Created by"}
-                        </div>
-                        <div className="flex-shrink">
-                          <Link
-                            href="/[profile]"
-                            as={`/${
-                              item?.creator_username || item.creator_address
-                            }`}
-                          >
-                            <a className="flex flex-row items-center pt-1">
-                              <div>
-                                <img
-                                  alt={item.creator_name}
-                                  src={
-                                    item.creator_img_url
-                                      ? item.creator_img_url
-                                      : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                                  }
-                                  className="rounded-full"
-                                  style={{
-                                    height: isMobile ? 24 : 30,
-                                    width: isMobile ? 24 : 30,
-                                  }}
-                                />
-                              </div>
-                              <div className="showtime-card-profile-link ml-2 md:text-lg">
-                                {this.truncateWithEllipses(
-                                  item.creator_name,
-                                  30
-                                )}
-                              </div>
-                            </a>
-                          </Link>
-                        </div>
-                      </div>
-                    ) : null}
-                    {item.owner_id &&
-                    (item.owner_id != item.creator_id ||
-                      item.contract_is_creator) ? (
-                      <div className="flex-1">
-                        <div
-                          className="flex-shrink pr-2"
-                          style={{
-                            fontWeight: 400,
-                            fontSize: 14,
-                            color: "#888",
-                          }}
-                        >
-                          Owned by
-                        </div>
-                        <div className="md:text-lg">
-                          {item.multiple_owners ? (
-                            <span style={{ color: "#888" }}>
-                              Multiple owners
-                            </span>
-                          ) : item.owner_id ? (
-                            <Link
-                              href="/[profile]"
-                              as={`/${
-                                item?.owner_username || item.owner_address
-                              }`}
-                            >
-                              <a className="flex flex-row items-center pt-1">
-                                <div>
-                                  <img
-                                    alt={item.owner_name}
-                                    src={
-                                      item.owner_img_url
-                                        ? item.owner_img_url
-                                        : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                                    }
-                                    className="rounded-full mr-2 "
-                                    style={{
-                                      height: 30,
-                                      width: 30,
-                                    }}
-                                  />
-                                </div>
-                                <div className="showtime-card-profile-link">
-                                  {this.truncateWithEllipses(
-                                    item.owner_name,
-                                    22
-                                  )}
-                                </div>
-                              </a>
-                            </Link>
-                          ) : null}
-                        </div>
-                      </div>
-                    ) : null}
-                  </div>
+                <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
+                  <ShareButton
+                    url={
+                      window.location.protocol +
+                      "//" +
+                      window.location.hostname +
+                      (window.location.port ? ":" + window.location.port : "") +
+                      `/t/${item.contract_address}/${item.token_id}`
+                    }
+                    type={"item"}
+                  />
                 </div>
-                <div
-                  style={{ fontSize: 16, fontWeight: 400 }}
-                  className={
-                    isMobile
-                      ? "flex items-center justify-center  w-full"
-                      : "flex items-center justify-start w-full"
-                  }
+
+                <a
+                  href={getBidLink(item)}
+                  title={`Buy on ${getContractName(item)}`}
+                  target="_blank"
+                  onClick={() => {
+                    mixpanel.track("OpenSea link click");
+                  }}
                 >
-                  <div className="mt-6 mt-16 mb-0 ">
-                    <a
-                      href={getBidLink(item)}
-                      title={`Buy on ${getContractName(item)}`}
-                      target="_blank"
-                      onClick={() => {
-                        mixpanel.track("OpenSea link click");
-                      }}
-                    >
-                      <div className="flex items-center bg-stpink text-white px-4 py-2 sm:px-6 sm:py-3 rounded-full border-2 border-stpink hover:text-stpink hover:bg-white transition shadow-lg">
-                        <div className="mr-2">
-                          Bid on {getContractName(item)}
-                        </div>
-                        <div>
-                          <FontAwesomeIcon
-                            style={{
-                              height: 16,
-                              width: 16,
-                            }}
-                            icon={faArrowRight}
-                          />
-                        </div>
-                      </div>
-                    </a>
+                  <div className="text-base font-normal px-4 py-3 mr-2 rounded-full shadow-md hover:text-stpink">
+                    {`Bid on ${getContractName(item)}`}
                   </div>
-                </div>
+                </a>
+              </div>
+              <div className="flex-grow"></div>
+              <div className="flex flex-row pt-4 mt-16 w-full border-t border-gray-200 mb-6">
+                {item.contract_is_creator ? (
+                  <div className="flex-col flex-1">
+                    <div className="flex-shrink pr-2 text-sm text-gray-500">
+                      Created by
+                    </div>
+                    <div className="flex-shrink">
+                      <Link
+                        href="/c/[collection]"
+                        as={`/c/${item.collection_slug}`}
+                      >
+                        <a className="flex flex-row items-center">
+                          <div style={{ width: 30 }}>
+                            <img
+                              alt={item.collection_name}
+                              src={
+                                item.collection_img_url
+                                  ? item.collection_img_url
+                                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                              }
+                              className="rounded-full"
+                              style={{
+                                height: 30,
+                                width: 30,
+                              }}
+                            />
+                          </div>
+                          <div className="showtime-card-profile-link mx-2 md:text-lg">
+                            {this.truncateWithEllipses(
+                              item.collection_name + " Collection",
+                              25
+                            )}{" "}
+                          </div>
+                        </a>
+                      </Link>
+                    </div>
+                  </div>
+                ) : item.creator_id ? (
+                  <div className="flex-col flex-1">
+                    <div className="flex-shrink pr-2  text-sm text-gray-500">
+                      {item.owner_id == item.creator_id
+                        ? "Created & Owned By"
+                        : "Created by"}
+                    </div>
+                    <div className="flex-shrink">
+                      <Link
+                        href="/[profile]"
+                        as={`/${
+                          item?.creator_username || item.creator_address
+                        }`}
+                      >
+                        <a className="flex flex-row items-center">
+                          <div>
+                            <img
+                              alt={item.creator_name}
+                              src={
+                                item.creator_img_url
+                                  ? item.creator_img_url
+                                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                              }
+                              className="rounded-full"
+                              style={{
+                                height: 30,
+                                width: 30,
+                              }}
+                            />
+                          </div>
+                          <div className="showtime-card-profile-link ml-2 md:text-lg">
+                            {this.truncateWithEllipses(item.creator_name, 30)}
+                          </div>
+                        </a>
+                      </Link>
+                    </div>
+                  </div>
+                ) : null}
+                {item.owner_id &&
+                (item.owner_id != item.creator_id ||
+                  item.contract_is_creator) ? (
+                  <div className="flex-1">
+                    <div className="flex-shrink pr-2  text-sm text-gray-500">
+                      Owned by
+                    </div>
+                    <div className="text-lg">
+                      {item.multiple_owners ? (
+                        <span style={{ color: "#888" }}>Multiple owners</span>
+                      ) : item.owner_id ? (
+                        <Link
+                          href="/[profile]"
+                          as={`/${item?.owner_username || item.owner_address}`}
+                        >
+                          <a className="flex flex-row items-center">
+                            <div>
+                              <img
+                                alt={item.owner_name}
+                                src={
+                                  item.owner_img_url
+                                    ? item.owner_img_url
+                                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                                }
+                                className="rounded-full mr-2 "
+                                style={{
+                                  height: 30,
+                                  width: 30,
+                                }}
+                              />
+                            </div>
+                            <div className="showtime-card-profile-link">
+                              {this.truncateWithEllipses(item.owner_name, 22)}
+                            </div>
+                          </a>
+                        </Link>
+                      ) : null}
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>

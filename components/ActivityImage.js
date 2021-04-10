@@ -22,9 +22,9 @@ export default function ActivityImage({
   const getImageUrl = (img_url, token_aspect_ratio) => {
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
       if (token_aspect_ratio && token_aspect_ratio > 1) {
-        img_url = img_url.split("=")[0] + "=h375";
+        img_url = img_url.split("=")[0] + "=h660";
       } else {
-        img_url = img_url.split("=")[0] + "=w375";
+        img_url = img_url.split("=")[0] + "=w660";
       }
     }
     return img_url;
@@ -33,9 +33,9 @@ export default function ActivityImage({
   const getImageUrlLarge = (img_url, token_aspect_ratio) => {
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
       if (token_aspect_ratio && token_aspect_ratio > 1) {
-        img_url = img_url.split("=")[0] + "=h662";
+        img_url = img_url.split("=")[0] + "=h1328";
       } else {
-        img_url = img_url.split("=")[0] + "=w662";
+        img_url = img_url.split("=")[0] + "=w1328";
       }
     }
     return img_url;

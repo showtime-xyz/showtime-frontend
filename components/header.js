@@ -109,7 +109,7 @@ const Header = () => {
               </a>
             </Link>
             {context.user && context.myProfile !== undefined && (
-              <div className="flex-shrink ml-6">
+              <div className="flex-shrink ml-5">
                 <NotificationsBtn />
               </div>
             )}
@@ -125,7 +125,7 @@ const Header = () => {
                 }`}
               >
                 <a
-                  className="showtime-login-button-outline text-sm px-2 py-1 md:px-3 md:py-2 md:text-base flex flex-row items-center rounded-full "
+                  className="text-base flex flex-row items-center hover:text-stpink"
                   onClick={() => {
                     mixpanel.track("Profile button click");
                   }}
@@ -150,7 +150,7 @@ const Header = () => {
                             : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                         }
                         className="rounded-full mr-2"
-                        style={{ height: 24, width: 24, minWidth: 24 }}
+                        style={{ height: 30, width: 30, minWidth: 30 }}
                       />
                     </div>
                     <div

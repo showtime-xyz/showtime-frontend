@@ -80,7 +80,7 @@ export default function NotificationsBtn() {
         onClick={() => {
           toggleOpen();
         }}
-        className="hover:text-stpink border-gray-900 hover:border-stpink border-2 rounded-full h-9 w-9 flex items-center justify-center cursor-pointer relative"
+        className="hover:text-stpink rounded-full h-6 w-6 flex items-center justify-center cursor-pointer relative"
       >
         <FontAwesomeIcon
           style={{
