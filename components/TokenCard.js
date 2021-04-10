@@ -16,6 +16,7 @@ import ReactPlayer from "react-player";
 import mixpanel from "mixpanel-browser";
 import AppContext from "../context/app-context";
 import { getBidLink } from "../lib/utilities";
+import MiniFollowButton from "./MiniFollowButton";
 class TokenCard extends React.Component {
   constructor(props) {
     super(props);
@@ -233,13 +234,18 @@ class TokenCard extends React.Component {
                         />
                       </div>
                       <div className="showtime-card-profile-link ml-2">
-                        {this.truncateWithEllipses(item.creator_name, 30)}
+                        {this.truncateWithEllipses(item.creator_name, 20)}
                       </div>
                     </a>
                   </Link>
                 ) : null}
               </div>
               <div className="flex-grow">&nbsp;</div>
+
+              {this.context.myProfile?.profile_id !== item.creator_id &&
+                !(isMyProfile && listId !== 3) && (
+                  <MiniFollowButton profileId={item.creator_id} />
+                )}
               <div>
                 {isMyProfile && listId !== 3 ? (
                   <div
