@@ -39,7 +39,7 @@ export default function ActivityRecommendedFollows() {
   };
   useEffect(() => {
     getActivityRecommendedFollows();
-  }, []);
+  }, [context.user]);
 
   // get more recs when we reject all recs
   useEffect(() => {

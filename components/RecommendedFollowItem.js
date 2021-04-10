@@ -207,7 +207,9 @@ const RecommendedFollowItem = ({
   const context = useContext(AppContext);
   const [followerCount, setFollowerCount] = useState();
   const isMyProfile = context?.myProfile?.profile_id === item?.profile_id;
-  const topItems = item?.top_items.slice(0, 6);
+  const topItems = liteVersion
+    ? item?.top_items.slice(0, 3)
+    : item?.top_items.slice(0, 6);
   const [currentlyOpenModal, setCurrentlyOpenModal] = useState(null);
   const currentIndex = topItems?.findIndex(
     (i) => i.nft_id === currentlyOpenModal?.nft_id

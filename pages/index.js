@@ -64,12 +64,12 @@ const Activity = () => {
     setIsLoading(false);
   };
   useEffect(() => {
+    setHasMoreScrolling(true);
     setActivity([]);
     getActivity();
   }, [context.user]);
 
   const getNext = () => {
-    console.log("getnext");
     activityPage.current = activityPage.current + 1;
     getActivity();
   };
@@ -199,7 +199,7 @@ const Activity = () => {
             </h1>
           </div>
 
-          <div class="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-4 gap-4">
             <div>
               <div className="px-4 py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
                 <div className="hover:bg-blue-100 p-2 rounded-lg px-3 text-blue-500 cursor-pointer">
@@ -229,6 +229,21 @@ const Activity = () => {
             <div className="col-span-2">
               <div className="" />
 
+              {context.user ? null : (
+                <div className="flex flex-1 items-center justify-center mb-6">
+                  <div className="text-gray-400 shadow-md bg-white rounded-lg w-full px-4 py-6 mx-4 text-center">
+                    News feed preview 👇 Please{" "}
+                    <span
+                      className="cursor-pointer text-gray-800 hover:text-stpink"
+                      onClick={() => context.setLoginModalOpen(true)}
+                    >
+                      sign in
+                    </span>{" "}
+                    to view & follow people
+                  </div>
+                </div>
+              )}
+
               <InfiniteScroll
                 dataLength={activity.length}
                 next={getNext}
@@ -238,14 +253,14 @@ const Activity = () => {
                     {context.user ? (
                       <div className="text-gray-400">No more activity.</div>
                     ) : (
-                      <div className="text-gray-400">
+                      <div className="text-gray-400 shadow-md bg-white rounded-lg w-full px-4 py-6 mx-4 text-center">
                         <span
                           className="cursor-pointer text-gray-800 hover:text-stpink"
                           onClick={() => context.setLoginModalOpen(true)}
                         >
                           Sign in
                         </span>{" "}
-                        to view more & customize
+                        to view & follow people
                       </div>
                     )}
                   </div>
