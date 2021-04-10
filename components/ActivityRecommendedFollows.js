@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import AppContext from "../context/app-context";
 import RecommendedFollowItem from "./RecommendedFollowItem";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export default function ActivityRecommendedFollows() {
   const context = useContext(AppContext);
@@ -66,19 +68,28 @@ export default function ActivityRecommendedFollows() {
 
   return (
     <div>
-      <div className="mt-1 py-3 text-gray-600 border-b border-gray-300 flex justify-between align-start">
-        <div className="py-2">Recommended for You</div>
+      <div className="border-b border-gray-200 flex items-center pb-2 px-4">
+        <div className="m-2 flex-grow">Suggested for You</div>
         <div />
         {!loading && (
-          <div
-            onClick={followAllClicked ? () => {} : handleFollowAll}
-            className={`px-4 py-1 text-sm rounded-full border w-max flex items-center justify-center hover:opacity-80 cursor-pointer ${
-              followAllClicked
-                ? "border-gray-300 text-black"
-                : "border-stpink bg-stpink text-white"
-            }`}
-          >
-            {followAllClicked ? "Followed All" : "Follow All"}
+          <div>
+            <div
+              onClick={followAllClicked ? () => {} : handleFollowAll}
+              className={`px-4 py-1 text-sm rounded-full border w-max flex items-center justify-center hover:opacity-80 cursor-pointer ${
+                followAllClicked
+                  ? "border-gray-300 text-black"
+                  : "border-stpink bg-stpink text-white"
+              }`}
+            >
+              {followAllClicked ? (
+                "Followed All"
+              ) : (
+                <div>
+                  <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                  Follow All
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>

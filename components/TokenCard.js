@@ -174,15 +174,6 @@ class TokenCard extends React.Component {
               {
                 backgroundColor: "white",
               },
-              this.props.columns === 1
-                ? {
-                    borderTopWidth: 1,
-                    borderBottomWidth: 1,
-                  }
-                : {
-                    width: 375,
-                    borderWidth: 1,
-                  },
 
               this.props.userHiddenItems &&
                 this.props.userHiddenItems.includes(this.props.item.nft_id)
@@ -190,11 +181,7 @@ class TokenCard extends React.Component {
                 : null
             )}
             ref={this.divRef}
-            className={
-              this.props.columns === 1
-                ? "mx-auto showtime-card"
-                : "mx-auto showtime-card sm:rounded-md overflow-hidden hover:shadow-xl"
-            }
+            className="mx-auto showtime-card sm:rounded-xl overflow-hidden shadow-md hover:shadow-xl"
           >
             <div
               className="p-4 flex flex-row items-center"

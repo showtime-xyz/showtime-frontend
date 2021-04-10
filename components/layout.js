@@ -37,7 +37,7 @@ const Layout = ({ children }) => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-50">
       <Head>
         <link rel="icon" href="/logo_sm.jpg" />
 
@@ -65,13 +65,15 @@ const Layout = ({ children }) => {
       </Head>
 
       <Header />
-      <ScrollUp />
-      {typeof document !== "undefined" &&
-      recommendedItems &&
-      recommendedItems.length > 0 ? (
-        <RecommendFollowers items={recommendedItems} />
-      ) : null}
-      <main>{children}</main>
+      <div className="max-w-screen-2xl w-full mx-auto sm:px-16 min-h-screen">
+        <ScrollUp />
+        {typeof document !== "undefined" &&
+        recommendedItems &&
+        recommendedItems.length > 0 ? (
+          <RecommendFollowers items={recommendedItems} />
+        ) : null}
+        <main>{children}</main>
+      </div>
 
       <Footer />
     </div>

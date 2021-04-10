@@ -6,7 +6,7 @@ export default function ActivityImages({ nfts, openModal }) {
   return (
     <>
       {count < 3 && (
-        <div className="flex flex-1">
+        <div className="flex flex-1 ">
           {nfts.map((nft, index) => (
             <ActivityImage
               nft={nft}

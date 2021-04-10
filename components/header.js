@@ -19,27 +19,8 @@ const Header = () => {
           />
         </>
       ) : null}
-      <header
-        className="p-4"
-        style={{
-          //boxShadow: "0px 4px 10px 6px rgba(34, 48, 67, 3%)",
-          borderBottom: "1px solid #ddd",
-          backgroundColor: "rgb(255 255 255 / 100%)",
-          zIndex: 1,
-          position: "sticky",
-          top: 0,
-        }}
-      >
-        <div
-          className={`flex flex-row items-center ${
-            !context.gridWidth ? "invisible" : ""
-          }`}
-          style={
-            context.isMobile
-              ? {}
-              : { maxWidth: context.gridWidth - 24, margin: "auto" }
-          }
-        >
+      <header className="p-4 fixed bg-white w-full z-10  shadow-md">
+        <div className="flex flex-row items-center max-w-screen-2xl mx-auto sm:px-16 ">
           <div>
             <Link href="/">
               <a
@@ -80,7 +61,7 @@ const Header = () => {
               </a>
               </Link>*/}
 
-            {context.myProfile && (
+            {/*context.myProfile && (
               <div className="relative">
                 <Link href="/activity">
                   <a
@@ -99,7 +80,7 @@ const Header = () => {
                   New!
                 </div>
               </div>
-            )}
+                  )*/}
             <Link href="/c/[collection]" as="/c/all">
               <a
                 className="showtime-header-link ml-6 text-sm md:text-base"
@@ -117,7 +98,7 @@ const Header = () => {
                   mixpanel.track("Leaderboard button click");
                 }}
               >
-                Leaderboard
+                Trending
               </a>
             </Link>
             {context.user && context.myProfile !== undefined && (

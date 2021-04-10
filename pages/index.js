@@ -1,76 +1,127 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import Head from "next/head";
-import Link from "next/link";
 import _ from "lodash";
 import Layout from "../components/layout";
-import TokenGridV4 from "../components/TokenGridV4";
-import backend from "../lib/backend";
+import InfiniteScroll from "react-infinite-scroll-component";
 import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
+import useKeyPress from "../hooks/useKeyPress";
+import ActivityFeed from "../components/ActivityFeed";
+import ModalTokenDetail from "../components/ModalTokenDetail";
+import ActivityRecommendedFollows from "../components/ActivityRecommendedFollows";
+import backend from "../lib/backend";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { GridTab, GridTabs } from "../components/GridTabs";
+import {
+  faComment,
+  faHeart,
+  faUser,
+} from "@fortawesome/free-regular-svg-icons";
+import { faFingerprint } from "@fortawesome/free-solid-svg-icons";
 
-export async function getServerSideProps(context) {
+const ACTIVITY_PAGE_LENGTH = 5; // 5 activity items per activity page
+export async function getServerSideProps() {
   return {
     props: {},
   };
 }
 
-export default function Home() {
+const Activity = () => {
   const context = useContext(AppContext);
-  const { columns, gridWidth } = context;
   useEffect(() => {
     // Wait for identity to resolve before recording the view
     if (typeof context.user !== "undefined") {
-      mixpanel.track("Home page view");
+      mixpanel.track("Leaderboard page view");
     }
   }, [typeof context.user]);
 
-  const [featuredItems, setFeaturedItems] = useState([]);
-  const [featuredDays, setFeaturedDays] = useState(1);
-  const [reachedBottom, setReachedBottom] = useState(false);
-  const [isLoadingCards, setIsLoadingCards] = useState(false);
-  //const [isLoadingHero, setIsLoadingHero] = useState(false);
-  const [isLoadingSpotlight, setIsLoadingSpotlight] = useState(false);
+  const [activity, setActivity] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const activityPage = useRef(1);
+  const [hasMoreScrolling, setHasMoreScrolling] = useState(true);
 
-  //const [heroItems, setHeroItems] = useState([]);
-  const [spotlightItems, setSpotlightItems] = useState([]);
+  const getActivity = async () => {
+    setIsLoading(true);
+    const result = await fetch(`/api/getactivity`, {
+      method: "POST",
+      body: JSON.stringify({
+        page: activityPage.current,
+      }),
+    });
+    const resultJson = await result.json();
+    const { data } = resultJson;
+    if (_.isEmpty(data) || data.length < ACTIVITY_PAGE_LENGTH) {
+      setHasMoreScrolling(false);
+    }
+
+    // filter out possible repeats
+    let filteredData = [];
+    await data.forEach((newItem) => {
+      if (!activity.find((actItem) => actItem.id === newItem.id)) {
+        filteredData.push(newItem);
+      }
+    });
+    setActivity([...activity, ...filteredData]);
+    setIsLoading(false);
+  };
+  useEffect(() => {
+    getActivity();
+  }, []);
+
+  const getNext = () => {
+    activityPage.current = activityPage.current + 1;
+    getActivity();
+  };
+
+  const [itemOpenInModal, setItemOpenInModal] = useState(null);
+  const handleSetItemOpenInModal = ({ index, nftGroup }) => {
+    setItemOpenInModal({ index, nftGroup });
+  };
+
+  const goToNext = () => {
+    setItemOpenInModal({
+      nftGroup: itemOpenInModal?.nftGroup,
+      index: itemOpenInModal?.index + 1,
+    });
+  };
+
+  const goToPrevious = () => {
+    setItemOpenInModal({
+      nftGroup: itemOpenInModal?.nftGroup,
+      index: itemOpenInModal?.index - 1,
+    });
+  };
+
+  const leftPress = useKeyPress("ArrowLeft");
+  const rightPress = useKeyPress("ArrowRight");
+  const escPress = useKeyPress("Escape");
 
   useEffect(() => {
-    const getFeatured = async () => {
-      setIsLoadingCards(true);
+    if (escPress) {
+      mixpanel.track("Activity - Close NFT Modal - keyboard");
+      setItemOpenInModal(null);
+    }
+    if (rightPress && itemOpenInModal) {
+      mixpanel.track("Activity - Next NFT - keyboard");
+      goToNext();
+    }
+    if (leftPress && itemOpenInModal) {
+      mixpanel.track("Activity - Prior NFT - keyboard");
+      goToPrevious();
+    }
+  }, [escPress, leftPress, rightPress]);
 
-      const response_featured = await backend.get(
-        `/v2/featured?limit=150&days=${featuredDays}`
-      );
-      const data_featured = response_featured.data.data;
-      setFeaturedItems(data_featured);
-      setIsLoadingCards(false);
-    };
-    getFeatured();
-    setReachedBottom(false);
-  }, [featuredDays]);
-
-  /*
-  const getHero = async () => {
-    setIsLoadingHero(true);
-    const response_hero = await backend.get(`/v1/hero`);
-    const data_hero = response_hero.data.data;
-    setHeroItems(data_hero);
-    setIsLoadingHero(false);
-
-    // Reset cache for next load
-    backend.get(`/v1/hero?recache=1`);
+  const handleOpenModal = (index) => {
+    setItemOpenInModal({ nftGroup: spotlightItems, index });
   };
-  */
+
+  const [spotlightItems, setSpotlightItems] = useState([]);
 
   const getSpotlight = async () => {
-    setIsLoadingSpotlight(true);
+    //setIsLoadingSpotlight(true);
     const response_spotlight = await backend.get(`/v1/spotlight`);
     const data_spotlight = response_spotlight.data.data;
-    setSpotlightItems(data_spotlight);
-    setIsLoadingSpotlight(false);
+    setSpotlightItems(data_spotlight.slice(0, 1));
+    //setIsLoadingSpotlight(false);
 
     // Reset cache for next load
     backend.get(`/v1/spotlight?recache=1`);
@@ -80,35 +131,6 @@ export default function Home() {
     //getHero();
     getSpotlight();
   }, []);
-
-  const FilterTabs =
-    gridWidth > 0 ? (
-      <>
-        <GridTabs title="Trending">
-          <GridTab
-            label="24 Hours"
-            isActive={featuredDays === 1}
-            onClickTab={() => {
-              setFeaturedDays(1);
-            }}
-          />
-          <GridTab
-            label="7 Days"
-            isActive={featuredDays === 7}
-            onClickTab={() => {
-              setFeaturedDays(7);
-            }}
-          />
-          <GridTab
-            label="30 Days"
-            isActive={featuredDays === 30}
-            onClickTab={() => {
-              setFeaturedDays(30);
-            }}
-          />
-        </GridTabs>
-      </>
-    ) : null;
 
   return (
     <Layout>
@@ -137,258 +159,128 @@ export default function Home() {
           content="https://storage.googleapis.com/showtime-nft-thumbnails/home_twitter_card_2.jpg"
         />
       </Head>
-
-      {columns && (
-        <div
-          className="mx-auto relative my-16 md:my-24 text-center md:text-left"
-          style={{
-            ...(columns === 1
-              ? { padding: "0px 16px" }
-              : { width: gridWidth, paddingLeft: 16 }),
-          }}
-        >
-          <h1
-            className="text-xl md:text-3xl xl:text-4xl"
-            style={{ maxWidth: 700 }}
-          >
-            Discover & Showcase
-          </h1>
-          <h1
-            className="text-4xl md:text-7xl xl:text-8xl"
-            style={{ fontFamily: "Afronaut" }}
-          >
-            Your Favorite
-          </h1>
-          <h1 className="text-4xl md:text-7xl xl:text-8xl">Crypto Art.</h1>
-        </div>
-      )}
-
-      {gridWidth && (
+      {typeof document !== "undefined" ? (
         <>
-          <div style={context.isMobile ? null : { paddingTop: 20 }}>
-            <div className="m-auto" style={{ width: gridWidth }}>
-              <div
-                className="flex flex-row ml-0 mr-0"
-                style={
-                  context.isMobile
-                    ? { padding: "0px 16px", marginBottom: 20 }
-                    : { padding: "0px 12px", marginBottom: 16 }
-                }
-              >
-                <h3 className="self-end text-2xl md:text-4xl flex flex-row">
-                  <div>
-                    <span
-                      style={
-                        context.windowSize && context.windowSize.width < 375
-                          ? {
-                              display: "none",
-                            }
-                          : null
-                      }
-                    >
-                      User
-                    </span>{" "}
-                    Spotlights{" "}
-                  </div>
-                  {/*<div>
-                    <img
-                      src="/icons/spotlight_black.png"
-                      style={{
-                        marginLeft: 8,
-                      }}
-                      className="w-7 h-7 md:w-10 md:h-10"
-                    />
-                    </div>*/}
-                  <div className="tooltip">
-                    <FontAwesomeIcon
-                      style={
-                        context.isMobile
-                          ? {
-                              height: 18,
-                              color: "#bbb",
-                              cursor: "pointer",
-                              marginBottom: 2,
-                            }
-                          : {
-                              height: 18,
-                              color: "#bbb",
-                              cursor: "pointer",
-                              marginBottom: 8,
-                            }
-                      }
-                      icon={faInfoCircle}
-                    />
-                    <span
-                      style={{
-                        fontSize: 12,
-                        opacity: 0.9,
-                        width: 200,
-                        lineHeight: 1.75,
-                      }}
-                      className="tooltip-text bg-black p-3 -mt-9 -ml-28 rounded text-white"
-                    >
-                      Users can pick one item from their profile to spotlight
-                    </span>
-                  </div>
-                </h3>
-                <div className="flex-grow "></div>
-                <div className="self-end">
-                  <div
-                    className="ml-4 bg-white text-black border-black rounded-full px-5 py-1 cursor-pointer border-2 hover:text-stpink hover:border-stpink transition-all showtime-random-button"
-                    onClick={() => {
-                      getSpotlight();
-                    }}
-                  >
-                    <span className="text-sm md:text-base">🎲&nbsp;Random</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              className="m-auto"
-              style={{ width: gridWidth, minHeight: 700 }}
-            >
-              <TokenGridV4
-                items={spotlightItems.slice(0, context.columns * 2)}
-                isLoading={isLoadingSpotlight}
-              />
-            </div>
-          </div>
-
-          <div
-            className="text-center pb-10 pt-4"
-            style={
-              context.columns === 1
-                ? { backgroundColor: "rgb(243, 244, 246)" }
+          <ModalTokenDetail
+            isOpen={itemOpenInModal}
+            setEditModalOpen={setItemOpenInModal}
+            item={
+              itemOpenInModal?.nftGroup
+                ? itemOpenInModal.nftGroup[itemOpenInModal?.index]
                 : null
             }
-          >
-            <Link href="/c/[collection]" as="/c/spotlights">
-              <a
-                className="showtime-purple-button-icon flex flex-row items-center px-4 py-2 rounded-full"
-                onClick={() => {
-                  mixpanel.track("Clicked Explore User Spotlights");
-                }}
-              >
-                <div className="mr-2">Explore User Spotlights</div>
-                <div className="flex">
-                  <FontAwesomeIcon style={{ height: 18 }} icon={faArrowRight} />
-                </div>
-              </a>
-            </Link>
-          </div>
-        </>
-      )}
-
-      {/*gridWidth && (
-        <>
-          <div style={context.isMobile ? null : { paddingTop: 20 }}>
-            <div className="m-auto" style={{ width: gridWidth }}>
-              <div
-                className="flex flex-row ml-0 mr-0"
-                style={
-                  context.isMobile
-                    ? {
-                        padding: "0px 16px",
-                        marginBottom: 20,
-                        borderTopWidth: 1,
-                      }
-                    : { padding: "0px 12px", marginBottom: 16 }
-                }
-              >
-                <h3
-                  className={`self-end text-2xl md:text-4xl  ${
-                    context.isMobile ? "pt-7" : null
-                  }`}
-                >
-                  Latest{" "}
-                </h3>
-                <div className="flex-grow "></div>
-                <div className="self-end">
-                  <div
-                    className="ml-4 bg-white text-black border-black rounded-full px-5 py-1 cursor-pointer border-2 hover:text-stpink hover:border-stpink transition-all showtime-random-button"
-                    onClick={() => {
-                      getHero();
-                    }}
-                  >
-                    <span className="text-sm md:text-base">🎲 Random</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              className="m-auto"
-              style={{ width: gridWidth, minHeight: 700 }}
-            >
-              <TokenGridV4
-                items={heroItems.slice(0, context.columns * 2)}
-                isLoading={isLoadingHero}
-              />
-            </div>
-          </div>
-
-          <div
-            className="text-center pb-10 pt-4"
-            style={
-              context.columns === 1
-                ? { backgroundColor: "rgb(243, 244, 246)" }
-                : null
+            goToNext={goToNext}
+            goToPrevious={goToPrevious}
+            hasNext={
+              !(
+                itemOpenInModal?.index ===
+                itemOpenInModal?.nftGroup?.length - 1
+              )
             }
-          >
-            <Link href="/c/[collection]" as="/c/all">
-              <a className="showtime-purple-button-icon flex flex-row items-center px-4 py-2 rounded-full">
-                <div className="mr-2">Explore Collections</div>
-                <div className="flex">
-                  <FontAwesomeIcon style={{ height: 18 }} icon={faArrowRight} />
-                </div>
-              </a>
-            </Link>
-          </div>
-        </>
-          )*/}
-
-      {columns && (
-        <div
-          className="mx-auto pt-2"
-          style={
-            columns === 1
-              ? { borderTopWidth: 1 }
-              : { width: columns * (375 + 20) }
-          }
-        >
-          {FilterTabs}
-        </div>
-      )}
-
-      {gridWidth && (
-        <div className="m-auto" style={{ width: gridWidth, minHeight: 900 }}>
-          <TokenGridV4
-            items={featuredItems}
-            onFinish={() => {
-              setReachedBottom(true);
-            }}
-            isLoading={isLoadingCards}
+            hasPrevious={!(itemOpenInModal?.index === 0)}
           />
-        </div>
-      )}
-
-      {featuredItems.length > 0 && reachedBottom ? (
-        <div className="text-center pt-8 pb-16">
-          <Link href="/c/[collection]" as="/c/all">
-            <a
-              className="showtime-purple-button-icon flex flex-row items-center px-4 py-2 rounded-full"
-              onClick={() => {
-                mixpanel.track("Clicked Explore Collections");
-              }}
-            >
-              <div className="mr-2">Explore Collections</div>
-              <div className="flex">
-                <FontAwesomeIcon style={{ height: 18 }} icon={faArrowRight} />
-              </div>
-            </a>
-          </Link>
-        </div>
+        </>
       ) : null}
+
+      <>
+        <div className="m-auto relative">
+          <div className="mb-8 mt-36 text-left">
+            <h1 className="text-4xl" style={{ fontFamily: "Afronaut" }}>
+              News Feed
+            </h1>
+          </div>
+
+          <div class="grid grid-cols-4 gap-4">
+            <div>
+              <div className="px-4 py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
+                <div className="hover:bg-blue-100 p-2 rounded-lg px-3 text-blue-500 cursor-pointer">
+                  All News
+                </div>
+                <div className="hover:bg-purple-100 p-2 rounded-lg px-3 text-gray-500 hover:text-purple-500 cursor-pointer flex flex-row items-center">
+                  <FontAwesomeIcon
+                    icon={faFingerprint}
+                    className="mr-2 w-4 h-4"
+                  />
+                  <div>Creations</div>
+                </div>
+                <div className="hover:bg-pink-100 p-2 rounded-lg px-3 text-gray-500 hover:text-pink-500 cursor-pointer flex flex-row items-center">
+                  <FontAwesomeIcon icon={faHeart} className="mr-2 w-4 h-4" />
+                  <div>Likes</div>
+                </div>
+                <div className="hover:bg-blue-100 p-2 rounded-lg px-3 text-gray-500 hover:text-blue-500 cursor-pointer flex flex-row items-center">
+                  <FontAwesomeIcon icon={faComment} className="mr-2 w-4 h-4" />
+                  <div>Comments</div>
+                </div>
+                <div className="hover:bg-green-100 p-2 rounded-lg px-3 text-gray-500 hover:text-green-600 cursor-pointer flex flex-row items-center">
+                  <FontAwesomeIcon icon={faUser} className="mr-2 w-4 h-4" />
+                  <div>Follows</div>
+                </div>
+              </div>
+            </div>
+            <div className="col-span-2">
+              <div className="" />
+
+              <InfiniteScroll
+                dataLength={activity.length}
+                next={getNext}
+                hasMore={hasMoreScrolling}
+                endMessage={
+                  <div className="flex flex-1 items-center justify-center my-4">
+                    <div className="text-gray-400">No more activity.</div>
+                  </div>
+                }
+                scrollThreshold={0.5}
+              >
+                <ActivityFeed
+                  activity={[...activity]}
+                  setItemOpenInModal={handleSetItemOpenInModal}
+                />
+              </InfiniteScroll>
+              <div className="flex h-16 items-center justify-center mt-6">
+                {isLoading && <div className="loading-card-spinner" />}
+              </div>
+            </div>
+            <div>
+              <div className=" py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
+                <ActivityRecommendedFollows />
+              </div>
+
+              {/*<div className="sticky top-24">
+                <div className="px-6 h-max rounded-lg border border-gray-200 bg-white shadow-md">
+                  Community Spotlights [Refresh]
+                  {spotlightItems ? (
+                    <>
+                      <div className="flex mt-4 max-w-full">
+                        <ActivityImages
+                          nfts={spotlightItems}
+                          openModal={handleOpenModal}
+                        />
+                      </div>
+                    </>
+                  ) : null}
+                </div>
+                <div className="px-6 h-max rounded-lg mt-8 border border-gray-200 bg-white shadow-md">
+                  Trending [Refresh]
+                  <br />
+                  <br />
+                  <br />
+                </div>
+                  </div>*/}
+            </div>
+          </div>
+
+          {/* Page Content */}
+          <div className="flex">
+            {/* Left Column */}
+
+            <div className="flex flex-col"></div>
+
+            <div className="flex flex-col"></div>
+          </div>
+        </div>
+      </>
     </Layout>
   );
-}
+};
+
+export default Activity;

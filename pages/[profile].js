@@ -640,129 +640,91 @@ const Profile = ({
         {/* Start Page Body */}
         {/* Wait until @gridWidth is populated to display page's body */}
 
-        {gridWidth && (
-          <div className="m-auto relative" style={{ width: gridWidth }}>
-            <div
-              style={
-                context.columns == 1
-                  ? { marginLeft: 16, marginRight: 16 }
-                  : { marginLeft: 12, marginRight: 12 }
-              }
+        <div className="m-auto relative">
+          <div>
+            <h1
+              style={{ wordWrap: "break-word" }}
+              className={`text-6xl text-left mt-32  ${
+                (wallet_addresses_excluding_email.length === 0 ||
+                  context.columns === 1) &&
+                !username
+                  ? "mb-8"
+                  : "mb-0"
+              }`}
             >
-              <h1
-                style={{ wordWrap: "break-word" }}
-                className={`text-4xl md:text-6xl sm:mb-2 text-center md:text-left mt-12 sm:mt-20 ${
-                  (wallet_addresses_excluding_email.length === 0 ||
-                    context.columns === 1) &&
-                  !username
-                    ? "mb-8"
-                    : "mb-0"
-                }`}
-              >
-                {isMyProfile
-                  ? context.myProfile
+              {isMyProfile
+                ? context.myProfile
+                  ? context.myProfile.name
                     ? context.myProfile.name
-                      ? context.myProfile.name
-                      : "Unnamed"
-                    : name
-                    ? name
                     : "Unnamed"
                   : name
                   ? name
-                  : "Unnamed"}
-              </h1>
-              {(username ||
-                (wallet_addresses_excluding_email.length > 0 &&
-                  context.columns > 1)) && (
-                <div className="flex flex-row justify-center items-center md:justify-start mb-12">
-                  {username && (
-                    <div className="mr-2 text-base text-gray-500">
-                      @{username}
-                    </div>
-                  )}
-                  {context.columns === 1 ? null : (
-                    <div className="flex mr-2 md:mr-0">
-                      {wallet_addresses_excluding_email.map((address) => {
-                        return (
-                          <AddressButton key={address} address={address} />
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+                  : "Unnamed"
+                : name
+                ? name
+                : "Unnamed"}
+            </h1>
+            {(username ||
+              (wallet_addresses_excluding_email.length > 0 &&
+                context.columns > 1)) && (
+              <div className="flex flex-row justify-center items-center md:justify-start mb-12">
+                {username && (
+                  <div className="mr-2 text-base text-gray-500">
+                    @{username}
+                  </div>
+                )}
+                {context.columns === 1 ? null : (
+                  <div className="flex mr-2 md:mr-0">
+                    {wallet_addresses_excluding_email.map((address) => {
+                      return <AddressButton key={address} address={address} />;
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
-        )}
+        </div>
 
-        {gridWidth && (
-          <div className="m-auto" style={{ width: gridWidth }}>
+        <div className="m-auto">
+          <div>
             <div
-              style={
-                context.columns == 1
-                  ? { marginLeft: 16, marginRight: 16 }
-                  : { marginLeft: 12, marginRight: 12 }
-              }
-            >
-              <div
-                className={`${
-                  isMyProfile && context.myProfile
-                    ? !context.myProfile.bio && !context.myProfile.website_url
-                      ? "hidden"
-                      : "flex-1"
-                    : !bio && !website_url
+              className={`${
+                isMyProfile && context.myProfile
+                  ? !context.myProfile.bio && !context.myProfile.website_url
                     ? "hidden"
                     : "flex-1"
-                } mt-4 pb-2 text-base align-center flex flex-col justify-center items-center md:items-start`}
-              >
-                {/*<h4 className="text-black mb-2 text-lg font-semibold">About</h4>*/}
-                {isMyProfile && context.myProfile ? (
-                  context.myProfile.bio ? (
-                    <div className="max-w-xl">
-                      <div className="text-center md:text-left">
-                        {context.myProfile.bio}
-                      </div>
-                    </div>
-                  ) : null
-                ) : bio ? (
+                  : !bio && !website_url
+                  ? "hidden"
+                  : "flex-1"
+              } mt-4 pb-2 text-base align-center flex flex-col justify-center items-center md:items-start`}
+            >
+              {/*<h4 className="text-black mb-2 text-lg font-semibold">About</h4>*/}
+              {isMyProfile && context.myProfile ? (
+                context.myProfile.bio ? (
                   <div className="max-w-xl">
                     <div className="text-center md:text-left">
-                      <div className="">{bio}</div>
+                      {context.myProfile.bio}
                     </div>
                   </div>
-                ) : null}
+                ) : null
+              ) : bio ? (
+                <div className="max-w-xl">
+                  <div className="text-center md:text-left">
+                    <div className="">{bio}</div>
+                  </div>
+                </div>
+              ) : null}
 
-                {isMyProfile && context.myProfile ? (
-                  context.myProfile.website_url ? (
-                    <a
-                      href={
-                        context.myProfile.website_url.slice(0, 4) === "http"
-                          ? context.myProfile.website_url
-                          : "https://" + context.myProfile.website_url
-                      }
-                      target="_blank"
-                      className="flex flex-row items-center justify-center"
-                      style={{ color: "rgb(81, 125, 228)" }}
-                      onClick={() => {
-                        mixpanel.track("Clicked profile website link", {
-                          slug: slug_address,
-                        });
-                      }}
-                    >
-                      <div style={{ wordBreak: "break-all" }}>
-                        {context.myProfile.website_url}
-                      </div>
-                    </a>
-                  ) : null
-                ) : website_url ? (
+              {isMyProfile && context.myProfile ? (
+                context.myProfile.website_url ? (
                   <a
                     href={
-                      website_url.slice(0, 4) === "http"
-                        ? website_url
-                        : "https://" + website_url
+                      context.myProfile.website_url.slice(0, 4) === "http"
+                        ? context.myProfile.website_url
+                        : "https://" + context.myProfile.website_url
                     }
                     target="_blank"
-                    className="flex flex-row"
+                    className="flex flex-row items-center justify-center"
                     style={{ color: "rgb(81, 125, 228)" }}
                     onClick={() => {
                       mixpanel.track("Clicked profile website link", {
@@ -770,80 +732,101 @@ const Profile = ({
                       });
                     }}
                   >
-                    <div style={{ wordBreak: "break-all" }}>{website_url}</div>
+                    <div style={{ wordBreak: "break-all" }}>
+                      {context.myProfile.website_url}
+                    </div>
                   </a>
-                ) : null}
-              </div>
-
-              <ProfileInfoPill
-                isFollowed={isFollowed}
-                isMyProfile={isMyProfile}
-                onClickFollow={
-                  context.user
-                    ? isFollowed
-                      ? handleUnfollow
-                      : handleFollow
-                    : handleLoggedOutFollow
-                }
-                onClickPhoto={() => {
-                  setPictureModalOpen(true);
-                  mixpanel.track("Open edit photo");
-                }}
-                numFollowers={followers && followers.length}
-                numFollowing={following && following.length}
-                showFollowers={() => {
-                  setShowFollowers(true);
-                }}
-                showFollowing={() => {
-                  setShowFollowing(true);
-                }}
-                profileImageUrl={
-                  isMyProfile
-                    ? context.myProfile && context.myProfile.img_url
-                      ? context.myProfile.img_url
-                      : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                    : img_url
-                    ? img_url
-                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                }
-                profileActions={{
-                  editAccount,
-                  editPhoto,
-                  addWallet,
-                  addEmail,
-                  logout,
-                }}
-                hasEmailAddress={hasEmailAddress}
-              />
+                ) : null
+              ) : website_url ? (
+                <a
+                  href={
+                    website_url.slice(0, 4) === "http"
+                      ? website_url
+                      : "https://" + website_url
+                  }
+                  target="_blank"
+                  className="flex flex-row"
+                  style={{ color: "rgb(81, 125, 228)" }}
+                  onClick={() => {
+                    mixpanel.track("Clicked profile website link", {
+                      slug: slug_address,
+                    });
+                  }}
+                >
+                  <div style={{ wordBreak: "break-all" }}>{website_url}</div>
+                </a>
+              ) : null}
             </div>
-            {spotlightItem && (
-              <>
-                <div className="mx-auto" style={{ width: gridWidth }}>
+
+            <ProfileInfoPill
+              isFollowed={isFollowed}
+              isMyProfile={isMyProfile}
+              onClickFollow={
+                context.user
+                  ? isFollowed
+                    ? handleUnfollow
+                    : handleFollow
+                  : handleLoggedOutFollow
+              }
+              onClickPhoto={() => {
+                setPictureModalOpen(true);
+                mixpanel.track("Open edit photo");
+              }}
+              numFollowers={followers && followers.length}
+              numFollowing={following && following.length}
+              showFollowers={() => {
+                setShowFollowers(true);
+              }}
+              showFollowing={() => {
+                setShowFollowing(true);
+              }}
+              profileImageUrl={
+                isMyProfile
+                  ? context.myProfile && context.myProfile.img_url
+                    ? context.myProfile.img_url
+                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                  : img_url
+                  ? img_url
+                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+              }
+              profileActions={{
+                editAccount,
+                editPhoto,
+                addWallet,
+                addEmail,
+                logout,
+              }}
+              hasEmailAddress={hasEmailAddress}
+            />
+          </div>
+          {spotlightItem && (
+            <>
+              <div className="mx-auto" style={{ width: gridWidth }}>
+                <div
+                  style={
+                    context.isMobile
+                      ? { padding: "0px 16px 20px 16px" }
+                      : { padding: "0px 12px 0px 12px" }
+                  }
+                >
                   <div
-                    style={
-                      context.isMobile
-                        ? { padding: "0px 16px 20px 16px" }
-                        : { padding: "0px 12px 0px 12px" }
-                    }
+                    className="mt-8"
+                    style={{ borderBottom: "1px solid #ddd" }}
                   >
                     <div
-                      className="mt-8"
-                      style={{ borderBottom: "1px solid #ddd" }}
+                      className="flex flex-row"
+                      style={{
+                        width: "max-content",
+                        padding: "15px 0px",
+                        marginRight: 25,
+                        whiteSpace: "nowrap",
+                        borderBottom: "3px solid #e45cff",
+                        transition: "all 300ms ease",
+                        color: "#e45cff",
+                      }}
                     >
-                      <div
-                        className="flex flex-row"
-                        style={{
-                          width: "max-content",
-                          padding: "15px 0px",
-                          marginRight: 25,
-                          whiteSpace: "nowrap",
-                          borderBottom: "3px solid #e45cff",
-                          transition: "all 300ms ease",
-                          color: "#e45cff",
-                        }}
-                      >
-                        <div>
-                          {/*<img
+                      <div>
+                        {/*<img
                             src="/icons/spotlight_flip.png"
                             style={{
                               height: 20,
@@ -853,199 +836,170 @@ const Profile = ({
                             width={20}
                             height={20}
                           />*/}
-                          <FontAwesomeIcon
-                            style={{ height: 18, width: 18, marginRight: 6 }}
-                            icon={faStar}
-                          />
-                        </div>
-                        <div>Spotlight</div>
+                        <FontAwesomeIcon
+                          style={{ height: 18, width: 18, marginRight: 6 }}
+                          icon={faStar}
+                        />
                       </div>
+                      <div>Spotlight</div>
                     </div>
                   </div>
                 </div>
-
-                <div
-                  className="mx-auto flex flex-col justify-center items-center md:items-start"
-                  style={{
-                    maxWidth: context.columns == 4 ? 1185 : gridWidth,
-                  }}
-                >
-                  <SpotlightItem
-                    item={spotlightItem}
-                    removeSpotlightItem={() => {
-                      handleChangeSpotlightItem(null);
-                      mixpanel.track("Removed Spotlight Item");
-                    }}
-                    isMyProfile={isMyProfile}
-                    openCardMenu={openCardMenu}
-                    setOpenCardMenu={setOpenCardMenu}
-                    listId={0}
-                    refreshItems={() => {
-                      updateCreated(selectedCreatedSortField, false);
-                      updateOwned(selectedOwnedSortField, false);
-                    }}
-                  />
-                </div>
-              </>
-            )}
-
-            <div
-              className="mx-auto"
-              style={
-                context.isMobile && spotlightItem
-                  ? { width: gridWidth, borderTopWidth: 1 }
-                  : { width: gridWidth }
-              }
-            >
-              <div className="pt-4">{FilterTabs}</div>
-
-              <div>
-                {isMyProfile ? (
-                  <div className="flex">
-                    <div className="flex-grow"></div>
-                    <div
-                      className="text-right pr-4 text-sm hidden-items-link pb-1"
-                      onClick={() => {
-                        setShowUserHiddenItems(!showUserHiddenItems);
-                      }}
-                      style={{
-                        fontWeight: 400,
-                        fontSize: 12,
-                        marginTop: -65,
-                      }}
-                    >
-                      {createdHiddenItems.length === 0 &&
-                      ownedHiddenItems.length === 0 &&
-                      likedHiddenItems.length === 0
-                        ? null
-                        : showUserHiddenItems
-                        ? "Hide hidden"
-                        : "Show hidden"}
-                    </div>
-                  </div>
-                ) : null}
               </div>
 
-              {!isLoadingCards && (
-                <div
-                  className={`flex items-center text-sm rounded-md md:text-base ${
-                    selectedGrid === 3
-                      ? "invisible"
-                      : selectedGrid === 1 &&
-                        createdItems.filter(
-                          (item) => !createdHiddenItems.includes(item.nft_id)
-                        ).length === 0
-                      ? "invisible"
-                      : selectedGrid === 2 &&
-                        ownedItems.filter(
-                          (item) => !ownedHiddenItems.includes(item.nft_id)
-                        ).length === 0
-                      ? "invisible"
-                      : null
-                  }`}
-                  style={
-                    context.columns === 1
-                      ? { marginTop: -12, marginRight: 16, marginBottom: 8 }
-                      : { marginTop: -20, marginRight: 12, marginBottom: 0 }
-                  }
-                >
-                  <div className="flex-1"></div>
-                  <div className="py-2 px-2 w-max cursor-pointer mr-1">
-                    Sort by:
-                  </div>
+              <div
+                className="mx-auto flex flex-col justify-center items-center md:items-start"
+                style={{
+                  maxWidth: context.columns == 4 ? 1185 : gridWidth,
+                }}
+              >
+                <SpotlightItem
+                  item={spotlightItem}
+                  removeSpotlightItem={() => {
+                    handleChangeSpotlightItem(null);
+                    mixpanel.track("Removed Spotlight Item");
+                  }}
+                  isMyProfile={isMyProfile}
+                  openCardMenu={openCardMenu}
+                  setOpenCardMenu={setOpenCardMenu}
+                  listId={0}
+                  refreshItems={() => {
+                    updateCreated(selectedCreatedSortField, false);
+                    updateOwned(selectedOwnedSortField, false);
+                  }}
+                />
+              </div>
+            </>
+          )}
 
-                  <Select
-                    options={sortFieldOptions.map((key) => SORT_FIELDS[key])}
-                    labelField="label"
-                    valueField="key"
-                    values={[
-                      SORT_FIELDS[
-                        sortFieldOptions[
-                          selectedGrid === 1
-                            ? selectedCreatedSortField - 1
-                            : selectedOwnedSortField - 1
-                        ]
-                      ],
-                    ]}
-                    searchable={false}
-                    onChange={(values) => {
-                      if (selectedGrid === 1) {
-                        setSelectedCreatedSortField(values[0]["id"]);
-                        updateCreated(values[0]["id"], true);
-                      } else {
-                        setSelectedOwnedSortField(values[0]["id"]);
-                        updateOwned(values[0]["id"], true);
-                      }
+          <div className={`mx-auto ${spotlightItem ? "border-t" : null}`}>
+            <div className="pt-4">{FilterTabs}</div>
+
+            <div>
+              {isMyProfile ? (
+                <div className="flex">
+                  <div className="flex-grow"></div>
+                  <div
+                    className="text-right pr-4 text-sm hidden-items-link pb-1 -mt-16"
+                    onClick={() => {
+                      setShowUserHiddenItems(!showUserHiddenItems);
                     }}
-                    style={
-                      context.columns === 1
-                        ? {
-                            fontSize: 14,
-                            width: 140,
-                          }
-                        : {
-                            fontSize: 16,
-                            width: 150,
-                          }
-                    }
-                    key={selectedGrid}
-                  />
+                  >
+                    {createdHiddenItems.length === 0 &&
+                    ownedHiddenItems.length === 0 &&
+                    likedHiddenItems.length === 0
+                      ? null
+                      : showUserHiddenItems
+                      ? "Hide hidden"
+                      : "Show hidden"}
+                  </div>
                 </div>
-              )}
+              ) : null}
             </div>
 
-            <TokenGridV4
-              items={
-                selectedGrid === 1
-                  ? createdItems
-                  : selectedGrid === 2
-                  ? ownedItems
-                  : selectedGrid === 3
-                  ? likedItems
-                  : null
-              }
-              isLoading={isLoadingCards || isRefreshingCards}
-              listId={
-                selectedGrid === 1
-                  ? 1
-                  : selectedGrid === 2
-                  ? 2
-                  : selectedGrid === 3
-                  ? 3
-                  : null
-              }
-              isMyProfile={isMyProfile}
-              openCardMenu={openCardMenu}
-              setOpenCardMenu={setOpenCardMenu}
-              userHiddenItems={
-                selectedGrid === 1
-                  ? createdHiddenItems
-                  : selectedGrid === 2
-                  ? ownedHiddenItems
-                  : selectedGrid === 3
-                  ? likedHiddenItems
-                  : null
-              }
-              setUserHiddenItems={
-                selectedGrid === 1
-                  ? setCreatedHiddenItems
-                  : selectedGrid === 2
-                  ? setOwnedHiddenItems
-                  : selectedGrid === 3
-                  ? setLikedHiddenItems
-                  : null
-              }
-              showUserHiddenItems={showUserHiddenItems}
-              refreshItems={
-                selectedGrid === 1
-                  ? () => updateCreated(selectedCreatedSortField, false)
-                  : () => updateOwned(selectedOwnedSortField, false)
-              }
-              detailsModalCloseOnKeyChange={slug_address}
-              changeSpotlightItem={handleChangeSpotlightItem}
-            />
+            {!isLoadingCards && (
+              <div
+                className={`flex items-center text-sm rounded-md md:text-base ${
+                  selectedGrid === 3
+                    ? "invisible"
+                    : selectedGrid === 1 &&
+                      createdItems.filter(
+                        (item) => !createdHiddenItems.includes(item.nft_id)
+                      ).length === 0
+                    ? "invisible"
+                    : selectedGrid === 2 &&
+                      ownedItems.filter(
+                        (item) => !ownedHiddenItems.includes(item.nft_id)
+                      ).length === 0
+                    ? "invisible"
+                    : null
+                }`}
+              >
+                <div className="flex-1"></div>
+                <div className="py-2 px-2 w-max cursor-pointer mr-1">
+                  Sort by:
+                </div>
+
+                <Select
+                  options={sortFieldOptions.map((key) => SORT_FIELDS[key])}
+                  labelField="label"
+                  valueField="key"
+                  values={[
+                    SORT_FIELDS[
+                      sortFieldOptions[
+                        selectedGrid === 1
+                          ? selectedCreatedSortField - 1
+                          : selectedOwnedSortField - 1
+                      ]
+                    ],
+                  ]}
+                  searchable={false}
+                  onChange={(values) => {
+                    if (selectedGrid === 1) {
+                      setSelectedCreatedSortField(values[0]["id"]);
+                      updateCreated(values[0]["id"], true);
+                    } else {
+                      setSelectedOwnedSortField(values[0]["id"]);
+                      updateOwned(values[0]["id"], true);
+                    }
+                  }}
+                  key={selectedGrid}
+                />
+              </div>
+            )}
           </div>
-        )}
+
+          <TokenGridV4
+            items={
+              selectedGrid === 1
+                ? createdItems
+                : selectedGrid === 2
+                ? ownedItems
+                : selectedGrid === 3
+                ? likedItems
+                : null
+            }
+            isLoading={isLoadingCards || isRefreshingCards}
+            listId={
+              selectedGrid === 1
+                ? 1
+                : selectedGrid === 2
+                ? 2
+                : selectedGrid === 3
+                ? 3
+                : null
+            }
+            isMyProfile={isMyProfile}
+            openCardMenu={openCardMenu}
+            setOpenCardMenu={setOpenCardMenu}
+            userHiddenItems={
+              selectedGrid === 1
+                ? createdHiddenItems
+                : selectedGrid === 2
+                ? ownedHiddenItems
+                : selectedGrid === 3
+                ? likedHiddenItems
+                : null
+            }
+            setUserHiddenItems={
+              selectedGrid === 1
+                ? setCreatedHiddenItems
+                : selectedGrid === 2
+                ? setOwnedHiddenItems
+                : selectedGrid === 3
+                ? setLikedHiddenItems
+                : null
+            }
+            showUserHiddenItems={showUserHiddenItems}
+            refreshItems={
+              selectedGrid === 1
+                ? () => updateCreated(selectedCreatedSortField, false)
+                : () => updateOwned(selectedOwnedSortField, false)
+            }
+            detailsModalCloseOnKeyChange={slug_address}
+            changeSpotlightItem={handleChangeSpotlightItem}
+          />
+        </div>
         {/* End Page Body */}
       </Layout>
     </div>

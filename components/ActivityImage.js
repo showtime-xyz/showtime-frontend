@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import ReactPlayer from "react-player";
+import mixpanel from "mixpanel-browser";
 
 export default function ActivityImage({
   nft,
@@ -29,6 +30,17 @@ export default function ActivityImage({
     return img_url;
   };
 
+  const getImageUrlLarge = (img_url, token_aspect_ratio) => {
+    if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
+      if (token_aspect_ratio && token_aspect_ratio > 1) {
+        img_url = img_url.split("=")[0] + "=h662";
+      } else {
+        img_url = img_url.split("=")[0] + "=w662";
+      }
+    }
+    return img_url;
+  };
+
   return (
     <div
       className={`flex-1 cursor-pointer overflow-hidden hover:opacity-90 ${
@@ -46,17 +58,17 @@ export default function ActivityImage({
         mixpanel.track("Activity - Click on NFT image, open modal");
       }}
     >
-      {nft.token_img_url && (
+      {nft.token_img_url && !(nft.token_has_video && numberOfImages === 1) && (
         <img
           src={
             numberOfImages === 1
-              ? nft.token_img_url
+              ? getImageUrlLarge(nft.token_img_url, nft.token_aspect_ratio)
               : getImageUrl(nft.token_img_url, nft.token_aspect_ratio)
           }
           className="object-cover w-full h-full"
         />
       )}
-      {nft.token_has_video && !nft.token_img_url && (
+      {nft.token_has_video && (!nft.token_img_url || numberOfImages === 1) && (
         <ReactPlayer
           url={nft?.token_animation_url}
           playing={true}
