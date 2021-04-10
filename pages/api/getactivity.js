@@ -6,7 +6,6 @@ export default async (req, res) => {
   let data_activity = { data: [] };
   const body = JSON.parse(req.body);
   const page = body.page || 1;
-  console.log(page);
 
   try {
     let publicAddress;
