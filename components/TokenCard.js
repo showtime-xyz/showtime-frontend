@@ -165,11 +165,7 @@ class TokenCard extends React.Component {
     const { isMobile } = this.context;
     return (
       <>
-        <div
-          className={`row-span-${this.state.spans}  ${
-            this.props.columns === 1 ? "pb-4" : "p-2"
-          }`}
-        >
+        <div>
           <div
             style={_.merge(
               {
@@ -258,7 +254,7 @@ class TokenCard extends React.Component {
                           : item.nft_id + "_" + listId
                       );
                     }}
-                    className="card-menu-button text-right"
+                    className="card-menu-button text-right text-gray-500"
                   >
                     <FontAwesomeIcon
                       style={{

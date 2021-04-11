@@ -19,10 +19,9 @@ import {
 import {
   faComment as fasComment,
   faHeart as fasHeart,
-  fas,
+  faFingerprint,
   faUser as fasUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { faFingerprint } from "@fortawesome/free-solid-svg-icons";
 
 const ACTIVITY_PAGE_LENGTH = 5; // 5 activity items per activity page
 export async function getServerSideProps() {
@@ -233,8 +232,10 @@ const Activity = () => {
                   onClick={() => {
                     handleFilterClick(0);
                   }}
-                  className={`hover:bg-blue-100 p-2 rounded-lg px-3 ${
-                    activityTypeFilter === 0 ? "text-blue-500" : "text-gray-500"
+                  className={`hover:bg-blue-100 mb-1 p-2 rounded-lg px-3 ${
+                    activityTypeFilter === 0
+                      ? "text-blue-500 bg-blue-100"
+                      : "text-gray-500"
                   }  cursor-pointer`}
                 >
                   All News
@@ -243,9 +244,9 @@ const Activity = () => {
                   onClick={() => {
                     handleFilterClick(3);
                   }}
-                  className={`hover:bg-purple-100 p-2 rounded-lg px-3 ${
+                  className={`hover:bg-purple-100 mb-1 p-2 rounded-lg px-3 ${
                     activityTypeFilter === 3
-                      ? "text-purple-500"
+                      ? "text-purple-500 bg-purple-100"
                       : "text-gray-500"
                   } hover:text-purple-500 cursor-pointer flex flex-row items-center`}
                 >
@@ -259,8 +260,10 @@ const Activity = () => {
                   onClick={() => {
                     handleFilterClick(1);
                   }}
-                  className={`hover:bg-pink-100 p-2 rounded-lg px-3 ${
-                    activityTypeFilter === 1 ? "text-pink-500" : "text-gray-500"
+                  className={`hover:bg-pink-100 mb-1 p-2 rounded-lg px-3 ${
+                    activityTypeFilter === 1
+                      ? "text-pink-500 bg-pink-100"
+                      : "text-gray-500"
                   } hover:text-pink-500 cursor-pointer flex flex-row items-center`}
                 >
                   <FontAwesomeIcon
@@ -273,8 +276,10 @@ const Activity = () => {
                   onClick={() => {
                     handleFilterClick(2);
                   }}
-                  className={`hover:bg-blue-100 p-2 rounded-lg px-3 ${
-                    activityTypeFilter === 2 ? "text-blue-500" : "text-gray-500"
+                  className={`hover:bg-blue-100 mb-1 p-2 rounded-lg px-3 ${
+                    activityTypeFilter === 2
+                      ? "text-blue-500 bg-blue-100"
+                      : "text-gray-500"
                   } hover:text-blue-500 cursor-pointer flex flex-row items-center`}
                 >
                   <FontAwesomeIcon
@@ -287,9 +292,9 @@ const Activity = () => {
                   onClick={() => {
                     handleFilterClick(4);
                   }}
-                  className={`hover:bg-green-100 p-2 rounded-lg px-3 ${
+                  className={`hover:bg-green-100 mb-1 p-2 rounded-lg px-3 ${
                     activityTypeFilter === 4
-                      ? "text-green-500"
+                      ? "text-green-500 bg-green-100"
                       : "text-gray-500"
                   } hover:text-green-600 cursor-pointer flex flex-row items-center`}
                 >

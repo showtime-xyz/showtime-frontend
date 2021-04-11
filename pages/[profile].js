@@ -20,6 +20,18 @@ import { SORT_FIELDS } from "../lib/constants";
 import Select from "react-dropdown-select";
 import SpotlightItem from "../components/SpotlightItem";
 //import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faComment,
+  faHeart,
+  faUser,
+} from "@fortawesome/free-regular-svg-icons";
+import {
+  faComment as fasComment,
+  faHeart as fasHeart,
+  faFingerprint,
+  faUser as fasUser,
+} from "@fortawesome/free-solid-svg-icons";
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
@@ -978,7 +990,117 @@ const Profile = ({
             <div>{followingMe ? "Following me" : "Not following me"}</div>
           </div>
 
-          <div className={`mx-auto`}>
+          <div className="py-12">
+            <hr />
+          </div>
+          <div className="grid grid-cols-4">
+            <div>
+              <div className="px-4 py-4 h-max rounded-lg sticky top-24 bg-white shadow-md mr-4">
+                <div
+                  onClick={() => {
+                    setSelectedGrid(1);
+                  }}
+                  className={`hover:bg-purple-100 p-2 mb-1 rounded-lg px-3 ${
+                    selectedGrid === 1
+                      ? "text-purple-500 bg-purple-100"
+                      : "text-gray-500"
+                  } hover:text-purple-500 cursor-pointer flex flex-row items-center`}
+                >
+                  <FontAwesomeIcon
+                    icon={faFingerprint}
+                    className="mr-2 w-4 h-4"
+                  />
+                  <div>Created</div>
+                </div>
+                <div
+                  onClick={() => {
+                    setSelectedGrid(2);
+                  }}
+                  className={`hover:bg-blue-100 mb-1 p-2 rounded-lg px-3 ${
+                    selectedGrid === 2
+                      ? "text-blue-500 bg-blue-100"
+                      : "text-gray-500"
+                  } hover:text-blue-500 cursor-pointer flex flex-row items-center`}
+                >
+                  <FontAwesomeIcon
+                    icon={selectedGrid === 2 ? fasComment : faComment}
+                    className="mr-2 w-4 h-4"
+                  />
+                  <div>Owned</div>
+                </div>
+                <div
+                  onClick={() => {
+                    setSelectedGrid(3);
+                  }}
+                  className={`hover:bg-pink-100 p-2 rounded-lg px-3 ${
+                    selectedGrid === 3
+                      ? "text-pink-500 bg-pink-100"
+                      : "text-gray-500"
+                  } hover:text-pink-500 cursor-pointer flex flex-row items-center`}
+                >
+                  <FontAwesomeIcon
+                    icon={selectedGrid === 3 ? fasHeart : faHeart}
+                    className="mr-2 w-4 h-4"
+                  />
+                  <div>Liked</div>
+                </div>
+              </div>
+            </div>
+            <div className="col-span-3">
+              <TokenGridV4
+                items={
+                  selectedGrid === 1
+                    ? createdItems
+                    : selectedGrid === 2
+                    ? ownedItems
+                    : selectedGrid === 3
+                    ? likedItems
+                    : null
+                }
+                isLoading={isLoadingCards || isRefreshingCards}
+                listId={
+                  selectedGrid === 1
+                    ? 1
+                    : selectedGrid === 2
+                    ? 2
+                    : selectedGrid === 3
+                    ? 3
+                    : null
+                }
+                isMyProfile={isMyProfile}
+                openCardMenu={openCardMenu}
+                setOpenCardMenu={setOpenCardMenu}
+                userHiddenItems={
+                  selectedGrid === 1
+                    ? createdHiddenItems
+                    : selectedGrid === 2
+                    ? ownedHiddenItems
+                    : selectedGrid === 3
+                    ? likedHiddenItems
+                    : null
+                }
+                setUserHiddenItems={
+                  selectedGrid === 1
+                    ? setCreatedHiddenItems
+                    : selectedGrid === 2
+                    ? setOwnedHiddenItems
+                    : selectedGrid === 3
+                    ? setLikedHiddenItems
+                    : null
+                }
+                showUserHiddenItems={showUserHiddenItems}
+                refreshItems={
+                  selectedGrid === 1
+                    ? () => updateCreated(selectedCreatedSortField, false)
+                    : () => updateOwned(selectedOwnedSortField, false)
+                }
+                detailsModalCloseOnKeyChange={slug_address}
+                changeSpotlightItem={handleChangeSpotlightItem}
+              />
+            </div>
+          </div>
+
+          <div className={`mx-auto hidden`}>
             <div className="pt-4">{FilterTabs}</div>
 
             <div>
@@ -1054,57 +1176,6 @@ const Profile = ({
               </div>
             )}
           </div>
-
-          <TokenGridV4
-            items={
-              selectedGrid === 1
-                ? createdItems
-                : selectedGrid === 2
-                ? ownedItems
-                : selectedGrid === 3
-                ? likedItems
-                : null
-            }
-            isLoading={isLoadingCards || isRefreshingCards}
-            listId={
-              selectedGrid === 1
-                ? 1
-                : selectedGrid === 2
-                ? 2
-                : selectedGrid === 3
-                ? 3
-                : null
-            }
-            isMyProfile={isMyProfile}
-            openCardMenu={openCardMenu}
-            setOpenCardMenu={setOpenCardMenu}
-            userHiddenItems={
-              selectedGrid === 1
-                ? createdHiddenItems
-                : selectedGrid === 2
-                ? ownedHiddenItems
-                : selectedGrid === 3
-                ? likedHiddenItems
-                : null
-            }
-            setUserHiddenItems={
-              selectedGrid === 1
-                ? setCreatedHiddenItems
-                : selectedGrid === 2
-                ? setOwnedHiddenItems
-                : selectedGrid === 3
-                ? setLikedHiddenItems
-                : null
-            }
-            showUserHiddenItems={showUserHiddenItems}
-            refreshItems={
-              selectedGrid === 1
-                ? () => updateCreated(selectedCreatedSortField, false)
-                : () => updateOwned(selectedOwnedSortField, false)
-            }
-            detailsModalCloseOnKeyChange={slug_address}
-            changeSpotlightItem={handleChangeSpotlightItem}
-          />
         </div>
         {/* End Page Body */}
       </Layout>
