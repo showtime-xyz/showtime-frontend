@@ -208,8 +208,8 @@ class SpotlightItem extends React.Component {
                       controls
                       muted={this.state.muted}
                       className={`w-full h-full`}
-                      width={this.divRef?.current?.width / 2}
-                      height={this.divRef?.current?.height + 1}
+                      width={this.divRef?.current?.clientWidth / 2}
+                      height={"1"}
                       //width={columns === 1 ? window.innerWidth : "100%"}
                       // height={
                       //   columns === 1
@@ -361,7 +361,7 @@ class SpotlightItem extends React.Component {
                       currentlyPlayingVideo: false,
                     });
                   }}
-                  className="mb-4 text-4xl hover:text-stpink"
+                  className="mb-4 text-3xl hover:text-stpink"
                   style={{
                     overflowWrap: "break-word",
                     wordWrap: "break-word",

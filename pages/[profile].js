@@ -997,112 +997,135 @@ const Profile = ({
           </div>
           <div ref={gridRef} className="grid lg:grid-cols-3 xl:grid-cols-4">
             <div>
-              <div className="px-4 py-4 h-max rounded-lg sticky top-24 bg-white shadow-md mr-4">
-                <div className="border-b border-gray-200 mx-2 mb-2 pb-4 flex flex-row items-center">
-                  <div className="mr-2">
-                    <img
-                      src={
-                        isMyProfile
-                          ? context.myProfile && context.myProfile.img_url
-                            ? context.myProfile.img_url
+              <div className="h-max sticky top-24 ">
+                <div className="px-4 py-4  rounded-lg bg-white shadow-md mr-4">
+                  <div className="border-b border-gray-200 mx-2 mb-2 pb-4 flex flex-row items-center">
+                    <div className="mr-2">
+                      <img
+                        src={
+                          isMyProfile
+                            ? context.myProfile && context.myProfile.img_url
+                              ? context.myProfile.img_url
+                              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                            : img_url
+                            ? img_url
                             : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                          : img_url
-                          ? img_url
-                          : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                      }
-                      style={{ width: 22, height: 22 }}
-                      className="rounded-full"
-                    />
-                  </div>
-                  <div>
-                    {isMyProfile
-                      ? context.myProfile?.name
+                        }
+                        style={{ width: 22, height: 22 }}
+                        className="rounded-full"
+                      />
+                    </div>
+                    <div>
+                      {isMyProfile
                         ? context.myProfile?.name
-                        : wallet_addresses_excluding_email &&
-                          wallet_addresses_excluding_email.length > 0
-                        ? formatAddressShort(
-                            wallet_addresses_excluding_email[0]
-                          )
-                        : "Unnamed"
-                      : null}
-                    {!isMyProfile
-                      ? name != "Unnamed"
-                        ? name
-                        : wallet_addresses_excluding_email &&
-                          wallet_addresses_excluding_email.length > 0
-                        ? formatAddressShort(
-                            wallet_addresses_excluding_email[0]
-                          )
-                        : "Unnamed"
-                      : null}
+                          ? context.myProfile?.name
+                          : wallet_addresses_excluding_email &&
+                            wallet_addresses_excluding_email.length > 0
+                          ? formatAddressShort(
+                              wallet_addresses_excluding_email[0]
+                            )
+                          : "Unnamed"
+                        : null}
+                      {!isMyProfile
+                        ? name != "Unnamed"
+                          ? name
+                          : wallet_addresses_excluding_email &&
+                            wallet_addresses_excluding_email.length > 0
+                          ? formatAddressShort(
+                              wallet_addresses_excluding_email[0]
+                            )
+                          : "Unnamed"
+                        : null}
+                    </div>
+                  </div>
+
+                  <div
+                    onClick={() => {
+                      setSelectedGrid(1);
+                      if (gridRef?.current?.getBoundingClientRect().top < 0) {
+                        window.scroll({
+                          top: gridRef?.current?.offsetTop + 30,
+                          behavior: "smooth",
+                        });
+                      }
+                    }}
+                    className={`hover:bg-stpurple100 p-2 mb-1 rounded-lg px-3 ${
+                      selectedGrid === 1
+                        ? "text-stpurple700 bg-stpurple100"
+                        : "text-gray-500"
+                    } hover:text-stpurple700 cursor-pointer flex flex-row items-center`}
+                  >
+                    <FontAwesomeIcon
+                      icon={faFingerprint}
+                      className="mr-2 w-4 h-4"
+                    />
+                    <div>Created</div>
+                  </div>
+                  <div
+                    onClick={() => {
+                      setSelectedGrid(2);
+                      if (gridRef?.current?.getBoundingClientRect().top < 0) {
+                        window.scroll({
+                          top: gridRef?.current?.offsetTop + 30,
+                          behavior: "smooth",
+                        });
+                      }
+                    }}
+                    className={`hover:bg-stteal100 mb-1 p-2 rounded-lg px-3 ${
+                      selectedGrid === 2
+                        ? "text-stteal700 bg-stteal100"
+                        : "text-gray-500"
+                    } hover:text-stteal700 cursor-pointer flex flex-row items-center`}
+                  >
+                    <FontAwesomeIcon
+                      icon={selectedGrid === 2 ? fasComment : faComment}
+                      className="mr-2 w-4 h-4"
+                    />
+                    <div>Owned</div>
+                  </div>
+                  <div
+                    onClick={() => {
+                      setSelectedGrid(3);
+                      if (gridRef?.current?.getBoundingClientRect().top < 0) {
+                        window.scroll({
+                          top: gridRef?.current?.offsetTop + 30,
+                          behavior: "smooth",
+                        });
+                      }
+                    }}
+                    className={`hover:bg-stred100 p-2 rounded-lg px-3 ${
+                      selectedGrid === 3
+                        ? "text-stred bg-stred100"
+                        : "text-gray-500"
+                    } hover:text-stred cursor-pointer flex flex-row items-center`}
+                  >
+                    <FontAwesomeIcon
+                      icon={selectedGrid === 3 ? fasHeart : faHeart}
+                      className="mr-2 w-4 h-4"
+                    />
+                    <div>Liked</div>
                   </div>
                 </div>
-
-                <div
-                  onClick={() => {
-                    setSelectedGrid(1);
-                    if (gridRef?.current?.getBoundingClientRect().top < 0) {
-                      window.scroll({
-                        top: gridRef?.current?.offsetTop + 30,
-                        behavior: "smooth",
-                      });
-                    }
-                  }}
-                  className={`hover:bg-stpurple100 p-2 mb-1 rounded-lg px-3 ${
-                    selectedGrid === 1
-                      ? "text-stpurple700 bg-stpurple100"
-                      : "text-gray-500"
-                  } hover:text-stpurple700 cursor-pointer flex flex-row items-center`}
-                >
-                  <FontAwesomeIcon
-                    icon={faFingerprint}
-                    className="mr-2 w-4 h-4"
-                  />
-                  <div>Created</div>
-                </div>
-                <div
-                  onClick={() => {
-                    setSelectedGrid(2);
-                    if (gridRef?.current?.getBoundingClientRect().top < 0) {
-                      window.scroll({
-                        top: gridRef?.current?.offsetTop + 30,
-                        behavior: "smooth",
-                      });
-                    }
-                  }}
-                  className={`hover:bg-stteal100 mb-1 p-2 rounded-lg px-3 ${
-                    selectedGrid === 2
-                      ? "text-stteal700 bg-stteal100"
-                      : "text-gray-500"
-                  } hover:text-stteal700 cursor-pointer flex flex-row items-center`}
-                >
-                  <FontAwesomeIcon
-                    icon={selectedGrid === 2 ? fasComment : faComment}
-                    className="mr-2 w-4 h-4"
-                  />
-                  <div>Own</div>
-                </div>
-                <div
-                  onClick={() => {
-                    setSelectedGrid(3);
-                    if (gridRef?.current?.getBoundingClientRect().top < 0) {
-                      window.scroll({
-                        top: gridRef?.current?.offsetTop + 30,
-                        behavior: "smooth",
-                      });
-                    }
-                  }}
-                  className={`hover:bg-stred100 p-2 rounded-lg px-3 ${
-                    selectedGrid === 3
-                      ? "text-stred bg-stred100"
-                      : "text-gray-500"
-                  } hover:text-stred cursor-pointer flex flex-row items-center`}
-                >
-                  <FontAwesomeIcon
-                    icon={selectedGrid === 3 ? fasHeart : faHeart}
-                    className="mr-2 w-4 h-4"
-                  />
-                  <div>Liked</div>
+                <div>
+                  {isMyProfile ? (
+                    <div className="flex">
+                      <div
+                        className="text-right text-sm mt-2 mr-6 ml-1 text-gray-400 cursor-pointer hover:text-gray-700"
+                        onClick={() => {
+                          setShowUserHiddenItems(!showUserHiddenItems);
+                        }}
+                      >
+                        {createdHiddenItems.length === 0 &&
+                        ownedHiddenItems.length === 0 &&
+                        likedHiddenItems.length === 0
+                          ? null
+                          : showUserHiddenItems
+                          ? "Hide hidden"
+                          : "Show hidden"}
+                      </div>
+                      <div className="flex-grow"></div>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             </div>
