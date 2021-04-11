@@ -140,7 +140,7 @@ class TokenCard extends React.Component {
     return img_url;
   };
 
-  max_description_length = 75;
+  max_description_length = 67;
 
   getBackgroundColor = (item) => {
     if (
@@ -184,13 +184,13 @@ class TokenCard extends React.Component {
               className="p-4 flex flex-row items-center"
               style={{ position: "relative" }}
             >
-              <div className="flex-shrink">
+              <div className="flex-shrink pr-2">
                 {item.contract_is_creator ? (
                   <Link
                     href="/c/[collection]"
                     as={`/c/${item.collection_slug}`}
                   >
-                    <a className="flex flex-row items-center">
+                    <a className="flex flex-row items-center ">
                       <div>
                         <img
                           alt={item.collection_name}
@@ -230,18 +230,18 @@ class TokenCard extends React.Component {
                         />
                       </div>
                       <div className="showtime-card-profile-link ml-2">
-                        {this.truncateWithEllipses(item.creator_name, 20)}
+                        {this.truncateWithEllipses(item.creator_name, 24)}
                       </div>
                     </a>
                   </Link>
                 ) : null}
               </div>
-              <div className="flex-grow">&nbsp;</div>
 
               {this.context.myProfile?.profile_id !== item.creator_id &&
                 !(isMyProfile && listId !== 3) && (
                   <MiniFollowButton profileId={item.creator_id} />
                 )}
+              <div className="flex-grow">&nbsp;</div>
               <div>
                 {isMyProfile && listId !== 3 ? (
                   <div
@@ -500,7 +500,7 @@ class TokenCard extends React.Component {
               </div>
             )}
 
-            <div className="p-4 pb-3 sm:pb-4">
+            <div className="p-4">
               <div>
                 <div className="">
                   <div
@@ -546,10 +546,10 @@ class TokenCard extends React.Component {
                               overflowWrap: "break-word",
                               wordWrap: "break-word",
                               display: "block",
-                              minHeight: "4.75rem",
+                              minHeight: "4.7rem",
                             }
                       }
-                      className="py-2 sm:py-4 text-gray-500"
+                      className="py-4 text-gray-500"
                     >
                       {this.state.moreShown ? (
                         <div>{this.removeTags(item.token_description)}</div>
@@ -564,7 +564,7 @@ class TokenCard extends React.Component {
                               )}{" "}
                               <a
                                 onClick={this.handleMoreShown}
-                                style={{ color: "#111", cursor: "pointer" }}
+                                className="text-gray-900 hover:text-gray-500 cursor-pointer"
                               >
                                 {" "}
                                 more
@@ -577,35 +577,36 @@ class TokenCard extends React.Component {
                       )}
                     </div>
                   ) : null}
-                  <div className="flex items-center">
-                    <div className="mr-4">
-                      <LikeButton item={item} />
-                    </div>
-                    <div className="mr-4">
-                      <CommentButton
-                        item={item}
-                        handleComment={() => {
-                          mixpanel.track("Open NFT modal via comment button");
-                          this.props.setCurrentlyOpenModal(item);
-                          this.setState({ showVideo: false, muted: true });
-                          this.props.setCurrentlyPlayingVideo(null);
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <ShareButton
-                        url={
-                          window.location.protocol +
-                          "//" +
-                          window.location.hostname +
-                          (window.location.port
-                            ? ":" + window.location.port
-                            : "") +
-                          `/t/${item.contract_address}/${item.token_id}`
-                        }
-                        type={"item"}
-                      />
-                    </div>
+                </div>
+
+                <div className="flex items-center">
+                  <div className="mr-4">
+                    <LikeButton item={item} />
+                  </div>
+                  <div className="mr-4">
+                    <CommentButton
+                      item={item}
+                      handleComment={() => {
+                        mixpanel.track("Open NFT modal via comment button");
+                        this.props.setCurrentlyOpenModal(item);
+                        this.setState({ showVideo: false, muted: true });
+                        this.props.setCurrentlyPlayingVideo(null);
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <ShareButton
+                      url={
+                        window.location.protocol +
+                        "//" +
+                        window.location.hostname +
+                        (window.location.port
+                          ? ":" + window.location.port
+                          : "") +
+                        `/t/${item.contract_address}/${item.token_id}`
+                      }
+                      type={"item"}
+                    />
                   </div>
                 </div>
               </div>
@@ -618,63 +619,54 @@ class TokenCard extends React.Component {
               }}
             >
               <div className="mx-4 py-4 flex flex-col">
-                <div
-                  className="flex-shrink pr-2"
-                  style={{
-                    fontWeight: 400,
-                    fontSize: 14,
-                    color: "#888",
-                  }}
-                >
+                <div className="flex-shrink pr-2 text-xs text-gray-500 mb-1">
                   Owned by {item.multiple_owners ? null : null}
                 </div>
                 <div>
                   {item.multiple_owners ? (
                     <span style={{ color: "#888" }}>Multiple owners</span>
                   ) : item.owner_id ? (
-                    <Link
-                      href="/[profile]"
-                      as={`/${item?.owner_username || item.owner_address}`}
-                    >
-                      <a className="flex flex-row items-center pt-1">
-                        <div>
-                          <img
-                            alt={item.owner_name}
-                            src={
-                              item.owner_img_url
-                                ? item.owner_img_url
-                                : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                            }
-                            className="rounded-full mr-2"
-                            style={{ height: 24, width: 24 }}
-                          />
-                        </div>
-                        <div className="showtime-card-profile-link">
-                          {this.truncateWithEllipses(item.owner_name, 22)}
-                        </div>
-                      </a>
-                    </Link>
+                    <div className="flex flex-row items-center pt-1">
+                      <Link
+                        href="/[profile]"
+                        as={`/${item?.owner_username || item.owner_address}`}
+                      >
+                        <a className="flex flex-row items-center pr-2 ">
+                          <div>
+                            <img
+                              alt={item.owner_name}
+                              src={
+                                item.owner_img_url
+                                  ? item.owner_img_url
+                                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                              }
+                              className="rounded-full mr-2"
+                              style={{ height: 24, width: 24 }}
+                            />
+                          </div>
+                          <div className="showtime-card-profile-link">
+                            {this.truncateWithEllipses(item.owner_name, 24)}
+                          </div>
+                        </a>
+                      </Link>
+                      {this.context.myProfile?.profile_id !== item.owner_id &&
+                        !(isMyProfile && listId !== 3) && (
+                          <MiniFollowButton profileId={item.owner_id} />
+                        )}
+                      <div className="flex-grow">&nbsp;</div>
+                    </div>
                   ) : null}
                 </div>
               </div>
               <div className="flex-grow"></div>
 
-              <div
-                style={{ fontSize: 16, fontWeight: 400 }}
-                className="mx-4 py-4"
-              >
+              <div className="mr-4 py-4 text-sm text-gray-500 hover:text-gray-400 cursor-pointer">
                 <a
                   href={getBidLink(item)}
                   target="_blank"
-                  className="flex flex-row items-center showtime-card-bid"
+                  className="flex flex-row items-center "
                 >
                   <div className="mr-1">Bid</div>
-                  <div className="mb-0 flex">
-                    <FontAwesomeIcon
-                      style={{ height: 14 }}
-                      icon={faExternalLinkAlt}
-                    />
-                  </div>
                 </a>
               </div>
             </div>

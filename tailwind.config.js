@@ -65,6 +65,7 @@ module.exports = {
     extend: {
       colors: {
         stpink: "#e45cff",
+        stlink: "rgb(81, 125, 228)",
       },
       cursor: {
         copy: "copy",

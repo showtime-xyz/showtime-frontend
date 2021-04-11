@@ -152,18 +152,18 @@ const TokenGridV4 = ({
 
   useEffect(() => {
     if (context.isMobile) {
-      setItemsShowing(4);
+      setItemsShowing(3);
     } else {
-      setItemsShowing(8);
+      setItemsShowing(6);
     }
   }, [context.isMobile]);
 
   const fetchMoreData = () => {
-    if (itemsShowing + 8 > itemsList.length) {
+    if (itemsShowing + 6 > itemsList.length) {
       setHasMore(false);
       onFinish ? onFinish() : null;
     }
-    setItemsShowing(itemsShowing + 8);
+    setItemsShowing(itemsShowing + 6);
   };
 
   const currentIndex = deduplicatedItemsList.findIndex(

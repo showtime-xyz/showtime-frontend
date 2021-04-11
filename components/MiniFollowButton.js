@@ -1,36 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import mixpanel from "mixpanel-browser";
 import AppContext from "../context/app-context";
-
-const Button = styled.button`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  //border-radius: 24px;
-  //border: 1px solid rgba(0, 0, 0, 0.2);
-  box-sizing: border-box;
-  //border-radius: 41px;
-  //padding: 4px 10px;
-  &:hover {
-    opacity: 0.7;
-  }
-`;
-
-const FollowText = styled.h6`
-  font-size: 12px;
-  font-weight: 400;
-  color: #888;
-`;
-const PlusIcon = styled.div`
-  display: flex;
-  align-items: center;
-  margin-right: 6px;
-  color: #888;
-`;
 
 const MiniFollowButton = ({ profileId }) => {
   const context = useContext(AppContext);
@@ -83,6 +53,22 @@ const MiniFollowButton = ({ profileId }) => {
     context.setLoginModalOpen(true);
   };
 
+  return !isFollowed ? (
+    <div
+      onClick={
+        context.user
+          ? isFollowed
+            ? handleUnfollow
+            : handleFollow
+          : handleLoggedOutFollow
+      }
+      isFollowed={isFollowed}
+      className="text-xs text-stlink opacity-80 hover:opacity-100 cursor-pointer"
+    >
+      Follow
+    </div>
+  ) : null;
+
   return (
     <Button
       onClick={
@@ -101,7 +87,10 @@ const MiniFollowButton = ({ profileId }) => {
           </PlusIcon>*/}
           <FollowText>Follow</FollowText>
         </>
-      ) : (
+      ) : null}
+
+      {/*(
+        
         <PlusIcon>
           <div className="tooltip">
             <FontAwesomeIcon
@@ -122,8 +111,8 @@ const MiniFollowButton = ({ profileId }) => {
               </span>
             )}
           </div>
-        </PlusIcon>
-      )}
+        </PlusIcon> 
+      )}*/}
     </Button>
   );
 };
