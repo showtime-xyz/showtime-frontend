@@ -72,7 +72,7 @@ export default function ActivityCard({ act, setItemOpenInModal }) {
   }
   return (
     <div
-      className="flex flex-col flex-1 mx-4 mb-8 py-4 rounded-lg bg-white shadow-md border-t-2"
+      className="flex flex-col flex-1 mx-4 mb-8 pt-4 rounded-lg bg-white shadow-md border-t-2"
       style={{
         borderTopColor: activityIconObjects[type].color,
       }}
@@ -195,7 +195,7 @@ export default function ActivityCard({ act, setItemOpenInModal }) {
               <ActivityImages nfts={nfts} openModal={handleOpenModal} />
             </div>
             {single ? (
-              <div className="flex items-center pt-2 ml-3">
+              <div className="flex items-center pt-2 ml-3 mb-4">
                 <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
                   <LikeButton item={nfts[0]} />
                 </div>

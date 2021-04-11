@@ -15,6 +15,7 @@ export default function ActivityImages({ nfts, openModal }) {
               numberOfImages={count}
               openModal={openModal}
               spacingIndex={index}
+              bottomRow={count === 2 ? true : false}
             />
           ))}
         </div>
@@ -30,7 +31,7 @@ export default function ActivityImages({ nfts, openModal }) {
             openModal={openModal}
             spacingIndex={0}
           />
-          <div className="flex mt-1 w-full">
+          <div className="flex mt-1 w-full ">
             {[nfts[1], nfts[2]].map((nft, index) => (
               <ActivityImage
                 nft={nft}
@@ -39,6 +40,7 @@ export default function ActivityImages({ nfts, openModal }) {
                 numberOfImages={2}
                 openModal={openModal}
                 spacingIndex={index}
+                bottomRow
               />
             ))}
           </div>
@@ -68,6 +70,7 @@ export default function ActivityImages({ nfts, openModal }) {
                 numberOfImages={2}
                 openModal={openModal}
                 spacingIndex={index}
+                bottomRow
               />
             ))}
           </div>

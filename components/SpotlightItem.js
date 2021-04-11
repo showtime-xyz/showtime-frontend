@@ -253,14 +253,14 @@ class SpotlightItem extends React.Component {
                     ) : null}
                     <div className="flex">
                       <img
-                        className={`w-full
+                        className={`w-full hover:opacity-90
           
                         ${
                           item.token_aspect_ratio &&
                           Number(item.token_aspect_ratio) >
                             this.aspect_ratio_cutoff
                             ? null
-                            : null //"rounded-tl-lg rounded-bl-lg"
+                            : "rounded-tl-lg rounded-bl-lg"
                         }
                         
                         `}

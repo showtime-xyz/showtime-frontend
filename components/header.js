@@ -95,7 +95,7 @@ const Header = () => {
                   mixpanel.track("Explore button click");
                 }}
               >
-                Explore
+                Discover
               </a>
             </Link>
             <Link href="/leaderboard">

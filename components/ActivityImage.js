@@ -8,6 +8,7 @@ export default function ActivityImage({
   numberOfImages,
   openModal,
   spacingIndex,
+  bottomRow,
 }) {
   const aRef = useRef();
   const [imgWidth, setImgWidth] = useState(null);
@@ -43,9 +44,14 @@ export default function ActivityImage({
 
   return (
     <div
-      className={`flex-1 cursor-pointer overflow-hidden hover:opacity-90 ${
+      className={`flex-1  cursor-pointer overflow-hidden hover:opacity-90 ${
         spacingIndex !== numberOfImages - 1 ? "mr-1" : ""
-      }`}
+      }
+      
+      ${bottomRow && spacingIndex === 0 ? "rounded-bl-lg" : null}
+      ${bottomRow && spacingIndex === 1 ? "rounded-br-lg" : null}
+      
+      `}
       ref={aRef}
       style={{
         height: imgWidth,

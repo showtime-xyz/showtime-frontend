@@ -758,62 +758,78 @@ const Profile = ({
         </div>
         <div className="grid grid-cols-4 gap-4">
           <div>
-            {(isMyProfile &&
+            {/*(isMyProfile &&
               context.myProfile &&
               (context.myProfile.bio || context.myProfile.website_url)) ||
-            (!isMyProfile && (bio || website_url)) ? (
-              <div className="px-6 py-6 h-max rounded-lg  bg-white shadow-md">
-                {isMyProfile && context.myProfile ? (
-                  context.myProfile.bio ? (
-                    <>
-                      <div className="text-gray-500">
-                        {context.myProfile.bio}
-                      </div>
-                    </>
-                  ) : null
-                ) : bio ? (
-                  <>
-                    <div className="text-gray-500">{bio}</div>
-                  </>
-                ) : null}
+            (!isMyProfile && (bio || website_url)) ? (*/}
 
-                <div className="text-gray-500">
-                  {isMyProfile && context.myProfile ? (
-                    context.myProfile.website_url ? (
-                      <>
-                        {isMyProfile &&
-                        context.myProfile &&
-                        context.myProfile.bio ? (
-                          <br />
-                        ) : null}
-                        <a
-                          href={
-                            context.myProfile.website_url.slice(0, 4) === "http"
-                              ? context.myProfile.website_url
-                              : "https://" + context.myProfile.website_url
-                          }
-                          target="_blank"
-                          style={{ color: "rgb(81, 125, 228)" }}
-                          onClick={() => {
-                            mixpanel.track("Clicked profile website link", {
-                              slug: slug_address,
-                            });
-                          }}
-                        >
-                          <div style={{ wordBreak: "break-all" }}>
-                            {context.myProfile.website_url}
-                          </div>
-                        </a>
-                      </>
-                    ) : null
-                  ) : website_url ? (
+            <div className="px-6 py-6 h-max rounded-lg  bg-white shadow-md">
+              <div className="flex flex-row  text-center">
+                <div
+                  className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80"
+                  onClick={() => {
+                    setShowFollowers(true);
+                  }}
+                >
+                  <div className="text-lg mr-2">
+                    {followers && followers.length !== null
+                      ? followers.length
+                      : null}
+                  </div>
+                  <div className="text-sm text-gray-500">Followers</div>
+                </div>
+                <div
+                  className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80"
+                  onClick={() => {
+                    setShowFollowing(true);
+                  }}
+                >
+                  <div className="text-lg mr-2">
+                    {following && following.length !== null
+                      ? following.length
+                      : null}
+                  </div>
+                  <div className="text-sm text-gray-500">Following</div>
+                </div>
+              </div>
+
+              {(isMyProfile &&
+                context.myProfile &&
+                (context.myProfile.bio || context.myProfile.website_url)) ||
+              (!isMyProfile && (bio || website_url)) ? (
+                <div className="mt-4 mb-6">
+                  <hr />
+                </div>
+              ) : null}
+
+              {isMyProfile && context.myProfile ? (
+                context.myProfile.bio ? (
+                  <>
+                    <div className="text-gray-500 ">
+                      {context.myProfile.bio}
+                    </div>
+                  </>
+                ) : null
+              ) : bio ? (
+                <>
+                  <div className="text-gray-500">{bio}</div>
+                </>
+              ) : null}
+
+              <div className="text-gray-500">
+                {isMyProfile && context.myProfile ? (
+                  context.myProfile.website_url ? (
                     <>
-                      {!isMyProfile && bio ? <br /> : null}
+                      {isMyProfile &&
+                      context.myProfile &&
+                      context.myProfile.bio ? (
+                        <br />
+                      ) : null}
                       <a
                         href={
-                          website_url.slice(0, 4) === "http"
-                            ? website_url
-                            : "https://" + website_url
+                          context.myProfile.website_url.slice(0, 4) === "http"
+                            ? context.myProfile.website_url
+                            : "https://" + context.myProfile.website_url
                         }
                         target="_blank"
                         style={{ color: "rgb(81, 125, 228)" }}
@@ -823,21 +839,50 @@ const Profile = ({
                           });
                         }}
                       >
-                        <div style={{ wordBreak: "break-all" }}>
-                          {website_url}
+                        <div
+                          className="text-xs hover:opacity-90"
+                          style={{ wordBreak: "break-all" }}
+                        >
+                          {context.myProfile.website_url}
                         </div>
                       </a>
                     </>
-                  ) : null}
-                </div>
-                {/*<br />
+                  ) : null
+                ) : website_url ? (
+                  <>
+                    {!isMyProfile && bio ? <br /> : null}
+                    <a
+                      href={
+                        website_url.slice(0, 4) === "http"
+                          ? website_url
+                          : "https://" + website_url
+                      }
+                      target="_blank"
+                      style={{ color: "rgb(81, 125, 228)" }}
+                      onClick={() => {
+                        mixpanel.track("Clicked profile website link", {
+                          slug: slug_address,
+                        });
+                      }}
+                    >
+                      <div
+                        className="text-xs hover:opacity-90"
+                        style={{ wordBreak: "break-all" }}
+                      >
+                        {website_url}
+                      </div>
+                    </a>
+                  </>
+                ) : null}
+              </div>
+              {/*<br />
                 <div className="flex">
                   {wallet_addresses_excluding_email.map((address) => {
                     return <AddressButton key={address} address={address} />;
                   })}
                 </div>*/}
-              </div>
-            ) : null}
+            </div>
+            {/* : null*/}
           </div>
           <div className="col-span-3">
             {hasSpotlightItem ? (
