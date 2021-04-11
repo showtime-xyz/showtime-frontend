@@ -65,7 +65,7 @@ const Layout = ({ children }) => {
       </Head>
 
       <Header />
-      <div className="max-w-screen-2xl w-full mx-auto sm:px-16 min-h-screen">
+      <div className="max-w-screen-2xl w-full mx-auto px-8 2xl:px-16 min-h-screen">
         <ScrollUp />
         {typeof document !== "undefined" &&
         recommendedItems &&

@@ -624,7 +624,7 @@ class TokenCard extends React.Component {
                 </div>
                 <div>
                   {item.multiple_owners ? (
-                    <span style={{ color: "#888" }}>Multiple owners</span>
+                    <span className="text-gray-500">Multiple owners</span>
                   ) : item.owner_id ? (
                     <div className="flex flex-row items-center pt-1">
                       <Link

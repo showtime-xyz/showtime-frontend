@@ -66,6 +66,23 @@ module.exports = {
       colors: {
         stpink: "#e45cff",
         stlink: "rgb(81, 125, 228)",
+        stgreen: "#6bd464",
+
+        stred: "#ff5151",
+        stblue: "#5454ff",
+        stpurple: "#a577ff",
+        styellow: "#f3bf4b",
+        stpink100: "rgba(228, 92, 255, 0.1)",
+        stpurple100: "rgba(165, 119, 255, 0.1)",
+        stgreen100: "rgba(107, 212, 100, 0.15)",
+        stred100: "rgba(255, 81, 81, 0.1)",
+        stblue100: "rgba(84, 84, 255, 0.1)",
+        stgreen700: "#52a34d",
+        stpurple700: "#946ce6",
+
+        stteal: "#1dd4e0",
+        stteal100: "rgba(29, 212, 224, 0.2)",
+        stteal700: "#198c94",
       },
       cursor: {
         copy: "copy",

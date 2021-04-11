@@ -27,7 +27,7 @@ const Header = () => {
           top: 0,
         }}
       >
-        <div className="flex flex-row items-center max-w-screen-2xl mx-auto sm:px-16 ">
+        <div className="flex flex-row items-center max-w-screen-2xl mx-auto px-8  2xl:px-16">
           <div>
             <Link href="/">
               <a

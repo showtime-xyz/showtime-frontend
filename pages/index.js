@@ -225,7 +225,7 @@ const Activity = () => {
             </h1>
           </div>
 
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <div>
               <div className="px-4 py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
                 <div
@@ -236,7 +236,7 @@ const Activity = () => {
                     activityTypeFilter === 0
                       ? "text-blue-500 bg-blue-100"
                       : "text-gray-500"
-                  }  cursor-pointer`}
+                  }  hover:text-blue-500 cursor-pointer`}
                 >
                   All News
                 </div>
@@ -244,11 +244,11 @@ const Activity = () => {
                   onClick={() => {
                     handleFilterClick(3);
                   }}
-                  className={`hover:bg-purple-100 mb-1 p-2 rounded-lg px-3 ${
+                  className={`hover:bg-stpurple100 mb-1 p-2 rounded-lg px-3 ${
                     activityTypeFilter === 3
-                      ? "text-purple-500 bg-purple-100"
+                      ? "text-stpurple700 bg-stpurple100"
                       : "text-gray-500"
-                  } hover:text-purple-500 cursor-pointer flex flex-row items-center`}
+                  } hover:text-stpurple700 cursor-pointer flex flex-row items-center`}
                 >
                   <FontAwesomeIcon
                     icon={faFingerprint}
@@ -260,11 +260,11 @@ const Activity = () => {
                   onClick={() => {
                     handleFilterClick(1);
                   }}
-                  className={`hover:bg-pink-100 mb-1 p-2 rounded-lg px-3 ${
+                  className={`hover:bg-stred100 mb-1 p-2 rounded-lg px-3 ${
                     activityTypeFilter === 1
-                      ? "text-pink-500 bg-pink-100"
+                      ? "text-stred bg-stred100"
                       : "text-gray-500"
-                  } hover:text-pink-500 cursor-pointer flex flex-row items-center`}
+                  } hover:text-stred cursor-pointer flex flex-row items-center`}
                 >
                   <FontAwesomeIcon
                     icon={activityTypeFilter === 1 ? fasHeart : faHeart}
@@ -276,11 +276,11 @@ const Activity = () => {
                   onClick={() => {
                     handleFilterClick(2);
                   }}
-                  className={`hover:bg-blue-100 mb-1 p-2 rounded-lg px-3 ${
+                  className={`hover:bg-stblue100 mb-1 p-2 rounded-lg px-3 ${
                     activityTypeFilter === 2
-                      ? "text-blue-500 bg-blue-100"
+                      ? "text-stblue bg-stblue100"
                       : "text-gray-500"
-                  } hover:text-blue-500 cursor-pointer flex flex-row items-center`}
+                  } hover:text-stblue cursor-pointer flex flex-row items-center`}
                 >
                   <FontAwesomeIcon
                     icon={activityTypeFilter === 2 ? fasComment : faComment}
@@ -292,11 +292,11 @@ const Activity = () => {
                   onClick={() => {
                     handleFilterClick(4);
                   }}
-                  className={`hover:bg-green-100 mb-1 p-2 rounded-lg px-3 ${
+                  className={`hover:bg-stgreen100 mb-1 p-2 rounded-lg px-3 ${
                     activityTypeFilter === 4
-                      ? "text-green-500 bg-green-100"
+                      ? "text-stgreen700 bg-stgreen100"
                       : "text-gray-500"
-                  } hover:text-green-600 cursor-pointer flex flex-row items-center`}
+                  } hover:text-stgreen700 cursor-pointer flex flex-row items-center`}
                 >
                   <FontAwesomeIcon
                     icon={activityTypeFilter === 4 ? fasUser : faUser}
@@ -360,7 +360,7 @@ const Activity = () => {
               </div>
             </div>
             <div>
-              <div className=" py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
+              <div className="hidden xl:block py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
                 <ActivityRecommendedFollows />
               </div>
 
