@@ -73,7 +73,7 @@ class SpotlightItem extends React.Component {
     return img_url;
   };
 
-  max_description_length = 180;
+  max_description_length = 170;
   aspect_ratio_cutoff = 1.6;
 
   getBackgroundColor = (item) => {
@@ -143,13 +143,13 @@ class SpotlightItem extends React.Component {
                   style={{ border: "1px solid #f0f0f0" }}
                 >
                   <div
-                    className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                    className="py-2 px-3 hover:text-stpink hover:bg-gray-50  transition-all rounded-lg cursor-pointer whitespace-nowrap"
                     onClick={this.props.removeSpotlightItem}
                   >
                     Remove Spotlight
                   </div>
                   <div
-                    className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                    className="py-2 px-3 hover:text-stpink hover:bg-gray-50  transition-all rounded-lg cursor-pointer whitespace-nowrap"
                     onClick={this.handleRefreshNFTMetadata}
                   >
                     Refresh Metadata
@@ -253,7 +253,7 @@ class SpotlightItem extends React.Component {
                     ) : null}
                     <div className="flex">
                       <img
-                        className={`w-full hover:opacity-90
+                        className={`w-full hover:opacity-90  transition-all
           
                         ${
                           item.token_aspect_ratio &&
@@ -407,10 +407,10 @@ class SpotlightItem extends React.Component {
                 </div>
               ) : null}
               <div className="flex items-center">
-                <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
+                <div className="mr-4 text-base ">
                   <LikeButton item={item} />
                 </div>
-                <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
+                <div className="mr-4 text-base ">
                   <CommentButton
                     item={item}
                     handleComment={() => {
@@ -423,7 +423,7 @@ class SpotlightItem extends React.Component {
                     }}
                   />
                 </div>
-                <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
+                <div className="mr-4 text-base ">
                   <ShareButton
                     url={
                       window.location.protocol +
@@ -435,21 +435,24 @@ class SpotlightItem extends React.Component {
                     type={"item"}
                   />
                 </div>
-
-                <a
-                  href={getBidLink(item)}
-                  title={`Buy on ${getContractName(item)}`}
-                  target="_blank"
-                  onClick={() => {
-                    mixpanel.track("OpenSea link click");
-                  }}
-                >
-                  <div className="text-base font-normal px-4 py-3 mr-2 rounded-full shadow-md hover:text-stpink">
-                    {`Bid on ${getContractName(item)}`}
-                  </div>
-                </a>
               </div>
-              <div className="flex-grow"></div>
+              <div className="flex-grow ">
+                <div className="flex flex-row mt-8">
+                  <div className="text-base px-5 py-2 rounded-full text-white bg-stpink hover:bg-white hover:text-stpink border-2 border-stpink">
+                    <a
+                      href={getBidLink(item)}
+                      title={`Buy on ${getContractName(item)}`}
+                      target="_blank"
+                      onClick={() => {
+                        mixpanel.track("OpenSea link click");
+                      }}
+                    >
+                      {`Bid on ${getContractName(item)}`}
+                    </a>
+                  </div>
+                  <div className="flex-grow"></div>
+                </div>
+              </div>
               <div className="flex flex-row pt-4 mt-16 w-full border-t border-gray-200 mb-6">
                 {item.contract_is_creator ? (
                   <div className="flex-col flex-1">

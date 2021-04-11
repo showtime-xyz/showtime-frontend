@@ -4,7 +4,7 @@ import { format } from "date-fns";
 
 export default function UserTimestampCard({ name, imageUrl, timestamp }) {
   return (
-    <div className="flex items-center md:w-max border-2 border-gray-300 rounded-xl p-4 hover:text-stpink hover:border-stpink">
+    <div className="flex items-center md:w-max border-2 border-gray-300 rounded-xl p-4 hover:text-stpink hover:border-stpink transition-all">
       <div className="mr-4">
         <img
           alt={name}

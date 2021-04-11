@@ -12,7 +12,7 @@ export default function UserImageList({ users }) {
           key={user.wallet_address}
         >
           <a
-            className="mr-2"
+            className="mr-2 hover:opacity-90 transition-all"
             onClick={() => {
               mixpanel.track("Activity - Click on followed user");
             }}

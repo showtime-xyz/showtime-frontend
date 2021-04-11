@@ -178,7 +178,7 @@ const RecommendFollowers = ({
                 className={`text-center text-sm sm:text-base mx-auto px-5 py-1 sm:px-6 sm:py-2 my-4 flex items-center w-max border-2 rounded-full ${
                   followAllClicked
                     ? "bg-white"
-                    : "hover:text-stpink text-white border-stpink bg-stpink hover:bg-white cursor-pointer"
+                    : "hover:text-stpink text-white border-stpink bg-stpink hover:bg-white transition-all cursor-pointer"
                 }  `}
                 onClick={() => {
                   if (!followAllClicked) {
@@ -211,7 +211,7 @@ const RecommendFollowers = ({
               {!showAllItems && removeAlreadyFollowedItems.length > 3 && (
                 <>
                   <div
-                    className="text-center mx-auto px-6 py-2 my-4 flex items-center w-max border-2 rounded-full hover:text-stpink hover:border-stpink bg-white   cursor-pointer"
+                    className="text-center mx-auto px-6 py-2 my-4 flex items-center w-max border-2 rounded-full hover:text-stpink hover:border-stpink transition-all bg-white   cursor-pointer"
                     onClick={() => {
                       mixpanel.track(
                         "Clicked Show More on Recommended Followers modal"
@@ -232,7 +232,7 @@ const RecommendFollowers = ({
               <div
                 className={`${
                   context.isMobile ? "mx-auto" : "float-right"
-                } px-6 py-2 mt-4 flex items-center w-max border-2 border-gray-300 hover:bg-white hover:text-green-500 rounded-full cursor-pointer showtime-green-button`}
+                } px-6 py-2 mt-4 flex items-center w-max border-2 border-gray-300 hover:bg-white hover:text-green-500 transition-all rounded-full cursor-pointer showtime-green-button`}
                 onClick={() => {
                   mixpanel.track(
                     "Close Recommended Followers modal - bottom button"

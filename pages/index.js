@@ -219,10 +219,30 @@ const Activity = () => {
 
       <>
         <div className="m-auto relative">
+          <div className="mt-16 text-left mb-16 flex flex-row items-center">
+            <div className="flex-1">
+              <div className="text-2xl">Discover & Showcase</div>
+              <div className="text-6xl" style={{ fontFamily: "Afronaut" }}>
+                Your Favorite
+              </div>
+              <div className="text-6xl">Crypto Art.</div>
+            </div>
+            <div className="flex-1">
+              <div className="bg-white rounded-lg shadow-md px-6 py-6 text-center">
+                <span
+                  className="cursor-pointer hover:text-black bg-black text-white rounded-full px-5 py-3 hover:bg-white border-2 border-black transition"
+                  onClick={() => context.setLoginModalOpen(true)}
+                >
+                  Sign in
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <hr />
+
           <div className="mb-8 mt-16 text-left">
-            <h1 className="text-5xl" style={{ fontFamily: "Afronaut" }}>
-              News Feed
-            </h1>
+            <h1 className="text-4xl">News Feed</h1>
           </div>
 
           <div className="grid lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -236,7 +256,7 @@ const Activity = () => {
                     activityTypeFilter === 0
                       ? "text-blue-500 bg-blue-100"
                       : "text-gray-500"
-                  }  hover:text-blue-500 cursor-pointer`}
+                  }  hover:text-blue-500 cursor-pointer transition-all`}
                 >
                   All News
                 </div>
@@ -248,7 +268,7 @@ const Activity = () => {
                     activityTypeFilter === 3
                       ? "text-stpurple700 bg-stpurple100"
                       : "text-gray-500"
-                  } hover:text-stpurple700 cursor-pointer flex flex-row items-center`}
+                  } hover:text-stpurple700 cursor-pointer transition-all flex flex-row items-center`}
                 >
                   <FontAwesomeIcon
                     icon={faFingerprint}
@@ -264,7 +284,7 @@ const Activity = () => {
                     activityTypeFilter === 1
                       ? "text-stred bg-stred100"
                       : "text-gray-500"
-                  } hover:text-stred cursor-pointer flex flex-row items-center`}
+                  } hover:text-stred cursor-pointer transition-all flex flex-row items-center`}
                 >
                   <FontAwesomeIcon
                     icon={activityTypeFilter === 1 ? fasHeart : faHeart}
@@ -280,7 +300,7 @@ const Activity = () => {
                     activityTypeFilter === 2
                       ? "text-stblue bg-stblue100"
                       : "text-gray-500"
-                  } hover:text-stblue cursor-pointer flex flex-row items-center`}
+                  } hover:text-stblue cursor-pointer transition-all flex flex-row items-center`}
                 >
                   <FontAwesomeIcon
                     icon={activityTypeFilter === 2 ? fasComment : faComment}
@@ -296,7 +316,7 @@ const Activity = () => {
                     activityTypeFilter === 4
                       ? "text-stgreen700 bg-stgreen100"
                       : "text-gray-500"
-                  } hover:text-stgreen700 cursor-pointer flex flex-row items-center`}
+                  } hover:text-stgreen700 cursor-pointer transition-all flex flex-row items-center`}
                 >
                   <FontAwesomeIcon
                     icon={activityTypeFilter === 4 ? fasUser : faUser}
@@ -312,7 +332,7 @@ const Activity = () => {
               {context.user === undefined ? null : context.user === null ? (
                 <div className="flex flex-1 items-center justify-center mb-6">
                   <div className="text-gray-400 shadow-md bg-white rounded-lg w-full px-4 py-6 mx-4 text-center">
-                    News feed preview 👇 Please{" "}
+                    News feed preview. Please{" "}
                     <span
                       className="cursor-pointer text-gray-800 hover:text-stpink"
                       onClick={() => context.setLoginModalOpen(true)}

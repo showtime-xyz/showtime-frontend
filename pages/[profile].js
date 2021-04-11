@@ -1053,7 +1053,7 @@ const Profile = ({
                       selectedGrid === 1
                         ? "text-stpurple700 bg-stpurple100"
                         : "text-gray-500"
-                    } hover:text-stpurple700 cursor-pointer flex flex-row items-center`}
+                    } hover:text-stpurple700 cursor-pointer flex flex-row transition-all items-center`}
                   >
                     <FontAwesomeIcon
                       icon={faFingerprint}
@@ -1075,7 +1075,7 @@ const Profile = ({
                       selectedGrid === 2
                         ? "text-stteal700 bg-stteal100"
                         : "text-gray-500"
-                    } hover:text-stteal700 cursor-pointer flex flex-row items-center`}
+                    } hover:text-stteal700 cursor-pointer flex flex-row transition-all items-center`}
                   >
                     <FontAwesomeIcon
                       icon={selectedGrid === 2 ? fasComment : faComment}
@@ -1097,7 +1097,7 @@ const Profile = ({
                       selectedGrid === 3
                         ? "text-stred bg-stred100"
                         : "text-gray-500"
-                    } hover:text-stred cursor-pointer flex flex-row items-center`}
+                    } hover:text-stred cursor-pointer flex flex-row transition-all items-center`}
                   >
                     <FontAwesomeIcon
                       icon={selectedGrid === 3 ? fasHeart : faHeart}

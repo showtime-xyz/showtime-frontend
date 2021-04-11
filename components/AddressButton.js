@@ -7,7 +7,7 @@ const AddressButton = ({ address }) => {
   return (
     <div className="tooltip">
       <div
-        className="py-1 px-3 bg-purple-100 rounded-full mr-1 md:mr-2 hover:bg-purple-200 transition text-xs mt-1 text-purple-500"
+        className="py-1 px-3 bg-purple-100 rounded-full mr-1 md:mr-2 hover:bg-purple-200 transition-all text-xs mt-1 text-purple-500"
         style={{ cursor: "pointer" }}
         key={address}
         onMouseOut={() => {

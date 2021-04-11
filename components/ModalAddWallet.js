@@ -395,7 +395,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
                   <div className="mt-4 mb-2 pt-4 text-center border-t-2">
                     {step == 1 ? (
                       <button
-                        className="showtime-pink-button bg-white text-black hover:bg-gray-300 py-2 px-4 rounded-full"
+                        className="showtime-pink-button bg-white text-black hover:bg-gray-300 transition-all py-2 px-4 rounded-full"
                         onClick={() => {
                           setStep(2);
                           //pickWallet({ clearCachedProvider: true });
@@ -410,7 +410,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
                         .map((item) => item.toLowerCase())
                         .includes(addressDetected?.toLowerCase()) ? null : (
                         <button
-                          className="showtime-pink-button bg-white text-black hover:bg-gray-300 py-2 px-4 rounded-full"
+                          className="showtime-pink-button bg-white text-black hover:bg-gray-300 transition-all py-2 px-4 rounded-full"
                           onClick={() => {
                             signMessage();
                           }}

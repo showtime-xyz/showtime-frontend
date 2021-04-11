@@ -32,7 +32,7 @@ function Footer() {
               <a
                 href="mailto:help@tryshowtime.com"
                 target="_blank"
-                className="hover:text-gray-300"
+                className="hover:text-gray-300 transition-all"
               >
                 <FontAwesomeIcon
                   style={{ height: 20, width: 20 }}
@@ -44,7 +44,7 @@ function Footer() {
               <a
                 href="https://twitter.com/tryShowtime"
                 target="_blank"
-                className="hover:text-gray-300"
+                className="hover:text-gray-300 transition-all"
               >
                 <FontAwesomeIcon
                   style={{ height: 20, width: 20 }}
@@ -56,7 +56,7 @@ function Footer() {
               <a
                 href="https://www.instagram.com/tryshowtime/"
                 target="_blank"
-                className="hover:text-gray-300"
+                className="hover:text-gray-300 transition-all"
               >
                 <FontAwesomeIcon
                   style={{ height: 20, width: 20 }}
@@ -68,7 +68,7 @@ function Footer() {
               <a
                 href="https://discord.gg/FBSxXrcnsm"
                 target="_blank"
-                className="hover:text-gray-300"
+                className="hover:text-gray-300 transition-all"
               >
                 <FontAwesomeIcon
                   style={{ height: 20, width: 20 }}
@@ -89,7 +89,7 @@ function Footer() {
             </a>
             {"  ·  "}
             <span
-              className="cursor-pointer hover:text-gray-300"
+              className="cursor-pointer hover:text-gray-300 "
               onClick={() => setIsFeedbackModalOpen(true)}
             >
               Feedback

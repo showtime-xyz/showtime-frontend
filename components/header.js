@@ -174,7 +174,7 @@ const Header = () => {
             ) : (
               <>
                 <div
-                  className="text-black border-black rounded-full px-5 py-1 cursor-pointer border-2 hover:text-stpink hover:border-stpink transition-all text-center"
+                  className="text-black rounded-full px-5 py-1 cursor-pointer hover:text-stpink hover:border-stpink text-center"
                   onClick={() => {
                     context.setLoginModalOpen(!context.loginModalOpen);
                   }}

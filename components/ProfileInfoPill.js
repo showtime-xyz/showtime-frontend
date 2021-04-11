@@ -75,7 +75,7 @@ export default function ProfileInfoPill({
             style={{ zIndex: 1 }}
           >
             <div
-              className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+              className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap transition-all"
               onClick={() => {
                 setIsActive(false);
                 editAccount();
@@ -84,7 +84,7 @@ export default function ProfileInfoPill({
               Edit Info
             </div>
             <div
-              className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+              className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap transition-all"
               onClick={() => {
                 setIsActive(false);
                 editPhoto();
@@ -97,7 +97,7 @@ export default function ProfileInfoPill({
                 : "Add Photo"}
             </div>
             <div
-              className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+              className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap transition-all"
               onClick={() => {
                 setIsActive(false);
                 addWallet();
@@ -107,7 +107,7 @@ export default function ProfileInfoPill({
             </div>
             {hasEmailAddress ? null : (
               <div
-                className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap transition-all"
                 onClick={() => {
                   setIsActive(false);
                   addEmail();
@@ -117,7 +117,7 @@ export default function ProfileInfoPill({
               </div>
             )}
             <div
-              className="py-2 px-8 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+              className="py-2 px-8 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap transition-all"
               onClick={() => {
                 setIsActive(false);
                 logout();
@@ -138,7 +138,7 @@ export default function ProfileInfoPill({
         className={` shadow-lg px-6 relative py-4 rounded-xl  bg-white md:w-max flex flex-row justify-center items-center sm:items-stretch mt-8 mb-4`}
       >
         <div
-          className="flex flex-col justify-center my-2 md:my-0 items-center md:items-start cursor-pointer hover:opacity-60 transition"
+          className="flex flex-col justify-center my-2 md:my-0 items-center md:items-start cursor-pointer hover:opacity-60  transition-all"
           onClick={showFollowing}
         >
           <div className="text-sm text-gray-500">Following</div>
@@ -147,7 +147,7 @@ export default function ProfileInfoPill({
         <ClearSeparator />
         <div
           className={
-            "flex flex-col justify-center my-2 md:my-0 items-center md:items-start cursor-pointer hover:opacity-60 transition"
+            "flex flex-col justify-center my-2 md:my-0 items-center md:items-start cursor-pointer hover:opacity-60  transition-all"
           }
           onClick={showFollowers}
         >

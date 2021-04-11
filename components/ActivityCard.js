@@ -96,7 +96,7 @@ export default function ActivityCard({ act, setItemOpenInModal }) {
                     actor.profile_img_url ||
                     "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                   }
-                  className="rounded-full mr-2 w-14 h-14  hover:opacity-90"
+                  className="rounded-full mr-2 w-14 h-14  hover:opacity-90 transition-all"
                 />
                 <div
                   className="absolute bottom-0 right-2 rounded-full h-5 w-5 flex items-center justify-center shadow"
@@ -195,12 +195,12 @@ export default function ActivityCard({ act, setItemOpenInModal }) {
               <ActivityImages nfts={nfts} openModal={handleOpenModal} />
             </div>
             {single ? (
-              <div className="flex items-center pt-2 ml-3 mb-4">
-                <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
+              <div className="flex items-center pt-2 ml-4 mb-4">
+                <div className="mr-4 text-base mt-2">
                   <LikeButton item={nfts[0]} />
                 </div>
 
-                <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
+                <div className="mr-4 text-base mt-2">
                   <CommentButton
                     item={nfts[0]}
                     handleComment={() => {

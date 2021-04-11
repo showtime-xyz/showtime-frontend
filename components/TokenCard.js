@@ -145,7 +145,7 @@ class TokenCard extends React.Component {
                 : null
             }
             ref={this.divRef}
-            className="mx-auto sm:rounded-xl overflow-hidden shadow-md hover:shadow-xl bg-white"
+            className="mx-auto sm:rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all bg-white"
           >
             <div
               ref={this.imageRef}
@@ -246,7 +246,7 @@ class TokenCard extends React.Component {
                         style={{ border: "1px solid #f0f0f0" }}
                       >
                         <div
-                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap flex flew-row"
+                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap flex flew-row"
                           onClick={() => {
                             mixpanel.track("Clicked Spotlight Item");
                             this.props.changeSpotlightItem(this.props.item);
@@ -262,7 +262,7 @@ class TokenCard extends React.Component {
                         </div>
 
                         <div
-                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap"
                           onClick={
                             this.props.userHiddenItems.includes(
                               this.props.item.nft_id
@@ -294,7 +294,7 @@ class TokenCard extends React.Component {
                               }`}
                         </div>
                         <div
-                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap"
                           onClick={this.handleRefreshNFTMetadata}
                         >
                           Refresh Metadata

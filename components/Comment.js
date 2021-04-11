@@ -27,7 +27,7 @@ export default function Comment({
     myProfile.profile_id &&
     myProfile.profile_id === comment.commenter_profile_id;
   return (
-    <div className="p-2 my-1 flex rounded-xl hover:bg-gray-100 relative">
+    <div className="p-2 my-1 flex rounded-xl hover:bg-gray-100 transition-all relative">
       <div className="mr-3 mt-1">
         <Link
           href="/[profile]"
@@ -74,7 +74,7 @@ export default function Comment({
             <div className="flex items-center justify-center my-2 md:my-0 relative">
               <div
                 onClick={toggleDropdown}
-                className="ml-3 mr-1 cursor-pointer text-gray-400 hover:text-gray-600"
+                className="ml-3 mr-1 cursor-pointer text-gray-400 hover:text-gray-600 transition-all"
               >
                 <FontAwesomeIcon
                   style={{
@@ -94,7 +94,7 @@ export default function Comment({
                 style={{ zIndex: 1 }}
               >
                 <div
-                  className="py-1 px-4 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                  className="py-1 px-4 hover:text-stpink hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap"
                   onClick={async () => {
                     setIsDeleting(true);
                     await deleteComment(comment.comment_id);

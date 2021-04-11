@@ -260,7 +260,7 @@ const TokenDetailBody = ({
                       setLightboxOpen(true);
                       mixpanel.track("Original size clicked");
                     }}
-                    className="flex flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white"
+                    className="flex flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all"
                   >
                     <div className="">
                       <FontAwesomeIcon icon={faExpand} width={18} height={18} />

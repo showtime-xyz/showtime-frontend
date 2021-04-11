@@ -26,7 +26,7 @@ export default function ActivityImage({ nft }) {
 
   return (
     <div
-      className={`flex-1  cursor-pointer overflow-hidden hover:opacity-90
+      className={`flex-1  cursor-pointer overflow-hidden hover:opacity-90 transition-all
       
       `}
       ref={aRef}

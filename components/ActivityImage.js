@@ -44,7 +44,7 @@ export default function ActivityImage({
 
   return (
     <div
-      className={`flex-1  cursor-pointer overflow-hidden hover:opacity-90 ${
+      className={`flex-1  cursor-pointer overflow-hidden hover:opacity-90  transition-all ${
         spacingIndex !== numberOfImages - 1 ? "mr-1" : ""
       }
       

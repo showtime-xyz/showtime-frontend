@@ -76,12 +76,12 @@ export default function ActivityRecommendedFollows() {
     <div>
       <div className="border-b border-gray-200 flex items-center pb-2 px-4">
         <div className="m-2 flex-grow">Suggested for You</div>
-        <div />
-        {!loading && (
+
+        {/*!loading && (
           <div>
             <div
               onClick={followAllClicked ? () => {} : handleFollowAll}
-              className={`px-4 py-1 text-sm rounded-full border w-max flex items-center justify-center hover:opacity-80 cursor-pointer ${
+              className={`px-4 py-1 text-sm rounded-full border w-max flex items-center justify-center hover:opacity-80  transition-all cursor-pointer ${
                 followAllClicked
                   ? "border-gray-300 text-black"
                   : "border-stpink bg-stpink text-white"
@@ -97,7 +97,7 @@ export default function ActivityRecommendedFollows() {
               )}
             </div>
           </div>
-        )}
+              )*/}
       </div>
       {!loading &&
         recommendedFollows &&
