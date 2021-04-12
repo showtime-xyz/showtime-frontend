@@ -9,7 +9,6 @@ import backend from "../lib/backend";
 import AppContext from "../context/app-context";
 import ModalEditProfile from "../components/ModalEditProfile";
 import ModalEditPhoto from "../components/ModalEditPhoto";
-//import { GridTabs, GridTab } from "../components/GridTabs";
 import ModalUserList from "../components/ModalUserList";
 import ModalAddWallet from "../components/ModalAddWallet";
 import ModalAddEmail from "../components/ModalAddEmail.js";
@@ -61,7 +60,6 @@ export async function getServerSideProps(context) {
     const default_created_sort_id =
       data_profile.profile.default_created_sort_id;
     const default_owned_sort_id = data_profile.profile.default_owned_sort_id;
-    const featured_nft_id = data_profile.profile.featured_nft_id;
 
     const featured_nft_img_url = data_profile.profile.featured_nft_img_url;
 
@@ -84,7 +82,6 @@ export async function getServerSideProps(context) {
         default_created_sort_id,
         default_owned_sort_id,
         featured_nft_img_url,
-        featured_nft_id,
         featured_nft,
       }, // will be passed to the page component as props
     };
@@ -118,7 +115,6 @@ const Profile = ({
   default_created_sort_id,
   default_owned_sort_id,
   featured_nft_img_url,
-  featured_nft_id,
   featured_nft,
 }) => {
   //const router = useRouter();
@@ -475,69 +471,11 @@ const Profile = ({
     setIsMyProfile(false);
   };
 
-  /*const FilterTabs = (
-    <GridTabs>
-      <GridTab
-        label="Created"
-        itemCount={
-          isLoadingCards
-            ? null
-            : showUserHiddenItems
-            ? createdItems.length
-            : createdItems.length == 150 // go ahead and say 150+ if we are at max items
-            ? 150
-            : createdItems.filter(
-                (item) => !createdHiddenItems.includes(item.nft_id)
-              ).length
-        }
-        isActive={selectedGrid === 1}
-        onClickTab={() => {
-          setSelectedGrid(1);
-        }}
-      />
-      <GridTab
-        label="Owned"
-        itemCount={
-          isLoadingCards
-            ? null
-            : showUserHiddenItems
-            ? ownedItems.length
-            : ownedItems.length == 150 // go ahead and say 150+ if we are at max items
-            ? 150
-            : ownedItems.filter(
-                (item) => !ownedHiddenItems.includes(item.nft_id)
-              ).length
-        }
-        isActive={selectedGrid === 2}
-        onClickTab={() => {
-          setSelectedGrid(2);
-        }}
-      />
-      <GridTab
-        label="Liked"
-        itemCount={
-          isLoadingCards
-            ? null
-            : showUserHiddenItems
-            ? likedItems.length
-            : likedItems.length == 150 // go ahead and say 150+ if we are at max items
-            ? 150
-            : likedItems.filter(
-                (item) => !likedHiddenItems.includes(item.nft_id)
-              ).length
-        }
-        isActive={selectedGrid === 3}
-        onClickTab={() => {
-          setSelectedGrid(3);
-        }}
-      />
-    </GridTabs>
-  );*/
-
   const gridRef = useRef();
 
   const dropdownRef = useRef(null);
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
+
   const onEditProfileClick = () => setIsActive(!isActive);
 
   const createdCount = isLoadingCards
