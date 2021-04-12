@@ -205,7 +205,7 @@ const Header = () => {
                 Home
               </a>
               </Link>*/}
-              {context.myProfile && (
+              {/* {context.myProfile && (
                 <span className="relative">
                   <Link href="/activity">
                     <a
@@ -224,7 +224,7 @@ const Header = () => {
                     New!
                   </div>
                 </span>
-              )}
+              )} */}
               <Link href="/c/[collection]" as="/c/all">
                 <a
                   className="showtime-header-link mr-5 text-sm md:text-base"
@@ -232,7 +232,7 @@ const Header = () => {
                     mixpanel.track("Explore button click");
                   }}
                 >
-                  Explore
+                  Discover
                 </a>
               </Link>
               <Link href="/leaderboard">
@@ -242,7 +242,7 @@ const Header = () => {
                     mixpanel.track("Leaderboard button click");
                   }}
                 >
-                  Leaderboard
+                  Trending
                 </a>
               </Link>
             </div>
