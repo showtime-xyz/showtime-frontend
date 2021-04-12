@@ -334,7 +334,7 @@ const Activity = () => {
             <div className="col-span-2 px-3">
               {context.user === undefined ? null : context.user === null ? (
                 <div className="flex flex-1 items-center justify-center mb-6">
-                  <div className="text-gray-400 shadow-md bg-white rounded-lg w-full px-4 py-6 mx-4 text-center">
+                  <div className="text-gray-400 shadow-md bg-white rounded-lg w-full px-4 py-6 text-center">
                     News feed preview. Please{" "}
                     <span
                       className="cursor-pointer text-gray-800 hover:text-stpink"
@@ -358,14 +358,14 @@ const Activity = () => {
                         No more activity. Follow more people.
                       </div>
                     ) : (
-                      <div className="text-gray-400 shadow-md bg-white rounded-lg w-full px-4 py-6 mx-4 text-center">
+                      <div className="text-gray-400 shadow-md bg-white rounded-lg w-full px-4 py-6 mb-4 text-center">
                         <span
                           className="cursor-pointer text-gray-800 hover:text-stpink"
                           onClick={() => context.setLoginModalOpen(true)}
                         >
                           Sign in
                         </span>{" "}
-                        to view & follow
+                        to view more
                       </div>
                     )}
                   </div>
