@@ -159,7 +159,7 @@ class SpotlightItem extends React.Component {
           ) : null}
           <div
             ref={this.divRef}
-            className={`md:w-3/4 mx-auto flex items-center flex-col md:flex-row p-4 md:p-0`}
+            className={`md:w-3/4 mx-auto flex items-center flex-col md:flex-row md:p-0`}
           >
             <div className={`flex-1 text-right`}>
               <div>
@@ -274,7 +274,7 @@ class SpotlightItem extends React.Component {
               </div>
             </div>
             <div
-              className={`flex-1 text-left mt-6 md:mt-4 md:mt-0 md:pl-12 w-full`}
+              className={`flex-1 text-left mt-3 md:mt-4 md:mt-0 md:pl-12 w-full p-6 md:p-0`}
             >
               <div>
                 <div className="flex flex-row">
