@@ -748,12 +748,12 @@ const Profile = ({
 
         <CappedWidth>
           <div className="flex flex-row -mt-8 mx-3">
-            <div className="opacity-100 w-full md:w-max mt-4 bg-white rounded-lg shadow-md px-4 py-3 text-center text-gray-900">
-              <div className="flex flex-col md:flex-row text-center">
+            <div className="opacity-100 w-full md:w-max mt-4 bg-white rounded-lg shadow-md px-4 py-4 md:py-3 text-center text-gray-900">
+              <div className="flex flex-col md:flex-row text-center items-center">
                 <div
                   className={`flex-1 ${
                     following?.length > 999 ? null : "w-28"
-                  }  flex flex-col md:flex-row items-center cursor-pointer hover:opacity-80`}
+                  }  flex flex-col md:flex-row items-center cursor-pointer hover:opacity-80 mb-4 md:mb-0`}
                   onClick={() => {
                     setShowFollowing(true);
                   }}
@@ -767,11 +767,16 @@ const Profile = ({
                   <div className="text-sm text-gray-500">Following</div>
                   <div className="flex-grow"></div>
                 </div>
-                <div className="border-r border-gray-400 mx-4"></div>
+                {!context.isMobile && (
+                  <div
+                    className="border-r border-gray-400 mx-4"
+                    style={{ width: 2, height: 20 }}
+                  ></div>
+                )}
                 <div
                   className={`flex-1 ${
                     followers?.length > 999 ? null : "w-28"
-                  }  flex flex-col md:flex-row items-center cursor-pointer hover:opacity-80`}
+                  }  flex flex-col md:flex-row items-center cursor-pointer hover:opacity-80 mb-4 md:mb-0`}
                   onClick={() => {
                     setShowFollowers(true);
                   }}
@@ -785,7 +790,12 @@ const Profile = ({
                   <div className="text-sm text-gray-500">Followers</div>
                   <div className="flex-grow"></div>
                 </div>
-                <div className="border-r border-gray-400 mx-4"></div>
+                {!context.isMobile && (
+                  <div
+                    className="border-r border-gray-400 mx-4"
+                    style={{ width: 2, height: 20 }}
+                  ></div>
+                )}
                 <div className="flex-1 w-36 flex flex-row items-center relative">
                   <div className="flex-grow"></div>
 
