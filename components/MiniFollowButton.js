@@ -6,9 +6,7 @@ const MiniFollowButton = ({ profileId }) => {
   const context = useContext(AppContext);
   const myFollows = context?.myFollows || [];
   const [isFollowed, setIsFollowed] = useState(false);
-  const [newlyFollowed, setNewlyFollowed] = useState(false);
-  //console.log(profileId);
-  //console.log(myFollows);
+
   useEffect(() => {
     var it_is_followed = false;
     _.forEach(myFollows, (follow) => {
@@ -20,7 +18,6 @@ const MiniFollowButton = ({ profileId }) => {
   }, [myFollows]);
 
   const handleFollow = async () => {
-    setNewlyFollowed(true);
     setIsFollowed(true);
     // Change myFollows via setMyFollows
     context.setMyFollows([{ profile_id: profileId }, ...context.myFollows]);
@@ -29,10 +26,6 @@ const MiniFollowButton = ({ profileId }) => {
       method: "post",
     });
     mixpanel.track("Followed profile - Card button");
-
-    setTimeout(function () {
-      setNewlyFollowed(false);
-    }, 1000);
   };
 
   const handleUnfollow = async () => {
@@ -62,60 +55,12 @@ const MiniFollowButton = ({ profileId }) => {
             : handleFollow
           : handleLoggedOutFollow
       }
-      //isFollowed={isFollowed}
       style={{ marginTop: 2 }}
       className="text-xs text-stlink opacity-80 hover:opacity-100 cursor-pointer"
     >
       Follow
     </div>
   ) : null;
-
-  return (
-    <Button
-      onClick={
-        context.user
-          ? isFollowed
-            ? handleUnfollow
-            : handleFollow
-          : handleLoggedOutFollow
-      }
-      isFollowed={isFollowed}
-    >
-      {!isFollowed ? (
-        <>
-          {/*<PlusIcon>
-            <FontAwesomeIcon icon={faPlus} style={{ width: 12, height: 12 }} />
-          </PlusIcon>*/}
-          <FollowText>Follow</FollowText>
-        </>
-      ) : null}
-
-      {/*(
-        
-        <PlusIcon>
-          <div className="tooltip">
-            <FontAwesomeIcon
-              icon={faUserFriends}
-              style={{ width: 18, height: 18 }}
-            />
-            {newlyFollowed ? null : (
-              <span
-                style={{
-                  fontSize: 12,
-                  opacity: 0.9,
-                  width: 170,
-                  lineHeight: 1.75,
-                }}
-                className="tooltip-text bg-black p-3 mb-9 -ml-48 rounded text-white"
-              >
-                Following. Click to unfollow.
-              </span>
-            )}
-          </div>
-        </PlusIcon> 
-      )}*/}
-    </Button>
-  );
 };
 
 export default MiniFollowButton;
