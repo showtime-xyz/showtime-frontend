@@ -7,11 +7,9 @@ import CappedWidth from "../components/CappedWidth";
 import TokenGridV4 from "../components/TokenGridV4";
 import backend from "../lib/backend";
 import AppContext from "../context/app-context";
-//import ShareButton from "../components/ShareButton";
 import ModalEditProfile from "../components/ModalEditProfile";
 import ModalEditPhoto from "../components/ModalEditPhoto";
-import { GridTabs, GridTab } from "../components/GridTabs";
-//import ProfileInfoPill from "../components/ProfileInfoPill";
+//import { GridTabs, GridTab } from "../components/GridTabs";
 import ModalUserList from "../components/ModalUserList";
 import ModalAddWallet from "../components/ModalAddWallet";
 import ModalAddEmail from "../components/ModalAddEmail.js";
@@ -20,19 +18,14 @@ import AddressButton from "../components/AddressButton";
 import { SORT_FIELDS } from "../lib/constants";
 import Select from "react-dropdown-select";
 import SpotlightItem from "../components/SpotlightItem";
-//import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faComment,
-  faHeart,
-  faUser,
-} from "@fortawesome/free-regular-svg-icons";
+import useDetectOutsideClick from "../hooks/useDetectOutsideClick";
+import { faComment, faHeart } from "@fortawesome/free-regular-svg-icons";
 import {
   faComment as fasComment,
   faHeart as fasHeart,
   faFingerprint,
-  faUser as fasUser,
-  faStar,
+  faUser,
   faLink,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -544,6 +537,10 @@ const Profile = ({
 
   const gridRef = useRef();
 
+  const dropdownRef = useRef(null);
+  const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
+  const onEditProfileClick = () => setIsActive(!isActive);
+
   return (
     <div
       onClick={() => {
@@ -728,7 +725,9 @@ const Profile = ({
             <div className="opacity-100 mt-4 bg-white rounded-lg shadow-md px-4 py-3 text-center text-gray-900">
               <div className="flex flex-row  text-center">
                 <div
-                  className="flex-1 w-28  flex flex-row items-center cursor-pointer hover:opacity-80"
+                  className={`flex-1 ${
+                    following?.length > 999 ? null : "w-28"
+                  }  flex flex-row items-center cursor-pointer hover:opacity-80`}
                   onClick={() => {
                     setShowFollowing(true);
                   }}
@@ -736,7 +735,7 @@ const Profile = ({
                   <div className="flex-grow"></div>
                   <div className="text-lg mr-2">
                     {following && following.length !== null
-                      ? following.length
+                      ? Number(following.length).toLocaleString()
                       : null}
                   </div>
                   <div className="text-sm text-gray-500">Following</div>
@@ -744,7 +743,9 @@ const Profile = ({
                 </div>
                 <div className="border-r border-gray-400 mx-4"></div>
                 <div
-                  className="flex-1 w-28 flex flex-row items-center cursor-pointer hover:opacity-80"
+                  className={`flex-1 ${
+                    followers?.length > 999 ? null : "w-28"
+                  }  flex flex-row items-center cursor-pointer hover:opacity-80`}
                   onClick={() => {
                     setShowFollowers(true);
                   }}
@@ -752,18 +753,110 @@ const Profile = ({
                   <div className="flex-grow"></div>
                   <div className="text-lg mr-2">
                     {followers && followers.length !== null
-                      ? followers.length
+                      ? Number(followers.length).toLocaleString()
                       : null}
                   </div>
                   <div className="text-sm text-gray-500">Followers</div>
                   <div className="flex-grow"></div>
                 </div>
                 <div className="border-r border-gray-400 mx-4"></div>
-                <div className="flex-1 w-32 flex flex-row items-center cursor-pointer hover:opacity-80">
+                <div className="flex-1 w-36 flex flex-row items-center relative">
                   <div className="flex-grow"></div>
-                  <div className="px-10 py-2 rounded-full bg-black text-white text-sm">
-                    Follow
-                  </div>
+
+                  {!isMyProfile ? (
+                    <div
+                      className={`w-32 py-2 rounded-full text-sm cursor-pointer hover:opacity-80 transition-all ${
+                        isFollowed
+                          ? "bg-white text-gray-600 border border-gray-500"
+                          : "bg-black text-white border border-black"
+                      }  `}
+                      onClick={
+                        context.user
+                          ? isFollowed
+                            ? handleUnfollow
+                            : handleFollow
+                          : handleLoggedOutFollow
+                      }
+                    >
+                      {isFollowed
+                        ? "Following"
+                        : followingMe
+                        ? "Follow Back"
+                        : "Follow"}
+                    </div>
+                  ) : (
+                    <>
+                      <div
+                        className="w-32 py-2 rounded-full text-sm cursor-pointer hover:opacity-80 transition-all bg-white text-black border border-black"
+                        onClick={onEditProfileClick}
+                      >
+                        Edit Profile
+                      </div>
+
+                      <div
+                        ref={dropdownRef}
+                        className={`absolute text-center top-12 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-md transform ${
+                          isActive
+                            ? "visible opacity-1 translate-y-2"
+                            : "invisible opacity-0"
+                        }`}
+                        style={{ zIndex: 1 }}
+                      >
+                        <div
+                          className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap transition-all"
+                          onClick={() => {
+                            setIsActive(false);
+                            editAccount();
+                          }}
+                        >
+                          Edit Info
+                        </div>
+                        <div
+                          className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap transition-all"
+                          onClick={() => {
+                            setIsActive(false);
+                            editPhoto();
+                          }}
+                        >
+                          {context.myProfile &&
+                          context.myProfile.img_url &&
+                          !context.myProfile.img_url.includes("opensea-profile")
+                            ? "Edit Photo"
+                            : "Add Photo"}
+                        </div>
+                        <div
+                          className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap transition-all"
+                          onClick={() => {
+                            setIsActive(false);
+                            addWallet();
+                          }}
+                        >
+                          Add Wallet
+                        </div>
+                        {hasEmailAddress ? null : (
+                          <div
+                            className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap transition-all"
+                            onClick={() => {
+                              setIsActive(false);
+                              addEmail();
+                            }}
+                          >
+                            Add Email
+                          </div>
+                        )}
+                        <div
+                          className="py-2 px-8 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap transition-all"
+                          onClick={() => {
+                            setIsActive(false);
+                            logout();
+                          }}
+                        >
+                          Log Out
+                        </div>
+                      </div>
+                    </>
+                  )}
+
                   <div className="flex-grow"></div>
                 </div>
               </div>
@@ -778,7 +871,7 @@ const Profile = ({
                   <FontAwesomeIcon
                     style={{ height: 16, width: 16 }}
                     className="mr-2 ml-2"
-                    icon={fasUser}
+                    icon={faUser}
                   />
                 </div>
                 <div>{context.myProfile.bio}</div>
@@ -791,7 +884,7 @@ const Profile = ({
                   <FontAwesomeIcon
                     style={{ height: 16, width: 16 }}
                     className="mr-2 ml-2"
-                    icon={fasUser}
+                    icon={faUser}
                   />
                 </div>
                 <div>{bio}</div>
@@ -881,18 +974,6 @@ const Profile = ({
         </CappedWidth>
         {spotlightItem ? (
           <div className="mt-16 ">
-            {/*<CappedWidth>
-              <div className="text-left px-3 pb-3">
-                <h1 className="text-3xl flex flex-row">
-                  <FontAwesomeIcon
-                    style={{ height: 30, width: 30 }}
-                    className="mr-2"
-                    icon={faStar}
-                  />
-                  <div>Spotlight</div>
-                </h1>
-        </div>
-            </CappedWidth>*/}
             <div className="relative bg-white border-t border-b border-gray-200 py-16 mb-4">
               <SpotlightItem
                 item={spotlightItem}
@@ -915,53 +996,6 @@ const Profile = ({
         ) : null}
         <CappedWidth>
           <div className="m-auto">
-            {/*
-          <div className=" hidden">
-            
-
-            <ProfileInfoPill
-              isFollowed={isFollowed}
-              isMyProfile={isMyProfile}
-              onClickFollow={
-                context.user
-                  ? isFollowed
-                    ? handleUnfollow
-                    : handleFollow
-                  : handleLoggedOutFollow
-              }
-              onClickPhoto={() => {
-                setPictureModalOpen(true);
-                mixpanel.track("Open edit photo");
-              }}
-              numFollowers={followers && followers.length}
-              numFollowing={following && following.length}
-              showFollowers={() => {
-                setShowFollowers(true);
-              }}
-              showFollowing={() => {
-                setShowFollowing(true);
-              }}
-              profileImageUrl={
-                isMyProfile
-                  ? context.myProfile && context.myProfile.img_url
-                    ? context.myProfile.img_url
-                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                  : img_url
-                  ? img_url
-                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-              }
-              profileActions={{
-                editAccount,
-                editPhoto,
-                addWallet,
-                addEmail,
-                logout,
-              }}
-              hasEmailAddress={hasEmailAddress}
-            />
-            <div>{followingMe ? "Following me" : "Not following me"}</div>
-            </div>*/}
-
             {/*<div className="py-12 px-3 ">
               <hr />
           </div>*/}
