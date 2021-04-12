@@ -7,7 +7,8 @@ const AddressButton = ({ address }) => {
   return (
     <div className="tooltip">
       <div
-        className="py-1 px-3 bg-purple-100 rounded-full mr-1 md:mr-2 hover:bg-purple-200 transition text-sm text-purple-500"
+        //className="py-1 px-3  rounded-full mr-1 md:mr-2 hover:bg-purple-200 bg-purple-100 text-purple-500 transition-all text-xs mt-1 "
+        className="py-1 px-3  rounded-full mr-1 md:mr-2 hover:opacity-70 bg-white text-gray-800 transition-all text-xs mt-1 opacity-50"
         style={{ cursor: "pointer" }}
         key={address}
         onMouseOut={() => {
@@ -28,7 +29,7 @@ const AddressButton = ({ address }) => {
             ? { fontSize: 12, opacity: 0.9, width: 70 }
             : { fontSize: 12, opacity: 0.9, width: 100 }
         }
-        className="tooltip-text bg-black p-3 -mt-14 rounded text-white"
+        className="tooltip-text bg-black p-3 -mt-12 rounded text-white"
       >
         {isCopied ? "Copied!" : "Copy address"}
       </span>

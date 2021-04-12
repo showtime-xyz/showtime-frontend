@@ -14,7 +14,11 @@ import { formatDistanceToNowStrict } from "date-fns";
 import Link from "next/link";
 import AppContext from "../context/app-context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
+
 import LikeButton from "./LikeButton";
+import CommentButton from "./CommentButton";
 import ActivityImages from "./ActivityImages";
 import mixpanel from "mixpanel-browser";
 
@@ -68,62 +72,50 @@ export default function ActivityCard({ act, setItemOpenInModal }) {
   }
   return (
     <div
-      className="flex flex-col flex-1 px-4 py-6 border-b border-gray-200"
-      style={{ fontSize: isMobile ? "0.875rem" : "1rem" }}
+      className="flex flex-col flex-1 mb-6 pt-4 rounded-lg bg-white shadow-md border-t-2"
+      style={{
+        borderTopColor: activityIconObjects[type].color,
+      }}
     >
       {/* actor data */}
-      <div className="flex items-start">
-        <Link
-          href="/[profile]"
-          as={`/${actor?.username || actor?.wallet_address}`}
-        >
-          <a
-            className="relative w-max flex-shrink-0"
-            onClick={() => {
-              mixpanel.track("Activity - Click on user profile");
-            }}
-          >
-            <img
-              src={
-                actor.profile_img_url ||
-                "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-              }
-              style={{ width: 48, height: 48 }}
-              className="rounded-full mr-2"
-            />
-            <div
-              className="absolute bottom-0 left-0 rounded-full h-5 w-5 flex items-center justify-center shadow"
-              style={{
-                backgroundColor: activityIconObjects[type].color,
-              }}
-            >
-              <FontAwesomeIcon
-                style={{
-                  height: 12,
-                  width: 12,
-                }}
-                icon={activityIconObjects[type].icon}
-                color="white"
-              />
-            </div>
-          </a>
-        </Link>
-        <div className="flex flex-col flex-1 max-w-full">
-          <div className="flex items-start">
+      <div className="border-b border-gray-200 pb-4 px-4 ">
+        <div className="flex flex-row">
+          <div className="flex items-center">
             <Link
               href="/[profile]"
               as={`/${actor?.username || actor?.wallet_address}`}
             >
               <a
+                className="relative w-max flex-shrink-0"
                 onClick={() => {
                   mixpanel.track("Activity - Click on user profile");
                 }}
               >
-                <div className="mr-2 hover:text-stpink">{actor.name}</div>
+                <img
+                  src={
+                    actor.profile_img_url ||
+                    "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                  }
+                  className="rounded-full mr-2 w-14 h-14  hover:opacity-90 transition-all"
+                />
+                <div
+                  className="absolute bottom-0 right-2 rounded-full h-5 w-5 flex items-center justify-center shadow"
+                  style={{
+                    backgroundColor: activityIconObjects[type].color,
+                  }}
+                >
+                  <FontAwesomeIcon
+                    style={{
+                      height: 12,
+                      width: 12,
+                    }}
+                    icon={activityIconObjects[type].icon}
+                    color="white"
+                  />
+                </div>
               </a>
             </Link>
-
-            {actor.username && !isMobile && (
+            <div className="flex flex-col flex-1 max-w-full">
               <Link
                 href="/[profile]"
                 as={`/${actor?.username || actor?.wallet_address}`}
@@ -133,29 +125,94 @@ export default function ActivityCard({ act, setItemOpenInModal }) {
                     mixpanel.track("Activity - Click on user profile");
                   }}
                 >
-                  <div className="text-gray-500 mr-2">@{actor.username}</div>
+                  <div className="mr-2 hover:text-stpink text-base">
+                    {actor.name}
+                  </div>
                 </a>
               </Link>
-            )}
-            <div className="text-gray-500">
-              <span className="mr-2">·</span>
-              {formatDistanceToNowStrict(new Date(`${act.timestamp}Z`), {
-                addSuffix: true,
-              })}
+
+              {actor.username && !isMobile && (
+                <Link
+                  href="/[profile]"
+                  as={`/${actor?.username || actor?.wallet_address}`}
+                >
+                  <a
+                    onClick={() => {
+                      mixpanel.track("Activity - Click on user profile");
+                    }}
+                  >
+                    <div className="text-gray-400 text-xs">
+                      @{actor.username}
+                    </div>
+                  </a>
+                </Link>
+              )}
+              <div className="text-gray-400 text-xs">
+                {formatDistanceToNowStrict(new Date(`${act.timestamp}Z`), {
+                  addSuffix: true,
+                })}
+              </div>
             </div>
           </div>
-          {/* content */}
-          <div className="max-w-full">{content}</div>
-          <div className="flex mt-2 max-w-full">
-            <ActivityImages nfts={nfts} openModal={handleOpenModal} />
-          </div>
-          {single && (
-            <div className="px-3 py-1 mt-2 bg-gray-100 w-max rounded-xl">
-              <LikeButton item={nfts[0]} />
+          <div className="flex-grow"></div>
+          <div>
+            <div
+              onClick={(e) => {}}
+              className="card-menu-button text-right text-gray-300"
+            >
+              <FontAwesomeIcon
+                style={{
+                  height: 20,
+                  width: 20,
+                }}
+                icon={faEllipsisH}
+              />
             </div>
-          )}
+          </div>
         </div>
       </div>
+      <>
+        {/* content */}
+        <div className="max-w-full mt-4  px-4 flex flex-row">
+          {/*<div
+            className="rounded-full h-7 w-7 flex items-center justify-center shadow mr-2 "
+            style={{
+              backgroundColor: activityIconObjects[type].color,
+            }}
+          >
+            <FontAwesomeIcon
+              className="h-4 w-4"
+              icon={activityIconObjects[type].icon}
+              color="white"
+            />
+          </div>*/}
+          <div>{content}</div>
+        </div>
+
+        {nfts ? (
+          <>
+            <div className="flex mt-4 max-w-full">
+              <ActivityImages nfts={nfts} openModal={handleOpenModal} />
+            </div>
+            {single ? (
+              <div className="flex items-center pt-2 ml-4 mb-4">
+                <div className="mr-4 text-base mt-2">
+                  <LikeButton item={nfts[0]} />
+                </div>
+
+                <div className="mr-4 text-base mt-2">
+                  <CommentButton
+                    item={nfts[0]}
+                    handleComment={() => {
+                      setItemOpenInModal({ nftGroup: nfts, index: 0 });
+                    }}
+                  />
+                </div>
+              </div>
+            ) : null}
+          </>
+        ) : null}
+      </>
     </div>
   );
 }

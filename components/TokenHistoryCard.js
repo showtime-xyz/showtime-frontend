@@ -115,7 +115,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
                         as={`/${entry.from_username || entry.from_address}`}
                       >
                         <a onClick={closeModal}>
-                          <div className="flex items-center hover:text-stpink w-max">
+                          <div className="flex items-center hover:text-stpink transition-all w-max">
                             <img
                               src={
                                 entry.from_img_url ||
@@ -152,7 +152,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
                       as={`/${entry.to_username || entry.to_address}`}
                     >
                       <a onClick={closeModal}>
-                        <div className="flex items-center hover:text-stpink w-max">
+                        <div className="flex items-center hover:text-stpink transition-all w-max">
                           <img
                             src={
                               entry.to_img_url ||
@@ -215,7 +215,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
         <div className="flex flex-row items-center my-2 justify-center">
           {!loadingMoreHistory ? (
             <div
-              className="text-center px-4 py-1 flex items-center w-max border-2 border-gray-300 rounded-full hover:text-stpink hover:border-stpink cursor-pointer hover:text-stpink"
+              className="text-center px-4 py-1 flex items-center w-max border-2 border-gray-300 rounded-full hover:text-stpink hover:border-stpink cursor-pointer transition-all"
               onClick={handleGetMoreHistory}
             >
               <div className="mr-2 text-sm">Show All</div>

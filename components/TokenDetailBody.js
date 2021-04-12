@@ -48,9 +48,9 @@ const TokenDetailBody = ({
   const getImageUrl = (img_url, token_aspect_ratio) => {
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
       if (token_aspect_ratio && token_aspect_ratio > 1) {
-        img_url = img_url.split("=")[0] + "=h375";
+        img_url = img_url.split("=")[0] + "=h660";
       } else {
-        img_url = img_url.split("=")[0] + "=w375";
+        img_url = img_url.split("=")[0] + "=w660";
       }
     }
     return img_url;
@@ -58,7 +58,7 @@ const TokenDetailBody = ({
 
   const getBiggerImageUrl = (img_url) => {
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
-      img_url = img_url.split("=")[0] + "=h500";
+      img_url = img_url.split("=")[0] + "=h1328";
     }
     return img_url;
   };
@@ -260,7 +260,7 @@ const TokenDetailBody = ({
                       setLightboxOpen(true);
                       mixpanel.track("Original size clicked");
                     }}
-                    className="flex flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white"
+                    className="flex flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all"
                   >
                     <div className="">
                       <FontAwesomeIcon icon={faExpand} width={18} height={18} />
@@ -351,21 +351,7 @@ const TokenDetailBody = ({
                     <CommentButton item={item} handleComment={() => {}} />
                   </div>
                 </SmoothScroll>
-                <a
-                  href={getBidLink(item)}
-                  title={`Buy on ${getContractName(item)}`}
-                  target="_blank"
-                  onClick={() => {
-                    mixpanel.track("OpenSea link click");
-                  }}
-                >
-                  <div className="text-base font-normal px-4 py-3 mr-2 rounded-full shadow-md hover:text-stpink">
-                    {context.columns > 2
-                      ? `Bid on ${getContractName(item)}`
-                      : "Bid"}
-                  </div>
-                </a>
-                <div className="px-4 py-2 rounded-full shadow-md">
+                <div className="px-4 py-2 rounded-full shadow-md mr-2">
                   <ShareButton
                     url={
                       typeof window !== "undefined" &&
@@ -380,6 +366,22 @@ const TokenDetailBody = ({
                     type={"item"}
                   />
                 </div>
+
+                <a
+                  href={getBidLink(item)}
+                  title={`Buy on ${getContractName(item)}`}
+                  target="_blank"
+                  onClick={() => {
+                    mixpanel.track("OpenSea link click");
+                  }}
+                >
+                  <div className="text-base font-normal px-4 py-3 mr-2 rounded-full shadow-md hover:text-stpink">
+                    {context.columns > 2
+                      ? `Bid on ${getContractName(item)}`
+                      : "Bid"}
+                  </div>
+                </a>
+                <div className="flex-grow"></div>
               </div>
               {usersWhoLiked && (
                 <UsersWhoLiked

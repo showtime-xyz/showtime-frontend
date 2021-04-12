@@ -16,8 +16,9 @@ const RecommendedFollowRowItem = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 24px 0px;
+  //padding: 24px 0px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.11);
+  position: relative;
 `;
 
 const RecommendedFollowHeader = styled.div`
@@ -30,6 +31,10 @@ const RecommendedFollowHeader = styled.div`
     flex-direction: column;
     align-items: flex-start;
   }
+
+  padding-right: 16px;
+  padding-left: 24px;
+  padding-top: 16px;
 `;
 
 const ProfileSection = styled.div`
@@ -113,6 +118,8 @@ const NFTTiles = styled.div`
   @media screen and (max-width: 420px) {
     justify-content: space-between;
   }
+  margin-left: 24px;
+  margin-bottom: 16px;
 `;
 
 const NFTTile = styled.img`
@@ -200,7 +207,9 @@ const RecommendedFollowItem = ({
   const context = useContext(AppContext);
   const [followerCount, setFollowerCount] = useState();
   const isMyProfile = context?.myProfile?.profile_id === item?.profile_id;
-  const topItems = item?.top_items.slice(0, 6);
+  const topItems = liteVersion
+    ? item?.top_items.slice(0, 3)
+    : item?.top_items.slice(0, 6);
   const [currentlyOpenModal, setCurrentlyOpenModal] = useState(null);
   const currentIndex = topItems?.findIndex(
     (i) => i.nft_id === currentlyOpenModal?.nft_id
@@ -322,16 +331,13 @@ const RecommendedFollowItem = ({
           )}
         </div>
       </RecommendedFollowHeader>
+
       {context.gridWidth <= 420 ? (
         <>
           <Tiles
             topItems={topItems.slice(0, 3)}
             setCurrentlyOpenModal={setCurrentlyOpenModal}
           />
-          {/*<Tiles
-            topItems={topItems.slice(3, 6)}
-            setCurrentlyOpenModal={setCurrentlyOpenModal}
-          />*/}
         </>
       ) : (
         <Tiles

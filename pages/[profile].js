@@ -1,8 +1,9 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import Head from "next/head";
 import _ from "lodash";
 import mixpanel from "mixpanel-browser";
 import Layout from "../components/layout";
+import CappedWidth from "../components/CappedWidth";
 import TokenGridV4 from "../components/TokenGridV4";
 import backend from "../lib/backend";
 import AppContext from "../context/app-context";
@@ -10,18 +11,30 @@ import AppContext from "../context/app-context";
 import ModalEditProfile from "../components/ModalEditProfile";
 import ModalEditPhoto from "../components/ModalEditPhoto";
 import { GridTabs, GridTab } from "../components/GridTabs";
-import ProfileInfoPill from "../components/ProfileInfoPill";
+//import ProfileInfoPill from "../components/ProfileInfoPill";
 import ModalUserList from "../components/ModalUserList";
 import ModalAddWallet from "../components/ModalAddWallet";
 import ModalAddEmail from "../components/ModalAddEmail.js";
-//import { formatAddressShort, copyToClipBoard } from "../lib/utilities";
+import { formatAddressShort } from "../lib/utilities";
 import AddressButton from "../components/AddressButton";
 import { SORT_FIELDS } from "../lib/constants";
 import Select from "react-dropdown-select";
 import SpotlightItem from "../components/SpotlightItem";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
 //import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faComment,
+  faHeart,
+  faUser,
+} from "@fortawesome/free-regular-svg-icons";
+import {
+  faComment as fasComment,
+  faHeart as fasHeart,
+  faFingerprint,
+  faUser as fasUser,
+  faStar,
+  faLink,
+} from "@fortawesome/free-solid-svg-icons";
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
@@ -204,20 +217,6 @@ const Profile = ({
         //&& !data_profile.liked_hidden.includes(item.nft_id)
       )
     );
-
-    // look for spotlight item
-    /*
-    let spotlight;
-    spotlight = data_profile.created.find(
-      (item) => item.nft_id === featured_nft_id
-    );
-    if (!spotlight) {
-      spotlight = data_profile.owned.find(
-        (item) => item.nft_id === featured_nft_id
-      );
-    }
-    */
-
     if (initial_load) {
       setIsLoadingCards(false);
     }
@@ -226,6 +225,18 @@ const Profile = ({
   useEffect(() => {
     fetchItems(true);
   }, [profile_id]);
+
+  useEffect(() => {
+    if (
+      following_list
+        .map((item) => item.profile_id)
+        .includes(context.myProfile?.profile_id)
+    ) {
+      setFollowingMe(true);
+    } else {
+      setFollowingMe(false);
+    }
+  }, [following_list, context.myProfile?.profile_id]);
 
   const [followers, setFollowers] = useState([]);
   useEffect(() => {
@@ -345,6 +356,7 @@ const Profile = ({
   const [walletModalOpen, setWalletModalOpen] = useState(false);
   const [emailModalOpen, setEmailModalOpen] = useState(false);
   const [pictureModalOpen, setPictureModalOpen] = useState(false);
+  const [followingMe, setFollowingMe] = useState(false);
 
   const [selectedGrid, setSelectedGrid] = useState(1);
   const sortFieldOptions = Object.keys(SORT_FIELDS);
@@ -433,6 +445,7 @@ const Profile = ({
 
   const handleChangeSpotlightItem = async (nft) => {
     const nftId = nft ? nft.nft_id : null;
+
     setSpotlightItem(nft);
 
     // Post changes to the API
@@ -470,7 +483,7 @@ const Profile = ({
     setIsMyProfile(false);
   };
 
-  const FilterTabs = (
+  /*const FilterTabs = (
     <GridTabs>
       <GridTab
         label="Created"
@@ -527,7 +540,9 @@ const Profile = ({
         }}
       />
     </GridTabs>
-  );
+  );*/
+
+  const gridRef = useRef();
 
   return (
     <div
@@ -637,132 +652,174 @@ const Profile = ({
           </>
         ) : null}
 
-        {/* Start Page Body */}
-        {/* Wait until @gridWidth is populated to display page's body */}
-
-        {gridWidth && (
-          <div className="m-auto relative" style={{ width: gridWidth }}>
-            <div
-              style={
-                context.columns == 1
-                  ? { marginLeft: 16, marginRight: 16 }
-                  : { marginLeft: 12, marginRight: 12 }
-              }
-            >
-              <h1
-                style={{ wordWrap: "break-word" }}
-                className={`text-4xl md:text-6xl sm:mb-2 text-center md:text-left mt-12 sm:mt-20 ${
-                  (wallet_addresses_excluding_email.length === 0 ||
-                    context.columns === 1) &&
-                  !username
-                    ? "mb-8"
-                    : "mb-0"
-                }`}
-              >
-                {isMyProfile
-                  ? context.myProfile
-                    ? context.myProfile.name
+        <div
+          style={{
+            background: "linear-gradient(to left, #0186CC, #8145B3)",
+          }}
+          className="py-6 pl-10 text-left" //  bg-gradient-to-r from-gray-900 to-gray-500
+        >
+          <CappedWidth>
+            <div className="flex flex-row  text-white items-center pb-3 pt-3">
+              <div className="flex-0 py-8">
+                <img
+                  onClick={() => {
+                    if (isMyProfile) {
+                      setPictureModalOpen(true);
+                      mixpanel.track("Open edit photo");
+                    }
+                  }}
+                  src={
+                    isMyProfile
+                      ? context.myProfile && context.myProfile.img_url
+                        ? context.myProfile.img_url
+                        : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                      : img_url
+                      ? img_url
+                      : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                  }
+                  className={`h-24 w-24 rounded-full mr-4 border-2 border-white overflow-hidden ${
+                    isMyProfile
+                      ? "cursor-pointer hover:opacity-90 transition"
+                      : ""
+                  }`}
+                />
+              </div>
+              <div className="flex-1">
+                <div className="text-6xl mb-1">
+                  {isMyProfile
+                    ? context.myProfile
                       ? context.myProfile.name
+                        ? context.myProfile.name
+                        : "Unnamed"
+                      : name
+                      ? name
                       : "Unnamed"
                     : name
                     ? name
-                    : "Unnamed"
-                  : name
-                  ? name
-                  : "Unnamed"}
-              </h1>
-              {(username ||
-                (wallet_addresses_excluding_email.length > 0 &&
-                  context.columns > 1)) && (
-                <div className="flex flex-row justify-center items-center md:justify-start mb-12">
-                  {username && (
-                    <div className="mr-2 text-base text-gray-500">
-                      @{username}
-                    </div>
-                  )}
-                  {context.columns === 1 ? null : (
-                    <div className="flex mr-2 md:mr-0">
-                      {wallet_addresses_excluding_email.map((address) => {
-                        return (
-                          <AddressButton key={address} address={address} />
-                        );
-                      })}
+                    : "Unnamed"}
+                </div>
+                <div>
+                  {(username ||
+                    wallet_addresses_excluding_email.length > 0) && (
+                    <div className="flex flex-row items-center justify-start ">
+                      {username && (
+                        <div className="mr-2 text-base opacity-80">
+                          @{username}
+                        </div>
+                      )}
+
+                      <div className="flex">
+                        {wallet_addresses_excluding_email.map((address) => {
+                          return (
+                            <AddressButton key={address} address={address} />
+                          );
+                        })}
+                      </div>
                     </div>
                   )}
                 </div>
-              )}
+              </div>
             </div>
-          </div>
-        )}
+          </CappedWidth>
+        </div>
 
-        {gridWidth && (
-          <div className="m-auto" style={{ width: gridWidth }}>
-            <div
-              style={
-                context.columns == 1
-                  ? { marginLeft: 16, marginRight: 16 }
-                  : { marginLeft: 12, marginRight: 12 }
-              }
-            >
-              <div
-                className={`${
-                  isMyProfile && context.myProfile
-                    ? !context.myProfile.bio && !context.myProfile.website_url
-                      ? "hidden"
-                      : "flex-1"
-                    : !bio && !website_url
-                    ? "hidden"
-                    : "flex-1"
-                } mt-4 pb-2 text-base align-center flex flex-col justify-center items-center md:items-start`}
-              >
-                {/*<h4 className="text-black mb-2 text-lg font-semibold">About</h4>*/}
-                {isMyProfile && context.myProfile ? (
-                  context.myProfile.bio ? (
-                    <div className="max-w-xl">
-                      <div className="text-center md:text-left">
-                        {context.myProfile.bio}
-                      </div>
-                    </div>
-                  ) : null
-                ) : bio ? (
-                  <div className="max-w-xl">
-                    <div className="text-center md:text-left">
-                      <div className="">{bio}</div>
-                    </div>
+        <CappedWidth>
+          <div className="flex flex-row -mt-8 ml-3">
+            <div className="opacity-100 mt-4 bg-white rounded-lg shadow-md px-4 py-3 text-center text-gray-900">
+              <div className="flex flex-row  text-center">
+                <div
+                  className="flex-1 w-28  flex flex-row items-center cursor-pointer hover:opacity-80"
+                  onClick={() => {
+                    setShowFollowing(true);
+                  }}
+                >
+                  <div className="flex-grow"></div>
+                  <div className="text-lg mr-2">
+                    {following && following.length !== null
+                      ? following.length
+                      : null}
                   </div>
-                ) : null}
+                  <div className="text-sm text-gray-500">Following</div>
+                  <div className="flex-grow"></div>
+                </div>
+                <div className="border-r border-gray-400 mx-4"></div>
+                <div
+                  className="flex-1 w-28 flex flex-row items-center cursor-pointer hover:opacity-80"
+                  onClick={() => {
+                    setShowFollowers(true);
+                  }}
+                >
+                  <div className="flex-grow"></div>
+                  <div className="text-lg mr-2">
+                    {followers && followers.length !== null
+                      ? followers.length
+                      : null}
+                  </div>
+                  <div className="text-sm text-gray-500">Followers</div>
+                  <div className="flex-grow"></div>
+                </div>
+                <div className="border-r border-gray-400 mx-4"></div>
+                <div className="flex-1 w-32 flex flex-row items-center cursor-pointer hover:opacity-80">
+                  <div className="flex-grow"></div>
+                  <div className="px-10 py-2 rounded-full bg-black text-white text-sm">
+                    Follow
+                  </div>
+                  <div className="flex-grow"></div>
+                </div>
+              </div>
+            </div>
+            <div className="flex-grow"></div>
+          </div>
 
-                {isMyProfile && context.myProfile ? (
-                  context.myProfile.website_url ? (
-                    <a
-                      href={
-                        context.myProfile.website_url.slice(0, 4) === "http"
-                          ? context.myProfile.website_url
-                          : "https://" + context.myProfile.website_url
-                      }
-                      target="_blank"
-                      className="flex flex-row items-center justify-center"
-                      style={{ color: "rgb(81, 125, 228)" }}
-                      onClick={() => {
-                        mixpanel.track("Clicked profile website link", {
-                          slug: slug_address,
-                        });
-                      }}
-                    >
-                      <div style={{ wordBreak: "break-all" }}>
-                        {context.myProfile.website_url}
-                      </div>
-                    </a>
-                  ) : null
-                ) : website_url ? (
+          <div className="px-3 mt-8">
+            {isMyProfile && context.myProfile?.bio ? (
+              <div className="text-gray-500 flex flex-row">
+                <div>
+                  <FontAwesomeIcon
+                    style={{ height: 16, width: 16 }}
+                    className="mr-2 ml-2"
+                    icon={fasUser}
+                  />
+                </div>
+                <div>{context.myProfile.bio}</div>
+              </div>
+            ) : null}
+
+            {!isMyProfile && bio ? (
+              <div className="text-gray-500 flex flex-row">
+                <div>
+                  <FontAwesomeIcon
+                    style={{ height: 16, width: 16 }}
+                    className="mr-2 ml-2"
+                    icon={fasUser}
+                  />
+                </div>
+                <div>{bio}</div>
+              </div>
+            ) : null}
+
+            {isMyProfile && context?.myProfile?.website_url ? (
+              <div
+                className={`text-gray-500 flex flex-row ${
+                  isMyProfile && context?.myProfile?.bio ? "mt-1" : null
+                }
+            `}
+              >
+                <div>
+                  <FontAwesomeIcon
+                    style={{ height: 16, width: 16 }}
+                    className="mr-2 ml-2"
+                    icon={faLink}
+                  />{" "}
+                </div>
+                <div>
                   <a
                     href={
-                      website_url.slice(0, 4) === "http"
-                        ? website_url
-                        : "https://" + website_url
+                      context.myProfile.website_url.slice(0, 4) === "http"
+                        ? context.myProfile.website_url
+                        : "https://" + context.myProfile.website_url
                     }
                     target="_blank"
-                    className="flex flex-row"
                     style={{ color: "rgb(81, 125, 228)" }}
                     onClick={() => {
                       mixpanel.track("Clicked profile website link", {
@@ -770,133 +827,336 @@ const Profile = ({
                       });
                     }}
                   >
-                    <div style={{ wordBreak: "break-all" }}>{website_url}</div>
+                    <div
+                      className="hover:opacity-90"
+                      style={{ wordBreak: "break-all" }}
+                    >
+                      {context.myProfile.website_url}
+                    </div>
                   </a>
-                ) : null}
+                </div>
               </div>
+            ) : null}
 
-              <ProfileInfoPill
-                isFollowed={isFollowed}
-                isMyProfile={isMyProfile}
-                onClickFollow={
-                  context.user
-                    ? isFollowed
-                      ? handleUnfollow
-                      : handleFollow
-                    : handleLoggedOutFollow
+            {!isMyProfile && website_url ? (
+              <div
+                className={`text-gray-500 flex flex-row ${
+                  !isMyProfile && bio ? "mt-1" : null
                 }
-                onClickPhoto={() => {
-                  setPictureModalOpen(true);
-                  mixpanel.track("Open edit photo");
-                }}
-                numFollowers={followers && followers.length}
-                numFollowing={following && following.length}
-                showFollowers={() => {
-                  setShowFollowers(true);
-                }}
-                showFollowing={() => {
-                  setShowFollowing(true);
-                }}
-                profileImageUrl={
-                  isMyProfile
-                    ? context.myProfile && context.myProfile.img_url
-                      ? context.myProfile.img_url
-                      : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                    : img_url
-                    ? img_url
-                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                }
-                profileActions={{
-                  editAccount,
-                  editPhoto,
-                  addWallet,
-                  addEmail,
-                  logout,
-                }}
-                hasEmailAddress={hasEmailAddress}
-              />
-            </div>
-            {spotlightItem && (
-              <>
-                <div className="mx-auto" style={{ width: gridWidth }}>
-                  <div
-                    style={
-                      context.isMobile
-                        ? { padding: "0px 16px 20px 16px" }
-                        : { padding: "0px 12px 0px 12px" }
+            `}
+              >
+                <div>
+                  <FontAwesomeIcon
+                    style={{ height: 16, width: 16 }}
+                    className="mr-2 ml-2"
+                    icon={faLink}
+                  />{" "}
+                </div>
+                <div>
+                  <a
+                    href={
+                      website_url.slice(0, 4) === "http"
+                        ? website_url
+                        : "https://" + website_url
                     }
+                    target="_blank"
+                    style={{ color: "rgb(81, 125, 228)" }}
+                    onClick={() => {
+                      mixpanel.track("Clicked profile website link", {
+                        slug: slug_address,
+                      });
+                    }}
                   >
                     <div
-                      className="mt-8"
-                      style={{ borderBottom: "1px solid #ddd" }}
+                      className="hover:opacity-90"
+                      style={{ wordBreak: "break-all" }}
                     >
-                      <div
-                        className="flex flex-row"
-                        style={{
-                          width: "max-content",
-                          padding: "15px 0px",
-                          marginRight: 25,
-                          whiteSpace: "nowrap",
-                          borderBottom: "3px solid #e45cff",
-                          transition: "all 300ms ease",
-                          color: "#e45cff",
-                        }}
-                      >
-                        <div>
-                          {/*<img
-                            src="/icons/spotlight_flip.png"
-                            style={{
-                              height: 20,
-                              width: 20,
-                              marginLeft: 8,
-                            }}
-                            width={20}
-                            height={20}
-                          />*/}
-                          <FontAwesomeIcon
-                            style={{ height: 18, width: 18, marginRight: 6 }}
-                            icon={faStar}
-                          />
-                        </div>
-                        <div>Spotlight</div>
+                      {website_url}
+                    </div>
+                  </a>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </CappedWidth>
+        {spotlightItem ? (
+          <div className="mt-16 ">
+            {/*<CappedWidth>
+              <div className="text-left px-3 pb-3">
+                <h1 className="text-3xl flex flex-row">
+                  <FontAwesomeIcon
+                    style={{ height: 30, width: 30 }}
+                    className="mr-2"
+                    icon={faStar}
+                  />
+                  <div>Spotlight</div>
+                </h1>
+        </div>
+            </CappedWidth>*/}
+            <div className="relative bg-white border-t border-b border-gray-200 py-16 mb-4">
+              <SpotlightItem
+                item={spotlightItem}
+                removeSpotlightItem={() => {
+                  handleChangeSpotlightItem(null);
+                  mixpanel.track("Removed Spotlight Item");
+                }}
+                isMyProfile={isMyProfile}
+                openCardMenu={openCardMenu}
+                setOpenCardMenu={setOpenCardMenu}
+                listId={0}
+                refreshItems={() => {
+                  updateCreated(selectedCreatedSortField, false);
+                  updateOwned(selectedOwnedSortField, false);
+                }}
+                key={spotlightItem.nft_id}
+              />
+            </div>
+          </div>
+        ) : null}
+        <CappedWidth>
+          <div className="m-auto">
+            {/*
+          <div className=" hidden">
+            
+
+            <ProfileInfoPill
+              isFollowed={isFollowed}
+              isMyProfile={isMyProfile}
+              onClickFollow={
+                context.user
+                  ? isFollowed
+                    ? handleUnfollow
+                    : handleFollow
+                  : handleLoggedOutFollow
+              }
+              onClickPhoto={() => {
+                setPictureModalOpen(true);
+                mixpanel.track("Open edit photo");
+              }}
+              numFollowers={followers && followers.length}
+              numFollowing={following && following.length}
+              showFollowers={() => {
+                setShowFollowers(true);
+              }}
+              showFollowing={() => {
+                setShowFollowing(true);
+              }}
+              profileImageUrl={
+                isMyProfile
+                  ? context.myProfile && context.myProfile.img_url
+                    ? context.myProfile.img_url
+                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                  : img_url
+                  ? img_url
+                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+              }
+              profileActions={{
+                editAccount,
+                editPhoto,
+                addWallet,
+                addEmail,
+                logout,
+              }}
+              hasEmailAddress={hasEmailAddress}
+            />
+            <div>{followingMe ? "Following me" : "Not following me"}</div>
+            </div>*/}
+
+            {/*<div className="py-12 px-3 ">
+              <hr />
+          </div>*/}
+            <div
+              ref={gridRef}
+              className="grid lg:grid-cols-3 xl:grid-cols-4 pt-12"
+            >
+              <div className="px-3">
+                <div className="h-max sticky top-24 ">
+                  <div className="px-4 py-4  rounded-lg bg-white shadow-md">
+                    <div className="border-b border-gray-200 mx-2 mb-2 pb-4 flex flex-row items-center">
+                      <div className="mr-2">
+                        <img
+                          src={
+                            isMyProfile
+                              ? context.myProfile && context.myProfile.img_url
+                                ? context.myProfile.img_url
+                                : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                              : img_url
+                              ? img_url
+                              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                          }
+                          style={{ width: 22, height: 22 }}
+                          className="rounded-full"
+                        />
+                      </div>
+                      <div>
+                        {isMyProfile
+                          ? context.myProfile?.name
+                            ? context.myProfile?.name
+                            : wallet_addresses_excluding_email &&
+                              wallet_addresses_excluding_email.length > 0
+                            ? formatAddressShort(
+                                wallet_addresses_excluding_email[0]
+                              )
+                            : "Unnamed"
+                          : null}
+                        {!isMyProfile
+                          ? name != "Unnamed"
+                            ? name
+                            : wallet_addresses_excluding_email &&
+                              wallet_addresses_excluding_email.length > 0
+                            ? formatAddressShort(
+                                wallet_addresses_excluding_email[0]
+                              )
+                            : "Unnamed"
+                          : null}
                       </div>
                     </div>
+
+                    <div
+                      onClick={() => {
+                        setSelectedGrid(1);
+                        if (gridRef?.current?.getBoundingClientRect().top < 0) {
+                          window.scroll({
+                            top: gridRef?.current?.offsetTop + 30,
+                            behavior: "smooth",
+                          });
+                        }
+                      }}
+                      className={`hover:bg-stpurple100 p-2 mb-1 rounded-lg px-3 ${
+                        selectedGrid === 1
+                          ? "text-stpurple700 bg-stpurple100"
+                          : "text-gray-500"
+                      } hover:text-stpurple700 cursor-pointer flex flex-row transition-all items-center`}
+                    >
+                      <FontAwesomeIcon
+                        icon={faFingerprint}
+                        className="mr-2 w-4 h-4"
+                      />
+                      <div>Created</div>
+                    </div>
+                    <div
+                      onClick={() => {
+                        setSelectedGrid(2);
+                        if (gridRef?.current?.getBoundingClientRect().top < 0) {
+                          window.scroll({
+                            top: gridRef?.current?.offsetTop + 30,
+                            behavior: "smooth",
+                          });
+                        }
+                      }}
+                      className={`hover:bg-stteal100 mb-1 p-2 rounded-lg px-3 ${
+                        selectedGrid === 2
+                          ? "text-stteal700 bg-stteal100"
+                          : "text-gray-500"
+                      } hover:text-stteal700 cursor-pointer flex flex-row transition-all items-center`}
+                    >
+                      <FontAwesomeIcon
+                        icon={selectedGrid === 2 ? fasComment : faComment}
+                        className="mr-2 w-4 h-4"
+                      />
+                      <div>Owned</div>
+                    </div>
+                    <div
+                      onClick={() => {
+                        setSelectedGrid(3);
+                        if (gridRef?.current?.getBoundingClientRect().top < 0) {
+                          window.scroll({
+                            top: gridRef?.current?.offsetTop + 30,
+                            behavior: "smooth",
+                          });
+                        }
+                      }}
+                      className={`hover:bg-stred100 p-2 rounded-lg px-3 ${
+                        selectedGrid === 3
+                          ? "text-stred bg-stred100"
+                          : "text-gray-500"
+                      } hover:text-stred cursor-pointer flex flex-row transition-all items-center`}
+                    >
+                      <FontAwesomeIcon
+                        icon={selectedGrid === 3 ? fasHeart : faHeart}
+                        className="mr-2 w-4 h-4"
+                      />
+                      <div>Liked</div>
+                    </div>
+                  </div>
+                  <div>
+                    {isMyProfile ? (
+                      <div className="flex">
+                        <div
+                          className="text-right text-sm mt-2 mr-6 ml-1 text-gray-400 cursor-pointer hover:text-gray-700"
+                          onClick={() => {
+                            setShowUserHiddenItems(!showUserHiddenItems);
+                          }}
+                        >
+                          {createdHiddenItems.length === 0 &&
+                          ownedHiddenItems.length === 0 &&
+                          likedHiddenItems.length === 0
+                            ? null
+                            : showUserHiddenItems
+                            ? "Hide hidden"
+                            : "Show hidden"}
+                        </div>
+                        <div className="flex-grow"></div>
+                      </div>
+                    ) : null}
                   </div>
                 </div>
+              </div>
+              <div className="lg:col-span-2 xl:col-span-3">
+                <TokenGridV4
+                  items={
+                    selectedGrid === 1
+                      ? createdItems
+                      : selectedGrid === 2
+                      ? ownedItems
+                      : selectedGrid === 3
+                      ? likedItems
+                      : null
+                  }
+                  isLoading={isLoadingCards || isRefreshingCards}
+                  listId={
+                    selectedGrid === 1
+                      ? 1
+                      : selectedGrid === 2
+                      ? 2
+                      : selectedGrid === 3
+                      ? 3
+                      : null
+                  }
+                  isMyProfile={isMyProfile}
+                  openCardMenu={openCardMenu}
+                  setOpenCardMenu={setOpenCardMenu}
+                  userHiddenItems={
+                    selectedGrid === 1
+                      ? createdHiddenItems
+                      : selectedGrid === 2
+                      ? ownedHiddenItems
+                      : selectedGrid === 3
+                      ? likedHiddenItems
+                      : null
+                  }
+                  setUserHiddenItems={
+                    selectedGrid === 1
+                      ? setCreatedHiddenItems
+                      : selectedGrid === 2
+                      ? setOwnedHiddenItems
+                      : selectedGrid === 3
+                      ? setLikedHiddenItems
+                      : null
+                  }
+                  showUserHiddenItems={showUserHiddenItems}
+                  refreshItems={
+                    selectedGrid === 1
+                      ? () => updateCreated(selectedCreatedSortField, false)
+                      : () => updateOwned(selectedOwnedSortField, false)
+                  }
+                  detailsModalCloseOnKeyChange={slug_address}
+                  changeSpotlightItem={handleChangeSpotlightItem}
+                />
+              </div>
+            </div>
 
-                <div
-                  className="mx-auto flex flex-col justify-center items-center md:items-start"
-                  style={{
-                    maxWidth: context.columns == 4 ? 1185 : gridWidth,
-                  }}
-                >
-                  <SpotlightItem
-                    item={spotlightItem}
-                    removeSpotlightItem={() => {
-                      handleChangeSpotlightItem(null);
-                      mixpanel.track("Removed Spotlight Item");
-                    }}
-                    isMyProfile={isMyProfile}
-                    openCardMenu={openCardMenu}
-                    setOpenCardMenu={setOpenCardMenu}
-                    listId={0}
-                    refreshItems={() => {
-                      updateCreated(selectedCreatedSortField, false);
-                      updateOwned(selectedOwnedSortField, false);
-                    }}
-                  />
-                </div>
-              </>
-            )}
-
-            <div
-              className="mx-auto"
-              style={
-                context.isMobile && spotlightItem
-                  ? { width: gridWidth, borderTopWidth: 1 }
-                  : { width: gridWidth }
-              }
-            >
+            {/*<div className={`mx-auto hidden`}>
               <div className="pt-4">{FilterTabs}</div>
 
               <div>
@@ -904,14 +1164,9 @@ const Profile = ({
                   <div className="flex">
                     <div className="flex-grow"></div>
                     <div
-                      className="text-right pr-4 text-sm hidden-items-link pb-1"
+                      className="text-right pr-4 text-sm hidden-items-link pb-1 -mt-16"
                       onClick={() => {
                         setShowUserHiddenItems(!showUserHiddenItems);
-                      }}
-                      style={{
-                        fontWeight: 400,
-                        fontSize: 12,
-                        marginTop: -65,
                       }}
                     >
                       {createdHiddenItems.length === 0 &&
@@ -943,11 +1198,6 @@ const Profile = ({
                       ? "invisible"
                       : null
                   }`}
-                  style={
-                    context.columns === 1
-                      ? { marginTop: -12, marginRight: 16, marginBottom: 8 }
-                      : { marginTop: -20, marginRight: 12, marginBottom: 0 }
-                  }
                 >
                   <div className="flex-1"></div>
                   <div className="py-2 px-2 w-max cursor-pointer mr-1">
@@ -977,76 +1227,14 @@ const Profile = ({
                         updateOwned(values[0]["id"], true);
                       }
                     }}
-                    style={
-                      context.columns === 1
-                        ? {
-                            fontSize: 14,
-                            width: 140,
-                          }
-                        : {
-                            fontSize: 16,
-                            width: 150,
-                          }
-                    }
                     key={selectedGrid}
                   />
                 </div>
               )}
-            </div>
-
-            <TokenGridV4
-              items={
-                selectedGrid === 1
-                  ? createdItems
-                  : selectedGrid === 2
-                  ? ownedItems
-                  : selectedGrid === 3
-                  ? likedItems
-                  : null
-              }
-              isLoading={isLoadingCards || isRefreshingCards}
-              listId={
-                selectedGrid === 1
-                  ? 1
-                  : selectedGrid === 2
-                  ? 2
-                  : selectedGrid === 3
-                  ? 3
-                  : null
-              }
-              isMyProfile={isMyProfile}
-              openCardMenu={openCardMenu}
-              setOpenCardMenu={setOpenCardMenu}
-              userHiddenItems={
-                selectedGrid === 1
-                  ? createdHiddenItems
-                  : selectedGrid === 2
-                  ? ownedHiddenItems
-                  : selectedGrid === 3
-                  ? likedHiddenItems
-                  : null
-              }
-              setUserHiddenItems={
-                selectedGrid === 1
-                  ? setCreatedHiddenItems
-                  : selectedGrid === 2
-                  ? setOwnedHiddenItems
-                  : selectedGrid === 3
-                  ? setLikedHiddenItems
-                  : null
-              }
-              showUserHiddenItems={showUserHiddenItems}
-              refreshItems={
-                selectedGrid === 1
-                  ? () => updateCreated(selectedCreatedSortField, false)
-                  : () => updateOwned(selectedOwnedSortField, false)
-              }
-              detailsModalCloseOnKeyChange={slug_address}
-              changeSpotlightItem={handleChangeSpotlightItem}
-            />
+                  </div>*/}
           </div>
-        )}
-        {/* End Page Body */}
+          {/* End Page Body */}
+        </CappedWidth>
       </Layout>
     </div>
   );

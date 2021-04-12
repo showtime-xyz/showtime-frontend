@@ -6,26 +6,29 @@ export default async (req, res) => {
   let data_activity = { data: [] };
   const body = JSON.parse(req.body);
   const page = body.page || 1;
+  const activityTypeId = body.activityTypeId || 0;
 
   try {
-    user = await Iron.unseal(
-      CookieService.getAuthToken(req.cookies),
-      process.env.ENCRYPTION_SECRET_V2,
-      Iron.defaults
-    );
-
-    //console.log(user);
-    let email = null;
-    if (user.email) {
-      email = user.email;
+    let publicAddress;
+    try {
+      user = await Iron.unseal(
+        CookieService.getAuthToken(req.cookies),
+        process.env.ENCRYPTION_SECRET_V2,
+        Iron.defaults
+      );
+      publicAddress = user.publicAddress;
+    } catch (err) {
+      if (page > 3) {
+        res.statusCode = 200;
+        res.json(data_activity);
+      }
     }
 
     const res_activity = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/activity?page=${page}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/activity?page=${page}&type_id=${activityTypeId}`,
       {
         headers: {
-          "X-Authenticated-User": user.publicAddress,
-          "X-Authenticated-Email": email,
+          "X-Authenticated-User": publicAddress,
           "X-API-Key": process.env.SHOWTIME_FRONTEND_API_KEY_V2,
         },
       }

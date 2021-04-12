@@ -129,7 +129,7 @@ export default function CommentsSection({
                 <div className="flex flex-row items-center my-2 justify-center">
                   {!loadingMoreComments ? (
                     <div
-                      className="text-center px-4 py-1 flex items-center w-max border-2 border-gray-300 rounded-full hover:text-stpink hover:border-stpink cursor-pointer hover:text-stpink"
+                      className="text-center px-4 py-1 flex items-center w-max border-2 border-gray-300 rounded-full hover:text-stpink hover:border-stpink cursor-pointer transition-all"
                       onClick={handleGetMoreComments}
                     >
                       <div className="mr-2 text-sm">Show Earlier Comments</div>
@@ -187,7 +187,7 @@ export default function CommentsSection({
                     commentText === "" ||
                     commentText.trim() === ""
                   }
-                  className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink disabled:bg-gray-700"
+                  className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700"
                 >
                   {isSubmitting ? (
                     <div className="loading-card-spinner-small" />

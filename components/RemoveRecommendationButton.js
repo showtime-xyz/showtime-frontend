@@ -10,11 +10,7 @@ const Button = styled.button`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  border-radius: 24px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
-  border-radius: 41px;
-  padding: 8px;
   &:hover {
     opacity: 0.7;
   }
@@ -22,6 +18,9 @@ const Button = styled.button`
     width: 100%;
     margin-top: 10px;
   }
+  position: absolute;
+  top: 4px;
+  right: 4px;
 `;
 
 const CrossIcon = styled.div`
@@ -31,6 +30,7 @@ const CrossIcon = styled.div`
   padding: 10px;
   width: 14px;
   height: 14px;
+  color: #ccc;
 `;
 
 const RemoveText = styled.h6`
@@ -59,7 +59,8 @@ const RemoveRecommendationButton = ({ item, removeRecommendation }) => {
   }, [myFollows]);
 
   return (
-    !isFollowed && (
+    !isFollowed &&
+    context.user && (
       <div className="ml-0 md:ml-1">
         <Button onClick={handleRemove}>
           <CrossIcon>

@@ -152,18 +152,18 @@ const TokenGridV4 = ({
 
   useEffect(() => {
     if (context.isMobile) {
-      setItemsShowing(4);
+      setItemsShowing(3);
     } else {
-      setItemsShowing(8);
+      setItemsShowing(6);
     }
   }, [context.isMobile]);
 
   const fetchMoreData = () => {
-    if (itemsShowing + 8 > itemsList.length) {
+    if (itemsShowing + 6 > itemsList.length) {
       setHasMore(false);
       onFinish ? onFinish() : null;
     }
-    setItemsShowing(itemsShowing + 8);
+    setItemsShowing(itemsShowing + 6);
   };
 
   const currentIndex = deduplicatedItemsList.findIndex(
@@ -177,12 +177,7 @@ const TokenGridV4 = ({
           {" "}
           <FontAwesomeIcon style={{ height: 48, width: 48 }} icon={faThLarge} />
         </div>
-        <div
-          style={context.columns === 1 ? null : { width: context.gridWidth }}
-          className="p-3 text-center"
-        >
-          No items found.
-        </div>
+        <div className="p-3 text-center">No items found.</div>
       </div>
     );
   }
@@ -208,25 +203,11 @@ const TokenGridV4 = ({
         hasMore={hasMore}
       >
         {isLoading ? (
-          <div
-            className="mx-auto items-center flex justify-center overflow-hidden py-4"
-            style={context.columns === 1 ? null : { width: context.gridWidth }}
-          >
+          <div className="mx-auto items-center flex justify-center overflow-hidden py-4">
             <div className="loading-card-spinner" />
           </div>
         ) : (
-          <div
-            className={`grid grid-cols-${context.columns} overflow-hidden ${
-              context.isMobile ? "bg-gray-100" : ""
-            }`}
-            style={
-              context.columns === 1
-                ? null
-                : {
-                    width: context.gridWidth,
-                  }
-            }
-          >
+          <div className={`grid lg:grid-cols-2 xl:grid-cols-3 overflow-hidden`}>
             {deduplicatedItemsList.slice(0, itemsShowing).map((item) => (
               <TokenCard
                 key={item.nft_id}

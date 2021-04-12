@@ -51,7 +51,7 @@ export default function CreatorSummary({
         }
       >
         <a onClick={closeModal}>
-          <p className="text-xl md:text-3xl py-4 inline-block hover:text-stpink">
+          <p className="text-xl md:text-3xl py-4 inline-block hover:text-stpink ">
             {truncateWithEllipses(name, 26)}
           </p>
         </a>
@@ -68,7 +68,7 @@ export default function CreatorSummary({
         }
       >
         <a onClick={closeModal}>
-          <div className="px-4 py-2 mt-2 border-2 border-gray-300 rounded-full rounded-xl flex items-center justify-center w-max text-gray-300 hover:border-stpink hover:text-stpink">
+          <div className="px-4 py-2 mt-2 border-2 border-gray-300 rounded-full rounded-xl flex items-center justify-center w-max text-gray-300 hover:border-stpink hover:text-stpink transition-all">
             <span className="mr-2 text-black">
               {collectionSlug ? "Collection" : "Creator Profile"}
             </span>

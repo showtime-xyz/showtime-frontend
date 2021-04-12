@@ -54,9 +54,9 @@ export default function Collection({
   const [pageTitle, setPageTitle] = useState(
     selected_collection
       ? selected_collection.name === "Filter by collection"
-        ? "Explore"
-        : `Explore ${selected_collection.name}`
-      : `Explore ${collection}`
+        ? "Discover"
+        : `Discover ${selected_collection.name}`
+      : `Discover ${collection}`
   );
 
   const router = useRouter();
@@ -66,7 +66,7 @@ export default function Collection({
   useEffect(() => {
     setCurrentCollectionSlug(router.query.collection);
     if (router.query.collection == "all") {
-      setPageTitle("Explore");
+      setPageTitle("Discover");
       setCurrentCollectionSlug("all");
     }
   }, [router.query.collection]);
@@ -80,8 +80,8 @@ export default function Collection({
     });
     setPageTitle(
       values[0]["name"] === "Filter by collection"
-        ? "Explore"
-        : `Explore ${values[0]["name"]}`
+        ? "Discover"
+        : `Discover ${values[0]["name"]}`
     );
     setCurrentCollectionSlug(values[0]["value"]);
     setCurrentCollectionName(
@@ -113,7 +113,7 @@ export default function Collection({
         `/v2/collection?limit=150&order_by=${sortBy}&collection=${collection_name}`
       );
 
-      mixpanel.track("Explore page view", {
+      mixpanel.track("Discover page view", {
         collection: collection_name,
         sortby: sortBy,
       });
@@ -242,7 +242,7 @@ export default function Collection({
             className="text-xl md:text-3xl xl:text-4xl"
             style={{ maxWidth: 700 }}
           >
-            Explore
+            Discover
           </h1>
           <h1
             className="text-4xl md:text-7xl xl:text-8xl"

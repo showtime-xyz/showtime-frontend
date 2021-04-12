@@ -12,7 +12,7 @@ export default function UserImageList({ users }) {
           key={user.wallet_address}
         >
           <a
-            className="mr-1"
+            className="mr-2 hover:opacity-90 transition-all"
             onClick={() => {
               mixpanel.track("Activity - Click on followed user");
             }}
@@ -22,7 +22,7 @@ export default function UserImageList({ users }) {
                 user.img_url ||
                 "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
               }
-              className="h-8 w-8 rounded-full"
+              className="h-12 w-12 rounded-full"
             />
           </a>
         </Link>

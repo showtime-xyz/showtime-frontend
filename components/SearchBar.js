@@ -89,8 +89,8 @@ const OverlaySearchInputContainer = styled.div`
 const SearchInput = styled.input`
   display: flex;
   border: 1px solid #ddd;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 6px;
+  padding-bottom: 6px;
   padding-right: 16px;
   padding-left: 40px;
   box-sizing: border-box;

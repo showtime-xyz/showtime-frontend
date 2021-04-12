@@ -16,6 +16,9 @@ import ReactPlayer from "react-player";
 import mixpanel from "mixpanel-browser";
 import AppContext from "../context/app-context";
 import { getBidLink } from "../lib/utilities";
+import MiniFollowButton from "./MiniFollowButton";
+import TokenCardImage from "../components/TokenCardImage";
+
 class TokenCard extends React.Component {
   constructor(props) {
     super(props);
@@ -29,40 +32,9 @@ class TokenCard extends React.Component {
     };
     this.handleMoreShown = this.handleMoreShown.bind(this);
     this.divRef = React.createRef();
-    //this.imageRef = React.createRef();
+    this.imageRef = React.createRef();
     //this.setSpans = this.setSpans.bind(this);
   }
-
-  componentDidMount() {
-    // Set to square at first, then adjust when media loads
-    /*
-    this.setState({ showVideo: true, spans: 23 });
-    if (this.props.item.token_has_video && !this.props.item.token_img_url) {
-      // If it's a video with missing thumbnail, use onReady instead
-    } else {
-      this.props.item.imageRef.current.addEventListener("load", this.setSpans);
-    }*/
-  }
-
-  componentWillUnmount() {
-    /*
-    if (this.props.item.imageRef.current) {
-      this.props.item.imageRef.current.removeEventListener(
-        "load",
-        this.setSpans
-      );
-    }*/
-  }
-
-  setSpans = () => {
-    //this.setState({ spans: 1 });
-    /*
-    if (this.divRef.current) {
-      const height = this.divRef.current.clientHeight;
-      const spans = Math.min(Math.ceil(height / 30 + 1), 50);
-      this.setState({ spans });
-    }*/
-  };
 
   removeTags(str) {
     if (str === null || str === "") return false;
@@ -131,15 +103,15 @@ class TokenCard extends React.Component {
 
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
       if (token_aspect_ratio && token_aspect_ratio > 1) {
-        img_url = img_url.split("=")[0] + "=h375";
+        img_url = img_url.split("=")[0] + "=h660";
       } else {
-        img_url = img_url.split("=")[0] + "=w375";
+        img_url = img_url.split("=")[0] + "=w660";
       }
     }
     return img_url;
   };
 
-  max_description_length = 75;
+  max_description_length = 67;
 
   getBackgroundColor = (item) => {
     if (
@@ -164,49 +136,28 @@ class TokenCard extends React.Component {
     const { isMobile } = this.context;
     return (
       <>
-        <div
-          className={`row-span-${this.state.spans}  ${
-            this.props.columns === 1 ? "pb-4" : "p-2"
-          }`}
-        >
+        <div className="px-3">
           <div
-            style={_.merge(
-              {
-                backgroundColor: "white",
-              },
-              this.props.columns === 1
-                ? {
-                    borderTopWidth: 1,
-                    borderBottomWidth: 1,
-                  }
-                : {
-                    width: 375,
-                    borderWidth: 1,
-                  },
-
+            style={
               this.props.userHiddenItems &&
-                this.props.userHiddenItems.includes(this.props.item.nft_id)
+              this.props.userHiddenItems.includes(this.props.item.nft_id)
                 ? { opacity: 0.7, backgroundColor: "#ddd" }
                 : null
-            )}
-            ref={this.divRef}
-            className={
-              this.props.columns === 1
-                ? "mx-auto showtime-card"
-                : "mx-auto showtime-card sm:rounded-md overflow-hidden hover:shadow-xl"
             }
+            ref={this.divRef}
+            className="mx-auto sm:rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all bg-white"
           >
             <div
-              className="p-4 flex flex-row items-center"
-              style={{ position: "relative" }}
+              ref={this.imageRef}
+              className="p-4 flex flex-row items-center relative"
             >
-              <div className="flex-shrink">
+              <div className="pr-2 ">
                 {item.contract_is_creator ? (
                   <Link
                     href="/c/[collection]"
                     as={`/c/${item.collection_slug}`}
                   >
-                    <a className="flex flex-row items-center">
+                    <a className="flex flex-row items-center ">
                       <div>
                         <img
                           alt={item.collection_name}
@@ -232,7 +183,7 @@ class TokenCard extends React.Component {
                     href="/[profile]"
                     as={`/${item?.creator_username || item.creator_address}`}
                   >
-                    <a className="flex flex-row items-center">
+                    <a className="flex flex-row items-center ">
                       <div>
                         <img
                           alt={item.creator_name}
@@ -242,17 +193,23 @@ class TokenCard extends React.Component {
                               : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                           }
                           className="rounded-full"
-                          style={{ height: 24, width: 24 }}
+                          style={{ height: 24, width: 24, minWidth: 24 }}
                         />
                       </div>
-                      <div className="showtime-card-profile-link ml-2">
-                        {this.truncateWithEllipses(item.creator_name, 30)}
+                      <div className="ml-2 hover:text-stpink truncate">
+                        {this.truncateWithEllipses(item.creator_name, 22)}
                       </div>
                     </a>
                   </Link>
                 ) : null}
               </div>
+
+              {this.context.myProfile?.profile_id !== item.creator_id &&
+                !(isMyProfile && listId !== 3) && (
+                  <MiniFollowButton profileId={item.creator_id} />
+                )}
               <div className="flex-grow">&nbsp;</div>
+
               <div>
                 {isMyProfile && listId !== 3 ? (
                   <div
@@ -265,7 +222,7 @@ class TokenCard extends React.Component {
                           : item.nft_id + "_" + listId
                       );
                     }}
-                    className="card-menu-button text-right"
+                    className="card-menu-button text-right text-gray-500"
                   >
                     <FontAwesomeIcon
                       style={{
@@ -289,7 +246,7 @@ class TokenCard extends React.Component {
                         style={{ border: "1px solid #f0f0f0" }}
                       >
                         <div
-                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap flex flew-row"
+                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap flex flew-row"
                           onClick={() => {
                             mixpanel.track("Clicked Spotlight Item");
                             this.props.changeSpotlightItem(this.props.item);
@@ -305,7 +262,7 @@ class TokenCard extends React.Component {
                         </div>
 
                         <div
-                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap"
                           onClick={
                             this.props.userHiddenItems.includes(
                               this.props.item.nft_id
@@ -337,7 +294,7 @@ class TokenCard extends React.Component {
                               }`}
                         </div>
                         <div
-                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap"
+                          className="py-2 px-3 hover:text-stpink hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap"
                           onClick={this.handleRefreshNFTMetadata}
                         >
                           Refresh Metadata
@@ -395,30 +352,25 @@ class TokenCard extends React.Component {
                 ) : null}
               </div>
             </div>
-            {(item.token_has_video &&
-              this.state.showVideo &&
-              this.props.currentlyPlayingVideo === item.nft_id) ||
-            (item.token_has_video && !item.token_img_url) ? (
-              <ReactPlayer
-                url={item.token_animation_url}
-                playing={
-                  this.props.currentlyPlayingVideo === item.nft_id ||
-                  (item.token_has_video && !item.token_img_url)
-                }
-                loop
-                controls
-                muted={this.state.muted}
-                width={this.props.columns === 1 ? window.innerWidth : 373}
-                height={
-                  this.props.columns === 1
-                    ? item.imageRef.current
-                      ? item.imageRef.current.height
-                      : null
-                    : 373
-                }
-                playsinline
-                //onReady={this.setSpans}
-              />
+            {item.token_has_video &&
+            this.state.showVideo &&
+            this.props.currentlyPlayingVideo === item.nft_id ? (
+              <div className="bg-black">
+                <ReactPlayer
+                  url={item.token_animation_url}
+                  playing={
+                    this.props.currentlyPlayingVideo === item.nft_id ||
+                    (item.token_has_video && !item.token_img_url)
+                  }
+                  loop
+                  controls
+                  muted={this.state.muted}
+                  width={this.imageRef?.current?.clientWidth}
+                  height={this.imageRef?.current?.clientWidth}
+                  playsinline
+                  //onReady={this.setSpans}
+                />
+              </div>
             ) : (
               <div style={{ position: "relative" }}>
                 <div
@@ -430,7 +382,7 @@ class TokenCard extends React.Component {
                   }}
                   style={{ cursor: "pointer" }}
                 >
-                  {!this.state.imageLoaded ? (
+                  {/*!this.state.imageLoaded ? (
                     <div
                       className="w-full text-center flex items-center justify-center"
                       style={
@@ -441,25 +393,13 @@ class TokenCard extends React.Component {
                     >
                       <div className="loading-card-spinner" />
                     </div>
-                  ) : null}
+                    ) : null*/}
                   <div
                     style={{
                       backgroundColor: this.getBackgroundColor(item),
                     }}
                   >
-                    <img
-                      className="w-full object-cover object-center "
-                      ref={item.imageRef}
-                      src={this.getImageUrl(item.token_aspect_ratio)}
-                      alt={item.token_name}
-                      onLoad={() => this.setState({ imageLoaded: true })}
-                      style={{
-                        ...(!this.state.imageLoaded ? { display: "none" } : {}),
-                        ...(this.props.columns === 1
-                          ? { height: window.innerWidth }
-                          : { height: 373 }),
-                      }}
-                    />
+                    <TokenCardImage nft={item} />
                   </div>
                 </div>
                 {item.token_has_video ? (
@@ -511,7 +451,7 @@ class TokenCard extends React.Component {
               </div>
             )}
 
-            <div className="p-4 pb-3 sm:pb-4">
+            <div className="p-4">
               <div>
                 <div className="">
                   <div
@@ -521,11 +461,11 @@ class TokenCard extends React.Component {
                       this.setState({ showVideo: false, muted: true });
                       this.props.setCurrentlyPlayingVideo(null);
                     }}
-                    className="showtime-card-title"
+                    className=""
                     style={{
                       overflowWrap: "break-word",
                       wordWrap: "break-word",
-                      fontSize: 20,
+
                       cursor: "pointer",
                       whiteSpace: "nowrap",
                       overflow: "hidden",
@@ -546,21 +486,19 @@ class TokenCard extends React.Component {
                       style={
                         isMobile
                           ? {
-                              fontSize: 14,
                               overflowWrap: "break-word",
                               wordWrap: "break-word",
                               display: "block",
                               minHeight: "3.5rem",
                             }
                           : {
-                              fontSize: 14,
                               overflowWrap: "break-word",
                               wordWrap: "break-word",
                               display: "block",
-                              minHeight: "4.75rem",
+                              minHeight: "4.7rem",
                             }
                       }
-                      className="py-2 sm:py-4 text-gray-500"
+                      className="py-4 text-gray-500 text-sm"
                     >
                       {this.state.moreShown ? (
                         <div>{this.removeTags(item.token_description)}</div>
@@ -575,7 +513,7 @@ class TokenCard extends React.Component {
                               )}{" "}
                               <a
                                 onClick={this.handleMoreShown}
-                                style={{ color: "#111", cursor: "pointer" }}
+                                className="text-gray-900 hover:text-gray-500 cursor-pointer"
                               >
                                 {" "}
                                 more
@@ -588,35 +526,36 @@ class TokenCard extends React.Component {
                       )}
                     </div>
                   ) : null}
-                  <div className="flex items-center">
-                    <div className="mr-4">
-                      <LikeButton item={item} />
-                    </div>
-                    <div className="mr-4">
-                      <CommentButton
-                        item={item}
-                        handleComment={() => {
-                          mixpanel.track("Open NFT modal via comment button");
-                          this.props.setCurrentlyOpenModal(item);
-                          this.setState({ showVideo: false, muted: true });
-                          this.props.setCurrentlyPlayingVideo(null);
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <ShareButton
-                        url={
-                          window.location.protocol +
-                          "//" +
-                          window.location.hostname +
-                          (window.location.port
-                            ? ":" + window.location.port
-                            : "") +
-                          `/t/${item.contract_address}/${item.token_id}`
-                        }
-                        type={"item"}
-                      />
-                    </div>
+                </div>
+
+                <div className="flex items-center">
+                  <div className="mr-4">
+                    <LikeButton item={item} />
+                  </div>
+                  <div className="mr-4">
+                    <CommentButton
+                      item={item}
+                      handleComment={() => {
+                        mixpanel.track("Open NFT modal via comment button");
+                        this.props.setCurrentlyOpenModal(item);
+                        this.setState({ showVideo: false, muted: true });
+                        this.props.setCurrentlyPlayingVideo(null);
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <ShareButton
+                      url={
+                        window.location.protocol +
+                        "//" +
+                        window.location.hostname +
+                        (window.location.port
+                          ? ":" + window.location.port
+                          : "") +
+                        `/t/${item.contract_address}/${item.token_id}`
+                      }
+                      type={"item"}
+                    />
                   </div>
                 </div>
               </div>
@@ -629,65 +568,56 @@ class TokenCard extends React.Component {
               }}
             >
               <div className="mx-4 py-4 flex flex-col">
-                <div
-                  className="flex-shrink pr-2"
-                  style={{
-                    fontWeight: 400,
-                    fontSize: 14,
-                    color: "#888",
-                  }}
-                >
+                <div className="flex-shrink pr-2 text-xs text-gray-500 mb-1">
                   Owned by {item.multiple_owners ? null : null}
                 </div>
                 <div>
                   {item.multiple_owners ? (
-                    <span style={{ color: "#888" }}>Multiple owners</span>
+                    <span className="text-gray-500">Multiple owners</span>
                   ) : item.owner_id ? (
-                    <Link
-                      href="/[profile]"
-                      as={`/${item?.owner_username || item.owner_address}`}
-                    >
-                      <a className="flex flex-row items-center pt-1">
-                        <div>
-                          <img
-                            alt={item.owner_name}
-                            src={
-                              item.owner_img_url
-                                ? item.owner_img_url
-                                : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                            }
-                            className="rounded-full mr-2"
-                            style={{ height: 24, width: 24 }}
-                          />
-                        </div>
-                        <div className="showtime-card-profile-link">
-                          {this.truncateWithEllipses(item.owner_name, 22)}
-                        </div>
-                      </a>
-                    </Link>
+                    <div className="flex flex-row items-center pt-1">
+                      <Link
+                        href="/[profile]"
+                        as={`/${item?.owner_username || item.owner_address}`}
+                      >
+                        <a className="flex flex-row items-center pr-2 ">
+                          <div>
+                            <img
+                              alt={item.owner_name}
+                              src={
+                                item.owner_img_url
+                                  ? item.owner_img_url
+                                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                              }
+                              className="rounded-full mr-2"
+                              style={{ height: 24, width: 24 }}
+                            />
+                          </div>
+                          <div className="showtime-card-profile-link">
+                            {this.truncateWithEllipses(item.owner_name, 24)}
+                          </div>
+                        </a>
+                      </Link>
+                      {this.context.myProfile?.profile_id !== item.owner_id &&
+                        !(isMyProfile && listId !== 3) && (
+                          <MiniFollowButton profileId={item.owner_id} />
+                        )}
+                      <div className="flex-grow">&nbsp;</div>
+                    </div>
                   ) : null}
                 </div>
               </div>
               <div className="flex-grow"></div>
 
-              <div
-                style={{ fontSize: 16, fontWeight: 400 }}
-                className="mx-4 py-4"
-              >
+              {/*<div className="mr-4 py-4 text-sm text-gray-500 hover:text-gray-400 cursor-pointer">
                 <a
                   href={getBidLink(item)}
                   target="_blank"
-                  className="flex flex-row items-center showtime-card-bid"
+                  className="flex flex-row items-center "
                 >
                   <div className="mr-1">Bid</div>
-                  <div className="mb-0 flex">
-                    <FontAwesomeIcon
-                      style={{ height: 14 }}
-                      icon={faExternalLinkAlt}
-                    />
-                  </div>
                 </a>
-              </div>
+                        </div>*/}
             </div>
           </div>
           <div

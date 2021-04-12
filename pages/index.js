@@ -1,25 +1,38 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import Head from "next/head";
-import Link from "next/link";
 import _ from "lodash";
 import Layout from "../components/layout";
-import TokenGridV4 from "../components/TokenGridV4";
-import backend from "../lib/backend";
+import CappedWidth from "../components/CappedWidth";
+import InfiniteScroll from "react-infinite-scroll-component";
 import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
+import useKeyPress from "../hooks/useKeyPress";
+import ActivityFeed from "../components/ActivityFeed";
+import ModalTokenDetail from "../components/ModalTokenDetail";
+import ActivityRecommendedFollows from "../components/ActivityRecommendedFollows";
+//import backend from "../lib/backend";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { GridTab, GridTabs } from "../components/GridTabs";
+import {
+  faComment,
+  faHeart,
+  faUser,
+} from "@fortawesome/free-regular-svg-icons";
+import {
+  faComment as fasComment,
+  faHeart as fasHeart,
+  faFingerprint,
+  faUser as fasUser,
+} from "@fortawesome/free-solid-svg-icons";
 
-export async function getServerSideProps(context) {
+const ACTIVITY_PAGE_LENGTH = 5; // 5 activity items per activity page
+export async function getServerSideProps() {
   return {
     props: {},
   };
 }
 
-export default function Home() {
+const Activity = () => {
   const context = useContext(AppContext);
-  const { columns, gridWidth } = context;
   useEffect(() => {
     // Wait for identity to resolve before recording the view
     if (typeof context.user !== "undefined") {
@@ -27,50 +40,112 @@ export default function Home() {
     }
   }, [typeof context.user]);
 
-  const [featuredItems, setFeaturedItems] = useState([]);
-  const [featuredDays, setFeaturedDays] = useState(1);
-  const [reachedBottom, setReachedBottom] = useState(false);
-  const [isLoadingCards, setIsLoadingCards] = useState(false);
-  //const [isLoadingHero, setIsLoadingHero] = useState(false);
-  const [isLoadingSpotlight, setIsLoadingSpotlight] = useState(false);
+  const [activity, setActivity] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [activityPage, setActivityPage] = useState(1);
+  const [hasMoreScrolling, setHasMoreScrolling] = useState(true);
+  const [activityTypeFilter, setActivityTypeFilter] = useState(0);
 
-  //const [heroItems, setHeroItems] = useState([]);
-  const [spotlightItems, setSpotlightItems] = useState([]);
+  const getActivity = async (type_id, page) => {
+    setIsLoading(true);
+    const result = await fetch(`/api/getactivity`, {
+      method: "POST",
+      body: JSON.stringify({
+        page: page,
+        activityTypeId: type_id,
+      }),
+    });
+    const resultJson = await result.json();
+    const { data } = resultJson;
+
+    if (_.isEmpty(data) || data.length < ACTIVITY_PAGE_LENGTH) {
+      setHasMoreScrolling(false);
+    }
+
+    if (page == 1) {
+      setActivity(data);
+    } else {
+      // filter out possible repeats
+      let filteredData = [];
+      await data.forEach((newItem) => {
+        if (!activity.find((actItem) => actItem.id === newItem.id)) {
+          filteredData.push(newItem);
+        }
+      });
+      setActivity([...activity, ...filteredData]);
+    }
+
+    setIsLoading(false);
+  };
+  useEffect(() => {
+    setHasMoreScrolling(true);
+    setActivity([]);
+    setActivityPage(1);
+    getActivity(activityTypeFilter, 1);
+  }, [context.user, activityTypeFilter]);
+
+  const getNext = () => {
+    setHasMoreScrolling(true);
+    getActivity(activityTypeFilter, activityPage + 1);
+    setActivityPage(activityPage + 1);
+  };
+
+  const [itemOpenInModal, setItemOpenInModal] = useState(null);
+  const handleSetItemOpenInModal = ({ index, nftGroup }) => {
+    setItemOpenInModal({ index, nftGroup });
+  };
+
+  const goToNext = () => {
+    if (itemOpenInModal?.index < itemOpenInModal?.nftGroup.length - 1) {
+      setItemOpenInModal({
+        nftGroup: itemOpenInModal?.nftGroup,
+        index: itemOpenInModal?.index + 1,
+      });
+    }
+  };
+
+  const goToPrevious = () => {
+    if (itemOpenInModal?.index - 1 >= 0) {
+      setItemOpenInModal({
+        nftGroup: itemOpenInModal?.nftGroup,
+        index: itemOpenInModal?.index - 1,
+      });
+    }
+  };
+
+  const leftPress = useKeyPress("ArrowLeft");
+  const rightPress = useKeyPress("ArrowRight");
+  const escPress = useKeyPress("Escape");
 
   useEffect(() => {
-    const getFeatured = async () => {
-      setIsLoadingCards(true);
-
-      const response_featured = await backend.get(
-        `/v2/featured?limit=150&days=${featuredDays}`
-      );
-      const data_featured = response_featured.data.data;
-      setFeaturedItems(data_featured);
-      setIsLoadingCards(false);
-    };
-    getFeatured();
-    setReachedBottom(false);
-  }, [featuredDays]);
+    if (escPress) {
+      mixpanel.track("Activity - Close NFT Modal - keyboard");
+      setItemOpenInModal(null);
+    }
+    if (rightPress && itemOpenInModal) {
+      mixpanel.track("Activity - Next NFT - keyboard");
+      goToNext();
+    }
+    if (leftPress && itemOpenInModal) {
+      mixpanel.track("Activity - Prior NFT - keyboard");
+      goToPrevious();
+    }
+  }, [escPress, leftPress, rightPress]);
 
   /*
-  const getHero = async () => {
-    setIsLoadingHero(true);
-    const response_hero = await backend.get(`/v1/hero`);
-    const data_hero = response_hero.data.data;
-    setHeroItems(data_hero);
-    setIsLoadingHero(false);
-
-    // Reset cache for next load
-    backend.get(`/v1/hero?recache=1`);
+  const handleOpenModal = (index) => {
+    setItemOpenInModal({ nftGroup: spotlightItems, index });
   };
-  */
+
+  
+  const [spotlightItems, setSpotlightItems] = useState([]);
 
   const getSpotlight = async () => {
-    setIsLoadingSpotlight(true);
+    //setIsLoadingSpotlight(true);
     const response_spotlight = await backend.get(`/v1/spotlight`);
     const data_spotlight = response_spotlight.data.data;
-    setSpotlightItems(data_spotlight);
-    setIsLoadingSpotlight(false);
+    setSpotlightItems(data_spotlight.slice(0, 1));
+    //setIsLoadingSpotlight(false);
 
     // Reset cache for next load
     backend.get(`/v1/spotlight?recache=1`);
@@ -80,35 +155,18 @@ export default function Home() {
     //getHero();
     getSpotlight();
   }, []);
+  */
 
-  const FilterTabs =
-    gridWidth > 0 ? (
-      <>
-        <GridTabs title="Trending">
-          <GridTab
-            label="24 Hours"
-            isActive={featuredDays === 1}
-            onClickTab={() => {
-              setFeaturedDays(1);
-            }}
-          />
-          <GridTab
-            label="7 Days"
-            isActive={featuredDays === 7}
-            onClickTab={() => {
-              setFeaturedDays(7);
-            }}
-          />
-          <GridTab
-            label="30 Days"
-            isActive={featuredDays === 30}
-            onClickTab={() => {
-              setFeaturedDays(30);
-            }}
-          />
-        </GridTabs>
-      </>
-    ) : null;
+  const handleFilterClick = (typeId) => {
+    if (activityTypeFilter != typeId) {
+      window.scroll({ top: 0, behavior: "smooth" });
+      setActivity([]);
+      setActivityTypeFilter(typeId);
+    }
+
+    //setActivityPage(1);
+    //setHasMoreScrolling(true);
+  };
 
   return (
     <Layout>
@@ -137,258 +195,234 @@ export default function Home() {
           content="https://storage.googleapis.com/showtime-nft-thumbnails/home_twitter_card_2.jpg"
         />
       </Head>
-
-      {columns && (
-        <div
-          className="mx-auto relative my-16 md:my-24 text-center md:text-left"
-          style={{
-            ...(columns === 1
-              ? { padding: "0px 16px" }
-              : { width: gridWidth, paddingLeft: 16 }),
-          }}
-        >
-          <h1
-            className="text-xl md:text-3xl xl:text-4xl"
-            style={{ maxWidth: 700 }}
-          >
-            Discover & Showcase
-          </h1>
-          <h1
-            className="text-4xl md:text-7xl xl:text-8xl"
-            style={{ fontFamily: "Afronaut" }}
-          >
-            Your Favorite
-          </h1>
-          <h1 className="text-4xl md:text-7xl xl:text-8xl">Crypto Art.</h1>
-        </div>
-      )}
-
-      {gridWidth && (
+      {typeof document !== "undefined" ? (
         <>
-          <div style={context.isMobile ? null : { paddingTop: 20 }}>
-            <div className="m-auto" style={{ width: gridWidth }}>
-              <div
-                className="flex flex-row ml-0 mr-0"
-                style={
-                  context.isMobile
-                    ? { padding: "0px 16px", marginBottom: 20 }
-                    : { padding: "0px 12px", marginBottom: 16 }
-                }
-              >
-                <h3 className="self-end text-2xl md:text-4xl flex flex-row">
-                  <div>
-                    <span
-                      style={
-                        context.windowSize && context.windowSize.width < 375
-                          ? {
-                              display: "none",
-                            }
-                          : null
-                      }
-                    >
-                      User
-                    </span>{" "}
-                    Spotlights{" "}
-                  </div>
-                  {/*<div>
-                    <img
-                      src="/icons/spotlight_black.png"
-                      style={{
-                        marginLeft: 8,
-                      }}
-                      className="w-7 h-7 md:w-10 md:h-10"
-                    />
-                    </div>*/}
-                  <div className="tooltip">
-                    <FontAwesomeIcon
-                      style={
-                        context.isMobile
-                          ? {
-                              height: 18,
-                              color: "#bbb",
-                              cursor: "pointer",
-                              marginBottom: 2,
-                            }
-                          : {
-                              height: 18,
-                              color: "#bbb",
-                              cursor: "pointer",
-                              marginBottom: 8,
-                            }
-                      }
-                      icon={faInfoCircle}
-                    />
-                    <span
-                      style={{
-                        fontSize: 12,
-                        opacity: 0.9,
-                        width: 200,
-                        lineHeight: 1.75,
-                      }}
-                      className="tooltip-text bg-black p-3 -mt-9 -ml-28 rounded text-white"
-                    >
-                      Users can pick one item from their profile to spotlight
-                    </span>
-                  </div>
-                </h3>
-                <div className="flex-grow "></div>
-                <div className="self-end">
-                  <div
-                    className="ml-4 bg-white text-black border-black rounded-full px-5 py-1 cursor-pointer border-2 hover:text-stpink hover:border-stpink transition-all showtime-random-button"
-                    onClick={() => {
-                      getSpotlight();
-                    }}
-                  >
-                    <span className="text-sm md:text-base">🎲&nbsp;Random</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              className="m-auto"
-              style={{ width: gridWidth, minHeight: 700 }}
-            >
-              <TokenGridV4
-                items={spotlightItems.slice(0, context.columns * 2)}
-                isLoading={isLoadingSpotlight}
-              />
-            </div>
-          </div>
-
-          <div
-            className="text-center pb-10 pt-4"
-            style={
-              context.columns === 1
-                ? { backgroundColor: "rgb(243, 244, 246)" }
+          <ModalTokenDetail
+            isOpen={itemOpenInModal}
+            setEditModalOpen={setItemOpenInModal}
+            item={
+              itemOpenInModal?.nftGroup
+                ? itemOpenInModal.nftGroup[itemOpenInModal?.index]
                 : null
             }
-          >
-            <Link href="/c/[collection]" as="/c/spotlights">
-              <a
-                className="showtime-purple-button-icon flex flex-row items-center px-4 py-2 rounded-full"
-                onClick={() => {
-                  mixpanel.track("Clicked Explore User Spotlights");
-                }}
-              >
-                <div className="mr-2">Explore User Spotlights</div>
-                <div className="flex">
-                  <FontAwesomeIcon style={{ height: 18 }} icon={faArrowRight} />
-                </div>
-              </a>
-            </Link>
-          </div>
-        </>
-      )}
-
-      {/*gridWidth && (
-        <>
-          <div style={context.isMobile ? null : { paddingTop: 20 }}>
-            <div className="m-auto" style={{ width: gridWidth }}>
-              <div
-                className="flex flex-row ml-0 mr-0"
-                style={
-                  context.isMobile
-                    ? {
-                        padding: "0px 16px",
-                        marginBottom: 20,
-                        borderTopWidth: 1,
-                      }
-                    : { padding: "0px 12px", marginBottom: 16 }
-                }
-              >
-                <h3
-                  className={`self-end text-2xl md:text-4xl  ${
-                    context.isMobile ? "pt-7" : null
-                  }`}
-                >
-                  Latest{" "}
-                </h3>
-                <div className="flex-grow "></div>
-                <div className="self-end">
-                  <div
-                    className="ml-4 bg-white text-black border-black rounded-full px-5 py-1 cursor-pointer border-2 hover:text-stpink hover:border-stpink transition-all showtime-random-button"
-                    onClick={() => {
-                      getHero();
-                    }}
-                  >
-                    <span className="text-sm md:text-base">🎲 Random</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              className="m-auto"
-              style={{ width: gridWidth, minHeight: 700 }}
-            >
-              <TokenGridV4
-                items={heroItems.slice(0, context.columns * 2)}
-                isLoading={isLoadingHero}
-              />
-            </div>
-          </div>
-
-          <div
-            className="text-center pb-10 pt-4"
-            style={
-              context.columns === 1
-                ? { backgroundColor: "rgb(243, 244, 246)" }
-                : null
+            goToNext={goToNext}
+            goToPrevious={goToPrevious}
+            hasNext={
+              !(
+                itemOpenInModal?.index ===
+                itemOpenInModal?.nftGroup?.length - 1
+              )
             }
-          >
-            <Link href="/c/[collection]" as="/c/all">
-              <a className="showtime-purple-button-icon flex flex-row items-center px-4 py-2 rounded-full">
-                <div className="mr-2">Explore Collections</div>
-                <div className="flex">
-                  <FontAwesomeIcon style={{ height: 18 }} icon={faArrowRight} />
-                </div>
-              </a>
-            </Link>
-          </div>
-        </>
-          )*/}
-
-      {columns && (
-        <div
-          className="mx-auto pt-2"
-          style={
-            columns === 1
-              ? { borderTopWidth: 1 }
-              : { width: columns * (375 + 20) }
-          }
-        >
-          {FilterTabs}
-        </div>
-      )}
-
-      {gridWidth && (
-        <div className="m-auto" style={{ width: gridWidth, minHeight: 900 }}>
-          <TokenGridV4
-            items={featuredItems}
-            onFinish={() => {
-              setReachedBottom(true);
-            }}
-            isLoading={isLoadingCards}
+            hasPrevious={!(itemOpenInModal?.index === 0)}
           />
-        </div>
-      )}
-
-      {featuredItems.length > 0 && reachedBottom ? (
-        <div className="text-center pt-8 pb-16">
-          <Link href="/c/[collection]" as="/c/all">
-            <a
-              className="showtime-purple-button-icon flex flex-row items-center px-4 py-2 rounded-full"
-              onClick={() => {
-                mixpanel.track("Clicked Explore Collections");
-              }}
-            >
-              <div className="mr-2">Explore Collections</div>
-              <div className="flex">
-                <FontAwesomeIcon style={{ height: 18 }} icon={faArrowRight} />
-              </div>
-            </a>
-          </Link>
-        </div>
+        </>
       ) : null}
+
+      <div className="py-14 px-10 text-left  bg-gradient-to-r from-green-400 to-blue-500">
+        <CappedWidth>
+          <div className="flex flex-row mx-3 text-white">
+            <div className="flex-1">
+              <div className="text-2xl">Discover & Showcase</div>
+              <div className="text-6xl" style={{ fontFamily: "Afronaut" }}>
+                Your Favorite
+              </div>
+              <div className="text-6xl">Crypto Art.</div>
+            </div>
+            {/*<div className="flex-1">
+              <div className="bg-white rounded-lg shadow-md px-6 py-6 text-center">
+                <span
+                  className="cursor-pointer hover:text-black bg-black text-white rounded-full px-5 py-3 hover:bg-white border-2 border-black transition"
+                  onClick={() => context.setLoginModalOpen(true)}
+                >
+                  Sign in
+                </span>
+              </div>
+          </div>*/}
+          </div>
+        </CappedWidth>
+      </div>
+
+      <CappedWidth>
+        <div className="m-auto relative">
+          <hr className="mx-3" />
+
+          <div className="mb-8 mt-16 text-left px-3">
+            <h1 className="text-3xl">News Feed</h1>
+          </div>
+
+          <div className="grid lg:grid-cols-3 xl:grid-cols-4">
+            <div className="px-3">
+              <div className="px-4 py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
+                <div
+                  onClick={() => {
+                    handleFilterClick(0);
+                  }}
+                  className={`hover:bg-blue-100 mb-1 p-2 rounded-lg px-3 ${
+                    activityTypeFilter === 0
+                      ? "text-blue-500 bg-blue-100"
+                      : "text-gray-500"
+                  }  hover:text-blue-500 cursor-pointer transition-all`}
+                >
+                  All News
+                </div>
+                <div
+                  onClick={() => {
+                    handleFilterClick(3);
+                  }}
+                  className={`hover:bg-stpurple100 mb-1 p-2 rounded-lg px-3 ${
+                    activityTypeFilter === 3
+                      ? "text-stpurple700 bg-stpurple100"
+                      : "text-gray-500"
+                  } hover:text-stpurple700 cursor-pointer transition-all flex flex-row items-center`}
+                >
+                  <FontAwesomeIcon
+                    icon={faFingerprint}
+                    className="mr-2 w-4 h-4"
+                  />
+                  <div>Creations</div>
+                </div>
+                <div
+                  onClick={() => {
+                    handleFilterClick(1);
+                  }}
+                  className={`hover:bg-stred100 mb-1 p-2 rounded-lg px-3 ${
+                    activityTypeFilter === 1
+                      ? "text-stred bg-stred100"
+                      : "text-gray-500"
+                  } hover:text-stred cursor-pointer transition-all flex flex-row items-center`}
+                >
+                  <FontAwesomeIcon
+                    icon={activityTypeFilter === 1 ? fasHeart : faHeart}
+                    className="mr-2 w-4 h-4"
+                  />
+                  <div>Likes</div>
+                </div>
+                <div
+                  onClick={() => {
+                    handleFilterClick(2);
+                  }}
+                  className={`hover:bg-stblue100 mb-1 p-2 rounded-lg px-3 ${
+                    activityTypeFilter === 2
+                      ? "text-stblue bg-stblue100"
+                      : "text-gray-500"
+                  } hover:text-stblue cursor-pointer transition-all flex flex-row items-center`}
+                >
+                  <FontAwesomeIcon
+                    icon={activityTypeFilter === 2 ? fasComment : faComment}
+                    className="mr-2 w-4 h-4"
+                  />
+                  <div>Comments</div>
+                </div>
+                <div
+                  onClick={() => {
+                    handleFilterClick(4);
+                  }}
+                  className={`hover:bg-stgreen100 mb-1 p-2 rounded-lg px-3 ${
+                    activityTypeFilter === 4
+                      ? "text-stgreen700 bg-stgreen100"
+                      : "text-gray-500"
+                  } hover:text-stgreen700 cursor-pointer transition-all flex flex-row items-center`}
+                >
+                  <FontAwesomeIcon
+                    icon={activityTypeFilter === 4 ? fasUser : faUser}
+                    className="mr-2 w-4 h-4"
+                  />
+                  <div>Follows</div>
+                </div>
+              </div>
+            </div>
+            <div className="col-span-2 px-3">
+              {context.user === undefined ? null : context.user === null ? (
+                <div className="flex flex-1 items-center justify-center mb-6">
+                  <div className="text-gray-400 shadow-md bg-white rounded-lg w-full px-4 py-6 text-center">
+                    News feed preview. Please{" "}
+                    <span
+                      className="cursor-pointer text-gray-800 hover:text-stpink"
+                      onClick={() => context.setLoginModalOpen(true)}
+                    >
+                      sign in
+                    </span>{" "}
+                    to view & follow
+                  </div>
+                </div>
+              ) : null}
+
+              <InfiniteScroll
+                dataLength={activity.length}
+                next={getNext}
+                hasMore={hasMoreScrolling}
+                endMessage={
+                  <div className="flex flex-1 items-center justify-center">
+                    {context.user ? (
+                      <div className="text-gray-400">
+                        No more activity. Follow more people.
+                      </div>
+                    ) : (
+                      <div className="text-gray-400 shadow-md bg-white rounded-lg w-full px-4 py-6 mb-4 text-center">
+                        <span
+                          className="cursor-pointer text-gray-800 hover:text-stpink"
+                          onClick={() => context.setLoginModalOpen(true)}
+                        >
+                          Sign in
+                        </span>{" "}
+                        to view more
+                      </div>
+                    )}
+                  </div>
+                }
+                scrollThreshold={0.5}
+              >
+                <ActivityFeed
+                  activity={activity}
+                  setItemOpenInModal={handleSetItemOpenInModal}
+                  key={activityTypeFilter}
+                />
+              </InfiniteScroll>
+              <div className="flex h-16 items-center justify-center mt-6">
+                {isLoading && <div className="loading-card-spinner" />}
+              </div>
+            </div>
+            <div className="px-3">
+              <div className="hidden xl:block py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
+                <ActivityRecommendedFollows />
+              </div>
+
+              {/*<div className="sticky top-24">
+                <div className="px-6 h-max rounded-lg border border-gray-200 bg-white shadow-md">
+                  Community Spotlights [Refresh]
+                  {spotlightItems ? (
+                    <>
+                      <div className="flex mt-4 max-w-full">
+                        <ActivityImages
+                          nfts={spotlightItems}
+                          openModal={handleOpenModal}
+                        />
+                      </div>
+                    </>
+                  ) : null}
+                </div>
+                <div className="px-6 h-max rounded-lg mt-8 border border-gray-200 bg-white shadow-md">
+                  Trending [Refresh]
+                  <br />
+                  <br />
+                  <br />
+                </div>
+                  </div>*/}
+            </div>
+          </div>
+
+          {/* Page Content */}
+          <div className="flex">
+            {/* Left Column */}
+
+            <div className="flex flex-col"></div>
+
+            <div className="flex flex-col"></div>
+          </div>
+        </div>
+      </CappedWidth>
     </Layout>
   );
-}
+};
+
+export default Activity;
