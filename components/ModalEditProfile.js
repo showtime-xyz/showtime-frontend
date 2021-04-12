@@ -430,7 +430,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="showtime-green-button px-4 py-2 float-right rounded-full"
+                  className="showtime-green-button px-4 py-2 float-right rounded-full w-36"
                   style={{ borderColor: "#35bb5b", borderWidth: 2 }}
                 >
                   {submitting ? (
