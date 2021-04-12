@@ -331,9 +331,9 @@ const Activity = () => {
                 </div>
               </div>
             </div>
-            <div className="col-span-2 px-3">
+            <div className="col-span-2">
               {context.user === undefined ? null : context.user === null ? (
-                <div className="flex flex-1 items-center justify-center mb-6">
+                <div className="flex flex-1 items-center justify-center mb-6 px-3">
                   <div className="text-gray-400 shadow-md bg-white rounded-lg w-full px-4 py-6 text-center">
                     News feed preview. Please{" "}
                     <span
@@ -358,7 +358,7 @@ const Activity = () => {
                         No more activity. Follow more people.
                       </div>
                     ) : (
-                      <div className="text-gray-400 shadow-md bg-white rounded-lg w-full px-4 py-6 mb-4 text-center">
+                      <div className="text-gray-400 shadow-md bg-white rounded-lg w-full px-4 py-6 mx-3 mb-4 text-center">
                         <span
                           className="cursor-pointer text-gray-800 hover:text-stpink"
                           onClick={() => context.setLoginModalOpen(true)}
@@ -378,7 +378,7 @@ const Activity = () => {
                   key={activityTypeFilter}
                 />
               </InfiniteScroll>
-              <div className="flex h-16 items-center justify-center mt-6">
+              <div className="flex h-16 items-center justify-center mt-6  px-3">
                 {isLoading && <div className="loading-card-spinner" />}
               </div>
             </div>
