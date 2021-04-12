@@ -49,13 +49,19 @@ const OverlaySearchContainer = styled.div`
   display: flex;
   flex-direction: column;
   position: absolute;
-  height: 66px;
+  height: 64px;
   background: #fff;
-  padding: 14px;
+  padding: 12px;
   width: 100%;
   left: 0;
   top: 0;
   z-index: 1;
+  @media (max-width: 820px) {
+    top: 40px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    height: 40px;
+  }
 `;
 
 const SearchToggleButton = styled.div`
@@ -65,13 +71,13 @@ const SearchToggleButton = styled.div`
   width: 14px;
   height: 14px;
   color: #000;
-  border: 2px solid #000;
-  border-radius: 50%;
+  //border: 2px solid #000;
+  //border-radius: 50%;
   padding: 16px;
   cursor: pointer;
   &:hover {
     color: #e45cff;
-    border: 2px solid #e45cff;
+    //border: 2px solid #e45cff;
   }
 `;
 

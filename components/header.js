@@ -21,7 +21,7 @@ const Header = () => {
         </>
       ) : null}
       <header
-        className="p-2 bg-white w-full  shadow-md"
+        className="px-2 py-1 sm:py-2 bg-white w-full  shadow-md"
         style={{
           zIndex: 1,
           position: "sticky",
@@ -52,9 +52,13 @@ const Header = () => {
               </Link>
             </div>
             {/* Start desktop-only menu */}
-            <div className="flex-grow" style={{ width: "100%" }}>
-              <SearchBar />
-            </div>
+            {!context.isMobile ? (
+              <div className="flex-grow" style={{ width: "100%" }}>
+                <SearchBar />
+              </div>
+            ) : (
+              <div className="flex-grow"></div>
+            )}
             <div
               className="hidden md:flex mr-6 items-center"
               style={{ fontWeight: 400 }}
@@ -161,7 +165,7 @@ const Header = () => {
                           textOverflow: "ellipsis",
                           overflow: "hidden",
                           whiteSpace: "nowrap",
-                          maxWidth: context.gridWidth < 500 ? 76 : 200,
+                          maxWidth: context.gridWidth < 500 ? 100 : 200,
                         }}
                       >
                         {context.myProfile
@@ -190,7 +194,7 @@ const Header = () => {
 
           {/* Start mobile-only menu */}
           {context.isMobile && (
-            <div className="flex md:hidden justify-between items-center py-2">
+            <div className="flex md:hidden justify-between items-center pb-1">
               <div>
                 {/*<Link href="/">
               <a
@@ -242,6 +246,9 @@ const Header = () => {
                     Trending
                   </a>
                 </Link>
+              </div>
+              <div className="flex-grow" style={{ width: "100%" }}>
+                <SearchBar />
               </div>
               {context.isMobile &&
                 context.user &&

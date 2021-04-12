@@ -22,6 +22,7 @@ import CommentsSection from "./CommentsSection";
 import { getBidLink, getContractName } from "../lib/utilities";
 import backend from "../lib/backend";
 import UsersWhoLiked from "./UsersWhoLiked";
+import MiniFollowButton from "./MiniFollowButton";
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500;
@@ -196,9 +197,12 @@ const TokenDetailBody = ({
                         style={{ height: 24, width: 24 }}
                       />
                     </div>
-                    <div className="showtime-card-profile-link ml-2">
+                    <div className="showtime-card-profile-link ml-2 mr-2">
                       {truncateWithEllipses(item.creator_name, 30)}
                     </div>
+                    {context.myProfile?.profile_id !== item?.creator_id && (
+                      <MiniFollowButton profileId={item?.creator_id} />
+                    )}
                   </a>
                 </Link>
               ) : null}
