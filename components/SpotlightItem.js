@@ -89,6 +89,7 @@ class SpotlightItem extends React.Component {
   };
 
   render() {
+    const { isMobile } = this.context;
     const { item, isMyProfile, listId } = this.props;
     return (
       <>
@@ -104,10 +105,10 @@ class SpotlightItem extends React.Component {
           </>
         ) : null}
 
-        {isMyProfile ? (
-          <CappedWidth>
+        <CappedWidth>
+          {isMyProfile ? (
             <div className="relative">
-              <div className="absolute top-0 right-6">
+              <div className="absolute -top-8 right-6">
                 <div
                   onClick={(e) => {
                     e.stopPropagation();
@@ -155,12 +156,10 @@ class SpotlightItem extends React.Component {
                 ) : null}
               </div>
             </div>
-          </CappedWidth>
-        ) : null}
-        <>
+          ) : null}
           <div
             ref={this.divRef}
-            className={`w-3/4 mx-auto flex items-center flex-row`}
+            className={`md:w-3/4 mx-auto flex items-center flex-col md:flex-row p-4 md:p-0`}
           >
             <div className={`flex-1 text-right`}>
               <div>
@@ -187,7 +186,11 @@ class SpotlightItem extends React.Component {
                         controls
                         muted={this.state.muted}
                         className={`w-full h-full`}
-                        width={this.divRef?.current?.clientWidth / 2}
+                        width={
+                          isMobile
+                            ? "100%"
+                            : this.divRef?.current?.clientWidth / 2
+                        }
                         height={"1"}
                         //width={columns === 1 ? window.innerWidth : "100%"}
                         // height={
@@ -270,7 +273,9 @@ class SpotlightItem extends React.Component {
                 )}
               </div>
             </div>
-            <div className={`flex-1 text-left pl-12`}>
+            <div
+              className={`flex-1 text-left mt-6 md:mt-4 md:mt-0 md:pl-12 w-full`}
+            >
               <div>
                 <div className="flex flex-row">
                   <div
@@ -378,7 +383,7 @@ class SpotlightItem extends React.Component {
                     <div className="flex-grow"></div>
                   </div>
                 </div>
-                <div className="flex flex-row pt-4 mt-8 w-full mb-6">
+                <div className="flex flex-col md:flex-row pt-4 mt-8 w-full mb-6">
                   {item.contract_is_creator ? (
                     <div className="flex-col flex-1">
                       <div className="flex-shrink pr-2 text-sm text-gray-500">
@@ -416,7 +421,7 @@ class SpotlightItem extends React.Component {
                       </div>
                     </div>
                   ) : item.creator_id ? (
-                    <div className="flex-col flex-1">
+                    <div className="flex-col flex-1 mb-6">
                       <div className="flex-shrink pr-2  text-sm text-gray-500">
                         {item.owner_id == item.creator_id
                           ? "Created & Owned By"
@@ -499,7 +504,7 @@ class SpotlightItem extends React.Component {
               </div>
             </div>
           </div>
-        </>
+        </CappedWidth>
       </>
     );
   }

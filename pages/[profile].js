@@ -747,13 +747,13 @@ const Profile = ({
         </div>
 
         <CappedWidth>
-          <div className="flex flex-row -mt-8 ml-3">
-            <div className="opacity-100 mt-4 bg-white rounded-lg shadow-md px-4 py-3 text-center text-gray-900">
-              <div className="flex flex-row  text-center">
+          <div className="flex flex-row -mt-8 mx-3">
+            <div className="opacity-100 w-full md:w-max mt-4 bg-white rounded-lg shadow-md px-4 py-3 text-center text-gray-900">
+              <div className="flex flex-col md:flex-row text-center">
                 <div
                   className={`flex-1 ${
                     following?.length > 999 ? null : "w-28"
-                  }  flex flex-row items-center cursor-pointer hover:opacity-80`}
+                  }  flex flex-col md:flex-row items-center cursor-pointer hover:opacity-80`}
                   onClick={() => {
                     setShowFollowing(true);
                   }}
@@ -771,7 +771,7 @@ const Profile = ({
                 <div
                   className={`flex-1 ${
                     followers?.length > 999 ? null : "w-28"
-                  }  flex flex-row items-center cursor-pointer hover:opacity-80`}
+                  }  flex flex-col md:flex-row items-center cursor-pointer hover:opacity-80`}
                   onClick={() => {
                     setShowFollowers(true);
                   }}
@@ -1000,7 +1000,7 @@ const Profile = ({
         </CappedWidth>
         {spotlightItem ? (
           <div className="mt-16 ">
-            <div className="relative bg-white border-t border-b border-gray-200 py-16 mb-8">
+            <div className="relative bg-white border-t border-b border-gray-200 py-16 pb-8 md:pb-16 mb-4">
               <SpotlightItem
                 item={spotlightItem}
                 removeSpotlightItem={() => {
@@ -1030,8 +1030,8 @@ const Profile = ({
               className="grid lg:grid-cols-3 xl:grid-cols-4 pt-0"
             >
               <div className="px-3">
-                <div className="h-max sticky top-24">
-                  <div className="px-4 py-4  rounded-lg bg-white shadow-md mt-16">
+                <div className="h-max sticky top-24 ">
+                  <div className="px-4 py-4 rounded-lg bg-white shadow-md mt-16 mb-4 md:mb-0">
                     <div className="border-b border-gray-200 mx-2 mb-2 pb-4 flex flex-row items-center">
                       <div className="mr-2">
                         <img
