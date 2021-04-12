@@ -203,7 +203,7 @@ const TokenGridV4 = ({
         hasMore={hasMore}
       >
         {isLoading ? (
-          <div className="mx-auto items-center flex justify-center overflow-hidden py-4">
+          <div className="mx-auto items-center flex justify-center overflow-hidden py-4 mt-16">
             <div className="loading-card-spinner" />
           </div>
         ) : (

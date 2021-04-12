@@ -540,6 +540,33 @@ const Profile = ({
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
   const onEditProfileClick = () => setIsActive(!isActive);
 
+  const createdCount = isLoadingCards
+    ? null
+    : showUserHiddenItems
+    ? createdItems.length
+    : createdItems.length == 150 // go ahead and say 150+ if we are at max items
+    ? 150
+    : createdItems.filter((item) => !createdHiddenItems.includes(item.nft_id))
+        .length;
+
+  const ownedCount = isLoadingCards
+    ? null
+    : showUserHiddenItems
+    ? ownedItems.length
+    : ownedItems.length == 150 // go ahead and say 150+ if we are at max items
+    ? 150
+    : ownedItems.filter((item) => !ownedHiddenItems.includes(item.nft_id))
+        .length;
+
+  const likedCount = isLoadingCards
+    ? null
+    : showUserHiddenItems
+    ? likedItems.length
+    : likedItems.length == 150 // go ahead and say 150+ if we are at max items
+    ? 150
+    : likedItems.filter((item) => !likedHiddenItems.includes(item.nft_id))
+        .length;
+
   return (
     <div
       onClick={() => {
@@ -1065,7 +1092,19 @@ const Profile = ({
                         icon={faFingerprint}
                         className="mr-2 w-4 h-4"
                       />
+
                       <div>Created</div>
+                      <div className="flex-grow"></div>
+                      <div className="rounded-full text-center text-sm">
+                        {createdCount}
+                        <span
+                          className={
+                            createdCount == 150 ? "visible" : "invisible"
+                          }
+                        >
+                          +
+                        </span>
+                      </div>
                     </div>
                     <div
                       onClick={() => {
@@ -1088,6 +1127,17 @@ const Profile = ({
                         className="mr-2 w-4 h-4"
                       />
                       <div>Owned</div>
+                      <div className="flex-grow"></div>
+                      <div className="rounded-full text-center text-sm">
+                        {ownedCount}
+                        <span
+                          className={
+                            ownedCount == 150 ? "visible" : "invisible"
+                          }
+                        >
+                          +
+                        </span>
+                      </div>
                     </div>
                     <div
                       onClick={() => {
@@ -1110,6 +1160,17 @@ const Profile = ({
                         className="mr-2 w-4 h-4"
                       />
                       <div>Liked</div>
+                      <div className="flex-grow"></div>
+                      <div className="rounded-full text-center text-sm">
+                        {likedCount}
+                        <span
+                          className={
+                            likedCount == 150 ? "visible" : "invisible"
+                          }
+                        >
+                          +
+                        </span>
+                      </div>
                     </div>
                   </div>
                   <div>
@@ -1240,82 +1301,6 @@ const Profile = ({
                 />
               </div>
             </div>
-
-            {/*<div className={`mx-auto hidden`}>
-
-              <div>
-                {isMyProfile ? (
-                  <div className="flex">
-                    <div className="flex-grow"></div>
-                    <div
-                      className="text-right pr-4 text-sm hidden-items-link pb-1 -mt-16"
-                      onClick={() => {
-                        setShowUserHiddenItems(!showUserHiddenItems);
-                      }}
-                    >
-                      {createdHiddenItems.length === 0 &&
-                      ownedHiddenItems.length === 0 &&
-                      likedHiddenItems.length === 0
-                        ? null
-                        : showUserHiddenItems
-                        ? "Hide hidden"
-                        : "Show hidden"}
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-
-              {!isLoadingCards && (
-                <div
-                  className={`flex items-center text-sm rounded-md md:text-base ${
-                    selectedGrid === 3
-                      ? "invisible"
-                      : selectedGrid === 1 &&
-                        createdItems.filter(
-                          (item) => !createdHiddenItems.includes(item.nft_id)
-                        ).length === 0
-                      ? "invisible"
-                      : selectedGrid === 2 &&
-                        ownedItems.filter(
-                          (item) => !ownedHiddenItems.includes(item.nft_id)
-                        ).length === 0
-                      ? "invisible"
-                      : null
-                  }`}
-                >
-                  <div className="flex-1"></div>
-                  <div className="py-2 px-2 w-max cursor-pointer mr-1">
-                    Sort by:
-                  </div>
-
-                  <Select
-                    options={sortFieldOptions.map((key) => SORT_FIELDS[key])}
-                    labelField="label"
-                    valueField="key"
-                    values={[
-                      SORT_FIELDS[
-                        sortFieldOptions[
-                          selectedGrid === 1
-                            ? selectedCreatedSortField - 1
-                            : selectedOwnedSortField - 1
-                        ]
-                      ],
-                    ]}
-                    searchable={false}
-                    onChange={(values) => {
-                      if (selectedGrid === 1) {
-                        setSelectedCreatedSortField(values[0]["id"]);
-                        updateCreated(values[0]["id"], true);
-                      } else {
-                        setSelectedOwnedSortField(values[0]["id"]);
-                        updateOwned(values[0]["id"], true);
-                      }
-                    }}
-                    key={selectedGrid}
-                  />
-                </div>
-              )}
-                  </div>*/}
           </div>
           {/* End Page Body */}
         </CappedWidth>

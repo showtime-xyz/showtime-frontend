@@ -466,42 +466,41 @@ const TokenCard = ({
                       />
                     ) : null} */}
                 </div>
-                {item.token_description ? (
-                  <div
-                    style={{
-                      overflowWrap: "break-word",
-                      wordWrap: "break-word",
-                      display: "block",
-                      minHeight: "4.7rem",
-                    }}
-                    className="py-4 text-gray-500 text-sm"
-                  >
-                    {moreShown ? (
-                      <div>{removeTags(item.token_description)}</div>
-                    ) : (
-                      <div>
-                        {item.token_description?.length >
-                        max_description_length ? (
-                          <>
-                            {truncateWithEllipses(
-                              removeTags(item.token_description),
-                              max_description_length
-                            )}{" "}
-                            <a
-                              onClick={() => setMoreShown(true)}
-                              className="text-gray-900 hover:text-gray-500 cursor-pointer"
-                            >
-                              {" "}
-                              more
-                            </a>
-                          </>
-                        ) : (
-                          <div>{removeTags(item.token_description)}</div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ) : null}
+
+                <div
+                  style={{
+                    overflowWrap: "break-word",
+                    wordWrap: "break-word",
+                    display: "block",
+                    minHeight: "4.7rem",
+                  }}
+                  className="py-4 text-gray-500 text-sm"
+                >
+                  {moreShown ? (
+                    <div>{removeTags(item.token_description)}</div>
+                  ) : (
+                    <div>
+                      {item.token_description?.length >
+                      max_description_length ? (
+                        <>
+                          {truncateWithEllipses(
+                            removeTags(item.token_description),
+                            max_description_length
+                          )}{" "}
+                          <a
+                            onClick={() => setMoreShown(true)}
+                            className="text-gray-900 hover:text-gray-500 cursor-pointer"
+                          >
+                            {" "}
+                            more
+                          </a>
+                        </>
+                      ) : (
+                        <div>{removeTags(item.token_description)}</div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="flex items-center">
