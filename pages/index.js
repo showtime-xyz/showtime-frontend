@@ -159,7 +159,7 @@ const Activity = () => {
 
   const handleFilterClick = (typeId) => {
     if (activityTypeFilter != typeId) {
-      window.scroll({ top: 0, behavior: "smooth" });
+      window.scroll({ top: context.isMobile ? 375 : 300, behavior: "smooth" });
       setActivity([]);
       setActivityTypeFilter(typeId);
     }
@@ -251,7 +251,7 @@ const Activity = () => {
           </div>
 
           <div className="grid lg:grid-cols-3 xl:grid-cols-4">
-            <div className="px-3">
+            <div className="px-3 col-span-2 md:col-span-1 mb-4 md:mb-0">
               <div className="px-4 py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
                 <div
                   onClick={() => {
