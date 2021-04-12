@@ -679,10 +679,10 @@ const Profile = ({
           style={{
             background: "linear-gradient(to left, #0186CC, #8145B3)",
           }}
-          className="py-6 pl-10 text-left" //  bg-gradient-to-r from-gray-900 to-gray-500
+          className="py-6 md:pl-10 text-left" //  bg-gradient-to-r from-gray-900 to-gray-500
         >
           <CappedWidth>
-            <div className="flex flex-row  text-white items-center pb-3 pt-3">
+            <div className="flex flex-col md:flex-row text-white items-center pb-3 pt-3">
               <div className="flex-0 py-8">
                 <img
                   onClick={() => {
@@ -700,15 +700,18 @@ const Profile = ({
                       ? img_url
                       : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                   }
-                  className={`h-24 w-24 rounded-full mr-4 border-2 border-white overflow-hidden ${
+                  className={`h-24 w-24 rounded-full md:mr-4 border-2 border-white overflow-hidden ${
                     isMyProfile
                       ? "cursor-pointer hover:opacity-90 transition"
                       : ""
                   }`}
                 />
               </div>
-              <div className="flex-1">
-                <div className="text-6xl mb-1">
+              <div
+                className="flex-1"
+                style={{ whiteSpace: "break-spaces", wordBreak: "break-word" }}
+              >
+                <div className="text-2xl md:text-6xl mb-1 text-center md:text-left max-w-full">
                   {isMyProfile
                     ? context.myProfile
                       ? context.myProfile.name
@@ -724,14 +727,14 @@ const Profile = ({
                 <div>
                   {(username ||
                     wallet_addresses_excluding_email.length > 0) && (
-                    <div className="flex flex-row items-center justify-start ">
+                    <div className="flex flex-col md:flex-row items-center justify-start">
                       {username && (
-                        <div className="mr-2 text-base opacity-80">
+                        <div className="md:mr-2 text-base opacity-80">
                           @{username}
                         </div>
                       )}
 
-                      <div className="flex">
+                      <div className="flex ml-1">
                         {wallet_addresses_excluding_email.map((address) => {
                           return (
                             <AddressButton key={address} address={address} />
