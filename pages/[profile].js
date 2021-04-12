@@ -974,7 +974,7 @@ const Profile = ({
         </CappedWidth>
         {spotlightItem ? (
           <div className="mt-16 ">
-            <div className="relative bg-white border-t border-b border-gray-200 py-16 mb-4">
+            <div className="relative bg-white border-t border-b border-gray-200 py-16 mb-8">
               <SpotlightItem
                 item={spotlightItem}
                 removeSpotlightItem={() => {
@@ -1001,11 +1001,11 @@ const Profile = ({
           </div>*/}
             <div
               ref={gridRef}
-              className="grid lg:grid-cols-3 xl:grid-cols-4 pt-12"
+              className="grid lg:grid-cols-3 xl:grid-cols-4 pt-0"
             >
               <div className="px-3">
-                <div className="h-max sticky top-24 ">
-                  <div className="px-4 py-4  rounded-lg bg-white shadow-md">
+                <div className="h-max sticky top-24">
+                  <div className="px-4 py-4  rounded-lg bg-white shadow-md mt-16">
                     <div className="border-b border-gray-200 mx-2 mb-2 pb-4 flex flex-row items-center">
                       <div className="mr-2">
                         <img
@@ -1116,8 +1116,9 @@ const Profile = ({
                   <div>
                     {isMyProfile ? (
                       <div className="flex">
+                        <div className="flex-grow"></div>
                         <div
-                          className="text-right text-sm mt-2 mr-6 ml-1 text-gray-400 cursor-pointer hover:text-gray-700"
+                          className="text-right text-xs mt-3 ml-6 mr-1 text-gray-400 cursor-pointer hover:text-gray-700"
                           onClick={() => {
                             setShowUserHiddenItems(!showUserHiddenItems);
                           }}
@@ -1130,13 +1131,64 @@ const Profile = ({
                             ? "Hide hidden"
                             : "Show hidden"}
                         </div>
-                        <div className="flex-grow"></div>
                       </div>
                     ) : null}
                   </div>
                 </div>
               </div>
-              <div className="lg:col-span-2 xl:col-span-3">
+              <div className="lg:col-span-2 xl:col-span-3 min-h-screen">
+                {!isLoadingCards && (
+                  <div
+                    className={`flex h-12 items-center px-3 my-2  md:text-base ${
+                      selectedGrid === 3
+                        ? "invisible"
+                        : selectedGrid === 1 &&
+                          createdItems.filter(
+                            (item) => !createdHiddenItems.includes(item.nft_id)
+                          ).length === 0
+                        ? "invisible"
+                        : selectedGrid === 2 &&
+                          ownedItems.filter(
+                            (item) => !ownedHiddenItems.includes(item.nft_id)
+                          ).length === 0
+                        ? "invisible"
+                        : null
+                    }`}
+                  >
+                    <div className="flex-1"></div>
+                    <div className="py-2 px-2 mr-1 text-sm text-gray-500">
+                      Sort by:
+                    </div>
+
+                    <Select
+                      className="text-sm"
+                      options={sortFieldOptions.map((key) => SORT_FIELDS[key])}
+                      labelField="label"
+                      valueField="key"
+                      values={[
+                        SORT_FIELDS[
+                          sortFieldOptions[
+                            selectedGrid === 1
+                              ? selectedCreatedSortField - 1
+                              : selectedOwnedSortField - 1
+                          ]
+                        ],
+                      ]}
+                      searchable={false}
+                      onChange={(values) => {
+                        if (selectedGrid === 1) {
+                          setSelectedCreatedSortField(values[0]["id"]);
+                          updateCreated(values[0]["id"], true);
+                        } else {
+                          setSelectedOwnedSortField(values[0]["id"]);
+                          updateOwned(values[0]["id"], true);
+                        }
+                      }}
+                      key={selectedGrid}
+                    />
+                  </div>
+                )}
+
                 <TokenGridV4
                   items={
                     selectedGrid === 1
@@ -1191,7 +1243,6 @@ const Profile = ({
             </div>
 
             {/*<div className={`mx-auto hidden`}>
-              <div className="pt-4">{FilterTabs}</div>
 
               <div>
                 {isMyProfile ? (

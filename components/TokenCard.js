@@ -3,7 +3,7 @@ import Link from "next/link";
 import _ from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faExternalLinkAlt,
+  //faExternalLinkAlt,
   faPlay,
   faEllipsisH,
   faStar,
@@ -15,7 +15,7 @@ import ShareButton from "./ShareButton";
 import ReactPlayer from "react-player";
 import mixpanel from "mixpanel-browser";
 import AppContext from "../context/app-context";
-import { getBidLink } from "../lib/utilities";
+//import { getBidLink } from "../lib/utilities";
 import MiniFollowButton from "./MiniFollowButton";
 import TokenCardImage from "../components/TokenCardImage";
 
@@ -382,24 +382,31 @@ class TokenCard extends React.Component {
                   }}
                   style={{ cursor: "pointer" }}
                 >
-                  {/*!this.state.imageLoaded ? (
+                  {!this.state.imageLoaded ? (
                     <div
                       className="w-full text-center flex items-center justify-center"
-                      style={
-                        this.props.columns === 1
-                          ? { height: window.innerWidth }
-                          : { height: 373 }
-                      }
+                      style={{
+                        height: 373,
+                      }}
                     >
                       <div className="loading-card-spinner" />
                     </div>
-                    ) : null*/}
+                  ) : null}
                   <div
                     style={{
                       backgroundColor: this.getBackgroundColor(item),
                     }}
+                    //className={
+                    //  this.state.imageLoaded === true ? "block" : "hidden"
+                    //}
                   >
-                    <TokenCardImage nft={item} />
+                    <TokenCardImage
+                      nft={item}
+                      onLoad={() => {
+                        //console.log("HERE");
+                        this.setState({ imageLoaded: true });
+                      }}
+                    />
                   </div>
                 </div>
                 {item.token_has_video ? (
