@@ -155,9 +155,9 @@ class SpotlightItem extends React.Component {
         <>
           <div
             ref={this.divRef}
-            className={`w-2/3 mx-auto flex items-center flex-row`}
+            className={`w-3/4 mx-auto flex items-center flex-row`}
           >
-            <div className={`flex-grow"`}>
+            <div className={`flex-1 text-right`}>
               <div>
                 {item.token_has_video ? (
                   <>
@@ -210,7 +210,7 @@ class SpotlightItem extends React.Component {
                           currentlyPlayingVideo: false,
                         });
                       }}
-                      style={{ cursor: "pointer" }}
+                      className="cursor-pointer text-right flex flex-row"
                     >
                       {!this.state.imageLoaded ? (
                         <div
@@ -220,7 +220,7 @@ class SpotlightItem extends React.Component {
                           <div className="loading-card-spinner" />
                         </div>
                       ) : null}
-
+                      <div className="flex-grow"></div>
                       <img
                         className={`hover:opacity-90  transition-all  shadow-lg 
           
@@ -265,7 +265,7 @@ class SpotlightItem extends React.Component {
                 )}
               </div>
             </div>
-            <div className={`flex-shrink text-left pl-12`}>
+            <div className={`flex-1 text-left pl-12`}>
               <div>
                 <div className="flex flex-row">
                   <div
@@ -373,7 +373,7 @@ class SpotlightItem extends React.Component {
                     <div className="flex-grow"></div>
                   </div>
                 </div>
-                <div className="flex flex-row pt-4 mt-16 w-full mb-6">
+                <div className="flex flex-row pt-4 mt-8 w-full mb-6">
                   {item.contract_is_creator ? (
                     <div className="flex-col flex-1">
                       <div className="flex-shrink pr-2 text-sm text-gray-500">
