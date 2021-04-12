@@ -29,7 +29,7 @@ const Header = () => {
         }}
       >
         <CappedWidth>
-          <div className="flex flex-row items-center px-3">
+          <div className="flex flex-row items-center md:px-3">
             <div>
               <Link href="/">
                 <a
@@ -189,13 +189,10 @@ const Header = () => {
           </div>
 
           {/* Start mobile-only menu */}
-          <div
-            className={`flex md:hidden justify-between items-center pt-3 ${
-              !context.gridWidth ? "invisible" : ""
-            }`}
-          >
-            <div>
-              {/*<Link href="/">
+          {context.isMobile && (
+            <div className="flex md:hidden justify-between items-center py-2">
+              <div>
+                {/*<Link href="/">
               <a
                 className="showtime-header-link mr-5 text-sm md:text-base"
                 onClick={() => {
@@ -205,7 +202,7 @@ const Header = () => {
                 Home
               </a>
               </Link>*/}
-              {/* {context.myProfile && (
+                {/* {context.myProfile && (
                 <span className="relative">
                   <Link href="/activity">
                     <a
@@ -225,35 +222,36 @@ const Header = () => {
                   </div>
                 </span>
               )} */}
-              <Link href="/c/[collection]" as="/c/all">
-                <a
-                  className="showtime-header-link mr-5 text-sm md:text-base"
-                  onClick={() => {
-                    mixpanel.track("Explore button click");
-                  }}
-                >
-                  Discover
-                </a>
-              </Link>
-              <Link href="/leaderboard">
-                <a
-                  className="showtime-header-link mr-5 text-sm md:text-base"
-                  onClick={() => {
-                    mixpanel.track("Leaderboard button click");
-                  }}
-                >
-                  Trending
-                </a>
-              </Link>
+                <Link href="/c/[collection]" as="/c/all">
+                  <a
+                    className="showtime-header-link mr-5 text-sm md:text-base"
+                    onClick={() => {
+                      mixpanel.track("Explore button click");
+                    }}
+                  >
+                    Discover
+                  </a>
+                </Link>
+                <Link href="/leaderboard">
+                  <a
+                    className="showtime-header-link mr-5 text-sm md:text-base"
+                    onClick={() => {
+                      mixpanel.track("Leaderboard button click");
+                    }}
+                  >
+                    Trending
+                  </a>
+                </Link>
+              </div>
+              {context.isMobile &&
+                context.user &&
+                context.myProfile !== undefined && (
+                  <div className="flex-shrink">
+                    <NotificationsBtn />
+                  </div>
+                )}
             </div>
-            {context.isMobile &&
-              context.user &&
-              context.myProfile !== undefined && (
-                <div className="flex-shrink">
-                  <NotificationsBtn />
-                </div>
-              )}
-          </div>
+          )}
           {/* End mobile-only menu */}
         </CappedWidth>
       </header>

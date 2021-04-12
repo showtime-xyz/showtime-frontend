@@ -49,9 +49,9 @@ const OverlaySearchContainer = styled.div`
   display: flex;
   flex-direction: column;
   position: absolute;
-  height: 80px;
+  height: 66px;
   background: #fff;
-  padding: 16px;
+  padding: 14px;
   width: 100%;
   left: 0;
   top: 0;
