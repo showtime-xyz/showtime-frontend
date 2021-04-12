@@ -123,7 +123,6 @@ const Profile = ({
 }) => {
   //const router = useRouter();
   const context = useContext(AppContext);
-  const { gridWidth } = context;
 
   const [isMyProfile, setIsMyProfile] = useState();
   const [isFollowed, setIsFollowed] = useState(false);
