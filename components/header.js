@@ -176,13 +176,12 @@ const Header = () => {
               ) : (
                 <>
                   <div
-                    className="text-black rounded-full px-5 py-1 cursor-pointer hover:text-stpink hover:border-stpink text-center"
+                    className="flex text-sm md:text-base text-black cursor-pointer hover:text-stpink hover:border-stpink text-center"
                     onClick={() => {
                       context.setLoginModalOpen(!context.loginModalOpen);
                     }}
-                    style={{ minWidth: 96 }}
                   >
-                    <span className="text-sm md:text-base">Sign in</span>
+                    Sign&nbsp;in
                   </div>
                 </>
               )}

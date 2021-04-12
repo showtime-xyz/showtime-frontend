@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import ReactPlayer from "react-player";
 import mixpanel from "mixpanel-browser";
 
-export default function ActivityImage({ nft }) {
+export default function ActivityImage({ nft, onLoad }) {
   const aRef = useRef();
   const [imgWidth, setImgWidth] = useState(null);
   useEffect(() => {
@@ -26,9 +26,7 @@ export default function ActivityImage({ nft }) {
 
   return (
     <div
-      className={`flex-1  cursor-pointer overflow-hidden hover:opacity-90 transition-all
-      
-      `}
+      className="flex-1  cursor-pointer overflow-hidden hover:opacity-90 transition-all"
       ref={aRef}
       style={{
         height: imgWidth,
@@ -41,6 +39,7 @@ export default function ActivityImage({ nft }) {
         <img
           src={getImageUrl(nft.token_img_url, nft.token_aspect_ratio)}
           className="object-cover w-full h-full"
+          onLoad={onLoad}
         />
       )}
       {!nft.token_img_url && nft.token_has_video && (
@@ -52,6 +51,7 @@ export default function ActivityImage({ nft }) {
           width={imgWidth}
           height={imgWidth}
           playsinline
+          onReady={onLoad}
         />
       )}
     </div>

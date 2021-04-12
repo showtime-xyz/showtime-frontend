@@ -3,7 +3,7 @@ import ActivityCard from "./ActivityCard";
 
 export default function ActivityFeed({ activity, setItemOpenInModal }) {
   return (
-    <>
+    <div className="px-3">
       {activity.map((act) => (
         <ActivityCard
           act={act}
@@ -11,6 +11,6 @@ export default function ActivityFeed({ activity, setItemOpenInModal }) {
           setItemOpenInModal={setItemOpenInModal}
         />
       ))}
-    </>
+    </div>
   );
 }

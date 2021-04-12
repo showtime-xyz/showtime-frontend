@@ -155,7 +155,7 @@ export default function ActivityCard({ act, setItemOpenInModal }) {
             </div>
           </div>
           <div className="flex-grow"></div>
-          <div>
+          {/*<div>
             <div
               onClick={(e) => {}}
               className="card-menu-button text-right text-gray-300"
@@ -168,24 +168,12 @@ export default function ActivityCard({ act, setItemOpenInModal }) {
                 icon={faEllipsisH}
               />
             </div>
-          </div>
+              </div>*/}
         </div>
       </div>
+      {/* content */}
       <>
-        {/* content */}
         <div className="max-w-full mt-4  px-4 flex flex-row">
-          {/*<div
-            className="rounded-full h-7 w-7 flex items-center justify-center shadow mr-2 "
-            style={{
-              backgroundColor: activityIconObjects[type].color,
-            }}
-          >
-            <FontAwesomeIcon
-              className="h-4 w-4"
-              icon={activityIconObjects[type].icon}
-              color="white"
-            />
-          </div>*/}
           <div>{content}</div>
         </div>
 

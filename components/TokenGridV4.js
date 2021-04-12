@@ -152,18 +152,18 @@ const TokenGridV4 = ({
 
   useEffect(() => {
     if (context.isMobile) {
-      setItemsShowing(3);
+      setItemsShowing(4);
     } else {
-      setItemsShowing(6);
+      setItemsShowing(9);
     }
   }, [context.isMobile]);
 
   const fetchMoreData = () => {
-    if (itemsShowing + 6 > itemsList.length) {
+    if (itemsShowing + 9 > itemsList.length) {
       setHasMore(false);
       onFinish ? onFinish() : null;
     }
-    setItemsShowing(itemsShowing + 6);
+    setItemsShowing(itemsShowing + 9);
   };
 
   const currentIndex = deduplicatedItemsList.findIndex(
@@ -203,7 +203,7 @@ const TokenGridV4 = ({
         hasMore={hasMore}
       >
         {isLoading ? (
-          <div className="mx-auto items-center flex justify-center overflow-hidden py-4">
+          <div className="mx-auto items-center flex justify-center overflow-hidden py-4 mt-16">
             <div className="loading-card-spinner" />
           </div>
         ) : (
