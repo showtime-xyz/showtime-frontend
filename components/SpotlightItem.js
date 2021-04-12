@@ -89,8 +89,6 @@ class SpotlightItem extends React.Component {
 
   render() {
     const { item, isMyProfile, listId } = this.props;
-    const hash = item.token_img_url || item.token_animation_url;
-    const { isMobile, columns } = this.context;
     return (
       <>
         {typeof document !== "undefined" ? (
@@ -101,17 +99,12 @@ class SpotlightItem extends React.Component {
                 this.setState({ currentlyOpenModal: false })
               }
               item={this.props.item}
-              // goToNext={goToNext}
-              // goToPrevious={goToPrevious}
-              // columns={context.columns}
-              // hasNext={false}
-              // hasPrevious={false}
             />
           </>
         ) : null}
 
         {isMyProfile ? (
-          <div className="absolute top-7 right-6">
+          <div className="absolute top-7 right-7">
             <div
               onClick={(e) => {
                 e.stopPropagation();
@@ -159,109 +152,78 @@ class SpotlightItem extends React.Component {
             ) : null}
           </div>
         ) : null}
-
-        <div
-          ref={this.divRef}
-          className={`w-full flex ${
-            item.token_aspect_ratio &&
-            Number(item.token_aspect_ratio) > this.aspect_ratio_cutoff
-              ? "flex-col"
-              : "flex-row"
-          }  `}
-        >
-          {this.props.item.token_aspect_ratio &&
-          Number(this.props.item.token_aspect_ratio) >
-            this.aspect_ratio_cutoff ? (
-            <div className="text-stpink px-6 py-6 border-b border-gray-200">
-              <FontAwesomeIcon icon={faStar} /> Spotlight
-            </div>
-          ) : null}
+        <>
           <div
-            className={`flex-1 ${
-              item.token_aspect_ratio &&
-              Number(item.token_aspect_ratio) > this.aspect_ratio_cutoff
-                ? "pb-6"
-                : "mr-6  h-full"
-            }  `}
+            ref={this.divRef}
+            className={`w-2/3 mx-auto flex items-center flex-row`}
           >
-            <div>
-              {item.token_has_video ? (
-                <>
-                  <div
-                    className={`w-full h-full ${
-                      this.state.videoReady ? "hidden" : null
-                    }`}
-                  >
-                    <div className="w-full text-center flex items-center mt-24 justify-center">
-                      <div className="loading-card-spinner" />
-                    </div>
-                  </div>
-                  <div
-                    className={`w-full h-full ${
-                      this.state.videoReady ? null : "invisible"
-                    }`}
-                  >
-                    <ReactPlayer
-                      url={item.token_animation_url}
-                      playing={this.state.currentlyPlayingVideo}
-                      loop
-                      controls
-                      muted={this.state.muted}
-                      className={`w-full h-full`}
-                      width={this.divRef?.current?.clientWidth / 2}
-                      height={"1"}
-                      //width={columns === 1 ? window.innerWidth : "100%"}
-                      // height={
-                      //   columns === 1
-                      //     ? item.imageRef
-                      //       ? item.imageRef.current
-                      //         ? item.imageRef.current.height
-                      //         : null
-                      //       : null
-                      //     : "100%"
-                      // }
-                      playsinline
-                      onReady={() => this.setState({ videoReady: true })}
-                    />
-                  </div>
-                </>
-              ) : (
-                <div style={{ position: "relative" }}>
-                  <div
-                    onClick={() => {
-                      mixpanel.track("Open NFT modal");
-                      this.setState({
-                        currentlyOpenModal: true,
-                        muted: true,
-                        currentlyPlayingVideo: false,
-                      });
-                    }}
-                    style={{ cursor: "pointer" }}
-                    className="h-full"
-                  >
-                    {!this.state.imageLoaded ? (
-                      <div
-                        className="w-full text-center flex items-center justify-center"
-                        style={
-                          columns === 1
-                            ? { height: window.innerWidth }
-                            : { height: 373 }
-                        }
-                      >
+            <div className={`flex-grow"`}>
+              <div>
+                {item.token_has_video ? (
+                  <>
+                    <div
+                      className={`w-full h-full ${
+                        this.state.videoReady ? "hidden" : null
+                      }`}
+                    >
+                      <div className="w-full text-center flex items-center mt-24 justify-center">
                         <div className="loading-card-spinner" />
                       </div>
-                    ) : null}
-                    <div className="flex">
+                    </div>
+                    <div
+                      className={`w-full shadow-lg h-full ${
+                        this.state.videoReady ? null : "invisible"
+                      }`}
+                    >
+                      <ReactPlayer
+                        url={item.token_animation_url}
+                        playing={this.state.currentlyPlayingVideo}
+                        loop
+                        controls
+                        muted={this.state.muted}
+                        className={`w-full h-full`}
+                        width={this.divRef?.current?.clientWidth / 2}
+                        height={"1"}
+                        //width={columns === 1 ? window.innerWidth : "100%"}
+                        // height={
+                        //   columns === 1
+                        //     ? item.imageRef
+                        //       ? item.imageRef.current
+                        //         ? item.imageRef.current.height
+                        //         : null
+                        //       : null
+                        //     : "100%"
+                        // }
+                        playsinline
+                        onReady={() => this.setState({ videoReady: true })}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <div style={{ position: "relative" }}>
+                    <div
+                      onClick={() => {
+                        mixpanel.track("Open NFT modal");
+                        this.setState({
+                          currentlyOpenModal: true,
+                          muted: true,
+                          currentlyPlayingVideo: false,
+                        });
+                      }}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {!this.state.imageLoaded ? (
+                        <div
+                          className="w-full text-center flex items-center justify-center"
+                          style={{ height: 500 }}
+                        >
+                          <div className="loading-card-spinner" />
+                        </div>
+                      ) : null}
+
                       <img
-                        className={`w-full hover:opacity-90  transition-all
+                        className={`hover:opacity-90  transition-all  shadow-lg 
           
-                        ${
-                          item.token_aspect_ratio &&
-                          Number(item.token_aspect_ratio) >
-                            this.aspect_ratio_cutoff
-                            ? null
-                            : "rounded-tl-lg rounded-bl-lg"
-                        }
                         
                         `}
                         ref={item.imageRef}
@@ -273,172 +235,128 @@ class SpotlightItem extends React.Component {
                             ? { display: "none" }
                             : {
                                 backgroundColor: this.getBackgroundColor(item),
+                                maxHeight: 500,
                               }),
                         }}
                       />
                     </div>
-                  </div>
-                  {item.token_has_video ? (
-                    <div
-                      className="p-4 playbutton"
-                      style={{
-                        position: "absolute",
-                        bottom: 0,
-                        right: 0,
-                        cursor: "pointer",
-                      }}
-                      onClick={() => {
-                        mixpanel.track("Play card video");
-                        this.setState({
-                          muted: false,
-                          currentlyPlayingVideo: true,
-                        });
-                      }}
-                    >
-                      <FontAwesomeIcon
+
+                    {this.state.refreshing && (
+                      <div
                         style={{
-                          height: 20,
-                          width: 20,
-                          color: "white",
-                          filter: "drop-shadow(0px 0px 10px grey)",
+                          position: "absolute",
+                          top: 0,
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          cursor: "pointer",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "#fffffff0",
                         }}
-                        icon={faPlay}
-                      />
-                    </div>
-                  ) : null}
-                  {this.state.refreshing && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        cursor: "pointer",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        backgroundColor: "#fffffff0",
-                      }}
-                    >
-                      <div className="loading-card-spinner-small mb-2" />
-                      <div>Refreshing...</div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-          <div
-            className={`flex-1  text-left pr-6
-          
-          ${
-            item.token_aspect_ratio &&
-            Number(item.token_aspect_ratio) > this.aspect_ratio_cutoff
-              ? "pl-6"
-              : "pt-6 "
-          }
-          
-          `}
-          >
-            <div class="flex flex-col h-full">
-              {this.props.item.token_aspect_ratio &&
-              Number(this.props.item.token_aspect_ratio) >
-                this.aspect_ratio_cutoff ? null : (
-                <div className="text-stpink pb-6 mb-6 border-b border-gray-200">
-                  <FontAwesomeIcon icon={faStar} /> Spotlight{" "}
-                </div>
-              )}
-
-              <div className="flex flex-row">
-                <div
-                  onClick={() => {
-                    mixpanel.track("Open NFT modal");
-                    this.setState({
-                      currentlyOpenModal: true,
-                      muted: true,
-                      currentlyPlayingVideo: false,
-                    });
-                  }}
-                  className="mb-4 text-3xl hover:text-stpink"
-                  style={{
-                    overflowWrap: "break-word",
-                    wordWrap: "break-word",
-
-                    cursor: "pointer",
-                  }}
-                >
-                  {item.token_name}
-                </div>
-                <div className="flex-grow"></div>
-              </div>
-
-              {item.token_description ? (
-                <div
-                  style={{
-                    overflowWrap: "break-word",
-                    wordWrap: "break-word",
-                  }}
-                  className="pb-2 pb-4 text-gray-500"
-                >
-                  <div>
-                    {item.token_description?.length >
-                      this.max_description_length && !this.state.moreShown ? (
-                      <>
-                        {this.truncateWithEllipses(
-                          this.removeTags(item.token_description),
-                          this.max_description_length
-                        )}{" "}
-                        <a
-                          onClick={() => {
-                            this.setState({ moreShown: true });
-                          }}
-                          className="text-gray-900 hover:text-gray-500 cursor-pointer"
-                        >
-                          {" "}
-                          more
-                        </a>
-                      </>
-                    ) : (
-                      <div>{this.removeTags(item.token_description)}</div>
+                      >
+                        <div className="loading-card-spinner-small mb-2" />
+                        <div>Refreshing...</div>
+                      </div>
                     )}
                   </div>
-                </div>
-              ) : null}
-              <div className="flex items-center">
-                <div className="mr-4 text-base ">
-                  <LikeButton item={item} />
-                </div>
-                <div className="mr-4 text-base ">
-                  <CommentButton
-                    item={item}
-                    handleComment={() => {
-                      mixpanel.track("Open NFT modal via comment button");
+                )}
+              </div>
+            </div>
+            <div className={`flex-shrink text-left pl-12`}>
+              <div>
+                <div className="flex flex-row">
+                  <div
+                    onClick={() => {
+                      mixpanel.track("Open NFT modal");
                       this.setState({
                         currentlyOpenModal: true,
                         muted: true,
                         currentlyPlayingVideo: false,
                       });
                     }}
-                  />
+                    className="mb-4 text-3xl hover:text-stpink"
+                    style={{
+                      overflowWrap: "break-word",
+                      wordWrap: "break-word",
+
+                      cursor: "pointer",
+                    }}
+                  >
+                    {item.token_name}
+                  </div>
+                  <div className="flex-grow"></div>
                 </div>
-                <div className="mr-4 text-base ">
-                  <ShareButton
-                    url={
-                      window.location.protocol +
-                      "//" +
-                      window.location.hostname +
-                      (window.location.port ? ":" + window.location.port : "") +
-                      `/t/${item.contract_address}/${item.token_id}`
-                    }
-                    type={"item"}
-                  />
+
+                {item.token_description ? (
+                  <div
+                    style={{
+                      overflowWrap: "break-word",
+                      wordWrap: "break-word",
+                    }}
+                    className="pb-4 text-gray-500"
+                  >
+                    <div>
+                      {item.token_description?.length >
+                        this.max_description_length && !this.state.moreShown ? (
+                        <>
+                          {this.truncateWithEllipses(
+                            this.removeTags(item.token_description),
+                            this.max_description_length
+                          )}{" "}
+                          <a
+                            onClick={() => {
+                              this.setState({ moreShown: true });
+                            }}
+                            className="text-gray-900 hover:text-gray-500 cursor-pointer"
+                          >
+                            {" "}
+                            more
+                          </a>
+                        </>
+                      ) : (
+                        <div>{this.removeTags(item.token_description)}</div>
+                      )}
+                    </div>
+                  </div>
+                ) : null}
+
+                <div className="flex items-center">
+                  <div className="mr-4 text-base ">
+                    <LikeButton item={item} />
+                  </div>
+                  <div className="mr-4 text-base ">
+                    <CommentButton
+                      item={item}
+                      handleComment={() => {
+                        mixpanel.track("Open NFT modal via comment button");
+                        this.setState({
+                          currentlyOpenModal: true,
+                          muted: true,
+                          currentlyPlayingVideo: false,
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className="mr-4 text-base ">
+                    <ShareButton
+                      url={
+                        window.location.protocol +
+                        "//" +
+                        window.location.hostname +
+                        (window.location.port
+                          ? ":" + window.location.port
+                          : "") +
+                        `/t/${item.contract_address}/${item.token_id}`
+                      }
+                      type={"item"}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="flex-grow ">
-                <div className="flex flex-row mt-8">
-                  <div className="text-base px-5 py-2 rounded-full text-white bg-stpink hover:bg-white hover:text-stpink border-2 border-stpink">
+                <div className="flex-grow ">
+                  <div className="flex flex-row mt-8">
                     <a
                       href={getBidLink(item)}
                       title={`Buy on ${getContractName(item)}`}
@@ -447,131 +365,136 @@ class SpotlightItem extends React.Component {
                         mixpanel.track("OpenSea link click");
                       }}
                     >
-                      {`Bid on ${getContractName(item)}`}
+                      <div className="text-base px-5 py-2 shadow-md transition-all rounded-full text-white bg-stpink hover:bg-white hover:text-stpink border-2 border-stpink">
+                        {`Bid on ${getContractName(item)}`}
+                      </div>
                     </a>
+
+                    <div className="flex-grow"></div>
                   </div>
-                  <div className="flex-grow"></div>
                 </div>
-              </div>
-              <div className="flex flex-row pt-4 mt-16 w-full border-t border-gray-200 mb-6">
-                {item.contract_is_creator ? (
-                  <div className="flex-col flex-1">
-                    <div className="flex-shrink pr-2 text-sm text-gray-500">
-                      Created by
-                    </div>
-                    <div className="flex-shrink">
-                      <Link
-                        href="/c/[collection]"
-                        as={`/c/${item.collection_slug}`}
-                      >
-                        <a className="flex flex-row items-center">
-                          <div style={{ width: 30 }}>
-                            <img
-                              alt={item.collection_name}
-                              src={
-                                item.collection_img_url
-                                  ? item.collection_img_url
-                                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                              }
-                              className="rounded-full"
-                              style={{
-                                height: 30,
-                                width: 30,
-                              }}
-                            />
-                          </div>
-                          <div className="showtime-card-profile-link mx-2 md:text-lg">
-                            {this.truncateWithEllipses(
-                              item.collection_name + " Collection",
-                              25
-                            )}{" "}
-                          </div>
-                        </a>
-                      </Link>
-                    </div>
-                  </div>
-                ) : item.creator_id ? (
-                  <div className="flex-col flex-1">
-                    <div className="flex-shrink pr-2  text-sm text-gray-500">
-                      {item.owner_id == item.creator_id
-                        ? "Created & Owned By"
-                        : "Created by"}
-                    </div>
-                    <div className="flex-shrink">
-                      <Link
-                        href="/[profile]"
-                        as={`/${
-                          item?.creator_username || item.creator_address
-                        }`}
-                      >
-                        <a className="flex flex-row items-center">
-                          <div>
-                            <img
-                              alt={item.creator_name}
-                              src={
-                                item.creator_img_url
-                                  ? item.creator_img_url
-                                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                              }
-                              className="rounded-full"
-                              style={{
-                                height: 30,
-                                width: 30,
-                              }}
-                            />
-                          </div>
-                          <div className="showtime-card-profile-link ml-2 md:text-lg">
-                            {this.truncateWithEllipses(item.creator_name, 30)}
-                          </div>
-                        </a>
-                      </Link>
-                    </div>
-                  </div>
-                ) : null}
-                {item.owner_id &&
-                (item.owner_id != item.creator_id ||
-                  item.contract_is_creator) ? (
-                  <div className="flex-1">
-                    <div className="flex-shrink pr-2  text-sm text-gray-500">
-                      Owned by
-                    </div>
-                    <div className="text-lg">
-                      {item.multiple_owners ? (
-                        <span style={{ color: "#888" }}>Multiple owners</span>
-                      ) : item.owner_id ? (
+                <div className="flex flex-row pt-4 mt-16 w-full mb-6">
+                  {item.contract_is_creator ? (
+                    <div className="flex-col flex-1">
+                      <div className="flex-shrink pr-2 text-sm text-gray-500">
+                        Created by
+                      </div>
+                      <div className="flex-shrink">
                         <Link
-                          href="/[profile]"
-                          as={`/${item?.owner_username || item.owner_address}`}
+                          href="/c/[collection]"
+                          as={`/c/${item.collection_slug}`}
                         >
                           <a className="flex flex-row items-center">
-                            <div>
+                            <div style={{ width: 30 }}>
                               <img
-                                alt={item.owner_name}
+                                alt={item.collection_name}
                                 src={
-                                  item.owner_img_url
-                                    ? item.owner_img_url
+                                  item.collection_img_url
+                                    ? item.collection_img_url
                                     : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                                 }
-                                className="rounded-full mr-2 "
+                                className="rounded-full"
                                 style={{
                                   height: 30,
                                   width: 30,
                                 }}
                               />
                             </div>
-                            <div className="showtime-card-profile-link">
-                              {this.truncateWithEllipses(item.owner_name, 22)}
+                            <div className="showtime-card-profile-link mx-2 md:text-lg">
+                              {this.truncateWithEllipses(
+                                item.collection_name + " Collection",
+                                25
+                              )}{" "}
                             </div>
                           </a>
                         </Link>
-                      ) : null}
+                      </div>
                     </div>
-                  </div>
-                ) : null}
+                  ) : item.creator_id ? (
+                    <div className="flex-col flex-1">
+                      <div className="flex-shrink pr-2  text-sm text-gray-500">
+                        {item.owner_id == item.creator_id
+                          ? "Created & Owned By"
+                          : "Created by"}
+                      </div>
+                      <div className="flex-shrink">
+                        <Link
+                          href="/[profile]"
+                          as={`/${
+                            item?.creator_username || item.creator_address
+                          }`}
+                        >
+                          <a className="flex flex-row items-center">
+                            <div>
+                              <img
+                                alt={item.creator_name}
+                                src={
+                                  item.creator_img_url
+                                    ? item.creator_img_url
+                                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                                }
+                                className="rounded-full"
+                                style={{
+                                  height: 30,
+                                  width: 30,
+                                }}
+                              />
+                            </div>
+                            <div className="showtime-card-profile-link ml-2 md:text-lg">
+                              {this.truncateWithEllipses(item.creator_name, 30)}
+                            </div>
+                          </a>
+                        </Link>
+                      </div>
+                    </div>
+                  ) : null}
+                  {item.owner_id &&
+                  (item.owner_id != item.creator_id ||
+                    item.contract_is_creator) ? (
+                    <div className="flex-1">
+                      <div className="flex-shrink pr-2  text-sm text-gray-500">
+                        Owned by
+                      </div>
+                      <div className="text-lg">
+                        {item.multiple_owners ? (
+                          <span style={{ color: "#888" }}>Multiple owners</span>
+                        ) : item.owner_id ? (
+                          <Link
+                            href="/[profile]"
+                            as={`/${
+                              item?.owner_username || item.owner_address
+                            }`}
+                          >
+                            <a className="flex flex-row items-center">
+                              <div>
+                                <img
+                                  alt={item.owner_name}
+                                  src={
+                                    item.owner_img_url
+                                      ? item.owner_img_url
+                                      : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                                  }
+                                  className="rounded-full mr-2 "
+                                  style={{
+                                    height: 30,
+                                    width: 30,
+                                  }}
+                                />
+                              </div>
+                              <div className="showtime-card-profile-link">
+                                {this.truncateWithEllipses(item.owner_name, 22)}
+                              </div>
+                            </a>
+                          </Link>
+                        ) : null}
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </>
       </>
     );
   }

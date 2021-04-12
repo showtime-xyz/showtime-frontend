@@ -136,7 +136,7 @@ class TokenCard extends React.Component {
     const { isMobile } = this.context;
     return (
       <>
-        <div>
+        <div className="px-3">
           <div
             style={
               this.props.userHiddenItems &&

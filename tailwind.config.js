@@ -63,6 +63,9 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      maxWidth: {
+        "screen-3xl": "1680px",
+      },
       colors: {
         stpink: "#e45cff",
         stlink: "rgb(81, 125, 228)",

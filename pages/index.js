@@ -2,6 +2,7 @@ import { useState, useEffect, useContext, useRef } from "react";
 import Head from "next/head";
 import _ from "lodash";
 import Layout from "../components/layout";
+import CappedWidth from "../components/CappedWidth";
 import InfiniteScroll from "react-infinite-scroll-component";
 import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
@@ -217,9 +218,9 @@ const Activity = () => {
         </>
       ) : null}
 
-      <>
-        <div className="m-auto relative">
-          <div className="mt-16 text-left mb-16 flex flex-row items-center">
+      <div className="py-14 px-10 text-left  bg-gradient-to-r from-green-400 to-blue-500">
+        <CappedWidth>
+          <div className="flex flex-row mx-3 text-white">
             <div className="flex-1">
               <div className="text-2xl">Discover & Showcase</div>
               <div className="text-6xl" style={{ fontFamily: "Afronaut" }}>
@@ -227,7 +228,7 @@ const Activity = () => {
               </div>
               <div className="text-6xl">Crypto Art.</div>
             </div>
-            <div className="flex-1">
+            {/*<div className="flex-1">
               <div className="bg-white rounded-lg shadow-md px-6 py-6 text-center">
                 <span
                   className="cursor-pointer hover:text-black bg-black text-white rounded-full px-5 py-3 hover:bg-white border-2 border-black transition"
@@ -236,17 +237,21 @@ const Activity = () => {
                   Sign in
                 </span>
               </div>
-            </div>
+          </div>*/}
+          </div>
+        </CappedWidth>
+      </div>
+
+      <CappedWidth>
+        <div className="m-auto relative">
+          <hr className="mx-3" />
+
+          <div className="mb-8 mt-16 text-left px-3">
+            <h1 className="text-3xl">News Feed</h1>
           </div>
 
-          <hr />
-
-          <div className="mb-8 mt-16 text-left">
-            <h1 className="text-4xl">News Feed</h1>
-          </div>
-
-          <div className="grid lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            <div>
+          <div className="grid lg:grid-cols-3 xl:grid-cols-4">
+            <div className="px-3">
               <div className="px-4 py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
                 <div
                   onClick={() => {
@@ -326,9 +331,7 @@ const Activity = () => {
                 </div>
               </div>
             </div>
-            <div className="col-span-2">
-              <div className="" />
-
+            <div className="col-span-2 px-3">
               {context.user === undefined ? null : context.user === null ? (
                 <div className="flex flex-1 items-center justify-center mb-6">
                   <div className="text-gray-400 shadow-md bg-white rounded-lg w-full px-4 py-6 mx-4 text-center">
@@ -349,7 +352,7 @@ const Activity = () => {
                 next={getNext}
                 hasMore={hasMoreScrolling}
                 endMessage={
-                  <div className="flex flex-1 items-center justify-center my-4">
+                  <div className="flex flex-1 items-center justify-center">
                     {context.user ? (
                       <div className="text-gray-400">
                         No more activity. Follow more people.
@@ -379,7 +382,7 @@ const Activity = () => {
                 {isLoading && <div className="loading-card-spinner" />}
               </div>
             </div>
-            <div>
+            <div className="px-3">
               <div className="hidden xl:block py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
                 <ActivityRecommendedFollows />
               </div>
@@ -417,7 +420,7 @@ const Activity = () => {
             <div className="flex flex-col"></div>
           </div>
         </div>
-      </>
+      </CappedWidth>
     </Layout>
   );
 };

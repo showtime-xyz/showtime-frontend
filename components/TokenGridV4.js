@@ -207,9 +207,7 @@ const TokenGridV4 = ({
             <div className="loading-card-spinner" />
           </div>
         ) : (
-          <div
-            className={`grid lg:grid-cols-2 xl:grid-cols-3 overflow-hidden gap-4`}
-          >
+          <div className={`grid lg:grid-cols-2 xl:grid-cols-3 overflow-hidden`}>
             {deduplicatedItemsList.slice(0, itemsShowing).map((item) => (
               <TokenCard
                 key={item.nft_id}

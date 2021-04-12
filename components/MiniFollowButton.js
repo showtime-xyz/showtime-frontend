@@ -62,8 +62,9 @@ const MiniFollowButton = ({ profileId }) => {
             : handleFollow
           : handleLoggedOutFollow
       }
-      isFollowed={isFollowed}
-      className="text-xs text-stlink opacity-80 hover:opacity-100 cursor-pointer mt-1"
+      //isFollowed={isFollowed}
+      style={{ marginTop: 2 }}
+      className="text-xs text-stlink opacity-80 hover:opacity-100 cursor-pointer"
     >
       Follow
     </div>

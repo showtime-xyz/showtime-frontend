@@ -72,7 +72,7 @@ export default function ActivityCard({ act, setItemOpenInModal }) {
   }
   return (
     <div
-      className="flex flex-col flex-1 mx-4 mb-8 pt-4 rounded-lg bg-white shadow-md border-t-2"
+      className="flex flex-col flex-1 mb-8 pt-4 rounded-lg bg-white shadow-md border-t-2"
       style={{
         borderTopColor: activityIconObjects[type].color,
       }}

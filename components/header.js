@@ -5,6 +5,7 @@ import SearchBar from "./SearchBar";
 import AppContext from "../context/app-context";
 import ModalLogin from "./ModalLogin";
 import NotificationsBtn from "./NotificationsBtn";
+import CappedWidth from "./CappedWidth";
 
 const Header = () => {
   const context = useContext(AppContext);
@@ -27,37 +28,38 @@ const Header = () => {
           top: 0,
         }}
       >
-        <div className="flex flex-row items-center max-w-screen-2xl mx-auto px-8  2xl:px-16">
-          <div>
-            <Link href="/">
-              <a
-                className="flex flex-row showtime-header-link items-center text-left mr-auto"
-                onClick={() => {
-                  mixpanel.track("Logo button click");
-                }}
-              >
-                {/* <img
+        <CappedWidth>
+          <div className="flex flex-row items-center px-3">
+            <div>
+              <Link href="/">
+                <a
+                  className="flex flex-row showtime-header-link items-center text-left mr-auto"
+                  onClick={() => {
+                    mixpanel.track("Logo button click");
+                  }}
+                >
+                  {/* <img
                   src="/logo_sm.jpg"
                   style={{ height: 44, width: 44, borderRadius: 5 }}
                 /> */}
-                <div
-                  className="text-2xl py-2"
-                  style={{ fontWeight: 400, fontFamily: "Afronaut" }}
-                >
-                  {"SHOWTIME"}
-                </div>
-              </a>
-            </Link>
-          </div>
-          {/* Start desktop-only menu */}
-          <div className="flex-grow" style={{ width: "100%" }}>
-            <SearchBar />
-          </div>
-          <div
-            className="hidden md:flex mr-6 items-center"
-            style={{ fontWeight: 400 }}
-          >
-            {/*<Link href="/">
+                  <div
+                    className="text-2xl py-2"
+                    style={{ fontWeight: 400, fontFamily: "Afronaut" }}
+                  >
+                    {"SHOWTIME"}
+                  </div>
+                </a>
+              </Link>
+            </div>
+            {/* Start desktop-only menu */}
+            <div className="flex-grow" style={{ width: "100%" }}>
+              <SearchBar />
+            </div>
+            <div
+              className="hidden md:flex mr-6 items-center"
+              style={{ fontWeight: 400 }}
+            >
+              {/*<Link href="/">
               <a
                 className="showtime-header-link ml-6 text-sm md:text-base"
                 onClick={() => {
@@ -68,7 +70,7 @@ const Header = () => {
               </a>
               </Link>*/}
 
-            {/*context.myProfile && (
+              {/*context.myProfile && (
               <div className="relative">
                 <Link href="/activity">
                   <a
@@ -88,112 +90,113 @@ const Header = () => {
                 </div>
               </div>
                   )*/}
-            <Link href="/c/[collection]" as="/c/all">
-              <a
-                className="showtime-header-link ml-6 text-sm md:text-base"
-                onClick={() => {
-                  mixpanel.track("Explore button click");
-                }}
-              >
-                Discover
-              </a>
-            </Link>
-            <Link href="/leaderboard">
-              <a
-                className="showtime-header-link ml-6 text-sm md:text-base"
-                onClick={() => {
-                  mixpanel.track("Leaderboard button click");
-                }}
-              >
-                Trending
-              </a>
-            </Link>
-            {context.user && context.myProfile !== undefined && (
-              <div className="flex-shrink ml-5">
-                <NotificationsBtn />
-              </div>
-            )}
-          </div>
-
-          {/* End desktop-only menu */}
-          <div>
-            {context.user && context.myProfile !== undefined ? (
-              <Link
-                href="/[profile]"
-                as={`/${
-                  context.myProfile.username || context.user.publicAddress
-                }`}
-              >
+              <Link href="/c/[collection]" as="/c/all">
                 <a
-                  className="text-base flex flex-row items-center hover:text-stpink"
+                  className="showtime-header-link ml-6 text-sm md:text-base"
                   onClick={() => {
-                    mixpanel.track("Profile button click");
+                    mixpanel.track("Explore button click");
                   }}
                 >
-                  <>
-                    <div
-                      className={
-                        context.windowSize
-                          ? context.windowSize.width < 350
-                            ? "hidden"
-                            : null
-                          : null
-                      }
-                    >
-                      <img
-                        alt="profile pic"
-                        src={
-                          context.myProfile
-                            ? context.myProfile.img_url
-                              ? context.myProfile.img_url
-                              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                            : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                        }
-                        className="rounded-full mr-2"
-                        style={{ height: 30, width: 30, minWidth: 30 }}
-                      />
-                    </div>
-                    <div
-                      className=""
-                      style={{
-                        textOverflow: "ellipsis",
-                        overflow: "hidden",
-                        whiteSpace: "nowrap",
-                        maxWidth: context.gridWidth < 500 ? 76 : 200,
-                      }}
-                    >
-                      {context.myProfile
-                        ? context.myProfile.name
-                          ? context.myProfile.name
-                          : "Profile"
-                        : "Profile"}
-                    </div>
-                  </>
+                  Discover
                 </a>
               </Link>
-            ) : (
-              <>
-                <div
-                  className="text-black rounded-full px-5 py-1 cursor-pointer hover:text-stpink hover:border-stpink text-center"
+              <Link href="/leaderboard">
+                <a
+                  className="showtime-header-link ml-6 text-sm md:text-base"
                   onClick={() => {
-                    context.setLoginModalOpen(!context.loginModalOpen);
+                    mixpanel.track("Leaderboard button click");
                   }}
-                  style={{ minWidth: 96 }}
                 >
-                  <span className="text-sm md:text-base">Sign in</span>
+                  Trending
+                </a>
+              </Link>
+              {context.user && context.myProfile !== undefined && (
+                <div className="flex-shrink ml-5">
+                  <NotificationsBtn />
                 </div>
-              </>
-            )}
+              )}
+            </div>
+
+            {/* End desktop-only menu */}
+            <div>
+              {context.user && context.myProfile !== undefined ? (
+                <Link
+                  href="/[profile]"
+                  as={`/${
+                    context.myProfile.username || context.user.publicAddress
+                  }`}
+                >
+                  <a
+                    className="text-base flex flex-row items-center hover:text-stpink"
+                    onClick={() => {
+                      mixpanel.track("Profile button click");
+                    }}
+                  >
+                    <>
+                      <div
+                        className={
+                          context.windowSize
+                            ? context.windowSize.width < 350
+                              ? "hidden"
+                              : null
+                            : null
+                        }
+                      >
+                        <img
+                          alt="profile pic"
+                          src={
+                            context.myProfile
+                              ? context.myProfile.img_url
+                                ? context.myProfile.img_url
+                                : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                          }
+                          className="rounded-full mr-2"
+                          style={{ height: 30, width: 30, minWidth: 30 }}
+                        />
+                      </div>
+                      <div
+                        className=""
+                        style={{
+                          textOverflow: "ellipsis",
+                          overflow: "hidden",
+                          whiteSpace: "nowrap",
+                          maxWidth: context.gridWidth < 500 ? 76 : 200,
+                        }}
+                      >
+                        {context.myProfile
+                          ? context.myProfile.name
+                            ? context.myProfile.name
+                            : "Profile"
+                          : "Profile"}
+                      </div>
+                    </>
+                  </a>
+                </Link>
+              ) : (
+                <>
+                  <div
+                    className="text-black rounded-full px-5 py-1 cursor-pointer hover:text-stpink hover:border-stpink text-center"
+                    onClick={() => {
+                      context.setLoginModalOpen(!context.loginModalOpen);
+                    }}
+                    style={{ minWidth: 96 }}
+                  >
+                    <span className="text-sm md:text-base">Sign in</span>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
-        </div>
-        {/* Start mobile-only menu */}
-        <div
-          className={`flex md:hidden justify-between items-center pt-3 ${
-            !context.gridWidth ? "invisible" : ""
-          }`}
-        >
-          <div>
-            {/*<Link href="/">
+
+          {/* Start mobile-only menu */}
+          <div
+            className={`flex md:hidden justify-between items-center pt-3 ${
+              !context.gridWidth ? "invisible" : ""
+            }`}
+          >
+            <div>
+              {/*<Link href="/">
               <a
                 className="showtime-header-link mr-5 text-sm md:text-base"
                 onClick={() => {
@@ -203,54 +206,57 @@ const Header = () => {
                 Home
               </a>
               </Link>*/}
-            {context.myProfile && (
-              <span className="relative">
-                <Link href="/activity">
-                  <a
-                    className="showtime-header-link mr-5 text-sm md:text-base"
-                    onClick={() => {
-                      mixpanel.track("Activity button click");
-                    }}
+              {context.myProfile && (
+                <span className="relative">
+                  <Link href="/activity">
+                    <a
+                      className="showtime-header-link mr-5 text-sm md:text-base"
+                      onClick={() => {
+                        mixpanel.track("Activity button click");
+                      }}
+                    >
+                      Activity
+                    </a>
+                  </Link>
+                  <div
+                    className="absolute -top-1 right-2 bg-stpink rounded text-white flex items-center"
+                    style={{ fontSize: 7, padding: "0px 2px" }}
                   >
-                    Activity
-                  </a>
-                </Link>
-                <div
-                  className="absolute -top-1 right-2 bg-stpink rounded text-white flex items-center"
-                  style={{ fontSize: 7, padding: "0px 2px" }}
+                    New!
+                  </div>
+                </span>
+              )}
+              <Link href="/c/[collection]" as="/c/all">
+                <a
+                  className="showtime-header-link mr-5 text-sm md:text-base"
+                  onClick={() => {
+                    mixpanel.track("Explore button click");
+                  }}
                 >
-                  New!
-                </div>
-              </span>
-            )}
-            <Link href="/c/[collection]" as="/c/all">
-              <a
-                className="showtime-header-link mr-5 text-sm md:text-base"
-                onClick={() => {
-                  mixpanel.track("Explore button click");
-                }}
-              >
-                Explore
-              </a>
-            </Link>
-            <Link href="/leaderboard">
-              <a
-                className="showtime-header-link mr-5 text-sm md:text-base"
-                onClick={() => {
-                  mixpanel.track("Leaderboard button click");
-                }}
-              >
-                Leaderboard
-              </a>
-            </Link>
-          </div>
-          {context.isMobile && context.user && context.myProfile !== undefined && (
-            <div className="flex-shrink">
-              <NotificationsBtn />
+                  Explore
+                </a>
+              </Link>
+              <Link href="/leaderboard">
+                <a
+                  className="showtime-header-link mr-5 text-sm md:text-base"
+                  onClick={() => {
+                    mixpanel.track("Leaderboard button click");
+                  }}
+                >
+                  Leaderboard
+                </a>
+              </Link>
             </div>
-          )}
-        </div>
-        {/* End mobile-only menu */}
+            {context.isMobile &&
+              context.user &&
+              context.myProfile !== undefined && (
+                <div className="flex-shrink">
+                  <NotificationsBtn />
+                </div>
+              )}
+          </div>
+          {/* End mobile-only menu */}
+        </CappedWidth>
       </header>
     </>
   );
