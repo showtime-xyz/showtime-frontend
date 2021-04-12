@@ -1012,7 +1012,7 @@ const Profile = ({
           </div>
         </CappedWidth>
         {spotlightItem ? (
-          <div className="mt-16 ">
+          <div className="mt-8 md:mt-16">
             <div className="relative bg-white border-t border-b border-gray-200 py-16 pb-8 md:pb-16 mb-4">
               <SpotlightItem
                 item={spotlightItem}
