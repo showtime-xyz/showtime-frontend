@@ -341,7 +341,7 @@ class SpotlightItem extends React.Component {
             {item.token_has_video ? (
               <div
                 className={isMobile ? null : "w-2/4 m-12 justify-end shadow-xl"}
-                style={isMobile ? {} : { maxHeight: 472 }}
+                // style={isMobile ? {} : { maxHeight: 472 }}
               >
                 <ReactPlayer
                   url={item.token_animation_url}
@@ -357,7 +357,7 @@ class SpotlightItem extends React.Component {
                           ? item.imageRef.current.height
                           : null
                         : null
-                      : 472
+                      : "100%"
                   }
                   playsinline
                   //onReady={this.setSpans}
