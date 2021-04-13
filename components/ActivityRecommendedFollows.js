@@ -1,14 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
 import AppContext from "../context/app-context";
 import RecommendedFollowItem from "./RecommendedFollowItem";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import mixpanel from "mixpanel-browser";
 
 export default function ActivityRecommendedFollows() {
   const context = useContext(AppContext);
   const [loading, setLoading] = useState(true);
-  const [recommendedFollows, setRecommendedFollows] = useState(null);
+  const [recommendedFollows, setRecommendedFollows] = useState([]);
   const removeRecommendation = async (recommendation) => {
     const newRecommendedFollows = recommendedFollows.filter(
       (recFollow) => recFollow.profile_id !== recommendation.profile_id
@@ -27,7 +25,7 @@ export default function ActivityRecommendedFollows() {
       body: JSON.stringify({}),
     });
     const { data } = await result.json();
-    setRecommendedFollows(data);
+    setRecommendedFollows([...recommendedFollows, ...data]);
     setLoading(false);
     // recache for next call
     await fetch("/api/getactivityrecommendedfollows", {
@@ -37,18 +35,13 @@ export default function ActivityRecommendedFollows() {
       }),
     });
   };
-  useEffect(() => {
-    if (typeof context.user !== "undefined") {
-      getActivityRecommendedFollows();
-    }
-  }, [context.user]);
 
-  // get more recs when we reject all recs
+  // get more recs when there are less than 3
   useEffect(() => {
-    if (recommendedFollows?.length === 0) {
+    if (typeof context.user !== "undefined" && recommendedFollows.length < 3) {
       getActivityRecommendedFollows();
     }
-  }, [recommendedFollows?.length]);
+  }, [recommendedFollows, context.user]);
 
   const [followAllClicked, setFollowAllClicked] = useState(false);
   const handleFollowAll = async () => {
@@ -72,6 +65,16 @@ export default function ActivityRecommendedFollows() {
       mixpanel.track("Follow but logged out");
       context.setLoginModalOpen(true);
     }
+  };
+
+  const followCallback = (recommendation) => {
+    console.log("followCallback: ", recommendation);
+    setTimeout(() => {
+      const newRecommendedFollows = recommendedFollows.filter(
+        (recFollow) => recFollow.profile_id !== recommendation.profile_id
+      );
+      setRecommendedFollows(newRecommendedFollows);
+    }, 300);
   };
 
   return (
@@ -101,17 +104,19 @@ export default function ActivityRecommendedFollows() {
           </div>
               )*/}
       </div>
-      {!loading &&
-        recommendedFollows &&
-        recommendedFollows.map((recFollow) => (
-          <RecommendedFollowItem
-            item={recFollow}
-            liteVersion
-            removeRecommendation={removeRecommendation}
-            closeModal={() => {}}
-            key={recFollow?.profile_id}
-          />
-        ))}
+      {recommendedFollows &&
+        recommendedFollows
+          .slice(0, 3)
+          .map((recFollow) => (
+            <RecommendedFollowItem
+              item={recFollow}
+              liteVersion
+              removeRecommendation={removeRecommendation}
+              followCallback={followCallback}
+              closeModal={() => {}}
+              key={recFollow?.profile_id}
+            />
+          ))}
       {!loading && recommendedFollows && recommendedFollows.length === 0 && (
         <div className="flex flex-col items-center justify-center my-8">
           <div className="text-gray-400">No more recommendations.</div>
@@ -119,7 +124,7 @@ export default function ActivityRecommendedFollows() {
         </div>
       )}
       {loading && (
-        <div className="flex justify-center items-center w-full my-8">
+        <div className="flex justify-center items-center w-full py-4 border-t border-gray-200">
           <div className="loading-card-spinner" />
         </div>
       )}

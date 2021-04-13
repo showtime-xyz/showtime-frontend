@@ -201,6 +201,7 @@ const RecommendedFollowItem = ({
   closeModal,
   liteVersion,
   removeRecommendation,
+  followCallback = () => {},
 }) => {
   const context = useContext(AppContext);
   const [followerCount, setFollowerCount] = useState();
@@ -314,7 +315,7 @@ const RecommendedFollowItem = ({
         </ProfileSection>
         <div className="flex flex-col md:flex-row w-full md:w-auto">
           {!isMyProfile && (
-            <FollowButtonWrapper>
+            <FollowButtonWrapper onClick={() => followCallback(item)}>
               <FollowButton
                 item={item}
                 followerCount={followerCount}
