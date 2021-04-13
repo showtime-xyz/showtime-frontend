@@ -37,7 +37,7 @@ const FollowText = styled.h6`
   font-weight: 400;
 `;
 
-const FollowButton = ({ item, followerCount, setFollowerCount }) => {
+const FollowButton = ({ item, followerCount, setFollowerCount, black }) => {
   const context = useContext(AppContext);
   const myFollows = context?.myFollows || [];
   const [isFollowed, setIsFollowed] = useState(false);
@@ -92,6 +92,13 @@ const FollowButton = ({ item, followerCount, setFollowerCount }) => {
 
   return (
     <Button
+      className={
+        black
+          ? !isFollowed
+            ? "bg-black text-white w-24 py-2"
+            : "w-24  py-2"
+          : null
+      }
       onClick={
         context.user
           ? isFollowed
@@ -100,7 +107,7 @@ const FollowButton = ({ item, followerCount, setFollowerCount }) => {
           : handleLoggedOutFollow
       }
     >
-      {!isFollowed && (
+      {!isFollowed && !black && (
         <PlusIcon>
           <FontAwesomeIcon icon={faPlus} />
         </PlusIcon>

@@ -73,11 +73,11 @@ const Header = () => {
                   Discover
                 </a>
               </Link>
-              <Link href="/leaderboard">
+              <Link href="/trending">
                 <a
                   className="showtime-header-link ml-6 text-sm md:text-base"
                   onClick={() => {
-                    mixpanel.track("Leaderboard button click");
+                    mixpanel.track("Trending button click");
                   }}
                 >
                   Trending
@@ -175,11 +175,11 @@ const Header = () => {
                     Discover
                   </a>
                 </Link>
-                <Link href="/leaderboard">
+                <Link href="/trending">
                   <a
                     className="showtime-header-link mr-5 text-sm md:text-base"
                     onClick={() => {
-                      mixpanel.track("Leaderboard button click");
+                      mixpanel.track("Trending button click");
                     }}
                   >
                     Trending
