@@ -17,7 +17,7 @@ const RecommendedFollowRowItem = styled.div`
   flex-direction: column;
   width: 100%;
   //padding: 24px 0px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.11);
+  border-top: 1px solid rgba(0, 0, 0, 0.11);
   position: relative;
 `;
 
@@ -35,6 +35,7 @@ const RecommendedFollowHeader = styled.div`
   padding-right: 16px;
   padding-left: 24px;
   padding-top: 16px;
+  padding-bottom: 16px;
 `;
 
 const ProfileSection = styled.div`
@@ -101,8 +102,6 @@ const ProfileImage = styled.img`
   box-sizing: border-box;
 `;
 
-const RemoveButtonWrapper = styled.div``;
-
 const FollowButtonWrapper = styled.div`
   @media screen and (max-width: 600px) {
     margin-top: 20px;
@@ -114,7 +113,6 @@ const NFTTiles = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding-top: 16px;
   @media screen and (max-width: 420px) {
     justify-content: space-between;
   }
@@ -203,6 +201,7 @@ const RecommendedFollowItem = ({
   closeModal,
   liteVersion,
   removeRecommendation,
+  followCallback = () => {},
 }) => {
   const context = useContext(AppContext);
   const [followerCount, setFollowerCount] = useState();
@@ -227,6 +226,7 @@ const RecommendedFollowItem = ({
   const leftPress = useKeyPress("ArrowLeft");
   const rightPress = useKeyPress("ArrowRight");
   const escPress = useKeyPress("Escape");
+  const [mouseOver, setMouseOver] = useState(false);
   useEffect(() => {
     if (escPress) {
       setCurrentlyOpenModal(null);
@@ -242,7 +242,10 @@ const RecommendedFollowItem = ({
   }, [escPress, leftPress, rightPress]);
 
   return (
-    <RecommendedFollowRowItem>
+    <RecommendedFollowRowItem
+      onMouseEnter={() => setMouseOver(true)}
+      onMouseLeave={() => setMouseOver(false)}
+    >
       {typeof document !== "undefined" ? (
         <>
           <ModalTokenDetail
@@ -312,7 +315,7 @@ const RecommendedFollowItem = ({
         </ProfileSection>
         <div className="flex flex-col md:flex-row w-full md:w-auto">
           {!isMyProfile && (
-            <FollowButtonWrapper>
+            <FollowButtonWrapper onClick={() => followCallback(item)}>
               <FollowButton
                 item={item}
                 followerCount={followerCount}
@@ -321,13 +324,11 @@ const RecommendedFollowItem = ({
             </FollowButtonWrapper>
           )}
 
-          {liteVersion && (
-            <RemoveButtonWrapper>
-              <RemoveRecommendationButton
-                item={item}
-                removeRecommendation={removeRecommendation}
-              />
-            </RemoveButtonWrapper>
+          {liteVersion && mouseOver && (
+            <RemoveRecommendationButton
+              item={item}
+              removeRecommendation={removeRecommendation}
+            />
           )}
         </div>
       </RecommendedFollowHeader>

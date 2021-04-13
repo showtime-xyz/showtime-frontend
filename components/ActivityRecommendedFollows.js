@@ -1,14 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
 import AppContext from "../context/app-context";
 import RecommendedFollowItem from "./RecommendedFollowItem";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import mixpanel from "mixpanel-browser";
 
 export default function ActivityRecommendedFollows() {
   const context = useContext(AppContext);
   const [loading, setLoading] = useState(true);
-  const [recommendedFollows, setRecommendedFollows] = useState(null);
+  const [recommendedFollows, setRecommendedFollows] = useState([]);
   const removeRecommendation = async (recommendation) => {
     const newRecommendedFollows = recommendedFollows.filter(
       (recFollow) => recFollow.profile_id !== recommendation.profile_id
@@ -18,7 +16,35 @@ export default function ActivityRecommendedFollows() {
       method: "post",
       body: JSON.stringify({ profileId: recommendation.profile_id }),
     });
+    mixpanel.track("Remove follow recommendation");
   };
+  const filterNewRecs = (newRecs, oldRecs, alreadyFollowed) => {
+    let filteredData = [];
+    newRecs.forEach((newRec) => {
+      if (
+        !oldRecs.find((oldRec) => oldRec.profile_id === newRec.profile_id) &&
+        !alreadyFollowed.find(
+          (followed) => followed.profile_id === newRec.profile_id
+        )
+      ) {
+        filteredData.push(newRec);
+      }
+    });
+    return filteredData;
+  };
+
+  const [recQueue, setRecQueue] = useState([]);
+
+  // update recommendedFollows when the RecQueue is updated
+  useEffect(() => {
+    //filter the recQueue before updating our list
+    const filteredRecQueue = filterNewRecs(
+      recQueue,
+      recommendedFollows,
+      context.myFollows || []
+    );
+    setRecommendedFollows([...recommendedFollows, ...filteredRecQueue]);
+  }, [recQueue]);
 
   const getActivityRecommendedFollows = async () => {
     setLoading(true);
@@ -28,55 +54,86 @@ export default function ActivityRecommendedFollows() {
     });
     const { data } = await result.json();
     setRecommendedFollows(data);
-    setLoading(false);
-    // recache for next call
-    await fetch("/api/getactivityrecommendedfollows", {
+
+    //get recond result
+    const secondResult = await fetch("/api/getactivityrecommendedfollows", {
       method: "post",
       body: JSON.stringify({
         recache: true,
       }),
     });
+    const { data: secondData } = await secondResult.json();
+    setRecQueue(secondData);
+    setLoading(false);
   };
+
+  const getActivityRecommendedFollowsRecache = async () => {
+    setLoading(true);
+    const secondResult = await fetch("/api/getactivityrecommendedfollows", {
+      method: "post",
+      body: JSON.stringify({
+        recache: true,
+      }),
+    });
+    const { data } = await secondResult.json();
+    setRecQueue(data);
+    setLoading(false);
+  };
+
+  // get recs on init
   useEffect(() => {
     if (typeof context.user !== "undefined") {
       getActivityRecommendedFollows();
     }
   }, [context.user]);
 
-  // get more recs when we reject all recs
+  //get more recs when we're at 3 recs
   useEffect(() => {
-    if (recommendedFollows?.length === 0) {
-      getActivityRecommendedFollows();
+    if (
+      typeof context.user !== "undefined" &&
+      !loading &&
+      recommendedFollows.length < 4
+    ) {
+      getActivityRecommendedFollowsRecache();
     }
-  }, [recommendedFollows?.length]);
+  }, [recommendedFollows]);
 
-  const [followAllClicked, setFollowAllClicked] = useState(false);
-  const handleFollowAll = async () => {
-    if (context.user && context.myProfile !== undefined) {
-      setFollowAllClicked(true);
+  // const [followAllClicked, setFollowAllClicked] = useState(false);
+  // const handleFollowAll = async () => {
+  //   if (context.user && context.myProfile !== undefined) {
+  //     setFollowAllClicked(true);
 
-      const newProfiles = recommendedFollows.filter(
-        (item) =>
-          !context.myFollows.map((f) => f.profile_id).includes(item.profile_id)
+  //     const newProfiles = recommendedFollows.filter(
+  //       (item) =>
+  //         !context.myFollows.map((f) => f.profile_id).includes(item.profile_id)
+  //     );
+
+  //     // UPDATE CONTEXT
+  //     context.setMyFollows([...newProfiles, ...context.myFollows]);
+
+  //     // Post changes to the API
+  //     await fetch(`/api/bulkfollow`, {
+  //       method: "post",
+  //       body: JSON.stringify(newProfiles.map((item) => item.profile_id)),
+  //     });
+  //   } else {
+  //     mixpanel.track("Follow but logged out");
+  //     context.setLoginModalOpen(true);
+  //   }
+  // };
+
+  const followCallback = (recommendation) => {
+    setTimeout(() => {
+      const newRecommendedFollows = recommendedFollows.filter(
+        (recFollow) => recFollow.profile_id !== recommendation.profile_id
       );
-
-      // UPDATE CONTEXT
-      context.setMyFollows([...newProfiles, ...context.myFollows]);
-
-      // Post changes to the API
-      await fetch(`/api/bulkfollow`, {
-        method: "post",
-        body: JSON.stringify(newProfiles.map((item) => item.profile_id)),
-      });
-    } else {
-      mixpanel.track("Follow but logged out");
-      context.setLoginModalOpen(true);
-    }
+      setRecommendedFollows(newRecommendedFollows);
+    }, 300);
   };
 
   return (
     <div>
-      <div className="border-b border-gray-200 flex items-center pb-2 px-4">
+      <div className="flex items-center pb-2 px-4">
         <div className="m-2 flex-grow">Suggested for You</div>
 
         {/*!loading && (
@@ -101,25 +158,27 @@ export default function ActivityRecommendedFollows() {
           </div>
               )*/}
       </div>
-      {!loading &&
-        recommendedFollows &&
-        recommendedFollows.map((recFollow) => (
-          <RecommendedFollowItem
-            item={recFollow}
-            liteVersion
-            removeRecommendation={removeRecommendation}
-            closeModal={() => {}}
-            key={recFollow?.profile_id}
-          />
-        ))}
+      {recommendedFollows &&
+        recommendedFollows
+          .slice(0, 3)
+          .map((recFollow) => (
+            <RecommendedFollowItem
+              item={recFollow}
+              liteVersion
+              removeRecommendation={removeRecommendation}
+              followCallback={context.user ? followCallback : () => {}}
+              closeModal={() => {}}
+              key={recFollow?.profile_id}
+            />
+          ))}
       {!loading && recommendedFollows && recommendedFollows.length === 0 && (
         <div className="flex flex-col items-center justify-center my-8">
           <div className="text-gray-400">No more recommendations.</div>
           <div className="text-gray-400">(Refresh for more!)</div>
         </div>
       )}
-      {loading && (
-        <div className="flex justify-center items-center w-full my-8">
+      {loading && recommendedFollows.length < 3 && (
+        <div className="flex justify-center items-center w-full py-4 border-t border-gray-200">
           <div className="loading-card-spinner" />
         </div>
       )}

@@ -61,7 +61,7 @@ const RemoveRecommendationButton = ({ item, removeRecommendation }) => {
   return (
     !isFollowed &&
     context.user && (
-      <div className="ml-0 md:ml-1">
+      <div>
         <Button onClick={handleRemove}>
           <CrossIcon>
             {context.isMobile ? (

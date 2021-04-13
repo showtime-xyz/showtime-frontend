@@ -197,7 +197,6 @@ const RecommendFollowers = ({
                 ) : null}
                 {followAllClicked ? "Following All" : "Follow All"}
               </div>
-              <GraySeparator />
 
               {filteredItems.map((item, index) => (
                 <RecommendedFollowItem
