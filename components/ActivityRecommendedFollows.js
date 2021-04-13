@@ -18,6 +18,22 @@ export default function ActivityRecommendedFollows() {
     });
     mixpanel.track("Remove follow recommendation");
   };
+  const filterNewRecs = (newRecs, oldRecs, alreadyFollowed) => {
+    // let filteredData = [];
+    // await data.forEach((newItem) => {
+    //   if (!activity.find((actItem) => actItem.id === newItem.id)) {
+    //     filteredData.push(newItem);
+    //   }
+    // });
+    return newRecs;
+  };
+
+  const [recQueue, setRecQueue] = useState([]);
+
+  // update recommendedFollows when the RecQueue is updated
+  useEffect(() => {
+    setRecommendedFollows([...recommendedFollows, ...recQueue]);
+  }, [recQueue]);
 
   const getActivityRecommendedFollows = async () => {
     setLoading(true);
@@ -26,47 +42,77 @@ export default function ActivityRecommendedFollows() {
       body: JSON.stringify({}),
     });
     const { data } = await result.json();
-    setRecommendedFollows([...recommendedFollows, ...data]);
-    setLoading(false);
-    // recache for next call
-    await fetch("/api/getactivityrecommendedfollows", {
+    setRecQueue(data);
+
+    //get recond result
+    const secondResult = await fetch("/api/getactivityrecommendedfollows", {
       method: "post",
       body: JSON.stringify({
         recache: true,
       }),
     });
+    const { data: secondData } = await secondResult.json();
+    setRecQueue(secondData);
+    setLoading(false);
   };
 
-  // get more recs when there are less than 3
+  const getActivityRecommendedFollowsRecache = async () => {
+    setLoading(true);
+    const secondResult = await fetch("/api/getactivityrecommendedfollows", {
+      method: "post",
+      body: JSON.stringify({
+        recache: true,
+      }),
+    });
+    const { data } = await secondResult.json();
+    setRecQueue(data);
+    setLoading(false);
+  };
+
+  // get recs on init
   useEffect(() => {
-    if (typeof context.user !== "undefined" && recommendedFollows.length < 3) {
+    if (
+      typeof context.user !== "undefined" &&
+      recommendedFollows.length === 0
+    ) {
       getActivityRecommendedFollows();
+    }
+  }, [context.user]);
+
+  //get more recs when we're at 3 recs
+  useEffect(() => {
+    if (
+      typeof context.user !== "undefined" &&
+      !loading &&
+      recommendedFollows.length < 4
+    ) {
+      getActivityRecommendedFollowsRecache();
     }
   }, [recommendedFollows, context.user]);
 
-  const [followAllClicked, setFollowAllClicked] = useState(false);
-  const handleFollowAll = async () => {
-    if (context.user && context.myProfile !== undefined) {
-      setFollowAllClicked(true);
+  // const [followAllClicked, setFollowAllClicked] = useState(false);
+  // const handleFollowAll = async () => {
+  //   if (context.user && context.myProfile !== undefined) {
+  //     setFollowAllClicked(true);
 
-      const newProfiles = recommendedFollows.filter(
-        (item) =>
-          !context.myFollows.map((f) => f.profile_id).includes(item.profile_id)
-      );
+  //     const newProfiles = recommendedFollows.filter(
+  //       (item) =>
+  //         !context.myFollows.map((f) => f.profile_id).includes(item.profile_id)
+  //     );
 
-      // UPDATE CONTEXT
-      context.setMyFollows([...newProfiles, ...context.myFollows]);
+  //     // UPDATE CONTEXT
+  //     context.setMyFollows([...newProfiles, ...context.myFollows]);
 
-      // Post changes to the API
-      await fetch(`/api/bulkfollow`, {
-        method: "post",
-        body: JSON.stringify(newProfiles.map((item) => item.profile_id)),
-      });
-    } else {
-      mixpanel.track("Follow but logged out");
-      context.setLoginModalOpen(true);
-    }
-  };
+  //     // Post changes to the API
+  //     await fetch(`/api/bulkfollow`, {
+  //       method: "post",
+  //       body: JSON.stringify(newProfiles.map((item) => item.profile_id)),
+  //     });
+  //   } else {
+  //     mixpanel.track("Follow but logged out");
+  //     context.setLoginModalOpen(true);
+  //   }
+  // };
 
   const followCallback = (recommendation) => {
     setTimeout(() => {
@@ -123,7 +169,7 @@ export default function ActivityRecommendedFollows() {
           <div className="text-gray-400">(Refresh for more!)</div>
         </div>
       )}
-      {loading && (
+      {loading && recommendedFollows.length < 3 && (
         <div className="flex justify-center items-center w-full py-4 border-t border-gray-200">
           <div className="loading-card-spinner" />
         </div>
