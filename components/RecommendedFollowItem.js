@@ -102,8 +102,6 @@ const ProfileImage = styled.img`
   box-sizing: border-box;
 `;
 
-const RemoveButtonWrapper = styled.div``;
-
 const FollowButtonWrapper = styled.div`
   @media screen and (max-width: 600px) {
     margin-top: 20px;
@@ -227,6 +225,7 @@ const RecommendedFollowItem = ({
   const leftPress = useKeyPress("ArrowLeft");
   const rightPress = useKeyPress("ArrowRight");
   const escPress = useKeyPress("Escape");
+  const [mouseOver, setMouseOver] = useState(false);
   useEffect(() => {
     if (escPress) {
       setCurrentlyOpenModal(null);
@@ -257,7 +256,10 @@ const RecommendedFollowItem = ({
           />
         </>
       ) : null}
-      <RecommendedFollowHeader>
+      <RecommendedFollowHeader
+        onMouseEnter={() => setMouseOver(true)}
+        onMouseLeave={() => setMouseOver(false)}
+      >
         <ProfileSection>
           <Link href="/[profile]" as={`/${item?.username || item.address}`}>
             <a
@@ -321,13 +323,11 @@ const RecommendedFollowItem = ({
             </FollowButtonWrapper>
           )}
 
-          {liteVersion && (
-            <RemoveButtonWrapper>
-              <RemoveRecommendationButton
-                item={item}
-                removeRecommendation={removeRecommendation}
-              />
-            </RemoveButtonWrapper>
+          {liteVersion && mouseOver && (
+            <RemoveRecommendationButton
+              item={item}
+              removeRecommendation={removeRecommendation}
+            />
           )}
         </div>
       </RecommendedFollowHeader>
