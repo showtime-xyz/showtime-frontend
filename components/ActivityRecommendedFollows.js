@@ -19,20 +19,31 @@ export default function ActivityRecommendedFollows() {
     mixpanel.track("Remove follow recommendation");
   };
   const filterNewRecs = (newRecs, oldRecs, alreadyFollowed) => {
-    // let filteredData = [];
-    // await data.forEach((newItem) => {
-    //   if (!activity.find((actItem) => actItem.id === newItem.id)) {
-    //     filteredData.push(newItem);
-    //   }
-    // });
-    return newRecs;
+    let filteredData = [];
+    newRecs.forEach((newRec) => {
+      if (
+        !oldRecs.find((oldRec) => oldRec.profile_id === newRec.profile_id) &&
+        !alreadyFollowed.find(
+          (followed) => followed.profile_id === newRec.profile_id
+        )
+      ) {
+        filteredData.push(newRec);
+      }
+    });
+    return filteredData;
   };
 
   const [recQueue, setRecQueue] = useState([]);
 
   // update recommendedFollows when the RecQueue is updated
   useEffect(() => {
-    setRecommendedFollows([...recommendedFollows, ...recQueue]);
+    //filter the recQueue before updating our list
+    const filteredRecQueue = filterNewRecs(
+      recQueue,
+      recommendedFollows,
+      context.myFollows || []
+    );
+    setRecommendedFollows([...recommendedFollows, ...filteredRecQueue]);
   }, [recQueue]);
 
   const getActivityRecommendedFollows = async () => {
