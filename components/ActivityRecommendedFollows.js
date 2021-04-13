@@ -53,7 +53,7 @@ export default function ActivityRecommendedFollows() {
       body: JSON.stringify({}),
     });
     const { data } = await result.json();
-    setRecQueue(data);
+    setRecommendedFollows(data);
 
     //get recond result
     const secondResult = await fetch("/api/getactivityrecommendedfollows", {
@@ -82,10 +82,7 @@ export default function ActivityRecommendedFollows() {
 
   // get recs on init
   useEffect(() => {
-    if (
-      typeof context.user !== "undefined" &&
-      recommendedFollows.length === 0
-    ) {
+    if (typeof context.user !== "undefined") {
       getActivityRecommendedFollows();
     }
   }, [context.user]);
@@ -99,7 +96,7 @@ export default function ActivityRecommendedFollows() {
     ) {
       getActivityRecommendedFollowsRecache();
     }
-  }, [recommendedFollows, context.user]);
+  }, [recommendedFollows]);
 
   // const [followAllClicked, setFollowAllClicked] = useState(false);
   // const handleFollowAll = async () => {
