@@ -16,6 +16,7 @@ export default function ActivityRecommendedFollows() {
       method: "post",
       body: JSON.stringify({ profileId: recommendation.profile_id }),
     });
+    mixpanel.track("Remove follow recommendation");
   };
 
   const getActivityRecommendedFollows = async () => {
@@ -68,7 +69,6 @@ export default function ActivityRecommendedFollows() {
   };
 
   const followCallback = (recommendation) => {
-    console.log("followCallback: ", recommendation);
     setTimeout(() => {
       const newRecommendedFollows = recommendedFollows.filter(
         (recFollow) => recFollow.profile_id !== recommendation.profile_id
