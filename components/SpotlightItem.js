@@ -201,6 +201,12 @@ class SpotlightItem extends React.Component {
                                     item
                                   ),
                                   width: this.divRef?.current?.clientWidth,
+                                  height:
+                                    item.token_aspect_ratio &&
+                                    this.divRef?.current?.clientWidth
+                                      ? this.divRef?.current?.clientWidth /
+                                        item.token_aspect_ratio
+                                      : null,
                                 }
                               : {
                                   backgroundColor: this.getBackgroundColor(
