@@ -169,7 +169,7 @@ export default function ActivityRecommendedFollows() {
               item={recFollow}
               liteVersion
               removeRecommendation={removeRecommendation}
-              followCallback={followCallback}
+              followCallback={context.user ? followCallback : null}
               closeModal={() => {}}
               key={recFollow?.profile_id}
             />
