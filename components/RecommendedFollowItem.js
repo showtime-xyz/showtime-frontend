@@ -35,6 +35,7 @@ const RecommendedFollowHeader = styled.div`
   padding-right: 16px;
   padding-left: 24px;
   padding-top: 16px;
+  padding-bottom: 16px;
 `;
 
 const ProfileSection = styled.div`
@@ -114,7 +115,7 @@ const NFTTiles = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding-top: 16px;
+  // padding-top: 16px;
   @media screen and (max-width: 420px) {
     justify-content: space-between;
   }
