@@ -139,7 +139,10 @@ const Activity = () => {
 
   const handleFilterClick = (typeId) => {
     if (activityTypeFilter != typeId) {
-      window.scroll({ top: context.isMobile ? 375 : 300, behavior: "smooth" });
+      window.scroll({
+        top: context.isMobile ? 375 : context.user === null ? 300 : 0,
+        behavior: "smooth",
+      });
       setActivity([]);
       setActivityTypeFilter(typeId);
     }
@@ -200,20 +203,21 @@ const Activity = () => {
         </>
       ) : null}
 
-      <div className="py-12 sm:py-14 px-8 sm:px-10 text-left  bg-gradient-to-r from-green-400 to-blue-500">
-        <CappedWidth>
-          <div className="flex flex-row mx-3 text-white">
-            <div className="flex-1">
-              <div className="text-xl sm:text-2xl">Discover & Showcase</div>
-              <div
-                className="text-4xl sm:text-6xl"
-                style={{ fontFamily: "Afronaut" }}
-              >
-                Your Favorite
+      {context.user === null ? (
+        <div className="py-12 sm:py-14 px-8 sm:px-10 text-left  bg-gradient-to-r from-green-400 to-blue-500">
+          <CappedWidth>
+            <div className="flex flex-row mx-3 text-white">
+              <div className="flex-1">
+                <div className="text-xl sm:text-2xl">Discover & Showcase</div>
+                <div
+                  className="text-4xl sm:text-6xl"
+                  style={{ fontFamily: "Afronaut" }}
+                >
+                  Your Favorite
+                </div>
+                <div className="text-4xl sm:text-6xl">Crypto Art.</div>
               </div>
-              <div className="text-4xl sm:text-6xl">Crypto Art.</div>
-            </div>
-            {/*<div className="flex-1">
+              {/*<div className="flex-1">
               <div className="bg-white rounded-lg shadow-md px-6 py-6 text-center">
                 <span
                   className="cursor-pointer hover:text-black bg-black text-white rounded-full px-5 py-3 hover:bg-white border-2 border-black transition"
@@ -223,16 +227,22 @@ const Activity = () => {
                 </span>
               </div>
           </div>*/}
-          </div>
-        </CappedWidth>
-      </div>
+            </div>
+          </CappedWidth>
+        </div>
+      ) : null}
 
       <CappedWidth>
         <div className="m-auto relative">
           <hr className="mx-3" />
 
           <div className="mb-4 sm:mb-8 mt-8 sm:mt-16 text-left px-6 sm:px-3 flex flex-row items-center">
-            <h1 className="text-xl  sm:text-3xl">News Feed</h1>
+            <h1
+              className="text-xl sm:text-3xl"
+              style={{ fontFamily: "Afronaut" }}
+            >
+              News Feed
+            </h1>
             <div className="flex-grow"></div>
             <div
               className="hover:text-stpink sm:hidden"
