@@ -115,7 +115,6 @@ const NFTTiles = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  // padding-top: 16px;
   @media screen and (max-width: 420px) {
     justify-content: space-between;
   }
