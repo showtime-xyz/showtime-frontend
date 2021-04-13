@@ -468,12 +468,22 @@ const TokenCard = ({
                 </div>
 
                 <div
-                  style={{
-                    overflowWrap: "break-word",
-                    wordWrap: "break-word",
-                    display: "block",
-                    minHeight: "4.7rem",
-                  }}
+                  style={
+                    context.isMobile
+                      ? {
+                          overflowWrap: "break-word",
+                          wordWrap: "break-word",
+                          display: "block",
+                          minHeight: "4.7rem",
+                          width: context?.windowSize?.width - 16 * 2,
+                        }
+                      : {
+                          overflowWrap: "break-word",
+                          wordWrap: "break-word",
+                          display: "block",
+                          minHeight: "4.7rem",
+                        }
+                  }
                   className="py-4 text-gray-500 text-sm"
                 >
                   {moreShown ? (

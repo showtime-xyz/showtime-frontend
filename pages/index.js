@@ -87,10 +87,10 @@ const Activity = () => {
     }
   }, [context.user, activityTypeFilter]);
 
-  const getNext = () => {
+  const getNext = async () => {
     if (typeof context.user !== "undefined") {
       setHasMoreScrolling(true);
-      getActivity(activityTypeFilter, activityPage + 1);
+      await getActivity(activityTypeFilter, activityPage + 1);
       setActivityPage(activityPage + 1);
     }
   };
@@ -140,7 +140,7 @@ const Activity = () => {
   const handleFilterClick = (typeId) => {
     if (activityTypeFilter != typeId) {
       window.scroll({
-        top: context.isMobile ? 375 : context.user === null ? 300 : 0,
+        top: context.user === null ? (context.isMobile ? 375 : 300) : 0,
         behavior: "smooth",
       });
       setActivity([]);
@@ -236,16 +236,11 @@ const Activity = () => {
         <div className="m-auto relative">
           <hr className="mx-3" />
 
-          <div className="mb-4 sm:mb-8 mt-8 sm:mt-16 text-left px-6 sm:px-3 flex flex-row items-center">
-            <h1
-              className="text-xl sm:text-3xl"
-              style={{ fontFamily: "Afronaut" }}
-            >
-              News Feed
-            </h1>
+          <div className="mb-4 sm:mb-8 mt-8 sm:mt-16 text-left px-5 sm:px-3 flex flex-row items-center">
+            <h1 className="text-lg sm:text-3xl">News Feed</h1>
             <div className="flex-grow"></div>
             <div
-              className="hover:text-stpink sm:hidden"
+              className="hover:text-stpink sm:hidden mr-1"
               onClick={() => {
                 setShowFiltersMobile(!showFiltersMobile);
               }}
@@ -382,7 +377,15 @@ const Activity = () => {
                     )}
                   </div>
                 }
-                scrollThreshold={0.75}
+                scrollThreshold={
+                  activityPage === 1
+                    ? 0.3
+                    : activityPage < 4
+                    ? 0.6
+                    : activityPage < 6
+                    ? 0.7
+                    : 0.8
+                }
               >
                 <ActivityFeed
                   activity={activity}
