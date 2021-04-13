@@ -5,7 +5,7 @@ import _ from "lodash";
 import mixpanel from "mixpanel-browser";
 import Layout from "../../components/layout";
 import backend from "../../lib/backend";
-import TokenGridV4 from "../../components/TokenGridV4";
+//import TokenGridV4 from "../../components/TokenGridV4";
 import AppContext from "../../context/app-context";
 import ModalReportItem from "../../components/ModalReportItem";
 import TokenDetailBody from "../../components/TokenDetailBody";
@@ -19,21 +19,21 @@ export async function getServerSideProps(context) {
     `/v2/token/${contract_address}/${token_id}?limit=150`
   );
   const token = response_token.data.data.item;
-  const same_creator_items = response_token.data.data.same_creator;
-  const same_owner_items = response_token.data.data.same_owner;
+  //const same_creator_items = response_token.data.data.same_creator;
+  // const same_owner_items = response_token.data.data.same_owner;
 
   return {
     props: {
       token,
-      same_creator_items,
-      same_owner_items,
+      //same_creator_items,
+      //same_owner_items,
     }, // will be passed to the page component as props
   };
 }
 
-export default function Token({ token, same_owner_items, same_creator_items }) {
+export default function Token({ token }) {
   const context = useContext(AppContext);
-  const { isMobile, gridWidth } = context;
+  //const { isMobile, gridWidth } = context;
   useEffect(() => {
     // Wait for identity to resolve before recording the view
     if (typeof context.user !== "undefined") {
@@ -41,6 +41,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
     }
   }, [typeof context.user]);
 
+  /*
   const [isMyProfile, setIsMyProfile] = useState(false);
 
   useEffect(() => {
@@ -54,6 +55,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
       setIsMyProfile(false);
     }
   }, [same_owner_items, context.user]);
+  */
 
   // Set up my likes
   const [item, setItem] = useState(token);
@@ -76,6 +78,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
     return () => setOwnershipDetails(null);
   }, [token]);
 
+  /*
   const [ownedItems, setOwnedItems] = useState([]);
 
   useEffect(() => {
@@ -87,6 +90,7 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
   useEffect(() => {
     setCreatedItems(same_creator_items.filter((c) => c.nft_id !== item.nft_id));
   }, [same_creator_items]);
+  */
 
   function removeTags(str) {
     if (str === null || str === "") return false;
@@ -133,17 +137,15 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
         </>
       ) : null}
 
-      {gridWidth && (
-        <div>
-          <div className="flex flex-col w-full relative bg-white">
-            <TokenDetailBody
-              item={item}
-              muted={false}
-              className="w-full"
-              ownershipDetails={ownershipDetails}
-            />
-          </div>
-          {createdItems.length === 0 ? null : (
+      <div>
+        <TokenDetailBody
+          item={item}
+          muted={false}
+          className="w-full"
+          ownershipDetails={ownershipDetails}
+        />
+
+        {/*createdItems.length === 0 ? null : (
             <>
               <div className="flex flex-col text-center w-full">
                 <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-4 py-10">
@@ -163,8 +165,8 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
                 </div>
               )}
             </>
-          )}
-          {item.multiple_owners ? null : ownedItems.length ===
+              )*/}
+        {/*item.multiple_owners ? null : ownedItems.length ===
             0 ? null : createdItems.length > 0 ? null : (
             <>
               <div className="flex flex-col text-center w-full mt-8">
@@ -185,11 +187,8 @@ export default function Token({ token, same_owner_items, same_creator_items }) {
                 </div>
               )}
             </>
-          )}
-        </div>
-      )}
-
-      <div className="mb-16"></div>
+              )*/}
+      </div>
     </Layout>
   );
 }

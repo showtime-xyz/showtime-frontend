@@ -933,10 +933,10 @@ const Profile = ({
                             : "text-gray-500"
                         } hover:text-stpurple700 cursor-pointer flex flex-row transition-all items-center`}
                       >
-                        <div className="w-6">
+                        <div className="w-6 hidden sm:block">
                           <FontAwesomeIcon
                             icon={faFingerprint}
-                            className="mr-2 hidden sm:block"
+                            className="mr-2"
                           />
                         </div>
                         <div className="flex-grow sm:hidden"></div>
@@ -975,10 +975,10 @@ const Profile = ({
                             : "text-gray-500"
                         } hover:text-stteal700 cursor-pointer flex flex-row transition-all items-center`}
                       >
-                        <div className="w-6">
+                        <div className="w-6 hidden sm:block">
                           <FontAwesomeIcon
                             icon={selectedGrid === 2 ? fasImage : faImage}
-                            className="mr-2 hidden sm:block"
+                            className="mr-2"
                           />
                         </div>
                         <div className="flex-grow sm:hidden"></div>
@@ -1017,10 +1017,10 @@ const Profile = ({
                             : "text-gray-500"
                         } hover:text-stred cursor-pointer flex flex-row transition-all items-center`}
                       >
-                        <div className="w-6">
+                        <div className="w-6 hidden sm:block">
                           <FontAwesomeIcon
                             icon={selectedGrid === 3 ? fasHeart : faHeart}
-                            className="mr-2 hidden sm:block"
+                            className="mr-2"
                           />
                         </div>
                         <div className="flex-grow sm:hidden"></div>
