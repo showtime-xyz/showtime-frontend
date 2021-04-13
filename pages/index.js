@@ -362,7 +362,7 @@ const Activity = () => {
                   <div className="flex flex-1 items-center justify-center">
                     {context.user ? (
                       <div className="text-gray-400">
-                        No more activity. Follow more people.
+                        Follow more people to keep the action going
                       </div>
                     ) : (
                       <div className="text-gray-400 shadow-md bg-white sm:rounded-lg w-full px-4 py-6 sm:mx-3 mb-4 text-center">

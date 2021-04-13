@@ -96,8 +96,8 @@ export default function NotificationsBtn() {
               position: "absolute",
               height: 10,
               width: 10,
-              top: 0,
-              left: 0,
+              top: 1,
+              left: 1,
               borderRadius: "50%",
             }}
           />

@@ -50,7 +50,7 @@ const ModalAddEmail = ({ isOpen, setEmailModalOpen, setHasEmailAddress }) => {
               <CloseButton setEditModalOpen={setEmailModalOpen} />
               <div className="text-3xl border-b-2 pb-2">Add Email</div>
               <div className="mt-8">
-                Add your email for notifications and another way to sign in.
+                Add your email for notifications & another way to sign in.
               </div>
               <div className="mt-8">
                 <input
