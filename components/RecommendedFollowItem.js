@@ -241,7 +241,10 @@ const RecommendedFollowItem = ({
   }, [escPress, leftPress, rightPress]);
 
   return (
-    <RecommendedFollowRowItem>
+    <RecommendedFollowRowItem
+      onMouseEnter={() => setMouseOver(true)}
+      onMouseLeave={() => setMouseOver(false)}
+    >
       {typeof document !== "undefined" ? (
         <>
           <ModalTokenDetail
@@ -256,10 +259,7 @@ const RecommendedFollowItem = ({
           />
         </>
       ) : null}
-      <RecommendedFollowHeader
-        onMouseEnter={() => setMouseOver(true)}
-        onMouseLeave={() => setMouseOver(false)}
-      >
+      <RecommendedFollowHeader>
         <ProfileSection>
           <Link href="/[profile]" as={`/${item?.username || item.address}`}>
             <a
