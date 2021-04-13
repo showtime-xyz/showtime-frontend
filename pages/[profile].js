@@ -611,10 +611,12 @@ const Profile = ({
         ) : null}
 
         <div
-          style={{
-            background: "linear-gradient(to left, #0186CC, #8145B3)",
-          }}
-          className="py-6 md:pl-10 text-left" //  bg-gradient-to-r from-gray-900 to-gray-500
+          style={
+            {
+              //background: "linear-gradient(to left, #0186CC, #8145B3)",
+            }
+          }
+          className="py-6 md:pl-10 text-left bg-gradient-to-b from-black to-gray-800" //
         >
           <CappedWidth>
             <div className="flex flex-col md:flex-row text-white items-center pb-6 sm:pb-3 pt-3">
@@ -709,16 +711,16 @@ const Profile = ({
             <div className="flex-grow"></div>
           </div>
 
-          <div className="px-3 mt-8">
+          <div className="px-6 sm:px-3 mt-8">
             {isMyProfile && context.myProfile?.bio ? (
               <div className="text-gray-500 flex flex-row">
-                <div>
+                {/*<div>
                   <FontAwesomeIcon
                     style={{ height: 16, width: 16 }}
                     className="mr-2 ml-2"
                     icon={faUser}
                   />
-                </div>
+                </div>*/}
                 <div className="max-w-prose text-sm sm:text-base">
                   {context.myProfile.bio}
                 </div>
@@ -727,13 +729,13 @@ const Profile = ({
 
             {!isMyProfile && bio ? (
               <div className="text-gray-500 flex flex-row">
-                <div>
+                {/*<div>
                   <FontAwesomeIcon
                     style={{ height: 16, width: 16 }}
                     className="mr-2 ml-2"
                     icon={faUser}
                   />
-                </div>
+                </div>*/}
                 <div className="max-w-prose text-sm sm:text-base">{bio}</div>
               </div>
             ) : null}
@@ -741,14 +743,14 @@ const Profile = ({
             {isMyProfile && context?.myProfile?.website_url ? (
               <div
                 className={`text-gray-500 flex text-sm sm:text-base flex-row ${
-                  isMyProfile && context?.myProfile?.bio ? "mt-1" : null
+                  isMyProfile && context?.myProfile?.bio ? "mt-3" : null
                 }
             `}
               >
                 <div>
                   <FontAwesomeIcon
-                    style={{ height: 16, width: 16 }}
-                    className="mr-2 ml-2"
+                    style={{ height: 14, width: 14 }}
+                    className="mr-2"
                     icon={faLink}
                   />{" "}
                 </div>
@@ -781,14 +783,14 @@ const Profile = ({
             {!isMyProfile && website_url ? (
               <div
                 className={`text-gray-500 text-sm sm:text-base flex flex-row ${
-                  !isMyProfile && bio ? "mt-1" : null
+                  !isMyProfile && bio ? "mt-3" : null
                 }
             `}
               >
                 <div>
                   <FontAwesomeIcon
-                    style={{ height: 16, width: 16 }}
-                    className="mr-2 ml-2"
+                    style={{ height: 14, width: 14 }}
+                    className="mr-2"
                     icon={faLink}
                   />{" "}
                 </div>

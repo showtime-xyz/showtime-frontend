@@ -447,17 +447,30 @@ const TokenCard = ({
                     setCurrentlyPlayingVideo(null);
                   }}
                   className=""
-                  style={{
-                    overflowWrap: "break-word",
-                    wordWrap: "break-word",
-                    display: "block",
-                    cursor: "pointer",
-                    //whiteSpace: "nowrap",
-                    //overflow: "hidden",
-                    //textOverflow: "ellipsis",
-                  }}
+                  style={
+                    context.isMobile
+                      ? {
+                          overflowWrap: "break-word",
+                          wordWrap: "break-word",
+                          //display: "block",
+                          cursor: "pointer",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          width: context?.windowSize?.width - 16 * 2,
+                        }
+                      : {
+                          overflowWrap: "break-word",
+                          wordWrap: "break-word",
+                          //display: "block",
+                          cursor: "pointer",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }
+                  }
                 >
-                  {truncateWithEllipses(item.token_name, 28)}
+                  {item.token_name}
                   {/* {this.props.item.token_has_video ? (
                       <FontAwesomeIcon
                         className="ml-1 inline"
