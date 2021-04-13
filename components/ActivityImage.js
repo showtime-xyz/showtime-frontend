@@ -48,8 +48,8 @@ export default function ActivityImage({
         spacingIndex !== numberOfImages - 1 ? "mr-1" : ""
       }
       
-      ${bottomRow && spacingIndex === 0 ? "rounded-bl-lg" : null}
-      ${bottomRow && spacingIndex === 1 ? "rounded-br-lg" : null}
+      ${bottomRow && spacingIndex === 0 ? "sm:rounded-bl-lg" : null}
+      ${bottomRow && spacingIndex === 1 ? "sm:rounded-br-lg" : null}
       
       `}
       ref={aRef}

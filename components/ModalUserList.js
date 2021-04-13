@@ -19,12 +19,12 @@ export default function ModalUserList({
         <ClientOnlyPortal selector="#modal">
           <div className="backdrop" onClick={closeModal}>
             <div
-              className="modal flex flex-col"
+              className="modal flex flex-col rounded-lg"
               style={{ color: "black" }}
               onClick={(e) => e.stopPropagation()}
             >
               <CloseButton setEditModalOpen={closeModal} />
-              <div className="text-3xl border-b-2 pb-2">{title}</div>
+              <div className="text-3xl border-b-2 pb-2 px-2">{title}</div>
               <div className="flex flex-col overflow-y-auto">
                 {users.length === 0 && (
                   <div className="text-center mx-2 my-8 text-gray-400">
@@ -85,7 +85,7 @@ export default function ModalUserList({
                 right: 5%;
                 left: 5%;
                 padding: 1em;
-                border-radius: 7px;
+
                 max-width: 400px;
                 margin-left: auto;
                 margin-right: auto;

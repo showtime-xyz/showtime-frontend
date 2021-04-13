@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import Link from "next/link";
 import UserImageList from "../UserImageList";
 import mixpanel from "mixpanel-browser";
 import { truncateWithEllipses } from "../../lib/utilities";
+import AppContext from "../../context/app-context";
 
 const TRUNCATE_NAME_LENGTH = 24;
 
 export default function Follow({ act }) {
+  const { isMobile } = useContext(AppContext);
   const { counterparties } = act;
   const count = counterparties?.length;
   return (
@@ -186,7 +188,7 @@ export default function Follow({ act }) {
         )}
       </div>
       <div className="flex mt-2 mb-4">
-        <UserImageList users={counterparties.slice(0, 7)} />
+        <UserImageList users={counterparties.slice(0, isMobile ? 5 : 7)} />
       </div>
     </div>
   );

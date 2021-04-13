@@ -22,6 +22,7 @@ import {
   faHeart as fasHeart,
   faFingerprint,
   faUser as fasUser,
+  faFilter,
 } from "@fortawesome/free-solid-svg-icons";
 
 const ACTIVITY_PAGE_LENGTH = 5; // 5 activity items per activity page
@@ -78,16 +79,20 @@ const Activity = () => {
     setIsLoading(false);
   };
   useEffect(() => {
-    setHasMoreScrolling(true);
-    setActivity([]);
-    setActivityPage(1);
-    getActivity(activityTypeFilter, 1);
+    if (typeof context.user !== "undefined") {
+      setHasMoreScrolling(true);
+      setActivity([]);
+      setActivityPage(1);
+      getActivity(activityTypeFilter, 1);
+    }
   }, [context.user, activityTypeFilter]);
 
-  const getNext = () => {
-    setHasMoreScrolling(true);
-    getActivity(activityTypeFilter, activityPage + 1);
-    setActivityPage(activityPage + 1);
+  const getNext = async () => {
+    if (typeof context.user !== "undefined") {
+      setHasMoreScrolling(true);
+      await getActivity(activityTypeFilter, activityPage + 1);
+      setActivityPage(activityPage + 1);
+    }
   };
 
   const [itemOpenInModal, setItemOpenInModal] = useState(null);
@@ -132,34 +137,12 @@ const Activity = () => {
     }
   }, [escPress, leftPress, rightPress]);
 
-  /*
-  const handleOpenModal = (index) => {
-    setItemOpenInModal({ nftGroup: spotlightItems, index });
-  };
-
-  
-  const [spotlightItems, setSpotlightItems] = useState([]);
-
-  const getSpotlight = async () => {
-    //setIsLoadingSpotlight(true);
-    const response_spotlight = await backend.get(`/v1/spotlight`);
-    const data_spotlight = response_spotlight.data.data;
-    setSpotlightItems(data_spotlight.slice(0, 1));
-    //setIsLoadingSpotlight(false);
-
-    // Reset cache for next load
-    backend.get(`/v1/spotlight?recache=1`);
-  };
-
-  useEffect(() => {
-    //getHero();
-    getSpotlight();
-  }, []);
-  */
-
   const handleFilterClick = (typeId) => {
     if (activityTypeFilter != typeId) {
-      window.scroll({ top: 0, behavior: "smooth" });
+      window.scroll({
+        top: context.user === null ? (context.isMobile ? 375 : 300) : 0,
+        behavior: "smooth",
+      });
       setActivity([]);
       setActivityTypeFilter(typeId);
     }
@@ -167,6 +150,8 @@ const Activity = () => {
     //setActivityPage(1);
     //setHasMoreScrolling(true);
   };
+
+  const [showFiltersMobile, setShowFiltersMobile] = useState(false);
 
   return (
     <Layout>
@@ -218,17 +203,21 @@ const Activity = () => {
         </>
       ) : null}
 
-      <div className="py-14 px-10 text-left  bg-gradient-to-r from-green-400 to-blue-500">
-        <CappedWidth>
-          <div className="flex flex-row mx-3 text-white">
-            <div className="flex-1">
-              <div className="text-2xl">Discover & Showcase</div>
-              <div className="text-6xl" style={{ fontFamily: "Afronaut" }}>
-                Your Favorite
+      {context.user === null ? (
+        <div className="py-12 sm:py-14 px-8 sm:px-10 text-left  bg-gradient-to-r from-green-400 to-blue-500">
+          <CappedWidth>
+            <div className="flex flex-row mx-3 text-white">
+              <div className="flex-1">
+                <div className="text-xl sm:text-2xl">Discover & Showcase</div>
+                <div
+                  className="text-4xl sm:text-6xl"
+                  style={{ fontFamily: "Afronaut" }}
+                >
+                  Your Favorite
+                </div>
+                <div className="text-4xl sm:text-6xl">Crypto Art.</div>
               </div>
-              <div className="text-6xl">Crypto Art.</div>
-            </div>
-            {/*<div className="flex-1">
+              {/*<div className="flex-1">
               <div className="bg-white rounded-lg shadow-md px-6 py-6 text-center">
                 <span
                   className="cursor-pointer hover:text-black bg-black text-white rounded-full px-5 py-3 hover:bg-white border-2 border-black transition"
@@ -238,20 +227,37 @@ const Activity = () => {
                 </span>
               </div>
           </div>*/}
-          </div>
-        </CappedWidth>
-      </div>
+            </div>
+          </CappedWidth>
+        </div>
+      ) : null}
 
       <CappedWidth>
         <div className="m-auto relative">
           <hr className="mx-3" />
 
-          <div className="mb-8 mt-16 text-left px-3">
-            <h1 className="text-3xl">News Feed</h1>
+          <div className="mb-4 sm:mb-8 mt-8 sm:mt-16 text-left px-5 sm:px-3 flex flex-row items-center">
+            <h1 className="text-lg sm:text-3xl">News Feed</h1>
+            <div className="flex-grow"></div>
+            <div
+              className="hover:text-stpink sm:hidden mr-1"
+              onClick={() => {
+                setShowFiltersMobile(!showFiltersMobile);
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faFilter}
+                style={{ width: 16, height: 16 }}
+              />
+            </div>
           </div>
 
           <div className="grid lg:grid-cols-3 xl:grid-cols-4">
-            <div className="px-3">
+            <div
+              className={`px-3 col-span-2 md:col-span-1 mb-4 md:mb-0 ${
+                showFiltersMobile ? null : "hidden"
+              } sm:block`}
+            >
               <div className="px-4 py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
                 <div
                   onClick={() => {
@@ -331,16 +337,17 @@ const Activity = () => {
                 </div>
               </div>
             </div>
+
             <div className="col-span-2">
               {context.user === undefined ? null : context.user === null ? (
-                <div className="flex flex-1 items-center justify-center mb-6 px-3">
-                  <div className="text-gray-400 shadow-md bg-white rounded-lg w-full px-4 py-6 text-center">
-                    News feed preview. Please{" "}
+                <div className="flex flex-1 items-center justify-center mb-6 sm:px-3">
+                  <div className="text-gray-400 shadow-md bg-white sm:rounded-lg w-full px-4 py-6 text-center">
+                    <span className="">News feed preview.</span>{" "}
                     <span
                       className="cursor-pointer text-gray-800 hover:text-stpink"
                       onClick={() => context.setLoginModalOpen(true)}
                     >
-                      sign in
+                      Sign in
                     </span>{" "}
                     to view & follow
                   </div>
@@ -358,7 +365,7 @@ const Activity = () => {
                         No more activity. Follow more people.
                       </div>
                     ) : (
-                      <div className="text-gray-400 shadow-md bg-white rounded-lg w-full px-4 py-6 mx-3 mb-4 text-center">
+                      <div className="text-gray-400 shadow-md bg-white sm:rounded-lg w-full px-4 py-6 sm:mx-3 mb-4 text-center">
                         <span
                           className="cursor-pointer text-gray-800 hover:text-stpink"
                           onClick={() => context.setLoginModalOpen(true)}
@@ -370,7 +377,15 @@ const Activity = () => {
                     )}
                   </div>
                 }
-                scrollThreshold={0.5}
+                scrollThreshold={
+                  activityPage === 1
+                    ? 0.3
+                    : activityPage < 4
+                    ? 0.6
+                    : activityPage < 6
+                    ? 0.7
+                    : 0.8
+                }
               >
                 <ActivityFeed
                   activity={activity}
@@ -383,41 +398,12 @@ const Activity = () => {
               </div>
             </div>
             <div className="px-3">
-              <div className="hidden xl:block py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
-                <ActivityRecommendedFollows />
-              </div>
-
-              {/*<div className="sticky top-24">
-                <div className="px-6 h-max rounded-lg border border-gray-200 bg-white shadow-md">
-                  Community Spotlights [Refresh]
-                  {spotlightItems ? (
-                    <>
-                      <div className="flex mt-4 max-w-full">
-                        <ActivityImages
-                          nfts={spotlightItems}
-                          openModal={handleOpenModal}
-                        />
-                      </div>
-                    </>
-                  ) : null}
+              {context.isMobile ? null : (
+                <div className="hidden xl:block py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
+                  <ActivityRecommendedFollows />
                 </div>
-                <div className="px-6 h-max rounded-lg mt-8 border border-gray-200 bg-white shadow-md">
-                  Trending [Refresh]
-                  <br />
-                  <br />
-                  <br />
-                </div>
-                  </div>*/}
+              )}
             </div>
-          </div>
-
-          {/* Page Content */}
-          <div className="flex">
-            {/* Left Column */}
-
-            <div className="flex flex-col"></div>
-
-            <div className="flex flex-col"></div>
           </div>
         </div>
       </CappedWidth>

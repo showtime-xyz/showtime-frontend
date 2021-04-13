@@ -112,8 +112,8 @@ export default function Modal({
               <div
                 style={{
                   position: "absolute",
-                  top: 14,
-                  right: 14,
+                  top: 10,
+                  right: 10,
                   cursor: "pointer",
                   zIndex: 4,
                   backgroundColor: "black",

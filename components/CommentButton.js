@@ -22,7 +22,7 @@ const CommentButton = ({ item, handleComment }) => {
   return (
     <div className="tooltip">
       <button onClick={context.user ? handleComment : handleLoggedOutComment}>
-        <div className="flex flex-row items-center rounded-md py-1 hover:text-stpink">
+        <div className="flex flex-row items-center rounded-lg py-1 hover:text-stpink">
           <div className="mr-2" style={{ whiteSpace: "nowrap" }}>
             {comment_count}
           </div>

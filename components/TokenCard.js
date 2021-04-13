@@ -114,7 +114,7 @@ const TokenCard = ({
 
   return (
     <>
-      <div className="px-3">
+      <div className="px-0 sm:px-3 mb-6 sm:mb-0">
         <div
           style={
             userHiddenItems && userHiddenItems.includes(item.nft_id)
@@ -450,14 +450,14 @@ const TokenCard = ({
                   style={{
                     overflowWrap: "break-word",
                     wordWrap: "break-word",
-
+                    display: "block",
                     cursor: "pointer",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
+                    //whiteSpace: "nowrap",
+                    //overflow: "hidden",
+                    //textOverflow: "ellipsis",
                   }}
                 >
-                  {item.token_name}
+                  {truncateWithEllipses(item.token_name, 28)}
                   {/* {this.props.item.token_has_video ? (
                       <FontAwesomeIcon
                         className="ml-1 inline"
@@ -468,12 +468,22 @@ const TokenCard = ({
                 </div>
 
                 <div
-                  style={{
-                    overflowWrap: "break-word",
-                    wordWrap: "break-word",
-                    display: "block",
-                    minHeight: "4.7rem",
-                  }}
+                  style={
+                    context.isMobile
+                      ? {
+                          overflowWrap: "break-word",
+                          wordWrap: "break-word",
+                          display: "block",
+                          minHeight: "4.7rem",
+                          width: context?.windowSize?.width - 16 * 2,
+                        }
+                      : {
+                          overflowWrap: "break-word",
+                          wordWrap: "break-word",
+                          display: "block",
+                          minHeight: "4.7rem",
+                        }
+                  }
                   className="py-4 text-gray-500 text-sm"
                 >
                   {moreShown ? (
@@ -607,7 +617,7 @@ const TokenCard = ({
                   [hash]: !showDuplicateNFTs[hash],
                 });
               }}
-              className="showtime-card-profile-link ml-2 cursor-pointer"
+              className="text-gray-500 mt-1 ml-2 cursor-pointer"
               style={{ fontWeight: 400 }}
             >
               {`${showDuplicateNFTs[hash] ? "Hide" : "Show"} ${

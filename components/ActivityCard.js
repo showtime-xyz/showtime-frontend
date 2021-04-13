@@ -72,13 +72,13 @@ export default function ActivityCard({ act, setItemOpenInModal }) {
   }
   return (
     <div
-      className="flex flex-col flex-1 mb-6 pt-4 rounded-lg bg-white shadow-md border-t-2"
+      className="flex flex-col flex-1 mb-6 pt-4 sm:rounded-lg bg-white shadow-md border-t-2"
       style={{
         borderTopColor: activityIconObjects[type].color,
       }}
     >
       {/* actor data */}
-      <div className="border-b border-gray-200 pb-4 px-4 ">
+      <div className="border-b border-gray-200 pb-4 px-4">
         <div className="flex flex-row">
           <div className="flex items-center">
             <Link
