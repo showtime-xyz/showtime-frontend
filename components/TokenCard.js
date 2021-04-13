@@ -114,7 +114,7 @@ const TokenCard = ({
 
   return (
     <>
-      <div className="px-3">
+      <div className="px-0 sm:px-3 mb-6 sm:mb-0">
         <div
           style={
             userHiddenItems && userHiddenItems.includes(item.nft_id)
@@ -607,7 +607,7 @@ const TokenCard = ({
                   [hash]: !showDuplicateNFTs[hash],
                 });
               }}
-              className="showtime-card-profile-link ml-2 cursor-pointer"
+              className="text-gray-500 mt-1 ml-2 cursor-pointer"
               style={{ fontWeight: 400 }}
             >
               {`${showDuplicateNFTs[hash] ? "Hide" : "Show"} ${

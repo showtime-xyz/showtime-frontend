@@ -29,7 +29,7 @@ const Header = () => {
         }}
       >
         <CappedWidth>
-          <div className="flex flex-row items-center md:px-3">
+          <div className="flex flex-row items-center px-3">
             <div>
               <Link href="/">
                 <a
@@ -129,7 +129,7 @@ const Header = () => {
                         />
                       </div>
                       <div
-                        className=""
+                        className="text-sm sm:text-base"
                         style={{
                           textOverflow: "ellipsis",
                           overflow: "hidden",
@@ -163,7 +163,7 @@ const Header = () => {
 
           {/* Start mobile-only menu */}
           {context.isMobile && (
-            <div className="flex md:hidden justify-between items-center pb-1">
+            <div className="flex md:hidden justify-between items-center pb-1 px-3">
               <div>
                 <Link href="/c/[collection]" as="/c/all">
                   <a

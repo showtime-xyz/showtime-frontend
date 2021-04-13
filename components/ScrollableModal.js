@@ -32,8 +32,6 @@ const Content = styled.div`
   text-align: left;
   background: white;
   width: 100%;
-  padding: 10px;
-  border-radius: 20px;
   gap: 20px;
   display: flex;
   flex-direction: column;
@@ -49,7 +47,12 @@ const ScrollableModal = ({ children, closeModal, contentWidth = null }) => {
   return (
     <Background onClick={closeModal}>
       <Scroller contentWidth={contentWidth}>
-        <Content onClick={(e) => e.stopPropagation()}>{children}</Content>
+        <Content
+          className="rounded-lg sm:rounded-2xl "
+          onClick={(e) => e.stopPropagation()}
+        >
+          {children}
+        </Content>
       </Scroller>
     </Background>
   );

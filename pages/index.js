@@ -22,6 +22,7 @@ import {
   faHeart as fasHeart,
   faFingerprint,
   faUser as fasUser,
+  faFilter,
 } from "@fortawesome/free-solid-svg-icons";
 
 const ACTIVITY_PAGE_LENGTH = 5; // 5 activity items per activity page
@@ -168,6 +169,8 @@ const Activity = () => {
     //setHasMoreScrolling(true);
   };
 
+  const [showFiltersMobile, setShowFiltersMobile] = useState(false);
+
   return (
     <Layout>
       <Head>
@@ -218,15 +221,18 @@ const Activity = () => {
         </>
       ) : null}
 
-      <div className="py-14 px-10 text-left  bg-gradient-to-r from-green-400 to-blue-500">
+      <div className="py-12 sm:py-14 px-8 sm:px-10 text-left  bg-gradient-to-r from-green-400 to-blue-500">
         <CappedWidth>
           <div className="flex flex-row mx-3 text-white">
             <div className="flex-1">
-              <div className="text-2xl">Discover & Showcase</div>
-              <div className="text-6xl" style={{ fontFamily: "Afronaut" }}>
+              <div className="text-xl sm:text-2xl">Discover & Showcase</div>
+              <div
+                className="text-4xl sm:text-6xl"
+                style={{ fontFamily: "Afronaut" }}
+              >
                 Your Favorite
               </div>
-              <div className="text-6xl">Crypto Art.</div>
+              <div className="text-4xl sm:text-6xl">Crypto Art.</div>
             </div>
             {/*<div className="flex-1">
               <div className="bg-white rounded-lg shadow-md px-6 py-6 text-center">
@@ -246,12 +252,28 @@ const Activity = () => {
         <div className="m-auto relative">
           <hr className="mx-3" />
 
-          <div className="mb-8 mt-16 text-left px-3">
-            <h1 className="text-3xl">News Feed</h1>
+          <div className="mb-4 sm:mb-8 mt-8 sm:mt-16 text-left px-6 sm:px-3 flex flex-row items-center">
+            <h1 className="text-xl  sm:text-3xl">News Feed</h1>
+            <div className="flex-grow"></div>
+            <div
+              className="hover:text-stpink sm:hidden"
+              onClick={() => {
+                setShowFiltersMobile(!showFiltersMobile);
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faFilter}
+                style={{ width: 16, height: 16 }}
+              />
+            </div>
           </div>
 
           <div className="grid lg:grid-cols-3 xl:grid-cols-4">
-            <div className="px-3 col-span-2 md:col-span-1 mb-4 md:mb-0">
+            <div
+              className={`px-3 col-span-2 md:col-span-1 mb-4 md:mb-0 ${
+                showFiltersMobile ? null : "hidden"
+              } sm:block`}
+            >
               <div className="px-4 py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
                 <div
                   onClick={() => {
@@ -331,6 +353,7 @@ const Activity = () => {
                 </div>
               </div>
             </div>
+
             <div className="col-span-2">
               {context.user === undefined ? null : context.user === null ? (
                 <div className="flex flex-1 items-center justify-center mb-6 px-3">

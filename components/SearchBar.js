@@ -57,10 +57,12 @@ const OverlaySearchContainer = styled.div`
   top: 0;
   z-index: 1;
   @media (max-width: 820px) {
-    top: 40px;
-    padding-top: 8px;
+    top: 48px;
+    padding-top: 0px;
     padding-bottom: 8px;
-    height: 40px;
+    padding-left: 16px;
+    padding-right: 16px;
+    height: 36px;
   }
 `;
 
@@ -172,6 +174,9 @@ const OverlaySearchResults = styled.div`
   background: #fff;
   border-radius: 8px;
   box-shadow: 0px 10px 20px rgb(0 0 0 / 5%);
+  @media (max-width: 820px) {
+    top: 40px;
+  }
 `;
 
 const SearchResult = styled.div`
