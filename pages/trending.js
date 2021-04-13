@@ -128,16 +128,21 @@ const Leaderboard = () => {
         </div>
         <div className="grid lg:grid-cols-3 xl:grid-cols-4 mt-16">
           <div className="px-3 col-span-2 md:col-span-3">
-            <h1 className="text-lg sm:text-3xl mb-6 sm:px-3">Pieces</h1>
+            {/*<h1 className="text-lg sm:text-3xl mb-6 sm:px-3">Pieces</h1>*/}
             <TokenGridV4 items={featuredItems} isLoading={isLoadingCards} />
           </div>
           <div className="sm:px-3">
-            <div className="flex flex-row">
+            {/*<div className="flex flex-row">
               <h1 className="text-lg sm:text-3xl mb-6">Creators</h1>
               <div className="flex-grow"></div>
               <div>[Follow All]</div>
-            </div>
-            <div className="bg-white rounded-lg shadow-md">
+            </div>*/}
+            <div className="bg-white rounded-lg shadow-md pt-3">
+              <div className="border-b border-gray-200 flex items-center pb-2 px-4 flex-row">
+                <div className="m-2 flex-grow">Top Creators</div>
+                <div>[Follow All]</div>
+              </div>
+
               {isLoading ? (
                 <div className="p-6 mx-auto flex flex-row">
                   <div className="flex-grow"></div>
