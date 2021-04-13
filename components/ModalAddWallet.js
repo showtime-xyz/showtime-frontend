@@ -6,13 +6,13 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 //import ethProvider from "eth-provider";
 import { WalletLink } from "walletlink";
 import _ from "lodash";
-import ClientOnlyPortal from "./ClientOnlyPortal";
 import backend from "../lib/backend";
 import AppContext from "../context/app-context";
 import CloseButton from "./CloseButton";
 import Web3 from "web3";
 import { useRouter } from "next/router";
 import Fortmatic from "fortmatic";
+import ScrollableModal from "./ScrollableModal";
 
 export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
   const context = useContext(AppContext);
@@ -207,249 +207,211 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
   return (
     <>
       {isOpen && (
-        <ClientOnlyPortal selector="#modal">
-          <div className="backdrop" onClick={() => handleModalClose()}>
-            <div
-              className="modal"
-              style={{ color: "black" }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <CloseButton setEditModalOpen={handleModalClose} />
-              <div className="text-3xl border-b-2 pb-2 text-center">
-                {step == 1
-                  ? "Add Wallet"
-                  : step == 4
-                  ? "Success!"
-                  : signaturePending
-                  ? "Almost there!"
-                  : walletAddresses
-                      .map((item) => item.toLowerCase())
-                      .includes(addressDetected?.toLowerCase())
-                  ? "Switch Wallet"
-                  : "Confirm Wallet"}
-              </div>
-              {step == 1 ? (
-                <>
-                  <div className="my-4 py-4">
-                    Add one or more wallets to showcase all your NFTs in one
-                    place.
-                  </div>
+        <ScrollableModal closeModal={handleModalClose} contentWidth="30rem">
+          <div className="p-4">
+            <CloseButton setEditModalOpen={handleModalClose} />
+            <div className="text-3xl border-b-2 pb-2 text-center">
+              {step == 1
+                ? "Add Wallet"
+                : step == 4
+                ? "Success!"
+                : signaturePending
+                ? "Almost there!"
+                : walletAddresses
+                    .map((item) => item.toLowerCase())
+                    .includes(addressDetected?.toLowerCase())
+                ? "Switch Wallet"
+                : "Confirm Wallet"}
+            </div>
+            {step == 1 ? (
+              <>
+                <div className="my-4 py-4">
+                  Add one or more wallets to showcase all your NFTs in one
+                  place.
+                </div>
 
-                  <div className="my-4 py-4" style={{}}>
-                    If you previously signed in with the wallet you are adding,
-                    your other profile will get merged into this profile.
-                  </div>
-                  {/*<div className="pb-4" style={{}}>
+                <div className="my-4 py-4" style={{}}>
+                  If you previously signed in with the wallet you are adding,
+                  your other profile will get merged into this profile.
+                </div>
+                {/*<div className="pb-4" style={{}}>
                     Going forward, you can log in with any of the wallets or
                     emails associated with your profile.
               </div>*/}
-                </>
-              ) : step == 4 ? (
-                <div className="text-center py-32 px-10">
-                  Successfully added the wallet to your profile
-                </div>
-              ) : step == 3 ? null : (
-                <div style={{}}>
-                  {addressDetected ? (
-                    signaturePending ? null : (
+              </>
+            ) : step == 4 ? (
+              <div className="text-center py-32 px-10">
+                Successfully added the wallet to your profile
+              </div>
+            ) : step == 3 ? null : (
+              <div style={{}}>
+                {addressDetected ? (
+                  signaturePending ? null : (
+                    <>
+                      <div className="mt-4">
+                        Your wallet provider is giving us a wallet with the
+                        address:
+                      </div>
+                      <div
+                        style={{ color: "rgb(81, 125, 228)", fontSize: 13 }}
+                        className="mb-4"
+                      >
+                        <pre>{addressDetected}</pre>
+                      </div>
                       <>
-                        <div className="mt-4">
-                          Your wallet provider is giving us a wallet with the
-                          address:
-                        </div>
-                        <div
-                          style={{ color: "rgb(81, 125, 228)", fontSize: 13 }}
-                          className="mb-4"
-                        >
-                          <pre>{addressDetected}</pre>
-                        </div>
-                        <>
-                          {walletAddresses
-                            .map((item) => item.toLowerCase())
-                            .includes(addressDetected?.toLowerCase()) ? (
-                            <>
-                              <div className="py-4">
-                                <span>
-                                  <span style={{ color: "red" }}>
-                                    This wallet is already on your Showtime
-                                    profile. Please switch to a different wallet
-                                    in your provider's menu.
-                                  </span>{" "}
-                                </span>
+                        {walletAddresses
+                          .map((item) => item.toLowerCase())
+                          .includes(addressDetected?.toLowerCase()) ? (
+                          <>
+                            <div className="py-4">
+                              <span>
+                                <span style={{ color: "red" }}>
+                                  This wallet is already on your Showtime
+                                  profile. Please switch to a different wallet
+                                  in your provider's menu.
+                                </span>{" "}
+                              </span>
+                            </div>
+                            <div className="py-4 ">
+                              <div>For MetaMask:</div>
+                              <div className="text-gray-500">
+                                Switch wallets by clicking on the MetaMask icon
+                                in the toolbar, then clicking the circle icon on
+                                the top right (the account switcher). If you get
+                                a warning "Your current account is not
+                                connected," make sure to click "Connect."
                               </div>
-                              <div className="py-4 ">
-                                <div>For MetaMask:</div>
-                                <div className="text-gray-500">
-                                  Switch wallets by clicking on the MetaMask
-                                  icon in the toolbar, then clicking the circle
-                                  icon on the top right (the account switcher).
-                                  If you get a warning "Your current account is
-                                  not connected," make sure to click "Connect."
-                                </div>
-                              </div>
-                              <div className="py-4">
-                                <div>For WalletConnect:</div>
-                                <div className="text-gray-500">
-                                  <a
-                                    href="#"
-                                    onClick={() => {
-                                      tryAgain();
-                                    }}
-                                    style={{ color: "rgb(81, 125, 228)" }}
-                                  >
-                                    Click here
-                                  </a>{" "}
-                                  to start over and pick a new wallet.
-                                </div>
-                              </div>
-                            </>
-                          ) : (
-                            <>
-                              <div className="py-4">
-                                Please confirm this is the correct wallet and
-                                click "Sign to finish" below.
-                              </div>
-                              {showInstructions ? (
-                                <>
-                                  <div
-                                    className="py-4"
-                                    style={{ fontSize: 14 }}
-                                  >
-                                    <span>
-                                      For MetaMask: <br />
-                                    </span>{" "}
-                                    <div className="text-gray-500">
-                                      Switch wallets by clicking on the MetaMask
-                                      icon in the toolbar, then clicking the
-                                      circle icon on the top right (the account
-                                      switcher). If you get a warning "Your
-                                      current account is not connected," make
-                                      sure to click "Connect."
-                                    </div>
-                                  </div>
-                                  <div
-                                    className="py-4"
-                                    style={{ fontSize: 14 }}
-                                  >
-                                    <span>
-                                      For Wallet Connect: <br />
-                                    </span>
-                                    <div className="text-gray-500">
-                                      <a
-                                        href="#"
-                                        onClick={() => {
-                                          tryAgain();
-                                        }}
-                                        style={{ color: "rgb(81, 125, 228)" }}
-                                      >
-                                        Click here
-                                      </a>{" "}
-                                      to start over and pick a new wallet.
-                                    </div>
-                                  </div>
-                                </>
-                              ) : (
-                                <div
-                                  className="pt-4 pb-2"
-                                  style={{ fontSize: 14 }}
+                            </div>
+                            <div className="py-4">
+                              <div>For WalletConnect:</div>
+                              <div className="text-gray-500">
+                                <a
+                                  href="#"
+                                  onClick={() => {
+                                    tryAgain();
+                                  }}
+                                  style={{ color: "rgb(81, 125, 228)" }}
                                 >
-                                  Wrong wallet?
-                                  <a
-                                    href="#"
-                                    onClick={() => {
-                                      setShowInstructions(true);
-                                    }}
-                                    style={{ color: "rgb(81, 125, 228)" }}
-                                  >
-                                    {" "}
-                                    Learn how to switch
-                                  </a>
+                                  Click here
+                                </a>{" "}
+                                to start over and pick a new wallet.
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="py-4">
+                              Please confirm this is the correct wallet and
+                              click "Sign to finish" below.
+                            </div>
+                            {showInstructions ? (
+                              <>
+                                <div className="py-4" style={{ fontSize: 14 }}>
+                                  <span>
+                                    For MetaMask: <br />
+                                  </span>{" "}
+                                  <div className="text-gray-500">
+                                    Switch wallets by clicking on the MetaMask
+                                    icon in the toolbar, then clicking the
+                                    circle icon on the top right (the account
+                                    switcher). If you get a warning "Your
+                                    current account is not connected," make sure
+                                    to click "Connect."
+                                  </div>
                                 </div>
-                              )}
-                            </>
-                          )}
-                        </>
+                                <div className="py-4" style={{ fontSize: 14 }}>
+                                  <span>
+                                    For Wallet Connect: <br />
+                                  </span>
+                                  <div className="text-gray-500">
+                                    <a
+                                      href="#"
+                                      onClick={() => {
+                                        tryAgain();
+                                      }}
+                                      style={{ color: "rgb(81, 125, 228)" }}
+                                    >
+                                      Click here
+                                    </a>{" "}
+                                    to start over and pick a new wallet.
+                                  </div>
+                                </div>
+                              </>
+                            ) : (
+                              <div
+                                className="pt-4 pb-2"
+                                style={{ fontSize: 14 }}
+                              >
+                                Wrong wallet?
+                                <a
+                                  href="#"
+                                  onClick={() => {
+                                    setShowInstructions(true);
+                                  }}
+                                  style={{ color: "rgb(81, 125, 228)" }}
+                                >
+                                  {" "}
+                                  Learn how to switch
+                                </a>
+                              </div>
+                            )}
+                          </>
+                        )}
                       </>
-                    )
-                  ) : (
-                    <div className="my-16 text-center">
-                      Select a wallet provider...
-                    </div>
-                  )}
-                </div>
-              )}
+                    </>
+                  )
+                ) : (
+                  <div className="my-16 text-center">
+                    Select a wallet provider...
+                  </div>
+                )}
+              </div>
+            )}
 
-              {signaturePending ? (
-                <div className="text-center py-40 px-10">
-                  Please sign the message we're sending to your wallet...
-                </div>
-              ) : step == 3 ? (
-                <div className="text-center py-40 px-10">
-                  Adding wallet and any history, please wait...
-                </div>
-              ) : walletAddresses
-                  .map((item) => item.toLowerCase())
-                  .includes(addressDetected?.toLowerCase()) &&
-                step != 1 ? null : (
-                <>
-                  <div className="mt-4 mb-2 pt-4 text-center border-t-2">
-                    {step == 1 ? (
+            {signaturePending ? (
+              <div className="text-center py-40 px-10">
+                Please sign the message we're sending to your wallet...
+              </div>
+            ) : step == 3 ? (
+              <div className="text-center py-40 px-10">
+                Adding wallet and any history, please wait...
+              </div>
+            ) : walletAddresses
+                .map((item) => item.toLowerCase())
+                .includes(addressDetected?.toLowerCase()) &&
+              step != 1 ? null : (
+              <>
+                <div className="mt-4 mb-0 pt-4 text-center border-t-2">
+                  {step == 1 ? (
+                    <button
+                      className="showtime-pink-button bg-white text-black hover:bg-gray-300 transition-all py-2 px-4 rounded-full"
+                      onClick={() => {
+                        setStep(2);
+                        //pickWallet({ clearCachedProvider: true });
+                        onConnect();
+                      }}
+                    >
+                      Select wallet to add
+                    </button>
+                  ) : step == 4 ? null : step == 3 ? null : addressDetected ? (
+                    walletAddresses
+                      .map((item) => item.toLowerCase())
+                      .includes(addressDetected?.toLowerCase()) ? null : (
                       <button
-                        className="showtime-pink-button bg-white text-black hover:bg-gray-300 transition-all py-2 px-4 rounded-full"
+                        className="showtime-green-button transition-all py-2 px-4 rounded-full"
                         onClick={() => {
-                          setStep(2);
-                          //pickWallet({ clearCachedProvider: true });
-                          onConnect();
+                          signMessage();
                         }}
                       >
-                        Select wallet to add
+                        Sign to finish
                       </button>
-                    ) : step == 4 ? null : step ==
-                      3 ? null : addressDetected ? (
-                      walletAddresses
-                        .map((item) => item.toLowerCase())
-                        .includes(addressDetected?.toLowerCase()) ? null : (
-                        <button
-                          className="showtime-pink-button bg-white text-black hover:bg-gray-300 transition-all py-2 px-4 rounded-full"
-                          onClick={() => {
-                            signMessage();
-                          }}
-                        >
-                          Sign to finish
-                        </button>
-                      )
-                    ) : null}
-                  </div>
-                </>
-              )}
-            </div>
-            <style jsx>{`
-              :global(body) {
-                overflow: hidden;
-              }
-              .backdrop {
-                position: fixed;
-                background-color: rgba(0, 0, 0, 0.7);
-                top: 0;
-                right: 0;
-                bottom: 0;
-                left: 0;
-              }
-              .modal {
-                background-color: white;
-                position: absolute;
-                top: 5%;
-                right: 3%;
-                left: 3%;
-                padding: 1em;
-                border-radius: 7px;
-                max-width: 400px;
-                margin-left: auto;
-                margin-right: auto;
-              }
-            `}</style>
+                    )
+                  ) : null}
+                </div>
+              </>
+            )}
           </div>
-        </ClientOnlyPortal>
+        </ScrollableModal>
       )}
     </>
   );
