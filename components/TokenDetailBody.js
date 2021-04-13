@@ -284,6 +284,9 @@ const TokenDetailBody = ({
                   context.isMobile
                     ? {
                         width: mediaWidth,
+                        height: item.token_aspect_ratio
+                          ? mediaWidth / item.token_aspect_ratio
+                          : null,
                       }
                     : {
                         height: TOKEN_MEDIA_HEIGHT,
