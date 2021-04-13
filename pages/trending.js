@@ -15,18 +15,11 @@ import { GridTab, GridTabs } from "../components/GridTabs";
 import CappedWidth from "../components/CappedWidth";
 import TokenGridV4 from "../components/TokenGridV4";
 import { formatAddressShort } from "../lib/utilities";
+import FollowButton from "../components/FollowButton";
+import LeaderboardItemV2 from "../components/LeaderboardItemV2";
 
 // how many leaders to show on first load
 const LEADERBOARD_LIMIT = 10;
-
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: ${(p) => (p.isMobile ? "4px 16px" : "10px 12px")};
-`;
 
 export async function getServerSideProps() {
   return {
@@ -153,55 +146,7 @@ const Leaderboard = () => {
                 </div>
               ) : (
                 shownLeaderboardItems.map((item, index) => (
-                  <div key={item.profile_id} className="border-b p-6 ">
-                    <div className="flex flex-row items-center">
-                      <div className="relative  mr-4">
-                        <Link
-                          href="/[profile]"
-                          as={`/${item?.username || item.address}`}
-                        >
-                          <div className="cursor-pointer">
-                            <img
-                              src={
-                                item?.img_url
-                                  ? item?.img_url
-                                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                              }
-                              className="rounded-full h-16 w-16 hover:opacity-90"
-                            />
-                          </div>
-                        </Link>
-                        <div
-                          className="absolute rounded-full bg-white text-center self-center"
-                          style={{
-                            border: "1px solid rgba(0, 0, 0, 0.16)",
-                            fontSize: 13,
-                            fontWeight: 500,
-                            paddingTop: 1,
-                            height: 24,
-                            width: 24,
-                            color: "#010101",
-                            bottom: 0,
-                            right: 0,
-                          }}
-                        >
-                          {index + 1}
-                        </div>
-                      </div>
-                      <div>
-                        <Link
-                          href="/[profile]"
-                          as={`/${item?.username || item.address}`}
-                        >
-                          <div className="hover:text-stpink cursor-pointer">
-                            {item?.name ||
-                              formatAddressShort(item.address) ||
-                              "Unnamed"}
-                          </div>
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
+                  <LeaderboardItemV2 item={item} index={index} />
                 ))
               )}
             </div>

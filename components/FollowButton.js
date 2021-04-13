@@ -95,8 +95,8 @@ const FollowButton = ({ item, followerCount, setFollowerCount, black }) => {
       className={
         black
           ? !isFollowed
-            ? "bg-black text-white w-24 py-2"
-            : "w-24  py-2"
+            ? "bg-black text-white w-24 py-1"
+            : "w-24 py-1"
           : null
       }
       onClick={
