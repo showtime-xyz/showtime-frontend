@@ -79,16 +79,20 @@ const Activity = () => {
     setIsLoading(false);
   };
   useEffect(() => {
-    setHasMoreScrolling(true);
-    setActivity([]);
-    setActivityPage(1);
-    getActivity(activityTypeFilter, 1);
+    if (typeof context.user !== "undefined") {
+      setHasMoreScrolling(true);
+      setActivity([]);
+      setActivityPage(1);
+      getActivity(activityTypeFilter, 1);
+    }
   }, [context.user, activityTypeFilter]);
 
   const getNext = () => {
-    setHasMoreScrolling(true);
-    getActivity(activityTypeFilter, activityPage + 1);
-    setActivityPage(activityPage + 1);
+    if (typeof context.user !== "undefined") {
+      setHasMoreScrolling(true);
+      getActivity(activityTypeFilter, activityPage + 1);
+      setActivityPage(activityPage + 1);
+    }
   };
 
   const [itemOpenInModal, setItemOpenInModal] = useState(null);
@@ -132,31 +136,6 @@ const Activity = () => {
       goToPrevious();
     }
   }, [escPress, leftPress, rightPress]);
-
-  /*
-  const handleOpenModal = (index) => {
-    setItemOpenInModal({ nftGroup: spotlightItems, index });
-  };
-
-  
-  const [spotlightItems, setSpotlightItems] = useState([]);
-
-  const getSpotlight = async () => {
-    //setIsLoadingSpotlight(true);
-    const response_spotlight = await backend.get(`/v1/spotlight`);
-    const data_spotlight = response_spotlight.data.data;
-    setSpotlightItems(data_spotlight.slice(0, 1));
-    //setIsLoadingSpotlight(false);
-
-    // Reset cache for next load
-    backend.get(`/v1/spotlight?recache=1`);
-  };
-
-  useEffect(() => {
-    //getHero();
-    getSpotlight();
-  }, []);
-  */
 
   const handleFilterClick = (typeId) => {
     if (activityTypeFilter != typeId) {
@@ -393,7 +372,7 @@ const Activity = () => {
                     )}
                   </div>
                 }
-                scrollThreshold={0.5}
+                scrollThreshold={0.75}
               >
                 <ActivityFeed
                   activity={activity}
@@ -406,41 +385,12 @@ const Activity = () => {
               </div>
             </div>
             <div className="px-3">
-              <div className="hidden xl:block py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
-                <ActivityRecommendedFollows />
-              </div>
-
-              {/*<div className="sticky top-24">
-                <div className="px-6 h-max rounded-lg border border-gray-200 bg-white shadow-md">
-                  Community Spotlights [Refresh]
-                  {spotlightItems ? (
-                    <>
-                      <div className="flex mt-4 max-w-full">
-                        <ActivityImages
-                          nfts={spotlightItems}
-                          openModal={handleOpenModal}
-                        />
-                      </div>
-                    </>
-                  ) : null}
+              {context.isMobile ? null : (
+                <div className="hidden xl:block py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
+                  <ActivityRecommendedFollows />
                 </div>
-                <div className="px-6 h-max rounded-lg mt-8 border border-gray-200 bg-white shadow-md">
-                  Trending [Refresh]
-                  <br />
-                  <br />
-                  <br />
-                </div>
-                  </div>*/}
+              )}
             </div>
-          </div>
-
-          {/* Page Content */}
-          <div className="flex">
-            {/* Left Column */}
-
-            <div className="flex flex-col"></div>
-
-            <div className="flex flex-col"></div>
           </div>
         </div>
       </CappedWidth>

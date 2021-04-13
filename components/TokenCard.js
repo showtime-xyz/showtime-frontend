@@ -450,14 +450,14 @@ const TokenCard = ({
                   style={{
                     overflowWrap: "break-word",
                     wordWrap: "break-word",
-
+                    display: "block",
                     cursor: "pointer",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
+                    //whiteSpace: "nowrap",
+                    //overflow: "hidden",
+                    //textOverflow: "ellipsis",
                   }}
                 >
-                  {item.token_name}
+                  {truncateWithEllipses(item.token_name, 28)}
                   {/* {this.props.item.token_has_video ? (
                       <FontAwesomeIcon
                         className="ml-1 inline"
