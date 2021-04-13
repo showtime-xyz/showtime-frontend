@@ -5,9 +5,9 @@ import FollowButton from "./FollowButton";
 const LeaderboardItemV2 = ({ item, index }) => {
   const [followerCount, setFollowerCount] = useState();
   return (
-    <div key={item.profile_id} className="border-b px-6 py-4">
+    <div key={item.profile_id} className="border-b px-4 py-4">
       <div className="flex flex-row items-center">
-        <div className="relative mr-2 w-16">
+        <div className="relative mr-0 w-16">
           <Link href="/[profile]" as={`/${item?.username || item.address}`}>
             <div className="cursor-pointer">
               <img
@@ -30,15 +30,15 @@ const LeaderboardItemV2 = ({ item, index }) => {
 
               color: "#010101",
               bottom: 0,
-              right: 0,
+              right: 4,
             }}
           >
             {index + 1}
           </div>
         </div>
-        <div className="flex flex-grow">
+        <div className="flex flex-grow overflow-hidden">
           <Link href="/[profile]" as={`/${item?.username || item.address}`}>
-            <div className="hover:text-stpink cursor-pointer">
+            <div className="hover:text-stpink cursor-pointer overflow-hidden overflow-ellipsis">
               {item?.name || formatAddressShort(item.address) || "Unnamed"}
             </div>
           </Link>
