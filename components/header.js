@@ -192,7 +192,7 @@ const Header = () => {
               {context.isMobile &&
                 context.user &&
                 context.myProfile !== undefined && (
-                  <div className="flex-shrink">
+                  <div className="flex-shrink ml-4">
                     <NotificationsBtn />
                   </div>
                 )}

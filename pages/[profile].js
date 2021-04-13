@@ -145,6 +145,7 @@ const Profile = ({
 
   const [isLoadingCards, setIsLoadingCards] = useState(false);
   const [isRefreshingCards, setIsRefreshingCards] = useState(false);
+  //const [hasSpotlightItem, setHasSpotlightItem] = useState(false);
 
   const [selectedCreatedSortField, setSelectedCreatedSortField] = useState(
     default_created_sort_id || 1
@@ -157,8 +158,9 @@ const Profile = ({
   const fetchItems = async (initial_load) => {
     // clear out existing from page (if switching profiles)
     if (initial_load) {
-      setSpotlightItem(featured_nft);
+      //setHasSpotlightItem(featured_nft ? true : false);
       setIsLoadingCards(true);
+      setSpotlightItem(featured_nft);
 
       setCreatedItems([]);
       setOwnedItems([]);

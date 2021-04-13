@@ -30,18 +30,18 @@ const MobileSearchWrapper = styled.div`
   position: relative;
   justify-content: flex-start;
   margin-left: 16px;
-  padding-right: 8px;
+  //padding-right: 8px;
   width: 100%;
   @media (max-width: 1229px) {
     display: flex;
   }
   @media (max-width: 767px) {
     justify-content: flex-end;
-    padding-right: 32px;
+    //padding-right: 32px;
   }
   @media (max-width: 420px) {
     margin-left: 4px;
-    padding-right: 16px;
+    //padding-right: 16px;
   }
 `;
 
@@ -122,6 +122,7 @@ const SearchIcon = styled.div`
   height: 14px;
   margin-right: 12px;
   color: #000;
+
   margin-top: ${(p) => (p.isFocused ? -1 : 0)}px;
 `;
 
@@ -410,6 +411,7 @@ const SearchBar = () => {
           <FontAwesomeIcon icon={faSearch} />
         </SearchToggleButton>
       </MobileSearchWrapper>
+
       {/* Start overlay menu */}
       {isMobileSearchOverlayOpen && (
         <OverlaySearchContainer>

@@ -173,12 +173,16 @@ class SpotlightItem extends React.Component {
                         {!this.state.imageLoaded ? (
                           <div
                             className="w-full text-center flex items-center justify-center"
-                            style={{ height: 500 }}
+                            style={{
+                              height: this.divRef?.current?.clientWidth
+                                ? this.divRef?.current?.clientWidth
+                                : 375,
+                            }}
                           >
                             <div className="loading-card-spinner" />
                           </div>
                         ) : null}
-                        <div className="flex-grow"></div>
+
                         <img
                           className={`hover:opacity-90  transition-all  shadow-lg 
           
@@ -191,6 +195,13 @@ class SpotlightItem extends React.Component {
                           style={{
                             ...(!this.state.imageLoaded
                               ? { display: "none" }
+                              : isMobile
+                              ? {
+                                  backgroundColor: this.getBackgroundColor(
+                                    item
+                                  ),
+                                  width: this.divRef?.current?.clientWidth,
+                                }
                               : {
                                   backgroundColor: this.getBackgroundColor(
                                     item
@@ -293,7 +304,7 @@ class SpotlightItem extends React.Component {
                           currentlyPlayingVideo: false,
                         });
                       }}
-                      className="mb-4 text-3xl hover:text-stpink"
+                      className="mb-2 sm:mb-4 text-2xl sm:text-3xl hover:text-stpink"
                       style={{
                         overflowWrap: "break-word",
                         wordWrap: "break-word",
@@ -312,7 +323,7 @@ class SpotlightItem extends React.Component {
                         overflowWrap: "break-word",
                         wordWrap: "break-word",
                       }}
-                      className="pb-4 text-gray-500"
+                      className="pb-4 text-sm sm:text-base text-gray-500"
                     >
                       <div>
                         {item.token_description?.length >
@@ -390,10 +401,10 @@ class SpotlightItem extends React.Component {
                       <div className="flex-grow"></div>
                     </div>
                   </div>
-                  <div className="flex flex-col md:flex-row pt-4 mt-8 w-full mb-6">
+                  <div className="flex flex-row pt-4 mt-8 w-full ">
                     {item.contract_is_creator ? (
                       <div className="flex-col flex-1">
-                        <div className="flex-shrink pr-2 text-sm text-gray-500">
+                        <div className="flex-shrink mb-1 pr-2 text-xs text-gray-500">
                           Created by
                         </div>
                         <div className="flex-shrink">
@@ -417,7 +428,7 @@ class SpotlightItem extends React.Component {
                                   }}
                                 />
                               </div>
-                              <div className="showtime-card-profile-link mx-2 md:text-lg">
+                              <div className="mx-2">
                                 {this.truncateWithEllipses(
                                   item.collection_name + " Collection",
                                   25
@@ -429,7 +440,7 @@ class SpotlightItem extends React.Component {
                       </div>
                     ) : item.creator_id ? (
                       <div className="flex-col flex-1 mb-6">
-                        <div className="flex-shrink pr-2  text-sm text-gray-500">
+                        <div className="flex-shrink pr-2 mb-1 text-xs text-gray-500">
                           {item.owner_id == item.creator_id
                             ? "Created & Owned By"
                             : "Created by"}
@@ -457,10 +468,10 @@ class SpotlightItem extends React.Component {
                                   }}
                                 />
                               </div>
-                              <div className="showtime-card-profile-link ml-2 md:text-lg">
+                              <div className="ml-2">
                                 {this.truncateWithEllipses(
                                   item.creator_name,
-                                  30
+                                  25
                                 )}
                               </div>
                             </a>
@@ -472,12 +483,12 @@ class SpotlightItem extends React.Component {
                     (item.owner_id != item.creator_id ||
                       item.contract_is_creator) ? (
                       <div className="flex-1">
-                        <div className="flex-shrink pr-2  text-sm text-gray-500">
+                        <div className="flex-shrink pr-2 mb-1 text-xs text-gray-500">
                           Owned by
                         </div>
-                        <div className="text-lg">
+                        <div className="">
                           {item.multiple_owners ? (
-                            <span style={{ color: "#888" }}>
+                            <span className="text-gray-500">
                               Multiple owners
                             </span>
                           ) : item.owner_id ? (
@@ -503,10 +514,10 @@ class SpotlightItem extends React.Component {
                                     }}
                                   />
                                 </div>
-                                <div className="showtime-card-profile-link">
+                                <div className="">
                                   {this.truncateWithEllipses(
                                     item.owner_name,
-                                    22
+                                    25
                                   )}
                                 </div>
                               </a>
