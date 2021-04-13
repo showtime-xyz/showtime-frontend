@@ -399,7 +399,7 @@ const Activity = () => {
             </div>
             <div className="px-3">
               {context.isMobile ? null : (
-                <div className="hidden xl:block py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
+                <div className="hidden xl:block pt-4 pb-2 h-max rounded-lg sticky top-24 bg-white shadow-md">
                   <ActivityRecommendedFollows />
                 </div>
               )}

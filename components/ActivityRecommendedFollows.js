@@ -76,7 +76,7 @@ export default function ActivityRecommendedFollows() {
 
   return (
     <div>
-      <div className="border-b border-gray-200 flex items-center pb-2 px-4">
+      <div className="flex items-center pb-2 px-4">
         <div className="m-2 flex-grow">Suggested for You</div>
 
         {/*!loading && (

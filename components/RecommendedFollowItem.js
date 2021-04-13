@@ -17,7 +17,7 @@ const RecommendedFollowRowItem = styled.div`
   flex-direction: column;
   width: 100%;
   //padding: 24px 0px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.11);
+  border-top: 1px solid rgba(0, 0, 0, 0.11);
   position: relative;
 `;
 
