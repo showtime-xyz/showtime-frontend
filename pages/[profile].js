@@ -18,14 +18,14 @@ import { SORT_FIELDS } from "../lib/constants";
 import Select from "react-dropdown-select";
 import SpotlightItem from "../components/SpotlightItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComment, faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart, faImage } from "@fortawesome/free-regular-svg-icons";
 import ProfileFollowersPill from "../components/ProfileFollowersPill";
 import {
-  faComment as fasComment,
   faHeart as fasHeart,
   faFingerprint,
   faUser,
   faLink,
+  faImage as fasImage,
 } from "@fortawesome/free-solid-svg-icons";
 
 export async function getServerSideProps(context) {
@@ -933,10 +933,12 @@ const Profile = ({
                             : "text-gray-500"
                         } hover:text-stpurple700 cursor-pointer flex flex-row transition-all items-center`}
                       >
-                        <FontAwesomeIcon
-                          icon={faFingerprint}
-                          className="mr-2 w-4 h-4 hidden sm:block"
-                        />
+                        <div className="w-6">
+                          <FontAwesomeIcon
+                            icon={faFingerprint}
+                            className="mr-2 hidden sm:block"
+                          />
+                        </div>
                         <div className="flex-grow sm:hidden"></div>
                         <div className="sm:hidden mr-1">
                           {createdCount}
@@ -973,10 +975,12 @@ const Profile = ({
                             : "text-gray-500"
                         } hover:text-stteal700 cursor-pointer flex flex-row transition-all items-center`}
                       >
-                        <FontAwesomeIcon
-                          icon={selectedGrid === 2 ? fasComment : faComment}
-                          className="mr-2 w-4 h-4 hidden sm:block"
-                        />
+                        <div className="w-6">
+                          <FontAwesomeIcon
+                            icon={selectedGrid === 2 ? fasImage : faImage}
+                            className="mr-2 hidden sm:block"
+                          />
+                        </div>
                         <div className="flex-grow sm:hidden"></div>
                         <div className="sm:hidden mr-1">
                           {ownedCount}
@@ -1013,10 +1017,12 @@ const Profile = ({
                             : "text-gray-500"
                         } hover:text-stred cursor-pointer flex flex-row transition-all items-center`}
                       >
-                        <FontAwesomeIcon
-                          icon={selectedGrid === 3 ? fasHeart : faHeart}
-                          className="mr-2 w-4 h-4 hidden sm:block"
-                        />
+                        <div className="w-6">
+                          <FontAwesomeIcon
+                            icon={selectedGrid === 3 ? fasHeart : faHeart}
+                            className="mr-2 hidden sm:block"
+                          />
+                        </div>
                         <div className="flex-grow sm:hidden"></div>
                         <div className="sm:hidden mr-1">
                           {likedCount}
