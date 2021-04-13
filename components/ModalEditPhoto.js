@@ -5,6 +5,7 @@ import Croppie from "croppie";
 import ClientOnlyPortal from "./ClientOnlyPortal";
 import AppContext from "../context/app-context";
 import CloseButton from "./CloseButton";
+import ScrollableModal from "./ScrollableModal";
 
 export default function Modal({ isOpen, setEditModalOpen }) {
   const context = useContext(AppContext);
@@ -115,153 +116,128 @@ export default function Modal({ isOpen, setEditModalOpen }) {
   return (
     <>
       {isOpen && (
-        <ClientOnlyPortal selector="#modal">
-          <div
-            className="backdrop"
-            onClick={() => {
-              if (!saveInProgress) {
-                setEditModalOpen(false);
-                if (croppie) {
-                  try {
-                    croppie.destroy();
-                  } catch {}
-                }
-                setCroppie(null);
-                setImage("");
+        <ScrollableModal
+          closeModal={() => {
+            if (!saveInProgress) {
+              setEditModalOpen(false);
+              if (croppie) {
+                try {
+                  croppie.destroy();
+                } catch {}
               }
-            }}
-          >
-            <div
-              className="modal"
-              style={{ color: "black" }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <form onSubmit={handleSubmit} ref={formRef}>
-                <CloseButton setEditModalOpen={setEditModalOpen} />
-                <div className="text-3xl border-b-2 pb-2">Edit Photo</div>
-                <div className="mt-4 mb-4">
-                  {image === "" && (
-                    <div>
-                      {/* Your image upload functionality here */}
-                      {/*<ImageUpload image={image} setImage={handleImage} />*/}
+              setCroppie(null);
+              setImage("");
+            }
+          }}
+          contentWidth="30rem"
+        >
+          <div className="p-4">
+            <form onSubmit={handleSubmit} ref={formRef}>
+              <CloseButton setEditModalOpen={setEditModalOpen} />
+              <div className="text-3xl border-b-2 pb-2">Edit Photo</div>
+              <div className="mt-4 mb-4">
+                {image === "" && (
+                  <div>
+                    {/* Your image upload functionality here */}
+                    {/*<ImageUpload image={image} setImage={handleImage} />*/}
 
-                      <div
-                        className="showtime-pink-button text-sm text-center mt-16  px-4 py-3  rounded-full"
-                        style={{ cursor: "pointer" }}
-                        onClick={handleClick}
-                      >
-                        Upload a photo
-                      </div>
-                      <div
-                        className="text-center text-xs mb-16 mt-4"
-                        style={{ fontWeight: 400, color: "#666" }}
-                      >
-                        Accepts JPEG, PNG, and GIF (non-animated)
-                      </div>
-
-                      <input
-                        ref={hiddenFileInput}
-                        onChange={handleChange}
-                        style={{ display: "none" }}
-                        id="profilePic"
-                        type="file"
-                        onChange={onChangePicture}
-                      />
-                    </div>
-                  )}
-
-                  <div style={{ maxWidth: 368 }}>
-                    <div id="image-helper"></div>
-                  </div>
-
-                  {image !== "" && (
                     <div
-                      className="text-sm text-center"
-                      onClick={() => {
-                        if (!saveInProgress) {
-                          if (croppie) {
-                            try {
-                              croppie.destroy();
-                            } catch {}
-                          }
-                          setCroppie(null);
-                          setImage("");
-                        }
-                      }}
-                      style={{ fontWeight: 400, cursor: "pointer" }}
+                      className="showtime-pink-button text-sm text-center mt-16  px-4 py-3  rounded-full"
+                      style={{ cursor: "pointer" }}
+                      onClick={handleClick}
                     >
-                      Clear
+                      Upload a photo
                     </div>
-                  )}
-                </div>
-                <div className="border-t-2 pt-4">
-                  <button
-                    type="submit"
-                    className="showtime-green-button  px-4 py-2  rounded-full float-right"
-                    style={
-                      image === ""
-                        ? {
-                            borderColor: "#35bb5b",
-                            borderWidth: 2,
-                            opacity: 0.6,
-                            cursor: "not-allowed",
-                          }
-                        : { borderColor: "#35bb5b", borderWidth: 2, opacity: 1 }
-                    }
-                    disabled={image === ""}
-                  >
-                    {saveInProgress ? "Saving..." : "Save changes"}
-                  </button>
+                    <div
+                      className="text-center text-xs mb-16 mt-4"
+                      style={{ fontWeight: 400, color: "#666" }}
+                    >
+                      Accepts JPEG, PNG, and GIF (non-animated)
+                    </div>
 
-                  <button
-                    type="button"
-                    className="showtime-black-button-outline  px-4 py-2  rounded-full"
+                    <input
+                      ref={hiddenFileInput}
+                      onChange={handleChange}
+                      style={{ display: "none" }}
+                      id="profilePic"
+                      type="file"
+                      onChange={onChangePicture}
+                    />
+                  </div>
+                )}
+
+                <div className="w-full">
+                  <div id="image-helper"></div>
+                </div>
+
+                {image !== "" && (
+                  <div
+                    className="text-sm text-center"
                     onClick={() => {
                       if (!saveInProgress) {
-                        setEditModalOpen(false);
                         if (croppie) {
                           try {
                             croppie.destroy();
                           } catch {}
                         }
-
                         setCroppie(null);
                         setImage("");
                       }
                     }}
+                    style={{ fontWeight: 400, cursor: "pointer" }}
                   >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </div>
-            <style jsx>{`
-              :global(body) {
-                overflow: hidden;
-              }
-              .backdrop {
-                position: fixed;
-                background-color: rgba(0, 0, 0, 0.7);
-                top: 0;
-                right: 0;
-                bottom: 0;
-                left: 0;
-              }
-              .modal {
-                background-color: white;
-                position: absolute;
-                top: ${context.isMobile ? 2 : 10}%;
-                right: 3%;
-                left: 3%;
-                padding: 1em;
-                border-radius: 7px;
-                max-width: 400px;
-                margin-left: auto;
-                margin-right: auto;
-              }
-            `}</style>
+                    Clear
+                  </div>
+                )}
+              </div>
+              <div className="border-t-2 pt-4">
+                <button
+                  type="submit"
+                  className="showtime-green-button  px-4 py-2  rounded-full float-right"
+                  style={
+                    image === ""
+                      ? {
+                          borderColor: "#35bb5b",
+                          borderWidth: 2,
+                          opacity: 0.6,
+                          cursor: "not-allowed",
+                        }
+                      : { borderColor: "#35bb5b", borderWidth: 2, opacity: 1 }
+                  }
+                  disabled={image === ""}
+                >
+                  {saveInProgress ? (
+                    <div className="flex items-center justify-center">
+                      <div className="loading-card-spinner-small" />
+                    </div>
+                  ) : (
+                    "Save changes"
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  className="showtime-black-button-outline  px-4 py-2  rounded-full"
+                  onClick={() => {
+                    if (!saveInProgress) {
+                      setEditModalOpen(false);
+                      if (croppie) {
+                        try {
+                          croppie.destroy();
+                        } catch {}
+                      }
+
+                      setCroppie(null);
+                      setImage("");
+                    }
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
-        </ClientOnlyPortal>
+        </ScrollableModal>
       )}
     </>
   );
