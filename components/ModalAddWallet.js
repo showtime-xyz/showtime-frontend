@@ -398,7 +398,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
                       .map((item) => item.toLowerCase())
                       .includes(addressDetected?.toLowerCase()) ? null : (
                       <button
-                        className="showtime-pink-button bg-white text-black hover:bg-gray-300 transition-all py-2 px-4 rounded-full"
+                        className="showtime-green-button transition-all py-2 px-4 rounded-full"
                         onClick={() => {
                           signMessage();
                         }}
