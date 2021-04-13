@@ -125,8 +125,8 @@ class SpotlightItem extends React.Component {
                         </div>
                       </div>
                       <div
-                        className={`w-full shadow-lg h-full ${
-                          this.state.videoReady ? null : "invisible"
+                        className={`w-full shadow-lg h-full relative ${
+                          this.state.videoReady ? "" : "invisible"
                         }`}
                       >
                         <ReactPlayer
@@ -155,6 +155,26 @@ class SpotlightItem extends React.Component {
                           playsinline
                           onReady={() => this.setState({ videoReady: true })}
                         />
+                        {this.state.refreshing && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: 0,
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              cursor: "pointer",
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              backgroundColor: "#fffffff0",
+                            }}
+                          >
+                            <div className="loading-card-spinner-small mb-2" />
+                            <div>Refreshing...</div>
+                          </div>
+                        )}
                       </div>
                     </>
                   ) : (
@@ -217,7 +237,6 @@ class SpotlightItem extends React.Component {
                           }}
                         />
                       </div>
-
                       {this.state.refreshing && (
                         <div
                           style={{
