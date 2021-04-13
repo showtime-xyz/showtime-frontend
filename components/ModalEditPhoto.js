@@ -2,7 +2,6 @@ import { useContext, useState, useRef } from "react";
 import mixpanel from "mixpanel-browser";
 import "croppie/croppie.css";
 import Croppie from "croppie";
-import ClientOnlyPortal from "./ClientOnlyPortal";
 import AppContext from "../context/app-context";
 import CloseButton from "./CloseButton";
 import ScrollableModal from "./ScrollableModal";

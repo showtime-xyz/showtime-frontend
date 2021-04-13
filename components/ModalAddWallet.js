@@ -6,7 +6,6 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 //import ethProvider from "eth-provider";
 import { WalletLink } from "walletlink";
 import _ from "lodash";
-import ClientOnlyPortal from "./ClientOnlyPortal";
 import backend from "../lib/backend";
 import AppContext from "../context/app-context";
 import CloseButton from "./CloseButton";
