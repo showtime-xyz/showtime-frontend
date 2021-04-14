@@ -164,7 +164,7 @@ const Activity = () => {
         />
         <meta
           property="og:image"
-          content="https://storage.googleapis.com/showtime-nft-thumbnails/home_og_card.jpg"
+          content="https://storage.googleapis.com/showtime-nft-thumbnails/twitter_card_showtime.jpg"
         />
         <meta name="og:title" content="Showtime" />
 
@@ -176,7 +176,7 @@ const Activity = () => {
         />
         <meta
           name="twitter:image"
-          content="https://storage.googleapis.com/showtime-nft-thumbnails/home_twitter_card_2.jpg"
+          content="https://storage.googleapis.com/showtime-nft-thumbnails/twitter_card_showtime.jpg"
         />
       </Head>
       {typeof document !== "undefined" ? (
@@ -207,7 +207,7 @@ const Activity = () => {
           className="py-12 sm:py-14 px-8 sm:px-10 text-left  "
           style={{
             background:
-              "linear-gradient(130deg, rgba(96,216,255,1) 0%, rgba(69,52,245,0.75) 33%, rgba(184,38,193,0.7) 100%)",
+              "linear-gradient(130deg, rgba(6,216,255,1) 0%, rgba(69,52,245,0.9) 43%, rgba(194,38,173,0.8) 100%)",
             //"linear-gradient(120deg, rgba(30,183,234,1) 0%, rgba(197,139,255,1) 55%, rgba(255,113,187,0.6) 100%)",
           }}
         >

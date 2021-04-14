@@ -79,7 +79,7 @@ const Leaderboard = () => {
         <meta name="og:description" content="Trending art & creators" />
         <meta
           property="og:image"
-          content="https://storage.googleapis.com/showtime-nft-thumbnails/trending_og_card.jpg"
+          content="https://storage.googleapis.com/showtime-nft-thumbnails/twitter_card_showtime.jpg"
         />
         <meta name="og:title" content="Showtime | Trending" />
 
@@ -91,7 +91,7 @@ const Leaderboard = () => {
         <meta name="twitter:description" content="Trending" />
         <meta
           name="twitter:image"
-          content="https://storage.googleapis.com/showtime-nft-thumbnails/trending_twitter_card2.jpg"
+          content="https://storage.googleapis.com/showtime-nft-thumbnails/twitter_card_showtime.jpg"
         />
       </Head>
 
