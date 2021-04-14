@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import Link from "next/link";
 import { truncateWithEllipses } from "../lib/utilities";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import FollowButton from "./FollowButton";
+import AppContext from "../context/app-context";
 
 export default function CreatorSummary({
   name,
@@ -16,6 +17,7 @@ export default function CreatorSummary({
   isCollection,
   profileId,
 }) {
+  const context = useContext(AppContext);
   return (
     <>
       <div>
@@ -60,15 +62,17 @@ export default function CreatorSummary({
             </p>
           </a>
         </Link>
-        {!isCollection && profileId && (
-          <div className="flex items-center w-1/2 md:w-max py-2">
-            <FollowButton
-              item={{ profile_id: profileId, follower_count: 0 }}
-              followerCount={0}
-              setFollowerCount={() => {}}
-            />
-          </div>
-        )}
+        {!isCollection &&
+          profileId &&
+          context.myProfile?.profile_id !== profileId && (
+            <div className="flex items-center w-1/2 md:w-max py-2">
+              <FollowButton
+                item={{ profile_id: profileId, follower_count: 0 }}
+                followerCount={0}
+                setFollowerCount={() => {}}
+              />
+            </div>
+          )}
       </div>
       {bio && <div className="pb-4 pt-2 text-gray-500">{bio}</div>}
       {/* <Link
