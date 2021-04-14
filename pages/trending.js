@@ -65,6 +65,7 @@ const Leaderboard = () => {
     : leaderboardItems.slice(0, LEADERBOARD_LIMIT);
 
   useEffect(() => {
+    //setTrendingCreatorOpen(null);
     const getFeatured = async () => {
       setIsLoadingCards(true);
 
@@ -77,6 +78,8 @@ const Leaderboard = () => {
     };
     getFeatured();
   }, [leaderboardDays]);
+
+  //const [trendingCreatorOpen, setTrendingCreatorOpen] = useState(null);
 
   return (
     <Layout>
@@ -120,14 +123,40 @@ const Leaderboard = () => {
         </CappedWidth>
       </div>
       <CappedWidth>
-        <div className="flex-1 -mt-4 mx-3 lg:w-2/3 lg:pr-6 xl:w-1/2">
+        {/*<div className="flex-1 -mt-4 mx-3 lg:w-2/3 lg:pr-6 xl:w-1/2">
           <div className="bg-white rounded-lg shadow-md px-6 py-6 text-center flex flex-col md:flex-row items-center">
             <div className="flex-1 mb-3 md:mb-0">Select a timeframe</div>
             <div className="flex-1 text-left">[ 24 Hours ]</div>
           </div>
+  </div>*/}
+
+        <div className="mt-12">
+          <GridTabs title="">
+            <GridTab
+              label="24 Hours"
+              isActive={leaderboardDays === 1}
+              onClickTab={() => {
+                setLeaderboardDays(1);
+              }}
+            />
+            <GridTab
+              label="7 Days"
+              isActive={leaderboardDays === 7}
+              onClickTab={() => {
+                setLeaderboardDays(7);
+              }}
+            />
+            <GridTab
+              label="30 Days"
+              isActive={leaderboardDays === 30}
+              onClickTab={() => {
+                setLeaderboardDays(30);
+              }}
+            />
+          </GridTabs>
         </div>
-        <div className="grid lg:grid-cols-3 xl:grid-cols-4 mt-16">
-          <div className="px-3 col-span-2 md:col-span-3">
+        <div className="grid lg:grid-cols-3 xl:grid-cols-4 ">
+          <div className="col-span-2 md:col-span-3">
             {/*<h1 className="text-lg sm:text-3xl mb-6 sm:px-3">Pieces</h1>*/}
             <TokenGridV4 items={featuredItems} isLoading={isLoadingCards} />
           </div>
@@ -139,7 +168,7 @@ const Leaderboard = () => {
             </div>*/}
             <div className="bg-white rounded-lg shadow-md pt-3">
               <div className="border-b border-gray-200 flex items-center pb-2 px-4 flex-row">
-                <div className="my-2 flex-grow">Top Creators</div>
+                <div className="my-2 flex-grow">Creators</div>
                 <div>[Follow All]</div>
               </div>
 
@@ -151,7 +180,12 @@ const Leaderboard = () => {
                 </div>
               ) : (
                 shownLeaderboardItems.map((item, index) => (
-                  <LeaderboardItemV2 item={item} index={index} />
+                  <LeaderboardItemV2
+                    item={item}
+                    index={index}
+                    //setTrendingCreatorOpen={setTrendingCreatorOpen}
+                    //trendingCreatorOpen={trendingCreatorOpen}
+                  />
                 ))
               )}
             </div>

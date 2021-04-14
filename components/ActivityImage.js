@@ -9,6 +9,8 @@ export default function ActivityImage({
   openModal,
   spacingIndex,
   bottomRow,
+  roundAllCorners,
+  totalNumberOfImages,
 }) {
   const aRef = useRef();
   const [imgWidth, setImgWidth] = useState(null);
@@ -50,6 +52,18 @@ export default function ActivityImage({
       
       ${bottomRow && spacingIndex === 0 ? "sm:rounded-bl-lg" : null}
       ${bottomRow && spacingIndex === 1 ? "sm:rounded-br-lg" : null}
+      ${roundAllCorners && index === 0 ? "sm:rounded-tl-lg" : null}
+      ${
+        roundAllCorners &&
+        (index === 1 || totalNumberOfImages === 1 || totalNumberOfImages === 3)
+          ? "sm:rounded-tr-lg"
+          : null
+      }
+      ${
+        roundAllCorners && totalNumberOfImages === 1
+          ? "sm:rounded-bl-lg sm:rounded-br-lg"
+          : null
+      }
       
       `}
       ref={aRef}
