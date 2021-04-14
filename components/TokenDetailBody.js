@@ -458,6 +458,7 @@ const TokenDetailBody = ({
                               setEditModalOpen(false);
                             }
                           }}
+                          isCollection
                         />
                       </div>
                     )
@@ -475,6 +476,7 @@ const TokenDetailBody = ({
                               setEditModalOpen(false);
                             }
                           }}
+                          profileId={item.creator_id}
                         />
                       </div>
                     )}
@@ -483,28 +485,13 @@ const TokenDetailBody = ({
                   <div className="mt-8">
                     <div className="md:text-lg py-4">Owned By</div>
                     <div>
-                      <Link
-                        href="/[profile]"
-                        as={
-                          item.owner_username
-                            ? `/${item.owner_username}`
-                            : `/${item.owner_address}`
-                        }
-                      >
-                        <a
-                          onClick={() => {
-                            if (setEditModalOpen) {
-                              setEditModalOpen(false);
-                            }
-                          }}
-                        >
-                          <UserTimestampCard
-                            name={item.owner_name}
-                            imageUrl={item.owner_img_url}
-                            timestamp={ownershipDetails.token_last_transferred}
-                          />
-                        </a>
-                      </Link>
+                      <UserTimestampCard
+                        item={item}
+                        timestamp={ownershipDetails.token_last_transferred}
+                        closeModalCallback={() => {
+                          setEditModalOpen(false);
+                        }}
+                      />
                     </div>
                   </div>
                 )}
@@ -529,28 +516,13 @@ const TokenDetailBody = ({
                   <div className="mb-8">
                     <div className="md:text-lg py-4">Owned By</div>
                     <div>
-                      <Link
-                        href="/[profile]"
-                        as={
-                          item.owner_username
-                            ? `/${item.owner_username}`
-                            : `/${item.owner_address}`
-                        }
-                      >
-                        <a
-                          onClick={() => {
-                            if (setEditModalOpen) {
-                              setEditModalOpen(false);
-                            }
-                          }}
-                        >
-                          <UserTimestampCard
-                            name={item.owner_name}
-                            imageUrl={item.owner_img_url}
-                            timestamp={ownershipDetails.token_last_transferred}
-                          />
-                        </a>
-                      </Link>
+                      <UserTimestampCard
+                        item={item}
+                        timestamp={ownershipDetails.token_last_transferred}
+                        closeModalCallback={() => {
+                          setEditModalOpen(false);
+                        }}
+                      />
                     </div>
                   </div>
                 )}
