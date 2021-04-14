@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useContext } from "react";
 import Head from "next/head";
 import _ from "lodash";
 import Layout from "../components/layout";
@@ -10,7 +10,6 @@ import useKeyPress from "../hooks/useKeyPress";
 import ActivityFeed from "../components/ActivityFeed";
 import ModalTokenDetail from "../components/ModalTokenDetail";
 import ActivityRecommendedFollows from "../components/ActivityRecommendedFollows";
-//import backend from "../lib/backend";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faComment,

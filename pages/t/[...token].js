@@ -92,12 +92,6 @@ export default function Token({ token }) {
   }, [same_creator_items]);
   */
 
-  function removeTags(str) {
-    if (str === null || str === "") return false;
-    else str = str.toString();
-    return str.replace(/(<([^>]+)>)/gi, " ");
-  }
-
   const [reportModalOpen, setReportModalOpen] = useState(false);
 
   return (

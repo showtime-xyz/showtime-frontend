@@ -8,13 +8,7 @@ const MiniFollowButton = ({ profileId }) => {
   const [isFollowed, setIsFollowed] = useState(null);
 
   useEffect(() => {
-    var it_is_followed = false;
-    _.forEach(myFollows, (follow) => {
-      if (follow?.profile_id === profileId) {
-        it_is_followed = true;
-      }
-    });
-    setIsFollowed(it_is_followed);
+    setIsFollowed(myFollows.map((p) => p.profile_id).includes(profileId));
   }, [myFollows]);
 
   const handleFollow = async () => {

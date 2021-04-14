@@ -12,15 +12,8 @@ import MiniFollowButton from "../components/MiniFollowButton";
 import mixpanel from "mixpanel-browser";
 import ActivityImages from "./ActivityImages";
 
-const LeaderboardItemV2 = ({
-  item,
-  index,
-  //trendingCreatorOpen,
-  //setTrendingCreatorOpen,
-}) => {
+const LeaderboardItemV2 = ({ item, index }) => {
   const context = useContext(AppContext);
-  //const [followerCount, setFollowerCount] = useState();
-  const isMyProfile = context?.myProfile?.profile_id === item?.profile_id;
   const topItems = item?.top_items.slice(0, 4);
   const [currentlyOpenModal, setCurrentlyOpenModal] = useState(null);
   const currentIndex = topItems?.findIndex(
@@ -53,9 +46,8 @@ const LeaderboardItemV2 = ({
     }
   }, [escPress, leftPress, rightPress]);
 
-  const containerRef = useRef();
-
   const [thumnailsOpen, setThumbnailsOpen] = useState(false);
+
   const handleOpenModal = (index) => {
     setCurrentlyOpenModal(topItems[index]);
   };
@@ -77,7 +69,7 @@ const LeaderboardItemV2 = ({
         </>
       ) : null}
       <div key={item.profile_id} className="border-b px-4 py-4">
-        <div className="flex flex-row items-center" ref={containerRef}>
+        <div className="flex flex-row items-center">
           <div className="relative mr-1 w-16 flex-none">
             <Link href="/[profile]" as={`/${item?.username || item.address}`}>
               <a className="cursor-pointer">

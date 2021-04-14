@@ -23,7 +23,6 @@ import ProfileFollowersPill from "../components/ProfileFollowersPill";
 import {
   faHeart as fasHeart,
   faFingerprint,
-  faUser,
   faLink,
   faImage as fasImage,
 } from "@fortawesome/free-solid-svg-icons";
@@ -160,7 +159,6 @@ const Profile = ({
     if (initial_load) {
       //setHasSpotlightItem(featured_nft ? true : false);
       setIsLoadingCards(true);
-      setSpotlightItem(featured_nft);
 
       setCreatedItems([]);
       setOwnedItems([]);
@@ -169,6 +167,8 @@ const Profile = ({
       setCreatedHiddenItems([]);
       setOwnedHiddenItems([]);
       setLikedHiddenItems([]);
+
+      setSpotlightItem(featured_nft);
       //setSpotlightItem();
 
       setSelectedCreatedSortField(default_created_sort_id || 1);
@@ -502,6 +502,8 @@ const Profile = ({
     : likedItems.filter((item) => !likedHiddenItems.includes(item.nft_id))
         .length;
 
+  console.log(createdHiddenItems.length);
+
   return (
     <div
       onClick={() => {
@@ -712,34 +714,23 @@ const Profile = ({
           </div>
 
           <div className="px-6 sm:px-3 mt-8">
+            {/* Use context info for logged in user - reflected immediately after changes */}
             {isMyProfile && context.myProfile?.bio ? (
               <div className="text-gray-500 flex flex-row">
-                {/*<div>
-                  <FontAwesomeIcon
-                    style={{ height: 16, width: 16 }}
-                    className="mr-2 ml-2"
-                    icon={faUser}
-                  />
-                </div>*/}
                 <div className="max-w-prose text-sm sm:text-base">
                   {context.myProfile.bio}
                 </div>
               </div>
             ) : null}
 
+            {/* Else use page info */}
             {!isMyProfile && bio ? (
               <div className="text-gray-500 flex flex-row">
-                {/*<div>
-                  <FontAwesomeIcon
-                    style={{ height: 16, width: 16 }}
-                    className="mr-2 ml-2"
-                    icon={faUser}
-                  />
-                </div>*/}
                 <div className="max-w-prose text-sm sm:text-base">{bio}</div>
               </div>
             ) : null}
 
+            {/* Use context info for logged in user - reflected immediately after changes */}
             {isMyProfile && context?.myProfile?.website_url ? (
               <div
                 className={`text-gray-500 flex text-sm sm:text-base flex-row ${
@@ -780,6 +771,7 @@ const Profile = ({
               </div>
             ) : null}
 
+            {/* Else use page info */}
             {!isMyProfile && website_url ? (
               <div
                 className={`text-gray-500 text-sm sm:text-base flex flex-row ${
