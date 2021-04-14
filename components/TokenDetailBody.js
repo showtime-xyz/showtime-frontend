@@ -458,6 +458,7 @@ const TokenDetailBody = ({
                               setEditModalOpen(false);
                             }
                           }}
+                          isCollection
                         />
                       </div>
                     )
@@ -475,6 +476,7 @@ const TokenDetailBody = ({
                               setEditModalOpen(false);
                             }
                           }}
+                          profileId={item.creator_id}
                         />
                       </div>
                     )}

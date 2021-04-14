@@ -3,6 +3,7 @@ import Link from "next/link";
 import { truncateWithEllipses } from "../lib/utilities";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import FollowButton from "./FollowButton";
 
 export default function CreatorSummary({
   name,
@@ -12,6 +13,8 @@ export default function CreatorSummary({
   closeModal,
   bio,
   collectionSlug,
+  isCollection,
+  profileId,
 }) {
   return (
     <>
@@ -40,24 +43,35 @@ export default function CreatorSummary({
           </a>
         </Link>
       </div>
-      <Link
-        href={collectionSlug ? "/c/[collection]" : "/[profile]"}
-        as={
-          collectionSlug
-            ? `/c/${collectionSlug}`
-            : username
-            ? `/${username}`
-            : `/${address}`
-        }
-      >
-        <a onClick={closeModal}>
-          <p className="text-xl md:text-3xl py-4 inline-block hover:text-stpink ">
-            {truncateWithEllipses(name, 26)}
-          </p>
-        </a>
-      </Link>
-      {bio && <div className="pb-4 text-gray-500">{bio}</div>}
-      <Link
+      <div class="flex flex-col md:flex-row md:items-center flex-wrap">
+        <Link
+          href={collectionSlug ? "/c/[collection]" : "/[profile]"}
+          as={
+            collectionSlug
+              ? `/c/${collectionSlug}`
+              : username
+              ? `/${username}`
+              : `/${address}`
+          }
+        >
+          <a onClick={closeModal}>
+            <p className="text-xl md:text-3xl py-3 inline-block hover:text-stpink mr-3">
+              {truncateWithEllipses(name, 24)}
+            </p>
+          </a>
+        </Link>
+        {!isCollection && profileId && (
+          <div className="flex items-center w-1/2 md:w-max py-2">
+            <FollowButton
+              item={{ profile_id: profileId, follower_count: 0 }}
+              followerCount={0}
+              setFollowerCount={() => {}}
+            />
+          </div>
+        )}
+      </div>
+      {bio && <div className="pb-4 pt-2 text-gray-500">{bio}</div>}
+      {/* <Link
         href={collectionSlug ? "/c/[collection]" : "/[profile]"}
         as={
           collectionSlug
@@ -82,7 +96,7 @@ export default function CreatorSummary({
             />
           </div>
         </a>
-      </Link>
+      </Link> */}
     </>
   );
 }
