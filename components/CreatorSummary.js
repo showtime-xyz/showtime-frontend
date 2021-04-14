@@ -55,7 +55,7 @@ export default function CreatorSummary({
           }
         >
           <a onClick={closeModal}>
-            <p className="text-xl md:text-3xl py-3 inline-block hover:text-stpink mr-3">
+            <p className="text-xl md:text-3xl py-2 inline-block hover:text-stpink mr-3">
               {truncateWithEllipses(name, 24)}
             </p>
           </a>
