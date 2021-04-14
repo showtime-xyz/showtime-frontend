@@ -184,6 +184,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
           router.push(`/${redirect}`);
           setWalletModalOpen(false);
           setStep(1);
+          mixpanel.track("User added new Wallet");
         });
     } catch (err) {
       //throw new Error("You need to sign the message to be able to log in.");

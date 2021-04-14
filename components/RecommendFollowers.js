@@ -8,44 +8,8 @@ import {
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import AppContext from "../context/app-context";
-import ClientOnlyPortal from "./ClientOnlyPortal";
 import RecommendedFollowItem from "./RecommendedFollowItem";
-
-const Backdrop = styled.div`
-  z-index: 1;
-  position: fixed;
-  background-color: rgba(0, 0, 0, 0.7);
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-`;
-
-const Modal = styled.div`
-  background-color: white;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 16px;
-  left: 16px;
-  padding: 1em;
-  border-radius: 8px;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: scroll;
-  margin-left: auto;
-  margin-right: auto;
-  color: black;
-  @media screen and (max-width: 600px) {
-    left: 3%;
-    right: 3%;
-    top: 2%;
-    bottom: 2%;
-    transform: translateY(0%);
-    max-height: 100vh;
-    //border-radius: 0px;
-  }
-`;
+import ScrollableModal from "./ScrollableModal";
 
 const Title = styled.h6`
   font-size: 24px;
@@ -154,96 +118,92 @@ const RecommendFollowers = ({
   if (variant === RecommendFollowersVariants.ONBOARDING) {
     return (
       recommendFollowersModalOpen && (
-        <ClientOnlyPortal selector="#modal">
-          <Backdrop onClick={() => closeModal()}>
-            <Modal onClick={(e) => e.stopPropagation()}>
-              <CloseIconWrapper
-                onClick={() => {
+        <ScrollableModal closeModal={closeModal} contentWidth="37rem">
+          <div className="p-4">
+            <CloseIconWrapper
+              onClick={() => {
+                mixpanel.track("Close Recommended Followers modal - x button");
+                closeModal();
+              }}
+            >
+              <CloseIcon>
+                <FontAwesomeIcon icon={faTimes} />
+              </CloseIcon>
+            </CloseIconWrapper>
+            <Title>
+              {context.isMobile ? "Suggested for you" : "Suggested for you"}
+            </Title>
+            <GraySeparator />
+
+            <div
+              className={`text-center text-sm sm:text-base mx-auto px-5 py-1 sm:px-6 sm:py-2 my-4 flex items-center w-max border-2 rounded-full ${
+                followAllClicked
+                  ? "bg-white"
+                  : "hover:text-stpink text-white border-stpink bg-stpink hover:bg-white transition-all cursor-pointer"
+              }  `}
+              onClick={() => {
+                if (!followAllClicked) {
                   mixpanel.track(
-                    "Close Recommended Followers modal - x button"
+                    "Clicked Follow All on Recommended Followers modal"
                   );
-                  closeModal();
-                }}
-              >
-                <CloseIcon>
-                  <FontAwesomeIcon icon={faTimes} />
-                </CloseIcon>
-              </CloseIconWrapper>
-              <Title>
-                {context.isMobile ? "Suggested for you" : "Suggested for you"}
-              </Title>
-              <GraySeparator />
-
-              <div
-                className={`text-center text-sm sm:text-base mx-auto px-5 py-1 sm:px-6 sm:py-2 my-4 flex items-center w-max border-2 rounded-full ${
-                  followAllClicked
-                    ? "bg-white"
-                    : "hover:text-stpink text-white border-stpink bg-stpink hover:bg-white transition-all cursor-pointer"
-                }  `}
-                onClick={() => {
-                  if (!followAllClicked) {
-                    mixpanel.track(
-                      "Clicked Follow All on Recommended Followers modal"
-                    );
-                    handleFollowAll();
-                  }
-                }}
-              >
-                {!followAllClicked ? (
-                  <FontAwesomeIcon
-                    style={{ height: 14, marginRight: 8 }}
-                    icon={faPlus}
-                  />
-                ) : null}
-                {followAllClicked ? "Following All" : "Follow All"}
-              </div>
-
-              {filteredItems.map((item, index) => (
-                <RecommendedFollowItem
-                  key={item.profile_id}
-                  item={item}
-                  index={index}
-                  closeModal={() => closeModal()}
+                  handleFollowAll();
+                }
+              }}
+            >
+              {!followAllClicked ? (
+                <FontAwesomeIcon
+                  style={{ height: 14, marginRight: 8 }}
+                  icon={faPlus}
                 />
-              ))}
+              ) : null}
+              {followAllClicked ? "Following All" : "Follow All"}
+            </div>
 
-              {!showAllItems && removeAlreadyFollowedItems.length > 3 && (
-                <>
-                  <div
-                    className="text-center mx-auto px-6 py-2 my-4 flex items-center w-max border-2 rounded-full hover:text-stpink hover:border-stpink transition-all bg-white   cursor-pointer"
-                    onClick={() => {
-                      mixpanel.track(
-                        "Clicked Show More on Recommended Followers modal"
-                      );
-                      setShowAllItems(true);
-                    }}
-                  >
-                    {"Show More"}
-                    <FontAwesomeIcon
-                      style={{ height: 14, marginLeft: 8 }}
-                      icon={faArrowDown}
-                    />
-                  </div>
-                  <GraySeparator />
-                </>
-              )}
+            {filteredItems.map((item, index) => (
+              <RecommendedFollowItem
+                key={item.profile_id}
+                item={item}
+                index={index}
+                closeModal={() => closeModal()}
+              />
+            ))}
 
-              <div
-                className={`${
-                  context.isMobile ? "mx-auto" : "float-right"
-                } px-6 py-2 mt-4 flex items-center w-max border-2 border-gray-300 hover:bg-white hover:text-green-500 transition-all rounded-full cursor-pointer showtime-green-button`}
-                onClick={() => {
-                  mixpanel.track(
-                    "Close Recommended Followers modal - bottom button"
-                  );
-                  closeModal();
-                }}
-              >
-                {"All Done"}
-              </div>
-            </Modal>
-          </Backdrop>
-        </ClientOnlyPortal>
+            {!showAllItems && removeAlreadyFollowedItems.length > 3 && (
+              <>
+                <div
+                  className="text-center mx-auto px-6 py-2 my-4 flex items-center w-max border-2 rounded-full hover:text-stpink hover:border-stpink transition-all bg-white   cursor-pointer"
+                  onClick={() => {
+                    mixpanel.track(
+                      "Clicked Show More on Recommended Followers modal"
+                    );
+                    setShowAllItems(true);
+                  }}
+                >
+                  {"Show More"}
+                  <FontAwesomeIcon
+                    style={{ height: 14, marginLeft: 8 }}
+                    icon={faArrowDown}
+                  />
+                </div>
+                <GraySeparator />
+              </>
+            )}
+
+            <div
+              className={`${
+                context.isMobile ? "mx-auto" : "float-right"
+              } px-6 py-2 mt-4 flex items-center w-max border-2 border-gray-300 hover:bg-white hover:text-green-500 transition-all rounded-full cursor-pointer showtime-green-button`}
+              onClick={() => {
+                mixpanel.track(
+                  "Close Recommended Followers modal - bottom button"
+                );
+                closeModal();
+              }}
+            >
+              {"All Done"}
+            </div>
+          </div>
+        </ScrollableModal>
       )
     );
   }
