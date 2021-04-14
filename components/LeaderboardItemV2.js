@@ -9,7 +9,7 @@ import { formatAddressShort } from "../lib/utilities";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThLarge } from "@fortawesome/free-solid-svg-icons";
 import MiniFollowButton from "../components/MiniFollowButton";
-
+import mixpanel from "mixpanel-browser";
 import ActivityImages from "./ActivityImages";
 
 const LeaderboardItemV2 = ({

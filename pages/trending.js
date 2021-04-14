@@ -119,7 +119,7 @@ const Leaderboard = () => {
                   setShowAllLeaderboardItems(true);
                 }}
               >
-                <div className="mr-2 ">Show More</div>
+                <div className="mr-2 text-sm">Show More</div>
                 <div>
                   <FontAwesomeIcon style={{ height: 14 }} icon={faArrowDown} />
                 </div>
@@ -199,14 +199,14 @@ const Leaderboard = () => {
             />
           </GridTabs>
         </div>
-        <div className="lg:grid lg:grid-cols-3 xl:grid-cols-4 ">
+        <div className="md:grid md:grid-cols-3 xl:grid-cols-4 ">
           {/* Start Mobile  */}
           <div className="block sm:hidden">
             {leaderboardItems && <CreatorsList />}
           </div>
           {/* END Mobile */}
 
-          <div className="col-span-2 md:col-span-3">
+          <div className="col-span-2 md:col-span-2 xl:col-span-3">
             <TokenGridV4 items={featuredItems} isLoading={isLoadingCards} />
           </div>
           {/* Start Desktop right column */}
