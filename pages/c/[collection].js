@@ -230,7 +230,7 @@ export default function Collection({
         />
       </Head>
 
-      <div className="py-12 sm:py-14 px-8 sm:px-10 text-left  bg-gradient-to-r from-green-400 to-blue-500">
+      <div className="py-12 sm:py-14 px-8 sm:px-10 text-left  bg-gradient-to-r from-green-400 to-blue-400">
         <CappedWidth>
           <div className="flex flex-row mx-3 text-white">
             <div className="flex-1">

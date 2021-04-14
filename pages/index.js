@@ -203,7 +203,14 @@ const Activity = () => {
       ) : null}
 
       {context.user === null ? (
-        <div className="py-12 sm:py-14 px-8 sm:px-10 text-left  bg-gradient-to-r from-green-400 to-blue-500">
+        <div
+          className="py-12 sm:py-14 px-8 sm:px-10 text-left  "
+          style={{
+            background:
+              "linear-gradient(130deg, rgba(96,216,255,1) 0%, rgba(69,52,245,0.75) 33%, rgba(184,38,193,0.7) 100%)",
+            //"linear-gradient(120deg, rgba(30,183,234,1) 0%, rgba(197,139,255,1) 55%, rgba(255,113,187,0.6) 100%)",
+          }}
+        >
           <CappedWidth>
             <div className="flex flex-row mx-3 text-white">
               <div className="flex-1">
@@ -251,7 +258,7 @@ const Activity = () => {
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid md:grid-cols-3 xl:grid-cols-4">
             <div
               className={`px-3 col-span-2 md:col-span-1 mb-4 md:mb-0 ${
                 showFiltersMobile ? null : "hidden"
@@ -341,7 +348,7 @@ const Activity = () => {
               {context.user === undefined ? null : context.user === null ? (
                 <div className="flex flex-1 items-center justify-center mb-6 sm:px-3">
                   <div className="text-gray-400 shadow-md bg-white sm:rounded-lg w-full px-4 py-6 text-center">
-                    <span className="">News feed preview.</span>{" "}
+                    <span className="">News Feed preview.</span>{" "}
                     <span
                       className="cursor-pointer text-gray-800 hover:text-stpink"
                       onClick={() => context.setLoginModalOpen(true)}

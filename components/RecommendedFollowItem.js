@@ -33,7 +33,7 @@ const RecommendedFollowHeader = styled.div`
   }
 
   padding-right: 16px;
-  padding-left: 24px;
+  //padding-left: 24px;
   padding-top: 16px;
   padding-bottom: 16px;
 `;
@@ -116,7 +116,7 @@ const NFTTiles = styled.div`
   @media screen and (max-width: 420px) {
     justify-content: space-between;
   }
-  margin-left: 24px;
+  //margin-left: 24px;
   margin-bottom: 16px;
 `;
 
@@ -202,6 +202,7 @@ const RecommendedFollowItem = ({
   liteVersion,
   removeRecommendation,
   followCallback = () => {},
+  leftPadding,
 }) => {
   const context = useContext(AppContext);
   const [followerCount, setFollowerCount] = useState();
@@ -260,7 +261,7 @@ const RecommendedFollowItem = ({
           />
         </>
       ) : null}
-      <RecommendedFollowHeader>
+      <RecommendedFollowHeader style={{ paddingLeft: leftPadding }}>
         <ProfileSection>
           <Link href="/[profile]" as={`/${item?.username || item.address}`}>
             <a
@@ -332,20 +333,19 @@ const RecommendedFollowItem = ({
           )}
         </div>
       </RecommendedFollowHeader>
-
-      {context.gridWidth <= 420 ? (
-        <>
+      <div style={{ paddingLeft: leftPadding }}>
+        {context.gridWidth <= 420 ? (
           <Tiles
             topItems={topItems.slice(0, 3)}
             setCurrentlyOpenModal={setCurrentlyOpenModal}
           />
-        </>
-      ) : (
-        <Tiles
-          topItems={topItems}
-          setCurrentlyOpenModal={setCurrentlyOpenModal}
-        />
-      )}
+        ) : (
+          <Tiles
+            topItems={topItems}
+            setCurrentlyOpenModal={setCurrentlyOpenModal}
+          />
+        )}
+      </div>
     </RecommendedFollowRowItem>
   );
 };

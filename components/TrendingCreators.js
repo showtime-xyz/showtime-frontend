@@ -17,7 +17,7 @@ const TrendingCreators = ({
           <div className="my-2 flex-grow">
             <span className="sm:hidden">Trending </span>Creators
           </div>
-          {!isLoading && (
+          {/*!isLoading && (
             <div>
               <div className="bg-white text-black border border-gray-400 rounded-full py-2 px-4 text-sm flex flex-row hover:opacity-70 transition-all cursor-pointer">
                 <div className="mr-1">
@@ -26,7 +26,7 @@ const TrendingCreators = ({
                 <div>Follow All</div>
               </div>
             </div>
-          )}
+          )*/}
         </div>
 
         {isLoading ? (

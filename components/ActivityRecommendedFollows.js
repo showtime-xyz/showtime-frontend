@@ -159,9 +159,8 @@ export default function ActivityRecommendedFollows() {
               )*/}
       </div>
       {recommendedFollows &&
-        recommendedFollows
-          .slice(0, 3)
-          .map((recFollow) => (
+        recommendedFollows.slice(0, 3).map((recFollow) => (
+          <div className="ml-0">
             <RecommendedFollowItem
               item={recFollow}
               liteVersion
@@ -169,8 +168,10 @@ export default function ActivityRecommendedFollows() {
               followCallback={context.user ? followCallback : () => {}}
               closeModal={() => {}}
               key={recFollow?.profile_id}
+              leftPadding={24}
             />
-          ))}
+          </div>
+        ))}
       {!loading && recommendedFollows && recommendedFollows.length === 0 && (
         <div className="flex flex-col items-center justify-center my-8">
           <div className="text-gray-400">No more recommendations.</div>

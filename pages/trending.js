@@ -95,7 +95,13 @@ const Leaderboard = () => {
         />
       </Head>
 
-      <div className="py-12 sm:py-14 px-8 sm:px-10 text-left  bg-gradient-to-r from-green-400 to-blue-500">
+      <div
+        className="py-12 sm:py-14 px-8 sm:px-10 text-left "
+        style={{
+          background:
+            "linear-gradient(133deg, rgba(184,38,193,0.7539390756302521) 0%, rgba(67,142,223,0.9) 50%, rgba(67,186,193,0.8) 100%)",
+        }}
+      >
         <CappedWidth>
           <div className="flex flex-row mx-3 text-white">
             <div className="flex-1">
