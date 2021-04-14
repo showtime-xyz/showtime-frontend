@@ -19,8 +19,8 @@ const LeaderboardItemRow = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding-top: 24px;
-  padding-bottom: 24px;
+  padding-top: 16px;
+  padding-bottom: 16px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.11);
   @media screen and (max-width: 1230px) {
     flex-direction: column;
@@ -280,6 +280,7 @@ const LeaderboardItem = ({ item, index }) => {
                       item={item}
                       followerCount={followerCount}
                       setFollowerCount={setFollowerCount}
+                      black
                     />
                     <GraySeparator />
                   </FollowButtonWrapper>

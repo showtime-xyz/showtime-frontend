@@ -63,21 +63,21 @@ const Header = () => {
               className="hidden md:flex mr-6 items-center"
               style={{ fontWeight: 400 }}
             >
-              <Link href="/c/[collection]" as="/c/all">
+              <Link href="/c/[collection]" as="/c/spotlights">
                 <a
                   className="showtime-header-link ml-6 text-sm md:text-base"
                   onClick={() => {
-                    mixpanel.track("Explore button click");
+                    mixpanel.track("Discover button click");
                   }}
                 >
                   Discover
                 </a>
               </Link>
-              <Link href="/leaderboard">
+              <Link href="/trending">
                 <a
                   className="showtime-header-link ml-6 text-sm md:text-base"
                   onClick={() => {
-                    mixpanel.track("Leaderboard button click");
+                    mixpanel.track("Trending button click");
                   }}
                 >
                   Trending
@@ -165,21 +165,21 @@ const Header = () => {
           {context.isMobile && (
             <div className="flex md:hidden justify-between items-center pb-1 px-3">
               <div>
-                <Link href="/c/[collection]" as="/c/all">
+                <Link href="/c/[collection]" as="/c/spotlights">
                   <a
                     className="showtime-header-link mr-5 text-sm md:text-base"
                     onClick={() => {
-                      mixpanel.track("Explore button click");
+                      mixpanel.track("Discover button click");
                     }}
                   >
                     Discover
                   </a>
                 </Link>
-                <Link href="/leaderboard">
+                <Link href="/trending">
                   <a
                     className="showtime-header-link mr-5 text-sm md:text-base"
                     onClick={() => {
-                      mixpanel.track("Leaderboard button click");
+                      mixpanel.track("Trending button click");
                     }}
                   >
                     Trending

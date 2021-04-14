@@ -1,7 +1,7 @@
 import React from "react";
 import ActivityImage from "./ActivityImage";
 
-export default function ActivityImages({ nfts, openModal }) {
+export default function ActivityImages({ nfts, openModal, roundAllCorners }) {
   const count = nfts?.length;
   return (
     <>
@@ -16,6 +16,8 @@ export default function ActivityImages({ nfts, openModal }) {
               openModal={openModal}
               spacingIndex={index}
               bottomRow={count === 2 ? true : false}
+              roundAllCorners={roundAllCorners}
+              totalNumberOfImages={count}
             />
           ))}
         </div>
@@ -30,6 +32,8 @@ export default function ActivityImages({ nfts, openModal }) {
             numberOfImages={1}
             openModal={openModal}
             spacingIndex={0}
+            roundAllCorners={roundAllCorners}
+            totalNumberOfImages={count}
           />
           <div className="flex mt-1 w-full ">
             {[nfts[1], nfts[2]].map((nft, index) => (
@@ -41,6 +45,8 @@ export default function ActivityImages({ nfts, openModal }) {
                 openModal={openModal}
                 spacingIndex={index}
                 bottomRow
+                roundAllCorners={roundAllCorners}
+                totalNumberOfImages={count}
               />
             ))}
           </div>
@@ -58,6 +64,8 @@ export default function ActivityImages({ nfts, openModal }) {
                 numberOfImages={2}
                 openModal={openModal}
                 spacingIndex={index}
+                roundAllCorners={roundAllCorners}
+                totalNumberOfImages={count}
               />
             ))}
           </div>
@@ -71,6 +79,8 @@ export default function ActivityImages({ nfts, openModal }) {
                 openModal={openModal}
                 spacingIndex={index}
                 bottomRow
+                roundAllCorners={roundAllCorners}
+                totalNumberOfImages={count}
               />
             ))}
           </div>

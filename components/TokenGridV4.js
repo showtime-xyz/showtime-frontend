@@ -24,6 +24,7 @@ const TokenGridV4 = ({
   refreshItems,
   detailsModalCloseOnKeyChange,
   changeSpotlightItem,
+  extraColumn,
 }) => {
   const context = useContext(AppContext);
   const [itemsList, setItemsList] = useState([]);
@@ -48,6 +49,8 @@ const TokenGridV4 = ({
   const leftPress = useKeyPress("ArrowLeft");
   const rightPress = useKeyPress("ArrowRight");
   const escPress = useKeyPress("Escape");
+
+  const itemsToLoad = extraColumn ? 12 : 9;
 
   useEffect(() => {
     if (escPress) {
@@ -154,16 +157,16 @@ const TokenGridV4 = ({
     if (context.isMobile) {
       setItemsShowing(4);
     } else {
-      setItemsShowing(9);
+      setItemsShowing(itemsToLoad);
     }
   }, [context.isMobile]);
 
   const fetchMoreData = () => {
-    if (itemsShowing + 9 > itemsList.length) {
+    if (itemsShowing + itemsToLoad > itemsList.length) {
       setHasMore(false);
       onFinish ? onFinish() : null;
     }
-    setItemsShowing(itemsShowing + 9);
+    setItemsShowing(itemsShowing + itemsToLoad);
   };
 
   const currentIndex = deduplicatedItemsList.findIndex(
@@ -207,7 +210,13 @@ const TokenGridV4 = ({
             <div className="loading-card-spinner" />
           </div>
         ) : (
-          <div className={`grid lg:grid-cols-2 xl:grid-cols-3 overflow-hidden`}>
+          <div
+            className={`grid ${
+              extraColumn
+                ? "md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                : "lg:grid-cols-2 xl:grid-cols-3"
+            }  overflow-hidden`}
+          >
             {deduplicatedItemsList.slice(0, itemsShowing).map((item) => (
               <TokenCard
                 key={item.nft_id}

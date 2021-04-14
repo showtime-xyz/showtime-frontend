@@ -5,7 +5,7 @@ import AppContext from "../context/app-context";
 const MiniFollowButton = ({ profileId }) => {
   const context = useContext(AppContext);
   const myFollows = context?.myFollows || [];
-  const [isFollowed, setIsFollowed] = useState(false);
+  const [isFollowed, setIsFollowed] = useState(null);
 
   useEffect(() => {
     var it_is_followed = false;
@@ -46,7 +46,7 @@ const MiniFollowButton = ({ profileId }) => {
     context.setLoginModalOpen(true);
   };
 
-  return !isFollowed ? (
+  return isFollowed === null ? null : !isFollowed ? (
     <div
       onClick={
         context.user
