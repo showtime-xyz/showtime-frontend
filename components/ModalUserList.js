@@ -19,7 +19,7 @@ export default function ModalUserList({
         <ClientOnlyPortal selector="#modal">
           <div className="backdrop" onClick={closeModal}>
             <div
-              className="modal flex flex-col rounded-lg"
+              className="modal flex flex-col rounded-lg sm:rounded-2xl"
               style={{ color: "black" }}
               onClick={(e) => e.stopPropagation()}
             >
