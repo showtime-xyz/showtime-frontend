@@ -49,9 +49,10 @@ export default class MyDocument extends Document {
           {this.props.styleTags}
         </Head>
         <body>
-          <Main />
           {/* Here we will mount our modal portal */}
           <div id="modal" />
+          <Main />
+
           <NextScript />
         </body>
       </Html>
