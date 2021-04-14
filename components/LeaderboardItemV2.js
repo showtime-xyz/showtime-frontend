@@ -78,7 +78,7 @@ const LeaderboardItemV2 = ({
       ) : null}
       <div key={item.profile_id} className="border-b px-4 py-4">
         <div className="flex flex-row items-center" ref={containerRef}>
-          <div className="relative mr-1 w-16">
+          <div className="relative mr-1 w-16 flex-none">
             <Link href="/[profile]" as={`/${item?.username || item.address}`}>
               <a className="cursor-pointer">
                 <img
@@ -101,7 +101,7 @@ const LeaderboardItemV2 = ({
 
                 color: "#010101",
                 bottom: 0,
-                right: 4,
+                right: 8,
               }}
             >
               {index + 1}

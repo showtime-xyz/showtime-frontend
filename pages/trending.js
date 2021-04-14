@@ -1,21 +1,20 @@
 import { useState, useEffect, useContext } from "react";
-import styled from "styled-components";
 import Head from "next/head";
-import Link from "next/link";
+//import Link from "next/link";
 import _ from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDown, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowDown, faPlus } from "@fortawesome/free-solid-svg-icons";
 import Layout from "../components/layout";
 import LoadingSpinner from "../components/LoadingSpinner";
-import LeaderboardItem from "../components/LeaderboardItem";
+//import LeaderboardItem from "../components/LeaderboardItem";
 import backend from "../lib/backend";
 import AppContext from "../context/app-context";
 import mixpanel from "mixpanel-browser";
 import { GridTab, GridTabs } from "../components/GridTabs";
 import CappedWidth from "../components/CappedWidth";
 import TokenGridV4 from "../components/TokenGridV4";
-import { formatAddressShort } from "../lib/utilities";
-import FollowButton from "../components/FollowButton";
+//import { formatAddressShort } from "../lib/utilities";
+//import FollowButton from "../components/FollowButton";
 import LeaderboardItemV2 from "../components/LeaderboardItemV2";
 
 // how many leaders to show on first load
@@ -65,7 +64,6 @@ const Leaderboard = () => {
     : leaderboardItems.slice(0, LEADERBOARD_LIMIT);
 
   useEffect(() => {
-    //setTrendingCreatorOpen(null);
     const getFeatured = async () => {
       setIsLoadingCards(true);
 
@@ -79,7 +77,60 @@ const Leaderboard = () => {
     getFeatured();
   }, [leaderboardDays]);
 
-  //const [trendingCreatorOpen, setTrendingCreatorOpen] = useState(null);
+  const CreatorsList = () => {
+    return (
+      <>
+        <div className="bg-white sm:rounded-lg shadow-md pt-3 ">
+          <div className="border-b border-gray-200 flex items-center pb-2 pl-4 pr-2 flex-row">
+            <div className="my-2 flex-grow">
+              <span className="sm:hidden">Trending </span>Creators
+            </div>
+            {!isLoading && (
+              <div>
+                <div className="bg-white text-black border border-gray-400 rounded-full py-2 px-4 text-sm flex flex-row hover:opacity-70 transition-all cursor-pointer">
+                  <div className="mr-1">
+                    <FontAwesomeIcon icon={faPlus} />
+                  </div>
+                  <div>Follow All</div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {isLoading ? (
+            <div className="p-6 mx-auto flex flex-row">
+              <div className="flex-grow"></div>
+              <LoadingSpinner />
+              <div className="flex-grow"></div>
+            </div>
+          ) : (
+            shownLeaderboardItems.map((item, index) => (
+              <LeaderboardItemV2 item={item} index={index} />
+            ))
+          )}
+        </div>
+
+        {!isLoading && (
+          <div className="flex flex-row items-center my-2 justify-center pb-10 sm:pb-0">
+            {!showAllLeaderboardItems ? (
+              <div
+                className="bg-white text-center px-6 py-2 mt-2 flex items-center w-max shadow-md rounded-full hover:text-stpink  cursor-pointer"
+                onClick={() => {
+                  setShowAllLeaderboardItems(true);
+                }}
+              >
+                <div className="mr-2 ">Show More</div>
+                <div>
+                  <FontAwesomeIcon style={{ height: 14 }} icon={faArrowDown} />
+                </div>
+              </div>
+            ) : null}
+          </div>
+        )}
+        <div className="sm:hidden mx-4 my-6">Trending Art</div>
+      </>
+    );
+  };
 
   return (
     <Layout>
@@ -123,13 +174,6 @@ const Leaderboard = () => {
         </CappedWidth>
       </div>
       <CappedWidth>
-        {/*<div className="flex-1 -mt-4 mx-3 lg:w-2/3 lg:pr-6 xl:w-1/2">
-          <div className="bg-white rounded-lg shadow-md px-6 py-6 text-center flex flex-col md:flex-row items-center">
-            <div className="flex-1 mb-3 md:mb-0">Select a timeframe</div>
-            <div className="flex-1 text-left">[ 24 Hours ]</div>
-          </div>
-  </div>*/}
-
         <div className="mt-12">
           <GridTabs title="">
             <GridTab
@@ -155,66 +199,21 @@ const Leaderboard = () => {
             />
           </GridTabs>
         </div>
-        <div className="grid lg:grid-cols-3 xl:grid-cols-4 ">
+        <div className="lg:grid lg:grid-cols-3 xl:grid-cols-4 ">
+          {/* Start Mobile  */}
+          <div className="block sm:hidden">
+            {leaderboardItems && <CreatorsList />}
+          </div>
+          {/* END Mobile */}
+
           <div className="col-span-2 md:col-span-3">
-            {/*<h1 className="text-lg sm:text-3xl mb-6 sm:px-3">Pieces</h1>*/}
             <TokenGridV4 items={featuredItems} isLoading={isLoadingCards} />
           </div>
-          <div className="sm:px-3">
-            {/*<div className="flex flex-row">
-              <h1 className="text-lg sm:text-3xl mb-6">Creators</h1>
-              <div className="flex-grow"></div>
-              <div>[Follow All]</div>
-            </div>*/}
-            <div className="bg-white rounded-lg shadow-md pt-3">
-              <div className="border-b border-gray-200 flex items-center pb-2 pl-4 pr-2 flex-row">
-                <div className="my-2 flex-grow">Creators</div>
-                <div>
-                  <div className="bg-stpink text-white rounded-full py-2 px-4 text-sm">
-                    Follow All [TBD]
-                  </div>
-                </div>
-              </div>
-
-              {isLoading ? (
-                <div className="p-6 mx-auto flex flex-row">
-                  <div className="flex-grow"></div>
-                  <LoadingSpinner />
-                  <div className="flex-grow"></div>
-                </div>
-              ) : (
-                shownLeaderboardItems.map((item, index) => (
-                  <LeaderboardItemV2
-                    item={item}
-                    index={index}
-                    //setTrendingCreatorOpen={setTrendingCreatorOpen}
-                    //trendingCreatorOpen={trendingCreatorOpen}
-                  />
-                ))
-              )}
-            </div>
-
-            {!isLoading && (
-              <div className="flex flex-row items-center my-2 justify-center">
-                {!showAllLeaderboardItems ? (
-                  <div
-                    className="bg-white text-center px-6 py-2 mt-2 flex items-center w-max shadow-md rounded-full hover:text-stpink  cursor-pointer"
-                    onClick={() => {
-                      setShowAllLeaderboardItems(true);
-                    }}
-                  >
-                    <div className="mr-2 ">Show More</div>
-                    <div>
-                      <FontAwesomeIcon
-                        style={{ height: 14 }}
-                        icon={faArrowDown}
-                      />
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-            )}
+          {/* Start Desktop right column */}
+          <div className="hidden sm:block sm:px-3">
+            {leaderboardItems && <CreatorsList />}
           </div>
+          {/* END Desktop right column */}
         </div>
 
         {/*<div className="mb-4 mt-8 sm:mt-16 text-left px-5 sm:px-3 flex flex-row items-center">
