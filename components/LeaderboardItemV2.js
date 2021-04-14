@@ -125,35 +125,15 @@ const LeaderboardItemV2 = ({
               onClick={() => {
                 setThumbnailsOpen(!thumnailsOpen);
               }}
-              className={`rounded-full border  ${
+              className={`cursor-pointer rounded-full border  ${
                 thumnailsOpen
                   ? "border-stpink text-stpink"
-                  : "border-gray-400 text-gray-700"
+                  : "border-gray-400 text-gray-700 hover:opacity-80 "
               } text-center px-2 py-1`}
             >
               <FontAwesomeIcon icon={faThLarge} />
             </div>
           </div>
-          {/*<div className="flex">
-            {!isMyProfile && (
-              <FollowButton
-                item={item}
-                followerCount={followerCount}
-                setFollowerCount={setFollowerCount}
-                hideIfFollowing
-              />
-            )}
-            </div>*/}
-          {/*<div>
-            <div
-              onClick={() => {
-                setThumbnailsOpen(!thumnailsOpen);
-              }}
-              className="rounded-full border border-gray-400 text-center px-2 py-1"
-            >
-              <FontAwesomeIcon icon={faImage} />
-            </div>
-            </div>*/}
         </div>
 
         {topItems?.length > 0 && thumnailsOpen ? (

@@ -167,9 +167,13 @@ const Leaderboard = () => {
               <div>[Follow All]</div>
             </div>*/}
             <div className="bg-white rounded-lg shadow-md pt-3">
-              <div className="border-b border-gray-200 flex items-center pb-2 px-4 flex-row">
+              <div className="border-b border-gray-200 flex items-center pb-2 pl-4 pr-2 flex-row">
                 <div className="my-2 flex-grow">Creators</div>
-                <div>[Follow All]</div>
+                <div>
+                  <div className="bg-stpink text-white rounded-full py-2 px-4 text-sm">
+                    Follow All [TBD]
+                  </div>
+                </div>
               </div>
 
               {isLoading ? (
