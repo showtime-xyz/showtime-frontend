@@ -7,9 +7,50 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 
-const LikeButton = ({ item, handleLike, handleUnlike }) => {
+const LikeButton = ({ item }) => {
   const context = useContext(AppContext);
   const { isMobile } = context;
+
+  const handleLike = async (nft_id) => {
+    // Change myLikes via setMyLikes
+    context.setMyLikes([...context.myLikes, nft_id]);
+
+    const likedItem = item;
+    const myLikeCounts = context.myLikeCounts;
+    context.setMyLikeCounts({
+      ...context.myLikeCounts,
+      [nft_id]:
+        ((myLikeCounts && myLikeCounts[nft_id]) || likedItem.like_count) + 1,
+    });
+
+    // Post changes to the API
+    await fetch(`/api/like_v3/${nft_id}`, {
+      method: "post",
+    });
+
+    mixpanel.track("Liked item");
+  };
+
+  const handleUnlike = async (nft_id) => {
+    // Change myLikes via setMyLikes
+    context.setMyLikes(context.myLikes.filter((item) => !(item === nft_id)));
+
+    const likedItem = item;
+    const myLikeCounts = context.myLikeCounts;
+    context.setMyLikeCounts({
+      ...context.myLikeCounts,
+      [nft_id]:
+        ((myLikeCounts && myLikeCounts[nft_id]) || likedItem.like_count) - 1,
+    });
+
+    // Post changes to the API
+    await fetch(`/api/unlike_v3/${nft_id}`, {
+      method: "post",
+    });
+
+    mixpanel.track("Unliked item");
+  };
+
   const like_count =
     context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id])
       ? context.myLikeCounts[item?.nft_id]

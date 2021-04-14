@@ -30,18 +30,18 @@ const MobileSearchWrapper = styled.div`
   position: relative;
   justify-content: flex-start;
   margin-left: 16px;
-  padding-right: 8px;
+  //padding-right: 8px;
   width: 100%;
   @media (max-width: 1229px) {
     display: flex;
   }
   @media (max-width: 767px) {
     justify-content: flex-end;
-    padding-right: 32px;
+    //padding-right: 32px;
   }
   @media (max-width: 420px) {
     margin-left: 4px;
-    padding-right: 16px;
+    //padding-right: 16px;
   }
 `;
 
@@ -49,13 +49,21 @@ const OverlaySearchContainer = styled.div`
   display: flex;
   flex-direction: column;
   position: absolute;
-  height: 80px;
+  height: 64px;
   background: #fff;
-  padding: 16px;
+  padding: 12px;
   width: 100%;
   left: 0;
   top: 0;
   z-index: 1;
+  @media (max-width: 820px) {
+    top: 48px;
+    padding-top: 0px;
+    padding-bottom: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+    height: 36px;
+  }
 `;
 
 const SearchToggleButton = styled.div`
@@ -65,13 +73,13 @@ const SearchToggleButton = styled.div`
   width: 14px;
   height: 14px;
   color: #000;
-  border: 2px solid #000;
-  border-radius: 50%;
+  //border: 2px solid #000;
+  //border-radius: 50%;
   padding: 16px;
   cursor: pointer;
   &:hover {
     color: #e45cff;
-    border: 2px solid #e45cff;
+    //border: 2px solid #e45cff;
   }
 `;
 
@@ -89,8 +97,8 @@ const OverlaySearchInputContainer = styled.div`
 const SearchInput = styled.input`
   display: flex;
   border: 1px solid #ddd;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 6px;
+  padding-bottom: 6px;
   padding-right: 16px;
   padding-left: 40px;
   box-sizing: border-box;
@@ -114,6 +122,7 @@ const SearchIcon = styled.div`
   height: 14px;
   margin-right: 12px;
   color: #000;
+
   margin-top: ${(p) => (p.isFocused ? -1 : 0)}px;
 `;
 
@@ -166,6 +175,9 @@ const OverlaySearchResults = styled.div`
   background: #fff;
   border-radius: 8px;
   box-shadow: 0px 10px 20px rgb(0 0 0 / 5%);
+  @media (max-width: 820px) {
+    top: 40px;
+  }
 `;
 
 const SearchResult = styled.div`
@@ -399,6 +411,7 @@ const SearchBar = () => {
           <FontAwesomeIcon icon={faSearch} />
         </SearchToggleButton>
       </MobileSearchWrapper>
+
       {/* Start overlay menu */}
       {isMobileSearchOverlayOpen && (
         <OverlaySearchContainer>

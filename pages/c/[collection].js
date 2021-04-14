@@ -10,6 +10,7 @@ import backend from "../../lib/backend";
 import AppContext from "../../context/app-context";
 import mixpanel from "mixpanel-browser";
 import { GridTabs, GridTab } from "../../components/GridTabs";
+import CappedWidth from "../../components/CappedWidth";
 
 export async function getServerSideProps(context) {
   const { collection } = context.query;
@@ -18,7 +19,7 @@ export async function getServerSideProps(context) {
   const response_collection_list = await backend.get(`/v1/collection_list`);
   const collection_list = [
     {
-      name: "Filter by collection",
+      name: "All leading collections",
       value: "all",
       order_by: "visitor_count",
       order_direction: "desc",
@@ -53,10 +54,10 @@ export default function Collection({
 
   const [pageTitle, setPageTitle] = useState(
     selected_collection
-      ? selected_collection.name === "Filter by collection"
-        ? "Explore"
-        : `Explore ${selected_collection.name}`
-      : `Explore ${collection}`
+      ? selected_collection.name === "All leading collections"
+        ? "Discover"
+        : `Discover ${selected_collection.name}`
+      : `Discover ${collection}`
   );
 
   const router = useRouter();
@@ -66,7 +67,7 @@ export default function Collection({
   useEffect(() => {
     setCurrentCollectionSlug(router.query.collection);
     if (router.query.collection == "all") {
-      setPageTitle("Explore");
+      setPageTitle("Discover");
       setCurrentCollectionSlug("all");
     }
   }, [router.query.collection]);
@@ -79,13 +80,13 @@ export default function Collection({
       shallow: true,
     });
     setPageTitle(
-      values[0]["name"] === "Filter by collection"
-        ? "Explore"
-        : `Explore ${values[0]["name"]}`
+      values[0]["name"] === "All leading collections"
+        ? "Discover"
+        : `Discover ${values[0]["name"]}`
     );
     setCurrentCollectionSlug(values[0]["value"]);
     setCurrentCollectionName(
-      values[0]["name"] === "Filter by collection" ? null : values[0]["name"]
+      values[0]["name"] === "All leading collections" ? null : values[0]["name"]
     );
   };
 
@@ -95,7 +96,7 @@ export default function Collection({
   );
   const [currentCollectionName, setCurrentCollectionName] = useState(
     selected_collection
-      ? selected_collection.name === "Filter by collection"
+      ? selected_collection.name === "All leading collections"
         ? null
         : selected_collection.name
       : collection
@@ -113,7 +114,7 @@ export default function Collection({
         `/v2/collection?limit=150&order_by=${sortBy}&collection=${collection_name}`
       );
 
-      mixpanel.track("Explore page view", {
+      mixpanel.track("Discover page view", {
         collection: collection_name,
         sortby: sortBy,
       });
@@ -229,102 +230,67 @@ export default function Collection({
         />
       </Head>
 
-      {columns && (
-        <div
-          className="mx-auto relative my-16 md:my-24 text-center md:text-left"
-          style={{
-            ...(columns === 1
-              ? { padding: "0px 16px" }
-              : { width: gridWidth, paddingLeft: 16 }),
-          }}
-        >
-          <h1
-            className="text-xl md:text-3xl xl:text-4xl"
-            style={{ maxWidth: 700 }}
-          >
-            Explore
-          </h1>
-          <h1
-            className="text-4xl md:text-7xl xl:text-8xl"
-            style={{ fontFamily: "Afronaut", textTransform: "capitalize" }}
-          >
-            {currentCollectionName ? currentCollectionName : "Leading NFT"}
-          </h1>
-          <h1 className="text-4xl md:text-7xl xl:text-8xl">
-            {currentCollectionName ? "Collection." : "Collections."}
-          </h1>
-        </div>
-      )}
-
-      {gridWidth > 0 ? (
-        <div
-          className="mx-auto mb-4 text-xs sm:text-sm flex flex-col md:flex-row items-center"
-          style={{
-            width: gridWidth,
-          }}
-        >
-          {collection_list && collection_list.length > 0 ? (
-            <div className="flex flex-row items-center">
+      <div className="py-12 sm:py-14 px-8 sm:px-10 text-left  bg-gradient-to-r from-green-400 to-blue-400">
+        <CappedWidth>
+          <div className="flex flex-row mx-3 text-white">
+            <div className="flex-1">
+              <div className="text-xl sm:text-2xl">Discover</div>
               <div
-                className="text-left"
-                style={
-                  context.columns === 1
-                    ? { width: 250, marginLeft: 16, marginRight: 16 }
-                    : { width: 250, marginLeft: 12, marginRight: 12 }
-                }
+                className="text-3xl sm:text-6xl"
+                style={{ fontFamily: "Afronaut", textTransform: "capitalize" }}
               >
-                <Select
-                  options={collection_list}
-                  labelField="name"
-                  valueField="value"
-                  values={
-                    collection_list
-                      .map((item) => item.value)
-                      .includes(currentCollectionSlug)
-                      ? collection_list.filter(
-                          (item) => item.value === currentCollectionSlug
-                        )
-                      : [
-                          {
-                            value: "all",
-                            name: "Filter by collection",
-                          },
-                        ]
-                  }
-                  searchable={false}
-                  onChange={(values) => onChange(values)}
-                  style={{ fontSize: 16 }}
-                />
+                {currentCollectionName ? currentCollectionName : "Leading NFT"}
               </div>
-              {/*<div className="">
-                <ShareButton
-                  url={
-                    typeof window !== "undefined" ? window.location.href : null
-                  }
-                  type={"collection"}
-                />
-                </div>*/}
+              <div className="text-3xl sm:text-6xl">
+                {currentCollectionName ? "Collection." : "Collections."}
+              </div>
             </div>
-          ) : null}
+          </div>
+        </CappedWidth>
+      </div>
+      <CappedWidth>
+        <div className="flex-1 -mt-4 mx-3 lg:w-2/3 lg:pr-6 xl:w-1/2">
+          <div className="bg-white rounded-lg shadow-md px-6 py-6 text-center flex flex-col md:flex-row items-center">
+            <div className="flex-1 mb-3 md:mb-0">
+              Select a collection to browse:{" "}
+            </div>
+            <div className="flex-1 text-left">
+              <Select
+                options={collection_list}
+                labelField="name"
+                valueField="value"
+                values={
+                  collection_list
+                    .map((item) => item.value)
+                    .includes(currentCollectionSlug)
+                    ? collection_list.filter(
+                        (item) => item.value === currentCollectionSlug
+                      )
+                    : [
+                        {
+                          value: "all",
+                          name: "All leading collections",
+                        },
+                      ]
+                }
+                searchable={false}
+                onChange={(values) => onChange(values)}
+                className="w-full"
+              />
+            </div>
+          </div>
         </div>
-      ) : null}
 
-      {columns && (
-        <div
-          className="mx-auto relative"
-          style={columns === 1 ? null : { width: columns * (375 + 20) }}
-        >
-          {FilterTabs}
+        <div className="mx-auto relative mt-12">{FilterTabs}</div>
+
+        <div className="m-auto relative min-h-screen">
+          <TokenGridV4
+            items={collectionItems}
+            isLoading={isChanging}
+            extraColumn
+          />
         </div>
-      )}
-      {gridWidth && (
-        <div
-          className="m-auto relative"
-          style={{ width: gridWidth, minHeight: 900 }}
-        >
-          <TokenGridV4 items={collectionItems} isLoading={isChanging} />
-        </div>
-      )}
+      </CappedWidth>
     </Layout>
   );
 }

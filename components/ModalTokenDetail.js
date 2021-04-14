@@ -15,8 +15,6 @@ export default function Modal({
   item,
   isOpen,
   setEditModalOpen,
-  handleLike,
-  handleUnlike,
   goToNext,
   goToPrevious,
   hasNext,
@@ -70,17 +68,17 @@ export default function Modal({
                 { cursor: "pointer" },
                 isStacked && columns === 1
                   ? {
-                    marginRight: -48,
-                    zIndex: 2,
-                    padding: 8,
-                    opacity: 0.4,
-                    backgroundColor: "black",
-                    borderTopRightRadius: 38,
-                    borderBottomRightRadius: 38,
-                    marginTop: 400,
-                    width: 46,
-                    height: 76,
-                  }
+                      marginRight: -48,
+                      zIndex: 2,
+                      padding: 8,
+                      opacity: 0.4,
+                      backgroundColor: "black",
+                      borderTopRightRadius: 38,
+                      borderBottomRightRadius: 38,
+                      marginTop: 400,
+                      width: 46,
+                      height: 76,
+                    }
                   : null
               )}
               onClick={(e) => {
@@ -100,22 +98,22 @@ export default function Modal({
                 isStacked
                   ? { color: "black", height: "100%", overflow: "auto" }
                   : {
-                    color: "black",
-                    height: "90%",
-                    borderRadius: 15,
-                    //, top: "5%",
-                    //right: 8%;
-                    //left: 8%;
-                    //bottom: 5%;
-                  }
+                      color: "black",
+                      height: "90%",
+                      borderRadius: 15,
+                      //, top: "5%",
+                      //right: 8%;
+                      //left: 8%;
+                      //bottom: 5%;
+                    }
               }
               onClick={(e) => e.stopPropagation()}
             >
               <div
                 style={{
                   position: "absolute",
-                  top: 14,
-                  right: 14,
+                  top: 10,
+                  right: 10,
                   cursor: "pointer",
                   zIndex: 4,
                   backgroundColor: "black",
@@ -128,7 +126,7 @@ export default function Modal({
                   mixpanel.track("Close NFT modal - x button");
                   setEditModalOpen(false);
                 }}
-                className="opacity-50 hover:opacity-80"
+                className="opacity-50 hover:opacity-80 transition-all"
               >
                 <FontAwesomeIcon
                   style={{
@@ -147,8 +145,6 @@ export default function Modal({
                 <TokenDetailBody
                   item={item}
                   muted={false}
-                  handleLike={handleLike}
-                  handleUnlike={handleUnlike}
                   className="w-full"
                   setEditModalOpen={setEditModalOpen}
                   ownershipDetails={ownershipDetails}
@@ -166,17 +162,17 @@ export default function Modal({
                 { cursor: "pointer" },
                 isStacked && columns === 1
                   ? {
-                    marginLeft: -48,
-                    zIndex: 2,
-                    padding: 8,
-                    opacity: 0.4,
-                    backgroundColor: "black",
-                    borderTopLeftRadius: 38,
-                    borderBottomLeftRadius: 38,
-                    width: 46,
-                    height: 76,
-                    marginTop: 400,
-                  }
+                      marginLeft: -48,
+                      zIndex: 2,
+                      padding: 8,
+                      opacity: 0.4,
+                      backgroundColor: "black",
+                      borderTopLeftRadius: 38,
+                      borderBottomLeftRadius: 38,
+                      width: 46,
+                      height: 76,
+                      marginTop: 400,
+                    }
                   : null
               )}
               onClick={(e) => {

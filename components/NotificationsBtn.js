@@ -80,7 +80,7 @@ export default function NotificationsBtn() {
         onClick={() => {
           toggleOpen();
         }}
-        className="hover:text-stpink border-gray-900 hover:border-stpink border-2 rounded-full h-9 w-9 flex items-center justify-center cursor-pointer relative"
+        className="hover:text-stpink transition-all rounded-full h-6 w-6 flex items-center justify-center cursor-pointer relative"
       >
         <FontAwesomeIcon
           style={{
@@ -96,8 +96,8 @@ export default function NotificationsBtn() {
               position: "absolute",
               height: 10,
               width: 10,
-              top: 0,
-              left: 0,
+              top: 1,
+              left: 1,
               borderRadius: "50%",
             }}
           />
@@ -150,7 +150,7 @@ export default function NotificationsBtn() {
               key={notif.id}
             >
               <div
-                className={`py-3 px-3 hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full ${
+                className={`py-3 px-3 hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full ${
                   new Date(notif.to_timestamp) > new Date(previouslyLastOpened)
                     ? "bg-gray-100 hover:bg-gray-200"
                     : ""

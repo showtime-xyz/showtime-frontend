@@ -22,6 +22,7 @@ import CommentsSection from "./CommentsSection";
 import { getBidLink, getContractName } from "../lib/utilities";
 import backend from "../lib/backend";
 import UsersWhoLiked from "./UsersWhoLiked";
+import MiniFollowButton from "./MiniFollowButton";
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500;
@@ -29,8 +30,6 @@ const TOKEN_MEDIA_HEIGHT = 500;
 const TokenDetailBody = ({
   item,
   muted,
-  handleLike,
-  handleUnlike,
   setEditModalOpen,
   ownershipDetails,
   isInModal,
@@ -50,9 +49,9 @@ const TokenDetailBody = ({
   const getImageUrl = (img_url, token_aspect_ratio) => {
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
       if (token_aspect_ratio && token_aspect_ratio > 1) {
-        img_url = img_url.split("=")[0] + "=h375";
+        img_url = img_url.split("=")[0] + "=h660";
       } else {
-        img_url = img_url.split("=")[0] + "=w375";
+        img_url = img_url.split("=")[0] + "=w660";
       }
     }
     return img_url;
@@ -60,7 +59,7 @@ const TokenDetailBody = ({
 
   const getBiggerImageUrl = (img_url) => {
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
-      img_url = img_url.split("=")[0] + "=h500";
+      img_url = img_url.split("=")[0] + "=h1328";
     }
     return img_url;
   };
@@ -198,9 +197,12 @@ const TokenDetailBody = ({
                         style={{ height: 24, width: 24 }}
                       />
                     </div>
-                    <div className="showtime-card-profile-link ml-2">
+                    <div className="showtime-card-profile-link ml-2 mr-2">
                       {truncateWithEllipses(item.creator_name, 30)}
                     </div>
+                    {context.myProfile?.profile_id !== item?.creator_id && (
+                      <MiniFollowButton profileId={item?.creator_id} />
+                    )}
                   </a>
                 </Link>
               ) : null}
@@ -247,7 +249,7 @@ const TokenDetailBody = ({
                   top: isMobile ? 57 : 0,
                   right: 0,
                   margin: 10,
-                  zIndex: 1,
+                  zIndex: 0,
                 }}
               >
                 {isMobile ||
@@ -262,7 +264,7 @@ const TokenDetailBody = ({
                       setLightboxOpen(true);
                       mixpanel.track("Original size clicked");
                     }}
-                    className="flex flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white"
+                    className="flex flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all"
                   >
                     <div className="">
                       <FontAwesomeIcon icon={faExpand} width={18} height={18} />
@@ -282,6 +284,9 @@ const TokenDetailBody = ({
                   context.isMobile
                     ? {
                         width: mediaWidth,
+                        height: item.token_aspect_ratio
+                          ? mediaWidth / item.token_aspect_ratio
+                          : null,
                       }
                     : {
                         height: TOKEN_MEDIA_HEIGHT,
@@ -340,11 +345,7 @@ const TokenDetailBody = ({
               {/*  */}
               <div className="flex items-center pt-2">
                 <div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
-                  <LikeButton
-                    item={item}
-                    handleLike={handleLike}
-                    handleUnlike={handleUnlike}
-                  />
+                  <LikeButton item={item} />
                 </div>
                 <SmoothScroll
                   to="CommentsSectionScroll"
@@ -357,21 +358,7 @@ const TokenDetailBody = ({
                     <CommentButton item={item} handleComment={() => {}} />
                   </div>
                 </SmoothScroll>
-                <a
-                  href={getBidLink(item)}
-                  title={`Buy on ${getContractName(item)}`}
-                  target="_blank"
-                  onClick={() => {
-                    mixpanel.track("OpenSea link click");
-                  }}
-                >
-                  <div className="text-base font-normal px-4 py-3 mr-2 rounded-full shadow-md hover:text-stpink">
-                    {context.columns > 2
-                      ? `Bid on ${getContractName(item)}`
-                      : "Bid"}
-                  </div>
-                </a>
-                <div className="px-4 py-2 rounded-full shadow-md">
+                <div className="px-4 py-2 rounded-full shadow-md mr-2">
                   <ShareButton
                     url={
                       typeof window !== "undefined" &&
@@ -386,6 +373,22 @@ const TokenDetailBody = ({
                     type={"item"}
                   />
                 </div>
+
+                <a
+                  href={getBidLink(item)}
+                  title={`Buy on ${getContractName(item)}`}
+                  target="_blank"
+                  onClick={() => {
+                    mixpanel.track("OpenSea link click");
+                  }}
+                >
+                  <div className="text-base font-normal px-4 py-3 mr-2 rounded-full shadow-md hover:text-stpink">
+                    {context.columns > 2
+                      ? `Bid on ${getContractName(item)}`
+                      : "Bid"}
+                  </div>
+                </a>
+                <div className="flex-grow"></div>
               </div>
               {usersWhoLiked && (
                 <UsersWhoLiked

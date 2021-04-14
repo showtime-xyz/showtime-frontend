@@ -24,6 +24,7 @@ const TokenGridV4 = ({
   refreshItems,
   detailsModalCloseOnKeyChange,
   changeSpotlightItem,
+  extraColumn,
 }) => {
   const context = useContext(AppContext);
   const [itemsList, setItemsList] = useState([]);
@@ -48,6 +49,8 @@ const TokenGridV4 = ({
   const leftPress = useKeyPress("ArrowLeft");
   const rightPress = useKeyPress("ArrowRight");
   const escPress = useKeyPress("Escape");
+
+  const itemsToLoad = extraColumn ? 12 : 9;
 
   useEffect(() => {
     if (escPress) {
@@ -154,60 +157,18 @@ const TokenGridV4 = ({
     if (context.isMobile) {
       setItemsShowing(4);
     } else {
-      setItemsShowing(8);
+      setItemsShowing(itemsToLoad);
     }
   }, [context.isMobile]);
 
   const fetchMoreData = () => {
-    if (itemsShowing + 8 > itemsList.length) {
+    if (itemsShowing + itemsToLoad > itemsList.length) {
       setHasMore(false);
       onFinish ? onFinish() : null;
     }
-    setItemsShowing(itemsShowing + 8);
+    setItemsShowing(itemsShowing + itemsToLoad);
   };
 
-  const handleLike = async (nft_id) => {
-    // Change myLikes via setMyLikes
-    context.setMyLikes([...context.myLikes, nft_id]);
-    const likedItem = itemsList.find((i) => i.nft_id === nft_id);
-    const myLikeCounts = context.myLikeCounts;
-    context.setMyLikeCounts({
-      ...myLikeCounts,
-      [nft_id]:
-        (myLikeCounts && !_.isNil(myLikeCounts[nft_id])
-          ? myLikeCounts[nft_id]
-          : likedItem.like_count) + 1,
-    });
-
-    // Post changes to the API
-    await fetch(`/api/like_v3/${nft_id}`, {
-      method: "post",
-    });
-
-    mixpanel.track("Liked item");
-  };
-
-  const handleUnlike = async (nft_id) => {
-    // Change myLikes via setMyLikes
-    context.setMyLikes(context.myLikes.filter((item) => !(item === nft_id)));
-
-    const likedItem = itemsList.find((i) => i.nft_id === nft_id);
-    const myLikeCounts = context.myLikeCounts;
-    context.setMyLikeCounts({
-      ...context.myLikeCounts,
-      [nft_id]:
-        (myLikeCounts && !_.isNil(myLikeCounts[nft_id])
-          ? myLikeCounts[nft_id]
-          : likedItem.like_count) - 1,
-    });
-
-    // Post changes to the API
-    await fetch(`/api/unlike_v3/${nft_id}`, {
-      method: "post",
-    });
-
-    mixpanel.track("Unliked item");
-  };
   const currentIndex = deduplicatedItemsList.findIndex(
     (i) => i.nft_id === currentlyOpenModal?.nft_id
   );
@@ -219,12 +180,7 @@ const TokenGridV4 = ({
           {" "}
           <FontAwesomeIcon style={{ height: 48, width: 48 }} icon={faThLarge} />
         </div>
-        <div
-          style={context.columns === 1 ? null : { width: context.gridWidth }}
-          className="p-3 text-center"
-        >
-          No items found.
-        </div>
+        <div className="p-3 text-center">No items found.</div>
       </div>
     );
   }
@@ -236,8 +192,6 @@ const TokenGridV4 = ({
             isOpen={currentlyOpenModal}
             setEditModalOpen={setCurrentlyOpenModal}
             item={currentlyOpenModal}
-            handleLike={handleLike}
-            handleUnlike={handleUnlike}
             goToNext={goToNext}
             goToPrevious={goToPrevious}
             columns={context.columns}
@@ -252,31 +206,21 @@ const TokenGridV4 = ({
         hasMore={hasMore}
       >
         {isLoading ? (
-          <div
-            className="mx-auto items-center flex justify-center overflow-hidden py-4"
-            style={context.columns === 1 ? null : { width: context.gridWidth }}
-          >
+          <div className="mx-auto items-center flex justify-center overflow-hidden py-4 mt-16">
             <div className="loading-card-spinner" />
           </div>
         ) : (
           <div
-            className={`grid grid-cols-${context.columns} overflow-hidden ${
-              context.isMobile ? "bg-gray-100" : ""
-            }`}
-            style={
-              context.columns === 1
-                ? null
-                : {
-                    width: context.gridWidth,
-                  }
-            }
+            className={`grid ${
+              extraColumn
+                ? "md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                : "lg:grid-cols-2 xl:grid-cols-3"
+            }  overflow-hidden`}
           >
             {deduplicatedItemsList.slice(0, itemsShowing).map((item) => (
               <TokenCard
                 key={item.nft_id}
                 item={item}
-                handleLike={handleLike}
-                handleUnlike={handleUnlike}
                 columns={context.columns}
                 isMobile={context.isMobile}
                 currentlyPlayingVideo={currentlyPlayingVideo}

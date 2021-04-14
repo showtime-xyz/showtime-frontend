@@ -10,10 +10,7 @@ const Button = styled.button`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  border-radius: 24px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
-  border-radius: 41px;
   padding: 8px 16px;
   &:hover {
     opacity: 0.7;
@@ -23,21 +20,12 @@ const Button = styled.button`
   }
 `;
 
-const PlusIcon = styled.div`
-  display: flex;
-  margin-bottom: 3px;
-  width: 14px;
-  height: 14px;
-  margin-right: 8px;
-  //color: #adadad;
-`;
-
-const FollowText = styled.h6`
-  font-size: 13px;
-  font-weight: 400;
-`;
-
-const FollowButton = ({ item, followerCount, setFollowerCount }) => {
+const FollowButton = ({
+  item,
+  followerCount,
+  setFollowerCount,
+  hideIfFollowing,
+}) => {
   const context = useContext(AppContext);
   const myFollows = context?.myFollows || [];
   const [isFollowed, setIsFollowed] = useState(false);
@@ -92,6 +80,11 @@ const FollowButton = ({ item, followerCount, setFollowerCount }) => {
 
   return (
     <Button
+      className={
+        hideIfFollowing && isFollowed
+          ? "hidden border-gray-400 border rounded-full"
+          : "border-gray-400 border rounded-full"
+      }
       onClick={
         context.user
           ? isFollowed
@@ -101,11 +94,11 @@ const FollowButton = ({ item, followerCount, setFollowerCount }) => {
       }
     >
       {!isFollowed && (
-        <PlusIcon>
+        <div className="mr-1 text-sm">
           <FontAwesomeIcon icon={faPlus} />
-        </PlusIcon>
+        </div>
       )}
-      <FollowText>{isFollowed ? "Following" : "Follow"}</FollowText>
+      <div className="text-sm">{isFollowed ? "Following" : "Follow"}</div>
     </Button>
   );
 };
