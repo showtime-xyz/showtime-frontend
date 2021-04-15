@@ -149,6 +149,17 @@ const Activity = () => {
     //setActivityPage(1);
     //setHasMoreScrolling(true);
   };
+  const removeItemFromFeed = (actId) => {
+    const filteredActivity = activity.filter((act) => act.id !== actId);
+    setActivity(filteredActivity);
+  };
+
+  const removeActorFromFeed = (profileId) => {
+    const filteredActivity = activity.filter(
+      (act) => act.actor_profile_id !== profileId
+    );
+    setActivity(filteredActivity);
+  };
 
   const [showFiltersMobile, setShowFiltersMobile] = useState(false);
 
@@ -398,6 +409,8 @@ const Activity = () => {
                   activity={activity}
                   setItemOpenInModal={handleSetItemOpenInModal}
                   key={activityTypeFilter}
+                  removeItemFromFeed={removeItemFromFeed}
+                  removeActorFromFeed={removeActorFromFeed}
                 />
               </InfiniteScroll>
               <div className="flex h-16 items-center justify-center mt-6  px-3">
