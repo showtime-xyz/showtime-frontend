@@ -180,31 +180,35 @@ const TokenDetailBody = ({
                   </a>
                 </Link>
               ) : item.creator_address ? (
-                <Link
-                  href="/[profile]"
-                  as={`/${item?.creator_username || item.creator_address}`}
-                >
-                  <a className="flex flex-row items-center ">
-                    <div>
-                      <img
-                        alt={item.creator_name}
-                        src={
-                          item.creator_img_url
-                            ? item.creator_img_url
-                            : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                        }
-                        className="rounded-full "
-                        style={{ height: 24, width: 24 }}
-                      />
-                    </div>
-                    <div className="showtime-card-profile-link ml-2 mr-2">
-                      {truncateWithEllipses(item.creator_name, 30)}
-                    </div>
-                    {context.myProfile?.profile_id !== item?.creator_id && (
+                <div className="flex flex-row items-center">
+                  <Link
+                    href="/[profile]"
+                    as={`/${item?.creator_username || item.creator_address}`}
+                  >
+                    <a className="flex flex-row items-center">
+                      <div>
+                        <img
+                          alt={item.creator_name}
+                          src={
+                            item.creator_img_url
+                              ? item.creator_img_url
+                              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                          }
+                          className="rounded-full "
+                          style={{ height: 24, width: 24 }}
+                        />
+                      </div>
+                      <div className="showtime-card-profile-link ml-2">
+                        {truncateWithEllipses(item.creator_name, 22)}
+                      </div>
+                    </a>
+                  </Link>
+                  {context.myProfile?.profile_id !== item?.creator_id && (
+                    <div className="ml-2">
                       <MiniFollowButton profileId={item?.creator_id} />
-                    )}
-                  </a>
-                </Link>
+                    </div>
+                  )}
+                </div>
               ) : null}
             </div>
             <div>&nbsp;</div>
