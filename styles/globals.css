@@ -581,7 +581,7 @@ input[type="text"] {
   cursor: pointer;
   height: 50px;
   width: 50px;
-  z-index: 2 !important;
+  z-index: 1 !important;
   box-shadow: 0px 10px 20px rgb(0 0 0 / 15%);
 }
 
