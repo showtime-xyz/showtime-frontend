@@ -12,7 +12,11 @@ import ModalEditPhoto from "../components/ModalEditPhoto";
 import ModalUserList from "../components/ModalUserList";
 import ModalAddWallet from "../components/ModalAddWallet";
 import ModalAddEmail from "../components/ModalAddEmail.js";
-import { formatAddressShort } from "../lib/utilities";
+import {
+  formatAddressShort,
+  removeTags,
+  truncateWithEllipses,
+} from "../lib/utilities";
 import AddressButton from "../components/AddressButton";
 import { SORT_FIELDS } from "../lib/constants";
 import Select from "react-dropdown-select";
@@ -26,6 +30,8 @@ import {
   faLink,
   faImage as fasImage,
 } from "@fortawesome/free-solid-svg-icons";
+
+const initialBioLength = 140;
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
@@ -493,6 +499,8 @@ const Profile = ({
     : ownedItems.filter((item) => !ownedHiddenItems.includes(item.nft_id))
         .length;
 
+  const [moreBioShown, setMoreBioShown] = useState(false);
+
   const likedCount = isLoadingCards
     ? null
     : showUserHiddenItems
@@ -716,10 +724,36 @@ const Profile = ({
           <div className="px-6 sm:px-3 mt-8">
             {/* Use context info for logged in user - reflected immediately after changes */}
             {isMyProfile && context.myProfile?.bio ? (
-              <div className="text-gray-500 flex flex-row">
-                <div className="max-w-prose text-sm sm:text-base">
-                  {context.myProfile.bio}
-                </div>
+              // <div className="text-gray-500 flex flex-row">
+              //   <div className="max-w-prose text-sm sm:text-base">
+              //     {context.myProfile.bio}
+              //   </div>
+              // </div>
+              <div
+                style={{
+                  overflowWrap: "break-word",
+                  wordWrap: "break-word",
+                  display: "block",
+                }}
+                className="text-gray-500 text-sm sm:text-base max-w-prose"
+              >
+                {moreBioShown
+                  ? context.myProfile.bio
+                  : truncateWithEllipses(
+                      context.myProfile.bio,
+                      initialBioLength
+                    )}
+                {!moreBioShown &&
+                  context?.myProfile?.bio &&
+                  context.myProfile.bio.length > initialBioLength && (
+                    <a
+                      onClick={() => setMoreBioShown(true)}
+                      className="text-gray-900 hover:text-gray-500 cursor-pointer"
+                    >
+                      {" "}
+                      more
+                    </a>
+                  )}
               </div>
             ) : null}
 
