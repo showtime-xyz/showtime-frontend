@@ -206,8 +206,8 @@ export default function ActivityCard({
                     className="py-2 px-4 hover:text-stpink rounded-lg cursor-pointer whitespace-nowrap"
                     onClick={handleUnfollow}
                   >
-                    Unfollow{" "}
-                    {actor.username ? `@${actor.username}` : "this user"}
+                    Unfollow
+                    {/*actor.username ? `@${actor.username}` : "this user"*/}
                   </div>
                   <div
                     className="py-2 px-4 hover:text-stpink rounded-lg cursor-pointer whitespace-nowrap"
@@ -215,7 +215,7 @@ export default function ActivityCard({
                       setReportModalIsOpen(id);
                     }}
                   >
-                    Report this activity
+                    Report
                   </div>
                 </div>
               </div>

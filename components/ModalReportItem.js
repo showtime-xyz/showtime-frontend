@@ -52,7 +52,7 @@ export default function Modal({
             <form onSubmit={handleSubmit}>
               <CloseButton setEditModalOpen={setReportModalOpen} />
               <div className="text-3xl border-b-2 pb-2">
-                Report {activityId ? "Activity" : "Item"}
+                Report {/*activityId ? "Activity" : "Item"*/}
               </div>
               {confirmationShowing ? (
                 <div className="my-8">We received your report. Thank you!</div>
@@ -84,7 +84,7 @@ export default function Modal({
                   <div className="border-t-2 pt-4">
                     <button
                       type="submit"
-                      className="showtime-green-button  px-4 py-2  rounded-full float-right"
+                      className="showtime-green-button  px-4 py-2 w-24 rounded-full float-right"
                       style={{ borderColor: "#35bb5b", borderWidth: 2 }}
                       //onClick={() => setEditModalOpen(false)}
                     >
