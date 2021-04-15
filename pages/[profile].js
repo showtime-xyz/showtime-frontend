@@ -502,8 +502,6 @@ const Profile = ({
     : likedItems.filter((item) => !likedHiddenItems.includes(item.nft_id))
         .length;
 
-  console.log(createdHiddenItems.length);
-
   return (
     <div
       onClick={() => {

@@ -23,6 +23,7 @@ import {
   faUser as fasUser,
   faFilter,
 } from "@fortawesome/free-solid-svg-icons";
+import ModalReportItem from "../components/ModalReportItem";
 
 const ACTIVITY_PAGE_LENGTH = 5; // 5 activity items per activity page
 export async function getServerSideProps() {
@@ -149,8 +150,20 @@ const Activity = () => {
     //setActivityPage(1);
     //setHasMoreScrolling(true);
   };
+  const removeItemFromFeed = (actId) => {
+    const filteredActivity = activity.filter((act) => act.id !== actId);
+    setActivity(filteredActivity);
+  };
+
+  const removeActorFromFeed = (profileId) => {
+    const filteredActivity = activity.filter(
+      (act) => act.actor_profile_id !== profileId
+    );
+    setActivity(filteredActivity);
+  };
 
   const [showFiltersMobile, setShowFiltersMobile] = useState(false);
+  const [reportModalIsOpen, setReportModalIsOpen] = useState(false);
 
   return (
     <Layout>
@@ -200,6 +213,25 @@ const Activity = () => {
             hasPrevious={!(itemOpenInModal?.index === 0)}
           />
         </>
+      ) : null}
+      {typeof document !== "undefined" ? (
+        <div
+          style={
+            {
+              //position: "absolute",
+              //top: 0,
+              //zIndex: 9,
+              //display: "block",
+            }
+          }
+        >
+          <ModalReportItem
+            isOpen={reportModalIsOpen}
+            setReportModalOpen={setReportModalIsOpen}
+            activityId={reportModalIsOpen}
+            removeItemFromFeed={removeItemFromFeed}
+          />
+        </div>
       ) : null}
 
       {context.user === null ? (
@@ -398,6 +430,9 @@ const Activity = () => {
                   activity={activity}
                   setItemOpenInModal={handleSetItemOpenInModal}
                   key={activityTypeFilter}
+                  removeItemFromFeed={removeItemFromFeed}
+                  removeActorFromFeed={removeActorFromFeed}
+                  setReportModalIsOpen={setReportModalIsOpen}
                 />
               </InfiniteScroll>
               <div className="flex h-16 items-center justify-center mt-6  px-3">
