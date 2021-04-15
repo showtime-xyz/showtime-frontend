@@ -10,7 +10,7 @@ const Background = styled.div`
   left: 0px;
   right: 0px;
   overflow: auto;
-  z-index: 2;
+  //z-index: 2;
   box-sizing: border-box;
   text-align: center;
   vertical-align: middle;
@@ -18,7 +18,7 @@ const Background = styled.div`
 
 const Scroller = styled.div`
   position: relative;
-  z-index: 3;
+  //z-index: 3;
   outline: none;
   max-width: 90%;
   width: ${(p) => (p.contentWidth ? p.contentWidth : "30rem")};
@@ -37,7 +37,12 @@ const Content = styled.div`
   flex-direction: column;
 `;
 
-const ScrollableModal = ({ children, closeModal, contentWidth = null }) => {
+const ScrollableModal = ({
+  children,
+  closeModal,
+  contentWidth = null,
+  zIndex = 2,
+}) => {
   useEffect(() => {
     document.documentElement.style.overflow = "hidden";
     return () => {
@@ -45,8 +50,8 @@ const ScrollableModal = ({ children, closeModal, contentWidth = null }) => {
     };
   }, []);
   return (
-    <Background onClick={closeModal}>
-      <Scroller contentWidth={contentWidth}>
+    <Background onClick={closeModal} style={{ zIndex: zIndex }}>
+      <Scroller contentWidth={contentWidth} style={{ zIndex: zIndex + 1 }}>
         <Content
           className="rounded-lg sm:rounded-2xl "
           onClick={(e) => e.stopPropagation()}

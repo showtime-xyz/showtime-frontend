@@ -47,6 +47,7 @@ export default function Modal({
             setInputValue("");
           }}
           contentWidth="30rem"
+          zIndex={4} //needs to be above mobile modal close button
         >
           <div className="p-4">
             <form onSubmit={handleSubmit}>
