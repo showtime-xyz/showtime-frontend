@@ -11,6 +11,7 @@ export default function Comment({
   closeModal,
   modalRef,
   deleteComment,
+  nftOwnerId,
 }) {
   const context = useContext(AppContext);
   const { myProfile } = context;
@@ -26,6 +27,8 @@ export default function Comment({
     myProfile &&
     myProfile.profile_id &&
     myProfile.profile_id === comment.commenter_profile_id;
+
+  const isOwnerOfNFT = nftOwnerId && nftOwnerId === myProfile.profile_id;
   return (
     <div className="p-2 my-1 flex rounded-xl hover:bg-gray-100 transition-all relative">
       <div className="mr-3 mt-1">
@@ -70,7 +73,7 @@ export default function Comment({
               }
             )}
           </div>
-          {userWroteComment && (
+          {(isOwnerOfNFT || userWroteComment) && (
             <div className="flex items-center justify-center my-2 md:my-0 relative">
               <div
                 onClick={toggleDropdown}

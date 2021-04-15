@@ -7,11 +7,12 @@ import mixpanel from "mixpanel-browser";
 import Comment from "./Comment";
 
 export default function CommentsSection({
-  nftId,
+  item,
   closeModal,
   modalRef,
   commentCount,
 }) {
+  const { nft_id: nftId, owner_id: nftOwnerId } = item;
   const context = useContext(AppContext);
   const { user } = context;
   const [loadingComments, setLoadingComments] = useState(true);
@@ -156,6 +157,7 @@ export default function CommentsSection({
                       closeModal={closeModal}
                       modalRef={modalRef}
                       deleteComment={deleteComment}
+                      nftOwnerId={nftOwnerId}
                     />
                   ))
                 ) : (
