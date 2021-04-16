@@ -139,7 +139,9 @@ class SpotlightItem extends React.Component {
                           width={
                             isMobile
                               ? "100%"
-                              : this.divRef?.current?.clientWidth / 2
+                              : this.divRef?.current?.clientWidth
+                              ? this.divRef?.current?.clientWidth / 2
+                              : null
                           }
                           height={"1"}
                           //width={columns === 1 ? window.innerWidth : "100%"}

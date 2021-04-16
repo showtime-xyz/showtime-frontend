@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import Link from "next/link";
 import { truncateWithEllipses } from "../lib/utilities";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+//import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+//import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import FollowButton from "./FollowButton";
 import AppContext from "../context/app-context";
 
@@ -45,7 +45,7 @@ export default function CreatorSummary({
           </a>
         </Link>
       </div>
-      <div class="flex flex-col md:flex-row md:items-center flex-wrap">
+      <div className="flex flex-col md:flex-row md:items-center flex-wrap">
         <Link
           href={collectionSlug ? "/c/[collection]" : "/[profile]"}
           as={
