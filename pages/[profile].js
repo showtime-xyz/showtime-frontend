@@ -23,12 +23,16 @@ import Select from "react-dropdown-select";
 import SpotlightItem from "../components/SpotlightItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faImage } from "@fortawesome/free-regular-svg-icons";
+import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import ProfileFollowersPill from "../components/ProfileFollowersPill";
 import {
   faHeart as fasHeart,
   faFingerprint,
   faLink,
   faImage as fasImage,
+  faTree,
+  faWater,
+  faTag,
 } from "@fortawesome/free-solid-svg-icons";
 
 const initialBioLength = 160;
@@ -806,7 +810,7 @@ const Profile = ({
                     <FontAwesomeIcon
                       style={{ height: 14, width: 14 }}
                       className="mr-2"
-                      icon={faLink}
+                      icon={faTwitter}
                     />{" "}
                   </div>
                   <div>
@@ -836,7 +840,7 @@ const Profile = ({
                     <FontAwesomeIcon
                       style={{ height: 14, width: 14 }}
                       className="mr-2"
-                      icon={faLink}
+                      icon={faTree}
                     />{" "}
                   </div>
                   <div>
@@ -866,7 +870,7 @@ const Profile = ({
                     <FontAwesomeIcon
                       style={{ height: 14, width: 14 }}
                       className="mr-2"
-                      icon={faLink}
+                      icon={fasImage}
                     />{" "}
                   </div>
                   <div>
@@ -898,7 +902,7 @@ const Profile = ({
                     <FontAwesomeIcon
                       style={{ height: 14, width: 14 }}
                       className="mr-2"
-                      icon={faLink}
+                      icon={faTag}
                     />{" "}
                   </div>
                   <div>
@@ -928,7 +932,7 @@ const Profile = ({
                     <FontAwesomeIcon
                       style={{ height: 14, width: 14 }}
                       className="mr-2"
-                      icon={faLink}
+                      icon={faWater}
                     />{" "}
                   </div>
                   <div>
