@@ -147,6 +147,15 @@ export default function Modal({ isOpen, setEditModalOpen }) {
           ? websiteValue.trim()
           : null
         : null,
+      twitter: twitter ? (twitter.trim() ? twitter.trim() : null) : null,
+      linktree: linktree ? (linktree.trim() ? linktree.trim() : null) : null,
+      foundation: foundation
+        ? foundation.trim()
+          ? foundation.trim()
+          : null
+        : null,
+      rarible: rarible ? (rarible.trim() ? rarible.trim() : null) : null,
+      opensea: opensea ? (opensea.trim() ? opensea.trim() : null) : null,
       default_list_id: defaultListId ? defaultListId : "",
       default_created_sort_id: defaultCreatedSortId,
       default_owned_sort_id: defaultOwnedSortId,
