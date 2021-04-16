@@ -806,10 +806,13 @@ const Profile = ({
                 </div>
               ) : null}
               {/* map out social links */}
-              {socialLinkObjs.map((socialLink) => (
-                <>
-                  {profileToDisplay?.social_links?.[socialLink.key] && (
-                    <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
+              {socialLinkObjs.map(
+                (socialLink) =>
+                  profileToDisplay?.social_links?.[socialLink.key] && (
+                    <div
+                      className="text-gray-500 flex text-sm sm:text-base flex-row py-1"
+                      key={socialLink.key}
+                    >
                       <div>
                         <FontAwesomeIcon
                           style={{ height: 14, width: 14 }}
@@ -843,9 +846,8 @@ const Profile = ({
                         </a>
                       </div>
                     </div>
-                  )}
-                </>
-              ))}
+                  )
+              )}
             </div>
           </div>
         </CappedWidth>
