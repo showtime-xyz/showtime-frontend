@@ -291,7 +291,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       setBioValue(e.target.value);
                     }}
                     type="text"
-                    maxLength="200"
+                    maxLength="300"
                     className="w-full mt-1 border-2 border-gray-400 px-3"
                     style={{
                       color: "black",
@@ -308,7 +308,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                     className="text-right text-gray-500"
                     style={{ fontSize: 12, fontWeight: 400 }}
                   >
-                    200 character limit
+                    300 character limit
                   </div>
                   <label
                     htmlFor="website_url"
