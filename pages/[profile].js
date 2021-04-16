@@ -31,7 +31,7 @@ import {
   faImage as fasImage,
 } from "@fortawesome/free-solid-svg-icons";
 
-const initialBioLength = 140;
+const initialBioLength = 180;
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
