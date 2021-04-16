@@ -18,6 +18,7 @@ export default async (req, res) => {
       },
       body: req.body,
     });
+    console.log(req.body);
   } catch (error) {
     console.log(error);
   }

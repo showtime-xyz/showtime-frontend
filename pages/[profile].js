@@ -763,45 +763,199 @@ const Profile = ({
             ) : null}
 
             {/* Use context info for logged in user - reflected immediately after changes */}
-            {isMyProfile && context?.myProfile?.website_url ? (
-              <div
-                className={`text-gray-500 flex text-sm sm:text-base flex-row ${
-                  isMyProfile && context?.myProfile?.bio ? "mt-3" : null
-                }
-            `}
-              >
-                <div>
-                  <FontAwesomeIcon
-                    style={{ height: 14, width: 14 }}
-                    className="mr-2"
-                    icon={faLink}
-                  />{" "}
-                </div>
-                <div>
-                  <a
-                    href={
-                      context.myProfile.website_url.slice(0, 4) === "http"
-                        ? context.myProfile.website_url
-                        : "https://" + context.myProfile.website_url
-                    }
-                    target="_blank"
-                    style={{ color: "rgb(81, 125, 228)" }}
-                    onClick={() => {
-                      mixpanel.track("Clicked profile website link", {
-                        slug: slug_address,
-                      });
-                    }}
-                  >
-                    <div
-                      className="hover:opacity-90"
-                      style={{ wordBreak: "break-all" }}
+            <div
+              className={isMyProfile && context?.myProfile?.bio ? "mt-3" : ""}
+            >
+              {isMyProfile && context?.myProfile?.website_url ? (
+                <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
+                  <div>
+                    <FontAwesomeIcon
+                      style={{ height: 14, width: 14 }}
+                      className="mr-2"
+                      icon={faLink}
+                    />{" "}
+                  </div>
+                  <div>
+                    <a
+                      href={
+                        context.myProfile.website_url.slice(0, 4) === "http"
+                          ? context.myProfile.website_url
+                          : "https://" + context.myProfile.website_url
+                      }
+                      target="_blank"
+                      style={{ color: "rgb(81, 125, 228)" }}
+                      onClick={() => {
+                        mixpanel.track("Clicked profile website link", {
+                          slug: slug_address,
+                        });
+                      }}
                     >
-                      {context.myProfile.website_url}
-                    </div>
-                  </a>
+                      <div
+                        className="hover:opacity-90"
+                        style={{ wordBreak: "break-all" }}
+                      >
+                        {context.myProfile.website_url}
+                      </div>
+                    </a>
+                  </div>
                 </div>
-              </div>
-            ) : null}
+              ) : null}
+              {isMyProfile && context?.myProfile?.twitter && (
+                <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
+                  <div>
+                    <FontAwesomeIcon
+                      style={{ height: 14, width: 14 }}
+                      className="mr-2"
+                      icon={faLink}
+                    />{" "}
+                  </div>
+                  <div>
+                    <a
+                      href={"https://twitter.com/" + context.myProfile.twitter}
+                      target="_blank"
+                      style={{ color: "rgb(81, 125, 228)" }}
+                      onClick={() => {
+                        mixpanel.track("Clicked Twitter profile link", {
+                          slug: slug_address,
+                        });
+                      }}
+                    >
+                      <div
+                        className="hover:opacity-90"
+                        style={{ wordBreak: "break-all" }}
+                      >
+                        Twitter
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              )}
+              {isMyProfile && context?.myProfile?.linktree && (
+                <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
+                  <div>
+                    <FontAwesomeIcon
+                      style={{ height: 14, width: 14 }}
+                      className="mr-2"
+                      icon={faLink}
+                    />{" "}
+                  </div>
+                  <div>
+                    <a
+                      href={"https://linktr.ee/" + context.myProfile.linktree}
+                      target="_blank"
+                      style={{ color: "rgb(81, 125, 228)" }}
+                      onClick={() => {
+                        mixpanel.track("Clicked Linktree profile link", {
+                          slug: slug_address,
+                        });
+                      }}
+                    >
+                      <div
+                        className="hover:opacity-90"
+                        style={{ wordBreak: "break-all" }}
+                      >
+                        Linktree
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              )}
+              {isMyProfile && context?.myProfile?.foundation && (
+                <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
+                  <div>
+                    <FontAwesomeIcon
+                      style={{ height: 14, width: 14 }}
+                      className="mr-2"
+                      icon={faLink}
+                    />{" "}
+                  </div>
+                  <div>
+                    <a
+                      href={
+                        "https://foundation.app/" + context.myProfile.foundation
+                      }
+                      target="_blank"
+                      style={{ color: "rgb(81, 125, 228)" }}
+                      onClick={() => {
+                        mixpanel.track("Clicked Foundation profile link", {
+                          slug: slug_address,
+                        });
+                      }}
+                    >
+                      <div
+                        className="hover:opacity-90"
+                        style={{ wordBreak: "break-all" }}
+                      >
+                        Foundation
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              )}
+              {isMyProfile && context?.myProfile?.rarible && (
+                <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
+                  <div>
+                    <FontAwesomeIcon
+                      style={{ height: 14, width: 14 }}
+                      className="mr-2"
+                      icon={faLink}
+                    />{" "}
+                  </div>
+                  <div>
+                    <a
+                      href={"https://rarible.com/" + context.myProfile.rarible}
+                      target="_blank"
+                      style={{ color: "rgb(81, 125, 228)" }}
+                      onClick={() => {
+                        mixpanel.track("Clicked Rarible profile link", {
+                          slug: slug_address,
+                        });
+                      }}
+                    >
+                      <div
+                        className="hover:opacity-90"
+                        style={{ wordBreak: "break-all" }}
+                      >
+                        Rarible
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              )}
+              {isMyProfile && context?.myProfile?.opensea && (
+                <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
+                  <div>
+                    <FontAwesomeIcon
+                      style={{ height: 14, width: 14 }}
+                      className="mr-2"
+                      icon={faLink}
+                    />{" "}
+                  </div>
+                  <div>
+                    <a
+                      href={
+                        "https://opensea.io/accounts/" +
+                        context.myProfile.opensea
+                      }
+                      target="_blank"
+                      style={{ color: "rgb(81, 125, 228)" }}
+                      onClick={() => {
+                        mixpanel.track("Clicked OpenSea profile link", {
+                          slug: slug_address,
+                        });
+                      }}
+                    >
+                      <div
+                        className="hover:opacity-90"
+                        style={{ wordBreak: "break-all" }}
+                      >
+                        OpenSea
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Else use page info */}
             {!isMyProfile && website_url ? (
