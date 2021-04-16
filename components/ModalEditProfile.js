@@ -64,6 +64,10 @@ export default function Modal({ isOpen, setEditModalOpen }) {
   const [foundation, setFoundation] = useState("");
   const [rarible, setRarible] = useState("");
   const [opensea, setOpensea] = useState("");
+  const [mintable, setMintable] = useState("");
+  const [makersplace, setMakersplace] = useState("");
+  const [superrare, setSuperrare] = useState("");
+  const [knownorigin, setKnownorigin] = useState("");
 
   const [customURLError, setCustomURLError] = useState({
     isError: false,
@@ -83,11 +87,15 @@ export default function Modal({ isOpen, setEditModalOpen }) {
       setDefaultListId(context.myProfile.default_list_id || "");
       setDefaultCreatedSortId(context.myProfile.default_created_sort_id || 1);
       setDefaultOwnedSortId(context.myProfile.default_owned_sort_id || 1);
-      setTwitter(context.myProfile.twitter || "");
-      setLinktree(context.myProfile.linktree || "");
-      setFoundation(context.myProfile.foundation || "");
-      setRarible(context.myProfile.rarible || "");
-      setOpensea(context.myProfile.opensea || "");
+      setTwitter(context.myProfile.social_links.twitter || "");
+      setLinktree(context.myProfile.social_links.linktree || "");
+      setFoundation(context.myProfile.social_links.foundation || "");
+      setRarible(context.myProfile.social_links.rarible || "");
+      setOpensea(context.myProfile.social_links.opensea || "");
+      setMintable(context.myProfile.social_links.mintable || "");
+      setMakersplace(context.myProfile.social_links.makersplace || "");
+      setSuperrare(context.myProfile.social_links.superrare || "");
+      setKnownorigin(context.myProfile.social_links.knownorigin || "");
     }
   }, [context.myProfile, isOpen]);
 
@@ -113,23 +121,21 @@ export default function Modal({ isOpen, setEditModalOpen }) {
     await fetch(`/api/editprofile`, {
       method: "post",
       body: JSON.stringify({
-        name: nameValue ? (nameValue.trim() ? nameValue.trim() : null) : null,
-        bio: bioValue ? (bioValue.trim() ? bioValue.trim() : null) : null,
-        username,
-        website_url: websiteValue
-          ? websiteValue.trim()
-            ? websiteValue.trim()
-            : null
-          : null,
-        twitter: twitter ? (twitter.trim() ? twitter.trim() : null) : null,
-        linktree: linktree ? (linktree.trim() ? linktree.trim() : null) : null,
-        foundation: foundation
-          ? foundation.trim()
-            ? foundation.trim()
-            : null
-          : null,
-        rarible: rarible ? (rarible.trim() ? rarible.trim() : null) : null,
-        opensea: opensea ? (opensea.trim() ? opensea.trim() : null) : null,
+        name: nameValue?.trim() ? nameValue.trim() : null, // handle names with all whitespaces
+        bio: bioValue?.trim() ? bioValue.trim() : null,
+        username: username?.trim() ? username.trim() : null,
+        website_url: websiteValue?.trim() ? websiteValue.trim() : null,
+        social_links: {
+          twitter: twitter?.trim() ? twitter.trim() : null,
+          linktree: linktree?.trim() ? linktree.trim() : null,
+          foundation: foundation?.trim() ? foundation.trim() : null,
+          rarible: rarible?.trim() ? rarible.trim() : null,
+          opensea: opensea?.trim() ? opensea.trim() : null,
+          mintable: mintable?.trim() ? mintable.trim() : null,
+          makersplace: makersplace?.trim() ? makersplace.trim() : null,
+          superrare: superrare?.trim() ? superrare.trim() : null,
+          knownorigin: knownorigin?.trim() ? knownorigin.trim() : null,
+        },
         default_list_id: defaultListId ? defaultListId : "",
         default_created_sort_id: defaultCreatedSortId,
         default_owned_sort_id: defaultOwnedSortId,
@@ -139,23 +145,21 @@ export default function Modal({ isOpen, setEditModalOpen }) {
     // Update state to immediately show changes
     context.setMyProfile({
       ...context.myProfile,
-      name: nameValue ? (nameValue.trim() ? nameValue.trim() : null) : null, // handle names with all whitespaces
-      bio: bioValue ? (bioValue.trim() ? bioValue.trim() : null) : null,
-      username,
-      website_url: websiteValue
-        ? websiteValue.trim()
-          ? websiteValue.trim()
-          : null
-        : null,
-      twitter: twitter ? (twitter.trim() ? twitter.trim() : null) : null,
-      linktree: linktree ? (linktree.trim() ? linktree.trim() : null) : null,
-      foundation: foundation
-        ? foundation.trim()
-          ? foundation.trim()
-          : null
-        : null,
-      rarible: rarible ? (rarible.trim() ? rarible.trim() : null) : null,
-      opensea: opensea ? (opensea.trim() ? opensea.trim() : null) : null,
+      name: nameValue?.trim() ? nameValue.trim() : null, // handle names with all whitespaces
+      bio: bioValue?.trim() ? bioValue.trim() : null,
+      username: username?.trim() ? username.trim() : null,
+      website_url: websiteValue?.trim() ? websiteValue.trim() : null,
+      social_links: {
+        twitter: twitter?.trim() ? twitter.trim() : null,
+        linktree: linktree?.trim() ? linktree.trim() : null,
+        foundation: foundation?.trim() ? foundation.trim() : null,
+        rarible: rarible?.trim() ? rarible.trim() : null,
+        opensea: opensea?.trim() ? opensea.trim() : null,
+        mintable: mintable?.trim() ? mintable.trim() : null,
+        makersplace: makersplace?.trim() ? makersplace.trim() : null,
+        superrare: superrare?.trim() ? superrare.trim() : null,
+        knownorigin: knownorigin?.trim() ? knownorigin.trim() : null,
+      },
       default_list_id: defaultListId ? defaultListId : "",
       default_created_sort_id: defaultCreatedSortId,
       default_owned_sort_id: defaultOwnedSortId,
@@ -191,6 +195,81 @@ export default function Modal({ isOpen, setEditModalOpen }) {
   const sortingOptionsList = [
     //{ label: "Select...", key: "" },
     ...Object.keys(SORT_FIELDS).map((key) => SORT_FIELDS[key]),
+  ];
+
+  const socialLinkObjs = [
+    {
+      title: "Twitter",
+      keyname: "twitter",
+      url: "twitter.com/",
+      value: twitter,
+      setValue: setTwitter,
+      padding: 100,
+    },
+    {
+      title: "Linktree",
+      keyname: "linktree",
+      url: "linktr.ee/",
+      value: linktree,
+      setValue: setLinktree,
+      padding: 78,
+    },
+    {
+      title: "Foundation",
+      keyname: "foundation",
+      url: "foundation.app/",
+      value: foundation,
+      setValue: setFoundation,
+      padding: 125,
+    },
+    {
+      title: "Rarible",
+      keyname: "rarible",
+      url: "rarible.com/",
+      value: rarible,
+      setValue: setRarible,
+      padding: 99,
+    },
+    {
+      title: "OpenSea",
+      keyname: "opensea",
+      url: "opensea.io/",
+      value: opensea,
+      setValue: setOpensea,
+      padding: 98,
+    },
+    {
+      title: "Mintable",
+      keyname: "mintable",
+      url: "mintable.app/",
+      value: mintable,
+      setValue: setMintable,
+      padding: 109,
+    },
+    {
+      title: "Makersplace",
+      keyname: "makersplace",
+      url: "makersplace.com/",
+      value: makersplace,
+      setValue: setMakersplace,
+      padding: 139,
+    },
+    {
+      title: "SuperRare",
+      keyname: "superrare",
+      url: "superrare.co/",
+      value: superrare,
+      setValue: setSuperrare,
+      padding: 109,
+    },
+    {
+      title: "KnownOrigin",
+      keyname: "knownorigin",
+      url: "knownorigin.io/",
+      value: knownorigin,
+      setValue: setKnownorigin,
+      padding: 119,
+    },
   ];
 
   return (
@@ -289,262 +368,181 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   >
                     {SHOWTIME_PROD_URL}
                   </div>
-                  <label htmlFor="bio" className="block text-sm text-gray-700">
-                    About Me (optional)
-                  </label>
-                  <textarea
-                    name="bio"
-                    placeholder=""
-                    value={bioValue ? bioValue : ""}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      const urlRegex = /^[a-zA-Z0-9_]*$/;
-                      if (urlRegex.test(value)) {
-                        setTwitter(value);
-                      }
-                    }}
-                    type="text"
-                    maxLength="300"
-                    rows={3}
-                    className="mt-1 bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  ></textarea>
+                </div>
+                <div
+                  style={{
+                    color: customURLError.isError ? "red" : "#35bb5b",
+                    fontSize: 12,
+                    visibility: customURLError.message ? "visible" : "hidden",
+                  }}
+                  className="text-right"
+                >
+                  &nbsp;{customURLError.message}
+                </div>
+                <label htmlFor="bio" className="text-gray-500 text-sm">
+                  About Me (optional)
+                </label>
+                <textarea
+                  name="bio"
+                  placeholder=""
+                  value={bioValue ? bioValue : ""}
+                  onChange={(e) => {
+                    setBioValue(e.target.value);
+                  }}
+                  type="text"
+                  maxLength="300"
+                  className="w-full mt-1 border-2 border-gray-400 px-3"
+                  style={{
+                    color: "black",
+                    borderRadius: 7,
+                    height: 114,
+                    fontSize: 16,
 
-                  <div className="text-right text-gray-500 text-xs">
-                    300 character limit
-                  </div>
-                </div>
-                <label htmlFor="linktree" className="text-gray-500  text-sm">
-                  Linktree{" "}
-                  {/*<span
-                      style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
-                    >
-                      (optional)
-                    </span>*/}
-                </label>
-                <div
-                  style={{
-                    position: "relative",
-                    borderRadius: 7,
+                    paddingTop: 10,
+                    paddingBottom: 10,
                   }}
-                  className="mt-1 border-2 border-gray-400 mb-6"
-                >
-                  <input
-                    name="linktree"
-                    placeholder="username"
-                    value={linktree ? linktree : ""}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      const urlRegex = /^[a-zA-Z0-9_]*$/;
-                      if (urlRegex.test(value)) {
-                        setLinktree(value);
-                      }
-                    }}
-                    type="text"
-                    maxLength={30}
-                    className="w-full"
-                    style={{
-                      color: "black",
-                      borderRadius: 7,
-                      padding: 10,
-                      paddingLeft: 78,
-                      fontSize: 16,
-                    }}
-                    autoComplete="false"
-                  />
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      paddingLeft: 10,
-                      paddingTop: 13,
-                      paddingBottom: 12,
-                      paddingRight: 7,
-                      borderBottomLeftRadius: 7,
-                      borderTopLeftRadius: 7,
-                      backgroundColor: "#eee",
-                      color: "#666",
-                      fontSize: 13,
-                    }}
-                  >
-                    linktr.ee/
-                  </div>
-                </div>
-                <label htmlFor="foundation" className="text-gray-500  text-sm">
-                  Foundation{" "}
-                  {/*<span
-                      style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
-                    >
-                      (optional)
-                    </span>*/}
-                </label>
+                ></textarea>
                 <div
-                  style={{
-                    position: "relative",
-                    borderRadius: 7,
-                  }}
-                  className="mt-1 border-2 border-gray-400 mb-6"
+                  className="text-right text-gray-500"
+                  style={{ fontSize: 12, fontWeight: 400 }}
                 >
-                  <input
-                    name="foundation"
-                    placeholder="username"
-                    value={foundation ? foundation : ""}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      const urlRegex = /^[a-zA-Z0-9_]*$/;
-                      if (urlRegex.test(value)) {
-                        setFoundation(value);
-                      }
-                    }}
-                    type="text"
-                    maxLength={30}
-                    className="w-full"
-                    style={{
-                      color: "black",
-                      borderRadius: 7,
-                      padding: 10,
-                      paddingLeft: 125,
-                      fontSize: 16,
-                    }}
-                    autoComplete="false"
-                  />
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      paddingLeft: 10,
-                      paddingTop: 13,
-                      paddingBottom: 12,
-                      paddingRight: 7,
-                      borderBottomLeftRadius: 7,
-                      borderTopLeftRadius: 7,
-                      backgroundColor: "#eee",
-                      color: "#666",
-                      fontSize: 13,
-                    }}
-                  >
-                    foundation.app/
-                  </div>
+                  300 character limit
                 </div>
-                <label htmlFor="rarible" className="text-gray-500  text-sm">
-                  Rarible{" "}
-                  {/*<span
-                      style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
-                    >
-                      (optional)
-                    </span>*/}
+              </div>
+            </div>
+
+            <div className="my-4">
+              <div className="text-xl text-purple-500 pt-2">Page Settings</div>
+              <div className="py-2 mb-2">
+                <label className="text-gray-500 text-sm">
+                  Default NFT List
                 </label>
-                <div
+                <Select
+                  options={tab_list}
+                  labelField="name"
+                  valueField="value"
+                  values={tab_list.filter(
+                    (item) => item.value === defaultListId
+                  )}
+                  searchable={false}
+                  onChange={(values) => setDefaultListId(values[0]["value"])}
                   style={{
-                    position: "relative",
-                    borderRadius: 7,
+                    fontSize: 16,
+                    borderWidth: 2,
+                    borderRadius: 4,
+                    borderColor: "rgb(156, 163, 175)",
+                    paddingRight: 8,
                   }}
-                  className="mt-1 border-2 border-gray-400 mb-6"
-                >
-                  <input
-                    name="rarible"
-                    placeholder="username"
-                    value={rarible ? rarible : ""}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      const urlRegex = /^[a-zA-Z0-9_]*$/;
-                      if (urlRegex.test(value)) {
-                        setRarible(value);
-                      }
-                    }}
-                    type="text"
-                    maxLength={30}
-                    className="w-full"
-                    style={{
-                      color: "black",
-                      borderRadius: 7,
-                      padding: 10,
-                      paddingLeft: 99,
-                      fontSize: 16,
-                    }}
-                    autoComplete="false"
-                  />
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      paddingLeft: 10,
-                      paddingTop: 13,
-                      paddingBottom: 12,
-                      paddingRight: 7,
-                      borderBottomLeftRadius: 7,
-                      borderTopLeftRadius: 7,
-                      backgroundColor: "#eee",
-                      color: "#666",
-                      fontSize: 13,
-                    }}
-                  >
-                    rarible.com/
-                  </div>
-                </div>
-                <label htmlFor="opensea" className="text-gray-500  text-sm">
-                  Opensea{" "}
-                  {/*<span
-                      style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
+                  className="mt-1"
+                />
+              </div>
+              <div className="py-2 mb-2">
+                <label className="text-gray-500 text-sm">Sort Created By</label>
+                <Select
+                  options={sortingOptionsList}
+                  labelField="label"
+                  valueField="id"
+                  values={sortingOptionsList.filter(
+                    (item) => item.id === defaultCreatedSortId
+                  )}
+                  searchable={false}
+                  onChange={(values) =>
+                    SetDefaultCreatedSortId(values[0]["id"])
+                  }
+                  style={{
+                    fontSize: 16,
+                    borderWidth: 2,
+                    borderRadius: 4,
+                    borderColor: "rgb(156, 163, 175)",
+                    paddingRight: 8,
+                  }}
+                  className="mt-1"
+                />
+              </div>
+              <div className="py-2  mb-2">
+                <label className="text-gray-500 text-sm">Sort Owned By</label>
+                <Select
+                  options={sortingOptionsList}
+                  labelField="label"
+                  valueField="id"
+                  values={sortingOptionsList.filter(
+                    (item) => item.id === defaultOwnedSortId
+                  )}
+                  searchable={false}
+                  onChange={(values) => setDefaultOwnedSortId(values[0]["id"])}
+                  style={{
+                    fontSize: 16,
+                    borderWidth: 2,
+                    borderRadius: 4,
+                    borderColor: "rgb(156, 163, 175)",
+                    paddingRight: 8,
+                  }}
+                  className="mt-1"
+                />
+              </div>
+            </div>
+
+            {/* second row */}
+            <div className="my-4">
+              <div className="text-xl text-purple-500 pt-2">Social Links</div>
+              <div className="py-2">
+                {socialLinkObjs.map((linkObj) => (
+                  <div key={linkObj.keyname}>
+                    <label htmlFor="opensea" className="text-gray-500  text-sm">
+                      {linkObj.title}{" "}
+                    </label>
+                    <div
+                      style={{
+                        position: "relative",
+                        borderRadius: 7,
+                      }}
+                      className="mt-1 border-2 border-gray-400 mb-6"
                     >
-                      (optional)
-                    </span>*/}
-                </label>
-                <div
-                  style={{
-                    position: "relative",
-                    borderRadius: 7,
-                  }}
-                  className="mt-1 border-2 border-gray-400 mb-6"
-                >
-                  <input
-                    name="opensea"
-                    placeholder="username"
-                    value={opensea ? opensea : ""}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      const urlRegex = /^[a-zA-Z0-9_]*$/;
-                      if (urlRegex.test(value)) {
-                        setOpensea(value);
-                      }
-                    }}
-                    type="text"
-                    maxLength={30}
-                    className="w-full"
-                    style={{
-                      color: "black",
-                      borderRadius: 7,
-                      padding: 10,
-                      paddingLeft: 98,
-                      fontSize: 16,
-                    }}
-                    autoComplete="false"
-                  />
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      paddingLeft: 10,
-                      paddingTop: 13,
-                      paddingBottom: 12,
-                      paddingRight: 7,
-                      borderBottomLeftRadius: 7,
-                      borderTopLeftRadius: 7,
-                      backgroundColor: "#eee",
-                      color: "#666",
-                      fontSize: 13,
-                    }}
-                  >
-                    opensea.io/
+                      <input
+                        name={linkObj.keyname}
+                        placeholder="username"
+                        value={linkObj.value ? linkObj.value : ""}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          const urlRegex = /^[a-zA-Z0-9_]*$/;
+                          if (urlRegex.test(value)) {
+                            linkObj.setValue(value);
+                          }
+                        }}
+                        type="text"
+                        maxLength={30}
+                        className="w-full"
+                        style={{
+                          color: "black",
+                          borderRadius: 7,
+                          padding: 10,
+                          paddingLeft: linkObj.padding,
+                          fontSize: 16,
+                        }}
+                        autoComplete="false"
+                      />
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          paddingLeft: 10,
+                          paddingTop: 13,
+                          paddingBottom: 12,
+                          paddingRight: 7,
+                          borderBottomLeftRadius: 7,
+                          borderTopLeftRadius: 7,
+                          backgroundColor: "#eee",
+                          color: "#666",
+                          fontSize: 13,
+                        }}
+                      >
+                        {linkObj.url}
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <label
-                  htmlFor="website_url"
-                  className="block text-sm text-gray-700 mt-1"
-                >
+                ))}
+                <label htmlFor="website_url" className="text-gray-500 text-sm">
                   Website URL
                 </label>
                 <input

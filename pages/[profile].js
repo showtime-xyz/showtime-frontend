@@ -60,7 +60,6 @@ export async function getServerSideProps(context) {
       data_profile.profile.wallet_addresses_excluding_email;
     const followers_list = data_profile.followers;
     const following_list = data_profile.following;
-
     const bio = data_profile.profile.bio;
     const website_url = data_profile.profile.website_url;
     const profile_id = data_profile.profile.profile_id;
@@ -69,15 +68,9 @@ export async function getServerSideProps(context) {
     const default_created_sort_id =
       data_profile.profile.default_created_sort_id;
     const default_owned_sort_id = data_profile.profile.default_owned_sort_id;
-
     const featured_nft_img_url = data_profile.profile.featured_nft_img_url;
-
     const featured_nft = data_profile.featured_nft;
-    const twitter = data_profile.profile.twitter;
-    const linktree = data_profile.profile.linktree;
-    const foundation = data_profile.profile.foundation;
-    const rarible = data_profile.profile.rarible;
-    const opensea = data_profile.profile.opensea;
+    const social_links = data_profile.profile.social_links;
 
     return {
       props: {
@@ -89,7 +82,6 @@ export async function getServerSideProps(context) {
         followers_list,
         following_list,
         bio,
-        website_url,
         profile_id,
         username,
         default_list_id,
@@ -97,11 +89,8 @@ export async function getServerSideProps(context) {
         default_owned_sort_id,
         featured_nft_img_url,
         featured_nft,
-        twitter,
-        linktree,
-        foundation,
-        rarible,
-        opensea,
+        website_url,
+        social_links,
       }, // will be passed to the page component as props
     };
   } catch (err) {
@@ -127,7 +116,6 @@ const Profile = ({
   followers_list,
   following_list,
   bio,
-  website_url,
   profile_id,
   username,
   default_list_id,
@@ -135,13 +123,9 @@ const Profile = ({
   default_owned_sort_id,
   featured_nft_img_url,
   featured_nft,
-  twitter,
-  linktree,
-  foundation,
-  rarible,
-  opensea,
+  website_url,
+  social_links,
 }) => {
-  //const router = useRouter();
   const context = useContext(AppContext);
 
   const [isMyProfile, setIsMyProfile] = useState();
@@ -534,22 +518,31 @@ const Profile = ({
     ? context.myProfile
     : {
         name,
+        website_url,
         bio,
         img_url,
-        website_url,
         username,
-        twitter,
-        linktree,
-        foundation,
-        rarible,
-        opensea,
+        social_links,
         wallet_addresses_excluding_email,
       };
 
-  console.log(
-    "wallet_addresses_excluding_email",
-    wallet_addresses_excluding_email
-  );
+  const socialLinkObjs = [
+    { key: "twitter", icon: faTwitter, title: "Twitter", url: "twitter.com" },
+    { key: "linktree", icon: faTree, title: "Linktree", url: "linktr.ee" },
+    {
+      key: "foundation",
+      icon: fasImage,
+      title: "Foundation",
+      url: "foundation.app",
+    },
+    { key: "rarible", icon: faTag, title: "Rarible", url: "rarible.com" },
+    {
+      key: "opensea",
+      icon: faWater,
+      title: "Opensea",
+      url: "opensea.io/accounts",
+    },
+  ];
 
   return (
     <div
@@ -812,161 +805,47 @@ const Profile = ({
                   </div>
                 </div>
               ) : null}
-              {profileToDisplay?.twitter && (
-                <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
-                  <div>
-                    <FontAwesomeIcon
-                      style={{ height: 14, width: 14 }}
-                      className="mr-2"
-                      icon={faTwitter}
-                    />{" "}
-                  </div>
-                  <div>
-                    <a
-                      href={"https://twitter.com/" + profileToDisplay.twitter}
-                      target="_blank"
-                      style={{ color: "rgb(81, 125, 228)" }}
-                      onClick={() => {
-                        mixpanel.track("Clicked Twitter profile link", {
-                          slug: slug_address,
-                        });
-                      }}
-                    >
-                      <div
-                        className="hover:opacity-90"
-                        style={{ wordBreak: "break-all" }}
-                      >
-                        Twitter
+              {/* map out social links */}
+              {socialLinkObjs.map((socialLink) => (
+                <>
+                  {profileToDisplay?.social_links?.[socialLink.key] && (
+                    <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
+                      <div>
+                        <FontAwesomeIcon
+                          style={{ height: 14, width: 14 }}
+                          className="mr-2"
+                          icon={socialLink.icon}
+                        />{" "}
                       </div>
-                    </a>
-                  </div>
-                </div>
-              )}
-              {profileToDisplay?.linktree && (
-                <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
-                  <div>
-                    <FontAwesomeIcon
-                      style={{ height: 14, width: 14 }}
-                      className="mr-2"
-                      icon={faTree}
-                    />{" "}
-                  </div>
-                  <div>
-                    <a
-                      href={"https://linktr.ee/" + profileToDisplay.linktree}
-                      target="_blank"
-                      style={{ color: "rgb(81, 125, 228)" }}
-                      onClick={() => {
-                        mixpanel.track("Clicked Linktree profile link", {
-                          slug: slug_address,
-                        });
-                      }}
-                    >
-                      <div
-                        className="hover:opacity-90"
-                        style={{ wordBreak: "break-all" }}
-                      >
-                        Linktree
+                      <div>
+                        <a
+                          href={
+                            `https://${socialLink.url}/` +
+                            profileToDisplay.social_links[socialLink.key]
+                          }
+                          target="_blank"
+                          style={{ color: "rgb(81, 125, 228)" }}
+                          onClick={() => {
+                            mixpanel.track(
+                              `Clicked ${socialLink.title} profile link`,
+                              {
+                                slug: slug_address,
+                              }
+                            );
+                          }}
+                        >
+                          <div
+                            className="hover:opacity-90"
+                            style={{ wordBreak: "break-all" }}
+                          >
+                            {socialLink.title}
+                          </div>
+                        </a>
                       </div>
-                    </a>
-                  </div>
-                </div>
-              )}
-              {profileToDisplay?.foundation && (
-                <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
-                  <div>
-                    <FontAwesomeIcon
-                      style={{ height: 14, width: 14 }}
-                      className="mr-2"
-                      icon={fasImage}
-                    />{" "}
-                  </div>
-                  <div>
-                    <a
-                      href={
-                        "https://foundation.app/" + profileToDisplay.foundation
-                      }
-                      target="_blank"
-                      style={{ color: "rgb(81, 125, 228)" }}
-                      onClick={() => {
-                        mixpanel.track("Clicked Foundation profile link", {
-                          slug: slug_address,
-                        });
-                      }}
-                    >
-                      <div
-                        className="hover:opacity-90"
-                        style={{ wordBreak: "break-all" }}
-                      >
-                        Foundation
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              )}
-              {profileToDisplay?.rarible && (
-                <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
-                  <div>
-                    <FontAwesomeIcon
-                      style={{ height: 14, width: 14 }}
-                      className="mr-2"
-                      icon={faTag}
-                    />{" "}
-                  </div>
-                  <div>
-                    <a
-                      href={"https://rarible.com/" + profileToDisplay.rarible}
-                      target="_blank"
-                      style={{ color: "rgb(81, 125, 228)" }}
-                      onClick={() => {
-                        mixpanel.track("Clicked Rarible profile link", {
-                          slug: slug_address,
-                        });
-                      }}
-                    >
-                      <div
-                        className="hover:opacity-90"
-                        style={{ wordBreak: "break-all" }}
-                      >
-                        Rarible
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              )}
-              {profileToDisplay?.opensea && (
-                <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
-                  <div>
-                    <FontAwesomeIcon
-                      style={{ height: 14, width: 14 }}
-                      className="mr-2"
-                      icon={faWater}
-                    />{" "}
-                  </div>
-                  <div>
-                    <a
-                      href={
-                        "https://opensea.io/accounts/" +
-                        profileToDisplay.opensea
-                      }
-                      target="_blank"
-                      style={{ color: "rgb(81, 125, 228)" }}
-                      onClick={() => {
-                        mixpanel.track("Clicked OpenSea profile link", {
-                          slug: slug_address,
-                        });
-                      }}
-                    >
-                      <div
-                        className="hover:opacity-90"
-                        style={{ wordBreak: "break-all" }}
-                      >
-                        OpenSea
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              )}
+                    </div>
+                  )}
+                </>
+              ))}
             </div>
           </div>
         </CappedWidth>
