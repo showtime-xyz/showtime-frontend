@@ -73,6 +73,11 @@ export async function getServerSideProps(context) {
     const featured_nft_img_url = data_profile.profile.featured_nft_img_url;
 
     const featured_nft = data_profile.featured_nft;
+    const twitter = data_profile.profile.twitter;
+    const linktree = data_profile.profile.linktree;
+    const foundation = data_profile.profile.foundation;
+    const rarible = data_profile.profile.rarible;
+    const opensea = data_profile.profile.opensea;
 
     return {
       props: {
@@ -92,6 +97,11 @@ export async function getServerSideProps(context) {
         default_owned_sort_id,
         featured_nft_img_url,
         featured_nft,
+        twitter,
+        linktree,
+        foundation,
+        rarible,
+        opensea,
       }, // will be passed to the page component as props
     };
   } catch (err) {
@@ -125,6 +135,11 @@ const Profile = ({
   default_owned_sort_id,
   featured_nft_img_url,
   featured_nft,
+  twitter,
+  linktree,
+  foundation,
+  rarible,
+  opensea,
 }) => {
   //const router = useRouter();
   const context = useContext(AppContext);
@@ -515,6 +530,27 @@ const Profile = ({
     : likedItems.filter((item) => !likedHiddenItems.includes(item.nft_id))
         .length;
 
+  const profileToDisplay = isMyProfile
+    ? context.myProfile
+    : {
+        name,
+        bio,
+        img_url,
+        website_url,
+        username,
+        twitter,
+        linktree,
+        foundation,
+        rarible,
+        opensea,
+        wallet_addresses_excluding_email,
+      };
+
+  console.log(
+    "wallet_addresses_excluding_email",
+    wallet_addresses_excluding_email
+  );
+
   return (
     <div
       onClick={() => {
@@ -567,17 +603,7 @@ const Profile = ({
       <Layout>
         <Head>
           <title>
-            {isMyProfile
-              ? context.myProfile
-                ? context.myProfile.name
-                  ? context.myProfile.name
-                  : "Unnamed"
-                : name
-                ? name
-                : "Unnamed"
-              : name
-              ? name
-              : "Unnamed"}
+            {profileToDisplay?.name ? profileToDisplay.name : "Unnamed"}
           </title>
 
           <meta
@@ -641,12 +667,8 @@ const Profile = ({
                     }
                   }}
                   src={
-                    isMyProfile
-                      ? context.myProfile && context.myProfile.img_url
-                        ? context.myProfile.img_url
-                        : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                      : img_url
-                      ? img_url
+                    profileToDisplay?.img_url
+                      ? profileToDisplay.img_url
                       : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                   }
                   className={`h-24 w-24 rounded-full md:mr-4 border-2 border-white overflow-hidden ${
@@ -661,16 +683,11 @@ const Profile = ({
                 style={{ whiteSpace: "break-spaces", wordBreak: "break-word" }}
               >
                 <div className="text-2xl md:text-6xl mt-1 sm:mt-0 sm:mb-1 text-center md:text-left max-w-full">
-                  {isMyProfile
-                    ? context.myProfile
-                      ? context.myProfile.name
-                        ? context.myProfile.name
-                        : "Unnamed"
-                      : name
-                      ? name
-                      : "Unnamed"
-                    : name
-                    ? name
+                  {profileToDisplay?.name
+                    ? profileToDisplay.name
+                    : wallet_addresses_excluding_email &&
+                      wallet_addresses_excluding_email.length > 0
+                    ? formatAddressShort(wallet_addresses_excluding_email[0])
                     : "Unnamed"}
                 </div>
                 <div>
@@ -725,7 +742,7 @@ const Profile = ({
 
           <div className="px-6 sm:px-3 mt-8">
             {/* Use context info for logged in user - reflected immediately after changes */}
-            {isMyProfile && context.myProfile?.bio ? (
+            {profileToDisplay?.bio ? (
               // <div className="text-gray-500 flex flex-row">
               //   <div className="max-w-prose text-sm sm:text-base">
               //     {context.myProfile.bio}
@@ -740,14 +757,14 @@ const Profile = ({
                 className="text-gray-500 text-sm sm:text-base max-w-prose"
               >
                 {moreBioShown
-                  ? context.myProfile.bio
+                  ? profileToDisplay.bio
                   : truncateWithEllipses(
-                      context.myProfile.bio,
+                      profileToDisplay.bio,
                       initialBioLength
                     )}
                 {!moreBioShown &&
-                  context?.myProfile?.bio &&
-                  context.myProfile.bio.length > initialBioLength && (
+                  profileToDisplay?.bio &&
+                  profileToDisplay.bio.length > initialBioLength && (
                     <a
                       onClick={() => setMoreBioShown(true)}
                       className="text-gray-900 hover:text-gray-500 cursor-pointer"
@@ -759,18 +776,9 @@ const Profile = ({
               </div>
             ) : null}
 
-            {/* Else use page info */}
-            {!isMyProfile && bio ? (
-              <div className="text-gray-500 flex flex-row">
-                <div className="max-w-prose text-sm sm:text-base">{bio}</div>
-              </div>
-            ) : null}
-
             {/* Use context info for logged in user - reflected immediately after changes */}
-            <div
-              className={isMyProfile && context?.myProfile?.bio ? "mt-3" : ""}
-            >
-              {isMyProfile && context?.myProfile?.website_url ? (
+            <div className={profileToDisplay?.bio ? "mt-3" : ""}>
+              {profileToDisplay?.website_url ? (
                 <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
                   <div>
                     <FontAwesomeIcon
@@ -782,9 +790,9 @@ const Profile = ({
                   <div>
                     <a
                       href={
-                        context.myProfile.website_url.slice(0, 4) === "http"
-                          ? context.myProfile.website_url
-                          : "https://" + context.myProfile.website_url
+                        profileToDisplay.website_url.slice(0, 4) === "http"
+                          ? profileToDisplay.website_url
+                          : "https://" + profileToDisplay.website_url
                       }
                       target="_blank"
                       style={{ color: "rgb(81, 125, 228)" }}
@@ -798,13 +806,13 @@ const Profile = ({
                         className="hover:opacity-90"
                         style={{ wordBreak: "break-all" }}
                       >
-                        {context.myProfile.website_url}
+                        {profileToDisplay.website_url}
                       </div>
                     </a>
                   </div>
                 </div>
               ) : null}
-              {isMyProfile && context?.myProfile?.twitter && (
+              {profileToDisplay?.twitter && (
                 <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
                   <div>
                     <FontAwesomeIcon
@@ -815,7 +823,7 @@ const Profile = ({
                   </div>
                   <div>
                     <a
-                      href={"https://twitter.com/" + context.myProfile.twitter}
+                      href={"https://twitter.com/" + profileToDisplay.twitter}
                       target="_blank"
                       style={{ color: "rgb(81, 125, 228)" }}
                       onClick={() => {
@@ -834,7 +842,7 @@ const Profile = ({
                   </div>
                 </div>
               )}
-              {isMyProfile && context?.myProfile?.linktree && (
+              {profileToDisplay?.linktree && (
                 <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
                   <div>
                     <FontAwesomeIcon
@@ -845,7 +853,7 @@ const Profile = ({
                   </div>
                   <div>
                     <a
-                      href={"https://linktr.ee/" + context.myProfile.linktree}
+                      href={"https://linktr.ee/" + profileToDisplay.linktree}
                       target="_blank"
                       style={{ color: "rgb(81, 125, 228)" }}
                       onClick={() => {
@@ -864,7 +872,7 @@ const Profile = ({
                   </div>
                 </div>
               )}
-              {isMyProfile && context?.myProfile?.foundation && (
+              {profileToDisplay?.foundation && (
                 <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
                   <div>
                     <FontAwesomeIcon
@@ -876,7 +884,7 @@ const Profile = ({
                   <div>
                     <a
                       href={
-                        "https://foundation.app/" + context.myProfile.foundation
+                        "https://foundation.app/" + profileToDisplay.foundation
                       }
                       target="_blank"
                       style={{ color: "rgb(81, 125, 228)" }}
@@ -896,7 +904,7 @@ const Profile = ({
                   </div>
                 </div>
               )}
-              {isMyProfile && context?.myProfile?.rarible && (
+              {profileToDisplay?.rarible && (
                 <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
                   <div>
                     <FontAwesomeIcon
@@ -907,7 +915,7 @@ const Profile = ({
                   </div>
                   <div>
                     <a
-                      href={"https://rarible.com/" + context.myProfile.rarible}
+                      href={"https://rarible.com/" + profileToDisplay.rarible}
                       target="_blank"
                       style={{ color: "rgb(81, 125, 228)" }}
                       onClick={() => {
@@ -926,7 +934,7 @@ const Profile = ({
                   </div>
                 </div>
               )}
-              {isMyProfile && context?.myProfile?.opensea && (
+              {profileToDisplay?.opensea && (
                 <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
                   <div>
                     <FontAwesomeIcon
@@ -939,7 +947,7 @@ const Profile = ({
                     <a
                       href={
                         "https://opensea.io/accounts/" +
-                        context.myProfile.opensea
+                        profileToDisplay.opensea
                       }
                       target="_blank"
                       style={{ color: "rgb(81, 125, 228)" }}
@@ -960,47 +968,6 @@ const Profile = ({
                 </div>
               )}
             </div>
-
-            {/* Else use page info */}
-            {!isMyProfile && website_url ? (
-              <div
-                className={`text-gray-500 text-sm sm:text-base flex flex-row ${
-                  !isMyProfile && bio ? "mt-3" : null
-                }
-            `}
-              >
-                <div>
-                  <FontAwesomeIcon
-                    style={{ height: 14, width: 14 }}
-                    className="mr-2"
-                    icon={faLink}
-                  />{" "}
-                </div>
-                <div>
-                  <a
-                    href={
-                      website_url.slice(0, 4) === "http"
-                        ? website_url
-                        : "https://" + website_url
-                    }
-                    target="_blank"
-                    style={{ color: "rgb(81, 125, 228)" }}
-                    onClick={() => {
-                      mixpanel.track("Clicked profile website link", {
-                        slug: slug_address,
-                      });
-                    }}
-                  >
-                    <div
-                      className="hover:opacity-90"
-                      style={{ wordBreak: "break-all" }}
-                    >
-                      {website_url}
-                    </div>
-                  </a>
-                </div>
-              </div>
-            ) : null}
           </div>
         </CappedWidth>
         {spotlightItem ? (
@@ -1053,12 +1020,8 @@ const Profile = ({
                         <div className="mr-2">
                           <img
                             src={
-                              isMyProfile
-                                ? context.myProfile && context.myProfile.img_url
-                                  ? context.myProfile.img_url
-                                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                                : img_url
-                                ? img_url
+                              profileToDisplay && profileToDisplay.img_url
+                                ? profileToDisplay.img_url
                                 : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                             }
                             style={{ width: 22, height: 22 }}
@@ -1066,26 +1029,14 @@ const Profile = ({
                           />
                         </div>
                         <div>
-                          {isMyProfile
-                            ? context.myProfile?.name
-                              ? context.myProfile?.name
-                              : wallet_addresses_excluding_email &&
-                                wallet_addresses_excluding_email.length > 0
-                              ? formatAddressShort(
-                                  wallet_addresses_excluding_email[0]
-                                )
-                              : "Unnamed"
-                            : null}
-                          {!isMyProfile
-                            ? name != "Unnamed"
-                              ? name
-                              : wallet_addresses_excluding_email &&
-                                wallet_addresses_excluding_email.length > 0
-                              ? formatAddressShort(
-                                  wallet_addresses_excluding_email[0]
-                                )
-                              : "Unnamed"
-                            : null}
+                          {profileToDisplay?.name
+                            ? profileToDisplay.name
+                            : wallet_addresses_excluding_email &&
+                              wallet_addresses_excluding_email.length > 0
+                            ? formatAddressShort(
+                                wallet_addresses_excluding_email[0]
+                              )
+                            : "Unnamed"}
                         </div>
                         <div className="flex-grow"></div>
                         {isMyProfile ? (
