@@ -215,12 +215,20 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                     Name
                   </label>
                   <input
-                    name="name"
-                    placeholder="Your name"
-                    value={nameValue ? nameValue : ""}
-                    //autoFocus
+                    name="customURL"
+                    placeholder="Your custom URL"
+                    value={customURLValue ? customURLValue : ""}
                     onChange={(e) => {
-                      setNameValue(e.target.value);
+                      const value = e.target.value;
+                      const urlRegex = /^[a-zA-Z0-9_]*$/;
+                      if (urlRegex.test(value)) {
+                        setCustomURLValue(value);
+                        handleDebouncedUsernameLookup(
+                          value,
+                          context,
+                          setCustomURLError
+                        );
+                      }
                     }}
                     type="text"
                     maxLength="50"
@@ -270,7 +278,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                     }}
                     className="text-right text-xs mt-1 mb-1"
                   >
-                    &nbsp;{customURLError.message}
+                    {SHOWTIME_PROD_URL}
                   </div>
                   <label htmlFor="bio" className="block text-sm text-gray-700">
                     About Me (optional)
@@ -280,7 +288,11 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                     placeholder=""
                     value={bioValue ? bioValue : ""}
                     onChange={(e) => {
-                      setBioValue(e.target.value);
+                      const value = e.target.value;
+                      const urlRegex = /^[a-zA-Z0-9_]*$/;
+                      if (urlRegex.test(value)) {
+                        setTwitter(value);
+                      }
                     }}
                     type="text"
                     maxLength="300"
@@ -292,394 +304,254 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                     300 character limit
                   </div>
                 </div>
-              </div>
-              <div className="w-4 flex-shrink" />
-              <div className="my-4 flex-1">
-                <div className="text-xl text-purple-500">Page Settings</div>
-                <div className="py-2 mb-2">
-                  <label className="text-gray-500 text-sm">
-                    Default NFT List
-                  </label>
-                  <Select
-                    options={tab_list}
-                    labelField="name"
-                    valueField="value"
-                    values={tab_list.filter(
-                      (item) => item.value === defaultListId
-                    )}
-                    searchable={false}
-                    onChange={(values) => setDefaultListId(values[0]["value"])}
-                    style={{
-                      fontSize: 16,
-                      borderWidth: 2,
-                      borderRadius: 4,
-                      borderColor: "rgb(156, 163, 175)",
-                      paddingRight: 8,
-                    }}
-                    className="mt-1"
-                  />
-                </div>
-                <div className="py-2 mb-2">
-                  <label className="text-gray-500 text-sm">
-                    Sort Created By
-                  </label>
-                  <Select
-                    options={sortingOptionsList}
-                    labelField="label"
-                    valueField="id"
-                    values={sortingOptionsList.filter(
-                      (item) => item.id === defaultCreatedSortId
-                    )}
-                    searchable={false}
-                    onChange={(values) =>
-                      SetDefaultCreatedSortId(values[0]["id"])
-                    }
-                    style={{
-                      fontSize: 16,
-                      borderWidth: 2,
-                      borderRadius: 4,
-                      borderColor: "rgb(156, 163, 175)",
-                      paddingRight: 8,
-                    }}
-                    className="mt-1"
-                  />
-                </div>
-                <div className="py-2  mb-2">
-                  <label className="text-gray-500 text-sm">Sort Owned By</label>
-                  <Select
-                    options={sortingOptionsList}
-                    labelField="label"
-                    valueField="id"
-                    values={sortingOptionsList.filter(
-                      (item) => item.id === defaultOwnedSortId
-                    )}
-                    searchable={false}
-                    onChange={(values) =>
-                      setDefaultOwnedSortId(values[0]["id"])
-                    }
-                    style={{
-                      fontSize: 16,
-                      borderWidth: 2,
-                      borderRadius: 4,
-                      borderColor: "rgb(156, 163, 175)",
-                      paddingRight: 8,
-                    }}
-                    className="mt-1"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* second row */}
-            <div className="flex flex-col md:flex-row">
-              <div className="flex-1 my-4">
-                <div className="text-xl text-purple-500">Social Links</div>
-                <div className="py-2">
-                  <label htmlFor="twitter" className="text-gray-500  text-sm">
-                    Twitter{" "}
-                    {/*<span
+                <label htmlFor="linktree" className="text-gray-500  text-sm">
+                  Linktree{" "}
+                  {/*<span
                       style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
                     >
                       (optional)
                     </span>*/}
-                  </label>
-                  <div
-                    style={{
-                      position: "relative",
-                      borderRadius: 7,
-                    }}
-                    className="mt-1 border-2 border-gray-400 mb-6"
-                  >
-                    <input
-                      name="twitter"
-                      placeholder="username"
-                      value={twitter ? twitter : ""}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        const urlRegex = /^[a-zA-Z0-9_]*$/;
-                        if (urlRegex.test(value)) {
-                          setTwitter(value);
-                        }
-                      }}
-                      type="text"
-                      maxLength={30}
-                      className="w-full"
-                      style={{
-                        color: "black",
-                        borderRadius: 7,
-                        padding: 10,
-                        paddingLeft: 100,
-                        fontSize: 16,
-                      }}
-                      autoComplete="false"
-                    />
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        paddingLeft: 10,
-                        paddingTop: 13,
-                        paddingBottom: 12,
-                        paddingRight: 7,
-                        borderBottomLeftRadius: 7,
-                        borderTopLeftRadius: 7,
-                        backgroundColor: "#eee",
-                        color: "#666",
-                        fontSize: 13,
-                      }}
-                    >
-                      twitter.com/
-                    </div>
-                  </div>
-                  <label htmlFor="linktree" className="text-gray-500  text-sm">
-                    Linktree{" "}
-                    {/*<span
-                      style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
-                    >
-                      (optional)
-                    </span>*/}
-                  </label>
-                  <div
-                    style={{
-                      position: "relative",
-                      borderRadius: 7,
-                    }}
-                    className="mt-1 border-2 border-gray-400 mb-6"
-                  >
-                    <input
-                      name="linktree"
-                      placeholder="username"
-                      value={linktree ? linktree : ""}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        const urlRegex = /^[a-zA-Z0-9_]*$/;
-                        if (urlRegex.test(value)) {
-                          setLinktree(value);
-                        }
-                      }}
-                      type="text"
-                      maxLength={30}
-                      className="w-full"
-                      style={{
-                        color: "black",
-                        borderRadius: 7,
-                        padding: 10,
-                        paddingLeft: 78,
-                        fontSize: 16,
-                      }}
-                      autoComplete="false"
-                    />
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        paddingLeft: 10,
-                        paddingTop: 13,
-                        paddingBottom: 12,
-                        paddingRight: 7,
-                        borderBottomLeftRadius: 7,
-                        borderTopLeftRadius: 7,
-                        backgroundColor: "#eee",
-                        color: "#666",
-                        fontSize: 13,
-                      }}
-                    >
-                      linktr.ee/
-                    </div>
-                  </div>
-                  <label
-                    htmlFor="foundation"
-                    className="text-gray-500  text-sm"
-                  >
-                    Foundation{" "}
-                    {/*<span
-                      style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
-                    >
-                      (optional)
-                    </span>*/}
-                  </label>
-                  <div
-                    style={{
-                      position: "relative",
-                      borderRadius: 7,
-                    }}
-                    className="mt-1 border-2 border-gray-400 mb-6"
-                  >
-                    <input
-                      name="foundation"
-                      placeholder="username"
-                      value={foundation ? foundation : ""}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        const urlRegex = /^[a-zA-Z0-9_]*$/;
-                        if (urlRegex.test(value)) {
-                          setFoundation(value);
-                        }
-                      }}
-                      type="text"
-                      maxLength={30}
-                      className="w-full"
-                      style={{
-                        color: "black",
-                        borderRadius: 7,
-                        padding: 10,
-                        paddingLeft: 125,
-                        fontSize: 16,
-                      }}
-                      autoComplete="false"
-                    />
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        paddingLeft: 10,
-                        paddingTop: 13,
-                        paddingBottom: 12,
-                        paddingRight: 7,
-                        borderBottomLeftRadius: 7,
-                        borderTopLeftRadius: 7,
-                        backgroundColor: "#eee",
-                        color: "#666",
-                        fontSize: 13,
-                      }}
-                    >
-                      foundation.app/
-                    </div>
-                  </div>
-                  <label htmlFor="rarible" className="text-gray-500  text-sm">
-                    Rarible{" "}
-                    {/*<span
-                      style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
-                    >
-                      (optional)
-                    </span>*/}
-                  </label>
-                  <div
-                    style={{
-                      position: "relative",
-                      borderRadius: 7,
-                    }}
-                    className="mt-1 border-2 border-gray-400 mb-6"
-                  >
-                    <input
-                      name="rarible"
-                      placeholder="username"
-                      value={rarible ? rarible : ""}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        const urlRegex = /^[a-zA-Z0-9_]*$/;
-                        if (urlRegex.test(value)) {
-                          setRarible(value);
-                        }
-                      }}
-                      type="text"
-                      maxLength={30}
-                      className="w-full"
-                      style={{
-                        color: "black",
-                        borderRadius: 7,
-                        padding: 10,
-                        paddingLeft: 99,
-                        fontSize: 16,
-                      }}
-                      autoComplete="false"
-                    />
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        paddingLeft: 10,
-                        paddingTop: 13,
-                        paddingBottom: 12,
-                        paddingRight: 7,
-                        borderBottomLeftRadius: 7,
-                        borderTopLeftRadius: 7,
-                        backgroundColor: "#eee",
-                        color: "#666",
-                        fontSize: 13,
-                      }}
-                    >
-                      rarible.com/
-                    </div>
-                  </div>
-                  <label htmlFor="opensea" className="text-gray-500  text-sm">
-                    Opensea{" "}
-                    {/*<span
-                      style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
-                    >
-                      (optional)
-                    </span>*/}
-                  </label>
-                  <div
-                    style={{
-                      position: "relative",
-                      borderRadius: 7,
-                    }}
-                    className="mt-1 border-2 border-gray-400 mb-6"
-                  >
-                    <input
-                      name="opensea"
-                      placeholder="username"
-                      value={opensea ? opensea : ""}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        const urlRegex = /^[a-zA-Z0-9_]*$/;
-                        if (urlRegex.test(value)) {
-                          setOpensea(value);
-                        }
-                      }}
-                      type="text"
-                      maxLength={30}
-                      className="w-full"
-                      style={{
-                        color: "black",
-                        borderRadius: 7,
-                        padding: 10,
-                        paddingLeft: 98,
-                        fontSize: 16,
-                      }}
-                      autoComplete="false"
-                    />
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        paddingLeft: 10,
-                        paddingTop: 13,
-                        paddingBottom: 12,
-                        paddingRight: 7,
-                        borderBottomLeftRadius: 7,
-                        borderTopLeftRadius: 7,
-                        backgroundColor: "#eee",
-                        color: "#666",
-                        fontSize: 13,
-                      }}
-                    >
-                      opensea.io/
-                    </div>
-                  </div>
-                  <label
-                    htmlFor="website_url"
-                    className="block text-sm text-gray-700 mt-1"
-                  >
-                    Website URL
-                  </label>
+                </label>
+                <div
+                  style={{
+                    position: "relative",
+                    borderRadius: 7,
+                  }}
+                  className="mt-1 border-2 border-gray-400 mb-6"
+                >
                   <input
-                    name="website_url"
-                    placeholder=""
-                    value={websiteValue ? websiteValue : ""}
+                    name="linktree"
+                    placeholder="username"
+                    value={linktree ? linktree : ""}
                     onChange={(e) => {
-                      setWebsiteValue(e.target.value);
+                      const value = e.target.value;
+                      const urlRegex = /^[a-zA-Z0-9_]*$/;
+                      if (urlRegex.test(value)) {
+                        setLinktree(value);
+                      }
                     }}
                     type="text"
-                    className="mt-1 bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    maxLength={30}
+                    className="w-full"
+                    style={{
+                      color: "black",
+                      borderRadius: 7,
+                      padding: 10,
+                      paddingLeft: 78,
+                      fontSize: 16,
+                    }}
+                    autoComplete="false"
                   />
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      paddingLeft: 10,
+                      paddingTop: 13,
+                      paddingBottom: 12,
+                      paddingRight: 7,
+                      borderBottomLeftRadius: 7,
+                      borderTopLeftRadius: 7,
+                      backgroundColor: "#eee",
+                      color: "#666",
+                      fontSize: 13,
+                    }}
+                  >
+                    linktr.ee/
+                  </div>
                 </div>
+                <label htmlFor="foundation" className="text-gray-500  text-sm">
+                  Foundation{" "}
+                  {/*<span
+                      style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
+                    >
+                      (optional)
+                    </span>*/}
+                </label>
+                <div
+                  style={{
+                    position: "relative",
+                    borderRadius: 7,
+                  }}
+                  className="mt-1 border-2 border-gray-400 mb-6"
+                >
+                  <input
+                    name="foundation"
+                    placeholder="username"
+                    value={foundation ? foundation : ""}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      const urlRegex = /^[a-zA-Z0-9_]*$/;
+                      if (urlRegex.test(value)) {
+                        setFoundation(value);
+                      }
+                    }}
+                    type="text"
+                    maxLength={30}
+                    className="w-full"
+                    style={{
+                      color: "black",
+                      borderRadius: 7,
+                      padding: 10,
+                      paddingLeft: 125,
+                      fontSize: 16,
+                    }}
+                    autoComplete="false"
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      paddingLeft: 10,
+                      paddingTop: 13,
+                      paddingBottom: 12,
+                      paddingRight: 7,
+                      borderBottomLeftRadius: 7,
+                      borderTopLeftRadius: 7,
+                      backgroundColor: "#eee",
+                      color: "#666",
+                      fontSize: 13,
+                    }}
+                  >
+                    foundation.app/
+                  </div>
+                </div>
+                <label htmlFor="rarible" className="text-gray-500  text-sm">
+                  Rarible{" "}
+                  {/*<span
+                      style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
+                    >
+                      (optional)
+                    </span>*/}
+                </label>
+                <div
+                  style={{
+                    position: "relative",
+                    borderRadius: 7,
+                  }}
+                  className="mt-1 border-2 border-gray-400 mb-6"
+                >
+                  <input
+                    name="rarible"
+                    placeholder="username"
+                    value={rarible ? rarible : ""}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      const urlRegex = /^[a-zA-Z0-9_]*$/;
+                      if (urlRegex.test(value)) {
+                        setRarible(value);
+                      }
+                    }}
+                    type="text"
+                    maxLength={30}
+                    className="w-full"
+                    style={{
+                      color: "black",
+                      borderRadius: 7,
+                      padding: 10,
+                      paddingLeft: 99,
+                      fontSize: 16,
+                    }}
+                    autoComplete="false"
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      paddingLeft: 10,
+                      paddingTop: 13,
+                      paddingBottom: 12,
+                      paddingRight: 7,
+                      borderBottomLeftRadius: 7,
+                      borderTopLeftRadius: 7,
+                      backgroundColor: "#eee",
+                      color: "#666",
+                      fontSize: 13,
+                    }}
+                  >
+                    rarible.com/
+                  </div>
+                </div>
+                <label htmlFor="opensea" className="text-gray-500  text-sm">
+                  Opensea{" "}
+                  {/*<span
+                      style={{ fontWeight: 400, color: "#999", fontSize: 12 }}
+                    >
+                      (optional)
+                    </span>*/}
+                </label>
+                <div
+                  style={{
+                    position: "relative",
+                    borderRadius: 7,
+                  }}
+                  className="mt-1 border-2 border-gray-400 mb-6"
+                >
+                  <input
+                    name="opensea"
+                    placeholder="username"
+                    value={opensea ? opensea : ""}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      const urlRegex = /^[a-zA-Z0-9_]*$/;
+                      if (urlRegex.test(value)) {
+                        setOpensea(value);
+                      }
+                    }}
+                    type="text"
+                    maxLength={30}
+                    className="w-full"
+                    style={{
+                      color: "black",
+                      borderRadius: 7,
+                      padding: 10,
+                      paddingLeft: 98,
+                      fontSize: 16,
+                    }}
+                    autoComplete="false"
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      paddingLeft: 10,
+                      paddingTop: 13,
+                      paddingBottom: 12,
+                      paddingRight: 7,
+                      borderBottomLeftRadius: 7,
+                      borderTopLeftRadius: 7,
+                      backgroundColor: "#eee",
+                      color: "#666",
+                      fontSize: 13,
+                    }}
+                  >
+                    opensea.io/
+                  </div>
+                </div>
+                <label
+                  htmlFor="website_url"
+                  className="block text-sm text-gray-700 mt-1"
+                >
+                  Website URL
+                </label>
+                <input
+                  name="opensea"
+                  placeholder="username"
+                  value={opensea ? opensea : ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    const urlRegex = /^[a-zA-Z0-9_]*$/;
+                    if (urlRegex.test(value)) {
+                      setOpensea(value);
+                    }
+                  }}
+                  type="text"
+                  className="mt-1 bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
               </div>
               <div className="w-4 flex-shrink" />
               <div className="my-4 flex-1">
