@@ -164,6 +164,7 @@ const Profile = ({
     // clear out existing from page (if switching profiles)
     if (initial_load) {
       //setHasSpotlightItem(featured_nft ? true : false);
+      setMoreBioShown(false);
       setIsLoadingCards(true);
 
       setCreatedItems([]);
@@ -509,8 +510,6 @@ const Profile = ({
     ? 150
     : likedItems.filter((item) => !likedHiddenItems.includes(item.nft_id))
         .length;
-
-  console.log(createdHiddenItems.length);
 
   return (
     <div
