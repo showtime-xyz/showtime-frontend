@@ -33,6 +33,7 @@ import {
   faTree,
   faWater,
   faTag,
+  faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 
 const initialBioLength = 160;
@@ -526,6 +527,20 @@ const Profile = ({
         wallet_addresses_excluding_email,
       };
 
+  const [showSocialLinks, setShowSocialLinks] = useState(false);
+
+  useEffect(() => {
+    if (context.isMobile === true) {
+      setShowSocialLinks(false);
+    } else {
+      setShowSocialLinks(true);
+    }
+  }, [context?.isMobile]);
+
+  const toggleShowSocialLinks = () => {
+    setShowSocialLinks(!showSocialLinks);
+  };
+
   const socialLinkObjs = [
     { key: "twitter", icon: faTwitter, title: "Twitter", url: "twitter.com" },
     { key: "linktree", icon: faTree, title: "Linktree", url: "linktr.ee" },
@@ -541,6 +556,30 @@ const Profile = ({
       icon: faWater,
       title: "Opensea",
       url: "opensea.io/accounts",
+    },
+    {
+      key: "mintable",
+      icon: faLink,
+      title: "Mintable",
+      url: "mintable.app",
+    },
+    {
+      key: "makersplace",
+      icon: faLink,
+      title: "Makersplace",
+      url: "makersplace.com",
+    },
+    {
+      key: "superrare",
+      icon: faLink,
+      title: "SuperRare",
+      url: "superrare.co",
+    },
+    {
+      key: "knownorigin",
+      icon: faLink,
+      title: "KnownOrigin",
+      url: "knownorigin.io",
     },
   ];
 
@@ -770,82 +809,112 @@ const Profile = ({
             ) : null}
 
             {/* Use context info for logged in user - reflected immediately after changes */}
-            <div className={profileToDisplay?.bio ? "mt-3" : ""}>
+            {context.isMobile && (
+              <div
+                className={`flex cursor-pointer items-center hover:opacity-70 justify-center md:justify-start ${
+                  profileToDisplay?.bio ? "mt-3" : ""
+                }`}
+                onClick={toggleShowSocialLinks}
+              >
+                <div className="mr-1">Social</div>{" "}
+                <div
+                  className={`transition-all ${
+                    showSocialLinks ? "transform rotate-90" : "rotate-0"
+                  }`}
+                >
+                  <FontAwesomeIcon
+                    style={{ height: 14, width: 14 }}
+                    className=""
+                    icon={faArrowRight}
+                  />{" "}
+                </div>
+              </div>
+            )}
+
+            <div
+              className={`flex flex-wrap max-w-prose items-center justify-center md:justify-start ${
+                showSocialLinks
+                  ? "visible opacity-1 translate-y-2"
+                  : "invisible opacity-0 translate-y-0 h-0"
+              } transition-all transform`}
+            >
               {profileToDisplay?.website_url ? (
-                <div className="text-gray-500 flex text-sm sm:text-base flex-row py-1">
-                  <div>
-                    <FontAwesomeIcon
-                      style={{ height: 14, width: 14 }}
-                      className="mr-2"
-                      icon={faLink}
-                    />{" "}
-                  </div>
-                  <div>
-                    <a
-                      href={
-                        profileToDisplay.website_url.slice(0, 4) === "http"
-                          ? profileToDisplay.website_url
-                          : "https://" + profileToDisplay.website_url
-                      }
-                      target="_blank"
-                      style={{ color: "rgb(81, 125, 228)" }}
-                      onClick={() => {
-                        mixpanel.track("Clicked profile website link", {
-                          slug: slug_address,
-                        });
-                      }}
-                    >
+                <a
+                  href={
+                    profileToDisplay.website_url.slice(0, 4) === "http"
+                      ? profileToDisplay.website_url
+                      : "https://" + profileToDisplay.website_url
+                  }
+                  target="_blank"
+                  // style={{ color: "rgb(81, 125, 228)" }}
+                  onClick={() => {
+                    mixpanel.track("Clicked profile website link", {
+                      slug: slug_address,
+                    });
+                  }}
+                  className="mr-5 my-1 md:my-0"
+                >
+                  <div className="hover:text-gray-600 flex text-sm sm:text-base flex-row py-1 text-black">
+                    <div>
+                      <FontAwesomeIcon
+                        style={{ height: 14, width: 14 }}
+                        className="mr-2"
+                        icon={faLink}
+                      />{" "}
+                    </div>
+                    <div>
                       <div
-                        className="hover:opacity-90"
+                        // className="hover:opacity-90"
                         style={{ wordBreak: "break-all" }}
                       >
                         {profileToDisplay.website_url}
                       </div>
-                    </a>
+                    </div>
                   </div>
-                </div>
+                </a>
               ) : null}
               {/* map out social links */}
               {socialLinkObjs.map(
                 (socialLink) =>
                   profileToDisplay?.social_links?.[socialLink.key] && (
-                    <div
-                      className="text-gray-500 flex text-sm sm:text-base flex-row py-1"
-                      key={socialLink.key}
-                    >
-                      <div>
-                        <FontAwesomeIcon
-                          style={{ height: 14, width: 14 }}
-                          className="mr-2"
-                          icon={socialLink.icon}
-                        />{" "}
-                      </div>
-                      <div>
-                        <a
-                          href={
-                            `https://${socialLink.url}/` +
-                            profileToDisplay.social_links[socialLink.key]
+                    <a
+                      href={
+                        `https://${socialLink.url}/` +
+                        profileToDisplay.social_links[socialLink.key]
+                      }
+                      target="_blank"
+                      // style={{ color: "rgb(81, 125, 228)" }}
+                      onClick={() => {
+                        mixpanel.track(
+                          `Clicked ${socialLink.title} profile link`,
+                          {
+                            slug: slug_address,
                           }
-                          target="_blank"
-                          style={{ color: "rgb(81, 125, 228)" }}
-                          onClick={() => {
-                            mixpanel.track(
-                              `Clicked ${socialLink.title} profile link`,
-                              {
-                                slug: slug_address,
-                              }
-                            );
-                          }}
-                        >
+                        );
+                      }}
+                      className="mr-5 my-1 md:my-0"
+                    >
+                      <div
+                        className="hover:text-gray-600 flex text-sm sm:text-base flex-row py-1 text-black"
+                        key={socialLink.key}
+                      >
+                        <div>
+                          <FontAwesomeIcon
+                            style={{ height: 14, width: 14 }}
+                            className="mr-2"
+                            icon={socialLink.icon}
+                          />{" "}
+                        </div>
+                        <div>
                           <div
                             className="hover:opacity-90"
                             style={{ wordBreak: "break-all" }}
                           >
                             {socialLink.title}
                           </div>
-                        </a>
+                        </div>
                       </div>
-                    </div>
+                    </a>
                   )
               )}
             </div>
