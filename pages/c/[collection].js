@@ -288,7 +288,7 @@ export default function Collection({
             items={collectionItems}
             isLoading={isChanging}
             extraColumn
-            key={`grid_${currentCollectionSlug}_${sortBy}_${randomNumber}`}
+            key={`grid_${currentCollectionSlug}_${sortBy}_${randomNumber}_${isChanging}`}
           />
         </div>
       </CappedWidth>

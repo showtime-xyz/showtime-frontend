@@ -1147,7 +1147,9 @@ const Profile = ({
                 )}
 
                 <TokenGridV4
-                  key={`grid_${selectedGrid}_${profile_id}`}
+                  key={`grid_${selectedGrid}_${profile_id}_${
+                    isLoadingCards || isRefreshingCards
+                  }`}
                   items={
                     selectedGrid === 1
                       ? createdItems
