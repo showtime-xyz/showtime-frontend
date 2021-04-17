@@ -161,7 +161,7 @@ const Leaderboard = () => {
             <TokenGridV4
               items={featuredItems}
               isLoading={isLoadingCards}
-              key={`grid_${leaderboardDays}`}
+              key={`grid_${leaderboardDays}_${isLoadingCards}`}
             />
           </div>
           {/* Desktop right column */}
@@ -172,6 +172,7 @@ const Leaderboard = () => {
                 isLoading={isLoading}
                 showAllLeaderboardItems={showAllLeaderboardItems}
                 setShowAllLeaderboardItems={setShowAllLeaderboardItems}
+                key={`creators_r_${leaderboardDays}`}
               />
             )}
           </div>

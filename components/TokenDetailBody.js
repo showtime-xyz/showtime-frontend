@@ -266,7 +266,7 @@ const TokenDetailBody = ({
                     type="button"
                     onClick={() => {
                       setLightboxOpen(true);
-                      mixpanel.track("Original size clicked");
+                      mixpanel.track("Original clicked");
                     }}
                     className="flex flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all"
                   >
@@ -274,7 +274,7 @@ const TokenDetailBody = ({
                       <FontAwesomeIcon icon={faExpand} width={18} height={18} />
                     </div>
                     <div className="ml-2" style={{ fontSize: 14 }}>
-                      Original size
+                      Original
                     </div>
                   </button>
                 ) : null}
