@@ -1147,6 +1147,7 @@ const Profile = ({
                 )}
 
                 <TokenGridV4
+                  key={`grid_${selectedGrid}_${profile_id}`}
                   items={
                     selectedGrid === 1
                       ? createdItems

@@ -49,7 +49,7 @@ export default function Collection({
   selected_collection,
 }) {
   const context = useContext(AppContext);
-  const { isMobile, gridWidth, columns } = context;
+  const { isMobile } = context;
   const [sortBy, setSortby] = useState("random");
 
   const [pageTitle, setPageTitle] = useState(
@@ -288,6 +288,7 @@ export default function Collection({
             items={collectionItems}
             isLoading={isChanging}
             extraColumn
+            key={`grid_${currentCollectionSlug}_${sortBy}_${randomNumber}`}
           />
         </div>
       </CappedWidth>
