@@ -152,12 +152,17 @@ const Leaderboard = () => {
                 isLoading={isLoading}
                 showAllLeaderboardItems={showAllLeaderboardItems}
                 setShowAllLeaderboardItems={setShowAllLeaderboardItems}
+                key={`creators_${leaderboardDays}`}
               />
             )}
           </div>
 
           <div className="col-span-2 md:col-span-2 xl:col-span-3">
-            <TokenGridV4 items={featuredItems} isLoading={isLoadingCards} />
+            <TokenGridV4
+              items={featuredItems}
+              isLoading={isLoadingCards}
+              key={`grid_${leaderboardDays}_${isLoadingCards}`}
+            />
           </div>
           {/* Desktop right column */}
           <div className="hidden sm:block sm:px-3">
@@ -167,6 +172,7 @@ const Leaderboard = () => {
                 isLoading={isLoading}
                 showAllLeaderboardItems={showAllLeaderboardItems}
                 setShowAllLeaderboardItems={setShowAllLeaderboardItems}
+                key={`creators_r_${leaderboardDays}`}
               />
             )}
           </div>

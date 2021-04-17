@@ -35,7 +35,9 @@ export default function Modal({
       setConfirmationShowing(false);
       setReportModalOpen(false);
       setInputValue("");
-      removeItemFromFeed(activityId);
+      if (removeItemFromFeed) {
+        removeItemFromFeed(activityId);
+      }
     }, 1500);
   };
   return (

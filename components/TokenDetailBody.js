@@ -33,6 +33,8 @@ const TokenDetailBody = ({
   setEditModalOpen,
   ownershipDetails,
   isInModal,
+  parentReportModalOpen, // for full page view only, not modal view
+  parentSetReportModalOpen, // for full page view only, not modal view
 }) => {
   const context = useContext(AppContext);
   const { isMobile, columns, gridWidth } = context;
@@ -117,7 +119,7 @@ const TokenDetailBody = ({
 
   return (
     <>
-      {typeof document !== "undefined" ? (
+      {typeof document !== "undefined" && parentReportModalOpen !== null ? (
         <>
           <ModalReportItem
             isOpen={reportModalOpen}
@@ -266,7 +268,7 @@ const TokenDetailBody = ({
                     type="button"
                     onClick={() => {
                       setLightboxOpen(true);
-                      mixpanel.track("Original size clicked");
+                      mixpanel.track("Original clicked");
                     }}
                     className="flex flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all"
                   >
@@ -274,7 +276,7 @@ const TokenDetailBody = ({
                       <FontAwesomeIcon icon={faExpand} width={18} height={18} />
                     </div>
                     <div className="ml-2" style={{ fontSize: 14 }}>
-                      Original size
+                      Original
                     </div>
                   </button>
                 ) : null}
@@ -571,7 +573,9 @@ const TokenDetailBody = ({
                 cursor: "pointer",
               }}
               onClick={() => {
-                setReportModalOpen(true);
+                parentSetReportModalOpen !== undefined
+                  ? parentSetReportModalOpen(true)
+                  : setReportModalOpen(true);
               }}
               className="text-gray-500 hover:text-stpink"
             >
