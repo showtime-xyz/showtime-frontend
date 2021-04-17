@@ -293,7 +293,7 @@ export default function Collection({
               <Listbox value={selected} onChange={onChange}>
                 {({ open }) => (
                   <>
-                    <div className="mt-1 relative z-10">
+                    <div className="mt-1 relative z-10 w-64">
                       <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         <span className="flex items-center">
                           {selected ? (
