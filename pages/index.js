@@ -188,14 +188,12 @@ const Activity = () => {
             hasPrevious={!(itemOpenInModal?.index === 0)}
           />
 
-          <div>
-            <ModalReportItem
-              isOpen={reportModalIsOpen}
-              setReportModalOpen={setReportModalIsOpen}
-              activityId={reportModalIsOpen}
-              removeItemFromFeed={removeItemFromFeed}
-            />
-          </div>
+          <ModalReportItem
+            isOpen={reportModalIsOpen}
+            setReportModalOpen={setReportModalIsOpen}
+            activityId={reportModalIsOpen}
+            removeItemFromFeed={removeItemFromFeed}
+          />
         </>
       ) : null}
       <Layout>
