@@ -1,6 +1,7 @@
 const { PHASE_DEVELOPMENT_SERVER } = require("next/constants");
 
 module.exports = {
+  /*
   future: {
     webpack5: true,
   },
@@ -16,4 +17,5 @@ module.exports = {
 
     return config;
   },
+  */
 };
