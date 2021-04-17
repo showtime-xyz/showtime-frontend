@@ -36,6 +36,7 @@
     "postcss": "^8.2.4",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-preset-env": "^6.7.0",
+    "preact": "^10.5.13",
     "prettier": "^2.2.1",
     "react": "17.0.1",
     "react-cookie": "^4.0.3",
