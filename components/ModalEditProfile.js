@@ -351,7 +351,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                                       <span
                                         className={classNames(
                                           item.value === defaultListId
-                                            ? "font-semibold"
+                                            ? "font-normal" // "font-semibold"
                                             : "font-normal",
                                           "block truncate"
                                         )}
@@ -443,7 +443,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                                       <span
                                         className={classNames(
                                           item.value === defaultCreatedSortId
-                                            ? "font-semibold"
+                                            ? "font-normal" // "font-semibold"
                                             : "font-normal",
                                           "block truncate"
                                         )}
@@ -535,7 +535,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                                       <span
                                         className={classNames(
                                           item.value === defaultOwnedSortId
-                                            ? "font-semibold"
+                                            ? "font-normal" // "font-semibold"
                                             : "font-normal",
                                           "block truncate"
                                         )}

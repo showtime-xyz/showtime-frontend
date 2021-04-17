@@ -354,7 +354,7 @@ export default function Collection({
                                     <span
                                       className={classNames(
                                         selected
-                                          ? "font-semibold"
+                                          ? "font-normal" // "font-semibold"
                                           : "font-normal",
                                         "ml-3 block truncate"
                                       )}
