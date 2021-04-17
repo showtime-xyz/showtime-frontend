@@ -517,6 +517,49 @@ const Profile = ({
         setOpenCardMenu(null);
       }}
     >
+      {typeof document !== "undefined" ? (
+        <>
+          <ModalAddWallet
+            isOpen={walletModalOpen}
+            setWalletModalOpen={setWalletModalOpen}
+            walletAddresses={wallet_addresses}
+          />
+          <ModalAddEmail
+            isOpen={emailModalOpen}
+            setEmailModalOpen={setEmailModalOpen}
+            walletAddresses={wallet_addresses}
+            setHasEmailAddress={setHasEmailAddress}
+          />
+          <ModalEditProfile
+            isOpen={editModalOpen}
+            setEditModalOpen={setEditModalOpen}
+          />
+          <ModalEditPhoto
+            isOpen={pictureModalOpen}
+            setEditModalOpen={setPictureModalOpen}
+          />
+          {/* Followers modal */}
+          <ModalUserList
+            title="Followers"
+            isOpen={showFollowers}
+            users={followers ? followers : []}
+            closeModal={() => {
+              setShowFollowers(false);
+            }}
+            emptyMessage="No followers yet."
+          />
+          {/* Following modal */}
+          <ModalUserList
+            title="Following"
+            isOpen={showFollowing}
+            users={following ? following : []}
+            closeModal={() => {
+              setShowFollowing(false);
+            }}
+            emptyMessage="Not following anyone yet."
+          />
+        </>
+      ) : null}
       <Layout>
         <Head>
           <title>
@@ -574,50 +617,6 @@ const Profile = ({
             }
           />
         </Head>
-
-        {typeof document !== "undefined" ? (
-          <>
-            <ModalAddWallet
-              isOpen={walletModalOpen}
-              setWalletModalOpen={setWalletModalOpen}
-              walletAddresses={wallet_addresses}
-            />
-            <ModalAddEmail
-              isOpen={emailModalOpen}
-              setEmailModalOpen={setEmailModalOpen}
-              walletAddresses={wallet_addresses}
-              setHasEmailAddress={setHasEmailAddress}
-            />
-            <ModalEditProfile
-              isOpen={editModalOpen}
-              setEditModalOpen={setEditModalOpen}
-            />
-            <ModalEditPhoto
-              isOpen={pictureModalOpen}
-              setEditModalOpen={setPictureModalOpen}
-            />
-            {/* Followers modal */}
-            <ModalUserList
-              title="Followers"
-              isOpen={showFollowers}
-              users={followers ? followers : []}
-              closeModal={() => {
-                setShowFollowers(false);
-              }}
-              emptyMessage="No followers yet."
-            />
-            {/* Following modal */}
-            <ModalUserList
-              title="Following"
-              isOpen={showFollowing}
-              users={following ? following : []}
-              closeModal={() => {
-                setShowFollowing(false);
-              }}
-              emptyMessage="Not following anyone yet."
-            />
-          </>
-        ) : null}
 
         <div
           style={

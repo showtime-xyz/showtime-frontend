@@ -65,13 +65,13 @@ const Layout = ({ children }) => {
       </Head>
 
       <Header />
-      <div className="w-full mx-auto min-h-screen">
+      {typeof document !== "undefined" &&
+      recommendedItems &&
+      recommendedItems.length > 0 ? (
+        <RecommendFollowers items={recommendedItems} />
+      ) : null}
+      <div className="w-full mx-auto min-h-screen" style={{ zIndex: 0 }}>
         <ScrollUp />
-        {typeof document !== "undefined" &&
-        recommendedItems &&
-        recommendedItems.length > 0 ? (
-          <RecommendFollowers items={recommendedItems} />
-        ) : null}
         <main>{children}</main>
       </div>
 

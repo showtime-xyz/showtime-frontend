@@ -33,6 +33,8 @@ const TokenDetailBody = ({
   setEditModalOpen,
   ownershipDetails,
   isInModal,
+  parentReportModalOpen, // for full page view only, not modal view
+  parentSetReportModalOpen, // for full page view only, not modal view
 }) => {
   const context = useContext(AppContext);
   const { isMobile, columns, gridWidth } = context;
@@ -117,7 +119,7 @@ const TokenDetailBody = ({
 
   return (
     <>
-      {typeof document !== "undefined" ? (
+      {typeof document !== "undefined" && parentReportModalOpen !== null ? (
         <>
           <ModalReportItem
             isOpen={reportModalOpen}
@@ -571,7 +573,9 @@ const TokenDetailBody = ({
                 cursor: "pointer",
               }}
               onClick={() => {
-                setReportModalOpen(true);
+                parentSetReportModalOpen !== undefined
+                  ? parentSetReportModalOpen(true)
+                  : setReportModalOpen(true);
               }}
               className="text-gray-500 hover:text-stpink"
             >

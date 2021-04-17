@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, Fragment } from "react";
 import Head from "next/head";
 import _ from "lodash";
 import Layout from "../../components/layout";
@@ -11,6 +11,9 @@ import AppContext from "../../context/app-context";
 import mixpanel from "mixpanel-browser";
 import { GridTabs, GridTab } from "../../components/GridTabs";
 import CappedWidth from "../../components/CappedWidth";
+
+import { Listbox, Transition } from "@headlessui/react";
+import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 
 export async function getServerSideProps(context) {
   const { collection } = context.query;
@@ -72,21 +75,22 @@ export default function Collection({
     }
   }, [router.query.collection]);
 
-  const onChange = async (values) => {
+  const onChange = async (c) => {
+    setSelected(c);
     mixpanel.track("Collection filter dropdown select", {
-      collection: values[0]["value"],
+      collection: c["value"],
     });
-    router.push("/c/[collection]", `/c/${values[0]["value"]}`, {
+    router.push("/c/[collection]", `/c/${c["value"]}`, {
       shallow: true,
     });
     setPageTitle(
-      values[0]["name"] === "All leading collections"
+      c["name"] === "All leading collections"
         ? "Discover"
-        : `Discover ${values[0]["name"]}`
+        : `Discover ${c["name"]}`
     );
-    setCurrentCollectionSlug(values[0]["value"]);
+    setCurrentCollectionSlug(c["value"]);
     setCurrentCollectionName(
-      values[0]["name"] === "All leading collections" ? null : values[0]["name"]
+      c["name"] === "All leading collections" ? null : c["name"]
     );
   };
 
@@ -190,6 +194,14 @@ export default function Collection({
     </GridTabs>
   );
 
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+  }
+
+  const [selected, setSelected] = useState(
+    collection_list.filter((c) => c.value == currentCollectionSlug)[0]
+  );
+
   return (
     <Layout key={collection}>
       <Head>
@@ -249,13 +261,13 @@ export default function Collection({
         </CappedWidth>
       </div>
       <CappedWidth>
-        <div className="flex-1 -mt-4 mx-3 lg:w-2/3 lg:pr-6 xl:w-1/2">
+        <div className=" flex-1 -mt-4 mx-3 lg:w-2/3 lg:pr-6 xl:w-1/2">
           <div className="bg-white rounded-lg shadow-md px-6 py-6 text-center flex flex-col md:flex-row items-center">
             <div className="flex-1 mb-3 md:mb-0">
               Select a collection to browse:{" "}
             </div>
             <div className="flex-1 text-left">
-              <Select
+              {/*<Select
                 options={collection_list}
                 labelField="name"
                 valueField="value"
@@ -276,7 +288,106 @@ export default function Collection({
                 searchable={false}
                 onChange={(values) => onChange(values)}
                 className="w-full"
-              />
+              />*/}
+
+              <Listbox value={selected} onChange={onChange}>
+                {({ open }) => (
+                  <>
+                    <div className="mt-1 relative z-10">
+                      <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <span className="flex items-center">
+                          {selected ? (
+                            <>
+                              <img
+                                src={selected.img_url}
+                                alt=""
+                                className="flex-shrink-0 h-6 w-6 rounded-full"
+                              />
+                              <span className="ml-3 block truncate">
+                                {selected.name}
+                              </span>
+                            </>
+                          ) : (
+                            <span>&nbsp;</span>
+                          )}
+                        </span>
+                        <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                          <SelectorIcon
+                            className="h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                        </span>
+                      </Listbox.Button>
+
+                      <Transition
+                        show={open}
+                        as={Fragment}
+                        leave="transition ease-in duration-100"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                      >
+                        <Listbox.Options
+                          static
+                          className="absolute mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                        >
+                          {collection_list.map((c) => (
+                            <Listbox.Option
+                              key={c.value}
+                              className={({ active }) =>
+                                classNames(
+                                  active
+                                    ? "text-white bg-indigo-600"
+                                    : "text-gray-900",
+                                  "cursor-default select-none relative py-2 pl-3 pr-9"
+                                )
+                              }
+                              value={c}
+                            >
+                              {({ selected, active }) => (
+                                <>
+                                  <div className="flex items-center">
+                                    <img
+                                      src={c.img_url}
+                                      alt=""
+                                      className="flex-shrink-0 h-6 w-6 rounded-full"
+                                    />
+                                    <span
+                                      className={classNames(
+                                        selected
+                                          ? "font-semibold"
+                                          : "font-normal",
+                                        "ml-3 block truncate"
+                                      )}
+                                    >
+                                      {c.name}
+                                    </span>
+                                  </div>
+
+                                  {selected ? (
+                                    <span
+                                      className={classNames(
+                                        active
+                                          ? "text-white"
+                                          : "text-indigo-600",
+                                        "absolute inset-y-0 right-0 flex items-center pr-4"
+                                      )}
+                                    >
+                                      <CheckIcon
+                                        className="h-5 w-5"
+                                        aria-hidden="true"
+                                      />
+                                    </span>
+                                  ) : null}
+                                </>
+                              )}
+                            </Listbox.Option>
+                          ))}
+                        </Listbox.Options>
+                      </Transition>
+                    </div>
+                  </>
+                )}
+              </Listbox>
             </div>
           </div>
         </div>
