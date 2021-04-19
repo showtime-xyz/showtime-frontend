@@ -685,69 +685,94 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         </>
                       )}
                     </Listbox>
-                    <div className="py-4"></div>
                   </div>
                 </div>
                 <div>
-                  <div className="text-xl text-indigo-500 pt-2">
+                  <div className="text-xl text-indigo-500 mt-4 pt-2">
                     Social Links
                   </div>
                   <div className="py-2">
                     {socialLinkObjs.map((linkObj) => (
-                      <div key={linkObj.keyname}>
+                      <div key={linkObj.keyname} className="mb-4 pb-2">
+                        {/* //   <label
+                      //     htmlFor="opensea"
+                      //     className="text-gray-500  text-sm"
+                      //   >
+                      //     {linkObj.title}{" "}
+                      //   </label>
+                      //   <div
+                      //     style={{
+                      //       position: "relative",
+                      //       borderRadius: 7,
+                      //     }}
+                      //     className="mt-1 border-2 border-gray-400 mb-6"
+                      //   >
+                      //     <input
+                      //       name={linkObj.keyname}
+                      //       placeholder="username"
+                      //       value={linkObj.value ? linkObj.value : ""}
+                      //       onChange={(e) => {
+                      //         const value = e.target.value;
+                      //         const urlRegex = /^[a-zA-Z0-9_]*$/;
+                      //         if (urlRegex.test(value)) {
+                      //           linkObj.setValue(value);
+                      //         }
+                      //       }}
+                      //       type="text"
+                      //       maxLength={30}
+                      //       className="w-full"
+                      //       style={{
+                      //         color: "black",
+                      //         borderRadius: 7,
+                      //         padding: 10,
+                      //         paddingLeft: linkObj.padding,
+                      //         fontSize: 16,
+                      //       }}
+                      //       autoComplete="false"
+                      //     />
+                      //     <div
+                      //       style={{
+                      //         position: "absolute",
+                      //         top: 0,
+                      //         left: 0,
+                      //         paddingLeft: 10,
+                      //         paddingTop: 13,
+                      //         paddingBottom: 12,
+                      //         paddingRight: 7,
+                      //         borderBottomLeftRadius: 7,
+                      //         borderTopLeftRadius: 7,
+                      //         backgroundColor: "#eee",
+                      //         color: "#666",
+                      //         fontSize: 13,
+                      //       }}
+                      //     >
+                      //       {linkObj.url}
+                      //     </div>
+                      //   </div> */}
                         <label
-                          htmlFor="opensea"
-                          className="text-gray-500  text-sm"
+                          htmlFor={linkObj.keyname}
+                          className="block text-sm font-medium text-gray-700"
                         >
-                          {linkObj.title}{" "}
+                          {linkObj.title}
                         </label>
-                        <div
-                          style={{
-                            position: "relative",
-                            borderRadius: 7,
-                          }}
-                          className="mt-1 border-2 border-gray-400 mb-6"
-                        >
-                          <input
-                            name={linkObj.keyname}
-                            placeholder="username"
-                            value={linkObj.value ? linkObj.value : ""}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              const urlRegex = /^[a-zA-Z0-9_]*$/;
-                              if (urlRegex.test(value)) {
+                        <div className="mt-1">
+                          <div className="max-w-lg flex rounded-md shadow-sm">
+                            <span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 bg-gray-100 text-gray-500 sm:text-sm">
+                              {linkObj.url}
+                            </span>
+                            <input
+                              type="text"
+                              name={linkObj.keyname}
+                              id={linkObj.keyname}
+                              className="pl-2 border flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                              value={linkObj.value ? linkObj.value : ""}
+                              onChange={(e) => {
+                                const value = e.target.value;
                                 linkObj.setValue(value);
-                              }
-                            }}
-                            type="text"
-                            maxLength={30}
-                            className="w-full"
-                            style={{
-                              color: "black",
-                              borderRadius: 7,
-                              padding: 10,
-                              paddingLeft: linkObj.padding,
-                              fontSize: 16,
-                            }}
-                            autoComplete="false"
-                          />
-                          <div
-                            style={{
-                              position: "absolute",
-                              top: 0,
-                              left: 0,
-                              paddingLeft: 10,
-                              paddingTop: 13,
-                              paddingBottom: 12,
-                              paddingRight: 7,
-                              borderBottomLeftRadius: 7,
-                              borderTopLeftRadius: 7,
-                              backgroundColor: "#eee",
-                              color: "#666",
-                              fontSize: 13,
-                            }}
-                          >
-                            {linkObj.url}
+                              }}
+                              autoComplete="false"
+                              maxLength={30}
+                            />
                           </div>
                         </div>
                       </div>
