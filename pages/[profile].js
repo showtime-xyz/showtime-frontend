@@ -893,10 +893,10 @@ const Profile = ({
                         );
                       }}
                       className="mr-5 my-1 md:my-0"
+                      key={socialLink.key}
                     >
                       <div
                         className="hover:text-gray-600 flex text-sm sm:text-base flex-row py-1 text-black"
-                        key={socialLink.key}
                       >
                         <div>
                           <FontAwesomeIcon
