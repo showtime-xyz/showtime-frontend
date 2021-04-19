@@ -34,8 +34,11 @@ const Header = () => {
               <Link href="/">
                 <a
                   className="flex flex-row showtime-header-link items-center text-left mr-auto"
-                  onClick={() => {
+                  onClick={async () => {
                     mixpanel.track("Logo button click");
+                    await context.setToggleRefreshFeed(
+                      !context.toggleRefreshFeed
+                    );
                   }}
                 >
                   {/* <img
