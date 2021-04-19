@@ -79,19 +79,29 @@ const Activity = () => {
     setIsLoading(false);
   };
   useEffect(() => {
-    if (typeof context.user !== "undefined") {
-      setHasMoreScrolling(true);
+    const handleLoadFeed = async () => {
+      setHasMoreScrolling(false);
       setActivity([]);
+      window.scroll({
+        top: 0,
+        behavior: "auto",
+      });
       setActivityPage(1);
-      getActivity(activityTypeFilter, 1);
-    }
-  }, [context.user, activityTypeFilter]);
+      setHasMoreScrolling(true);
+      if (typeof context.user !== "undefined") {
+        getActivity(activityTypeFilter, 1);
+      }
+    };
+    handleLoadFeed();
+  }, [context.user, activityTypeFilter, context.toggleRefreshFeed]);
 
   const getNext = async () => {
-    if (typeof context.user !== "undefined") {
-      setHasMoreScrolling(true);
-      await getActivity(activityTypeFilter, activityPage + 1);
-      setActivityPage(activityPage + 1);
+    if (!isLoading) {
+      if (typeof context.user !== "undefined") {
+        setHasMoreScrolling(true);
+        await getActivity(activityTypeFilter, activityPage + 1);
+        setActivityPage(activityPage + 1);
+      }
     }
   };
 
@@ -390,7 +400,7 @@ const Activity = () => {
                     <div className="flex flex-1 items-center justify-center">
                       {context.user ? (
                         <div className="text-gray-400">
-                          Follow more people to keep the action going
+                          Follow more people to keep the action going!
                         </div>
                       ) : (
                         <div className="text-gray-400 shadow-md bg-white sm:rounded-lg w-full px-4 py-6 sm:mx-3 mb-4 text-center">

@@ -34,6 +34,7 @@ export default class MyApp extends React.Component {
     gridWidth: null,
     columns: null,
     isMobile: null,
+    toggleRefreshFeed: false,
   };
 
   getUserFromCookies = async () => {
@@ -197,6 +198,10 @@ export default class MyApp extends React.Component {
     this.setState({ isMobile });
   }
 
+  setToggleRefreshFeed(toggleRefreshFeed) {
+    this.setState({ toggleRefreshFeed });
+  }
+
   adjustGridProperties(windowWidth) {
     if (windowWidth < 790 + 30) {
       this.setIsMobile(true);
@@ -234,7 +239,7 @@ export default class MyApp extends React.Component {
       gridWidth: this.state.gridWidth,
       columns: this.state.columns,
       isMobile: this.state.isMobile,
-      setUser: (user) => this.setUser(user),
+      toggleRefreshFeed: this.state.toggleRefreshFeed,
       setWindowSize: (windowSize) => this.setWindowSize(windowSize),
       setMyLikes: (myLikes) => this.setMyLikes(myLikes),
       setMyLikeCounts: (myLikeCounts) => this.setMyLikeCounts(myLikeCounts),
@@ -250,6 +255,9 @@ export default class MyApp extends React.Component {
 
       getUserFromCookies: () => this.getUserFromCookies(),
       logOut: () => this.logOut(),
+      setToggleRefreshFeed: (toggleRefreshFeed) =>
+        this.setToggleRefreshFeed(toggleRefreshFeed),
+      setUser: (user) => this.setUser(user),
     };
 
     return (
