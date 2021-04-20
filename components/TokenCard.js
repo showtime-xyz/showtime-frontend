@@ -571,7 +571,7 @@ const TokenCard = ({
               </div>
               <div>
                 {item.owner_count && item.owner_count > 1 ? (
-                  pageProfile ? (
+                  pageProfile && listId === 2 ? (
                     <div className="flex flex-row items-center pt-1">
                       <Link
                         href="/[profile]"
@@ -609,7 +609,8 @@ const TokenCard = ({
                                 : wallet_addresses_excluding_email.length > 0
                                 ? wallet_addresses_excluding_email[0]
                                 : "Unknown",
-                              20
+
+                              13
                             )}
                           </div>
                         </a>
@@ -622,10 +623,9 @@ const TokenCard = ({
                         & {item.owner_count - 1} other
                         {item.owner_count - 1 > 1 ? "s" : null}
                       </div>
-                      {context.myProfile?.profile_id !== item.owner_id &&
-                        !(isMyProfile && listId !== 3) && (
-                          <MiniFollowButton profileId={item.owner_id} />
-                        )}
+                      {context.myProfile?.profile_id !== item.owner_id && (
+                        <MiniFollowButton profileId={item.owner_id} />
+                      )}
                       <div className="flex-grow">&nbsp;</div>
                     </div>
                   ) : (
