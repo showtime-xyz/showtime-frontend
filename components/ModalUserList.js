@@ -66,7 +66,8 @@ export default function ModalUserList({
                           </div>
                         </a>
                       </Link>
-                      {context.myProfile.profile_id !== profile.profile_id && (
+                      {context?.myProfile?.profile_id !==
+                        profile.profile_id && (
                         <FollowButton
                           item={{
                             profile_id: profile.profile_id,
