@@ -863,6 +863,17 @@ const Profile = ({
                   updateOwned(selectedOwnedSortField, false);
                 }}
                 key={spotlightItem.nft_id}
+                pageProfile={{
+                  profile_id,
+                  slug_address,
+                  name,
+                  img_url,
+                  wallet_addresses_excluding_email,
+                  slug_address,
+                  website_url,
+                  profile_id,
+                  username,
+                }}
               />
             </div>
           </div>
@@ -1197,6 +1208,17 @@ const Profile = ({
                   }
                   detailsModalCloseOnKeyChange={slug_address}
                   changeSpotlightItem={handleChangeSpotlightItem}
+                  pageProfile={{
+                    profile_id,
+                    slug_address,
+                    name,
+                    img_url,
+                    wallet_addresses_excluding_email,
+                    slug_address,
+                    website_url,
+                    profile_id,
+                    username,
+                  }} // to customize owned by list
                 />
               </div>
             </div>

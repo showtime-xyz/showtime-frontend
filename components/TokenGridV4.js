@@ -25,6 +25,7 @@ const TokenGridV4 = ({
   detailsModalCloseOnKeyChange,
   changeSpotlightItem,
   extraColumn,
+  pageProfile,
 }) => {
   const context = useContext(AppContext);
   const [itemsList, setItemsList] = useState([]);
@@ -237,6 +238,7 @@ const TokenGridV4 = ({
                 setUserHiddenItems={setUserHiddenItems}
                 refreshItems={refreshItems}
                 changeSpotlightItem={changeSpotlightItem}
+                pageProfile={pageProfile}
               />
             ))}
           </div>
