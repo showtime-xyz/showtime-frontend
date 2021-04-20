@@ -111,7 +111,10 @@ export default function Modal({ isOpen, setEditModalOpen }) {
         bio: bioValue?.trim() ? bioValue.trim() : null,
         username: username?.trim() ? username.trim() : null,
         website_url: websiteValue?.trim() ? websiteValue.trim() : null,
-        links: socialLinks,
+        links: socialLinks.map((sl) => ({
+          type_id: sl.type_id,
+          user_input: sl.user_input?.trim() ? sl.user_input.trim() : null,
+        })),
         default_list_id: defaultListId ? defaultListId : "",
         default_created_sort_id: defaultCreatedSortId,
         default_owned_sort_id: defaultOwnedSortId,
@@ -168,7 +171,12 @@ export default function Modal({ isOpen, setEditModalOpen }) {
       const options = await fetch(`/api/getsociallinkoptions`, {});
       const optionsJson = await options.json();
       setSocialLinkOptions(
-        optionsJson?.map((opt) => ({ ...opt, type_id: opt.id }))
+        optionsJson?.map((opt) => ({
+          type_id: opt.id,
+          icon_url: opt.icon_url,
+          name: opt.name,
+          prefix: opt.prefix,
+        }))
       );
     };
     getSocialLinkOptions();
