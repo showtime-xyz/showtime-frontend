@@ -852,24 +852,13 @@ const Profile = ({
                     className="hover:text-gray-600 flex text-sm sm:text-base flex-row py-1 items-center opacity-70 hover:opacity-100"
                     style={{ color: "#353535" }}
                   >
-                    {socialLink.name === "Twitter" ? (
-                      <div>
-                        <FontAwesomeIcon
-                          style={{ height: 14, width: 14 }}
-                          className="mr-2"
-                          icon={faTwitter}
-                        />{" "}
-                      </div>
-                    ) : (
-                      socialLink.icon_url && (
-                        <img
-                          src={socialLink.icon_url}
-                          alt=""
-                          className="flex-shrink-0 h-5 w-5 rounded-full mr-2"
-                        />
-                      )
+                    {socialLink.icon_url && (
+                      <img
+                        src={socialLink.icon_url}
+                        alt=""
+                        className="flex-shrink-0 h-5 w-5 mr-2"
+                      />
                     )}
-
                     <div>
                       <div className="" style={{ wordBreak: "break-all" }}>
                         {socialLink.name}
