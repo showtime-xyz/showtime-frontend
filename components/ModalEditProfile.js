@@ -333,7 +333,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
               <div className="flex-1 my-4">
                 <div>
                   <div className="text-xl text-indigo-500">Links</div>
-                  <div className="mb-4 pt-2">
+                  <div className="mb-4 pt-1">
                     <label
                       htmlFor="websiteValue"
                       className="text-gray-700 text-sm"
