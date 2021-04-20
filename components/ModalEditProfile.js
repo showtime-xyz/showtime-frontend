@@ -1,12 +1,11 @@
 import { useContext, useState, useEffect, Fragment } from "react";
 import AwesomeDebouncePromise from "awesome-debounce-promise";
 import { useRouter } from "next/router";
-import mixpanel, { opt_in_tracking } from "mixpanel-browser";
+import mixpanel from "mixpanel-browser";
 import backend from "../lib/backend";
 import AppContext from "../context/app-context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import Select from "react-dropdown-select";
 import { SORT_FIELDS } from "../lib/constants";
 import ScrollableModal from "./ScrollableModal";
 import { Listbox, Transition } from "@headlessui/react";
@@ -59,15 +58,6 @@ export default function Modal({ isOpen, setEditModalOpen }) {
   const context = useContext(AppContext);
   const [nameValue, setNameValue] = useState(null);
   const [customURLValue, setCustomURLValue] = useState("");
-  const [twitter, setTwitter] = useState("");
-  const [linktree, setLinktree] = useState("");
-  const [foundation, setFoundation] = useState("");
-  const [rarible, setRarible] = useState("");
-  const [opensea, setOpensea] = useState("");
-  const [mintable, setMintable] = useState("");
-  const [makersplace, setMakersplace] = useState("");
-  const [superrare, setSuperrare] = useState("");
-  const [knownorigin, setKnownorigin] = useState("");
 
   const [socialLinks, setSocialLinks] = useState({});
   const [socialLinkOptions, setSocialLinkOptions] = useState([]);
@@ -91,15 +81,6 @@ export default function Modal({ isOpen, setEditModalOpen }) {
       setDefaultListId(context.myProfile.default_list_id || "");
       setDefaultCreatedSortId(context.myProfile.default_created_sort_id || 1);
       setDefaultOwnedSortId(context.myProfile.default_owned_sort_id || 1);
-      // setTwitter(context.myProfile.social_links.twitter || "");
-      // setLinktree(context.myProfile.social_links.linktree || "");
-      // setFoundation(context.myProfile.social_links.foundation || "");
-      // setRarible(context.myProfile.social_links.rarible || "");
-      // setOpensea(context.myProfile.social_links.opensea || "");
-      // setMintable(context.myProfile.social_links.mintable || "");
-      // setMakersplace(context.myProfile.social_links.makersplace || "");
-      // setSuperrare(context.myProfile.social_links.superrare || "");
-      // setKnownorigin(context.myProfile.social_links.knownorigin || "");
       setSocialLinks(context.myProfile.links);
     }
   }, [context.myProfile, isOpen]);
@@ -222,72 +203,6 @@ export default function Modal({ isOpen, setEditModalOpen }) {
     );
   };
 
-  // const socialLinkObjs = [
-  //   {
-  //     title: "Twitter",
-  //     keyname: "twitter",
-  //     url: "twitter.com/",
-  //     value: twitter,
-  //     setValue: setTwitter,
-  //   },
-  //   {
-  //     title: "Linktree",
-  //     keyname: "linktree",
-  //     url: "linktr.ee/",
-  //     value: linktree,
-  //     setValue: setLinktree,
-  //   },
-  //   {
-  //     title: "Foundation",
-  //     keyname: "foundation",
-  //     url: "foundation.app/",
-  //     value: foundation,
-  //     setValue: setFoundation,
-  //   },
-  //   {
-  //     title: "Rarible",
-  //     keyname: "rarible",
-  //     url: "rarible.com/",
-  //     value: rarible,
-  //     setValue: setRarible,
-  //   },
-  //   {
-  //     title: "OpenSea",
-  //     keyname: "opensea",
-  //     url: "opensea.io/",
-  //     value: opensea,
-  //     setValue: setOpensea,
-  //   },
-  //   {
-  //     title: "Mintable",
-  //     keyname: "mintable",
-  //     url: "mintable.app/",
-  //     value: mintable,
-  //     setValue: setMintable,
-  //   },
-  //   {
-  //     title: "Makersplace",
-  //     keyname: "makersplace",
-  //     url: "makersplace.com/",
-  //     value: makersplace,
-  //     setValue: setMakersplace,
-  //   },
-  //   {
-  //     title: "SuperRare",
-  //     keyname: "superrare",
-  //     url: "superrare.co/",
-  //     value: superrare,
-  //     setValue: setSuperrare,
-  //   },
-  //   {
-  //     title: "KnownOrigin",
-  //     keyname: "knownorigin",
-  //     url: "knownorigin.io/",
-  //     value: knownorigin,
-  //     setValue: setKnownorigin,
-  //   },
-  // ];
-
   return (
     <>
       {isOpen && (
@@ -405,20 +320,6 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                 >
                   300 character limit
                 </div>
-                <label htmlFor="websiteValue" className="text-gray-500 text-sm">
-                  Website URL
-                </label>
-                <input
-                  name="websiteValue"
-                  placeholder="your URL"
-                  value={websiteValue ? websiteValue : ""}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setWebsiteValue(value);
-                  }}
-                  type="text"
-                  className="mt-1 bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                />
               </div>
               <div className="w-6 flex-shrink" />
               {/* second row */}
@@ -703,67 +604,29 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   </div>
                 </div>
                 <div>
-                  <div className="text-xl text-indigo-500 mt-4 pt-2">
-                    Social Links
+                  <div className="text-xl text-indigo-500 mt-4 pt-2">Links</div>
+                  <div>
+                    <label
+                      htmlFor="websiteValue"
+                      className="text-gray-500 text-sm"
+                    >
+                      Website URL
+                    </label>
+                    <input
+                      name="websiteValue"
+                      placeholder="your URL"
+                      value={websiteValue ? websiteValue : ""}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setWebsiteValue(value);
+                      }}
+                      type="text"
+                      className="mt-1 bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
                   </div>
                   <div className="py-2">
                     {socialLinks.map((linkObj) => (
                       <div key={linkObj.name} className="mb-4 pb-2">
-                        {/* //   <label
-                      //     htmlFor="opensea"
-                      //     className="text-gray-500  text-sm"
-                      //   >
-                      //     {linkObj.title}{" "}
-                      //   </label>
-                      //   <div
-                      //     style={{
-                      //       position: "relative",
-                      //       borderRadius: 7,
-                      //     }}
-                      //     className="mt-1 border-2 border-gray-400 mb-6"
-                      //   >
-                      //     <input
-                      //       name={linkObj.keyname}
-                      //       placeholder="username"
-                      //       value={linkObj.value ? linkObj.value : ""}
-                      //       onChange={(e) => {
-                      //         const value = e.target.value;
-                      //         const urlRegex = /^[a-zA-Z0-9_]*$/;
-                      //         if (urlRegex.test(value)) {
-                      //           linkObj.setValue(value);
-                      //         }
-                      //       }}
-                      //       type="text"
-                      //       maxLength={30}
-                      //       className="w-full"
-                      //       style={{
-                      //         color: "black",
-                      //         borderRadius: 7,
-                      //         padding: 10,
-                      //         paddingLeft: linkObj.padding,
-                      //         fontSize: 16,
-                      //       }}
-                      //       autoComplete="false"
-                      //     />
-                      //     <div
-                      //       style={{
-                      //         position: "absolute",
-                      //         top: 0,
-                      //         left: 0,
-                      //         paddingLeft: 10,
-                      //         paddingTop: 13,
-                      //         paddingBottom: 12,
-                      //         paddingRight: 7,
-                      //         borderBottomLeftRadius: 7,
-                      //         borderTopLeftRadius: 7,
-                      //         backgroundColor: "#eee",
-                      //         color: "#666",
-                      //         fontSize: 13,
-                      //       }}
-                      //     >
-                      //       {linkObj.url}
-                      //     </div>
-                      //   </div> */}
                         <div className="flex items-center justify-between">
                           <label
                             htmlFor={linkObj.name}
