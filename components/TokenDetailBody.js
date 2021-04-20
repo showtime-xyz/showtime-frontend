@@ -520,20 +520,22 @@ const TokenDetailBody = ({
               {/* right column section */}
               <div className="flex-1 p-4 order-first md:order-last">
                 {/* Owned by section ONLY ON MOBILE */}
-                {isMobile && item.owner_address && (
-                  <div className="mb-8">
-                    <div className="md:text-lg py-4">Owned By</div>
-                    <div>
-                      <UserTimestampCard
-                        item={item}
-                        timestamp={ownershipDetails.token_last_transferred}
-                        closeModalCallback={() => {
-                          setEditModalOpen(false);
-                        }}
-                      />
+                {isMobile &&
+                  item.owner_address &&
+                  (item.owner_count === null || item.owner_count === 1) && (
+                    <div className="mb-8">
+                      <div className="md:text-lg py-4">Owned By</div>
+                      <div>
+                        <UserTimestampCard
+                          item={item}
+                          timestamp={ownershipDetails.token_last_transferred}
+                          closeModalCallback={() => {
+                            setEditModalOpen(false);
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
                 {/* Comments section */}
                 <div className="flex">
                   <CommentsSection

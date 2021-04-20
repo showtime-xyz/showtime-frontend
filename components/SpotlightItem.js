@@ -428,7 +428,15 @@ class SpotlightItem extends React.Component {
                       <div className="flex-grow"></div>
                     </div>
                   </div>
-                  <div className="flex flex-col lg:flex-row pt-4 mt-8 w-full ">
+                  <div
+                    className={`flex ${
+                      //
+                      item.multiple_owners &&
+                      this.props.pageProfile.profile_id !== item.creator_id
+                        ? "flex-col lg:flex-row  pb-6"
+                        : "flex-row"
+                    } pt-4 mt-8 w-full`}
+                  >
                     {item.contract_is_creator ? (
                       <div className="flex-col flex-1">
                         <div className="flex-shrink mb-1 pr-2 text-xs text-gray-500">
