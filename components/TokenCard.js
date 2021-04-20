@@ -11,6 +11,7 @@ import mixpanel from "mixpanel-browser";
 import AppContext from "../context/app-context";
 import MiniFollowButton from "./MiniFollowButton";
 import TokenCardImage from "../components/TokenCardImage";
+import { removeTags } from "../lib/utilities";
 
 const TokenCard = ({
   item,
@@ -39,12 +40,6 @@ const TokenCard = ({
 
   const divRef = useRef();
   const imageRef = useRef();
-
-  const removeTags = (str) => {
-    if (str === null || str === "") return false;
-    else str = str.toString();
-    return str.replace(/(<([^>]+)>)/gi, " ");
-  };
 
   const truncateWithEllipses = (text, max) => {
     if (text) {
@@ -501,7 +496,9 @@ const TokenCard = ({
                   className="py-4 text-gray-500 text-sm"
                 >
                   {moreShown ? (
-                    <div>{removeTags(item.token_description)}</div>
+                    <div style={{ whiteSpace: "pre-line" }}>
+                      {removeTags(item.token_description)}
+                    </div>
                   ) : (
                     <div>
                       {item.token_description?.length >

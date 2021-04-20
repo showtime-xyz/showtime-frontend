@@ -74,6 +74,9 @@ const TokenDetailBody = ({
   const [mediaHeight, setMediaHeight] = useState(null);
   const [mediaWidth, setMediaWidth] = useState(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [moreShown, setMoreShown] = useState(false);
+
+  const max_description_length = context.isMobile ? 120 : 220;
 
   useEffect(() => {
     var aspectRatio = 1;
@@ -115,6 +118,7 @@ const TokenDetailBody = ({
     setFullResLoaded(false);
     setUsersWhoLiked(null);
     getUsersWhoLiked();
+    setMoreShown(false);
   }, [item]);
 
   return (
@@ -429,7 +433,32 @@ const TokenDetailBody = ({
                           }
                     }
                   >
-                    {removeTags(item.token_description)}
+                    {moreShown ? (
+                      <div style={{ whiteSpace: "pre-line" }}>
+                        {removeTags(item.token_description)}
+                      </div>
+                    ) : (
+                      <div>
+                        {item.token_description?.length >
+                        max_description_length ? (
+                          <>
+                            {truncateWithEllipses(
+                              removeTags(item.token_description),
+                              max_description_length
+                            )}{" "}
+                            <a
+                              onClick={() => setMoreShown(true)}
+                              className="text-gray-900 hover:text-gray-500 cursor-pointer"
+                            >
+                              {" "}
+                              more
+                            </a>
+                          </>
+                        ) : (
+                          <div>{removeTags(item.token_description)}</div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </>
               )}

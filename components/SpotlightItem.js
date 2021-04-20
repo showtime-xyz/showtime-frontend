@@ -16,7 +16,7 @@ import ShareButton from "./ShareButton";
 import ReactPlayer from "react-player";
 import mixpanel from "mixpanel-browser";
 import AppContext from "../context/app-context";
-import { getBidLink, getContractName } from "../lib/utilities";
+import { getBidLink, getContractName, removeTags } from "../lib/utilities";
 import ModalTokenDetail from "./ModalTokenDetail";
 import CappedWidth from "./CappedWidth";
 
@@ -34,12 +34,6 @@ class SpotlightItem extends React.Component {
       videoReady: false,
     };
     this.divRef = React.createRef();
-  }
-
-  removeTags(str) {
-    if (str === null || str === "") return false;
-    else str = str.toString();
-    return str.replace(/(<([^>]+)>)/gi, " ");
   }
 
   truncateWithEllipses(text, max) {
@@ -358,7 +352,7 @@ class SpotlightItem extends React.Component {
                         !this.state.moreShown ? (
                           <>
                             {this.truncateWithEllipses(
-                              this.removeTags(item.token_description),
+                              removeTags(item.token_description),
                               this.max_description_length
                             )}{" "}
                             <a
@@ -372,7 +366,9 @@ class SpotlightItem extends React.Component {
                             </a>
                           </>
                         ) : (
-                          <div>{this.removeTags(item.token_description)}</div>
+                          <div style={{ whiteSpace: "pre-line" }}>
+                            {removeTags(item.token_description)}
+                          </div>
                         )}
                       </div>
                     </div>

@@ -32,8 +32,8 @@ export default function Comment({
     myProfile.profile_id &&
     myProfile.profile_id === comment.commenter_profile_id;
 
-  const isOwnerOfNFT = nftOwnerId && nftOwnerId === myProfile.profile_id;
-  const isCreatorOfNFT = nftCreatorId && nftCreatorId === myProfile.profile_id;
+  const isOwnerOfNFT = nftOwnerId && nftOwnerId === myProfile?.profile_id;
+  const isCreatorOfNFT = nftCreatorId && nftCreatorId === myProfile?.profile_id;
 
   return (
     <div className="p-2 my-1 flex rounded-xl hover:bg-gray-100 transition-all relative">
