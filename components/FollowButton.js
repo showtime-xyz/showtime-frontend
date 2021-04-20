@@ -15,9 +15,12 @@ const Button = styled.button`
   &:hover {
     opacity: 0.7;
   }
-  @media screen and (max-width: 400px) {
+  ${(p) =>
+    p.notExpandWhenMobile
+      ? ""
+      : `@media screen and (max-width: 400px) {
     width: 100%;
-  }
+  }`}
 `;
 
 const FollowButton = ({
@@ -25,6 +28,7 @@ const FollowButton = ({
   followerCount,
   setFollowerCount,
   hideIfFollowing,
+  notExpandWhenMobile,
 }) => {
   const context = useContext(AppContext);
   const myFollows = context?.myFollows || [];
@@ -80,6 +84,7 @@ const FollowButton = ({
 
   return (
     <Button
+      notExpandWhenMobile={notExpandWhenMobile}
       className={
         hideIfFollowing && isFollowed
           ? "hidden border-gray-400 border rounded-full"

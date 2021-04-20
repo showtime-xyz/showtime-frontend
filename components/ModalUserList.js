@@ -59,7 +59,7 @@ export default function ModalUserList({
                           </div>
                           <div className="ml-2">
                             {profile.name
-                              ? truncateWithEllipses(profile.name, 25)
+                              ? truncateWithEllipses(profile.name, 18)
                               : "Unnamed"}
                           </div>
                         </a>
@@ -71,6 +71,7 @@ export default function ModalUserList({
                         }}
                         followerCount={0}
                         setFollowerCount={() => {}}
+                        notExpandWhenMobile
                       />
                     </div>
                   );
