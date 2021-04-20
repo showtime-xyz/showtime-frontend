@@ -778,9 +778,10 @@ const Profile = ({
             ) : null}
 
             {/* Use context info for logged in user - reflected immediately after changes */}
-            {(context.isMobile && profileToDisplay?.links?.length > 2) ||
-            (profileToDisplay?.links?.length > 1 &&
-              profileToDisplay?.website_url) ? (
+            {context.isMobile &&
+            (profileToDisplay?.links?.length > 2 ||
+              (profileToDisplay?.links?.length > 1 &&
+                profileToDisplay?.website_url)) ? (
               <div
                 className={`flex cursor-pointer items-center hover:opacity-70 justify-center text-gray-600 text-sm md:justify-start ${
                   profileToDisplay?.bio ? "mt-3" : ""
