@@ -59,7 +59,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
   const [nameValue, setNameValue] = useState(null);
   const [customURLValue, setCustomURLValue] = useState("");
 
-  const [socialLinks, setSocialLinks] = useState({});
+  const [socialLinks, setSocialLinks] = useState();
   const [socialLinkOptions, setSocialLinkOptions] = useState([]);
 
   const [customURLError, setCustomURLError] = useState({
@@ -111,10 +111,12 @@ export default function Modal({ isOpen, setEditModalOpen }) {
         bio: bioValue?.trim() ? bioValue.trim() : null,
         username: username?.trim() ? username.trim() : null,
         website_url: websiteValue?.trim() ? websiteValue.trim() : null,
-        links: socialLinks.map((sl) => ({
-          type_id: sl.type_id,
-          user_input: sl.user_input?.trim() ? sl.user_input.trim() : null,
-        })),
+        links: socialLinks
+          .filter((sl) => sl.user_input?.trim())
+          .socialLinks.map((sl) => ({
+            type_id: sl.type_id,
+            user_input: sl.user_input?.trim() ? sl.user_input.trim() : null,
+          })),
         default_list_id: defaultListId ? defaultListId : "",
         default_created_sort_id: defaultCreatedSortId,
         default_owned_sort_id: defaultOwnedSortId,
@@ -171,12 +173,14 @@ export default function Modal({ isOpen, setEditModalOpen }) {
       const options = await fetch(`/api/getsociallinkoptions`, {});
       const optionsJson = await options.json();
       setSocialLinkOptions(
-        optionsJson?.map((opt) => ({
-          type_id: opt.id,
-          icon_url: opt.icon_url,
-          name: opt.name,
-          prefix: opt.prefix,
-        }))
+        optionsJson
+          ? optionsJson.map((opt) => ({
+              type_id: opt.id,
+              icon_url: opt.icon_url,
+              name: opt.name,
+              prefix: opt.prefix,
+            }))
+          : []
       );
     };
     getSocialLinkOptions();
@@ -354,56 +358,57 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                     />
                   </div>
                   <div className="py-2">
-                    {socialLinks.map((linkObj) => (
-                      <div key={linkObj.name} className="mb-4 pb-2">
-                        <div className="flex items-center justify-between">
-                          <label
-                            htmlFor={linkObj.name}
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            {linkObj.name}
-                          </label>
-                          <span
-                            className="text-xs ml-2 text-gray-400 hover:text-red-400 cursor-pointer"
-                            onClick={() =>
-                              handleRemoveSocialLink(linkObj.type_id)
-                            }
-                          >
-                            Remove
-                          </span>
-                        </div>
-                        <div className="mt-1">
-                          <div className="max-w-lg flex rounded-md shadow-sm">
-                            <span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 bg-gray-100 text-gray-700 sm:text-sm">
-                              {linkObj.prefix}
-                            </span>
-                            <input
-                              type="text"
-                              name={linkObj.name}
-                              id={linkObj.name}
-                              className="pl-2 border flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
-                              value={
-                                linkObj.user_input ? linkObj.user_input : ""
+                    {socialLinks &&
+                      socialLinks.map((linkObj) => (
+                        <div key={linkObj.name} className="mb-4 pb-2">
+                          <div className="flex items-center justify-between">
+                            <label
+                              htmlFor={linkObj.name}
+                              className="block text-sm font-medium text-gray-700"
+                            >
+                              {linkObj.name}
+                            </label>
+                            <span
+                              className="text-xs ml-2 text-gray-400 hover:text-red-400 cursor-pointer"
+                              onClick={() =>
+                                handleRemoveSocialLink(linkObj.type_id)
                               }
-                              onChange={(e) => {
-                                const value = e.target.value;
+                            >
+                              Remove
+                            </span>
+                          </div>
+                          <div className="mt-1">
+                            <div className="max-w-lg flex rounded-md shadow-sm">
+                              <span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 bg-gray-100 text-gray-700 sm:text-sm">
+                                {linkObj.prefix}
+                              </span>
+                              <input
+                                type="text"
+                                name={linkObj.name}
+                                id={linkObj.name}
+                                className="pl-2 border flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                                value={
+                                  linkObj.user_input ? linkObj.user_input : ""
+                                }
+                                onChange={(e) => {
+                                  const value = e.target.value;
 
-                                setSocialLinks(
-                                  socialLinks.map((link) => {
-                                    if (link.name === linkObj.name) {
-                                      return { ...link, user_input: value };
-                                    }
-                                    return link;
-                                  })
-                                );
-                              }}
-                              autoComplete="false"
-                              maxLength={30}
-                            />
+                                  setSocialLinks(
+                                    socialLinks.map((link) => {
+                                      if (link.name === linkObj.name) {
+                                        return { ...link, user_input: value };
+                                      }
+                                      return link;
+                                    })
+                                  );
+                                }}
+                                autoComplete="false"
+                                maxLength={30}
+                              />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
                     <div className="flex items-center">
                       <div className="flex-1">
                         <Listbox

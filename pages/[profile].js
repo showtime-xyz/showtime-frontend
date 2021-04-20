@@ -523,7 +523,13 @@ const Profile = ({
         bio,
         img_url,
         username,
-        links,
+        links: links.map((link) => ({
+          name: link.type__name,
+          prefix: link.type__prefix,
+          icon_url: link.type__icon_url,
+          type_id: link.type_id,
+          user_input: link.user_input,
+        })),
         wallet_addresses_excluding_email,
       };
 
@@ -560,10 +566,12 @@ const Profile = ({
             walletAddresses={wallet_addresses}
             setHasEmailAddress={setHasEmailAddress}
           />
-          <ModalEditProfile
-            isOpen={editModalOpen}
-            setEditModalOpen={setEditModalOpen}
-          />
+          {editModalOpen && (
+            <ModalEditProfile
+              isOpen={editModalOpen}
+              setEditModalOpen={setEditModalOpen}
+            />
+          )}
           <ModalEditPhoto
             isOpen={pictureModalOpen}
             setEditModalOpen={setPictureModalOpen}
@@ -835,38 +843,44 @@ const Profile = ({
                 </a>
               ) : null}
               {/* map out social links */}
-              {profileToDisplay?.links?.map((socialLink) => (
-                <a
-                  href={`https://${socialLink.prefix}` + socialLink.user_input}
-                  target="_blank"
-                  // style={{ color: "rgb(81, 125, 228)" }}
-                  onClick={() => {
-                    mixpanel.track(`Clicked ${socialLink.name} profile link`, {
-                      slug: slug_address,
-                    });
-                  }}
-                  className="mr-5 my-1 md:my-0"
-                  key={socialLink.type_id}
-                >
-                  <div
-                    className="hover:text-gray-600 flex text-sm sm:text-base flex-row py-1 items-center opacity-70 hover:opacity-100"
-                    style={{ color: "#353535" }}
+              {profileToDisplay?.links &&
+                profileToDisplay.links.map((socialLink) => (
+                  <a
+                    href={
+                      `https://${socialLink.prefix}` + socialLink.user_input
+                    }
+                    target="_blank"
+                    // style={{ color: "rgb(81, 125, 228)" }}
+                    onClick={() => {
+                      mixpanel.track(
+                        `Clicked ${socialLink.name} profile link`,
+                        {
+                          slug: slug_address,
+                        }
+                      );
+                    }}
+                    className="mr-5 my-1 md:my-0"
+                    key={socialLink.type_id}
                   >
-                    {socialLink.icon_url && (
-                      <img
-                        src={socialLink.icon_url}
-                        alt=""
-                        className="flex-shrink-0 h-5 w-5 mr-2"
-                      />
-                    )}
-                    <div>
-                      <div className="" style={{ wordBreak: "break-all" }}>
-                        {socialLink.name}
+                    <div
+                      className="hover:text-gray-600 flex text-sm sm:text-base flex-row py-1 items-center opacity-70 hover:opacity-100"
+                      style={{ color: "#353535" }}
+                    >
+                      {socialLink.icon_url && (
+                        <img
+                          src={socialLink.icon_url}
+                          alt=""
+                          className="flex-shrink-0 h-5 w-5 mr-2"
+                        />
+                      )}
+                      <div>
+                        <div className="" style={{ wordBreak: "break-all" }}>
+                          {socialLink.name}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </a>
-              ))}
+                  </a>
+                ))}
             </div>
           </div>
         </CappedWidth>
