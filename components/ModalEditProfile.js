@@ -5,7 +5,11 @@ import mixpanel from "mixpanel-browser";
 import backend from "../lib/backend";
 import AppContext from "../context/app-context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTimes,
+  faLink,
+  faPlusCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { SORT_FIELDS } from "../lib/constants";
 import ScrollableModal from "./ScrollableModal";
 import { Listbox, Transition } from "@headlessui/react";
@@ -192,8 +196,9 @@ export default function Modal({ isOpen, setEditModalOpen }) {
   }, []);
 
   const emptySelectedAddSocialLink = {
+    //icon_url: "/icons/twitter.png",
     type_id: -1,
-    name: "Select...",
+    name: "Select website...",
   };
   const [selectedAddSocialLink, setSelectedAddSocialLink] = useState(
     emptySelectedAddSocialLink
@@ -220,12 +225,21 @@ export default function Modal({ isOpen, setEditModalOpen }) {
     );
   };
 
+  const handleSocialSelected = (event) => {
+    console.log(event);
+
+    setSocialLinks([...socialLinks, { ...event, user_input: "" }]);
+    console.log([...socialLinks, { ...event, user_input: "" }]);
+    //setSelectedAddSocialLink();
+    //handleAddSocialLink();
+  };
+
   return (
     <>
       {isOpen && (
         <ScrollableModal
           closeModal={() => setEditModalOpen(false)}
-          contentWidth="40rem"
+          contentWidth="60rem"
         >
           <form onSubmit={handleSubmit} className="p-4 overflow-y-auto">
             <div className="text-3xl border-b-2 pb-2 flex justify-between items-start">
@@ -243,8 +257,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
             </div>
 
             <div className="flex flex-col md:flex-row">
-              <div className="flex-1 my-4">
-                <div className="text-xl text-indigo-500">Profile</div>
+              <div className="flex-1 my-4  ">
+                <div className="text-xl text-indigo-500 mb-3">Profile</div>
 
                 <div className="py-2">
                   <label htmlFor="name" className="block text-sm text-gray-700">
@@ -330,28 +344,10 @@ export default function Modal({ isOpen, setEditModalOpen }) {
               </div>
               <div className="w-6 flex-shrink" />
               {/* second row */}
-              <div className="flex-1 my-4">
+              <div className="flex-1 my-4 md:pr-4">
                 <div>
-                  <div className="text-xl text-indigo-500">Links</div>
-                  <div className="mb-4 pt-2">
-                    <label
-                      htmlFor="websiteValue"
-                      className="text-gray-700 text-sm"
-                    >
-                      Website URL
-                    </label>
-                    <input
-                      name="websiteValue"
-                      placeholder="your URL"
-                      value={websiteValue ? websiteValue : ""}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setWebsiteValue(value);
-                      }}
-                      type="text"
-                      className="mt-1 bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
-                  </div>
+                  <div className="text-xl text-indigo-500  mb-3">Links</div>
+
                   <div className="py-2">
                     {socialLinks &&
                       socialLinks.map((linkObj) => (
@@ -359,8 +355,12 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                           <div className="flex items-center justify-between">
                             <label
                               htmlFor={linkObj.name}
-                              className="block text-sm font-medium text-gray-700"
+                              className="block text-sm font-medium text-gray-700 flex flex-row"
                             >
+                              <img
+                                className="h-5 w-5 mr-1"
+                                src={linkObj.icon_url}
+                              />
                               {linkObj.name}
                             </label>
                             <span
@@ -408,17 +408,24 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       <div className="flex-1">
                         <Listbox
                           value={selectedAddSocialLink}
-                          onChange={setSelectedAddSocialLink}
+                          onChange={handleSocialSelected}
                         >
                           {({ open }) => (
                             <>
                               <Listbox.Label className="block text-sm text-gray-700">
                                 Add Link
                               </Listbox.Label>
-                              <div className="flex items-center">
-                                <div className="mt-1 relative flex-1">
-                                  <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    {/* <span className="block truncate">
+                              <div className="flex flex-row items-center">
+                                <div className="text-lg">
+                                  <FontAwesomeIcon
+                                    icon={faPlusCircle}
+                                    className="mr-2"
+                                  />
+                                </div>
+                                <div className="flex items-center flex-grow">
+                                  <div className="mt-1 relative flex-1">
+                                    <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                      {/* <span className="block truncate">
                                       {selectedAddSocialLink.name}
                                     </span>
                                     <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
@@ -427,97 +434,103 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                                         aria-hidden="true"
                                       />
                                     </span> */}
-                                    <span className="flex items-center">
-                                      {selectedAddSocialLink.icon_url && (
-                                        <img
-                                          src={selectedAddSocialLink.icon_url}
-                                          alt=""
-                                          className="flex-shrink-0 h-6 w-6 rounded-full"
-                                        />
-                                      )}
-                                      <span className="ml-3 block truncate">
-                                        {selectedAddSocialLink.name}
+                                      <span className="flex items-center">
+                                        {selectedAddSocialLink.icon_url && (
+                                          <img
+                                            src={selectedAddSocialLink.icon_url}
+                                            alt=""
+                                            className="flex-shrink-0 h-6 w-6 rounded-full"
+                                          />
+                                        )}
+                                        <span
+                                          className={` ${
+                                            selectedAddSocialLink.icon_url
+                                              ? "ml-3"
+                                              : null
+                                          }  block truncate`}
+                                        >
+                                          {selectedAddSocialLink.name}
+                                        </span>
+                                        <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                          <SelectorIcon
+                                            className="h-5 w-5 text-gray-400"
+                                            aria-hidden="true"
+                                          />
+                                        </span>
                                       </span>
-                                      <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                        <SelectorIcon
-                                          className="h-5 w-5 text-gray-400"
-                                          aria-hidden="true"
-                                        />
-                                      </span>
-                                    </span>
-                                  </Listbox.Button>
+                                    </Listbox.Button>
 
-                                  <Transition
-                                    show={open}
-                                    as={Fragment}
-                                    leave="transition ease-in duration-100"
-                                    leaveFrom="opacity-100"
-                                    leaveTo="opacity-0"
-                                  >
-                                    <Listbox.Options
-                                      static
-                                      className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                                    <Transition
+                                      show={open}
+                                      as={Fragment}
+                                      leave="transition ease-in duration-100"
+                                      leaveFrom="opacity-100"
+                                      leaveTo="opacity-0"
                                     >
-                                      {filteredSocialLinkOptions().map(
-                                        (opt) => (
-                                          <Listbox.Option
-                                            key={opt.type_id}
-                                            className={({ active }) =>
-                                              classNames(
-                                                active
-                                                  ? "text-white bg-indigo-600"
-                                                  : "text-gray-900",
-                                                "cursor-default select-none relative py-2 pl-3 pr-9"
-                                              )
-                                            }
-                                            value={opt}
-                                          >
-                                            {({ active }) => (
-                                              <>
-                                                <div className="flex items-center">
-                                                  <img
-                                                    src={opt.icon_url}
-                                                    alt=""
-                                                    className="flex-shrink-0 h-6 w-6 rounded-full"
-                                                  />
-                                                  <span
-                                                    className={classNames(
-                                                      opt.type_id ===
-                                                        selectedAddSocialLink.type_id
-                                                        ? "font-normal" // "font-semibold"
-                                                        : "font-normal",
-                                                      "ml-3 block truncate"
-                                                    )}
-                                                  >
-                                                    {opt.name}
-                                                  </span>
-                                                </div>
-
-                                                {opt ===
-                                                selectedAddSocialLink ? (
-                                                  <span
-                                                    className={classNames(
-                                                      active
-                                                        ? "text-white"
-                                                        : "text-indigo-600",
-                                                      "absolute inset-y-0 right-0 flex items-center pr-4"
-                                                    )}
-                                                  >
-                                                    <CheckIcon
-                                                      className="h-5 w-5"
-                                                      aria-hidden="true"
+                                      <Listbox.Options
+                                        static
+                                        className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                                      >
+                                        {filteredSocialLinkOptions().map(
+                                          (opt) => (
+                                            <Listbox.Option
+                                              key={opt.type_id}
+                                              className={({ active }) =>
+                                                classNames(
+                                                  active
+                                                    ? "text-white bg-indigo-600"
+                                                    : "text-gray-900",
+                                                  "cursor-default select-none relative py-2 pl-3 pr-9"
+                                                )
+                                              }
+                                              value={opt}
+                                            >
+                                              {({ active }) => (
+                                                <>
+                                                  <div className="flex items-center">
+                                                    <img
+                                                      src={opt.icon_url}
+                                                      alt=""
+                                                      className="flex-shrink-0 h-6 w-6 rounded-full"
                                                     />
-                                                  </span>
-                                                ) : null}
-                                              </>
-                                            )}
-                                          </Listbox.Option>
-                                        )
-                                      )}
-                                    </Listbox.Options>
-                                  </Transition>
-                                </div>
-                                <div className="flex-shrink mt-1 ml-2">
+                                                    <span
+                                                      className={classNames(
+                                                        opt.type_id ===
+                                                          selectedAddSocialLink.type_id
+                                                          ? "font-normal" // "font-semibold"
+                                                          : "font-normal",
+                                                        "ml-3 block truncate"
+                                                      )}
+                                                    >
+                                                      {opt.name}
+                                                    </span>
+                                                  </div>
+
+                                                  {opt ===
+                                                  selectedAddSocialLink ? (
+                                                    <span
+                                                      className={classNames(
+                                                        active
+                                                          ? "text-white"
+                                                          : "text-indigo-600",
+                                                        "absolute inset-y-0 right-0 flex items-center pr-4"
+                                                      )}
+                                                    >
+                                                      <CheckIcon
+                                                        className="h-5 w-5"
+                                                        aria-hidden="true"
+                                                      />
+                                                    </span>
+                                                  ) : null}
+                                                </>
+                                              )}
+                                            </Listbox.Option>
+                                          )
+                                        )}
+                                      </Listbox.Options>
+                                    </Transition>
+                                  </div>
+                                  {/*<div className="flex-shrink mt-1 ml-2">
                                   <button
                                     type="button"
                                     className="inline-flex items-center px-2.5 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
@@ -528,6 +541,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                                   >
                                     Add
                                   </button>
+                                  </div>*/}
                                 </div>
                               </div>
                             </>
@@ -536,9 +550,35 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       </div>
                     </div>
                   </div>
+                  <div className="mb-4 pt-3 md:pb-14">
+                    <label
+                      htmlFor="websiteValue"
+                      className="text-gray-700 text-sm"
+                    >
+                      <FontAwesomeIcon
+                        className="h-5 w-5 mr-2 hidden"
+                        icon={faLink}
+                      />
+                      Other Website
+                    </label>
+                    <input
+                      name="websiteValue"
+                      placeholder="Your URL"
+                      value={websiteValue ? websiteValue : ""}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setWebsiteValue(value);
+                      }}
+                      type="text"
+                      className="mt-1 bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  </div>
                 </div>
+              </div>
+              {/* Third column */}
+              <div className="flex-1 my-4 md:pl-2">
                 <div>
-                  <div className="text-xl text-indigo-500 mt-2 pt-2">
+                  <div className="text-xl text-indigo-500 mt-2 pt-2 md:mt-0 md:pt-0 mb-3">
                     Page Settings
                   </div>
                   <div className="py-2 mb-2">
@@ -725,7 +765,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       )}
                     </Listbox>
                   </div>
-                  <div className="py-2 mb-2">
+                  <div className="py-2 mb-16">
                     <Listbox
                       value={defaultOwnedSortId}
                       onChange={(value) => {

@@ -537,11 +537,14 @@ const Profile = ({
 
   useEffect(() => {
     if (context.isMobile === true) {
-      setShowSocialLinks(false);
+      profileToDisplay?.links?.length > 2 ||
+      (profileToDisplay?.links?.length > 1 && profileToDisplay?.website_url)
+        ? setShowSocialLinks(false)
+        : setShowSocialLinks(true);
     } else {
       setShowSocialLinks(true);
     }
-  }, [context?.isMobile]);
+  }, [context?.isMobile, profileToDisplay]);
 
   const toggleShowSocialLinks = () => {
     setShowSocialLinks(!showSocialLinks);
@@ -738,7 +741,7 @@ const Profile = ({
             <div className="flex-grow"></div>
           </div>
 
-          <div className="px-6 sm:px-3 mt-8">
+          <div className="px-6 sm:px-3 mt-8 ">
             {/* Use context info for logged in user - reflected immediately after changes */}
             {profileToDisplay?.bio ? (
               // <div className="text-gray-500 flex flex-row">
@@ -752,7 +755,7 @@ const Profile = ({
                   wordWrap: "break-word",
                   display: "block",
                 }}
-                className="text-black text-sm sm:text-base max-w-prose"
+                className="text-black text-sm sm:text-base max-w-prose text-center md:text-left"
               >
                 {moreBioShown
                   ? profileToDisplay.bio
@@ -775,14 +778,16 @@ const Profile = ({
             ) : null}
 
             {/* Use context info for logged in user - reflected immediately after changes */}
-            {context.isMobile && (
+            {(context.isMobile && profileToDisplay?.links?.length > 2) ||
+            (profileToDisplay?.links?.length > 1 &&
+              profileToDisplay?.website_url) ? (
               <div
-                className={`flex cursor-pointer items-center hover:opacity-70 justify-center md:justify-start ${
+                className={`flex cursor-pointer items-center hover:opacity-70 justify-center text-gray-600 text-sm md:justify-start ${
                   profileToDisplay?.bio ? "mt-3" : ""
                 }`}
                 onClick={toggleShowSocialLinks}
               >
-                <div className="mr-1">Links</div>{" "}
+                <div className="mr-1">View links</div>{" "}
                 <div
                   className={`transition-all ${
                     showSocialLinks ? "transform rotate-90" : "rotate-0"
@@ -795,7 +800,7 @@ const Profile = ({
                   />{" "}
                 </div>
               </div>
-            )}
+            ) : null}
 
             <div
               className={`flex flex-wrap max-w-prose items-center justify-center md:justify-start ${
@@ -821,7 +826,7 @@ const Profile = ({
                   className="mr-5 my-1 md:my-0"
                 >
                   <div
-                    className="hover:text-gray-600 flex text-sm sm:text-base flex-row py-1 opacity-70 hover:opacity-100"
+                    className="hover:text-gray-600 flex text-sm flex-row py-1 opacity-70 hover:opacity-100"
                     style={{ color: "#353535" }}
                   >
                     <div>
@@ -863,14 +868,14 @@ const Profile = ({
                     key={socialLink.type_id}
                   >
                     <div
-                      className="hover:text-gray-600 flex text-sm sm:text-base flex-row py-1 items-center opacity-70 hover:opacity-100"
+                      className="hover:text-gray-600 flex text-sm flex-row py-1 items-center opacity-60 hover:opacity-100"
                       style={{ color: "#353535" }}
                     >
                       {socialLink.icon_url && (
                         <img
                           src={socialLink.icon_url}
                           alt=""
-                          className="flex-shrink-0 h-5 w-5 mr-2"
+                          className="flex-shrink-0 h-5 w-5 mr-1"
                         />
                       )}
                       <div>
