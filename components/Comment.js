@@ -23,13 +23,18 @@ export default function Comment({
     false,
     modalRef
   );
-  const toggleDropdown = () => setIsActive(!isActive);
+  const toggleDropdown = () => {
+    setIsActive(!isActive);
+  };
+
   const userWroteComment =
     myProfile &&
     myProfile.profile_id &&
     myProfile.profile_id === comment.commenter_profile_id;
 
   const isOwnerOfNFT = nftOwnerId && nftOwnerId === myProfile.profile_id;
+  const isCreatorOfNFT = nftCreatorId && nftCreatorId === myProfile.profile_id;
+
   return (
     <div className="p-2 my-1 flex rounded-xl hover:bg-gray-100 transition-all relative">
       <div className="mr-3 mt-1">
@@ -52,36 +57,42 @@ export default function Comment({
       </div>
       <div className="flex flex-col flex-1">
         <div className="flex items-center justify-between">
-          <Link
-            href="/[profile]"
-            as={
-              comment.username ? `/${comment.username}` : `/${comment.address}`
-            }
-          >
-            <a
-              className="hover:text-stpink cursor-pointer text-sm"
-              onClick={closeModal}
-              style={{ overflow: "hidden", textOverflow: "ellipsis" }}
+          <div className="flex flex-col sm:flex-row">
+            <Link
+              href="/[profile]"
+              as={
+                comment.username
+                  ? `/${comment.username}`
+                  : `/${comment.address}`
+              }
             >
-              {comment.name || "Unnamed"}
-            </a>
-          </Link>
-          <Link
-            href="/[profile]"
-            as={
-              comment.username ? `/${comment.username}` : `/${comment.address}`
-            }
-          >
-            <a
-              className="hover:text-stpink cursor-pointer text-xs text-gray-400 ml-1"
-              onClick={closeModal}
-              style={{ overflow: "hidden", textOverflow: "ellipsis" }}
+              <a
+                className="hover:text-stpink cursor-pointer text-sm"
+                onClick={closeModal}
+                style={{ overflow: "hidden", textOverflow: "ellipsis" }}
+              >
+                {comment.name || "Unnamed"}
+              </a>
+            </Link>
+            <Link
+              href="/[profile]"
+              as={
+                comment.username
+                  ? `/${comment.username}`
+                  : `/${comment.address}`
+              }
             >
-              @{comment.username}
-            </a>
-          </Link>
+              <a
+                className="hover:text-stpink cursor-pointer text-xs text-gray-400 sm:ml-1"
+                onClick={closeModal}
+                style={{ overflow: "hidden", textOverflow: "ellipsis" }}
+              >
+                @{comment.username}
+              </a>
+            </Link>
+          </div>
           <div className="flex-grow"></div>
-          <div className="text-gray-400 text-xs flex-0">
+          <div className="text-gray-400 text-xs flex-0 mb-6 sm:mb-0 mt-2 sm:mt-0">
             {formatDistanceToNowStrict(
               subSeconds(new Date(`${comment.added}Z`), 1),
               {
@@ -89,8 +100,8 @@ export default function Comment({
               }
             )}
           </div>
-          {(isOwnerOfNFT || userWroteComment) && (
-            <div className="flex items-center justify-center my-2 md:my-0 relative">
+          {(isOwnerOfNFT || userWroteComment || isCreatorOfNFT) && (
+            <div className="flex items-center justify-center  relative -mt-4 sm:mt-0">
               <div
                 onClick={toggleDropdown}
                 className="ml-3 mr-1 cursor-pointer text-gray-400 hover:text-gray-600 transition-all"
