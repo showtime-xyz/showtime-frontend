@@ -12,6 +12,7 @@ export default function Comment({
   modalRef,
   deleteComment,
   nftOwnerId,
+  nftCreatorId,
 }) {
   const context = useContext(AppContext);
   const { myProfile } = context;
@@ -57,15 +58,30 @@ export default function Comment({
               comment.username ? `/${comment.username}` : `/${comment.address}`
             }
           >
-            <div
-              className="hover:text-stpink cursor-pointer flex-1"
+            <a
+              className="hover:text-stpink cursor-pointer text-sm"
               onClick={closeModal}
               style={{ overflow: "hidden", textOverflow: "ellipsis" }}
             >
-              {comment.username || comment.name || "Unnamed"}
-            </div>
+              {comment.name || "Unnamed"}
+            </a>
           </Link>
-          <div className="text-gray-400 text-sm flex-0">
+          <Link
+            href="/[profile]"
+            as={
+              comment.username ? `/${comment.username}` : `/${comment.address}`
+            }
+          >
+            <a
+              className="hover:text-stpink cursor-pointer text-xs text-gray-400 ml-1"
+              onClick={closeModal}
+              style={{ overflow: "hidden", textOverflow: "ellipsis" }}
+            >
+              @{comment.username}
+            </a>
+          </Link>
+          <div className="flex-grow"></div>
+          <div className="text-gray-400 text-xs flex-0">
             {formatDistanceToNowStrict(
               subSeconds(new Date(`${comment.added}Z`), 1),
               {
