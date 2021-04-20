@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import ClientOnlyPortal from "./ClientOnlyPortal";
 import _ from "lodash";
 import Link from "next/link";
 import CloseButton from "./CloseButton";
 import { truncateWithEllipses } from "../lib/utilities";
 import FollowButton from "./FollowButton";
+import AppContext from "../context/app-context";
 export default function ModalUserList({
   isOpen,
   title,
@@ -13,6 +14,7 @@ export default function ModalUserList({
   emptyMessage,
   onRedirect,
 }) {
+  const context = useContext(AppContext);
   return (
     <>
       {isOpen && (
@@ -64,15 +66,17 @@ export default function ModalUserList({
                           </div>
                         </a>
                       </Link>
-                      <FollowButton
-                        item={{
-                          profile_id: profile.profile_id,
-                          follower_count: 0,
-                        }}
-                        followerCount={0}
-                        setFollowerCount={() => {}}
-                        notExpandWhenMobile
-                      />
+                      {context.myProfile.profile_id !== profile.profile_id && (
+                        <FollowButton
+                          item={{
+                            profile_id: profile.profile_id,
+                            follower_count: 0,
+                          }}
+                          followerCount={0}
+                          setFollowerCount={() => {}}
+                          notExpandWhenMobile
+                        />
+                      )}
                     </div>
                   );
                 })}
