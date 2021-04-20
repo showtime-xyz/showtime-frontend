@@ -51,6 +51,7 @@
     "react-player": "^2.8.1",
     "react-scroll": "^1.8.2",
     "react-scroll-up-button": "^1.6.4",
+    "remove-markdown": "^0.3.0",
     "styled-components": "^5.2.1",
     "swr": "^0.4.0",
     "tailwindcss": "^2.1.1",
