@@ -539,7 +539,7 @@ const TokenDetailBody = ({
                 {/* Comments section */}
                 <div className="flex">
                   <CommentsSection
-                    nftId={item.nft_id}
+                    item={item}
                     commentCount={item.comment_count}
                     closeModal={() => {
                       if (setEditModalOpen) {
