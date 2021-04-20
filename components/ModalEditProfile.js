@@ -113,7 +113,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
         website_url: websiteValue?.trim() ? websiteValue.trim() : null,
         links: socialLinks
           .filter((sl) => sl.user_input?.trim())
-          .socialLinks.map((sl) => ({
+          .map((sl) => ({
             type_id: sl.type_id,
             user_input: sl.user_input?.trim() ? sl.user_input.trim() : null,
           })),
@@ -130,7 +130,12 @@ export default function Modal({ isOpen, setEditModalOpen }) {
       bio: bioValue?.trim() ? bioValue.trim() : null,
       username: username?.trim() ? username.trim() : null,
       website_url: websiteValue?.trim() ? websiteValue.trim() : null,
-      links: socialLinks,
+      links: socialLinks
+        .filter((sl) => sl.user_input?.trim())
+        .map((sl) => ({
+          ...sl,
+          user_input: sl.user_input?.trim(),
+        })),
       default_list_id: defaultListId ? defaultListId : "",
       default_created_sort_id: defaultCreatedSortId,
       default_owned_sort_id: defaultOwnedSortId,
