@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect, Fragment } from "react";
 import AwesomeDebouncePromise from "awesome-debounce-promise";
 import { useRouter } from "next/router";
-import mixpanel from "mixpanel-browser";
+import mixpanel, { opt_in_tracking } from "mixpanel-browser";
 import backend from "../lib/backend";
 import AppContext from "../context/app-context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -69,6 +69,9 @@ export default function Modal({ isOpen, setEditModalOpen }) {
   const [superrare, setSuperrare] = useState("");
   const [knownorigin, setKnownorigin] = useState("");
 
+  const [socialLinks, setSocialLinks] = useState({});
+  const [socialLinkOptions, setSocialLinkOptions] = useState([]);
+
   const [customURLError, setCustomURLError] = useState({
     isError: false,
     message: "",
@@ -88,15 +91,16 @@ export default function Modal({ isOpen, setEditModalOpen }) {
       setDefaultListId(context.myProfile.default_list_id || "");
       setDefaultCreatedSortId(context.myProfile.default_created_sort_id || 1);
       setDefaultOwnedSortId(context.myProfile.default_owned_sort_id || 1);
-      setTwitter(context.myProfile.social_links.twitter || "");
-      setLinktree(context.myProfile.social_links.linktree || "");
-      setFoundation(context.myProfile.social_links.foundation || "");
-      setRarible(context.myProfile.social_links.rarible || "");
-      setOpensea(context.myProfile.social_links.opensea || "");
-      setMintable(context.myProfile.social_links.mintable || "");
-      setMakersplace(context.myProfile.social_links.makersplace || "");
-      setSuperrare(context.myProfile.social_links.superrare || "");
-      setKnownorigin(context.myProfile.social_links.knownorigin || "");
+      // setTwitter(context.myProfile.social_links.twitter || "");
+      // setLinktree(context.myProfile.social_links.linktree || "");
+      // setFoundation(context.myProfile.social_links.foundation || "");
+      // setRarible(context.myProfile.social_links.rarible || "");
+      // setOpensea(context.myProfile.social_links.opensea || "");
+      // setMintable(context.myProfile.social_links.mintable || "");
+      // setMakersplace(context.myProfile.social_links.makersplace || "");
+      // setSuperrare(context.myProfile.social_links.superrare || "");
+      // setKnownorigin(context.myProfile.social_links.knownorigin || "");
+      setSocialLinks(context.myProfile.links);
     }
   }, [context.myProfile, isOpen]);
 
@@ -126,17 +130,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
         bio: bioValue?.trim() ? bioValue.trim() : null,
         username: username?.trim() ? username.trim() : null,
         website_url: websiteValue?.trim() ? websiteValue.trim() : null,
-        social_links: {
-          twitter: twitter?.trim() ? twitter.trim() : null,
-          linktree: linktree?.trim() ? linktree.trim() : null,
-          foundation: foundation?.trim() ? foundation.trim() : null,
-          rarible: rarible?.trim() ? rarible.trim() : null,
-          opensea: opensea?.trim() ? opensea.trim() : null,
-          mintable: mintable?.trim() ? mintable.trim() : null,
-          makersplace: makersplace?.trim() ? makersplace.trim() : null,
-          superrare: superrare?.trim() ? superrare.trim() : null,
-          knownorigin: knownorigin?.trim() ? knownorigin.trim() : null,
-        },
+        links: socialLinks,
         default_list_id: defaultListId ? defaultListId : "",
         default_created_sort_id: defaultCreatedSortId,
         default_owned_sort_id: defaultOwnedSortId,
@@ -150,17 +144,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
       bio: bioValue?.trim() ? bioValue.trim() : null,
       username: username?.trim() ? username.trim() : null,
       website_url: websiteValue?.trim() ? websiteValue.trim() : null,
-      social_links: {
-        twitter: twitter?.trim() ? twitter.trim() : null,
-        linktree: linktree?.trim() ? linktree.trim() : null,
-        foundation: foundation?.trim() ? foundation.trim() : null,
-        rarible: rarible?.trim() ? rarible.trim() : null,
-        opensea: opensea?.trim() ? opensea.trim() : null,
-        mintable: mintable?.trim() ? mintable.trim() : null,
-        makersplace: makersplace?.trim() ? makersplace.trim() : null,
-        superrare: superrare?.trim() ? superrare.trim() : null,
-        knownorigin: knownorigin?.trim() ? knownorigin.trim() : null,
-      },
+      links: socialLinks,
       default_list_id: defaultListId ? defaultListId : "",
       default_created_sort_id: defaultCreatedSortId,
       default_owned_sort_id: defaultOwnedSortId,
@@ -168,7 +152,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
     setSubmitting(false);
     setEditModalOpen(false);
     const wallet_addresses = context.myProfile?.wallet_addresses;
-
+    // confirm saved correctly
     router.push(
       `/${username || (wallet_addresses && wallet_addresses[0]) || ""}`
     );
@@ -198,80 +182,111 @@ export default function Modal({ isOpen, setEditModalOpen }) {
     ...Object.keys(SORT_FIELDS).map((key) => SORT_FIELDS[key]),
   ];
 
-  const socialLinkObjs = [
-    {
-      title: "Twitter",
-      keyname: "twitter",
-      url: "twitter.com/",
-      value: twitter,
-      setValue: setTwitter,
-      padding: 100,
-    },
-    {
-      title: "Linktree",
-      keyname: "linktree",
-      url: "linktr.ee/",
-      value: linktree,
-      setValue: setLinktree,
-      padding: 78,
-    },
-    {
-      title: "Foundation",
-      keyname: "foundation",
-      url: "foundation.app/",
-      value: foundation,
-      setValue: setFoundation,
-      padding: 125,
-    },
-    {
-      title: "Rarible",
-      keyname: "rarible",
-      url: "rarible.com/",
-      value: rarible,
-      setValue: setRarible,
-      padding: 99,
-    },
-    {
-      title: "OpenSea",
-      keyname: "opensea",
-      url: "opensea.io/",
-      value: opensea,
-      setValue: setOpensea,
-      padding: 98,
-    },
-    {
-      title: "Mintable",
-      keyname: "mintable",
-      url: "mintable.app/",
-      value: mintable,
-      setValue: setMintable,
-      padding: 109,
-    },
-    {
-      title: "Makersplace",
-      keyname: "makersplace",
-      url: "makersplace.com/",
-      value: makersplace,
-      setValue: setMakersplace,
-      padding: 139,
-    },
-    {
-      title: "SuperRare",
-      keyname: "superrare",
-      url: "superrare.co/",
-      value: superrare,
-      setValue: setSuperrare,
-      padding: 109,
-    },
-    {
-      title: "KnownOrigin",
-      keyname: "knownorigin",
-      url: "knownorigin.io/",
-      value: knownorigin,
-      setValue: setKnownorigin,
-      padding: 119,
-    },
-  ];
+  useEffect(() => {
+    const getSocialLinkOptions = async () => {
+      const options = await fetch(`/api/getsociallinkoptions`, {});
+      const optionsJson = await options.json();
+      setSocialLinkOptions(
+        optionsJson?.map((opt) => ({ ...opt, type_id: opt.id }))
+      );
+    };
+    getSocialLinkOptions();
+  }, []);
+
+  const emptySelectedAddSocialLink = {
+    type_id: -1,
+    name: "Select...",
+  };
+  const [selectedAddSocialLink, setSelectedAddSocialLink] = useState(
+    emptySelectedAddSocialLink
+  );
+
+  const handleAddSocialLink = () => {
+    setSocialLinks([
+      ...socialLinks,
+      { ...selectedAddSocialLink, user_input: "" },
+    ]);
+
+    setSelectedAddSocialLink(emptySelectedAddSocialLink);
+  };
+
+  const handleRemoveSocialLink = (id) => {
+    setSocialLinks(
+      socialLinks.filter((socialLink) => socialLink.type_id !== id)
+    );
+  };
+
+  const filteredSocialLinkOptions = () => {
+    return socialLinkOptions.filter(
+      (option) => !socialLinks.map((sl) => sl.type_id).includes(option.type_id)
+    );
+  };
+
+  // const socialLinkObjs = [
+  //   {
+  //     title: "Twitter",
+  //     keyname: "twitter",
+  //     url: "twitter.com/",
+  //     value: twitter,
+  //     setValue: setTwitter,
+  //   },
+  //   {
+  //     title: "Linktree",
+  //     keyname: "linktree",
+  //     url: "linktr.ee/",
+  //     value: linktree,
+  //     setValue: setLinktree,
+  //   },
+  //   {
+  //     title: "Foundation",
+  //     keyname: "foundation",
+  //     url: "foundation.app/",
+  //     value: foundation,
+  //     setValue: setFoundation,
+  //   },
+  //   {
+  //     title: "Rarible",
+  //     keyname: "rarible",
+  //     url: "rarible.com/",
+  //     value: rarible,
+  //     setValue: setRarible,
+  //   },
+  //   {
+  //     title: "OpenSea",
+  //     keyname: "opensea",
+  //     url: "opensea.io/",
+  //     value: opensea,
+  //     setValue: setOpensea,
+  //   },
+  //   {
+  //     title: "Mintable",
+  //     keyname: "mintable",
+  //     url: "mintable.app/",
+  //     value: mintable,
+  //     setValue: setMintable,
+  //   },
+  //   {
+  //     title: "Makersplace",
+  //     keyname: "makersplace",
+  //     url: "makersplace.com/",
+  //     value: makersplace,
+  //     setValue: setMakersplace,
+  //   },
+  //   {
+  //     title: "SuperRare",
+  //     keyname: "superrare",
+  //     url: "superrare.co/",
+  //     value: superrare,
+  //     setValue: setSuperrare,
+  //   },
+  //   {
+  //     title: "KnownOrigin",
+  //     keyname: "knownorigin",
+  //     url: "knownorigin.io/",
+  //     value: knownorigin,
+  //     setValue: setKnownorigin,
+  //   },
+  // ];
 
   return (
     <>
@@ -692,8 +707,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                     Social Links
                   </div>
                   <div className="py-2">
-                    {socialLinkObjs.map((linkObj) => (
-                      <div key={linkObj.keyname} className="mb-4 pb-2">
+                    {socialLinks.map((linkObj) => (
+                      <div key={linkObj.name} className="mb-4 pb-2">
                         {/* //   <label
                       //     htmlFor="opensea"
                       //     className="text-gray-500  text-sm"
@@ -749,26 +764,46 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                       //       {linkObj.url}
                       //     </div>
                       //   </div> */}
-                        <label
-                          htmlFor={linkObj.keyname}
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          {linkObj.title}
-                        </label>
+                        <div className="flex items-center justify-between">
+                          <label
+                            htmlFor={linkObj.name}
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            {linkObj.name}
+                          </label>
+                          <span
+                            className="text-xs ml-2 text-gray-400 hover:text-red-400 cursor-pointer"
+                            onClick={() =>
+                              handleRemoveSocialLink(linkObj.type_id)
+                            }
+                          >
+                            Remove
+                          </span>
+                        </div>
                         <div className="mt-1">
                           <div className="max-w-lg flex rounded-md shadow-sm">
                             <span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 bg-gray-100 text-gray-500 sm:text-sm">
-                              {linkObj.url}
+                              {linkObj.prefix}
                             </span>
                             <input
                               type="text"
-                              name={linkObj.keyname}
-                              id={linkObj.keyname}
+                              name={linkObj.name}
+                              id={linkObj.name}
                               className="pl-2 border flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
-                              value={linkObj.value ? linkObj.value : ""}
+                              value={
+                                linkObj.user_input ? linkObj.user_input : ""
+                              }
                               onChange={(e) => {
                                 const value = e.target.value;
-                                linkObj.setValue(value);
+
+                                setSocialLinks(
+                                  socialLinks.map((link) => {
+                                    if (link.name === linkObj.name) {
+                                      return { ...link, user_input: value };
+                                    }
+                                    return link;
+                                  })
+                                );
                               }}
                               autoComplete="false"
                               maxLength={30}
@@ -777,6 +812,113 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                         </div>
                       </div>
                     ))}
+                    <hr className="mb-4" />
+                    <div className="flex items-center">
+                      <div className="flex-1">
+                        <Listbox
+                          value={selectedAddSocialLink}
+                          onChange={setSelectedAddSocialLink}
+                        >
+                          {({ open }) => (
+                            <>
+                              <Listbox.Label className="block text-sm text-gray-700">
+                                Add Social Link
+                              </Listbox.Label>
+                              <div className="flex items-center">
+                                <div className="mt-1 relative flex-1">
+                                  <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <span className="block truncate">
+                                      {selectedAddSocialLink.name}
+                                    </span>
+                                    <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                      <SelectorIcon
+                                        className="h-5 w-5 text-gray-400"
+                                        aria-hidden="true"
+                                      />
+                                    </span>
+                                  </Listbox.Button>
+
+                                  <Transition
+                                    show={open}
+                                    as={Fragment}
+                                    leave="transition ease-in duration-100"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0"
+                                  >
+                                    <Listbox.Options
+                                      static
+                                      className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                                    >
+                                      {filteredSocialLinkOptions().map(
+                                        (opt) => (
+                                          <Listbox.Option
+                                            key={opt.type_id}
+                                            className={({ active }) =>
+                                              classNames(
+                                                active
+                                                  ? "text-white bg-indigo-600"
+                                                  : "text-gray-900",
+                                                "cursor-default select-none relative py-2 pl-3 pr-9"
+                                              )
+                                            }
+                                            value={opt}
+                                          >
+                                            {({ active }) => (
+                                              <>
+                                                <span
+                                                  className={classNames(
+                                                    opt.type_id ===
+                                                      selectedAddSocialLink.type_id
+                                                      ? "font-normal" // "font-semibold"
+                                                      : "font-normal",
+                                                    "block truncate"
+                                                  )}
+                                                >
+                                                  {opt.name}
+                                                </span>
+
+                                                {opt ===
+                                                selectedAddSocialLink ? (
+                                                  <span
+                                                    className={classNames(
+                                                      active
+                                                        ? "text-white"
+                                                        : "text-indigo-600",
+                                                      "absolute inset-y-0 right-0 flex items-center pr-4"
+                                                    )}
+                                                  >
+                                                    <CheckIcon
+                                                      className="h-5 w-5"
+                                                      aria-hidden="true"
+                                                    />
+                                                  </span>
+                                                ) : null}
+                                              </>
+                                            )}
+                                          </Listbox.Option>
+                                        )
+                                      )}
+                                    </Listbox.Options>
+                                  </Transition>
+                                </div>
+                                <div className="flex-shrink mt-1 ml-2">
+                                  <button
+                                    type="button"
+                                    className="inline-flex items-center px-2.5 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
+                                    onClick={handleAddSocialLink}
+                                    disabled={
+                                      selectedAddSocialLink.type_id === -1
+                                    }
+                                  >
+                                    Add
+                                  </button>
+                                </div>
+                              </div>
+                            </>
+                          )}
+                        </Listbox>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

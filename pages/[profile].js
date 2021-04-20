@@ -71,7 +71,7 @@ export async function getServerSideProps(context) {
     const default_owned_sort_id = data_profile.profile.default_owned_sort_id;
     const featured_nft_img_url = data_profile.profile.featured_nft_img_url;
     const featured_nft = data_profile.featured_nft;
-    const social_links = data_profile.profile.social_links;
+    const links = data_profile.profile.links;
 
     return {
       props: {
@@ -91,7 +91,7 @@ export async function getServerSideProps(context) {
         featured_nft_img_url,
         featured_nft,
         website_url,
-        social_links,
+        links,
       }, // will be passed to the page component as props
     };
   } catch (err) {
@@ -125,7 +125,7 @@ const Profile = ({
   featured_nft_img_url,
   featured_nft,
   website_url,
-  social_links,
+  links,
 }) => {
   const context = useContext(AppContext);
 
@@ -523,7 +523,7 @@ const Profile = ({
         bio,
         img_url,
         username,
-        social_links,
+        links,
         wallet_addresses_excluding_email,
       };
 
@@ -874,49 +874,38 @@ const Profile = ({
                 </a>
               ) : null}
               {/* map out social links */}
-              {socialLinkObjs.map(
-                (socialLink) =>
-                  profileToDisplay?.social_links?.[socialLink.key] && (
-                    <a
-                      href={
-                        `https://${socialLink.url}/` +
-                        profileToDisplay.social_links[socialLink.key]
-                      }
-                      target="_blank"
-                      // style={{ color: "rgb(81, 125, 228)" }}
-                      onClick={() => {
-                        mixpanel.track(
-                          `Clicked ${socialLink.title} profile link`,
-                          {
-                            slug: slug_address,
-                          }
-                        );
-                      }}
-                      className="mr-5 my-1 md:my-0"
-                      key={socialLink.key}
-                    >
+              {profileToDisplay?.links?.map((socialLink) => (
+                <a
+                  href={`https://${socialLink.prefix}` + socialLink.user_input}
+                  target="_blank"
+                  // style={{ color: "rgb(81, 125, 228)" }}
+                  onClick={() => {
+                    mixpanel.track(`Clicked ${socialLink.name} profile link`, {
+                      slug: slug_address,
+                    });
+                  }}
+                  className="mr-5 my-1 md:my-0"
+                  key={socialLink.type_id}
+                >
+                  <div className="hover:text-gray-600 flex text-sm sm:text-base flex-row py-1 text-black">
+                    {/* <div>
+                      <FontAwesomeIcon
+                        style={{ height: 14, width: 14 }}
+                        className="mr-2"
+                        icon={socialLink.icon}
+                      />{" "}
+                    </div> */}
+                    <div>
                       <div
-                        className="hover:text-gray-600 flex text-sm sm:text-base flex-row py-1 text-black"
+                        className="hover:opacity-90"
+                        style={{ wordBreak: "break-all" }}
                       >
-                        <div>
-                          <FontAwesomeIcon
-                            style={{ height: 14, width: 14 }}
-                            className="mr-2"
-                            icon={socialLink.icon}
-                          />{" "}
-                        </div>
-                        <div>
-                          <div
-                            className="hover:opacity-90"
-                            style={{ wordBreak: "break-all" }}
-                          >
-                            {socialLink.title}
-                          </div>
-                        </div>
+                        {socialLink.name}
                       </div>
-                    </a>
-                  )
-              )}
+                    </div>
+                  </div>
+                </a>
+              ))}
             </div>
           </div>
         </CappedWidth>
