@@ -33,6 +33,8 @@ const TokenDetailBody = ({
   setEditModalOpen,
   ownershipDetails,
   isInModal,
+  parentReportModalOpen, // for full page view only, not modal view
+  parentSetReportModalOpen, // for full page view only, not modal view
 }) => {
   const context = useContext(AppContext);
   const { isMobile, columns, gridWidth } = context;
@@ -117,7 +119,7 @@ const TokenDetailBody = ({
 
   return (
     <>
-      {typeof document !== "undefined" ? (
+      {typeof document !== "undefined" && parentReportModalOpen !== null ? (
         <>
           <ModalReportItem
             isOpen={reportModalOpen}
@@ -180,31 +182,35 @@ const TokenDetailBody = ({
                   </a>
                 </Link>
               ) : item.creator_address ? (
-                <Link
-                  href="/[profile]"
-                  as={`/${item?.creator_username || item.creator_address}`}
-                >
-                  <a className="flex flex-row items-center ">
-                    <div>
-                      <img
-                        alt={item.creator_name}
-                        src={
-                          item.creator_img_url
-                            ? item.creator_img_url
-                            : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                        }
-                        className="rounded-full "
-                        style={{ height: 24, width: 24 }}
-                      />
-                    </div>
-                    <div className="showtime-card-profile-link ml-2 mr-2">
-                      {truncateWithEllipses(item.creator_name, 30)}
-                    </div>
-                    {context.myProfile?.profile_id !== item?.creator_id && (
+                <div className="flex flex-row items-center">
+                  <Link
+                    href="/[profile]"
+                    as={`/${item?.creator_username || item.creator_address}`}
+                  >
+                    <a className="flex flex-row items-center">
+                      <div>
+                        <img
+                          alt={item.creator_name}
+                          src={
+                            item.creator_img_url
+                              ? item.creator_img_url
+                              : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                          }
+                          className="rounded-full "
+                          style={{ height: 24, width: 24 }}
+                        />
+                      </div>
+                      <div className="showtime-card-profile-link ml-2">
+                        {truncateWithEllipses(item.creator_name, 22)}
+                      </div>
+                    </a>
+                  </Link>
+                  {context.myProfile?.profile_id !== item?.creator_id && (
+                    <div className="ml-2">
                       <MiniFollowButton profileId={item?.creator_id} />
-                    )}
-                  </a>
-                </Link>
+                    </div>
+                  )}
+                </div>
               ) : null}
             </div>
             <div>&nbsp;</div>
@@ -262,7 +268,7 @@ const TokenDetailBody = ({
                     type="button"
                     onClick={() => {
                       setLightboxOpen(true);
-                      mixpanel.track("Original size clicked");
+                      mixpanel.track("Original clicked");
                     }}
                     className="flex flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all"
                   >
@@ -270,7 +276,7 @@ const TokenDetailBody = ({
                       <FontAwesomeIcon icon={faExpand} width={18} height={18} />
                     </div>
                     <div className="ml-2" style={{ fontSize: 14 }}>
-                      Original size
+                      Original
                     </div>
                   </button>
                 ) : null}
@@ -480,21 +486,23 @@ const TokenDetailBody = ({
                         />
                       </div>
                     )}
-                {/* Owned by Section */}
-                {!isMobile && item.owner_address && (
-                  <div className="mt-8">
-                    <div className="md:text-lg py-4">Owned By</div>
-                    <div>
-                      <UserTimestampCard
-                        item={item}
-                        timestamp={ownershipDetails.token_last_transferred}
-                        closeModalCallback={() => {
-                          setEditModalOpen(false);
-                        }}
-                      />
+                {/* Owned by Section - excluding multiple owners */}
+                {!isMobile &&
+                  item.owner_address &&
+                  (item.owner_count === null || item.owner_count === 1) && (
+                    <div className="mt-8">
+                      <div className="md:text-lg py-4">Owned By</div>
+                      <div>
+                        <UserTimestampCard
+                          item={item}
+                          timestamp={ownershipDetails.token_last_transferred}
+                          closeModalCallback={() => {
+                            setEditModalOpen(false);
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
                 {/* History Section */}
                 <div className="mt-8">
                   <div className="md:text-lg py-4">Owner History</div>
@@ -512,20 +520,22 @@ const TokenDetailBody = ({
               {/* right column section */}
               <div className="flex-1 p-4 order-first md:order-last">
                 {/* Owned by section ONLY ON MOBILE */}
-                {isMobile && item.owner_address && (
-                  <div className="mb-8">
-                    <div className="md:text-lg py-4">Owned By</div>
-                    <div>
-                      <UserTimestampCard
-                        item={item}
-                        timestamp={ownershipDetails.token_last_transferred}
-                        closeModalCallback={() => {
-                          setEditModalOpen(false);
-                        }}
-                      />
+                {isMobile &&
+                  item.owner_address &&
+                  (item.owner_count === null || item.owner_count === 1) && (
+                    <div className="mb-8">
+                      <div className="md:text-lg py-4">Owned By</div>
+                      <div>
+                        <UserTimestampCard
+                          item={item}
+                          timestamp={ownershipDetails.token_last_transferred}
+                          closeModalCallback={() => {
+                            setEditModalOpen(false);
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
                 {/* Comments section */}
                 <div className="flex">
                   <CommentsSection
@@ -567,7 +577,9 @@ const TokenDetailBody = ({
                 cursor: "pointer",
               }}
               onClick={() => {
-                setReportModalOpen(true);
+                parentSetReportModalOpen !== undefined
+                  ? parentSetReportModalOpen(true)
+                  : setReportModalOpen(true);
               }}
               className="text-gray-500 hover:text-stpink"
             >

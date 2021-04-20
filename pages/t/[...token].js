@@ -95,51 +95,51 @@ export default function Token({ token }) {
   const [reportModalOpen, setReportModalOpen] = useState(false);
 
   return (
-    <Layout key={item.nft_id}>
-      <Head>
-        <title>{item.token_name}</title>
-
-        <meta name="description" content={item.token_description} />
-        <meta property="og:type" content="website" />
-        <meta name="og:description" content={item.token_description} />
-        <meta
-          property="og:image"
-          content={
-            item.token_img_preview_url ? item.token_img_preview_url : null
-          }
-        />
-        <meta name="og:title" content={item.token_name} />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={item.token_name} />
-        <meta name="twitter:description" content={item.token_description} />
-        <meta
-          name="twitter:image"
-          content={
-            item.token_img_preview_url ? item.token_img_preview_url : null
-          }
-        />
-      </Head>
-
+    <>
       {typeof document !== "undefined" ? (
-        <>
-          <ModalReportItem
-            isOpen={reportModalOpen}
-            setReportModalOpen={setReportModalOpen}
-            nftId={item.nft_id}
-          />
-        </>
-      ) : null}
-
-      <div>
-        <TokenDetailBody
-          item={item}
-          muted={false}
-          className="w-full"
-          ownershipDetails={ownershipDetails}
+        <ModalReportItem
+          isOpen={reportModalOpen}
+          setReportModalOpen={setReportModalOpen}
+          nftId={item.nft_id}
         />
+      ) : null}
+      <Layout key={item.nft_id}>
+        <Head>
+          <title>{item.token_name}</title>
 
-        {/*createdItems.length === 0 ? null : (
+          <meta name="description" content={item.token_description} />
+          <meta property="og:type" content="website" />
+          <meta name="og:description" content={item.token_description} />
+          <meta
+            property="og:image"
+            content={
+              item.token_img_preview_url ? item.token_img_preview_url : null
+            }
+          />
+          <meta name="og:title" content={item.token_name} />
+
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={item.token_name} />
+          <meta name="twitter:description" content={item.token_description} />
+          <meta
+            name="twitter:image"
+            content={
+              item.token_img_preview_url ? item.token_img_preview_url : null
+            }
+          />
+        </Head>
+
+        <div>
+          <TokenDetailBody
+            item={item}
+            muted={false}
+            className="w-full"
+            ownershipDetails={ownershipDetails}
+            parentSetReportModalOpen={setReportModalOpen}
+            parentReportModalOpen={reportModalOpen}
+          />
+
+          {/*createdItems.length === 0 ? null : (
             <>
               <div className="flex flex-col text-center w-full">
                 <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-4 py-10">
@@ -160,7 +160,7 @@ export default function Token({ token }) {
               )}
             </>
               )*/}
-        {/*item.multiple_owners ? null : ownedItems.length ===
+          {/*item.multiple_owners ? null : ownedItems.length ===
             0 ? null : createdItems.length > 0 ? null : (
             <>
               <div className="flex flex-col text-center w-full mt-8">
@@ -182,7 +182,8 @@ export default function Token({ token }) {
               )}
             </>
               )*/}
-      </div>
-    </Layout>
+        </div>
+      </Layout>
+    </>
   );
 }

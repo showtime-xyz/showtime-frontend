@@ -12,7 +12,11 @@ import ModalEditPhoto from "../components/ModalEditPhoto";
 import ModalUserList from "../components/ModalUserList";
 import ModalAddWallet from "../components/ModalAddWallet";
 import ModalAddEmail from "../components/ModalAddEmail.js";
-import { formatAddressShort } from "../lib/utilities";
+import {
+  formatAddressShort,
+  removeTags,
+  truncateWithEllipses,
+} from "../lib/utilities";
 import AddressButton from "../components/AddressButton";
 import { SORT_FIELDS } from "../lib/constants";
 import Select from "react-dropdown-select";
@@ -26,6 +30,8 @@ import {
   faLink,
   faImage as fasImage,
 } from "@fortawesome/free-solid-svg-icons";
+
+const initialBioLength = 160;
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
@@ -158,6 +164,7 @@ const Profile = ({
     // clear out existing from page (if switching profiles)
     if (initial_load) {
       //setHasSpotlightItem(featured_nft ? true : false);
+      setMoreBioShown(false);
       setIsLoadingCards(true);
 
       setCreatedItems([]);
@@ -493,6 +500,8 @@ const Profile = ({
     : ownedItems.filter((item) => !ownedHiddenItems.includes(item.nft_id))
         .length;
 
+  const [moreBioShown, setMoreBioShown] = useState(false);
+
   const likedCount = isLoadingCards
     ? null
     : showUserHiddenItems
@@ -502,14 +511,55 @@ const Profile = ({
     : likedItems.filter((item) => !likedHiddenItems.includes(item.nft_id))
         .length;
 
-  console.log(createdHiddenItems.length);
-
   return (
     <div
       onClick={() => {
         setOpenCardMenu(null);
       }}
     >
+      {typeof document !== "undefined" ? (
+        <>
+          <ModalAddWallet
+            isOpen={walletModalOpen}
+            setWalletModalOpen={setWalletModalOpen}
+            walletAddresses={wallet_addresses}
+          />
+          <ModalAddEmail
+            isOpen={emailModalOpen}
+            setEmailModalOpen={setEmailModalOpen}
+            walletAddresses={wallet_addresses}
+            setHasEmailAddress={setHasEmailAddress}
+          />
+          <ModalEditProfile
+            isOpen={editModalOpen}
+            setEditModalOpen={setEditModalOpen}
+          />
+          <ModalEditPhoto
+            isOpen={pictureModalOpen}
+            setEditModalOpen={setPictureModalOpen}
+          />
+          {/* Followers modal */}
+          <ModalUserList
+            title="Followers"
+            isOpen={showFollowers}
+            users={followers ? followers : []}
+            closeModal={() => {
+              setShowFollowers(false);
+            }}
+            emptyMessage="No followers yet."
+          />
+          {/* Following modal */}
+          <ModalUserList
+            title="Following"
+            isOpen={showFollowing}
+            users={following ? following : []}
+            closeModal={() => {
+              setShowFollowing(false);
+            }}
+            emptyMessage="Not following anyone yet."
+          />
+        </>
+      ) : null}
       <Layout>
         <Head>
           <title>
@@ -567,50 +617,6 @@ const Profile = ({
             }
           />
         </Head>
-
-        {typeof document !== "undefined" ? (
-          <>
-            <ModalAddWallet
-              isOpen={walletModalOpen}
-              setWalletModalOpen={setWalletModalOpen}
-              walletAddresses={wallet_addresses}
-            />
-            <ModalAddEmail
-              isOpen={emailModalOpen}
-              setEmailModalOpen={setEmailModalOpen}
-              walletAddresses={wallet_addresses}
-              setHasEmailAddress={setHasEmailAddress}
-            />
-            <ModalEditProfile
-              isOpen={editModalOpen}
-              setEditModalOpen={setEditModalOpen}
-            />
-            <ModalEditPhoto
-              isOpen={pictureModalOpen}
-              setEditModalOpen={setPictureModalOpen}
-            />
-            {/* Followers modal */}
-            <ModalUserList
-              title="Followers"
-              isOpen={showFollowers}
-              users={followers ? followers : []}
-              closeModal={() => {
-                setShowFollowers(false);
-              }}
-              emptyMessage="No followers yet."
-            />
-            {/* Following modal */}
-            <ModalUserList
-              title="Following"
-              isOpen={showFollowing}
-              users={following ? following : []}
-              closeModal={() => {
-                setShowFollowing(false);
-              }}
-              emptyMessage="Not following anyone yet."
-            />
-          </>
-        ) : null}
 
         <div
           style={
@@ -716,10 +722,36 @@ const Profile = ({
           <div className="px-6 sm:px-3 mt-8">
             {/* Use context info for logged in user - reflected immediately after changes */}
             {isMyProfile && context.myProfile?.bio ? (
-              <div className="text-gray-500 flex flex-row">
-                <div className="max-w-prose text-sm sm:text-base">
-                  {context.myProfile.bio}
-                </div>
+              // <div className="text-gray-500 flex flex-row">
+              //   <div className="max-w-prose text-sm sm:text-base">
+              //     {context.myProfile.bio}
+              //   </div>
+              // </div>
+              <div
+                style={{
+                  overflowWrap: "break-word",
+                  wordWrap: "break-word",
+                  display: "block",
+                }}
+                className="text-gray-500 text-sm sm:text-base max-w-prose"
+              >
+                {moreBioShown
+                  ? context.myProfile.bio
+                  : truncateWithEllipses(
+                      context.myProfile.bio,
+                      initialBioLength
+                    )}
+                {!moreBioShown &&
+                  context?.myProfile?.bio &&
+                  context.myProfile.bio.length > initialBioLength && (
+                    <a
+                      onClick={() => setMoreBioShown(true)}
+                      className="text-gray-900 hover:text-gray-500 cursor-pointer"
+                    >
+                      {" "}
+                      more
+                    </a>
+                  )}
               </div>
             ) : null}
 
@@ -831,6 +863,17 @@ const Profile = ({
                   updateOwned(selectedOwnedSortField, false);
                 }}
                 key={spotlightItem.nft_id}
+                pageProfile={{
+                  profile_id,
+                  slug_address,
+                  name,
+                  img_url,
+                  wallet_addresses_excluding_email,
+                  slug_address,
+                  website_url,
+                  profile_id,
+                  username,
+                }}
               />
             </div>
           </div>
@@ -1114,6 +1157,9 @@ const Profile = ({
                 )}
 
                 <TokenGridV4
+                  key={`grid_${selectedGrid}_${profile_id}_${
+                    isLoadingCards || isRefreshingCards
+                  }`}
                   items={
                     selectedGrid === 1
                       ? createdItems
@@ -1162,6 +1208,17 @@ const Profile = ({
                   }
                   detailsModalCloseOnKeyChange={slug_address}
                   changeSpotlightItem={handleChangeSpotlightItem}
+                  pageProfile={{
+                    profile_id,
+                    slug_address,
+                    name,
+                    img_url,
+                    wallet_addresses_excluding_email,
+                    slug_address,
+                    website_url,
+                    profile_id,
+                    username,
+                  }} // to customize owned by list
                 />
               </div>
             </div>

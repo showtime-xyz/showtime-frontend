@@ -160,14 +160,13 @@ export default function ActivityRecommendedFollows() {
       </div>
       {recommendedFollows &&
         recommendedFollows.slice(0, 3).map((recFollow) => (
-          <div className="ml-0">
+          <div className="ml-0" key={recFollow.profile_id}>
             <RecommendedFollowItem
               item={recFollow}
               liteVersion
               removeRecommendation={removeRecommendation}
               followCallback={context.user ? followCallback : () => {}}
               closeModal={() => {}}
-              key={recFollow?.profile_id}
               leftPadding={24}
             />
           </div>

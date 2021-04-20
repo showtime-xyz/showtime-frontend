@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import { ACTIVITY_TYPES } from "../lib/constants";
 import {
   Like,
@@ -14,22 +14,29 @@ import { formatDistanceToNowStrict } from "date-fns";
 import Link from "next/link";
 import AppContext from "../context/app-context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
-
 import LikeButton from "./LikeButton";
 import CommentButton from "./CommentButton";
 import ActivityImages from "./ActivityImages";
 import mixpanel from "mixpanel-browser";
+import useDetectOutsideClick from "../hooks/useDetectOutsideClick";
 
-export default function ActivityCard({ act, setItemOpenInModal }) {
-  const { isMobile } = useContext(AppContext);
+export default function ActivityCard({
+  act,
+  setItemOpenInModal,
+  setReportModalIsOpen,
+  removeActorFromFeed,
+}) {
+  const context = useContext(AppContext);
+  const { isMobile } = context;
   const {
+    id,
     nfts,
     actor_img_url,
     actor_name,
     actor_username,
     actor_wallet_address,
+    actor_profile_id,
   } = act;
   const actor = {
     profile_img_url: actor_img_url,
@@ -41,6 +48,19 @@ export default function ActivityCard({ act, setItemOpenInModal }) {
   let content = null;
   const handleOpenModal = (index) => {
     setItemOpenInModal({ nftGroup: nfts, index });
+  };
+
+  const handleUnfollow = async () => {
+    // Change myLikes via setMyLikes
+    context.setMyFollows(
+      context.myFollows.filter((f) => f?.profile_id !== actor_profile_id)
+    );
+    removeActorFromFeed(actor_profile_id);
+    // Post changes to the API
+    await fetch(`/api/unfollow_v2/${actor_profile_id}`, {
+      method: "post",
+    });
+    mixpanel.track("Unfollowed profile from Newsfeed dropdown");
   };
 
   const { type } = act;
@@ -70,6 +90,10 @@ export default function ActivityCard({ act, setItemOpenInModal }) {
     default:
       break;
   }
+  const dropdownRef = useRef(null);
+  const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
+
+  const onCornerMenuClick = () => setIsActive(!isActive);
   return (
     <div
       className="flex flex-col flex-1 mb-6 pt-4 sm:rounded-lg bg-white shadow-md border-t-2"
@@ -155,20 +179,48 @@ export default function ActivityCard({ act, setItemOpenInModal }) {
             </div>
           </div>
           <div className="flex-grow"></div>
-          {/*<div>
-            <div
-              onClick={(e) => {}}
-              className="card-menu-button text-right text-gray-300"
-            >
-              <FontAwesomeIcon
-                style={{
-                  height: 20,
-                  width: 20,
-                }}
-                icon={faEllipsisH}
-              />
+          {context.user && (
+            <div>
+              <div
+                onClick={onCornerMenuClick}
+                className="text-right text-gray-300 relative"
+              >
+                <FontAwesomeIcon
+                  style={{
+                    height: 20,
+                    width: 20,
+                  }}
+                  icon={faEllipsisH}
+                  className="hover:text-stpink cursor-pointer"
+                />
+                <div
+                  ref={dropdownRef}
+                  className={`absolute text-black text-center top-4 right-1 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-md transform ${
+                    isActive
+                      ? "visible opacity-1 translate-y-1"
+                      : "invisible opacity-0"
+                  }`}
+                  style={{ zIndex: 1 }}
+                >
+                  <div
+                    className="py-2 px-4 hover:text-stpink rounded-lg cursor-pointer whitespace-nowrap"
+                    onClick={handleUnfollow}
+                  >
+                    Unfollow
+                    {/*actor.username ? `@${actor.username}` : "this user"*/}
+                  </div>
+                  <div
+                    className="py-2 px-4 hover:text-stpink rounded-lg cursor-pointer whitespace-nowrap"
+                    onClick={() => {
+                      setReportModalIsOpen(id);
+                    }}
+                  >
+                    Report
+                  </div>
+                </div>
+              </div>
             </div>
-              </div>*/}
+          )}
         </div>
       </div>
       {/* content */}

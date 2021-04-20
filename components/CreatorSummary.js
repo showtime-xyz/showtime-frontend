@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import Link from "next/link";
 import { truncateWithEllipses } from "../lib/utilities";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+//import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+//import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import FollowButton from "./FollowButton";
 import AppContext from "../context/app-context";
 

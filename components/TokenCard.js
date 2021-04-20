@@ -27,6 +27,7 @@ const TokenCard = ({
   currentlyPlayingVideo,
   setCurrentlyPlayingVideo,
   setCurrentlyOpenModal,
+  pageProfile,
 }) => {
   const [moreShown, setMoreShown] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -566,11 +567,70 @@ const TokenCard = ({
           >
             <div className="mx-4 py-4 flex flex-col">
               <div className="flex-shrink pr-2 text-xs text-gray-500 mb-1">
-                Owned by {item.multiple_owners ? null : null}
+                Owned by
               </div>
               <div>
-                {item.multiple_owners ? (
-                  <span className="text-gray-500">Multiple owners</span>
+                {item.owner_count && item.owner_count > 1 ? (
+                  pageProfile && listId === 2 ? (
+                    <div className="flex flex-row items-center pt-1">
+                      <Link
+                        href="/[profile]"
+                        as={`/${pageProfile.slug_address}`}
+                      >
+                        <a className="flex flex-row items-center pr-2 ">
+                          <div>
+                            <img
+                              alt={
+                                pageProfile.name
+                                  ? pageProfile.name
+                                  : pageProfile.username
+                                  ? pageProfile.username
+                                  : pageProfile.wallet_addresses_excluding_email
+                                      .length > 0
+                                  ? pageProfile
+                                      .wallet_addresses_excluding_email[0]
+                                  : "Unknown"
+                              }
+                              src={
+                                pageProfile.img_url
+                                  ? pageProfile.img_url
+                                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                              }
+                              className="rounded-full mr-2"
+                              style={{ height: 24, width: 24 }}
+                            />
+                          </div>
+                          <div className="showtime-card-profile-link">
+                            {truncateWithEllipses(
+                              pageProfile.name
+                                ? pageProfile.name
+                                : pageProfile.username
+                                ? pageProfile.username
+                                : wallet_addresses_excluding_email.length > 0
+                                ? wallet_addresses_excluding_email[0]
+                                : "Unknown",
+
+                              14
+                            )}
+                          </div>
+                        </a>
+                      </Link>
+
+                      <div
+                        className="text-gray-400 text-sm mr-2 -ml-1"
+                        style={{ marginTop: 1 }}
+                      >
+                        & {item.owner_count - 1} other
+                        {item.owner_count - 1 > 1 ? "s" : null}
+                      </div>
+                      {context.myProfile?.profile_id !== item.owner_id && (
+                        <MiniFollowButton profileId={item.owner_id} />
+                      )}
+                      <div className="flex-grow">&nbsp;</div>
+                    </div>
+                  ) : (
+                    <span className="text-gray-500">Multiple owners</span>
+                  )
                 ) : item.owner_id ? (
                   <div className="flex flex-row items-center pt-1">
                     <Link
