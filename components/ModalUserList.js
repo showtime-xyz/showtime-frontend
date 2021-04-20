@@ -4,7 +4,7 @@ import _ from "lodash";
 import Link from "next/link";
 import CloseButton from "./CloseButton";
 import { truncateWithEllipses } from "../lib/utilities";
-
+import FollowButton from "./FollowButton";
 export default function ModalUserList({
   isOpen,
   title,
@@ -33,13 +33,16 @@ export default function ModalUserList({
                 )}
                 {users.map((profile) => {
                   return (
-                    <div key={profile.wallet_address}>
+                    <div
+                      key={profile.wallet_address}
+                      className="flex items-center justify-between"
+                    >
                       <Link
                         href="/[profile]"
                         as={`/${profile?.username || profile.wallet_address}`}
                       >
                         <a
-                          className="flex flex-row items-center py-3 rounded-lg px-1 hover:bg-gray-100 overflow-hidden"
+                          className="flex flex-row items-center py-3 rounded-lg px-1 overflow-hidden hover:text-stpink"
                           onClick={onRedirect}
                         >
                           <div>
@@ -61,6 +64,14 @@ export default function ModalUserList({
                           </div>
                         </a>
                       </Link>
+                      <FollowButton
+                        item={{
+                          profile_id: profile.profile_id,
+                          follower_count: 0,
+                        }}
+                        followerCount={0}
+                        setFollowerCount={() => {}}
+                      />
                     </div>
                   );
                 })}
