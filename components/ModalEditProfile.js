@@ -270,7 +270,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   </label>
                   <div className="mt-1 ">
                     <div className="max-w-lg flex rounded-md shadow-sm">
-                      <span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 bg-gray-100 text-gray-500 sm:text-sm">
+                      <span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 bg-gray-100 text-gray-700 sm:text-sm">
                         {SHOWTIME_PROD_URL}
                       </span>
                       <input
@@ -308,7 +308,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                 >
                   &nbsp;{customURLError.message}
                 </div>
-                <label htmlFor="bio" className="text-gray-700 text-sm">
+                <label htmlFor="bio" className="block text-sm text-gray-700">
                   About Me (optional)
                 </label>
                 <textarea
@@ -320,21 +320,11 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   }}
                   type="text"
                   maxLength="300"
-                  className="w-full mt-1 border-2 border-gray-400 px-3"
-                  style={{
-                    color: "black",
-                    borderRadius: 7,
-                    height: 114,
-                    fontSize: 16,
-
-                    paddingTop: 10,
-                    paddingBottom: 10,
-                  }}
+                  rows={3}
+                  className="mt-1 bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 ></textarea>
-                <div
-                  className="text-right text-gray-500"
-                  style={{ fontSize: 12, fontWeight: 400 }}
-                >
+
+                <div className="text-right text-gray-500 text-xs">
                   300 character limit
                 </div>
               </div>
