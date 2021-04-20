@@ -541,48 +541,6 @@ const Profile = ({
     setShowSocialLinks(!showSocialLinks);
   };
 
-  const socialLinkObjs = [
-    { key: "twitter", icon: faTwitter, title: "Twitter", url: "twitter.com" },
-    { key: "linktree", icon: faTree, title: "Linktree", url: "linktr.ee" },
-    {
-      key: "foundation",
-      icon: fasImage,
-      title: "Foundation",
-      url: "foundation.app",
-    },
-    { key: "rarible", icon: faTag, title: "Rarible", url: "rarible.com" },
-    {
-      key: "opensea",
-      icon: faWater,
-      title: "Opensea",
-      url: "opensea.io/accounts",
-    },
-    {
-      key: "mintable",
-      icon: faLink,
-      title: "Mintable",
-      url: "mintable.app",
-    },
-    {
-      key: "makersplace",
-      icon: faLink,
-      title: "Makersplace",
-      url: "makersplace.com",
-    },
-    {
-      key: "superrare",
-      icon: faLink,
-      title: "SuperRare",
-      url: "superrare.co",
-    },
-    {
-      key: "knownorigin",
-      icon: faLink,
-      title: "KnownOrigin",
-      url: "knownorigin.io",
-    },
-  ];
-
   return (
     <div
       onClick={() => {
@@ -786,7 +744,7 @@ const Profile = ({
                   wordWrap: "break-word",
                   display: "block",
                 }}
-                className="text-gray-500 text-sm sm:text-base max-w-prose"
+                className="text-black text-sm sm:text-base max-w-prose"
               >
                 {moreBioShown
                   ? profileToDisplay.bio
@@ -799,7 +757,7 @@ const Profile = ({
                   profileToDisplay.bio.length > initialBioLength && (
                     <a
                       onClick={() => setMoreBioShown(true)}
-                      className="text-gray-900 hover:text-gray-500 cursor-pointer"
+                      className="text-gray-500 hover:text-gray-700 cursor-pointer"
                     >
                       {" "}
                       more
@@ -816,7 +774,7 @@ const Profile = ({
                 }`}
                 onClick={toggleShowSocialLinks}
               >
-                <div className="mr-1">Social</div>{" "}
+                <div className="mr-1">Links</div>{" "}
                 <div
                   className={`transition-all ${
                     showSocialLinks ? "transform rotate-90" : "rotate-0"
@@ -854,7 +812,10 @@ const Profile = ({
                   }}
                   className="mr-5 my-1 md:my-0"
                 >
-                  <div className="hover:text-gray-600 flex text-sm sm:text-base flex-row py-1 text-black">
+                  <div
+                    className="hover:text-gray-600 flex text-sm sm:text-base flex-row py-1 opacity-70 hover:opacity-100"
+                    style={{ color: "#353535" }}
+                  >
                     <div>
                       <FontAwesomeIcon
                         style={{ height: 14, width: 14 }}
@@ -887,19 +848,30 @@ const Profile = ({
                   className="mr-5 my-1 md:my-0"
                   key={socialLink.type_id}
                 >
-                  <div className="hover:text-gray-600 flex text-sm sm:text-base flex-row py-1 text-black">
-                    {/* <div>
-                      <FontAwesomeIcon
-                        style={{ height: 14, width: 14 }}
-                        className="mr-2"
-                        icon={socialLink.icon}
-                      />{" "}
-                    </div> */}
+                  <div
+                    className="hover:text-gray-600 flex text-sm sm:text-base flex-row py-1 items-center opacity-70 hover:opacity-100"
+                    style={{ color: "#353535" }}
+                  >
+                    {socialLink.name === "Twitter" ? (
+                      <div>
+                        <FontAwesomeIcon
+                          style={{ height: 14, width: 14 }}
+                          className="mr-2"
+                          icon={faTwitter}
+                        />{" "}
+                      </div>
+                    ) : (
+                      socialLink.icon_url && (
+                        <img
+                          src={socialLink.icon_url}
+                          alt=""
+                          className="flex-shrink-0 h-5 w-5 rounded-full mr-2"
+                        />
+                      )
+                    )}
+
                     <div>
-                      <div
-                        className="hover:opacity-90"
-                        style={{ wordBreak: "break-all" }}
-                      >
+                      <div className="" style={{ wordBreak: "break-all" }}>
                         {socialLink.name}
                       </div>
                     </div>
