@@ -75,6 +75,13 @@ export default class MyApp extends React.Component {
             .notifications_last_opened
             ? new Date(my_info_data.data.profile.notifications_last_opened)
             : null,
+          links: my_info_data.data.profile.links.map((link) => ({
+            name: link.type__name,
+            prefix: link.type__prefix,
+            icon_url: link.type__icon_url,
+            type_id: link.type_id,
+            user_input: link.user_input,
+          })),
         });
 
         // Load up the recommendations async if we are onboarding

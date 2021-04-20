@@ -23,12 +23,17 @@ import Select from "react-dropdown-select";
 import SpotlightItem from "../components/SpotlightItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faImage } from "@fortawesome/free-regular-svg-icons";
+import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import ProfileFollowersPill from "../components/ProfileFollowersPill";
 import {
   faHeart as fasHeart,
   faFingerprint,
   faLink,
   faImage as fasImage,
+  faTree,
+  faWater,
+  faTag,
+  faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 
 const initialBioLength = 160;
@@ -56,7 +61,6 @@ export async function getServerSideProps(context) {
       data_profile.profile.wallet_addresses_excluding_email;
     const followers_list = data_profile.followers;
     const following_list = data_profile.following;
-
     const bio = data_profile.profile.bio;
     const website_url = data_profile.profile.website_url;
     const profile_id = data_profile.profile.profile_id;
@@ -65,10 +69,9 @@ export async function getServerSideProps(context) {
     const default_created_sort_id =
       data_profile.profile.default_created_sort_id;
     const default_owned_sort_id = data_profile.profile.default_owned_sort_id;
-
     const featured_nft_img_url = data_profile.profile.featured_nft_img_url;
-
     const featured_nft = data_profile.featured_nft;
+    const links = data_profile.profile.links;
 
     return {
       props: {
@@ -80,7 +83,6 @@ export async function getServerSideProps(context) {
         followers_list,
         following_list,
         bio,
-        website_url,
         profile_id,
         username,
         default_list_id,
@@ -88,6 +90,8 @@ export async function getServerSideProps(context) {
         default_owned_sort_id,
         featured_nft_img_url,
         featured_nft,
+        website_url,
+        links,
       }, // will be passed to the page component as props
     };
   } catch (err) {
@@ -113,7 +117,6 @@ const Profile = ({
   followers_list,
   following_list,
   bio,
-  website_url,
   profile_id,
   username,
   default_list_id,
@@ -121,8 +124,9 @@ const Profile = ({
   default_owned_sort_id,
   featured_nft_img_url,
   featured_nft,
+  website_url,
+  links,
 }) => {
-  //const router = useRouter();
   const context = useContext(AppContext);
 
   const [isMyProfile, setIsMyProfile] = useState();
@@ -511,6 +515,41 @@ const Profile = ({
     : likedItems.filter((item) => !likedHiddenItems.includes(item.nft_id))
         .length;
 
+  const profileToDisplay = isMyProfile
+    ? context.myProfile
+    : {
+        name,
+        website_url,
+        bio,
+        img_url,
+        username,
+        links: links.map((link) => ({
+          name: link.type__name,
+          prefix: link.type__prefix,
+          icon_url: link.type__icon_url,
+          type_id: link.type_id,
+          user_input: link.user_input,
+        })),
+        wallet_addresses_excluding_email,
+      };
+
+  const [showSocialLinks, setShowSocialLinks] = useState(false);
+
+  useEffect(() => {
+    if (context.isMobile === true) {
+      profileToDisplay?.links?.length > 2 ||
+      (profileToDisplay?.links?.length > 1 && profileToDisplay?.website_url)
+        ? setShowSocialLinks(false)
+        : setShowSocialLinks(true);
+    } else {
+      setShowSocialLinks(true);
+    }
+  }, [context?.isMobile, profileToDisplay]);
+
+  const toggleShowSocialLinks = () => {
+    setShowSocialLinks(!showSocialLinks);
+  };
+
   return (
     <div
       onClick={() => {
@@ -530,10 +569,12 @@ const Profile = ({
             walletAddresses={wallet_addresses}
             setHasEmailAddress={setHasEmailAddress}
           />
-          <ModalEditProfile
-            isOpen={editModalOpen}
-            setEditModalOpen={setEditModalOpen}
-          />
+          {editModalOpen && (
+            <ModalEditProfile
+              isOpen={editModalOpen}
+              setEditModalOpen={setEditModalOpen}
+            />
+          )}
           <ModalEditPhoto
             isOpen={pictureModalOpen}
             setEditModalOpen={setPictureModalOpen}
@@ -563,17 +604,7 @@ const Profile = ({
       <Layout>
         <Head>
           <title>
-            {isMyProfile
-              ? context.myProfile
-                ? context.myProfile.name
-                  ? context.myProfile.name
-                  : "Unnamed"
-                : name
-                ? name
-                : "Unnamed"
-              : name
-              ? name
-              : "Unnamed"}
+            {profileToDisplay?.name ? profileToDisplay.name : "Unnamed"}
           </title>
 
           <meta
@@ -637,12 +668,8 @@ const Profile = ({
                     }
                   }}
                   src={
-                    isMyProfile
-                      ? context.myProfile && context.myProfile.img_url
-                        ? context.myProfile.img_url
-                        : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                      : img_url
-                      ? img_url
+                    profileToDisplay?.img_url
+                      ? profileToDisplay.img_url
                       : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                   }
                   className={`h-24 w-24 rounded-full md:mr-4 border-2 border-white overflow-hidden ${
@@ -657,16 +684,11 @@ const Profile = ({
                 style={{ whiteSpace: "break-spaces", wordBreak: "break-word" }}
               >
                 <div className="text-2xl md:text-6xl mt-1 sm:mt-0 sm:mb-1 text-center md:text-left max-w-full">
-                  {isMyProfile
-                    ? context.myProfile
-                      ? context.myProfile.name
-                        ? context.myProfile.name
-                        : "Unnamed"
-                      : name
-                      ? name
-                      : "Unnamed"
-                    : name
-                    ? name
+                  {profileToDisplay?.name
+                    ? profileToDisplay.name
+                    : wallet_addresses_excluding_email &&
+                      wallet_addresses_excluding_email.length > 0
+                    ? formatAddressShort(wallet_addresses_excluding_email[0])
                     : "Unnamed"}
                 </div>
                 <div>
@@ -719,9 +741,9 @@ const Profile = ({
             <div className="flex-grow"></div>
           </div>
 
-          <div className="px-6 sm:px-3 mt-8">
+          <div className="px-6 sm:px-3 mt-8 ">
             {/* Use context info for logged in user - reflected immediately after changes */}
-            {isMyProfile && context.myProfile?.bio ? (
+            {profileToDisplay?.bio ? (
               // <div className="text-gray-500 flex flex-row">
               //   <div className="max-w-prose text-sm sm:text-base">
               //     {context.myProfile.bio}
@@ -733,20 +755,20 @@ const Profile = ({
                   wordWrap: "break-word",
                   display: "block",
                 }}
-                className="text-gray-500 text-sm sm:text-base max-w-prose"
+                className="text-black text-sm sm:text-base max-w-prose text-center md:text-left"
               >
                 {moreBioShown
-                  ? context.myProfile.bio
+                  ? profileToDisplay.bio
                   : truncateWithEllipses(
-                      context.myProfile.bio,
+                      profileToDisplay.bio,
                       initialBioLength
                     )}
                 {!moreBioShown &&
-                  context?.myProfile?.bio &&
-                  context.myProfile.bio.length > initialBioLength && (
+                  profileToDisplay?.bio &&
+                  profileToDisplay.bio.length > initialBioLength && (
                     <a
                       onClick={() => setMoreBioShown(true)}
-                      className="text-gray-900 hover:text-gray-500 cursor-pointer"
+                      className="text-gray-500 hover:text-gray-700 cursor-pointer"
                     >
                       {" "}
                       more
@@ -755,94 +777,116 @@ const Profile = ({
               </div>
             ) : null}
 
-            {/* Else use page info */}
-            {!isMyProfile && bio ? (
-              <div className="text-gray-500 flex flex-row">
-                <div className="max-w-prose text-sm sm:text-base">{bio}</div>
-              </div>
-            ) : null}
-
             {/* Use context info for logged in user - reflected immediately after changes */}
-            {isMyProfile && context?.myProfile?.website_url ? (
+            {(context.isMobile && profileToDisplay?.links?.length > 2) ||
+            (profileToDisplay?.links?.length > 1 &&
+              profileToDisplay?.website_url) ? (
               <div
-                className={`text-gray-500 flex text-sm sm:text-base flex-row ${
-                  isMyProfile && context?.myProfile?.bio ? "mt-3" : null
-                }
-            `}
+                className={`flex cursor-pointer items-center hover:opacity-70 justify-center text-gray-600 text-sm md:justify-start ${
+                  profileToDisplay?.bio ? "mt-3" : ""
+                }`}
+                onClick={toggleShowSocialLinks}
               >
-                <div>
+                <div className="mr-1">View links</div>{" "}
+                <div
+                  className={`transition-all ${
+                    showSocialLinks ? "transform rotate-90" : "rotate-0"
+                  }`}
+                >
                   <FontAwesomeIcon
                     style={{ height: 14, width: 14 }}
-                    className="mr-2"
-                    icon={faLink}
+                    className=""
+                    icon={faArrowRight}
                   />{" "}
-                </div>
-                <div>
-                  <a
-                    href={
-                      context.myProfile.website_url.slice(0, 4) === "http"
-                        ? context.myProfile.website_url
-                        : "https://" + context.myProfile.website_url
-                    }
-                    target="_blank"
-                    style={{ color: "rgb(81, 125, 228)" }}
-                    onClick={() => {
-                      mixpanel.track("Clicked profile website link", {
-                        slug: slug_address,
-                      });
-                    }}
-                  >
-                    <div
-                      className="hover:opacity-90"
-                      style={{ wordBreak: "break-all" }}
-                    >
-                      {context.myProfile.website_url}
-                    </div>
-                  </a>
                 </div>
               </div>
             ) : null}
 
-            {/* Else use page info */}
-            {!isMyProfile && website_url ? (
-              <div
-                className={`text-gray-500 text-sm sm:text-base flex flex-row ${
-                  !isMyProfile && bio ? "mt-3" : null
-                }
-            `}
-              >
-                <div>
-                  <FontAwesomeIcon
-                    style={{ height: 14, width: 14 }}
-                    className="mr-2"
-                    icon={faLink}
-                  />{" "}
-                </div>
-                <div>
+            <div
+              className={`flex flex-wrap max-w-prose items-center justify-center md:justify-start ${
+                showSocialLinks
+                  ? "visible opacity-1 translate-y-2"
+                  : "invisible opacity-0 translate-y-0 h-0"
+              } transition-all transform`}
+            >
+              {profileToDisplay?.website_url ? (
+                <a
+                  href={
+                    profileToDisplay.website_url.slice(0, 4) === "http"
+                      ? profileToDisplay.website_url
+                      : "https://" + profileToDisplay.website_url
+                  }
+                  target="_blank"
+                  // style={{ color: "rgb(81, 125, 228)" }}
+                  onClick={() => {
+                    mixpanel.track("Clicked profile website link", {
+                      slug: slug_address,
+                    });
+                  }}
+                  className="mr-5 my-1 md:my-0"
+                >
+                  <div
+                    className="hover:text-gray-600 flex text-sm flex-row py-1 opacity-70 hover:opacity-100"
+                    style={{ color: "#353535" }}
+                  >
+                    <div>
+                      <FontAwesomeIcon
+                        style={{ height: 14, width: 14 }}
+                        className="mr-2"
+                        icon={faLink}
+                      />{" "}
+                    </div>
+                    <div>
+                      <div
+                        // className="hover:opacity-90"
+                        style={{ wordBreak: "break-all" }}
+                      >
+                        {profileToDisplay.website_url}
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              ) : null}
+              {/* map out social links */}
+              {profileToDisplay?.links &&
+                profileToDisplay.links.map((socialLink) => (
                   <a
                     href={
-                      website_url.slice(0, 4) === "http"
-                        ? website_url
-                        : "https://" + website_url
+                      `https://${socialLink.prefix}` + socialLink.user_input
                     }
                     target="_blank"
-                    style={{ color: "rgb(81, 125, 228)" }}
+                    // style={{ color: "rgb(81, 125, 228)" }}
                     onClick={() => {
-                      mixpanel.track("Clicked profile website link", {
-                        slug: slug_address,
-                      });
+                      mixpanel.track(
+                        `Clicked ${socialLink.name} profile link`,
+                        {
+                          slug: slug_address,
+                        }
+                      );
                     }}
+                    className="mr-5 my-1 md:my-0"
+                    key={socialLink.type_id}
                   >
                     <div
-                      className="hover:opacity-90"
-                      style={{ wordBreak: "break-all" }}
+                      className="hover:text-gray-600 flex text-sm flex-row py-1 items-center opacity-60 hover:opacity-100"
+                      style={{ color: "#353535" }}
                     >
-                      {website_url}
+                      {socialLink.icon_url && (
+                        <img
+                          src={socialLink.icon_url}
+                          alt=""
+                          className="flex-shrink-0 h-5 w-5 mr-1"
+                        />
+                      )}
+                      <div>
+                        <div className="" style={{ wordBreak: "break-all" }}>
+                          {socialLink.name}
+                        </div>
+                      </div>
                     </div>
                   </a>
-                </div>
-              </div>
-            ) : null}
+                ))}
+            </div>
           </div>
         </CappedWidth>
         {spotlightItem ? (
@@ -895,12 +939,8 @@ const Profile = ({
                         <div className="mr-2">
                           <img
                             src={
-                              isMyProfile
-                                ? context.myProfile && context.myProfile.img_url
-                                  ? context.myProfile.img_url
-                                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                                : img_url
-                                ? img_url
+                              profileToDisplay && profileToDisplay.img_url
+                                ? profileToDisplay.img_url
                                 : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                             }
                             style={{ width: 22, height: 22 }}
@@ -908,26 +948,14 @@ const Profile = ({
                           />
                         </div>
                         <div>
-                          {isMyProfile
-                            ? context.myProfile?.name
-                              ? context.myProfile?.name
-                              : wallet_addresses_excluding_email &&
-                                wallet_addresses_excluding_email.length > 0
-                              ? formatAddressShort(
-                                  wallet_addresses_excluding_email[0]
-                                )
-                              : "Unnamed"
-                            : null}
-                          {!isMyProfile
-                            ? name != "Unnamed"
-                              ? name
-                              : wallet_addresses_excluding_email &&
-                                wallet_addresses_excluding_email.length > 0
-                              ? formatAddressShort(
-                                  wallet_addresses_excluding_email[0]
-                                )
-                              : "Unnamed"
-                            : null}
+                          {profileToDisplay?.name
+                            ? profileToDisplay.name
+                            : wallet_addresses_excluding_email &&
+                              wallet_addresses_excluding_email.length > 0
+                            ? formatAddressShort(
+                                wallet_addresses_excluding_email[0]
+                              )
+                            : "Unnamed"}
                         </div>
                         <div className="flex-grow"></div>
                         {isMyProfile ? (
