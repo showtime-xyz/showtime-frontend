@@ -226,10 +226,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
   };
 
   const handleSocialSelected = (event) => {
-    console.log(event);
-
     setSocialLinks([...socialLinks, { ...event, user_input: "" }]);
-    console.log([...socialLinks, { ...event, user_input: "" }]);
     //setSelectedAddSocialLink();
     //handleAddSocialLink();
   };

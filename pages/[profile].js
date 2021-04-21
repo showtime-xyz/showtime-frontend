@@ -544,7 +544,7 @@ const Profile = ({
     } else {
       setShowSocialLinks(true);
     }
-  }, [context?.isMobile, profileToDisplay]);
+  }, [context?.isMobile, profile_id]);
 
   const toggleShowSocialLinks = () => {
     setShowSocialLinks(!showSocialLinks);
