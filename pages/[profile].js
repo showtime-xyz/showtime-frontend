@@ -755,7 +755,7 @@ const Profile = ({
                   wordWrap: "break-word",
                   display: "block",
                 }}
-                className="text-black text-sm sm:text-base max-w-prose text-center md:text-left"
+                className="text-black text-sm max-w-prose text-center md:text-left md:ml-2 text-gray-600  md:text-base"
               >
                 {moreBioShown
                   ? profileToDisplay.bio
@@ -783,7 +783,7 @@ const Profile = ({
               (profileToDisplay?.links?.length > 1 &&
                 profileToDisplay?.website_url)) ? (
               <div
-                className={`flex cursor-pointer items-center hover:opacity-70 justify-center text-gray-600 text-sm md:justify-start ${
+                className={`flex cursor-pointer items-center hover:opacity-70 justify-center text-gray-600 text-sm  md:justify-start ${
                   profileToDisplay?.bio ? "mt-3" : ""
                 }`}
                 onClick={toggleShowSocialLinks}
@@ -804,7 +804,7 @@ const Profile = ({
             ) : null}
 
             <div
-              className={`flex flex-wrap max-w-prose items-center justify-center md:justify-start ${
+              className={` md:ml-2 flex flex-wrap max-w-prose items-center justify-center md:justify-start ${
                 showSocialLinks
                   ? "visible opacity-1 translate-y-2"
                   : "invisible opacity-0 translate-y-0 h-0"
@@ -827,7 +827,7 @@ const Profile = ({
                   className="mr-5 my-1 md:my-0"
                 >
                   <div
-                    className="hover:text-gray-600 flex text-sm flex-row py-1 opacity-70 hover:opacity-100"
+                    className="hover:text-gray-600 flex text-sm  md:text-base flex-row py-1 opacity-60 hover:opacity-80"
                     style={{ color: "#353535" }}
                   >
                     <div>
@@ -869,7 +869,7 @@ const Profile = ({
                     key={socialLink.type_id}
                   >
                     <div
-                      className="hover:text-gray-600 flex text-sm flex-row py-1 items-center opacity-60 hover:opacity-100"
+                      className="hover:text-gray-600 flex text-sm  md:text-base flex-row py-1 items-center opacity-60 hover:opacity-80"
                       style={{ color: "#353535" }}
                     >
                       {socialLink.icon_url && (
