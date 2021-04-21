@@ -535,7 +535,7 @@ const TokenDetailBody = ({
                       )}
 
                     {ownershipDetails?.multiple_owners_list &&
-                      ownershipDetails.multiple_owners_list.length > 0 && (
+                      ownershipDetails.multiple_owners_list.length > 1 && (
                         <div>
                           <UsersWhoOwn
                             users={ownershipDetails.multiple_owners_list}
@@ -582,7 +582,7 @@ const TokenDetailBody = ({
                       )}
 
                     {ownershipDetails?.multiple_owners_list &&
-                      ownershipDetails.multiple_owners_list.length > 0 && (
+                      ownershipDetails.multiple_owners_list.length > 1 && (
                         <div>
                           <UsersWhoOwn
                             users={ownershipDetails.multiple_owners_list}
