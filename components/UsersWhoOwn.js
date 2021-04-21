@@ -9,7 +9,13 @@ const UserImagesList = ({ users }) => {
       {displayedUsers.map((u) => (
         <Link href="/[profile]" as={`/${u.username || u.wallet_address}`}>
           <a className="rounded-full mr-2">
-            <img src={u.img_url} className="w-12 h-12 rounded-full" />
+            <img
+              src={
+                u.img_url ||
+                "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+              }
+              className="w-12 h-12 rounded-full"
+            />
           </a>
         </Link>
       ))}
