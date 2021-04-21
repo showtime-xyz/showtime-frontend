@@ -418,9 +418,9 @@ const Activity = () => {
                   }
                   scrollThreshold={
                     activityPage === 1
-                      ? 0.3
+                      ? 0.1
                       : activityPage < 4
-                      ? 0.6
+                      ? 0.3
                       : activityPage < 6
                       ? 0.7
                       : 0.8
