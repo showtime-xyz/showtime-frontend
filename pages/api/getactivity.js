@@ -7,6 +7,7 @@ export default async (req, res) => {
   const body = JSON.parse(req.body);
   const page = body.page || 1;
   const activityTypeId = body.activityTypeId || 0;
+  const limit = body.limit || 5;
 
   try {
     let publicAddress;
@@ -18,14 +19,14 @@ export default async (req, res) => {
       );
       publicAddress = user.publicAddress;
     } catch (err) {
-      if (page > 3) {
+      if (page > 8) {
         res.statusCode = 200;
         res.json(data_activity);
       }
     }
 
     const res_activity = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/activity?page=${page}&type_id=${activityTypeId}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/activity?page=${page}&type_id=${activityTypeId}&limit=${limit}`,
       {
         headers: {
           "X-Authenticated-User": publicAddress,
