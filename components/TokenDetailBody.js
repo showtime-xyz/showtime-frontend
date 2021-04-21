@@ -534,8 +534,7 @@ const TokenDetailBody = ({
                         </div>
                       )}
 
-                    {item.multiple_owners === 1 &&
-                      ownershipDetails?.multiple_owners_list &&
+                    {ownershipDetails?.multiple_owners_list &&
                       ownershipDetails.multiple_owners_list.length > 0 && (
                         <div>
                           <UsersWhoOwn
@@ -582,8 +581,7 @@ const TokenDetailBody = ({
                         </div>
                       )}
 
-                    {item.multiple_owners === 1 &&
-                      ownershipDetails?.multiple_owners_list &&
+                    {ownershipDetails?.multiple_owners_list &&
                       ownershipDetails.multiple_owners_list.length > 0 && (
                         <div>
                           <UsersWhoOwn
