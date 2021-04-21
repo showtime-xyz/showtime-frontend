@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import ClientOnlyPortal from "./ClientOnlyPortal";
 import _ from "lodash";
 import Link from "next/link";
 import CloseButton from "./CloseButton";
 import { truncateWithEllipses } from "../lib/utilities";
-
+import FollowButton from "./FollowButton";
+import AppContext from "../context/app-context";
 export default function ModalUserList({
   isOpen,
   title,
@@ -13,6 +14,7 @@ export default function ModalUserList({
   emptyMessage,
   onRedirect,
 }) {
+  const context = useContext(AppContext);
   return (
     <>
       {isOpen && (
@@ -33,13 +35,16 @@ export default function ModalUserList({
                 )}
                 {users.map((profile) => {
                   return (
-                    <div key={profile.wallet_address}>
+                    <div
+                      key={profile.wallet_address}
+                      className="flex items-center justify-between"
+                    >
                       <Link
                         href="/[profile]"
                         as={`/${profile?.username || profile.wallet_address}`}
                       >
                         <a
-                          className="flex flex-row items-center py-3 rounded-lg px-1 hover:bg-gray-100 overflow-hidden"
+                          className="flex flex-row items-center py-3 rounded-lg px-1 overflow-hidden hover:text-stpink"
                           onClick={onRedirect}
                         >
                           <div>
@@ -56,11 +61,27 @@ export default function ModalUserList({
                           </div>
                           <div className="ml-2">
                             {profile.name
-                              ? truncateWithEllipses(profile.name, 25)
+                              ? truncateWithEllipses(
+                                  profile.name,
+                                  context.isMobile ? 16 : 22
+                                )
                               : "Unnamed"}
                           </div>
                         </a>
                       </Link>
+                      {context?.myProfile?.profile_id !==
+                        profile.profile_id && (
+                        <FollowButton
+                          item={{
+                            profile_id: profile.profile_id,
+                            follower_count: 0,
+                          }}
+                          followerCount={0}
+                          setFollowerCount={() => {}}
+                          notExpandWhenMobile
+                          compact
+                        />
+                      )}
                     </div>
                   );
                 })}

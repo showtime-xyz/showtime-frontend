@@ -11,13 +11,15 @@ const Button = styled.button`
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  padding: 8px 16px;
   &:hover {
     opacity: 0.7;
   }
-  @media screen and (max-width: 400px) {
+  ${(p) =>
+    p.notExpandWhenMobile
+      ? ""
+      : `@media screen and (max-width: 400px) {
     width: 100%;
-  }
+  }`}
 `;
 
 const FollowButton = ({
@@ -25,6 +27,8 @@ const FollowButton = ({
   followerCount,
   setFollowerCount,
   hideIfFollowing,
+  notExpandWhenMobile,
+  compact,
 }) => {
   const context = useContext(AppContext);
   const myFollows = context?.myFollows || [];
@@ -77,14 +81,19 @@ const FollowButton = ({
     mixpanel.track("Follow but logged out");
     context.setLoginModalOpen(true);
   };
-
   return (
     <Button
-      className={
-        hideIfFollowing && isFollowed
-          ? "hidden border-gray-400 border rounded-full"
-          : "border-gray-400 border rounded-full"
-      }
+      notExpandWhenMobile={notExpandWhenMobile}
+      className={`
+
+      
+      border rounded-full 
+      py-2 px-4
+        ${hideIfFollowing && isFollowed ? "hidden" : null}
+        ${compact ? "border-gray-300 mr-1" : "border-gray-400"}
+        ${compact && context.isMobile ? "py-2 px-3" : null}
+
+      `}
       onClick={
         context.user
           ? isFollowed
@@ -94,11 +103,15 @@ const FollowButton = ({
       }
     >
       {!isFollowed && (
-        <div className="mr-1 text-sm">
+        <div
+          className={`mr-1 ${compact ? "text-xs text-gray-600" : "text-sm"} `}
+        >
           <FontAwesomeIcon icon={faPlus} />
         </div>
       )}
-      <div className="text-sm">{isFollowed ? "Following" : "Follow"}</div>
+      <div className={` ${compact ? "text-xs text-gray-700" : "text-sm"} `}>
+        {isFollowed ? "Following" : "Follow"}
+      </div>
     </Button>
   );
 };
