@@ -516,7 +516,7 @@ const TokenDetailBody = ({
                         />
                       </div>
                     )}
-                {/* Owned by Section - excluding multiple owners */}
+                {/* Owned by Section */}
                 {!isMobile && (
                   <div className="mt-8">
                     <div className="md:text-lg pt-4">Owned By</div>
