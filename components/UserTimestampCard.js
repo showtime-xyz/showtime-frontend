@@ -15,7 +15,7 @@ export default function UserTimestampCard({
   const imageUrl = item.owner_img_url;
   const profileId = item.owner_id;
   return (
-    <div className="flex items-center md:w-max max-w-full border-2 border-gray-300 rounded-xl p-4">
+    <div className="flex items-center md:w-max max-w-full border-2 border-gray-300 rounded-xl p-4 mt-4">
       <div className="flex flex-row items-center">
         <div className="mr-3 sm:mr-4 flex-none">
           <Link
