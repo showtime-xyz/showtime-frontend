@@ -7,7 +7,7 @@ const UserImagesList = ({ users }) => {
   return (
     <div className="flex mb-2">
       {displayedUsers.map((u) => (
-        <Link href="/[profile]" as={`/${u.username || u.wallet_address}`}>
+        <Link href="/[profile]" as={`/${u.username || u.address}`}>
           <a className="rounded-full mr-2">
             <img src={u.img_url} className="w-12 h-12 rounded-full" />
           </a>
@@ -27,7 +27,7 @@ export default function UsersWhoOwn({ users, closeModal }) {
           <div>
             <Link
               href="/[profile]"
-              as={`/${users[0]?.username || users[0].wallet_address}`}
+              as={`/${users[0]?.username || users[0].address}`}
             >
               <span
                 className="text-black cursor-pointer hover:text-stpink"
@@ -45,7 +45,7 @@ export default function UsersWhoOwn({ users, closeModal }) {
           <div>
             <Link
               href="/[profile]"
-              as={`/${users[0]?.username || users[0].wallet_address}`}
+              as={`/${users[0]?.username || users[0].address}`}
             >
               <span
                 className="text-black cursor-pointer hover:text-stpink"
@@ -57,7 +57,7 @@ export default function UsersWhoOwn({ users, closeModal }) {
             and{" "}
             <Link
               href="/[profile]"
-              as={`/${users[1]?.username || users[1].wallet_address}`}
+              as={`/${users[1]?.username || users[1].address}`}
             >
               <span
                 className="text-black cursor-pointer hover:text-stpink"
@@ -75,7 +75,7 @@ export default function UsersWhoOwn({ users, closeModal }) {
           <div>
             <Link
               href="/[profile]"
-              as={`/${users[0]?.username || users[0].wallet_address}`}
+              as={`/${users[0]?.username || users[0].address}`}
             >
               <span
                 className="text-black cursor-pointer hover:text-stpink"
@@ -87,7 +87,7 @@ export default function UsersWhoOwn({ users, closeModal }) {
             ,{" "}
             <Link
               href="/[profile]"
-              as={`/${users[1]?.username || users[1].wallet_address}`}
+              as={`/${users[1]?.username || users[1].address}`}
             >
               <span
                 className="text-black cursor-pointer hover:text-stpink"
@@ -99,7 +99,7 @@ export default function UsersWhoOwn({ users, closeModal }) {
             and{" "}
             <Link
               href="/[profile]"
-              as={`/${users[2]?.username || users[2].wallet_address}`}
+              as={`/${users[2]?.username || users[2].address}`}
             >
               <span
                 className="text-black cursor-pointer hover:text-stpink"
@@ -117,7 +117,7 @@ export default function UsersWhoOwn({ users, closeModal }) {
           <div>
             <Link
               href="/[profile]"
-              as={`/${users[0]?.username || users[0].wallet_address}`}
+              as={`/${users[0]?.username || users[0].address}`}
             >
               <span
                 className="text-black cursor-pointer hover:text-stpink"
@@ -129,7 +129,7 @@ export default function UsersWhoOwn({ users, closeModal }) {
             ,{" "}
             <Link
               href="/[profile]"
-              as={`/${users[1]?.username || users[1].wallet_address}`}
+              as={`/${users[1]?.username || users[1].address}`}
             >
               <span
                 className="text-black cursor-pointer hover:text-stpink"
