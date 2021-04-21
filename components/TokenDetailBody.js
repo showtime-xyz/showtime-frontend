@@ -23,6 +23,7 @@ import { getBidLink, getContractName } from "../lib/utilities";
 import backend from "../lib/backend";
 import UsersWhoLiked from "./UsersWhoLiked";
 import MiniFollowButton from "./MiniFollowButton";
+import UsersWhoOwn from "./UsersWhoOwn";
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500;
@@ -516,22 +517,37 @@ const TokenDetailBody = ({
                       </div>
                     )}
                 {/* Owned by Section - excluding multiple owners */}
-                {!isMobile &&
-                  item.owner_address &&
-                  (item.owner_count === null || item.owner_count === 1) && (
-                    <div className="mt-8">
-                      <div className="md:text-lg py-4">Owned By</div>
-                      <div>
-                        <UserTimestampCard
-                          item={item}
-                          timestamp={ownershipDetails.token_last_transferred}
-                          closeModalCallback={() => {
-                            setEditModalOpen(false);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  )}
+                {!isMobile && (
+                  <div className="mt-8">
+                    <div className="md:text-lg pt-4">Owned By</div>
+
+                    {item.owner_address &&
+                      (item.owner_count === null || item.owner_count === 1) && (
+                        <div>
+                          <UserTimestampCard
+                            item={item}
+                            timestamp={ownershipDetails.token_last_transferred}
+                            closeModalCallback={() => {
+                              setEditModalOpen(false);
+                            }}
+                          />
+                        </div>
+                      )}
+
+                    {item.multiple_owners === 1 &&
+                      ownershipDetails?.multiple_owners_list &&
+                      ownershipDetails.multiple_owners_list.length > 0 && (
+                        <div>
+                          <UsersWhoOwn
+                            users={ownershipDetails.multiple_owners_list}
+                            closeModal={() =>
+                              setEditModalOpen ? setEditModalOpen(false) : null
+                            }
+                          />
+                        </div>
+                      )}
+                  </div>
+                )}
                 {/* History Section */}
                 <div className="mt-8">
                   <div className="md:text-lg py-4">Owner History</div>
@@ -549,22 +565,37 @@ const TokenDetailBody = ({
               {/* right column section */}
               <div className="flex-1 p-4 order-first md:order-last">
                 {/* Owned by section ONLY ON MOBILE */}
-                {isMobile &&
-                  item.owner_address &&
-                  (item.owner_count === null || item.owner_count === 1) && (
-                    <div className="mb-8">
-                      <div className="md:text-lg py-4">Owned By</div>
-                      <div>
-                        <UserTimestampCard
-                          item={item}
-                          timestamp={ownershipDetails.token_last_transferred}
-                          closeModalCallback={() => {
-                            setEditModalOpen(false);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  )}
+                {isMobile && (
+                  <div className="mb-8">
+                    <div className="md:text-lg pt-4">Owned By</div>
+
+                    {item.owner_address &&
+                      (item.owner_count === null || item.owner_count === 1) && (
+                        <div>
+                          <UserTimestampCard
+                            item={item}
+                            timestamp={ownershipDetails.token_last_transferred}
+                            closeModalCallback={() => {
+                              setEditModalOpen(false);
+                            }}
+                          />
+                        </div>
+                      )}
+
+                    {item.multiple_owners === 1 &&
+                      ownershipDetails?.multiple_owners_list &&
+                      ownershipDetails.multiple_owners_list.length > 0 && (
+                        <div>
+                          <UsersWhoOwn
+                            users={ownershipDetails.multiple_owners_list}
+                            closeModal={() =>
+                              setEditModalOpen ? setEditModalOpen(false) : null
+                            }
+                          />
+                        </div>
+                      )}
+                  </div>
+                )}
                 {/* Comments section */}
                 <div className="flex">
                   <CommentsSection
