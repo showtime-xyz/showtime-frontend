@@ -19,7 +19,7 @@ export default async (req, res) => {
       );
       publicAddress = user.publicAddress;
     } catch (err) {
-      if (page > 3) {
+      if (page > 8) {
         res.statusCode = 200;
         res.json(data_activity);
       }
