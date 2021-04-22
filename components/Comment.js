@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import useDetectOutsideClick from "../hooks/useDetectOutsideClick";
 import AppContext from "../context/app-context";
+import reactStringReplace from "react-string-replace";
 
 export default function Comment({
   comment,
@@ -17,6 +18,19 @@ export default function Comment({
   const context = useContext(AppContext);
   const { myProfile } = context;
   const dropdownRef = useRef(null);
+  const commentWithMentions = reactStringReplace(
+    comment.text,
+    /(@\[.+?\]\(\w+\))/g,
+    (match, i, o) => {
+      const [_, name, urlParam] = match.match(/@\[(.+?)\]\((\w+)\)/);
+      return (
+        <Link href="/[profile]" as={`/${urlParam}`} key={match + i}>
+          <a className="text-indigo-500 hover:text-indigo-400">{name}</a>
+        </Link>
+      );
+    }
+  );
+  // console.log(replaced);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isActive, setIsActive] = useDetectOutsideClick(
     dropdownRef,
@@ -148,7 +162,7 @@ export default function Comment({
           className="text-gray-500 text-sm leading-5"
           style={{ wordBreak: "break-word" }}
         >
-          {comment.text}
+          {commentWithMentions}
         </div>
       </div>
     </div>
