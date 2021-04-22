@@ -63,7 +63,7 @@ const mentionsStyle = {
       padding: "5px 15px",
       // borderBottom: "1px solid rgba(0,0,0,0.15)",
       "&focused": {
-        backgroundColor: "#F8D5FF",
+        backgroundColor: "#dddeff",
       },
     },
   },
@@ -294,7 +294,7 @@ export default function CommentsSection({
                     trigger="@"
                     data={handleDebouncedSearchQuery}
                     style={{
-                      backgroundColor: "#F8D5FF",
+                      backgroundColor: "#dddeff",
                       borderRadius: 2,
                     }}
                   />
