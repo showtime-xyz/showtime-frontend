@@ -27,59 +27,41 @@ const ProfileFollowersPill = ({
   const onEditProfileClick = () => setIsActive(!isActive);
 
   return (
-    <div className="opacity-100 bg-white rounded-lg shadow-md px-4 py-4 md:py-3 text-center text-gray-900">
+    <div className="pb-4 md:pb-2 text-center text-gray-900">
       <div className="flex flex-col md:flex-row text-center items-center">
         <div className="flex flex-row items-center">
           <div
-            className={`flex-1 ${
-              following?.length > 999 ? null : "w-28"
-            }  flex flex-col md:flex-row items-center cursor-pointer hover:opacity-80 mb-4 md:mb-0`}
+            className="flex-1 flex flex-col md:flex-row items-center cursor-pointer hover:opacity-80 mb-4 md:mb-0"
             onClick={() => {
               setShowFollowing(true);
             }}
           >
-            <div className="flex-grow"></div>
             <div className="text-lg mr-2">
               {following && following.length !== null
                 ? Number(following.length).toLocaleString()
                 : null}
             </div>
             <div className="text-sm text-gray-500">Following</div>
-            <div className="flex-grow"></div>
           </div>
-          {!context.isMobile && (
-            <div
-              className="border-r border-gray-400 mx-4"
-              style={{ width: 2, height: 20 }}
-            ></div>
-          )}
+          <div className="mx-3" style={{ width: 2, height: 20 }}></div>
           <div
-            className={`flex-1 ${
-              followers?.length > 999 ? null : "w-28"
-            }  flex flex-col md:flex-row items-center cursor-pointer hover:opacity-80 mb-4 md:mb-0`}
+            className="flex-1 flex flex-col md:flex-row items-center cursor-pointer hover:opacity-80 mb-4 md:mb-0"
             onClick={() => {
               setShowFollowers(true);
             }}
           >
-            <div className="flex-grow"></div>
             <div className="text-lg mr-2">
               {followers && followers.length !== null
                 ? Number(followers.length).toLocaleString()
                 : null}
             </div>
             <div className="text-sm text-gray-500">Followers</div>
-            <div className="flex-grow"></div>
           </div>
           {!context.isMobile && (
-            <div
-              className="border-r border-gray-400 mx-4"
-              style={{ width: 2, height: 20 }}
-            ></div>
+            <div className="mx-3" style={{ width: 2, height: 20 }}></div>
           )}
         </div>
-        <div className="flex-1 w-36 flex flex-row items-center relative">
-          <div className="flex-grow"></div>
-
+        <div className="flex-1 flex flex-row items-center relative">
           {!isMyProfile ? (
             <div
               className={`w-32 py-2 rounded-full text-sm cursor-pointer hover:opacity-80 transition-all ${
@@ -173,8 +155,6 @@ const ProfileFollowersPill = ({
               </div>
             </>
           )}
-
-          <div className="flex-grow"></div>
         </div>
       </div>
     </div>

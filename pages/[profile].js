@@ -656,7 +656,7 @@ const Profile = ({
         </Head>
 
         <div
-          className="relative py-6 md:pl-10 text-left bg-gradient-to-b from-black to-gray-800"
+          className="h-48 relative py-6 md:pl-10 text-left bg-gradient-to-b from-black to-gray-800"
           style={
             profileToDisplay?.cover_url
               ? {
@@ -681,67 +681,68 @@ const Profile = ({
               Change Cover
             </div>
           )}
-          <CappedWidth>
-            <div className="flex flex-col md:flex-row text-white items-center pb-6 sm:pb-3 pt-3">
-              <div className="flex-0 sm:py-8">
-                <img
-                  onClick={() => {
-                    if (isMyProfile) {
-                      setPictureModalOpen(true);
-                      mixpanel.track("Open edit photo");
-                    }
-                  }}
-                  src={
-                    profileToDisplay?.img_url
-                      ? profileToDisplay.img_url
-                      : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+        </div>
+        <CappedWidth>
+          <div className="relative">
+            <div className="flex sm:pb-2 -mt-14 justify-center sm:justify-start px-3">
+              <img
+                onClick={() => {
+                  if (isMyProfile) {
+                    setPictureModalOpen(true);
+                    mixpanel.track("Open edit photo");
                   }
-                  className={`h-24 w-24 rounded-full md:mr-4 border-2 border-white overflow-hidden ${
-                    isMyProfile
-                      ? "cursor-pointer hover:opacity-90 transition"
-                      : ""
-                  }`}
-                />
+                }}
+                src={
+                  profileToDisplay?.img_url
+                    ? profileToDisplay.img_url
+                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                }
+                className={`h-32 w-32 rounded-full md:mr-4 border-2 border-white overflow-hidden ${
+                  isMyProfile
+                    ? "cursor-pointer hover:opacity-90 transition"
+                    : ""
+                }`}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row text-black items-center pb-6 sm:pb-3 pt-3 sm:mx-3">
+            <div
+              className="flex-1"
+              style={{ whiteSpace: "break-spaces", wordBreak: "break-word" }}
+            >
+              <div className="text-2xl md:text-6xl mt-1 sm:mt-0 sm:mb-1 text-center md:text-left max-w-full">
+                {profileToDisplay?.name
+                  ? profileToDisplay.name
+                  : wallet_addresses_excluding_email &&
+                    wallet_addresses_excluding_email.length > 0
+                  ? formatAddressShort(wallet_addresses_excluding_email[0])
+                  : "Unnamed"}
               </div>
-              <div
-                className="flex-1"
-                style={{ whiteSpace: "break-spaces", wordBreak: "break-word" }}
-              >
-                <div className="text-2xl md:text-6xl mt-1 sm:mt-0 sm:mb-1 text-center md:text-left max-w-full">
-                  {profileToDisplay?.name
-                    ? profileToDisplay.name
-                    : wallet_addresses_excluding_email &&
-                      wallet_addresses_excluding_email.length > 0
-                    ? formatAddressShort(wallet_addresses_excluding_email[0])
-                    : "Unnamed"}
-                </div>
-                <div>
-                  {(username ||
-                    wallet_addresses_excluding_email.length > 0) && (
-                    <div className="flex flex-col md:flex-row items-center justify-start">
-                      {username && (
-                        <div className="md:mr-2 text-base opacity-80">
-                          @{username}
-                        </div>
-                      )}
-
-                      <div className="flex ml-1">
-                        {wallet_addresses_excluding_email.map((address) => {
-                          return (
-                            <AddressButton key={address} address={address} />
-                          );
-                        })}
+              <div className="my-1">
+                {(username || wallet_addresses_excluding_email.length > 0) && (
+                  <div className="flex flex-col md:flex-row items-center justify-start">
+                    {username && (
+                      <div className="md:mr-2 text-base text-gray-500">
+                        @{username}
                       </div>
+                    )}
+
+                    <div className="flex ml-1">
+                      {wallet_addresses_excluding_email.map((address) => {
+                        return (
+                          <AddressButton key={address} address={address} />
+                        );
+                      })}
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
-          </CappedWidth>
-        </div>
+          </div>
+        </CappedWidth>
 
         <CappedWidth>
-          <div className="flex flex-row -mt-4 mx-3 relative">
+          <div className="flex flex-row mx-3 relative">
             <div className="w-full md:w-max">
               <ProfileFollowersPill
                 following={following}
@@ -765,7 +766,7 @@ const Profile = ({
             <div className="flex-grow"></div>
           </div>
 
-          <div className="px-6 sm:px-3 mt-8 ">
+          <div className="px-6 sm:px-1 mt-2 ">
             {/* Use context info for logged in user - reflected immediately after changes */}
             {profileToDisplay?.bio ? (
               // <div className="text-gray-500 flex flex-row">
@@ -779,7 +780,7 @@ const Profile = ({
                   wordWrap: "break-word",
                   display: "block",
                 }}
-                className="text-black text-sm max-w-prose text-center md:text-left md:ml-2 text-gray-600  md:text-base"
+                className="text-black text-sm max-w-prose text-center md:text-left md:ml-2 md:text-base"
               >
                 {moreBioShown
                   ? profileToDisplay.bio
@@ -828,11 +829,11 @@ const Profile = ({
             ) : null}
 
             <div
-              className={` md:ml-2 flex flex-wrap max-w-prose items-center justify-center md:justify-start ${
+              className={`md:ml-2 flex flex-wrap max-w-prose items-center justify-center md:justify-start ${
                 showSocialLinks
                   ? "visible opacity-1 translate-y-2"
                   : "invisible opacity-0 translate-y-0 h-0"
-              } transition-all transform`}
+              } transition-all transform md:mt-3`}
             >
               {profileToDisplay?.website_url ? (
                 <a
@@ -851,14 +852,15 @@ const Profile = ({
                   className="mr-5 my-1 md:my-0"
                 >
                   <div
-                    className="hover:text-gray-600 flex text-sm  md:text-base flex-row py-1 opacity-60 hover:opacity-80"
-                    style={{ color: "#353535" }}
+                    className="flex text-sm text-gray-500 md:text-base flex-row py-1 hover:opacity-80"
+                    // style={{ color: "#353535" }}
                   >
                     <div>
                       <FontAwesomeIcon
                         style={{ height: 14, width: 14 }}
-                        className="mr-2"
+                        className="mr-2 opacity-70"
                         icon={faLink}
+                        style={{ color: "#353535" }}
                       />{" "}
                     </div>
                     <div>
@@ -893,14 +895,14 @@ const Profile = ({
                     key={socialLink.type_id}
                   >
                     <div
-                      className="hover:text-gray-600 flex text-sm  md:text-base flex-row py-1 items-center opacity-60 hover:opacity-80"
-                      style={{ color: "#353535" }}
+                      className="text-gray-500 flex text-sm  md:text-base flex-row py-1 items-center hover:opacity-80"
+                      // style={{ color: "#353535" }}
                     >
                       {socialLink.icon_url && (
                         <img
                           src={socialLink.icon_url}
                           alt=""
-                          className="flex-shrink-0 h-5 w-5 mr-1"
+                          className="flex-shrink-0 h-5 w-5 mr-1 opacity-70"
                         />
                       )}
                       <div>
