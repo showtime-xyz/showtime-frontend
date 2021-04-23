@@ -6,6 +6,7 @@ import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import useDetectOutsideClick from "../hooks/useDetectOutsideClick";
 import AppContext from "../context/app-context";
 import reactStringReplace from "react-string-replace";
+import { formatAddressShort } from "../lib/utilities";
 
 export default function Comment({
   comment,
@@ -85,25 +86,27 @@ export default function Comment({
                 onClick={closeModal}
                 style={{ overflow: "hidden", textOverflow: "ellipsis" }}
               >
-                {comment.name || "Unnamed"}
+                {comment.name || formatAddressShort(comment.address)}
               </a>
             </Link>
-            <Link
-              href="/[profile]"
-              as={
-                comment.username
-                  ? `/${comment.username}`
-                  : `/${comment.address}`
-              }
-            >
-              <a
-                className="hover:text-stpink cursor-pointer text-xs text-gray-400 sm:ml-1"
-                onClick={closeModal}
-                style={{ overflow: "hidden", textOverflow: "ellipsis" }}
+            {comment.username && (
+              <Link
+                href="/[profile]"
+                as={
+                  comment.username
+                    ? `/${comment.username}`
+                    : `/${comment.address}`
+                }
               >
-                @{comment.username}
-              </a>
-            </Link>
+                <a
+                  className="hover:text-stpink cursor-pointer text-xs text-gray-400 sm:ml-1"
+                  onClick={closeModal}
+                  style={{ overflow: "hidden", textOverflow: "ellipsis" }}
+                >
+                  @{comment.username}
+                </a>
+              </Link>
+            )}
           </div>
           <div className="flex-grow"></div>
           <div className="text-gray-400 text-xs flex-0 mb-6 sm:mb-0 mt-2 sm:mt-0">
