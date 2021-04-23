@@ -682,7 +682,7 @@ const Profile = ({
             </div>
           )}
         </div>
-        <div className="relative">
+        <div className="relative max-w-screen-2xl mx-auto">
           <CappedWidth>
             <div className="relative">
               <div className="flex sm:pb-2 -mt-14 justify-center sm:justify-start px-3">
