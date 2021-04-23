@@ -93,7 +93,7 @@ export default function CommentsSection({
   const handleSearchQuery = (mentionSearchText, callback) => {
     if (!mentionSearchText) return;
     return backend
-      .get(`/v1/search?q=${mentionSearchText}&limit=5`, {
+      .get(`/v1/search?q=${mentionSearchText}&limit=5&nft_id=${nftId}`, {
         method: "get",
       })
       .then((res) => res?.data?.data || [])
@@ -112,7 +112,7 @@ export default function CommentsSection({
   };
 
   const handleDebouncedSearchQuery = useCallback(
-    AwesomeDebouncePromise(handleSearchQuery, 400),
+    AwesomeDebouncePromise(handleSearchQuery, 300),
     []
   );
 
@@ -268,7 +268,7 @@ export default function CommentsSection({
                   onChange={(e) => {
                     setCommentText(e.target.value);
                   }}
-                  placeholder="Mention a user by typing `@` followed by their username"
+                  placeholder="Your comment..."
                   className="flex-grow md:mr-2"
                   allowSuggestionsAboveCursor
                   allowSpaceInQuery
