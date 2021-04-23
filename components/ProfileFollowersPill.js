@@ -61,7 +61,7 @@ const ProfileFollowersPill = ({
             <div className="mx-3" style={{ width: 2, height: 20 }}></div>
           )}
         </div>
-        <div className="flex-1 flex flex-row items-center relative">
+        <div className="flex-1 flex flex-row items-center relative md:absolute md:top-20 md:right-6">
           {!isMyProfile ? (
             <div
               className={`w-32 py-2 rounded-full text-sm cursor-pointer hover:opacity-80 transition-all ${
@@ -94,7 +94,7 @@ const ProfileFollowersPill = ({
 
               <div
                 ref={dropdownRef}
-                className={`absolute text-center top-12 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-md transform ${
+                className={`absolute text-center top-12 -right-1 md:right-0 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-md transform ${
                   isActive
                     ? "visible opacity-1 translate-y-2"
                     : "invisible opacity-0"

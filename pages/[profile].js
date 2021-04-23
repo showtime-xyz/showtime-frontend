@@ -682,240 +682,243 @@ const Profile = ({
             </div>
           )}
         </div>
-        <CappedWidth>
-          <div className="relative">
-            <div className="flex sm:pb-2 -mt-14 justify-center sm:justify-start px-3">
-              <img
-                onClick={() => {
-                  if (isMyProfile) {
-                    setPictureModalOpen(true);
-                    mixpanel.track("Open edit photo");
+        <div className="relative">
+          <CappedWidth>
+            <div className="relative">
+              <div className="flex sm:pb-2 -mt-14 justify-center sm:justify-start px-3">
+                <img
+                  onClick={() => {
+                    if (isMyProfile) {
+                      setPictureModalOpen(true);
+                      mixpanel.track("Open edit photo");
+                    }
+                  }}
+                  src={
+                    profileToDisplay?.img_url
+                      ? profileToDisplay.img_url
+                      : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                   }
-                }}
-                src={
-                  profileToDisplay?.img_url
-                    ? profileToDisplay.img_url
-                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                }
-                className={`h-32 w-32 rounded-full md:mr-4 border-2 border-white overflow-hidden ${
-                  isMyProfile
-                    ? "cursor-pointer hover:opacity-90 transition"
-                    : ""
-                }`}
-              />
-            </div>
-          </div>
-          <div className="flex flex-col md:flex-row text-black items-center pb-6 sm:pb-3 pt-3 sm:mx-3">
-            <div
-              className="flex-1"
-              style={{ whiteSpace: "break-spaces", wordBreak: "break-word" }}
-            >
-              <div className="text-2xl md:text-6xl mt-1 sm:mt-0 sm:mb-1 text-center md:text-left max-w-full">
-                {profileToDisplay?.name
-                  ? profileToDisplay.name
-                  : wallet_addresses_excluding_email &&
-                    wallet_addresses_excluding_email.length > 0
-                  ? formatAddressShort(wallet_addresses_excluding_email[0])
-                  : "Unnamed"}
-              </div>
-              <div className="my-1">
-                {(username || wallet_addresses_excluding_email.length > 0) && (
-                  <div className="flex flex-col md:flex-row items-center justify-start">
-                    {username && (
-                      <div className="md:mr-2 text-base text-gray-500">
-                        @{username}
-                      </div>
-                    )}
-
-                    <div className="flex ml-1">
-                      {wallet_addresses_excluding_email.map((address) => {
-                        return (
-                          <AddressButton key={address} address={address} />
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </CappedWidth>
-
-        <CappedWidth>
-          <div className="flex flex-row mx-3 relative">
-            <div className="w-full md:w-max">
-              <ProfileFollowersPill
-                following={following}
-                followers={followers}
-                isFollowed={isFollowed}
-                isMyProfile={isMyProfile}
-                followingMe={followingMe}
-                handleUnfollow={handleUnfollow}
-                handleFollow={handleFollow}
-                handleLoggedOutFollow={handleLoggedOutFollow}
-                hasEmailAddress={hasEmailAddress}
-                setShowFollowers={setShowFollowers}
-                setShowFollowing={setShowFollowing}
-                editAccount={editAccount}
-                editPhoto={editPhoto}
-                addWallet={addWallet}
-                addEmail={addEmail}
-                logout={logout}
-              />
-            </div>
-            <div className="flex-grow"></div>
-          </div>
-
-          <div className="px-6 sm:px-1 mt-2 ">
-            {/* Use context info for logged in user - reflected immediately after changes */}
-            {profileToDisplay?.bio ? (
-              // <div className="text-gray-500 flex flex-row">
-              //   <div className="max-w-prose text-sm sm:text-base">
-              //     {context.myProfile.bio}
-              //   </div>
-              // </div>
-              <div
-                style={{
-                  overflowWrap: "break-word",
-                  wordWrap: "break-word",
-                  display: "block",
-                }}
-                className="text-black text-sm max-w-prose text-center md:text-left md:ml-2 md:text-base"
-              >
-                {moreBioShown
-                  ? profileToDisplay.bio
-                  : truncateWithEllipses(
-                      profileToDisplay.bio,
-                      initialBioLength
-                    )}
-                {!moreBioShown &&
-                  profileToDisplay?.bio &&
-                  profileToDisplay.bio.length > initialBioLength && (
-                    <a
-                      onClick={() => setMoreBioShown(true)}
-                      className="text-gray-500 hover:text-gray-700 cursor-pointer"
-                    >
-                      {" "}
-                      more
-                    </a>
-                  )}
-              </div>
-            ) : null}
-
-            {/* Use context info for logged in user - reflected immediately after changes */}
-            {context.isMobile &&
-            (profileToDisplay?.links?.length > 2 ||
-              (profileToDisplay?.links?.length > 1 &&
-                profileToDisplay?.website_url)) ? (
-              <div
-                className={`flex cursor-pointer items-center hover:opacity-70 justify-center text-gray-600 text-sm  md:justify-start ${
-                  profileToDisplay?.bio ? "mt-3" : ""
-                }`}
-                onClick={toggleShowSocialLinks}
-              >
-                <div className="mr-1">View links</div>{" "}
-                <div
-                  className={`transition-all ${
-                    showSocialLinks ? "transform rotate-90" : "rotate-0"
+                  className={`h-32 w-32 rounded-full md:mr-4 border-2 border-white overflow-hidden ${
+                    isMyProfile
+                      ? "cursor-pointer hover:opacity-90 transition"
+                      : ""
                   }`}
-                >
-                  <FontAwesomeIcon
-                    style={{ height: 14, width: 14 }}
-                    className=""
-                    icon={faArrowRight}
-                  />{" "}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col md:flex-row text-black items-center pb-6 sm:pb-3 pt-3 sm:mx-3">
+              <div
+                className="flex-1"
+                style={{ whiteSpace: "break-spaces", wordBreak: "break-word" }}
+              >
+                <div className="text-2xl md:text-6xl mt-1 sm:mt-0 sm:mb-1 text-center md:text-left max-w-full">
+                  {profileToDisplay?.name
+                    ? profileToDisplay.name
+                    : wallet_addresses_excluding_email &&
+                      wallet_addresses_excluding_email.length > 0
+                    ? formatAddressShort(wallet_addresses_excluding_email[0])
+                    : "Unnamed"}
+                </div>
+                <div className="my-1">
+                  {(username ||
+                    wallet_addresses_excluding_email.length > 0) && (
+                    <div className="flex flex-col md:flex-row items-center justify-start">
+                      {username && (
+                        <div className="md:mr-2 text-base text-gray-500">
+                          @{username}
+                        </div>
+                      )}
+
+                      <div className="flex ml-1">
+                        {wallet_addresses_excluding_email.map((address) => {
+                          return (
+                            <AddressButton key={address} address={address} />
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-            ) : null}
+            </div>
+          </CappedWidth>
 
-            <div
-              className={`md:ml-2 flex flex-wrap max-w-prose items-center justify-center md:justify-start ${
-                showSocialLinks
-                  ? "visible opacity-1 translate-y-2"
-                  : "invisible opacity-0 translate-y-0 h-0"
-              } transition-all transform md:mt-3`}
-            >
-              {profileToDisplay?.website_url ? (
-                <a
-                  href={
-                    profileToDisplay.website_url.slice(0, 4) === "http"
-                      ? profileToDisplay.website_url
-                      : "https://" + profileToDisplay.website_url
-                  }
-                  target="_blank"
-                  // style={{ color: "rgb(81, 125, 228)" }}
-                  onClick={() => {
-                    mixpanel.track("Clicked profile website link", {
-                      slug: slug_address,
-                    });
+          <CappedWidth>
+            <div className="flex flex-row mx-3">
+              <div className="w-full md:w-max">
+                <ProfileFollowersPill
+                  following={following}
+                  followers={followers}
+                  isFollowed={isFollowed}
+                  isMyProfile={isMyProfile}
+                  followingMe={followingMe}
+                  handleUnfollow={handleUnfollow}
+                  handleFollow={handleFollow}
+                  handleLoggedOutFollow={handleLoggedOutFollow}
+                  hasEmailAddress={hasEmailAddress}
+                  setShowFollowers={setShowFollowers}
+                  setShowFollowing={setShowFollowing}
+                  editAccount={editAccount}
+                  editPhoto={editPhoto}
+                  addWallet={addWallet}
+                  addEmail={addEmail}
+                  logout={logout}
+                />
+              </div>
+              <div className="flex-grow"></div>
+            </div>
+
+            <div className="px-6 sm:px-1 mt-2 ">
+              {/* Use context info for logged in user - reflected immediately after changes */}
+              {profileToDisplay?.bio ? (
+                // <div className="text-gray-500 flex flex-row">
+                //   <div className="max-w-prose text-sm sm:text-base">
+                //     {context.myProfile.bio}
+                //   </div>
+                // </div>
+                <div
+                  style={{
+                    overflowWrap: "break-word",
+                    wordWrap: "break-word",
+                    display: "block",
                   }}
-                  className="mr-5 my-1 md:my-0"
+                  className="text-black text-sm max-w-prose text-center md:text-left md:ml-2 md:text-base"
                 >
-                  <div
-                    className="flex text-sm text-gray-500 md:text-base flex-row py-1 hover:opacity-80"
-                    // style={{ color: "#353535" }}
-                  >
-                    <div>
-                      <FontAwesomeIcon
-                        style={{ height: 14, width: 14 }}
-                        className="mr-2 opacity-70"
-                        icon={faLink}
-                        style={{ color: "#353535" }}
-                      />{" "}
-                    </div>
-                    <div>
-                      <div
-                        // className="hover:opacity-90"
-                        style={{ wordBreak: "break-all" }}
+                  {moreBioShown
+                    ? profileToDisplay.bio
+                    : truncateWithEllipses(
+                        profileToDisplay.bio,
+                        initialBioLength
+                      )}
+                  {!moreBioShown &&
+                    profileToDisplay?.bio &&
+                    profileToDisplay.bio.length > initialBioLength && (
+                      <a
+                        onClick={() => setMoreBioShown(true)}
+                        className="text-gray-500 hover:text-gray-700 cursor-pointer"
                       >
-                        {profileToDisplay.website_url}
-                      </div>
-                    </div>
-                  </div>
-                </a>
+                        {" "}
+                        more
+                      </a>
+                    )}
+                </div>
               ) : null}
-              {/* map out social links */}
-              {profileToDisplay?.links &&
-                profileToDisplay.links.map((socialLink) => (
+
+              {/* Use context info for logged in user - reflected immediately after changes */}
+              {context.isMobile &&
+              (profileToDisplay?.links?.length > 2 ||
+                (profileToDisplay?.links?.length > 1 &&
+                  profileToDisplay?.website_url)) ? (
+                <div
+                  className={`flex cursor-pointer items-center hover:opacity-70 justify-center text-gray-600 text-sm  md:justify-start ${
+                    profileToDisplay?.bio ? "mt-3" : ""
+                  }`}
+                  onClick={toggleShowSocialLinks}
+                >
+                  <div className="mr-1">View links</div>{" "}
+                  <div
+                    className={`transition-all ${
+                      showSocialLinks ? "transform rotate-90" : "rotate-0"
+                    }`}
+                  >
+                    <FontAwesomeIcon
+                      style={{ height: 14, width: 14 }}
+                      className=""
+                      icon={faArrowRight}
+                    />{" "}
+                  </div>
+                </div>
+              ) : null}
+
+              <div
+                className={`md:ml-2 flex flex-wrap max-w-prose items-center justify-center md:justify-start ${
+                  showSocialLinks
+                    ? "visible opacity-1 translate-y-2"
+                    : "invisible opacity-0 translate-y-0 h-0"
+                } transition-all transform md:mt-3`}
+              >
+                {profileToDisplay?.website_url ? (
                   <a
                     href={
-                      `https://${socialLink.prefix}` + socialLink.user_input
+                      profileToDisplay.website_url.slice(0, 4) === "http"
+                        ? profileToDisplay.website_url
+                        : "https://" + profileToDisplay.website_url
                     }
                     target="_blank"
                     // style={{ color: "rgb(81, 125, 228)" }}
                     onClick={() => {
-                      mixpanel.track(
-                        `Clicked ${socialLink.name} profile link`,
-                        {
-                          slug: slug_address,
-                        }
-                      );
+                      mixpanel.track("Clicked profile website link", {
+                        slug: slug_address,
+                      });
                     }}
                     className="mr-5 my-1 md:my-0"
-                    key={socialLink.type_id}
                   >
                     <div
-                      className="text-gray-500 flex text-sm  md:text-base flex-row py-1 items-center hover:opacity-80"
+                      className="flex text-sm text-gray-500 md:text-base flex-row py-1 hover:opacity-80"
                       // style={{ color: "#353535" }}
                     >
-                      {socialLink.icon_url && (
-                        <img
-                          src={socialLink.icon_url}
-                          alt=""
-                          className="flex-shrink-0 h-5 w-5 mr-1 opacity-70"
-                        />
-                      )}
                       <div>
-                        <div className="" style={{ wordBreak: "break-all" }}>
-                          {socialLink.name}
+                        <FontAwesomeIcon
+                          style={{ height: 14, width: 14 }}
+                          className="mr-2 opacity-70"
+                          icon={faLink}
+                          style={{ color: "#353535" }}
+                        />{" "}
+                      </div>
+                      <div>
+                        <div
+                          // className="hover:opacity-90"
+                          style={{ wordBreak: "break-all" }}
+                        >
+                          {profileToDisplay.website_url}
                         </div>
                       </div>
                     </div>
                   </a>
-                ))}
+                ) : null}
+                {/* map out social links */}
+                {profileToDisplay?.links &&
+                  profileToDisplay.links.map((socialLink) => (
+                    <a
+                      href={
+                        `https://${socialLink.prefix}` + socialLink.user_input
+                      }
+                      target="_blank"
+                      // style={{ color: "rgb(81, 125, 228)" }}
+                      onClick={() => {
+                        mixpanel.track(
+                          `Clicked ${socialLink.name} profile link`,
+                          {
+                            slug: slug_address,
+                          }
+                        );
+                      }}
+                      className="mr-5 my-1 md:my-0"
+                      key={socialLink.type_id}
+                    >
+                      <div
+                        className="text-gray-500 flex text-sm  md:text-base flex-row py-1 items-center hover:opacity-80"
+                        // style={{ color: "#353535" }}
+                      >
+                        {socialLink.icon_url && (
+                          <img
+                            src={socialLink.icon_url}
+                            alt=""
+                            className="flex-shrink-0 h-5 w-5 mr-1 opacity-70"
+                          />
+                        )}
+                        <div>
+                          <div className="" style={{ wordBreak: "break-all" }}>
+                            {socialLink.name}
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  ))}
+              </div>
             </div>
-          </div>
-        </CappedWidth>
+          </CappedWidth>
+        </div>
         {spotlightItem ? (
           <div className="mt-16 sm:mt-8 md:mt-16">
             <div className="relative bg-white border-t border-b border-gray-200 sm:py-16 sm:pb-8 md:pb-16 mb-4">
