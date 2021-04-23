@@ -15,7 +15,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 
   const formRef = useRef();
 
-  function handleImage(image) {
+  const handleImage = (image) => {
     setImage(image);
     const el = document.getElementById("image-helper");
     if (el) {
@@ -38,58 +38,58 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
       setCroppie(croppieInstance);
     } else {
     }
-  }
+  };
 
-  const handleSubmit = async (event) => {
-    mixpanel.track("Save photo edit");
-    if (!saveInProgress) {
-      setSaveInProgress(true);
-      event.preventDefault();
-
-      try {
-        if (croppie !== null) {
-          croppie
-            .result({
-              type: "base64",
-              //   size: {
-              //     width: 300,
-              //     height: 300,
-              //   },
-              size: "original",
-              format: "jpeg",
-              circle: false,
+  const submitPhoto = () => {
+    try {
+      if (croppie !== null) {
+        croppie
+          .result({
+            type: "base64",
+            //   size: {
+            //     width: 300,
+            //     height: 300,
+            //   },
+            size: "original",
+            format: "jpeg",
+            circle: false,
+          })
+          .then((blob) => {
+            // Post changes to the API
+            fetch(`/api/editcoverphoto`, {
+              method: "post",
+              body: blob,
             })
-            .then((blob) => {
-              // Post changes to the API
-              fetch(`/api/editcoverphoto`, {
-                method: "post",
-                body: blob,
+              .then(function (response) {
+                return response.json();
               })
-                .then(function (response) {
-                  return response.json();
-                })
-                .then(function (myJson) {
-                  const url = myJson["data"];
+              .then(function (myJson) {
+                const url = myJson["data"];
 
-                  context.setMyProfile({
-                    ...context.myProfile,
-                    cover_url: url,
-                  });
-
-                  setEditModalOpen(false);
-                  if (croppie) {
-                    croppie.destroy();
-                  }
-                  setCroppie(null);
-                  setImage("");
+                context.setMyProfile({
+                  ...context.myProfile,
+                  cover_url: url,
                 });
-            });
-        }
-      } catch {
-      } finally {
-        setSaveInProgress(false);
+
+                setEditModalOpen(false);
+                setSaveInProgress(false);
+                if (croppie) {
+                  croppie.destroy();
+                }
+                setCroppie(null);
+                setImage("");
+              });
+          });
       }
+    } catch (e) {
+      setSaveInProgress(false);
     }
+  };
+
+  const handleSubmit = () => {
+    mixpanel.track("Save photo edit");
+    setSaveInProgress(true);
+    submitPhoto();
   };
 
   const onChangePicture = (e) => {
@@ -131,7 +131,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
           contentWidth="30rem"
         >
           <div className="p-4">
-            <form onSubmit={handleSubmit} ref={formRef}>
+            <div ref={formRef}>
               <CloseButton setEditModalOpen={setEditModalOpen} />
               <div className="text-3xl border-b-2 pb-2">Edit Cover Image</div>
               <div className="mt-4 mb-4">
@@ -191,8 +191,8 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
               </div>
               <div className="border-t-2 pt-4">
                 <button
-                  type="submit"
-                  className="showtime-green-button  px-4 py-2  rounded-full float-right"
+                  onClick={handleSubmit}
+                  className="showtime-green-button  px-4 py-2  rounded-full float-right w-36"
                   style={
                     image === ""
                       ? {
@@ -203,7 +203,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
                         }
                       : { borderColor: "#35bb5b", borderWidth: 2, opacity: 1 }
                   }
-                  disabled={image === ""}
+                  disabled={image === "" || saveInProgress}
                 >
                   {saveInProgress ? (
                     <div className="flex items-center justify-center">
@@ -234,7 +234,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
                   Cancel
                 </button>
               </div>
-            </form>
+            </div>
           </div>
         </ScrollableModal>
       )}
