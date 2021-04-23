@@ -9,6 +9,7 @@ import backend from "../lib/backend";
 import AppContext from "../context/app-context";
 import ModalEditProfile from "../components/ModalEditProfile";
 import ModalEditPhoto from "../components/ModalEditPhoto";
+import ModalEditCover from "../components/ModalEditCover";
 import ModalUserList from "../components/ModalUserList";
 import ModalAddWallet from "../components/ModalAddWallet";
 import ModalAddEmail from "../components/ModalAddEmail.js";
@@ -23,16 +24,12 @@ import Select from "react-dropdown-select";
 import SpotlightItem from "../components/SpotlightItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faImage } from "@fortawesome/free-regular-svg-icons";
-import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import ProfileFollowersPill from "../components/ProfileFollowersPill";
 import {
   faHeart as fasHeart,
   faFingerprint,
   faLink,
   faImage as fasImage,
-  faTree,
-  faWater,
-  faTag,
   faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -56,6 +53,7 @@ export async function getServerSideProps(context) {
     const data_profile = response_profile.data.data;
     const name = data_profile.profile.name;
     const img_url = data_profile.profile.img_url;
+    const cover_url = data_profile.profile.cover_url;
     const wallet_addresses = data_profile.profile.wallet_addresses;
     const wallet_addresses_excluding_email =
       data_profile.profile.wallet_addresses_excluding_email;
@@ -77,6 +75,7 @@ export async function getServerSideProps(context) {
       props: {
         name,
         img_url,
+        cover_url,
         wallet_addresses,
         wallet_addresses_excluding_email,
         slug_address,
@@ -111,6 +110,7 @@ export async function getServerSideProps(context) {
 const Profile = ({
   name,
   img_url,
+  cover_url,
   wallet_addresses,
   wallet_addresses_excluding_email,
   slug_address,
@@ -357,6 +357,7 @@ const Profile = ({
   const [walletModalOpen, setWalletModalOpen] = useState(false);
   const [emailModalOpen, setEmailModalOpen] = useState(false);
   const [pictureModalOpen, setPictureModalOpen] = useState(false);
+  const [coverModalOpen, setCoverModalOpen] = useState(false);
   const [followingMe, setFollowingMe] = useState(false);
 
   const [selectedGrid, setSelectedGrid] = useState(1);
@@ -522,6 +523,7 @@ const Profile = ({
         website_url,
         bio,
         img_url,
+        cover_url,
         username,
         links: links.map((link) => ({
           name: link.type__name,
@@ -578,6 +580,10 @@ const Profile = ({
           <ModalEditPhoto
             isOpen={pictureModalOpen}
             setEditModalOpen={setPictureModalOpen}
+          />
+          <ModalEditCover
+            isOpen={coverModalOpen}
+            setEditModalOpen={setCoverModalOpen}
           />
           {/* Followers modal */}
           <ModalUserList
@@ -650,13 +656,31 @@ const Profile = ({
         </Head>
 
         <div
+          className="relative py-6 md:pl-10 text-left bg-gradient-to-b from-black to-gray-800"
           style={
-            {
-              //background: "linear-gradient(to left, #0186CC, #8145B3)",
-            }
+            profileToDisplay?.cover_url
+              ? {
+                  backgroundImage: `url(${profileToDisplay.cover_url})`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center center",
+                  backgroundSize: "cover",
+                }
+              : {}
           }
-          className="py-6 md:pl-10 text-left bg-gradient-to-b from-black to-gray-800" //
         >
+          {isMyProfile && (
+            <div
+              className="absolute top-2 right-2 text-white text-sm cursor-pointer bg-black bg-opacity-50 py-1 px-2 rounded-lg hover:bg-opacity-80"
+              onClick={() => {
+                if (isMyProfile) {
+                  setCoverModalOpen(true);
+                  mixpanel.track("Open edit cover photo");
+                }
+              }}
+            >
+              Change Cover
+            </div>
+          )}
           <CappedWidth>
             <div className="flex flex-col md:flex-row text-white items-center pb-6 sm:pb-3 pt-3">
               <div className="flex-0 sm:py-8">
@@ -717,7 +741,7 @@ const Profile = ({
         </div>
 
         <CappedWidth>
-          <div className="flex flex-row -mt-4 mx-3">
+          <div className="flex flex-row -mt-4 mx-3 relative">
             <div className="w-full md:w-max">
               <ProfileFollowersPill
                 following={following}
