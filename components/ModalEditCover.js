@@ -52,6 +52,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
             //     height: 300,
             //   },
             size: "original",
+            quality: 0.75,
             format: "jpeg",
             circle: false,
           })
