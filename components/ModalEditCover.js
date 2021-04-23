@@ -22,7 +22,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
       const croppieInstance = new Croppie(el, {
         enableExif: true,
         viewport: {
-          height: 200,
+          height: 100,
           width: formRef.width,
           type: "square",
         },
@@ -34,6 +34,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
       });
       croppieInstance.bind({
         url: image,
+        zoom: 0,
       });
       setCroppie(croppieInstance);
     } else {
@@ -104,9 +105,10 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 
   const hiddenFileInput = useRef(null);
 
-  const handleClick = (event) => {
+  const handleClickUpload = () => {
     hiddenFileInput.current.click();
   };
+
   const handleChange = (event) => {
     const fileUploaded = event.target.files[0];
     props.handleFile(fileUploaded);
@@ -143,7 +145,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
                     <div
                       className="showtime-pink-button text-sm text-center mt-16  px-4 py-3  rounded-full"
                       style={{ cursor: "pointer" }}
-                      onClick={handleClick}
+                      onClick={handleClickUpload}
                     >
                       Upload a photo
                     </div>

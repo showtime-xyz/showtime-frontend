@@ -51,7 +51,6 @@ export default function Modal({ isOpen, setEditModalOpen }) {
             },
             format: "jpeg",
             circle: false,
-            //rotate: 90,
           })
           .then((blob) => {
             // Post changes to the API
