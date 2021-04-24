@@ -670,7 +670,7 @@ const Profile = ({
         >
           {isMyProfile && (
             <div
-              className="absolute top-2 right-2 text-white text-sm cursor-pointer bg-black bg-opacity-50 py-1 px-2 rounded-lg hover:bg-opacity-80"
+              className="absolute top-2 right-2 text-white text-sm cursor-pointer bg-gray-800 bg-opacity-70 py-1 px-3 rounded-full hover:bg-opacity-90"
               onClick={() => {
                 if (isMyProfile) {
                   setCoverModalOpen(true);

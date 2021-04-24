@@ -41,6 +41,28 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
     }
   };
 
+  const handleRemovePhoto = () => {
+    setSaveInProgress(true);
+    fetch(`/api/editcoverphoto`, {
+      method: "post",
+      body: null,
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (myJson) {
+        const emptyUrl = myJson["data"];
+        console.log("response from server after removing", myJson);
+
+        context.setMyProfile({
+          ...context.myProfile,
+          cover_url: emptyUrl,
+        });
+        setEditModalOpen(false);
+        setSaveInProgress(false);
+      });
+  };
+
   const submitPhoto = () => {
     try {
       if (croppie !== null) {
@@ -139,23 +161,32 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
               <div className="text-3xl border-b-2 pb-2">Edit Cover Image</div>
               <div className="mt-4 mb-4">
                 {image === "" && (
-                  <div>
+                  <div className="my-16">
                     {/* Your image upload functionality here */}
                     {/*<ImageUpload image={image} setImage={handleImage} />*/}
 
                     <div
-                      className="showtime-pink-button text-sm text-center mt-16  px-4 py-3  rounded-full"
+                      className="showtime-pink-button text-sm text-center px-4 py-3  rounded-full"
                       style={{ cursor: "pointer" }}
                       onClick={handleClickUpload}
                     >
-                      Upload a photo
+                      Upload cover image
                     </div>
                     <div
-                      className="text-center text-xs mb-16 mt-4"
+                      className="text-center text-xs mt-4"
                       style={{ fontWeight: 400, color: "#666" }}
                     >
                       Accepts JPEG, PNG, and GIF (non-animated)
                     </div>
+                    {context.myProfile.cover_url && (
+                      <div
+                        className="text-sm text-center px-4 py-3 mt-6 rounded-full showtime-black-button-outline"
+                        style={{ cursor: "pointer" }}
+                        onClick={handleRemovePhoto}
+                      >
+                        Remove cover image
+                      </div>
+                    )}
 
                     <input
                       ref={hiddenFileInput}
