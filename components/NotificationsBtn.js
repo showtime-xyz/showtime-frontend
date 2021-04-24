@@ -2,7 +2,12 @@ import React, { useRef, useState, useEffect, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
-import { faComment, faHeart, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faComment,
+  faHeart,
+  faUser,
+  faAt,
+} from "@fortawesome/free-solid-svg-icons";
 import useDetectOutsideClick from "../hooks/useDetectOutsideClick";
 import { formatDistanceToNowStrict } from "date-fns";
 // import { truncateWithEllipses } from "../lib/utilities";
@@ -15,6 +20,7 @@ const iconObjects = {
   comment: faComment,
   heart: faHeart,
   user: faUser,
+  at: faAt,
 };
 
 export default function NotificationsBtn() {
@@ -369,7 +375,7 @@ export default function NotificationsBtn() {
                           ? "commented on "
                           : null}
                         {[6].includes(notif.type_id)
-                          ? "mentioned you in a comment on "
+                          ? "mentioned you on "
                           : null}
                       </span>
 
