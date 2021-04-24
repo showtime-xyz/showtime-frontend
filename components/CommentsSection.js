@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+//import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 //import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import AppContext from "../context/app-context";
 import backend from "../lib/backend";
@@ -292,11 +292,18 @@ export default function CommentsSection({
                     displayTransform={(id, display) => `${display}`}
                     trigger="@"
                     data={handleDebouncedSearchQuery}
-                    style={{
-                      backgroundColor: "#dddeff",
-                      borderRadius: 2,
-                      marginLeft: -3,
-                    }}
+                    style={
+                      context.isMobile
+                        ? {
+                            backgroundColor: "#dddeff",
+                            borderRadius: 2,
+                            marginLeft: -3,
+                          }
+                        : {
+                            backgroundColor: "#dddeff",
+                            borderRadius: 2,
+                          }
+                    }
                     appendSpaceOnAdd
                   />
                 </MentionsInput>
