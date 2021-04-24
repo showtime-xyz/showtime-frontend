@@ -1,10 +1,72 @@
-import React, { useEffect, useState, useContext } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect, useState, useContext, useCallback } from "react";
+//import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 //import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import AppContext from "../context/app-context";
 import backend from "../lib/backend";
 import mixpanel from "mixpanel-browser";
 import Comment from "./Comment";
+import { Mention, MentionsInput } from "react-mentions";
+import AwesomeDebouncePromise from "awesome-debounce-promise";
+import { formatAddressShort } from "../lib/utilities";
+
+const mentionsStyle = {
+  control: {
+    backgroundColor: "#fff",
+    fontSize: 14,
+    borderRadius: 10,
+  },
+
+  "&multiLine": {
+    control: {
+      minHeight: 63,
+    },
+    highlighter: {
+      padding: 9,
+      border: "2px solid transparent",
+      borderRadius: 10,
+    },
+    input: {
+      padding: 9,
+      border: "2px solid #d1d5da",
+      borderRadius: 8,
+      "&focused": {
+        border: "2px solid black",
+      },
+    },
+  },
+
+  "&singleLine": {
+    display: "inline-block",
+    width: 180,
+
+    highlighter: {
+      padding: 1,
+      border: "2px inset transparent",
+    },
+    input: {
+      padding: 1,
+      border: "2px inset",
+      borderRadius: 10,
+    },
+  },
+
+  suggestions: {
+    list: {
+      backgroundColor: "white",
+      border: "1px solid rgba(0,0,0,0.15)",
+      fontSize: 14,
+      borderRadius: 10,
+      overflow: "hidden",
+    },
+    item: {
+      padding: "5px 15px",
+      // borderBottom: "1px solid rgba(0,0,0,0.15)",
+      "&focused": {
+        backgroundColor: "#dddeff",
+      },
+    },
+  },
+};
 
 export default function CommentsSection({
   item,
@@ -26,6 +88,32 @@ export default function CommentsSection({
   const [comments, setComments] = useState();
   const [commentText, setCommentText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSearchQuery = (mentionSearchText, callback) => {
+    if (!mentionSearchText) return;
+    return backend
+      .get(`/v1/search?q=${mentionSearchText}&limit=5&nft_id=${nftId}`, {
+        method: "get",
+      })
+      .then((res) => res?.data?.data || [])
+      .then((res) =>
+        res.map((r) => ({
+          username: r.username,
+          id: r.username || r.address0,
+          address: r.address0,
+          display: r.name || formatAddressShort(r.address0),
+          img_url:
+            r.img_url ||
+            "https://storage.googleapis.com/opensea-static/opensea-profile/4.png",
+        }))
+      )
+      .then(callback);
+  };
+
+  const handleDebouncedSearchQuery = useCallback(
+    AwesomeDebouncePromise(handleSearchQuery, 300),
+    []
+  );
 
   const refreshComments = async (showLoading = true) => {
     const commentsData = await backend.get(
@@ -174,19 +262,51 @@ export default function CommentsSection({
               </div>
               {/* New Comment */}
               <div className="my-2 flex items-stretch flex-col md:flex-row">
-                <textarea
+                <MentionsInput
                   value={commentText}
-                  disabled={isSubmitting}
-                  className={`border-2 border-gray-300 text-sm md:h-12 flex-grow rounded-xl p-2 px-3 md:mr-2 focus:border-gray-400${
-                    isSubmitting ? " bg-gray-100" : ""
-                  }`}
-                  rows="2"
-                  placeholder="Your comment..."
                   onChange={(e) => {
                     setCommentText(e.target.value);
                   }}
+                  placeholder="Your comment..."
+                  className="flex-grow md:mr-2"
+                  allowSuggestionsAboveCursor
+                  allowSpaceInQuery
+                  style={mentionsStyle}
                   maxLength={240}
-                />
+                >
+                  <Mention
+                    renderSuggestion={(s) => (
+                      <div className="flex items-center">
+                        <img
+                          src={s.img_url}
+                          className="h-6 w-6 mr-2 rounded-full"
+                        />
+                        <span className="">{s.display}</span>
+                        {s.username && (
+                          <span className="text-gray-400 ml-2">
+                            @{s.username}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                    displayTransform={(id, display) => `${display}`}
+                    trigger="@"
+                    data={handleDebouncedSearchQuery}
+                    style={
+                      context.isMobile
+                        ? {
+                            backgroundColor: "#dddeff",
+                            borderRadius: 2,
+                            marginLeft: -3,
+                          }
+                        : {
+                            backgroundColor: "#dddeff",
+                            borderRadius: 2,
+                          }
+                    }
+                    appendSpaceOnAdd
+                  />
+                </MentionsInput>
                 <button
                   onClick={!user ? handleLoggedOutComment : createComment}
                   disabled={
