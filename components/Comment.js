@@ -109,7 +109,11 @@ export default function Comment({
             )}
           </div>
           <div className="flex-grow"></div>
-          <div className="text-gray-400 text-xs flex-0 mb-6 sm:mb-0 mt-2 sm:mt-0">
+          <div
+            className={`text-gray-400 text-xs flex-0 sm:mb-0 ${
+              comment.username ? "-mt-4" : "-mt-1"
+            }  sm:mt-0`}
+          >
             {formatDistanceToNowStrict(
               subSeconds(new Date(`${comment.added}Z`), 1),
               {
@@ -118,7 +122,11 @@ export default function Comment({
             )}
           </div>
           {(isOwnerOfNFT || userWroteComment || isCreatorOfNFT) && (
-            <div className="flex items-center justify-center  relative -mt-4 sm:mt-0">
+            <div
+              className={`flex items-center justify-center  relative ${
+                comment.username ? "-mt-4" : "-mt-1"
+              } sm:mt-0`}
+            >
               <div
                 onClick={toggleDropdown}
                 className="ml-3 mr-1 cursor-pointer text-gray-400 hover:text-gray-600 transition-all"

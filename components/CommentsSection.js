@@ -13,7 +13,6 @@ const mentionsStyle = {
   control: {
     backgroundColor: "#fff",
     fontSize: 14,
-    fontWeight: "normal",
     borderRadius: 10,
   },
 
@@ -297,6 +296,7 @@ export default function CommentsSection({
                       backgroundColor: "#dddeff",
                       borderRadius: 2,
                     }}
+                    appendSpaceOnAdd
                   />
                 </MentionsInput>
                 <button

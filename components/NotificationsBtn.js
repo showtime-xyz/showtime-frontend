@@ -375,7 +375,7 @@ export default function NotificationsBtn() {
                           ? "commented on "
                           : null}
                         {[6].includes(notif.type_id)
-                          ? "mentioned you on "
+                          ? "mentioned you in "
                           : null}
                       </span>
 
