@@ -295,6 +295,7 @@ export default function CommentsSection({
                     style={{
                       backgroundColor: "#dddeff",
                       borderRadius: 2,
+                      marginLeft: -3,
                     }}
                     appendSpaceOnAdd
                   />
