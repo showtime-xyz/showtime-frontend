@@ -9,6 +9,7 @@ import { formatDistanceToNowStrict } from "date-fns";
 import useInterval from "../hooks/useInterval";
 import AppContext from "../context/app-context";
 import { getNotificationInfo } from "../lib/constants";
+import ModalUserList from "../components/ModalUserList";
 
 const iconObjects = {
   comment: faComment,
@@ -26,6 +27,7 @@ export default function NotificationsBtn() {
   const dropdownRef = useRef(null);
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
   const [previouslyLastOpened, setPreviouslyLastOpened] = useState();
+  const [openUserList, setOpenUserList] = useState(null);
 
   const toggleOpen = async () => {
     if (!isActive) {
@@ -127,35 +129,18 @@ export default function NotificationsBtn() {
         {!loadingNotifications &&
           notifications &&
           notifications.length > 0 &&
-          notifications.map((notif) => (
+          notifications.map((notif) =>
             // either link to your profile or to the nft
-            <Link
-              href={
-                getNotificationInfo(notif.type_id).goTo === "profile"
-                  ? "/[profile]"
-                  : "/t/[...token]"
-              }
-              as={
-                getNotificationInfo(notif.type_id).goTo === "profile"
-                  ? notif.link_to_profile__address
-                    ? `/${
-                        notif.link_to_profile__username ||
-                        notif.link_to_profile__address
-                      }`
-                    : `/${
-                        context.myProfile.username || context.user.publicAddress
-                      }`
-                  : `/t/${notif.nft__contract__address}/${notif.nft__token_identifier}`
-              }
-              key={notif.id}
-            >
+
+            notif.actors && notif.actors.length > 0 ? (
+              // HAS CLICKABLE ACTORS
               <div
-                className={`py-3 px-3 hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full ${
+                className={`py-3 px-3 hover:bg-gray-50 transition-all rounded-lg whitespace-nowrap flex items-start w-full max-w-full ${
                   new Date(notif.to_timestamp) > new Date(previouslyLastOpened)
                     ? "bg-gray-100 hover:bg-gray-200"
                     : ""
                 }`}
-                onClick={() => setIsActive(!isActive)}
+                //onClick={() => setIsActive(!isActive)}
                 key={notif.id}
                 // style={
                 //   new Date(notif.to_timestamp) > new Date(previouslyLastOpened)
@@ -164,33 +149,44 @@ export default function NotificationsBtn() {
                 // }
               >
                 <div className="w-max mr-2 relative" style={{ minWidth: 36 }}>
-                  <img
-                    alt={notif.name}
-                    src={
-                      notif.img_url
-                        ? notif.img_url
-                        : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-                    }
-                    className="rounded-full mr-1 mt-1"
-                    style={{ height: 36, width: 36 }}
-                  />
-                  <div
-                    className="absolute bottom-0 right-0 rounded-full h-5 w-5 flex items-center justify-center shadow"
-                    style={{
-                      backgroundColor: getNotificationInfo(notif.type_id).color,
-                    }}
+                  <Link
+                    href="/[profile]"
+                    as={`/${
+                      notif.actors[0]?.username ||
+                      notif.actors[0].wallet_address
+                    }`}
                   >
-                    <FontAwesomeIcon
-                      style={{
-                        height: 12,
-                        width: 12,
-                      }}
-                      icon={
-                        iconObjects[getNotificationInfo(notif.type_id).icon]
-                      }
-                      color="white"
-                    />
-                  </div>
+                    <a onClick={() => setIsActive(!isActive)}>
+                      <img
+                        alt={notif.name}
+                        src={
+                          notif.img_url
+                            ? notif.img_url
+                            : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                        }
+                        className="rounded-full mr-1 mt-1"
+                        style={{ height: 36, width: 36 }}
+                      />
+                      <div
+                        className="absolute bottom-0 right-0 rounded-full h-5 w-5 flex items-center justify-center shadow"
+                        style={{
+                          backgroundColor: getNotificationInfo(notif.type_id)
+                            .color,
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          style={{
+                            height: 12,
+                            width: 12,
+                          }}
+                          icon={
+                            iconObjects[getNotificationInfo(notif.type_id).icon]
+                          }
+                          color="white"
+                        />
+                      </div>
+                    </a>
+                  </Link>
                 </div>
                 <div className="flex-1 flex-col items-start text-left">
                   <div
@@ -201,7 +197,197 @@ export default function NotificationsBtn() {
                       fontSize: 14,
                     }}
                   >
-                    {notif.description}
+                    {/*notif.description*/}
+
+                    <>
+                      {notif.actors.length == 1 ? (
+                        <Link
+                          href="/[profile]"
+                          as={`/${
+                            notif.actors[0]?.username ||
+                            notif.actors[0].wallet_address
+                          }`}
+                        >
+                          <a
+                            className="text-black cursor-pointer hover:text-stpink"
+                            //onClick={closeModal}
+                            onClick={() => setIsActive(!isActive)}
+                          >
+                            {notif.actors[0].name}{" "}
+                          </a>
+                        </Link>
+                      ) : null}
+                      {notif.actors.length == 2 ? (
+                        <>
+                          <Link
+                            href="/[profile]"
+                            as={`/${
+                              notif.actors[0]?.username ||
+                              notif.actors[0].wallet_address
+                            }`}
+                          >
+                            <a
+                              className="text-black cursor-pointer hover:text-stpink"
+                              //onClick={closeModal}
+                              onClick={() => setIsActive(!isActive)}
+                            >
+                              {notif.actors[0].name}
+                            </a>
+                          </Link>
+                          <span className="text-gray-500"> and </span>
+                          <Link
+                            href="/[profile]"
+                            as={`/${
+                              notif.actors[1]?.username ||
+                              notif.actors[1].wallet_address
+                            }`}
+                          >
+                            <a
+                              className="text-black cursor-pointer hover:text-stpink"
+                              //onClick={closeModal}
+                              onClick={() => setIsActive(!isActive)}
+                            >
+                              {notif.actors[1].name}{" "}
+                            </a>
+                          </Link>
+                        </>
+                      ) : null}
+                      {notif.actors.length == 3 ? (
+                        <>
+                          <Link
+                            href="/[profile]"
+                            as={`/${
+                              notif.actors[0]?.username ||
+                              notif.actors[0].wallet_address
+                            }`}
+                          >
+                            <a
+                              className="text-black cursor-pointer hover:text-stpink"
+                              //onClick={closeModal}
+                              onClick={() => setIsActive(!isActive)}
+                            >
+                              {notif.actors[0].name}
+                            </a>
+                          </Link>
+                          <span className="text-gray-500">, </span>
+                          <Link
+                            href="/[profile]"
+                            as={`/${
+                              notif.actors[1]?.username ||
+                              notif.actors[1].wallet_address
+                            }`}
+                          >
+                            <a
+                              className="text-black cursor-pointer hover:text-stpink"
+                              //onClick={closeModal}
+                              onClick={() => setIsActive(!isActive)}
+                            >
+                              {notif.actors[1].name}{" "}
+                            </a>
+                          </Link>
+                          <span className="text-gray-500">, and </span>
+                          <Link
+                            href="/[profile]"
+                            as={`/${
+                              notif.actors[2]?.username ||
+                              notif.actors[2].wallet_address
+                            }`}
+                          >
+                            <a
+                              className="text-black cursor-pointer hover:text-stpink"
+                              //onClick={closeModal}
+                              onClick={() => setIsActive(!isActive)}
+                            >
+                              {notif.actors[2].name}{" "}
+                            </a>
+                          </Link>
+                        </>
+                      ) : null}
+                      {notif.actors.length > 3 ? (
+                        <>
+                          <ModalUserList
+                            title="Followed You"
+                            isOpen={openUserList == notif.id}
+                            users={notif.actors ? notif.actors : []}
+                            closeModal={() => {
+                              setOpenUserList(null);
+                            }}
+                            onRedirect={() => {
+                              setOpenUserList(null);
+                              setIsActive(!isActive);
+                            }}
+                            emptyMessage="No followers yet."
+                          />
+                          <Link
+                            href="/[profile]"
+                            as={`/${
+                              notif.actors[0]?.username ||
+                              notif.actors[0].wallet_address
+                            }`}
+                          >
+                            <a
+                              className="text-black cursor-pointer hover:text-stpink"
+                              //onClick={closeModal}
+                              onClick={() => setIsActive(!isActive)}
+                            >
+                              {notif.actors[0].name}
+                            </a>
+                          </Link>
+                          <span className="text-gray-500">, </span>
+                          <Link
+                            href="/[profile]"
+                            as={`/${
+                              notif.actors[1]?.username ||
+                              notif.actors[1].wallet_address
+                            }`}
+                          >
+                            <a
+                              className="text-black cursor-pointer hover:text-stpink"
+                              //onClick={closeModal}
+                              onClick={() => setIsActive(!isActive)}
+                            >
+                              {notif.actors[1].name}
+                            </a>
+                          </Link>
+                          <span className="text-gray-500">, and </span>
+
+                          <a
+                            className="text-black cursor-pointer hover:text-stpink"
+                            //onClick={closeModal}
+                            onClick={() => setOpenUserList(notif.id)}
+                          >
+                            {notif.actors.length - 2} other{" "}
+                            {notif.actors.length - 2 == 1 ? "person" : "people"}{" "}
+                          </a>
+                        </>
+                      ) : null}
+
+                      <span className="text-gray-500">
+                        {[2, 3].includes(notif.type_id) ? "liked " : null}
+                        {[1].includes(notif.type_id) ? "followed you" : null}
+                        {[4, 5].includes(notif.type_id)
+                          ? "commented on "
+                          : null}
+                        {[6].includes(notif.type_id)
+                          ? "mentioned you in a comment on "
+                          : null}
+                      </span>
+
+                      {notif.nft__nftdisplay__name ? (
+                        <Link
+                          href="/t/[...token]"
+                          as={`/t/${notif.nft__contract__address}/${notif.nft__token_identifier}`}
+                        >
+                          <a
+                            className="text-black cursor-pointer hover:text-stpink"
+                            //onClick={closeModal}
+                            onClick={() => setIsActive(!isActive)}
+                          >
+                            {notif.nft__nftdisplay__name}
+                          </a>
+                        </Link>
+                      ) : null}
+                    </>
                   </div>
                   <div className="text-gray-400 text-xs">
                     {formatDistanceToNowStrict(new Date(notif.to_timestamp), {
@@ -210,8 +396,94 @@ export default function NotificationsBtn() {
                   </div>
                 </div>
               </div>
-            </Link>
-          ))}
+            ) : (
+              <Link
+                href={
+                  getNotificationInfo(notif.type_id).goTo === "profile"
+                    ? "/[profile]"
+                    : "/t/[...token]"
+                }
+                as={
+                  getNotificationInfo(notif.type_id).goTo === "profile"
+                    ? notif.link_to_profile__address
+                      ? `/${
+                          notif.link_to_profile__username ||
+                          notif.link_to_profile__address
+                        }`
+                      : `/${
+                          context.myProfile.username ||
+                          context.user.publicAddress
+                        }`
+                    : `/t/${notif.nft__contract__address}/${notif.nft__token_identifier}`
+                }
+                key={notif.id}
+              >
+                <div
+                  className={`py-3 px-3 hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full ${
+                    new Date(notif.to_timestamp) >
+                    new Date(previouslyLastOpened)
+                      ? "bg-gray-100 hover:bg-gray-200"
+                      : ""
+                  }`}
+                  onClick={() => setIsActive(!isActive)}
+                  key={notif.id}
+                  // style={
+                  //   new Date(notif.to_timestamp) > new Date(previouslyLastOpened)
+                  //     ? { backgroundColor: "#f3f4ff" }
+                  //     : {}
+                  // }
+                >
+                  <div className="w-max mr-2 relative" style={{ minWidth: 36 }}>
+                    <img
+                      alt={notif.name}
+                      src={
+                        notif.img_url
+                          ? notif.img_url
+                          : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                      }
+                      className="rounded-full mr-1 mt-1"
+                      style={{ height: 36, width: 36 }}
+                    />
+                    <div
+                      className="absolute bottom-0 right-0 rounded-full h-5 w-5 flex items-center justify-center shadow"
+                      style={{
+                        backgroundColor: getNotificationInfo(notif.type_id)
+                          .color,
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        style={{
+                          height: 12,
+                          width: 12,
+                        }}
+                        icon={
+                          iconObjects[getNotificationInfo(notif.type_id).icon]
+                        }
+                        color="white"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex-1 flex-col items-start text-left">
+                    <div
+                      style={{
+                        // textOverflow: "ellipsis",
+                        // overflow: "hidden",
+                        whiteSpace: "break-spaces",
+                        fontSize: 14,
+                      }}
+                    >
+                      {notif.description}
+                    </div>
+                    <div className="text-gray-400 text-xs">
+                      {formatDistanceToNowStrict(new Date(notif.to_timestamp), {
+                        addSuffix: true,
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            )
+          )}
         {!loadingNotifications &&
           notifications &&
           notifications.length === 0 && (
