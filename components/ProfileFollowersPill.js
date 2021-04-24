@@ -4,7 +4,9 @@ import useDetectOutsideClick from "../hooks/useDetectOutsideClick";
 
 const ProfileFollowersPill = ({
   following,
+  following_count,
   followers,
+  followers_count,
   isFollowed,
   isMyProfile,
   followingMe,
@@ -41,7 +43,7 @@ const ProfileFollowersPill = ({
             <div className="flex-grow"></div>
             <div className="text-lg mr-2">
               {following && following.length !== null
-                ? Number(following.length).toLocaleString()
+                ? Number(following_count).toLocaleString()
                 : null}
             </div>
             <div className="text-sm text-gray-500">Following</div>
@@ -64,7 +66,7 @@ const ProfileFollowersPill = ({
             <div className="flex-grow"></div>
             <div className="text-lg mr-2">
               {followers && followers.length !== null
-                ? Number(followers.length).toLocaleString()
+                ? Number(followers_count).toLocaleString()
                 : null}
             </div>
             <div className="text-sm text-gray-500">Followers</div>
