@@ -34,8 +34,6 @@ import {
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 
-const initialBioLength = 150;
-
 export async function getServerSideProps(context) {
   const { res, query } = context;
 
@@ -139,6 +137,8 @@ const Profile = ({
   const [isMyProfile, setIsMyProfile] = useState();
   const [isFollowed, setIsFollowed] = useState(false);
   const [hasEmailAddress, setHasEmailAddress] = useState(false);
+
+  const initialBioLength = context.isMobile ? 130 : 150;
 
   useEffect(() => {
     var it_is_followed = false;
