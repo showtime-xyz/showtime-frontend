@@ -178,15 +178,6 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
                     >
                       Accepts JPEG, PNG, and GIF (non-animated)
                     </div>
-                    {context.myProfile.cover_url && (
-                      <div
-                        className="text-sm text-center px-4 py-3 mt-6 rounded-full showtime-black-button-outline"
-                        style={{ cursor: "pointer" }}
-                        onClick={handleRemovePhoto}
-                      >
-                        Remove cover image
-                      </div>
-                    )}
 
                     <input
                       ref={hiddenFileInput}
@@ -223,50 +214,64 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
                   </div>
                 )}
               </div>
-              <div className="border-t-2 pt-4">
-                <button
-                  onClick={handleSubmit}
-                  className="showtime-green-button  px-4 py-2  rounded-full float-right w-36"
-                  style={
-                    image === ""
-                      ? {
-                          borderColor: "#35bb5b",
-                          borderWidth: 2,
-                          opacity: 0.6,
-                          cursor: "not-allowed",
+              <div className="border-t-2 pt-4 flex flex-row items-center">
+                <div>
+                  <button
+                    type="button"
+                    className="showtime-black-button-outline  px-4 py-2  rounded-full"
+                    onClick={() => {
+                      if (!saveInProgress) {
+                        setEditModalOpen(false);
+                        if (croppie) {
+                          try {
+                            croppie.destroy();
+                          } catch {}
                         }
-                      : { borderColor: "#35bb5b", borderWidth: 2, opacity: 1 }
-                  }
-                  disabled={image === "" || saveInProgress}
-                >
-                  {saveInProgress ? (
-                    <div className="flex items-center justify-center">
-                      <div className="loading-card-spinner-small" />
-                    </div>
-                  ) : (
-                    "Save changes"
-                  )}
-                </button>
 
-                <button
-                  type="button"
-                  className="showtime-black-button-outline  px-4 py-2  rounded-full"
-                  onClick={() => {
-                    if (!saveInProgress) {
-                      setEditModalOpen(false);
-                      if (croppie) {
-                        try {
-                          croppie.destroy();
-                        } catch {}
+                        setCroppie(null);
+                        setImage("");
                       }
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
 
-                      setCroppie(null);
-                      setImage("");
+                {context.myProfile.cover_url && (
+                  <div
+                    className="text-sm ml-4"
+                    style={{ cursor: "pointer" }}
+                    onClick={handleRemovePhoto}
+                  >
+                    Remove
+                  </div>
+                )}
+                <div className="flex-grow"></div>
+                <div>
+                  <button
+                    onClick={handleSubmit}
+                    className="showtime-green-button  px-4 py-2  rounded-full float-right w-36"
+                    style={
+                      image === ""
+                        ? {
+                            borderColor: "#35bb5b",
+                            borderWidth: 2,
+                            opacity: 0.6,
+                            cursor: "not-allowed",
+                          }
+                        : { borderColor: "#35bb5b", borderWidth: 2, opacity: 1 }
                     }
-                  }}
-                >
-                  Cancel
-                </button>
+                    disabled={image === "" || saveInProgress}
+                  >
+                    {saveInProgress ? (
+                      <div className="flex items-center justify-center">
+                        <div className="loading-card-spinner-small" />
+                      </div>
+                    ) : (
+                      "Save changes"
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           </div>

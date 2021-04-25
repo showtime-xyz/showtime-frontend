@@ -31,9 +31,10 @@ import {
   faLink,
   faImage as fasImage,
   faArrowRight,
+  faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 
-const initialBioLength = 160;
+const initialBioLength = 150;
 
 export async function getServerSideProps(context) {
   const { res, query } = context;
@@ -656,7 +657,7 @@ const Profile = ({
         </Head>
 
         <div
-          className="h-48 relative py-6 md:pl-10 text-left bg-gradient-to-b from-black to-gray-800"
+          className="h-36 md:h-52 relative py-6 md:pl-10 text-left bg-gradient-to-b from-black to-gray-800"
           style={
             profileToDisplay?.cover_url
               ? {
@@ -669,23 +670,28 @@ const Profile = ({
           }
         >
           {isMyProfile && (
-            <div
-              className="absolute top-2 right-2 text-white text-sm cursor-pointer bg-gray-800 bg-opacity-70 py-1 px-3 rounded-full hover:bg-opacity-90"
-              onClick={() => {
-                if (isMyProfile) {
-                  setCoverModalOpen(true);
-                  mixpanel.track("Open edit cover photo");
-                }
-              }}
-            >
-              Change Cover
-            </div>
+            <CappedWidth>
+              <div className="relative">
+                <div
+                  className="absolute top-0 right-5  xl:right-10 text-gray-200 text-sm cursor-pointer bg-gray-800 bg-opacity-70 py-1 px-3 rounded-full hover:bg-opacity-90"
+                  onClick={() => {
+                    if (isMyProfile) {
+                      setCoverModalOpen(true);
+                      mixpanel.track("Open edit cover photo");
+                    }
+                  }}
+                >
+                  <FontAwesomeIcon icon={faEdit} /> Cover
+                </div>
+              </div>
+            </CappedWidth>
           )}
         </div>
-        <div className="relative max-w-screen-2xl mx-auto">
-          <CappedWidth>
-            <div className="relative">
-              <div className="flex sm:pb-2 -mt-14 justify-center sm:justify-start px-3">
+
+        <CappedWidth>
+          <div className="flex flex-col md:flex-row mx-5">
+            <div className="flex flex-col text-left">
+              <div className="z-10 pb-2 flex flex-row">
                 <img
                   onClick={() => {
                     if (isMyProfile) {
@@ -698,113 +704,327 @@ const Profile = ({
                       ? profileToDisplay.img_url
                       : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
                   }
-                  className={`h-32 w-32 rounded-full md:mr-4 border-2 border-white overflow-hidden ${
-                    isMyProfile
-                      ? "cursor-pointer hover:opacity-90 transition"
-                      : ""
+                  className={`h-24 w-24 md:h-32 md:w-32 rounded-full border-2 shadow-md border-white z-10 -mt-14 md:-mt-20 overflow-hidden ${
+                    isMyProfile ? "cursor-pointer " : ""
                   }`}
                 />
+                <div className="flex-grow"></div>
+                <div className="md:hidden z-10 -mt-5">
+                  <ProfileFollowersPill
+                    following={following}
+                    followers={followers}
+                    isFollowed={isFollowed}
+                    isMyProfile={isMyProfile}
+                    followingMe={followingMe}
+                    handleUnfollow={handleUnfollow}
+                    handleFollow={handleFollow}
+                    handleLoggedOutFollow={handleLoggedOutFollow}
+                    hasEmailAddress={hasEmailAddress}
+                    setShowFollowers={setShowFollowers}
+                    setShowFollowing={setShowFollowing}
+                    editAccount={editAccount}
+                    editPhoto={editPhoto}
+                    addWallet={addWallet}
+                    addEmail={addEmail}
+                    logout={logout}
+                  />
+                </div>
+              </div>
+              <div className="text-3xl md:text-4xl md:mb-1">
+                {" "}
+                {profileToDisplay?.name
+                  ? profileToDisplay.name
+                  : wallet_addresses_excluding_email &&
+                    wallet_addresses_excluding_email.length > 0
+                  ? formatAddressShort(wallet_addresses_excluding_email[0])
+                  : "Unnamed"}
+              </div>
+              <div>
+                {(username || wallet_addresses_excluding_email.length > 0) && (
+                  <div className="flex flex-row items-center justify-start">
+                    {username && (
+                      <div className="md:mr-2 text-sm md:text-base text-gray-500">
+                        @{username}
+                      </div>
+                    )}
+
+                    <div className="flex ml-1">
+                      {wallet_addresses_excluding_email.map((address) => {
+                        return (
+                          <AddressButton key={address} address={address} />
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div>
+                {profileToDisplay?.bio ? (
+                  // <div className="text-gray-500 flex flex-row">
+                  //   <div className="max-w-prose text-sm sm:text-base">
+                  //     {context.myProfile.bio}
+                  //   </div>
+                  // </div>
+                  <div
+                    style={{
+                      overflowWrap: "break-word",
+                      wordWrap: "break-word",
+                      display: "block",
+                    }}
+                    className="text-black text-sm max-w-prose text-left md:text-base mt-6"
+                  >
+                    {moreBioShown
+                      ? profileToDisplay.bio
+                      : truncateWithEllipses(
+                          profileToDisplay.bio,
+                          initialBioLength
+                        )}
+                    {!moreBioShown &&
+                      profileToDisplay?.bio &&
+                      profileToDisplay.bio.length > initialBioLength && (
+                        <a
+                          onClick={() => setMoreBioShown(true)}
+                          className="text-gray-500 hover:text-gray-700 cursor-pointer"
+                        >
+                          {" "}
+                          more
+                        </a>
+                      )}
+                  </div>
+                ) : null}
               </div>
             </div>
-            <div className="flex flex-col md:flex-row text-black items-center pb-6 sm:pb-3 pt-3 sm:mx-3">
+            <div className="flex-grow"></div>
+            <div className="flex  flex-col">
+              <div className="flex items-center mt-6 md:-mt-6 md:z-10  md:justify-end justify-start md:mx-0 ">
+                <div className="flex flex-row  md:bg-white md:shadow-md md:rounded-full md:px-2 md:py-2 ">
+                  <div className="flex-grow md:mb-2 ">
+                    <div className="flex flex-row md:mt-2">
+                      <div
+                        className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80 md:ml-4"
+                        onClick={() => {
+                          setShowFollowing(true);
+                        }}
+                      >
+                        <div className="text-sm mr-2">
+                          {following && following.length !== null
+                            ? Number(following.length).toLocaleString()
+                            : null}
+                        </div>
+                        <div className="text-sm text-gray-500 mr-5">
+                          Following
+                        </div>
+                      </div>
+                      <div
+                        className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80 "
+                        onClick={() => {
+                          setShowFollowers(true);
+                        }}
+                      >
+                        <div className="text-sm  mr-2">
+                          {followers && followers.length !== null
+                            ? Number(followers.length).toLocaleString()
+                            : null}
+                        </div>
+                        <div className="text-sm text-gray-500 mr-5">
+                          Followers
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="hidden md:flex">
+                    <ProfileFollowersPill
+                      following={following}
+                      followers={followers}
+                      isFollowed={isFollowed}
+                      isMyProfile={isMyProfile}
+                      followingMe={followingMe}
+                      handleUnfollow={handleUnfollow}
+                      handleFollow={handleFollow}
+                      handleLoggedOutFollow={handleLoggedOutFollow}
+                      hasEmailAddress={hasEmailAddress}
+                      setShowFollowers={setShowFollowers}
+                      setShowFollowing={setShowFollowing}
+                      editAccount={editAccount}
+                      editPhoto={editPhoto}
+                      addWallet={addWallet}
+                      addEmail={addEmail}
+                      logout={logout}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className=" md:text-right text-sm md:mr-2 pt-5 md:pt-7">
+                {profileToDisplay?.website_url ? (
+                  <a
+                    href={
+                      profileToDisplay.website_url.slice(0, 4) === "http"
+                        ? profileToDisplay.website_url
+                        : "https://" + profileToDisplay.website_url
+                    }
+                    target="_blank"
+                    // style={{ color: "rgb(81, 125, 228)" }}
+                    onClick={() => {
+                      mixpanel.track("Clicked profile website link", {
+                        slug: slug_address,
+                      });
+                    }}
+                    className="inline-block "
+                  >
+                    <div
+                      className="flex text-gray-500 flex-row  items-center hover:opacity-80 mr-3 md:mr-0"
+                      // style={{ color: "#353535" }}
+                    >
+                      {/*<div>
+                        <FontAwesomeIcon
+                          style={{ height: 14, width: 14 }}
+                          className="mr-2 opacity-70 h-5 w-5"
+                          icon={faLink}
+                          style={{ color: "#353535" }}
+                        />{" "}
+                      </div>*/}
+                      <img
+                        src="/icons/link-solid-01.png"
+                        alt=""
+                        className="flex-shrink-0 h-5 w-5 mr-1 opacity-70"
+                      />
+                      <div>
+                        <div
+                          // className="hover:opacity-90"
+                          style={{ wordBreak: "break-all" }}
+                        >
+                          {profileToDisplay.website_url}
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                ) : null}
+                {/* map out social links */}
+                {profileToDisplay?.links &&
+                  profileToDisplay.links.map((socialLink) => (
+                    <a
+                      href={
+                        `https://${socialLink.prefix}` + socialLink.user_input
+                      }
+                      target="_blank"
+                      // style={{ color: "rgb(81, 125, 228)" }}
+                      onClick={() => {
+                        mixpanel.track(
+                          `Clicked ${socialLink.name} profile link`,
+                          {
+                            slug: slug_address,
+                          }
+                        );
+                      }}
+                      className="mr-4 md:mr-0 md:ml-5 inline-block "
+                      key={socialLink.type_id}
+                    >
+                      <div
+                        className="text-gray-500 flex flex-row items-center hover:opacity-80"
+                        // style={{ color: "#353535" }}
+                      >
+                        {socialLink.icon_url && (
+                          <img
+                            src={socialLink.icon_url}
+                            alt=""
+                            className="flex-shrink-0 h-5 w-5 mr-1 opacity-70"
+                          />
+                        )}
+                        <div>
+                          <div className="" style={{ wordBreak: "break-all" }}>
+                            {socialLink.name}
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  ))}
+              </div>
+              <div className="flex-grow "></div>
+            </div>
+          </div>
+        </CappedWidth>
+
+        {/*<div className="relative max-w-screen-2xl mx-auto ">
+          <CappedWidth>
+            <div className="relative flex flex-row items-center">
+              <div className="flex sm:pb-2 -mt-16 justify-center sm:justify-start px-3"></div>
+              <div className="flex-grow"></div>
+              <div className="flex flex-row">
+                <div
+                  className="flex-1 flex flex-col md:flex-row items-center cursor-pointer hover:opacity-80 mb-4 md:mb-0"
+                  onClick={() => {
+                    setShowFollowing(true);
+                  }}
+                >
+                  <div className="text-sm mr-2">
+                    {following && following.length !== null
+                      ? Number(following.length).toLocaleString()
+                      : null}
+                  </div>
+                  <div className="text-sm text-gray-500">Following</div>
+                </div>
+                <div className="mx-3" style={{ width: 2, height: 20 }}></div>
+                <div
+                  className="flex-1 flex flex-col md:flex-row items-center cursor-pointer hover:opacity-80 mb-4 md:mb-0"
+                  onClick={() => {
+                    setShowFollowers(true);
+                  }}
+                >
+                  <div className="text-sm  mr-2">
+                    {followers && followers.length !== null
+                      ? Number(followers.length).toLocaleString()
+                      : null}
+                  </div>
+                  <div className="text-sm text-gray-500">Followers</div>
+                </div>
+                {!context.isMobile && (
+                  <div className="mx-3" style={{ width: 2, height: 20 }}></div>
+                )}
+              </div>
+            </div>
+            <div className="flex flex-col md:flex-row text-black items-center pb-6 sm:pb-3 pt-1 sm:mx-3 ">
               <div
                 className="flex-1"
                 style={{ whiteSpace: "break-spaces", wordBreak: "break-word" }}
               >
-                <div className="text-2xl md:text-6xl mt-1 sm:mt-0 sm:mb-1 text-center md:text-left max-w-full">
-                  {profileToDisplay?.name
-                    ? profileToDisplay.name
-                    : wallet_addresses_excluding_email &&
-                      wallet_addresses_excluding_email.length > 0
-                    ? formatAddressShort(wallet_addresses_excluding_email[0])
-                    : "Unnamed"}
-                </div>
-                <div className="my-1">
-                  {(username ||
-                    wallet_addresses_excluding_email.length > 0) && (
-                    <div className="flex flex-col md:flex-row items-center justify-start">
-                      {username && (
-                        <div className="md:mr-2 text-base text-gray-500">
-                          @{username}
-                        </div>
+               
+
+                {profileToDisplay?.bio ? (
+                  // <div className="text-gray-500 flex flex-row">
+                  //   <div className="max-w-prose text-sm sm:text-base">
+                  //     {context.myProfile.bio}
+                  //   </div>
+                  // </div>
+                  <div
+                    style={{
+                      overflowWrap: "break-word",
+                      wordWrap: "break-word",
+                      display: "block",
+                    }}
+                    className="text-black text-sm max-w-prose text-center md:text-left md:text-base mb-4 mt-4"
+                  >
+                    {moreBioShown
+                      ? profileToDisplay.bio
+                      : truncateWithEllipses(
+                          profileToDisplay.bio,
+                          initialBioLength
+                        )}
+                    {!moreBioShown &&
+                      profileToDisplay?.bio &&
+                      profileToDisplay.bio.length > initialBioLength && (
+                        <a
+                          onClick={() => setMoreBioShown(true)}
+                          className="text-gray-500 hover:text-gray-700 cursor-pointer"
+                        >
+                          {" "}
+                          more
+                        </a>
                       )}
-
-                      <div className="flex ml-1">
-                        {wallet_addresses_excluding_email.map((address) => {
-                          return (
-                            <AddressButton key={address} address={address} />
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </div>
+                  </div>
+                ) : null}
               </div>
-            </div>
-          </CappedWidth>
 
-          <CappedWidth>
-            <div className="flex flex-row mx-3">
-              <div className="w-full md:w-max">
-                <ProfileFollowersPill
-                  following={following}
-                  followers={followers}
-                  isFollowed={isFollowed}
-                  isMyProfile={isMyProfile}
-                  followingMe={followingMe}
-                  handleUnfollow={handleUnfollow}
-                  handleFollow={handleFollow}
-                  handleLoggedOutFollow={handleLoggedOutFollow}
-                  hasEmailAddress={hasEmailAddress}
-                  setShowFollowers={setShowFollowers}
-                  setShowFollowing={setShowFollowing}
-                  editAccount={editAccount}
-                  editPhoto={editPhoto}
-                  addWallet={addWallet}
-                  addEmail={addEmail}
-                  logout={logout}
-                />
-              </div>
-              <div className="flex-grow"></div>
-            </div>
-
-            <div className="px-6 sm:px-1 mt-2 ">
-              {/* Use context info for logged in user - reflected immediately after changes */}
-              {profileToDisplay?.bio ? (
-                // <div className="text-gray-500 flex flex-row">
-                //   <div className="max-w-prose text-sm sm:text-base">
-                //     {context.myProfile.bio}
-                //   </div>
-                // </div>
-                <div
-                  style={{
-                    overflowWrap: "break-word",
-                    wordWrap: "break-word",
-                    display: "block",
-                  }}
-                  className="text-black text-sm max-w-prose text-center md:text-left md:ml-2 md:text-base"
-                >
-                  {moreBioShown
-                    ? profileToDisplay.bio
-                    : truncateWithEllipses(
-                        profileToDisplay.bio,
-                        initialBioLength
-                      )}
-                  {!moreBioShown &&
-                    profileToDisplay?.bio &&
-                    profileToDisplay.bio.length > initialBioLength && (
-                      <a
-                        onClick={() => setMoreBioShown(true)}
-                        className="text-gray-500 hover:text-gray-700 cursor-pointer"
-                      >
-                        {" "}
-                        more
-                      </a>
-                    )}
-                </div>
-              ) : null}
-
-              {/* Use context info for logged in user - reflected immediately after changes */}
               {context.isMobile &&
               (profileToDisplay?.links?.length > 2 ||
                 (profileToDisplay?.links?.length > 1 &&
@@ -876,7 +1096,6 @@ const Profile = ({
                     </div>
                   </a>
                 ) : null}
-                {/* map out social links */}
                 {profileToDisplay?.links &&
                   profileToDisplay.links.map((socialLink) => (
                     <a
@@ -918,7 +1137,7 @@ const Profile = ({
               </div>
             </div>
           </CappedWidth>
-        </div>
+                        </div>*/}
         {spotlightItem ? (
           <div className="mt-16 sm:mt-8 md:mt-16">
             <div className="relative bg-white border-t border-b border-gray-200 sm:py-16 sm:pb-8 md:pb-16 mb-4">
