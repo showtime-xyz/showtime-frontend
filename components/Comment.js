@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import useDetectOutsideClick from "../hooks/useDetectOutsideClick";
 import AppContext from "../context/app-context";
+import reactStringReplace from "react-string-replace";
+import { formatAddressShort } from "../lib/utilities";
 
 export default function Comment({
   comment,
@@ -17,6 +19,19 @@ export default function Comment({
   const context = useContext(AppContext);
   const { myProfile } = context;
   const dropdownRef = useRef(null);
+  const commentWithMentions = reactStringReplace(
+    comment.text,
+    /(@\[.+?\]\(\w+\))/g,
+    (match, i, o) => {
+      const [_, name, urlParam] = match.match(/@\[(.+?)\]\((\w+)\)/);
+      return (
+        <Link href="/[profile]" as={`/${urlParam}`} key={match + i}>
+          <a className="text-indigo-500 hover:text-indigo-400">{name}</a>
+        </Link>
+      );
+    }
+  );
+  // console.log(replaced);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isActive, setIsActive] = useDetectOutsideClick(
     dropdownRef,
@@ -71,28 +86,34 @@ export default function Comment({
                 onClick={closeModal}
                 style={{ overflow: "hidden", textOverflow: "ellipsis" }}
               >
-                {comment.name || "Unnamed"}
+                {comment.name || formatAddressShort(comment.address)}
               </a>
             </Link>
-            <Link
-              href="/[profile]"
-              as={
-                comment.username
-                  ? `/${comment.username}`
-                  : `/${comment.address}`
-              }
-            >
-              <a
-                className="hover:text-stpink cursor-pointer text-xs text-gray-400 sm:ml-1"
-                onClick={closeModal}
-                style={{ overflow: "hidden", textOverflow: "ellipsis" }}
+            {comment.username && (
+              <Link
+                href="/[profile]"
+                as={
+                  comment.username
+                    ? `/${comment.username}`
+                    : `/${comment.address}`
+                }
               >
-                @{comment.username}
-              </a>
-            </Link>
+                <a
+                  className="hover:text-stpink cursor-pointer text-xs text-gray-400 sm:ml-1"
+                  onClick={closeModal}
+                  style={{ overflow: "hidden", textOverflow: "ellipsis" }}
+                >
+                  @{comment.username}
+                </a>
+              </Link>
+            )}
           </div>
           <div className="flex-grow"></div>
-          <div className="text-gray-400 text-xs flex-0 mb-6 sm:mb-0 mt-2 sm:mt-0">
+          <div
+            className={`text-gray-400 text-xs flex-0 sm:mb-0 ${
+              comment.username ? "-mt-4" : "-mt-1"
+            }  sm:mt-0`}
+          >
             {formatDistanceToNowStrict(
               subSeconds(new Date(`${comment.added}Z`), 1),
               {
@@ -101,7 +122,11 @@ export default function Comment({
             )}
           </div>
           {(isOwnerOfNFT || userWroteComment || isCreatorOfNFT) && (
-            <div className="flex items-center justify-center  relative -mt-4 sm:mt-0">
+            <div
+              className={`flex items-center justify-center  relative ${
+                comment.username ? "-mt-4" : "-mt-1"
+              } sm:mt-0`}
+            >
               <div
                 onClick={toggleDropdown}
                 className="ml-3 mr-1 cursor-pointer text-gray-400 hover:text-gray-600 transition-all"
@@ -148,7 +173,7 @@ export default function Comment({
           className="text-gray-500 text-sm leading-5"
           style={{ wordBreak: "break-word" }}
         >
-          {comment.text}
+          {commentWithMentions}
         </div>
       </div>
     </div>

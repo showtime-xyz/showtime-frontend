@@ -59,7 +59,9 @@ export async function getServerSideProps(context) {
     const wallet_addresses_excluding_email =
       data_profile.profile.wallet_addresses_excluding_email;
     const followers_list = data_profile.followers;
+    const followers_count = data_profile.followers_count;
     const following_list = data_profile.following;
+    const following_count = data_profile.following_count;
     const bio = data_profile.profile.bio;
     const website_url = data_profile.profile.website_url;
     const profile_id = data_profile.profile.profile_id;
@@ -81,7 +83,9 @@ export async function getServerSideProps(context) {
         wallet_addresses_excluding_email,
         slug_address,
         followers_list,
+        followers_count,
         following_list,
+        following_count,
         bio,
         profile_id,
         username,
@@ -116,7 +120,9 @@ const Profile = ({
   wallet_addresses_excluding_email,
   slug_address,
   followers_list,
+  followers_count,
   following_list,
+  following_count,
   bio,
   profile_id,
   username,
@@ -808,7 +814,7 @@ const Profile = ({
                       >
                         <div className="text-sm mr-2">
                           {following && following.length !== null
-                            ? Number(following.length).toLocaleString()
+                            ? Number(following_count).toLocaleString()
                             : null}
                         </div>
                         <div className="text-sm text-gray-500 mr-5">
@@ -823,7 +829,7 @@ const Profile = ({
                       >
                         <div className="text-sm  mr-2">
                           {followers && followers.length !== null
-                            ? Number(followers.length).toLocaleString()
+                            ? Number(followers_count).toLocaleString()
                             : null}
                         </div>
                         <div className="text-sm text-gray-500 mr-5">

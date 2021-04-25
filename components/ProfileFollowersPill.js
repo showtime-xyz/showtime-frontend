@@ -4,7 +4,9 @@ import useDetectOutsideClick from "../hooks/useDetectOutsideClick";
 
 const ProfileFollowersPill = ({
   following,
+  following_count,
   followers,
+  followers_count,
   isFollowed,
   isMyProfile,
   followingMe,

@@ -1,5 +1,5 @@
-import React, { useState, useContext, useRef } from "react";
-import { ACTIVITY_TYPES } from "../lib/constants";
+import React, { useContext, useRef } from "react";
+import { ACTIVITY_TYPES, activityIconObjects } from "../lib/constants";
 import {
   Like,
   Comment,
@@ -9,7 +9,6 @@ import {
   Follow,
   Transfer,
 } from "./ActivityTypes";
-import { activityIconObjects } from "../lib/constants";
 import { formatDistanceToNowStrict } from "date-fns";
 import Link from "next/link";
 import AppContext from "../context/app-context";
@@ -20,6 +19,7 @@ import CommentButton from "./CommentButton";
 import ActivityImages from "./ActivityImages";
 import mixpanel from "mixpanel-browser";
 import useDetectOutsideClick from "../hooks/useDetectOutsideClick";
+import { truncateWithEllipses } from "../lib/utilities";
 
 export default function ActivityCard({
   act,
@@ -149,13 +149,13 @@ export default function ActivityCard({
                     mixpanel.track("Activity - Click on user profile");
                   }}
                 >
-                  <div className="mr-2 hover:text-stpink text-base">
-                    {actor.name}
+                  <div className="mr-2 hover:text-stpink text-base -mb-1">
+                    {truncateWithEllipses(actor.name, 24)}
                   </div>
                 </a>
               </Link>
 
-              {actor.username && !isMobile && (
+              {actor.username && (
                 <Link
                   href="/[profile]"
                   as={`/${actor?.username || actor?.wallet_address}`}
@@ -165,7 +165,10 @@ export default function ActivityCard({
                       mixpanel.track("Activity - Click on user profile");
                     }}
                   >
-                    <div className="text-gray-400 text-xs">
+                    <div
+                      className="text-gray-400 text-xs"
+                      style={{ marginBottom: 1, marginTop: 1 }}
+                    >
                       @{actor.username}
                     </div>
                   </a>
