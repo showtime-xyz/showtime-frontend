@@ -663,7 +663,7 @@ const Profile = ({
         </Head>
 
         <div
-          className="h-36 md:h-52 relative py-6 md:pl-10 text-left bg-gradient-to-b from-black to-gray-800"
+          className="h-32 md:h-60 relative py-6 md:pl-10 text-left bg-gradient-to-b from-black to-gray-800"
           style={
             profileToDisplay?.cover_url
               ? {
@@ -679,7 +679,7 @@ const Profile = ({
             <CappedWidth>
               <div className="relative">
                 <div
-                  className="absolute top-0 right-5  xl:right-10 text-gray-200 text-sm cursor-pointer bg-gray-800 bg-opacity-70 py-1 px-3 rounded-full hover:bg-opacity-90"
+                  className="absolute top-0 right-5  2xl:right-10 text-gray-200 text-sm cursor-pointer bg-gray-800 bg-opacity-70 py-1 px-3 rounded-full hover:bg-opacity-90"
                   onClick={() => {
                     if (isMyProfile) {
                       setCoverModalOpen(true);
