@@ -6,7 +6,7 @@ import AppContext from "../context/app-context";
 import CloseButton from "./CloseButton";
 import ScrollableModal from "./ScrollableModal";
 
-export default function Modal({ isOpen, setEditModalOpen }) {
+export default function ModalEditCover({ isOpen, setEditModalOpen }) {
   const context = useContext(AppContext);
 
   const [image, setImage] = useState("");
@@ -18,25 +18,49 @@ export default function Modal({ isOpen, setEditModalOpen }) {
   const handleImage = (image) => {
     setImage(image);
     const el = document.getElementById("image-helper");
-    if (el) {
+    if (el && formRef.current?.clientWidth) {
       const croppieInstance = new Croppie(el, {
         enableExif: true,
         viewport: {
-          height: 250,
-          width: 250,
-          type: "circle",
+          height: formRef.current?.clientWidth / 5,
+          width: formRef.current?.clientWidth,
+          type: "square",
         },
         boundary: {
           height: 280,
-          width: formRef.width,
+          width: formRef.current?.clientWidth,
         },
         enableOrientation: true,
       });
       croppieInstance.bind({
         url: image,
+        zoom: 0,
       });
       setCroppie(croppieInstance);
+    } else {
     }
+  };
+
+  const handleRemovePhoto = () => {
+    setSaveInProgress(true);
+    fetch(`/api/editcoverphoto`, {
+      method: "post",
+      body: null,
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (myJson) {
+        const emptyUrl = myJson["data"];
+        console.log("response from server after removing", myJson);
+
+        context.setMyProfile({
+          ...context.myProfile,
+          cover_url: emptyUrl,
+        });
+        setEditModalOpen(false);
+        setSaveInProgress(false);
+      });
   };
 
   const submitPhoto = () => {
@@ -46,15 +70,17 @@ export default function Modal({ isOpen, setEditModalOpen }) {
           .result({
             type: "base64",
             size: {
-              width: 300,
-              height: 300,
+              width: 1600,
+              height: 320,
             },
+            //size: "original",
+            //quality: 0.75,
             format: "jpeg",
             circle: false,
           })
           .then((blob) => {
             // Post changes to the API
-            fetch(`/api/editphoto`, {
+            fetch(`/api/editcoverphoto`, {
               method: "post",
               body: blob,
             })
@@ -63,10 +89,12 @@ export default function Modal({ isOpen, setEditModalOpen }) {
               })
               .then(function (myJson) {
                 const url = myJson["data"];
+
                 context.setMyProfile({
                   ...context.myProfile,
-                  img_url: url,
+                  cover_url: url,
                 });
+
                 setEditModalOpen(false);
                 setSaveInProgress(false);
                 if (croppie) {
@@ -100,9 +128,10 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 
   const hiddenFileInput = useRef(null);
 
-  const handleClick = (event) => {
+  const handleClickUpload = () => {
     hiddenFileInput.current.click();
   };
+
   const handleChange = (event) => {
     const fileUploaded = event.target.files[0];
     props.handleFile(fileUploaded);
@@ -129,22 +158,22 @@ export default function Modal({ isOpen, setEditModalOpen }) {
           <div className="p-4">
             <div ref={formRef}>
               <CloseButton setEditModalOpen={setEditModalOpen} />
-              <div className="text-3xl border-b-2 pb-2">Edit Photo</div>
+              <div className="text-3xl border-b-2 pb-2">Edit Cover Image</div>
               <div className="mt-4 mb-4">
                 {image === "" && (
-                  <div>
+                  <div className="my-16">
                     {/* Your image upload functionality here */}
                     {/*<ImageUpload image={image} setImage={handleImage} />*/}
 
                     <div
-                      className="showtime-pink-button text-sm text-center mt-16  px-4 py-3  rounded-full"
+                      className="showtime-pink-button text-sm text-center px-4 py-3  rounded-full"
                       style={{ cursor: "pointer" }}
-                      onClick={handleClick}
+                      onClick={handleClickUpload}
                     >
-                      Upload a photo
+                      Upload cover image
                     </div>
                     <div
-                      className="text-center text-xs mb-16 mt-4"
+                      className="text-center text-xs mt-4"
                       style={{ fontWeight: 400, color: "#666" }}
                     >
                       Accepts JPEG, PNG, and GIF (non-animated)
@@ -185,50 +214,64 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                   </div>
                 )}
               </div>
-              <div className="border-t-2 pt-4">
-                <button
-                  onClick={handleSubmit}
-                  className="showtime-green-button  px-4 py-2 rounded-full float-right w-36"
-                  style={
-                    image === ""
-                      ? {
-                          borderColor: "#35bb5b",
-                          borderWidth: 2,
-                          opacity: 0.6,
-                          cursor: "not-allowed",
+              <div className="border-t-2 pt-4 flex flex-row items-center">
+                <div>
+                  <button
+                    type="button"
+                    className="showtime-black-button-outline  px-4 py-2  rounded-full"
+                    onClick={() => {
+                      if (!saveInProgress) {
+                        setEditModalOpen(false);
+                        if (croppie) {
+                          try {
+                            croppie.destroy();
+                          } catch {}
                         }
-                      : { borderColor: "#35bb5b", borderWidth: 2, opacity: 1 }
-                  }
-                  disabled={image === "" || saveInProgress}
-                >
-                  {saveInProgress ? (
-                    <div className="flex items-center justify-center">
-                      <div className="loading-card-spinner-small" />
-                    </div>
-                  ) : (
-                    "Save changes"
-                  )}
-                </button>
 
-                <button
-                  type="button"
-                  className="showtime-black-button-outline  px-4 py-2  rounded-full"
-                  onClick={() => {
-                    if (!saveInProgress) {
-                      setEditModalOpen(false);
-                      if (croppie) {
-                        try {
-                          croppie.destroy();
-                        } catch {}
+                        setCroppie(null);
+                        setImage("");
                       }
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
 
-                      setCroppie(null);
-                      setImage("");
+                {context.myProfile.cover_url && (
+                  <div
+                    className="text-sm ml-4"
+                    style={{ cursor: "pointer" }}
+                    onClick={handleRemovePhoto}
+                  >
+                    Remove
+                  </div>
+                )}
+                <div className="flex-grow"></div>
+                <div>
+                  <button
+                    onClick={handleSubmit}
+                    className="showtime-green-button  px-4 py-2  rounded-full float-right w-36"
+                    style={
+                      image === ""
+                        ? {
+                            borderColor: "#35bb5b",
+                            borderWidth: 2,
+                            opacity: 0.6,
+                            cursor: "not-allowed",
+                          }
+                        : { borderColor: "#35bb5b", borderWidth: 2, opacity: 1 }
                     }
-                  }}
-                >
-                  Cancel
-                </button>
+                    disabled={image === "" || saveInProgress}
+                  >
+                    {saveInProgress ? (
+                      <div className="flex items-center justify-center">
+                        <div className="loading-card-spinner-small" />
+                      </div>
+                    ) : (
+                      "Save changes"
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           </div>

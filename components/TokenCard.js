@@ -175,7 +175,8 @@ const TokenCard = ({
             </div>
 
             {context.myProfile?.profile_id !== item.creator_id &&
-              !(isMyProfile && listId !== 3) && (
+              !(isMyProfile && listId !== 3) &&
+              !item.contract_is_creator && (
                 <MiniFollowButton profileId={item.creator_id} />
               )}
             <div className="flex-grow">&nbsp;</div>

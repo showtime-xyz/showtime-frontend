@@ -50,11 +50,11 @@ const ScrollableModal = ({
     };
   }, []);
   return (
-    <Background onClick={closeModal} style={{ zIndex: zIndex }}>
+    <Background onMouseDown={closeModal} style={{ zIndex: zIndex }}>
       <Scroller contentWidth={contentWidth} style={{ zIndex: zIndex + 1 }}>
         <Content
           className="rounded-lg sm:rounded-2xl "
-          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
         >
           {children}
         </Content>
