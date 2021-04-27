@@ -1,6 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import ReactPlayer from "react-player";
 import mixpanel from "mixpanel-browser";
+import LikeButton from "./LikeButton";
+import CommentButton from "./CommentButton";
+import AppContext from "../context/app-context";
 
 export default function ActivityImage({
   nft,
@@ -13,7 +16,9 @@ export default function ActivityImage({
   totalNumberOfImages,
 }) {
   const aRef = useRef();
+  const { isMobile } = useContext(AppContext);
   const [imgWidth, setImgWidth] = useState(null);
+  const [isHovering, setIsHovering] = useState(false);
   useEffect(() => {
     setImgWidth(aRef?.current?.clientWidth);
   }, [aRef?.current?.clientWidth]);
@@ -46,7 +51,7 @@ export default function ActivityImage({
 
   return (
     <div
-      className={`flex-1  cursor-pointer overflow-hidden hover:opacity-90  transition-all ${
+      className={`flex-1 relative cursor-pointer overflow-hidden hover:opacity-90  transition-all ${
         spacingIndex !== numberOfImages - 1 ? "mr-1" : ""
       }
       
@@ -77,6 +82,8 @@ export default function ActivityImage({
         openModal(index);
         mixpanel.track("Activity - Click on NFT image, open modal");
       }}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
     >
       {nft.token_img_url && !(nft.token_has_video && numberOfImages === 1) && (
         <img
@@ -98,6 +105,26 @@ export default function ActivityImage({
           height={imgWidth}
           playsinline
         />
+      )}
+      {totalNumberOfImages > 1 && !isMobile && (
+        <div
+          className={`absolute flex bottom-1 right-0 py-1 px-2 bg-white bg-opacity-95 shadow-md rounded-xl transform scale-90 ${
+            isHovering
+              ? "visible opacity-100 translate-y-0"
+              : "invisible opacity-0 translate-y-1"
+          } transition-all`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <LikeButton item={nft} />
+          <div className="w-3" />
+          <CommentButton
+            item={nft}
+            handleComment={() => {
+              mixpanel.track("Open NFT modal via hover comment button");
+              openModal(index);
+            }}
+          />
+        </div>
       )}
     </div>
   );
