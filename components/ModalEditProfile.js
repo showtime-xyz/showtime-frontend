@@ -395,7 +395,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                                   );
                                 }}
                                 autoComplete="false"
-                                maxLength={30}
+                                maxLength={50}
                               />
                             </div>
                           </div>
