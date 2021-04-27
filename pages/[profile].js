@@ -802,10 +802,10 @@ const Profile = ({
             </div>
             <div className="flex-grow"></div>
             <div className="flex  flex-col">
-              <div className="flex items-center mt-6 md:-mt-6 md:z-10  md:justify-end justify-start md:mx-0 ">
-                <div className="flex flex-row  md:bg-white md:shadow-md md:rounded-full md:px-2 md:py-2 ">
-                  <div className="flex-grow md:mb-2 ">
-                    <div className="flex flex-row md:mt-2">
+              <div className="flex items-center mt-6 md:-mt-7 md:z-10  md:justify-end justify-start md:mx-0 ">
+                <div className="flex flex-row  md:bg-white md:shadow-md md:rounded-full md:px-2 md:py-2 items-center">
+                  <div className="flex-grow ">
+                    <div className="flex flex-row ">
                       <div
                         className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80 md:ml-4"
                         onClick={() => {

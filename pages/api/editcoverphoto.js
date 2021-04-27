@@ -31,3 +31,11 @@ export default async (req, res) => {
   res.statusCode = 200;
   res.end();
 };
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "2mb",
+    },
+  },
+};

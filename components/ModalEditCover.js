@@ -18,17 +18,17 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
   const handleImage = (image) => {
     setImage(image);
     const el = document.getElementById("image-helper");
-    if (el) {
+    if (el && formRef.current?.clientWidth) {
       const croppieInstance = new Croppie(el, {
         enableExif: true,
         viewport: {
-          height: 100,
-          width: formRef.width,
+          height: formRef.current?.clientWidth / 5,
+          width: formRef.current?.clientWidth,
           type: "square",
         },
         boundary: {
           height: 280,
-          width: formRef.width,
+          width: formRef.current?.clientWidth,
         },
         enableOrientation: true,
       });
@@ -69,12 +69,12 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
         croppie
           .result({
             type: "base64",
-            //   size: {
-            //     width: 300,
-            //     height: 300,
-            //   },
-            size: "original",
-            quality: 0.75,
+            size: {
+              width: 1600,
+              height: 320,
+            },
+            //size: "original",
+            //quality: 0.75,
             format: "jpeg",
             circle: false,
           })
