@@ -70,8 +70,8 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
           .result({
             type: "base64",
             size: {
-              width: 1600,
-              height: 320,
+              width: 2880,
+              height: 576,
             },
             //size: "original",
             //quality: 0.75,
@@ -250,7 +250,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
                 <div>
                   <button
                     onClick={handleSubmit}
-                    className="showtime-green-button  px-4 py-2  rounded-full float-right w-36"
+                    className="showtime-green-button  px-4 py-2  rounded-full float-right w-24"
                     style={
                       image === ""
                         ? {
@@ -268,7 +268,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
                         <div className="loading-card-spinner-small" />
                       </div>
                     ) : (
-                      "Save changes"
+                      "Save"
                     )}
                   </button>
                 </div>
