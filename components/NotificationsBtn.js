@@ -16,6 +16,8 @@ import AppContext from "../context/app-context";
 import { getNotificationInfo } from "../lib/constants";
 import ModalUserList from "../components/ModalUserList";
 
+const NOTIFICATIONS_PER_PAGE = 7;
+
 const iconObjects = {
   comment: faComment,
   heart: faHeart,
@@ -29,11 +31,16 @@ export default function NotificationsBtn() {
   //   context.myProfile && context.myProfile.notifications_last_opened;
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
   const [loadingNotifications, setLoadingNotifications] = useState(true);
+  const [loadingMoreNotifications, setLoadingMoreNotifications] = useState(
+    false
+  );
   const [notifications, setNotifications] = useState([]);
   const dropdownRef = useRef(null);
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
   const [previouslyLastOpened, setPreviouslyLastOpened] = useState();
   const [openUserList, setOpenUserList] = useState(null);
+  const [queryPage, setQueryPage] = useState(1);
+  const [hasMoreNotifications, setHasMoreNotifications] = useState(true);
 
   const toggleOpen = async () => {
     if (!isActive) {
@@ -58,11 +65,57 @@ export default function NotificationsBtn() {
     }
   };
 
+  const handleMoreNotifications = async () => {
+    if (!loadingMoreNotifications) {
+      try {
+        setLoadingMoreNotifications(true);
+        const nextQueryPage = queryPage + 1;
+        setQueryPage(nextQueryPage);
+        const res = await fetch("/api/getnotifications", {
+          method: "post",
+          body: JSON.stringify({
+            page: nextQueryPage,
+            limit: NOTIFICATIONS_PER_PAGE,
+          }),
+        });
+        const moreNotifs = await res.json();
+        if (moreNotifs.length < NOTIFICATIONS_PER_PAGE) {
+          setHasMoreNotifications(false);
+        }
+        insertNewNotifications(moreNotifs);
+        setLoadingMoreNotifications(false);
+      } catch (e) {}
+    }
+  };
+
+  const insertNewNotifications = (newNotifications, order) => {
+    // remove repeats
+    const existingNotificationIds = notifications.map((n) => n.id);
+    const filteredNewNotifications = newNotifications.filter(
+      (n) => !existingNotificationIds.includes(n.id)
+    );
+    // assign order
+    if (order === "front") {
+      setNotifications([...filteredNewNotifications, ...notifications]);
+    } else {
+      setNotifications([...notifications, ...filteredNewNotifications]);
+    }
+  };
+
   const getNotifications = async () => {
     try {
-      const res = await fetch("/api/getnotifications");
+      const res = await fetch("/api/getnotifications", {
+        method: "post",
+        body: JSON.stringify({
+          page: 1,
+          limit: NOTIFICATIONS_PER_PAGE,
+        }),
+      });
       const notifs = await res.json();
-      setNotifications(notifs);
+      insertNewNotifications(notifs, "front");
+      if (notifs.length < NOTIFICATIONS_PER_PAGE) {
+        setHasMoreNotifications(false);
+      }
       setLoadingNotifications(false);
       setHasUnreadNotifications(
         (notifs &&
@@ -113,12 +166,13 @@ export default function NotificationsBtn() {
       </div>
       <div
         ref={dropdownRef}
-        className={`text-black absolute text-center top-10 right-0 bg-white py-2 px-2 shadow-lg rounded-xl transition-all transform border border-gray-200 ${
+        className={`overflow-y-scroll text-black absolute text-center top-10 right-0 bg-white py-2 px-2 shadow-lg rounded-xl transition-all transform border border-gray-200 ${
           isActive ? "visible opacity-1 translate-y-2" : "invisible opacity-0"
         }`}
         style={{
           zIndex: 1,
           maxWidth: context.windowSize.width < 768 ? "92vw" : 500,
+          maxHeight: context.isMobile ? 500 : 650,
           width:
             loadingNotifications || !notifications || notifications.length === 0
               ? "unset"
@@ -495,6 +549,25 @@ export default function NotificationsBtn() {
           notifications.length === 0 && (
             <div className="py-2 px-4 whitespace-nowrap">
               No notifications yet.
+            </div>
+          )}
+        {!loadingNotifications &&
+          notifications &&
+          notifications.length !== 0 &&
+          hasMoreNotifications && (
+            <div className="flex justify-center items-center my-1 mt-2">
+              <div
+                onClick={handleMoreNotifications}
+                className={`flex w-36 h-10 items-center justify-center my-1 text-sm border-gray-300 border-2 rounded-full px-3 py-1 hover:text-stpink ${
+                  loadingMoreNotifications ? "" : "hover:border-stpink"
+                } transition cursor-pointer`}
+              >
+                {loadingMoreNotifications ? (
+                  <div className="loading-card-spinner-small"></div>
+                ) : (
+                  "Show More"
+                )}
+              </div>
             </div>
           )}
       </div>
