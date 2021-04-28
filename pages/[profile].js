@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useContext, useRef, Fragment } from "react";
 import Head from "next/head";
 import _ from "lodash";
 import mixpanel from "mixpanel-browser";
@@ -15,22 +15,24 @@ import ModalAddWallet from "../components/ModalAddWallet";
 import ModalAddEmail from "../components/ModalAddEmail.js";
 import {
   formatAddressShort,
-  removeTags,
+  //removeTags,
   truncateWithEllipses,
+  classNames,
 } from "../lib/utilities";
 import AddressButton from "../components/AddressButton";
 import { SORT_FIELDS } from "../lib/constants";
-import Select from "react-dropdown-select";
 import SpotlightItem from "../components/SpotlightItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faImage } from "@fortawesome/free-regular-svg-icons";
 import ProfileFollowersPill from "../components/ProfileFollowersPill";
+import { Listbox, Transition } from "@headlessui/react";
+import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import {
   faHeart as fasHeart,
   faFingerprint,
-  faLink,
+  //faLink,
   faImage as fasImage,
-  faArrowRight,
+  //faArrowRight,
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -161,7 +163,6 @@ const Profile = ({
 
   const [isLoadingCards, setIsLoadingCards] = useState(false);
   const [isRefreshingCards, setIsRefreshingCards] = useState(false);
-  //const [hasSpotlightItem, setHasSpotlightItem] = useState(false);
 
   const [selectedCreatedSortField, setSelectedCreatedSortField] = useState(
     default_created_sort_id || 1
@@ -174,7 +175,6 @@ const Profile = ({
   const fetchItems = async (initial_load) => {
     // clear out existing from page (if switching profiles)
     if (initial_load) {
-      //setHasSpotlightItem(featured_nft ? true : false);
       setMoreBioShown(false);
       setIsLoadingCards(true);
 
@@ -187,7 +187,6 @@ const Profile = ({
       setLikedHiddenItems([]);
 
       setSpotlightItem(featured_nft);
-      //setSpotlightItem();
 
       setSelectedCreatedSortField(default_created_sort_id || 1);
       setSelectedOwnedSortField(default_owned_sort_id || 1);
@@ -368,7 +367,12 @@ const Profile = ({
   const [followingMe, setFollowingMe] = useState(false);
 
   const [selectedGrid, setSelectedGrid] = useState(1);
-  const sortFieldOptions = Object.keys(SORT_FIELDS);
+  //const sortFieldOptions = Object.keys(SORT_FIELDS);
+
+  const sortingOptionsList = [
+    //{ label: "Select...", key: "" },
+    ...Object.keys(SORT_FIELDS).map((key) => SORT_FIELDS[key]),
+  ];
 
   const updateCreated = async (selectedCreatedSortField, showCardRefresh) => {
     if (showCardRefresh) {
@@ -542,6 +546,7 @@ const Profile = ({
         wallet_addresses_excluding_email,
       };
 
+  /*
   const [showSocialLinks, setShowSocialLinks] = useState(false);
 
   useEffect(() => {
@@ -557,6 +562,18 @@ const Profile = ({
 
   const toggleShowSocialLinks = () => {
     setShowSocialLinks(!showSocialLinks);
+  };*/
+
+  const handleSortChange = (value) => {
+    const setSelectedSortField =
+      selectedGrid === 1
+        ? setSelectedCreatedSortField
+        : setSelectedOwnedSortField;
+
+    const updateList = selectedGrid === 1 ? updateCreated : updateOwned;
+
+    setSelectedSortField(value);
+    updateList(value, true);
   };
 
   return (
@@ -870,7 +887,6 @@ const Profile = ({
                         : "https://" + profileToDisplay.website_url
                     }
                     target="_blank"
-                    // style={{ color: "rgb(81, 125, 228)" }}
                     onClick={() => {
                       mixpanel.track("Clicked profile website link", {
                         slug: slug_address,
@@ -878,28 +894,14 @@ const Profile = ({
                     }}
                     className="inline-block "
                   >
-                    <div
-                      className="flex text-gray-500 flex-row  items-center hover:opacity-80 mr-3 md:mr-0"
-                      // style={{ color: "#353535" }}
-                    >
-                      {/*<div>
-                        <FontAwesomeIcon
-                          style={{ height: 14, width: 14 }}
-                          className="mr-2 opacity-70 h-5 w-5"
-                          icon={faLink}
-                          style={{ color: "#353535" }}
-                        />{" "}
-                      </div>*/}
+                    <div className="flex text-gray-500 flex-row  items-center hover:opacity-80 mr-3 md:mr-0">
                       <img
                         src="/icons/link-solid-01.png"
                         alt=""
                         className="flex-shrink-0 h-5 w-5 mr-1 opacity-70"
                       />
                       <div>
-                        <div
-                          // className="hover:opacity-90"
-                          style={{ wordBreak: "break-all" }}
-                        >
+                        <div style={{ wordBreak: "break-all" }}>
                           {profileToDisplay.website_url}
                         </div>
                       </div>
@@ -914,7 +916,6 @@ const Profile = ({
                         `https://${socialLink.prefix}` + socialLink.user_input
                       }
                       target="_blank"
-                      // style={{ color: "rgb(81, 125, 228)" }}
                       onClick={() => {
                         mixpanel.track(
                           `Clicked ${socialLink.name} profile link`,
@@ -926,10 +927,7 @@ const Profile = ({
                       className="mr-4 md:mr-0 md:ml-5 inline-block "
                       key={socialLink.type_id}
                     >
-                      <div
-                        className="text-gray-500 flex flex-row items-center hover:opacity-80"
-                        // style={{ color: "#353535" }}
-                      >
+                      <div className="text-gray-500 flex flex-row items-center hover:opacity-80">
                         {socialLink.icon_url && (
                           <img
                             src={socialLink.icon_url}
@@ -951,199 +949,6 @@ const Profile = ({
           </div>
         </CappedWidth>
 
-        {/*<div className="relative max-w-screen-2xl mx-auto ">
-          <CappedWidth>
-            <div className="relative flex flex-row items-center">
-              <div className="flex sm:pb-2 -mt-16 justify-center sm:justify-start px-3"></div>
-              <div className="flex-grow"></div>
-              <div className="flex flex-row">
-                <div
-                  className="flex-1 flex flex-col md:flex-row items-center cursor-pointer hover:opacity-80 mb-4 md:mb-0"
-                  onClick={() => {
-                    setShowFollowing(true);
-                  }}
-                >
-                  <div className="text-sm mr-2">
-                    {following && following.length !== null
-                      ? Number(following.length).toLocaleString()
-                      : null}
-                  </div>
-                  <div className="text-sm text-gray-500">Following</div>
-                </div>
-                <div className="mx-3" style={{ width: 2, height: 20 }}></div>
-                <div
-                  className="flex-1 flex flex-col md:flex-row items-center cursor-pointer hover:opacity-80 mb-4 md:mb-0"
-                  onClick={() => {
-                    setShowFollowers(true);
-                  }}
-                >
-                  <div className="text-sm  mr-2">
-                    {followers && followers.length !== null
-                      ? Number(followers.length).toLocaleString()
-                      : null}
-                  </div>
-                  <div className="text-sm text-gray-500">Followers</div>
-                </div>
-                {!context.isMobile && (
-                  <div className="mx-3" style={{ width: 2, height: 20 }}></div>
-                )}
-              </div>
-            </div>
-            <div className="flex flex-col md:flex-row text-black items-center pb-6 sm:pb-3 pt-1 sm:mx-3 ">
-              <div
-                className="flex-1"
-                style={{ whiteSpace: "break-spaces", wordBreak: "break-word" }}
-              >
-               
-
-                {profileToDisplay?.bio ? (
-                  // <div className="text-gray-500 flex flex-row">
-                  //   <div className="max-w-prose text-sm sm:text-base">
-                  //     {context.myProfile.bio}
-                  //   </div>
-                  // </div>
-                  <div
-                    style={{
-                      overflowWrap: "break-word",
-                      wordWrap: "break-word",
-                      display: "block",
-                    }}
-                    className="text-black text-sm max-w-prose text-center md:text-left md:text-base mb-4 mt-4"
-                  >
-                    {moreBioShown
-                      ? profileToDisplay.bio
-                      : truncateWithEllipses(
-                          profileToDisplay.bio,
-                          initialBioLength
-                        )}
-                    {!moreBioShown &&
-                      profileToDisplay?.bio &&
-                      profileToDisplay.bio.length > initialBioLength && (
-                        <a
-                          onClick={() => setMoreBioShown(true)}
-                          className="text-gray-500 hover:text-gray-700 cursor-pointer"
-                        >
-                          {" "}
-                          more
-                        </a>
-                      )}
-                  </div>
-                ) : null}
-              </div>
-
-              {context.isMobile &&
-              (profileToDisplay?.links?.length > 2 ||
-                (profileToDisplay?.links?.length > 1 &&
-                  profileToDisplay?.website_url)) ? (
-                <div
-                  className={`flex cursor-pointer items-center hover:opacity-70 justify-center text-gray-600 text-sm  md:justify-start ${
-                    profileToDisplay?.bio ? "mt-3" : ""
-                  }`}
-                  onClick={toggleShowSocialLinks}
-                >
-                  <div className="mr-1">View links</div>{" "}
-                  <div
-                    className={`transition-all ${
-                      showSocialLinks ? "transform rotate-90" : "rotate-0"
-                    }`}
-                  >
-                    <FontAwesomeIcon
-                      style={{ height: 14, width: 14 }}
-                      className=""
-                      icon={faArrowRight}
-                    />{" "}
-                  </div>
-                </div>
-              ) : null}
-
-              <div
-                className={`md:ml-2 flex flex-wrap max-w-prose items-center justify-center md:justify-start ${
-                  showSocialLinks
-                    ? "visible opacity-1 translate-y-2"
-                    : "invisible opacity-0 translate-y-0 h-0"
-                } transition-all transform md:mt-3`}
-              >
-                {profileToDisplay?.website_url ? (
-                  <a
-                    href={
-                      profileToDisplay.website_url.slice(0, 4) === "http"
-                        ? profileToDisplay.website_url
-                        : "https://" + profileToDisplay.website_url
-                    }
-                    target="_blank"
-                    // style={{ color: "rgb(81, 125, 228)" }}
-                    onClick={() => {
-                      mixpanel.track("Clicked profile website link", {
-                        slug: slug_address,
-                      });
-                    }}
-                    className="mr-5 my-1 md:my-0"
-                  >
-                    <div
-                      className="flex text-sm text-gray-500 md:text-base flex-row py-1 hover:opacity-80"
-                      // style={{ color: "#353535" }}
-                    >
-                      <div>
-                        <FontAwesomeIcon
-                          style={{ height: 14, width: 14 }}
-                          className="mr-2 opacity-70"
-                          icon={faLink}
-                          style={{ color: "#353535" }}
-                        />{" "}
-                      </div>
-                      <div>
-                        <div
-                          // className="hover:opacity-90"
-                          style={{ wordBreak: "break-all" }}
-                        >
-                          {profileToDisplay.website_url}
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                ) : null}
-                {profileToDisplay?.links &&
-                  profileToDisplay.links.map((socialLink) => (
-                    <a
-                      href={
-                        `https://${socialLink.prefix}` + socialLink.user_input
-                      }
-                      target="_blank"
-                      // style={{ color: "rgb(81, 125, 228)" }}
-                      onClick={() => {
-                        mixpanel.track(
-                          `Clicked ${socialLink.name} profile link`,
-                          {
-                            slug: slug_address,
-                          }
-                        );
-                      }}
-                      className="mr-5 my-1 md:my-0"
-                      key={socialLink.type_id}
-                    >
-                      <div
-                        className="text-gray-500 flex text-sm  md:text-base flex-row py-1 items-center hover:opacity-80"
-                        // style={{ color: "#353535" }}
-                      >
-                        {socialLink.icon_url && (
-                          <img
-                            src={socialLink.icon_url}
-                            alt=""
-                            className="flex-shrink-0 h-5 w-5 mr-1 opacity-70"
-                          />
-                        )}
-                        <div>
-                          <div className="" style={{ wordBreak: "break-all" }}>
-                            {socialLink.name}
-                          </div>
-                        </div>
-                      </div>
-                    </a>
-                  ))}
-              </div>
-            </div>
-          </CappedWidth>
-                        </div>*/}
         {spotlightItem ? (
           <div className="mt-12 sm:mt-8 md:mt-12">
             <div className="relative bg-white border-t border-b border-gray-200 sm:py-16 sm:pb-8 md:pb-16 mb-4">
@@ -1179,9 +984,6 @@ const Profile = ({
         ) : null}
         <CappedWidth>
           <div className="m-auto">
-            {/*<div className="py-12 px-3 ">
-              <hr />
-          </div>*/}
             <div
               ref={gridRef}
               className="grid lg:grid-cols-3 xl:grid-cols-4 pt-0"
@@ -1406,36 +1208,114 @@ const Profile = ({
                     }`}
                   >
                     <div className="flex-1"></div>
-                    <div className="py-2 px-2 mr-1  text-sm text-gray-500">
-                      Sort by:
-                    </div>
+                    {/*<div className="py-2 px-2 mr-1  text-sm text-gray-500">
+                      {selectedOwnedSortField}
+                  </div>*/}
 
-                    <Select
-                      className="text-sm"
-                      options={sortFieldOptions.map((key) => SORT_FIELDS[key])}
-                      labelField="label"
-                      valueField="key"
-                      values={[
-                        SORT_FIELDS[
-                          sortFieldOptions[
-                            selectedGrid === 1
-                              ? selectedCreatedSortField - 1
-                              : selectedOwnedSortField - 1
-                          ]
-                        ],
-                      ]}
-                      searchable={false}
-                      onChange={(values) => {
-                        if (selectedGrid === 1) {
-                          setSelectedCreatedSortField(values[0]["id"]);
-                          updateCreated(values[0]["id"], true);
-                        } else {
-                          setSelectedOwnedSortField(values[0]["id"]);
-                          updateOwned(values[0]["id"], true);
-                        }
+                    <Listbox
+                      value={
+                        selectedGrid === 1
+                          ? selectedCreatedSortField
+                          : selectedOwnedSortField
+                      }
+                      onChange={(value) => {
+                        handleSortChange(value);
                       }}
-                      key={selectedGrid}
-                    />
+                    >
+                      {({ open }) => (
+                        <>
+                          <Listbox.Label className="block text-sm text-gray-500 mr-2">
+                            Sort By
+                          </Listbox.Label>
+                          <div className="relative" style={{ width: 140 }}>
+                            <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                              <span className="block truncate">
+                                {
+                                  sortingOptionsList.filter(
+                                    (t) =>
+                                      t.value ===
+                                      (selectedGrid === 1
+                                        ? selectedCreatedSortField
+                                        : selectedOwnedSortField)
+                                  )[0].label
+                                }
+                              </span>
+                              <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                <SelectorIcon
+                                  className="h-5 w-5 text-gray-400"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            </Listbox.Button>
+
+                            <Transition
+                              show={open}
+                              as={Fragment}
+                              leave="transition ease-in duration-100"
+                              leaveFrom="opacity-100"
+                              leaveTo="opacity-0"
+                            >
+                              <Listbox.Options
+                                static
+                                className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                              >
+                                {sortingOptionsList.map((item) => (
+                                  <Listbox.Option
+                                    key={item.value}
+                                    className={({ active }) =>
+                                      classNames(
+                                        active
+                                          ? "text-white bg-indigo-600"
+                                          : "text-gray-900",
+                                        "cursor-default select-none relative py-2 pl-3 pr-9"
+                                      )
+                                    }
+                                    value={item.value}
+                                  >
+                                    {({ active }) => (
+                                      <>
+                                        <span
+                                          className={classNames(
+                                            item.value ===
+                                              (selectedGrid === 1
+                                                ? selectedCreatedSortField
+                                                : selectedOwnedSortField)
+                                              ? "font-normal" // "font-semibold"
+                                              : "font-normal",
+                                            "block truncate"
+                                          )}
+                                        >
+                                          {item.label}
+                                        </span>
+
+                                        {item.value ===
+                                        (selectedGrid === 1
+                                          ? selectedCreatedSortField
+                                          : selectedOwnedSortField) ? (
+                                          <span
+                                            className={classNames(
+                                              active
+                                                ? "text-white"
+                                                : "text-indigo-600",
+                                              "absolute inset-y-0 right-0 flex items-center pr-4"
+                                            )}
+                                          >
+                                            <CheckIcon
+                                              className="h-5 w-5"
+                                              aria-hidden="true"
+                                            />
+                                          </span>
+                                        ) : null}
+                                      </>
+                                    )}
+                                  </Listbox.Option>
+                                ))}
+                              </Listbox.Options>
+                            </Transition>
+                          </div>
+                        </>
+                      )}
+                    </Listbox>
                   </div>
                 )}
 
