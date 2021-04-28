@@ -29,6 +29,7 @@ const FollowButton = ({
   hideIfFollowing,
   notExpandWhenMobile,
   compact,
+  homepage,
 }) => {
   const context = useContext(AppContext);
   const myFollows = context?.myFollows || [];
@@ -93,6 +94,8 @@ const FollowButton = ({
         ${
           isFollowed
             ? "text-black border-gray-400"
+            : homepage
+            ? "bg-stpurple text-white border-stpurple"
             : "bg-black text-white border-black"
         }
       `}

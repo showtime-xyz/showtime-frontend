@@ -79,12 +79,12 @@ const LikeButton = ({ item }) => {
         //     : "showtime-like-button-white"
         // }
       >
-        <div className="flex flex-row items-center rounded-md py-1 hover:text-red-500">
+        <div className="flex flex-row items-center rounded-md py-1 hover:text-stred">
           <div className="mr-2" style={{ whiteSpace: "nowrap" }}>
             {like_count}
           </div>
           <div
-            className={`flex ${liked ? "text-red-500" : ""}`}
+            className={`flex ${liked ? "text-stred" : ""}`}
             style={{ paddingRight: 2 }}
           >
             <FontAwesomeIcon
