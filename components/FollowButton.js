@@ -12,7 +12,7 @@ const Button = styled.button`
   align-items: center;
   box-sizing: border-box;
   &:hover {
-    opacity: 0.7;
+    opacity: 0.8;
   }
   ${(p) =>
     p.notExpandWhenMobile
@@ -29,6 +29,7 @@ const FollowButton = ({
   hideIfFollowing,
   notExpandWhenMobile,
   compact,
+  homepage,
 }) => {
   const context = useContext(AppContext);
   const myFollows = context?.myFollows || [];
@@ -85,14 +86,18 @@ const FollowButton = ({
     <Button
       notExpandWhenMobile={notExpandWhenMobile}
       className={`
-
-      
-      border rounded-full 
+      border rounded-full transition
       py-2 px-4
         ${hideIfFollowing && isFollowed ? "hidden" : null}
-        ${compact ? "border-gray-300 mr-1" : "border-gray-400"}
+        ${compact ? "mr-1" : ""}
         ${compact && context.isMobile ? "py-2 px-3" : null}
-
+        ${
+          isFollowed
+            ? "text-black border-gray-400"
+            : homepage
+            ? "bg-stpurple text-white border-stpurple"
+            : "bg-black text-white border-black"
+        }
       `}
       onClick={
         context.user
@@ -103,13 +108,11 @@ const FollowButton = ({
       }
     >
       {!isFollowed && (
-        <div
-          className={`mr-1 ${compact ? "text-xs text-gray-600" : "text-sm"} `}
-        >
+        <div className={`mr-2 ${compact ? "text-xs" : "text-sm"} `}>
           <FontAwesomeIcon icon={faPlus} />
         </div>
       )}
-      <div className={` ${compact ? "text-xs text-gray-700" : "text-sm"} `}>
+      <div className={` ${compact ? "text-xs" : "text-sm"} `}>
         {isFollowed ? "Following" : "Follow"}
       </div>
     </Button>

@@ -321,6 +321,8 @@ const RecommendedFollowItem = ({
                 item={item}
                 followerCount={followerCount}
                 setFollowerCount={setFollowerCount}
+                compact
+                homepage
               />
             </FollowButtonWrapper>
           )}
