@@ -367,7 +367,6 @@ const Profile = ({
   const [followingMe, setFollowingMe] = useState(false);
 
   const [selectedGrid, setSelectedGrid] = useState(1);
-  //const sortFieldOptions = Object.keys(SORT_FIELDS);
 
   const sortingOptionsList = [
     //{ label: "Select...", key: "" },
@@ -986,10 +985,10 @@ const Profile = ({
           <div className="m-auto">
             <div
               ref={gridRef}
-              className="grid lg:grid-cols-3 xl:grid-cols-4 pt-0"
+              className="grid lg:grid-cols-3 xl:grid-cols-4 pt-0 "
             >
               <div className="sm:px-3">
-                <div className="h-max sticky top-24 ">
+                <div className="h-max sticky top-24  ">
                   <div className="px-2 sm:px-4 py-2 sm:py-4 sm:rounded-lg bg-white border-t border-b sm:border-none border-gray-200  sm:shadow-md mt-16">
                     <div className="border-b border-gray-200 sm:mx-2 mb-2 pb-4  ">
                       <div className="flex flex-row items-center mt-2 ml-2 sm:mt-0 sm:ml-0">
@@ -1188,7 +1187,7 @@ const Profile = ({
                   </div>
                 </div>
               </div>
-              <div className="lg:col-span-2 xl:col-span-3 min-h-screen">
+              <div className="lg:col-span-2 xl:col-span-3 min-h-screen ">
                 {!isLoadingCards && (
                   <div
                     className={`sm:mt-0 flex h-12 items-center px-3 my-2  md:text-base ${
@@ -1208,9 +1207,108 @@ const Profile = ({
                     }`}
                   >
                     <div className="flex-1"></div>
-                    {/*<div className="py-2 px-2 mr-1  text-sm text-gray-500">
-                      {selectedOwnedSortField}
-                  </div>*/}
+                    <Listbox
+                      value={
+                        selectedGrid === 1
+                          ? selectedCreatedSortField
+                          : selectedOwnedSortField
+                      }
+                      onChange={(value) => {
+                        handleSortChange(value);
+                      }}
+                    >
+                      {({ open }) => (
+                        <>
+                          <div className="relative mr-2" style={{ width: 160 }}>
+                            <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                              <span className="block truncate">
+                                All Collections
+                                {/*
+                                  sortingOptionsList.filter(
+                                    (t) =>
+                                      t.value ===
+                                      (selectedGrid === 1
+                                        ? selectedCreatedSortField
+                                        : selectedOwnedSortField)
+                                  )[0].label
+                                      */}
+                              </span>
+                              <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                <SelectorIcon
+                                  className="h-5 w-5 text-gray-400"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            </Listbox.Button>
+
+                            <Transition
+                              show={open}
+                              as={Fragment}
+                              leave="transition ease-in duration-100"
+                              leaveFrom="opacity-100"
+                              leaveTo="opacity-0"
+                            >
+                              <Listbox.Options
+                                static
+                                className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                              >
+                                {sortingOptionsList.map((item) => (
+                                  <Listbox.Option
+                                    key={item.value}
+                                    className={({ active }) =>
+                                      classNames(
+                                        active
+                                          ? "text-white bg-indigo-600"
+                                          : "text-gray-900",
+                                        "cursor-default select-none relative py-2 pl-3 pr-9"
+                                      )
+                                    }
+                                    value={item.value}
+                                  >
+                                    {({ active }) => (
+                                      <>
+                                        <span
+                                          className={classNames(
+                                            item.value ===
+                                              (selectedGrid === 1
+                                                ? selectedCreatedSortField
+                                                : selectedOwnedSortField)
+                                              ? "font-normal" // "font-semibold"
+                                              : "font-normal",
+                                            "block truncate"
+                                          )}
+                                        >
+                                          {item.label}
+                                        </span>
+
+                                        {item.value ===
+                                        (selectedGrid === 1
+                                          ? selectedCreatedSortField
+                                          : selectedOwnedSortField) ? (
+                                          <span
+                                            className={classNames(
+                                              active
+                                                ? "text-white"
+                                                : "text-indigo-600",
+                                              "absolute inset-y-0 right-0 flex items-center pr-4"
+                                            )}
+                                          >
+                                            <CheckIcon
+                                              className="h-5 w-5"
+                                              aria-hidden="true"
+                                            />
+                                          </span>
+                                        ) : null}
+                                      </>
+                                    )}
+                                  </Listbox.Option>
+                                ))}
+                              </Listbox.Options>
+                            </Transition>
+                          </div>
+                        </>
+                      )}
+                    </Listbox>
 
                     <Listbox
                       value={
@@ -1224,7 +1322,7 @@ const Profile = ({
                     >
                       {({ open }) => (
                         <>
-                          <Listbox.Label className="block text-sm text-gray-500 mr-2">
+                          <Listbox.Label className="block text-sm text-gray-500 mr-2 hidden">
                             Sort By
                           </Listbox.Label>
                           <div className="relative" style={{ width: 140 }}>
