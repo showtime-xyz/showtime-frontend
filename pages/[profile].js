@@ -384,6 +384,7 @@ const Profile = ({
       setItems([]);
       //setCollections([]);
       //setSwitchInProgress(false);
+      setFollowersCount(followers_count);
     }
 
     // Populate initial state
