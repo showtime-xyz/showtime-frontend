@@ -555,10 +555,10 @@ export default function NotificationsBtn() {
           notifications &&
           notifications.length !== 0 &&
           hasMoreNotifications && (
-            <div className="flex justify-center items-center my-1 mt-2">
+            <div className="flex justify-center items-center mb-1 mt-1">
               <div
                 onClick={handleMoreNotifications}
-                className={`flex w-36 h-10 items-center justify-center my-1 text-sm border-gray-300 border-2 rounded-full px-3 py-1 hover:text-stpink ${
+                className={`flex w-36 h-8 items-center justify-center  text-xs border-gray-600 text-gray-600 border rounded-full px-2 py-1 hover:text-stpink ${
                   loadingMoreNotifications ? "" : "hover:border-stpink"
                 } transition cursor-pointer`}
               >
