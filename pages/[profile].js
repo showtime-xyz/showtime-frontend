@@ -4,7 +4,7 @@ import _ from "lodash";
 import mixpanel from "mixpanel-browser";
 import Layout from "../components/layout";
 import CappedWidth from "../components/CappedWidth";
-import TokenGridV4 from "../components/TokenGridV4";
+import TokenGridV5 from "../components/TokenGridV5";
 import backend from "../lib/backend";
 import AppContext from "../context/app-context";
 import ModalEditProfile from "../components/ModalEditProfile";
@@ -1446,34 +1446,13 @@ const Profile = ({
                   </div>
                 )}
 
-                <TokenGridV4
+                <TokenGridV5
                   key={`grid_${selectedGrid}_${profile_id}_${
                     isLoadingCards || isRefreshingCards
                   }`}
-                  items={
-                    items
-
-                    /*selectedGrid === 1
-                      ? createdItems
-                      : selectedGrid === 2
-                      ? ownedItems
-                      : selectedGrid === 3
-                      ? likedItems
-                      : null*/
-                  }
+                  items={items}
                   isLoading={isLoadingCards || isRefreshingCards}
-                  listId={
-                    selectedGrid
-
-                    /*
-                    selectedGrid === 1
-                      ? 1
-                      : selectedGrid === 2
-                      ? 2
-                      : selectedGrid === 3
-                      ? 3
-                      : null*/
-                  }
+                  listId={selectedGrid}
                   isMyProfile={isMyProfile}
                   openCardMenu={openCardMenu}
                   setOpenCardMenu={setOpenCardMenu}

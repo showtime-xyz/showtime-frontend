@@ -11,7 +11,7 @@ import mixpanel from "mixpanel-browser";
 import AppContext from "../context/app-context";
 import MiniFollowButton from "./MiniFollowButton";
 import TokenCardImage from "../components/TokenCardImage";
-import { removeTags } from "../lib/utilities";
+import { removeTags, formatAddressShort } from "../lib/utilities";
 
 const TokenCard = ({
   item,
@@ -579,14 +579,17 @@ const TokenCard = ({
                           <div>
                             <img
                               alt={
-                                pageProfile.name
+                                pageProfile.name &&
+                                pageProfile.name != "Unnamed"
                                   ? pageProfile.name
                                   : pageProfile.username
                                   ? pageProfile.username
                                   : pageProfile.wallet_addresses_excluding_email
                                       .length > 0
-                                  ? pageProfile
-                                      .wallet_addresses_excluding_email[0]
+                                  ? formatAddressShort(
+                                      pageProfile
+                                        .wallet_addresses_excluding_email[0]
+                                    )
                                   : "Unknown"
                               }
                               src={
@@ -600,12 +603,16 @@ const TokenCard = ({
                           </div>
                           <div className="showtime-card-profile-link">
                             {truncateWithEllipses(
-                              pageProfile.name
+                              pageProfile.name && pageProfile.name != "Unnamed"
                                 ? pageProfile.name
                                 : pageProfile.username
                                 ? pageProfile.username
-                                : wallet_addresses_excluding_email.length > 0
-                                ? wallet_addresses_excluding_email[0]
+                                : pageProfile.wallet_addresses_excluding_email
+                                    .length > 0
+                                ? formatAddressShort(
+                                    pageProfile
+                                      .wallet_addresses_excluding_email[0]
+                                  )
                                 : "Unknown",
 
                               14
