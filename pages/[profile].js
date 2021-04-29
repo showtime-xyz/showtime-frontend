@@ -115,6 +115,7 @@ const Profile = ({
   const [hasEmailAddress, setHasEmailAddress] = useState(false);
   const initialBioLength = context.isMobile ? 130 : 150;
   const [moreBioShown, setMoreBioShown] = useState(false);
+  const [followersCount, setFollowersCount] = useState(followers_count);
   const profileToDisplay = isMyProfile
     ? context.myProfile
     : {
