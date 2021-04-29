@@ -234,8 +234,14 @@ const Profile = ({
     //{ label: "Select...", key: "" },
     ...Object.keys(SORT_FIELDS).map((key) => SORT_FIELDS[key]),
   ];
+  const perPage = context.isMobile ? 4 : 6; // switch to 12 after testing;
 
   const [items, setItems] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const [switchInProgress, setSwitchInProgress] = useState(false);
+
   const [collections, setCollections] = useState([]);
   const [collectionId, setCollectionId] = useState(0);
   const [isLoadingCards, setIsLoadingCards] = useState(false);
@@ -248,7 +254,13 @@ const Profile = ({
   );
   const [selectedLikedSortField, setSelectedLikedSortField] = useState(2);
 
-  const updateItems = async (listId, sortId, collectionId, showCardRefresh) => {
+  const updateItems = async (
+    listId,
+    sortId,
+    collectionId,
+    showCardRefresh,
+    page
+  ) => {
     if (showCardRefresh) {
       setIsRefreshingCards(true);
     }
@@ -258,8 +270,8 @@ const Profile = ({
       method: "post",
       body: JSON.stringify({
         profileId: profile_id,
-        page: 1,
-        limit: 9,
+        page: page,
+        limit: perPage,
         listId: listId,
         sortId: sortId,
         showHidden: 0,
@@ -268,27 +280,63 @@ const Profile = ({
     });
     const { data } = await result.json();
     setItems(data.items);
+    setHasMore(data.has_more);
 
     if (showCardRefresh) {
       setIsRefreshingCards(false);
     }
   };
 
-  const handleSortChange = (sortId) => {
+  const addPage = async (nextPage) => {
+    setIsLoadingMore(true);
+    const sortId =
+      selectedGrid === 1
+        ? selectedCreatedSortField
+        : selectedGrid === 2
+        ? selectedOwnedSortField
+        : selectedLikedSortField;
+
+    const result = await fetch(`/api/getprofilenfts`, {
+      method: "post",
+      body: JSON.stringify({
+        profileId: profile_id,
+        page: nextPage,
+        limit: perPage,
+        listId: selectedGrid,
+        sortId: sortId,
+        showHidden: 0,
+        collectionId: collectionId,
+      }),
+    });
+    const { data } = await result.json();
+    if (!switchInProgress) {
+      setItems([...items, ...data.items]);
+      setHasMore(data.has_more);
+      setPage(nextPage);
+    }
+
+    setIsLoadingMore(false);
+  };
+
+  const handleSortChange = async (sortId) => {
+    setSwitchInProgress(true);
     const setSelectedSortField =
       selectedGrid === 1
         ? setSelectedCreatedSortField
         : selectedGrid === 2
         ? setSelectedOwnedSortField
         : setSelectedLikedSortField;
-
+    setPage(1);
     setSelectedSortField(sortId);
-    updateItems(selectedGrid, sortId, collectionId, true);
+    await updateItems(selectedGrid, sortId, collectionId, true, 1);
+    setSwitchInProgress(false);
   };
 
-  const handleListChange = (listId) => {
+  const handleListChange = async (listId) => {
+    setSwitchInProgress(true);
     setSelectedGrid(listId);
     setCollectionId(0);
+    setPage(1);
 
     const sortId =
       listId === 1
@@ -296,11 +344,14 @@ const Profile = ({
         : listId === 2
         ? selectedOwnedSortField
         : selectedLikedSortField;
-    updateItems(listId, sortId, 0, true);
+    await updateItems(listId, sortId, 0, true, 1);
+    setSwitchInProgress(false);
   };
 
-  const handleCollectionChange = (collectionId) => {
+  const handleCollectionChange = async (collectionId) => {
+    setSwitchInProgress(true);
     setCollectionId(collectionId);
+    setPage(1);
 
     const sortId =
       selectedGrid === 1
@@ -308,7 +359,8 @@ const Profile = ({
         : selectedGrid === 2
         ? selectedOwnedSortField
         : selectedLikedSortField;
-    updateItems(selectedGrid, sortId, collectionId, true);
+    await updateItems(selectedGrid, sortId, collectionId, true, 1);
+    setSwitchInProgress(false);
   };
 
   // Fetch the created/owned/liked items
@@ -325,9 +377,12 @@ const Profile = ({
       setSelectedLikedSortField(2);
 
       setCollectionId(0);
+      setPage(1);
       setMenuLists([]);
+      setHasMore(true);
       setItems([]);
       setCollections([]);
+      setSwitchInProgress(false);
     }
 
     // Populate initial state
@@ -338,7 +393,7 @@ const Profile = ({
         body: JSON.stringify({
           profileId: profile_id,
           page: 1,
-          limit: 9,
+          limit: perPage,
           listId: 1,
           sortId: lists.lists[0].sort_id,
           showHidden: 0,
@@ -347,14 +402,15 @@ const Profile = ({
       });
       const { data } = await result.json();
       setItems(data.items);
+      setHasMore(data.has_more);
     } else if (lists.default_list_id == 2) {
       // Owned
       const result = await fetch(`/api/getprofilenfts`, {
         method: "post",
         body: JSON.stringify({
           profileId: profile_id,
-          page: 1,
-          limit: 9,
+          page: page,
+          limit: perPage,
           listId: 2,
           sortId: lists.lists[1].sort_id,
           showHidden: 0,
@@ -363,14 +419,15 @@ const Profile = ({
       });
       const { data } = await result.json();
       setItems(data.items);
+      setHasMore(data.has_more);
     } else if (lists.default_list_id == 3) {
       // Liked
       const result = await fetch(`/api/getprofilenfts`, {
         method: "post",
         body: JSON.stringify({
           profileId: profile_id,
-          page: 1,
-          limit: 9,
+          page: page,
+          limit: perPage,
           listId: 3,
           sortId: lists.lists[2].sort_id,
           showHidden: 0,
@@ -379,6 +436,7 @@ const Profile = ({
       });
       const { data } = await result.json();
       setItems(data.items);
+      setHasMore(data.has_more);
     }
 
     if (initial_load) {
@@ -1447,15 +1505,38 @@ const Profile = ({
                 )}
 
                 <TokenGridV5
+                  dataLength={items.length}
+                  next={() => {
+                    addPage(page + 1);
+                  }}
+                  hasMore={hasMore}
+                  endMessage={<div>End</div>}
+                  scrollThreshold={0.5}
+                  //
                   key={`grid_${selectedGrid}_${profile_id}_${
                     isLoadingCards || isRefreshingCards
                   }`}
                   items={items}
                   isLoading={isLoadingCards || isRefreshingCards}
+                  isLoadingMore={isLoadingMore}
                   listId={selectedGrid}
                   isMyProfile={isMyProfile}
                   openCardMenu={openCardMenu}
                   setOpenCardMenu={setOpenCardMenu}
+                  detailsModalCloseOnKeyChange={slug_address}
+                  changeSpotlightItem={handleChangeSpotlightItem}
+                  pageProfile={{
+                    profile_id,
+                    slug_address,
+                    name,
+                    img_url,
+                    wallet_addresses_excluding_email,
+                    slug_address,
+                    website_url,
+                    profile_id,
+                    username,
+                  }} // to customize owned by list on bottom of card
+
                   /*
                   userHiddenItems={
                     selectedGrid === 1
@@ -1478,24 +1559,11 @@ const Profile = ({
                   showUserHiddenItems={showUserHiddenItems}
                   */
 
-                  refreshItems={
-                    selectedGrid === 1
-                      ? () => updateCreated(selectedCreatedSortField, false)
-                      : () => updateOwned(selectedOwnedSortField, false)
-                  }
-                  detailsModalCloseOnKeyChange={slug_address}
-                  changeSpotlightItem={handleChangeSpotlightItem}
-                  pageProfile={{
-                    profile_id,
-                    slug_address,
-                    name,
-                    img_url,
-                    wallet_addresses_excluding_email,
-                    slug_address,
-                    website_url,
-                    profile_id,
-                    username,
-                  }} // to customize owned by list
+                  //refreshItems={
+                  //  selectedGrid === 1
+                  //    ? () => updateCreated(selectedCreatedSortField, false)
+                  //    : () => updateOwned(selectedOwnedSortField, false)
+                  //}
                 />
               </div>
             </div>

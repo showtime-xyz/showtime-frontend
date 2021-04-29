@@ -11,7 +11,11 @@ import mixpanel from "mixpanel-browser";
 import AppContext from "../context/app-context";
 import MiniFollowButton from "./MiniFollowButton";
 import TokenCardImage from "../components/TokenCardImage";
-import { removeTags, formatAddressShort } from "../lib/utilities";
+import {
+  removeTags,
+  formatAddressShort,
+  truncateWithEllipses,
+} from "../lib/utilities";
 
 const TokenCard = ({
   item,
@@ -31,7 +35,7 @@ const TokenCard = ({
   pageProfile,
 }) => {
   const [moreShown, setMoreShown] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  //const [imageLoaded, setImageLoaded] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [muted, setMuted] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -39,13 +43,7 @@ const TokenCard = ({
   const context = useContext(AppContext);
 
   const divRef = useRef();
-  const imageRef = useRef();
-
-  const truncateWithEllipses = (text, max) => {
-    if (text) {
-      return text.substr(0, max - 1) + (text.length > max ? "..." : "");
-    }
-  };
+  //const imageRef = useRef(); // Ref getting passed in from TokenGrid item instead
 
   const handleHide = async () => {
     setUserHiddenItems([...userHiddenItems, item.nft_id]);
@@ -121,7 +119,7 @@ const TokenCard = ({
           className="mx-auto sm:rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all bg-white"
         >
           <div
-            ref={imageRef}
+            ref={item.imageRef}
             className="p-4 flex flex-row items-center relative"
           >
             <div className="pr-2 ">
@@ -332,8 +330,8 @@ const TokenCard = ({
                 loop
                 controls
                 muted={muted}
-                width={imageRef?.current?.clientWidth}
-                height={imageRef?.current?.clientWidth}
+                width={item.imageRef?.current?.clientWidth}
+                height={item.imageRef?.current?.clientWidth}
                 playsinline
                 //onReady={this.setSpans}
               />
@@ -342,7 +340,7 @@ const TokenCard = ({
             <div
               style={{
                 position: "relative",
-                height: imageRef?.current?.clientWidth,
+                height: item.imageRef?.current?.clientWidth,
               }}
             >
               <div
@@ -374,9 +372,9 @@ const TokenCard = ({
                 >
                   <TokenCardImage
                     nft={item}
-                    onLoad={() => {
-                      setImageLoaded(true);
-                    }}
+                    //onLoad={() => {
+                    //  setImageLoaded(true);
+                    //}}
                   />
                 </div>
               </div>

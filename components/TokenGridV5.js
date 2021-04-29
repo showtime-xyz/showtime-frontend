@@ -9,7 +9,13 @@ import TokenCard from "./TokenCard";
 import useKeyPress from "../hooks/useKeyPress";
 import ModalTokenDetail from "./ModalTokenDetail";
 
-const TokenGridV4 = ({
+const TokenGridV5 = ({
+  dataLength,
+  hasMore,
+  next,
+  endMessage,
+  scrollThreshold,
+
   items,
   isDetail,
   onFinish,
@@ -18,32 +24,34 @@ const TokenGridV4 = ({
   isMyProfile,
   openCardMenu,
   setOpenCardMenu,
-  userHiddenItems,
-  setUserHiddenItems,
-  showUserHiddenItems,
+  //userHiddenItems,
+  //setUserHiddenItems,
+  //showUserHiddenItems,
   refreshItems,
   detailsModalCloseOnKeyChange,
   changeSpotlightItem,
   extraColumn,
   pageProfile,
+  //fetchMoreData,
+  isLoadingMore,
 }) => {
   const context = useContext(AppContext);
   const [itemsList, setItemsList] = useState([]);
-  const [showDuplicateNFTs, setShowDuplicateNFTs] = useState({});
-  const [itemsShowing, setItemsShowing] = useState(0);
-  const deduplicatedItemsList = itemsList
-    .filter((item) => {
-      return showUserHiddenItems
-        ? true
-        : !userHiddenItems
-        ? true
-        : !userHiddenItems.includes(item.nft_id);
-    })
-    .filter((item) => {
-      const hash = item?.token_img_url || item?.token_animation_url;
-      return !item?.hidden_duplicate ? true : showDuplicateNFTs[hash];
-    });
-  const [hasMore, setHasMore] = useState(true);
+  //const [showDuplicateNFTs, setShowDuplicateNFTs] = useState({});
+  //const [itemsShowing, setItemsShowing] = useState(0);
+  //const deduplicatedItemsList = itemsList
+  //  .filter((item) => {
+  //    return showUserHiddenItems
+  //      ? true
+  //      : !userHiddenItems
+  //      ? true
+  //      : !userHiddenItems.includes(item.nft_id);
+  //  })
+  //  .filter((item) => {
+  //    const hash = item?.token_img_url || item?.token_animation_url;
+  //    return !item?.hidden_duplicate ? true : showDuplicateNFTs[hash];
+  //  });
+  //const [hasMore, setHasMore] = useState(true);
   const [currentlyPlayingVideo, setCurrentlyPlayingVideo] = useState(null);
   const [currentlyOpenModal, setCurrentlyOpenModal] = useState(null);
 
@@ -65,27 +73,28 @@ const TokenGridV4 = ({
   }, [detailsModalCloseOnKeyChange]);
 
   const goToNext = () => {
-    const currentIndex = deduplicatedItemsList.indexOf(currentlyOpenModal);
-    if (currentIndex < deduplicatedItemsList.length - 1) {
-      if (itemsShowing - 6 < currentIndex - 1) {
-        fetchMoreData();
-      }
+    const currentIndex = itemsList.indexOf(currentlyOpenModal);
+    if (currentIndex < itemsList.length - 1) {
+      //if (itemsShowing - 6 < currentIndex - 1) {
+      //  fetchMoreData();
+      //}
 
       // Get position of next card image and scroll down
       const bodyRect = document.body.getBoundingClientRect();
-      if (deduplicatedItemsList[currentIndex + 1].imageRef.current) {
+      console.log(bodyRect);
+      console.log(itemsList[currentIndex + 1]);
+      if (itemsList[currentIndex + 1].imageRef.current) {
         window.scrollTo({
           top:
-            deduplicatedItemsList[
-              currentIndex + 1
-            ].imageRef.current.getBoundingClientRect().top -
+            itemsList[currentIndex + 1].imageRef.current.getBoundingClientRect()
+              .top -
             bodyRect.top -
             70,
           behavior: "smooth",
         });
       }
 
-      setCurrentlyOpenModal(deduplicatedItemsList[currentIndex + 1]);
+      setCurrentlyOpenModal(itemsList[currentIndex + 1]);
     }
   };
 
@@ -97,23 +106,22 @@ const TokenGridV4 = ({
   }, [rightPress, itemsList]);
 
   const goToPrevious = () => {
-    const currentIndex = deduplicatedItemsList.indexOf(currentlyOpenModal);
+    const currentIndex = itemsList.indexOf(currentlyOpenModal);
     if (currentIndex - 1 >= 0) {
       // Get position of previous card image and scroll up
       const bodyRect = document.body.getBoundingClientRect();
-      if (deduplicatedItemsList[currentIndex - 1].imageRef.current) {
+      if (itemsList[currentIndex - 1].imageRef.current) {
         window.scrollTo({
           top:
-            deduplicatedItemsList[
-              currentIndex - 1
-            ].imageRef.current.getBoundingClientRect().top -
+            itemsList[currentIndex - 1].imageRef.current.getBoundingClientRect()
+              .top -
             bodyRect.top -
             70,
           behavior: "smooth",
         });
       }
 
-      setCurrentlyOpenModal(deduplicatedItemsList[currentIndex - 1]);
+      setCurrentlyOpenModal(itemsList[currentIndex - 1]);
     }
   };
 
@@ -151,17 +159,18 @@ const TokenGridV4 = ({
       itemsWithRefs.push(item);
     });
     setItemsList(itemsWithRefs);
-    setHasMore(true);
+    //setHasMore(true);
   }, [items]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (context.isMobile) {
       setItemsShowing(4);
     } else {
       setItemsShowing(itemsToLoad);
     }
-  }, [context.isMobile]);
+  }, [context.isMobile]);*/
 
+  /*
   const fetchMoreData = () => {
     if (itemsShowing + itemsToLoad > itemsList.length) {
       setHasMore(false);
@@ -169,8 +178,9 @@ const TokenGridV4 = ({
     }
     setItemsShowing(itemsShowing + itemsToLoad);
   };
+  */
 
-  const currentIndex = deduplicatedItemsList.findIndex(
+  const currentIndex = itemsList.findIndex(
     (i) => i.nft_id === currentlyOpenModal?.nft_id
   );
 
@@ -196,56 +206,65 @@ const TokenGridV4 = ({
             goToNext={goToNext}
             goToPrevious={goToPrevious}
             columns={context.columns}
-            hasNext={!(currentIndex === deduplicatedItemsList.length - 1)}
+            hasNext={!(currentIndex === itemsList.length - 1)}
             hasPrevious={!(currentIndex === 0)}
           />
         </>
       ) : null}
       <InfiniteScroll
-        dataLength={itemsShowing}
-        next={fetchMoreData}
+        dataLength={dataLength}
+        next={next}
         hasMore={hasMore}
+        endMessage={endMessage}
+        scrollThreshold={scrollThreshold}
       >
         {isLoading ? (
           <div className="mx-auto items-center flex justify-center overflow-hidden py-4 mt-16">
             <div className="loading-card-spinner" />
           </div>
         ) : (
-          <div
-            className={`grid ${
-              extraColumn
-                ? "md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                : "lg:grid-cols-2 xl:grid-cols-3"
-            }  overflow-hidden`}
-          >
-            {deduplicatedItemsList.slice(0, itemsShowing).map((item) => (
-              <TokenCard
-                key={item.nft_id}
-                item={item}
-                columns={context.columns}
-                isMobile={context.isMobile}
-                currentlyPlayingVideo={currentlyPlayingVideo}
-                setCurrentlyPlayingVideo={setCurrentlyPlayingVideo}
-                currentlyOpenModal={currentlyOpenModal}
-                setCurrentlyOpenModal={setCurrentlyOpenModal}
-                showDuplicateNFTs={showDuplicateNFTs}
-                setShowDuplicateNFTs={setShowDuplicateNFTs}
-                isMyProfile={isMyProfile}
-                listId={listId}
-                openCardMenu={openCardMenu}
-                setOpenCardMenu={setOpenCardMenu}
-                userHiddenItems={userHiddenItems}
-                setUserHiddenItems={setUserHiddenItems}
-                refreshItems={refreshItems}
-                changeSpotlightItem={changeSpotlightItem}
-                pageProfile={pageProfile}
-              />
-            ))}
-          </div>
+          <>
+            <div
+              className={`grid ${
+                extraColumn
+                  ? "md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                  : "lg:grid-cols-2 xl:grid-cols-3"
+              }  overflow-hidden`}
+            >
+              {items.map((item) => (
+                <TokenCard
+                  key={item.nft_id}
+                  item={item}
+                  //columns={context.columns}
+                  //isMobile={context.isMobile}
+                  currentlyPlayingVideo={currentlyPlayingVideo}
+                  setCurrentlyPlayingVideo={setCurrentlyPlayingVideo}
+                  currentlyOpenModal={currentlyOpenModal}
+                  setCurrentlyOpenModal={setCurrentlyOpenModal}
+                  //showDuplicateNFTs={showDuplicateNFTs}
+                  //setShowDuplicateNFTs={setShowDuplicateNFTs}
+                  isMyProfile={isMyProfile}
+                  listId={listId}
+                  openCardMenu={openCardMenu}
+                  setOpenCardMenu={setOpenCardMenu}
+                  //userHiddenItems={userHiddenItems}
+                  //setUserHiddenItems={setUserHiddenItems}
+                  //refreshItems={refreshItems}
+                  changeSpotlightItem={changeSpotlightItem}
+                  pageProfile={pageProfile}
+                />
+              ))}
+            </div>
+            {isLoadingMore ? (
+              <div className="mx-auto items-center flex justify-center overflow-hidden py-4">
+                <div className="loading-card-spinner" />
+              </div>
+            ) : null}
+          </>
         )}
       </InfiniteScroll>
     </>
   );
 };
 
-export default TokenGridV4;
+export default TokenGridV5;
