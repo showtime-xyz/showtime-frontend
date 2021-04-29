@@ -154,6 +154,7 @@ const Profile = ({
   const [ownedItems, setOwnedItems] = useState([]);
   const [likedItems, setLikedItems] = useState([]);
   const [spotlightItem, setSpotlightItem] = useState();
+  const [followersCount, setFollowersCount] = useState(followers_count || 0);
 
   const [createdHiddenItems, setCreatedHiddenItems] = useState([]);
   const [ownedHiddenItems, setOwnedHiddenItems] = useState([]);
@@ -191,6 +192,7 @@ const Profile = ({
 
       setSelectedCreatedSortField(default_created_sort_id || 1);
       setSelectedOwnedSortField(default_owned_sort_id || 1);
+      setFollowersCount(followers_count || 0);
     }
 
     const response_profile = await backend.get(
@@ -302,6 +304,7 @@ const Profile = ({
 
   const handleFollow = async () => {
     setIsFollowed(true);
+    setFollowersCount(followersCount + 1);
     // Change myFollows via setMyFollows
     context.setMyFollows([
       {
@@ -341,6 +344,7 @@ const Profile = ({
 
   const handleUnfollow = async () => {
     setIsFollowed(false);
+    setFollowersCount(followersCount - 1);
     // Change myLikes via setMyLikes
     context.setMyFollows(
       context.myFollows.filter((item) => item.profile_id != profile_id)
@@ -814,7 +818,11 @@ const Profile = ({
                       >
                         <div className="text-sm mr-2">
                           {following && following.length !== null
-                            ? Number(following_count).toLocaleString()
+                            ? Number(
+                                isMyProfile
+                                  ? context.myFollows.length
+                                  : following_count
+                              ).toLocaleString()
                             : null}
                         </div>
                         <div className="text-sm text-gray-500 mr-5">
@@ -829,7 +837,7 @@ const Profile = ({
                       >
                         <div className="text-sm  mr-2">
                           {followers && followers.length !== null
-                            ? Number(followers_count).toLocaleString()
+                            ? Number(followersCount).toLocaleString()
                             : null}
                         </div>
                         <div className="text-sm text-gray-500 mr-5">
