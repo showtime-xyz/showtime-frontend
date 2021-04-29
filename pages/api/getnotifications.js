@@ -4,7 +4,9 @@ import CookieService from "../../lib/cookie";
 export default async (req, res) => {
   let user = null;
   let data_notifications = { data: [] };
-
+  const body = JSON.parse(req.body);
+  const queryPage = body.page || 1;
+  const limit = body.limit || 7;
   try {
     user = await Iron.unseal(
       CookieService.getAuthToken(req.cookies),
@@ -21,7 +23,7 @@ export default async (req, res) => {
     //console.log(email);
 
     const res_notifications = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/notifications`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/notifications?page=${queryPage}&limit=${limit}`,
       {
         headers: {
           "X-Authenticated-User": user.publicAddress,
