@@ -367,6 +367,7 @@ const Profile = ({
   const fetchItems = async (initial_load, lists) => {
     // clear out existing from page (if switching profiles)
     if (initial_load) {
+      //setSwitchInProgress(true);
       setMoreBioShown(false);
       setIsLoadingCards(true);
 
@@ -382,11 +383,12 @@ const Profile = ({
       setHasMore(true);
       setItems([]);
       setCollections([]);
-      setSwitchInProgress(false);
+      //setSwitchInProgress(false);
     }
 
     // Populate initial state
     if (lists.default_list_id == 1) {
+      setSwitchInProgress(true);
       // Created
       const result = await fetch(`/api/getprofilenfts`, {
         method: "post",
@@ -403,13 +405,15 @@ const Profile = ({
       const { data } = await result.json();
       setItems(data.items);
       setHasMore(data.has_more);
+      setSwitchInProgress(false);
     } else if (lists.default_list_id == 2) {
+      setSwitchInProgress(true);
       // Owned
       const result = await fetch(`/api/getprofilenfts`, {
         method: "post",
         body: JSON.stringify({
           profileId: profile_id,
-          page: page,
+          page: 1,
           limit: perPage,
           listId: 2,
           sortId: lists.lists[1].sort_id,
@@ -420,13 +424,15 @@ const Profile = ({
       const { data } = await result.json();
       setItems(data.items);
       setHasMore(data.has_more);
+      setSwitchInProgress(false);
     } else if (lists.default_list_id == 3) {
+      setSwitchInProgress(true);
       // Liked
       const result = await fetch(`/api/getprofilenfts`, {
         method: "post",
         body: JSON.stringify({
           profileId: profile_id,
-          page: page,
+          page: 1,
           limit: perPage,
           listId: 3,
           sortId: lists.lists[2].sort_id,
@@ -437,6 +443,7 @@ const Profile = ({
       const { data } = await result.json();
       setItems(data.items);
       setHasMore(data.has_more);
+      setSwitchInProgress(false);
     }
 
     if (initial_load) {
