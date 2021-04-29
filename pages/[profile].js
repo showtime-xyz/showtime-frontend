@@ -396,6 +396,7 @@ const Profile = ({
 
   const handleFollow = async () => {
     setIsFollowed(true);
+    setFollowersCount(followersCount + 1);
     // Change myFollows via setMyFollows
     context.setMyFollows([
       {
@@ -435,6 +436,7 @@ const Profile = ({
 
   const handleUnfollow = async () => {
     setIsFollowed(false);
+    setFollowersCount(followersCount - 1);
     // Change myLikes via setMyLikes
     context.setMyFollows(
       context.myFollows.filter((item) => item.profile_id != profile_id)
@@ -801,7 +803,11 @@ const Profile = ({
                       >
                         <div className="text-sm mr-2">
                           {following && following.length !== null
-                            ? Number(following_count).toLocaleString()
+                            ? Number(
+                                isMyProfile
+                                  ? context.myFollows.length
+                                  : following_count
+                              ).toLocaleString()
                             : null}
                         </div>
                         <div className="text-sm text-gray-500 mr-5">
@@ -816,7 +822,7 @@ const Profile = ({
                       >
                         <div className="text-sm  mr-2">
                           {followers && followers.length !== null
-                            ? Number(followers_count).toLocaleString()
+                            ? Number(followersCount).toLocaleString()
                             : null}
                         </div>
                         <div className="text-sm text-gray-500 mr-5">
