@@ -11,6 +11,7 @@ export default async (req, res) => {
   const listId = body.listId || 1;
   const sortId = body.sortId || 1;
   const showHidden = body.showHidden || 0;
+  const collectionId = body.collectionId || 0;
 
   try {
     let publicAddress;
@@ -21,15 +22,10 @@ export default async (req, res) => {
         Iron.defaults
       );
       publicAddress = user.publicAddress;
-    } catch (err) {
-      if (page > 8) {
-        res.statusCode = 200;
-        res.json(data_activity);
-      }
-    }
+    } catch (err) {}
 
     const res_activity = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/profile_nfts?profile_id=${profileId}&page=${page}&limit=${limit}&list_id=${listId}&sort_id=${sortId}&show_hidden=${showHidden}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/profile_nfts?profile_id=${profileId}&page=${page}&limit=${limit}&list_id=${listId}&sort_id=${sortId}&show_hidden=${showHidden}&collection_id=${collectionId}`,
       {
         headers: {
           "X-Authenticated-User": publicAddress,
@@ -38,6 +34,7 @@ export default async (req, res) => {
       }
     );
     data_activity = await res_activity.json();
+    //console.log(data_activity);
   } catch {}
 
   res.statusCode = 200;

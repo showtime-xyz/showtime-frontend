@@ -15,7 +15,6 @@ import ModalAddWallet from "../components/ModalAddWallet";
 import ModalAddEmail from "../components/ModalAddEmail.js";
 import {
   formatAddressShort,
-  //removeTags,
   truncateWithEllipses,
   classNames,
 } from "../lib/utilities";
@@ -30,9 +29,7 @@ import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import {
   faHeart as fasHeart,
   faFingerprint,
-  //faLink,
   faImage as fasImage,
-  //faArrowRight,
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -51,52 +48,27 @@ export async function getServerSideProps(context) {
   let response_profile;
   try {
     response_profile = await backend.get(`/v2/profile_server/${slug_address}`);
-    const data_profile = response_profile.data.data;
-    const name = data_profile.profile.name;
-    const img_url = data_profile.profile.img_url;
-    const cover_url = data_profile.profile.cover_url;
-    const wallet_addresses = data_profile.profile.wallet_addresses;
-    const wallet_addresses_excluding_email =
-      data_profile.profile.wallet_addresses_excluding_email;
-    const followers_list = data_profile.followers;
-    const followers_count = data_profile.followers_count;
-    const following_list = data_profile.following;
-    const following_count = data_profile.following_count;
-    const bio = data_profile.profile.bio;
-    const website_url = data_profile.profile.website_url;
-    const profile_id = data_profile.profile.profile_id;
-    const username = data_profile.profile.username;
-    const default_list_id = data_profile.profile.default_list_id;
-    const default_created_sort_id =
-      data_profile.profile.default_created_sort_id;
-    const default_owned_sort_id = data_profile.profile.default_owned_sort_id;
-    const featured_nft_img_url = data_profile.profile.featured_nft_img_url;
-    const featured_nft = data_profile.featured_nft;
-    const links = data_profile.profile.links;
+    const {
+      profile,
+      followers: followers_list,
+      followers_count,
+      following: following_list,
+      following_count,
+      featured_nft,
+      lists,
+    } = response_profile.data.data;
 
     return {
       props: {
-        name,
-        img_url,
-        cover_url,
-        wallet_addresses,
-        wallet_addresses_excluding_email,
+        profile,
         slug_address,
         followers_list,
         followers_count,
         following_list,
         following_count,
-        bio,
-        profile_id,
-        username,
-        default_list_id,
-        default_created_sort_id,
-        default_owned_sort_id,
-        featured_nft_img_url,
         featured_nft,
-        website_url,
-        links,
-      }, // will be passed to the page component as props
+        lists,
+      },
     };
   } catch (err) {
     if (err.response.status == 400) {
@@ -113,148 +85,54 @@ export async function getServerSideProps(context) {
 }
 
 const Profile = ({
-  name,
-  img_url,
-  cover_url,
-  wallet_addresses,
-  wallet_addresses_excluding_email,
+  profile,
   slug_address,
   followers_list,
   followers_count,
   following_list,
   following_count,
-  bio,
-  profile_id,
-  username,
-  default_list_id,
-  default_created_sort_id,
-  default_owned_sort_id,
-  featured_nft_img_url,
   featured_nft,
-  website_url,
-  links,
+  lists,
 }) => {
+  const {
+    name,
+    img_url,
+    cover_url,
+    wallet_addresses,
+    wallet_addresses_excluding_email,
+    bio,
+    website_url,
+    profile_id,
+    username,
+    featured_nft_img_url,
+    links,
+  } = profile;
+
   const context = useContext(AppContext);
 
+  // Profile details
   const [isMyProfile, setIsMyProfile] = useState();
-  const [isFollowed, setIsFollowed] = useState(false);
   const [hasEmailAddress, setHasEmailAddress] = useState(false);
-
   const initialBioLength = context.isMobile ? 130 : 150;
-
-  useEffect(() => {
-    var it_is_followed = false;
-    _.forEach(context.myFollows, (follow) => {
-      if (follow?.profile_id === profile_id) {
-        it_is_followed = true;
-      }
-    });
-    setIsFollowed(it_is_followed);
-  }, [context.myFollows, profile_id]);
-
-  const [createdItems, setCreatedItems] = useState([]);
-  const [ownedItems, setOwnedItems] = useState([]);
-  const [likedItems, setLikedItems] = useState([]);
-  const [spotlightItem, setSpotlightItem] = useState();
-
-  const [createdHiddenItems, setCreatedHiddenItems] = useState([]);
-  const [ownedHiddenItems, setOwnedHiddenItems] = useState([]);
-  const [likedHiddenItems, setLikedHiddenItems] = useState([]);
-
-  const [isLoadingCards, setIsLoadingCards] = useState(false);
-  const [isRefreshingCards, setIsRefreshingCards] = useState(false);
-
-  const [selectedCreatedSortField, setSelectedCreatedSortField] = useState(
-    default_created_sort_id || 1
-  );
-  const [selectedOwnedSortField, setSelectedOwnedSortField] = useState(
-    default_owned_sort_id || 1
-  );
-
-  // Fetch the created/owned/liked items
-  const fetchItems = async (initial_load) => {
-    // clear out existing from page (if switching profiles)
-    if (initial_load) {
-      setMoreBioShown(false);
-      setIsLoadingCards(true);
-
-      setCreatedItems([]);
-      setOwnedItems([]);
-      setLikedItems([]);
-
-      setCreatedHiddenItems([]);
-      setOwnedHiddenItems([]);
-      setLikedHiddenItems([]);
-
-      setSpotlightItem(featured_nft);
-
-      setSelectedCreatedSortField(default_created_sort_id || 1);
-      setSelectedOwnedSortField(default_owned_sort_id || 1);
-    }
-
-    const response_profile = await backend.get(
-      `/v2/profile_client/${slug_address}?limit=150`
-    );
-    const data_profile = response_profile.data.data;
-    setCreatedHiddenItems(data_profile.created_hidden);
-    setOwnedHiddenItems(data_profile.owned_hidden);
-    setLikedHiddenItems(data_profile.liked_hidden);
-
-    setCreatedItems(
-      data_profile.created.filter(
-        (item) =>
-          item.token_hidden !== 1 &&
-          (item.token_img_url || item.token_animation_url)
-        //&& !data_profile.created_hidden.includes(item.nft_id)
-      )
-    );
-    setOwnedItems(
-      data_profile.owned.filter(
-        (item) =>
-          item.token_hidden !== 1 &&
-          (item.token_img_url || item.token_animation_url)
-        //&& !data_profile.owned_hidden.includes(item.nft_id)
-      )
-    );
-    setLikedItems(
-      data_profile.liked.filter(
-        (item) =>
-          item.token_hidden !== 1 &&
-          (item.token_img_url || item.token_animation_url)
-        //&& !data_profile.liked_hidden.includes(item.nft_id)
-      )
-    );
-    if (initial_load) {
-      setIsLoadingCards(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchItems(true);
-  }, [profile_id]);
-
-  useEffect(() => {
-    if (
-      following_list
-        .map((item) => item.profile_id)
-        .includes(context.myProfile?.profile_id)
-    ) {
-      setFollowingMe(true);
-    } else {
-      setFollowingMe(false);
-    }
-  }, [following_list, context.myProfile?.profile_id]);
-
-  const [followers, setFollowers] = useState([]);
-  useEffect(() => {
-    setFollowers(followers_list);
-  }, [followers_list]);
-
-  const [following, setFollowing] = useState([]);
-  useEffect(() => {
-    setFollowing(following_list);
-  }, [following_list]);
-
+  const [moreBioShown, setMoreBioShown] = useState(false);
+  const profileToDisplay = isMyProfile
+    ? context.myProfile
+    : {
+        name,
+        website_url,
+        bio,
+        img_url,
+        cover_url,
+        username,
+        links: links.map((link) => ({
+          name: link.type__name,
+          prefix: link.type__prefix,
+          icon_url: link.type__icon_url,
+          type_id: link.type_id,
+          user_input: link.user_input,
+        })),
+        wallet_addresses_excluding_email,
+      };
   useEffect(() => {
     // Wait for identity to resolve before recording the view
     if (typeof context.user !== "undefined") {
@@ -293,6 +171,223 @@ const Profile = ({
     context.user ? context.user.publicAddress : null,
     slug_address,
   ]);
+
+  // Followers
+  const [followers, setFollowers] = useState([]);
+  useEffect(() => {
+    setFollowers(followers_list);
+  }, [followers_list]);
+
+  const [following, setFollowing] = useState([]);
+  useEffect(() => {
+    setFollowing(following_list);
+  }, [following_list]);
+
+  // Followed?
+  const [isFollowed, setIsFollowed] = useState(false);
+  useEffect(() => {
+    if (context.myFollows) {
+      setIsFollowed(
+        context.myFollows.map((p) => p.profile_id).includes(profile_id)
+      );
+    }
+  }, [context.myFollows, profile_id]);
+
+  // Follow back?
+  const [followingMe, setFollowingMe] = useState(false);
+  useEffect(() => {
+    if (
+      following_list
+        .map((item) => item.profile_id)
+        .includes(context.myProfile?.profile_id)
+    ) {
+      setFollowingMe(true);
+    } else {
+      setFollowingMe(false);
+    }
+  }, [following_list, context.myProfile?.profile_id]);
+
+  // Spotlight
+  const [spotlightItem, setSpotlightItem] = useState();
+  const handleChangeSpotlightItem = async (nft) => {
+    const nftId = nft ? nft.nft_id : null;
+    setSpotlightItem(nft);
+
+    // Post changes to the API
+    await fetch("/api/updatespotlight", {
+      method: "post",
+      body: JSON.stringify({
+        nft_id: nftId,
+      }),
+    });
+  };
+
+  // NFT grid
+  // Left menu
+  const [menuLists, setMenuLists] = useState(lists.lists);
+
+  // Grid
+  const gridRef = useRef();
+  const [selectedGrid, setSelectedGrid] = useState(1);
+  const sortingOptionsList = [
+    //{ label: "Select...", key: "" },
+    ...Object.keys(SORT_FIELDS).map((key) => SORT_FIELDS[key]),
+  ];
+
+  const [items, setItems] = useState([]);
+  const [collections, setCollections] = useState([]);
+  const [collectionId, setCollectionId] = useState(0);
+  const [isLoadingCards, setIsLoadingCards] = useState(false);
+  const [isRefreshingCards, setIsRefreshingCards] = useState(false);
+  const [selectedCreatedSortField, setSelectedCreatedSortField] = useState(
+    lists.lists[0].sort_id || 1
+  );
+  const [selectedOwnedSortField, setSelectedOwnedSortField] = useState(
+    lists.lists[1].sort_id || 1
+  );
+  const [selectedLikedSortField, setSelectedLikedSortField] = useState(2);
+
+  const updateItems = async (listId, sortId, collectionId, showCardRefresh) => {
+    if (showCardRefresh) {
+      setIsRefreshingCards(true);
+    }
+
+    // Created
+    const result = await fetch(`/api/getprofilenfts`, {
+      method: "post",
+      body: JSON.stringify({
+        profileId: profile_id,
+        page: 1,
+        limit: 9,
+        listId: listId,
+        sortId: sortId,
+        showHidden: 0,
+        collectionId: collectionId,
+      }),
+    });
+    const { data } = await result.json();
+    setItems(data.items);
+
+    if (showCardRefresh) {
+      setIsRefreshingCards(false);
+    }
+  };
+
+  const handleSortChange = (sortId) => {
+    const setSelectedSortField =
+      selectedGrid === 1
+        ? setSelectedCreatedSortField
+        : selectedGrid === 2
+        ? setSelectedOwnedSortField
+        : setSelectedLikedSortField;
+
+    setSelectedSortField(sortId);
+    updateItems(selectedGrid, sortId, collectionId, true);
+  };
+
+  const handleListChange = (listId) => {
+    setSelectedGrid(listId);
+    setCollectionId(0);
+
+    const sortId =
+      listId === 1
+        ? selectedCreatedSortField
+        : listId === 2
+        ? selectedOwnedSortField
+        : selectedLikedSortField;
+    updateItems(listId, sortId, 0, true);
+  };
+
+  const handleCollectionChange = (collectionId) => {
+    setCollectionId(collectionId);
+
+    const sortId =
+      selectedGrid === 1
+        ? selectedCreatedSortField
+        : selectedGrid === 2
+        ? selectedOwnedSortField
+        : selectedLikedSortField;
+    updateItems(selectedGrid, sortId, collectionId, true);
+  };
+
+  // Fetch the created/owned/liked items
+  const fetchItems = async (initial_load, lists) => {
+    // clear out existing from page (if switching profiles)
+    if (initial_load) {
+      setMoreBioShown(false);
+      setIsLoadingCards(true);
+
+      setSpotlightItem(featured_nft);
+
+      setSelectedCreatedSortField(lists.lists[0].sort_id || 1);
+      setSelectedOwnedSortField(lists.lists[1].sort_id || 1);
+      setSelectedLikedSortField(2);
+
+      setCollectionId(0);
+      setMenuLists([]);
+      setItems([]);
+      setCollections([]);
+    }
+
+    // Populate initial state
+    if (lists.default_list_id == 1) {
+      // Created
+      const result = await fetch(`/api/getprofilenfts`, {
+        method: "post",
+        body: JSON.stringify({
+          profileId: profile_id,
+          page: 1,
+          limit: 9,
+          listId: 1,
+          sortId: lists.lists[0].sort_id,
+          showHidden: 0,
+          collectionId: 0,
+        }),
+      });
+      const { data } = await result.json();
+      setItems(data.items);
+    } else if (lists.default_list_id == 2) {
+      // Owned
+      const result = await fetch(`/api/getprofilenfts`, {
+        method: "post",
+        body: JSON.stringify({
+          profileId: profile_id,
+          page: 1,
+          limit: 9,
+          listId: 2,
+          sortId: lists.lists[1].sort_id,
+          showHidden: 0,
+          collectionId: 0,
+        }),
+      });
+      const { data } = await result.json();
+      setItems(data.items);
+    } else if (lists.default_list_id == 3) {
+      // Liked
+      const result = await fetch(`/api/getprofilenfts`, {
+        method: "post",
+        body: JSON.stringify({
+          profileId: profile_id,
+          page: 1,
+          limit: 9,
+          listId: 3,
+          sortId: lists.lists[2].sort_id,
+          showHidden: 0,
+          collectionId: 0,
+        }),
+      });
+      const { data } = await result.json();
+      setItems(data.items);
+    }
+
+    if (initial_load) {
+      setIsLoadingCards(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchItems(true, lists);
+  }, [profile_id, lists]);
 
   const handleLoggedOutFollow = () => {
     mixpanel.track("Follow but logged out");
@@ -359,20 +454,17 @@ const Profile = ({
     mixpanel.track("Unfollowed profile");
   };
 
+  // Modal states
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [walletModalOpen, setWalletModalOpen] = useState(false);
   const [emailModalOpen, setEmailModalOpen] = useState(false);
   const [pictureModalOpen, setPictureModalOpen] = useState(false);
   const [coverModalOpen, setCoverModalOpen] = useState(false);
-  const [followingMe, setFollowingMe] = useState(false);
+  const [showFollowers, setShowFollowers] = useState(false);
+  const [showFollowing, setShowFollowing] = useState(false);
+  const [openCardMenu, setOpenCardMenu] = useState(null);
 
-  const [selectedGrid, setSelectedGrid] = useState(1);
-
-  const sortingOptionsList = [
-    //{ label: "Select...", key: "" },
-    ...Object.keys(SORT_FIELDS).map((key) => SORT_FIELDS[key]),
-  ];
-
+  /*
   const updateCreated = async (selectedCreatedSortField, showCardRefresh) => {
     if (showCardRefresh) {
       setIsRefreshingCards(true);
@@ -416,58 +508,17 @@ const Profile = ({
       setIsRefreshingCards(false);
     }
   };
+  */
 
-  const [showFollowers, setShowFollowers] = useState(false);
-  const [showFollowing, setShowFollowing] = useState(false);
-
-  const [openCardMenu, setOpenCardMenu] = useState(null);
   const [showUserHiddenItems, setShowUserHiddenItems] = useState(false);
 
   useEffect(() => {
-    // if user has a default_list_id configured, use it
-    if (default_list_id) {
-      setSelectedGrid(default_list_id);
-    } else {
-      // If use doesn't have default_tab, pick first non-empty tab
-      if (isLoadingCards) {
-        setSelectedGrid(1);
-      } else {
-        if (
-          createdItems.length > 0 &&
-          createdItems.length >= ownedItems.length
-        ) {
-          setSelectedGrid(1);
-        } else if (ownedItems.length > 0) {
-          setSelectedGrid(2);
-        } else {
-          setSelectedGrid(3);
-        }
-      }
-    }
+    setSelectedGrid(lists.default_list_id);
+    setMenuLists(lists.lists);
 
     setShowFollowers(false);
     setShowFollowing(false);
-  }, [
-    profile_id,
-    default_list_id,
-    //createdItems.length,
-    //ownedItems.length,
-    isLoadingCards,
-  ]);
-
-  const handleChangeSpotlightItem = async (nft) => {
-    const nftId = nft ? nft.nft_id : null;
-
-    setSpotlightItem(nft);
-
-    // Post changes to the API
-    await fetch("/api/updatespotlight", {
-      method: "post",
-      body: JSON.stringify({
-        nft_id: nftId,
-      }),
-    });
-  };
+  }, [profile_id, lists.default_list_id, isLoadingCards]);
 
   // profilePill Edit profile actions
   const editAccount = () => {
@@ -493,86 +544,6 @@ const Profile = ({
   const logout = async () => {
     await context.logOut();
     setIsMyProfile(false);
-  };
-
-  const gridRef = useRef();
-
-  const createdCount = isLoadingCards
-    ? null
-    : showUserHiddenItems
-    ? createdItems.length
-    : createdItems.length == 150 // go ahead and say 150+ if we are at max items
-    ? 150
-    : createdItems.filter((item) => !createdHiddenItems.includes(item.nft_id))
-        .length;
-
-  const ownedCount = isLoadingCards
-    ? null
-    : showUserHiddenItems
-    ? ownedItems.length
-    : ownedItems.length == 150 // go ahead and say 150+ if we are at max items
-    ? 150
-    : ownedItems.filter((item) => !ownedHiddenItems.includes(item.nft_id))
-        .length;
-
-  const [moreBioShown, setMoreBioShown] = useState(false);
-
-  const likedCount = isLoadingCards
-    ? null
-    : showUserHiddenItems
-    ? likedItems.length
-    : likedItems.length == 150 // go ahead and say 150+ if we are at max items
-    ? 150
-    : likedItems.filter((item) => !likedHiddenItems.includes(item.nft_id))
-        .length;
-
-  const profileToDisplay = isMyProfile
-    ? context.myProfile
-    : {
-        name,
-        website_url,
-        bio,
-        img_url,
-        cover_url,
-        username,
-        links: links.map((link) => ({
-          name: link.type__name,
-          prefix: link.type__prefix,
-          icon_url: link.type__icon_url,
-          type_id: link.type_id,
-          user_input: link.user_input,
-        })),
-        wallet_addresses_excluding_email,
-      };
-
-  /*
-  const [showSocialLinks, setShowSocialLinks] = useState(false);
-
-  useEffect(() => {
-    if (context.isMobile === true) {
-      profileToDisplay?.links?.length > 2 ||
-      (profileToDisplay?.links?.length > 1 && profileToDisplay?.website_url)
-        ? setShowSocialLinks(false)
-        : setShowSocialLinks(true);
-    } else {
-      setShowSocialLinks(true);
-    }
-  }, [context?.isMobile, isLoadingCards]);
-
-  const toggleShowSocialLinks = () => {
-    setShowSocialLinks(!showSocialLinks);
-  };*/
-
-  const handleSortChange = (value) => {
-    const setSelectedSortField =
-      selectedGrid === 1
-        ? setSelectedCreatedSortField
-        : setSelectedOwnedSortField;
-
-    const updateList = selectedGrid === 1 ? updateCreated : updateOwned;
-
-    setSelectedSortField(value);
-    updateList(value, true);
   };
 
   return (
@@ -1014,7 +985,7 @@ const Profile = ({
                             : "Unnamed"}
                         </div>
                         <div className="flex-grow"></div>
-                        {isMyProfile ? (
+                        {/*isMyProfile ? (
                           <div className="flex sm:hidden">
                             <div className="flex-grow flex"></div>
                             <div
@@ -1032,13 +1003,14 @@ const Profile = ({
                                 : "Show hidden"}
                             </div>
                           </div>
-                        ) : null}
+                              ) : null*/}
                       </div>
                     </div>
                     <div className="flex flex-row sm:flex-col">
                       <div
                         onClick={() => {
-                          setSelectedGrid(1);
+                          //setSelectedGrid(1);
+                          handleListChange(1);
                           if (
                             gridRef?.current?.getBoundingClientRect().top < 0
                           ) {
@@ -1062,25 +1034,19 @@ const Profile = ({
                         </div>
                         <div className="flex-grow sm:hidden"></div>
                         <div className="sm:hidden mr-1">
-                          {createdCount}
-                          {createdCount == 150 ? "+" : ""}
+                          {menuLists ? menuLists[0].count : null}
                         </div>
                         <div>Created</div>
                         <div className="flex-grow"></div>
                         <div className="rounded-full text-center text-sm hidden sm:block">
-                          {createdCount}
-                          <span
-                            className={
-                              createdCount == 150 ? "visible" : "invisible"
-                            }
-                          >
-                            +
-                          </span>
+                          {menuLists ? menuLists[0].count : null}
+                          <span className="invisible">+</span>
                         </div>
                       </div>
                       <div
                         onClick={() => {
-                          setSelectedGrid(2);
+                          //setSelectedGrid(2);
+                          handleListChange(2);
                           if (
                             gridRef?.current?.getBoundingClientRect().top < 0
                           ) {
@@ -1104,25 +1070,19 @@ const Profile = ({
                         </div>
                         <div className="flex-grow sm:hidden"></div>
                         <div className="sm:hidden mr-1">
-                          {ownedCount}
-                          {ownedCount == 150 ? "+" : ""}
+                          {menuLists ? menuLists[1].count : null}
                         </div>
                         <div>Owned</div>
                         <div className="flex-grow"></div>
                         <div className="rounded-full text-center text-sm hidden sm:block">
-                          {ownedCount}
-                          <span
-                            className={
-                              ownedCount == 150 ? "visible" : "invisible"
-                            }
-                          >
-                            +
-                          </span>
+                          {menuLists ? menuLists[1].count : null}
+                          <span className="invisible">+</span>
                         </div>
                       </div>
                       <div
                         onClick={() => {
-                          setSelectedGrid(3);
+                          //setSelectedGrid(3);
+                          handleListChange(3);
                           if (
                             gridRef?.current?.getBoundingClientRect().top < 0
                           ) {
@@ -1146,16 +1106,26 @@ const Profile = ({
                         </div>
                         <div className="flex-grow sm:hidden"></div>
                         <div className="sm:hidden mr-1">
-                          {likedCount}
-                          {likedCount == 150 ? "+" : ""}
+                          {menuLists
+                            ? menuLists[2].count > 150
+                              ? 150
+                              : menuLists[2].count
+                            : null}
+                          {menuLists && menuLists[2].count > 150 ? "+" : ""}
                         </div>
                         <div>Liked</div>
                         <div className="flex-grow"></div>
                         <div className="rounded-full text-center text-sm hidden sm:block">
-                          {likedCount}
+                          {menuLists
+                            ? menuLists[2].count > 150
+                              ? 150
+                              : menuLists[2].count
+                            : null}
                           <span
                             className={
-                              likedCount == 150 ? "visible" : "invisible"
+                              menuLists && menuLists[2].count > 150
+                                ? "visible"
+                                : "invisible"
                             }
                           >
                             +
@@ -1165,7 +1135,7 @@ const Profile = ({
                     </div>
                   </div>
                   <div>
-                    {isMyProfile ? (
+                    {/*isMyProfile ? (
                       <div className="flex hidden sm:flex">
                         <div className="flex-grow flex"></div>
                         <div
@@ -1183,7 +1153,7 @@ const Profile = ({
                             : "Show hidden"}
                         </div>
                       </div>
-                    ) : null}
+                          ) : null*/}
                   </div>
                 </div>
               </div>
@@ -1191,49 +1161,83 @@ const Profile = ({
                 {!isLoadingCards && (
                   <div
                     className={`sm:mt-0 flex h-12 items-center px-3 my-2  md:text-base ${
-                      selectedGrid === 3
+                      null
+
+                      /*selectedGrid === 3
                         ? "invisible"
                         : selectedGrid === 1 &&
                           createdItems.filter(
-                            (item) => !createdHiddenItems.includes(item.nft_id)
+                            //(item) => !createdHiddenItems.includes(item.nft_id)
+                            true
                           ).length === 0
                         ? "invisible"
                         : selectedGrid === 2 &&
                           ownedItems.filter(
-                            (item) => !ownedHiddenItems.includes(item.nft_id)
+                            //(item) => !ownedHiddenItems.includes(item.nft_id)
+                            true
                           ).length === 0
                         ? "invisible"
                         : null
+                            */
                     }`}
                   >
                     <div className="flex-1"></div>
                     <Listbox
-                      value={
-                        selectedGrid === 1
-                          ? selectedCreatedSortField
-                          : selectedOwnedSortField
-                      }
+                      value={collectionId}
                       onChange={(value) => {
-                        handleSortChange(value);
+                        handleCollectionChange(value);
                       }}
                     >
                       {({ open }) => (
                         <>
-                          <div className="relative mr-2" style={{ width: 160 }}>
-                            <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                              <span className="block truncate">
-                                All Collections
-                                {/*
-                                  sortingOptionsList.filter(
-                                    (t) =>
-                                      t.value ===
-                                      (selectedGrid === 1
-                                        ? selectedCreatedSortField
-                                        : selectedOwnedSortField)
-                                  )[0].label
-                                      */}
+                          <div className="relative mr-2" style={{ width: 218 }}>
+                            <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                              <span className="flex items-center">
+                                <>
+                                  {collectionId && collectionId > 0 ? (
+                                    <img
+                                      src={
+                                        menuLists &&
+                                        menuLists[
+                                          selectedGrid - 1
+                                        ].collections.filter(
+                                          (t) =>
+                                            t.collection_id === collectionId
+                                        ).length > 0 &&
+                                        menuLists[
+                                          selectedGrid - 1
+                                        ].collections.filter(
+                                          (t) =>
+                                            t.collection_id === collectionId
+                                        )[0].collection_img_url
+                                          ? menuLists[
+                                              selectedGrid - 1
+                                            ].collections.filter(
+                                              (t) =>
+                                                t.collection_id === collectionId
+                                            )[0].collection_img_url
+                                          : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                                      }
+                                      alt=""
+                                      className="flex-shrink-0 h-6 w-6 rounded-full mr-3"
+                                    />
+                                  ) : null}
+                                  <span className=" block truncate">
+                                    {menuLists &&
+                                      menuLists[
+                                        selectedGrid - 1
+                                      ].collections.filter(
+                                        (t) => t.collection_id === collectionId
+                                      ).length > 0 &&
+                                      menuLists[
+                                        selectedGrid - 1
+                                      ].collections.filter(
+                                        (t) => t.collection_id === collectionId
+                                      )[0].collection_name}
+                                  </span>
+                                </>
                               </span>
-                              <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                              <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                 <SelectorIcon
                                   className="h-5 w-5 text-gray-400"
                                   aria-hidden="true"
@@ -1252,57 +1256,67 @@ const Profile = ({
                                 static
                                 className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
                               >
-                                {sortingOptionsList.map((item) => (
-                                  <Listbox.Option
-                                    key={item.value}
-                                    className={({ active }) =>
-                                      classNames(
-                                        active
-                                          ? "text-white bg-indigo-600"
-                                          : "text-gray-900",
-                                        "cursor-default select-none relative py-2 pl-3 pr-9"
-                                      )
-                                    }
-                                    value={item.value}
-                                  >
-                                    {({ active }) => (
-                                      <>
-                                        <span
-                                          className={classNames(
-                                            item.value ===
-                                              (selectedGrid === 1
-                                                ? selectedCreatedSortField
-                                                : selectedOwnedSortField)
-                                              ? "font-normal" // "font-semibold"
-                                              : "font-normal",
-                                            "block truncate"
-                                          )}
-                                        >
-                                          {item.label}
-                                        </span>
+                                {menuLists &&
+                                  menuLists[selectedGrid - 1].collections.map(
+                                    (item) => (
+                                      <Listbox.Option
+                                        key={item.collection_id}
+                                        className={({ active }) =>
+                                          classNames(
+                                            active
+                                              ? "text-white bg-indigo-600"
+                                              : "text-gray-900",
+                                            "cursor-default select-none relative py-2 pl-3 pr-9"
+                                          )
+                                        }
+                                        value={item.collection_id}
+                                      >
+                                        {({ active }) => (
+                                          <>
+                                            <div className="flex items-center">
+                                              <img
+                                                src={
+                                                  item.collection_img_url
+                                                    ? item.collection_img_url
+                                                    : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
+                                                }
+                                                alt=""
+                                                className="flex-shrink-0 h-6 w-6 rounded-full"
+                                              />
+                                              <span
+                                                className={classNames(
+                                                  item.collection_id ===
+                                                    collectionId
+                                                    ? "font-normal" // "font-semibold"
+                                                    : "font-normal",
+                                                  "ml-3 block truncate"
+                                                )}
+                                              >
+                                                {item.collection_name}
+                                              </span>
+                                            </div>
 
-                                        {item.value ===
-                                        (selectedGrid === 1
-                                          ? selectedCreatedSortField
-                                          : selectedOwnedSortField) ? (
-                                          <span
-                                            className={classNames(
-                                              active
-                                                ? "text-white"
-                                                : "text-indigo-600",
-                                              "absolute inset-y-0 right-0 flex items-center pr-4"
-                                            )}
-                                          >
-                                            <CheckIcon
-                                              className="h-5 w-5"
-                                              aria-hidden="true"
-                                            />
-                                          </span>
-                                        ) : null}
-                                      </>
-                                    )}
-                                  </Listbox.Option>
-                                ))}
+                                            {item.collection_id ===
+                                            collectionId ? (
+                                              <span
+                                                className={classNames(
+                                                  active
+                                                    ? "text-white"
+                                                    : "text-indigo-600",
+                                                  "absolute inset-y-0 right-0 flex items-center pr-4"
+                                                )}
+                                              >
+                                                <CheckIcon
+                                                  className="h-5 w-5"
+                                                  aria-hidden="true"
+                                                />
+                                              </span>
+                                            ) : null}
+                                          </>
+                                        )}
+                                      </Listbox.Option>
+                                    )
+                                  )}
                               </Listbox.Options>
                             </Transition>
                           </div>
@@ -1314,7 +1328,9 @@ const Profile = ({
                       value={
                         selectedGrid === 1
                           ? selectedCreatedSortField
-                          : selectedOwnedSortField
+                          : selectedGrid === 2
+                          ? selectedOwnedSortField
+                          : selectedLikedSortField
                       }
                       onChange={(value) => {
                         handleSortChange(value);
@@ -1325,7 +1341,7 @@ const Profile = ({
                           <Listbox.Label className="block text-sm text-gray-500 mr-2 hidden">
                             Sort By
                           </Listbox.Label>
-                          <div className="relative" style={{ width: 140 }}>
+                          <div className="relative" style={{ width: 130 }}>
                             <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                               <span className="block truncate">
                                 {
@@ -1334,7 +1350,9 @@ const Profile = ({
                                       t.value ===
                                       (selectedGrid === 1
                                         ? selectedCreatedSortField
-                                        : selectedOwnedSortField)
+                                        : selectedGrid === 2
+                                        ? selectedOwnedSortField
+                                        : selectedLikedSortField)
                                   )[0].label
                                 }
                               </span>
@@ -1377,7 +1395,9 @@ const Profile = ({
                                             item.value ===
                                               (selectedGrid === 1
                                                 ? selectedCreatedSortField
-                                                : selectedOwnedSortField)
+                                                : selectedGrid === 2
+                                                ? selectedOwnedSortField
+                                                : selectedLikedSortField)
                                               ? "font-normal" // "font-semibold"
                                               : "font-normal",
                                             "block truncate"
@@ -1389,7 +1409,9 @@ const Profile = ({
                                         {item.value ===
                                         (selectedGrid === 1
                                           ? selectedCreatedSortField
-                                          : selectedOwnedSortField) ? (
+                                          : selectedGrid === 2
+                                          ? selectedOwnedSortField
+                                          : selectedLikedSortField) ? (
                                           <span
                                             className={classNames(
                                               active
@@ -1422,27 +1444,33 @@ const Profile = ({
                     isLoadingCards || isRefreshingCards
                   }`}
                   items={
-                    selectedGrid === 1
+                    items
+
+                    /*selectedGrid === 1
                       ? createdItems
                       : selectedGrid === 2
                       ? ownedItems
                       : selectedGrid === 3
                       ? likedItems
-                      : null
+                      : null*/
                   }
                   isLoading={isLoadingCards || isRefreshingCards}
                   listId={
+                    selectedGrid
+
+                    /*
                     selectedGrid === 1
                       ? 1
                       : selectedGrid === 2
                       ? 2
                       : selectedGrid === 3
                       ? 3
-                      : null
+                      : null*/
                   }
                   isMyProfile={isMyProfile}
                   openCardMenu={openCardMenu}
                   setOpenCardMenu={setOpenCardMenu}
+                  /*
                   userHiddenItems={
                     selectedGrid === 1
                       ? createdHiddenItems
@@ -1462,6 +1490,8 @@ const Profile = ({
                       : null
                   }
                   showUserHiddenItems={showUserHiddenItems}
+                  */
+
                   refreshItems={
                     selectedGrid === 1
                       ? () => updateCreated(selectedCreatedSortField, false)
