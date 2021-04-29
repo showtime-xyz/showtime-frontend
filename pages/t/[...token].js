@@ -11,24 +11,32 @@ import ModalReportItem from "../../components/ModalReportItem";
 import TokenDetailBody from "../../components/TokenDetailBody";
 
 export async function getServerSideProps(context) {
+  const { res } = context;
+
   const { token: token_array } = context.query;
   const contract_address = token_array[0];
   const token_id = token_array[1];
 
   const response_token = await backend.get(
-    `/v2/token/${contract_address}/${token_id}?limit=150`
+    `/v2/token/${contract_address}/${token_id}`
   );
   const token = response_token.data.data.item;
+
+  if (token) {
+    return {
+      props: {
+        token,
+        //same_creator_items,
+        //same_owner_items,
+      }, // will be passed to the page component as props
+    };
+  } else {
+    res.writeHead(404);
+    res.end();
+    return { props: {} };
+  }
   //const same_creator_items = response_token.data.data.same_creator;
   // const same_owner_items = response_token.data.data.same_owner;
-
-  return {
-    props: {
-      token,
-      //same_creator_items,
-      //same_owner_items,
-    }, // will be passed to the page component as props
-  };
 }
 
 export default function Token({ token }) {

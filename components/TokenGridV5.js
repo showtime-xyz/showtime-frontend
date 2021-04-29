@@ -18,7 +18,7 @@ const TokenGridV5 = ({
 
   items,
   isDetail,
-  onFinish,
+  //onFinish,
   isLoading,
   listId,
   isMyProfile,
@@ -27,7 +27,7 @@ const TokenGridV5 = ({
   //userHiddenItems,
   //setUserHiddenItems,
   //showUserHiddenItems,
-  refreshItems,
+  //refreshItems,
   detailsModalCloseOnKeyChange,
   changeSpotlightItem,
   extraColumn,
@@ -37,6 +37,12 @@ const TokenGridV5 = ({
 }) => {
   const context = useContext(AppContext);
   const [itemsList, setItemsList] = useState([]);
+
+  const handleRemoveItem = (nft_id) => {
+    //console.log(nft_id);
+    //setItemsList([]);
+    setItemsList(itemsList.filter((item) => item.nft_id != nft_id));
+  };
   //const [showDuplicateNFTs, setShowDuplicateNFTs] = useState({});
   //const [itemsShowing, setItemsShowing] = useState(0);
   //const deduplicatedItemsList = itemsList
@@ -59,7 +65,7 @@ const TokenGridV5 = ({
   const rightPress = useKeyPress("ArrowRight");
   const escPress = useKeyPress("Escape");
 
-  const itemsToLoad = extraColumn ? 12 : 9;
+  //const itemsToLoad = extraColumn ? 12 : 9;
 
   useEffect(() => {
     if (escPress) {
@@ -81,8 +87,6 @@ const TokenGridV5 = ({
 
       // Get position of next card image and scroll down
       const bodyRect = document.body.getBoundingClientRect();
-      console.log(bodyRect);
-      console.log(itemsList[currentIndex + 1]);
       if (itemsList[currentIndex + 1].imageRef.current) {
         window.scrollTo({
           top:
@@ -231,10 +235,10 @@ const TokenGridV5 = ({
                   : "lg:grid-cols-2 xl:grid-cols-3"
               }  overflow-hidden`}
             >
-              {items.map((item) => (
+              {itemsList.map((item) => (
                 <TokenCard
                   key={item.nft_id}
-                  item={item}
+                  originalItem={item}
                   //columns={context.columns}
                   //isMobile={context.isMobile}
                   currentlyPlayingVideo={currentlyPlayingVideo}
@@ -252,6 +256,7 @@ const TokenGridV5 = ({
                   //refreshItems={refreshItems}
                   changeSpotlightItem={changeSpotlightItem}
                   pageProfile={pageProfile}
+                  handleRemoveItem={handleRemoveItem}
                 />
               ))}
             </div>

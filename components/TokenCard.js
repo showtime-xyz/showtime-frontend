@@ -18,14 +18,14 @@ import {
 } from "../lib/utilities";
 
 const TokenCard = ({
-  item,
-  showDuplicateNFTs,
-  setShowDuplicateNFTs,
+  originalItem,
+  //showDuplicateNFTs,
+  //setShowDuplicateNFTs,
   isMyProfile,
   listId,
-  userHiddenItems,
-  setUserHiddenItems,
-  refreshItems,
+  //userHiddenItems,
+  //setUserHiddenItems,
+  //refreshItems,
   setOpenCardMenu,
   openCardMenu,
   changeSpotlightItem,
@@ -33,7 +33,9 @@ const TokenCard = ({
   setCurrentlyPlayingVideo,
   setCurrentlyOpenModal,
   pageProfile,
+  handleRemoveItem,
 }) => {
+  const [item, setItem] = useState(originalItem);
   const [moreShown, setMoreShown] = useState(false);
   //const [imageLoaded, setImageLoaded] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
@@ -43,10 +45,9 @@ const TokenCard = ({
   const context = useContext(AppContext);
 
   const divRef = useRef();
-  //const imageRef = useRef(); // Ref getting passed in from TokenGrid item instead
 
   const handleHide = async () => {
-    setUserHiddenItems([...userHiddenItems, item.nft_id]);
+    //setUserHiddenItems([...userHiddenItems, item.nft_id]);
 
     // Post changes to the API
     await fetch(`/api/hidenft/${item.nft_id}/${listId}`, {
@@ -57,9 +58,9 @@ const TokenCard = ({
   };
 
   const handleUnhide = async () => {
-    setUserHiddenItems([
-      ...userHiddenItems.filter((nft_id) => nft_id != item.nft_id),
-    ]);
+    //setUserHiddenItems([
+    //  ...userHiddenItems.filter((nft_id) => nft_id != item.nft_id),
+    //]);
 
     // Post changes to the API
     await fetch(`/api/unhidenft/${item.nft_id}/${listId}`, {
@@ -71,13 +72,24 @@ const TokenCard = ({
 
   const handleRefreshNFTMetadata = async () => {
     setRefreshing(true);
-    await fetch(`/api/refreshmetadata/${item.nft_id}`, {
+    const result = await fetch(`/api/refreshmetadata/${item.nft_id}`, {
       method: "post",
     });
-    await refreshItems();
+    const { data } = await result.json();
+    if (data) {
+      // Replace all fields
+      setItem(data);
+    } else {
+      handleRemoveItem(item.nft_id);
+    }
+
+    //item.name = "THIS";
+
+    //await refreshItems();
     setRefreshing(false);
   };
 
+  /*
   const getImageUrl = (token_aspect_ratio) => {
     var img_url = item.token_img_url ? item.token_img_url : null;
 
@@ -90,6 +102,7 @@ const TokenCard = ({
     }
     return img_url;
   };
+  */
 
   const max_description_length = 67;
 
@@ -110,11 +123,11 @@ const TokenCard = ({
     <>
       <div className="px-0 sm:px-3 mb-6 sm:mb-0">
         <div
-          style={
-            userHiddenItems && userHiddenItems.includes(item.nft_id)
-              ? { opacity: 0.7, backgroundColor: "#ddd" }
-              : null
-          }
+          //style={
+          //  userHiddenItems && userHiddenItems.includes(item.nft_id)
+          //    ? { opacity: 0.7, backgroundColor: "#ddd" }
+          //    : null
+          //}
           ref={divRef}
           className="mx-auto sm:rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all bg-white"
         >
@@ -191,7 +204,7 @@ const TokenCard = ({
                         : item.nft_id + "_" + listId
                     );
                   }}
-                  className="card-menu-button text-right text-gray-500"
+                  className="card-menu-button text-right text-gray-600"
                 >
                   <FontAwesomeIcon
                     style={{
@@ -230,7 +243,7 @@ const TokenCard = ({
                         <div>Spotlight Item</div>
                       </div>
 
-                      <div
+                      {/*<div
                         className="py-2 px-3 hover:text-stpink hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap"
                         onClick={
                           userHiddenItems.includes(item.nft_id)
@@ -257,7 +270,7 @@ const TokenCard = ({
                                 ? "Liked"
                                 : "List"
                             }`}
-                      </div>
+                          </div>*/}
                       <div
                         className="py-2 px-3 hover:text-stpink hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap"
                         onClick={handleRefreshNFTMetadata}
@@ -266,53 +279,6 @@ const TokenCard = ({
                       </div>
                     </div>
                   </div>
-                  {/*<div
-                      style={{
-                        borderWidth: 1,
-                        borderColor: "#ccc",
-                        position: "absolute",
-                        top: 40,
-                        right: 15,
-                        backgroundColor: "white",
-                        borderRadius: 7,
-                        zIndex: 1,
-                        fontSize: 14,
-                      }}
-                      className="py-2 px-4"
-                    >
-                      <div
-                        className="card-menu-item"
-                        onClick={
-                          this.props.userHiddenItems.includes(
-                            this.props.item.nft_id
-                          )
-                            ? this.handleUnhide
-                            : this.handleHide
-                        }
-                      >
-                        {this.props.userHiddenItems.includes(
-                          this.props.item.nft_id
-                        )
-                          ? `Unhide item from ${
-                              listId === 1
-                                ? "Created"
-                                : listId === 2
-                                ? "Owned"
-                                : listId === 3
-                                ? "Liked"
-                                : "List"
-                            }`
-                          : `Hide item from ${
-                              listId === 1
-                                ? "Created"
-                                : listId === 2
-                                ? "Owned"
-                                : listId === 3
-                                ? "Liked"
-                                : "List"
-                            }`}
-                      </div>
-                          </div>*/}
                 </div>
               ) : null}
             </div>
@@ -685,7 +651,7 @@ const TokenCard = ({
           style={{ fontWeight: 400, fontSize: 14 }}
         >
           <div className="flex-grow"></div>
-          {item.duplicate_count > 1 && (
+          {/*item.duplicate_count > 1 && (
             <div
               onClick={() => {
                 setShowDuplicateNFTs({
@@ -700,7 +666,7 @@ const TokenCard = ({
                 item.duplicate_count - 1
               } more similar`}
             </div>
-          )}
+            )*/}
         </div>
       </div>
     </>

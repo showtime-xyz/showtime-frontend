@@ -242,7 +242,7 @@ const Profile = ({
   const [page, setPage] = useState(1);
   const [switchInProgress, setSwitchInProgress] = useState(false);
 
-  const [collections, setCollections] = useState([]);
+  //const [collections, setCollections] = useState([]);
   const [collectionId, setCollectionId] = useState(0);
   const [isLoadingCards, setIsLoadingCards] = useState(false);
   const [isRefreshingCards, setIsRefreshingCards] = useState(false);
@@ -382,7 +382,7 @@ const Profile = ({
       setMenuLists([]);
       setHasMore(true);
       setItems([]);
-      setCollections([]);
+      //setCollections([]);
       //setSwitchInProgress(false);
     }
 
@@ -1032,7 +1032,7 @@ const Profile = ({
             >
               <div className="sm:px-3">
                 <div className="h-max sticky top-24  ">
-                  <div className="px-2 sm:px-4 py-2 sm:py-4 sm:rounded-lg bg-white border-t border-b sm:border-none border-gray-200  sm:shadow-md mt-16">
+                  <div className="px-2 sm:px-4 py-2 sm:py-4 sm:rounded-lg bg-white border-t border-b sm:border-none border-gray-200  sm:shadow-md mt-14">
                     <div className="border-b border-gray-200 sm:mx-2 mb-2 pb-4  ">
                       <div className="flex flex-row items-center mt-2 ml-2 sm:mt-0 sm:ml-0">
                         <div className="mr-2">

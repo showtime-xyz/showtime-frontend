@@ -20,7 +20,13 @@ export default async (req, res) => {
           "X-API-Key": process.env.SHOWTIME_FRONTEND_API_KEY_V2,
         },
       }
-    );
+    )
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (myJson) {
+        res.json(myJson);
+      });
   } catch (error) {
     console.log(error);
   }
