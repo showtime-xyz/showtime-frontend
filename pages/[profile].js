@@ -192,6 +192,7 @@ const Profile = ({
 
       setSelectedCreatedSortField(default_created_sort_id || 1);
       setSelectedOwnedSortField(default_owned_sort_id || 1);
+      setFollowersCount(followers_count || 0);
     }
 
     const response_profile = await backend.get(
