@@ -539,6 +539,7 @@ const TokenDetailBody = ({
                         <div>
                           <UsersWhoOwn
                             users={ownershipDetails.multiple_owners_list}
+                            ownerCount={item.owner_count}
                             closeModal={() =>
                               setEditModalOpen ? setEditModalOpen(false) : null
                             }
@@ -586,6 +587,7 @@ const TokenDetailBody = ({
                         <div>
                           <UsersWhoOwn
                             users={ownershipDetails.multiple_owners_list}
+                            ownerCount={item.owner_count}
                             closeModal={() =>
                               setEditModalOpen ? setEditModalOpen(false) : null
                             }
