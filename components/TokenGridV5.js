@@ -16,9 +16,10 @@ const TokenGridV5 = ({
   endMessage,
   scrollThreshold,
   showUserHiddenItems,
+  showDuplicates,
 
   items,
-  isDetail,
+  //isDetail,
   //onFinish,
   isLoading,
   listId,
@@ -38,20 +39,6 @@ const TokenGridV5 = ({
     setItemsList(itemsList.filter((item) => item.nft_id != nft_id));
   };
   //const [showDuplicateNFTs, setShowDuplicateNFTs] = useState({});
-  //const [itemsShowing, setItemsShowing] = useState(0);
-  //const deduplicatedItemsList = itemsList
-  //  .filter((item) => {
-  //    return showUserHiddenItems
-  //      ? true
-  //      : !userHiddenItems
-  //      ? true
-  //      : !userHiddenItems.includes(item.nft_id);
-  //  })
-  //  .filter((item) => {
-  //    const hash = item?.token_img_url || item?.token_animation_url;
-  //    return !item?.hidden_duplicate ? true : showDuplicateNFTs[hash];
-  //  });
-  //const [hasMore, setHasMore] = useState(true);
   const [currentlyPlayingVideo, setCurrentlyPlayingVideo] = useState(null);
   const [currentlyOpenModal, setCurrentlyOpenModal] = useState(null);
 
@@ -127,55 +114,13 @@ const TokenGridV5 = ({
   }, [leftPress, itemsList]);
 
   useEffect(() => {
-    /*
-    const validItems = items.filter(
-      (item) =>
-        (item.token_hidden !== 1 || isDetail) &&
-        (item.token_img_url || item.token_animation_url)
-    );
-    const groupedItems = _.groupBy(
-      validItems,
-      (item) => item.token_img_url || item.token_animation_url
-    );
-    const uniqueItems = Object.values(groupedItems)
-      .map((itemGroup) =>
-        itemGroup.length > 1
-          ? itemGroup.map((item, index) => ({
-              ...item,
-              hidden_duplicate: index !== 0,
-              duplicate_count: itemGroup.length,
-            }))
-          : itemGroup[0]
-      )
-      .flat();
-    */
-
     const itemsWithRefs = [];
     _.forEach(items, (item) => {
       item.imageRef = createRef();
       itemsWithRefs.push(item);
     });
     setItemsList(itemsWithRefs);
-    //setHasMore(true);
   }, [items]);
-
-  /*useEffect(() => {
-    if (context.isMobile) {
-      setItemsShowing(4);
-    } else {
-      setItemsShowing(itemsToLoad);
-    }
-  }, [context.isMobile]);*/
-
-  /*
-  const fetchMoreData = () => {
-    if (itemsShowing + itemsToLoad > itemsList.length) {
-      setHasMore(false);
-      onFinish ? onFinish() : null;
-    }
-    setItemsShowing(itemsShowing + itemsToLoad);
-  };
-  */
 
   const currentIndex = itemsList.findIndex(
     (i) => i.nft_id === currentlyOpenModal?.nft_id
@@ -251,6 +196,7 @@ const TokenGridV5 = ({
                   pageProfile={pageProfile}
                   handleRemoveItem={handleRemoveItem}
                   showUserHiddenItems={showUserHiddenItems}
+                  showDuplicates={showDuplicates}
                 />
               ))}
             </div>

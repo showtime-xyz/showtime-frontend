@@ -35,6 +35,7 @@ const TokenCard = ({
   pageProfile,
   handleRemoveItem,
   showUserHiddenItems,
+  showDuplicates,
 }) => {
   const [item, setItem] = useState(originalItem);
   const [moreShown, setMoreShown] = useState(false);
@@ -55,6 +56,9 @@ const TokenCard = ({
     // Post changes to the API
     await fetch(`/api/hidenft/${item.nft_id}/${listId}`, {
       method: "post",
+      body: JSON.stringify({
+        showDuplicates: showDuplicates ? 1 : 0,
+      }),
     });
 
     if (!showUserHiddenItems) {
@@ -74,6 +78,9 @@ const TokenCard = ({
     // Post changes to the API
     await fetch(`/api/unhidenft/${item.nft_id}/${listId}`, {
       method: "post",
+      body: JSON.stringify({
+        showDuplicates: showDuplicates ? 1 : 0,
+      }),
     });
 
     mixpanel.track("Unhid item");

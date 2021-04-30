@@ -234,7 +234,7 @@ const Profile = ({
     //{ label: "Select...", key: "" },
     ...Object.keys(SORT_FIELDS).map((key) => SORT_FIELDS[key]),
   ];
-  const perPage = context.isMobile ? 4 : 6; // switch to 12 after testing;
+  const perPage = context.isMobile ? 4 : 12; // switch to 12 after testing;
 
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
@@ -242,6 +242,7 @@ const Profile = ({
   const [page, setPage] = useState(1);
   const [switchInProgress, setSwitchInProgress] = useState(false);
   const [showUserHiddenItems, setShowUserHiddenItems] = useState(false);
+  const [showDuplicates, setShowDuplicates] = useState(false);
 
   //const [collections, setCollections] = useState([]);
   const [collectionId, setCollectionId] = useState(0);
@@ -261,7 +262,8 @@ const Profile = ({
     collectionId,
     showCardRefresh,
     page,
-    showHidden
+    showHidden,
+    showDuplicates
   ) => {
     if (showCardRefresh) {
       setIsRefreshingCards(true);
@@ -277,7 +279,7 @@ const Profile = ({
         listId: listId,
         sortId: sortId,
         showHidden: showHidden ? 1 : 0,
-        showDuplicates: 0,
+        showDuplicates: showDuplicates ? 1 : 0,
         collectionId: collectionId,
       }),
     });
@@ -307,8 +309,8 @@ const Profile = ({
         limit: perPage,
         listId: selectedGrid,
         sortId: sortId,
-        showHidden: 0,
-        showDuplicates: 0,
+        showHidden: showUserHiddenItems ? 1 : 0,
+        showDuplicates: showDuplicates ? 1 : 0,
         collectionId: collectionId,
       }),
     });
@@ -338,7 +340,8 @@ const Profile = ({
       collectionId,
       true,
       1,
-      showUserHiddenItems
+      showUserHiddenItems,
+      showDuplicates
     );
     setSwitchInProgress(false);
   };
@@ -348,6 +351,7 @@ const Profile = ({
     setSelectedGrid(listId);
     setCollectionId(0);
     setPage(1);
+    setShowDuplicates(false);
 
     const sortId =
       listId === 1
@@ -355,7 +359,7 @@ const Profile = ({
         : listId === 2
         ? selectedOwnedSortField
         : selectedLikedSortField;
-    await updateItems(listId, sortId, 0, true, 1, showUserHiddenItems);
+    await updateItems(listId, sortId, 0, true, 1, showUserHiddenItems, 0);
     setSwitchInProgress(false);
   };
 
@@ -376,7 +380,8 @@ const Profile = ({
       collectionId,
       true,
       1,
-      showUserHiddenItems
+      showUserHiddenItems,
+      showDuplicates
     );
     setSwitchInProgress(false);
   };
@@ -384,6 +389,12 @@ const Profile = ({
   const handleShowHiddenChange = async (showUserHiddenItems) => {
     setShowUserHiddenItems(showUserHiddenItems);
     setSwitchInProgress(true);
+    if (gridRef?.current?.getBoundingClientRect().top < 0) {
+      window.scroll({
+        top: gridRef?.current?.offsetTop + 30,
+        behavior: "smooth",
+      });
+    }
     setPage(1);
 
     const sortId =
@@ -398,7 +409,37 @@ const Profile = ({
       collectionId,
       true,
       1,
-      showUserHiddenItems
+      showUserHiddenItems,
+      showDuplicates
+    );
+    setSwitchInProgress(false);
+  };
+
+  const handleShowDuplicates = async (showDuplicates) => {
+    setShowDuplicates(showDuplicates);
+    setSwitchInProgress(true);
+    if (gridRef?.current?.getBoundingClientRect().top < 0) {
+      window.scroll({
+        top: gridRef?.current?.offsetTop + 30,
+        behavior: "smooth",
+      });
+    }
+    setPage(1);
+
+    const sortId =
+      selectedGrid === 1
+        ? selectedCreatedSortField
+        : selectedGrid === 2
+        ? selectedOwnedSortField
+        : selectedLikedSortField;
+    await updateItems(
+      selectedGrid,
+      sortId,
+      collectionId,
+      true,
+      1,
+      showUserHiddenItems,
+      showDuplicates
     );
     setSwitchInProgress(false);
   };
@@ -417,6 +458,7 @@ const Profile = ({
       setSelectedOwnedSortField(lists.lists[1].sort_id || 1);
       setSelectedLikedSortField(2);
 
+      setShowDuplicates(false);
       setCollectionId(0);
       setPage(1);
       setMenuLists([]);
@@ -1597,18 +1639,62 @@ const Profile = ({
                         menuLists[selectedGrid - 1].count_all_nonhidden >
                         menuLists[selectedGrid - 1]
                           .count_deduplicated_nonhidden ? (
+                          !showDuplicates ? (
+                            <div className="text-center text-gray-400 text-xs">
+                              Some duplicate items were hidden.{" "}
+                              <span
+                                className="cursor-pointer hover:text-gray-700"
+                                onClick={() => handleShowDuplicates(true)}
+                              >
+                                Show all
+                              </span>
+                            </div>
+                          ) : (
+                            <div className="text-center text-gray-400 text-xs">
+                              <span
+                                className="cursor-pointer hover:text-gray-700"
+                                onClick={() => handleShowDuplicates(false)}
+                              >
+                                Hide duplicates
+                              </span>
+                            </div>
+                          )
+                        ) : (
+                          <span
+                            className="cursor-pointer hover:text-gray-700"
+                            onClick={() => handleShowDuplicates(true)}
+                          >
+                            Show duplicates temp
+                          </span>
+                        )
+                      ) : /*
+                        !showDuplicates && false ? (
                           <div className="text-center text-gray-400 text-xs">
-                            Some duplicate items were hidden. Show all
+                            Some duplicate items were hidden. NOT
+                            <span
+                              className="cursor-pointer hover:text-gray-700"
+                              onClick={() => handleShowDuplicates(true)}
+                            >
+                              Show all
+                            </span>
                           </div>
                         ) : (
                           <div className="text-center text-gray-400 text-xs">
-                            Some duplicate items were hidden. Show all [not]
+                            <span
+                              className="cursor-pointer hover:text-gray-700"
+                              onClick={() => handleShowDuplicates(false)}
+                            >
+                              Hide duplicates NOT
+                            </span>
                           </div>
                         )
-                      ) : null
+                        */
+
+                      null
                     }
                     scrollThreshold={0.5}
                     showUserHiddenItems={showUserHiddenItems}
+                    showDuplicates={showDuplicates}
                     //
                     key={`grid_${selectedGrid}_${profile_id}_${
                       isLoadingCards || isRefreshingCards
