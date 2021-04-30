@@ -241,6 +241,7 @@ const Profile = ({
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
   const [switchInProgress, setSwitchInProgress] = useState(false);
+  const [showUserHiddenItems, setShowUserHiddenItems] = useState(false);
 
   //const [collections, setCollections] = useState([]);
   const [collectionId, setCollectionId] = useState(0);
@@ -259,7 +260,8 @@ const Profile = ({
     sortId,
     collectionId,
     showCardRefresh,
-    page
+    page,
+    showHidden
   ) => {
     if (showCardRefresh) {
       setIsRefreshingCards(true);
@@ -274,7 +276,7 @@ const Profile = ({
         limit: perPage,
         listId: listId,
         sortId: sortId,
-        showHidden: 0,
+        showHidden: showHidden ? 1 : 0,
         showDuplicates: 0,
         collectionId: collectionId,
       }),
@@ -330,7 +332,14 @@ const Profile = ({
         : setSelectedLikedSortField;
     setPage(1);
     setSelectedSortField(sortId);
-    await updateItems(selectedGrid, sortId, collectionId, true, 1);
+    await updateItems(
+      selectedGrid,
+      sortId,
+      collectionId,
+      true,
+      1,
+      showUserHiddenItems
+    );
     setSwitchInProgress(false);
   };
 
@@ -346,7 +355,7 @@ const Profile = ({
         : listId === 2
         ? selectedOwnedSortField
         : selectedLikedSortField;
-    await updateItems(listId, sortId, 0, true, 1);
+    await updateItems(listId, sortId, 0, true, 1, showUserHiddenItems);
     setSwitchInProgress(false);
   };
 
@@ -361,7 +370,36 @@ const Profile = ({
         : selectedGrid === 2
         ? selectedOwnedSortField
         : selectedLikedSortField;
-    await updateItems(selectedGrid, sortId, collectionId, true, 1);
+    await updateItems(
+      selectedGrid,
+      sortId,
+      collectionId,
+      true,
+      1,
+      showUserHiddenItems
+    );
+    setSwitchInProgress(false);
+  };
+
+  const handleShowHiddenChange = async (showUserHiddenItems) => {
+    setShowUserHiddenItems(showUserHiddenItems);
+    setSwitchInProgress(true);
+    setPage(1);
+
+    const sortId =
+      selectedGrid === 1
+        ? selectedCreatedSortField
+        : selectedGrid === 2
+        ? selectedOwnedSortField
+        : selectedLikedSortField;
+    await updateItems(
+      selectedGrid,
+      sortId,
+      collectionId,
+      true,
+      1,
+      showUserHiddenItems
+    );
     setSwitchInProgress(false);
   };
 
@@ -372,7 +410,7 @@ const Profile = ({
       //setSwitchInProgress(true);
       setMoreBioShown(false);
       setIsLoadingCards(true);
-
+      setShowUserHiddenItems(false);
       setSpotlightItem(featured_nft);
 
       setSelectedCreatedSortField(lists.lists[0].sort_id || 1);
@@ -583,8 +621,6 @@ const Profile = ({
     }
   };
   */
-
-  const [showUserHiddenItems, setShowUserHiddenItems] = useState(false);
 
   useEffect(() => {
     setSelectedGrid(lists.default_list_id);
@@ -1063,25 +1099,30 @@ const Profile = ({
                             : "Unnamed"}
                         </div>
                         <div className="flex-grow"></div>
-                        {/*isMyProfile ? (
+                        {isMyProfile ? (
                           <div className="flex sm:hidden">
                             <div className="flex-grow flex"></div>
                             <div
                               className=" text-xs mr-2 text-gray-400 cursor-pointer hover:text-gray-700"
                               onClick={() => {
-                                setShowUserHiddenItems(!showUserHiddenItems);
+                                //setShowUserHiddenItems(!showUserHiddenItems);
+                                handleShowHiddenChange(!showUserHiddenItems);
                               }}
                             >
-                              {createdHiddenItems.length === 0 &&
-                              ownedHiddenItems.length === 0 &&
-                              likedHiddenItems.length === 0
-                                ? null
-                                : showUserHiddenItems
-                                ? "Hide hidden"
-                                : "Show hidden"}
+                              {
+                                //createdHiddenItems.length === 0 &&
+                                //ownedHiddenItems.length === 0 &&
+                                //likedHiddenItems.length === 0
+                                //? null
+                                //:
+
+                                showUserHiddenItems
+                                  ? "Hide hidden"
+                                  : "Show hidden"
+                              }
                             </div>
                           </div>
-                              ) : null*/}
+                        ) : null}
                       </div>
                     </div>
                     <div className="flex flex-row sm:flex-col">
@@ -1113,14 +1154,18 @@ const Profile = ({
                         <div className="flex-grow sm:hidden"></div>
                         <div className="sm:hidden mr-1">
                           {menuLists && menuLists.length > 0
-                            ? Number(menuLists[0].count).toLocaleString()
+                            ? Number(
+                                menuLists[0].count_deduplicated_nonhidden
+                              ).toLocaleString()
                             : null}
                         </div>
                         <div>Created</div>
                         <div className="flex-grow"></div>
                         <div className="rounded-full text-center text-sm hidden sm:block">
                           {menuLists && menuLists.length > 0
-                            ? Number(menuLists[0].count).toLocaleString()
+                            ? Number(
+                                menuLists[0].count_deduplicated_nonhidden
+                              ).toLocaleString()
                             : null}
                           <span className="invisible">+</span>
                         </div>
@@ -1153,14 +1198,18 @@ const Profile = ({
                         <div className="flex-grow sm:hidden"></div>
                         <div className="sm:hidden mr-1">
                           {menuLists && menuLists.length > 0
-                            ? Number(menuLists[1].count).toLocaleString()
+                            ? Number(
+                                menuLists[1].count_deduplicated_nonhidden
+                              ).toLocaleString()
                             : null}
                         </div>
                         <div>Owned</div>
                         <div className="flex-grow"></div>
                         <div className="rounded-full text-center text-sm hidden sm:block">
                           {menuLists && menuLists.length > 0
-                            ? Number(menuLists[1].count).toLocaleString()
+                            ? Number(
+                                menuLists[1].count_deduplicated_nonhidden
+                              ).toLocaleString()
                             : null}
                           <span className="invisible">+</span>
                         </div>
@@ -1193,13 +1242,13 @@ const Profile = ({
                         <div className="flex-grow sm:hidden"></div>
                         <div className="sm:hidden mr-1">
                           {menuLists && menuLists.length > 0
-                            ? menuLists[2].count > 300
+                            ? menuLists[2].count_deduplicated_nonhidden > 300
                               ? 300
-                              : menuLists[2].count
+                              : menuLists[2].count_deduplicated_nonhidden
                             : null}
                           {menuLists &&
                           menuLists.length > 0 &&
-                          menuLists[2].count > 300
+                          menuLists[2].count_deduplicated_nonhidden > 300
                             ? "+"
                             : ""}
                         </div>
@@ -1207,15 +1256,15 @@ const Profile = ({
                         <div className="flex-grow"></div>
                         <div className="rounded-full text-center text-sm hidden sm:block">
                           {menuLists && menuLists.length > 0
-                            ? menuLists[2].count > 300
+                            ? menuLists[2].count_deduplicated_nonhidden > 300
                               ? 300
-                              : menuLists[2].count
+                              : menuLists[2].count_deduplicated_nonhidden
                             : null}
                           <span
                             className={
                               menuLists &&
                               menuLists.length > 0 &&
-                              menuLists[2].count > 300
+                              menuLists[2].count_deduplicated_nonhidden > 300
                                 ? "visible"
                                 : "invisible"
                             }
@@ -1227,25 +1276,28 @@ const Profile = ({
                     </div>
                   </div>
                   <div>
-                    {/*isMyProfile ? (
+                    {isMyProfile ? (
                       <div className="flex hidden sm:flex">
                         <div className="flex-grow flex"></div>
                         <div
                           className=" text-xs mt-3 ml-6 mr-1 text-gray-400 cursor-pointer hover:text-gray-700"
                           onClick={() => {
-                            setShowUserHiddenItems(!showUserHiddenItems);
+                            //setShowUserHiddenItems(!showUserHiddenItems);
+                            handleShowHiddenChange(!showUserHiddenItems);
                           }}
                         >
-                          {createdHiddenItems.length === 0 &&
-                          ownedHiddenItems.length === 0 &&
-                          likedHiddenItems.length === 0
-                            ? null
-                            : showUserHiddenItems
-                            ? "Hide hidden"
-                            : "Show hidden"}
+                          {
+                            //createdHiddenItems.length === 0 &&
+                            //ownedHiddenItems.length === 0 &&
+                            //likedHiddenItems.length === 0
+                            //  ? null
+                            //  :
+
+                            showUserHiddenItems ? "Hide hidden" : "Show hidden"
+                          }
                         </div>
                       </div>
-                          ) : null*/}
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -1531,40 +1583,50 @@ const Profile = ({
                   </div>
                 )}
 
-                <TokenGridV5
-                  dataLength={items.length}
-                  next={() => {
-                    addPage(page + 1);
-                  }}
-                  hasMore={hasMore}
-                  endMessage={<div>End</div>}
-                  scrollThreshold={0.5}
-                  //
-                  key={`grid_${selectedGrid}_${profile_id}_${
-                    isLoadingCards || isRefreshingCards
-                  }`}
-                  items={items}
-                  isLoading={isLoadingCards || isRefreshingCards}
-                  isLoadingMore={isLoadingMore}
-                  listId={selectedGrid}
-                  isMyProfile={isMyProfile}
-                  openCardMenu={openCardMenu}
-                  setOpenCardMenu={setOpenCardMenu}
-                  detailsModalCloseOnKeyChange={slug_address}
-                  changeSpotlightItem={handleChangeSpotlightItem}
-                  pageProfile={{
-                    profile_id,
-                    slug_address,
-                    name,
-                    img_url,
-                    wallet_addresses_excluding_email,
-                    slug_address,
-                    website_url,
-                    profile_id,
-                    username,
-                  }} // to customize owned by list on bottom of card
+                {menuLists && menuLists.length > 0 && (
+                  <TokenGridV5
+                    dataLength={items.length}
+                    next={() => {
+                      addPage(page + 1);
+                    }}
+                    hasMore={hasMore}
+                    endMessage={
+                      menuLists[selectedGrid - 1].count_all_nonhidden >
+                      menuLists[selectedGrid - 1]
+                        .count_deduplicated_nonhidden ? (
+                        <div>Has duplicates</div>
+                      ) : (
+                        <div>No duplicated</div>
+                      )
+                    }
+                    scrollThreshold={0.5}
+                    showUserHiddenItems={showUserHiddenItems}
+                    //
+                    key={`grid_${selectedGrid}_${profile_id}_${
+                      isLoadingCards || isRefreshingCards
+                    }`}
+                    items={items}
+                    isLoading={isLoadingCards || isRefreshingCards}
+                    isLoadingMore={isLoadingMore}
+                    listId={selectedGrid}
+                    isMyProfile={isMyProfile}
+                    openCardMenu={openCardMenu}
+                    setOpenCardMenu={setOpenCardMenu}
+                    detailsModalCloseOnKeyChange={slug_address}
+                    changeSpotlightItem={handleChangeSpotlightItem}
+                    pageProfile={{
+                      profile_id,
+                      slug_address,
+                      name,
+                      img_url,
+                      wallet_addresses_excluding_email,
+                      slug_address,
+                      website_url,
+                      profile_id,
+                      username,
+                    }} // to customize owned by list on bottom of card
 
-                  /*
+                    /*
                   userHiddenItems={
                     selectedGrid === 1
                       ? createdHiddenItems
@@ -1586,12 +1648,13 @@ const Profile = ({
                   showUserHiddenItems={showUserHiddenItems}
                   */
 
-                  //refreshItems={
-                  //  selectedGrid === 1
-                  //    ? () => updateCreated(selectedCreatedSortField, false)
-                  //    : () => updateOwned(selectedOwnedSortField, false)
-                  //}
-                />
+                    //refreshItems={
+                    //  selectedGrid === 1
+                    //    ? () => updateCreated(selectedCreatedSortField, false)
+                    //    : () => updateOwned(selectedOwnedSortField, false)
+                    //}
+                  />
+                )}
               </div>
             </div>
           </div>

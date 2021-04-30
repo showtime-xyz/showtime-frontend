@@ -34,6 +34,7 @@ const TokenCard = ({
   setCurrentlyOpenModal,
   pageProfile,
   handleRemoveItem,
+  showUserHiddenItems,
 }) => {
   const [item, setItem] = useState(originalItem);
   const [moreShown, setMoreShown] = useState(false);
@@ -49,10 +50,16 @@ const TokenCard = ({
   const handleHide = async () => {
     //setUserHiddenItems([...userHiddenItems, item.nft_id]);
 
+    setItem({ ...item, user_hidden: true });
+
     // Post changes to the API
     await fetch(`/api/hidenft/${item.nft_id}/${listId}`, {
       method: "post",
     });
+
+    if (!showUserHiddenItems) {
+      handleRemoveItem(item.nft_id);
+    }
 
     mixpanel.track("Hid item");
   };
@@ -61,6 +68,8 @@ const TokenCard = ({
     //setUserHiddenItems([
     //  ...userHiddenItems.filter((nft_id) => nft_id != item.nft_id),
     //]);
+
+    setItem({ ...item, user_hidden: false });
 
     // Post changes to the API
     await fetch(`/api/unhidenft/${item.nft_id}/${listId}`, {
@@ -71,6 +80,8 @@ const TokenCard = ({
   };
 
   const handleRefreshNFTMetadata = async () => {
+    const user_hidden = item.user_hidden;
+
     setRefreshing(true);
     const result = await fetch(`/api/refreshmetadata/${item.nft_id}`, {
       method: "post",
@@ -78,7 +89,7 @@ const TokenCard = ({
     const { data } = await result.json();
     if (data) {
       // Replace all fields
-      setItem(data);
+      setItem({ ...data, user_hidden: user_hidden });
     } else {
       handleRemoveItem(item.nft_id);
     }
@@ -117,17 +128,15 @@ const TokenCard = ({
     }
   };
 
-  const hash = item.token_img_url || item.token_animation_url;
+  //const hash = item.token_img_url || item.token_animation_url;
 
   return (
     <>
       <div className="px-0 sm:px-3 mb-6 sm:mb-0">
         <div
-          //style={
-          //  userHiddenItems && userHiddenItems.includes(item.nft_id)
-          //    ? { opacity: 0.7, backgroundColor: "#ddd" }
-          //    : null
-          //}
+          style={
+            item.user_hidden ? { opacity: 0.7, backgroundColor: "#ddd" } : null
+          }
           ref={divRef}
           className="mx-auto sm:rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all bg-white"
         >
@@ -243,15 +252,11 @@ const TokenCard = ({
                         <div>Spotlight Item</div>
                       </div>
 
-                      {/*<div
+                      <div
                         className="py-2 px-3 hover:text-stpink hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap"
-                        onClick={
-                          userHiddenItems.includes(item.nft_id)
-                            ? handleUnhide
-                            : handleHide
-                        }
+                        onClick={item.user_hidden ? handleUnhide : handleHide}
                       >
-                        {userHiddenItems.includes(item.nft_id)
+                        {item.user_hidden
                           ? `Unhide From ${
                               listId === 1
                                 ? "Created"
@@ -270,7 +275,7 @@ const TokenCard = ({
                                 ? "Liked"
                                 : "List"
                             }`}
-                          </div>*/}
+                      </div>
                       <div
                         className="py-2 px-3 hover:text-stpink hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap"
                         onClick={handleRefreshNFTMetadata}

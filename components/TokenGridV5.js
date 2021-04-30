@@ -15,6 +15,7 @@ const TokenGridV5 = ({
   next,
   endMessage,
   scrollThreshold,
+  showUserHiddenItems,
 
   items,
   isDetail,
@@ -257,6 +258,7 @@ const TokenGridV5 = ({
                   changeSpotlightItem={changeSpotlightItem}
                   pageProfile={pageProfile}
                   handleRemoveItem={handleRemoveItem}
+                  showUserHiddenItems={showUserHiddenItems}
                 />
               ))}
             </div>
