@@ -21,6 +21,7 @@ export default async (req, res) => {
           "X-Authenticated-User": user.publicAddress,
           "X-API-Key": process.env.SHOWTIME_FRONTEND_API_KEY_V2,
         },
+        body: req.body,
       }
     );
   } catch (error) {

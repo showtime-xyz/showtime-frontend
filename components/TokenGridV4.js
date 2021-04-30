@@ -221,7 +221,7 @@ const TokenGridV4 = ({
             {deduplicatedItemsList.slice(0, itemsShowing).map((item) => (
               <TokenCard
                 key={item.nft_id}
-                item={item}
+                originalItem={item}
                 columns={context.columns}
                 isMobile={context.isMobile}
                 currentlyPlayingVideo={currentlyPlayingVideo}

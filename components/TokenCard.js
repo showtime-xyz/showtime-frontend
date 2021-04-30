@@ -11,17 +11,21 @@ import mixpanel from "mixpanel-browser";
 import AppContext from "../context/app-context";
 import MiniFollowButton from "./MiniFollowButton";
 import TokenCardImage from "../components/TokenCardImage";
-import { removeTags } from "../lib/utilities";
+import {
+  removeTags,
+  formatAddressShort,
+  truncateWithEllipses,
+} from "../lib/utilities";
 
 const TokenCard = ({
-  item,
-  showDuplicateNFTs,
-  setShowDuplicateNFTs,
+  originalItem,
+  //showDuplicateNFTs,
+  //setShowDuplicateNFTs,
   isMyProfile,
   listId,
-  userHiddenItems,
-  setUserHiddenItems,
-  refreshItems,
+  //userHiddenItems,
+  //setUserHiddenItems,
+  //refreshItems,
   setOpenCardMenu,
   openCardMenu,
   changeSpotlightItem,
@@ -29,9 +33,14 @@ const TokenCard = ({
   setCurrentlyPlayingVideo,
   setCurrentlyOpenModal,
   pageProfile,
+  handleRemoveItem,
+  showUserHiddenItems,
+  showDuplicates,
+  setHasUserHiddenItems,
 }) => {
+  const [item, setItem] = useState(originalItem);
   const [moreShown, setMoreShown] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  //const [imageLoaded, setImageLoaded] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [muted, setMuted] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -39,47 +48,68 @@ const TokenCard = ({
   const context = useContext(AppContext);
 
   const divRef = useRef();
-  const imageRef = useRef();
-
-  const truncateWithEllipses = (text, max) => {
-    if (text) {
-      return text.substr(0, max - 1) + (text.length > max ? "..." : "");
-    }
-  };
 
   const handleHide = async () => {
-    setUserHiddenItems([...userHiddenItems, item.nft_id]);
+    //setUserHiddenItems([...userHiddenItems, item.nft_id]);
+
+    setItem({ ...item, user_hidden: true });
+    setHasUserHiddenItems(true);
 
     // Post changes to the API
     await fetch(`/api/hidenft/${item.nft_id}/${listId}`, {
       method: "post",
+      body: JSON.stringify({
+        showDuplicates: showDuplicates ? 1 : 0,
+      }),
     });
+
+    if (!showUserHiddenItems) {
+      handleRemoveItem(item.nft_id);
+    }
 
     mixpanel.track("Hid item");
   };
 
   const handleUnhide = async () => {
-    setUserHiddenItems([
-      ...userHiddenItems.filter((nft_id) => nft_id != item.nft_id),
-    ]);
+    //setUserHiddenItems([
+    //  ...userHiddenItems.filter((nft_id) => nft_id != item.nft_id),
+    //]);
+
+    setItem({ ...item, user_hidden: false });
 
     // Post changes to the API
     await fetch(`/api/unhidenft/${item.nft_id}/${listId}`, {
       method: "post",
+      body: JSON.stringify({
+        showDuplicates: showDuplicates ? 1 : 0,
+      }),
     });
 
     mixpanel.track("Unhid item");
   };
 
   const handleRefreshNFTMetadata = async () => {
+    const user_hidden = item.user_hidden;
+
     setRefreshing(true);
-    await fetch(`/api/refreshmetadata/${item.nft_id}`, {
+    const result = await fetch(`/api/refreshmetadata/${item.nft_id}`, {
       method: "post",
     });
-    await refreshItems();
+    const { data } = await result.json();
+    if (data) {
+      // Replace all fields
+      setItem({ ...data, user_hidden: user_hidden });
+    } else {
+      handleRemoveItem(item.nft_id);
+    }
+
+    //item.name = "THIS";
+
+    //await refreshItems();
     setRefreshing(false);
   };
 
+  /*
   const getImageUrl = (token_aspect_ratio) => {
     var img_url = item.token_img_url ? item.token_img_url : null;
 
@@ -92,8 +122,9 @@ const TokenCard = ({
     }
     return img_url;
   };
+  */
 
-  const max_description_length = 67;
+  const max_description_length = 65;
 
   const getBackgroundColor = (item) => {
     if (
@@ -106,22 +137,20 @@ const TokenCard = ({
     }
   };
 
-  const hash = item.token_img_url || item.token_animation_url;
+  //const hash = item.token_img_url || item.token_animation_url;
 
   return (
     <>
       <div className="px-0 sm:px-3 mb-6 sm:mb-0">
         <div
           style={
-            userHiddenItems && userHiddenItems.includes(item.nft_id)
-              ? { opacity: 0.7, backgroundColor: "#ddd" }
-              : null
+            item.user_hidden ? { opacity: 0.7, backgroundColor: "#ddd" } : null
           }
           ref={divRef}
           className="mx-auto sm:rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all bg-white"
         >
           <div
-            ref={imageRef}
+            ref={item.imageRef}
             className="p-4 flex flex-row items-center relative"
           >
             <div className="pr-2 ">
@@ -193,7 +222,7 @@ const TokenCard = ({
                         : item.nft_id + "_" + listId
                     );
                   }}
-                  className="card-menu-button text-right text-gray-500"
+                  className="card-menu-button text-right text-gray-600"
                 >
                   <FontAwesomeIcon
                     style={{
@@ -234,13 +263,9 @@ const TokenCard = ({
 
                       <div
                         className="py-2 px-3 hover:text-stpink hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap"
-                        onClick={
-                          userHiddenItems.includes(item.nft_id)
-                            ? handleUnhide
-                            : handleHide
-                        }
+                        onClick={item.user_hidden ? handleUnhide : handleHide}
                       >
-                        {userHiddenItems.includes(item.nft_id)
+                        {item.user_hidden
                           ? `Unhide From ${
                               listId === 1
                                 ? "Created"
@@ -268,53 +293,6 @@ const TokenCard = ({
                       </div>
                     </div>
                   </div>
-                  {/*<div
-                      style={{
-                        borderWidth: 1,
-                        borderColor: "#ccc",
-                        position: "absolute",
-                        top: 40,
-                        right: 15,
-                        backgroundColor: "white",
-                        borderRadius: 7,
-                        zIndex: 1,
-                        fontSize: 14,
-                      }}
-                      className="py-2 px-4"
-                    >
-                      <div
-                        className="card-menu-item"
-                        onClick={
-                          this.props.userHiddenItems.includes(
-                            this.props.item.nft_id
-                          )
-                            ? this.handleUnhide
-                            : this.handleHide
-                        }
-                      >
-                        {this.props.userHiddenItems.includes(
-                          this.props.item.nft_id
-                        )
-                          ? `Unhide item from ${
-                              listId === 1
-                                ? "Created"
-                                : listId === 2
-                                ? "Owned"
-                                : listId === 3
-                                ? "Liked"
-                                : "List"
-                            }`
-                          : `Hide item from ${
-                              listId === 1
-                                ? "Created"
-                                : listId === 2
-                                ? "Owned"
-                                : listId === 3
-                                ? "Liked"
-                                : "List"
-                            }`}
-                      </div>
-                          </div>*/}
                 </div>
               ) : null}
             </div>
@@ -332,8 +310,8 @@ const TokenCard = ({
                 loop
                 controls
                 muted={muted}
-                width={imageRef?.current?.clientWidth}
-                height={imageRef?.current?.clientWidth}
+                width={item.imageRef?.current?.clientWidth}
+                height={item.imageRef?.current?.clientWidth}
                 playsinline
                 //onReady={this.setSpans}
               />
@@ -342,7 +320,7 @@ const TokenCard = ({
             <div
               style={{
                 position: "relative",
-                height: imageRef?.current?.clientWidth,
+                height: item.imageRef?.current?.clientWidth,
               }}
             >
               <div
@@ -374,9 +352,9 @@ const TokenCard = ({
                 >
                   <TokenCardImage
                     nft={item}
-                    onLoad={() => {
-                      setImageLoaded(true);
-                    }}
+                    //onLoad={() => {
+                    //  setImageLoaded(true);
+                    //}}
                   />
                 </div>
               </div>
@@ -579,14 +557,17 @@ const TokenCard = ({
                           <div>
                             <img
                               alt={
-                                pageProfile.name
+                                pageProfile.name &&
+                                pageProfile.name != "Unnamed"
                                   ? pageProfile.name
                                   : pageProfile.username
                                   ? pageProfile.username
                                   : pageProfile.wallet_addresses_excluding_email
                                       .length > 0
-                                  ? pageProfile
-                                      .wallet_addresses_excluding_email[0]
+                                  ? formatAddressShort(
+                                      pageProfile
+                                        .wallet_addresses_excluding_email[0]
+                                    )
                                   : "Unknown"
                               }
                               src={
@@ -600,12 +581,16 @@ const TokenCard = ({
                           </div>
                           <div className="showtime-card-profile-link">
                             {truncateWithEllipses(
-                              pageProfile.name
+                              pageProfile.name && pageProfile.name != "Unnamed"
                                 ? pageProfile.name
                                 : pageProfile.username
                                 ? pageProfile.username
-                                : wallet_addresses_excluding_email.length > 0
-                                ? wallet_addresses_excluding_email[0]
+                                : pageProfile.wallet_addresses_excluding_email
+                                    .length > 0
+                                ? formatAddressShort(
+                                    pageProfile
+                                      .wallet_addresses_excluding_email[0]
+                                  )
                                 : "Unknown",
 
                               14
@@ -680,7 +665,7 @@ const TokenCard = ({
           style={{ fontWeight: 400, fontSize: 14 }}
         >
           <div className="flex-grow"></div>
-          {item.duplicate_count > 1 && (
+          {/*item.duplicate_count > 1 && (
             <div
               onClick={() => {
                 setShowDuplicateNFTs({
@@ -695,7 +680,7 @@ const TokenCard = ({
                 item.duplicate_count - 1
               } more similar`}
             </div>
-          )}
+            )*/}
         </div>
       </div>
     </>
