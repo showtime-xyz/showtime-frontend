@@ -1107,12 +1107,16 @@ const Profile = ({
                         </div>
                         <div className="flex-grow sm:hidden"></div>
                         <div className="sm:hidden mr-1">
-                          {menuLists ? menuLists[0].count : null}
+                          {menuLists
+                            ? Number(menuLists[0].count).toLocaleString()
+                            : null}
                         </div>
                         <div>Created</div>
                         <div className="flex-grow"></div>
                         <div className="rounded-full text-center text-sm hidden sm:block">
-                          {menuLists ? menuLists[0].count : null}
+                          {menuLists
+                            ? Number(menuLists[0].count).toLocaleString()
+                            : null}
                           <span className="invisible">+</span>
                         </div>
                       </div>
@@ -1143,12 +1147,16 @@ const Profile = ({
                         </div>
                         <div className="flex-grow sm:hidden"></div>
                         <div className="sm:hidden mr-1">
-                          {menuLists ? menuLists[1].count : null}
+                          {menuLists
+                            ? Number(menuLists[1].count).toLocaleString()
+                            : null}
                         </div>
                         <div>Owned</div>
                         <div className="flex-grow"></div>
                         <div className="rounded-full text-center text-sm hidden sm:block">
-                          {menuLists ? menuLists[1].count : null}
+                          {menuLists
+                            ? Number(menuLists[1].count).toLocaleString()
+                            : null}
                           <span className="invisible">+</span>
                         </div>
                       </div>
