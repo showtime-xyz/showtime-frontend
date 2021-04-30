@@ -1666,7 +1666,8 @@ const Profile = ({
                     endMessage={
                       !isLoadingCards &&
                       !isRefreshingCards &&
-                      !isLoadingMore ? (
+                      !isLoadingMore &&
+                      collectionId == 0 ? (
                         menuLists[selectedGrid - 1].count_all_nonhidden >
                         menuLists[selectedGrid - 1]
                           .count_deduplicated_nonhidden ? (
