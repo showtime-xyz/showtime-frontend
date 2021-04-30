@@ -1367,7 +1367,7 @@ const Profile = ({
                             */
                     }`}
                   >
-                    <div className="flex-1"></div>
+                    <div className="flex-1 hidden sm:flex"></div>
                     <Listbox
                       value={collectionId}
                       onChange={(value) => {
@@ -1376,7 +1376,18 @@ const Profile = ({
                     >
                       {({ open }) => (
                         <>
-                          <div className="relative mr-2" style={{ width: 218 }}>
+                          <div
+                            className="relative mr-2"
+                            style={
+                              context.isMobile
+                                ? {
+                                    width: "100%",
+                                  }
+                                : {
+                                    width: 218,
+                                  }
+                            }
+                          >
                             <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                               <span className="flex items-center">
                                 <>
@@ -1415,11 +1426,12 @@ const Profile = ({
                                       ].collections.filter(
                                         (t) => t.collection_id === collectionId
                                       ).length > 0 &&
-                                      menuLists[
-                                        selectedGrid - 1
-                                      ].collections.filter(
-                                        (t) => t.collection_id === collectionId
-                                      )[0].collection_name}
+                                      menuLists[selectedGrid - 1].collections
+                                        .filter(
+                                          (t) =>
+                                            t.collection_id === collectionId
+                                        )[0]
+                                        .collection_name.replace(" (FND)", "")}
                                   </span>
                                 </>
                               </span>
@@ -1478,7 +1490,10 @@ const Profile = ({
                                                   "ml-3 block truncate"
                                                 )}
                                               >
-                                                {item.collection_name}
+                                                {item.collection_name.replace(
+                                                  " (FND)",
+                                                  ""
+                                                )}
                                               </span>
                                             </div>
 
@@ -1509,7 +1524,7 @@ const Profile = ({
                         </>
                       )}
                     </Listbox>
-
+                    <div className="flex-1 flex sm:hidden"></div>
                     <Listbox
                       value={
                         selectedGrid === 1
@@ -1524,10 +1539,17 @@ const Profile = ({
                     >
                       {({ open }) => (
                         <>
-                          <Listbox.Label className="block text-sm text-gray-500 mr-2 hidden">
+                          {/*<Listbox.Label className="block text-sm text-gray-500 mr-2 hidden">
                             Sort By
-                          </Listbox.Label>
-                          <div className="relative" style={{ width: 130 }}>
+                      </Listbox.Label>*/}
+                          <div
+                            className="relative"
+                            style={
+                              context.isMobile
+                                ? { minWidth: 140 }
+                                : { width: 130 }
+                            }
+                          >
                             <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                               <span className="block truncate">
                                 {
@@ -1659,14 +1681,7 @@ const Profile = ({
                               </span>
                             </div>
                           )
-                        ) : (
-                          <span
-                            className="cursor-pointer hover:text-gray-700"
-                            onClick={() => handleShowDuplicates(true)}
-                          >
-                            Show duplicates temp
-                          </span>
-                        )
+                        ) : null
                       ) : /*
                         !showDuplicates && false ? (
                           <div className="text-center text-gray-400 text-xs">
@@ -1692,7 +1707,9 @@ const Profile = ({
 
                       null
                     }
-                    scrollThreshold={0.5}
+                    scrollThreshold={
+                      page === 1 ? 0.3 : page < 4 ? 0.5 : page < 6 ? 0.7 : 0.8
+                    }
                     showUserHiddenItems={showUserHiddenItems}
                     showDuplicates={showDuplicates}
                     //
