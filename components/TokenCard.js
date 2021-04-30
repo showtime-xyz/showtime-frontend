@@ -36,6 +36,7 @@ const TokenCard = ({
   handleRemoveItem,
   showUserHiddenItems,
   showDuplicates,
+  setHasUserHiddenItems,
 }) => {
   const [item, setItem] = useState(originalItem);
   const [moreShown, setMoreShown] = useState(false);
@@ -52,6 +53,7 @@ const TokenCard = ({
     //setUserHiddenItems([...userHiddenItems, item.nft_id]);
 
     setItem({ ...item, user_hidden: true });
+    setHasUserHiddenItems(true);
 
     // Post changes to the API
     await fetch(`/api/hidenft/${item.nft_id}/${listId}`, {

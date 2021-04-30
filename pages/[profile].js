@@ -243,6 +243,7 @@ const Profile = ({
   const [switchInProgress, setSwitchInProgress] = useState(false);
   const [showUserHiddenItems, setShowUserHiddenItems] = useState(false);
   const [showDuplicates, setShowDuplicates] = useState(false);
+  const [hasUserHiddenItems, setHasUserHiddenItems] = useState(false);
 
   //const [collections, setCollections] = useState([]);
   const [collectionId, setCollectionId] = useState(0);
@@ -452,11 +453,19 @@ const Profile = ({
       setMoreBioShown(false);
       setIsLoadingCards(true);
       setShowUserHiddenItems(false);
+
       setSpotlightItem(featured_nft);
 
       setSelectedCreatedSortField(lists.lists[0].sort_id || 1);
       setSelectedOwnedSortField(lists.lists[1].sort_id || 1);
       setSelectedLikedSortField(2);
+
+      setHasUserHiddenItems(
+        lists.lists[0].count_all_withhidden >
+          lists.lists[0].count_all_nonhidden ||
+          lists.lists[1].count_all_withhidden >
+            lists.lists[1].count_all_nonhidden
+      );
 
       setShowDuplicates(false);
       setCollectionId(0);
@@ -1141,7 +1150,7 @@ const Profile = ({
                             : "Unnamed"}
                         </div>
                         <div className="flex-grow"></div>
-                        {isMyProfile ? (
+                        {isMyProfile && hasUserHiddenItems ? (
                           <div className="flex sm:hidden">
                             <div className="flex-grow flex"></div>
                             <div
@@ -1318,7 +1327,7 @@ const Profile = ({
                     </div>
                   </div>
                   <div>
-                    {isMyProfile ? (
+                    {isMyProfile && hasUserHiddenItems ? (
                       <div className="flex hidden sm:flex">
                         <div className="flex-grow flex"></div>
                         <div
@@ -1712,6 +1721,7 @@ const Profile = ({
                     }
                     showUserHiddenItems={showUserHiddenItems}
                     showDuplicates={showDuplicates}
+                    setHasUserHiddenItems={setHasUserHiddenItems}
                     //
                     key={`grid_${selectedGrid}_${profile_id}_${
                       isLoadingCards || isRefreshingCards

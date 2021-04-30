@@ -17,6 +17,7 @@ const TokenGridV5 = ({
   scrollThreshold,
   showUserHiddenItems,
   showDuplicates,
+  setHasUserHiddenItems,
 
   items,
   //isDetail,
@@ -197,6 +198,7 @@ const TokenGridV5 = ({
                   handleRemoveItem={handleRemoveItem}
                   showUserHiddenItems={showUserHiddenItems}
                   showDuplicates={showDuplicates}
+                  setHasUserHiddenItems={setHasUserHiddenItems}
                 />
               ))}
             </div>
