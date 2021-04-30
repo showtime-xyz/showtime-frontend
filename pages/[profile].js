@@ -275,6 +275,7 @@ const Profile = ({
         listId: listId,
         sortId: sortId,
         showHidden: 0,
+        showDuplicates: 0,
         collectionId: collectionId,
       }),
     });
@@ -305,6 +306,7 @@ const Profile = ({
         listId: selectedGrid,
         sortId: sortId,
         showHidden: 0,
+        showDuplicates: 0,
         collectionId: collectionId,
       }),
     });
@@ -400,6 +402,7 @@ const Profile = ({
           listId: 1,
           sortId: lists.lists[0].sort_id,
           showHidden: 0,
+          showDuplicates: 0,
           collectionId: 0,
         }),
       });
@@ -419,6 +422,7 @@ const Profile = ({
           listId: 2,
           sortId: lists.lists[1].sort_id,
           showHidden: 0,
+          showDuplicates: 0,
           collectionId: 0,
         }),
       });
@@ -438,6 +442,7 @@ const Profile = ({
           listId: 3,
           sortId: lists.lists[2].sort_id,
           showHidden: 0,
+          showDuplicates: 0,
           collectionId: 0,
         }),
       });
@@ -1107,14 +1112,14 @@ const Profile = ({
                         </div>
                         <div className="flex-grow sm:hidden"></div>
                         <div className="sm:hidden mr-1">
-                          {menuLists
+                          {menuLists && menuLists.length > 0
                             ? Number(menuLists[0].count).toLocaleString()
                             : null}
                         </div>
                         <div>Created</div>
                         <div className="flex-grow"></div>
                         <div className="rounded-full text-center text-sm hidden sm:block">
-                          {menuLists
+                          {menuLists && menuLists.length > 0
                             ? Number(menuLists[0].count).toLocaleString()
                             : null}
                           <span className="invisible">+</span>
@@ -1147,14 +1152,14 @@ const Profile = ({
                         </div>
                         <div className="flex-grow sm:hidden"></div>
                         <div className="sm:hidden mr-1">
-                          {menuLists
+                          {menuLists && menuLists.length > 0
                             ? Number(menuLists[1].count).toLocaleString()
                             : null}
                         </div>
                         <div>Owned</div>
                         <div className="flex-grow"></div>
                         <div className="rounded-full text-center text-sm hidden sm:block">
-                          {menuLists
+                          {menuLists && menuLists.length > 0
                             ? Number(menuLists[1].count).toLocaleString()
                             : null}
                           <span className="invisible">+</span>
@@ -1187,24 +1192,30 @@ const Profile = ({
                         </div>
                         <div className="flex-grow sm:hidden"></div>
                         <div className="sm:hidden mr-1">
-                          {menuLists
+                          {menuLists && menuLists.length > 0
                             ? menuLists[2].count > 300
                               ? 300
                               : menuLists[2].count
                             : null}
-                          {menuLists && menuLists[2].count > 300 ? "+" : ""}
+                          {menuLists &&
+                          menuLists.length > 0 &&
+                          menuLists[2].count > 300
+                            ? "+"
+                            : ""}
                         </div>
                         <div>Liked</div>
                         <div className="flex-grow"></div>
                         <div className="rounded-full text-center text-sm hidden sm:block">
-                          {menuLists
+                          {menuLists && menuLists.length > 0
                             ? menuLists[2].count > 300
                               ? 300
                               : menuLists[2].count
                             : null}
                           <span
                             className={
-                              menuLists && menuLists[2].count > 300
+                              menuLists &&
+                              menuLists.length > 0 &&
+                              menuLists[2].count > 300
                                 ? "visible"
                                 : "invisible"
                             }

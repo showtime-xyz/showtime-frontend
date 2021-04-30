@@ -11,6 +11,7 @@ export default async (req, res) => {
   const listId = body.listId || 1;
   const sortId = body.sortId || 1;
   const showHidden = body.showHidden || 0;
+  const showDuplicates = body.showDuplicates || 0;
   const collectionId = body.collectionId || 0;
 
   try {
@@ -25,7 +26,7 @@ export default async (req, res) => {
     } catch (err) {}
 
     const res_activity = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/profile_nfts?profile_id=${profileId}&page=${page}&limit=${limit}&list_id=${listId}&sort_id=${sortId}&show_hidden=${showHidden}&collection_id=${collectionId}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/profile_nfts?profile_id=${profileId}&page=${page}&limit=${limit}&list_id=${listId}&sort_id=${sortId}&show_hidden=${showHidden}&show_duplicates=${showDuplicates}&collection_id=${collectionId}`,
       {
         headers: {
           "X-Authenticated-User": publicAddress,

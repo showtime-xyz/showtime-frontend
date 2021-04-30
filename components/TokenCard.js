@@ -104,7 +104,7 @@ const TokenCard = ({
   };
   */
 
-  const max_description_length = 67;
+  const max_description_length = 65;
 
   const getBackgroundColor = (item) => {
     if (
