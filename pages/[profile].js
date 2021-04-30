@@ -1188,23 +1188,23 @@ const Profile = ({
                         <div className="flex-grow sm:hidden"></div>
                         <div className="sm:hidden mr-1">
                           {menuLists
-                            ? menuLists[2].count > 150
-                              ? 150
+                            ? menuLists[2].count > 300
+                              ? 300
                               : menuLists[2].count
                             : null}
-                          {menuLists && menuLists[2].count > 150 ? "+" : ""}
+                          {menuLists && menuLists[2].count > 300 ? "+" : ""}
                         </div>
                         <div>Liked</div>
                         <div className="flex-grow"></div>
                         <div className="rounded-full text-center text-sm hidden sm:block">
                           {menuLists
-                            ? menuLists[2].count > 150
-                              ? 150
+                            ? menuLists[2].count > 300
+                              ? 300
                               : menuLists[2].count
                             : null}
                           <span
                             className={
-                              menuLists && menuLists[2].count > 150
+                              menuLists && menuLists[2].count > 300
                                 ? "visible"
                                 : "invisible"
                             }
