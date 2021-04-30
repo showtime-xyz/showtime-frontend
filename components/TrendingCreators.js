@@ -1,15 +1,39 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
 import LeaderboardItemV2 from "../components/LeaderboardItemV2";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown, faPlus } from "@fortawesome/free-solid-svg-icons";
+import AppContext from "../context/app-context";
 
 const TrendingCreators = ({
   shownLeaderboardItems,
   isLoading,
   showAllLeaderboardItems,
   setShowAllLeaderboardItems,
+  trendingTab,
 }) => {
+  const context = useContext(AppContext);
+  const [followAllClicked, setFollowAllClicked] = useState(false);
+
+  // reset follow all button when leaderboard changes
+  useEffect(() => {
+    setFollowAllClicked(false);
+  }, [showAllLeaderboardItems, trendingTab]);
+
+  const handleFollowAll = async () => {
+    setFollowAllClicked(true);
+    const newProfiles = shownLeaderboardItems.filter(
+      (item) =>
+        !context.myFollows.map((f) => f.profile_id).includes(item.profile_id)
+    );
+    // UPDATE CONTEXT
+    context.setMyFollows([...newProfiles, ...context.myFollows]);
+    // Post changes to the API
+    await fetch(`/api/bulkfollow`, {
+      method: "post",
+      body: JSON.stringify(newProfiles.map((item) => item.profile_id)),
+    });
+  };
   return (
     <>
       <div className="bg-white sm:rounded-lg shadow-md pt-3 ">
@@ -17,16 +41,25 @@ const TrendingCreators = ({
           <div className="my-2 flex-grow">
             <span className="sm:hidden">Trending </span>Creators
           </div>
-          {/*!isLoading && (
+          {!isLoading && (
             <div>
-              <div className="bg-white text-black border border-gray-400 rounded-full py-2 px-4 text-sm flex flex-row hover:opacity-70 transition-all cursor-pointer">
-                <div className="mr-1">
-                  <FontAwesomeIcon icon={faPlus} />
-                </div>
-                <div>Follow All</div>
+              <div
+                className={`text-black border rounded-full py-2 px-4 text-sm flex flex-row hover:opacity-70 transition-all cursor-pointer ${
+                  followAllClicked
+                    ? "bg-white border-gray-400"
+                    : "bg-black text-white border-black"
+                }`}
+                onClick={handleFollowAll}
+              >
+                {!followAllClicked && (
+                  <div className="mr-1">
+                    <FontAwesomeIcon icon={faPlus} />
+                  </div>
+                )}
+                <div>{followAllClicked ? "Followed All" : "Follow All"}</div>
               </div>
             </div>
-          )*/}
+          )}
         </div>
 
         {isLoading ? (
