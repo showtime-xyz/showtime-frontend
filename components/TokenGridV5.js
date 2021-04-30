@@ -25,23 +25,16 @@ const TokenGridV5 = ({
   isMyProfile,
   openCardMenu,
   setOpenCardMenu,
-  //userHiddenItems,
-  //setUserHiddenItems,
-  //showUserHiddenItems,
-  //refreshItems,
   detailsModalCloseOnKeyChange,
   changeSpotlightItem,
   extraColumn,
   pageProfile,
-  //fetchMoreData,
   isLoadingMore,
 }) => {
   const context = useContext(AppContext);
   const [itemsList, setItemsList] = useState([]);
 
   const handleRemoveItem = (nft_id) => {
-    //console.log(nft_id);
-    //setItemsList([]);
     setItemsList(itemsList.filter((item) => item.nft_id != nft_id));
   };
   //const [showDuplicateNFTs, setShowDuplicateNFTs] = useState({});
@@ -82,10 +75,6 @@ const TokenGridV5 = ({
   const goToNext = () => {
     const currentIndex = itemsList.indexOf(currentlyOpenModal);
     if (currentIndex < itemsList.length - 1) {
-      //if (itemsShowing - 6 < currentIndex - 1) {
-      //  fetchMoreData();
-      //}
-
       // Get position of next card image and scroll down
       const bodyRect = document.body.getBoundingClientRect();
       if (itemsList[currentIndex + 1].imageRef.current) {
@@ -138,6 +127,7 @@ const TokenGridV5 = ({
   }, [leftPress, itemsList]);
 
   useEffect(() => {
+    /*
     const validItems = items.filter(
       (item) =>
         (item.token_hidden !== 1 || isDetail) &&
@@ -158,8 +148,10 @@ const TokenGridV5 = ({
           : itemGroup[0]
       )
       .flat();
+    */
+
     const itemsWithRefs = [];
-    _.forEach(uniqueItems, (item) => {
+    _.forEach(items, (item) => {
       item.imageRef = createRef();
       itemsWithRefs.push(item);
     });

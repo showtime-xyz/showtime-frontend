@@ -284,7 +284,7 @@ class SpotlightItem extends React.Component {
                               : item.nft_id + "_" + listId
                           );
                         }}
-                        className="card-menu-button text-right flex items-center justify-center text-gray-500"
+                        className="card-menu-button text-right flex items-center justify-center text-gray-600"
                       >
                         <FontAwesomeIcon
                           style={{

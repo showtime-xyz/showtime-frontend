@@ -1591,13 +1591,21 @@ const Profile = ({
                     }}
                     hasMore={hasMore}
                     endMessage={
-                      menuLists[selectedGrid - 1].count_all_nonhidden >
-                      menuLists[selectedGrid - 1]
-                        .count_deduplicated_nonhidden ? (
-                        <div>Has duplicates</div>
-                      ) : (
-                        <div>No duplicated</div>
-                      )
+                      !isLoadingCards &&
+                      !isRefreshingCards &&
+                      !isLoadingMore ? (
+                        menuLists[selectedGrid - 1].count_all_nonhidden >
+                        menuLists[selectedGrid - 1]
+                          .count_deduplicated_nonhidden ? (
+                          <div className="text-center text-gray-400 text-xs">
+                            Some duplicate items were hidden. Show all
+                          </div>
+                        ) : (
+                          <div className="text-center text-gray-400 text-xs">
+                            Some duplicate items were hidden. Show all [not]
+                          </div>
+                        )
+                      ) : null
                     }
                     scrollThreshold={0.5}
                     showUserHiddenItems={showUserHiddenItems}
@@ -1625,34 +1633,6 @@ const Profile = ({
                       profile_id,
                       username,
                     }} // to customize owned by list on bottom of card
-
-                    /*
-                  userHiddenItems={
-                    selectedGrid === 1
-                      ? createdHiddenItems
-                      : selectedGrid === 2
-                      ? ownedHiddenItems
-                      : selectedGrid === 3
-                      ? likedHiddenItems
-                      : null
-                  }
-                  setUserHiddenItems={
-                    selectedGrid === 1
-                      ? setCreatedHiddenItems
-                      : selectedGrid === 2
-                      ? setOwnedHiddenItems
-                      : selectedGrid === 3
-                      ? setLikedHiddenItems
-                      : null
-                  }
-                  showUserHiddenItems={showUserHiddenItems}
-                  */
-
-                    //refreshItems={
-                    //  selectedGrid === 1
-                    //    ? () => updateCreated(selectedCreatedSortField, false)
-                    //    : () => updateOwned(selectedOwnedSortField, false)
-                    //}
                   />
                 )}
               </div>
