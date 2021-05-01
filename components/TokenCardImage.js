@@ -48,6 +48,15 @@ export default function ActivityImage({ nft, onLoad }) {
           height={imgWidth}
           playsinline
           onReady={onLoad}
+          // Disable downloading & right click
+          config={{
+            file: {
+              attributes: {
+                onContextMenu: (e) => e.preventDefault(),
+                controlsList: "nodownload",
+              },
+            },
+          }}
         />
       )}
     </div>

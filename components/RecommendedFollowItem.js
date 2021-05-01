@@ -186,6 +186,15 @@ const Tiles = ({ topItems, setCurrentlyOpenModal }) => {
                   width={"100%"}
                   height={"100%"}
                   playsinline
+                  // Disable downloading & right click
+                  config={{
+                    file: {
+                      attributes: {
+                        onContextMenu: (e) => e.preventDefault(),
+                        controlsList: "nodownload",
+                      },
+                    },
+                  }}
                 />
               </NFTVideoTile>
             )}

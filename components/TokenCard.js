@@ -316,6 +316,15 @@ const TokenCard = ({
                 height={item.imageRef?.current?.clientWidth}
                 playsinline
                 //onReady={this.setSpans}
+                // Disable downloading & right click
+                config={{
+                  file: {
+                    attributes: {
+                      onContextMenu: (e) => e.preventDefault(),
+                      controlsList: "nodownload",
+                    },
+                  },
+                }}
               />
             </div>
           ) : (

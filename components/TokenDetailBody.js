@@ -246,6 +246,15 @@ const TokenDetailBody = ({
               width={mediaWidth}
               style={{ margin: "auto" }}
               playsinline
+              // Disable downloading & right click
+              config={{
+                file: {
+                  attributes: {
+                    onContextMenu: (e) => e.preventDefault(),
+                    controlsList: "nodownload",
+                  },
+                },
+              }}
             />
           ) : (
             <div

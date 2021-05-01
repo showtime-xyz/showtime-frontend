@@ -104,6 +104,15 @@ export default function ActivityImage({
           width={imgWidth}
           height={imgWidth}
           playsinline
+          // Disable downloading & right click
+          config={{
+            file: {
+              attributes: {
+                onContextMenu: (e) => e.preventDefault(),
+                controlsList: "nodownload",
+              },
+            },
+          }}
         />
       )}
       {totalNumberOfImages > 1 && !isMobile && (
