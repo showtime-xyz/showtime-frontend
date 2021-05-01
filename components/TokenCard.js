@@ -89,7 +89,9 @@ const TokenCard = ({
   };
 
   const handleRefreshNFTMetadata = async () => {
+    // Keep these from the original item
     const user_hidden = item.user_hidden;
+    const owner_id = item.owner_id;
 
     setRefreshing(true);
     const result = await fetch(`/api/refreshmetadata/${item.nft_id}`, {
@@ -97,8 +99,8 @@ const TokenCard = ({
     });
     const { data } = await result.json();
     if (data) {
-      // Replace all fields
-      setItem({ ...data, user_hidden: user_hidden });
+      // Replace all fields, except those two
+      setItem({ ...data, user_hidden: user_hidden, owner_id: owner_id });
     } else {
       handleRemoveItem(item.nft_id);
     }
