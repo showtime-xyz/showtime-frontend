@@ -24,6 +24,7 @@ import backend from "../lib/backend";
 import UsersWhoLiked from "./UsersWhoLiked";
 import MiniFollowButton from "./MiniFollowButton";
 import UsersWhoOwn from "./UsersWhoOwn";
+import CappedWidth from "../components/CappedWidth";
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500;
@@ -38,7 +39,7 @@ const TokenDetailBody = ({
   parentSetReportModalOpen, // for full page view only, not modal view
 }) => {
   const context = useContext(AppContext);
-  const { isMobile, columns, gridWidth } = context;
+  const { isMobile, gridWidth } = context;
   const getBackgroundColor = () => {
     if (
       item.token_background_color &&
@@ -80,28 +81,22 @@ const TokenDetailBody = ({
   const max_description_length = context.isMobile ? 120 : 220;
 
   useEffect(() => {
-    var aspectRatio = 1;
-
-    // Try to use current image's aspect ratio
-    if (item.imageRef && item.imageRef.current) {
-      if (item.imageRef.current.clientHeight) {
-        aspectRatio =
-          item.imageRef.current.clientWidth /
-          item.imageRef.current.clientHeight;
-      }
-    }
-    // Set full height
-    var mWidth = 0;
+    var aspectRatio = item.token_aspect_ratio ? item.token_aspect_ratio : 1;
 
     if (isMobile) {
-      mWidth = modalRef.current.clientWidth;
-      setMediaWidth(mWidth);
-      setMediaHeight(mWidth / aspectRatio);
+      setMediaWidth(modalRef.current.clientWidth);
+      setMediaHeight(modalRef.current.clientWidth / aspectRatio);
     } else {
       setMediaHeight(TOKEN_MEDIA_HEIGHT);
       setMediaWidth(TOKEN_MEDIA_HEIGHT * aspectRatio);
     }
-  }, [targetRef, item, context.windowSize, isMobile]);
+  }, [
+    targetRef,
+    item,
+    context.windowSize,
+    isMobile,
+    modalRef?.current?.clientWidth,
+  ]);
 
   const [fullResLoaded, setFullResLoaded] = useState(false);
   const [usersWhoLiked, setUsersWhoLiked] = useState();
@@ -162,7 +157,7 @@ const TokenDetailBody = ({
         ref={modalRef}
         style={{ position: "relative", marginTop: -1 }}
       >
-        {columns === 1 ? (
+        {isMobile ? (
           <div className="p-4 flex flex-row">
             <div className="flex-shrink">
               {item.contract_is_creator ? (
@@ -246,6 +241,15 @@ const TokenDetailBody = ({
               width={mediaWidth}
               style={{ margin: "auto" }}
               playsinline
+              // Disable downloading & right click
+              config={{
+                file: {
+                  attributes: {
+                    onContextMenu: (e) => e.preventDefault(),
+                    controlsList: "nodownload",
+                  },
+                },
+              }}
             />
           ) : (
             <div
@@ -332,12 +336,13 @@ const TokenDetailBody = ({
           )}
         </div>
         {/* Details wrapper */}
+
         <div
-          className="p-2 md:p-8"
+          className="p-2 md:p-8 max-w-screen-2xl"
           style={{
             overflow: "auto",
             position: "relative",
-            width: isInModal ? "100%" : gridWidth,
+            width: "100%",
             margin: "auto",
           }}
         >
@@ -394,9 +399,10 @@ const TokenDetailBody = ({
                   }}
                 >
                   <div className="text-base font-normal px-4 py-3 mr-2 rounded-full shadow-md hover:text-stpink">
-                    {context.columns > 2
-                      ? `Bid on ${getContractName(item)}`
-                      : "Bid"}
+                    <span>Bid </span>
+                    <span className="hidden sm:inline">
+                      on {getContractName(item)}
+                    </span>
                   </div>
                 </a>
                 <div className="flex-grow"></div>

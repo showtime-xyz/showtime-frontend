@@ -161,6 +161,15 @@ class SpotlightItem extends React.Component {
                           // }
                           playsinline
                           onReady={() => this.setState({ videoReady: true })}
+                          // Disable downloading & right click
+                          config={{
+                            file: {
+                              attributes: {
+                                onContextMenu: (e) => e.preventDefault(),
+                                controlsList: "nodownload",
+                              },
+                            },
+                          }}
                         />
                         {this.state.refreshing && (
                           <div
