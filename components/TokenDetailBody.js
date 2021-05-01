@@ -24,7 +24,6 @@ import backend from "../lib/backend";
 import UsersWhoLiked from "./UsersWhoLiked";
 import MiniFollowButton from "./MiniFollowButton";
 import UsersWhoOwn from "./UsersWhoOwn";
-import CappedWidth from "../components/CappedWidth";
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500;
