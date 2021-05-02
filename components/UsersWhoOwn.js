@@ -149,7 +149,7 @@ export default function UsersWhoOwn({ users, ownerCount, closeModal }) {
               className="text-black cursor-pointer hover:text-stpink"
               onClick={() => setModalIsOpen(true)}
             >
-              {ownerCount - 2} others
+              {Number(ownerCount - 2).toLocaleString()} others
             </span>
             <ModalUserList
               isOpen={modalIsOpen}

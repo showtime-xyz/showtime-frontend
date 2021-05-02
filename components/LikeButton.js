@@ -81,7 +81,7 @@ const LikeButton = ({ item }) => {
       >
         <div className="flex flex-row items-center rounded-md py-1 hover:text-stred">
           <div className="mr-2" style={{ whiteSpace: "nowrap" }}>
-            {like_count}
+            {Number(like_count).toLocaleString()}
           </div>
           <div
             className={`flex ${liked ? "text-stred" : ""}`}
