@@ -23,7 +23,7 @@ const UserImagesList = ({ users }) => {
   );
 };
 
-export default function UsersWhoOwn({ users, closeModal }) {
+export default function UsersWhoOwn({ users, ownerCount, closeModal }) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   return (
     <div className="text-xs md:text-sm mt-3 text-gray-400">
@@ -149,12 +149,12 @@ export default function UsersWhoOwn({ users, closeModal }) {
               className="text-black cursor-pointer hover:text-stpink"
               onClick={() => setModalIsOpen(true)}
             >
-              {users.length - 2} others
+              {Number(ownerCount - 2).toLocaleString()} others
             </span>
             <ModalUserList
               isOpen={modalIsOpen}
               title="Owned By"
-              users={users}
+              users={users.slice(0, 500)}
               closeModal={() => setModalIsOpen(false)}
               emptyMessage="Nobody owns this yet."
               onRedirect={closeModal}
