@@ -15,9 +15,6 @@ const LikeButton = ({ item }) => {
     // Change myLikes via setMyLikes
     context.setMyLikes([...context.myLikes, nft_id]);
 
-    const likedItem = item;
-    const myLikeCounts = context.myLikeCounts;
-
     context.setMyLikeCounts({
       ...context.myLikeCounts,
       [nft_id]:
@@ -35,7 +32,6 @@ const LikeButton = ({ item }) => {
   };
 
   const handleUnlike = async (nft_id) => {
-    console.log(nft_id);
     // Change myLikes via setMyLikes
     context.setMyLikes(context.myLikes.filter((item) => !(item === nft_id)));
 
