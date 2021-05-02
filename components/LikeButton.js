@@ -15,12 +15,12 @@ const LikeButton = ({ item }) => {
     // Change myLikes via setMyLikes
     context.setMyLikes([...context.myLikes, nft_id]);
 
-    const likedItem = item;
-    const myLikeCounts = context.myLikeCounts;
     context.setMyLikeCounts({
       ...context.myLikeCounts,
       [nft_id]:
-        ((myLikeCounts && myLikeCounts[nft_id]) || likedItem.like_count) + 1,
+        (context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id])
+          ? context.myLikeCounts[item?.nft_id]
+          : item.like_count) + 1,
     });
 
     // Post changes to the API
@@ -35,12 +35,12 @@ const LikeButton = ({ item }) => {
     // Change myLikes via setMyLikes
     context.setMyLikes(context.myLikes.filter((item) => !(item === nft_id)));
 
-    const likedItem = item;
-    const myLikeCounts = context.myLikeCounts;
     context.setMyLikeCounts({
       ...context.myLikeCounts,
       [nft_id]:
-        ((myLikeCounts && myLikeCounts[nft_id]) || likedItem.like_count) - 1,
+        (context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id])
+          ? context.myLikeCounts[item?.nft_id]
+          : item.like_count) - 1,
     });
 
     // Post changes to the API
