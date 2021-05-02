@@ -44,10 +44,10 @@ const TrendingCreators = ({
           {!isLoading && (
             <div>
               <div
-                className={`text-black border rounded-full py-2 px-4 text-sm flex flex-row hover:opacity-70 transition-all cursor-pointer ${
+                className={`text-black border rounded-full py-2 px-4 text-xs flex flex-row hover:opacity-70 transition-all cursor-pointer ${
                   followAllClicked
                     ? "bg-white border-gray-400"
-                    : "bg-black text-white border-black"
+                    : "bg-stpurple text-white border-stpurple"
                 }`}
                 onClick={handleFollowAll}
               >
@@ -56,7 +56,7 @@ const TrendingCreators = ({
                     <FontAwesomeIcon icon={faPlus} />
                   </div>
                 )}
-                <div>{followAllClicked ? "Followed All" : "Follow All"}</div>
+                <div>{followAllClicked ? "Following All" : "Follow All"}</div>
               </div>
             </div>
           )}
