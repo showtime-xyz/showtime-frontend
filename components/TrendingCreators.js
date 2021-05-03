@@ -18,8 +18,19 @@ const TrendingCreators = ({
 
   // reset follow all button when leaderboard changes
   useEffect(() => {
-    setFollowAllClicked(false);
-  }, [showAllLeaderboardItems, trendingTab]);
+    if (context.myFollows) {
+      const newProfiles = shownLeaderboardItems.filter(
+        (item) =>
+          !context.myFollows.map((f) => f.profile_id).includes(item.profile_id)
+      );
+      setFollowAllClicked(newProfiles.length === 0);
+    }
+  }, [
+    shownLeaderboardItems,
+    showAllLeaderboardItems,
+    trendingTab,
+    context.myFollows,
+  ]);
 
   const handleFollowAll = async () => {
     setFollowAllClicked(true);
