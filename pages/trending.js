@@ -152,6 +152,7 @@ const Leaderboard = () => {
                 isLoading={isLoading}
                 showAllLeaderboardItems={showAllLeaderboardItems}
                 setShowAllLeaderboardItems={setShowAllLeaderboardItems}
+                trendingTab={leaderboardDays}
                 key={`creators_${leaderboardDays}`}
               />
             )}
