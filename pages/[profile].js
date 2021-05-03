@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext, useRef, Fragment } from "react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import _ from "lodash";
 import mixpanel from "mixpanel-browser";
 import Layout from "../components/layout";
@@ -19,7 +20,7 @@ import {
   classNames,
 } from "../lib/utilities";
 import AddressButton from "../components/AddressButton";
-import { SORT_FIELDS } from "../lib/constants";
+import { PROFILE_TABS, SORT_FIELDS } from "../lib/constants";
 import SpotlightItem from "../components/SpotlightItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faImage } from "@fortawesome/free-regular-svg-icons";
@@ -109,6 +110,8 @@ const Profile = ({
   } = profile;
 
   const context = useContext(AppContext);
+
+  const router = useRouter();
 
   // Profile details
   const [isMyProfile, setIsMyProfile] = useState();
@@ -550,6 +553,19 @@ const Profile = ({
     fetchItems(true, lists);
   }, [profile_id, lists]);
 
+  useEffect(() => {
+    if (selectedGrid) {
+      router.push(
+        {
+          pathname: "/[profile]",
+          query: { ...router.query, tab: PROFILE_TABS[selectedGrid] },
+        },
+        undefined,
+        { shallow: true }
+      );
+    }
+  }, [selectedGrid]);
+
   const handleLoggedOutFollow = () => {
     mixpanel.track("Follow but logged out");
     context.setLoginModalOpen(true);
@@ -674,7 +690,13 @@ const Profile = ({
   */
 
   useEffect(() => {
-    setSelectedGrid(lists.default_list_id);
+    // console.log("setting default list Id to:", lists.default_list_id);
+    // console.log("current value in url:", router.query);
+    setSelectedGrid(
+      router?.query?.tab
+        ? PROFILE_TABS.indexOf(router.query.tab)
+        : lists.default_list_id
+    );
     setMenuLists(lists.lists);
 
     setShowFollowers(false);
