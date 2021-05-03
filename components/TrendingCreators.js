@@ -4,6 +4,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown, faPlus } from "@fortawesome/free-solid-svg-icons";
 import AppContext from "../context/app-context";
+import mixpanel from "mixpanel-browser";
 
 const TrendingCreators = ({
   shownLeaderboardItems,
@@ -34,6 +35,12 @@ const TrendingCreators = ({
       body: JSON.stringify(newProfiles.map((item) => item.profile_id)),
     });
   };
+
+  const handleLoggedOutFollowAll = () => {
+    mixpanel.track("Clicked `Follow all` on trending page, but is logged out");
+    context.setLoginModalOpen(true);
+  };
+
   return (
     <>
       <div className="bg-white sm:rounded-lg shadow-md pt-3 ">
@@ -49,7 +56,9 @@ const TrendingCreators = ({
                     ? "bg-white border-gray-400"
                     : "bg-stpurple text-white border-stpurple"
                 }`}
-                onClick={handleFollowAll}
+                onClick={
+                  context.user ? handleFollowAll : handleLoggedOutFollowAll
+                }
               >
                 {!followAllClicked && (
                   <div className="mr-1">
