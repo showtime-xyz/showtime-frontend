@@ -62,10 +62,10 @@ const TrendingCreators = ({
           {!isLoading && (
             <div>
               <div
-                className={`text-black border rounded-full py-2 px-4 text-xs flex flex-row hover:opacity-70 transition-all cursor-pointer ${
+                className={`text-black border rounded-full py-2 px-4 text-xs flex flex-row   ${
                   followAllClicked
                     ? "bg-white border-gray-400"
-                    : "bg-stpurple text-white border-stpurple"
+                    : "bg-stpurple text-white border-stpurple cursor-pointer hover:opacity-70 transition-all"
                 }`}
                 onClick={
                   context.user ? handleFollowAll : handleLoggedOutFollowAll
