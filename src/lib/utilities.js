@@ -28,7 +28,9 @@ export const formatAddressShort = address => {
 export const copyToClipBoard = async textToCopy => {
 	try {
 		await navigator.clipboard.writeText(textToCopy)
-	} catch (err) {}
+	} catch (err) {
+		console.error(err)
+	}
 }
 
 export const getBidLink = item => {

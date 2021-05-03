@@ -24,7 +24,9 @@ export default async (req, res) => {
 			},
 		})
 		socialLinkOptions = await socialLinkOptionsQuery.json()
-	} catch {}
+	} catch (e) {
+		console.error(e)
+	}
 
 	res.statusCode = 200
 	res.json(socialLinkOptions)

@@ -1,4 +1,3 @@
-import React from 'react'
 import Link from 'next/link'
 import mixpanel from 'mixpanel-browser'
 import reactStringReplace from 'react-string-replace'
@@ -6,8 +5,8 @@ import reactStringReplace from 'react-string-replace'
 export default function Comment({ act }) {
 	const { nfts, comments } = act
 	const count = nfts?.length
-	const commentWithMentions = reactStringReplace(comments[0].text, /(@\[.+?\]\(\w+\))/g, (match, i, o) => {
-		const [_, name, urlParam] = match.match(/@\[(.+?)\]\((\w+)\)/)
+	const commentWithMentions = reactStringReplace(comments[0].text, /(@\[.+?\]\(\w+\))/g, (match, i) => {
+		const [, name, urlParam] = match.match(/@\[(.+?)\]\((\w+)\)/)
 		return (
 			<Link href="/[profile]" as={`/${urlParam}`} key={match + i}>
 				<a className="text-indigo-500 hover:text-indigo-400">{name}</a>

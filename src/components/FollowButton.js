@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import mixpanel from 'mixpanel-browser'
 import AppContext from '@/context/app-context'
+import _ from 'lodash'
 
 const Button = styled.button`
 	display: flex;

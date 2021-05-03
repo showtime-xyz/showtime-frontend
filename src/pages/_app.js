@@ -20,24 +20,28 @@ Router.events.on('routeChangeComplete', progress.finish)
 Router.events.on('routeChangeError', progress.finish)
 
 export default class MyApp extends React.Component {
-	state = {
-		user: undefined,
-		windowSize: null,
-		myLikes: null,
-		myLikeCounts: null,
-		myComments: null,
-		myCommentCounts: null,
-		myFollows: null,
-		myProfile: undefined,
-		myRecommendations: undefined,
-		loginModalOpen: false,
-		gridWidth: null,
-		columns: null,
-		isMobile: null,
-		toggleRefreshFeed: false,
+	constructor() {
+		super()
+
+		this.state = {
+			user: undefined,
+			windowSize: null,
+			myLikes: null,
+			myLikeCounts: null,
+			myComments: null,
+			myCommentCounts: null,
+			myFollows: null,
+			myProfile: undefined,
+			myRecommendations: undefined,
+			loginModalOpen: false,
+			gridWidth: null,
+			columns: null,
+			isMobile: null,
+			toggleRefreshFeed: false,
+		}
 	}
 
-	getUserFromCookies = async () => {
+	async getUserFromCookies() {
 		// log in with our own API
 		const userRequest = await fetch('/api/user')
 		try {
@@ -102,7 +106,7 @@ export default class MyApp extends React.Component {
 		}
 	}
 
-	handleResize = () => {
+	handleResize() {
 		// Set window width/height to state
 		this.setState({
 			windowSize: {
@@ -114,7 +118,7 @@ export default class MyApp extends React.Component {
 		this.adjustGridProperties(window.innerWidth)
 	}
 
-	logOut = async () => {
+	async logOut() {
 		const authRequest = await fetch('/api/logout', {
 			method: 'POST',
 		})

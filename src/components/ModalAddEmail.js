@@ -1,14 +1,12 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import mixpanel from 'mixpanel-browser'
-import AppContext from '@/context/app-context'
 import CloseButton from './CloseButton'
 import { Magic } from 'magic-sdk'
 import ScrollableModal from './ScrollableModal'
 
 const ModalAddEmail = ({ isOpen, setEmailModalOpen, setHasEmailAddress }) => {
-	const context = useContext(AppContext)
 	const [emailValue, setEmailValue] = useState(null)
-	const [emailError, setEmailError] = useState('')
+	const [, setEmailError] = useState('')
 	const handleSubmit = async event => {
 		setEmailError('')
 		event.preventDefault()

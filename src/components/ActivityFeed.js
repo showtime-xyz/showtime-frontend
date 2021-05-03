@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import ActivityCard from './ActivityCard'
 
 export default function ActivityFeed({

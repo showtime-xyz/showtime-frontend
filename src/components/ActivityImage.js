@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import ReactPlayer from 'react-player'
 import mixpanel from 'mixpanel-browser'
 import LikeButton from './LikeButton'

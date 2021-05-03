@@ -11,7 +11,9 @@ export default async (req, res) => {
 		try {
 			const user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 			publicAddress = user.publicAddress
-		} catch {}
+		} catch (e) {
+			console.error(e)
+		}
 
 		await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/get_follow_suggestions${recache ? '?recache=1' : ''}`, {
 			method: 'POST',

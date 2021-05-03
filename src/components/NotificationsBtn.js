@@ -77,7 +77,9 @@ export default function NotificationsBtn() {
 				}
 				insertNewNotifications(moreNotifs)
 				setLoadingMoreNotifications(false)
-			} catch (e) {}
+			} catch (e) {
+				console.error(e)
+			}
 		}
 	}
 

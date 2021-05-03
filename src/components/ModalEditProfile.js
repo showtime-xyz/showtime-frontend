@@ -178,7 +178,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 		type_id: -1,
 		name: 'Select website...',
 	}
-	const [selectedAddSocialLink, setSelectedAddSocialLink] = useState(emptySelectedAddSocialLink)
+	const [selectedAddSocialLink] = useState(emptySelectedAddSocialLink)
 
 	//   const handleAddSocialLink = () => {
 	//     setSocialLinks([

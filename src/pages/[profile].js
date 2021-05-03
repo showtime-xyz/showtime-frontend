@@ -802,10 +802,10 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 								openCardMenu={openCardMenu}
 								setOpenCardMenu={setOpenCardMenu}
 								listId={0}
-								refreshItems={() => {
-									updateCreated(selectedCreatedSortField, false)
-									updateOwned(selectedOwnedSortField, false)
-								}}
+								// refreshItems={() => {
+								// 	updateCreated(selectedCreatedSortField, false)
+								// 	updateOwned(selectedOwnedSortField, false)
+								// }}
 								key={spotlightItem.nft_id}
 								pageProfile={{
 									profile_id,
@@ -813,9 +813,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 									name,
 									img_url,
 									wallet_addresses_excluding_email,
-									slug_address,
 									website_url,
-									profile_id,
 									username,
 								}}
 							/>
@@ -1185,9 +1183,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											name,
 											img_url,
 											wallet_addresses_excluding_email,
-											slug_address,
 											website_url,
-											profile_id,
 											username,
 										}} // to customize owned by list on bottom of card
 									/>

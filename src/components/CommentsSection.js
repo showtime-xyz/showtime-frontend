@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react'
+import { useEffect, useState, useContext, useCallback } from 'react'
 //import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 //import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import AppContext from '@/context/app-context'
@@ -100,7 +100,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 
 	const handleDebouncedSearchQuery = useCallback(AwesomeDebouncePromise(handleSearchQuery, 300), [])
 
-	const refreshComments = async (showLoading = true) => {
+	const refreshComments = async () => {
 		const commentsData = await backend.get(`/v2/comments/${nftId}${hasMoreComments ? '' : '?limit=10'}`)
 		setComments(commentsData.data.data.comments)
 		setHasMoreComments(commentsData.data.data.has_more)

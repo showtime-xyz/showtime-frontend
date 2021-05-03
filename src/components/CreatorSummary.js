@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import Link from 'next/link'
 import { truncateWithEllipses } from '@/lib/utilities'
 //import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

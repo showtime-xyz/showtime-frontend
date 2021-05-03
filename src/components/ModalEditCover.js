@@ -37,7 +37,6 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 				zoom: 0,
 			})
 			setCroppie(croppieInstance)
-		} else {
 		}
 	}
 
@@ -132,11 +131,6 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 		hiddenFileInput.current.click()
 	}
 
-	const handleChange = event => {
-		const fileUploaded = event.target.files[0]
-		props.handleFile(fileUploaded)
-	}
-
 	return (
 		<>
 			{isOpen && (
@@ -147,7 +141,9 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 							if (croppie) {
 								try {
 									croppie.destroy()
-								} catch {}
+								} catch (e) {
+									console.error(e)
+								}
 							}
 							setCroppie(null)
 							setImage('')
@@ -172,7 +168,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 											Accepts JPEG, PNG, and GIF (non-animated)
 										</div>
 
-										<input ref={hiddenFileInput} onChange={handleChange} style={{ display: 'none' }} id="profilePic" type="file" onChange={onChangePicture} />
+										<input ref={hiddenFileInput} style={{ display: 'none' }} id="profilePic" type="file" onChange={onChangePicture} />
 									</div>
 								)}
 
@@ -188,7 +184,9 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 												if (croppie) {
 													try {
 														croppie.destroy()
-													} catch {}
+													} catch (e) {
+														console.error(e)
+													}
 												}
 												setCroppie(null)
 												setImage('')
@@ -211,7 +209,9 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 												if (croppie) {
 													try {
 														croppie.destroy()
-													} catch {}
+													} catch (e) {
+														console.error(e)
+													}
 												}
 
 												setCroppie(null)

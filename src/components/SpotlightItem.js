@@ -1,6 +1,5 @@
 import React from 'react'
 import Link from 'next/link'
-import _ from 'lodash'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
 //import { faSun } from "@fortawesome/free-regular-svg-icons";
@@ -30,6 +29,9 @@ class SpotlightItem extends React.Component {
 			thisItem: props.item,
 		}
 		this.divRef = React.createRef()
+
+		this.max_description_length = 170
+		this.aspect_ratio_cutoff = 1.6
 	}
 
 	truncateWithEllipses(text, max) {
@@ -38,7 +40,7 @@ class SpotlightItem extends React.Component {
 		}
 	}
 
-	handleRefreshNFTMetadata = async () => {
+	async handleRefreshNFTMetadata() {
 		mixpanel.track('Clicked refresh metadata')
 		this.setState({ refreshing: true })
 
@@ -54,9 +56,9 @@ class SpotlightItem extends React.Component {
 		this.setState({ refreshing: false })
 	}
 
-	handleRemoveFromSpotlight = async () => {}
+	handleRemoveFromSpotlight() {}
 
-	getImageUrl = () => {
+	getImageUrl() {
 		var img_url = this.state.thisItem.token_img_url ? this.state.thisItem.token_img_url : null
 
 		if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
@@ -65,10 +67,7 @@ class SpotlightItem extends React.Component {
 		return img_url
 	}
 
-	max_description_length = 170
-	aspect_ratio_cutoff = 1.6
-
-	getBackgroundColor = item => {
+	getBackgroundColor(item) {
 		if (item.token_background_color && item.token_background_color.length === 6) {
 			return `#${item.token_background_color}`
 		} else {
@@ -84,7 +83,7 @@ class SpotlightItem extends React.Component {
 			<>
 				{typeof document !== 'undefined' ? (
 					<>
-						<ModalTokenDetail isOpen={this.state.currentlyOpenModal} setEditModalOpen={_ => this.setState({ currentlyOpenModal: false })} item={this.state.thisItem} />
+						<ModalTokenDetail isOpen={this.state.currentlyOpenModal} setEditModalOpen={() => this.setState({ currentlyOpenModal: false })} item={this.state.thisItem} />
 					</>
 				) : null}
 
@@ -107,7 +106,7 @@ class SpotlightItem extends React.Component {
 													loop
 													controls
 													muted={this.state.muted}
-													className={`w-full h-full`}
+													className={'w-full h-full'}
 													width={isMobile ? '100%' : this.divRef?.current?.clientWidth ? this.divRef?.current?.clientWidth / 2 : null}
 													height={'1'}
 													//width={columns === 1 ? window.innerWidth : "100%"}
@@ -348,6 +347,7 @@ class SpotlightItem extends React.Component {
 												onClick={() => {
 													mixpanel.track('OpenSea link click')
 												}}
+												rel="noreferrer"
 											>
 												<div className="text-base px-5 py-2 shadow-md transition-all rounded-full text-white bg-stpink hover:bg-white hover:text-stpink border-2 border-stpink">{`Bid on ${getContractName(item)}`}</div>
 											</a>
@@ -426,7 +426,7 @@ class SpotlightItem extends React.Component {
 																				}}
 																			/>
 																		</div>
-																		<div className="hover:text-stpink">{pageProfile.name ? pageProfile.name : pageProfile.username ? pageProfile.username : wallet_addresses_excluding_email.length > 0 ? wallet_addresses_excluding_email[0] : 'Unknown'}</div>
+																		<div className="hover:text-stpink">{pageProfile.name ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? pageProfile.wallet_addresses_excluding_email[0] : 'Unknown'}</div>
 																	</a>
 																</Link>
 

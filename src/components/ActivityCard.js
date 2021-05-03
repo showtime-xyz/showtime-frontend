@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react'
+import { useContext, useRef } from 'react'
 import { ACTIVITY_TYPES, activityIconObjects } from '@/lib/constants'
 import { Like, Comment, Sell, Buy, Create, Follow, Transfer } from './ActivityTypes'
 import { formatDistanceToNowStrict } from 'date-fns'
@@ -15,7 +15,6 @@ import { truncateWithEllipses } from '@/lib/utilities'
 
 export default function ActivityCard({ act, setItemOpenInModal, setReportModalIsOpen, removeActorFromFeed }) {
 	const context = useContext(AppContext)
-	const { isMobile } = context
 	const { id, nfts, actor_img_url, actor_name, actor_username, actor_wallet_address, actor_profile_id } = act
 	const actor = {
 		profile_img_url: actor_img_url,
@@ -63,9 +62,6 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 		case ACTIVITY_TYPES.SEND:
 		case ACTIVITY_TYPES.RECEIVE:
 			content = <Transfer act={act} />
-
-		default:
-			break
 	}
 	const dropdownRef = useRef(null)
 	const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)

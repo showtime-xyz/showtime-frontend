@@ -19,7 +19,9 @@ export default async (req, res) => {
 		try {
 			user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 			publicAddress = user.publicAddress
-		} catch (err) {}
+		} catch (err) {
+			console.error(err)
+		}
 
 		const res_activity = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/profile_nfts?profile_id=${profileId}&page=${page}&limit=${limit}&list_id=${listId}&sort_id=${sortId}&show_hidden=${showHidden}&show_duplicates=${showDuplicates}&collection_id=${collectionId}`, {
 			headers: {
@@ -29,7 +31,9 @@ export default async (req, res) => {
 		})
 		data_activity = await res_activity.json()
 		//console.log(data_activity);
-	} catch {}
+	} catch (e) {
+		console.error(e)
+	}
 
 	res.statusCode = 200
 	res.json(data_activity)

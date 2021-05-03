@@ -155,7 +155,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 			setStep(3)
 
 			// login with our own API
-			const authRequest = await fetch('/api/addwallet', {
+			await fetch('/api/addwallet', {
 				method: 'POST',
 				body: JSON.stringify({
 					signature,
@@ -174,7 +174,9 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 						context.setMyLikes(my_info_data.data.likes_nft)
 						context.setMyFollows(my_info_data.data.follows)
 						context.setMyProfile(my_info_data.data.profile)
-					} catch {}
+					} catch (error) {
+						console.error(error)
+					}
 
 					const redirect = myJson['data']
 					router.push(`/${redirect}`)

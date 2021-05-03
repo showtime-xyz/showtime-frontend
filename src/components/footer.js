@@ -1,9 +1,8 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import { faTwitter, faInstagram, faDiscord } from '@fortawesome/free-brands-svg-icons'
 import ModalFeedback from './ModalFeedback'
-import AppContext from '@/context/app-context'
 function Footer() {
 	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false)
 	return (

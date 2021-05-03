@@ -28,7 +28,9 @@ export default async (req, res) => {
 			},
 		})
 		data_activity = await res_activity.json()
-	} catch {}
+	} catch (err) {
+		console.error(err)
+	}
 
 	res.statusCode = 200
 	res.json(data_activity)

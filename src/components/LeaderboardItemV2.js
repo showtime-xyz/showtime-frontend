@@ -1,6 +1,5 @@
-import React, { useState, useContext, useEffect, useRef } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import Link from 'next/link'
-import FollowButton from './FollowButton'
 import AppContext from '@/context/app-context'
 import ModalTokenDetail from './ModalTokenDetail'
 import useKeyPress from '@/hooks/useKeyPress'

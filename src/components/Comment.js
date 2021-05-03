@@ -12,8 +12,8 @@ export default function Comment({ comment, closeModal, modalRef, deleteComment, 
 	const context = useContext(AppContext)
 	const { myProfile } = context
 	const dropdownRef = useRef(null)
-	const commentWithMentions = reactStringReplace(comment.text, /(@\[.+?\]\(\w+\))/g, (match, i, o) => {
-		const [_, name, urlParam] = match.match(/@\[(.+?)\]\((\w+)\)/)
+	const commentWithMentions = reactStringReplace(comment.text, /(@\[.+?\]\(\w+\))/g, (match, i) => {
+		const [, name, urlParam] = match.match(/@\[(.+?)\]\((\w+)\)/)
 		return (
 			<Link href="/[profile]" as={`/${urlParam}`} key={match + i}>
 				<a className="text-indigo-500 hover:text-indigo-400">{name}</a>

@@ -1,4 +1,3 @@
-import React from 'react'
 import ActivityImage from './ActivityImage'
 
 export default function ActivityImages({ nfts, openModal, roundAllCorners }) {

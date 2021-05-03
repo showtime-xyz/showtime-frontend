@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import AppContext from '@/context/app-context'
 import RecommendedFollowItem from './RecommendedFollowItem'
 import mixpanel from 'mixpanel-browser'

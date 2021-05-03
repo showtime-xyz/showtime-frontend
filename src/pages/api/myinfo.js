@@ -24,7 +24,7 @@ export default async (req, res) => {
 			},
 		})
 		data_myinfo = await res_myinfo.json()
-	} catch {
+	} catch (error) {
 		console.error(error)
 	}
 
