@@ -1,4 +1,4 @@
-import React from 'react'
+import { useEffect, useState } from 'react'
 import '@/styles/globals.css'
 import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
@@ -19,34 +19,55 @@ Router.events.on('routeChangeStart', progress.start)
 Router.events.on('routeChangeComplete', progress.finish)
 Router.events.on('routeChangeError', progress.finish)
 
-export default class MyApp extends React.Component {
-	constructor() {
-		super()
+const App = ({ Component, pageProps }) => {
+	const [user, setUser] = useState()
+	const [windowSize, setWindowSize] = useState(null)
+	const [myLikes, setMyLikes] = useState(null)
+	const [myLikeCounts, setMyLikeCounts] = useState(null)
+	const [myComments, setMyComments] = useState(null)
+	const [myCommentCounts, setMyCommentCounts] = useState(null)
+	const [myFollows, setMyFollows] = useState(null)
+	const [myProfile, setMyProfile] = useState()
+	const [myRecommendations, setMyRecommendations] = useState()
+	const [loginModalOpen, setLoginModalOpen] = useState(false)
+	const [gridWidth, setGridWidth] = useState(null)
+	const [columns, setColumns] = useState(null)
+	const [isMobile, setIsMobile] = useState(null)
+	const [toggleRefreshFeed, setToggleRefreshFeed] = useState(false)
 
-		this.state = {
-			user: undefined,
-			windowSize: null,
-			myLikes: null,
-			myLikeCounts: null,
-			myComments: null,
-			myCommentCounts: null,
-			myFollows: null,
-			myProfile: undefined,
-			myRecommendations: undefined,
-			loginModalOpen: false,
-			gridWidth: null,
-			columns: null,
-			isMobile: null,
-			toggleRefreshFeed: false,
+	const adjustGridProperties = windowWidth => {
+		if (windowWidth < 790 + 30) {
+			setIsMobile(true)
+			setGridWidth(windowWidth)
+			setColumns(1)
+		} else if (windowWidth < 1185 + 45) {
+			setIsMobile(false)
+			setGridWidth(790)
+			setColumns(2)
+		} else if (windowWidth < 1580 + 40) {
+			setIsMobile(false)
+			setGridWidth(1185)
+			setColumns(3)
+		} else {
+			setIsMobile(false)
+			setGridWidth(1580)
+			setColumns(4)
 		}
 	}
 
-	async getUserFromCookies() {
+	const handleResize = () => {
+		// Set window width/height to state
+		setWindowSize({ width: window.innerWidth, height: window.innerHeight })
+		//update grid width / columns
+		adjustGridProperties(window.innerWidth)
+	}
+
+	const getUserFromCookies = async () => {
 		// log in with our own API
 		const userRequest = await fetch('/api/user')
 		try {
 			const user_data = await userRequest.json()
-			this.setUser(user_data)
+			setUser(user_data)
 
 			mixpanel.identify(user_data.publicAddress)
 			if (user_data.email) {
@@ -69,10 +90,10 @@ export default class MyApp extends React.Component {
 			const myInfoRequest = await fetch('/api/myinfo')
 			try {
 				const my_info_data = await myInfoRequest.json()
-				this.setMyLikes(my_info_data.data.likes_nft)
-				this.setMyComments(my_info_data.data.comments)
-				this.setMyFollows(my_info_data.data.follows)
-				this.setMyProfile({
+				setMyLikes(my_info_data.data.likes_nft)
+				setMyComments(my_info_data.data.comments)
+				setMyFollows(my_info_data.data.follows)
+				setMyProfile({
 					...my_info_data.data.profile,
 					// turn notifications_last_opened into Date before storing in context
 					notifications_last_opened: my_info_data.data.profile.notifications_last_opened ? new Date(my_info_data.data.profile.notifications_last_opened) : null,
@@ -92,7 +113,7 @@ export default class MyApp extends React.Component {
 
 					const myRecRequest = await fetch('/api/follow_recommendations_onboarding')
 					const my_rec_data = await myRecRequest.json()
-					this.setMyRecommendations(my_rec_data.data)
+					setMyRecommendations(my_rec_data.data)
 					//console.log("FINISHED LOADING ONBAORDING DATA");
 					//console.log(my_rec_data.data);
 				}
@@ -102,170 +123,80 @@ export default class MyApp extends React.Component {
 		} catch {
 			// Not logged in
 			// Switch from undefined to null
-			this.setUser(null)
+			setUser(null)
 		}
 	}
 
-	handleResize() {
-		// Set window width/height to state
-		this.setState({
-			windowSize: {
-				width: window.innerWidth,
-				height: window.innerHeight,
-			},
-		})
-		//update grid width / columns
-		this.adjustGridProperties(window.innerWidth)
-	}
-
-	async logOut() {
-		const authRequest = await fetch('/api/logout', {
-			method: 'POST',
-		})
-
-		if (authRequest.ok) {
-			this.setUser(null)
-			this.setMyLikes([])
-			this.setMyLikeCounts({})
-			this.setMyComments([])
-			this.setMyCommentCounts({})
-			this.setMyFollows([])
-			this.setMyRecommendations([])
-			this.setMyProfile(undefined)
-
-			mixpanel.track('Logout')
-		} else {
-			/* handle errors */
-		}
-	}
-
-	componentDidMount() {
-		this.getUserFromCookies()
+	useEffect(() => {
+		getUserFromCookies()
 
 		// Add event listener
-		window.addEventListener('resize', this.handleResize)
+		window.addEventListener('resize', handleResize)
 
 		// Call handler right away so state gets updated with initial window size
-		this.handleResize()
-	}
+		handleResize()
 
-	componentWillUnmount() {
-		window.removeEventListener('resize', this.handleResize)
-	}
-
-	setUser(user) {
-		this.setState({ user })
-	}
-
-	setWindowSize(windowSize) {
-		this.setState({ windowSize })
-	}
-
-	setMyLikes(myLikes) {
-		this.setState({ myLikes })
-	}
-
-	setMyLikeCounts(myLikeCounts) {
-		this.setState({ myLikeCounts })
-	}
-
-	setMyComments(myComments) {
-		this.setState({ myComments })
-	}
-	setMyCommentCounts(myCommentCounts) {
-		this.setState({ myCommentCounts })
-	}
-
-	setMyFollows(myFollows) {
-		this.setState({ myFollows })
-	}
-
-	setMyProfile(myProfile) {
-		this.setState({ myProfile })
-	}
-
-	setMyRecommendations(myRecommendations) {
-		this.setState({ myRecommendations })
-	}
-
-	setLoginModalOpen(loginModalOpen) {
-		this.setState({ loginModalOpen })
-	}
-
-	setGridWidth(gridWidth) {
-		this.setState({ gridWidth })
-	}
-
-	setColumns(columns) {
-		this.setState({ columns })
-	}
-
-	setIsMobile(isMobile) {
-		this.setState({ isMobile })
-	}
-
-	setToggleRefreshFeed(toggleRefreshFeed) {
-		this.setState({ toggleRefreshFeed })
-	}
-
-	adjustGridProperties(windowWidth) {
-		if (windowWidth < 790 + 30) {
-			this.setIsMobile(true)
-			this.setGridWidth(windowWidth)
-			this.setColumns(1)
-		} else if (windowWidth < 1185 + 45) {
-			this.setIsMobile(false)
-			this.setGridWidth(790)
-			this.setColumns(2)
-		} else if (windowWidth < 1580 + 40) {
-			this.setIsMobile(false)
-			this.setGridWidth(1185)
-			this.setColumns(3)
-		} else {
-			this.setIsMobile(false)
-			this.setGridWidth(1580)
-			this.setColumns(4)
+		return () => {
+			window.removeEventListener('resize', handleResize)
 		}
+	}, [])
+
+	const injectedGlobalContext = {
+		user,
+		windowSize,
+		myLikes,
+		myLikeCounts,
+		myComments,
+		myCommentCounts,
+		myFollows,
+		myProfile,
+		myRecommendations,
+		loginModalOpen,
+		gridWidth,
+		columns,
+		isMobile,
+		toggleRefreshFeed,
+		setWindowSize,
+		setMyLikes,
+		setMyLikeCounts,
+		setMyComments,
+		setMyCommentCounts,
+		setMyFollows,
+		setMyProfile,
+		setMyRecommendations,
+		setLoginModalOpen,
+
+		getUserFromCookies,
+		logOut: async () => {
+			const authRequest = await fetch('/api/logout', {
+				method: 'POST',
+			})
+
+			if (authRequest.ok) {
+				this.setUser(null)
+				this.setMyLikes([])
+				this.setMyLikeCounts({})
+				this.setMyComments([])
+				this.setMyCommentCounts({})
+				this.setMyFollows([])
+				this.setMyRecommendations([])
+				this.setMyProfile(undefined)
+
+				mixpanel.track('Logout')
+			} else {
+				/* handle errors */
+			}
+		},
+		setToggleRefreshFeed,
+		setUser,
+		adjustGridProperties,
 	}
 
-	render() {
-		const { Component, pageProps } = this.props
-
-		const injectedGlobalContext = {
-			user: this.state.user,
-			windowSize: this.state.windowSize,
-			myLikes: this.state.myLikes,
-			myLikeCounts: this.state.myLikeCounts,
-			myComments: this.state.myComments,
-			myCommentCounts: this.state.myCommentCounts,
-			myFollows: this.state.myFollows,
-			myProfile: this.state.myProfile,
-			myRecommendations: this.state.myRecommendations,
-			loginModalOpen: this.state.loginModalOpen,
-			gridWidth: this.state.gridWidth,
-			columns: this.state.columns,
-			isMobile: this.state.isMobile,
-			toggleRefreshFeed: this.state.toggleRefreshFeed,
-			setWindowSize: windowSize => this.setWindowSize(windowSize),
-			setMyLikes: myLikes => this.setMyLikes(myLikes),
-			setMyLikeCounts: myLikeCounts => this.setMyLikeCounts(myLikeCounts),
-			setMyComments: myComments => this.setMyComments(myComments),
-			setMyCommentCounts: myCommentCounts => this.setMyCommentCounts(myCommentCounts),
-			setMyFollows: myFollows => this.setMyFollows(myFollows),
-			setMyProfile: myProfile => this.setMyProfile(myProfile),
-			setMyRecommendations: myRecommendations => this.setMyRecommendations(myRecommendations),
-			setLoginModalOpen: loginModalOpen => this.setLoginModalOpen(loginModalOpen),
-
-			getUserFromCookies: () => this.getUserFromCookies(),
-			logOut: () => this.logOut(),
-			setToggleRefreshFeed: toggleRefreshFeed => this.setToggleRefreshFeed(toggleRefreshFeed),
-			setUser: user => this.setUser(user),
-		}
-
-		return (
-			<AppContext.Provider value={injectedGlobalContext}>
-				<Component {...pageProps} />
-			</AppContext.Provider>
-		)
-	}
+	return (
+		<AppContext.Provider value={injectedGlobalContext}>
+			<Component {...pageProps} />
+		</AppContext.Provider>
+	)
 }
+
+export default App
