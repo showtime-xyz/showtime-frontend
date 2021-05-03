@@ -1,43 +1,40 @@
-import { serialize } from "cookie";
+import { serialize } from 'cookie'
 
-const TOKEN_NAME = "api_token";
-const MAX_AGE = 60 * 60 * 24 * 365; //60 * 60 * 8;
+const TOKEN_NAME = 'api_token'
+const MAX_AGE = 60 * 60 * 24 * 365 //60 * 60 * 8;
 
 function createCookie(name, data, options = {}) {
-  return serialize(name, data, {
-    maxAge: MAX_AGE,
-    expires: new Date(Date.now() + MAX_AGE * 1000),
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    httpOnly: true,
-    sameSite: "lax",
-    ...options,
-  });
+	return serialize(name, data, {
+		maxAge: MAX_AGE,
+		expires: new Date(Date.now() + MAX_AGE * 1000),
+		secure: process.env.NODE_ENV === 'production',
+		path: '/',
+		httpOnly: true,
+		sameSite: 'lax',
+		...options,
+	})
 }
 
 function setTokenCookie(res, token) {
-  res.setHeader("Set-Cookie", [
-    createCookie(TOKEN_NAME, token),
-    createCookie("authed", true, { httpOnly: false }),
-  ]);
+	res.setHeader('Set-Cookie', [createCookie(TOKEN_NAME, token), createCookie('authed', true, { httpOnly: false })])
 }
 
 function getAuthToken(cookies) {
-  return cookies[TOKEN_NAME];
+	return cookies[TOKEN_NAME]
 }
 
 function expireTokenCookie(res) {
-  res.setHeader("Set-Cookie", [
-    createCookie(TOKEN_NAME, null, {
-      maxAge: 0,
-      expires: new Date(Date.now() - 1000),
-    }),
-    createCookie("authed", false, {
-      httpOnly: false,
-      maxAge: 0,
-      expires: new Date(Date.now() - 1000),
-    }),
-  ]);
+	res.setHeader('Set-Cookie', [
+		createCookie(TOKEN_NAME, null, {
+			maxAge: 0,
+			expires: new Date(Date.now() - 1000),
+		}),
+		createCookie('authed', false, {
+			httpOnly: false,
+			maxAge: 0,
+			expires: new Date(Date.now() - 1000),
+		}),
+	])
 }
 
-export default { setTokenCookie, getAuthToken, expireTokenCookie };
+export default { setTokenCookie, getAuthToken, expireTokenCookie }
