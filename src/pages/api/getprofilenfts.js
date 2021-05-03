@@ -20,7 +20,7 @@ export default async (req, res) => {
 			user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 			publicAddress = user.publicAddress
 		} catch (err) {
-			console.error(err)
+			// The user is not logged in
 		}
 
 		const res_activity = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/profile_nfts?profile_id=${profileId}&page=${page}&limit=${limit}&list_id=${listId}&sort_id=${sortId}&show_hidden=${showHidden}&show_duplicates=${showDuplicates}&collection_id=${collectionId}`, {
