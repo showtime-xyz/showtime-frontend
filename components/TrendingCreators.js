@@ -68,7 +68,11 @@ const TrendingCreators = ({
                     : "bg-stpurple text-white border-stpurple cursor-pointer hover:opacity-70 transition-all"
                 }`}
                 onClick={
-                  context.user ? handleFollowAll : handleLoggedOutFollowAll
+                  context.user
+                    ? followAllClicked
+                      ? null
+                      : handleFollowAll
+                    : handleLoggedOutFollowAll
                 }
               >
                 {!followAllClicked && (
