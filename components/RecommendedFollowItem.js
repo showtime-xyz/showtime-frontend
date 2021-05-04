@@ -207,7 +207,7 @@ const Tiles = ({ topItems, setCurrentlyOpenModal }) => {
 
 const RecommendedFollowItem = ({
   item,
-  closeModal,
+  closeModal = () => {},
   liteVersion,
   removeRecommendation,
   followCallback = () => {},

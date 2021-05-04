@@ -24,6 +24,7 @@ import {
   faFilter,
 } from "@fortawesome/free-solid-svg-icons";
 import ModalReportItem from "../components/ModalReportItem";
+import RecommendFollowers from "../components/RecommendFollowers";
 
 const ACTIVITY_PAGE_LENGTH = 2; // 5 activity items per activity page
 export async function getServerSideProps() {
@@ -79,6 +80,20 @@ const Activity = () => {
 
     setIsLoading(false);
   };
+
+  // if there's activity, finish onboarding
+  useEffect(() => {
+    if (activity && activity.length > 0 && !context?.myProfile?.has_onboarded) {
+      fetch(`/api/finishonboarding`, {
+        method: "post",
+      });
+      context.setMyProfile({
+        ...context.myProfile,
+        has_onboarded: true,
+      });
+    }
+  }, [activity]);
+
   useEffect(() => {
     const handleLoadFeed = async () => {
       setHasMoreScrolling(false);
@@ -392,6 +407,19 @@ const Activity = () => {
                     </div>
                   </div>
                 ) : null}
+                {activity.length === 0 &&
+                  !isLoading &&
+                  !context.myProfile?.has_onboarded && (
+                    <>
+                      {context.myRecommendations ? (
+                        <RecommendFollowers items={context.myRecommendations} />
+                      ) : (
+                        <div className="flex items-center justify-center my-4">
+                          <div className="loading-card-spinner" />
+                        </div>
+                      )}
+                    </>
+                  )}
 
                 <InfiniteScroll
                   dataLength={activity.length}

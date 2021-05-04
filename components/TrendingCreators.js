@@ -8,6 +8,7 @@ import mixpanel from "mixpanel-browser";
 
 const TrendingCreators = ({
   shownLeaderboardItems,
+  allLeaderboardItems,
   isLoading,
   showAllLeaderboardItems,
   setShowAllLeaderboardItems,
@@ -19,14 +20,14 @@ const TrendingCreators = ({
   // reset follow all button when leaderboard changes
   useEffect(() => {
     if (context.myFollows) {
-      const newProfiles = shownLeaderboardItems.filter(
+      const newProfiles = allLeaderboardItems.filter(
         (item) =>
           !context.myFollows.map((f) => f.profile_id).includes(item.profile_id)
       );
       setFollowAllClicked(newProfiles.length === 0);
     }
   }, [
-    shownLeaderboardItems,
+    allLeaderboardItems,
     showAllLeaderboardItems,
     trendingTab,
     context.myFollows,
@@ -34,7 +35,7 @@ const TrendingCreators = ({
 
   const handleFollowAll = async () => {
     setFollowAllClicked(true);
-    const newProfiles = shownLeaderboardItems.filter(
+    const newProfiles = allLeaderboardItems.filter(
       (item) =>
         !context.myFollows.map((f) => f.profile_id).includes(item.profile_id)
     );
