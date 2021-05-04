@@ -149,6 +149,7 @@ const Leaderboard = () => {
             {leaderboardItems && (
               <TrendingCreators
                 shownLeaderboardItems={shownLeaderboardItems}
+                allLeaderboardItems={leaderboardItems}
                 isLoading={isLoading}
                 showAllLeaderboardItems={showAllLeaderboardItems}
                 setShowAllLeaderboardItems={setShowAllLeaderboardItems}
@@ -170,9 +171,11 @@ const Leaderboard = () => {
             {leaderboardItems && (
               <TrendingCreators
                 shownLeaderboardItems={shownLeaderboardItems}
+                allLeaderboardItems={leaderboardItems}
                 isLoading={isLoading}
                 showAllLeaderboardItems={showAllLeaderboardItems}
                 setShowAllLeaderboardItems={setShowAllLeaderboardItems}
+                trendingTab={leaderboardDays}
                 key={`creators_r_${leaderboardDays}`}
               />
             )}
