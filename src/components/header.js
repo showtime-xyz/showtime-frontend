@@ -35,7 +35,7 @@ const Header = () => {
 						</div>
 						{/* Start desktop-only menu */}
 						{!context.isMobile ? (
-							<div className="flex-grow w-full">
+							<div className="flex-grow flex-1">
 								<SearchBar />
 							</div>
 						) : (
@@ -81,7 +81,7 @@ const Header = () => {
 									>
 										<>
 											<div className={context.windowSize ? (context.windowSize.width < 350 ? 'hidden' : null) : null}>
-												<img alt="profile pic" src={context.myProfile ? (context.myProfile.img_url ? context.myProfile.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png') : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-2 h-8 w-8" />
+												<img alt="profile pic" src={context.myProfile ? (context.myProfile.img_url ? context.myProfile.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png') : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="mr-2 rounded-full h-8 w-8 min-w-[1.875rem]" />
 											</div>
 											<div
 												className="text-sm sm:text-base truncate"
@@ -134,7 +134,7 @@ const Header = () => {
 									</a>
 								</Link>
 							</div>
-							<div className="flex-grow w-full">
+							<div className="flex-grow flex-1">
 								<SearchBar />
 							</div>
 							{context.isMobile && context.user && context.myProfile !== undefined && (

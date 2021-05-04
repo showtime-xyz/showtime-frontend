@@ -451,9 +451,6 @@ input[type="text"] {
   font-weight: 400;
 }
 
-.showtime-logout-link {
-}
-
 .showtime-logout-link:hover {
   color: #e45cff;
 }
@@ -571,18 +568,15 @@ input[type="text"] {
   position: fixed;
   right: 20px;
   bottom: -100px;
-  transition: bottom 400ms cubic-bezier(1, 0, 0, 1), box-shadow 400ms ease,
-    transform 200ms ease;
-  cursor: pointer;
+  transition: bottom 400ms cubic-bezier(1, 0, 0, 1), box-shadow 400ms ease, transform 200ms ease;
   background-color: #333;
   font-size: 20px;
-  padding: 10px;
-  border-radius: 50%;
-  cursor: pointer;
   height: 50px;
   width: 50px;
   z-index: 1 !important;
   box-shadow: 0px 10px 20px rgb(0 0 0 / 15%);
+
+  @apply flex items-center justify-center rounded-full p-2.5 cursor-pointer;
 }
 
 .scrollUpButton:hover {

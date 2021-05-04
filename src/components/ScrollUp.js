@@ -5,7 +5,7 @@ import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
 export default function ScrollUp() {
 	return (
 		<ScrollUpButton ContainerClassName="scrollUpButton" TransitionClassName="scrollUpButtonTransition">
-			<FontAwesomeIcon className="text-white w-8 h-8" icon={faChevronUp} />
+			<FontAwesomeIcon className="w-6 h-6" icon={faChevronUp} color="white" />
 		</ScrollUpButton>
 	)
 }
