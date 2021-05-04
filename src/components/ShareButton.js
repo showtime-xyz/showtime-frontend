@@ -1,35 +1,29 @@
 import { useState } from 'react'
-import { CopyToClipboard } from 'react-copy-to-clipboard'
 import mixpanel from 'mixpanel-browser'
+import copy from 'copy-to-clipboard'
 
 const ShareButton = ({ url, type }) => {
-	const [isHovering, setIsHovering] = useState(false)
 	const [isCopied, setIsCopied] = useState(false)
 
+	const share = () => {
+		if (!navigator.canShare?.({ url })) return copyToClipboard()
+
+		navigator.share({ url }).then(() => mixpanel.track('Shared NFT', { type: type }))
+	}
+
+	const copyToClipboard = () => {
+		copy(url)
+
+		mixpanel.track('Copy link click', { type: type })
+		setIsCopied(true)
+	}
+
 	return (
-		<div className="tooltip">
-			<CopyToClipboard
-				text={url}
-				onCopy={() => {
-					setIsCopied(true)
-					mixpanel.track('Copy link click', { type: type })
-				}}
-			>
-				<button
-					className="inline-flex py-1 rounded-md px-1"
-					onMouseOver={() => setIsHovering(true)}
-					onMouseOut={() => {
-						setIsHovering(false)
-						setTimeout(function () {
-							setIsCopied(false)
-						}, 3000)
-					}}
-				>
-					<img src={isHovering ? '/icons/share-pink.svg' : '/icons/share-black.svg'} alt="share-button" className="h-6 w-6 items-center flex" />
-				</button>
-			</CopyToClipboard>
-			<span className="tooltip-text bg-black p-3 -mt-6 -ml-12 rounded text-white text-xs text-opacity-90 w-20">{isCopied ? 'Copied!' : 'Copy link'}</span>
-		</div>
+		<button className="inline-flex rounded-lg group" onClick={share} onMouseOut={() => setTimeout(() => setIsCopied(false), 3000)}>
+			<svg className="h-5 w-5 items-center flex text-gray-800 group-hover:text-gray-600 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+			</svg>
+		</button>
 	)
 }
 
