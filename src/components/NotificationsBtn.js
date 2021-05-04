@@ -10,6 +10,7 @@ import useInterval from '@/hooks/useInterval'
 import AppContext from '@/context/app-context'
 import { getNotificationInfo } from '@/lib/constants'
 import ModalUserList from '@/components/ModalUserList'
+import axios from '@/lib/axios'
 
 const NOTIFICATIONS_PER_PAGE = 7
 
@@ -46,9 +47,8 @@ export default function NotificationsBtn() {
 
 	const updateNotificationsLastOpened = async () => {
 		try {
-			await fetch('/api/updatenotificationslastopened', {
-				method: 'post',
-			})
+			await axios.post('/api/notifications')
+
 			await context.setMyProfile({
 				...context.myProfile,
 				notifications_last_opened: new Date(),
@@ -64,17 +64,9 @@ export default function NotificationsBtn() {
 				setLoadingMoreNotifications(true)
 				const nextQueryPage = queryPage + 1
 				setQueryPage(nextQueryPage)
-				const res = await fetch('/api/getnotifications', {
-					method: 'post',
-					body: JSON.stringify({
-						page: nextQueryPage,
-						limit: NOTIFICATIONS_PER_PAGE,
-					}),
-				})
-				const moreNotifs = await res.json()
-				if (moreNotifs.length < NOTIFICATIONS_PER_PAGE) {
-					setHasMoreNotifications(false)
-				}
+				const moreNotifs = await axios.get(`/api/notifications?page=${nextQueryPage}&limit=${NOTIFICATIONS_PER_PAGE}`).then(res => res.data)
+
+				if (moreNotifs.length < NOTIFICATIONS_PER_PAGE) setHasMoreNotifications(false)
 				insertNewNotifications(moreNotifs)
 				setLoadingMoreNotifications(false)
 			} catch (e) {
@@ -97,27 +89,21 @@ export default function NotificationsBtn() {
 
 	const getNotifications = async () => {
 		try {
-			const res = await fetch('/api/getnotifications', {
-				method: 'post',
-				body: JSON.stringify({
-					page: 1,
-					limit: NOTIFICATIONS_PER_PAGE,
-				}),
-			})
-			const notifs = await res.json()
+			const notifs = await axios.get(`/api/notifications?page=1&limit=${NOTIFICATIONS_PER_PAGE}`).then(res => res.data)
+
 			insertNewNotifications(notifs, 'front')
-			if (notifs.length < NOTIFICATIONS_PER_PAGE) {
-				setHasMoreNotifications(false)
-			}
+			if (notifs.length < NOTIFICATIONS_PER_PAGE) setHasMoreNotifications(false)
 			setLoadingNotifications(false)
 			setHasUnreadNotifications((notifs && notifs[0] && context.myProfile.notifications_last_opened === null) || (notifs && notifs[0] && new Date(notifs[0].to_timestamp) > new Date(context.myProfile.notifications_last_opened)))
 		} catch (err) {
 			console.log(err)
 		}
 	}
+
 	useEffect(() => {
 		getNotifications()
 	}, [])
+
 	useInterval(getNotifications, 3 * 60 * 1000)
 
 	return (

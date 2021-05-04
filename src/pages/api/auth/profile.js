@@ -9,7 +9,7 @@ const handler = nc()
 			const user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
 			await backend
-				.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v2/myinfo`, {
+				.get('/v2/myinfo', {
 					headers: {
 						'X-Authenticated-User': user.publicAddress,
 						'X-Authenticated-Email': user.email || null,
@@ -25,7 +25,7 @@ const handler = nc()
 		try {
 			const user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
-			await backend.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/editname`, body, {
+			await backend.post('/v1/editname', body, {
 				headers: {
 					'X-Authenticated-User': user.publicAddress,
 					'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,

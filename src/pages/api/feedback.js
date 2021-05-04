@@ -10,7 +10,7 @@ const handler = nc().post(async ({ body: { description }, cookies }, res) => {
 	} finally {
 		try {
 			await backend.post(
-				`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/feedback`,
+				'/v1/feedback',
 				{ description },
 				{
 					headers: {
