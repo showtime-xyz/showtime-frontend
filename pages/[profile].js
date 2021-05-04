@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext, useRef, Fragment } from "react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import _ from "lodash";
 import mixpanel from "mixpanel-browser";
 import Layout from "../components/layout";
@@ -19,7 +20,7 @@ import {
   classNames,
 } from "../lib/utilities";
 import AddressButton from "../components/AddressButton";
-import { SORT_FIELDS } from "../lib/constants";
+import { PROFILE_TABS, SORT_FIELDS } from "../lib/constants";
 import SpotlightItem from "../components/SpotlightItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faImage } from "@fortawesome/free-regular-svg-icons";
@@ -109,6 +110,8 @@ const Profile = ({
   } = profile;
 
   const context = useContext(AppContext);
+
+  const router = useRouter();
 
   // Profile details
   const [isMyProfile, setIsMyProfile] = useState();
@@ -360,6 +363,14 @@ const Profile = ({
         : listId === 2
         ? selectedOwnedSortField
         : selectedLikedSortField;
+    router.replace(
+      {
+        pathname: "/[profile]",
+        query: { ...router.query, list: PROFILE_TABS[listId] },
+      },
+      undefined,
+      { shallow: true }
+    );
     await updateItems(listId, sortId, 0, true, 1, showUserHiddenItems, 0);
     setSwitchInProgress(false);
   };
@@ -479,7 +490,12 @@ const Profile = ({
     }
 
     // Populate initial state
-    if (lists.default_list_id == 1) {
+
+    const initial_list_id = router?.query?.list
+      ? PROFILE_TABS.indexOf(router.query.list)
+      : lists.default_list_id;
+
+    if (initial_list_id == 1) {
       setSwitchInProgress(true);
       // Created
       const result = await fetch(`/api/getprofilenfts`, {
@@ -499,7 +515,7 @@ const Profile = ({
       setItems(data.items);
       setHasMore(data.has_more);
       setSwitchInProgress(false);
-    } else if (lists.default_list_id == 2) {
+    } else if (initial_list_id == 2) {
       setSwitchInProgress(true);
       // Owned
       const result = await fetch(`/api/getprofilenfts`, {
@@ -519,7 +535,7 @@ const Profile = ({
       setItems(data.items);
       setHasMore(data.has_more);
       setSwitchInProgress(false);
-    } else if (lists.default_list_id == 3) {
+    } else if (initial_list_id == 3) {
       setSwitchInProgress(true);
       // Liked
       const result = await fetch(`/api/getprofilenfts`, {
@@ -627,54 +643,16 @@ const Profile = ({
   const [showFollowing, setShowFollowing] = useState(false);
   const [openCardMenu, setOpenCardMenu] = useState(null);
 
-  /*
-  const updateCreated = async (selectedCreatedSortField, showCardRefresh) => {
-    if (showCardRefresh) {
-      setIsRefreshingCards(true);
-    }
-
-    const response_profile = await backend.get(
-      `/v2/profile_client/${slug_address}?limit=150&tab=created&sort=${selectedCreatedSortField}`
-    );
-    const data_profile = response_profile.data.data;
-
-    setCreatedItems(
-      data_profile.created.filter(
-        (item) =>
-          item.token_hidden !== 1 &&
-          (item.token_img_url || item.token_animation_url)
-      )
-    );
-    if (showCardRefresh) {
-      setIsRefreshingCards(false);
-    }
-  };
-
-  const updateOwned = async (selectedOwnedSortField, showCardRefresh) => {
-    if (showCardRefresh) {
-      setIsRefreshingCards(true);
-    }
-
-    const response_profile = await backend.get(
-      `/v2/profile_client/${slug_address}?limit=150&tab=owned&sort=${selectedOwnedSortField}`
-    );
-    const data_profile = response_profile.data.data;
-
-    setOwnedItems(
-      data_profile.owned.filter(
-        (item) =>
-          item.token_hidden !== 1 &&
-          (item.token_img_url || item.token_animation_url)
-      )
-    );
-    if (showCardRefresh) {
-      setIsRefreshingCards(false);
-    }
-  };
-  */
-
   useEffect(() => {
-    setSelectedGrid(lists.default_list_id);
+    // console.log("setting default list Id to:", lists.default_list_id);
+    // console.log("current value in url:", router.query);
+
+    setSelectedGrid(
+      router?.query?.list
+        ? PROFILE_TABS.indexOf(router.query.list)
+        : lists.default_list_id
+    );
+
     setMenuLists(lists.lists);
 
     setShowFollowers(false);
