@@ -83,7 +83,7 @@ const Activity = () => {
 
   // if there's activity, finish onboarding
   useEffect(() => {
-    if (activity && activity.length > 0 && !context.myProfile.has_onboarded) {
+    if (activity && activity.length > 0 && !context?.myProfile?.has_onboarded) {
       fetch(`/api/finishonboarding`, {
         method: "post",
       });
