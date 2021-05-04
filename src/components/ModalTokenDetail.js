@@ -72,7 +72,7 @@ export default function Modal({ item, isOpen, setEditModalOpen, goToNext, goToPr
 								goToPrevious()
 							}}
 						>
-							<FontAwesomeIcon icon={faAngleLeft} className="w-8 h-16" />
+							<FontAwesomeIcon icon={faAngleLeft} className="!w-4 h-auto" />
 						</div>
 						<div
 							className="modal flex-grow my-8 overflow-hidden"
@@ -96,9 +96,9 @@ export default function Modal({ item, isOpen, setEditModalOpen, goToNext, goToPr
 									mixpanel.track('Close NFT modal - x button')
 									setEditModalOpen(false)
 								}}
-								className="absolute top-3 right-3 cursor-pointer z-[4] bg-black p-1.5 rounded-2xl w-9 h-9 opacity-50 hover:opacity-80 transition-all"
+								className="absolute top-3 right-3 cursor-pointer z-[4] bg-black p-1.5 rounded-full w-9 h-9 opacity-50 hover:opacity-80 transition-all flex items-center justify-center"
 							>
-								<FontAwesomeIcon className="w-6 h-6 text-white" icon={faTimes} />
+								<FontAwesomeIcon className="w-8 h-8 text-white" icon={faTimes} />
 							</div>
 							<div className="overflow-y-scroll h-full" style={context.isMobile ? {} : { borderRadius: 10 }} id="ModalTokenDetailWrapper">
 								<TokenDetailBody item={item} muted={false} className="w-full" setEditModalOpen={setEditModalOpen} ownershipDetails={ownershipDetails} isInModal />
@@ -129,7 +129,7 @@ export default function Modal({ item, isOpen, setEditModalOpen, goToNext, goToPr
 								goToNext()
 							}}
 						>
-							<FontAwesomeIcon icon={faAngleRight} className="w-8 h-16" />
+							<FontAwesomeIcon icon={faAngleRight} className="!w-4 h-auto" />
 						</div>
 						<style jsx>{`
 							:global(body) {
