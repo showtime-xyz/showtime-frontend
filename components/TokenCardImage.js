@@ -1,17 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import ReactPlayer from "react-player";
-import mixpanel from "mixpanel-browser";
 
 export default function ActivityImage({ nft, onLoad }) {
   const aRef = useRef();
   const [imgWidth, setImgWidth] = useState(null);
-  useEffect(() => {
-    setImgWidth(aRef?.current?.clientWidth);
-  }, [aRef?.current?.clientWidth]);
 
   useEffect(() => {
     setImgWidth(aRef?.current?.clientWidth);
-  }, []);
+  }, [aRef?.current]);
 
   const getImageUrl = (img_url, token_aspect_ratio) => {
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
@@ -52,6 +48,15 @@ export default function ActivityImage({ nft, onLoad }) {
           height={imgWidth}
           playsinline
           onReady={onLoad}
+          // Disable downloading & right click
+          config={{
+            file: {
+              attributes: {
+                onContextMenu: (e) => e.preventDefault(),
+                controlsList: "nodownload",
+              },
+            },
+          }}
         />
       )}
     </div>

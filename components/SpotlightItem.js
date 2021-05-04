@@ -32,6 +32,7 @@ class SpotlightItem extends React.Component {
       currentlyOpenModal: false,
       currentlyPlayingVideo: true,
       videoReady: false,
+      thisItem: props.item,
     };
     this.divRef = React.createRef();
   }
@@ -45,23 +46,32 @@ class SpotlightItem extends React.Component {
   handleRefreshNFTMetadata = async () => {
     mixpanel.track("Clicked refresh metadata");
     this.setState({ refreshing: true });
-    await fetch(`/api/refreshmetadata/${this.props.item.nft_id}`, {
-      method: "post",
-    });
-    await this.props.refreshItems();
+
+    const result = await fetch(
+      `/api/refreshmetadata/${this.state.thisItem.nft_id}`,
+      {
+        method: "post",
+      }
+    );
+    const { data } = await result.json();
+    if (data) {
+      // Replace all fields
+      this.setState({ thisItem: data });
+    }
+
     this.setState({ refreshing: false });
   };
 
   handleRemoveFromSpotlight = async () => {};
 
   getImageUrl = () => {
-    var img_url = this.props.item.token_img_url
-      ? this.props.item.token_img_url
+    var img_url = this.state.thisItem.token_img_url
+      ? this.state.thisItem.token_img_url
       : null;
 
     if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
-      this.props.item.token_aspect_ratio &&
-      Number(this.props.item.token_aspect_ratio) > this.aspect_ratio_cutoff
+      this.state.thisItem.token_aspect_ratio &&
+      Number(this.state.thisItem.token_aspect_ratio) > this.aspect_ratio_cutoff
         ? (img_url = img_url.split("=")[0] + "=w2104")
         : (img_url = img_url.split("=")[0] + "=w1004");
     }
@@ -84,7 +94,8 @@ class SpotlightItem extends React.Component {
 
   render() {
     const { isMobile } = this.context;
-    const { item, isMyProfile, listId, pageProfile } = this.props;
+    const { isMyProfile, listId, pageProfile } = this.props;
+    const { thisItem: item } = this.state;
     return (
       <>
         {typeof document !== "undefined" ? (
@@ -94,7 +105,7 @@ class SpotlightItem extends React.Component {
               setEditModalOpen={(_) =>
                 this.setState({ currentlyOpenModal: false })
               }
-              item={this.props.item}
+              item={this.state.thisItem}
             />
           </>
         ) : null}
@@ -150,6 +161,15 @@ class SpotlightItem extends React.Component {
                           // }
                           playsinline
                           onReady={() => this.setState({ videoReady: true })}
+                          // Disable downloading & right click
+                          config={{
+                            file: {
+                              attributes: {
+                                onContextMenu: (e) => e.preventDefault(),
+                                controlsList: "nodownload",
+                              },
+                            },
+                          }}
                         />
                         {this.state.refreshing && (
                           <div
@@ -273,7 +293,7 @@ class SpotlightItem extends React.Component {
                               : item.nft_id + "_" + listId
                           );
                         }}
-                        className="card-menu-button text-right flex items-center justify-center text-gray-500"
+                        className="card-menu-button text-right flex items-center justify-center text-gray-600"
                       >
                         <FontAwesomeIcon
                           style={{

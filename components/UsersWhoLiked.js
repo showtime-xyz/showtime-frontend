@@ -121,7 +121,7 @@ export default function UsersWhoLiked({ users, closeModal }) {
             className="text-black cursor-pointer hover:text-stpink"
             onClick={() => setModalIsOpen(true)}
           >
-            {users.length - 2} others
+            {Number(users.length - 2).toLocaleString()} others
           </span>
           <ModalUserList
             isOpen={modalIsOpen}

@@ -14,6 +14,7 @@ import { SORT_FIELDS } from "../lib/constants";
 import ScrollableModal from "./ScrollableModal";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
+import { classNames } from "../lib/utilities";
 
 const handleUsernameLookup = async (value, context, setCustomURLError) => {
   const username = value ? value.trim() : null;
@@ -50,10 +51,6 @@ const handleDebouncedUsernameLookup = AwesomeDebouncePromise(
   handleUsernameLookup,
   400
 );
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export default function Modal({ isOpen, setEditModalOpen }) {
   const router = useRouter();
@@ -422,15 +419,6 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                                 <div className="flex items-center flex-grow">
                                   <div className="mt-1 relative flex-1">
                                     <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                      {/* <span className="block truncate">
-                                      {selectedAddSocialLink.name}
-                                    </span>
-                                    <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                      <SelectorIcon
-                                        className="h-5 w-5 text-gray-400"
-                                        aria-hidden="true"
-                                      />
-                                    </span> */}
                                       <span className="flex items-center">
                                         {selectedAddSocialLink.icon_url && (
                                           <img
@@ -527,18 +515,6 @@ export default function Modal({ isOpen, setEditModalOpen }) {
                                       </Listbox.Options>
                                     </Transition>
                                   </div>
-                                  {/*<div className="flex-shrink mt-1 ml-2">
-                                  <button
-                                    type="button"
-                                    className="inline-flex items-center px-2.5 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
-                                    onClick={handleAddSocialLink}
-                                    disabled={
-                                      selectedAddSocialLink.type_id === -1
-                                    }
-                                  >
-                                    Add
-                                  </button>
-                                  </div>*/}
                                 </div>
                               </div>
                             </>

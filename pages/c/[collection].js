@@ -4,16 +4,15 @@ import _ from "lodash";
 import Layout from "../../components/layout";
 import TokenGridV4 from "../../components/TokenGridV4";
 import { useRouter } from "next/router";
-import Select from "react-dropdown-select";
 import backend from "../../lib/backend";
 //import ShareButton from "../../components/ShareButton";
 import AppContext from "../../context/app-context";
 import mixpanel from "mixpanel-browser";
 import { GridTabs, GridTab } from "../../components/GridTabs";
 import CappedWidth from "../../components/CappedWidth";
-
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
+import { classNames } from "../../lib/utilities";
 
 export async function getServerSideProps(context) {
   const { collection } = context.query;
@@ -194,10 +193,6 @@ export default function Collection({
     </GridTabs>
   );
 
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
-  }
-
   const [selected, setSelected] = useState(
     collection_list.filter((c) => c.value == currentCollectionSlug)[0]
   );
@@ -267,29 +262,6 @@ export default function Collection({
               Select a collection to browse:{" "}
             </div>
             <div className="flex-1 text-left">
-              {/*<Select
-                options={collection_list}
-                labelField="name"
-                valueField="value"
-                values={
-                  collection_list
-                    .map((item) => item.value)
-                    .includes(currentCollectionSlug)
-                    ? collection_list.filter(
-                        (item) => item.value === currentCollectionSlug
-                      )
-                    : [
-                        {
-                          value: "all",
-                          name: "All leading collections",
-                        },
-                      ]
-                }
-                searchable={false}
-                onChange={(values) => onChange(values)}
-                className="w-full"
-              />*/}
-
               <Listbox value={selected} onChange={onChange}>
                 {({ open }) => (
                   <>
