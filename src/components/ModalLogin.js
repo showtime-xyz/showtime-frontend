@@ -12,6 +12,7 @@ import CloseButton from './CloseButton'
 import Web3 from 'web3'
 import Fortmatic from 'fortmatic'
 import ScrollableModal from './ScrollableModal'
+import axios from '@/lib/axios'
 
 export default function Modal({ isOpen }) {
 	const context = useContext(AppContext)
@@ -28,21 +29,18 @@ export default function Modal({ isOpen }) {
 			const did = await new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY).auth.loginWithMagicLink({ email: elements.email.value })
 
 			// Once we have the did from magic, login with our own API
-			const authRequest = await fetch('/api/login', {
-				method: 'POST',
-				headers: { Authorization: `Bearer ${did}` },
-			})
-
-			if (authRequest.ok) {
-				mixpanel.track('Login success - email')
-
-				if (!context?.user) {
-					context.getUserFromCookies()
+			await axios.post(
+				'/api/auth/login',
+				{},
+				{
+					headers: { Authorization: `Bearer ${did}` },
 				}
-				context.setLoginModalOpen(false)
-			} else {
-				/* handle errors */
-			}
+			)
+
+			mixpanel.track('Login success - email')
+
+			if (!context?.user) context.getUserFromCookies()
+			context.setLoginModalOpen(false)
 		} catch {
 			/* handle errors */
 		}
@@ -119,24 +117,12 @@ export default function Modal({ isOpen }) {
 			)
 
 			// login with our own API
-			const authRequest = await fetch('/api/loginsignature', {
-				method: 'POST',
-				body: JSON.stringify({
-					signature,
-					address,
-				}),
-			})
+			await axios.post('/api/auth/login/signature', { signature, address })
 
-			if (authRequest.ok) {
-				mixpanel.track('Login success - wallet signature')
+			mixpanel.track('Login success - wallet signature')
 
-				if (!context?.user) {
-					context.getUserFromCookies()
-				}
-				context.setLoginModalOpen(false)
-			} else {
-				// handle errors
-			}
+			if (!context?.user) context.getUserFromCookies()
+			context.setLoginModalOpen(false)
 		} catch (err) {
 			//throw new Error("You need to sign the message to be able to log in.");
 			//console.log(err);

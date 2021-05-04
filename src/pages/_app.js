@@ -4,6 +4,7 @@ import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
 import Router from 'next/router'
 import ProgressBar from '@badrap/bar-of-progress'
+import axios from '@/lib/axios'
 
 mixpanel.init('9b14512bc76f3f349c708f67ab189941')
 
@@ -168,24 +169,18 @@ const App = ({ Component, pageProps }) => {
 
 		getUserFromCookies,
 		logOut: async () => {
-			const authRequest = await fetch('/api/logout', {
-				method: 'POST',
-			})
+			await axios.post('/api/auth/logout')
 
-			if (authRequest.ok) {
-				this.setUser(null)
-				this.setMyLikes([])
-				this.setMyLikeCounts({})
-				this.setMyComments([])
-				this.setMyCommentCounts({})
-				this.setMyFollows([])
-				this.setMyRecommendations([])
-				this.setMyProfile(undefined)
+			setUser(null)
+			setMyLikes([])
+			setMyLikeCounts({})
+			setMyComments([])
+			setMyCommentCounts({})
+			setMyFollows([])
+			setMyRecommendations([])
+			setMyProfile(undefined)
 
-				mixpanel.track('Logout')
-			} else {
-				/* handle errors */
-			}
+			mixpanel.track('Logout')
 		},
 		setToggleRefreshFeed,
 		setUser,

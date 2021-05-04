@@ -11,8 +11,8 @@ export default async (req, res) => {
 		try {
 			const user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 			publicAddress = user.publicAddress
-		} catch (e) {
-			console.error(e)
+		} catch {
+			// the user is not authenticated yet
 		}
 
 		await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/get_follow_suggestions${recache ? '?recache=1' : ''}`, {

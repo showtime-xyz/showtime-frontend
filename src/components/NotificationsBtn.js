@@ -128,7 +128,7 @@ export default function NotificationsBtn() {
 				}}
 				className="hover:text-stpink transition-all rounded-full h-6 w-6 flex items-center justify-center cursor-pointer relative"
 			>
-				<FontAwesomeIcon className="w-5 h-5" icon={faBell} />
+				<FontAwesomeIcon className="w-6 h-6" icon={faBell} />
 				{hasUnreadNotifications && <div className="bg-stpink absolute h-2.5 w-2.5 top-px left-px rounded-full" />}
 			</div>
 			<div

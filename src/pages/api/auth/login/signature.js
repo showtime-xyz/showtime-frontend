@@ -3,29 +3,22 @@ import CookieService from '@/lib/cookie'
 import { recoverPersonalSignature } from 'eth-sig-util'
 import { bufferToHex } from 'ethereumjs-util'
 import backend from '@/lib/backend'
+import nc from 'next-connect'
 
-export default async (req, res) => {
-	if (req.method !== 'POST') return res.status(405).end()
-
-	const body = JSON.parse(req.body)
+const handler = nc().post(async ({ body: { address, signature } }, res) => {
+	if (!address || !signature) return res.status(400).json({ error: 'Address or signature not specified.' })
 
 	// check the signature
-	const address = body.address
-	const signature = body.signature
-	const response_nonce = await backend.get(`/v1/getnonce?address=${address}`)
-	const nonce = response_nonce.data.data
+	const {
+		data: { data: nonce },
+	} = await backend.get(`/v1/getnonce?address=${address}`)
 
 	// If it checks out, save to a cookie
 	const msg = process.env.NEXT_PUBLIC_SIGNING_MESSAGE + nonce
 
 	// We now are in possession of msg, publicAddress and signature. We
 	// will use a helper from eth-sig-util to extract the address from the signature
-	const msgBufferHex = bufferToHex(Buffer.from(msg, 'utf8'))
-	//console.log(msgBufferHex);
-	const verifiedAddress = recoverPersonalSignature({
-		data: msgBufferHex,
-		sig: signature,
-	})
+	const verifiedAddress = recoverPersonalSignature({ data: bufferToHex(Buffer.from(msg, 'utf8')), sig: signature })
 
 	// The signature verification is successful if the address found with
 	// sigUtil.recoverPersonalSignature matches the initial publicAddress
@@ -44,4 +37,6 @@ export default async (req, res) => {
 	}
 
 	res.end()
-}
+})
+
+export default handler
