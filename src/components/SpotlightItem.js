@@ -1,4 +1,4 @@
-import React, { createRef, useContext, useState } from 'react'
+import { createRef, useContext, useState } from 'react'
 import Link from 'next/link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
