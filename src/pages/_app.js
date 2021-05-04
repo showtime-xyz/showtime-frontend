@@ -5,6 +5,7 @@ import mixpanel from 'mixpanel-browser'
 import Router from 'next/router'
 import ProgressBar from '@badrap/bar-of-progress'
 import axios from '@/lib/axios'
+import ModalThrottleUser from '@/components/ModalThrottleUser'
 
 mixpanel.init('9b14512bc76f3f349c708f67ab189941')
 
@@ -35,6 +36,8 @@ const App = ({ Component, pageProps }) => {
 	const [columns, setColumns] = useState(null)
 	const [isMobile, setIsMobile] = useState(null)
 	const [toggleRefreshFeed, setToggleRefreshFeed] = useState(false)
+	const [throttleOpen, setThrottleOpen] = useState(false)
+	const [throttleContent, setThrottleContent] = useState('')
 
 	const adjustGridProperties = windowWidth => {
 		if (windowWidth < 790 + 30) {
@@ -123,6 +126,18 @@ const App = ({ Component, pageProps }) => {
 		}
 	}
 
+	const throttleClose = () => {
+		setThrottleOpen(false)
+	}
+
+	useEffect(() => {
+		// Handle the backend call to throttle in here
+		// Add a trigger to useEffect argument when ready
+		setThrottleContent("Looks like you've exceeded your limit!")
+
+		setTimeout(() => setThrottleOpen(true), 2500)
+	}, [])
+
 	useEffect(() => {
 		getUserFromCookies()
 
@@ -184,6 +199,7 @@ const App = ({ Component, pageProps }) => {
 
 	return (
 		<AppContext.Provider value={injectedGlobalContext}>
+			<ModalThrottleUser isOpen={throttleOpen} closeModal={throttleClose} modalContent={throttleContent} />
 			<Component {...pageProps} />
 		</AppContext.Provider>
 	)
