@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import mixpanel from 'mixpanel-browser'
 import copy from 'copy-to-clipboard'
 
