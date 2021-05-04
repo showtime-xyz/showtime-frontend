@@ -12,6 +12,7 @@ import Web3 from 'web3'
 import { useRouter } from 'next/router'
 import Fortmatic from 'fortmatic'
 import ScrollableModal from './ScrollableModal'
+import axios from '@/lib/axios'
 
 export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 	const context = useContext(AppContext)
@@ -168,9 +169,8 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 				})
 				.then(async function (myJson) {
 					// get our likes, follows, profile
-					const myInfoRequest = await fetch('/api/myinfo')
 					try {
-						const my_info_data = await myInfoRequest.json()
+						const my_info_data = await axios.get('/api/auth/profile').then(res => res.data)
 						context.setMyLikes(my_info_data.data.likes_nft)
 						context.setMyFollows(my_info_data.data.follows)
 						context.setMyProfile(my_info_data.data.profile)

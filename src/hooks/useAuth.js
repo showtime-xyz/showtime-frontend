@@ -1,19 +1,8 @@
+import axios from '@/lib/axios'
 import useSWR from 'swr'
 
-function fetcher(route) {
-	/* our token cookie gets sent with this request */
-	return fetch(route)
-		.then(r => r.ok && r.json())
-		.then(user => user || null)
-}
-
 export default function useAuth() {
-	const { data: user, error } = useSWR('/api/user', fetcher)
-	const loading = user === undefined
+	const { data: user, error } = useSWR('/api/auth/user', url => axios.get(url).then(res => res.data || null))
 
-	return {
-		user,
-		loading,
-		error,
-	}
+	return { user, loading: user === undefined, error }
 }

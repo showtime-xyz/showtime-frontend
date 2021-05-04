@@ -65,9 +65,8 @@ const App = ({ Component, pageProps }) => {
 
 	const getUserFromCookies = async () => {
 		// log in with our own API
-		const userRequest = await fetch('/api/user')
 		try {
-			const user_data = await userRequest.json()
+			const user_data = await axios.get('/api/auth/user').then(res => res.data)
 			setUser(user_data)
 
 			mixpanel.identify(user_data.publicAddress)
@@ -88,38 +87,34 @@ const App = ({ Component, pageProps }) => {
 			}
 
 			// get our likes, follows, profile
-			const myInfoRequest = await fetch('/api/myinfo')
-			try {
-				const my_info_data = await myInfoRequest.json()
-				setMyLikes(my_info_data.data.likes_nft)
-				setMyComments(my_info_data.data.comments)
-				setMyFollows(my_info_data.data.follows)
-				setMyProfile({
-					...my_info_data.data.profile,
-					// turn notifications_last_opened into Date before storing in context
-					notifications_last_opened: my_info_data.data.profile.notifications_last_opened ? new Date(my_info_data.data.profile.notifications_last_opened) : null,
-					links: my_info_data.data.profile.links.map(link => ({
-						name: link.type__name,
-						prefix: link.type__prefix,
-						icon_url: link.type__icon_url,
-						type_id: link.type_id,
-						user_input: link.user_input,
-					})),
-				})
+			const my_info_data = await axios.get('/api/auth/profile').then(res => res.data)
 
-				// Load up the recommendations async if we are onboarding
-				//console.log(my_info_data.data.profile.has_onboarded);
-				if (my_info_data.data.profile.has_onboarded == false) {
-					//console.log("NEED TO ONBOARD");
+			setMyLikes(my_info_data.data.likes_nft)
+			setMyComments(my_info_data.data.comments)
+			setMyFollows(my_info_data.data.follows)
+			setMyProfile({
+				...my_info_data.data.profile,
+				// turn notifications_last_opened into Date before storing in context
+				notifications_last_opened: my_info_data.data.profile.notifications_last_opened ? new Date(my_info_data.data.profile.notifications_last_opened) : null,
+				links: my_info_data.data.profile.links.map(link => ({
+					name: link.type__name,
+					prefix: link.type__prefix,
+					icon_url: link.type__icon_url,
+					type_id: link.type_id,
+					user_input: link.user_input,
+				})),
+			})
 
-					const myRecRequest = await fetch('/api/follow_recommendations_onboarding')
-					const my_rec_data = await myRecRequest.json()
-					setMyRecommendations(my_rec_data.data)
-					//console.log("FINISHED LOADING ONBAORDING DATA");
-					//console.log(my_rec_data.data);
-				}
-			} catch (e) {
-				//console.log(e);
+			// Load up the recommendations async if we are onboarding
+			//console.log(my_info_data.data.profile.has_onboarded);
+			if (my_info_data.data.profile.has_onboarded == false) {
+				//console.log("NEED TO ONBOARD");
+
+				const myRecRequest = await fetch('/api/follow_recommendations_onboarding')
+				const my_rec_data = await myRecRequest.json()
+				setMyRecommendations(my_rec_data.data)
+				//console.log("FINISHED LOADING ONBAORDING DATA");
+				//console.log(my_rec_data.data);
 			}
 		} catch {
 			// Not logged in
