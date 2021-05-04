@@ -1,9 +1,40 @@
+import { useState, useContext, useEffect } from 'react'
 import LeaderboardItemV2 from '@/components/LeaderboardItemV2'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowDown } from '@fortawesome/free-solid-svg-icons'
+import { faArrowDown, faPlus } from '@fortawesome/free-solid-svg-icons'
+import AppContext from '@/context/app-context'
+import mixpanel from 'mixpanel-browser'
 
-const TrendingCreators = ({ shownLeaderboardItems, isLoading, showAllLeaderboardItems, setShowAllLeaderboardItems }) => {
+const TrendingCreators = ({ shownLeaderboardItems, allLeaderboardItems, isLoading, showAllLeaderboardItems, setShowAllLeaderboardItems, trendingTab }) => {
+	const context = useContext(AppContext)
+	const [followAllClicked, setFollowAllClicked] = useState(false)
+
+	// reset follow all button when leaderboard changes
+	useEffect(() => {
+		if (context.myFollows) {
+			const newProfiles = allLeaderboardItems.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id))
+			setFollowAllClicked(newProfiles.length === 0)
+		}
+	}, [allLeaderboardItems, showAllLeaderboardItems, trendingTab, context.myFollows])
+
+	const handleFollowAll = async () => {
+		setFollowAllClicked(true)
+		const newProfiles = allLeaderboardItems.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id))
+		// UPDATE CONTEXT
+		context.setMyFollows([...newProfiles, ...context.myFollows])
+		// Post changes to the API
+		await fetch('/api/bulkfollow', {
+			method: 'post',
+			body: JSON.stringify(newProfiles.map(item => item.profile_id)),
+		})
+	}
+
+	const handleLoggedOutFollowAll = () => {
+		mixpanel.track('Clicked `Follow all` on trending page, but is logged out')
+		context.setLoginModalOpen(true)
+	}
+
 	return (
 		<>
 			<div className="bg-white sm:rounded-lg shadow-md pt-3 ">
@@ -11,16 +42,18 @@ const TrendingCreators = ({ shownLeaderboardItems, isLoading, showAllLeaderboard
 					<div className="my-2 flex-grow">
 						<span className="sm:hidden">Trending </span>Creators
 					</div>
-					{/*!isLoading && (
-            <div>
-              <div className="bg-white text-black border border-gray-400 rounded-full py-2 px-4 text-sm flex flex-row hover:opacity-70 transition-all cursor-pointer">
-                <div className="mr-1">
-                  <FontAwesomeIcon icon={faPlus} />
-                </div>
-                <div>Follow All</div>
-              </div>
-            </div>
-          )*/}
+					{!isLoading && (
+						<div>
+							<div className={`text-black border rounded-full py-2 px-4 text-xs flex flex-row   ${followAllClicked ? 'bg-white border-gray-400' : 'bg-stpurple text-white border-stpurple cursor-pointer hover:opacity-70 transition-all'}`} onClick={context.user ? (followAllClicked ? null : handleFollowAll) : handleLoggedOutFollowAll}>
+								{!followAllClicked && (
+									<div className="mr-1">
+										<FontAwesomeIcon icon={faPlus} />
+									</div>
+								)}
+								<div>{followAllClicked ? 'Following All' : 'Follow All'}</div>
+							</div>
+						</div>
+					)}
 				</div>
 
 				{isLoading ? (

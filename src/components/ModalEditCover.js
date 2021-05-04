@@ -51,7 +51,6 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 			})
 			.then(function (myJson) {
 				const emptyUrl = myJson['data']
-				console.log('response from server after removing', myJson)
 
 				context.setMyProfile({
 					...context.myProfile,

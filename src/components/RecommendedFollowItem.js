@@ -199,7 +199,7 @@ const Tiles = ({ topItems, setCurrentlyOpenModal }) => {
 	)
 }
 
-const RecommendedFollowItem = ({ item, closeModal, liteVersion, removeRecommendation, followCallback = () => {}, leftPadding }) => {
+const RecommendedFollowItem = ({ item, closeModal = () => {}, liteVersion, removeRecommendation, followCallback = () => {}, leftPadding }) => {
 	const context = useContext(AppContext)
 	const [followerCount, setFollowerCount] = useState()
 	const isMyProfile = context?.myProfile?.profile_id === item?.profile_id
