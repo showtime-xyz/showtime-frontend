@@ -490,7 +490,12 @@ const Profile = ({
     }
 
     // Populate initial state
-    if (lists.default_list_id == 1) {
+
+    const initial_list_id = router?.query?.list
+      ? PROFILE_TABS.indexOf(router.query.list)
+      : lists.default_list_id;
+
+    if (initial_list_id == 1) {
       setSwitchInProgress(true);
       // Created
       const result = await fetch(`/api/getprofilenfts`, {
@@ -510,7 +515,7 @@ const Profile = ({
       setItems(data.items);
       setHasMore(data.has_more);
       setSwitchInProgress(false);
-    } else if (lists.default_list_id == 2) {
+    } else if (initial_list_id == 2) {
       setSwitchInProgress(true);
       // Owned
       const result = await fetch(`/api/getprofilenfts`, {
@@ -530,7 +535,7 @@ const Profile = ({
       setItems(data.items);
       setHasMore(data.has_more);
       setSwitchInProgress(false);
-    } else if (lists.default_list_id == 3) {
+    } else if (initial_list_id == 3) {
       setSwitchInProgress(true);
       // Liked
       const result = await fetch(`/api/getprofilenfts`, {
@@ -641,11 +646,13 @@ const Profile = ({
   useEffect(() => {
     // console.log("setting default list Id to:", lists.default_list_id);
     // console.log("current value in url:", router.query);
+
     setSelectedGrid(
       router?.query?.list
         ? PROFILE_TABS.indexOf(router.query.list)
         : lists.default_list_id
     );
+
     setMenuLists(lists.lists);
 
     setShowFollowers(false);
