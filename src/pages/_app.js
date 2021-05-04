@@ -133,9 +133,9 @@ const App = ({ Component, pageProps }) => {
 	useEffect(() => {
 		// Handle the backend call to throttle in here
 		// Add a trigger to useEffect argument when ready
-		setThrottleContent("Looks like you've exceeded your limit!")
+		setThrottleContent("Looks like you've exceeded your like/comment/etc limit!")
 
-		setTimeout(() => setThrottleOpen(true), 2500)
+		setTimeout(() => setThrottleOpen(true), 4500)
 	}, [])
 
 	useEffect(() => {
