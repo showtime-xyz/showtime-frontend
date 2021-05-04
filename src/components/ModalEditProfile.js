@@ -11,6 +11,7 @@ import ScrollableModal from './ScrollableModal'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { classNames } from '@/lib/utilities'
+import axios from '@/lib/axios'
 
 const handleUsernameLookup = async (value, context, setCustomURLError) => {
 	const username = value ? value.trim() : null
@@ -88,23 +89,20 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 		}
 
 		// Post changes to the API
-		await fetch('/api/editprofile', {
-			method: 'post',
-			body: JSON.stringify({
-				name: nameValue?.trim() ? nameValue.trim() : null, // handle names with all whitespaces
-				bio: bioValue?.trim() ? bioValue.trim() : null,
-				username: username?.trim() ? username.trim() : null,
-				website_url: websiteValue?.trim() ? websiteValue.trim() : null,
-				links: socialLinks
-					.filter(sl => sl.user_input?.trim())
-					.map(sl => ({
-						type_id: sl.type_id,
-						user_input: sl.user_input?.trim() ? sl.user_input.trim() : null,
-					})),
-				default_list_id: defaultListId ? defaultListId : '',
-				default_created_sort_id: defaultCreatedSortId,
-				default_owned_sort_id: defaultOwnedSortId,
-			}),
+		await axios.post('/api/auth/profile', {
+			name: nameValue?.trim() ? nameValue.trim() : null, // handle names with all whitespaces
+			bio: bioValue?.trim() ? bioValue.trim() : null,
+			username: username?.trim() ? username.trim() : null,
+			website_url: websiteValue?.trim() ? websiteValue.trim() : null,
+			links: socialLinks
+				.filter(sl => sl.user_input?.trim())
+				.map(sl => ({
+					type_id: sl.type_id,
+					user_input: sl.user_input?.trim() ? sl.user_input.trim() : null,
+				})),
+			default_list_id: defaultListId ? defaultListId : '',
+			default_created_sort_id: defaultCreatedSortId,
+			default_owned_sort_id: defaultOwnedSortId,
 		})
 
 		// Update state to immediately show changes

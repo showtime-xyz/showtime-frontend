@@ -3,22 +3,40 @@ import CookieService from '@/lib/cookie'
 import nc from 'next-connect'
 import backend from '@/lib/backend'
 
-const handler = nc().get(async (req, res) => {
-	try {
-		const user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+const handler = nc()
+	.get(async (req, res) => {
+		try {
+			const user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
-		await backend
-			.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v2/myinfo`, {
+			await backend
+				.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v2/myinfo`, {
+					headers: {
+						'X-Authenticated-User': user.publicAddress,
+						'X-Authenticated-Email': user.email || null,
+						'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
+					},
+				})
+				.then(resp => res.json(resp.data))
+		} catch (error) {
+			res.status(400).json({ error: 'Unauthenticated' })
+		}
+	})
+	.post(async ({ cookies, body }, res) => {
+		try {
+			const user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+
+			await backend.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/editname`, body, {
 				headers: {
 					'X-Authenticated-User': user.publicAddress,
-					'X-Authenticated-Email': user.email || null,
 					'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
+					'Content-Type': 'application/json',
 				},
 			})
-			.then(resp => res.json(resp.data))
-	} catch (error) {
-		res.status(400).json({ error: 'Unauthenticated' })
-	}
-})
+		} catch (error) {
+			console.log(error)
+		}
+
+		res.status(200).end()
+	})
 
 export default handler
