@@ -71,11 +71,12 @@ const RecommendFollowers = ({
     }
   };
 
-  const closeRecommendFollowers = () => {
+  const closeRecommendFollowers = async () => {
     context.setMyProfile({
       ...context.myProfile,
       has_onboarded: true,
     });
+    await context.setToggleRefreshFeed(!context.toggleRefreshFeed);
   };
 
   const handleFollowAll = async () => {
@@ -112,8 +113,11 @@ const RecommendFollowers = ({
     return (
       <div className="p-4 mx-4 rounded-xl bg-white shadow-lg mb-8">
         <div className="flex items-center justify-between mb-4">
-          <Title>Recommended follows</Title>
-          <CloseIconWrapper
+          <Title>
+            Follow people to start{" "}
+            <span className="hidden sm:inline">your feed</span>
+          </Title>
+          {/*<CloseIconWrapper
             onClick={() => {
               mixpanel.track("Close Recommended Followers modal - x button");
               closeModal();
@@ -122,7 +126,7 @@ const RecommendFollowers = ({
             <CloseIcon>
               <FontAwesomeIcon icon={faTimes} />
             </CloseIcon>
-          </CloseIconWrapper>
+          </CloseIconWrapper>*/}
         </div>
         <GraySeparator />
 
@@ -182,14 +186,14 @@ const RecommendFollowers = ({
           )}
           <div />
           <div
-            className="text-center text-white px-6 py-2 flex items-center w-max border-2 border-black rounded-full hover:text-black hover:border-gray-300 hover:bg-white transition-all bg-black cursor-pointer"
+            className="text-center text-white px-6 py-2 flex items-center w-max border-2 border-black rounded-full hover:text-black hover:border-gray-300 hover:bg-white transition-all showtime-green-button cursor-pointer"
             onClick={() => {
               mixpanel.track("Clicked Close on Recommended Followers modal");
               finishOnboarding();
               closeRecommendFollowers();
             }}
           >
-            Close
+            All Done
           </div>
         </div>
       </div>
