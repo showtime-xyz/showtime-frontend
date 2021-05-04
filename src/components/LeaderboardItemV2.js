@@ -67,12 +67,12 @@ const LeaderboardItemV2 = ({ item, index }) => {
 						<div className="absolute text-sm bottom-0 right-2 rounded-full bg-white text-center self-center h-6 w-6 font-medium pt-px border border-black border-opacity-10 text-gray-900">{index + 1}</div>
 					</div>
 
-					<div className="flex flex-grow overflow-hidden pr-1">
+					<div className="flex items-center flex-grow overflow-hidden pr-1">
 						<Link href="/[profile]" as={`/${item?.username || item.address}`}>
 							<a className="hover:text-stpink cursor-pointer overflow-hidden overflow-ellipsis whitespace-nowrap">{item?.name || formatAddressShort(item.address) || 'Unnamed'} </a>
 						</Link>
 						{context.myProfile?.profile_id !== item?.profile_id && (
-							<div className="ml-2 mt-1">
+							<div className="ml-2">
 								<MiniFollowButton profileId={item?.profile_id} />
 							</div>
 						)}

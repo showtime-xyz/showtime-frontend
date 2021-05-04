@@ -39,7 +39,7 @@ const MiniFollowButton = ({ profileId }) => {
 	}
 
 	return isFollowed === null ? null : !isFollowed ? (
-		<div onClick={context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow} className="text-xs text-stlink opacity-80 hover:opacity-100 cursor-pointer mt-1">
+		<div onClick={context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow} className="text-xs text-stlink opacity-80 hover:opacity-100 cursor-pointer">
 			Follow
 		</div>
 	) : null
