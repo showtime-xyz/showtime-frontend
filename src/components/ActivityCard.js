@@ -129,14 +129,7 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 					{context.user && (
 						<div>
 							<div onClick={onCornerMenuClick} className="text-right text-gray-300 relative">
-								<FontAwesomeIcon
-									style={{
-										height: 20,
-										width: 20,
-									}}
-									icon={faEllipsisH}
-									className="hover:text-stpink cursor-pointer"
-								/>
+								<FontAwesomeIcon icon={faEllipsisH} className="hover:text-stpink cursor-pointer !w-5 !h-5" />
 								<div ref={dropdownRef} className={`absolute text-black text-center top-4 right-1 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-md transform z-1 ${isActive ? 'visible opacity-1 translate-y-1' : 'invisible opacity-0'}`}>
 									<div className="py-2 px-4 hover:text-stpink rounded-lg cursor-pointer whitespace-nowrap" onClick={handleUnfollow}>
 										Unfollow

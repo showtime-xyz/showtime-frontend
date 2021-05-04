@@ -23,7 +23,7 @@ const CommentButton = ({ item, handleComment }) => {
 				<div className="flex flex-row items-center rounded-lg py-1 hover:text-stblue">
 					<div className="mr-2 whitespace-nowrap">{comment_count}</div>
 					<div className={`flex pr-1 ${commented ? 'text-stblue' : ''}`}>
-						<FontAwesomeIcon className="w-5 h-5" icon={commented ? faCommentSolid : faCommentOutline} />
+						<FontAwesomeIcon className="!w-5 !h-5" icon={commented ? faCommentSolid : faCommentOutline} />
 					</div>
 				</div>
 			</button>

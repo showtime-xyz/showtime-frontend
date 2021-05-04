@@ -173,7 +173,7 @@ const TokenCard = ({
 									}}
 									className="card-menu-button text-right text-gray-600"
 								>
-									<FontAwesomeIcon className="w-5 h-5" icon={faEllipsisH} />
+									<FontAwesomeIcon className="!w-4 !h-4" icon={faEllipsisH} />
 								</div>
 							) : null}
 
