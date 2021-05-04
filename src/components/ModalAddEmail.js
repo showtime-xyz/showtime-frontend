@@ -3,6 +3,7 @@ import mixpanel from 'mixpanel-browser'
 import CloseButton from './CloseButton'
 import { Magic } from 'magic-sdk'
 import ScrollableModal from './ScrollableModal'
+import axios from '@/lib/axios'
 
 const ModalAddEmail = ({ isOpen, setEmailModalOpen, setHasEmailAddress }) => {
 	const [emailValue, setEmailValue] = useState(null)
@@ -18,18 +19,17 @@ const ModalAddEmail = ({ isOpen, setEmailModalOpen, setHasEmailAddress }) => {
 			const did = await new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY).auth.loginWithMagicLink({ email: elements.email.value })
 
 			// Once we have the did from magic, login with our own API
-			const authRequest = await fetch('/api/addemail', {
-				method: 'POST',
-				headers: { Authorization: `Bearer ${did}` },
-			})
+			await axios.post(
+				'/api/profile/email',
+				{},
+				{
+					headers: { Authorization: `Bearer ${did}` },
+				}
+			)
 
-			if (authRequest.ok) {
-				mixpanel.track('Add email success')
-				setHasEmailAddress(true)
-				setEmailModalOpen(false)
-			} else {
-				/* handle errors */
-			}
+			mixpanel.track('Add email success')
+			setHasEmailAddress(true)
+			setEmailModalOpen(false)
 		} catch {
 			/* handle errors */
 		}

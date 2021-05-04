@@ -156,21 +156,19 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 			setStep(3)
 
 			// login with our own API
-			await fetch('/api/addwallet', {
-				method: 'POST',
-				body: JSON.stringify({
+			await axios
+				.put('/api/profile/wallet', {
 					signature,
 					addressDetected,
-				}),
-			})
-				.then(function (response) {
-					setStep(4)
-					return response.json()
 				})
-				.then(async function (myJson) {
+				.then(res => {
+					setStep(4)
+					return res.data
+				})
+				.then(async ({ data: redirect }) => {
 					// get our likes, follows, profile
 					try {
-						const my_info_data = await axios.get('/api/auth/profile').then(res => res.data)
+						const my_info_data = await axios.get('/api/profile').then(res => res.data)
 						context.setMyLikes(my_info_data.data.likes_nft)
 						context.setMyFollows(my_info_data.data.follows)
 						context.setMyProfile(my_info_data.data.profile)
@@ -178,7 +176,6 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 						console.error(error)
 					}
 
-					const redirect = myJson['data']
 					router.push(`/${redirect}`)
 					setWalletModalOpen(false)
 					setStep(1)

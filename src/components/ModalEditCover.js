@@ -5,6 +5,7 @@ import Croppie from 'croppie'
 import AppContext from '@/context/app-context'
 import CloseButton from './CloseButton'
 import ScrollableModal from './ScrollableModal'
+import axios from '@/lib/axios'
 
 export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 	const context = useContext(AppContext)
@@ -42,20 +43,11 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 
 	const handleRemovePhoto = () => {
 		setSaveInProgress(true)
-		fetch('/api/editcoverphoto', {
-			method: 'post',
-			body: null,
-		})
-			.then(function (response) {
-				return response.json()
-			})
-			.then(function (myJson) {
-				const emptyUrl = myJson['data']
-
-				context.setMyProfile({
-					...context.myProfile,
-					cover_url: emptyUrl,
-				})
+		axios
+			.post('/api/profile/cover')
+			.then(res => res.data)
+			.then(({ data: emptyUrl }) => {
+				context.setMyProfile({ ...context.myProfile, cover_url: emptyUrl })
 				setEditModalOpen(false)
 				setSaveInProgress(false)
 			})
@@ -78,26 +70,15 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 					})
 					.then(blob => {
 						// Post changes to the API
-						fetch('/api/editcoverphoto', {
-							method: 'post',
-							body: blob,
-						})
-							.then(function (response) {
-								return response.json()
-							})
-							.then(function (myJson) {
-								const url = myJson['data']
-
-								context.setMyProfile({
-									...context.myProfile,
-									cover_url: url,
-								})
+						axios
+							.post('/api/profile/cover', blob)
+							.then(res => res.data)
+							.then(({ data: url }) => {
+								context.setMyProfile({ ...context.myProfile, cover_url: url })
 
 								setEditModalOpen(false)
 								setSaveInProgress(false)
-								if (croppie) {
-									croppie.destroy()
-								}
+								if (croppie) croppie.destroy()
 								setCroppie(null)
 								setImage('')
 							})

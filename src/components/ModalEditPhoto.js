@@ -5,6 +5,7 @@ import Croppie from 'croppie'
 import AppContext from '@/context/app-context'
 import CloseButton from './CloseButton'
 import ScrollableModal from './ScrollableModal'
+import axios from '@/lib/axios'
 
 export default function Modal({ isOpen, setEditModalOpen }) {
 	const context = useContext(AppContext)
@@ -54,30 +55,21 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 					})
 					.then(blob => {
 						// Post changes to the API
-						fetch('/api/editphoto', {
-							method: 'post',
-							body: blob,
-						})
-							.then(function (response) {
-								return response.json()
-							})
-							.then(function (myJson) {
-								const url = myJson['data']
-								context.setMyProfile({
-									...context.myProfile,
-									img_url: url,
-								})
+						axios
+							.post('/api/profile/avatar', blob)
+							.then(res => res.data)
+							.then(({ data: url }) => {
+								context.setMyProfile({ ...context.myProfile, img_url: url })
+
 								setEditModalOpen(false)
-								setSaveInProgress(false)
-								if (croppie) {
-									croppie.destroy()
-								}
+
+								if (croppie) croppie.destroy()
 								setCroppie(null)
 								setImage('')
 							})
 					})
 			}
-		} catch (e) {
+		} finally {
 			setSaveInProgress(false)
 		}
 	}

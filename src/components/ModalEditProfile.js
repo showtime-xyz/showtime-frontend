@@ -89,7 +89,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 		}
 
 		// Post changes to the API
-		await axios.post('/api/auth/profile', {
+		await axios.post('/api/profile', {
 			name: nameValue?.trim() ? nameValue.trim() : null, // handle names with all whitespaces
 			bio: bioValue?.trim() ? bioValue.trim() : null,
 			username: username?.trim() ? username.trim() : null,
@@ -287,7 +287,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 											socialLinks.map(linkObj => (
 												<div key={linkObj.name} className="mb-4 pb-2">
 													<div className="flex items-center justify-between">
-														<label htmlFor={linkObj.name} className="block text-sm font-medium text-gray-700 flex flex-row">
+														<label htmlFor={linkObj.name} className="text-sm font-medium text-gray-700 flex flex-row">
 															<img className="h-5 w-5 mr-1" src={linkObj.icon_url} />
 															{linkObj.name}
 														</label>

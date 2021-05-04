@@ -87,7 +87,7 @@ const App = ({ Component, pageProps }) => {
 			}
 
 			// get our likes, follows, profile
-			const my_info_data = await axios.get('/api/auth/profile').then(res => res.data)
+			const my_info_data = await axios.get('/api/profile').then(res => res.data)
 
 			setMyLikes(my_info_data.data.likes_nft)
 			setMyComments(my_info_data.data.comments)
