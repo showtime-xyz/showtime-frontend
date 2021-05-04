@@ -363,6 +363,14 @@ const Profile = ({
         : listId === 2
         ? selectedOwnedSortField
         : selectedLikedSortField;
+    router.replace(
+      {
+        pathname: "/[profile]",
+        query: { ...router.query, list: PROFILE_TABS[listId] },
+      },
+      undefined,
+      { shallow: true }
+    );
     await updateItems(listId, sortId, 0, true, 1, showUserHiddenItems, 0);
     setSwitchInProgress(false);
   };
@@ -553,19 +561,6 @@ const Profile = ({
     fetchItems(true, lists);
   }, [profile_id, lists]);
 
-  useEffect(() => {
-    if (selectedGrid) {
-      router.push(
-        {
-          pathname: "/[profile]",
-          query: { ...router.query, tab: PROFILE_TABS[selectedGrid] },
-        },
-        undefined,
-        { shallow: true }
-      );
-    }
-  }, [selectedGrid]);
-
   const handleLoggedOutFollow = () => {
     mixpanel.track("Follow but logged out");
     context.setLoginModalOpen(true);
@@ -643,58 +638,12 @@ const Profile = ({
   const [showFollowing, setShowFollowing] = useState(false);
   const [openCardMenu, setOpenCardMenu] = useState(null);
 
-  /*
-  const updateCreated = async (selectedCreatedSortField, showCardRefresh) => {
-    if (showCardRefresh) {
-      setIsRefreshingCards(true);
-    }
-
-    const response_profile = await backend.get(
-      `/v2/profile_client/${slug_address}?limit=150&tab=created&sort=${selectedCreatedSortField}`
-    );
-    const data_profile = response_profile.data.data;
-
-    setCreatedItems(
-      data_profile.created.filter(
-        (item) =>
-          item.token_hidden !== 1 &&
-          (item.token_img_url || item.token_animation_url)
-      )
-    );
-    if (showCardRefresh) {
-      setIsRefreshingCards(false);
-    }
-  };
-
-  const updateOwned = async (selectedOwnedSortField, showCardRefresh) => {
-    if (showCardRefresh) {
-      setIsRefreshingCards(true);
-    }
-
-    const response_profile = await backend.get(
-      `/v2/profile_client/${slug_address}?limit=150&tab=owned&sort=${selectedOwnedSortField}`
-    );
-    const data_profile = response_profile.data.data;
-
-    setOwnedItems(
-      data_profile.owned.filter(
-        (item) =>
-          item.token_hidden !== 1 &&
-          (item.token_img_url || item.token_animation_url)
-      )
-    );
-    if (showCardRefresh) {
-      setIsRefreshingCards(false);
-    }
-  };
-  */
-
   useEffect(() => {
     // console.log("setting default list Id to:", lists.default_list_id);
     // console.log("current value in url:", router.query);
     setSelectedGrid(
-      router?.query?.tab
-        ? PROFILE_TABS.indexOf(router.query.tab)
+      router?.query?.list
+        ? PROFILE_TABS.indexOf(router.query.list)
         : lists.default_list_id
     );
     setMenuLists(lists.lists);
