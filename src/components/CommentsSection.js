@@ -203,12 +203,6 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 									{!loadingMoreComments ? (
 										<div className="text-center px-4 py-1 flex items-center w-max border-2 border-gray-300 rounded-full hover:text-stpink hover:border-stpink cursor-pointer transition-all" onClick={handleGetMoreComments}>
 											<div className="mr-2 text-sm">Show Earlier Comments</div>
-											{/*<div>
-                        <FontAwesomeIcon
-                          style={{ height: 12 }}
-                          icon={faArrowUp}
-                        />
-                      </div>*/}
 										</div>
 									) : (
 										<div className="p-1">

@@ -64,21 +64,7 @@ const LeaderboardItemV2 = ({ item, index }) => {
 								<img src={item?.img_url ? item?.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full h-12 w-12 hover:opacity-90" />
 							</a>
 						</Link>
-						<div
-							className="absolute rounded-full bg-white text-center self-center h-6 w-6"
-							style={{
-								border: '1px solid rgba(0, 0, 0, 0.16)',
-								fontSize: 13,
-								fontWeight: 500,
-								paddingTop: 1,
-
-								color: '#010101',
-								bottom: 0,
-								right: 8,
-							}}
-						>
-							{index + 1}
-						</div>
+						<div className="absolute text-sm bottom-0 right-2 rounded-full bg-white text-center self-center h-6 w-6 font-medium pt-px border border-black border-opacity-10 text-gray-900">{index + 1}</div>
 					</div>
 
 					<div className="flex flex-grow overflow-hidden pr-1">
@@ -86,7 +72,7 @@ const LeaderboardItemV2 = ({ item, index }) => {
 							<a className="hover:text-stpink cursor-pointer overflow-hidden overflow-ellipsis whitespace-nowrap">{item?.name || formatAddressShort(item.address) || 'Unnamed'} </a>
 						</Link>
 						{context.myProfile?.profile_id !== item?.profile_id && (
-							<div className="ml-2" style={{ marginTop: 3 }}>
+							<div className="ml-2 mt-1">
 								<MiniFollowButton profileId={item?.profile_id} />
 							</div>
 						)}

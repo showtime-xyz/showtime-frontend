@@ -653,19 +653,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 							</div>
 							<div>
 								{profileToDisplay?.bio ? (
-									// <div className="text-gray-500 flex flex-row">
-									//   <div className="max-w-prose text-sm sm:text-base">
-									//     {context.myProfile.bio}
-									//   </div>
-									// </div>
-									<div
-										style={{
-											overflowWrap: 'break-word',
-											wordWrap: 'break-word',
-											display: 'block',
-										}}
-										className="text-black text-sm max-w-prose text-left md:text-base mt-6"
-									>
+									<div className="text-black text-sm max-w-prose text-left md:text-base mt-6 block break-words">
 										{moreBioShown ? profileToDisplay.bio : truncateWithEllipses(profileToDisplay.bio, initialBioLength)}
 										{!moreBioShown && profileToDisplay?.bio && profileToDisplay.bio.length > initialBioLength && (
 											<a onClick={() => setMoreBioShown(true)} className="text-gray-500 hover:text-gray-700 cursor-pointer">
@@ -725,7 +713,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										<div className="flex text-gray-500 flex-row  items-center hover:opacity-80 mr-3 md:mr-0">
 											<img src="/icons/link-solid-01.png" alt="" className="flex-shrink-0 h-5 w-5 mr-1 opacity-70" />
 											<div>
-												<div style={{ wordBreak: 'break-all' }}>{profileToDisplay.website_url}</div>
+												<div className="break-all">{profileToDisplay.website_url}</div>
 											</div>
 										</div>
 									</a>
@@ -748,9 +736,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											<div className="text-gray-500 flex flex-row items-center hover:opacity-80">
 												{socialLink.icon_url && <img src={socialLink.icon_url} alt="" className="flex-shrink-0 h-5 w-5 mr-1 opacity-70" />}
 												<div>
-													<div className="" style={{ wordBreak: 'break-all' }}>
-														{socialLink.name}
-													</div>
+													<div className="break-all">{socialLink.name}</div>
 												</div>
 											</div>
 										</a>
@@ -801,7 +787,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										<div className="border-b border-gray-200 sm:mx-2 mb-2 pb-4  ">
 											<div className="flex flex-row items-center mt-2 ml-2 sm:mt-0 sm:ml-0">
 												<div className="mr-2">
-													<img src={profileToDisplay && profileToDisplay.img_url ? profileToDisplay.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} style={{ width: 22, height: 22 }} className="rounded-full" />
+													<img src={profileToDisplay && profileToDisplay.img_url ? profileToDisplay.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="w-5 h-5 rounded-full" />
 												</div>
 												<div>{profileToDisplay?.name ? profileToDisplay.name : wallet_addresses_excluding_email && wallet_addresses_excluding_email.length > 0 ? formatAddressShort(wallet_addresses_excluding_email[0]) : 'Unnamed'}</div>
 												<div className="flex-grow"></div>

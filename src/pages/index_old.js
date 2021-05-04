@@ -124,18 +124,9 @@ backend.get(`/v1/hero?recache=1`);
 			</Head>
 
 			{columns && (
-				<div
-					className="mx-auto relative my-16 md:my-24 text-center md:text-left"
-					style={{
-						...(columns === 1 ? { padding: '0px 16px' } : { width: gridWidth, paddingLeft: 16 }),
-					}}
-				>
-					<h1 className="text-xl md:text-3xl xl:text-4xl" style={{ maxWidth: 700 }}>
-						Discover & Showcase
-					</h1>
-					<h1 className="text-4xl md:text-7xl xl:text-8xl" style={{ fontFamily: 'Afronaut' }}>
-						Your Favorite
-					</h1>
+				<div className="mx-auto relative my-16 md:my-24 text-center md:text-left" style={columns === 1 ? { padding: '0px 16px' } : { width: gridWidth, paddingLeft: 16 }}>
+					<h1 className="text-xl md:text-3xl xl:text-4xl max-w-2xl">Discover &amp; Showcase</h1>
+					<h1 className="text-4xl md:text-7xl xl:text-8xl font-afro">Your Favorite</h1>
 					<h1 className="text-4xl md:text-7xl xl:text-8xl">Crypto Art.</h1>
 				</div>
 			)}

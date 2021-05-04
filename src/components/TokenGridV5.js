@@ -121,8 +121,7 @@ const TokenGridV5 = ({
 		return (
 			<div className="flex flex-col items-center justify-center text-gray-400 mt-20 mb-24">
 				<div>
-					{' '}
-					<FontAwesomeIcon style={{ height: 48, width: 48 }} icon={faThLarge} />
+					<FontAwesomeIcon className="w-12 h-12" icon={faThLarge} />
 				</div>
 				<div className="p-3 text-center">No items found.</div>
 			</div>

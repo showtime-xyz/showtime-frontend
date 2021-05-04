@@ -128,32 +128,13 @@ export default function NotificationsBtn() {
 				}}
 				className="hover:text-stpink transition-all rounded-full h-6 w-6 flex items-center justify-center cursor-pointer relative"
 			>
-				<FontAwesomeIcon
-					style={{
-						height: 20,
-						width: 20,
-					}}
-					icon={faBell}
-				/>
-				{hasUnreadNotifications && (
-					<div
-						className="bg-stpink"
-						style={{
-							position: 'absolute',
-							height: 10,
-							width: 10,
-							top: 1,
-							left: 1,
-							borderRadius: '50%',
-						}}
-					/>
-				)}
+				<FontAwesomeIcon className="w-5 h-5" icon={faBell} />
+				{hasUnreadNotifications && <div className="bg-stpink absolute h-2.5 w-2.5 top-px left-px rounded-full" />}
 			</div>
 			<div
 				ref={dropdownRef}
-				className={`overflow-y-scroll text-black absolute text-center top-10 right-0 bg-white py-2 px-2 shadow-lg rounded-xl transition-all transform border border-gray-200 ${isActive ? 'visible opacity-1 translate-y-2' : 'invisible opacity-0'}`}
+				className={`overflow-y-scroll text-black absolute text-center top-10 right-0 bg-white py-2 px-2 shadow-lg rounded-xl transition-all transform border border-gray-200 z-1 ${isActive ? 'visible opacity-1 translate-y-2' : 'invisible opacity-0'}`}
 				style={{
-					zIndex: 1,
 					maxWidth: context.windowSize.width < 768 ? '92vw' : 500,
 					maxHeight: context.isMobile ? 500 : 650,
 					width: loadingNotifications || !notifications || notifications.length === 0 ? 'unset' : context.windowSize.width < 768 ? '92vw' : 500,
@@ -182,37 +163,18 @@ export default function NotificationsBtn() {
 								//     : {}
 								// }
 							>
-								<div className="w-max mr-2 relative" style={{ minWidth: 36 }}>
+								<div className="w-max mr-2 relative min-w-[2.25rem]">
 									<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
 										<a onClick={() => setIsActive(!isActive)}>
-											<img alt={notif.name} src={notif.img_url ? notif.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-1 mt-1" style={{ height: 36, width: 36 }} />
-											<div
-												className="absolute bottom-0 right-0 rounded-full h-5 w-5 flex items-center justify-center shadow"
-												style={{
-													backgroundColor: getNotificationInfo(notif.type_id).color,
-												}}
-											>
-												<FontAwesomeIcon
-													style={{
-														height: 12,
-														width: 12,
-													}}
-													icon={iconObjects[getNotificationInfo(notif.type_id).icon]}
-													color="white"
-												/>
+											<img alt={notif.name} src={notif.img_url ? notif.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-1 mt-1 w-9 h-9" />
+											<div className="absolute bottom-0 right-0 rounded-full h-5 w-5 flex items-center justify-center shadow" style={{ backgroundColor: getNotificationInfo(notif.type_id).color }}>
+												<FontAwesomeIcon className="w-3 h-3 text-white" icon={iconObjects[getNotificationInfo(notif.type_id).icon]} />
 											</div>
 										</a>
 									</Link>
 								</div>
 								<div className="flex-1 flex-col items-start text-left">
-									<div
-										style={{
-											// textOverflow: "ellipsis",
-											// overflow: "hidden",
-											whiteSpace: 'break-spaces',
-											fontSize: 14,
-										}}
-									>
+									<div className="text-sm" style={{ whiteSpace: 'break-spaces' }}>
 										{/*notif.description*/}
 
 										<>
@@ -368,33 +330,14 @@ export default function NotificationsBtn() {
 									//     : {}
 									// }
 								>
-									<div className="w-max mr-2 relative" style={{ minWidth: 36 }}>
-										<img alt={notif.name} src={notif.img_url ? notif.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-1 mt-1" style={{ height: 36, width: 36 }} />
-										<div
-											className="absolute bottom-0 right-0 rounded-full h-5 w-5 flex items-center justify-center shadow"
-											style={{
-												backgroundColor: getNotificationInfo(notif.type_id).color,
-											}}
-										>
-											<FontAwesomeIcon
-												style={{
-													height: 12,
-													width: 12,
-												}}
-												icon={iconObjects[getNotificationInfo(notif.type_id).icon]}
-												color="white"
-											/>
+									<div className="w-max mr-2 relative min-w-[2.25rem]">
+										<img alt={notif.name} src={notif.img_url ? notif.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-1 mt-1 w-9 h-9" />
+										<div className="absolute bottom-0 right-0 rounded-full h-5 w-5 flex items-center justify-center shadow" style={{ backgroundColor: getNotificationInfo(notif.type_id).color }}>
+											<FontAwesomeIcon className="w-3 h-3 text-white" icon={iconObjects[getNotificationInfo(notif.type_id).icon]} />
 										</div>
 									</div>
 									<div className="flex-1 flex-col items-start text-left">
-										<div
-											style={{
-												// textOverflow: "ellipsis",
-												// overflow: "hidden",
-												whiteSpace: 'break-spaces',
-												fontSize: 14,
-											}}
-										>
+										<div className="text-sm" style={{ whiteSpace: 'break-spaces' }}>
 											{notif.description}
 										</div>
 										<div className="text-gray-400 text-xs">

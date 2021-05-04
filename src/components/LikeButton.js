@@ -65,25 +65,13 @@ const LikeButton = ({ item }) => {
 				// }
 			>
 				<div className="flex flex-row items-center rounded-md py-1 hover:text-stred">
-					<div className="mr-2" style={{ whiteSpace: 'nowrap' }}>
-						{Number(like_count).toLocaleString()}
-					</div>
-					<div className={`flex ${liked ? 'text-stred' : ''}`} style={{ paddingRight: 2 }}>
-						<FontAwesomeIcon
-							style={{
-								height: 22,
-								width: 22,
-							}}
-							icon={liked ? faHeartSolid : faHeartOutline}
-						/>
+					<div className="mr-2 whitespace-nowrap">{Number(like_count).toLocaleString()}</div>
+					<div className={`flex pr-1 ${liked ? 'text-stred' : ''}`}>
+						<FontAwesomeIcon className="w-5 h-5" icon={liked ? faHeartSolid : faHeartOutline} />
 					</div>
 				</div>
 			</button>
-			{context.user ? null : !isMobile ? (
-				<span style={{ fontSize: 12, opacity: 0.9, width: 90 }} className="tooltip-text bg-black p-3 -mt-6 -ml-16 rounded text-white">
-					Sign in to like
-				</span>
-			) : null}
+			{context.user ? null : !isMobile ? <span className="tooltip-text bg-black p-3 -mt-6 -ml-16 rounded text-white text-xs text-opacity-90 w-24">Sign in to like</span> : null}
 		</div>
 	)
 }

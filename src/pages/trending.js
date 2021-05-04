@@ -79,19 +79,12 @@ const Leaderboard = () => {
 				<meta name="twitter:image" content="https://storage.googleapis.com/showtime-nft-thumbnails/twitter_card_showtime.jpg" />
 			</Head>
 
-			<div
-				className="py-12 sm:py-14 px-8 sm:px-10 text-left "
-				style={{
-					background: 'linear-gradient(133deg, rgba(184,38,193,0.7539390756302521) 0%, rgba(67,142,223,0.9) 50%, rgba(67,186,193,0.8) 100%)',
-				}}
-			>
+			<div className="py-12 sm:py-14 px-8 sm:px-10 text-left " style={{ background: 'linear-gradient(133deg, rgba(184,38,193,0.7539390756302521) 0%, rgba(67,142,223,0.9) 50%, rgba(67,186,193,0.8) 100%)' }}>
 				<CappedWidth>
 					<div className="flex flex-row mx-3 text-white">
 						<div className="flex-1">
-							<div className="text-xl sm:text-2xl">Art & Creators</div>
-							<div className="text-3xl sm:text-6xl" style={{ fontFamily: 'Afronaut', textTransform: 'capitalize' }}>
-								Trending
-							</div>
+							<div className="text-xl sm:text-2xl">Art &amp; Creators</div>
+							<div className="text-3xl sm:text-6xl capitalize font-afro">Trending</div>
 							<div className="text-3xl sm:text-6xl">On Showtime</div>
 						</div>
 					</div>

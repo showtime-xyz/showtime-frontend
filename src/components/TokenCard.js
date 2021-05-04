@@ -143,7 +143,7 @@ const TokenCard = ({
 								<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
 									<a className="flex flex-row items-center ">
 										<div>
-											<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full" style={{ height: 24, width: 24 }} />
+											<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full w-5 h-5" />
 										</div>
 										<div className="showtime-card-profile-link ml-2">{truncateWithEllipses(item.collection_name + ' Collection', 30)}</div>
 									</a>
@@ -152,7 +152,7 @@ const TokenCard = ({
 								<Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
 									<a className="flex flex-row items-center ">
 										<div>
-											<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full" style={{ height: 24, width: 24, minWidth: 24 }} />
+											<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full w-5 h-5" />
 										</div>
 										<div className="ml-2 hover:text-stpink truncate">{truncateWithEllipses(item.creator_name, 22)}</div>
 									</a>
@@ -173,20 +173,14 @@ const TokenCard = ({
 									}}
 									className="card-menu-button text-right text-gray-600"
 								>
-									<FontAwesomeIcon
-										style={{
-											height: 20,
-											width: 20,
-										}}
-										icon={faEllipsisH}
-									/>
+									<FontAwesomeIcon className="w-5 h-5" icon={faEllipsisH} />
 								</div>
 							) : null}
 
 							{openCardMenu == item.nft_id + '_' + listId ? (
 								<div className="">
 									<div className="flex justify-end relative z-10">
-										<div className={`absolute text-center top-2 bg-white shadow-lg py-2 px-2 rounded-xl transition-all text-md transform  ${openCardMenu == item.nft_id + '_' + listId ? 'visible opacity-1 ' : 'invisible opacity-0'}`} style={{ border: '1px solid #f0f0f0' }}>
+										<div className={`absolute text-center top-2 bg-white shadow-lg py-2 px-2 rounded-xl transition-all text-md transform border border-gray-100 ${openCardMenu == item.nft_id + '_' + listId ? 'visible opacity-1 ' : 'invisible opacity-0'}`}>
 											<div
 												className="py-2 px-3 hover:text-stpink hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap flex flew-row"
 												onClick={() => {
@@ -195,7 +189,7 @@ const TokenCard = ({
 												}}
 											>
 												<div>
-													<FontAwesomeIcon style={{ height: 18, width: 18, marginRight: 6 }} icon={faStar} />
+													<FontAwesomeIcon className="h-4 w-4 mr-1.5" icon={faStar} />
 												</div>
 												<div>Spotlight Item</div>
 											</div>
@@ -237,12 +231,13 @@ const TokenCard = ({
 						</div>
 					) : (
 						<div
+							className="relative"
 							style={{
-								position: 'relative',
 								height: item.imageRef?.current?.clientWidth,
 							}}
 						>
 							<div
+								className="cursor-pointer"
 								onClick={() => {
 									mixpanel.track('Open NFT modal')
 									setCurrentlyOpenModal(item)
@@ -250,42 +245,18 @@ const TokenCard = ({
 									setMuted(true)
 									setCurrentlyPlayingVideo(null)
 								}}
-								style={{ cursor: 'pointer' }}
 							>
-								{/*!imageLoaded ? (
-                  <div
-                    className="w-full text-center flex items-center justify-center"
-                    style={{
-                      height: imageRef?.current?.clientWidth,
-                      width: imageRef?.current?.clientWidth,
-                    }}
-                  >
-                    <div className="loading-card-spinner" />
-                  </div>
-                  ) : null*/}
 								<div
 									style={{
 										backgroundColor: getBackgroundColor(item),
 									}}
-									//className={imageLoaded ? null : "hidden"}
 								>
-									<TokenCardImage
-										nft={item}
-										//onLoad={() => {
-										//  setImageLoaded(true);
-										//}}
-									/>
+									<TokenCardImage nft={item} />
 								</div>
 							</div>
 							{item.token_has_video ? (
 								<div
-									className="p-4 playbutton"
-									style={{
-										position: 'absolute',
-										bottom: 0,
-										right: 0,
-										cursor: 'pointer',
-									}}
+									className="p-4 playbutton absolute bottom-0 right-0 cursor-pointer"
 									onClick={() => {
 										mixpanel.track('Play card video')
 
@@ -294,33 +265,11 @@ const TokenCard = ({
 										setCurrentlyPlayingVideo(item.nft_id)
 									}}
 								>
-									<FontAwesomeIcon
-										style={{
-											height: 20,
-											width: 20,
-											color: 'white',
-											filter: 'drop-shadow(0px 0px 10px grey)',
-										}}
-										icon={faPlay}
-									/>
+									<FontAwesomeIcon className="h-5 w-5 text-white filter drop-shadow" icon={faPlay} />
 								</div>
 							) : null}
 							{refreshing && (
-								<div
-									style={{
-										position: 'absolute',
-										top: 0,
-										bottom: 0,
-										left: 0,
-										right: 0,
-										cursor: 'pointer',
-										display: 'flex',
-										flexDirection: 'column',
-										alignItems: 'center',
-										justifyContent: 'center',
-										backgroundColor: '#fffffff0',
-									}}
-								>
+								<div className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center bg-white bg-opacity-50">
 									<div className="loading-card-spinner-small mb-2" />
 									<div>Refreshing...</div>
 								</div>
@@ -340,61 +289,15 @@ const TokenCard = ({
 										setMuted(true)
 										setCurrentlyPlayingVideo(null)
 									}}
-									className=""
-									style={
-										context.isMobile
-											? {
-													overflowWrap: 'break-word',
-													wordWrap: 'break-word',
-													//display: "block",
-													cursor: 'pointer',
-													whiteSpace: 'nowrap',
-													overflow: 'hidden',
-													textOverflow: 'ellipsis',
-													width: context?.windowSize?.width - 16 * 2,
-											  }
-											: {
-													overflowWrap: 'break-word',
-													wordWrap: 'break-word',
-													//display: "block",
-													cursor: 'pointer',
-													whiteSpace: 'nowrap',
-													overflow: 'hidden',
-													textOverflow: 'ellipsis',
-											  }
-									}
+									className="break-words cursor-pointer truncate"
+									style={context.isMobile ? { width: context?.windowSize?.width - 16 * 2 } : {}}
 								>
 									{item.token_name}
-									{/* {this.props.item.token_has_video ? (
-                      <FontAwesomeIcon
-                        className="ml-1 inline"
-                        style={{ height: 12, marginBottom: 2 }}
-                        icon={faVideo}
-                      />
-                    ) : null} */}
 								</div>
 
-								<div
-									style={
-										context.isMobile
-											? {
-													overflowWrap: 'break-word',
-													wordWrap: 'break-word',
-													display: 'block',
-													minHeight: '4.7rem',
-													width: context?.windowSize?.width - 16 * 2,
-											  }
-											: {
-													overflowWrap: 'break-word',
-													wordWrap: 'break-word',
-													display: 'block',
-													minHeight: '4.7rem',
-											  }
-									}
-									className="py-4 text-gray-500 text-sm"
-								>
+								<div style={context.isMobile ? { width: context?.windowSize?.width - 16 * 2 } : {}} className="break-words cursor-pointer truncate py-4 text-gray-500 text-sm">
 									{moreShown ? (
-										<div style={{ whiteSpace: 'pre-line' }}>{removeTags(item.token_description)}</div>
+										<div className="whitespace-pre-line">{removeTags(item.token_description)}</div>
 									) : (
 										<div>
 											{item.token_description?.length > max_description_length ? (
@@ -435,13 +338,7 @@ const TokenCard = ({
 							</div>
 						</div>
 					</div>
-					<div
-						className="flex items-end md:h-20"
-						style={{
-							borderTopWidth: 1,
-							borderColor: 'rgb(219,219,219)',
-						}}
-					>
+					<div className="flex items-end md:h-20 border-t border-gray-300">
 						<div className="mx-4 py-4 flex flex-col">
 							<div className="flex-shrink pr-2 text-xs text-gray-500 mb-1">Owned by</div>
 							<div>
@@ -451,7 +348,7 @@ const TokenCard = ({
 											<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
 												<a className="flex flex-row items-center pr-2 ">
 													<div>
-														<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? formatAddressShort(pageProfile.wallet_addresses_excluding_email[0]) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-2" style={{ height: 24, width: 24 }} />
+														<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? formatAddressShort(pageProfile.wallet_addresses_excluding_email[0]) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-2 h-6 w-6" />
 													</div>
 													<div className="showtime-card-profile-link">
 														{truncateWithEllipses(
@@ -463,7 +360,7 @@ const TokenCard = ({
 												</a>
 											</Link>
 
-											<div className="text-gray-400 text-sm mr-2 -ml-1" style={{ marginTop: 1 }}>
+											<div className="text-gray-400 text-sm mr-2 -ml-1 mt-px">
 												& {item.owner_count - 1} other
 												{item.owner_count - 1 > 1 ? 's' : null}
 											</div>
@@ -478,7 +375,7 @@ const TokenCard = ({
 										<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
 											<a className="flex flex-row items-center pr-2 ">
 												<div>
-													<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-2" style={{ height: 24, width: 24 }} />
+													<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-2 w-6 h-6" />
 												</div>
 												<div className="showtime-card-profile-link">{truncateWithEllipses(item.owner_name, 24)}</div>
 											</a>
@@ -490,36 +387,10 @@ const TokenCard = ({
 							</div>
 						</div>
 						<div className="flex-grow"></div>
-
-						{/*<div className="mr-4 py-4 text-sm text-gray-500 hover:text-gray-400 cursor-pointer">
-                <a
-                  href={getBidLink(item)}
-                  target="_blank"
-                  className="flex flex-row items-center "
-                >
-                  <div className="mr-1">Bid</div>
-                </a>
-                        </div>*/}
 					</div>
 				</div>
-				<div className="text-right mr-2 mt-1 sm:mb-5 flex flex-row" style={{ fontWeight: 400, fontSize: 14 }}>
+				<div className="text-right mr-2 mt-1 sm:mb-5 flex flex-row text-base font-normal">
 					<div className="flex-grow"></div>
-					{/*item.duplicate_count > 1 && (
-            <div
-              onClick={() => {
-                setShowDuplicateNFTs({
-                  ...showDuplicateNFTs,
-                  [hash]: !showDuplicateNFTs[hash],
-                });
-              }}
-              className="text-gray-500 mt-1 ml-2 cursor-pointer"
-              style={{ fontWeight: 400 }}
-            >
-              {`${showDuplicateNFTs[hash] ? "Hide" : "Show"} ${
-                item.duplicate_count - 1
-              } more similar`}
-            </div>
-            )*/}
 				</div>
 			</div>
 		</>

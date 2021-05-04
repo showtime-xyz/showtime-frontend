@@ -57,25 +57,12 @@ export default function ModalFeedback({ isOpen, closeModal }) {
 											}}
 											type="text"
 											maxLength="500"
-											className="w-full"
+											className="w-full text-black p-3 rounded-lg border-2 border-gray-600"
 											rows={4}
-											style={{
-												color: 'black',
-												padding: 10,
-												borderRadius: 7,
-
-												borderWidth: 2,
-												borderColor: '#999',
-											}}
 										/>
 									</div>
 									<div className="border-t-2 pt-4">
-										<button
-											type="submit"
-											className="showtime-green-button  px-4 py-2  rounded-full float-right"
-											style={{ borderColor: '#35bb5b', borderWidth: 2 }}
-											//onClick={() => setEditModalOpen(false)}
-										>
+										<button type="submit" className="showtime-green-button  px-4 py-2  rounded-full float-right border-2 border-gray-600">
 											Submit
 										</button>
 										<button

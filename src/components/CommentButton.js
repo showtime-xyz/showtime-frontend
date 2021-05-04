@@ -21,25 +21,13 @@ const CommentButton = ({ item, handleComment }) => {
 		<div className="tooltip">
 			<button onClick={context.user ? handleComment : handleLoggedOutComment}>
 				<div className="flex flex-row items-center rounded-lg py-1 hover:text-stblue">
-					<div className="mr-2" style={{ whiteSpace: 'nowrap' }}>
-						{comment_count}
-					</div>
-					<div className={`flex ${commented ? 'text-stblue' : ''}`} style={{ paddingRight: 2 }}>
-						<FontAwesomeIcon
-							style={{
-								height: 22,
-								width: 22,
-							}}
-							icon={commented ? faCommentSolid : faCommentOutline}
-						/>
+					<div className="mr-2 whitespace-nowrap">{comment_count}</div>
+					<div className={`flex pr-1 ${commented ? 'text-stblue' : ''}`}>
+						<FontAwesomeIcon className="w-5 h-5" icon={commented ? faCommentSolid : faCommentOutline} />
 					</div>
 				</div>
 			</button>
-			{context.user ? null : !isMobile ? (
-				<span style={{ fontSize: 12, opacity: 0.9, width: 125 }} className="tooltip-text bg-black p-3 -mt-6 -ml-16 rounded text-white">
-					Sign in to comment
-				</span>
-			) : null}
+			{context.user ? null : !isMobile ? <span className="tooltip-text bg-black p-3 -mt-6 -ml-16 rounded text-white opacity-90 w-32 text-xs">Sign in to comment</span> : null}
 		</div>
 	)
 }

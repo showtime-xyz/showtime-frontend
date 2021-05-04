@@ -1,10 +1,8 @@
 import { useState, useEffect, useContext } from 'react'
 import Head from 'next/head'
-// import "react-image-lightbox/style.css"; // This only needs to be imported once in your app
 import mixpanel from 'mixpanel-browser'
 import Layout from '@/components/layout'
 import backend from '@/lib/backend'
-//import TokenGridV4 from "@/components/TokenGridV4";
 import AppContext from '@/context/app-context'
 import ModalReportItem from '@/components/ModalReportItem'
 import TokenDetailBody from '@/components/TokenDetailBody'
@@ -23,8 +21,6 @@ export async function getServerSideProps(context) {
 		return {
 			props: {
 				token,
-				//same_creator_items,
-				//same_owner_items,
 			}, // will be passed to the page component as props
 		}
 	} else {
@@ -32,8 +28,6 @@ export async function getServerSideProps(context) {
 		res.end()
 		return { props: {} }
 	}
-	//const same_creator_items = response_token.data.data.same_creator;
-	// const same_owner_items = response_token.data.data.same_owner;
 }
 
 export default function Token({ token }) {
@@ -45,22 +39,6 @@ export default function Token({ token }) {
 			mixpanel.track('NFT page view')
 		}
 	}, [typeof context.user])
-
-	/*
-  const [isMyProfile, setIsMyProfile] = useState(false);
-
-  useEffect(() => {
-    if (context.user && token.owner_address) {
-      if (token.owner_address === context.user.publicAddress) {
-        setIsMyProfile(true);
-      } else {
-        setIsMyProfile(false);
-      }
-    } else {
-      setIsMyProfile(false);
-    }
-  }, [same_owner_items, context.user]);
-  */
 
 	// Set up my likes
 	const [item, setItem] = useState(token)
@@ -82,20 +60,6 @@ export default function Token({ token }) {
 		}
 		return () => setOwnershipDetails(null)
 	}, [token])
-
-	/*
-  const [ownedItems, setOwnedItems] = useState([]);
-
-  useEffect(() => {
-    setOwnedItems(same_owner_items.filter((c) => c.nft_id !== item.nft_id));
-  }, [same_owner_items]);
-
-  const [createdItems, setCreatedItems] = useState([]);
-
-  useEffect(() => {
-    setCreatedItems(same_creator_items.filter((c) => c.nft_id !== item.nft_id));
-  }, [same_creator_items]);
-  */
 
 	const [reportModalOpen, setReportModalOpen] = useState(false)
 
@@ -120,50 +84,6 @@ export default function Token({ token }) {
 
 				<div>
 					<TokenDetailBody item={item} muted={false} className="w-full" ownershipDetails={ownershipDetails} parentSetReportModalOpen={setReportModalOpen} parentReportModalOpen={reportModalOpen} />
-
-					{/*createdItems.length === 0 ? null : (
-            <>
-              <div className="flex flex-col text-center w-full">
-                <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-4 py-10">
-                  More from this creator
-                </div>
-              </div>
-              <div className="text-center">
-                {createdItems.length === 0
-                  ? `We couldn't find any more items created by ${
-                      isMyProfile ? "you" : "this person"
-                    }.`
-                  : null}
-              </div>
-              {gridWidth && (
-                <div className="m-auto" style={{ width: gridWidth }}>
-                  <TokenGridV4 items={createdItems} />
-                </div>
-              )}
-            </>
-              )*/}
-					{/*item.multiple_owners ? null : ownedItems.length ===
-            0 ? null : createdItems.length > 0 ? null : (
-            <>
-              <div className="flex flex-col text-center w-full mt-8">
-                <div className="showtime-title text-center mx-auto text-3xl md:text-5xl mb-4 py-10">
-                  More from this owner
-                </div>
-              </div>
-              <div className="text-center">
-                {ownedItems.length === 0
-                  ? `We couldn't find any more items owned by ${
-                      isMyProfile ? "you" : "this person"
-                    }.`
-                  : null}
-              </div>
-              {gridWidth && (
-                <div className="m-auto" style={{ width: gridWidth }}>
-                  <TokenGridV4 items={ownedItems} />
-                </div>
-              )}
-            </>
-              )*/}
 				</div>
 			</Layout>
 		</>

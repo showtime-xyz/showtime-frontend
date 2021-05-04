@@ -78,7 +78,7 @@ const TrendingCreators = ({ shownLeaderboardItems, allLeaderboardItems, isLoadin
 						>
 							<div className="mr-2 text-sm">Show More</div>
 							<div>
-								<FontAwesomeIcon style={{ height: 14 }} icon={faArrowDown} />
+								<FontAwesomeIcon className="h-3" icon={faArrowDown} />
 							</div>
 						</div>
 					) : null}

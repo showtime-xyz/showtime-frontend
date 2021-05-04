@@ -210,16 +210,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 					<form onSubmit={handleSubmit} className="p-4 overflow-y-auto">
 						<div className="text-3xl border-b-2 pb-2 flex justify-between items-start">
 							<div>Edit Info</div>
-							<FontAwesomeIcon
-								style={{
-									height: 24,
-									width: 24,
-									color: '#ccc',
-								}}
-								icon={faTimes}
-								className="m-1 cursor-pointer"
-								onClick={() => setEditModalOpen(false)}
-							/>
+							<FontAwesomeIcon className="w-6 h-6 text-gray-600 m-1 cursor-pointer" icon={faTimes} onClick={() => setEditModalOpen(false)} />
 						</div>
 
 						<div className="flex flex-col md:flex-row">
@@ -268,16 +259,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 										</div>
 									</div>
 								</div>
-								<div
-									style={{
-										color: customURLError.isError ? 'red' : '#35bb5b',
-										fontSize: 12,
-										visibility: customURLError.message ? 'visible' : 'hidden',
-									}}
-									className="text-right"
-								>
-									&nbsp;{customURLError.message}
-								</div>
+								<div className={`text-xs text-right ${customURLError.message ? 'visible' : 'invisible'} ${customURLError.isError ? 'text-red-500' : 'text-green-400'}`}>&nbsp;{customURLError.message}</div>
 								<label htmlFor="bio" className="block text-sm text-gray-700">
 									About Me (optional)
 								</label>
@@ -588,7 +570,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 						{/* Submit section */}
 						<div>
 							<div className="border-t-2 pt-4">
-								<button type="submit" disabled={submitting} className="showtime-green-button px-4 py-2 float-right rounded-full w-36" style={{ borderColor: '#35bb5b', borderWidth: 2 }}>
+								<button type="submit" disabled={submitting} className="showtime-green-button px-4 py-2 float-right rounded-full w-36 border-2 border-gray-600">
 									{submitting ? (
 										<div className="flex items-center justify-center">
 											<div className="loading-card-spinner-small" />

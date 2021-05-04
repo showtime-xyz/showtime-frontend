@@ -5,13 +5,7 @@ import mixpanel from 'mixpanel-browser'
 const CloseButton = ({ setEditModalOpen, isDetailModal }) => {
 	return (
 		<div
-			style={{
-				position: 'absolute',
-				top: 20,
-				right: 20,
-				cursor: 'pointer',
-				zIndex: 4,
-			}}
+			className="absolute top-5 right-5 cursor-pointer z-[4]"
 			onClick={() => {
 				setEditModalOpen(false)
 				if (isDetailModal) {
@@ -19,14 +13,7 @@ const CloseButton = ({ setEditModalOpen, isDetailModal }) => {
 				}
 			}}
 		>
-			<FontAwesomeIcon
-				style={{
-					height: 24,
-					width: 24,
-					color: '#ccc',
-				}}
-				icon={faTimes}
-			/>
+			<FontAwesomeIcon className="w-6 h-6 text-gray-400" icon={faTimes} />
 		</div>
 	)
 }

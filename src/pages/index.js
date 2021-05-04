@@ -204,33 +204,14 @@ const Activity = () => {
 				</Head>
 
 				{context.user === null ? (
-					<div
-						className="py-12 sm:py-14 px-8 sm:px-10 text-left  "
-						style={{
-							background: 'linear-gradient(130deg, rgba(6,216,255,1) 0%, rgba(69,52,245,0.8) 48%, rgba(194,38,173,0.7) 100%)',
-							//"linear-gradient(130deg, rgba(6,216,255,1) 0%, rgba(69,52,245,0.9) 43%, rgba(194,38,173,0.8) 100%)",
-							//"linear-gradient(120deg, rgba(30,183,234,1) 0%, rgba(197,139,255,1) 55%, rgba(255,113,187,0.6) 100%)",
-						}}
-					>
+					<div className="py-12 sm:py-14 px-8 sm:px-10 text-left" style={{ background: 'linear-gradient(130deg, rgba(6,216,255,1) 0%, rgba(69,52,245,0.8) 48%, rgba(194,38,173,0.7) 100%)' }}>
 						<CappedWidth>
 							<div className="flex flex-row mx-3 text-white">
 								<div className="flex-1">
-									<div className="text-xl sm:text-2xl">Discover & Showcase</div>
-									<div className="text-4xl sm:text-6xl" style={{ fontFamily: 'Afronaut' }}>
-										Your Favorite
-									</div>
+									<div className="text-xl sm:text-2xl">Discover &amp; Showcase</div>
+									<div className="text-4xl sm:text-6xl font-afro">Your Favorite</div>
 									<div className="text-4xl sm:text-6xl">Crypto Art.</div>
 								</div>
-								{/*<div className="flex-1">
-              <div className="bg-white rounded-lg shadow-md px-6 py-6 text-center">
-                <span
-                  className="cursor-pointer hover:text-black bg-black text-white rounded-full px-5 py-3 hover:bg-white border-2 border-black transition"
-                  onClick={() => context.setLoginModalOpen(true)}
-                >
-                  Sign in
-                </span>
-              </div>
-          </div>*/}
 							</div>
 						</CappedWidth>
 					</div>
@@ -249,7 +230,7 @@ const Activity = () => {
 									setShowFiltersMobile(!showFiltersMobile)
 								}}
 							>
-								<FontAwesomeIcon icon={faFilter} style={{ width: 16, height: 16 }} />
+								<FontAwesomeIcon icon={faFilter} className="w-4 h-4" />
 							</div>
 						</div>
 

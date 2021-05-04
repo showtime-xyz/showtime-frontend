@@ -111,21 +111,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 												}}
 											/>
 											{refreshing && (
-												<div
-													style={{
-														position: 'absolute',
-														top: 0,
-														bottom: 0,
-														left: 0,
-														right: 0,
-														cursor: 'pointer',
-														display: 'flex',
-														flexDirection: 'column',
-														alignItems: 'center',
-														justifyContent: 'center',
-														backgroundColor: '#fffffff0',
-													}}
-												>
+												<div className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center bg-white bg-opacity-50">
 													<div className="loading-card-spinner-small mb-2" />
 													<div>Refreshing...</div>
 												</div>
@@ -133,7 +119,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 										</div>
 									</>
 								) : (
-									<div style={{ position: 'relative' }}>
+									<div className="relative">
 										<div
 											onClick={() => {
 												mixpanel.track('Open NFT modal')
@@ -144,12 +130,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 											className="cursor-pointer text-right flex flex-row"
 										>
 											{!imageLoaded ? (
-												<div
-													className="w-full text-center flex items-center justify-center"
-													style={{
-														height: divRef?.current?.clientWidth ? divRef?.current?.clientWidth : 375,
-													}}
-												>
+												<div className="w-full text-center flex items-center justify-center" style={{ height: divRef?.current?.clientWidth ? divRef?.current?.clientWidth : 375 }}>
 													<div className="loading-card-spinner" />
 												</div>
 											) : null}
@@ -177,21 +158,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 											/>
 										</div>
 										{refreshing && (
-											<div
-												style={{
-													position: 'absolute',
-													top: 0,
-													bottom: 0,
-													left: 0,
-													right: 0,
-													cursor: 'pointer',
-													display: 'flex',
-													flexDirection: 'column',
-													alignItems: 'center',
-													justifyContent: 'center',
-													backgroundColor: '#fffffff0',
-												}}
-											>
+											<div className="absolute inset-0 cursor-pointer flex items-center justify-center bg-white bg-opacity-50">
 												<div className="loading-card-spinner-small mb-2" />
 												<div>Refreshing...</div>
 											</div>
@@ -213,17 +180,11 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 											}}
 											className="card-menu-button text-right flex items-center justify-center text-gray-600"
 										>
-											<FontAwesomeIcon
-												style={{
-													height: 20,
-													width: 20,
-												}}
-												icon={faEllipsisH}
-											/>
+											<FontAwesomeIcon className="w-5 h-5" icon={faEllipsisH} />
 										</div>
 										{openCardMenu == item.nft_id + '_' + listId ? (
 											<div className="flex justify-end relative z-10">
-												<div className={`absolute text-center top-2 bg-white shadow-lg py-2 px-2 rounded-xl transition-all text-md transform  ${openCardMenu == item.nft_id + '_' + listId ? 'visible opacity-1 ' : 'invisible opacity-0'}`} style={{ border: '1px solid #f0f0f0' }}>
+												<div className={`absolute text-center top-2 bg-white shadow-lg py-2 px-2 rounded-xl transition-all text-md transform border border-gray-100 ${openCardMenu == item.nft_id + '_' + listId ? 'visible opacity-1 ' : 'invisible opacity-0'}`}>
 													<div className="py-2 px-3 hover:text-stpink hover:bg-gray-50  transition-all rounded-lg cursor-pointer whitespace-nowrap" onClick={removeSpotlightItem}>
 														Remove Spotlight
 													</div>
@@ -248,7 +209,6 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 											setCurrentlyPlayingVideo(false)
 										}}
 										className="mb-2 sm:mb-4 text-2xl sm:text-3xl hover:text-stpink cursor-pointer break-words"
-										style={{ wordWrap: 'break-word' }}
 									>
 										{item.token_name}
 									</div>
@@ -256,13 +216,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 								</div>
 
 								{item.token_description ? (
-									<div
-										style={{
-											overflowWrap: 'break-word',
-											wordWrap: 'break-word',
-										}}
-										className="pb-4 text-sm sm:text-base text-gray-500"
-									>
+									<div className="pb-4 text-sm sm:text-base text-gray-500 break-words">
 										<div>
 											{item.token_description?.length > max_description_length && !moreShown ? (
 												<>
@@ -278,7 +232,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 													</a>
 												</>
 											) : (
-												<div style={{ whiteSpace: 'pre-line' }}>{removeTags(item.token_description)}</div>
+												<div className="whitespace-pre-line">{removeTags(item.token_description)}</div>
 											)}
 										</div>
 									</div>
@@ -332,16 +286,8 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 											<div className="flex-shrink">
 												<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
 													<a className="flex flex-row items-center">
-														<div style={{ width: 30 }}>
-															<img
-																alt={item.collection_name}
-																src={item.collection_img_url ? item.collection_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'}
-																className="rounded-full"
-																style={{
-																	height: 30,
-																	width: 30,
-																}}
-															/>
+														<div className="w-8">
+															<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full h-8 w-8" />
 														</div>
 														<div className="mx-2 hover:text-stpink">{truncateWithEllipses(item.collection_name + ' Collection', 25)} </div>
 													</a>
@@ -355,15 +301,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 												<Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
 													<a className="flex flex-row items-center">
 														<div>
-															<img
-																alt={item.creator_name}
-																src={item.creator_img_url ? item.creator_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'}
-																className="rounded-full"
-																style={{
-																	height: 30,
-																	width: 30,
-																}}
-															/>
+															<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full w-8 h-8" />
 														</div>
 														<div className="ml-2 hover:text-stpink">{truncateWithEllipses(item.creator_name, 25)}</div>
 													</a>
@@ -381,21 +319,13 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 															<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
 																<a className="flex flex-row items-center pr-2 ">
 																	<div>
-																		<img
-																			alt={pageProfile.name ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? pageProfile.wallet_addresses_excluding_email[0] : 'Unknown'}
-																			src={pageProfile.img_url ? pageProfile.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'}
-																			className="rounded-full mr-2"
-																			style={{
-																				height: 30,
-																				width: 30,
-																			}}
-																		/>
+																		<img alt={pageProfile.name ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? pageProfile.wallet_addresses_excluding_email[0] : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-2 w-8 h-8" />
 																	</div>
 																	<div className="hover:text-stpink">{pageProfile.name ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? pageProfile.wallet_addresses_excluding_email[0] : 'Unknown'}</div>
 																</a>
 															</Link>
 
-															<div className="text-gray-400 text-sm mr-2 -ml-1" style={{ marginTop: 2 }}>
+															<div className="text-gray-400 text-sm mr-2 -ml-1 mt-1">
 																&amp; {item.owner_count - 1} other
 																{item.owner_count - 1 > 1 ? 's' : null}
 															</div>
@@ -407,15 +337,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 													<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
 														<a className="flex flex-row items-center">
 															<div>
-																<img
-																	alt={item.owner_name}
-																	src={item.owner_img_url ? item.owner_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'}
-																	className="rounded-full mr-2 "
-																	style={{
-																		height: 30,
-																		width: 30,
-																	}}
-																/>
+																<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-2 w-8 h-8" />
 															</div>
 															<div className="hover:text-stpink">{truncateWithEllipses(item.owner_name, 25)}</div>
 														</a>

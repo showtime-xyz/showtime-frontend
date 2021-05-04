@@ -162,28 +162,15 @@ export default function Modal({ isOpen }) {
 											<label htmlFor="email" className="pb-4 ">
 												Enter your email to receive a sign in link.
 											</label>
-											<div className="pt-1 pb-1" style={{ color: '#444', fontSize: 13 }}>
-												If this is your first time, it will create a new account.
-											</div>
+											<div className="pt-1 pb-1 text-xs text-gray-700">If this is your first time, it will create a new account.</div>
 										</div>
 										<br />
-										<input
-											name="email"
-											placeholder="Email"
-											type="email"
-											className="border-2 w-full"
-											autoFocus
-											style={{
-												color: 'black',
-												padding: 10,
-												borderRadius: 7,
-											}}
-										/>
+										<input name="email" placeholder="Email" type="email" className="border-2 w-full text-black rounded-lg p-3" autoFocus />
 
-										<div className="pt-8 pb-8" style={{ color: '#444', fontSize: 13 }}>
+										<div className="pt-8 pb-8 text-gray-700 text-xs">
 											By signing in you agree to our{' '}
 											<a href="https://www.notion.so/Showtime-Legal-c407e36eb7cd414ca190245ca8621e68" target="_blank" rel="noreferrer">
-												Terms & Conditions
+												Terms &amp; Conditions
 											</a>
 											.
 										</div>
@@ -191,9 +178,7 @@ export default function Modal({ isOpen }) {
 										<button className="bg-stpink text-white rounded-full px-6 py-2 cursor-pointer border-2 hover:text-stpink hover:bg-white border-stpink transition-all">
 											<span className="text-sm md:text-base">Sign in with Email</span>
 										</button>
-										<div className="py-6" style={{ color: '#444' }}>
-											— or —
-										</div>
+										<div className="py-6 text-gray-700">— or —</div>
 									</div>
 								</form>
 

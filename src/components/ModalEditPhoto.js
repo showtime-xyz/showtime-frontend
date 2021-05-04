@@ -134,14 +134,12 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 										{/* Your image upload functionality here */}
 										{/*<ImageUpload image={image} setImage={handleImage} />*/}
 
-										<div className="showtime-pink-button text-sm text-center mt-16  px-4 py-3  rounded-full" style={{ cursor: 'pointer' }} onClick={handleClick}>
+										<div className="showtime-pink-button text-sm text-center mt-16  px-4 py-3  rounded-full cursor-pointer" onClick={handleClick}>
 											Upload a photo
 										</div>
-										<div className="text-center text-xs mb-16 mt-4" style={{ fontWeight: 400, color: '#666' }}>
-											Accepts JPEG, PNG, and GIF (non-animated)
-										</div>
+										<div className="text-center text-xs mb-16 mt-4 text-gray-700">Accepts JPEG, PNG, and GIF (non-animated)</div>
 
-										<input ref={hiddenFileInput} style={{ display: 'none' }} id="profilePic" type="file" onChange={onChangePicture} />
+										<input ref={hiddenFileInput} className="hidden" id="profilePic" type="file" onChange={onChangePicture} />
 									</div>
 								)}
 
@@ -151,7 +149,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 
 								{image !== '' && (
 									<div
-										className="text-sm text-center"
+										className="text-sm text-center cursor-pointer"
 										onClick={() => {
 											if (!saveInProgress) {
 												if (croppie) {
@@ -165,7 +163,6 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 												setImage('')
 											}
 										}}
-										style={{ fontWeight: 400, cursor: 'pointer' }}
 									>
 										Clear
 									</div>

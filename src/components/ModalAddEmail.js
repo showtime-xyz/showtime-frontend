@@ -54,30 +54,11 @@ const ModalAddEmail = ({ isOpen, setEmailModalOpen, setHasEmailAddress }) => {
 									}}
 									type="text"
 									maxLength="50"
-									className="w-full"
-									style={{
-										color: 'black',
-										padding: 10,
-										borderRadius: 7,
-										borderWidth: 2,
-										borderColor: '#999',
-										fontSize: 15,
-									}}
+									className="w-full text-black p-4 rounded-lg border-2 border-gray-700 text-base"
 								/>
-								{/*<div
-                    style={{
-                      color: "red",
-                      fontSize: 12,
-                      visibility: emailError ? "visible" : "hidden",
-                    }}
-                    className="text-right mb-2"
-                  >
-                    &nbsp;{emailError}
-                </div>*/}
-
 								<div className="my-8">If you've previously logged in with that email, your old profile will get combined with this one.</div>
 								<div className="border-t-2 pt-4">
-									<button type="submit" className="showtime-green-button px-4 py-2 float-right rounded-full" style={{ borderColor: '#35bb5b', borderWidth: 2 }}>
+									<button type="submit" className="showtime-green-button px-4 py-2 float-right rounded-full border-2 border-green-600">
 										Get Verification Link
 									</button>
 									<button

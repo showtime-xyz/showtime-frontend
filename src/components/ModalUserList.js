@@ -12,7 +12,7 @@ export default function ModalUserList({ isOpen, title, users, closeModal, emptyM
 			{isOpen && (
 				<ClientOnlyPortal selector="#modal">
 					<div className="backdrop" onClick={closeModal}>
-						<div className="modal flex flex-col rounded-lg sm:rounded-2xl" style={{ color: 'black' }} onClick={e => e.stopPropagation()}>
+						<div className="modal flex flex-col rounded-lg sm:rounded-2xl text-black" onClick={e => e.stopPropagation()}>
 							<CloseButton setEditModalOpen={closeModal} />
 							<div className="text-3xl border-b-2 pb-2 px-2">{title}</div>
 							<div className="flex flex-col overflow-y-auto">
@@ -23,7 +23,7 @@ export default function ModalUserList({ isOpen, title, users, closeModal, emptyM
 											<Link href="/[profile]" as={`/${profile?.username || profile.wallet_address}`}>
 												<a className="flex flex-row items-center py-3 rounded-lg px-1 overflow-hidden hover:text-stpink" onClick={onRedirect}>
 													<div>
-														<img alt={profile.name} src={profile.img_url ? profile.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-1" style={{ height: 36, width: 36 }} />
+														<img alt={profile.name} src={profile.img_url ? profile.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-1 w-9 h-9" />
 													</div>
 													<div className="ml-2">{profile.name ? truncateWithEllipses(profile.name, context.isMobile ? 16 : 22) : 'Unnamed'}</div>
 												</a>

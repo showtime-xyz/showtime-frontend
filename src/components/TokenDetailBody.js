@@ -134,7 +134,7 @@ const TokenDetailBody = ({
           }*/
 				/>
 			)}
-			<div className="flex flex-col" ref={modalRef} style={{ position: 'relative', marginTop: -1 }}>
+			<div className="flex flex-col relative -mt-px" ref={modalRef}>
 				{isMobile ? (
 					<div className="p-4 flex flex-row">
 						<div className="flex-shrink">
@@ -142,7 +142,7 @@ const TokenDetailBody = ({
 								<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
 									<a className="flex flex-row items-center ">
 										<div>
-											<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full " style={{ height: 24, width: 24 }} />
+											<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full w-6 h-6" />
 										</div>
 										<div className="showtime-card-profile-link ml-2">{truncateWithEllipses(item.collection_name, 30)} Collection</div>
 									</a>
@@ -152,7 +152,7 @@ const TokenDetailBody = ({
 									<Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
 										<a className="flex flex-row items-center">
 											<div>
-												<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full " style={{ height: 24, width: 24 }} />
+												<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full w-6 h-6" />
 											</div>
 											<div className="showtime-card-profile-link ml-2">{truncateWithEllipses(item.creator_name, 22)}</div>
 										</a>
@@ -204,40 +204,26 @@ const TokenDetailBody = ({
 							}}
 						/>
 					) : (
-						<div
-							style={{
-								margin: 'auto',
-							}}
-						>
+						<div className="m-auto">
 							<div
-								className="w-max p"
+								className="w-max p absolute right-0 m-2.5 z-0"
 								style={{
-									position: 'absolute',
 									top: isMobile ? 57 : 0,
-									right: 0,
-									margin: 10,
-									zIndex: 0,
 								}}
 							>
 								{isMobile || item.token_has_video ? null : item.token_img_url ? (
 									<button
-										style={{
-											borderRadius: 7,
-											padding: 12,
-										}}
 										type="button"
 										onClick={() => {
 											setLightboxOpen(true)
 											mixpanel.track('Original clicked')
 										}}
-										className="flex flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all"
+										className="flex flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all rounded-lg p-3"
 									>
 										<div className="">
 											<FontAwesomeIcon icon={faExpand} width={18} height={18} />
 										</div>
-										<div className="ml-2" style={{ fontSize: 14 }}>
-											Original
-										</div>
+										<div className="ml-2 text-sm">Original</div>
 									</button>
 								) : null}
 								<div></div>
@@ -282,25 +268,10 @@ const TokenDetailBody = ({
 				</div>
 				{/* Details wrapper */}
 
-				<div
-					className="p-2 md:p-8 max-w-screen-2xl"
-					style={{
-						overflow: 'auto',
-						position: 'relative',
-						width: '100%',
-						margin: 'auto',
-					}}
-				>
+				<div className="p-2 md:p-8 max-w-screen-2xl overflow-auto relative w-full m-auto">
 					{/* Title and description section */}
 					<div className="flex flex-col md:flex-row pb-10 items-stretch w-full max-w-full">
-						<div
-							className="pb-0 text-left flex-1 p-4"
-							style={{
-								overflowWrap: 'break-word',
-								wordWrap: 'break-word',
-								...(isMobile ? {} : { maxWidth: '50%' }),
-							}}
-						>
+						<div className="pb-0 text-left flex-1 p-4 break-words" style={isMobile ? {} : { maxWidth: '50%' }}>
 							<div className="text-2xl md:text-4xl">{item.token_name}</div>
 							{/* Likes & Share */}
 							{/*  */}
@@ -355,7 +326,7 @@ const TokenDetailBody = ({
 										}
 									>
 										{moreShown ? (
-											<div style={{ whiteSpace: 'pre-line' }}>{removeTags(item.token_description)}</div>
+											<div className="whitespace-pre-line">{removeTags(item.token_description)}</div>
 										) : (
 											<div>
 												{item.token_description?.length > max_description_length ? (
@@ -525,13 +496,10 @@ const TokenDetailBody = ({
 						</a>
 						<div className="mr-4">·</div>
 						<div
-							style={{
-								cursor: 'pointer',
-							}}
 							onClick={() => {
 								parentSetReportModalOpen !== undefined ? parentSetReportModalOpen(true) : setReportModalOpen(true)
 							}}
-							className="text-gray-500 hover:text-stpink"
+							className="text-gray-500 hover:text-stpink cursor-pointer"
 						>
 							Report Item
 						</div>

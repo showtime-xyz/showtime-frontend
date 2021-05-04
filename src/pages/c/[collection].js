@@ -190,9 +190,7 @@ export default function Collection({
 					<div className="flex flex-row mx-3 text-white">
 						<div className="flex-1">
 							<div className="text-xl sm:text-2xl">Discover</div>
-							<div className="text-3xl sm:text-6xl" style={{ fontFamily: 'Afronaut', textTransform: 'capitalize' }}>
-								{currentCollectionName ? currentCollectionName : 'Leading NFT'}
-							</div>
+							<div className="text-3xl sm:text-6xl capitalize font-afro">{currentCollectionName ? currentCollectionName : 'Leading NFT'}</div>
 							<div className="text-3xl sm:text-6xl">{currentCollectionName ? 'Collection.' : 'Collections.'}</div>
 						</div>
 					</div>

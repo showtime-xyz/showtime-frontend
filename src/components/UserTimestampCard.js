@@ -43,62 +43,6 @@ export default function UserTimestampCard({ timestamp, item, closeModalCallback 
 					)}
 				</div>
 			</div>
-
-			{/*<div className="mr-4">
-        <Link
-          href="/[profile]"
-          as={
-            item.owner_username
-              ? `/${item.owner_username}`
-              : `/${item.owner_address}`
-          }
-        >
-          <a onClick={closeModalCallback}>
-            <img
-              alt={name}
-              src={
-                imageUrl
-                  ? imageUrl
-                  : "https://storage.googleapis.com/opensea-static/opensea-profile/4.png"
-              }
-              className="rounded-full"
-              style={{ height: 48, width: 48 }}
-            />
-          </a>
-        </Link>
-      </div>
-      <div className="">
-        <div className="flex flex-row place-content-end items-end w-full">
-          <div className="text-lg mr-3">
-            <Link
-              href="/[profile]"
-              as={
-                item.owner_username
-                  ? `/${item.owner_username}`
-                  : `/${item.owner_address}`
-              }
-            >
-              <a onClick={closeModalCallback} className="hover:text-stpink">
-                {truncateWithEllipses(name, 20)}
-              </a>
-            </Link>
-          </div>
-          {profileId && (
-            <div className="flex items-center py-2 md:py-1 w-max text-black">
-              <FollowButton
-                item={{ profile_id: profileId, follower_count: 0 }}
-                followerCount={0}
-                setFollowerCount={() => {}}
-              />
-            </div>
-          )}
-        </div>
-        {timestamp && (
-          <div className="text-gray-500 text-sm">
-            {format(new Date(timestamp), "PPp")}
-          </div>
-        )}
-        </div>*/}
 		</div>
 	)
 }

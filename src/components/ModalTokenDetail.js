@@ -72,7 +72,7 @@ export default function Modal({ item, isOpen, setEditModalOpen, goToNext, goToPr
 								goToPrevious()
 							}}
 						>
-							<FontAwesomeIcon icon={faAngleLeft} style={{ width: 30, height: 60 }} />
+							<FontAwesomeIcon icon={faAngleLeft} className="w-8 h-16" />
 						</div>
 						<div
 							className="modal flex-grow my-8 overflow-hidden"
@@ -92,32 +92,13 @@ export default function Modal({ item, isOpen, setEditModalOpen, goToNext, goToPr
 							onClick={e => e.stopPropagation()}
 						>
 							<div
-								style={{
-									position: 'absolute',
-									top: 10,
-									right: 10,
-									cursor: 'pointer',
-									zIndex: 4,
-									backgroundColor: 'black',
-									padding: 6,
-									borderRadius: 18,
-									width: 36,
-									height: 36,
-								}}
 								onClick={() => {
 									mixpanel.track('Close NFT modal - x button')
 									setEditModalOpen(false)
 								}}
-								className="opacity-50 hover:opacity-80 transition-all"
+								className="absolute top-3 right-3 cursor-pointer z-[4] bg-black p-1.5 rounded-2xl w-9 h-9 opacity-50 hover:opacity-80 transition-all"
 							>
-								<FontAwesomeIcon
-									style={{
-										height: 24,
-										width: 24,
-										color: '#fff',
-									}}
-									icon={faTimes}
-								/>
+								<FontAwesomeIcon className="w-6 h-6 text-white" icon={faTimes} />
 							</div>
 							<div className="overflow-y-scroll h-full" style={context.isMobile ? {} : { borderRadius: 10 }} id="ModalTokenDetailWrapper">
 								<TokenDetailBody item={item} muted={false} className="w-full" setEditModalOpen={setEditModalOpen} ownershipDetails={ownershipDetails} isInModal />
@@ -148,7 +129,7 @@ export default function Modal({ item, isOpen, setEditModalOpen, goToNext, goToPr
 								goToNext()
 							}}
 						>
-							<FontAwesomeIcon icon={faAngleRight} style={{ width: 30, height: 60 }} />
+							<FontAwesomeIcon icon={faAngleRight} className="w-8 h-16" />
 						</div>
 						<style jsx>{`
 							:global(body) {
@@ -164,16 +145,6 @@ export default function Modal({ item, isOpen, setEditModalOpen, goToNext, goToPr
 							}
 							.modal {
 								background-color: white;
-								//position: absolute;
-								//top: 5%;
-								//right: 8%;
-								//left: 8%;
-								//bottom: 5%;
-
-								//border-radius: 7px;
-								//max-width: 400px;
-								//margin-left: auto;
-								//margin-right: auto;
 							}
 							.modal-arrow {
 								color: #888;

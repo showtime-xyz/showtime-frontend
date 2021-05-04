@@ -16,7 +16,7 @@ const ShareButton = ({ url, type }) => {
 				}}
 			>
 				<button
-					className="inline-flex py-1 rounded-md"
+					className="inline-flex py-1 rounded-md px-1"
 					onMouseOver={() => setIsHovering(true)}
 					onMouseOut={() => {
 						setIsHovering(false)
@@ -24,14 +24,11 @@ const ShareButton = ({ url, type }) => {
 							setIsCopied(false)
 						}, 3000)
 					}}
-					style={{ paddingLeft: 2, paddingRight: 2 }}
 				>
 					<img src={isHovering ? '/icons/share-pink.svg' : '/icons/share-black.svg'} alt="share-button" className="h-6 w-6 items-center flex" />
 				</button>
 			</CopyToClipboard>
-			<span style={{ fontSize: 12, opacity: 0.9, width: 70 }} className="tooltip-text bg-black p-3 -mt-6 -ml-12 rounded text-white">
-				{isCopied ? 'Copied!' : 'Copy link'}
-			</span>
+			<span className="tooltip-text bg-black p-3 -mt-6 -ml-12 rounded text-white text-xs text-opacity-90 w-20">{isCopied ? 'Copied!' : 'Copy link'}</span>
 		</div>
 	)
 }

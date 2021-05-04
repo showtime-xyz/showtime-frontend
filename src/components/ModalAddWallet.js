@@ -214,23 +214,17 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 							<>
 								<div className="my-4 py-4">Add one or more wallets to showcase all your NFTs in one place.</div>
 
-								<div className="my-4 py-4" style={{}}>
-									If you previously signed in with the wallet you are adding, your other profile will get merged into this profile.
-								</div>
-								{/*<div className="pb-4" style={{}}>
-                    Going forward, you can log in with any of the wallets or
-                    emails associated with your profile.
-              </div>*/}
+								<div className="my-4 py-4">If you previously signed in with the wallet you are adding, your other profile will get merged into this profile.</div>
 							</>
 						) : step == 4 ? (
 							<div className="text-center py-32 px-10">Successfully added the wallet to your profile</div>
 						) : step == 3 ? null : (
-							<div style={{}}>
+							<div>
 								{addressDetected ? (
 									signaturePending ? null : (
 										<>
 											<div className="mt-4">Your wallet provider is giving us a wallet with the address:</div>
-											<div style={{ color: 'rgb(81, 125, 228)', fontSize: 13 }} className="mb-4">
+											<div className="mb-4 text-base text-indigo-500">
 												<pre>{addressDetected}</pre>
 											</div>
 											<>
@@ -238,7 +232,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 													<>
 														<div className="py-4">
 															<span>
-																<span style={{ color: 'red' }}>This wallet is already on your Showtime profile. Please switch to a different wallet in your provider's menu.</span>{' '}
+																<span className="text-red-500">This wallet is already on your Showtime profile. Please switch to a different wallet in your provider's menu.</span>{' '}
 															</span>
 														</div>
 														<div className="py-4 ">
@@ -253,7 +247,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 																	onClick={() => {
 																		tryAgain()
 																	}}
-																	style={{ color: 'rgb(81, 125, 228)' }}
+																	className="text-indigo-500"
 																>
 																	Click here
 																</a>{' '}
@@ -266,13 +260,13 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 														<div className="py-4">Please confirm this is the correct wallet and click "Sign to finish" below.</div>
 														{showInstructions ? (
 															<>
-																<div className="py-4" style={{ fontSize: 14 }}>
+																<div className="py-4 text-base">
 																	<span>
 																		For MetaMask: <br />
 																	</span>{' '}
 																	<div className="text-gray-500">Switch wallets by clicking on the MetaMask icon in the toolbar, then clicking the circle icon on the top right (the account switcher). If you get a warning "Your current account is not connected," make sure to click "Connect."</div>
 																</div>
-																<div className="py-4" style={{ fontSize: 14 }}>
+																<div className="py-4 text-base">
 																	<span>
 																		For Wallet Connect: <br />
 																	</span>
@@ -282,7 +276,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 																			onClick={() => {
 																				tryAgain()
 																			}}
-																			style={{ color: 'rgb(81, 125, 228)' }}
+																			className="text-indigo-500"
 																		>
 																			Click here
 																		</a>{' '}
@@ -291,16 +285,15 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 																</div>
 															</>
 														) : (
-															<div className="pt-4 pb-2" style={{ fontSize: 14 }}>
-																Wrong wallet?
+															<div className="pt-4 pb-2 text-base">
+																Wrong wallet?{' '}
 																<a
 																	href="#"
 																	onClick={() => {
 																		setShowInstructions(true)
 																	}}
-																	style={{ color: 'rgb(81, 125, 228)' }}
+																	className="text-indigo-500"
 																>
-																	{' '}
 																	Learn how to switch
 																</a>
 															</div>

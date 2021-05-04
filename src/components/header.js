@@ -17,14 +17,7 @@ const Header = () => {
 					<ModalLogin isOpen={context.loginModalOpen} setEditModalOpen={context.setLoginModalOpen} />
 				</>
 			) : null}
-			<header
-				className="px-2 py-1 sm:py-2 bg-white w-full  shadow-md"
-				style={{
-					zIndex: 1,
-					position: 'sticky',
-					top: 0,
-				}}
-			>
+			<header className="px-2 py-1 sm:py-2 bg-white w-full shadow-md sticky top-0 z-1">
 				<CappedWidth>
 					<div className="flex flex-row items-center px-3">
 						<div>
@@ -36,25 +29,19 @@ const Header = () => {
 										await context.setToggleRefreshFeed(!context.toggleRefreshFeed)
 									}}
 								>
-									{/* <img
-                  src="/logo_sm.jpg"
-                  style={{ height: 44, width: 44, borderRadius: 5 }}
-                /> */}
-									<div className="text-2xl py-2" style={{ fontWeight: 400, fontFamily: 'Afronaut' }}>
-										{'SHOWTIME'}
-									</div>
+									<div className="text-2xl py-2 font-normal font-afro">SHOWTIME</div>
 								</a>
 							</Link>
 						</div>
 						{/* Start desktop-only menu */}
 						{!context.isMobile ? (
-							<div className="flex-grow" style={{ width: '100%' }}>
+							<div className="flex-grow w-full">
 								<SearchBar />
 							</div>
 						) : (
 							<div className="flex-grow"></div>
 						)}
-						<div className="hidden md:flex mr-6 items-center" style={{ fontWeight: 400 }}>
+						<div className="hidden md:flex mr-6 items-center font-normal">
 							<Link href="/c/[collection]" as="/c/spotlights">
 								<a
 									className="showtime-header-link ml-6 text-sm md:text-base"
@@ -94,14 +81,11 @@ const Header = () => {
 									>
 										<>
 											<div className={context.windowSize ? (context.windowSize.width < 350 ? 'hidden' : null) : null}>
-												<img alt="profile pic" src={context.myProfile ? (context.myProfile.img_url ? context.myProfile.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png') : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-2" style={{ height: 30, width: 30, minWidth: 30 }} />
+												<img alt="profile pic" src={context.myProfile ? (context.myProfile.img_url ? context.myProfile.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png') : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-2 h-8 w-8" />
 											</div>
 											<div
-												className="text-sm sm:text-base"
+												className="text-sm sm:text-base truncate"
 												style={{
-													textOverflow: 'ellipsis',
-													overflow: 'hidden',
-													whiteSpace: 'nowrap',
 													maxWidth: context.gridWidth < 500 ? 100 : 200,
 												}}
 											>
@@ -150,7 +134,7 @@ const Header = () => {
 									</a>
 								</Link>
 							</div>
-							<div className="flex-grow" style={{ width: '100%' }}>
+							<div className="flex-grow w-full">
 								<SearchBar />
 							</div>
 							{context.isMobile && context.user && context.myProfile !== undefined && (

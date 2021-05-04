@@ -92,14 +92,7 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 										backgroundColor: activityIconObjects[type].color,
 									}}
 								>
-									<FontAwesomeIcon
-										style={{
-											height: 12,
-											width: 12,
-										}}
-										icon={activityIconObjects[type].icon}
-										color="white"
-									/>
+									<FontAwesomeIcon className="w-3 h-3 text-white" icon={activityIconObjects[type].icon} />
 								</div>
 							</a>
 						</Link>
@@ -121,9 +114,7 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 											mixpanel.track('Activity - Click on user profile')
 										}}
 									>
-										<div className="text-gray-400 text-xs" style={{ marginBottom: 1, marginTop: 1 }}>
-											@{actor.username}
-										</div>
+										<div className="text-gray-400 text-xs mx-px">@{actor.username}</div>
 									</a>
 								</Link>
 							)}
@@ -146,7 +137,7 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 									icon={faEllipsisH}
 									className="hover:text-stpink cursor-pointer"
 								/>
-								<div ref={dropdownRef} className={`absolute text-black text-center top-4 right-1 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-md transform ${isActive ? 'visible opacity-1 translate-y-1' : 'invisible opacity-0'}`} style={{ zIndex: 1 }}>
+								<div ref={dropdownRef} className={`absolute text-black text-center top-4 right-1 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-md transform z-1 ${isActive ? 'visible opacity-1 translate-y-1' : 'invisible opacity-0'}`}>
 									<div className="py-2 px-4 hover:text-stpink rounded-lg cursor-pointer whitespace-nowrap" onClick={handleUnfollow}>
 										Unfollow
 										{/*actor.username ? `@${actor.username}` : "this user"*/}

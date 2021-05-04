@@ -158,20 +158,9 @@ const Tiles = ({ topItems, setCurrentlyOpenModal }) => {
 				{topItems.map((topItem, index) => (
 					<div key={topItem?.nft_id}>
 						{topItem?.token_img_thumbnail_url ? (
-							<NFTTile
-								style={{
-									marginRight: index === topItems.length - 1 || context.gridWidth <= 420 ? 0 : 14,
-								}}
-								onClick={() => setCurrentlyOpenModal(topItem)}
-								src={topItem?.token_img_thumbnail_url}
-							/>
+							<NFTTile style={{ marginRight: index === topItems.length - 1 || context.gridWidth <= 420 ? 0 : 14 }} onClick={() => setCurrentlyOpenModal(topItem)} src={topItem?.token_img_thumbnail_url} />
 						) : (
-							<NFTVideoTile
-								style={{
-									marginRight: index === topItems.length - 1 || context.gridWidth <= 420 ? 0 : 14,
-								}}
-								onClick={() => setCurrentlyOpenModal(topItem)}
-							>
+							<NFTVideoTile style={{ marginRight: index === topItems.length - 1 || context.gridWidth <= 420 ? 0 : 14 }} onClick={() => setCurrentlyOpenModal(topItem)}>
 								<ReactPlayer
 									url={topItem?.token_animation_url}
 									playing={false}
@@ -248,7 +237,7 @@ const RecommendedFollowItem = ({ item, closeModal = () => {}, liteVersion, remov
 							onClick={() => {
 								closeModal()
 							}}
-							style={{ minWidth: 42 }}
+							className="min-w-[42px]"
 						>
 							<ProfileImage isMobile={context.isMobile} liteVersion={liteVersion} src={item?.img_url ? item?.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} />
 						</a>

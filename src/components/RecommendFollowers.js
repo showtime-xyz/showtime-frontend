@@ -100,7 +100,7 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
 						}
 					}}
 				>
-					{!followAllClicked ? <FontAwesomeIcon style={{ height: 14, marginRight: 8 }} icon={faPlus} /> : null}
+					{!followAllClicked ? <FontAwesomeIcon className="mr-2 h-3.5" icon={faPlus} /> : null}
 					{followAllClicked ? 'Following All' : 'Follow All'}
 				</div>
 
@@ -119,7 +119,7 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
 								}}
 							>
 								{'Show More'}
-								<FontAwesomeIcon style={{ height: 14, marginLeft: 8 }} icon={faArrowDown} />
+								<FontAwesomeIcon className="h-3.5 ml-2" icon={faArrowDown} />
 							</div>
 						</>
 					)}

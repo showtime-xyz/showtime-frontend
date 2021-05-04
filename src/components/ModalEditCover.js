@@ -157,17 +157,12 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 							<div className="mt-4 mb-4">
 								{image === '' && (
 									<div className="my-16">
-										{/* Your image upload functionality here */}
-										{/*<ImageUpload image={image} setImage={handleImage} />*/}
-
-										<div className="showtime-pink-button text-sm text-center px-4 py-3  rounded-full" style={{ cursor: 'pointer' }} onClick={handleClickUpload}>
+										<div className="showtime-pink-button text-sm text-center px-4 py-3 rounded-full cursor-pointer" onClick={handleClickUpload}>
 											Upload cover image
 										</div>
-										<div className="text-center text-xs mt-4" style={{ fontWeight: 400, color: '#666' }}>
-											Accepts JPEG, PNG, and GIF (non-animated)
-										</div>
+										<div className="text-center text-xs mt-4 text-gray-700">Accepts JPEG, PNG, and GIF (non-animated)</div>
 
-										<input ref={hiddenFileInput} style={{ display: 'none' }} id="profilePic" type="file" onChange={onChangePicture} />
+										<input ref={hiddenFileInput} className="hidden" id="profilePic" type="file" onChange={onChangePicture} />
 									</div>
 								)}
 
@@ -177,7 +172,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 
 								{image !== '' && (
 									<div
-										className="text-sm text-center"
+										className="text-sm text-center cursor-pointer"
 										onClick={() => {
 											if (!saveInProgress) {
 												if (croppie) {
@@ -191,7 +186,6 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 												setImage('')
 											}
 										}}
-										style={{ fontWeight: 400, cursor: 'pointer' }}
 									>
 										Clear
 									</div>
@@ -223,7 +217,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 								</div>
 
 								{context.myProfile.cover_url && (
-									<div className="text-sm ml-4" style={{ cursor: 'pointer' }} onClick={handleRemovePhoto}>
+									<div className="text-sm ml-4 cursor-pointer" onClick={handleRemovePhoto}>
 										Remove
 									</div>
 								)}

@@ -22,7 +22,7 @@ const ProfileFollowersPill = ({ isFollowed, isMyProfile, followingMe, handleUnfo
 							Edit Profile
 						</div>
 
-						<div ref={dropdownRef} className={`absolute text-center top-12 -right-1 md:right-0 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-md transform ${isActive ? 'visible opacity-1 translate-y-2' : 'invisible opacity-0'}`} style={{ zIndex: 1 }}>
+						<div ref={dropdownRef} className={`absolute text-center top-12 -right-1 md:right-0 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-md transform z-1 ${isActive ? 'visible opacity-1 translate-y-2' : 'invisible opacity-0'}`}>
 							<div
 								className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap transition-all"
 								onClick={() => {

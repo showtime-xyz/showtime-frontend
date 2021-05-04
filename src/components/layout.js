@@ -29,7 +29,7 @@ const Layout = ({ children }) => {
 			</Head>
 
 			<Header />
-			<div className="w-full mx-auto min-h-screen" style={{ zIndex: 0 }}>
+			<div className="w-full mx-auto min-h-screen z-0">
 				<ScrollUp />
 				<main>{children}</main>
 			</div>

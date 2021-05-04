@@ -61,23 +61,9 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
 	}
 	return (
 		<>
-			<div
-				className="overflow-x-auto overflow-y-hidden flex flex-col border-2 border-gray-300 rounded-xl w-full"
-				style={{
-					height: '100%',
-					width: '100%',
-				}}
-			>
+			<div className="overflow-x-auto overflow-y-hidden flex flex-col border-2 border-gray-300 rounded-xl w-full h-full">
 				{nftHistory && nftHistory.history && nftHistory.history.length > 0 ? (
-					<table
-						className="table-auto text-sm"
-						style={{
-							borderSpacing: 50,
-							height: '100%',
-							width: '100%',
-							overflow: 'auto',
-						}}
-					>
+					<table className="table-auto text-sm w-full h-full overflow-auto" style={{ borderSpacing: 50 }}>
 						<tbody>
 							{nftHistory.history.length == 1 && !nftHistory.history[0].from_address ? null : (
 								<tr className="text-left text-gray-400 text-sm">
@@ -94,7 +80,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
 											<Link href="/[profile]" as={`/${entry.from_username || entry.from_address}`}>
 												<a onClick={closeModal}>
 													<div className="flex items-center hover:text-stpink transition-all w-max">
-														<img src={entry.from_img_url || 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} style={{ width: 24, height: 24 }} className="rounded-full mr-2" />
+														<img src={entry.from_img_url || 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-2 w-6 h-6" />
 														<div>{truncateWithEllipses(entry.from_name || entry.from_username || formatAddressShort(entry.from_address), 26)}</div>
 													</div>
 												</a>
@@ -110,7 +96,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
 										<Link href="/[profile]" as={`/${entry.to_username || entry.to_address}`}>
 											<a onClick={closeModal}>
 												<div className="flex items-center hover:text-stpink transition-all w-max">
-													<img src={entry.to_img_url || 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} style={{ width: 24, height: 24 }} className="rounded-full mr-2" />
+													<img src={entry.to_img_url || 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-2 w-6 h-6" />
 													<div>{truncateWithEllipses(entry.to_name || entry.to_username || formatAddressShort(entry.to_address), 26)}</div>
 												</div>
 											</a>
@@ -138,7 +124,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
 						<div className="text-center px-4 py-1 flex items-center w-max border-2 border-gray-300 rounded-full hover:text-stpink hover:border-stpink cursor-pointer transition-all" onClick={handleGetMoreHistory}>
 							<div className="mr-2 text-sm">Show All</div>
 							<div>
-								<FontAwesomeIcon style={{ height: 12 }} icon={faArrowDown} />
+								<FontAwesomeIcon className="h-3" icon={faArrowDown} />
 							</div>
 						</div>
 					) : (

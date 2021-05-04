@@ -63,7 +63,7 @@ const RemoveRecommendationButton = ({ item, removeRecommendation }) => {
 		context.user && (
 			<div>
 				<Button onClick={handleRemove}>
-					<CrossIcon>{context.isMobile ? <RemoveText>Remove</RemoveText> : <FontAwesomeIcon icon={faTimes} style={{ height: 16, width: 16 }} />}</CrossIcon>
+					<CrossIcon>{context.isMobile ? <RemoveText>Remove</RemoveText> : <FontAwesomeIcon icon={faTimes} className="w-4 h-4" />}</CrossIcon>
 				</Button>
 			</div>
 		)
