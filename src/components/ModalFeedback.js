@@ -2,6 +2,7 @@ import { useState } from 'react'
 import mixpanel from 'mixpanel-browser'
 import CloseButton from './CloseButton'
 import ScrollableModal from './ScrollableModal'
+import axios from '@/lib/axios'
 
 export default function ModalFeedback({ isOpen, closeModal }) {
 	const [inputValue, setInputValue] = useState('')
@@ -12,11 +13,8 @@ export default function ModalFeedback({ isOpen, closeModal }) {
 		event.preventDefault()
 
 		// Post changes to the API
-		await fetch('/api/websitefeedback', {
-			method: 'post',
-			body: JSON.stringify({
-				description: inputValue,
-			}),
+		await axios.post('/api/feedback', {
+			description: inputValue,
 		})
 
 		setConfirmationShowing(true)
