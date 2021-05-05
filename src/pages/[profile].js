@@ -522,10 +522,10 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const [revertItems, setRevertItems] = useState(null)
 	const [newOrder, setNewOrder] = useState(null)
 
-	const handleClickChangeOrder = () => {
-		setRevertItems(items)
-		handleSortChange(5)
+	const handleClickChangeOrder = async () => {
+		await handleSortChange(5)
 		setIsChangingOrder(true)
+		setRevertItems(items)
 		setNewOrder(items)
 	}
 
@@ -555,6 +555,13 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		console.log('handle reorder: ', items)
 		setNewOrder(items)
 	}
+
+	// reset reordering if page changes
+	useEffect(() => {
+		setIsChangingOrder(false)
+		setNewOrder(null)
+		setRevertItems(null)
+	}, [selectedGrid, collectionId, profile_id, selectedCreatedSortField, selectedOwnedSortField])
 
 	return (
 		<div
@@ -966,7 +973,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
                             */
 										}`}
 									>
-										{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && (
+										{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && (
 											<>
 												{!isChangingOrder && (
 													<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none" onClick={handleClickChangeOrder}>
