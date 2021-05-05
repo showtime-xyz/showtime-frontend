@@ -6,6 +6,7 @@ import _ from 'lodash'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart as faHeartOutline } from '@fortawesome/free-regular-svg-icons'
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons'
+import Tippy from '@tippyjs/react'
 
 const LikeButton = ({ item }) => {
 	const context = useContext(AppContext)
@@ -54,16 +55,8 @@ const LikeButton = ({ item }) => {
 	}
 
 	return (
-		<div className="tooltip">
-			<button
-				onClick={() => (context.user ? (liked ? handleUnlike(item.nft_id) : handleLike(item.nft_id)) : handleLoggedOutLike())}
-
-				// className={
-				//   item.liked
-				//     ? "showtime-like-button-pink"
-				//     : "showtime-like-button-white"
-				// }
-			>
+		<Tippy content="Sign in to like" disabled={context.user || isMobile}>
+			<button onClick={() => (context.user ? (liked ? handleUnlike(item.nft_id) : handleLike(item.nft_id)) : handleLoggedOutLike())}>
 				<div className="flex flex-row items-center rounded-md py-1 hover:text-stred">
 					<div className="mr-2 whitespace-nowrap">{Number(like_count).toLocaleString()}</div>
 					<div className={`flex pr-1 ${liked ? 'text-stred' : ''}`}>
@@ -71,8 +64,7 @@ const LikeButton = ({ item }) => {
 					</div>
 				</div>
 			</button>
-			{context.user ? null : !isMobile ? <span className="tooltip-text bg-black p-3 -mt-6 -ml-16 rounded text-white text-xs text-opacity-90 w-24">Sign in to like</span> : null}
-		</div>
+		</Tippy>
 	)
 }
 

@@ -253,7 +253,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 											}}
 										/>
 									</div>
-									<div className="mr-4 text-base ">
+									<div className="mr-4 text-base flex items-center justify-center">
 										<ShareButton url={window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${item.contract_address}/${item.token_id}`} type={'item'} />
 									</div>
 								</div>
