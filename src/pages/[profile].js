@@ -539,6 +539,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 			method: 'post',
 			body: JSON.stringify({
 				new_order: saveOrderPayload,
+				list_id: selectedGrid,
 			}),
 		})
 	}
