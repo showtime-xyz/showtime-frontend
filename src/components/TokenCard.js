@@ -325,7 +325,7 @@ const TokenCard = ({
 									}}
 								/>
 							</div>
-							<div>
+							<div className="flex items-center justify-center">
 								<ShareButton url={window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${item.contract_address}/${item.token_id}`} type={'item'} />
 							</div>
 						</div>

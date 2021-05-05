@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "tippy.js/dist/tippy.css";
 
 html {
   overflow: hidden scroll;
@@ -399,17 +400,6 @@ input[type="text"] {
 
 .ril__toolbar {
   background-color: rgba(0, 0, 0, 0) !important;
-}
-
-.tooltip .tooltip-text {
-  visibility: hidden;
-  text-align: center;
-  padding: 2px 6px;
-  position: absolute;
-  z-index: 1;
-}
-.tooltip:hover .tooltip-text {
-  visibility: visible;
 }
 
 .showtime-login-button-solid {

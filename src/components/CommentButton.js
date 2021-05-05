@@ -5,6 +5,7 @@ import mixpanel from 'mixpanel-browser'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment as faCommentOutline } from '@fortawesome/free-regular-svg-icons'
 import { faComment as faCommentSolid } from '@fortawesome/free-solid-svg-icons'
+import Tippy from '@tippyjs/react'
 
 const CommentButton = ({ item, handleComment }) => {
 	const context = useContext(AppContext)
@@ -18,7 +19,7 @@ const CommentButton = ({ item, handleComment }) => {
 	}
 
 	return (
-		<div className="tooltip">
+		<Tippy content="Sign in to comment" disabled={context.user || isMobile}>
 			<button onClick={context.user ? handleComment : handleLoggedOutComment}>
 				<div className="flex flex-row items-center rounded-lg py-1 hover:text-stblue">
 					<div className="mr-2 whitespace-nowrap">{comment_count}</div>
@@ -27,8 +28,7 @@ const CommentButton = ({ item, handleComment }) => {
 					</div>
 				</div>
 			</button>
-			{context.user ? null : !isMobile ? <span className="tooltip-text bg-black p-3 -mt-6 -ml-16 rounded text-white opacity-90 w-32 text-xs">Sign in to comment</span> : null}
-		</div>
+		</Tippy>
 	)
 }
 
