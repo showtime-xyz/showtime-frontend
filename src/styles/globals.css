@@ -402,17 +402,6 @@ input[type="text"] {
   background-color: rgba(0, 0, 0, 0) !important;
 }
 
-.tooltip .tooltip-text {
-  visibility: hidden;
-  text-align: center;
-  padding: 2px 6px;
-  position: absolute;
-  z-index: 1;
-}
-.tooltip:hover .tooltip-text {
-  visibility: visible;
-}
-
 .showtime-login-button-solid {
   color: #222222;
   border-radius: 7px;

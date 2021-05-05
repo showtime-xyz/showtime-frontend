@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { formatAddressShort, copyToClipBoard } from '@/lib/utilities'
+import Tippy from '@tippyjs/react'
 
 const AddressButton = ({ address }) => {
 	const [isCopied, setIsCopied] = useState(false)
 
 	return (
-		<div className="tooltip">
+		<Tippy content={isCopied ? 'Copied!' : 'Copy address'}>
 			<div
 				//className="py-1 px-3  rounded-full mr-1 md:mr-2 hover:bg-purple-200 bg-purple-100 text-purple-500 transition-all text-xs mt-1 "
 				className="py-1 px-3  rounded-full mr-1 md:mr-2 hover:bg-opacity-20 bg-black text-gray-800 transition-all text-xs mt-1 md:mt-0 bg-opacity-10 cursor-pointer"
@@ -22,10 +23,7 @@ const AddressButton = ({ address }) => {
 			>
 				{formatAddressShort(address)}
 			</div>
-			<span style={isCopied ? { fontSize: 12, opacity: 0.9, width: 70 } : { fontSize: 12, opacity: 0.9, width: 100 }} className="tooltip-text bg-black p-3 -mt-12 rounded text-white">
-				{isCopied ? 'Copied!' : 'Copy address'}
-			</span>
-		</div>
+		</Tippy>
 	)
 }
 
