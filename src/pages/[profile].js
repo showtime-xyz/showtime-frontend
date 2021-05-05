@@ -561,7 +561,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setIsChangingOrder(false)
 		setNewOrder(null)
 		setRevertItems(null)
-	}, [selectedGrid, collectionId, profile_id, selectedCreatedSortField, selectedOwnedSortField])
+	}, [selectedGrid, collectionId, profile_id, selectedCreatedSortField, selectedOwnedSortField, showUserHiddenItems])
 
 	return (
 		<div
