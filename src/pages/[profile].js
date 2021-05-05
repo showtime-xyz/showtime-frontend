@@ -518,6 +518,44 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setIsMyProfile(false)
 	}
 
+	const [isChangingOrder, setIsChangingOrder] = useState(false)
+	const [revertItems, setRevertItems] = useState(null)
+	const [newOrder, setNewOrder] = useState(null)
+
+	const handleClickChangeOrder = () => {
+		setRevertItems(items)
+		handleSortChange(5)
+		setIsChangingOrder(true)
+		setNewOrder(items)
+	}
+
+	const handleSaveOrder = async () => {
+		const saveOrderPayload = newOrder.map((o, i) => ({ index: i, nft_id: o.nft_id }))
+		setItems(newOrder)
+		setIsChangingOrder(false)
+		setRevertItems(null)
+		setNewOrder(null)
+		await fetch('/api/updatelistorder', {
+			method: 'post',
+			body: JSON.stringify({
+				new_order: saveOrderPayload,
+			}),
+		})
+	}
+
+	const handleCancelOrder = () => {
+		const oldItems = revertItems
+		console.log('cancel order (revert to:):', revertItems)
+		setItems(oldItems)
+		setRevertItems(null)
+		setIsChangingOrder(false)
+	}
+
+	const handleReorder = items => {
+		console.log('handle reorder: ', items)
+		setNewOrder(items)
+	}
+
 	return (
 		<div
 			onClick={() => {
@@ -851,7 +889,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											</div>
 											<div
 												onClick={() => {
-													//setSelectedGrid(3);
 													handleListChange(3)
 													if (gridRef?.current?.getBoundingClientRect().top < 0) {
 														window.scroll({
@@ -929,6 +966,25 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
                             */
 										}`}
 									>
+										{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && (
+											<>
+												{!isChangingOrder && (
+													<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none" onClick={handleClickChangeOrder}>
+														Customize Order
+													</div>
+												)}
+												{isChangingOrder && ((selectedGrid === 1 && selectedCreatedSortField === 5) || (selectedGrid === 2 && selectedOwnedSortField === 5)) && (
+													<>
+														<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none" onClick={handleCancelOrder}>
+															Cancel
+														</div>
+														<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none" onClick={handleSaveOrder}>
+															Save Order
+														</div>
+													</>
+												)}
+											</>
+										)}
 										<div className="flex-1 hidden sm:flex"></div>
 										<Listbox
 											value={collectionId}
@@ -1104,6 +1160,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												website_url,
 												username,
 											}} // to customize owned by list on bottom of card
+											isChangingOrder={isChangingOrder}
+											handleReorder={handleReorder}
 										/>
 									)}
 								</div>

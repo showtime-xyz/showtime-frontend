@@ -8,6 +8,7 @@ import AppContext from '@/context/app-context'
 import TokenCard from './TokenCard'
 import useKeyPress from '@/hooks/useKeyPress'
 import ModalTokenDetail from './ModalTokenDetail'
+import { ReactSortable } from 'react-sortablejs'
 
 const TokenGridV5 = ({
 	dataLength,
@@ -32,6 +33,8 @@ const TokenGridV5 = ({
 	extraColumn,
 	pageProfile,
 	isLoadingMore,
+	isChangingOrder,
+	handleReorder,
 }) => {
 	const context = useContext(AppContext)
 	const [itemsList, setItemsList] = useState([])
@@ -47,7 +50,10 @@ const TokenGridV5 = ({
 	const rightPress = useKeyPress('ArrowRight')
 	const escPress = useKeyPress('Escape')
 
-	//const itemsToLoad = extraColumn ? 12 : 9;
+	const handleSetItemsList = list => {
+		setItemsList(list)
+		handleReorder(list)
+	}
 
 	useEffect(() => {
 		if (escPress) {
@@ -141,35 +147,81 @@ const TokenGridV5 = ({
 					</div>
 				) : (
 					<>
-						<div className={`grid gap-6 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'lg:grid-cols-2 xl:grid-cols-3'}`}>
-							{itemsList.map(item => (
-								<TokenCard
-									key={item.nft_id}
-									originalItem={item}
-									//columns={context.columns}
-									//isMobile={context.isMobile}
-									currentlyPlayingVideo={currentlyPlayingVideo}
-									setCurrentlyPlayingVideo={setCurrentlyPlayingVideo}
-									currentlyOpenModal={currentlyOpenModal}
-									setCurrentlyOpenModal={setCurrentlyOpenModal}
-									//showDuplicateNFTs={showDuplicateNFTs}
-									//setShowDuplicateNFTs={setShowDuplicateNFTs}
-									isMyProfile={isMyProfile}
-									listId={listId}
-									openCardMenu={openCardMenu}
-									setOpenCardMenu={setOpenCardMenu}
-									//userHiddenItems={userHiddenItems}
-									//setUserHiddenItems={setUserHiddenItems}
-									//refreshItems={refreshItems}
-									changeSpotlightItem={changeSpotlightItem}
-									pageProfile={pageProfile}
-									handleRemoveItem={handleRemoveItem}
-									showUserHiddenItems={showUserHiddenItems}
-									showDuplicates={showDuplicates}
-									setHasUserHiddenItems={setHasUserHiddenItems}
-								/>
-							))}
-						</div>
+						{isChangingOrder ? (
+							<ReactSortable
+								list={itemsList}
+								setList={handleSetItemsList}
+								animation={200}
+								// disabled={true}
+								swap={true}
+								// handle=".handle"
+								delayOnTouchStart={true}
+								delay={2}
+								className={`grid gap-6 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'lg:grid-cols-2 xl:grid-cols-3'}  overflow-hidden`}
+								onSort={e => {
+									console.log(e)
+								}}
+							>
+								{itemsList.map(item => (
+									<TokenCard
+										key={item.nft_id}
+										originalItem={item}
+										//columns={context.columns}
+										//isMobile={context.isMobile}
+										currentlyPlayingVideo={currentlyPlayingVideo}
+										setCurrentlyPlayingVideo={setCurrentlyPlayingVideo}
+										currentlyOpenModal={currentlyOpenModal}
+										setCurrentlyOpenModal={setCurrentlyOpenModal}
+										//showDuplicateNFTs={showDuplicateNFTs}
+										//setShowDuplicateNFTs={setShowDuplicateNFTs}
+										isMyProfile={isMyProfile}
+										listId={listId}
+										openCardMenu={openCardMenu}
+										setOpenCardMenu={setOpenCardMenu}
+										//userHiddenItems={userHiddenItems}
+										//setUserHiddenItems={setUserHiddenItems}
+										//refreshItems={refreshItems}
+										changeSpotlightItem={changeSpotlightItem}
+										pageProfile={pageProfile}
+										handleRemoveItem={handleRemoveItem}
+										showUserHiddenItems={showUserHiddenItems}
+										showDuplicates={showDuplicates}
+										setHasUserHiddenItems={setHasUserHiddenItems}
+										isChangingOrder={isChangingOrder}
+									/>
+								))}
+							</ReactSortable>
+						) : (
+							<div className={`grid gap-x-3 gap-y-6 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'lg:grid-cols-2 xl:grid-cols-3'}  overflow-hidden`}>
+								{itemsList.map(item => (
+									<TokenCard
+										key={item.nft_id}
+										originalItem={item}
+										//columns={context.columns}
+										//isMobile={context.isMobile}
+										currentlyPlayingVideo={currentlyPlayingVideo}
+										setCurrentlyPlayingVideo={setCurrentlyPlayingVideo}
+										currentlyOpenModal={currentlyOpenModal}
+										setCurrentlyOpenModal={setCurrentlyOpenModal}
+										//showDuplicateNFTs={showDuplicateNFTs}
+										//setShowDuplicateNFTs={setShowDuplicateNFTs}
+										isMyProfile={isMyProfile}
+										listId={listId}
+										openCardMenu={openCardMenu}
+										setOpenCardMenu={setOpenCardMenu}
+										//userHiddenItems={userHiddenItems}
+										//setUserHiddenItems={setUserHiddenItems}
+										//refreshItems={refreshItems}
+										changeSpotlightItem={changeSpotlightItem}
+										pageProfile={pageProfile}
+										handleRemoveItem={handleRemoveItem}
+										showUserHiddenItems={showUserHiddenItems}
+										showDuplicates={showDuplicates}
+										setHasUserHiddenItems={setHasUserHiddenItems}
+									/>
+								))}
+							</div>
+						)}
 						{isLoadingMore ? (
 							<div className="mx-auto items-center flex justify-center overflow-hidden py-4">
 								<div className="loading-card-spinner" />

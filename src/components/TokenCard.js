@@ -34,6 +34,7 @@ const TokenCard = ({
 	showUserHiddenItems,
 	showDuplicates,
 	setHasUserHiddenItems,
+	isChangingOrder,
 }) => {
 	const [item, setItem] = useState(originalItem)
 	const [moreShown, setMoreShown] = useState(false)
@@ -100,7 +101,7 @@ const TokenCard = ({
 	//const hash = item.token_img_url || item.token_animation_url;
 
 	return (
-		<div className="w-full h-full">
+		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
 			<div style={item.user_hidden ? { opacity: 0.7, backgroundColor: '#ddd' } : null} ref={divRef} className="w-full h-full sm:rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all bg-white flex flex-col">
 				<div ref={item.imageRef} className="p-4 flex flex-row items-center relative">
 					<div className="pr-2 ">
