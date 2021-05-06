@@ -148,20 +148,7 @@ const TokenGridV5 = ({
 				) : (
 					<>
 						{isChangingOrder ? (
-							<ReactSortable
-								list={itemsList}
-								setList={handleSetItemsList}
-								animation={200}
-								// disabled={true}
-								swap={true}
-								// handle=".handle"
-								delayOnTouchStart={true}
-								delay={2}
-								className={`grid gap-6 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'lg:grid-cols-2 xl:grid-cols-3'}  overflow-hidden`}
-								onSort={e => {
-									console.log(e)
-								}}
-							>
+							<ReactSortable list={itemsList} setList={handleSetItemsList} animation={200} swap={true} delayOnTouchStart={true} delay={2} className={`grid gap-6 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'lg:grid-cols-2 xl:grid-cols-3'}  overflow-hidden`}>
 								{itemsList.map(item => (
 									<TokenCard
 										key={item.nft_id}
