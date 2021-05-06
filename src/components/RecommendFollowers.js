@@ -58,6 +58,7 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
 			'/api/bulkfollow',
 			newProfiles.map(item => item.profile_id)
 		)
+
 		finishOnboarding()
 	}
 

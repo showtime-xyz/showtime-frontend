@@ -126,10 +126,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	const createComment = async () => {
 		setIsSubmitting(true)
 		// post new comment
-		await axios.post('/api/createcomment', {
-			nftId,
-			message: commentText,
-		})
+		await axios.post('/api/createcomment', { nftId, message: commentText })
 
 		mixpanel.track('Comment created')
 		// pull new comments
