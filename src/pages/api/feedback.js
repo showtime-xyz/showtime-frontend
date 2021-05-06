@@ -11,8 +11,6 @@ export default handler().post(async ({ body: { description }, cookies }, res) =>
 		//user is logged out
 	}
 
-	console.log(user?.publicAddress || null)
-
 	await backend.post(
 		'/v1/feedback',
 		{ description },
