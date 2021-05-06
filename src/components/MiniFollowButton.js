@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 import mixpanel from 'mixpanel-browser'
 import AppContext from '@/context/app-context'
+import axios from '@/lib/axios'
 
 const MiniFollowButton = ({ profileId }) => {
 	const context = useContext(AppContext)
@@ -16,9 +17,7 @@ const MiniFollowButton = ({ profileId }) => {
 		// Change myFollows via setMyFollows
 		context.setMyFollows([{ profile_id: profileId }, ...context.myFollows])
 		// Post changes to the API
-		await fetch(`/api/follow_v2/${profileId}`, {
-			method: 'post',
-		})
+		await axios.post(`/api/follow_v2/${profileId}`)
 		mixpanel.track('Followed profile - Card button')
 	}
 
@@ -27,9 +26,7 @@ const MiniFollowButton = ({ profileId }) => {
 		// Change myLikes via setMyLikes
 		context.setMyFollows(context.myFollows.filter(i => i?.profile_id !== profileId))
 		// Post changes to the API
-		await fetch(`/api/unfollow_v2/${profileId}`, {
-			method: 'post',
-		})
+		await axios.post(`/api/unfollow_v2/${profileId}`)
 		mixpanel.track('Unfollowed profile - Card button')
 	}
 

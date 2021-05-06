@@ -12,6 +12,7 @@ import ActivityImages from './ActivityImages'
 import mixpanel from 'mixpanel-browser'
 import useDetectOutsideClick from '@/hooks/useDetectOutsideClick'
 import { truncateWithEllipses } from '@/lib/utilities'
+import axios from '@/lib/axios'
 
 export default function ActivityCard({ act, setItemOpenInModal, setReportModalIsOpen, removeActorFromFeed }) {
 	const context = useContext(AppContext)
@@ -33,9 +34,7 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 		context.setMyFollows(context.myFollows.filter(f => f?.profile_id !== actor_profile_id))
 		removeActorFromFeed(actor_profile_id)
 		// Post changes to the API
-		await fetch(`/api/unfollow_v2/${actor_profile_id}`, {
-			method: 'post',
-		})
+		await axios.post(`/api/unfollow_v2/${actor_profile_id}`)
 		mixpanel.track('Unfollowed profile from Newsfeed dropdown')
 	}
 

@@ -5,6 +5,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import mixpanel from 'mixpanel-browser'
 import AppContext from '@/context/app-context'
 import _ from 'lodash'
+import axios from '@/lib/axios'
 
 const Button = styled.button`
 	display: flex;
@@ -48,9 +49,7 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 		// Change myFollows via setMyFollows
 		context.setMyFollows([{ profile_id: item?.profile_id }, ...context.myFollows])
 		// Post changes to the API
-		await fetch(`/api/follow_v2/${item?.profile_id}`, {
-			method: 'post',
-		})
+		await axios.post(`/api/follow_v2/${item?.profile_id}`)
 		mixpanel.track('Followed profile')
 	}
 
@@ -60,9 +59,7 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 		// Change myLikes via setMyLikes
 		context.setMyFollows(context.myFollows.filter(i => i?.profile_id !== item?.profile_id))
 		// Post changes to the API
-		await fetch(`/api/unfollow_v2/${item?.profile_id}`, {
-			method: 'post',
-		})
+		await axios.post(`/api/unfollow_v2/${item?.profile_id}`)
 		mixpanel.track('Unfollowed profile')
 	}
 

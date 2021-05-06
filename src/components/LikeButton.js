@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart as faHeartOutline } from '@fortawesome/free-regular-svg-icons'
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons'
 import Tippy from '@tippyjs/react'
+import axios from '@/lib/axios'
 
 const LikeButton = ({ item }) => {
 	const context = useContext(AppContext)
@@ -22,9 +23,7 @@ const LikeButton = ({ item }) => {
 		})
 
 		// Post changes to the API
-		await fetch(`/api/like_v3/${nft_id}`, {
-			method: 'post',
-		})
+		await axios.post(`/api/like_v3/${nft_id}`)
 
 		mixpanel.track('Liked item')
 	}
@@ -39,9 +38,7 @@ const LikeButton = ({ item }) => {
 		})
 
 		// Post changes to the API
-		await fetch(`/api/unlike_v3/${nft_id}`, {
-			method: 'post',
-		})
+		await axios.post(`/api/unlike_v3/${nft_id}`)
 
 		mixpanel.track('Unliked item')
 	}

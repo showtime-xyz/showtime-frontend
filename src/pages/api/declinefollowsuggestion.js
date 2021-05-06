@@ -1,30 +1,23 @@
 import Iron from '@hapi/iron'
 import CookieService from '@/lib/cookie'
+import backend from '@/lib/backend'
+import handler from '@/lib/api-handler'
 
-export default async (req, res) => {
-	const body = JSON.parse(req.body)
-	const profileId = body.profileId
+export default handler.post(async ({ body: { profileId }, cookies }, res) => {
+	const user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
-	try {
-		const user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+	await backend
+		.post(
+			`/v1/decline_follow_suggestion/${profileId}`,
+			{},
+			{
+				headers: {
+					'X-Authenticated-User': user.publicAddress,
+					'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
+				},
+			}
+		)
+		.then(resp => res.json(resp.data))
 
-		await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/decline_follow_suggestion/${profileId}`, {
-			method: 'POST',
-			headers: {
-				'X-Authenticated-User': user.publicAddress,
-				'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
-			},
-		})
-			.then(function (response) {
-				return response.json()
-			})
-			.then(function (myJson) {
-				res.json(myJson)
-			})
-	} catch (error) {
-		console.log(error)
-	}
-
-	res.statusCode = 200
-	res.end()
-}
+	res.status(200).end()
+})

@@ -1,9 +1,9 @@
-import nc from 'next-connect'
+import handler from '@/lib/api-handler'
 import Iron from '@hapi/iron'
 import CookieService from '@/lib/cookie'
 import backend from '@/lib/backend'
 
-const handler = nc().post(async ({ cookies, body }, res) => {
+export default handler.post(async ({ cookies, body }, res) => {
 	try {
 		const user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
@@ -19,8 +19,6 @@ const handler = nc().post(async ({ cookies, body }, res) => {
 
 	res.status(200).end()
 })
-
-export default handler
 
 export const config = {
 	api: {

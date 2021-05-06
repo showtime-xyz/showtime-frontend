@@ -3,9 +3,9 @@ import CookieService from '@/lib/cookie'
 import { recoverPersonalSignature } from 'eth-sig-util'
 import { bufferToHex } from 'ethereumjs-util'
 import backend from '@/lib/backend'
-import nc from 'next-connect'
+import handler from '@/lib/api-handler'
 
-const handler = nc().post(async ({ body: { address, signature } }, res) => {
+export default handler.post(async ({ body: { address, signature } }, res) => {
 	if (!address || !signature) return res.status(400).json({ error: 'Address or signature not specified.' })
 
 	// check the signature
@@ -38,5 +38,3 @@ const handler = nc().post(async ({ body: { address, signature } }, res) => {
 
 	res.end()
 })
-
-export default handler

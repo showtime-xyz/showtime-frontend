@@ -2,6 +2,7 @@ import { useState } from 'react'
 import mixpanel from 'mixpanel-browser'
 import CloseButton from './CloseButton'
 import ScrollableModal from './ScrollableModal'
+import axios from '@/lib/axios'
 
 export default function Modal({ isOpen, setReportModalOpen, nftId, activityId, removeItemFromFeed }) {
 	const [inputValue, setInputValue] = useState('')
@@ -14,13 +15,10 @@ export default function Modal({ isOpen, setReportModalOpen, nftId, activityId, r
 		event.preventDefault()
 
 		// Post changes to the API
-		await fetch('/api/reportitem_v2', {
-			method: 'post',
-			body: JSON.stringify({
-				nft_id: nftId,
-				description: inputValue,
-				activity_id: activityId,
-			}),
+		await axios.post('/api/reportitem_v2', {
+			nft_id: nftId,
+			description: inputValue,
+			activity_id: activityId,
 		})
 
 		setConfirmationShowing(true)

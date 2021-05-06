@@ -15,6 +15,7 @@ import { faComment, faHeart, faUser } from '@fortawesome/free-regular-svg-icons'
 import { faComment as fasComment, faHeart as fasHeart, faFingerprint, faUser as fasUser, faFilter } from '@fortawesome/free-solid-svg-icons'
 import ModalReportItem from '@/components/ModalReportItem'
 import RecommendFollowers from '@/components/RecommendFollowers'
+import axios from '@/lib/axios'
 
 const ACTIVITY_PAGE_LENGTH = 2 // 5 activity items per activity page
 export async function getServerSideProps() {
@@ -40,16 +41,13 @@ const Activity = () => {
 
 	const getActivity = async (type_id, page) => {
 		setIsLoading(true)
-		const result = await fetch('/api/getactivity', {
-			method: 'POST',
-			body: JSON.stringify({
-				page: page,
+		const { data } = await axios
+			.post('/api/getactivity', {
+				page,
 				activityTypeId: type_id,
 				limit: ACTIVITY_PAGE_LENGTH,
-			}),
-		})
-		const resultJson = await result.json()
-		const { data } = resultJson
+			})
+			.then(res => res.data)
 
 		if (_.isEmpty(data) || data.length < ACTIVITY_PAGE_LENGTH) {
 			setHasMoreScrolling(false)
@@ -74,9 +72,8 @@ const Activity = () => {
 	// if there's activity, finish onboarding
 	useEffect(() => {
 		if (activity && activity.length > 0 && !context?.myProfile?.has_onboarded) {
-			fetch('/api/finishonboarding', {
-				method: 'post',
-			})
+			axios.post('/api/finishonboarding')
+
 			context.setMyProfile({
 				...context.myProfile,
 				has_onboarded: true,

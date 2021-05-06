@@ -1,6 +1,8 @@
 const { withSentryConfig } = require('@sentry/nextjs')
 
-module.exports = withSentryConfig({
+const isDev = process.env.NODE_ENV === 'development'
+
+const nextConfig = {
 	future: {
 		webpack5: true,
 	},
@@ -19,4 +21,6 @@ module.exports = withSentryConfig({
     return config;
   },
   */
-})
+}
+
+module.exports = isDev ? nextConfig : withSentryConfig(nextConfig)
