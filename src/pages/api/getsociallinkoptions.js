@@ -3,7 +3,7 @@ import CookieService from '@/lib/cookie'
 import handler from '@/lib/api-handler'
 import backend from '@/lib/backend'
 
-export default handler.get(async (req, res) => {
+export default handler().get(async (req, res) => {
 	let user = null
 
 	user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)

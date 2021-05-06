@@ -3,7 +3,7 @@ import CookieService from '@/lib/cookie'
 import handler from '@/lib/api-handler'
 import backend from '@/lib/backend'
 
-export default handler.post(async ({ cookies, query: { nft_list }, body: { showDuplicates } }, res) => {
+export default handler().post(async ({ cookies, query: { nft_list }, body: { showDuplicates } }, res) => {
 	const [nft_id, list_id] = nft_list
 
 	const user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)

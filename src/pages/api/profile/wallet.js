@@ -5,7 +5,7 @@ import CookieService from '@/lib/cookie'
 import backend from '@/lib/backend'
 import handler from '@/lib/api-handler'
 
-export default handler.put(async ({ cookies, body: { addressDetected: address, signature } }, res) => {
+export default handler().put(async ({ cookies, body: { addressDetected: address, signature } }, res) => {
 	const user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
 	// check the signature
