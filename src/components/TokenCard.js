@@ -13,6 +13,7 @@ import MiniFollowButton from './MiniFollowButton'
 import TokenCardImage from '@/components/TokenCardImage'
 import { removeTags, formatAddressShort, truncateWithEllipses } from '@/lib/utilities'
 import axios from '@/lib/axios'
+import { MenuIcon } from '@heroicons/react/solid'
 
 const TokenCard = ({
 	originalItem,
@@ -232,6 +233,14 @@ const TokenCard = ({
 							<div className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center bg-white bg-opacity-50">
 								<div className="loading-card-spinner-small mb-2" />
 								<div>Refreshing...</div>
+							</div>
+						)}
+						{isChangingOrder && (
+							<div className="absolute cursor-move inset-0 cursor-pointer flex flex-col items-center justify-center bg-white bg-opacity-70">
+								<div className="p-2 bg-white rounded-lg shadow flex justify-center items-center">
+									<MenuIcon className="w-5 h-5 text-black mr-1" aria-hidden="true" />
+									<div>Drag to Reorder</div>
+								</div>
 							</div>
 						)}
 					</div>
