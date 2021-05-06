@@ -71,7 +71,7 @@ const Activity = () => {
 
 	// if there's activity, finish onboarding
 	useEffect(() => {
-		if (activity && activity.length > 0 && !context?.myProfile?.has_onboarded) {
+		if (context.user && activity && activity.length > 0 && !context?.myProfile?.has_onboarded) {
 			axios.post('/api/finishonboarding')
 
 			context.setMyProfile({

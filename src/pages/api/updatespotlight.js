@@ -17,7 +17,7 @@ export default handler().post(async ({ cookies, body: { nft_id } }, res) => {
 		{ nft_id },
 		{
 			headers: {
-				'X-Authenticated-User': user?.publicAddress || undefined, // may be null if logged out
+				'X-Authenticated-User': user?.publicAddress || null, // may be null if logged out
 				'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
 			},
 		}

@@ -13,7 +13,7 @@ export default handler().post(async ({ body: { description }, cookies }, res) =>
 			{ description },
 			{
 				headers: {
-					'X-Authenticated-User': user?.publicAddress || undefined,
+					'X-Authenticated-User': user?.publicAddress || null,
 					'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
 				},
 			}
