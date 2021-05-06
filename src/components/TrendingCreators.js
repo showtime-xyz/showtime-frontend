@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faPlus } from '@fortawesome/free-solid-svg-icons'
 import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
+import axios from '@/lib/axios'
 
 const TrendingCreators = ({ shownLeaderboardItems, allLeaderboardItems, isLoading, showAllLeaderboardItems, setShowAllLeaderboardItems, trendingTab }) => {
 	const context = useContext(AppContext)
@@ -24,10 +25,10 @@ const TrendingCreators = ({ shownLeaderboardItems, allLeaderboardItems, isLoadin
 		// UPDATE CONTEXT
 		context.setMyFollows([...newProfiles, ...context.myFollows])
 		// Post changes to the API
-		await fetch('/api/bulkfollow', {
-			method: 'post',
-			body: JSON.stringify(newProfiles.map(item => item.profile_id)),
-		})
+		await axios.post(
+			'/api/bulkfollow',
+			newProfiles.map(item => item.profile_id)
+		)
 	}
 
 	const handleLoggedOutFollowAll = () => {

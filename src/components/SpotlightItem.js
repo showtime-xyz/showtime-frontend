@@ -13,6 +13,7 @@ import AppContext from '@/context/app-context'
 import { getBidLink, getContractName, removeTags } from '@/lib/utilities'
 import ModalTokenDetail from './ModalTokenDetail'
 import CappedWidth from './CappedWidth'
+import axios from '@/lib/axios'
 
 const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu, openCardMenu, removeSpotlightItem }) => {
 	const [moreShown, setMoreShown] = useState(false)
@@ -39,8 +40,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 		mixpanel.track('Clicked refresh metadata')
 		setRefreshing(true)
 
-		const result = await fetch(`/api/refreshmetadata/${thisItem.nft_id}`, { method: 'post' })
-		const { data } = await result.json()
+		const { data } = await axios.post(`/api/refreshmetadata/${thisItem.nft_id}`).then(res => res.data)
 
 		if (data) setThisItem(data)
 

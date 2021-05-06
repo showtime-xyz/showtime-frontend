@@ -11,6 +11,7 @@ import AppContext from '@/context/app-context'
 import MiniFollowButton from './MiniFollowButton'
 import TokenCardImage from '@/components/TokenCardImage'
 import { removeTags, formatAddressShort, truncateWithEllipses } from '@/lib/utilities'
+import axios from '@/lib/axios'
 
 const TokenCard = ({
 	originalItem,
@@ -51,16 +52,9 @@ const TokenCard = ({
 		setHasUserHiddenItems(true)
 
 		// Post changes to the API
-		await fetch(`/api/hidenft/${item.nft_id}/${listId}`, {
-			method: 'post',
-			body: JSON.stringify({
-				showDuplicates: showDuplicates ? 1 : 0,
-			}),
-		})
+		await axios.post(`/api/hidenft/${item.nft_id}/${listId}`, { showDuplicates: showDuplicates ? 1 : 0 })
 
-		if (!showUserHiddenItems) {
-			handleRemoveItem(item.nft_id)
-		}
+		if (!showUserHiddenItems) handleRemoveItem(item.nft_id)
 
 		mixpanel.track('Hid item')
 	}
@@ -73,12 +67,7 @@ const TokenCard = ({
 		setItem({ ...item, user_hidden: false })
 
 		// Post changes to the API
-		await fetch(`/api/unhidenft/${item.nft_id}/${listId}`, {
-			method: 'post',
-			body: JSON.stringify({
-				showDuplicates: showDuplicates ? 1 : 0,
-			}),
-		})
+		await axios.post(`/api/unhidenft/${item.nft_id}/${listId}`, { showDuplicates: showDuplicates ? 1 : 0 })
 
 		mixpanel.track('Unhid item')
 	}
@@ -89,37 +78,13 @@ const TokenCard = ({
 		const owner_id = item.owner_id
 
 		setRefreshing(true)
-		const result = await fetch(`/api/refreshmetadata/${item.nft_id}`, {
-			method: 'post',
-		})
-		const { data } = await result.json()
-		if (data) {
-			// Replace all fields, except those two
-			setItem({ ...data, user_hidden: user_hidden, owner_id: owner_id })
-		} else {
-			handleRemoveItem(item.nft_id)
-		}
+		const { data } = await axios.post(`/api/refreshmetadata/${item.nft_id}`).then(res => res.data)
 
-		//item.name = "THIS";
+		if (data) setItem({ ...data, user_hidden: user_hidden, owner_id: owner_id })
+		else handleRemoveItem(item.nft_id)
 
-		//await refreshItems();
 		setRefreshing(false)
 	}
-
-	/*
-  const getImageUrl = (token_aspect_ratio) => {
-    var img_url = item.token_img_url ? item.token_img_url : null;
-
-    if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
-      if (token_aspect_ratio && token_aspect_ratio > 1) {
-        img_url = img_url.split("=")[0] + "=h660";
-      } else {
-        img_url = img_url.split("=")[0] + "=w660";
-      }
-    }
-    return img_url;
-  };
-  */
 
 	const max_description_length = 65
 

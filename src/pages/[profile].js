@@ -23,6 +23,7 @@ import ProfileFollowersPill from '@/components/ProfileFollowersPill'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { faHeart as fasHeart, faFingerprint, faImage as fasImage, faEdit } from '@fortawesome/free-solid-svg-icons'
+import axios from '@/lib/axios'
 
 export async function getServerSideProps(context) {
 	const { res, query } = context
@@ -159,12 +160,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setSpotlightItem(nft)
 
 		// Post changes to the API
-		await fetch('/api/updatespotlight', {
-			method: 'post',
-			body: JSON.stringify({
-				nft_id: nftId,
-			}),
-		})
+		await axios.post('/api/updatespotlight', { nft_id: nftId })
 	}
 
 	// NFT grid
@@ -203,9 +199,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		}
 
 		// Created
-		const result = await fetch('/api/getprofilenfts', {
-			method: 'post',
-			body: JSON.stringify({
+		const { data } = await axios
+			.post('/api/getprofilenfts', {
 				profileId: profile_id,
 				page: page,
 				limit: perPage,
@@ -214,9 +209,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 				showHidden: showHidden ? 1 : 0,
 				showDuplicates: showDuplicates ? 1 : 0,
 				collectionId: collectionId,
-			}),
-		})
-		const { data } = await result.json()
+			})
+			.then(res => res.data)
 		setItems(data.items)
 		setHasMore(data.has_more)
 
@@ -229,9 +223,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setIsLoadingMore(true)
 		const sortId = selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField
 
-		const result = await fetch('/api/getprofilenfts', {
-			method: 'post',
-			body: JSON.stringify({
+		const { data } = await axios
+			.post('/api/getprofilenfts', {
 				profileId: profile_id,
 				page: nextPage,
 				limit: perPage,
@@ -240,9 +233,9 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 				showHidden: showUserHiddenItems ? 1 : 0,
 				showDuplicates: showDuplicates ? 1 : 0,
 				collectionId: collectionId,
-			}),
-		})
-		const { data } = await result.json()
+			})
+			.then(res => res.data)
+
 		if (!switchInProgress) {
 			setItems([...items, ...data.items])
 			setHasMore(data.has_more)
@@ -358,9 +351,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		if (initial_list_id == 1) {
 			setSwitchInProgress(true)
 			// Created
-			const result = await fetch('/api/getprofilenfts', {
-				method: 'post',
-				body: JSON.stringify({
+			const { data } = await axios
+				.post('/api/getprofilenfts', {
 					profileId: profile_id,
 					page: 1,
 					limit: perPage,
@@ -369,18 +361,16 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 					showHidden: 0,
 					showDuplicates: 0,
 					collectionId: 0,
-				}),
-			})
-			const { data } = await result.json()
+				})
+				.then(res => res.data)
 			setItems(data.items)
 			setHasMore(data.has_more)
 			setSwitchInProgress(false)
 		} else if (initial_list_id == 2) {
 			setSwitchInProgress(true)
 			// Owned
-			const result = await fetch('/api/getprofilenfts', {
-				method: 'post',
-				body: JSON.stringify({
+			const { data } = await axios
+				.post('/api/getprofilenfts', {
 					profileId: profile_id,
 					page: 1,
 					limit: perPage,
@@ -389,18 +379,16 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 					showHidden: 0,
 					showDuplicates: 0,
 					collectionId: 0,
-				}),
-			})
-			const { data } = await result.json()
+				})
+				.then(res => res.data)
 			setItems(data.items)
 			setHasMore(data.has_more)
 			setSwitchInProgress(false)
 		} else if (initial_list_id == 3) {
 			setSwitchInProgress(true)
 			// Liked
-			const result = await fetch('/api/getprofilenfts', {
-				method: 'post',
-				body: JSON.stringify({
+			const { data } = await axios
+				.post('/api/getprofilenfts', {
 					profileId: profile_id,
 					page: 1,
 					limit: perPage,
@@ -409,9 +397,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 					showHidden: 0,
 					showDuplicates: 0,
 					collectionId: 0,
-				}),
-			})
-			const { data } = await result.json()
+				})
+				.then(res => res.data)
 			setItems(data.items)
 			setHasMore(data.has_more)
 			setSwitchInProgress(false)
@@ -460,9 +447,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		])
 
 		// Post changes to the API
-		await fetch(`/api/follow_v2/${profile_id}`, {
-			method: 'post',
-		})
+		await axios.post(`/api/follow_v2/${profile_id}`)
 
 		mixpanel.track('Followed profile')
 	}
@@ -480,9 +465,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		)
 
 		// Post changes to the API
-		await fetch(`/api/unfollow_v2/${profile_id}`, {
-			method: 'post',
-		})
+		await axios.post(`/api/unfollow_v2/${profile_id}`)
 
 		mixpanel.track('Unfollowed profile')
 	}

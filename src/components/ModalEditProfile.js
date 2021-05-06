@@ -155,8 +155,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 
 	useEffect(() => {
 		const getSocialLinkOptions = async () => {
-			const options = await fetch('/api/getsociallinkoptions', {})
-			const optionsJson = await options.json()
+			const optionsJson = await axios.get('/api/getsociallinkoptions').then(res => res.data)
+
 			setSocialLinkOptions(
 				optionsJson
 					? optionsJson.map(opt => ({

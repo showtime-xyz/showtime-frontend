@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from 'react'
 import AppContext from '@/context/app-context'
 import RecommendedFollowItem from './RecommendedFollowItem'
 import mixpanel from 'mixpanel-browser'
+import axios from '@/lib/axios'
 
 export default function ActivityRecommendedFollows() {
 	const context = useContext(AppContext)
@@ -10,10 +11,7 @@ export default function ActivityRecommendedFollows() {
 	const removeRecommendation = async recommendation => {
 		const newRecommendedFollows = recommendedFollows.filter(recFollow => recFollow.profile_id !== recommendation.profile_id)
 		setRecommendedFollows(newRecommendedFollows)
-		await fetch('/api/declinefollowsuggestion', {
-			method: 'post',
-			body: JSON.stringify({ profileId: recommendation.profile_id }),
-		})
+		await axios.post('/api/declinefollowsuggestion', { profileId: recommendation.profile_id })
 		mixpanel.track('Remove follow recommendation')
 	}
 	const filterNewRecs = (newRecs, oldRecs, alreadyFollowed) => {
@@ -37,75 +35,33 @@ export default function ActivityRecommendedFollows() {
 
 	const getActivityRecommendedFollows = async () => {
 		setLoading(true)
-		const result = await fetch('/api/getactivityrecommendedfollows', {
-			method: 'post',
-			body: JSON.stringify({}),
-		})
-		const { data } = await result.json()
+		const { data } = await axios.post('/api/getactivityrecommendedfollows').then(res => res.data)
 		setRecommendedFollows(data)
 
-		//get recond result
-		const secondResult = await fetch('/api/getactivityrecommendedfollows', {
-			method: 'post',
-			body: JSON.stringify({
-				recache: true,
-			}),
-		})
-		const { data: secondData } = await secondResult.json()
+		// get recond result
+		const { data: secondData } = await axios.post('/api/getactivityrecommendedfollows', { recache: true }).then(res => res.data)
+
 		setRecQueue(secondData)
 		setLoading(false)
 	}
 
 	const getActivityRecommendedFollowsRecache = async () => {
 		setLoading(true)
-		const secondResult = await fetch('/api/getactivityrecommendedfollows', {
-			method: 'post',
-			body: JSON.stringify({
-				recache: true,
-			}),
-		})
-		const { data } = await secondResult.json()
+		const { data } = await axios.post('/api/getactivityrecommendedfollows', { recache: true }).then(res => res.data)
+
 		setRecQueue(data)
 		setLoading(false)
 	}
 
 	// get recs on init
 	useEffect(() => {
-		if (typeof context.user !== 'undefined') {
-			getActivityRecommendedFollows()
-		}
+		if (typeof context.user !== 'undefined') getActivityRecommendedFollows()
 	}, [context.user])
 
 	//get more recs when we're at 3 recs
 	useEffect(() => {
-		if (typeof context.user !== 'undefined' && !loading && recommendedFollows.length < 4) {
-			getActivityRecommendedFollowsRecache()
-		}
+		if (typeof context.user !== 'undefined' && !loading && recommendedFollows.length < 4) getActivityRecommendedFollowsRecache()
 	}, [recommendedFollows])
-
-	// const [followAllClicked, setFollowAllClicked] = useState(false);
-	// const handleFollowAll = async () => {
-	//   if (context.user && context.myProfile !== undefined) {
-	//     setFollowAllClicked(true);
-
-	//     const newProfiles = recommendedFollows.filter(
-	//       (item) =>
-	//         !context.myFollows.map((f) => f.profile_id).includes(item.profile_id)
-	//     );
-
-	//     // UPDATE CONTEXT
-	//     context.setMyFollows([...newProfiles, ...context.myFollows]);
-
-	//     // Post changes to the API
-	//     await fetch(`/api/bulkfollow`, {
-	//       method: "post",
-	//       body: JSON.stringify(newProfiles.map((item) => item.profile_id)),
-	//     });
-	//   } else {
-	//     mixpanel.track("Follow but logged out");
-	//     context.setLoginModalOpen(true);
-	//   }
-	// };
 
 	const followCallback = recommendation => {
 		setTimeout(() => {
