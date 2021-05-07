@@ -77,11 +77,11 @@ const Activity = () => {
 	}
 
 	useEffect(() => {
-		const handleThrottle = response => {
-			setThrottleContent(response.message)
+		if (context.throttleMessage) {
+			setThrottleContent(context.throttleMessage)
 			setThrottleOpen(true)
 		}
-	}, [])
+	}, [context.throttleMessage])
 
 	// if there's activity, finish onboarding
 	useEffect(() => {
