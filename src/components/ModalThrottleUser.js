@@ -20,9 +20,7 @@ export default function ModalThrottleUser({ isOpen, closeModal, modalContent }) 
 		<>
 			{isOpen && (
 				<ScrollableModal
-					closeModal={() => {
-						closeModal()
-					}}
+					closeModal={closeModal}
 					contentWidth="30rem"
 				>
 					<div className="p-4">
