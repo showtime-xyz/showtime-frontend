@@ -1,5 +1,5 @@
 import { useContext, useRef } from 'react'
-import { ACTIVITY_TYPES, activityIconObjects } from '@/lib/constants'
+import { ACTIVITY_TYPES, DEFAULT_PROFILE_PIC, activityIconObjects } from '@/lib/constants'
 import { Like, Comment, Sell, Buy, Create, Follow, Transfer } from './ActivityTypes'
 import { formatDistanceToNowStrict } from 'date-fns'
 import Link from 'next/link'
@@ -84,7 +84,7 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 									mixpanel.track('Activity - Click on user profile')
 								}}
 							>
-								<img src={actor.profile_img_url || 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-2 w-14 h-14  hover:opacity-90 transition-all" />
+								<img src={actor.profile_img_url || DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-14 h-14  hover:opacity-90 transition-all" />
 								<div
 									className="absolute bottom-0 right-2 rounded-full h-5 w-5 flex items-center justify-center shadow"
 									style={{

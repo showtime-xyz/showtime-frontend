@@ -8,7 +8,7 @@ import { formatDistanceToNowStrict } from 'date-fns'
 // import { truncateWithEllipses } from "@/lib/utilities";
 import useInterval from '@/hooks/useInterval'
 import AppContext from '@/context/app-context'
-import { getNotificationInfo } from '@/lib/constants'
+import { getNotificationInfo, DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import ModalUserList from '@/components/ModalUserList'
 import axios from '@/lib/axios'
 
@@ -152,7 +152,7 @@ export default function NotificationsBtn() {
 								<div className="w-max mr-2 relative min-w-[2.25rem]">
 									<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
 										<a onClick={() => setIsActive(!isActive)}>
-											<img alt={notif.name} src={notif.img_url ? notif.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-1 mt-1 w-9 h-9" />
+											<img alt={notif.name} src={notif.img_url ? notif.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 mt-1 w-9 h-9" />
 											<div className="absolute bottom-0 right-0 rounded-full h-5 w-5 flex items-center justify-center shadow" style={{ backgroundColor: getNotificationInfo(notif.type_id).color }}>
 												<FontAwesomeIcon className="w-3 h-3 text-white" icon={iconObjects[getNotificationInfo(notif.type_id).icon]} />
 											</div>
@@ -317,7 +317,7 @@ export default function NotificationsBtn() {
 									// }
 								>
 									<div className="w-max mr-2 relative min-w-[2.25rem]">
-										<img alt={notif.name} src={notif.img_url ? notif.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-1 mt-1 w-9 h-9" />
+										<img alt={notif.name} src={notif.img_url ? notif.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 mt-1 w-9 h-9" />
 										<div className="absolute bottom-0 right-0 rounded-full h-5 w-5 flex items-center justify-center shadow" style={{ backgroundColor: getNotificationInfo(notif.type_id).color }}>
 											<FontAwesomeIcon className="w-3 h-3 text-white" icon={iconObjects[getNotificationInfo(notif.type_id).icon]} />
 										</div>

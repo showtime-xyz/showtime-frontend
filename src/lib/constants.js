@@ -25,6 +25,8 @@ export const CONTRACTS = {
 	EPHIMERA: '0xfe21b0a8df3308c61cb13df57ae5962c567a668a',
 }
 
+export const DEFAULT_PROFILE_PIC = 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'
+
 // fields to sort by on profile page
 export const SORT_FIELDS = {
 	LIKE_COUNT: { label: 'Popularity', key: 'like_count', id: 1, value: 1 },
