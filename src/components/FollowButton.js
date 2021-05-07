@@ -49,8 +49,16 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 		// Change myFollows via setMyFollows
 		context.setMyFollows([{ profile_id: item?.profile_id }, ...context.myFollows])
 		// Post changes to the API
-		await axios.post(`/api/follow_v2/${item?.profile_id}`)
-		mixpanel.track('Followed profile')
+		await axios
+			.post(`/api/follow_v2/${item?.profile_id}`)
+			.then(() => {
+				mixpanel.track('Followed profile')
+			})
+			.catch(err => {
+				if (err.code === 429) {
+					context.setThrottleMessage(err.message)
+				}
+			})
 	}
 
 	const handleUnfollow = async () => {

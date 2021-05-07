@@ -17,8 +17,16 @@ const MiniFollowButton = ({ profileId }) => {
 		// Change myFollows via setMyFollows
 		context.setMyFollows([{ profile_id: profileId }, ...context.myFollows])
 		// Post changes to the API
-		await axios.post(`/api/follow_v2/${profileId}`)
-		mixpanel.track('Followed profile - Card button')
+		await axios
+			.post(`/api/follow_v2/${profileId}`)
+			.then(() => {
+				mixpanel.track('Followed profile - Card button')
+			})
+			.catch(err => {
+				if (err.code === 429) {
+					context.setThrottleMessage(err.message)
+				}
+			})
 	}
 
 	const handleUnfollow = async () => {
