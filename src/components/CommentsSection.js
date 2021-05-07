@@ -133,8 +133,9 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 			})
 			.catch(err => {
 				if (err.code === 429) {
-					context.setThrottleMessage(err.message)
+					return context.setThrottleMessage(err.message)
 				}
+				console.error(err)
 			})
 
 		// pull new comments

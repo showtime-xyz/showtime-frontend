@@ -454,8 +454,9 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 			})
 			.catch(err => {
 				if (err.code === 429) {
-					context.setThrottleMessage(err.message)
+					return context.setThrottleMessage(err.message)
 				}
+				console.error(err)
 			})
 	}
 
