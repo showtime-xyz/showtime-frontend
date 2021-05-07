@@ -33,6 +33,14 @@ export default function ActivityRecommendedFollows() {
 		setRecommendedFollows([...recommendedFollows, ...filteredRecQueue])
 	}, [recQueue])
 
+	useEffect(() => {
+		// when context.myFollows changes, filter out any recommended follows
+		if (context.myFollows) {
+			const filteredRecs = filterNewRecs(recommendedFollows, [], context.myFollows)
+			setRecommendedFollows(filteredRecs)
+		}
+	}, [context.myFollows])
+
 	const getActivityRecommendedFollows = async () => {
 		setLoading(true)
 		const { data } = await axios.post('/api/getactivityrecommendedfollows').then(res => res.data)
@@ -62,13 +70,6 @@ export default function ActivityRecommendedFollows() {
 	useEffect(() => {
 		if (typeof context.user !== 'undefined' && !loading && recommendedFollows.length < 4) getActivityRecommendedFollowsRecache()
 	}, [recommendedFollows])
-
-	const followCallback = recommendation => {
-		setTimeout(() => {
-			const newRecommendedFollows = recommendedFollows.filter(recFollow => recFollow.profile_id !== recommendation.profile_id)
-			setRecommendedFollows(newRecommendedFollows)
-		}, 300)
-	}
 
 	return (
 		<div>
@@ -100,7 +101,7 @@ export default function ActivityRecommendedFollows() {
 			{recommendedFollows &&
 				recommendedFollows.slice(0, 3).map(recFollow => (
 					<div className="ml-0" key={recFollow.profile_id}>
-						<RecommendedFollowItem item={recFollow} liteVersion removeRecommendation={removeRecommendation} followCallback={context.user ? followCallback : () => {}} closeModal={() => {}} leftPadding={24} />
+						<RecommendedFollowItem item={recFollow} liteVersion removeRecommendation={removeRecommendation} closeModal={() => {}} leftPadding={24} />
 					</div>
 				))}
 			{!loading && recommendedFollows && recommendedFollows.length === 0 && (
