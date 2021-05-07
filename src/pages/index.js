@@ -15,6 +15,7 @@ import { faComment, faHeart, faUser } from '@fortawesome/free-regular-svg-icons'
 import { faComment as fasComment, faHeart as fasHeart, faFingerprint, faUser as fasUser, faFilter } from '@fortawesome/free-solid-svg-icons'
 import ModalReportItem from '@/components/ModalReportItem'
 import RecommendFollowers from '@/components/RecommendFollowers'
+import ModalThrottleUser from '@/components/ModalThrottleUser'
 import axios from '@/lib/axios'
 
 const ACTIVITY_PAGE_LENGTH = 2 // 5 activity items per activity page
@@ -38,6 +39,12 @@ const Activity = () => {
 	const [activityPage, setActivityPage] = useState(1)
 	const [hasMoreScrolling, setHasMoreScrolling] = useState(true)
 	const [activityTypeFilter, setActivityTypeFilter] = useState(0)
+	const [throttleOpen, setThrottleOpen] = useState(false)
+	const [throttleContent, setThrottleContent] = useState('')
+
+	const throttleClose = () => {
+		setThrottleOpen(false)
+	}
 
 	const getActivity = async (type_id, page) => {
 		setIsLoading(true)
@@ -68,6 +75,13 @@ const Activity = () => {
 
 		setIsLoading(false)
 	}
+
+	useEffect(() => {
+		const handleThrottle = response => {
+			setThrottleContent(response.message)
+			setThrottleOpen(true)
+		}
+	}, [])
 
 	// if there's activity, finish onboarding
 	useEffect(() => {
@@ -172,6 +186,7 @@ const Activity = () => {
 		const filteredActivity = activity.filter(act => act.actor_profile_id !== profileId)
 		setActivity(filteredActivity)
 	}
+	console.log(context)
 
 	const [showFiltersMobile, setShowFiltersMobile] = useState(false)
 	const [reportModalIsOpen, setReportModalIsOpen] = useState(false)
@@ -180,8 +195,8 @@ const Activity = () => {
 		<>
 			{typeof document !== 'undefined' ? (
 				<>
+					<ModalThrottleUser isOpen={throttleOpen} closeModal={throttleClose} modalContent={throttleContent} />
 					<ModalTokenDetail isOpen={itemOpenInModal} setEditModalOpen={setItemOpenInModal} item={itemOpenInModal?.nftGroup ? itemOpenInModal.nftGroup[itemOpenInModal?.index] : null} goToNext={goToNext} goToPrevious={goToPrevious} hasNext={!(itemOpenInModal?.index === itemOpenInModal?.nftGroup?.length - 1)} hasPrevious={!(itemOpenInModal?.index === 0)} />
-
 					<ModalReportItem isOpen={reportModalIsOpen} setReportModalOpen={setReportModalIsOpen} activityId={reportModalIsOpen} removeItemFromFeed={removeItemFromFeed} />
 				</>
 			) : null}
