@@ -35,7 +35,7 @@ const App = ({ Component, pageProps }) => {
 	const [columns, setColumns] = useState(null)
 	const [isMobile, setIsMobile] = useState(null)
 	const [toggleRefreshFeed, setToggleRefreshFeed] = useState(false)
-	const [throttleMessage, setThrottleMessage] = useState('')
+	const [throttleMessage, setThrottleMessage] = useState(null)
 
 	const adjustGridProperties = windowWidth => {
 		if (windowWidth < 790 + 30) {
