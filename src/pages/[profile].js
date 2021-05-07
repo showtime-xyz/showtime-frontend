@@ -524,11 +524,16 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const [newOrder, setNewOrder] = useState(null)
 
 	const handleClickChangeOrder = async () => {
-		await handleSortChange(5)
-		setIsChangingOrder(true)
+		if (menuLists[selectedGrid - 1].has_custom_sort) {
+			await handleSortChange(5)
+		} else {
+			const setSelectedSortField = selectedGrid === 1 ? setSelectedCreatedSortField : selectedGrid === 2 ? setSelectedOwnedSortField : setSelectedLikedSortField
+			await setSelectedSortField(5)
+		}
 		setRevertItems(items)
 		setRevertSort(selectedGrid === 1 ? selectedCreatedSortField : selectedOwnedSortField)
 		setNewOrder(items)
+		setIsChangingOrder(true)
 	}
 
 	const handleClickDeleteCustomOrder = async () => {
@@ -1112,12 +1117,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 																<SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
 															</span>
 														</Listbox.Button>
-														{console.log('sortingOptionsList', sortingOptionsList)}
-														{console.log('menuLists', menuLists)}
-														{console.log('selectedGrid', selectedGrid)}
-														{console.log('selectedGrid - 1 used', selectedGrid - 1)}
-														{console.log('current list has custom sort', menuLists[selectedGrid - 1].has_custom_sort)}
-
 														<Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
 															<Listbox.Options static className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
 																{sortingOptionsList
@@ -1157,8 +1156,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												{({ open }) => (
 													<>
 														<div>
-															<Menu.Button disabled={isChangingOrder} className="inline-flex justify-center w-full px-2 py-2 text-sm font-medium text-white bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 focus-visible:ring-opacity-75">
-																<PencilAltIcon className="w-5 h-5 ml-1 text-black" aria-hidden="true" />
+															<Menu.Button disabled={isChangingOrder} className="inline-flex justify-center items-center w-full px-2 py-2 text-sm font-medium text-white bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 focus-visible:ring-opacity-75">
+																<PencilAltIcon className="w-4 h-4 ml-1 text-black" aria-hidden="true" />
 																<ChevronDownIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
 															</Menu.Button>
 														</div>
