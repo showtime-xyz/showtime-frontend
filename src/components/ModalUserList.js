@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import ClientOnlyPortal from './ClientOnlyPortal'
 import Link from 'next/link'
 import CloseButton from './CloseButton'
@@ -23,7 +24,7 @@ export default function ModalUserList({ isOpen, title, users, closeModal, emptyM
 											<Link href="/[profile]" as={`/${profile?.username || profile.wallet_address}`}>
 												<a className="flex flex-row items-center py-3 rounded-lg px-1 overflow-hidden hover:text-stpink" onClick={onRedirect}>
 													<div>
-														<img alt={profile.name} src={profile.img_url ? profile.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-1 w-9 h-9" />
+														<img alt={profile.name} src={profile.img_url ? profile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-9 h-9" />
 													</div>
 													<div className="ml-2">{profile.name ? truncateWithEllipses(profile.name, context.isMobile ? 16 : 22) : 'Unnamed'}</div>
 												</a>

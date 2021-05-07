@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import Link from 'next/link'
+import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import AppContext from '@/context/app-context'
 import ModalTokenDetail from './ModalTokenDetail'
 import useKeyPress from '@/hooks/useKeyPress'
@@ -61,7 +62,7 @@ const LeaderboardItemV2 = ({ item, index }) => {
 					<div className="relative mr-1 w-16 flex-none">
 						<Link href="/[profile]" as={`/${item?.username || item.address}`}>
 							<a className="cursor-pointer">
-								<img src={item?.img_url ? item?.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full h-12 w-12 hover:opacity-90" />
+								<img src={item?.img_url ? item?.img_url : DEFAULT_PROFILE_PIC} className="rounded-full h-12 w-12 hover:opacity-90" />
 							</a>
 						</Link>
 						<div className="absolute text-sm bottom-0 right-2 rounded-full bg-white text-center self-center h-6 w-6 font-medium pt-px border border-black border-opacity-10 text-gray-900">{index + 1}</div>

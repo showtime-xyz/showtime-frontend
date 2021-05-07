@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import mixpanel from 'mixpanel-browser'
 import SearchBar from './SearchBar'
@@ -81,7 +82,7 @@ const Header = () => {
 									>
 										<>
 											<div className={context.windowSize ? (context.windowSize.width < 350 ? 'hidden' : null) : null}>
-												<img alt="profile pic" src={context.myProfile ? (context.myProfile.img_url ? context.myProfile.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png') : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="mr-2 rounded-full h-8 w-8 min-w-[1.875rem]" />
+												<img alt="profile pic" src={context.myProfile ? (context.myProfile.img_url ? context.myProfile.img_url : DEFAULT_PROFILE_PIC) : DEFAULT_PROFILE_PIC} className="mr-2 rounded-full h-8 w-8 min-w-[1.875rem]" />
 											</div>
 											<div
 												className="text-sm sm:text-base truncate"

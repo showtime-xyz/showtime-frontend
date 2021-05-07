@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import { truncateWithEllipses } from '@/lib/utilities'
 import { format } from 'date-fns'
 import FollowButton from './FollowButton'
@@ -16,7 +17,7 @@ export default function UserTimestampCard({ timestamp, item, closeModalCallback 
 				<div className="mr-3 sm:mr-4 flex-none">
 					<Link href="/[profile]" as={item.owner_username ? `/${item.owner_username}` : `/${item.owner_address}`}>
 						<a onClick={closeModalCallback}>
-							<img alt={name} src={imageUrl ? imageUrl : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full sm:h-12 sm:w-12 h-10 w-10" />
+							<img alt={name} src={imageUrl ? imageUrl : DEFAULT_PROFILE_PIC} className="rounded-full sm:h-12 sm:w-12 h-10 w-10" />
 						</a>
 					</Link>
 				</div>
