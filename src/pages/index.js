@@ -186,7 +186,6 @@ const Activity = () => {
 		const filteredActivity = activity.filter(act => act.actor_profile_id !== profileId)
 		setActivity(filteredActivity)
 	}
-	console.log(context)
 
 	const [showFiltersMobile, setShowFiltersMobile] = useState(false)
 	const [reportModalIsOpen, setReportModalIsOpen] = useState(false)
