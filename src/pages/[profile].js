@@ -520,12 +520,14 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 
 	const [isChangingOrder, setIsChangingOrder] = useState(false)
 	const [revertItems, setRevertItems] = useState(null)
+	const [revertSort, setRevertSort] = useState(null)
 	const [newOrder, setNewOrder] = useState(null)
 
 	const handleClickChangeOrder = async () => {
 		await handleSortChange(5)
 		setIsChangingOrder(true)
 		setRevertItems(items)
+		setRevertSort(selectedGrid === 1 ? selectedCreatedSortField : selectedOwnedSortField)
 		setNewOrder(items)
 	}
 
@@ -535,6 +537,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setIsChangingOrder(false)
 		setRevertItems(null)
 		setNewOrder(null)
+		const newMenuLists = menuLists.map((list, index) => (index === listIdToClearOrder - 1 ? { ...list, has_custom_sort: false } : list))
+		setMenuLists(newMenuLists)
 		context.setMyProfile({
 			...context.myProfile,
 			...(listIdToClearOrder === 1 && { default_created_sort_id: null }),
@@ -555,6 +559,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setIsChangingOrder(false)
 		setRevertItems(null)
 		setNewOrder(null)
+		const newMenuLists = menuLists.map((list, index) => (index === selectedGrid - 1 ? { ...list, has_custom_sort: true } : list))
+		setMenuLists(newMenuLists)
 		context.setMyProfile({
 			...context.myProfile,
 			...(selectedGrid === 1 && { default_created_sort_id: 5 }),
@@ -571,6 +577,12 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 
 	const handleCancelOrder = () => {
 		const oldItems = revertItems
+		const oldSort = revertSort
+		if (selectedGrid === 1) {
+			setSelectedCreatedSortField(oldSort)
+		} else {
+			setSelectedOwnedSortField(oldSort)
+		}
 		setItems(oldItems)
 		setRevertItems(null)
 		setIsChangingOrder(false)
@@ -585,6 +597,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setIsChangingOrder(false)
 		setNewOrder(null)
 		setRevertItems(null)
+		setRevertSort(null)
 	}, [selectedGrid, collectionId, profile_id, selectedCreatedSortField, selectedOwnedSortField, showUserHiddenItems])
 
 	return (
@@ -1099,11 +1112,16 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 																<SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
 															</span>
 														</Listbox.Button>
+														{console.log('sortingOptionsList', sortingOptionsList)}
+														{console.log('menuLists', menuLists)}
+														{console.log('selectedGrid', selectedGrid)}
+														{console.log('selectedGrid - 1 used', selectedGrid - 1)}
+														{console.log('current list has custom sort', menuLists[selectedGrid - 1].has_custom_sort)}
 
 														<Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
 															<Listbox.Options static className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
 																{sortingOptionsList
-																	.filter(opts => (menuLists[selectedGrid - 1].has_custom_sort ? opts.value !== 5 : true))
+																	.filter(opts => (menuLists[selectedGrid - 1].has_custom_sort ? true : opts.value !== 5))
 																	.map(item => (
 																		<Listbox.Option key={item.value} className={({ active }) => classNames(active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={item.value}>
 																			{({ active }) => (
@@ -1150,16 +1168,14 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 																	<Menu.Item>
 																		{({ active }) => (
 																			<button className={`${active ? 'text-white bg-indigo-600' : 'bg-white text-gray-900'} group flex rounded-md items-center w-full px-2 py-2 text-sm`} onClick={handleClickChangeOrder}>
-																				{/* {active ? <EditActiveIcon className="w-5 h-5 mr-2" aria-hidden="true" /> : <></>} */}
 																				Customize Order
 																			</button>
 																		)}
 																	</Menu.Item>
-																	{((selectedGrid === 1 && context.myProfile.default_created_sort_id === 5) || (selectedGrid === 2 && context.myProfile.default_owned_sort_id === 5)) && (
+																	{((selectedGrid === 1 && context.myProfile.default_created_sort_id === 5) || (selectedGrid === 2 && context.myProfile.default_owned_sort_id === 5) || menuLists[selectedGrid - 1].has_custom_sort) && (
 																		<Menu.Item>
 																			{({ active }) => (
 																				<button className={`${active ? 'text-white bg-indigo-600' : 'bg-white text-gray-900'} group flex rounded-md items-center w-full px-2 py-2 text-sm`} onClick={handleClickDeleteCustomOrder}>
-																					{/* {active ? <EditActiveIcon className="w-5 h-5 mr-2" aria-hidden="true" /> : <></>} */}
 																					Remove Custom Order
 																				</button>
 																			)}
