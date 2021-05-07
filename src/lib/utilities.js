@@ -33,6 +33,13 @@ export const copyToClipBoard = async textToCopy => {
 	}
 }
 
+export const handleArrowKeys = event => {
+	if (event.keyCode === 37 || event.keyCode === 39) {
+		event.stopPropagation()
+		event.preventDefault()
+	}
+}
+
 export const getBidLink = item => {
 	switch (item.contract_address) {
 		case CONTRACTS.ZORA:

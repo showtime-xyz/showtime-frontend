@@ -7,7 +7,7 @@ import mixpanel from 'mixpanel-browser'
 import Comment from './Comment'
 import { Mention, MentionsInput } from 'react-mentions'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
-import { formatAddressShort } from '@/lib/utilities'
+import { formatAddressShort, handleArrowKeys } from '@/lib/utilities'
 import axios from '@/lib/axios'
 
 const mentionsStyle = {
@@ -176,11 +176,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 			context.setMyComments(context.myComments.filter(item => !(item === nftId)))
 		}
 	}
-	const handleArrowKeys = e => {
-		if (e.keyCode === 37 || e.keyCode === 39) {
-			e.preventDefault
-		}
-	}
+
 	return (
 		<div className="w-full">
 			{/* Comments */}
