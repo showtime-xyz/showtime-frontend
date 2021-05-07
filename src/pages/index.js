@@ -42,10 +42,6 @@ const Activity = () => {
 	const [throttleOpen, setThrottleOpen] = useState(false)
 	const [throttleContent, setThrottleContent] = useState('')
 
-	const throttleClose = () => {
-		setThrottleOpen(false)
-	}
-
 	const getActivity = async (type_id, page) => {
 		setIsLoading(true)
 		const { data } = await axios
@@ -194,7 +190,7 @@ const Activity = () => {
 		<>
 			{typeof document !== 'undefined' ? (
 				<>
-					<ModalThrottleUser isOpen={throttleOpen} closeModal={throttleClose} modalContent={throttleContent} />
+					<ModalThrottleUser isOpen={throttleOpen} closeModal={() => setThrottleOpen(false)} modalContent={throttleContent} />
 					<ModalTokenDetail isOpen={itemOpenInModal} setEditModalOpen={setItemOpenInModal} item={itemOpenInModal?.nftGroup ? itemOpenInModal.nftGroup[itemOpenInModal?.index] : null} goToNext={goToNext} goToPrevious={goToPrevious} hasNext={!(itemOpenInModal?.index === itemOpenInModal?.nftGroup?.length - 1)} hasPrevious={!(itemOpenInModal?.index === 0)} />
 					<ModalReportItem isOpen={reportModalIsOpen} setReportModalOpen={setReportModalIsOpen} activityId={reportModalIsOpen} removeItemFromFeed={removeItemFromFeed} />
 				</>
