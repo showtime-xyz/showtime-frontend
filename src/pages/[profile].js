@@ -1053,82 +1053,60 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 									</div>
 								)}
 
-								{menuLists && menuLists.length > 0 && (
-									<TokenGridV5
-										dataLength={items.length}
-										next={() => {
-											addPage(page + 1)
-										}}
-										hasMore={hasMore}
-										endMessage={
-											!isLoadingCards && !isRefreshingCards && !isLoadingMore && collectionId == 0 ? (
-												menuLists[selectedGrid - 1].count_all_nonhidden > menuLists[selectedGrid - 1].count_deduplicated_nonhidden ? (
-													!showDuplicates ? (
-														<div className="text-center text-gray-400 text-xs">
-															Some duplicate items were hidden.{' '}
-															<span className="cursor-pointer hover:text-gray-700" onClick={() => handleShowDuplicates(true)}>
-																Show all
-															</span>
-														</div>
-													) : (
-														<div className="text-center text-gray-400 text-xs">
-															<span className="cursor-pointer hover:text-gray-700" onClick={() => handleShowDuplicates(false)}>
-																Hide duplicates
-															</span>
-														</div>
-													)
+								<div className="md:mx-3">
+									{menuLists && menuLists.length > 0 && (
+										<TokenGridV5
+											dataLength={items.length}
+											next={() => {
+												addPage(page + 1)
+											}}
+											hasMore={hasMore}
+											endMessage={
+												!isLoadingCards && !isRefreshingCards && !isLoadingMore && collectionId == 0 ? (
+													menuLists[selectedGrid - 1].count_all_nonhidden > menuLists[selectedGrid - 1].count_deduplicated_nonhidden ? (
+														!showDuplicates ? (
+															<div className="text-center text-gray-400 text-xs">
+																Some duplicate items were hidden.{' '}
+																<span className="cursor-pointer hover:text-gray-700" onClick={() => handleShowDuplicates(true)}>
+																	Show all
+																</span>
+															</div>
+														) : (
+															<div className="text-center text-gray-400 text-xs">
+																<span className="cursor-pointer hover:text-gray-700" onClick={() => handleShowDuplicates(false)}>
+																	Hide duplicates
+																</span>
+															</div>
+														)
+													) : null
 												) : null
-											) : /*
-                        !showDuplicates && false ? (
-                          <div className="text-center text-gray-400 text-xs">
-                            Some duplicate items were hidden. NOT
-                            <span
-                              className="cursor-pointer hover:text-gray-700"
-                              onClick={() => handleShowDuplicates(true)}
-                            >
-                              Show all
-                            </span>
-                          </div>
-                        ) : (
-                          <div className="text-center text-gray-400 text-xs">
-                            <span
-                              className="cursor-pointer hover:text-gray-700"
-                              onClick={() => handleShowDuplicates(false)}
-                            >
-                              Hide duplicates NOT
-                            </span>
-                          </div>
-                        )
-                        */
-
-											null
-										}
-										scrollThreshold={page === 1 ? 0.3 : page < 4 ? 0.5 : page < 6 ? 0.7 : 0.8}
-										showUserHiddenItems={showUserHiddenItems}
-										showDuplicates={showDuplicates}
-										setHasUserHiddenItems={setHasUserHiddenItems}
-										//
-										key={`grid_${selectedGrid}_${profile_id}_${isLoadingCards || isRefreshingCards}`}
-										items={items}
-										isLoading={isLoadingCards || isRefreshingCards}
-										isLoadingMore={isLoadingMore}
-										listId={selectedGrid}
-										isMyProfile={isMyProfile}
-										openCardMenu={openCardMenu}
-										setOpenCardMenu={setOpenCardMenu}
-										detailsModalCloseOnKeyChange={slug_address}
-										changeSpotlightItem={handleChangeSpotlightItem}
-										pageProfile={{
-											profile_id,
-											slug_address,
-											name,
-											img_url,
-											wallet_addresses_excluding_email,
-											website_url,
-											username,
-										}} // to customize owned by list on bottom of card
-									/>
-								)}
+											}
+											scrollThreshold={page === 1 ? 0.3 : page < 4 ? 0.5 : page < 6 ? 0.7 : 0.8}
+											showUserHiddenItems={showUserHiddenItems}
+											showDuplicates={showDuplicates}
+											setHasUserHiddenItems={setHasUserHiddenItems}
+											key={`grid___${isLoadingCards || isRefreshingCards}`}
+											items={items}
+											isLoading={isLoadingCards || isRefreshingCards}
+											isLoadingMore={isLoadingMore}
+											listId={selectedGrid}
+											isMyProfile={isMyProfile}
+											openCardMenu={openCardMenu}
+											setOpenCardMenu={setOpenCardMenu}
+											detailsModalCloseOnKeyChange={slug_address}
+											changeSpotlightItem={handleChangeSpotlightItem}
+											pageProfile={{
+												profile_id,
+												slug_address,
+												name,
+												img_url,
+												wallet_addresses_excluding_email,
+												website_url,
+												username,
+											}} // to customize owned by list on bottom of card
+										/>
+									)}
+								</div>
 							</div>
 						</div>
 					</div>

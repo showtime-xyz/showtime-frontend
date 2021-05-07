@@ -262,7 +262,7 @@ export default function Collection({
 
 				<div className="mx-auto relative mt-12">{FilterTabs}</div>
 
-				<div className="m-auto relative min-h-screen">
+				<div className="m-auto relative min-h-screen md:mx-3">
 					<TokenGridV4 items={collectionItems} isLoading={isChanging} extraColumn key={`grid_${currentCollectionSlug}_${sortBy}_${randomNumber}_${isChanging}`} />
 				</div>
 			</CappedWidth>

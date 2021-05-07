@@ -120,7 +120,7 @@ const Leaderboard = () => {
 					{/* Mobile on top */}
 					<div className="block sm:hidden">{leaderboardItems && <TrendingCreators shownLeaderboardItems={shownLeaderboardItems} allLeaderboardItems={leaderboardItems} isLoading={isLoading} showAllLeaderboardItems={showAllLeaderboardItems} setShowAllLeaderboardItems={setShowAllLeaderboardItems} trendingTab={leaderboardDays} key={`creators_${leaderboardDays}`} />}</div>
 
-					<div className="col-span-2 md:col-span-2 xl:col-span-3">
+					<div className="col-span-2 md:col-span-2 xl:col-span-3 md:mx-3">
 						<TokenGridV4 items={featuredItems} isLoading={isLoadingCards} key={`grid_${leaderboardDays}_${isLoadingCards}`} />
 					</div>
 					{/* Desktop right column */}
