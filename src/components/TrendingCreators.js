@@ -45,7 +45,7 @@ const TrendingCreators = ({ shownLeaderboardItems, allLeaderboardItems, isLoadin
 					</div>
 					{!isLoading && (
 						<div>
-							<div className={`border rounded-full py-2 px-4 text-xs flex flex-row text-white ${followAllClicked ? 'bg-white border-gray-400' : 'bg-stpurple text-white border-stpurple cursor-pointer hover:opacity-70 transition-all'}`} onClick={context.user ? (followAllClicked ? null : handleFollowAll) : handleLoggedOutFollowAll}>
+							<div className={`border rounded-full py-2 px-4 text-xs flex flex-row text-white ${followAllClicked ? 'bg-black border-transparent' : 'bg-stpurple text-white border-stpurple cursor-pointer hover:opacity-70 transition-all'}`} onClick={context.user ? (followAllClicked ? null : handleFollowAll) : handleLoggedOutFollowAll}>
 								{!followAllClicked && (
 									<div className="mr-1">
 										<FontAwesomeIcon icon={faPlus} />
