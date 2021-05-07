@@ -12,7 +12,7 @@ export default function ModalUserList({ isOpen, title, users, closeModal, emptyM
 		<>
 			{isOpen && (
 				<ClientOnlyPortal selector="#modal">
-					<div className="backdrop" onClick={closeModal}>
+					<div className="z-2" onClick={closeModal}>
 						<div className="modal flex flex-col rounded-lg sm:rounded-2xl text-black" onClick={e => e.stopPropagation()}>
 							<CloseButton setEditModalOpen={closeModal} />
 							<div className="text-3xl border-b-2 pb-2 px-2">{title}</div>
@@ -57,6 +57,7 @@ export default function ModalUserList({ isOpen, title, users, closeModal, emptyM
 								right: 0;
 								bottom: 0;
 								left: 0;
+								z-index: 2;
 							}
 							.modal {
 								background-color: white;

@@ -142,6 +142,7 @@ export default function Modal({ item, isOpen, setEditModalOpen, goToNext, goToPr
 								right: 0;
 								bottom: 0;
 								left: 0;
+								z-index: 2;
 							}
 							.modal {
 								background-color: white;

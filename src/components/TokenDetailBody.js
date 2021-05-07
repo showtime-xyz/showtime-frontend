@@ -145,7 +145,7 @@ const TokenDetailBody = ({
 										<div>
 											<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
 										</div>
-										<div className="showtime-card-profile-link ml-2">{truncateWithEllipses(item.collection_name, 30)} Collection</div>
+										<div className="text-gray-800 hover:text-stpink ml-2">{truncateWithEllipses(item.collection_name, 30)} Collection</div>
 									</a>
 								</Link>
 							) : item.creator_address ? (
@@ -155,7 +155,7 @@ const TokenDetailBody = ({
 											<div>
 												<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
 											</div>
-											<div className="showtime-card-profile-link ml-2">{truncateWithEllipses(item.creator_name, 22)}</div>
+											<div className="text-gray-800 hover:text-stpink ml-2">{truncateWithEllipses(item.creator_name, 22)}</div>
 										</a>
 									</Link>
 									{context.myProfile?.profile_id !== item?.creator_id && (
@@ -476,7 +476,7 @@ const TokenDetailBody = ({
 						</div>
 					) : (
 						<div className="flex items-center justify-center mt-8">
-							<div className="loading-card-spinner" />
+							<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 						</div>
 					)}
 

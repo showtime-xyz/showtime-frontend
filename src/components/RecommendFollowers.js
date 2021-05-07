@@ -125,7 +125,7 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
 					)}
 					<div />
 					<div
-						className="text-center text-white px-6 py-2 flex items-center w-max border-2 border-black rounded-full hover:text-black hover:border-gray-300 hover:bg-white transition-all showtime-green-button cursor-pointer"
+						className="text-center text-white px-6 py-2 flex items-center w-max border-2 border-black rounded-full hover:text-black hover:border-gray-300 hover:bg-white bg-green-500 transition cursor-pointer"
 						onClick={() => {
 							mixpanel.track('Clicked Close on Recommended Followers modal')
 							finishOnboarding()

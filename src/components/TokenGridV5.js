@@ -137,7 +137,7 @@ const TokenGridV5 = ({
 			<InfiniteScroll style={{ overflow: null }} dataLength={dataLength} next={next} hasMore={hasMore} endMessage={endMessage} scrollThreshold={scrollThreshold}>
 				{isLoading ? (
 					<div className="mx-auto items-center flex justify-center overflow-hidden py-4 mt-16">
-						<div className="loading-card-spinner" />
+						<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 					</div>
 				) : (
 					<>
@@ -172,7 +172,7 @@ const TokenGridV5 = ({
 						</div>
 						{isLoadingMore ? (
 							<div className="mx-auto items-center flex justify-center overflow-hidden py-4">
-								<div className="loading-card-spinner" />
+								<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 							</div>
 						) : null}
 					</>

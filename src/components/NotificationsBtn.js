@@ -128,7 +128,7 @@ export default function NotificationsBtn() {
 			>
 				{loadingNotifications && (
 					<div className="flex items-center justify-center">
-						<div className="loading-card-spinner-small" />
+						<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
 					</div>
 				)}
 				{!loadingNotifications &&
@@ -340,7 +340,7 @@ export default function NotificationsBtn() {
 				{!loadingNotifications && notifications && notifications.length !== 0 && hasMoreNotifications && (
 					<div className="flex justify-center items-center mb-1 mt-1">
 						<div onClick={handleMoreNotifications} className={`flex w-36 h-8 items-center justify-center  text-xs border-gray-600 text-gray-600 border rounded-full px-2 py-1 hover:text-stpink ${loadingMoreNotifications ? '' : 'hover:border-stpink'} transition cursor-pointer`}>
-							{loadingMoreNotifications ? <div className="loading-card-spinner-small"></div> : 'Show More'}
+							{loadingMoreNotifications ? <div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin"></div> : 'Show More'}
 						</div>
 					</div>
 				)}

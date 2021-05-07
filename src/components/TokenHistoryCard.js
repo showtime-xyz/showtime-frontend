@@ -56,7 +56,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
 	if (loadingHistory) {
 		return (
 			<div className="text-center my-4">
-				<div className="loading-card-spinner" />
+				<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 			</div>
 		)
 	}
@@ -130,7 +130,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
 						</div>
 					) : (
 						<div className="p-1">
-							<div className="loading-card-spinner-small" />
+							<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
 						</div>
 					)}
 				</div>

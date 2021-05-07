@@ -1,13 +1,12 @@
 import Head from 'next/head'
 import PropTypes from 'prop-types'
 //import backend from "../lib/backend";
-import ScrollUp from './ScrollUp'
 import Footer from './footer'
 import Header from './header'
 
 const Layout = ({ children }) => {
 	return (
-		<div className="flex flex-col min-h-screen bg-gray-50">
+		<div className="flex flex-col min-h-screen bg-gray-50 tracking-wide">
 			<Head>
 				<link rel="icon" href="/logo_sm.jpg" />
 
@@ -29,8 +28,7 @@ const Layout = ({ children }) => {
 			</Head>
 
 			<Header />
-			<div className="w-full mx-auto min-h-screen z-0">
-				<ScrollUp />
+			<div className="w-full mx-auto min-h-screen z-0 relative">
 				<main>{children}</main>
 			</div>
 

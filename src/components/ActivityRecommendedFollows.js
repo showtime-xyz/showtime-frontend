@@ -112,7 +112,7 @@ export default function ActivityRecommendedFollows() {
 			)}
 			{loading && recommendedFollows.length < 3 && (
 				<div className="flex justify-center items-center w-full py-4 border-t border-gray-200">
-					<div className="loading-card-spinner" />
+					<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 				</div>
 			)}
 		</div>

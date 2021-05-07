@@ -299,7 +299,7 @@ const Activity = () => {
 											<RecommendFollowers items={context.myRecommendations} />
 										) : (
 											<div className="flex items-center justify-center my-4">
-												<div className="loading-card-spinner" />
+												<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 											</div>
 										)}
 									</>
@@ -327,7 +327,7 @@ const Activity = () => {
 								>
 									<ActivityFeed activity={activity} setItemOpenInModal={handleSetItemOpenInModal} key={activityTypeFilter} removeItemFromFeed={removeItemFromFeed} removeActorFromFeed={removeActorFromFeed} setReportModalIsOpen={setReportModalIsOpen} />
 								</InfiniteScroll>
-								<div className="flex h-16 items-center justify-center mt-6  px-3">{isLoading && <div className="loading-card-spinner" />}</div>
+								<div className="flex h-16 items-center justify-center mt-6  px-3">{isLoading && <div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />}</div>
 							</div>
 							<div className="px-3">
 								{context.isMobile ? null : (
