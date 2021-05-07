@@ -60,8 +60,8 @@ const LikeButton = ({ item }) => {
 
 	return (
 		<Tippy content="Sign in to like" disabled={context.user || isMobile}>
-			<button onClick={() => (context.user ? (liked ? handleUnlike(item.nft_id) : handleLike(item.nft_id)) : handleLoggedOutLike())}>
-				<div className="flex flex-row items-center rounded-md py-1 hover:text-stred">
+			<button disabled={context.throttleMessage} onClick={() => (context.user ? (liked ? handleUnlike(item.nft_id) : handleLike(item.nft_id)) : handleLoggedOutLike())}>
+				<div className="flex flex-row items-center rounded-md py-1 hover:text-stred disabled:text-gray-300">
 					<div className="mr-2 whitespace-nowrap">{Number(like_count).toLocaleString()}</div>
 					<div className={`flex pr-1 ${liked ? 'text-stred' : ''}`}>
 						<FontAwesomeIcon className="!w-5 !h-5" icon={liked ? faHeartSolid : faHeartOutline} />

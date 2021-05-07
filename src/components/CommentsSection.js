@@ -252,7 +252,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 										appendSpaceOnAdd
 									/>
 								</MentionsInput>
-								<button onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === ''} className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700">
+								<button onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.throttleMessage} className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700">
 									{isSubmitting ? <div className="loading-card-spinner-small" /> : 'Post'}
 								</button>
 							</div>

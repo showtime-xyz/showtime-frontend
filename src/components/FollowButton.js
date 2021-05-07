@@ -79,13 +79,14 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 		<Button
 			notExpandWhenMobile={notExpandWhenMobile}
 			className={`
-      border rounded-full transition
+      border rounded-full transition disabled:text-gray-300
       py-2 px-4
         ${hideIfFollowing && isFollowed ? 'hidden' : null}
         ${compact ? 'mr-1' : ''}
         ${compact && context.isMobile ? 'py-2 px-3' : null}
         ${isFollowed ? 'text-black border-gray-400' : homepage ? 'bg-stpurple text-white border-stpurple' : 'bg-black text-white border-black'}
       `}
+			disabled={context.throttleMessage}
 			onClick={context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow}
 		>
 			{!isFollowed && (
