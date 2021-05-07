@@ -35,6 +35,7 @@ const App = ({ Component, pageProps }) => {
 	const [columns, setColumns] = useState(null)
 	const [isMobile, setIsMobile] = useState(null)
 	const [toggleRefreshFeed, setToggleRefreshFeed] = useState(false)
+	const [throttleMessage, setThrottleMessage] = useState('')
 
 	const adjustGridProperties = windowWidth => {
 		if (windowWidth < 790 + 30) {
@@ -141,6 +142,7 @@ const App = ({ Component, pageProps }) => {
 		columns,
 		isMobile,
 		toggleRefreshFeed,
+		throttleMessage,
 		setWindowSize,
 		setMyLikes,
 		setMyLikeCounts,
@@ -150,6 +152,7 @@ const App = ({ Component, pageProps }) => {
 		setMyProfile,
 		setMyRecommendations,
 		setLoginModalOpen,
+		setThrottleMessage,
 
 		getUserFromCookies,
 		logOut: async () => {
