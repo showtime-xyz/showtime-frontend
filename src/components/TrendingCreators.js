@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faPlus } from '@fortawesome/free-solid-svg-icons'
 import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
+import axios from '@/lib/axios'
 
 const TrendingCreators = ({ shownLeaderboardItems, allLeaderboardItems, isLoading, showAllLeaderboardItems, setShowAllLeaderboardItems, trendingTab }) => {
 	const context = useContext(AppContext)
@@ -24,10 +25,10 @@ const TrendingCreators = ({ shownLeaderboardItems, allLeaderboardItems, isLoadin
 		// UPDATE CONTEXT
 		context.setMyFollows([...newProfiles, ...context.myFollows])
 		// Post changes to the API
-		await fetch('/api/bulkfollow', {
-			method: 'post',
-			body: JSON.stringify(newProfiles.map(item => item.profile_id)),
-		})
+		await axios.post(
+			'/api/bulkfollow',
+			newProfiles.map(item => item.profile_id)
+		)
 	}
 
 	const handleLoggedOutFollowAll = () => {
@@ -44,7 +45,7 @@ const TrendingCreators = ({ shownLeaderboardItems, allLeaderboardItems, isLoadin
 					</div>
 					{!isLoading && (
 						<div>
-							<div className={`border rounded-full py-2 px-4 text-xs flex flex-row text-white ${followAllClicked ? 'bg-white border-gray-400' : 'bg-stpurple text-white border-stpurple cursor-pointer hover:opacity-70 transition-all'}`} onClick={context.user ? (followAllClicked ? null : handleFollowAll) : handleLoggedOutFollowAll}>
+							<div className={`border rounded-full py-2 px-4 text-xs flex flex-row ${followAllClicked ? 'bg-transparent border-gray-700 text-gray-700' : 'bg-stpurple text-white border-stpurple cursor-pointer hover:opacity-70'} transition-all`} onClick={context.user ? (followAllClicked ? null : handleFollowAll) : handleLoggedOutFollowAll}>
 								{!followAllClicked && (
 									<div className="mr-1">
 										<FontAwesomeIcon icon={faPlus} />

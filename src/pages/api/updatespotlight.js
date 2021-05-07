@@ -1,30 +1,27 @@
 import Iron from '@hapi/iron'
 import CookieService from '@/lib/cookie'
+import handler from '@/lib/api-handler'
+import backend from '@/lib/backend'
 
-export default async (req, res) => {
+export default handler().post(async ({ cookies, body: { nft_id } }, res) => {
 	let user
-	let publicAddress
+
 	try {
-		user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
-		publicAddress = user.publicAddress
+		user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 	} catch (error) {
-		//
-	} finally {
-		try {
-			await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/update_featured_nft`, {
-				method: 'POST',
-				headers: {
-					'X-Authenticated-User': publicAddress, // may be null if logged out
-					'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
-					'Content-Type': 'application/json',
-				},
-				body: req.body,
-			})
-		} catch (error) {
-			console.log(error)
-		}
+		// User is not logged in
 	}
 
-	res.statusCode = 200
-	res.end()
-}
+	await backend.post(
+		'/v1/update_featured_nft',
+		{ nft_id },
+		{
+			headers: {
+				'X-Authenticated-User': user?.publicAddress || null, // may be null if logged out
+				'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
+			},
+		}
+	)
+
+	res.status(200).end()
+})

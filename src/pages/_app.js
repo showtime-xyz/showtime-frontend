@@ -77,15 +77,10 @@ const App = ({ Component, pageProps }) => {
 				mixpanel.people.set({
 					$email: user_data.email, // only reserved properties need the $
 					USER_ID: user_data.publicAddress, // use human-readable names
-					//"Sign up date": USER_SIGNUP_DATE,    // Send dates in ISO timestamp format (e.g. "2020-01-02T21:07:03Z")
-					//"credits": 150    // ...or numbers
 				})
 			} else {
 				mixpanel.people.set({
-					//$email: user_data.email, // only reserved properties need the $
 					USER_ID: user_data.publicAddress, // use human-readable names
-					//"Sign up date": USER_SIGNUP_DATE,    // Send dates in ISO timestamp format (e.g. "2020-01-02T21:07:03Z")
-					//"credits": 150    // ...or numbers
 				})
 			}
 
@@ -109,15 +104,9 @@ const App = ({ Component, pageProps }) => {
 			})
 
 			// Load up the recommendations async if we are onboarding
-			//console.log(my_info_data.data.profile.has_onboarded);
 			if (my_info_data.data.profile.has_onboarded == false) {
-				//console.log("NEED TO ONBOARD");
-
-				const myRecRequest = await fetch('/api/follow_recommendations_onboarding')
-				const my_rec_data = await myRecRequest.json()
+				const my_rec_data = await axios.get('/api/follow_recommendations_onboarding').then(res => res.data)
 				setMyRecommendations(my_rec_data.data)
-				//console.log("FINISHED LOADING ONBAORDING DATA");
-				//console.log(my_rec_data.data);
 			}
 		} catch {
 			// Not logged in

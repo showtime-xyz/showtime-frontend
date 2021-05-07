@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faPlus } from '@fortawesome/free-solid-svg-icons'
 import AppContext from '@/context/app-context'
 import RecommendedFollowItem from './RecommendedFollowItem'
+import axios from '@/lib/axios'
 
 const Title = styled.h6`
 	font-size: 24px;
@@ -32,9 +33,7 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
 
 	const finishOnboarding = async () => {
 		if (!context.myProfile.has_onboarded) {
-			await fetch('/api/finishonboarding', {
-				method: 'post',
-			})
+			await axios.post('/api/finishonboarding')
 		}
 	}
 
@@ -55,10 +54,11 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
 		context.setMyFollows([...newProfiles, ...context.myFollows])
 
 		// Post changes to the API
-		await fetch('/api/bulkfollow', {
-			method: 'post',
-			body: JSON.stringify(newProfiles.map(item => item.profile_id)),
-		})
+		await axios.post(
+			'/api/bulkfollow',
+			newProfiles.map(item => item.profile_id)
+		)
+
 		finishOnboarding()
 	}
 

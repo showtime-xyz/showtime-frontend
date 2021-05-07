@@ -1,33 +1,20 @@
 import Iron from '@hapi/iron'
 import CookieService from '@/lib/cookie'
+import handler from '@/lib/api-handler'
+import backend from '@/lib/backend'
 
-export default async (req, res) => {
+export default handler().get(async (req, res) => {
 	let user = null
-	let socialLinkOptions = { data: [] }
 
-	try {
-		user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+	user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
-		//console.log(user);
-		let email = null
-		if (user.email) {
-			email = user.email
-		}
-
-		//console.log(email);
-
-		const socialLinkOptionsQuery = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/link_options`, {
+	await backend
+		.get('/v1/link_options', {
 			headers: {
 				'X-Authenticated-User': user.publicAddress,
-				'X-Authenticated-Email': email,
+				'X-Authenticated-Email': user?.email,
 				'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
 			},
 		})
-		socialLinkOptions = await socialLinkOptionsQuery.json()
-	} catch (e) {
-		console.error(e)
-	}
-
-	res.statusCode = 200
-	res.json(socialLinkOptions)
-}
+		.then(resp => res.json(resp))
+})

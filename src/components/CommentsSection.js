@@ -8,6 +8,7 @@ import Comment from './Comment'
 import { Mention, MentionsInput } from 'react-mentions'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 import { formatAddressShort } from '@/lib/utilities'
+import axios from '@/lib/axios'
 
 const mentionsStyle = {
 	control: {
@@ -125,13 +126,8 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	const createComment = async () => {
 		setIsSubmitting(true)
 		// post new comment
-		await fetch('/api/createcomment', {
-			method: 'post',
-			body: JSON.stringify({
-				nftId,
-				message: commentText,
-			}),
-		})
+		await axios.post('/api/createcomment', { nftId, message: commentText })
+
 		mixpanel.track('Comment created')
 		// pull new comments
 		await refreshComments(false)
@@ -143,12 +139,8 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 
 	const deleteComment = async commentId => {
 		// post new comment
-		await fetch('/api/deletecomment', {
-			method: 'post',
-			body: JSON.stringify({
-				commentId,
-			}),
-		})
+		await axios.post('/api/deletecomment', { commentId })
+
 		removeCommentFromContext()
 		mixpanel.track('Comment deleted')
 		// pull new comments

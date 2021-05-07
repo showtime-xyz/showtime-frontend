@@ -13,6 +13,7 @@ import AppContext from '@/context/app-context'
 import { getBidLink, getContractName, removeTags } from '@/lib/utilities'
 import ModalTokenDetail from './ModalTokenDetail'
 import CappedWidth from './CappedWidth'
+import axios from '@/lib/axios'
 
 const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu, openCardMenu, removeSpotlightItem }) => {
 	const [moreShown, setMoreShown] = useState(false)
@@ -39,8 +40,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 		mixpanel.track('Clicked refresh metadata')
 		setRefreshing(true)
 
-		const result = await fetch(`/api/refreshmetadata/${thisItem.nft_id}`, { method: 'post' })
-		const { data } = await result.json()
+		const { data } = await axios.post(`/api/refreshmetadata/${thisItem.nft_id}`).then(res => res.data)
 
 		if (data) setThisItem(data)
 
@@ -253,7 +253,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 											}}
 										/>
 									</div>
-									<div className="mr-4 text-base ">
+									<div className="mr-4 text-base flex items-center justify-center">
 										<ShareButton url={window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${item.contract_address}/${item.token_id}`} type={'item'} />
 									</div>
 								</div>

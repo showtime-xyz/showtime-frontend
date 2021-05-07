@@ -1,16 +1,12 @@
-export async function getServerSideProps(context) {
-	const { slug } = context.query
-	const { res } = context
-	res.writeHead(301, { location: `/${slug}` })
-	res.end()
-
+export async function getServerSideProps({ query: { slug } }) {
 	return {
-		props: {},
+		redirect: {
+			destination: `/${slug}`,
+			permanent: true,
+		},
 	}
 }
 
-const RedirectURL = () => {
-	return null
-}
+const RedirectURL = () => null
 
 export default RedirectURL

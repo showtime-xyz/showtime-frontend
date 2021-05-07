@@ -22,7 +22,7 @@ export const formatAddressShort = address => {
 	}
 	const startString = address.slice(0, 4)
 	const endString = address.slice(address.length - 4, address.length)
-	return `${startString}...${endString}`
+	return `${startString}…${endString}`
 }
 
 export const copyToClipBoard = async textToCopy => {

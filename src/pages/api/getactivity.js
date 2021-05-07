@@ -1,37 +1,25 @@
 import Iron from '@hapi/iron'
 import CookieService from '@/lib/cookie'
+import handler from '@/lib/api-handler'
+import backend from '@/lib/backend'
 
-export default async (req, res) => {
-	let user = null
-	let data_activity = { data: [] }
-	const body = JSON.parse(req.body)
-	const page = body.page || 1
-	const activityTypeId = body.activityTypeId || 0
-	const limit = body.limit || 5
+export default handler().post(async ({ cookies, body: { page = 1, activityTypeId = 0, limit = 5 } }, res) => {
+	let user
 
 	try {
-		let publicAddress
-		try {
-			user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
-			publicAddress = user.publicAddress
-		} catch (err) {
-			if (page > 8) {
-				res.statusCode = 200
-				res.json(data_activity)
-			}
-		}
+		user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+	} catch (err) {
+		if (page > 8) return res.status(200).json({ data: [] })
 
-		const res_activity = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/activity?page=${page}&type_id=${activityTypeId}&limit=${limit}`, {
+		// User is not authenticated
+	}
+
+	await backend
+		.get(`/v1/activity?page=${page}&type_id=${activityTypeId}&limit=${limit}`, {
 			headers: {
-				'X-Authenticated-User': publicAddress,
+				'X-Authenticated-User': user?.publicAddress || null,
 				'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
 			},
 		})
-		data_activity = await res_activity.json()
-	} catch (err) {
-		console.error(err)
-	}
-
-	res.statusCode = 200
-	res.json(data_activity)
-}
+		.then(resp => res.json(resp.data))
+})

@@ -284,7 +284,7 @@ const TokenDetailBody = ({
 										<CommentButton item={item} handleComment={() => {}} />
 									</div>
 								</SmoothScroll>
-								<div className="px-4 py-2 rounded-full shadow-md mr-2">
+								<div className="p-3 rounded-full shadow-md mr-2 flex items-center justify-center">
 									<ShareButton url={typeof window !== 'undefined' && window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${item.contract_address}/${item.token_id}`} type={'item'} />
 								</div>
 

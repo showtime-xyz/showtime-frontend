@@ -134,14 +134,14 @@ const TokenGridV5 = ({
 					<ModalTokenDetail isOpen={currentlyOpenModal} setEditModalOpen={setCurrentlyOpenModal} item={currentlyOpenModal} goToNext={goToNext} goToPrevious={goToPrevious} columns={context.columns} hasNext={!(currentIndex === itemsList.length - 1)} hasPrevious={!(currentIndex === 0)} />
 				</>
 			) : null}
-			<InfiniteScroll dataLength={dataLength} next={next} hasMore={hasMore} endMessage={endMessage} scrollThreshold={scrollThreshold}>
+			<InfiniteScroll style={{ overflow: null }} dataLength={dataLength} next={next} hasMore={hasMore} endMessage={endMessage} scrollThreshold={scrollThreshold}>
 				{isLoading ? (
 					<div className="mx-auto items-center flex justify-center overflow-hidden py-4 mt-16">
 						<div className="loading-card-spinner" />
 					</div>
 				) : (
 					<>
-						<div className={`grid gap-x-3 gap-y-6 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'lg:grid-cols-2 xl:grid-cols-3'}  overflow-hidden`}>
+						<div className={`grid gap-6 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'lg:grid-cols-2 xl:grid-cols-3'}`}>
 							{itemsList.map(item => (
 								<TokenCard
 									key={item.nft_id}
