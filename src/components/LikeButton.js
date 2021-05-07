@@ -23,9 +23,16 @@ const LikeButton = ({ item }) => {
 		})
 
 		// Post changes to the API
-		await axios.post(`/api/like_v3/${nft_id}`)
-
-		mixpanel.track('Liked item')
+		await axios
+			.post(`/api/like_v3/${nft_id}`)
+			.then(() => {
+				mixpanel.track('Liked item')
+			})
+			.catch(err => {
+				if (err.code === 429) {
+					context.setThrottleMessage(err.message)
+				}
+			})
 	}
 
 	const handleUnlike = async nft_id => {
