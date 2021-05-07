@@ -176,6 +176,11 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 			context.setMyComments(context.myComments.filter(item => !(item === nftId)))
 		}
 	}
+	const handleArrowKeys = e => {
+		if (e.keyCode === 37 || e.keyCode === 39) {
+			e.preventDefault
+		}
+	}
 	return (
 		<div className="w-full">
 			{/* Comments */}
@@ -211,6 +216,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 									onChange={e => {
 										setCommentText(e.target.value)
 									}}
+									onKeyDown={handleArrowKeys}
 									placeholder="Your comment..."
 									className="flex-grow md:mr-2"
 									allowSuggestionsAboveCursor
