@@ -19,11 +19,14 @@ const MiniFollowButton = ({ profileId }) => {
 		// Post changes to the API
 		await axios
 			.post(`/api/follow_v2/${profileId}`)
-			.then(() => {
+			.then(res => {
+				console.log(res, 'success!')
 				mixpanel.track('Followed profile - Card button')
 			})
 			.catch(err => {
+				console.log(err, 'error #?')
 				if (err.code === 429) {
+					console.log(err, '429?')
 					return context.setThrottleMessage(err.message)
 				}
 				console.error(err)

@@ -128,11 +128,15 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		// post new comment
 		await axios
 			.post('/api/createcomment', { nftId, message: commentText })
-			.then(() => {
+			.then(res => {
+				console.log(res)
 				mixpanel.track('Comment created')
 			})
 			.catch(err => {
+				console.log(err.status, 'error #?')
+				console.log(err.response, 'error #?')
 				if (err.code === 429) {
+					console.log(err, '429?')
 					return context.setThrottleMessage(err.message)
 				}
 				console.error(err)

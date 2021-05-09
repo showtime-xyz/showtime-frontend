@@ -25,11 +25,14 @@ const LikeButton = ({ item }) => {
 		// Post changes to the API
 		await axios
 			.post(`/api/like_v3/${nft_id}`)
-			.then(() => {
+			.then(res => {
+				console.log(res, 'success!')
 				mixpanel.track('Liked item')
 			})
 			.catch(err => {
+				console.log(err, 'error #?')
 				if (err.code === 429) {
+					console.log(err, '429?')
 					return context.setThrottleMessage(err.message)
 				}
 				console.error(err)
