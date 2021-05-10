@@ -225,6 +225,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 									onChange={e => {
 										setCommentText(e.target.value)
 									}}
+									disabled={context.throttleMessage}
 									placeholder="Your comment..."
 									className="flex-grow md:mr-2"
 									allowSuggestionsAboveCursor
