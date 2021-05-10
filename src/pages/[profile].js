@@ -521,7 +521,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const [isChangingOrder, setIsChangingOrder] = useState(false)
 	const [revertItems, setRevertItems] = useState(null)
 	const [revertSort, setRevertSort] = useState(null)
-	// const [newOrder, setNewOrder] = useState(null)
 
 	const handleClickChangeOrder = async () => {
 		if (menuLists[selectedGrid - 1].has_custom_sort) {
@@ -532,7 +531,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		}
 		setRevertItems(items)
 		setRevertSort(selectedGrid === 1 ? selectedCreatedSortField : selectedOwnedSortField)
-		// setNewOrder(items)
 		setIsChangingOrder(true)
 	}
 
@@ -541,7 +539,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		await handleSortChange(1)
 		setIsChangingOrder(false)
 		setRevertItems(null)
-		// setNewOrder(null)
 		const newMenuLists = menuLists.map((list, index) => (index === listIdToClearOrder - 1 ? { ...list, has_custom_sort: false } : list))
 		setMenuLists(newMenuLists)
 		context.setMyProfile({
@@ -590,10 +587,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setRevertItems(null)
 		setIsChangingOrder(false)
 	}
-
-	// const handleReorder = items => {
-	// 	setNewOrder(items)
-	// }
 
 	// reset reordering if page changes
 	useEffect(() => {
@@ -1242,7 +1235,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												username,
 											}} // to customize owned by list on bottom of card
 											isChangingOrder={isChangingOrder}
-											// handleReorder={handleReorder}
 										/>
 									)}
 								</div>
