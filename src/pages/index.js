@@ -15,7 +15,6 @@ import { faComment, faHeart, faUser } from '@fortawesome/free-regular-svg-icons'
 import { faComment as fasComment, faHeart as fasHeart, faFingerprint, faUser as fasUser, faFilter } from '@fortawesome/free-solid-svg-icons'
 import ModalReportItem from '@/components/ModalReportItem'
 import RecommendFollowers from '@/components/RecommendFollowers'
-import ModalThrottleUser from '@/components/ModalThrottleUser'
 import axios from '@/lib/axios'
 
 const ACTIVITY_PAGE_LENGTH = 2 // 5 activity items per activity page
@@ -39,8 +38,6 @@ const Activity = () => {
 	const [activityPage, setActivityPage] = useState(1)
 	const [hasMoreScrolling, setHasMoreScrolling] = useState(true)
 	const [activityTypeFilter, setActivityTypeFilter] = useState(0)
-	const [throttleOpen, setThrottleOpen] = useState(false)
-	const [throttleContent, setThrottleContent] = useState('')
 
 	const getActivity = async (type_id, page) => {
 		setIsLoading(true)
@@ -71,13 +68,6 @@ const Activity = () => {
 
 		setIsLoading(false)
 	}
-
-	useEffect(() => {
-		if (context.throttleMessage) {
-			setThrottleContent(context.throttleMessage)
-			setThrottleOpen(true)
-		}
-	}, [context.throttleMessage])
 
 	// if there's activity, finish onboarding
 	useEffect(() => {
@@ -190,7 +180,6 @@ const Activity = () => {
 		<>
 			{typeof document !== 'undefined' ? (
 				<>
-					<ModalThrottleUser isOpen={throttleOpen} closeModal={() => setThrottleOpen(false)} modalContent={throttleContent} />
 					<ModalTokenDetail isOpen={itemOpenInModal} setEditModalOpen={setItemOpenInModal} item={itemOpenInModal?.nftGroup ? itemOpenInModal.nftGroup[itemOpenInModal?.index] : null} goToNext={goToNext} goToPrevious={goToPrevious} hasNext={!(itemOpenInModal?.index === itemOpenInModal?.nftGroup?.length - 1)} hasPrevious={!(itemOpenInModal?.index === 0)} />
 					<ModalReportItem isOpen={reportModalIsOpen} setReportModalOpen={setReportModalIsOpen} activityId={reportModalIsOpen} removeItemFromFeed={removeItemFromFeed} />
 				</>

@@ -4,6 +4,7 @@ import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
 import Router from 'next/router'
 import ProgressBar from '@badrap/bar-of-progress'
+import ModalThrottleUser from '@/components/ModalThrottleUser'
 import axios from '@/lib/axios'
 
 mixpanel.init('9b14512bc76f3f349c708f67ab189941')
@@ -36,6 +37,8 @@ const App = ({ Component, pageProps }) => {
 	const [isMobile, setIsMobile] = useState(null)
 	const [toggleRefreshFeed, setToggleRefreshFeed] = useState(false)
 	const [throttleMessage, setThrottleMessage] = useState(null)
+	const [throttleOpen, setThrottleOpen] = useState(false)
+	const [throttleContent, setThrottleContent] = useState('')
 
 	const adjustGridProperties = windowWidth => {
 		if (windowWidth < 790 + 30) {
@@ -114,6 +117,13 @@ const App = ({ Component, pageProps }) => {
 	}
 
 	useEffect(() => {
+		if (throttleMessage) {
+			setThrottleContent(throttleMessage)
+			setThrottleOpen(true)
+		}
+	}, [throttleMessage])
+
+	useEffect(() => {
 		getUserFromCookies()
 
 		// Add event listener
@@ -176,6 +186,7 @@ const App = ({ Component, pageProps }) => {
 
 	return (
 		<AppContext.Provider value={injectedGlobalContext}>
+			<ModalThrottleUser isOpen={throttleOpen} closeModal={() => setThrottleOpen(false)} modalContent={throttleContent} />
 			<Component {...pageProps} />
 		</AppContext.Provider>
 	)
