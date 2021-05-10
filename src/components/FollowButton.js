@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { ERROR_MESSAGE_FOLLOW } from '@/lib/constants'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import mixpanel from 'mixpanel-browser'
@@ -57,7 +58,7 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 				})
 				.catch(err => {
 					if (err.response.data.message.includes('429')) {
-						return context.setThrottleMessage(err.response.data.message)
+						return context.setThrottleMessage(ERROR_MESSAGE_FOLLOW)
 					}
 					console.error(err)
 				})

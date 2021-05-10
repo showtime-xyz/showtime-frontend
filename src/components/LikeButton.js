@@ -8,6 +8,7 @@ import { faHeart as faHeartOutline } from '@fortawesome/free-regular-svg-icons'
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons'
 import Tippy from '@tippyjs/react'
 import axios from '@/lib/axios'
+import { ERROR_MESSAGE_LIKE } from '@/lib/constants'
 
 const LikeButton = ({ item }) => {
 	const context = useContext(AppContext)
@@ -31,7 +32,7 @@ const LikeButton = ({ item }) => {
 				})
 				.catch(err => {
 					if (err.response.data.message.includes('429')) {
-						return context.setThrottleMessage(err.response.data.message)
+						return context.setThrottleMessage(ERROR_MESSAGE_LIKE)
 					}
 					console.error(err)
 				})

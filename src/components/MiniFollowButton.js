@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import mixpanel from 'mixpanel-browser'
 import AppContext from '@/context/app-context'
 import axios from '@/lib/axios'
+import { ERROR_MESSAGE_FOLLOW } from '@/lib/constants'
 
 const MiniFollowButton = ({ profileId }) => {
 	const context = useContext(AppContext)
@@ -25,7 +26,7 @@ const MiniFollowButton = ({ profileId }) => {
 				})
 				.catch(err => {
 					if (err.response.data.message.includes('429')) {
-						return context.setThrottleMessage(err.response.data.message)
+						return context.setThrottleMessage(ERROR_MESSAGE_FOLLOW)
 					}
 					console.error(err)
 				})

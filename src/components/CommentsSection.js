@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext, useCallback } from 'react'
 //import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 //import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
-import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
+import { DEFAULT_PROFILE_PIC, ERROR_MESSAGE_COMMENT } from '@/lib/constants'
 import AppContext from '@/context/app-context'
 import backend from '@/lib/backend'
 import mixpanel from 'mixpanel-browser'
@@ -135,7 +135,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 				})
 				.catch(err => {
 					if (err.response.data.message.includes('429')) {
-						return context.setThrottleMessage(err.response.data.message)
+						return context.setThrottleMessage(ERROR_MESSAGE_COMMENT)
 					}
 					console.error(err)
 				})

@@ -15,7 +15,7 @@ import ModalAddWallet from '@/components/ModalAddWallet'
 import ModalAddEmail from '@/components/ModalAddEmail.js'
 import { formatAddressShort, truncateWithEllipses, classNames } from '@/lib/utilities'
 import AddressButton from '@/components/AddressButton'
-import { PROFILE_TABS, SORT_FIELDS, DEFAULT_PROFILE_PIC } from '@/lib/constants'
+import { PROFILE_TABS, SORT_FIELDS, DEFAULT_PROFILE_PIC, ERROR_MESSAGE_FOLLOW } from '@/lib/constants'
 import SpotlightItem from '@/components/SpotlightItem'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faImage } from '@fortawesome/free-regular-svg-icons'
@@ -455,7 +455,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 				})
 				.catch(err => {
 					if (err.response.data.message.includes('429')) {
-						return context.setThrottleMessage(err.response.data.message)
+						return context.setThrottleMessage(ERROR_MESSAGE_FOLLOW)
 					}
 					console.error(err)
 				})
