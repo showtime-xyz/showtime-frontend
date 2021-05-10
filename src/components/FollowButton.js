@@ -60,6 +60,10 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 				})
 				.catch(err => {
 					if (err.response.data.code === 429) {
+						setIsFollowed(false)
+						setFollowerCount(followerCount - 1)
+						// Change myLikes via setMyLikes
+						context.setMyFollows(context.myFollows.filter(i => i?.profile_id !== item?.profile_id))
 						return context.setThrottleMessage(err.response.data.message)
 					}
 					console.error(err)

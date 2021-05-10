@@ -31,6 +31,7 @@ const LikeButton = ({ item }) => {
 				})
 				.catch(err => {
 					if (err.response.data.code === 429) {
+						handleUnlike(nft_id)
 						return context.setThrottleMessage(err.response.data.message)
 					}
 					console.error(err)
@@ -50,9 +51,11 @@ const LikeButton = ({ item }) => {
 		})
 
 		// Post changes to the API
-		await axios.post(`/api/unlike_v3/${nft_id}`)
+		if (context.disableLikes === null) {
+			await axios.post(`/api/unlike_v3/${nft_id}`)
 
-		mixpanel.track('Unliked item')
+			mixpanel.track('Unliked item')
+		}
 	}
 
 	const like_count = context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id]) ? context.myLikeCounts[item?.nft_id] : item.like_count
@@ -67,7 +70,7 @@ const LikeButton = ({ item }) => {
 		<Tippy content="Sign in to like" disabled={context.user || isMobile}>
 			<button disabled={context.disableLikes} onClick={() => (context.user ? (liked ? handleUnlike(item.nft_id) : handleLike(item.nft_id)) : handleLoggedOutLike())}>
 				<div className={`flex flex-row items-center rounded-md py-1 hover:text-stred ${context.disableLikes ? 'hover:text-gray-500 text-gray-500' : ''}`}>
-					<div className="mr-2 whitespace-nowrap">{Number(like_count).toLocaleString()}</div>
+					<div className="mr-2 whitespace-nowrap">{Number(like_count < 0 ? 0 : like_count).toLocaleString()}</div>
 					<div className={`flex pr-1 ${liked ? 'text-stred' : ''}`}>
 						<FontAwesomeIcon className="!w-5 !h-5" icon={liked ? faHeartSolid : faHeartOutline} />
 					</div>
