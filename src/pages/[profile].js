@@ -455,6 +455,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 				})
 				.catch(err => {
 					if (err.response.data.code === 429) {
+						handleUnfollow()
 						return context.setThrottleMessage(err.response.data.message)
 					}
 					console.error(err)
@@ -477,9 +478,10 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		)
 
 		// Post changes to the API
-		await axios.post(`/api/unfollow_v2/${profile_id}`)
-
-		mixpanel.track('Unfollowed profile')
+		if (context.disableFollows === false) {
+			await axios.post(`/api/unfollow_v2/${profile_id}`)
+			mixpanel.track('Unfollowed profile')
+		}
 	}
 
 	// Modal states

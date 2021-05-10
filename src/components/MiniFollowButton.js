@@ -25,6 +25,7 @@ const MiniFollowButton = ({ profileId }) => {
 				})
 				.catch(err => {
 					if (err.response.data.code === 429) {
+						handleUnfollow()
 						return context.setThrottleMessage(err.response.data.message)
 					}
 					console.error(err)
@@ -39,8 +40,10 @@ const MiniFollowButton = ({ profileId }) => {
 		// Change myLikes via setMyLikes
 		context.setMyFollows(context.myFollows.filter(i => i?.profile_id !== profileId))
 		// Post changes to the API
-		await axios.post(`/api/unfollow_v2/${profileId}`)
-		mixpanel.track('Unfollowed profile - Card button')
+		if (context.disableFollows === false) {
+			await axios.post(`/api/unfollow_v2/${profileId}`)
+			mixpanel.track('Unfollowed profile - Card button')
+		}
 	}
 
 	const handleLoggedOutFollow = () => {
