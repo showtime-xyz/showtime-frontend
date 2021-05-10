@@ -129,7 +129,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		try {
 			await axios
 				.post('/api/createcomment', { nftId, message: commentText })
-				.then(res => {
+				.then(() => {
 					mixpanel.track('Comment created')
 				})
 				.catch(err => {

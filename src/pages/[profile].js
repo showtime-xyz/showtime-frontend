@@ -450,7 +450,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		try {
 			await axios
 				.post(`/api/follow_v2/${profile_id}`)
-				.then(res => {
+				.then(() => {
 					mixpanel.track('Followed profile')
 				})
 				.catch(err => {

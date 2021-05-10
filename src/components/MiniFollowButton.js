@@ -20,7 +20,7 @@ const MiniFollowButton = ({ profileId }) => {
 		try {
 			await axios
 				.post(`/api/follow_v2/${profileId}`)
-				.then(res => {
+				.then(() => {
 					mixpanel.track('Followed profile - Card button')
 				})
 				.catch(err => {

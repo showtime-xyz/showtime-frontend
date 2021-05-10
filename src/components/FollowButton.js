@@ -52,7 +52,7 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 		try {
 			await axios
 				.post(`/api/follow_v2/${item?.profile_id}`)
-				.then(res => {
+				.then(() => {
 					mixpanel.track('Followed profile')
 				})
 				.catch(err => {

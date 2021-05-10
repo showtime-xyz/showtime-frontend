@@ -26,7 +26,7 @@ const LikeButton = ({ item }) => {
 		try {
 			await axios
 				.post(`/api/like_v3/${nft_id}`)
-				.then(res => {
+				.then(() => {
 					mixpanel.track('Liked item')
 				})
 				.catch(err => {
