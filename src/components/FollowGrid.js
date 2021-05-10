@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 
 const FollowGrid = ({ people }) => {
 	return (
@@ -9,7 +10,7 @@ const FollowGrid = ({ people }) => {
 						<Link href="/[profile]" as={`/${profile?.username || profile.wallet_address}`}>
 							<a className="flex flex-row items-center showtime-follower-button rounded-full">
 								<div>
-									<img alt={profile.name} src={profile.img_url ? profile.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-1 h-6 w-6" />
+									<img alt={profile.name} src={profile.img_url ? profile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 h-6 w-6" />
 								</div>
 								<div className="font-normal">{profile.name ? profile.name : 'Unnamed'}</div>
 							</a>

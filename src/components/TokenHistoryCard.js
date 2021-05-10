@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown } from '@fortawesome/free-solid-svg-icons'
 import { truncateWithEllipses, formatAddressShort } from '@/lib/utilities'
@@ -80,7 +81,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
 											<Link href="/[profile]" as={`/${entry.from_username || entry.from_address}`}>
 												<a onClick={closeModal}>
 													<div className="flex items-center hover:text-stpink transition-all w-max">
-														<img src={entry.from_img_url || 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-2 w-6 h-6" />
+														<img src={entry.from_img_url || DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-6 h-6" />
 														<div>{truncateWithEllipses(entry.from_name || entry.from_username || formatAddressShort(entry.from_address), 26)}</div>
 													</div>
 												</a>
@@ -96,7 +97,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
 										<Link href="/[profile]" as={`/${entry.to_username || entry.to_address}`}>
 											<a onClick={closeModal}>
 												<div className="flex items-center hover:text-stpink transition-all w-max">
-													<img src={entry.to_img_url || 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-2 w-6 h-6" />
+													<img src={entry.to_img_url || DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-6 h-6" />
 													<div>{truncateWithEllipses(entry.to_name || entry.to_username || formatAddressShort(entry.to_address), 26)}</div>
 												</div>
 											</a>

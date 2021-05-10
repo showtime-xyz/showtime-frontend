@@ -15,7 +15,7 @@ import ModalAddWallet from '@/components/ModalAddWallet'
 import ModalAddEmail from '@/components/ModalAddEmail.js'
 import { formatAddressShort, truncateWithEllipses, classNames } from '@/lib/utilities'
 import AddressButton from '@/components/AddressButton'
-import { PROFILE_TABS, SORT_FIELDS } from '@/lib/constants'
+import { PROFILE_TABS, SORT_FIELDS, DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import SpotlightItem from '@/components/SpotlightItem'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faImage } from '@fortawesome/free-regular-svg-icons'
@@ -427,7 +427,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 				profile_id: profile_id,
 				wallet_address: wallet_addresses[0],
 				name: name,
-				img_url: img_url ? img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png',
+				img_url: img_url ? img_url : DEFAULT_PROFILE_PIC,
 				timestamp: null,
 				username: username,
 			},
@@ -439,7 +439,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 				profile_id: context.myProfile.profile_id,
 				wallet_address: context.user.publicAddress,
 				name: context.myProfile.name,
-				img_url: context.myProfile.img_url ? context.myProfile.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png',
+				img_url: context.myProfile.img_url ? context.myProfile.img_url : DEFAULT_PROFILE_PIC,
 				timestamp: null,
 				username: context.myProfile.username,
 			},
@@ -572,13 +572,13 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 					<meta name="description" content="Explore crypto art I've created, owned, and liked" />
 					<meta property="og:type" content="website" />
 					<meta name="og:description" content="Explore crypto art I've created, owned, and liked" />
-					<meta property="og:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} />
+					<meta property="og:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : DEFAULT_PROFILE_PIC} />
 					<meta name="og:title" content={name ? name : wallet_addresses[0]} />
 
 					<meta name="twitter:card" content="summary_large_image" />
 					<meta name="twitter:title" content={name ? name : wallet_addresses[0]} />
 					<meta name="twitter:description" content="Explore crypto art I've created, owned, and liked" />
-					<meta name="twitter:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} />
+					<meta name="twitter:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : DEFAULT_PROFILE_PIC} />
 				</Head>
 
 				<div
@@ -624,7 +624,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											mixpanel.track('Open edit photo')
 										}
 									}}
-									src={profileToDisplay?.img_url ? profileToDisplay.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'}
+									src={profileToDisplay?.img_url ? profileToDisplay.img_url : DEFAULT_PROFILE_PIC}
 									className={`h-24 w-24 md:h-32 md:w-32 rounded-full border-2 shadow-md border-white z-10 -mt-14 md:-mt-20 overflow-hidden ${isMyProfile ? 'cursor-pointer ' : ''}`}
 								/>
 								<div className="flex-grow"></div>
@@ -782,7 +782,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										<div className="border-b border-gray-200 sm:mx-2 mb-2 pb-4  ">
 											<div className="flex flex-row items-center mt-2 ml-2 sm:mt-0 sm:ml-0">
 												<div className="mr-2">
-													<img src={profileToDisplay && profileToDisplay.img_url ? profileToDisplay.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="w-5 h-5 rounded-full" />
+													<img src={profileToDisplay && profileToDisplay.img_url ? profileToDisplay.img_url : DEFAULT_PROFILE_PIC} className="w-5 h-5 rounded-full" />
 												</div>
 												<div>{profileToDisplay?.name ? profileToDisplay.name : wallet_addresses_excluding_email && wallet_addresses_excluding_email.length > 0 ? formatAddressShort(wallet_addresses_excluding_email[0]) : 'Unnamed'}</div>
 												<div className="flex-grow"></div>
@@ -965,7 +965,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 														<Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 															<span className="flex items-center">
 																<>
-																	{collectionId && collectionId > 0 ? <img src={menuLists && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId).length > 0 && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId)[0].collection_img_url ? menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId)[0].collection_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} alt="" className="flex-shrink-0 h-6 w-6 rounded-full mr-3" /> : null}
+																	{collectionId && collectionId > 0 ? <img src={menuLists && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId).length > 0 && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId)[0].collection_img_url ? menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId)[0].collection_img_url : DEFAULT_PROFILE_PIC} alt="" className="flex-shrink-0 h-6 w-6 rounded-full mr-3" /> : null}
 																	<span className=" block truncate">{menuLists && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId).length > 0 && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId)[0].collection_name.replace(' (FND)', '')}</span>
 																</>
 															</span>
@@ -982,7 +982,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 																			{({ active }) => (
 																				<>
 																					<div className="flex items-center">
-																						<img src={item.collection_img_url ? item.collection_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />
+																						<img src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />
 																						<span
 																							className={classNames(
 																								item.collection_id === collectionId

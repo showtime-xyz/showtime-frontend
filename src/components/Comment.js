@@ -1,5 +1,6 @@
 import { useRef, useState, useContext } from 'react'
 import Link from 'next/link'
+import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import { formatDistanceToNowStrict, subSeconds } from 'date-fns'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
@@ -36,7 +37,7 @@ export default function Comment({ comment, closeModal, modalRef, deleteComment, 
 		<div className="p-2 my-1 flex rounded-xl hover:bg-gray-100 transition-all relative">
 			<div className="mr-3 mt-1">
 				<Link href="/[profile]" as={comment.username ? `/${comment.username}` : `/${comment.address}`}>
-					<img alt={comment.username || comment.name || 'Unnamed'} src={comment.img_url ? comment.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full cursor-pointer h-8 w-8" onClick={closeModal} />
+					<img alt={comment.username || comment.name || 'Unnamed'} src={comment.img_url ? comment.img_url : DEFAULT_PROFILE_PIC} className="rounded-full cursor-pointer h-8 w-8" onClick={closeModal} />
 				</Link>
 			</div>
 			<div className="flex flex-col flex-1">

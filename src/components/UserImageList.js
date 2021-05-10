@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import mixpanel from 'mixpanel-browser'
 
 export default function UserImageList({ users }) {
@@ -12,7 +13,7 @@ export default function UserImageList({ users }) {
 							mixpanel.track('Activity - Click on followed user')
 						}}
 					>
-						<img src={user.img_url || 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="h-12 w-12 rounded-full" />
+						<img src={user.img_url || DEFAULT_PROFILE_PIC} className="h-12 w-12 rounded-full" />
 					</a>
 				</Link>
 			))}

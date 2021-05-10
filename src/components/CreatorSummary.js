@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import Link from 'next/link'
 import { truncateWithEllipses } from '@/lib/utilities'
+import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 //import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 //import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import FollowButton from './FollowButton'
@@ -13,7 +14,7 @@ export default function CreatorSummary({ name, username, address, imageUrl, clos
 			<div>
 				<Link href={collectionSlug ? '/c/[collection]' : '/[profile]'} as={collectionSlug ? `/c/${collectionSlug}` : username ? `/${username}` : `/${address}`}>
 					<a onClick={closeModal}>
-						<img alt={name} src={imageUrl ? imageUrl : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-1 inline-block h-16 w-16" />
+						<img alt={name} src={imageUrl ? imageUrl : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 inline-block h-16 w-16" />
 					</a>
 				</Link>
 			</div>
