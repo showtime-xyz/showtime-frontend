@@ -13,7 +13,7 @@ export default function ModalUserList({ isOpen, title, users, closeModal, emptyM
 			{isOpen && (
 				<ClientOnlyPortal selector="#modal">
 					<div className="z-2" onClick={closeModal}>
-						<div className="modal flex flex-col rounded-lg sm:rounded-2xl text-black" onClick={e => e.stopPropagation()}>
+						<div className="bg-white absolute top-[10%] inset-x-[5%] p-4 mx-auto max-h-[80vh] max-w-[400px] flex flex-col rounded-lg sm:rounded-2xl text-black" onClick={e => e.stopPropagation()}>
 							<CloseButton setEditModalOpen={closeModal} />
 							<div className="text-3xl border-b-2 pb-2 px-2">{title}</div>
 							<div className="flex flex-col overflow-y-auto">
@@ -46,33 +46,6 @@ export default function ModalUserList({ isOpen, title, users, closeModal, emptyM
 								})}
 							</div>
 						</div>
-						<style jsx>{`
-							:global(body) {
-								overflow: hidden;
-							}
-							.backdrop {
-								position: fixed;
-								background-color: rgba(0, 0, 0, 0.7);
-								top: 0;
-								right: 0;
-								bottom: 0;
-								left: 0;
-								z-index: 2;
-							}
-							.modal {
-								background-color: white;
-								position: absolute;
-								top: 10%;
-								right: 5%;
-								left: 5%;
-								padding: 1em;
-
-								max-width: 400px;
-								margin-left: auto;
-								margin-right: auto;
-								max-height: 80vh;
-							}
-						`}</style>
 					</div>
 				</ClientOnlyPortal>
 			)}

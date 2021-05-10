@@ -169,20 +169,7 @@ const TokenDetailBody = ({
 						<div>&nbsp;</div>
 					</div>
 				) : null}
-				<div
-					className="flex items-center md:p-12"
-					style={_.merge(
-						{ flexShrink: 0 },
-						item.token_has_video
-							? {
-									backgroundColor: 'black',
-							  }
-							: {
-									backgroundColor: getBackgroundColor(),
-							  }
-					)}
-					ref={targetRef}
-				>
+				<div className={`flex flex-shrink-0 items-center md:p-12 ${item.token_has_video ? 'bg-black' : ''}`} style={item.token_has_video ? null : { backgroundColor: getBackgroundColor() }} ref={targetRef}>
 					{item.token_has_video ? (
 						<ReactPlayer
 							url={item.token_animation_url}
@@ -206,12 +193,7 @@ const TokenDetailBody = ({
 						/>
 					) : (
 						<div className="m-auto">
-							<div
-								className="w-max p absolute right-0 m-2.5 z-0"
-								style={{
-									top: isMobile ? 57 : 0,
-								}}
-							>
+							<div className="w-max p absolute right-0 m-2.5 z-0 top-14 sm:top-0">
 								{isMobile || item.token_has_video ? null : item.token_img_url ? (
 									<button
 										type="button"
@@ -229,41 +211,9 @@ const TokenDetailBody = ({
 								) : null}
 								<div></div>
 							</div>
-							<img
-								src={getImageUrl(item.token_img_url, item.token_aspect_ratio)}
-								alt={item.token_name}
-								style={_.merge(
-									fullResLoaded === true ? { display: 'none' } : null,
-									context.isMobile
-										? {
-												width: mediaWidth,
-												height: item.token_aspect_ratio ? mediaWidth / item.token_aspect_ratio : null,
-										  }
-										: {
-												height: TOKEN_MEDIA_HEIGHT,
-										  }
-								)}
-							/>
+							<img src={getImageUrl(item.token_img_url, item.token_aspect_ratio)} alt={item.token_name} className={fullResLoaded === true ? 'hidden' : ''} style={context.isMobile ? { width: mediaWidth, height: item.token_aspect_ratio ? mediaWidth / item.token_aspect_ratio : null } : { height: TOKEN_MEDIA_HEIGHT }} />
 
-							<img
-								src={context.isMobile ? getImageUrl(item.token_img_url) : getBiggerImageUrl(item.token_img_url)}
-								alt={item.token_name}
-								style={_.merge(
-									fullResLoaded ? null : { display: 'none' },
-									context.isMobile
-										? {
-												width: mediaWidth,
-										  }
-										: {
-												height: TOKEN_MEDIA_HEIGHT,
-										  }
-								)}
-								onLoad={() => {
-									setTimeout(function () {
-										setFullResLoaded(true)
-									}, 100)
-								}}
-							/>
+							<img src={context.isMobile ? getImageUrl(item.token_img_url) : getBiggerImageUrl(item.token_img_url)} alt={item.token_name} className={fullResLoaded === true ? '' : 'hidden'} style={context.isMobile ? { width: mediaWidth } : { height: TOKEN_MEDIA_HEIGHT }} onLoad={() => setTimeout(() => setFullResLoaded(true), 100)} />
 						</div>
 					)}
 				</div>
@@ -272,7 +222,7 @@ const TokenDetailBody = ({
 				<div className="p-2 md:p-8 max-w-screen-2xl overflow-auto relative w-full m-auto">
 					{/* Title and description section */}
 					<div className="flex flex-col md:flex-row pb-10 items-stretch w-full max-w-full">
-						<div className="pb-0 text-left flex-1 p-4 break-words" style={isMobile ? {} : { maxWidth: '50%' }}>
+						<div className="pb-0 text-left flex-1 p-4 break-words sm:max-w-[50%]">
 							<div className="text-2xl md:text-4xl">{item.token_name}</div>
 							{/* Likes & Share */}
 							{/*  */}
@@ -307,25 +257,11 @@ const TokenDetailBody = ({
 							</div>
 							{usersWhoLiked && <UsersWhoLiked users={usersWhoLiked} closeModal={() => (setEditModalOpen ? setEditModalOpen(false) : null)} />}
 						</div>
-						<div className="flex-1 p-4 pb-0" style={isMobile ? {} : { maxWidth: '50%' }}>
+						<div className="flex-1 p-4 pb-0 sm:max-w-[50%]">
 							{item.token_description && (
 								<>
 									<div className="md:text-lg py-2">Description</div>
-									<div
-										className={`${context.isMobile ? null : 'text-base'} text-gray-500`}
-										style={
-											context.isMobile
-												? {
-														overflowWrap: 'break-word',
-														wordWrap: 'break-word',
-														fontSize: 14,
-												  }
-												: {
-														overflowWrap: 'break-word',
-														wordWrap: 'break-word',
-												  }
-										}
-									>
+									<div className={'text-gray-500 truncate text-sm sm:text-base'}>
 										{moreShown ? (
 											<div className="whitespace-pre-line">{removeTags(item.token_description)}</div>
 										) : (

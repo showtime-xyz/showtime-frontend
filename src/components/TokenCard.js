@@ -101,7 +101,7 @@ const TokenCard = ({
 
 	return (
 		<div className="w-full h-full">
-			<div style={item.user_hidden ? { opacity: 0.7, backgroundColor: '#ddd' } : null} ref={divRef} className="w-full h-full sm:rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all bg-white flex flex-col">
+			<div ref={divRef} className={`w-full h-full sm:rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all bg-white flex flex-col ${item.user_hidden ? 'opacity-70 bg-gray-200' : ''}`}>
 				<div ref={item.imageRef} className="p-4 flex flex-row items-center relative">
 					<div className="pr-2 ">
 						{item.contract_is_creator ? (
