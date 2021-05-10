@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import '@/styles/globals.css'
+import { DISABLE_ALL } from '@/lib/constants'
 import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
 import Router from 'next/router'
@@ -119,17 +120,13 @@ const App = ({ Component, pageProps }) => {
 		}
 	}
 
-	const disableUserActions = (likes, comments, follows) => {
-		setDisableLikes(likes)
-		setDisableComments(comments)
-		setDisableFollows(follows)
-	}
-
 	useEffect(() => {
 		if (throttleMessage) {
 			setThrottleContent(throttleMessage)
 			setThrottleOpen(true)
-			disableUserActions(true, true, true)
+			setDisableLikes(DISABLE_ALL || disableLikes || throttleMessage.includes('like'))
+			setDisableComments(DISABLE_ALL || disableComments || throttleMessage.includes('comment'))
+			setDisableFollows(DISABLE_ALL || disableFollows || throttleMessage.includes('follow'))
 		}
 	}, [throttleMessage])
 

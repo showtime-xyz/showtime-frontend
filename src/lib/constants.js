@@ -26,6 +26,7 @@ export const CONTRACTS = {
 }
 
 export const DEFAULT_PROFILE_PIC = 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'
+export const DISABLE_ALL = true
 
 // fields to sort by on profile page
 export const SORT_FIELDS = {
