@@ -51,9 +51,8 @@ const LikeButton = ({ item }) => {
 		})
 
 		// Post changes to the API
-		if (context.disableLikes === null) {
+		if (context.disableLikes === false) {
 			await axios.post(`/api/unlike_v3/${nft_id}`)
-
 			mixpanel.track('Unliked item')
 		}
 	}
