@@ -49,20 +49,31 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 		// Change myFollows via setMyFollows
 		context.setMyFollows([{ profile_id: item?.profile_id }, ...context.myFollows])
 		// Post changes to the API
-		await axios
-			.post(`/api/follow_v2/${item?.profile_id}`)
-			.then(res => {
-				console.log(res, 'success!')
-				mixpanel.track('Followed profile')
-			})
-			.catch(err => {
-				console.log(err, 'error #?')
-				if (err.code === 429) {
-					console.log(err, '429')
-					return context.setThrottleMessage(err.message)
-				}
-				console.error(err)
-			})
+		try {
+			await axios
+				.post(`/api/follow_v2/${item?.profile_id}`)
+				.then(res => {
+					console.log(res, 'success!')
+					mixpanel.track('Followed profile')
+				})
+				.catch(err => {
+					console.log(err.response.data, 'data')
+					console.log(err.response.status, 'status')
+					console.log(err.response.headers, 'headers')
+					console.log(err.request, 'request')
+					console.log('Error', err.message, 'message')
+					console.log(err.config, 'config')
+					if (err.response.data.message.includes('429')) {
+						console.log(err.response.data.message)
+						return context.setThrottleMessage(err.response.data.message)
+					}
+					console.error(err)
+				})
+		} catch (err) {
+			console.error(err)
+		} finally {
+			console.log('did it do this as well?')
+		}
 	}
 
 	const handleUnfollow = async () => {

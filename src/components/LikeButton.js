@@ -31,9 +31,9 @@ const LikeButton = ({ item }) => {
 			})
 			.catch(err => {
 				console.log(err, 'error #?')
-				if (err.code === 429) {
-					console.log(err, '429?')
-					return context.setThrottleMessage(err.message)
+				if (err.response.data.message.includes('429')) {
+					console.log(err.response.data.message)
+					return context.setThrottleMessage(err.response.data.message)
 				}
 				console.error(err)
 			})
