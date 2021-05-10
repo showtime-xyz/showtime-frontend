@@ -8,7 +8,6 @@ import { faHeart as faHeartOutline } from '@fortawesome/free-regular-svg-icons'
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons'
 import Tippy from '@tippyjs/react'
 import axios from '@/lib/axios'
-import { ERROR_MESSAGE_LIKE } from '@/lib/constants'
 
 const LikeButton = ({ item }) => {
 	const context = useContext(AppContext)

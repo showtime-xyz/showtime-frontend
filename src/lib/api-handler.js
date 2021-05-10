@@ -26,7 +26,7 @@ export default () =>
 			})
 
 			if (err.response.data.error.code === 429) {
-				return res.status(429).send(err.response.data.error.message)
+				return res.status(429).send(err.response.data.error)
 			}
 			res.status(500).send('Internal Server Error')
 		},

@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext, useCallback } from 'react'
 //import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 //import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
-import { DEFAULT_PROFILE_PIC, ERROR_MESSAGE_COMMENT } from '@/lib/constants'
+import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import AppContext from '@/context/app-context'
 import backend from '@/lib/backend'
 import mixpanel from 'mixpanel-browser'
