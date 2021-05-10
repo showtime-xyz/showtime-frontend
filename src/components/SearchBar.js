@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react'
+import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import styled from 'styled-components'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 import mixpanel from 'mixpanel-browser'
@@ -338,7 +339,7 @@ const SearchBar = () => {
 											}}
 											className="items-center"
 										>
-											<SearchProfile src={searchResult?.img_url ? searchResult?.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} />
+											<SearchProfile src={searchResult?.img_url ? searchResult?.img_url : DEFAULT_PROFILE_PIC} />
 											<SearchResultText>{searchResult?.name || searchResult.address0}</SearchResultText>
 											{searchResult?.username ? <SearchResultUsernameText>@{searchResult?.username}</SearchResultUsernameText> : null}
 										</SearchResult>
@@ -409,7 +410,7 @@ const SearchBar = () => {
 												}}
 												className="items-center"
 											>
-												<SearchProfile src={searchResult?.img_url ? searchResult?.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} />
+												<SearchProfile src={searchResult?.img_url ? searchResult?.img_url : DEFAULT_PROFILE_PIC} />
 												<SearchResultText className="flex-0">{searchResult?.name || searchResult.address0}</SearchResultText>
 												{searchResult?.username ? <SearchResultUsernameText className="flex-1">@{searchResult?.username}</SearchResultUsernameText> : null}
 											</SearchResult>

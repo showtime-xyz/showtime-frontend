@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext, useCallback } from 'react'
 //import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 //import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import AppContext from '@/context/app-context'
 import backend from '@/lib/backend'
 import mixpanel from 'mixpanel-browser'
@@ -93,7 +94,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 					id: r.username || r.address0,
 					address: r.address0,
 					display: r.name || formatAddressShort(r.address0),
-					img_url: r.img_url || 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png',
+					img_url: r.img_url || DEFAULT_PROFILE_PIC,
 				}))
 			)
 			.then(callback)

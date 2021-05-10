@@ -1,4 +1,5 @@
 import { useState, useContext, useRef } from 'react'
+import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faEllipsisH, faStar } from '@fortawesome/free-solid-svg-icons'
@@ -107,7 +108,7 @@ const TokenCard = ({
 							<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
 								<a className="flex flex-row items-center ">
 									<div>
-										<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full w-5 h-5" />
+										<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-5 h-5" />
 									</div>
 									<div className="showtime-card-profile-link ml-2">{truncateWithEllipses(item.collection_name + ' Collection', 30)}</div>
 								</a>
@@ -116,7 +117,7 @@ const TokenCard = ({
 							<Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
 								<a className="flex flex-row items-center ">
 									<div>
-										<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full w-5 h-5" />
+										<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-5 h-5" />
 									</div>
 									<div className="ml-2 hover:text-stpink truncate">{truncateWithEllipses(item.creator_name, 22)}</div>
 								</a>
@@ -306,7 +307,7 @@ const TokenCard = ({
 										<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
 											<a className="flex flex-row items-center pr-2 ">
 												<div>
-													<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? formatAddressShort(pageProfile.wallet_addresses_excluding_email[0]) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-2 h-6 w-6" />
+													<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? formatAddressShort(pageProfile.wallet_addresses_excluding_email[0]) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
 												</div>
 												<div className="showtime-card-profile-link">
 													{truncateWithEllipses(
@@ -333,7 +334,7 @@ const TokenCard = ({
 									<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
 										<a className="flex flex-row items-center pr-2 ">
 											<div>
-												<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-2 w-6 h-6" />
+												<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-6 h-6" />
 											</div>
 											<div className="showtime-card-profile-link">{truncateWithEllipses(item.owner_name, 24)}</div>
 										</a>
