@@ -39,6 +39,9 @@ const App = ({ Component, pageProps }) => {
 	const [throttleMessage, setThrottleMessage] = useState(null)
 	const [throttleOpen, setThrottleOpen] = useState(false)
 	const [throttleContent, setThrottleContent] = useState('')
+	const [disableLikes, setDisableLikes] = useState(false)
+	const [disableComments, setDisableComments] = useState(false)
+	const [disableFollows, setDisableFollows] = useState(false)
 
 	const adjustGridProperties = windowWidth => {
 		if (windowWidth < 790 + 30) {
@@ -116,10 +119,17 @@ const App = ({ Component, pageProps }) => {
 		}
 	}
 
+	const disableUserActions = (likes, comments, follows) => {
+		setDisableLikes(likes)
+		setDisableComments(comments)
+		setDisableFollows(follows)
+	}
+
 	useEffect(() => {
 		if (throttleMessage) {
 			setThrottleContent(throttleMessage)
 			setThrottleOpen(true)
+			disableUserActions(true, true, true)
 		}
 	}, [throttleMessage])
 
@@ -153,6 +163,9 @@ const App = ({ Component, pageProps }) => {
 		isMobile,
 		toggleRefreshFeed,
 		throttleMessage,
+		disableLikes,
+		disableComments,
+		disableFollows,
 		setWindowSize,
 		setMyLikes,
 		setMyLikeCounts,

@@ -91,7 +91,7 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
         ${compact && context.isMobile ? 'py-2 px-3' : null}
         ${isFollowed ? 'text-black border-gray-400' : homepage ? 'bg-stpurple text-white border-stpurple' : 'bg-black text-white border-black'}
       `}
-			disabled={context.throttleMessage}
+			disabled={context.disableFollows}
 			onClick={context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow}
 		>
 			{!isFollowed && (
