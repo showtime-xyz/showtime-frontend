@@ -19,8 +19,8 @@ const TokenGridV5 = ({
 	showUserHiddenItems,
 	showDuplicates,
 	setHasUserHiddenItems,
-
 	items,
+	setItems,
 	//isDetail,
 	//onFinish,
 	isLoading,
@@ -34,13 +34,12 @@ const TokenGridV5 = ({
 	pageProfile,
 	isLoadingMore,
 	isChangingOrder,
-	handleReorder,
 }) => {
 	const context = useContext(AppContext)
 	const [itemsList, setItemsList] = useState([])
 
 	const handleRemoveItem = nft_id => {
-		setItemsList(itemsList.filter(item => item.nft_id != nft_id))
+		setItems(items.filter(item => item.nft_id != nft_id))
 	}
 	//const [showDuplicateNFTs, setShowDuplicateNFTs] = useState({});
 	const [currentlyPlayingVideo, setCurrentlyPlayingVideo] = useState(null)
@@ -50,9 +49,8 @@ const TokenGridV5 = ({
 	const rightPress = useKeyPress('ArrowRight')
 	const escPress = useKeyPress('Escape')
 
-	const handleSetItemsList = list => {
-		setItemsList(list)
-		handleReorder(list)
+	const handleSetItemsList = newList => {
+		setItems(newList)
 	}
 
 	useEffect(() => {

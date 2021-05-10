@@ -521,7 +521,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const [isChangingOrder, setIsChangingOrder] = useState(false)
 	const [revertItems, setRevertItems] = useState(null)
 	const [revertSort, setRevertSort] = useState(null)
-	const [newOrder, setNewOrder] = useState(null)
+	// const [newOrder, setNewOrder] = useState(null)
 
 	const handleClickChangeOrder = async () => {
 		if (menuLists[selectedGrid - 1].has_custom_sort) {
@@ -532,7 +532,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		}
 		setRevertItems(items)
 		setRevertSort(selectedGrid === 1 ? selectedCreatedSortField : selectedOwnedSortField)
-		setNewOrder(items)
+		// setNewOrder(items)
 		setIsChangingOrder(true)
 	}
 
@@ -541,7 +541,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		await handleSortChange(1)
 		setIsChangingOrder(false)
 		setRevertItems(null)
-		setNewOrder(null)
+		// setNewOrder(null)
 		const newMenuLists = menuLists.map((list, index) => (index === listIdToClearOrder - 1 ? { ...list, has_custom_sort: false } : list))
 		setMenuLists(newMenuLists)
 		context.setMyProfile({
@@ -559,11 +559,9 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	}
 
 	const handleSaveOrder = async () => {
-		const saveOrderPayload = newOrder.map((o, i) => ({ index: i, nft_id: o.nft_id }))
-		setItems(newOrder)
+		const saveOrderPayload = items.map((o, i) => ({ index: i, nft_id: o.nft_id }))
 		setIsChangingOrder(false)
 		setRevertItems(null)
-		setNewOrder(null)
 		const newMenuLists = menuLists.map((list, index) => (index === selectedGrid - 1 ? { ...list, has_custom_sort: true } : list))
 		setMenuLists(newMenuLists)
 		context.setMyProfile({
@@ -593,17 +591,16 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setIsChangingOrder(false)
 	}
 
-	const handleReorder = items => {
-		setNewOrder(items)
-	}
+	// const handleReorder = items => {
+	// 	setNewOrder(items)
+	// }
 
 	// reset reordering if page changes
 	useEffect(() => {
 		setIsChangingOrder(false)
-		setNewOrder(null)
 		setRevertItems(null)
 		setRevertSort(null)
-	}, [selectedGrid, collectionId, profile_id, selectedCreatedSortField, selectedOwnedSortField, showUserHiddenItems])
+	}, [selectedGrid, collectionId, profile_id, showUserHiddenItems])
 
 	return (
 		<div
@@ -1035,6 +1032,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											onChange={value => {
 												handleCollectionChange(value)
 											}}
+											disabled={isChangingOrder}
 										>
 											{({ open }) => (
 												<>
@@ -1104,6 +1102,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											onChange={value => {
 												handleSortChange(value)
 											}}
+											disabled={isChangingOrder}
 										>
 											{({ open }) => (
 												<>
@@ -1224,6 +1223,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											setHasUserHiddenItems={setHasUserHiddenItems}
 											key={`grid___${isLoadingCards || isRefreshingCards}`}
 											items={items}
+											setItems={setItems}
 											isLoading={isLoadingCards || isRefreshingCards}
 											isLoadingMore={isLoadingMore}
 											listId={selectedGrid}
@@ -1242,7 +1242,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												username,
 											}} // to customize owned by list on bottom of card
 											isChangingOrder={isChangingOrder}
-											handleReorder={handleReorder}
+											// handleReorder={handleReorder}
 										/>
 									)}
 								</div>
