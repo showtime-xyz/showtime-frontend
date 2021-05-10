@@ -1,28 +1,10 @@
 import { useContext, useEffect, useState } from 'react'
-import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import mixpanel from 'mixpanel-browser'
 import AppContext from '@/context/app-context'
 import _ from 'lodash'
 import axios from '@/lib/axios'
-
-const Button = styled.button`
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-	box-sizing: border-box;
-	&:hover {
-		opacity: 0.8;
-	}
-	${p =>
-		p.notExpandWhenMobile
-			? ''
-			: `@media screen and (max-width: 400px) {
-    width: 100%;
-  }`}
-`
 
 const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, notExpandWhenMobile, compact, homepage }) => {
 	const context = useContext(AppContext)
@@ -68,25 +50,14 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 		context.setLoginModalOpen(true)
 	}
 	return (
-		<Button
-			notExpandWhenMobile={notExpandWhenMobile}
-			className={`
-      border rounded-full transition
-      py-2 px-4
-        ${hideIfFollowing && isFollowed ? 'hidden' : null}
-        ${compact ? 'mr-1' : ''}
-        ${compact && context.isMobile ? 'py-2 px-3' : null}
-        ${isFollowed ? 'text-black border-gray-400' : homepage ? 'bg-stpurple text-white border-stpurple' : 'bg-black text-white border-black'}
-      `}
-			onClick={context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow}
-		>
+		<button className={`flex items-center justify-center hover:opacity-80 border rounded-full transition py-2 px-4 ${notExpandWhenMobile ? '' : 'w-full md:w-auto'} ${hideIfFollowing && isFollowed ? 'hidden' : null} ${compact ? 'mr-1' : ''} ${compact && context.isMobile ? 'py-2 px-3' : null} ${isFollowed ? 'text-black border-gray-400' : homepage ? 'bg-stpurple text-white border-stpurple' : 'bg-black text-white border-black'}`} onClick={context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow}>
 			{!isFollowed && (
 				<div className={`mr-2 ${compact ? 'text-xs' : 'text-sm'} `}>
 					<FontAwesomeIcon icon={faPlus} />
 				</div>
 			)}
-			<div className={` ${compact ? 'text-xs' : 'text-sm'} `}>{isFollowed ? 'Following' : 'Follow'}</div>
-		</Button>
+			<div className={`${compact ? 'text-xs' : 'text-sm'} `}>{isFollowed ? 'Following' : 'Follow'}</div>
+		</button>
 	)
 }
 
