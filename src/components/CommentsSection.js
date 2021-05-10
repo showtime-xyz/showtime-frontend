@@ -126,20 +126,21 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	const createComment = async () => {
 		setIsSubmitting(true)
 		// post new comment
-		await axios
-			.post('/api/createcomment', { nftId, message: commentText })
-			.then(res => {
-				console.log(res)
-				mixpanel.track('Comment created')
-			})
-			.catch(err => {
-				console.log(err.response, 'error response')
-				if (err.response.data.message.includes('429')) {
-					console.log(err.response.data.message)
-					return context.setThrottleMessage(err.response.data.message)
-				}
-				console.error(err.data, 'error 3')
-			})
+		try {
+			await axios
+				.post('/api/createcomment', { nftId, message: commentText })
+				.then(res => {
+					mixpanel.track('Comment created')
+				})
+				.catch(err => {
+					if (err.response.data.message.includes('429')) {
+						return context.setThrottleMessage(err.response.data.message)
+					}
+					console.error(err)
+				})
+		} catch (err) {
+			console.error(err)
+		}
 
 		// pull new comments
 		await refreshComments(false)

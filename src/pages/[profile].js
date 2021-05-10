@@ -447,21 +447,21 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		])
 
 		// Post changes to the API
-		await axios
-			.post(`/api/follow_v2/${profile_id}`)
-			.then(res => {
-				console.log(res, 'success!')
-				mixpanel.track('Followed profile')
-			})
-			.catch(err => {
-				console.log(err.status, 'error #?')
-				console.log(err.response, 'error #?')
-				if (err.response.data.message.includes('429')) {
-					console.log(err.response.data.message)
-					return context.setThrottleMessage(err.response.data.message)
-				}
-				console.error(err)
-			})
+		try {
+			await axios
+				.post(`/api/follow_v2/${profile_id}`)
+				.then(res => {
+					mixpanel.track('Followed profile')
+				})
+				.catch(err => {
+					if (err.response.data.message.includes('429')) {
+						return context.setThrottleMessage(err.response.data.message)
+					}
+					console.error(err)
+				})
+		} catch (err) {
+			console.error(err)
+		}
 	}
 
 	const handleUnfollow = async () => {

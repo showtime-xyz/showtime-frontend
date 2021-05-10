@@ -23,20 +23,21 @@ const LikeButton = ({ item }) => {
 		})
 
 		// Post changes to the API
-		await axios
-			.post(`/api/like_v3/${nft_id}`)
-			.then(res => {
-				console.log(res, 'success!')
-				mixpanel.track('Liked item')
-			})
-			.catch(err => {
-				console.log(err, 'error #?')
-				if (err.response.data.message.includes('429')) {
-					console.log(err.response.data.message)
-					return context.setThrottleMessage(err.response.data.message)
-				}
-				console.error(err)
-			})
+		try {
+			await axios
+				.post(`/api/like_v3/${nft_id}`)
+				.then(res => {
+					mixpanel.track('Liked item')
+				})
+				.catch(err => {
+					if (err.response.data.message.includes('429')) {
+						return context.setThrottleMessage(err.response.data.message)
+					}
+					console.error(err)
+				})
+		} catch (err) {
+			console.error(err)
+		}
 	}
 
 	const handleUnlike = async nft_id => {
