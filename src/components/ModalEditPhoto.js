@@ -109,29 +109,35 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 		hiddenFileInput.current.click()
 	}
 
+	const clearForm = () => {
+		if (!saveInProgress) {
+			if (croppie) {
+				try {
+					croppie.destroy()
+				} catch (e) {
+					console.error(e)
+				}
+			}
+			setCroppie(null)
+			setImage('')
+		}
+	}
+
 	return (
 		<>
 			{isOpen && (
 				<ScrollableModal
 					closeModal={() => {
 						if (!saveInProgress) {
+							clearForm()
 							setEditModalOpen(false)
-							if (croppie) {
-								try {
-									croppie.destroy()
-								} catch (e) {
-									console.error(e)
-								}
-							}
-							setCroppie(null)
-							setImage('')
 						}
 					}}
 					contentWidth="30rem"
 				>
 					<div className="p-4">
 						<div ref={formRef}>
-							<CloseButton setEditModalOpen={setEditModalOpen} />
+							<CloseButton cleanupFunction={clearForm} setEditModalOpen={setEditModalOpen} />
 							<div className="text-3xl border-b-2 pb-2">Edit Photo</div>
 							<div className="mt-4 mb-4">
 								{image === '' && (
@@ -153,22 +159,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 								</div>
 
 								{image !== '' && (
-									<div
-										className="text-sm text-center cursor-pointer"
-										onClick={() => {
-											if (!saveInProgress) {
-												if (croppie) {
-													try {
-														croppie.destroy()
-													} catch (e) {
-														console.error(e)
-													}
-												}
-												setCroppie(null)
-												setImage('')
-											}
-										}}
-									>
+									<div className="text-sm text-center cursor-pointer" onClick={clearForm}>
 										Clear
 									</div>
 								)}
@@ -182,16 +173,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 										onClick={() => {
 											if (!saveInProgress) {
 												setEditModalOpen(false)
-												if (croppie) {
-													try {
-														croppie.destroy()
-													} catch (e) {
-														console.error(e)
-													}
-												}
-
-												setCroppie(null)
-												setImage('')
+												clearForm()
 											}
 										}}
 									>
