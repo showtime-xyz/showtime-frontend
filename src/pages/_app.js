@@ -5,6 +5,7 @@ import mixpanel from 'mixpanel-browser'
 import Router from 'next/router'
 import ProgressBar from '@badrap/bar-of-progress'
 import axios from '@/lib/axios'
+import { filterNewRecs } from '../lib/utilities'
 
 mixpanel.init('9b14512bc76f3f349c708f67ab189941')
 
@@ -35,6 +36,9 @@ const App = ({ Component, pageProps }) => {
 	const [columns, setColumns] = useState(null)
 	const [isMobile, setIsMobile] = useState(null)
 	const [toggleRefreshFeed, setToggleRefreshFeed] = useState(false)
+	const [recQueue, setRecQueue] = useState([])
+	const [loadingRecommendedFollows, setLoadingRecommendedFollows] = useState(true)
+	const [recommendedFollows, setRecommendedFollows] = useState([])
 
 	const adjustGridProperties = windowWidth => {
 		if (windowWidth < 790 + 30) {
@@ -112,6 +116,51 @@ const App = ({ Component, pageProps }) => {
 		}
 	}
 
+	const getActivityRecommendedFollows = async () => {
+		setLoadingRecommendedFollows(true)
+		const { data } = await axios.post('/api/getactivityrecommendedfollows').then(res => res.data)
+		setRecommendedFollows(data)
+
+		// get recond result
+		const { data: secondData } = await axios.post('/api/getactivityrecommendedfollows', { recache: true }).then(res => res.data)
+
+		setRecQueue(secondData)
+		setLoadingRecommendedFollows(false)
+	}
+
+	const getActivityRecommendedFollowsRecache = async () => {
+		setLoadingRecommendedFollows(true)
+		const { data } = await axios.post('/api/getactivityrecommendedfollows', { recache: true }).then(res => res.data)
+
+		setRecQueue(data)
+		setLoadingRecommendedFollows(false)
+	}
+
+	// get recommended followers on init
+	useEffect(() => {
+		if (typeof user !== 'undefined') getActivityRecommendedFollows()
+	}, [user])
+
+	// update recommendedFollows when the RecQueue is updated
+	useEffect(() => {
+		//filter the recQueue before updating our list
+		const filteredRecQueue = filterNewRecs(recQueue, recommendedFollows, myFollows || [])
+		setRecommendedFollows([...recommendedFollows, ...filteredRecQueue])
+	}, [recQueue])
+
+	// when context.myFollows changes, filter out any recommended follows
+	useEffect(() => {
+		if (myFollows) {
+			const filteredRecs = filterNewRecs(recommendedFollows, [], myFollows)
+			setRecommendedFollows(filteredRecs)
+		}
+	}, [myFollows])
+
+	//get more recs when we're at 3 recs
+	useEffect(() => {
+		if (typeof user !== 'undefined' && !loadingRecommendedFollows && recommendedFollows.length < 4) getActivityRecommendedFollowsRecache()
+	}, [recommendedFollows])
+
 	useEffect(() => {
 		getUserFromCookies()
 
@@ -141,6 +190,8 @@ const App = ({ Component, pageProps }) => {
 		columns,
 		isMobile,
 		toggleRefreshFeed,
+		recommendedFollows,
+		loadingRecommendedFollows,
 		setWindowSize,
 		setMyLikes,
 		setMyLikeCounts,
@@ -150,6 +201,7 @@ const App = ({ Component, pageProps }) => {
 		setMyProfile,
 		setMyRecommendations,
 		setLoginModalOpen,
+		setRecommendedFollows,
 
 		getUserFromCookies,
 		logOut: async () => {
