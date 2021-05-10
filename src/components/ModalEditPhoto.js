@@ -40,6 +40,18 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 		}
 	}
 
+	const handleRemovePhoto = () => {
+		setSaveInProgress(true)
+		axios
+			.post('/api/profile/avatar')
+			.then(res => res.data)
+			.then(({ data: emptyUrl }) => {
+				context.setMyProfile({ ...context.myProfile, img_url: emptyUrl })
+				setEditModalOpen(false)
+				setSaveInProgress(false)
+			})
+	}
+
 	const submitPhoto = () => {
 		try {
 			if (croppie !== null) {
@@ -53,10 +65,10 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 						format: 'jpeg',
 						circle: false,
 					})
-					.then(blob => {
+					.then(blobString => {
 						// Post changes to the API
 						axios
-							.post('/api/profile/avatar', blob)
+							.post('/api/profile/avatar', { image: blobString })
 							.then(res => res.data)
 							.then(({ data: url }) => {
 								context.setMyProfile({ ...context.myProfile, img_url: url })
@@ -66,10 +78,11 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 								if (croppie) croppie.destroy()
 								setCroppie(null)
 								setImage('')
+								setSaveInProgress(false)
 							})
 					})
 			}
-		} finally {
+		} catch (e) {
 			setSaveInProgress(false)
 		}
 	}
@@ -160,52 +173,63 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 									</div>
 								)}
 							</div>
-							<div className="border-t-2 pt-4">
-								<button
-									onClick={handleSubmit}
-									className="showtime-green-button  px-4 py-2 rounded-full float-right w-36"
-									style={
-										image === ''
-											? {
-													borderColor: '#35bb5b',
-													borderWidth: 2,
-													opacity: 0.6,
-													cursor: 'not-allowed',
-											  }
-											: { borderColor: '#35bb5b', borderWidth: 2, opacity: 1 }
-									}
-									disabled={image === '' || saveInProgress}
-								>
-									{saveInProgress ? (
-										<div className="flex items-center justify-center">
-											<div className="loading-card-spinner-small" />
-										</div>
-									) : (
-										'Save changes'
-									)}
-								</button>
 
-								<button
-									type="button"
-									className="showtime-black-button-outline  px-4 py-2  rounded-full"
-									onClick={() => {
-										if (!saveInProgress) {
-											setEditModalOpen(false)
-											if (croppie) {
-												try {
-													croppie.destroy()
-												} catch (e) {
-													console.error(e)
+							<div className="border-t-2 pt-4 flex flex-row items-center">
+								<div>
+									<button
+										type="button"
+										className="showtime-black-button-outline  px-4 py-2  rounded-full"
+										onClick={() => {
+											if (!saveInProgress) {
+												setEditModalOpen(false)
+												if (croppie) {
+													try {
+														croppie.destroy()
+													} catch (e) {
+														console.error(e)
+													}
 												}
-											}
 
-											setCroppie(null)
-											setImage('')
+												setCroppie(null)
+												setImage('')
+											}
+										}}
+									>
+										Cancel
+									</button>
+								</div>
+
+								{context.myProfile.img_url && (
+									<div className="text-sm ml-4 cursor-pointer" onClick={handleRemovePhoto}>
+										Remove
+									</div>
+								)}
+								<div className="flex-grow"></div>
+								<div>
+									<button
+										onClick={handleSubmit}
+										className="showtime-green-button  px-4 py-2  rounded-full float-right w-24"
+										style={
+											image === ''
+												? {
+														borderColor: '#35bb5b',
+														borderWidth: 2,
+														opacity: 0.6,
+														cursor: 'not-allowed',
+												  }
+												: { borderColor: '#35bb5b', borderWidth: 2, opacity: 1 }
 										}
-									}}
-								>
-									Cancel
-								</button>
+										disabled={image === '' || saveInProgress}
+									>
+										{saveInProgress ? (
+											<div className="flex items-center justify-center">
+												<div className="loading-card-spinner-small" />
+											</div>
+										) : (
+											'Save'
+										)}
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>

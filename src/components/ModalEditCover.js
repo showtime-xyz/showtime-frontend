@@ -68,10 +68,10 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 						format: 'jpeg',
 						circle: false,
 					})
-					.then(blob => {
+					.then(blobString => {
 						// Post changes to the API
 						axios
-							.post('/api/profile/cover', blob)
+							.post('/api/profile/cover', { image: blobString })
 							.then(res => res.data)
 							.then(({ data: url }) => {
 								context.setMyProfile({ ...context.myProfile, cover_url: url })
@@ -81,6 +81,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 								if (croppie) croppie.destroy()
 								setCroppie(null)
 								setImage('')
+								setSaveInProgress(false)
 							})
 					})
 			}
