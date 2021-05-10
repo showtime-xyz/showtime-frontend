@@ -53,10 +53,10 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 						format: 'jpeg',
 						circle: false,
 					})
-					.then(blob => {
+					.then(blobString => {
 						// Post changes to the API
 						axios
-							.post('/api/profile/avatar', blob)
+							.post('/api/profile/avatar', { image: blobString })
 							.then(res => res.data)
 							.then(({ data: url }) => {
 								context.setMyProfile({ ...context.myProfile, img_url: url })
