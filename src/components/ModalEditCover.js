@@ -81,6 +81,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 								if (croppie) croppie.destroy()
 								setCroppie(null)
 								setImage('')
+								setSaveInProgress(false)
 							})
 					})
 			}
