@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react'
 import mixpanel from 'mixpanel-browser'
 import AppContext from '@/context/app-context'
 import axios from '@/lib/axios'
-import { ERROR_MESSAGE_FOLLOW } from '@/lib/constants'
 
 const MiniFollowButton = ({ profileId }) => {
 	const context = useContext(AppContext)
