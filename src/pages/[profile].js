@@ -454,8 +454,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 					mixpanel.track('Followed profile')
 				})
 				.catch(err => {
-					if (err.response.data.message.includes('429')) {
-						return context.setThrottleMessage(ERROR_MESSAGE_FOLLOW)
+					if (err.response.data.code === 429) {
+						return context.setThrottleMessage(err.response.data.message)
 					}
 					console.error(err)
 				})

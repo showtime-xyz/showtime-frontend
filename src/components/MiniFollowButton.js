@@ -25,8 +25,8 @@ const MiniFollowButton = ({ profileId }) => {
 					mixpanel.track('Followed profile - Card button')
 				})
 				.catch(err => {
-					if (err.response.data.message.includes('429')) {
-						return context.setThrottleMessage(ERROR_MESSAGE_FOLLOW)
+					if (err.response.data.code === 429) {
+						return context.setThrottleMessage(err.response.data.message)
 					}
 					console.error(err)
 				})

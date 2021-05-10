@@ -31,8 +31,8 @@ const LikeButton = ({ item }) => {
 					mixpanel.track('Liked item')
 				})
 				.catch(err => {
-					if (err.response.data.message.includes('429')) {
-						return context.setThrottleMessage(ERROR_MESSAGE_LIKE)
+					if (err.response.data.code === 429) {
+						return context.setThrottleMessage(err.response.data.message)
 					}
 					console.error(err)
 				})

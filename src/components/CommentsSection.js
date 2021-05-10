@@ -134,8 +134,8 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 					mixpanel.track('Comment created')
 				})
 				.catch(err => {
-					if (err.response.data.message.includes('429')) {
-						return context.setThrottleMessage(ERROR_MESSAGE_COMMENT)
+					if (err.response.data.code === 429) {
+						return context.setThrottleMessage(err.response.data.message)
 					}
 					console.error(err)
 				})
