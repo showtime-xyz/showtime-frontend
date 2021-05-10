@@ -26,9 +26,6 @@ export const CONTRACTS = {
 }
 
 export const DEFAULT_PROFILE_PIC = 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'
-export const ERROR_MESSAGE_FOLLOW = 'You have hit a follow limit designed to protect authentic connections on Showtime. Your ability to follow people has been paused for 24 hours.'
-export const ERROR_MESSAGE_LIKE = 'You have hit a like limit designed to protect authentic connections on Showtime. Your ability to like items has been paused for 24 hours.'
-export const ERROR_MESSAGE_COMMENT = 'You have hit a comment limit designed to protect authentic connections on Showtime. Your ability to comment has been paused for 24 hours.'
 
 // fields to sort by on profile page
 export const SORT_FIELDS = {
