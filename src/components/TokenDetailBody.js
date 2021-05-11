@@ -260,7 +260,7 @@ const TokenDetailBody = ({
 							{item.token_description && (
 								<>
 									<div className="md:text-lg py-2">Description</div>
-									<div className={'text-gray-500 truncate text-sm sm:text-base'}>
+									<div className="text-gray-500 text-sm sm:text-base whitespace-pre-line">
 										{moreShown ? (
 											<div className="whitespace-pre-line">{removeTags(item.token_description)}</div>
 										) : (

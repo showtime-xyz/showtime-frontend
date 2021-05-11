@@ -41,6 +41,9 @@ module.exports = {
 				afro: ['Afronaut'],
 				sans: ['"Tomato Grotesk"', ...defaultTheme.fontFamily.sans],
 			},
+			whitespace: {
+				'break-spaces': 'break-spaces',
+			},
 			zIndex: {
 				1: 1,
 				2: 2,

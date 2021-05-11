@@ -87,8 +87,6 @@ const TokenCard = ({
 		}
 	}
 
-	//const hash = item.token_img_url || item.token_animation_url;
-
 	return (
 		<div className="w-full h-full">
 			<div ref={divRef} className={`w-full h-full sm:rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all bg-white flex flex-col ${item.user_hidden ? 'opacity-70 bg-gray-200' : ''}`}>
