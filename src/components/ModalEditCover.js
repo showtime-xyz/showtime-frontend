@@ -68,10 +68,10 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 						format: 'jpeg',
 						circle: false,
 					})
-					.then(blob => {
+					.then(blobString => {
 						// Post changes to the API
 						axios
-							.post('/api/profile/cover', blob)
+							.post('/api/profile/cover', { image: blobString })
 							.then(res => res.data)
 							.then(({ data: url }) => {
 								context.setMyProfile({ ...context.myProfile, cover_url: url })
@@ -81,6 +81,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 								if (croppie) croppie.destroy()
 								setCroppie(null)
 								setImage('')
+								setSaveInProgress(false)
 							})
 					})
 			}
@@ -111,29 +112,35 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 		hiddenFileInput.current.click()
 	}
 
+	const clearForm = () => {
+		if (!saveInProgress) {
+			if (croppie) {
+				try {
+					croppie.destroy()
+				} catch (e) {
+					console.error(e)
+				}
+			}
+			setCroppie(null)
+			setImage('')
+		}
+	}
+
 	return (
 		<>
 			{isOpen && (
 				<ScrollableModal
 					closeModal={() => {
 						if (!saveInProgress) {
+							clearForm()
 							setEditModalOpen(false)
-							if (croppie) {
-								try {
-									croppie.destroy()
-								} catch (e) {
-									console.error(e)
-								}
-							}
-							setCroppie(null)
-							setImage('')
 						}
 					}}
 					contentWidth="30rem"
 				>
 					<div className="p-4">
 						<div ref={formRef}>
-							<CloseButton setEditModalOpen={setEditModalOpen} />
+							<CloseButton cleanupFunction={clearForm} setEditModalOpen={setEditModalOpen} />
 							<div className="text-3xl border-b-2 pb-2">Edit Cover Image</div>
 							<div className="mt-4 mb-4">
 								{image === '' && (
@@ -152,22 +159,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 								</div>
 
 								{image !== '' && (
-									<div
-										className="text-sm text-center cursor-pointer"
-										onClick={() => {
-											if (!saveInProgress) {
-												if (croppie) {
-													try {
-														croppie.destroy()
-													} catch (e) {
-														console.error(e)
-													}
-												}
-												setCroppie(null)
-												setImage('')
-											}
-										}}
-									>
+									<div className="text-sm text-center cursor-pointer" onClick={clearForm}>
 										Clear
 									</div>
 								)}
@@ -180,16 +172,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 										onClick={() => {
 											if (!saveInProgress) {
 												setEditModalOpen(false)
-												if (croppie) {
-													try {
-														croppie.destroy()
-													} catch (e) {
-														console.error(e)
-													}
-												}
-
-												setCroppie(null)
-												setImage('')
+												clearForm()
 											}
 										}}
 									>

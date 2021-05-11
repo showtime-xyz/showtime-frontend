@@ -40,6 +40,18 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 		}
 	}
 
+	const handleRemovePhoto = () => {
+		setSaveInProgress(true)
+		axios
+			.post('/api/profile/avatar')
+			.then(res => res.data)
+			.then(({ data: emptyUrl }) => {
+				context.setMyProfile({ ...context.myProfile, img_url: emptyUrl })
+				setEditModalOpen(false)
+				setSaveInProgress(false)
+			})
+	}
+
 	const submitPhoto = () => {
 		try {
 			if (croppie !== null) {
@@ -53,10 +65,10 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 						format: 'jpeg',
 						circle: false,
 					})
-					.then(blob => {
+					.then(blobString => {
 						// Post changes to the API
 						axios
-							.post('/api/profile/avatar', blob)
+							.post('/api/profile/avatar', { image: blobString })
 							.then(res => res.data)
 							.then(({ data: url }) => {
 								context.setMyProfile({ ...context.myProfile, img_url: url })
@@ -66,10 +78,11 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 								if (croppie) croppie.destroy()
 								setCroppie(null)
 								setImage('')
+								setSaveInProgress(false)
 							})
 					})
 			}
-		} finally {
+		} catch (e) {
 			setSaveInProgress(false)
 		}
 	}
@@ -96,29 +109,35 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 		hiddenFileInput.current.click()
 	}
 
+	const clearForm = () => {
+		if (!saveInProgress) {
+			if (croppie) {
+				try {
+					croppie.destroy()
+				} catch (e) {
+					console.error(e)
+				}
+			}
+			setCroppie(null)
+			setImage('')
+		}
+	}
+
 	return (
 		<>
 			{isOpen && (
 				<ScrollableModal
 					closeModal={() => {
 						if (!saveInProgress) {
+							clearForm()
 							setEditModalOpen(false)
-							if (croppie) {
-								try {
-									croppie.destroy()
-								} catch (e) {
-									console.error(e)
-								}
-							}
-							setCroppie(null)
-							setImage('')
 						}
 					}}
 					contentWidth="30rem"
 				>
 					<div className="p-4">
 						<div ref={formRef}>
-							<CloseButton setEditModalOpen={setEditModalOpen} />
+							<CloseButton cleanupFunction={clearForm} setEditModalOpen={setEditModalOpen} />
 							<div className="text-3xl border-b-2 pb-2">Edit Photo</div>
 							<div className="mt-4 mb-4">
 								{image === '' && (
@@ -137,58 +156,45 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 								</div>
 
 								{image !== '' && (
-									<div
-										className="text-sm text-center cursor-pointer"
-										onClick={() => {
-											if (!saveInProgress) {
-												if (croppie) {
-													try {
-														croppie.destroy()
-													} catch (e) {
-														console.error(e)
-													}
-												}
-												setCroppie(null)
-												setImage('')
-											}
-										}}
-									>
+									<div className="text-sm text-center cursor-pointer" onClick={clearForm}>
 										Clear
 									</div>
 								)}
 							</div>
-							<div className="border-t-2 pt-4">
-								<button onClick={handleSubmit} className={`bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition px-4 py-2 rounded-full float-right w-36 ${image === '' ? 'opacity-60 cursor-not-allowed' : ''}`} disabled={image === '' || saveInProgress}>
-									{saveInProgress ? (
-										<div className="flex items-center justify-center">
-											<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
-										</div>
-									) : (
-										'Save changes'
-									)}
-								</button>
 
-								<button
-									type="button"
-									className="border-2 text-gray-800 border-gray-800 hover:border-gray-500 hover:text-gray-500 px-4 py-2 rounded-full transition"
-									onClick={() => {
-										if (!saveInProgress) {
-											setEditModalOpen(false)
-											if (croppie) {
-												try {
-													croppie.destroy()
-												} catch (e) {
-													console.error(e)
-												}
+							<div className="border-t-2 pt-4 flex flex-row items-center">
+								<div>
+									<button
+										type="button"
+										className="showtime-black-button-outline  px-4 py-2  rounded-full"
+										onClick={() => {
+											if (!saveInProgress) {
+												setEditModalOpen(false)
+												clearForm()
 											}
+										}}
+									>
+										Cancel
+									</button>
+								</div>
 
-											setCroppie(null)
-											setImage('')
-										}
-									}}
-								>
-									Cancel
-								</button>
+								{context.myProfile.img_url && (
+									<div className="text-sm ml-4 cursor-pointer" onClick={handleRemovePhoto}>
+										Remove
+									</div>
+								)}
+								<div className="flex-grow"></div>
+								<div>
+									<button onClick={handleSubmit} className={`bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition px-4 py-2 rounded-full float-right w-36 ${image === '' ? 'opacity-60 cursor-not-allowed' : ''}`} disabled={image === '' || saveInProgress}>
+										{saveInProgress ? (
+											<div className="flex items-center justify-center">
+												<div className="loading-card-spinner-small" />
+											</div>
+										) : (
+											'Save'
+										)}
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>

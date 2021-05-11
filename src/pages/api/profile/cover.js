@@ -4,18 +4,17 @@ import CookieService from '@/lib/cookie'
 import backend from '@/lib/backend'
 
 export default handler().post(async ({ cookies, body }, res) => {
-	try {
-		const user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+	const user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
-		await backend('/v1/editcoverphoto', body, {
+	await backend
+		.post('/v2/editcoverphoto', body, {
 			headers: {
 				'X-Authenticated-User': user.publicAddress,
 				'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
+				'Content-Type': 'application/json',
 			},
-		}).then(resp => res.json(resp.data))
-	} catch (error) {
-		console.log(error)
-	}
+		})
+		.then(resp => res.json(resp.data))
 
 	res.status(200).end()
 })
