@@ -20,9 +20,6 @@ const TokenCard = ({
 	//setShowDuplicateNFTs,
 	isMyProfile,
 	listId,
-	//userHiddenItems,
-	//setUserHiddenItems,
-	//refreshItems,
 	setOpenCardMenu,
 	openCardMenu,
 	changeSpotlightItem,
@@ -37,7 +34,6 @@ const TokenCard = ({
 }) => {
 	const [item, setItem] = useState(originalItem)
 	const [moreShown, setMoreShown] = useState(false)
-	//const [imageLoaded, setImageLoaded] = useState(false);
 	const [showVideo, setShowVideo] = useState(false)
 	const [muted, setMuted] = useState(true)
 	const [refreshing, setRefreshing] = useState(false)
@@ -47,8 +43,6 @@ const TokenCard = ({
 	const divRef = useRef()
 
 	const handleHide = async () => {
-		//setUserHiddenItems([...userHiddenItems, item.nft_id]);
-
 		setItem({ ...item, user_hidden: true })
 		setHasUserHiddenItems(true)
 
@@ -61,10 +55,6 @@ const TokenCard = ({
 	}
 
 	const handleUnhide = async () => {
-		//setUserHiddenItems([
-		//  ...userHiddenItems.filter((nft_id) => nft_id != item.nft_id),
-		//]);
-
 		setItem({ ...item, user_hidden: false })
 
 		// Post changes to the API
@@ -108,7 +98,7 @@ const TokenCard = ({
 							<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
 								<a className="flex flex-row items-center ">
 									<div>
-										<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-5 h-5" />
+										<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
 									</div>
 									<div className="text-gray-800 hover:text-stpink ml-2">{truncateWithEllipses(item.collection_name + ' Collection', 30)}</div>
 								</a>
@@ -117,7 +107,7 @@ const TokenCard = ({
 							<Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
 								<a className="flex flex-row items-center ">
 									<div>
-										<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-5 h-5" />
+										<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
 									</div>
 									<div className="ml-2 hover:text-stpink truncate">{truncateWithEllipses(item.creator_name, 22)}</div>
 								</a>
