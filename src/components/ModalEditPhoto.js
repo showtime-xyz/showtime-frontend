@@ -166,7 +166,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 								<div>
 									<button
 										type="button"
-										className="showtime-black-button-outline  px-4 py-2  rounded-full"
+										className="border-2 text-gray-800 border-gray-800 hover:border-gray-500 hover:text-gray-500 px-4 py-2 rounded-full outline-none"
 										onClick={() => {
 											if (!saveInProgress) {
 												setEditModalOpen(false)
