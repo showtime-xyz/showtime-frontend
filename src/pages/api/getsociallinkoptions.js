@@ -12,7 +12,7 @@ export default handler().get(async (req, res) => {
 		.get('/v1/link_options', {
 			headers: {
 				'X-Authenticated-User': user.publicAddress,
-				'X-Authenticated-Email': user?.email,
+				'X-Authenticated-Email': user?.email ?? null,
 				'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
 			},
 		})
