@@ -18,11 +18,6 @@ import RecommendFollowers from '@/components/RecommendFollowers'
 import axios from '@/lib/axios'
 
 const ACTIVITY_PAGE_LENGTH = 2 // 5 activity items per activity page
-export async function getServerSideProps() {
-	return {
-		props: {},
-	}
-}
 
 const Activity = () => {
 	const context = useContext(AppContext)
@@ -260,12 +255,7 @@ const Activity = () => {
 										<FontAwesomeIcon icon={activityTypeFilter === 1 ? fasHeart : faHeart} className="mr-2 w-4 h-4" />
 										<div>Likes</div>
 									</div>
-									<div
-										onClick={() => {
-											handleFilterClick(2)
-										}}
-										className={`hover:bg-stblue100 mb-1 p-2 rounded-lg px-3 ${activityTypeFilter === 2 ? 'text-stblue bg-stblue100' : 'text-gray-500'} hover:text-stblue cursor-pointer transition-all flex flex-row items-center`}
-									>
+									<div onClick={() => handleFilterClick(2)} className={`hover:bg-stblue100 mb-1 p-2 rounded-lg px-3 ${activityTypeFilter === 2 ? 'text-stblue bg-stblue100' : 'text-gray-500'} hover:text-stblue cursor-pointer transition-all flex flex-row items-center`}>
 										<FontAwesomeIcon icon={activityTypeFilter === 2 ? fasComment : faComment} className="mr-2 w-4 h-4" />
 										<div>Comments</div>
 									</div>
@@ -289,7 +279,7 @@ const Activity = () => {
 											<span className="cursor-pointer text-gray-800 hover:text-stpink" onClick={() => context.setLoginModalOpen(true)}>
 												Sign in
 											</span>{' '}
-											to view & follow
+											to view &amp; follow
 										</div>
 									</div>
 								) : null}
