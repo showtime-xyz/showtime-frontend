@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import '@/styles/globals.css'
+import { DISABLE_ALL } from '@/lib/constants'
 import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
 import Router from 'next/router'
 import ProgressBar from '@badrap/bar-of-progress'
+import ModalThrottleUser from '@/components/ModalThrottleUser'
 import axios from '@/lib/axios'
 import { filterNewRecs } from '../lib/utilities'
 
@@ -36,6 +38,12 @@ const App = ({ Component, pageProps }) => {
 	const [columns, setColumns] = useState(null)
 	const [isMobile, setIsMobile] = useState(null)
 	const [toggleRefreshFeed, setToggleRefreshFeed] = useState(false)
+	const [throttleMessage, setThrottleMessage] = useState(null)
+	const [throttleOpen, setThrottleOpen] = useState(false)
+	const [throttleContent, setThrottleContent] = useState('')
+	const [disableLikes, setDisableLikes] = useState(false)
+	const [disableComments, setDisableComments] = useState(false)
+	const [disableFollows, setDisableFollows] = useState(false)
 	const [recQueue, setRecQueue] = useState([])
 	const [loadingRecommendedFollows, setLoadingRecommendedFollows] = useState(true)
 	const [recommendedFollows, setRecommendedFollows] = useState([])
@@ -163,6 +171,16 @@ const App = ({ Component, pageProps }) => {
 	}, [recommendedFollows])
 
 	useEffect(() => {
+		if (throttleMessage) {
+			setThrottleContent(throttleMessage)
+			setThrottleOpen(true)
+			setDisableLikes(DISABLE_ALL || disableLikes || throttleMessage.includes('like'))
+			setDisableComments(DISABLE_ALL || disableComments || throttleMessage.includes('comment'))
+			setDisableFollows(DISABLE_ALL || disableFollows || throttleMessage.includes('follow'))
+		}
+	}, [throttleMessage])
+
+	useEffect(() => {
 		getUserFromCookies()
 
 		// Add event listener
@@ -191,6 +209,10 @@ const App = ({ Component, pageProps }) => {
 		columns,
 		isMobile,
 		toggleRefreshFeed,
+		throttleMessage,
+		disableLikes,
+		disableComments,
+		disableFollows,
 		recommendedFollows,
 		loadingRecommendedFollows,
 		setWindowSize,
@@ -202,6 +224,7 @@ const App = ({ Component, pageProps }) => {
 		setMyProfile,
 		setMyRecommendations,
 		setLoginModalOpen,
+		setThrottleMessage,
 		setRecommendedFollows,
 
 		getUserFromCookies,
@@ -226,6 +249,7 @@ const App = ({ Component, pageProps }) => {
 
 	return (
 		<AppContext.Provider value={injectedGlobalContext}>
+			<ModalThrottleUser isOpen={throttleOpen} closeModal={() => setThrottleOpen(false)} modalContent={throttleContent} />
 			<Component {...pageProps} />
 		</AppContext.Provider>
 	)
