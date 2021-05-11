@@ -27,7 +27,7 @@ export default class MyDocument extends Document {
 					<link rel="preload" href="/fonts/woff/Afronaut.woff" as="font" type="font/woff" />
 					{this.props.styleTags}
 				</Head>
-				<body style={{ maxWidth: '100vw' }}>
+				<body style={{ maxWidth: '100vw !important' }}>
 					{/* Here we will mount our modal portal */}
 					<div id="modal" />
 					<Main />
