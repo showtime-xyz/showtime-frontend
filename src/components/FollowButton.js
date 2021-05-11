@@ -47,20 +47,19 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 	}, [myFollows])
 
 	const handleFollow = async () => {
-		setIsFollowed(true)
-		setFollowerCount(followerCount + 1)
-		// Change myFollows via setMyFollows
-		context.setMyFollows([{ profile_id: item?.profile_id }, ...context.myFollows])
 		// Post changes to the API
 		try {
 			await axios
 				.post(`/api/follow_v2/${item?.profile_id}`)
 				.then(() => {
+					setIsFollowed(true)
+					setFollowerCount(followerCount + 1)
+					// Change myFollows via setMyFollows
+					context.setMyFollows([{ profile_id: item?.profile_id }, ...context.myFollows])
 					mixpanel.track('Followed profile')
 				})
 				.catch(err => {
 					if (err.response.data.code === 429) {
-						handleUnfollow()
 						return context.setThrottleMessage(err.response.data.message)
 					}
 					console.error(err)
@@ -76,10 +75,8 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 		// Change myLikes via setMyLikes
 		context.setMyFollows(context.myFollows.filter(i => i?.profile_id !== item?.profile_id))
 		// Post changes to the API
-		if (context.disableFollows === false) {
-			await axios.post(`/api/unfollow_v2/${item?.profile_id}`)
-			mixpanel.track('Unfollowed profile')
-		}
+		await axios.post(`/api/unfollow_v2/${item?.profile_id}`)
+		mixpanel.track('Unfollowed profile')
 	}
 
 	const handleLoggedOutFollow = () => {

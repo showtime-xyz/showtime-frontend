@@ -131,6 +131,9 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 			await axios
 				.post('/api/createcomment', { nftId, message: commentText })
 				.then(() => {
+					// pull new comments
+					refreshComments(false)
+					storeCommentInContext()
 					mixpanel.track('Comment created')
 				})
 				.catch(err => {
@@ -143,9 +146,6 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 			console.error(err)
 		}
 
-		// pull new comments
-		await refreshComments(false)
-		await storeCommentInContext()
 		// clear state
 		setCommentText('')
 		setIsSubmitting(false)
