@@ -48,7 +48,6 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 
 	const handleFollow = async () => {
 		setIsFollowed(true)
-		setFollowerCount(followerCount + 1)
 		// Change myFollows via setMyFollows
 		context.setMyFollows([{ profile_id: item?.profile_id }, ...context.myFollows])
 		// Post changes to the API
@@ -60,6 +59,7 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 				})
 				.catch(err => {
 					if (err.response.data.code === 429) {
+						context.setMyFollows(context.myFollows.filter(i => i?.profile_id !== item?.profile_id))
 						return context.setThrottleMessage(err.response.data.message)
 					}
 					console.error(err)

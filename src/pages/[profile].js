@@ -456,7 +456,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 				.catch(err => {
 					if (err.response.data.code === 429) {
 						setIsFollowed(false)
-						setFollowersCount(followersCount - 0)
+						setFollowersCount(followersCount)
 						// Change myLikes via setMyLikes
 						context.setMyFollows(context.myFollows.filter(item => item.profile_id != profile_id))
 
