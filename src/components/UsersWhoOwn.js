@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import ModalUserList from './ModalUserList'
 
@@ -9,7 +10,7 @@ const UserImagesList = ({ users }) => {
 			{displayedUsers.map(u => (
 				<Link key={u.username || u.wallet_address} href="/[profile]" as={`/${u.username || u.wallet_address}`}>
 					<a className="rounded-full mr-2">
-						<img src={u.img_url || 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="w-12 h-12 rounded-full" />
+						<img src={u.img_url || DEFAULT_PROFILE_PIC} className="w-12 h-12 rounded-full" />
 					</a>
 				</Link>
 			))}

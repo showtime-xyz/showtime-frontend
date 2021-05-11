@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
+import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import styled from 'styled-components'
 import ReactPlayer from 'react-player'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -239,7 +240,7 @@ const RecommendedFollowItem = ({ item, closeModal = () => {}, liteVersion, remov
 							}}
 							className="min-w-[42px]"
 						>
-							<ProfileImage isMobile={context.isMobile} liteVersion={liteVersion} src={item?.img_url ? item?.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} />
+							<ProfileImage isMobile={context.isMobile} liteVersion={liteVersion} src={item?.img_url ? item?.img_url : DEFAULT_PROFILE_PIC} />
 						</a>
 					</Link>
 					<ProfileSectionContent liteVersion={liteVersion}>

@@ -1,4 +1,5 @@
 import { createRef, useContext, useState } from 'react'
+import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
@@ -287,7 +288,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 												<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
 													<a className="flex flex-row items-center">
 														<div className="w-8">
-															<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full h-8 w-8" />
+															<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full h-8 w-8" />
 														</div>
 														<div className="mx-2 hover:text-stpink">{truncateWithEllipses(item.collection_name + ' Collection', 25)} </div>
 													</a>
@@ -301,7 +302,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 												<Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
 													<a className="flex flex-row items-center">
 														<div>
-															<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full w-8 h-8" />
+															<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
 														</div>
 														<div className="ml-2 hover:text-stpink">{truncateWithEllipses(item.creator_name, 25)}</div>
 													</a>
@@ -319,7 +320,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 															<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
 																<a className="flex flex-row items-center pr-2 ">
 																	<div>
-																		<img alt={pageProfile.name ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? pageProfile.wallet_addresses_excluding_email[0] : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-2 w-8 h-8" />
+																		<img alt={pageProfile.name ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? pageProfile.wallet_addresses_excluding_email[0] : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-8 h-8" />
 																	</div>
 																	<div className="hover:text-stpink">{pageProfile.name ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? pageProfile.wallet_addresses_excluding_email[0] : 'Unknown'}</div>
 																</a>
@@ -337,7 +338,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 													<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
 														<a className="flex flex-row items-center">
 															<div>
-																<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full mr-2 w-8 h-8" />
+																<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-8 h-8" />
 															</div>
 															<div className="hover:text-stpink">{truncateWithEllipses(item.owner_name, 25)}</div>
 														</a>

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useContext } from 'react'
+import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import mixpanel from 'mixpanel-browser'
 import Lightbox from 'react-image-lightbox'
@@ -142,7 +143,7 @@ const TokenDetailBody = ({
 								<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
 									<a className="flex flex-row items-center ">
 										<div>
-											<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full w-6 h-6" />
+											<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
 										</div>
 										<div className="showtime-card-profile-link ml-2">{truncateWithEllipses(item.collection_name, 30)} Collection</div>
 									</a>
@@ -152,7 +153,7 @@ const TokenDetailBody = ({
 									<Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
 										<a className="flex flex-row items-center">
 											<div>
-												<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'} className="rounded-full w-6 h-6" />
+												<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
 											</div>
 											<div className="showtime-card-profile-link ml-2">{truncateWithEllipses(item.creator_name, 22)}</div>
 										</a>
@@ -364,7 +365,7 @@ const TokenDetailBody = ({
 													//address={item.creator_address}
 													name={`${item.collection_name} Collection`}
 													//username={item.creator_username}
-													imageUrl={item.collection_img_url ? item.collection_img_url : 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'}
+													imageUrl={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC}
 													collectionSlug={item.collection_slug}
 													//bio={ownershipDetails.creator_bio}
 													closeModal={() => {
