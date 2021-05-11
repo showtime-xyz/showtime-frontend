@@ -121,10 +121,11 @@ const App = ({ Component, pageProps }) => {
 		const { data } = await axios.post('/api/getactivityrecommendedfollows').then(res => res.data)
 		setRecommendedFollows(data)
 
-		// get recond result
-		const { data: secondData } = await axios.post('/api/getactivityrecommendedfollows', { recache: true }).then(res => res.data)
-
-		setRecQueue(secondData)
+		// get recond result if logged in
+		if (user) {
+			const { data: secondData } = await axios.post('/api/getactivityrecommendedfollows', { recache: true }).then(res => res.data)
+			setRecQueue(secondData)
+		}
 		setLoadingRecommendedFollows(false)
 	}
 
