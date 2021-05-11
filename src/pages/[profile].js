@@ -419,41 +419,52 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	}
 
 	const handleFollow = async () => {
+		setIsFollowed(true)
+		setFollowersCount(followersCount + 1)
+		// Change myFollows via setMyFollows
+		context.setMyFollows([
+			{
+				profile_id: profile_id,
+				wallet_address: wallet_addresses[0],
+				name: name,
+				img_url: img_url ? img_url : DEFAULT_PROFILE_PIC,
+				timestamp: null,
+				username: username,
+			},
+			...context.myFollows,
+		])
+
+		setFollowers([
+			{
+				profile_id: context.myProfile.profile_id,
+				wallet_address: context.user.publicAddress,
+				name: context.myProfile.name,
+				img_url: context.myProfile.img_url ? context.myProfile.img_url : DEFAULT_PROFILE_PIC,
+				timestamp: null,
+				username: context.myProfile.username,
+			},
+			...followers,
+		])
+
 		// Post changes to the API
 		try {
 			await axios
 				.post(`/api/follow_v2/${profile_id}`)
 				.then(() => {
-					setIsFollowed(true)
-					setFollowersCount(followersCount + 1)
-					// Change myFollows via setMyFollows
-					context.setMyFollows([
-						{
-							profile_id: profile_id,
-							wallet_address: wallet_addresses[0],
-							name: name,
-							img_url: img_url ? img_url : DEFAULT_PROFILE_PIC,
-							timestamp: null,
-							username: username,
-						},
-						...context.myFollows,
-					])
-
-					setFollowers([
-						{
-							profile_id: context.myProfile.profile_id,
-							wallet_address: context.user.publicAddress,
-							name: context.myProfile.name,
-							img_url: context.myProfile.img_url ? context.myProfile.img_url : DEFAULT_PROFILE_PIC,
-							timestamp: null,
-							username: context.myProfile.username,
-						},
-						...followers,
-					])
 					mixpanel.track('Followed profile')
 				})
 				.catch(err => {
 					if (err.response.data.code === 429) {
+						setIsFollowed(false)
+						setFollowersCount(followersCount - 0)
+						// Change myLikes via setMyLikes
+						context.setMyFollows(context.myFollows.filter(item => item.profile_id != profile_id))
+
+						setFollowers(
+							followers.filter(follower => {
+								context.myProfile.profile_id != follower.profile_id
+							})
+						)
 						return context.setThrottleMessage(err.response.data.message)
 					}
 					console.error(err)
@@ -476,8 +487,10 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		)
 
 		// Post changes to the API
-		await axios.post(`/api/unfollow_v2/${profile_id}`)
-		mixpanel.track('Unfollowed profile')
+		if (context.disableFollows === false) {
+			await axios.post(`/api/unfollow_v2/${profile_id}`)
+			mixpanel.track('Unfollowed profile')
+		}
 	}
 
 	// Modal states

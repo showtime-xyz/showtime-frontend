@@ -14,22 +14,30 @@ const LikeButton = ({ item }) => {
 	const { isMobile } = context
 
 	const handleLike = async nft_id => {
+		// Change myLikes via setMyLikes
+		context.setMyLikes([...context.myLikes, nft_id])
+
+		context.setMyLikeCounts({
+			...context.myLikeCounts,
+			[nft_id]: (context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id]) ? context.myLikeCounts[item?.nft_id] : item.like_count) + 1,
+		})
+
 		// Post changes to the API
 		try {
 			await axios
 				.post(`/api/like_v3/${nft_id}`)
 				.then(() => {
-					// Change myLikes via setMyLikes
-					context.setMyLikes([...context.myLikes, nft_id])
-
-					context.setMyLikeCounts({
-						...context.myLikeCounts,
-						[nft_id]: (context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id]) ? context.myLikeCounts[item?.nft_id] : item.like_count) + 1,
-					})
 					mixpanel.track('Liked item')
 				})
 				.catch(err => {
 					if (err.response.data.code === 429) {
+						// Change myLikes via setMyLikes
+						context.setMyLikes(context.myLikes.filter(item => !(item === nft_id)))
+
+						context.setMyLikeCounts({
+							...context.myLikeCounts,
+							[nft_id]: (context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id]) ? context.myLikeCounts[item?.nft_id] : item.like_count) - 0,
+						})
 						return context.setThrottleMessage(err.response.data.message)
 					}
 					console.error(err)
