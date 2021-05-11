@@ -181,7 +181,6 @@ const Activity = () => {
 			{typeof document !== 'undefined' ? (
 				<>
 					<ModalTokenDetail isOpen={itemOpenInModal} setEditModalOpen={setItemOpenInModal} item={itemOpenInModal?.nftGroup ? itemOpenInModal.nftGroup[itemOpenInModal?.index] : null} goToNext={goToNext} goToPrevious={goToPrevious} hasNext={!(itemOpenInModal?.index === itemOpenInModal?.nftGroup?.length - 1)} hasPrevious={!(itemOpenInModal?.index === 0)} />
-
 					<ModalReportItem isOpen={reportModalIsOpen} setReportModalOpen={setReportModalIsOpen} activityId={reportModalIsOpen} removeItemFromFeed={removeItemFromFeed} />
 				</>
 			) : null}
