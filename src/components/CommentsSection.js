@@ -11,6 +11,7 @@ import AwesomeDebouncePromise from 'awesome-debounce-promise'
 import { formatAddressShort } from '@/lib/utilities'
 import axios from '@/lib/axios'
 
+// TODO: Convert to classes and include it into the MentionsInput component
 const mentionsStyle = {
 	control: {
 		backgroundColor: '#fff',
@@ -230,18 +231,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 										displayTransform={(id, display) => `${display}`}
 										trigger="@"
 										data={handleDebouncedSearchQuery}
-										style={
-											context.isMobile
-												? {
-														backgroundColor: '#dddeff',
-														borderRadius: 2,
-														marginLeft: -3,
-												  }
-												: {
-														backgroundColor: '#dddeff',
-														borderRadius: 2,
-												  }
-										}
+										className="bg-purple-200 rounded -ml-1 sm:ml-0"
 										appendSpaceOnAdd
 									/>
 								</MentionsInput>
