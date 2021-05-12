@@ -5,21 +5,7 @@ import { faArrowDown } from '@fortawesome/free-solid-svg-icons'
 import { truncateWithEllipses, formatAddressShort } from '@/lib/utilities'
 import Link from 'next/link'
 import backend from '@/lib/backend'
-import styled from 'styled-components'
 import { formatDistanceToNowStrict } from 'date-fns'
-
-const HistoryTableHeader = styled.td`
-	white-space: nowrap;
-	width: fit-content;
-	padding: 0.5rem 1rem 0.5rem 1rem;
-	text-overflow: ellipsis;
-`
-
-const HistoryTableData = styled.td`
-	white-space: nowrap;
-	padding: 0.75rem 1rem;
-	text-overflow: ellipsis;
-`
 
 export default function TokenHistoryCard({ nftId, closeModal }) {
 	const [nftHistory, setNftHistory] = useState()
@@ -56,7 +42,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
 	if (loadingHistory) {
 		return (
 			<div className="text-center my-4">
-				<div className="loading-card-spinner" />
+				<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 			</div>
 		)
 	}
@@ -68,15 +54,15 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
 						<tbody>
 							{nftHistory.history.length == 1 && !nftHistory.history[0].from_address ? null : (
 								<tr className="text-left text-gray-400 text-sm">
-									<HistoryTableHeader>From</HistoryTableHeader>
-									<HistoryTableHeader>To</HistoryTableHeader>
-									{nftHistory.multiple && <HistoryTableHeader className="text-right">Qty</HistoryTableHeader>}
-									<HistoryTableHeader>Date</HistoryTableHeader>
+									<td className="truncate px-2 py-4 w-[fit-content]">From</td>
+									<td className="truncate px-2 py-4 w-[fit-content]">To</td>
+									{nftHistory.multiple && <td className="truncate px-2 py-4 w-[fit-content] text-right">Qty</td>}
+									<td className="truncate px-2 py-4 w-[fit-content]">Date</td>
 								</tr>
 							)}
 							{nftHistory.history.map(entry => (
 								<tr key={`${entry.timestamp}${entry.from_address}${entry.to_address}`}>
-									<HistoryTableData className={!entry.from_address ? `border-t-2 border-gray-100  rounded-bl-xl ${nftHistory.history.length == 1 ? 'rounded-tl-xl' : null}` : ''}>
+									<td className={`truncate py-3 px-4 ${!entry.from_address ? `border-t-2 border-gray-100  rounded-bl-xl ${nftHistory.history.length == 1 ? 'rounded-tl-xl' : null}` : ''}`}>
 										{entry.from_address ? (
 											<Link href="/[profile]" as={`/${entry.from_username || entry.from_address}`}>
 												<a onClick={closeModal}>
@@ -89,11 +75,8 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
 										) : (
 											<div className="text-gray-400">Created</div>
 										)}
-									</HistoryTableData>
-									<HistoryTableData
-										className={!entry.from_address ? 'border-t-2 border-gray-100 flex flex-row' : ''}
-										//colSpan={!entry.from_address ? 3 : 1}
-									>
+									</td>
+									<td className={`truncate py-3 px-4 ${!entry.from_address ? 'border-t-2 border-gray-100 flex flex-row' : ''}`}>
 										<Link href="/[profile]" as={`/${entry.to_username || entry.to_address}`}>
 											<a onClick={closeModal}>
 												<div className="flex items-center hover:text-stpink transition-all w-max">
@@ -102,15 +85,9 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
 												</div>
 											</a>
 										</Link>
-									</HistoryTableData>
-									{nftHistory.multiple && <HistoryTableData className={!entry.from_address ? 'border-t-2 border-gray-100  text-right' : 'text-right'}>{entry.quantity}</HistoryTableData>}
-									<HistoryTableData className={!entry.from_address ? `border-t-2 border-gray-100  rounded-br-xl ${nftHistory.history.length == 1 ? 'rounded-tr-xl' : null}` : ''}>
-										{/*format(new Date(entry.timestamp), "PPp")*/}
-
-										{formatDistanceToNowStrict(new Date(entry.timestamp), {
-											addSuffix: true,
-										})}
-									</HistoryTableData>
+									</td>
+									{nftHistory.multiple && <td className={`truncate py-3 px-4 ${!entry.from_address ? 'border-t-2 border-gray-100  text-right' : 'text-right'}`}>{entry.quantity}</td>}
+									<td className={`truncate py-3 px-4 ${!entry.from_address ? `border-t-2 border-gray-100  rounded-br-xl ${nftHistory.history.length == 1 ? 'rounded-tr-xl' : null}` : ''}`}>{formatDistanceToNowStrict(new Date(entry.timestamp), { addSuffix: true })}</td>
 								</tr>
 							))}
 						</tbody>
@@ -130,7 +107,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
 						</div>
 					) : (
 						<div className="p-1">
-							<div className="loading-card-spinner-small" />
+							<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
 						</div>
 					)}
 				</div>

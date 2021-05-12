@@ -60,12 +60,12 @@ export default function ModalFeedback({ isOpen, closeModal }) {
 										/>
 									</div>
 									<div className="border-t-2 pt-4">
-										<button type="submit" className="showtime-green-button  px-4 py-2  rounded-full float-right border-2 border-gray-600">
+										<button type="submit" className="bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition px-4 py-2 rounded-full float-right">
 											Submit
 										</button>
 										<button
 											type="button"
-											className="showtime-black-button-outline  px-4 py-2  rounded-full"
+											className="border-2 text-gray-800 border-gray-800 hover:border-gray-500 hover:text-gray-500 px-4 py-2 rounded-full transition"
 											onClick={() => {
 												closeModal()
 												setInputValue('')

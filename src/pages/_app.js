@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import '@/styles/globals.css'
+import '@/styles/styles.css'
 import { DISABLE_ALL } from '@/lib/constants'
 import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'

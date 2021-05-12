@@ -154,7 +154,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish, isLoading, listId, isMyProfile
 			<InfiniteScroll style={{ overflow: null }} dataLength={itemsShowing} next={fetchMoreData} hasMore={hasMore}>
 				{isLoading ? (
 					<div className="mx-auto items-center flex justify-center overflow-hidden py-4 mt-16">
-						<div className="loading-card-spinner" />
+						<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 					</div>
 				) : (
 					<div className={`grid gap-6 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'lg:grid-cols-2 xl:grid-cols-3'}`}>

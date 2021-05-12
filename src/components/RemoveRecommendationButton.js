@@ -1,48 +1,10 @@
 import { useContext, useEffect, useState } from 'react'
 import _ from 'lodash'
-import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import AppContext from '@/context/app-context'
 
-const Button = styled.button`
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-	box-sizing: border-box;
-	&:hover {
-		opacity: 0.7;
-	}
-	@media screen and (max-width: 400px) {
-		width: 100%;
-		margin-top: 10px;
-	}
-	position: absolute;
-	top: 4px;
-	right: 4px;
-`
-
-const CrossIcon = styled.div`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: 10px;
-	width: 14px;
-	height: 14px;
-	color: #ccc;
-`
-
-const RemoveText = styled.h6`
-	margin-left: 10px;
-	font-size: 13px;
-	font-weight: 400;
-`
-
 const RemoveRecommendationButton = ({ item, removeRecommendation }) => {
-	const handleRemove = async () => {
-		removeRecommendation(item)
-	}
 	const context = useContext(AppContext)
 
 	const myFollows = context?.myFollows || []
@@ -50,11 +12,11 @@ const RemoveRecommendationButton = ({ item, removeRecommendation }) => {
 
 	useEffect(() => {
 		var it_is_followed = false
+
 		_.forEach(myFollows, follow => {
-			if (follow?.profile_id === item?.profile_id) {
-				it_is_followed = true
-			}
+			if (follow?.profile_id === item?.profile_id) it_is_followed = true
 		})
+
 		setIsFollowed(it_is_followed)
 	}, [myFollows])
 
@@ -62,9 +24,9 @@ const RemoveRecommendationButton = ({ item, removeRecommendation }) => {
 		!isFollowed &&
 		context.user && (
 			<div>
-				<Button onClick={handleRemove}>
-					<CrossIcon>{context.isMobile ? <RemoveText>Remove</RemoveText> : <FontAwesomeIcon icon={faTimes} className="w-4 h-4" />}</CrossIcon>
-				</Button>
+				<button className="flex items-center justify-center hover:opacity-70 w-full mt-2.5 sm:w-auto sm:mt-0 absolute top-1 right-1" onClick={() => removeRecommendation(item)}>
+					<div className="flex items-center justify-center p-2.5 w-3.5 h-3.5 text-gray-200">{context.isMobile ? <h6 className="ml-2.5 text-sm">Remove</h6> : <FontAwesomeIcon icon={faTimes} className="w-4 h-4" />}</div>
+				</button>
 			</div>
 		)
 	)

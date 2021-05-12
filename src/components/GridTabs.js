@@ -1,66 +1,29 @@
 import { useContext } from 'react'
-import styled from 'styled-components'
 import AppContext from '@/context/app-context'
 
-const GridTabsWrapper = styled.div`
-	display: flex;
-	flex-direction: row;
-	border-bottom: 1px solid #ddd;
-	margin-right: 0px;
-	//   overflow-x: scroll;
-`
-const GridTabsContainer = styled.div`
-	width: 100%;
-	padding: ${p => (p.isMobile ? (p.sortingBar ? '0px 16px 10px 16px' : '0px 16px 20px 16px') : p.sortingBar ? '0px 12px 8px 12px' : '0px 12px 1.75rem 12px')};
-`
-const GridTabsTitle = styled.h3`
-	padding: 10px 0px;
-`
-
-const Tab = styled.div`
-	width: max-content;
-	padding: 15px 0px;
-	margin-right: 25px;
-	white-space: nowrap;
-	cursor: pointer;
-	border-bottom: ${p => (p.isActive ? '3px solid #e45cff' : '3px solid transparent')};
-	transition: all 300ms ease;
-	color: ${p => (p.isActive ? '#e45cff' : 'inherit')};
-	&:hover {
-		opacity: ${p => (p.isActive ? null : 0.6)};
-	}
-`
-
-const ItemCountSpan = styled.span`
-	color: ${p => (p.isActive ? null : '#a6a6a6')};
-	margin-right: 5px;
-`
-
-function GridTabs({ children, title, sortingBar }) {
+const GridTabs = ({ children, title, sortingBar }) => {
 	const context = useContext(AppContext)
+
 	return (
-		<GridTabsContainer isMobile={context.isMobile} sortingBar={sortingBar}>
-			{title && <GridTabsTitle className="text-2xl md:text-4xl">{title}</GridTabsTitle>}
-			<GridTabsWrapper>{children}</GridTabsWrapper>
-		</GridTabsContainer>
+		<div className={`w-full ${context.isMobile ? `${sortingBar ? 'mx-4 mb-2.5' : 'mx-4 mb-5'}` : `${sortingBar ? 'mx-3 mb-2' : 'mx-3 mb-7'}`}`}>
+			{title && <h3 className="text-2xl md:text-4xl px-2.5">{title}</h3>}
+			<div className="flex border-b">{children}</div>
+		</div>
 	)
 }
 
-function GridTab({ label, itemCount, isActive, onClickTab }) {
+const GridTab = ({ label, itemCount, isActive, onClickTab }) => {
 	const cleanItemCount = () => {
-		if (itemCount === null || itemCount === undefined) {
-			return null
-		}
-		if (itemCount === 0) {
-			return '0'
-		}
+		if (itemCount === null || itemCount === undefined) return null
+		if (itemCount === 0) return '0'
 		return Number(itemCount) < 150 ? Number(itemCount) : '150+'
 	}
+
 	return (
-		<Tab onClick={onClickTab} isActive={isActive} className="text-sm md:text-base">
-			{cleanItemCount() && <ItemCountSpan isActive={isActive}>{cleanItemCount()}</ItemCountSpan>}
+		<div className={`text-sm md:text-base w-max py-3.5 mr-6 whitespace-nowrap cursor-pointer border-b-2 ${isActive ? 'border-stpink' : 'border-transparent hover:opacity-60'} transition`} onClick={onClickTab}>
+			{cleanItemCount() && <div className={`${isActive ? '' : 'text-gray-400'} mr-1`}>{cleanItemCount()}</div>}
 			<span>{label}</span>
-		</Tab>
+		</div>
 	)
 }
 

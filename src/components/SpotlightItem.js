@@ -76,7 +76,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 									<>
 										<div className={`w-full h-full ${videoReady ? 'hidden' : null}`}>
 											<div className="w-full text-center flex items-center mt-24 justify-center">
-												<div className="loading-card-spinner" />
+												<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 											</div>
 										</div>
 										<div className={`w-full shadow-lg h-full relative ${videoReady ? '' : 'invisible'}`}>
@@ -113,7 +113,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 											/>
 											{refreshing && (
 												<div className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center bg-white bg-opacity-50">
-													<div className="loading-card-spinner-small mb-2" />
+													<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin mb-2" />
 													<div>Refreshing...</div>
 												</div>
 											)}
@@ -132,7 +132,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 										>
 											{!imageLoaded ? (
 												<div className="w-full text-center flex items-center justify-center" style={{ height: divRef?.current?.clientWidth ? divRef?.current?.clientWidth : 375 }}>
-													<div className="loading-card-spinner" />
+													<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 												</div>
 											) : null}
 
@@ -160,7 +160,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 										</div>
 										{refreshing && (
 											<div className="absolute inset-0 cursor-pointer flex items-center justify-center bg-white bg-opacity-50">
-												<div className="loading-card-spinner-small mb-2" />
+												<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin mb-2" />
 												<div>Refreshing...</div>
 											</div>
 										)}
@@ -173,16 +173,16 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 							{isMyProfile ? (
 								<div className="relative sm:static">
 									<div className="absolute top-0 right-0 sm:right-6">
-										<div
+										<button
 											onClick={e => {
 												e.stopPropagation()
 
 												setOpenCardMenu(openCardMenu == item.nft_id + '_' + listId ? null : item.nft_id + '_' + listId)
 											}}
-											className="card-menu-button text-right flex items-center justify-center text-gray-600"
+											className="text-right flex items-center justify-center text-gray-600 hover:text-stpink"
 										>
 											<FontAwesomeIcon className="w-5 h-5" icon={faEllipsisH} />
-										</div>
+										</button>
 										{openCardMenu == item.nft_id + '_' + listId ? (
 											<div className="flex justify-end relative z-10">
 												<div className={`absolute text-center top-2 bg-white shadow-lg py-2 px-2 rounded-xl transition-all text-md transform border border-gray-100 ${openCardMenu == item.nft_id + '_' + listId ? 'visible opacity-1 ' : 'invisible opacity-0'}`}>

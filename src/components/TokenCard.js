@@ -21,9 +21,6 @@ const TokenCard = ({
 	//setShowDuplicateNFTs,
 	isMyProfile,
 	listId,
-	//userHiddenItems,
-	//setUserHiddenItems,
-	//refreshItems,
 	setOpenCardMenu,
 	openCardMenu,
 	changeSpotlightItem,
@@ -39,7 +36,6 @@ const TokenCard = ({
 }) => {
 	const [item, setItem] = useState(originalItem)
 	const [moreShown, setMoreShown] = useState(false)
-	//const [imageLoaded, setImageLoaded] = useState(false);
 	const [showVideo, setShowVideo] = useState(false)
 	const [muted, setMuted] = useState(true)
 	const [refreshing, setRefreshing] = useState(false)
@@ -49,8 +45,6 @@ const TokenCard = ({
 	const divRef = useRef()
 
 	const handleHide = async () => {
-		//setUserHiddenItems([...userHiddenItems, item.nft_id]);
-
 		setItem({ ...item, user_hidden: true })
 		setHasUserHiddenItems(true)
 
@@ -63,10 +57,6 @@ const TokenCard = ({
 	}
 
 	const handleUnhide = async () => {
-		//setUserHiddenItems([
-		//  ...userHiddenItems.filter((nft_id) => nft_id != item.nft_id),
-		//]);
-
 		setItem({ ...item, user_hidden: false })
 
 		// Post changes to the API
@@ -99,27 +89,25 @@ const TokenCard = ({
 		}
 	}
 
-	//const hash = item.token_img_url || item.token_animation_url;
-
 	return (
 		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
-			<div style={item.user_hidden ? { opacity: 0.7, backgroundColor: '#ddd' } : null} ref={divRef} className={`w-full h-full sm:rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all flex flex-col  bg-white ${isChangingOrder ? 'border-2 border-stpink' : ''}`}>
+			<div ref={divRef} className={`w-full h-full sm:rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all bg-white flex flex-col ${item.user_hidden ? 'opacity-70 bg-gray-200' : ''} ${isChangingOrder ? 'border-2 border-stpink' : ''}`}>
 				<div ref={item.imageRef} className="p-4 flex flex-row items-center relative">
 					<div className="pr-2 ">
 						{item.contract_is_creator ? (
 							<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
 								<a className="flex flex-row items-center ">
 									<div>
-										<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-5 h-5" />
+										<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
 									</div>
-									<div className="showtime-card-profile-link ml-2">{truncateWithEllipses(item.collection_name + ' Collection', 30)}</div>
+									<div className="text-gray-800 hover:text-stpink ml-2">{truncateWithEllipses(item.collection_name + ' Collection', 30)}</div>
 								</a>
 							</Link>
 						) : item.creator_address ? (
 							<Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
 								<a className="flex flex-row items-center ">
 									<div>
-										<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-5 h-5" />
+										<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
 									</div>
 									<div className="ml-2 hover:text-stpink truncate">{truncateWithEllipses(item.creator_name, 22)}</div>
 								</a>
@@ -132,16 +120,16 @@ const TokenCard = ({
 
 					<div>
 						{isMyProfile && listId !== 3 ? (
-							<div
+							<button
 								onClick={e => {
 									e.stopPropagation()
 
 									setOpenCardMenu(openCardMenu == item.nft_id + '_' + listId ? null : item.nft_id + '_' + listId)
 								}}
-								className="card-menu-button text-right text-gray-600"
+								className="text-right text-gray-600 hover:text-stpink"
 							>
 								<FontAwesomeIcon className="!w-4 !h-4" icon={faEllipsisH} />
-							</div>
+							</button>
 						) : null}
 
 						{openCardMenu == item.nft_id + '_' + listId ? (
@@ -218,7 +206,7 @@ const TokenCard = ({
 						</div>
 						{item.token_has_video ? (
 							<div
-								className="p-4 playbutton absolute bottom-0 right-0 cursor-pointer"
+								className="p-4 opacity-80 hover:opacity-100 absolute bottom-0 right-0 cursor-pointer"
 								onClick={() => {
 									mixpanel.track('Play card video')
 									setShowVideo(true)
@@ -231,7 +219,7 @@ const TokenCard = ({
 						) : null}
 						{refreshing && (
 							<div className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center bg-white bg-opacity-50">
-								<div className="loading-card-spinner-small mb-2" />
+								<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin mb-2" />
 								<div>Refreshing...</div>
 							</div>
 						)}
@@ -319,18 +307,12 @@ const TokenCard = ({
 												<div>
 													<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? formatAddressShort(pageProfile.wallet_addresses_excluding_email[0]) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
 												</div>
-												<div className="showtime-card-profile-link">
-													{truncateWithEllipses(
-														pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? formatAddressShort(pageProfile.wallet_addresses_excluding_email[0]) : 'Unknown',
-
-														14
-													)}
-												</div>
+												<div className="text-gray-800 hover:text-stpink">{truncateWithEllipses(pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? formatAddressShort(pageProfile.wallet_addresses_excluding_email[0]) : 'Unknown', 14)}</div>
 											</a>
 										</Link>
 
 										<div className="text-gray-400 text-sm mr-2 -ml-1 mt-px">
-											& {item.owner_count - 1} other
+											&amp; {item.owner_count - 1} other
 											{item.owner_count - 1 > 1 ? 's' : null}
 										</div>
 										{context.myProfile?.profile_id !== item.owner_id && <MiniFollowButton profileId={item.owner_id} />}
@@ -346,7 +328,7 @@ const TokenCard = ({
 											<div>
 												<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-6 h-6" />
 											</div>
-											<div className="showtime-card-profile-link">{truncateWithEllipses(item.owner_name, 24)}</div>
+											<div className="text-gray-800 hover:text-stpink">{truncateWithEllipses(item.owner_name, 24)}</div>
 										</a>
 									</Link>
 									{context.myProfile?.profile_id !== item.owner_id && !(isMyProfile && listId !== 3) && <MiniFollowButton profileId={item.owner_id} />}
