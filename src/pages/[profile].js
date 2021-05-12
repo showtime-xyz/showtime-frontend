@@ -1171,7 +1171,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												</>
 											)}
 										</Listbox>
-										{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && (
+										{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && items?.length > 0 && (
 											<Menu as="div" className="relative inline-block text-left ml-2">
 												{({ open }) => (
 													<>
