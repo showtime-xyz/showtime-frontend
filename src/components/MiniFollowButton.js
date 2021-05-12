@@ -17,8 +17,24 @@ const MiniFollowButton = ({ profileId }) => {
 		// Change myFollows via setMyFollows
 		context.setMyFollows([{ profile_id: profileId }, ...context.myFollows])
 		// Post changes to the API
-		await axios.post(`/api/follow_v2/${profileId}`)
-		mixpanel.track('Followed profile - Card button')
+		try {
+			await axios
+				.post(`/api/follow_v2/${profileId}`)
+				.then(() => {
+					mixpanel.track('Followed profile - Card button')
+				})
+				.catch(err => {
+					if (err.response.data.code === 429) {
+						setIsFollowed(false)
+						// Change myLikes via setMyLikes
+						context.setMyFollows(context.myFollows.filter(i => i?.profile_id !== profileId))
+						return context.setThrottleMessage(err.response.data.message)
+					}
+					console.error(err)
+				})
+		} catch (err) {
+			console.error(err)
+		}
 	}
 
 	const handleUnfollow = async () => {
@@ -36,7 +52,7 @@ const MiniFollowButton = ({ profileId }) => {
 	}
 
 	return isFollowed === null ? null : !isFollowed ? (
-		<div onClick={context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow} className="text-xs text-stlink opacity-80 hover:opacity-100 cursor-pointer">
+		<div onClick={context.disableFollows ? null : context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow} className={`text-xs text-stlink opacity-80 cursor-pointer ${context.disableFollows ? ' hover:opacity-80' : ' hover:opacity-100'}`}>
 			Follow
 		</div>
 	) : null

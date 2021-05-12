@@ -127,12 +127,25 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	const createComment = async () => {
 		setIsSubmitting(true)
 		// post new comment
-		await axios.post('/api/createcomment', { nftId, message: commentText })
+		try {
+			await axios
+				.post('/api/createcomment', { nftId, message: commentText })
+				.then(() => {
+					// pull new comments
+					refreshComments(false)
+					storeCommentInContext()
+					mixpanel.track('Comment created')
+				})
+				.catch(err => {
+					if (err.response.data.code === 429) {
+						return context.setThrottleMessage(err.response.data.message)
+					}
+					console.error(err)
+				})
+		} catch (err) {
+			console.error(err)
+		}
 
-		mixpanel.track('Comment created')
-		// pull new comments
-		await refreshComments(false)
-		await storeCommentInContext()
 		// clear state
 		setCommentText('')
 		setIsSubmitting(false)
@@ -212,6 +225,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 									onChange={e => {
 										setCommentText(e.target.value)
 									}}
+									disabled={context.disableComments}
 									placeholder="Your comment..."
 									className="flex-grow md:mr-2"
 									allowSuggestionsAboveCursor
@@ -245,7 +259,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 										appendSpaceOnAdd
 									/>
 								</MentionsInput>
-								<button onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === ''} className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700">
+								<button onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700">
 									{isSubmitting ? <div className="loading-card-spinner-small" /> : 'Post'}
 								</button>
 							</div>
