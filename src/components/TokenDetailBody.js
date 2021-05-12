@@ -136,7 +136,7 @@ const TokenDetailBody = ({
 			)}
 			<div className="flex flex-col relative -mt-px" ref={modalRef}>
 				{isMobile ? (
-					<div className="p-4 flex flex-row">
+					<div className="py-4 px-6 flex flex-row">
 						<div className="flex-shrink">
 							{item.contract_is_creator ? (
 								<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
