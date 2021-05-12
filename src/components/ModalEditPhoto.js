@@ -185,10 +185,10 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 								)}
 								<div className="flex-grow"></div>
 								<div>
-									<button onClick={handleSubmit} className={`bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition px-4 py-2 rounded-full float-right w-36 ${image === '' ? 'opacity-60 cursor-not-allowed' : ''}`} disabled={image === '' || saveInProgress}>
+									<button onClick={handleSubmit} className={`bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition px-4 py-2 rounded-full float-right w-24 ${image === '' ? 'opacity-60 cursor-not-allowed' : ''}`} disabled={image === '' || saveInProgress}>
 										{saveInProgress ? (
 											<div className="flex items-center justify-center">
-												<div className="loading-card-spinner-small" />
+												<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
 											</div>
 										) : (
 											'Save'

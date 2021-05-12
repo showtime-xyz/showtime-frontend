@@ -145,7 +145,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 							<div className="mt-4 mb-4">
 								{image === '' && (
 									<div className="my-16">
-										<div className="border-2 border-transparent text-white bg-stpink hover:border-stpink hover:bg-transparent hover:text-stpink transition text-sm text-center px-4 py-3 rounded-full cursor-pointer" onClick={handleClickUpload}>
+										<div className="border-2 border-transparent text-white bg-stpink hover:border-stpink hover:bg-transparent hover:text-stpink transition text-center px-4 py-3 rounded-full cursor-pointer" onClick={handleClickUpload}>
 											Upload cover image
 										</div>
 										<div className="text-center text-xs mt-4 text-gray-700">Accepts JPEG, PNG, and GIF (non-animated)</div>
