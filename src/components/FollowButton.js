@@ -27,12 +27,25 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 
 	const handleFollow = async () => {
 		setIsFollowed(true)
-		setFollowerCount(followerCount + 1)
 		// Change myFollows via setMyFollows
 		context.setMyFollows([{ profile_id: item?.profile_id }, ...context.myFollows])
 		// Post changes to the API
-		await axios.post(`/api/follow_v2/${item?.profile_id}`)
-		mixpanel.track('Followed profile')
+		try {
+			await axios
+				.post(`/api/follow_v2/${item?.profile_id}`)
+				.then(() => {
+					mixpanel.track('Followed profile')
+				})
+				.catch(err => {
+					if (err.response.data.code === 429) {
+						context.setMyFollows(context.myFollows.filter(i => i?.profile_id !== item?.profile_id))
+						return context.setThrottleMessage(err.response.data.message)
+					}
+					console.error(err)
+				})
+		} catch (err) {
+			console.error(err)
+		}
 	}
 
 	const handleUnfollow = async () => {
@@ -50,7 +63,7 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 		context.setLoginModalOpen(true)
 	}
 	return (
-		<button className={`flex items-center justify-center hover:opacity-80 border rounded-full transition py-2 px-4 ${notExpandWhenMobile ? '' : 'w-full md:w-auto'} ${hideIfFollowing && isFollowed ? 'hidden' : null} ${compact ? 'mr-1' : ''} ${compact && context.isMobile ? 'py-2 px-3' : null} ${isFollowed ? 'text-black border-gray-400' : homepage ? 'bg-stpurple text-white border-stpurple' : 'bg-black text-white border-black'}`} onClick={context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow}>
+		<button className={`flex items-center justify-center hover:opacity-80 disabled:opacity-80 border rounded-full transition py-2 px-4 ${notExpandWhenMobile ? '' : 'w-full md:w-auto'} ${hideIfFollowing && isFollowed ? 'hidden' : null} ${compact ? 'mr-1' : ''} ${compact && context.isMobile ? 'py-2 px-3' : null} ${isFollowed ? 'text-black border-gray-400' : homepage ? 'bg-stpurple text-white border-stpurple' : 'bg-black text-white border-black'}`} disabled={context.disableFollows} onClick={context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow}>
 			{!isFollowed && (
 				<div className={`mr-2 ${compact ? 'text-xs' : 'text-sm'} `}>
 					<FontAwesomeIcon icon={faPlus} />

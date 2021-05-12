@@ -16,7 +16,8 @@ export default class MyDocument extends Document {
 					<link rel="preload" href="/fonts/woff2/Afronaut.woff2" as="font" type="font/woff2" />
 					<link rel="preload" href="/fonts/woff/Afronaut.woff" as="font" type="font/woff" />
 				</Head>
-				<body>
+				<body className="!max-w-screen">
+					{/* Here we will mount our modal portal */}
 					<div id="modal" />
 					<Main />
 

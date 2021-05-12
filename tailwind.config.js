@@ -8,6 +8,7 @@ module.exports = {
 		extend: {
 			maxWidth: {
 				'screen-3xl': '1680px',
+				screen: '100vw',
 			},
 			colors: {
 				inherit: 'inherit',

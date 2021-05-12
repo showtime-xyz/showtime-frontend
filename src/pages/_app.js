@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
 import '@/styles/styles.css'
+import { DISABLE_ALL } from '@/lib/constants'
 import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
 import Router from 'next/router'
 import ProgressBar from '@badrap/bar-of-progress'
+import ModalThrottleUser from '@/components/ModalThrottleUser'
 import axios from '@/lib/axios'
+import { filterNewRecs } from '../lib/utilities'
 
 mixpanel.init('9b14512bc76f3f349c708f67ab189941')
 
@@ -35,6 +38,15 @@ const App = ({ Component, pageProps }) => {
 	const [columns, setColumns] = useState(null)
 	const [isMobile, setIsMobile] = useState(null)
 	const [toggleRefreshFeed, setToggleRefreshFeed] = useState(false)
+	const [throttleMessage, setThrottleMessage] = useState(null)
+	const [throttleOpen, setThrottleOpen] = useState(false)
+	const [throttleContent, setThrottleContent] = useState('')
+	const [disableLikes, setDisableLikes] = useState(false)
+	const [disableComments, setDisableComments] = useState(false)
+	const [disableFollows, setDisableFollows] = useState(false)
+	const [recQueue, setRecQueue] = useState([])
+	const [loadingRecommendedFollows, setLoadingRecommendedFollows] = useState(true)
+	const [recommendedFollows, setRecommendedFollows] = useState([])
 
 	const adjustGridProperties = windowWidth => {
 		if (windowWidth < 790 + 30) {
@@ -112,6 +124,62 @@ const App = ({ Component, pageProps }) => {
 		}
 	}
 
+	const getActivityRecommendedFollows = async () => {
+		setLoadingRecommendedFollows(true)
+		const { data } = await axios.post('/api/getactivityrecommendedfollows').then(res => res.data)
+		setRecommendedFollows(data)
+
+		// get recond result if logged in
+		if (user) {
+			const { data: secondData } = await axios.post('/api/getactivityrecommendedfollows', { recache: true }).then(res => res.data)
+			setRecQueue(secondData)
+		}
+		setLoadingRecommendedFollows(false)
+	}
+
+	const getActivityRecommendedFollowsRecache = async () => {
+		setLoadingRecommendedFollows(true)
+		const { data } = await axios.post('/api/getactivityrecommendedfollows', { recache: true }).then(res => res.data)
+
+		setRecQueue(data)
+		setLoadingRecommendedFollows(false)
+	}
+
+	// get recommended followers on init
+	useEffect(() => {
+		if (typeof user !== 'undefined') getActivityRecommendedFollows()
+	}, [user])
+
+	// update recommendedFollows when the RecQueue is updated
+	useEffect(() => {
+		//filter the recQueue before updating our list
+		const filteredRecQueue = filterNewRecs(recQueue, recommendedFollows, myFollows || [])
+		setRecommendedFollows([...recommendedFollows, ...filteredRecQueue])
+	}, [recQueue])
+
+	// when context.myFollows changes, filter out any recommended follows
+	useEffect(() => {
+		if (myFollows) {
+			const filteredRecs = filterNewRecs(recommendedFollows, [], myFollows)
+			setRecommendedFollows(filteredRecs)
+		}
+	}, [myFollows])
+
+	//get more recs when we're at 3 recs
+	useEffect(() => {
+		if (typeof user !== 'undefined' && !loadingRecommendedFollows && recommendedFollows.length < 4) getActivityRecommendedFollowsRecache()
+	}, [recommendedFollows])
+
+	useEffect(() => {
+		if (throttleMessage) {
+			setThrottleContent(throttleMessage)
+			setThrottleOpen(true)
+			setDisableLikes(DISABLE_ALL || disableLikes || throttleMessage.includes('like'))
+			setDisableComments(DISABLE_ALL || disableComments || throttleMessage.includes('comment'))
+			setDisableFollows(DISABLE_ALL || disableFollows || throttleMessage.includes('follow'))
+		}
+	}, [throttleMessage])
+
 	useEffect(() => {
 		getUserFromCookies()
 
@@ -141,6 +209,12 @@ const App = ({ Component, pageProps }) => {
 		columns,
 		isMobile,
 		toggleRefreshFeed,
+		throttleMessage,
+		disableLikes,
+		disableComments,
+		disableFollows,
+		recommendedFollows,
+		loadingRecommendedFollows,
 		setWindowSize,
 		setMyLikes,
 		setMyLikeCounts,
@@ -150,6 +224,8 @@ const App = ({ Component, pageProps }) => {
 		setMyProfile,
 		setMyRecommendations,
 		setLoginModalOpen,
+		setThrottleMessage,
+		setRecommendedFollows,
 
 		getUserFromCookies,
 		logOut: async () => {
@@ -173,6 +249,7 @@ const App = ({ Component, pageProps }) => {
 
 	return (
 		<AppContext.Provider value={injectedGlobalContext}>
+			<ModalThrottleUser isOpen={throttleOpen} closeModal={() => setThrottleOpen(false)} modalContent={throttleContent} />
 			<Component {...pageProps} />
 		</AppContext.Provider>
 	)
