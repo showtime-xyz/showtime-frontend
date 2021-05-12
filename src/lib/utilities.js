@@ -133,3 +133,13 @@ export const getContractName = item => {
 			return 'OpenSea'
 	}
 }
+
+export const filterNewRecs = (newRecs, oldRecs, alreadyFollowed) => {
+	let filteredData = []
+	newRecs.forEach(newRec => {
+		if (!oldRecs.find(oldRec => oldRec.profile_id === newRec.profile_id) && !alreadyFollowed.find(followed => followed.profile_id === newRec.profile_id)) {
+			filteredData.push(newRec)
+		}
+	})
+	return filteredData
+}

@@ -26,6 +26,7 @@ export const CONTRACTS = {
 }
 
 export const DEFAULT_PROFILE_PIC = 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'
+export const DISABLE_ALL = false
 
 // fields to sort by on profile page
 export const SORT_FIELDS = {
@@ -43,6 +44,7 @@ export const SORT_FIELDS = {
 		value: 3,
 	},
 	COMMENT_COUNT: { label: 'Comments', key: 'comment_count', id: 4, value: 4 },
+	CUSTOM: { label: 'Custom', key: 'custom', id: 5, value: 5 },
 }
 
 export const getNotificationInfo = type => {

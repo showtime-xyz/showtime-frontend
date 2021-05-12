@@ -16,6 +16,9 @@ const Button = styled.button`
 	&:hover {
 		opacity: 0.8;
 	}
+	&:disabled {
+		opacity: 0.8;
+	}
 	${p =>
 		p.notExpandWhenMobile
 			? ''
@@ -45,12 +48,25 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 
 	const handleFollow = async () => {
 		setIsFollowed(true)
-		setFollowerCount(followerCount + 1)
 		// Change myFollows via setMyFollows
 		context.setMyFollows([{ profile_id: item?.profile_id }, ...context.myFollows])
 		// Post changes to the API
-		await axios.post(`/api/follow_v2/${item?.profile_id}`)
-		mixpanel.track('Followed profile')
+		try {
+			await axios
+				.post(`/api/follow_v2/${item?.profile_id}`)
+				.then(() => {
+					mixpanel.track('Followed profile')
+				})
+				.catch(err => {
+					if (err.response.data.code === 429) {
+						context.setMyFollows(context.myFollows.filter(i => i?.profile_id !== item?.profile_id))
+						return context.setThrottleMessage(err.response.data.message)
+					}
+					console.error(err)
+				})
+		} catch (err) {
+			console.error(err)
+		}
 	}
 
 	const handleUnfollow = async () => {
@@ -71,13 +87,14 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 		<Button
 			notExpandWhenMobile={notExpandWhenMobile}
 			className={`
-      border rounded-full transition
+      border rounded-full transition disabled:text-gray-300
       py-2 px-4
         ${hideIfFollowing && isFollowed ? 'hidden' : null}
         ${compact ? 'mr-1' : ''}
         ${compact && context.isMobile ? 'py-2 px-3' : null}
         ${isFollowed ? 'text-black border-gray-400' : homepage ? 'bg-stpurple text-white border-stpurple' : 'bg-black text-white border-black'}
       `}
+			disabled={context.disableFollows}
 			onClick={context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow}
 		>
 			{!isFollowed && (
