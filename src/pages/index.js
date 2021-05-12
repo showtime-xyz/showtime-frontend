@@ -135,11 +135,11 @@ const Activity = () => {
 			mixpanel.track('Activity - Close NFT Modal - keyboard')
 			setItemOpenInModal(null)
 		}
-		if (rightPress && itemOpenInModal) {
+		if (rightPress && itemOpenInModal && !context.commentInputFocused) {
 			mixpanel.track('Activity - Next NFT - keyboard')
 			goToNext()
 		}
-		if (leftPress && itemOpenInModal) {
+		if (leftPress && itemOpenInModal && !context.commentInputFocused) {
 			mixpanel.track('Activity - Prior NFT - keyboard')
 			goToPrevious()
 		}
