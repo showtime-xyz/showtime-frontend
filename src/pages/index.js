@@ -135,16 +135,18 @@ const Activity = () => {
 	const rightPress = useKeyPress('ArrowRight')
 	const escPress = useKeyPress('Escape')
 
+	console.log(leftPress, context.commentInputFocused, 'leftPress')
+	console.log(rightPress, context.commentInputFocused, 'rightPress')
 	useEffect(() => {
 		if (escPress) {
 			mixpanel.track('Activity - Close NFT Modal - keyboard')
 			setItemOpenInModal(null)
 		}
-		if (rightPress && itemOpenInModal) {
+		if (rightPress && itemOpenInModal && !context.commentInputFocused) {
 			mixpanel.track('Activity - Next NFT - keyboard')
 			goToNext()
 		}
-		if (leftPress && itemOpenInModal) {
+		if (leftPress && itemOpenInModal && !context.commentInputFocused) {
 			mixpanel.track('Activity - Prior NFT - keyboard')
 			goToPrevious()
 		}
