@@ -214,11 +214,11 @@ const RecommendedFollowItem = ({ item, closeModal = () => {}, liteVersion, remov
 		if (escPress) {
 			setCurrentlyOpenModal(null)
 		}
-		if (rightPress && currentlyOpenModal) {
+		if (rightPress && currentlyOpenModal && !context.commentInputFocused) {
 			mixpanel.track('Next NFT - keyboard')
 			goToNext()
 		}
-		if (leftPress && currentlyOpenModal) {
+		if (leftPress && currentlyOpenModal && !context.commentInputFocused) {
 			mixpanel.track('Prior NFT - keyboard')
 			goToPrevious()
 		}
