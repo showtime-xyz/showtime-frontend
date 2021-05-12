@@ -28,6 +28,8 @@ const App = ({ Component, pageProps }) => {
 	const [windowSize, setWindowSize] = useState(null)
 	const [myLikes, setMyLikes] = useState(null)
 	const [myLikeCounts, setMyLikeCounts] = useState(null)
+	const [myCommentLikes, setMyCommentLikes] = useState(null)
+	const [myCommentLikeCounts, setMyCommentLikeCounts] = useState(null)
 	const [myComments, setMyComments] = useState(null)
 	const [myCommentCounts, setMyCommentCounts] = useState(null)
 	const [myFollows, setMyFollows] = useState(null)
@@ -98,6 +100,7 @@ const App = ({ Component, pageProps }) => {
 			const my_info_data = await axios.get('/api/profile').then(res => res.data)
 
 			setMyLikes(my_info_data.data.likes_nft)
+			setMyCommentLikes(my_info_data.data.likes_comment)
 			setMyComments(my_info_data.data.comments)
 			setMyFollows(my_info_data.data.follows)
 			setMyProfile({
@@ -200,6 +203,8 @@ const App = ({ Component, pageProps }) => {
 		windowSize,
 		myLikes,
 		myLikeCounts,
+		myCommentLikes,
+		myCommentLikeCounts,
 		myComments,
 		myCommentCounts,
 		myFollows,
@@ -220,6 +225,8 @@ const App = ({ Component, pageProps }) => {
 		setWindowSize,
 		setMyLikes,
 		setMyLikeCounts,
+		setMyCommentLikes,
+		setMyCommentLikeCounts,
 		setMyComments,
 		setMyCommentCounts,
 		setMyFollows,
@@ -237,6 +244,8 @@ const App = ({ Component, pageProps }) => {
 			setUser(null)
 			setMyLikes([])
 			setMyLikeCounts({})
+			setMyCommentLikes([])
+			setMyCommentLikeCounts({})
 			setMyComments([])
 			setMyCommentCounts({})
 			setMyFollows([])

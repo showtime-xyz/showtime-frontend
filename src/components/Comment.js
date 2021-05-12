@@ -8,6 +8,7 @@ import useDetectOutsideClick from '@/hooks/useDetectOutsideClick'
 import AppContext from '@/context/app-context'
 import reactStringReplace from 'react-string-replace'
 import { formatAddressShort } from '@/lib/utilities'
+import CommentLikeButton from './CommentLikeButton'
 
 export default function Comment({ comment, closeModal, modalRef, deleteComment, nftOwnerId, nftCreatorId }) {
 	const context = useContext(AppContext)
@@ -90,6 +91,14 @@ export default function Comment({ comment, closeModal, modalRef, deleteComment, 
 					)}
 				</div>
 				<div className="text-gray-500 text-sm leading-5 break-words">{commentWithMentions}</div>
+				<div>
+					<CommentLikeButton comment={comment} />
+				</div>
+				{/* {isFocused && (
+					<div className={`absolute -top-6 right-0 px-2 pt-1 rounded-lg bg-white shadow transition-all transform ${isFocused ? 'visible translate-y-0 opacity-1' : 'invisible translate-y-2 opacity-0'}`}>
+						<CommentLikeButton comment={comment} />
+					</div>
+				)} */}
 			</div>
 		</div>
 	)
