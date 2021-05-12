@@ -146,7 +146,7 @@ const TokenGridV5 = ({
 				) : (
 					<>
 						{isChangingOrder ? (
-							<ReactSortable list={itemsList} animation={200} delayOnTouchStart={true} delay={2} setList={handleSetItemsList} className={`grid gap-6 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'lg:grid-cols-2 xl:grid-cols-3'}  overflow-hidden`}>
+							<ReactSortable list={itemsList} animation={200} delayOnTouchStart={true} delay={2} setList={handleSetItemsList} className={`grid gap-6 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'lg:grid-cols-2 xl:grid-cols-3'} `}>
 								{itemsList.map(item => (
 									<TokenCard
 										key={item.nft_id}
@@ -177,7 +177,7 @@ const TokenGridV5 = ({
 								))}
 							</ReactSortable>
 						) : (
-							<div className={`grid gap-6 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'lg:grid-cols-2 xl:grid-cols-3'}  overflow-hidden`}>
+							<div className={`grid gap-6 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'lg:grid-cols-2 xl:grid-cols-3'}  `}>
 								{itemsList.map(item => (
 									<TokenCard
 										key={item.nft_id}
