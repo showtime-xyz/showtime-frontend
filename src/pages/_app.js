@@ -47,6 +47,7 @@ const App = ({ Component, pageProps }) => {
 	const [recQueue, setRecQueue] = useState([])
 	const [loadingRecommendedFollows, setLoadingRecommendedFollows] = useState(true)
 	const [recommendedFollows, setRecommendedFollows] = useState([])
+	const [commentInputFocused, setCommentInputFocused] = useState(false)
 
 	const adjustGridProperties = windowWidth => {
 		if (windowWidth < 790 + 30) {
@@ -215,6 +216,7 @@ const App = ({ Component, pageProps }) => {
 		disableFollows,
 		recommendedFollows,
 		loadingRecommendedFollows,
+		commentInputFocused,
 		setWindowSize,
 		setMyLikes,
 		setMyLikeCounts,
@@ -226,6 +228,7 @@ const App = ({ Component, pageProps }) => {
 		setLoginModalOpen,
 		setThrottleMessage,
 		setRecommendedFollows,
+		setCommentInputFocused,
 
 		getUserFromCookies,
 		logOut: async () => {
