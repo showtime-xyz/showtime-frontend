@@ -13,6 +13,7 @@ import MiniFollowButton from './MiniFollowButton'
 import TokenCardImage from '@/components/TokenCardImage'
 import { removeTags, formatAddressShort, truncateWithEllipses } from '@/lib/utilities'
 import axios from '@/lib/axios'
+import { MenuIcon } from '@heroicons/react/solid'
 
 const TokenCard = ({
 	originalItem,
@@ -31,6 +32,7 @@ const TokenCard = ({
 	showUserHiddenItems,
 	showDuplicates,
 	setHasUserHiddenItems,
+	isChangingOrder,
 }) => {
 	const [item, setItem] = useState(originalItem)
 	const [moreShown, setMoreShown] = useState(false)
@@ -88,8 +90,8 @@ const TokenCard = ({
 	}
 
 	return (
-		<div className="w-full h-full">
-			<div ref={divRef} className={`w-full h-full sm:rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all bg-white flex flex-col ${item.user_hidden ? 'opacity-70 bg-gray-200' : ''}`}>
+		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
+			<div ref={divRef} className={`w-full h-full sm:rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all bg-white flex flex-col ${item.user_hidden ? 'opacity-70 bg-gray-200' : ''} ${isChangingOrder ? 'border-2 border-stpink' : ''}`}>
 				<div ref={item.imageRef} className="p-4 flex flex-row items-center relative">
 					<div className="pr-2 ">
 						{item.contract_is_creator ? (
@@ -219,6 +221,14 @@ const TokenCard = ({
 							<div className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center bg-white bg-opacity-50">
 								<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin mb-2" />
 								<div>Refreshing...</div>
+							</div>
+						)}
+						{isChangingOrder && (
+							<div className="absolute cursor-move inset-0 cursor-pointer flex flex-col items-center justify-center bg-white bg-opacity-70">
+								<div className="p-2 bg-white rounded-lg shadow flex justify-center items-center">
+									<MenuIcon className="w-5 h-5 text-black mr-1" aria-hidden="true" />
+									<div>Drag to Reorder</div>
+								</div>
 							</div>
 						)}
 					</div>
