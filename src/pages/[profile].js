@@ -229,15 +229,14 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 				page: nextPage,
 				limit: perPage,
 				listId: selectedGrid,
-				sortId: sortId,
+				sortId: fetchMoreSort || sortId,
 				showHidden: showUserHiddenItems ? 1 : 0,
 				showDuplicates: showDuplicates ? 1 : 0,
 				collectionId: collectionId,
 			})
 			.then(res => res.data)
-
 		if (!switchInProgress) {
-			setItems([...items, ...data.items])
+			setItems(items => [...items, ...data.items])
 			setHasMore(data.has_more)
 			setPage(nextPage)
 		}
@@ -521,11 +520,14 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const [isChangingOrder, setIsChangingOrder] = useState(false)
 	const [revertItems, setRevertItems] = useState(null)
 	const [revertSort, setRevertSort] = useState(null)
+	const [fetchMoreSort, setFetchMoreSort] = useState(null)
 
 	const handleClickChangeOrder = async () => {
 		if (menuLists[selectedGrid - 1].has_custom_sort) {
+			setFetchMoreSort(5)
 			await handleSortChange(5)
 		} else {
+			setFetchMoreSort(selectedGrid === 1 ? selectedCreatedSortField : selectedOwnedSortField)
 			const setSelectedSortField = selectedGrid === 1 ? setSelectedCreatedSortField : selectedGrid === 2 ? setSelectedOwnedSortField : setSelectedLikedSortField
 			await setSelectedSortField(5)
 		}
@@ -584,8 +586,10 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 			setSelectedOwnedSortField(oldSort)
 		}
 		setItems(oldItems)
+		setFetchMoreSort(null)
 		setRevertItems(null)
 		setIsChangingOrder(false)
+		setHasMore(true)
 	}
 
 	// reset reordering if page changes
@@ -593,6 +597,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setIsChangingOrder(false)
 		setRevertItems(null)
 		setRevertSort(null)
+		setFetchMoreSort(null)
 	}, [selectedGrid, collectionId, profile_id, showUserHiddenItems])
 
 	return (
@@ -1163,7 +1168,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 																			</button>
 																		)}
 																	</Menu.Item>
-																	{((selectedGrid === 1 && context.myProfile.default_created_sort_id === 5) || (selectedGrid === 2 && context.myProfile.default_owned_sort_id === 5) || menuLists[selectedGrid - 1].has_custom_sort) && (
+																	{context.myProfile && ((selectedGrid === 1 && context.myProfile.default_created_sort_id === 5) || (selectedGrid === 2 && context.myProfile.default_owned_sort_id === 5) || menuLists[selectedGrid - 1].has_custom_sort) && (
 																		<Menu.Item>
 																			{({ active }) => (
 																				<button className={`${active ? 'text-white bg-indigo-600' : 'bg-white text-gray-900'} group flex rounded-md items-center w-full px-2 py-2 text-sm`} onClick={handleClickDeleteCustomOrder}>
