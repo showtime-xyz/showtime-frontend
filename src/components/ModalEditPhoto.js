@@ -142,10 +142,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 							<div className="mt-4 mb-4">
 								{image === '' && (
 									<div>
-										{/* Your image upload functionality here */}
-										{/*<ImageUpload image={image} setImage={handleImage} />*/}
-
-										<div className="showtime-pink-button text-sm text-center mt-16  px-4 py-3  rounded-full cursor-pointer" onClick={handleClick}>
+										<div className="border-2 border-transparent text-white bg-stpink hover:border-stpink hover:bg-transparent hover:text-stpink transition text-center mt-16  px-4 py-3  rounded-full cursor-pointer" onClick={handleClick}>
 											Upload a photo
 										</div>
 										<div className="text-center text-xs mb-16 mt-4 text-gray-700">Accepts JPEG, PNG, and GIF (non-animated)</div>
@@ -169,7 +166,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 								<div>
 									<button
 										type="button"
-										className="showtime-black-button-outline  px-4 py-2  rounded-full"
+										className="border-2 text-gray-800 border-gray-800 hover:border-gray-500 hover:text-gray-500 px-4 py-2 rounded-full outline-none"
 										onClick={() => {
 											if (!saveInProgress) {
 												setEditModalOpen(false)
@@ -188,24 +185,10 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 								)}
 								<div className="flex-grow"></div>
 								<div>
-									<button
-										onClick={handleSubmit}
-										className="showtime-green-button  px-4 py-2  rounded-full float-right w-24"
-										style={
-											image === ''
-												? {
-														borderColor: '#35bb5b',
-														borderWidth: 2,
-														opacity: 0.6,
-														cursor: 'not-allowed',
-												  }
-												: { borderColor: '#35bb5b', borderWidth: 2, opacity: 1 }
-										}
-										disabled={image === '' || saveInProgress}
-									>
+									<button onClick={handleSubmit} className={`bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition px-4 py-2 rounded-full float-right w-24 ${image === '' ? 'opacity-60 cursor-not-allowed' : ''}`} disabled={image === '' || saveInProgress}>
 										{saveInProgress ? (
 											<div className="flex items-center justify-center">
-												<div className="loading-card-spinner-small" />
+												<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
 											</div>
 										) : (
 											'Save'

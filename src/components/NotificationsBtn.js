@@ -128,7 +128,7 @@ export default function NotificationsBtn() {
 			>
 				{loadingNotifications && (
 					<div className="flex items-center justify-center">
-						<div className="loading-card-spinner-small" />
+						<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
 					</div>
 				)}
 				{!loadingNotifications &&
@@ -139,16 +139,7 @@ export default function NotificationsBtn() {
 
 						notif.actors && notif.actors.length > 0 ? (
 							// HAS CLICKABLE ACTORS
-							<div
-								className={`py-3 px-3 hover:bg-gray-50 transition-all rounded-lg whitespace-nowrap flex items-start w-full max-w-full ${new Date(notif.to_timestamp) > new Date(previouslyLastOpened) ? 'bg-gray-100 hover:bg-gray-200' : ''}`}
-								//onClick={() => setIsActive(!isActive)}
-								key={notif.id}
-								// style={
-								//   new Date(notif.to_timestamp) > new Date(previouslyLastOpened)
-								//     ? { backgroundColor: "#f3f4ff" }
-								//     : {}
-								// }
-							>
+							<div className={`py-3 px-3 hover:bg-gray-50 transition-all rounded-lg whitespace-nowrap flex items-start w-full max-w-full ${new Date(notif.to_timestamp) > new Date(previouslyLastOpened) ? 'bg-gray-100 hover:bg-gray-200' : ''}`} key={notif.id}>
 								<div className="w-max mr-2 relative min-w-[2.25rem]">
 									<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
 										<a onClick={() => setIsActive(!isActive)}>
@@ -160,9 +151,7 @@ export default function NotificationsBtn() {
 									</Link>
 								</div>
 								<div className="flex-1 flex-col items-start text-left">
-									<div className="text-sm" style={{ whiteSpace: 'break-spaces' }}>
-										{/*notif.description*/}
-
+									<div className="text-sm whitespace-pre-line">
 										<>
 											{notif.actors.length == 1 ? (
 												<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
@@ -306,16 +295,7 @@ export default function NotificationsBtn() {
 							</div>
 						) : (
 							<Link href={getNotificationInfo(notif.type_id).goTo === 'profile' ? '/[profile]' : '/t/[...token]'} as={getNotificationInfo(notif.type_id).goTo === 'profile' ? (notif.link_to_profile__address ? `/${notif.link_to_profile__username || notif.link_to_profile__address}` : `/${context.myProfile.username || context.user.publicAddress}`) : `/t/${notif.nft__contract__address}/${notif.nft__token_identifier}`} key={notif.id}>
-								<div
-									className={`py-3 px-3 hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full ${new Date(notif.to_timestamp) > new Date(previouslyLastOpened) ? 'bg-gray-100 hover:bg-gray-200' : ''}`}
-									onClick={() => setIsActive(!isActive)}
-									key={notif.id}
-									// style={
-									//   new Date(notif.to_timestamp) > new Date(previouslyLastOpened)
-									//     ? { backgroundColor: "#f3f4ff" }
-									//     : {}
-									// }
-								>
+								<div className={`py-3 px-3 hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full ${new Date(notif.to_timestamp) > new Date(previouslyLastOpened) ? 'bg-gray-100 hover:bg-gray-200' : ''}`} onClick={() => setIsActive(!isActive)} key={notif.id}>
 									<div className="w-max mr-2 relative min-w-[2.25rem]">
 										<img alt={notif.name} src={notif.img_url ? notif.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 mt-1 w-9 h-9" />
 										<div className="absolute bottom-0 right-0 rounded-full h-5 w-5 flex items-center justify-center shadow" style={{ backgroundColor: getNotificationInfo(notif.type_id).color }}>
@@ -323,9 +303,7 @@ export default function NotificationsBtn() {
 										</div>
 									</div>
 									<div className="flex-1 flex-col items-start text-left">
-										<div className="text-sm" style={{ whiteSpace: 'break-spaces' }}>
-											{notif.description}
-										</div>
+										<div className="text-sm whitespace-pre-line">{notif.description}</div>
 										<div className="text-gray-400 text-xs">
 											{formatDistanceToNowStrict(new Date(notif.to_timestamp), {
 												addSuffix: true,
@@ -340,7 +318,7 @@ export default function NotificationsBtn() {
 				{!loadingNotifications && notifications && notifications.length !== 0 && hasMoreNotifications && (
 					<div className="flex justify-center items-center mb-1 mt-1">
 						<div onClick={handleMoreNotifications} className={`flex w-36 h-8 items-center justify-center  text-xs border-gray-600 text-gray-600 border rounded-full px-2 py-1 hover:text-stpink ${loadingMoreNotifications ? '' : 'hover:border-stpink'} transition cursor-pointer`}>
-							{loadingMoreNotifications ? <div className="loading-card-spinner-small"></div> : 'Show More'}
+							{loadingMoreNotifications ? <div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin"></div> : 'Show More'}
 						</div>
 					</div>
 				)}

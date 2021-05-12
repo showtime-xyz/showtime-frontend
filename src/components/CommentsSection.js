@@ -1,6 +1,4 @@
 import { useEffect, useState, useContext, useCallback } from 'react'
-//import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-//import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import AppContext from '@/context/app-context'
 import backend from '@/lib/backend'
@@ -11,6 +9,7 @@ import AwesomeDebouncePromise from 'awesome-debounce-promise'
 import { formatAddressShort } from '@/lib/utilities'
 import axios from '@/lib/axios'
 
+// TODO: Convert to classes and include it into the MentionsInput component
 const mentionsStyle = {
 	control: {
 		backgroundColor: '#fff',
@@ -199,7 +198,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 				</div>
 				{loadingComments ? (
 					<div className="text-center my-4">
-						<div className="loading-card-spinner" />
+						<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 					</div>
 				) : (
 					<>
@@ -212,7 +211,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 										</div>
 									) : (
 										<div className="p-1">
-											<div className="loading-card-spinner-small" />
+											<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
 										</div>
 									)}
 								</div>
@@ -244,23 +243,12 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 										displayTransform={(id, display) => `${display}`}
 										trigger="@"
 										data={handleDebouncedSearchQuery}
-										style={
-											context.isMobile
-												? {
-														backgroundColor: '#dddeff',
-														borderRadius: 2,
-														marginLeft: -3,
-												  }
-												: {
-														backgroundColor: '#dddeff',
-														borderRadius: 2,
-												  }
-										}
+										className="bg-purple-200 rounded -ml-1 sm:ml-0"
 										appendSpaceOnAdd
 									/>
 								</MentionsInput>
 								<button onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700">
-									{isSubmitting ? <div className="loading-card-spinner-small" /> : 'Post'}
+									{isSubmitting ? <div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" /> : 'Post'}
 								</button>
 							</div>
 						</div>

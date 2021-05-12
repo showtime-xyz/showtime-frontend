@@ -1,23 +1,10 @@
 import { useContext, useEffect, useState } from 'react'
-import styled from 'styled-components'
 import mixpanel from 'mixpanel-browser'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faPlus } from '@fortawesome/free-solid-svg-icons'
 import AppContext from '@/context/app-context'
 import RecommendedFollowItem from './RecommendedFollowItem'
 import axios from '@/lib/axios'
-
-const Title = styled.h6`
-	font-size: 24px;
-	font-weight: 500;
-	width: 90%;
-`
-
-const GraySeparator = styled.div`
-	width: 100%;
-	height: 1px;
-	background: rgba(0, 0, 0, 0.11);
-`
 
 const RecommendFollowersVariants = {
 	ONBOARDING: 'ONBOARDING',
@@ -75,21 +62,11 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
 		return (
 			<div className="p-4 mx-4 rounded-xl bg-white shadow-lg mb-8">
 				<div className="flex items-center justify-between mb-4">
-					<Title>
+					<h6 className="text-2xl font-medium w-11/12">
 						Follow people to start <span className="hidden sm:inline">your feed</span>
-					</Title>
-					{/*<CloseIconWrapper
-            onClick={() => {
-              mixpanel.track("Close Recommended Followers modal - x button");
-              closeModal();
-            }}
-          >
-            <CloseIcon>
-              <FontAwesomeIcon icon={faTimes} />
-            </CloseIcon>
-          </CloseIconWrapper>*/}
+					</h6>
 				</div>
-				<GraySeparator />
+				<div className="w-full h-px bg-black bg-opacity-10" />
 
 				<div
 					className={`text-center text-sm sm:text-base mx-auto px-5 py-1 sm:px-6 sm:py-2 my-4 flex items-center w-max border-2 rounded-full ${followAllClicked ? 'bg-white' : 'hover:text-stpink text-white border-stpink bg-stpink hover:bg-white transition-all cursor-pointer'}  `}
@@ -125,7 +102,7 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
 					)}
 					<div />
 					<div
-						className="text-center text-white px-6 py-2 flex items-center w-max border-2 border-black rounded-full hover:text-black hover:border-gray-300 hover:bg-white transition-all showtime-green-button cursor-pointer"
+						className="text-center text-white px-6 py-2 flex items-center w-max border-2 border-green-500 rounded-full hover:text-green-500 hover:bg-white bg-green-500 transition cursor-pointer"
 						onClick={() => {
 							mixpanel.track('Clicked Close on Recommended Followers modal')
 							finishOnboarding()

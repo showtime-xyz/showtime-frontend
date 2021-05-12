@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
 import mixpanel from 'mixpanel-browser'
-import _ from 'lodash'
 import ClientOnlyPortal from './ClientOnlyPortal'
 import AppContext from '@/context/app-context'
 import TokenDetailBody from './TokenDetailBody'
@@ -41,31 +40,14 @@ export default function Modal({ item, isOpen, setEditModalOpen, goToNext, goToPr
 			{isOpen && (
 				<ClientOnlyPortal selector="#modal">
 					<div
-						className="backdrop flex flex-row items-center"
+						className="fixed bg-black bg-opacity-70 inset-0 z-2 flex flex-row items-center"
 						onClick={() => {
 							mixpanel.track('Close NFT modal - backdrop click')
 							setEditModalOpen(false)
 						}}
 					>
 						<div
-							className={hasPrevious ? 'visible flex-shrink md:p-4 lg:p-8 xl:p-12 modal-arrow' : 'invisible flex-shrink md:p-4 lg:p-8 xl:p-12 modal-arrow'}
-							style={_.merge(
-								{ cursor: 'pointer' },
-								isStacked && columns === 1
-									? {
-											marginRight: -48,
-											zIndex: 2,
-											padding: 8,
-											opacity: 0.4,
-											backgroundColor: 'black',
-											borderTopRightRadius: 38,
-											borderBottomRightRadius: 38,
-											marginTop: 400,
-											width: 46,
-											height: 76,
-									  }
-									: null
-							)}
+							className={`cursor-pointer flex items-center justify-center ${isStacked && columns === 1 ? 'z-2 -mr-12 p-2 pr-3 sm:pr-2 opacity-40 bg-black rounded-r-full mt-[400px] w-12 h-20' : ''} ${hasPrevious ? 'visible flex-shrink md:p-4 lg:p-8 xl:p-12 text-gray-500 hover:text-gray-200' : 'invisible flex-shrink md:p-4 lg:p-8 xl:p-12 text-gray-500 hover:text-gray-200'}`}
 							onClick={e => {
 								e.stopPropagation()
 								mixpanel.track('Prior NFT - arrow button')
@@ -74,23 +56,7 @@ export default function Modal({ item, isOpen, setEditModalOpen, goToNext, goToPr
 						>
 							<FontAwesomeIcon icon={faAngleLeft} className="!w-4 h-auto" />
 						</div>
-						<div
-							className="modal flex-grow my-8 overflow-hidden"
-							style={
-								isStacked
-									? { color: 'black', height: '100%', overflow: 'auto' }
-									: {
-											color: 'black',
-											height: '90%',
-											borderRadius: 15,
-											//, top: "5%",
-											//right: 8%;
-											//left: 8%;
-											//bottom: 5%;
-									  }
-							}
-							onClick={e => e.stopPropagation()}
-						>
+						<div className={`bg-white flex-grow my-8 overflow-hidden text-black ${isStacked ? 'h-full overflow-auto' : 'h-[90%] rounded-lg'}`} onClick={e => e.stopPropagation()}>
 							<div
 								onClick={() => {
 									mixpanel.track('Close NFT modal - x button')
@@ -100,29 +66,12 @@ export default function Modal({ item, isOpen, setEditModalOpen, goToNext, goToPr
 							>
 								<FontAwesomeIcon className="w-8 h-8 text-white" icon={faTimes} />
 							</div>
-							<div className="overflow-y-scroll h-full" style={context.isMobile ? {} : { borderRadius: 10 }} id="ModalTokenDetailWrapper">
+							<div className="overflow-y-scroll h-full sm:rounded-lg" id="ModalTokenDetailWrapper">
 								<TokenDetailBody item={item} muted={false} className="w-full" setEditModalOpen={setEditModalOpen} ownershipDetails={ownershipDetails} isInModal />
 							</div>
 						</div>
 						<div
-							className={hasNext ? 'visible flex-shrink md:p-4 lg:p-8 xl:p-12 modal-arrow' : 'invisible flex-shrink md:p-4 lg:p-8 xl:p-12 modal-arrow'}
-							style={_.merge(
-								{ cursor: 'pointer' },
-								isStacked && columns === 1
-									? {
-											marginLeft: -48,
-											zIndex: 2,
-											padding: 8,
-											opacity: 0.4,
-											backgroundColor: 'black',
-											borderTopLeftRadius: 38,
-											borderBottomLeftRadius: 38,
-											width: 46,
-											height: 76,
-											marginTop: 400,
-									  }
-									: null
-							)}
+							className={`cursor-pointer flex items-center justify-center ${isStacked && columns === 1 ? 'z-2 -ml-12 p-2 pl-3 sm:pl-2 opacity-40 bg-black rounded-l-full w-12 h-20 mt-[400px]' : ''} ${hasNext ? 'visible flex-shrink md:p-4 lg:p-8 xl:p-12 text-gray-500 hover:text-gray-200' : 'invisible flex-shrink md:p-4 lg:p-8 xl:p-12 text-gray-500 hover:text-gray-200'}`}
 							onClick={e => {
 								e.stopPropagation()
 								mixpanel.track('Next NFT - arrow button')
@@ -131,28 +80,6 @@ export default function Modal({ item, isOpen, setEditModalOpen, goToNext, goToPr
 						>
 							<FontAwesomeIcon icon={faAngleRight} className="!w-4 h-auto" />
 						</div>
-						<style jsx>{`
-							:global(body) {
-								overflow: hidden;
-							}
-							.backdrop {
-								position: fixed;
-								background-color: rgba(0, 0, 0, 0.7);
-								top: 0;
-								right: 0;
-								bottom: 0;
-								left: 0;
-							}
-							.modal {
-								background-color: white;
-							}
-							.modal-arrow {
-								color: #888;
-							}
-							.modal-arrow:hover {
-								color: #ccc;
-							}
-						`}</style>
 					</div>
 				</ClientOnlyPortal>
 			)}

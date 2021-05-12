@@ -79,7 +79,7 @@ export default function Comment({ comment, closeModal, modalRef, deleteComment, 
 								>
 									{isDeleting ? (
 										<div className="flex items-center justify-center">
-											<div className="loading-card-spinner-small" />
+											<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
 										</div>
 									) : (
 										'Delete'

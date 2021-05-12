@@ -24,7 +24,7 @@ const Header = () => {
 						<div>
 							<Link href="/">
 								<a
-									className="flex flex-row showtime-header-link items-center text-left mr-auto"
+									className="flex flex-row text-black hover:text-stpink items-center text-left mr-auto"
 									onClick={async () => {
 										mixpanel.track('Logo button click')
 										await context.setToggleRefreshFeed(!context.toggleRefreshFeed)
@@ -45,7 +45,7 @@ const Header = () => {
 						<div className="hidden md:flex mr-6 items-center font-normal">
 							<Link href="/c/[collection]" as="/c/spotlights">
 								<a
-									className="showtime-header-link ml-6 text-sm md:text-base"
+									className="text-black hover:text-stpink ml-6 text-sm md:text-base"
 									onClick={() => {
 										mixpanel.track('Discover button click')
 									}}
@@ -55,7 +55,7 @@ const Header = () => {
 							</Link>
 							<Link href="/trending">
 								<a
-									className="showtime-header-link ml-6 text-sm md:text-base"
+									className="text-black hover:text-stpink ml-6 text-sm md:text-base"
 									onClick={() => {
 										mixpanel.track('Trending button click')
 									}}
@@ -116,7 +116,7 @@ const Header = () => {
 							<div>
 								<Link href="/c/[collection]" as="/c/spotlights">
 									<a
-										className="showtime-header-link mr-5 text-sm md:text-base"
+										className="text-black hover:text-stpink mr-5 text-sm md:text-base"
 										onClick={() => {
 											mixpanel.track('Discover button click')
 										}}
@@ -126,7 +126,7 @@ const Header = () => {
 								</Link>
 								<Link href="/trending">
 									<a
-										className="showtime-header-link mr-5 text-sm md:text-base"
+										className="text-black hover:text-stpink mr-5 text-sm md:text-base"
 										onClick={() => {
 											mixpanel.track('Trending button click')
 										}}
