@@ -47,7 +47,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
       .then(callback)
   }
 
-  const handleDebouncedSearchQuery = useCallback(AwesomeDebouncePromise(handleSearchQuery, 300), [])
+  const handleDebouncedSearchQuery = useCallback(AwesomeDebouncePromise(handleSearchQuery, 150), [])
 
   const refreshComments = async () => {
     const commentsData = await backend.get(
@@ -75,7 +75,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 
   const nestedReply = comment => {
     setParentComment(comment)
-    setCommentText('@' + (comment.username || comment.name) + ' ')
+    setCommentText('@' + (comment.username || comment.name))
     commentInputRef.current.focus()
   }
 
