@@ -12,8 +12,8 @@ export default function ModalUserList({ isOpen, title, users, closeModal, emptyM
 		<>
 			{isOpen && (
 				<ClientOnlyPortal selector="#modal">
-					<div className="z-2" onClick={closeModal}>
-						<div className="bg-white absolute top-[10%] inset-x-[5%] p-4 mx-auto max-h-[80vh] max-w-[400px] flex flex-col rounded-lg sm:rounded-2xl text-black" onClick={e => e.stopPropagation()}>
+					<div onClick={closeModal}>
+						<div className="z-20 bg-white absolute top-[10%] inset-x-[5%] p-4 mx-auto max-h-[80vh] max-w-[400px] flex flex-col rounded-lg sm:rounded-2xl text-black" onClick={e => e.stopPropagation()}>
 							<CloseButton setEditModalOpen={closeModal} />
 							<div className="text-3xl border-b-2 pb-2 px-2">{title}</div>
 							<div className="flex flex-col overflow-y-auto">
