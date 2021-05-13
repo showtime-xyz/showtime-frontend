@@ -67,11 +67,11 @@ const SearchBar = () => {
 			{/* Start desktop-only menu */}
 			<div className="hidden flex-col relative ml-6 pr-6 w-full max-w-3xl md:flex">
 				<div className="flex relative w-full" ref={searchInputContainerRef}>
-					<div className="flex absolute left-4 top-1/2 transform -translate-y-2 mb-px w-3.5 h-3.5 mr-3 text-black focus:-mt-px">
+					<div className="flex absolute left-4 top-1/2 transform -translate-y-2 mb-px w-3.5 h-3.5 mr-3 text-black dark:text-gray-200 focus:-mt-px">
 						<FontAwesomeIcon icon={faSearch} />
 					</div>
 					<input
-						className="flex border py-1.5 px-4 rounded-full w-full pl-10 focus:-mt-px focus:ring-1 ring-gray-300 focus:outline-none"
+						className="flex dark:bg-gray-800 border dark:border-gray-800 py-1.5 px-4 rounded-full w-full pl-10 focus:-mt-px focus:ring-1 ring-gray-300 dark:ring-gray-800 focus:outline-none"
 						type="search"
 						placeholder={context.gridWidth < 400 ? 'Search by name' : 'Search by name or wallet address'}
 						value={searchText}
@@ -123,24 +123,24 @@ const SearchBar = () => {
 			</div>
 			{/* Start mobile-only menu */}
 			<div className="flex justify-end md:hidden relative w-full sm:ml-4 sm:justify-start ml-1">
-				<button className="flex items-center justify-center w-3.5 h-3.5 text-black p-4 hover:text-stpink" onClick={() => toggleMobileSearchOverlay(true)}>
+				<button className="flex items-center justify-center w-3.5 h-3.5 text-black dark:text-white hover:text-stpink dark:hover:text-stpink p-4" onClick={() => toggleMobileSearchOverlay(true)}>
 					<FontAwesomeIcon icon={faSearch} />
 				</button>
 			</div>
 
 			{/* Start overlay menu */}
 			{isMobileSearchOverlayOpen && (
-				<div className="flex flex-col absolute md:h-16 bg-white md:p-3 w-full left-0 md:top-0 z-1 top-12 pt-1 pb-2 px-4 shadow">
+				<div className="flex flex-col absolute md:h-16 bg-white dark:bg-gray-900 md:p-3 w-full left-0 md:top-0 z-1 top-12 pt-1 pb-2 px-4 shadow">
 					<div className="flex items-center">
-						<button className="flex items-center justify-center w-3.5 h-3.5 mr-4 text-blck border-2 border-black rounded-full p-4 focus:-m-px hover:border-stpink hover:text-stpink" isFocused={searchInputFocused} onClick={() => toggleMobileSearchOverlay(false)}>
+						<button className="flex items-center justify-center w-3.5 h-3.5 mr-4 text-black dark:text-gray-300 border-2 border-black dark:border-gray-300 rounded-full p-4 focus:-m-px hover:border-stpink hover:text-stpink" isFocused={searchInputFocused} onClick={() => toggleMobileSearchOverlay(false)}>
 							<FontAwesomeIcon icon={faTimes} />
 						</button>
 						<div className="flex relative w-full" ref={searchInputContainerRef}>
-							<div className="flex absolute left-4 top-1/2 transform -translate-y-2 mb-px w-3.5 h-3.5 mr-3 text-black focus:-mt-px" isFocused={searchInputFocused}>
+							<div className="flex absolute left-4 top-1/2 transform -translate-y-2 mb-px w-3.5 h-3.5 mr-3 text-black dark:text-gray-200 focus:-mt-px" isFocused={searchInputFocused}>
 								<FontAwesomeIcon icon={faSearch} />
 							</div>
 							<input
-								className="flex border py-1.5 px-4 rounded-full w-full pl-10 focus:-mt-px focus:ring-1 ring-gray-300 focus:outline-none"
+								className="flex dark:bg-gray-800 border dark:border-gray-800 py-1.5 px-4 rounded-full w-full pl-10 focus:-mt-px focus:ring-1 ring-gray-300 dark:ring-gray-800 focus:outline-none"
 								type="search"
 								placeholder={context.gridWidth < 400 ? 'Search by name' : 'Search by name or wallet address'}
 								value={searchText}

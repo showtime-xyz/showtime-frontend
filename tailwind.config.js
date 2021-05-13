@@ -1,4 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
+const colors = require('tailwindcss/colors')
 
 module.exports = {
 	mode: 'jit',
@@ -31,6 +32,7 @@ module.exports = {
 				stteal: '#1dd4e0',
 				stteal100: 'rgba(29, 212, 224, 0.2)',
 				stteal700: '#198c94',
+				gray: colors.trueGray,
 			},
 			cursor: {
 				copy: 'copy',

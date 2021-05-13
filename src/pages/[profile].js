@@ -21,7 +21,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faImage } from '@fortawesome/free-regular-svg-icons'
 import ProfileFollowersPill from '@/components/ProfileFollowersPill'
 import { Listbox, Transition, Menu } from '@headlessui/react'
-import { CheckIcon, SelectorIcon, ChevronDownIcon, PencilAltIcon } from '@heroicons/react/solid'
+import { CheckIcon, SelectorIcon, ChevronDownIcon, PencilAltIcon, LinkIcon } from '@heroicons/react/solid'
 import { faHeart as fasHeart, faFingerprint, faImage as fasImage, faEdit } from '@fortawesome/free-solid-svg-icons'
 import axios from '@/lib/axios'
 
@@ -679,7 +679,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 						<CappedWidth>
 							<div className="relative">
 								<div
-									className="absolute top-6 right-5  2xl:right-5 text-gray-200 text-sm cursor-pointer bg-gray-800 bg-opacity-70 py-1 px-3 rounded-full hover:bg-opacity-90"
+									className="absolute top-6 right-5 2xl:right-5 text-gray-200 text-sm cursor-pointer bg-gray-800 bg-opacity-70 py-1 px-3 rounded-full hover:bg-opacity-90"
 									onClick={() => {
 										if (isMyProfile) {
 											setCoverModalOpen(true)
@@ -706,18 +706,18 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										}
 									}}
 									src={profileToDisplay?.img_url ? profileToDisplay.img_url : DEFAULT_PROFILE_PIC}
-									className={`h-24 w-24 md:h-32 md:w-32 rounded-full border-2 shadow-md border-white z-10 -mt-14 md:-mt-20 overflow-hidden ${isMyProfile ? 'cursor-pointer ' : ''}`}
+									className={`h-24 w-24 md:h-32 md:w-32 rounded-full border-2 shadow-md border-white dark:border-gray-800 z-10 -mt-14 md:-mt-20 overflow-hidden ${isMyProfile ? 'cursor-pointer ' : ''}`}
 								/>
 								<div className="flex-grow"></div>
 								<div className="md:hidden z-10 -mt-5">
 									<ProfileFollowersPill following={following} followers={followers} isFollowed={isFollowed} isMyProfile={isMyProfile} followingMe={followingMe} handleUnfollow={handleUnfollow} handleFollow={handleFollow} handleLoggedOutFollow={handleLoggedOutFollow} hasEmailAddress={hasEmailAddress} setShowFollowers={setShowFollowers} setShowFollowing={setShowFollowing} editAccount={editAccount} editPhoto={editPhoto} addWallet={addWallet} addEmail={addEmail} logout={logout} />
 								</div>
 							</div>
-							<div className="text-3xl md:text-4xl md:mb-1"> {profileToDisplay?.name ? profileToDisplay.name : wallet_addresses_excluding_email && wallet_addresses_excluding_email.length > 0 ? formatAddressShort(wallet_addresses_excluding_email[0]) : 'Unnamed'}</div>
+							<div className="dark:text-gray-200 text-3xl md:text-4xl md:mb-1"> {profileToDisplay?.name ? profileToDisplay.name : wallet_addresses_excluding_email && wallet_addresses_excluding_email.length > 0 ? formatAddressShort(wallet_addresses_excluding_email[0]) : 'Unnamed'}</div>
 							<div>
 								{(username || wallet_addresses_excluding_email.length > 0) && (
 									<div className="flex flex-row items-center justify-start">
-										{username && <div className="md:mr-2 text-sm md:text-base text-gray-500">@{username}</div>}
+										{username && <div className="md:mr-2 text-sm md:text-base text-gray-500 dark:text-gray-400">@{username}</div>}
 
 										<div className="flex ml-1">
 											{wallet_addresses_excluding_email.map(address => {
@@ -729,7 +729,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 							</div>
 							<div>
 								{profileToDisplay?.bio ? (
-									<div className="text-black text-sm max-w-prose text-left md:text-base mt-6 block break-words">
+									<div className="text-black dark:text-gray-500 text-sm max-w-prose text-left md:text-base mt-6 block break-words">
 										{moreBioShown ? profileToDisplay.bio : truncateWithEllipses(profileToDisplay.bio, initialBioLength)}
 										{!moreBioShown && profileToDisplay?.bio && profileToDisplay.bio.length > initialBioLength && (
 											<a onClick={() => setMoreBioShown(true)} className="text-gray-500 hover:text-gray-700 cursor-pointer">
@@ -744,7 +744,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 						<div className="flex-grow"></div>
 						<div className="flex  flex-col">
 							<div className="flex items-center mt-6 md:-mt-7 md:z-10  md:justify-end justify-start md:mx-0 ">
-								<div className="flex flex-row  md:bg-white md:shadow-md md:rounded-full md:px-2 md:py-2 items-center">
+								<div className="flex border border-transparent dark:border-gray-800 flex-row md:bg-white md:dark:bg-gray-900 md:shadow-md md:rounded-full md:px-2 md:py-2 items-center">
 									<div className="flex-grow ">
 										<div className="flex flex-row ">
 											<div
@@ -773,7 +773,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 								</div>
 							</div>
 
-							<div className=" md:text-right text-sm md:mr-2 pt-5 md:pt-7">
+							<div className="dark:text-gray-400 md:text-right text-sm md:mr-2 pt-5 md:pt-7">
 								{profileToDisplay?.website_url ? (
 									<a
 										href={profileToDisplay.website_url.slice(0, 4) === 'http' ? profileToDisplay.website_url : 'https://' + profileToDisplay.website_url}
@@ -787,7 +787,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										rel="noreferrer"
 									>
 										<div className="flex text-gray-500 flex-row  items-center hover:opacity-80 mr-3 md:mr-0">
-											<img src="/icons/link-solid-01.png" alt="" className="flex-shrink-0 h-5 w-5 mr-1 opacity-70" />
+											<LinkIcon className="dark:text-gray-600 flex-shrink-0 h-4 w-4 mr-1 opacity-70" />
 											<div>
 												<div className="break-all">{profileToDisplay.website_url}</div>
 											</div>
@@ -825,7 +825,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 
 				{spotlightItem ? (
 					<div className="mt-12 sm:mt-8 md:mt-12">
-						<div className="relative bg-white border-t border-b border-gray-200 sm:py-16 sm:pb-8 md:pb-16 mb-4">
+						<div className="relative bg-white dark:bg-gray-900 border-t border-b border-gray-200 dark:border-gray-800 sm:py-16 sm:pb-8 md:pb-16 mb-4">
 							<SpotlightItem
 								item={spotlightItem}
 								removeSpotlightItem={() => {

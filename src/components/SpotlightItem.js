@@ -179,7 +179,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 
 												setOpenCardMenu(openCardMenu == item.nft_id + '_' + listId ? null : item.nft_id + '_' + listId)
 											}}
-											className="text-right flex items-center justify-center text-gray-600 hover:text-stpink"
+											className="text-right flex items-center justify-center text-gray-600 dark:text-gray-700 hover:text-stpink dark:hover:text-stpink"
 										>
 											<FontAwesomeIcon className="w-5 h-5" icon={faEllipsisH} />
 										</button>
@@ -209,7 +209,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 											setMuted(true)
 											setCurrentlyPlayingVideo(false)
 										}}
-										className="mb-2 sm:mb-4 text-2xl sm:text-3xl hover:text-stpink cursor-pointer break-words"
+										className="dark:text-gray-200 mb-2 sm:mb-4 text-2xl sm:text-3xl hover:text-stpink cursor-pointer break-words"
 									>
 										{item.token_name}
 									</div>
@@ -222,12 +222,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 											{item.token_description?.length > max_description_length && !moreShown ? (
 												<>
 													{truncateWithEllipses(removeTags(item.token_description), max_description_length)}{' '}
-													<a
-														onClick={() => {
-															setMoreShown(true)
-														}}
-														className="text-gray-900 hover:text-gray-500 cursor-pointer"
-													>
+													<a onClick={() => setMoreShown(true)} className="text-gray-900 dark:text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer">
 														{' '}
 														more
 													</a>
@@ -260,27 +255,14 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 								</div>
 								<div className="flex-grow ">
 									<div className="flex flex-row mt-8">
-										<a
-											href={getBidLink(item)}
-											title={`Buy on ${getContractName(item)}`}
-											target="_blank"
-											onClick={() => {
-												mixpanel.track('OpenSea link click')
-											}}
-											rel="noreferrer"
-										>
-											<div className="text-base px-5 py-2 shadow-md transition-all rounded-full text-white bg-stpink hover:bg-white hover:text-stpink border-2 border-stpink">{`Bid on ${getContractName(item)}`}</div>
+										<a href={getBidLink(item)} title={`Buy on ${getContractName(item)}`} target="_blank" onClick={() => mixpanel.track('OpenSea link click')} rel="noreferrer">
+											<div className="text-base px-5 py-2 shadow-md transition-all rounded-full text-white dark:text-gray-900 bg-stpink hover:bg-white dark:hover:bg-gray-900 hover:text-stpink dark:hover:text-gray-200 border-2 border-stpink">{`Bid on ${getContractName(item)}`}</div>
 										</a>
 
 										<div className="flex-grow"></div>
 									</div>
 								</div>
-								<div
-									className={`flex ${
-										//
-										item.multiple_owners && pageProfile.profile_id !== item.creator_id ? 'flex-col lg:flex-row  pb-6' : 'flex-row'
-									} pt-4 mt-8 w-full`}
-								>
+								<div className={`flex ${item.multiple_owners && pageProfile.profile_id !== item.creator_id ? 'flex-col lg:flex-row  pb-6' : 'flex-row'} pt-4 mt-8 w-full`}>
 									{item.contract_is_creator ? (
 										<div className="flex-col flex-1">
 											<div className="flex-shrink mb-1 pr-2 text-xs text-gray-500">Created by</div>
@@ -290,7 +272,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 														<div className="w-8">
 															<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full h-8 w-8" />
 														</div>
-														<div className="mx-2 hover:text-stpink">{truncateWithEllipses(item.collection_name + ' Collection', 25)} </div>
+														<div className="mx-2 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">{truncateWithEllipses(item.collection_name + ' Collection', 25)} </div>
 													</a>
 												</Link>
 											</div>
@@ -304,7 +286,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 														<div>
 															<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
 														</div>
-														<div className="ml-2 hover:text-stpink">{truncateWithEllipses(item.creator_name, 25)}</div>
+														<div className="ml-2 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">{truncateWithEllipses(item.creator_name, 25)}</div>
 													</a>
 												</Link>
 											</div>
@@ -322,7 +304,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 																	<div>
 																		<img alt={pageProfile.name ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? pageProfile.wallet_addresses_excluding_email[0] : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-8 h-8" />
 																	</div>
-																	<div className="hover:text-stpink">{pageProfile.name ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? pageProfile.wallet_addresses_excluding_email[0] : 'Unknown'}</div>
+																	<div className="dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">{pageProfile.name ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? pageProfile.wallet_addresses_excluding_email[0] : 'Unknown'}</div>
 																</a>
 															</Link>
 
@@ -340,7 +322,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 															<div>
 																<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-8 h-8" />
 															</div>
-															<div className="hover:text-stpink">{truncateWithEllipses(item.owner_name, 25)}</div>
+															<div className="dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">{truncateWithEllipses(item.owner_name, 25)}</div>
 														</a>
 													</Link>
 												) : null}

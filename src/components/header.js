@@ -18,13 +18,13 @@ const Header = () => {
 					<ModalLogin isOpen={context.loginModalOpen} setEditModalOpen={context.setLoginModalOpen} />
 				</>
 			) : null}
-			<header className="px-2 py-1 sm:py-2 bg-white w-full shadow-md sticky top-0 z-1">
+			<header className="px-2 py-1 sm:py-2 bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md sticky top-0 z-1">
 				<CappedWidth>
 					<div className="flex flex-row items-center px-3">
 						<div>
 							<Link href="/">
 								<a
-									className="flex flex-row text-black hover:text-stpink items-center text-left mr-auto"
+									className="flex flex-row text-black dark:text-white hover:text-stpink dark:hover:text-stpink items-center text-left mr-auto"
 									onClick={async () => {
 										mixpanel.track('Logo button click')
 										await context.setToggleRefreshFeed(!context.toggleRefreshFeed)
@@ -45,7 +45,7 @@ const Header = () => {
 						<div className="hidden md:flex mr-6 items-center font-normal">
 							<Link href="/c/[collection]" as="/c/spotlights">
 								<a
-									className="text-black hover:text-stpink ml-6 text-sm md:text-base"
+									className="text-black dark:text-white hover:text-stpink dark:hover:text-stpink ml-6 text-sm md:text-base"
 									onClick={() => {
 										mixpanel.track('Discover button click')
 									}}
@@ -55,7 +55,7 @@ const Header = () => {
 							</Link>
 							<Link href="/trending">
 								<a
-									className="text-black hover:text-stpink ml-6 text-sm md:text-base"
+									className="text-black dark:text-white hover:text-stpink dark:hover:text-stpink ml-6 text-sm md:text-base"
 									onClick={() => {
 										mixpanel.track('Trending button click')
 									}}
@@ -98,7 +98,7 @@ const Header = () => {
 							) : (
 								<>
 									<div
-										className="flex text-sm md:text-base text-black cursor-pointer hover:text-stpink hover:border-stpink text-center"
+										className="flex text-sm md:text-base dark:text-white hover:text-stpink dark:hover:text-stpink cursor-pointer hover:border-stpink dark:hover:border-stpink text-center"
 										onClick={() => {
 											context.setLoginModalOpen(!context.loginModalOpen)
 										}}
@@ -116,7 +116,7 @@ const Header = () => {
 							<div>
 								<Link href="/c/[collection]" as="/c/spotlights">
 									<a
-										className="text-black hover:text-stpink mr-5 text-sm md:text-base"
+										className="text-black dark:text-white hover:text-stpink dark:hover:text-stpink mr-5 text-sm md:text-base"
 										onClick={() => {
 											mixpanel.track('Discover button click')
 										}}
@@ -126,7 +126,7 @@ const Header = () => {
 								</Link>
 								<Link href="/trending">
 									<a
-										className="text-black hover:text-stpink mr-5 text-sm md:text-base"
+										className="text-black dark:text-white hover:text-stpink dark:hover:text-stpink mr-5 text-sm md:text-base"
 										onClick={() => {
 											mixpanel.track('Trending button click')
 										}}

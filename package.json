@@ -39,6 +39,7 @@
     "mixpanel-browser": "^2.40.1",
     "next": "^10.2.0",
     "next-connect": "^0.10.1",
+    "next-themes": "^0.0.14",
     "postcss": "^8.2.13",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-preset-env": "^6.7.0",

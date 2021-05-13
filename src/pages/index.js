@@ -210,10 +210,10 @@ const Activity = () => {
 
 				<CappedWidth>
 					<div className="m-auto relative">
-						<hr className="mx-3" />
+						<hr className="dark:border-gray-700 mx-3" />
 
 						<div className="mb-4 sm:mb-8 mt-8 sm:mt-16 text-left px-5 sm:px-3 flex flex-row items-center">
-							<h1 className="text-lg sm:text-3xl">News Feed</h1>
+							<h1 className="text-lg sm:text-3xl dark:text-gray-200">News Feed</h1>
 							<div className="flex-grow"></div>
 							<div
 								className="hover:text-stpink sm:hidden mr-1"
@@ -227,13 +227,8 @@ const Activity = () => {
 
 						<div className="grid md:grid-cols-3 xl:grid-cols-4">
 							<div className={`px-3 col-span-2 md:col-span-1 mb-4 md:mb-0 ${showFiltersMobile ? null : 'hidden'} sm:block`}>
-								<div className="px-4 py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
-									<div
-										onClick={() => {
-											handleFilterClick(0)
-										}}
-										className={`hover:bg-blue-100 mb-1 p-2 rounded-lg px-3 ${activityTypeFilter === 0 ? 'text-blue-500 bg-blue-100' : 'text-gray-500'}  hover:text-blue-500 cursor-pointer transition-all`}
-									>
+								<div className="px-4 py-4 h-max rounded-lg sticky top-24 bg-white dark:bg-gray-900 border border-transparent dark:border-gray-800 shadow-md">
+									<div onClick={() => handleFilterClick(0)} className={`hover:bg-blue-100 mb-1 p-2 rounded-lg px-3 ${activityTypeFilter === 0 ? 'text-blue-500 bg-blue-100' : 'text-gray-500'}  hover:text-blue-500 cursor-pointer transition-all`}>
 										All News
 									</div>
 									<div
