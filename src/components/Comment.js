@@ -10,7 +10,7 @@ import reactStringReplace from 'react-string-replace'
 import { formatAddressShort } from '@/lib/utilities'
 import CommentLikeButton from './CommentLikeButton'
 
-export default function Comment({ comment, closeModal, modalRef, deleteComment, nftOwnerId, nftCreatorId }) {
+export default function Comment({ comment, closeModal, modalRef, deleteComment, nftOwnerId, nftCreatorId, openLikedByModal }) {
 	const context = useContext(AppContext)
 	const { myProfile } = context
 	const dropdownRef = useRef(null)
@@ -22,7 +22,6 @@ export default function Comment({ comment, closeModal, modalRef, deleteComment, 
 			</Link>
 		)
 	})
-	// console.log(replaced);
 	const [isDeleting, setIsDeleting] = useState(false)
 	const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false, modalRef)
 	const toggleDropdown = () => {
@@ -35,7 +34,7 @@ export default function Comment({ comment, closeModal, modalRef, deleteComment, 
 	const isCreatorOfNFT = nftCreatorId && nftCreatorId === myProfile?.profile_id
 
 	return (
-		<div className="p-2 my-1 flex rounded-xl hover:bg-gray-100 transition-all relative">
+		<div className="p-2 my-1 pb-1 flex rounded-xl hover:bg-gray-100 transition-all relative">
 			<div className="mr-3 mt-1">
 				<Link href="/[profile]" as={comment.username ? `/${comment.username}` : `/${comment.address}`}>
 					<img alt={comment.username || comment.name || 'Unnamed'} src={comment.img_url ? comment.img_url : DEFAULT_PROFILE_PIC} className="rounded-full cursor-pointer h-8 w-8" onClick={closeModal} />
@@ -92,13 +91,8 @@ export default function Comment({ comment, closeModal, modalRef, deleteComment, 
 				</div>
 				<div className="text-gray-500 text-sm leading-5 break-words">{commentWithMentions}</div>
 				<div>
-					<CommentLikeButton comment={comment} />
+					<CommentLikeButton comment={comment} openLikedByModal={openLikedByModal} />
 				</div>
-				{/* {isFocused && (
-					<div className={`absolute -top-6 right-0 px-2 pt-1 rounded-lg bg-white shadow transition-all transform ${isFocused ? 'visible translate-y-0 opacity-1' : 'invisible translate-y-2 opacity-0'}`}>
-						<CommentLikeButton comment={comment} />
-					</div>
-				)} */}
 			</div>
 		</div>
 	)

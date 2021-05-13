@@ -9,7 +9,7 @@ import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons'
 import Tippy from '@tippyjs/react'
 import axios from '@/lib/axios'
 
-const CommentLikeButton = ({ comment }) => {
+const CommentLikeButton = ({ comment, openLikedByModal }) => {
 	const context = useContext(AppContext)
 	const { isMobile } = context
 
@@ -56,7 +56,7 @@ const CommentLikeButton = ({ comment }) => {
 		mixpanel.track('Unliked comment')
 	}
 
-	const like_count = context.myCommentLikeCounts && !_.isNil(context.myCommentLikeCounts[comment?.commment_id]) ? context.myCommentLikeCounts[comment?.comment_id] : comment.like_count
+	const like_count = context.myCommentLikeCounts?.[comment.comment_id] ?? comment.like_count
 	const liked = context.myCommentLikes?.includes(comment.comment_id)
 
 	const handleLoggedOutCommentLike = () => {
@@ -66,14 +66,20 @@ const CommentLikeButton = ({ comment }) => {
 
 	return (
 		<Tippy content="Sign in to like" disabled={context.user || isMobile}>
-			<button disabled={context.disableLikes} onClick={() => (context.user ? (liked ? handleCommentUnlike(comment.comment_id) : handleCommentLike(comment.comment_id)) : handleLoggedOutCommentLike())}>
-				<div className={`flex flex-row items-center rounded-md py-1 hover:text-stred ${context.disableLikes ? 'hover:text-gray-500 text-gray-500' : ''}`}>
-					<div className={`flex ${liked ? 'text-stred' : ''}`}>
-						<FontAwesomeIcon className="!w-4 !h-4" icon={liked ? faHeartSolid : faHeartOutline} />
+			<div className="flex items-center">
+				<button disabled={context.disableLikes} onClick={() => (context.user ? (liked ? handleCommentUnlike(comment.comment_id) : handleCommentLike(comment.comment_id)) : handleLoggedOutCommentLike())}>
+					<div className={`flex flex-row items-center rounded-md py-1 hover:text-stred ${context.disableLikes ? 'hover:text-gray-500 text-gray-500' : ''}`}>
+						<div className={`flex ${liked ? 'text-stred' : ''}`}>
+							<FontAwesomeIcon className="!w-4 !h-4" icon={liked ? faHeartSolid : faHeartOutline} />
+						</div>
 					</div>
-					{like_count ? <div className="ml-1 text-xs whitespace-nowrap">{Number(like_count < 0 ? 0 : like_count).toLocaleString()}</div> : null}
-				</div>
-			</button>
+				</button>
+				{like_count ? (
+					<button onClick={() => openLikedByModal(_.isEmpty(comment.likers) ? [context.myProfile] : comment.likers)}>
+						<div className="ml-1 text-xs whitespace-nowrap">{Number(like_count < 0 ? 0 : like_count).toLocaleString()}</div>
+					</button>
+				) : null}
+			</div>
 		</Tippy>
 	)
 }

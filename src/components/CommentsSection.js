@@ -8,6 +8,7 @@ import { Mention, MentionsInput } from 'react-mentions'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 import { formatAddressShort } from '@/lib/utilities'
 import axios from '@/lib/axios'
+import ModalUserList from './ModalUserList'
 
 // TODO: Convert to classes and include it into the MentionsInput component
 const mentionsStyle = {
@@ -80,6 +81,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	const [commentText, setCommentText] = useState('')
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [focused, setFocused] = useState(false)
+	const [likedByUserList, setLikedByUserList] = useState(false)
 
 	const handleSearchQuery = (mentionSearchText, callback) => {
 		if (!mentionSearchText) return
@@ -194,75 +196,85 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 			context.setMyComments(context.myComments.filter(item => !(item === nftId)))
 		}
 	}
+	const openLikedByModal = likedBy => {
+		setLikedByUserList(likedBy)
+	}
+
+	const closeLikedByModal = () => {
+		setLikedByUserList(null)
+	}
 
 	return (
-		<div className="w-full">
-			{/* Comments */}
-			<div>
-				<div className="md:text-lg py-4" id="CommentsSectionScroll">
-					Comments
-				</div>
-				{loadingComments ? (
-					<div className="text-center my-4">
-						<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
+		<>
+			<div className="w-full">
+				{/* Comments */}
+				<div>
+					<div className="md:text-lg py-4" id="CommentsSectionScroll">
+						Comments
 					</div>
-				) : (
-					<>
-						<div className="py-2 px-4 border-2 border-gray-300 rounded-xl">
-							{hasMoreComments && (
-								<div className="flex flex-row items-center my-2 justify-center">
-									{!loadingMoreComments ? (
-										<div className="text-center px-4 py-1 flex items-center w-max border-2 border-gray-300 rounded-full hover:text-stpink hover:border-stpink cursor-pointer transition-all" onClick={handleGetMoreComments}>
-											<div className="mr-2 text-sm">Show Earlier Comments</div>
-										</div>
-									) : (
-										<div className="p-1">
-											<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
-										</div>
-									)}
-								</div>
-							)}
-							<div className="mb-4">{comments.length > 0 ? comments.map(comment => <Comment comment={comment} key={comment.comment_id} closeModal={closeModal} modalRef={modalRef} deleteComment={deleteComment} nftOwnerId={ownerCount > 0 ? null : nftOwnerId} nftCreatorId={nftCreatorId} />) : <div className="my-2 mb-3 p-3 bg-gray-100 rounded-xl">No comments yet.</div>}</div>
-							{/* New Comment */}
-							<div className="my-2 flex items-stretch flex-col md:flex-row">
-								<MentionsInput
-									value={commentText}
-									onChange={e => {
-										setCommentText(e.target.value)
-									}}
-									onFocus={() => setFocused(true)}
-									onBlur={() => setFocused(false)}
-									disabled={context.disableComments}
-									placeholder="Your comment..."
-									className="flex-grow md:mr-2"
-									allowSuggestionsAboveCursor
-									allowSpaceInQuery
-									style={mentionsStyle}
-									maxLength={240}
-								>
-									<Mention
-										renderSuggestion={s => (
-											<div className="flex items-center">
-												<img src={s.img_url} className="h-6 w-6 mr-2 rounded-full" />
-												<span className="">{s.display}</span>
-												{s.username && <span className="text-gray-400 ml-2">@{s.username}</span>}
+					{loadingComments ? (
+						<div className="text-center my-4">
+							<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
+						</div>
+					) : (
+						<>
+							<div className="py-2 px-4 border-2 border-gray-300 rounded-xl">
+								{hasMoreComments && (
+									<div className="flex flex-row items-center my-2 justify-center">
+										{!loadingMoreComments ? (
+											<div className="text-center px-4 py-1 flex items-center w-max border-2 border-gray-300 rounded-full hover:text-stpink hover:border-stpink cursor-pointer transition-all" onClick={handleGetMoreComments}>
+												<div className="mr-2 text-sm">Show Earlier Comments</div>
+											</div>
+										) : (
+											<div className="p-1">
+												<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
 											</div>
 										)}
-										displayTransform={(id, display) => `${display}`}
-										trigger="@"
-										data={handleDebouncedSearchQuery}
-										className="bg-purple-200 rounded -ml-1 sm:ml-0"
-										appendSpaceOnAdd
-									/>
-								</MentionsInput>
-								<button onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700">
-									{isSubmitting ? <div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" /> : 'Post'}
-								</button>
+									</div>
+								)}
+								<div className="mb-4">{comments.length > 0 ? comments.map(comment => <Comment comment={comment} key={comment.comment_id} closeModal={closeModal} modalRef={modalRef} deleteComment={deleteComment} nftOwnerId={ownerCount > 0 ? null : nftOwnerId} nftCreatorId={nftCreatorId} openLikedByModal={openLikedByModal} />) : <div className="my-2 mb-3 p-3 bg-gray-100 rounded-xl">No comments yet.</div>}</div>
+								{/* New Comment */}
+								<div className="my-2 flex items-stretch flex-col md:flex-row">
+									<MentionsInput
+										value={commentText}
+										onChange={e => {
+											setCommentText(e.target.value)
+										}}
+										onFocus={() => setFocused(true)}
+										onBlur={() => setFocused(false)}
+										disabled={context.disableComments}
+										placeholder="Your comment..."
+										className="flex-grow md:mr-2"
+										allowSuggestionsAboveCursor
+										allowSpaceInQuery
+										style={mentionsStyle}
+										maxLength={240}
+									>
+										<Mention
+											renderSuggestion={s => (
+												<div className="flex items-center">
+													<img src={s.img_url} className="h-6 w-6 mr-2 rounded-full" />
+													<span className="">{s.display}</span>
+													{s.username && <span className="text-gray-400 ml-2">@{s.username}</span>}
+												</div>
+											)}
+											displayTransform={(id, display) => `${display}`}
+											trigger="@"
+											data={handleDebouncedSearchQuery}
+											className="bg-purple-200 rounded -ml-1 sm:ml-0"
+											appendSpaceOnAdd
+										/>
+									</MentionsInput>
+									<button onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700">
+										{isSubmitting ? <div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" /> : 'Post'}
+									</button>
+								</div>
 							</div>
-						</div>
-					</>
-				)}
+						</>
+					)}
+				</div>
 			</div>
-		</div>
+			{likedByUserList && <ModalUserList isOpen={likedByUserList} title="Comment Likes" closeModal={closeLikedByModal} users={likedByUserList} emptyMessage="No one has liked this yet!" />}
+		</>
 	)
 }
