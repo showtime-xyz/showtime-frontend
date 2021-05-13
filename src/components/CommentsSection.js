@@ -274,7 +274,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 					)}
 				</div>
 			</div>
-			{likedByUserList && <ModalUserList isOpen={likedByUserList} title="Comment Likes" closeModal={closeLikedByModal} users={likedByUserList} emptyMessage="No one has liked this yet!" />}
+			{likedByUserList && <ModalUserList onRedirect={closeModal} isOpen={likedByUserList} title="Comment Likes" closeModal={closeLikedByModal} users={likedByUserList} emptyMessage="No one has liked this yet!" />}
 		</>
 	)
 }
