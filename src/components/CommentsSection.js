@@ -87,23 +87,19 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
       message: commentText,
       parent_id: parentComment?.comment_id,
     }
-    try {
-      await axios
-        .post(endpoint, payload)
-        .then(() => {
-          refreshComments(false)
-          storeCommentInContext()
-          parentComment ? mixpanel.track('Reply created') : mixpanel.track('Comment created')
-        })
-        .catch(err => {
-          if (err.response.data.code === 429) {
-            return context.setThrottleMessage(err.response.data.message)
-          }
-          console.error(err)
-        })
-    } catch (err) {
-      console.error(err)
-    }
+    await axios
+      .post(endpoint, payload)
+      .then(() => {
+        refreshComments(false)
+        storeCommentInContext()
+        parentComment ? mixpanel.track('Reply created') : mixpanel.track('Comment created')
+      })
+      .catch(err => {
+        if (err.response.data.code === 429) {
+          return context.setThrottleMessage(err.response.data.message)
+        }
+        console.error(err)
+      })
     setCommentText('')
     setParentComment(null)
     setIsSubmitting(false)
@@ -197,7 +193,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
                         nestedReply={nestedReply}
                         isReply={false}
                       />
-                      {comment.replies?.length > 0 ? (
+                      {comment.replies?.length > 0 && (
                         <div className="ml-10">
                           {comment.replies?.map(comment => (
                             <Comment
@@ -213,8 +209,6 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
                             />
                           ))}
                         </div>
-                      ) : (
-                        <></>
                       )}
                     </div>
                   ))

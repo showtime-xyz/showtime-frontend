@@ -31,7 +31,6 @@ export default function Comment({
       </Link>
     )
   })
-  // console.log(replaced);
   const [isDeleting, setIsDeleting] = useState(false)
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false, modalRef)
   const toggleDropdown = () => {
@@ -136,16 +135,15 @@ export default function Comment({
         <div className="text-gray-500 text-sm leading-5 break-words">{commentWithMentions}</div>
         {!isReply ? (
           <div>
-            <div className="flex-grow"></div>
             <div
               onClick={() => nestedReply(comment)}
-              className="flex justify-end text-gray-400 text-xs flex-0 sm:mb-0 cursor-pointer sm:mt-0"
+              className="flex justify-end text-gray-400 text-xs flex-0 sm:mb-0 cursor-pointer -mt-2"
             >
               reply
             </div>
           </div>
         ) : (
-          <div className="my-2" />
+          <div className="my-1" />
         )}
       </div>
     </div>
