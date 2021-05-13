@@ -135,7 +135,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 
   const nestedReply = comment => {
     setParentComment(comment)
-    setCommentText('@' + comment.username || comment.name + ' ')
+    setCommentText('@' + (comment.username || comment.name) + ' ')
     commentInputRef.current.focus()
   }
 
