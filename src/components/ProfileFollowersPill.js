@@ -22,9 +22,9 @@ const ProfileFollowersPill = ({ isFollowed, isMyProfile, followingMe, handleUnfo
 							Edit Profile
 						</div>
 
-						<div ref={dropdownRef} className={`absolute text-center top-12 -right-1 md:right-0 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-md transform z-1 ${isActive ? 'visible opacity-1 translate-y-2' : 'invisible opacity-0'}`}>
+						<div ref={dropdownRef} className={`absolute text-center top-12 -right-1 md:right-0 border border-transparent bg-white dark:bg-gray-900 dark:border-gray-800 py-2 px-2 shadow-lg rounded-xl transition-all text-md transform z-1 ${isActive ? 'visible opacity-1 translate-y-2' : 'invisible opacity-0'}`}>
 							<div
-								className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap transition-all"
+								className="py-2 dark:text-gray-400 hover:text-stpink dark:hover:stpink hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg cursor-pointer whitespace-nowrap transition-all"
 								onClick={() => {
 									setIsActive(false)
 									editAccount()
@@ -33,7 +33,7 @@ const ProfileFollowersPill = ({ isFollowed, isMyProfile, followingMe, handleUnfo
 								Edit Info
 							</div>
 							<div
-								className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap transition-all"
+								className="py-2 dark:text-gray-400 hover:text-stpink dark:hover:stpink hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg cursor-pointer whitespace-nowrap transition-all"
 								onClick={() => {
 									setIsActive(false)
 									editPhoto()
@@ -42,7 +42,7 @@ const ProfileFollowersPill = ({ isFollowed, isMyProfile, followingMe, handleUnfo
 								{context.myProfile && context.myProfile.img_url && !context.myProfile.img_url.includes('opensea-profile') ? 'Edit Photo' : 'Add Photo'}
 							</div>
 							<div
-								className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap transition-all"
+								className="py-2 dark:text-gray-400 hover:text-stpink dark:hover:stpink hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg cursor-pointer whitespace-nowrap transition-all"
 								onClick={() => {
 									setIsActive(false)
 									addWallet()
@@ -52,7 +52,7 @@ const ProfileFollowersPill = ({ isFollowed, isMyProfile, followingMe, handleUnfo
 							</div>
 							{hasEmailAddress ? null : (
 								<div
-									className="py-2 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap transition-all"
+									className="py-2 dark:text-gray-400 hover:text-stpink dark:hover:stpink hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg cursor-pointer whitespace-nowrap transition-all"
 									onClick={() => {
 										setIsActive(false)
 										addEmail()
@@ -62,7 +62,7 @@ const ProfileFollowersPill = ({ isFollowed, isMyProfile, followingMe, handleUnfo
 								</div>
 							)}
 							<div
-								className="py-2 px-8 hover:text-stpink hover:bg-gray-50 rounded-lg cursor-pointer whitespace-nowrap transition-all"
+								className="py-2 px-8 dark:text-gray-400 hover:text-stpink dark:hover:stpink hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg cursor-pointer whitespace-nowrap transition-all"
 								onClick={() => {
 									setIsActive(false)
 									logout()

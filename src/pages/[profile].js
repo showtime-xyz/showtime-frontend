@@ -17,12 +17,10 @@ import { formatAddressShort, truncateWithEllipses, classNames } from '@/lib/util
 import AddressButton from '@/components/AddressButton'
 import { PROFILE_TABS, SORT_FIELDS, DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import SpotlightItem from '@/components/SpotlightItem'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeart, faImage } from '@fortawesome/free-regular-svg-icons'
 import ProfileFollowersPill from '@/components/ProfileFollowersPill'
 import { Listbox, Transition, Menu } from '@headlessui/react'
-import { CheckIcon, SelectorIcon, ChevronDownIcon, PencilAltIcon, LinkIcon } from '@heroicons/react/solid'
-import { faHeart as fasHeart, faFingerprint, faImage as fasImage, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { CheckIcon, SelectorIcon, PencilAltIcon, LinkIcon, PhotographIcon as PhotographSolidIcon, HeartIcon as HeartSolidIcon, DotsHorizontalIcon } from '@heroicons/react/solid'
+import { FingerPrintIcon, PhotographIcon as PhotographOutlineIcon, HeartIcon as HeartOutlineIcon } from '@heroicons/react/outline'
 import axios from '@/lib/axios'
 
 export async function getServerSideProps(context) {
@@ -679,7 +677,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 						<CappedWidth>
 							<div className="relative">
 								<div
-									className="absolute top-6 right-5 2xl:right-5 text-gray-200 text-sm cursor-pointer bg-gray-800 bg-opacity-70 py-1 px-3 rounded-full hover:bg-opacity-90"
+									className="absolute top-6 right-5 2xl:right-5 text-gray-200 text-sm cursor-pointer bg-gray-900 bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 py-1 px-3 rounded-full hover:bg-opacity-60 flex items-center"
 									onClick={() => {
 										if (isMyProfile) {
 											setCoverModalOpen(true)
@@ -687,7 +685,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										}
 									}}
 								>
-									<FontAwesomeIcon icon={faEdit} /> Cover
+									<PencilAltIcon className="w-4 h-4 mr-1" />
+									<span>Cover</span>
 								</div>
 							</div>
 						</CappedWidth>
@@ -747,21 +746,11 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 								<div className="flex border border-transparent dark:border-gray-800 flex-row md:bg-white md:dark:bg-gray-900 md:shadow-md md:rounded-full md:px-2 md:py-2 items-center">
 									<div className="flex-grow ">
 										<div className="flex flex-row ">
-											<div
-												className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80 md:ml-4"
-												onClick={() => {
-													setShowFollowing(true)
-												}}
-											>
+											<div className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80 md:ml-4" onClick={() => setShowFollowing(true)}>
 												<div className="text-sm mr-2">{following && following.length !== null ? Number(isMyProfile ? context.myFollows.length : following_count).toLocaleString() : null}</div>
 												<div className="text-sm text-gray-500 mr-5">Following</div>
 											</div>
-											<div
-												className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80 "
-												onClick={() => {
-													setShowFollowers(true)
-												}}
-											>
+											<div className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80 " onClick={() => setShowFollowers(true)}>
 												<div className="text-sm  mr-2">{followers && followers.length !== null ? Number(followersCount).toLocaleString() : null}</div>
 												<div className="text-sm text-gray-500 mr-5">Followers</div>
 											</div>
@@ -786,7 +775,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										className="inline-block "
 										rel="noreferrer"
 									>
-										<div className="flex text-gray-500 flex-row  items-center hover:opacity-80 mr-3 md:mr-0">
+										<div className="flex text-gray-500 dark:hover:text-gray-400 flex-row  items-center hover:opacity-80 dark:hover:opacity-100 mr-3 md:mr-0">
 											<LinkIcon className="dark:text-gray-600 flex-shrink-0 h-4 w-4 mr-1 opacity-70" />
 											<div>
 												<div className="break-all">{profileToDisplay.website_url}</div>
@@ -809,11 +798,9 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											key={socialLink.type_id}
 											rel="noreferrer"
 										>
-											<div className="text-gray-500 flex flex-row items-center hover:opacity-80">
-												{socialLink.icon_url && <img src={socialLink.icon_url} alt="" className="flex-shrink-0 h-5 w-5 mr-1 opacity-70" />}
-												<div>
-													<div className="break-all">{socialLink.name}</div>
-												</div>
+											<div className="text-gray-500 dark:hover:text-gray-400 flex flex-row items-center hover:opacity-80 dark:hover:opacity-100">
+												{socialLink.icon_url && <img src={socialLink.icon_url} alt="" className="flex-shrink-0 h-5 w-5 mr-1 opacity-70 dark:opacity-100" />}
+												<div className="break-all">{socialLink.name}</div>
 											</div>
 										</a>
 									))}
@@ -836,10 +823,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 								openCardMenu={openCardMenu}
 								setOpenCardMenu={setOpenCardMenu}
 								listId={0}
-								// refreshItems={() => {
-								// 	updateCreated(selectedCreatedSortField, false)
-								// 	updateOwned(selectedOwnedSortField, false)
-								// }}
 								key={spotlightItem.nft_id}
 								pageProfile={{
 									profile_id,
@@ -858,34 +841,20 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 					<div className="m-auto">
 						<div ref={gridRef} className="grid lg:grid-cols-3 xl:grid-cols-4 pt-0 ">
 							<div className="sm:px-3">
-								<div className="h-max sticky top-24  ">
-									<div className="px-2 sm:px-4 py-2 sm:py-4 sm:rounded-lg bg-white border-t border-b sm:border-none border-gray-200  sm:shadow-md mt-14">
-										<div className="border-b border-gray-200 sm:mx-2 mb-2 pb-4  ">
+								<div className="h-max sticky top-24">
+									<div className="px-2 sm:px-4 py-2 sm:py-4 sm:rounded-lg bg-white dark:bg-gray-900 border-t border-b sm:border-l sm:border-r border-gray-200 sm:border-transparent dark:border-gray-800 sm:shadow-md mt-14">
+										<div className="border-b border-gray-200 dark:border-gray-800 sm:mx-2 mb-2 pb-4">
 											<div className="flex flex-row items-center mt-2 ml-2 sm:mt-0 sm:ml-0">
 												<div className="mr-2">
 													<img src={profileToDisplay && profileToDisplay.img_url ? profileToDisplay.img_url : DEFAULT_PROFILE_PIC} className="w-5 h-5 rounded-full" />
 												</div>
-												<div>{profileToDisplay?.name ? profileToDisplay.name : wallet_addresses_excluding_email && wallet_addresses_excluding_email.length > 0 ? formatAddressShort(wallet_addresses_excluding_email[0]) : 'Unnamed'}</div>
+												<div className="dark:text-gray-300">{profileToDisplay?.name ? profileToDisplay.name : wallet_addresses_excluding_email && wallet_addresses_excluding_email.length > 0 ? formatAddressShort(wallet_addresses_excluding_email[0]) : 'Unnamed'}</div>
 												<div className="flex-grow"></div>
 												{isMyProfile && hasUserHiddenItems ? (
 													<div className="flex sm:hidden">
 														<div className="flex-grow flex"></div>
-														<div
-															className=" text-xs mr-2 text-gray-400 cursor-pointer hover:text-gray-700"
-															onClick={() => {
-																//setShowUserHiddenItems(!showUserHiddenItems);
-																handleShowHiddenChange(!showUserHiddenItems)
-															}}
-														>
-															{
-																//createdHiddenItems.length === 0 &&
-																//ownedHiddenItems.length === 0 &&
-																//likedHiddenItems.length === 0
-																//? null
-																//:
-
-																showUserHiddenItems ? 'Hide hidden' : 'Show hidden'
-															}
+														<div className="text-xs mr-2 text-gray-400 dark:text-gray-500 cursor-pointer hover:text-gray-700" onClick={() => handleShowHiddenChange(!showUserHiddenItems)}>
+															{showUserHiddenItems ? 'Hide hidden' : 'Show hidden'}
 														</div>
 													</div>
 												) : null}
@@ -893,20 +862,15 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										</div>
 										<div className="flex flex-row sm:flex-col">
 											<div
-												onClick={() => {
-													//setSelectedGrid(1);
-													handleListChange(1)
-													if (gridRef?.current?.getBoundingClientRect().top < 0) {
-														window.scroll({
-															top: gridRef?.current?.offsetTop + 30,
-															behavior: 'smooth',
-														})
-													}
-												}}
 												className={`flex-1 hover:bg-stpurple100 p-2 sm:mb-1 ml-1 sm:ml-0 rounded-lg px-3  ${selectedGrid === 1 ? 'text-stpurple700 bg-stpurple100' : 'text-gray-500'} hover:text-stpurple700 cursor-pointer flex flex-row transition-all items-center`}
+												onClick={() => {
+													handleListChange(1)
+
+													if (gridRef?.current?.getBoundingClientRect().top < 0) window.scroll({ top: gridRef?.current?.offsetTop + 30, behavior: 'smooth' })
+												}}
 											>
 												<div className="w-6 hidden sm:block">
-													<FontAwesomeIcon icon={faFingerprint} className="mr-2" />
+													<FingerPrintIcon className="w-5 h-5 mr-2.5" />
 												</div>
 												<div className="flex-grow sm:hidden"></div>
 												<div className="sm:hidden mr-1">{menuLists && menuLists.length > 0 ? Number(menuLists[0].count_deduplicated_nonhidden).toLocaleString() : null}</div>
@@ -918,21 +882,13 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												</div>
 											</div>
 											<div
-												onClick={() => {
-													//setSelectedGrid(2);
-													handleListChange(2)
-													if (gridRef?.current?.getBoundingClientRect().top < 0) {
-														window.scroll({
-															top: gridRef?.current?.offsetTop + 30,
-															behavior: 'smooth',
-														})
-													}
-												}}
 												className={`flex-1 hover:bg-stteal100 sm:mb-1 p-2  rounded-lg px-3 ${selectedGrid === 2 ? 'text-stteal700 bg-stteal100' : 'text-gray-500'} hover:text-stteal700 cursor-pointer flex flex-row transition-all items-center`}
+												onClick={() => {
+													handleListChange(2)
+													if (gridRef?.current?.getBoundingClientRect().top < 0) window.scroll({ top: gridRef?.current?.offsetTop + 30, behavior: 'smooth' })
+												}}
 											>
-												<div className="w-6 hidden sm:block">
-													<FontAwesomeIcon icon={selectedGrid === 2 ? fasImage : faImage} className="mr-2" />
-												</div>
+												<div className="w-6 hidden sm:block">{selectedGrid === 2 ? <PhotographSolidIcon className="w-5 h-5 mr-2.5" /> : <PhotographOutlineIcon className="w-5 h-5 mr-2.5" />}</div>
 												<div className="flex-grow sm:hidden"></div>
 												<div className="sm:hidden mr-1">{menuLists && menuLists.length > 0 ? Number(menuLists[1].count_deduplicated_nonhidden).toLocaleString() : null}</div>
 												<div>Owned</div>
@@ -943,20 +899,13 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												</div>
 											</div>
 											<div
+												className={`flex-1 hover:bg-stred100 p-2 sm:mt-0 mr-1 sm:mr-0 rounded-lg px-3 ${selectedGrid === 3 ? 'text-stred bg-stred100' : 'text-gray-500'} hover:text-stred cursor-pointer flex flex-row transition-all items-center`}
 												onClick={() => {
 													handleListChange(3)
-													if (gridRef?.current?.getBoundingClientRect().top < 0) {
-														window.scroll({
-															top: gridRef?.current?.offsetTop + 30,
-															behavior: 'smooth',
-														})
-													}
+													if (gridRef?.current?.getBoundingClientRect().top < 0) window.scroll({ top: gridRef?.current?.offsetTop + 30, behavior: 'smooth' })
 												}}
-												className={`flex-1 hover:bg-stred100 p-2 sm:mt-0 mr-1 sm:mr-0 rounded-lg px-3 ${selectedGrid === 3 ? 'text-stred bg-stred100' : 'text-gray-500'} hover:text-stred cursor-pointer flex flex-row transition-all items-center`}
 											>
-												<div className="w-6 hidden sm:block">
-													<FontAwesomeIcon icon={selectedGrid === 3 ? fasHeart : faHeart} className="mr-2" />
-												</div>
+												<div className="w-6 hidden sm:block">{selectedGrid === 3 ? <HeartSolidIcon className="w-5 h-5 mr-2.5" /> : <HeartOutlineIcon className="w-5 h-5 mr-2.5" />}</div>
 												<div className="flex-grow sm:hidden"></div>
 												<div className="sm:hidden mr-1">
 													{menuLists && menuLists.length > 0 ? (menuLists[2].count_deduplicated_nonhidden > 300 ? 300 : menuLists[2].count_deduplicated_nonhidden) : null}
@@ -973,25 +922,11 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 									</div>
 									<div>
 										{isMyProfile && hasUserHiddenItems ? (
-											<div className="flex hidden sm:flex">
+											<div className="hidden sm:flex">
 												<div className="flex-grow flex"></div>
-												<div
-													className=" text-xs mt-3 ml-6 mr-1 text-gray-400 cursor-pointer hover:text-gray-700"
-													onClick={() => {
-														//setShowUserHiddenItems(!showUserHiddenItems);
-														handleShowHiddenChange(!showUserHiddenItems)
-													}}
-												>
-													{
-														//createdHiddenItems.length === 0 &&
-														//ownedHiddenItems.length === 0 &&
-														//likedHiddenItems.length === 0
-														//  ? null
-														//  :
-
-														showUserHiddenItems ? 'Hide hidden' : 'Show hidden'
-													}
-												</div>
+												<p className=" text-xs mt-3 ml-6 mr-1 text-gray-400 dark:text-gray-500 cursor-pointer hover:text-gray-700" onClick={() => handleShowHiddenChange(!showUserHiddenItems)}>
+													{showUserHiddenItems ? 'Hide hidden' : 'Show hidden'}
+												</p>
 											</div>
 										) : null}
 									</div>
@@ -999,36 +934,15 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 							</div>
 							<div className="lg:col-span-2 xl:col-span-3 min-h-screen ">
 								{!isLoadingCards && (
-									<div
-										className={`sm:mt-0 flex h-12 items-center px-3 my-2  md:text-base ${
-											null
-
-											/*selectedGrid === 3
-                        ? "invisible"
-                        : selectedGrid === 1 &&
-                          createdItems.filter(
-                            //(item) => !createdHiddenItems.includes(item.nft_id)
-                            true
-                          ).length === 0
-                        ? "invisible"
-                        : selectedGrid === 2 &&
-                          ownedItems.filter(
-                            //(item) => !ownedHiddenItems.includes(item.nft_id)
-                            true
-                          ).length === 0
-                        ? "invisible"
-                        : null
-                            */
-										}`}
-									>
+									<div className="sm:mt-0 flex h-12 items-center px-3 my-2  md:text-base">
 										{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && (
 											<>
 												{isChangingOrder && ((selectedGrid === 1 && selectedCreatedSortField === 5) || (selectedGrid === 2 && selectedOwnedSortField === 5)) && (
 													<>
-														<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none" onClick={handleCancelOrder}>
+														<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-red-100 bg-red-600 hover:bg-red-700 focus:outline-none" onClick={handleCancelOrder}>
 															Cancel
 														</div>
-														<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none" onClick={handleSaveOrder}>
+														<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-green-100 bg-green-600 hover:bg-green-700 focus:outline-none" onClick={handleSaveOrder}>
 															Save Order
 														</div>
 													</>
@@ -1036,58 +950,32 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											</>
 										)}
 										<div className="flex-1 hidden sm:flex"></div>
-										<Listbox
-											value={collectionId}
-											onChange={value => {
-												handleCollectionChange(value)
-											}}
-											disabled={isChangingOrder}
-										>
+										<Listbox value={collectionId} onChange={value => handleCollectionChange(value)} disabled={isChangingOrder}>
 											{({ open }) => (
 												<>
-													<div
-														className="relative mr-2"
-														style={
-															context.isMobile
-																? {
-																		width: '100%',
-																  }
-																: {
-																		width: 218,
-																  }
-														}
-													>
-														<Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+													<div className="relative mr-2 w-full sm:w-56">
+														<Listbox.Button className="relative w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 sm:text-sm">
 															<span className="flex items-center">
 																<>
 																	{collectionId && collectionId > 0 ? <img src={menuLists && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId).length > 0 && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId)[0].collection_img_url ? menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId)[0].collection_img_url : DEFAULT_PROFILE_PIC} alt="" className="flex-shrink-0 h-6 w-6 rounded-full mr-3" /> : null}
-																	<span className=" block truncate">{menuLists && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId).length > 0 && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId)[0].collection_name.replace(' (FND)', '')}</span>
+																	<span className="block truncate dark:text-gray-400">{menuLists && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId).length > 0 && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId)[0].collection_name.replace(' (FND)', '')}</span>
 																</>
 															</span>
 															<span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-																<SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+																<SelectorIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" aria-hidden="true" />
 															</span>
 														</Listbox.Button>
 
 														<Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-															<Listbox.Options static className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+															<Listbox.Options static className="z-10 absolute mt-1 w-full border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
 																{menuLists &&
 																	menuLists[selectedGrid - 1].collections.map(item => (
-																		<Listbox.Option key={item.collection_id} className={({ active }) => classNames(active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={item.collection_id}>
+																		<Listbox.Option key={item.collection_id} className={({ active }) => classNames(active ? 'text-white dark:text-gray-300 bg-indigo-600 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={item.collection_id}>
 																			{({ active }) => (
 																				<>
 																					<div className="flex items-center">
 																						<img src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />
-																						<span
-																							className={classNames(
-																								item.collection_id === collectionId
-																									? 'font-normal' // "font-semibold"
-																									: 'font-normal',
-																								'ml-3 block truncate'
-																							)}
-																						>
-																							{item.collection_name.replace(' (FND)', '')}
-																						</span>
+																						<span className="ml-3 block truncate">{item.collection_name.replace(' (FND)', '')}</span>
 																					</div>
 
 																					{item.collection_id === collectionId ? (
@@ -1106,43 +994,25 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											)}
 										</Listbox>
 										<div className="flex-1 flex sm:hidden"></div>
-										<Listbox
-											value={selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField}
-											onChange={value => {
-												handleSortChange(value)
-											}}
-											disabled={isChangingOrder}
-										>
+										<Listbox value={selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField} onChange={value => handleSortChange(value)} disabled={isChangingOrder}>
 											{({ open }) => (
 												<>
-													{/*<Listbox.Label className="block text-sm text-gray-500 mr-2 hidden">
-                            Sort By
-                      </Listbox.Label>*/}
 													<div className="relative" style={context.isMobile ? { minWidth: 140 } : { width: 130 }}>
-														<Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-															<span className="block truncate">{sortingOptionsList.filter(t => t.value === (selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField))[0].label}</span>
+														<Listbox.Button className="bg-white dark:bg-gray-700 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 sm:text-sm">
+															<span className="block truncate dark:text-gray-400">{sortingOptionsList.filter(t => t.value === (selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField))[0].label}</span>
 															<span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
 																<SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
 															</span>
 														</Listbox.Button>
 														<Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-															<Listbox.Options static className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+															<Listbox.Options static className="z-10 absolute mt-1 w-full border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
 																{sortingOptionsList
 																	.filter(opts => (menuLists[selectedGrid - 1].has_custom_sort ? true : opts.value !== 5))
 																	.map(item => (
-																		<Listbox.Option key={item.value} className={({ active }) => classNames(active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={item.value}>
+																		<Listbox.Option key={item.value} className={({ active }) => classNames(active ? 'text-white dark:text-gray-300 bg-indigo-600 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={item.value}>
 																			{({ active }) => (
 																				<>
-																					<span
-																						className={classNames(
-																							item.value === (selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField)
-																								? 'font-normal' // "font-semibold"
-																								: 'font-normal',
-																							'block truncate'
-																						)}
-																					>
-																						{item.label}
-																					</span>
+																					<span className="block truncate">{item.label}</span>
 
 																					{item.value === (selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField) ? (
 																						<span className={classNames(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}>
@@ -1164,17 +1034,16 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												{({ open }) => (
 													<>
 														<div>
-															<Menu.Button disabled={isChangingOrder} className="inline-flex justify-center items-center w-full px-2 py-2 text-sm font-medium text-white bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 focus-visible:ring-opacity-75">
-																<PencilAltIcon className="w-4 h-4 ml-1 text-black" aria-hidden="true" />
-																<ChevronDownIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
+															<Menu.Button disabled={isChangingOrder} className="flex items-center justify-center text-gray-800 dark:text-gray-400 hover:text-stpink dark:hover:text-stpink focus:outline-none focus-visible:ring-1">
+																<DotsHorizontalIcon className="w-5 h-5" aria-hidden="true" />
 															</Menu.Button>
 														</div>
 														<Transition show={open} as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
-															<Menu.Items static className="z-1 absolute right-0 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" style={{ width: 200 }}>
+															<Menu.Items static className="z-1 absolute right-0 mt-2 origin-top-right border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" style={{ width: 200 }}>
 																<div className="px-1 py-1 ">
 																	<Menu.Item>
 																		{({ active }) => (
-																			<button className={`${active ? 'text-white bg-indigo-600' : 'bg-white text-gray-900'} group flex rounded-md items-center w-full px-2 py-2 text-sm`} onClick={handleClickChangeOrder}>
+																			<button className={`${active ? 'text-white dark:text-gray-300 bg-indigo-600 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400'} group flex rounded-md items-center w-full px-2 py-2 text-sm`} onClick={handleClickChangeOrder}>
 																				Customize Order
 																			</button>
 																		)}
@@ -1202,9 +1071,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 									{menuLists && menuLists.length > 0 && (
 										<TokenGridV5
 											dataLength={items.length}
-											next={() => {
-												addPage(page + 1)
-											}}
+											next={() => addPage(page + 1)}
 											hasMore={hasMore}
 											endMessage={
 												!isLoadingCards && !isRefreshingCards && !isLoadingMore && collectionId == 0 ? (

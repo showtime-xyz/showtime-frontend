@@ -2,7 +2,7 @@ import { useState, useContext, useRef } from 'react'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faEllipsisH, faStar } from '@fortawesome/free-solid-svg-icons'
+import { faPlay, faStar } from '@fortawesome/free-solid-svg-icons'
 import LikeButton from './LikeButton'
 import CommentButton from './CommentButton'
 import ShareButton from './ShareButton'
@@ -13,7 +13,8 @@ import MiniFollowButton from './MiniFollowButton'
 import TokenCardImage from '@/components/TokenCardImage'
 import { removeTags, formatAddressShort, truncateWithEllipses } from '@/lib/utilities'
 import axios from '@/lib/axios'
-import { MenuIcon } from '@heroicons/react/solid'
+import { MenuIcon, PlayIcon, StarIcon } from '@heroicons/react/solid'
+import { DotsHorizontalIcon } from '@heroicons/react/outline'
 
 const TokenCard = ({
 	originalItem,
@@ -91,7 +92,7 @@ const TokenCard = ({
 
 	return (
 		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
-			<div ref={divRef} className={`w-full h-full sm:rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all bg-white flex flex-col ${item.user_hidden ? 'opacity-70 bg-gray-200' : ''} ${isChangingOrder ? 'border-2 border-stpink' : ''}`}>
+			<div ref={divRef} className={`w-full h-full sm:rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all flex flex-col bg-white dark:bg-gray-900 ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border border-transparent dark:border-gray-800'}`}>
 				<div ref={item.imageRef} className="p-4 flex flex-row items-center relative">
 					<div className="pr-2 ">
 						{item.contract_is_creator ? (
@@ -100,7 +101,7 @@ const TokenCard = ({
 									<div>
 										<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
 									</div>
-									<div className="text-gray-800 hover:text-stpink ml-2">{truncateWithEllipses(item.collection_name + ' Collection', 30)}</div>
+									<div className="text-gray-800 dark:text-gray-300 hover:text-stpink ml-2">{truncateWithEllipses(item.collection_name + ' Collection', 30)}</div>
 								</a>
 							</Link>
 						) : item.creator_address ? (
@@ -109,7 +110,7 @@ const TokenCard = ({
 									<div>
 										<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
 									</div>
-									<div className="ml-2 hover:text-stpink truncate">{truncateWithEllipses(item.creator_name, 22)}</div>
+									<div className="ml-2 dark:text-gray-300 hover:text-stpink truncate">{truncateWithEllipses(item.creator_name, 22)}</div>
 								</a>
 							</Link>
 						) : null}
@@ -126,33 +127,31 @@ const TokenCard = ({
 
 									setOpenCardMenu(openCardMenu == item.nft_id + '_' + listId ? null : item.nft_id + '_' + listId)
 								}}
-								className="text-right text-gray-600 hover:text-stpink"
+								className="text-right text-gray-600 hover:text-stpink focus:outline-none focus-visible:ring-1"
 							>
-								<FontAwesomeIcon className="!w-4 !h-4" icon={faEllipsisH} />
+								<DotsHorizontalIcon className="w-5 h-5" />
 							</button>
 						) : null}
 
 						{openCardMenu == item.nft_id + '_' + listId ? (
 							<div className="">
 								<div className="flex justify-end relative z-10">
-									<div className={`absolute text-center top-2 bg-white shadow-lg py-2 px-2 rounded-xl transition-all text-md transform border border-gray-100 ${openCardMenu == item.nft_id + '_' + listId ? 'visible opacity-1 ' : 'invisible opacity-0'}`}>
+									<div className={`absolute text-center top-2 bg-white dark:bg-gray-900 shadow-lg py-2 px-2 rounded-xl transition-all text-md transform border-gray-100 dark:border-gray-800 ${openCardMenu == item.nft_id + '_' + listId ? 'visible opacity-1 ' : 'invisible opacity-0'}`}>
 										<div
-											className="py-2 px-3 hover:text-stpink hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap flex flew-row"
+											className="py-2 px-3 dark:text-gray-400 hover:text-stpink dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all rounded-lg cursor-pointer whitespace-nowrap flex items-center"
 											onClick={() => {
 												mixpanel.track('Clicked Spotlight Item')
 												changeSpotlightItem(item)
 											}}
 										>
-											<div>
-												<FontAwesomeIcon className="h-4 w-4 mr-1.5" icon={faStar} />
-											</div>
-											<div>Spotlight Item</div>
+											<StarIcon className="h-5 w-5 mr-1.5" />
+											<span>Spotlight Item</span>
 										</div>
 
-										<div className="py-2 px-3 hover:text-stpink hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap" onClick={item.user_hidden ? handleUnhide : handleHide}>
+										<div className="py-2 px-3 dark:text-gray-400 hover:text-stpink dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all rounded-lg cursor-pointer whitespace-nowrap" onClick={item.user_hidden ? handleUnhide : handleHide}>
 											{item.user_hidden ? `Unhide From ${listId === 1 ? 'Created' : listId === 2 ? 'Owned' : listId === 3 ? 'Liked' : 'List'}` : `Hide From ${listId === 1 ? 'Created' : listId === 2 ? 'Owned' : listId === 3 ? 'Liked' : 'List'}`}
 										</div>
-										<div className="py-2 px-3 hover:text-stpink hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap" onClick={handleRefreshNFTMetadata}>
+										<div className="py-2 px-3 dark:text-gray-400 hover:text-stpink dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all rounded-lg cursor-pointer whitespace-nowrap" onClick={handleRefreshNFTMetadata}>
 											Refresh Metadata
 										</div>
 									</div>
@@ -172,7 +171,6 @@ const TokenCard = ({
 							width={item.imageRef?.current?.clientWidth}
 							height={item.imageRef?.current?.clientWidth}
 							playsinline
-							//onReady={this.setSpans}
 							// Disable downloading & right click
 							config={{
 								file: {
@@ -196,17 +194,13 @@ const TokenCard = ({
 								setCurrentlyPlayingVideo(null)
 							}}
 						>
-							<div
-								style={{
-									backgroundColor: getBackgroundColor(item),
-								}}
-							>
+							<div style={{ backgroundColor: getBackgroundColor(item) }}>
 								<TokenCardImage nft={item} />
 							</div>
 						</div>
 						{item.token_has_video ? (
 							<div
-								className="p-4 opacity-80 hover:opacity-100 absolute bottom-0 right-0 cursor-pointer"
+								className="p-2.5 opacity-80 hover:opacity-100 absolute bottom-0 right-0 cursor-pointer"
 								onClick={() => {
 									mixpanel.track('Play card video')
 									setShowVideo(true)
@@ -214,20 +208,20 @@ const TokenCard = ({
 									setCurrentlyPlayingVideo(item.nft_id)
 								}}
 							>
-								<FontAwesomeIcon className="h-5 w-5 text-white filter drop-shadow" icon={faPlay} />
+								<PlayIcon className="h-6 w-6 text-white filter drop-shadow" />
 							</div>
 						) : null}
 						{refreshing && (
-							<div className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center bg-white bg-opacity-50">
-								<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin mb-2" />
-								<div>Refreshing...</div>
+							<div className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center bg-white dark:bg-black bg-opacity-50 dark:bg-opacity-50">
+								<div className="inline-block w-6 h-6 border-2 border-gray-100 dark:border-gray-300 border-t-gray-800 dark:border-t-gray-800 rounded-full animate-spin mb-2" />
+								<span className="dark:text-gray-300">Refreshing...</span>
 							</div>
 						)}
 						{isChangingOrder && (
-							<div className="absolute cursor-move inset-0 cursor-pointer flex flex-col items-center justify-center bg-white bg-opacity-70">
-								<div className="p-2 bg-white rounded-lg shadow flex justify-center items-center">
-									<MenuIcon className="w-5 h-5 text-black mr-1" aria-hidden="true" />
-									<div>Drag to Reorder</div>
+							<div className="absolute cursor-move inset-0 flex flex-col items-center justify-center bg-white dark:bg-black bg-opacity-70 dark:bg-opacity-70">
+								<div className="p-2 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg shadow flex justify-center items-center">
+									<MenuIcon className="w-5 h-5 text-black dark:text-gray-400 mr-2" aria-hidden="true" />
+									<span className="dark:text-gray-300">Drag to Reorder</span>
 								</div>
 							</div>
 						)}
@@ -236,7 +230,7 @@ const TokenCard = ({
 
 				<div className="p-4">
 					<div>
-						<div className="">
+						<div>
 							<div
 								onClick={() => {
 									mixpanel.track('Open NFT modal')
@@ -246,7 +240,7 @@ const TokenCard = ({
 									setMuted(true)
 									setCurrentlyPlayingVideo(null)
 								}}
-								className="break-words cursor-pointer truncate"
+								className="break-words cursor-pointer truncate dark:text-gray-200"
 								style={context.isMobile ? { width: context?.windowSize?.width - 16 * 2 } : {}}
 							>
 								{item.token_name}
@@ -260,7 +254,7 @@ const TokenCard = ({
 										{item.token_description?.length > max_description_length ? (
 											<>
 												{truncateWithEllipses(removeTags(item.token_description), max_description_length)}{' '}
-												<a onClick={() => setMoreShown(true)} className="text-gray-900 hover:text-gray-500 cursor-pointer">
+												<a onClick={() => setMoreShown(true)} className="text-gray-900 dark:text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer">
 													{' '}
 													more
 												</a>
@@ -296,7 +290,7 @@ const TokenCard = ({
 					</div>
 				</div>
 				<div className="flex-1 flex items-end w-full">
-					<div className="border-t border-gray-300 p-4 flex flex-col w-full">
+					<div className="border-t border-gray-300 dark:border-gray-800 p-4 flex flex-col w-full">
 						<div className="flex-shrink pr-2 text-xs text-gray-500 mb-1">Owned by</div>
 						<div>
 							{item.owner_count && item.owner_count > 1 ? (
@@ -307,7 +301,7 @@ const TokenCard = ({
 												<div>
 													<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? formatAddressShort(pageProfile.wallet_addresses_excluding_email[0]) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
 												</div>
-												<div className="text-gray-800 hover:text-stpink">{truncateWithEllipses(pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? formatAddressShort(pageProfile.wallet_addresses_excluding_email[0]) : 'Unknown', 14)}</div>
+												<div className="text-gray-800 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">{truncateWithEllipses(pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? formatAddressShort(pageProfile.wallet_addresses_excluding_email[0]) : 'Unknown', 14)}</div>
 											</a>
 										</Link>
 
@@ -328,7 +322,7 @@ const TokenCard = ({
 											<div>
 												<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-6 h-6" />
 											</div>
-											<div className="text-gray-800 hover:text-stpink">{truncateWithEllipses(item.owner_name, 24)}</div>
+											<div className="text-gray-800 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">{truncateWithEllipses(item.owner_name, 24)}</div>
 										</a>
 									</Link>
 									{context.myProfile?.profile_id !== item.owner_id && !(isMyProfile && listId !== 3) && <MiniFollowButton profileId={item.owner_id} />}
