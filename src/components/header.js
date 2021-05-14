@@ -93,7 +93,7 @@ const Header = () => {
 							) : (
 								<>
 									<div
-										className="flex text-sm md:text-base dark:text-white hover:text-stpink dark:hover:text-stpink cursor-pointer hover:border-stpink dark:hover:border-stpink text-center"
+										className="flex text-sm md:text-base dark:text-gray-200 hover:text-stpink dark:hover:text-stpink cursor-pointer hover:border-stpink dark:hover:border-stpink text-center"
 										onClick={() => {
 											context.setLoginModalOpen(!context.loginModalOpen)
 										}}
