@@ -79,6 +79,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	const [comments, setComments] = useState()
 	const [commentText, setCommentText] = useState('')
 	const [isSubmitting, setIsSubmitting] = useState(false)
+	const [focused, setFocused] = useState(false)
 
 	const handleSearchQuery = (mentionSearchText, callback) => {
 		if (!mentionSearchText) return
@@ -115,6 +116,10 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		refreshComments()
 		return () => setComments(null)
 	}, [nftId])
+
+	useEffect(() => {
+		context.setCommentInputFocused(focused)
+	}, [focused])
 
 	const handleGetMoreComments = async () => {
 		setLoadingMoreComments(true)
@@ -189,6 +194,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 			context.setMyComments(context.myComments.filter(item => !(item === nftId)))
 		}
 	}
+
 	return (
 		<div className="w-full">
 			{/* Comments */}
@@ -224,6 +230,8 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 									onChange={e => {
 										setCommentText(e.target.value)
 									}}
+									onFocus={() => setFocused(true)}
+									onBlur={() => setFocused(false)}
 									disabled={context.disableComments}
 									placeholder="Your comment..."
 									className="flex-grow md:mr-2"

@@ -75,14 +75,14 @@ const RecommendedFollowItem = ({ item, closeModal = () => {}, liteVersion, remov
 	const [mouseOver, setMouseOver] = useState(false)
 
 	useEffect(() => {
-		if (escPress) setCurrentlyOpenModal(null)
-
-		if (rightPress && currentlyOpenModal) {
+		if (escPress) {
+			setCurrentlyOpenModal(null)
+		}
+		if (rightPress && currentlyOpenModal && !context.commentInputFocused) {
 			mixpanel.track('Next NFT - keyboard')
 			goToNext()
 		}
-
-		if (leftPress && currentlyOpenModal) {
+		if (leftPress && currentlyOpenModal && !context.commentInputFocused) {
 			mixpanel.track('Prior NFT - keyboard')
 			goToPrevious()
 		}
