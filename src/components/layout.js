@@ -6,7 +6,7 @@ import Header from './header'
 
 const Layout = ({ children }) => {
 	return (
-		<div className="flex flex-col min-h-screen bg-gray-50 tracking-wide overflow-x-hidden">
+		<div className="flex flex-col min-h-screen bg-gray-50 tracking-wide">
 			<Head>
 				<link rel="icon" href="/logo_sm.jpg" />
 

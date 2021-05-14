@@ -56,7 +56,7 @@ export default function Modal({ item, isOpen, setEditModalOpen, goToNext, goToPr
 						>
 							<FontAwesomeIcon icon={faAngleLeft} className="!w-4 h-auto" />
 						</div>
-						<div className={`bg-white flex-grow my-8 overflow-hidden text-black ${isStacked ? 'h-full overflow-auto' : 'h-[90%] rounded-lg'}`} onClick={e => e.stopPropagation()}>
+						<div className={`bg-white flex-grow my-8 overflow-hidden text-black w-full ${isStacked ? 'h-full overflow-auto' : 'h-[90%] rounded-lg'}`} onClick={e => e.stopPropagation()}>
 							<div
 								onClick={() => {
 									mixpanel.track('Close NFT modal - x button')
