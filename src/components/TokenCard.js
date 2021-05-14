@@ -1,8 +1,6 @@
 import { useState, useContext, useRef } from 'react'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faStar } from '@fortawesome/free-solid-svg-icons'
 import LikeButton from './LikeButton'
 import CommentButton from './CommentButton'
 import ShareButton from './ShareButton'
