@@ -45,7 +45,7 @@ const Header = () => {
 						<div className="hidden md:flex mr-6 items-center font-normal">
 							<Link href="/c/[collection]" as="/c/spotlights">
 								<a
-									className="text-black dark:text-white hover:text-stpink dark:hover:text-stpink ml-6 text-sm md:text-base"
+									className="text-black dark:text-gray-200 hover:text-stpink dark:hover:text-stpink ml-6 text-sm md:text-base"
 									onClick={() => {
 										mixpanel.track('Discover button click')
 									}}
@@ -55,7 +55,7 @@ const Header = () => {
 							</Link>
 							<Link href="/trending">
 								<a
-									className="text-black dark:text-white hover:text-stpink dark:hover:text-stpink ml-6 text-sm md:text-base"
+									className="text-black dark:text-gray-200 hover:text-stpink dark:hover:text-stpink ml-6 text-sm md:text-base"
 									onClick={() => {
 										mixpanel.track('Trending button click')
 									}}
@@ -74,12 +74,7 @@ const Header = () => {
 						<div>
 							{context.user && context.myProfile !== undefined ? (
 								<Link href="/[profile]" as={`/${context.myProfile.username || context.user.publicAddress}`}>
-									<a
-										className="text-base flex flex-row items-center hover:text-stpink"
-										onClick={() => {
-											mixpanel.track('Profile button click')
-										}}
-									>
+									<a className="dark:text-gray-200 text-base flex flex-row items-center hover:text-stpink" onClick={() => mixpanel.track('Profile button click')}>
 										<>
 											<div className={context.windowSize ? (context.windowSize.width < 350 ? 'hidden' : null) : null}>
 												<img alt="profile pic" src={context.myProfile ? (context.myProfile.img_url ? context.myProfile.img_url : DEFAULT_PROFILE_PIC) : DEFAULT_PROFILE_PIC} className="mr-2 rounded-full h-8 w-8 min-w-[1.875rem]" />

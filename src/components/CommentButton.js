@@ -23,7 +23,7 @@ const CommentButton = ({ item, handleComment }) => {
 			<button className="focus:outline-none focus-visible:ring-1" disabled={context.disableComments} onClick={context.user ? handleComment : handleLoggedOutComment}>
 				<div className={`flex flex-row items-center rounded-lg py-1 dark:text-gray-300 hover:text-blue-500 ${context.disableComments ? 'hover:text-gray-500 text-gray-500' : ''}`}>
 					<div className="mr-2 whitespace-nowrap">{comment_count}</div>
-					<div className={`flex pr-1 ${commented ? 'text-blue-500 dark:text-blue-600' : ''}`}>
+					<div className={`flex pr-1 ${commented ? 'text-blue-500 dark:text-blue-600' : 'hover:text-blue-400 dark:hover:text-blue-400'}`}>
 						<FontAwesomeIcon className="!w-5 !h-5" icon={commented ? faCommentSolid : faCommentOutline} />
 					</div>
 				</div>

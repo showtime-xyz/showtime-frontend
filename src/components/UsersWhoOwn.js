@@ -27,9 +27,9 @@ export default function UsersWhoOwn({ users, ownerCount, closeModal }) {
 					<UserImagesList users={users} />
 					<div>
 						<Link href="/[profile]" as={`/${users[0]?.username || users[0].wallet_address}`}>
-							<span className="text-black cursor-pointer hover:text-stpink" onClick={closeModal}>
+							<a className="text-black dark:text-gray-300 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={closeModal}>
 								{users[0].name}
-							</span>
+							</a>
 						</Link>
 					</div>
 				</div>
@@ -39,15 +39,15 @@ export default function UsersWhoOwn({ users, ownerCount, closeModal }) {
 					<UserImagesList users={users} />
 					<div>
 						<Link href="/[profile]" as={`/${users[0]?.username || users[0].wallet_address}`}>
-							<span className="text-black cursor-pointer hover:text-stpink" onClick={closeModal}>
+							<a className="text-black dark:text-gray-300 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={closeModal}>
 								{users[0].name}
-							</span>
+							</a>
 						</Link>{' '}
 						and{' '}
 						<Link href="/[profile]" as={`/${users[1]?.username || users[1].wallet_address}`}>
-							<span className="text-black cursor-pointer hover:text-stpink" onClick={closeModal}>
+							<a className="text-black dark:text-gray-300 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={closeModal}>
 								{users[1].name}
-							</span>
+							</a>
 						</Link>
 					</div>
 				</div>
@@ -57,21 +57,21 @@ export default function UsersWhoOwn({ users, ownerCount, closeModal }) {
 					<UserImagesList users={users} />
 					<div>
 						<Link href="/[profile]" as={`/${users[0]?.username || users[0].wallet_address}`}>
-							<span className="text-black cursor-pointer hover:text-stpink" onClick={closeModal}>
+							<a className="text-black dark:text-gray-300 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={closeModal}>
 								{users[0].name}
-							</span>
+							</a>
 						</Link>
 						,{' '}
 						<Link href="/[profile]" as={`/${users[1]?.username || users[1].wallet_address}`}>
-							<span className="text-black cursor-pointer hover:text-stpink" onClick={closeModal}>
+							<a className="text-black dark:text-gray-300 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={closeModal}>
 								{users[1].name}
-							</span>
+							</a>
 						</Link>{' '}
 						and{' '}
 						<Link href="/[profile]" as={`/${users[2]?.username || users[2].wallet_address}`}>
-							<span className="text-black cursor-pointer hover:text-stpink" onClick={closeModal}>
+							<a className="text-black dark:text-gray-300 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={closeModal}>
 								{users[2].name}
-							</span>
+							</a>
 						</Link>
 					</div>
 				</div>
@@ -81,18 +81,18 @@ export default function UsersWhoOwn({ users, ownerCount, closeModal }) {
 					<UserImagesList users={users} />
 					<div>
 						<Link href="/[profile]" as={`/${users[0]?.username || users[0].wallet_address}`}>
-							<span className="text-black cursor-pointer hover:text-stpink" onClick={closeModal}>
+							<a className="text-black dark:text-gray-300 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={closeModal}>
 								{users[0].name}
-							</span>
+							</a>
 						</Link>
 						,{' '}
 						<Link href="/[profile]" as={`/${users[1]?.username || users[1].wallet_address}`}>
-							<span className="text-black cursor-pointer hover:text-stpink" onClick={closeModal}>
+							<a className="text-black dark:text-gray-300 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={closeModal}>
 								{users[1].name}
-							</span>
+							</a>
 						</Link>{' '}
 						and{' '}
-						<span className="text-black cursor-pointer hover:text-stpink" onClick={() => setModalIsOpen(true)}>
+						<span className="text-black dark:text-gray-300 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setModalIsOpen(true)}>
 							{Number(ownerCount - 2).toLocaleString()} others
 						</span>
 						<ModalUserList isOpen={modalIsOpen} title="Owned By" users={users.slice(0, 500)} closeModal={() => setModalIsOpen(false)} emptyMessage="Nobody owns this yet." onRedirect={closeModal} />

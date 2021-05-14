@@ -6,6 +6,7 @@ import { faArrowDown, faPlus } from '@fortawesome/free-solid-svg-icons'
 import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
 import axios from '@/lib/axios'
+import { ArrowDownIcon } from '@heroicons/react/solid'
 
 const TrendingCreators = ({ shownLeaderboardItems, allLeaderboardItems, isLoading, showAllLeaderboardItems, setShowAllLeaderboardItems, trendingTab }) => {
 	const context = useContext(AppContext)
@@ -38,14 +39,14 @@ const TrendingCreators = ({ shownLeaderboardItems, allLeaderboardItems, isLoadin
 
 	return (
 		<>
-			<div className="bg-white sm:rounded-lg shadow-md pt-3 ">
-				<div className="border-b border-gray-200 flex items-center pb-2 pl-4 pr-2 flex-row">
-					<div className="my-2 flex-grow">
+			<div className="border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 sm:rounded-lg shadow-md pt-3 ">
+				<div className="border-b border-gray-200 dark:border-gray-800 flex items-center pb-2 pl-4 pr-2 flex-row">
+					<div className="my-2 flex-grow dark:text-gray-300">
 						<span className="sm:hidden">Trending </span>Creators
 					</div>
 					{!isLoading && (
 						<div>
-							<div className={`border rounded-full py-2 px-4 text-xs flex flex-row ${followAllClicked ? 'bg-transparent border-gray-700 text-gray-700' : context.disableFollows ? 'bg-stpurple text-white border-stpurple opacity-70' : 'bg-stpurple text-white border-stpurple cursor-pointer hover:opacity-70'} transition-all`} onClick={context.user ? (followAllClicked ? null : context.disableFollows ? null : handleFollowAll) : handleLoggedOutFollowAll}>
+							<div className={`border rounded-full py-2 px-4 text-xs flex flex-row ${followAllClicked ? 'bg-transparent border-gray-700 dark:border-gray-500 text-gray-700 dark:text-gray-500' : context.disableFollows ? 'bg-stpurple text-white border-stpurple opacity-70' : 'bg-stpurple text-white dark:text-gray-900 border-stpurple cursor-pointer hover:opacity-70'} transition-all`} onClick={context.user ? (followAllClicked ? null : context.disableFollows ? null : handleFollowAll) : handleLoggedOutFollowAll}>
 								{!followAllClicked && (
 									<div className="mr-1">
 										<FontAwesomeIcon icon={faPlus} />
@@ -71,16 +72,9 @@ const TrendingCreators = ({ shownLeaderboardItems, allLeaderboardItems, isLoadin
 			{!isLoading && (
 				<div className="flex flex-row items-center my-2 justify-center pb-10 sm:pb-0">
 					{!showAllLeaderboardItems ? (
-						<div
-							className="bg-white text-center px-6 py-2 mt-2 flex items-center w-max shadow-md rounded-full hover:text-stpink  cursor-pointer"
-							onClick={() => {
-								setShowAllLeaderboardItems(true)
-							}}
-						>
+						<div className="bg-white dark:bg-gray-800 text-center px-6 py-2 mt-2 flex items-center w-max shadow-md rounded-full hover:text-stpink cursor-pointer" onClick={() => setShowAllLeaderboardItems(true)}>
 							<div className="mr-2 text-sm">Show More</div>
-							<div>
-								<FontAwesomeIcon className="h-3" icon={faArrowDown} />
-							</div>
+							<ArrowDownIcon className="h-3 w-3" />
 						</div>
 					) : null}
 				</div>

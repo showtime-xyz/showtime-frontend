@@ -16,6 +16,8 @@ import { faComment as fasComment, faHeart as fasHeart, faFingerprint, faUser as 
 import ModalReportItem from '@/components/ModalReportItem'
 import RecommendFollowers from '@/components/RecommendFollowers'
 import axios from '@/lib/axios'
+import { FingerPrintIcon, HeartIcon as HeartSolidIcon, UserIcon as UserSolidIcon, ChatAlt2Icon as CommentSolidIcon } from '@heroicons/react/solid'
+import { HeartIcon as HeartOutlineIcon, UserIcon as UserOutlineIcon, ChatAlt2Icon as CommentOutlineIcon } from '@heroicons/react/outline'
 
 const ACTIVITY_PAGE_LENGTH = 2 // 5 activity items per activity page
 
@@ -228,38 +230,23 @@ const Activity = () => {
 						<div className="grid md:grid-cols-3 xl:grid-cols-4">
 							<div className={`px-3 col-span-2 md:col-span-1 mb-4 md:mb-0 ${showFiltersMobile ? null : 'hidden'} sm:block`}>
 								<div className="px-4 py-4 h-max rounded-lg sticky top-24 bg-white dark:bg-gray-900 border border-transparent dark:border-gray-800 shadow-md">
-									<div onClick={() => handleFilterClick(0)} className={`hover:bg-blue-100 mb-1 p-2 rounded-lg px-3 ${activityTypeFilter === 0 ? 'text-blue-500 bg-blue-100' : 'text-gray-500'}  hover:text-blue-500 cursor-pointer transition-all`}>
+									<div onClick={() => handleFilterClick(0)} className={`hover:bg-stblue100 mb-1 p-2 rounded-lg px-3 ${activityTypeFilter === 0 ? 'text-stblue bg-stblue100' : 'text-gray-500'} hover:text-stblue cursor-pointer transition-all flex flex-row items-center`}>
 										All News
 									</div>
-									<div
-										onClick={() => {
-											handleFilterClick(3)
-										}}
-										className={`hover:bg-stpurple100 mb-1 p-2 rounded-lg px-3 ${activityTypeFilter === 3 ? 'text-stpurple700 bg-stpurple100' : 'text-gray-500'} hover:text-stpurple700 cursor-pointer transition-all flex flex-row items-center`}
-									>
-										<FontAwesomeIcon icon={faFingerprint} className="mr-2 w-4 h-4" />
+									<div onClick={() => handleFilterClick(3)} className={`hover:bg-stpurple100 mb-1 p-2 rounded-lg px-3 ${activityTypeFilter === 3 ? 'text-stpurple700 bg-stpurple100' : 'text-gray-500'} hover:text-stpurple700 cursor-pointer transition-all flex flex-row items-center`}>
+										<FingerPrintIcon className="w-5 h-5 mr-2.5" />
 										<div>Creations</div>
 									</div>
-									<div
-										onClick={() => {
-											handleFilterClick(1)
-										}}
-										className={`hover:bg-stred100 mb-1 p-2 rounded-lg px-3 ${activityTypeFilter === 1 ? 'text-stred bg-stred100' : 'text-gray-500'} hover:text-stred cursor-pointer transition-all flex flex-row items-center`}
-									>
-										<FontAwesomeIcon icon={activityTypeFilter === 1 ? fasHeart : faHeart} className="mr-2 w-4 h-4" />
+									<div onClick={() => handleFilterClick(1)} className={`hover:bg-stred100 mb-1 p-2 rounded-lg px-3 ${activityTypeFilter === 1 ? 'text-stred bg-stred100' : 'text-gray-500'} hover:text-stred cursor-pointer transition-all flex flex-row items-center`}>
+										{activityTypeFilter === 1 ? <HeartSolidIcon className="w-5 h-5 mr-2.5" /> : <HeartOutlineIcon className="w-5 h-5 mr-2.5" />}
 										<div>Likes</div>
 									</div>
 									<div onClick={() => handleFilterClick(2)} className={`hover:bg-stblue100 mb-1 p-2 rounded-lg px-3 ${activityTypeFilter === 2 ? 'text-stblue bg-stblue100' : 'text-gray-500'} hover:text-stblue cursor-pointer transition-all flex flex-row items-center`}>
-										<FontAwesomeIcon icon={activityTypeFilter === 2 ? fasComment : faComment} className="mr-2 w-4 h-4" />
+										{activityTypeFilter === 2 ? <CommentSolidIcon className="w-5 h-5 mr-2.5" /> : <CommentOutlineIcon className="w-5 h-5 mr-2.5" />}
 										<div>Comments</div>
 									</div>
-									<div
-										onClick={() => {
-											handleFilterClick(4)
-										}}
-										className={`hover:bg-stgreen100 mb-1 p-2 rounded-lg px-3 ${activityTypeFilter === 4 ? 'text-stgreen700 bg-stgreen100' : 'text-gray-500'} hover:text-stgreen700 cursor-pointer transition-all flex flex-row items-center`}
-									>
-										<FontAwesomeIcon icon={activityTypeFilter === 4 ? fasUser : faUser} className="mr-2 w-4 h-4" />
+									<div onClick={() => handleFilterClick(4)} className={`hover:bg-stgreen100 mb-1 p-2 rounded-lg px-3 ${activityTypeFilter === 4 ? 'text-stgreen700 bg-stgreen100' : 'text-gray-500'} hover:text-stgreen700 cursor-pointer transition-all flex flex-row items-center`}>
+										{activityTypeFilter === 4 ? <UserSolidIcon className="w-5 h-5 mr-2.5" /> : <UserOutlineIcon className="w-5 h-5 mr-2.5" />}
 										<div>Follows</div>
 									</div>
 								</div>
@@ -283,7 +270,7 @@ const Activity = () => {
 											<RecommendFollowers items={context.myRecommendations} />
 										) : (
 											<div className="flex items-center justify-center my-4">
-												<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
+												<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 dark:border-gray-300 border-t-gray-800 dark:border-t-gray-800 animate-spin" />
 											</div>
 										)}
 									</>
@@ -315,7 +302,7 @@ const Activity = () => {
 							</div>
 							<div className="px-3">
 								{context.isMobile ? null : (
-									<div className="hidden xl:block pt-4 pb-2 h-max rounded-lg sticky top-24 bg-white shadow-md">
+									<div className="hidden border border-transparent dark:border-gray-800 xl:block pt-4 pb-2 h-max rounded-lg sticky top-24 bg-white dark:bg-gray-900 shadow-md">
 										<ActivityRecommendedFollows />
 									</div>
 								)}

@@ -672,7 +672,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 					<meta name="twitter:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : DEFAULT_PROFILE_PIC} />
 				</Head>
 
-				<div className={`h-32 md:h-64 relative text-left bg-gradient-to-b from-black to-gray-800 ${profileToDisplay?.cover_url ? 'bg-no-repeat bg-center bg-cover' : ''}`} style={profileToDisplay?.cover_url ? { backgroundImage: `url(${profileToDisplay.cover_url})` } : {}}>
+				<div className={`h-32 md:h-64 relative text-left bg-gradient-to-b from-black dark:from-gray-400 to-gray-800 dark:to-gray-100 ${profileToDisplay?.cover_url ? 'bg-no-repeat bg-center bg-cover' : ''}`} style={profileToDisplay?.cover_url ? { backgroundImage: `url(${profileToDisplay.cover_url})` } : {}}>
 					{isMyProfile && (
 						<CappedWidth>
 							<div className="relative">
