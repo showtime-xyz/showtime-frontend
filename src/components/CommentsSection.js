@@ -10,15 +10,17 @@ import { formatAddressShort } from '@/lib/utilities'
 import axios from '@/lib/axios'
 
 export default function CommentsSection({ item, closeModal, modalRef, commentCount }) {
+	const context = useContext(AppContext)
+	const { user } = context
 	let refArray = []
+
 	const {
 		nft_id: nftId,
 		owner_id: nftOwnerId,
 		creator_id: nftCreatorId,
 		owner_count: ownerCount,
 	} = item
-	const context = useContext(AppContext)
-	const { user } = context
+
 	const [comments, setComments] = useState()
 	const [commentText, setCommentText] = useState('')
 	const [parentComment, setParentComment] = useState(null)
@@ -47,8 +49,47 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 			.then(callback)
 	}
 
+	const handleReplyQuery = (mentionSearchText, callback) => {
+		if (!mentionSearchText) return
+		let matched = false
+		backend
+			.get(`/v1/search?q=${mentionSearchText}&limit=5&nft_id=${nftId}`, {
+				method: 'get',
+			})
+			.then(res => res?.data?.data || [])
+			.then(res =>
+				res.map(r => ({
+					username: r.username,
+					id: r.username || r.address0,
+					address: r.address0,
+					display: r.name || formatAddressShort(r.address0),
+					img_url: r.img_url || DEFAULT_PROFILE_PIC,
+				}))
+			)
+			.then(res => {
+				callback(res)
+				res.find(r => {
+					console.log(r)
+					if (r.username === mentionSearchText) {
+						console.log('r is true')
+						matched = true
+					}
+				})
+			})
+			.then(() => {
+				if (matched) {
+					let list = document.querySelector('div.mentions-input ul')
+					list.style.display = 'none'
+					setTimeout(() => {
+						let link = document.querySelector('div.mentions-input li')
+						link?.click()
+					}, 500)
+				}
+			})
+	}
+
 	const handleDebouncedSearchQuery = useCallback(
-		AwesomeDebouncePromise(handleSearchQuery, 150),
+		AwesomeDebouncePromise(handleSearchQuery, 300),
 		[]
 	)
 
@@ -61,14 +102,6 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		setLoadingComments(false)
 	}
 
-	useEffect(() => {
-		setHasMoreComments(false)
-		setLoadingComments(true)
-		setLoadingMoreComments(false)
-		refreshComments()
-		return () => setComments(null)
-	}, [nftId])
-
 	const handleGetMoreComments = async () => {
 		setLoadingMoreComments(true)
 		await refreshComments(nftId)
@@ -80,14 +113,6 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		setParentComment(comment)
 		setReplyActive(true)
 	}
-
-	useEffect(() => {
-		if (parentComment && replyActive) {
-			setCommentText('@' + (parentComment.username || parentComment.name))
-			setReplyActive(false)
-		}
-		refArray[0]?.current?.focus()
-	}, [refArray])
 
 	const createComment = async () => {
 		setIsSubmitting(true)
@@ -153,13 +178,33 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		}
 	}
 
-	const suggestion = s => (
-		<div className="flex items-center">
-			<img src={s.img_url} className="h-6 w-6 mr-2 rounded-full" />
-			<span className="">{s.display}</span>
-			{s.username && <span className="text-gray-400 ml-2">@{s.username}</span>}
-		</div>
-	)
+	useEffect(() => {
+		setHasMoreComments(false)
+		setLoadingComments(true)
+		setLoadingMoreComments(false)
+		refreshComments()
+		return () => setComments(null)
+	}, [nftId])
+
+	useEffect(() => {
+		if (parentComment && replyActive) {
+			setCommentText('@' + (parentComment.username || parentComment.name))
+			refArray[0]?.current?.focus()
+			setReplyActive(false)
+		}
+	}, [refArray])
+
+	const suggestion = s => {
+		const suggestionRef = createRef()
+		refArray.push(suggestionRef)
+		return (
+			<div className="flex items-center" ref={suggestionRef}>
+				<img src={s.img_url} className="h-6 w-6 mr-2 rounded-full" />
+				<span className="">{s.display}</span>
+				{s.username && <span className="text-gray-400 ml-2">@{s.username}</span>}
+			</div>
+		)
+	}
 
 	const commentItem = (comment, type) => {
 		return (
@@ -185,11 +230,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 				className={`${!type ? 'ml-10 ' : ''} my-2 flex items-stretch flex-col md:flex-row`}
 			>
 				<MentionsInput
-					value={
-						(!type && parentComment) || parentComment === null
-							? commentText
-							: commentText
-					}
+					value={(!type && parentComment) || parentComment === null ? commentText : ''}
 					inputRef={!type ? newInputRef : null}
 					onChange={e => setCommentText(e.target.value)}
 					onFocus={() => context.setCommentInputFocused(true)}
@@ -197,16 +238,16 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 					disabled={context.disableComments || (type && parentComment)}
 					style={MENTIONS_STYLE}
 					placeholder="Your comment..."
-					className="flex-grow md:mr-2"
+					className="mentions-input flex-grow md:mr-2"
 					allowSuggestionsAboveCursor
 					allowSpaceInQuery
 					maxLength={240}
 				>
 					<Mention
 						trigger="@"
-						renderSuggestion={s => suggestion(s)}
+						renderSuggestion={parentComment ? () => <></> : s => suggestion(s)}
 						displayTransform={(id, display) => `${display}`}
-						data={handleDebouncedSearchQuery}
+						data={parentComment ? handleReplyQuery : handleDebouncedSearchQuery}
 						className="bg-purple-200 rounded -ml-1 sm:ml-0"
 						appendSpaceOnAdd
 					/>
@@ -222,7 +263,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 					}
 					className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700"
 				>
-					{!isSubmitting || (isSubmitting && !type) ? (
+					{!isSubmitting ? (
 						'Post'
 					) : (
 						<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
