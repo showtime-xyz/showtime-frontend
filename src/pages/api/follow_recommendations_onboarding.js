@@ -4,7 +4,11 @@ import handler from '@/lib/api-handler'
 import backend from '@/lib/backend'
 
 export default handler().get(async (req, res) => {
-	const user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+	const user = await Iron.unseal(
+		CookieService.getAuthToken(req.cookies),
+		process.env.ENCRYPTION_SECRET_V2,
+		Iron.defaults
+	)
 
 	await backend
 		.post(

@@ -11,7 +11,10 @@ const Layout = ({ children }) => {
 				<link rel="icon" href="/logo_sm.jpg" />
 
 				<meta name="keywords" content="showtime, ethereum, token, nft" />
-				<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0" />
+				<meta
+					name="viewport"
+					content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0"
+				/>
 
 				<script async src="https://www.googletagmanager.com/gtag/js?id=G-EJP74KCP4M" />
 

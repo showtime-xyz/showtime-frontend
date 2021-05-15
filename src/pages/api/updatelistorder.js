@@ -5,7 +5,11 @@ export default async (req, res) => {
 	let user
 	let publicAddress
 	try {
-		user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+		user = await Iron.unseal(
+			CookieService.getAuthToken(req.cookies),
+			process.env.ENCRYPTION_SECRET_V2,
+			Iron.defaults
+		)
 		publicAddress = user.publicAddress
 	} finally {
 		try {

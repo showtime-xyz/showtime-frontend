@@ -16,7 +16,9 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
 	const [showAllItems, setShowAllItems] = useState(false)
 	const [followAllClicked, setFollowAllClicked] = useState(false)
 	const removeAlreadyFollowedItems = items.filter(item => !myFollows.includes(item.profile_id))
-	const filteredItems = showAllItems ? removeAlreadyFollowedItems : removeAlreadyFollowedItems.slice(0, 7)
+	const filteredItems = showAllItems
+		? removeAlreadyFollowedItems
+		: removeAlreadyFollowedItems.slice(0, 7)
 
 	const finishOnboarding = async () => {
 		if (!context.myProfile.has_onboarded) {
@@ -35,7 +37,9 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
 	const handleFollowAll = async () => {
 		setFollowAllClicked(true)
 
-		const newProfiles = items.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id))
+		const newProfiles = items.filter(
+			item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id)
+		)
 
 		// UPDATE CONTEXT
 		context.setMyFollows([...newProfiles, ...context.myFollows])
@@ -69,7 +73,11 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
 				<div className="w-full h-px bg-black bg-opacity-10" />
 
 				<div
-					className={`text-center text-sm sm:text-base mx-auto px-5 py-1 sm:px-6 sm:py-2 my-4 flex items-center w-max border-2 rounded-full ${followAllClicked ? 'bg-white' : 'hover:text-stpink text-white border-stpink bg-stpink hover:bg-white transition-all cursor-pointer'}  `}
+					className={`text-center text-sm sm:text-base mx-auto px-5 py-1 sm:px-6 sm:py-2 my-4 flex items-center w-max border-2 rounded-full ${
+						followAllClicked
+							? 'bg-white'
+							: 'hover:text-stpink text-white border-stpink bg-stpink hover:bg-white transition-all cursor-pointer'
+					}  `}
 					onClick={() => {
 						if (!followAllClicked) {
 							mixpanel.track('Clicked Follow All on Recommended Followers modal')
@@ -77,12 +85,20 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
 						}
 					}}
 				>
-					{!followAllClicked ? <FontAwesomeIcon className="mr-2 h-3.5" icon={faPlus} /> : null}
+					{!followAllClicked ? (
+						<FontAwesomeIcon className="mr-2 h-3.5" icon={faPlus} />
+					) : null}
 					{followAllClicked ? 'Following All' : 'Follow All'}
 				</div>
 
 				{filteredItems.map((item, index) => (
-					<RecommendedFollowItem key={item.profile_id} item={item} index={index} closeModal={() => {}} followCallback={() => finishOnboarding()} />
+					<RecommendedFollowItem
+						key={item.profile_id}
+						item={item}
+						index={index}
+						closeModal={() => {}}
+						followCallback={() => finishOnboarding()}
+					/>
 				))}
 
 				<div className="flex justify-between items-center w-full mt-6">
@@ -91,7 +107,9 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
 							<div
 								className="text-center px-6 py-2 lex items-center w-max border-2 rounded-full hover:text-stpink hover:border-stpink transition-all bg-white   cursor-pointer"
 								onClick={() => {
-									mixpanel.track('Clicked Show More on Recommended Followers modal')
+									mixpanel.track(
+										'Clicked Show More on Recommended Followers modal'
+									)
 									setShowAllItems(true)
 								}}
 							>

@@ -12,13 +12,18 @@ import useKeyPress from '@/hooks/useKeyPress'
 import useOnClickOutside from '@/hooks/useOnClickOutside'
 import LoadingSpinner from './LoadingSpinner'
 
-const handleSearchQuery = AwesomeDebouncePromise(async (searchText, setSearchResults, setIsLoading) => {
-	setIsLoading(true)
+const handleSearchQuery = AwesomeDebouncePromise(
+	async (searchText, setSearchResults, setIsLoading) => {
+		setIsLoading(true)
 
-	setSearchResults(await backend.get(`/v1/search?q=${searchText}`).then(res => res?.data?.data))
+		setSearchResults(
+			await backend.get(`/v1/search?q=${searchText}`).then(res => res?.data?.data)
+		)
 
-	setIsLoading(false)
-}, 500)
+		setIsLoading(false)
+	},
+	500
+)
 
 //TODO: Refactor this component to use HeadlessUI's Listbox Component
 const SearchBar = () => {
@@ -43,13 +48,25 @@ const SearchBar = () => {
 	useEffect(() => {
 		if (upPress) {
 			mixpanel.track('Up Search - keyboard')
-			if (activeSelectedSearchResult === null) setActiveSelectedSearchResult(searchResults.length - 1 >= 0 ? searchResults.length - 1 : null)
-			else setActiveSelectedSearchResult(activeSelectedSearchResult - 1 >= 0 ? activeSelectedSearchResult - 1 : null)
+			if (activeSelectedSearchResult === null)
+				setActiveSelectedSearchResult(
+					searchResults.length - 1 >= 0 ? searchResults.length - 1 : null
+				)
+			else
+				setActiveSelectedSearchResult(
+					activeSelectedSearchResult - 1 >= 0 ? activeSelectedSearchResult - 1 : null
+				)
 		}
 		if (downPress) {
 			mixpanel.track('Down search - keyboard')
-			if (activeSelectedSearchResult === null) setActiveSelectedSearchResult(searchResults.length - 1 >= 0 ? 0 : null)
-			else setActiveSelectedSearchResult(activeSelectedSearchResult + 1 < searchResults.length ? activeSelectedSearchResult + 1 : null)
+			if (activeSelectedSearchResult === null)
+				setActiveSelectedSearchResult(searchResults.length - 1 >= 0 ? 0 : null)
+			else
+				setActiveSelectedSearchResult(
+					activeSelectedSearchResult + 1 < searchResults.length
+						? activeSelectedSearchResult + 1
+						: null
+				)
 		}
 		if (enterPress && activeSelectedSearchResult !== null && searchResults.length > 0) {
 			setShowSearchResults(false)
@@ -73,7 +90,11 @@ const SearchBar = () => {
 					<input
 						className="flex border py-1.5 px-4 rounded-full w-full pl-10 focus:-mt-px focus:ring-1 ring-gray-300 focus:outline-none"
 						type="search"
-						placeholder={context.gridWidth < 400 ? 'Search by name' : 'Search by name or wallet address'}
+						placeholder={
+							context.gridWidth < 400
+								? 'Search by name'
+								: 'Search by name or wallet address'
+						}
 						value={searchText}
 						onFocus={() => {
 							setShowSearchResults(true)
@@ -91,7 +112,10 @@ const SearchBar = () => {
 					/>
 				</div>
 				{searchText.length > 0 && showSearchResults && (
-					<div className="flex flex-col max-h-[80vh] overflow-y-scroll absolute top-10 inset-x-0 border bg-white rounded-lg shadow" ref={dropdownRef}>
+					<div
+						className="flex flex-col max-h-[80vh] overflow-y-scroll absolute top-10 inset-x-0 border bg-white rounded-lg shadow"
+						ref={dropdownRef}
+					>
 						{isLoading ? (
 							<div className="flex justify-center w-full p-4">
 								<LoadingSpinner />
@@ -99,9 +123,21 @@ const SearchBar = () => {
 						) : (
 							<>
 								{searchResults.map((searchResult, index) => (
-									<Link href="/[profile]" as={`/${searchResult?.username || searchResult.address0}`} key={searchResult.id}>
+									<Link
+										href="/[profile]"
+										as={`/${searchResult?.username || searchResult.address0}`}
+										key={searchResult.id}
+									>
 										<div
-											className={`flex items-center w-full p-4 cursor-pointer hover:bg-gray-50 ${activeSelectedSearchResult === index ? 'bg-gray-50' : 'bg-white'} ${index === 0 ? 'rounded-t-lg' : ''} ${index === searchResults.length - 1 ? 'rounded-b-lg' : ''}`}
+											className={`flex items-center w-full p-4 cursor-pointer hover:bg-gray-50 ${
+												activeSelectedSearchResult === index
+													? 'bg-gray-50'
+													: 'bg-white'
+											} ${index === 0 ? 'rounded-t-lg' : ''} ${
+												index === searchResults.length - 1
+													? 'rounded-b-lg'
+													: ''
+											}`}
 											key={index}
 											onClick={() => {
 												setShowSearchResults(false)
@@ -109,13 +145,28 @@ const SearchBar = () => {
 												mixpanel.track('Clicked Search result')
 											}}
 										>
-											<img className="w-6 h-6 mr-2 rounded-full" src={searchResult?.img_url ? searchResult?.img_url : DEFAULT_PROFILE_PIC} />
-											<div className="truncate">{searchResult?.name || searchResult.address0}</div>
-											{searchResult?.username ? <div className="text-sm pl-1 truncate text-gray-400">@{searchResult?.username}</div> : null}
+											<img
+												className="w-6 h-6 mr-2 rounded-full"
+												src={
+													searchResult?.img_url
+														? searchResult?.img_url
+														: DEFAULT_PROFILE_PIC
+												}
+											/>
+											<div className="truncate">
+												{searchResult?.name || searchResult.address0}
+											</div>
+											{searchResult?.username ? (
+												<div className="text-sm pl-1 truncate text-gray-400">
+													@{searchResult?.username}
+												</div>
+											) : null}
 										</div>
 									</Link>
 								))}
-								{searchResults.length === 0 && <div className="flex w-full p-4">No matching people</div>}
+								{searchResults.length === 0 && (
+									<div className="flex w-full p-4">No matching people</div>
+								)}
 							</>
 						)}
 					</div>
@@ -123,7 +174,10 @@ const SearchBar = () => {
 			</div>
 			{/* Start mobile-only menu */}
 			<div className="flex justify-end md:hidden relative w-full sm:ml-4 sm:justify-start ml-1">
-				<button className="flex items-center justify-center w-3.5 h-3.5 text-black p-4 hover:text-stpink" onClick={() => toggleMobileSearchOverlay(true)}>
+				<button
+					className="flex items-center justify-center w-3.5 h-3.5 text-black p-4 hover:text-stpink"
+					onClick={() => toggleMobileSearchOverlay(true)}
+				>
 					<FontAwesomeIcon icon={faSearch} />
 				</button>
 			</div>
@@ -132,17 +186,28 @@ const SearchBar = () => {
 			{isMobileSearchOverlayOpen && (
 				<div className="flex flex-col absolute md:h-16 bg-white md:p-3 w-full left-0 md:top-0 z-1 top-12 pt-1 pb-2 px-4 shadow">
 					<div className="flex items-center">
-						<button className="flex items-center justify-center w-3.5 h-3.5 mr-4 text-blck border-2 border-black rounded-full p-4 focus:-m-px hover:border-stpink hover:text-stpink" isFocused={searchInputFocused} onClick={() => toggleMobileSearchOverlay(false)}>
+						<button
+							className="flex items-center justify-center w-3.5 h-3.5 mr-4 text-blck border-2 border-black rounded-full p-4 focus:-m-px hover:border-stpink hover:text-stpink"
+							isFocused={searchInputFocused}
+							onClick={() => toggleMobileSearchOverlay(false)}
+						>
 							<FontAwesomeIcon icon={faTimes} />
 						</button>
 						<div className="flex relative w-full" ref={searchInputContainerRef}>
-							<div className="flex absolute left-4 top-1/2 transform -translate-y-2 mb-px w-3.5 h-3.5 mr-3 text-black focus:-mt-px" isFocused={searchInputFocused}>
+							<div
+								className="flex absolute left-4 top-1/2 transform -translate-y-2 mb-px w-3.5 h-3.5 mr-3 text-black focus:-mt-px"
+								isFocused={searchInputFocused}
+							>
 								<FontAwesomeIcon icon={faSearch} />
 							</div>
 							<input
 								className="flex border py-1.5 px-4 rounded-full w-full pl-10 focus:-mt-px focus:ring-1 ring-gray-300 focus:outline-none"
 								type="search"
-								placeholder={context.gridWidth < 400 ? 'Search by name' : 'Search by name or wallet address'}
+								placeholder={
+									context.gridWidth < 400
+										? 'Search by name'
+										: 'Search by name or wallet address'
+								}
 								value={searchText}
 								onFocus={() => {
 									setShowSearchResults(true)
@@ -155,13 +220,20 @@ const SearchBar = () => {
 									setShowSearchResults(true)
 									setSearchText(e.currentTarget.value)
 									setActiveSelectedSearchResult(null)
-									handleSearchQuery(e.currentTarget.value, setSearchResults, setIsLoading)
+									handleSearchQuery(
+										e.currentTarget.value,
+										setSearchResults,
+										setIsLoading
+									)
 								}}
 							/>
 						</div>
 					</div>
 					{searchText.length > 0 && showSearchResults && (
-						<div className="flex flex-col mt-4 max-h-[80vh] overflow-y-scroll absolute top-10 sm:top-14 left-16 right-4 border bg-white rounded-lg shadow" ref={dropdownRef}>
+						<div
+							className="flex flex-col mt-4 max-h-[80vh] overflow-y-scroll absolute top-10 sm:top-14 left-16 right-4 border bg-white rounded-lg shadow"
+							ref={dropdownRef}
+						>
 							{isLoading ? (
 								<div className="flex justify-center w-full p-4">
 									<LoadingSpinner />
@@ -169,9 +241,23 @@ const SearchBar = () => {
 							) : (
 								<>
 									{searchResults.map((searchResult, index) => (
-										<Link href="/[profile]" as={`/${searchResult?.username || searchResult.address0}`} key={searchResult.profile_id}>
+										<Link
+											href="/[profile]"
+											as={`/${
+												searchResult?.username || searchResult.address0
+											}`}
+											key={searchResult.profile_id}
+										>
 											<div
-												className={`flex items-center w-full p-4 cursor-pointer hover:bg-gray-50 ${activeSelectedSearchResult === index ? 'bg-gray-50' : 'bg-white'} ${index === 0 ? 'rounded-t-lg' : ''} ${index === searchResults.length - 1 ? 'rounded-b-lg' : ''}`}
+												className={`flex items-center w-full p-4 cursor-pointer hover:bg-gray-50 ${
+													activeSelectedSearchResult === index
+														? 'bg-gray-50'
+														: 'bg-white'
+												} ${index === 0 ? 'rounded-t-lg' : ''} ${
+													index === searchResults.length - 1
+														? 'rounded-b-lg'
+														: ''
+												}`}
 												key={index}
 												onClick={() => {
 													setShowSearchResults(false)
@@ -179,13 +265,28 @@ const SearchBar = () => {
 													toggleMobileSearchOverlay(false)
 												}}
 											>
-												<img className="w-6 h-6 mr-2 rounded-full" src={searchResult?.img_url ? searchResult?.img_url : DEFAULT_PROFILE_PIC} />
-												<div className="truncate flex-0">{searchResult?.name || searchResult.address0}</div>
-												{searchResult?.username ? <div className="flex-1 text-sm pl-1 truncate text-gray-400">@{searchResult?.username}</div> : null}
+												<img
+													className="w-6 h-6 mr-2 rounded-full"
+													src={
+														searchResult?.img_url
+															? searchResult?.img_url
+															: DEFAULT_PROFILE_PIC
+													}
+												/>
+												<div className="truncate flex-0">
+													{searchResult?.name || searchResult.address0}
+												</div>
+												{searchResult?.username ? (
+													<div className="flex-1 text-sm pl-1 truncate text-gray-400">
+														@{searchResult?.username}
+													</div>
+												) : null}
 											</div>
 										</Link>
 									))}
-									{searchResults.length === 0 && <div className="flex w-full p-4">No matching people</div>}
+									{searchResults.length === 0 && (
+										<div className="flex w-full p-4">No matching people</div>
+									)}
 								</>
 							)}
 						</div>

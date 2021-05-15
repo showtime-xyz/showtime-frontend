@@ -6,7 +6,8 @@ import backend from '@/lib/backend'
 import handler from '@/lib/api-handler'
 
 export default handler().post(async ({ body: { address, signature } }, res) => {
-	if (!address || !signature) return res.status(400).json({ error: 'Address or signature not specified.' })
+	if (!address || !signature)
+		return res.status(400).json({ error: 'Address or signature not specified.' })
 
 	// check the signature
 	const {
@@ -18,7 +19,10 @@ export default handler().post(async ({ body: { address, signature } }, res) => {
 
 	// We now are in possession of msg, publicAddress and signature. We
 	// will use a helper from eth-sig-util to extract the address from the signature
-	const verifiedAddress = recoverPersonalSignature({ data: bufferToHex(Buffer.from(msg, 'utf8')), sig: signature })
+	const verifiedAddress = recoverPersonalSignature({
+		data: bufferToHex(Buffer.from(msg, 'utf8')),
+		sig: signature,
+	})
 
 	// The signature verification is successful if the address found with
 	// sigUtil.recoverPersonalSignature matches the initial publicAddress

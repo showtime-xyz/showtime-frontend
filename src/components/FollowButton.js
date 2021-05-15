@@ -6,7 +6,15 @@ import AppContext from '@/context/app-context'
 import _ from 'lodash'
 import axios from '@/lib/axios'
 
-const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, notExpandWhenMobile, compact, homepage }) => {
+const FollowButton = ({
+	item,
+	followerCount,
+	setFollowerCount,
+	hideIfFollowing,
+	notExpandWhenMobile,
+	compact,
+	homepage,
+}) => {
 	const context = useContext(AppContext)
 	const myFollows = context?.myFollows || []
 	const [isFollowed, setIsFollowed] = useState(false)
@@ -38,7 +46,9 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 				})
 				.catch(err => {
 					if (err.response.data.code === 429) {
-						context.setMyFollows(context.myFollows.filter(i => i?.profile_id !== item?.profile_id))
+						context.setMyFollows(
+							context.myFollows.filter(i => i?.profile_id !== item?.profile_id)
+						)
 						return context.setThrottleMessage(err.response.data.message)
 					}
 					console.error(err)
@@ -63,13 +73,31 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 		context.setLoginModalOpen(true)
 	}
 	return (
-		<button className={`flex items-center justify-center hover:opacity-80 disabled:opacity-80 border rounded-full transition py-2 px-4 ${notExpandWhenMobile ? '' : 'w-full md:w-auto'} ${hideIfFollowing && isFollowed ? 'hidden' : null} ${compact ? 'mr-1' : ''} ${compact && context.isMobile ? 'py-2 px-3' : null} ${isFollowed ? 'text-black border-gray-400' : homepage ? 'bg-stpurple text-white border-stpurple' : 'bg-black text-white border-black'}`} disabled={context.disableFollows} onClick={context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow}>
+		<button
+			className={`flex items-center justify-center hover:opacity-80 disabled:opacity-80 border rounded-full transition py-2 px-4 ${
+				notExpandWhenMobile ? '' : 'w-full md:w-auto'
+			} ${hideIfFollowing && isFollowed ? 'hidden' : null} ${compact ? 'mr-1' : ''} ${
+				compact && context.isMobile ? 'py-2 px-3' : null
+			} ${
+				isFollowed
+					? 'text-black border-gray-400'
+					: homepage
+					? 'bg-stpurple text-white border-stpurple'
+					: 'bg-black text-white border-black'
+			}`}
+			disabled={context.disableFollows}
+			onClick={
+				context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow
+			}
+		>
 			{!isFollowed && (
 				<div className={`mr-2 ${compact ? 'text-xs' : 'text-sm'} `}>
 					<FontAwesomeIcon icon={faPlus} />
 				</div>
 			)}
-			<div className={`${compact ? 'text-xs' : 'text-sm'} `}>{isFollowed ? 'Following' : 'Follow'}</div>
+			<div className={`${compact ? 'text-xs' : 'text-sm'} `}>
+				{isFollowed ? 'Following' : 'Follow'}
+			</div>
 		</button>
 	)
 }

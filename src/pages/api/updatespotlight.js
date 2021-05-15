@@ -7,7 +7,11 @@ export default handler().post(async ({ cookies, body: { nft_id } }, res) => {
 	let user
 
 	try {
-		user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+		user = await Iron.unseal(
+			CookieService.getAuthToken(cookies),
+			process.env.ENCRYPTION_SECRET_V2,
+			Iron.defaults
+		)
 	} catch (error) {
 		// User is not logged in
 	}

@@ -16,7 +16,9 @@ const ModalAddEmail = ({ isOpen, setEmailModalOpen, setHasEmailAddress }) => {
 
 		// the magic code
 		try {
-			const did = await new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY).auth.loginWithMagicLink({ email: elements.email.value })
+			const did = await new Magic(
+				process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
+			).auth.loginWithMagicLink({ email: elements.email.value })
 
 			// Once we have the did from magic, login with our own API
 			await axios.post(
@@ -42,7 +44,9 @@ const ModalAddEmail = ({ isOpen, setEmailModalOpen, setHasEmailAddress }) => {
 						<form onSubmit={handleSubmit}>
 							<CloseButton setEditModalOpen={setEmailModalOpen} />
 							<div className="text-3xl border-b-2 pb-2">Add Email</div>
-							<div className="mt-8">Add your email for notifications & another way to sign in.</div>
+							<div className="mt-8">
+								Add your email for notifications & another way to sign in.
+							</div>
 							<div className="mt-8">
 								<input
 									name="email"
@@ -56,9 +60,15 @@ const ModalAddEmail = ({ isOpen, setEmailModalOpen, setHasEmailAddress }) => {
 									maxLength="50"
 									className="w-full text-black p-4 rounded-lg border-2 border-gray-700 text-base"
 								/>
-								<div className="my-8">If you've previously logged in with that email, your old profile will get combined with this one.</div>
+								<div className="my-8">
+									If you've previously logged in with that email, your old profile
+									will get combined with this one.
+								</div>
 								<div className="border-t-2 pt-4">
-									<button type="submit" className="bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition px-4 py-2 float-right rounded-full">
+									<button
+										type="submit"
+										className="bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition px-4 py-2 float-right rounded-full"
+									>
 										Get Verification Link
 									</button>
 									<button

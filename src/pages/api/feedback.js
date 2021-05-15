@@ -6,7 +6,11 @@ import handler from '@/lib/api-handler'
 export default handler().post(async ({ body: { description }, cookies }, res) => {
 	let user
 	try {
-		user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+		user = await Iron.unseal(
+			CookieService.getAuthToken(cookies),
+			process.env.ENCRYPTION_SECRET_V2,
+			Iron.defaults
+		)
 	} catch {
 		//user is logged out
 	}

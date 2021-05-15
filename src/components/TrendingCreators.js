@@ -7,21 +7,32 @@ import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
 import axios from '@/lib/axios'
 
-const TrendingCreators = ({ shownLeaderboardItems, allLeaderboardItems, isLoading, showAllLeaderboardItems, setShowAllLeaderboardItems, trendingTab }) => {
+const TrendingCreators = ({
+	shownLeaderboardItems,
+	allLeaderboardItems,
+	isLoading,
+	showAllLeaderboardItems,
+	setShowAllLeaderboardItems,
+	trendingTab,
+}) => {
 	const context = useContext(AppContext)
 	const [followAllClicked, setFollowAllClicked] = useState(false)
 
 	// reset follow all button when leaderboard changes
 	useEffect(() => {
 		if (context.myFollows) {
-			const newProfiles = allLeaderboardItems.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id))
+			const newProfiles = allLeaderboardItems.filter(
+				item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id)
+			)
 			setFollowAllClicked(newProfiles.length === 0)
 		}
 	}, [allLeaderboardItems, showAllLeaderboardItems, trendingTab, context.myFollows])
 
 	const handleFollowAll = async () => {
 		setFollowAllClicked(true)
-		const newProfiles = allLeaderboardItems.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id))
+		const newProfiles = allLeaderboardItems.filter(
+			item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id)
+		)
 		// UPDATE CONTEXT
 		context.setMyFollows([...newProfiles, ...context.myFollows])
 		// Post changes to the API
@@ -45,7 +56,24 @@ const TrendingCreators = ({ shownLeaderboardItems, allLeaderboardItems, isLoadin
 					</div>
 					{!isLoading && (
 						<div>
-							<div className={`border rounded-full py-2 px-4 text-xs flex flex-row ${followAllClicked ? 'bg-transparent border-gray-700 text-gray-700' : context.disableFollows ? 'bg-stpurple text-white border-stpurple opacity-70' : 'bg-stpurple text-white border-stpurple cursor-pointer hover:opacity-70'} transition-all`} onClick={context.user ? (followAllClicked ? null : context.disableFollows ? null : handleFollowAll) : handleLoggedOutFollowAll}>
+							<div
+								className={`border rounded-full py-2 px-4 text-xs flex flex-row ${
+									followAllClicked
+										? 'bg-transparent border-gray-700 text-gray-700'
+										: context.disableFollows
+										? 'bg-stpurple text-white border-stpurple opacity-70'
+										: 'bg-stpurple text-white border-stpurple cursor-pointer hover:opacity-70'
+								} transition-all`}
+								onClick={
+									context.user
+										? followAllClicked
+											? null
+											: context.disableFollows
+											? null
+											: handleFollowAll
+										: handleLoggedOutFollowAll
+								}
+							>
 								{!followAllClicked && (
 									<div className="mr-1">
 										<FontAwesomeIcon icon={faPlus} />
@@ -64,7 +92,9 @@ const TrendingCreators = ({ shownLeaderboardItems, allLeaderboardItems, isLoadin
 						<div className="flex-grow"></div>
 					</div>
 				) : (
-					shownLeaderboardItems.map((item, index) => <LeaderboardItemV2 key={item?.profile_id} item={item} index={index} />)
+					shownLeaderboardItems.map((item, index) => (
+						<LeaderboardItemV2 key={item?.profile_id} item={item} index={index} />
+					))
 				)}
 			</div>
 

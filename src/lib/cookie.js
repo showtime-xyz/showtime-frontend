@@ -16,7 +16,10 @@ function createCookie(name, data, options = {}) {
 }
 
 function setTokenCookie(res, token) {
-	res.setHeader('Set-Cookie', [createCookie(TOKEN_NAME, token), createCookie('authed', true, { httpOnly: false })])
+	res.setHeader('Set-Cookie', [
+		createCookie(TOKEN_NAME, token),
+		createCookie('authed', true, { httpOnly: false }),
+	])
 }
 
 function getAuthToken(cookies) {

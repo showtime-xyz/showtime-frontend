@@ -29,7 +29,10 @@ export async function getServerSideProps(context) {
 		...response_collection_list.data.data,
 	]
 
-	const selected_collection = collection_list.filter(item => item.value === collection).length > 0 ? collection_list.filter(item => item.value === collection)[0] : null
+	const selected_collection =
+		collection_list.filter(item => item.value === collection).length > 0
+			? collection_list.filter(item => item.value === collection)[0]
+			: null
 
 	return {
 		props: {
@@ -50,7 +53,13 @@ export default function Collection({
 	const { isMobile } = context
 	const [sortBy, setSortby] = useState('random')
 
-	const [pageTitle, setPageTitle] = useState(selected_collection ? (selected_collection.name === 'All leading collections' ? 'Discover' : `Discover ${selected_collection.name}`) : `Discover ${collection}`)
+	const [pageTitle, setPageTitle] = useState(
+		selected_collection
+			? selected_collection.name === 'All leading collections'
+				? 'Discover'
+				: `Discover ${selected_collection.name}`
+			: `Discover ${collection}`
+	)
 
 	const router = useRouter()
 
@@ -79,7 +88,15 @@ export default function Collection({
 
 	const [collectionItems, setCollectionItems] = useState([])
 	const [currentCollectionSlug, setCurrentCollectionSlug] = useState(collection)
-	const [currentCollectionName, setCurrentCollectionName] = useState(selected_collection ? (selected_collection.name === 'All leading collections' ? null : selected_collection.name) : collection ? collection.replace(/-/g, ' ') : collection)
+	const [currentCollectionName, setCurrentCollectionName] = useState(
+		selected_collection
+			? selected_collection.name === 'All leading collections'
+				? null
+				: selected_collection.name
+			: collection
+			? collection.replace(/-/g, ' ')
+			: collection
+	)
 	const [randomNumber, setRandomNumber] = useState(1)
 
 	useEffect(() => {
@@ -87,7 +104,9 @@ export default function Collection({
 
 		const getCollectionItems = async collection_name => {
 			setIsChanging(true)
-			const response_collection_items = await backend.get(`/v2/collection?limit=150&order_by=${sortBy}&collection=${collection_name}`)
+			const response_collection_items = await backend.get(
+				`/v2/collection?limit=150&order_by=${sortBy}&collection=${collection_name}`
+			)
 
 			mixpanel.track('Discover page view', {
 				collection: collection_name,
@@ -96,7 +115,9 @@ export default function Collection({
 
 			if (sortBy == 'random') {
 				// Resetting the cache for random items - for next load
-				backend.get(`/v2/collection?limit=150&recache=1&order_by=${sortBy}&collection=${collection_name}`)
+				backend.get(
+					`/v2/collection?limit=150&recache=1&order_by=${sortBy}&collection=${collection_name}`
+				)
 			}
 
 			if (isSubscribed) {
@@ -163,7 +184,9 @@ export default function Collection({
 		</GridTabs>
 	)
 
-	const [selected, setSelected] = useState(collection_list.filter(c => c.value == currentCollectionSlug)[0])
+	const [selected, setSelected] = useState(
+		collection_list.filter(c => c.value == currentCollectionSlug)[0]
+	)
 
 	return (
 		<Layout key={collection}>
@@ -174,7 +197,14 @@ export default function Collection({
 				<meta property="og:type" content="website" />
 				<meta name="og:description" content="Discover and showcase crypto art" />
 
-				<meta property="og:image" content={selected_collection ? selected_collection.img_url : 'https://showtime.kilkka.vercel.app/banner.png'} />
+				<meta
+					property="og:image"
+					content={
+						selected_collection
+							? selected_collection.img_url
+							: 'https://showtime.kilkka.vercel.app/banner.png'
+					}
+				/>
 
 				<meta name="og:title" content={`Showtime | ${pageTitle}`} />
 
@@ -182,7 +212,14 @@ export default function Collection({
 				<meta name="twitter:title" content={`Showtime | ${pageTitle}`} />
 				<meta name="twitter:description" content="Discover and showcase crypto art" />
 
-				<meta name="twitter:image" content={selected_collection ? selected_collection.img_url : 'https://showtime.kilkka.vercel.app/banner.png'} />
+				<meta
+					name="twitter:image"
+					content={
+						selected_collection
+							? selected_collection.img_url
+							: 'https://showtime.kilkka.vercel.app/banner.png'
+					}
+				/>
 			</Head>
 
 			<div className="py-12 sm:py-14 px-8 sm:px-10 text-left  bg-gradient-to-r from-green-400 to-blue-400">
@@ -190,8 +227,12 @@ export default function Collection({
 					<div className="flex flex-row mx-3 text-white">
 						<div className="flex-1">
 							<div className="text-xl sm:text-2xl">Discover</div>
-							<div className="text-3xl sm:text-6xl capitalize font-afro">{currentCollectionName ? currentCollectionName : 'Leading NFT'}</div>
-							<div className="text-3xl sm:text-6xl">{currentCollectionName ? 'Collection.' : 'Collections.'}</div>
+							<div className="text-3xl sm:text-6xl capitalize font-afro">
+								{currentCollectionName ? currentCollectionName : 'Leading NFT'}
+							</div>
+							<div className="text-3xl sm:text-6xl">
+								{currentCollectionName ? 'Collection.' : 'Collections.'}
+							</div>
 						</div>
 					</div>
 				</CappedWidth>
@@ -209,26 +250,59 @@ export default function Collection({
 												<span className="flex items-center">
 													{selected ? (
 														<>
-															<img src={selected.img_url} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />
-															<span className="ml-3 block truncate">{selected.name}</span>
+															<img
+																src={selected.img_url}
+																alt=""
+																className="flex-shrink-0 h-6 w-6 rounded-full"
+															/>
+															<span className="ml-3 block truncate">
+																{selected.name}
+															</span>
 														</>
 													) : (
 														<span>&nbsp;</span>
 													)}
 												</span>
 												<span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-													<SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+													<SelectorIcon
+														className="h-5 w-5 text-gray-400"
+														aria-hidden="true"
+													/>
 												</span>
 											</Listbox.Button>
 
-											<Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-												<Listbox.Options static className="absolute mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+											<Transition
+												show={open}
+												as={Fragment}
+												leave="transition ease-in duration-100"
+												leaveFrom="opacity-100"
+												leaveTo="opacity-0"
+											>
+												<Listbox.Options
+													static
+													className="absolute mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+												>
 													{collection_list.map(c => (
-														<Listbox.Option key={c.value} className={({ active }) => classNames(active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={c}>
+														<Listbox.Option
+															key={c.value}
+															className={({ active }) =>
+																classNames(
+																	active
+																		? 'text-white bg-indigo-600'
+																		: 'text-gray-900',
+																	'cursor-default select-none relative py-2 pl-3 pr-9'
+																)
+															}
+															value={c}
+														>
 															{({ selected, active }) => (
 																<>
 																	<div className="flex items-center">
-																		<img src={c.img_url} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />
+																		<img
+																			src={c.img_url}
+																			alt=""
+																			className="flex-shrink-0 h-6 w-6 rounded-full"
+																		/>
 																		<span
 																			className={classNames(
 																				selected
@@ -242,8 +316,18 @@ export default function Collection({
 																	</div>
 
 																	{selected ? (
-																		<span className={classNames(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}>
-																			<CheckIcon className="h-5 w-5" aria-hidden="true" />
+																		<span
+																			className={classNames(
+																				active
+																					? 'text-white'
+																					: 'text-indigo-600',
+																				'absolute inset-y-0 right-0 flex items-center pr-4'
+																			)}
+																		>
+																			<CheckIcon
+																				className="h-5 w-5"
+																				aria-hidden="true"
+																			/>
 																		</span>
 																	) : null}
 																</>
@@ -263,7 +347,12 @@ export default function Collection({
 				<div className="mx-auto relative mt-12">{FilterTabs}</div>
 
 				<div className="m-auto relative min-h-screen md:mx-3">
-					<TokenGridV4 items={collectionItems} isLoading={isChanging} extraColumn key={`grid_${currentCollectionSlug}_${sortBy}_${randomNumber}_${isChanging}`} />
+					<TokenGridV4
+						items={collectionItems}
+						isLoading={isChanging}
+						extraColumn
+						key={`grid_${currentCollectionSlug}_${sortBy}_${randomNumber}_${isChanging}`}
+					/>
 				</div>
 			</CappedWidth>
 		</Layout>

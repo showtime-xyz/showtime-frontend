@@ -6,7 +6,11 @@ import backend from '@/lib/backend'
 export default handler().get(async (req, res) => {
 	let user = null
 
-	user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+	user = await Iron.unseal(
+		CookieService.getAuthToken(req.cookies),
+		process.env.ENCRYPTION_SECRET_V2,
+		Iron.defaults
+	)
 
 	await backend
 		.get('/v1/link_options', {

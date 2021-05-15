@@ -40,11 +40,16 @@ export default function ModalFeedback({ isOpen, closeModal }) {
 							<CloseButton setEditModalOpen={closeModal} />
 							<div className="text-3xl border-b-2 pb-2">Feedback</div>
 							{confirmationShowing ? (
-								<div className="my-8">We have received your feedback. Thank you!</div>
+								<div className="my-8">
+									We have received your feedback. Thank you!
+								</div>
 							) : (
 								<>
 									<div className="my-4">
-										<div className="my-4 mx-1">Please let us know how we can improve Showtime! The team reviews every message.</div>
+										<div className="my-4 mx-1">
+											Please let us know how we can improve Showtime! The team
+											reviews every message.
+										</div>
 										<textarea
 											name="description"
 											placeholder="Your feedback here..."
@@ -60,7 +65,10 @@ export default function ModalFeedback({ isOpen, closeModal }) {
 										/>
 									</div>
 									<div className="border-t-2 pt-4">
-										<button type="submit" className="bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition px-4 py-2 rounded-full float-right">
+										<button
+											type="submit"
+											className="bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition px-4 py-2 rounded-full float-right"
+										>
 											Submit
 										</button>
 										<button

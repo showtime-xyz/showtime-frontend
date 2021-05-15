@@ -14,9 +14,22 @@ import useDetectOutsideClick from '@/hooks/useDetectOutsideClick'
 import { truncateWithEllipses } from '@/lib/utilities'
 import axios from '@/lib/axios'
 
-export default function ActivityCard({ act, setItemOpenInModal, setReportModalIsOpen, removeActorFromFeed }) {
+export default function ActivityCard({
+	act,
+	setItemOpenInModal,
+	setReportModalIsOpen,
+	removeActorFromFeed,
+}) {
 	const context = useContext(AppContext)
-	const { id, nfts, actor_img_url, actor_name, actor_username, actor_wallet_address, actor_profile_id } = act
+	const {
+		id,
+		nfts,
+		actor_img_url,
+		actor_name,
+		actor_username,
+		actor_wallet_address,
+		actor_profile_id,
+	} = act
 	const actor = {
 		profile_img_url: actor_img_url,
 		name: actor_name,
@@ -84,36 +97,52 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 									mixpanel.track('Activity - Click on user profile')
 								}}
 							>
-								<img src={actor.profile_img_url || DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-14 h-14  hover:opacity-90 transition-all" />
+								<img
+									src={actor.profile_img_url || DEFAULT_PROFILE_PIC}
+									className="rounded-full mr-2 w-14 h-14  hover:opacity-90 transition-all"
+								/>
 								<div
 									className="absolute bottom-0 right-2 rounded-full h-5 w-5 flex items-center justify-center shadow"
 									style={{
 										backgroundColor: activityIconObjects[type].color,
 									}}
 								>
-									<FontAwesomeIcon className="w-3 h-3 text-white" icon={activityIconObjects[type].icon} />
+									<FontAwesomeIcon
+										className="w-3 h-3 text-white"
+										icon={activityIconObjects[type].icon}
+									/>
 								</div>
 							</a>
 						</Link>
 						<div className="flex flex-col flex-1 max-w-full">
-							<Link href="/[profile]" as={`/${actor?.username || actor?.wallet_address}`}>
+							<Link
+								href="/[profile]"
+								as={`/${actor?.username || actor?.wallet_address}`}
+							>
 								<a
 									onClick={() => {
 										mixpanel.track('Activity - Click on user profile')
 									}}
 								>
-									<div className="mr-2 hover:text-stpink text-base -mb-1">{truncateWithEllipses(actor.name, 24)}</div>
+									<div className="mr-2 hover:text-stpink text-base -mb-1">
+										{truncateWithEllipses(actor.name, 24)}
+									</div>
 								</a>
 							</Link>
 
 							{actor.username && (
-								<Link href="/[profile]" as={`/${actor?.username || actor?.wallet_address}`}>
+								<Link
+									href="/[profile]"
+									as={`/${actor?.username || actor?.wallet_address}`}
+								>
 									<a
 										onClick={() => {
 											mixpanel.track('Activity - Click on user profile')
 										}}
 									>
-										<div className="text-gray-400 text-xs mx-px">@{actor.username}</div>
+										<div className="text-gray-400 text-xs mx-px">
+											@{actor.username}
+										</div>
 									</a>
 								</Link>
 							)}
@@ -127,10 +156,26 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 					<div className="flex-grow"></div>
 					{context.user && (
 						<div>
-							<div onClick={onCornerMenuClick} className="text-right text-gray-300 relative">
-								<FontAwesomeIcon icon={faEllipsisH} className="hover:text-stpink cursor-pointer !w-5 !h-5" />
-								<div ref={dropdownRef} className={`absolute text-black text-center top-4 right-1 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-md transform z-1 ${isActive ? 'visible opacity-1 translate-y-1' : 'invisible opacity-0'}`}>
-									<div className="py-2 px-4 hover:text-stpink rounded-lg cursor-pointer whitespace-nowrap" onClick={handleUnfollow}>
+							<div
+								onClick={onCornerMenuClick}
+								className="text-right text-gray-300 relative"
+							>
+								<FontAwesomeIcon
+									icon={faEllipsisH}
+									className="hover:text-stpink cursor-pointer !w-5 !h-5"
+								/>
+								<div
+									ref={dropdownRef}
+									className={`absolute text-black text-center top-4 right-1 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-md transform z-1 ${
+										isActive
+											? 'visible opacity-1 translate-y-1'
+											: 'invisible opacity-0'
+									}`}
+								>
+									<div
+										className="py-2 px-4 hover:text-stpink rounded-lg cursor-pointer whitespace-nowrap"
+										onClick={handleUnfollow}
+									>
 										Unfollow
 										{/*actor.username ? `@${actor.username}` : "this user"*/}
 									</div>

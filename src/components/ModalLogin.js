@@ -26,7 +26,9 @@ export default function Modal({ isOpen }) {
 
 		// the magic code
 		try {
-			const did = await new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY).auth.loginWithMagicLink({ email: elements.email.value })
+			const did = await new Magic(
+				process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
+			).auth.loginWithMagicLink({ email: elements.email.value })
 
 			// Once we have the did from magic, login with our own API
 			await axios.post(
@@ -134,12 +136,17 @@ export default function Modal({ isOpen }) {
 	return (
 		<>
 			{isOpen && (
-				<ScrollableModal closeModal={() => context.setLoginModalOpen(false)} contentWidth="25rem">
+				<ScrollableModal
+					closeModal={() => context.setLoginModalOpen(false)}
+					contentWidth="25rem"
+				>
 					<div className="p-4">
 						<CloseButton setEditModalOpen={context.setLoginModalOpen} />
 						<div className="text-3xl border-b-2 pb-2 text-center">Sign in</div>
 						{signaturePending ? (
-							<div className="text-center py-40">Pushed a request to your wallet...</div>
+							<div className="text-center py-40">
+								Pushed a request to your wallet...
+							</div>
 						) : (
 							<>
 								<form onSubmit={handleSubmitEmail}>
@@ -148,21 +155,36 @@ export default function Modal({ isOpen }) {
 											<label htmlFor="email" className="pb-4 ">
 												Enter your email to receive a sign in link.
 											</label>
-											<div className="pt-1 pb-1 text-xs text-gray-700">If this is your first time, it will create a new account.</div>
+											<div className="pt-1 pb-1 text-xs text-gray-700">
+												If this is your first time, it will create a new
+												account.
+											</div>
 										</div>
 										<br />
-										<input name="email" placeholder="Email" type="email" className="border-2 w-full text-black rounded-lg p-3" autoFocus />
+										<input
+											name="email"
+											placeholder="Email"
+											type="email"
+											className="border-2 w-full text-black rounded-lg p-3"
+											autoFocus
+										/>
 
 										<div className="pt-8 pb-8 text-gray-700 text-xs">
 											By signing in you agree to our{' '}
-											<a href="https://www.notion.so/Showtime-Legal-c407e36eb7cd414ca190245ca8621e68" target="_blank" rel="noreferrer">
+											<a
+												href="https://www.notion.so/Showtime-Legal-c407e36eb7cd414ca190245ca8621e68"
+												target="_blank"
+												rel="noreferrer"
+											>
 												Terms &amp; Conditions
 											</a>
 											.
 										</div>
 
 										<button className="bg-stpink text-white rounded-full px-6 py-2 cursor-pointer border-2 hover:text-stpink hover:bg-white border-stpink transition-all">
-											<span className="text-sm md:text-base">Sign in with Email</span>
+											<span className="text-sm md:text-base">
+												Sign in with Email
+											</span>
 										</button>
 										<div className="py-6 text-gray-700">— or —</div>
 									</div>
@@ -175,7 +197,9 @@ export default function Modal({ isOpen }) {
 											handleSubmitWallet()
 										}}
 									>
-										<span className="text-sm md:text-base">Sign in with Wallet</span>
+										<span className="text-sm md:text-base">
+											Sign in with Wallet
+										</span>
 									</button>
 								</div>
 							</>

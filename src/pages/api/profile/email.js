@@ -6,10 +6,16 @@ import backend from '@/lib/backend'
 
 export default handler().post(async (req, res) => {
 	try {
-		const user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+		const user = await Iron.unseal(
+			CookieService.getAuthToken(req.cookies),
+			process.env.ENCRYPTION_SECRET_V2,
+			Iron.defaults
+		)
 
 		// exchange the did from Magic for some user data
-		const new_user = await new Magic(process.env.MAGIC_SECRET_KEY).users.getMetadataByToken(req.headers.authorization.split('Bearer').pop().trim())
+		const new_user = await new Magic(process.env.MAGIC_SECRET_KEY).users.getMetadataByToken(
+			req.headers.authorization.split('Bearer').pop().trim()
+		)
 
 		await backend.post(
 			'/v1/addwallet',

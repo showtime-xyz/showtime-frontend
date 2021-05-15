@@ -103,7 +103,9 @@ const App = ({ Component, pageProps }) => {
 			setMyProfile({
 				...my_info_data.data.profile,
 				// turn notifications_last_opened into Date before storing in context
-				notifications_last_opened: my_info_data.data.profile.notifications_last_opened ? new Date(my_info_data.data.profile.notifications_last_opened) : null,
+				notifications_last_opened: my_info_data.data.profile.notifications_last_opened
+					? new Date(my_info_data.data.profile.notifications_last_opened)
+					: null,
 				links: my_info_data.data.profile.links.map(link => ({
 					name: link.type__name,
 					prefix: link.type__prefix,
@@ -115,7 +117,9 @@ const App = ({ Component, pageProps }) => {
 
 			// Load up the recommendations async if we are onboarding
 			if (my_info_data.data.profile.has_onboarded == false) {
-				const my_rec_data = await axios.get('/api/follow_recommendations_onboarding').then(res => res.data)
+				const my_rec_data = await axios
+					.get('/api/follow_recommendations_onboarding')
+					.then(res => res.data)
 				setMyRecommendations(my_rec_data.data)
 			}
 		} catch {
@@ -127,12 +131,16 @@ const App = ({ Component, pageProps }) => {
 
 	const getActivityRecommendedFollows = async () => {
 		setLoadingRecommendedFollows(true)
-		const { data } = await axios.post('/api/getactivityrecommendedfollows').then(res => res.data)
+		const { data } = await axios
+			.post('/api/getactivityrecommendedfollows')
+			.then(res => res.data)
 		setRecommendedFollows(data)
 
 		// get recond result if logged in
 		if (user) {
-			const { data: secondData } = await axios.post('/api/getactivityrecommendedfollows', { recache: true }).then(res => res.data)
+			const { data: secondData } = await axios
+				.post('/api/getactivityrecommendedfollows', { recache: true })
+				.then(res => res.data)
 			setRecQueue(secondData)
 		}
 		setLoadingRecommendedFollows(false)
@@ -140,7 +148,9 @@ const App = ({ Component, pageProps }) => {
 
 	const getActivityRecommendedFollowsRecache = async () => {
 		setLoadingRecommendedFollows(true)
-		const { data } = await axios.post('/api/getactivityrecommendedfollows', { recache: true }).then(res => res.data)
+		const { data } = await axios
+			.post('/api/getactivityrecommendedfollows', { recache: true })
+			.then(res => res.data)
 
 		setRecQueue(data)
 		setLoadingRecommendedFollows(false)
@@ -168,7 +178,12 @@ const App = ({ Component, pageProps }) => {
 
 	//get more recs when we're at 3 recs
 	useEffect(() => {
-		if (typeof user !== 'undefined' && !loadingRecommendedFollows && recommendedFollows.length < 4) getActivityRecommendedFollowsRecache()
+		if (
+			typeof user !== 'undefined' &&
+			!loadingRecommendedFollows &&
+			recommendedFollows.length < 4
+		)
+			getActivityRecommendedFollowsRecache()
 	}, [recommendedFollows])
 
 	useEffect(() => {
@@ -176,7 +191,9 @@ const App = ({ Component, pageProps }) => {
 			setThrottleContent(throttleMessage)
 			setThrottleOpen(true)
 			setDisableLikes(DISABLE_ALL || disableLikes || throttleMessage.includes('like'))
-			setDisableComments(DISABLE_ALL || disableComments || throttleMessage.includes('comment'))
+			setDisableComments(
+				DISABLE_ALL || disableComments || throttleMessage.includes('comment')
+			)
 			setDisableFollows(DISABLE_ALL || disableFollows || throttleMessage.includes('follow'))
 		}
 	}, [throttleMessage])
@@ -252,7 +269,11 @@ const App = ({ Component, pageProps }) => {
 
 	return (
 		<AppContext.Provider value={injectedGlobalContext}>
-			<ModalThrottleUser isOpen={throttleOpen} closeModal={() => setThrottleOpen(false)} modalContent={throttleContent} />
+			<ModalThrottleUser
+				isOpen={throttleOpen}
+				closeModal={() => setThrottleOpen(false)}
+				modalContent={throttleContent}
+			/>
 			<Component {...pageProps} />
 		</AppContext.Provider>
 	)

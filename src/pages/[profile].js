@@ -22,7 +22,12 @@ import { faHeart, faImage } from '@fortawesome/free-regular-svg-icons'
 import ProfileFollowersPill from '@/components/ProfileFollowersPill'
 import { Listbox, Transition, Menu } from '@headlessui/react'
 import { CheckIcon, SelectorIcon, ChevronDownIcon, PencilAltIcon } from '@heroicons/react/solid'
-import { faHeart as fasHeart, faFingerprint, faImage as fasImage, faEdit } from '@fortawesome/free-solid-svg-icons'
+import {
+	faHeart as fasHeart,
+	faFingerprint,
+	faImage as fasImage,
+	faEdit,
+} from '@fortawesome/free-solid-svg-icons'
 import axios from '@/lib/axios'
 
 export async function getServerSideProps(context) {
@@ -40,7 +45,15 @@ export async function getServerSideProps(context) {
 	let response_profile
 	try {
 		response_profile = await backend.get(`/v2/profile_server/${slug_address}`)
-		const { profile, followers: followers_list, followers_count, following: following_list, following_count, featured_nft, lists } = response_profile.data.data
+		const {
+			profile,
+			followers: followers_list,
+			followers_count,
+			following: following_list,
+			following_count,
+			featured_nft,
+			lists,
+		} = response_profile.data.data
 
 		return {
 			props: {
@@ -68,8 +81,29 @@ export async function getServerSideProps(context) {
 	}
 }
 
-const Profile = ({ profile, slug_address, followers_list, followers_count, following_list, following_count, featured_nft, lists }) => {
-	const { name, img_url, cover_url, wallet_addresses, wallet_addresses_excluding_email, bio, website_url, profile_id, username, featured_nft_img_url, links } = profile
+const Profile = ({
+	profile,
+	slug_address,
+	followers_list,
+	followers_count,
+	following_list,
+	following_count,
+	featured_nft,
+	lists,
+}) => {
+	const {
+		name,
+		img_url,
+		cover_url,
+		wallet_addresses,
+		wallet_addresses_excluding_email,
+		bio,
+		website_url,
+		profile_id,
+		username,
+		featured_nft_img_url,
+		links,
+	} = profile
 
 	const context = useContext(AppContext)
 
@@ -104,7 +138,12 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		if (typeof context.user !== 'undefined') {
 			if (context.user) {
 				// Logged in?
-				if (context.myProfile?.wallet_addresses.map(a => a.toLowerCase()).includes(slug_address.toLowerCase()) || slug_address.toLowerCase() === context.myProfile?.username?.toLowerCase()) {
+				if (
+					context.myProfile?.wallet_addresses
+						.map(a => a.toLowerCase())
+						.includes(slug_address.toLowerCase()) ||
+					slug_address.toLowerCase() === context.myProfile?.username?.toLowerCase()
+				) {
 					setIsMyProfile(true)
 					if (wallet_addresses.length === wallet_addresses_excluding_email.length) {
 						setHasEmailAddress(false)
@@ -122,7 +161,13 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 				mixpanel.track('Profile view', { slug: slug_address })
 			}
 		}
-	}, [profile_id, typeof context.user, context.myProfile, context.user ? context.user.publicAddress : null, slug_address])
+	}, [
+		profile_id,
+		typeof context.user,
+		context.myProfile,
+		context.user ? context.user.publicAddress : null,
+		slug_address,
+	])
 
 	// Followers
 	const [followers, setFollowers] = useState([])
@@ -189,11 +234,23 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const [collectionId, setCollectionId] = useState(0)
 	const [isLoadingCards, setIsLoadingCards] = useState(false)
 	const [isRefreshingCards, setIsRefreshingCards] = useState(false)
-	const [selectedCreatedSortField, setSelectedCreatedSortField] = useState(lists.lists[0].sort_id || 1)
-	const [selectedOwnedSortField, setSelectedOwnedSortField] = useState(lists.lists[1].sort_id || 1)
+	const [selectedCreatedSortField, setSelectedCreatedSortField] = useState(
+		lists.lists[0].sort_id || 1
+	)
+	const [selectedOwnedSortField, setSelectedOwnedSortField] = useState(
+		lists.lists[1].sort_id || 1
+	)
 	const [selectedLikedSortField, setSelectedLikedSortField] = useState(2)
 
-	const updateItems = async (listId, sortId, collectionId, showCardRefresh, page, showHidden, showDuplicates) => {
+	const updateItems = async (
+		listId,
+		sortId,
+		collectionId,
+		showCardRefresh,
+		page,
+		showHidden,
+		showDuplicates
+	) => {
 		if (showCardRefresh) {
 			setIsRefreshingCards(true)
 		}
@@ -221,7 +278,12 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 
 	const addPage = async nextPage => {
 		setIsLoadingMore(true)
-		const sortId = selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField
+		const sortId =
+			selectedGrid === 1
+				? selectedCreatedSortField
+				: selectedGrid === 2
+				? selectedOwnedSortField
+				: selectedLikedSortField
 
 		const { data } = await axios
 			.post('/api/getprofilenfts', {
@@ -246,10 +308,23 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 
 	const handleSortChange = async sortId => {
 		setSwitchInProgress(true)
-		const setSelectedSortField = selectedGrid === 1 ? setSelectedCreatedSortField : selectedGrid === 2 ? setSelectedOwnedSortField : setSelectedLikedSortField
+		const setSelectedSortField =
+			selectedGrid === 1
+				? setSelectedCreatedSortField
+				: selectedGrid === 2
+				? setSelectedOwnedSortField
+				: setSelectedLikedSortField
 		setPage(1)
 		setSelectedSortField(sortId)
-		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates)
+		await updateItems(
+			selectedGrid,
+			sortId,
+			collectionId,
+			true,
+			1,
+			showUserHiddenItems,
+			showDuplicates
+		)
 		setSwitchInProgress(false)
 	}
 
@@ -260,7 +335,12 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setPage(1)
 		setShowDuplicates(false)
 
-		const sortId = listId === 1 ? selectedCreatedSortField : listId === 2 ? selectedOwnedSortField : selectedLikedSortField
+		const sortId =
+			listId === 1
+				? selectedCreatedSortField
+				: listId === 2
+				? selectedOwnedSortField
+				: selectedLikedSortField
 		router.replace(
 			{
 				pathname: '/[profile]',
@@ -278,8 +358,21 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setCollectionId(collectionId)
 		setPage(1)
 
-		const sortId = selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField
-		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates)
+		const sortId =
+			selectedGrid === 1
+				? selectedCreatedSortField
+				: selectedGrid === 2
+				? selectedOwnedSortField
+				: selectedLikedSortField
+		await updateItems(
+			selectedGrid,
+			sortId,
+			collectionId,
+			true,
+			1,
+			showUserHiddenItems,
+			showDuplicates
+		)
 		setSwitchInProgress(false)
 	}
 
@@ -294,8 +387,21 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		}
 		setPage(1)
 
-		const sortId = selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField
-		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates)
+		const sortId =
+			selectedGrid === 1
+				? selectedCreatedSortField
+				: selectedGrid === 2
+				? selectedOwnedSortField
+				: selectedLikedSortField
+		await updateItems(
+			selectedGrid,
+			sortId,
+			collectionId,
+			true,
+			1,
+			showUserHiddenItems,
+			showDuplicates
+		)
 		setSwitchInProgress(false)
 	}
 
@@ -310,8 +416,21 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		}
 		setPage(1)
 
-		const sortId = selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField
-		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates)
+		const sortId =
+			selectedGrid === 1
+				? selectedCreatedSortField
+				: selectedGrid === 2
+				? selectedOwnedSortField
+				: selectedLikedSortField
+		await updateItems(
+			selectedGrid,
+			sortId,
+			collectionId,
+			true,
+			1,
+			showUserHiddenItems,
+			showDuplicates
+		)
 		setSwitchInProgress(false)
 	}
 
@@ -330,7 +449,10 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 			setSelectedOwnedSortField(lists.lists[1].sort_id || 1)
 			setSelectedLikedSortField(2)
 
-			setHasUserHiddenItems(lists.lists[0].count_all_withhidden > lists.lists[0].count_all_nonhidden || lists.lists[1].count_all_withhidden > lists.lists[1].count_all_nonhidden)
+			setHasUserHiddenItems(
+				lists.lists[0].count_all_withhidden > lists.lists[0].count_all_nonhidden ||
+					lists.lists[1].count_all_withhidden > lists.lists[1].count_all_nonhidden
+			)
 
 			setShowDuplicates(false)
 			setCollectionId(0)
@@ -345,7 +467,9 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 
 		// Populate initial state
 
-		const initial_list_id = router?.query?.list ? PROFILE_TABS.indexOf(router.query.list) : lists.default_list_id
+		const initial_list_id = router?.query?.list
+			? PROFILE_TABS.indexOf(router.query.list)
+			: lists.default_list_id
 
 		if (initial_list_id == 1) {
 			setSwitchInProgress(true)
@@ -438,7 +562,9 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 				profile_id: context.myProfile.profile_id,
 				wallet_address: context.user.publicAddress,
 				name: context.myProfile.name,
-				img_url: context.myProfile.img_url ? context.myProfile.img_url : DEFAULT_PROFILE_PIC,
+				img_url: context.myProfile.img_url
+					? context.myProfile.img_url
+					: DEFAULT_PROFILE_PIC,
 				timestamp: null,
 				username: context.myProfile.username,
 			},
@@ -457,7 +583,9 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 						setIsFollowed(false)
 						setFollowersCount(followersCount)
 						// Change myLikes via setMyLikes
-						context.setMyFollows(context.myFollows.filter(item => item.profile_id != profile_id))
+						context.setMyFollows(
+							context.myFollows.filter(item => item.profile_id != profile_id)
+						)
 
 						setFollowers(
 							followers.filter(follower => {
@@ -506,7 +634,9 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		// console.log("setting default list Id to:", lists.default_list_id);
 		// console.log("current value in url:", router.query);
 
-		setSelectedGrid(router?.query?.list ? PROFILE_TABS.indexOf(router.query.list) : lists.default_list_id)
+		setSelectedGrid(
+			router?.query?.list ? PROFILE_TABS.indexOf(router.query.list) : lists.default_list_id
+		)
 
 		setMenuLists(lists.lists)
 
@@ -551,7 +681,12 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 			await handleSortChange(5)
 		} else {
 			setFetchMoreSort(selectedGrid === 1 ? selectedCreatedSortField : selectedOwnedSortField)
-			const setSelectedSortField = selectedGrid === 1 ? setSelectedCreatedSortField : selectedGrid === 2 ? setSelectedOwnedSortField : setSelectedLikedSortField
+			const setSelectedSortField =
+				selectedGrid === 1
+					? setSelectedCreatedSortField
+					: selectedGrid === 2
+					? setSelectedOwnedSortField
+					: setSelectedLikedSortField
 			await setSelectedSortField(5)
 		}
 		setRevertItems(items)
@@ -564,7 +699,9 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		await handleSortChange(1)
 		setIsChangingOrder(false)
 		setRevertItems(null)
-		const newMenuLists = menuLists.map((list, index) => (index === listIdToClearOrder - 1 ? { ...list, has_custom_sort: false } : list))
+		const newMenuLists = menuLists.map((list, index) =>
+			index === listIdToClearOrder - 1 ? { ...list, has_custom_sort: false } : list
+		)
 		setMenuLists(newMenuLists)
 		context.setMyProfile({
 			...context.myProfile,
@@ -584,7 +721,9 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		const saveOrderPayload = items.map((o, i) => ({ index: i, nft_id: o.nft_id }))
 		setIsChangingOrder(false)
 		setRevertItems(null)
-		const newMenuLists = menuLists.map((list, index) => (index === selectedGrid - 1 ? { ...list, has_custom_sort: true } : list))
+		const newMenuLists = menuLists.map((list, index) =>
+			index === selectedGrid - 1 ? { ...list, has_custom_sort: true } : list
+		)
 		setMenuLists(newMenuLists)
 		context.setMyProfile({
 			...context.myProfile,
@@ -631,10 +770,27 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		>
 			{typeof document !== 'undefined' ? (
 				<>
-					<ModalAddWallet isOpen={walletModalOpen} setWalletModalOpen={setWalletModalOpen} walletAddresses={wallet_addresses} />
-					<ModalAddEmail isOpen={emailModalOpen} setEmailModalOpen={setEmailModalOpen} walletAddresses={wallet_addresses} setHasEmailAddress={setHasEmailAddress} />
-					{editModalOpen && <ModalEditProfile isOpen={editModalOpen} setEditModalOpen={setEditModalOpen} />}
-					<ModalEditPhoto isOpen={pictureModalOpen} setEditModalOpen={setPictureModalOpen} />
+					<ModalAddWallet
+						isOpen={walletModalOpen}
+						setWalletModalOpen={setWalletModalOpen}
+						walletAddresses={wallet_addresses}
+					/>
+					<ModalAddEmail
+						isOpen={emailModalOpen}
+						setEmailModalOpen={setEmailModalOpen}
+						walletAddresses={wallet_addresses}
+						setHasEmailAddress={setHasEmailAddress}
+					/>
+					{editModalOpen && (
+						<ModalEditProfile
+							isOpen={editModalOpen}
+							setEditModalOpen={setEditModalOpen}
+						/>
+					)}
+					<ModalEditPhoto
+						isOpen={pictureModalOpen}
+						setEditModalOpen={setPictureModalOpen}
+					/>
 					<ModalEditCover isOpen={coverModalOpen} setEditModalOpen={setCoverModalOpen} />
 					{/* Followers modal */}
 					<ModalUserList
@@ -660,19 +816,55 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 				<Head>
 					<title>{profileToDisplay?.name ? profileToDisplay.name : 'Unnamed'}</title>
 
-					<meta name="description" content="Explore crypto art I've created, owned, and liked" />
+					<meta
+						name="description"
+						content="Explore crypto art I've created, owned, and liked"
+					/>
 					<meta property="og:type" content="website" />
-					<meta name="og:description" content="Explore crypto art I've created, owned, and liked" />
-					<meta property="og:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : DEFAULT_PROFILE_PIC} />
+					<meta
+						name="og:description"
+						content="Explore crypto art I've created, owned, and liked"
+					/>
+					<meta
+						property="og:image"
+						content={
+							featured_nft_img_url
+								? featured_nft_img_url
+								: img_url
+								? img_url
+								: DEFAULT_PROFILE_PIC
+						}
+					/>
 					<meta name="og:title" content={name ? name : wallet_addresses[0]} />
 
 					<meta name="twitter:card" content="summary_large_image" />
 					<meta name="twitter:title" content={name ? name : wallet_addresses[0]} />
-					<meta name="twitter:description" content="Explore crypto art I've created, owned, and liked" />
-					<meta name="twitter:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : DEFAULT_PROFILE_PIC} />
+					<meta
+						name="twitter:description"
+						content="Explore crypto art I've created, owned, and liked"
+					/>
+					<meta
+						name="twitter:image"
+						content={
+							featured_nft_img_url
+								? featured_nft_img_url
+								: img_url
+								? img_url
+								: DEFAULT_PROFILE_PIC
+						}
+					/>
 				</Head>
 
-				<div className={`h-32 md:h-64 relative text-left bg-gradient-to-b from-black to-gray-800 ${profileToDisplay?.cover_url ? 'bg-no-repeat bg-center bg-cover' : ''}`} style={profileToDisplay?.cover_url ? { backgroundImage: `url(${profileToDisplay.cover_url})` } : {}}>
+				<div
+					className={`h-32 md:h-64 relative text-left bg-gradient-to-b from-black to-gray-800 ${
+						profileToDisplay?.cover_url ? 'bg-no-repeat bg-center bg-cover' : ''
+					}`}
+					style={
+						profileToDisplay?.cover_url
+							? { backgroundImage: `url(${profileToDisplay.cover_url})` }
+							: {}
+					}
+				>
 					{isMyProfile && (
 						<CappedWidth>
 							<div className="relative">
@@ -703,23 +895,63 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											mixpanel.track('Open edit photo')
 										}
 									}}
-									src={profileToDisplay?.img_url ? profileToDisplay.img_url : DEFAULT_PROFILE_PIC}
-									className={`h-24 w-24 md:h-32 md:w-32 rounded-full border-2 shadow-md border-white z-10 -mt-14 md:-mt-20 overflow-hidden ${isMyProfile ? 'cursor-pointer ' : ''}`}
+									src={
+										profileToDisplay?.img_url
+											? profileToDisplay.img_url
+											: DEFAULT_PROFILE_PIC
+									}
+									className={`h-24 w-24 md:h-32 md:w-32 rounded-full border-2 shadow-md border-white z-10 -mt-14 md:-mt-20 overflow-hidden ${
+										isMyProfile ? 'cursor-pointer ' : ''
+									}`}
 								/>
 								<div className="flex-grow"></div>
 								<div className="md:hidden z-10 -mt-5">
-									<ProfileFollowersPill following={following} followers={followers} isFollowed={isFollowed} isMyProfile={isMyProfile} followingMe={followingMe} handleUnfollow={handleUnfollow} handleFollow={handleFollow} handleLoggedOutFollow={handleLoggedOutFollow} hasEmailAddress={hasEmailAddress} setShowFollowers={setShowFollowers} setShowFollowing={setShowFollowing} editAccount={editAccount} editPhoto={editPhoto} addWallet={addWallet} addEmail={addEmail} logout={logout} />
+									<ProfileFollowersPill
+										following={following}
+										followers={followers}
+										isFollowed={isFollowed}
+										isMyProfile={isMyProfile}
+										followingMe={followingMe}
+										handleUnfollow={handleUnfollow}
+										handleFollow={handleFollow}
+										handleLoggedOutFollow={handleLoggedOutFollow}
+										hasEmailAddress={hasEmailAddress}
+										setShowFollowers={setShowFollowers}
+										setShowFollowing={setShowFollowing}
+										editAccount={editAccount}
+										editPhoto={editPhoto}
+										addWallet={addWallet}
+										addEmail={addEmail}
+										logout={logout}
+									/>
 								</div>
 							</div>
-							<div className="text-3xl md:text-4xl md:mb-1"> {profileToDisplay?.name ? profileToDisplay.name : wallet_addresses_excluding_email && wallet_addresses_excluding_email.length > 0 ? formatAddressShort(wallet_addresses_excluding_email[0]) : 'Unnamed'}</div>
+							<div className="text-3xl md:text-4xl md:mb-1">
+								{' '}
+								{profileToDisplay?.name
+									? profileToDisplay.name
+									: wallet_addresses_excluding_email &&
+									  wallet_addresses_excluding_email.length > 0
+									? formatAddressShort(wallet_addresses_excluding_email[0])
+									: 'Unnamed'}
+							</div>
 							<div>
 								{(username || wallet_addresses_excluding_email.length > 0) && (
 									<div className="flex flex-row items-center justify-start">
-										{username && <div className="md:mr-2 text-sm md:text-base text-gray-500">@{username}</div>}
+										{username && (
+											<div className="md:mr-2 text-sm md:text-base text-gray-500">
+												@{username}
+											</div>
+										)}
 
 										<div className="flex ml-1">
 											{wallet_addresses_excluding_email.map(address => {
-												return <AddressButton key={address} address={address} />
+												return (
+													<AddressButton
+														key={address}
+														address={address}
+													/>
+												)
 											})}
 										</div>
 									</div>
@@ -728,13 +960,23 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 							<div>
 								{profileToDisplay?.bio ? (
 									<div className="text-black text-sm max-w-prose text-left md:text-base mt-6 block break-words">
-										{moreBioShown ? profileToDisplay.bio : truncateWithEllipses(profileToDisplay.bio, initialBioLength)}
-										{!moreBioShown && profileToDisplay?.bio && profileToDisplay.bio.length > initialBioLength && (
-											<a onClick={() => setMoreBioShown(true)} className="text-gray-500 hover:text-gray-700 cursor-pointer">
-												{' '}
-												more
-											</a>
-										)}
+										{moreBioShown
+											? profileToDisplay.bio
+											: truncateWithEllipses(
+													profileToDisplay.bio,
+													initialBioLength
+											  )}
+										{!moreBioShown &&
+											profileToDisplay?.bio &&
+											profileToDisplay.bio.length > initialBioLength && (
+												<a
+													onClick={() => setMoreBioShown(true)}
+													className="text-gray-500 hover:text-gray-700 cursor-pointer"
+												>
+													{' '}
+													more
+												</a>
+											)}
 									</div>
 								) : null}
 							</div>
@@ -751,8 +993,18 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 													setShowFollowing(true)
 												}}
 											>
-												<div className="text-sm mr-2">{following && following.length !== null ? Number(isMyProfile ? context.myFollows.length : following_count).toLocaleString() : null}</div>
-												<div className="text-sm text-gray-500 mr-5">Following</div>
+												<div className="text-sm mr-2">
+													{following && following.length !== null
+														? Number(
+																isMyProfile
+																	? context.myFollows.length
+																	: following_count
+														  ).toLocaleString()
+														: null}
+												</div>
+												<div className="text-sm text-gray-500 mr-5">
+													Following
+												</div>
 											</div>
 											<div
 												className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80 "
@@ -760,13 +1012,36 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 													setShowFollowers(true)
 												}}
 											>
-												<div className="text-sm  mr-2">{followers && followers.length !== null ? Number(followersCount).toLocaleString() : null}</div>
-												<div className="text-sm text-gray-500 mr-5">Followers</div>
+												<div className="text-sm  mr-2">
+													{followers && followers.length !== null
+														? Number(followersCount).toLocaleString()
+														: null}
+												</div>
+												<div className="text-sm text-gray-500 mr-5">
+													Followers
+												</div>
 											</div>
 										</div>
 									</div>
 									<div className="hidden md:flex">
-										<ProfileFollowersPill following={following} followers={followers} isFollowed={isFollowed} isMyProfile={isMyProfile} followingMe={followingMe} handleUnfollow={handleUnfollow} handleFollow={handleFollow} handleLoggedOutFollow={handleLoggedOutFollow} hasEmailAddress={hasEmailAddress} setShowFollowers={setShowFollowers} setShowFollowing={setShowFollowing} editAccount={editAccount} editPhoto={editPhoto} addWallet={addWallet} addEmail={addEmail} logout={logout} />
+										<ProfileFollowersPill
+											following={following}
+											followers={followers}
+											isFollowed={isFollowed}
+											isMyProfile={isMyProfile}
+											followingMe={followingMe}
+											handleUnfollow={handleUnfollow}
+											handleFollow={handleFollow}
+											handleLoggedOutFollow={handleLoggedOutFollow}
+											hasEmailAddress={hasEmailAddress}
+											setShowFollowers={setShowFollowers}
+											setShowFollowing={setShowFollowing}
+											editAccount={editAccount}
+											editPhoto={editPhoto}
+											addWallet={addWallet}
+											addEmail={addEmail}
+											logout={logout}
+										/>
 									</div>
 								</div>
 							</div>
@@ -774,7 +1049,11 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 							<div className=" md:text-right text-sm md:mr-2 pt-5 md:pt-7">
 								{profileToDisplay?.website_url ? (
 									<a
-										href={profileToDisplay.website_url.slice(0, 4) === 'http' ? profileToDisplay.website_url : 'https://' + profileToDisplay.website_url}
+										href={
+											profileToDisplay.website_url.slice(0, 4) === 'http'
+												? profileToDisplay.website_url
+												: 'https://' + profileToDisplay.website_url
+										}
 										target="_blank"
 										onClick={() => {
 											mixpanel.track('Clicked profile website link', {
@@ -785,9 +1064,15 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										rel="noreferrer"
 									>
 										<div className="flex text-gray-500 flex-row  items-center hover:opacity-80 mr-3 md:mr-0">
-											<img src="/icons/link-solid-01.png" alt="" className="flex-shrink-0 h-5 w-5 mr-1 opacity-70" />
+											<img
+												src="/icons/link-solid-01.png"
+												alt=""
+												className="flex-shrink-0 h-5 w-5 mr-1 opacity-70"
+											/>
 											<div>
-												<div className="break-all">{profileToDisplay.website_url}</div>
+												<div className="break-all">
+													{profileToDisplay.website_url}
+												</div>
 											</div>
 										</div>
 									</a>
@@ -796,21 +1081,35 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 								{profileToDisplay?.links &&
 									profileToDisplay.links.map(socialLink => (
 										<a
-											href={`https://${socialLink.prefix}` + socialLink.user_input}
+											href={
+												`https://${socialLink.prefix}` +
+												socialLink.user_input
+											}
 											target="_blank"
 											onClick={() => {
-												mixpanel.track(`Clicked ${socialLink.name} profile link`, {
-													slug: slug_address,
-												})
+												mixpanel.track(
+													`Clicked ${socialLink.name} profile link`,
+													{
+														slug: slug_address,
+													}
+												)
 											}}
 											className="mr-4 md:mr-0 md:ml-5 inline-block "
 											key={socialLink.type_id}
 											rel="noreferrer"
 										>
 											<div className="text-gray-500 flex flex-row items-center hover:opacity-80">
-												{socialLink.icon_url && <img src={socialLink.icon_url} alt="" className="flex-shrink-0 h-5 w-5 mr-1 opacity-70" />}
+												{socialLink.icon_url && (
+													<img
+														src={socialLink.icon_url}
+														alt=""
+														className="flex-shrink-0 h-5 w-5 mr-1 opacity-70"
+													/>
+												)}
 												<div>
-													<div className="break-all">{socialLink.name}</div>
+													<div className="break-all">
+														{socialLink.name}
+													</div>
 												</div>
 											</div>
 										</a>
@@ -861,9 +1160,27 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										<div className="border-b border-gray-200 sm:mx-2 mb-2 pb-4  ">
 											<div className="flex flex-row items-center mt-2 ml-2 sm:mt-0 sm:ml-0">
 												<div className="mr-2">
-													<img src={profileToDisplay && profileToDisplay.img_url ? profileToDisplay.img_url : DEFAULT_PROFILE_PIC} className="w-5 h-5 rounded-full" />
+													<img
+														src={
+															profileToDisplay &&
+															profileToDisplay.img_url
+																? profileToDisplay.img_url
+																: DEFAULT_PROFILE_PIC
+														}
+														className="w-5 h-5 rounded-full"
+													/>
 												</div>
-												<div>{profileToDisplay?.name ? profileToDisplay.name : wallet_addresses_excluding_email && wallet_addresses_excluding_email.length > 0 ? formatAddressShort(wallet_addresses_excluding_email[0]) : 'Unnamed'}</div>
+												<div>
+													{profileToDisplay?.name
+														? profileToDisplay.name
+														: wallet_addresses_excluding_email &&
+														  wallet_addresses_excluding_email.length >
+																0
+														? formatAddressShort(
+																wallet_addresses_excluding_email[0]
+														  )
+														: 'Unnamed'}
+												</div>
 												<div className="flex-grow"></div>
 												{isMyProfile && hasUserHiddenItems ? (
 													<div className="flex sm:hidden">
@@ -872,7 +1189,9 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 															className=" text-xs mr-2 text-gray-400 cursor-pointer hover:text-gray-700"
 															onClick={() => {
 																//setShowUserHiddenItems(!showUserHiddenItems);
-																handleShowHiddenChange(!showUserHiddenItems)
+																handleShowHiddenChange(
+																	!showUserHiddenItems
+																)
 															}}
 														>
 															{
@@ -882,7 +1201,9 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 																//? null
 																//:
 
-																showUserHiddenItems ? 'Hide hidden' : 'Show hidden'
+																showUserHiddenItems
+																	? 'Hide hidden'
+																	: 'Show hidden'
 															}
 														</div>
 													</div>
@@ -894,24 +1215,46 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												onClick={() => {
 													//setSelectedGrid(1);
 													handleListChange(1)
-													if (gridRef?.current?.getBoundingClientRect().top < 0) {
+													if (
+														gridRef?.current?.getBoundingClientRect()
+															.top < 0
+													) {
 														window.scroll({
 															top: gridRef?.current?.offsetTop + 30,
 															behavior: 'smooth',
 														})
 													}
 												}}
-												className={`flex-1 hover:bg-stpurple100 p-2 sm:mb-1 ml-1 sm:ml-0 rounded-lg px-3  ${selectedGrid === 1 ? 'text-stpurple700 bg-stpurple100' : 'text-gray-500'} hover:text-stpurple700 cursor-pointer flex flex-row transition-all items-center`}
+												className={`flex-1 hover:bg-stpurple100 p-2 sm:mb-1 ml-1 sm:ml-0 rounded-lg px-3  ${
+													selectedGrid === 1
+														? 'text-stpurple700 bg-stpurple100'
+														: 'text-gray-500'
+												} hover:text-stpurple700 cursor-pointer flex flex-row transition-all items-center`}
 											>
 												<div className="w-6 hidden sm:block">
-													<FontAwesomeIcon icon={faFingerprint} className="mr-2" />
+													<FontAwesomeIcon
+														icon={faFingerprint}
+														className="mr-2"
+													/>
 												</div>
 												<div className="flex-grow sm:hidden"></div>
-												<div className="sm:hidden mr-1">{menuLists && menuLists.length > 0 ? Number(menuLists[0].count_deduplicated_nonhidden).toLocaleString() : null}</div>
+												<div className="sm:hidden mr-1">
+													{menuLists && menuLists.length > 0
+														? Number(
+																menuLists[0]
+																	.count_deduplicated_nonhidden
+														  ).toLocaleString()
+														: null}
+												</div>
 												<div>Created</div>
 												<div className="flex-grow"></div>
 												<div className="rounded-full text-center text-sm hidden sm:block">
-													{menuLists && menuLists.length > 0 ? Number(menuLists[0].count_deduplicated_nonhidden).toLocaleString() : null}
+													{menuLists && menuLists.length > 0
+														? Number(
+																menuLists[0]
+																	.count_deduplicated_nonhidden
+														  ).toLocaleString()
+														: null}
 													<span className="invisible">+</span>
 												</div>
 											</div>
@@ -919,52 +1262,115 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												onClick={() => {
 													//setSelectedGrid(2);
 													handleListChange(2)
-													if (gridRef?.current?.getBoundingClientRect().top < 0) {
+													if (
+														gridRef?.current?.getBoundingClientRect()
+															.top < 0
+													) {
 														window.scroll({
 															top: gridRef?.current?.offsetTop + 30,
 															behavior: 'smooth',
 														})
 													}
 												}}
-												className={`flex-1 hover:bg-stteal100 sm:mb-1 p-2  rounded-lg px-3 ${selectedGrid === 2 ? 'text-stteal700 bg-stteal100' : 'text-gray-500'} hover:text-stteal700 cursor-pointer flex flex-row transition-all items-center`}
+												className={`flex-1 hover:bg-stteal100 sm:mb-1 p-2  rounded-lg px-3 ${
+													selectedGrid === 2
+														? 'text-stteal700 bg-stteal100'
+														: 'text-gray-500'
+												} hover:text-stteal700 cursor-pointer flex flex-row transition-all items-center`}
 											>
 												<div className="w-6 hidden sm:block">
-													<FontAwesomeIcon icon={selectedGrid === 2 ? fasImage : faImage} className="mr-2" />
+													<FontAwesomeIcon
+														icon={
+															selectedGrid === 2 ? fasImage : faImage
+														}
+														className="mr-2"
+													/>
 												</div>
 												<div className="flex-grow sm:hidden"></div>
-												<div className="sm:hidden mr-1">{menuLists && menuLists.length > 0 ? Number(menuLists[1].count_deduplicated_nonhidden).toLocaleString() : null}</div>
+												<div className="sm:hidden mr-1">
+													{menuLists && menuLists.length > 0
+														? Number(
+																menuLists[1]
+																	.count_deduplicated_nonhidden
+														  ).toLocaleString()
+														: null}
+												</div>
 												<div>Owned</div>
 												<div className="flex-grow"></div>
 												<div className="rounded-full text-center text-sm hidden sm:block">
-													{menuLists && menuLists.length > 0 ? Number(menuLists[1].count_deduplicated_nonhidden).toLocaleString() : null}
+													{menuLists && menuLists.length > 0
+														? Number(
+																menuLists[1]
+																	.count_deduplicated_nonhidden
+														  ).toLocaleString()
+														: null}
 													<span className="invisible">+</span>
 												</div>
 											</div>
 											<div
 												onClick={() => {
 													handleListChange(3)
-													if (gridRef?.current?.getBoundingClientRect().top < 0) {
+													if (
+														gridRef?.current?.getBoundingClientRect()
+															.top < 0
+													) {
 														window.scroll({
 															top: gridRef?.current?.offsetTop + 30,
 															behavior: 'smooth',
 														})
 													}
 												}}
-												className={`flex-1 hover:bg-stred100 p-2 sm:mt-0 mr-1 sm:mr-0 rounded-lg px-3 ${selectedGrid === 3 ? 'text-stred bg-stred100' : 'text-gray-500'} hover:text-stred cursor-pointer flex flex-row transition-all items-center`}
+												className={`flex-1 hover:bg-stred100 p-2 sm:mt-0 mr-1 sm:mr-0 rounded-lg px-3 ${
+													selectedGrid === 3
+														? 'text-stred bg-stred100'
+														: 'text-gray-500'
+												} hover:text-stred cursor-pointer flex flex-row transition-all items-center`}
 											>
 												<div className="w-6 hidden sm:block">
-													<FontAwesomeIcon icon={selectedGrid === 3 ? fasHeart : faHeart} className="mr-2" />
+													<FontAwesomeIcon
+														icon={
+															selectedGrid === 3 ? fasHeart : faHeart
+														}
+														className="mr-2"
+													/>
 												</div>
 												<div className="flex-grow sm:hidden"></div>
 												<div className="sm:hidden mr-1">
-													{menuLists && menuLists.length > 0 ? (menuLists[2].count_deduplicated_nonhidden > 300 ? 300 : menuLists[2].count_deduplicated_nonhidden) : null}
-													{menuLists && menuLists.length > 0 && menuLists[2].count_deduplicated_nonhidden > 300 ? '+' : ''}
+													{menuLists && menuLists.length > 0
+														? menuLists[2]
+																.count_deduplicated_nonhidden > 300
+															? 300
+															: menuLists[2]
+																	.count_deduplicated_nonhidden
+														: null}
+													{menuLists &&
+													menuLists.length > 0 &&
+													menuLists[2].count_deduplicated_nonhidden > 300
+														? '+'
+														: ''}
 												</div>
 												<div>Liked</div>
 												<div className="flex-grow"></div>
 												<div className="rounded-full text-center text-sm hidden sm:block">
-													{menuLists && menuLists.length > 0 ? (menuLists[2].count_deduplicated_nonhidden > 300 ? 300 : menuLists[2].count_deduplicated_nonhidden) : null}
-													<span className={menuLists && menuLists.length > 0 && menuLists[2].count_deduplicated_nonhidden > 300 ? 'visible' : 'invisible'}>+</span>
+													{menuLists && menuLists.length > 0
+														? menuLists[2]
+																.count_deduplicated_nonhidden > 300
+															? 300
+															: menuLists[2]
+																	.count_deduplicated_nonhidden
+														: null}
+													<span
+														className={
+															menuLists &&
+															menuLists.length > 0 &&
+															menuLists[2]
+																.count_deduplicated_nonhidden > 300
+																? 'visible'
+																: 'invisible'
+														}
+													>
+														+
+													</span>
 												</div>
 											</div>
 										</div>
@@ -987,7 +1393,9 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 														//  ? null
 														//  :
 
-														showUserHiddenItems ? 'Hide hidden' : 'Show hidden'
+														showUserHiddenItems
+															? 'Hide hidden'
+															: 'Show hidden'
 													}
 												</div>
 											</div>
@@ -1019,20 +1427,35 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
                             */
 										}`}
 									>
-										{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && (
-											<>
-												{isChangingOrder && ((selectedGrid === 1 && selectedCreatedSortField === 5) || (selectedGrid === 2 && selectedOwnedSortField === 5)) && (
-													<>
-														<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none" onClick={handleCancelOrder}>
-															Cancel
-														</div>
-														<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none" onClick={handleSaveOrder}>
-															Save Order
-														</div>
-													</>
-												)}
-											</>
-										)}
+										{(selectedGrid === 1 || selectedGrid === 2) &&
+											isMyProfile &&
+											!context.isMobile &&
+											!isLoadingCards &&
+											!isRefreshingCards &&
+											collectionId == 0 && (
+												<>
+													{isChangingOrder &&
+														((selectedGrid === 1 &&
+															selectedCreatedSortField === 5) ||
+															(selectedGrid === 2 &&
+																selectedOwnedSortField === 5)) && (
+															<>
+																<div
+																	className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none"
+																	onClick={handleCancelOrder}
+																>
+																	Cancel
+																</div>
+																<div
+																	className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none"
+																	onClick={handleSaveOrder}
+																>
+																	Save Order
+																</div>
+															</>
+														)}
+												</>
+											)}
 										<div className="flex-1 hidden sm:flex"></div>
 										<Listbox
 											value={collectionId}
@@ -1058,39 +1481,146 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 														<Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 															<span className="flex items-center">
 																<>
-																	{collectionId && collectionId > 0 ? <img src={menuLists && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId).length > 0 && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId)[0].collection_img_url ? menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId)[0].collection_img_url : DEFAULT_PROFILE_PIC} alt="" className="flex-shrink-0 h-6 w-6 rounded-full mr-3" /> : null}
-																	<span className=" block truncate">{menuLists && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId).length > 0 && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId)[0].collection_name.replace(' (FND)', '')}</span>
+																	{collectionId &&
+																	collectionId > 0 ? (
+																		<img
+																			src={
+																				menuLists &&
+																				menuLists[
+																					selectedGrid - 1
+																				].collections.filter(
+																					t =>
+																						t.collection_id ===
+																						collectionId
+																				).length > 0 &&
+																				menuLists[
+																					selectedGrid - 1
+																				].collections.filter(
+																					t =>
+																						t.collection_id ===
+																						collectionId
+																				)[0]
+																					.collection_img_url
+																					? menuLists[
+																							selectedGrid -
+																								1
+																					  ].collections.filter(
+																							t =>
+																								t.collection_id ===
+																								collectionId
+																					  )[0]
+																							.collection_img_url
+																					: DEFAULT_PROFILE_PIC
+																			}
+																			alt=""
+																			className="flex-shrink-0 h-6 w-6 rounded-full mr-3"
+																		/>
+																	) : null}
+																	<span className=" block truncate">
+																		{menuLists &&
+																			menuLists[
+																				selectedGrid - 1
+																			].collections.filter(
+																				t =>
+																					t.collection_id ===
+																					collectionId
+																			).length > 0 &&
+																			menuLists[
+																				selectedGrid - 1
+																			].collections
+																				.filter(
+																					t =>
+																						t.collection_id ===
+																						collectionId
+																				)[0]
+																				.collection_name.replace(
+																					' (FND)',
+																					''
+																				)}
+																	</span>
 																</>
 															</span>
 															<span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-																<SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+																<SelectorIcon
+																	className="h-5 w-5 text-gray-400"
+																	aria-hidden="true"
+																/>
 															</span>
 														</Listbox.Button>
 
-														<Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-															<Listbox.Options static className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+														<Transition
+															show={open}
+															as={Fragment}
+															leave="transition ease-in duration-100"
+															leaveFrom="opacity-100"
+															leaveTo="opacity-0"
+														>
+															<Listbox.Options
+																static
+																className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+															>
 																{menuLists &&
-																	menuLists[selectedGrid - 1].collections.map(item => (
-																		<Listbox.Option key={item.collection_id} className={({ active }) => classNames(active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={item.collection_id}>
+																	menuLists[
+																		selectedGrid - 1
+																	].collections.map(item => (
+																		<Listbox.Option
+																			key={item.collection_id}
+																			className={({
+																				active,
+																			}) =>
+																				classNames(
+																					active
+																						? 'text-white bg-indigo-600'
+																						: 'text-gray-900',
+																					'cursor-default select-none relative py-2 pl-3 pr-9'
+																				)
+																			}
+																			value={
+																				item.collection_id
+																			}
+																		>
 																			{({ active }) => (
 																				<>
 																					<div className="flex items-center">
-																						<img src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />
+																						<img
+																							src={
+																								item.collection_img_url
+																									? item.collection_img_url
+																									: DEFAULT_PROFILE_PIC
+																							}
+																							alt=""
+																							className="flex-shrink-0 h-6 w-6 rounded-full"
+																						/>
 																						<span
 																							className={classNames(
-																								item.collection_id === collectionId
+																								item.collection_id ===
+																									collectionId
 																									? 'font-normal' // "font-semibold"
 																									: 'font-normal',
 																								'ml-3 block truncate'
 																							)}
 																						>
-																							{item.collection_name.replace(' (FND)', '')}
+																							{item.collection_name.replace(
+																								' (FND)',
+																								''
+																							)}
 																						</span>
 																					</div>
 
-																					{item.collection_id === collectionId ? (
-																						<span className={classNames(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}>
-																							<CheckIcon className="h-5 w-5" aria-hidden="true" />
+																					{item.collection_id ===
+																					collectionId ? (
+																						<span
+																							className={classNames(
+																								active
+																									? 'text-white'
+																									: 'text-indigo-600',
+																								'absolute inset-y-0 right-0 flex items-center pr-4'
+																							)}
+																						>
+																							<CheckIcon
+																								className="h-5 w-5"
+																								aria-hidden="true"
+																							/>
 																						</span>
 																					) : null}
 																				</>
@@ -1105,7 +1635,13 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										</Listbox>
 										<div className="flex-1 flex sm:hidden"></div>
 										<Listbox
-											value={selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField}
+											value={
+												selectedGrid === 1
+													? selectedCreatedSortField
+													: selectedGrid === 2
+													? selectedOwnedSortField
+													: selectedLikedSortField
+											}
 											onChange={value => {
 												handleSortChange(value)
 											}}
@@ -1116,24 +1652,80 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 													{/*<Listbox.Label className="block text-sm text-gray-500 mr-2 hidden">
                             Sort By
                       </Listbox.Label>*/}
-													<div className="relative" style={context.isMobile ? { minWidth: 140 } : { width: 130 }}>
+													<div
+														className="relative"
+														style={
+															context.isMobile
+																? { minWidth: 140 }
+																: { width: 130 }
+														}
+													>
 														<Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-															<span className="block truncate">{sortingOptionsList.filter(t => t.value === (selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField))[0].label}</span>
+															<span className="block truncate">
+																{
+																	sortingOptionsList.filter(
+																		t =>
+																			t.value ===
+																			(selectedGrid === 1
+																				? selectedCreatedSortField
+																				: selectedGrid === 2
+																				? selectedOwnedSortField
+																				: selectedLikedSortField)
+																	)[0].label
+																}
+															</span>
 															<span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-																<SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+																<SelectorIcon
+																	className="h-5 w-5 text-gray-400"
+																	aria-hidden="true"
+																/>
 															</span>
 														</Listbox.Button>
-														<Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-															<Listbox.Options static className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+														<Transition
+															show={open}
+															as={Fragment}
+															leave="transition ease-in duration-100"
+															leaveFrom="opacity-100"
+															leaveTo="opacity-0"
+														>
+															<Listbox.Options
+																static
+																className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+															>
 																{sortingOptionsList
-																	.filter(opts => (menuLists[selectedGrid - 1].has_custom_sort ? true : opts.value !== 5))
+																	.filter(opts =>
+																		menuLists[selectedGrid - 1]
+																			.has_custom_sort
+																			? true
+																			: opts.value !== 5
+																	)
 																	.map(item => (
-																		<Listbox.Option key={item.value} className={({ active }) => classNames(active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={item.value}>
+																		<Listbox.Option
+																			key={item.value}
+																			className={({
+																				active,
+																			}) =>
+																				classNames(
+																					active
+																						? 'text-white bg-indigo-600'
+																						: 'text-gray-900',
+																					'cursor-default select-none relative py-2 pl-3 pr-9'
+																				)
+																			}
+																			value={item.value}
+																		>
 																			{({ active }) => (
 																				<>
 																					<span
 																						className={classNames(
-																							item.value === (selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField)
+																							item.value ===
+																								(selectedGrid ===
+																								1
+																									? selectedCreatedSortField
+																									: selectedGrid ===
+																									  2
+																									? selectedOwnedSortField
+																									: selectedLikedSortField)
 																								? 'font-normal' // "font-semibold"
 																								: 'font-normal',
 																							'block truncate'
@@ -1142,9 +1734,26 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 																						{item.label}
 																					</span>
 
-																					{item.value === (selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField) ? (
-																						<span className={classNames(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}>
-																							<CheckIcon className="h-5 w-5" aria-hidden="true" />
+																					{item.value ===
+																					(selectedGrid ===
+																					1
+																						? selectedCreatedSortField
+																						: selectedGrid ===
+																						  2
+																						? selectedOwnedSortField
+																						: selectedLikedSortField) ? (
+																						<span
+																							className={classNames(
+																								active
+																									? 'text-white'
+																									: 'text-indigo-600',
+																								'absolute inset-y-0 right-0 flex items-center pr-4'
+																							)}
+																						>
+																							<CheckIcon
+																								className="h-5 w-5"
+																								aria-hidden="true"
+																							/>
 																						</span>
 																					) : null}
 																				</>
@@ -1157,42 +1766,109 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												</>
 											)}
 										</Listbox>
-										{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && items?.length > 0 && (
-											<Menu as="div" className="relative inline-block text-left ml-2">
-												{({ open }) => (
-													<>
-														<div>
-															<Menu.Button disabled={isChangingOrder} className="inline-flex justify-center items-center w-full px-2 py-2 text-sm font-medium text-white bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 focus-visible:ring-opacity-75">
-																<PencilAltIcon className="w-4 h-4 ml-1 text-black" aria-hidden="true" />
-																<ChevronDownIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
-															</Menu.Button>
-														</div>
-														<Transition show={open} as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
-															<Menu.Items static className="z-1 absolute right-0 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" style={{ width: 200 }}>
-																<div className="px-1 py-1 ">
-																	<Menu.Item>
-																		{({ active }) => (
-																			<button className={`${active ? 'text-white bg-indigo-600' : 'bg-white text-gray-900'} group flex rounded-md items-center w-full px-2 py-2 text-sm`} onClick={handleClickChangeOrder}>
-																				Customize Order
-																			</button>
-																		)}
-																	</Menu.Item>
-																	{context.myProfile && ((selectedGrid === 1 && context.myProfile.default_created_sort_id === 5) || (selectedGrid === 2 && context.myProfile.default_owned_sort_id === 5) || menuLists[selectedGrid - 1].has_custom_sort) && (
+										{(selectedGrid === 1 || selectedGrid === 2) &&
+											isMyProfile &&
+											!context.isMobile &&
+											!isLoadingCards &&
+											!isRefreshingCards &&
+											collectionId == 0 &&
+											items?.length > 0 && (
+												<Menu
+													as="div"
+													className="relative inline-block text-left ml-2"
+												>
+													{({ open }) => (
+														<>
+															<div>
+																<Menu.Button
+																	disabled={isChangingOrder}
+																	className="inline-flex justify-center items-center w-full px-2 py-2 text-sm font-medium text-white bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 focus-visible:ring-opacity-75"
+																>
+																	<PencilAltIcon
+																		className="w-4 h-4 ml-1 text-black"
+																		aria-hidden="true"
+																	/>
+																	<ChevronDownIcon
+																		className="w-5 h-5 text-gray-400"
+																		aria-hidden="true"
+																	/>
+																</Menu.Button>
+															</div>
+															<Transition
+																show={open}
+																as={Fragment}
+																enter="transition ease-out duration-100"
+																enterFrom="transform opacity-0 scale-95"
+																enterTo="transform opacity-100 scale-100"
+																leave="transition ease-in duration-75"
+																leaveFrom="transform opacity-100 scale-100"
+																leaveTo="transform opacity-0 scale-95"
+															>
+																<Menu.Items
+																	static
+																	className="z-1 absolute right-0 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+																	style={{ width: 200 }}
+																>
+																	<div className="px-1 py-1 ">
 																		<Menu.Item>
 																			{({ active }) => (
-																				<button className={`${active ? 'text-white bg-indigo-600' : 'bg-white text-gray-900'} group flex rounded-md items-center w-full px-2 py-2 text-sm`} onClick={handleClickDeleteCustomOrder}>
-																					Remove Custom Order
+																				<button
+																					className={`${
+																						active
+																							? 'text-white bg-indigo-600'
+																							: 'bg-white text-gray-900'
+																					} group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+																					onClick={
+																						handleClickChangeOrder
+																					}
+																				>
+																					Customize Order
 																				</button>
 																			)}
 																		</Menu.Item>
-																	)}
-																</div>
-															</Menu.Items>
-														</Transition>
-													</>
-												)}
-											</Menu>
-										)}
+																		{context.myProfile &&
+																			((selectedGrid === 1 &&
+																				context.myProfile
+																					.default_created_sort_id ===
+																					5) ||
+																				(selectedGrid ===
+																					2 &&
+																					context
+																						.myProfile
+																						.default_owned_sort_id ===
+																						5) ||
+																				menuLists[
+																					selectedGrid - 1
+																				]
+																					.has_custom_sort) && (
+																				<Menu.Item>
+																					{({
+																						active,
+																					}) => (
+																						<button
+																							className={`${
+																								active
+																									? 'text-white bg-indigo-600'
+																									: 'bg-white text-gray-900'
+																							} group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+																							onClick={
+																								handleClickDeleteCustomOrder
+																							}
+																						>
+																							Remove
+																							Custom
+																							Order
+																						</button>
+																					)}
+																				</Menu.Item>
+																			)}
+																	</div>
+																</Menu.Items>
+															</Transition>
+														</>
+													)}
+												</Menu>
+											)}
 									</div>
 								)}
 
@@ -1205,18 +1881,34 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											}}
 											hasMore={hasMore}
 											endMessage={
-												!isLoadingCards && !isRefreshingCards && !isLoadingMore && collectionId == 0 ? (
-													menuLists[selectedGrid - 1].count_all_nonhidden > menuLists[selectedGrid - 1].count_deduplicated_nonhidden ? (
+												!isLoadingCards &&
+												!isRefreshingCards &&
+												!isLoadingMore &&
+												collectionId == 0 ? (
+													menuLists[selectedGrid - 1]
+														.count_all_nonhidden >
+													menuLists[selectedGrid - 1]
+														.count_deduplicated_nonhidden ? (
 														!showDuplicates ? (
 															<div className="text-center text-gray-400 text-xs">
 																Some duplicate items were hidden.{' '}
-																<span className="cursor-pointer hover:text-gray-700" onClick={() => handleShowDuplicates(true)}>
+																<span
+																	className="cursor-pointer hover:text-gray-700"
+																	onClick={() =>
+																		handleShowDuplicates(true)
+																	}
+																>
 																	Show all
 																</span>
 															</div>
 														) : (
 															<div className="text-center text-gray-400 text-xs">
-																<span className="cursor-pointer hover:text-gray-700" onClick={() => handleShowDuplicates(false)}>
+																<span
+																	className="cursor-pointer hover:text-gray-700"
+																	onClick={() =>
+																		handleShowDuplicates(false)
+																	}
+																>
 																	Hide duplicates
 																</span>
 															</div>
@@ -1224,7 +1916,15 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 													) : null
 												) : null
 											}
-											scrollThreshold={page === 1 ? 0.3 : page < 4 ? 0.5 : page < 6 ? 0.7 : 0.8}
+											scrollThreshold={
+												page === 1
+													? 0.3
+													: page < 4
+													? 0.5
+													: page < 6
+													? 0.7
+													: 0.8
+											}
 											showUserHiddenItems={showUserHiddenItems}
 											showDuplicates={showDuplicates}
 											setHasUserHiddenItems={setHasUserHiddenItems}

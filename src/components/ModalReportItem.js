@@ -4,7 +4,13 @@ import CloseButton from './CloseButton'
 import ScrollableModal from './ScrollableModal'
 import axios from '@/lib/axios'
 
-export default function Modal({ isOpen, setReportModalOpen, nftId, activityId, removeItemFromFeed }) {
+export default function Modal({
+	isOpen,
+	setReportModalOpen,
+	nftId,
+	activityId,
+	removeItemFromFeed,
+}) {
 	const [inputValue, setInputValue] = useState('')
 	const [confirmationShowing, setConfirmationShowing] = useState(false)
 	const [waitingForResponse, setWaitingForResponse] = useState(false)
@@ -15,7 +21,11 @@ export default function Modal({ isOpen, setReportModalOpen, nftId, activityId, r
 		event.preventDefault()
 
 		// Post changes to the API
-		await axios.post('/api/reportitem_v2', { nft_id: nftId, description: inputValue, activity_id: activityId })
+		await axios.post('/api/reportitem_v2', {
+			nft_id: nftId,
+			description: inputValue,
+			activity_id: activityId,
+		})
 
 		setConfirmationShowing(true)
 		setWaitingForResponse(false)
@@ -42,7 +52,9 @@ export default function Modal({ isOpen, setReportModalOpen, nftId, activityId, r
 					<div className="p-4">
 						<form onSubmit={handleSubmit}>
 							<CloseButton setEditModalOpen={setReportModalOpen} />
-							<div className="text-3xl border-b-2 pb-2">Report {/*activityId ? "Activity" : "Item"*/}</div>
+							<div className="text-3xl border-b-2 pb-2">
+								Report {/*activityId ? "Activity" : "Item"*/}
+							</div>
 							{confirmationShowing ? (
 								<div className="my-8">We received your report. Thank you!</div>
 							) : (
@@ -63,7 +75,10 @@ export default function Modal({ isOpen, setReportModalOpen, nftId, activityId, r
 										/>
 									</div>
 									<div className="border-t-2 pt-4">
-										<button type="submit" className="bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition px-4 py-2 w-24 rounded-full float-right">
+										<button
+											type="submit"
+											className="bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition px-4 py-2 w-24 rounded-full float-right"
+										>
 											{waitingForResponse ? (
 												<div className="flex items-center justify-center">
 													<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
