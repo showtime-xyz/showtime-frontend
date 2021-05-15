@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, useCallback, useRef } from 'react'
+import { useEffect, useState, useContext, useCallback, createRef } from 'react'
 import { DEFAULT_PROFILE_PIC, MENTIONS_STYLE } from '@/lib/constants'
 import AppContext from '@/context/app-context'
 import backend from '@/lib/backend'
@@ -10,6 +10,7 @@ import { formatAddressShort } from '@/lib/utilities'
 import axios from '@/lib/axios'
 
 export default function CommentsSection({ item, closeModal, modalRef, commentCount }) {
+	let refArray = []
 	const {
 		nft_id: nftId,
 		owner_id: nftOwnerId,
@@ -18,15 +19,14 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	} = item
 	const context = useContext(AppContext)
 	const { user } = context
+	const [comments, setComments] = useState()
+	const [commentText, setCommentText] = useState('')
+	const [parentComment, setParentComment] = useState(null)
+	const [replyActive, setReplyActive] = useState(false)
 	const [loadingComments, setLoadingComments] = useState(true)
 	const [hasMoreComments, setHasMoreComments] = useState(false)
 	const [loadingMoreComments, setLoadingMoreComments] = useState(true)
-	const [comments, setComments] = useState()
-	const [commentText, setCommentText] = useState('')
 	const [isSubmitting, setIsSubmitting] = useState(false)
-	const [parentComment, setParentComment] = useState(null)
-
-	const commentInputRef = useRef(null)
 
 	const handleSearchQuery = (mentionSearchText, callback) => {
 		if (!mentionSearchText) return
@@ -78,11 +78,16 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 
 	const nestedReply = comment => {
 		setParentComment(comment)
-		setCommentText('@' + (comment.username || comment.name))
-		//if (comments.filter(com => com.comment_id === comment.comment_id)) {
-		commentInputRef?.current?.focus()
-		//}
+		setReplyActive(true)
 	}
+
+	useEffect(() => {
+		if (parentComment && replyActive) {
+			setCommentText('@' + (parentComment.username || parentComment.name))
+			setReplyActive(false)
+		}
+		refArray[0]?.current?.focus()
+	}, [refArray])
 
 	const createComment = async () => {
 		setIsSubmitting(true)
@@ -173,13 +178,19 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	}
 
 	const inputItem = type => {
+		const newInputRef = createRef()
+		refArray.push(newInputRef)
 		return (
 			<div
 				className={`${!type ? 'ml-10 ' : ''} my-2 flex items-stretch flex-col md:flex-row`}
 			>
 				<MentionsInput
-					value={(!type && parentComment) || parentComment === null ? commentText : ''}
-					inputRef={!type ? commentInputRef : null}
+					value={
+						(!type && parentComment) || parentComment === null
+							? commentText
+							: commentText
+					}
+					inputRef={!type ? newInputRef : null}
 					onChange={e => setCommentText(e.target.value)}
 					onFocus={() => context.setCommentInputFocused(true)}
 					onBlur={() => context.setCommentInputFocused(false)}
@@ -211,10 +222,10 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 					}
 					className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700"
 				>
-					{isSubmitting ? (
-						<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
-					) : (
+					{!isSubmitting || (isSubmitting && !type) ? (
 						'Post'
+					) : (
+						<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
 					)}
 				</button>
 			</div>
@@ -223,7 +234,6 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 
 	return (
 		<div className="w-full">
-			{/* Comments */}
 			<div>
 				<div className="md:text-lg py-4" id="CommentsSectionScroll">
 					Comments
@@ -233,7 +243,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 						<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 					</div>
 				) : (
-					<>
+					<div>
 						<div className="py-2 px-4 border-2 border-gray-300 rounded-xl">
 							{hasMoreComments && (
 								<div className="flex flex-row items-center my-2 justify-center">
@@ -263,7 +273,9 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 											{comment.replies?.length > 0 && (
 												<div className="ml-10">
 													{comment.replies?.map(comment => (
-														<div>{commentItem(comment, true)}</div>
+														<div key={comment.comment_id}>
+															{commentItem(comment, true)}
+														</div>
 													))}
 												</div>
 											)}
@@ -277,7 +289,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 							</div>
 							{inputItem(true)}
 						</div>
-					</>
+					</div>
 				)}
 			</div>
 		</div>
