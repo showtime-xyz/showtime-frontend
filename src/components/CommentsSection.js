@@ -79,7 +79,9 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	const nestedReply = comment => {
 		setParentComment(comment)
 		setCommentText('@' + (comment.username || comment.name))
-		commentInputRef.current.focus()
+		//if (comments.filter(com => com.comment_id === comment.comment_id)) {
+		commentInputRef?.current?.focus()
+		//}
 	}
 
 	const createComment = async () => {
@@ -154,6 +156,71 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		</div>
 	)
 
+	const commentItem = (comment, type) => {
+		return (
+			<Comment
+				key={comment.comment_id}
+				comment={comment}
+				modalRef={modalRef}
+				closeModal={closeModal}
+				deleteComment={deleteComment}
+				nftOwnerId={ownerCount > 0 ? null : nftOwnerId}
+				nftCreatorId={nftCreatorId}
+				nestedReply={nestedReply}
+				isReply={type}
+			/>
+		)
+	}
+
+	const inputItem = type => {
+		return (
+			<div
+				className={`${!type ? 'ml-10 ' : ''} my-2 flex items-stretch flex-col md:flex-row`}
+			>
+				<MentionsInput
+					value={(!type && parentComment) || parentComment === null ? commentText : ''}
+					inputRef={!type ? commentInputRef : null}
+					onChange={e => setCommentText(e.target.value)}
+					onFocus={() => context.setCommentInputFocused(true)}
+					onBlur={() => context.setCommentInputFocused(false)}
+					disabled={context.disableComments || (type && parentComment)}
+					style={MENTIONS_STYLE}
+					placeholder="Your comment..."
+					className="flex-grow md:mr-2"
+					allowSuggestionsAboveCursor
+					allowSpaceInQuery
+					maxLength={240}
+				>
+					<Mention
+						trigger="@"
+						renderSuggestion={s => suggestion(s)}
+						displayTransform={(id, display) => `${display}`}
+						data={handleDebouncedSearchQuery}
+						className="bg-purple-200 rounded -ml-1 sm:ml-0"
+						appendSpaceOnAdd
+					/>
+				</MentionsInput>
+				<button
+					onClick={!user ? handleLoggedOutComment : createComment}
+					disabled={
+						isSubmitting ||
+						!commentText ||
+						commentText === '' ||
+						commentText.trim() === '' ||
+						context.disableComments
+					}
+					className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700"
+				>
+					{isSubmitting ? (
+						<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
+					) : (
+						'Post'
+					)}
+				</button>
+			</div>
+		)
+	}
+
 	return (
 		<div className="w-full">
 			{/* Comments */}
@@ -190,32 +257,13 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 								{comments.length > 0 ? (
 									comments.map(comment => (
 										<div key={comment.comment_id}>
-											<Comment
-												comment={comment}
-												modalRef={modalRef}
-												closeModal={closeModal}
-												deleteComment={deleteComment}
-												nftOwnerId={ownerCount > 0 ? null : nftOwnerId}
-												nftCreatorId={nftCreatorId}
-												nestedReply={nestedReply}
-												isReply={false}
-											/>
+											{commentItem(comment, false)}
+											{parentComment?.comment_id === comment?.comment_id &&
+												inputItem(false)}
 											{comment.replies?.length > 0 && (
 												<div className="ml-10">
 													{comment.replies?.map(comment => (
-														<Comment
-															comment={comment}
-															modalRef={modalRef}
-															key={comment.comment_id}
-															closeModal={closeModal}
-															deleteComment={deleteComment}
-															nftOwnerId={
-																ownerCount > 0 ? null : nftOwnerId
-															}
-															nftCreatorId={nftCreatorId}
-															nestedReply={nestedReply}
-															isReply={true}
-														/>
+														<div>{commentItem(comment, true)}</div>
 													))}
 												</div>
 											)}
@@ -227,49 +275,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 									</div>
 								)}
 							</div>
-							{/* New Comment */}
-							<div className="my-2 flex items-stretch flex-col md:flex-row">
-								<MentionsInput
-									value={commentText}
-									inputRef={commentInputRef}
-									onChange={e => setCommentText(e.target.value)}
-									onFocus={() => context.setCommentInputFocused(true)}
-									onBlur={() => context.setCommentInputFocused(false)}
-									disabled={context.disableComments}
-									style={MENTIONS_STYLE}
-									placeholder="Your comment..."
-									className="flex-grow md:mr-2"
-									allowSuggestionsAboveCursor
-									allowSpaceInQuery
-									maxLength={240}
-								>
-									<Mention
-										trigger="@"
-										renderSuggestion={s => suggestion(s)}
-										displayTransform={(id, display) => `${display}`}
-										data={handleDebouncedSearchQuery}
-										className="bg-purple-200 rounded -ml-1 sm:ml-0"
-										appendSpaceOnAdd
-									/>
-								</MentionsInput>
-								<button
-									onClick={!user ? handleLoggedOutComment : createComment}
-									disabled={
-										isSubmitting ||
-										!commentText ||
-										commentText === '' ||
-										commentText.trim() === '' ||
-										context.disableComments
-									}
-									className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700"
-								>
-									{isSubmitting ? (
-										<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
-									) : (
-										'Post'
-									)}
-								</button>
-							</div>
+							{inputItem(true)}
 						</div>
 					</>
 				)}
