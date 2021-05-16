@@ -124,3 +124,63 @@ export const activityIconObjects = {
 }
 
 export const PROFILE_TABS = [null, 'created', 'owned', 'liked'] // first  item blank due to tabs being 1-indexed
+
+// TODO: Convert to classes and include it into the MentionsInput component
+export const MENTIONS_STYLE = {
+	control: {
+		backgroundColor: '#fff',
+		fontSize: 14,
+		borderRadius: 10,
+	},
+
+	'&multiLine': {
+		control: {
+			minHeight: 63,
+		},
+		highlighter: {
+			padding: 9,
+			border: '2px solid transparent',
+			borderRadius: 10,
+		},
+		input: {
+			padding: 9,
+			border: '2px solid #d1d5da',
+			borderRadius: 8,
+			'&focused': {
+				border: '2px solid black',
+			},
+		},
+	},
+
+	'&singleLine': {
+		display: 'inline-block',
+		width: 180,
+
+		highlighter: {
+			padding: 1,
+			border: '2px inset transparent',
+		},
+		input: {
+			padding: 1,
+			border: '2px inset',
+			borderRadius: 10,
+		},
+	},
+
+	suggestions: {
+		list: {
+			backgroundColor: 'white',
+			border: '1px solid rgba(0,0,0,0.15)',
+			fontSize: 14,
+			borderRadius: 10,
+			overflow: 'hidden',
+		},
+		item: {
+			padding: '5px 15px',
+			// borderBottom: "1px solid rgba(0,0,0,0.15)",
+			'&focused': {
+				backgroundColor: '#dddeff',
+			},
+		},
+	},
+}

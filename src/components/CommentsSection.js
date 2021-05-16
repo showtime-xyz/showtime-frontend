@@ -1,5 +1,5 @@
-import { useEffect, useState, useContext, useCallback } from 'react'
-import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
+import { useEffect, useState, useContext, useCallback, createRef } from 'react'
+import { DEFAULT_PROFILE_PIC, MENTIONS_STYLE } from '@/lib/constants'
 import AppContext from '@/context/app-context'
 import backend from '@/lib/backend'
 import mixpanel from 'mixpanel-browser'
@@ -9,77 +9,23 @@ import AwesomeDebouncePromise from 'awesome-debounce-promise'
 import { formatAddressShort } from '@/lib/utilities'
 import axios from '@/lib/axios'
 
-// TODO: Convert to classes and include it into the MentionsInput component
-const mentionsStyle = {
-	control: {
-		backgroundColor: '#fff',
-		fontSize: 14,
-		borderRadius: 10,
-	},
-
-	'&multiLine': {
-		control: {
-			minHeight: 63,
-		},
-		highlighter: {
-			padding: 9,
-			border: '2px solid transparent',
-			borderRadius: 10,
-		},
-		input: {
-			padding: 9,
-			border: '2px solid #d1d5da',
-			borderRadius: 8,
-			'&focused': {
-				border: '2px solid black',
-			},
-		},
-	},
-
-	'&singleLine': {
-		display: 'inline-block',
-		width: 180,
-
-		highlighter: {
-			padding: 1,
-			border: '2px inset transparent',
-		},
-		input: {
-			padding: 1,
-			border: '2px inset',
-			borderRadius: 10,
-		},
-	},
-
-	suggestions: {
-		list: {
-			backgroundColor: 'white',
-			border: '1px solid rgba(0,0,0,0.15)',
-			fontSize: 14,
-			borderRadius: 10,
-			overflow: 'hidden',
-		},
-		item: {
-			padding: '5px 15px',
-			// borderBottom: "1px solid rgba(0,0,0,0.15)",
-			'&focused': {
-				backgroundColor: '#dddeff',
-			},
-		},
-	},
-}
-
 export default function CommentsSection({ item, closeModal, modalRef, commentCount }) {
-	const { nft_id: nftId, owner_id: nftOwnerId, creator_id: nftCreatorId, owner_count: ownerCount } = item
 	const context = useContext(AppContext)
 	const { user } = context
-	const [loadingComments, setLoadingComments] = useState(true)
-	const [loadingMoreComments, setLoadingMoreComments] = useState(true)
-	const [hasMoreComments, setHasMoreComments] = useState(false)
+	let refArray = []
+
+	const { nft_id: nftId, owner_id: nftOwnerId, creator_id: nftCreatorId, owner_count: ownerCount } = item
+
 	const [comments, setComments] = useState()
 	const [commentText, setCommentText] = useState('')
+	const [parentComment, setParentComment] = useState(null)
+	const [siblingComment, setSiblingComment] = useState(null)
+	const [replyActive, setReplyActive] = useState(false)
+	const [loadingComments, setLoadingComments] = useState(true)
+	const [hasMoreComments, setHasMoreComments] = useState(false)
+	const [loadingMoreComments, setLoadingMoreComments] = useState(true)
 	const [isSubmitting, setIsSubmitting] = useState(false)
-	const [focused, setFocused] = useState(false)
+	const [mentionAdded, setMentionAdded] = useState(false)
 
 	const handleSearchQuery = (mentionSearchText, callback) => {
 		if (!mentionSearchText) return
@@ -97,7 +43,20 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 					img_url: r.img_url || DEFAULT_PROFILE_PIC,
 				}))
 			)
-			.then(callback)
+			.then(res => {
+				callback(res)
+				if (parentComment) {
+					res.find(r => {
+						if (r.username === mentionSearchText) {
+							let list = document.querySelector('div.st-mentions-input ul')
+							if (list) {
+								setMentionAdded(true)
+								list.style.display = 'none'
+							}
+						}
+					})
+				}
+			})
 	}
 
 	const handleDebouncedSearchQuery = useCallback(AwesomeDebouncePromise(handleSearchQuery, 300), [])
@@ -109,18 +68,6 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		setLoadingComments(false)
 	}
 
-	useEffect(() => {
-		setHasMoreComments(false)
-		setLoadingComments(true)
-		setLoadingMoreComments(false)
-		refreshComments()
-		return () => setComments(null)
-	}, [nftId])
-
-	useEffect(() => {
-		context.setCommentInputFocused(focused)
-	}, [focused])
-
 	const handleGetMoreComments = async () => {
 		setLoadingMoreComments(true)
 		await refreshComments(nftId)
@@ -128,40 +75,51 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		setHasMoreComments(false)
 	}
 
+	const handleReply = comment => {
+		let nestedReply
+		if (comment.parent_id) {
+			nestedReply = comments.find(com => {
+				return com.comment_id === comment.parent_id
+			})
+			setParentComment(nestedReply)
+			setSiblingComment(comment)
+		} else {
+			setParentComment(comment)
+		}
+		setReplyActive(true)
+	}
+
 	const createComment = async () => {
 		setIsSubmitting(true)
-		// post new comment
-		try {
-			await axios
-				.post('/api/createcomment', { nftId, message: commentText })
-				.then(() => {
-					// pull new comments
-					refreshComments(false)
-					storeCommentInContext()
-					mixpanel.track('Comment created')
-				})
-				.catch(err => {
-					if (err.response.data.code === 429) {
-						return context.setThrottleMessage(err.response.data.message)
-					}
-					console.error(err)
-				})
-		} catch (err) {
-			console.error(err)
+		let endpoint = '/api/createcomment'
+		let payload = {
+			nftId,
+			message: commentText,
+			parent_id: parentComment?.comment_id,
 		}
-
-		// clear state
+		await axios
+			.post(endpoint, payload)
+			.then(() => {
+				refreshComments(false)
+				storeCommentInContext()
+				parentComment ? mixpanel.track('Reply created') : mixpanel.track('Comment created')
+			})
+			.catch(err => {
+				if (err.response.data.code === 429) {
+					return context.setThrottleMessage(err.response.data.message)
+				}
+				console.error(err)
+			})
 		setCommentText('')
+		setParentComment(null)
+		setSiblingComment(null)
 		setIsSubmitting(false)
 	}
 
 	const deleteComment = async commentId => {
-		// post new comment
 		await axios.post('/api/deletecomment', { commentId })
-
 		removeCommentFromContext()
 		mixpanel.track('Comment deleted')
-		// pull new comments
 		await refreshComments(false)
 	}
 
@@ -173,7 +131,6 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	const storeCommentInContext = async () => {
 		const myCommentCounts = context.myCommentCounts
 		const newAmountOfMyComments = ((myCommentCounts && myCommentCounts[nftId]) || commentCount) + 1
-
 		context.setMyCommentCounts({
 			...context.myCommentCounts,
 			[nftId]: newAmountOfMyComments,
@@ -195,9 +152,63 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		}
 	}
 
+	useEffect(() => {
+		setHasMoreComments(false)
+		setLoadingComments(true)
+		setLoadingMoreComments(false)
+		refreshComments()
+		return () => setComments(null)
+	}, [nftId])
+
+	useEffect(() => {
+		if (parentComment && replyActive) {
+			if (siblingComment) {
+				setCommentText('@' + (siblingComment.username || siblingComment.name))
+			} else {
+				setCommentText('@' + (parentComment.username || parentComment.name))
+			}
+			refArray[0]?.current?.focus()
+			setReplyActive(false)
+		}
+	}, [refArray])
+
+	useEffect(() => {
+		let link = document.querySelector('div.st-mentions-input li')
+		link?.click()
+		setMentionAdded(false)
+	}, [mentionAdded])
+
+	const suggestion = s => {
+		return (
+			<div className="flex items-center">
+				<img src={s.img_url} className="h-6 w-6 mr-2 rounded-full" />
+				<span className="">{s.display}</span>
+				{s.username && <span className="text-gray-400 ml-2">@{s.username}</span>}
+			</div>
+		)
+	}
+
+	const commentItem = comment => {
+		return <Comment key={comment.comment_id} comment={comment} modalRef={modalRef} closeModal={closeModal} deleteComment={deleteComment} nftOwnerId={ownerCount > 0 ? null : nftOwnerId} nftCreatorId={nftCreatorId} handleReply={handleReply} />
+	}
+
+	const inputItem = type => {
+		const newInputRef = createRef()
+		refArray.push(newInputRef)
+		return (
+			<div className={`${!type ? 'ml-10 ' : ''} my-2 flex items-stretch flex-col md:flex-row`}>
+				<MentionsInput value={(!type && parentComment) || parentComment === null ? commentText : ''} inputRef={!type ? newInputRef : null} onChange={e => setCommentText(e.target.value)} onFocus={() => context.setCommentInputFocused(true)} onBlur={() => context.setCommentInputFocused(false)} disabled={context.disableComments || (type && parentComment)} style={MENTIONS_STYLE} placeholder="Your comment..." className="st-mentions-input flex-grow md:mr-2" allowSuggestionsAboveCursor allowSpaceInQuery maxLength={240}>
+					<Mention trigger="@" renderSuggestion={parentComment ? null : s => suggestion(s)} displayTransform={(_, display) => `${display}`} data={parentComment ? handleSearchQuery : handleDebouncedSearchQuery} className="bg-purple-200 rounded -ml-1 sm:ml-0" appendSpaceOnAdd />
+				</MentionsInput>
+				<button onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700">
+					{isSubmitting && type && parentComment ? 'Post' : isSubmitting && !type ? <div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" /> : isSubmitting && type ? <div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" /> : 'Post'}
+				</button>
+			</div>
+		)
+	}
+
 	return (
 		<div className="w-full">
-			{/* Comments */}
 			<div>
 				<div className="md:text-lg py-4" id="CommentsSectionScroll">
 					Comments
@@ -207,7 +218,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 						<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 					</div>
 				) : (
-					<>
+					<div>
 						<div className="py-2 px-4 border-2 border-gray-300 rounded-xl">
 							{hasMoreComments && (
 								<div className="flex flex-row items-center my-2 justify-center">
@@ -222,45 +233,31 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 									)}
 								</div>
 							)}
-							<div className="mb-4">{comments.length > 0 ? comments.map(comment => <Comment comment={comment} key={comment.comment_id} closeModal={closeModal} modalRef={modalRef} deleteComment={deleteComment} nftOwnerId={ownerCount > 0 ? null : nftOwnerId} nftCreatorId={nftCreatorId} />) : <div className="my-2 mb-3 p-3 bg-gray-100 rounded-xl">No comments yet.</div>}</div>
-							{/* New Comment */}
-							<div className="my-2 flex items-stretch flex-col md:flex-row">
-								<MentionsInput
-									value={commentText}
-									onChange={e => {
-										setCommentText(e.target.value)
-									}}
-									onFocus={() => setFocused(true)}
-									onBlur={() => setFocused(false)}
-									disabled={context.disableComments}
-									placeholder="Your comment..."
-									className="flex-grow md:mr-2"
-									allowSuggestionsAboveCursor
-									allowSpaceInQuery
-									style={mentionsStyle}
-									maxLength={240}
-								>
-									<Mention
-										renderSuggestion={s => (
-											<div className="flex items-center">
-												<img src={s.img_url} className="h-6 w-6 mr-2 rounded-full" />
-												<span className="">{s.display}</span>
-												{s.username && <span className="text-gray-400 ml-2">@{s.username}</span>}
-											</div>
-										)}
-										displayTransform={(id, display) => `${display}`}
-										trigger="@"
-										data={handleDebouncedSearchQuery}
-										className="bg-purple-200 rounded -ml-1 sm:ml-0"
-										appendSpaceOnAdd
-									/>
-								</MentionsInput>
-								<button onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700">
-									{isSubmitting ? <div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" /> : 'Post'}
-								</button>
+							<div className="mb-4">
+								{comments.length > 0 ? (
+									comments.map(comment => (
+										<div key={comment.comment_id}>
+											{commentItem(comment)}
+											{parentComment?.comment_id === comment?.comment_id && siblingComment === null && inputItem(false)}
+											{comment.replies?.length > 0 && (
+												<div className="ml-10">
+													{comment.replies?.map(comment => (
+														<div key={comment.comment_id}>
+															{commentItem(comment)}
+															{parentComment?.comment_id === comment?.parent_id && comment?.comment_id === siblingComment?.comment_id && inputItem(false)}
+														</div>
+													))}
+												</div>
+											)}
+										</div>
+									))
+								) : (
+									<div className="my-2 mb-3 p-3 bg-gray-100 rounded-xl">No comments yet.</div>
+								)}
 							</div>
+							{inputItem(true)}
 						</div>
-					</>
+					</div>
 				)}
 			</div>
 		</div>

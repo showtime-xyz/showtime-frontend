@@ -3,16 +3,17 @@ import Link from 'next/link'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import { formatDistanceToNowStrict, subSeconds } from 'date-fns'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
+import { faEllipsisH, faReply } from '@fortawesome/free-solid-svg-icons'
 import useDetectOutsideClick from '@/hooks/useDetectOutsideClick'
 import AppContext from '@/context/app-context'
 import reactStringReplace from 'react-string-replace'
 import { formatAddressShort } from '@/lib/utilities'
 
-export default function Comment({ comment, closeModal, modalRef, deleteComment, nftOwnerId, nftCreatorId }) {
+export default function Comment({ comment, closeModal, modalRef, deleteComment, nftOwnerId, nftCreatorId, handleReply }) {
 	const context = useContext(AppContext)
 	const { myProfile } = context
 	const dropdownRef = useRef(null)
+
 	const commentWithMentions = reactStringReplace(comment.text, /(@\[.+?\]\(\w+\))/g, (match, i) => {
 		const [, name, urlParam] = match.match(/@\[(.+?)\]\((\w+)\)/)
 		return (
@@ -21,7 +22,6 @@ export default function Comment({ comment, closeModal, modalRef, deleteComment, 
 			</Link>
 		)
 	})
-	// console.log(replaced);
 	const [isDeleting, setIsDeleting] = useState(false)
 	const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false, modalRef)
 	const toggleDropdown = () => {
@@ -90,6 +90,13 @@ export default function Comment({ comment, closeModal, modalRef, deleteComment, 
 					)}
 				</div>
 				<div className="text-gray-500 text-sm leading-5 break-words">{commentWithMentions}</div>
+				<div className="flex">
+					<div className="flex-grow"></div>
+					<div onClick={() => handleReply(comment)} className="w-10 flex items-center justify-end text-gray-400 text-xs sm:mb-0 cursor-pointer -mt-2">
+						reply
+						<FontAwesomeIcon className="ml-1 fa-flip-horizontal" icon={faReply} />
+					</div>
+				</div>
 			</div>
 		</div>
 	)
