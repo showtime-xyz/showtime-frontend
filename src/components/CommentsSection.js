@@ -174,7 +174,11 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 
 	useEffect(() => {
 		if (parentComment && replyActive) {
-			setCommentText('@' + (parentComment.username || parentComment.name))
+			if (siblingComment) {
+				setCommentText('@' + (siblingComment.username || siblingComment.name))
+			} else {
+				setCommentText('@' + (parentComment.username || parentComment.name))
+			}
 			refArray[0]?.current?.focus()
 			setReplyActive(false)
 		}
@@ -196,7 +200,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		)
 	}
 
-	const commentItem = (comment, type) => {
+	const commentItem = comment => {
 		return (
 			<Comment
 				key={comment.comment_id}
@@ -207,7 +211,6 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 				nftOwnerId={ownerCount > 0 ? null : nftOwnerId}
 				nftCreatorId={nftCreatorId}
 				handleReply={handleReply}
-				isReply={type}
 			/>
 		)
 	}
@@ -253,10 +256,10 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 					}
 					className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700"
 				>
-					{!isSubmitting ? (
-						'Post'
-					) : (
+					{isSubmitting && !type ? (
 						<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
+					) : (
+						'Post'
 					)}
 				</button>
 			</div>
@@ -298,7 +301,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 								{comments.length > 0 ? (
 									comments.map(comment => (
 										<div key={comment.comment_id}>
-											{commentItem(comment, false)}
+											{commentItem(comment)}
 											{parentComment?.comment_id === comment?.comment_id &&
 												siblingComment === null &&
 												inputItem(false)}
@@ -306,7 +309,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 												<div className="ml-10">
 													{comment.replies?.map(comment => (
 														<div key={comment.comment_id}>
-															{commentItem(comment, true)}
+															{commentItem(comment)}
 															{parentComment?.comment_id ===
 																comment?.parent_id &&
 																comment?.comment_id ===
