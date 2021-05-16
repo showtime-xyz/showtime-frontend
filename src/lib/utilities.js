@@ -48,10 +48,7 @@ export const getBidLink = item => {
 			}
 		case CONTRACTS.PORTIONIO:
 			if (item.token_img_original_url) {
-				return `https://app.portion.io/#exchange?ID=${item.token_img_original_url.replace(
-					'https://ipfs.io/ipfs/',
-					''
-				)}`
+				return `https://app.portion.io/#exchange?ID=${item.token_img_original_url.replace('https://ipfs.io/ipfs/', '')}`
 			} else {
 				return `https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`
 			}
@@ -133,10 +130,7 @@ export const getContractName = item => {
 export const filterNewRecs = (newRecs, oldRecs, alreadyFollowed) => {
 	let filteredData = []
 	newRecs.forEach(newRec => {
-		if (
-			!oldRecs.find(oldRec => oldRec.profile_id === newRec.profile_id) &&
-			!alreadyFollowed.find(followed => followed.profile_id === newRec.profile_id)
-		) {
+		if (!oldRecs.find(oldRec => oldRec.profile_id === newRec.profile_id) && !alreadyFollowed.find(followed => followed.profile_id === newRec.profile_id)) {
 			filteredData.push(newRec)
 		}
 	})

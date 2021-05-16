@@ -17,12 +17,7 @@ export default function Follow({ act }) {
 				{count === 1 && (
 					<>
 						Followed{' '}
-						<Link
-							href="/[profile]"
-							as={`/${
-								counterparties[0]?.username || counterparties[0]?.wallet_address
-							}`}
-						>
+						<Link href="/[profile]" as={`/${counterparties[0]?.username || counterparties[0]?.wallet_address}`}>
 							<a
 								className="text-black hover:text-stpink"
 								onClick={() => {
@@ -38,12 +33,7 @@ export default function Follow({ act }) {
 				{count === 2 && (
 					<>
 						Followed{' '}
-						<Link
-							href="/[profile]"
-							as={`/${
-								counterparties[0]?.username || counterparties[0]?.wallet_address
-							}`}
-						>
+						<Link href="/[profile]" as={`/${counterparties[0]?.username || counterparties[0]?.wallet_address}`}>
 							<a
 								className="text-black hover:text-stpink"
 								onClick={() => {
@@ -54,12 +44,7 @@ export default function Follow({ act }) {
 							</a>
 						</Link>{' '}
 						and{' '}
-						<Link
-							href="/[profile]"
-							as={`/${
-								counterparties[1]?.username || counterparties[1]?.wallet_address
-							}`}
-						>
+						<Link href="/[profile]" as={`/${counterparties[1]?.username || counterparties[1]?.wallet_address}`}>
 							<a
 								className="text-black hover:text-stpink"
 								onClick={() => {
@@ -75,12 +60,7 @@ export default function Follow({ act }) {
 				{count === 3 && (
 					<>
 						Followed{' '}
-						<Link
-							href="/[profile]"
-							as={`/${
-								counterparties[0]?.username || counterparties[0]?.wallet_address
-							}`}
-						>
+						<Link href="/[profile]" as={`/${counterparties[0]?.username || counterparties[0]?.wallet_address}`}>
 							<a
 								className="text-black hover:text-stpink"
 								onClick={() => {
@@ -91,12 +71,7 @@ export default function Follow({ act }) {
 							</a>
 						</Link>
 						,{' '}
-						<Link
-							href="/[profile]"
-							as={`/${
-								counterparties[1]?.username || counterparties[1]?.wallet_address
-							}`}
-						>
+						<Link href="/[profile]" as={`/${counterparties[1]?.username || counterparties[1]?.wallet_address}`}>
 							<a
 								className="text-black hover:text-stpink"
 								onClick={() => {
@@ -107,12 +82,7 @@ export default function Follow({ act }) {
 							</a>
 						</Link>{' '}
 						and{' '}
-						<Link
-							href="/[profile]"
-							as={`/${
-								counterparties[2]?.username || counterparties[2]?.wallet_address
-							}`}
-						>
+						<Link href="/[profile]" as={`/${counterparties[2]?.username || counterparties[2]?.wallet_address}`}>
 							<a
 								className="text-black hover:text-stpink"
 								onClick={() => {
@@ -128,12 +98,7 @@ export default function Follow({ act }) {
 				{count > 3 && (
 					<>
 						Followed{' '}
-						<Link
-							href="/[profile]"
-							as={`/${
-								counterparties[0]?.username || counterparties[0]?.wallet_address
-							}`}
-						>
+						<Link href="/[profile]" as={`/${counterparties[0]?.username || counterparties[0]?.wallet_address}`}>
 							<a
 								className="text-black hover:text-stpink"
 								onClick={() => {
@@ -144,12 +109,7 @@ export default function Follow({ act }) {
 							</a>
 						</Link>
 						,{' '}
-						<Link
-							href="/[profile]"
-							as={`/${
-								counterparties[1]?.username || counterparties[1]?.wallet_address
-							}`}
-						>
+						<Link href="/[profile]" as={`/${counterparties[1]?.username || counterparties[1]?.wallet_address}`}>
 							<a
 								className="text-black hover:text-stpink"
 								onClick={() => {

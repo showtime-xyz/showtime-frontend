@@ -12,13 +12,7 @@ import ModalTokenDetail from '@/components/ModalTokenDetail'
 import ActivityRecommendedFollows from '@/components/ActivityRecommendedFollows'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment, faHeart, faUser } from '@fortawesome/free-regular-svg-icons'
-import {
-	faComment as fasComment,
-	faHeart as fasHeart,
-	faFingerprint,
-	faUser as fasUser,
-	faFilter,
-} from '@fortawesome/free-solid-svg-icons'
+import { faComment as fasComment, faHeart as fasHeart, faFingerprint, faUser as fasUser, faFilter } from '@fortawesome/free-solid-svg-icons'
 import ModalReportItem from '@/components/ModalReportItem'
 import RecommendFollowers from '@/components/RecommendFollowers'
 import axios from '@/lib/axios'
@@ -181,27 +175,8 @@ const Activity = () => {
 		<>
 			{typeof document !== 'undefined' ? (
 				<>
-					<ModalTokenDetail
-						isOpen={itemOpenInModal}
-						setEditModalOpen={setItemOpenInModal}
-						item={
-							itemOpenInModal?.nftGroup
-								? itemOpenInModal.nftGroup[itemOpenInModal?.index]
-								: null
-						}
-						goToNext={goToNext}
-						goToPrevious={goToPrevious}
-						hasNext={
-							!(itemOpenInModal?.index === itemOpenInModal?.nftGroup?.length - 1)
-						}
-						hasPrevious={!(itemOpenInModal?.index === 0)}
-					/>
-					<ModalReportItem
-						isOpen={reportModalIsOpen}
-						setReportModalOpen={setReportModalIsOpen}
-						activityId={reportModalIsOpen}
-						removeItemFromFeed={removeItemFromFeed}
-					/>
+					<ModalTokenDetail isOpen={itemOpenInModal} setEditModalOpen={setItemOpenInModal} item={itemOpenInModal?.nftGroup ? itemOpenInModal.nftGroup[itemOpenInModal?.index] : null} goToNext={goToNext} goToPrevious={goToPrevious} hasNext={!(itemOpenInModal?.index === itemOpenInModal?.nftGroup?.length - 1)} hasPrevious={!(itemOpenInModal?.index === 0)} />
+					<ModalReportItem isOpen={reportModalIsOpen} setReportModalOpen={setReportModalIsOpen} activityId={reportModalIsOpen} removeItemFromFeed={removeItemFromFeed} />
 				</>
 			) : null}
 			<Layout>
@@ -210,38 +185,27 @@ const Activity = () => {
 					<meta name="description" content="Discover and showcase crypto art" />
 					<meta property="og:type" content="website" />
 					<meta name="og:description" content="Discover and showcase crypto art" />
-					<meta
-						property="og:image"
-						content="https://storage.googleapis.com/showtime-nft-thumbnails/twitter_card_showtime.jpg"
-					/>
+					<meta property="og:image" content="https://storage.googleapis.com/showtime-nft-thumbnails/twitter_card_showtime.jpg" />
 					<meta name="og:title" content="Showtime" />
 
 					<meta name="twitter:card" content="summary_large_image" />
 					<meta name="twitter:title" content="Showtime" />
 					<meta name="twitter:description" content="Discover and showcase crypto art" />
-					<meta
-						name="twitter:image"
-						content="https://storage.googleapis.com/showtime-nft-thumbnails/twitter_card_showtime.jpg"
-					/>
+					<meta name="twitter:image" content="https://storage.googleapis.com/showtime-nft-thumbnails/twitter_card_showtime.jpg" />
 				</Head>
 
 				{context.user === null ? (
 					<div
 						className="py-12 sm:py-14 px-8 sm:px-10 text-left"
 						style={{
-							background:
-								'linear-gradient(130deg, rgba(6,216,255,1) 0%, rgba(69,52,245,0.8) 48%, rgba(194,38,173,0.7) 100%)',
+							background: 'linear-gradient(130deg, rgba(6,216,255,1) 0%, rgba(69,52,245,0.8) 48%, rgba(194,38,173,0.7) 100%)',
 						}}
 					>
 						<CappedWidth>
 							<div className="flex flex-row mx-3 text-white">
 								<div className="flex-1">
-									<div className="text-xl sm:text-2xl">
-										Discover &amp; Showcase
-									</div>
-									<div className="text-4xl sm:text-6xl font-afro">
-										Your Favorite
-									</div>
+									<div className="text-xl sm:text-2xl">Discover &amp; Showcase</div>
+									<div className="text-4xl sm:text-6xl font-afro">Your Favorite</div>
 									<div className="text-4xl sm:text-6xl">Crypto Art.</div>
 								</div>
 							</div>
@@ -267,21 +231,13 @@ const Activity = () => {
 						</div>
 
 						<div className="grid md:grid-cols-3 xl:grid-cols-4">
-							<div
-								className={`px-3 col-span-2 md:col-span-1 mb-4 md:mb-0 ${
-									showFiltersMobile ? null : 'hidden'
-								} sm:block`}
-							>
+							<div className={`px-3 col-span-2 md:col-span-1 mb-4 md:mb-0 ${showFiltersMobile ? null : 'hidden'} sm:block`}>
 								<div className="px-4 py-4 h-max rounded-lg sticky top-24 bg-white shadow-md">
 									<div
 										onClick={() => {
 											handleFilterClick(0)
 										}}
-										className={`hover:bg-blue-100 mb-1 p-2 rounded-lg px-3 ${
-											activityTypeFilter === 0
-												? 'text-blue-500 bg-blue-100'
-												: 'text-gray-500'
-										}  hover:text-blue-500 cursor-pointer transition-all`}
+										className={`hover:bg-blue-100 mb-1 p-2 rounded-lg px-3 ${activityTypeFilter === 0 ? 'text-blue-500 bg-blue-100' : 'text-gray-500'}  hover:text-blue-500 cursor-pointer transition-all`}
 									>
 										All News
 									</div>
@@ -289,62 +245,31 @@ const Activity = () => {
 										onClick={() => {
 											handleFilterClick(3)
 										}}
-										className={`hover:bg-stpurple100 mb-1 p-2 rounded-lg px-3 ${
-											activityTypeFilter === 3
-												? 'text-stpurple700 bg-stpurple100'
-												: 'text-gray-500'
-										} hover:text-stpurple700 cursor-pointer transition-all flex flex-row items-center`}
+										className={`hover:bg-stpurple100 mb-1 p-2 rounded-lg px-3 ${activityTypeFilter === 3 ? 'text-stpurple700 bg-stpurple100' : 'text-gray-500'} hover:text-stpurple700 cursor-pointer transition-all flex flex-row items-center`}
 									>
-										<FontAwesomeIcon
-											icon={faFingerprint}
-											className="mr-2 w-4 h-4"
-										/>
+										<FontAwesomeIcon icon={faFingerprint} className="mr-2 w-4 h-4" />
 										<div>Creations</div>
 									</div>
 									<div
 										onClick={() => {
 											handleFilterClick(1)
 										}}
-										className={`hover:bg-stred100 mb-1 p-2 rounded-lg px-3 ${
-											activityTypeFilter === 1
-												? 'text-stred bg-stred100'
-												: 'text-gray-500'
-										} hover:text-stred cursor-pointer transition-all flex flex-row items-center`}
+										className={`hover:bg-stred100 mb-1 p-2 rounded-lg px-3 ${activityTypeFilter === 1 ? 'text-stred bg-stred100' : 'text-gray-500'} hover:text-stred cursor-pointer transition-all flex flex-row items-center`}
 									>
-										<FontAwesomeIcon
-											icon={activityTypeFilter === 1 ? fasHeart : faHeart}
-											className="mr-2 w-4 h-4"
-										/>
+										<FontAwesomeIcon icon={activityTypeFilter === 1 ? fasHeart : faHeart} className="mr-2 w-4 h-4" />
 										<div>Likes</div>
 									</div>
-									<div
-										onClick={() => handleFilterClick(2)}
-										className={`hover:bg-stblue100 mb-1 p-2 rounded-lg px-3 ${
-											activityTypeFilter === 2
-												? 'text-stblue bg-stblue100'
-												: 'text-gray-500'
-										} hover:text-stblue cursor-pointer transition-all flex flex-row items-center`}
-									>
-										<FontAwesomeIcon
-											icon={activityTypeFilter === 2 ? fasComment : faComment}
-											className="mr-2 w-4 h-4"
-										/>
+									<div onClick={() => handleFilterClick(2)} className={`hover:bg-stblue100 mb-1 p-2 rounded-lg px-3 ${activityTypeFilter === 2 ? 'text-stblue bg-stblue100' : 'text-gray-500'} hover:text-stblue cursor-pointer transition-all flex flex-row items-center`}>
+										<FontAwesomeIcon icon={activityTypeFilter === 2 ? fasComment : faComment} className="mr-2 w-4 h-4" />
 										<div>Comments</div>
 									</div>
 									<div
 										onClick={() => {
 											handleFilterClick(4)
 										}}
-										className={`hover:bg-stgreen100 mb-1 p-2 rounded-lg px-3 ${
-											activityTypeFilter === 4
-												? 'text-stgreen700 bg-stgreen100'
-												: 'text-gray-500'
-										} hover:text-stgreen700 cursor-pointer transition-all flex flex-row items-center`}
+										className={`hover:bg-stgreen100 mb-1 p-2 rounded-lg px-3 ${activityTypeFilter === 4 ? 'text-stgreen700 bg-stgreen100' : 'text-gray-500'} hover:text-stgreen700 cursor-pointer transition-all flex flex-row items-center`}
 									>
-										<FontAwesomeIcon
-											icon={activityTypeFilter === 4 ? fasUser : faUser}
-											className="mr-2 w-4 h-4"
-										/>
+										<FontAwesomeIcon icon={activityTypeFilter === 4 ? fasUser : faUser} className="mr-2 w-4 h-4" />
 										<div>Follows</div>
 									</div>
 								</div>
@@ -355,31 +280,24 @@ const Activity = () => {
 									<div className="flex flex-1 items-center justify-center mb-6 sm:px-3">
 										<div className="text-gray-400 shadow-md bg-white sm:rounded-lg w-full px-4 py-6 text-center">
 											<span className="">News Feed preview.</span>{' '}
-											<span
-												className="cursor-pointer text-gray-800 hover:text-stpink"
-												onClick={() => context.setLoginModalOpen(true)}
-											>
+											<span className="cursor-pointer text-gray-800 hover:text-stpink" onClick={() => context.setLoginModalOpen(true)}>
 												Sign in
 											</span>{' '}
 											to view &amp; follow
 										</div>
 									</div>
 								) : null}
-								{activity.length === 0 &&
-									!isLoading &&
-									!context.myProfile?.has_onboarded && (
-										<>
-											{context.myRecommendations ? (
-												<RecommendFollowers
-													items={context.myRecommendations}
-												/>
-											) : (
-												<div className="flex items-center justify-center my-4">
-													<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
-												</div>
-											)}
-										</>
-									)}
+								{activity.length === 0 && !isLoading && !context.myProfile?.has_onboarded && (
+									<>
+										{context.myRecommendations ? (
+											<RecommendFollowers items={context.myRecommendations} />
+										) : (
+											<div className="flex items-center justify-center my-4">
+												<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
+											</div>
+										)}
+									</>
+								)}
 
 								<InfiniteScroll
 									dataLength={activity.length}
@@ -388,17 +306,10 @@ const Activity = () => {
 									endMessage={
 										<div className="flex flex-1 items-center justify-center">
 											{context.user ? (
-												<div className="text-gray-400">
-													Follow more people to keep the action going!
-												</div>
+												<div className="text-gray-400">Follow more people to keep the action going!</div>
 											) : (
 												<div className="text-gray-400 shadow-md bg-white sm:rounded-lg w-full px-4 py-6 sm:mx-3 mb-4 text-center">
-													<span
-														className="cursor-pointer text-gray-800 hover:text-stpink"
-														onClick={() =>
-															context.setLoginModalOpen(true)
-														}
-													>
+													<span className="cursor-pointer text-gray-800 hover:text-stpink" onClick={() => context.setLoginModalOpen(true)}>
 														Sign in
 													</span>{' '}
 													to view more
@@ -406,30 +317,11 @@ const Activity = () => {
 											)}
 										</div>
 									}
-									scrollThreshold={
-										activityPage === 1
-											? 0.1
-											: activityPage < 4
-											? 0.3
-											: activityPage < 6
-											? 0.7
-											: 0.8
-									}
+									scrollThreshold={activityPage === 1 ? 0.1 : activityPage < 4 ? 0.3 : activityPage < 6 ? 0.7 : 0.8}
 								>
-									<ActivityFeed
-										activity={activity}
-										setItemOpenInModal={handleSetItemOpenInModal}
-										key={activityTypeFilter}
-										removeItemFromFeed={removeItemFromFeed}
-										removeActorFromFeed={removeActorFromFeed}
-										setReportModalIsOpen={setReportModalIsOpen}
-									/>
+									<ActivityFeed activity={activity} setItemOpenInModal={handleSetItemOpenInModal} key={activityTypeFilter} removeItemFromFeed={removeItemFromFeed} removeActorFromFeed={removeActorFromFeed} setReportModalIsOpen={setReportModalIsOpen} />
 								</InfiniteScroll>
-								<div className="flex h-16 items-center justify-center mt-6  px-3">
-									{isLoading && (
-										<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
-									)}
-								</div>
+								<div className="flex h-16 items-center justify-center mt-6  px-3">{isLoading && <div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />}</div>
 							</div>
 							<div className="px-3">
 								{context.isMobile ? null : (

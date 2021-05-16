@@ -26,18 +26,10 @@ export default function ActivityImage({ nft, onLoad }) {
 			ref={aRef}
 			style={{
 				height: imgWidth,
-				backgroundColor: nft.token_background_color
-					? `#${nft.token_background_color}`
-					: 'black',
+				backgroundColor: nft.token_background_color ? `#${nft.token_background_color}` : 'black',
 			}}
 		>
-			{nft.token_img_url && (
-				<img
-					src={getImageUrl(nft.token_img_url, nft.token_aspect_ratio)}
-					className="object-cover w-full h-full"
-					onLoad={onLoad}
-				/>
-			)}
+			{nft.token_img_url && <img src={getImageUrl(nft.token_img_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" onLoad={onLoad} />}
 			{!nft.token_img_url && nft.token_has_video && (
 				<ReactPlayer
 					url={nft?.token_animation_url}

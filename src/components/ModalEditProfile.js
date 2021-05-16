@@ -17,10 +17,7 @@ const handleUsernameLookup = async (value, context, setCustomURLError) => {
 	const username = value ? value.trim() : null
 	let validUsername
 	try {
-		if (
-			username === null ||
-			username.toLowerCase() === context.myProfile?.username?.toLowerCase()
-		) {
+		if (username === null || username.toLowerCase() === context.myProfile?.username?.toLowerCase()) {
 			validUsername = true
 		} else {
 			const result = await backend.get(`/v1/username_available?username=${username}`, {
@@ -85,11 +82,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 		const username = customURLValue ? customURLValue.trim() : null
 
 		if (username?.toLowerCase() != context.myProfile.username?.toLowerCase()) {
-			const validUsername = await handleUsernameLookup(
-				customURLValue,
-				context,
-				setCustomURLError
-			)
+			const validUsername = await handleUsernameLookup(customURLValue, context, setCustomURLError)
 			if (!validUsername) {
 				return
 			}
@@ -199,9 +192,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 	}
 
 	const filteredSocialLinkOptions = () => {
-		return socialLinkOptions.filter(
-			option => !socialLinks.map(sl => sl.type_id).includes(option.type_id)
-		)
+		return socialLinkOptions.filter(option => !socialLinks.map(sl => sl.type_id).includes(option.type_id))
 	}
 
 	const handleSocialSelected = event => {
@@ -217,11 +208,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 					<form onSubmit={handleSubmit} className="p-4 overflow-y-auto">
 						<div className="text-3xl border-b-2 pb-2 flex justify-between items-start">
 							<div>Edit Info</div>
-							<FontAwesomeIcon
-								className="w-6 h-6 text-gray-600 m-1 cursor-pointer"
-								icon={faTimes}
-								onClick={() => setEditModalOpen(false)}
-							/>
+							<FontAwesomeIcon className="w-6 h-6 text-gray-600 m-1 cursor-pointer" icon={faTimes} onClick={() => setEditModalOpen(false)} />
 						</div>
 
 						<div className="flex flex-col md:flex-row">
@@ -244,17 +231,12 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 										maxLength="50"
 										className="mt-1 bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 									/>
-									<label
-										htmlFor="customURL"
-										className="mt-4 block text-sm font-medium text-gray-700 sm:pt-2"
-									>
+									<label htmlFor="customURL" className="mt-4 block text-sm font-medium text-gray-700 sm:pt-2">
 										Username
 									</label>
 									<div className="mt-1 ">
 										<div className="max-w-lg flex rounded-md shadow-sm">
-											<span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 bg-gray-100 text-gray-700 sm:text-sm">
-												{SHOWTIME_PROD_URL}
-											</span>
+											<span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 bg-gray-100 text-gray-700 sm:text-sm">{SHOWTIME_PROD_URL}</span>
 											<input
 												type="text"
 												name="customURL"
@@ -267,11 +249,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 													const urlRegex = /^[a-zA-Z0-9_]*$/
 													if (urlRegex.test(value)) {
 														setCustomURLValue(value)
-														handleDebouncedUsernameLookup(
-															value,
-															context,
-															setCustomURLError
-														)
+														handleDebouncedUsernameLookup(value, context, setCustomURLError)
 													}
 												}}
 												maxLength={30}
@@ -279,15 +257,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 										</div>
 									</div>
 								</div>
-								<div
-									className={`text-xs text-right ${
-										customURLError.message ? 'visible' : 'invisible'
-									} ${
-										customURLError.isError ? 'text-red-500' : 'text-green-400'
-									}`}
-								>
-									&nbsp;{customURLError.message}
-								</div>
+								<div className={`text-xs text-right ${customURLError.message ? 'visible' : 'invisible'} ${customURLError.isError ? 'text-red-500' : 'text-green-400'}`}>&nbsp;{customURLError.message}</div>
 								<label htmlFor="bio" className="block text-sm text-gray-700">
 									About Me (optional)
 								</label>
@@ -304,9 +274,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 									className="mt-1 bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 								></textarea>
 
-								<div className="text-right text-gray-500 text-xs">
-									300 character limit
-								</div>
+								<div className="text-right text-gray-500 text-xs">300 character limit</div>
 							</div>
 							<div className="w-6 flex-shrink" />
 							{/* second row */}
@@ -319,55 +287,32 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 											socialLinks.map(linkObj => (
 												<div key={linkObj.name} className="mb-4 pb-2">
 													<div className="flex items-center justify-between">
-														<label
-															htmlFor={linkObj.name}
-															className="text-sm font-medium text-gray-700 flex flex-row"
-														>
-															<img
-																className="h-5 w-5 mr-1"
-																src={linkObj.icon_url}
-															/>
+														<label htmlFor={linkObj.name} className="text-sm font-medium text-gray-700 flex flex-row">
+															<img className="h-5 w-5 mr-1" src={linkObj.icon_url} />
 															{linkObj.name}
 														</label>
-														<span
-															className="text-xs ml-2 text-gray-400 hover:text-red-400 cursor-pointer"
-															onClick={() =>
-																handleRemoveSocialLink(
-																	linkObj.type_id
-																)
-															}
-														>
+														<span className="text-xs ml-2 text-gray-400 hover:text-red-400 cursor-pointer" onClick={() => handleRemoveSocialLink(linkObj.type_id)}>
 															Remove
 														</span>
 													</div>
 													<div className="mt-1">
 														<div className="max-w-lg flex rounded-md shadow-sm">
-															<span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 bg-gray-100 text-gray-700 sm:text-sm">
-																{linkObj.prefix}
-															</span>
+															<span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 bg-gray-100 text-gray-700 sm:text-sm">{linkObj.prefix}</span>
 															<input
 																type="text"
 																name={linkObj.name}
 																id={linkObj.name}
 																className="pl-2 border flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
-																value={
-																	linkObj.user_input
-																		? linkObj.user_input
-																		: ''
-																}
+																value={linkObj.user_input ? linkObj.user_input : ''}
 																onChange={e => {
 																	const value = e.target.value
 
 																	setSocialLinks(
 																		socialLinks.map(link => {
-																			if (
-																				link.name ===
-																				linkObj.name
-																			) {
+																			if (link.name === linkObj.name) {
 																				return {
 																					...link,
-																					user_input:
-																						value,
+																					user_input: value,
 																				}
 																			}
 																			return link
@@ -383,134 +328,55 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 											))}
 										<div className="flex items-center">
 											<div className="flex-1">
-												<Listbox
-													value={selectedAddSocialLink}
-													onChange={handleSocialSelected}
-												>
+												<Listbox value={selectedAddSocialLink} onChange={handleSocialSelected}>
 													{({ open }) => (
 														<>
-															<Listbox.Label className="block text-sm text-gray-700">
-																Add Link
-															</Listbox.Label>
+															<Listbox.Label className="block text-sm text-gray-700">Add Link</Listbox.Label>
 															<div className="flex flex-row items-center">
 																<div className="text-lg">
-																	<FontAwesomeIcon
-																		icon={faPlusCircle}
-																		className="mr-2"
-																	/>
+																	<FontAwesomeIcon icon={faPlusCircle} className="mr-2" />
 																</div>
 																<div className="flex items-center flex-grow">
 																	<div className="mt-1 relative flex-1">
 																		<Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 																			<span className="flex items-center">
-																				{selectedAddSocialLink.icon_url && (
-																					<img
-																						src={
-																							selectedAddSocialLink.icon_url
-																						}
-																						alt=""
-																						className="flex-shrink-0 h-6 w-6 rounded-full"
-																					/>
-																				)}
-																				<span
-																					className={` ${
-																						selectedAddSocialLink.icon_url
-																							? 'ml-3'
-																							: null
-																					}  block truncate`}
-																				>
-																					{
-																						selectedAddSocialLink.name
-																					}
-																				</span>
+																				{selectedAddSocialLink.icon_url && <img src={selectedAddSocialLink.icon_url} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />}
+																				<span className={` ${selectedAddSocialLink.icon_url ? 'ml-3' : null}  block truncate`}>{selectedAddSocialLink.name}</span>
 																				<span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-																					<SelectorIcon
-																						className="h-5 w-5 text-gray-400"
-																						aria-hidden="true"
-																					/>
+																					<SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
 																				</span>
 																			</span>
 																		</Listbox.Button>
 
-																		<Transition
-																			show={open}
-																			as={Fragment}
-																			leave="transition ease-in duration-100"
-																			leaveFrom="opacity-100"
-																			leaveTo="opacity-0"
-																		>
-																			<Listbox.Options
-																				static
-																				className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
-																			>
-																				{filteredSocialLinkOptions().map(
-																					opt => (
-																						<Listbox.Option
-																							key={
-																								opt.type_id
-																							}
-																							className={({
-																								active,
-																							}) =>
-																								classNames(
-																									active
-																										? 'text-white bg-indigo-600'
-																										: 'text-gray-900',
-																									'cursor-default select-none relative py-2 pl-3 pr-9'
-																								)
-																							}
-																							value={
-																								opt
-																							}
-																						>
-																							{({
-																								active,
-																							}) => (
-																								<>
-																									<div className="flex items-center">
-																										<img
-																											src={
-																												opt.icon_url
-																											}
-																											alt=""
-																											className="flex-shrink-0 h-6 w-6 rounded-full"
-																										/>
-																										<span
-																											className={classNames(
-																												opt.type_id ===
-																													selectedAddSocialLink.type_id
-																													? 'font-normal' // "font-semibold"
-																													: 'font-normal',
-																												'ml-3 block truncate'
-																											)}
-																										>
-																											{
-																												opt.name
-																											}
-																										</span>
-																									</div>
+																		<Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+																			<Listbox.Options static className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+																				{filteredSocialLinkOptions().map(opt => (
+																					<Listbox.Option key={opt.type_id} className={({ active }) => classNames(active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={opt}>
+																						{({ active }) => (
+																							<>
+																								<div className="flex items-center">
+																									<img src={opt.icon_url} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />
+																									<span
+																										className={classNames(
+																											opt.type_id === selectedAddSocialLink.type_id
+																												? 'font-normal' // "font-semibold"
+																												: 'font-normal',
+																											'ml-3 block truncate'
+																										)}
+																									>
+																										{opt.name}
+																									</span>
+																								</div>
 
-																									{opt ===
-																									selectedAddSocialLink ? (
-																										<span
-																											className={classNames(
-																												active
-																													? 'text-white'
-																													: 'text-indigo-600',
-																												'absolute inset-y-0 right-0 flex items-center pr-4'
-																											)}
-																										>
-																											<CheckIcon
-																												className="h-5 w-5"
-																												aria-hidden="true"
-																											/>
-																										</span>
-																									) : null}
-																								</>
-																							)}
-																						</Listbox.Option>
-																					)
-																				)}
+																								{opt === selectedAddSocialLink ? (
+																									<span className={classNames(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}>
+																										<CheckIcon className="h-5 w-5" aria-hidden="true" />
+																									</span>
+																								) : null}
+																							</>
+																						)}
+																					</Listbox.Option>
+																				))}
 																			</Listbox.Options>
 																		</Transition>
 																	</div>
@@ -523,14 +389,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 										</div>
 									</div>
 									<div className="mb-4 pt-3 md:pb-14">
-										<label
-											htmlFor="websiteValue"
-											className="text-gray-700 text-sm"
-										>
-											<FontAwesomeIcon
-												className="h-5 w-5 mr-2 hidden"
-												icon={faLink}
-											/>
+										<label htmlFor="websiteValue" className="text-gray-700 text-sm">
+											<FontAwesomeIcon className="h-5 w-5 mr-2 hidden" icon={faLink} />
 											Other Website
 										</label>
 										<input
@@ -550,9 +410,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 							{/* Third column */}
 							<div className="flex-1 my-4 md:pl-2">
 								<div>
-									<div className="text-xl text-indigo-500 mt-2 pt-2 md:mt-0 md:pt-0 mb-3">
-										Page Settings
-									</div>
+									<div className="text-xl text-indigo-500 mt-2 pt-2 md:mt-0 md:pt-0 mb-3">Page Settings</div>
 									<div className="py-2 mb-2">
 										<Listbox
 											value={defaultListId}
@@ -562,58 +420,24 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 										>
 											{({ open }) => (
 												<>
-													<Listbox.Label className="block text-sm text-gray-700">
-														Default NFT List
-													</Listbox.Label>
+													<Listbox.Label className="block text-sm text-gray-700">Default NFT List</Listbox.Label>
 													<div className="mt-1 relative">
 														<Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-															<span className="block truncate">
-																{
-																	tab_list.filter(
-																		t =>
-																			t.value ===
-																			defaultListId
-																	)[0].name
-																}
-															</span>
+															<span className="block truncate">{tab_list.filter(t => t.value === defaultListId)[0].name}</span>
 															<span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-																<SelectorIcon
-																	className="h-5 w-5 text-gray-400"
-																	aria-hidden="true"
-																/>
+																<SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
 															</span>
 														</Listbox.Button>
 
-														<Transition
-															show={open}
-															as={Fragment}
-															leave="transition ease-in duration-100"
-															leaveFrom="opacity-100"
-															leaveTo="opacity-0"
-														>
-															<Listbox.Options
-																static
-																className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
-															>
+														<Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+															<Listbox.Options static className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
 																{tab_list.map(item => (
-																	<Listbox.Option
-																		key={item.value}
-																		className={({ active }) =>
-																			classNames(
-																				active
-																					? 'text-white bg-indigo-600'
-																					: 'text-gray-900',
-																				'cursor-default select-none relative py-2 pl-3 pr-9'
-																			)
-																		}
-																		value={item.value}
-																	>
+																	<Listbox.Option key={item.value} className={({ active }) => classNames(active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={item.value}>
 																		{({ active }) => (
 																			<>
 																				<span
 																					className={classNames(
-																						item.value ===
-																							defaultListId
+																						item.value === defaultListId
 																							? 'font-normal' // "font-semibold"
 																							: 'font-normal',
 																						'block truncate'
@@ -622,20 +446,9 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 																					{item.name}
 																				</span>
 
-																				{item.value ===
-																				defaultListId ? (
-																					<span
-																						className={classNames(
-																							active
-																								? 'text-white'
-																								: 'text-indigo-600',
-																							'absolute inset-y-0 right-0 flex items-center pr-4'
-																						)}
-																					>
-																						<CheckIcon
-																							className="h-5 w-5"
-																							aria-hidden="true"
-																						/>
+																				{item.value === defaultListId ? (
+																					<span className={classNames(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}>
+																						<CheckIcon className="h-5 w-5" aria-hidden="true" />
 																					</span>
 																				) : null}
 																			</>
@@ -658,58 +471,24 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 										>
 											{({ open }) => (
 												<>
-													<Listbox.Label className="block text-sm text-gray-700">
-														Sort Created By
-													</Listbox.Label>
+													<Listbox.Label className="block text-sm text-gray-700">Sort Created By</Listbox.Label>
 													<div className="mt-1 relative">
 														<Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-															<span className="block truncate">
-																{
-																	sortingOptionsList.filter(
-																		t =>
-																			t.value ===
-																			defaultCreatedSortId
-																	)[0].label
-																}
-															</span>
+															<span className="block truncate">{sortingOptionsList.filter(t => t.value === defaultCreatedSortId)[0].label}</span>
 															<span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-																<SelectorIcon
-																	className="h-5 w-5 text-gray-400"
-																	aria-hidden="true"
-																/>
+																<SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
 															</span>
 														</Listbox.Button>
 
-														<Transition
-															show={open}
-															as={Fragment}
-															leave="transition ease-in duration-100"
-															leaveFrom="opacity-100"
-															leaveTo="opacity-0"
-														>
-															<Listbox.Options
-																static
-																className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
-															>
+														<Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+															<Listbox.Options static className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
 																{sortingOptionsList.map(item => (
-																	<Listbox.Option
-																		key={item.value}
-																		className={({ active }) =>
-																			classNames(
-																				active
-																					? 'text-white bg-indigo-600'
-																					: 'text-gray-900',
-																				'cursor-default select-none relative py-2 pl-3 pr-9'
-																			)
-																		}
-																		value={item.value}
-																	>
+																	<Listbox.Option key={item.value} className={({ active }) => classNames(active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={item.value}>
 																		{({ active }) => (
 																			<>
 																				<span
 																					className={classNames(
-																						item.value ===
-																							defaultCreatedSortId
+																						item.value === defaultCreatedSortId
 																							? 'font-normal' // "font-semibold"
 																							: 'font-normal',
 																						'block truncate'
@@ -718,20 +497,9 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 																					{item.label}
 																				</span>
 
-																				{item.value ===
-																				defaultCreatedSortId ? (
-																					<span
-																						className={classNames(
-																							active
-																								? 'text-white'
-																								: 'text-indigo-600',
-																							'absolute inset-y-0 right-0 flex items-center pr-4'
-																						)}
-																					>
-																						<CheckIcon
-																							className="h-5 w-5"
-																							aria-hidden="true"
-																						/>
+																				{item.value === defaultCreatedSortId ? (
+																					<span className={classNames(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}>
+																						<CheckIcon className="h-5 w-5" aria-hidden="true" />
 																					</span>
 																				) : null}
 																			</>
@@ -754,58 +522,24 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 										>
 											{({ open }) => (
 												<>
-													<Listbox.Label className="block text-sm text-gray-700">
-														Sort Owned By
-													</Listbox.Label>
+													<Listbox.Label className="block text-sm text-gray-700">Sort Owned By</Listbox.Label>
 													<div className="mt-1 relative">
 														<Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-															<span className="block truncate">
-																{
-																	sortingOptionsList.filter(
-																		t =>
-																			t.value ===
-																			defaultOwnedSortId
-																	)[0].label
-																}
-															</span>
+															<span className="block truncate">{sortingOptionsList.filter(t => t.value === defaultOwnedSortId)[0].label}</span>
 															<span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-																<SelectorIcon
-																	className="h-5 w-5 text-gray-400"
-																	aria-hidden="true"
-																/>
+																<SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
 															</span>
 														</Listbox.Button>
 
-														<Transition
-															show={open}
-															as={Fragment}
-															leave="transition ease-in duration-100"
-															leaveFrom="opacity-100"
-															leaveTo="opacity-0"
-														>
-															<Listbox.Options
-																static
-																className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
-															>
+														<Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+															<Listbox.Options static className="z-10 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
 																{sortingOptionsList.map(item => (
-																	<Listbox.Option
-																		key={item.value}
-																		className={({ active }) =>
-																			classNames(
-																				active
-																					? 'text-white bg-indigo-600'
-																					: 'text-gray-900',
-																				'cursor-default select-none relative py-2 pl-3 pr-9 '
-																			)
-																		}
-																		value={item.value}
-																	>
+																	<Listbox.Option key={item.value} className={({ active }) => classNames(active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-default select-none relative py-2 pl-3 pr-9 ')} value={item.value}>
 																		{({ active }) => (
 																			<>
 																				<span
 																					className={classNames(
-																						item.value ===
-																							defaultOwnedSortId
+																						item.value === defaultOwnedSortId
 																							? 'font-normal' // "font-semibold"
 																							: 'font-normal',
 																						'block truncate'
@@ -814,20 +548,9 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 																					{item.label}
 																				</span>
 
-																				{item.value ===
-																				defaultOwnedSortId ? (
-																					<span
-																						className={classNames(
-																							active
-																								? 'text-white'
-																								: 'text-indigo-600',
-																							'absolute inset-y-0 right-0 flex items-center pr-4'
-																						)}
-																					>
-																						<CheckIcon
-																							className="h-5 w-5"
-																							aria-hidden="true"
-																						/>
+																				{item.value === defaultOwnedSortId ? (
+																					<span className={classNames(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}>
+																						<CheckIcon className="h-5 w-5" aria-hidden="true" />
 																					</span>
 																				) : null}
 																			</>
@@ -848,11 +571,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 						{/* Submit section */}
 						<div>
 							<div className="border-t-2 pt-4">
-								<button
-									type="submit"
-									disabled={submitting}
-									className="bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition px-4 py-2 float-right rounded-full w-36"
-								>
+								<button type="submit" disabled={submitting} className="bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition px-4 py-2 float-right rounded-full w-36">
 									{submitting ? (
 										<div className="flex items-center justify-center">
 											<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />

@@ -1,13 +1,4 @@
-import {
-	faComment,
-	faHeart,
-	faUser,
-	faStore,
-	faShoppingCart,
-	faArrowLeft,
-	faArrowRight,
-	faFingerprint,
-} from '@fortawesome/free-solid-svg-icons'
+import { faComment, faHeart, faUser, faStore, faShoppingCart, faArrowLeft, faArrowRight, faFingerprint } from '@fortawesome/free-solid-svg-icons'
 
 export const colors = {
 	green: '#6bd464',
@@ -34,8 +25,7 @@ export const CONTRACTS = {
 	EPHIMERA: '0xfe21b0a8df3308c61cb13df57ae5962c567a668a',
 }
 
-export const DEFAULT_PROFILE_PIC =
-	'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'
+export const DEFAULT_PROFILE_PIC = 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'
 export const DISABLE_ALL = false
 
 // fields to sort by on profile page

@@ -7,11 +7,7 @@ export default handler().post(async ({ body: { recache }, cookies }, res) => {
 	let user
 
 	try {
-		user = await Iron.unseal(
-			CookieService.getAuthToken(cookies),
-			process.env.ENCRYPTION_SECRET_V2,
-			Iron.defaults
-		)
+		user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 	} catch {
 		// the user is not authenticated yet
 	}

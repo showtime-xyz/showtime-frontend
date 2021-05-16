@@ -11,13 +11,7 @@ export default function ActivityFeed({
 		<>
 			<div className="sm:px-3">
 				{activity.map(act => (
-					<ActivityCard
-						act={act}
-						key={act.id}
-						setItemOpenInModal={setItemOpenInModal}
-						setReportModalIsOpen={setReportModalIsOpen}
-						removeActorFromFeed={removeActorFromFeed}
-					/>
+					<ActivityCard act={act} key={act.id} setItemOpenInModal={setItemOpenInModal} setReportModalIsOpen={setReportModalIsOpen} removeActorFromFeed={removeActorFromFeed} />
 				))}
 			</div>
 		</>

@@ -65,13 +65,7 @@ export default function Token({ token }) {
 
 	return (
 		<>
-			{typeof document !== 'undefined' ? (
-				<ModalReportItem
-					isOpen={reportModalOpen}
-					setReportModalOpen={setReportModalOpen}
-					nftId={item.nft_id}
-				/>
-			) : null}
+			{typeof document !== 'undefined' ? <ModalReportItem isOpen={reportModalOpen} setReportModalOpen={setReportModalOpen} nftId={item.nft_id} /> : null}
 			<Layout key={item.nft_id}>
 				<Head>
 					<title>{item.token_name}</title>
@@ -79,30 +73,17 @@ export default function Token({ token }) {
 					<meta name="description" content={item.token_description} />
 					<meta property="og:type" content="website" />
 					<meta name="og:description" content={item.token_description} />
-					<meta
-						property="og:image"
-						content={item.token_img_preview_url ? item.token_img_preview_url : null}
-					/>
+					<meta property="og:image" content={item.token_img_preview_url ? item.token_img_preview_url : null} />
 					<meta name="og:title" content={item.token_name} />
 
 					<meta name="twitter:card" content="summary_large_image" />
 					<meta name="twitter:title" content={item.token_name} />
 					<meta name="twitter:description" content={item.token_description} />
-					<meta
-						name="twitter:image"
-						content={item.token_img_preview_url ? item.token_img_preview_url : null}
-					/>
+					<meta name="twitter:image" content={item.token_img_preview_url ? item.token_img_preview_url : null} />
 				</Head>
 
 				<div>
-					<TokenDetailBody
-						item={item}
-						muted={false}
-						className="w-full"
-						ownershipDetails={ownershipDetails}
-						parentSetReportModalOpen={setReportModalOpen}
-						parentReportModalOpen={reportModalOpen}
-					/>
+					<TokenDetailBody item={item} muted={false} className="w-full" ownershipDetails={ownershipDetails} parentSetReportModalOpen={setReportModalOpen} parentReportModalOpen={reportModalOpen} />
 				</div>
 			</Layout>
 		</>

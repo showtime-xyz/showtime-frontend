@@ -21,10 +21,7 @@ export default function Sell({ act }) {
 							</a>
 						</Link>{' '}
 						to{' '}
-						<Link
-							href="/[profile]"
-							as={`/${act.buyer?.username || act.buyer?.wallet_address}`}
-						>
+						<Link href="/[profile]" as={`/${act.buyer?.username || act.buyer?.wallet_address}`}>
 							<a
 								className="text-black hover:text-stpink"
 								onClick={() => {

@@ -6,8 +6,7 @@ import backend from '@/lib/backend'
 import handler from '@/lib/api-handler'
 
 export default handler().post(async ({ body: { address, signature } }, res) => {
-	if (!address || !signature)
-		return res.status(400).json({ error: 'Address or signature not specified.' })
+	if (!address || !signature) return res.status(400).json({ error: 'Address or signature not specified.' })
 
 	// check the signature
 	const {

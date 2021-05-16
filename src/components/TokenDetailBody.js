@@ -111,20 +111,12 @@ const TokenDetailBody = ({
 		<>
 			{typeof document !== 'undefined' && parentReportModalOpen !== null ? (
 				<>
-					<ModalReportItem
-						isOpen={reportModalOpen}
-						setReportModalOpen={setReportModalOpen}
-						nftId={item.nft_id}
-					/>
+					<ModalReportItem isOpen={reportModalOpen} setReportModalOpen={setReportModalOpen} nftId={item.nft_id} />
 				</>
 			) : null}
 			{lightboxOpen && (
 				<Lightbox
-					mainSrc={
-						item.token_img_original_url
-							? item.token_img_original_url
-							: item.token_img_url
-					}
+					mainSrc={item.token_img_original_url ? item.token_img_original_url : item.token_img_url}
 					//nextSrc={images[(photoIndex + 1) % images.length]}
 					//prevSrc={images[(photoIndex + images.length - 1) % images.length]}
 					onCloseRequest={() => setLightboxOpen(false)}
@@ -150,43 +142,19 @@ const TokenDetailBody = ({
 								<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
 									<a className="flex flex-row items-center ">
 										<div>
-											<img
-												alt={item.collection_name}
-												src={
-													item.collection_img_url
-														? item.collection_img_url
-														: DEFAULT_PROFILE_PIC
-												}
-												className="rounded-full w-6 h-6"
-											/>
+											<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
 										</div>
-										<div className="text-gray-800 hover:text-stpink ml-2">
-											{truncateWithEllipses(item.collection_name, 30)}{' '}
-											Collection
-										</div>
+										<div className="text-gray-800 hover:text-stpink ml-2">{truncateWithEllipses(item.collection_name, 30)} Collection</div>
 									</a>
 								</Link>
 							) : item.creator_address ? (
 								<div className="flex flex-row items-center">
-									<Link
-										href="/[profile]"
-										as={`/${item?.creator_username || item.creator_address}`}
-									>
+									<Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
 										<a className="flex flex-row items-center">
 											<div>
-												<img
-													alt={item.creator_name}
-													src={
-														item.creator_img_url
-															? item.creator_img_url
-															: DEFAULT_PROFILE_PIC
-													}
-													className="rounded-full w-6 h-6"
-												/>
+												<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
 											</div>
-											<div className="text-gray-800 hover:text-stpink ml-2">
-												{truncateWithEllipses(item.creator_name, 22)}
-											</div>
+											<div className="text-gray-800 hover:text-stpink ml-2">{truncateWithEllipses(item.creator_name, 22)}</div>
 										</a>
 									</Link>
 									{context.myProfile?.profile_id !== item?.creator_id && (
@@ -200,13 +168,7 @@ const TokenDetailBody = ({
 						<div>&nbsp;</div>
 					</div>
 				) : null}
-				<div
-					className={`flex flex-shrink-0 items-center md:p-12 ${
-						item.token_has_video ? 'bg-black' : ''
-					}`}
-					style={item.token_has_video ? null : { backgroundColor: getBackgroundColor() }}
-					ref={targetRef}
-				>
+				<div className={`flex flex-shrink-0 items-center md:p-12 ${item.token_has_video ? 'bg-black' : ''}`} style={item.token_has_video ? null : { backgroundColor: getBackgroundColor() }} ref={targetRef}>
 					{item.token_has_video ? (
 						<ReactPlayer
 							url={item.token_animation_url}
@@ -241,11 +203,7 @@ const TokenDetailBody = ({
 										className="flex flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all rounded-lg p-3"
 									>
 										<div className="">
-											<FontAwesomeIcon
-												icon={faExpand}
-												width={18}
-												height={18}
-											/>
+											<FontAwesomeIcon icon={faExpand} width={18} height={18} />
 										</div>
 										<div className="ml-2 text-sm">Original</div>
 									</button>
@@ -260,29 +218,13 @@ const TokenDetailBody = ({
 									context.isMobile
 										? {
 												width: mediaWidth,
-												height: item.token_aspect_ratio
-													? mediaWidth / item.token_aspect_ratio
-													: null,
+												height: item.token_aspect_ratio ? mediaWidth / item.token_aspect_ratio : null,
 										  }
 										: { height: TOKEN_MEDIA_HEIGHT }
 								}
 							/>
 
-							<img
-								src={
-									context.isMobile
-										? getImageUrl(item.token_img_url)
-										: getBiggerImageUrl(item.token_img_url)
-								}
-								alt={item.token_name}
-								className={fullResLoaded === true ? '' : 'hidden'}
-								style={
-									context.isMobile
-										? { width: mediaWidth }
-										: { height: TOKEN_MEDIA_HEIGHT }
-								}
-								onLoad={() => setTimeout(() => setFullResLoaded(true), 100)}
-							/>
+							<img src={context.isMobile ? getImageUrl(item.token_img_url) : getBiggerImageUrl(item.token_img_url)} alt={item.token_name} className={fullResLoaded === true ? '' : 'hidden'} style={context.isMobile ? { width: mediaWidth } : { height: TOKEN_MEDIA_HEIGHT }} onLoad={() => setTimeout(() => setFullResLoaded(true), 100)} />
 						</div>
 					)}
 				</div>
@@ -299,31 +241,13 @@ const TokenDetailBody = ({
 								<div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
 									<LikeButton item={item} />
 								</div>
-								<SmoothScroll
-									to="CommentsSectionScroll"
-									containerId={isInModal ? 'ModalTokenDetailWrapper' : null}
-									smooth={true}
-									offset={isInModal ? 210 : -70}
-									duration={500}
-								>
+								<SmoothScroll to="CommentsSectionScroll" containerId={isInModal ? 'ModalTokenDetailWrapper' : null} smooth={true} offset={isInModal ? 210 : -70} duration={500}>
 									<div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
 										<CommentButton item={item} handleComment={() => {}} />
 									</div>
 								</SmoothScroll>
 								<div className="p-3 rounded-full shadow-md mr-2 flex items-center justify-center">
-									<ShareButton
-										url={
-											typeof window !== 'undefined' &&
-											window.location.protocol +
-												'//' +
-												window.location.hostname +
-												(window.location.port
-													? ':' + window.location.port
-													: '') +
-												`/t/${item.contract_address}/${item.token_id}`
-										}
-										type={'item'}
-									/>
+									<ShareButton url={typeof window !== 'undefined' && window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${item.contract_address}/${item.token_id}`} type={'item'} />
 								</div>
 
 								<a
@@ -337,21 +261,12 @@ const TokenDetailBody = ({
 								>
 									<div className="text-base font-normal px-4 py-3 mr-2 rounded-full shadow-md hover:text-stpink">
 										<span>Bid </span>
-										<span className="hidden sm:inline">
-											on {getContractName(item)}
-										</span>
+										<span className="hidden sm:inline">on {getContractName(item)}</span>
 									</div>
 								</a>
 								<div className="flex-grow"></div>
 							</div>
-							{usersWhoLiked && (
-								<UsersWhoLiked
-									users={usersWhoLiked}
-									closeModal={() =>
-										setEditModalOpen ? setEditModalOpen(false) : null
-									}
-								/>
-							)}
+							{usersWhoLiked && <UsersWhoLiked users={usersWhoLiked} closeModal={() => (setEditModalOpen ? setEditModalOpen(false) : null)} />}
 						</div>
 						<div className="flex-1 p-4 pb-0 sm:max-w-[50%]">
 							{item.token_description && (
@@ -359,22 +274,13 @@ const TokenDetailBody = ({
 									<div className="md:text-lg py-2">Description</div>
 									<div className="text-gray-500 text-sm sm:text-base whitespace-pre-line">
 										{moreShown ? (
-											<div className="whitespace-pre-line">
-												{removeTags(item.token_description)}
-											</div>
+											<div className="whitespace-pre-line">{removeTags(item.token_description)}</div>
 										) : (
 											<div>
-												{item.token_description?.length >
-												max_description_length ? (
+												{item.token_description?.length > max_description_length ? (
 													<>
-														{truncateWithEllipses(
-															removeTags(item.token_description),
-															max_description_length
-														)}{' '}
-														<a
-															onClick={() => setMoreShown(true)}
-															className="text-gray-900 hover:text-gray-500 cursor-pointer"
-														>
+														{truncateWithEllipses(removeTags(item.token_description), max_description_length)}{' '}
+														<a onClick={() => setMoreShown(true)} className="text-gray-900 hover:text-gray-500 cursor-pointer">
 															{' '}
 															more
 														</a>
@@ -406,11 +312,7 @@ const TokenDetailBody = ({
 													//address={item.creator_address}
 													name={`${item.collection_name} Collection`}
 													//username={item.creator_username}
-													imageUrl={
-														item.collection_img_url
-															? item.collection_img_url
-															: DEFAULT_PROFILE_PIC
-													}
+													imageUrl={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC}
 													collectionSlug={item.collection_slug}
 													//bio={ownershipDetails.creator_bio}
 													closeModal={() => {
@@ -445,38 +347,23 @@ const TokenDetailBody = ({
 									<div className="mt-8">
 										<div className="md:text-lg pt-4">Owned By</div>
 
-										{item.owner_address &&
-											(item.owner_count === null ||
-												item.owner_count === 1) && (
-												<div>
-													<UserTimestampCard
-														item={item}
-														timestamp={
-															ownershipDetails.token_last_transferred
-														}
-														closeModalCallback={() => {
-															setEditModalOpen(false)
-														}}
-													/>
-												</div>
-											)}
+										{item.owner_address && (item.owner_count === null || item.owner_count === 1) && (
+											<div>
+												<UserTimestampCard
+													item={item}
+													timestamp={ownershipDetails.token_last_transferred}
+													closeModalCallback={() => {
+														setEditModalOpen(false)
+													}}
+												/>
+											</div>
+										)}
 
-										{ownershipDetails?.multiple_owners_list &&
-											ownershipDetails.multiple_owners_list.length > 1 && (
-												<div>
-													<UsersWhoOwn
-														users={
-															ownershipDetails.multiple_owners_list
-														}
-														ownerCount={item.owner_count}
-														closeModal={() =>
-															setEditModalOpen
-																? setEditModalOpen(false)
-																: null
-														}
-													/>
-												</div>
-											)}
+										{ownershipDetails?.multiple_owners_list && ownershipDetails.multiple_owners_list.length > 1 && (
+											<div>
+												<UsersWhoOwn users={ownershipDetails.multiple_owners_list} ownerCount={item.owner_count} closeModal={() => (setEditModalOpen ? setEditModalOpen(false) : null)} />
+											</div>
+										)}
 									</div>
 								)}
 								{/* History Section */}
@@ -500,38 +387,23 @@ const TokenDetailBody = ({
 									<div className="mb-8">
 										<div className="md:text-lg pt-4">Owned By</div>
 
-										{item.owner_address &&
-											(item.owner_count === null ||
-												item.owner_count === 1) && (
-												<div>
-													<UserTimestampCard
-														item={item}
-														timestamp={
-															ownershipDetails.token_last_transferred
-														}
-														closeModalCallback={() => {
-															setEditModalOpen(false)
-														}}
-													/>
-												</div>
-											)}
+										{item.owner_address && (item.owner_count === null || item.owner_count === 1) && (
+											<div>
+												<UserTimestampCard
+													item={item}
+													timestamp={ownershipDetails.token_last_transferred}
+													closeModalCallback={() => {
+														setEditModalOpen(false)
+													}}
+												/>
+											</div>
+										)}
 
-										{ownershipDetails?.multiple_owners_list &&
-											ownershipDetails.multiple_owners_list.length > 1 && (
-												<div>
-													<UsersWhoOwn
-														users={
-															ownershipDetails.multiple_owners_list
-														}
-														ownerCount={item.owner_count}
-														closeModal={() =>
-															setEditModalOpen
-																? setEditModalOpen(false)
-																: null
-														}
-													/>
-												</div>
-											)}
+										{ownershipDetails?.multiple_owners_list && ownershipDetails.multiple_owners_list.length > 1 && (
+											<div>
+												<UsersWhoOwn users={ownershipDetails.multiple_owners_list} ownerCount={item.owner_count} closeModal={() => (setEditModalOpen ? setEditModalOpen(false) : null)} />
+											</div>
+										)}
 									</div>
 								)}
 								{/* Comments section */}
@@ -573,9 +445,7 @@ const TokenDetailBody = ({
 						<div className="mr-4">·</div>
 						<div
 							onClick={() => {
-								parentSetReportModalOpen !== undefined
-									? parentSetReportModalOpen(true)
-									: setReportModalOpen(true)
+								parentSetReportModalOpen !== undefined ? parentSetReportModalOpen(true) : setReportModalOpen(true)
 							}}
 							className="text-gray-500 hover:text-stpink cursor-pointer"
 						>

@@ -22,9 +22,7 @@ export default function ModalThrottleUser({ isOpen, closeModal, modalContent }) 
 				<ScrollableModal closeModal={closeModal} contentWidth="30rem">
 					<div className="p-4">
 						<CloseButton setEditModalOpen={closeModal} />
-						<div className="text-3xl border-b-2 pb-2">
-							Looks like there's a problem!
-						</div>
+						<div className="text-3xl border-b-2 pb-2">Looks like there's a problem!</div>
 						<div className="my-8">{modalContent}</div>
 					</div>
 				</ScrollableModal>

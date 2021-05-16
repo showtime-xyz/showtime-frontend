@@ -6,11 +6,7 @@ import backend from '@/lib/backend'
 export default handler().post(async (req, res) => {
 	const profile_id = req.query.profile_id
 
-	const user = await Iron.unseal(
-		CookieService.getAuthToken(req.cookies),
-		process.env.ENCRYPTION_SECRET_V2,
-		Iron.defaults
-	)
+	const user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
 	await backend.post(
 		`/v2/unfollow/${profile_id}`,

@@ -6,11 +6,7 @@ import backend from '@/lib/backend'
 export default handler()
 	.get(async ({ cookies, query: { page = 1, limit = 7 } }, res) => {
 		try {
-			const user = await Iron.unseal(
-				CookieService.getAuthToken(cookies),
-				process.env.ENCRYPTION_SECRET_V2,
-				Iron.defaults
-			)
+			const user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
 			await backend(`/v1/notifications?page=${page}&limit=${limit}`, {
 				headers: {
@@ -24,11 +20,7 @@ export default handler()
 		}
 	})
 	.post(async (req, res) => {
-		const user = await Iron.unseal(
-			CookieService.getAuthToken(req.cookies),
-			process.env.ENCRYPTION_SECRET_V2,
-			Iron.defaults
-		)
+		const user = await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
 		await backend.post(
 			'/v1/check_notifications',

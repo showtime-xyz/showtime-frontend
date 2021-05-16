@@ -25,18 +25,11 @@ export default function Transfer({ act }) {
 							</a>
 						</Link>{' '}
 						{preposition}{' '}
-						<Link
-							href="/[profile]"
-							as={`/${
-								act.counterparty?.username || act.counterparty?.wallet_address
-							}`}
-						>
+						<Link href="/[profile]" as={`/${act.counterparty?.username || act.counterparty?.wallet_address}`}>
 							<a
 								className="text-black hover:text-stpink"
 								onClick={() => {
-									mixpanel.track(
-										"Activity - Click on person transferred to's name"
-									)
+									mixpanel.track("Activity - Click on person transferred to's name")
 								}}
 							>
 								{act.counterparty?.name}

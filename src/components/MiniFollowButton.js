@@ -27,9 +27,7 @@ const MiniFollowButton = ({ profileId }) => {
 					if (err.response.data.code === 429) {
 						setIsFollowed(false)
 						// Change myLikes via setMyLikes
-						context.setMyFollows(
-							context.myFollows.filter(i => i?.profile_id !== profileId)
-						)
+						context.setMyFollows(context.myFollows.filter(i => i?.profile_id !== profileId))
 						return context.setThrottleMessage(err.response.data.message)
 					}
 					console.error(err)
@@ -54,20 +52,7 @@ const MiniFollowButton = ({ profileId }) => {
 	}
 
 	return isFollowed === null ? null : !isFollowed ? (
-		<div
-			onClick={
-				context.disableFollows
-					? null
-					: context.user
-					? isFollowed
-						? handleUnfollow
-						: handleFollow
-					: handleLoggedOutFollow
-			}
-			className={`text-xs text-stlink opacity-80 cursor-pointer ${
-				context.disableFollows ? ' hover:opacity-80' : ' hover:opacity-100'
-			}`}
-		>
+		<div onClick={context.disableFollows ? null : context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow} className={`text-xs text-stlink opacity-80 cursor-pointer ${context.disableFollows ? ' hover:opacity-80' : ' hover:opacity-100'}`}>
 			Follow
 		</div>
 	) : null

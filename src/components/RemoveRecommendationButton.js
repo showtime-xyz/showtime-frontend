@@ -24,17 +24,8 @@ const RemoveRecommendationButton = ({ item, removeRecommendation }) => {
 		!isFollowed &&
 		context.user && (
 			<div>
-				<button
-					className="flex items-center justify-center hover:opacity-70 w-full mt-2.5 sm:w-auto sm:mt-0 absolute top-1 right-1"
-					onClick={() => removeRecommendation(item)}
-				>
-					<div className="flex items-center justify-center p-2.5 w-3.5 h-3.5 text-gray-200">
-						{context.isMobile ? (
-							<h6 className="ml-2.5 text-sm">Remove</h6>
-						) : (
-							<FontAwesomeIcon icon={faTimes} className="w-4 h-4" />
-						)}
-					</div>
+				<button className="flex items-center justify-center hover:opacity-70 w-full mt-2.5 sm:w-auto sm:mt-0 absolute top-1 right-1" onClick={() => removeRecommendation(item)}>
+					<div className="flex items-center justify-center p-2.5 w-3.5 h-3.5 text-gray-200">{context.isMobile ? <h6 className="ml-2.5 text-sm">Remove</h6> : <FontAwesomeIcon icon={faTimes} className="w-4 h-4" />}</div>
 				</button>
 			</div>
 		)

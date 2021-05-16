@@ -15,10 +15,7 @@ const Header = () => {
 		<>
 			{typeof document !== 'undefined' ? (
 				<>
-					<ModalLogin
-						isOpen={context.loginModalOpen}
-						setEditModalOpen={context.setLoginModalOpen}
-					/>
+					<ModalLogin isOpen={context.loginModalOpen} setEditModalOpen={context.setLoginModalOpen} />
 				</>
 			) : null}
 			<header className="px-2 py-1 sm:py-2 bg-white w-full shadow-md sticky top-0 z-1">
@@ -30,14 +27,10 @@ const Header = () => {
 									className="flex flex-row text-black hover:text-stpink items-center text-left mr-auto"
 									onClick={async () => {
 										mixpanel.track('Logo button click')
-										await context.setToggleRefreshFeed(
-											!context.toggleRefreshFeed
-										)
+										await context.setToggleRefreshFeed(!context.toggleRefreshFeed)
 									}}
 								>
-									<div className="text-2xl py-2 font-normal font-afro">
-										SHOWTIME
-									</div>
+									<div className="text-2xl py-2 font-normal font-afro">SHOWTIME</div>
 								</a>
 							</Link>
 						</div>
@@ -80,12 +73,7 @@ const Header = () => {
 						{/* End desktop-only menu */}
 						<div>
 							{context.user && context.myProfile !== undefined ? (
-								<Link
-									href="/[profile]"
-									as={`/${
-										context.myProfile.username || context.user.publicAddress
-									}`}
-								>
+								<Link href="/[profile]" as={`/${context.myProfile.username || context.user.publicAddress}`}>
 									<a
 										className="text-base flex flex-row items-center hover:text-stpink"
 										onClick={() => {
@@ -93,26 +81,8 @@ const Header = () => {
 										}}
 									>
 										<>
-											<div
-												className={
-													context.windowSize
-														? context.windowSize.width < 350
-															? 'hidden'
-															: null
-														: null
-												}
-											>
-												<img
-													alt="profile pic"
-													src={
-														context.myProfile
-															? context.myProfile.img_url
-																? context.myProfile.img_url
-																: DEFAULT_PROFILE_PIC
-															: DEFAULT_PROFILE_PIC
-													}
-													className="mr-2 rounded-full h-8 w-8 min-w-[1.875rem]"
-												/>
+											<div className={context.windowSize ? (context.windowSize.width < 350 ? 'hidden' : null) : null}>
+												<img alt="profile pic" src={context.myProfile ? (context.myProfile.img_url ? context.myProfile.img_url : DEFAULT_PROFILE_PIC) : DEFAULT_PROFILE_PIC} className="mr-2 rounded-full h-8 w-8 min-w-[1.875rem]" />
 											</div>
 											<div
 												className="text-sm sm:text-base truncate"
@@ -120,11 +90,7 @@ const Header = () => {
 													maxWidth: context.gridWidth < 500 ? 100 : 200,
 												}}
 											>
-												{context.myProfile
-													? context.myProfile.name
-														? context.myProfile.name
-														: 'Profile'
-													: 'Profile'}
+												{context.myProfile ? (context.myProfile.name ? context.myProfile.name : 'Profile') : 'Profile'}
 											</div>
 										</>
 									</a>

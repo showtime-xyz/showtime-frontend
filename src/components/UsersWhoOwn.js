@@ -8,16 +8,9 @@ const UserImagesList = ({ users }) => {
 	return (
 		<div className="flex mb-2">
 			{displayedUsers.map(u => (
-				<Link
-					key={u.username || u.wallet_address}
-					href="/[profile]"
-					as={`/${u.username || u.wallet_address}`}
-				>
+				<Link key={u.username || u.wallet_address} href="/[profile]" as={`/${u.username || u.wallet_address}`}>
 					<a className="rounded-full mr-2">
-						<img
-							src={u.img_url || DEFAULT_PROFILE_PIC}
-							className="w-12 h-12 rounded-full"
-						/>
+						<img src={u.img_url || DEFAULT_PROFILE_PIC} className="w-12 h-12 rounded-full" />
 					</a>
 				</Link>
 			))}
@@ -33,14 +26,8 @@ export default function UsersWhoOwn({ users, ownerCount, closeModal }) {
 				<div className="flex flex-col">
 					<UserImagesList users={users} />
 					<div>
-						<Link
-							href="/[profile]"
-							as={`/${users[0]?.username || users[0].wallet_address}`}
-						>
-							<span
-								className="text-black cursor-pointer hover:text-stpink"
-								onClick={closeModal}
-							>
+						<Link href="/[profile]" as={`/${users[0]?.username || users[0].wallet_address}`}>
+							<span className="text-black cursor-pointer hover:text-stpink" onClick={closeModal}>
 								{users[0].name}
 							</span>
 						</Link>
@@ -51,26 +38,14 @@ export default function UsersWhoOwn({ users, ownerCount, closeModal }) {
 				<div className="flex flex-col">
 					<UserImagesList users={users} />
 					<div>
-						<Link
-							href="/[profile]"
-							as={`/${users[0]?.username || users[0].wallet_address}`}
-						>
-							<span
-								className="text-black cursor-pointer hover:text-stpink"
-								onClick={closeModal}
-							>
+						<Link href="/[profile]" as={`/${users[0]?.username || users[0].wallet_address}`}>
+							<span className="text-black cursor-pointer hover:text-stpink" onClick={closeModal}>
 								{users[0].name}
 							</span>
 						</Link>{' '}
 						and{' '}
-						<Link
-							href="/[profile]"
-							as={`/${users[1]?.username || users[1].wallet_address}`}
-						>
-							<span
-								className="text-black cursor-pointer hover:text-stpink"
-								onClick={closeModal}
-							>
+						<Link href="/[profile]" as={`/${users[1]?.username || users[1].wallet_address}`}>
+							<span className="text-black cursor-pointer hover:text-stpink" onClick={closeModal}>
 								{users[1].name}
 							</span>
 						</Link>
@@ -81,38 +56,20 @@ export default function UsersWhoOwn({ users, ownerCount, closeModal }) {
 				<div className="flex flex-col">
 					<UserImagesList users={users} />
 					<div>
-						<Link
-							href="/[profile]"
-							as={`/${users[0]?.username || users[0].wallet_address}`}
-						>
-							<span
-								className="text-black cursor-pointer hover:text-stpink"
-								onClick={closeModal}
-							>
+						<Link href="/[profile]" as={`/${users[0]?.username || users[0].wallet_address}`}>
+							<span className="text-black cursor-pointer hover:text-stpink" onClick={closeModal}>
 								{users[0].name}
 							</span>
 						</Link>
 						,{' '}
-						<Link
-							href="/[profile]"
-							as={`/${users[1]?.username || users[1].wallet_address}`}
-						>
-							<span
-								className="text-black cursor-pointer hover:text-stpink"
-								onClick={closeModal}
-							>
+						<Link href="/[profile]" as={`/${users[1]?.username || users[1].wallet_address}`}>
+							<span className="text-black cursor-pointer hover:text-stpink" onClick={closeModal}>
 								{users[1].name}
 							</span>
 						</Link>{' '}
 						and{' '}
-						<Link
-							href="/[profile]"
-							as={`/${users[2]?.username || users[2].wallet_address}`}
-						>
-							<span
-								className="text-black cursor-pointer hover:text-stpink"
-								onClick={closeModal}
-							>
+						<Link href="/[profile]" as={`/${users[2]?.username || users[2].wallet_address}`}>
+							<span className="text-black cursor-pointer hover:text-stpink" onClick={closeModal}>
 								{users[2].name}
 							</span>
 						</Link>
@@ -123,44 +80,22 @@ export default function UsersWhoOwn({ users, ownerCount, closeModal }) {
 				<div className="flex flex-col">
 					<UserImagesList users={users} />
 					<div>
-						<Link
-							href="/[profile]"
-							as={`/${users[0]?.username || users[0].wallet_address}`}
-						>
-							<span
-								className="text-black cursor-pointer hover:text-stpink"
-								onClick={closeModal}
-							>
+						<Link href="/[profile]" as={`/${users[0]?.username || users[0].wallet_address}`}>
+							<span className="text-black cursor-pointer hover:text-stpink" onClick={closeModal}>
 								{users[0].name}
 							</span>
 						</Link>
 						,{' '}
-						<Link
-							href="/[profile]"
-							as={`/${users[1]?.username || users[1].wallet_address}`}
-						>
-							<span
-								className="text-black cursor-pointer hover:text-stpink"
-								onClick={closeModal}
-							>
+						<Link href="/[profile]" as={`/${users[1]?.username || users[1].wallet_address}`}>
+							<span className="text-black cursor-pointer hover:text-stpink" onClick={closeModal}>
 								{users[1].name}
 							</span>
 						</Link>{' '}
 						and{' '}
-						<span
-							className="text-black cursor-pointer hover:text-stpink"
-							onClick={() => setModalIsOpen(true)}
-						>
+						<span className="text-black cursor-pointer hover:text-stpink" onClick={() => setModalIsOpen(true)}>
 							{Number(ownerCount - 2).toLocaleString()} others
 						</span>
-						<ModalUserList
-							isOpen={modalIsOpen}
-							title="Owned By"
-							users={users.slice(0, 500)}
-							closeModal={() => setModalIsOpen(false)}
-							emptyMessage="Nobody owns this yet."
-							onRedirect={closeModal}
-						/>
+						<ModalUserList isOpen={modalIsOpen} title="Owned By" users={users.slice(0, 500)} closeModal={() => setModalIsOpen(false)} emptyMessage="Nobody owns this yet." onRedirect={closeModal} />
 					</div>
 				</div>
 			)}

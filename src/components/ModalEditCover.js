@@ -140,31 +140,17 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 				>
 					<div className="p-4">
 						<div ref={formRef}>
-							<CloseButton
-								cleanupFunction={clearForm}
-								setEditModalOpen={setEditModalOpen}
-							/>
+							<CloseButton cleanupFunction={clearForm} setEditModalOpen={setEditModalOpen} />
 							<div className="text-3xl border-b-2 pb-2">Edit Cover Image</div>
 							<div className="mt-4 mb-4">
 								{image === '' && (
 									<div className="my-16">
-										<div
-											className="border-2 border-transparent text-white bg-stpink hover:border-stpink hover:bg-transparent hover:text-stpink transition text-center px-4 py-3 rounded-full cursor-pointer"
-											onClick={handleClickUpload}
-										>
+										<div className="border-2 border-transparent text-white bg-stpink hover:border-stpink hover:bg-transparent hover:text-stpink transition text-center px-4 py-3 rounded-full cursor-pointer" onClick={handleClickUpload}>
 											Upload cover image
 										</div>
-										<div className="text-center text-xs mt-4 text-gray-700">
-											Accepts JPEG, PNG, and GIF (non-animated)
-										</div>
+										<div className="text-center text-xs mt-4 text-gray-700">Accepts JPEG, PNG, and GIF (non-animated)</div>
 
-										<input
-											ref={hiddenFileInput}
-											className="hidden"
-											id="profilePic"
-											type="file"
-											onChange={onChangePicture}
-										/>
+										<input ref={hiddenFileInput} className="hidden" id="profilePic" type="file" onChange={onChangePicture} />
 									</div>
 								)}
 
@@ -173,10 +159,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 								</div>
 
 								{image !== '' && (
-									<div
-										className="text-sm text-center cursor-pointer"
-										onClick={clearForm}
-									>
+									<div className="text-sm text-center cursor-pointer" onClick={clearForm}>
 										Clear
 									</div>
 								)}
@@ -198,22 +181,13 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 								</div>
 
 								{context.myProfile.cover_url && (
-									<div
-										className="text-sm ml-4 cursor-pointer"
-										onClick={handleRemovePhoto}
-									>
+									<div className="text-sm ml-4 cursor-pointer" onClick={handleRemovePhoto}>
 										Remove
 									</div>
 								)}
 								<div className="flex-grow"></div>
 								<div>
-									<button
-										onClick={handleSubmit}
-										className={`bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition px-4 py-2 rounded-full float-right w-24 ${
-											image === '' ? 'opacity-60 cursor-not-allowed' : ''
-										}`}
-										disabled={image === '' || saveInProgress}
-									>
+									<button onClick={handleSubmit} className={`bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition px-4 py-2 rounded-full float-right w-24 ${image === '' ? 'opacity-60 cursor-not-allowed' : ''}`} disabled={image === '' || saveInProgress}>
 										{saveInProgress ? (
 											<div className="flex items-center justify-center">
 												<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
