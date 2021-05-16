@@ -24,6 +24,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	const [comments, setComments] = useState()
 	const [commentText, setCommentText] = useState('')
 	const [parentComment, setParentComment] = useState(null)
+	const [siblingComment, setSiblingComment] = useState(null)
 	const [replyActive, setReplyActive] = useState(false)
 	const [loadingComments, setLoadingComments] = useState(true)
 	const [hasMoreComments, setHasMoreComments] = useState(false)
@@ -84,13 +85,14 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		setHasMoreComments(false)
 	}
 
-	const nestedReply = comment => {
-		let metaReply
+	const handleReply = comment => {
+		let nestedReply
 		if (comment.parent_id) {
-			metaReply = comments.find(com => {
+			nestedReply = comments.find(com => {
 				return com.comment_id === comment.parent_id
 			})
-			setParentComment(metaReply)
+			setParentComment(nestedReply)
+			setSiblingComment(comment)
 		} else {
 			setParentComment(comment)
 		}
@@ -120,6 +122,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 			})
 		setCommentText('')
 		setParentComment(null)
+		setSiblingComment(null)
 		setIsSubmitting(false)
 	}
 
@@ -203,7 +206,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 				deleteComment={deleteComment}
 				nftOwnerId={ownerCount > 0 ? null : nftOwnerId}
 				nftCreatorId={nftCreatorId}
-				nestedReply={nestedReply}
+				handleReply={handleReply}
 				isReply={type}
 			/>
 		)
@@ -297,6 +300,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 										<div key={comment.comment_id}>
 											{commentItem(comment, false)}
 											{parentComment?.comment_id === comment?.comment_id &&
+												siblingComment === null &&
 												inputItem(false)}
 											{comment.replies?.length > 0 && (
 												<div className="ml-10">
@@ -305,6 +309,8 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 															{commentItem(comment, true)}
 															{parentComment?.comment_id ===
 																comment?.parent_id &&
+																comment?.comment_id ===
+																	siblingComment?.comment_id &&
 																inputItem(false)}
 														</div>
 													))}

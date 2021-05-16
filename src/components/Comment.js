@@ -16,7 +16,7 @@ export default function Comment({
 	deleteComment,
 	nftOwnerId,
 	nftCreatorId,
-	nestedReply,
+	handleReply,
 	isReply,
 }) {
 	const context = useContext(AppContext)
@@ -151,7 +151,7 @@ export default function Comment({
 				<div className="flex">
 					<div className="flex-grow"></div>
 					<div
-						onClick={isReply ? () => nestedReply(comment) : () => nestedReply(comment)}
+						onClick={isReply ? () => handleReply(comment) : () => handleReply(comment)}
 						className="w-10 flex items-center justify-end text-gray-400 text-xs sm:mb-0 cursor-pointer -mt-2"
 					>
 						reply
