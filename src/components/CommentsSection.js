@@ -256,7 +256,11 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 					}
 					className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700"
 				>
-					{isSubmitting && !type ? (
+					{isSubmitting && type && parentComment ? (
+						'Post'
+					) : isSubmitting && !type ? (
+						<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
+					) : isSubmitting && type ? (
 						<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
 					) : (
 						'Post'
