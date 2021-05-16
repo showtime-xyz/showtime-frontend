@@ -47,36 +47,19 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 					img_url: r.img_url || DEFAULT_PROFILE_PIC,
 				}))
 			)
-			.then(callback)
-	}
-
-	const handleReplyQuery = (mentionSearchText, callback) => {
-		if (!mentionSearchText) return
-		return backend
-			.get(`/v1/search?q=${mentionSearchText}&limit=5&nft_id=${nftId}`, {
-				method: 'get',
-			})
-			.then(res => res?.data?.data || [])
-			.then(res =>
-				res.map(r => ({
-					username: r.username,
-					id: r.username || r.address0,
-					address: r.address0,
-					display: r.name || formatAddressShort(r.address0),
-					img_url: r.img_url || DEFAULT_PROFILE_PIC,
-				}))
-			)
 			.then(res => {
 				callback(res)
-				res.find(r => {
-					if (r.username === mentionSearchText) {
-						let list = document.querySelector('div.st-mentions-input ul')
-						if (list) {
-							setMentionAdded(true)
-							list.style.display = 'none'
+				if (parentComment) {
+					res.find(r => {
+						if (r.username === mentionSearchText) {
+							let list = document.querySelector('div.st-mentions-input ul')
+							if (list) {
+								setMentionAdded(true)
+								list.style.display = 'none'
+							}
 						}
-					}
-				})
+					})
+				}
 			})
 	}
 
@@ -102,7 +85,15 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	}
 
 	const nestedReply = comment => {
-		setParentComment(comment)
+		let metaReply
+		if (comment.parent_id) {
+			metaReply = comments.find(com => {
+				return com.comment_id === comment.parent_id
+			})
+			setParentComment(metaReply)
+		} else {
+			setParentComment(comment)
+		}
 		setReplyActive(true)
 	}
 
@@ -243,7 +234,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 						trigger="@"
 						renderSuggestion={parentComment ? null : s => suggestion(s)}
 						displayTransform={(_, display) => `${display}`}
-						data={parentComment ? handleReplyQuery : handleDebouncedSearchQuery}
+						data={parentComment ? handleSearchQuery : handleDebouncedSearchQuery}
 						className="bg-purple-200 rounded -ml-1 sm:ml-0"
 						appendSpaceOnAdd
 					/>
@@ -312,6 +303,9 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 													{comment.replies?.map(comment => (
 														<div key={comment.comment_id}>
 															{commentItem(comment, true)}
+															{parentComment?.comment_id ===
+																comment?.parent_id &&
+																inputItem(false)}
 														</div>
 													))}
 												</div>
