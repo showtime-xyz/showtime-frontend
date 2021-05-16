@@ -29,6 +29,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	const [hasMoreComments, setHasMoreComments] = useState(false)
 	const [loadingMoreComments, setLoadingMoreComments] = useState(true)
 	const [isSubmitting, setIsSubmitting] = useState(false)
+	const [mentionAdded, setMentionAdded] = useState(false)
 
 	const handleSearchQuery = (mentionSearchText, callback) => {
 		if (!mentionSearchText) return
@@ -51,8 +52,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 
 	const handleReplyQuery = (mentionSearchText, callback) => {
 		if (!mentionSearchText) return
-		let matched = false
-		backend
+		return backend
 			.get(`/v1/search?q=${mentionSearchText}&limit=5&nft_id=${nftId}`, {
 				method: 'get',
 			})
@@ -69,22 +69,14 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 			.then(res => {
 				callback(res)
 				res.find(r => {
-					console.log(r)
 					if (r.username === mentionSearchText) {
-						console.log('r is true')
-						matched = true
+						let list = document.querySelector('div.st-mentions-input ul')
+						if (list) {
+							setMentionAdded(true)
+							list.style.display = 'none'
+						}
 					}
 				})
-			})
-			.then(() => {
-				if (matched) {
-					let list = document.querySelector('div.mentions-input ul')
-					list.style.display = 'none'
-					setTimeout(() => {
-						let link = document.querySelector('div.mentions-input li')
-						link?.click()
-					}, 500)
-				}
 			})
 	}
 
@@ -194,11 +186,15 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		}
 	}, [refArray])
 
+	useEffect(() => {
+		let link = document.querySelector('div.st-mentions-input li')
+		link?.click()
+		setMentionAdded(false)
+	}, [mentionAdded])
+
 	const suggestion = s => {
-		const suggestionRef = createRef()
-		refArray.push(suggestionRef)
 		return (
-			<div className="flex items-center" ref={suggestionRef}>
+			<div className="flex items-center">
 				<img src={s.img_url} className="h-6 w-6 mr-2 rounded-full" />
 				<span className="">{s.display}</span>
 				{s.username && <span className="text-gray-400 ml-2">@{s.username}</span>}
@@ -238,15 +234,15 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 					disabled={context.disableComments || (type && parentComment)}
 					style={MENTIONS_STYLE}
 					placeholder="Your comment..."
-					className="mentions-input flex-grow md:mr-2"
+					className="st-mentions-input flex-grow md:mr-2"
 					allowSuggestionsAboveCursor
 					allowSpaceInQuery
 					maxLength={240}
 				>
 					<Mention
 						trigger="@"
-						renderSuggestion={parentComment ? () => <></> : s => suggestion(s)}
-						displayTransform={(id, display) => `${display}`}
+						renderSuggestion={parentComment ? null : s => suggestion(s)}
+						displayTransform={(_, display) => `${display}`}
 						data={parentComment ? handleReplyQuery : handleDebouncedSearchQuery}
 						className="bg-purple-200 rounded -ml-1 sm:ml-0"
 						appendSpaceOnAdd
