@@ -14,9 +14,14 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	const { user } = context
 	let refArray = []
 
-	const { nft_id: nftId, owner_id: nftOwnerId, creator_id: nftCreatorId, owner_count: ownerCount } = item
+	const {
+		nft_id: nftId,
+		owner_id: nftOwnerId,
+		creator_id: nftCreatorId,
+		owner_count: ownerCount,
+	} = item
 
-	const [comments, setComments] = useState()
+	const [comments, setComments] = useState([])
 	const [commentText, setCommentText] = useState('')
 	const [parentComment, setParentComment] = useState(null)
 	const [siblingComment, setSiblingComment] = useState(null)
@@ -46,7 +51,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 			)
 			.then(res => {
 				callback(res)
-				if (parentComment) {
+				if (parentComment || siblingComment) {
 					res.find(r => {
 						if (r.username === mentionSearchText) {
 							let list = document.querySelector('div.st-mentions-input ul')
@@ -60,10 +65,15 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 			})
 	}
 
-	const handleDebouncedSearchQuery = useCallback(AwesomeDebouncePromise(handleSearchQuery, 300), [])
+	const handleDebouncedSearchQuery = useCallback(
+		AwesomeDebouncePromise(handleSearchQuery, 300),
+		[]
+	)
 
 	const refreshComments = async () => {
-		const commentsData = await backend.get(`/v2/comments/${nftId}${hasMoreComments ? '' : '?limit=10'}`)
+		const commentsData = await backend.get(
+			`/v2/comments/${nftId}${hasMoreComments ? '' : '?limit=10'}`
+		)
 		setComments(commentsData.data.data.comments)
 		setHasMoreComments(commentsData.data.data.has_more)
 		setLoadingComments(false)
@@ -96,6 +106,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		context.setCommentInputFocused(false)
 		if (commentText?.trim().length === 0 || testUserName) {
 			setLocalFocus(false)
+			setCommentText('')
 			setParentComment(null)
 			setSiblingComment(null)
 		}
@@ -138,13 +149,17 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 
 	const handleLoggedOutComment = () => {
 		setLocalFocus(false)
+		setCommentText('')
+		setParentComment(null)
+		setSiblingComment(null)
 		context.setLoginModalOpen(true)
 		mixpanel.track('Commented but logged out')
 	}
 
 	const storeCommentInContext = async () => {
 		const myCommentCounts = context.myCommentCounts
-		const newAmountOfMyComments = ((myCommentCounts && myCommentCounts[nftId]) || commentCount) + 1
+		const newAmountOfMyComments =
+			((myCommentCounts && myCommentCounts[nftId]) || commentCount) + 1
 		context.setMyCommentCounts({
 			...context.myCommentCounts,
 			[nftId]: newAmountOfMyComments,
@@ -156,7 +171,8 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 
 	const removeCommentFromContext = async () => {
 		const myCommentCounts = context.myCommentCounts
-		const newAmountOfMyComments = ((myCommentCounts && myCommentCounts[nftId]) || commentCount) - 1
+		const newAmountOfMyComments =
+			((myCommentCounts && myCommentCounts[nftId]) || commentCount) - 1
 		context.setMyCommentCounts({
 			...context.myCommentCounts,
 			[nftId]: newAmountOfMyComments,
@@ -203,19 +219,72 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	}
 
 	const commentItem = comment => {
-		return <Comment key={comment.comment_id} comment={comment} modalRef={modalRef} closeModal={closeModal} deleteComment={deleteComment} nftOwnerId={ownerCount > 0 ? null : nftOwnerId} nftCreatorId={nftCreatorId} handleReply={handleReply} />
+		return (
+			<Comment
+				key={comment.comment_id}
+				comment={comment}
+				modalRef={modalRef}
+				closeModal={closeModal}
+				deleteComment={deleteComment}
+				nftOwnerId={ownerCount > 0 ? null : nftOwnerId}
+				nftCreatorId={nftCreatorId}
+				handleReply={handleReply}
+			/>
+		)
 	}
 
-	const inputItem = type => {
+	const inputItem = isReply => {
 		const newInputRef = createRef()
 		refArray.push(newInputRef)
 		return (
-			<div className={`${!type ? 'ml-10 ' : ''} my-2 flex items-stretch flex-col md:flex-row`}>
-				<MentionsInput value={(!type && parentComment) || parentComment === null ? commentText : ''} inputRef={!type ? newInputRef : null} onChange={e => setCommentText(e.target.value)} onFocus={() => context.setCommentInputFocused(true)} onBlur={handleOnBlur} disabled={context.disableComments || (type && parentComment)} style={MENTIONS_STYLE} placeholder="Your comment..." className="st-mentions-input flex-grow md:mr-2" allowSuggestionsAboveCursor allowSpaceInQuery maxLength={240}>
-					<Mention trigger="@" renderSuggestion={parentComment ? null : s => suggestion(s)} displayTransform={(_, display) => `${display}`} data={parentComment ? handleSearchQuery : handleDebouncedSearchQuery} className="bg-purple-200 rounded -ml-1 sm:ml-0" appendSpaceOnAdd />
+			<div
+				className={`${
+					isReply ? 'ml-10 ' : ''
+				} my-2 flex items-stretch flex-col md:flex-row`}
+			>
+				<MentionsInput
+					value={(isReply && parentComment) || parentComment === null ? commentText : ''}
+					inputRef={isReply ? newInputRef : null}
+					onChange={e => setCommentText(e.target.value)}
+					onFocus={() => context.setCommentInputFocused(true)}
+					onBlur={handleOnBlur}
+					disabled={context.disableComments || (!isReply && parentComment)}
+					style={MENTIONS_STYLE}
+					placeholder="Your comment..."
+					className="st-mentions-input flex-grow md:mr-2"
+					allowSuggestionsAboveCursor
+					allowSpaceInQuery
+					maxLength={240}
+				>
+					<Mention
+						trigger="@"
+						renderSuggestion={parentComment ? null : s => suggestion(s)}
+						displayTransform={(_, display) => `${display}`}
+						data={parentComment ? handleSearchQuery : handleDebouncedSearchQuery}
+						className="bg-purple-200 rounded -ml-1 sm:ml-0"
+						appendSpaceOnAdd
+					/>
 				</MentionsInput>
-				<button onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700">
-					{isSubmitting && type && parentComment ? 'Post' : isSubmitting && !type ? <div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" /> : isSubmitting && type ? <div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" /> : 'Post'}
+				<button
+					onClick={!user ? handleLoggedOutComment : createComment}
+					disabled={
+						isSubmitting ||
+						!commentText ||
+						commentText === '' ||
+						commentText.trim() === '' ||
+						context.disableComments
+					}
+					className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700"
+				>
+					{isSubmitting && !isReply && parentComment ? (
+						'Post'
+					) : isSubmitting && isReply ? (
+						<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
+					) : isSubmitting && !isReply ? (
+						<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
+					) : (
+						'Post'
+					)}
 				</button>
 			</div>
 		)
@@ -237,8 +306,13 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 							{hasMoreComments && (
 								<div className="flex flex-row items-center my-2 justify-center">
 									{!loadingMoreComments ? (
-										<div className="text-center px-4 py-1 flex items-center w-max border-2 border-gray-300 rounded-full hover:text-stpink hover:border-stpink cursor-pointer transition-all" onClick={handleGetMoreComments}>
-											<div className="mr-2 text-sm">Show Earlier Comments</div>
+										<div
+											className="text-center px-4 py-1 flex items-center w-max border-2 border-gray-300 rounded-full hover:text-stpink hover:border-stpink cursor-pointer transition-all"
+											onClick={handleGetMoreComments}
+										>
+											<div className="mr-2 text-sm">
+												Show Earlier Comments
+											</div>
 										</div>
 									) : (
 										<div className="p-1">
@@ -252,13 +326,21 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 									comments.map(comment => (
 										<div key={comment.comment_id}>
 											{commentItem(comment)}
-											{parentComment?.comment_id === comment?.comment_id && siblingComment === null && localFocus && inputItem(false)}
+											{parentComment?.comment_id === comment?.comment_id &&
+												siblingComment === null &&
+												localFocus &&
+												inputItem(true)}
 											{comment.replies?.length > 0 && (
 												<div className="ml-10">
 													{comment.replies?.map(comment => (
 														<div key={comment.comment_id}>
 															{commentItem(comment)}
-															{parentComment?.comment_id === comment?.parent_id && comment?.comment_id === siblingComment?.comment_id && localFocus && inputItem(false)}
+															{parentComment?.comment_id ===
+																comment?.parent_id &&
+																comment?.comment_id ===
+																	siblingComment?.comment_id &&
+																localFocus &&
+																inputItem(true)}
 														</div>
 													))}
 												</div>
@@ -266,10 +348,12 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 										</div>
 									))
 								) : (
-									<div className="my-2 mb-3 p-3 bg-gray-100 rounded-xl">No comments yet.</div>
+									<div className="my-2 mb-3 p-3 bg-gray-100 rounded-xl">
+										No comments yet.
+									</div>
 								)}
 							</div>
-							{inputItem(true)}
+							{inputItem(false)}
 						</div>
 					</div>
 				)}
