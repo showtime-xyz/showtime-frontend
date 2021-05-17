@@ -47,6 +47,7 @@ export const getBidLink = item => {
 				return `https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`
 			}
 		case CONTRACTS.PORTIONIO:
+		case CONTRACTS.PORTIONIO_1155:
 			if (item.token_img_original_url) {
 				return `https://app.portion.io/#exchange?ID=${item.token_img_original_url.replace('https://ipfs.io/ipfs/', '')}`
 			} else {
@@ -103,6 +104,7 @@ export const getContractName = item => {
 		case CONTRACTS.ASYNCART_V2:
 			return 'Async Art'
 		case CONTRACTS.PORTIONIO:
+		case CONTRACTS.PORTIONIO_1155:
 			if (item.token_img_original_url) {
 				return 'Portion.io'
 			} else {
