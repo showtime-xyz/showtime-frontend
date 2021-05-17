@@ -192,11 +192,9 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 
 	useEffect(() => {
 		if (parentComment && replyActive) {
-			if (siblingComment) {
-				setCommentText('@' + (siblingComment.username || siblingComment.name))
-			} else {
-				setCommentText('@' + (parentComment.username || parentComment.name))
-			}
+			siblingComment
+				? setCommentText('@' + (siblingComment.username || siblingComment.name))
+				: setCommentText('@' + (parentComment.username || parentComment.name))
 			refArray[0]?.current?.focus()
 			setReplyActive(false)
 		}
@@ -322,8 +320,8 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 								</div>
 							)}
 							<div className="mb-4">
-								{comments.length > 0 ? (
-									comments.map(comment => (
+								{comments?.length > 0 ? (
+									comments?.map(comment => (
 										<div key={comment.comment_id}>
 											{commentItem(comment)}
 											{parentComment?.comment_id === comment?.comment_id &&
