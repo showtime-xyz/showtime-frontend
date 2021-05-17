@@ -91,6 +91,16 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		setReplyActive(true)
 	}
 
+	const handleOnBlur = () => {
+		let testUserName = /\[(.*?)\)\s$/g.test(commentText)
+		context.setCommentInputFocused(false)
+		if (commentText?.trim().length === 0 || testUserName) {
+			setLocalFocus(false)
+			setParentComment(null)
+			setSiblingComment(null)
+		}
+	}
+
 	const createComment = async () => {
 		setIsSubmitting(true)
 		let endpoint = '/api/createcomment'
@@ -182,15 +192,6 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		setMentionAdded(false)
 	}, [mentionAdded])
 
-	const handleOnBlur = () => {
-		context.setCommentInputFocused(false)
-		if (commentText.length === 0) {
-			setLocalFocus(false)
-			setParentComment(null)
-			setSiblingComment(null)
-		}
-	}
-
 	const suggestion = s => {
 		return (
 			<div className="flex items-center">
@@ -210,7 +211,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		refArray.push(newInputRef)
 		return (
 			<div className={`${!type ? 'ml-10 ' : ''} my-2 flex items-stretch flex-col md:flex-row`}>
-				<MentionsInput value={(!type && parentComment) || parentComment === null ? commentText : ''} inputRef={!type ? newInputRef : null} onChange={e => setCommentText(e.target.value)} onFocus={() => context.setCommentInputFocused(true)} onBlur={handleOnBlur} disabled={context.disableComments || (type && parentComment)} style={MENTIONS_STYLE} placeholder="Your comment..." className="st-mentions-input flex-grow md:mr-2" allowSuggestionsAboveCursor allowSpaceInQuery maxLength={240}>
+				<MentionsInput value={(!type && parentComment) || parentComment === null ? commentText : ''} inputRef={!type ? newInputRef : null} onChange={e => setCommentText(e.target.value)} onFocus={() => context.setCommentInputFocused(true)} onBlur={() => handleOnBlur(comment)} disabled={context.disableComments || (type && parentComment)} style={MENTIONS_STYLE} placeholder="Your comment..." className="st-mentions-input flex-grow md:mr-2" allowSuggestionsAboveCursor allowSpaceInQuery maxLength={240}>
 					<Mention trigger="@" renderSuggestion={parentComment ? null : s => suggestion(s)} displayTransform={(_, display) => `${display}`} data={parentComment ? handleSearchQuery : handleDebouncedSearchQuery} className="bg-purple-200 rounded -ml-1 sm:ml-0" appendSpaceOnAdd />
 				</MentionsInput>
 				<button onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700">
