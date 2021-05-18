@@ -7,7 +7,7 @@ import AppContext from '@/context/app-context'
 
 export default function ActivityImage({ nft, index, numberOfImages, openModal, spacingIndex, bottomRow, roundAllCorners, totalNumberOfImages }) {
 	const aRef = useRef()
-	const { isMobile, windowSize } = useContext(AppContext)
+	const { isMobile } = useContext(AppContext)
 	const [imgWidth, setImgWidth] = useState(null)
 	const [isHovering, setIsHovering] = useState(false)
 	useEffect(() => {
@@ -17,10 +17,6 @@ export default function ActivityImage({ nft, index, numberOfImages, openModal, s
 	useEffect(() => {
 		setImgWidth(aRef?.current?.clientWidth)
 	}, [])
-
-	useEffect(() => {
-		setImgWidth(aRef?.current?.clientWidth)
-	}, [windowSize])
 
 	const getImageUrl = (img_url, token_aspect_ratio) => {
 		if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
