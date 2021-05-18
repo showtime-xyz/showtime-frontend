@@ -68,7 +68,7 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 	const onCornerMenuClick = () => setIsActive(!isActive)
 	return (
 		<div
-			className="flex flex-col flex-1 mb-6 pt-4 sm:rounded-lg bg-white shadow-md border-t-2"
+			className="flex flex-col flex-1 mb-6 pt-4 sm:rounded-lg bg-white shadow-md border-t-2 overflow-hidden"
 			style={{
 				borderTopColor: activityIconObjects[type].color,
 			}}

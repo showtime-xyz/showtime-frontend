@@ -9,7 +9,7 @@ export default function ActivityFeed({
 }) {
 	return (
 		<>
-			<div className="sm:px-3">
+			<div className="sm:px-3 overflow-hidden">
 				{activity.map(act => (
 					<ActivityCard act={act} key={act.id} setItemOpenInModal={setItemOpenInModal} setReportModalIsOpen={setReportModalIsOpen} removeActorFromFeed={removeActorFromFeed} />
 				))}
