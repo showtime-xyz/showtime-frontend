@@ -5,11 +5,12 @@ import LikeButton from './LikeButton'
 import CommentButton from './CommentButton'
 import AppContext from '@/context/app-context'
 
-export default function ActivityImage({ nft, index, numberOfImages, openModal, spacingIndex, bottomRow, roundAllCorners, totalNumberOfImages }) {
+export default function ActivityImage({ nft, index, numberOfImages, openModal, spacingIndex, bottomRow, roundAllCorners, totalNumberOfImages, cardWidth }) {
 	const aRef = useRef()
 	const { isMobile } = useContext(AppContext)
 	const [imgWidth, setImgWidth] = useState(null)
 	const [isHovering, setIsHovering] = useState(false)
+
 	useEffect(() => {
 		setImgWidth(aRef?.current?.clientWidth)
 	}, [aRef?.current?.clientWidth])
@@ -62,8 +63,15 @@ export default function ActivityImage({ nft, index, numberOfImages, openModal, s
 					playing={true}
 					loop
 					muted={true}
-					width={imgWidth}
+					width={imgWidth > window.innerWidth ? window.innerWidth : imgWidth > cardWidth ? cardWidth : imgWidth}
 					height={imgWidth}
+					style={{
+						maxWidth: imgWidth > window.innerWidth ? window.innerWidth : imgWidth > cardWidth ? cardWidth : imgWidth,
+						justifyContent: 'center',
+						alignItems: 'center',
+						marginLeft: 'auto',
+						marginRight: 'auto',
+					}}
 					playsinline
 					// Disable downloading & right click
 					config={{
