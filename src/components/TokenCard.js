@@ -257,17 +257,7 @@ const TokenCard = ({
 									<div className="whitespace-pre-line">{removeTags(item.token_description)}</div>
 								) : (
 									<div>
-										{item.token_description?.length > max_description_length ? (
-											<>
-												{truncateWithEllipses(removeTags(item.token_description), max_description_length)}{' '}
-												<a onClick={() => setMoreShown(true)} className="text-gray-900 hover:text-gray-500 cursor-pointer">
-													{' '}
-													more
-												</a>
-											</>
-										) : (
-											<div>{removeTags(item.token_description)}</div>
-										)}
+										<div className="whitespace-nowrap overflow-hidden overflow-ellipsis">{removeTags(item.token_description)}</div>
 									</div>
 								)}
 							</div>
