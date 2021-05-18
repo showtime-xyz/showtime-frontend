@@ -10,13 +10,10 @@ import useKeyPress from '@/hooks/useKeyPress'
 import ActivityFeed from '@/components/ActivityFeed'
 import ModalTokenDetail from '@/components/ModalTokenDetail'
 import ActivityRecommendedFollows from '@/components/ActivityRecommendedFollows'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faComment, faHeart, faUser } from '@fortawesome/free-regular-svg-icons'
-import { faComment as fasComment, faHeart as fasHeart, faFingerprint, faUser as fasUser, faFilter } from '@fortawesome/free-solid-svg-icons'
 import ModalReportItem from '@/components/ModalReportItem'
 import RecommendFollowers from '@/components/RecommendFollowers'
 import axios from '@/lib/axios'
-import { FingerPrintIcon, HeartIcon as HeartSolidIcon, UserIcon as UserSolidIcon, ChatAlt2Icon as CommentSolidIcon } from '@heroicons/react/solid'
+import { FingerPrintIcon, HeartIcon as HeartSolidIcon, UserIcon as UserSolidIcon, ChatAlt2Icon as CommentSolidIcon, FilterIcon } from '@heroicons/react/solid'
 import { HeartIcon as HeartOutlineIcon, UserIcon as UserOutlineIcon, ChatAlt2Icon as CommentOutlineIcon } from '@heroicons/react/outline'
 
 const ACTIVITY_PAGE_LENGTH = 2 // 5 activity items per activity page
@@ -223,7 +220,7 @@ const Activity = () => {
 									setShowFiltersMobile(!showFiltersMobile)
 								}}
 							>
-								<FontAwesomeIcon icon={faFilter} className="w-4 h-4" />
+								<FilterIcon className="w-5 h-5" />
 							</div>
 						</div>
 

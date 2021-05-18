@@ -1,12 +1,10 @@
 import { useState, useContext, useEffect } from 'react'
 import LeaderboardItemV2 from '@/components/LeaderboardItemV2'
 import LoadingSpinner from '@/components/LoadingSpinner'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowDown, faPlus } from '@fortawesome/free-solid-svg-icons'
 import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
 import axios from '@/lib/axios'
-import { ArrowDownIcon } from '@heroicons/react/solid'
+import { ArrowDownIcon, PlusIcon } from '@heroicons/react/solid'
 
 const TrendingCreators = ({ shownLeaderboardItems, allLeaderboardItems, isLoading, showAllLeaderboardItems, setShowAllLeaderboardItems, trendingTab }) => {
 	const context = useContext(AppContext)
@@ -49,7 +47,7 @@ const TrendingCreators = ({ shownLeaderboardItems, allLeaderboardItems, isLoadin
 							<div className={`border rounded-full py-2 px-4 text-xs flex flex-row ${followAllClicked ? 'bg-transparent border-gray-700 dark:border-gray-500 text-gray-700 dark:text-gray-500' : context.disableFollows ? 'bg-stpurple text-white border-stpurple opacity-70' : 'bg-stpurple text-white dark:text-gray-900 border-stpurple cursor-pointer hover:opacity-70'} transition-all`} onClick={context.user ? (followAllClicked ? null : context.disableFollows ? null : handleFollowAll) : handleLoggedOutFollowAll}>
 								{!followAllClicked && (
 									<div className="mr-1">
-										<FontAwesomeIcon icon={faPlus} />
+										<PlusIcon className="w-4 h-4" />
 									</div>
 								)}
 								<div>{followAllClicked ? 'Following All' : 'Follow All'}</div>

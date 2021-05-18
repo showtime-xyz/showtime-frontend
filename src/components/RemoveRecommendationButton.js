@@ -1,7 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
 import _ from 'lodash'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import AppContext from '@/context/app-context'
 import { XIcon } from '@heroicons/react/solid'
 
