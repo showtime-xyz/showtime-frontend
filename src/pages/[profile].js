@@ -635,13 +635,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 					<ModalEditPhoto isOpen={pictureModalOpen} setEditModalOpen={setPictureModalOpen} />
 					<ModalEditCover isOpen={coverModalOpen} setEditModalOpen={setCoverModalOpen} />
 					{/* Followers modal */}
-					<ModalUserList
-						title="Followers"
-						isOpen={showFollowers}
-						users={followers ? followers : []}
-						closeModal={() => setShowFollowers(false)}
-						emptyMessage="No followers yet."
-					/>
+					<ModalUserList title="Followers" isOpen={showFollowers} users={followers ? followers : []} closeModal={() => setShowFollowers(false)} emptyMessage="No followers yet." />
 					{/* Following modal */}
 					<ModalUserList
 						title="Following"
