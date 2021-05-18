@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 import ActivityCard from './ActivityCard'
 
-export default function ActivityFeed({
+const ActivityFeed = ({
 	activity,
 	setItemOpenInModal,
 	//removeItemFromFeed,
 	removeActorFromFeed,
 	setReportModalIsOpen,
-}) {
+}) => {
 	let windowObj
 	useEffect(() => {
 		windowObj = window
@@ -23,3 +23,5 @@ export default function ActivityFeed({
 		</div>
 	)
 }
+
+export default ActivityFeed
