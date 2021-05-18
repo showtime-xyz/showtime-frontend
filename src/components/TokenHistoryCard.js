@@ -99,7 +99,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
 			{hasMoreHistory && (
 				<div className="flex flex-row items-center my-2 justify-center">
 					{!loadingMoreHistory ? (
-						<div className="text-center px-4 py-1 flex items-center w-max border-2 border-gray-300 rounded-full hover:text-stpink hover:border-stpink cursor-pointer transition-all" onClick={handleGetMoreHistory}>
+						<div className="text-center px-4 py-1 flex items-center w-max border-2 border-gray-300 dark:border-gray-800 rounded-full dark:text-gray-500 hover:text-stpink dark:hover:text-stpink hover:border-stpink dark:hover:border-stpink cursor-pointer transition-all" onClick={handleGetMoreHistory}>
 							<div className="mr-2 text-sm">Show All</div>
 							<div>
 								<FontAwesomeIcon className="h-3" icon={faArrowDown} />

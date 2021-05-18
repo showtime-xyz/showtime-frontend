@@ -122,7 +122,7 @@ const TokenDetailBody = ({
 										<div>
 											<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
 										</div>
-										<div className="text-gray-800 hover:text-stpink ml-2">{truncateWithEllipses(item.collection_name, 30)} Collection</div>
+										<div className="text-gray-800 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink ml-2">{truncateWithEllipses(item.collection_name, 30)} Collection</div>
 									</a>
 								</Link>
 							) : item.creator_address ? (
@@ -132,7 +132,7 @@ const TokenDetailBody = ({
 											<div>
 												<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
 											</div>
-											<div className="text-gray-800 hover:text-stpink ml-2">{truncateWithEllipses(item.creator_name, 22)}</div>
+											<div className="text-gray-800 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink ml-2">{truncateWithEllipses(item.creator_name, 22)}</div>
 										</a>
 									</Link>
 									{context.myProfile?.profile_id !== item?.creator_id && (

@@ -743,8 +743,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 						<div className="flex-grow"></div>
 						<div className="flex  flex-col">
 							<div className="flex items-center mt-6 md:-mt-7 md:z-10  md:justify-end justify-start md:mx-0 ">
-								<div className="flex border border-transparent dark:border-gray-800 flex-row md:bg-white md:dark:bg-gray-900 md:shadow-md md:rounded-full md:px-2 md:py-2 items-center">
-									<div className="flex-grow ">
+								<div className="flex md:border border-transparent dark:border-gray-800 flex-row md:bg-white md:dark:bg-gray-900 md:shadow-md md:rounded-full md:px-2 md:py-2 items-center">
+									<div className="flex-grow">
 										<div className="flex flex-row ">
 											<div className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80 md:ml-4" onClick={() => setShowFollowing(true)}>
 												<div className="text-sm mr-2">{following && following.length !== null ? Number(isMyProfile ? context.myFollows.length : following_count).toLocaleString() : null}</div>

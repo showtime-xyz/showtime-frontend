@@ -161,7 +161,7 @@ const SearchBar = () => {
 						</div>
 					</div>
 					{searchText.length > 0 && showSearchResults && (
-						<div className="flex flex-col mt-4 max-h-[80vh] overflow-y-scroll absolute top-10 sm:top-14 left-16 right-4 border bg-white rounded-lg shadow" ref={dropdownRef}>
+						<div className="flex flex-col mt-4 max-h-[80vh] overflow-y-scroll absolute top-10 sm:top-14 left-16 right-4 border dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg shadow" ref={dropdownRef}>
 							{isLoading ? (
 								<div className="flex justify-center w-full p-4">
 									<LoadingSpinner />
@@ -171,7 +171,7 @@ const SearchBar = () => {
 									{searchResults.map((searchResult, index) => (
 										<Link href="/[profile]" as={`/${searchResult?.username || searchResult.address0}`} key={searchResult.profile_id}>
 											<div
-												className={`flex items-center w-full p-4 cursor-pointer hover:bg-gray-50 ${activeSelectedSearchResult === index ? 'bg-gray-50' : 'bg-white'} ${index === 0 ? 'rounded-t-lg' : ''} ${index === searchResults.length - 1 ? 'rounded-b-lg' : ''}`}
+												className={`flex items-center w-full p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 ${activeSelectedSearchResult === index ? 'bg-gray-800' : 'bg-gray-900'} ${index === 0 ? 'rounded-t-lg' : ''} ${index === searchResults.length - 1 ? 'rounded-b-lg' : ''}`}
 												key={index}
 												onClick={() => {
 													setShowSearchResults(false)
@@ -180,12 +180,12 @@ const SearchBar = () => {
 												}}
 											>
 												<img className="w-6 h-6 mr-2 rounded-full" src={searchResult?.img_url ? searchResult?.img_url : DEFAULT_PROFILE_PIC} />
-												<div className="truncate flex-0">{searchResult?.name || searchResult.address0}</div>
-												{searchResult?.username ? <div className="flex-1 text-sm pl-1 truncate text-gray-400">@{searchResult?.username}</div> : null}
+												<div className="truncate flex-0 dark:text-gray-300">{searchResult?.name || searchResult.address0}</div>
+												{searchResult?.username ? <div className="flex-1 text-sm pl-1 truncate text-gray-400 dark:text-gray-500">@{searchResult?.username}</div> : null}
 											</div>
 										</Link>
 									))}
-									{searchResults.length === 0 && <div className="flex w-full p-4">No matching people</div>}
+									{searchResults.length === 0 && <div className="flex w-full p-4 dark:text-gray-400">No matching people</div>}
 								</>
 							)}
 						</div>

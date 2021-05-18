@@ -221,7 +221,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 									disabled={context.disableComments}
 									placeholder="Your comment..."
 									classNames={{
-										mentions: 'dark:bg-gray-700 border dark:border-gray-800 rounded-lg flex-grow md:mr-2',
+										mentions: 'dark:bg-gray-700 border dark:border-gray-800 rounded-lg flex-grow md:mr-2 w-full md:w-auto mb-2 md:mb-0',
 										mentions__input: 'focus:outline-none focus-visible:ring-1 dark:text-gray-300',
 										mentions__suggestions__list: 'rounded-lg border border-transparent dark:border-gray-800 bg-white hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 overflow-hidden',
 									}}
@@ -245,7 +245,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 										appendSpaceOnAdd
 									/>
 								</MentionsInput>
-								<GhostButton loading={isSubmitting} onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="rounded-lg">
+								<GhostButton loading={isSubmitting} onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="rounded-lg w-full md:w-auto">
 									Post
 								</GhostButton>
 							</div>
