@@ -1,6 +1,5 @@
-import { useContext, useRef } from 'react'
+import { useContext } from 'react'
 import AppContext from '@/context/app-context'
-import useDetectOutsideClick from '@/hooks/useDetectOutsideClick'
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { classNames } from '@/lib/utilities'
@@ -9,10 +8,6 @@ import { useTheme } from 'next-themes'
 const ProfileFollowersPill = ({ isFollowed, isMyProfile, followingMe, hasEmailAddress, handleUnfollow, handleFollow, handleLoggedOutFollow, editAccount, editPhoto, addWallet, addEmail, logout }) => {
 	const { theme, themes, setTheme } = useTheme()
 	const context = useContext(AppContext)
-	const dropdownRef = useRef(null)
-	const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
-
-	const onEditProfileClick = () => setIsActive(!isActive)
 
 	return (
 		<div className="text-center text-gray-900">
@@ -40,7 +35,7 @@ const ProfileFollowersPill = ({ isFollowed, isMyProfile, followingMe, hasEmailAd
 											<Menu.Item>
 												{({ active }) => (
 													<button onClick={editPhoto} className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm')}>
-														Edit Photo
+														{context.myProfile && context.myProfile.img_url && !context.myProfile.img_url.includes('opensea-profile') ? 'Edit Photo' : 'Add Photo'}
 													</button>
 												)}
 											</Menu.Item>
@@ -93,61 +88,6 @@ const ProfileFollowersPill = ({ isFollowed, isMyProfile, followingMe, hasEmailAd
 							</>
 						)}
 					</Menu>
-					// <>
-					// 	<div className="w-32 py-2 rounded-full text-sm cursor-pointer shadow-md md:shadow-none transition-all bg-white dark:bg-gray-900 text-black dark:text-gray-300 border border-white md:border-gray-700" onClick={onEditProfileClick}>
-					// 		Edit Profile
-					// 	</div>
-
-					// 	<div ref={dropdownRef} className={`absolute text-left top-12 -right-1 md:right-0 border border-transparent bg-white dark:bg-gray-900 dark:border-gray-800 py-2 px-2 shadow-lg rounded-xl transition-all text-md transform z-1 ${isActive ? 'visible opacity-1 translate-y-2' : 'invisible opacity-0'}`}>
-					// 		<div
-					// 			className="py-2 dark:text-gray-400 hover:text-stpink dark:hover:stpink hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg cursor-pointer whitespace-nowrap transition-all"
-					// 			onClick={() => {
-					// 				setIsActive(false)
-					// 				editAccount()
-					// 			}}
-					// 		>
-					// 			Edit Info
-					// 		</div>
-					// 		<div
-					// 			className="py-2 dark:text-gray-400 hover:text-stpink dark:hover:stpink hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg cursor-pointer whitespace-nowrap transition-all"
-					// 			onClick={() => {
-					// 				setIsActive(false)
-					// 				editPhoto()
-					// 			}}
-					// 		>
-					// 			{context.myProfile && context.myProfile.img_url && !context.myProfile.img_url.includes('opensea-profile') ? 'Edit Photo' : 'Add Photo'}
-					// 		</div>
-					// 		<div
-					// 			className="py-2 dark:text-gray-400 hover:text-stpink dark:hover:stpink hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg cursor-pointer whitespace-nowrap transition-all"
-					// 			onClick={() => {
-					// 				setIsActive(false)
-					// 				addWallet()
-					// 			}}
-					// 		>
-					// 			Add Wallet
-					// 		</div>
-					// 		{hasEmailAddress ? null : (
-					// 			<div
-					// 				className="py-2 dark:text-gray-400 hover:text-stpink dark:hover:stpink hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg cursor-pointer whitespace-nowrap transition-all"
-					// 				onClick={() => {
-					// 					setIsActive(false)
-					// 					addEmail()
-					// 				}}
-					// 			>
-					// 				Add Email
-					// 			</div>
-					// 		)}
-					// 		<button
-					// 			className="py-2 dark:text-gray-400 hover:text-stpink dark:hover:stpink hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg cursor-pointer whitespace-nowrap transition"
-					// 			onClick={() => {
-					// 				setIsActive(false)
-					// 				logout()
-					// 			}}
-					// 		>
-					// 			Log Out
-					// 		</button>
-					// 	</div>
-					// </>
 				)}
 			</div>
 		</div>
