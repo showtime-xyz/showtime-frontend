@@ -19,6 +19,14 @@ export default function ActivityImage({ nft, index, numberOfImages, openModal, s
 		setImgWidth(aRef?.current?.clientWidth)
 	}, [])
 
+	useEffect(() => {
+		if (imgWidth > cardWidth && window.innerWidth > cardWidth) {
+			return setImgWidth(cardWidth)
+		} else if (imgWidth > window.innerWidth && cardWidth > window.innerWidth) {
+			return setImgWidth(window.innerWidth)
+		}
+	}, [cardWidth, imgWidth])
+
 	const getImageUrl = (img_url, token_aspect_ratio) => {
 		if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
 			if (token_aspect_ratio && token_aspect_ratio > 1) {

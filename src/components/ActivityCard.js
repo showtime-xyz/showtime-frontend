@@ -70,13 +70,14 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 
 	useEffect(() => {
 		setCardWidth(cardRef?.current?.clientWidth)
-	}, [cardRef?.current?.clientWidth])
+	}, [cardRef?.current?.clientWidth, context.windowSize])
 
 	const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
 
 	const onCornerMenuClick = () => setIsActive(!isActive)
 	return (
 		<div
+			ref={cardRef}
 			className="flex flex-col flex-1 mb-6 pt-4 sm:rounded-lg bg-white shadow-md border-t-2 overflow-hidden"
 			style={{
 				borderTopColor: activityIconObjects[type].color,
