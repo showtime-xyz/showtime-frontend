@@ -11,6 +11,7 @@ import { useRouter } from 'next/router'
 import Fortmatic from 'fortmatic'
 import ScrollableModal from './ScrollableModal'
 import axios from '@/lib/axios'
+import GreenButton from '@/components/UI/Buttons/GreenButton'
 
 export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 	const context = useContext(AppContext)
@@ -304,10 +305,9 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 								<div className="mt-4 mb-0 pt-4 text-center border-t-2 dark:border-gray-800">
 									{step == 1 ? (
 										<button
-											className="border-2 border-transparent text-white bg-stpink hover:border-stpink hover:bg-transparent hover:text-stpink transition py-2 px-4 rounded-full"
+											className="border-2 border-transparent text-white dark:text-gray-900 bg-stpink hover:border-stpink hover:bg-transparent hover:text-stpink dark:hover:text-stpink transition py-2 px-4 rounded-full"
 											onClick={() => {
 												setStep(2)
-												//pickWallet({ clearCachedProvider: true });
 												onConnect()
 											}}
 										>
@@ -315,14 +315,9 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 										</button>
 									) : step == 4 ? null : step == 3 ? null : addressDetected ? (
 										walletAddresses.map(item => item.toLowerCase()).includes(addressDetected?.toLowerCase()) ? null : (
-											<button
-												className="bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition py-2 px-4 rounded-full"
-												onClick={() => {
-													signMessage()
-												}}
-											>
+											<GreenButton className="float-none" onClick={signMessage}>
 												Sign to finish
-											</button>
+											</GreenButton>
 										)
 									) : null}
 								</div>

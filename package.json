@@ -20,6 +20,7 @@
     "@heroicons/react": "^1.0.1",
     "@magic-sdk/admin": "^1.3.0",
     "@sentry/nextjs": "^6.3.5",
+    "@tailwindcss/forms": "^0.3.2",
     "@tippyjs/react": "^4.2.5",
     "@walletconnect/web3-provider": "^1.3.4",
     "authereum": "^0.1.0",
