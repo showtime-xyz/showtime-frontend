@@ -112,7 +112,7 @@ const Header = () => {
 
 					{/* Start mobile-only menu */}
 					{context.isMobile && (
-						<div className="flex md:hidden justify-between items-center pb-1 px-3">
+						<div className="flex justify-between items-center pb-1 px-3">
 							<div>
 								<Link href="/c/[collection]" as="/c/spotlights">
 									<a
