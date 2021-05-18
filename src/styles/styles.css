@@ -1,14 +1,17 @@
 @tailwind base;
 
 @layer base {
-    /* clear default iOS styling from inputs */
-    input[type="text"] {
-        @apply appearance-none;
-    }
+	/* clear default iOS styling from inputs */
+	input[type='text'] {
+		@apply appearance-none;
+	}
 
-    a {
-        @apply no-underline text-inherit;
-    }
+	a {
+		@apply no-underline text-inherit;
+	}
+	button:focus {
+		@apply outline-none;
+	}
 }
 
 @tailwind components;
@@ -26,4 +29,4 @@
     }
 }
 
-@import "tippy.js/dist/tippy.css";
+@import 'tippy.js/dist/tippy.css';

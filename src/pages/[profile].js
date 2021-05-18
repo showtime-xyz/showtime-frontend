@@ -639,9 +639,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 						title="Followers"
 						isOpen={showFollowers}
 						users={followers ? followers : []}
-						closeModal={() => {
-							setShowFollowers(false)
-						}}
+						closeModal={() => setShowFollowers(false)}
 						emptyMessage="No followers yet."
 					/>
 					{/* Following modal */}

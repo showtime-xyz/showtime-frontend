@@ -12,10 +12,10 @@ export default function ModalUserList({ isOpen, title, users, closeModal, emptyM
 		<>
 			{isOpen && (
 				<ClientOnlyPortal selector="#modal">
-					<div onClick={closeModal}>
-						<div className="z-2 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 absolute top-[10%] inset-x-[5%] p-4 mx-auto max-h-[80vh] max-w-[400px] flex flex-col rounded-lg sm:rounded-2xl text-black" onClick={e => e.stopPropagation()}>
-							<div className="text-2xl dark:text-gray-300 border-b-2 dark:border-gray-800 pb-2 px-2">{title}</div>
+					<div className="fixed bg-black bg-opacity-70 inset-0 z-2 flex flex-row items-center" onClick={closeModal}>
+						<div className="fixed z-2 shadow-lg border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 absolute top-[10%] inset-x-[5%] p-4 mx-auto max-h-[80vh] max-w-[400px] flex flex-col rounded-lg sm:rounded-2xl text-black" onClick={e => e.stopPropagation()}>
 							<CloseButton setEditModalOpen={closeModal} />
+                <div className="text-2xl dark:text-gray-300 border-b-2 dark:border-gray-800 pb-2 px-2">{title}</div>
 							<div className="flex flex-col overflow-y-auto">
 								{users.length === 0 && <div className="text-center mx-2 my-8 text-gray-400">{emptyMessage}</div>}
 								{users.map(profile => {
