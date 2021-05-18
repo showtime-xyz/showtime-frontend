@@ -71,7 +71,10 @@ const TokenGridV5 = ({
 			const bodyRect = document.body.getBoundingClientRect()
 			if (itemsList[currentIndex + 1].imageRef.current) {
 				window.scrollTo({
-					top: itemsList[currentIndex + 1].imageRef.current.getBoundingClientRect().top - bodyRect.top - 70,
+					top:
+						itemsList[currentIndex + 1].imageRef.current.getBoundingClientRect().top -
+						bodyRect.top -
+						70,
 					behavior: 'smooth',
 				})
 			}
@@ -94,7 +97,10 @@ const TokenGridV5 = ({
 			const bodyRect = document.body.getBoundingClientRect()
 			if (itemsList[currentIndex - 1].imageRef.current) {
 				window.scrollTo({
-					top: itemsList[currentIndex - 1].imageRef.current.getBoundingClientRect().top - bodyRect.top - 70,
+					top:
+						itemsList[currentIndex - 1].imageRef.current.getBoundingClientRect().top -
+						bodyRect.top -
+						70,
 					behavior: 'smooth',
 				})
 			}
@@ -135,10 +141,26 @@ const TokenGridV5 = ({
 		<>
 			{typeof document !== 'undefined' ? (
 				<>
-					<ModalTokenDetail isOpen={currentlyOpenModal} setEditModalOpen={setCurrentlyOpenModal} item={currentlyOpenModal} goToNext={goToNext} goToPrevious={goToPrevious} columns={context.columns} hasNext={!(currentIndex === itemsList.length - 1)} hasPrevious={!(currentIndex === 0)} />
+					<ModalTokenDetail
+						isOpen={currentlyOpenModal}
+						setEditModalOpen={setCurrentlyOpenModal}
+						item={currentlyOpenModal}
+						goToNext={goToNext}
+						goToPrevious={goToPrevious}
+						columns={context.columns}
+						hasNext={!(currentIndex === itemsList.length - 1)}
+						hasPrevious={!(currentIndex === 0)}
+					/>
 				</>
 			) : null}
-			<InfiniteScroll style={{ overflow: null }} dataLength={dataLength} next={next} hasMore={hasMore} endMessage={endMessage} scrollThreshold={scrollThreshold}>
+			<InfiniteScroll
+				style={{ overflow: null }}
+				dataLength={dataLength}
+				next={next}
+				hasMore={hasMore}
+				endMessage={endMessage}
+				scrollThreshold={scrollThreshold}
+			>
 				{isLoading ? (
 					<div className="mx-auto items-center flex justify-center overflow-hidden py-4 mt-16">
 						<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
@@ -146,7 +168,18 @@ const TokenGridV5 = ({
 				) : (
 					<>
 						{isChangingOrder ? (
-							<ReactSortable list={itemsList} animation={200} delayOnTouchStart={true} delay={2} setList={handleSetItemsList} className={`grid gap-6 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'lg:grid-cols-2 xl:grid-cols-3'} `}>
+							<ReactSortable
+								list={itemsList}
+								animation={200}
+								delayOnTouchStart={true}
+								delay={2}
+								setList={handleSetItemsList}
+								className={`grid gap-6 ${
+									extraColumn
+										? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+										: 'md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'
+								} `}
+							>
 								{itemsList.map(item => (
 									<TokenCard
 										key={item.nft_id}
@@ -177,7 +210,13 @@ const TokenGridV5 = ({
 								))}
 							</ReactSortable>
 						) : (
-							<div className={`grid gap-6 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'lg:grid-cols-2 xl:grid-cols-3'}  `}>
+							<div
+								className={`grid gap-6 ${
+									extraColumn
+										? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+										: 'md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'
+								}  `}
+							>
 								{itemsList.map(item => (
 									<TokenCard
 										key={item.nft_id}
