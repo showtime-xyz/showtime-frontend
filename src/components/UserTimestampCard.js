@@ -12,7 +12,7 @@ export default function UserTimestampCard({ timestamp, item, closeModalCallback 
 	const imageUrl = item.owner_img_url
 	const profileId = item.owner_id
 	return (
-		<div className="flex items-center md:w-max max-w-full border-2 border-gray-300 rounded-xl p-4 mt-4">
+		<div className="flex items-center md:w-max max-w-full border-2 border-gray-300 dark:border-gray-800 rounded-xl p-4 mt-4">
 			<div className="flex flex-row items-center">
 				<div className="mr-3 sm:mr-4 flex-none">
 					<Link href="/[profile]" as={item.owner_username ? `/${item.owner_username}` : `/${item.owner_address}`}>
@@ -27,7 +27,7 @@ export default function UserTimestampCard({ timestamp, item, closeModalCallback 
 						<div className="flex flex-row place-content-end items-end ">
 							<div className="text-base sm:text-lg mr-3">
 								<Link href="/[profile]" as={item.owner_username ? `/${item.owner_username}` : `/${item.owner_address}`}>
-									<a onClick={closeModalCallback} className="hover:text-stpink">
+									<a onClick={closeModalCallback} className="dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">
 										{truncateWithEllipses(name, 20)}
 									</a>
 								</Link>

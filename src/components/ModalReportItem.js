@@ -3,6 +3,8 @@ import mixpanel from 'mixpanel-browser'
 import CloseButton from './CloseButton'
 import ScrollableModal from './ScrollableModal'
 import axios from '@/lib/axios'
+import GreenButton from './UI/Buttons/GreenButton'
+import GhostButton from './UI/Buttons/GhostButton'
 
 export default function Modal({ isOpen, setReportModalOpen, nftId, activityId, removeItemFromFeed }) {
 	const [inputValue, setInputValue] = useState('')
@@ -46,46 +48,26 @@ export default function Modal({ isOpen, setReportModalOpen, nftId, activityId, r
 					<div className="p-4">
 						<form onSubmit={handleSubmit}>
 							<CloseButton setEditModalOpen={setReportModalOpen} />
-							<div className="text-3xl border-b-2 pb-2">Report {/*activityId ? "Activity" : "Item"*/}</div>
+							<div className="text-2xl dark:text-gray-300 border-b-2 dark:border-gray-800 pb-2">Report</div>
 							{confirmationShowing ? (
 								<div className="my-8">We received your report. Thank you!</div>
 							) : (
 								<>
 									<div className="my-8">
-										<textarea
-											name="details"
-											placeholder="Provide details (optional)"
-											value={inputValue}
-											autoFocus
-											onChange={e => {
-												setInputValue(e.target.value)
-											}}
-											type="text"
-											maxLength="200"
-											className="w-full text-black p-3 rounded-lg border-2 border-gray-400"
-											rows={4}
-										/>
+										<textarea name="details" placeholder="Provide details (optional)" value={inputValue} autoFocus onChange={e => setInputValue(e.target.value)} type="text" maxLength="200" className="w-full text-black dark:text-gray-300 p-3 rounded-lg border-2 border-gray-400 dark:border-gray-800 focus:outline-none focus:border-gray-500 dark:focus:border-gray-600" rows={4} />
 									</div>
-									<div className="border-t-2 pt-4">
-										<button type="submit" className="bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition px-4 py-2 w-24 rounded-full float-right">
-											{waitingForResponse ? (
-												<div className="flex items-center justify-center">
-													<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
-												</div>
-											) : (
-												'Submit'
-											)}
-										</button>
-										<button
-											type="button"
-											className="border-2 text-gray-800 border-gray-800 hover:border-gray-500 hover:text-gray-500 px-4 py-2 rounded-full transition"
+									<div className="border-t-2 dark:border-gray-800 pt-4">
+										<GreenButton type="submit" loading={waitingForResponse}>
+											Submit
+										</GreenButton>
+										<GhostButton
 											onClick={() => {
 												setReportModalOpen(false)
 												setInputValue('')
 											}}
 										>
 											Cancel
-										</button>
+										</GhostButton>
 									</div>
 								</>
 							)}

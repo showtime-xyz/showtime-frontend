@@ -1,12 +1,6 @@
 import ActivityCard from './ActivityCard'
 
-export default function ActivityFeed({
-	activity,
-	setItemOpenInModal,
-	//removeItemFromFeed,
-	removeActorFromFeed,
-	setReportModalIsOpen,
-}) {
+export default function ActivityFeed({ activity, setItemOpenInModal, removeActorFromFeed, setReportModalIsOpen }) {
 	return (
 		<>
 			<div className="sm:px-3">

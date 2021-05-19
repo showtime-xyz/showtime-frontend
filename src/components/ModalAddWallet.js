@@ -2,8 +2,6 @@ import { useContext, useState, useEffect } from 'react'
 import mixpanel from 'mixpanel-browser'
 import Web3Modal from 'web3modal'
 import WalletConnectProvider from '@walletconnect/web3-provider'
-//import Authereum from "authereum";
-//import ethProvider from "eth-provider";
 import { WalletLink } from 'walletlink'
 import backend from '@/lib/backend'
 import AppContext from '@/context/app-context'
@@ -13,6 +11,7 @@ import { useRouter } from 'next/router'
 import Fortmatic from 'fortmatic'
 import ScrollableModal from './ScrollableModal'
 import axios from '@/lib/axios'
+import GreenButton from '@/components/UI/Buttons/GreenButton'
 
 export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 	const context = useContext(AppContext)
@@ -31,26 +30,17 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 		setAddressDetected(accounts[0])
 
 		try {
-			myProvider.on('accountsChanged', async accounts => {
-				//console.log(accounts);
-				setAddressDetected(accounts[0])
-			})
+			myProvider.on('accountsChanged', async accounts => setAddressDetected(accounts[0]))
 		} catch {
 			//Coinbase wallet
 		}
 	}
 
 	useEffect(() => {
-		if (isOpen && myProvider) {
-			//console.log(myProvider);
-
-			connect()
-		}
+		if (isOpen && myProvider) connect()
 
 		return function cleanup() {
-			if (myProvider && myProvider.close) {
-				myProvider.close()
-			}
+			if (myProvider && myProvider.close) myProvider.close()
 		}
 	}, [myProvider, isOpen])
 
@@ -206,22 +196,22 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 				<ScrollableModal closeModal={handleModalClose} contentWidth="30rem">
 					<div className="p-4">
 						<CloseButton setEditModalOpen={handleModalClose} />
-						<div className="text-3xl border-b-2 pb-2 text-center">{step == 1 ? 'Add Wallet' : step == 4 ? 'Success!' : signaturePending ? 'Almost there!' : walletAddresses.map(item => item.toLowerCase()).includes(addressDetected?.toLowerCase()) ? 'Switch Wallet' : 'Confirm Wallet'}</div>
+						<div className="dark:text-gray-300 text-2xl border-b-2 dark:border-gray-800 pb-2">{step == 1 ? 'Add Wallet' : step == 4 ? 'Success!' : signaturePending ? 'Almost there!' : walletAddresses.map(item => item.toLowerCase()).includes(addressDetected?.toLowerCase()) ? 'Switch Wallet' : 'Confirm Wallet'}</div>
 						{step == 1 ? (
 							<>
-								<div className="my-4 py-4">Add one or more wallets to showcase all your NFTs in one place.</div>
+								<div className="my-4 py-4 dark:text-gray-400">Add one or more wallets to showcase all your NFTs in one place.</div>
 
-								<div className="my-4 py-4">If you previously signed in with the wallet you are adding, your other profile will get merged into this profile.</div>
+								<div className="my-4 py-4 dark:text-gray-400">If you previously signed in with the wallet you are adding, your other profile will get merged into this profile.</div>
 							</>
 						) : step == 4 ? (
-							<div className="text-center py-32 px-10">Successfully added the wallet to your profile</div>
+							<div className="text-center py-32 px-10 dark:text-gray-400">Successfully added the wallet to your profile</div>
 						) : step == 3 ? null : (
 							<div>
 								{addressDetected ? (
 									signaturePending ? null : (
 										<>
-											<div className="mt-4">Your wallet provider is giving us a wallet with the address:</div>
-											<div className="mb-4 text-base text-indigo-500">
+											<div className="mt-4 dark:text-gray-400">Your wallet provider is giving us a wallet with the address:</div>
+											<div className="mb-4 text-base text-indigo-500 dark:text-indigo-600">
 												<pre>{addressDetected}</pre>
 											</div>
 											<>
@@ -229,22 +219,22 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 													<>
 														<div className="py-4">
 															<span>
-																<span className="text-red-500">This wallet is already on your Showtime profile. Please switch to a different wallet in your provider's menu.</span>{' '}
+																<span className="text-red-500 dark:text-red-700">This wallet is already on your Showtime profile. Please switch to a different wallet in your provider's menu.</span>{' '}
 															</span>
 														</div>
 														<div className="py-4 ">
-															<div>For MetaMask:</div>
+															<div className="dark:text-gray-400">For MetaMask:</div>
 															<div className="text-gray-500">Switch wallets by clicking on the MetaMask icon in the toolbar, then clicking the circle icon on the top right (the account switcher). If you get a warning "Your current account is not connected," make sure to click "Connect."</div>
 														</div>
 														<div className="py-4">
-															<div>For WalletConnect:</div>
+															<div className="dark:text-gray-400">For WalletConnect:</div>
 															<div className="text-gray-500">
 																<a
 																	href="#"
 																	onClick={() => {
 																		tryAgain()
 																	}}
-																	className="text-indigo-500"
+																	className="text-indigo-500 dark:text-indigo-600"
 																>
 																	Click here
 																</a>{' '}
@@ -254,17 +244,17 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 													</>
 												) : (
 													<>
-														<div className="py-4">Please confirm this is the correct wallet and click "Sign to finish" below.</div>
+														<div className="py-4 dark:text-gray-400">Please confirm this is the correct wallet and click "Sign to finish" below.</div>
 														{showInstructions ? (
 															<>
 																<div className="py-4 text-base">
-																	<span>
+																	<span className="text-gray-400">
 																		For MetaMask: <br />
 																	</span>{' '}
 																	<div className="text-gray-500">Switch wallets by clicking on the MetaMask icon in the toolbar, then clicking the circle icon on the top right (the account switcher). If you get a warning "Your current account is not connected," make sure to click "Connect."</div>
 																</div>
 																<div className="py-4 text-base">
-																	<span>
+																	<span className="text-gray-400">
 																		For Wallet Connect: <br />
 																	</span>
 																	<div className="text-gray-500">
@@ -282,14 +272,14 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 																</div>
 															</>
 														) : (
-															<div className="pt-4 pb-2 text-base">
+															<div className="pt-4 pb-2 text-base dark:text-gray-400">
 																Wrong wallet?{' '}
 																<a
 																	href="#"
 																	onClick={() => {
 																		setShowInstructions(true)
 																	}}
-																	className="text-indigo-500"
+																	className="text-indigo-500 dark:text-indigo-600"
 																>
 																	Learn how to switch
 																</a>
@@ -301,24 +291,23 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 										</>
 									)
 								) : (
-									<div className="my-16 text-center">Select a wallet provider...</div>
+									<div className="my-16 text-center dark:text-gray-400">Select a wallet provider...</div>
 								)}
 							</div>
 						)}
 
 						{signaturePending ? (
-							<div className="text-center py-40 px-10">Please sign the message we're sending to your wallet...</div>
+							<div className="text-center py-40 px-10 dark:text-gray-400">Please sign the message we're sending to your wallet...</div>
 						) : step == 3 ? (
-							<div className="text-center py-40 px-10">Adding wallet and any history, please wait...</div>
+							<div className="text-center py-40 px-10 dark:text-gray-400">Adding wallet and any history, please wait...</div>
 						) : walletAddresses.map(item => item.toLowerCase()).includes(addressDetected?.toLowerCase()) && step != 1 ? null : (
 							<>
-								<div className="mt-4 mb-0 pt-4 text-center border-t-2">
+								<div className="mt-4 mb-0 pt-4 text-center border-t-2 dark:border-gray-800">
 									{step == 1 ? (
 										<button
-											className="border-2 border-transparent text-white bg-stpink hover:border-stpink hover:bg-transparent hover:text-stpink transition py-2 px-4 rounded-full"
+											className="border-2 border-transparent text-white dark:text-gray-900 bg-stpink hover:border-stpink hover:bg-transparent hover:text-stpink dark:hover:text-stpink transition py-2 px-4 rounded-full"
 											onClick={() => {
 												setStep(2)
-												//pickWallet({ clearCachedProvider: true });
 												onConnect()
 											}}
 										>
@@ -326,14 +315,9 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 										</button>
 									) : step == 4 ? null : step == 3 ? null : addressDetected ? (
 										walletAddresses.map(item => item.toLowerCase()).includes(addressDetected?.toLowerCase()) ? null : (
-											<button
-												className="bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition py-2 px-4 rounded-full"
-												onClick={() => {
-													signMessage()
-												}}
-											>
+											<GreenButton className="float-none" onClick={signMessage}>
 												Sign to finish
-											</button>
+											</GreenButton>
 										)
 									) : null}
 								</div>

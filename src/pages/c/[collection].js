@@ -4,7 +4,6 @@ import Layout from '@/components/layout'
 import TokenGridV4 from '@/components/TokenGridV4'
 import { useRouter } from 'next/router'
 import backend from '@/lib/backend'
-//import ShareButton from "@/components/ShareButton";
 import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
 import { GridTabs, GridTab } from '@/components/GridTabs'
@@ -40,12 +39,7 @@ export async function getServerSideProps(context) {
 	}
 }
 
-export default function Collection({
-	//collection_items,
-	collection_list,
-	collection,
-	selected_collection,
-}) {
+export default function Collection({ collection_list, collection, selected_collection }) {
 	const context = useContext(AppContext)
 	const { isMobile } = context
 	const [sortBy, setSortby] = useState('random')
@@ -189,42 +183,42 @@ export default function Collection({
 				<CappedWidth>
 					<div className="flex flex-row mx-3 text-white">
 						<div className="flex-1">
-							<div className="text-xl sm:text-2xl">Discover</div>
-							<div className="text-3xl sm:text-6xl capitalize font-afro">{currentCollectionName ? currentCollectionName : 'Leading NFT'}</div>
-							<div className="text-3xl sm:text-6xl">{currentCollectionName ? 'Collection.' : 'Collections.'}</div>
+							<div className="text-xl sm:text-2xl dark:text-black">Discover</div>
+							<div className="text-3xl sm:text-6xl capitalize font-afro dark:text-black">{currentCollectionName ? currentCollectionName : 'Leading NFT'}</div>
+							<div className="text-3xl sm:text-6xl dark:text-black">{currentCollectionName ? 'Collection.' : 'Collections.'}</div>
 						</div>
 					</div>
 				</CappedWidth>
 			</div>
 			<CappedWidth>
 				<div className=" flex-1 -mt-4 mx-3 lg:w-2/3 lg:pr-6 xl:w-1/2">
-					<div className="bg-white rounded-lg shadow-md px-6 py-6 text-center flex flex-col md:flex-row items-center">
-						<div className="flex-1 mb-3 md:mb-0">Select a collection to browse: </div>
+					<div className="border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg shadow-md px-6 py-6 text-center flex flex-col md:flex-row items-center">
+						<div className="flex-1 mb-3 md:mb-0 dark:text-gray-300">Select a collection to browse: </div>
 						<div className="flex-1 text-left">
 							<Listbox value={selected} onChange={onChange}>
 								{({ open }) => (
 									<>
 										<div className="mt-1 relative z-10 w-64">
-											<Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+											<Listbox.Button className="relative w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 sm:text-sm">
 												<span className="flex items-center">
 													{selected ? (
 														<>
 															<img src={selected.img_url} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />
-															<span className="ml-3 block truncate">{selected.name}</span>
+															<span className="ml-3 block truncate dark:text-gray-300">{selected.name}</span>
 														</>
 													) : (
 														<span>&nbsp;</span>
 													)}
 												</span>
 												<span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-													<SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+													<SelectorIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" aria-hidden="true" />
 												</span>
 											</Listbox.Button>
 
 											<Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-												<Listbox.Options static className="absolute mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+												<Listbox.Options static className="absolute mt-1 w-full border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
 													{collection_list.map(c => (
-														<Listbox.Option key={c.value} className={({ active }) => classNames(active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={c}>
+														<Listbox.Option key={c.value} className={({ active }) => classNames(active ? 'text-white dark:text-gray-300 bg-indigo-600 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={c}>
 															{({ selected, active }) => (
 																<>
 																	<div className="flex items-center">
