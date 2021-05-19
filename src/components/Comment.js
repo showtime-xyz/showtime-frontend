@@ -32,7 +32,7 @@ export default function Comment({ comment, closeModal, modalRef, deleteComment, 
 	const isCreatorOfNFT = nftCreatorId && nftCreatorId === myProfile?.profile_id
 
 	return (
-		<div className="p-2 my-1 pb-1 flex rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition relative">
+		<div className="p-2 my-1 flex rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition relative">
 			<div className="mr-3 mt-1">
 				<Link href="/[profile]" as={comment.username ? `/${comment.username}` : `/${comment.address}`}>
 					<img alt={comment.username || comment.name || 'Unnamed'} src={comment.img_url ? comment.img_url : DEFAULT_PROFILE_PIC} className="rounded-full cursor-pointer h-8 w-8" onClick={closeModal} />

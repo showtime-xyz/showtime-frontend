@@ -258,11 +258,11 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 									Post
 								</GhostButton>
 							</div>
-						</>
-					)}
-				</div>
+						</div>
+					</>
+				)}
 			</div>
 			{likedByUserList && <ModalUserList onRedirect={closeModal} isOpen={likedByUserList} title="Comment Likes" closeModal={closeLikedByModal} users={likedByUserList} emptyMessage="No one has liked this yet!" />}
-		</>
+		</div>
 	)
 }
