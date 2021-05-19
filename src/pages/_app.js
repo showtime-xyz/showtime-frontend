@@ -8,6 +8,7 @@ import ProgressBar from '@badrap/bar-of-progress'
 import ModalThrottleUser from '@/components/ModalThrottleUser'
 import axios from '@/lib/axios'
 import { filterNewRecs } from '../lib/utilities'
+import { ThemeProvider } from 'next-themes'
 
 mixpanel.init('9b14512bc76f3f349c708f67ab189941')
 
@@ -260,10 +261,12 @@ const App = ({ Component, pageProps }) => {
 	}
 
 	return (
-		<AppContext.Provider value={injectedGlobalContext}>
-			<ModalThrottleUser isOpen={throttleOpen} closeModal={() => setThrottleOpen(false)} modalContent={throttleContent} />
-			<Component {...pageProps} />
-		</AppContext.Provider>
+		<ThemeProvider defaultTheme="system" disableTransitionOnChange={true} attribute="class">
+			<AppContext.Provider value={injectedGlobalContext}>
+				<ModalThrottleUser isOpen={throttleOpen} closeModal={() => setThrottleOpen(false)} modalContent={throttleContent} />
+				<Component {...pageProps} />
+			</AppContext.Provider>
+		</ThemeProvider>
 	)
 }
 

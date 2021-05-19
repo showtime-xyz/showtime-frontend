@@ -5,7 +5,6 @@ import { formatDistanceToNowStrict } from 'date-fns'
 import Link from 'next/link'
 import AppContext from '@/context/app-context'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
 import LikeButton from './LikeButton'
 import CommentButton from './CommentButton'
 import ActivityImages from './ActivityImages'
@@ -13,6 +12,7 @@ import mixpanel from 'mixpanel-browser'
 import useDetectOutsideClick from '@/hooks/useDetectOutsideClick'
 import { truncateWithEllipses } from '@/lib/utilities'
 import axios from '@/lib/axios'
+import { DotsHorizontalIcon } from '@heroicons/react/solid'
 
 export default function ActivityCard({ act, setItemOpenInModal, setReportModalIsOpen, removeActorFromFeed }) {
 	const context = useContext(AppContext)
@@ -78,51 +78,33 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 	return (
 		<div
 			ref={cardRef}
-			className="flex flex-col flex-1 mb-6 pt-4 sm:rounded-lg bg-white shadow-md border-t-2 overflow-hidden"
+			className="flex flex-col flex-1 mb-6 pt-4 sm:rounded-lg bg-white dark:bg-gray-900 shadow-md border border-transparent dark:border-gray-800 border-t-2"
 			style={{
 				borderTopColor: activityIconObjects[type].color,
 			}}
 		>
 			{/* actor data */}
-			<div className="border-b border-gray-200 pb-4 px-4">
+			<div className="border-b border-gray-200 dark:border-gray-800 pb-4 px-4">
 				<div className="flex flex-row">
 					<div className="flex items-center">
 						<Link href="/[profile]" as={`/${actor?.username || actor?.wallet_address}`}>
-							<a
-								className="relative w-max flex-shrink-0"
-								onClick={() => {
-									mixpanel.track('Activity - Click on user profile')
-								}}
-							>
+							<a className="relative w-max flex-shrink-0" onClick={() => mixpanel.track('Activity - Click on user profile')}>
 								<img src={actor.profile_img_url || DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-14 h-14  hover:opacity-90 transition-all" />
-								<div
-									className="absolute bottom-0 right-2 rounded-full h-5 w-5 flex items-center justify-center shadow"
-									style={{
-										backgroundColor: activityIconObjects[type].color,
-									}}
-								>
+								<div className="absolute bottom-0 right-2 rounded-full h-5 w-5 flex items-center justify-center shadow" style={{ backgroundColor: activityIconObjects[type].color }}>
 									<FontAwesomeIcon className="w-3 h-3 text-white" icon={activityIconObjects[type].icon} />
 								</div>
 							</a>
 						</Link>
 						<div className="flex flex-col flex-1 max-w-full">
 							<Link href="/[profile]" as={`/${actor?.username || actor?.wallet_address}`}>
-								<a
-									onClick={() => {
-										mixpanel.track('Activity - Click on user profile')
-									}}
-								>
-									<div className="mr-2 hover:text-stpink text-base -mb-1">{truncateWithEllipses(actor.name, 24)}</div>
+								<a onClick={() => mixpanel.track('Activity - Click on user profile')}>
+									<div className="mr-2 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink text-base -mb-1">{truncateWithEllipses(actor.name, 24)}</div>
 								</a>
 							</Link>
 
 							{actor.username && (
 								<Link href="/[profile]" as={`/${actor?.username || actor?.wallet_address}`}>
-									<a
-										onClick={() => {
-											mixpanel.track('Activity - Click on user profile')
-										}}
-									>
+									<a onClick={() => mixpanel.track('Activity - Click on user profile')}>
 										<div className="text-gray-400 text-xs mx-px">@{actor.username}</div>
 									</a>
 								</Link>
@@ -138,18 +120,12 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 					{context.user && (
 						<div>
 							<div onClick={onCornerMenuClick} className="text-right text-gray-300 relative">
-								<FontAwesomeIcon icon={faEllipsisH} className="hover:text-stpink cursor-pointer !w-5 !h-5" />
-								<div ref={dropdownRef} className={`absolute text-black text-center top-4 right-1 bg-white py-2 px-2 shadow-lg rounded-xl transition-all text-md transform z-1 ${isActive ? 'visible opacity-1 translate-y-1' : 'invisible opacity-0'}`}>
-									<div className="py-2 px-4 hover:text-stpink rounded-lg cursor-pointer whitespace-nowrap" onClick={handleUnfollow}>
+								<DotsHorizontalIcon className="dark:text-gray-500 hover:text-stpink dark:hover:text-stpink cursor-pointer w-6 h-6" />
+								<div ref={dropdownRef} className={`absolute text-black dark:text-gray-400 text-left top-4 right-1 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 py-2 px-2 shadow-lg rounded-xl transition-all text-md transform z-1 ${isActive ? 'visible opacity-1 translate-y-1' : 'invisible opacity-0'}`}>
+									<div className="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-stpink dark:hover:text-gray-300 rounded-lg cursor-pointer whitespace-nowrap" onClick={handleUnfollow}>
 										Unfollow
-										{/*actor.username ? `@${actor.username}` : "this user"*/}
 									</div>
-									<div
-										className="py-2 px-4 hover:text-stpink rounded-lg cursor-pointer whitespace-nowrap"
-										onClick={() => {
-											setReportModalIsOpen(id)
-										}}
-									>
+									<div className="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-stpink dark:hover:text-gray-300 rounded-lg cursor-pointer whitespace-nowrap" onClick={() => setReportModalIsOpen(id)}>
 										Report
 									</div>
 								</div>
@@ -160,7 +136,7 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 			</div>
 			{/* content */}
 			<>
-				<div className="max-w-full mt-4  px-4 flex flex-row">
+				<div className="max-w-full mt-4 px-4 flex flex-row">
 					<div>{content}</div>
 				</div>
 
@@ -176,12 +152,7 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 								</div>
 
 								<div className="mr-4 text-base mt-2">
-									<CommentButton
-										item={nfts[0]}
-										handleComment={() => {
-											setItemOpenInModal({ nftGroup: nfts, index: 0 })
-										}}
-									/>
+									<CommentButton item={nfts[0]} handleComment={() => setItemOpenInModal({ nftGroup: nfts, index: 0 })} />
 								</div>
 							</div>
 						) : null}

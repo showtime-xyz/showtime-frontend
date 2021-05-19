@@ -19,9 +19,14 @@
 @tailwind utilities;
 
 @layer utilities {
-	.border-t-gray-800 {
-		border-top-color: theme('colors.gray.800');
-	}
+    @variants dark {
+        .border-t-gray-800 {
+            border-top-color: theme('colors.gray.800');
+        }
+        .border-t-green-300 {
+            border-top-color: theme('colors.green.300');
+        }
+    }
 }
 
 @import 'tippy.js/dist/tippy.css';

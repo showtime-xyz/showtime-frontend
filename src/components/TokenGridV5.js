@@ -163,7 +163,7 @@ const TokenGridV5 = ({
 			>
 				{isLoading ? (
 					<div className="mx-auto items-center flex justify-center overflow-hidden py-4 mt-16">
-						<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
+						<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 dark:border-gray-300 border-t-gray-800 dark:border-t-gray-800 animate-spin" />
 					</div>
 				) : (
 					<>
@@ -181,32 +181,7 @@ const TokenGridV5 = ({
 								} `}
 							>
 								{itemsList.map(item => (
-									<TokenCard
-										key={item.nft_id}
-										originalItem={item}
-										//columns={context.columns}
-										//isMobile={context.isMobile}
-										currentlyPlayingVideo={currentlyPlayingVideo}
-										setCurrentlyPlayingVideo={setCurrentlyPlayingVideo}
-										currentlyOpenModal={currentlyOpenModal}
-										setCurrentlyOpenModal={setCurrentlyOpenModal}
-										//showDuplicateNFTs={showDuplicateNFTs}
-										//setShowDuplicateNFTs={setShowDuplicateNFTs}
-										isMyProfile={isMyProfile}
-										listId={listId}
-										openCardMenu={openCardMenu}
-										setOpenCardMenu={setOpenCardMenu}
-										//userHiddenItems={userHiddenItems}
-										//setUserHiddenItems={setUserHiddenItems}
-										//refreshItems={refreshItems}
-										changeSpotlightItem={changeSpotlightItem}
-										pageProfile={pageProfile}
-										handleRemoveItem={handleRemoveItem}
-										showUserHiddenItems={showUserHiddenItems}
-										showDuplicates={showDuplicates}
-										setHasUserHiddenItems={setHasUserHiddenItems}
-										isChangingOrder={isChangingOrder}
-									/>
+									<TokenCard key={item.nft_id} originalItem={item} currentlyPlayingVideo={currentlyPlayingVideo} setCurrentlyPlayingVideo={setCurrentlyPlayingVideo} currentlyOpenModal={currentlyOpenModal} setCurrentlyOpenModal={setCurrentlyOpenModal} isMyProfile={isMyProfile} listId={listId} openCardMenu={openCardMenu} setOpenCardMenu={setOpenCardMenu} changeSpotlightItem={changeSpotlightItem} pageProfile={pageProfile} handleRemoveItem={handleRemoveItem} showUserHiddenItems={showUserHiddenItems} showDuplicates={showDuplicates} setHasUserHiddenItems={setHasUserHiddenItems} isChangingOrder={isChangingOrder} />
 								))}
 							</ReactSortable>
 						) : (
@@ -218,31 +193,7 @@ const TokenGridV5 = ({
 								}  `}
 							>
 								{itemsList.map(item => (
-									<TokenCard
-										key={item.nft_id}
-										originalItem={item}
-										//columns={context.columns}
-										//isMobile={context.isMobile}
-										currentlyPlayingVideo={currentlyPlayingVideo}
-										setCurrentlyPlayingVideo={setCurrentlyPlayingVideo}
-										currentlyOpenModal={currentlyOpenModal}
-										setCurrentlyOpenModal={setCurrentlyOpenModal}
-										//showDuplicateNFTs={showDuplicateNFTs}
-										//setShowDuplicateNFTs={setShowDuplicateNFTs}
-										isMyProfile={isMyProfile}
-										listId={listId}
-										openCardMenu={openCardMenu}
-										setOpenCardMenu={setOpenCardMenu}
-										//userHiddenItems={userHiddenItems}
-										//setUserHiddenItems={setUserHiddenItems}
-										//refreshItems={refreshItems}
-										changeSpotlightItem={changeSpotlightItem}
-										pageProfile={pageProfile}
-										handleRemoveItem={handleRemoveItem}
-										showUserHiddenItems={showUserHiddenItems}
-										showDuplicates={showDuplicates}
-										setHasUserHiddenItems={setHasUserHiddenItems}
-									/>
+									<TokenCard key={item.nft_id} originalItem={item} currentlyPlayingVideo={currentlyPlayingVideo} setCurrentlyPlayingVideo={setCurrentlyPlayingVideo} currentlyOpenModal={currentlyOpenModal} setCurrentlyOpenModal={setCurrentlyOpenModal} isMyProfile={isMyProfile} listId={listId} openCardMenu={openCardMenu} setOpenCardMenu={setOpenCardMenu} changeSpotlightItem={changeSpotlightItem} pageProfile={pageProfile} handleRemoveItem={handleRemoveItem} showUserHiddenItems={showUserHiddenItems} showDuplicates={showDuplicates} setHasUserHiddenItems={setHasUserHiddenItems} />
 								))}
 							</div>
 						)}

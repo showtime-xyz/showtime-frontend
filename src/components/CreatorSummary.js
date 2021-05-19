@@ -2,8 +2,6 @@ import { useContext } from 'react'
 import Link from 'next/link'
 import { truncateWithEllipses } from '@/lib/utilities'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
-//import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-//import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import FollowButton from './FollowButton'
 import AppContext from '@/context/app-context'
 
@@ -21,7 +19,7 @@ export default function CreatorSummary({ name, username, address, imageUrl, clos
 			<div className="flex flex-col md:flex-row md:items-center flex-wrap">
 				<Link href={collectionSlug ? '/c/[collection]' : '/[profile]'} as={collectionSlug ? `/c/${collectionSlug}` : username ? `/${username}` : `/${address}`}>
 					<a onClick={closeModal}>
-						<p className="text-xl md:text-3xl py-2 inline-block hover:text-stpink mr-3">{truncateWithEllipses(name, 24)}</p>
+						<p className="text-xl md:text-3xl py-2 inline-block dark:text-gray-300 hover:text-stpink dark:hover:text-stpink mr-3">{truncateWithEllipses(name, 24)}</p>
 					</a>
 				</Link>
 				{!isCollection && profileId && context.myProfile?.profile_id !== profileId && (
@@ -30,7 +28,7 @@ export default function CreatorSummary({ name, username, address, imageUrl, clos
 					</div>
 				)}
 			</div>
-			{bio && <div className="pb-4 pt-2 text-gray-500">{bio}</div>}
+			{bio && <div className="pb-4 pt-2 text-gray-500 dark:text-gray-400">{bio}</div>}
 		</>
 	)
 }

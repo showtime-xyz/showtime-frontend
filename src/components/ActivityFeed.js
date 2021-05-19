@@ -1,13 +1,7 @@
 import { useEffect } from 'react'
 import ActivityCard from './ActivityCard'
 
-const ActivityFeed = ({
-	activity,
-	setItemOpenInModal,
-	//removeItemFromFeed,
-	removeActorFromFeed,
-	setReportModalIsOpen,
-}) => {
+const ActivityFeed = ({ activity, setItemOpenInModal, removeActorFromFeed, setReportModalIsOpen }) => {
 	let windowObj
 	useEffect(() => {
 		windowObj = window
