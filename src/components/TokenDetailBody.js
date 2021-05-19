@@ -12,7 +12,6 @@ import ReactPlayer from 'react-player'
 import LikeButton from './LikeButton'
 import ShareButton from './ShareButton'
 import CommentButton from './CommentButton'
-//import CloseButton from "./CloseButton";
 import AppContext from '@/context/app-context'
 import CreatorSummary from './CreatorSummary'
 import { removeTags, truncateWithEllipses } from '@/lib/utilities'
@@ -24,6 +23,7 @@ import backend from '@/lib/backend'
 import UsersWhoLiked from './UsersWhoLiked'
 import MiniFollowButton from './MiniFollowButton'
 import UsersWhoOwn from './UsersWhoOwn'
+import GhostButton from './UI/Buttons/GhostButton'
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500
@@ -48,19 +48,16 @@ const TokenDetailBody = ({
 	}
 	const getImageUrl = (img_url, token_aspect_ratio) => {
 		if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
-			if (token_aspect_ratio && token_aspect_ratio > 1) {
-				img_url = img_url.split('=')[0] + '=h660'
-			} else {
-				img_url = img_url.split('=')[0] + '=w660'
-			}
+			if (token_aspect_ratio && token_aspect_ratio > 1) img_url = img_url.split('=')[0] + '=h660'
+			else img_url = img_url.split('=')[0] + '=w660'
 		}
+
 		return img_url
 	}
 
 	const getBiggerImageUrl = img_url => {
-		if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
-			img_url = img_url.split('=')[0] + '=h1328'
-		}
+		if (img_url && img_url.includes('https://lh3.googleusercontent.com')) img_url = img_url.split('=')[0] + '=h1328'
+
 		return img_url
 	}
 
@@ -114,27 +111,8 @@ const TokenDetailBody = ({
 					<ModalReportItem isOpen={reportModalOpen} setReportModalOpen={setReportModalOpen} nftId={item.nft_id} />
 				</>
 			) : null}
-			{lightboxOpen && (
-				<Lightbox
-					mainSrc={item.token_img_original_url ? item.token_img_original_url : item.token_img_url}
-					//nextSrc={images[(photoIndex + 1) % images.length]}
-					//prevSrc={images[(photoIndex + images.length - 1) % images.length]}
-					onCloseRequest={() => setLightboxOpen(false)}
-					//enableZoom={false}
-					/*
-          onMovePrevRequest={() =>
-            this.setState({
-              photoIndex: (photoIndex + images.length - 1) % images.length,
-            })
-          }
-          onMoveNextRequest={() =>
-            this.setState({
-              photoIndex: (photoIndex + 1) % images.length,
-            })
-          }*/
-				/>
-			)}
-			<div className="flex flex-col relative -mt-px" ref={modalRef}>
+			{lightboxOpen && <Lightbox mainSrc={item.token_img_original_url ? item.token_img_original_url : item.token_img_url} onCloseRequest={() => setLightboxOpen(false)} />}
+			<div className="flex flex-col relative -mt-px dark:bg-gray-900" ref={modalRef}>
 				{isMobile ? (
 					<div className="py-4 px-6 flex flex-row">
 						<div className="flex-shrink">
@@ -144,7 +122,7 @@ const TokenDetailBody = ({
 										<div>
 											<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
 										</div>
-										<div className="text-gray-800 hover:text-stpink ml-2">{truncateWithEllipses(item.collection_name, 30)} Collection</div>
+										<div className="text-gray-800 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink ml-2">{truncateWithEllipses(item.collection_name, 30)} Collection</div>
 									</a>
 								</Link>
 							) : item.creator_address ? (
@@ -154,7 +132,7 @@ const TokenDetailBody = ({
 											<div>
 												<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
 											</div>
-											<div className="text-gray-800 hover:text-stpink ml-2">{truncateWithEllipses(item.creator_name, 22)}</div>
+											<div className="text-gray-800 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink ml-2">{truncateWithEllipses(item.creator_name, 22)}</div>
 										</a>
 									</Link>
 									{context.myProfile?.profile_id !== item?.creator_id && (
@@ -222,7 +200,7 @@ const TokenDetailBody = ({
 					{/* Title and description section */}
 					<div className="flex flex-col md:flex-row pb-10 items-stretch w-full max-w-full">
 						<div className="pb-0 text-left flex-1 p-4 break-words sm:max-w-[50%]">
-							<div className="text-2xl md:text-4xl">{item.token_name}</div>
+							<div className="text-2xl md:text-4xl dark:text-gray-200">{item.token_name}</div>
 							{/* Likes & Share */}
 							{/*  */}
 							<div className="flex items-center pt-2">
@@ -247,10 +225,10 @@ const TokenDetailBody = ({
 									}}
 									rel="noreferrer"
 								>
-									<div className="text-base font-normal px-4 py-3 mr-2 rounded-full shadow-md hover:text-stpink">
+									<GhostButton>
 										<span>Bid </span>
 										<span className="hidden sm:inline">on {getContractName(item)}</span>
-									</div>
+									</GhostButton>
 								</a>
 								<div className="flex-grow"></div>
 							</div>
@@ -259,8 +237,7 @@ const TokenDetailBody = ({
 						<div className="flex-1 p-4 pb-0 sm:max-w-[50%]">
 							{item.token_description && (
 								<>
-									<div className="md:text-lg py-2">Description</div>
-									<div className="text-gray-500 text-sm sm:text-base whitespace-pre-line">
+									<div className="text-gray-500 dark:text-gray-400 text-sm sm:text-base whitespace-pre-line">
 										{moreShown ? (
 											<div className="whitespace-pre-line">{removeTags(item.token_description)}</div>
 										) : (
@@ -268,7 +245,7 @@ const TokenDetailBody = ({
 												{item.token_description?.length > max_description_length ? (
 													<>
 														{truncateWithEllipses(removeTags(item.token_description), max_description_length)}{' '}
-														<a onClick={() => setMoreShown(true)} className="text-gray-900 hover:text-gray-500 cursor-pointer">
+														<a onClick={() => setMoreShown(true)} className="text-gray-900 dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-200 cursor-pointer">
 															{' '}
 															more
 														</a>
@@ -284,7 +261,7 @@ const TokenDetailBody = ({
 						</div>
 					</div>
 					{/* separator */}
-					<hr />
+					<hr className="dark:border-gray-800" />
 					{/* Artist and Owned by Section */}
 					{ownershipDetails ? (
 						<div className="flex flex-col md:flex-row mt-4">
@@ -295,18 +272,12 @@ const TokenDetailBody = ({
 								{item.contract_is_creator
 									? item.contract_is_creator && (
 											<div>
-												<div className="md:text-lg py-4">Creator</div>
 												<CreatorSummary
-													//address={item.creator_address}
 													name={`${item.collection_name} Collection`}
-													//username={item.creator_username}
 													imageUrl={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC}
 													collectionSlug={item.collection_slug}
-													//bio={ownershipDetails.creator_bio}
 													closeModal={() => {
-														if (setEditModalOpen) {
-															setEditModalOpen(false)
-														}
+														if (setEditModalOpen) setEditModalOpen(false)
 													}}
 													isCollection
 												/>
@@ -314,7 +285,6 @@ const TokenDetailBody = ({
 									  )
 									: item.creator_address && (
 											<div>
-												<div className="md:text-lg py-4">Creator</div>
 												<CreatorSummary
 													address={item.creator_address}
 													name={item.creator_name}
@@ -322,9 +292,7 @@ const TokenDetailBody = ({
 													imageUrl={item.creator_img_url}
 													bio={ownershipDetails.creator_bio}
 													closeModal={() => {
-														if (setEditModalOpen) {
-															setEditModalOpen(false)
-														}
+														if (setEditModalOpen) setEditModalOpen(false)
 													}}
 													profileId={item.creator_id}
 												/>
@@ -333,7 +301,7 @@ const TokenDetailBody = ({
 								{/* Owned by Section */}
 								{!isMobile && (
 									<div className="mt-8">
-										<div className="md:text-lg pt-4">Owned By</div>
+										<div className="md:text-lg pt-4 dark:text-gray-400">Owned By</div>
 
 										{item.owner_address && (item.owner_count === null || item.owner_count === 1) && (
 											<div>
@@ -356,7 +324,7 @@ const TokenDetailBody = ({
 								)}
 								{/* History Section */}
 								<div className="mt-8">
-									<div className="md:text-lg py-4">Owner History</div>
+									<div className="md:text-lg py-4 dark:text-gray-500">Owner History</div>
 									<TokenHistoryCard
 										nftId={item.nft_id}
 										closeModal={() => {
@@ -373,7 +341,7 @@ const TokenDetailBody = ({
 								{/* Owned by section ONLY ON MOBILE */}
 								{isMobile && (
 									<div className="mb-8">
-										<div className="md:text-lg pt-4">Owned By</div>
+										<div className="md:text-lg pt-4 dark:text-gray-500">Owned By</div>
 
 										{item.owner_address && (item.owner_count === null || item.owner_count === 1) && (
 											<div>

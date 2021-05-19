@@ -12,7 +12,7 @@ jobs:
             - name: Obtain Yarn Cache directory
               id: node-cache-dir
               run: echo "::set-output name=dir::$(yarn cache dir)"
-            - name: Cache Yarn dependencies (used by Laravel Mix)
+            - name: Cache Yarn dependencies
               uses: actions/cache@v1
               with:
                   path: ${{ steps.node-cache-dir.outputs.dir }}

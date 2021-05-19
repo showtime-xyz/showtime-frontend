@@ -31,12 +31,10 @@ export default function ActivityImage({ nft, index, numberOfImages, openModal, s
 
 	const getImageUrlLarge = (img_url, token_aspect_ratio) => {
 		if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
-			if (token_aspect_ratio && token_aspect_ratio > 1) {
-				img_url = img_url.split('=')[0] + '=h1328'
-			} else {
-				img_url = img_url.split('=')[0] + '=w1328'
-			}
+			if (token_aspect_ratio && token_aspect_ratio > 1) img_url = img_url.split('=')[0] + '=h1328'
+			else img_url = img_url.split('=')[0] + '=w1328'
 		}
+
 		return img_url
 	}
 
@@ -77,7 +75,7 @@ export default function ActivityImage({ nft, index, numberOfImages, openModal, s
 				/>
 			)}
 			{totalNumberOfImages > 1 && !isMobile && (
-				<div className={`absolute flex bottom-1 right-0 py-1 px-2 bg-white bg-opacity-95 shadow-md rounded-xl transform scale-90 ${isHovering ? 'visible opacity-100 translate-y-0' : 'invisible opacity-0 translate-y-1'} transition-all`} onClick={e => e.stopPropagation()}>
+				<div className={`absolute flex bottom-1 right-0 py-1 px-2 bg-white dark:bg-black bg-opacity-95 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 shadow-md rounded-xl transform scale-90 ${isHovering ? 'visible opacity-100 translate-y-0' : 'invisible opacity-0 translate-y-1'} transition-all`} onClick={e => e.stopPropagation()}>
 					<LikeButton item={nft} />
 					<div className="w-3" />
 					<CommentButton

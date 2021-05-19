@@ -10,28 +10,18 @@ export default function Transfer({ act }) {
 
 	return (
 		<div className="flex flex-col">
-			<div className="text-gray-500">
+			<div className="text-gray-500 dark:text-gray-400">
 				{count === 1 && (
 					<>
 						{verb}{' '}
 						<Link href={`/t/${nfts[0].contract_address}/${nfts[0].token_id}`}>
-							<a
-								className="text-black hover:text-stpink"
-								onClick={() => {
-									mixpanel.track('Activity - Click on NFT title')
-								}}
-							>
+							<a className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink" onClick={() => mixpanel.track('Activity - Click on NFT title')}>
 								{nfts[0].title}
 							</a>
 						</Link>{' '}
 						{preposition}{' '}
 						<Link href="/[profile]" as={`/${act.counterparty?.username || act.counterparty?.wallet_address}`}>
-							<a
-								className="text-black hover:text-stpink"
-								onClick={() => {
-									mixpanel.track("Activity - Click on person transferred to's name")
-								}}
-							>
+							<a className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink" onClick={() => mixpanel.track("Activity - Click on person transferred to's name")}>
 								{act.counterparty?.name}
 							</a>
 						</Link>

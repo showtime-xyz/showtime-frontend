@@ -59,20 +59,14 @@ const RecommendedFollowItem = ({ item, closeModal = () => {}, liteVersion, remov
 	const [currentlyOpenModal, setCurrentlyOpenModal] = useState(null)
 	const currentIndex = topItems?.findIndex(i => i.nft_id === currentlyOpenModal?.nft_id)
 	const goToNext = () => {
-		if (currentIndex < topItems.length - 1) {
-			setCurrentlyOpenModal(topItems[currentIndex + 1])
-		}
+		if (currentIndex < topItems.length - 1) setCurrentlyOpenModal(topItems[currentIndex + 1])
 	}
 	const goToPrevious = () => {
-		if (currentIndex - 1 >= 0) {
-			setCurrentlyOpenModal(topItems[currentIndex - 1])
-		}
+		if (currentIndex - 1 >= 0) setCurrentlyOpenModal(topItems[currentIndex - 1])
 	}
 	const leftPress = useKeyPress('ArrowLeft')
 	const rightPress = useKeyPress('ArrowRight')
 	const escPress = useKeyPress('Escape')
-
-	const [mouseOver, setMouseOver] = useState(false)
 
 	useEffect(() => {
 		if (escPress) {
@@ -89,32 +83,23 @@ const RecommendedFollowItem = ({ item, closeModal = () => {}, liteVersion, remov
 	}, [escPress, leftPress, rightPress])
 
 	return (
-		<div className="flex flex-col w-full border-t-px relative" onMouseEnter={() => setMouseOver(true)} onMouseLeave={() => setMouseOver(false)}>
+		<div className="flex flex-col w-full border-t-px dark:border-gray-800 relative">
 			{typeof document !== 'undefined' ? (
 				<>
 					<ModalTokenDetail isOpen={currentlyOpenModal} setEditModalOpen={setCurrentlyOpenModal} item={currentlyOpenModal} goToNext={goToNext} goToPrevious={goToPrevious} columns={context.columns} hasNext={!(currentIndex === topItems.length - 1)} hasPrevious={!(currentIndex === 0)} />
 				</>
 			) : null}
-			<div className="flex flex-col sm:flex-row sm:justify-between w-full border-t relative p-4" style={{ paddingLeft: leftPadding }}>
+			<div className="flex flex-col sm:flex-row sm:justify-between w-full border-t dark:border-gray-800 relative p-4 group" style={{ paddingLeft: leftPadding }}>
 				<div className="flex">
 					<Link href="/[profile]" as={`/${item?.username || item.address}`}>
-						<a
-							onClick={() => {
-								closeModal()
-							}}
-							className="min-w-[42px]"
-						>
+						<a onClick={() => closeModal()} className="min-w-[42px]">
 							<img className={`rounded-full cursor-pointer ${liteVersion ? 'w-11 h-11 mr-2.5' : 'w-20 h-20 mr-5'}`} src={item?.img_url ? item?.img_url : DEFAULT_PROFILE_PIC} />
 						</a>
 					</Link>
 					<div className={`flex flex-col justify-around truncate ${liteVersion ? 'max-w-[7.5rem]' : ''}`}>
 						<Link href="/[profile]" as={`/${item?.username || item.address}`}>
-							<a
-								onClick={() => {
-									closeModal()
-								}}
-							>
-								<h4 className={`font-medium cursor-pointer truncate hover:text-stpink ${liteVersion ? 'mr-7' : 'text-lg'}`}>{truncateWithEllipses(item?.name, context.isMobile ? 19 : 30) || formatAddressShort(item.address) || 'Unnamed'}</h4>
+							<a onClick={() => closeModal()}>
+								<h4 className={`font-medium cursor-pointer truncate dark:text-gray-300 hover:text-stpink dark:hover:text-stpink ${liteVersion ? 'mr-7' : 'text-lg'}`}>{truncateWithEllipses(item?.name, context.isMobile ? 19 : 30) || formatAddressShort(item.address) || 'Unnamed'}</h4>
 							</a>
 						</Link>
 						{!liteVersion && (
@@ -140,7 +125,7 @@ const RecommendedFollowItem = ({ item, closeModal = () => {}, liteVersion, remov
 						</div>
 					)}
 
-					{liteVersion && mouseOver && <RemoveRecommendationButton item={item} removeRecommendation={removeRecommendation} />}
+					{liteVersion && <RemoveRecommendationButton item={item} removeRecommendation={removeRecommendation} />}
 				</div>
 			</div>
 			<div style={{ paddingLeft: leftPadding }}>{context.gridWidth <= 420 ? <Tiles topItems={topItems.slice(0, 3)} setCurrentlyOpenModal={setCurrentlyOpenModal} /> : <Tiles topItems={topItems} setCurrentlyOpenModal={setCurrentlyOpenModal} />}</div>
