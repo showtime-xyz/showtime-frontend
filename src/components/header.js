@@ -35,7 +35,7 @@ const Header = () => {
 							</Link>
 						</div>
 						{/* Start desktop-only menu */}
-						{!context.isMobile ? (
+						{!context.isMobile || context.isTablet ? (
 							<div className="flex-grow flex-1">
 								<SearchBar />
 							</div>
@@ -112,7 +112,7 @@ const Header = () => {
 
 					{/* Start mobile-only menu */}
 					{context.isMobile && (
-						<div className="flex justify-between items-center pb-1 px-3">
+						<div className="flex md:hidden justify-between items-center pb-1 px-3">
 							<div>
 								<Link href="/c/[collection]" as="/c/spotlights">
 									<a

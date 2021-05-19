@@ -35,6 +35,7 @@ const TokenCard = ({
 	isChangingOrder,
 }) => {
 	const [item, setItem] = useState(originalItem)
+	const [moreShown, setMoreShown] = useState(false)
 	const [showVideo, setShowVideo] = useState(false)
 	const [muted, setMuted] = useState(true)
 	const [refreshing, setRefreshing] = useState(false)
@@ -77,6 +78,8 @@ const TokenCard = ({
 
 		setRefreshing(false)
 	}
+
+	const max_description_length = 65
 
 	const getBackgroundColor = item => {
 		if (item.token_background_color && item.token_background_color.length === 6) {
@@ -244,15 +247,28 @@ const TokenCard = ({
 									setCurrentlyPlayingVideo(null)
 								}}
 								className="break-words cursor-pointer truncate"
-								style={context.isMobile ? { width: context?.windowSize?.width - 16 * 2 } : {}}
 							>
 								{item.token_name}
 							</div>
 
-							<div style={context.isMobile ? { width: context?.windowSize?.width - 16 * 2 } : {}} className="cursor-pointer py-4 text-gray-500 text-sm">
-								<div>
-									<div className="whitespace-nowrap overflow-hidden overflow-ellipsis">{removeTags(item.token_description)}</div>
-								</div>
+							<div className="cursor-pointer py-4 text-gray-500 text-sm">
+								{moreShown ? (
+									<div className="whitespace-pre-line">{removeTags(item.token_description)}</div>
+								) : (
+									<div>
+										{item.token_description?.length > max_description_length ? (
+											<>
+												{truncateWithEllipses(removeTags(item.token_description), max_description_length)}{' '}
+												<a onClick={() => setMoreShown(true)} className="text-gray-900 hover:text-gray-500 cursor-pointer">
+													{' '}
+													more
+												</a>
+											</>
+										) : (
+											<div>{removeTags(item.token_description)}</div>
+										)}
+									</div>
+								)}
 							</div>
 						</div>
 
