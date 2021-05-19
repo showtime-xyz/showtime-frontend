@@ -239,12 +239,11 @@ const TokenCard = ({
 									setCurrentlyPlayingVideo(null)
 								}}
 								className="break-words cursor-pointer truncate dark:text-gray-200"
-								style={context.isMobile ? { width: context?.windowSize?.width - 16 * 2 } : {}}
 							>
 								{item.token_name}
 							</div>
 
-							<div style={context.isMobile ? { width: context?.windowSize?.width - 16 * 2 } : {}} className="cursor-pointer py-4 text-gray-500 text-sm">
+							<div className="cursor-pointer py-4 text-gray-500 text-sm">
 								{moreShown ? (
 									<div className="whitespace-pre-line">{removeTags(item.token_description)}</div>
 								) : (
