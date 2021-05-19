@@ -6,7 +6,7 @@ import Header from './header'
 
 const Layout = ({ children }) => {
 	return (
-		<div className="flex flex-col min-h-screen bg-gray-50 tracking-wide overflow-x-hidden">
+		<div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 tracking-wide">
 			<Head>
 				<link rel="icon" href="/logo_sm.jpg" />
 
@@ -28,7 +28,7 @@ const Layout = ({ children }) => {
 			</Head>
 
 			<Header />
-			<div className="w-full mx-auto min-h-screen z-0 relative">
+			<div className="w-full mx-auto min-h-screen z-0 relative overflow-hidden">
 				<main>{children}</main>
 			</div>
 

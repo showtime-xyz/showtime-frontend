@@ -3,9 +3,8 @@ import { useContext } from 'react'
 import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
 import _ from 'lodash'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeart as faHeartOutline } from '@fortawesome/free-regular-svg-icons'
-import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons'
+import { HeartIcon as SolidHeartIcon } from '@heroicons/react/solid'
+import { HeartIcon as OutlineHeartIcon } from '@heroicons/react/outline'
 import Tippy from '@tippyjs/react'
 import axios from '@/lib/axios'
 
@@ -71,12 +70,10 @@ const LikeButton = ({ item }) => {
 
 	return (
 		<Tippy content="Sign in to like" disabled={context.user || isMobile}>
-			<button disabled={context.disableLikes} onClick={() => (context.user ? (liked ? handleUnlike(item.nft_id) : handleLike(item.nft_id)) : handleLoggedOutLike())}>
-				<div className={`flex flex-row items-center rounded-md py-1 hover:text-stred ${context.disableLikes ? 'hover:text-gray-500 text-gray-500' : ''}`}>
+			<button className="focus:outline-none focus-visible:ring-1" disabled={context.disableLikes} onClick={() => (context.user ? (liked ? handleUnlike(item.nft_id) : handleLike(item.nft_id)) : handleLoggedOutLike())}>
+				<div className={`flex flex-row items-center rounded-md py-1 dark:text-gray-300 hover:text-red-500 ${context.disableLikes ? 'hover:text-gray-500 text-gray-500' : ''}`}>
 					<div className="mr-2 whitespace-nowrap">{Number(like_count < 0 ? 0 : like_count).toLocaleString()}</div>
-					<div className={`flex pr-1 ${liked ? 'text-stred' : ''}`}>
-						<FontAwesomeIcon className="!w-5 !h-5" icon={liked ? faHeartSolid : faHeartOutline} />
-					</div>
+					<div className={`flex pr-1 ${liked ? 'text-red-500 dark:text-red-600' : 'hover:text-red-400 dark:hover:text-red-500'}`}>{liked ? <SolidHeartIcon className="w-6 h-6" /> : <OutlineHeartIcon className="w-6 h-6" />}</div>
 				</div>
 			</button>
 		</Tippy>
