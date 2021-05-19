@@ -28,7 +28,7 @@ const Layout = ({ children }) => {
 			</Head>
 
 			<Header />
-			<div className="w-full mx-auto min-h-screen z-0 relative overflow-x-hidden">
+			<div className="w-full mx-auto min-h-screen z-0 relative overflow-hidden">
 				<main>{children}</main>
 			</div>
 
