@@ -187,9 +187,6 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 			context.setMyComments(context.myComments.filter(item => !(item === nftId)))
 		}
 	}
-	const openLikedByModal = likedBy => {
-		setLikedByUserList(likedBy)
-	}
 
 	const closeLikedByModal = () => {
 		setLikedByUserList(null)
