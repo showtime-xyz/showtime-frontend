@@ -633,16 +633,16 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 			) : null}
 			<Layout>
 				<Head>
-					<title>{name ? name : username ? username : wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'} | Showtime</title>
+					<title>{name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'} | Showtime</title>
 
 					<meta name="description" content="Explore crypto art I've created, owned, and liked" />
 					<meta property="og:type" content="website" />
 					<meta name="og:description" content="Explore crypto art I've created, owned, and liked" />
 					<meta property="og:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : DEFAULT_PROFILE_PIC} />
-					<meta name="og:title" content={name ? name : username ? username : wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'} />
+					<meta name="og:title" content={name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'} />
 
 					<meta name="twitter:card" content="summary_large_image" />
-					<meta name="twitter:title" content={name ? name : username ? username : wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'} />
+					<meta name="twitter:title" content={name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'} />
 					<meta name="twitter:description" content="Explore crypto art I've created, owned, and liked" />
 					<meta name="twitter:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : DEFAULT_PROFILE_PIC} />
 				</Head>
@@ -689,15 +689,17 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 							</div>
 							<div className="dark:text-gray-200 text-3xl md:text-4xl md:mb-1"> {name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</div>
 							<div>
-								{(username || wallet_addresses_excluding_email_v2.length > 0) && (
+								{(username || (wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0)) && (
 									<div className="flex flex-row items-center justify-start">
 										{username && <div className="md:mr-2 text-sm md:text-base text-gray-500 dark:text-gray-400">@{username}</div>}
 
-										<div className="flex ml-1">
-											{wallet_addresses_excluding_email_v2.map(w => {
-												return <AddressButton key={w.address} address={w.address} ens_domain={w.ens_domain} />
-											})}
-										</div>
+										{wallet_addresses_excluding_email_v2 && (
+											<div className="flex ml-1">
+												{wallet_addresses_excluding_email_v2.map(w => {
+													return <AddressButton key={w.address} address={w.address} ens_domain={w.ens_domain} />
+												})}
+											</div>
+										)}
 									</div>
 								)}
 							</div>

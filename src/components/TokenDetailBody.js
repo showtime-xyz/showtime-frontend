@@ -112,9 +112,9 @@ const TokenDetailBody = ({
 				</>
 			) : null}
 			{lightboxOpen && <Lightbox mainSrc={item.token_img_original_url ? item.token_img_original_url : item.token_img_url} onCloseRequest={() => setLightboxOpen(false)} />}
-			<div className="flex flex-col relative -mt-px dark:bg-gray-900" ref={modalRef}>
+			<div className="flex flex-col relative dark:bg-gray-900" ref={modalRef}>
 				{isMobile ? (
-					<div className="py-4 px-6 flex flex-row">
+					<div className="py-4 px-4 flex flex-row">
 						<div className="flex-shrink">
 							{item.contract_is_creator ? (
 								<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
