@@ -1,4 +1,4 @@
-import { useContext, useRef } from 'react'
+import { useContext, useRef, useEffect, useState } from 'react'
 import { ACTIVITY_TYPES, DEFAULT_PROFILE_PIC, activityIconObjects } from '@/lib/constants'
 import { Like, Comment, Sell, Buy, Create, Follow, Transfer } from './ActivityTypes'
 import { formatDistanceToNowStrict } from 'date-fns'
@@ -25,7 +25,14 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 	}
 	const single = act.nfts?.length === 1
 	let content = null
-	const handleOpenModal = index => setItemOpenInModal({ nftGroup: nfts, index })
+
+	const [cardWidth, setCardWidth] = useState(null)
+	const dropdownRef = useRef(null)
+	const cardRef = useRef(null)
+
+	const handleOpenModal = index => {
+		setItemOpenInModal({ nftGroup: nfts, index })
+	}
 
 	const handleUnfollow = async () => {
 		// Change myLikes via setMyLikes
@@ -60,12 +67,17 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 		case ACTIVITY_TYPES.RECEIVE:
 			content = <Transfer act={act} />
 	}
-	const dropdownRef = useRef(null)
+
+	useEffect(() => {
+		setCardWidth(cardRef?.current?.clientWidth)
+	}, [cardRef?.current?.clientWidth, context.windowSize])
+
 	const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
 
 	const onCornerMenuClick = () => setIsActive(!isActive)
 	return (
 		<div
+			ref={cardRef}
 			className="flex flex-col flex-1 mb-6 pt-4 sm:rounded-lg bg-white dark:bg-gray-900 shadow-md border border-transparent dark:border-gray-800 border-t-2"
 			style={{
 				borderTopColor: activityIconObjects[type].color,
@@ -131,7 +143,7 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 				{nfts ? (
 					<>
 						<div className="flex mt-4 max-w-full">
-							<ActivityImages nfts={nfts} openModal={handleOpenModal} />
+							<ActivityImages nfts={nfts} openModal={handleOpenModal} cardWidth={cardWidth} />
 						</div>
 						{single ? (
 							<div className="flex items-center pt-2 ml-4 mb-4">

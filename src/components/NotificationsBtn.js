@@ -114,7 +114,7 @@ export default function NotificationsBtn() {
 			</div>
 			<div
 				ref={dropdownRef}
-				className={`overflow-y-scroll text-black absolute text-center top-10 right-0 bg-white dark:bg-gray-900 py-2 px-2 shadow-lg rounded-xl transition-all transform border border-gray-200 dark:border-gray-800 z-1 ${isActive ? 'visible opacity-1 translate-y-2' : 'invisible opacity-0'}`}
+				className={`overflow-y-scroll text-black dark:text-gray-200 absolute text-center top-10 right-0 bg-white dark:bg-gray-900 py-2 px-2 shadow-lg rounded-xl transition-all transform border border-gray-200 dark:border-gray-800 z-1 ${isActive ? 'visible opacity-1 translate-y-2' : 'invisible opacity-0'}`}
 				style={{
 					maxWidth: context.windowSize.width < 768 ? '92vw' : 500,
 					maxHeight: context.isMobile ? 500 : 650,

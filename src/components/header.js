@@ -35,7 +35,7 @@ const Header = () => {
 							</Link>
 						</div>
 						{/* Start desktop-only menu */}
-						{!context.isMobile ? (
+						{!context.isMobile || context.isTablet ? (
 							<div className="flex-grow flex-1">
 								<SearchBar />
 							</div>
