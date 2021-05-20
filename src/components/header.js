@@ -7,6 +7,7 @@ import AppContext from '@/context/app-context'
 import ModalLogin from './ModalLogin'
 import NotificationsBtn from './NotificationsBtn'
 import CappedWidth from './CappedWidth'
+import { formatAddressShort } from '@/lib/utilities'
 
 const Header = () => {
 	const context = useContext(AppContext)
@@ -73,7 +74,7 @@ const Header = () => {
 						{/* End desktop-only menu */}
 						<div>
 							{context.user && context.myProfile !== undefined ? (
-								<Link href="/[profile]" as={`/${context.myProfile.username || context.user.publicAddress}`}>
+								<Link href="/[profile]" as={`/${context.myProfile.username ? context.myProfile.username : context.myProfile.wallet_addresses_excluding_email_v2.length > 0 ? context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain : context.user.publicAddress}`}>
 									<a className="dark:text-gray-200 text-base flex flex-row items-center hover:text-stpink" onClick={() => mixpanel.track('Profile button click')}>
 										<>
 											<div className={context.windowSize ? (context.windowSize.width < 350 ? 'hidden' : null) : null}>
@@ -85,7 +86,7 @@ const Header = () => {
 													maxWidth: context.gridWidth < 500 ? 100 : 200,
 												}}
 											>
-												{context.myProfile ? (context.myProfile.name ? context.myProfile.name : 'Profile') : 'Profile'}
+												{context.myProfile ? (context.myProfile.name ? context.myProfile.name : context.myProfile.username ? context.myProfile.username : context.myProfile.wallet_addresses_excluding_email_v2 && context.myProfile.wallet_addresses_excluding_email_v2.length > 0 ? (context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(context.myProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Profile') : 'Profile'}
 											</div>
 										</>
 									</a>

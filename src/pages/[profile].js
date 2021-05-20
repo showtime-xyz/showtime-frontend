@@ -67,10 +67,7 @@ export async function getServerSideProps(context) {
 }
 
 const Profile = ({ profile, slug_address, followers_list, followers_count, following_list, following_count, featured_nft, lists }) => {
-	const { name, img_url, cover_url, wallet_addresses, wallet_addresses_excluding_email, bio, website_url, profile_id, username, featured_nft_img_url, links } = profile
-
 	const context = useContext(AppContext)
-
 	const router = useRouter()
 
 	// Profile details
@@ -79,32 +76,18 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const initialBioLength = context.isMobile ? 130 : 150
 	const [moreBioShown, setMoreBioShown] = useState(false)
 	const [followersCount, setFollowersCount] = useState(followers_count)
-	const profileToDisplay = isMyProfile
-		? context.myProfile
-		: {
-				name,
-				website_url,
-				bio,
-				img_url,
-				cover_url,
-				username,
-				links: links.map(link => ({
-					name: link.type__name,
-					prefix: link.type__prefix,
-					icon_url: link.type__icon_url,
-					type_id: link.type_id,
-					user_input: link.user_input,
-				})),
-				wallet_addresses_excluding_email,
-		  }
+
+	// Using global context for logged in user, else server data for other pages
+	const { name, img_url, cover_url, wallet_addresses_v2, wallet_addresses_excluding_email_v2, bio, website_url, profile_id, username, featured_nft_img_url, links } = isMyProfile ? context.myProfile : profile
+
 	useEffect(() => {
 		// Wait for identity to resolve before recording the view
 		if (typeof context.user !== 'undefined') {
 			if (context.user) {
 				// Logged in?
-				if (context.myProfile?.wallet_addresses.map(a => a.toLowerCase()).includes(slug_address.toLowerCase()) || slug_address.toLowerCase() === context.myProfile?.username?.toLowerCase()) {
+				if (context.myProfile?.wallet_addresses_v2.map(a => a.address?.toLowerCase()).includes(slug_address.toLowerCase()) || slug_address.toLowerCase() === context.myProfile?.username?.toLowerCase() || context.myProfile?.wallet_addresses_v2.map(a => a.ens_domain?.toLowerCase()).includes(slug_address.toLowerCase())) {
 					setIsMyProfile(true)
-					if (wallet_addresses.length === wallet_addresses_excluding_email.length) {
+					if (wallet_addresses_v2.length === wallet_addresses_excluding_email_v2.length) {
 						setHasEmailAddress(false)
 					} else {
 						setHasEmailAddress(true)
@@ -422,7 +405,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		context.setMyFollows([
 			{
 				profile_id: profile_id,
-				wallet_address: wallet_addresses[0],
+				wallet_address: wallet_addresses_v2[0].address,
 				name: name,
 				img_url: img_url ? img_url : DEFAULT_PROFILE_PIC,
 				timestamp: null,
@@ -629,8 +612,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		>
 			{typeof document !== 'undefined' ? (
 				<>
-					<ModalAddWallet isOpen={walletModalOpen} setWalletModalOpen={setWalletModalOpen} walletAddresses={wallet_addresses} />
-					<ModalAddEmail isOpen={emailModalOpen} setEmailModalOpen={setEmailModalOpen} walletAddresses={wallet_addresses} setHasEmailAddress={setHasEmailAddress} />
+					<ModalAddWallet isOpen={walletModalOpen} setWalletModalOpen={setWalletModalOpen} walletAddresses={wallet_addresses_v2} />
+					<ModalAddEmail isOpen={emailModalOpen} setEmailModalOpen={setEmailModalOpen} setHasEmailAddress={setHasEmailAddress} />
 					{editModalOpen && <ModalEditProfile isOpen={editModalOpen} setEditModalOpen={setEditModalOpen} />}
 					<ModalEditPhoto isOpen={pictureModalOpen} setEditModalOpen={setPictureModalOpen} />
 					<ModalEditCover isOpen={coverModalOpen} setEditModalOpen={setCoverModalOpen} />
@@ -650,21 +633,21 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 			) : null}
 			<Layout>
 				<Head>
-					<title>{profileToDisplay?.name ? profileToDisplay.name : 'Unnamed'}</title>
+					<title>{name ? name : username ? username : wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'} | Showtime</title>
 
 					<meta name="description" content="Explore crypto art I've created, owned, and liked" />
 					<meta property="og:type" content="website" />
 					<meta name="og:description" content="Explore crypto art I've created, owned, and liked" />
 					<meta property="og:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : DEFAULT_PROFILE_PIC} />
-					<meta name="og:title" content={name ? name : wallet_addresses[0]} />
+					<meta name="og:title" content={name ? name : username ? username : wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'} />
 
 					<meta name="twitter:card" content="summary_large_image" />
-					<meta name="twitter:title" content={name ? name : wallet_addresses[0]} />
+					<meta name="twitter:title" content={name ? name : username ? username : wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'} />
 					<meta name="twitter:description" content="Explore crypto art I've created, owned, and liked" />
 					<meta name="twitter:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : DEFAULT_PROFILE_PIC} />
 				</Head>
 
-				<div className={`h-32 md:h-64 relative text-left bg-gradient-to-b from-black dark:from-gray-400 to-gray-800 dark:to-gray-100 ${profileToDisplay?.cover_url ? 'bg-no-repeat bg-center bg-cover' : ''}`} style={profileToDisplay?.cover_url ? { backgroundImage: `url(${profileToDisplay.cover_url})` } : {}}>
+				<div className={`h-32 md:h-64 relative text-left bg-gradient-to-b from-black dark:from-gray-400 to-gray-800 dark:to-gray-100 ${cover_url ? 'bg-no-repeat bg-center bg-cover' : ''}`} style={cover_url ? { backgroundImage: `url(${cover_url})` } : {}}>
 					{isMyProfile && (
 						<CappedWidth>
 							<div className="relative">
@@ -696,7 +679,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											mixpanel.track('Open edit photo')
 										}
 									}}
-									src={profileToDisplay?.img_url ? profileToDisplay.img_url : DEFAULT_PROFILE_PIC}
+									src={img_url ? img_url : DEFAULT_PROFILE_PIC}
 									className={`h-24 w-24 md:h-32 md:w-32 rounded-full border-2 shadow-md border-white dark:border-gray-800 z-10 -mt-14 md:-mt-20 overflow-hidden ${isMyProfile ? 'cursor-pointer ' : ''}`}
 								/>
 								<div className="flex-grow"></div>
@@ -704,25 +687,25 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 									<ProfileFollowersPill following={following} followers={followers} isFollowed={isFollowed} isMyProfile={isMyProfile} followingMe={followingMe} handleUnfollow={handleUnfollow} handleFollow={handleFollow} handleLoggedOutFollow={handleLoggedOutFollow} hasEmailAddress={hasEmailAddress} setShowFollowers={setShowFollowers} setShowFollowing={setShowFollowing} editAccount={editAccount} editPhoto={editPhoto} addWallet={addWallet} addEmail={addEmail} logout={logout} />
 								</div>
 							</div>
-							<div className="dark:text-gray-200 text-3xl md:text-4xl md:mb-1"> {profileToDisplay?.name ? profileToDisplay.name : wallet_addresses_excluding_email && wallet_addresses_excluding_email.length > 0 ? formatAddressShort(wallet_addresses_excluding_email[0]) : 'Unnamed'}</div>
+							<div className="dark:text-gray-200 text-3xl md:text-4xl md:mb-1"> {name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</div>
 							<div>
-								{(username || wallet_addresses_excluding_email.length > 0) && (
+								{(username || wallet_addresses_excluding_email_v2.length > 0) && (
 									<div className="flex flex-row items-center justify-start">
 										{username && <div className="md:mr-2 text-sm md:text-base text-gray-500 dark:text-gray-400">@{username}</div>}
 
 										<div className="flex ml-1">
-											{wallet_addresses_excluding_email.map(address => {
-												return <AddressButton key={address} address={address} />
+											{wallet_addresses_excluding_email_v2.map(w => {
+												return <AddressButton key={w.address} address={w.address} ens_domain={w.ens_domain} />
 											})}
 										</div>
 									</div>
 								)}
 							</div>
 							<div>
-								{profileToDisplay?.bio ? (
+								{bio ? (
 									<div className="text-black dark:text-gray-500 text-sm max-w-prose text-left md:text-base mt-6 block break-words">
-										{moreBioShown ? profileToDisplay.bio : truncateWithEllipses(profileToDisplay.bio, initialBioLength)}
-										{!moreBioShown && profileToDisplay?.bio && profileToDisplay.bio.length > initialBioLength && (
+										{moreBioShown ? bio : truncateWithEllipses(bio, initialBioLength)}
+										{!moreBioShown && bio && bio.length > initialBioLength && (
 											<a onClick={() => setMoreBioShown(true)} className="text-gray-500 hover:text-gray-700 cursor-pointer">
 												{' '}
 												more
@@ -755,9 +738,9 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 							</div>
 
 							<div className="dark:text-gray-400 md:text-right text-sm md:mr-2 pt-5 md:pt-7">
-								{profileToDisplay?.website_url ? (
+								{website_url ? (
 									<a
-										href={profileToDisplay.website_url.slice(0, 4) === 'http' ? profileToDisplay.website_url : 'https://' + profileToDisplay.website_url}
+										href={website_url.slice(0, 4) === 'http' ? website_url : 'https://' + website_url}
 										target="_blank"
 										onClick={() => {
 											mixpanel.track('Clicked profile website link', {
@@ -770,29 +753,30 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										<div className="flex text-gray-500 dark:hover:text-gray-400 flex-row  items-center hover:opacity-80 dark:hover:opacity-100 mr-3 md:mr-0">
 											<LinkIcon className="dark:text-gray-600 flex-shrink-0 h-4 w-4 mr-1 opacity-70" />
 											<div>
-												<div className="break-all">{profileToDisplay.website_url}</div>
+												<div className="break-all">{website_url}</div>
 											</div>
 										</div>
 									</a>
 								) : null}
 								{/* map out social links */}
-								{profileToDisplay?.links &&
-									profileToDisplay.links.map(socialLink => (
+								{links &&
+									links.map(link => (
 										<a
-											href={`https://${socialLink.prefix}` + socialLink.user_input}
+											href={`https://${link.prefix ? link.prefix : link.type__prefix}` + link.user_input}
 											target="_blank"
 											onClick={() => {
-												mixpanel.track(`Clicked ${socialLink.name} profile link`, {
+												mixpanel.track(`Clicked ${link.name ? link.name : link.type__name} profile link`, {
 													slug: slug_address,
 												})
 											}}
 											className="mr-4 md:mr-0 md:ml-5 inline-block "
-											key={socialLink.type_id}
+											key={link.type_id}
 											rel="noreferrer"
 										>
 											<div className="text-gray-500 dark:hover:text-gray-400 flex flex-row items-center hover:opacity-80 dark:hover:opacity-100">
-												{socialLink.icon_url && <img src={socialLink.icon_url} alt="" className="flex-shrink-0 h-5 w-5 mr-1 opacity-70 dark:opacity-100" />}
-												<div className="break-all">{socialLink.name}</div>
+												{link.icon_url && <img src={link.icon_url} alt="" className="flex-shrink-0 h-5 w-5 mr-1 opacity-70 dark:opacity-100" />}
+												{link.type__icon_url && <img src={link.type__icon_url} alt="" className="flex-shrink-0 h-5 w-5 mr-1 opacity-70 dark:opacity-100" />}
+												<div className="break-all">{link.name ? link.name : link.type__name}</div>
 											</div>
 										</a>
 									))}
@@ -821,7 +805,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 									slug_address,
 									name,
 									img_url,
-									wallet_addresses_excluding_email,
+									wallet_addresses_excluding_email_v2,
 									website_url,
 									username,
 								}}
@@ -838,9 +822,9 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										<div className="border-b border-gray-200 dark:border-gray-800 sm:mx-2 mb-2 pb-4">
 											<div className="flex flex-row items-center mt-2 ml-2 sm:mt-0 sm:ml-0">
 												<div className="mr-2">
-													<img src={profileToDisplay && profileToDisplay.img_url ? profileToDisplay.img_url : DEFAULT_PROFILE_PIC} className="w-5 h-5 rounded-full" />
+													<img src={img_url ? img_url : DEFAULT_PROFILE_PIC} className="w-5 h-5 rounded-full" />
 												</div>
-												<div className="dark:text-gray-300">{profileToDisplay?.name ? profileToDisplay.name : wallet_addresses_excluding_email && wallet_addresses_excluding_email.length > 0 ? formatAddressShort(wallet_addresses_excluding_email[0]) : 'Unnamed'}</div>
+												<div className="dark:text-gray-300">{name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</div>
 												<div className="flex-grow"></div>
 												{isMyProfile && hasUserHiddenItems ? (
 													<div className="flex sm:hidden">
@@ -1105,7 +1089,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												slug_address,
 												name,
 												img_url,
-												wallet_addresses_excluding_email,
+												wallet_addresses_excluding_email_v2,
 												website_url,
 												username,
 											}} // to customize owned by list on bottom of card
