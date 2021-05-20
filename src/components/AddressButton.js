@@ -8,8 +8,7 @@ const AddressButton = ({ address }) => {
 	return (
 		<Tippy content={isCopied ? 'Copied!' : 'Copy address'} hideOnClick={false}>
 			<div
-				//className="py-1 px-3  rounded-full mr-1 md:mr-2 hover:bg-purple-200 bg-purple-100 text-purple-500 transition-all text-xs mt-1 "
-				className="py-1 px-3  rounded-full mr-1 md:mr-2 hover:bg-opacity-20 bg-black text-gray-800 transition-all text-xs mt-1 md:mt-0 bg-opacity-10 cursor-pointer"
+				className="py-1 px-3 rounded-full mr-1 md:mr-2 hover:bg-opacity-20 bg-black dark:bg-gray-700 text-gray-800 dark:text-gray-400 transition-all text-xs mt-1 md:mt-0 bg-opacity-10 cursor-pointer"
 				key={address}
 				onClick={() => {
 					setIsCopied(true)

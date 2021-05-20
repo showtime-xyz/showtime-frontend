@@ -129,7 +129,6 @@ export const PROFILE_TABS = [null, 'created', 'owned', 'liked'] // first  item b
 // TODO: Convert to classes and include it into the MentionsInput component
 export const MENTIONS_STYLE = {
 	control: {
-		backgroundColor: '#fff',
 		fontSize: 14,
 		borderRadius: 10,
 	},
@@ -140,16 +139,11 @@ export const MENTIONS_STYLE = {
 		},
 		highlighter: {
 			padding: 9,
-			border: '2px solid transparent',
 			borderRadius: 10,
 		},
 		input: {
 			padding: 9,
-			border: '2px solid #d1d5da',
 			borderRadius: 8,
-			'&focused': {
-				border: '2px solid black',
-			},
 		},
 	},
 
@@ -169,19 +163,15 @@ export const MENTIONS_STYLE = {
 	},
 
 	suggestions: {
+		background: 'transparent',
 		list: {
-			backgroundColor: 'white',
-			border: '1px solid rgba(0,0,0,0.15)',
+			background: null,
 			fontSize: 14,
 			borderRadius: 10,
 			overflow: 'hidden',
 		},
 		item: {
 			padding: '5px 15px',
-			// borderBottom: "1px solid rgba(0,0,0,0.15)",
-			'&focused': {
-				backgroundColor: '#dddeff',
-			},
 		},
 	},
 }

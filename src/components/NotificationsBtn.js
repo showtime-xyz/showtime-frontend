@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect, useContext } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
-import { faBell } from '@fortawesome/free-regular-svg-icons'
 import { faComment, faHeart, faUser, faAt } from '@fortawesome/free-solid-svg-icons'
 import useDetectOutsideClick from '@/hooks/useDetectOutsideClick'
 import { formatDistanceToNowStrict } from 'date-fns'
@@ -11,6 +10,7 @@ import AppContext from '@/context/app-context'
 import { getNotificationInfo, DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import ModalUserList from '@/components/ModalUserList'
 import axios from '@/lib/axios'
+import { BellIcon } from '@heroicons/react/outline'
 
 const NOTIFICATIONS_PER_PAGE = 7
 
@@ -108,18 +108,13 @@ export default function NotificationsBtn() {
 
 	return (
 		<div className="relative">
-			<div
-				onClick={() => {
-					toggleOpen()
-				}}
-				className="hover:text-stpink transition-all rounded-full h-6 w-6 flex items-center justify-center cursor-pointer relative"
-			>
-				<FontAwesomeIcon className="w-6 h-6" icon={faBell} />
+			<div onClick={toggleOpen} className="dark:text-gray-200 hover:text-stpink transition-all rounded-full h-6 w-6 flex items-center justify-center cursor-pointer relative">
+				<BellIcon className="w-5 h-5" />
 				{hasUnreadNotifications && <div className="bg-stpink absolute h-2.5 w-2.5 top-px left-px rounded-full" />}
 			</div>
 			<div
 				ref={dropdownRef}
-				className={`overflow-y-scroll text-black absolute text-center top-10 right-0 bg-white py-2 px-2 shadow-lg rounded-xl transition-all transform border border-gray-200 z-1 ${isActive ? 'visible opacity-1 translate-y-2' : 'invisible opacity-0'}`}
+				className={`overflow-y-scroll text-black absolute text-center top-10 right-0 bg-white dark:bg-gray-900 py-2 px-2 shadow-lg rounded-xl transition-all transform border border-gray-200 dark:border-gray-800 z-1 ${isActive ? 'visible opacity-1 translate-y-2' : 'invisible opacity-0'}`}
 				style={{
 					maxWidth: context.windowSize.width < 768 ? '92vw' : 500,
 					maxHeight: context.isMobile ? 500 : 650,
@@ -139,7 +134,7 @@ export default function NotificationsBtn() {
 
 						notif.actors && notif.actors.length > 0 ? (
 							// HAS CLICKABLE ACTORS
-							<div className={`py-3 px-3 hover:bg-gray-50 transition-all rounded-lg whitespace-nowrap flex items-start w-full max-w-full ${new Date(notif.to_timestamp) > new Date(previouslyLastOpened) ? 'bg-gray-100 hover:bg-gray-200' : ''}`} key={notif.id}>
+							<div className={`py-3 px-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all rounded-lg whitespace-nowrap flex items-start w-full max-w-full ${new Date(notif.to_timestamp) > new Date(previouslyLastOpened) ? 'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700' : ''}`} key={notif.id}>
 								<div className="w-max mr-2 relative min-w-[2.25rem]">
 									<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
 										<a onClick={() => setIsActive(!isActive)}>
@@ -160,11 +155,7 @@ export default function NotificationsBtn() {
 										<>
 											{notif.actors.length == 1 ? (
 												<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
-													<a
-														className="text-black cursor-pointer hover:text-stpink"
-														//onClick={closeModal}
-														onClick={() => setIsActive(!isActive)}
-													>
+													<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setIsActive(!isActive)}>
 														{notif.actors[0].name}{' '}
 													</a>
 												</Link>
@@ -172,21 +163,13 @@ export default function NotificationsBtn() {
 											{notif.actors.length == 2 ? (
 												<>
 													<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
-														<a
-															className="text-black cursor-pointer hover:text-stpink"
-															//onClick={closeModal}
-															onClick={() => setIsActive(!isActive)}
-														>
+														<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setIsActive(!isActive)}>
 															{notif.actors[0].name}
 														</a>
 													</Link>
 													<span className="text-gray-500"> and </span>
 													<Link href="/[profile]" as={`/${notif.actors[1]?.username || notif.actors[1].wallet_address}`}>
-														<a
-															className="text-black cursor-pointer hover:text-stpink"
-															//onClick={closeModal}
-															onClick={() => setIsActive(!isActive)}
-														>
+														<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setIsActive(!isActive)}>
 															{notif.actors[1].name}{' '}
 														</a>
 													</Link>
@@ -195,31 +178,19 @@ export default function NotificationsBtn() {
 											{notif.actors.length == 3 ? (
 												<>
 													<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
-														<a
-															className="text-black cursor-pointer hover:text-stpink"
-															//onClick={closeModal}
-															onClick={() => setIsActive(!isActive)}
-														>
+														<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setIsActive(!isActive)}>
 															{notif.actors[0].name}
 														</a>
 													</Link>
 													<span className="text-gray-500">, </span>
 													<Link href="/[profile]" as={`/${notif.actors[1]?.username || notif.actors[1].wallet_address}`}>
-														<a
-															className="text-black cursor-pointer hover:text-stpink"
-															//onClick={closeModal}
-															onClick={() => setIsActive(!isActive)}
-														>
+														<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setIsActive(!isActive)}>
 															{notif.actors[1].name}{' '}
 														</a>
 													</Link>
 													<span className="text-gray-500">, and </span>
 													<Link href="/[profile]" as={`/${notif.actors[2]?.username || notif.actors[2].wallet_address}`}>
-														<a
-															className="text-black cursor-pointer hover:text-stpink"
-															//onClick={closeModal}
-															onClick={() => setIsActive(!isActive)}
-														>
+														<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setIsActive(!isActive)}>
 															{notif.actors[2].name}{' '}
 														</a>
 													</Link>
@@ -231,9 +202,7 @@ export default function NotificationsBtn() {
 														title="Followed You"
 														isOpen={openUserList == notif.id}
 														users={notif.actors ? notif.actors : []}
-														closeModal={() => {
-															setOpenUserList(null)
-														}}
+														closeModal={() => setOpenUserList(null)}
 														onRedirect={() => {
 															setOpenUserList(null)
 															setIsActive(!isActive)
@@ -241,31 +210,19 @@ export default function NotificationsBtn() {
 														emptyMessage="No followers yet."
 													/>
 													<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
-														<a
-															className="text-black cursor-pointer hover:text-stpink"
-															//onClick={closeModal}
-															onClick={() => setIsActive(!isActive)}
-														>
+														<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setIsActive(!isActive)}>
 															{notif.actors[0].name}
 														</a>
 													</Link>
 													<span className="text-gray-500">, </span>
 													<Link href="/[profile]" as={`/${notif.actors[1]?.username || notif.actors[1].wallet_address}`}>
-														<a
-															className="text-black cursor-pointer hover:text-stpink"
-															//onClick={closeModal}
-															onClick={() => setIsActive(!isActive)}
-														>
+														<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setIsActive(!isActive)}>
 															{notif.actors[1].name}
 														</a>
 													</Link>
 													<span className="text-gray-500">, and </span>
 
-													<a
-														className="text-black cursor-pointer hover:text-stpink"
-														//onClick={closeModal}
-														onClick={() => setOpenUserList(notif.id)}
-													>
+													<a className="text-black dark:text-gray-300 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setOpenUserList(notif.id)}>
 														{notif.actors.length - 2} other {notif.actors.length - 2 == 1 ? 'person' : 'people'}{' '}
 													</a>
 												</>
@@ -280,18 +237,14 @@ export default function NotificationsBtn() {
 
 											{notif.nft__nftdisplay__name ? (
 												<Link href="/t/[...token]" as={`/t/${notif.nft__contract__address}/${notif.nft__token_identifier}`}>
-													<a
-														className="text-black cursor-pointer hover:text-stpink"
-														//onClick={closeModal}
-														onClick={() => setIsActive(!isActive)}
-													>
+													<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setIsActive(!isActive)}>
 														{notif.nft__nftdisplay__name}
 													</a>
 												</Link>
 											) : null}
 										</>
 									</div>
-									<div className="text-gray-400 text-xs">
+									<div className="text-gray-400 dark:text-gray-500 text-xs">
 										{formatDistanceToNowStrict(new Date(notif.to_timestamp), {
 											addSuffix: true,
 										})}

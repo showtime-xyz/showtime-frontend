@@ -3,8 +3,6 @@ import mixpanel from 'mixpanel-browser'
 import { Magic } from 'magic-sdk'
 import Web3Modal from 'web3modal'
 import WalletConnectProvider from '@walletconnect/web3-provider'
-//import Authereum from "authereum";
-//import ethProvider from "eth-provider";
 import { WalletLink } from 'walletlink'
 import backend from '@/lib/backend'
 import AppContext from '@/context/app-context'
@@ -13,9 +11,11 @@ import Web3 from 'web3'
 import Fortmatic from 'fortmatic'
 import ScrollableModal from './ScrollableModal'
 import axios from '@/lib/axios'
+import { useTheme } from 'next-themes'
 
 export default function Modal({ isOpen }) {
 	const context = useContext(AppContext)
+	const { resolvedTheme } = useTheme()
 	const [signaturePending, setSignaturePending] = useState(false)
 
 	const handleSubmitEmail = async event => {
@@ -98,6 +98,7 @@ export default function Modal({ isOpen }) {
 			network: 'mainnet', // optional
 			cacheProvider: false, // optional
 			providerOptions, // required
+			theme: resolvedTheme,
 		})
 
 		const provider = await web3Modal.connect()
@@ -136,45 +137,40 @@ export default function Modal({ isOpen }) {
 			{isOpen && (
 				<ScrollableModal closeModal={() => context.setLoginModalOpen(false)} contentWidth="25rem">
 					<div className="p-4">
+						<div className="text-2xl dark:text-gray-300 border-b-2 dark:border-gray-800 pb-2">Sign in</div>
 						<CloseButton setEditModalOpen={context.setLoginModalOpen} />
-						<div className="text-3xl border-b-2 pb-2 text-center">Sign in</div>
 						{signaturePending ? (
-							<div className="text-center py-40">Pushed a request to your wallet...</div>
+							<div className="text-center py-40 dark:text-gray-400">Pushed a request to your wallet...</div>
 						) : (
 							<>
 								<form onSubmit={handleSubmitEmail}>
 									<div className="text-center pt-8">
 										<div>
-											<label htmlFor="email" className="pb-4 ">
+											<label htmlFor="email" className="pb-4 dark:text-gray-400">
 												Enter your email to receive a sign in link.
 											</label>
-											<div className="pt-1 pb-1 text-xs text-gray-700">If this is your first time, it will create a new account.</div>
+											<div className="pt-1 pb-1 text-xs text-gray-700 dark:text-gray-500">If this is your first time, it will create a new account.</div>
 										</div>
 										<br />
-										<input name="email" placeholder="Email" type="email" className="border-2 w-full text-black rounded-lg p-3" autoFocus />
+										<input name="email" placeholder="Email" type="email" className="border-2 dark:border-gray-800 w-full text-black dark:text-gray-300 rounded-lg p-3 focus:outline-none focus-visible:ring-1" autoFocus />
 
-										<div className="pt-8 pb-8 text-gray-700 text-xs">
+										<div className="pt-8 pb-8 text-gray-700 dark:text-gray-500 text-xs">
 											By signing in you agree to our{' '}
-											<a href="https://www.notion.so/Showtime-Legal-c407e36eb7cd414ca190245ca8621e68" target="_blank" rel="noreferrer">
+											<a className="dark:text-gray-400" href="https://www.notion.so/Showtime-Legal-c407e36eb7cd414ca190245ca8621e68" target="_blank" rel="noreferrer">
 												Terms &amp; Conditions
 											</a>
 											.
 										</div>
 
-										<button className="bg-stpink text-white rounded-full px-6 py-2 cursor-pointer border-2 hover:text-stpink hover:bg-white border-stpink transition-all">
+										<button className="bg-stpink text-white dark:text-gray-900 rounded-full px-6 py-2 cursor-pointer border-2 hover:text-stpink hover:bg-white dark:hover:bg-gray-900 dark:hover:text-stpink border-stpink transition">
 											<span className="text-sm md:text-base">Sign in with Email</span>
 										</button>
-										<div className="py-6 text-gray-700">— or —</div>
+										<div className="py-6 text-gray-700 dark:text-gray-600">— or —</div>
 									</div>
 								</form>
 
 								<div className="mb-4 text-center">
-									<button
-										className="bg-black text-white border-black rounded-full px-6 py-2 cursor-pointer border-2 hover:text-black hover:bg-white transition-all"
-										onClick={() => {
-											handleSubmitWallet()
-										}}
-									>
+									<button className="bg-black text-white dark:text-gray-300 border-black rounded-full px-6 py-2 cursor-pointer border-2 hover:text-black hover:bg-white dark:hover:bg-gray-800 dark:hover:border-gray-800 transition focus:outline-none focus-visible:ring-1" onClick={() => handleSubmitWallet()}>
 										<span className="text-sm md:text-base">Sign in with Wallet</span>
 									</button>
 								</div>

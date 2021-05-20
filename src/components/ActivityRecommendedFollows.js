@@ -17,29 +17,7 @@ export default function ActivityRecommendedFollows() {
 	return (
 		<div>
 			<div className="flex items-center pb-2 px-4">
-				<div className="m-2 flex-grow">Suggested for You</div>
-
-				{/*!loading && (
-          <div>
-            <div
-              onClick={followAllClicked ? () => {} : handleFollowAll}
-              className={`px-4 py-1 text-sm rounded-full border w-max flex items-center justify-center hover:opacity-80  transition-all cursor-pointer ${
-                followAllClicked
-                  ? "border-gray-300 text-black"
-                  : "border-stpink bg-stpink text-white"
-              }`}
-            >
-              {followAllClicked ? (
-                "Followed All"
-              ) : (
-                <div>
-                  <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                  Follow All
-                </div>
-              )}
-            </div>
-          </div>
-              )*/}
+				<div className="m-2 flex-grow dark:text-gray-200">Suggested for You</div>
 			</div>
 			{context.recommendedFollows &&
 				context.recommendedFollows.slice(0, 3).map(recFollow => (
@@ -54,7 +32,7 @@ export default function ActivityRecommendedFollows() {
 				</div>
 			)}
 			{context.loadingRecommendedFollows && context.recommendedFollows.length < 3 && (
-				<div className="flex justify-center items-center w-full py-4 border-t border-gray-200">
+				<div className="flex justify-center items-center w-full py-4 border-t border-gray-200 dark:border-gray-800">
 					<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 				</div>
 			)}

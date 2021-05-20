@@ -1,23 +1,19 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import mixpanel from 'mixpanel-browser'
+import { XIcon } from '@heroicons/react/solid'
 
 const CloseButton = ({ setEditModalOpen, isDetailModal, cleanupFunction }) => {
 	return (
 		<div
 			className="absolute top-5 right-5 cursor-pointer z-[4]"
 			onClick={() => {
-				if (cleanupFunction) {
-					cleanupFunction()
-				}
+				if (cleanupFunction) cleanupFunction()
 
 				setEditModalOpen(false)
-				if (isDetailModal) {
-					mixpanel.track('Close NFT modal - x button')
-				}
+
+				if (isDetailModal) mixpanel.track('Close NFT modal - x button')
 			}}
 		>
-			<FontAwesomeIcon className="w-6 h-6 text-gray-400" icon={faTimes} />
+			<XIcon className="w-6 h-6 text-gray-600 dark:text-gray-700" />
 		</div>
 	)
 }

@@ -2,7 +2,9 @@ import { useState } from 'react'
 import mixpanel from 'mixpanel-browser'
 import CloseButton from './CloseButton'
 import ScrollableModal from './ScrollableModal'
+import GreenButton from './UI/Buttons/GreenButton'
 import axios from '@/lib/axios'
+import GhostButton from './UI/Buttons/GhostButton'
 
 export default function ModalFeedback({ isOpen, closeModal }) {
 	const [inputValue, setInputValue] = useState('')
@@ -38,41 +40,25 @@ export default function ModalFeedback({ isOpen, closeModal }) {
 					<div className="p-4">
 						<form onSubmit={handleSubmit}>
 							<CloseButton setEditModalOpen={closeModal} />
-							<div className="text-3xl border-b-2 pb-2">Feedback</div>
+							<div className="text-2xl dark:text-gray-300 border-b-2 dark:border-gray-800 pb-2">Feedback</div>
 							{confirmationShowing ? (
-								<div className="my-8">We have received your feedback. Thank you!</div>
+								<div className="my-8 dark:text-gray-400">We have received your feedback. Thank you!</div>
 							) : (
 								<>
 									<div className="my-4">
-										<div className="my-4 mx-1">Please let us know how we can improve Showtime! The team reviews every message.</div>
-										<textarea
-											name="description"
-											placeholder="Your feedback here..."
-											value={inputValue}
-											autoFocus
-											onChange={e => {
-												setInputValue(e.target.value)
-											}}
-											type="text"
-											maxLength="500"
-											className="w-full text-black p-3 rounded-lg border-2 border-gray-600"
-											rows={4}
-										/>
+										<div className="my-4 mx-1 dark:text-gray-400">Please let us know how we can improve Showtime! The team reviews every message.</div>
+										<textarea name="description" placeholder="Your feedback here..." value={inputValue} autoFocus onChange={e => setInputValue(e.target.value)} type="text" maxLength="500" className="w-full text-black dark:text-gray-400 p-3 rounded-lg border-2 border-gray-600 focus:outline-none focus-visible:ring-1" rows={4} />
 									</div>
-									<div className="border-t-2 pt-4">
-										<button type="submit" className="bg-green-500 hover:bg-green-400 border-2 border-green-500 hover:border-green-400 text-white transition px-4 py-2 rounded-full float-right">
-											Submit
-										</button>
-										<button
-											type="button"
-											className="border-2 text-gray-800 border-gray-800 hover:border-gray-500 hover:text-gray-500 px-4 py-2 rounded-full transition"
+									<div className="border-t-2 dark:border-gray-800 pt-4">
+										<GreenButton type="submit">Submit</GreenButton>
+										<GhostButton
 											onClick={() => {
 												closeModal()
 												setInputValue('')
 											}}
 										>
 											Cancel
-										</button>
+										</GhostButton>
 									</div>
 								</>
 							)}
