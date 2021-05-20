@@ -196,7 +196,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 				<ScrollableModal closeModal={handleModalClose} contentWidth="30rem">
 					<div className="p-4">
 						<CloseButton setEditModalOpen={handleModalClose} />
-						<div className="dark:text-gray-300 text-2xl border-b-2 dark:border-gray-800 pb-2">{step == 1 ? 'Add Wallet' : step == 4 ? 'Success!' : signaturePending ? 'Almost there!' : walletAddresses.map(item => item.toLowerCase()).includes(addressDetected?.toLowerCase()) ? 'Switch Wallet' : 'Confirm Wallet'}</div>
+						<div className="dark:text-gray-300 text-2xl border-b-2 dark:border-gray-800 pb-2">{step == 1 ? 'Add Wallet' : step == 4 ? 'Success!' : signaturePending ? 'Almost there!' : walletAddresses.map(item => item.address.toLowerCase()).includes(addressDetected?.toLowerCase()) ? 'Switch Wallet' : 'Confirm Wallet'}</div>
 						{step == 1 ? (
 							<>
 								<div className="my-4 py-4 dark:text-gray-400">Add one or more wallets to showcase all your NFTs in one place.</div>
@@ -215,7 +215,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 												<pre>{addressDetected}</pre>
 											</div>
 											<>
-												{walletAddresses.map(item => item.toLowerCase()).includes(addressDetected?.toLowerCase()) ? (
+												{walletAddresses.map(item => item.address.toLowerCase()).includes(addressDetected?.toLowerCase()) ? (
 													<>
 														<div className="py-4">
 															<span>
@@ -300,7 +300,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 							<div className="text-center py-40 px-10 dark:text-gray-400">Please sign the message we're sending to your wallet...</div>
 						) : step == 3 ? (
 							<div className="text-center py-40 px-10 dark:text-gray-400">Adding wallet and any history, please wait...</div>
-						) : walletAddresses.map(item => item.toLowerCase()).includes(addressDetected?.toLowerCase()) && step != 1 ? null : (
+						) : walletAddresses.map(item => item.address.toLowerCase()).includes(addressDetected?.toLowerCase()) && step != 1 ? null : (
 							<>
 								<div className="mt-4 mb-0 pt-4 text-center border-t-2 dark:border-gray-800">
 									{step == 1 ? (
@@ -314,7 +314,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 											Select wallet to add
 										</button>
 									) : step == 4 ? null : step == 3 ? null : addressDetected ? (
-										walletAddresses.map(item => item.toLowerCase()).includes(addressDetected?.toLowerCase()) ? null : (
+										walletAddresses.map(item => item.address.toLowerCase()).includes(addressDetected?.toLowerCase()) ? null : (
 											<GreenButton className="float-none" onClick={signMessage}>
 												Sign to finish
 											</GreenButton>

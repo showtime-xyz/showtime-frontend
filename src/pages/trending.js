@@ -64,7 +64,7 @@ const Leaderboard = () => {
 	return (
 		<Layout>
 			<Head>
-				<title>Trending</title>
+				<title>Trending | Showtime</title>
 				<meta name="description" content="Trending creators & items" />
 				<meta property="og:type" content="website" />
 				<meta name="og:description" content="Trending art & creators" />

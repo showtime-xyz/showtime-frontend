@@ -68,7 +68,7 @@ export default function Token({ token }) {
 			{typeof document !== 'undefined' ? <ModalReportItem isOpen={reportModalOpen} setReportModalOpen={setReportModalOpen} nftId={item.nft_id} /> : null}
 			<Layout key={item.nft_id}>
 				<Head>
-					<title>{item.token_name}</title>
+					<title>{item.token_name} | Showtime</title>
 
 					<meta name="description" content={item.token_description} />
 					<meta property="og:type" content="website" />
