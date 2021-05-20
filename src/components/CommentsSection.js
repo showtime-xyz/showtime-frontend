@@ -221,9 +221,8 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 					disabled={context.disableComments || (!isReply && parentComment)}
 					style={MENTIONS_STYLE}
 					placeholder="Your comment..."
-					className="st-mentions-input flex-grow md:mr-2"
 					classNames={{
-						mentions: 'dark:bg-gray-700 border dark:border-gray-800 rounded-lg flex-grow md:mr-2 w-full md:w-auto mb-2 md:mb-0',
+						mentions: 'st-mentions-input dark:bg-gray-700 border dark:border-gray-800 rounded-lg flex-grow md:mr-2 w-full md:w-auto mb-2 md:mb-0',
 						mentions__input: 'focus:outline-none focus-visible:ring-1 dark:text-gray-300',
 						mentions__suggestions__list: 'rounded-lg border border-transparent dark:border-gray-800 bg-white hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 overflow-hidden',
 					}}
@@ -233,12 +232,9 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 				>
 					<Mention trigger="@" renderSuggestion={parentComment ? null : s => suggestion(s)} displayTransform={(_, display) => `${display}`} data={parentComment ? handleSearchQuery : handleDebouncedSearchQuery} className="border-2 border-transparent bg-purple-200 dark:bg-gray-800  rounded -ml-1.5 px-1" appendSpaceOnAdd />
 				</MentionsInput>
-				<GhostButton loading={isSubmitting} onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="rounded-lg w-full md:w-auto">
-					Post
-				</GhostButton>
-				{/*<button onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700">
+				<GhostButton onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700">
 					{isSubmitting && !isReply && parentComment ? 'Post' : isSubmitting && isReply ? <div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" /> : isSubmitting && !isReply ? <div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" /> : 'Post'}
-				</button>*/}
+				</GhostButton>
 			</div>
 		)
 	}
