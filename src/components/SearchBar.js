@@ -11,6 +11,7 @@ import backend from '@/lib/backend'
 import useKeyPress from '@/hooks/useKeyPress'
 import useOnClickOutside from '@/hooks/useOnClickOutside'
 import LoadingSpinner from './LoadingSpinner'
+import { SearchIcon } from '@heroicons/react/outline'
 
 const handleSearchQuery = AwesomeDebouncePromise(async (searchText, setSearchResults, setIsLoading) => {
 	setIsLoading(true)
@@ -21,7 +22,7 @@ const handleSearchQuery = AwesomeDebouncePromise(async (searchText, setSearchRes
 }, 500)
 
 //TODO: Refactor this component to use HeadlessUI's Listbox Component
-const SearchBar = () => {
+const SearchBar = ({ propagateSearchState }) => {
 	const router = useRouter()
 	const context = useContext(AppContext)
 
@@ -39,6 +40,12 @@ const SearchBar = () => {
 	const downPress = useKeyPress('ArrowDown')
 	const upPress = useKeyPress('ArrowUp')
 	const enterPress = useKeyPress('Enter')
+
+	useEffect(() => {
+		console.log(isMobileSearchOverlayOpen)
+		propagateSearchState(isMobileSearchOverlayOpen)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isMobileSearchOverlayOpen])
 
 	useEffect(() => {
 		if (upPress) {
@@ -67,11 +74,11 @@ const SearchBar = () => {
 			{/* Start desktop-only menu */}
 			<div className="hidden flex-col relative ml-6 pr-6 w-full max-w-3xl lg:flex">
 				<div className="flex relative w-full" ref={searchInputContainerRef}>
-					<div className="flex absolute left-4 top-1/2 transform -translate-y-2 mb-px w-3.5 h-3.5 mr-3 text-black dark:text-gray-200 focus:-mt-px">
-						<FontAwesomeIcon icon={faSearch} />
+					<div className="flex absolute left-4 top-1/2 transform -translate-y-2.5 -translate-x-1 mr-3 text-black dark:text-gray-200 focus:-mt-px">
+						<SearchIcon className="w-5 h-5" />
 					</div>
 					<input
-						className="flex dark:bg-gray-800 border dark:border-gray-800 py-1.5 px-4 rounded-full w-full pl-10 focus:-mt-px focus:ring-1 ring-gray-300 dark:ring-gray-800 focus:outline-none"
+						className="flex border dark:border-gray-800 bg-white placeholder-gray-500 text-gray-600 dark:text-gray-400 dark:bg-gray-900 bg-opacity-10 dark:bg-opacity-20 backdrop-filter backdrop-blur-lg backdrop-saturate-150 py-1.5 px-4 rounded-full w-full pl-10 focus-visible:ring-1 ring-gray-300 dark:ring-gray-800 focus:outline-none"
 						type="search"
 						placeholder={context.gridWidth < 400 ? 'Search by name' : 'Search by name or wallet address'}
 						value={searchText}
@@ -79,9 +86,7 @@ const SearchBar = () => {
 							setShowSearchResults(true)
 							setSearchInputFocused(true)
 						}}
-						onBlur={() => {
-							setSearchInputFocused(false)
-						}}
+						onBlur={() => setSearchInputFocused(false)}
 						onChange={e => {
 							setShowSearchResults(true)
 							setSearchText(e.currentTarget.value)
@@ -130,17 +135,17 @@ const SearchBar = () => {
 
 			{/* Start overlay menu */}
 			{isMobileSearchOverlayOpen && (
-				<div className="flex flex-col absolute md:h-16 bg-white dark:bg-gray-900 md:p-3 w-full left-0 md:top-0 z-1 top-12 pt-1 pb-2 px-4 shadow">
+				<div className="visible flex flex-col absolute md:h-16 bg-transparent md:p-3 w-full left-0 md:top-0 z-1 top-12 pb-2 px-4">
 					<div className="flex items-center">
 						<button className="flex items-center justify-center w-3.5 h-3.5 mr-4 text-black dark:text-gray-300 border-2 border-black dark:border-gray-300 rounded-full p-4 focus:-m-px hover:border-stpink hover:text-stpink" isFocused={searchInputFocused} onClick={() => toggleMobileSearchOverlay(false)}>
 							<FontAwesomeIcon icon={faTimes} />
 						</button>
 						<div className="flex relative w-full" ref={searchInputContainerRef}>
-							<div className="flex absolute left-4 top-1/2 transform -translate-y-2 mb-px w-3.5 h-3.5 mr-3 text-black dark:text-gray-200 focus:-mt-px" isFocused={searchInputFocused}>
-								<FontAwesomeIcon icon={faSearch} />
+							<div className="flex absolute left-4 top-1/2 transform -translate-y-2.5 -translate-x-1.5 mr-3 text-black dark:text-gray-200 focus:-mt-px" isFocused={searchInputFocused}>
+								<SearchIcon className="w-5 h-5" />
 							</div>
 							<input
-								className="flex dark:bg-gray-800 border dark:border-gray-800 py-1.5 px-4 rounded-full w-full pl-10 focus:-mt-px focus:ring-1 ring-gray-300 dark:ring-gray-800 focus:outline-none"
+								className="flex border dark:border-gray-800 bg-white text-gray-600 dark:bg-gray-900 bg-opacity-10 dark:bg-opacity-20 backdrop-filter backdrop-blur-lg backdrop-saturate-150 py-1.5 px-4 rounded-full w-full pl-10 focus-visible:ring-1 ring-gray-300 dark:ring-gray-800 focus:outline-none"
 								type="search"
 								placeholder={context.gridWidth < 400 ? 'Search by name' : 'Search by name or wallet address'}
 								value={searchText}
@@ -148,9 +153,7 @@ const SearchBar = () => {
 									setShowSearchResults(true)
 									setSearchInputFocused(true)
 								}}
-								onBlur={() => {
-									setSearchInputFocused(false)
-								}}
+								onBlur={() => setSearchInputFocused(false)}
 								onChange={e => {
 									setShowSearchResults(true)
 									setSearchText(e.currentTarget.value)
@@ -171,7 +174,7 @@ const SearchBar = () => {
 									{searchResults.map((searchResult, index) => (
 										<Link href="/[profile]" as={`/${searchResult?.username || searchResult.address0}`} key={searchResult.profile_id}>
 											<div
-												className={`flex items-center w-full p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 ${activeSelectedSearchResult === index ? 'bg-gray-800' : 'bg-gray-900'} ${index === 0 ? 'rounded-t-lg' : ''} ${index === searchResults.length - 1 ? 'rounded-b-lg' : ''}`}
+												className={`flex items-center w-full p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 ${activeSelectedSearchResult === index ? 'bg-gray-800' : 'dark:bg-gray-900'} ${index === 0 ? 'rounded-t-lg' : ''} ${index === searchResults.length - 1 ? 'rounded-b-lg' : ''}`}
 												key={index}
 												onClick={() => {
 													setShowSearchResults(false)

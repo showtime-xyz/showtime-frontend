@@ -28,7 +28,7 @@ const Layout = ({ children }) => {
 			</Head>
 
 			<Header />
-			<div className="w-full mx-auto min-h-screen z-0 relative">
+			<div className="w-full mx-auto min-h-screen z-0 relative pb-12">
 				<main>{children}</main>
 			</div>
 

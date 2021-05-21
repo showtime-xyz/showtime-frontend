@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import mixpanel from 'mixpanel-browser'
@@ -11,6 +11,9 @@ import { formatAddressShort } from '@/lib/utilities'
 
 const Header = () => {
 	const context = useContext(AppContext)
+	const [isSearchBarOpen, setSearchBarOpen] = useState(false)
+
+	console.log({ isSearchBarOpen })
 
 	return (
 		<>
@@ -38,7 +41,7 @@ const Header = () => {
 						{/* Start desktop-only menu */}
 						{!context.isMobile || context.isTablet ? (
 							<div className="flex-grow flex-1">
-								<SearchBar />
+								<SearchBar propagateSearchState={setSearchBarOpen} />
 							</div>
 						) : (
 							<div className="flex-grow"></div>
@@ -55,12 +58,7 @@ const Header = () => {
 								</a>
 							</Link>
 							<Link href="/trending">
-								<a
-									className="text-black dark:text-gray-200 hover:text-stpink dark:hover:text-stpink ml-6 text-sm md:text-base"
-									onClick={() => {
-										mixpanel.track('Trending button click')
-									}}
-								>
+								<a className="text-black dark:text-gray-200 hover:text-stpink dark:hover:text-stpink ml-6 text-sm md:text-base" onClick={() => mixpanel.track('Trending button click')}>
 									Trending
 								</a>
 							</Link>
@@ -108,7 +106,7 @@ const Header = () => {
 
 					{/* Start mobile-only menu */}
 					{context.isMobile && (
-						<div className="flex md:hidden justify-between items-center pb-1 px-3">
+						<div className={`flex md:hidden justify-between items-center pb-1 px-3 ${isSearchBarOpen ? 'invisible' : ''}`}>
 							<div>
 								<Link href="/c/[collection]" as="/c/spotlights">
 									<a
@@ -132,7 +130,7 @@ const Header = () => {
 								</Link>
 							</div>
 							<div className="flex-grow flex-1">
-								<SearchBar />
+								<SearchBar propagateSearchState={setSearchBarOpen} />
 							</div>
 							{context.isMobile && context.user && context.myProfile !== undefined && (
 								<div className="flex-shrink ml-4">

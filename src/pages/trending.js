@@ -89,8 +89,8 @@ const Leaderboard = () => {
 				</CappedWidth>
 			</div>
 			<CappedWidth>
-				<div className="mt-12">
-					<GridTabs title="">
+				<div className="mt-12 overflow-hidden">
+					<GridTabs>
 						<GridTab
 							label="24 Hours"
 							isActive={leaderboardDays === 1}

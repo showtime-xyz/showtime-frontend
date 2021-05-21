@@ -13,7 +13,7 @@ const Footer = () => {
 					<ModalFeedback isOpen={isFeedbackModalOpen} closeModal={() => setIsFeedbackModalOpen(false)} />
 				</>
 			) : null}
-			<footer className="text-center mt-12 bg-black px-10">
+			<footer className="text-center bg-black px-10">
 				<CappedWidth>
 					<div className="px-3 text-sm my-8 py-4 text-center text-gray-400 flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
 						<div>&copy; {new Date().getFullYear()} Showtime Technologies, Inc.</div>
