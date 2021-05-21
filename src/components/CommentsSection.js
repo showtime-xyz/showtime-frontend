@@ -54,9 +54,6 @@ const mentionsStyle = {
 			borderRadius: 10,
 			overflow: 'hidden',
 		},
-		item: {
-			padding: '5px 15px',
-		},
 	},
 }
 
@@ -223,7 +220,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 									classNames={{
 										mentions: 'dark:bg-gray-700 border dark:border-gray-800 rounded-lg flex-grow md:mr-2 w-full md:w-auto mb-2 md:mb-0',
 										mentions__input: 'focus:outline-none focus-visible:ring-1 dark:text-gray-300',
-										mentions__suggestions__list: 'rounded-lg border border-transparent dark:border-gray-800 bg-white hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 overflow-hidden',
+										mentions__suggestions__list: 'rounded-lg border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden',
 									}}
 									allowSuggestionsAboveCursor
 									allowSpaceInQuery
@@ -232,7 +229,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 								>
 									<Mention
 										renderSuggestion={s => (
-											<div className="flex items-center">
+											<div className="flex items-center hover:bg-gray-100 dark:hover:bg-gray-800 px-4 py-1">
 												<img src={s.img_url} className="h-6 w-6 mr-2 rounded-full" />
 												<span className="dark:text-gray-300">{s.display}</span>
 												{s.username && <span className="text-gray-400 ml-2">@{s.username}</span>}
@@ -241,7 +238,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 										displayTransform={(id, display) => `${display}`}
 										trigger="@"
 										data={handleDebouncedSearchQuery}
-										className="border-2 border-transparent bg-purple-200 dark:bg-gray-800  rounded -ml-1.5 px-1"
+										className="border-2 border-transparent bg-purple-200 dark:bg-gray-800 rounded -ml-1.5 px-1"
 										appendSpaceOnAdd
 									/>
 								</MentionsInput>
