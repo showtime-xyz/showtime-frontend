@@ -239,12 +239,11 @@ const TokenCard = ({
 									setCurrentlyPlayingVideo(null)
 								}}
 								className="break-words cursor-pointer truncate dark:text-gray-200"
-								style={context.isMobile ? { width: context?.windowSize?.width - 16 * 2 } : {}}
 							>
 								{item.token_name}
 							</div>
 
-							<div style={context.isMobile ? { width: context?.windowSize?.width - 16 * 2 } : {}} className="cursor-pointer py-4 text-gray-500 text-sm">
+							<div className="cursor-pointer py-4 text-gray-500 text-sm">
 								{moreShown ? (
 									<div className="whitespace-pre-line">{removeTags(item.token_description)}</div>
 								) : (
@@ -297,9 +296,9 @@ const TokenCard = ({
 										<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
 											<a className="flex flex-row items-center pr-2 ">
 												<div>
-													<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? formatAddressShort(pageProfile.wallet_addresses_excluding_email[0]) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
+													<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
 												</div>
-												<div className="text-gray-800 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">{truncateWithEllipses(pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? formatAddressShort(pageProfile.wallet_addresses_excluding_email[0]) : 'Unknown', 14)}</div>
+												<div className="text-gray-800 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">{truncateWithEllipses(pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown', 14)}</div>
 											</a>
 										</Link>
 

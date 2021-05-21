@@ -28,8 +28,8 @@ const Layout = ({ children }) => {
 			</Head>
 
 			<Header />
-			<div className="w-full mx-auto min-h-screen z-0 relative overflow-hidden flex flex-col pb-12">
-				<main className="overflow-visible flex-1">{children}</main>
+			<div className="w-full mx-auto min-h-screen z-0 relative pb-12">
+				<main>{children}</main>
 			</div>
 
 			<Footer />

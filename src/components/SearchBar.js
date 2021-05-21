@@ -72,7 +72,7 @@ const SearchBar = ({ propagateSearchState }) => {
 	return (
 		<>
 			{/* Start desktop-only menu */}
-			<div className="hidden flex-col relative ml-6 pr-6 w-full max-w-3xl md:flex">
+			<div className="hidden flex-col relative ml-6 pr-6 w-full max-w-3xl lg:flex">
 				<div className="flex relative w-full" ref={searchInputContainerRef}>
 					<div className="flex absolute left-4 top-1/2 transform -translate-y-2.5 -translate-x-1 mr-3 text-black dark:text-gray-200 focus:-mt-px">
 						<SearchIcon className="w-5 h-5" />
@@ -127,7 +127,7 @@ const SearchBar = ({ propagateSearchState }) => {
 				)}
 			</div>
 			{/* Start mobile-only menu */}
-			<div className="flex justify-end md:hidden relative w-full sm:ml-4 sm:justify-start ml-1">
+			<div className="flex justify-end lg:hidden relative w-full sm:ml-4 sm:justify-start ml-1">
 				<button className="flex items-center justify-center w-3.5 h-3.5 text-black dark:text-white hover:text-stpink dark:hover:text-stpink p-4" onClick={() => toggleMobileSearchOverlay(true)}>
 					<FontAwesomeIcon icon={faSearch} />
 				</button>

@@ -162,7 +162,7 @@ export default function Collection({ collection_list, collection, selected_colle
 	return (
 		<Layout key={collection}>
 			<Head>
-				<title>{pageTitle}</title>
+				<title>{pageTitle} | Showtime</title>
 
 				<meta name="description" content="Discover and showcase crypto art" />
 				<meta property="og:type" content="website" />
