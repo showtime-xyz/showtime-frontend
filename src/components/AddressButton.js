@@ -3,7 +3,6 @@ import { formatAddressShort, copyToClipBoard } from '@/lib/utilities'
 import Tippy from '@tippyjs/react'
 
 const AddressButton = ({ address, ens_domain }) => {
-	console.log(ens_domain)
 	const [isCopied, setIsCopied] = useState(false)
 
 	return (
