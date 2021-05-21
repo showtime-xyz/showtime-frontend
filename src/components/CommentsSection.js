@@ -245,7 +245,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 										appendSpaceOnAdd
 									/>
 								</MentionsInput>
-								<GhostButton loading={isSubmitting} onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className={`rounded-lg w-full md:w-auto ${commentText.trim() !== '' ? 'bg-gray-800 text-gray-400' : ''}`}>
+								<GhostButton loading={isSubmitting} onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="rounded-lg w-full md:w-auto">
 									Post
 								</GhostButton>
 							</div>
