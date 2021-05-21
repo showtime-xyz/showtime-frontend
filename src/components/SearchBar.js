@@ -21,7 +21,7 @@ const handleSearchQuery = AwesomeDebouncePromise(async (searchText, setSearchRes
 }, 500)
 
 //TODO: Refactor this component to use HeadlessUI's Listbox Component
-const SearchBar = () => {
+const SearchBar = ({ propagateSearchState }) => {
 	const router = useRouter()
 	const context = useContext(AppContext)
 
@@ -39,6 +39,12 @@ const SearchBar = () => {
 	const downPress = useKeyPress('ArrowDown')
 	const upPress = useKeyPress('ArrowUp')
 	const enterPress = useKeyPress('Enter')
+
+	useEffect(() => {
+		console.log(isMobileSearchOverlayOpen)
+		propagateSearchState(isMobileSearchOverlayOpen)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isMobileSearchOverlayOpen])
 
 	useEffect(() => {
 		if (upPress) {
@@ -79,9 +85,7 @@ const SearchBar = () => {
 							setShowSearchResults(true)
 							setSearchInputFocused(true)
 						}}
-						onBlur={() => {
-							setSearchInputFocused(false)
-						}}
+						onBlur={() => setSearchInputFocused(false)}
 						onChange={e => {
 							setShowSearchResults(true)
 							setSearchText(e.currentTarget.value)
@@ -130,7 +134,7 @@ const SearchBar = () => {
 
 			{/* Start overlay menu */}
 			{isMobileSearchOverlayOpen && (
-				<div className="flex flex-col absolute md:h-16 bg-white dark:bg-gray-900 md:p-3 w-full left-0 md:top-0 z-1 top-12 pt-1 pb-2 px-4 shadow">
+				<div className="visible flex flex-col absolute md:h-16 bg-transparent md:p-3 w-full left-0 md:top-0 z-1 top-12 pb-2 px-4">
 					<div className="flex items-center">
 						<button className="flex items-center justify-center w-3.5 h-3.5 mr-4 text-black dark:text-gray-300 border-2 border-black dark:border-gray-300 rounded-full p-4 focus:-m-px hover:border-stpink hover:text-stpink" isFocused={searchInputFocused} onClick={() => toggleMobileSearchOverlay(false)}>
 							<FontAwesomeIcon icon={faTimes} />
