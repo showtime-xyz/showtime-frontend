@@ -817,7 +817,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 				) : null}
 				<CappedWidth>
 					<div className="m-auto">
-						<div ref={gridRef} className="grid lg:grid-cols-3 xl:grid-cols-4 pt-0 ">
+						<div ref={gridRef} className="md:grid lg:grid-cols-3 xl:grid-cols-4 pt-0 ">
 							<div className="sm:px-3 relative">
 								<div className="h-max sticky top-24">
 									<div className="px-2 sm:px-4 py-2 sm:py-4 sm:rounded-lg bg-white dark:bg-gray-900 border-t border-b sm:border-l sm:border-r border-gray-200 sm:border-transparent dark:border-gray-800 sm:shadow-md mt-14">

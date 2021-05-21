@@ -13,8 +13,6 @@ const Header = () => {
 	const context = useContext(AppContext)
 	const [isSearchBarOpen, setSearchBarOpen] = useState(false)
 
-	console.log({ isSearchBarOpen })
-
 	return (
 		<>
 			{typeof document !== 'undefined' ? (
