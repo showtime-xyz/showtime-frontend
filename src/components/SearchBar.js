@@ -42,7 +42,6 @@ const SearchBar = ({ propagateSearchState }) => {
 	const enterPress = useKeyPress('Enter')
 
 	useEffect(() => {
-		console.log(isMobileSearchOverlayOpen)
 		propagateSearchState(isMobileSearchOverlayOpen)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMobileSearchOverlayOpen])
@@ -74,7 +73,7 @@ const SearchBar = ({ propagateSearchState }) => {
 			{/* Start desktop-only menu */}
 			<div className="hidden flex-col relative ml-6 pr-6 w-full max-w-3xl lg:flex">
 				<div className="flex relative w-full" ref={searchInputContainerRef}>
-					<div className="flex absolute left-4 top-1/2 transform -translate-y-2.5 -translate-x-1 mr-3 text-black dark:text-gray-200 focus:-mt-px">
+					<div className="flex absolute z-1 left-4 top-1/2 transform -translate-y-2.5 -translate-x-1 mr-3 text-black dark:text-gray-200 focus:-mt-px">
 						<SearchIcon className="w-5 h-5" />
 					</div>
 					<input
@@ -141,7 +140,7 @@ const SearchBar = ({ propagateSearchState }) => {
 							<FontAwesomeIcon icon={faTimes} />
 						</button>
 						<div className="flex relative w-full" ref={searchInputContainerRef}>
-							<div className="flex absolute left-4 top-1/2 transform -translate-y-2.5 -translate-x-1.5 mr-3 text-black dark:text-gray-200 focus:-mt-px" isFocused={searchInputFocused}>
+							<div className="flex absolute z-1 left-4 top-1/2 transform -translate-y-2.5 -translate-x-1 mr-3 text-black dark:text-gray-200 focus:-mt-px" isFocused={searchInputFocused}>
 								<SearchIcon className="w-5 h-5" />
 							</div>
 							<input
