@@ -11,6 +11,7 @@ import backend from '@/lib/backend'
 import useKeyPress from '@/hooks/useKeyPress'
 import useOnClickOutside from '@/hooks/useOnClickOutside'
 import LoadingSpinner from './LoadingSpinner'
+import { SearchIcon } from '@heroicons/react/outline'
 
 const handleSearchQuery = AwesomeDebouncePromise(async (searchText, setSearchResults, setIsLoading) => {
 	setIsLoading(true)
@@ -73,11 +74,11 @@ const SearchBar = ({ propagateSearchState }) => {
 			{/* Start desktop-only menu */}
 			<div className="hidden flex-col relative ml-6 pr-6 w-full max-w-3xl md:flex">
 				<div className="flex relative w-full" ref={searchInputContainerRef}>
-					<div className="flex absolute left-4 top-1/2 transform -translate-y-2 mb-px w-3.5 h-3.5 mr-3 text-black dark:text-gray-200 focus:-mt-px">
-						<FontAwesomeIcon icon={faSearch} />
+					<div className="flex absolute left-4 top-1/2 transform -translate-y-2.5 -translate-x-1 mr-3 text-black dark:text-gray-200 focus:-mt-px">
+						<SearchIcon className="w-5 h-5" />
 					</div>
 					<input
-						className="flex dark:bg-gray-800 border dark:border-gray-800 py-1.5 px-4 rounded-full w-full pl-10 focus:-mt-px focus:ring-1 ring-gray-300 dark:ring-gray-800 focus:outline-none"
+						className="flex border dark:border-gray-800 bg-white placeholder-gray-500 text-gray-600 dark:text-gray-400 dark:bg-gray-900 bg-opacity-10 dark:bg-opacity-20 backdrop-filter backdrop-blur-lg backdrop-saturate-150 py-1.5 px-4 rounded-full w-full pl-10 focus-visible:ring-1 ring-gray-300 dark:ring-gray-800 focus:outline-none"
 						type="search"
 						placeholder={context.gridWidth < 400 ? 'Search by name' : 'Search by name or wallet address'}
 						value={searchText}
@@ -140,11 +141,11 @@ const SearchBar = ({ propagateSearchState }) => {
 							<FontAwesomeIcon icon={faTimes} />
 						</button>
 						<div className="flex relative w-full" ref={searchInputContainerRef}>
-							<div className="flex absolute left-4 top-1/2 transform -translate-y-2 mb-px w-3.5 h-3.5 mr-3 text-black dark:text-gray-200 focus:-mt-px" isFocused={searchInputFocused}>
-								<FontAwesomeIcon icon={faSearch} />
+							<div className="flex absolute left-4 top-1/2 transform -translate-y-2.5 -translate-x-1.5 mr-3 text-black dark:text-gray-200 focus:-mt-px" isFocused={searchInputFocused}>
+								<SearchIcon className="w-5 h-5" />
 							</div>
 							<input
-								className="flex dark:bg-gray-800 border dark:border-gray-800 py-1.5 px-4 rounded-full w-full pl-10 focus:-mt-px focus:ring-1 ring-gray-300 dark:ring-gray-800 focus:outline-none"
+								className="flex border dark:border-gray-800 bg-white text-gray-600 dark:bg-gray-900 bg-opacity-10 dark:bg-opacity-20 backdrop-filter backdrop-blur-lg backdrop-saturate-150 py-1.5 px-4 rounded-full w-full pl-10 focus-visible:ring-1 ring-gray-300 dark:ring-gray-800 focus:outline-none"
 								type="search"
 								placeholder={context.gridWidth < 400 ? 'Search by name' : 'Search by name or wallet address'}
 								value={searchText}
@@ -152,9 +153,7 @@ const SearchBar = ({ propagateSearchState }) => {
 									setShowSearchResults(true)
 									setSearchInputFocused(true)
 								}}
-								onBlur={() => {
-									setSearchInputFocused(false)
-								}}
+								onBlur={() => setSearchInputFocused(false)}
 								onChange={e => {
 									setShowSearchResults(true)
 									setSearchText(e.currentTarget.value)
