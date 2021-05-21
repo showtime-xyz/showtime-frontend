@@ -78,7 +78,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const [followersCount, setFollowersCount] = useState(followers_count)
 
 	// Using global context for logged in user, else server data for other pages
-	const { name, img_url, cover_url, wallet_addresses_v2, wallet_addresses_excluding_email_v2, bio, website_url, profile_id, username, featured_nft_img_url, links } = isMyProfile ? context.myProfile : profile
+	const { name, img_url, cover_url, wallet_addresses_v2, wallet_addresses_excluding_email_v2, bio, website_url, username, featured_nft_img_url, links } = isMyProfile ? context.myProfile : profile
+	const { profile_id } = profile
 
 	useEffect(() => {
 		// Wait for identity to resolve before recording the view
@@ -1071,7 +1072,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 													) : null
 												) : null
 											}
-											scrollThreshold={page === 1 ? 0.3 : page < 4 ? 0.5 : page < 6 ? 0.7 : 0.8}
+											scrollThreshold={page === 1 ? 0.5 : page < 4 ? 0.5 : page < 6 ? 0.7 : 0.8}
 											showUserHiddenItems={showUserHiddenItems}
 											showDuplicates={showDuplicates}
 											setHasUserHiddenItems={setHasUserHiddenItems}
