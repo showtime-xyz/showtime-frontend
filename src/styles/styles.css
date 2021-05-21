@@ -1,0 +1,32 @@
+@tailwind base;
+
+@layer base {
+	/* clear default iOS styling from inputs */
+	input[type='text'] {
+		@apply appearance-none;
+	}
+
+	a {
+		@apply no-underline text-inherit;
+	}
+	button:focus {
+		@apply outline-none;
+	}
+}
+
+@tailwind components;
+
+@tailwind utilities;
+
+@layer utilities {
+    @variants dark {
+        .border-t-gray-800 {
+            border-top-color: theme('colors.gray.800');
+        }
+        .border-t-green-300 {
+            border-top-color: theme('colors.green.300');
+        }
+    }
+}
+
+@import 'tippy.js/dist/tippy.css';

@@ -1,11 +1,13 @@
-const { PHASE_DEVELOPMENT_SERVER } = require("next/constants");
+const { withSentryConfig } = require('@sentry/nextjs')
 
-module.exports = {
-  future: {
-    webpack5: true,
-  },
+const isDev = process.env.NODE_ENV === 'development'
 
-  /*
+const nextConfig = {
+	future: {
+		webpack5: true,
+	},
+
+	/*
   webpack: (config, { dev, isServer }) => {
     // Replace React with Preact only in client production build
     if (!dev && !isServer) {
@@ -19,4 +21,6 @@ module.exports = {
     return config;
   },
   */
-};
+}
+
+module.exports = isDev ? nextConfig : withSentryConfig(nextConfig)
