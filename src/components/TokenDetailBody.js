@@ -23,7 +23,6 @@ import backend from '@/lib/backend'
 import UsersWhoLiked from './UsersWhoLiked'
 import MiniFollowButton from './MiniFollowButton'
 import UsersWhoOwn from './UsersWhoOwn'
-import GhostButton from './UI/Buttons/GhostButton'
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500
