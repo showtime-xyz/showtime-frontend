@@ -23,7 +23,6 @@ import backend from '@/lib/backend'
 import UsersWhoLiked from './UsersWhoLiked'
 import MiniFollowButton from './MiniFollowButton'
 import UsersWhoOwn from './UsersWhoOwn'
-import GhostButton from './UI/Buttons/GhostButton'
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500
@@ -112,9 +111,9 @@ const TokenDetailBody = ({
 				</>
 			) : null}
 			{lightboxOpen && <Lightbox mainSrc={item.token_img_original_url ? item.token_img_original_url : item.token_img_url} onCloseRequest={() => setLightboxOpen(false)} />}
-			<div className="flex flex-col relative -mt-px dark:bg-gray-900" ref={modalRef}>
+			<div className="flex flex-col relative dark:bg-gray-900" ref={modalRef}>
 				{isMobile ? (
-					<div className="py-4 px-6 flex flex-row">
+					<div className="py-4 px-4 flex flex-row">
 						<div className="flex-shrink">
 							{item.contract_is_creator ? (
 								<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
@@ -186,7 +185,6 @@ const TokenDetailBody = ({
 										<div className="ml-2 text-sm">Original</div>
 									</button>
 								) : null}
-								<div></div>
 							</div>
 							<img src={getImageUrl(item.token_img_url, item.token_aspect_ratio)} alt={item.token_name} className={fullResLoaded === true ? 'hidden' : ''} style={context.isMobile ? { width: mediaWidth, height: item.token_aspect_ratio ? mediaWidth / item.token_aspect_ratio : null } : { height: TOKEN_MEDIA_HEIGHT }} />
 
@@ -216,19 +214,9 @@ const TokenDetailBody = ({
 									<ShareButton url={typeof window !== 'undefined' && window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${item.contract_address}/${item.token_id}`} type={'item'} />
 								</div>
 
-								<a
-									href={getBidLink(item)}
-									title={`Buy on ${getContractName(item)}`}
-									target="_blank"
-									onClick={() => {
-										mixpanel.track('OpenSea link click')
-									}}
-									rel="noreferrer"
-								>
-									<GhostButton>
-										<span>Bid </span>
-										<span className="hidden sm:inline">on {getContractName(item)}</span>
-									</GhostButton>
+								<a href={getBidLink(item)} title={`Buy on ${getContractName(item)}`} target="_blank" className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none focus-visible:ring-1" onClick={() => mixpanel.track('OpenSea link click')} rel="noreferrer">
+									<span>Bid </span>
+									<span className="hidden sm:inline">on {getContractName(item)}</span>
 								</a>
 								<div className="flex-grow"></div>
 							</div>

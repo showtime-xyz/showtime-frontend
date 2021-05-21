@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import mixpanel from 'mixpanel-browser'
@@ -7,9 +7,13 @@ import AppContext from '@/context/app-context'
 import ModalLogin from './ModalLogin'
 import NotificationsBtn from './NotificationsBtn'
 import CappedWidth from './CappedWidth'
+import { formatAddressShort } from '@/lib/utilities'
 
 const Header = () => {
 	const context = useContext(AppContext)
+	const [isSearchBarOpen, setSearchBarOpen] = useState(false)
+
+	console.log({ isSearchBarOpen })
 
 	return (
 		<>
@@ -35,9 +39,9 @@ const Header = () => {
 							</Link>
 						</div>
 						{/* Start desktop-only menu */}
-						{!context.isMobile ? (
+						{!context.isMobile || context.isTablet ? (
 							<div className="flex-grow flex-1">
-								<SearchBar />
+								<SearchBar propagateSearchState={setSearchBarOpen} />
 							</div>
 						) : (
 							<div className="flex-grow"></div>
@@ -54,12 +58,7 @@ const Header = () => {
 								</a>
 							</Link>
 							<Link href="/trending">
-								<a
-									className="text-black dark:text-gray-200 hover:text-stpink dark:hover:text-stpink ml-6 text-sm md:text-base"
-									onClick={() => {
-										mixpanel.track('Trending button click')
-									}}
-								>
+								<a className="text-black dark:text-gray-200 hover:text-stpink dark:hover:text-stpink ml-6 text-sm md:text-base" onClick={() => mixpanel.track('Trending button click')}>
 									Trending
 								</a>
 							</Link>
@@ -73,7 +72,7 @@ const Header = () => {
 						{/* End desktop-only menu */}
 						<div>
 							{context.user && context.myProfile !== undefined ? (
-								<Link href="/[profile]" as={`/${context.myProfile.username || context.user.publicAddress}`}>
+								<Link href="/[profile]" as={`/${context.myProfile.username ? context.myProfile.username : context.myProfile.wallet_addresses_excluding_email_v2 && context.myProfile.wallet_addresses_excluding_email_v2.length > 0 ? context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain : context.user.publicAddress}`}>
 									<a className="dark:text-gray-200 text-base flex flex-row items-center hover:text-stpink" onClick={() => mixpanel.track('Profile button click')}>
 										<>
 											<div className={context.windowSize ? (context.windowSize.width < 350 ? 'hidden' : null) : null}>
@@ -85,7 +84,7 @@ const Header = () => {
 													maxWidth: context.gridWidth < 500 ? 100 : 200,
 												}}
 											>
-												{context.myProfile ? (context.myProfile.name ? context.myProfile.name : 'Profile') : 'Profile'}
+												{context.myProfile ? (context.myProfile.name ? context.myProfile.name : context.myProfile.username ? context.myProfile.username : context.myProfile.wallet_addresses_excluding_email_v2 && context.myProfile.wallet_addresses_excluding_email_v2.length > 0 ? (context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(context.myProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Profile') : 'Profile'}
 											</div>
 										</>
 									</a>
@@ -107,7 +106,7 @@ const Header = () => {
 
 					{/* Start mobile-only menu */}
 					{context.isMobile && (
-						<div className="flex md:hidden justify-between items-center pb-1 px-3">
+						<div className={`flex md:hidden justify-between items-center pb-1 px-3 ${isSearchBarOpen ? 'invisible' : ''}`}>
 							<div>
 								<Link href="/c/[collection]" as="/c/spotlights">
 									<a
@@ -131,7 +130,7 @@ const Header = () => {
 								</Link>
 							</div>
 							<div className="flex-grow flex-1">
-								<SearchBar />
+								<SearchBar propagateSearchState={setSearchBarOpen} />
 							</div>
 							{context.isMobile && context.user && context.myProfile !== undefined && (
 								<div className="flex-shrink ml-4">
