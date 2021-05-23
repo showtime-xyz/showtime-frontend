@@ -21,9 +21,9 @@ const Tiles = ({ topItems, setCurrentlyOpenModal }) => {
 				{topItems.map((topItem, index) => (
 					<div key={topItem?.nft_id}>
 						{topItem?.token_img_thumbnail_url ? (
-							<img className="w-[27vw] h-[27vw] max-w-[27vw] max-h-[27vw] sm:w-[12vw] sm:h-[12vw] sm:max-w-[80px] sm:max-h-[80px] object-cover cursor-pointer" style={{ marginRight: index === topItems.length - 1 || context.gridWidth <= 420 ? 0 : 14 }} onClick={() => setCurrentlyOpenModal(topItem)} src={topItem?.token_img_thumbnail_url} />
+							<img className="w-[27vw] h-[27vw] max-w-[27vw] max-h-[27vw] sm:w-[12vw] sm:h-[12vw] sm:max-w-[80px] sm:max-h-[80px] object-cover cursor-pointer" style={{ marginRight: index === topItems.length - 1 || context.windowSize?.width <= 420 ? 0 : 14 }} onClick={() => setCurrentlyOpenModal(topItem)} src={topItem?.token_img_thumbnail_url} />
 						) : (
-							<div className="w-[27vw] h-[27vw] max-w-[27vw] max-h-[27vw] sm:w-[12vw] sm:h-[12vw] sm:max-w-[80px] sm:max-h-[80px] bg-black cursor-pointer" style={{ marginRight: index === topItems.length - 1 || context.gridWidth <= 420 ? 0 : 14 }} onClick={() => setCurrentlyOpenModal(topItem)}>
+							<div className="w-[27vw] h-[27vw] max-w-[27vw] max-h-[27vw] sm:w-[12vw] sm:h-[12vw] sm:max-w-[80px] sm:max-h-[80px] bg-black cursor-pointer" style={{ marginRight: index === topItems.length - 1 || context.windowSize?.width <= 420 ? 0 : 14 }} onClick={() => setCurrentlyOpenModal(topItem)}>
 								<ReactPlayer
 									url={topItem?.token_animation_url}
 									playing={false}
@@ -86,7 +86,7 @@ const RecommendedFollowItem = ({ item, closeModal = () => {}, liteVersion, remov
 		<div className="flex flex-col w-full border-t-px dark:border-gray-800 relative">
 			{typeof document !== 'undefined' ? (
 				<>
-					<ModalTokenDetail isOpen={currentlyOpenModal} setEditModalOpen={setCurrentlyOpenModal} item={currentlyOpenModal} goToNext={goToNext} goToPrevious={goToPrevious} columns={context.columns} hasNext={!(currentIndex === topItems.length - 1)} hasPrevious={!(currentIndex === 0)} />
+					<ModalTokenDetail isOpen={currentlyOpenModal} setEditModalOpen={setCurrentlyOpenModal} item={currentlyOpenModal} goToNext={goToNext} goToPrevious={goToPrevious} hasNext={!(currentIndex === topItems.length - 1)} hasPrevious={!(currentIndex === 0)} />
 				</>
 			) : null}
 			<div className="flex flex-col sm:flex-row sm:justify-between w-full border-t dark:border-gray-800 relative p-4 group" style={{ paddingLeft: leftPadding }}>
@@ -128,7 +128,7 @@ const RecommendedFollowItem = ({ item, closeModal = () => {}, liteVersion, remov
 					{liteVersion && <RemoveRecommendationButton item={item} removeRecommendation={removeRecommendation} />}
 				</div>
 			</div>
-			<div style={{ paddingLeft: leftPadding }}>{context.gridWidth <= 420 ? <Tiles topItems={topItems.slice(0, 3)} setCurrentlyOpenModal={setCurrentlyOpenModal} /> : <Tiles topItems={topItems} setCurrentlyOpenModal={setCurrentlyOpenModal} />}</div>
+			<div style={{ paddingLeft: leftPadding }}>{context.windowSize?.width <= 420 ? <Tiles topItems={topItems.slice(0, 3)} setCurrentlyOpenModal={setCurrentlyOpenModal} /> : <Tiles topItems={topItems} setCurrentlyOpenModal={setCurrentlyOpenModal} />}</div>
 		</div>
 	)
 }
