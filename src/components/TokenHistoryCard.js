@@ -77,14 +77,18 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
 										)}
 									</td>
 									<td className={`truncate py-3 px-4 ${!entry.from_address ? 'border-t-2 border-gray-100 dark:border-gray-800 flex flex-row' : ''}`}>
-										<Link href="/[profile]" as={`/${entry.to_username || entry.to_address}`}>
-											<a onClick={closeModal}>
-												<div className="flex items-center dark:text-gray-300 hover:text-stpink dark:hover:text-stpink transition-all w-max">
-													<img src={entry.to_img_url || DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-6 h-6" />
-													<div>{truncateWithEllipses(entry.to_name || entry.to_username || formatAddressShort(entry.to_address), 26)}</div>
-												</div>
-											</a>
-										</Link>
+										{entry.to_address ? (
+											<Link href="/[profile]" as={`/${entry.to_username || entry.to_address}`}>
+												<a onClick={closeModal}>
+													<div className="flex items-center dark:text-gray-300 hover:text-stpink dark:hover:text-stpink transition-all w-max">
+														<img src={entry.to_img_url || DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-6 h-6" />
+														<div>{truncateWithEllipses(entry.to_name || entry.to_username || formatAddressShort(entry.to_address), 26)}</div>
+													</div>
+												</a>
+											</Link>
+										) : (
+											<div className="text-gray-400">Burned</div>
+										)}
 									</td>
 									{nftHistory.multiple && <td className={`truncate py-3 px-4 dark:text-gray-400 ${!entry.from_address ? 'border-t-2 border-gray-100 dark:border-gray-800 text-right' : 'text-right'}`}>{entry.quantity}</td>}
 									<td className={`truncate py-3 px-4 dark:text-gray-500 ${!entry.from_address ? `border-t-2 border-gray-100 dark:border-gray-800 rounded-br-xl ${nftHistory.history.length == 1 ? 'rounded-tr-xl' : null}` : ''}`}>{formatDistanceToNowStrict(new Date(entry.timestamp), { addSuffix: true })}</td>
