@@ -35,10 +35,7 @@ const App = ({ Component, pageProps }) => {
 	const [myProfile, setMyProfile] = useState()
 	const [myRecommendations, setMyRecommendations] = useState()
 	const [loginModalOpen, setLoginModalOpen] = useState(false)
-	const [gridWidth, setGridWidth] = useState(null)
-	const [columns, setColumns] = useState(null)
 	const [isMobile, setIsMobile] = useState(null)
-	const [isTablet, setIsTablet] = useState(false)
 	const [toggleRefreshFeed, setToggleRefreshFeed] = useState(false)
 	const [throttleMessage, setThrottleMessage] = useState(null)
 	const [throttleOpen, setThrottleOpen] = useState(false)
@@ -52,36 +49,16 @@ const App = ({ Component, pageProps }) => {
 	const [commentInputFocused, setCommentInputFocused] = useState(false)
 
 	const adjustGridProperties = windowWidth => {
-		if (windowWidth < 790 + 30) {
-			setIsTablet(false)
-			if (windowWidth > 767 && windowWidth < 850) {
-				setIsTablet(true)
-			}
+		if (windowWidth < 640) {
 			setIsMobile(true)
-			setGridWidth(windowWidth)
-			setColumns(1)
-		} else if (windowWidth < 1185 + 45) {
-			setIsTablet(false)
-			setIsMobile(false)
-			setGridWidth(790)
-			setColumns(2)
-		} else if (windowWidth < 1580 + 40) {
-			setIsTablet(false)
-			setIsMobile(false)
-			setGridWidth(1185)
-			setColumns(3)
 		} else {
-			setIsTablet(false)
 			setIsMobile(false)
-			setGridWidth(1580)
-			setColumns(4)
 		}
 	}
 
 	const handleResize = () => {
 		// Set window width/height to state
 		setWindowSize({ width: window.innerWidth, height: window.innerHeight })
-		//update grid width / columns
 		adjustGridProperties(window.innerWidth)
 	}
 
@@ -215,10 +192,7 @@ const App = ({ Component, pageProps }) => {
 		myProfile,
 		myRecommendations,
 		loginModalOpen,
-		gridWidth,
-		columns,
 		isMobile,
-		isTablet,
 		toggleRefreshFeed,
 		throttleMessage,
 		disableLikes,

@@ -177,7 +177,7 @@ const TokenDetailBody = ({
 											setLightboxOpen(true)
 											mixpanel.track('Original clicked')
 										}}
-										className="flex flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all rounded-lg p-3"
+										className="flex flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all rounded-lg p-3 hidden md:flex"
 									>
 										<div className="">
 											<FontAwesomeIcon icon={faExpand} width={18} height={18} />
@@ -197,7 +197,7 @@ const TokenDetailBody = ({
 				<div className="p-2 md:p-8 max-w-screen-2xl overflow-auto relative w-full m-auto">
 					{/* Title and description section */}
 					<div className="flex flex-col md:flex-row pb-10 items-stretch w-full max-w-full">
-						<div className="pb-0 text-left flex-1 p-4 break-words sm:max-w-[50%]">
+						<div className="pb-0 text-left flex-1 p-4 break-words md:max-w-[50%]">
 							<div className="text-2xl md:text-4xl dark:text-gray-200">{item.token_name}</div>
 							{/* Likes & Share */}
 							{/*  */}
@@ -214,7 +214,7 @@ const TokenDetailBody = ({
 									<ShareButton url={typeof window !== 'undefined' && window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${item.contract_address}/${item.token_id}`} type={'item'} />
 								</div>
 
-								<a href={getBidLink(item)} title={`Buy on ${getContractName(item)}`} target="_blank" className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none focus-visible:ring-1" onClick={() => mixpanel.track('OpenSea link click')} rel="noreferrer">
+								<a href={getBidLink(item)} title={`Bid on ${getContractName(item)}`} target="_blank" className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none focus-visible:ring-1" onClick={() => mixpanel.track('OpenSea link click')} rel="noreferrer">
 									<span>Bid </span>
 									<span className="hidden sm:inline">on {getContractName(item)}</span>
 								</a>
@@ -222,7 +222,7 @@ const TokenDetailBody = ({
 							</div>
 							{usersWhoLiked && <UsersWhoLiked users={usersWhoLiked} closeModal={() => (setEditModalOpen ? setEditModalOpen(false) : null)} />}
 						</div>
-						<div className="flex-1 p-4 pb-0 sm:max-w-[50%]">
+						<div className="flex-1 p-4 pb-0 md:max-w-[50%]">
 							{item.token_description && (
 								<>
 									<div className="text-gray-500 dark:text-gray-400 text-sm sm:text-base whitespace-pre-line">

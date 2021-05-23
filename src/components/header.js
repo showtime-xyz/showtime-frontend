@@ -37,7 +37,7 @@ const Header = () => {
 							</Link>
 						</div>
 						{/* Start desktop-only menu */}
-						{!context.isMobile || context.isTablet ? (
+						{!context.isMobile ? (
 							<div className="flex-grow flex-1">
 								<SearchBar propagateSearchState={setSearchBarOpen} />
 							</div>
@@ -79,7 +79,7 @@ const Header = () => {
 											<div
 												className="text-sm sm:text-base truncate"
 												style={{
-													maxWidth: context.gridWidth < 500 ? 100 : 200,
+													maxWidth: context.windowSize?.width < 500 ? 100 : 200,
 												}}
 											>
 												{context.myProfile ? (context.myProfile.name ? context.myProfile.name : context.myProfile.username ? context.myProfile.username : context.myProfile.wallet_addresses_excluding_email_v2 && context.myProfile.wallet_addresses_excluding_email_v2.length > 0 ? (context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(context.myProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Profile') : 'Profile'}
