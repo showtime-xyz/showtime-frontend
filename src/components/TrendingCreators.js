@@ -63,7 +63,7 @@ const TrendingCreators = ({ shownLeaderboardItems, allLeaderboardItems, isLoadin
 						<div className="flex-grow"></div>
 					</div>
 				) : (
-					shownLeaderboardItems.map((item, index) => <LeaderboardItemV2 key={item?.profile_id} item={item} index={index} />)
+					shownLeaderboardItems.map((item, index) => <LeaderboardItemV2 key={item?.profile_id} item={item} index={index} totalCount={shownLeaderboardItems.length} />)
 				)}
 			</div>
 
