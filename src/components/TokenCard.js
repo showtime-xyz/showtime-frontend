@@ -158,11 +158,11 @@ const TokenCard = ({
 						) : null}
 					</div>
 				</div>
-				{item.token_has_video && showVideo && currentlyPlayingVideo === item.nft_id ? (
+				{(item.token_has_video || (!item.token_img_url && item.token_animation_url)) && showVideo && currentlyPlayingVideo === item.nft_id ? (
 					<div className="bg-black">
 						<ReactPlayer
 							url={item.token_animation_url}
-							playing={currentlyPlayingVideo === item.nft_id || (item.token_has_video && !item.token_img_url)}
+							playing={currentlyPlayingVideo === item.nft_id || ((item.token_has_video || (!item.token_img_url && item.token_animation_url)) && !item.token_img_url)}
 							loop
 							controls
 							muted={muted}
@@ -196,7 +196,7 @@ const TokenCard = ({
 								<TokenCardImage nft={item} />
 							</div>
 						</div>
-						{item.token_has_video ? (
+						{item.token_has_video || (!item.token_img_url && item.token_animation_url) ? (
 							<div
 								className="p-2.5 opacity-80 hover:opacity-100 absolute bottom-0 right-0 cursor-pointer"
 								onClick={() => {

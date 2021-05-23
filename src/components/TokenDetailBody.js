@@ -145,8 +145,8 @@ const TokenDetailBody = ({
 						<div>&nbsp;</div>
 					</div>
 				) : null}
-				<div className={`flex flex-shrink-0 items-center md:p-12 ${item.token_has_video ? 'bg-black' : ''}`} style={item.token_has_video ? null : { backgroundColor: getBackgroundColor() }} ref={targetRef}>
-					{item.token_has_video ? (
+				<div className={`flex flex-shrink-0 items-center md:p-12 ${item.token_has_video || (item.token_animation_url && !item.token_img_url) ? 'bg-black' : ''}`} style={item.token_has_video || (item.token_animation_url && !item.token_img_url) ? null : { backgroundColor: getBackgroundColor() }} ref={targetRef}>
+					{item.token_has_video || (item.token_animation_url && !item.token_img_url) ? (
 						<ReactPlayer
 							url={item.token_animation_url}
 							playing={true}
@@ -170,7 +170,7 @@ const TokenDetailBody = ({
 					) : (
 						<div className="m-auto">
 							<div className="w-max p absolute right-0 m-2.5 z-0 top-14 sm:top-0">
-								{isMobile || item.token_has_video ? null : item.token_img_url ? (
+								{isMobile || item.token_has_video || (item.token_animation_url && !item.token_img_url) ? null : item.token_img_url ? (
 									<button
 										type="button"
 										onClick={() => {
