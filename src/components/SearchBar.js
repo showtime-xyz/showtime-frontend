@@ -105,7 +105,7 @@ const SearchBar = ({ propagateSearchState }) => {
 								{searchResults.map((searchResult, index) => (
 									<Link href="/[profile]" as={`/${searchResult?.username || searchResult.address0}`} key={searchResult.id}>
 										<div
-											className={`flex items-center w-full p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 ${activeSelectedSearchResult === index ? 'bg-gray-50 dark:bg-gray-800' : 'bg-white dark:bg-gray-900'} ${index === 0 ? 'rounded-t-lg' : ''} ${index === searchResults.length - 1 ? 'rounded-b-lg' : ''}`}
+											className={`flex items-center w-full p-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 ${activeSelectedSearchResult === index ? 'bg-gray-100 dark:bg-gray-800' : 'bg-white dark:bg-gray-900'} ${index === 0 ? 'rounded-t-lg' : ''} ${index === searchResults.length - 1 ? 'rounded-b-lg' : ''}`}
 											key={index}
 											onClick={() => {
 												setShowSearchResults(false)
