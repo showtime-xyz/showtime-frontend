@@ -54,10 +54,10 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
 						<tbody>
 							{nftHistory.history.length == 1 && !nftHistory.history[0].from_address ? null : (
 								<tr className="text-left text-gray-400 text-sm">
-									<td className="truncate px-2 py-4 w-[fit-content]">From</td>
-									<td className="truncate px-2 py-4 w-[fit-content]">To</td>
+									<td className="truncate px-4 py-4 w-[fit-content]">From</td>
+									<td className="truncate px-4 py-4 w-[fit-content]">To</td>
 									{nftHistory.multiple && <td className="truncate px-2 py-4 w-[fit-content] text-right">Qty</td>}
-									<td className="truncate px-2 py-4 w-[fit-content]">Date</td>
+									<td className="truncate px-4 py-4 w-[fit-content]">Date</td>
 								</tr>
 							)}
 							{nftHistory.history.map(entry => (
