@@ -20,7 +20,7 @@ const GridTab = ({ label, itemCount, isActive, onClickTab }) => {
 	}
 
 	return (
-		<div className={`text-sm md:text-base w-max py-3.5 mr-6 whitespace-nowrap cursor-pointer border-b-2 ${isActive ? 'border-stpink dark:text-gray-200' : 'dark:text-gray-400 border-transparent hover:opacity-60'} transition`} onClick={onClickTab}>
+		<div className={`text-sm md:text-base w-max py-3.5 mr-6 whitespace-nowrap cursor-pointer border-b-2 ${isActive ? 'border-stpink text-stpink dark:text-gray-200' : 'dark:text-gray-400 border-transparent hover:opacity-60'} transition`} onClick={onClickTab}>
 			{cleanItemCount() && <div className={`${isActive ? '' : 'text-gray-400'} mr-1`}>{cleanItemCount()}</div>}
 			<span>{label}</span>
 		</div>
