@@ -3,7 +3,7 @@ import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import ClientOnlyPortal from './ClientOnlyPortal'
 import Link from 'next/link'
 import CloseButton from './CloseButton'
-import { truncateWithEllipses, formatAddressShort } from '@/lib/utilities'
+import { truncateWithEllipses } from '@/lib/utilities'
 import FollowButton from './FollowButton'
 import AppContext from '@/context/app-context'
 export default function ModalUserList({ isOpen, title, users, closeModal, emptyMessage, onRedirect }) {

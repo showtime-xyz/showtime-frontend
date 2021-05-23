@@ -1056,14 +1056,14 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												!isLoadingCards && !isRefreshingCards && !isLoadingMore && collectionId == 0 ? (
 													menuLists[selectedGrid - 1].count_all_nonhidden > menuLists[selectedGrid - 1].count_deduplicated_nonhidden ? (
 														!showDuplicates ? (
-															<div className="text-center text-gray-400 text-xs">
+															<div className="text-center text-gray-400 text-xs mt-6">
 																Some duplicate items were hidden.{' '}
 																<span className="cursor-pointer hover:text-gray-700" onClick={() => handleShowDuplicates(true)}>
 																	Show all
 																</span>
 															</div>
 														) : (
-															<div className="text-center text-gray-400 text-xs">
+															<div className="text-center text-gray-400 text-xs mt-6">
 																<span className="cursor-pointer hover:text-gray-700" onClick={() => handleShowDuplicates(false)}>
 																	Hide duplicates
 																</span>

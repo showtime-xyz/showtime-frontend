@@ -32,7 +32,6 @@ export async function getServerSideProps(context) {
 
 export default function Token({ token }) {
 	const context = useContext(AppContext)
-	//const { isMobile, gridWidth } = context;
 	useEffect(() => {
 		// Wait for identity to resolve before recording the view
 		if (typeof context.user !== 'undefined') {
