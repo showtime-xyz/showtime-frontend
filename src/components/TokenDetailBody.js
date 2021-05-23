@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useContext } from 'react'
-import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
+import { DEFAULT_PROFILE_PIC, CONTRACTS } from '@/lib/constants'
 import Link from 'next/link'
 import mixpanel from 'mixpanel-browser'
 import Lightbox from 'react-image-lightbox'
@@ -374,19 +374,23 @@ const TokenDetailBody = ({
 					{/* OpenSea Link */}
 
 					<div className="m-4 flex text-sm">
-						<a
-							href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`}
-							title="Buy on OpenSea"
-							target="_blank"
-							onClick={() => {
-								mixpanel.track('OpenSea link click')
-							}}
-							className="mr-4 text-gray-500 hover:text-stpink"
-							rel="noreferrer"
-						>
-							<div>View on OpenSea</div>
-						</a>
-						<div className="mr-4">·</div>
+						{item.contract_address == CONTRACTS.HICETNUNC ? null : (
+							<>
+								<a
+									href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`}
+									title="Buy on OpenSea"
+									target="_blank"
+									onClick={() => {
+										mixpanel.track('OpenSea link click')
+									}}
+									className="mr-4 text-gray-500 hover:text-stpink"
+									rel="noreferrer"
+								>
+									<div>View on OpenSea</div>
+								</a>
+								<div className="mr-4">·</div>{' '}
+							</>
+						)}
 						<div
 							onClick={() => {
 								parentSetReportModalOpen !== undefined ? parentSetReportModalOpen(true) : setReportModalOpen(true)
