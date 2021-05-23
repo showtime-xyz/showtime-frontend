@@ -136,7 +136,7 @@ const TokenDetailBody = ({
 									</Link>
 									{context.myProfile?.profile_id !== item?.creator_id && (
 										<div className="ml-2">
-											<MiniFollowButton profileId={item?.creator_id} />
+											<MiniFollowButton key={item?.creator_id} profileId={item?.creator_id} />
 										</div>
 									)}
 								</div>
