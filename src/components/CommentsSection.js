@@ -238,7 +238,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 										displayTransform={(id, display) => `${display}`}
 										trigger="@"
 										data={handleDebouncedSearchQuery}
-										className="border-2 border-transparent bg-purple-200 dark:bg-gray-800 rounded -ml-1.5 px-1"
+										className="border-2 border-transparent bg-purple-200 dark:bg-gray-800 rounded -ml-1"
 										appendSpaceOnAdd
 									/>
 								</MentionsInput>
