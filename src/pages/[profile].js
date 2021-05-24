@@ -78,7 +78,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const [followersCount, setFollowersCount] = useState(followers_count)
 
 	// Using global context for logged in user, else server data for other pages
-	const { name, img_url, cover_url, wallet_addresses_v2, wallet_addresses_excluding_email_v2, bio, website_url, profile_id, username, featured_nft_img_url, links } = isMyProfile ? context.myProfile : profile
+	const { name, img_url, cover_url, wallet_addresses_v2, wallet_addresses_excluding_email_v2, bio, website_url, username, featured_nft_img_url, links } = isMyProfile ? context.myProfile : profile
+	const { profile_id } = profile
 
 	useEffect(() => {
 		// Wait for identity to resolve before recording the view
@@ -817,7 +818,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 				) : null}
 				<CappedWidth>
 					<div className="m-auto">
-						<div ref={gridRef} className="grid lg:grid-cols-3 xl:grid-cols-4 pt-0 ">
+						<div ref={gridRef} className="md:grid lg:grid-cols-3 xl:grid-cols-4 pt-0 ">
 							<div className="sm:px-3 relative">
 								<div className="h-max sticky top-24">
 									<div className="px-2 sm:px-4 py-2 sm:py-4 sm:rounded-lg bg-white dark:bg-gray-900 border-t border-b sm:border-l sm:border-r border-gray-200 sm:border-transparent dark:border-gray-800 sm:shadow-md mt-14">
@@ -1055,14 +1056,14 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												!isLoadingCards && !isRefreshingCards && !isLoadingMore && collectionId == 0 ? (
 													menuLists[selectedGrid - 1].count_all_nonhidden > menuLists[selectedGrid - 1].count_deduplicated_nonhidden ? (
 														!showDuplicates ? (
-															<div className="text-center text-gray-400 text-xs">
+															<div className="text-center text-gray-400 text-xs mt-6">
 																Some duplicate items were hidden.{' '}
 																<span className="cursor-pointer hover:text-gray-700" onClick={() => handleShowDuplicates(true)}>
 																	Show all
 																</span>
 															</div>
 														) : (
-															<div className="text-center text-gray-400 text-xs">
+															<div className="text-center text-gray-400 text-xs mt-6">
 																<span className="cursor-pointer hover:text-gray-700" onClick={() => handleShowDuplicates(false)}>
 																	Hide duplicates
 																</span>
@@ -1071,7 +1072,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 													) : null
 												) : null
 											}
-											scrollThreshold={page === 1 ? 0.3 : page < 4 ? 0.5 : page < 6 ? 0.7 : 0.8}
+											scrollThreshold={page === 1 ? 0.5 : page < 4 ? 0.5 : page < 6 ? 0.7 : 0.8}
 											showUserHiddenItems={showUserHiddenItems}
 											showDuplicates={showDuplicates}
 											setHasUserHiddenItems={setHasUserHiddenItems}

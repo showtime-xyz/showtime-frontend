@@ -42,7 +42,6 @@ const SearchBar = ({ propagateSearchState }) => {
 	const enterPress = useKeyPress('Enter')
 
 	useEffect(() => {
-		console.log(isMobileSearchOverlayOpen)
 		propagateSearchState(isMobileSearchOverlayOpen)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMobileSearchOverlayOpen])
@@ -72,15 +71,15 @@ const SearchBar = ({ propagateSearchState }) => {
 	return (
 		<>
 			{/* Start desktop-only menu */}
-			<div className="hidden flex-col relative ml-6 pr-6 w-full max-w-3xl lg:flex">
+			<div className="hidden flex-col relative ml-6 pr-6 w-full max-w-3xl md:flex">
 				<div className="flex relative w-full" ref={searchInputContainerRef}>
-					<div className="flex absolute left-4 top-1/2 transform -translate-y-2.5 -translate-x-1 mr-3 text-black dark:text-gray-200 focus:-mt-px">
+					<div className="flex absolute z-1 left-4 top-1/2 transform -translate-y-2.5 -translate-x-1 mr-3 text-black dark:text-gray-200 focus:-mt-px">
 						<SearchIcon className="w-5 h-5" />
 					</div>
 					<input
 						className="flex border dark:border-gray-800 bg-white placeholder-gray-500 text-gray-600 dark:text-gray-400 dark:bg-gray-900 bg-opacity-10 dark:bg-opacity-20 backdrop-filter backdrop-blur-lg backdrop-saturate-150 py-1.5 px-4 rounded-full w-full pl-10 focus-visible:ring-1 ring-gray-300 dark:ring-gray-800 focus:outline-none"
 						type="search"
-						placeholder={context.gridWidth < 400 ? 'Search by name' : 'Search by name or wallet address'}
+						placeholder={context.windowSize?.width < 950 ? (context.windowSize?.width < 850 ? 'Search' : 'Search by name') : 'Search by name or wallet address'}
 						value={searchText}
 						onFocus={() => {
 							setShowSearchResults(true)
@@ -106,7 +105,7 @@ const SearchBar = ({ propagateSearchState }) => {
 								{searchResults.map((searchResult, index) => (
 									<Link href="/[profile]" as={`/${searchResult?.username || searchResult.address0}`} key={searchResult.id}>
 										<div
-											className={`flex items-center w-full p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 ${activeSelectedSearchResult === index ? 'bg-gray-50 dark:bg-gray-800' : 'bg-white dark:bg-gray-900'} ${index === 0 ? 'rounded-t-lg' : ''} ${index === searchResults.length - 1 ? 'rounded-b-lg' : ''}`}
+											className={`flex items-center w-full p-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 ${activeSelectedSearchResult === index ? 'bg-gray-100 dark:bg-gray-800' : 'bg-white dark:bg-gray-900'} ${index === 0 ? 'rounded-t-lg' : ''} ${index === searchResults.length - 1 ? 'rounded-b-lg' : ''}`}
 											key={index}
 											onClick={() => {
 												setShowSearchResults(false)
@@ -127,7 +126,7 @@ const SearchBar = ({ propagateSearchState }) => {
 				)}
 			</div>
 			{/* Start mobile-only menu */}
-			<div className="flex justify-end lg:hidden relative w-full sm:ml-4 sm:justify-start ml-1">
+			<div className="flex justify-end md:hidden relative w-full sm:ml-4 sm:justify-start ml-1">
 				<button className="flex items-center justify-center w-3.5 h-3.5 text-black dark:text-white hover:text-stpink dark:hover:text-stpink p-4" onClick={() => toggleMobileSearchOverlay(true)}>
 					<FontAwesomeIcon icon={faSearch} />
 				</button>
@@ -141,13 +140,13 @@ const SearchBar = ({ propagateSearchState }) => {
 							<FontAwesomeIcon icon={faTimes} />
 						</button>
 						<div className="flex relative w-full" ref={searchInputContainerRef}>
-							<div className="flex absolute left-4 top-1/2 transform -translate-y-2.5 -translate-x-1.5 mr-3 text-black dark:text-gray-200 focus:-mt-px" isFocused={searchInputFocused}>
+							<div className="flex absolute z-1 left-4 top-1/2 transform -translate-y-2.5 -translate-x-1 mr-3 text-black dark:text-gray-200 focus:-mt-px" isFocused={searchInputFocused}>
 								<SearchIcon className="w-5 h-5" />
 							</div>
 							<input
 								className="flex border dark:border-gray-800 bg-white text-gray-600 dark:bg-gray-900 bg-opacity-10 dark:bg-opacity-20 backdrop-filter backdrop-blur-lg backdrop-saturate-150 py-1.5 px-4 rounded-full w-full pl-10 focus-visible:ring-1 ring-gray-300 dark:ring-gray-800 focus:outline-none"
 								type="search"
-								placeholder={context.gridWidth < 400 ? 'Search by name' : 'Search by name or wallet address'}
+								placeholder={context.windowSize?.width < 400 ? 'Search by name' : 'Search by name or wallet address'}
 								value={searchText}
 								onFocus={() => {
 									setShowSearchResults(true)

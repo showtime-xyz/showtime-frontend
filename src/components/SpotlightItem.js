@@ -69,7 +69,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 					<div ref={divRef} className="md:w-3/4 mx-auto flex items-center flex-col md:flex-row md:p-0">
 						<div className="flex-1 text-right">
 							<div>
-								{thisItem.token_has_video ? (
+								{thisItem.token_has_video || (!thisItem.token_img_url && thisItem.token_animation_url) ? (
 									<>
 										<div className={`w-full h-full ${videoReady ? 'hidden' : null}`}>
 											<div className="w-full text-center flex items-center mt-24 justify-center">

@@ -10,7 +10,7 @@ import mixpanel from 'mixpanel-browser'
 import ActivityImages from './ActivityImages'
 import { ViewGridIcon } from '@heroicons/react/solid'
 
-const LeaderboardItemV2 = ({ item, index }) => {
+const LeaderboardItemV2 = ({ item, index, totalCount }) => {
 	const context = useContext(AppContext)
 	const topItems = item?.top_items.slice(0, 4)
 	const [currentlyOpenModal, setCurrentlyOpenModal] = useState(null)
@@ -52,10 +52,10 @@ const LeaderboardItemV2 = ({ item, index }) => {
 		<>
 			{typeof document !== 'undefined' ? (
 				<>
-					<ModalTokenDetail isOpen={currentlyOpenModal} setEditModalOpen={setCurrentlyOpenModal} item={currentlyOpenModal} goToNext={goToNext} goToPrevious={goToPrevious} columns={context.columns} hasNext={!(currentIndex === topItems.length - 1)} hasPrevious={!(currentIndex === 0)} />
+					<ModalTokenDetail isOpen={currentlyOpenModal} setEditModalOpen={setCurrentlyOpenModal} item={currentlyOpenModal} goToNext={goToNext} goToPrevious={goToPrevious} hasNext={!(currentIndex === topItems.length - 1)} hasPrevious={!(currentIndex === 0)} />
 				</>
 			) : null}
-			<div key={item.profile_id} className="border-b dark:border-gray-800 px-4 py-4">
+			<div key={item.profile_id} className={`${index == totalCount - 1 ? null : 'border-b'}  dark:border-gray-800 px-4 py-4`}>
 				<div className="flex flex-row items-center">
 					<div className="relative mr-1 w-16 flex-none">
 						<Link href="/[profile]" as={`/${item?.username || item.address}`}>

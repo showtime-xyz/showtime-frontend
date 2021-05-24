@@ -13,8 +13,6 @@ const Header = () => {
 	const context = useContext(AppContext)
 	const [isSearchBarOpen, setSearchBarOpen] = useState(false)
 
-	console.log({ isSearchBarOpen })
-
 	return (
 		<>
 			{typeof document !== 'undefined' ? (
@@ -39,7 +37,7 @@ const Header = () => {
 							</Link>
 						</div>
 						{/* Start desktop-only menu */}
-						{!context.isMobile || context.isTablet ? (
+						{!context.isMobile ? (
 							<div className="flex-grow flex-1">
 								<SearchBar propagateSearchState={setSearchBarOpen} />
 							</div>
@@ -72,7 +70,7 @@ const Header = () => {
 						{/* End desktop-only menu */}
 						<div>
 							{context.user && context.myProfile !== undefined ? (
-								<Link href="/[profile]" as={`/${context.myProfile.username ? context.myProfile.username : context.myProfile.wallet_addresses_excluding_email_v2 && context.myProfile.wallet_addresses_excluding_email_v2.length > 0 ? context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain : context.user.publicAddress}`}>
+								<Link href="/[profile]" as={`/${context.myProfile.username ? context.myProfile.username : context.myProfile.wallet_addresses_excluding_email_v2 && context.myProfile.wallet_addresses_excluding_email_v2.length > 0 ? (context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain : context.myProfile.wallet_addresses_excluding_email_v2[0].address) : context.user.publicAddress}`}>
 									<a className="dark:text-gray-200 text-base flex flex-row items-center hover:text-stpink" onClick={() => mixpanel.track('Profile button click')}>
 										<>
 											<div className={context.windowSize ? (context.windowSize.width < 350 ? 'hidden' : null) : null}>
@@ -81,7 +79,7 @@ const Header = () => {
 											<div
 												className="text-sm sm:text-base truncate"
 												style={{
-													maxWidth: context.gridWidth < 500 ? 100 : 200,
+													maxWidth: context.windowSize?.width < 500 ? 100 : 200,
 												}}
 											>
 												{context.myProfile ? (context.myProfile.name ? context.myProfile.name : context.myProfile.username ? context.myProfile.username : context.myProfile.wallet_addresses_excluding_email_v2 && context.myProfile.wallet_addresses_excluding_email_v2.length > 0 ? (context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(context.myProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Profile') : 'Profile'}
