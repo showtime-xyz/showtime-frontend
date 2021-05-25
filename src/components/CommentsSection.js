@@ -10,6 +10,7 @@ import { formatAddressShort } from '@/lib/utilities'
 import axios from '@/lib/axios'
 import ModalUserList from './ModalUserList'
 import GhostButton from './UI/Buttons/GhostButton'
+import { XIcon } from '@heroicons/react/solid'
 
 export default function CommentsSection({ item, closeModal, modalRef, commentCount }) {
 	const context = useContext(AppContext)
@@ -116,9 +117,8 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 				parentComment ? mixpanel.track('Reply created') : mixpanel.track('Comment created')
 			})
 			.catch(err => {
-				if (err.response.data.code === 429) {
-					return context.setThrottleMessage(err.response.data.message)
-				}
+				if (err.response.data.code === 429) return context.setThrottleMessage(err.response.data.message)
+
 				console.error(err)
 			})
 		setCommentText('')
@@ -208,7 +208,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		const newInputRef = createRef()
 		refArray.push(newInputRef)
 		return (
-			<div className={`${isReply ? 'ml-10 ' : ''} my-2 flex items-center flex-col md:flex-row`}>
+			<div className={`${isReply ? 'ml-10 ' : ''} my-2 flex ${isReply ? '' : 'md:flex-row items-center'} flex-col`}>
 				<MentionsInput
 					value={(isReply && parentComment) || parentComment === null ? commentText : ''}
 					inputRef={isReply ? newInputRef : null}
@@ -229,9 +229,16 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 				>
 					<Mention trigger="@" renderSuggestion={parentComment ? null : s => suggestion(s)} displayTransform={(_, display) => `${display}`} data={parentComment ? handleSearchQuery : handleDebouncedSearchQuery} className="border-2 border-transparent bg-purple-200 dark:bg-gray-800  rounded -ml-1.5 px-1" appendSpaceOnAdd />
 				</MentionsInput>
-				<GhostButton loading={isSubmitting} onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="rounded-lg">
-					Post
-				</GhostButton>
+				<div className="flex items-center justify-between mt-2">
+					{isReply && (
+						<button onClick={() => setLocalFocus(false) && setCommentText('') && setParentComment(null) && setSiblingComment(null)} className="p-4 bg-gray-100 rounded-lg">
+							<XIcon className="w-4 h-4 text-gray-800" />
+						</button>
+					)}
+					<GhostButton loading={isSubmitting} onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="rounded-lg">
+						Post
+					</GhostButton>
+				</div>
 			</div>
 		)
 	}
