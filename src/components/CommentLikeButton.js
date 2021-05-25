@@ -60,13 +60,13 @@ const CommentLikeButton = ({ comment, openLikedByModal }) => {
 		<Tippy content="Sign in to like" disabled={context.user || isMobile}>
 			<div className="flex items-center">
 				<button disabled={context.disableLikes} onClick={() => (context.user ? (liked ? handleCommentUnlike(comment.comment_id) : handleCommentLike(comment.comment_id)) : handleLoggedOutCommentLike())}>
-					<div className={`flex flex-row items-center rounded-md py-1 hover:text-stred ${context.disableLikes ? 'hover:text-gray-500 text-gray-500' : 'dark:text-gray-600 dark:hover:text-stred'}`}>
+					<div className={`flex flex-row items-center rounded-md py-1 hover:text-stred ${context.disableLikes ? 'hover:text-gray-500 text-gray-500' : 'text-gray-500 dark:text-gray-600 dark:hover:text-stred'}`}>
 						<div className={`flex ${liked ? 'text-stred' : ''}`}>{liked ? <HeartIconSolid className="w-4 h-4" /> : <HeartIconOutline className="w-4 h-4" />}</div>
 					</div>
 				</button>
 				{like_count ? (
 					<button onClick={() => openLikedByModal(_.isEmpty(comment.likers) ? [context.myProfile] : comment.likers)}>
-						<div className="ml-1 text-xs whitespace-nowrap text-gray-600 dark:text-gray-500">{Number(like_count < 0 ? 0 : like_count).toLocaleString()}</div>
+						<div className="ml-1 text-xs whitespace-nowrap text-gray-600 dark:text-gray-500 tabular-nums">{Number(like_count < 0 ? 0 : like_count).toLocaleString()}</div>
 					</button>
 				) : null}
 			</div>

@@ -88,15 +88,14 @@ export default function Comment({ comment, closeModal, modalRef, deleteComment, 
 					)}
 				</div>
 				<div className="text-gray-500 text-sm leading-5 break-words">{commentWithMentions}</div>
-                {/* @TODO: Make sure this looks decent */}
-				<div className="flex">
-					<div className="flex-grow"></div>
-					<div onClick={() => handleReply(comment)} className="flex items-center justify-end text-gray-400 text-xs sm:mb-0 cursor-pointer -mt-2">
-						<ReplyIcon className="w-3 h-3" />
-						<span className="ml-1">reply</span>
+				<div className="flex justify-end">
+					<div className="flex items-center">
+						<div onClick={() => handleReply(comment)} className="flex items-center justify-end text-gray-400 text-xs sm:mb-0 cursor-pointer mr-2">
+							<ReplyIcon className="w-3 h-3" />
+							<span className="ml-1">reply</span>
+						</div>
+						<CommentLikeButton comment={comment} openLikedByModal={openLikedByModal} />
 					</div>
-				<div>
-					<CommentLikeButton comment={comment} openLikedByModal={openLikedByModal} />
 				</div>
 			</div>
 		</div>

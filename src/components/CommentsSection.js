@@ -241,8 +241,6 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		)
 	}
 
-	const closeLikedByModal = () => setLikedByUserList(null)
-
 	return (
 		<div className="w-full">
 			{/* Comments */}
