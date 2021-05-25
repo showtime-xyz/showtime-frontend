@@ -7,7 +7,7 @@ import ShareButton from './ShareButton'
 import ReactPlayer from 'react-player'
 import mixpanel from 'mixpanel-browser'
 import AppContext from '@/context/app-context'
-import { getBidLink, getContractName, removeTags } from '@/lib/utilities'
+import { getBidLink, getContractName, removeTags, formatAddressShort } from '@/lib/utilities'
 import ModalTokenDetail from './ModalTokenDetail'
 import CappedWidth from './CappedWidth'
 import axios from '@/lib/axios'
@@ -69,7 +69,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 					<div ref={divRef} className="md:w-3/4 mx-auto flex items-center flex-col md:flex-row md:p-0">
 						<div className="flex-1 text-right">
 							<div>
-								{thisItem.token_has_video ? (
+								{thisItem.token_has_video || (!thisItem.token_img_url && thisItem.token_animation_url) ? (
 									<>
 										<div className={`w-full h-full ${videoReady ? 'hidden' : null}`}>
 											<div className="w-full text-center flex items-center mt-24 justify-center">
@@ -293,9 +293,9 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 															<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
 																<a className="flex flex-row items-center pr-2 ">
 																	<div>
-																		<img alt={pageProfile.name ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? pageProfile.wallet_addresses_excluding_email[0] : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-8 h-8" />
+																		<img alt={pageProfile.name ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-8 h-8" />
 																	</div>
-																	<div className="dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">{pageProfile.name ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? pageProfile.wallet_addresses_excluding_email[0] : 'Unknown'}</div>
+																	<div className="dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">{pageProfile.name ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown'}</div>
 																</a>
 															</Link>
 

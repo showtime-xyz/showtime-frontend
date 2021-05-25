@@ -49,7 +49,12 @@ export default function ActivityImage({ nft, index, numberOfImages, openModal, s
 
 	return (
 		<div
-			className={`flex-1 relative cursor-pointer overflow-hidden hover:opacity-90  transition-all ${spacingIndex !== numberOfImages - 1 ? 'mr-1' : ''} ${bottomRow && spacingIndex === 0 ? 'sm:rounded-bl-lg' : null} ${bottomRow && spacingIndex === 1 ? 'sm:rounded-br-lg' : null} ${roundAllCorners && index === 0 ? 'sm:rounded-tl-lg' : null} ${roundAllCorners && (index === 1 || totalNumberOfImages === 1 || totalNumberOfImages === 3) ? 'sm:rounded-tr-lg' : null} ${roundAllCorners && totalNumberOfImages === 1 ? 'sm:rounded-bl-lg sm:rounded-br-lg' : null}`}
+			className={`flex-1 relative cursor-pointer overflow-hidden hover:opacity-90  transition-all ${spacingIndex !== numberOfImages - 1 ? 'mr-1' : ''} 
+				${bottomRow && spacingIndex === 0 ? 'sm:rounded-bl-lg' : null} 
+				${bottomRow && spacingIndex === 1 ? 'sm:rounded-br-lg' : null} 
+				${roundAllCorners && index === 0 ? 'sm:rounded-tl-lg' : null} 
+				${roundAllCorners && ((index === 0 && (totalNumberOfImages === 1 || totalNumberOfImages === 3)) || (index === 1 && (totalNumberOfImages === 2 || totalNumberOfImages === 4))) ? 'sm:rounded-tr-lg' : null} 
+				${roundAllCorners && totalNumberOfImages === 1 ? 'sm:rounded-bl-lg sm:rounded-br-lg' : null}`}
 			ref={aRef}
 			style={{
 				height: imgWidth,
@@ -62,8 +67,8 @@ export default function ActivityImage({ nft, index, numberOfImages, openModal, s
 			onMouseEnter={() => setIsHovering(true)}
 			onMouseLeave={() => setIsHovering(false)}
 		>
-			{nft.token_img_url && !(nft.token_has_video && numberOfImages === 1) && <img src={numberOfImages === 1 ? getImageUrlLarge(nft.token_img_url, nft.token_aspect_ratio) : getImageUrl(nft.token_img_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" />}
-			{nft.token_has_video && (!nft.token_img_url || numberOfImages === 1) && (
+			{nft.token_img_url && !((nft.token_has_video || (nft.token_animation_url && !nft.token_img_url)) && numberOfImages === 1) && <img src={numberOfImages === 1 ? getImageUrlLarge(nft.token_img_url, nft.token_aspect_ratio) : getImageUrl(nft.token_img_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" />}
+			{(nft.token_has_video || (nft.token_animation_url && !nft.token_img_url)) && (!nft.token_img_url || numberOfImages === 1) && (
 				<ReactPlayer
 					url={nft?.token_animation_url}
 					playing={true}

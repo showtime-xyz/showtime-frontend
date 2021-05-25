@@ -64,7 +64,7 @@ const Leaderboard = () => {
 	return (
 		<Layout>
 			<Head>
-				<title>Trending</title>
+				<title>Trending | Showtime</title>
 				<meta name="description" content="Trending creators & items" />
 				<meta property="og:type" content="website" />
 				<meta name="og:description" content="Trending art & creators" />
@@ -89,8 +89,8 @@ const Leaderboard = () => {
 				</CappedWidth>
 			</div>
 			<CappedWidth>
-				<div className="mt-12">
-					<GridTabs title="">
+				<div className="mt-12 overflow-hidden">
+					<GridTabs>
 						<GridTab
 							label="24 Hours"
 							isActive={leaderboardDays === 1}

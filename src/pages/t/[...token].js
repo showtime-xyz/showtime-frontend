@@ -32,7 +32,6 @@ export async function getServerSideProps(context) {
 
 export default function Token({ token }) {
 	const context = useContext(AppContext)
-	//const { isMobile, gridWidth } = context;
 	useEffect(() => {
 		// Wait for identity to resolve before recording the view
 		if (typeof context.user !== 'undefined') {
@@ -68,7 +67,7 @@ export default function Token({ token }) {
 			{typeof document !== 'undefined' ? <ModalReportItem isOpen={reportModalOpen} setReportModalOpen={setReportModalOpen} nftId={item.nft_id} /> : null}
 			<Layout key={item.nft_id}>
 				<Head>
-					<title>{item.token_name}</title>
+					<title>{item.token_name} | Showtime</title>
 
 					<meta name="description" content={item.token_description} />
 					<meta property="og:type" content="website" />

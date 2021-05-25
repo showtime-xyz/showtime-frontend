@@ -162,11 +162,11 @@ const TokenCard = ({
 						) : null}
 					</div>
 				</div>
-				{item.token_has_video && showVideo && currentlyPlayingVideo === item.nft_id ? (
+				{(item.token_has_video || (!item.token_img_url && item.token_animation_url)) && showVideo && currentlyPlayingVideo === item.nft_id ? (
 					<div className="bg-black">
 						<ReactPlayer
 							url={item.token_animation_url}
-							playing={currentlyPlayingVideo === item.nft_id || (item.token_has_video && !item.token_img_url)}
+							playing={currentlyPlayingVideo === item.nft_id || ((item.token_has_video || (!item.token_img_url && item.token_animation_url)) && !item.token_img_url)}
 							loop
 							controls
 							muted={muted}
@@ -200,7 +200,7 @@ const TokenCard = ({
 								<TokenCardImage nft={item} />
 							</div>
 						</div>
-						{item.token_has_video ? (
+						{item.token_has_video || (!item.token_img_url && item.token_animation_url) ? (
 							<div
 								className="p-2.5 opacity-80 hover:opacity-100 absolute bottom-0 right-0 cursor-pointer"
 								onClick={() => {
@@ -300,9 +300,9 @@ const TokenCard = ({
 										<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
 											<a className="flex flex-row items-center pr-2 ">
 												<div>
-													<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? formatAddressShort(pageProfile.wallet_addresses_excluding_email[0]) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
+													<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
 												</div>
-												<div className="text-gray-800 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">{truncateWithEllipses(pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email.length > 0 ? formatAddressShort(pageProfile.wallet_addresses_excluding_email[0]) : 'Unknown', 14)}</div>
+												<div className="text-gray-800 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">{truncateWithEllipses(pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown', 14)}</div>
 											</a>
 										</Link>
 

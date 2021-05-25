@@ -24,6 +24,7 @@ export const CONTRACTS = {
 	PORTIONIO_1155: '0x0adf0bc748296bcba9f394d783a5f5e9406d6874',
 	MINTABLE: '0x8c5acf6dbd24c66e6fd44d4a4c3d7a2d955aaad2', // Gasless store
 	EPHIMERA: '0xfe21b0a8df3308c61cb13df57ae5962c567a668a',
+	HICETNUNC: 'KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton',
 }
 
 export const DEFAULT_PROFILE_PIC = 'https://storage.googleapis.com/opensea-static/opensea-profile/4.png'

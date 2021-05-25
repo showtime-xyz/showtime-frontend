@@ -135,7 +135,7 @@ const TokenGridV5 = ({
 		<>
 			{typeof document !== 'undefined' ? (
 				<>
-					<ModalTokenDetail isOpen={currentlyOpenModal} setEditModalOpen={setCurrentlyOpenModal} item={currentlyOpenModal} goToNext={goToNext} goToPrevious={goToPrevious} columns={context.columns} hasNext={!(currentIndex === itemsList.length - 1)} hasPrevious={!(currentIndex === 0)} />
+					<ModalTokenDetail isOpen={currentlyOpenModal} setEditModalOpen={setCurrentlyOpenModal} item={currentlyOpenModal} goToNext={goToNext} goToPrevious={goToPrevious} hasNext={!(currentIndex === itemsList.length - 1)} hasPrevious={!(currentIndex === 0)} />
 				</>
 			) : null}
 			<InfiniteScroll style={{ overflow: null }} dataLength={dataLength} next={next} hasMore={hasMore} endMessage={endMessage} scrollThreshold={scrollThreshold}>
@@ -146,13 +146,13 @@ const TokenGridV5 = ({
 				) : (
 					<>
 						{isChangingOrder ? (
-							<ReactSortable list={itemsList} animation={200} delayOnTouchStart={true} delay={2} setList={handleSetItemsList} className={`grid gap-6 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'} `}>
+							<ReactSortable list={itemsList} animation={200} delayOnTouchStart={true} delay={2} setList={handleSetItemsList} className={`grid gap-6 grid-cols-1 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'} `}>
 								{itemsList.map(item => (
 									<TokenCard key={item.nft_id} originalItem={item} currentlyPlayingVideo={currentlyPlayingVideo} setCurrentlyPlayingVideo={setCurrentlyPlayingVideo} currentlyOpenModal={currentlyOpenModal} setCurrentlyOpenModal={setCurrentlyOpenModal} isMyProfile={isMyProfile} listId={listId} openCardMenu={openCardMenu} setOpenCardMenu={setOpenCardMenu} changeSpotlightItem={changeSpotlightItem} pageProfile={pageProfile} handleRemoveItem={handleRemoveItem} showUserHiddenItems={showUserHiddenItems} showDuplicates={showDuplicates} setHasUserHiddenItems={setHasUserHiddenItems} isChangingOrder={isChangingOrder} />
 								))}
 							</ReactSortable>
 						) : (
-							<div className={`grid gap-6 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'}  `}>
+							<div className={`grid gap-6 grid-cols-1 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'}  `}>
 								{itemsList.map(item => (
 									<TokenCard key={item.nft_id} originalItem={item} currentlyPlayingVideo={currentlyPlayingVideo} setCurrentlyPlayingVideo={setCurrentlyPlayingVideo} currentlyOpenModal={currentlyOpenModal} setCurrentlyOpenModal={setCurrentlyOpenModal} isMyProfile={isMyProfile} listId={listId} openCardMenu={openCardMenu} setOpenCardMenu={setOpenCardMenu} changeSpotlightItem={changeSpotlightItem} pageProfile={pageProfile} handleRemoveItem={handleRemoveItem} showUserHiddenItems={showUserHiddenItems} showDuplicates={showDuplicates} setHasUserHiddenItems={setHasUserHiddenItems} />
 								))}

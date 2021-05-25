@@ -126,9 +126,9 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 		})
 		setSubmitting(false)
 		setEditModalOpen(false)
-		const wallet_addresses = context.myProfile?.wallet_addresses
+		const wallet_addresses_v2 = context.myProfile?.wallet_addresses_v2
 		// confirm saved correctly
-		router.push(`/${username || (wallet_addresses && wallet_addresses[0]) || ''}`)
+		router.push(`/${username || (wallet_addresses_v2 && wallet_addresses_v2[0].ens_domain) || (wallet_addresses_v2 && wallet_addresses_v2[0].address) || ''}`)
 	}
 
 	const tab_list = [

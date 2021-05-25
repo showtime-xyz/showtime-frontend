@@ -148,7 +148,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish, isLoading, listId, isMyProfile
 		<>
 			{typeof document !== 'undefined' ? (
 				<>
-					<ModalTokenDetail isOpen={currentlyOpenModal} setEditModalOpen={setCurrentlyOpenModal} item={currentlyOpenModal} goToNext={goToNext} goToPrevious={goToPrevious} columns={context.columns} hasNext={!(currentIndex === deduplicatedItemsList.length - 1)} hasPrevious={!(currentIndex === 0)} />
+					<ModalTokenDetail isOpen={currentlyOpenModal} setEditModalOpen={setCurrentlyOpenModal} item={currentlyOpenModal} goToNext={goToNext} goToPrevious={goToPrevious} hasNext={!(currentIndex === deduplicatedItemsList.length - 1)} hasPrevious={!(currentIndex === 0)} />
 				</>
 			) : null}
 			<InfiniteScroll style={{ overflow: null }} dataLength={itemsShowing} next={fetchMoreData} hasMore={hasMore}>
@@ -157,9 +157,9 @@ const TokenGridV4 = ({ items, isDetail, onFinish, isLoading, listId, isMyProfile
 						<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 					</div>
 				) : (
-					<div className={`grid gap-6 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'}`}>
+					<div className={`grid gap-6 grid-cols-1 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'}`}>
 						{deduplicatedItemsList.slice(0, itemsShowing).map(item => (
-							<TokenCard key={item.nft_id} originalItem={item} columns={context.columns} isMobile={context.isMobile} currentlyPlayingVideo={currentlyPlayingVideo} setCurrentlyPlayingVideo={setCurrentlyPlayingVideo} currentlyOpenModal={currentlyOpenModal} setCurrentlyOpenModal={setCurrentlyOpenModal} showDuplicateNFTs={showDuplicateNFTs} setShowDuplicateNFTs={setShowDuplicateNFTs} isMyProfile={isMyProfile} listId={listId} openCardMenu={openCardMenu} setOpenCardMenu={setOpenCardMenu} userHiddenItems={userHiddenItems} setUserHiddenItems={setUserHiddenItems} refreshItems={refreshItems} changeSpotlightItem={changeSpotlightItem} pageProfile={pageProfile} />
+							<TokenCard key={item.nft_id} originalItem={item} isMobile={context.isMobile} currentlyPlayingVideo={currentlyPlayingVideo} setCurrentlyPlayingVideo={setCurrentlyPlayingVideo} currentlyOpenModal={currentlyOpenModal} setCurrentlyOpenModal={setCurrentlyOpenModal} showDuplicateNFTs={showDuplicateNFTs} setShowDuplicateNFTs={setShowDuplicateNFTs} isMyProfile={isMyProfile} listId={listId} openCardMenu={openCardMenu} setOpenCardMenu={setOpenCardMenu} userHiddenItems={userHiddenItems} setUserHiddenItems={setUserHiddenItems} refreshItems={refreshItems} changeSpotlightItem={changeSpotlightItem} pageProfile={pageProfile} />
 						))}
 					</div>
 				)}

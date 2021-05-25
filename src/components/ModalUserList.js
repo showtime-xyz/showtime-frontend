@@ -26,7 +26,7 @@ export default function ModalUserList({ isOpen, title, users, closeModal, emptyM
 													<div>
 														<img alt={profile.name} src={profile.img_url ? profile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-9 h-9" />
 													</div>
-													<div className="ml-2">{profile.name ? truncateWithEllipses(profile.name, context.isMobile ? 16 : 22) : 'Unnamed'}</div>
+													<div className="ml-2">{truncateWithEllipses(profile.name ? profile.name : profile.username ? profile.username : 'Unnamed', context.isMobile ? 16 : 22)}</div>
 												</a>
 											</Link>
 											{context?.myProfile?.profile_id !== profile.profile_id && <FollowButton item={{ profile_id: profile.profile_id, follower_count: 0 }} followerCount={0} setFollowerCount={() => {}} notExpandWhenMobile compact />}

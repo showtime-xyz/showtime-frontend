@@ -8,6 +8,7 @@ import { Mention, MentionsInput } from 'react-mentions'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 import { formatAddressShort } from '@/lib/utilities'
 import axios from '@/lib/axios'
+import ModalUserList from './ModalUserList'
 import GhostButton from './UI/Buttons/GhostButton'
 
 export default function CommentsSection({ item, closeModal, modalRef, commentCount }) {
@@ -27,6 +28,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	const [loadingMoreComments, setLoadingMoreComments] = useState(true)
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [mentionAdded, setMentionAdded] = useState(false)
+	const [likedByUserList, setLikedByUserList] = useState(false)
 	const [localFocus, setLocalFocus] = useState(false)
 
 	const handleSearchQuery = (mentionSearchText, callback) => {
@@ -195,7 +197,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 
 	const suggestion = s => {
 		return (
-			<div className="flex items-center">
+			<div className="flex items-center hover:bg-gray-100 dark:hover:bg-gray-800 px-4 py-1">
 				<img src={s.img_url} className="h-6 w-6 mr-2 rounded-full" />
 				<span className="dark:text-gray-300">{s.display}</span>
 				{s.username && <span className="text-gray-400 ml-2">@{s.username}</span>}
@@ -204,7 +206,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	}
 
 	const commentItem = comment => {
-		return <Comment key={comment.comment_id} comment={comment} modalRef={modalRef} closeModal={closeModal} deleteComment={deleteComment} nftOwnerId={ownerCount > 0 ? null : nftOwnerId} nftCreatorId={nftCreatorId} handleReply={handleReply} />
+		return <Comment key={comment.comment_id} comment={comment} modalRef={modalRef} closeModal={closeModal} deleteComment={deleteComment} nftOwnerId={ownerCount > 0 ? null : nftOwnerId} nftCreatorId={nftCreatorId} handleReply={handleReply} openLikedByModal={setLikedByUserList} />
 	}
 
 	const inputItem = isReply => {
@@ -238,6 +240,8 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 			</div>
 		)
 	}
+
+	const closeLikedByModal = () => setLikedByUserList(null)
 
 	return (
 		<div className="w-full">
@@ -290,6 +294,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 					</div>
 				)}
 			</div>
+			{likedByUserList && <ModalUserList onRedirect={closeModal} isOpen={likedByUserList} title="Comment Likes" closeModal={() => setLikedByUserList(null)} users={likedByUserList} emptyMessage="No one has liked this yet!" />}
 		</div>
 	)
 }

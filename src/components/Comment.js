@@ -6,9 +6,10 @@ import useDetectOutsideClick from '@/hooks/useDetectOutsideClick'
 import AppContext from '@/context/app-context'
 import reactStringReplace from 'react-string-replace'
 import { formatAddressShort } from '@/lib/utilities'
+import CommentLikeButton from './CommentLikeButton'
 import { DotsHorizontalIcon, ReplyIcon } from '@heroicons/react/solid'
 
-export default function Comment({ comment, closeModal, modalRef, deleteComment, nftOwnerId, nftCreatorId, handleReply }) {
+export default function Comment({ comment, closeModal, modalRef, deleteComment, nftOwnerId, nftCreatorId, openLikedByModal, handleReply }) {
 	const context = useContext(AppContext)
 	const { myProfile } = context
 	const dropdownRef = useRef(null)
@@ -31,7 +32,7 @@ export default function Comment({ comment, closeModal, modalRef, deleteComment, 
 	const isCreatorOfNFT = nftCreatorId && nftCreatorId === myProfile?.profile_id
 
 	return (
-		<div className="p-2 my-1 flex rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all relative">
+		<div className="p-2 my-1 flex rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition relative">
 			<div className="mr-3 mt-1">
 				<Link href="/[profile]" as={comment.username ? `/${comment.username}` : `/${comment.address}`}>
 					<img alt={comment.username || comment.name || 'Unnamed'} src={comment.img_url ? comment.img_url : DEFAULT_PROFILE_PIC} className="rounded-full cursor-pointer h-8 w-8" onClick={closeModal} />
@@ -87,12 +88,15 @@ export default function Comment({ comment, closeModal, modalRef, deleteComment, 
 					)}
 				</div>
 				<div className="text-gray-500 text-sm leading-5 break-words">{commentWithMentions}</div>
+                {/* @TODO: Make sure this looks decent */}
 				<div className="flex">
 					<div className="flex-grow"></div>
 					<div onClick={() => handleReply(comment)} className="flex items-center justify-end text-gray-400 text-xs sm:mb-0 cursor-pointer -mt-2">
 						<ReplyIcon className="w-3 h-3" />
 						<span className="ml-1">reply</span>
 					</div>
+				<div>
+					<CommentLikeButton comment={comment} openLikedByModal={openLikedByModal} />
 				</div>
 			</div>
 		</div>
