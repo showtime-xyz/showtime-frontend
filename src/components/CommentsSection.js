@@ -164,7 +164,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 
 	useEffect(() => {
 		if (parentComment && replyActive) {
-			siblingComment ? setCommentText('@' + (siblingComment.username || siblingComment.name || siblingComment.address)) : setCommentText('@' + (parentComment.username || parentComment.name || parentComment.address))
+			siblingComment ? setCommentText('@' + (siblingComment.username || siblingComment.name || `[${formatAddressShort(siblingComment.address)}](${siblingComment.address})`)) : setCommentText('@' + (parentComment.username || parentComment.name || `[${formatAddressShort(parentComment.address)}](${parentComment.address})`))
 			refArray[0]?.current?.focus()
 			setReplyActive(false)
 		}
