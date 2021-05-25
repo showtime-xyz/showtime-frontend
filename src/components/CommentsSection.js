@@ -8,6 +8,7 @@ import { Mention, MentionsInput } from 'react-mentions'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 import { formatAddressShort } from '@/lib/utilities'
 import axios from '@/lib/axios'
+import ModalUserList from './ModalUserList'
 import GhostButton from './UI/Buttons/GhostButton'
 
 // TODO: Convert to classes and include it into the MentionsInput component
@@ -68,6 +69,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	const [commentText, setCommentText] = useState('')
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [focused, setFocused] = useState(false)
+	const [likedByUserList, setLikedByUserList] = useState(false)
 
 	const handleSearchQuery = (mentionSearchText, callback) => {
 		if (!mentionSearchText) return
@@ -183,6 +185,10 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		}
 	}
 
+	const closeLikedByModal = () => {
+		setLikedByUserList(null)
+	}
+
 	return (
 		<div className="w-full">
 			{/* Comments */}
@@ -207,7 +213,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 									)}
 								</div>
 							)}
-							<div className="mb-4">{comments.length > 0 ? comments.map(comment => <Comment comment={comment} key={comment.comment_id} closeModal={closeModal} modalRef={modalRef} deleteComment={deleteComment} nftOwnerId={ownerCount > 0 ? null : nftOwnerId} nftCreatorId={nftCreatorId} />) : <div className="my-2 mb-3 p-3 bg-gray-100 dark:bg-gray-800 dark:text-gray-400 rounded-xl">No comments yet.</div>}</div>
+							<div className="mb-4">{comments.length > 0 ? comments.map(comment => <Comment comment={comment} key={comment.comment_id} closeModal={closeModal} modalRef={modalRef} deleteComment={deleteComment} nftOwnerId={ownerCount > 0 ? null : nftOwnerId} nftCreatorId={nftCreatorId} openLikedByModal={setLikedByUserList} />) : <div className="my-2 mb-3 p-3 bg-gray-100 dark:bg-gray-800 dark:text-gray-400 rounded-xl">No comments yet.</div>}</div>
 							{/* New Comment */}
 							<div className="my-2 flex items-center flex-col md:flex-row">
 								<MentionsInput
@@ -250,6 +256,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 					</>
 				)}
 			</div>
+			{likedByUserList && <ModalUserList onRedirect={closeModal} isOpen={likedByUserList} title="Comment Likes" closeModal={closeLikedByModal} users={likedByUserList} emptyMessage="No one has liked this yet!" />}
 		</div>
 	)
 }
