@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { Fragment, useContext, useState } from 'react'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import mixpanel from 'mixpanel-browser'
@@ -7,7 +7,14 @@ import AppContext from '@/context/app-context'
 import ModalLogin from './ModalLogin'
 import NotificationsBtn from './NotificationsBtn'
 import CappedWidth from './CappedWidth'
-import { formatAddressShort } from '@/lib/utilities'
+import { classNames, formatAddressShort } from '@/lib/utilities'
+import { Menu, Transition } from '@headlessui/react'
+
+const userNavigation = [
+	{ name: 'Your Profile', href: '#' },
+	{ name: 'Settings', href: '#' },
+	{ name: 'Sign out', href: '#' },
+]
 
 const Header = () => {
 	const context = useContext(AppContext)
@@ -70,31 +77,52 @@ const Header = () => {
 						{/* End desktop-only menu */}
 						<div>
 							{context.user && context.myProfile !== undefined ? (
-								<Link href="/[profile]" as={`/${context.myProfile.username ? context.myProfile.username : context.myProfile.wallet_addresses_excluding_email_v2 && context.myProfile.wallet_addresses_excluding_email_v2.length > 0 ? (context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain : context.myProfile.wallet_addresses_excluding_email_v2[0].address) : context.user.publicAddress}`}>
-									<a className="dark:text-gray-200 text-base flex flex-row items-center hover:text-stpink" onClick={() => mixpanel.track('Profile button click')}>
+								<Menu as="div" className="ml-3 relative">
+									{({ open }) => (
 										<>
-											<div className={context.windowSize ? (context.windowSize.width < 350 ? 'hidden' : null) : null}>
-												<img alt="profile pic" src={context.myProfile ? (context.myProfile.img_url ? context.myProfile.img_url : DEFAULT_PROFILE_PIC) : DEFAULT_PROFILE_PIC} className="mr-2 rounded-full h-8 w-8 min-w-[1.875rem]" />
+											<div>
+												<Menu.Button className="max-w-xs bg-transparent flex items-center text-sm rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-stpink group">
+													<span className="sr-only">Open user menu</span>
+													<img className="h-8 w-8 rounded-full mr-2" src={context.myProfile?.img_url || DEFAULT_PROFILE_PIC} alt={context.myProfile?.name || context.myProfile?.username || context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Profile'} />
+													<span className="text-sm sm:text-base truncate dark:text-gray-200 group-hover:text-stpink dark:group-hover:text-stpink transition">{context.myProfile?.name || context.myProfile?.username || context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Profile'}</span>
+												</Menu.Button>
 											</div>
-											<div
-												className="text-sm sm:text-base truncate"
-												style={{
-													maxWidth: context.windowSize?.width < 500 ? 100 : 200,
-												}}
-											>
-												{context.myProfile ? (context.myProfile.name ? context.myProfile.name : context.myProfile.username ? context.myProfile.username : context.myProfile.wallet_addresses_excluding_email_v2 && context.myProfile.wallet_addresses_excluding_email_v2.length > 0 ? (context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(context.myProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Profile') : 'Profile'}
-											</div>
+											<Transition show={open} as={Fragment} enter="transition ease-out duration-200" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
+												<Menu.Items static className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-20">
+													<Menu.Item>
+														{({ active }) => (
+															<Link href="/[profile]" as={`/${context.myProfile?.username || context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.address || context.user.publicAddress}`}>
+																<a className={classNames(active ? 'bg-gray-100' : '', 'block hover:bg-gray-100 px-4 py-2 text-sm text-gray-700')}>Your Profile</a>
+															</Link>
+														)}
+													</Menu.Item>
+													<Menu.Item>
+														{({ active }) => (
+															<button onClick={() => context.logOut()} className={classNames(active ? 'bg-gray-100' : '', 'block w-full text-left px-4 py-2 text-sm text-gray-700')}>
+																Sign Out
+															</button>
+														)}
+													</Menu.Item>
+												</Menu.Items>
+											</Transition>
 										</>
-									</a>
-								</Link>
+									)}
+								</Menu>
 							) : (
+								// <Link href="/[profile]" as={`/${context.myProfile.username ? context.myProfile.username : context.myProfile.wallet_addresses_excluding_email_v2 && context.myProfile.wallet_addresses_excluding_email_v2.length > 0 ? (context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain : context.myProfile.wallet_addresses_excluding_email_v2[0].address) : context.user.publicAddress}`}>
+								// 	<a className="dark:text-gray-200 text-base flex flex-row items-center hover:text-stpink" onClick={() => mixpanel.track('Profile button click')}>
+								// 		<>
+								// 			<div className={context.windowSize ? (context.windowSize.width < 350 ? 'hidden' : null) : null}>
+								// 				<img alt="profile pic" src={context.myProfile ? (context.myProfile.img_url ? context.myProfile.img_url : DEFAULT_PROFILE_PIC) : DEFAULT_PROFILE_PIC} className="mr-2 rounded-full h-8 w-8 min-w-[1.875rem]" />
+								// 			</div>
+								// 			<div className="text-sm sm:text-base truncate" style={{ maxWidth: context.windowSize?.width < 500 ? 100 : 200 }}>
+								// 				{context.myProfile ? (context.myProfile.name ? context.myProfile.name : context.myProfile.username ? context.myProfile.username : context.myProfile.wallet_addresses_excluding_email_v2 && context.myProfile.wallet_addresses_excluding_email_v2.length > 0 ? (context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(context.myProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Profile') : 'Profile'}
+								// 			</div>
+								// 		</>
+								// 	</a>
+								// </Link>
 								<>
-									<div
-										className="flex text-sm md:text-base dark:text-gray-200 hover:text-stpink dark:hover:text-stpink cursor-pointer hover:border-stpink dark:hover:border-stpink text-center"
-										onClick={() => {
-											context.setLoginModalOpen(!context.loginModalOpen)
-										}}
-									>
+									<div className="flex text-sm md:text-base dark:text-gray-200 hover:text-stpink dark:hover:text-stpink cursor-pointer hover:border-stpink dark:hover:border-stpink text-center" onClick={() => context.setLoginModalOpen(!context.loginModalOpen)}>
 										Sign&nbsp;in
 									</div>
 								</>
