@@ -232,8 +232,8 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 				>
 					<Mention trigger="@" renderSuggestion={parentComment ? null : s => suggestion(s)} displayTransform={(_, display) => `${display}`} data={parentComment ? handleSearchQuery : handleDebouncedSearchQuery} className="border-2 border-transparent bg-purple-200 dark:bg-gray-800  rounded -ml-1.5 px-1" appendSpaceOnAdd />
 				</MentionsInput>
-				<GhostButton onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="px-4 py-3 bg-black rounded-xl mt-4 md:mt-0 justify-center text-white flex items-center cursor-pointer hover:bg-stpink transition-all disabled:bg-gray-700">
-					{isSubmitting && !isReply && parentComment ? 'Post' : isSubmitting && isReply ? <div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" /> : isSubmitting && !isReply ? <div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" /> : 'Post'}
+				<GhostButton loading={isSubmitting} onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="rounded-lg">
+					Post
 				</GhostButton>
 			</div>
 		)

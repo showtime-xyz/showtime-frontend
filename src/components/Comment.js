@@ -2,13 +2,11 @@ import { useRef, useState, useContext } from 'react'
 import Link from 'next/link'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import { formatDistanceToNowStrict, subSeconds } from 'date-fns'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faReply } from '@fortawesome/free-solid-svg-icons'
 import useDetectOutsideClick from '@/hooks/useDetectOutsideClick'
 import AppContext from '@/context/app-context'
 import reactStringReplace from 'react-string-replace'
 import { formatAddressShort } from '@/lib/utilities'
-import { DotsHorizontalIcon } from '@heroicons/react/solid'
+import { DotsHorizontalIcon, ReplyIcon } from '@heroicons/react/solid'
 
 export default function Comment({ comment, closeModal, modalRef, deleteComment, nftOwnerId, nftCreatorId, handleReply }) {
 	const context = useContext(AppContext)
@@ -91,9 +89,9 @@ export default function Comment({ comment, closeModal, modalRef, deleteComment, 
 				<div className="text-gray-500 text-sm leading-5 break-words">{commentWithMentions}</div>
 				<div className="flex">
 					<div className="flex-grow"></div>
-					<div onClick={() => handleReply(comment)} className="w-10 flex items-center justify-end text-gray-400 text-xs sm:mb-0 cursor-pointer -mt-2">
-						reply
-						<FontAwesomeIcon className="ml-1 fa-flip-horizontal" icon={faReply} />
+					<div onClick={() => handleReply(comment)} className="flex items-center justify-end text-gray-400 text-xs sm:mb-0 cursor-pointer -mt-2">
+						<ReplyIcon className="w-3 h-3" />
+						<span className="ml-1">reply</span>
 					</div>
 				</div>
 			</div>

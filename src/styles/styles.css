@@ -26,6 +26,9 @@
         .border-t-green-300 {
             border-top-color: theme('colors.green.300');
         }
+        .border-t-gray-300 {
+            border-top-color: theme('colors.gray.300');
+        }
     }
 }
 
