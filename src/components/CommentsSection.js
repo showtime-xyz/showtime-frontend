@@ -87,30 +87,15 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		} else {
 			setParentComment(comment)
 		}
-		setReplyActive(true)
-	}
 
-	const handleOnBlur = () => {
-		let testUserName = /\[(.*?)\)\s$/g.test(commentText)
-		context.setCommentInputFocused(false)
-		if (commentText?.trim().length === 0 || testUserName) {
-			setLocalFocus(false)
-			setCommentText('')
-			setParentComment(null)
-			setSiblingComment(null)
-		}
+		setReplyActive(true)
 	}
 
 	const createComment = async () => {
 		setIsSubmitting(true)
-		let endpoint = '/api/createcomment'
-		let payload = {
-			nftId,
-			message: commentText,
-			parent_id: parentComment?.comment_id,
-		}
+
 		await axios
-			.post(endpoint, payload)
+			.post('/api/createcomment', { nftId, message: commentText, parent_id: parentComment?.comment_id })
 			.then(() => {
 				refreshComments(false)
 				storeCommentInContext()
@@ -119,8 +104,9 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 			.catch(err => {
 				if (err.response.data.code === 429) return context.setThrottleMessage(err.response.data.message)
 
-				console.error(err)
+				throw err
 			})
+
 		setCommentText('')
 		setLocalFocus(false)
 		setParentComment(null)
@@ -208,20 +194,20 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		const newInputRef = createRef()
 		refArray.push(newInputRef)
 		return (
-			<div className={`${isReply ? 'ml-10 ' : ''} my-2 flex ${isReply ? '' : 'md:flex-row items-center'} flex-col`}>
+			<div className={`${isReply ? 'md:ml-10 ' : ''} my-2 flex ${isReply ? '' : 'md:flex-row items-center'} flex-col`}>
 				<MentionsInput
 					value={(isReply && parentComment) || parentComment === null ? commentText : ''}
 					inputRef={isReply ? newInputRef : null}
 					onChange={e => setCommentText(e.target.value)}
 					onFocus={() => context.setCommentInputFocused(true)}
-					onBlur={handleOnBlur}
+					onBlur={() => context.setCommentInputFocused(false)}
 					disabled={context.disableComments || (!isReply && parentComment)}
 					style={MENTIONS_STYLE}
 					placeholder="Your comment..."
 					classNames={{
 						mentions: 'st-mentions-input dark:bg-gray-700 border dark:border-gray-800 rounded-lg flex-grow md:mr-2 w-full md:w-auto mb-2 md:mb-0',
 						mentions__input: 'focus:outline-none focus-visible:ring-1 dark:text-gray-300',
-						mentions__suggestions__list: 'rounded-lg border border-transparent dark:border-gray-800 bg-white hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 overflow-hidden',
+						mentions__suggestions__list: 'rounded-lg border border-transparent dark:border-gray-800 bg-white hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 dark:text-gray-400 overflow-hidden',
 					}}
 					allowSuggestionsAboveCursor
 					allowSpaceInQuery
@@ -229,13 +215,13 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 				>
 					<Mention trigger="@" renderSuggestion={parentComment ? null : s => suggestion(s)} displayTransform={(_, display) => `${display}`} data={parentComment ? handleSearchQuery : handleDebouncedSearchQuery} className="border-2 border-transparent bg-purple-200 dark:bg-gray-800  rounded -ml-1.5 px-1" appendSpaceOnAdd />
 				</MentionsInput>
-				<div className="flex items-center justify-between mt-2">
+				<div className="flex items-center justify-between mt-2 w-full md:w-auto space-x-4">
 					{isReply && (
-						<button onClick={() => setLocalFocus(false) && setCommentText('') && setParentComment(null) && setSiblingComment(null)} className="p-4 bg-gray-100 rounded-lg">
-							<XIcon className="w-4 h-4 text-gray-800" />
+						<button onClick={() => setLocalFocus(false) && setCommentText('') && setParentComment(null) && setSiblingComment(null)} className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+							<XIcon className="w-4 h-4 text-gray-800 dark:text-gray-500" />
 						</button>
 					)}
-					<GhostButton loading={isSubmitting} onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="rounded-lg">
+					<GhostButton loading={isSubmitting} onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="flex-1 md:flex-initial rounded-lg">
 						Post
 					</GhostButton>
 				</div>
