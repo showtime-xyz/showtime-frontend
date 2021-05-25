@@ -34,9 +34,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	const handleSearchQuery = (mentionSearchText, callback) => {
 		if (!mentionSearchText) return
 		return backend
-			.get(`/v1/search?q=${mentionSearchText}&limit=5&nft_id=${nftId}`, {
-				method: 'get',
-			})
+			.get(`/v1/search?q=${mentionSearchText}&limit=5&nft_id=${nftId}`)
 			.then(res => res?.data?.data || [])
 			.then(res =>
 				res.map(r => ({
@@ -81,12 +79,9 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 
 	const handleReply = comment => {
 		setLocalFocus(true)
-		let nestedReply
+
 		if (comment.parent_id) {
-			nestedReply = comments.find(com => {
-				return com.comment_id === comment.parent_id
-			})
-			setParentComment(nestedReply)
+			setParentComment(comments.find(com => com.comment_id === comment.parent_id))
 			setSiblingComment(comment)
 		} else {
 			setParentComment(comment)
@@ -183,7 +178,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 
 	useEffect(() => {
 		if (parentComment && replyActive) {
-			siblingComment ? setCommentText('@' + (siblingComment.username || siblingComment.name)) : setCommentText('@' + (parentComment.username || parentComment.name))
+			siblingComment ? setCommentText('@' + (siblingComment.username || siblingComment.name || siblingComment.address)) : setCommentText('@' + (parentComment.username || parentComment.name || parentComment.address))
 			refArray[0]?.current?.focus()
 			setReplyActive(false)
 		}
