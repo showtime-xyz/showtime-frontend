@@ -9,7 +9,7 @@ const ShareButton = ({ url, type }) => {
 	const context = useContext(AppContext)
 
 	const share = () => {
-		if (!navigator.canShare?.({ url })) return copyToClipboard()
+		if (!context.isMobile || !navigator.canShare?.({ url })) return copyToClipboard()
 
 		navigator.share({ url }).then(() => mixpanel.track('Share link click', { type: type }))
 	}
