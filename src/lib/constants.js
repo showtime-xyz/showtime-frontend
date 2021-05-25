@@ -93,6 +93,13 @@ export const getNotificationInfo = type => {
 				goTo: 'nft',
 				color: colors.blue,
 			}
+		case 7:
+			return {
+				type: 'liked_my_comment',
+				icon: 'heart',
+				goTo: 'nft',
+				color: colors.red,
+			}
 		default:
 			return {
 				type: 'no_type_exists',

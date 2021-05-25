@@ -228,6 +228,7 @@ export default function NotificationsBtn() {
 												{[1].includes(notif.type_id) ? 'followed you' : null}
 												{[4, 5].includes(notif.type_id) ? 'commented on ' : null}
 												{[6].includes(notif.type_id) ? 'mentioned you in ' : null}
+												{[7].includes(notif.type_id) ? 'liked your comment on ' : null}
 											</span>
 
 											{notif.nft__nftdisplay__name ? (
