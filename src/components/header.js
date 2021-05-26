@@ -93,7 +93,7 @@ const Header = () => {
 														)}
 													</Menu.Item>
 													<Menu.Item disabled>
-														<div className="flex items-center justify-between w-full text-left px-4 py-2 text-sm">
+														<div className="flex items-center justify-between w-full text-left px-4 py-2 text-sm space-x-2">
 															<label className="text-gray-700 dark:text-gray-500" htmlFor="theme">
 																Theme
 															</label>
