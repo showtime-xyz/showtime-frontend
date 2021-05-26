@@ -88,7 +88,7 @@ const Header = () => {
 													<Menu.Item>
 														{({ active }) => (
 															<Link href="/[profile]" as={`/${context.myProfile?.username || context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.address || context.user.publicAddress}`}>
-																<a className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm')}>Your Profile</a>
+																<a className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm transition')}>Your Profile</a>
 															</Link>
 														)}
 													</Menu.Item>
@@ -108,7 +108,7 @@ const Header = () => {
 													</Menu.Item>
 													<Menu.Item>
 														{({ active }) => (
-															<button onClick={() => context.logOut()} className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm')}>
+															<button onClick={() => context.logOut()} className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm transition')}>
 																Sign Out
 															</button>
 														)}
