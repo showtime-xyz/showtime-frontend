@@ -229,7 +229,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 				</MentionsInput>
 				<div className="flex items-center justify-between mt-2 w-full md:w-auto space-x-4">
 					{isReply && (
-						<button onClick={() => setLocalFocus(false) && setCommentText('') && setParentComment(null) && setSiblingComment(null)} className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+						<button onClick={() => setLocalFocus(false) && setCommentText('') && setParentComment(null) && setSiblingComment(null)} className="p-4 bg-gray-200 dark:bg-gray-800 rounded-lg">
 							<XIcon className="w-4 h-4 text-gray-800 dark:text-gray-500" />
 						</button>
 					)}
