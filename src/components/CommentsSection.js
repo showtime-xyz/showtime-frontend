@@ -80,6 +80,8 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 
 	const handleReply = comment => {
 		setLocalFocus(true)
+		setParentComment(null)
+		setSiblingComment(null)
 
 		if (comment.parent_id) {
 			setParentComment(comments.find(com => com.comment_id === comment.parent_id))
@@ -190,6 +192,16 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		return <Comment key={comment.comment_id} comment={comment} modalRef={modalRef} closeModal={closeModal} deleteComment={deleteComment} nftOwnerId={ownerCount > 0 ? null : nftOwnerId} nftCreatorId={nftCreatorId} handleReply={handleReply} openLikedByModal={setLikedByUserList} />
 	}
 
+	const onInputFocus = isReply => {
+		context.setCommentInputFocused(true)
+
+		if (!isReply && (parentComment || siblingComment)) {
+			setParentComment(null)
+			setSiblingComment(null)
+			setCommentText('')
+		}
+	}
+
 	const inputItem = isReply => {
 		const newInputRef = createRef()
 		refArray.push(newInputRef)
@@ -199,9 +211,9 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 					value={(isReply && parentComment) || parentComment === null ? commentText : ''}
 					inputRef={isReply ? newInputRef : null}
 					onChange={e => setCommentText(e.target.value)}
-					onFocus={() => context.setCommentInputFocused(true)}
+					onFocus={() => onInputFocus(isReply)}
 					onBlur={() => context.setCommentInputFocused(false)}
-					disabled={context.disableComments || (!isReply && parentComment)}
+					disabled={context.disableComments}
 					style={MENTIONS_STYLE}
 					placeholder="Your comment..."
 					classNames={{
