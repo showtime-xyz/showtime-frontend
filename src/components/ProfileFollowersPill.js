@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { classNames } from '@/lib/utilities'
 
-const ProfileFollowersPill = ({ isFollowed, isMyProfile, followingMe, hasEmailAddress, handleUnfollow, handleFollow, handleLoggedOutFollow, editAccount, editPhoto, addWallet, addEmail }) => {
+const ProfileFollowersPill = ({ isFollowed, isMyProfile, followingMe, hasEmailAddress, handleUnfollow, handleFollow, handleLoggedOutFollow, editAccount, addWallet, addEmail }) => {
 	const context = useContext(AppContext)
 
 	return (
