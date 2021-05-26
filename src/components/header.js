@@ -9,15 +9,11 @@ import NotificationsBtn from './NotificationsBtn'
 import CappedWidth from './CappedWidth'
 import { classNames, formatAddressShort } from '@/lib/utilities'
 import { Menu, Transition } from '@headlessui/react'
-
-const userNavigation = [
-	{ name: 'Your Profile', href: '#' },
-	{ name: 'Settings', href: '#' },
-	{ name: 'Sign out', href: '#' },
-]
+import { useTheme } from 'next-themes'
 
 const Header = () => {
 	const context = useContext(AppContext)
+	const { theme, themes, setTheme } = useTheme()
 	const [isSearchBarOpen, setSearchBarOpen] = useState(false)
 
 	return (
@@ -88,17 +84,31 @@ const Header = () => {
 												</Menu.Button>
 											</div>
 											<Transition show={open} as={Fragment} enter="transition ease-out duration-200" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
-												<Menu.Items static className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-20">
+												<Menu.Items static className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 ring-1 ring-black ring-opacity-5 focus:outline-none z-20">
 													<Menu.Item>
 														{({ active }) => (
 															<Link href="/[profile]" as={`/${context.myProfile?.username || context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.address || context.user.publicAddress}`}>
-																<a className={classNames(active ? 'bg-gray-100' : '', 'block hover:bg-gray-100 px-4 py-2 text-sm text-gray-700')}>Your Profile</a>
+																<a className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm')}>Your Profile</a>
 															</Link>
 														)}
 													</Menu.Item>
+													<Menu.Item disabled>
+														<div className="flex items-center justify-between w-full text-left px-4 py-2 text-sm">
+															<label className="text-gray-700 dark:text-gray-500" htmlFor="theme">
+																Theme
+															</label>
+															<select value={theme} onChange={e => setTheme(e.target.value)} id="theme" name="theme" className="form-select border-gray-300 dark:border-gray-800 dark:bg-gray-800 dark:text-gray-500 capitalize pl-2 py-1 text-base focus:outline-none focus:border-gray-800 focus:ring-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-800 sm:text-sm rounded-md">
+																{themes.map(theme => (
+																	<option className="capitalize" value={theme} key={theme}>
+																		{theme}
+																	</option>
+																))}
+															</select>
+														</div>
+													</Menu.Item>
 													<Menu.Item>
 														{({ active }) => (
-															<button onClick={() => context.logOut()} className={classNames(active ? 'bg-gray-100' : '', 'block w-full text-left px-4 py-2 text-sm text-gray-700')}>
+															<button onClick={() => context.logOut()} className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm')}>
 																Sign Out
 															</button>
 														)}

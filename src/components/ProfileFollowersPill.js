@@ -5,8 +5,7 @@ import { Menu, Transition } from '@headlessui/react'
 import { classNames } from '@/lib/utilities'
 import { useTheme } from 'next-themes'
 
-const ProfileFollowersPill = ({ isFollowed, isMyProfile, followingMe, hasEmailAddress, handleUnfollow, handleFollow, handleLoggedOutFollow, editAccount, editPhoto, addWallet, addEmail, logout }) => {
-	const { theme, themes, setTheme } = useTheme()
+const ProfileFollowersPill = ({ isFollowed, isMyProfile, followingMe, hasEmailAddress, handleUnfollow, handleFollow, handleLoggedOutFollow, editAccount, editPhoto, addWallet, addEmail }) => {
 	const context = useContext(AppContext)
 
 	return (
@@ -32,13 +31,6 @@ const ProfileFollowersPill = ({ isFollowed, isMyProfile, followingMe, hasEmailAd
 													</button>
 												)}
 											</Menu.Item>
-											<Menu.Item>
-												{({ active }) => (
-													<button onClick={editPhoto} className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm')}>
-														{context.myProfile && context.myProfile.img_url && !context.myProfile.img_url.includes('opensea-profile') ? 'Edit Photo' : 'Add Photo'}
-													</button>
-												)}
-											</Menu.Item>
 										</div>
 										<div className="py-1">
 											<Menu.Item>
@@ -57,31 +49,6 @@ const ProfileFollowersPill = ({ isFollowed, isMyProfile, followingMe, hasEmailAd
 													)}
 												</Menu.Item>
 											)}
-										</div>
-										<div className="py-1">
-											<Menu.Item disabled>
-												<div className="flex items-center justify-between w-full text-left px-4 py-2 text-sm">
-													<label className="dark:text-gray-500" htmlFor="theme">
-														Theme
-													</label>
-													<select value={theme} onChange={e => setTheme(e.target.value)} id="theme" name="theme" className="form-select border-gray-300 dark:border-gray-800 dark:bg-gray-800 dark:text-gray-500 capitalize pl-2 py-1 text-base focus:outline-none focus:border-gray-800 focus:ring-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-800 sm:text-sm rounded-md">
-														{themes.map(theme => (
-															<option className="capitalize" value={theme} key={theme}>
-																{theme}
-															</option>
-														))}
-													</select>
-												</div>
-											</Menu.Item>
-										</div>
-										<div className="py-1">
-											<Menu.Item>
-												{({ active }) => (
-													<button onClick={logout} className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm')}>
-														Log Out
-													</button>
-												)}
-											</Menu.Item>
 										</div>
 									</Menu.Items>
 								</Transition>

@@ -20,7 +20,7 @@ import SpotlightItem from '@/components/SpotlightItem'
 import ProfileFollowersPill from '@/components/ProfileFollowersPill'
 import { Listbox, Transition, Menu } from '@headlessui/react'
 import { CheckIcon, SelectorIcon, PencilAltIcon, LinkIcon, PhotographIcon as PhotographSolidIcon, HeartIcon as HeartSolidIcon, DotsHorizontalIcon } from '@heroicons/react/solid'
-import { FingerPrintIcon, PhotographIcon as PhotographOutlineIcon, HeartIcon as HeartOutlineIcon } from '@heroicons/react/outline'
+import { FingerPrintIcon, PhotographIcon as PhotographOutlineIcon, HeartIcon as HeartOutlineIcon, UploadIcon } from '@heroicons/react/outline'
 import axios from '@/lib/axios'
 
 export async function getServerSideProps(context) {
@@ -673,16 +673,23 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 					<div className="flex flex-col md:flex-row mx-5">
 						<div className="flex flex-col text-left">
 							<div className="z-10 pb-2 flex flex-row">
-								<img
-									onClick={() => {
-										if (isMyProfile) {
-											setPictureModalOpen(true)
-											mixpanel.track('Open edit photo')
-										}
-									}}
-									src={img_url ? img_url : DEFAULT_PROFILE_PIC}
-									className={`h-24 w-24 md:h-32 md:w-32 rounded-full border-2 shadow-md border-white dark:border-gray-800 z-10 -mt-14 md:-mt-20 overflow-hidden ${isMyProfile ? 'cursor-pointer ' : ''}`}
-								/>
+								<div className="relative -mt-14 md:-mt-20 rounded-full border-2 border-white dark:border-gray-800 shadow-md overflow-hidden group">
+									<img
+										onClick={() => {
+											if (isMyProfile) {
+												setPictureModalOpen(true)
+												mixpanel.track('Open edit photo')
+											}
+										}}
+										src={img_url ? img_url : DEFAULT_PROFILE_PIC}
+										className="h-24 w-24 md:h-32 md:w-32 z-10"
+									/>
+									{isMyProfile && (
+										<button onClick={editPhoto} className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 bg-black bg-opacity-50 transition flex items-center justify-center">
+											<UploadIcon className="w-10 h-10 text-white" />
+										</button>
+									)}
+								</div>
 								<div className="flex-grow"></div>
 								<div className="md:hidden z-10 -mt-5">
 									<ProfileFollowersPill following={following} followers={followers} isFollowed={isFollowed} isMyProfile={isMyProfile} followingMe={followingMe} handleUnfollow={handleUnfollow} handleFollow={handleFollow} handleLoggedOutFollow={handleLoggedOutFollow} hasEmailAddress={hasEmailAddress} setShowFollowers={setShowFollowers} setShowFollowing={setShowFollowing} editAccount={editAccount} editPhoto={editPhoto} addWallet={addWallet} addEmail={addEmail} logout={logout} />
