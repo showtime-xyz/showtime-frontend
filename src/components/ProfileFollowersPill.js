@@ -3,7 +3,6 @@ import AppContext from '@/context/app-context'
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { classNames } from '@/lib/utilities'
-import { useTheme } from 'next-themes'
 
 const ProfileFollowersPill = ({ isFollowed, isMyProfile, followingMe, hasEmailAddress, handleUnfollow, handleFollow, handleLoggedOutFollow, editAccount, editPhoto, addWallet, addEmail }) => {
 	const context = useContext(AppContext)

@@ -685,8 +685,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										className="h-24 w-24 md:h-32 md:w-32 z-10"
 									/>
 									{isMyProfile && (
-										<button onClick={editPhoto} className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 bg-black bg-opacity-50 transition flex items-center justify-center">
-											<UploadIcon className="w-10 h-10 text-white" />
+										<button onClick={editPhoto} className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg backdrop-saturate-150 transition duration-300 flex items-center justify-center">
+											<UploadIcon className="w-10 h-10 text-white dark:text-gray-300" />
 										</button>
 									)}
 								</div>
@@ -731,11 +731,11 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 								<div className="flex md:border border-transparent dark:border-gray-800 flex-row md:bg-white md:dark:bg-gray-900 md:shadow-md md:rounded-full md:px-2 md:py-2 items-center">
 									<div className="flex-grow">
 										<div className="flex flex-row ">
-											<div className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80 md:ml-4" onClick={() => setShowFollowing(true)}>
+											<div className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80 md:ml-4 transition" onClick={() => setShowFollowing(true)}>
 												<div className="text-sm mr-2">{following && following.length !== null ? Number(isMyProfile ? context.myFollows.length : following_count).toLocaleString() : null}</div>
 												<div className="text-sm text-gray-500 mr-5">Following</div>
 											</div>
-											<div className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80 " onClick={() => setShowFollowers(true)}>
+											<div className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80 transition" onClick={() => setShowFollowers(true)}>
 												<div className="text-sm  mr-2">{followers && followers.length !== null ? Number(followersCount).toLocaleString() : null}</div>
 												<div className="text-sm text-gray-500 mr-5">Followers</div>
 											</div>
