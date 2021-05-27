@@ -20,7 +20,7 @@ import SpotlightItem from '@/components/SpotlightItem'
 import ProfileFollowersPill from '@/components/ProfileFollowersPill'
 import { Listbox, Transition, Menu } from '@headlessui/react'
 import { CheckIcon, SelectorIcon, PencilAltIcon, LinkIcon, PhotographIcon as PhotographSolidIcon, HeartIcon as HeartSolidIcon, DotsHorizontalIcon } from '@heroicons/react/solid'
-import { FingerPrintIcon, PhotographIcon as PhotographOutlineIcon, HeartIcon as HeartOutlineIcon } from '@heroicons/react/outline'
+import { FingerPrintIcon, PhotographIcon as PhotographOutlineIcon, HeartIcon as HeartOutlineIcon, UploadIcon } from '@heroicons/react/outline'
 import axios from '@/lib/axios'
 
 export async function getServerSideProps(context) {
@@ -673,16 +673,23 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 					<div className="flex flex-col md:flex-row mx-5">
 						<div className="flex flex-col text-left">
 							<div className="z-10 pb-2 flex flex-row">
-								<img
-									onClick={() => {
-										if (isMyProfile) {
-											setPictureModalOpen(true)
-											mixpanel.track('Open edit photo')
-										}
-									}}
-									src={img_url ? img_url : DEFAULT_PROFILE_PIC}
-									className={`h-24 w-24 md:h-32 md:w-32 rounded-full border-2 shadow-md border-white dark:border-gray-800 z-10 -mt-14 md:-mt-20 overflow-hidden ${isMyProfile ? 'cursor-pointer ' : ''}`}
-								/>
+								<div className="relative -mt-14 md:-mt-20 rounded-full border-2 border-white dark:border-gray-800 shadow-md overflow-hidden group">
+									<img
+										onClick={() => {
+											if (isMyProfile) {
+												setPictureModalOpen(true)
+												mixpanel.track('Open edit photo')
+											}
+										}}
+										src={img_url ? img_url : DEFAULT_PROFILE_PIC}
+										className="h-24 w-24 md:h-32 md:w-32 z-10"
+									/>
+									{isMyProfile && (
+										<button onClick={editPhoto} className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg backdrop-saturate-150 transition duration-300 flex items-center justify-center">
+											<UploadIcon className="w-10 h-10 text-white dark:text-gray-300" />
+										</button>
+									)}
+								</div>
 								<div className="flex-grow"></div>
 								<div className="md:hidden z-10 -mt-5">
 									<ProfileFollowersPill following={following} followers={followers} isFollowed={isFollowed} isMyProfile={isMyProfile} followingMe={followingMe} handleUnfollow={handleUnfollow} handleFollow={handleFollow} handleLoggedOutFollow={handleLoggedOutFollow} hasEmailAddress={hasEmailAddress} setShowFollowers={setShowFollowers} setShowFollowing={setShowFollowing} editAccount={editAccount} editPhoto={editPhoto} addWallet={addWallet} addEmail={addEmail} logout={logout} />
@@ -724,18 +731,18 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 								<div className="flex md:border border-transparent dark:border-gray-800 flex-row md:bg-white md:dark:bg-gray-900 md:shadow-md md:rounded-full md:px-2 md:py-2 items-center">
 									<div className="flex-grow">
 										<div className="flex flex-row ">
-											<div className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80 md:ml-4" onClick={() => setShowFollowing(true)}>
+											<div className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80 md:ml-4 transition" onClick={() => setShowFollowing(true)}>
 												<div className="text-sm mr-2">{following && following.length !== null ? Number(isMyProfile ? context.myFollows.length : following_count).toLocaleString() : null}</div>
 												<div className="text-sm text-gray-500 mr-5">Following</div>
 											</div>
-											<div className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80 " onClick={() => setShowFollowers(true)}>
+											<div className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80 transition" onClick={() => setShowFollowers(true)}>
 												<div className="text-sm  mr-2">{followers && followers.length !== null ? Number(followersCount).toLocaleString() : null}</div>
 												<div className="text-sm text-gray-500 mr-5">Followers</div>
 											</div>
 										</div>
 									</div>
 									<div className="hidden md:flex">
-										<ProfileFollowersPill following={following} followers={followers} isFollowed={isFollowed} isMyProfile={isMyProfile} followingMe={followingMe} handleUnfollow={handleUnfollow} handleFollow={handleFollow} handleLoggedOutFollow={handleLoggedOutFollow} hasEmailAddress={hasEmailAddress} setShowFollowers={setShowFollowers} setShowFollowing={setShowFollowing} editAccount={editAccount} editPhoto={editPhoto} addWallet={addWallet} addEmail={addEmail} logout={logout} />
+										<ProfileFollowersPill following={following} followers={followers} isFollowed={isFollowed} isMyProfile={isMyProfile} followingMe={followingMe} handleUnfollow={handleUnfollow} handleFollow={handleFollow} handleLoggedOutFollow={handleLoggedOutFollow} hasEmailAddress={hasEmailAddress} setShowFollowers={setShowFollowers} setShowFollowing={setShowFollowing} editAccount={editAccount} addWallet={addWallet} addEmail={addEmail} />
 									</div>
 								</div>
 							</div>
