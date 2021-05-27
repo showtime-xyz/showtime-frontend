@@ -186,7 +186,19 @@ const TokenDetailBody = ({
 									</button>
 								) : null}
 							</div>
-							<img src={getImageUrl(item.token_img_url, item.token_aspect_ratio)} alt={item.token_name} className={fullResLoaded === true ? 'hidden' : ''} style={context.isMobile ? { width: mediaWidth, height: item.token_aspect_ratio ? mediaWidth / item.token_aspect_ratio : null } : { height: TOKEN_MEDIA_HEIGHT }} />
+							<img
+								src={getImageUrl(item.token_img_url, item.token_aspect_ratio)}
+								alt={item.token_name}
+								className={fullResLoaded === true ? 'hidden' : ''}
+								style={
+									context.isMobile
+										? {
+												width: mediaWidth,
+												height: item.token_aspect_ratio ? mediaWidth / item.token_aspect_ratio : null,
+										  }
+										: { height: TOKEN_MEDIA_HEIGHT }
+								}
+							/>
 
 							<img src={context.isMobile ? getImageUrl(item.token_img_url) : getBiggerImageUrl(item.token_img_url)} alt={item.token_name} className={fullResLoaded === true ? '' : 'hidden'} style={context.isMobile ? { width: mediaWidth } : { height: TOKEN_MEDIA_HEIGHT }} onLoad={() => setTimeout(() => setFullResLoaded(true), 100)} />
 						</div>

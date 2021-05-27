@@ -46,7 +46,7 @@ const ModalAddEmail = ({ isOpen, setEmailModalOpen, setHasEmailAddress }) => {
 							<CloseButton setEditModalOpen={setEmailModalOpen} />
 							<div className="mt-8 dark:text-gray-400">Add your email for notifications &amp; another way to sign in.</div>
 							<div className="mt-8">
-                            <input name="email" value={emailValue ? emailValue : ''} onChange={e => setEmailValue(e.target.value)} placeholder="Email" type="email" className="border-2 dark:border-gray-800 w-full text-black dark:text-gray-300 rounded-lg p-3 focus:outline-none focus-visible:ring-1" autoFocus />
+								<input name="email" value={emailValue ? emailValue : ''} onChange={e => setEmailValue(e.target.value)} placeholder="Email" type="email" className="border-2 dark:border-gray-800 w-full text-black dark:text-gray-300 rounded-lg p-3 focus:outline-none focus-visible:ring-1" autoFocus />
 								<div className="my-8 dark:text-gray-400">If you've previously logged in with that email, your old profile will get combined with this one.</div>
 								<div className="flex items-center justify-between border-t-2 dark:border-gray-800 pt-4">
 									<GhostButton type="button" onClick={() => setEmailModalOpen(false)}>
