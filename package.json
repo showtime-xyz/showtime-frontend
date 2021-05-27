@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@airgap/beacon-sdk": "^2.2.7",
     "@badrap/bar-of-progress": "^0.1.2",
     "@ethersproject/providers": "^5.0.19",
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
@@ -27,6 +28,7 @@
     "autoprefixer": "^10.2.5",
     "awesome-debounce-promise": "^2.1.0",
     "axios": "^0.21.1",
+    "bs58check": "^2.1.2",
     "copy-to-clipboard": "^3.3.1",
     "croppie": "^2.6.5",
     "date-fns": "^2.18.0",
@@ -35,6 +37,7 @@
     "ethereumjs-util": "^7.0.8",
     "exif-js": "^2.3.0",
     "fortmatic": "^2.2.1",
+    "libsodium-wrappers": "^0.7.9",
     "lodash": "^4.17.20",
     "magic-sdk": "^4.0.2",
     "mixpanel-browser": "^2.40.1",

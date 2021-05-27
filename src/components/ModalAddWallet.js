@@ -71,7 +71,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 							description: 'Use Coinbase Wallet app on mobile device',
 						},
 						options: {
-							appName: 'Showtime', // Your app name
+							appName: 'Showtime',
 							networkUrl: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`,
 							chainId: process.env.NEXT_PUBLIC_CHAINID,
 						},
@@ -98,10 +98,10 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 		}
 
 		return function cleanup() {
-			if (myWeb3Modal) {
-				myWeb3Modal.clearCachedProvider()
-				myWeb3Modal.off()
-			}
+			if (!myWeb3Modal) return
+
+			myWeb3Modal.clearCachedProvider()
+			myWeb3Modal.off()
 		}
 	}, [isOpen])
 
@@ -116,17 +116,15 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 			await myWeb3Modal.clearCachedProvider()
 			setMyProvider(null)
 		}
+
 		onConnect()
 	}
 
 	const onConnect = async () => {
-		//console.log("Opening a dialog", myWeb3Modal);
 		try {
 			setMyProvider(await myWeb3Modal.connect())
-		} catch (e) {
-			//console.log("Could not get a wallet connection", e);
+		} catch {
 			setStep(1)
-			return
 		}
 	}
 
@@ -147,10 +145,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 
 			// login with our own API
 			await axios
-				.put('/api/profile/wallet', {
-					signature,
-					addressDetected,
-				})
+				.put('/api/auth/wallet/eth', { signature, addressDetected })
 				.then(res => {
 					setStep(4)
 					return res.data
