@@ -117,7 +117,12 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 											className="cursor-pointer text-right flex flex-row"
 										>
 											{!imageLoaded ? (
-												<div className="w-full text-center flex items-center justify-center" style={{ height: divRef?.current?.clientWidth ? divRef?.current?.clientWidth : 375 }}>
+												<div
+													className="w-full text-center flex items-center justify-center"
+													style={{
+														height: divRef?.current?.clientWidth ? divRef?.current?.clientWidth : 375,
+													}}
+												>
 													<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 												</div>
 											) : null}

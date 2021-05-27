@@ -17,7 +17,11 @@ export default function Modal({ isOpen, setReportModalOpen, nftId, activityId, r
 		event.preventDefault()
 
 		// Post changes to the API
-		await axios.post('/api/reportitem_v2', { nft_id: nftId, description: inputValue, activity_id: activityId })
+		await axios.post('/api/reportitem_v2', {
+			nft_id: nftId,
+			description: inputValue,
+			activity_id: activityId,
+		})
 
 		setConfirmationShowing(true)
 		setWaitingForResponse(false)

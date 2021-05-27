@@ -139,7 +139,12 @@ export default function NotificationsBtn() {
 									<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
 										<a onClick={() => setIsActive(!isActive)}>
 											<img alt={notif.name} src={notif.img_url ? notif.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 mt-1 w-9 h-9" />
-											<div className="absolute bottom-0 right-0 rounded-full h-5 w-5 flex items-center justify-center shadow" style={{ backgroundColor: getNotificationInfo(notif.type_id).color }}>
+											<div
+												className="absolute bottom-0 right-0 rounded-full h-5 w-5 flex items-center justify-center shadow"
+												style={{
+													backgroundColor: getNotificationInfo(notif.type_id).color,
+												}}
+											>
 												<FontAwesomeIcon className="w-3 h-3 text-white" icon={iconObjects[getNotificationInfo(notif.type_id).icon]} />
 											</div>
 										</a>
@@ -252,7 +257,12 @@ export default function NotificationsBtn() {
 								<div className={`py-3 px-3 hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full ${new Date(notif.to_timestamp) > new Date(previouslyLastOpened) ? 'bg-gray-100 hover:bg-gray-200' : ''}`} onClick={() => setIsActive(!isActive)} key={notif.id}>
 									<div className="w-max mr-2 relative min-w-[2.25rem]">
 										<img alt={notif.name} src={notif.img_url ? notif.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 mt-1 w-9 h-9" />
-										<div className="absolute bottom-0 right-0 rounded-full h-5 w-5 flex items-center justify-center shadow" style={{ backgroundColor: getNotificationInfo(notif.type_id).color }}>
+										<div
+											className="absolute bottom-0 right-0 rounded-full h-5 w-5 flex items-center justify-center shadow"
+											style={{
+												backgroundColor: getNotificationInfo(notif.type_id).color,
+											}}
+										>
 											<FontAwesomeIcon className="w-3 h-3 text-white" icon={iconObjects[getNotificationInfo(notif.type_id).icon]} />
 										</div>
 									</div>
