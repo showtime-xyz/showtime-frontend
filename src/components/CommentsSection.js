@@ -166,7 +166,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 
 	useEffect(() => {
 		if (parentComment && replyActive) {
-			siblingComment ? setCommentText('@' + (siblingComment.username || siblingComment.name || `[${formatAddressShort(siblingComment.address)}](${siblingComment.address})`)) : setCommentText('@' + (parentComment.username || parentComment.name || `[${formatAddressShort(parentComment.address)}](${parentComment.address})`))
+			siblingComment ? setCommentText('@' + (siblingComment.username || siblingComment.name || `[${formatAddressShort(siblingComment.address)}](${siblingComment.address}) `)) : setCommentText('@' + (parentComment.username || parentComment.name || `[${formatAddressShort(parentComment.address)}](${parentComment.address}) `))
 			refArray[0]?.current?.focus()
 			setReplyActive(false)
 		}
@@ -217,7 +217,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 					style={MENTIONS_STYLE}
 					placeholder="Your comment..."
 					classNames={{
-						mentions: 'st-mentions-input dark:bg-gray-700 border dark:border-gray-800 rounded-lg flex-grow md:mr-2 w-full md:w-auto mb-2 md:mb-0',
+						mentions: 'st-mentions-input dark:bg-gray-700 border dark:border-gray-800 rounded-lg flex-grow w-full md:w-auto mb-2 md:mb-0',
 						mentions__input: 'focus:outline-none focus-visible:ring-1 dark:text-gray-300',
 						mentions__suggestions__list: 'rounded-lg border border-transparent dark:border-gray-800 bg-white hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 dark:text-gray-400 overflow-hidden',
 					}}
@@ -233,7 +233,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 							<XIcon className="w-4 h-4 text-gray-800 dark:text-gray-500" />
 						</button>
 					)}
-					<GhostButton loading={isSubmitting} onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="flex-1 md:flex-initial rounded-lg">
+					<GhostButton loading={isSubmitting} onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="md:ml-2 flex-1 md:flex-initial rounded-lg">
 						Post
 					</GhostButton>
 				</div>
