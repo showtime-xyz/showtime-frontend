@@ -11,6 +11,13 @@ import { classNames, formatAddressShort } from '@/lib/utilities'
 import { Menu, Transition } from '@headlessui/react'
 import { useTheme } from 'next-themes'
 
+// Next.js' Link component doesn't appropiately forward all props, so we need to wrap it in order to use it on our menu
+const NextLink = ({ href, children, ...rest }) => (
+	<Link href={href}>
+		<a {...rest}>{children}</a>
+	</Link>
+)
+
 const Header = () => {
 	const context = useContext(AppContext)
 	const { theme, themes, setTheme } = useTheme()
@@ -84,14 +91,10 @@ const Header = () => {
 												</Menu.Button>
 											</div>
 											<Transition show={open} as={Fragment} enter="transition ease-out duration-200" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
-												<Menu.Items static className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 divide-y divide-gray-100 dark:divide-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none z-20">
+												<Menu.Items static className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 divide-y divide-gray-100 dark:divide-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none z-20">
 													<div className="py-1">
-														<Menu.Item>
-															{({ active }) => (
-																<Link href="/[profile]" as={`/${context.myProfile?.username || context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.address || context.user.publicAddress}`}>
-																	<a className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm transition')}>Your Profile</a>
-																</Link>
-															)}
+														<Menu.Item as={NextLink} href={`/${context.myProfile?.username || context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.address || context.user.publicAddress}`}>
+															{({ active }) => <a className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm transition')}>Your Profile</a>}
 														</Menu.Item>
 													</div>
 													<div className="py-1">
