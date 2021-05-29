@@ -127,7 +127,7 @@ const SearchBar = ({ propagateSearchState }) => {
 			</div>
 			{/* Start mobile-only menu */}
 			<div className="flex justify-end md:hidden relative w-full sm:ml-4 sm:justify-start ml-1">
-				<button className="flex items-center justify-center w-3.5 h-3.5 text-black dark:text-white hover:text-stpink dark:hover:text-stpink p-4" onClick={() => toggleMobileSearchOverlay(true)}>
+				<button className="flex items-center justify-center text-black dark:text-white hover:text-stpink dark:hover:text-stpink p-2" onClick={() => toggleMobileSearchOverlay(true)}>
 					<FontAwesomeIcon icon={faSearch} />
 				</button>
 			</div>
@@ -136,7 +136,7 @@ const SearchBar = ({ propagateSearchState }) => {
 			{isMobileSearchOverlayOpen && (
 				<div className="visible flex flex-col absolute md:h-16 bg-transparent md:p-3 w-full left-0 md:top-0 z-1 top-12 pb-2 px-4">
 					<div className="flex items-center">
-						<button className="flex items-center justify-center w-3.5 h-3.5 mr-4 text-black dark:text-gray-300 border-2 border-black dark:border-gray-300 rounded-full p-4 focus:-m-px hover:border-stpink hover:text-stpink" isFocused={searchInputFocused} onClick={() => toggleMobileSearchOverlay(false)}>
+						<button className="flex items-center justify-center w-10 mr-4 text-black dark:text-gray-300 border-2 border-black dark:border-gray-300 rounded-full focus:-m-px hover:border-stpink hover:text-stpink p-2" isFocused={searchInputFocused} onClick={() => toggleMobileSearchOverlay(false)}>
 							<FontAwesomeIcon icon={faTimes} />
 						</button>
 						<div className="flex relative w-full" ref={searchInputContainerRef}>
