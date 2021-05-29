@@ -139,8 +139,9 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 														: isMobile
 														? {
 																backgroundColor: getBackgroundColor(item),
-																width: divRef?.current?.clientWidth,
-																height: item.token_aspect_ratio && divRef?.current?.clientWidth ? divRef?.current?.clientWidth / item.token_aspect_ratio : null,
+																width: '100%',
+																//width: divRef?.current?.clientWidth,
+																//height: item.token_aspect_ratio && divRef?.current?.clientWidth ? divRef?.current?.clientWidth / item.token_aspect_ratio : null,
 														  }
 														: {
 																backgroundColor: getBackgroundColor(item),
