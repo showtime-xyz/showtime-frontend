@@ -1,4 +1,4 @@
-import { createRef, useContext, useState } from 'react'
+import { useRef, useContext, useState } from 'react'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import LikeButton from './LikeButton'
@@ -23,7 +23,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 	const [videoReady, setVideoReady] = useState(false)
 	const [thisItem, setThisItem] = useState(item)
 
-	const divRef = createRef(null)
+	const divRef = useRef()
 
 	const max_description_length = 170
 	const aspect_ratio_cutoff = 1.6
@@ -128,7 +128,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 											) : null}
 
 											<img
-												className="hover:opacity-90  transition-all  shadow-lg"
+												className="hover:opacity-90 transition-all  shadow-lg"
 												ref={item.imageRef}
 												src={getImageUrl()}
 												alt={item.token_name}
@@ -139,9 +139,8 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 														: isMobile
 														? {
 																backgroundColor: getBackgroundColor(item),
-																width: '100%',
-																//width: divRef?.current?.clientWidth,
-																//height: item.token_aspect_ratio && divRef?.current?.clientWidth ? divRef?.current?.clientWidth / item.token_aspect_ratio : null,
+																width: divRef?.current?.clientWidth,
+																height: item.token_aspect_ratio && divRef?.current?.clientWidth ? divRef?.current?.clientWidth / item.token_aspect_ratio : null,
 														  }
 														: {
 																backgroundColor: getBackgroundColor(item),
