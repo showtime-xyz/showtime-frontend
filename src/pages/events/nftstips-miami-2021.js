@@ -229,7 +229,7 @@ const Leaderboard = () => {
 
 								<div className="flex flex-row">
 									<div className="flex-grow"></div>
-									<div className={`border rounded-full py-2 px-4 text-xs flex flex-row ${followAllClicked ? 'bg-transparent border-gray-700 dark:border-gray-500 text-gray-700 dark:text-gray-500' : context.disableFollows ? 'bg-black text-white border-black opacity-70' : 'bg-black text-white dark:text-gray-900 border-black cursor-pointer hover:opacity-70'} transition-all`} onClick={context.user ? (followAllClicked ? null : context.disableFollows ? null : handleFollowAll) : handleLoggedOutFollowAll}>
+									<div className={`border rounded-full py-2 px-4 text-xs flex flex-row ${followAllClicked ? 'bg-transparent border-gray-700 dark:border-gray-500 text-gray-700 dark:text-gray-500' : context.disableFollows ? 'bg-black dark:bg-gray-800 border-black dark:border-gray-800 text-white dark:text-gray-300 opacity-70' : 'bg-black dark:bg-gray-800 border-black dark:border-gray-800 text-white dark:text-gray-300 cursor-pointer hover:opacity-70'} transition-all`} onClick={context.user ? (followAllClicked ? null : context.disableFollows ? null : handleFollowAll) : handleLoggedOutFollowAll}>
 										{!followAllClicked && (
 											<div className="mr-1">
 												<PlusIcon className="w-4 h-4" />
