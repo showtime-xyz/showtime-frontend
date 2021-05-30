@@ -257,7 +257,7 @@ const Leaderboard = () => {
 															<h3 className="text-indigo-600 dark:text-indigo-200 hover:opacity-90">{item?.name || formatAddressShort(item.address) || 'Unnamed'}</h3>
 														</a>
 													</Link>
-
+													{item?.username && <div className="text-gray-500 dark:text-gray-400 text-xs mb-1">@{item?.username}</div>}
 													{context.myProfile?.profile_id !== item?.profile_id && (
 														<div>
 															<MiniFollowButton profileId={item?.profile_id} />
