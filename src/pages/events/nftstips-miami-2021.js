@@ -20,7 +20,7 @@ import { PlusIcon } from '@heroicons/react/solid'
 import axios from '@/lib/axios'
 
 // how many leaders to show on first load
-const LEADERBOARD_LIMIT = 100
+//const LEADERBOARD_LIMIT = 100
 
 export async function getServerSideProps() {
 	return {
@@ -32,27 +32,19 @@ const Leaderboard = () => {
 	const context = useContext(AppContext)
 	useEffect(() => {
 		// Wait for identity to resolve before recording the view
-		if (typeof context.user !== 'undefined') mixpanel.track('Leaderboard page view')
+		if (typeof context.user !== 'undefined') mixpanel.track('NFTs.tips Miami event page view')
 	}, [typeof context.user])
 
 	const [leaderboardItems, setLeaderboardItems] = useState([])
-	const [leaderboardDays, setLeaderboardDays] = useState(30)
-	const [isLoading, setIsLoading] = useState(false)
-	const [isLoadingCards, setIsLoadingCards] = useState(false)
-	const [featuredItems, setFeaturedItems] = useState([])
-	const [showAllLeaderboardItems, setShowAllLeaderboardItems] = useState(false)
 
 	useEffect(() => {
 		const getFeatured = async () => {
-			setIsLoading(true)
-			setShowAllLeaderboardItems(false)
-			const result = await backend.get(`v1/miami2021`)
+			const result = await backend.get('v1/miami2021')
 			const data = result?.data?.data
 			setLeaderboardItems(data)
-			setIsLoading(false)
 		}
 		getFeatured()
-	}, [leaderboardDays])
+	}, [])
 
 	const [followAllClicked, setFollowAllClicked] = useState(false)
 
