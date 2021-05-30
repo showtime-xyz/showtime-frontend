@@ -191,20 +191,20 @@ const Leaderboard = () => {
 							<ul className="mx-auto grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-8 lg:gap-x-8 lg:gap-y-16">
 								<li>
 									<div className="space-y-4">
-										<div className="text-xl sm:text-2xl font-extrabold tracking-tight mb-4">Out of the Dark / Into the Light</div>
+										<div className="text-xl sm:text-2xl font-extrabold tracking-tight mb-4">Life is a Garden</div>
 										<div className="max-w-prose text-left text-gray-500 dark:text-gray-400">
-											<p className="mb-4">The main theme of this inaugural NFTs.tips exhibition is Out of the Dark / into the Light, a visual representation of society’s journey out of the global coronavirus pandemic.</p>
-											<p className="mb-4">The dark tunnel into which the world plunged by the Pandemic could not have been more catastrophic. Yet here we are, one year later, bathed in the luminous light of recovery and hope, the gloom lifted as our lives stabilize, as the world begins to normalize and as we begin to look eagerly forward to the future.</p>
-											<p className="mb-4">Out of the Dark / Into the Light reflects both sides of this tunnel with art that portray the year’s struggle metaphorically and symbolically, as well as literally with images that are in their essence constructed entirely from light. Intangible, digital images created in the ether as if by magic, that one cannot reach out and touch, yet one can feel.</p>
+											<p className="mb-4">Technology brings change that, like seeds in a garden, takes time to germinate, unseen, until ideas take root, send shoots above ground, and then blossom into things that were once only dreamed about.</p>
+											<p className="mb-4">The world of NFTs has only recently emerged, a seedling that has taken root globally, seemingly overnight, and yet has already changed the landscape of the art world in radical ways. From animations to augmented reality and holograms all the way into the Metaverse, the artists in this exhibition have applied unique digital technologies to their interpretations of the theme, Life is a Garden. There is no end to how far and wide this technological garden of innovations will grow.</p>
 										</div>
 									</div>
 								</li>
 								<li>
 									<div className="space-y-4">
-										<div className="text-xl sm:text-2xl font-extrabold tracking-tight mb-4">Life is a Garden</div>
+										<div className="text-xl sm:text-2xl font-extrabold tracking-tight mb-4">Out of the Dark / Into the Light</div>
 										<div className="max-w-prose text-left text-gray-500 dark:text-gray-400">
-											<p className="mb-4">Technology brings change that, like seeds in a garden, takes time to germinate, unseen, until ideas take root, send shoots above ground, and then blossom into things that were once only dreamed about.</p>
-											<p className="mb-4">The world of NFTs has only recently emerged, a seedling that has taken root globally, seemingly overnight, and yet has already changed the landscape of the art world in radical ways. From animations to augmented reality and holograms all the way into the Metaverse, the artists in this exhibition have applied unique digital technologies to their interpretations of the theme, Life is a Garden. There is no end to how far and wide this technological garden of innovations will grow.</p>
+											<p className="mb-4">The main theme of this inaugural NFTs.tips exhibition is Out of the Dark / into the Light, a visual representation of society’s journey out of the global coronavirus pandemic.</p>
+											<p className="mb-4">The dark tunnel into which the world plunged by the Pandemic could not have been more catastrophic. Yet here we are, one year later, bathed in the luminous light of recovery and hope, the gloom lifted as our lives stabilize, as the world begins to normalize and as we begin to look eagerly forward to the future.</p>
+											<p className="mb-4">Out of the Dark / Into the Light reflects both sides of this tunnel with art that portray the year’s struggle metaphorically and symbolically, as well as literally with images that are in their essence constructed entirely from light. Intangible, digital images created in the ether as if by magic, that one cannot reach out and touch, yet one can feel.</p>
 										</div>
 									</div>
 								</li>
@@ -229,7 +229,7 @@ const Leaderboard = () => {
 
 								<div className="flex flex-row">
 									<div className="flex-grow"></div>
-									<div className={`border rounded-full py-2 px-4 text-xs flex flex-row ${followAllClicked ? 'bg-transparent border-gray-700 dark:border-gray-500 text-gray-700 dark:text-gray-500' : context.disableFollows ? 'bg-black text-white border-black opacity-70' : 'bg-black text-white dark:text-gray-900 border-stpurple cursor-pointer hover:opacity-70'} transition-all`} onClick={context.user ? (followAllClicked ? null : context.disableFollows ? null : handleFollowAll) : handleLoggedOutFollowAll}>
+									<div className={`border rounded-full py-2 px-4 text-xs flex flex-row ${followAllClicked ? 'bg-transparent border-gray-700 dark:border-gray-500 text-gray-700 dark:text-gray-500' : context.disableFollows ? 'bg-black text-white border-black opacity-70' : 'bg-black text-white dark:text-gray-900 border-black cursor-pointer hover:opacity-70'} transition-all`} onClick={context.user ? (followAllClicked ? null : context.disableFollows ? null : handleFollowAll) : handleLoggedOutFollowAll}>
 										{!followAllClicked && (
 											<div className="mr-1">
 												<PlusIcon className="w-4 h-4" />
