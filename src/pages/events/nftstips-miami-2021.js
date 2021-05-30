@@ -22,12 +22,6 @@ import axios from '@/lib/axios'
 // how many leaders to show on first load
 //const LEADERBOARD_LIMIT = 100
 
-export async function getServerSideProps() {
-	return {
-		props: {},
-	}
-}
-
 const Leaderboard = () => {
 	const context = useContext(AppContext)
 	useEffect(() => {
@@ -50,10 +44,10 @@ const Leaderboard = () => {
 
 	// reset follow all button when leaderboard changes
 	useEffect(() => {
-		if (context.myFollows) {
-			const newProfiles = leaderboardItems.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id))
-			setFollowAllClicked(newProfiles.length === 0)
-		}
+		if (!context.myFollows) return
+
+		const newProfiles = leaderboardItems.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id))
+		setFollowAllClicked(newProfiles.length === 0)
 	}, [leaderboardItems, context.myFollows])
 
 	const handleFollowAll = async () => {
@@ -270,16 +264,12 @@ const Leaderboard = () => {
 						<GridTab
 							label="Out of the Dark / Into the Light"
 							isActive={leaderboardDays === 1}
-							onClickTab={() => {
-								setLeaderboardDays(1)
-							}}
+							onClickTab={() => setLeaderboardDays(1)}
 						/>
 						<GridTab
 							label="Life is a Garden"
 							isActive={leaderboardDays === 7}
-							onClickTab={() => {
-								setLeaderboardDays(7)
-							}}
+							onClickTab={() => setLeaderboardDays(7)}
 						/>
 					</GridTabs>
 				</div>
