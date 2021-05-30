@@ -12,6 +12,12 @@ import { CalendarIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import { formatAddressShort } from '@/lib/utilities'
+import MiniFollowButton from '@/components/MiniFollowButton'
+
+import FollowButton from '@/components/FollowButton'
+
+import { PlusIcon } from '@heroicons/react/solid'
+import axios from '@/lib/axios'
 
 // how many leaders to show on first load
 const LEADERBOARD_LIMIT = 100
@@ -40,30 +46,40 @@ const Leaderboard = () => {
 		const getFeatured = async () => {
 			setIsLoading(true)
 			setShowAllLeaderboardItems(false)
-			const result = await backend.get(`/v1/leaderboard?days=${leaderboardDays}`)
+			const result = await backend.get(`v1/miami2021`)
 			const data = result?.data?.data
 			setLeaderboardItems(data)
 			setIsLoading(false)
-
-			// Reset cache for next load
-			backend.get(`/v1/leaderboard?days=${leaderboardDays}&recache=1`)
 		}
 		getFeatured()
 	}, [leaderboardDays])
 
-	const shownLeaderboardItems = showAllLeaderboardItems ? leaderboardItems.slice(0, 20) : leaderboardItems.slice(0, LEADERBOARD_LIMIT)
+	const [followAllClicked, setFollowAllClicked] = useState(false)
 
+	// reset follow all button when leaderboard changes
 	useEffect(() => {
-		const getFeatured = async () => {
-			setIsLoadingCards(true)
-
-			const response_featured = await backend.get(`/v2/featured?limit=150&days=${leaderboardDays}`)
-			const data_featured = response_featured.data.data
-			setFeaturedItems(data_featured)
-			setIsLoadingCards(false)
+		if (context.myFollows) {
+			const newProfiles = leaderboardItems.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id))
+			setFollowAllClicked(newProfiles.length === 0)
 		}
-		getFeatured()
-	}, [leaderboardDays])
+	}, [leaderboardItems, context.myFollows])
+
+	const handleFollowAll = async () => {
+		setFollowAllClicked(true)
+		const newProfiles = leaderboardItems.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id))
+		// UPDATE CONTEXT
+		context.setMyFollows([...newProfiles, ...context.myFollows])
+		// Post changes to the API
+		await axios.post(
+			'/api/bulkfollow',
+			newProfiles.map(item => item.profile_id)
+		)
+	}
+
+	const handleLoggedOutFollowAll = () => {
+		mixpanel.track('Clicked `Follow all` on trending page, but is logged out')
+		context.setLoginModalOpen(true)
+	}
 
 	return (
 		<Layout>
@@ -111,7 +127,7 @@ const Leaderboard = () => {
 					<div className="space-y-12 lg:grid lg:grid-cols-3 lg:gap-8 lg:space-y-0">
 						<div className="space-y-5 sm:space-y-4">
 							<h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">Featured Artists</h2>
-							<p className="text-xl text-gray-500">Selected for the "Out of the Dark, Into the Light" exhibition</p>
+							<p className="text-xl text-gray-500 dark:text-gray-400">Selected for the "Out of the Dark, Into the Light" exhibition</p>
 						</div>
 						<div className="lg:col-span-2">
 							<ul className="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:gap-x-8">
@@ -125,14 +141,17 @@ const Leaderboard = () => {
 											</Link>
 										</div>
 										<div className="text-lg leading-6 font-medium space-y-1">
-											<h3 className="text-indigo-600">
+											<h3 className="text-indigo-600 dark:text-indigo-200 flex flex-row items-center">
 												<Link href="/[profile]" as="/GlitchOfMind">
 													Lionel Piccardo
 												</Link>
+												<div className="flex-grow"></div>
+
+												{context?.myProfile?.profile_id !== 731042 && <FollowButton item={{ profile_id: 731042, follower_count: 0 }} followerCount={0} setFollowerCount={() => {}} notExpandWhenMobile compact />}
 											</h3>
 										</div>
 										<div className="text-lg">
-											<p className="text-gray-500">Afro-Surrealist Artist | Photographer. Based in Amsterdam. I create photo-realistic artworks inspired by my afro-identity experiences.</p>
+											<p className="text-gray-500 dark:text-gray-400">Afro-Surrealist Artist | Photographer. Based in Amsterdam. I create photo-realistic artworks inspired by my afro-identity experiences.</p>
 										</div>
 									</div>
 								</li>
@@ -146,14 +165,17 @@ const Leaderboard = () => {
 											</Link>
 										</div>
 										<div className="text-lg leading-6 font-medium space-y-1">
-											<h3 className="text-indigo-600">
+											<h3 className="text-indigo-600 dark:text-indigo-200 flex flex-row items-center">
 												<Link href="/[profile]?list=created" as="/HazelG?list=created">
 													Hazel Griffiths
 												</Link>
+												<div className="flex-grow"></div>
+
+												{context?.myProfile?.profile_id !== 155429 && <FollowButton item={{ profile_id: 155429, follower_count: 0 }} followerCount={0} setFollowerCount={() => {}} notExpandWhenMobile compact />}
 											</h3>
 										</div>
 										<div className="text-lg">
-											<p className="text-gray-500"></p>
+											<p className="text-gray-500 dark:text-gray-400"></p>
 										</div>
 									</div>
 								</li>
@@ -170,7 +192,7 @@ const Leaderboard = () => {
 								<li>
 									<div className="space-y-4">
 										<div className="text-xl sm:text-2xl font-extrabold tracking-tight mb-4">Out of the Dark / Into the Light</div>
-										<div className="max-w-prose text-left text-gray-500">
+										<div className="max-w-prose text-left text-gray-500 dark:text-gray-400">
 											<p className="mb-4">The main theme of this inaugural NFTs.tips exhibition is Out of the Dark / into the Light, a visual representation of society’s journey out of the global coronavirus pandemic.</p>
 											<p className="mb-4">The dark tunnel into which the world plunged by the Pandemic could not have been more catastrophic. Yet here we are, one year later, bathed in the luminous light of recovery and hope, the gloom lifted as our lives stabilize, as the world begins to normalize and as we begin to look eagerly forward to the future.</p>
 											<p className="mb-4">Out of the Dark / Into the Light reflects both sides of this tunnel with art that portray the year’s struggle metaphorically and symbolically, as well as literally with images that are in their essence constructed entirely from light. Intangible, digital images created in the ether as if by magic, that one cannot reach out and touch, yet one can feel.</p>
@@ -180,7 +202,7 @@ const Leaderboard = () => {
 								<li>
 									<div className="space-y-4">
 										<div className="text-xl sm:text-2xl font-extrabold tracking-tight mb-4">Life is a Garden</div>
-										<div className="max-w-prose text-left text-gray-500">
+										<div className="max-w-prose text-left text-gray-500 dark:text-gray-400">
 											<p className="mb-4">Technology brings change that, like seeds in a garden, takes time to germinate, unseen, until ideas take root, send shoots above ground, and then blossom into things that were once only dreamed about.</p>
 											<p className="mb-4">The world of NFTs has only recently emerged, a seedling that has taken root globally, seemingly overnight, and yet has already changed the landscape of the art world in radical ways. From animations to augmented reality and holograms all the way into the Metaverse, the artists in this exhibition have applied unique digital technologies to their interpretations of the theme, Life is a Garden. There is no end to how far and wide this technological garden of innovations will grow.</p>
 										</div>
@@ -190,12 +212,12 @@ const Leaderboard = () => {
 						</div>
 					</div>
 
-					<div className="pt-12 space-y-12 lg:grid lg:grid-cols-3 lg:gap-8 lg:space-y-0 ">
+					<div className="pt-12 lg:pt-24 space-y-12 lg:grid lg:grid-cols-3 lg:gap-8 lg:space-y-0 ">
 						<div className="space-y-5 sm:space-y-4">
 							<h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">Curatorial Team</h2>
 						</div>
 						<div className="lg:col-span-2">
-							<div className="space-y-4 text-lg leading-6 font-medium text-gray-500">Joyce Korotkin, Ramón Govea, Rebecca Rose, Eric Pivak, Holly Wood, Kilsy Curiel, Major Dream Williams, Paiman, JenJoy Roybal, Glassy Music</div>
+							<div className="space-y-4 text-lg leading-6 font-medium text-gray-500 dark:text-gray-400">Joyce Korotkin, Ramón Govea, Rebecca Rose, Eric Pivak, Holly Wood, Kilsy Curiel, Major Dream Williams, Paiman, JenJoy Roybal, Glassy Music</div>
 						</div>
 					</div>
 
@@ -203,16 +225,44 @@ const Leaderboard = () => {
 						<div className="space-y-8 sm:space-y-12">
 							<div className="space-y-5 sm:mx-auto sm:max-w-xl sm:space-y-4 ">
 								<h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">All Artists</h2>
-								<p className="text-xl text-gray-500">Represented in the 2021 conference</p>
+								<p className="text-xl text-gray-500 dark:text-gray-400">Represented in the 2021 conference</p>
+
+								<div className="flex flex-row">
+									<div className="flex-grow"></div>
+									<div className={`border rounded-full py-2 px-4 text-xs flex flex-row ${followAllClicked ? 'bg-transparent border-gray-700 dark:border-gray-500 text-gray-700 dark:text-gray-500' : context.disableFollows ? 'bg-black text-white border-black opacity-70' : 'bg-black text-white dark:text-gray-900 border-stpurple cursor-pointer hover:opacity-70'} transition-all`} onClick={context.user ? (followAllClicked ? null : context.disableFollows ? null : handleFollowAll) : handleLoggedOutFollowAll}>
+										{!followAllClicked && (
+											<div className="mr-1">
+												<PlusIcon className="w-4 h-4" />
+											</div>
+										)}
+										<div>{followAllClicked ? 'Following All' : 'Follow All'}</div>
+									</div>
+									<div className="flex-grow"></div>
+								</div>
 							</div>
 							<ul className="mx-auto grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 md:gap-x-6  lg:gap-x-8 lg:gap-y-12 xl:grid-cols-6">
-								{shownLeaderboardItems.map(item => (
+								{leaderboardItems.map(item => (
 									<li key={item.profile_id}>
 										<div className="space-y-4">
-											<img className="mx-auto h-20 w-20 rounded-full lg:w-24 lg:h-24" src={item?.img_url ? item?.img_url : DEFAULT_PROFILE_PIC} alt="" />
+											<Link href="/[profile]" as={`/${item?.username || item.address}`}>
+												<a className="cursor-pointer">
+													<img className="mx-auto h-20 w-20 rounded-full lg:w-24 lg:h-24 hover:opacity-90" src={item?.img_url ? item?.img_url : DEFAULT_PROFILE_PIC} alt="" />
+												</a>
+											</Link>
+
 											<div className="space-y-2">
-												<div className="text-xs font-medium lg:text-sm">
-													<h3 className="text-indigo-600">{item?.name || formatAddressShort(item.address) || 'Unnamed'}</h3>
+												<div className="text-sm font-medium lg:text-base">
+													<Link href="/[profile]" as={`/${item?.username || item.address}`}>
+														<a>
+															<h3 className="text-indigo-600 dark:text-indigo-200 hover:opacity-90">{item?.name || formatAddressShort(item.address) || 'Unnamed'}</h3>
+														</a>
+													</Link>
+
+													{context.myProfile?.profile_id !== item?.profile_id && (
+														<div>
+															<MiniFollowButton profileId={item?.profile_id} />
+														</div>
+													)}
 												</div>
 											</div>
 										</div>
