@@ -254,7 +254,7 @@ const Leaderboard = () => {
 												<div className="text-sm font-medium lg:text-base">
 													<Link href="/[profile]" as={`/${item?.username || item.address}`}>
 														<a>
-															<h3 className="text-indigo-600 dark:text-indigo-200 hover:opacity-90">{item?.name || formatAddressShort(item.address) || 'Unnamed'}</h3>
+															<h3 className="text-indigo-600 dark:text-indigo-200 hover:opacity-90 font-extrabold ">{item?.name || formatAddressShort(item.address) || 'Unnamed'}</h3>
 														</a>
 													</Link>
 													{item?.username && <div className="text-gray-500 dark:text-gray-400 text-xs mb-1">@{item?.username}</div>}
