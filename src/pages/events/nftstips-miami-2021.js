@@ -68,17 +68,17 @@ const Leaderboard = () => {
 	return (
 		<Layout>
 			<Head>
-				<title>Trending | Showtime</title>
-				<meta name="description" content="Trending creators & items" />
+				<title>NFTs.tips Event | Miami 2021</title>
+				<meta name="description" content="Artist and exhibition details" />
 				<meta property="og:type" content="website" />
-				<meta name="og:description" content="Trending art & creators" />
-				<meta property="og:image" content="https://storage.googleapis.com/showtime-nft-thumbnails/twitter_card_showtime.jpg" />
-				<meta name="og:title" content="Showtime | Trending" />
+				<meta name="og:description" content="Artist and exhibition details" />
+				<meta property="og:image" content="https://storage.googleapis.com/showtime-nft-thumbnails/nftstips_miami_logo.png" />
+				<meta name="og:title" content="NFTs.tips Event | Miami 2021" />
 
 				<meta name="twitter:card" content="summary_large_image" />
-				<meta name="twitter:title" content="Showtime | Trending Art & Creators" />
-				<meta name="twitter:description" content="Trending" />
-				<meta name="twitter:image" content="https://storage.googleapis.com/showtime-nft-thumbnails/twitter_card_showtime.jpg" />
+				<meta name="twitter:title" content="NFTs.tips Event | Miami 2021" />
+				<meta name="twitter:description" content="Artist and exhibition details" />
+				<meta name="twitter:image" content="https://storage.googleapis.com/showtime-nft-thumbnails/nftstips_miami_logo.png" />
 			</Head>
 
 			<div className="py-12 sm:py-14 px-8 sm:px-10 text-left h-32 md:h-64 relative text-left bg-gradient-to-b from-black dark:from-gray-400 to-gray-800 dark:to-gray-100 bg-no-repeat bg-center bg-cover opacity-80" style={{ backgroundImage: 'url(https://storage.googleapis.com/showtime-test/51_cover_1622397198.jpg)' }}>
