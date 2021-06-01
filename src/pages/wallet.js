@@ -13,10 +13,14 @@ import { useTheme } from 'next-themes'
 const Wallet = () => {
 	const { myProfile, user, setLoginModalOpen } = useContext(AppContext)
 	const { resolvedTheme } = useTheme()
-	const [dAppClient] = useState(new DAppClient({ name: 'Showtime', colorMode: resolvedTheme }))
+	const [dAppClient, setDAppClient] = useState(null)
 	const [walletModalOpen, setWalletModalOpen] = useState(false)
 	const [emailModalOpen, setEmailModalOpen] = useState(false)
 	const [hasEmailAddress, setHasEmailAddress] = useState(false)
+
+	useEffect(() => {
+		setDAppClient(new DAppClient({ name: 'Showtime', colorMode: resolvedTheme }))
+	}, [resolvedTheme])
 
 	useEffect(() => {
 		if (!myProfile) return
