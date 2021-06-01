@@ -122,7 +122,7 @@ const Leaderboard = () => {
 										<div className="aspect-w-3 aspect-h-2">
 											<Link href="/[profile]" as="/GlitchOfMind">
 												<a>
-													<img className="object-cover shadow-lg rounded-lg hover:opacity-90" src="https://storage.googleapis.com/showtime-nft-thumbnails/piccardo.jpg" alt="" />
+													<img className="object-cover shadow-lg rounded-lg hover:opacity-90 transition-all" src="https://storage.googleapis.com/showtime-nft-thumbnails/piccardo.jpg" alt="" />
 												</a>
 											</Link>
 										</div>
@@ -146,7 +146,7 @@ const Leaderboard = () => {
 										<div className="aspect-w-3 aspect-h-2">
 											<Link href="/[profile]?list=created" as="/HazelG?list=created">
 												<a>
-													<img className="object-cover shadow-lg rounded-lg hover:opacity-90" src="https://storage.googleapis.com/showtime-nft-thumbnails/griffiths.jpg" alt="" />
+													<img className="object-cover shadow-lg rounded-lg hover:opacity-90 transition-all" src="https://storage.googleapis.com/showtime-nft-thumbnails/griffiths.jpg" alt="" />
 												</a>
 											</Link>
 										</div>
@@ -203,7 +203,7 @@ const Leaderboard = () => {
 							<h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">Curatorial Team</h2>
 						</div>
 						<div className="lg:col-span-2">
-							<div className="space-y-4 text-lg leading-6 font-medium text-gray-500 dark:text-gray-400">Joyce Korotkin, Ramón Govea, Rebecca Rose, Eric Pivak, Holly Wood, Kilsy Curiel, Major Dream Williams, Paiman, JenJoy Roybal, Glassy Music</div>
+							<div className="space-y-4 text-lg leading-6 font-medium text-gray-500 dark:text-gray-400">Joyce Korotkin, Ramón Govea, Rebecca Rose, Holly Wood, Kilsy Curiel, Major Dream Williams, Paiman, JenJoy Roybal, Glassy Music</div>
 						</div>
 					</div>
 
@@ -230,17 +230,17 @@ const Leaderboard = () => {
 								{leaderboardItems.map(item => (
 									<li key={item.profile_id}>
 										<div className="space-y-4">
-											<Link href="/[profile]" as={`/${item?.username || item.address}`}>
+											<Link href="/[profile]?list=created" as={`/${item?.username || item.address}?list=created`}>
 												<a className="cursor-pointer">
-													<img className="mx-auto h-20 w-20 rounded-full lg:w-24 lg:h-24 hover:opacity-90" src={item?.img_url ? item?.img_url : DEFAULT_PROFILE_PIC} alt="" />
+													<img className="mx-auto h-20 w-20 rounded-full lg:w-24 lg:h-24 hover:opacity-90 transition-all" src={item?.img_url ? item?.img_url : DEFAULT_PROFILE_PIC} alt="" />
 												</a>
 											</Link>
 
 											<div className="space-y-2">
 												<div className="text-sm font-medium lg:text-base">
-													<Link href="/[profile]" as={`/${item?.username || item.address}`}>
+													<Link href="/[profile]?list=created" as={`/${item?.username || item.address}?list=created`}>
 														<a>
-															<h3 className="text-indigo-600 dark:text-indigo-200 hover:opacity-90 font-extrabold ">{item?.name || formatAddressShort(item.address) || 'Unnamed'}</h3>
+															<h3 className="text-indigo-600 dark:text-indigo-200 hover:opacity-90 font-extrabold transition-all">{item?.name || formatAddressShort(item.address) || 'Unnamed'}</h3>
 														</a>
 													</Link>
 													{item?.username && <div className="text-gray-500 dark:text-gray-400 text-xs mb-1">@{item?.username}</div>}
