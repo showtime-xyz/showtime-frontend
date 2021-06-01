@@ -28,7 +28,7 @@ const Layout = ({ children }) => {
 			</Head>
 
 			<Header />
-			<div className="w-full mx-auto min-h-screen z-0 relative pb-12 flex flex-col">
+			<div className="w-full mx-auto flex-1 z-0 relative pb-12 flex flex-col">
 				<main className="flex-1 flex flex-col">{children}</main>
 			</div>
 

@@ -25,7 +25,6 @@ export default handler().put(async ({ cookies, body: { address, signature, publi
 	if (sodium.crypto_sign_verify_detached(b58decode(signature, prefix.edsig), sodium.crypto_generichash(32, hex2buf(char2Bytes(process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + nonce))), b58decode(publicKey, prefix.edpk))) {
 		await backend
 			.post(
-				// Needs an actual endpoint
 				'/v1/addwallet',
 				{ address },
 				{
