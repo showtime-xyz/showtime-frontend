@@ -11,8 +11,6 @@ import ModalEditProfile from '@/components/ModalEditProfile'
 import ModalEditPhoto from '@/components/ModalEditPhoto'
 import ModalEditCover from '@/components/ModalEditCover'
 import ModalUserList from '@/components/ModalUserList'
-import ModalAddWallet from '@/components/ModalAddWallet'
-import ModalAddEmail from '@/components/ModalAddEmail.js'
 import { formatAddressShort, truncateWithEllipses, classNames } from '@/lib/utilities'
 import AddressButton from '@/components/AddressButton'
 import { PROFILE_TABS, SORT_FIELDS, DEFAULT_PROFILE_PIC } from '@/lib/constants'
@@ -72,7 +70,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 
 	// Profile details
 	const [isMyProfile, setIsMyProfile] = useState()
-	const [hasEmailAddress, setHasEmailAddress] = useState(false)
 	const initialBioLength = context.isMobile ? 130 : 150
 	const [moreBioShown, setMoreBioShown] = useState(false)
 	const [followersCount, setFollowersCount] = useState(followers_count)
@@ -88,11 +85,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 				// Logged in?
 				if (context.myProfile?.wallet_addresses_v2.map(a => a.address?.toLowerCase()).includes(slug_address.toLowerCase()) || slug_address.toLowerCase() === context.myProfile?.username?.toLowerCase() || context.myProfile?.wallet_addresses_v2.map(a => a.ens_domain?.toLowerCase()).includes(slug_address.toLowerCase())) {
 					setIsMyProfile(true)
-					if (wallet_addresses_v2.length === wallet_addresses_excluding_email_v2.length) {
-						setHasEmailAddress(false)
-					} else {
-						setHasEmailAddress(true)
-					}
 					mixpanel.track('Self profile view', { slug: slug_address })
 				} else {
 					setIsMyProfile(false)
@@ -476,8 +468,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 
 	// Modal states
 	const [editModalOpen, setEditModalOpen] = useState(false)
-	const [walletModalOpen, setWalletModalOpen] = useState(false)
-	const [emailModalOpen, setEmailModalOpen] = useState(false)
 	const [pictureModalOpen, setPictureModalOpen] = useState(false)
 	const [coverModalOpen, setCoverModalOpen] = useState(false)
 	const [showFollowers, setShowFollowers] = useState(false)
@@ -505,16 +495,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const editPhoto = () => {
 		setPictureModalOpen(true)
 		mixpanel.track('Open edit photo')
-	}
-
-	const addWallet = () => {
-		setWalletModalOpen(true)
-		mixpanel.track('Open add wallet')
-	}
-
-	const addEmail = () => {
-		setEmailModalOpen(true)
-		mixpanel.track('Open add email')
 	}
 
 	const logout = async () => {
@@ -613,8 +593,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		>
 			{typeof document !== 'undefined' ? (
 				<>
-					<ModalAddWallet isOpen={walletModalOpen} setWalletModalOpen={setWalletModalOpen} walletAddresses={wallet_addresses_v2} />
-					<ModalAddEmail isOpen={emailModalOpen} setEmailModalOpen={setEmailModalOpen} setHasEmailAddress={setHasEmailAddress} />
 					{editModalOpen && <ModalEditProfile isOpen={editModalOpen} setEditModalOpen={setEditModalOpen} />}
 					<ModalEditPhoto isOpen={pictureModalOpen} setEditModalOpen={setPictureModalOpen} />
 					<ModalEditCover isOpen={coverModalOpen} setEditModalOpen={setCoverModalOpen} />
