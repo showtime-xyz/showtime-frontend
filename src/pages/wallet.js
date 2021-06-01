@@ -56,7 +56,7 @@ const Wallet = () => {
 	const unlinkAddress = async address => {
 		if (address.toLowerCase() === user.publicAddress) return
 
-		await axios.delete('/api/auth/wallet', { address })
+		await axios.delete('/api/auth/wallet', { data: { address } })
 
 		setWalletAddresses(walletAddresses => walletAddresses.filter(({ address: stateAddr }) => stateAddr !== address))
 	}
