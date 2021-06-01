@@ -8,12 +8,12 @@ import axios from '@/lib/axios'
 import backend from '@/lib/backend'
 import { Menu, Transition } from '@headlessui/react'
 import ModalAddEmail from '@/components/ModalAddEmail'
-
-let dAppClient
-if (typeof window !== 'undefined') dAppClient = new DAppClient({ name: 'Showtime' })
+import { useTheme } from 'next-themes'
 
 const Wallet = () => {
 	const { myProfile, user, setLoginModalOpen } = useContext(AppContext)
+	const { resolvedTheme } = useTheme()
+	const [dAppClient] = useState(new DAppClient({ name: 'Showtime', colorMode: resolvedTheme }))
 	const [walletModalOpen, setWalletModalOpen] = useState(false)
 	const [emailModalOpen, setEmailModalOpen] = useState(false)
 	const [hasEmailAddress, setHasEmailAddress] = useState(false)
@@ -71,33 +71,33 @@ const Wallet = () => {
 						<div className="flex flex-col">
 							<div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 								<div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-									<div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-										<div className="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
+									<div className="shadow overflow-hidden border-b dark:border-t dark:border-l dark:border-r border-gray-200 dark:border-gray-800 sm:rounded-lg">
+										<div className="bg-white dark:bg-gray-900 px-4 py-5 border-b border-gray-200 dark:border-gray-800 sm:px-6">
 											<div className="-ml-4 -mt-2 flex items-center justify-between flex-wrap sm:flex-nowrap">
 												<div className="ml-4 mt-2">
-													<h3 className="text-lg leading-6 font-medium text-gray-900">Wallets</h3>
+													<h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-400">Wallets</h3>
 												</div>
 												<div className="ml-4 mt-2 flex-shrink-0">
 													<Menu as="div" className="relative inline-block text-left">
 														{({ open }) => (
 															<>
 																<div>
-																	<Menu.Button className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Connect Wallet</Menu.Button>
+																	<Menu.Button className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white dark:text-gray-100 bg-indigo-600 dark:bg-indigo-800 hover:bg-indigo-700 dark:hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:ring-indigo-900 transition">Connect Wallet</Menu.Button>
 																</div>
 
 																<Transition show={open} as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
-																	<Menu.Items static className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+																	<Menu.Items static className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 ring-1 ring-black ring-opacity-5 focus:outline-none">
 																		<div className="py-1">
 																			<Menu.Item>
 																				{({ active }) => (
-																					<button onClick={() => setWalletModalOpen(true)} className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block w-full text-left px-4 py-2 text-sm')}>
+																					<button onClick={() => setWalletModalOpen(true)} className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm transition')}>
 																						Link Ethereum wallet
 																					</button>
 																				)}
 																			</Menu.Item>
 																			<Menu.Item>
 																				{({ active }) => (
-																					<button onClick={loginWithTezos} className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block w-full text-left px-4 py-2 text-sm')}>
+																					<button onClick={loginWithTezos} className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm transition')}>
 																						Link Tezos wallet
 																					</button>
 																				)}
@@ -123,14 +123,14 @@ const Wallet = () => {
 										<table className="min-w-full divide-y divide-gray-200">
 											<tbody>
 												{walletAddresses?.map(({ address, ens_domain }, i) => (
-													<tr key={address} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-														<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ens_domain || address}</td>
+													<tr key={address} className={i % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900'}>
+														<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-400">{ens_domain || address}</td>
 														<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{address.startsWith('tz') ? 'Tezos' : 'Ethereum'}</td>
 														<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 															{address.toLowerCase() === user.publicAddress ? (
-																<span className="text-gray-600">Active</span>
+																<span className="text-gray-600 dark:text-gray-500">Active</span>
 															) : (
-																<button onClick={() => unlinkAddress(address)} className="text-red-600 hover:text-red-900 transition">
+																<button onClick={() => unlinkAddress(address)} className="text-red-600 hover:text-red-900 dark:hover:text-red-700 transition">
 																	Unlink
 																</button>
 															)}
