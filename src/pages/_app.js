@@ -220,11 +220,12 @@ const App = ({ Component, pageProps }) => {
 		setThrottleMessage,
 		setRecommendedFollows,
 		setCommentInputFocused,
-
 		getUserFromCookies,
+		setToggleRefreshFeed,
+		setUser,
+		adjustGridProperties,
 		logOut: async () => {
 			await axios.post('/api/auth/logout')
-
 			setUser(null)
 			setMyLikes([])
 			setMyLikeCounts({})
@@ -235,12 +236,8 @@ const App = ({ Component, pageProps }) => {
 			setMyFollows([])
 			setMyRecommendations([])
 			setMyProfile(undefined)
-
 			mixpanel.track('Logout')
 		},
-		setToggleRefreshFeed,
-		setUser,
-		adjustGridProperties,
 	}
 
 	return (

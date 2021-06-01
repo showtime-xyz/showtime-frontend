@@ -7,9 +7,9 @@ import AppContext from '@/context/app-context'
 import reactStringReplace from 'react-string-replace'
 import { formatAddressShort } from '@/lib/utilities'
 import CommentLikeButton from './CommentLikeButton'
-import { DotsHorizontalIcon } from '@heroicons/react/solid'
+import { DotsHorizontalIcon, ReplyIcon } from '@heroicons/react/solid'
 
-export default function Comment({ comment, closeModal, modalRef, deleteComment, nftOwnerId, nftCreatorId, openLikedByModal }) {
+export default function Comment({ comment, closeModal, modalRef, deleteComment, nftOwnerId, nftCreatorId, openLikedByModal, handleReply }) {
 	const context = useContext(AppContext)
 	const { myProfile } = context
 	const dropdownRef = useRef(null)
@@ -88,8 +88,14 @@ export default function Comment({ comment, closeModal, modalRef, deleteComment, 
 					)}
 				</div>
 				<div className="text-gray-500 text-sm leading-5 break-words">{commentWithMentions}</div>
-				<div>
-					<CommentLikeButton comment={comment} openLikedByModal={openLikedByModal} />
+				<div className="flex justify-end">
+					<div className="flex items-center">
+						<div onClick={() => handleReply(comment)} className="flex items-center justify-end text-gray-400 text-xs sm:mb-0 cursor-pointer mr-2">
+							<ReplyIcon className="w-3 h-3" />
+							<span className="ml-1">reply</span>
+						</div>
+						<CommentLikeButton comment={comment} openLikedByModal={openLikedByModal} />
+					</div>
 				</div>
 			</div>
 		</div>

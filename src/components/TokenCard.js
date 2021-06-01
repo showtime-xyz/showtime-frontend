@@ -48,7 +48,9 @@ const TokenCard = ({
 		setHasUserHiddenItems(true)
 
 		// Post changes to the API
-		await axios.post(`/api/hidenft/${item.nft_id}/${listId}`, { showDuplicates: showDuplicates ? 1 : 0 })
+		await axios.post(`/api/hidenft/${item.nft_id}/${listId}`, {
+			showDuplicates: showDuplicates ? 1 : 0,
+		})
 
 		if (!showUserHiddenItems) handleRemoveItem(item.nft_id)
 
@@ -59,7 +61,9 @@ const TokenCard = ({
 		setItem({ ...item, user_hidden: false })
 
 		// Post changes to the API
-		await axios.post(`/api/unhidenft/${item.nft_id}/${listId}`, { showDuplicates: showDuplicates ? 1 : 0 })
+		await axios.post(`/api/unhidenft/${item.nft_id}/${listId}`, {
+			showDuplicates: showDuplicates ? 1 : 0,
+		})
 
 		mixpanel.track('Unhid item')
 	}

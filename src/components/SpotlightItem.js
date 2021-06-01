@@ -1,4 +1,4 @@
-import { createRef, useContext, useState } from 'react'
+import { useRef, useContext, useState } from 'react'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import LikeButton from './LikeButton'
@@ -23,7 +23,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 	const [videoReady, setVideoReady] = useState(false)
 	const [thisItem, setThisItem] = useState(item)
 
-	const divRef = createRef(null)
+	const divRef = useRef()
 
 	const max_description_length = 170
 	const aspect_ratio_cutoff = 1.6
@@ -117,13 +117,18 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 											className="cursor-pointer text-right flex flex-row"
 										>
 											{!imageLoaded ? (
-												<div className="w-full text-center flex items-center justify-center" style={{ height: divRef?.current?.clientWidth ? divRef?.current?.clientWidth : 375 }}>
+												<div
+													className="w-full text-center flex items-center justify-center"
+													style={{
+														height: divRef?.current?.clientWidth ? divRef?.current?.clientWidth : 375,
+													}}
+												>
 													<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 												</div>
 											) : null}
 
 											<img
-												className="hover:opacity-90  transition-all  shadow-lg"
+												className="hover:opacity-90 transition-all  shadow-lg"
 												ref={item.imageRef}
 												src={getImageUrl()}
 												alt={item.token_name}

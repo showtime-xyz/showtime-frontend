@@ -299,7 +299,10 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 																	setSocialLinks(
 																		socialLinks.map(link => {
 																			if (link.name === linkObj.name) {
-																				return { ...link, user_input: value }
+																				return {
+																					...link,
+																					user_input: value,
+																				}
 																			}
 																			return link
 																		})
