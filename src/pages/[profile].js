@@ -692,7 +692,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 								</div>
 								<div className="flex-grow"></div>
 								<div className="md:hidden z-10 -mt-5">
-									<ProfileFollowersPill following={following} followers={followers} isFollowed={isFollowed} isMyProfile={isMyProfile} followingMe={followingMe} handleUnfollow={handleUnfollow} handleFollow={handleFollow} handleLoggedOutFollow={handleLoggedOutFollow} hasEmailAddress={hasEmailAddress} setShowFollowers={setShowFollowers} setShowFollowing={setShowFollowing} editAccount={editAccount} editPhoto={editPhoto} addWallet={addWallet} addEmail={addEmail} logout={logout} />
+									<ProfileFollowersPill following={following} followers={followers} isFollowed={isFollowed} isMyProfile={isMyProfile} followingMe={followingMe} handleUnfollow={handleUnfollow} handleFollow={handleFollow} handleLoggedOutFollow={handleLoggedOutFollow} setShowFollowers={setShowFollowers} setShowFollowing={setShowFollowing} editAccount={editAccount} logout={logout} />
 								</div>
 							</div>
 							<div className="dark:text-gray-200 text-3xl md:text-4xl md:mb-1"> {name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</div>
@@ -742,7 +742,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										</div>
 									</div>
 									<div className="hidden md:flex">
-										<ProfileFollowersPill following={following} followers={followers} isFollowed={isFollowed} isMyProfile={isMyProfile} followingMe={followingMe} handleUnfollow={handleUnfollow} handleFollow={handleFollow} handleLoggedOutFollow={handleLoggedOutFollow} hasEmailAddress={hasEmailAddress} setShowFollowers={setShowFollowers} setShowFollowing={setShowFollowing} editAccount={editAccount} addWallet={addWallet} addEmail={addEmail} />
+										<ProfileFollowersPill following={following} followers={followers} isFollowed={isFollowed} isMyProfile={isMyProfile} followingMe={followingMe} handleUnfollow={handleUnfollow} handleFollow={handleFollow} handleLoggedOutFollow={handleLoggedOutFollow} setShowFollowers={setShowFollowers} setShowFollowing={setShowFollowing} editAccount={editAccount} />
 									</div>
 								</div>
 							</div>
