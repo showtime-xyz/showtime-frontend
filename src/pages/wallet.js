@@ -15,19 +15,10 @@ const Wallet = () => {
 	const { resolvedTheme } = useTheme()
 	const [dAppClient, setDAppClient] = useState(null)
 	const [walletModalOpen, setWalletModalOpen] = useState(false)
-	const [emailModalOpen, setEmailModalOpen] = useState(false)
-	const [hasEmailAddress, setHasEmailAddress] = useState(false)
 
 	useEffect(() => {
 		setDAppClient(new DAppClient({ name: 'Showtime', colorMode: resolvedTheme }))
 	}, [resolvedTheme])
-
-	useEffect(() => {
-		if (!myProfile) return
-
-		setHasEmailAddress(myProfile.wallet_addresses_v2.length !== myProfile.wallet_addresses_excluding_email_v2.length)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [myProfile?.wallet_addresses_v2, myProfile?.wallet_addresses_excluding_email_v2])
 
 	const loginWithTezos = async () => {
 		const activeAccount = await dAppClient.getActiveAccount()
@@ -65,12 +56,7 @@ const Wallet = () => {
 
 	return (
 		<>
-			{typeof document !== 'undefined' ? (
-				<>
-					<ModalAddWallet isOpen={walletModalOpen} setWalletModalOpen={setWalletModalOpen} walletAddresses={myProfile?.wallet_addresses_v2} />
-					<ModalAddEmail isOpen={emailModalOpen} setEmailModalOpen={setEmailModalOpen} setHasEmailAddress={setHasEmailAddress} />
-				</>
-			) : null}
+			{typeof document !== 'undefined' ? <ModalAddWallet isOpen={walletModalOpen} setWalletModalOpen={setWalletModalOpen} walletAddresses={myProfile?.wallet_addresses_v2} /> : null}
 			<Layout>
 				<div className="flex-1 flex items-center justify-center">
 					{myProfile ? (
@@ -105,15 +91,6 @@ const Wallet = () => {
 																		</button>
 																	)}
 																</Menu.Item>
-																{!hasEmailAddress && (
-																	<Menu.Item>
-																		{({ active }) => (
-																			<button onClick={() => setEmailModalOpen(true)} className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block w-full text-left px-4 py-2 text-sm')}>
-																				Link Email Address
-																			</button>
-																		)}
-																	</Menu.Item>
-																)}
 															</div>
 														</Menu.Items>
 													</Transition>

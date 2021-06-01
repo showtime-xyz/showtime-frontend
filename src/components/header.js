@@ -1,4 +1,4 @@
-import { Fragment, useContext, useState } from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import mixpanel from 'mixpanel-browser'
@@ -10,6 +10,7 @@ import CappedWidth from './CappedWidth'
 import { classNames, formatAddressShort } from '@/lib/utilities'
 import { Menu, Transition } from '@headlessui/react'
 import { useTheme } from 'next-themes'
+import ModalAddEmail from './ModalAddEmail'
 
 // Next.js' Link component doesn't appropiately forward all props, so we need to wrap it in order to use it on our menu
 const NextLink = ({ href, children, ...rest }) => (
@@ -22,12 +23,22 @@ const Header = () => {
 	const context = useContext(AppContext)
 	const { theme, themes, setTheme } = useTheme()
 	const [isSearchBarOpen, setSearchBarOpen] = useState(false)
+	const [emailModalOpen, setEmailModalOpen] = useState(false)
+	const [hasEmailAddress, setHasEmailAddress] = useState(false)
+
+	useEffect(() => {
+		if (!context.myProfile) return
+
+		setHasEmailAddress(context.myProfile.wallet_addresses_v2.length !== context.myProfile.wallet_addresses_excluding_email_v2.length)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [context.myProfile?.wallet_addresses_v2, context.myProfile?.wallet_addresses_excluding_email_v2])
 
 	return (
 		<>
 			{typeof document !== 'undefined' ? (
 				<>
 					<ModalLogin isOpen={context.loginModalOpen} setEditModalOpen={context.setLoginModalOpen} />
+					<ModalAddEmail isOpen={emailModalOpen} setEmailModalOpen={setEmailModalOpen} setHasEmailAddress={setHasEmailAddress} />
 				</>
 			) : null}
 			<header className="px-2 py-1 sm:py-2 bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none sticky top-0 z-1">
@@ -100,6 +111,17 @@ const Header = () => {
 															{({ active }) => <a className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm transition')}>Wallets</a>}
 														</Menu.Item>
 													</div>
+													{!hasEmailAddress && (
+														<div className="py-1">
+															<Menu.Item>
+																{({ active }) => (
+																	<button onClick={() => setEmailModalOpen(true)} className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm transition')}>
+																		Add Email
+																	</button>
+																)}
+															</Menu.Item>
+														</div>
+													)}
 													<div className="py-1">
 														<Menu.Item disabled>
 															<div className="flex items-center justify-between w-full text-left px-4 py-2 text-sm space-x-2">
