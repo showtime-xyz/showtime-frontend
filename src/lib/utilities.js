@@ -40,7 +40,7 @@ export const copyToClipBoard = async textToCopy => {
 export const getBidLink = item => {
 	switch (item.contract_address) {
 		case CONTRACTS.ZORA:
-			return `https://zora.co/${item.creator_address}/${item.token_id}`
+			return `https://zora.co/${item.creator_address_nonens}/${item.token_id}`
 		case CONTRACTS.RARIBLE_V2:
 		case CONTRACTS.RARIBLE_1155:
 			return `https://rarible.com/token/${item.contract_address}:${item.token_id}`
