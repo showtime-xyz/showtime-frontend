@@ -24,6 +24,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 	const [thisItem, setThisItem] = useState(item)
 
 	const divRef = useRef()
+	const imgContainerRef = useRef()
 
 	const max_description_length = 170
 	const aspect_ratio_cutoff = 1.6
@@ -115,6 +116,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 												setCurrentlyPlayingVideo(false)
 											}}
 											className="cursor-pointer text-right flex flex-row"
+											ref={imgContainerRef}
 										>
 											{!imageLoaded ? (
 												<div
@@ -142,9 +144,23 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 																width: divRef?.current?.clientWidth,
 																height: item.token_aspect_ratio && divRef?.current?.clientWidth ? divRef?.current?.clientWidth / item.token_aspect_ratio : null,
 														  }
+														: !(item.token_aspect_ratio && imgContainerRef?.current?.clientWidth) // use defaults if aspect ratio unknown
+														? {
+																backgroundColor: getBackgroundColor(item),
+																maxHeight: 500,
+														  }
+														: imgContainerRef?.current?.clientWidth / item.token_aspect_ratio > 500 // going to be too tall, need to rescale
+														? {
+																backgroundColor: getBackgroundColor(item),
+																maxHeight: 500,
+																width: 500 / (1 / item.token_aspect_ratio),
+																height: 500,
+														  }
 														: {
 																backgroundColor: getBackgroundColor(item),
 																maxHeight: 500,
+																width: imgContainerRef?.current?.clientWidth,
+																height: item.token_aspect_ratio && imgContainerRef?.current?.clientWidth ? imgContainerRef?.current?.clientWidth / item.token_aspect_ratio : null,
 														  }),
 												}}
 											/>
