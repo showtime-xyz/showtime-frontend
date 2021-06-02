@@ -7,7 +7,6 @@ import ModalAddWallet from '@/components/ModalAddWallet'
 import axios from '@/lib/axios'
 import backend from '@/lib/backend'
 import { Menu, Transition } from '@headlessui/react'
-import ModalAddEmail from '@/components/ModalAddEmail'
 import { useTheme } from 'next-themes'
 
 const Wallet = () => {
