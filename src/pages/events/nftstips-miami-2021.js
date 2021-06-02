@@ -46,13 +46,13 @@ const Leaderboard = () => {
 	useEffect(() => {
 		if (!context.myFollows) return
 
-		const newProfiles = leaderboardItems.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id))
+		const newProfiles = leaderboardItems.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id) && context.myProfile?.profile_id != item.profile_id)
 		setFollowAllClicked(newProfiles.length === 0)
 	}, [leaderboardItems, context.myFollows])
 
 	const handleFollowAll = async () => {
 		setFollowAllClicked(true)
-		const newProfiles = leaderboardItems.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id))
+		const newProfiles = leaderboardItems.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id) && context.myProfile?.profile_id != item.profile_id)
 		// UPDATE CONTEXT
 		context.setMyFollows([...newProfiles, ...context.myFollows])
 		// Post changes to the API
