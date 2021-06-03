@@ -35,7 +35,7 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
 	const handleFollowAll = async () => {
 		setFollowAllClicked(true)
 
-		const newProfiles = items.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id))
+		const newProfiles = items.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id) && context.myProfile?.profile_id != item.profile_id)
 
 		// UPDATE CONTEXT
 		context.setMyFollows([...newProfiles, ...context.myFollows])

@@ -13,14 +13,14 @@ const TrendingCreators = ({ shownLeaderboardItems, allLeaderboardItems, isLoadin
 	// reset follow all button when leaderboard changes
 	useEffect(() => {
 		if (context.myFollows) {
-			const newProfiles = allLeaderboardItems.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id))
+			const newProfiles = allLeaderboardItems.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id) && context.myProfile?.profile_id != item.profile_id)
 			setFollowAllClicked(newProfiles.length === 0)
 		}
 	}, [allLeaderboardItems, showAllLeaderboardItems, trendingTab, context.myFollows])
 
 	const handleFollowAll = async () => {
 		setFollowAllClicked(true)
-		const newProfiles = allLeaderboardItems.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id))
+		const newProfiles = allLeaderboardItems.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id) && context.myProfile?.profile_id != item.profile_id)
 		// UPDATE CONTEXT
 		context.setMyFollows([...newProfiles, ...context.myFollows])
 		// Post changes to the API
