@@ -1,6 +1,7 @@
 import Iron from '@hapi/iron'
 import CookieService from '@/lib/cookie'
 import handler from '@/lib/api-handler'
+import backendnotifications from '@/lib/backend-notifications'
 import backend from '@/lib/backend'
 
 export default handler()
@@ -8,7 +9,7 @@ export default handler()
 		try {
 			const user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
-			await backend(`/v1/notifications?page=${page}&limit=${limit}`, {
+			await backendnotifications(`/v1/notifications?page=${page}&limit=${limit}`, {
 				headers: {
 					'X-Authenticated-User': user.publicAddress,
 					'X-Authenticated-Email': user.email || null,
