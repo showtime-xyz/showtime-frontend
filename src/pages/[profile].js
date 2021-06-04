@@ -11,8 +11,6 @@ import ModalEditProfile from '@/components/ModalEditProfile'
 import ModalEditPhoto from '@/components/ModalEditPhoto'
 import ModalEditCover from '@/components/ModalEditCover'
 import ModalUserList from '@/components/ModalUserList'
-import ModalAddWallet from '@/components/ModalAddWallet'
-import ModalAddEmail from '@/components/ModalAddEmail.js'
 import { formatAddressShort, truncateWithEllipses, classNames } from '@/lib/utilities'
 import AddressButton from '@/components/AddressButton'
 import { PROFILE_TABS, SORT_FIELDS, DEFAULT_PROFILE_PIC } from '@/lib/constants'
@@ -72,7 +70,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 
 	// Profile details
 	const [isMyProfile, setIsMyProfile] = useState()
-	const [hasEmailAddress, setHasEmailAddress] = useState(false)
 	const initialBioLength = context.isMobile ? 130 : 150
 	const [moreBioShown, setMoreBioShown] = useState(false)
 	const [followersCount, setFollowersCount] = useState(followers_count)
@@ -88,11 +85,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 				// Logged in?
 				if (context.myProfile?.wallet_addresses_v2.map(a => a.address?.toLowerCase()).includes(slug_address.toLowerCase()) || slug_address.toLowerCase() === context.myProfile?.username?.toLowerCase() || context.myProfile?.wallet_addresses_v2.map(a => a.ens_domain?.toLowerCase()).includes(slug_address.toLowerCase())) {
 					setIsMyProfile(true)
-					if (wallet_addresses_v2.length === wallet_addresses_excluding_email_v2.length) {
-						setHasEmailAddress(false)
-					} else {
-						setHasEmailAddress(true)
-					}
 					mixpanel.track('Self profile view', { slug: slug_address })
 				} else {
 					setIsMyProfile(false)
@@ -476,8 +468,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 
 	// Modal states
 	const [editModalOpen, setEditModalOpen] = useState(false)
-	const [walletModalOpen, setWalletModalOpen] = useState(false)
-	const [emailModalOpen, setEmailModalOpen] = useState(false)
 	const [pictureModalOpen, setPictureModalOpen] = useState(false)
 	const [coverModalOpen, setCoverModalOpen] = useState(false)
 	const [showFollowers, setShowFollowers] = useState(false)
@@ -505,16 +495,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const editPhoto = () => {
 		setPictureModalOpen(true)
 		mixpanel.track('Open edit photo')
-	}
-
-	const addWallet = () => {
-		setWalletModalOpen(true)
-		mixpanel.track('Open add wallet')
-	}
-
-	const addEmail = () => {
-		setEmailModalOpen(true)
-		mixpanel.track('Open add email')
 	}
 
 	const logout = async () => {
@@ -613,8 +593,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		>
 			{typeof document !== 'undefined' ? (
 				<>
-					<ModalAddWallet isOpen={walletModalOpen} setWalletModalOpen={setWalletModalOpen} walletAddresses={wallet_addresses_v2} />
-					<ModalAddEmail isOpen={emailModalOpen} setEmailModalOpen={setEmailModalOpen} setHasEmailAddress={setHasEmailAddress} />
 					{editModalOpen && <ModalEditProfile isOpen={editModalOpen} setEditModalOpen={setEditModalOpen} />}
 					<ModalEditPhoto isOpen={pictureModalOpen} setEditModalOpen={setPictureModalOpen} />
 					<ModalEditCover isOpen={coverModalOpen} setEditModalOpen={setCoverModalOpen} />
@@ -692,7 +670,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 								</div>
 								<div className="flex-grow"></div>
 								<div className="md:hidden z-10 -mt-5">
-									<ProfileFollowersPill following={following} followers={followers} isFollowed={isFollowed} isMyProfile={isMyProfile} followingMe={followingMe} handleUnfollow={handleUnfollow} handleFollow={handleFollow} handleLoggedOutFollow={handleLoggedOutFollow} hasEmailAddress={hasEmailAddress} setShowFollowers={setShowFollowers} setShowFollowing={setShowFollowing} editAccount={editAccount} editPhoto={editPhoto} addWallet={addWallet} addEmail={addEmail} logout={logout} />
+									<ProfileFollowersPill following={following} followers={followers} isFollowed={isFollowed} isMyProfile={isMyProfile} followingMe={followingMe} handleUnfollow={handleUnfollow} handleFollow={handleFollow} handleLoggedOutFollow={handleLoggedOutFollow} setShowFollowers={setShowFollowers} setShowFollowing={setShowFollowing} editAccount={editAccount} logout={logout} />
 								</div>
 							</div>
 							<div className="dark:text-gray-200 text-3xl md:text-4xl md:mb-1"> {name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</div>
@@ -742,7 +720,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										</div>
 									</div>
 									<div className="hidden md:flex">
-										<ProfileFollowersPill following={following} followers={followers} isFollowed={isFollowed} isMyProfile={isMyProfile} followingMe={followingMe} handleUnfollow={handleUnfollow} handleFollow={handleFollow} handleLoggedOutFollow={handleLoggedOutFollow} hasEmailAddress={hasEmailAddress} setShowFollowers={setShowFollowers} setShowFollowing={setShowFollowing} editAccount={editAccount} addWallet={addWallet} addEmail={addEmail} />
+										<ProfileFollowersPill following={following} followers={followers} isFollowed={isFollowed} isMyProfile={isMyProfile} followingMe={followingMe} handleUnfollow={handleUnfollow} handleFollow={handleFollow} handleLoggedOutFollow={handleLoggedOutFollow} setShowFollowers={setShowFollowers} setShowFollowing={setShowFollowing} editAccount={editAccount} />
 									</div>
 								</div>
 							</div>

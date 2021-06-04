@@ -7,7 +7,6 @@ import backend from '@/lib/backend'
 import AppContext from '@/context/app-context'
 import CloseButton from './CloseButton'
 import Web3 from 'web3'
-import { useRouter } from 'next/router'
 import Fortmatic from 'fortmatic'
 import ScrollableModal from './ScrollableModal'
 import axios from '@/lib/axios'
@@ -22,7 +21,6 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 	const [showInstructions, setShowInstructions] = useState(false)
 	const [myWeb3Modal, setMyWeb3Modal] = useState(null)
 	const [myProvider, setMyProvider] = useState(null)
-	const router = useRouter()
 
 	const connect = async () => {
 		const web3 = new Web3(myProvider)
@@ -71,7 +69,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 							description: 'Use Coinbase Wallet app on mobile device',
 						},
 						options: {
-							appName: 'Showtime', // Your app name
+							appName: 'Showtime',
 							networkUrl: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`,
 							chainId: process.env.NEXT_PUBLIC_CHAINID,
 						},
@@ -98,10 +96,10 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 		}
 
 		return function cleanup() {
-			if (myWeb3Modal) {
-				myWeb3Modal.clearCachedProvider()
-				myWeb3Modal.off()
-			}
+			if (!myWeb3Modal) return
+
+			myWeb3Modal.clearCachedProvider()
+			myWeb3Modal.off()
 		}
 	}, [isOpen])
 
@@ -116,17 +114,15 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 			await myWeb3Modal.clearCachedProvider()
 			setMyProvider(null)
 		}
+
 		onConnect()
 	}
 
 	const onConnect = async () => {
-		//console.log("Opening a dialog", myWeb3Modal);
 		try {
 			setMyProvider(await myWeb3Modal.connect())
-		} catch (e) {
-			//console.log("Could not get a wallet connection", e);
+		} catch {
 			setStep(1)
-			return
 		}
 	}
 
@@ -147,15 +143,12 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 
 			// login with our own API
 			await axios
-				.put('/api/profile/wallet', {
-					signature,
-					addressDetected,
-				})
+				.put('/api/auth/wallet/eth', { signature, addressDetected })
 				.then(res => {
 					setStep(4)
 					return res.data
 				})
-				.then(async ({ data: redirect }) => {
+				.then(async () => {
 					// get our likes, follows, profile
 					try {
 						const my_info_data = await axios.get('/api/profile').then(res => res.data)
@@ -166,7 +159,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 						console.error(error)
 					}
 
-					router.push(`/${redirect}`)
+					//router.push(`/${redirect}`)
 					setWalletModalOpen(false)
 					setStep(1)
 					mixpanel.track('User added new Wallet')
