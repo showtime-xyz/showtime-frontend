@@ -20,20 +20,16 @@ const Wallet = () => {
 	}, [resolvedTheme])
 
 	const loginWithTezos = async () => {
-		const { address: tezosAddr, publicKey: tezosPk, appMetadata: tezosApp } = await dAppClient.requestPermissions({ scopes: [PermissionScope.SIGN] })
-
-		const isKukai = tezosApp?.name === 'Kukai Wallet'
+		const { address: tezosAddr, publicKey: tezosPk } = await dAppClient.requestPermissions({ scopes: [PermissionScope.SIGN] })
 
 		const {
 			data: { data: nonce },
 		} = await backend.get(`/v1/getnonce?address=${tezosAddr}`)
 
-		let signature
+		const payload = Buffer.from(`${process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_TEZOS_WALLET} ${nonce}`, 'utf8').toString('hex')
+		const signature = await dAppClient.requestSignPayload({ signingType: SigningType.MICHELINE, payload: payload }).then(res => res.signature)
 
-		if (isKukai) signature = await dAppClient.requestSignPayload({ signingType: SigningType.MICHELINE, payload: Buffer.from(`B   ${process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET_V2} ${nonce}`, 'utf8').toString('hex') }).then(res => res.signature)
-		else signature = await dAppClient.requestSignPayload({ signingType: SigningType.RAW, payload: process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET_V2 + ' ' + nonce }).then(res => res.signature)
-
-		await axios.put('/api/auth/wallet/tz', { address: tezosAddr, signature, publicKey: tezosPk, isKukai })
+		await axios.put('/api/auth/wallet/tz', { address: tezosAddr, signature, publicKey: tezosPk })
 
 		setWalletAddresses(walletAddresses => [...walletAddresses, { address: tezosAddr, ens_domain: null }])
 

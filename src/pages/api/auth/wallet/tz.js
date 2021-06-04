@@ -7,14 +7,14 @@ import CookieService from '@/lib/cookie'
 import handler from '@/lib/api-handler'
 import backend from '@/lib/backend'
 
-export default handler().put(async ({ cookies, body: { address, signature, publicKey, isKukai } }, res) => {
+export default handler().put(async ({ cookies, body: { address, signature, publicKey } }, res) => {
 	const user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
 	const {
 		data: { data: nonce },
 	} = await backend.get(`/v1/getnonce?address=${address}`)
 
-	const message = isKukai ? `B   ${process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET_V2} ${nonce}` : process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET_V2 + ' ' + nonce
+	const message = process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_TEZOS_WALLET + ' ' + nonce
 
 	await sodium.ready
 
