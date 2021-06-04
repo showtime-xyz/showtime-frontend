@@ -30,12 +30,22 @@ const Wallet = () => {
 
 		let signature
 
-		if (isKukai) signature = await dAppClient.requestSignPayload({ signingType: SigningType.MICHELINE, payload: Buffer.from(`B   ${process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + nonce}`, 'utf8').toString('hex') }).then(res => res.signature)
-		else signature = await dAppClient.requestSignPayload({ signingType: SigningType.RAW, payload: process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + nonce }).then(res => res.signature)
+		if (isKukai) signature = await dAppClient.requestSignPayload({ signingType: SigningType.MICHELINE, payload: Buffer.from(`B   ${process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET_V2} ${nonce}`, 'utf8').toString('hex') }).then(res => res.signature)
+		else signature = await dAppClient.requestSignPayload({ signingType: SigningType.RAW, payload: process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET_V2 + ' ' + nonce }).then(res => res.signature)
 
 		await axios.put('/api/auth/wallet/tz', { address: tezosAddr, signature, publicKey: tezosPk, isKukai })
 
 		setWalletAddresses(walletAddresses => [...walletAddresses, { address: tezosAddr, ens_domain: null }])
+
+		// UPDATE THE PROFILE STATE DATA
+		try {
+			const my_info_data = await axios.get('/api/profile').then(res => res.data)
+			setMyLikes(my_info_data.data.likes_nft)
+			setMyFollows(my_info_data.data.follows)
+			setMyProfile(my_info_data.data.profile)
+		} catch (error) {
+			console.error(error)
+		}
 
 		dAppClient.clearActiveAccount()
 	}
@@ -57,8 +67,8 @@ const Wallet = () => {
 		// UPDATE THE PROFILE STATE DATA
 		try {
 			const my_info_data = await axios.get('/api/profile').then(res => res.data)
-			setMyLikes(my_info_data.data.likes_nft)
-			setMyFollows(my_info_data.data.follows)
+			//setMyLikes(my_info_data.data.likes_nft) // These only will change when adding wallets
+			//setMyFollows(my_info_data.data.follows) // These only will change when adding wallets
 			setMyProfile(my_info_data.data.profile)
 		} catch (error) {
 			console.error(error)
