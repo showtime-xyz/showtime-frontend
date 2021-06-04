@@ -10,7 +10,7 @@ import { Menu, Transition } from '@headlessui/react'
 import { useTheme } from 'next-themes'
 
 const Wallet = () => {
-	const { myProfile, user, setLoginModalOpen } = useContext(AppContext)
+	const { myProfile, user, setLoginModalOpen, setMyProfile, setMyLikes, setMyFollows } = useContext(AppContext)
 	const { resolvedTheme } = useTheme()
 	const [dAppClient, setDAppClient] = useState(null)
 	const [walletModalOpen, setWalletModalOpen] = useState(false)
@@ -48,11 +48,21 @@ const Wallet = () => {
 	}, [myProfile?.wallet_addresses_excluding_email_v2])
 
 	const unlinkAddress = async address => {
-		if (address.toLowerCase() === user.publicAddress) return
+		if (address.toLowerCase() === user?.publicAddress) return
 
 		await axios.delete('/api/auth/wallet', { data: { address } })
 
 		setWalletAddresses(walletAddresses => walletAddresses.filter(({ address: stateAddr }) => stateAddr !== address))
+
+		// UPDATE THE PROFILE STATE DATA
+		try {
+			const my_info_data = await axios.get('/api/profile').then(res => res.data)
+			setMyLikes(my_info_data.data.likes_nft)
+			setMyFollows(my_info_data.data.follows)
+			setMyProfile(my_info_data.data.profile)
+		} catch (error) {
+			console.error(error)
+		}
 	}
 
 	return (
@@ -112,8 +122,8 @@ const Wallet = () => {
 															<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-400">{ens_domain || address}</td>
 															<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{address.startsWith('tz') ? 'Tezos' : 'Ethereum'}</td>
 															<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-																{address.toLowerCase() === user.publicAddress ? (
-																	<span className="text-gray-600 dark:text-gray-500">Active</span>
+																{address.toLowerCase() === user?.publicAddress ? (
+																	<span className="text-gray-600 dark:text-gray-500">Signed In</span>
 																) : (
 																	<button onClick={() => unlinkAddress(address)} className="text-red-600 hover:text-red-900 dark:hover:text-red-700 transition">
 																		Unlink
