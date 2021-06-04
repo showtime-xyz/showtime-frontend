@@ -7,7 +7,6 @@ import backend from '@/lib/backend'
 import AppContext from '@/context/app-context'
 import CloseButton from './CloseButton'
 import Web3 from 'web3'
-import { useRouter } from 'next/router'
 import Fortmatic from 'fortmatic'
 import ScrollableModal from './ScrollableModal'
 import axios from '@/lib/axios'
@@ -22,7 +21,6 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 	const [showInstructions, setShowInstructions] = useState(false)
 	const [myWeb3Modal, setMyWeb3Modal] = useState(null)
 	const [myProvider, setMyProvider] = useState(null)
-	const router = useRouter()
 
 	const connect = async () => {
 		const web3 = new Web3(myProvider)

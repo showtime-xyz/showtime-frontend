@@ -1,6 +1,6 @@
 import Layout from '@/components/layout'
 import AppContext from '@/context/app-context'
-import { classNames } from '@/lib/utilities'
+import { classNames, formatAddressShort } from '@/lib/utilities'
 import { Fragment, useContext, useEffect, useState } from 'react'
 import { DAppClient, PermissionScope, SigningType } from '@airgap/beacon-sdk'
 import ModalAddWallet from '@/components/ModalAddWallet'
@@ -10,7 +10,7 @@ import { Menu, Transition } from '@headlessui/react'
 import { useTheme } from 'next-themes'
 
 const Wallet = () => {
-	const { myProfile, user, setLoginModalOpen, setMyProfile, setMyLikes, setMyFollows } = useContext(AppContext)
+	const { myProfile, user, setLoginModalOpen, setMyProfile, setMyLikes, setMyFollows, isMobile } = useContext(AppContext)
 	const { resolvedTheme } = useTheme()
 	const [dAppClient, setDAppClient] = useState(null)
 	const [walletModalOpen, setWalletModalOpen] = useState(false)
@@ -125,7 +125,7 @@ const Wallet = () => {
 												<tbody>
 													{walletAddresses?.map(({ address, ens_domain }, i) => (
 														<tr key={address} className={i % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900'}>
-															<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-400">{ens_domain || address}</td>
+															<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-400">{ens_domain ? ens_domain : isMobile ? formatAddressShort(address) : address}</td>
 															<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{address.startsWith('tz') ? 'Tezos' : 'Ethereum'}</td>
 															<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 																{address.toLowerCase() === user?.publicAddress ? (
