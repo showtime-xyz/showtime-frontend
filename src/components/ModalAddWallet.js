@@ -150,7 +150,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 					setStep(4)
 					return res.data
 				})
-				.then(async ({ data: redirect }) => {
+				.then(async () => {
 					// get our likes, follows, profile
 					try {
 						const my_info_data = await axios.get('/api/profile').then(res => res.data)
@@ -161,7 +161,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 						console.error(error)
 					}
 
-					router.push(`/${redirect}`)
+					//router.push(`/${redirect}`)
 					setWalletModalOpen(false)
 					setStep(1)
 					mixpanel.track('User added new Wallet')
