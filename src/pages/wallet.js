@@ -92,7 +92,7 @@ const Wallet = () => {
 											{({ open }) => (
 												<>
 													<div>
-														<Menu.Button className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white dark:text-gray-100 bg-indigo-600 dark:bg-indigo-800 hover:bg-indigo-700 dark:hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:ring-indigo-900 transition">Connect Wallet</Menu.Button>
+														<Menu.Button className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white dark:text-gray-100 bg-indigo-600 dark:bg-indigo-800 hover:bg-indigo-700 dark:hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:ring-indigo-900 transition">Add Wallet</Menu.Button>
 													</div>
 
 													<Transition show={open} as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
@@ -101,14 +101,14 @@ const Wallet = () => {
 																<Menu.Item>
 																	{({ active }) => (
 																		<button onClick={() => setWalletModalOpen(true)} className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm transition')}>
-																			Link Ethereum wallet
+																			Add Ethereum wallet
 																		</button>
 																	)}
 																</Menu.Item>
 																<Menu.Item>
 																	{({ active }) => (
 																		<button onClick={loginWithTezos} className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm transition')}>
-																			Link Tezos wallet
+																			Add Tezos wallet
 																		</button>
 																	)}
 																</Menu.Item>
@@ -136,7 +136,7 @@ const Wallet = () => {
 																	<span className="text-gray-600 dark:text-gray-500">Signed In</span>
 																) : (
 																	<button onClick={() => unlinkAddress(address)} className="text-red-600 hover:text-red-900 dark:hover:text-red-700 transition">
-																		Unlink
+																		Remove
 																	</button>
 																)}
 															</td>
@@ -152,9 +152,9 @@ const Wallet = () => {
 					) : (
 						<div className="bg-white border border-transparent dark:border-gray-800 dark:bg-gray-900 shadow sm:rounded-lg">
 							<div className="px-4 py-5 sm:p-6">
-								<h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-300">Log in to manage your wallets</h3>
+								<h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-300">Sign in to manage your wallets</h3>
 								<div className="mt-2 max-w-xl text-sm text-gray-500">
-									<p>Once you're logged in, you'll be able to connect and disconnect your Ethereum and Tezos wallets.</p>
+									<p>Once you're signed in, you'll be able to add and remove your Ethereum and Tezos wallets.</p>
 								</div>
 								<div className="mt-5">
 									<button onClick={() => setLoginModalOpen(true)} type="button" className="inline-flex items-center justify-center px-4 py-2 border border-transparent font-medium rounded-md text-stpink bg-stpink bg-opacity-20 hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stpink sm:text-sm transition">
