@@ -14,7 +14,7 @@ export default handler().put(async ({ cookies, body: { address, signature, publi
 		data: { data: nonce },
 	} = await backend.get(`/v1/getnonce?address=${address}`)
 
-	const message = isKukai ? `B   ${process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + nonce}` : process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + nonce
+	const message = isKukai ? `B   ${process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET_V2} ${nonce}` : process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET_V2 + ' ' + nonce
 
 	await sodium.ready
 
