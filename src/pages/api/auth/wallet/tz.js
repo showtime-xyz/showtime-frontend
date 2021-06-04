@@ -1,28 +1,24 @@
+import { prefix, utility } from 'sotez'
+import sodium from 'libsodium-wrappers'
+import { ec as EC } from 'elliptic'
+import blake2b from 'blake2b'
 import Iron from '@hapi/iron'
 import CookieService from '@/lib/cookie'
 import handler from '@/lib/api-handler'
-import sodium from 'libsodium-wrappers'
-import bs58check from 'bs58check'
 import backend from '@/lib/backend'
 
-const prefix = { edsig: new Uint8Array([9, 245, 205, 134, 18]), edpk: new Uint8Array([13, 15, 37, 217]) }
-
-const hex2buf = hex => new Uint8Array(hex.match(/[\da-f]{2}/gi).map(h => parseInt(h, 16)))
-
-const b58decode = (enc, prefix) => bs58check.decode(enc).slice(prefix.length)
-
-const char2Bytes = str => Buffer.from(str, 'utf8').toString('hex')
-
-export default handler().put(async ({ cookies, body: { address, signature, publicKey } }, res) => {
+export default handler().put(async ({ cookies, body: { address, signature, publicKey, isKukai } }, res) => {
 	const user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
 	const {
 		data: { data: nonce },
 	} = await backend.get(`/v1/getnonce?address=${address}`)
 
+	const message = isKukai ? `B   ${process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + nonce}` : process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + nonce
+
 	await sodium.ready
 
-	if (sodium.crypto_sign_verify_detached(b58decode(signature, prefix.edsig), sodium.crypto_generichash(32, hex2buf(char2Bytes(process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + nonce))), b58decode(publicKey, prefix.edpk))) {
+	if (await verifySig(Buffer.from(message, 'utf-8').toString('hex'), signature, publicKey)) {
 		await backend
 			.post(
 				'/v1/addwallet',
@@ -41,3 +37,48 @@ export default handler().put(async ({ cookies, body: { address, signature, publi
 
 	res.status(200).end()
 })
+
+const isHex = s => utility.buf2hex(utility.hex2buf(s)) === s.toLowerCase()
+
+const verifySig = async function (bytes, sig, pk) {
+	await sodium.ready
+
+	bytes = utility.hex2buf(bytes)
+	const sigCurve = sig.substring(0, 2)
+	switch (sigCurve) {
+		case 'ed':
+			sig = utility.b58cdecode(sig, prefix.edsig)
+			break
+		case 'sp':
+			sig = utility.b58cdecode(sig, prefix.spsig)
+			break
+		case 'p2':
+			sig = utility.b58cdecode(sig, prefix.p2sig)
+			break
+		default:
+			sig = utility.b58cdecode(sig, prefix.sig)
+			break
+	}
+
+	// pk is hex format (Beacon does this for reasons not clear)
+	if (pk.length == 64 && isHex(pk)) {
+		pk = Buffer.from(utility.hex2buf(pk))
+		bytes = sodium.crypto_generichash(32, bytes)
+		return sodium.crypto_sign_verify_detached(sig, bytes, pk)
+	}
+
+	const curve = pk.substring(0, 2)
+	switch (curve) {
+		case 'ed':
+			bytes = sodium.crypto_generichash(32, bytes)
+			pk = utility.b58cdecode(pk, prefix.edpk)
+			return sodium.crypto_sign_verify_detached(sig, bytes, pk)
+		case 'sp':
+		case 'p2':
+			bytes = blake2b(32).update(bytes).digest()
+			pk = utility.b58cdecode(pk, curve == 'sp' ? prefix.sppk : prefix.p2pk)
+			return new EC(curve == 'sp' ? 'secp256k1' : 'p256').keyFromPublic(pk).verify(bytes, { r: sig.slice(0, 32), s: sig.slice(32) })
+	}
+
+	return false
+}
