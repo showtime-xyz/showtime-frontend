@@ -8,7 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@airgap/beacon-sdk": "^2.2.7",
+    "@airgap/beacon-sdk": "^2.2.8",
     "@badrap/bar-of-progress": "^0.1.2",
     "@ethersproject/providers": "^5.0.19",
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
