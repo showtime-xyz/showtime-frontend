@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@airgap/beacon-sdk@^2.2.7":
-  version "2.2.7"
-  resolved "https://registry.yarnpkg.com/@airgap/beacon-sdk/-/beacon-sdk-2.2.7.tgz#8dcf041f9c98f2648d0d0a76698027717873ece3"
-  integrity sha512-07tEUuRWjjX+eRWyX4r9b5TSwUvJZntiuUHLuaVFkZMa1E1BUuLKFB7z5KN9wBSzmUP6viASi3F2/5OFnomNkQ==
+"@airgap/beacon-sdk@^2.2.8":
+  version "2.2.8"
+  resolved "https://registry.yarnpkg.com/@airgap/beacon-sdk/-/beacon-sdk-2.2.8.tgz#e7901cd997640deb38903e406c763360868500f0"
+  integrity sha512-50UT7pBW9l7E3n34uYbxdjOe8+GalTiRgIqQBsW8lS7OIkb1u9gt6ZrU7VH5xBO+2/UMssOKYJkiaaHmkFR47A==
   dependencies:
     "@types/chrome" "0.0.115"
     "@types/libsodium-wrappers" "0.7.7"
