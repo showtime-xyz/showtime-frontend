@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, useCallback, createRef } from 'react'
+import { useEffect, useState, useContext, useCallback, createRef, Fragment } from 'react'
 import { DEFAULT_PROFILE_PIC, MENTIONS_STYLE } from '@/lib/constants'
 import AppContext from '@/context/app-context'
 import backend from '@/lib/backend'
@@ -11,8 +11,13 @@ import axios from '@/lib/axios'
 import ModalUserList from './ModalUserList'
 import GhostButton from './UI/Buttons/GhostButton'
 import { XIcon } from '@heroicons/react/solid'
+import { Picker } from 'emoji-mart'
+import { useTheme } from 'next-themes'
+import { EmojiHappyIcon } from '@heroicons/react/outline'
+import { Menu } from '@headlessui/react'
 
 export default function CommentsSection({ item, closeModal, modalRef, commentCount }) {
+	const { resolvedTheme } = useTheme()
 	const context = useContext(AppContext)
 	const { user } = context
 	let refArray = []
@@ -24,6 +29,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	const [parentComment, setParentComment] = useState(null)
 	const [siblingComment, setSiblingComment] = useState(null)
 	const [replyActive, setReplyActive] = useState(false)
+	const [emojiPickerOpen, setEmojiPickerOpen] = useState(false)
 	const [loadingComments, setLoadingComments] = useState(true)
 	const [hasMoreComments, setHasMoreComments] = useState(false)
 	const [loadingMoreComments, setLoadingMoreComments] = useState(true)
@@ -207,26 +213,38 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		refArray.push(newInputRef)
 		return (
 			<div className={`${isReply ? 'md:ml-10 ' : ''} my-2 flex ${isReply ? '' : 'md:flex-row items-center'} flex-col`}>
-				<MentionsInput
-					value={(isReply && parentComment) || parentComment === null ? commentText : ''}
-					inputRef={isReply ? newInputRef : null}
-					onChange={e => setCommentText(e.target.value)}
-					onFocus={() => onInputFocus(isReply)}
-					onBlur={() => context.setCommentInputFocused(false)}
-					disabled={context.disableComments}
-					style={MENTIONS_STYLE}
-					placeholder="Your comment..."
-					classNames={{
-						mentions: 'st-mentions-input dark:bg-gray-700 border dark:border-gray-800 rounded-lg flex-grow w-full md:w-auto mb-2 md:mb-0',
-						mentions__input: 'focus:outline-none focus-visible:ring-1 dark:text-gray-300',
-						mentions__suggestions__list: 'rounded-lg border border-transparent dark:border-gray-800 bg-white hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 dark:text-gray-400 overflow-hidden',
-					}}
-					allowSuggestionsAboveCursor
-					allowSpaceInQuery
-					maxLength={240}
-				>
-					<Mention trigger="@" renderSuggestion={parentComment ? null : s => suggestion(s)} displayTransform={(_, display) => `${display}`} data={parentComment ? handleSearchQuery : handleDebouncedSearchQuery} className="border-2 border-transparent bg-purple-200 dark:bg-gray-800  rounded -ml-1.5 px-1" appendSpaceOnAdd />
-				</MentionsInput>
+				<Menu as={Fragment}>
+					<div className="relative w-full">
+						<MentionsInput
+							value={(isReply && parentComment) || parentComment === null ? commentText : ''}
+							inputRef={isReply ? newInputRef : null}
+							onChange={e => setCommentText(e.target.value)}
+							onFocus={() => onInputFocus(isReply)}
+							onBlur={() => context.setCommentInputFocused(false)}
+							disabled={context.disableComments}
+							style={MENTIONS_STYLE}
+							placeholder="Your comment..."
+							classNames={{
+								mentions: 'st-mentions-input dark:bg-gray-700 border dark:border-gray-800 rounded-lg flex-grow w-full md:w-auto mb-2 md:mb-0',
+								mentions__input: 'focus:outline-none focus-visible:ring-1 dark:text-gray-300',
+								mentions__suggestions__list: 'rounded-lg border border-transparent dark:border-gray-800 bg-white hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 dark:text-gray-400 overflow-hidden',
+							}}
+							allowSuggestionsAboveCursor
+							allowSpaceInQuery
+							maxLength={240}
+						>
+							<Mention trigger="@" renderSuggestion={parentComment ? null : s => suggestion(s)} displayTransform={(_, display) => ''} data={parentComment ? handleSearchQuery : handleDebouncedSearchQuery} className="border-2 border-transparent bg-purple-200 dark:bg-gray-800  rounded -ml-1.5 px-1" appendSpaceOnAdd />
+						</MentionsInput>
+						<Menu.Button onClick={() => setEmojiPickerOpen(state => !state)} className="hidden md:block absolute bottom-1 right-1">
+							<EmojiHappyIcon className="w-5 h-5 text-gray-500" />
+						</Menu.Button>
+					</div>
+					<Menu.Items className="absolute origin-top-left">
+						<Menu.Item>
+							<Picker autoFocus={true} native={true} emoji="star2" enableFrequentEmojiSort={true} theme={resolvedTheme} onSelect={emoji => setCommentText(commentText => commentText + emoji.native)} />
+						</Menu.Item>
+					</Menu.Items>
+				</Menu>
 				<div className="flex items-center justify-between mt-2 w-full md:w-auto space-x-4">
 					{isReply && (
 						<button onClick={() => setLocalFocus(false) && setCommentText('') && setParentComment(null) && setSiblingComment(null)} className="p-4 bg-gray-200 dark:bg-gray-800 rounded-lg">
