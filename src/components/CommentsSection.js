@@ -29,7 +29,6 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	const [parentComment, setParentComment] = useState(null)
 	const [siblingComment, setSiblingComment] = useState(null)
 	const [replyActive, setReplyActive] = useState(false)
-	const [emojiPickerOpen, setEmojiPickerOpen] = useState(false)
 	const [loadingComments, setLoadingComments] = useState(true)
 	const [hasMoreComments, setHasMoreComments] = useState(false)
 	const [loadingMoreComments, setLoadingMoreComments] = useState(true)
@@ -233,9 +232,9 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 							allowSpaceInQuery
 							maxLength={240}
 						>
-							<Mention trigger="@" renderSuggestion={parentComment ? null : s => suggestion(s)} displayTransform={(_, display) => ''} data={parentComment ? handleSearchQuery : handleDebouncedSearchQuery} className="border-2 border-transparent bg-purple-200 dark:bg-gray-800  rounded -ml-1.5 px-1" appendSpaceOnAdd />
+							<Mention trigger="@" renderSuggestion={parentComment ? null : s => suggestion(s)} displayTransform={() => ''} data={parentComment ? handleSearchQuery : handleDebouncedSearchQuery} className="border-2 border-transparent bg-purple-200 dark:bg-gray-800  rounded -ml-1.5 px-1" appendSpaceOnAdd />
 						</MentionsInput>
-						<Menu.Button onClick={() => setEmojiPickerOpen(state => !state)} className="hidden md:block absolute bottom-1 right-1">
+						<Menu.Button className="hidden md:block absolute bottom-1 right-1">
 							<EmojiHappyIcon className="w-5 h-5 text-gray-500" />
 						</Menu.Button>
 					</div>
