@@ -11,6 +11,7 @@ import { classNames, formatAddressShort } from '@/lib/utilities'
 import { Menu, Transition } from '@headlessui/react'
 import { useTheme } from 'next-themes'
 import ModalAddEmail from './ModalAddEmail'
+import ShowtimeIcon from './Icons/ShowtimeIcon'
 
 // Next.js' Link component doesn't appropiately forward all props, so we need to wrap it in order to use it on our menu
 const NextLink = ({ href, children, ...rest }) => (
@@ -53,7 +54,7 @@ const Header = () => {
 										await context.setToggleRefreshFeed(!context.toggleRefreshFeed)
 									}}
 								>
-									<div className="text-2xl py-2 font-normal font-afro">SHOWTIME</div>
+									<ShowtimeIcon className="w-6 h-6" />
 								</a>
 							</Link>
 						</div>
@@ -67,12 +68,7 @@ const Header = () => {
 						)}
 						<div className="hidden md:flex mr-6 items-center font-normal">
 							<Link href="/c/[collection]" as="/c/spotlights">
-								<a
-									className="text-black dark:text-gray-200 hover:text-stpink dark:hover:text-stpink ml-6 text-sm md:text-base"
-									onClick={() => {
-										mixpanel.track('Discover button click')
-									}}
-								>
+								<a className="text-black dark:text-gray-200 hover:text-stpink dark:hover:text-stpink ml-6 text-sm md:text-base" onClick={() => mixpanel.track('Discover button click')}>
 									Discover
 								</a>
 							</Link>

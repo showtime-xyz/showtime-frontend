@@ -11,7 +11,7 @@ import backend from '@/lib/backend'
 import useKeyPress from '@/hooks/useKeyPress'
 import useOnClickOutside from '@/hooks/useOnClickOutside'
 import LoadingSpinner from './LoadingSpinner'
-import { SearchIcon } from '@heroicons/react/outline'
+import SearchIcon from './Icons/SearchIcon'
 
 const handleSearchQuery = AwesomeDebouncePromise(async (searchText, setSearchResults, setIsLoading) => {
 	setIsLoading(true)
@@ -71,15 +71,15 @@ const SearchBar = ({ propagateSearchState }) => {
 	return (
 		<>
 			{/* Start desktop-only menu */}
-			<div className="hidden flex-col relative ml-6 pr-6 w-full max-w-3xl md:flex">
+			<div className="hidden flex-col relative px-6 w-full max-w-3xl md:flex">
 				<div className="flex relative w-full" ref={searchInputContainerRef}>
-					<div className="flex absolute z-1 left-4 top-1/2 transform -translate-y-2.5 -translate-x-1 mr-3 text-black dark:text-gray-200 focus:-mt-px">
-						<SearchIcon className="w-5 h-5" />
+					<div className="text-gray-700 absolute left-2 top-2 pointer-events-none">
+						<SearchIcon className="w-4 h-4" />
 					</div>
 					<input
-						className="flex border dark:border-gray-800 bg-white placeholder-gray-500 text-gray-600 dark:text-gray-400 dark:bg-gray-900 bg-opacity-10 dark:bg-opacity-20 backdrop-filter backdrop-blur-lg backdrop-saturate-150 py-1.5 px-4 rounded-full w-full pl-10 focus-visible:ring-1 ring-gray-300 dark:ring-gray-800 focus:outline-none"
-						type="search"
-						placeholder={context.windowSize?.width < 950 ? (context.windowSize?.width < 850 ? 'Search' : 'Search by name') : 'Search by name or wallet address'}
+						className="flex w-8 focus:w-auto focus:min-w-[20rem] bg-gray-100 focus:px-2 focus:pl-8 py-1.5 rounded-full focus:outline-none text-sm text-gray-800 placeholder-gray-700 placeholder-opacity-0 focus:placeholder-opacity-100"
+						type="text"
+						placeholder="Search by name or wallet address"
 						value={searchText}
 						onFocus={() => {
 							setShowSearchResults(true)
