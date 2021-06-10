@@ -8,6 +8,7 @@ import handler from '@/lib/api-handler'
 import backend from '@/lib/backend'
 
 export default handler().put(async ({ cookies, body: { address, signature, publicKey } }, res) => {
+	console.log({ address, signature, publicKey })
 	const user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
 	const {
@@ -16,7 +17,11 @@ export default handler().put(async ({ cookies, body: { address, signature, publi
 
 	const message = process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_TEZOS_WALLET + ' ' + nonce
 
+	console.log({ message })
+
 	await sodium.ready
+
+	console.log({ verificationStatus: await verifySig(Buffer.from(message, 'utf-8').toString('hex'), signature, publicKey) })
 
 	if (await verifySig(Buffer.from(message, 'utf-8').toString('hex'), signature, publicKey)) {
 		await backend
