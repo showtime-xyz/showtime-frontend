@@ -54,7 +54,7 @@ const Header = () => {
 										await context.setToggleRefreshFeed(!context.toggleRefreshFeed)
 									}}
 								>
-									<ShowtimeIcon className="w-6 h-6" />
+									Showtime
 								</a>
 							</Link>
 						</div>
