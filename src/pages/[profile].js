@@ -585,6 +585,13 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setFetchMoreSort(null)
 	}, [selectedGrid, collectionId, profile_id, showUserHiddenItems])
 
+	const getCoverUrl = img_url => {
+		if (img_url && img_url.includes('lh3.googleusercontent.com')) {
+			img_url = context.isMobile ? img_url.split('=')[0] + '=w800' : img_url.split('=')[0] + '=w2880'
+		}
+		return img_url
+	}
+
 	return (
 		<div
 			onClick={() => {
@@ -626,7 +633,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 					<meta name="twitter:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : DEFAULT_PROFILE_PIC} />
 				</Head>
 
-				<div className={`h-32 md:h-64 relative text-left bg-gradient-to-b from-black dark:from-gray-400 to-gray-800 dark:to-gray-100 ${cover_url ? 'bg-no-repeat bg-center bg-cover' : ''}`} style={cover_url ? { backgroundImage: `url(${cover_url})` } : {}}>
+				<div className={`h-32 md:h-64 relative text-left bg-gradient-to-b from-black dark:from-gray-400 to-gray-800 dark:to-gray-100 ${cover_url ? 'bg-no-repeat bg-center bg-cover' : ''}`} style={cover_url ? { backgroundImage: `url(${getCoverUrl(cover_url)})` } : {}}>
 					{isMyProfile && (
 						<CappedWidth>
 							<div className="relative">
