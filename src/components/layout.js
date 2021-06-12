@@ -3,8 +3,11 @@ import PropTypes from 'prop-types'
 //import backend from "../lib/backend";
 import Footer from './footer'
 import Header from './header'
+import { useTheme } from 'next-themes'
 
 const Layout = ({ children }) => {
+	const { resolvedTheme } = useTheme()
+
 	return (
 		<div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 tracking-wide">
 			<Head>
@@ -25,6 +28,7 @@ const Layout = ({ children }) => {
         `,
 					}}
 				/>
+				<meta name="theme-color" content={resolvedTheme === 'dark' ? '#171717' : '#ffffff'} />
 			</Head>
 
 			<Header />
