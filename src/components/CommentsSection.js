@@ -238,7 +238,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 							<EmojiHappyIcon className="w-5 h-5 text-gray-500" />
 						</Menu.Button>
 					</div>
-					<Menu.Items className="absolute origin-top-left">
+					<Menu.Items className="absolute origin-top-left z-20">
 						<Menu.Item>
 							<Picker autoFocus={true} native={true} emoji="star2" enableFrequentEmojiSort={true} theme={resolvedTheme} onSelect={emoji => setCommentText(commentText => commentText + emoji.native)} />
 						</Menu.Item>
