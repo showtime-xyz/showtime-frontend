@@ -4,13 +4,12 @@ import Link from 'next/link'
 import { faComment, faHeart, faUser, faAt } from '@fortawesome/free-solid-svg-icons'
 import useDetectOutsideClick from '@/hooks/useDetectOutsideClick'
 import { formatDistanceToNowStrict } from 'date-fns'
-// import { truncateWithEllipses } from "@/lib/utilities";
+import BellIcon from './Icons/BellIcon'
 import useInterval from '@/hooks/useInterval'
 import AppContext from '@/context/app-context'
 import { getNotificationInfo, DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import ModalUserList from '@/components/ModalUserList'
 import axios from '@/lib/axios'
-import { BellIcon } from '@heroicons/react/outline'
 
 const NOTIFICATIONS_PER_PAGE = 7
 

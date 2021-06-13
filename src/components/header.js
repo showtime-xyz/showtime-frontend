@@ -11,7 +11,10 @@ import { classNames, formatAddressShort } from '@/lib/utilities'
 import { Menu, Transition } from '@headlessui/react'
 import { useTheme } from 'next-themes'
 import ModalAddEmail from './ModalAddEmail'
-import ShowtimeIcon from './Icons/ShowtimeIcon'
+import HomeIcon from './Icons/HomeIcon'
+import StarIcon from './Icons/StarIcon'
+import TrendIcon from './Icons/TrendIcon'
+import { useRouter } from 'next/router'
 
 // Next.js' Link component doesn't appropiately forward all props, so we need to wrap it in order to use it on our menu
 const NextLink = ({ href, children, ...rest }) => (
@@ -21,6 +24,7 @@ const NextLink = ({ href, children, ...rest }) => (
 )
 
 const Header = () => {
+	const { asPath } = useRouter()
 	const context = useContext(AppContext)
 	const { theme, themes, setTheme } = useTheme()
 	const [isSearchBarOpen, setSearchBarOpen] = useState(false)
@@ -42,13 +46,13 @@ const Header = () => {
 					<ModalAddEmail isOpen={emailModalOpen} setEmailModalOpen={setEmailModalOpen} setHasEmailAddress={setHasEmailAddress} />
 				</>
 			) : null}
-			<header className="px-2 py-1 sm:py-2 bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none sticky top-0 z-1">
+			<header className="px-2 pt-1 sm:py-3 bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none sticky top-0 z-1">
 				<CappedWidth>
-					<div className="flex flex-row items-center px-3">
-						<div>
+					<div className="flex flex-row items-center justify-between px-2 md:px-3">
+						<div className="md:flex-1 flex flex-row-reverse md:flex-row items-center">
 							<Link href="/">
 								<a
-									className="flex flex-row text-black dark:text-white hover:text-stpink dark:hover:text-stpink items-center text-left mr-auto"
+									className="flex flex-row text-black dark:text-white hover:text-stpink dark:hover:text-stpink items-center text-left text-xl ml-4 md:mr-6"
 									onClick={async () => {
 										mixpanel.track('Logo button click')
 										await context.setToggleRefreshFeed(!context.toggleRefreshFeed)
@@ -57,35 +61,37 @@ const Header = () => {
 									Showtime
 								</a>
 							</Link>
+							<SearchBar propagateSearchState={setSearchBarOpen} />
 						</div>
 						{/* Start desktop-only menu */}
-						{!context.isMobile ? (
-							<div className="flex-grow flex-1">
-								<SearchBar propagateSearchState={setSearchBarOpen} />
-							</div>
-						) : (
-							<div className="flex-grow"></div>
-						)}
-						<div className="hidden md:flex mr-6 items-center font-normal">
-							<Link href="/c/[collection]" as="/c/spotlights">
-								<a className="text-black dark:text-gray-200 hover:text-stpink dark:hover:text-stpink ml-6 text-sm md:text-base" onClick={() => mixpanel.track('Discover button click')}>
-									Discover
+						<div className="hidden flex-1 md:flex mr-6 items-center font-normal space-x-4">
+							<Link href="/">
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/' ? 'bg-gray-100' : 'hover:bg-gray-100'} rounded-full py-1 px-2`} onClick={() => mixpanel.track('Discover button click')}>
+									<HomeIcon className="w-5 h-5" />
+									<span>Feed</span>
+								</a>
+							</Link>
+							<Link href="/c/spotlights">
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/c/spotlights' ? 'bg-gray-100' : 'hover:bg-gray-100'} rounded-full py-1 px-2`} onClick={() => mixpanel.track('Discover button click')}>
+									<StarIcon className="w-5 h-5" />
+									<span>Discover</span>
 								</a>
 							</Link>
 							<Link href="/trending">
-								<a className="text-black dark:text-gray-200 hover:text-stpink dark:hover:text-stpink ml-6 text-sm md:text-base" onClick={() => mixpanel.track('Trending button click')}>
-									Trending
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/trending' ? 'bg-gray-100' : 'hover:bg-gray-100'} rounded-full py-1 px-2`} onClick={() => mixpanel.track('Trending button click')}>
+									<TrendIcon className="w-5 h-5" />
+									<span>Trending</span>
 								</a>
 							</Link>
+						</div>
+
+						{/* End desktop-only menu */}
+						<div className="flex items-center">
 							{context.user && context.myProfile !== undefined && (
 								<div className="flex-shrink ml-5">
 									<NotificationsBtn />
 								</div>
 							)}
-						</div>
-
-						{/* End desktop-only menu */}
-						<div>
 							{context.user && context.myProfile !== undefined ? (
 								<Menu as="div" className="ml-3 relative">
 									{({ open }) => (
@@ -94,7 +100,7 @@ const Header = () => {
 												<Menu.Button className="max-w-xs bg-transparent flex items-center text-sm rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-stpink group">
 													<span className="sr-only">Open user menu</span>
 													<img className="h-8 w-8 rounded-full mr-2" src={context.myProfile?.img_url || DEFAULT_PROFILE_PIC} alt={context.myProfile?.name || context.myProfile?.username || context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Profile'} />
-													<span className="text-sm sm:text-base truncate dark:text-gray-200 group-hover:text-stpink dark:group-hover:text-stpink transition">{context.myProfile?.name || context.myProfile?.username || context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Profile'}</span>
+													<span className="hidden md:inline text-sm sm:text-base truncate dark:text-gray-200 group-hover:text-stpink dark:group-hover:text-stpink transition">{context.myProfile?.name || context.myProfile?.username || context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Profile'}</span>
 												</Menu.Button>
 											</div>
 											<Transition show={open} as={Fragment} enter="transition ease-out duration-200" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
@@ -149,18 +155,6 @@ const Header = () => {
 									)}
 								</Menu>
 							) : (
-								// <Link href="/[profile]" as={`/${context.myProfile.username ? context.myProfile.username : context.myProfile.wallet_addresses_excluding_email_v2 && context.myProfile.wallet_addresses_excluding_email_v2.length > 0 ? (context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain : context.myProfile.wallet_addresses_excluding_email_v2[0].address) : context.user.publicAddress}`}>
-								// 	<a className="dark:text-gray-200 text-base flex flex-row items-center hover:text-stpink" onClick={() => mixpanel.track('Profile button click')}>
-								// 		<>
-								// 			<div className={context.windowSize ? (context.windowSize.width < 350 ? 'hidden' : null) : null}>
-								// 				<img alt="profile pic" src={context.myProfile ? (context.myProfile.img_url ? context.myProfile.img_url : DEFAULT_PROFILE_PIC) : DEFAULT_PROFILE_PIC} className="mr-2 rounded-full h-8 w-8 min-w-[1.875rem]" />
-								// 			</div>
-								// 			<div className="text-sm sm:text-base truncate" style={{ maxWidth: context.windowSize?.width < 500 ? 100 : 200 }}>
-								// 				{context.myProfile ? (context.myProfile.name ? context.myProfile.name : context.myProfile.username ? context.myProfile.username : context.myProfile.wallet_addresses_excluding_email_v2 && context.myProfile.wallet_addresses_excluding_email_v2.length > 0 ? (context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? context.myProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(context.myProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Profile') : 'Profile'}
-								// 			</div>
-								// 		</>
-								// 	</a>
-								// </Link>
 								<>
 									<div className="flex text-sm md:text-base dark:text-gray-200 hover:text-stpink dark:hover:text-stpink cursor-pointer hover:border-stpink dark:hover:border-stpink text-center" onClick={() => context.setLoginModalOpen(!context.loginModalOpen)}>
 										Sign&nbsp;in
@@ -171,40 +165,28 @@ const Header = () => {
 					</div>
 
 					{/* Start mobile-only menu */}
-					{context.isMobile && (
-						<div className={`flex md:hidden justify-between items-center pb-1 px-3 ${isSearchBarOpen ? 'invisible' : ''}`}>
-							<div>
-								<Link href="/c/[collection]" as="/c/spotlights">
-									<a
-										className="text-black dark:text-white hover:text-stpink dark:hover:text-stpink mr-5 text-sm md:text-base"
-										onClick={() => {
-											mixpanel.track('Discover button click')
-										}}
-									>
-										Discover
-									</a>
-								</Link>
-								<Link href="/trending">
-									<a
-										className="text-black dark:text-white hover:text-stpink dark:hover:text-stpink mr-5 text-sm md:text-base"
-										onClick={() => {
-											mixpanel.track('Trending button click')
-										}}
-									>
-										Trending
-									</a>
-								</Link>
-							</div>
-							<div className="flex-grow flex-1">
-								<SearchBar propagateSearchState={setSearchBarOpen} />
-							</div>
-							{context.isMobile && context.user && context.myProfile !== undefined && (
-								<div className="flex-shrink ml-4">
-									<NotificationsBtn />
-								</div>
-							)}
+					<div className={`mt-2 md:hidden ${isSearchBarOpen ? 'invisible' : ''}`}>
+						<div className="flex-1 flex justify-around font-normal -mx-2">
+							<Link href="/">
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-2 ${asPath == '/' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>
+									<HomeIcon className="w-5 h-5" />
+									<span>Feed</span>
+								</a>
+							</Link>
+							<Link href="/c/spotlights">
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-2 ${asPath == '/c/spotlights' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>
+									<StarIcon className="w-5 h-5" />
+									<span>Discover</span>
+								</a>
+							</Link>
+							<Link href="/trending">
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-2 ${asPath == '/trending' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Trending button click')}>
+									<TrendIcon className="w-5 h-5" />
+									<span>Trending</span>
+								</a>
+							</Link>
 						</div>
-					)}
+					</div>
 					{/* End mobile-only menu */}
 				</CappedWidth>
 			</header>
