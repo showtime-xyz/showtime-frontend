@@ -4,12 +4,12 @@ import Link from 'next/link'
 import { faComment, faHeart, faUser, faAt } from '@fortawesome/free-solid-svg-icons'
 import useDetectOutsideClick from '@/hooks/useDetectOutsideClick'
 import { formatDistanceToNowStrict } from 'date-fns'
-import BellIcon from './Icons/BellIcon'
 import useInterval from '@/hooks/useInterval'
 import AppContext from '@/context/app-context'
 import { getNotificationInfo, DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import ModalUserList from '@/components/ModalUserList'
 import axios from '@/lib/axios'
+import ZapIcon from './Icons/ZapIcon'
 
 const NOTIFICATIONS_PER_PAGE = 7
 
@@ -108,8 +108,8 @@ export default function NotificationsBtn() {
 	return (
 		<div className="relative">
 			<div onClick={toggleOpen} className="dark:text-gray-200 hover:text-stpink transition-all rounded-full h-6 w-6 flex items-center justify-center cursor-pointer relative">
-				<BellIcon className="w-5 h-5" />
-				{hasUnreadNotifications && <div className="bg-stpink absolute h-2.5 w-2.5 top-px left-px rounded-full" />}
+				<ZapIcon className="w-5 h-5" />
+				{hasUnreadNotifications && <div className="bg-gradient-to-r from-[#4D54FF] to-[#E14DFF] absolute h-2 w-2 top-0 right-0 rounded-full" />}
 			</div>
 			<div
 				ref={dropdownRef}

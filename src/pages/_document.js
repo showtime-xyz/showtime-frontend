@@ -11,8 +11,8 @@ export default class MyDocument extends Document {
 				<Head>
 					{/* preload fonts */}
 					<link rel="stylesheet" href="/fonts/showtime.css" />
-					<link rel="preload" href="/fonts/woff2/Tomato Grotesk Medium.woff2" as="font" type="font/woff2" />
-					<link rel="preload" href="/fonts/woff/Tomato Grotesk Medium.woff" as="font" type="font/woff" />
+					<link rel="preconnect" href="https://fonts.gstatic.com" />
+					<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 					<link rel="preload" href="/fonts/woff2/Afronaut.woff2" as="font" type="font/woff2" />
 					<link rel="preload" href="/fonts/woff/Afronaut.woff" as="font" type="font/woff" />
 				</Head>

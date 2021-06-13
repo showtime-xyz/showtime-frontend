@@ -48,11 +48,11 @@ const Header = () => {
 			) : null}
 			<header className="px-2 pt-1 sm:py-3 bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none sticky top-0 z-1">
 				<CappedWidth>
-					<div className="flex flex-row items-center justify-between px-2 md:px-3">
-						<div className="md:flex-1 flex flex-row-reverse md:flex-row items-center">
+					<div className="flex flex-row items-center justify-between px-2 md:px-3 space-x-5">
+						<div className="flex-1 flex items-center space-x-4">
 							<Link href="/">
 								<a
-									className="flex flex-row text-black dark:text-white hover:text-stpink dark:hover:text-stpink items-center text-left text-xl ml-4 md:mr-6"
+									className="flex flex-row text-black dark:text-white hover:text-stpink dark:hover:text-stpink items-center text-left text-xl ml-4 md:mr-6 font-tomato"
 									onClick={async () => {
 										mixpanel.track('Logo button click')
 										await context.setToggleRefreshFeed(!context.toggleRefreshFeed)
@@ -66,26 +66,26 @@ const Header = () => {
 						{/* Start desktop-only menu */}
 						<div className="hidden flex-1 md:flex mr-6 items-center font-normal space-x-4">
 							<Link href="/">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/' ? 'bg-gray-100' : 'hover:bg-gray-100'} rounded-full py-1 px-2`} onClick={() => mixpanel.track('Discover button click')}>
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/' ? 'bg-gray-200' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter backdrop-blur-lg backdrop-saturate-150'} rounded-full py-1 px-2`} onClick={() => mixpanel.track('Discover button click')}>
 									<HomeIcon className="w-5 h-5" />
 									<span>Feed</span>
 								</a>
 							</Link>
 							<Link href="/c/spotlights">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/c/spotlights' ? 'bg-gray-100' : 'hover:bg-gray-100'} rounded-full py-1 px-2`} onClick={() => mixpanel.track('Discover button click')}>
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/c/spotlights' ? 'bg-gray-200' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter backdrop-blur-lg backdrop-saturate-150'} rounded-full py-1 px-2`} onClick={() => mixpanel.track('Discover button click')}>
 									<StarIcon className="w-5 h-5" />
 									<span>Discover</span>
 								</a>
 							</Link>
 							<Link href="/trending">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/trending' ? 'bg-gray-100' : 'hover:bg-gray-100'} rounded-full py-1 px-2`} onClick={() => mixpanel.track('Trending button click')}>
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/trending' ? 'bg-gray-200' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter backdrop-blur-lg backdrop-saturate-150'} rounded-full py-1 px-2`} onClick={() => mixpanel.track('Trending button click')}>
 									<TrendIcon className="w-5 h-5" />
 									<span>Trending</span>
 								</a>
 							</Link>
 						</div>
-
 						{/* End desktop-only menu */}
+
 						<div className="flex items-center">
 							{context.user && context.myProfile !== undefined && (
 								<div className="flex-shrink ml-5">
@@ -104,33 +104,33 @@ const Header = () => {
 												</Menu.Button>
 											</div>
 											<Transition show={open} as={Fragment} enter="transition ease-out duration-200" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
-												<Menu.Items static className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 divide-y divide-gray-100 dark:divide-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none z-20">
+												<Menu.Items static className="origin-top-right absolute right-0 mt-2 rounded-lg shadow-lg py-1 px-4 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 space-y-4 divide-y divide-gray-100 dark:divide-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none z-20">
 													<div className="py-1">
 														<Menu.Item as={NextLink} href={`/${context.myProfile?.username || context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.address || context.user.publicAddress}`}>
-															{({ active }) => <a className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm transition')}>Your Profile</a>}
+															{({ active }) => <a className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'block rounded-lg w-full text-left py-2 text-sm transition')}>Your Profile</a>}
 														</Menu.Item>
 														<Menu.Item as={NextLink} href="/wallet">
-															{({ active }) => <a className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm transition')}>Wallets</a>}
+															{({ active }) => <a className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'block rounded-lg w-full text-left py-2 text-sm transition')}>Wallets</a>}
 														</Menu.Item>
 													</div>
 													{!hasEmailAddress && (
-														<div className="py-1">
+														<div className="py-1 pt-4">
 															<Menu.Item>
 																{({ active }) => (
-																	<button onClick={() => setEmailModalOpen(true)} className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm transition')}>
+																	<button onClick={() => setEmailModalOpen(true)} className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'text-gray-700 dark:text-gray-500', 'block rounded-lg w-full text-left px-4 py-2 text-sm transition')}>
 																		Add Email
 																	</button>
 																)}
 															</Menu.Item>
 														</div>
 													)}
-													<div className="py-1">
+													<div className="py-1 pt-4">
 														<Menu.Item disabled>
-															<div className="flex items-center justify-between w-full text-left px-4 py-2 text-sm space-x-2">
-																<label className="text-gray-700 dark:text-gray-500" htmlFor="theme">
+															<div className="w-full space-y-2">
+																<label className="block text-gray-700 dark:text-gray-500 text-xs ml-1" htmlFor="theme">
 																	Theme
 																</label>
-																<select value={theme} onChange={e => setTheme(e.target.value)} id="theme" name="theme" className="form-select border-gray-300 dark:border-gray-800 dark:bg-gray-800 dark:text-gray-500 capitalize pl-2 py-1 text-base focus:outline-none focus:border-gray-800 focus:ring-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-800 sm:text-sm rounded-md">
+																<select value={theme} onChange={e => setTheme(e.target.value)} id="theme" name="theme" className="appearance-none w-full border-transparent dark:bg-gray-800 dark:text-gray-500 capitalize pl-2 py-1 text-base focus:outline-none focus:border-gray-800 focus:ring-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-800 sm:text-sm rounded-md">
 																	{themes.map(theme => (
 																		<option className="capitalize" value={theme} key={theme}>
 																			{theme}
@@ -140,10 +140,10 @@ const Header = () => {
 															</div>
 														</Menu.Item>
 													</div>
-													<div className="py-1">
+													<div className="py-1 pt-4">
 														<Menu.Item>
 															{({ active }) => (
-																<button onClick={() => context.logOut()} className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'text-gray-700 dark:text-gray-500', 'block w-full text-left px-4 py-2 text-sm transition')}>
+																<button onClick={() => context.logOut()} className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'text-gray-700 dark:text-gray-500', 'block rounded-lg w-full text-left px-4 py-2 text-sm transition')}>
 																	Sign Out
 																</button>
 															)}

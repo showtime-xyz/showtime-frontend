@@ -42,7 +42,8 @@ module.exports = {
 			},
 			fontFamily: {
 				afro: ['Afronaut'],
-				sans: ['"Tomato Grotesk"', ...defaultTheme.fontFamily.sans],
+				tomato: ['"Tomato Grotesk"'],
+				sans: ['"Inter"', ...defaultTheme.fontFamily.sans],
 			},
 			whitespace: {
 				'break-spaces': 'break-spaces',
