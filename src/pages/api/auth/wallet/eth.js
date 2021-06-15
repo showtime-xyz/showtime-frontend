@@ -15,7 +15,7 @@ export default handler().put(async ({ cookies, body: { addressDetected: address,
 
 	// We now are in possession of msg, publicAddress and signature. We
 	// will use a helper from eth-sig-util to extract the address from the signature
-	const msgBufferHex = bufferToHex(Buffer.from(process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + nonce, 'utf8'))
+	const msgBufferHex = bufferToHex(Buffer.from(process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + ' ' + nonce, 'utf8'))
 	const verifiedAddress = recoverPersonalSignature({ data: msgBufferHex, sig: signature })
 
 	// The signature verification is successful if the address found with
