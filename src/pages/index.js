@@ -210,7 +210,9 @@ const Activity = () => {
 							</div>
 						</CappedWidth>
 					</div>
-				) : null}
+				) : (
+					<div className="h-6" />
+				)}
 
 				<CappedWidth>
 					<div className="m-auto relative">

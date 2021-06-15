@@ -12,12 +12,6 @@ import TrendingCreators from '@/components/TrendingCreators'
 // how many leaders to show on first load
 const LEADERBOARD_LIMIT = 10
 
-export async function getServerSideProps() {
-	return {
-		props: {},
-	}
-}
-
 const Leaderboard = () => {
 	const context = useContext(AppContext)
 	useEffect(() => {
@@ -78,6 +72,7 @@ const Leaderboard = () => {
 			</Head>
 
 			<div className="py-12 sm:py-14 px-8 sm:px-10 text-left " style={{ background: 'linear-gradient(133deg, rgba(184,38,193,0.95) 0%, rgba(67,142,223,0.9) 50%, rgba(67,186,193,0.8) 100%)' }}>
+				<div className="h-6" />
 				<CappedWidth>
 					<div className="flex flex-row mx-3 text-white">
 						<div className="flex-1">

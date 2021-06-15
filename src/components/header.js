@@ -47,7 +47,7 @@ const Header = () => {
 					<ModalAddEmail isOpen={emailModalOpen} setEmailModalOpen={setEmailModalOpen} setHasEmailAddress={setHasEmailAddress} />
 				</>
 			) : null}
-			<header className="px-2 pt-3 sm:py-3 bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none sticky top-0 z-1">
+			<header className="px-2 pt-3 sm:py-3 bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none fixed top-0 z-1">
 				<CappedWidth>
 					<div className="flex flex-row items-center justify-between px-2 md:px-3 space-x-5">
 						<div className="flex-1 flex items-center space-x-4">
@@ -67,19 +67,19 @@ const Header = () => {
 						{/* Start desktop-only menu */}
 						<div className="hidden flex-1 md:flex mr-6 items-center font-normal space-x-4">
 							<Link href="/">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/' ? 'bg-gray-200' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter backdrop-blur-lg backdrop-saturate-150'} rounded-full py-1 px-2`} onClick={() => mixpanel.track('Discover button click')}>
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter backdrop-blur-lg backdrop-saturate-150'} rounded-full py-1 px-2`} onClick={() => mixpanel.track('Discover button click')}>
 									<HomeIcon className="w-5 h-5" />
 									<span>Feed</span>
 								</a>
 							</Link>
 							<Link href="/c/spotlights">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/c/spotlights' ? 'bg-gray-200' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter backdrop-blur-lg backdrop-saturate-150'} rounded-full py-1 px-2`} onClick={() => mixpanel.track('Discover button click')}>
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/c/spotlights' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter backdrop-blur-lg backdrop-saturate-150'} rounded-full py-1 px-2`} onClick={() => mixpanel.track('Discover button click')}>
 									<StarIcon className="w-5 h-5" />
 									<span>Discover</span>
 								</a>
 							</Link>
 							<Link href="/trending">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/trending' ? 'bg-gray-200' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter backdrop-blur-lg backdrop-saturate-150'} rounded-full py-1 px-2`} onClick={() => mixpanel.track('Trending button click')}>
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/trending' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter backdrop-blur-lg backdrop-saturate-150'} rounded-full py-1 px-2`} onClick={() => mixpanel.track('Trending button click')}>
 									<TrendIcon className="w-5 h-5" />
 									<span>Trending</span>
 								</a>
