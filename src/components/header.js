@@ -15,6 +15,7 @@ import HomeIcon from './Icons/HomeIcon'
 import StarIcon from './Icons/StarIcon'
 import TrendIcon from './Icons/TrendIcon'
 import { useRouter } from 'next/router'
+import WalletIcon from './Icons/WalletIcon'
 
 // Next.js' Link component doesn't appropiately forward all props, so we need to wrap it in order to use it on our menu
 const NextLink = ({ href, children, ...rest }) => (
@@ -46,7 +47,7 @@ const Header = () => {
 					<ModalAddEmail isOpen={emailModalOpen} setEmailModalOpen={setEmailModalOpen} setHasEmailAddress={setHasEmailAddress} />
 				</>
 			) : null}
-			<header className="px-2 pt-1 sm:py-3 bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none sticky top-0 z-1">
+			<header className="px-2 pt-3 sm:py-3 bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none sticky top-0 z-1">
 				<CappedWidth>
 					<div className="flex flex-row items-center justify-between px-2 md:px-3 space-x-5">
 						<div className="flex-1 flex items-center space-x-4">
@@ -156,8 +157,9 @@ const Header = () => {
 								</Menu>
 							) : (
 								<>
-									<div className="flex text-sm md:text-base dark:text-gray-200 hover:text-stpink dark:hover:text-stpink cursor-pointer hover:border-stpink dark:hover:border-stpink text-center" onClick={() => context.setLoginModalOpen(!context.loginModalOpen)}>
-										Sign&nbsp;in
+									<div className="flex items-center space-x-2 text-sm md:text-base dark:text-gray-200 hover:text-stpink dark:hover:text-stpink cursor-pointer hover:border-stpink dark:hover:border-stpink" onClick={() => context.setLoginModalOpen(!context.loginModalOpen)}>
+										<WalletIcon className="w-5 h-5" />
+										<span>Sign&nbsp;in</span>
 									</div>
 								</>
 							)}
@@ -165,22 +167,22 @@ const Header = () => {
 					</div>
 
 					{/* Start mobile-only menu */}
-					<div className={`mt-2 md:hidden ${isSearchBarOpen ? 'invisible' : ''}`}>
+					<div className={`mt-4 md:hidden ${isSearchBarOpen ? 'invisible' : ''}`}>
 						<div className="flex-1 flex justify-around font-normal -mx-2">
 							<Link href="/">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-2 ${asPath == '/' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 ${asPath == '/' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>
 									<HomeIcon className="w-5 h-5" />
 									<span>Feed</span>
 								</a>
 							</Link>
 							<Link href="/c/spotlights">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-2 ${asPath == '/c/spotlights' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 ${asPath == '/c/spotlights' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>
 									<StarIcon className="w-5 h-5" />
 									<span>Discover</span>
 								</a>
 							</Link>
 							<Link href="/trending">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-2 ${asPath == '/trending' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Trending button click')}>
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 ${asPath == '/trending' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Trending button click')}>
 									<TrendIcon className="w-5 h-5" />
 									<span>Trending</span>
 								</a>
