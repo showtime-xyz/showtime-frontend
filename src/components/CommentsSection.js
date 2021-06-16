@@ -232,7 +232,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 							allowSpaceInQuery
 							maxLength={240}
 						>
-							<Mention trigger="@" renderSuggestion={parentComment ? null : s => suggestion(s)} displayTransform={() => ''} data={parentComment ? handleSearchQuery : handleDebouncedSearchQuery} className="border-2 border-transparent bg-purple-200 dark:bg-gray-800  rounded -ml-1.5 px-1" appendSpaceOnAdd />
+							<Mention trigger="@" renderSuggestion={parentComment ? null : s => suggestion(s)} data={parentComment ? handleSearchQuery : handleDebouncedSearchQuery} className="border-2 border-transparent bg-purple-200 dark:bg-gray-800  rounded -ml-1.5 px-1" appendSpaceOnAdd />
 						</MentionsInput>
 						<Menu.Button className="hidden md:block absolute bottom-1 right-1">
 							<EmojiHappyIcon className="w-5 h-5 text-gray-500" />
