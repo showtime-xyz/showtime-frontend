@@ -33,3 +33,8 @@
 }
 
 @import 'tippy.js/dist/tippy.css';
+@import 'emoji-mart/css/emoji-mart.css';
+
+.emoji-mart-bar {
+    @apply hidden;
+}
