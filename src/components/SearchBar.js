@@ -72,11 +72,11 @@ const SearchBar = ({ propagateSearchState }) => {
 			{/* Start desktop-only menu */}
 			<div className="hidden flex-col relative w-full max-w-3xl md:flex">
 				<div className="flex relative w-full" ref={searchInputContainerRef}>
-					<div className="text-gray-600 absolute left-2.5 top-2 transform translate-y-px pointer-events-none z-1">
-						<SearchIcon className="w-4 h-4" />
+					<div className="absolute left-2.5 top-2 transform translate-y-px pointer-events-none z-1">
+						<SearchIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
 					</div>
 					<input
-						className="flex border border-transparent dark:border-gray-800 bg-white placeholder-gray-500 text-gray-600 dark:text-gray-400 dark:bg-gray-900 bg-opacity-10 dark:bg-opacity-20 backdrop-filter backdrop-blur-lg backdrop-saturate-150 px-2 pl-8 py-1.5 rounded-full focus:outline-none text-sm w-full"
+						className="flex border placeholder-gray-500 dark:placeholder-gray-400 border-transparent dark:border-gray-800 bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150 px-2 pl-8 py-1.5 rounded-full focus:outline-none text-sm w-full"
 						type="text"
 						placeholder="Search by name or wallet address"
 						value={searchText}

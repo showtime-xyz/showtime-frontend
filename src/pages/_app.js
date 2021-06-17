@@ -9,6 +9,7 @@ import ModalThrottleUser from '@/components/ModalThrottleUser'
 import axios from '@/lib/axios'
 import { filterNewRecs } from '../lib/utilities'
 import { ThemeProvider } from 'next-themes'
+import useAuth from '@/hooks/useAuth'
 
 mixpanel.init('9b14512bc76f3f349c708f67ab189941')
 
@@ -25,6 +26,7 @@ Router.events.on('routeChangeComplete', progress.finish)
 Router.events.on('routeChangeError', progress.finish)
 
 const App = ({ Component, pageProps }) => {
+	const { revalidate } = useAuth()
 	const [user, setUser] = useState()
 	const [windowSize, setWindowSize] = useState(null)
 	const [myLikes, setMyLikes] = useState(null)
@@ -226,6 +228,7 @@ const App = ({ Component, pageProps }) => {
 		adjustGridProperties,
 		logOut: async () => {
 			await axios.post('/api/auth/logout')
+			revalidate()
 			setUser(null)
 			setMyLikes([])
 			setMyLikeCounts({})
