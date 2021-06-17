@@ -107,7 +107,7 @@ export default function NotificationsBtn() {
 
 	return (
 		<div className="relative">
-			<div onClick={toggleOpen} className="dark:text-gray-200 hover:text-stpink transition-all rounded-full h-6 w-6 flex items-center justify-center cursor-pointer relative">
+			<div onClick={toggleOpen} className="dark:text-gray-300 hover:text-stpink transition-all rounded-full h-6 w-6 flex items-center justify-center cursor-pointer relative">
 				<ZapIcon className="w-5 h-5" />
 				{hasUnreadNotifications && <div className="bg-gradient-to-r from-[#4D54FF] to-[#E14DFF] absolute h-2 w-2 top-0 right-0 rounded-full" />}
 			</div>
