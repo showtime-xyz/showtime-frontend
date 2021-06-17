@@ -18,6 +18,7 @@ import { useRouter } from 'next/router'
 import WalletIcon from './Icons/WalletIcon'
 import Image from 'next/image'
 import showtimeLogo from '../../public/img/logo.png'
+import Dropdown from './UI/Dropdown'
 
 console.log(showtimeLogo)
 
@@ -109,20 +110,20 @@ const Header = () => {
 												</Menu.Button>
 											</div>
 											<Transition show={open} as={Fragment} enter="transition ease-out duration-200" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
-												<Menu.Items static className="origin-top-right absolute right-0 mt-2 rounded-lg shadow-lg py-1 px-4 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 space-y-4 divide-y divide-gray-100 dark:divide-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none z-20">
+												<Menu.Items static className="origin-top-right absolute right-0 mt-2 rounded-2xl shadow-lg py-1 px-2 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 space-y-4 divide-y divide-gray-100 dark:divide-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none z-20 min-w-[10rem]">
 													<div className="py-1">
 														<Menu.Item as={NextLink} href={`/${context.myProfile?.username || context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || context.myProfile.wallet_addresses_excluding_email_v2?.[0]?.address || context.user.publicAddress}`}>
-															{({ active }) => <a className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'block rounded-lg w-full text-left py-2 text-sm transition')}>Your Profile</a>}
+															{({ active }) => <a className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'block rounded-lg w-full text-left py-2 pr-6 pl-2 text-sm font-semibold transition')}>Your Profile</a>}
 														</Menu.Item>
 														<Menu.Item as={NextLink} href="/wallet">
-															{({ active }) => <a className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'block rounded-lg w-full text-left py-2 text-sm transition')}>Wallets</a>}
+															{({ active }) => <a className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'block rounded-lg w-full text-left py-2 pr-6 pl-2 text-sm font-semibold transition')}>Wallets</a>}
 														</Menu.Item>
 													</div>
 													{!hasEmailAddress && (
 														<div className="py-1 pt-4">
 															<Menu.Item>
 																{({ active }) => (
-																	<button onClick={() => setEmailModalOpen(true)} className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'text-gray-700 dark:text-gray-500', 'block rounded-lg w-full text-left px-4 py-2 text-sm transition')}>
+																	<button onClick={() => setEmailModalOpen(true)} className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'text-gray-700 dark:text-gray-500', 'block rounded-lg w-full text-left pr-6 pl-2 py-2 text-sm font-semibold transition')}>
 																		Add Email
 																	</button>
 																)}
@@ -132,23 +133,14 @@ const Header = () => {
 													<div className="py-1 pt-4">
 														<Menu.Item disabled>
 															<div className="w-full space-y-2">
-																<label className="block text-gray-700 dark:text-gray-500 text-xs ml-1" htmlFor="theme">
-																	Theme
-																</label>
-																<select value={theme} onChange={e => setTheme(e.target.value)} id="theme" name="theme" className="appearance-none w-full border-transparent dark:bg-gray-800 dark:text-gray-500 capitalize pl-2 py-1 text-base focus:outline-none focus:border-gray-800 focus:ring-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-800 sm:text-sm rounded-md">
-																	{themes.map(theme => (
-																		<option className="capitalize" value={theme} key={theme}>
-																			{theme}
-																		</option>
-																	))}
-																</select>
+																<Dropdown label="Theme" options={themes.map(t => ({ value: t, label: t.charAt(0).toUpperCase() + t.slice(1) }))} value={theme} onChange={setTheme} />
 															</div>
 														</Menu.Item>
 													</div>
 													<div className="py-1 pt-4">
 														<Menu.Item>
 															{({ active }) => (
-																<button onClick={() => context.logOut()} className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'text-gray-700 dark:text-gray-500', 'block rounded-lg w-full text-left px-4 py-2 text-sm transition')}>
+																<button onClick={() => context.logOut()} className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'text-gray-700 dark:text-gray-500', 'block rounded-lg w-full text-left pr-6 pl-2 py-2 text-sm font-semibold transition')}>
 																	Sign Out
 																</button>
 															)}
