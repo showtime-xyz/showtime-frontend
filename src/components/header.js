@@ -19,6 +19,8 @@ import WalletIcon from './Icons/WalletIcon'
 import Image from 'next/image'
 import showtimeLogo from '../../public/img/logo.png'
 
+console.log(showtimeLogo)
+
 // Next.js' Link component doesn't appropiately forward all props, so we need to wrap it in order to use it on our menu
 const NextLink = ({ href, children, ...rest }) => (
 	<Link href={href}>
@@ -55,13 +57,13 @@ const Header = () => {
 						<div className="flex-1 flex items-center space-x-4">
 							<Link href="/">
 								<a
-									className="flex flex-row text-black dark:text-white hover:text-stpink dark:hover:text-stpink items-center ml-4 md:mr-6"
+									className="flex flex-shrink-0 md:mr-6"
 									onClick={async () => {
 										mixpanel.track('Logo button click')
 										await context.setToggleRefreshFeed(!context.toggleRefreshFeed)
 									}}
 								>
-									<Image src={showtimeLogo} width={40} height={40} className="rounded-lg overflow-hidden" placeholder="blur" />
+									<img src={showtimeLogo.src} alt="Showtime logo" className="rounded-lg overflow-hidden w-8 h-8" />
 								</a>
 							</Link>
 							<SearchBar propagateSearchState={setSearchBarOpen} />
@@ -89,7 +91,7 @@ const Header = () => {
 						</div>
 						{/* End desktop-only menu */}
 
-						<div className="flex items-center">
+						<div className={`flex items-center ${isSearchBarOpen ? 'hidden' : ''}`}>
 							{context.user && context.myProfile !== undefined && (
 								<div className="flex-shrink ml-5">
 									<NotificationsBtn />
@@ -169,7 +171,7 @@ const Header = () => {
 					</div>
 
 					{/* Start mobile-only menu */}
-					<div className={`mt-4 md:hidden ${isSearchBarOpen ? 'invisible' : ''}`}>
+					<div className="mt-4 md:hidden">
 						<div className="flex-1 flex justify-around font-normal -mx-2">
 							<Link href="/">
 								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 ${asPath == '/' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>
