@@ -55,10 +55,10 @@ const Header = () => {
 			<header className="px-2 pt-3 sm:py-3 bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none sticky top-0 z-1">
 				<CappedWidth>
 					<div className="flex flex-row items-center justify-between px-2 md:px-3 space-x-5">
-						<div className="flex-1 flex items-center space-x-4">
+						<div className="flex-1 flex items-center space-x-2">
 							<Link href="/">
 								<a
-									className="flex flex-shrink-0 md:mr-6"
+									className="flex flex-shrink-0"
 									onClick={async () => {
 										mixpanel.track('Logo button click')
 										await context.setToggleRefreshFeed(!context.toggleRefreshFeed)
