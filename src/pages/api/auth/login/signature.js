@@ -14,7 +14,7 @@ export default handler().post(async ({ body: { address, signature } }, res) => {
 	} = await backend.get(`/v1/getnonce?address=${address}`)
 
 	// If it checks out, save to a cookie
-	const msg = process.env.NEXT_PUBLIC_SIGNING_MESSAGE + nonce
+	const msg = process.env.NEXT_PUBLIC_SIGNING_MESSAGE + ' ' + nonce
 
 	// We now are in possession of msg, publicAddress and signature. We
 	// will use a helper from eth-sig-util to extract the address from the signature

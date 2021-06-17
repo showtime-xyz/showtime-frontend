@@ -184,7 +184,7 @@ export default function NotificationsBtn() {
 													<span className="text-gray-500">, </span>
 													<Link href="/[profile]" as={`/${notif.actors[1]?.username || notif.actors[1].wallet_address}`}>
 														<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setIsActive(!isActive)}>
-															{notif.actors[1].name}{' '}
+															{notif.actors[1].name}
 														</a>
 													</Link>
 													<span className="text-gray-500">, and </span>
