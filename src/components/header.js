@@ -16,6 +16,8 @@ import StarIcon from './Icons/StarIcon'
 import TrendIcon from './Icons/TrendIcon'
 import { useRouter } from 'next/router'
 import WalletIcon from './Icons/WalletIcon'
+import Image from 'next/image'
+import showtimeLogo from '../../public/img/logo.png'
 
 // Next.js' Link component doesn't appropiately forward all props, so we need to wrap it in order to use it on our menu
 const NextLink = ({ href, children, ...rest }) => (
@@ -47,19 +49,19 @@ const Header = () => {
 					<ModalAddEmail isOpen={emailModalOpen} setEmailModalOpen={setEmailModalOpen} setHasEmailAddress={setHasEmailAddress} />
 				</>
 			) : null}
-			<header className="px-2 pt-3 sm:py-3 bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none fixed top-0 z-1">
+			<header className="px-2 pt-3 sm:py-3 bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none sticky top-0 z-1">
 				<CappedWidth>
 					<div className="flex flex-row items-center justify-between px-2 md:px-3 space-x-5">
 						<div className="flex-1 flex items-center space-x-4">
 							<Link href="/">
 								<a
-									className="flex flex-row text-black dark:text-white hover:text-stpink dark:hover:text-stpink items-center text-left text-xl ml-4 md:mr-6 font-tomato"
+									className="flex flex-row text-black dark:text-white hover:text-stpink dark:hover:text-stpink items-center ml-4 md:mr-6"
 									onClick={async () => {
 										mixpanel.track('Logo button click')
 										await context.setToggleRefreshFeed(!context.toggleRefreshFeed)
 									}}
 								>
-									Showtime
+									<Image src={showtimeLogo} width={40} height={40} className="rounded-lg overflow-hidden" placeholder="blur" />
 								</a>
 							</Link>
 							<SearchBar propagateSearchState={setSearchBarOpen} />
