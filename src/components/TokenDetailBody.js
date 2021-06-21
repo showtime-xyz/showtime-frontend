@@ -386,7 +386,7 @@ const TokenDetailBody = ({
 					{/* OpenSea Link */}
 
 					<div className="m-4 flex text-sm">
-						{item.contract_address == CONTRACTS.HICETNUNC ? null : (
+						{(CONTRACTS.HICETNUNC, CONTRACTS.KALAMINT).includes(item.contract_address) ? null : (
 							<>
 								<a
 									href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`}

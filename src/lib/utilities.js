@@ -81,6 +81,13 @@ export const getBidLink = item => {
 			}
 		case CONTRACTS.EPHIMERA:
 			return `https://ephimera.com/tokens/${item.token_id}`
+		case CONTRACTS.KALAMINT:
+			if (item.token_edition_identifier) {
+				return `https://kalamint.io/collection/${item.token_edition_identifier}`
+			} else {
+				return `https://kalamint.io/token/${item.token_id}`
+			}
+
 		case CONTRACTS.HICETNUNC:
 			return `https://www.hicetnunc.xyz/objkt/${item.token_id}`
 		default:
@@ -130,6 +137,8 @@ export const getContractName = item => {
 			}
 		case CONTRACTS.EPHIMERA:
 			return 'Ephimera'
+		case CONTRACTS.KALAMINT:
+			return 'Kalamint'
 		case CONTRACTS.HICETNUNC:
 			return 'Hic Et Nunc'
 		default:
