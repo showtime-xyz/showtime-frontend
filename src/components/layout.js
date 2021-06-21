@@ -17,16 +17,18 @@ const Layout = ({ children }) => {
 				<meta name="keywords" content="showtime, ethereum, token, nft" />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0" />
 
-				<Script
-					src="https://www.googletagmanager.com/gtag/js?id=G-EJP74KCP4M"
-					strategy="afterInteractive"
-					onLoad={() => {
-						window.dataLayer = window.dataLayer || []
-						const gtag = (...args) => window.dataLayer.push(args)
-						gtag('js', new Date())
-						gtag('config', 'G-EJP74KCP4M')
+				<script
+					dangerouslySetInnerHTML={{
+						__html: `
+             window.dataLayer = window.dataLayer || [];
+             function gtag(){dataLayer.push(arguments);}
+             gtag('js', new Date());
+             gtag('config', 'G-EJP74KCP4M');
+         `,
 					}}
 				/>
+
+				<Script src="https://www.googletagmanager.com/gtag/js?id=G-EJP74KCP4M" strategy="afterInteractive" />
 
 				<meta name="theme-color" content={resolvedTheme === 'dark' ? '#171717' : '#ffffff'} />
 			</Head>
