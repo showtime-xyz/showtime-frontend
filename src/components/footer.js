@@ -1,18 +1,9 @@
 import { MailIcon } from '@heroicons/react/solid'
-import { useState } from 'react'
-import ModalFeedback from './ModalFeedback'
 import CappedWidth from './CappedWidth'
 
 const Footer = () => {
-	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false)
-
 	return (
 		<>
-			{typeof document !== 'undefined' ? (
-				<>
-					<ModalFeedback isOpen={isFeedbackModalOpen} closeModal={() => setIsFeedbackModalOpen(false)} />
-				</>
-			) : null}
 			<footer className="text-center bg-black px-10">
 				<CappedWidth>
 					<div className="px-3 text-sm my-8 py-4 text-center text-gray-400 flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
@@ -45,7 +36,7 @@ const Footer = () => {
 								Terms &amp; Conditions
 							</a>{' '}
 							·{' '}
-							<a className="cursor-pointer hover:text-gray-300 transition" onClick={() => setIsFeedbackModalOpen(true)}>
+							<a className="cursor-pointer hover:text-gray-300 transition" href="https://showtime.nolt.io/" target="_blank" rel="noreferrer">
 								Feedback
 							</a>
 						</div>
