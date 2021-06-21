@@ -11,6 +11,7 @@ const Layout = ({ children }) => {
 
 	return (
 		<div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 tracking-wide">
+			<Script src="https://www.googletagmanager.com/gtag/js?id=G-EJP74KCP4M" strategy="afterInteractive" />
 			<Head>
 				<link rel="icon" href="/logo_sm.jpg" />
 
@@ -27,8 +28,6 @@ const Layout = ({ children }) => {
          `,
 					}}
 				/>
-
-				<Script src="https://www.googletagmanager.com/gtag/js?id=G-EJP74KCP4M" strategy="afterInteractive" />
 
 				<meta name="theme-color" content={resolvedTheme === 'dark' ? '#171717' : '#ffffff'} />
 			</Head>

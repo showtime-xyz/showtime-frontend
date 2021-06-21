@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@airgap/beacon-sdk": "^2.2.8",
@@ -47,9 +48,11 @@
     "next": "^11.0.0",
     "next-connect": "^0.10.1",
     "next-themes": "^0.0.14",
+    "patch-package": "^6.4.7",
     "postcss": "^8.3.5",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-preset-env": "^6.7.0",
+    "postinstall-postinstall": "^2.1.0",
     "preact": "^10.5.13",
     "prettier": "^2.2.1",
     "react": "^17.0.2",
