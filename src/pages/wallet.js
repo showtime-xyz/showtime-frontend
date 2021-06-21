@@ -20,7 +20,7 @@ const Wallet = () => {
 	}, [resolvedTheme])
 
 	const loginWithTezos = async () => {
-		const { address: tezosAddr, publicKey: tezosPk } = await dAppClient.requestPermissions({ scopes: [PermissionScope.SIGN, PermissionScope.OPERATION_REQUEST] })
+		const { address: tezosAddr, publicKey: tezosPk } = await dAppClient.requestPermissions({ scopes: [PermissionScope.SIGN] })
 
 		const {
 			data: { data: nonce },
