@@ -81,7 +81,7 @@
     "node": "14.x"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.13.14",
+    "@babel/eslint-parser": "^7.14.7",
     "eslint": "^7.25.0",
     "eslint-config-next": "^11.0.0",
     "eslint-config-prettier": "^8.3.0",
