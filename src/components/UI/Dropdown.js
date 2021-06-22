@@ -1,6 +1,5 @@
 import { classNames } from '@/lib/utilities'
 import { Listbox, Transition } from '@headlessui/react'
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { Fragment } from 'react'
 import ChevronDown from '../Icons/ChevronDown'
 

@@ -2,7 +2,7 @@ import { useState, useEffect, useContext, useRef, Fragment } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import mixpanel from 'mixpanel-browser'
-import BadgeIcon from '../components/Icons/BadgeIcon'
+import BadgeIcon from '@/components/Icons/BadgeIcon'
 import Layout from '@/components/layout'
 import CappedWidth from '@/components/CappedWidth'
 import TokenGridV5 from '@/components/TokenGridV5'
@@ -13,20 +13,18 @@ import ModalEditPhoto from '@/components/ModalEditPhoto'
 import ModalEditCover from '@/components/ModalEditCover'
 import ModalUserList from '@/components/ModalUserList'
 import { formatAddressShort, truncateWithEllipses, classNames } from '@/lib/utilities'
-import AddressButton, { AddressCollection } from '@/components/AddressButton'
+import { AddressCollection } from '@/components/AddressButton'
 import { PROFILE_TABS, SORT_FIELDS, DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import SpotlightItem from '@/components/SpotlightItem'
-import ProfileFollowersPill from '@/components/ProfileFollowersPill'
 import { Listbox, Transition, Menu } from '@headlessui/react'
-import { CheckIcon, SelectorIcon, PencilAltIcon, LinkIcon, PhotographIcon as PhotographSolidIcon, HeartIcon as HeartSolidIcon, DotsHorizontalIcon } from '@heroicons/react/solid'
+import { CheckIcon, SelectorIcon, PencilAltIcon, PhotographIcon as PhotographSolidIcon, HeartIcon as HeartSolidIcon, DotsHorizontalIcon } from '@heroicons/react/solid'
 import { FingerPrintIcon, PhotographIcon as PhotographOutlineIcon, HeartIcon as HeartOutlineIcon, UploadIcon } from '@heroicons/react/outline'
 import axios from '@/lib/axios'
 import EllipsisIcon from '@/components/Icons/EllipsisIcon'
 import UserAddIcon from '@/components/Icons/UserAddIcon'
 import FollowersInCommon from '@/components/FollowersInCommon'
-import useSWR from 'swr'
-import GlobeIcon from '../components/Icons/GlobeIcon'
-import useAuth from '../hooks/useAuth'
+import GlobeIcon from '@/components/Icons/GlobeIcon'
+import useAuth from '@/hooks/useAuth'
 
 export async function getServerSideProps(context) {
 	const { res, query } = context
@@ -493,20 +491,14 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setShowFollowing(false)
 	}, [profile_id, lists.default_list_id, isLoadingCards])
 
-	// profilePill Edit profile actions
-	const editAccount = () => {
-		setEditModalOpen(true)
-		mixpanel.track('Open edit name')
-	}
+	// const editAccount = () => {
+	// 	setEditModalOpen(true)
+	// 	mixpanel.track('Open edit name')
+	// }
 
 	const editPhoto = () => {
 		setPictureModalOpen(true)
 		mixpanel.track('Open edit photo')
-	}
-
-	const logout = async () => {
-		await context.logOut()
-		setIsMyProfile(false)
 	}
 
 	const [isChangingOrder, setIsChangingOrder] = useState(false)
@@ -690,7 +682,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											<button className="p-3">
 												<EllipsisIcon className="w-5 h-auto text-gray-800 dark:text-gray-500" />
 											</button>
-											<button className="bg-black dark:bg-white rounded-xl flex items-center px-4 py-2.5 space-x-2 text-white dark:text-black">
+											<button onClick={isAuthenticated ? (isFollowed ? handleUnfollow : context.disableFollows ? null : handleFollow) : handleLoggedOutFollow} className="bg-black dark:bg-white rounded-xl flex items-center px-4 py-2.5 space-x-2 text-white dark:text-black">
 												{isFollowed ? (
 													<span className="font-semibold">Following</span>
 												) : (
