@@ -1,4 +1,4 @@
-import { useState, useContext, useRef } from 'react'
+import { useState, useContext, useRef, Fragment } from 'react'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import LikeButton from './LikeButton'
@@ -9,10 +9,11 @@ import mixpanel from 'mixpanel-browser'
 import AppContext from '@/context/app-context'
 import MiniFollowButton from './MiniFollowButton'
 import TokenCardImage from '@/components/TokenCardImage'
-import { removeTags, formatAddressShort, truncateWithEllipses } from '@/lib/utilities'
+import { formatAddressShort, truncateWithEllipses, classNames } from '@/lib/utilities'
 import axios from '@/lib/axios'
-import { MenuIcon, PlayIcon, StarIcon } from '@heroicons/react/solid'
-import { DotsHorizontalIcon } from '@heroicons/react/outline'
+import { MenuIcon, PlayIcon } from '@heroicons/react/solid'
+import EllipsisIcon from './Icons/EllipsisIcon'
+import { Menu, Transition } from '@headlessui/react'
 
 const TokenCard = ({
 	originalItem,
@@ -20,8 +21,6 @@ const TokenCard = ({
 	//setShowDuplicateNFTs,
 	isMyProfile,
 	listId,
-	setOpenCardMenu,
-	openCardMenu,
 	changeSpotlightItem,
 	currentlyPlayingVideo,
 	setCurrentlyPlayingVideo,
@@ -34,7 +33,6 @@ const TokenCard = ({
 	isChangingOrder,
 }) => {
 	const [item, setItem] = useState(originalItem)
-	const [moreShown, setMoreShown] = useState(false)
 	const [showVideo, setShowVideo] = useState(false)
 	const [muted, setMuted] = useState(true)
 	const [refreshing, setRefreshing] = useState(false)
@@ -82,8 +80,6 @@ const TokenCard = ({
 		setRefreshing(false)
 	}
 
-	const max_description_length = 65
-
 	const getBackgroundColor = item => {
 		if (item.token_background_color && item.token_background_color.length === 6) {
 			return `#${item.token_background_color}`
@@ -94,73 +90,73 @@ const TokenCard = ({
 
 	return (
 		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
-			<div ref={divRef} className={`w-full h-full sm:rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all flex flex-col bg-white dark:bg-gray-900 ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border border-transparent dark:border-gray-800'}`}>
-				<div ref={item.imageRef} className="p-4 flex flex-row items-center relative">
-					<div className="pr-2 ">
-						{item.contract_is_creator ? (
-							<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
-								<a className="flex flex-row items-center ">
-									<div>
-										<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
-									</div>
-									<div className="text-gray-800 dark:text-gray-300 hover:text-stpink ml-2">{truncateWithEllipses(item.collection_name + ' Collection', 30)}</div>
-								</a>
-							</Link>
-						) : item.creator_address ? (
-							<Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
-								<a className="flex flex-row items-center ">
-									<div>
-										<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
-									</div>
-									<div className="ml-2 dark:text-gray-300 hover:text-stpink truncate">{truncateWithEllipses(item.creator_name, 22)}</div>
-								</a>
-							</Link>
-						) : null}
+			<div ref={divRef} className={`w-full h-full sm:rounded-2xl shadow-lg transition-all flex flex-col bg-white dark:bg-gray-900 ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border border-transparent dark:border-gray-800'}`}>
+				<div ref={item.imageRef} className="p-4 relative">
+					<div className="flex items-center justify-between">
+						<div className="pr-2">
+							{item.contract_is_creator ? (
+								<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
+									<a className="flex flex-row items-center space-x-2">
+										<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
+										<div>
+											<span className="text-xs font-medium text-gray-600">Created by</span>
+											<div className="text-sm font-semibold truncate -mt-0.5">{truncateWithEllipses(item.collection_name + ' Collection', 30)}</div>
+										</div>
+									</a>
+								</Link>
+							) : item.creator_address ? (
+								<Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
+									<a className="flex flex-row items-center space-x-2">
+										<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
+										<div>
+											<span className="text-xs font-medium text-gray-600">Created by</span>
+											<div className="text-sm font-semibold truncate -mt-0.5">{truncateWithEllipses(item.creator_name, 22)}</div>
+										</div>
+									</a>
+								</Link>
+							) : null}
+						</div>
+
+						<Menu as="div" className="relative">
+							{isMyProfile && listId !== 3 ? (
+								<Menu.Button className="text-right text-gray-600 hover:text-stpink focus:outline-none focus-visible:ring-1 relative">
+									<EllipsisIcon className="w-5 h-5" />
+								</Menu.Button>
+							) : null}
+							<Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+								<Menu.Items className="z-1 absolute right-0 mt-2 origin-top-right border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg rounded-xl p-2 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+									<Menu.Item>
+										{({ active }) => (
+											<button
+												onClick={() => {
+													mixpanel.track('Clicked Spotlight Item')
+													changeSpotlightItem(item)
+												}}
+												className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}
+											>
+												<span className="block truncate font-medium">Spotlight Item</span>
+											</button>
+										)}
+									</Menu.Item>
+									<Menu.Item>
+										{({ active }) => (
+											<button onClick={item.user_hidden ? handleUnhide : handleHide} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+												<span className="block truncate font-medium">{item.user_hidden ? `Unhide From ${listId === 1 ? 'Created' : listId === 2 ? 'Owned' : listId === 3 ? 'Liked' : 'List'}` : `Hide From ${listId === 1 ? 'Created' : listId === 2 ? 'Owned' : listId === 3 ? 'Liked' : 'List'}`}</span>
+											</button>
+										)}
+									</Menu.Item>
+									<Menu.Item>
+										{({ active }) => (
+											<button onClick={handleRefreshNFTMetadata} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+												<span className="block truncate font-medium">Refresh Metadata</span>
+											</button>
+										)}
+									</Menu.Item>
+								</Menu.Items>
+							</Transition>
+						</Menu>
 					</div>
-
-					{context.myProfile?.profile_id !== item.creator_id && !(isMyProfile && listId !== 3) && !item.contract_is_creator && <MiniFollowButton profileId={item.creator_id} />}
-					<div className="flex-grow">&nbsp;</div>
-
-					<div>
-						{isMyProfile && listId !== 3 ? (
-							<button
-								onClick={e => {
-									e.stopPropagation()
-
-									setOpenCardMenu(openCardMenu == item.nft_id + '_' + listId ? null : item.nft_id + '_' + listId)
-								}}
-								className="text-right text-gray-600 hover:text-stpink focus:outline-none focus-visible:ring-1"
-							>
-								<DotsHorizontalIcon className="w-5 h-5" />
-							</button>
-						) : null}
-
-						{openCardMenu == item.nft_id + '_' + listId ? (
-							<div className="">
-								<div className="flex justify-end relative z-10">
-									<div className={`absolute text-center top-2 bg-white dark:bg-gray-900 shadow-lg py-2 px-2 rounded-xl transition-all text-md transform border-gray-100 dark:border-gray-800 ${openCardMenu == item.nft_id + '_' + listId ? 'visible opacity-1 ' : 'invisible opacity-0'}`}>
-										<div
-											className="py-2 px-3 dark:text-gray-400 hover:text-stpink dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all rounded-lg cursor-pointer whitespace-nowrap flex items-center"
-											onClick={() => {
-												mixpanel.track('Clicked Spotlight Item')
-												changeSpotlightItem(item)
-											}}
-										>
-											<StarIcon className="h-5 w-5 mr-1.5" />
-											<span>Spotlight Item</span>
-										</div>
-
-										<div className="py-2 px-3 dark:text-gray-400 hover:text-stpink dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all rounded-lg cursor-pointer whitespace-nowrap" onClick={item.user_hidden ? handleUnhide : handleHide}>
-											{item.user_hidden ? `Unhide From ${listId === 1 ? 'Created' : listId === 2 ? 'Owned' : listId === 3 ? 'Liked' : 'List'}` : `Hide From ${listId === 1 ? 'Created' : listId === 2 ? 'Owned' : listId === 3 ? 'Liked' : 'List'}`}
-										</div>
-										<div className="py-2 px-3 dark:text-gray-400 hover:text-stpink dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all rounded-lg cursor-pointer whitespace-nowrap" onClick={handleRefreshNFTMetadata}>
-											Refresh Metadata
-										</div>
-									</div>
-								</div>
-							</div>
-						) : null}
-					</div>
+					{/* {context.myProfile?.profile_id !== item.creator_id && !(isMyProfile && listId !== 3) && !item.contract_is_creator && <MiniFollowButton profileId={item.creator_id} />} */}
 				</div>
 				{(item.token_has_video || (!item.token_img_url && item.token_animation_url)) && showVideo && currentlyPlayingVideo === item.nft_id ? (
 					<div className="bg-black">
@@ -242,37 +238,15 @@ const TokenCard = ({
 									setMuted(true)
 									setCurrentlyPlayingVideo(null)
 								}}
-								className="break-words cursor-pointer truncate dark:text-gray-200"
+								className="break-words cursor-pointer truncate text-lg font-bold dark:text-gray-200"
 							>
 								{item.token_name}
 							</div>
-
-							<div className="cursor-pointer py-4 text-gray-500 text-sm">
-								{moreShown ? (
-									<div className="whitespace-pre-line">{removeTags(item.token_description)}</div>
-								) : (
-									<div>
-										{item.token_description?.length > max_description_length ? (
-											<>
-												{truncateWithEllipses(removeTags(item.token_description), max_description_length)}{' '}
-												<a onClick={() => setMoreShown(true)} className="text-gray-900 dark:text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer">
-													{' '}
-													more
-												</a>
-											</>
-										) : (
-											<div>{removeTags(item.token_description)}</div>
-										)}
-									</div>
-								)}
-							</div>
 						</div>
 
-						<div className="flex items-center">
-							<div className="mr-4">
+						<div className="flex items-center justify-between">
+							<div className="flex items-center space-x-4">
 								<LikeButton item={item} />
-							</div>
-							<div className="mr-4">
 								<CommentButton
 									item={item}
 									handleComment={() => {
@@ -284,34 +258,33 @@ const TokenCard = ({
 									}}
 								/>
 							</div>
-							<div className="flex items-center justify-center">
-								<ShareButton url={window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${item.contract_address}/${item.token_id}`} type={'item'} />
-							</div>
+							<ShareButton url={window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${item.contract_address}/${item.token_id}`} type={'item'} />
 						</div>
 					</div>
 				</div>
+				<hr className="mx-4 border-gray-100 dark:border-gray-800" />
 				<div className="flex-1 flex items-end w-full">
-					<div className="border-t border-gray-300 dark:border-gray-800 p-4 flex flex-col w-full">
-						<div className="flex-shrink pr-2 text-xs text-gray-500 mb-1">Owned by</div>
+					<div className="px-4 pb-4 pt-1 flex flex-col w-full">
 						<div>
 							{item.owner_count && item.owner_count > 1 ? (
 								pageProfile && listId === 2 ? (
-									<div className="flex flex-row items-center pt-1">
-										<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
-											<a className="flex flex-row items-center pr-2 ">
-												<div>
+									<div className="">
+										<span className="text-xs font-medium text-gray-600">Owned by</span>
+										<div className="flex items-center">
+											<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
+												<a className="flex flex-row items-center pr-2 ">
 													<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
-												</div>
-												<div className="text-gray-800 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">{truncateWithEllipses(pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown', 14)}</div>
-											</a>
-										</Link>
-
-										<div className="text-gray-400 text-sm mr-2 -ml-1 mt-px">
-											&amp; {item.owner_count - 1} other
-											{item.owner_count - 1 > 1 ? 's' : null}
+													<div>
+														<div className="text-sm font-semibold truncate">{truncateWithEllipses(pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown', 14)}</div>
+													</div>
+												</a>
+											</Link>
+											<div className="text-gray-500 text-sm mr-2 -ml-1 mt-px">
+												&amp; {item.owner_count - 1} other
+												{item.owner_count - 1 > 1 ? 's' : null}
+											</div>
 										</div>
-										{context.myProfile?.profile_id !== item.owner_id && <MiniFollowButton profileId={item.owner_id} />}
-										<div className="flex-grow">&nbsp;</div>
+										{/* {context.myProfile?.profile_id !== item.owner_id && <MiniFollowButton profileId={item.owner_id} />} */}
 									</div>
 								) : (
 									<span className="text-gray-500">Multiple owners</span>
@@ -319,11 +292,12 @@ const TokenCard = ({
 							) : item.owner_id ? (
 								<div className="flex flex-row items-center pt-1">
 									<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
-										<a className="flex flex-row items-center pr-2 ">
+										<a className="flex flex-row items-center space-x-2">
+											<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8" />
 											<div>
-												<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-6 h-6" />
+												<span className="text-xs font-medium text-gray-600">Owned by</span>
+												<div className="text-sm font-semibold truncate -mt-0.5">{truncateWithEllipses(item.owner_name, 24)}</div>
 											</div>
-											<div className="text-gray-800 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">{truncateWithEllipses(item.owner_name, 24)}</div>
 										</a>
 									</Link>
 									{context.myProfile?.profile_id !== item.owner_id && !(isMyProfile && listId !== 3) && <MiniFollowButton profileId={item.owner_id} />}

@@ -3,6 +3,8 @@ import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import mixpanel from 'mixpanel-browser'
 
 export default function UserImageList({ users, sizeClass = 'h-12 w-12' }) {
+	if (!users) return null
+
 	return (
 		<div className="flex -space-x-2 relative z-0 overflow-hidden p-0.5 -m-0.5">
 			{users.map(user => (

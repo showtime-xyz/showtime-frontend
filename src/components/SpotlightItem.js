@@ -10,6 +10,7 @@ import AppContext from '@/context/app-context'
 import { getBidLink, getContractName, removeTags, formatAddressShort } from '@/lib/utilities'
 import ModalTokenDetail from './ModalTokenDetail'
 import CappedWidth from './CappedWidth'
+import { truncateWithEllipses } from '../lib/utilities'
 import axios from '@/lib/axios'
 import { DotsHorizontalIcon } from '@heroicons/react/solid'
 
@@ -30,10 +31,6 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 	const aspect_ratio_cutoff = 1.6
 
 	const { isMobile } = useContext(AppContext)
-
-	const truncateWithEllipses = (text, max) => {
-		if (text) return text.substr(0, max - 1) + (text.length > max ? '...' : '')
-	}
 
 	const handleRefreshNFTMetadata = async () => {
 		mixpanel.track('Clicked refresh metadata')
@@ -119,12 +116,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 											ref={imgContainerRef}
 										>
 											{!imageLoaded ? (
-												<div
-													className="w-full text-center flex items-center justify-center"
-													style={{
-														height: divRef?.current?.clientWidth ? divRef?.current?.clientWidth : 375,
-													}}
-												>
+												<div className="w-full text-center flex items-center justify-center" style={{ height: divRef?.current?.clientWidth ? divRef?.current?.clientWidth : 375 }}>
 													<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 												</div>
 											) : null}

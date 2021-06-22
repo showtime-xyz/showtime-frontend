@@ -20,7 +20,7 @@ const FollowersInCommon = ({ profileId }) => {
 				Followed by{' '}
 				{followersInCommon.followers.map(follower => (
 					<>
-						<Link href={`/${follower.username}`}>
+						<Link href={`/${follower.username}`} key={follower.username}>
 							<a className="font-semibold dark:text-gray-300">@{follower.username}</a>
 						</Link>
 						{', '}

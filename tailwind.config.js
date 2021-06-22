@@ -11,6 +11,9 @@ module.exports = {
 				'screen-3xl': '1680px',
 				screen: '100vw',
 			},
+			borderRadius: {
+				inherit: 'inherit',
+			},
 			colors: {
 				inherit: 'inherit',
 				stpink: '#e45cff',
