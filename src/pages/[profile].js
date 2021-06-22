@@ -778,7 +778,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 								<div className="lg:col-span-2 xl:col-span-3 min-h-screen">
 									{!isLoadingCards && (
 										<div className="flex items-center justify-between px-3 my-2">
-											{/* TODO: Re-add ordering controls */}
+											{/* TODO: Find a good place for the ordering controls */}
 											{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && (
 												<>
 													{isChangingOrder && ((selectedGrid === 1 && selectedCreatedSortField === 5) || (selectedGrid === 2 && selectedOwnedSortField === 5)) && (
