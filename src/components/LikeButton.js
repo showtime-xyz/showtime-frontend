@@ -1,10 +1,7 @@
 import { useContext } from 'react'
-//import { useRouter } from "next/router";
 import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
 import _ from 'lodash'
-import { HeartIcon as SolidHeartIcon } from '@heroicons/react/solid'
-import { HeartIcon as OutlineHeartIcon } from '@heroicons/react/outline'
 import Tippy from '@tippyjs/react'
 import axios from '@/lib/axios'
 import HeartIcon from './Icons/HeartIcon'

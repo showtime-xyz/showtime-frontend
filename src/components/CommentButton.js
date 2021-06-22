@@ -1,11 +1,7 @@
 import { useContext } from 'react'
-//import { useRouter } from "next/router";
 import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
 import CommentIcon from './Icons/CommentIcon'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faComment as faCommentOutline } from '@fortawesome/free-regular-svg-icons'
-import { faComment as faCommentSolid } from '@fortawesome/free-solid-svg-icons'
 import Tippy from '@tippyjs/react'
 
 const CommentButton = ({ item, handleComment }) => {

@@ -16,9 +16,9 @@ import { formatAddressShort, truncateWithEllipses, classNames } from '@/lib/util
 import { AddressCollection } from '@/components/AddressButton'
 import { PROFILE_TABS, SORT_FIELDS, DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import SpotlightItem from '@/components/SpotlightItem'
-import { Listbox, Transition, Menu } from '@headlessui/react'
-import { CheckIcon, SelectorIcon, PencilAltIcon, PhotographIcon as PhotographSolidIcon, HeartIcon as HeartSolidIcon, DotsHorizontalIcon, HeartIcon } from '@heroicons/react/solid'
-import { FingerPrintIcon, PhotographIcon as PhotographOutlineIcon, HeartIcon as HeartOutlineIcon, UploadIcon } from '@heroicons/react/outline'
+import { Transition, Menu } from '@headlessui/react'
+import { PencilAltIcon, DotsHorizontalIcon, HeartIcon } from '@heroicons/react/solid'
+import { UploadIcon } from '@heroicons/react/outline'
 import axios from '@/lib/axios'
 import EllipsisIcon from '@/components/Icons/EllipsisIcon'
 import UserAddIcon from '@/components/Icons/UserAddIcon'
@@ -775,19 +775,11 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 					<CappedWidth>
 						<div className="m-auto">
 							<div ref={gridRef} className="pt-0 ">
-								{/* {isMyProfile && hasUserHiddenItems ? (
-                                    <div className="hidden sm:flex">
-                                        <div className="flex-grow flex"></div>
-                                        <p className=" text-xs mt-3 ml-6 mr-1 text-gray-400 dark:text-gray-500 cursor-pointer hover:text-gray-700" onClick={() => handleShowHiddenChange(!showUserHiddenItems)}>
-                                            {showUserHiddenItems ? 'Hide hidden' : 'Show hidden'}
-                                        </p>
-                                    </div>
-                                ) : null} */}
 								<div className="lg:col-span-2 xl:col-span-3 min-h-screen">
 									{!isLoadingCards && (
 										<div className="flex items-center justify-between px-3 my-2">
 											{/* TODO: Re-add ordering controls */}
-											{/* {(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && (
+											{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && (
 												<>
 													{isChangingOrder && ((selectedGrid === 1 && selectedCreatedSortField === 5) || (selectedGrid === 2 && selectedOwnedSortField === 5)) && (
 														<>
@@ -800,7 +792,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 														</>
 													)}
 												</>
-											)} */}
+											)}
 											<div className="flex items-center">
 												<button onClick={() => handleListChange(1)} className={`px-4 py-3 space-x-2 flex items-center border-b-2 ${selectedGrid === 1 ? 'border-gray-800 dark:border-gray-300' : 'border-gray-200 dark:border-gray-700'} transition`}>
 													<FingerprintIcon className="w-5 h-5 dark:text-gray-500" />
