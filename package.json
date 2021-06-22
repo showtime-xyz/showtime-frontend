@@ -36,7 +36,7 @@
     "date-fns": "^2.18.0",
     "elliptic": "^6.5.4",
     "emoji-mart": "^3.0.1",
-    "eth-provider": "^0.6.1",
+    "eth-provider": "^0.7.0",
     "eth-sig-util": "^3.0.1",
     "ethereumjs-util": "^7.0.8",
     "exif-js": "^2.3.0",
