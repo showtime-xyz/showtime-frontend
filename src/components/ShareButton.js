@@ -26,7 +26,7 @@ const ShareButton = ({ url, type }) => {
 	return (
 		<Tippy disabled={context.isMobile} content={isCopied ? 'Copied link' : 'Copy link'} hideOnClick={false}>
 			<button className="inline-flex rounded-lg group focus:outline-none focus-visible:ring-1" onClick={share}>
-				<ShareIcon className="h-5 w-5 text-gray-800 dark:text-gray-300 dark:group-hover:text-gray-200 group-hover:text-gray-600 transition" />
+				<ShareIcon className="h-5 w-5 text-gray-800 dark:text-gray-500 dark:group-hover:text-gray-200 group-hover:text-gray-600 transition" />
 			</button>
 		</Tippy>
 	)

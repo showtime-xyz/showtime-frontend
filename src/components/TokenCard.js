@@ -227,7 +227,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 							</div>
 						</div>
 
-						<div className="flex items-center justify-between">
+						<div className="mt-4 flex items-center justify-between">
 							<div className="flex items-center space-x-4">
 								<LikeButton item={item} />
 								<CommentButton
