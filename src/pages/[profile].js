@@ -2,6 +2,7 @@ import { useState, useEffect, useContext, useRef, Fragment } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import mixpanel from 'mixpanel-browser'
+import Tippy from '@tippyjs/react'
 import BadgeIcon from '@/components/Icons/BadgeIcon'
 import Layout from '@/components/layout'
 import CappedWidth from '@/components/CappedWidth'
@@ -727,19 +728,23 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										{isAuthenticated && !isMyProfile && <FollowersInCommon profileId={profile_id} />}
 										<div className="space-x-2 text-right">
 											{website_url && (
-												<a href={website_url.slice(0, 4) === 'http' ? website_url : 'https://' + website_url} target="_blank" onClick={() => mixpanel.track('Clicked profile website link', { slug: slug_address })} className="inline-block" rel="noreferrer">
-													<div className="text-gray-500 hover:opacity-80 dark:hover:opacity-80 border dark:border-gray-700 rounded-full p-1">
-														<GlobeIcon className="flex-shrink-0 h-6 w-6 opacity-70 dark:opacity-100" />
-													</div>
-												</a>
+												<Tippy content="Website">
+													<a href={website_url.slice(0, 4) === 'http' ? website_url : 'https://' + website_url} target="_blank" onClick={() => mixpanel.track('Clicked profile website link', { slug: slug_address })} className="inline-block" rel="noreferrer">
+														<div className="text-gray-500 hover:opacity-80 dark:hover:opacity-80 border dark:border-gray-700 rounded-full p-1">
+															<GlobeIcon className="flex-shrink-0 h-6 w-6 opacity-70 dark:opacity-100" />
+														</div>
+													</a>
+												</Tippy>
 											)}
 											{links &&
 												links.map(link => (
-													<a href={`https://${link.prefix ? link.prefix : link.type__prefix}` + link.user_input} target="_blank" onClick={() => mixpanel.track(`Clicked ${link.name ? link.name : link.type__name} profile link`, { slug: slug_address })} className="inline-block" key={link.type_id} rel="noreferrer">
-														<div className="text-gray-500 hover:opacity-80 dark:hover:opacity-80 border dark:border-gray-700 rounded-full p-1">
-															<img src={link.icon_url || link.type__icon_url} alt={`${link.name ? link.name : link.type__name} icon`} className="flex-shrink-0 h-6 w-6 opacity-70 dark:opacity-100 filter dark:brightness-200" />
-														</div>
-													</a>
+													<Tippy content={link.name || link.type__name} key={link.type_id}>
+														<a href={`https://${link.prefix ? link.prefix : link.type__prefix}` + link.user_input} target="_blank" onClick={() => mixpanel.track(`Clicked ${link.name ? link.name : link.type__name} profile link`, { slug: slug_address })} className="inline-block" rel="noreferrer">
+															<div className="text-gray-500 hover:opacity-80 dark:hover:opacity-80 border dark:border-gray-700 rounded-full p-1">
+																<img src={link.icon_url || link.type__icon_url} alt={`${link.name ? link.name : link.type__name} icon`} className="flex-shrink-0 h-6 w-6 opacity-70 dark:opacity-100 filter dark:brightness-200" />
+															</div>
+														</a>
+													</Tippy>
 												))}
 										</div>
 									</div>
@@ -799,7 +804,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 													</p>
 												</button>
 											</div>
-                                            {(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && (
+											{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && (
 												<div>
 													{isChangingOrder && ((selectedGrid === 1 && selectedCreatedSortField === 5) || (selectedGrid === 2 && selectedOwnedSortField === 5)) && (
 														<>
