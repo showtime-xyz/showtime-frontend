@@ -1,16 +1,16 @@
-import { useRef, useState, useEffect, useContext, Fragment } from 'react'
+import { useState, useEffect, useContext, Fragment } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import { faComment, faHeart, faUser, faAt } from '@fortawesome/free-solid-svg-icons'
-import useDetectOutsideClick from '@/hooks/useDetectOutsideClick'
 import { formatDistanceToNowStrict } from 'date-fns'
-import useInterval from '@/hooks/useInterval'
 import AppContext from '@/context/app-context'
 import { getNotificationInfo, DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import ModalUserList from '@/components/ModalUserList'
 import axios from '@/lib/axios'
 import ZapIcon from './Icons/ZapIcon'
 import { Popover, Transition } from '@headlessui/react'
+import { useSWRInfinite } from 'swr'
+import { useRef } from 'react'
 
 const NOTIFICATIONS_PER_PAGE = 7
 
@@ -23,119 +23,78 @@ const iconObjects = {
 
 export default function NotificationsBtn() {
 	const context = useContext(AppContext)
-	// const myNotificationsLastOpened =
-	//   context.myProfile && context.myProfile.notifications_last_opened;
 	const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false)
-	const [loadingNotifications, setLoadingNotifications] = useState(true)
-	const [loadingMoreNotifications, setLoadingMoreNotifications] = useState(false)
-	const [notifications, setNotifications] = useState([])
-	const dropdownRef = useRef(null)
-	const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
 	const [previouslyLastOpened, setPreviouslyLastOpened] = useState()
 	const [openUserList, setOpenUserList] = useState(null)
-	const [queryPage, setQueryPage] = useState(1)
-	const [hasMoreNotifications, setHasMoreNotifications] = useState(true)
+	const closeBtn = useRef()
 
-	const toggleOpen = async () => {
-		if (!isActive) {
-			setPreviouslyLastOpened(context.myProfile.notifications_last_opened)
-			updateNotificationsLastOpened()
-			setHasUnreadNotifications(false)
-		}
-		setIsActive(!isActive)
+	console.log(closeBtn)
+
+	const handlePanelOpen = async () => {
+		setPreviouslyLastOpened(context.myProfile.notifications_last_opened)
+		updateNotificationsLastOpened()
+		setHasUnreadNotifications(false)
 	}
 
 	const updateNotificationsLastOpened = async () => {
-		try {
-			await axios.post('/api/notifications')
+		await axios.post('/api/notifications')
 
-			await context.setMyProfile({
-				...context.myProfile,
-				notifications_last_opened: new Date(),
-			})
-		} catch (err) {
-			console.log(err)
-		}
+		await context.setMyProfile({
+			...context.myProfile,
+			notifications_last_opened: new Date(),
+		})
 	}
 
-	const handleMoreNotifications = async () => {
-		if (!loadingMoreNotifications) {
-			try {
-				setLoadingMoreNotifications(true)
-				const nextQueryPage = queryPage + 1
-				setQueryPage(nextQueryPage)
-				const moreNotifs = await axios.get(`/api/notifications?page=${nextQueryPage}&limit=${NOTIFICATIONS_PER_PAGE}`).then(res => res.data)
+	const { data, error, size, setSize } = useSWRInfinite(
+		(pageIndex, previousPageData) => {
+			if (pageIndex != 0 && previousPageData.length < NOTIFICATIONS_PER_PAGE) return null
 
-				if (moreNotifs.length < NOTIFICATIONS_PER_PAGE) setHasMoreNotifications(false)
-				insertNewNotifications(moreNotifs)
-				setLoadingMoreNotifications(false)
-			} catch (e) {
-				console.error(e)
-			}
-		}
-	}
+			return `/api/notifications?page=${pageIndex + 1}&limit=${NOTIFICATIONS_PER_PAGE}`
+		},
+		url => axios.get(url).then(res => res.data),
+		{ initialSize: 1, refreshInterval: 3 * 60 * 1000, refreshWhenHidden: true, revalidateOnMount: true }
+	)
 
-	const insertNewNotifications = (newNotifications, order) => {
-		// remove repeats
-		const existingNotificationIds = notifications.map(n => n.id)
-		const filteredNewNotifications = newNotifications.filter(n => !existingNotificationIds.includes(n.id))
-		// assign order
-		if (order === 'front') {
-			setNotifications([...filteredNewNotifications, ...notifications])
-		} else {
-			setNotifications([...notifications, ...filteredNewNotifications])
-		}
-	}
-
-	const getNotifications = async () => {
-		try {
-			const notifs = await axios.get(`/api/notifications?page=1&limit=${NOTIFICATIONS_PER_PAGE}`).then(res => res.data)
-
-			insertNewNotifications(notifs, 'front')
-			if (notifs.length < NOTIFICATIONS_PER_PAGE) setHasMoreNotifications(false)
-			setLoadingNotifications(false)
-			setHasUnreadNotifications((notifs && notifs[0] && context.myProfile.notifications_last_opened === null) || (notifs && notifs[0] && new Date(notifs[0].to_timestamp) > new Date(context.myProfile.notifications_last_opened)))
-		} catch (err) {
-			console.log(err)
-		}
-	}
+	const notifs = (data ? [].concat(...data) : []).flat()
+	const isLoadingInitialData = !data && !error
+	const isLoadingMore = isLoadingInitialData || (size > 0 && data && typeof data[size - 1] === 'undefined')
+	const isEmpty = data?.[0]?.length === 0
+	const isReachingEnd = isEmpty || (data && data[data.length - 1]?.length < NOTIFICATIONS_PER_PAGE)
 
 	useEffect(() => {
-		getNotifications()
-	}, [])
-
-	useInterval(getNotifications, 3 * 60 * 1000)
+		setHasUnreadNotifications((notifs && notifs[0] && context.myProfile.notifications_last_opened === null) || (notifs && notifs[0] && new Date(notifs[0].to_timestamp) > new Date(context.myProfile.notifications_last_opened)))
+	}, [context.myProfile.notifications_last_opened, notifs])
 
 	return (
 		<Popover className="md:relative">
 			{({ open }) => (
 				<>
-					<Popover.Button className="dark:text-gray-300 hover:text-stpink transition-all rounded-full h-6 w-6 flex items-center justify-center cursor-pointer relative">
-						<ZapIcon className="w-5 h-5" />
-						{hasUnreadNotifications && <div className="bg-gradient-to-r from-[#4D54FF] to-[#E14DFF] absolute h-2 w-2 top-0 right-0 rounded-full" />}
+					<Popover.Button className="dark:text-gray-300 hover:text-stpink transition-all rounded-full cursor-pointer relative h-6 w-6">
+						<span onClick={open ? null : handlePanelOpen} className="flex items-center justify-center">
+							<ZapIcon className="w-5 h-5" />
+							{hasUnreadNotifications && <div className="bg-gradient-to-r from-[#4D54FF] to-[#E14DFF] absolute h-2 w-2 top-0 right-0 rounded-full" />}
+						</span>
 					</Popover.Button>
 					<Transition show={open} as={Fragment} enter="transition ease-out duration-200" enterFrom="transform opacity-0" enterTo="transform opacity-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100" leaveTo="transform opacity-0">
 						<button className="bg-white dark:bg-black bg-opacity-90 dark:bg-opacity-90 w-full h-screen fixed inset-x-0 top-[2.9rem] z-10 focus:outline-none md:hidden" />
 					</Transition>
 					<Transition as={Fragment} enter="transition ease-out duration-200" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
-						<Popover.Panel className={'overflow-y-scroll text-black dark:text-gray-200 absolute text-center top-[3.1rem] md:top-10 right-0 z-20 w-full md:min-w-[25rem]'}>
-							<div className="mx-2 md:mx-0 bg-white dark:bg-gray-900 py-2 px-2 shadow-lg rounded-xl transition border border-gray-200 dark:border-gray-800">
-								{loadingNotifications && (
+						<Popover.Panel className={'text-black dark:text-gray-200 absolute text-center top-[3.1rem] md:top-10 right-0 z-20 w-full md:min-w-[25rem]'}>
+							<div className="mx-2 md:mx-0 bg-white dark:bg-gray-900 py-2 px-2 shadow-lg rounded-xl transition border border-gray-200 dark:border-gray-800 overflow-y-scroll max-h-[80vh]">
+								{isLoadingInitialData && (
 									<div className="flex items-center justify-center">
 										<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin" />
 									</div>
 								)}
-								{!loadingNotifications &&
-									notifications &&
-									notifications.length > 0 &&
-									notifications.map(notif =>
+								{!isEmpty &&
+									notifs.map(notif =>
 										// either link to your profile or to the nft
 										notif.actors && notif.actors.length > 0 ? (
 											// HAS CLICKABLE ACTORS
 											<div className={`py-3 px-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all rounded-lg whitespace-nowrap flex items-start w-full max-w-full ${new Date(notif.to_timestamp) > new Date(previouslyLastOpened) ? 'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700' : ''}`} key={notif.id}>
 												<div className="w-max mr-2 relative min-w-[2.25rem]">
 													<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
-														<a onClick={() => setIsActive(!isActive)}>
+														<a>
 															<img alt={notif.name} src={notif.img_url ? notif.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 mt-1 w-9 h-9" />
 															<div
 																className="absolute bottom-0 right-0 rounded-full h-5 w-5 flex items-center justify-center shadow"
@@ -153,70 +112,44 @@ export default function NotificationsBtn() {
 														<>
 															{notif.actors.length == 1 ? (
 																<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
-																	<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setIsActive(!isActive)}>
-																		{notif.actors[0].name}{' '}
-																	</a>
+																	<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">{notif.actors[0].name} </a>
 																</Link>
 															) : null}
 															{notif.actors.length == 2 ? (
 																<>
 																	<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
-																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setIsActive(!isActive)}>
-																			{notif.actors[0].name}
-																		</a>
+																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">{notif.actors[0].name}</a>
 																	</Link>
 																	<span className="text-gray-500"> and </span>
 																	<Link href="/[profile]" as={`/${notif.actors[1]?.username || notif.actors[1].wallet_address}`}>
-																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setIsActive(!isActive)}>
-																			{notif.actors[1].name}{' '}
-																		</a>
+																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">{notif.actors[1].name} </a>
 																	</Link>
 																</>
 															) : null}
 															{notif.actors.length == 3 ? (
 																<>
 																	<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
-																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setIsActive(!isActive)}>
-																			{notif.actors[0].name}
-																		</a>
+																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">{notif.actors[0].name}</a>
 																	</Link>
 																	<span className="text-gray-500">, </span>
 																	<Link href="/[profile]" as={`/${notif.actors[1]?.username || notif.actors[1].wallet_address}`}>
-																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setIsActive(!isActive)}>
-																			{notif.actors[1].name}
-																		</a>
+																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">{notif.actors[1].name}</a>
 																	</Link>
 																	<span className="text-gray-500">, and </span>
 																	<Link href="/[profile]" as={`/${notif.actors[2]?.username || notif.actors[2].wallet_address}`}>
-																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setIsActive(!isActive)}>
-																			{notif.actors[2].name}{' '}
-																		</a>
+																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">{notif.actors[2].name} </a>
 																	</Link>
 																</>
 															) : null}
 															{notif.actors.length > 3 ? (
 																<>
-																	<ModalUserList
-																		title="Followed You"
-																		isOpen={openUserList == notif.id}
-																		users={notif.actors ? notif.actors : []}
-																		closeModal={() => setOpenUserList(null)}
-																		onRedirect={() => {
-																			setOpenUserList(null)
-																			setIsActive(!isActive)
-																		}}
-																		emptyMessage="No followers yet."
-																	/>
+																	<ModalUserList title="Followed You" isOpen={openUserList == notif.id} users={notif.actors ? notif.actors : []} closeModal={() => setOpenUserList(null)} onRedirect={() => setOpenUserList(null)} emptyMessage="No followers yet." />
 																	<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
-																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setIsActive(!isActive)}>
-																			{notif.actors[0].name}
-																		</a>
+																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">{notif.actors[0].name}</a>
 																	</Link>
 																	<span className="text-gray-500">, </span>
 																	<Link href="/[profile]" as={`/${notif.actors[1]?.username || notif.actors[1].wallet_address}`}>
-																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setIsActive(!isActive)}>
-																			{notif.actors[1].name}
-																		</a>
+																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">{notif.actors[1].name}</a>
 																	</Link>
 																	<span className="text-gray-500">, and </span>
 																	<a className="text-black dark:text-gray-300 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setOpenUserList(notif.id)}>
@@ -233,9 +166,7 @@ export default function NotificationsBtn() {
 															</span>
 															{notif.nft__nftdisplay__name ? (
 																<Link href="/t/[...token]" as={`/t/${notif.nft__contract__address}/${notif.nft__token_identifier}`}>
-																	<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setIsActive(!isActive)}>
-																		{notif.nft__nftdisplay__name}
-																	</a>
+																	<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">{notif.nft__nftdisplay__name}</a>
 																</Link>
 															) : null}
 														</>
@@ -249,7 +180,7 @@ export default function NotificationsBtn() {
 											</div>
 										) : (
 											<Link href={getNotificationInfo(notif.type_id).goTo === 'profile' ? '/[profile]' : '/t/[...token]'} as={getNotificationInfo(notif.type_id).goTo === 'profile' ? (notif.link_to_profile__address ? `/${notif.link_to_profile__username || notif.link_to_profile__address}` : `/${context.myProfile.username || context.user.publicAddress}`) : `/t/${notif.nft__contract__address}/${notif.nft__token_identifier}`} key={notif.id}>
-												<div className={`py-3 px-3 hover:bg-gray-50 transition-all rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full ${new Date(notif.to_timestamp) > new Date(previouslyLastOpened) ? 'bg-gray-100 hover:bg-gray-200' : ''}`} onClick={() => setIsActive(!isActive)} key={notif.id}>
+												<div className={`py-3 px-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full ${new Date(notif.to_timestamp) > new Date(previouslyLastOpened) ? 'bg-gray-100 hover:bg-gray-200' : ''}`} key={notif.id}>
 													<div className="w-max mr-2 relative min-w-[2.25rem]">
 														<img alt={notif.name} src={notif.img_url ? notif.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 mt-1 w-9 h-9" />
 														<div
@@ -273,12 +204,12 @@ export default function NotificationsBtn() {
 											</Link>
 										)
 									)}
-								{!loadingNotifications && notifications && notifications.length === 0 && <div className="py-2 px-4 whitespace-nowrap">No notifications yet.</div>}
-								{!loadingNotifications && notifications && notifications.length !== 0 && hasMoreNotifications && (
+								{isLoadingInitialData && <div className="py-2 px-4 whitespace-nowrap">No notifications yet.</div>}
+								{!isReachingEnd && (
 									<div className="flex justify-center items-center mb-1 mt-1">
-										<div onClick={handleMoreNotifications} className={`flex w-36 h-8 items-center justify-center  text-xs border-gray-600 text-gray-600 border rounded-full px-2 py-1 hover:text-stpink ${loadingMoreNotifications ? '' : 'hover:border-stpink'} transition cursor-pointer`}>
-											{loadingMoreNotifications ? <div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin"></div> : 'Show More'}
-										</div>
+										<button disabled={isLoadingMore} onClick={() => setSize(size + 1)} className={`flex w-36 h-8 items-center justify-center  text-xs border-gray-600 text-gray-600 border rounded-full px-2 py-1 hover:text-stpink ${isLoadingMore ? '' : 'hover:border-stpink'} transition cursor-pointer`}>
+											{isLoadingMore ? <div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin"></div> : 'Show More'}
+										</button>
 									</div>
 								)}
 							</div>
