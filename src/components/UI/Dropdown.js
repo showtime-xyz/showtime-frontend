@@ -4,11 +4,11 @@ import { Fragment } from 'react'
 import ChevronDown from '../Icons/ChevronDown'
 
 // Expects an array of objects with a label and a value properties
-const Dropdown = ({ options, value, onChange, label, disabled = false }) => {
-    if (! options) return null
+const Dropdown = ({ options, value, onChange, label, disabled = false, className = '' }) => {
+	if (!options) return null
 
 	return (
-		<Listbox value={value} onChange={onChange} as="div" disabled={disabled}>
+		<Listbox value={value} onChange={onChange} as="div" className={className} disabled={disabled}>
 			{({ open }) => (
 				<>
 					{label && <Listbox.Label className="block text-sm font-semibold text-gray-800 dark:text-gray-400">{label}</Listbox.Label>}

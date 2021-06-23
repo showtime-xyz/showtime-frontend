@@ -650,20 +650,11 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												</button>
 											)}
 										</div>
-										<div>{wallet_addresses_excluding_email_v2 && <AddressCollection addresses={wallet_addresses_excluding_email_v2} isMyProfile={isMyProfile} />}</div>
+										<div className="hidden md:block">{wallet_addresses_excluding_email_v2 && <AddressCollection addresses={wallet_addresses_excluding_email_v2} isMyProfile={isMyProfile} />}</div>
 									</div>
 									<div className="flex items-center space-x-8">
-										<div className="flex items-center space-x-6">
-											<button className="cursor-pointer hover:opacity-80 transition" onClick={() => setShowFollowing(true)}>
-												<div className="text-sm mr-2 dark:text-gray-300">
-													<span className="font-semibold">{following && following.length !== null ? Number(isMyProfile && context.myFollows ? context.myFollows.length : following_count).toLocaleString() : null}</span> following
-												</div>
-											</button>
-											<button className="cursor-pointer hover:opacity-80 transition" onClick={() => setShowFollowers(true)}>
-												<div className="text-sm mr-2 dark:text-gray-300">
-													<span className="font-semibold">{followers && followers.length !== null ? Number(followersCount).toLocaleString() : null}</span> followers
-												</div>
-											</button>
+										<div className="hidden md:block">
+											<FollowStats {...{ following, following_count, followers, followersCount, isMyProfile, setShowFollowing, setShowFollowers }} />
 										</div>
 										<div className="flex items-center space-x-2">
 											<Button style={isMyProfile ? 'tertiary_gray' : isFollowed ? 'tertiary' : 'primary'} onClick={isAuthenticated ? (isMyProfile ? editAccount : isFollowed ? handleUnfollow : context.disableFollows ? null : handleFollow) : handleLoggedOutFollow} className={`space-x-2 ${isFollowed || isMyProfile ? '' : 'text-white'}`}>
@@ -681,11 +672,11 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										</div>
 									</div>
 								</div>
-								<div className="flex justify-between">
+								<div className="flex flex-col md:flex-row md:justify-between">
 									<div>
 										<div className="flex items-center space-x-2">
-											<h2 className="text-4xl font-tomato font-bold"> {name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</h2>
-											{verified && <BadgeIcon className="w-6 h-auto text-black dark:text-white" bgClass="text-white dark:text-black" />}
+											<h2 className="text-3xl md:text-4xl font-tomato font-bold"> {name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</h2>
+											{verified && <BadgeIcon className="w-5 md:w-6 h-auto text-black dark:text-white" bgClass="text-white dark:text-black" />}
 										</div>
 										<div className="mt-2">{(username || (wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0)) && <p className="flex flex-row items-center justify-start">{username && <div className="font-tomato font-bold tracking-wider dark:text-gray-300">@{username}</div>}</p>}</div>
 										<div>
@@ -701,11 +692,18 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												</div>
 											) : null}
 										</div>
+										{wallet_addresses_excluding_email_v2 && (
+											<div className="mt-8 md:hidden">
+												<AddressCollection addresses={wallet_addresses_excluding_email_v2} isMyProfile={isMyProfile} />
+											</div>
+										)}
+										<div className="mt-4 md:hidden">
+											<FollowStats {...{ following, following_count, followers, followersCount, isMyProfile, setShowFollowing, setShowFollowers }} />
+										</div>
 									</div>
-									<div className="space-y-10">
-										{/* TODO: Hide this when viewing your own profile or logged out */}
+									<div className="mt-4 md:mt-0 space-y-4 md:space-y-10">
 										{isAuthenticated && !isMyProfile && <FollowersInCommon profileId={profile_id} />}
-										<div className="space-x-2 text-right">
+										<div className="space-x-2 md:text-right">
 											{website_url && (
 												<Tippy content="Website">
 													<a href={website_url.slice(0, 4) === 'http' ? website_url : 'https://' + website_url} target="_blank" onClick={() => mixpanel.track('Clicked profile website link', { slug: slug_address })} className="inline-block" rel="noreferrer">
@@ -732,8 +730,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 						</div>
 					</CappedWidth>
 					{spotlightItem ? (
-						<div className="mt-12 sm:mt-8 md:mt-12">
-							<div className="relative bg-gray-50 dark:bg-gray-900 border-t border-b border-gray-200 dark:border-gray-800 sm:py-16 sm:pb-8 md:pb-16 mb-4">
+						<div className="mt-8 md:mt-12">
+							<div className="relative bg-gray-50 dark:bg-gray-900 border-t border-b border-gray-200 dark:border-gray-800 pb-8 md:py-12">
 								<SpotlightItem
 									item={spotlightItem}
 									removeSpotlightItem={() => {
@@ -761,29 +759,29 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 							<div ref={gridRef} className="pt-0 ">
 								<div className="lg:col-span-2 xl:col-span-3 min-h-screen">
 									{!isLoadingCards && (
-										<div className="flex items-center justify-between px-3 my-2">
+										<div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:px-3 md:my-2">
 											{/* TODO: Find a good place for the ordering controls */}
-											<div className="flex items-center">
-												<button onClick={() => handleListChange(1)} className={`px-4 py-3 space-x-2 flex items-center border-b-2 ${selectedGrid === 1 ? 'border-gray-800 dark:border-gray-300' : 'border-gray-200 dark:border-gray-700'} transition`}>
-													<FingerprintIcon className="w-5 h-5 dark:text-gray-500" />
+											<div className="flex items-center w-full md:w-auto">
+												<button onClick={() => handleListChange(1)} className={`flex-1 md:flex-initial px-4 py-3 space-x-2 flex items-center justify-center md:justify-start border-b-2 ${selectedGrid === 1 ? 'border-gray-800 dark:border-gray-300' : 'border-gray-200 dark:border-gray-700'} transition`}>
+													<FingerprintIcon className="hidden md:block w-5 h-5 dark:text-gray-500" />
 													<p className="text-sm text-gray-500">
-														<span className="font-semibold text-gray-800 dark:text-gray-300">Created</span> {menuLists && menuLists.length > 0 ? Number(menuLists[0].count_deduplicated_nonhidden).toLocaleString() : null}
+														<span className="font-semibold text-gray-800 dark:text-gray-300">Created</span> <span className="hidden md:inline">{menuLists && menuLists.length > 0 ? Number(menuLists[0].count_deduplicated_nonhidden).toLocaleString() : null}</span>
 													</p>
 												</button>
-												<button onClick={() => handleListChange(2)} className={`px-4 py-3 space-x-2 flex items-center border-b-2 ${selectedGrid === 2 ? 'border-gray-800 dark:border-gray-300' : 'border-gray-200 dark:border-gray-700'} transition`}>
-													<WalletIcon className="w-5 h-5 dark:text-gray-500" />
+												<button onClick={() => handleListChange(2)} className={`flex-1 md:flex-initial px-4 py-3 space-x-2 flex items-center justify-center md:justify-start border-b-2 ${selectedGrid === 2 ? 'border-gray-800 dark:border-gray-300' : 'border-gray-200 dark:border-gray-700'} transition`}>
+													<WalletIcon className="hidden md:block w-5 h-5 dark:text-gray-500" />
 													<p className="text-sm text-gray-500">
-														<span className="font-semibold text-gray-800 dark:text-gray-300">Owned</span> {menuLists && menuLists.length > 0 ? Number(menuLists[1].count_deduplicated_nonhidden).toLocaleString() : null}
+														<span className="font-semibold text-gray-800 dark:text-gray-300">Owned</span> <span className="hidden md:inline">{menuLists && menuLists.length > 0 ? Number(menuLists[1].count_deduplicated_nonhidden).toLocaleString() : null}</span>
 													</p>
 												</button>
-												<button onClick={() => handleListChange(3)} className={`px-4 py-3 space-x-2 flex items-center border-b-2 ${selectedGrid === 3 ? 'border-gray-800 dark:border-gray-300' : 'border-gray-200 dark:border-gray-700'} transition`}>
-													<HeartIcon className="w-5 h-5 dark:text-gray-500" />
+												<button onClick={() => handleListChange(3)} className={`flex-1 md:flex-initial px-4 py-3 space-x-2 flex items-center justify-center md:justify-start border-b-2 ${selectedGrid === 3 ? 'border-gray-800 dark:border-gray-300' : 'border-gray-200 dark:border-gray-700'} transition`}>
+													<HeartIcon className="hidden md:block w-5 h-5 dark:text-gray-500" />
 													<p className="text-sm text-gray-500">
-														<span className="font-semibold text-gray-800 dark:text-gray-300">Liked</span> {menuLists && menuLists.length > 0 ? Number(menuLists[2].count_deduplicated_nonhidden).toLocaleString() : null}
+														<span className="font-semibold text-gray-800 dark:text-gray-300">Liked</span> <span className="hidden md:inline">{menuLists && menuLists.length > 0 ? Number(menuLists[2].count_deduplicated_nonhidden).toLocaleString() : null}</span>
 													</p>
 												</button>
 											</div>
-											<div className="flex items-center space-x-2">
+											<div className="flex items-center space-x-2 w-full md:w-auto px-3 md:px-0">
 												{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && (
 													<div>
 														{isChangingOrder && ((selectedGrid === 1 && selectedCreatedSortField === 5) || (selectedGrid === 2 && selectedOwnedSortField === 5)) && (
@@ -800,8 +798,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												)}
 												{!isChangingOrder && (
 													<>
-														<Dropdown options={menuLists && menuLists[selectedGrid - 1].collections.map(item => ({ value: item.collection_id, label: item.collection_name.replace(' (FND)', ''), img_url: item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC }))} value={collectionId} onChange={handleCollectionChange} disabled={isChangingOrder} />
-														<Dropdown options={sortingOptionsList.filter(opts => (menuLists[selectedGrid - 1].has_custom_sort ? true : opts.value !== 5))} value={selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField} onChange={handleSortChange} disabled={isChangingOrder} />
+														<Dropdown className="flex-1" options={menuLists && menuLists[selectedGrid - 1].collections.map(item => ({ value: item.collection_id, label: item.collection_name.replace(' (FND)', ''), img_url: item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC }))} value={collectionId} onChange={handleCollectionChange} disabled={isChangingOrder} />
+														<Dropdown className="flex-1" options={sortingOptionsList.filter(opts => (menuLists[selectedGrid - 1].has_custom_sort ? true : opts.value !== 5))} value={selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField} onChange={handleSortChange} disabled={isChangingOrder} />
 
 														{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && items?.length > 0 && (
 															<Menu as="div" className="relative inline-block text-left ml-2">
@@ -848,7 +846,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											</div>
 										</div>
 									)}
-									<div className="mt-8 md:mx-3">
+									<div className="mt-4 md:mt-8 mx-4">
 										{menuLists && menuLists.length > 0 && (
 											<TokenGridV5
 												dataLength={items.length}
@@ -907,6 +905,25 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 					</CappedWidth>
 				</div>
 			</Layout>
+		</div>
+	)
+}
+
+const FollowStats = ({ following, following_count, followers, followersCount, isMyProfile, setShowFollowing, setShowFollowers }) => {
+	const context = useContext(AppContext)
+
+	return (
+		<div className="flex items-center space-x-6">
+			<button className="cursor-pointer hover:opacity-80 transition" onClick={() => setShowFollowing(true)}>
+				<div className="text-sm mr-2 dark:text-gray-300">
+					<span className="font-semibold">{following && following.length !== null ? Number(isMyProfile && context.myFollows ? context.myFollows.length : following_count).toLocaleString() : null}</span> following
+				</div>
+			</button>
+			<button className="cursor-pointer hover:opacity-80 transition" onClick={() => setShowFollowers(true)}>
+				<div className="text-sm mr-2 dark:text-gray-300">
+					<span className="font-semibold">{followers && followers.length !== null ? Number(followersCount).toLocaleString() : null}</span> followers
+				</div>
+			</button>
 		</div>
 	)
 }

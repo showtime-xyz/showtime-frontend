@@ -8,7 +8,7 @@ export default handler().get(async ({ cookies, query: { profileId, isComplete = 
 		const user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
 		await backend
-			.get(`/v1/commonfollows?profileid=${profileId}${isComplete ? '' : '&limit=3&count=1'}&sortbyfollowers=1`, {
+			.get(`/v1/commonfollows?profileid=${profileId}${isComplete ? '' : '&limit=4&count=1'}&sortbyfollowers=1`, {
 				headers: {
 					'X-Authenticated-User': user.publicAddress,
 					'X-Authenticated-Email': user.email || null,
