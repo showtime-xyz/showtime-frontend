@@ -633,7 +633,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 							<div className="flex flex-col text-left">
 								<div className="z-10 pb-2 flex items-center justify-between">
 									<div className="flex items-center">
-										<div className="relative -mt-14 md:-mt-20 rounded-full border-8 border-white dark:border-gray-800 overflow-hidden group self-start">
+										<div className="relative -mt-14 md:-mt-20 rounded-full border-8 border-white dark:border-gray-900 overflow-hidden group self-start">
 											<img
 												onClick={() => {
 													if (isMyProfile) {
