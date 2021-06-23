@@ -10,7 +10,7 @@ const FollowersInCommon = ({ profileId }) => {
 		{ revalidateOnFocus: false }
 	)
 
-	if (!followersInCommon) return null
+	if (!followersInCommon || followersInCommon.data.count == 0) return null
 
 	followersInCommon = followersInCommon.data
 
@@ -27,7 +27,7 @@ const FollowersInCommon = ({ profileId }) => {
 					</>
 				))}
 				{/* TODO: Allow seeing the complete list of followers in common (we need to fetch the complete list & pass it to the modal) */}
-                {followersInCommon.count > 2 && `& ${followersInCommon.count - 2} others you follow`}
+				{followersInCommon.count > 2 && `& ${followersInCommon.count - 2} others you follow`}
 			</p>
 			<UserImageList users={followersInCommon.followers} sizeClass="w-6 h-6" />
 		</div>

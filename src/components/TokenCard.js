@@ -7,7 +7,6 @@ import ShareButton from './ShareButton'
 import ReactPlayer from 'react-player'
 import mixpanel from 'mixpanel-browser'
 import AppContext from '@/context/app-context'
-import MiniFollowButton from './MiniFollowButton'
 import TokenCardImage from '@/components/TokenCardImage'
 import { formatAddressShort, truncateWithEllipses, classNames } from '@/lib/utilities'
 import axios from '@/lib/axios'
@@ -16,23 +15,7 @@ import EllipsisIcon from './Icons/EllipsisIcon'
 import BadgeIcon from './Icons/BadgeIcon'
 import { Menu, Transition } from '@headlessui/react'
 
-const TokenCard = ({
-	originalItem,
-	//showDuplicateNFTs,
-	//setShowDuplicateNFTs,
-	isMyProfile,
-	listId,
-	changeSpotlightItem,
-	currentlyPlayingVideo,
-	setCurrentlyPlayingVideo,
-	setCurrentlyOpenModal,
-	pageProfile,
-	handleRemoveItem,
-	showUserHiddenItems,
-	showDuplicates,
-	setHasUserHiddenItems,
-	isChangingOrder,
-}) => {
+const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
 	const [item, setItem] = useState(originalItem)
 	const [showVideo, setShowVideo] = useState(false)
 	const [muted, setMuted] = useState(true)
@@ -112,7 +95,7 @@ const TokenCard = ({
 										<div>
 											<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Created by</span>
 											<div className="flex items-center space-x-1 -mt-0.5">
-												<div className="text-sm font-semibold truncate">{truncateWithEllipses(item.creator_name, 22)}</div>
+												<div className="text-sm font-semibold truncate">{item.creator_name === item.creator_address ? formatAddressShort(item.creator_address) : truncateWithEllipses(item.creator_name, 22)}</div>
 												{item.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
 											</div>
 										</div>
@@ -278,7 +261,7 @@ const TokenCard = ({
 												<a className="flex flex-row items-center pr-2 ">
 													<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
 													<div>
-														<div className="text-sm font-semibold truncate">{truncateWithEllipses(pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown', 14)}</div>
+														<div className="text-sm font-semibold truncate">{truncateWithEllipses(pageProfile.name && pageProfile.name != 'Unnamed' ? (pageProfile.name == pageProfile.slug_address ? formatAddressShort(pageProfile.slug_address) : pageProfile.name) : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown', 14)}</div>
 													</div>
 												</a>
 											</Link>
@@ -299,7 +282,7 @@ const TokenCard = ({
 											<div>
 												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
 												<div className="flex items-center space-x-1 -mt-0.5">
-													<div className="text-sm font-semibold truncate">{truncateWithEllipses(item.owner_name, 24)}</div>
+													<div className="text-sm font-semibold truncate">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
 													{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
 												</div>
 											</div>

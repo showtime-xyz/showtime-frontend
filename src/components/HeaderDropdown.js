@@ -50,7 +50,7 @@ const DesktopMenu = ({ myProfile, user, hasEmailAddress, setEmailModalOpen, them
 		{({ open }) => (
 			<>
 				<div>
-					<Menu.Button className="max-w-xs bg-transparent flex items-center text-sm rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-stpink group">
+					<Menu.Button className="max-w-xs bg-transparent hover:bg-gray-100 py-1 px-2 -my-1 -mx-2 flex items-center text-sm rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-stpink group">
 						<span className="sr-only">Open user menu</span>
 						<img className="h-8 w-8 rounded-full mr-2" src={myProfile?.img_url || DEFAULT_PROFILE_PIC} alt={myProfile?.name || myProfile?.username || myProfile.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(myProfile.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Profile'} />
 						<span className="hidden md:inline text-sm sm:text-base truncate dark:text-gray-200 group-hover:text-stpink dark:group-hover:text-stpink transition font-medium">{myProfile?.name || myProfile?.username || myProfile.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(myProfile.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Profile'}</span>
