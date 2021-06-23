@@ -10,7 +10,6 @@ import axios from '@/lib/axios'
 import ZapIcon from './Icons/ZapIcon'
 import { Popover, Transition } from '@headlessui/react'
 import { useSWRInfinite } from 'swr'
-import { useRef } from 'react'
 
 const NOTIFICATIONS_PER_PAGE = 7
 
@@ -26,9 +25,6 @@ export default function NotificationsBtn() {
 	const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false)
 	const [previouslyLastOpened, setPreviouslyLastOpened] = useState()
 	const [openUserList, setOpenUserList] = useState(null)
-	const closeBtn = useRef()
-
-	console.log(closeBtn)
 
 	const handlePanelOpen = async () => {
 		setPreviouslyLastOpened(context.myProfile.notifications_last_opened)
