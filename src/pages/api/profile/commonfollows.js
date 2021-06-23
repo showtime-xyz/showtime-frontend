@@ -3,12 +3,12 @@ import Iron from '@hapi/iron'
 import CookieService from '@/lib/cookie'
 import backend from '@/lib/backend'
 
-export default handler().get(async ({ cookies, query: { profileId } }, res) => {
+export default handler().get(async ({ cookies, query: { profileId, isComplete = false } }, res) => {
 	try {
 		const user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
 		await backend
-			.get(`/v1/commonfollows?profileid=${profileId}&limit=3&count=1&sortbyfollowers=1`, {
+			.get(`/v1/commonfollows?profileid=${profileId}${isComplete ? '' : '&limit=3&count=1'}&sortbyfollowers=1`, {
 				headers: {
 					'X-Authenticated-User': user.publicAddress,
 					'X-Authenticated-Email': user.email || null,

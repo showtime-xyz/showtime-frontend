@@ -31,22 +31,15 @@ import WalletIcon from '@/components/Icons/WalletIcon'
 import Dropdown from '@/components/UI/Dropdown'
 import Button from '@/components/UI/Buttons/Button'
 
-export async function getServerSideProps(context) {
-	const { res, query } = context
+export async function getServerSideProps({ query: { profile: slug_address } }) {
+	if (slug_address.includes('apple-touch-icon')) return { props: {}, notFound: true }
 
-	const slug_address = query.profile
-
-	if (slug_address.includes('apple-touch-icon')) {
-		res.writeHead(404)
-		res.end()
-		return { props: {} }
-	}
-
-	// Get profile metadata
-	let response_profile
 	try {
-		response_profile = await backend.get(`/v2/profile_server/${slug_address}`)
-		const { profile, followers: followers_list, followers_count, following: following_list, following_count, featured_nft, lists } = response_profile.data.data
+		const {
+			data: {
+				data: { profile, followers: followers_list, followers_count, following: following_list, following_count, featured_nft, lists },
+			},
+		} = await backend.get(`/v2/profile_server/${slug_address}`)
 
 		return {
 			props: {
@@ -61,16 +54,8 @@ export async function getServerSideProps(context) {
 			},
 		}
 	} catch (err) {
-		if (err.response.status == 400) {
-			// Redirect to homepage
-			res.writeHead(302, { location: '/' })
-			res.end()
-			return { props: {} }
-		} else {
-			res.writeHead(404)
-			res.end()
-			return { props: {} }
-		}
+		if (err.response.status == 400) return { redirect: { destination: '/', permanent: false } }
+		else return { notFound: true }
 	}
 }
 
