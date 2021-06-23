@@ -1,4 +1,4 @@
-import { useRef, useContext, useState } from 'react'
+import { useRef, useContext, useState, Fragment } from 'react'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import LikeButton from './LikeButton'
@@ -7,14 +7,17 @@ import ShareButton from './ShareButton'
 import ReactPlayer from 'react-player'
 import mixpanel from 'mixpanel-browser'
 import AppContext from '@/context/app-context'
-import { getBidLink, getContractName, removeTags, formatAddressShort } from '@/lib/utilities'
+import { getBidLink, getContractName, removeTags, formatAddressShort, classNames } from '@/lib/utilities'
 import ModalTokenDetail from './ModalTokenDetail'
 import CappedWidth from './CappedWidth'
 import { truncateWithEllipses } from '../lib/utilities'
+import Button from './UI/Buttons/Button'
 import axios from '@/lib/axios'
-import { DotsHorizontalIcon } from '@heroicons/react/solid'
+import { Menu, Transition } from '@headlessui/react'
+import EllipsisIcon from './Icons/EllipsisIcon'
+import BadgeIcon from './Icons/BadgeIcon'
 
-const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu, openCardMenu, removeSpotlightItem }) => {
+const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, removeSpotlightItem }) => {
 	const [moreShown, setMoreShown] = useState(false)
 	const [imageLoaded, setImageLoaded] = useState(false)
 	const [muted, setMuted] = useState(true)
@@ -168,37 +171,6 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 							</div>
 						</div>
 						<div className="flex-1 text-left mt-3 md:mt-4 md:pl-12 w-full p-6 pb-0 md:p-0">
-							{/*START DROPDOWN MENU */}
-							{isMyProfile ? (
-								<div className="relative sm:static">
-									<div className="absolute top-0 right-0 sm:right-6">
-										<button
-											onClick={e => {
-												e.stopPropagation()
-
-												setOpenCardMenu(openCardMenu == item.nft_id + '_' + listId ? null : item.nft_id + '_' + listId)
-											}}
-											className="text-right flex items-center justify-center text-gray-600 dark:text-gray-700 hover:text-stpink dark:hover:text-stpink focus:outline-none focus-visible:text-stpink"
-										>
-											<DotsHorizontalIcon className="w-5 h-5" />
-										</button>
-										{openCardMenu == item.nft_id + '_' + listId ? (
-											<div className="flex justify-end relative z-10">
-												<div className={`absolute text-center top-2 bg-white dark:bg-gray-900 shadow-lg py-2 px-2 rounded-xl transition-all text-md transform border border-gray-100 dark:border-gray-800 ${openCardMenu == item.nft_id + '_' + listId ? 'visible opacity-1 ' : 'invisible opacity-0'}`}>
-													<div className="py-2 px-3 dark:text-gray-400 hover:text-stpink dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all rounded-lg cursor-pointer whitespace-nowrap" onClick={removeSpotlightItem}>
-														Remove Spotlight
-													</div>
-													<div className="py-2 px-3 dark:text-gray-400 hover:text-stpink dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all rounded-lg cursor-pointer whitespace-nowrap" onClick={handleRefreshNFTMetadata}>
-														Refresh Metadata
-													</div>
-												</div>
-											</div>
-										) : null}
-									</div>
-								</div>
-							) : null}
-							{/* END DROPDOWN MENU */}
-
 							<div>
 								<div className="flex flex-row">
 									<div
@@ -208,7 +180,7 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 											setMuted(true)
 											setCurrentlyPlayingVideo(false)
 										}}
-										className="dark:text-gray-200 mb-2 sm:mb-4 text-2xl sm:text-3xl hover:text-stpink cursor-pointer break-words"
+										className="dark:text-gray-200 mb-2 sm:mb-4 text-2xl sm:text-3xl font-medium hover:text-stpink cursor-pointer break-words"
 									>
 										{item.token_name}
 									</div>
@@ -233,101 +205,119 @@ const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, setOpenCardMenu
 									</div>
 								) : null}
 
-								<div className="flex items-center">
-									<div className="mr-4 text-base ">
-										<LikeButton item={item} />
-									</div>
-									<div className="mr-4 text-base ">
-										<CommentButton
-											item={item}
-											handleComment={() => {
-												mixpanel.track('Open NFT modal via comment button')
-												setCurrentlyOpenModal(true)
-												setMuted(true)
-												setCurrentlyPlayingVideo(false)
-											}}
-										/>
-									</div>
-									<div className="mr-4 text-base flex items-center justify-center">
-										<ShareButton url={window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${item.contract_address}/${item.token_id}`} type={'item'} />
-									</div>
-								</div>
-								<div className="flex-grow ">
-									<div className="flex flex-row mt-8">
-										<a href={getBidLink(item)} title={`Buy on ${getContractName(item)}`} target="_blank" onClick={() => mixpanel.track('OpenSea link click')} rel="noreferrer">
-											<div className="text-base px-5 py-2 shadow-md transition-all rounded-full text-white dark:text-gray-900 bg-stpink hover:bg-white dark:hover:bg-gray-900 hover:text-stpink dark:hover:text-stpink border-2 border-stpink">{`Bid on ${getContractName(item)}`}</div>
-										</a>
-
-										<div className="flex-grow"></div>
-									</div>
-								</div>
-								<div className={`flex ${item.multiple_owners && pageProfile.profile_id !== item.creator_id ? 'flex-col lg:flex-row  pb-6' : 'flex-row'} pt-4 mt-8 w-full`}>
-									{item.contract_is_creator ? (
-										<div className="flex-col flex-1">
-											<div className="flex-shrink mb-1 pr-2 text-xs text-gray-500">Created by</div>
-											<div className="flex-shrink">
-												<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
-													<a className="flex flex-row items-center">
-														<div className="w-8">
-															<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full h-8 w-8" />
+								<div className="bg-white shadow-lg rounded-xl py-4 px-2">
+									<div className="flex w-full px-2">
+										{item.contract_is_creator ? (
+											<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
+												<a className="flex flex-row items-center space-x-2">
+													<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
+													<div>
+														<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Creator</span>
+														<div className="text-sm font-semibold truncate -mt-0.5">{truncateWithEllipses(item.collection_name + ' Collection', 30)}</div>
+													</div>
+												</a>
+											</Link>
+										) : item.creator_address ? (
+											<Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
+												<a className="flex flex-row items-center space-x-2">
+													<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
+													<div>
+														<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Creator</span>
+														<div className="flex items-center space-x-1 -mt-0.5">
+															<div className="text-sm font-semibold truncate">{item.creator_name === item.creator_address ? formatAddressShort(item.creator_address) : truncateWithEllipses(item.creator_name, 22)}</div>
+															{item.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
 														</div>
-														<div className="mx-2 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">{truncateWithEllipses(item.collection_name + ' Collection', 25)} </div>
-													</a>
-												</Link>
-											</div>
-										</div>
-									) : item.creator_id ? (
-										<div className="flex-col flex-1 mb-6">
-											<div className="flex-shrink pr-2 mb-1 text-xs text-gray-500">{item.owner_id == item.creator_id ? 'Created & Owned By' : 'Created by'}</div>
-											<div className="flex-shrink">
-												<Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
-													<a className="flex flex-row items-center">
-														<div>
-															<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
-														</div>
-														<div className="ml-2 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">{truncateWithEllipses(item.creator_name, 25)}</div>
-													</a>
-												</Link>
-											</div>
-										</div>
-									) : null}
-									{(item.owner_id && (item.owner_id != item.creator_id || item.contract_is_creator)) || item.owner_count > 0 ? (
-										<div className="flex-1">
-											<div className="flex-shrink pr-2 mb-1 text-xs text-gray-500">Owned by</div>
-											<div className="">
-												{item.multiple_owners ? (
-													pageProfile.profile_id !== item.creator_id ? (
-														<div className="flex flex-row items-center">
-															<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
-																<a className="flex flex-row items-center pr-2 ">
-																	<div>
-																		<img alt={pageProfile.name ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-8 h-8" />
-																	</div>
-																	<div className="dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">{pageProfile.name ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown'}</div>
-																</a>
-															</Link>
-
-															<div className="text-gray-400 text-sm mr-2 -ml-1 mt-1">
-																&amp; {item.owner_count - 1} other
-																{item.owner_count - 1 > 1 ? 's' : null}
-															</div>
-														</div>
-													) : (
-														<span className="text-gray-500">Multiple owners</span>
-													)
-												) : item.owner_id ? (
-													<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
-														<a className="flex flex-row items-center">
+													</div>
+												</a>
+											</Link>
+										) : null}
+										<div className="w-[2px] bg-gray-100 my-2.5 mx-4" />
+										{item.owner_count && item.owner_count > 1 ? (
+											<div>
+												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owner</span>
+												<div className="flex items-center">
+													<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
+														<a className="flex flex-row items-center pr-2 ">
+															<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
 															<div>
-																<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-8 h-8" />
+																<div className="text-sm font-semibold truncate">{truncateWithEllipses(pageProfile.name && pageProfile.name != 'Unnamed' ? (pageProfile.name == pageProfile.slug_address ? formatAddressShort(pageProfile.slug_address) : pageProfile.name) : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown', 14)}</div>
 															</div>
-															<div className="dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">{truncateWithEllipses(item.owner_name, 25)}</div>
 														</a>
 													</Link>
-												) : null}
+													<div className="text-gray-500 text-sm mr-2 -ml-1 mt-px">
+														&amp; {item.owner_count - 1} other
+														{item.owner_count - 1 > 1 ? 's' : null}
+													</div>
+												</div>
 											</div>
+										) : item.owner_id ? (
+											<div className="flex flex-row items-center pt-1">
+												<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
+													<a className="flex flex-row items-center space-x-2">
+														<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8" />
+														<div>
+															<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owner</span>
+															<div className="flex items-center space-x-1 -mt-0.5">
+																<div className="text-sm font-semibold truncate">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
+																{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+															</div>
+														</div>
+													</a>
+												</Link>
+												<div className="flex-grow">&nbsp;</div>
+											</div>
+										) : null}
+									</div>
+									<div className="h-px bg-gray-100 mx-1 my-4" />
+									<div className="flex items-center justify-between px-4">
+										<div className="flex items-center space-x-4">
+											<LikeButton item={item} />
+											<CommentButton
+												item={item}
+												handleComment={() => {
+													mixpanel.track('Open NFT modal via comment button')
+													setCurrentlyOpenModal(true)
+													setMuted(true)
+													setCurrentlyPlayingVideo(false)
+												}}
+											/>
 										</div>
-									) : null}
+										<div className="flex items-center space-x-4">
+											<ShareButton url={window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${item.contract_address}/${item.token_id}`} type={'item'} />
+											{isMyProfile ? (
+												<Menu as="div" className="relative -mb-2">
+													<>
+														<Menu.Button className="text-right text-gray-600 hover:text-stpink focus:outline-none focus-visible:ring-1 relative">
+															<EllipsisIcon className="w-5 h-5" />
+														</Menu.Button>
+														<Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+															<Menu.Items className="z-1 absolute right-0 mt-2 origin-top-right border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg rounded-xl p-2 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+																<Menu.Item>
+																	{({ active }) => (
+																		<button onClick={removeSpotlightItem} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+																			<span className="block truncate font-medium">Remove Spotlight</span>
+																		</button>
+																	)}
+																</Menu.Item>
+																<Menu.Item>
+																	{({ active }) => (
+																		<button onClick={handleRefreshNFTMetadata} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+																			<span className="block truncate font-medium">Refresh Metadata</span>
+																		</button>
+																	)}
+																</Menu.Item>
+															</Menu.Items>
+														</Transition>
+													</>
+												</Menu>
+											) : null}
+										</div>
+									</div>
+								</div>
+								<div className="mt-8 inline-block">
+									<Button style="primary" as="a" href={getBidLink(item)} title={`View on ${getContractName(item)}`} target="_blank" onClick={() => mixpanel.track('OpenSea link click')} rel="noreferrer">
+										View on {getContractName(item)}
+									</Button>
 								</div>
 							</div>
 						</div>
