@@ -17,7 +17,7 @@ import { Menu, Transition } from '@headlessui/react'
 import EllipsisIcon from './Icons/EllipsisIcon'
 import BadgeIcon from './Icons/BadgeIcon'
 
-const SpotlightItem = ({ isMyProfile, listId, pageProfile, item, removeSpotlightItem }) => {
+const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) => {
 	const [moreShown, setMoreShown] = useState(false)
 	const [imageLoaded, setImageLoaded] = useState(false)
 	const [muted, setMuted] = useState(true)

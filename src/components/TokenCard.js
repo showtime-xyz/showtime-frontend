@@ -1,4 +1,4 @@
-import { useState, useContext, useRef, Fragment } from 'react'
+import { useState, useRef, Fragment } from 'react'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import LikeButton from './LikeButton'
@@ -6,7 +6,6 @@ import CommentButton from './CommentButton'
 import ShareButton from './ShareButton'
 import ReactPlayer from 'react-player'
 import mixpanel from 'mixpanel-browser'
-import AppContext from '@/context/app-context'
 import TokenCardImage from '@/components/TokenCardImage'
 import { formatAddressShort, truncateWithEllipses, classNames } from '@/lib/utilities'
 import axios from '@/lib/axios'
@@ -20,8 +19,6 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 	const [showVideo, setShowVideo] = useState(false)
 	const [muted, setMuted] = useState(true)
 	const [refreshing, setRefreshing] = useState(false)
-
-	const context = useContext(AppContext)
 
 	const divRef = useRef()
 
