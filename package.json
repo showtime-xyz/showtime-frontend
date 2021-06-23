@@ -45,7 +45,7 @@
     "lodash": "^4.17.20",
     "magic-sdk": "^4.0.2",
     "mixpanel-browser": "^2.40.1",
-    "next": "^11.0.0",
+    "next": "^11.0.1",
     "next-connect": "^0.10.1",
     "next-themes": "^0.0.14",
     "patch-package": "^6.4.7",
