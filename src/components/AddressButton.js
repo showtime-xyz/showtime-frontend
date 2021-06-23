@@ -21,7 +21,7 @@ export const AddressCollection = ({ addresses, isMyProfile = false }) => {
 						<ChevronDown className="w-4 h-4" />
 					</Popover.Button>
 					<Transition enter="transition duration-100 ease-out" enterFrom="transform scale-95 opacity-0" enterTo="transform scale-100 opacity-100" leave="transition duration-75 ease-out" leaveFrom="transform scale-100 opacity-100" leaveTo="transform scale-95 opacity-0">
-						<Popover.Panel className="absolute top-8 right-0 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 px-6 py-4 shadow rounded-xl">
+						<Popover.Panel className="absolute top-10 right-0 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 px-6 py-4 shadow rounded-xl">
 							<div className="space-y-3">
 								{addresses
 									.filter((a, i) => i !== 0)

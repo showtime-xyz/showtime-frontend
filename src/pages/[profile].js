@@ -419,9 +419,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		try {
 			await axios
 				.post(`/api/follow_v2/${profile_id}`)
-				.then(() => {
-					mixpanel.track('Followed profile')
-				})
+				.then(() => mixpanel.track('Followed profile'))
 				.catch(err => {
 					if (err.response.data.code === 429) {
 						setIsFollowed(false)
@@ -481,10 +479,10 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setShowFollowing(false)
 	}, [profile_id, lists.default_list_id, isLoadingCards])
 
-	// const editAccount = () => {
-	// 	setEditModalOpen(true)
-	// 	mixpanel.track('Open edit name')
-	// }
+	const editAccount = () => {
+		setEditModalOpen(true)
+		mixpanel.track('Open edit name')
+	}
 
 	const editPhoto = () => {
 		setPictureModalOpen(true)
@@ -669,7 +667,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											</button>
 										</div>
 										<div className="flex items-center space-x-2">
-											<Button style={isFollowed || isMyProfile ? 'tertiary' : 'primary'} onClick={isAuthenticated ? (isMyProfile ? () => setEditModalOpen(true) : isFollowed ? handleUnfollow : context.disableFollows ? null : handleFollow) : handleLoggedOutFollow} className={`space-x-2 ${isFollowed || isMyProfile ? '' : 'text-white'}`}>
+											<Button style={isMyProfile ? 'tertiary_gray' : isFollowed ? 'tertiary' : 'primary'} onClick={isAuthenticated ? (isMyProfile ? editAccount : isFollowed ? handleUnfollow : context.disableFollows ? null : handleFollow) : handleLoggedOutFollow} className={`space-x-2 ${isFollowed || isMyProfile ? '' : 'text-white'}`}>
 												{isMyProfile ? (
 													<span className="font-semibold">Edit Profile</span>
 												) : isFollowed ? (
@@ -786,63 +784,67 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 													</p>
 												</button>
 											</div>
-											{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && (
-												<div>
-													{isChangingOrder && ((selectedGrid === 1 && selectedCreatedSortField === 5) || (selectedGrid === 2 && selectedOwnedSortField === 5)) && (
-														<>
-															<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-red-100 bg-red-600 hover:bg-red-700 focus:outline-none" onClick={handleCancelOrder}>
-																Cancel
-															</div>
-															<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-green-100 bg-green-600 hover:bg-green-700 focus:outline-none" onClick={handleSaveOrder}>
-																Save Order
-															</div>
-														</>
-													)}
-												</div>
-											)}
 											<div className="flex items-center space-x-2">
-												<Dropdown options={menuLists && menuLists[selectedGrid - 1].collections.map(item => ({ value: item.collection_id, label: item.collection_name.replace(' (FND)', ''), img_url: item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC }))} value={collectionId} onChange={handleCollectionChange} disabled={isChangingOrder} />
-												<Dropdown options={sortingOptionsList.filter(opts => (menuLists[selectedGrid - 1].has_custom_sort ? true : opts.value !== 5))} value={selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField} onChange={handleSortChange} disabled={isChangingOrder} />
+												{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && (
+													<div>
+														{isChangingOrder && ((selectedGrid === 1 && selectedCreatedSortField === 5) || (selectedGrid === 2 && selectedOwnedSortField === 5)) && (
+															<>
+																<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-red-100 bg-red-600 hover:bg-red-700 focus:outline-none" onClick={handleCancelOrder}>
+																	Cancel
+																</div>
+																<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-green-100 bg-green-600 hover:bg-green-700 focus:outline-none" onClick={handleSaveOrder}>
+																	Save Order
+																</div>
+															</>
+														)}
+													</div>
+												)}
+												{!isChangingOrder && (
+													<>
+														<Dropdown options={menuLists && menuLists[selectedGrid - 1].collections.map(item => ({ value: item.collection_id, label: item.collection_name.replace(' (FND)', ''), img_url: item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC }))} value={collectionId} onChange={handleCollectionChange} disabled={isChangingOrder} />
+														<Dropdown options={sortingOptionsList.filter(opts => (menuLists[selectedGrid - 1].has_custom_sort ? true : opts.value !== 5))} value={selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField} onChange={handleSortChange} disabled={isChangingOrder} />
 
-												{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && items?.length > 0 && (
-													<Menu as="div" className="relative inline-block text-left ml-2">
-														<>
-															<div>
-																<Menu.Button disabled={isChangingOrder} className={({ open }) => `flex items-center justify-center text-gray-800 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus-visible:bg-gray-100 dark:focus-visible:bg-gray-800 p-1 -m-1 rounded-lg ${open ? 'bg-gray-100 dark:bg-gray-800' : ''} transition`}>
-																	<DotsHorizontalIcon className="w-5 h-5" aria-hidden="true" />
-																</Menu.Button>
-															</div>
-															<Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-																<Menu.Items className="z-1 absolute right-0 mt-2 origin-top-right border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg rounded-xl p-4 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-																	<Menu.Item>
-																		{({ active }) => (
-																			<button onClick={handleClickChangeOrder} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
-																				<span className="block truncate font-medium">Customize Order</span>
-																			</button>
-																		)}
-																	</Menu.Item>
-																	{context.myProfile && ((selectedGrid === 1 && context.myProfile.default_created_sort_id === 5) || (selectedGrid === 2 && context.myProfile.default_owned_sort_id === 5) || menuLists[selectedGrid - 1].has_custom_sort) && (
-																		<Menu.Item>
-																			{({ active }) => (
-																				<button onClick={handleClickDeleteCustomOrder} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
-																					<span className="block truncate font-medium">Remove Custom Order</span>
-																				</button>
+														{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && items?.length > 0 && (
+															<Menu as="div" className="relative inline-block text-left ml-2">
+																<>
+																	<div>
+																		<Menu.Button disabled={isChangingOrder} className={({ open }) => `flex items-center justify-center text-gray-800 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus-visible:bg-gray-100 dark:focus-visible:bg-gray-800 p-1 -m-1 rounded-lg ${open ? 'bg-gray-100 dark:bg-gray-800' : ''} transition`}>
+																			<DotsHorizontalIcon className="w-5 h-5" aria-hidden="true" />
+																		</Menu.Button>
+																	</div>
+																	<Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+																		<Menu.Items className="z-1 absolute right-0 mt-2 origin-top-right border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg rounded-xl p-4 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+																			<Menu.Item>
+																				{({ active }) => (
+																					<button onClick={handleClickChangeOrder} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+																						<span className="block truncate font-medium">Customize Order</span>
+																					</button>
+																				)}
+																			</Menu.Item>
+																			{context.myProfile && ((selectedGrid === 1 && context.myProfile.default_created_sort_id === 5) || (selectedGrid === 2 && context.myProfile.default_owned_sort_id === 5) || menuLists[selectedGrid - 1].has_custom_sort) && (
+																				<Menu.Item>
+																					{({ active }) => (
+																						<button onClick={handleClickDeleteCustomOrder} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+																							<span className="block truncate font-medium">Remove Custom Order</span>
+																						</button>
+																					)}
+																				</Menu.Item>
 																			)}
-																		</Menu.Item>
-																	)}
-																	{hasUserHiddenItems && (
-																		<Menu.Item>
-																			{({ active }) => (
-																				<button onClick={() => handleShowHiddenChange(!showUserHiddenItems)} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 pl-3 w-full text-left')}>
-																					<span className="block truncate font-medium">{showUserHiddenItems ? 'Hide hidden' : 'Show hidden'}</span>
-																				</button>
+																			{hasUserHiddenItems && (
+																				<Menu.Item>
+																					{({ active }) => (
+																						<button onClick={() => handleShowHiddenChange(!showUserHiddenItems)} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 pl-3 w-full text-left')}>
+																							<span className="block truncate font-medium">{showUserHiddenItems ? 'Hide hidden' : 'Show hidden'}</span>
+																						</button>
+																					)}
+																				</Menu.Item>
 																			)}
-																		</Menu.Item>
-																	)}
-																</Menu.Items>
-															</Transition>
-														</>
-													</Menu>
+																		</Menu.Items>
+																	</Transition>
+																</>
+															</Menu>
+														)}
+													</>
 												)}
 											</div>
 										</div>
