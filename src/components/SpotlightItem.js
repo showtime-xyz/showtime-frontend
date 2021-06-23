@@ -188,7 +188,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 								</div>
 
 								{item.token_description ? (
-									<div className="pb-4 text-sm sm:text-base text-gray-500 break-words">
+									<div className="pb-8 text-sm sm:text-base text-gray-500 break-words">
 										<div>
 											{item.token_description?.length > max_description_length && !moreShown ? (
 												<>

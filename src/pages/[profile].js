@@ -684,9 +684,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											</button>
 										</div>
 										<div className="flex items-center space-x-2">
-											<button className="p-3">
-												<EllipsisIcon className="w-5 h-auto text-gray-800 dark:text-gray-500" />
-											</button>
 											<Button style={isFollowed || isMyProfile ? 'tertiary' : 'primary'} onClick={isAuthenticated ? (isMyProfile ? () => setEditModalOpen(true) : isFollowed ? handleUnfollow : context.disableFollows ? null : handleFollow) : handleLoggedOutFollow} className={`space-x-2 ${isFollowed || isMyProfile ? '' : 'text-white'}`}>
 												{isMyProfile ? (
 													<span className="font-semibold">Edit Profile</span>
