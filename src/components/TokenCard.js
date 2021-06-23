@@ -13,6 +13,7 @@ import { formatAddressShort, truncateWithEllipses, classNames } from '@/lib/util
 import axios from '@/lib/axios'
 import { MenuIcon, PlayIcon } from '@heroicons/react/solid'
 import EllipsisIcon from './Icons/EllipsisIcon'
+import BadgeIcon from './Icons/BadgeIcon'
 import { Menu, Transition } from '@headlessui/react'
 
 const TokenCard = ({
@@ -110,7 +111,10 @@ const TokenCard = ({
 										<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
 										<div>
 											<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Created by</span>
-											<div className="text-sm font-semibold truncate -mt-0.5">{truncateWithEllipses(item.creator_name, 22)}</div>
+											<div className="flex items-center space-x-1 -mt-0.5">
+												<div className="text-sm font-semibold truncate">{truncateWithEllipses(item.creator_name, 22)}</div>
+												{item.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+											</div>
 										</div>
 									</a>
 								</Link>
@@ -285,7 +289,7 @@ const TokenCard = ({
 										</div>
 									</div>
 								) : (
-									<span className="text-gray-500">Multiple owners</span>
+									<span className="text-gray-500 text-sm">Multiple owners</span>
 								)
 							) : item.owner_id ? (
 								<div className="flex flex-row items-center pt-1">
@@ -294,7 +298,10 @@ const TokenCard = ({
 											<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8" />
 											<div>
 												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
-												<div className="text-sm font-semibold truncate -mt-0.5">{truncateWithEllipses(item.owner_name, 24)}</div>
+												<div className="flex items-center space-x-1 -mt-0.5">
+													<div className="text-sm font-semibold truncate">{truncateWithEllipses(item.owner_name, 24)}</div>
+													{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+												</div>
 											</div>
 										</a>
 									</Link>
