@@ -30,7 +30,6 @@ const TokenGridV5 = ({
 	setOpenCardMenu,
 	detailsModalCloseOnKeyChange,
 	changeSpotlightItem,
-	extraColumn,
 	pageProfile,
 	isLoadingMore,
 	isChangingOrder,
