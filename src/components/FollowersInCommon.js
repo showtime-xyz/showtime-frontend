@@ -18,16 +18,16 @@ const FollowersInCommon = ({ profileId }) => {
 		<div className="flex items-center space-x-1">
 			<p className="text-sm dark:text-gray-400">
 				Followed by{' '}
-				{followersInCommon.followers.map(follower => (
+				{followersInCommon.followers.map((follower, i) => (
 					<>
 						<Link href={`/${follower.username}`} key={follower.username}>
 							<a className="font-semibold dark:text-gray-300">@{follower.username}</a>
 						</Link>
-						{', '}
+						{i + 1 != followersInCommon.count && ', '}
 					</>
 				))}
 				{/* TODO: Allow seeing the complete list of followers in common (we need to fetch the complete list & pass it to the modal) */}
-				&amp; {followersInCommon.count - 2} others you follow
+                {followersInCommon.count > 2 && `& ${followersInCommon.count - 2} others you follow`}
 			</p>
 			<UserImageList users={followersInCommon.followers} sizeClass="w-6 h-6" />
 		</div>

@@ -779,20 +779,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 									{!isLoadingCards && (
 										<div className="flex items-center justify-between px-3 my-2">
 											{/* TODO: Find a good place for the ordering controls */}
-											{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && (
-												<>
-													{isChangingOrder && ((selectedGrid === 1 && selectedCreatedSortField === 5) || (selectedGrid === 2 && selectedOwnedSortField === 5)) && (
-														<>
-															<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-red-100 bg-red-600 hover:bg-red-700 focus:outline-none" onClick={handleCancelOrder}>
-																Cancel
-															</div>
-															<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-green-100 bg-green-600 hover:bg-green-700 focus:outline-none" onClick={handleSaveOrder}>
-																Save Order
-															</div>
-														</>
-													)}
-												</>
-											)}
 											<div className="flex items-center">
 												<button onClick={() => handleListChange(1)} className={`px-4 py-3 space-x-2 flex items-center border-b-2 ${selectedGrid === 1 ? 'border-gray-800 dark:border-gray-300' : 'border-gray-200 dark:border-gray-700'} transition`}>
 													<FingerprintIcon className="w-5 h-5 dark:text-gray-500" />
@@ -813,6 +799,20 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 													</p>
 												</button>
 											</div>
+                                            {(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && (
+												<div>
+													{isChangingOrder && ((selectedGrid === 1 && selectedCreatedSortField === 5) || (selectedGrid === 2 && selectedOwnedSortField === 5)) && (
+														<>
+															<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-red-100 bg-red-600 hover:bg-red-700 focus:outline-none" onClick={handleCancelOrder}>
+																Cancel
+															</div>
+															<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-green-100 bg-green-600 hover:bg-green-700 focus:outline-none" onClick={handleSaveOrder}>
+																Save Order
+															</div>
+														</>
+													)}
+												</div>
+											)}
 											<div className="flex items-center space-x-2">
 												<Dropdown options={menuLists && menuLists[selectedGrid - 1].collections.map(item => ({ value: item.collection_id, label: item.collection_name.replace(' (FND)', ''), img_url: item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC }))} value={collectionId} onChange={handleCollectionChange} disabled={isChangingOrder} />
 												<Dropdown options={sortingOptionsList.filter(opts => (menuLists[selectedGrid - 1].has_custom_sort ? true : opts.value !== 5))} value={selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField} onChange={handleSortChange} disabled={isChangingOrder} />
@@ -821,7 +821,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 													<Menu as="div" className="relative inline-block text-left ml-2">
 														<>
 															<div>
-																<Menu.Button disabled={isChangingOrder} className={({ open }) => `flex items-center justify-center text-gray-800 dark:text-gray-400 hover:bg-gray-100 focus:outline-none focus-visible:bg-gray-100 p-1 -m-1 rounded-lg ${open ? 'bg-gray-100' : ''} transition`}>
+																<Menu.Button disabled={isChangingOrder} className={({ open }) => `flex items-center justify-center text-gray-800 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus-visible:bg-gray-100 dark:focus-visible:bg-gray-800 p-1 -m-1 rounded-lg ${open ? 'bg-gray-100 dark:bg-gray-800' : ''} transition`}>
 																	<DotsHorizontalIcon className="w-5 h-5" aria-hidden="true" />
 																</Menu.Button>
 															</div>

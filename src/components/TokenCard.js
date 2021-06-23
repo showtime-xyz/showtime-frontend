@@ -99,7 +99,7 @@ const TokenCard = ({
 									<a className="flex flex-row items-center space-x-2">
 										<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
 										<div>
-											<span className="text-xs font-medium text-gray-600">Created by</span>
+											<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Created by</span>
 											<div className="text-sm font-semibold truncate -mt-0.5">{truncateWithEllipses(item.collection_name + ' Collection', 30)}</div>
 										</div>
 									</a>
@@ -109,7 +109,7 @@ const TokenCard = ({
 									<a className="flex flex-row items-center space-x-2">
 										<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
 										<div>
-											<span className="text-xs font-medium text-gray-600">Created by</span>
+											<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Created by</span>
 											<div className="text-sm font-semibold truncate -mt-0.5">{truncateWithEllipses(item.creator_name, 22)}</div>
 										</div>
 									</a>
@@ -156,7 +156,6 @@ const TokenCard = ({
 							</Transition>
 						</Menu>
 					</div>
-					{/* {context.myProfile?.profile_id !== item.creator_id && !(isMyProfile && listId !== 3) && !item.contract_is_creator && <MiniFollowButton profileId={item.creator_id} />} */}
 				</div>
 				{(item.token_has_video || (!item.token_img_url && item.token_animation_url)) && showVideo && currentlyPlayingVideo === item.nft_id ? (
 					<div className="bg-black">
@@ -269,7 +268,7 @@ const TokenCard = ({
 							{item.owner_count && item.owner_count > 1 ? (
 								pageProfile && listId === 2 ? (
 									<div className="">
-										<span className="text-xs font-medium text-gray-600">Owned by</span>
+										<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
 										<div className="flex items-center">
 											<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
 												<a className="flex flex-row items-center pr-2 ">
@@ -284,7 +283,6 @@ const TokenCard = ({
 												{item.owner_count - 1 > 1 ? 's' : null}
 											</div>
 										</div>
-										{/* {context.myProfile?.profile_id !== item.owner_id && <MiniFollowButton profileId={item.owner_id} />} */}
 									</div>
 								) : (
 									<span className="text-gray-500">Multiple owners</span>
@@ -295,12 +293,11 @@ const TokenCard = ({
 										<a className="flex flex-row items-center space-x-2">
 											<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8" />
 											<div>
-												<span className="text-xs font-medium text-gray-600">Owned by</span>
+												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
 												<div className="text-sm font-semibold truncate -mt-0.5">{truncateWithEllipses(item.owner_name, 24)}</div>
 											</div>
 										</a>
 									</Link>
-									{context.myProfile?.profile_id !== item.owner_id && !(isMyProfile && listId !== 3) && <MiniFollowButton profileId={item.owner_id} />}
 									<div className="flex-grow">&nbsp;</div>
 								</div>
 							) : null}
