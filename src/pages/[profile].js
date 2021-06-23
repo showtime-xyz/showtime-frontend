@@ -607,7 +607,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 					<meta name="twitter:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : DEFAULT_PROFILE_PIC} />
 				</Head>
 
-				<div className="bg-white dark:bg-gray-900">
+				<div className="bg-white dark:bg-gray-900 pb-8">
 					<div className={`h-32 md:h-64 relative text-left bg-gradient-to-b from-black dark:from-gray-400 to-gray-800 dark:to-gray-100 ${cover_url ? 'bg-no-repeat bg-center bg-cover' : ''}`} style={cover_url ? { backgroundImage: `url(${getCoverUrl(cover_url)})` } : {}}>
 						{isMyProfile && (
 							<CappedWidth>
