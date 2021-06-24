@@ -664,7 +664,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											<h2 className="text-3xl md:text-4xl font-tomato font-bold"> {name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</h2>
 											{verified && <BadgeIcon className="w-5 md:w-6 h-auto text-black dark:text-white" bgClass="text-white dark:text-black" />}
 										</div>
-										<div className="mt-2">{(username || (wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0)) && <p className="flex flex-row items-center justify-start">{username && <div className="font-tomato font-bold tracking-wider dark:text-gray-300">@{username}</div>}</p>}</div>
+										<div className="mt-2">{(username || (wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0)) && <p className="flex flex-row items-center justify-start">{username && <span className="font-tomato font-bold tracking-wider dark:text-gray-300">@{username}</span>}</p>}</div>
 										<div>
 											{bio ? (
 												<div className="text-black dark:text-gray-400 text-sm max-w-prose text-left md:text-base mt-4 block break-words">

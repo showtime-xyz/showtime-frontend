@@ -58,11 +58,11 @@ const HeaderDropdown = () => {
 								</Menu.Item>
 								<div className="mt-0.5 md:mt-0 rounded-2xl shadow-lg border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 space-y-4 divide-y divide-gray-100 dark:divide-gray-800 relative z-20 min-w-[10rem] w-full md:w-auto py-1 px-2">
 									<div className="py-1">
-										<Menu.Item as={NextLink} href={`/${myProfile?.username || myProfile.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || myProfile.wallet_addresses_excluding_email_v2?.[0]?.address || user.publicAddress}`}>
-											{({ active }) => <a className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'block rounded-lg w-full text-left py-2 pr-6 pl-2 text-sm font-semibold transition')}>Your Profile</a>}
+										<Menu.Item as={NextLink} className={({ active }) => classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'block rounded-lg w-full text-left py-2 pr-6 pl-2 text-sm font-semibold transition')} href={`/${myProfile?.username || myProfile.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || myProfile.wallet_addresses_excluding_email_v2?.[0]?.address || user.publicAddress}`}>
+											Your Profile
 										</Menu.Item>
-										<Menu.Item as={NextLink} href="/wallet">
-											{({ active }) => <a className={classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'block rounded-lg w-full text-left py-2 pr-6 pl-2 text-sm font-semibold transition')}>Wallets</a>}
+										<Menu.Item as={NextLink} className={({ active }) => classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'block rounded-lg w-full text-left py-2 pr-6 pl-2 text-sm font-semibold transition')} href="/wallet">
+											Wallets
 										</Menu.Item>
 									</div>
 									{!hasEmailAddress && (

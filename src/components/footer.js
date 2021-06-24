@@ -29,7 +29,7 @@ const Footer = () => {
 							<InstagramIcon className="w-4 h-4" />
 							<span>Instagram</span>
 						</a>
-						<a className="text-gray-200 font-bold flex items-center space-x-2" href="https://discord.gg/FBSxXrcnsm" target="_blank" rel="noopener noreferrer">
+						<a className="text-gray-200 font-bold flex items-center space-x-2" href="/discord" target="_blank" rel="noopener noreferrer">
 							<DiscordIcon className="w-4 h-4" />
 							<span>Discord</span>
 						</a>

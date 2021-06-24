@@ -1,6 +1,6 @@
 import axios from '@/lib/axios'
 import Link from 'next/link'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import useSWR from 'swr'
 import ModalUserList from './ModalUserList'
 import UserImageList from './UserImageList'
@@ -28,16 +28,16 @@ const FollowersInCommon = ({ profileId }) => {
 		<>
 			{typeof document !== 'undefined' && followersInCommon.count > 2 ? <ModalUserList title="Followers In Common" isOpen={showFollowersModal} users={followersInCommonComplete?.data?.followers || []} closeModal={() => setShowFollowersModal(false)} onRedirect={() => setShowFollowersModal(false)} emptyMessage="Loading..." /> : null}
 			<div className="flex items-center space-x-1">
-				<p className="text-sm dark:text-gray-400">
+				<div className="text-sm dark:text-gray-400">
 					Followed by{' '}
 					<div className="hidden md:inline">
 						{followersInCommon.followers.map((follower, i) => (
-							<>
-								<Link href={`/${follower.username}`} key={follower.username}>
+							<Fragment key={follower.profile_id}>
+								<Link href={`/${follower.username}`}>
 									<a className="font-semibold dark:text-gray-300">@{follower.username}</a>
 								</Link>
 								{i + 1 != followersInCommon.count && ', '}
-							</>
+							</Fragment>
 						))}
 						{followersInCommon.count > 2 && (
 							<>
@@ -48,7 +48,7 @@ const FollowersInCommon = ({ profileId }) => {
 							</>
 						)}
 					</div>
-				</p>
+				</div>
 				<UserImageList users={followersInCommon.followers} sizeClass="w-6 h-6" />
 			</div>
 		</>
