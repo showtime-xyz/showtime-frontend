@@ -1,6 +1,3 @@
-import { MailIcon } from '@heroicons/react/solid'
-import { useState } from 'react'
-import ModalFeedback from './ModalFeedback'
 import showtimeLogo from '../../public/img/logo.png'
 import mixpanel from 'mixpanel-browser'
 import Link from 'next/link'
@@ -10,15 +7,8 @@ import DiscordIcon from './Icons/Social/DiscordIcon'
 import EmailIcon from './Icons/Social/EmailIcon'
 
 const Footer = () => {
-	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false)
-
 	return (
 		<>
-			{typeof document !== 'undefined' ? (
-				<>
-					<ModalFeedback isOpen={isFeedbackModalOpen} closeModal={() => setIsFeedbackModalOpen(false)} />
-				</>
-			) : null}
 			<footer className="bg-gray-900 py-24 px-40 flex justify-between">
 				<div className="space-y-4">
 					<Link href="/">
