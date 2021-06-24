@@ -233,14 +233,21 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 								<div>
 									<div className="text-xl text-indigo-500 dark:text-indigo-400 mb-3">Links</div>
 
+									<div className="mb-4">
+										<label htmlFor="websiteValue" className="text-gray-700 dark:text-gray-500 text-sm">
+											Website
+										</label>
+										<input name="websiteValue" placeholder="Your URL" value={websiteValue ? websiteValue : ''} onChange={e => setWebsiteValue(e.target.value)} type="url" className="mt-1 dark:text-gray-300 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 sm:text-sm" />
+									</div>
+
 									<div className="py-2">
 										{socialLinks &&
 											socialLinks.map(linkObj => (
 												<div key={linkObj.name} className="mb-4 pb-2">
 													<div className="flex items-center justify-between">
-														<label htmlFor={linkObj.name} className="text-sm font-medium text-gray-700 dark:text-gray-500 flex flex-row">
-															<img className="h-5 w-5 mr-1" src={linkObj.icon_url} />
-															{linkObj.name}
+														<label htmlFor={linkObj.name || linkObj.type__name} className="text-sm font-medium text-gray-700 dark:text-gray-500 flex flex-row">
+															<img className="h-5 w-5 mr-1" src={linkObj.icon_url || linkObj.type__icon_url} />
+															{linkObj.name || linkObj.type__name}
 														</label>
 														<span className="text-xs ml-2 text-gray-400 dark:text-gray-600 hover:text-red-400 cursor-pointer" onClick={() => handleRemoveSocialLink(linkObj.type_id)}>
 															Remove
@@ -248,11 +255,11 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 													</div>
 													<div className="mt-1">
 														<div className="max-w-lg flex rounded-md shadow-sm">
-															<span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-500 sm:text-sm">{linkObj.prefix}</span>
+															<span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-500 sm:text-sm">{linkObj.prefix || linkObj.type__prefix}</span>
 															<input
 																type="text"
-																name={linkObj.name}
-																id={linkObj.name}
+																name={linkObj.name || linkObj.type__name}
+																id={linkObj.name || linkObj.type__name}
 																className="pl-2 dark:text-gray-300 border flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300 dark:border-gray-700 focus:outline-none focus:ring"
 																value={linkObj.user_input ? linkObj.user_input : ''}
 																onChange={e => {
@@ -327,12 +334,6 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 												</Listbox>
 											</div>
 										</div>
-									</div>
-									<div className="mb-4 pt-3 md:pb-14">
-										<label htmlFor="websiteValue" className="text-gray-700 dark:text-gray-500 text-sm">
-											Other Website
-										</label>
-										<input name="websiteValue" placeholder="Your URL" value={websiteValue ? websiteValue : ''} onChange={e => setWebsiteValue(e.target.value)} type="url" className="mt-1 dark:text-gray-300 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 sm:text-sm" />
 									</div>
 								</div>
 							</div>
