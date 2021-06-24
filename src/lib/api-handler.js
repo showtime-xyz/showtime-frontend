@@ -27,3 +27,16 @@ export default () =>
 
 			next()
 		})
+
+export const middleware = {
+	auth: ({ user }, res, next) => {
+		if (!user) return res.status(401).json({ error: 'Unauthenticated.' })
+
+		next()
+	},
+	guest: ({ user }, res, next) => {
+		if (user) return res.status(401).json({ error: 'User is already authenticated.' })
+
+		next()
+	},
+}

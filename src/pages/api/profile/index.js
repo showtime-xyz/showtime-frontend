@@ -1,10 +1,9 @@
-import handler from '@/lib/api-handler'
+import handler, { middleware } from '@/lib/api-handler'
 import backend from '@/lib/backend'
 
 export default handler()
+	.use(middleware.auth)
 	.get(async ({ user }, res) => {
-		if (!user) return res.status(401).json({ error: 'Unauthenticated.' })
-
 		await backend
 			.get('/v2/myinfo', {
 				headers: {
@@ -16,8 +15,6 @@ export default handler()
 			.then(resp => res.json(resp.data))
 	})
 	.post(async ({ user, body }, res) => {
-		if (!user) return res.status(401).json({ error: 'Unauthenticated.' })
-
 		await backend.post('/v1/editname', body, {
 			headers: {
 				'X-Authenticated-User': user.publicAddress,

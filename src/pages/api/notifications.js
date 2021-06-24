@@ -1,10 +1,10 @@
-import handler from '@/lib/api-handler'
+import handler, { middleware } from '@/lib/api-handler'
 import backendnotifications from '@/lib/backend-notifications'
 import backend from '@/lib/backend'
 
 export default handler()
+	.use(middleware.auth)
 	.get(async ({ user, query: { page = 1, limit = 7 } }, res) => {
-		if (!user) return res.status(401).json({ error: 'Unauthenticated.' })
 		await backendnotifications(`/v1/notifications?page=${page}&limit=${limit}`, {
 			headers: {
 				'X-Authenticated-User': user.publicAddress,
@@ -14,8 +14,6 @@ export default handler()
 		}).then(resp => res.json(resp.data))
 	})
 	.post(async ({ user }, res) => {
-		if (!user) return res.status(401).json({ error: 'Unauthenticated.' })
-
 		await backend.post(
 			'/v1/check_notifications',
 			{},
