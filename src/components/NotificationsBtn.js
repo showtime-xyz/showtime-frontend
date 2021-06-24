@@ -1,15 +1,16 @@
-import { useState, useEffect, useContext, Fragment } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import { faComment, faHeart, faUser, faAt } from '@fortawesome/free-solid-svg-icons'
 import { formatDistanceToNowStrict } from 'date-fns'
-import AppContext from '@/context/app-context'
 import { getNotificationInfo, DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import ModalUserList from '@/components/ModalUserList'
 import axios from '@/lib/axios'
 import ZapIcon from './Icons/ZapIcon'
 import { Popover, Transition } from '@headlessui/react'
 import { useSWRInfinite } from 'swr'
+import useAuth from '../hooks/useAuth'
+import useProfile from '@/hooks/useProfile'
 
 const NOTIFICATIONS_PER_PAGE = 7
 
@@ -21,7 +22,8 @@ const iconObjects = {
 }
 
 export default function NotificationsBtn() {
-	const context = useContext(AppContext)
+	const { user } = useAuth()
+	const { profile: myProfile, mutate: mutateProfile, loading: profileLoading } = useProfile()
 	const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false)
 	const [previouslyLastOpened, setPreviouslyLastOpened] = useState()
 	const [openUserList, setOpenUserList] = useState(null)
@@ -29,7 +31,7 @@ export default function NotificationsBtn() {
 	const closePanel = () => document.querySelector('[data-close-notifs]').click()
 
 	const handlePanelOpen = async () => {
-		setPreviouslyLastOpened(context.myProfile.notifications_last_opened)
+		setPreviouslyLastOpened(myProfile.notifications_last_opened)
 		updateNotificationsLastOpened()
 		setHasUnreadNotifications(false)
 	}
@@ -37,10 +39,7 @@ export default function NotificationsBtn() {
 	const updateNotificationsLastOpened = async () => {
 		await axios.post('/api/notifications')
 
-		await context.setMyProfile({
-			...context.myProfile,
-			notifications_last_opened: new Date(),
-		})
+		await mutateProfile({ ...myProfile, notifications_last_opened: new Date() }, true)
 	}
 
 	const { data, error, size, setSize } = useSWRInfinite(
@@ -60,8 +59,10 @@ export default function NotificationsBtn() {
 	const isReachingEnd = isEmpty || (data && data[data.length - 1]?.length < NOTIFICATIONS_PER_PAGE)
 
 	useEffect(() => {
-		setHasUnreadNotifications((notifs && notifs[0] && context.myProfile.notifications_last_opened === null) || (notifs && notifs[0] && new Date(notifs[0].to_timestamp) > new Date(context.myProfile.notifications_last_opened)))
-	}, [context.myProfile.notifications_last_opened, notifs])
+		if (profileLoading) return
+
+		setHasUnreadNotifications((notifs && notifs[0] && myProfile?.notifications_last_opened === null) || (notifs && notifs[0] && new Date(notifs[0].to_timestamp) > new Date(myProfile?.notifications_last_opened)))
+	}, [profileLoading, myProfile?.notifications_last_opened, notifs])
 
 	return (
 		<Popover className="md:relative">
@@ -195,7 +196,7 @@ export default function NotificationsBtn() {
 												</div>
 											</div>
 										) : (
-											<Link href={getNotificationInfo(notif.type_id).goTo === 'profile' ? '/[profile]' : '/t/[...token]'} as={getNotificationInfo(notif.type_id).goTo === 'profile' ? (notif.link_to_profile__address ? `/${notif.link_to_profile__username || notif.link_to_profile__address}` : `/${context.myProfile.username || context.user.publicAddress}`) : `/t/${notif.nft__contract__address}/${notif.nft__token_identifier}`} key={notif.id}>
+											<Link href={getNotificationInfo(notif.type_id).goTo === 'profile' ? '/[profile]' : '/t/[...token]'} as={getNotificationInfo(notif.type_id).goTo === 'profile' ? (notif.link_to_profile__address ? `/${notif.link_to_profile__username || notif.link_to_profile__address}` : `/${myProfile?.username || user?.publicAddress}`) : `/t/${notif.nft__contract__address}/${notif.nft__token_identifier}`} key={notif.id}>
 												<div onClick={closePanel} className={`py-3 px-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full ${new Date(notif.to_timestamp) > new Date(previouslyLastOpened) ? 'bg-gray-100 hover:bg-gray-200' : ''}`} key={notif.id}>
 													<div className="w-max mr-2 relative min-w-[2.25rem]">
 														<img alt={notif.name} src={notif.img_url ? notif.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 mt-1 w-9 h-9" />

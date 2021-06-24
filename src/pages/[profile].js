@@ -29,8 +29,9 @@ import FingerprintIcon from '@/components/Icons/FingerprintIcon'
 import WalletIcon from '@/components/Icons/WalletIcon'
 import Dropdown from '@/components/UI/Dropdown'
 import Button from '@/components/UI/Buttons/Button'
+import useProfile from '@/hooks/useProfile'
 
-export async function getServerSideProps({ query: { profile: slug_address } }) {
+export async function getStaticProps({ params: { profile: slug_address } }) {
 	if (slug_address.includes('apple-touch-icon')) return { props: {}, notFound: true }
 
 	try {
@@ -51,6 +52,7 @@ export async function getServerSideProps({ query: { profile: slug_address } }) {
 				featured_nft,
 				lists,
 			},
+			revalidate: 1,
 		}
 	} catch (err) {
 		if (err.response.status == 400) return { redirect: { destination: '/', permanent: false } }
@@ -58,8 +60,13 @@ export async function getServerSideProps({ query: { profile: slug_address } }) {
 	}
 }
 
+export async function getStaticPaths() {
+	return { paths: [], fallback: 'blocking' }
+}
+
 const Profile = ({ profile, slug_address, followers_list, followers_count, following_list, following_count, featured_nft, lists }) => {
-	const { user, loading, isAuthenticated } = useAuth()
+	const { user, loading: authLoading, isAuthenticated } = useAuth()
+	const { profile: myProfile, loading: profileLoading, mutate: mutateProfile } = useProfile()
 	const context = useContext(AppContext)
 	const router = useRouter()
 
@@ -70,11 +77,11 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const [followersCount, setFollowersCount] = useState(followers_count)
 
 	// Using global context for logged in user, else server data for other pages
-	const { name, img_url, cover_url, wallet_addresses_v2, wallet_addresses_excluding_email_v2, bio, website_url, username, featured_nft_img_url, links, verified } = isMyProfile && context.myProfile ? context.myProfile : profile
+	const { name, img_url, cover_url, wallet_addresses_v2, wallet_addresses_excluding_email_v2, bio, website_url, username, featured_nft_img_url, links, verified } = isMyProfile && !profileLoading ? myProfile : profile
 	const { profile_id } = profile
 
 	useEffect(() => {
-		if (loading) return
+		if (authLoading) return
 
 		if (!isAuthenticated) {
 			setIsMyProfile(false)
@@ -90,7 +97,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 			setIsMyProfile(false)
 			mixpanel.track('Profile view', { slug: slug_address })
 		}
-	}, [loading, isAuthenticated, profile.wallet_addresses_v2, user?.publicAddress, slug_address])
+	}, [authLoading, isAuthenticated, profile.wallet_addresses_v2, user?.publicAddress, slug_address])
 
 	// Followers
 	const [followers, setFollowers] = useState([])
@@ -114,13 +121,10 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 
 	// Follow back?
 	const [followingMe, setFollowingMe] = useState(false)
+
 	useEffect(() => {
-		if (following_list.map(item => item.profile_id).includes(context.myProfile?.profile_id)) {
-			setFollowingMe(true)
-		} else {
-			setFollowingMe(false)
-		}
-	}, [following_list, context.myProfile?.profile_id])
+		setFollowingMe(following_list.map(item => item.profile_id).includes(myProfile?.profile_id))
+	}, [following_list, myProfile?.profile_id])
 
 	// Spotlight
 	const [spotlightItem, setSpotlightItem] = useState()
@@ -154,7 +158,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const [showDuplicates, setShowDuplicates] = useState(false)
 	const [hasUserHiddenItems, setHasUserHiddenItems] = useState(false)
 
-	//const [collections, setCollections] = useState([]);
 	const [collectionId, setCollectionId] = useState(0)
 	const [isLoadingCards, setIsLoadingCards] = useState(false)
 	const [isRefreshingCards, setIsRefreshingCards] = useState(false)
@@ -163,9 +166,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const [selectedLikedSortField, setSelectedLikedSortField] = useState(2)
 
 	const updateItems = async (listId, sortId, collectionId, showCardRefresh, page, showHidden, showDuplicates) => {
-		if (showCardRefresh) {
-			setIsRefreshingCards(true)
-		}
+		if (showCardRefresh) setIsRefreshingCards(true)
 
 		// Created
 		const { data } = await axios
@@ -183,9 +184,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setItems(data.items)
 		setHasMore(data.has_more)
 
-		if (showCardRefresh) {
-			setIsRefreshingCards(false)
-		}
+		if (showCardRefresh) setIsRefreshingCards(false)
 	}
 
 	const addPage = async nextPage => {
@@ -404,40 +403,32 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 
 		setFollowers([
 			{
-				profile_id: context.myProfile.profile_id,
+				profile_id: myProfile.profile_id,
 				wallet_address: user.publicAddress,
-				name: context.myProfile.name,
-				img_url: context.myProfile.img_url ? context.myProfile.img_url : DEFAULT_PROFILE_PIC,
+				name: myProfile.name,
+				img_url: myProfile.img_url || DEFAULT_PROFILE_PIC,
 				timestamp: null,
-				username: context.myProfile.username,
+				username: myProfile.username,
 			},
 			...followers,
 		])
 
 		// Post changes to the API
-		try {
-			await axios
-				.post(`/api/follow_v2/${profile_id}`)
-				.then(() => mixpanel.track('Followed profile'))
-				.catch(err => {
-					if (err.response.data.code === 429) {
-						setIsFollowed(false)
-						setFollowersCount(followersCount)
-						// Change myLikes via setMyLikes
-						context.setMyFollows(context.myFollows.filter(item => item.profile_id != profile_id))
+		await axios
+			.post(`/api/follow_v2/${profile_id}`)
+			.then(() => mixpanel.track('Followed profile'))
+			.catch(err => {
+				if (err.response.data.code !== 429) throw err
 
-						setFollowers(
-							followers.filter(follower => {
-								context.myProfile.profile_id != follower.profile_id
-							})
-						)
-						return context.setThrottleMessage(err.response.data.message)
-					}
-					console.error(err)
-				})
-		} catch (err) {
-			console.error(err)
-		}
+				setIsFollowed(false)
+				setFollowersCount(followersCount)
+				// Change myLikes via setMyLikes
+				context.setMyFollows(context.myFollows.filter(item => item.profile_id != profile_id))
+
+				setFollowers(followers.filter(follower => myProfile.profile_id != follower.profile_id))
+
+				return context.setThrottleMessage(err.response.data.message)
+			})
 	}
 
 	const handleUnfollow = async () => {
@@ -446,11 +437,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		// Change myLikes via setMyLikes
 		context.setMyFollows(context.myFollows.filter(item => item.profile_id != profile_id))
 
-		setFollowers(
-			followers.filter(follower => {
-				return context.myProfile.profile_id != follower.profile_id
-			})
-		)
+		setFollowers(followers.filter(follower => myProfile.profile_id != follower.profile_id))
 
 		// Post changes to the API
 		if (context.disableFollows === false) {
@@ -508,24 +495,22 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	}
 
 	const handleClickDeleteCustomOrder = async () => {
-		const listIdToClearOrder = selectedGrid
 		await handleSortChange(1)
+
 		setIsChangingOrder(false)
 		setRevertItems(null)
-		const newMenuLists = menuLists.map((list, index) => (index === listIdToClearOrder - 1 ? { ...list, has_custom_sort: false } : list))
-		setMenuLists(newMenuLists)
-		context.setMyProfile({
-			...context.myProfile,
-			...(listIdToClearOrder === 1 && { default_created_sort_id: null }),
-			...(listIdToClearOrder === 2 && { default_owned_sort_id: null }),
-		})
-		await fetch('/api/updatelistorder', {
-			method: 'post',
-			body: JSON.stringify({
-				new_order: null,
-				list_id: listIdToClearOrder,
-			}),
-		})
+		setMenuLists(menuLists.map((list, index) => (index === selectedGrid - 1 ? { ...list, has_custom_sort: false } : list)))
+
+		mutateProfile(
+			{
+				...myProfile,
+				...(selectedGrid === 1 && { default_created_sort_id: null }),
+				...(selectedGrid === 2 && { default_owned_sort_id: null }),
+			},
+			true
+		)
+
+		await axios.post('/api/updatelistorder', { new_order: null, list_id: selectedGrid })
 	}
 
 	const handleSaveOrder = async () => {
@@ -534,11 +519,14 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setRevertItems(null)
 		const newMenuLists = menuLists.map((list, index) => (index === selectedGrid - 1 ? { ...list, has_custom_sort: true } : list))
 		setMenuLists(newMenuLists)
-		context.setMyProfile({
-			...context.myProfile,
-			...(selectedGrid === 1 && { default_created_sort_id: 5 }),
-			...(selectedGrid === 2 && { default_owned_sort_id: 5 }),
-		})
+		mutateProfile(
+			{
+				...myProfile,
+				...(selectedGrid === 1 && { default_created_sort_id: 5 }),
+				...(selectedGrid === 2 && { default_owned_sort_id: 5 }),
+			},
+			true
+		)
 		await fetch('/api/updatelistorder', {
 			method: 'post',
 			body: JSON.stringify({
@@ -818,7 +806,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 																					</button>
 																				)}
 																			</Menu.Item>
-																			{context.myProfile && ((selectedGrid === 1 && context.myProfile.default_created_sort_id === 5) || (selectedGrid === 2 && context.myProfile.default_owned_sort_id === 5) || menuLists[selectedGrid - 1].has_custom_sort) && (
+																			{myProfile && ((selectedGrid === 1 && myProfile.default_created_sort_id === 5) || (selectedGrid === 2 && myProfile.default_owned_sort_id === 5) || menuLists[selectedGrid - 1].has_custom_sort) && (
 																				<Menu.Item>
 																					{({ active }) => (
 																						<button onClick={handleClickDeleteCustomOrder} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>

@@ -1,5 +1,6 @@
 import AppContext from '@/context/app-context'
 import useAuth from '@/hooks/useAuth'
+import useProfile from '@/hooks/useProfile'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import { classNames, formatAddressShort } from '@/lib/utilities'
 import { Menu, Transition } from '@headlessui/react'
@@ -21,16 +22,17 @@ const NextLink = ({ href, children, ...rest }) => (
 
 const HeaderDropdown = () => {
 	const { user } = useAuth()
-	const { myProfile, logOut } = useContext(AppContext)
+	const { profile: myProfile, loading: profileLoading } = useProfile()
+	const { logOut } = useContext(AppContext)
 	const { theme, themes, setTheme } = useTheme()
 	const [hasEmailAddress, setHasEmailAddress] = useState(false)
 	const [emailModalOpen, setEmailModalOpen] = useState(false)
 
 	useEffect(() => {
-		if (!myProfile) return
+		if (profileLoading) return
 
 		setHasEmailAddress(myProfile.wallet_addresses_v2.length !== myProfile.wallet_addresses_excluding_email_v2.length)
-	}, [myProfile])
+	}, [profileLoading, myProfile])
 
 	return (
 		<>
