@@ -1,12 +1,10 @@
 import { recoverPersonalSignature } from 'eth-sig-util'
 import { bufferToHex } from 'ethereumjs-util'
-import Iron from '@hapi/iron'
-import CookieService from '@/lib/cookie'
 import backend from '@/lib/backend'
 import handler from '@/lib/api-handler'
 
-export default handler().put(async ({ cookies, body: { addressDetected: address, signature } }, res) => {
-	const user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+export default handler().put(async ({ user, body: { addressDetected: address, signature } }, res) => {
+	if (!user) return res.status(401).json({ error: 'Unauthenticated.' })
 
 	// check the signature
 	const {

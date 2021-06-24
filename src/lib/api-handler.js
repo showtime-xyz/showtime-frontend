@@ -1,5 +1,7 @@
 import nc from 'next-connect'
 import { withSentry } from '@sentry/nextjs'
+import Iron from '@hapi/iron'
+import CookieService from '@/lib/cookie'
 
 export default () =>
 	nc({
@@ -16,4 +18,12 @@ export default () =>
 			if (err.response.data.error.code === 429) return res.status(429).send(err.response.data.error)
 			res.status(500).send('Internal Server Error')
 		},
-	}).use((req, res, next) => withSentry(next)(req, res))
+	})
+		.use((req, res, next) => withSentry(next)(req, res))
+		.use(async (req, _, next) => {
+			await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+				.then(user => (req.user = user))
+				.catch(() => null)
+
+			next()
+		})

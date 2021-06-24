@@ -1,10 +1,8 @@
-import Iron from '@hapi/iron'
-import CookieService from '@/lib/cookie'
 import backend from '@/lib/backend'
 import handler from '@/lib/api-handler'
 
-export default handler().post(async ({ cookies, body: { commentId } }, res) => {
-	const user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+export default handler().post(async ({ user, body: { commentId } }, res) => {
+	if (!user) return res.status(401).json({ error: 'Unauthenticated.' })
 
 	await backend.post(
 		`/v1/deletecomment/${commentId}`,

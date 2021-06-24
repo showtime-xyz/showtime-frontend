@@ -1,10 +1,8 @@
-import Iron from '@hapi/iron'
-import CookieService from '@/lib/cookie'
 import backend from '@/lib/backend'
 import handler from '@/lib/api-handler'
 
-export default handler().delete(async ({ cookies, body: { address } }, res) => {
-	const user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+export default handler().delete(async ({ user, body: { address } }, res) => {
+	if (!user) return res.status(401).json({ error: 'Unauthenticated.' })
 
 	if (address === user.publicAddress) return res.status(400).json({ error: "This address can't be unlinked" })
 

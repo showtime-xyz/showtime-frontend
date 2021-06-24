@@ -2,13 +2,11 @@ import { prefix, utility } from 'sotez'
 import sodium from 'libsodium-wrappers'
 import { ec as EC } from 'elliptic'
 import blake2b from 'blake2b'
-import Iron from '@hapi/iron'
-import CookieService from '@/lib/cookie'
 import handler from '@/lib/api-handler'
 import backend from '@/lib/backend'
 
-export default handler().put(async ({ cookies, body: { address, signature, publicKey } }, res) => {
-	const user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+export default handler().put(async ({ user, body: { address, signature, publicKey } }, res) => {
+	if (!user) return res.status(401).json({ error: 'Unauthenticated.' })
 
 	const {
 		data: { data: nonce },
