@@ -13,10 +13,14 @@ import { useRouter } from 'next/router'
 import WalletIcon from './Icons/WalletIcon'
 import showtimeLogo from '../../public/img/logo.png'
 import HeaderDropdown from './HeaderDropdown'
+import useAuth from '@/hooks/useAuth'
+import useProfile from '@/hooks/useProfile'
 
 const Header = () => {
 	const { asPath } = useRouter()
 	const context = useContext(AppContext)
+	const { isAuthenticated } = useAuth()
+	const { loaded: profileLoaded } = useProfile()
 	const [isSearchBarOpen, setSearchBarOpen] = useState(false)
 
 	return (
@@ -67,12 +71,12 @@ const Header = () => {
 						{/* End desktop-only menu */}
 
 						<div className={`flex items-center ${isSearchBarOpen ? 'hidden' : ''}`}>
-							{context.user && context.myProfile !== undefined && (
+							{isAuthenticated && profileLoaded && (
 								<div className="flex-shrink ml-5">
 									<NotificationsBtn />
 								</div>
 							)}
-							{context.user && context.myProfile !== undefined ? (
+							{isAuthenticated && profileLoaded ? (
 								<HeaderDropdown />
 							) : (
 								<div className="flex items-center space-x-2 text-sm md:text-base dark:text-gray-200 hover:text-stpink dark:hover:text-stpink cursor-pointer hover:border-stpink dark:hover:border-stpink" onClick={() => context.setLoginModalOpen(!context.loginModalOpen)}>
