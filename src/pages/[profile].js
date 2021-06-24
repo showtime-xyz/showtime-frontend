@@ -378,6 +378,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 
 	useEffect(() => {
 		fetchItems(true, lists)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [profile_id, lists])
 
 	const handleLoggedOutFollow = () => {
@@ -454,16 +455,13 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const [showFollowing, setShowFollowing] = useState(false)
 
 	useEffect(() => {
-		// console.log("setting default list Id to:", lists.default_list_id);
-		// console.log("current value in url:", router.query);
-
 		setSelectedGrid(router?.query?.list ? PROFILE_TABS.indexOf(router.query.list) : lists.default_list_id)
 
 		setMenuLists(lists.lists)
 
 		setShowFollowers(false)
 		setShowFollowing(false)
-	}, [profile_id, lists.default_list_id, isLoadingCards])
+	}, [profile_id, router?.query?.list, lists.default_list_id, lists.lists])
 
 	const editAccount = () => {
 		setEditModalOpen(true)
