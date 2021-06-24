@@ -1,5 +1,3 @@
-import Iron from '@hapi/iron'
-import CookieService from '@/lib/cookie'
 import handler from '@/lib/api-handler'
 import backend from '@/lib/backend'
 
