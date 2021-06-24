@@ -26,6 +26,8 @@ export default function NotificationsBtn() {
 	const [previouslyLastOpened, setPreviouslyLastOpened] = useState()
 	const [openUserList, setOpenUserList] = useState(null)
 
+	const closePanel = () => document.querySelector('[data-close-notifs]').click()
+
 	const handlePanelOpen = async () => {
 		setPreviouslyLastOpened(context.myProfile.notifications_last_opened)
 		updateNotificationsLastOpened()
@@ -65,7 +67,7 @@ export default function NotificationsBtn() {
 		<Popover className="md:relative">
 			{({ open }) => (
 				<>
-					<Popover.Button className="dark:text-gray-300 hover:text-stpink transition-all rounded-full cursor-pointer relative h-6 w-6">
+					<Popover.Button data-close-notifs className="dark:text-gray-300 hover:text-stpink transition-all rounded-full cursor-pointer relative h-6 w-6">
 						<span onClick={open ? null : handlePanelOpen} className="flex items-center justify-center">
 							<ZapIcon className="w-5 h-5" />
 							{hasUnreadNotifications && <div className="bg-gradient-to-r from-[#4D54FF] to-[#E14DFF] absolute h-2 w-2 top-0 right-0 rounded-full" />}
@@ -90,7 +92,7 @@ export default function NotificationsBtn() {
 											<div className={`py-3 px-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all rounded-lg whitespace-nowrap flex items-start w-full max-w-full ${new Date(notif.to_timestamp) > new Date(previouslyLastOpened) ? 'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700' : ''}`} key={notif.id}>
 												<div className="w-max mr-2 relative min-w-[2.25rem]">
 													<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
-														<a>
+														<a onClick={closePanel}>
 															<img alt={notif.name} src={notif.img_url ? notif.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 mt-1 w-9 h-9" />
 															<div
 																className="absolute bottom-0 right-0 rounded-full h-5 w-5 flex items-center justify-center shadow"
@@ -108,32 +110,44 @@ export default function NotificationsBtn() {
 														<>
 															{notif.actors.length == 1 ? (
 																<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
-																	<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">{notif.actors[0].name} </a>
+																	<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
+																		{notif.actors[0].name}{' '}
+																	</a>
 																</Link>
 															) : null}
 															{notif.actors.length == 2 ? (
 																<>
 																	<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
-																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">{notif.actors[0].name}</a>
+																		<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
+																			{notif.actors[0].name}
+																		</a>
 																	</Link>
 																	<span className="text-gray-500"> and </span>
 																	<Link href="/[profile]" as={`/${notif.actors[1]?.username || notif.actors[1].wallet_address}`}>
-																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">{notif.actors[1].name} </a>
+																		<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
+																			{notif.actors[1].name}{' '}
+																		</a>
 																	</Link>
 																</>
 															) : null}
 															{notif.actors.length == 3 ? (
 																<>
 																	<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
-																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">{notif.actors[0].name}</a>
+																		<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
+																			{notif.actors[0].name}
+																		</a>
 																	</Link>
 																	<span className="text-gray-500">, </span>
 																	<Link href="/[profile]" as={`/${notif.actors[1]?.username || notif.actors[1].wallet_address}`}>
-																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">{notif.actors[1].name}</a>
+																		<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
+																			{notif.actors[1].name}
+																		</a>
 																	</Link>
 																	<span className="text-gray-500">, and </span>
 																	<Link href="/[profile]" as={`/${notif.actors[2]?.username || notif.actors[2].wallet_address}`}>
-																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">{notif.actors[2].name} </a>
+																		<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
+																			{notif.actors[2].name}{' '}
+																		</a>
 																	</Link>
 																</>
 															) : null}
@@ -141,11 +155,15 @@ export default function NotificationsBtn() {
 																<>
 																	<ModalUserList title="Followed You" isOpen={openUserList == notif.id} users={notif.actors ? notif.actors : []} closeModal={() => setOpenUserList(null)} onRedirect={() => setOpenUserList(null)} emptyMessage="No followers yet." />
 																	<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
-																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">{notif.actors[0].name}</a>
+																		<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
+																			{notif.actors[0].name}
+																		</a>
 																	</Link>
 																	<span className="text-gray-500">, </span>
 																	<Link href="/[profile]" as={`/${notif.actors[1]?.username || notif.actors[1].wallet_address}`}>
-																		<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">{notif.actors[1].name}</a>
+																		<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
+																			{notif.actors[1].name}
+																		</a>
 																	</Link>
 																	<span className="text-gray-500">, and </span>
 																	<a className="text-black dark:text-gray-300 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setOpenUserList(notif.id)}>
@@ -162,7 +180,9 @@ export default function NotificationsBtn() {
 															</span>
 															{notif.nft__nftdisplay__name ? (
 																<Link href="/t/[...token]" as={`/t/${notif.nft__contract__address}/${notif.nft__token_identifier}`}>
-																	<a className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">{notif.nft__nftdisplay__name}</a>
+																	<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
+																		{notif.nft__nftdisplay__name}
+																	</a>
 																</Link>
 															) : null}
 														</>
@@ -176,7 +196,7 @@ export default function NotificationsBtn() {
 											</div>
 										) : (
 											<Link href={getNotificationInfo(notif.type_id).goTo === 'profile' ? '/[profile]' : '/t/[...token]'} as={getNotificationInfo(notif.type_id).goTo === 'profile' ? (notif.link_to_profile__address ? `/${notif.link_to_profile__username || notif.link_to_profile__address}` : `/${context.myProfile.username || context.user.publicAddress}`) : `/t/${notif.nft__contract__address}/${notif.nft__token_identifier}`} key={notif.id}>
-												<div className={`py-3 px-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full ${new Date(notif.to_timestamp) > new Date(previouslyLastOpened) ? 'bg-gray-100 hover:bg-gray-200' : ''}`} key={notif.id}>
+												<div onClick={closePanel} className={`py-3 px-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full ${new Date(notif.to_timestamp) > new Date(previouslyLastOpened) ? 'bg-gray-100 hover:bg-gray-200' : ''}`} key={notif.id}>
 													<div className="w-max mr-2 relative min-w-[2.25rem]">
 														<img alt={notif.name} src={notif.img_url ? notif.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 mt-1 w-9 h-9" />
 														<div

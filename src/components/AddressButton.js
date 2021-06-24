@@ -9,7 +9,7 @@ import Link from 'next/link'
 export const AddressCollection = ({ addresses, isMyProfile = false }) => {
 	const firstAddress = addresses[0]
 
-	if (!firstAddress) return
+	if (!firstAddress) return null
 
 	return (
 		<Popover className="relative">
