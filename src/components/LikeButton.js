@@ -68,7 +68,7 @@ const LikeButton = ({ item }) => {
 	return (
 		<Tippy content="Sign in to like" disabled={isAuthenticated || context.isMobile}>
 			<button className="focus:outline-none hover:bg-red-50 dark:hover:bg-red-900 focus:bg-red-50 dark:focus:bg-red-900 px-2 -mx-2 rounded-xl" disabled={context.disableLikes} onClick={() => (isAuthenticated ? (liked ? handleUnlike(item.nft_id) : handleLike(item.nft_id)) : handleLoggedOutLike())}>
-				<div className={`flex flex-row items-center rounded-md py-1 dark:text-gray-300 ${liked ? 'text-red-500 dark:text-red-600' : ''} ${context.disableLikes ? 'hover:text-gray-500 text-gray-500' : ''}`}>
+				<div className={`flex flex-row items-center rounded-md py-1 dark:text-gray-300 ${liked ? 'text-red-500 dark:text-red-600' : 'hover:text-red-400 dark:hover:text-red-400'} ${context.disableLikes ? 'hover:text-gray-500 text-gray-500' : ''}`}>
 					<div className={'flex'}>
 						<HeartIcon className="w-5 h-5" />
 					</div>
