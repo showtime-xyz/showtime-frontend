@@ -1,16 +1,16 @@
-import { useContext, useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 import mixpanel from 'mixpanel-browser'
 import 'croppie/croppie.css'
 import Croppie from 'croppie'
-import AppContext from '@/context/app-context'
 import CloseButton from './CloseButton'
 import ScrollableModal from './ScrollableModal'
 import GhostButton from './UI/Buttons/GhostButton'
 import GreenButton from './UI/Buttons/GreenButton'
 import axios from '@/lib/axios'
+import useProfile from '@/hooks/useProfile'
 
 export default function Modal({ isOpen, setEditModalOpen }) {
-	const context = useContext(AppContext)
+	const { profile: myProfile, mutate: mutateProfile } = useProfile()
 
 	const [image, setImage] = useState('')
 	const [croppie, setCroppie] = useState(null)
@@ -46,7 +46,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 			.post('/api/profile/avatar')
 			.then(res => res.data)
 			.then(({ data: emptyUrl }) => {
-				context.setMyProfile({ ...context.myProfile, img_url: emptyUrl })
+				mutateProfile({ ...myProfile, img_url: emptyUrl })
 				setEditModalOpen(false)
 				setSaveInProgress(false)
 			})
@@ -71,7 +71,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 							.post('/api/profile/avatar', { image: blobString })
 							.then(res => res.data)
 							.then(({ data: url }) => {
-								context.setMyProfile({ ...context.myProfile, img_url: url })
+								mutateProfile({ ...myProfile, img_url: url })
 
 								setEditModalOpen(false)
 
@@ -176,7 +176,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 									</GhostButton>
 								</div>
 
-								{context.myProfile.img_url && (
+								{myProfile?.img_url && (
 									<div className="dark:text-gray-400 text-sm ml-4 cursor-pointer" onClick={handleRemovePhoto}>
 										Remove
 									</div>

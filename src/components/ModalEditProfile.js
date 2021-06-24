@@ -1,9 +1,8 @@
-import { useContext, useState, useEffect, Fragment } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 import { useRouter } from 'next/router'
 import mixpanel from 'mixpanel-browser'
 import backend from '@/lib/backend'
-import AppContext from '@/context/app-context'
 import { SORT_FIELDS } from '@/lib/constants'
 import ScrollableModal from './ScrollableModal'
 import { Listbox, Transition } from '@headlessui/react'
@@ -14,49 +13,39 @@ import Dropdown from './UI/Dropdown'
 import GreenButton from './UI/Buttons/GreenButton'
 import GhostButton from './UI/Buttons/GhostButton'
 import CloseButton from './CloseButton'
+import useProfile from '@/hooks/useProfile'
 
-const handleUsernameLookup = async (value, context, setCustomURLError) => {
+const SHOWTIME_PROD_URL = 'tryshowtime.com/'
+
+const handleUsernameLookup = async (value, myProfile, setCustomURLError) => {
 	const username = value ? value.trim() : null
-	let validUsername
+	let validUsername = false
+
 	try {
-		if (username === null || username.toLowerCase() === context.myProfile?.username?.toLowerCase()) {
-			validUsername = true
-		} else {
-			const result = await backend.get(`/v1/username_available?username=${username}`, {
-				method: 'get',
-			})
-			validUsername = result?.data?.data
-		}
+		if (username === null || username.toLowerCase() === myProfile?.username?.toLowerCase()) validUsername = true
+		else validUsername = await backend.get(`/v1/username_available?username=${username}`).then(res => res?.data?.data)
 	} catch {
-		validUsername = false
+		//
 	}
-	setCustomURLError(
-		validUsername
-			? {
-					isError: false,
-					message: username === null ? '' : 'Username is available',
-			  }
-			: { isError: true, message: 'Username is not available' }
-	)
+
+	setCustomURLError(validUsername ? { isError: false, message: username === null ? '' : 'Username is available' } : { isError: true, message: 'Username is not available' })
+
 	return validUsername
 }
+
 const handleDebouncedUsernameLookup = AwesomeDebouncePromise(handleUsernameLookup, 400)
 
 export default function Modal({ isOpen, setEditModalOpen }) {
 	const router = useRouter()
+	const { profile: myProfile, loading: profileLoading, mutate: mutateProfile } = useProfile()
 	const [submitting, setSubmitting] = useState(false)
-	const SHOWTIME_PROD_URL = 'tryshowtime.com/'
-	const context = useContext(AppContext)
 	const [nameValue, setNameValue] = useState(null)
 	const [customURLValue, setCustomURLValue] = useState('')
 
 	const [socialLinks, setSocialLinks] = useState()
 	const [socialLinkOptions, setSocialLinkOptions] = useState([])
 
-	const [customURLError, setCustomURLError] = useState({
-		isError: false,
-		message: '',
-	})
+	const [customURLError, setCustomURLError] = useState({ isError: false, message: '' })
 	const [bioValue, setBioValue] = useState(null)
 	const [websiteValue, setWebsiteValue] = useState(null)
 	const [defaultListId, setDefaultListId] = useState('')
@@ -64,17 +53,17 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 	const [defaultOwnedSortId, setDefaultOwnedSortId] = useState(1)
 
 	useEffect(() => {
-		if (context.myProfile) {
-			setNameValue(context.myProfile.name)
-			setCustomURLValue(context.myProfile.username)
-			setBioValue(context.myProfile.bio)
-			setWebsiteValue(context.myProfile.website_url)
-			setDefaultListId(context.myProfile.default_list_id || '')
-			setDefaultCreatedSortId(context.myProfile.default_created_sort_id || 1)
-			setDefaultOwnedSortId(context.myProfile.default_owned_sort_id || 1)
-			setSocialLinks(context.myProfile.links)
-		}
-	}, [context.myProfile, isOpen])
+		if (profileLoading) return
+
+		setNameValue(myProfile.name)
+		setCustomURLValue(myProfile.username)
+		setBioValue(myProfile.bio)
+		setWebsiteValue(myProfile.website_url)
+		setDefaultListId(myProfile.default_list_id || '')
+		setDefaultCreatedSortId(myProfile.default_created_sort_id || 1)
+		setDefaultOwnedSortId(myProfile.default_owned_sort_id || 1)
+		setSocialLinks(myProfile.links)
+	}, [profileLoading, myProfile, isOpen])
 
 	const handleSubmit = async event => {
 		event.preventDefault()
@@ -83,71 +72,44 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 
 		const username = customURLValue ? customURLValue.trim() : null
 
-		if (username?.toLowerCase() != context.myProfile.username?.toLowerCase()) {
-			const validUsername = await handleUsernameLookup(customURLValue, context, setCustomURLError)
-			if (!validUsername) {
-				return
-			}
-		}
+		if (username?.toLowerCase() != myProfile.username?.toLowerCase() && !(await handleUsernameLookup(customURLValue, myProfile, setCustomURLError))) return
 
 		// Post changes to the API
 		await axios.post('/api/profile', {
-			name: nameValue?.trim() ? nameValue.trim() : null, // handle names with all whitespaces
-			bio: bioValue?.trim() ? bioValue.trim() : null,
-			username: username?.trim() ? username.trim() : null,
-			website_url: websiteValue?.trim() ? websiteValue.trim() : null,
-			links: socialLinks
-				.filter(sl => sl.user_input?.trim())
-				.map(sl => ({
-					type_id: sl.type_id,
-					user_input: sl.user_input?.trim() ? sl.user_input.trim() : null,
-				})),
-			default_list_id: defaultListId ? defaultListId : '',
+			name: nameValue?.trim() || null, // handle names with all whitespaces
+			bio: bioValue?.trim() || null,
+			username: username?.trim() || null,
+			website_url: websiteValue?.trim() || null,
+			links: socialLinks.filter(sl => sl.user_input?.trim()).map(sl => ({ type_id: sl.type_id, user_input: sl.user_input?.trim() ? sl.user_input.trim() : null })),
+			default_list_id: defaultListId || '',
 			default_created_sort_id: defaultCreatedSortId,
 			default_owned_sort_id: defaultOwnedSortId,
 		})
 
 		// Update state to immediately show changes
-		context.setMyProfile({
-			...context.myProfile,
-			name: nameValue?.trim() ? nameValue.trim() : null, // handle names with all whitespaces
-			bio: bioValue?.trim() ? bioValue.trim() : null,
-			username: username?.trim() ? username.trim() : null,
-			website_url: websiteValue?.trim() ? websiteValue.trim() : null,
-			links: socialLinks
-				.filter(sl => sl.user_input?.trim())
-				.map(sl => ({
-					...sl,
-					user_input: sl.user_input?.trim(),
-				})),
-			default_list_id: defaultListId ? defaultListId : '',
+		mutateProfile({
+			...myProfile,
+			name: nameValue?.trim() || null, // handle names with all whitespaces
+			bio: bioValue?.trim() || null,
+			username: username?.trim() || null,
+			website_url: websiteValue?.trim() || null,
+			links: socialLinks.filter(sl => sl.user_input?.trim()).map(sl => ({ ...sl, user_input: sl.user_input?.trim() })),
+			default_list_id: defaultListId || '',
 			default_created_sort_id: defaultCreatedSortId,
 			default_owned_sort_id: defaultOwnedSortId,
 		})
+
 		setSubmitting(false)
 		setEditModalOpen(false)
-		const wallet_addresses_v2 = context.myProfile?.wallet_addresses_v2
 		// confirm saved correctly
-		router.push(`/${username || (wallet_addresses_v2 && wallet_addresses_v2[0].ens_domain) || (wallet_addresses_v2 && wallet_addresses_v2[0].address) || ''}`)
+		router.push(`/${username || myProfile?.wallet_addresses_v2?.[0].ens_domain || myProfile?.wallet_addresses_v2?.[0].address || ''}`)
 	}
 
 	const tab_list = [
-		{
-			label: 'Select...',
-			value: '',
-		},
-		{
-			label: 'Created',
-			value: 1,
-		},
-		{
-			label: 'Owned',
-			value: 2,
-		},
-		{
-			label: 'Liked',
-			value: 3,
-		},
+		{ label: 'Select...', value: '' },
+		{ label: 'Created', value: 1 },
+		{ label: 'Owned', value: 2 },
+		{ label: 'Liked', value: 3 },
 	]
 
 	const sortingOptionsList = [
@@ -238,7 +200,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 													const urlRegex = /^[a-zA-Z0-9_]*$/
 													if (urlRegex.test(value)) {
 														setCustomURLValue(value)
-														handleDebouncedUsernameLookup(value, context, setCustomURLError)
+														handleDebouncedUsernameLookup(value, myProfile, setCustomURLError)
 													}
 												}}
 												maxLength={30}
@@ -400,7 +362,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 								<GhostButton
 									onClick={() => {
 										setEditModalOpen(false)
-										setNameValue(context.myProfile.name)
+										setNameValue(myProfile?.name)
 									}}
 									disabled={submitting}
 								>
