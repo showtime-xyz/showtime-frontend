@@ -5,6 +5,8 @@ import { Popover, Transition } from '@headlessui/react'
 import EthereumIcon from './Icons/EthereumIcon'
 import TezosIcon from './Icons/TezosIcon'
 import Link from 'next/link'
+import { useState } from 'react'
+import { CheckIcon } from '@heroicons/react/outline'
 
 export const AddressCollection = ({ addresses, isMyProfile = false }) => {
 	const firstAddress = addresses[0]
@@ -51,11 +53,19 @@ export const AddressCollection = ({ addresses, isMyProfile = false }) => {
 }
 
 const AddressButton = ({ address, ens_domain }) => {
+	const [hasCopied, setHasCopied] = useState(false)
+
+	const copyAddress = () => {
+		copyToClipBoard(ens_domain || address)
+		setHasCopied(true)
+		setTimeout(() => setHasCopied(false), 500)
+	}
+
 	return (
 		<span className="border dark:border-gray-700 rounded-full px-3 py-1 text-sm flex items-center space-x-2 text-gray-800 dark:text-gray-400">
 			<span className="font-medium whitespace-nowrap">{formatAddressShort(ens_domain || address)}</span>
-			<button onClick={() => copyToClipBoard(ens_domain || address)} className="p-1 -m-1 rounded-full">
-				<CopyIcon className="w-4 h-4" />
+			<button onClick={copyAddress} className="p-1 -m-1 rounded-full">
+				{hasCopied ? <CheckIcon className="w-4 h-auto" /> : <CopyIcon className="w-4 h-auto" />}
 			</button>
 		</span>
 	)
