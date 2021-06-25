@@ -658,25 +658,33 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										</div>
 									</div>
 								</div>
-								<div className="flex flex-col md:flex-row md:justify-between">
+								<div>
 									<div>
-										<div className="flex items-center space-x-2">
-											<h2 className="text-3xl md:text-4xl font-tomato font-bold"> {name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</h2>
-											{verified && <BadgeIcon className="w-5 md:w-6 h-auto text-black dark:text-white" bgClass="text-white dark:text-black" />}
-										</div>
-										<div className="mt-2">{(username || (wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0)) && <p className="flex flex-row items-center justify-start">{username && <span className="font-tomato font-bold tracking-wider dark:text-gray-300">@{username}</span>}</p>}</div>
-										<div>
-											{bio ? (
-												<div className="text-black dark:text-gray-400 text-sm max-w-prose text-left md:text-base mt-4 block break-words">
-													{moreBioShown ? bio : truncateWithEllipses(bio, initialBioLength)}
-													{!moreBioShown && bio && bio.length > initialBioLength && (
-														<a onClick={() => setMoreBioShown(true)} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-400 cursor-pointer">
-															{' '}
-															more
-														</a>
-													)}
+										<div className="flex justify-between">
+											<div>
+												<div className="flex items-center space-x-2">
+													<h2 className="text-3xl md:text-4xl font-tomato font-bold"> {name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</h2>
+													{verified && <BadgeIcon className="w-5 md:w-6 h-auto text-black dark:text-white" bgClass="text-white dark:text-black" />}
 												</div>
-											) : null}
+												<div className="mt-2">{(username || (wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0)) && <p className="flex flex-row items-center justify-start">{username && <span className="font-tomato font-bold tracking-wider dark:text-gray-300">@{username}</span>}</p>}</div>
+											</div>
+											<div className="hidden md:block">{isAuthenticated && !isMyProfile && <FollowersInCommon profileId={profile_id} />}</div>
+										</div>
+										<div className="flex justify-between">
+											<div>
+												{bio ? (
+													<div className="text-black dark:text-gray-400 text-sm max-w-2xl text-left md:text-base mt-4 block break-words">
+														{moreBioShown ? bio : truncateWithEllipses(bio, initialBioLength)}
+														{!moreBioShown && bio && bio.length > initialBioLength && (
+															<a onClick={() => setMoreBioShown(true)} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-400 cursor-pointer">
+																{' '}
+																more
+															</a>
+														)}
+													</div>
+												) : null}
+											</div>
+											<LinkCollection className="hidden md:block" links={links} website_url={website_url} slug_address={slug_address} />
 										</div>
 										{wallet_addresses_excluding_email_v2 && (
 											<div className="mt-8 md:hidden">
@@ -686,30 +694,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										<div className="mt-4 md:hidden">
 											<FollowStats {...{ following, following_count, followers, followersCount, isMyProfile, setShowFollowing, setShowFollowers }} />
 										</div>
-									</div>
-									<div className="mt-4 md:mt-0 space-y-4 md:space-y-10">
-										{isAuthenticated && !isMyProfile && <FollowersInCommon profileId={profile_id} />}
-										<div className="space-x-2 md:text-right">
-											{website_url && (
-												<Tippy content="Website">
-													<a href={website_url.slice(0, 4) === 'http' ? website_url : 'https://' + website_url} target="_blank" onClick={() => mixpanel.track('Clicked profile website link', { slug: slug_address })} className="inline-block" rel="noreferrer">
-														<div className="text-gray-500 hover:opacity-80 dark:hover:opacity-80 border dark:border-gray-700 rounded-full p-1">
-															<GlobeIcon className="flex-shrink-0 h-6 w-6 opacity-70 dark:opacity-100" />
-														</div>
-													</a>
-												</Tippy>
-											)}
-											{links &&
-												links.map(link => (
-													<Tippy content={link.name || link.type__name} key={link.type_id}>
-														<a href={`https://${link.prefix ? link.prefix : link.type__prefix}` + link.user_input} target="_blank" onClick={() => mixpanel.track(`Clicked ${link.name ? link.name : link.type__name} profile link`, { slug: slug_address })} className="inline-block" rel="noreferrer">
-															<div className="text-gray-500 hover:opacity-80 dark:hover:opacity-80 border dark:border-gray-700 rounded-full p-1">
-																<img src={link.icon_url || link.type__icon_url} alt={`${link.name ? link.name : link.type__name} icon`} className="flex-shrink-0 h-6 w-6 opacity-70 dark:opacity-100 filter dark:brightness-200" />
-															</div>
-														</a>
-													</Tippy>
-												))}
-										</div>
+										<div className="mt-4 md:hidden">{isAuthenticated && !isMyProfile && <FollowersInCommon profileId={profile_id} />}</div>
+										<LinkCollection className="md:hidden" links={links} website_url={website_url} slug_address={slug_address} />
 									</div>
 								</div>
 							</div>
@@ -913,5 +899,31 @@ const FollowStats = ({ following, following_count, followers, followersCount, is
 		</div>
 	)
 }
+
+const LinkCollection = ({ links, website_url, slug_address, className = '' }) => (
+	<div className={`mt-4 md:mt-0 space-y-4 md:space-y-10 ${className}`}>
+		<div className="space-x-2 md:text-right">
+			{website_url && (
+				<Tippy content={new URL(website_url.slice(0, 4) === 'http' ? website_url : 'https://' + website_url).hostname}>
+					<a href={website_url.slice(0, 4) === 'http' ? website_url : 'https://' + website_url} target="_blank" onClick={() => mixpanel.track('Clicked profile website link', { slug: slug_address })} className="inline-block" rel="noreferrer">
+						<div className="text-gray-500 hover:opacity-80 dark:hover:opacity-80 border dark:border-gray-700 rounded-full p-1">
+							<GlobeIcon className="flex-shrink-0 h-6 w-6 opacity-70 dark:opacity-100" />
+						</div>
+					</a>
+				</Tippy>
+			)}
+			{links &&
+				links.map(link => (
+					<Tippy content={link.name || link.type__name} key={link.type_id}>
+						<a href={`https://${link.prefix ? link.prefix : link.type__prefix}` + link.user_input} target="_blank" onClick={() => mixpanel.track(`Clicked ${link.name ? link.name : link.type__name} profile link`, { slug: slug_address })} className="inline-block" rel="noreferrer">
+							<div className="text-gray-500 hover:opacity-80 dark:hover:opacity-80 border dark:border-gray-700 rounded-full p-1">
+								<img src={link.icon_url || link.type__icon_url} alt={`${link.name ? link.name : link.type__name} icon`} className="flex-shrink-0 h-6 w-6 opacity-70 dark:opacity-100 filter dark:brightness-200" />
+							</div>
+						</a>
+					</Tippy>
+				))}
+		</div>
+	</div>
+)
 
 export default Profile
