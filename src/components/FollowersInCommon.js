@@ -31,7 +31,7 @@ const FollowersInCommon = ({ profileId }) => {
 				<div className="text-sm dark:text-gray-400">
 					Followed by{' '}
 					<div className="hidden md:inline">
-						{followersInCommon.followers.map((follower, i) => (
+						{followersInCommon.followers.slice(0, 3).map((follower, i) => (
 							<Fragment key={follower.profile_id}>
 								<Link href={`/${follower.username}`}>
 									<a className="font-semibold dark:text-gray-300">@{follower.username}</a>
@@ -43,8 +43,9 @@ const FollowersInCommon = ({ profileId }) => {
 							<>
 								&amp;{' '}
 								<button className="font-semibold dark:text-gray-300" onClick={() => setShowFollowersModal(true)}>
-									{followersInCommon.count - 2} others you follow
-								</button>
+									{followersInCommon.count - 2} others
+								</button>{' '}
+								you follow
 							</>
 						)}
 					</div>
