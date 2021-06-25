@@ -8,7 +8,6 @@ import NotificationsBtn from './NotificationsBtn'
 import CappedWidth from './CappedWidth'
 import HomeIcon from './Icons/HomeIcon'
 import StarIcon from './Icons/StarIcon'
-import TrendIcon from './Icons/TrendIcon'
 import { useRouter } from 'next/router'
 import WalletIcon from './Icons/WalletIcon'
 import showtimeLogo from '../../public/img/logo.png'
@@ -57,7 +56,7 @@ const Header = () => {
 								</a>
 							</Link>
 							<Link href="/c/spotlights">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/c/spotlights' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-full py-1 px-2`} onClick={() => mixpanel.track('Discover button click')}>
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/c/spotlights' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-2xl py-2 -my-1 px-3 -mx-1`} onClick={() => mixpanel.track('Discover button click')}>
 									<StarIcon className="w-5 h-5" />
 									<span>Discover</span>
 								</a>
