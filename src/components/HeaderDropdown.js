@@ -31,7 +31,7 @@ const HeaderDropdown = () => {
 	useEffect(() => {
 		if (profileLoading) return
 
-		setHasEmailAddress(myProfile.wallet_addresses_v2.length !== myProfile.wallet_addresses_excluding_email_v2.length)
+		setHasEmailAddress((myProfile?.wallet_addresses_v2 || []).length !== (myProfile?.wallet_addresses_excluding_email_v2 || []).length)
 	}, [profileLoading, myProfile])
 
 	return (

@@ -15,6 +15,7 @@ import showtimeLogo from '../../public/img/logo.png'
 import HeaderDropdown from './HeaderDropdown'
 import useAuth from '@/hooks/useAuth'
 import useProfile from '@/hooks/useProfile'
+import FireIcon from './Icons/FireIcon'
 
 const Header = () => {
 	const { asPath } = useRouter()
@@ -63,7 +64,7 @@ const Header = () => {
 							</Link>
 							<Link href="/trending">
 								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/trending' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-full py-1 px-2`} onClick={() => mixpanel.track('Trending button click')}>
-									<TrendIcon className="w-5 h-5" />
+									<FireIcon className="w-5 h-5" />
 									<span>Trending</span>
 								</a>
 							</Link>
@@ -104,7 +105,7 @@ const Header = () => {
 							</Link>
 							<Link href="/trending">
 								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 ${asPath == '/trending' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Trending button click')}>
-									<TrendIcon className="w-5 h-5" />
+									<FireIcon className="w-5 h-5" />
 									<span>Trending</span>
 								</a>
 							</Link>
