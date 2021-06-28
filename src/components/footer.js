@@ -42,7 +42,7 @@ const Footer = () => {
 						<a className="text-gray-200 font-bold" href="https://www.notion.so/Showtime-Legal-c407e36eb7cd414ca190245ca8621e68" target="_blank" rel="noopener noreferrer">
 							Terms &amp; Conditions
 						</a>
-						<a className="text-gray-200 font-bold" href="https://showtime.nolt.io" target="_blank" rel="noopener noreferrer">
+						<a className="text-gray-200 font-bold" href="/feedback" target="_blank" rel="noopener noreferrer">
 							Feedback
 						</a>
 					</div>

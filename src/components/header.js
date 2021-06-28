@@ -48,25 +48,31 @@ const Header = () => {
 							<SearchBar propagateSearchState={setSearchBarOpen} />
 						</div>
 						{/* Start desktop-only menu */}
-						<div className="hidden flex-1 md:flex mr-6 items-center font-normal space-x-4">
-							<Link href="/">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-xl py-2 -my-1 px-3 -mx-1`} onClick={() => mixpanel.track('Discover button click')}>
-									<HomeIcon className="w-5 h-5" />
-									<span>Feed</span>
-								</a>
-							</Link>
-							<Link href="/c/spotlights">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/c/spotlights' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-xl py-2 -my-1 px-3 -mx-1`} onClick={() => mixpanel.track('Discover button click')}>
-									<StarIcon className="w-5 h-5" />
-									<span>Discover</span>
-								</a>
-							</Link>
-							<Link href="/trending">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/trending' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-xl py-2 -my-1 px-3 -mx-1`} onClick={() => mixpanel.track('Trending button click')}>
-									<FireIcon className="w-5 h-5" />
-									<span>Trending</span>
-								</a>
-							</Link>
+						<div className="hidden flex-1 md:flex mr-6 items-center font-normal space-x-2">
+							<div className={`pb-2.5 -mb-3 border-b-2 ${asPath == '/' ? 'border-gray-800' : 'border-transparent'}`}>
+								<Link href="/">
+									<a className={'text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150 rounded-xl py-2 -my-1 px-3 -mx-1'} onClick={() => mixpanel.track('Discover button click')}>
+										<HomeIcon className="w-5 h-5" />
+										<span>Feed</span>
+									</a>
+								</Link>
+							</div>
+							<div className={`pb-2.5 -mb-3 border-b-2 ${asPath == '/c/spotlights' ? 'border-gray-800' : 'border-transparent'}`}>
+								<Link href="/c/spotlights">
+									<a className={'text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150 rounded-xl py-2 -my-1 px-3 -mx-1'} onClick={() => mixpanel.track('Discover button click')}>
+										<StarIcon className="w-5 h-5" />
+										<span>Discover</span>
+									</a>
+								</Link>
+							</div>
+							<div className={`pb-2.5 -mb-3 border-b-2 ${asPath == '/trending' ? 'border-gray-800' : 'border-transparent'}`}>
+								<Link href="/trending">
+									<a className={'text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150 rounded-xl py-2 -my-1 px-3 -mx-1'} onClick={() => mixpanel.track('Trending button click')}>
+										<FireIcon className="w-5 h-5" />
+										<span>Trending</span>
+									</a>
+								</Link>
+							</div>
 						</div>
 						{/* End desktop-only menu */}
 

@@ -10,6 +10,11 @@ const nextConfig = {
 				destination: 'https://discord.gg/FBSxXrcnsm',
 				permanent: true,
 			},
+			{
+				source: '/feedback',
+				destination: 'https://feedback.nolt.io',
+				permanent: true,
+			},
 		]
 	},
 }
