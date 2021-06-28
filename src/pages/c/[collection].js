@@ -4,6 +4,7 @@ import Layout from '@/components/layout'
 import TokenGridV4 from '@/components/TokenGridV4'
 import { useRouter } from 'next/router'
 import backend from '@/lib/backend'
+import backendscripts from '@/lib/backend-scripts'
 import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
 import { GridTabs, GridTab } from '@/components/GridTabs'
@@ -90,7 +91,7 @@ export default function Collection({ collection_list, collection, selected_colle
 
 			if (sortBy == 'random') {
 				// Resetting the cache for random items - for next load
-				backend.get(`/v2/collection?limit=150&recache=1&order_by=${sortBy}&collection=${collection_name}`)
+				backendscripts.get(`/api/v2/collection?limit=150&recache=1&order_by=${sortBy}&collection=${collection_name}`)
 			}
 
 			if (isSubscribed) {
