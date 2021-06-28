@@ -40,9 +40,6 @@ const Leaderboard = () => {
 			const data = result?.data?.data
 			setLeaderboardItems(data)
 			setIsLoading(false)
-
-			// Reset cache for next load
-			backend.get(`/v1/leaderboard?days=${leaderboardDays}&recache=1`)
 		}
 		getFeatured()
 	}, [leaderboardDays])
