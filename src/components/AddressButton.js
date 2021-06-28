@@ -19,7 +19,7 @@ export const AddressCollection = ({ addresses, isMyProfile = false }) => {
 				<AddressButton {...firstAddress} />
 				{(addresses.length > 1 || isMyProfile) && (
 					<>
-						<Popover.Button className={({ open }) => `border rounded-full px-3 py-1 text-sm flex items-center space-x-2 text-gray-800 dark:text-gray-400 font-medium ${open ? 'bg-gray-100 dark:bg-gray-800 border-transparent' : 'dark:border-gray-700'}`}>
+						<Popover.Button className={({ open }) => `border rounded-full px-3 py-1 text-sm flex items-center space-x-2 text-gray-800 dark:text-gray-400 font-medium transition ${open ? 'bg-gray-100 dark:bg-gray-800 border-transparent' : 'dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 hover:border-transparent'}`}>
 							{addresses.length > 1 && <span>+{addresses.length - 1} more</span>}
 							<ChevronDown className="w-4 h-4" />
 						</Popover.Button>
@@ -64,7 +64,7 @@ const AddressButton = ({ address, ens_domain }) => {
 	return (
 		<span className="border dark:border-gray-700 rounded-full px-3 py-1 text-sm flex items-center space-x-2 text-gray-800 dark:text-gray-400">
 			<span className="font-medium whitespace-nowrap">{formatAddressShort(ens_domain || address)}</span>
-			<button onClick={copyAddress} className="p-1 -m-1 rounded-full">
+			<button onClick={copyAddress} className="p-1 -m-1 rounded-full text-gray-500">
 				{hasCopied ? <CheckIcon className="w-4 h-auto" /> : <CopyIcon className="w-4 h-auto" />}
 			</button>
 		</span>
