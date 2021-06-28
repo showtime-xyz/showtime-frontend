@@ -31,7 +31,7 @@ const FollowersInCommon = ({ profileId }) => {
 				<div className="text-sm dark:text-gray-400">
 					Followed by{' '}
 					<div className="hidden md:inline">
-						{followersInCommon.followers.slice(0, 3).map((follower, i) => (
+						{followersInCommon.followers.slice(0, 2).map((follower, i) => (
 							<Fragment key={follower.profile_id}>
 								<Link href={`/${follower.username}`}>
 									<a className="font-semibold dark:text-gray-300">@{follower.username}</a>

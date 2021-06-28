@@ -5,7 +5,7 @@ export default handler()
 	.use(middleware.auth)
 	.get(async ({ user, query: { profileId, isComplete = false } }, res) => {
 		await backend
-			.get(`/v1/commonfollows?profileid=${profileId}${isComplete ? '' : '&limit=5&count=1'}&sortbyfollowers=1`, {
+			.get(`/v1/commonfollows?profileid=${profileId}${isComplete ? '' : '&limit=4&count=1'}&sortbyfollowers=1`, {
 				headers: {
 					'X-Authenticated-User': user.publicAddress,
 					'X-Authenticated-Email': user.email || null,
