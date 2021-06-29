@@ -17,16 +17,12 @@ export const truncateWithEllipses = (text, max) => {
 }
 
 export const formatAddressShort = address => {
-	if (!address) {
-		return null
-	}
+	if (!address) return null
+
 	// Skip over ENS names
-	if (address.includes('.eth')) {
-		return address
-	}
-	const startString = address.slice(0, 4)
-	const endString = address.slice(address.length - 4, address.length)
-	return `${startString}…${endString}`
+	if (address.includes('.eth')) return address
+
+	return `${address.slice(0, 4)}…${address.slice(address.length - 4, address.length)}`
 }
 
 export const copyToClipBoard = async textToCopy => {

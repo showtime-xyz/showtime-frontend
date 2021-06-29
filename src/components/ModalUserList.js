@@ -6,8 +6,10 @@ import CloseButton from './CloseButton'
 import { truncateWithEllipses } from '@/lib/utilities'
 import FollowButton from './FollowButton'
 import AppContext from '@/context/app-context'
+
 export default function ModalUserList({ isOpen, title, users, closeModal, emptyMessage, onRedirect }) {
 	const context = useContext(AppContext)
+
 	return (
 		<>
 			{isOpen && (

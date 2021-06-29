@@ -2,6 +2,8 @@ import { useState, useEffect, useContext, useRef, Fragment } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import mixpanel from 'mixpanel-browser'
+import Tippy from '@tippyjs/react'
+import BadgeIcon from '@/components/Icons/BadgeIcon'
 import Layout from '@/components/layout'
 import CappedWidth from '@/components/CappedWidth'
 import TokenGridV5 from '@/components/TokenGridV5'
@@ -12,31 +14,32 @@ import ModalEditPhoto from '@/components/ModalEditPhoto'
 import ModalEditCover from '@/components/ModalEditCover'
 import ModalUserList from '@/components/ModalUserList'
 import { formatAddressShort, truncateWithEllipses, classNames } from '@/lib/utilities'
-import AddressButton from '@/components/AddressButton'
+import { AddressCollection } from '@/components/AddressButton'
 import { PROFILE_TABS, SORT_FIELDS, DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import SpotlightItem from '@/components/SpotlightItem'
-import ProfileFollowersPill from '@/components/ProfileFollowersPill'
-import { Listbox, Transition, Menu } from '@headlessui/react'
-import { CheckIcon, SelectorIcon, PencilAltIcon, LinkIcon, PhotographIcon as PhotographSolidIcon, HeartIcon as HeartSolidIcon, DotsHorizontalIcon } from '@heroicons/react/solid'
-import { FingerPrintIcon, PhotographIcon as PhotographOutlineIcon, HeartIcon as HeartOutlineIcon, UploadIcon } from '@heroicons/react/outline'
+import { Transition, Menu } from '@headlessui/react'
+import { PencilAltIcon, DotsHorizontalIcon, HeartIcon } from '@heroicons/react/solid'
+import { UploadIcon } from '@heroicons/react/outline'
 import axios from '@/lib/axios'
+import UserAddIcon from '@/components/Icons/UserAddIcon'
+import FollowersInCommon from '@/components/FollowersInCommon'
+import GlobeIcon from '@/components/Icons/GlobeIcon'
+import useAuth from '@/hooks/useAuth'
+import FingerprintIcon from '@/components/Icons/FingerprintIcon'
+import WalletIcon from '@/components/Icons/WalletIcon'
+import Dropdown from '@/components/UI/Dropdown'
+import Button from '@/components/UI/Buttons/Button'
+import useProfile from '@/hooks/useProfile'
 
-export async function getServerSideProps(context) {
-	const { res, query } = context
+export async function getStaticProps({ params: { profile: slug_address } }) {
+	if (slug_address.includes('apple-touch-icon')) return { props: {}, notFound: true }
 
-	const slug_address = query.profile
-
-	if (slug_address.includes('apple-touch-icon')) {
-		res.writeHead(404)
-		res.end()
-		return { props: {} }
-	}
-
-	// Get profile metadata
-	let response_profile
 	try {
-		response_profile = await backend.get(`/v2/profile_server/${slug_address}`)
-		const { profile, followers: followers_list, followers_count, following: following_list, following_count, featured_nft, lists } = response_profile.data.data
+		const {
+			data: {
+				data: { profile, followers: followers_list, followers_count, following: following_list, following_count, featured_nft, lists },
+			},
+		} = await backend.get(`/v2/profile_server/${slug_address}`)
 
 		return {
 			props: {
@@ -49,22 +52,21 @@ export async function getServerSideProps(context) {
 				featured_nft,
 				lists,
 			},
+			revalidate: 1,
 		}
 	} catch (err) {
-		if (err.response.status == 400) {
-			// Redirect to homepage
-			res.writeHead(302, { location: '/' })
-			res.end()
-			return { props: {} }
-		} else {
-			res.writeHead(404)
-			res.end()
-			return { props: {} }
-		}
+		if (err.response.status == 400) return { redirect: { destination: '/', permanent: false } }
+		else return { notFound: true }
 	}
 }
 
+export async function getStaticPaths() {
+	return { paths: [], fallback: 'blocking' }
+}
+
 const Profile = ({ profile, slug_address, followers_list, followers_count, following_list, following_count, featured_nft, lists }) => {
+	const { user, loading: authLoading, isAuthenticated } = useAuth()
+	const { profile: myProfile, loading: profileLoading, mutate: mutateProfile } = useProfile()
 	const context = useContext(AppContext)
 	const router = useRouter()
 
@@ -75,31 +77,31 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const [followersCount, setFollowersCount] = useState(followers_count)
 
 	// Using global context for logged in user, else server data for other pages
-	const { name, img_url, cover_url, wallet_addresses_v2, wallet_addresses_excluding_email_v2, bio, website_url, username, featured_nft_img_url, links } = isMyProfile ? context.myProfile : profile
+	const { name, img_url, cover_url, wallet_addresses_v2, wallet_addresses_excluding_email_v2, bio, website_url, username, featured_nft_img_url, links, verified } = isMyProfile && !profileLoading ? myProfile : profile
 	const { profile_id } = profile
 
 	useEffect(() => {
-		// Wait for identity to resolve before recording the view
-		if (typeof context.user !== 'undefined') {
-			if (context.user) {
-				// Logged in?
-				if (context.myProfile?.wallet_addresses_v2.map(a => a.address?.toLowerCase()).includes(slug_address.toLowerCase()) || slug_address.toLowerCase() === context.myProfile?.username?.toLowerCase() || context.myProfile?.wallet_addresses_v2.map(a => a.ens_domain?.toLowerCase()).includes(slug_address.toLowerCase())) {
-					setIsMyProfile(true)
-					mixpanel.track('Self profile view', { slug: slug_address })
-				} else {
-					setIsMyProfile(false)
-					mixpanel.track('Profile view', { slug: slug_address })
-				}
-			} else {
-				// Logged out
-				setIsMyProfile(false)
-				mixpanel.track('Profile view', { slug: slug_address })
-			}
+		if (authLoading) return
+
+		if (!isAuthenticated) {
+			setIsMyProfile(false)
+			mixpanel.track('Profile view', { slug: slug_address })
+			return
 		}
-	}, [profile_id, typeof context.user, context.myProfile, context.user ? context.user.publicAddress : null, slug_address])
+
+		// Logged in?
+		if (profile.wallet_addresses_v2.map(a => a.address?.toLowerCase()).includes(user.publicAddress.toLowerCase())) {
+			setIsMyProfile(true)
+			mixpanel.track('Self profile view', { slug: slug_address })
+		} else {
+			setIsMyProfile(false)
+			mixpanel.track('Profile view', { slug: slug_address })
+		}
+	}, [authLoading, isAuthenticated, profile.wallet_addresses_v2, user?.publicAddress, slug_address])
 
 	// Followers
 	const [followers, setFollowers] = useState([])
+
 	useEffect(() => {
 		setFollowers(followers_list)
 	}, [followers_list])
@@ -119,13 +121,10 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 
 	// Follow back?
 	const [followingMe, setFollowingMe] = useState(false)
+
 	useEffect(() => {
-		if (following_list.map(item => item.profile_id).includes(context.myProfile?.profile_id)) {
-			setFollowingMe(true)
-		} else {
-			setFollowingMe(false)
-		}
-	}, [following_list, context.myProfile?.profile_id])
+		setFollowingMe(following_list.map(item => item.profile_id).includes(myProfile?.profile_id))
+	}, [following_list, myProfile?.profile_id])
 
 	// Spotlight
 	const [spotlightItem, setSpotlightItem] = useState()
@@ -159,7 +158,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const [showDuplicates, setShowDuplicates] = useState(false)
 	const [hasUserHiddenItems, setHasUserHiddenItems] = useState(false)
 
-	//const [collections, setCollections] = useState([]);
 	const [collectionId, setCollectionId] = useState(0)
 	const [isLoadingCards, setIsLoadingCards] = useState(false)
 	const [isRefreshingCards, setIsRefreshingCards] = useState(false)
@@ -168,9 +166,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const [selectedLikedSortField, setSelectedLikedSortField] = useState(2)
 
 	const updateItems = async (listId, sortId, collectionId, showCardRefresh, page, showHidden, showDuplicates) => {
-		if (showCardRefresh) {
-			setIsRefreshingCards(true)
-		}
+		if (showCardRefresh) setIsRefreshingCards(true)
 
 		// Created
 		const { data } = await axios
@@ -188,9 +184,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setItems(data.items)
 		setHasMore(data.has_more)
 
-		if (showCardRefresh) {
-			setIsRefreshingCards(false)
-		}
+		if (showCardRefresh) setIsRefreshingCards(false)
 	}
 
 	const addPage = async nextPage => {
@@ -384,6 +378,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 
 	useEffect(() => {
 		fetchItems(true, lists)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [profile_id, lists])
 
 	const handleLoggedOutFollow = () => {
@@ -409,42 +404,32 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 
 		setFollowers([
 			{
-				profile_id: context.myProfile.profile_id,
-				wallet_address: context.user.publicAddress,
-				name: context.myProfile.name,
-				img_url: context.myProfile.img_url ? context.myProfile.img_url : DEFAULT_PROFILE_PIC,
+				profile_id: myProfile.profile_id,
+				wallet_address: user.publicAddress,
+				name: myProfile.name,
+				img_url: myProfile.img_url || DEFAULT_PROFILE_PIC,
 				timestamp: null,
-				username: context.myProfile.username,
+				username: myProfile.username,
 			},
 			...followers,
 		])
 
 		// Post changes to the API
-		try {
-			await axios
-				.post(`/api/follow_v2/${profile_id}`)
-				.then(() => {
-					mixpanel.track('Followed profile')
-				})
-				.catch(err => {
-					if (err.response.data.code === 429) {
-						setIsFollowed(false)
-						setFollowersCount(followersCount)
-						// Change myLikes via setMyLikes
-						context.setMyFollows(context.myFollows.filter(item => item.profile_id != profile_id))
+		await axios
+			.post(`/api/follow_v2/${profile_id}`)
+			.then(() => mixpanel.track('Followed profile'))
+			.catch(err => {
+				if (err.response.data.code !== 429) throw err
 
-						setFollowers(
-							followers.filter(follower => {
-								context.myProfile.profile_id != follower.profile_id
-							})
-						)
-						return context.setThrottleMessage(err.response.data.message)
-					}
-					console.error(err)
-				})
-		} catch (err) {
-			console.error(err)
-		}
+				setIsFollowed(false)
+				setFollowersCount(followersCount)
+				// Change myLikes via setMyLikes
+				context.setMyFollows(context.myFollows.filter(item => item.profile_id != profile_id))
+
+				setFollowers(followers.filter(follower => myProfile.profile_id != follower.profile_id))
+
+				return context.setThrottleMessage(err.response.data.message)
+			})
 	}
 
 	const handleUnfollow = async () => {
@@ -453,11 +438,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		// Change myLikes via setMyLikes
 		context.setMyFollows(context.myFollows.filter(item => item.profile_id != profile_id))
 
-		setFollowers(
-			followers.filter(follower => {
-				return context.myProfile.profile_id != follower.profile_id
-			})
-		)
+		setFollowers(followers.filter(follower => myProfile.profile_id != follower.profile_id))
 
 		// Post changes to the API
 		if (context.disableFollows === false) {
@@ -472,21 +453,16 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const [coverModalOpen, setCoverModalOpen] = useState(false)
 	const [showFollowers, setShowFollowers] = useState(false)
 	const [showFollowing, setShowFollowing] = useState(false)
-	const [openCardMenu, setOpenCardMenu] = useState(null)
 
 	useEffect(() => {
-		// console.log("setting default list Id to:", lists.default_list_id);
-		// console.log("current value in url:", router.query);
-
 		setSelectedGrid(router?.query?.list ? PROFILE_TABS.indexOf(router.query.list) : lists.default_list_id)
 
 		setMenuLists(lists.lists)
 
 		setShowFollowers(false)
 		setShowFollowing(false)
-	}, [profile_id, lists.default_list_id, isLoadingCards])
+	}, [profile_id, router?.query?.list, lists.default_list_id, lists.lists])
 
-	// profilePill Edit profile actions
 	const editAccount = () => {
 		setEditModalOpen(true)
 		mixpanel.track('Open edit name')
@@ -495,11 +471,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const editPhoto = () => {
 		setPictureModalOpen(true)
 		mixpanel.track('Open edit photo')
-	}
-
-	const logout = async () => {
-		await context.logOut()
-		setIsMyProfile(false)
 	}
 
 	const [isChangingOrder, setIsChangingOrder] = useState(false)
@@ -522,24 +493,22 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	}
 
 	const handleClickDeleteCustomOrder = async () => {
-		const listIdToClearOrder = selectedGrid
 		await handleSortChange(1)
+
 		setIsChangingOrder(false)
 		setRevertItems(null)
-		const newMenuLists = menuLists.map((list, index) => (index === listIdToClearOrder - 1 ? { ...list, has_custom_sort: false } : list))
-		setMenuLists(newMenuLists)
-		context.setMyProfile({
-			...context.myProfile,
-			...(listIdToClearOrder === 1 && { default_created_sort_id: null }),
-			...(listIdToClearOrder === 2 && { default_owned_sort_id: null }),
-		})
-		await fetch('/api/updatelistorder', {
-			method: 'post',
-			body: JSON.stringify({
-				new_order: null,
-				list_id: listIdToClearOrder,
-			}),
-		})
+		setMenuLists(menuLists.map((list, index) => (index === selectedGrid - 1 ? { ...list, has_custom_sort: false } : list)))
+
+		mutateProfile(
+			{
+				...myProfile,
+				...(selectedGrid === 1 && { default_created_sort_id: null }),
+				...(selectedGrid === 2 && { default_owned_sort_id: null }),
+			},
+			true
+		)
+
+		await axios.post('/api/updatelistorder', { new_order: null, list_id: selectedGrid })
 	}
 
 	const handleSaveOrder = async () => {
@@ -548,11 +517,14 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setRevertItems(null)
 		const newMenuLists = menuLists.map((list, index) => (index === selectedGrid - 1 ? { ...list, has_custom_sort: true } : list))
 		setMenuLists(newMenuLists)
-		context.setMyProfile({
-			...context.myProfile,
-			...(selectedGrid === 1 && { default_created_sort_id: 5 }),
-			...(selectedGrid === 2 && { default_owned_sort_id: 5 }),
-		})
+		mutateProfile(
+			{
+				...myProfile,
+				...(selectedGrid === 1 && { default_created_sort_id: 5 }),
+				...(selectedGrid === 2 && { default_owned_sort_id: 5 }),
+			},
+			true
+		)
 		await fetch('/api/updatelistorder', {
 			method: 'post',
 			body: JSON.stringify({
@@ -593,11 +565,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	}
 
 	return (
-		<div
-			onClick={() => {
-				setOpenCardMenu(null)
-			}}
-		>
+		<div>
 			{typeof document !== 'undefined' ? (
 				<>
 					{editModalOpen && <ModalEditProfile isOpen={editModalOpen} setEditModalOpen={setEditModalOpen} />}
@@ -606,15 +574,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 					{/* Followers modal */}
 					<ModalUserList title="Followers" isOpen={showFollowers} users={followers ? followers : []} closeModal={() => setShowFollowers(false)} emptyMessage="No followers yet." />
 					{/* Following modal */}
-					<ModalUserList
-						title="Following"
-						isOpen={showFollowing}
-						users={following ? following : []}
-						closeModal={() => {
-							setShowFollowing(false)
-						}}
-						emptyMessage="Not following anyone yet."
-					/>
+					<ModalUserList title="Following" isOpen={showFollowing} users={following ? following : []} closeModal={() => setShowFollowing(false)} emptyMessage="Not following anyone yet." />
 				</>
 			) : null}
 			<Layout>
@@ -633,473 +593,337 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 					<meta name="twitter:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : DEFAULT_PROFILE_PIC} />
 				</Head>
 
-				<div className={`h-32 md:h-64 relative text-left bg-gradient-to-b from-black dark:from-gray-400 to-gray-800 dark:to-gray-100 ${cover_url ? 'bg-no-repeat bg-center bg-cover' : ''}`} style={cover_url ? { backgroundImage: `url(${getCoverUrl(cover_url)})` } : {}}>
-					{isMyProfile && (
-						<CappedWidth>
-							<div className="relative">
-								<div
-									className="absolute top-6 right-5 2xl:right-5 text-gray-200 text-sm cursor-pointer bg-gray-900 bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 py-1 px-3 rounded-full hover:bg-opacity-60 flex items-center"
-									onClick={() => {
-										if (isMyProfile) {
-											setCoverModalOpen(true)
-											mixpanel.track('Open edit cover photo')
-										}
-									}}
-								>
-									<PencilAltIcon className="w-4 h-4 mr-1" />
-									<span>Cover</span>
-								</div>
-							</div>
-						</CappedWidth>
-					)}
-				</div>
-
-				<CappedWidth>
-					<div className="flex flex-col md:flex-row mx-5">
-						<div className="flex flex-col text-left">
-							<div className="z-10 pb-2 flex flex-row">
-								<div className="relative -mt-14 md:-mt-20 rounded-full border-2 border-white dark:border-gray-800 shadow-md overflow-hidden group">
-									<img
+				<div className="bg-white dark:bg-gray-900 pb-8">
+					<div className={`h-32 md:h-64 relative text-left bg-gradient-to-b from-black dark:from-gray-400 to-gray-800 dark:to-gray-100 ${cover_url ? 'bg-no-repeat bg-center bg-cover' : ''}`} style={cover_url ? { backgroundImage: `url(${getCoverUrl(cover_url)})` } : {}}>
+						{isMyProfile && (
+							<CappedWidth>
+								<div className="relative">
+									<div
+										className="absolute top-6 right-5 2xl:right-5 text-gray-200 text-sm cursor-pointer bg-gray-900 bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 py-1 px-3 rounded-full hover:bg-opacity-60 flex items-center"
 										onClick={() => {
 											if (isMyProfile) {
-												setPictureModalOpen(true)
-												mixpanel.track('Open edit photo')
+												setCoverModalOpen(true)
+												mixpanel.track('Open edit cover photo')
 											}
 										}}
-										src={img_url ? img_url : DEFAULT_PROFILE_PIC}
-										className="h-24 w-24 md:h-32 md:w-32 z-10"
-									/>
-									{isMyProfile && (
-										<button onClick={editPhoto} className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg backdrop-saturate-150 transition duration-300 flex items-center justify-center">
-											<UploadIcon className="w-10 h-10 text-white dark:text-gray-300" />
-										</button>
-									)}
-								</div>
-								<div className="flex-grow"></div>
-								<div className="md:hidden z-10 -mt-5">
-									<ProfileFollowersPill following={following} followers={followers} isFollowed={isFollowed} isMyProfile={isMyProfile} followingMe={followingMe} handleUnfollow={handleUnfollow} handleFollow={handleFollow} handleLoggedOutFollow={handleLoggedOutFollow} setShowFollowers={setShowFollowers} setShowFollowing={setShowFollowing} editAccount={editAccount} logout={logout} />
-								</div>
-							</div>
-							<div className="dark:text-gray-200 text-3xl md:text-4xl md:mb-1"> {name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</div>
-							<div>
-								{(username || (wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0)) && (
-									<div className="flex flex-row items-center justify-start">
-										{username && <div className="md:mr-2 text-sm md:text-base text-gray-500 dark:text-gray-400">@{username}</div>}
-
-										{wallet_addresses_excluding_email_v2 && (
-											<div className="flex ml-1">
-												{wallet_addresses_excluding_email_v2.map(w => {
-													return <AddressButton key={w.address} address={w.address} ens_domain={w.ens_domain} />
-												})}
-											</div>
-										)}
-									</div>
-								)}
-							</div>
-							<div>
-								{bio ? (
-									<div className="text-black dark:text-gray-500 text-sm max-w-prose text-left md:text-base mt-6 block break-words">
-										{moreBioShown ? bio : truncateWithEllipses(bio, initialBioLength)}
-										{!moreBioShown && bio && bio.length > initialBioLength && (
-											<a onClick={() => setMoreBioShown(true)} className="text-gray-500 hover:text-gray-700 cursor-pointer">
-												{' '}
-												more
-											</a>
-										)}
-									</div>
-								) : null}
-							</div>
-						</div>
-						<div className="flex-grow"></div>
-						<div className="flex  flex-col">
-							<div className="flex items-center mt-6 md:-mt-7 md:z-10  md:justify-end justify-start md:mx-0 ">
-								<div className="flex md:border border-transparent dark:border-gray-800 flex-row md:bg-white md:dark:bg-gray-900 md:shadow-md md:rounded-full md:px-2 md:py-2 items-center">
-									<div className="flex-grow">
-										<div className="flex flex-row ">
-											<div className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80 md:ml-4 transition" onClick={() => setShowFollowing(true)}>
-												<div className="text-sm mr-2">{following && following.length !== null ? Number(isMyProfile ? context.myFollows.length : following_count).toLocaleString() : null}</div>
-												<div className="text-sm text-gray-500 mr-5">Following</div>
-											</div>
-											<div className="flex-1 flex flex-row items-center cursor-pointer hover:opacity-80 transition" onClick={() => setShowFollowers(true)}>
-												<div className="text-sm  mr-2">{followers && followers.length !== null ? Number(followersCount).toLocaleString() : null}</div>
-												<div className="text-sm text-gray-500 mr-5">Followers</div>
-											</div>
-										</div>
-									</div>
-									<div className="hidden md:flex">
-										<ProfileFollowersPill following={following} followers={followers} isFollowed={isFollowed} isMyProfile={isMyProfile} followingMe={followingMe} handleUnfollow={handleUnfollow} handleFollow={handleFollow} handleLoggedOutFollow={handleLoggedOutFollow} setShowFollowers={setShowFollowers} setShowFollowing={setShowFollowing} editAccount={editAccount} />
-									</div>
-								</div>
-							</div>
-
-							<div className="dark:text-gray-400 md:text-right text-sm md:mr-2 pt-5 md:pt-7">
-								{website_url ? (
-									<a
-										href={website_url.slice(0, 4) === 'http' ? website_url : 'https://' + website_url}
-										target="_blank"
-										onClick={() => {
-											mixpanel.track('Clicked profile website link', {
-												slug: slug_address,
-											})
-										}}
-										className="inline-block "
-										rel="noreferrer"
 									>
-										<div className="flex text-gray-500 dark:hover:text-gray-400 flex-row  items-center hover:opacity-80 dark:hover:opacity-100 mr-3 md:mr-0">
-											<LinkIcon className="dark:text-gray-600 flex-shrink-0 h-4 w-4 mr-1 opacity-70" />
-											<div>
-												<div className="break-all">{website_url}</div>
-											</div>
+										<PencilAltIcon className="w-4 h-4 mr-1" />
+										<span>Cover</span>
+									</div>
+								</div>
+							</CappedWidth>
+						)}
+					</div>
+					<CappedWidth>
+						<div className="mx-5">
+							<div className="flex flex-col text-left">
+								<div className="z-10 pb-2 flex items-center justify-between">
+									<div className="flex items-center">
+										<div className="relative -mt-14 md:-mt-20 rounded-full border-8 border-white dark:border-gray-900 overflow-hidden group self-start">
+											<img
+												onClick={() => {
+													if (isMyProfile) {
+														setPictureModalOpen(true)
+														mixpanel.track('Open edit photo')
+													}
+												}}
+												src={img_url ? img_url : DEFAULT_PROFILE_PIC}
+												className="h-24 w-24 md:h-32 md:w-32 z-10"
+											/>
+											{isMyProfile && (
+												<button onClick={editPhoto} className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg backdrop-saturate-150 transition duration-300 flex items-center justify-center">
+													<UploadIcon className="w-10 h-10 text-white dark:text-gray-300" />
+												</button>
+											)}
 										</div>
-									</a>
-								) : null}
-								{/* map out social links */}
-								{links &&
-									links.map(link => (
-										<a
-											href={`https://${link.prefix ? link.prefix : link.type__prefix}` + link.user_input}
-											target="_blank"
-											onClick={() => {
-												mixpanel.track(`Clicked ${link.name ? link.name : link.type__name} profile link`, {
-													slug: slug_address,
-												})
-											}}
-											className="mr-4 md:mr-0 md:ml-5 inline-block "
-											key={link.type_id}
-											rel="noreferrer"
-										>
-											<div className="text-gray-500 dark:hover:text-gray-400 flex flex-row items-center hover:opacity-80 dark:hover:opacity-100">
-												{link.icon_url && <img src={link.icon_url} alt="" className="flex-shrink-0 h-5 w-5 mr-1 opacity-70 dark:opacity-100" />}
-												{link.type__icon_url && <img src={link.type__icon_url} alt="" className="flex-shrink-0 h-5 w-5 mr-1 opacity-70 dark:opacity-100" />}
-												<div className="break-all">{link.name ? link.name : link.type__name}</div>
-											</div>
-										</a>
-									))}
-							</div>
-							<div className="flex-grow "></div>
-						</div>
-					</div>
-				</CappedWidth>
-
-				{spotlightItem ? (
-					<div className="mt-12 sm:mt-8 md:mt-12">
-						<div className="relative bg-white dark:bg-gray-900 border-t border-b border-gray-200 dark:border-gray-800 sm:py-16 sm:pb-8 md:pb-16 mb-4">
-							<SpotlightItem
-								item={spotlightItem}
-								removeSpotlightItem={() => {
-									handleChangeSpotlightItem(null)
-									mixpanel.track('Removed Spotlight Item')
-								}}
-								isMyProfile={isMyProfile}
-								openCardMenu={openCardMenu}
-								setOpenCardMenu={setOpenCardMenu}
-								listId={0}
-								key={spotlightItem.nft_id}
-								pageProfile={{
-									profile_id,
-									slug_address,
-									name,
-									img_url,
-									wallet_addresses_excluding_email_v2,
-									website_url,
-									username,
-								}}
-							/>
-						</div>
-					</div>
-				) : null}
-				<CappedWidth>
-					<div className="m-auto">
-						<div ref={gridRef} className="md:grid lg:grid-cols-3 xl:grid-cols-4 pt-0 ">
-							<div className="sm:px-3 relative">
-								<div className="h-max sticky top-24">
-									<div className="px-2 sm:px-4 py-2 sm:py-4 sm:rounded-lg bg-white dark:bg-gray-900 border-t border-b sm:border-l sm:border-r border-gray-200 sm:border-transparent dark:border-gray-800 sm:shadow-md mt-14">
-										<div className="border-b border-gray-200 dark:border-gray-800 sm:mx-2 mb-2 pb-4">
-											<div className="flex flex-row items-center mt-2 ml-2 sm:mt-0 sm:ml-0">
-												<div className="mr-2">
-													<img src={img_url ? img_url : DEFAULT_PROFILE_PIC} className="w-5 h-5 rounded-full" />
+										<div className="hidden md:block">{wallet_addresses_excluding_email_v2 && <AddressCollection addresses={wallet_addresses_excluding_email_v2} isMyProfile={isMyProfile} />}</div>
+									</div>
+									<div className="flex items-center space-x-8">
+										<div className="hidden md:block">
+											<FollowStats {...{ following, following_count, followers, followersCount, isMyProfile, setShowFollowing, setShowFollowers }} />
+										</div>
+										<div className="flex items-center space-x-2">
+											<Button style={isMyProfile ? 'tertiary_gray' : isFollowed ? 'tertiary' : 'primary'} onClick={isAuthenticated ? (isMyProfile ? editAccount : isFollowed ? handleUnfollow : context.disableFollows ? null : handleFollow) : handleLoggedOutFollow} className={`space-x-2 ${isFollowed || isMyProfile ? '' : 'text-white'}`}>
+												{isMyProfile ? (
+													<span className="font-semibold">Edit Profile</span>
+												) : isFollowed ? (
+													<span className="font-semibold">Following</span>
+												) : (
+													<>
+														<UserAddIcon className="w-5 h-5" />
+														<span className="font-semibold">{followingMe ? 'Follow Back' : 'Follow'}</span>
+													</>
+												)}
+											</Button>
+										</div>
+									</div>
+								</div>
+								<div>
+									<div>
+										<div className="flex justify-between">
+											<div>
+												<div className="flex items-center space-x-2">
+													<h2 className="text-3xl md:text-4xl font-tomato font-bold"> {name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</h2>
+													{verified && <BadgeIcon className="w-5 md:w-6 h-auto text-black dark:text-white" bgClass="text-white dark:text-black" />}
 												</div>
-												<div className="dark:text-gray-300">{name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</div>
-												<div className="flex-grow"></div>
-												{isMyProfile && hasUserHiddenItems ? (
-													<div className="flex sm:hidden">
-														<div className="flex-grow flex"></div>
-														<div className="text-xs mr-2 text-gray-400 dark:text-gray-500 cursor-pointer hover:text-gray-700" onClick={() => handleShowHiddenChange(!showUserHiddenItems)}>
-															{showUserHiddenItems ? 'Hide hidden' : 'Show hidden'}
-														</div>
+												<div className="mt-2">{(username || (wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0)) && <p className="flex flex-row items-center justify-start">{username && <span className="font-tomato font-bold tracking-wider dark:text-gray-300">@{username}</span>}</p>}</div>
+											</div>
+											<div className="hidden md:block">{isAuthenticated && !isMyProfile && <FollowersInCommon profileId={profile_id} />}</div>
+										</div>
+										<div className="flex justify-between">
+											<div>
+												{bio ? (
+													<div className="text-black dark:text-gray-400 text-sm max-w-2xl text-left md:text-base mt-4 block break-words">
+														{moreBioShown ? bio : truncateWithEllipses(bio, initialBioLength)}
+														{!moreBioShown && bio && bio.length > initialBioLength && (
+															<a onClick={() => setMoreBioShown(true)} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-400 cursor-pointer">
+																{' '}
+																more
+															</a>
+														)}
 													</div>
 												) : null}
 											</div>
+											<LinkCollection className="hidden md:block" links={links} website_url={website_url} slug_address={slug_address} />
 										</div>
-										<div className="flex flex-row sm:flex-col">
-											<div
-												className={`flex-1 hover:bg-stpurple100 p-2 sm:mb-1 ml-1 sm:ml-0 rounded-lg px-3  ${selectedGrid === 1 ? 'text-stpurple700 bg-stpurple100' : 'text-gray-500'} hover:text-stpurple700 cursor-pointer flex flex-row transition-all items-center`}
-												onClick={() => {
-													handleListChange(1)
-
-													if (gridRef?.current?.getBoundingClientRect().top < 0) window.scroll({ top: gridRef?.current?.offsetTop + 30, behavior: 'smooth' })
-												}}
-											>
-												<div className="w-6 hidden sm:block">
-													<FingerPrintIcon className="w-5 h-5 mr-2.5" />
-												</div>
-												<div className="flex-grow sm:hidden"></div>
-												<div className="sm:hidden mr-1">{menuLists && menuLists.length > 0 ? Number(menuLists[0].count_deduplicated_nonhidden).toLocaleString() : null}</div>
-												<div>Created</div>
-												<div className="flex-grow"></div>
-												<div className="rounded-full text-center text-sm hidden sm:block">
-													{menuLists && menuLists.length > 0 ? Number(menuLists[0].count_deduplicated_nonhidden).toLocaleString() : null}
-													<span className="invisible">+</span>
-												</div>
+										{wallet_addresses_excluding_email_v2 && (
+											<div className="mt-8 md:hidden">
+												<AddressCollection addresses={wallet_addresses_excluding_email_v2} isMyProfile={isMyProfile} />
 											</div>
-											<div
-												className={`flex-1 hover:bg-stteal100 sm:mb-1 p-2  rounded-lg px-3 ${selectedGrid === 2 ? 'text-stteal700 bg-stteal100' : 'text-gray-500'} hover:text-stteal700 cursor-pointer flex flex-row transition-all items-center`}
-												onClick={() => {
-													handleListChange(2)
-													if (gridRef?.current?.getBoundingClientRect().top < 0) window.scroll({ top: gridRef?.current?.offsetTop + 30, behavior: 'smooth' })
-												}}
-											>
-												<div className="w-6 hidden sm:block">{selectedGrid === 2 ? <PhotographSolidIcon className="w-5 h-5 mr-2.5" /> : <PhotographOutlineIcon className="w-5 h-5 mr-2.5" />}</div>
-												<div className="flex-grow sm:hidden"></div>
-												<div className="sm:hidden mr-1">{menuLists && menuLists.length > 0 ? Number(menuLists[1].count_deduplicated_nonhidden).toLocaleString() : null}</div>
-												<div>Owned</div>
-												<div className="flex-grow"></div>
-												<div className="rounded-full text-center text-sm hidden sm:block">
-													{menuLists && menuLists.length > 0 ? Number(menuLists[1].count_deduplicated_nonhidden).toLocaleString() : null}
-													<span className="invisible">+</span>
-												</div>
-											</div>
-											<div
-												className={`flex-1 hover:bg-stred100 p-2 sm:mt-0 mr-1 sm:mr-0 rounded-lg px-3 ${selectedGrid === 3 ? 'text-stred bg-stred100' : 'text-gray-500'} hover:text-stred cursor-pointer flex flex-row transition-all items-center`}
-												onClick={() => {
-													handleListChange(3)
-													if (gridRef?.current?.getBoundingClientRect().top < 0) window.scroll({ top: gridRef?.current?.offsetTop + 30, behavior: 'smooth' })
-												}}
-											>
-												<div className="w-6 hidden sm:block">{selectedGrid === 3 ? <HeartSolidIcon className="w-5 h-5 mr-2.5" /> : <HeartOutlineIcon className="w-5 h-5 mr-2.5" />}</div>
-												<div className="flex-grow sm:hidden"></div>
-												<div className="sm:hidden mr-1">
-													{menuLists && menuLists.length > 0 ? (menuLists[2].count_deduplicated_nonhidden > 300 ? 300 : menuLists[2].count_deduplicated_nonhidden) : null}
-													{menuLists && menuLists.length > 0 && menuLists[2].count_deduplicated_nonhidden > 300 ? '+' : ''}
-												</div>
-												<div>Liked</div>
-												<div className="flex-grow"></div>
-												<div className="rounded-full text-center text-sm hidden sm:block">
-													{menuLists && menuLists.length > 0 ? (menuLists[2].count_deduplicated_nonhidden > 300 ? 300 : menuLists[2].count_deduplicated_nonhidden) : null}
-													<span className={menuLists && menuLists.length > 0 && menuLists[2].count_deduplicated_nonhidden > 300 ? 'visible' : 'invisible'}>+</span>
-												</div>
-											</div>
+										)}
+										<div className="mt-4 md:hidden">
+											<FollowStats {...{ following, following_count, followers, followersCount, isMyProfile, setShowFollowing, setShowFollowers }} />
 										</div>
+										<div className="mt-4 md:hidden">{isAuthenticated && !isMyProfile && <FollowersInCommon profileId={profile_id} />}</div>
+										<LinkCollection className="md:hidden" links={links} website_url={website_url} slug_address={slug_address} />
 									</div>
-									<div>
-										{isMyProfile && hasUserHiddenItems ? (
-											<div className="hidden sm:flex">
-												<div className="flex-grow flex"></div>
-												<p className=" text-xs mt-3 ml-6 mr-1 text-gray-400 dark:text-gray-500 cursor-pointer hover:text-gray-700" onClick={() => handleShowHiddenChange(!showUserHiddenItems)}>
-													{showUserHiddenItems ? 'Hide hidden' : 'Show hidden'}
-												</p>
-											</div>
-										) : null}
-									</div>
-								</div>
-							</div>
-							<div className="lg:col-span-2 xl:col-span-3 min-h-screen ">
-								{!isLoadingCards && (
-									<div className="sm:mt-0 flex h-12 items-center px-3 my-2  md:text-base">
-										{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && (
-											<>
-												{isChangingOrder && ((selectedGrid === 1 && selectedCreatedSortField === 5) || (selectedGrid === 2 && selectedOwnedSortField === 5)) && (
-													<>
-														<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-red-100 bg-red-600 hover:bg-red-700 focus:outline-none" onClick={handleCancelOrder}>
-															Cancel
-														</div>
-														<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-green-100 bg-green-600 hover:bg-green-700 focus:outline-none" onClick={handleSaveOrder}>
-															Save Order
-														</div>
-													</>
-												)}
-											</>
-										)}
-										<div className="flex-1 hidden sm:flex"></div>
-										<Listbox value={collectionId} onChange={value => handleCollectionChange(value)} disabled={isChangingOrder}>
-											{({ open }) => (
-												<>
-													<div className="relative mr-2 w-full sm:w-56">
-														<Listbox.Button className="relative w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 sm:text-sm">
-															<span className="flex items-center">
-																<>
-																	{collectionId && collectionId > 0 ? <img src={menuLists && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId).length > 0 && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId)[0].collection_img_url ? menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId)[0].collection_img_url : DEFAULT_PROFILE_PIC} alt="" className="flex-shrink-0 h-6 w-6 rounded-full mr-3" /> : null}
-																	<span className="block truncate dark:text-gray-400">{menuLists && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId).length > 0 && menuLists[selectedGrid - 1].collections.filter(t => t.collection_id === collectionId)[0].collection_name.replace(' (FND)', '')}</span>
-																</>
-															</span>
-															<span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-																<SelectorIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-															</span>
-														</Listbox.Button>
-
-														<Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-															<Listbox.Options static className="z-10 absolute mt-1 w-full border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-																{menuLists &&
-																	menuLists[selectedGrid - 1].collections.map(item => (
-																		<Listbox.Option key={item.collection_id} className={({ active }) => classNames(active ? 'text-white dark:text-gray-300 bg-indigo-600 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={item.collection_id}>
-																			{({ active }) => (
-																				<>
-																					<div className="flex items-center">
-																						<img src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />
-																						<span className="ml-3 block truncate">{item.collection_name.replace(' (FND)', '')}</span>
-																					</div>
-
-																					{item.collection_id === collectionId ? (
-																						<span className={classNames(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}>
-																							<CheckIcon className="h-5 w-5" aria-hidden="true" />
-																						</span>
-																					) : null}
-																				</>
-																			)}
-																		</Listbox.Option>
-																	))}
-															</Listbox.Options>
-														</Transition>
-													</div>
-												</>
-											)}
-										</Listbox>
-										<div className="flex-1 flex sm:hidden"></div>
-										<Listbox value={selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField} onChange={value => handleSortChange(value)} disabled={isChangingOrder}>
-											{({ open }) => (
-												<>
-													<div className="relative" style={context.isMobile ? { minWidth: 140 } : { width: 130 }}>
-														<Listbox.Button className="bg-white dark:bg-gray-700 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 sm:text-sm">
-															<span className="block truncate dark:text-gray-400">{sortingOptionsList.filter(t => t.value === (selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField))[0].label}</span>
-															<span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-																<SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-															</span>
-														</Listbox.Button>
-														<Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-															<Listbox.Options static className="z-10 absolute mt-1 w-full border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-																{sortingOptionsList
-																	.filter(opts => (menuLists[selectedGrid - 1].has_custom_sort ? true : opts.value !== 5))
-																	.map(item => (
-																		<Listbox.Option key={item.value} className={({ active }) => classNames(active ? 'text-white dark:text-gray-300 bg-indigo-600 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={item.value}>
-																			{({ active }) => (
-																				<>
-																					<span className="block truncate">{item.label}</span>
-
-																					{item.value === (selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField) ? (
-																						<span className={classNames(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}>
-																							<CheckIcon className="h-5 w-5" aria-hidden="true" />
-																						</span>
-																					) : null}
-																				</>
-																			)}
-																		</Listbox.Option>
-																	))}
-															</Listbox.Options>
-														</Transition>
-													</div>
-												</>
-											)}
-										</Listbox>
-										{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && items?.length > 0 && (
-											<Menu as="div" className="relative inline-block text-left ml-2">
-												{({ open }) => (
-													<>
-														<div>
-															<Menu.Button disabled={isChangingOrder} className="flex items-center justify-center text-gray-800 dark:text-gray-400 hover:text-stpink dark:hover:text-stpink focus:outline-none focus-visible:ring-1">
-																<DotsHorizontalIcon className="w-5 h-5" aria-hidden="true" />
-															</Menu.Button>
-														</div>
-														<Transition show={open} as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
-															<Menu.Items static className="z-1 absolute right-0 mt-2 origin-top-right border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" style={{ width: 200 }}>
-																<div className="px-1 py-1 ">
-																	<Menu.Item>
-																		{({ active }) => (
-																			<button className={`${active ? 'text-white dark:text-gray-300 bg-indigo-600 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400'} group flex rounded-md items-center w-full px-2 py-2 text-sm`} onClick={handleClickChangeOrder}>
-																				Customize Order
-																			</button>
-																		)}
-																	</Menu.Item>
-																	{context.myProfile && ((selectedGrid === 1 && context.myProfile.default_created_sort_id === 5) || (selectedGrid === 2 && context.myProfile.default_owned_sort_id === 5) || menuLists[selectedGrid - 1].has_custom_sort) && (
-																		<Menu.Item>
-																			{({ active }) => (
-																				<button className={`${active ? 'text-white bg-indigo-600' : 'bg-white text-gray-900'} group flex rounded-md items-center w-full px-2 py-2 text-sm`} onClick={handleClickDeleteCustomOrder}>
-																					Remove Custom Order
-																				</button>
-																			)}
-																		</Menu.Item>
-																	)}
-																</div>
-															</Menu.Items>
-														</Transition>
-													</>
-												)}
-											</Menu>
-										)}
-									</div>
-								)}
-
-								<div className="md:mx-3">
-									{menuLists && menuLists.length > 0 && (
-										<TokenGridV5
-											dataLength={items.length}
-											next={() => addPage(page + 1)}
-											hasMore={hasMore}
-											endMessage={
-												!isLoadingCards && !isRefreshingCards && !isLoadingMore && collectionId == 0 ? (
-													menuLists[selectedGrid - 1].count_all_nonhidden > menuLists[selectedGrid - 1].count_deduplicated_nonhidden ? (
-														!showDuplicates ? (
-															<div className="text-center text-gray-400 text-xs mt-6">
-																Some duplicate items were hidden.{' '}
-																<span className="cursor-pointer hover:text-gray-700" onClick={() => handleShowDuplicates(true)}>
-																	Show all
-																</span>
-															</div>
-														) : (
-															<div className="text-center text-gray-400 text-xs mt-6">
-																<span className="cursor-pointer hover:text-gray-700" onClick={() => handleShowDuplicates(false)}>
-																	Hide duplicates
-																</span>
-															</div>
-														)
-													) : null
-												) : null
-											}
-											scrollThreshold={page === 1 ? 0.5 : page < 4 ? 0.5 : page < 6 ? 0.7 : 0.8}
-											showUserHiddenItems={showUserHiddenItems}
-											showDuplicates={showDuplicates}
-											setHasUserHiddenItems={setHasUserHiddenItems}
-											key={`grid___${isLoadingCards || isRefreshingCards}`}
-											items={items}
-											setItems={setItems}
-											isLoading={isLoadingCards || isRefreshingCards}
-											isLoadingMore={isLoadingMore}
-											listId={selectedGrid}
-											isMyProfile={isMyProfile}
-											openCardMenu={openCardMenu}
-											setOpenCardMenu={setOpenCardMenu}
-											detailsModalCloseOnKeyChange={slug_address}
-											changeSpotlightItem={handleChangeSpotlightItem}
-											pageProfile={{
-												profile_id,
-												slug_address,
-												name,
-												img_url,
-												wallet_addresses_excluding_email_v2,
-												website_url,
-												username,
-											}} // to customize owned by list on bottom of card
-											isChangingOrder={isChangingOrder}
-										/>
-									)}
 								</div>
 							</div>
 						</div>
-					</div>
-					{/* End Page Body */}
-				</CappedWidth>
+					</CappedWidth>
+					{spotlightItem ? (
+						<div className="mt-8 md:mt-12">
+							<div className="relative bg-gray-50 dark:bg-gray-900 border-t border-b border-gray-200 dark:border-gray-800 pb-8 md:py-12">
+								<SpotlightItem
+									item={spotlightItem}
+									removeSpotlightItem={() => {
+										handleChangeSpotlightItem(null)
+										mixpanel.track('Removed Spotlight Item')
+									}}
+									isMyProfile={isMyProfile}
+									listId={0}
+									key={spotlightItem.nft_id}
+									pageProfile={{
+										profile_id,
+										slug_address,
+										name,
+										img_url,
+										wallet_addresses_excluding_email_v2,
+										website_url,
+										username,
+									}}
+								/>
+							</div>
+						</div>
+					) : null}
+					<CappedWidth>
+						<div className="m-auto">
+							<div ref={gridRef} className="pt-0 ">
+								<div className="lg:col-span-2 xl:col-span-3 min-h-screen">
+									{!isLoadingCards && (
+										<div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:px-3 md:my-2">
+											{/* TODO: Find a good place for the ordering controls */}
+											<div className="flex items-center w-full md:w-auto">
+												<button onClick={() => handleListChange(1)} className={`flex-1 md:flex-initial px-4 py-3 space-x-2 flex items-center justify-center md:justify-start border-b-2 ${selectedGrid === 1 ? 'border-gray-800 dark:border-gray-300' : 'border-gray-200 dark:border-gray-700'} transition`}>
+													<FingerprintIcon className="hidden md:block w-5 h-5 dark:text-gray-500" />
+													<p className="text-sm text-gray-500">
+														<span className="font-semibold text-gray-800 dark:text-gray-300">Created</span> <span className="hidden md:inline">{menuLists && menuLists.length > 0 ? Number(menuLists[0].count_deduplicated_nonhidden).toLocaleString() : null}</span>
+													</p>
+												</button>
+												<button onClick={() => handleListChange(2)} className={`flex-1 md:flex-initial px-4 py-3 space-x-2 flex items-center justify-center md:justify-start border-b-2 ${selectedGrid === 2 ? 'border-gray-800 dark:border-gray-300' : 'border-gray-200 dark:border-gray-700'} transition`}>
+													<WalletIcon className="hidden md:block w-5 h-5 dark:text-gray-500" />
+													<p className="text-sm text-gray-500">
+														<span className="font-semibold text-gray-800 dark:text-gray-300">Owned</span> <span className="hidden md:inline">{menuLists && menuLists.length > 0 ? Number(menuLists[1].count_deduplicated_nonhidden).toLocaleString() : null}</span>
+													</p>
+												</button>
+												<button onClick={() => handleListChange(3)} className={`flex-1 md:flex-initial px-4 py-3 space-x-2 flex items-center justify-center md:justify-start border-b-2 ${selectedGrid === 3 ? 'border-gray-800 dark:border-gray-300' : 'border-gray-200 dark:border-gray-700'} transition`}>
+													<HeartIcon className="hidden md:block w-5 h-5 dark:text-gray-500" />
+													<p className="text-sm text-gray-500">
+														<span className="font-semibold text-gray-800 dark:text-gray-300">Liked</span> <span className="hidden md:inline">{menuLists && menuLists.length > 0 ? Number(menuLists[2].count_deduplicated_nonhidden).toLocaleString() : null}</span>
+													</p>
+												</button>
+											</div>
+											<div className="flex items-center space-x-2 w-full md:w-auto px-3 md:px-0">
+												{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && (
+													<div>
+														{isChangingOrder && ((selectedGrid === 1 && selectedCreatedSortField === 5) || (selectedGrid === 2 && selectedOwnedSortField === 5)) && (
+															<>
+																<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-red-100 bg-red-600 hover:bg-red-700 focus:outline-none" onClick={handleCancelOrder}>
+																	Cancel
+																</div>
+																<div className="cursor-pointer mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-green-100 bg-green-600 hover:bg-green-700 focus:outline-none" onClick={handleSaveOrder}>
+																	Save Order
+																</div>
+															</>
+														)}
+													</div>
+												)}
+												{!isChangingOrder && (
+													<>
+														<Dropdown className="flex-1" options={menuLists && menuLists[selectedGrid - 1].collections.map(item => ({ value: item.collection_id, label: item.collection_name.replace(' (FND)', ''), img_url: item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC }))} value={collectionId} onChange={handleCollectionChange} disabled={isChangingOrder} />
+														<Dropdown className="flex-1" options={sortingOptionsList.filter(opts => (menuLists[selectedGrid - 1].has_custom_sort ? true : opts.value !== 5))} value={selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField} onChange={handleSortChange} disabled={isChangingOrder} />
+
+														{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && items?.length > 0 && (
+															<Menu as="div" className="relative inline-block text-left ml-2">
+																<>
+																	<div>
+																		<Menu.Button disabled={isChangingOrder} className={({ open }) => `flex items-center justify-center text-gray-800 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus-visible:bg-gray-100 dark:focus-visible:bg-gray-800 p-1 -m-1 rounded-lg ${open ? 'bg-gray-100 dark:bg-gray-800' : ''} transition`}>
+																			<DotsHorizontalIcon className="w-5 h-5" aria-hidden="true" />
+																		</Menu.Button>
+																	</div>
+																	<Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+																		<Menu.Items className="z-1 absolute right-0 mt-2 origin-top-right border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg rounded-xl p-4 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+																			<Menu.Item>
+																				{({ active }) => (
+																					<button onClick={handleClickChangeOrder} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+																						<span className="block truncate font-medium">Customize Order</span>
+																					</button>
+																				)}
+																			</Menu.Item>
+																			{myProfile && ((selectedGrid === 1 && myProfile.default_created_sort_id === 5) || (selectedGrid === 2 && myProfile.default_owned_sort_id === 5) || menuLists[selectedGrid - 1].has_custom_sort) && (
+																				<Menu.Item>
+																					{({ active }) => (
+																						<button onClick={handleClickDeleteCustomOrder} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+																							<span className="block truncate font-medium">Remove Custom Order</span>
+																						</button>
+																					)}
+																				</Menu.Item>
+																			)}
+																			{hasUserHiddenItems && (
+																				<Menu.Item>
+																					{({ active }) => (
+																						<button onClick={() => handleShowHiddenChange(!showUserHiddenItems)} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 pl-3 w-full text-left')}>
+																							<span className="block truncate font-medium">{showUserHiddenItems ? 'Hide hidden' : 'Show hidden'}</span>
+																						</button>
+																					)}
+																				</Menu.Item>
+																			)}
+																		</Menu.Items>
+																	</Transition>
+																</>
+															</Menu>
+														)}
+													</>
+												)}
+											</div>
+										</div>
+									)}
+									<div className="mt-4 md:mt-8 md:mx-4">
+										{menuLists && menuLists.length > 0 && (
+											<TokenGridV5
+												dataLength={items.length}
+												next={() => addPage(page + 1)}
+												hasMore={hasMore}
+												endMessage={
+													!isLoadingCards && !isRefreshingCards && !isLoadingMore && collectionId == 0 ? (
+														menuLists[selectedGrid - 1].count_all_nonhidden > menuLists[selectedGrid - 1].count_deduplicated_nonhidden ? (
+															!showDuplicates ? (
+																<div className="text-center text-gray-400 text-xs mt-6">
+																	Some duplicate items were hidden.{' '}
+																	<span className="cursor-pointer hover:text-gray-700" onClick={() => handleShowDuplicates(true)}>
+																		Show all
+																	</span>
+																</div>
+															) : (
+																<div className="text-center text-gray-400 text-xs mt-6">
+																	<span className="cursor-pointer hover:text-gray-700" onClick={() => handleShowDuplicates(false)}>
+																		Hide duplicates
+																	</span>
+																</div>
+															)
+														) : null
+													) : null
+												}
+												scrollThreshold={page === 1 ? 0.5 : page < 4 ? 0.5 : page < 6 ? 0.7 : 0.8}
+												showUserHiddenItems={showUserHiddenItems}
+												showDuplicates={showDuplicates}
+												setHasUserHiddenItems={setHasUserHiddenItems}
+												key={`grid___${isLoadingCards || isRefreshingCards}`}
+												items={items}
+												setItems={setItems}
+												isLoading={isLoadingCards || isRefreshingCards}
+												isLoadingMore={isLoadingMore}
+												listId={selectedGrid}
+												isMyProfile={isMyProfile}
+												detailsModalCloseOnKeyChange={slug_address}
+												changeSpotlightItem={handleChangeSpotlightItem}
+												pageProfile={{
+													profile_id,
+													slug_address,
+													name,
+													img_url,
+													wallet_addresses_excluding_email_v2,
+													website_url,
+													username,
+												}} // to customize owned by list on bottom of card
+												isChangingOrder={isChangingOrder}
+											/>
+										)}
+									</div>
+								</div>
+							</div>
+						</div>
+						{/* End Page Body */}
+					</CappedWidth>
+				</div>
 			</Layout>
 		</div>
 	)
 }
+
+const FollowStats = ({ following, following_count, followers, followersCount, isMyProfile, setShowFollowing, setShowFollowers }) => {
+	const context = useContext(AppContext)
+
+	return (
+		<div className="flex items-center space-x-6">
+			<button className="cursor-pointer hover:opacity-80 transition" onClick={() => setShowFollowing(true)}>
+				<div className="text-sm mr-2 dark:text-gray-300">
+					<span className="font-semibold">{following && following.length !== null ? Number(isMyProfile && context.myFollows ? context.myFollows.length : following_count).toLocaleString() : null}</span> following
+				</div>
+			</button>
+			<button className="cursor-pointer hover:opacity-80 transition" onClick={() => setShowFollowers(true)}>
+				<div className="text-sm mr-2 dark:text-gray-300">
+					<span className="font-semibold">{followers && followers.length !== null ? Number(followersCount).toLocaleString() : null}</span> followers
+				</div>
+			</button>
+		</div>
+	)
+}
+
+const LinkCollection = ({ links, website_url, slug_address, className = '' }) => (
+	<div className={`mt-4 md:mt-0 space-y-4 md:space-y-10 ${className}`}>
+		<div className="space-x-2 md:text-right">
+			{website_url && (
+				<Tippy content={new URL(website_url.slice(0, 4) === 'http' ? website_url : 'https://' + website_url).hostname}>
+					<a href={website_url.slice(0, 4) === 'http' ? website_url : 'https://' + website_url} target="_blank" onClick={() => mixpanel.track('Clicked profile website link', { slug: slug_address })} className="inline-block" rel="noreferrer">
+						<div className="text-gray-500 hover:opacity-80 dark:hover:opacity-80 border dark:border-gray-700 rounded-full p-1">
+							<GlobeIcon className="flex-shrink-0 h-6 w-6 opacity-70 dark:opacity-100" />
+						</div>
+					</a>
+				</Tippy>
+			)}
+			{links &&
+				links.map(link => (
+					<Tippy content={link.name || link.type__name} key={link.type_id}>
+						<a href={`https://${link.prefix ? link.prefix : link.type__prefix}` + link.user_input} target="_blank" onClick={() => mixpanel.track(`Clicked ${link.name ? link.name : link.type__name} profile link`, { slug: slug_address })} className="inline-block" rel="noreferrer">
+							<div className="text-gray-500 hover:opacity-80 dark:hover:opacity-80 border dark:border-gray-700 rounded-full p-1">
+								<img src={link.icon_url || link.type__icon_url} alt={`${link.name ? link.name : link.type__name} icon`} className="flex-shrink-0 h-6 w-6 opacity-70 dark:opacity-100 filter dark:brightness-200" />
+							</div>
+						</a>
+					</Tippy>
+				))}
+		</div>
+	</div>
+)
 
 export default Profile

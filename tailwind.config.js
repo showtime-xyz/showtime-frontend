@@ -4,12 +4,15 @@ const colors = require('tailwindcss/colors')
 module.exports = {
 	mode: 'jit',
 	purge: ['./src/**/*.{js,ts,jsx,tsx}'],
-	darkMode: 'class', // or 'media' or 'class'
+	darkMode: 'class',
 	theme: {
 		extend: {
 			maxWidth: {
 				'screen-3xl': '1680px',
 				screen: '100vw',
+			},
+			borderRadius: {
+				inherit: 'inherit',
 			},
 			colors: {
 				inherit: 'inherit',
@@ -42,7 +45,8 @@ module.exports = {
 			},
 			fontFamily: {
 				afro: ['Afronaut'],
-				sans: ['"Tomato Grotesk"', ...defaultTheme.fontFamily.sans],
+				tomato: ['"Tomato Grotesk"'],
+				sans: ['"Inter"', ...defaultTheme.fontFamily.sans],
 			},
 			whitespace: {
 				'break-spaces': 'break-spaces',

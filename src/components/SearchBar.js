@@ -1,17 +1,15 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 import mixpanel from 'mixpanel-browser'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch, faTimes } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import AppContext from '@/context/app-context'
 import backend from '@/lib/backend'
 import useKeyPress from '@/hooks/useKeyPress'
 import useOnClickOutside from '@/hooks/useOnClickOutside'
 import LoadingSpinner from './LoadingSpinner'
-import { SearchIcon } from '@heroicons/react/outline'
+import SearchIcon from './Icons/SearchIcon'
+import XIcon from './Icons/XIcon'
 
 const handleSearchQuery = AwesomeDebouncePromise(async (searchText, setSearchResults, setIsLoading) => {
 	setIsLoading(true)
@@ -24,7 +22,6 @@ const handleSearchQuery = AwesomeDebouncePromise(async (searchText, setSearchRes
 //TODO: Refactor this component to use HeadlessUI's Listbox Component
 const SearchBar = ({ propagateSearchState }) => {
 	const router = useRouter()
-	const context = useContext(AppContext)
 
 	const [isLoading, setIsLoading] = useState(false)
 	const [searchInputFocused, setSearchInputFocused] = useState(false)
@@ -71,15 +68,15 @@ const SearchBar = ({ propagateSearchState }) => {
 	return (
 		<>
 			{/* Start desktop-only menu */}
-			<div className="hidden flex-col relative ml-6 pr-6 w-full max-w-3xl md:flex">
+			<div className="hidden flex-col relative w-full max-w-3xl md:flex">
 				<div className="flex relative w-full" ref={searchInputContainerRef}>
-					<div className="flex absolute z-1 left-4 top-1/2 transform -translate-y-2.5 -translate-x-1 mr-3 text-black dark:text-gray-200 focus:-mt-px">
-						<SearchIcon className="w-5 h-5" />
+					<div className="absolute left-2.5 top-2 transform translate-y-px pointer-events-none z-1">
+						<SearchIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
 					</div>
 					<input
-						className="flex border dark:border-gray-800 bg-white placeholder-gray-500 text-gray-600 dark:text-gray-400 dark:bg-gray-900 bg-opacity-10 dark:bg-opacity-20 backdrop-filter backdrop-blur-lg backdrop-saturate-150 py-1.5 px-4 rounded-full w-full pl-10 focus-visible:ring-1 ring-gray-300 dark:ring-gray-800 focus:outline-none"
-						type="search"
-						placeholder={context.windowSize?.width < 950 ? (context.windowSize?.width < 850 ? 'Search' : 'Search by name') : 'Search by name or wallet address'}
+						className="flex placeholder-gray-500 dark:placeholder-gray-400 bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150 px-2 pl-8 py-1.5 rounded-full focus:outline-none text-sm w-full"
+						type="text"
+						placeholder="Search by name or wallet address"
 						value={searchText}
 						onFocus={() => {
 							setShowSearchResults(true)
@@ -126,27 +123,23 @@ const SearchBar = ({ propagateSearchState }) => {
 				)}
 			</div>
 			{/* Start mobile-only menu */}
-			<div className="flex justify-end md:hidden relative w-full sm:ml-4 sm:justify-start ml-1">
-				<button className="flex items-center justify-center text-black dark:text-white hover:text-stpink dark:hover:text-stpink p-2" onClick={() => toggleMobileSearchOverlay(true)}>
-					<FontAwesomeIcon icon={faSearch} />
+			<div className={`flex md:hidden ${isMobileSearchOverlayOpen ? 'hidden' : ''}`}>
+				<button onClick={() => toggleMobileSearchOverlay(true)}>
+					<SearchIcon className="w-4 h-4 text-gray-500 dark:text-gray-300" />
 				</button>
 			</div>
-
 			{/* Start overlay menu */}
 			{isMobileSearchOverlayOpen && (
-				<div className="visible flex flex-col absolute md:h-16 bg-transparent md:p-3 w-full left-0 md:top-0 z-1 top-12 pb-2 px-4">
+				<div className="visible flex flex-col bg-transparent flex-1 z-1">
 					<div className="flex items-center">
-						<button className="flex items-center justify-center w-10 mr-4 text-black dark:text-gray-300 border-2 border-black dark:border-gray-300 rounded-full focus:-m-px hover:border-stpink hover:text-stpink p-2" isFocused={searchInputFocused} onClick={() => toggleMobileSearchOverlay(false)}>
-							<FontAwesomeIcon icon={faTimes} />
-						</button>
 						<div className="flex relative w-full" ref={searchInputContainerRef}>
-							<div className="flex absolute z-1 left-4 top-1/2 transform -translate-y-2.5 -translate-x-1 mr-3 text-black dark:text-gray-200 focus:-mt-px" isFocused={searchInputFocused}>
-								<SearchIcon className="w-5 h-5" />
+							<div className="flex absolute z-1 left-4 top-[12px] transform -translate-y-2.5 -translate-x-1 mr-3 text-black dark:text-gray-200 focus:-mt-px" isFocused={searchInputFocused}>
+								<SearchIcon className="w-4 h-4" />
 							</div>
 							<input
-								className="flex border dark:border-gray-800 bg-white text-gray-600 dark:bg-gray-900 bg-opacity-10 dark:bg-opacity-20 backdrop-filter backdrop-blur-lg backdrop-saturate-150 py-1.5 px-4 rounded-full w-full pl-10 focus-visible:ring-1 ring-gray-300 dark:ring-gray-800 focus:outline-none"
-								type="search"
-								placeholder={context.windowSize?.width < 400 ? 'Search by name' : 'Search by name or wallet address'}
+								className="text-sm flex placeholder-gray-500 dark:placeholder-gray-400 bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150 py-1.5 -my-1.5 px-1 rounded-full w-full pl-10 focus-visible:ring-1 ring-gray-300 dark:ring-gray-800 focus:outline-none"
+								type="text"
+								placeholder="Search by name or wallet address"
 								value={searchText}
 								onFocus={() => {
 									setShowSearchResults(true)
@@ -161,6 +154,9 @@ const SearchBar = ({ propagateSearchState }) => {
 								}}
 							/>
 						</div>
+						<button className="ml-2 flex items-center justify-center" isFocused={searchInputFocused} onClick={() => toggleMobileSearchOverlay(false)}>
+							<XIcon className="w-6 h-6 text-gray-800 dark:text-gray-300" />
+						</button>
 					</div>
 					{searchText.length > 0 && showSearchResults && (
 						<div className="flex flex-col mt-4 max-h-[80vh] overflow-y-scroll absolute top-10 sm:top-14 left-16 right-4 border dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg shadow" ref={dropdownRef}>

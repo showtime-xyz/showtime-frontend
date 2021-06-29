@@ -1,9 +1,8 @@
-import { useContext, useState, useEffect, Fragment } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import AwesomeDebouncePromise from 'awesome-debounce-promise'
 import { useRouter } from 'next/router'
 import mixpanel from 'mixpanel-browser'
 import backend from '@/lib/backend'
-import AppContext from '@/context/app-context'
 import { SORT_FIELDS } from '@/lib/constants'
 import ScrollableModal from './ScrollableModal'
 import { Listbox, Transition } from '@headlessui/react'
@@ -14,49 +13,39 @@ import Dropdown from './UI/Dropdown'
 import GreenButton from './UI/Buttons/GreenButton'
 import GhostButton from './UI/Buttons/GhostButton'
 import CloseButton from './CloseButton'
+import useProfile from '@/hooks/useProfile'
 
-const handleUsernameLookup = async (value, context, setCustomURLError) => {
+const SHOWTIME_PROD_URL = 'tryshowtime.com/'
+
+const handleUsernameLookup = async (value, myProfile, setCustomURLError) => {
 	const username = value ? value.trim() : null
-	let validUsername
+	let validUsername = false
+
 	try {
-		if (username === null || username.toLowerCase() === context.myProfile?.username?.toLowerCase()) {
-			validUsername = true
-		} else {
-			const result = await backend.get(`/v1/username_available?username=${username}`, {
-				method: 'get',
-			})
-			validUsername = result?.data?.data
-		}
+		if (username === null || username.toLowerCase() === myProfile?.username?.toLowerCase()) validUsername = true
+		else validUsername = await backend.get(`/v1/username_available?username=${username}`).then(res => res?.data?.data)
 	} catch {
-		validUsername = false
+		//
 	}
-	setCustomURLError(
-		validUsername
-			? {
-					isError: false,
-					message: username === null ? '' : 'Username is available',
-			  }
-			: { isError: true, message: 'Username is not available' }
-	)
+
+	setCustomURLError(validUsername ? { isError: false, message: username === null ? '' : 'Username is available' } : { isError: true, message: 'Username is not available' })
+
 	return validUsername
 }
+
 const handleDebouncedUsernameLookup = AwesomeDebouncePromise(handleUsernameLookup, 400)
 
 export default function Modal({ isOpen, setEditModalOpen }) {
 	const router = useRouter()
+	const { profile: myProfile, loading: profileLoading, mutate: mutateProfile } = useProfile()
 	const [submitting, setSubmitting] = useState(false)
-	const SHOWTIME_PROD_URL = 'tryshowtime.com/'
-	const context = useContext(AppContext)
 	const [nameValue, setNameValue] = useState(null)
 	const [customURLValue, setCustomURLValue] = useState('')
 
 	const [socialLinks, setSocialLinks] = useState()
 	const [socialLinkOptions, setSocialLinkOptions] = useState([])
 
-	const [customURLError, setCustomURLError] = useState({
-		isError: false,
-		message: '',
-	})
+	const [customURLError, setCustomURLError] = useState({ isError: false, message: '' })
 	const [bioValue, setBioValue] = useState(null)
 	const [websiteValue, setWebsiteValue] = useState(null)
 	const [defaultListId, setDefaultListId] = useState('')
@@ -64,17 +53,17 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 	const [defaultOwnedSortId, setDefaultOwnedSortId] = useState(1)
 
 	useEffect(() => {
-		if (context.myProfile) {
-			setNameValue(context.myProfile.name)
-			setCustomURLValue(context.myProfile.username)
-			setBioValue(context.myProfile.bio)
-			setWebsiteValue(context.myProfile.website_url)
-			setDefaultListId(context.myProfile.default_list_id || '')
-			setDefaultCreatedSortId(context.myProfile.default_created_sort_id || 1)
-			setDefaultOwnedSortId(context.myProfile.default_owned_sort_id || 1)
-			setSocialLinks(context.myProfile.links)
-		}
-	}, [context.myProfile, isOpen])
+		if (profileLoading) return
+
+		setNameValue(myProfile.name)
+		setCustomURLValue(myProfile.username)
+		setBioValue(myProfile.bio)
+		setWebsiteValue(myProfile.website_url)
+		setDefaultListId(myProfile.default_list_id || '')
+		setDefaultCreatedSortId(myProfile.default_created_sort_id || 1)
+		setDefaultOwnedSortId(myProfile.default_owned_sort_id || 1)
+		setSocialLinks(myProfile.links)
+	}, [profileLoading, myProfile, isOpen])
 
 	const handleSubmit = async event => {
 		event.preventDefault()
@@ -83,71 +72,44 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 
 		const username = customURLValue ? customURLValue.trim() : null
 
-		if (username?.toLowerCase() != context.myProfile.username?.toLowerCase()) {
-			const validUsername = await handleUsernameLookup(customURLValue, context, setCustomURLError)
-			if (!validUsername) {
-				return
-			}
-		}
+		if (username?.toLowerCase() != myProfile.username?.toLowerCase() && !(await handleUsernameLookup(customURLValue, myProfile, setCustomURLError))) return
 
 		// Post changes to the API
 		await axios.post('/api/profile', {
-			name: nameValue?.trim() ? nameValue.trim() : null, // handle names with all whitespaces
-			bio: bioValue?.trim() ? bioValue.trim() : null,
-			username: username?.trim() ? username.trim() : null,
-			website_url: websiteValue?.trim() ? websiteValue.trim() : null,
-			links: socialLinks
-				.filter(sl => sl.user_input?.trim())
-				.map(sl => ({
-					type_id: sl.type_id,
-					user_input: sl.user_input?.trim() ? sl.user_input.trim() : null,
-				})),
-			default_list_id: defaultListId ? defaultListId : '',
+			name: nameValue?.trim() || null, // handle names with all whitespaces
+			bio: bioValue?.trim() || null,
+			username: username?.trim() || null,
+			website_url: websiteValue?.trim() || null,
+			links: socialLinks.filter(sl => sl.user_input?.trim()).map(sl => ({ type_id: sl.type_id, user_input: sl.user_input?.trim() ? sl.user_input.trim() : null })),
+			default_list_id: defaultListId || '',
 			default_created_sort_id: defaultCreatedSortId,
 			default_owned_sort_id: defaultOwnedSortId,
 		})
 
 		// Update state to immediately show changes
-		context.setMyProfile({
-			...context.myProfile,
-			name: nameValue?.trim() ? nameValue.trim() : null, // handle names with all whitespaces
-			bio: bioValue?.trim() ? bioValue.trim() : null,
-			username: username?.trim() ? username.trim() : null,
-			website_url: websiteValue?.trim() ? websiteValue.trim() : null,
-			links: socialLinks
-				.filter(sl => sl.user_input?.trim())
-				.map(sl => ({
-					...sl,
-					user_input: sl.user_input?.trim(),
-				})),
-			default_list_id: defaultListId ? defaultListId : '',
+		mutateProfile({
+			...myProfile,
+			name: nameValue?.trim() || null, // handle names with all whitespaces
+			bio: bioValue?.trim() || null,
+			username: username?.trim() || null,
+			website_url: websiteValue?.trim() || null,
+			links: socialLinks.filter(sl => sl.user_input?.trim()).map(sl => ({ ...sl, user_input: sl.user_input?.trim() })),
+			default_list_id: defaultListId || '',
 			default_created_sort_id: defaultCreatedSortId,
 			default_owned_sort_id: defaultOwnedSortId,
 		})
+
 		setSubmitting(false)
 		setEditModalOpen(false)
-		const wallet_addresses_v2 = context.myProfile?.wallet_addresses_v2
 		// confirm saved correctly
-		router.push(`/${username || (wallet_addresses_v2 && wallet_addresses_v2[0].ens_domain) || (wallet_addresses_v2 && wallet_addresses_v2[0].address) || ''}`)
+		router.push(`/${username || myProfile?.wallet_addresses_v2?.[0].ens_domain || myProfile?.wallet_addresses_v2?.[0].address || ''}`)
 	}
 
 	const tab_list = [
-		{
-			label: 'Select...',
-			value: '',
-		},
-		{
-			label: 'Created',
-			value: 1,
-		},
-		{
-			label: 'Owned',
-			value: 2,
-		},
-		{
-			label: 'Liked',
-			value: 3,
-		},
+		{ label: 'Select...', value: '' },
+		{ label: 'Created', value: 1 },
+		{ label: 'Owned', value: 2 },
+		{ label: 'Liked', value: 3 },
 	]
 
 	const sortingOptionsList = [
@@ -238,7 +200,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 													const urlRegex = /^[a-zA-Z0-9_]*$/
 													if (urlRegex.test(value)) {
 														setCustomURLValue(value)
-														handleDebouncedUsernameLookup(value, context, setCustomURLError)
+														handleDebouncedUsernameLookup(value, myProfile, setCustomURLError)
 													}
 												}}
 												maxLength={30}
@@ -271,14 +233,68 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 								<div>
 									<div className="text-xl text-indigo-500 dark:text-indigo-400 mb-3">Links</div>
 
-									<div className="py-2">
+									<div className="flex items-center">
+										<div className="flex-1">
+											<Listbox value={selectedAddSocialLink} onChange={handleSocialSelected}>
+												<Listbox.Label className="block text-sm text-gray-700 dark:text-gray-500">Add Link</Listbox.Label>
+												<div className="flex flex-row items-center">
+													<PlusCircleIcon className="w-5 h-5 mr-2 dark:text-gray-400" />
+													<div className="flex items-center flex-grow">
+														<div className="mt-1 relative flex-1">
+															<Listbox.Button className="bg-white dark:bg-gray-700 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 focus:border-indigo-500 dark:focus:border-indigo-700 sm:text-sm">
+																<span className="flex items-center">
+																	{selectedAddSocialLink.icon_url && <img src={selectedAddSocialLink.icon_url} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />}
+																	<span className={`${selectedAddSocialLink.icon_url ? 'ml-3' : null} block truncate dark:text-gray-400`}>{selectedAddSocialLink.name}</span>
+																	<span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+																		<SelectorIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" aria-hidden="true" />
+																	</span>
+																</span>
+															</Listbox.Button>
+
+															<Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+																<Listbox.Options className="z-10 absolute mt-1 w-full border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+																	{filteredSocialLinkOptions().map(opt => (
+																		<Listbox.Option key={opt.type_id} className={({ active }) => classNames(active ? 'text-white dark:text-gray-300 bg-indigo-600 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={opt}>
+																			{({ active }) => (
+																				<>
+																					<div className="flex items-center">
+																						<img src={opt.icon_url} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />
+																						<span className="ml-3 block truncate">{opt.name}</span>
+																					</div>
+
+																					{opt === selectedAddSocialLink ? (
+																						<span className={classNames(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}>
+																							<CheckIcon className="h-5 w-5" aria-hidden="true" />
+																						</span>
+																					) : null}
+																				</>
+																			)}
+																		</Listbox.Option>
+																	))}
+																</Listbox.Options>
+															</Transition>
+														</div>
+													</div>
+												</div>
+											</Listbox>
+										</div>
+									</div>
+
+									<div className="my-4">
+										<label htmlFor="websiteValue" className="text-gray-700 dark:text-gray-500 text-sm">
+											Website
+										</label>
+										<input name="websiteValue" placeholder="Your URL" value={websiteValue ? websiteValue : ''} onChange={e => setWebsiteValue(e.target.value)} type="url" className="mt-1 dark:text-gray-300 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 sm:text-sm" />
+									</div>
+
+									<div className="pt-2">
 										{socialLinks &&
 											socialLinks.map(linkObj => (
 												<div key={linkObj.name} className="mb-4 pb-2">
 													<div className="flex items-center justify-between">
-														<label htmlFor={linkObj.name} className="text-sm font-medium text-gray-700 dark:text-gray-500 flex flex-row">
-															<img className="h-5 w-5 mr-1" src={linkObj.icon_url} />
-															{linkObj.name}
+														<label htmlFor={linkObj.name || linkObj.type__name} className="text-sm font-medium text-gray-700 dark:text-gray-500 flex flex-row">
+															<img className="h-5 w-5 mr-1" src={linkObj.icon_url || linkObj.type__icon_url} />
+															{linkObj.name || linkObj.type__name}
 														</label>
 														<span className="text-xs ml-2 text-gray-400 dark:text-gray-600 hover:text-red-400 cursor-pointer" onClick={() => handleRemoveSocialLink(linkObj.type_id)}>
 															Remove
@@ -286,11 +302,11 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 													</div>
 													<div className="mt-1">
 														<div className="max-w-lg flex rounded-md shadow-sm">
-															<span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-500 sm:text-sm">{linkObj.prefix}</span>
+															<span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-500 sm:text-sm">{linkObj.prefix || linkObj.type__prefix}</span>
 															<input
 																type="text"
-																name={linkObj.name}
-																id={linkObj.name}
+																name={linkObj.name || linkObj.type__name}
+																id={linkObj.name || linkObj.type__name}
 																className="pl-2 dark:text-gray-300 border flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300 dark:border-gray-700 focus:outline-none focus:ring"
 																value={linkObj.user_input ? linkObj.user_input : ''}
 																onChange={e => {
@@ -315,62 +331,6 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 													</div>
 												</div>
 											))}
-										<div className="flex items-center">
-											<div className="flex-1">
-												<Listbox value={selectedAddSocialLink} onChange={handleSocialSelected}>
-													{({ open }) => (
-														<>
-															<Listbox.Label className="block text-sm text-gray-700 dark:text-gray-500">Add Link</Listbox.Label>
-															<div className="flex flex-row items-center">
-																<PlusCircleIcon className="w-5 h-5 mr-2 dark:text-gray-400" />
-																<div className="flex items-center flex-grow">
-																	<div className="mt-1 relative flex-1">
-																		<Listbox.Button className="bg-white dark:bg-gray-700 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 focus:border-indigo-500 dark:focus:border-indigo-700 sm:text-sm">
-																			<span className="flex items-center">
-																				{selectedAddSocialLink.icon_url && <img src={selectedAddSocialLink.icon_url} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />}
-																				<span className={`${selectedAddSocialLink.icon_url ? 'ml-3' : null} block truncate dark:text-gray-400`}>{selectedAddSocialLink.name}</span>
-																				<span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-																					<SelectorIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-																				</span>
-																			</span>
-																		</Listbox.Button>
-
-																		<Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-																			<Listbox.Options static className="z-10 absolute mt-1 w-full border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-																				{filteredSocialLinkOptions().map(opt => (
-																					<Listbox.Option key={opt.type_id} className={({ active }) => classNames(active ? 'text-white dark:text-gray-300 bg-indigo-600 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={opt}>
-																						{({ active }) => (
-																							<>
-																								<div className="flex items-center">
-																									<img src={opt.icon_url} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />
-																									<span className="ml-3 block truncate">{opt.name}</span>
-																								</div>
-
-																								{opt === selectedAddSocialLink ? (
-																									<span className={classNames(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}>
-																										<CheckIcon className="h-5 w-5" aria-hidden="true" />
-																									</span>
-																								) : null}
-																							</>
-																						)}
-																					</Listbox.Option>
-																				))}
-																			</Listbox.Options>
-																		</Transition>
-																	</div>
-																</div>
-															</div>
-														</>
-													)}
-												</Listbox>
-											</div>
-										</div>
-									</div>
-									<div className="mb-4 pt-3 md:pb-14">
-										<label htmlFor="websiteValue" className="text-gray-700 dark:text-gray-500 text-sm">
-											Other Website
-										</label>
-										<input name="websiteValue" placeholder="Your URL" value={websiteValue ? websiteValue : ''} onChange={e => setWebsiteValue(e.target.value)} type="url" className="mt-1 dark:text-gray-300 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 sm:text-sm" />
 									</div>
 								</div>
 							</div>
@@ -400,7 +360,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 								<GhostButton
 									onClick={() => {
 										setEditModalOpen(false)
-										setNameValue(context.myProfile.name)
+										setNameValue(myProfile?.name)
 									}}
 									disabled={submitting}
 								>
