@@ -15,8 +15,12 @@ import HeaderDropdown from './HeaderDropdown'
 import useAuth from '@/hooks/useAuth'
 import useProfile from '@/hooks/useProfile'
 import FireIcon from './Icons/FireIcon'
+import Button from './UI/Buttons/Button'
+import PlusIcon from './Icons/PlusIcon'
+import useFlags, { FLAGS } from '@/hooks/useFlags'
 
 const Header = () => {
+	const { [FLAGS.hasMinting]: canMint } = useFlags()
 	const { asPath } = useRouter()
 	const context = useContext(AppContext)
 	const { isAuthenticated } = useAuth()
@@ -77,8 +81,15 @@ const Header = () => {
 						{/* End desktop-only menu */}
 
 						<div className={`flex items-center ${isSearchBarOpen ? 'hidden' : ''}`}>
+							{canMint && (
+								<Link href="/mint">
+									<Button style="primary" href="/mint" iconOnly={true} as="a">
+										<PlusIcon className="w-4 h-4" />
+									</Button>
+								</Link>
+							)}
 							{isAuthenticated && !profileLoading && (
-								<div className="flex-shrink ml-5">
+								<div className="flex-shrink ml-2">
 									<NotificationsBtn />
 								</div>
 							)}
