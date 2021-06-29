@@ -233,14 +233,65 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 								<div>
 									<div className="text-xl text-indigo-500 dark:text-indigo-400 mb-3">Links</div>
 
-									<div className="mb-4">
+									<div className="flex items-center">
+										<div className="flex-1">
+											<Listbox value={selectedAddSocialLink} onChange={handleSocialSelected}>
+												{({ open }) => (
+													<>
+														<Listbox.Label className="block text-sm text-gray-700 dark:text-gray-500">Add Link</Listbox.Label>
+														<div className="flex flex-row items-center">
+															<PlusCircleIcon className="w-5 h-5 mr-2 dark:text-gray-400" />
+															<div className="flex items-center flex-grow">
+																<div className="mt-1 relative flex-1">
+																	<Listbox.Button className="bg-white dark:bg-gray-700 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 focus:border-indigo-500 dark:focus:border-indigo-700 sm:text-sm">
+																		<span className="flex items-center">
+																			{selectedAddSocialLink.icon_url && <img src={selectedAddSocialLink.icon_url} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />}
+																			<span className={`${selectedAddSocialLink.icon_url ? 'ml-3' : null} block truncate dark:text-gray-400`}>{selectedAddSocialLink.name}</span>
+																			<span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+																				<SelectorIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" aria-hidden="true" />
+																			</span>
+																		</span>
+																	</Listbox.Button>
+
+																	<Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+																		<Listbox.Options className="z-10 absolute mt-1 w-full border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+																			{filteredSocialLinkOptions().map(opt => (
+																				<Listbox.Option key={opt.type_id} className={({ active }) => classNames(active ? 'text-white dark:text-gray-300 bg-indigo-600 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={opt}>
+																					{({ active }) => (
+																						<>
+																							<div className="flex items-center">
+																								<img src={opt.icon_url} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />
+																								<span className="ml-3 block truncate">{opt.name}</span>
+																							</div>
+
+																							{opt === selectedAddSocialLink ? (
+																								<span className={classNames(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}>
+																									<CheckIcon className="h-5 w-5" aria-hidden="true" />
+																								</span>
+																							) : null}
+																						</>
+																					)}
+																				</Listbox.Option>
+																			))}
+																		</Listbox.Options>
+																	</Transition>
+																</div>
+															</div>
+														</div>
+													</>
+												)}
+											</Listbox>
+										</div>
+									</div>
+
+									<div className="my-4">
 										<label htmlFor="websiteValue" className="text-gray-700 dark:text-gray-500 text-sm">
 											Website
 										</label>
 										<input name="websiteValue" placeholder="Your URL" value={websiteValue ? websiteValue : ''} onChange={e => setWebsiteValue(e.target.value)} type="url" className="mt-1 dark:text-gray-300 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 sm:text-sm" />
 									</div>
 
-									<div className="py-2">
+									<div className="pt-2">
 										{socialLinks &&
 											socialLinks.map(linkObj => (
 												<div key={linkObj.name} className="mb-4 pb-2">
@@ -284,56 +335,6 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 													</div>
 												</div>
 											))}
-										<div className="flex items-center">
-											<div className="flex-1">
-												<Listbox value={selectedAddSocialLink} onChange={handleSocialSelected}>
-													{({ open }) => (
-														<>
-															<Listbox.Label className="block text-sm text-gray-700 dark:text-gray-500">Add Link</Listbox.Label>
-															<div className="flex flex-row items-center">
-																<PlusCircleIcon className="w-5 h-5 mr-2 dark:text-gray-400" />
-																<div className="flex items-center flex-grow">
-																	<div className="mt-1 relative flex-1">
-																		<Listbox.Button className="bg-white dark:bg-gray-700 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 focus:border-indigo-500 dark:focus:border-indigo-700 sm:text-sm">
-																			<span className="flex items-center">
-																				{selectedAddSocialLink.icon_url && <img src={selectedAddSocialLink.icon_url} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />}
-																				<span className={`${selectedAddSocialLink.icon_url ? 'ml-3' : null} block truncate dark:text-gray-400`}>{selectedAddSocialLink.name}</span>
-																				<span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-																					<SelectorIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" aria-hidden="true" />
-																				</span>
-																			</span>
-																		</Listbox.Button>
-
-																		<Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-																			<Listbox.Options static className="z-10 absolute mt-1 w-full border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-																				{filteredSocialLinkOptions().map(opt => (
-																					<Listbox.Option key={opt.type_id} className={({ active }) => classNames(active ? 'text-white dark:text-gray-300 bg-indigo-600 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={opt}>
-																						{({ active }) => (
-																							<>
-																								<div className="flex items-center">
-																									<img src={opt.icon_url} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />
-																									<span className="ml-3 block truncate">{opt.name}</span>
-																								</div>
-
-																								{opt === selectedAddSocialLink ? (
-																									<span className={classNames(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}>
-																										<CheckIcon className="h-5 w-5" aria-hidden="true" />
-																									</span>
-																								) : null}
-																							</>
-																						)}
-																					</Listbox.Option>
-																				))}
-																			</Listbox.Options>
-																		</Transition>
-																	</div>
-																</div>
-															</div>
-														</>
-													)}
-												</Listbox>
-											</div>
-										</div>
 									</div>
 								</div>
 							</div>
