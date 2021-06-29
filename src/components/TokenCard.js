@@ -13,8 +13,11 @@ import { MenuIcon, PlayIcon } from '@heroicons/react/solid'
 import EllipsisIcon from './Icons/EllipsisIcon'
 import BadgeIcon from './Icons/BadgeIcon'
 import { Menu, Transition } from '@headlessui/react'
+import MiniFollowButton from './MiniFollowButton'
+import useProfile from '@/hooks/useProfile'
 
 const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
+	const { profile: myProfile } = useProfile()
 	const [item, setItem] = useState(originalItem)
 	const [showVideo, setShowVideo] = useState(false)
 	const [muted, setMuted] = useState(true)
@@ -69,6 +72,8 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 		}
 	}
 
+	console.log(myProfile, item)
+
 	return (
 		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
 			<div ref={divRef} className={`w-full h-full rounded-2xl shadow-lg transition-all flex flex-col bg-white dark:bg-gray-900 ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border border-transparent dark:border-gray-800'}`}>
@@ -101,44 +106,47 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 							) : null}
 						</div>
 
-						<Menu as="div" className="relative">
-							{isMyProfile && listId !== 3 ? (
-								<Menu.Button className="text-right text-gray-600 hover:text-stpink focus:outline-none focus-visible:ring-1 relative">
-									<EllipsisIcon className="w-5 h-5" />
-								</Menu.Button>
-							) : null}
-							<Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-								<Menu.Items className="z-1 absolute right-0 mt-2 origin-top-right border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg rounded-xl p-2 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-									<Menu.Item>
-										{({ active }) => (
-											<button
-												onClick={() => {
-													mixpanel.track('Clicked Spotlight Item')
-													changeSpotlightItem(item)
-												}}
-												className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}
-											>
-												<span className="block truncate font-medium">Spotlight Item</span>
-											</button>
-										)}
-									</Menu.Item>
-									<Menu.Item>
-										{({ active }) => (
-											<button onClick={item.user_hidden ? handleUnhide : handleHide} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
-												<span className="block truncate font-medium">{item.user_hidden ? `Unhide From ${listId === 1 ? 'Created' : listId === 2 ? 'Owned' : listId === 3 ? 'Liked' : 'List'}` : `Hide From ${listId === 1 ? 'Created' : listId === 2 ? 'Owned' : listId === 3 ? 'Liked' : 'List'}`}</span>
-											</button>
-										)}
-									</Menu.Item>
-									<Menu.Item>
-										{({ active }) => (
-											<button onClick={handleRefreshNFTMetadata} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
-												<span className="block truncate font-medium">Refresh Metadata</span>
-											</button>
-										)}
-									</Menu.Item>
-								</Menu.Items>
-							</Transition>
-						</Menu>
+						<div className="flex items-center space-x-2">
+							{myProfile?.profile_id !== item.creator_id && <MiniFollowButton profileId={item.creator_id} />}
+							<Menu as="div" className="relative">
+								{isMyProfile && listId !== 3 ? (
+									<Menu.Button className="text-right text-gray-600 focus:outline-none rounded-xl relative hover:bg-gray-100 focus-visible:bg-gray-100 py-2 -my-2 px-2 -mx-2 transition">
+										<EllipsisIcon className="w-5 h-5" />
+									</Menu.Button>
+								) : null}
+								<Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+									<Menu.Items className="z-1 absolute right-0 mt-2 origin-top-right border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg rounded-xl p-2 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+										<Menu.Item>
+											{({ active }) => (
+												<button
+													onClick={() => {
+														mixpanel.track('Clicked Spotlight Item')
+														changeSpotlightItem(item)
+													}}
+													className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}
+												>
+													<span className="block truncate font-medium">Spotlight Item</span>
+												</button>
+											)}
+										</Menu.Item>
+										<Menu.Item>
+											{({ active }) => (
+												<button onClick={item.user_hidden ? handleUnhide : handleHide} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+													<span className="block truncate font-medium">{item.user_hidden ? `Unhide From ${listId === 1 ? 'Created' : listId === 2 ? 'Owned' : listId === 3 ? 'Liked' : 'List'}` : `Hide From ${listId === 1 ? 'Created' : listId === 2 ? 'Owned' : listId === 3 ? 'Liked' : 'List'}`}</span>
+												</button>
+											)}
+										</Menu.Item>
+										<Menu.Item>
+											{({ active }) => (
+												<button onClick={handleRefreshNFTMetadata} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+													<span className="block truncate font-medium">Refresh Metadata</span>
+												</button>
+											)}
+										</Menu.Item>
+									</Menu.Items>
+								</Transition>
+							</Menu>
+						</div>
 					</div>
 				</div>
 				{(item.token_has_video || (!item.token_img_url && item.token_animation_url)) && showVideo && currentlyPlayingVideo === item.nft_id ? (
@@ -272,7 +280,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 									<span className="text-gray-500 text-sm">Multiple owners</span>
 								)
 							) : item.owner_id ? (
-								<div className="flex flex-row items-center pt-1">
+								<div className="flex items-center justify-between pt-1">
 									<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
 										<a className="flex flex-row items-center space-x-2">
 											<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8" />
@@ -285,7 +293,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 											</div>
 										</a>
 									</Link>
-									<div className="flex-grow">&nbsp;</div>
+									{myProfile?.profile_id !== item.owner_id && <MiniFollowButton profileId={item.owner_id} />}
 								</div>
 							) : null}
 						</div>
