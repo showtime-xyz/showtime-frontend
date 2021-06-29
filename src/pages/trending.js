@@ -43,7 +43,6 @@ const Leaderboard = () => {
 	useEffect(() => {
 		const getFeatured = async () => {
 			setIsLoadingCards(true)
-
 			setFeaturedItems(await backend.get(`/v2/featured?limit=150&days=${leaderboardDays}`).then(res => res.data.data))
 			setIsLoadingCards(false)
 		}
