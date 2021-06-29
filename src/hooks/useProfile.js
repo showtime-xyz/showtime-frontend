@@ -1,7 +1,7 @@
 import axios from '@/lib/axios'
 import useSWR from 'swr'
 
-export default function useProfile() {
+const useProfile = () => {
 	const {
 		data: profile,
 		error,
@@ -32,3 +32,5 @@ export default function useProfile() {
 
 	return { profile, error, loading: !profile && !error, revalidate, mutate }
 }
+
+export default useProfile
