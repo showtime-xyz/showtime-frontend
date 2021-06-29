@@ -72,8 +72,6 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 		}
 	}
 
-	console.log(myProfile, item)
-
 	return (
 		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
 			<div ref={divRef} className={`w-full h-full md:rounded-2xl shadow-lg transition-all flex flex-col bg-white dark:bg-gray-900 ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border-t border-b md:border-l md:border-r border-transparent dark:border-gray-800'}`}>
