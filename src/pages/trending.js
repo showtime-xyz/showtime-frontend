@@ -1,23 +1,24 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Layout from '@/components/layout'
 import backend from '@/lib/backend'
-import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
 import { GridTab, GridTabs } from '@/components/GridTabs'
 import CappedWidth from '@/components/CappedWidth'
 import TokenGridV4 from '@/components/TokenGridV4'
 import TrendingCreators from '@/components/TrendingCreators'
+import useAuth from '@/hooks/useAuth'
 
 // how many leaders to show on first load
 const LEADERBOARD_LIMIT = 10
 
 const Leaderboard = () => {
-	const context = useContext(AppContext)
+	const { isAuthenticated } = useAuth()
+
 	useEffect(() => {
 		// Wait for identity to resolve before recording the view
-		if (typeof context.user !== 'undefined') mixpanel.track('Leaderboard page view')
-	}, [typeof context.user])
+		if (isAuthenticated) mixpanel.track('Leaderboard page view')
+	}, [isAuthenticated])
 
 	const [leaderboardItems, setLeaderboardItems] = useState([])
 	const [leaderboardDays, setLeaderboardDays] = useState(1)
@@ -30,11 +31,10 @@ const Leaderboard = () => {
 		const getFeatured = async () => {
 			setIsLoading(true)
 			setShowAllLeaderboardItems(false)
-			const result = await backend.get(`/v1/leaderboard?days=${leaderboardDays}`)
-			const data = result?.data?.data
-			setLeaderboardItems(data)
+			setLeaderboardItems(await backend.get(`/v1/leaderboard?days=${leaderboardDays}`).then(res => res.data.data))
 			setIsLoading(false)
 		}
+
 		getFeatured()
 	}, [leaderboardDays])
 
@@ -44,11 +44,10 @@ const Leaderboard = () => {
 		const getFeatured = async () => {
 			setIsLoadingCards(true)
 
-			const response_featured = await backend.get(`/v2/featured?limit=150&days=${leaderboardDays}`)
-			const data_featured = response_featured.data.data
-			setFeaturedItems(data_featured)
+			setFeaturedItems(await backend.get(`/v2/featured?limit=150&days=${leaderboardDays}`).then(res => res.data.data))
 			setIsLoadingCards(false)
 		}
+
 		getFeatured()
 	}, [leaderboardDays])
 
