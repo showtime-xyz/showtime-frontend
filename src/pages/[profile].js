@@ -818,7 +818,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											</div>
 										</div>
 									)}
-									<div className="mt-4 md:mt-8 mx-4">
+									<div className="mt-4 md:mt-8 md:mx-4">
 										{menuLists && menuLists.length > 0 && (
 											<TokenGridV5
 												dataLength={items.length}

@@ -76,7 +76,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 
 	return (
 		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
-			<div ref={divRef} className={`w-full h-full rounded-2xl shadow-lg transition-all flex flex-col bg-white dark:bg-gray-900 ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border border-transparent dark:border-gray-800'}`}>
+			<div ref={divRef} className={`w-full h-full md:rounded-2xl shadow-lg transition-all flex flex-col bg-white dark:bg-gray-900 ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border-t border-b md:border-l md:border-r border-transparent dark:border-gray-800'}`}>
 				<div ref={item.imageRef} className="p-4 relative">
 					<div className="flex items-center justify-between">
 						<div className="pr-2">
@@ -110,7 +110,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 							{myProfile?.profile_id !== item.creator_id && <MiniFollowButton profileId={item.creator_id} />}
 							<Menu as="div" className="relative">
 								{isMyProfile && listId !== 3 ? (
-									<Menu.Button className="text-right text-gray-600 focus:outline-none rounded-xl relative hover:bg-gray-100 focus-visible:bg-gray-100 py-2 -my-2 px-2 -mx-2 transition">
+									<Menu.Button className="text-right text-gray-600 focus:outline-none rounded-xl relative hover:bg-gray-100 dark:hover:bg-gray-800 focus-visible:bg-gray-100 dark:focus-visible:bg-gray-800 py-2 -my-2 px-2 -mx-2 transition">
 										<EllipsisIcon className="w-5 h-5" />
 									</Menu.Button>
 								) : null}
