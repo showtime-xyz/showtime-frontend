@@ -13,10 +13,13 @@ import Input from '@/components/UI/Inputs/Input'
 import Textarea from '@/components/UI/Inputs/Textarea'
 import PercentageIcon from '@/components/Icons/PercentageIcon'
 
-const TYPES = ['image', 'video']
+const TYPES = ['image', 'video', 'audio', 'text', 'file']
 const FORMATS = {
 	image: ['.png', '.gif', '.jpg', '.tiff'],
-	video: ['.mp4'],
+	video: ['.mp4', '.mov'],
+	audio: ['.mp3', '.wav'],
+	text: ['.txt', '.md'],
+	file: ['.pdf', '.psd', '.ai'],
 }
 
 const MintPage = ({ type }) => {
@@ -70,8 +73,13 @@ const MintPage = ({ type }) => {
 	useEffect(() => {
 		if (profileLoading || selectedWallet) return
 
-		setSelectedWallet(profile.wallet_addresses_excluding_email_v2?.[0]?.address)
-	}, [profileLoading, profile?.wallet_addresses_excluding_email_v2, selectedWallet])
+		if (profile.wallet_addresses_excluding_email_v2.filter(({ address }) => !address.startsWith('tz')).length > 0) {
+			setSelectedWallet(profile.wallet_addresses_excluding_email_v2.filter(({ address }) => !address.startsWith('tz'))[0].address)
+			return
+		}
+
+		setSelectedWallet(profile.wallet_addresses_v2?.filter(({ address }) => !address.startsWith('tz'))?.[0]?.address)
+	}, [profileLoading, profile?.wallet_addresses_v2, profile?.wallet_addresses_excluding_email_v2, selectedWallet])
 
 	return (
 		<Layout>
@@ -85,7 +93,7 @@ const MintPage = ({ type }) => {
 					<h1 className="text-3xl font-bold">
 						Create <span className="capitalize">{type}</span>
 					</h1>
-					{!profileLoading && <Dropdown className="w-max" options={profile.wallet_addresses_excluding_email_v2.map(({ address, ens_domain }) => ({ value: address, label: ens_domain || address }))} value={selectedWallet} onChange={setSelectedWallet} label="Wallet" />}
+					{!profileLoading && <Dropdown className="w-max" options={profile.wallet_addresses_v2.filter(({ address }) => !address.startsWith('tz')).map(({ address, ens_domain }) => ({ value: address, label: ens_domain || address }))} value={selectedWallet} onChange={setSelectedWallet} label="Wallet" />}
 				</div>
 				<form onSubmit={submitForm} className="mt-12 flex flex-col md:flex-row justify-between space-y-12 md:space-y-0 md:space-x-12">
 					<div className="space-y-6">

@@ -17,6 +17,7 @@ import useProfile from '@/hooks/useProfile'
 import FireIcon from './Icons/FireIcon'
 import Button from './UI/Buttons/Button'
 import PlusIcon from './Icons/PlusIcon'
+import MintDropdown from './MintDropdown'
 import useFlags, { FLAGS } from '@/hooks/useFlags'
 
 const Header = () => {
@@ -81,13 +82,7 @@ const Header = () => {
 						{/* End desktop-only menu */}
 
 						<div className={`flex items-center ${isSearchBarOpen ? 'hidden' : ''}`}>
-							{canMint && (
-								<Link href="/mint">
-									<Button style="primary" href="/mint" iconOnly={true} as="a">
-										<PlusIcon className="w-4 h-4" />
-									</Button>
-								</Link>
-							)}
+							{canMint && <MintDropdown />}
 							{isAuthenticated && !profileLoading && (
 								<div className="flex-shrink ml-2">
 									<NotificationsBtn />
