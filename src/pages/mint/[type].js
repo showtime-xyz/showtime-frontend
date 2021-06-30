@@ -67,12 +67,12 @@ const MintPage = ({ type }) => {
 	}
 
 	const isValid = useMemo(() => {
-		if (!title || !description || !hasVerifiedAuthorship || !copies || !royalties) return false
+		if (!canMint || !title || !description || !hasVerifiedAuthorship || !copies || !royalties) return false
 		if (putOnSale && (!price || !currency)) return false
 		if (copies < 1 || royalties > 100) return false
 
 		return true
-	}, [title, description, hasVerifiedAuthorship, putOnSale, price, currency, copies, royalties])
+	}, [title, description, hasVerifiedAuthorship, putOnSale, price, currency, copies, royalties, canMint])
 
 	const submitForm = event => {
 		event.preventDefault()
