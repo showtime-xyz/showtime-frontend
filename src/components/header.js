@@ -15,8 +15,6 @@ import HeaderDropdown from './HeaderDropdown'
 import useAuth from '@/hooks/useAuth'
 import useProfile from '@/hooks/useProfile'
 import FireIcon from './Icons/FireIcon'
-import Button from './UI/Buttons/Button'
-import PlusIcon from './Icons/PlusIcon'
 import MintDropdown from './MintDropdown'
 import useFlags, { FLAGS } from '@/hooks/useFlags'
 
