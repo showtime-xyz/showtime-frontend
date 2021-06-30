@@ -56,7 +56,7 @@ const AddressButton = ({ address, ens_domain }) => {
 	const [hasCopied, setHasCopied] = useState(false)
 
 	const copyAddress = () => {
-		copyToClipBoard(ens_domain || address)
+		copyToClipBoard(address)
 		setHasCopied(true)
 		setTimeout(() => setHasCopied(false), 500)
 	}
