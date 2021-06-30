@@ -10,9 +10,9 @@ const flagDefs = {
 }
 
 const useFlags = () => {
-	const { profile } = useProfile()
+	const { profile, loading } = useProfile()
 
-	return useMemo(() => Object.fromEntries(Object.values(FLAGS).map(key => [key, flagDefs[key](profile)])), [profile])
+	return { ...useMemo(() => Object.fromEntries(Object.values(FLAGS).map(key => [key, flagDefs[key](profile)])), [profile]), loading }
 }
 
 export default useFlags

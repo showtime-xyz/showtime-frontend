@@ -12,6 +12,7 @@ import { useMemo } from 'react'
 import Input from '@/components/UI/Inputs/Input'
 import Textarea from '@/components/UI/Inputs/Textarea'
 import PercentageIcon from '@/components/Icons/PercentageIcon'
+import useFlags, { FLAGS } from '@/hooks/useFlags'
 
 const TYPES = ['image', 'video', 'audio', 'text', 'file']
 const FORMATS = {
@@ -23,8 +24,17 @@ const FORMATS = {
 }
 
 const MintPage = ({ type }) => {
-	const { profile, loading: profileLoading } = useProfile()
 	const router = useRouter()
+	const { [FLAGS.hasMinting]: canMint, loading: flagsLoading } = useFlags()
+
+	useEffect(() => {
+		if (flagsLoading || canMint) return
+
+		router.push('/')
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [canMint, flagsLoading])
+
+	const { profile, loading: profileLoading } = useProfile()
 	const [selectedWallet, setSelectedWallet] = useState(null)
 
 	const [uploadProgress, setUploadProgress] = useState(null)
