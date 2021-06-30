@@ -233,7 +233,7 @@ const App = ({ Component, pageProps }) => {
 	}
 
 	return (
-		<ThemeProvider defaultTheme="system" disableTransitionOnChange={true} attribute="class">
+		<ThemeProvider defaultTheme="light" disableTransitionOnChange={true} attribute="class">
 			<AppContext.Provider value={injectedGlobalContext}>
 				<ModalThrottleUser isOpen={throttleOpen} closeModal={() => setThrottleOpen(false)} modalContent={throttleContent} />
 				<Component {...pageProps} />

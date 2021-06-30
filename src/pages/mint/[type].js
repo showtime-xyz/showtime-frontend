@@ -18,7 +18,7 @@ const TYPES = ['image', 'video', 'audio', 'text', 'file']
 const FORMATS = {
 	image: ['.png', '.gif', '.jpg', '.tiff'],
 	video: ['.mp4', '.mov'],
-	audio: ['.mp3', '.wav'],
+	audio: ['.mp3', '.flac', '.wav'],
 	text: ['.txt', '.md'],
 	file: ['.pdf', '.psd', '.ai'],
 }
@@ -103,7 +103,7 @@ const MintPage = ({ type }) => {
 					<h1 className="text-3xl font-bold">
 						Create <span className="capitalize">{type}</span>
 					</h1>
-					{!profileLoading && <Dropdown className="w-max" options={profile.wallet_addresses_v2.filter(({ address }) => !address.startsWith('tz')).map(({ address, ens_domain }) => ({ value: address, label: ens_domain || address }))} value={selectedWallet} onChange={setSelectedWallet} label="Wallet" />}
+					{!profileLoading && <Dropdown className="w-max" options={profile?.wallet_addresses_v2?.filter(({ address }) => !address.startsWith('tz'))?.map(({ address, ens_domain }) => ({ value: address, label: ens_domain || address }))} value={selectedWallet} onChange={setSelectedWallet} label="Wallet" />}
 				</div>
 				<form onSubmit={submitForm} className="mt-12 flex flex-col md:flex-row justify-between space-y-12 md:space-y-0 md:space-x-12">
 					<div className="space-y-6">
