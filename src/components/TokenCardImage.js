@@ -1,28 +1,27 @@
 import { useState, useEffect, useRef } from 'react'
 import ReactPlayer from 'react-player'
 
-export default function ActivityImage({ nft, onLoad }) {
+const TokenCardImage = ({ nft, onLoad, isPreview = false }) => {
 	const aRef = useRef()
 	const [imgWidth, setImgWidth] = useState(null)
 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => {
 		setImgWidth(aRef?.current?.clientWidth)
-	}, [aRef?.current])
+	})
 
 	const getImageUrl = (img_url, token_aspect_ratio) => {
 		if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
-			if (token_aspect_ratio && token_aspect_ratio > 1) {
-				img_url = img_url.split('=')[0] + '=h660'
-			} else {
-				img_url = img_url.split('=')[0] + '=w660'
-			}
+			if (token_aspect_ratio && token_aspect_ratio > 1) img_url = img_url.split('=')[0] + '=h660'
+			else img_url = img_url.split('=')[0] + '=w660'
 		}
+
 		return img_url
 	}
 
 	return (
 		<div
-			className="flex-1  cursor-pointer overflow-hidden hover:opacity-90 transition-all"
+			className={`flex-1 ${isPreview ? '' : 'cursor-pointer hover:opacity-90'} overflow-hidden transition-all`}
 			ref={aRef}
 			style={{
 				height: imgWidth,
@@ -54,3 +53,5 @@ export default function ActivityImage({ nft, onLoad }) {
 		</div>
 	)
 }
+
+export default TokenCardImage

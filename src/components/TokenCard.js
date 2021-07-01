@@ -15,13 +15,19 @@ import BadgeIcon from './Icons/BadgeIcon'
 import { Menu, Transition } from '@headlessui/react'
 import MiniFollowButton from './MiniFollowButton'
 import useProfile from '@/hooks/useProfile'
+import { useEffect } from 'react'
+import XIcon from './Icons/XIcon'
 
-const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
+const TokenCard = ({ originalItem, isPreview = false, onPreviewClose, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
 	const { profile: myProfile } = useProfile()
 	const [item, setItem] = useState(originalItem)
-	const [showVideo, setShowVideo] = useState(false)
+	const [showVideo, setShowVideo] = useState(isPreview)
 	const [muted, setMuted] = useState(true)
 	const [refreshing, setRefreshing] = useState(false)
+
+	useEffect(() => {
+		setItem(originalItem)
+	}, [originalItem])
 
 	const divRef = useRef()
 
@@ -30,9 +36,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 		setHasUserHiddenItems(true)
 
 		// Post changes to the API
-		await axios.post(`/api/hidenft/${item.nft_id}/${listId}`, {
-			showDuplicates: showDuplicates ? 1 : 0,
-		})
+		await axios.post(`/api/hidenft/${item.nft_id}/${listId}`, { showDuplicates: showDuplicates ? 1 : 0 })
 
 		if (!showUserHiddenItems) handleRemoveItem(item.nft_id)
 
@@ -74,7 +78,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 
 	return (
 		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
-			<div ref={divRef} className={`w-full h-full md:rounded-2xl shadow-lg hover:shadow-xl transition duration-300 flex flex-col bg-white dark:bg-gray-900 ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border-t border-b md:border-l md:border-r border-transparent dark:border-gray-800'}`}>
+			<div ref={divRef} className={`w-full h-full shadow-lg ${isPreview ? 'rounded-2xl' : 'hover:shadow-xl md:rounded-2xl'} transition duration-300 flex flex-col bg-white dark:bg-gray-900 ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border-t border-b md:border-l md:border-r border-transparent dark:border-gray-800'}`}>
 				<div ref={item.imageRef} className="p-4 relative">
 					<div className="flex items-center justify-between">
 						<div className="pr-2">
@@ -106,6 +110,11 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 
 						<div className="flex items-center space-x-2">
 							{myProfile?.profile_id !== item.creator_id && <MiniFollowButton profileId={item.creator_id} />}
+							{isPreview && (
+								<button onClick={onPreviewClose} className="text-right text-gray-600 focus:outline-none rounded-xl relative hover:bg-gray-100 dark:hover:bg-gray-800 focus-visible:bg-gray-100 dark:focus-visible:bg-gray-800 py-2 -my-2 px-2 -mx-2 transition">
+									<XIcon className="w-5 h-5" />
+								</button>
+							)}
 							<Menu as="div" className="relative">
 								{isMyProfile && listId !== 3 ? (
 									<Menu.Button className="text-right text-gray-600 focus:outline-none rounded-xl relative hover:bg-gray-100 dark:hover:bg-gray-800 focus-visible:bg-gray-100 dark:focus-visible:bg-gray-800 py-2 -my-2 px-2 -mx-2 transition">
@@ -172,8 +181,9 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 				) : (
 					<div className="relative">
 						<div
-							className="cursor-pointer"
+							className={isPreview ? '' : 'cursor-pointer'}
 							onClick={() => {
+								if (isPreview) return
 								mixpanel.track('Open NFT modal')
 								setCurrentlyOpenModal(item)
 								setShowVideo(false)
@@ -182,7 +192,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 							}}
 						>
 							<div style={{ backgroundColor: getBackgroundColor(item) }}>
-								<TokenCardImage nft={item} />
+								<TokenCardImage nft={item} isPreview={isPreview} />
 							</div>
 						</div>
 						{item.token_has_video || (!item.token_img_url && item.token_animation_url) ? (
@@ -218,8 +228,9 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 				<div className="p-4">
 					<div>
 						<div>
-							<div
+							<p
 								onClick={() => {
+									if (isPreview) return
 									mixpanel.track('Open NFT modal')
 									setCurrentlyOpenModal(item)
 
@@ -227,76 +238,81 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 									setMuted(true)
 									setCurrentlyPlayingVideo(null)
 								}}
-								className="break-words cursor-pointer truncate text-lg font-bold dark:text-gray-200"
+								className={`break-words ${isPreview ? '' : 'cursor-pointer'} truncate text-lg font-bold dark:text-gray-200`}
 							>
 								{item.token_name}
-							</div>
+							</p>
 						</div>
-
-						<div className="mt-4 flex items-center justify-between">
-							<div className="flex items-center space-x-4">
-								<LikeButton item={item} />
-								<CommentButton
-									item={item}
-									handleComment={() => {
-										mixpanel.track('Open NFT modal via comment button')
-										setCurrentlyOpenModal(item)
-										setShowVideo(false)
-										setMuted(true)
-										setCurrentlyPlayingVideo(null)
-									}}
-								/>
+						{!isPreview && (
+							<div className="mt-4 flex items-center justify-between">
+								<div className="flex items-center space-x-4">
+									<LikeButton item={item} />
+									<CommentButton
+										item={item}
+										handleComment={() => {
+											mixpanel.track('Open NFT modal via comment button')
+											setCurrentlyOpenModal(item)
+											setShowVideo(false)
+											setMuted(true)
+											setCurrentlyPlayingVideo(null)
+										}}
+									/>
+								</div>
+								<ShareButton url={window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${item.contract_address}/${item.token_id}`} type={'item'} />
 							</div>
-							<ShareButton url={window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${item.contract_address}/${item.token_id}`} type={'item'} />
-						</div>
+						)}
 					</div>
 				</div>
-				<hr className="mx-4 border-gray-100 dark:border-gray-800" />
-				<div className="flex-1 flex items-end w-full">
-					<div className="px-4 pb-4 pt-1 flex flex-col w-full">
-						<div>
-							{item.owner_count && item.owner_count > 1 ? (
-								pageProfile && listId === 2 ? (
-									<div className="">
-										<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
-										<div className="flex items-center">
-											<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
-												<a className="flex flex-row items-center pr-2 ">
-													<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
+				{!isPreview && (
+					<>
+						<hr className="mx-4 border-gray-100 dark:border-gray-800" />
+						<div className="flex-1 flex items-end w-full">
+							<div className="px-4 pb-4 pt-1 flex flex-col w-full">
+								<div>
+									{item.owner_count && item.owner_count > 1 ? (
+										pageProfile && listId === 2 ? (
+											<div className="">
+												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
+												<div className="flex items-center">
+													<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
+														<a className="flex flex-row items-center pr-2 ">
+															<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
+															<div>
+																<div className="text-sm font-semibold truncate">{truncateWithEllipses(pageProfile.name && pageProfile.name != 'Unnamed' ? (pageProfile.name == pageProfile.slug_address ? formatAddressShort(pageProfile.slug_address) : pageProfile.name) : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown', 14)}</div>
+															</div>
+														</a>
+													</Link>
+													<div className="text-gray-500 text-sm mr-2 -ml-1 mt-px">
+														&amp; {item.owner_count - 1} other
+														{item.owner_count - 1 > 1 ? 's' : null}
+													</div>
+												</div>
+											</div>
+										) : (
+											<span className="text-gray-500 text-sm">Multiple owners</span>
+										)
+									) : item.owner_id ? (
+										<div className="flex items-center justify-between pt-1">
+											<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
+												<a className="flex flex-row items-center space-x-2">
+													<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8" />
 													<div>
-														<div className="text-sm font-semibold truncate">{truncateWithEllipses(pageProfile.name && pageProfile.name != 'Unnamed' ? (pageProfile.name == pageProfile.slug_address ? formatAddressShort(pageProfile.slug_address) : pageProfile.name) : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown', 14)}</div>
+														<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
+														<div className="flex items-center space-x-1 -mt-0.5">
+															<div className="text-sm font-semibold truncate">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
+															{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+														</div>
 													</div>
 												</a>
 											</Link>
-											<div className="text-gray-500 text-sm mr-2 -ml-1 mt-px">
-												&amp; {item.owner_count - 1} other
-												{item.owner_count - 1 > 1 ? 's' : null}
-											</div>
+											{myProfile?.profile_id !== item.owner_id && <MiniFollowButton profileId={item.owner_id} />}
 										</div>
-									</div>
-								) : (
-									<span className="text-gray-500 text-sm">Multiple owners</span>
-								)
-							) : item.owner_id ? (
-								<div className="flex items-center justify-between pt-1">
-									<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
-										<a className="flex flex-row items-center space-x-2">
-											<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8" />
-											<div>
-												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
-												<div className="flex items-center space-x-1 -mt-0.5">
-													<div className="text-sm font-semibold truncate">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
-													{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
-												</div>
-											</div>
-										</a>
-									</Link>
-									{myProfile?.profile_id !== item.owner_id && <MiniFollowButton profileId={item.owner_id} />}
+									) : null}
 								</div>
-							) : null}
+							</div>
 						</div>
-					</div>
-				</div>
+					</>
+				)}
 			</div>
 		</div>
 	)

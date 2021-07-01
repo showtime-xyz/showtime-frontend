@@ -5,7 +5,7 @@ export const FLAGS = {
 	hasMinting: 'mint',
 }
 
-const flagDefs = {
+export const flagDefs = {
 	[FLAGS.hasMinting]: profile => profile?.verified || false,
 }
 

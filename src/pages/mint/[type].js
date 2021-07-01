@@ -13,14 +13,15 @@ import Input from '@/components/UI/Inputs/Input'
 import Textarea from '@/components/UI/Inputs/Textarea'
 import PercentageIcon from '@/components/Icons/PercentageIcon'
 import useFlags, { FLAGS } from '@/hooks/useFlags'
+import IpfsUpload from '@/components/IpfsUpload'
 
-const TYPES = ['image', 'video', 'audio', 'text', 'file']
-const FORMATS = {
-	image: ['.png', '.gif', '.jpg', '.tiff'],
+export const TYPES = ['image', 'video' /* 'audio', 'text', 'file' */]
+export const FORMATS = {
+	image: ['.png', '.gif', '.jpg'],
 	video: ['.mp4', '.mov'],
-	audio: ['.mp3', '.flac', '.wav'],
-	text: ['.txt', '.md'],
-	file: ['.pdf', '.psd', '.ai'],
+	// audio: ['.mp3', '.flac', '.wav'],
+	// text: ['.txt', '.md'],
+	// file: ['.pdf', '.psd', '.ai'],
 }
 
 const MintPage = ({ type }) => {
@@ -37,7 +38,7 @@ const MintPage = ({ type }) => {
 	const { profile, loading: profileLoading } = useProfile()
 	const [selectedWallet, setSelectedWallet] = useState(null)
 
-	const [uploadProgress, setUploadProgress] = useState(null)
+	const [ipfsHash, setIpfsHash] = useState('')
 
 	const [title, setTitle] = useState('')
 	const [description, setDescription] = useState('')
@@ -52,27 +53,13 @@ const MintPage = ({ type }) => {
 	const [copies, setCopies] = useState(1)
 	const [royalties, setRoyalties] = useState(10)
 
-	const fileUploaded = event => {
-		const file = event.target.files?.[0]
-
-		if (!file) return
-
-		setUploadProgress(0)
-	}
-
-	const cancelUpload = event => {
-		event.preventDefault()
-
-		setUploadProgress(null)
-	}
-
 	const isValid = useMemo(() => {
-		if (!canMint || !title || !description || !hasVerifiedAuthorship || !copies || !royalties) return false
+		if (!canMint || !title || !description || !hasVerifiedAuthorship || !copies || !royalties || !ipfsHash) return false
 		if (putOnSale && (!price || !currency)) return false
 		if (copies < 1 || royalties > 100) return false
 
 		return true
-	}, [title, description, hasVerifiedAuthorship, putOnSale, price, currency, copies, royalties, canMint])
+	}, [title, description, hasVerifiedAuthorship, putOnSale, price, currency, copies, royalties, canMint, ipfsHash])
 
 	const submitForm = event => {
 		event.preventDefault()
@@ -108,30 +95,7 @@ const MintPage = ({ type }) => {
 				<form onSubmit={submitForm} className="mt-12 flex flex-col md:flex-row justify-between space-y-12 md:space-y-0 md:space-x-12">
 					<div className="space-y-6">
 						<p className="font-bold text-lg">Upload</p>
-						<label className={`rounded-xl ${uploadProgress != null ? '' : 'cursor-pointer'} border dark:border-gray-700 flex flex-col items-center justify-center space-y-6 px-8 py-16 min-w-[15rem]`}>
-							{uploadProgress != null ? (
-								<>
-									<div className="space-y-2 text-center">
-										<p className="font-bold">Uploading to IPFS...</p>
-										<a className="text-xs font-medium">Learn about IPFS &rarr;</a>
-									</div>
-									<div className="rounded overflow-hidden bg-gray-100 w-full h-2 my-6">
-										<div className="rounded bg-gradient-to-r from-[#4D54FF] to-[#E14DFF] h-full transition" style={{ width: `${uploadProgress}%` }} />
-									</div>
-									<button onClick={cancelUpload} className="text-xs font-bold">
-										Cancel Upload
-									</button>
-								</>
-							) : (
-								<>
-									<input onChange={fileUploaded} type="file" className="hidden" multiple={false} accept={FORMATS[type].join(',')} capture="environment" />
-									<p className="font-medium text-sm dark:text-gray-400">{FORMATS[type].join(', ')} / max 50mb</p>
-									<Button as="div" type="button" style="primary">
-										Choose File
-									</Button>
-								</>
-							)}
-						</label>
+						<IpfsUpload type={type} wallet={selectedWallet} onChange={setIpfsHash} tokenName={title} />
 					</div>
 					<div className="flex-1">
 						<p className="font-bold text-lg">Details</p>

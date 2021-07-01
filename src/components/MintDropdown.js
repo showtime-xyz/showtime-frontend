@@ -1,4 +1,5 @@
 import { classNames } from '@/lib/utilities'
+import { TYPES } from '@/pages/mint/[type]'
 import { Menu, Transition } from '@headlessui/react'
 import Link from 'next/link'
 import { Fragment } from 'react'
@@ -18,6 +19,14 @@ const NextLink = ({ href, children, ...rest }) => (
 )
 
 const MintDropdown = () => {
+	const OPTIONS = [
+		{ type: 'image', Icon: ImageIcon },
+		{ type: 'video', Icon: VideoIcon },
+		{ type: 'audio', Icon: AudioIcon },
+		{ type: 'text', Icon: TextIcon },
+		{ type: 'file', Icon: FileIcon },
+	].filter(({ type }) => TYPES.includes(type))
+
 	return (
 		<Menu as="div" className="ml-5 md:relative">
 			{({ open }) => (
@@ -34,26 +43,12 @@ const MintDropdown = () => {
 							</Menu.Item>
 							<div className="mt-0.5 md:mt-0 rounded-2xl shadow-lg border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 space-y-4 divide-y divide-gray-100 dark:divide-gray-800 relative z-20 min-w-[10rem] w-full md:w-auto py-1 px-2">
 								<div className="py-1">
-									<Menu.Item as={NextLink} className={({ active }) => classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'block rounded-lg w-full text-left py-2 pr-6 pl-2 text-sm font-semibold transition flex items-center space-x-2')} href="/mint/image">
-										<ImageIcon className="w-4 h-4" />
-										<span>Image</span>
-									</Menu.Item>
-									<Menu.Item as={NextLink} className={({ active }) => classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'block rounded-lg w-full text-left py-2 pr-6 pl-2 text-sm font-semibold transition flex items-center space-x-2')} href="/mint/video">
-										<VideoIcon className="w-4 h-4" />
-										<span>Video</span>
-									</Menu.Item>
-									<Menu.Item as={NextLink} className={({ active }) => classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'block rounded-lg w-full text-left py-2 pr-6 pl-2 text-sm font-semibold transition flex items-center space-x-2')} href="/mint/audio">
-										<AudioIcon className="w-4 h-4" />
-										<span>Audio</span>
-									</Menu.Item>
-									<Menu.Item as={NextLink} className={({ active }) => classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'block rounded-lg w-full text-left py-2 pr-6 pl-2 text-sm font-semibold transition flex items-center space-x-2')} href="/mint/text">
-										<TextIcon className="w-4 h-4" />
-										<span>Text</span>
-									</Menu.Item>
-									<Menu.Item as={NextLink} className={({ active }) => classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'block rounded-lg w-full text-left py-2 pr-6 pl-2 text-sm font-semibold transition flex items-center space-x-2')} href="/mint/file">
-										<FileIcon className="w-4 h-4" />
-										<span>File</span>
-									</Menu.Item>
+									{OPTIONS.map(({ type, Icon }) => (
+										<Menu.Item key={type} as={NextLink} className={({ active }) => classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'rounded-lg w-full text-left py-2 pr-6 pl-2 text-sm font-semibold transition flex items-center space-x-2')} href={`/mint/${type}`}>
+											<Icon className="w-4 h-4" />
+											<span className="capitalize">{type}</span>
+										</Menu.Item>
+									))}
 								</div>
 							</div>
 						</Menu.Items>

@@ -151,3 +151,15 @@ export const filterNewRecs = (newRecs, oldRecs, alreadyFollowed) => {
 	})
 	return filteredData
 }
+
+export const buildFormData = data => {
+	const formData = new FormData()
+
+	Object.entries(data).forEach(([key, value]) => {
+		if (value instanceof File || typeof value !== 'object') return formData.append(key, value)
+
+		formData.append(key, JSON.stringify(value))
+	})
+
+	return formData
+}
