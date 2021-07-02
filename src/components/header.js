@@ -87,26 +87,28 @@ const Header = () => {
 					</div>
 
 					{/* Start mobile-only menu */}
-					<div className="-mx-4 mt-4 md:hidden">
-						<div className="flex-1 flex justify-around font-normal -mx-2">
-							<Link href="/">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 ${asPath == '/' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>
-									<HomeIcon className="w-5 h-5" />
-									<span>Feed</span>
-								</a>
-							</Link>
-							<Link href="/c/spotlights">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 ${asPath == '/c/spotlights' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>
-									<StarIcon className="w-5 h-5" />
-									<span>Discover</span>
-								</a>
-							</Link>
-							<Link href="/trending">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 ${asPath == '/trending' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Trending button click')}>
-									<FireIcon className="w-5 h-5" />
-									<span>Trending</span>
-								</a>
-							</Link>
+					<div className="overflow-hidden">
+						<div className="-mx-4 mt-4 md:hidden">
+							<div className="flex-1 flex justify-around font-normal -mx-2">
+								<Link href="/">
+									<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 ${asPath == '/' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>
+										<HomeIcon className="w-5 h-5" />
+										<span>Feed</span>
+									</a>
+								</Link>
+								<Link href="/c/spotlights">
+									<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 ${asPath == '/c/spotlights' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>
+										<StarIcon className="w-5 h-5" />
+										<span>Discover</span>
+									</a>
+								</Link>
+								<Link href="/trending">
+									<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 ${asPath == '/trending' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Trending button click')}>
+										<FireIcon className="w-5 h-5" />
+										<span>Trending</span>
+									</a>
+								</Link>
+							</div>
 						</div>
 					</div>
 					{/* End mobile-only menu */}
