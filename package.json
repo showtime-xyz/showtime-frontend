@@ -11,6 +11,7 @@
   "dependencies": {
     "@airgap/beacon-sdk": "^2.2.8",
     "@badrap/bar-of-progress": "^0.1.2",
+    "@biconomy/mexa": "^2.0.10",
     "@ethersproject/providers": "^5.4.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-brands-svg-icons": "^5.15.2",
@@ -39,6 +40,7 @@
     "eth-provider": "^0.7.0",
     "eth-sig-util": "^3.0.1",
     "ethereumjs-util": "^7.0.8",
+    "ethers": "^5.4.0",
     "exif-js": "^2.3.0",
     "fortmatic": "^2.2.1",
     "libsodium-wrappers": "^0.7.9",
@@ -74,7 +76,6 @@
     "use-wallet": "^0.9.0",
     "uuid": "^8.3.2",
     "walletlink": "^2.0.3",
-    "web3": "^1.3.4",
     "web3modal": "^1.9.3",
     "webpack-modules": "^1.0.0"
   },

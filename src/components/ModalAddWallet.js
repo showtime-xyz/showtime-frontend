@@ -6,11 +6,12 @@ import { WalletLink } from 'walletlink'
 import backend from '@/lib/backend'
 import AppContext from '@/context/app-context'
 import CloseButton from './CloseButton'
-import Web3 from 'web3'
+import { ethers } from 'ethers'
 import Fortmatic from 'fortmatic'
 import ScrollableModal from './ScrollableModal'
 import axios from '@/lib/axios'
 import GreenButton from '@/components/UI/Buttons/GreenButton'
+import { Biconomy } from '@biconomy/mexa'
 
 export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 	const context = useContext(AppContext)
@@ -23,9 +24,8 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 	const [myProvider, setMyProvider] = useState(null)
 
 	const connect = async () => {
-		const web3 = new Web3(myProvider)
-		const accounts = await web3.eth.getAccounts()
-		setAddressDetected(accounts[0])
+		const web3 = new ethers.providers.Web3Provider(myProvider)
+		setAddressDetected(await web3.getSigner().getAddress())
 
 		try {
 			myProvider.on('accountsChanged', async accounts => setAddressDetected(accounts[0]))
@@ -90,7 +90,6 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 			const web3Modal = new Web3Modal({
 				cacheProvider: false, // optional
 				providerOptions, // required
-				disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
 			})
 			setMyWeb3Modal(web3Modal)
 		}
@@ -120,7 +119,9 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 
 	const onConnect = async () => {
 		try {
-			setMyProvider(await myWeb3Modal.connect())
+			const provider = await myWeb3Modal.connect()
+			setMyProvider(provider)
+			context.setWeb3(new ethers.providers.Web3Provider(new Biconomy(new ethers.providers.Web3Provider(provider).provider, { apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY, debug: true })))
 		} catch {
 			setStep(1)
 		}
@@ -129,15 +130,11 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 	const signMessage = async () => {
 		const response_nonce = await backend.get(`/v1/getnonce?address=${addressDetected.toLowerCase()}`)
 
-		const web3 = new Web3(myProvider)
+		const web3 = new ethers.providers.Web3Provider(myProvider)
 
 		try {
 			setSignaturePending(true)
-			const signature = await web3.eth.personal.sign(
-				process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + ' ' + response_nonce.data.data,
-				addressDetected,
-				'' // MetaMask will ignore the password argument here
-			)
+			const signature = await web3.getSigner().signMessage(process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + ' ' + response_nonce.data.data)
 			setSignaturePending(false)
 			setStep(3)
 

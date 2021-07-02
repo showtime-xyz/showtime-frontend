@@ -30,6 +30,7 @@ const App = ({ Component, pageProps }) => {
 	const { revalidate } = useAuth()
 	const { profile: myProfile, mutate: setMyProfile } = useProfile()
 	const [user, setUser] = useState()
+	const [web3, setWeb3] = useState(null)
 	const [windowSize, setWindowSize] = useState(null)
 	const [myLikes, setMyLikes] = useState(null)
 	const [myLikeCounts, setMyLikeCounts] = useState(null)
@@ -177,6 +178,8 @@ const App = ({ Component, pageProps }) => {
 
 	const injectedGlobalContext = {
 		user,
+		web3,
+		setWeb3,
 		windowSize,
 		myLikes,
 		myLikeCounts,
@@ -228,6 +231,7 @@ const App = ({ Component, pageProps }) => {
 			setMyFollows([])
 			setMyRecommendations([])
 			setMyProfile(undefined)
+			setWeb3(null)
 			mixpanel.track('Logout')
 		},
 	}

@@ -7,11 +7,12 @@ import { WalletLink } from 'walletlink'
 import backend from '@/lib/backend'
 import AppContext from '@/context/app-context'
 import CloseButton from './CloseButton'
-import Web3 from 'web3'
+import { ethers } from 'ethers'
 import Fortmatic from 'fortmatic'
 import ScrollableModal from './ScrollableModal'
 import axios from '@/lib/axios'
 import { useTheme } from 'next-themes'
+import { Biconomy } from '@biconomy/mexa'
 import useAuth from '@/hooks/useAuth'
 
 export default function Modal({ isOpen }) {
@@ -27,8 +28,10 @@ export default function Modal({ isOpen }) {
 		const { elements } = event.target
 
 		// the magic code
+		const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY)
 		try {
-			const did = await new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY).auth.loginWithMagicLink({ email: elements.email.value })
+			const did = await magic.auth.loginWithMagicLink({ email: elements.email.value })
+			context.setWeb3(new ethers.providers.Web3Provider(new Biconomy(new ethers.providers.Web3Provider(magic.rpcProvider).provider, { apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY, debug: true })))
 
 			// Once we have the did from magic, login with our own API
 			await axios.post(
@@ -99,26 +102,26 @@ export default function Modal({ isOpen }) {
 
 		const web3Modal = new Web3Modal({
 			network: 'mainnet', // optional
-			cacheProvider: false, // optional
+			cacheProvider: true, // optional
 			providerOptions, // required
 			theme: resolvedTheme,
 		})
 
-		const provider = await web3Modal.connect()
+		let web3
+		if (!context.web3) {
+			const provider = await web3Modal.connect()
 
-		const web3 = new Web3(provider)
+			web3 = new ethers.providers.Web3Provider(new Biconomy(new ethers.providers.Web3Provider(provider).provider, { apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY, debug: false }))
 
-		const coinbase = await web3.eth.getCoinbase()
-		const address = coinbase.toLowerCase()
+			context.setWeb3(web3)
+		} else web3 = context.web3
+
+		const address = await web3.getSigner().getAddress()
 		const response_nonce = await backend.get(`/v1/getnonce?address=${address}`)
 
 		try {
 			setSignaturePending(true)
-			const signature = await web3.eth.personal.sign(
-				process.env.NEXT_PUBLIC_SIGNING_MESSAGE + ' ' + response_nonce.data.data,
-				address,
-				'' // MetaMask will ignore the password argument here
-			)
+			const signature = await web3.getSigner().signMessage(process.env.NEXT_PUBLIC_SIGNING_MESSAGE + ' ' + response_nonce.data.data)
 
 			// login with our own API
 			await axios.post('/api/auth/login/signature', { signature, address })

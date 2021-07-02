@@ -2,10 +2,14 @@ import Layout from '@/components/layout'
 import { Magic } from 'magic-sdk'
 import { useState } from 'react'
 import useAuth from '@/hooks/useAuth'
-import Web3 from 'web3'
+import { ethers } from 'ethers'
 import useWeb3Modal from '@/lib/web3Modal'
+import { Biconomy } from '@biconomy/mexa'
+import { useContext } from 'react'
+import AppContext from '@/context/app-context'
 
 const _SignPage = () => {
+	const { web3, setWeb3 } = useContext(AppContext)
 	const { isAuthenticated, loading } = useAuth()
 	const [signText, setSignText] = useState('')
 	const web3Modal = useWeb3Modal()
@@ -20,14 +24,17 @@ const _SignPage = () => {
 
 	const signMessage = async message => {
 		const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY)
-		let web3
+		let _web3
 
-		if (await magic.user.isLoggedIn()) web3 = new Web3(magic.rpcProvider)
-		else web3 = new Web3(await web3Modal.connect())
+		if (!web3) {
+			if (await magic.user.isLoggedIn()) _web3 = new ethers.providers.Web3Provider(magic.rpcProvider)
+			else _web3 = new ethers.providers.Web3Provider(await web3Modal.connect())
 
-		const fromAddress = (await web3.eth.getAccounts())[0]
+			_web3 = new ethers.providers.Web3Provider(new Biconomy(_web3.provider, { apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY, debug: true }))
+			setWeb3(_web3)
+		} else _web3 = web3
 
-		return web3.eth.personal.sign(message, fromAddress)
+		return _web3.getSigner().signMessage(message)
 	}
 
 	if (loading || !isAuthenticated) {
