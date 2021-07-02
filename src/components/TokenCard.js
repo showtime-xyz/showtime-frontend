@@ -227,7 +227,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 									setMuted(true)
 									setCurrentlyPlayingVideo(null)
 								}}
-								className="break-words cursor-pointer truncate text-lg font-bold dark:text-gray-200"
+								className="break-words cursor-pointer truncate text-lg font-semibold dark:text-gray-200"
 							>
 								{item.token_name}
 							</div>
