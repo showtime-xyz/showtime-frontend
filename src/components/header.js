@@ -32,7 +32,7 @@ const Header = () => {
 			<header className="px-2 pt-3 sm:py-3 bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none sticky top-0 z-1">
 				<div className="max-w-screen-2xl 2xl:max-w-none 2xl:px-10 sm:px-3 mx-auto w-full">
 					<div className="flex items-center justify-between">
-						<div className="flex-1 flex items-center space-x-2 mr-5">
+						<div className="flex-1 flex items-center space-x-2">
 							<Link href="/">
 								<a
 									className="flex flex-shrink-0"
@@ -47,7 +47,7 @@ const Header = () => {
 							<SearchBar propagateSearchState={setSearchBarOpen} />
 						</div>
 						{/* Start desktop-only menu */}
-						<div className="hidden flex-1 md:flex mr-6 items-center font-normal space-x-2">
+						<div className="hidden flex-1 md:flex md:items-center md:justify-center mr-6 md:mr-0 items-center font-normal space-x-2">
 							<Link href="/">
 								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-xl py-2 -my-1 px-3 -mx-1`} onClick={() => mixpanel.track('Discover button click')}>
 									<HomeIcon className="w-5 h-5" />
@@ -69,7 +69,7 @@ const Header = () => {
 						</div>
 						{/* End desktop-only menu */}
 
-						<div className={`flex items-center ${isSearchBarOpen ? 'hidden' : ''}`}>
+						<div className={`flex-1 flex items-center justify-end ${isSearchBarOpen ? 'hidden' : ''}`}>
 							{isAuthenticated && !profileLoading && (
 								<div className="flex-shrink ml-5">
 									<NotificationsBtn />
