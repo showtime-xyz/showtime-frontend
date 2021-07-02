@@ -725,7 +725,9 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 								/>
 							</div>
 						</div>
-					) : null}
+					) : (
+						<div className="my-8" />
+					)}
 					<CappedWidth>
 						<div className="m-auto">
 							<div ref={gridRef} className="pt-0 ">
