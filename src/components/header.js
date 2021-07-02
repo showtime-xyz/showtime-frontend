@@ -29,10 +29,10 @@ const Header = () => {
 					<ModalLogin isOpen={context.loginModalOpen} setEditModalOpen={context.setLoginModalOpen} />
 				</>
 			) : null}
-			<header className="px-2 pt-3 sm:py-3 bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none sticky top-0 z-1">
+			<header className="px-4 pt-3 sm:py-3 bg-white dark:bg-gray-900 bg-opacity-70 dark:bg-opacity-70 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none sticky top-0 z-1">
 				<div className="max-w-screen-2xl 2xl:max-w-none 2xl:px-10 sm:px-3 mx-auto w-full">
 					<div className="flex items-center justify-between">
-						<div className="flex-1 flex items-center space-x-2">
+						<div className="flex-1 flex items-center space-x-4 md:space-x-2">
 							<Link href="/">
 								<a
 									className="flex flex-shrink-0"
@@ -87,7 +87,7 @@ const Header = () => {
 					</div>
 
 					{/* Start mobile-only menu */}
-					<div className="mt-4 md:hidden">
+					<div className="-mx-4 mt-4 md:hidden">
 						<div className="flex-1 flex justify-around font-normal -mx-2">
 							<Link href="/">
 								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 ${asPath == '/' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>

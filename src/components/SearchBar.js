@@ -124,7 +124,7 @@ const SearchBar = ({ propagateSearchState }) => {
 			</div>
 			{/* Start mobile-only menu */}
 			<div className={`flex md:hidden ${isMobileSearchOverlayOpen ? 'hidden' : ''}`}>
-				<button onClick={() => toggleMobileSearchOverlay(true)}>
+				<button onClick={() => toggleMobileSearchOverlay(true)} className="focus:outline-none">
 					<SearchIcon className="w-4 h-4 text-gray-500 dark:text-gray-300" />
 				</button>
 			</div>
@@ -154,7 +154,7 @@ const SearchBar = ({ propagateSearchState }) => {
 								}}
 							/>
 						</div>
-						<button className="ml-2 flex items-center justify-center" isFocused={searchInputFocused} onClick={() => toggleMobileSearchOverlay(false)}>
+						<button className="ml-2 flex items-center justify-center focus:outline-none" isFocused={searchInputFocused} onClick={() => toggleMobileSearchOverlay(false)}>
 							<XIcon className="w-6 h-6 text-gray-800 dark:text-gray-300" />
 						</button>
 					</div>

@@ -68,7 +68,7 @@ export default function NotificationsBtn() {
 		<Popover className="md:relative">
 			{({ open }) => (
 				<>
-					<Popover.Button data-close-notifs className="dark:text-gray-300 transition-all rounded-full cursor-pointer relative h-6 w-6">
+					<Popover.Button data-close-notifs className="dark:text-gray-300 transition-all rounded-full cursor-pointer relative h-6 w-6 focus:outline-none">
 						<span onClick={open ? null : handlePanelOpen} className="flex items-center justify-center">
 							<ZapIcon className="w-5 h-5" />
 							{hasUnreadNotifications && <div className="bg-red-500 absolute h-2 w-2 top-0 right-0 rounded-full" />}

@@ -226,8 +226,8 @@ const TokenDetailBody = ({
 									<ShareButton url={typeof window !== 'undefined' && window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${item.contract_address}/${item.token_id}`} type={'item'} />
 								</div>
 
-								<a href={getBidLink(item)} title={`Bid on ${getContractName(item)}`} target="_blank" className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none focus-visible:ring-1" onClick={() => mixpanel.track('OpenSea link click')} rel="noreferrer">
-									<span>Bid </span>
+								<a href={getBidLink(item)} title={`View on ${getContractName(item)}`} target="_blank" className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none focus-visible:ring-1" onClick={() => mixpanel.track('OpenSea link click')} rel="noreferrer">
+									<span>View </span>
 									<span className="hidden sm:inline">on {getContractName(item)}</span>
 								</a>
 								<div className="flex-grow"></div>
