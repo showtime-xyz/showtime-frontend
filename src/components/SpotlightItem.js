@@ -272,7 +272,13 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 											</>
 										)}
 									</div>
-									<div className="h-px bg-gray-100 dark:bg-gray-800 mx-1 my-4" />
+									<div className="h-px bg-gray-100 dark:bg-gray-800 mx-1 my-2" />
+									<div className="flex items-center justify-center">
+										<Button style="primary" as="a" href={getBidLink(item)} title={`View on ${getContractName(item)}`} target="_blank" onClick={() => mixpanel.track('OpenSea link click')} rel="noreferrer">
+											View on {getContractName(item)}
+										</Button>
+									</div>
+									<div className="h-px bg-gray-100 dark:bg-gray-800 mx-1 my-2" />
 									<div className="flex items-center justify-between px-4 space-x-4">
 										<div className="flex items-center space-x-4">
 											<LikeButton item={item} />
@@ -317,11 +323,6 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 											) : null}
 										</div>
 									</div>
-								</div>
-								<div className="mt-8 inline-block">
-									<Button style="primary" as="a" href={getBidLink(item)} title={`View on ${getContractName(item)}`} target="_blank" onClick={() => mixpanel.track('OpenSea link click')} rel="noreferrer">
-										View on {getContractName(item)}
-									</Button>
 								</div>
 							</div>
 						</div>
