@@ -30,7 +30,7 @@ const Header = () => {
 				</>
 			) : null}
 			<header className="px-2 pt-3 sm:py-3 bg-white dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none sticky top-0 z-1">
-				<div className="max-w-screen-2xl xl:max-w-none xl:px-40 sm:px-3 mx-auto w-full">
+				<div className="max-w-screen-2xl 2xl:max-w-none 2xl:px-10 sm:px-3 mx-auto w-full">
 					<div className="flex items-center justify-between">
 						<div className="flex-1 flex items-center space-x-2 mr-5">
 							<Link href="/">
