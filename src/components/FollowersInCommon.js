@@ -1,4 +1,5 @@
 import axios from '@/lib/axios'
+import { formatAddressShort } from '@/lib/utilities'
 import Link from 'next/link'
 import { Fragment, useState } from 'react'
 import useSWR from 'swr'
@@ -33,8 +34,8 @@ const FollowersInCommon = ({ profileId }) => {
 					<div className="hidden md:inline">
 						{followersInCommon.followers.slice(0, 2).map((follower, i) => (
 							<Fragment key={follower.profile_id}>
-								<Link href={`/${follower.username}`}>
-									<a className="font-semibold dark:text-gray-300">@{follower.username}</a>
+								<Link href={`/${follower.username || follower.address}`}>
+									<a className="font-semibold dark:text-gray-300">{`@${follower.username}` || formatAddressShort(follower.address)}</a>
 								</Link>
 								{i + 1 != followersInCommon.count && ', '}
 							</Fragment>
