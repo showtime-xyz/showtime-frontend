@@ -26,7 +26,7 @@ const FollowersInCommon = ({ profileId }) => {
 
 	return (
 		<>
-			{typeof document !== 'undefined' && followersInCommon.count > 2 ? <ModalUserList title="Followers In Common" isOpen={showFollowersModal} users={followersInCommonComplete?.data?.followers || []} closeModal={() => setShowFollowersModal(false)} onRedirect={() => setShowFollowersModal(false)} emptyMessage="Loading..." /> : null}
+			{typeof document !== 'undefined' && followersInCommon.count > 2 ? <ModalUserList title="Followed by" isOpen={showFollowersModal} users={followersInCommonComplete?.data?.followers || []} closeModal={() => setShowFollowersModal(false)} onRedirect={() => setShowFollowersModal(false)} emptyMessage="Loading..." /> : null}
 			<div className="flex items-center space-x-1">
 				<div className="text-sm dark:text-gray-400">
 					Followed by{' '}
