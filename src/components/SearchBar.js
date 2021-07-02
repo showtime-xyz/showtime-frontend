@@ -68,7 +68,7 @@ const SearchBar = ({ propagateSearchState }) => {
 	return (
 		<>
 			{/* Start desktop-only menu */}
-			<div className="hidden flex-col relative w-full max-w-3xl md:flex">
+			<div className="hidden flex-col relative w-full max-w-3xl md:flex pr-1">
 				<div className="flex relative w-full" ref={searchInputContainerRef}>
 					<div className="absolute left-2.5 top-2 transform translate-y-px pointer-events-none z-1">
 						<SearchIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
