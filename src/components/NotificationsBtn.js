@@ -68,10 +68,10 @@ export default function NotificationsBtn() {
 		<Popover className="md:relative">
 			{({ open }) => (
 				<>
-					<Popover.Button data-close-notifs className="dark:text-gray-300 hover:text-stpink transition-all rounded-full cursor-pointer relative h-6 w-6">
+					<Popover.Button data-close-notifs className="dark:text-gray-300 transition-all rounded-full cursor-pointer relative h-6 w-6">
 						<span onClick={open ? null : handlePanelOpen} className="flex items-center justify-center">
 							<ZapIcon className="w-5 h-5" />
-							{hasUnreadNotifications && <div className="bg-gradient-to-r from-[#4D54FF] to-[#E14DFF] absolute h-2 w-2 top-0 right-0 rounded-full" />}
+							{hasUnreadNotifications && <div className="bg-red-500 absolute h-2 w-2 top-0 right-0 rounded-full" />}
 						</span>
 					</Popover.Button>
 					<Transition show={open} as={Fragment} enter="transition ease-out duration-200" enterFrom="transform opacity-0" enterTo="transform opacity-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100" leaveTo="transform opacity-0">
