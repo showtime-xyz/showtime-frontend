@@ -1,17 +1,13 @@
-import { useContext } from 'react'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import ClientOnlyPortal from './ClientOnlyPortal'
 import Link from 'next/link'
 import CloseButton from './CloseButton'
-import { truncateWithEllipses } from '@/lib/utilities'
 import FollowButton from './FollowButton'
 import BadgeIcon from './Icons/BadgeIcon'
-import AppContext from '@/context/app-context'
 import useProfile from '@/hooks/useProfile'
 
 export default function ModalUserList({ isOpen, title, users, closeModal, emptyMessage, onRedirect }) {
 	const { profile: myProfile } = useProfile()
-	const context = useContext(AppContext)
 
 	return (
 		<>
