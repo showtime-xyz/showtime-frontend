@@ -725,14 +725,15 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 								/>
 							</div>
 						</div>
-					) : null}
+					) : (
+						<div className="my-8" />
+					)}
 					<CappedWidth>
 						<div className="m-auto">
 							<div ref={gridRef} className="pt-0 ">
 								<div className="lg:col-span-2 xl:col-span-3 min-h-screen">
 									{!isLoadingCards && (
 										<div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:px-3 md:my-2">
-											{/* TODO: Find a good place for the ordering controls */}
 											<div className="flex items-center w-full md:w-auto">
 												<button onClick={() => handleListChange(1)} className={`flex-1 md:flex-initial px-4 py-3 space-x-2 flex items-center justify-center md:justify-start border-b-2 ${selectedGrid === 1 ? 'border-gray-800 dark:border-gray-300' : 'border-gray-200 dark:border-gray-700'} transition`}>
 													<FingerprintIcon className="hidden md:block w-5 h-5 dark:text-gray-500" />

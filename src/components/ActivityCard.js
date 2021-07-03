@@ -78,7 +78,7 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 	return (
 		<div
 			ref={cardRef}
-			className="flex flex-col flex-1 mb-6 pt-4 sm:rounded-lg bg-white dark:bg-gray-900 shadow-md border border-transparent dark:border-gray-800 border-t-2"
+			className="flex flex-col flex-1 mb-6 pt-4 sm:rounded-lg bg-white dark:bg-gray-900 shadow-md border-transparent dark:border-gray-800 border-t-2 md:dark:border md:border-t-2"
 			style={{
 				borderTopColor: activityIconObjects[type].color,
 			}}
