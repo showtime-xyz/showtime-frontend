@@ -5,7 +5,7 @@ import { Popover, Transition } from '@headlessui/react'
 import EthereumIcon from './Icons/EthereumIcon'
 import TezosIcon from './Icons/TezosIcon'
 import Link from 'next/link'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { CheckIcon } from '@heroicons/react/outline'
 
 export const AddressCollection = ({ addresses, isMyProfile = false }) => {
@@ -23,7 +23,7 @@ export const AddressCollection = ({ addresses, isMyProfile = false }) => {
 							{addresses.length > 1 && <span>+{addresses.length - 1} more</span>}
 							<ChevronDown className="w-4 h-4" />
 						</Popover.Button>
-						<Transition enter="transition duration-100 ease-out" enterFrom="transform scale-95 opacity-0" enterTo="transform scale-100 opacity-100" leave="transition duration-75 ease-out" leaveFrom="transform scale-100 opacity-100" leaveTo="transform scale-95 opacity-0">
+						<Transition as={Fragment} enter="transition transform duration-100 ease-out" enterFrom="scale-95 opacity-0" enterTo="scale-100 opacity-100" leave="transition transform duration-75 ease-out" leaveFrom="scale-100 opacity-100" leaveTo="scale-95 opacity-0">
 							<Popover.Panel className="absolute z-20 top-10 right-0 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 px-6 py-4 shadow rounded-xl">
 								<div className="space-y-3">
 									{addresses
@@ -56,7 +56,7 @@ const AddressButton = ({ address, ens_domain }) => {
 	const [hasCopied, setHasCopied] = useState(false)
 
 	const copyAddress = () => {
-		copyToClipBoard(ens_domain || address)
+		copyToClipBoard(address)
 		setHasCopied(true)
 		setTimeout(() => setHasCopied(false), 500)
 	}
