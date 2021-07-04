@@ -39,7 +39,7 @@ export async function getStaticProps({ params: { profile: slug_address } }) {
 			data: {
 				data: { profile, followers: followers_list, followers_count, following: following_list, following_count, featured_nft, lists },
 			},
-		} = await backend.get(`/v2/profile_server/${slug_address}`)
+		} = await backend.get(encodeURIComponent(`v2/profile_server/${slug_address}`))
 
 		return {
 			props: {
