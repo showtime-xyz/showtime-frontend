@@ -1,18 +1,8 @@
-import Iron from '@hapi/iron'
-import CookieService from '@/lib/cookie'
 import handler from '@/lib/api-handler'
 import backend from '@/lib/backend'
 
-export default handler().post(async ({ cookies, body: { page = 1, activityTypeId = 0, limit = 5 } }, res) => {
-	let user
-
-	try {
-		user = await Iron.unseal(CookieService.getAuthToken(cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
-	} catch (err) {
-		if (page > 8) return res.status(200).json({ data: [] })
-
-		// User is not authenticated
-	}
+export default handler().post(async ({ user, body: { page = 1, activityTypeId = 0, limit = 5 } }, res) => {
+	if (!user && page > 8) return res.status(200).json({ data: [] })
 
 	await backend
 		.get(`/v1/activity?page=${page}&type_id=${activityTypeId}&limit=${limit}`, {

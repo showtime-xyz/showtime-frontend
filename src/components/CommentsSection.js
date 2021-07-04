@@ -15,11 +15,12 @@ import { Picker } from 'emoji-mart'
 import { useTheme } from 'next-themes'
 import { EmojiHappyIcon } from '@heroicons/react/outline'
 import { Menu } from '@headlessui/react'
+import useAuth from '@/hooks/useAuth'
 
 export default function CommentsSection({ item, closeModal, modalRef, commentCount }) {
 	const { resolvedTheme } = useTheme()
 	const context = useContext(AppContext)
-	const { user } = context
+	const { isAuthenticated } = useAuth()
 	let refArray = []
 
 	const { nft_id: nftId, owner_id: nftOwnerId, creator_id: nftCreatorId, owner_count: ownerCount } = item
@@ -250,7 +251,7 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 							<XIcon className="w-4 h-4 text-gray-800 dark:text-gray-500" />
 						</button>
 					)}
-					<GhostButton loading={isSubmitting && (isReply ? parentComment || siblingComment : !parentComment && !siblingComment)} onClick={!user ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="md:ml-2 flex-1 md:flex-initial rounded-lg">
+					<GhostButton loading={isSubmitting && (isReply ? parentComment || siblingComment : !parentComment && !siblingComment)} onClick={!isAuthenticated ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="md:ml-2 flex-1 md:flex-initial rounded-lg">
 						Post
 					</GhostButton>
 				</div>

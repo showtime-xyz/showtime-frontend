@@ -1,16 +1,15 @@
 import { useContext } from 'react'
-//import { useRouter } from "next/router";
 import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
 import _ from 'lodash'
-import { HeartIcon as SolidHeartIcon } from '@heroicons/react/solid'
-import { HeartIcon as OutlineHeartIcon } from '@heroicons/react/outline'
 import Tippy from '@tippyjs/react'
 import axios from '@/lib/axios'
+import HeartIcon, { HeartIconSolid } from './Icons/HeartIcon'
+import useAuth from '@/hooks/useAuth'
 
 const LikeButton = ({ item }) => {
+	const { isAuthenticated } = useAuth()
 	const context = useContext(AppContext)
-	const { isMobile } = context
 
 	const handleLike = async nft_id => {
 		// Change myLikes via setMyLikes
@@ -25,9 +24,7 @@ const LikeButton = ({ item }) => {
 		try {
 			await axios
 				.post(`/api/like_v3/${nft_id}`)
-				.then(() => {
-					mixpanel.track('Liked item')
-				})
+				.then(() => mixpanel.track('Liked item'))
 				.catch(err => {
 					if (err.response.data.code === 429) {
 						// Change myLikes via setMyLikes
@@ -69,11 +66,11 @@ const LikeButton = ({ item }) => {
 	}
 
 	return (
-		<Tippy content="Sign in to like" disabled={context.user || isMobile}>
-			<button className="focus:outline-none focus-visible:ring-1" disabled={context.disableLikes} onClick={() => (context.user ? (liked ? handleUnlike(item.nft_id) : handleLike(item.nft_id)) : handleLoggedOutLike())}>
-				<div className={`flex flex-row items-center rounded-md py-1 dark:text-gray-300 hover:text-red-500 ${context.disableLikes ? 'hover:text-gray-500 text-gray-500' : ''}`}>
-					<div className="mr-2 whitespace-nowrap">{Number(like_count < 0 ? 0 : like_count).toLocaleString()}</div>
-					<div className={`flex pr-1 ${liked ? 'text-red-500 dark:text-red-600' : 'hover:text-red-400 dark:hover:text-red-500'}`}>{liked ? <SolidHeartIcon className="w-6 h-6" /> : <OutlineHeartIcon className="w-6 h-6" />}</div>
+		<Tippy content="Sign in to like" disabled={isAuthenticated || context.isMobile}>
+			<button className="focus:outline-none hover:bg-red-50 dark:hover:bg-red-900 focus-visible:bg-red-50 dark:focus-visible:bg-red-900 px-2 -mx-2 rounded-xl group" disabled={context.disableLikes} onClick={() => (isAuthenticated ? (liked ? handleUnlike(item.nft_id) : handleLike(item.nft_id)) : handleLoggedOutLike())}>
+				<div className={`flex flex-row items-center rounded-md py-1 dark:text-gray-300 ${liked ? 'text-red-500 dark:text-red-600' : 'group-hover:text-red-400 dark:group-hover:text-red-400'} ${context.disableLikes ? 'hover:text-gray-500 text-gray-500' : ''}`}>
+					<div className={'flex'}>{liked ? <HeartIconSolid className="w-5 h-5" /> : <HeartIcon className="w-5 h-5" />}</div>
+					<div className="ml-1 whitespace-nowrap">{Number(like_count < 0 ? 0 : like_count).toLocaleString()}</div>
 				</div>
 			</button>
 		</Tippy>

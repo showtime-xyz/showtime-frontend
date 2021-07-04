@@ -17,16 +17,12 @@ export const truncateWithEllipses = (text, max) => {
 }
 
 export const formatAddressShort = address => {
-	if (!address) {
-		return null
-	}
+	if (!address) return null
+
 	// Skip over ENS names
-	if (address.includes('.eth')) {
-		return address
-	}
-	const startString = address.slice(0, 4)
-	const endString = address.slice(address.length - 4, address.length)
-	return `${startString}…${endString}`
+	if (address.includes('.')) return address
+
+	return `${address.slice(0, 4)}…${address.slice(address.length - 4, address.length)}`
 }
 
 export const copyToClipBoard = async textToCopy => {
@@ -103,11 +99,8 @@ export const getContractName = item => {
 		case CONTRACTS.RARIBLE_1155:
 			return 'Rarible'
 		case CONTRACTS.KNOWNORIGIN:
-			if (item.token_ko_edition) {
-				return 'KnownOrigin'
-			} else {
-				return 'OpenSea'
-			}
+			if (item.token_ko_edition) return 'KnownOrigin'
+			else return 'OpenSea'
 		case CONTRACTS.FOUNDATION:
 			return 'Foundation'
 		case CONTRACTS.SUPERRARE_V1:
@@ -118,23 +111,14 @@ export const getContractName = item => {
 			return 'Async Art'
 		case CONTRACTS.PORTIONIO:
 		case CONTRACTS.PORTIONIO_1155:
-			if (item.token_img_original_url) {
-				return 'Portion.io'
-			} else {
-				return 'OpenSea'
-			}
+			if (item.token_img_original_url) return 'Portion.io'
+			else return 'OpenSea'
 		case CONTRACTS.CRYPTOARTAI:
-			if (item.token_edition_identifier) {
-				return 'CryptoArt.Ai'
-			} else {
-				return 'OpenSea'
-			}
+			if (item.token_edition_identifier) return 'CryptoArt.Ai'
+			else return 'OpenSea'
 		case CONTRACTS.MINTABLE:
-			if (item.token_listing_identifier) {
-				return 'Mintable'
-			} else {
-				return 'OpenSea'
-			}
+			if (item.token_listing_identifier) return 'Mintable'
+			else return 'OpenSea'
 		case CONTRACTS.EPHIMERA:
 			return 'Ephimera'
 		case CONTRACTS.KALAMINT:
@@ -143,6 +127,45 @@ export const getContractName = item => {
 			return 'Hic Et Nunc'
 		default:
 			return 'OpenSea'
+	}
+}
+
+export const getContractImage = item => {
+	switch (item.contract_address) {
+		case CONTRACTS.ZORA:
+			return '/icons/zora.png'
+		case CONTRACTS.RARIBLE_V2:
+		case CONTRACTS.RARIBLE_1155:
+			return '/icons/rarible.png'
+		case CONTRACTS.KNOWNORIGIN:
+			if (item.token_ko_edition) return '/icons/knownorigin.png'
+			else return '/icons/opensea.png'
+		case CONTRACTS.FOUNDATION:
+			return '/icons/foundation.png'
+		case CONTRACTS.SUPERRARE_V1:
+		case CONTRACTS.SUPERRARE_V2:
+			return '/icons/superrare.png'
+		case CONTRACTS.ASYNCART_V1:
+		case CONTRACTS.ASYNCART_V2:
+			return '/icons/asyncart.png'
+		case CONTRACTS.PORTIONIO:
+		case CONTRACTS.PORTIONIO_1155:
+			if (item.token_img_original_url) return '/icons/portion.png'
+			else return '/icons/opensea.png'
+		case CONTRACTS.CRYPTOARTAI:
+			if (item.token_edition_identifier) return '/icons/cryptoartai.png'
+			else return '/icons/opensea.png'
+		case CONTRACTS.MINTABLE:
+			if (item.token_listing_identifier) return '/icons/mintable.png'
+			else return '/icons/opensea.png'
+		case CONTRACTS.EPHIMERA:
+			return '/icons/ephimera.png'
+		case CONTRACTS.KALAMINT:
+			return '/icons/kalamint.png'
+		case CONTRACTS.HICETNUNC:
+			return '/icons/hicetnunc.png'
+		default:
+			return '/icons/opensea.png'
 	}
 }
 

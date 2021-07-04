@@ -1,17 +1,17 @@
-import { useContext, useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 import mixpanel from 'mixpanel-browser'
 import 'croppie/croppie.css'
 import Croppie from 'croppie'
-import AppContext from '@/context/app-context'
 import CloseButton from './CloseButton'
 import ScrollableModal from './ScrollableModal'
 import axios from '@/lib/axios'
 import PrimaryButton from './UI/Buttons/PrimaryButton'
 import GhostButton from './UI/Buttons/GhostButton'
 import GreenButton from './UI/Buttons/GreenButton'
+import useProfile from '@/hooks/useProfile'
 
 export default function ModalEditCover({ isOpen, setEditModalOpen }) {
-	const context = useContext(AppContext)
+	const { profile: myProfile, mutate: mutateProfile } = useProfile()
 
 	const [image, setImage] = useState('')
 	const [croppie, setCroppie] = useState(null)
@@ -50,7 +50,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 			.post('/api/profile/cover')
 			.then(res => res.data)
 			.then(({ data: emptyUrl }) => {
-				context.setMyProfile({ ...context.myProfile, cover_url: emptyUrl })
+				mutateProfile({ ...myProfile, cover_url: emptyUrl })
 				setEditModalOpen(false)
 				setSaveInProgress(false)
 			})
@@ -77,7 +77,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 							.post('/api/profile/cover', { image: blobString })
 							.then(res => res.data)
 							.then(({ data: url }) => {
-								context.setMyProfile({ ...context.myProfile, cover_url: url })
+								mutateProfile({ ...myProfile, cover_url: url })
 
 								setEditModalOpen(false)
 								setSaveInProgress(false)
@@ -179,7 +179,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 									</GhostButton>
 								</div>
 
-								{context.myProfile.cover_url && (
+								{myProfile?.cover_url && (
 									<div className="text-sm dark:text-gray-400 ml-4 cursor-pointer" onClick={handleRemovePhoto}>
 										Remove
 									</div>

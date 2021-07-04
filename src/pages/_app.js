@@ -9,6 +9,8 @@ import ModalThrottleUser from '@/components/ModalThrottleUser'
 import axios from '@/lib/axios'
 import { filterNewRecs } from '../lib/utilities'
 import { ThemeProvider } from 'next-themes'
+import useAuth from '@/hooks/useAuth'
+import useProfile from '@/hooks/useProfile'
 
 mixpanel.init('9b14512bc76f3f349c708f67ab189941')
 
@@ -25,6 +27,8 @@ Router.events.on('routeChangeComplete', progress.finish)
 Router.events.on('routeChangeError', progress.finish)
 
 const App = ({ Component, pageProps }) => {
+	const { revalidate } = useAuth()
+	const { profile: myProfile, mutate: setMyProfile } = useProfile()
 	const [user, setUser] = useState()
 	const [windowSize, setWindowSize] = useState(null)
 	const [myLikes, setMyLikes] = useState(null)
@@ -34,7 +38,6 @@ const App = ({ Component, pageProps }) => {
 	const [myComments, setMyComments] = useState(null)
 	const [myCommentCounts, setMyCommentCounts] = useState(null)
 	const [myFollows, setMyFollows] = useState(null)
-	const [myProfile, setMyProfile] = useState()
 	const [myRecommendations, setMyRecommendations] = useState()
 	const [loginModalOpen, setLoginModalOpen] = useState(false)
 	const [isMobile, setIsMobile] = useState(null)
@@ -89,18 +92,6 @@ const App = ({ Component, pageProps }) => {
 			setMyCommentLikes(my_info_data.data.likes_comment)
 			setMyComments(my_info_data.data.comments)
 			setMyFollows(my_info_data.data.follows)
-			setMyProfile({
-				...my_info_data.data.profile,
-				// turn notifications_last_opened into Date before storing in context
-				notifications_last_opened: my_info_data.data.profile.notifications_last_opened ? new Date(my_info_data.data.profile.notifications_last_opened) : null,
-				links: my_info_data.data.profile.links.map(link => ({
-					name: link.type__name,
-					prefix: link.type__prefix,
-					icon_url: link.type__icon_url,
-					type_id: link.type_id,
-					user_input: link.user_input,
-				})),
-			})
 
 			// Load up the recommendations async if we are onboarding
 			if (my_info_data.data.profile.has_onboarded == false) {
@@ -138,7 +129,7 @@ const App = ({ Component, pageProps }) => {
 	// get recommended followers on init
 	useEffect(() => {
 		if (typeof user !== 'undefined') getActivityRecommendedFollows()
-	}, [user])
+	}, [typeof user])
 
 	// update recommendedFollows when the RecQueue is updated
 	useEffect(() => {
@@ -226,6 +217,7 @@ const App = ({ Component, pageProps }) => {
 		adjustGridProperties,
 		logOut: async () => {
 			await axios.post('/api/auth/logout')
+			revalidate()
 			setUser(null)
 			setMyLikes([])
 			setMyLikeCounts({})
