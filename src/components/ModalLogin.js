@@ -156,7 +156,7 @@ export default function Modal({ isOpen }) {
 											<div className="pt-1 pb-1 text-xs text-gray-700 dark:text-gray-500">If this is your first time, it will create a new account.</div>
 										</div>
 										<br />
-										<input name="email" placeholder="Email" type="email" className="border-2 dark:border-gray-800 w-full text-black dark:text-gray-300 rounded-lg p-3 focus:outline-none focus-visible:ring-1" autoFocus />
+										<input name="email" placeholder="Email" type="email" className="border-2 dark:border-gray-800 dark:bg-gray-800 w-full text-black dark:text-gray-300 rounded-lg p-3 focus:outline-none focus-visible:ring-1" autoFocus />
 
 										<div className="pt-8 pb-8 text-gray-700 dark:text-gray-500 text-xs">
 											By signing in you agree to our{' '}

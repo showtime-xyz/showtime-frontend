@@ -62,7 +62,7 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
 		return (
 			<div className="p-4 mx-4 rounded-xl bg-white dark:bg-gray-900 shadow-lg mb-8 ">
 				<div className="flex items-center justify-between mb-4">
-					<h6 className="text-2xl font-medium w-11/12">
+					<h6 className="text-2xl font-medium w-11/12 dark:text-gray-300">
 						Follow people to start <span className="hidden sm:inline">your feed</span>
 					</h6>
 				</div>

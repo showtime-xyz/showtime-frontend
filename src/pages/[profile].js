@@ -643,7 +643,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 											<FollowStats {...{ following, following_count, followers, followersCount, isMyProfile, setShowFollowing, setShowFollowers }} />
 										</div>
 										<div className="flex items-center space-x-2">
-											<Button style={isMyProfile ? 'tertiary_gray' : isFollowed ? 'tertiary' : 'primary'} onClick={isAuthenticated ? (isMyProfile ? editAccount : isFollowed ? handleUnfollow : context.disableFollows ? null : handleFollow) : handleLoggedOutFollow} className={`space-x-2 ${isFollowed || isMyProfile ? '' : 'text-white'}`}>
+											<Button style={isMyProfile ? 'tertiary_gray' : isFollowed ? 'tertiary' : 'primary'} onClick={isAuthenticated ? (isMyProfile ? editAccount : isFollowed ? handleUnfollow : context.disableFollows ? null : handleFollow) : handleLoggedOutFollow} className={`space-x-2 ${isFollowed || isMyProfile ? 'dark:text-gray-400' : 'text-white'}`}>
 												{isMyProfile ? (
 													<span className="font-semibold">Edit Profile</span>
 												) : isFollowed ? (
