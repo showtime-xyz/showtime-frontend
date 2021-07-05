@@ -89,7 +89,7 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
 					{!showAllItems && removeAlreadyFollowedItems.length > 3 && (
 						<>
 							<div
-								className="text-center px-6 py-2 lex items-center w-max border-2 rounded-full hover:text-stpink hover:border-stpink transition-all bg-white  dark:bg-gray-800 cursor-pointer"
+								className="text-center px-6 py-2 lex items-center w-max border-2 rounded-full hover:text-stpink hover:border-stpink transition-all bg-white  dark:bg-gray-800 dark:text-gray-400 cursor-pointer"
 								onClick={() => {
 									mixpanel.track('Clicked Show More on Recommended Followers modal')
 									setShowAllItems(true)
