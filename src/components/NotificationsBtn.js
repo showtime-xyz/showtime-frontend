@@ -11,6 +11,7 @@ import { Popover, Transition } from '@headlessui/react'
 import { useSWRInfinite } from 'swr'
 import useAuth from '../hooks/useAuth'
 import useProfile from '@/hooks/useProfile'
+import ProfileHovercard from './ProfileHovercard'
 
 const NOTIFICATIONS_PER_PAGE = 7
 
@@ -92,80 +93,98 @@ export default function NotificationsBtn() {
 											// HAS CLICKABLE ACTORS
 											<div className={`py-3 px-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all rounded-lg whitespace-nowrap flex items-start w-full max-w-full ${new Date(notif.to_timestamp) > new Date(previouslyLastOpened) ? 'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700' : ''}`} key={notif.id}>
 												<div className="w-max mr-2 relative min-w-[2.25rem]">
-													<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
-														<a onClick={closePanel}>
-															<img alt={notif.name} src={notif.img_url ? notif.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 mt-1 w-9 h-9" />
-															<div
-																className="absolute bottom-0 right-0 rounded-full h-5 w-5 flex items-center justify-center shadow"
-																style={{
-																	backgroundColor: getNotificationInfo(notif.type_id).color,
-																}}
-															>
-																<FontAwesomeIcon className="w-3 h-3 text-white" icon={iconObjects[getNotificationInfo(notif.type_id).icon]} />
-															</div>
-														</a>
-													</Link>
+													<ProfileHovercard user={notif.actors[0]?.profile_id}>
+														<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
+															<a onClick={closePanel}>
+																<img alt={notif.name} src={notif.img_url ? notif.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 mt-1 w-9 h-9" />
+																<div
+																	className="absolute bottom-0 right-0 rounded-full h-5 w-5 flex items-center justify-center shadow"
+																	style={{
+																		backgroundColor: getNotificationInfo(notif.type_id).color,
+																	}}
+																>
+																	<FontAwesomeIcon className="w-3 h-3 text-white" icon={iconObjects[getNotificationInfo(notif.type_id).icon]} />
+																</div>
+															</a>
+														</Link>
+													</ProfileHovercard>
 												</div>
 												<div className="flex-1 flex-col items-start text-left">
 													<div className="text-sm whitespace-pre-line">
 														<>
 															{notif.actors.length == 1 ? (
-																<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
-																	<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
-																		{notif.actors[0].name}{' '}
-																	</a>
-																</Link>
+																<ProfileHovercard user={notif.actors[0]?.profile_id}>
+																	<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
+																		<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
+																			{notif.actors[0].name}{' '}
+																		</a>
+																	</Link>
+																</ProfileHovercard>
 															) : null}
 															{notif.actors.length == 2 ? (
 																<>
-																	<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
-																		<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
-																			{notif.actors[0].name}
-																		</a>
-																	</Link>
+																	<ProfileHovercard user={notif.actors[0]?.profile_id}>
+																		<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
+																			<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
+																				{notif.actors[0].name}
+																			</a>
+																		</Link>
+																	</ProfileHovercard>
 																	<span className="text-gray-500"> and </span>
-																	<Link href="/[profile]" as={`/${notif.actors[1]?.username || notif.actors[1].wallet_address}`}>
-																		<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
-																			{notif.actors[1].name}{' '}
-																		</a>
-																	</Link>
+																	<ProfileHovercard user={notif.actors[1]?.profile_id}>
+																		<Link href="/[profile]" as={`/${notif.actors[1]?.username || notif.actors[1].wallet_address}`}>
+																			<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
+																				{notif.actors[1].name}{' '}
+																			</a>
+																		</Link>
+																	</ProfileHovercard>
 																</>
 															) : null}
 															{notif.actors.length == 3 ? (
 																<>
-																	<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
-																		<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
-																			{notif.actors[0].name}
-																		</a>
-																	</Link>
+																	<ProfileHovercard user={notif.actors[0]?.profile_id}>
+																		<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
+																			<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
+																				{notif.actors[0].name}
+																			</a>
+																		</Link>
+																	</ProfileHovercard>
 																	<span className="text-gray-500">, </span>
-																	<Link href="/[profile]" as={`/${notif.actors[1]?.username || notif.actors[1].wallet_address}`}>
-																		<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
-																			{notif.actors[1].name}
-																		</a>
-																	</Link>
+																	<ProfileHovercard user={notif.actors[1]?.profile_id}>
+																		<Link href="/[profile]" as={`/${notif.actors[1]?.username || notif.actors[1].wallet_address}`}>
+																			<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
+																				{notif.actors[1].name}
+																			</a>
+																		</Link>
+																	</ProfileHovercard>
 																	<span className="text-gray-500">, and </span>
-																	<Link href="/[profile]" as={`/${notif.actors[2]?.username || notif.actors[2].wallet_address}`}>
-																		<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
-																			{notif.actors[2].name}{' '}
-																		</a>
-																	</Link>
+																	<ProfileHovercard user={notif.actors[2]?.profile_id}>
+																		<Link href="/[profile]" as={`/${notif.actors[2]?.username || notif.actors[2].wallet_address}`}>
+																			<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
+																				{notif.actors[2].name}{' '}
+																			</a>
+																		</Link>
+																	</ProfileHovercard>
 																</>
 															) : null}
 															{notif.actors.length > 3 ? (
 																<>
 																	<ModalUserList title="Followed You" isOpen={openUserList == notif.id} users={notif.actors ? notif.actors : []} closeModal={() => setOpenUserList(null)} onRedirect={() => setOpenUserList(null)} emptyMessage="No followers yet." />
-																	<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
-																		<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
-																			{notif.actors[0].name}
-																		</a>
-																	</Link>
+																	<ProfileHovercard user={notif.actors[0]?.profile_id}>
+																		<Link href="/[profile]" as={`/${notif.actors[0]?.username || notif.actors[0].wallet_address}`}>
+																			<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
+																				{notif.actors[0].name}
+																			</a>
+																		</Link>
+																	</ProfileHovercard>
 																	<span className="text-gray-500">, </span>
-																	<Link href="/[profile]" as={`/${notif.actors[1]?.username || notif.actors[1].wallet_address}`}>
-																		<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
-																			{notif.actors[1].name}
-																		</a>
-																	</Link>
+																	<ProfileHovercard user={notif.actors[1]?.profile_id}>
+																		<Link href="/[profile]" as={`/${notif.actors[1]?.username || notif.actors[1].wallet_address}`}>
+																			<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
+																				{notif.actors[1].name}
+																			</a>
+																		</Link>
+																	</ProfileHovercard>
 																	<span className="text-gray-500">, and </span>
 																	<a className="text-black dark:text-gray-300 cursor-pointer hover:text-stpink dark:hover:text-stpink" onClick={() => setOpenUserList(notif.id)}>
 																		{notif.actors.length - 2} other {notif.actors.length - 2 == 1 ? 'person' : 'people'}{' '}

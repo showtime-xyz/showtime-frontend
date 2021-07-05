@@ -4,7 +4,7 @@ import AppContext from '@/context/app-context'
 import axios from '@/lib/axios'
 import { useMemo } from 'react'
 
-const MiniFollowButton = ({ profileId }) => {
+const MiniFollowButton = ({ profileId, className = '' }) => {
 	const context = useContext(AppContext)
 	const myFollows = useMemo(() => context?.myFollows || [], [context?.myFollows])
 	const [isFollowed, setIsFollowed] = useState(null)
@@ -46,7 +46,7 @@ const MiniFollowButton = ({ profileId }) => {
 	}
 
 	return isFollowed === null ? null : !isFollowed ? (
-		<button onClick={context.disableFollows ? null : context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow} className={`text-xs font-medium text-gray-800 dark:text-gray-500 rounded-xl px-3 py-2 transition ${context.disableFollows ? 'hover:opacity-80' : 'hover:bg-gray-100 dark:hover:bg-gray-800 focus-visible:bg-gray-100 dark:focus-visible:bg-gray-800'}`}>
+		<button onClick={context.disableFollows ? null : context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow} className={`text-xs font-medium text-gray-800 dark:text-gray-500 rounded-xl px-3 py-2 transition ${context.disableFollows ? 'hover:opacity-80' : 'hover:bg-gray-100 dark:hover:bg-gray-800 focus-visible:bg-gray-100 dark:focus-visible:bg-gray-800'} ${className}`}>
 			Follow
 		</button>
 	) : null

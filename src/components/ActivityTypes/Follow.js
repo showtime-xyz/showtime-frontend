@@ -7,10 +7,10 @@ import AppContext from '@/context/app-context'
 
 const TRUNCATE_NAME_LENGTH = 24
 
-export default function Follow({ act }) {
+export default function Follow({ act: { counterparties } }) {
 	const { isMobile } = useContext(AppContext)
-	const { counterparties } = act
 	const count = counterparties?.length
+
 	return (
 		<div className="flex flex-col">
 			<div className="text-gray-500 dark:text-gray-400">

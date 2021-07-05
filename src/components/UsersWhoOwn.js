@@ -2,17 +2,21 @@ import { useState } from 'react'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import ModalUserList from './ModalUserList'
+import ProfileHovercard from './ProfileHovercard'
 
 const UserImagesList = ({ users }) => {
 	const displayedUsers = users.slice(0, 5)
+
 	return (
 		<div className="flex mb-2">
 			{displayedUsers.map(u => (
-				<Link key={u.username || u.wallet_address} href="/[profile]" as={`/${u.username || u.wallet_address}`}>
-					<a className="rounded-full mr-2">
-						<img src={u.img_url || DEFAULT_PROFILE_PIC} className="w-12 h-12 rounded-full" />
-					</a>
-				</Link>
+				<ProfileHovercard user={u?.profile_id} initialProfile={u} key={u.username || u.wallet_address}>
+					<Link href="/[profile]" as={`/${u.username || u.wallet_address}`}>
+						<a className="rounded-full mr-2">
+							<img src={u.img_url || DEFAULT_PROFILE_PIC} className="w-12 h-12 rounded-full" />
+						</a>
+					</Link>
+				</ProfileHovercard>
 			))}
 		</div>
 	)

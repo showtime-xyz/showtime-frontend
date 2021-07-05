@@ -16,6 +16,7 @@ import axios from '@/lib/axios'
 import { Menu, Transition } from '@headlessui/react'
 import EllipsisIcon from './Icons/EllipsisIcon'
 import BadgeIcon from './Icons/BadgeIcon'
+import ProfileHovercard from './ProfileHovercard'
 
 const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) => {
 	const [moreShown, setMoreShown] = useState(false)
@@ -220,13 +221,17 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 										) : item.creator_address ? (
 											<Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
 												<a className="flex flex-row items-center space-x-2">
-													<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
+													<ProfileHovercard user={item.creator_id}>
+														<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
+													</ProfileHovercard>
 													<div>
 														<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Creator {item.owner_id == item.creator_id && '& Owner'}</span>
-														<div className="flex items-center space-x-1 -mt-0.5">
-															<div className="text-sm font-semibold truncate dark:text-gray-200">{item.creator_name === item.creator_address ? formatAddressShort(item.creator_address) : truncateWithEllipses(item.creator_name, 22)}</div>
-															{item.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
-														</div>
+														<ProfileHovercard user={item.creator_id}>
+															<div className="flex items-center space-x-1 -mt-0.5">
+																<div className="text-sm font-semibold truncate dark:text-gray-200">{item.creator_name === item.creator_address ? formatAddressShort(item.creator_address) : truncateWithEllipses(item.creator_name, 22)}</div>
+																{item.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+															</div>
+														</ProfileHovercard>
 													</div>
 												</a>
 											</Link>
@@ -238,14 +243,16 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 													<div>
 														<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owner</span>
 														<div className="flex items-center">
-															<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
-																<a className="flex flex-row items-center pr-2 ">
-																	<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
-																	<div>
-																		<div className="text-sm font-semibold truncate dark:text-gray-200">{truncateWithEllipses(pageProfile.name && pageProfile.name != 'Unnamed' ? (pageProfile.name == pageProfile.slug_address ? formatAddressShort(pageProfile.slug_address) : pageProfile.name) : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown', 14)}</div>
-																	</div>
-																</a>
-															</Link>
+															<ProfileHovercard user={pageProfile.profile_id}>
+																<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
+																	<a className="flex flex-row items-center pr-2 ">
+																		<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
+																		<div>
+																			<div className="text-sm font-semibold truncate dark:text-gray-200">{truncateWithEllipses(pageProfile.name && pageProfile.name != 'Unnamed' ? (pageProfile.name == pageProfile.slug_address ? formatAddressShort(pageProfile.slug_address) : pageProfile.name) : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown', 14)}</div>
+																		</div>
+																	</a>
+																</Link>
+															</ProfileHovercard>
 															<div className="text-gray-500 text-sm mr-2 -ml-1 mt-px">
 																&amp; {item.owner_count - 1} other
 																{item.owner_count - 1 > 1 ? 's' : null}
@@ -256,13 +263,17 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 													<div className="flex flex-row items-center pt-1">
 														<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
 															<a className="flex flex-row items-center space-x-2">
-																<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8" />
+																<ProfileHovercard user={item.owner_id}>
+																	<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8" />
+																</ProfileHovercard>
 																<div>
 																	<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owner</span>
-																	<div className="flex items-center space-x-1 -mt-0.5">
-																		<div className="text-sm font-semibold truncate dark:text-gray-200">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
-																		{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
-																	</div>
+																	<ProfileHovercard user={item.owner_id}>
+																		<div className="flex items-center space-x-1 -mt-0.5">
+																			<div className="text-sm font-semibold truncate dark:text-gray-200">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
+																			{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+																		</div>
+																	</ProfileHovercard>
 																</div>
 															</a>
 														</Link>

@@ -6,6 +6,7 @@ import { truncateWithEllipses, formatAddressShort } from '@/lib/utilities'
 import Link from 'next/link'
 import backend from '@/lib/backend'
 import { formatDistanceToNowStrict } from 'date-fns'
+import ProfileHovercard from './ProfileHovercard'
 
 export default function TokenHistoryCard({ nftId, closeModal }) {
 	const [nftHistory, setNftHistory] = useState()
@@ -46,6 +47,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
 			</div>
 		)
 	}
+
 	return (
 		<>
 			<div className="overflow-x-auto overflow-y-hidden flex flex-col border-2 border-gray-300 dark:border-gray-800 rounded-xl w-full h-full">
@@ -64,28 +66,32 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
 								<tr key={`${entry.timestamp}${entry.from_address}${entry.to_address}`}>
 									<td className={`truncate py-3 px-4 ${!entry.from_address ? `border-t-2 border-gray-100 dark:border-gray-800 rounded-bl-xl ${nftHistory.history.length == 1 ? 'rounded-tl-xl' : null}` : ''}`}>
 										{entry.from_address ? (
-											<Link href="/[profile]" as={`/${entry.from_username || entry.from_address}`}>
-												<a onClick={closeModal}>
-													<div className="flex items-center dark:text-gray-300 hover:text-stpink dark:hover:text-stpink transition-all w-max">
-														<img src={entry.from_img_url || DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-6 h-6" />
-														<div>{truncateWithEllipses(entry.from_name || entry.from_username || formatAddressShort(entry.from_address), 26)}</div>
-													</div>
-												</a>
-											</Link>
+											<ProfileHovercard user={entry.from_profile_id}>
+												<Link href="/[profile]" as={`/${entry.from_username || entry.from_address}`}>
+													<a onClick={closeModal}>
+														<div className="flex items-center dark:text-gray-300 hover:text-stpink dark:hover:text-stpink transition-all w-max">
+															<img src={entry.from_img_url || DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-6 h-6" />
+															<div>{truncateWithEllipses(entry.from_name || entry.from_username || formatAddressShort(entry.from_address), 26)}</div>
+														</div>
+													</a>
+												</Link>
+											</ProfileHovercard>
 										) : (
 											<div className="text-gray-400">Created</div>
 										)}
 									</td>
 									<td className={`truncate py-3 px-4 ${!entry.from_address ? 'border-t-2 border-gray-100 dark:border-gray-800 flex flex-row' : ''}`}>
 										{entry.to_address ? (
-											<Link href="/[profile]" as={`/${entry.to_username || entry.to_address}`}>
-												<a onClick={closeModal}>
-													<div className="flex items-center dark:text-gray-300 hover:text-stpink dark:hover:text-stpink transition-all w-max">
-														<img src={entry.to_img_url || DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-6 h-6" />
-														<div>{truncateWithEllipses(entry.to_name || entry.to_username || formatAddressShort(entry.to_address), 26)}</div>
-													</div>
-												</a>
-											</Link>
+											<ProfileHovercard user={entry.to_profile_id}>
+												<Link href="/[profile]" as={`/${entry.to_username || entry.to_address}`}>
+													<a onClick={closeModal}>
+														<div className="flex items-center dark:text-gray-300 hover:text-stpink dark:hover:text-stpink transition-all w-max">
+															<img src={entry.to_img_url || DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-6 h-6" />
+															<div>{truncateWithEllipses(entry.to_name || entry.to_username || formatAddressShort(entry.to_address), 26)}</div>
+														</div>
+													</a>
+												</Link>
+											</ProfileHovercard>
 										) : (
 											<div className="text-gray-400">Burned</div>
 										)}

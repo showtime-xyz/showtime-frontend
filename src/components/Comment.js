@@ -8,6 +8,7 @@ import reactStringReplace from 'react-string-replace'
 import { formatAddressShort } from '@/lib/utilities'
 import CommentLikeButton from './CommentLikeButton'
 import { DotsHorizontalIcon, ReplyIcon } from '@heroicons/react/solid'
+import ProfileHovercard from './ProfileHovercard'
 
 export default function Comment({ comment, closeModal, modalRef, deleteComment, nftOwnerId, nftCreatorId, openLikedByModal, handleReply }) {
 	const context = useContext(AppContext)
@@ -31,35 +32,37 @@ export default function Comment({ comment, closeModal, modalRef, deleteComment, 
 	const isOwnerOfNFT = nftOwnerId && nftOwnerId === myProfile?.profile_id
 	const isCreatorOfNFT = nftCreatorId && nftCreatorId === myProfile?.profile_id
 
+	console.log(comment)
+
 	return (
 		<div className="p-2 my-1 flex rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition relative">
 			<div className="mr-3 mt-1">
-				<Link href="/[profile]" as={comment.username ? `/${comment.username}` : `/${comment.address}`}>
-					<img alt={comment.username || comment.name || 'Unnamed'} src={comment.img_url ? comment.img_url : DEFAULT_PROFILE_PIC} className="rounded-full cursor-pointer h-8 w-8" onClick={closeModal} />
-				</Link>
+				<ProfileHovercard user={comment.commenter_profile_id}>
+					<Link href="/[profile]" as={comment.username ? `/${comment.username}` : `/${comment.address}`}>
+						<img alt={comment.username || comment.name || 'Unnamed'} src={comment.img_url ? comment.img_url : DEFAULT_PROFILE_PIC} className="rounded-full cursor-pointer h-8 w-8" onClick={closeModal} />
+					</Link>
+				</ProfileHovercard>
 			</div>
 			<div className="flex flex-col flex-1">
 				<div className="flex items-center justify-between">
-					<div className="flex flex-col sm:flex-row">
-						<Link href="/[profile]" as={comment.username ? `/${comment.username}` : `/${comment.address}`}>
-							<a className="dark:text-gray-300 hover:text-stpink dark:hover:text-stpink cursor-pointer text-sm truncate" onClick={closeModal}>
-								{comment.name || formatAddressShort(comment.address)}
-							</a>
-						</Link>
-						{comment.username && (
+					<ProfileHovercard user={comment.commenter_profile_id}>
+						<div className="flex flex-col sm:flex-row">
 							<Link href="/[profile]" as={comment.username ? `/${comment.username}` : `/${comment.address}`}>
-								<a className="hover:text-stpink cursor-pointer text-xs text-gray-400 sm:ml-1 truncate" onClick={closeModal}>
-									@{comment.username}
+								<a className="dark:text-gray-300 hover:text-stpink dark:hover:text-stpink cursor-pointer text-sm truncate" onClick={closeModal}>
+									{comment.name || formatAddressShort(comment.address)}
 								</a>
 							</Link>
-						)}
-					</div>
+							{comment.username && (
+								<Link href="/[profile]" as={comment.username ? `/${comment.username}` : `/${comment.address}`}>
+									<a className="hover:text-stpink cursor-pointer text-xs text-gray-400 sm:ml-1 truncate" onClick={closeModal}>
+										@{comment.username}
+									</a>
+								</Link>
+							)}
+						</div>
+					</ProfileHovercard>
 					<div className="flex-grow"></div>
-					<div className={`text-gray-400 dark:text-gray-500 text-xs flex-0 sm:mb-0 ${comment.username ? '-mt-4' : '-mt-1'}  sm:mt-0`}>
-						{formatDistanceToNowStrict(subSeconds(new Date(`${comment.added}Z`), 1), {
-							addSuffix: true,
-						})}
-					</div>
+					<div className={`text-gray-400 dark:text-gray-500 text-xs flex-0 sm:mb-0 ${comment.username ? '-mt-4' : '-mt-1'}  sm:mt-0`}>{formatDistanceToNowStrict(subSeconds(new Date(`${comment.added}Z`), 1), { addSuffix: true })}</div>
 					{(isOwnerOfNFT || userWroteComment || isCreatorOfNFT) && (
 						<div className={`flex items-center justify-center  relative ${comment.username ? '-mt-4' : '-mt-1'} sm:mt-0`}>
 							<div onClick={toggleDropdown} className="ml-3 mr-1 cursor-pointer text-gray-400 dark:text-gray-600 hover:text-gray-600 dark:hover:text-gray-500 transition">

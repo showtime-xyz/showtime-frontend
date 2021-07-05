@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Fragment, useState } from 'react'
 import useSWR from 'swr'
 import ModalUserList from './ModalUserList'
+import ProfileHovercard from './ProfileHovercard'
 import UserImageList from './UserImageList'
 
 const FollowersInCommon = ({ profileId }) => {
@@ -34,9 +35,11 @@ const FollowersInCommon = ({ profileId }) => {
 					<div className="hidden md:inline">
 						{followersInCommon.followers.slice(0, 2).map((follower, i) => (
 							<Fragment key={follower.profile_id}>
-								<Link href={`/${follower.username || follower.address}`}>
-									<a className="font-semibold dark:text-gray-300">{`@${follower.username}` || formatAddressShort(follower.address)}</a>
-								</Link>
+								<ProfileHovercard user={follower.profile_id}>
+									<Link href={`/${follower.username || follower.address}`}>
+										<a className="font-semibold dark:text-gray-300">{`@${follower.username}` || formatAddressShort(follower.address)}</a>
+									</Link>
+								</ProfileHovercard>
 								{i + 1 != followersInCommon.count && ', '}
 							</Fragment>
 						))}

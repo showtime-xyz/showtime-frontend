@@ -11,6 +11,7 @@ import FollowButton from './FollowButton'
 import AppContext from '@/context/app-context'
 import { formatAddressShort, truncateWithEllipses } from '@/lib/utilities'
 import RemoveRecommendationButton from './RemoveRecommendationButton'
+import ProfileHovercard from './ProfileHovercard'
 
 const Tiles = ({ topItems, setCurrentlyOpenModal }) => {
 	const context = useContext(AppContext)
@@ -82,6 +83,8 @@ const RecommendedFollowItem = ({ item, closeModal = () => {}, liteVersion, remov
 		}
 	}, [escPress, leftPress, rightPress])
 
+	console.log({ item })
+
 	return (
 		<div className="flex flex-col w-full border-t-px dark:border-gray-800 relative">
 			{typeof document !== 'undefined' ? (
@@ -91,17 +94,21 @@ const RecommendedFollowItem = ({ item, closeModal = () => {}, liteVersion, remov
 			) : null}
 			<div className="flex flex-col sm:flex-row sm:justify-between w-full border-t dark:border-gray-800 relative p-4 group" style={{ paddingLeft: leftPadding }}>
 				<div className="flex">
-					<Link href="/[profile]" as={`/${item?.username || item.address}`}>
-						<a onClick={() => closeModal()} className="min-w-[42px]">
-							<img className={`rounded-full cursor-pointer ${liteVersion ? 'w-11 h-11 mr-2.5' : 'w-20 h-20 mr-5'}`} src={item?.img_url ? item?.img_url : DEFAULT_PROFILE_PIC} />
-						</a>
-					</Link>
-					<div className={`flex flex-col justify-around truncate ${liteVersion ? 'max-w-[7.5rem]' : ''}`}>
+					<ProfileHovercard user={item?.profile_id} initialProfile={item}>
 						<Link href="/[profile]" as={`/${item?.username || item.address}`}>
-							<a onClick={() => closeModal()}>
-								<h4 className={`font-medium cursor-pointer truncate dark:text-gray-300 hover:text-stpink dark:hover:text-stpink ${liteVersion ? 'mr-7' : 'text-lg'}`}>{truncateWithEllipses(item?.name, context.isMobile ? 19 : 30) || formatAddressShort(item.address) || 'Unnamed'}</h4>
+							<a onClick={() => closeModal()} className="min-w-[42px]">
+								<img className={`rounded-full cursor-pointer ${liteVersion ? 'w-11 h-11 mr-2.5' : 'w-20 h-20 mr-5'}`} src={item?.img_url ? item?.img_url : DEFAULT_PROFILE_PIC} />
 							</a>
 						</Link>
+					</ProfileHovercard>
+					<div className={`flex flex-col justify-around truncate ${liteVersion ? 'max-w-[7.5rem]' : ''}`}>
+						<ProfileHovercard user={item?.profile_id} initialProfile={item}>
+							<Link href="/[profile]" as={`/${item?.username || item.address}`}>
+								<a onClick={() => closeModal()}>
+									<h4 className={`font-medium cursor-pointer truncate dark:text-gray-300 hover:text-stpink dark:hover:text-stpink ${liteVersion ? 'mr-7' : 'text-lg'}`}>{truncateWithEllipses(item?.name, context.isMobile ? 19 : 30) || formatAddressShort(item.address) || 'Unnamed'}</h4>
+								</a>
+							</Link>
+						</ProfileHovercard>
 						{!liteVersion && (
 							<div className="flex items-center">
 								<div className="flex items-center dark:text-gray-400">
