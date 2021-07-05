@@ -164,24 +164,16 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 
 						<div className="flex flex-col md:flex-row">
 							<div className="flex-1 my-4 ">
-								<div className="text-xl text-indigo-500 dark:text-indigo-400 mb-3">Profile</div>
+								<div className="mb-3">
+									<p className="text-xl text-indigo-500 dark:text-indigo-400 mb-1">Profile</p>
+									{myProfile?.verified && <p className="text-gray-500 text-xs">Verified users can't change their name or username. Please contact us to modify them.</p>}
+								</div>
 
 								<div className="py-2">
 									<label htmlFor="name" className="block text-sm text-gray-700 dark:text-gray-500">
 										Name
 									</label>
-									<input
-										name="name"
-										placeholder="Your display name"
-										value={nameValue ? nameValue : ''}
-										onChange={e => {
-											const value = e.target.value
-											setNameValue(value)
-										}}
-										type="text"
-										maxLength="50"
-										className="mt-1 dark:text-gray-300 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-800 focus:border-indigo-500 dark:focus:border-indigo-800 sm:text-sm"
-									/>
+									<input name="name" placeholder="Your display name" value={nameValue ? nameValue : ''} onChange={e => setNameValue(e.target.value)} type="text" maxLength="50" disabled={myProfile?.verified} className="mt-1 dark:text-gray-300 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-800 focus:border-indigo-500 dark:focus:border-indigo-800 sm:text-sm" />
 									<label htmlFor="customURL" className="mt-4 block text-sm font-medium text-gray-700 dark:text-gray-500 sm:pt-2">
 										Username
 									</label>
@@ -195,6 +187,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 												autoComplete="username"
 												className="pl-2 dark:text-gray-300 border flex-1 block w-full focus:outline-none focus:ring focus:ring-indigo-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300 dark:border-gray-800"
 												value={customURLValue ? customURLValue : ''}
+												disabled={myProfile?.verified}
 												onChange={e => {
 													const value = e.target.value
 													const urlRegex = /^[a-zA-Z0-9_]*$/
