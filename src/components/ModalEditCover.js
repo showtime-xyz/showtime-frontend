@@ -5,9 +5,9 @@ import Croppie from 'croppie'
 import CloseButton from './CloseButton'
 import ScrollableModal from './ScrollableModal'
 import axios from '@/lib/axios'
-import PrimaryButton from './UI/Buttons/PrimaryButton'
 import GhostButton from './UI/Buttons/GhostButton'
 import GreenButton from './UI/Buttons/GreenButton'
+import Button from './UI/Buttons/Button'
 import useProfile from '@/hooks/useProfile'
 
 export default function ModalEditCover({ isOpen, setEditModalOpen }) {
@@ -148,7 +148,9 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 							<div className="mt-4 mb-4">
 								{image === '' && (
 									<div className="my-16">
-										<PrimaryButton onClick={handleClickUpload}>Upload cover image</PrimaryButton>
+										<Button style="primary" className="w-full justify-center" onClick={handleClickUpload}>
+											Upload cover image
+										</Button>
 										<div className="text-center text-xs mt-4 text-gray-700 dark:text-gray-500">Accepts JPEG, PNG, and GIF (non-animated)</div>
 
 										<input ref={hiddenFileInput} className="hidden" id="profilePic" type="file" onChange={onChangePicture} />

@@ -9,9 +9,9 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@airgap/beacon-sdk": "^2.2.8",
+    "@airgap/beacon-sdk": "^2.2.10",
     "@badrap/bar-of-progress": "^0.1.2",
-    "@ethersproject/providers": "^5.4.0",
+    "@ethersproject/providers": "^5.4.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-brands-svg-icons": "^5.15.2",
     "@fortawesome/free-regular-svg-icons": "^5.15.2",
@@ -67,7 +67,7 @@
     "react-sortablejs": "^6.0.0",
     "react-string-replace": "^0.4.4",
     "remove-markdown": "^0.3.0",
-    "sortablejs": "^1.13.0",
+    "sortablejs": "^1.14.0",
     "sotez": "^9.0.0",
     "swr": "^0.5.6",
     "tailwindcss": "^2.2.4",
@@ -82,7 +82,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.14.7",
-    "eslint": "^7.25.0",
+    "eslint": "^7.30.0",
     "eslint-config-next": "^11.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-react": "^7.23.2",
