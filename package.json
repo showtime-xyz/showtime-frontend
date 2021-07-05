@@ -67,7 +67,7 @@
     "react-sortablejs": "^6.0.0",
     "react-string-replace": "^0.4.4",
     "remove-markdown": "^0.3.0",
-    "sortablejs": "^1.13.0",
+    "sortablejs": "^1.14.0",
     "sotez": "^9.0.0",
     "swr": "^0.5.6",
     "tailwindcss": "^2.2.4",
