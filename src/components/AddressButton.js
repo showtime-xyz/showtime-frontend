@@ -9,6 +9,14 @@ import { Fragment, useState } from 'react'
 import { CheckIcon } from '@heroicons/react/outline'
 
 export const AddressCollection = ({ addresses, isMyProfile = false }) => {
+	// Make sure Ethereum addresses always show up first
+	addresses = addresses.sort(({ address: firstAddr }, { address: secondAddr }) => {
+		if (!firstAddr.startsWith('tz') && secondAddr.startsWith('tz')) return -1
+		if (firstAddr.startsWith('tz') && !secondAddr.startsWith('tz')) return 1
+
+		return 0
+	})
+
 	const firstAddress = addresses[0]
 
 	if (!firstAddress) return null

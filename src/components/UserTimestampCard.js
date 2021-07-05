@@ -24,7 +24,7 @@ export default function UserTimestampCard({ timestamp, item, closeModalCallback 
 
 				<div>
 					<div className="flex-grow">
-						<div className="flex flex-row place-content-end items-end ">
+						<div>
 							<div className="text-base sm:text-lg mr-3">
 								<Link href="/[profile]" as={item.owner_username ? `/${item.owner_username}` : `/${item.owner_address}`}>
 									<a onClick={closeModalCallback} className="dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">

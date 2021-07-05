@@ -104,7 +104,7 @@ const RecommendedFollowItem = ({ item, closeModal = () => {}, liteVersion, remov
 						</Link>
 						{!liteVersion && (
 							<div className="flex items-center">
-								<div className="flex items-center">
+								<div className="flex items-center dark:text-gray-400">
 									<div className="flex w-4 h-4 mr-2 text-gray-300">
 										<FontAwesomeIcon icon={faUser} />
 									</div>
