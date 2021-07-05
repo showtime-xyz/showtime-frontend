@@ -9,6 +9,7 @@ import MiniFollowButton from '@/components/MiniFollowButton'
 import mixpanel from 'mixpanel-browser'
 import ActivityImages from './ActivityImages'
 import { ViewGridIcon } from '@heroicons/react/solid'
+import ProfileHovercard from './ProfileHovercard'
 
 const LeaderboardItemV2 = ({ item, index, totalCount }) => {
 	const context = useContext(AppContext)
@@ -58,18 +59,22 @@ const LeaderboardItemV2 = ({ item, index, totalCount }) => {
 			<div key={item.profile_id} className={`${index == totalCount - 1 ? null : 'border-b'}  dark:border-gray-800 px-4 py-4`}>
 				<div className="flex flex-row items-center">
 					<div className="relative mr-1 w-16 flex-none">
-						<Link href="/[profile]" as={`/${item?.username || item.address}`}>
-							<a className="cursor-pointer">
-								<img src={item?.img_url ? item?.img_url : DEFAULT_PROFILE_PIC} className="rounded-full h-12 w-12 hover:opacity-90" />
-							</a>
-						</Link>
+						<ProfileHovercard user={item.profile_id} initialProfile={item}>
+							<Link href="/[profile]" as={`/${item?.username || item.address}`}>
+								<a className="cursor-pointer">
+									<img src={item?.img_url ? item?.img_url : DEFAULT_PROFILE_PIC} className="rounded-full h-12 w-12 hover:opacity-90" />
+								</a>
+							</Link>
+						</ProfileHovercard>
 						<div className="absolute text-sm bottom-0 right-2 rounded-full bg-white dark:bg-gray-900 text-center self-center h-6 w-6 font-medium pt-px border border-black dark:border-gray-800 border-opacity-10 text-gray-900 dark:text-gray-200">{index + 1}</div>
 					</div>
 
 					<div className="flex items-center flex-grow overflow-hidden pr-1">
-						<Link href="/[profile]" as={`/${item?.username || item.address}`}>
-							<a className="dark:text-gray-300 hover:text-stpink dark:hover:text-stpink cursor-pointer overflow-hidden overflow-ellipsis whitespace-nowrap">{item?.name || formatAddressShort(item.address) || 'Unnamed'} </a>
-						</Link>
+						<ProfileHovercard user={item.profile_id} initialProfile={item}>
+							<Link href="/[profile]" as={`/${item?.username || item.address}`}>
+								<a className="dark:text-gray-300 hover:text-stpink dark:hover:text-stpink cursor-pointer overflow-hidden overflow-ellipsis whitespace-nowrap">{item?.name || formatAddressShort(item.address) || 'Unnamed'} </a>
+							</Link>
+						</ProfileHovercard>
 						{context.myProfile?.profile_id !== item?.profile_id && (
 							<div className="ml-2">
 								<MiniFollowButton profileId={item?.profile_id} />

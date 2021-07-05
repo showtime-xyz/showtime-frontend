@@ -18,7 +18,7 @@ const ProfileHovercard = ({ children, user, initialProfile }) => {
 	const { data: userData } = useSWR(
 		() => user && isOpen && `/api/profile/card?userId=${user}`,
 		url => axios.get(url).then(res => res.data.data),
-		{ dedupingInterval: 60000 /* 1 min */, initialData: initialProfile ? { profile: initialProfile } : undefined }
+		{ dedupingInterval: 60000 /* 1 min */, initialData: initialProfile ? { profile: initialProfile } : undefined, revalidateOnMount: true }
 	)
 
 	if (!user && !initialProfile) return children
