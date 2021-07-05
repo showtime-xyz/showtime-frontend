@@ -72,6 +72,8 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 		}
 	}
 
+	const pageProfileName = pageProfile.name && pageProfile.name != 'Unnamed' ? (pageProfile?.wallet_addresses_excluding_email_v2?.map(addr => addr.address).includes(pageProfile.name) ? formatAddressShort(pageProfile.slug_address) : pageProfile.name) : pageProfile?.username || pageProfile.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Unknown'
+
 	return (
 		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
 			<div ref={divRef} className={`w-full h-full md:rounded-2xl shadow-lg hover:shadow-xl transition duration-300 flex flex-col bg-white dark:bg-gray-900 ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border-t border-b md:border-l md:border-r border-transparent dark:border-gray-800'}`}>
@@ -262,9 +264,9 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 										<div className="flex items-center">
 											<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
 												<a className="flex flex-row items-center pr-2 ">
-													<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
+													<img alt={pageProfileName} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
 													<div>
-														<div className="text-sm font-semibold truncate dark:text-gray-200">{truncateWithEllipses(pageProfile.name && pageProfile.name != 'Unnamed' ? (pageProfile.name == pageProfile.slug_address ? formatAddressShort(pageProfile.slug_address) : pageProfile.name) : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown', 14)}</div>
+														<div className="text-sm font-semibold truncate dark:text-gray-200">{pageProfileName}</div>
 													</div>
 												</a>
 											</Link>

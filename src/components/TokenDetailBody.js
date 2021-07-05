@@ -408,7 +408,7 @@ const TokenDetailBody = ({
 							onClick={() => {
 								parentSetReportModalOpen !== undefined ? parentSetReportModalOpen(true) : setReportModalOpen(true)
 							}}
-							className="text-gray-500 hover:text-stpink cursor-pointer"
+							className="text-gray-500 hover:text-stpink cursor-pointer whitespace-nowrap"
 						>
 							Report Item
 						</div>

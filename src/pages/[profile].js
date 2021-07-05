@@ -39,7 +39,7 @@ export async function getStaticProps({ params: { profile: slug_address } }) {
 			data: {
 				data: { profile, followers: followers_list, followers_count, following: following_list, following_count, featured_nft, lists },
 			},
-		} = await backend.get(encodeURIComponent(`v2/profile_server/${slug_address}`))
+		} = await backend.get(`v2/profile_server/${slug_address}`)
 
 		return {
 			props: {
@@ -52,7 +52,7 @@ export async function getStaticProps({ params: { profile: slug_address } }) {
 				featured_nft,
 				lists,
 			},
-			revalidate: 1,
+			revalidate: 5,
 		}
 	} catch (err) {
 		if (err.response.status == 400) return { redirect: { destination: '/', permanent: false } }
@@ -631,7 +631,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												className="h-24 w-24 md:h-32 md:w-32 z-10"
 											/>
 											{isMyProfile && (
-												<button onClick={editPhoto} className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg backdrop-saturate-150 transition duration-300 flex items-center justify-center">
+												<button onClick={editPhoto} className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg backdrop-saturate-150 transition duration-300 flex items-center justify-center rounded-full">
 													<UploadIcon className="w-10 h-10 text-white dark:text-gray-300" />
 												</button>
 											)}
