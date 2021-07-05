@@ -29,7 +29,7 @@ const ProfileHovercard = ({ children, user, initialProfile }) => {
 
 			<HoverCardPrimitive.Content side="top" align="center" sideOffset={10} onClick={event => event.stopPropagation()}>
 				<Transition show={isOpen} appear={true} enter="transform transition duration-300 origin-bottom ease-out" enterFrom="opacity-0 translate-y-2 scale-0" enterTo="opacity-100 translate-y-0 scale-100" leave="transform transition duration-200 origin-bottom ease-in" leaveFrom="opacity-100 translate-y-0 scale-100" leaveTo="opacity-0 translate-y-2 scale-0" className="shadow-xl rounded-xl">
-					<div className="bg-white shadow p-4 space-y-4 rounded-xl">
+					<div className="border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow dark:shadow-dark p-4 space-y-4 rounded-xl">
 						{user && !userData?.profile ? (
 							<div>
 								<LoadingSpinner />
@@ -44,7 +44,7 @@ const ProfileHovercard = ({ children, user, initialProfile }) => {
 												<p className="font-semibold">{userData?.profile?.name || formatAddressShort(userData?.profile?.address || userData?.profile?.wallet_address)}</p>
 												{userData?.profile?.verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
 											</div>
-											{userData?.profile?.username && <p className="text-sm font-medium text-gray-600">@{userData?.profile?.username}</p>}
+											{userData?.profile?.username && <p className="text-sm font-medium text-gray-600 dark:text-gray-400">@{userData?.profile?.username}</p>}
 										</div>
 									</a>
 								</Link>
@@ -53,7 +53,7 @@ const ProfileHovercard = ({ children, user, initialProfile }) => {
 										<p className="text-sm">
 											<span className="font-bold">{userData?.profile?.following_count}</span> following
 										</p>
-										<div className="h-auto w-px bg-gray-100 my-0.5 mx-12" />
+										<div className="h-auto w-px bg-gray-100 dark:bg-gray-800 my-0.5 mx-12" />
 										<p className="text-sm">
 											<span className="font-bold">{userData?.profile?.follower_count}</span> followers
 										</p>
@@ -63,7 +63,7 @@ const ProfileHovercard = ({ children, user, initialProfile }) => {
 								{userData?.followers?.length > 0 && (
 									<div className="flex items-center justify-end">
 										<div className="inline-flex items-center space-x-1">
-											<p className="text-sm font-medium text-gray-600">Followed by</p>
+											<p className="text-sm font-medium text-gray-600 dark:text-gray-500">Followed by</p>
 											<UserImageList users={userData.followers} sizeClass="w-6 h-6" />
 										</div>
 									</div>
