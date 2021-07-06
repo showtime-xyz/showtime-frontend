@@ -1,5 +1,5 @@
 diff --git a/node_modules/@airgap/beacon-sdk/dist/esm/ui/alert/wallet-lists.js b/node_modules/@airgap/beacon-sdk/dist/esm/ui/alert/wallet-lists.js
-index 8f1bb4d..11c1c6d 100644
+index 8f1bb4d..fffec08 100644
 --- a/node_modules/@airgap/beacon-sdk/dist/esm/ui/alert/wallet-lists.js
 +++ b/node_modules/@airgap/beacon-sdk/dist/esm/ui/alert/wallet-lists.js
 @@ -16,15 +16,7 @@ export const extensionList = [
