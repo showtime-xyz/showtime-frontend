@@ -72,7 +72,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 		}
 	}
 
-	const pageProfileName = pageProfile.name && pageProfile.name != 'Unnamed' ? (pageProfile?.wallet_addresses_excluding_email_v2?.map(addr => addr.address).includes(pageProfile.name) ? formatAddressShort(pageProfile.slug_address) : pageProfile.name) : pageProfile?.username || pageProfile.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Unknown'
+	const pageProfileName = pageProfile?.name && pageProfile?.name != 'Unnamed' ? (pageProfile?.wallet_addresses_excluding_email_v2?.map(addr => addr.address)?.includes(pageProfile.name) ? formatAddressShort(pageProfile?.slug_address) : pageProfile?.name) : pageProfile?.username || pageProfile?.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(pageProfile?.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Unknown'
 
 	return (
 		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
