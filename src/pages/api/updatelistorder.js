@@ -1,6 +1,7 @@
+import handler from '@/lib/api-handler'
 import backend from '@/lib/backend'
 
-export default async ({ user, body }, res) => {
+export default handler().post(async ({ user, body }, res) => {
 	await backend.post('/v1/update_list_order', body, {
 		headers: {
 			'X-Authenticated-User': user?.publicAddress || null,
@@ -9,4 +10,4 @@ export default async ({ user, body }, res) => {
 	})
 
 	res.status(200).end()
-}
+})
