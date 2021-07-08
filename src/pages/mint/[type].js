@@ -4,6 +4,7 @@ import Dropdown from '@/components/UI/Dropdown'
 import useProfile from '@/hooks/useProfile'
 import { Fragment, useState } from 'react'
 import { useEffect } from 'react'
+import { v4 as uuid } from 'uuid'
 import Button from '@/components/UI/Buttons/Button'
 import Checkbox from '@/components/UI/Inputs/Checkbox'
 import Switch from '@/components/UI/Inputs/Switch'
@@ -14,6 +15,7 @@ import Textarea from '@/components/UI/Inputs/Textarea'
 import PercentageIcon from '@/components/Icons/PercentageIcon'
 import useFlags, { FLAGS } from '@/hooks/useFlags'
 import IpfsUpload from '@/components/IpfsUpload'
+import axios from '@/lib/axios'
 
 export const TYPES = ['image', 'video' /* 'audio', 'text', 'file' */]
 export const FORMATS = {
@@ -40,7 +42,7 @@ const MintPage = ({ type }) => {
 
 	const [ipfsHash, setIpfsHash] = useState('')
 
-	const [title, setTitle] = useState('')
+	const [name, setName] = useState('')
 	const [description, setDescription] = useState('')
 	const [hasVerifiedAuthorship, setHasVerifiedAuthorship] = useState(false)
 	const [isAdultContent, setIsAdultContent] = useState(false)
@@ -54,17 +56,39 @@ const MintPage = ({ type }) => {
 	const [royalties, setRoyalties] = useState(10)
 
 	const isValid = useMemo(() => {
-		if (!canMint || !title || !description || !hasVerifiedAuthorship || !copies || !royalties || !ipfsHash) return false
+		if (!canMint || !name || !description || !hasVerifiedAuthorship || !copies || !royalties || !ipfsHash) return false
 		if (putOnSale && (!price || !currency)) return false
 		if (copies < 1 || royalties > 100) return false
 
 		return true
-	}, [title, description, hasVerifiedAuthorship, putOnSale, price, currency, copies, royalties, canMint, ipfsHash])
+	}, [name, description, hasVerifiedAuthorship, putOnSale, price, currency, copies, royalties, canMint, ipfsHash])
 
-	const submitForm = event => {
+	const submitForm = async event => {
 		event.preventDefault()
 
-		//
+		const { token: pinataToken } = await axios.post('/api/pinata/generate-key').then(res => res.data)
+
+		const { IpfsHash: contentHash } = await axios
+			.post(
+				'https://api.pinata.cloud/pinning/pinJSONToIPFS',
+				{
+					pinataMetadata: { name: uuid(), keyvalues: { wallet: selectedWallet } },
+					pinataContent: {
+						name,
+						description,
+						image: `ipfs://${ipfsHash}`,
+					},
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${pinataToken}`,
+					},
+				}
+			)
+			.then(res => res.data)
+
+		alert('Uploaded meta to IPFS')
+		window.open(`https://gateway.pinata.cloud/ipfs/${contentHash}`)
 	}
 
 	useEffect(() => {
@@ -95,13 +119,13 @@ const MintPage = ({ type }) => {
 				<form onSubmit={submitForm} className="mt-12 flex flex-col md:flex-row justify-between space-y-12 md:space-y-0 md:space-x-12">
 					<div className="space-y-6">
 						<p className="font-bold text-lg">Upload</p>
-						<IpfsUpload type={type} wallet={selectedWallet} onChange={setIpfsHash} tokenName={title} />
+						<IpfsUpload type={type} wallet={selectedWallet} onChange={setIpfsHash} tokenName={name} />
 					</div>
 					<div className="flex-1">
 						<p className="font-bold text-lg">Details</p>
 						<div className="mt-6 space-y-16">
 							<div className="space-y-6">
-								<Input label="Title" value={title} onChange={setTitle} id="title" placeholder="e.g. Super Cool Marbles" required />
+								<Input label="Title" value={name} onChange={setName} id="title" placeholder="e.g. Super Cool Marbles" required />
 								<Textarea label="Description" labelSubtitle={<span className="ml-1 text-gray-400 font-medium text-xs">(optional)</span>} value={description} onChange={setDescription} id="description" placeholder="e.g. A story about some marbles" />
 								<div className="flex flex-col md:flex-row md:items-center justify-between space-y-2 md:space-y-0">
 									<Checkbox label="I verify that this artwork is mine" value={hasVerifiedAuthorship} onChange={setHasVerifiedAuthorship} />

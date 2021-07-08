@@ -17,6 +17,7 @@ export default handler()
 						endpoints: {
 							pinning: {
 								pinFileToIPFS: true,
+								pinJSONToIPFS: true,
 							},
 						},
 					},
