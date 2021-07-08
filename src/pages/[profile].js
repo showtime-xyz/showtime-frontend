@@ -41,7 +41,7 @@ export async function getStaticProps({ params: { profile: slug_address } }) {
 			data: {
 				data: { profile, followers_count, following_count, featured_nft, lists },
 			},
-		} = await backend.get(encodeURIComponent(`v3/profile_server/${slug_address}`))
+		} = await backend.get(`v3/profile_server/${encodeURIComponent(slug_address)}`)
 
 		return {
 			props: {
@@ -369,6 +369,17 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 		context.setLoginModalOpen(true)
 	}
 
+	const { data: followers, mutate: setFollowers } = useSWR(
+		() => showFollowers && `/v1/people?profile_id=${profile_id}&want=followers&limit=500`,
+		url => backend.get(url).then(res => res.data.data.list),
+		{ focusThrottleInterval: 60 * 1000 }
+	)
+	const { data: following } = useSWR(
+		() => showFollowing && `/v1/people?profile_id=${profile_id}&want=following&limit=500`,
+		url => backend.get(url).then(res => res.data.data.list),
+		{ focusThrottleInterval: 60 * 1000 }
+	)
+
 	const handleFollow = async () => {
 		setIsFollowed(true)
 		setFollowersCount(followersCount + 1)
@@ -385,17 +396,19 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 			...context.myFollows,
 		])
 
-		setFollowers([
-			{
-				profile_id: myProfile.profile_id,
-				wallet_address: user.publicAddress,
-				name: myProfile.name,
-				img_url: myProfile.img_url || DEFAULT_PROFILE_PIC,
-				timestamp: null,
-				username: myProfile.username,
-			},
-			...followers,
-		])
+		if (followers) {
+			setFollowers([
+				{
+					profile_id: myProfile.profile_id,
+					wallet_address: user.publicAddress,
+					name: myProfile.name,
+					img_url: myProfile.img_url || DEFAULT_PROFILE_PIC,
+					timestamp: null,
+					username: myProfile.username,
+				},
+				...followers,
+			])
+		}
 
 		// Post changes to the API
 		await axios
@@ -421,7 +434,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 		// Change myLikes via setMyLikes
 		context.setMyFollows(context.myFollows.filter(item => item.profile_id != profile_id))
 
-		setFollowers(followers.filter(follower => myProfile.profile_id != follower.profile_id))
+		if (followers) setFollowers(followers.filter(follower => myProfile.profile_id != follower.profile_id))
 
 		// Post changes to the API
 		if (context.disableFollows === false) {
@@ -552,17 +565,6 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 		handleListChange(myProfile?.default_list_id)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [profile.profile_id, myProfile?.profile_id, myProfile?.default_list_id])
-
-	const { data: followers, mutate: setFollowers } = useSWR(
-		() => showFollowers && `/v1/people?profileid=${profile_id}&want=followers&limit=500`,
-		url => backend.get(url).then(res => res.data.data.list),
-		{ focusThrottleInterval: 60 * 1000 }
-	)
-	const { data: following } = useSWR(
-		() => showFollowing && `/v1/people?profileid=${profile_id}&want=following&limit=500`,
-		url => backend.get(url).then(res => res.data.data.list),
-		{ focusThrottleInterval: 60 * 1000 }
-	)
 
 	return (
 		<div>
