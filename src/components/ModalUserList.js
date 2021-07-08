@@ -7,7 +7,7 @@ import BadgeIcon from './Icons/BadgeIcon'
 import useProfile from '@/hooks/useProfile'
 
 export default function ModalUserList({ isOpen, title, users, closeModal, emptyMessage, onRedirect }) {
-	const { profile: myProfile } = useProfile()
+	const { myProfile } = useProfile()
 
 	return (
 		<>

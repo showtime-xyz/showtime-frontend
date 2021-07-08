@@ -37,7 +37,7 @@ const handleDebouncedUsernameLookup = AwesomeDebouncePromise(handleUsernameLooku
 
 export default function Modal({ isOpen, setEditModalOpen }) {
 	const router = useRouter()
-	const { profile: myProfile, loading: profileLoading, mutate: mutateProfile } = useProfile()
+	const { myProfile, setMyProfile } = useProfile()
 	const [submitting, setSubmitting] = useState(false)
 	const [nameValue, setNameValue] = useState(null)
 	const [customURLValue, setCustomURLValue] = useState('')
@@ -53,7 +53,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 	const [defaultOwnedSortId, setDefaultOwnedSortId] = useState(1)
 
 	useEffect(() => {
-		if (profileLoading) return
+		if (!myProfile) return
 
 		setNameValue(myProfile.name)
 		setCustomURLValue(myProfile.username)
@@ -63,7 +63,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 		setDefaultCreatedSortId(myProfile.default_created_sort_id || 1)
 		setDefaultOwnedSortId(myProfile.default_owned_sort_id || 1)
 		setSocialLinks(myProfile.links)
-	}, [profileLoading, myProfile, isOpen])
+	}, [myProfile, isOpen])
 
 	const handleSubmit = async event => {
 		event.preventDefault()
@@ -87,7 +87,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 		})
 
 		// Update state to immediately show changes
-		mutateProfile({
+		setMyProfile({
 			...myProfile,
 			name: nameValue?.trim() || null, // handle names with all whitespaces
 			bio: bioValue?.trim() || null,

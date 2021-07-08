@@ -66,7 +66,7 @@ export async function getStaticPaths() {
 
 const Profile = ({ profile, slug_address, followers_count, following_count, featured_nft, lists }) => {
 	const { user, loading: authLoading, isAuthenticated } = useAuth()
-	const { profile: myProfile, loading: profileLoading, mutate: mutateProfile } = useProfile()
+	const { myProfile, setMyProfile } = useProfile()
 	const context = useContext(AppContext)
 	const router = useRouter()
 
@@ -77,7 +77,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 	const [followersCount, setFollowersCount] = useState(followers_count)
 
 	// Using global context for logged in user, else server data for other pages
-	const { name, img_url, cover_url, wallet_addresses_v2, wallet_addresses_excluding_email_v2, bio, website_url, username, featured_nft_img_url, links, verified } = isMyProfile && !profileLoading ? myProfile : profile
+	const { name, img_url, cover_url, wallet_addresses_v2, wallet_addresses_excluding_email_v2, bio, website_url, username, featured_nft_img_url, links, verified } = isMyProfile && myProfile ? myProfile : profile
 	const { profile_id } = profile
 
 	useEffect(() => {
@@ -482,7 +482,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 		setRevertItems(null)
 		setMenuLists(menuLists.map((list, index) => (index === selectedGrid - 1 ? { ...list, has_custom_sort: false } : list)))
 
-		mutateProfile(
+		setMyProfile(
 			{
 				...myProfile,
 				...(selectedGrid === 1 && { default_created_sort_id: null }),
@@ -500,7 +500,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 		setRevertItems(null)
 		const newMenuLists = menuLists.map((list, index) => (index === selectedGrid - 1 ? { ...list, has_custom_sort: true } : list))
 		setMenuLists(newMenuLists)
-		mutateProfile(
+		setMyProfile(
 			{
 				...myProfile,
 				...(selectedGrid === 1 && { default_created_sort_id: 5 }),
