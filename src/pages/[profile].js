@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */ // For some reason, this rule is behaving weirdly. @TODO I guess
 import { useState, useEffect, useContext, useRef, Fragment } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -524,11 +525,10 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 	const handleCancelOrder = () => {
 		const oldItems = revertItems
 		const oldSort = revertSort
-		if (selectedGrid === 1) {
-			setSelectedCreatedSortField(oldSort)
-		} else {
-			setSelectedOwnedSortField(oldSort)
-		}
+
+		if (selectedGrid === 1) setSelectedCreatedSortField(oldSort)
+		else setSelectedOwnedSortField(oldSort)
+
 		setItems(oldItems)
 		setFetchMoreSort(null)
 		setRevertItems(null)
