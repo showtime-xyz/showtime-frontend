@@ -30,6 +30,7 @@ import WalletIcon from '@/components/Icons/WalletIcon'
 import Dropdown from '@/components/UI/Dropdown'
 import Button from '@/components/UI/Buttons/Button'
 import useProfile from '@/hooks/useProfile'
+import useSWR from 'swr'
 
 export async function getStaticProps({ params: { profile: slug_address } }) {
 	if (slug_address.includes('apple-touch-icon')) return { props: {}, notFound: true }
@@ -37,17 +38,15 @@ export async function getStaticProps({ params: { profile: slug_address } }) {
 	try {
 		const {
 			data: {
-				data: { profile, followers: followers_list, followers_count, following: following_list, following_count, featured_nft, lists },
+				data: { profile, followers_count, following_count, featured_nft, lists },
 			},
-		} = await backend.get(encodeURIComponent(`v2/profile_server/${slug_address}`))
+		} = await backend.get(encodeURIComponent(`v3/profile_server/${slug_address}`))
 
 		return {
 			props: {
 				profile,
 				slug_address,
-				followers_list,
 				followers_count,
-				following_list,
 				following_count,
 				featured_nft,
 				lists,
@@ -64,7 +63,7 @@ export async function getStaticPaths() {
 	return { paths: [], fallback: 'blocking' }
 }
 
-const Profile = ({ profile, slug_address, followers_list, followers_count, following_list, following_count, featured_nft, lists }) => {
+const Profile = ({ profile, slug_address, followers_count, following_count, featured_nft, lists }) => {
 	const { user, loading: authLoading, isAuthenticated } = useAuth()
 	const { profile: myProfile, loading: profileLoading, mutate: mutateProfile } = useProfile()
 	const context = useContext(AppContext)
@@ -99,19 +98,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		}
 	}, [authLoading, isAuthenticated, profile.wallet_addresses_v2, user?.publicAddress, slug_address])
 
-	// Followers
-	const [followers, setFollowers] = useState([])
-
-	useEffect(() => {
-		setFollowers(followers_list)
-	}, [followers_list])
-
-	const [following, setFollowing] = useState([])
-	useEffect(() => {
-		setFollowing(following_list)
-	}, [following_list])
-
-	// Followed?
 	const [isFollowed, setIsFollowed] = useState(false)
 	useEffect(() => {
 		if (context.myFollows) {
@@ -120,11 +106,12 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	}, [context.myFollows, profile_id])
 
 	// Follow back?
-	const [followingMe, setFollowingMe] = useState(false)
+	const [followingMe] = useState(false)
 
-	useEffect(() => {
-		setFollowingMe(following_list.map(item => item.profile_id).includes(myProfile?.profile_id))
-	}, [following_list, myProfile?.profile_id])
+	/* @TODO: Find a way of figuring out if the user follows you */
+	// useEffect(() => {
+	// 	setFollowingMe(following_list.map(item => item.profile_id).includes(myProfile?.profile_id))
+	// }, [following_list, myProfile?.profile_id])
 
 	// Spotlight
 	const [spotlightItem, setSpotlightItem] = useState()
@@ -571,6 +558,17 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [profile.profile_id, myProfile?.profile_id, myProfile?.default_list_id])
 
+	const { data: followers, mutate: setFollowers } = useSWR(
+		() => showFollowers && `/v1/people?profileid=${profile_id}&want=followers&limit=500`,
+		url => backend.get(url).then(res => res.data.data.list),
+		{ focusThrottleInterval: 60 * 1000 }
+	)
+	const { data: following } = useSWR(
+		() => showFollowing && `/v1/people?profileid=${profile_id}&want=following&limit=500`,
+		url => backend.get(url).then(res => res.data.data.list),
+		{ focusThrottleInterval: 60 * 1000 }
+	)
+
 	return (
 		<div>
 			{typeof document !== 'undefined' ? (
@@ -579,9 +577,9 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 					<ModalEditPhoto isOpen={pictureModalOpen} setEditModalOpen={setPictureModalOpen} />
 					<ModalEditCover isOpen={coverModalOpen} setEditModalOpen={setCoverModalOpen} />
 					{/* Followers modal */}
-					<ModalUserList title="Followers" isOpen={showFollowers} users={followers ? followers : []} closeModal={() => setShowFollowers(false)} emptyMessage="No followers yet." />
+					<ModalUserList title="Followers" isOpen={showFollowers} users={followers ? followers : []} closeModal={() => setShowFollowers(false)} emptyMessage={followers_count == 0 ? 'No followers yet.' : 'Loading...'} />
 					{/* Following modal */}
-					<ModalUserList title="Following" isOpen={showFollowing} users={following ? following : []} closeModal={() => setShowFollowing(false)} emptyMessage="Not following anyone yet." />
+					<ModalUserList title="Following" isOpen={showFollowing} users={following ? following : []} closeModal={() => setShowFollowing(false)} emptyMessage={following_count == 0 ? 'Not following anyone yet.' : 'Loading...'} />
 				</>
 			) : null}
 			<Layout>
@@ -647,7 +645,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 									</div>
 									<div className="flex items-center space-x-8">
 										<div className="hidden md:block">
-											<FollowStats {...{ following, following_count, followers, followersCount, isMyProfile, setShowFollowing, setShowFollowers }} />
+											<FollowStats {...{ following_count, followersCount, isMyProfile, setShowFollowing, setShowFollowers }} />
 										</div>
 										<div className="flex items-center space-x-2">
 											<Button style={isMyProfile ? 'tertiary_gray' : isFollowed ? 'tertiary' : 'primary'} onClick={isAuthenticated ? (isMyProfile ? editAccount : isFollowed ? handleUnfollow : context.disableFollows ? null : handleFollow) : handleLoggedOutFollow} className={`space-x-2 ${isFollowed || isMyProfile ? 'dark:text-gray-400' : 'text-white'}`}>
@@ -892,19 +890,19 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	)
 }
 
-const FollowStats = ({ following, following_count, followers, followersCount, isMyProfile, setShowFollowing, setShowFollowers }) => {
+const FollowStats = ({ following_count, followersCount, isMyProfile, setShowFollowing, setShowFollowers }) => {
 	const context = useContext(AppContext)
 
 	return (
 		<div className="flex items-center space-x-6">
 			<button className="cursor-pointer hover:opacity-80 transition" onClick={() => setShowFollowing(true)}>
 				<div className="text-sm mr-2 dark:text-gray-300">
-					<span className="font-semibold">{following && following.length !== null ? Number(isMyProfile && context.myFollows ? context.myFollows.length : following_count).toLocaleString() : null}</span> following
+					<span className="font-semibold">{Number(isMyProfile && context.myFollows ? context.myFollows.length : following_count).toLocaleString()}</span> following
 				</div>
 			</button>
 			<button className="cursor-pointer hover:opacity-80 transition" onClick={() => setShowFollowers(true)}>
 				<div className="text-sm mr-2 dark:text-gray-300">
-					<span className="font-semibold">{followers && followers.length !== null ? Number(followersCount).toLocaleString() : null}</span> followers
+					<span className="font-semibold">{Number(followersCount).toLocaleString()}</span> followers
 				</div>
 			</button>
 		</div>
