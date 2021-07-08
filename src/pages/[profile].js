@@ -52,7 +52,7 @@ export async function getStaticProps({ params: { profile: slug_address } }) {
 				featured_nft,
 				lists,
 			},
-			revalidate: 1.5,
+			revalidate: 2,
 		}
 	} catch (err) {
 		if (err.response.status == 400) return { redirect: { destination: '/', permanent: false } }
@@ -563,6 +563,13 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		}
 		return img_url
 	}
+
+	useEffect(() => {
+		if (profile.profile_id !== myProfile?.profile_id) return
+
+		handleListChange(myProfile?.default_list_id)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [profile.profile_id, myProfile?.profile_id, myProfile?.default_list_id])
 
 	return (
 		<div>
