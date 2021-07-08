@@ -39,7 +39,7 @@ export const AddressCollection = ({ addresses, isMyProfile = false }) => {
 										.map(({ address, ens_domain }) => (
 											<div key={address} className="flex items-center space-x-4">
 												{address.startsWith('tz') ? <TezosIcon className="w-6 h-auto text-gray-500 dark:text-gray-600" /> : <EthereumIcon className="w-6 h-auto text-gray-500 dark:text-gray-600" />}
-												<AddressButton address={address} ens_domain={ens_domain} />
+												<AddressButton address={address} ens_domain={ens_domain} isCollection={true} />
 											</div>
 										))}
 								</div>
@@ -60,7 +60,7 @@ export const AddressCollection = ({ addresses, isMyProfile = false }) => {
 	)
 }
 
-const AddressButton = ({ address, ens_domain }) => {
+const AddressButton = ({ address, ens_domain, isCollection = false }) => {
 	const [hasCopied, setHasCopied] = useState(false)
 
 	const copyAddress = () => {
@@ -70,7 +70,7 @@ const AddressButton = ({ address, ens_domain }) => {
 	}
 
 	return (
-		<span className="border dark:border-gray-700 rounded-full px-3 py-1 text-sm flex items-center space-x-2 text-gray-800 dark:text-gray-400">
+		<span className={`border dark:border-gray-700 rounded-full px-3 py-1 text-sm flex items-center justify-between space-x-2 text-gray-800 dark:text-gray-400 ${isCollection ? 'flex-1' : ''}`}>
 			<span className="font-medium whitespace-nowrap">{formatAddressShort(ens_domain || address)}</span>
 			<button onClick={copyAddress} className="p-1 -m-1 rounded-full text-gray-500">
 				{hasCopied ? <CheckIcon className="w-4 h-auto" /> : <CopyIcon className="w-4 h-auto" />}

@@ -107,7 +107,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 	}, [context.myFollows, profile_id])
 
 	// Follow back?
-	const { data: followingMe, mutate: setFollowingMe } = useSWR(`/api/profile/following?userId=${profile_id}`, url => axios.get(url).then(res => res.data), { initialData: false, revalidateOnMount: true })
+	const { data: followingMe } = useSWR(isAuthenticated && `/api/profile/following?userId=${profile_id}`, url => axios.get(url).then(res => res.data.data.following), { initialData: false, revalidateOnMount: true })
 
 	// Spotlight
 	const [spotlightItem, setSpotlightItem] = useState()
