@@ -107,12 +107,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 	}, [context.myFollows, profile_id])
 
 	// Follow back?
-	const [followingMe] = useState(false)
-
-	/* @TODO: Find a way of figuring out if the user follows you */
-	// useEffect(() => {
-	// 	setFollowingMe(following_list.map(item => item.profile_id).includes(myProfile?.profile_id))
-	// }, [following_list, myProfile?.profile_id])
+	const { data: followingMe, mutate: setFollowingMe } = useSWR(`/api/profile/following?userId=${profile_id}`, url => axios.get(url).then(res => res.data), { initialData: false, revalidateOnMount: true })
 
 	// Spotlight
 	const [spotlightItem, setSpotlightItem] = useState()
