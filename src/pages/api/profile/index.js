@@ -4,6 +4,7 @@ import backend from '@/lib/backend'
 export default handler()
 	.use(middleware.auth)
 	.get(async ({ user }, res) => {
+		console.log(process.env.ENCRYPTION_SECRET_V2)
 		await backend
 			.get('/v2/myinfo', {
 				headers: {
