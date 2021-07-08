@@ -673,7 +673,10 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 													<h2 className="text-3xl md:text-4xl font-tomato font-bold text-black dark:text-white">{name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</h2>
 													{verified && <BadgeIcon className="w-5 md:w-6 h-auto text-black dark:text-white" bgClass="text-white dark:text-black" />}
 												</div>
-												<div className="mt-2">{(username || (wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0)) && <p className="flex flex-row items-center justify-start">{username && <span className="font-tomato font-bold tracking-wider dark:text-gray-300">@{username}</span>}</p>}</div>
+												<div className="mt-2 flex items-center space-x-2">
+													{(username || (wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0)) && <p className="flex flex-row items-center justify-start">{username && <span className="font-tomato font-bold tracking-wider dark:text-gray-300">@{username}</span>}</p>}
+													{followingMe && <span className="font-medium text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-lg">Follows You</span>}
+												</div>
 											</div>
 											<div className="hidden md:block">{isAuthenticated && !isMyProfile && <FollowersInCommon profileId={profile_id} />}</div>
 										</div>
