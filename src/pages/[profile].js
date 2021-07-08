@@ -296,7 +296,8 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 
 		// Populate initial state
 
-		const initial_list_id = router?.query?.list ? PROFILE_TABS.indexOf(router.query.list) : lists.default_list_id
+		const urlParams = new URLSearchParams(location.search)
+		const initial_list_id = urlParams.has('list') ? PROFILE_TABS.indexOf(urlParams.get('list')) : lists.default_list_id
 
 		if (initial_list_id == 1) {
 			setSwitchInProgress(true)
@@ -451,13 +452,8 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 	const [showFollowing, setShowFollowing] = useState(false)
 
 	useEffect(() => {
-		setSelectedGrid(router?.query?.list ? PROFILE_TABS.indexOf(router.query.list) : lists.default_list_id)
-
 		setMenuLists(lists.lists)
-
-		setShowFollowers(false)
-		setShowFollowing(false)
-	}, [profile_id, router?.query?.list, lists.default_list_id, lists.lists])
+	}, [lists])
 
 	const editAccount = () => {
 		setEditModalOpen(true)
