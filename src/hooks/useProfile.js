@@ -1,34 +1,12 @@
+import AppContext from '@/context/app-context'
 import axios from '@/lib/axios'
+import { useContext } from 'react'
 import useSWR from 'swr'
 
 export default function useProfile() {
-	const {
-		data: profile,
-		error,
-		revalidate,
-		mutate,
-	} = useSWR(
-		'/api/profile',
-		url =>
-			axios.get(url).then(
-				({
-					data: {
-						data: { profile },
-					},
-				}) => ({
-					...profile,
-					notifications_last_opened: profile.notifications_last_opened ? new Date(profile.notifications_last_opened) : null,
-					links: profile.links.map(link => ({
-						name: link.type__name,
-						prefix: link.type__prefix,
-						icon_url: link.type__icon_url,
-						type_id: link.type_id,
-						user_input: link.user_input,
-					})),
-				})
-			),
-		{ revalidateOnFocus: false, shouldRetryOnError: false }
-	)
+	const { myProfile, setMyProfile } = useContext(AppContext)
 
-	return { profile, error, loading: !profile && !error, revalidate, mutate }
+	return { profile: myProfile, loading: !myProfile, revalidate: setMyProfile }
 }
+
+export const useMyInfo = () => useSWR('/api/profile', url => axios.get(url).then(({ data: { data } }) => data), { revalidateOnFocus: false, shouldRetryOnError: false, initialData: { profile: null, likes_nft: [], likes_comment: [], follows: [], comments: [] }, revalidateOnMount: true })
