@@ -90,22 +90,20 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 									</a>
 								</Link>
 							) : item.creator_address ? (
-								<Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
-									<a className="flex flex-row items-center space-x-2">
-										<ProfileHovercard user={item.creator_id}>
+								<ProfileHovercard user={item.creator_id}>
+									<Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
+										<a className="flex flex-row items-center space-x-2">
 											<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
-										</ProfileHovercard>
-										<div>
-											<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Created by</span>
-											<ProfileHovercard user={item.creator_id}>
+											<div>
+												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Created by</span>
 												<div className="flex items-center space-x-1 -mt-0.5">
 													<div className="text-sm font-semibold truncate dark:text-gray-200">{item.creator_name === item.creator_address ? formatAddressShort(item.creator_address) : truncateWithEllipses(item.creator_name, 22)}</div>
 													{item.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
 												</div>
-											</ProfileHovercard>
-										</div>
-									</a>
-								</Link>
+											</div>
+										</a>
+									</Link>
+								</ProfileHovercard>
 							) : null}
 						</div>
 
@@ -286,22 +284,20 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 								)
 							) : item.owner_id ? (
 								<div className="flex items-center justify-between pt-1">
-									<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
-										<a className="flex flex-row items-center space-x-2">
-											<ProfileHovercard user={item.owner_id}>
+									<ProfileHovercard user={item.owner_id}>
+										<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
+											<a className="flex flex-row items-center space-x-2">
 												<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8" />
-											</ProfileHovercard>
-											<div>
-												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
-												<ProfileHovercard user={item.owner_id}>
+												<div>
+													<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
 													<div className="flex items-center space-x-1 -mt-0.5">
 														<div className="text-sm font-semibold truncate dark:text-gray-200">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
 														{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
 													</div>
-												</ProfileHovercard>
-											</div>
-										</a>
-									</Link>
+												</div>
+											</a>
+										</Link>
+									</ProfileHovercard>
 									{myProfile?.profile_id !== item.owner_id && <MiniFollowButton profileId={item.owner_id} />}
 								</div>
 							) : null}

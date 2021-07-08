@@ -83,8 +83,6 @@ const RecommendedFollowItem = ({ item, closeModal = () => {}, liteVersion, remov
 		}
 	}, [escPress, leftPress, rightPress])
 
-	console.log({ item })
-
 	return (
 		<div className="flex flex-col w-full border-t-px dark:border-gray-800 relative">
 			{typeof document !== 'undefined' ? (

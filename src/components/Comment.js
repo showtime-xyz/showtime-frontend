@@ -32,8 +32,6 @@ export default function Comment({ comment, closeModal, modalRef, deleteComment, 
 	const isOwnerOfNFT = nftOwnerId && nftOwnerId === myProfile?.profile_id
 	const isCreatorOfNFT = nftCreatorId && nftCreatorId === myProfile?.profile_id
 
-	console.log(comment)
-
 	return (
 		<div className="p-2 my-1 flex rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition relative">
 			<div className="mr-3 mt-1">

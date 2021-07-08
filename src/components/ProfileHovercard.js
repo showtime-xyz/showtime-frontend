@@ -51,11 +51,11 @@ const ProfileHovercard = ({ children, user, initialProfile }) => {
 								{typeof userData?.profile?.following_count != 'undefined' && typeof userData?.profile?.follower_count != 'undefined' && (
 									<div className="flex items-stretch justify-between">
 										<p className="text-sm">
-											<span className="font-bold">{userData?.profile?.following_count}</span> following
+											<span className="font-bold">{Number(userData?.profile?.following_count).toLocaleString()}</span> following
 										</p>
 										<div className="h-auto w-px bg-gray-100 dark:bg-gray-800 my-0.5 mx-12" />
 										<p className="text-sm">
-											<span className="font-bold">{userData?.profile?.follower_count}</span> followers
+											<span className="font-bold">{Number(userData?.profile?.follower_count).toLocaleString()}</span> followers
 										</p>
 									</div>
 								)}
