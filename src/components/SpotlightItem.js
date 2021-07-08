@@ -206,7 +206,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 								) : null}
 
 								<div className="border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg rounded-xl py-4 px-2 md:max-w-max">
-									<div className="flex w-full px-2">
+									<div className="flex flex-col md:flex-row w-full px-2">
 										{item.contract_is_creator ? (
 											<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
 												<a className="flex flex-row items-center space-x-2">
@@ -233,7 +233,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 										) : null}
 										{item.owner_id != item.creator_id && (
 											<>
-												<div className="w-[2px] bg-gray-100 dark:bg-gray-800 my-2.5 mx-4" />
+												<div className="my-1 md:my-0 md:mx-4" />
 												{item.owner_count && item.owner_count > 1 ? (
 													<div>
 														<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owner</span>
