@@ -107,7 +107,11 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 	}, [context.myFollows, profile_id])
 
 	// Follow back?
-	const { data: followingMe } = useSWR(isAuthenticated && `/api/profile/following?userId=${profile_id}`, url => axios.get(url).then(res => res.data.data.following), { initialData: false, revalidateOnMount: true })
+	const { data: followingMe } = useSWR(
+		() => isAuthenticated && `/api/profile/following?userId=${profile_id}`,
+		url => axios.get(url).then(res => res.data.data.following),
+		{ initialData: false, revalidateOnMount: true, focusThrottleInterval: 60 * 1000 }
+	)
 
 	// Spotlight
 	const [spotlightItem, setSpotlightItem] = useState()
@@ -370,6 +374,9 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 		context.setLoginModalOpen(true)
 	}
 
+	const [showFollowers, setShowFollowers] = useState(false)
+	const [showFollowing, setShowFollowing] = useState(false)
+
 	const { data: followers, mutate: setFollowers } = useSWR(
 		() => showFollowers && `/v1/people?profile_id=${profile_id}&want=followers&limit=500`,
 		url => backend.get(url).then(res => res.data.data.list),
@@ -448,8 +455,6 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 	const [editModalOpen, setEditModalOpen] = useState(false)
 	const [pictureModalOpen, setPictureModalOpen] = useState(false)
 	const [coverModalOpen, setCoverModalOpen] = useState(false)
-	const [showFollowers, setShowFollowers] = useState(false)
-	const [showFollowing, setShowFollowing] = useState(false)
 
 	useEffect(() => {
 		setMenuLists(lists.lists)
