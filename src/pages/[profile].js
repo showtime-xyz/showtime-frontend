@@ -302,6 +302,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 
 		const urlParams = new URLSearchParams(location.search)
 		const initial_list_id = urlParams.has('list') ? PROFILE_TABS.indexOf(urlParams.get('list')) : lists.default_list_id
+		setSelectedGrid(initial_list_id)
 
 		if (initial_list_id == 1) {
 			setSwitchInProgress(true)
