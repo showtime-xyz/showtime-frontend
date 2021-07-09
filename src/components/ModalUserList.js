@@ -22,7 +22,7 @@ export default function ModalUserList({ isOpen, title, users, closeModal, emptyM
 								{users.map(profile => {
 									return (
 										<div key={profile.wallet_address} className="flex items-center justify-between space-x-3">
-											<Link href="/[profile]" as={`/${profile?.username || profile.wallet_address}`}>
+											<Link href="/[profile]" as={`/${profile?.username || profile.wallet_address || profile.address}`}>
 												<a className="flex-1 flex items-center space-x-2 py-3 rounded-lg px-1 overflow-hidden dark:text-gray-300 hover:text-stpink dark:hover:text-stpink" onClick={onRedirect}>
 													<div className="flex-shrink-0">
 														<img alt={profile.name} src={profile.img_url ? profile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-9 h-9" />
