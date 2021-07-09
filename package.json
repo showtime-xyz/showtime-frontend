@@ -19,7 +19,7 @@
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@hapi/iron": "^6.0.0",
     "@headlessui/react": "^1.0.0",
-    "@heroicons/react": "^1.0.1",
+    "@heroicons/react": "^1.0.2",
     "@magic-sdk/admin": "^1.3.0",
     "@sentry/integrations": "^6.8.0",
     "@sentry/nextjs": "^6.8.0",
