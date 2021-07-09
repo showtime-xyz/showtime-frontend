@@ -16,6 +16,13 @@ import PercentageIcon from '@/components/Icons/PercentageIcon'
 import useFlags, { FLAGS } from '@/hooks/useFlags'
 import IpfsUpload from '@/components/IpfsUpload'
 import axios from '@/lib/axios'
+import { ethers } from 'ethers'
+import minterAbi from '@/data/ShowtimeMT.json'
+import { useContext } from 'react'
+import AppContext from '@/context/app-context'
+import { Magic } from 'magic-sdk'
+import { Biconomy } from '@biconomy/mexa'
+import useWeb3Modal from '@/lib/web3Modal'
 
 export const TYPES = ['image', 'video' /* 'audio', 'text', 'file' */]
 export const FORMATS = {
@@ -28,6 +35,8 @@ export const FORMATS = {
 
 const MintPage = ({ type }) => {
 	const router = useRouter()
+	const { web3: contextWeb3, setWeb3 } = useContext(AppContext)
+	const web3Modal = useWeb3Modal()
 	const { [FLAGS.hasMinting]: canMint, loading: flagsLoading } = useFlags()
 
 	useEffect(() => {
@@ -63,6 +72,39 @@ const MintPage = ({ type }) => {
 		return true
 	}, [name, description, hasVerifiedAuthorship, putOnSale, price, currency, copies, royalties, canMint, ipfsHash])
 
+	const getWeb3 = async () => {
+		const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY)
+		let web3
+
+		if (!contextWeb3) {
+			if (await magic.user.isLoggedIn()) web3 = new ethers.providers.Web3Provider(magic.rpcProvider)
+			else web3 = new ethers.providers.Web3Provider(await web3Modal.connect())
+
+			web3 = new ethers.providers.Web3Provider(new Biconomy(web3.provider, { apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY, debug: true }))
+			setWeb3(web3)
+		} else web3 = contextWeb3
+
+		return web3
+	}
+
+	const submitFormEasy = async () => {
+		const web3 = await getWeb3()
+		const biconomy = web3.provider
+		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MINTING_CONTRACT, minterAbi, biconomy.getSignerByAddress(await web3.getSigner().getAddress()))
+		const { data: contractData } = await contract.populateTransaction.issueToken('0xE340b00B6B622C136fFA5CFf130eC8edCdDCb39D', 1, 'QmYFJvq9dLWZs2YZ4pVQUVN8qUhKkwdXxP9J5Gvp7CiCCh', [])
+
+		const provider = biconomy.getEthersProvider()
+
+		const transaction = await provider.send('eth_sendTransaction', [
+			{
+				data: contractData,
+				to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+			},
+		])
+
+		console.log({ transaction })
+	}
+
 	const submitForm = async event => {
 		event.preventDefault()
 
@@ -87,8 +129,21 @@ const MintPage = ({ type }) => {
 			)
 			.then(res => res.data)
 
-		alert('Uploaded meta to IPFS')
-		window.open(`https://gateway.pinata.cloud/ipfs/${contentHash}`)
+		const web3 = await getWeb3()
+		const biconomy = web3.provider
+		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MINTING_CONTRACT, minterAbi, biconomy.getSignerByAddress(await web3.getSigner().getAddress()))
+		const { data: contractData } = await contract.populateTransaction.issueToken(await web3.getSigner().getAddress(), copies, contentHash, [])
+
+		const provider = biconomy.getEthersProvider()
+
+		const transaction = await provider.send('eth_sendTransaction', [
+			{
+				data: contractData,
+				to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+			},
+		])
+
+		console.log({ transaction })
 	}
 
 	useEffect(() => {
@@ -116,6 +171,7 @@ const MintPage = ({ type }) => {
 					</h1>
 					{!profileLoading && <Dropdown className="w-max" options={profile?.wallet_addresses_v2?.filter(({ address }) => !address.startsWith('tz'))?.map(({ address, ens_domain }) => ({ value: address, label: ens_domain || address }))} value={selectedWallet} onChange={setSelectedWallet} label="Wallet" />}
 				</div>
+				<button onClick={submitFormEasy}>Test submit</button>
 				<form onSubmit={submitForm} className="mt-12 flex flex-col md:flex-row justify-between space-y-12 md:space-y-0 md:space-x-12">
 					<div className="space-y-6">
 						<p className="font-bold text-lg">Upload</p>
