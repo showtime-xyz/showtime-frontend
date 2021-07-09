@@ -38,7 +38,7 @@
     "emoji-mart": "^3.0.1",
     "eth-provider": "^0.7.0",
     "eth-sig-util": "^3.0.1",
-    "ethereumjs-util": "^7.0.8",
+    "ethereumjs-util": "^7.1.0",
     "exif-js": "^2.3.0",
     "fortmatic": "^2.2.1",
     "libsodium-wrappers": "^0.7.9",
