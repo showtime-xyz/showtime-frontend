@@ -65,7 +65,7 @@ const HeaderDropdown = () => {
 											Wallets
 										</Menu.Item>
 									</div>
-									{!hasEmailAddress && (
+									{false && !hasEmailAddress && (
 										<div className="py-1 pt-4">
 											<Menu.Item>
 												{({ active }) => (
