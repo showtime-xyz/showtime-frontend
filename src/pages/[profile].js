@@ -221,14 +221,10 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 		setShowDuplicates(false)
 
 		const sortId = listId === 1 ? selectedCreatedSortField : listId === 2 ? selectedOwnedSortField : selectedLikedSortField
-		router.replace(
-			{
-				pathname: '/[profile]',
-				query: { ...router.query, list: PROFILE_TABS[listId] },
-			},
-			undefined,
-			{ shallow: true }
-		)
+
+		if (listId != (isMyProfile && myProfile ? myProfile.default_list_id : lists.default_list_id)) router.replace({ query: { ...router.query, list: PROFILE_TABS[listId] } }, undefined, { shallow: true })
+		else router.replace({ query: Object.fromEntries(Object.entries(router.query).filter(([key]) => key != 'list')) }, undefined, { shallow: true })
+
 		await updateItems(listId, sortId, 0, true, 1, showUserHiddenItems, 0)
 		setSwitchInProgress(false)
 	}
