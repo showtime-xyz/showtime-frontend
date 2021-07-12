@@ -107,11 +107,16 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 	}, [context.myFollows, profile_id])
 
 	// Follow back?
-	const { data: followingMe } = useSWR(
+	const { data: followingMe, mutate: mutateFollowsYou } = useSWR(
 		() => isAuthenticated && `/api/profile/following?userId=${profile_id}`,
 		url => axios.get(url).then(res => res.data.data.following),
 		{ initialData: false, revalidateOnMount: true, focusThrottleInterval: 60 * 1000 }
 	)
+
+	useEffect(() => {
+		mutateFollowsYou(false, true)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [profile_id])
 
 	// Spotlight
 	const [spotlightItem, setSpotlightItem] = useState()
