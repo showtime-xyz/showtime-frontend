@@ -18,8 +18,6 @@ import IpfsUpload from '@/components/IpfsUpload'
 import axios from '@/lib/axios'
 import { ethers } from 'ethers'
 import minterAbi from '@/data/ShowtimeMT.json'
-import { useContext } from 'react'
-import AppContext from '@/context/app-context'
 import { Magic } from 'magic-sdk'
 import { Biconomy } from '@biconomy/mexa'
 import useWeb3Modal from '@/lib/web3Modal'
@@ -35,7 +33,6 @@ export const FORMATS = {
 
 const MintPage = ({ type }) => {
 	const router = useRouter()
-	const { web3: contextWeb3, setWeb3 } = useContext(AppContext)
 	const web3Modal = useWeb3Modal()
 	const { [FLAGS.hasMinting]: canMint, loading: flagsLoading } = useFlags()
 
@@ -95,29 +92,6 @@ const MintPage = ({ type }) => {
 		return { biconomy, web3 }
 	}
 
-	const submitFormEasy = async () => {
-		const { biconomy, web3 } = await getBiconomy()
-		const signerAddress = await web3.getSigner().getAddress()
-		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MINTING_CONTRACT, minterAbi, biconomy.getSignerByAddress(signerAddress))
-		const { data } = await contract.populateTransaction.issueToken(signerAddress, 1, 'QmYFJvq9dLWZs2YZ4pVQUVN8qUhKkwdXxP9J5Gvp7CiCCh', 0)
-
-		const provider = biconomy.getEthersProvider()
-
-		try {
-			const transaction = await provider.send('eth_sendTransaction', [
-				{
-					data,
-					from: signerAddress,
-					to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
-				},
-			])
-
-			console.log({ transaction })
-		} catch (error) {
-			alert(JSON.parse(error.error.body).error.message)
-		}
-	}
-
 	const submitForm = async event => {
 		event.preventDefault()
 
@@ -142,16 +116,17 @@ const MintPage = ({ type }) => {
 			)
 			.then(res => res.data)
 
-		const web3 = await getWeb3()
-		const biconomy = web3.provider
-		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MINTING_CONTRACT, minterAbi, biconomy.getSignerByAddress(await web3.getSigner().getAddress()))
-		const { data: contractData } = await contract.populateTransaction.issueToken(await web3.getSigner().getAddress(), copies, contentHash, [])
+		const { biconomy, web3 } = await getBiconomy()
+		const signerAddress = await web3.getSigner().getAddress()
+		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MINTING_CONTRACT, minterAbi, biconomy.getSignerByAddress(signerAddress))
+		const { data } = await contract.populateTransaction.issueToken(signerAddress, 1, contentHash, 0)
 
 		const provider = biconomy.getEthersProvider()
 
 		const transaction = await provider.send('eth_sendTransaction', [
 			{
-				data: contractData,
+				data,
+				from: signerAddress,
 				to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
 			},
 		])
@@ -184,7 +159,6 @@ const MintPage = ({ type }) => {
 					</h1>
 					{!profileLoading && <Dropdown className="w-max" options={profile?.wallet_addresses_v2?.filter(({ address }) => !address.startsWith('tz'))?.map(({ address, ens_domain }) => ({ value: address, label: ens_domain || address }))} value={selectedWallet} onChange={setSelectedWallet} label="Wallet" />}
 				</div>
-				<button onClick={submitFormEasy}>Test submit</button>
 				<form onSubmit={submitForm} className="mt-12 flex flex-col md:flex-row justify-between space-y-12 md:space-y-0 md:space-x-12">
 					<div className="space-y-6">
 						<p className="font-bold text-lg">Upload</p>
