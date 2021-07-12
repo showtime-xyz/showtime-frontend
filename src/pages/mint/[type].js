@@ -72,37 +72,50 @@ const MintPage = ({ type }) => {
 		return true
 	}, [name, description, hasVerifiedAuthorship, putOnSale, price, currency, copies, royalties, canMint, ipfsHash])
 
-	const getWeb3 = async () => {
+	const getBiconomy = async () => {
 		const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY)
 		let web3
+		if (await magic.user.isLoggedIn()) web3 = new ethers.providers.Web3Provider(magic.rpcProvider)
+		else web3 = new ethers.providers.Web3Provider(await web3Modal.connect())
 
-		if (!contextWeb3) {
-			if (await magic.user.isLoggedIn()) web3 = new ethers.providers.Web3Provider(magic.rpcProvider)
-			else web3 = new ethers.providers.Web3Provider(await web3Modal.connect())
+		const biconomy = new Biconomy(new ethers.providers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`), { apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY, debug: true, walletProvider: web3.provider })
 
-			web3 = new ethers.providers.Web3Provider(new Biconomy(web3.provider, { apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY, debug: true }))
-			setWeb3(web3)
-		} else web3 = contextWeb3
+		await new Promise((resolve, reject) => {
+			biconomy
+				.onEvent(biconomy.READY, () => {
+					console.log('Biconomy is Ready')
+					resolve()
+				})
+				.onEvent(biconomy.ERROR, (error, message) => {
+					console.error(error, message)
+					reject(message)
+				})
+		})
 
-		return web3
+		return { biconomy, web3 }
 	}
 
 	const submitFormEasy = async () => {
-		const web3 = await getWeb3()
-		const biconomy = web3.provider
-		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MINTING_CONTRACT, minterAbi, biconomy.getSignerByAddress(await web3.getSigner().getAddress()))
-		const { data: contractData } = await contract.populateTransaction.issueToken('0xE340b00B6B622C136fFA5CFf130eC8edCdDCb39D', 1, 'QmYFJvq9dLWZs2YZ4pVQUVN8qUhKkwdXxP9J5Gvp7CiCCh', [])
+		const { biconomy, web3 } = await getBiconomy()
+		const signerAddress = await web3.getSigner().getAddress()
+		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MINTING_CONTRACT, minterAbi, biconomy.getSignerByAddress(signerAddress))
+		const { data } = await contract.populateTransaction.issueToken(signerAddress, 1, 'QmYFJvq9dLWZs2YZ4pVQUVN8qUhKkwdXxP9J5Gvp7CiCCh', 0)
 
 		const provider = biconomy.getEthersProvider()
 
-		const transaction = await provider.send('eth_sendTransaction', [
-			{
-				data: contractData,
-				to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
-			},
-		])
+		try {
+			const transaction = await provider.send('eth_sendTransaction', [
+				{
+					data,
+					from: signerAddress,
+					to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+				},
+			])
 
-		console.log({ transaction })
+			console.log({ transaction })
+		} catch (error) {
+			alert(JSON.parse(error.error.body).error.message)
+		}
 	}
 
 	const submitForm = async event => {
