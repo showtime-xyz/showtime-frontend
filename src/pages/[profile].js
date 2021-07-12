@@ -778,8 +778,8 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 												)}
 												{!isChangingOrder && (
 													<>
-														<Dropdown className="flex-1" options={menuLists && menuLists[selectedGrid - 1].collections.map(item => ({ value: item.collection_id, label: item.collection_name?.replace(' (FND)', ''), img_url: item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC }))} value={collectionId} onChange={handleCollectionChange} disabled={isChangingOrder} />
-														<Dropdown className="flex-1" options={sortingOptionsList.filter(opts => (menuLists[selectedGrid - 1].has_custom_sort ? true : opts.value !== 5))} value={selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField} onChange={handleSortChange} disabled={isChangingOrder} />
+														<Dropdown className="w-1/2 md:w-auto md:flex-1" options={menuLists && menuLists[selectedGrid - 1].collections.map(item => ({ value: item.collection_id, label: item.collection_name?.replace(' (FND)', ''), img_url: item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC }))} value={collectionId} onChange={handleCollectionChange} disabled={isChangingOrder} />
+														<Dropdown className="w-1/2 md:w-auto md:flex-1" options={sortingOptionsList.filter(opts => (menuLists[selectedGrid - 1].has_custom_sort ? true : opts.value !== 5))} value={selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField} onChange={handleSortChange} disabled={isChangingOrder} />
 
 														{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && items?.length > 0 && (
 															<Menu as="div" className="relative inline-block text-left ml-2">
