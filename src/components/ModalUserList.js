@@ -5,6 +5,7 @@ import CloseButton from './CloseButton'
 import FollowButton from './FollowButton'
 import BadgeIcon from './Icons/BadgeIcon'
 import useProfile from '@/hooks/useProfile'
+import { formatAddressShort } from '@/lib/utilities'
 
 export default function ModalUserList({ isOpen, title, users, closeModal, emptyMessage, onRedirect }) {
 	const { myProfile } = useProfile()
@@ -28,7 +29,7 @@ export default function ModalUserList({ isOpen, title, users, closeModal, emptyM
 														<img alt={profile.name} src={profile.img_url ? profile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-9 h-9" />
 													</div>
 													<div className="flex items-center space-x-1 overflow-hidden">
-														<p className="font-semibold truncate min-w-0">{profile.name || `@${profile.username}` || 'Unnamed'}</p>
+														<p className="font-semibold truncate min-w-0">{profile.name || (profile.username && `@${profile.username}`) || formatAddressShort(profile.wallet_address) || 'Unnamed'}</p>
 														{profile.verified == 1 && <BadgeIcon className="flex-shrink-0 w-3 h-auto text-black dark:text-white" bgClass="text-white dark:text-black" />}
 													</div>
 												</a>
