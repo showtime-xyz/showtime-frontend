@@ -7,7 +7,7 @@ import FollowButton from './FollowButton'
 import UserImageList from './UserImageList'
 import BadgeIcon from './Icons/BadgeIcon'
 import Link from 'next/link'
-import { formatAddressShort } from '../lib/utilities'
+import { formatAddressShort } from '@/lib/utilities'
 import useProfile from '@/hooks/useProfile'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import LoadingSpinner from './LoadingSpinner'
@@ -24,7 +24,7 @@ const ProfileHovercard = ({ children, user, initialProfile }) => {
 	if (!user && !initialProfile) return children
 
 	return (
-		<HoverCardPrimitive.Root openDelay={50} onOpenChange={setOpen}>
+		<HoverCardPrimitive.Root openDelay={700} onOpenChange={setOpen}>
 			<HoverCardPrimitive.Trigger>{children}</HoverCardPrimitive.Trigger>
 
 			<HoverCardPrimitive.Content side="top" align="center" sideOffset={10} onClick={event => event.stopPropagation()}>
