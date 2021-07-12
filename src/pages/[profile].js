@@ -667,7 +667,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 										<div className="flex justify-between">
 											<div>
 												<div className="flex items-center space-x-2">
-													<h2 className="text-3xl md:text-4xl font-tomato font-bold text-black dark:text-white">{name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</h2>
+													<h2 className={`text-3xl md:text-4xl font-tomato font-bold text-black dark:text-white ${verified ? 'whitespace-nowrap' : ''}`}>{name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</h2>
 													{verified && <BadgeIcon className="w-5 md:w-6 h-auto text-black dark:text-white" bgClass="text-white dark:text-black" />}
 												</div>
 												<div className="mt-2 flex items-center space-x-2">
