@@ -46,7 +46,7 @@ const FollowersInCommon = ({ profileId }) => {
 								<Link href={`/${follower.username || follower.address}`}>
 									<a className="font-semibold dark:text-gray-300">{follower.username ? `@${follower.username}` : formatAddressShort(follower.address)}</a>
 								</Link>
-								{(followersInCommon.count <= 3 && followersInCommon.count == i + 2 && <span>, &amp; </span>) || (followersInCommon.followers.length > i + 1 && <span>, </span>)}
+								{(followersInCommon.count <= 3 && followersInCommon.count == i + 2 && <span>{followersInCommon.count > 2 && ','} &amp; </span>) || (followersInCommon.followers.length > i + 1 && <span>, </span>)}
 							</Fragment>
 						))}
 						{followersInCommon.count > 3 && (
