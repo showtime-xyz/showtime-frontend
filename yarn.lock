@@ -9456,13 +9456,13 @@ react-fast-compare@^3.0.1:
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-3.2.0.tgz#641a9da81b6a6320f270e89724fb45a0b39e43bb"
   integrity sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==
 
-react-image-lightbox@^5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/react-image-lightbox/-/react-image-lightbox-5.1.1.tgz#872d1a4336b5a6410ea7909b767cf59014081004"
-  integrity sha512-GprldD8AqpRb2hsOdns3sI7Xeo9hJlcybDxuli4RB+ml1J/GaFaUuRkT/7IrTLv2+4vkR74ahz2LD0HOUHI7wA==
+react-image-lightbox@^5.1.3:
+  version "5.1.3"
+  resolved "https://registry.yarnpkg.com/react-image-lightbox/-/react-image-lightbox-5.1.3.tgz#62509d2d96b4d088274d85fb9b497643dcf43a68"
+  integrity sha512-/AM8Fk55RD1t+kr7DgHYSHP1q+lCpIwv82B9wwn0EFPs6Ua03J/C/CK398NEQAB1IVIP4vx3NLfmY2Ua6MYuLQ==
   dependencies:
-    prop-types "^15.6.2"
-    react-modal "^3.8.1"
+    prop-types "^15.7.2"
+    react-modal "^3.11.1"
 
 react-infinite-scroll-component@^6.1.0:
   version "6.1.0"
@@ -9501,7 +9501,7 @@ react-mentions@^4.1.1:
     prop-types "^15.5.8"
     substyle "^9.1.0"
 
-react-modal@^3.8.1:
+react-modal@^3.11.1:
   version "3.14.3"
   resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-3.14.3.tgz#7eb7c5ec85523e5843e2d4737cc17fc3f6aeb1c0"
   integrity sha512-+C2KODVKyu20zHXPJxfOOcf571L1u/EpFlH+oS/3YDn8rgVE51QZuxuuIwabJ8ZFnOEHaD+r6XNjqwtxZnXO0g==
