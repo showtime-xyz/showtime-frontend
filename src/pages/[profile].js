@@ -69,6 +69,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 	const { myProfile, setMyProfile } = useProfile()
 	const context = useContext(AppContext)
 	const router = useRouter()
+	const isFirstRender = useRef(true)
 
 	const [cancelTokenArray, setCancelTokens] = useState([CancelToken.source(), CancelToken.source(), CancelToken.source()])
 
@@ -598,6 +599,11 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 	}
 
 	useEffect(() => {
+		if (isFirstRender) {
+			isFirstRender.current = false
+			return
+		}
+
 		if (profile.profile_id !== myProfile?.profile_id) return
 
 		handleListChange(myProfile?.default_list_id)
