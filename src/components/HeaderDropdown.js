@@ -22,17 +22,17 @@ const NextLink = ({ href, children, ...rest }) => (
 
 const HeaderDropdown = () => {
 	const { user } = useAuth()
-	const { profile: myProfile, loading: profileLoading } = useProfile()
+	const { myProfile } = useProfile()
 	const { logOut } = useContext(AppContext)
 	const { theme, themes, setTheme } = useTheme()
 	const [hasEmailAddress, setHasEmailAddress] = useState(false)
 	const [emailModalOpen, setEmailModalOpen] = useState(false)
 
 	useEffect(() => {
-		if (profileLoading) return
+		if (!myProfile) return
 
 		setHasEmailAddress((myProfile?.wallet_addresses_v2 || []).length !== (myProfile?.wallet_addresses_excluding_email_v2 || []).length)
-	}, [profileLoading, myProfile])
+	}, [myProfile])
 
 	return (
 		<>

@@ -25,6 +25,15 @@ const FollowersInCommon = ({ profileId }) => {
 
 	followersInCommon = followersInCommon.data
 
+	followersInCommon.followers = followersInCommon.followers.sort((a, b) => {
+		if (a.username && !b.username) return -1
+		if (!a.username && b.username) return 1
+
+		return 0
+	})
+
+	const displayCount = followersInCommon.count === 3 ? 3 : 2
+
 	return (
 		<>
 			{typeof document !== 'undefined' && followersInCommon.count > 2 ? <ModalUserList title="Followed by" isOpen={showFollowersModal} users={followersInCommonComplete?.data?.followers || []} closeModal={() => setShowFollowersModal(false)} onRedirect={() => setShowFollowersModal(false)} emptyMessage="Loading..." /> : null}
@@ -32,19 +41,19 @@ const FollowersInCommon = ({ profileId }) => {
 				<div className="text-sm dark:text-gray-400">
 					Followed by{' '}
 					<div className="hidden md:inline">
-						{followersInCommon.followers.slice(0, 2).map((follower, i) => (
+						{followersInCommon.followers.slice(0, displayCount).map((follower, i) => (
 							<Fragment key={follower.profile_id}>
 								<Link href={`/${follower.username || follower.address}`}>
-									<a className="font-semibold dark:text-gray-300">{`@${follower.username}` || formatAddressShort(follower.address)}</a>
+									<a className="font-semibold dark:text-gray-300">{follower.username ? `@${follower.username}` : formatAddressShort(follower.address)}</a>
 								</Link>
-								{i + 1 != followersInCommon.count && ', '}
+								{(followersInCommon.count <= 3 && followersInCommon.count == i + 2 && <span>{followersInCommon.count > 2 && ','} &amp; </span>) || (followersInCommon.followers.length > i + 1 && <span>, </span>)}
 							</Fragment>
 						))}
-						{followersInCommon.count > 2 && (
+						{followersInCommon.count > 3 && (
 							<>
 								&amp;{' '}
 								<button className="font-semibold dark:text-gray-300" onClick={() => setShowFollowersModal(true)}>
-									{followersInCommon.count - 2} others
+									{followersInCommon.count - 2} other{followersInCommon.count - 2 > 1 ? 's' : ''}
 								</button>{' '}
 								you follow
 							</>

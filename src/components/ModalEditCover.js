@@ -11,7 +11,7 @@ import Button from './UI/Buttons/Button'
 import useProfile from '@/hooks/useProfile'
 
 export default function ModalEditCover({ isOpen, setEditModalOpen }) {
-	const { profile: myProfile, mutate: mutateProfile } = useProfile()
+	const { myProfile, setMyProfile } = useProfile()
 
 	const [image, setImage] = useState('')
 	const [croppie, setCroppie] = useState(null)
@@ -50,7 +50,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 			.post('/api/profile/cover')
 			.then(res => res.data)
 			.then(({ data: emptyUrl }) => {
-				mutateProfile({ ...myProfile, cover_url: emptyUrl })
+				setMyProfile({ ...myProfile, cover_url: emptyUrl })
 				setEditModalOpen(false)
 				setSaveInProgress(false)
 			})
@@ -77,7 +77,7 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 							.post('/api/profile/cover', { image: blobString })
 							.then(res => res.data)
 							.then(({ data: url }) => {
-								mutateProfile({ ...myProfile, cover_url: url })
+								setMyProfile({ ...myProfile, cover_url: url })
 
 								setEditModalOpen(false)
 								setSaveInProgress(false)
