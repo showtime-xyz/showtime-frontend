@@ -21,20 +21,15 @@ import minterAbi from '@/data/ShowtimeMT.json'
 import { Magic } from 'magic-sdk'
 import { Biconomy } from '@biconomy/mexa'
 import useWeb3Modal from '@/lib/web3Modal'
+import { MINT_TYPES } from '@/lib/constants'
+import { useWarningOnExit } from '@/hooks/useWarningOnExit'
+import useSWR from 'swr'
 
-export const TYPES = ['image', 'video' /* 'audio', 'text', 'file' */]
-export const FORMATS = {
-	image: ['.png', '.gif', '.jpg'],
-	video: ['.mp4', '.mov'],
-	// audio: ['.mp3', '.flac', '.wav'],
-	// text: ['.txt', '.md'],
-	// file: ['.pdf', '.psd', '.ai'],
-}
-
-const MintPage = ({ type }) => {
+const MintPage = () => {
 	const router = useRouter()
 	const web3Modal = useWeb3Modal()
 	const { [FLAGS.hasMinting]: canMint, loading: flagsLoading } = useFlags()
+	const { revalidate: revalidateDrafts } = useSWR('/api/mint/drafts', url => axios.get(url).then(res => res.data), { revalidateOnMount: false, focusThrottleInterval: 60 * 1000 })
 
 	useEffect(() => {
 		if (flagsLoading || canMint) return
@@ -44,9 +39,11 @@ const MintPage = ({ type }) => {
 	}, [canMint, flagsLoading])
 
 	const { profile, loading: profileLoading } = useProfile()
-	const [selectedWallet, setSelectedWallet] = useState(null)
 
-	const [ipfsHash, setIpfsHash] = useState('')
+	const [selectedWallet, setSelectedWallet] = useState(null)
+	const [draft, setDraft] = useState({})
+	const [draftId, setDraftId] = useState(null)
+	const [ipfsHash, setIpfsHash] = useState(null)
 
 	const [name, setName] = useState('')
 	const [description, setDescription] = useState('')
@@ -54,12 +51,34 @@ const MintPage = ({ type }) => {
 	const [isAdultContent, setIsAdultContent] = useState(false)
 
 	const [putOnSale, setPutOnSale] = useState(false)
-	const [price, setPrice] = useState('')
-	const [currency, setCurrency] = useState('eth')
+	const [price, setPrice] = useState(null)
+	const [currency, setCurrency] = useState('ETH')
 
 	const [configureOptions, setConfigureOptions] = useState(false)
 	const [copies, setCopies] = useState(1)
 	const [royalties, setRoyalties] = useState(10)
+
+	useEffect(() => {
+		if (!router.query?.draft) return
+
+		axios.get(`/api/mint/drafts/${router.query?.draft}`).then(({ data: draft }) => {
+			if (router.query.type != draft.type) router.push({ query: { ...router.query, type: draft.type } }, undefined, { shallow: true })
+
+			setDraft(draft)
+			setDraftId(draft.draftId)
+			setSelectedWallet(draft.selectedWallet)
+			setCurrency(draft.currency)
+			setDescription(draft.description)
+			setIpfsHash(draft.ipfsHash)
+			setIsAdultContent(draft.isAdultContent)
+			setName(draft.name)
+			setPrice(draft.price)
+			setRoyalties(draft.royalties)
+			setPutOnSale(putOnSale || !!draft.price)
+			setConfigureOptions(configureOptions || draft.copies != 1 || draft.royalties != 10)
+		})
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [router.query?.draft])
 
 	const isValid = useMemo(() => {
 		if (!canMint || !name || !description || !hasVerifiedAuthorship || !copies || !royalties || !ipfsHash) return false
@@ -68,6 +87,18 @@ const MintPage = ({ type }) => {
 
 		return true
 	}, [name, description, hasVerifiedAuthorship, putOnSale, price, currency, copies, royalties, canMint, ipfsHash])
+
+	const isEmpty = useMemo(() => {
+		return !name && !description && !ipfsHash && !hasVerifiedAuthorship && !draftId && !price && !isAdultContent && copies == 1 && royalties == 10 && currency == 'ETH'
+	}, [name, description, ipfsHash, hasVerifiedAuthorship, draftId, currency, price, isAdultContent, copies, royalties])
+
+	const isDirty = useMemo(() => {
+		if (isEmpty) return false
+
+		return draftId != draft.draftId || selectedWallet != draft.selectedWallet || copies != draft.copies || currency != draft.currency || description != draft.description || ipfsHash != draft.ipfsHash || isAdultContent != draft.isAdultContent || name != draft.name || price != draft.price || royalties != draft.royalties
+	}, [isEmpty, draftId, draft.draftId, draft.selectedWallet, draft.copies, draft.currency, draft.description, draft.ipfsHash, draft.isAdultContent, draft.name, draft.price, draft.royalties, selectedWallet, copies, currency, description, ipfsHash, isAdultContent, name, price, royalties])
+
+	useWarningOnExit(isDirty, 'You have unsaved changes. Are you sure you want to leave without minting or saving as a draft?')
 
 	const getBiconomy = async () => {
 		const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY)
@@ -134,6 +165,17 @@ const MintPage = ({ type }) => {
 		console.log({ transaction })
 	}
 
+	const saveDraft = async () => {
+		if (!isDirty) return
+
+		const newDraft = { selectedWallet, name, description, copies, isAdultContent, price, royalties, currency, ipfsHash, hasVerifiedAuthorship, draftId, type: router.query.type }
+
+		await axios.post('/api/mint/drafts', newDraft)
+
+		setDraft(newDraft)
+		revalidateDrafts()
+	}
+
 	useEffect(() => {
 		if (profileLoading || selectedWallet) return
 
@@ -155,14 +197,14 @@ const MintPage = ({ type }) => {
 				</div>
 				<div className="mt-12 flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0">
 					<h1 className="text-3xl font-bold">
-						Create <span className="capitalize">{type}</span>
+						Create <span className="capitalize">{router.query.type}</span>
 					</h1>
 					{!profileLoading && <Dropdown className="w-max" options={profile?.wallet_addresses_v2?.filter(({ address }) => !address.startsWith('tz'))?.map(({ address, ens_domain }) => ({ value: address, label: ens_domain || address }))} value={selectedWallet} onChange={setSelectedWallet} label="Wallet" />}
 				</div>
 				<form onSubmit={submitForm} className="mt-12 flex flex-col md:flex-row justify-between space-y-12 md:space-y-0 md:space-x-12">
 					<div className="space-y-6">
 						<p className="font-bold text-lg">Upload</p>
-						<IpfsUpload type={type} wallet={selectedWallet} onChange={setIpfsHash} tokenName={name} />
+						<IpfsUpload ipfsHash={ipfsHash} wallet={selectedWallet} onChange={setIpfsHash} tokenName={name} />
 					</div>
 					<div className="flex-1">
 						<p className="font-bold text-lg">Details</p>
@@ -190,8 +232,18 @@ const MintPage = ({ type }) => {
 								</div>
 								<Transition appear={false} show={putOnSale} as={Fragment} enter="transition ease-in-out duration-300 transform" enterFrom="-translate-y-full opacity-0" enterTo="translate-y-0 opacity-100" leave="transition ease-in-out duration-300 transform" leaveFrom="translate-y-0 opacity-100" leaveTo="-translate-y-full opacity-0">
 									<div className="flex items-stretch space-x-2">
-										<Input className="flex-1" label="Price" id="price" value={price} onChange={setPrice} placeholder="Enter Price" required={putOnSale} />
-										<Dropdown className="flex-1 flex flex-col" label="Currency" value={currency} onChange={setCurrency} options={[{ label: 'ETH', value: 'eth' }]} />
+										<Input className="flex-1" label="Price" id="price" value={price || ''} onChange={setPrice} placeholder="Enter Price" required={putOnSale} />
+										<Dropdown
+											className="flex-1 flex flex-col"
+											label="Currency"
+											value={currency}
+											onChange={setCurrency}
+											options={[
+												{ label: 'ETH', value: 'ETH' },
+												{ label: 'USDC', value: 'USDC' },
+												{ label: 'USD', value: 'USD' },
+											]}
+										/>
 									</div>
 								</Transition>
 							</div>
@@ -211,9 +263,11 @@ const MintPage = ({ type }) => {
 								</Transition>
 							</div>
 							<div className="flex items-center justify-between">
-								<button className="text-sm font-bold text-gray-400 dark:text-gray-500">Save Draft</button>
+								<button type="button" onClick={saveDraft} className="text-sm font-bold text-gray-500 hover:text-gray-500 disabled:text-gray-400 disabled:hover:text-gray-400 disabled:cursor-not-allowed dark:text-gray-500 transition" disabled={!isDirty || isEmpty}>
+									Save Draft
+								</button>
 								<Button disabled={!isValid} type="submit" style="primary" className="flex items-center">
-									Create <span className="capitalize ml-1">{type}</span>
+									Create <span className="capitalize ml-1">{router.query.type}</span>
 								</Button>
 							</div>
 						</div>
@@ -230,7 +284,7 @@ export async function getStaticProps({ params: { type } }) {
 
 export async function getStaticPaths() {
 	return {
-		paths: TYPES.map(type => ({ params: { type } })),
+		paths: MINT_TYPES.map(type => ({ params: { type } })),
 		fallback: false,
 	}
 }

@@ -8,19 +8,28 @@ import TokenCard from './TokenCard'
 import useProfile from '@/hooks/useProfile'
 import { useMemo } from 'react'
 import { useRef } from 'react'
-import { FORMATS } from '@/pages/mint/[type]'
+import { useRouter } from 'next/router'
+import { MINT_FORMATS } from '@/lib/constants'
 
-const IpfsUpload = ({ type, wallet, onChange, tokenName }) => {
+const IpfsUpload = ({ ipfsHash: baseIpfsHash, wallet, onChange, tokenName }) => {
+	const router = useRouter()
 	const { profile } = useProfile()
 	const [uploadProgress, setUploadProgress] = useState(null)
 	const [filePreview, setFilePreview] = useState(null)
-	const [ipfsHash, setIpfsHash] = useState('')
+	const [ipfsHash, setIpfsHash] = useState(baseIpfsHash)
 	const imageRef = useRef(null)
 
 	useEffect(() => {
 		onChange(ipfsHash)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ipfsHash])
+
+	useEffect(() => {
+		if (ipfsHash) return
+		setIpfsHash(baseIpfsHash)
+		setFilePreview(`https://gateway.pinata.cloud/ipfs/${baseIpfsHash}`)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [baseIpfsHash])
 
 	const cancelUpload = () => {
 		setUploadProgress(null)
@@ -57,7 +66,7 @@ const IpfsUpload = ({ type, wallet, onChange, tokenName }) => {
 	const fakeItem = useMemo(
 		() => ({
 			nft_id: -1,
-			token_has_video: type === 'video',
+			token_has_video: router.query.type === 'video',
 			imageRef,
 			creator_address: 'm1guelpf.eth',
 			creator_address_nonens: '0x000',
@@ -70,7 +79,7 @@ const IpfsUpload = ({ type, wallet, onChange, tokenName }) => {
 			token_img_url: filePreview,
 			token_animation_url: filePreview,
 		}),
-		[profile, tokenName, filePreview, type]
+		[profile, tokenName, filePreview, router.query.type]
 	)
 
 	return (
@@ -96,8 +105,8 @@ const IpfsUpload = ({ type, wallet, onChange, tokenName }) => {
 						</>
 					) : (
 						<>
-							<input onChange={onFileUpload} type="file" className="hidden" multiple={false} accept={FORMATS[type].join(',')} capture="environment" />
-							<p className="font-medium text-sm dark:text-gray-400">{FORMATS[type].join(', ')} / max 50mb</p>
+							<input onChange={onFileUpload} type="file" className="hidden" multiple={false} accept={MINT_FORMATS[router.query.type].join(',')} capture="environment" />
+							<p className="font-medium text-sm dark:text-gray-400">{MINT_FORMATS[router.query.type].join(', ')} / max 50mb</p>
 							<Button as="div" type="button" style="primary">
 								Choose File
 							</Button>

@@ -1,8 +1,10 @@
+import axios from '@/lib/axios'
+import { MINT_TYPES } from '@/lib/constants'
 import { classNames } from '@/lib/utilities'
-import { TYPES } from '@/pages/mint/[type]'
 import { Menu, Transition } from '@headlessui/react'
 import Link from 'next/link'
 import { Fragment } from 'react'
+import useSWR from 'swr'
 import AudioIcon from './Icons/AudioIcon'
 import FileIcon from './Icons/FileIcon'
 import ImageIcon from './Icons/ImageIcon'
@@ -25,7 +27,9 @@ const MintDropdown = () => {
 		{ type: 'audio', Icon: AudioIcon },
 		{ type: 'text', Icon: TextIcon },
 		{ type: 'file', Icon: FileIcon },
-	].filter(({ type }) => TYPES.includes(type))
+	].filter(({ type }) => MINT_TYPES.includes(type))
+
+	const { data: drafts } = useSWR('/api/mint/drafts', url => axios.get(url).then(res => res.data), { initialData: [], revalidateOnMount: true, focusThrottleInterval: 60 * 1000 })
 
 	return (
 		<Menu as="div" className="ml-5 md:relative">
@@ -49,6 +53,18 @@ const MintDropdown = () => {
 											<span className="capitalize">{type}</span>
 										</Menu.Item>
 									))}
+									{drafts.length > 0 && <hr className="border-gray-100 dark:border-gray-800" />}
+									{drafts
+										.sort((draft1, draft2) => draft2.id - draft1.id)
+										.slice(0, 3)
+										.map(({ id, title, type = 'Image' }) => (
+											<Menu.Item key={id} as={NextLink} href={`/mint/${type.toLowerCase()}?draft=${id}`} className={({ active }) => classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'rounded-lg w-full text-left py-2 pr-6 pl-2 text-sm font-semibold transition flex items-center space-x-2')}>
+												{OPTIONS.filter(option => option.type == type.toLowerCase()).map(({ Icon }) => (
+													<Icon key="icon" className="w-4 h-4" />
+												))}
+												<span className="whitespace-nowrap truncate">{title || 'Untitled Draft'}</span>
+											</Menu.Item>
+										))}
 								</div>
 							</div>
 						</Menu.Items>

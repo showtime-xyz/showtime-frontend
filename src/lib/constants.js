@@ -184,3 +184,12 @@ export const MENTIONS_STYLE = {
 		},
 	},
 }
+
+export const MINT_TYPES = ['image', 'video' /* 'audio', 'text', 'file' */]
+export const MINT_FORMATS = {
+	image: ['.png', '.gif', '.jpg'],
+	video: ['.mp4', '.mov'],
+	// audio: ['.mp3', '.flac', '.wav'],
+	// text: ['.txt', '.md'],
+	// file: ['.pdf', '.psd', '.ai'],
+}
