@@ -21,7 +21,7 @@ import SpotlightItem from '@/components/SpotlightItem'
 import { Transition, Menu } from '@headlessui/react'
 import { PencilAltIcon, DotsHorizontalIcon, HeartIcon } from '@heroicons/react/solid'
 import { UploadIcon } from '@heroicons/react/outline'
-import axios from '@/lib/axios'
+import axios, { CancelToken, isCancel } from '@/lib/axios'
 import UserAddIcon from '@/components/Icons/UserAddIcon'
 import FollowersInCommon from '@/components/FollowersInCommon'
 import GlobeIcon from '@/components/Icons/GlobeIcon'
@@ -69,6 +69,32 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 	const { myProfile, setMyProfile } = useProfile()
 	const context = useContext(AppContext)
 	const router = useRouter()
+
+	const [cancelTokenArray, setCancelTokens] = useState([CancelToken.source(), CancelToken.source(), CancelToken.source()])
+
+	const cancelTokens = {
+		get(listId) {
+			return cancelTokenArray[listId]
+		},
+		refresh(listId) {
+			const newToken = CancelToken.source()
+
+			setCancelTokens(tokenArray => {
+				tokenArray[listId] = newToken
+
+				return tokenArray
+			})
+
+			return newToken
+		},
+		cancelExcept(listId) {
+			cancelTokenArray.filter((_, i) => listId != i).forEach(source => source.cancel())
+		},
+		willLoad(listId) {
+			this.cancelExcept(listId)
+			return this.refresh(listId)
+		},
+	}
 
 	// Profile details
 	const [isMyProfile, setIsMyProfile] = useState()
@@ -157,26 +183,35 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 	const [selectedOwnedSortField, setSelectedOwnedSortField] = useState(lists.lists[1].sort_id || 1)
 	const [selectedLikedSortField, setSelectedLikedSortField] = useState(2)
 
-	const updateItems = async (listId, sortId, collectionId, showCardRefresh, page, showHidden, showDuplicates) => {
+	const updateItems = async (listId, sortId, collectionId, showCardRefresh, page, showHidden, showDuplicates, cancelTokens) => {
 		if (showCardRefresh) setIsRefreshingCards(true)
 
-		// Created
-		const { data } = await axios
-			.post('/api/getprofilenfts', {
-				profileId: profile_id,
-				page: page,
-				limit: perPage,
-				listId: listId,
-				sortId: sortId,
-				showHidden: showHidden ? 1 : 0,
-				showDuplicates: showDuplicates ? 1 : 0,
-				collectionId: collectionId,
-			})
-			.then(res => res.data)
-		setItems(data.items)
-		setHasMore(data.has_more)
+		const source = cancelTokens.willLoad(listId)
 
-		if (showCardRefresh) setIsRefreshingCards(false)
+		await axios
+			.post(
+				'/api/getprofilenfts',
+				{
+					profileId: profile_id,
+					page: page,
+					limit: perPage,
+					listId: listId,
+					sortId: sortId,
+					showHidden: showHidden ? 1 : 0,
+					showDuplicates: showDuplicates ? 1 : 0,
+					collectionId: collectionId,
+				},
+				{ cancelToken: source.token }
+			)
+			.then(({ data: { data } }) => {
+				setItems(data.items)
+				setHasMore(data.has_more)
+
+				if (showCardRefresh) setIsRefreshingCards(false)
+			})
+			.catch(err => {
+				if (!isCancel(err)) throw err
+			})
 	}
 
 	const addPage = async nextPage => {
@@ -209,7 +244,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 		const setSelectedSortField = selectedGrid === 1 ? setSelectedCreatedSortField : selectedGrid === 2 ? setSelectedOwnedSortField : setSelectedLikedSortField
 		setPage(1)
 		setSelectedSortField(sortId)
-		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates)
+		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates, cancelTokens)
 		setSwitchInProgress(false)
 	}
 
@@ -225,7 +260,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 		if (listId != (isMyProfile && myProfile ? myProfile.default_list_id : lists.default_list_id)) router.replace({ query: { ...router.query, list: PROFILE_TABS[listId] } }, undefined, { shallow: true })
 		else router.replace({ query: Object.fromEntries(Object.entries(router.query).filter(([key]) => key != 'list')) }, undefined, { shallow: true })
 
-		await updateItems(listId, sortId, 0, true, 1, showUserHiddenItems, 0)
+		await updateItems(listId, sortId, 0, true, 1, showUserHiddenItems, 0, cancelTokens)
 		setSwitchInProgress(false)
 	}
 
@@ -235,7 +270,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 		setPage(1)
 
 		const sortId = selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField
-		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates)
+		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates, cancelTokens)
 		setSwitchInProgress(false)
 	}
 
@@ -251,7 +286,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 		setPage(1)
 
 		const sortId = selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField
-		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates)
+		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates, cancelTokens)
 		setSwitchInProgress(false)
 	}
 
@@ -267,7 +302,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 		setPage(1)
 
 		const sortId = selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField
-		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates)
+		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates, cancelTokens)
 		setSwitchInProgress(false)
 	}
 
