@@ -8,11 +8,11 @@ const Dropdown = ({ options, value, onChange, label, disabled = false, className
 	if (!options) return null
 
 	return (
-		<Listbox value={value} onChange={onChange} as="div" className={className} disabled={disabled}>
+		<Listbox value={value} onChange={onChange} disabled={disabled}>
 			{({ open }) => (
 				<>
 					{label && <Listbox.Label className="block text-sm font-semibold text-gray-800 dark:text-gray-400">{label}</Listbox.Label>}
-					<div className="relative">
+					<div className={`relative ${className}`}>
 						<Listbox.Button className="flex items-center justify-between bg-white dark:bg-gray-900 relative w-full border border-gray-200 dark:border-gray-800 rounded-xl px-3 py-2 cursor-default focus:outline-none focus-visible:ring-1 focus-visible:ring-gray-800 dark:focus-visible:ring-indigo-300 sm:text-sm space-x-2">
 							<span className="block truncate dark:text-gray-400 flex-1 text-left font-medium">{options?.filter(t => t.value === value)?.[0]?.label}</span>
 							<span className="inline-flex items-center pointer-events-none bg-gray-200 dark:bg-gray-800 rounded-full flex-shrink-0 p-0.5 -m-0.5">
