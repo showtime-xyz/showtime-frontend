@@ -4,7 +4,6 @@ import { useState } from 'react'
 import useAuth from '@/hooks/useAuth'
 import { ethers } from 'ethers'
 import useWeb3Modal from '@/lib/web3Modal'
-import { Biconomy } from '@biconomy/mexa'
 import { useContext } from 'react'
 import AppContext from '@/context/app-context'
 
@@ -30,7 +29,6 @@ const _SignPage = () => {
 			if (await magic.user.isLoggedIn()) _web3 = new ethers.providers.Web3Provider(magic.rpcProvider)
 			else _web3 = new ethers.providers.Web3Provider(await web3Modal.connect())
 
-			_web3 = new ethers.providers.Web3Provider(new Biconomy(_web3.provider, { apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY, debug: true }))
 			setWeb3(_web3)
 		} else _web3 = web3
 

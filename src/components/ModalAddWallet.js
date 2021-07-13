@@ -11,7 +11,6 @@ import Fortmatic from 'fortmatic'
 import ScrollableModal from './ScrollableModal'
 import axios from '@/lib/axios'
 import GreenButton from '@/components/UI/Buttons/GreenButton'
-import { Biconomy } from '@biconomy/mexa'
 
 export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 	const context = useContext(AppContext)
@@ -121,7 +120,8 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 		try {
 			const provider = await myWeb3Modal.connect()
 			setMyProvider(provider)
-			context.setWeb3(new ethers.providers.Web3Provider(new Biconomy(new ethers.providers.Web3Provider(provider).provider, { apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY, debug: true })))
+
+			context.setWeb3(new ethers.providers.Web3Provider(provider))
 		} catch {
 			setStep(1)
 		}

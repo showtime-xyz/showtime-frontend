@@ -12,7 +12,6 @@ import Fortmatic from 'fortmatic'
 import ScrollableModal from './ScrollableModal'
 import axios from '@/lib/axios'
 import { useTheme } from 'next-themes'
-import { Biconomy } from '@biconomy/mexa'
 import useAuth from '@/hooks/useAuth'
 
 export default function Modal({ isOpen }) {
@@ -31,7 +30,7 @@ export default function Modal({ isOpen }) {
 		const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY)
 		try {
 			const did = await magic.auth.loginWithMagicLink({ email: elements.email.value })
-			context.setWeb3(new ethers.providers.Web3Provider(new Biconomy(new ethers.providers.Web3Provider(magic.rpcProvider).provider, { apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY, debug: true })))
+			context.setWeb3(new ethers.providers.Web3Provider(magic.rpcProvider))
 
 			// Once we have the did from magic, login with our own API
 			await axios.post(
@@ -111,7 +110,7 @@ export default function Modal({ isOpen }) {
 		if (!context.web3) {
 			const provider = await web3Modal.connect()
 
-			web3 = new ethers.providers.Web3Provider(new Biconomy(new ethers.providers.Web3Provider(provider).provider, { apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY, debug: false }))
+			web3 = new ethers.providers.Web3Provider(provider)
 
 			context.setWeb3(web3)
 		} else web3 = context.web3
