@@ -38,7 +38,7 @@ const MintPage = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [canMint, flagsLoading])
 
-	const { profile, loading: profileLoading } = useProfile()
+	const { myProfile, loading: profileLoading } = useProfile()
 
 	const [selectedWallet, setSelectedWallet] = useState(null)
 	const [draft, setDraft] = useState({})
@@ -116,6 +116,7 @@ const MintPage = () => {
 
 	const submitForm = async event => {
 		event.preventDefault()
+		alert('Minting process starting now, this might take a while...')
 
 		const { token: pinataToken } = await axios.post('/api/pinata/generate-key').then(res => res.data)
 
@@ -154,7 +155,7 @@ const MintPage = () => {
 			},
 		])
 
-		console.log({ transaction })
+		window.open(`https://mumbai.polygonscan.com/tx/${transaction}`)
 	}
 
 	const saveDraft = async () => {
@@ -171,15 +172,15 @@ const MintPage = () => {
 	}
 
 	useEffect(() => {
-		if (profileLoading || selectedWallet) return
+		if (!myProfile || selectedWallet) return
 
-		if (profile.wallet_addresses_excluding_email_v2.filter(({ address }) => !address.startsWith('tz')).length > 0) {
-			setSelectedWallet(profile.wallet_addresses_excluding_email_v2.filter(({ address }) => !address.startsWith('tz'))[0].address)
+		if (myProfile.wallet_addresses_excluding_email_v2.filter(({ address }) => !address.startsWith('tz')).length > 0) {
+			setSelectedWallet(myProfile.wallet_addresses_excluding_email_v2.filter(({ address }) => !address.startsWith('tz'))[0].address)
 			return
 		}
 
-		setSelectedWallet(profile.wallet_addresses_v2?.filter(({ address }) => !address.startsWith('tz'))?.[0]?.address)
-	}, [profileLoading, profile?.wallet_addresses_v2, profile?.wallet_addresses_excluding_email_v2, selectedWallet])
+		setSelectedWallet(myProfile.wallet_addresses_v2?.filter(({ address }) => !address.startsWith('tz'))?.[0]?.address)
+	}, [myProfile, myProfile?.wallet_addresses_v2, myProfile?.wallet_addresses_excluding_email_v2, selectedWallet])
 
 	return (
 		<Layout>
@@ -193,7 +194,7 @@ const MintPage = () => {
 					<h1 className="text-3xl font-bold">
 						Create <span className="capitalize">{router.query.type}</span>
 					</h1>
-					{!profileLoading && <Dropdown className="w-max" options={profile?.wallet_addresses_v2?.filter(({ address }) => !address.startsWith('tz'))?.map(({ address, ens_domain }) => ({ value: address, label: ens_domain || address }))} value={selectedWallet} onChange={setSelectedWallet} label="Wallet" />}
+					{!profileLoading && <Dropdown className="w-max" options={myProfile?.wallet_addresses_v2?.filter(({ address }) => !address.startsWith('tz'))?.map(({ address, ens_domain }) => ({ value: address, label: ens_domain || address }))} value={selectedWallet} onChange={setSelectedWallet} label="Wallet" />}
 				</div>
 				<form onSubmit={submitForm} className="mt-12 flex flex-col md:flex-row justify-between space-y-12 md:space-y-0 md:space-x-12">
 					<div className="space-y-6">

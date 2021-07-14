@@ -6,13 +6,13 @@ export const FLAGS = {
 }
 
 export const flagDefs = {
-	[FLAGS.hasMinting]: profile => !!profile?.username, //profile?.verified || false,
+	[FLAGS.hasMinting]: profile => profile?.verified || false,
 }
 
 const useFlags = () => {
-	const { profile, loading } = useProfile()
+	const { myProfile } = useProfile()
 
-	return { ...useMemo(() => Object.fromEntries(Object.values(FLAGS).map(key => [key, flagDefs[key](profile)])), [profile]), loading }
+	return { ...useMemo(() => Object.fromEntries(Object.values(FLAGS).map(key => [key, flagDefs[key](myProfile)])), [myProfile]), loading: !myProfile }
 }
 
 export default useFlags

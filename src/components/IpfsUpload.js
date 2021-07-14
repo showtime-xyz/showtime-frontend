@@ -13,7 +13,7 @@ import { MINT_FORMATS } from '@/lib/constants'
 
 const IpfsUpload = ({ ipfsHash: baseIpfsHash, wallet, onChange, tokenName }) => {
 	const router = useRouter()
-	const { profile } = useProfile()
+	const { myProfile } = useProfile()
 	const [uploadProgress, setUploadProgress] = useState(null)
 	const [filePreview, setFilePreview] = useState(null)
 	const [ipfsHash, setIpfsHash] = useState(baseIpfsHash)
@@ -70,16 +70,16 @@ const IpfsUpload = ({ ipfsHash: baseIpfsHash, wallet, onChange, tokenName }) => 
 			imageRef,
 			creator_address: 'm1guelpf.eth',
 			creator_address_nonens: '0x000',
-			creator_id: profile?.profile_id,
-			creator_img_url: profile?.img_url,
-			creator_name: profile?.name,
-			creator_username: profile?.username,
-			creator_verified: profile?.verified ? 1 : 0,
+			creator_id: myProfile?.profile_id,
+			creator_img_url: myProfile?.img_url,
+			creator_name: myProfile?.name,
+			creator_username: myProfile?.username,
+			creator_verified: myProfile?.verified ? 1 : 0,
 			token_name: tokenName || 'NFT',
 			token_img_url: filePreview,
 			token_animation_url: filePreview,
 		}),
-		[profile, tokenName, filePreview, router.query.type]
+		[myProfile, tokenName, filePreview, router.query.type]
 	)
 
 	return (

@@ -111,9 +111,9 @@ const TokenCard = ({ originalItem, isPreview = false, onPreviewClose, isMyProfil
 						</div>
 
 						<div className="flex items-center space-x-2">
-							{myProfile?.profile_id !== item.creator_id && <MiniFollowButton profileId={item.creator_id} />}
+							{myProfile?.profile_id !== item.creator_id && !isPreview && <MiniFollowButton profileId={item.creator_id} />}
 							{isPreview && (
-								<button onClick={onPreviewClose} className="text-right text-gray-600 focus:outline-none rounded-xl relative hover:bg-gray-100 dark:hover:bg-gray-800 focus-visible:bg-gray-100 dark:focus-visible:bg-gray-800 py-2 -my-2 px-2 -mx-2 transition">
+								<button onClick={onPreviewClose} className="ml-4 text-right text-gray-600 focus:outline-none rounded-xl relative hover:bg-gray-100 dark:hover:bg-gray-800 focus-visible:bg-gray-100 dark:focus-visible:bg-gray-800 py-2 -my-2 px-2 -mx-2 transition">
 									<XIcon className="w-5 h-5" />
 								</button>
 							)}
