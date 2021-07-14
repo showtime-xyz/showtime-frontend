@@ -18,7 +18,7 @@ import useProfile from '@/hooks/useProfile'
 import ProfileHovercard from './ProfileHovercard'
 
 const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
-	const { profile: myProfile } = useProfile()
+	const { myProfile } = useProfile()
 	const [item, setItem] = useState(originalItem)
 	const [showVideo, setShowVideo] = useState(false)
 	const [muted, setMuted] = useState(true)
@@ -72,6 +72,8 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 			return null
 		}
 	}
+
+	const pageProfileName = pageProfile?.name && pageProfile?.name != 'Unnamed' ? (pageProfile?.wallet_addresses_excluding_email_v2?.map(addr => addr.address)?.includes(pageProfile.name) ? formatAddressShort(pageProfile?.slug_address) : pageProfile?.name) : pageProfile?.username || pageProfile?.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(pageProfile?.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Unknown'
 
 	return (
 		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
@@ -266,9 +268,9 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 											<ProfileHovercard user={pageProfile.profile_id}>
 												<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
 													<a className="flex flex-row items-center pr-2 ">
-														<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
+														<img alt={pageProfileName} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
 														<div>
-															<div className="text-sm font-semibold truncate dark:text-gray-200">{truncateWithEllipses(pageProfile.name && pageProfile.name != 'Unnamed' ? (pageProfile.name == pageProfile.slug_address ? formatAddressShort(pageProfile.slug_address) : pageProfile.name) : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown', 14)}</div>
+															<div className="text-sm font-semibold truncate dark:text-gray-200">{pageProfileName}</div>
 														</div>
 													</a>
 												</Link>

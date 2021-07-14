@@ -24,7 +24,7 @@ const iconObjects = {
 
 export default function NotificationsBtn() {
 	const { user } = useAuth()
-	const { profile: myProfile, mutate: mutateProfile, loading: profileLoading } = useProfile()
+	const { myProfile, setMyProfile } = useProfile()
 	const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false)
 	const [previouslyLastOpened, setPreviouslyLastOpened] = useState()
 	const [openUserList, setOpenUserList] = useState(null)
@@ -40,7 +40,7 @@ export default function NotificationsBtn() {
 	const updateNotificationsLastOpened = async () => {
 		await axios.post('/api/notifications')
 
-		await mutateProfile({ ...myProfile, notifications_last_opened: new Date() }, true)
+		await setMyProfile({ ...myProfile, notifications_last_opened: new Date() }, true)
 	}
 
 	const { data, error, size, setSize } = useSWRInfinite(
@@ -60,10 +60,10 @@ export default function NotificationsBtn() {
 	const isReachingEnd = isEmpty || (data && data[data.length - 1]?.length < NOTIFICATIONS_PER_PAGE)
 
 	useEffect(() => {
-		if (profileLoading) return
+		if (!myProfile) return
 
 		setHasUnreadNotifications((notifs && notifs[0] && myProfile?.notifications_last_opened === null) || (notifs && notifs[0] && new Date(notifs[0].to_timestamp) > new Date(myProfile?.notifications_last_opened)))
-	}, [profileLoading, myProfile?.notifications_last_opened, notifs])
+	}, [myProfile, myProfile?.notifications_last_opened, notifs])
 
 	return (
 		<Popover className="md:relative">

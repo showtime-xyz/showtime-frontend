@@ -19,7 +19,7 @@ const Header = () => {
 	const { asPath } = useRouter()
 	const context = useContext(AppContext)
 	const { isAuthenticated } = useAuth()
-	const { loading: profileLoading } = useProfile()
+	const { myProfile } = useProfile()
 	const [isSearchBarOpen, setSearchBarOpen] = useState(false)
 
 	return (
@@ -70,12 +70,12 @@ const Header = () => {
 						{/* End desktop-only menu */}
 
 						<div className={`flex-1 flex items-center justify-end ${isSearchBarOpen ? 'hidden' : ''}`}>
-							{isAuthenticated && !profileLoading && (
+							{isAuthenticated && myProfile && (
 								<div className="flex-shrink ml-5">
 									<NotificationsBtn />
 								</div>
 							)}
-							{isAuthenticated && !profileLoading ? (
+							{isAuthenticated && myProfile ? (
 								<HeaderDropdown />
 							) : (
 								<div className="flex items-center space-x-2 text-sm md:text-base dark:text-gray-200 hover:text-stpink dark:hover:text-stpink cursor-pointer hover:border-stpink dark:hover:border-stpink" onClick={() => context.setLoginModalOpen(!context.loginModalOpen)}>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */ // For some reason, this rule is behaving weirdly. @TODO I guess
 import { useState, useEffect, useContext, useRef, Fragment } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -20,7 +21,7 @@ import SpotlightItem from '@/components/SpotlightItem'
 import { Transition, Menu } from '@headlessui/react'
 import { PencilAltIcon, DotsHorizontalIcon, HeartIcon } from '@heroicons/react/solid'
 import { UploadIcon } from '@heroicons/react/outline'
-import axios from '@/lib/axios'
+import axios, { CancelToken, isCancel } from '@/lib/axios'
 import UserAddIcon from '@/components/Icons/UserAddIcon'
 import FollowersInCommon from '@/components/FollowersInCommon'
 import GlobeIcon from '@/components/Icons/GlobeIcon'
@@ -30,6 +31,7 @@ import WalletIcon from '@/components/Icons/WalletIcon'
 import Dropdown from '@/components/UI/Dropdown'
 import Button from '@/components/UI/Buttons/Button'
 import useProfile from '@/hooks/useProfile'
+import useSWR from 'swr'
 
 export async function getStaticProps({ params: { profile: slug_address } }) {
 	if (slug_address.includes('apple-touch-icon')) return { props: {}, notFound: true }
@@ -37,22 +39,20 @@ export async function getStaticProps({ params: { profile: slug_address } }) {
 	try {
 		const {
 			data: {
-				data: { profile, followers: followers_list, followers_count, following: following_list, following_count, featured_nft, lists },
+				data: { profile, followers_count, following_count, featured_nft, lists },
 			},
-		} = await backend.get(encodeURIComponent(`v2/profile_server/${slug_address}`))
+		} = await backend.get(`v3/profile_server/${encodeURIComponent(slug_address)}`)
 
 		return {
 			props: {
 				profile,
 				slug_address,
-				followers_list,
 				followers_count,
-				following_list,
 				following_count,
 				featured_nft,
 				lists,
 			},
-			revalidate: 1,
+			revalidate: 2,
 		}
 	} catch (err) {
 		if (err.response.status == 400) return { redirect: { destination: '/', permanent: false } }
@@ -64,11 +64,38 @@ export async function getStaticPaths() {
 	return { paths: [], fallback: 'blocking' }
 }
 
-const Profile = ({ profile, slug_address, followers_list, followers_count, following_list, following_count, featured_nft, lists }) => {
+const Profile = ({ profile, slug_address, followers_count, following_count, featured_nft, lists }) => {
 	const { user, loading: authLoading, isAuthenticated } = useAuth()
-	const { profile: myProfile, loading: profileLoading, mutate: mutateProfile } = useProfile()
+	const { myProfile, setMyProfile } = useProfile()
 	const context = useContext(AppContext)
 	const router = useRouter()
+	const isFirstRender = useRef(true)
+
+	const [cancelTokenArray, setCancelTokens] = useState([CancelToken.source(), CancelToken.source(), CancelToken.source()])
+
+	const cancelTokens = {
+		get(listId) {
+			return cancelTokenArray[listId]
+		},
+		refresh(listId) {
+			const newToken = CancelToken.source()
+
+			setCancelTokens(tokenArray => {
+				tokenArray[listId] = newToken
+
+				return tokenArray
+			})
+
+			return newToken
+		},
+		cancelExcept(listId) {
+			cancelTokenArray.filter((_, i) => listId != i).forEach(source => source.cancel())
+		},
+		willLoad(listId) {
+			this.cancelExcept(listId)
+			return this.refresh(listId)
+		},
+	}
 
 	// Profile details
 	const [isMyProfile, setIsMyProfile] = useState()
@@ -77,7 +104,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const [followersCount, setFollowersCount] = useState(followers_count)
 
 	// Using global context for logged in user, else server data for other pages
-	const { name, img_url, cover_url, wallet_addresses_v2, wallet_addresses_excluding_email_v2, bio, website_url, username, featured_nft_img_url, links, verified } = isMyProfile && !profileLoading ? myProfile : profile
+	const { name, img_url, cover_url, wallet_addresses_v2, wallet_addresses_excluding_email_v2, bio, website_url, username, featured_nft_img_url, links, verified } = isMyProfile && myProfile ? myProfile : profile
 	const { profile_id } = profile
 
 	useEffect(() => {
@@ -99,19 +126,6 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		}
 	}, [authLoading, isAuthenticated, profile.wallet_addresses_v2, user?.publicAddress, slug_address])
 
-	// Followers
-	const [followers, setFollowers] = useState([])
-
-	useEffect(() => {
-		setFollowers(followers_list)
-	}, [followers_list])
-
-	const [following, setFollowing] = useState([])
-	useEffect(() => {
-		setFollowing(following_list)
-	}, [following_list])
-
-	// Followed?
 	const [isFollowed, setIsFollowed] = useState(false)
 	useEffect(() => {
 		if (context.myFollows) {
@@ -120,11 +134,16 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	}, [context.myFollows, profile_id])
 
 	// Follow back?
-	const [followingMe, setFollowingMe] = useState(false)
+	const { data: followingMe, mutate: mutateFollowsYou } = useSWR(
+		() => isAuthenticated && `/api/profile/following?userId=${profile_id}`,
+		url => axios.get(url).then(res => res.data.data.following),
+		{ initialData: false, revalidateOnMount: true, focusThrottleInterval: 60 * 1000 }
+	)
 
 	useEffect(() => {
-		setFollowingMe(following_list.map(item => item.profile_id).includes(myProfile?.profile_id))
-	}, [following_list, myProfile?.profile_id])
+		mutateFollowsYou(false, true)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [profile_id])
 
 	// Spotlight
 	const [spotlightItem, setSpotlightItem] = useState()
@@ -165,26 +184,35 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const [selectedOwnedSortField, setSelectedOwnedSortField] = useState(lists.lists[1].sort_id || 1)
 	const [selectedLikedSortField, setSelectedLikedSortField] = useState(2)
 
-	const updateItems = async (listId, sortId, collectionId, showCardRefresh, page, showHidden, showDuplicates) => {
+	const updateItems = async (listId, sortId, collectionId, showCardRefresh, page, showHidden, showDuplicates, cancelTokens) => {
 		if (showCardRefresh) setIsRefreshingCards(true)
 
-		// Created
-		const { data } = await axios
-			.post('/api/getprofilenfts', {
-				profileId: profile_id,
-				page: page,
-				limit: perPage,
-				listId: listId,
-				sortId: sortId,
-				showHidden: showHidden ? 1 : 0,
-				showDuplicates: showDuplicates ? 1 : 0,
-				collectionId: collectionId,
-			})
-			.then(res => res.data)
-		setItems(data.items)
-		setHasMore(data.has_more)
+		const source = cancelTokens.willLoad(listId)
 
-		if (showCardRefresh) setIsRefreshingCards(false)
+		await axios
+			.post(
+				'/api/getprofilenfts',
+				{
+					profileId: profile_id,
+					page: page,
+					limit: perPage,
+					listId: listId,
+					sortId: sortId,
+					showHidden: showHidden ? 1 : 0,
+					showDuplicates: showDuplicates ? 1 : 0,
+					collectionId: collectionId,
+				},
+				{ cancelToken: source.token }
+			)
+			.then(({ data: { data } }) => {
+				setItems(data.items)
+				setHasMore(data.has_more)
+
+				if (showCardRefresh) setIsRefreshingCards(false)
+			})
+			.catch(err => {
+				if (!isCancel(err)) throw err
+			})
 	}
 
 	const addPage = async nextPage => {
@@ -217,7 +245,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		const setSelectedSortField = selectedGrid === 1 ? setSelectedCreatedSortField : selectedGrid === 2 ? setSelectedOwnedSortField : setSelectedLikedSortField
 		setPage(1)
 		setSelectedSortField(sortId)
-		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates)
+		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates, cancelTokens)
 		setSwitchInProgress(false)
 	}
 
@@ -229,15 +257,11 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setShowDuplicates(false)
 
 		const sortId = listId === 1 ? selectedCreatedSortField : listId === 2 ? selectedOwnedSortField : selectedLikedSortField
-		router.replace(
-			{
-				pathname: '/[profile]',
-				query: { ...router.query, list: PROFILE_TABS[listId] },
-			},
-			undefined,
-			{ shallow: true }
-		)
-		await updateItems(listId, sortId, 0, true, 1, showUserHiddenItems, 0)
+
+		if (listId != (isMyProfile && myProfile ? myProfile.default_list_id : lists.default_list_id)) router.replace({ query: { ...router.query, list: PROFILE_TABS[listId] } }, undefined, { shallow: true })
+		else router.replace({ query: Object.fromEntries(Object.entries(router.query).filter(([key]) => key != 'list')) }, undefined, { shallow: true })
+
+		await updateItems(listId, sortId, 0, true, 1, showUserHiddenItems, 0, cancelTokens)
 		setSwitchInProgress(false)
 	}
 
@@ -247,7 +271,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setPage(1)
 
 		const sortId = selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField
-		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates)
+		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates, cancelTokens)
 		setSwitchInProgress(false)
 	}
 
@@ -263,7 +287,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setPage(1)
 
 		const sortId = selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField
-		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates)
+		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates, cancelTokens)
 		setSwitchInProgress(false)
 	}
 
@@ -279,7 +303,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setPage(1)
 
 		const sortId = selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField
-		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates)
+		await updateItems(selectedGrid, sortId, collectionId, true, 1, showUserHiddenItems, showDuplicates, cancelTokens)
 		setSwitchInProgress(false)
 	}
 
@@ -313,7 +337,9 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 
 		// Populate initial state
 
-		const initial_list_id = router?.query?.list ? PROFILE_TABS.indexOf(router.query.list) : lists.default_list_id
+		const urlParams = new URLSearchParams(location.search)
+		const initial_list_id = urlParams.has('list') ? PROFILE_TABS.indexOf(urlParams.get('list')) : lists.default_list_id
+		setSelectedGrid(initial_list_id)
 
 		if (initial_list_id == 1) {
 			setSwitchInProgress(true)
@@ -386,6 +412,20 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		context.setLoginModalOpen(true)
 	}
 
+	const [showFollowers, setShowFollowers] = useState(false)
+	const [showFollowing, setShowFollowing] = useState(false)
+
+	const { data: followers, mutate: setFollowers } = useSWR(
+		() => showFollowers && `/v1/people?profile_id=${profile_id}&want=followers&limit=500`,
+		url => backend.get(url).then(res => res.data.data.list),
+		{ focusThrottleInterval: 60 * 1000 }
+	)
+	const { data: following } = useSWR(
+		() => showFollowing && `/v1/people?profile_id=${profile_id}&want=following&limit=500`,
+		url => backend.get(url).then(res => res.data.data.list),
+		{ focusThrottleInterval: 60 * 1000 }
+	)
+
 	const handleFollow = async () => {
 		setIsFollowed(true)
 		setFollowersCount(followersCount + 1)
@@ -402,17 +442,19 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 			...context.myFollows,
 		])
 
-		setFollowers([
-			{
-				profile_id: myProfile.profile_id,
-				wallet_address: user.publicAddress,
-				name: myProfile.name,
-				img_url: myProfile.img_url || DEFAULT_PROFILE_PIC,
-				timestamp: null,
-				username: myProfile.username,
-			},
-			...followers,
-		])
+		if (followers) {
+			setFollowers([
+				{
+					profile_id: myProfile.profile_id,
+					wallet_address: user.publicAddress,
+					name: myProfile.name,
+					img_url: myProfile.img_url || DEFAULT_PROFILE_PIC,
+					timestamp: null,
+					username: myProfile.username,
+				},
+				...followers,
+			])
+		}
 
 		// Post changes to the API
 		await axios
@@ -438,7 +480,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		// Change myLikes via setMyLikes
 		context.setMyFollows(context.myFollows.filter(item => item.profile_id != profile_id))
 
-		setFollowers(followers.filter(follower => myProfile.profile_id != follower.profile_id))
+		if (followers) setFollowers(followers.filter(follower => myProfile.profile_id != follower.profile_id))
 
 		// Post changes to the API
 		if (context.disableFollows === false) {
@@ -451,17 +493,10 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const [editModalOpen, setEditModalOpen] = useState(false)
 	const [pictureModalOpen, setPictureModalOpen] = useState(false)
 	const [coverModalOpen, setCoverModalOpen] = useState(false)
-	const [showFollowers, setShowFollowers] = useState(false)
-	const [showFollowing, setShowFollowing] = useState(false)
 
 	useEffect(() => {
-		setSelectedGrid(router?.query?.list ? PROFILE_TABS.indexOf(router.query.list) : lists.default_list_id)
-
 		setMenuLists(lists.lists)
-
-		setShowFollowers(false)
-		setShowFollowing(false)
-	}, [profile_id, router?.query?.list, lists.default_list_id, lists.lists])
+	}, [lists])
 
 	const editAccount = () => {
 		setEditModalOpen(true)
@@ -499,7 +534,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setRevertItems(null)
 		setMenuLists(menuLists.map((list, index) => (index === selectedGrid - 1 ? { ...list, has_custom_sort: false } : list)))
 
-		mutateProfile(
+		setMyProfile(
 			{
 				...myProfile,
 				...(selectedGrid === 1 && { default_created_sort_id: null }),
@@ -517,7 +552,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		setRevertItems(null)
 		const newMenuLists = menuLists.map((list, index) => (index === selectedGrid - 1 ? { ...list, has_custom_sort: true } : list))
 		setMenuLists(newMenuLists)
-		mutateProfile(
+		setMyProfile(
 			{
 				...myProfile,
 				...(selectedGrid === 1 && { default_created_sort_id: 5 }),
@@ -537,11 +572,10 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	const handleCancelOrder = () => {
 		const oldItems = revertItems
 		const oldSort = revertSort
-		if (selectedGrid === 1) {
-			setSelectedCreatedSortField(oldSort)
-		} else {
-			setSelectedOwnedSortField(oldSort)
-		}
+
+		if (selectedGrid === 1) setSelectedCreatedSortField(oldSort)
+		else setSelectedOwnedSortField(oldSort)
+
 		setItems(oldItems)
 		setFetchMoreSort(null)
 		setRevertItems(null)
@@ -564,6 +598,18 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 		return img_url
 	}
 
+	useEffect(() => {
+		if (isFirstRender) {
+			isFirstRender.current = false
+			return
+		}
+
+		if (profile.profile_id !== myProfile?.profile_id) return
+
+		handleListChange(myProfile?.default_list_id)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [profile.profile_id, myProfile?.profile_id, myProfile?.default_list_id])
+
 	return (
 		<div>
 			{typeof document !== 'undefined' ? (
@@ -572,9 +618,9 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 					<ModalEditPhoto isOpen={pictureModalOpen} setEditModalOpen={setPictureModalOpen} />
 					<ModalEditCover isOpen={coverModalOpen} setEditModalOpen={setCoverModalOpen} />
 					{/* Followers modal */}
-					<ModalUserList title="Followers" isOpen={showFollowers} users={followers ? followers : []} closeModal={() => setShowFollowers(false)} emptyMessage="No followers yet." />
+					<ModalUserList title="Followers" isOpen={showFollowers} users={followers ? followers : []} closeModal={() => setShowFollowers(false)} emptyMessage={followers_count == 0 ? 'No followers yet.' : 'Loading...'} />
 					{/* Following modal */}
-					<ModalUserList title="Following" isOpen={showFollowing} users={following ? following : []} closeModal={() => setShowFollowing(false)} emptyMessage="Not following anyone yet." />
+					<ModalUserList title="Following" isOpen={showFollowing} users={following ? following : []} closeModal={() => setShowFollowing(false)} emptyMessage={following_count == 0 ? 'Not following anyone yet.' : 'Loading...'} />
 				</>
 			) : null}
 			<Layout>
@@ -631,7 +677,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												className="h-24 w-24 md:h-32 md:w-32 z-10"
 											/>
 											{isMyProfile && (
-												<button onClick={editPhoto} className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg backdrop-saturate-150 transition duration-300 flex items-center justify-center">
+												<button onClick={editPhoto} className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg backdrop-saturate-150 transition duration-300 flex items-center justify-center rounded-full">
 													<UploadIcon className="w-10 h-10 text-white dark:text-gray-300" />
 												</button>
 											)}
@@ -640,7 +686,7 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 									</div>
 									<div className="flex items-center space-x-8">
 										<div className="hidden md:block">
-											<FollowStats {...{ following, following_count, followers, followersCount, isMyProfile, setShowFollowing, setShowFollowers }} />
+											<FollowStats {...{ following_count, followersCount, isMyProfile, setShowFollowing, setShowFollowers }} />
 										</div>
 										<div className="flex items-center space-x-2">
 											<Button style={isMyProfile ? 'tertiary_gray' : isFollowed ? 'tertiary' : 'primary'} onClick={isAuthenticated ? (isMyProfile ? editAccount : isFollowed ? handleUnfollow : context.disableFollows ? null : handleFollow) : handleLoggedOutFollow} className={`space-x-2 ${isFollowed || isMyProfile ? 'dark:text-gray-400' : 'text-white'}`}>
@@ -663,10 +709,13 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 										<div className="flex justify-between">
 											<div>
 												<div className="flex items-center space-x-2">
-													<h2 className="text-3xl md:text-4xl font-tomato font-bold text-black dark:text-white">{name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</h2>
+													<h2 className={`text-3xl md:text-4xl font-tomato font-bold text-black dark:text-white ${verified ? 'whitespace-nowrap' : ''}`}>{name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</h2>
 													{verified && <BadgeIcon className="w-5 md:w-6 h-auto text-black dark:text-white" bgClass="text-white dark:text-black" />}
 												</div>
-												<div className="mt-2">{(username || (wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0)) && <p className="flex flex-row items-center justify-start">{username && <span className="font-tomato font-bold tracking-wider dark:text-gray-300">@{username}</span>}</p>}</div>
+												<div className="mt-2 flex items-center space-x-2">
+													{(username || (wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0)) && <p className="flex flex-row items-center justify-start">{username && <span className="font-tomato font-bold tracking-wider dark:text-gray-300">@{username}</span>}</p>}
+													{followingMe && <span className="font-medium text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-lg">Follows You</span>}
+												</div>
 											</div>
 											<div className="hidden md:block">{isAuthenticated && !isMyProfile && <FollowersInCommon profileId={profile_id} />}</div>
 										</div>
@@ -771,8 +820,8 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 												)}
 												{!isChangingOrder && (
 													<>
-														<Dropdown className="flex-1" options={menuLists && menuLists[selectedGrid - 1].collections.map(item => ({ value: item.collection_id, label: item.collection_name.replace(' (FND)', ''), img_url: item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC }))} value={collectionId} onChange={handleCollectionChange} disabled={isChangingOrder} />
-														<Dropdown className="flex-1" options={sortingOptionsList.filter(opts => (menuLists[selectedGrid - 1].has_custom_sort ? true : opts.value !== 5))} value={selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField} onChange={handleSortChange} disabled={isChangingOrder} />
+														<Dropdown className="w-1/2 md:w-auto md:flex-1" options={menuLists && menuLists[selectedGrid - 1].collections.map(item => ({ value: item.collection_id, label: item.collection_name?.replace(' (FND)', ''), img_url: item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC }))} value={collectionId} onChange={handleCollectionChange} disabled={isChangingOrder} />
+														<Dropdown className="w-1/2 md:w-auto md:flex-1" options={sortingOptionsList.filter(opts => (menuLists[selectedGrid - 1].has_custom_sort ? true : opts.value !== 5))} value={selectedGrid === 1 ? selectedCreatedSortField : selectedGrid === 2 ? selectedOwnedSortField : selectedLikedSortField} onChange={handleSortChange} disabled={isChangingOrder} />
 
 														{(selectedGrid === 1 || selectedGrid === 2) && isMyProfile && !context.isMobile && !isLoadingCards && !isRefreshingCards && collectionId == 0 && items?.length > 0 && (
 															<Menu as="div" className="relative inline-block text-left ml-2">
@@ -882,19 +931,19 @@ const Profile = ({ profile, slug_address, followers_list, followers_count, follo
 	)
 }
 
-const FollowStats = ({ following, following_count, followers, followersCount, isMyProfile, setShowFollowing, setShowFollowers }) => {
+const FollowStats = ({ following_count, followersCount, isMyProfile, setShowFollowing, setShowFollowers }) => {
 	const context = useContext(AppContext)
 
 	return (
 		<div className="flex items-center space-x-6">
 			<button className="cursor-pointer hover:opacity-80 transition" onClick={() => setShowFollowing(true)}>
 				<div className="text-sm mr-2 dark:text-gray-300">
-					<span className="font-semibold">{following && following.length !== null ? Number(isMyProfile && context.myFollows ? context.myFollows.length : following_count).toLocaleString() : null}</span> following
+					<span className="font-semibold">{Number(isMyProfile && context.myFollows ? context.myFollows.length : following_count).toLocaleString()}</span> following
 				</div>
 			</button>
 			<button className="cursor-pointer hover:opacity-80 transition" onClick={() => setShowFollowers(true)}>
 				<div className="text-sm mr-2 dark:text-gray-300">
-					<span className="font-semibold">{followers && followers.length !== null ? Number(followersCount).toLocaleString() : null}</span> followers
+					<span className="font-semibold">{Number(followersCount).toLocaleString()}</span> followers
 				</div>
 			</button>
 		</div>
