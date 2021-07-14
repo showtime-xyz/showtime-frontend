@@ -159,6 +159,7 @@ const MintPage = () => {
 				data,
 				from: signerAddress,
 				to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+				signatureType: 'EIP712_SIGN',
 			},
 		])
 
