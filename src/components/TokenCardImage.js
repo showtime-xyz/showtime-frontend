@@ -2,9 +2,10 @@ import { useState, useEffect, useRef } from 'react'
 import ReactPlayer from 'react-player'
 import { BlurhashCanvas } from 'react-blurhash'
 
-export default function ActivityImage({ nft }) {
+const TokenCardImage = ({ nft }) => {
 	const aRef = useRef()
 	const [hasLoadedImage, setHasLoadedImage] = useState(false)
+	const [hasLoadedAnimation, setHasLoadedAnimation] = useState(false)
 	const [imgWidth, setImgWidth] = useState(null)
 
 	useEffect(() => {
@@ -32,8 +33,8 @@ export default function ActivityImage({ nft }) {
 			}}
 		>
 			{nft.blurhash && !hasLoadedImage && <BlurhashCanvas className="object-cover w-full h-full" hash={nft.blurhash} width={400} height={300} punch={2} />}
-			{nft.token_img_url && <img src={getImageUrl(nft.token_img_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" onLoad={() => setHasLoadedImage(true)} />}
-			{!nft.token_img_url && (nft.token_has_video || (!nft.token_img_url && nft.token_animation_url)) && (
+			{nft.token_img_url && !(nft.token_has_video && hasLoadedAnimation) && <img src={getImageUrl(nft.token_img_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" onLoad={() => setHasLoadedImage(true)} />}
+			{!nft.token_img_url && (nft.token_has_video || (!nft.token_img_url && !nft.animation_preview_url && nft.token_animation_url)) && (
 				<ReactPlayer
 					url={nft?.token_animation_url}
 					playing={true}
@@ -42,7 +43,27 @@ export default function ActivityImage({ nft }) {
 					width={imgWidth}
 					height={imgWidth}
 					playsinline
-					onReady={onLoad}
+					// Disable downloading & right click
+					config={{
+						file: {
+							attributes: {
+								onContextMenu: e => e.preventDefault(),
+								controlsList: 'nodownload',
+							},
+						},
+					}}
+				/>
+			)}
+			{nft.token_has_video && nft.animation_preview_url && (
+				<ReactPlayer
+					url={nft?.animation_preview_url}
+					playing={true}
+					loop
+					muted={true}
+					onReady={() => setHasLoadedAnimation(true)}
+					width={imgWidth}
+					height={imgWidth}
+					playsinline
 					// Disable downloading & right click
 					config={{
 						file: {
@@ -57,3 +78,5 @@ export default function ActivityImage({ nft }) {
 		</div>
 	)
 }
+
+export default TokenCardImage
