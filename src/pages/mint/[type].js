@@ -109,17 +109,7 @@ const MintPage = () => {
 
 		const biconomy = new Biconomy(new ethers.providers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`), { apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY, debug: true, walletProvider: web3.provider })
 
-		await new Promise((resolve, reject) => {
-			biconomy
-				.onEvent(biconomy.READY, () => {
-					console.log('Biconomy is Ready')
-					resolve()
-				})
-				.onEvent(biconomy.ERROR, (error, message) => {
-					console.error(error, message)
-					reject(message)
-				})
-		})
+		await new Promise((resolve, reject) => biconomy.onEvent(biconomy.READY, resolve).onEvent(biconomy.ERROR, reject))
 
 		return { biconomy, web3 }
 	}
@@ -151,7 +141,7 @@ const MintPage = () => {
 		const { biconomy, web3 } = await getBiconomy()
 		const signerAddress = await web3.getSigner().getAddress()
 		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MINTING_CONTRACT, minterAbi, biconomy.getSignerByAddress(signerAddress))
-		const { data } = await contract.populateTransaction.issueToken(signerAddress, 1, contentHash, 0)
+		const { data } = await contract.populateTransaction.issueToken(signerAddress, copies, contentHash, 0)
 
 		const provider = biconomy.getEthersProvider()
 
