@@ -1,12 +1,14 @@
 import { useContext, useEffect, useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import mixpanel from 'mixpanel-browser'
 import AppContext from '@/context/app-context'
 import _ from 'lodash'
 import axios from '@/lib/axios'
+import UserAddIcon from './Icons/UserAddIcon'
+import Button from './UI/Buttons/Button'
+import useAuth from '@/hooks/useAuth'
 
-const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, notExpandWhenMobile, compact, homepage }) => {
+const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, compact }) => {
+	const { isAuthenticated } = useAuth()
 	const context = useContext(AppContext)
 	const myFollows = context?.myFollows || []
 	const [isFollowed, setIsFollowed] = useState(false)
@@ -62,15 +64,18 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 		mixpanel.track('Follow but logged out')
 		context.setLoginModalOpen(true)
 	}
+
 	return (
-		<button className={`flex items-center justify-center hover:opacity-80 disabled:opacity-80 border rounded-full transition py-2 px-4 focus:outline-none focus-visible:ring-1 ${notExpandWhenMobile ? '' : 'w-full md:w-auto'} ${hideIfFollowing && isFollowed ? 'hidden' : null} ${compact ? 'mr-1' : ''} ${compact && context.isMobile ? 'py-2 px-3' : null} ${isFollowed ? 'text-black dark:text-gray-500 border-gray-400 dark:border-gray-500' : homepage ? 'bg-purple-500 text-white dark:text-gray-900 border-purple-500' : 'bg-black dark:bg-gray-800 border-black dark:border-gray-800 text-white dark:text-gray-300'}`} disabled={context.disableFollows} onClick={context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow}>
-			{!isFollowed && (
-				<div className={`mr-2 ${compact ? 'text-xs' : 'text-sm'} `}>
-					<FontAwesomeIcon icon={faPlus} />
-				</div>
+		<Button style={isFollowed ? 'tertiary' : 'primary'} onClick={isAuthenticated ? (isFollowed ? handleUnfollow : context.disableFollows ? null : handleFollow) : handleLoggedOutFollow} className={`space-x-2 ${isFollowed ? '' : 'text-white'} ${hideIfFollowing ? 'hidden' : ''} ${compact ? 'py-1 px-2 text-sm' : ''}`}>
+			{isFollowed ? (
+				<span className="font-semibold">Following</span>
+			) : (
+				<>
+					<UserAddIcon className="w-5 h-5" />
+					<span className="font-semibold">Follow</span>
+				</>
 			)}
-			<div className={`${compact ? 'text-xs' : 'text-sm'} `}>{isFollowed ? 'Following' : 'Follow'}</div>
-		</button>
+		</Button>
 	)
 }
 

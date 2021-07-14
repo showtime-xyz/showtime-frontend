@@ -30,7 +30,7 @@ export const PrimaryButton = forwardRef(({ className, iconOnly, ...props }, ref)
 
 PrimaryButton.displayName = 'PrimaryButton'
 
-export const TertiaryButton = ({ className, ...props }) => <BaseButton {...props} className={`relative border border-transparent bg-white dark:bg-gray-900 rounded-2xl flex items-center px-4 py-2 before:absolute before:inset-0 before:z-[-1] before:rounded-inherit before:bg-gradient-to-r before:from-[#4DEAFF] before:to-[#894DFF] before:m-[-2px] ${className}`} />
+export const TertiaryButton = ({ className, ...props }) => <BaseButton {...props} className={`relative border bg-transparent border-gray-500 dark:border-gray-300 dark:text-gray-400 rounded-2xl flex items-center px-4 py-2 ${className}`} />
 
 export const TertiaryGrayButton = ({ className, ...props }) => <BaseButton {...props} className={`relative border border-gray-400 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-2xl flex items-center px-4 py-2 ${className}`} />
 

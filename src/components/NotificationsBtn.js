@@ -23,7 +23,7 @@ const iconObjects = {
 
 export default function NotificationsBtn() {
 	const { user } = useAuth()
-	const { profile: myProfile, mutate: mutateProfile, loading: profileLoading } = useProfile()
+	const { myProfile, setMyProfile } = useProfile()
 	const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false)
 	const [previouslyLastOpened, setPreviouslyLastOpened] = useState()
 	const [openUserList, setOpenUserList] = useState(null)
@@ -39,7 +39,7 @@ export default function NotificationsBtn() {
 	const updateNotificationsLastOpened = async () => {
 		await axios.post('/api/notifications')
 
-		await mutateProfile({ ...myProfile, notifications_last_opened: new Date() }, true)
+		await setMyProfile({ ...myProfile, notifications_last_opened: new Date() }, true)
 	}
 
 	const { data, error, size, setSize } = useSWRInfinite(
@@ -59,19 +59,19 @@ export default function NotificationsBtn() {
 	const isReachingEnd = isEmpty || (data && data[data.length - 1]?.length < NOTIFICATIONS_PER_PAGE)
 
 	useEffect(() => {
-		if (profileLoading) return
+		if (!myProfile) return
 
 		setHasUnreadNotifications((notifs && notifs[0] && myProfile?.notifications_last_opened === null) || (notifs && notifs[0] && new Date(notifs[0].to_timestamp) > new Date(myProfile?.notifications_last_opened)))
-	}, [profileLoading, myProfile?.notifications_last_opened, notifs])
+	}, [myProfile, myProfile?.notifications_last_opened, notifs])
 
 	return (
 		<Popover className="md:relative">
 			{({ open }) => (
 				<>
-					<Popover.Button data-close-notifs className="dark:text-gray-300 hover:text-stpink transition-all rounded-full cursor-pointer relative h-6 w-6">
+					<Popover.Button data-close-notifs className="dark:text-gray-300 transition-all rounded-full cursor-pointer relative h-6 w-6 focus:outline-none">
 						<span onClick={open ? null : handlePanelOpen} className="flex items-center justify-center">
 							<ZapIcon className="w-5 h-5" />
-							{hasUnreadNotifications && <div className="bg-gradient-to-r from-[#4D54FF] to-[#E14DFF] absolute h-2 w-2 top-0 right-0 rounded-full" />}
+							{hasUnreadNotifications && <div className="bg-red-500 absolute h-2 w-2 top-0 right-0 rounded-full" />}
 						</span>
 					</Popover.Button>
 					<Transition show={open} as={Fragment} enter="transition ease-out duration-200" enterFrom="transform opacity-0" enterTo="transform opacity-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100" leaveTo="transform opacity-0">

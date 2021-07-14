@@ -7,10 +7,9 @@ import Router, { useRouter } from 'next/router'
 import ProgressBar from '@badrap/bar-of-progress'
 import ModalThrottleUser from '@/components/ModalThrottleUser'
 import axios from '@/lib/axios'
-import { filterNewRecs } from '../lib/utilities'
+import { filterNewRecs } from '@/lib/utilities'
 import { ThemeProvider } from 'next-themes'
 import useAuth from '@/hooks/useAuth'
-import useProfile from '@/hooks/useProfile'
 
 mixpanel.init('9b14512bc76f3f349c708f67ab189941')
 
@@ -29,7 +28,7 @@ Router.events.on('routeChangeError', progress.finish)
 const App = ({ Component, pageProps }) => {
 	const router = useRouter()
 	const { revalidate } = useAuth()
-	const { profile: myProfile, mutate: setMyProfile } = useProfile()
+	const [myProfile, setMyProfile] = useState(null)
 	const [user, setUser] = useState()
 	const [web3, setWeb3] = useState(null)
 	const [windowSize, setWindowSize] = useState(null)
@@ -90,6 +89,17 @@ const App = ({ Component, pageProps }) => {
 			// get our likes, follows, profile
 			const my_info_data = await axios.get('/api/profile').then(res => res.data)
 
+			setMyProfile({
+				...my_info_data.data.profile,
+				notifications_last_opened: my_info_data.data.profile.notifications_last_opened ? new Date(my_info_data.data.profile.notifications_last_opened) : null,
+				links: my_info_data.data.profile.links.map(link => ({
+					name: link.type__name,
+					prefix: link.type__prefix,
+					icon_url: link.type__icon_url,
+					type_id: link.type_id,
+					user_input: link.user_input,
+				})),
+			})
 			setMyLikes(my_info_data.data.likes_nft)
 			setMyCommentLikes(my_info_data.data.likes_comment)
 			setMyComments(my_info_data.data.comments)

@@ -76,6 +76,8 @@ const TokenCard = ({ originalItem, isPreview = false, onPreviewClose, isMyProfil
 		}
 	}
 
+	const pageProfileName = pageProfile?.name && pageProfile?.name != 'Unnamed' ? (pageProfile?.wallet_addresses_excluding_email_v2?.map(addr => addr.address)?.includes(pageProfile.name) ? formatAddressShort(pageProfile?.slug_address) : pageProfile?.name) : pageProfile?.username || pageProfile?.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(pageProfile?.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Unknown'
+
 	return (
 		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
 			<div ref={divRef} className={`w-full h-full shadow-lg ${isPreview ? 'rounded-2xl' : 'hover:shadow-xl md:rounded-2xl'} transition duration-300 flex flex-col bg-white dark:bg-gray-900 ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border-t border-b md:border-l md:border-r border-transparent dark:border-gray-800'}`}>
@@ -88,7 +90,7 @@ const TokenCard = ({ originalItem, isPreview = false, onPreviewClose, isMyProfil
 										<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
 										<div>
 											<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Created by</span>
-											<div className="text-sm font-semibold truncate -mt-0.5">{truncateWithEllipses(item.collection_name + ' Collection', 30)}</div>
+											<div className="text-sm font-semibold truncate -mt-0.5 dark:text-gray-200">{truncateWithEllipses(item.collection_name + ' Collection', 30)}</div>
 										</div>
 									</a>
 								</Link>
@@ -99,7 +101,7 @@ const TokenCard = ({ originalItem, isPreview = false, onPreviewClose, isMyProfil
 										<div>
 											<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Created by</span>
 											<div className="flex items-center space-x-1 -mt-0.5">
-												<div className="text-sm font-semibold truncate">{item.creator_name === item.creator_address ? formatAddressShort(item.creator_address) : truncateWithEllipses(item.creator_name, 22)}</div>
+												<div className="text-sm font-semibold truncate dark:text-gray-200">{item.creator_name === item.creator_address ? formatAddressShort(item.creator_address) : truncateWithEllipses(item.creator_name, 22)}</div>
 												{item.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
 											</div>
 										</div>
@@ -238,7 +240,7 @@ const TokenCard = ({ originalItem, isPreview = false, onPreviewClose, isMyProfil
 									setMuted(true)
 									setCurrentlyPlayingVideo(null)
 								}}
-								className={`break-words ${isPreview ? '' : 'cursor-pointer'} truncate text-lg font-bold dark:text-gray-200`}
+								className={`break-words ${isPreview ? '' : 'cursor-pointer'} truncate text-lg font-semibold dark:text-gray-200`}
 							>
 								{item.token_name}
 							</p>
@@ -276,16 +278,13 @@ const TokenCard = ({ originalItem, isPreview = false, onPreviewClose, isMyProfil
 												<div className="flex items-center">
 													<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
 														<a className="flex flex-row items-center pr-2 ">
-															<img alt={pageProfile.name && pageProfile.name != 'Unnamed' ? pageProfile.name : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown'} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
+															<img alt={pageProfileName} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
 															<div>
-																<div className="text-sm font-semibold truncate">{truncateWithEllipses(pageProfile.name && pageProfile.name != 'Unnamed' ? (pageProfile.name == pageProfile.slug_address ? formatAddressShort(pageProfile.slug_address) : pageProfile.name) : pageProfile.username ? pageProfile.username : pageProfile.wallet_addresses_excluding_email_v2 && pageProfile.wallet_addresses_excluding_email_v2.length > 0 ? (pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain ? pageProfile.wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(pageProfile.wallet_addresses_excluding_email_v2[0].address)) : 'Unknown', 14)}</div>
+																<div className="text-sm font-semibold truncate dark:text-gray-200">{pageProfileName}</div>
 															</div>
 														</a>
 													</Link>
-													<div className="text-gray-500 text-sm mr-2 -ml-1 mt-px">
-														&amp; {item.owner_count - 1} other
-														{item.owner_count - 1 > 1 ? 's' : null}
-													</div>
+													{myProfile?.profile_id !== item.owner_id && <MiniFollowButton profileId={item.owner_id} />}
 												</div>
 											</div>
 										) : (
@@ -299,7 +298,7 @@ const TokenCard = ({ originalItem, isPreview = false, onPreviewClose, isMyProfil
 													<div>
 														<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
 														<div className="flex items-center space-x-1 -mt-0.5">
-															<div className="text-sm font-semibold truncate">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
+															<div className="text-sm font-semibold truncate dark:text-gray-200">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
 															{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
 														</div>
 													</div>

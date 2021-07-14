@@ -37,7 +37,7 @@ const handleDebouncedUsernameLookup = AwesomeDebouncePromise(handleUsernameLooku
 
 export default function Modal({ isOpen, setEditModalOpen }) {
 	const router = useRouter()
-	const { profile: myProfile, loading: profileLoading, mutate: mutateProfile } = useProfile()
+	const { myProfile, setMyProfile } = useProfile()
 	const [submitting, setSubmitting] = useState(false)
 	const [nameValue, setNameValue] = useState(null)
 	const [customURLValue, setCustomURLValue] = useState('')
@@ -53,7 +53,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 	const [defaultOwnedSortId, setDefaultOwnedSortId] = useState(1)
 
 	useEffect(() => {
-		if (profileLoading) return
+		if (!myProfile) return
 
 		setNameValue(myProfile.name)
 		setCustomURLValue(myProfile.username)
@@ -63,7 +63,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 		setDefaultCreatedSortId(myProfile.default_created_sort_id || 1)
 		setDefaultOwnedSortId(myProfile.default_owned_sort_id || 1)
 		setSocialLinks(myProfile.links)
-	}, [profileLoading, myProfile, isOpen])
+	}, [myProfile, isOpen])
 
 	const handleSubmit = async event => {
 		event.preventDefault()
@@ -87,7 +87,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 		})
 
 		// Update state to immediately show changes
-		mutateProfile({
+		setMyProfile({
 			...myProfile,
 			name: nameValue?.trim() || null, // handle names with all whitespaces
 			bio: bioValue?.trim() || null,
@@ -164,24 +164,16 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 
 						<div className="flex flex-col md:flex-row">
 							<div className="flex-1 my-4 ">
-								<div className="text-xl text-indigo-500 dark:text-indigo-400 mb-3">Profile</div>
+								<div className="mb-3">
+									<p className="text-xl text-indigo-500 dark:text-indigo-400 mb-1">Profile</p>
+									{myProfile?.verified && <p className="text-gray-500 text-xs">Verified users can't change their name or username. Please contact us to modify them.</p>}
+								</div>
 
 								<div className="py-2">
 									<label htmlFor="name" className="block text-sm text-gray-700 dark:text-gray-500">
 										Name
 									</label>
-									<input
-										name="name"
-										placeholder="Your display name"
-										value={nameValue ? nameValue : ''}
-										onChange={e => {
-											const value = e.target.value
-											setNameValue(value)
-										}}
-										type="text"
-										maxLength="50"
-										className="mt-1 dark:text-gray-300 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-800 focus:border-indigo-500 dark:focus:border-indigo-800 sm:text-sm"
-									/>
+									<input name="name" placeholder="Your display name" value={nameValue ? nameValue : ''} onChange={e => setNameValue(e.target.value)} type="text" maxLength="50" disabled={myProfile?.verified} className="mt-1 dark:text-gray-300 dark:bg-gray-700 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-800 focus:border-indigo-500 dark:focus:border-indigo-800 sm:text-sm" />
 									<label htmlFor="customURL" className="mt-4 block text-sm font-medium text-gray-700 dark:text-gray-500 sm:pt-2">
 										Username
 									</label>
@@ -193,8 +185,9 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 												name="customURL"
 												id="customURL"
 												autoComplete="username"
-												className="pl-2 dark:text-gray-300 border flex-1 block w-full focus:outline-none focus:ring focus:ring-indigo-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300 dark:border-gray-800"
+												className="pl-2 dark:text-gray-300 dark:bg-gray-700 border flex-1 block w-full focus:outline-none focus:ring focus:ring-indigo-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300 dark:border-gray-800"
 												value={customURLValue ? customURLValue : ''}
+												disabled={myProfile?.verified}
 												onChange={e => {
 													const value = e.target.value
 													const urlRegex = /^[a-zA-Z0-9_]*$/
@@ -222,7 +215,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 									type="text"
 									maxLength="300"
 									rows={3}
-									className="mt-1 dark:text-gray-300 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 sm:text-sm"
+									className="mt-1 dark:text-gray-300 dark:bg-gray-700 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 sm:text-sm"
 								></textarea>
 
 								<div className="text-right text-gray-500 dark:text-gray-600 text-xs">300 character limit</div>
@@ -284,7 +277,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 										<label htmlFor="websiteValue" className="text-gray-700 dark:text-gray-500 text-sm">
 											Website
 										</label>
-										<input name="websiteValue" placeholder="Your URL" value={websiteValue ? websiteValue : ''} onChange={e => setWebsiteValue(e.target.value)} type="url" className="mt-1 dark:text-gray-300 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 sm:text-sm" />
+										<input name="websiteValue" placeholder="Your URL" value={websiteValue ? websiteValue : ''} onChange={e => setWebsiteValue(e.target.value)} type="url" className="mt-1 dark:text-gray-300 dark:bg-gray-700 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 sm:text-sm" />
 									</div>
 
 									<div className="pt-2">
@@ -307,7 +300,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 																type="text"
 																name={linkObj.name || linkObj.type__name}
 																id={linkObj.name || linkObj.type__name}
-																className="pl-2 dark:text-gray-300 border flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300 dark:border-gray-700 focus:outline-none focus:ring"
+																className="pl-2 dark:text-gray-300 dark:bg-gray-700 border flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300 dark:border-gray-700 focus:outline-none focus:ring"
 																value={linkObj.user_input ? linkObj.user_input : ''}
 																onChange={e => {
 																	const value = e.target.value
@@ -325,7 +318,7 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 																	)
 																}}
 																autoComplete="false"
-																maxLength={50}
+																maxLength={200}
 															/>
 														</div>
 													</div>

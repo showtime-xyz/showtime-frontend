@@ -12,7 +12,7 @@ const nextConfig = {
 			},
 			{
 				source: '/feedback',
-				destination: 'https://feedback.nolt.io',
+				destination: 'https://showtime.nolt.io',
 				permanent: true,
 			},
 		]
