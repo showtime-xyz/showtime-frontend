@@ -57,9 +57,9 @@ const MintDropdown = () => {
 									{drafts
 										.sort((draft1, draft2) => draft2.id - draft1.id)
 										.slice(0, 3)
-										.map(({ id, title, type = 'Image' }) => (
-											<Menu.Item key={id} as={NextLink} href={`/mint/${type.toLowerCase()}?draft=${id}`} className={({ active }) => classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'rounded-lg w-full text-left py-2 pr-6 pl-2 text-sm font-semibold transition flex items-center space-x-2')}>
-												{OPTIONS.filter(option => option.type == type.toLowerCase()).map(({ Icon }) => (
+										.map(({ id, title, media_type = 'Image' }) => (
+											<Menu.Item key={id} as={NextLink} href={`/mint/${media_type.toLowerCase()}?draft=${id}`} className={({ active }) => classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'rounded-lg w-full text-left py-2 pr-6 pl-2 text-sm font-semibold transition flex items-center space-x-2')}>
+												{OPTIONS.filter(option => option.type == media_type.toLowerCase()).map(({ Icon }) => (
 													<Icon key="icon" className="w-4 h-4" />
 												))}
 												<span className="whitespace-nowrap truncate">{title || 'Untitled Draft'}</span>
