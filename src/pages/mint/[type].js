@@ -171,9 +171,11 @@ const MintPage = () => {
 
 		const newDraft = { selectedWallet, name, description, copies, isAdultContent, price, royalties, currency, ipfsHash, hasVerifiedAuthorship, draftId, type: router.query.type }
 
-		await axios.post('/api/mint/drafts', newDraft)
+		const { draft_id: draftId } = await axios.post('/api/mint/drafts', newDraft).then(res => res.data)
 
-		setDraft(newDraft)
+		setDraftId(draftId)
+		router.push({ query: { ...router.query, draft: draftId } }, undefined, { shallow: true })
+		setDraft({ ...newDraft, draftId })
 		revalidateDrafts()
 	}
 

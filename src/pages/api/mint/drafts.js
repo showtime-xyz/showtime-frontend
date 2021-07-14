@@ -25,6 +25,6 @@ export default handler()
 					},
 				}
 			)
-			.then(resp => res.json(resp.data))
+			.then(resp => res.json(resp.data.data))
 			.catch(error => res.status(error.response.status).json(error.response.data))
 	})
