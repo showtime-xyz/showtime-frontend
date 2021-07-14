@@ -14,9 +14,9 @@ export default handler()
 			.then(
 				({
 					data: {
-						data: { id, wallet, title, description, nsfw, price, currency_ticker, number_of_copies, royalties, ipfs_hash, media_type },
+						data: { id, wallet, title, description, nsfw, price, currency_ticker, number_of_copies, royalties, ipfs_hash, media_type, agreed_to_terms },
 					},
-				}) => res.json({ draftId: id, selectedWallet: wallet, name: title, description, isAdultContent: nsfw, price: parseFloat(price), currency: currency_ticker, copies: number_of_copies, royalties: parseInt(royalties), ipfsHash: ipfs_hash, type: media_type.toLowerCase() })
+				}) => res.json({ draftId: id, selectedWallet: wallet, name: title, description, isAdultContent: nsfw, price: parseFloat(price), currency: currency_ticker, copies: number_of_copies, royalties: parseInt(royalties), ipfsHash: ipfs_hash, type: media_type.toLowerCase(), hasVerifiedAuthorship: agreed_to_terms })
 			)
 			.catch(err => {
 				if (err.response.status !== 400) throw err

@@ -70,6 +70,7 @@ const MintPage = () => {
 			setCurrency(draft.currency)
 			setDescription(draft.description)
 			setIpfsHash(draft.ipfsHash)
+			setHasVerifiedAuthorship(draft.hasVerifiedAuthorship)
 			setIsAdultContent(draft.isAdultContent)
 			setName(draft.name)
 			setPrice(draft.price)
@@ -95,8 +96,8 @@ const MintPage = () => {
 	const isDirty = useMemo(() => {
 		if (isEmpty) return false
 
-		return draftId != draft.draftId || selectedWallet != draft.selectedWallet || copies != draft.copies || currency != draft.currency || description != draft.description || ipfsHash != draft.ipfsHash || isAdultContent != draft.isAdultContent || name != draft.name || price != draft.price || royalties != draft.royalties
-	}, [isEmpty, draftId, draft.draftId, draft.selectedWallet, draft.copies, draft.currency, draft.description, draft.ipfsHash, draft.isAdultContent, draft.name, draft.price, draft.royalties, selectedWallet, copies, currency, description, ipfsHash, isAdultContent, name, price, royalties])
+		return draftId != draft.draftId || selectedWallet != draft.selectedWallet || copies != draft.copies || currency != draft.currency || description != draft.description || ipfsHash != draft.ipfsHash || isAdultContent != draft.isAdultContent || name != draft.name || price != draft.price || royalties != draft.royalties || hasVerifiedAuthorship != draft.hasVerifiedAuthorship
+	}, [isEmpty, draftId, draft.draftId, draft.selectedWallet, draft.copies, draft.currency, draft.description, draft.ipfsHash, draft.isAdultContent, draft.name, draft.price, draft.royalties, selectedWallet, copies, currency, description, ipfsHash, isAdultContent, name, price, royalties, hasVerifiedAuthorship, draft.hasVerifiedAuthorship])
 
 	useWarningOnExit(isDirty, 'You have unsaved changes. Are you sure you want to leave without minting or saving as a draft?')
 
