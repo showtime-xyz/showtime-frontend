@@ -14,12 +14,10 @@ const TokenCardImage = ({ nft }) => {
 
 	const getImageUrl = (img_url, token_aspect_ratio) => {
 		if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
-			if (token_aspect_ratio && token_aspect_ratio > 1) {
-				img_url = img_url.split('=')[0] + '=h660'
-			} else {
-				img_url = img_url.split('=')[0] + '=w660'
-			}
+			if (token_aspect_ratio && token_aspect_ratio > 1) img_url = img_url.split('=')[0] + '=h660'
+			else img_url = img_url.split('=')[0] + '=w660'
 		}
+
 		return img_url
 	}
 
@@ -70,6 +68,7 @@ const TokenCardImage = ({ nft }) => {
 							attributes: {
 								onContextMenu: e => e.preventDefault(),
 								controlsList: 'nodownload',
+								style: { objectFit: 'cover', width: '100%', height: '100%' },
 							},
 						},
 					}}
