@@ -1,6 +1,6 @@
 const HomeIcon = ({ className = '' }) => (
-	<svg className={className} viewBox="0 0 21 22" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-		<path fillRule="evenodd" clipRule="evenodd" d="M11.114.21a1 1 0 00-1.228 0l-9 7A1 1 0 00.5 8v11a3 3 0 003 3h14a3 3 0 003-3V8a1 1 0 00-.386-.79l-9-7zM14.5 20h3a1 1 0 001-1V8.49l-8-6.223-8 6.222V19a1 1 0 001 1h3v-9a1 1 0 011-1h6a1 1 0 011 1v9zm-6 0v-8h4v8h-4z" />
+	<svg className={className} viewBox="0 0 21 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+		<path fillRule="evenodd" clipRule="evenodd" d="M9.907 2.68a1 1 0 011.186 0l7 5.157a1 1 0 01.407.805V17a1 1 0 01-1 1h-3v-5a3 3 0 00-3-3h-2a3 3 0 00-3 3v5h-3a1 1 0 01-1-1V8.642a1 1 0 01.407-.805l7-5.158zM8.5 18h4v-5a1 1 0 00-1-1h-2a1 1 0 00-1 1v5zm-2 2h-3a3 3 0 01-3-3V8.642a3 3 0 011.22-2.415l7-5.158a3 3 0 013.56 0l7 5.158a3 3 0 011.22 2.415V17a3 3 0 01-3 3h-11z" />
 	</svg>
 )
 

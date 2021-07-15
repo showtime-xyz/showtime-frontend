@@ -50,20 +50,20 @@ const Header = () => {
 						<div className="hidden flex-1 md:flex md:items-center md:justify-center mr-6 md:mr-0 items-center font-normal space-x-2">
 							<Link href="/">
 								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-xl py-2 -my-1 px-3 -mx-1`} onClick={() => mixpanel.track('Discover button click')}>
-									<HomeIcon className="w-5 h-5" />
-									<span className="font-bold">Feed</span>
+									<HomeIcon className="w-5 h-auto" />
+									<span className="font-semibold">Feed</span>
 								</a>
 							</Link>
 							<Link href="/c/spotlights">
 								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/c/spotlights' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-xl py-2 -my-1 px-3 -mx-1`} onClick={() => mixpanel.track('Discover button click')}>
-									<StarIcon className="w-5 h-5" />
-									<span className="font-bold">Discover</span>
+									<StarIcon className="w-5 h-auto" />
+									<span className="font-semibold">Discover</span>
 								</a>
 							</Link>
 							<Link href="/trending">
 								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/trending' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-xl py-2 -my-1 px-3 -mx-1`} onClick={() => mixpanel.track('Trending button click')}>
-									<FireIcon className="w-5 h-5" />
-									<span className="font-bold">Trending</span>
+									<FireIcon className="w-4 h-auto" />
+									<span className="font-semibold">Trending</span>
 								</a>
 							</Link>
 						</div>
