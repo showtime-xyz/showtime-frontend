@@ -6,7 +6,7 @@ export const FLAGS = {
 }
 
 export const flagDefs = {
-	[FLAGS.hasMinting]: profile => profile?.verified || false,
+	[FLAGS.hasMinting]: profile => profile?.minting_enabled || false,
 }
 
 const useFlags = () => {

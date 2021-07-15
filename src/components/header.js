@@ -25,8 +25,6 @@ const Header = () => {
 	const { myProfile } = useProfile()
 	const [isSearchBarOpen, setSearchBarOpen] = useState(false)
 
-	console.log(canMint)
-
 	return (
 		<>
 			{typeof document !== 'undefined' ? (
