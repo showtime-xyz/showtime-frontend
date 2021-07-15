@@ -1,8 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
 import ReactPlayer from 'react-player'
+import { BlurhashCanvas } from 'react-blurhash'
 
-export default function ActivityImage({ nft, onLoad }) {
+const TokenCardImage = ({ nft }) => {
 	const aRef = useRef()
+	const [hasLoadedImage, setHasLoadedImage] = useState(false)
+	const [hasLoadedAnimation, setHasLoadedAnimation] = useState(false)
 	const [imgWidth, setImgWidth] = useState(null)
 
 	useEffect(() => {
@@ -11,12 +14,10 @@ export default function ActivityImage({ nft, onLoad }) {
 
 	const getImageUrl = (img_url, token_aspect_ratio) => {
 		if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
-			if (token_aspect_ratio && token_aspect_ratio > 1) {
-				img_url = img_url.split('=')[0] + '=h660'
-			} else {
-				img_url = img_url.split('=')[0] + '=w660'
-			}
+			if (token_aspect_ratio && token_aspect_ratio > 1) img_url = img_url.split('=')[0] + '=h660'
+			else img_url = img_url.split('=')[0] + '=w660'
 		}
+
 		return img_url
 	}
 
@@ -29,8 +30,9 @@ export default function ActivityImage({ nft, onLoad }) {
 				backgroundColor: nft.token_background_color ? `#${nft.token_background_color}` : 'black',
 			}}
 		>
-			{nft.token_img_url && <img src={getImageUrl(nft.token_img_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" onLoad={onLoad} />}
-			{!nft.token_img_url && (nft.token_has_video || (!nft.token_img_url && nft.token_animation_url)) && (
+			{nft.blurhash && !hasLoadedImage && !hasLoadedAnimation && <BlurhashCanvas className="object-cover w-full h-full" hash={nft.blurhash} width={400} height={300} punch={2} />}
+			{nft.token_img_url && !(nft.token_has_video && hasLoadedAnimation) && <img src={getImageUrl(nft.token_img_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" onLoad={() => setHasLoadedImage(true)} />}
+			{!nft.token_img_url && (nft.token_has_video || (!nft.token_img_url && !nft.animation_preview_url && nft.token_animation_url)) && (
 				<ReactPlayer
 					url={nft?.token_animation_url}
 					playing={true}
@@ -39,7 +41,6 @@ export default function ActivityImage({ nft, onLoad }) {
 					width={imgWidth}
 					height={imgWidth}
 					playsinline
-					onReady={onLoad}
 					// Disable downloading & right click
 					config={{
 						file: {
@@ -51,6 +52,30 @@ export default function ActivityImage({ nft, onLoad }) {
 					}}
 				/>
 			)}
+			{nft.token_has_video && nft.animation_preview_url && (
+				<ReactPlayer
+					url={nft?.animation_preview_url}
+					playing={true}
+					loop
+					muted={true}
+					onReady={() => setHasLoadedAnimation(true)}
+					width={imgWidth}
+					height={imgWidth}
+					playsinline
+					// Disable downloading & right click
+					config={{
+						file: {
+							attributes: {
+								onContextMenu: e => e.preventDefault(),
+								controlsList: 'nodownload',
+								style: { objectFit: 'cover', width: '100%', height: '100%' },
+							},
+						},
+					}}
+				/>
+			)}
 		</div>
 	)
 }
+
+export default TokenCardImage
