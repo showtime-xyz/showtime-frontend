@@ -5,10 +5,11 @@ import { useTheme } from 'next-themes'
 import Web3Modal from 'web3modal'
 import { useState } from 'react'
 import { useEffect } from 'react'
+import { Magic } from 'magic-sdk'
 
 class DummyModal {}
 
-const useWeb3Modal = () => {
+const useWeb3Modal = ({ withMagic = false }) => {
 	const { resolvedTheme } = useTheme()
 	const [modal, setModal] = useState(new DummyModal())
 
@@ -52,6 +53,28 @@ const useWeb3Modal = () => {
 						return provider
 					},
 				},
+				...(withMagic
+					? {
+							'custom-magiclink': {
+								display: {
+									logo: '/img/logo.png',
+									name: 'Showtime Account',
+									description: 'If you log in to Showtime with an email address, use this',
+								},
+								options: {
+									apiKey: process.env.NEXT_PUBLIC_MAGIC_PUB_KEY,
+								},
+								package: Magic,
+								connector: async (Magic, opts) => {
+									const magic = new Magic(opts.apiKey)
+
+									if (!(await magic.user.isLoggedIn())) await magic.auth.loginWithMagicLink({ email: prompt('What email do you use to log into Showtime?') })
+
+									return magic.rpcProvider
+								},
+							},
+					  }
+					: {}),
 			},
 			theme: resolvedTheme,
 		})

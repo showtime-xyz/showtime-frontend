@@ -27,7 +27,7 @@ import useSWR from 'swr'
 
 const MintPage = () => {
 	const router = useRouter()
-	const web3Modal = useWeb3Modal()
+	const web3Modal = useWeb3Modal({ withMagic: true })
 	const { [FLAGS.hasMinting]: canMint, loading: flagsLoading } = useFlags()
 	const { revalidate: revalidateDrafts } = useSWR('/api/mint/drafts', url => axios.get(url).then(res => res.data), { revalidateOnMount: false, focusThrottleInterval: 60 * 1000 })
 
@@ -38,7 +38,7 @@ const MintPage = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [canMint, flagsLoading])
 
-	const { myProfile, loading: profileLoading } = useProfile()
+	const { myProfile } = useProfile()
 
 	const [selectedWallet, setSelectedWallet] = useState(null)
 	const [draft, setDraft] = useState({})
@@ -102,11 +102,7 @@ const MintPage = () => {
 	useWarningOnExit(isDirty, 'You have unsaved changes. Are you sure you want to leave without minting or saving as a draft?')
 
 	const getBiconomy = async () => {
-		const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY)
-		let web3
-		if (await magic.user.isLoggedIn()) web3 = new ethers.providers.Web3Provider(magic.rpcProvider)
-		else web3 = new ethers.providers.Web3Provider(await web3Modal.connect())
-
+		const web3 = new ethers.providers.Web3Provider(await web3Modal.connect())
 		const biconomy = new Biconomy(new ethers.providers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`), { apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY, debug: true, walletProvider: web3.provider })
 
 		await new Promise((resolve, reject) => biconomy.onEvent(biconomy.READY, resolve).onEvent(biconomy.ERROR, reject))
