@@ -263,14 +263,12 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 										<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
 										<div className="flex items-center">
 											<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
-												<a className="flex flex-row items-center pr-2 ">
-													<img alt={pageProfileName} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
-													<div>
-														<div className="text-sm font-semibold truncate dark:text-gray-200">{pageProfileName}</div>
-													</div>
+												<a className="flex items-center pr-2">
+													<img alt={pageProfileName} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6 flex-shrink-0" />
+													<p className="text-sm font-semibold truncate dark:text-gray-200 flex-shrink">{pageProfileName}</p>
 												</a>
 											</Link>
-											<div className="text-gray-500 text-sm mr-2 -ml-1 mt-px">
+											<div className="flex-1 text-gray-500 text-sm mr-2 -ml-1 mt-px whitespace-nowrap">
 												&amp; {item.owner_count - 1} other
 												{item.owner_count - 1 > 1 ? 's' : null}
 											</div>
