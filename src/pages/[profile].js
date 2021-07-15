@@ -639,7 +639,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 					<meta name="twitter:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : DEFAULT_PROFILE_PIC} />
 				</Head>
 
-				<div className="bg-white dark:bg-gray-900 pb-8">
+				<div className="bg-white dark:bg-black pb-8">
 					<div className={`h-32 md:h-64 relative text-left bg-gradient-to-b from-black dark:from-gray-400 to-gray-800 dark:to-gray-100 ${cover_url ? 'bg-no-repeat bg-center bg-cover' : ''}`} style={cover_url ? { backgroundImage: `url(${getCoverUrl(cover_url)})` } : {}}>
 						{isMyProfile && (
 							<CappedWidth>
@@ -689,7 +689,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 											<FollowStats {...{ following_count, followersCount, isMyProfile, setShowFollowing, setShowFollowers }} />
 										</div>
 										<div className="flex items-center space-x-2">
-											<Button style={isMyProfile ? 'tertiary_gray' : isFollowed ? 'tertiary' : 'primary'} onClick={isAuthenticated ? (isMyProfile ? editAccount : isFollowed ? handleUnfollow : context.disableFollows ? null : handleFollow) : handleLoggedOutFollow} className={`space-x-2 ${isFollowed || isMyProfile ? 'dark:text-gray-400' : 'text-white'}`}>
+											<Button style={isFollowed || isMyProfile ? 'tertiary' : 'primary'} onClick={isAuthenticated ? (isMyProfile ? editAccount : isFollowed ? handleUnfollow : context.disableFollows ? null : handleFollow) : handleLoggedOutFollow} className={`space-x-2 ${isFollowed || isMyProfile ? 'dark:text-gray-400' : 'text-white'}`}>
 												{isMyProfile ? (
 													<span className="font-semibold">Edit Profile</span>
 												) : isFollowed ? (
@@ -713,7 +713,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 													{verified && <BadgeIcon className="w-5 md:w-6 h-auto text-black dark:text-white" bgClass="text-white dark:text-black" />}
 												</div>
 												<div className="mt-2 flex items-center space-x-2">
-													{(username || (wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0)) && <p className="flex flex-row items-center justify-start">{username && <span className="font-tomato font-bold tracking-wider dark:text-gray-300">@{username}</span>}</p>}
+													{(username || (wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0)) && <p className="flex flex-row items-center justify-start">{username && <span className="font-tomato font-bold tracking-wider dark:text-white">@{username}</span>}</p>}
 													{followingMe && <span className="font-medium text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-lg">Follows You</span>}
 												</div>
 											</div>
@@ -722,7 +722,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 										<div className="flex justify-between">
 											<div>
 												{bio ? (
-													<div className="text-black dark:text-gray-400 text-sm max-w-2xl text-left md:text-base mt-4 block break-words">
+													<div className="text-black dark:text-gray-300 text-sm max-w-2xl text-left md:text-base mt-4 block break-words">
 														{moreBioShown ? bio : truncateWithEllipses(bio, initialBioLength)}
 														{!moreBioShown && bio && bio.length > initialBioLength && (
 															<a onClick={() => setMoreBioShown(true)} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-400 cursor-pointer">
@@ -937,12 +937,12 @@ const FollowStats = ({ following_count, followersCount, isMyProfile, setShowFoll
 	return (
 		<div className="flex items-center space-x-6">
 			<button className="cursor-pointer hover:opacity-80 transition" onClick={() => setShowFollowing(true)}>
-				<div className="text-sm mr-2 dark:text-gray-300">
+				<div className="text-sm md:text-base mr-2 dark:text-gray-300">
 					<span className="font-semibold">{Number(isMyProfile && context.myFollows ? context.myFollows.length : following_count).toLocaleString()}</span> following
 				</div>
 			</button>
 			<button className="cursor-pointer hover:opacity-80 transition" onClick={() => setShowFollowers(true)}>
-				<div className="text-sm mr-2 dark:text-gray-300">
+				<div className="text-sm md:text-base mr-2 dark:text-gray-300">
 					<span className="font-semibold">{Number(followersCount).toLocaleString()}</span> followers
 				</div>
 			</button>
@@ -956,8 +956,8 @@ const LinkCollection = ({ links, website_url, slug_address, className = '' }) =>
 			{website_url && (
 				<Tippy content={new URL(website_url.slice(0, 4) === 'http' ? website_url : 'https://' + website_url).hostname}>
 					<a href={website_url.slice(0, 4) === 'http' ? website_url : 'https://' + website_url} target="_blank" onClick={() => mixpanel.track('Clicked profile website link', { slug: slug_address })} className="inline-block" rel="noreferrer">
-						<div className="text-gray-500 hover:opacity-80 dark:hover:opacity-80 border dark:border-gray-700 rounded-full p-1">
-							<GlobeIcon className="flex-shrink-0 h-6 w-6 opacity-70 dark:opacity-100" />
+						<div className="text-gray-400 hover:opacity-80 dark:hover:opacity-80 bg-gray-100 dark:bg-gray-900 rounded-full p-1.5">
+							<GlobeIcon className="flex-shrink-0 h-5 w-5 opacity-70 dark:opacity-100" />
 						</div>
 					</a>
 				</Tippy>
@@ -966,8 +966,8 @@ const LinkCollection = ({ links, website_url, slug_address, className = '' }) =>
 				links.map(link => (
 					<Tippy content={link.name || link.type__name} key={link.type_id}>
 						<a href={`https://${link.prefix ? link.prefix : link.type__prefix}` + link.user_input} target="_blank" onClick={() => mixpanel.track(`Clicked ${link.name ? link.name : link.type__name} profile link`, { slug: slug_address })} className="inline-block" rel="noreferrer">
-							<div className="text-gray-500 hover:opacity-80 dark:hover:opacity-80 border dark:border-gray-700 rounded-full p-1">
-								<img src={link.icon_url || link.type__icon_url} alt={`${link.name ? link.name : link.type__name} icon`} className="flex-shrink-0 h-6 w-6 opacity-70 dark:opacity-100 filter dark:brightness-200" />
+							<div className="text-gray-500 hover:opacity-80 dark:hover:opacity-80 bg-gray-100 dark:bg-gray-900 rounded-full p-1.5">
+								<img src={link.icon_url || link.type__icon_url} alt={`${link.name ? link.name : link.type__name} icon`} className="flex-shrink-0 h-5 w-5 opacity-70 dark:opacity-100 filter dark:brightness-200" style={{ '--tw-brightness': 'brightness(3)' }} />
 							</div>
 						</a>
 					</Tippy>

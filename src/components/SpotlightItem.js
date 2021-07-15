@@ -182,7 +182,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 											setMuted(true)
 											setCurrentlyPlayingVideo(false)
 										}}
-										className="dark:text-gray-200 mb-2 sm:mb-4 text-2xl sm:text-3xl font-medium hover:text-stpink cursor-pointer break-words"
+										className="dark:text-white mb-2 sm:mb-4 text-2xl sm:text-3xl font-medium cursor-pointer break-words"
 									>
 										{item.token_name}
 									</div>
@@ -190,12 +190,12 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 								</div>
 
 								{item.token_description ? (
-									<div className="pb-8 text-sm sm:text-base text-gray-500 break-words">
+									<div className="pb-8 text-sm sm:text-base text-gray-500 dark:text-gray-300 break-words">
 										<div>
 											{item.token_description?.length > max_description_length && !moreShown ? (
 												<>
 													{truncateWithEllipses(removeTags(item.token_description), max_description_length)}{' '}
-													<a onClick={() => setMoreShown(true)} className="text-gray-900 dark:text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer">
+													<a onClick={() => setMoreShown(true)} className="text-gray-900 dark:text-white hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer">
 														{' '}
 														more
 													</a>
@@ -207,7 +207,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 									</div>
 								) : null}
 
-								<div className="border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg rounded-xl py-4 px-2 md:max-w-max">
+								<div className="border border-transparent dark:border-gray-700 bg-white dark:bg-black shadow-lg rounded-2xl py-4 px-2 md:max-w-max">
 									<div className="flex flex-wrap w-full px-2 gap-y-1 gap-x-5 md:gap-0">
 										{item.contract_is_creator ? (
 											<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>

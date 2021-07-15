@@ -76,7 +76,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 
 	return (
 		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
-			<div ref={divRef} className={`w-full h-full md:rounded-2xl shadow-lg hover:shadow-xl transition duration-300 flex flex-col bg-white dark:bg-gray-900 ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border-t border-b md:border-l md:border-r border-transparent dark:border-gray-800'}`}>
+			<div ref={divRef} className={`w-full h-full md:rounded-2xl shadow-lg hover:shadow-xl transition duration-300 flex flex-col bg-white dark:bg-black ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border-t border-b md:border-l md:border-r border-transparent dark:border-gray-700'}`}>
 				<div ref={item.imageRef} className="p-4 relative">
 					<div className="flex items-center justify-between">
 						<div className="pr-2">
