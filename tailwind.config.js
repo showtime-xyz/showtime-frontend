@@ -36,6 +36,7 @@ module.exports = {
 				stteal100: 'rgba(29, 212, 224, 0.2)',
 				stteal700: '#198c94',
 				gray: colors.trueGray,
+				cyan: colors.cyan,
 			},
 			cursor: {
 				copy: 'copy',

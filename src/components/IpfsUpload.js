@@ -89,7 +89,7 @@ const IpfsUpload = ({ ipfsHash: baseIpfsHash, wallet, onChange, tokenName }) => 
 					<TokenCard isPreview={true} onPreviewClose={cancelUpload} originalItem={fakeItem} currentlyPlayingVideo={-1} currentlyOpenModal={false} isMyProfile={false} listId={1} isChangingOrder={false} />
 				</div>
 			) : (
-				<label className={`rounded-xl ${ipfsHash || uploadProgress != null ? '' : 'cursor-pointer'} border dark:border-gray-700 flex flex-col items-center justify-center space-y-6 px-8 py-16 min-w-[15rem]`}>
+				<label className={`rounded-xl ${ipfsHash || uploadProgress != null ? '' : 'cursor-pointer'} border dark:border-gray-700 dark:bg-gray-900 flex flex-col items-center justify-center space-y-6 px-8 py-16 min-w-[15rem]`}>
 					{uploadProgress != null ? (
 						<>
 							<div className="space-y-2 text-center">
@@ -106,7 +106,7 @@ const IpfsUpload = ({ ipfsHash: baseIpfsHash, wallet, onChange, tokenName }) => 
 					) : (
 						<>
 							<input onChange={onFileUpload} type="file" className="hidden" multiple={false} accept={MINT_FORMATS[router.query.type].join(',')} capture="environment" />
-							<p className="font-medium text-sm dark:text-gray-400">{MINT_FORMATS[router.query.type].join(', ')} / max 50mb</p>
+							<p className="font-medium text-sm dark:text-gray-300">{MINT_FORMATS[router.query.type].join(', ')} / max 50mb</p>
 							<Button as="div" type="button" style="primary">
 								Choose File
 							</Button>

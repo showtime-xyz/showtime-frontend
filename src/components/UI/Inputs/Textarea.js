@@ -5,7 +5,7 @@ const Input = ({ label, labelSubtitle, id, value, onChange, className = '', ...p
 				{label}
 				{labelSubtitle}
 			</label>
-			<textarea value={value} rows={3} onChange={event => onChange(event.target.value)} className="placeholder-shown:bg-gray-100 dark:bg-transparent border placeholder-shown:border-transparent dark:border-gray-700 px-4 py-3 rounded-2xl w-full font-medium focus:outline-none resize-none" id={id} {...props} />
+			<textarea value={value} rows={3} onChange={event => onChange(event.target.value)} className="border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-900 text-gray-500 dark:text-gray-300 px-4 py-3 rounded-2xl w-full font-medium focus:outline-none resize-none" id={id} {...props} />
 		</div>
 	)
 }

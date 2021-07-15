@@ -185,16 +185,15 @@ const MintPage = () => {
 	return (
 		<Layout>
 			<div className="my-12 px-4 md:px-0 max-w-4xl xl:max-w-7xl md:mx-auto w-full">
-				<div>
-					<button onClick={router.back} className="flex items-center font-bold">
-						&larr; Back
-					</button>
-				</div>
-				<div className="mt-12 flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0">
+				<div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0">
 					<h1 className="text-3xl font-bold">
 						Create <span className="capitalize">{router.query.type}</span>
 					</h1>
-					{!profileLoading && <Dropdown className="w-max" options={myProfile?.wallet_addresses_v2?.filter(({ address }) => !address.startsWith('tz'))?.map(({ address, ens_domain }) => ({ value: address, label: ens_domain || address }))} value={selectedWallet} onChange={setSelectedWallet} label="Wallet" />}
+					{/* {!profileLoading && (
+						<div>
+							<Dropdown className="w-max" options={myProfile?.wallet_addresses_v2?.filter(({ address }) => !address.startsWith('tz'))?.map(({ address, ens_domain }) => ({ value: address, label: ens_domain || address }))} value={selectedWallet} onChange={setSelectedWallet} label="Wallet" />
+						</div>
+					)} */}
 				</div>
 				<form onSubmit={submitForm} className="mt-12 flex flex-col md:flex-row justify-between space-y-12 md:space-y-0 md:space-x-12">
 					<div className="space-y-6">
@@ -228,17 +227,19 @@ const MintPage = () => {
 								<Transition appear={false} show={putOnSale} as={Fragment} enter="transition ease-in-out duration-300 transform" enterFrom="-translate-y-full opacity-0" enterTo="translate-y-0 opacity-100" leave="transition ease-in-out duration-300 transform" leaveFrom="translate-y-0 opacity-100" leaveTo="-translate-y-full opacity-0">
 									<div className="flex items-stretch space-x-2">
 										<Input className="flex-1" label="Price" id="price" value={price || ''} onChange={setPrice} placeholder="Enter Price" required={putOnSale} />
-										<Dropdown
-											className="flex-1 flex flex-col"
-											label="Currency"
-											value={currency}
-											onChange={setCurrency}
-											options={[
-												{ label: 'ETH', value: 'ETH' },
-												{ label: 'USDC', value: 'USDC' },
-												{ label: 'USD', value: 'USD' },
-											]}
-										/>
+										<div className="flex-1 flex flex-col">
+											<Dropdown
+												className="flex-1 flex"
+												label="Currency"
+												value={currency}
+												onChange={setCurrency}
+												options={[
+													{ label: 'ETH', value: 'ETH' },
+													{ label: 'USDC', value: 'USDC' },
+													{ label: 'USD', value: 'USD' },
+												]}
+											/>
+										</div>
 									</div>
 								</Transition>
 							</div>
