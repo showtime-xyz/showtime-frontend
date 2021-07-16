@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */ // For some reason, this rule is behaving weirdly. @TODO I guess
 import { useState, useEffect, useContext, useRef, Fragment } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -158,6 +157,13 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 	// NFT grid
 	// Left menu
 	const [menuLists, setMenuLists] = useState(lists.lists)
+	const [defaultList, setDefaultList] = useState(lists.default_list_id)
+
+	useEffect(() => {
+		if (!isMyProfile || !myProfile?.default_list_id) return
+
+		setDefaultList(myProfile.default_list_id)
+	}, [isMyProfile, myProfile?.default_list_id])
 
 	// Grid
 	const gridRef = useRef()
@@ -258,7 +264,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 
 		const sortId = listId === 1 ? selectedCreatedSortField : listId === 2 ? selectedOwnedSortField : selectedLikedSortField
 
-		if (listId != (isMyProfile && myProfile ? myProfile.default_list_id : lists.default_list_id)) router.replace({ query: { ...router.query, list: PROFILE_TABS[listId] } }, undefined, { shallow: true })
+		if (listId != defaultList) router.replace({ query: { ...router.query, list: PROFILE_TABS[listId] } }, undefined, { shallow: true })
 		else router.replace({ query: Object.fromEntries(Object.entries(router.query).filter(([key]) => key != 'list')) }, undefined, { shallow: true })
 
 		await updateItems(listId, sortId, 0, true, 1, showUserHiddenItems, 0, cancelTokens)
@@ -338,7 +344,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 		// Populate initial state
 
 		const urlParams = new URLSearchParams(location.search)
-		const initial_list_id = urlParams.has('list') ? PROFILE_TABS.indexOf(urlParams.get('list')) : lists.default_list_id
+		const initial_list_id = urlParams.has('list') ? PROFILE_TABS.indexOf(urlParams.get('list')) : defaultList
 		setSelectedGrid(initial_list_id)
 
 		if (initial_list_id == 1) {
@@ -604,11 +610,11 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 			return
 		}
 
-		if (profile.profile_id !== myProfile?.profile_id) return
+		if (!isMyProfile) return
 
-		handleListChange(myProfile?.default_list_id)
+		handleListChange(defaultList)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [profile.profile_id, myProfile?.profile_id, myProfile?.default_list_id])
+	}, [isMyProfile, defaultList])
 
 	return (
 		<div>
