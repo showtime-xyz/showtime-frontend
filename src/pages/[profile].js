@@ -32,6 +32,7 @@ import Dropdown from '@/components/UI/Dropdown'
 import Button from '@/components/UI/Buttons/Button'
 import useProfile from '@/hooks/useProfile'
 import useSWR from 'swr'
+import useSideEffect from '@/hooks/useSideEffect'
 
 export async function getStaticProps({ params: { profile: slug_address } }) {
 	if (slug_address.includes('apple-touch-icon')) return { props: {}, notFound: true }
@@ -95,7 +96,16 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 			this.cancelExcept(listId)
 			return this.refresh(listId)
 		},
+		refreshAll() {
+			cancelTokenArray.forEach(source => source.cancel())
+
+			setCancelTokens([CancelToken.source(), CancelToken.source(), CancelToken.source()])
+		},
 	}
+
+	useSideEffect(() => {
+		cancelTokens.refreshAll()
+	}, [router.asPath])
 
 	// Profile details
 	const [isMyProfile, setIsMyProfile] = useState()
