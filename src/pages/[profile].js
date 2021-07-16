@@ -606,12 +606,15 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 
 	useEffect(() => {
 		if (isFirstRender) {
+			console.log('not changing cuz first render')
 			isFirstRender.current = false
 			return
 		}
 
+		console.log('attempting to change')
 		if (!isMyProfile) return
 
+		console.log('changing to list ', defaultList)
 		handleListChange(defaultList)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMyProfile, defaultList])
