@@ -9,7 +9,7 @@ import { Magic } from 'magic-sdk'
 
 class DummyModal {}
 
-const useWeb3Modal = ({ withMagic = false }) => {
+const useWeb3Modal = ({ withMagic = false } = {}) => {
 	const { resolvedTheme } = useTheme()
 	const [modal, setModal] = useState(new DummyModal())
 
