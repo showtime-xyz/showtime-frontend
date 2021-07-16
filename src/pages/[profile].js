@@ -31,6 +31,7 @@ import Dropdown from '@/components/UI/Dropdown'
 import Button from '@/components/UI/Buttons/Button'
 import useProfile from '@/hooks/useProfile'
 import useSWR from 'swr'
+import useSideEffect from '@/hooks/useSideEffect'
 
 export async function getStaticProps({ params: { profile: slug_address } }) {
 	if (slug_address.includes('apple-touch-icon')) return { props: {}, notFound: true }
@@ -68,7 +69,6 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 	const { myProfile, setMyProfile } = useProfile()
 	const context = useContext(AppContext)
 	const router = useRouter()
-	const isFirstRender = useRef(true)
 
 	const [cancelTokenArray, setCancelTokens] = useState([CancelToken.source(), CancelToken.source(), CancelToken.source()])
 
@@ -604,19 +604,12 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 		return img_url
 	}
 
-	useEffect(() => {
-		if (isFirstRender) {
-			console.log('not changing cuz first render')
-			isFirstRender.current = false
-			return
-		}
-
+	useSideEffect(() => {
 		console.log('attempting to change')
 		if (!isMyProfile) return
 
 		console.log('changing to list ', defaultList)
 		handleListChange(defaultList)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMyProfile, defaultList])
 
 	return (
