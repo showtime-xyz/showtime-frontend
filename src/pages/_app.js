@@ -3,7 +3,7 @@ import '@/styles/styles.css'
 import { DISABLE_ALL } from '@/lib/constants'
 import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
-import Router, { useRouter } from 'next/router'
+import Router from 'next/router'
 import ProgressBar from '@badrap/bar-of-progress'
 import ModalThrottleUser from '@/components/ModalThrottleUser'
 import axios from '@/lib/axios'
@@ -26,7 +26,6 @@ Router.events.on('routeChangeComplete', progress.finish)
 Router.events.on('routeChangeError', progress.finish)
 
 const App = ({ Component, pageProps }) => {
-	const router = useRouter()
 	const { revalidate } = useAuth()
 	const [myProfile, setMyProfile] = useState(null)
 	const [user, setUser] = useState()
@@ -247,7 +246,7 @@ const App = ({ Component, pageProps }) => {
 		<ThemeProvider defaultTheme="system" disableTransitionOnChange={true} attribute="class">
 			<AppContext.Provider value={injectedGlobalContext}>
 				<ModalThrottleUser isOpen={throttleOpen} closeModal={() => setThrottleOpen(false)} modalContent={throttleContent} />
-				<Component {...pageProps} key={router.asPath} />
+				<Component {...pageProps} />
 			</AppContext.Provider>
 		</ThemeProvider>
 	)
