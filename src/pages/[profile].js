@@ -605,10 +605,8 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 	}
 
 	useSideEffect(() => {
-		console.log('attempting to change')
 		if (!isMyProfile) return
 
-		console.log('changing to list ', defaultList)
 		handleListChange(defaultList)
 	}, [isMyProfile, defaultList])
 
