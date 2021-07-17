@@ -59,8 +59,8 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 					.result({
 						type: 'base64',
 						size: {
-							width: 300,
-							height: 300,
+							width: 1200,
+							height: 1200,
 						},
 						format: 'jpeg',
 						circle: false,
