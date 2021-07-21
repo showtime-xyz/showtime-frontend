@@ -12,6 +12,13 @@ import AppContext from '@/context/app-context'
 import { formatAddressShort, truncateWithEllipses } from '@/lib/utilities'
 import RemoveRecommendationButton from './RemoveRecommendationButton'
 
+const getSmallImageUrl = img_url => {
+	if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
+		img_url = img_url.split('=')[0] + '=s128'
+	}
+	return img_url
+}
+
 const Tiles = ({ topItems, setCurrentlyOpenModal }) => {
 	const context = useContext(AppContext)
 
@@ -20,8 +27,8 @@ const Tiles = ({ topItems, setCurrentlyOpenModal }) => {
 			<div className="flex flex-wrap justify-between sm:justify-start mb-4">
 				{topItems.map((topItem, index) => (
 					<div key={topItem?.nft_id}>
-						{topItem?.token_img_thumbnail_url ? (
-							<img className="w-[27vw] h-[27vw] max-w-[27vw] max-h-[27vw] sm:w-[12vw] sm:h-[12vw] sm:max-w-[80px] sm:max-h-[80px] object-cover cursor-pointer" style={{ marginRight: index === topItems.length - 1 || context.windowSize?.width <= 420 ? 0 : 14 }} onClick={() => setCurrentlyOpenModal(topItem)} src={topItem?.token_img_thumbnail_url} />
+						{topItem?.token_img_url ? (
+							<img className="w-[27vw] h-[27vw] max-w-[27vw] max-h-[27vw] sm:w-[12vw] sm:h-[12vw] sm:max-w-[80px] sm:max-h-[80px] object-cover cursor-pointer" style={{ marginRight: index === topItems.length - 1 || context.windowSize?.width <= 420 ? 0 : 14 }} onClick={() => setCurrentlyOpenModal(topItem)} src={getSmallImageUrl(topItem?.token_img_url)} />
 						) : (
 							<div className="w-[27vw] h-[27vw] max-w-[27vw] max-h-[27vw] sm:w-[12vw] sm:h-[12vw] sm:max-w-[80px] sm:max-h-[80px] bg-black cursor-pointer" style={{ marginRight: index === topItems.length - 1 || context.windowSize?.width <= 420 ? 0 : 14 }} onClick={() => setCurrentlyOpenModal(topItem)}>
 								<ReactPlayer

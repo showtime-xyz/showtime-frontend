@@ -13,6 +13,13 @@ import { Fragment } from 'react'
 import ModalAddEmail from './ModalAddEmail'
 import Dropdown from './UI/Dropdown'
 
+const getSmallImageUrl = img_url => {
+	if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
+		img_url = img_url.split('=')[0] + '=s64'
+	}
+	return img_url
+}
+
 // Next.js' Link component doesn't appropiately forward all props, so we need to wrap it in order to use it on our menu
 const NextLink = ({ href, children, ...rest }) => (
 	<Link href={href}>
@@ -48,7 +55,7 @@ const HeaderDropdown = () => {
 							<Menu.Button className={({ open }) => `max-w-xs ${open ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} p-1 -m-1 md:py-1 md:pl-2.5 md:pr-1 md:-my-1 md:-ml-2.5 md:-mr-1 flex items-center text-sm rounded-full focus:outline-none group`}>
 								<span className="sr-only">Open user menu</span>
 								<span className="hidden md:inline truncate dark:text-gray-200 transition font-medium">{myProfile?.name || myProfile?.username || myProfile?.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(myProfile?.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Profile'}</span>
-								<img className="h-8 w-8 rounded-full md:ml-2" src={myProfile?.img_url || DEFAULT_PROFILE_PIC} alt={myProfile?.name || myProfile?.username || myProfile?.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(myProfile?.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Profile'} />
+								<img className="h-8 w-8 rounded-full md:ml-2" src={getSmallImageUrl(myProfile?.img_url || DEFAULT_PROFILE_PIC)} alt={myProfile?.name || myProfile?.username || myProfile?.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(myProfile?.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Profile'} />
 							</Menu.Button>
 						</div>
 						<Transition show={open} as={Fragment} enter="transition ease-out duration-200" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
