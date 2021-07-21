@@ -214,8 +214,6 @@ const Activity = () => {
 
 				<CappedWidth>
 					<div className="m-auto relative pb-8">
-						<hr className="dark:border-gray-700 mx-3" />
-
 						<div className="mb-4 sm:mb-8 mt-8 sm:mt-16 text-left px-5 sm:px-3 flex flex-row items-center">
 							<h1 className="text-lg sm:text-3xl dark:text-gray-200">News Feed</h1>
 							<div className="flex-grow"></div>

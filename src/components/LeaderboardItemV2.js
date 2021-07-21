@@ -10,6 +10,13 @@ import mixpanel from 'mixpanel-browser'
 import ActivityImages from './ActivityImages'
 import { ViewGridIcon } from '@heroicons/react/solid'
 
+const getProfileImageUrl = img_url => {
+	if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
+		img_url = img_url.split('=')[0] + '=s96'
+	}
+	return img_url
+}
+
 const LeaderboardItemV2 = ({ item, index, totalCount }) => {
 	const context = useContext(AppContext)
 	const topItems = item?.top_items.slice(0, 4)
@@ -60,7 +67,7 @@ const LeaderboardItemV2 = ({ item, index, totalCount }) => {
 					<div className="relative mr-1 w-16 flex-none">
 						<Link href="/[profile]" as={`/${item?.username || item.address}`}>
 							<a className="cursor-pointer">
-								<img src={item?.img_url ? item?.img_url : DEFAULT_PROFILE_PIC} className="rounded-full h-12 w-12 hover:opacity-90" />
+								<img src={getProfileImageUrl(item?.img_url ? item?.img_url : DEFAULT_PROFILE_PIC)} className="rounded-full h-12 w-12 hover:opacity-90" />
 							</a>
 						</Link>
 						<div className="absolute text-sm bottom-0 right-2 rounded-full bg-white dark:bg-gray-900 text-center self-center h-6 w-6 font-medium pt-px border border-black dark:border-gray-800 border-opacity-10 text-gray-900 dark:text-gray-200">{index + 1}</div>
