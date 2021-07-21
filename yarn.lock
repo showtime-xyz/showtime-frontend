@@ -4889,12 +4889,12 @@ eth-provider@^0.2.5:
     ws "7.1.2"
     xhr2-cookies "1.1.0"
 
-eth-provider@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/eth-provider/-/eth-provider-0.7.0.tgz#e85d70f7707273b7e7e36d372e819cb4a76bd81c"
-  integrity sha512-6YJfLNN5PcQKrnqN6BGpDP/+YKr8wf/AergP++aVqNBfVl1uH/0U3pCm5BzJ3UoAnY5FfgA5MPt/TQgU8q54kA==
+eth-provider@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/eth-provider/-/eth-provider-0.9.0.tgz#f5782a83389aeafafde4ee696de5e2c4a5079faa"
+  integrity sha512-d30lYiE9EfW+dXmpkC+iqFJl5i9XGgChxuGk1I7zO4yUt/DGw+E9nJQ5+sSrfrb3hMgRAMqBg9ZU0iocggdsRA==
   dependencies:
-    ethereum-provider "0.2.2"
+    ethereum-provider "^0.4.0"
     events "3.3.0"
     oboe "2.1.5"
     uuid "8.3.2"
@@ -5078,12 +5078,12 @@ ethereum-provider@0.0.6:
   resolved "https://registry.yarnpkg.com/ethereum-provider/-/ethereum-provider-0.0.6.tgz#6f5a0427c34872339667d9904a8692e8992e6bf5"
   integrity sha512-DqtdXNHGi/QtOjEovNOegVVQTd8/NnH9rP27R5SU3j2LKECZbcLGIZ3Z9Ln1SDaeUC5YJGJFYQCUUjfIi7NNyQ==
 
-ethereum-provider@0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/ethereum-provider/-/ethereum-provider-0.2.2.tgz#37ba0674a6c05915b51afb8e6d13e9bd166f1c33"
-  integrity sha512-147DaU4nccfYYCAKhrILdgSWTjjZX2NnmcZJx12frM+cNw8cGTbpQPpi4xApagIk7HlN16ZncCP5uyOiZN7n3g==
+ethereum-provider@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/ethereum-provider/-/ethereum-provider-0.4.0.tgz#96c7b0d8b9ff2ad86a0bf548bc4654ed7965a6e0"
+  integrity sha512-vv4MC1tpOtens8WyPs24hLurlrqEVUnwgnI99ASCFibXhsODIfzCQ2B/OBde0Ra1E/mJtWvoU1qGPs30S/Barg==
   dependencies:
-    events "3.2.0"
+    events "3.3.0"
 
 ethereum-public-key-to-address@0.0.1:
   version "0.0.1"
@@ -5375,11 +5375,6 @@ eventemitter3@4.0.7, eventemitter3@^4.0.4:
   version "4.0.7"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.7.tgz#2de9b68f6528d5644ef5c59526a1b4a07306169f"
   integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
-
-events@3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/events/-/events-3.2.0.tgz#93b87c18f8efcd4202a461aec4dfc0556b639379"
-  integrity sha512-/46HWwbfCX2xTawVfkKLGxMifJYQBWMwY1mjywRtb4c9x8l5NP3KoJtnIOiL1hfdRkIuYhETxQlo62IF8tcnlg==
 
 events@3.3.0, events@^3.0.0:
   version "3.3.0"
