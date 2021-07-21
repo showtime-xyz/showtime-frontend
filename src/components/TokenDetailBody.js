@@ -262,7 +262,7 @@ const TokenDetailBody = ({
 						</div>
 					</div>
 					{/* separator */}
-					<hr className="dark:border-gray-800" />
+					<hr className="border-gray-200 dark:border-gray-800" />
 					{/* Artist and Owned by Section */}
 					{ownershipDetails ? (
 						<div className="flex flex-col md:flex-row mt-4">
