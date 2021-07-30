@@ -30,6 +30,11 @@
             border-top-color: theme('colors.gray.300');
         }
     }
+
+    .no-spinners::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 }
 
 @import 'tippy.js/dist/tippy.css';
