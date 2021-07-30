@@ -29,6 +29,9 @@
         .border-t-gray-300 {
             border-top-color: theme('colors.gray.300');
         }
+        .border-t-indigo-500 {
+            border-top-color: theme('colors.indigo.500');
+        }
     }
 
     .no-spinners::-webkit-inner-spin-button, ::-webkit-outer-spin-button {

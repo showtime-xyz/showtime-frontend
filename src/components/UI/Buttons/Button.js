@@ -7,6 +7,8 @@ const Button = forwardRef(({ style, ...props }, ref) => {
 
 		case 'tertiary':
 			return <TertiaryButton ref={ref} {...props} />
+		case 'tertiary_gray':
+			return <TertiaryButton ref={ref} {...props} />
 
 		default:
 			throw new Error('No style specified')
@@ -23,7 +25,7 @@ export const BaseButton = forwardRef((props, ref) => {
 
 BaseButton.displayName = 'BaseButton'
 
-export const PrimaryButton = ({ className, ...props }) => <BaseButton {...props} className={`border border-transparent dark:border-white bg-black text-white font-medium rounded-2xl flex items-center px-4 py-2 disabled:opacity-40 disabled:cursor-not-allowed ${className}`} />
+export const PrimaryButton = ({ className, iconOnly, ...props }) => <BaseButton {...props} className={`border border-transparent dark:border-white bg-black text-white font-medium flex items-center ${iconOnly ? 'p-2 rounded-xl' : 'px-4 py-2 rounded-2xl'} disabled:opacity-40 disabled:cursor-not-allowed ${className}`} />
 
 PrimaryButton.displayName = 'PrimaryButton'
 

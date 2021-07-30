@@ -1,26 +1,40 @@
-import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import ImageIcon from '@/components/Icons/ImageIcon'
-import VideoIcon from '@/components/Icons/VideoIcon'
-import HelpIcon from '@/components/Icons/HelpIcon'
 import Checkbox from '../Inputs/Checkbox'
 import Switch from '../Inputs/Switch'
 import ChevronRight from '@/components/Icons/ChevronRight'
 import Button from '../Buttons/Button'
-import { useState } from 'react'
-import AudioIcon from '@/components/Icons/AudioIcon'
-import TextIcon from '@/components/Icons/TextIcon'
-import FileIcon from '@/components/Icons/FileIcon'
-import { MINT_TYPES } from '@/lib/constants'
+import { useState, Fragment } from 'react'
 import Dropdown from '../Dropdown'
 import ChevronLeft from '@/components/Icons/ChevronLeft'
 import PercentageIcon from '@/components/Icons/PercentageIcon'
+import TextareaAutosize from 'react-autosize-textarea'
+import IpfsUpload from '@/components/IpfsUpload'
+import { useMemo } from 'react'
+import useFlags, { FLAGS } from '@/hooks/useFlags'
+import axios from '@/lib/axios'
+import { v4 as uuid } from 'uuid'
+import { ethers } from 'ethers'
+import { getBiconomy } from '@/lib/biconomy'
+import useWeb3Modal from '@/lib/web3Modal'
+import minterAbi from '@/data/ShowtimeMT.json'
+
+const MODAL_PAGES = {
+	GENERAL: 'general',
+	OPTIONS: 'options',
+}
 
 const MintModal = ({ open, onClose }) => {
-	const [isOptionsOpen, setOptionsOpen] = useState(false)
+	const { [FLAGS.hasMinting]: canMint } = useFlags()
+	const web3Modal = useWeb3Modal({ withMagic: true })
+
+	const [modalPage, setModalPage] = useState(MODAL_PAGES.GENERAL)
+
+	//const [draft, setDraft] = useState({})
+	const [draftId /*, setDraftId */] = useState(null)
 
 	const [title, setTitle] = useState('')
 	const [description, setDescription] = useState('')
+	const [ipfsHash, setIpfsHash] = useState(null)
 	const [putOnSale, setPutOnSale] = useState(false)
 	const [price, setPrice] = useState('')
 	const [currency, setCurrency] = useState('ETH')
@@ -28,6 +42,77 @@ const MintModal = ({ open, onClose }) => {
 	const [royaltiesPercentage, setRoyaltiesPercentage] = useState(10)
 	const [notSafeForWork, setNotSafeForWork] = useState(false)
 	const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false)
+
+	const isValid = useMemo(() => {
+		if (!canMint || !title || !hasAcceptedTerms || !editionCount || !royaltiesPercentage || !ipfsHash) return false
+		if (putOnSale && (!price || !currency)) return false
+		if (editionCount < 1 || royaltiesPercentage > 100 || royaltiesPercentage < 0) return false
+
+		return true
+	}, [title, hasAcceptedTerms, putOnSale, price, currency, editionCount, royaltiesPercentage, canMint, ipfsHash])
+
+	const isEmpty = useMemo(() => {
+		return !title && !description && !ipfsHash && !hasAcceptedTerms && !draftId && !price && !notSafeForWork && editionCount == 1 && royaltiesPercentage == 10 && currency == 'ETH'
+	}, [title, description, ipfsHash, hasAcceptedTerms, draftId, currency, price, notSafeForWork, editionCount, royaltiesPercentage])
+
+	// const isDirty = useMemo(() => {
+	// 	if (isEmpty) return false
+
+	// 	return draftId != draft.id || editionCount != draft.number_of_copies || currency != draft.currency_ticker || description != draft.description || ipfsHash != draft.ipfs_hash || notSafeForWork != draft.nsfw || title != draft.title || price != draft.price || royaltiesPercentage != draft.royalties || hasAcceptedTerms != draft.agreed_to_terms
+	// }, [currency, description, draft.agreed_to_terms, draft.currency_ticker, draft.description, draft.id, draft.ipfs_hash, draft.nsfw, draft.number_of_copies, draft.price, draft.royalties, draft.title, draftId, editionCount, hasAcceptedTerms, ipfsHash, isEmpty, notSafeForWork, price, royaltiesPercentage, title])
+
+	const mintToken = async () => {
+		// setModalPage(MODAL_PAGES.LOADING)
+
+		const { token: pinataToken } = await axios.post('/api/pinata/generate-key').then(res => res.data)
+
+		const { IpfsHash: contentHash } = await axios
+			.post(
+				'https://api.pinata.cloud/pinning/pinJSONToIPFS',
+				{
+					pinataMetadata: { name: uuid() },
+					pinataContent: {
+						name: title,
+						description,
+						image: `ipfs://${ipfsHash}`,
+					},
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${pinataToken}`,
+					},
+				}
+			)
+			.then(res => res.data)
+
+		const { biconomy, web3 } = await getBiconomy(web3Modal)
+		const signerAddress = await web3.getSigner().getAddress()
+		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MINTING_CONTRACT, minterAbi, biconomy.getSignerByAddress(signerAddress))
+		const { data } = await contract.populateTransaction.issueToken(signerAddress, editionCount, contentHash, 0)
+
+		const provider = biconomy.getEthersProvider()
+
+		const transaction = await provider.send('eth_sendTransaction', [
+			{
+				data,
+				from: signerAddress,
+				to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+				signatureType: 'EIP712_SIGN',
+			},
+		])
+
+		// setModalPage(MODAL_PAGES.SUCCESS)
+		window.open(`https://mumbai.polygonscan.com/tx/${transaction}`)
+	}
+
+	const renderedPage = (type => {
+		switch (type) {
+			case MODAL_PAGES.GENERAL:
+				return <CreatePage {...{ title, setTitle, description, setDescription, ipfsHash, setIpfsHash, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isEmpty, isValid, mintToken }} />
+			case MODAL_PAGES.OPTIONS:
+				return <OptionsPage {...{ editionCount, setEditionCount, royaltiesPercentage, setRoyaltiesPercentage, notSafeForWork, setNotSafeForWork }} />
+		}
+	})(modalPage)
 
 	return (
 		<Transition.Root show={open} as={Fragment}>
@@ -45,9 +130,9 @@ const MintModal = ({ open, onClose }) => {
 					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enterTo="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 translate-y-0 sm:scale-100" leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
 						<div className="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:max-w-lg sm:w-full">
 							<div className="p-4 border-b border-gray-100">
-								{isOptionsOpen ? (
+								{modalPage === MODAL_PAGES.OPTIONS ? (
 									<div className="flex items-center justify-between">
-										<button onClick={() => setOptionsOpen(false)} className="rounded-xl bg-gray-100 px-5 py-4 group">
+										<button onClick={() => setModalPage(MODAL_PAGES.GENERAL)} className="rounded-xl bg-gray-100 px-5 py-4 group">
 											<ChevronLeft className="w-auto h-3 transform group-hover:-translate-x-0.5 transition" />
 										</button>
 										<h2 className="text-gray-900 text-xl font-bold">Options</h2>
@@ -57,7 +142,7 @@ const MintModal = ({ open, onClose }) => {
 									<h2 className="text-gray-900 text-xl font-bold">Create NFT</h2>
 								)}
 							</div>
-							{isOptionsOpen ? <OptionsPage {...{ editionCount, setEditionCount, royaltiesPercentage, setRoyaltiesPercentage, notSafeForWork, setNotSafeForWork }} /> : <CreatePage {...{ title, setTitle, description, setDescription, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setOptionsOpen, hasAcceptedTerms, setHasAcceptedTerms }} />}
+							{renderedPage}
 						</div>
 					</Transition.Child>
 				</div>
@@ -66,15 +151,7 @@ const MintModal = ({ open, onClose }) => {
 	)
 }
 
-const CreatePage = ({ title, setTitle, description, setDescription, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setOptionsOpen, hasAcceptedTerms, setHasAcceptedTerms }) => {
-	const MINT_FORMATS = [
-		{ type: 'image', Icon: ImageIcon },
-		{ type: 'video', Icon: VideoIcon },
-		{ type: 'audio', Icon: AudioIcon },
-		{ type: 'text', Icon: TextIcon },
-		{ type: 'file', Icon: FileIcon },
-	].filter(({ type }) => MINT_TYPES.includes(type))
-
+const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, setIpfsHash, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isEmpty, isValid, mintToken }) => {
 	return (
 		<div>
 			<div className="p-4 border-b border-gray-100 space-y-4">
@@ -90,32 +167,11 @@ const CreatePage = ({ title, setTitle, description, setDescription, putOnSale, s
 							<label htmlFor="description" className="sr-only">
 								Description
 							</label>
-							<textarea name="description" id="description" className="px-4 py-3 relative block w-full rounded-none rounded-b-2xl bg-gray-100 focus:z-10 border border-gray-300 resize-none focus:outline-none focus-visible:ring" placeholder="Description (optional)" value={description} onChange={event => setDescription(event.target.value)} />
+							<TextareaAutosize rows={2} maxRows={6} name="description" id="description" className="px-4 py-3 text-sm relative block w-full rounded-none rounded-b-2xl bg-gray-100 focus:z-10 border border-gray-300 resize-none focus:outline-none focus-visible:ring" placeholder="Description (optional)" value={description} onChange={event => setDescription(event.target.value)} />
 						</div>
 					</div>
 				</fieldset>
-				<div className="flex items-center justify-between">
-					<div className="flex items-center">
-						<div>
-							<p className="text-gray-900 text-sm font-semibold">Attachment</p>
-							<p className="text-xs font-medium text-gray-500">50mb max</p>
-						</div>
-						<div className="h-5 w-px bg-gray-300 mx-4" />
-						<div className="flex items-center space-x-2 text-gray-900">
-							{MINT_FORMATS.map(({ type, Icon }) => (
-								<button key={type} className="bg-gray-100 rounded-full p-2.5 focus-visible:ring">
-									<Icon className="w-5 h-5" />
-								</button>
-							))}
-						</div>
-					</div>
-					<div className="flex items-center space-x-1">
-						<span className="text-gray-700 text-xs font-medium">
-							Stored on <span className="font-semibold text-gray-900">IPFS</span>
-						</span>
-						<HelpIcon className="w-4 h-4 cursor-help" />
-					</div>
-				</div>
+				<IpfsUpload ipfsHash={ipfsHash} onChange={setIpfsHash} />
 			</div>
 			<div className="p-4 border-b border-gray-100">
 				<div className="flex items-center justify-between space-x-4">
@@ -140,7 +196,7 @@ const CreatePage = ({ title, setTitle, description, setDescription, putOnSale, s
 					</div>
 				</Transition>
 			</div>
-			<button onClick={() => setOptionsOpen(true)} className="p-4 border-b border-gray-100 w-full text-left focus-visible:ring group">
+			<button onClick={() => setModalPage(MODAL_PAGES.OPTIONS)} className="p-4 border-b border-gray-100 w-full text-left focus-visible:ring group">
 				<div className="flex items-center justify-between space-x-4">
 					<div>
 						<p className="font-semibold text-gray-900">Options</p>
@@ -158,10 +214,15 @@ const CreatePage = ({ title, setTitle, description, setDescription, putOnSale, s
 			</div>
 			<div className="p-4">
 				<div className="flex items-center justify-between">
-					<Button style="tertiary" disabled>
-						Save Draft
-					</Button>
-					<Button style="primary" disabled>
+					{/* eslint-disable-next-line no-constant-condition */}
+					{false ? (
+						<Button style="tertiary" disabled={isEmpty}>
+							Save Draft
+						</Button>
+					) : (
+						<div />
+					)}
+					<Button style="primary" disabled={!isValid} onClick={mintToken}>
 						Create
 					</Button>
 				</div>

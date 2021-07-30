@@ -14,8 +14,10 @@ import HeaderDropdown from './HeaderDropdown'
 import useAuth from '@/hooks/useAuth'
 import useProfile from '@/hooks/useProfile'
 import FireIcon from './Icons/FireIcon'
-import MintDropdown from './MintDropdown'
 import useFlags, { FLAGS } from '@/hooks/useFlags'
+import MintModal from './UI/Modals/MintModal'
+import PlusIcon from './Icons/PlusIcon'
+import Button from './UI/Buttons/Button'
 
 const Header = () => {
 	const { [FLAGS.hasMinting]: canMint } = useFlags()
@@ -23,6 +25,7 @@ const Header = () => {
 	const context = useContext(AppContext)
 	const { isAuthenticated } = useAuth()
 	const { myProfile } = useProfile()
+	const [mintModalOpen, setMintModalOpen] = useState(false)
 	const [isSearchBarOpen, setSearchBarOpen] = useState(false)
 
 	return (
@@ -30,6 +33,7 @@ const Header = () => {
 			{typeof document !== 'undefined' ? (
 				<>
 					<ModalLogin isOpen={context.loginModalOpen} setEditModalOpen={context.setLoginModalOpen} />
+					<MintModal open={mintModalOpen} onClose={() => setMintModalOpen(false)} />
 				</>
 			) : null}
 			<header className="px-4 pt-3 sm:py-3 bg-white dark:bg-gray-900 bg-opacity-70 dark:bg-opacity-70 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none sticky top-0 z-1">
@@ -73,7 +77,13 @@ const Header = () => {
 						{/* End desktop-only menu */}
 
 						<div className={`flex-1 flex items-center justify-end ${isSearchBarOpen ? 'hidden' : ''}`}>
-							{canMint && <MintDropdown />}
+							{canMint && (
+								<div className="ml-5">
+									<Button onClick={() => setMintModalOpen(true)} style="primary" iconOnly={true}>
+										<PlusIcon className="w-4 h-4" />
+									</Button>
+								</div>
+							)}
 							{isAuthenticated && myProfile && (
 								<div className="flex-shrink ml-5">
 									<NotificationsBtn />
