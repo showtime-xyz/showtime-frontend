@@ -3,7 +3,7 @@ import Checkbox from '../Inputs/Checkbox'
 import Switch from '../Inputs/Switch'
 import ChevronRight from '@/components/Icons/ChevronRight'
 import Button from '../Buttons/Button'
-import { useState, Fragment } from 'react'
+import { useState, Fragment, useLayoutEffect } from 'react'
 import Dropdown from '../Dropdown'
 import ChevronLeft from '@/components/Icons/ChevronLeft'
 import PercentageIcon from '@/components/Icons/PercentageIcon'
@@ -15,26 +15,60 @@ import axios from '@/lib/axios'
 import { v4 as uuid } from 'uuid'
 import { ethers } from 'ethers'
 import { getBiconomy } from '@/lib/biconomy'
-import useWeb3Modal from '@/lib/web3Modal'
+import getWeb3Modal from '@/lib/web3Modal'
 import minterAbi from '@/data/ShowtimeMT.json'
+import PolygonIcon from '@/components/Icons/PolygonIcon'
+import Link from 'next/link'
+import { useContext } from 'react'
+import AppContext from '@/context/app-context'
+import TwitterIcon from '@/components/Icons/Social/TwitterIcon'
+import { useRef } from 'react'
+import { useEffect } from 'react'
+import confetti from 'canvas-confetti'
+import { useTheme } from 'next-themes'
 
 const MODAL_PAGES = {
 	GENERAL: 'general',
 	OPTIONS: 'options',
+	LOADING: 'loading',
+	MINTING: 'minting',
+	SUCCESS: 'success',
 }
 
 const MintModal = ({ open, onClose }) => {
 	const { [FLAGS.hasMinting]: canMint } = useFlags()
-	const web3Modal = useWeb3Modal({ withMagic: true })
+	const { resolvedTheme } = useTheme()
+	const isWeb3ModalActive = useRef(false)
+	const confettiCanvas = useRef(null)
+
+	const trueOnClose = () => {
+		if (!isWeb3ModalActive.current) onClose()
+	}
+
+	const shotConfetti = () => {
+		if (!confettiCanvas.current) return
+
+		const confettiSource = confetti.create(confettiCanvas.current, { resize: true, disableForReducedMotion: true })
+		const end = Date.now() + 1 * 1000
+		const colors = ['#4DEAFF', '#894DFF', '#E14DFF']
+
+		const frame = () => {
+			confettiSource({ particleCount: 3, angle: 120, spread: 55, colors: colors, shapes: ['circle'] })
+			confettiSource({ particleCount: 3, angle: 60, spread: 55, colors: colors, shapes: ['circle'] })
+
+			if (Date.now() < end) requestAnimationFrame(frame)
+		}
+
+		frame()
+	}
 
 	const [modalPage, setModalPage] = useState(MODAL_PAGES.GENERAL)
-
 	//const [draft, setDraft] = useState({})
-	const [draftId /*, setDraftId */] = useState(null)
 
 	const [title, setTitle] = useState('')
 	const [description, setDescription] = useState('')
 	const [ipfsHash, setIpfsHash] = useState(null)
+	const [sourcePreview, setSourcePreview] = useState({ src: null, type: null })
 	const [putOnSale, setPutOnSale] = useState(false)
 	const [price, setPrice] = useState('')
 	const [currency, setCurrency] = useState('ETH')
@@ -42,6 +76,8 @@ const MintModal = ({ open, onClose }) => {
 	const [royaltiesPercentage, setRoyaltiesPercentage] = useState(10)
 	const [notSafeForWork, setNotSafeForWork] = useState(false)
 	const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false)
+	const [transactionHash, setTransactionHash] = useState('')
+	const [tokenID, setTokenID] = useState('')
 
 	const isValid = useMemo(() => {
 		if (!canMint || !title || !hasAcceptedTerms || !editionCount || !royaltiesPercentage || !ipfsHash) return false
@@ -52,17 +88,11 @@ const MintModal = ({ open, onClose }) => {
 	}, [title, hasAcceptedTerms, putOnSale, price, currency, editionCount, royaltiesPercentage, canMint, ipfsHash])
 
 	const isEmpty = useMemo(() => {
-		return !title && !description && !ipfsHash && !hasAcceptedTerms && !draftId && !price && !notSafeForWork && editionCount == 1 && royaltiesPercentage == 10 && currency == 'ETH'
-	}, [title, description, ipfsHash, hasAcceptedTerms, draftId, currency, price, notSafeForWork, editionCount, royaltiesPercentage])
-
-	// const isDirty = useMemo(() => {
-	// 	if (isEmpty) return false
-
-	// 	return draftId != draft.id || editionCount != draft.number_of_copies || currency != draft.currency_ticker || description != draft.description || ipfsHash != draft.ipfs_hash || notSafeForWork != draft.nsfw || title != draft.title || price != draft.price || royaltiesPercentage != draft.royalties || hasAcceptedTerms != draft.agreed_to_terms
-	// }, [currency, description, draft.agreed_to_terms, draft.currency_ticker, draft.description, draft.id, draft.ipfs_hash, draft.nsfw, draft.number_of_copies, draft.price, draft.royalties, draft.title, draftId, editionCount, hasAcceptedTerms, ipfsHash, isEmpty, notSafeForWork, price, royaltiesPercentage, title])
+		return !title && !description && !ipfsHash && !hasAcceptedTerms && !price && !notSafeForWork && editionCount == 1 && royaltiesPercentage == 10 && currency == 'ETH'
+	}, [title, description, ipfsHash, hasAcceptedTerms, currency, price, notSafeForWork, editionCount, royaltiesPercentage])
 
 	const mintToken = async () => {
-		// setModalPage(MODAL_PAGES.LOADING)
+		setModalPage(MODAL_PAGES.LOADING)
 
 		const { token: pinataToken } = await axios.post('/api/pinata/generate-key').then(res => res.data)
 
@@ -85,12 +115,17 @@ const MintModal = ({ open, onClose }) => {
 			)
 			.then(res => res.data)
 
-		const { biconomy, web3 } = await getBiconomy(web3Modal)
+		const web3Modal = getWeb3Modal({ theme: resolvedTheme })
+		isWeb3ModalActive.current = true
+		const { biconomy, web3 } = await getBiconomy(web3Modal, () => (isWeb3ModalActive.current = false))
 		const signerAddress = await web3.getSigner().getAddress()
 		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MINTING_CONTRACT, minterAbi, biconomy.getSignerByAddress(signerAddress))
+
 		const { data } = await contract.populateTransaction.issueToken(signerAddress, editionCount, contentHash, 0)
 
 		const provider = biconomy.getEthersProvider()
+
+		console.log(provider)
 
 		const transaction = await provider.send('eth_sendTransaction', [
 			{
@@ -101,25 +136,38 @@ const MintModal = ({ open, onClose }) => {
 			},
 		])
 
-		// setModalPage(MODAL_PAGES.SUCCESS)
-		window.open(`https://mumbai.polygonscan.com/tx/${transaction}`)
+		setTransactionHash(transaction)
+
+		provider.once(transaction, result => {
+			setTokenID(contract.interface.decodeFunctionResult('issueToken', result.logs[0].data)[0].toNumber())
+			setModalPage(MODAL_PAGES.SUCCESS)
+		})
+
+		setModalPage(MODAL_PAGES.MINTING)
 	}
 
 	const renderedPage = (type => {
 		switch (type) {
 			case MODAL_PAGES.GENERAL:
-				return <CreatePage {...{ title, setTitle, description, setDescription, ipfsHash, setIpfsHash, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isEmpty, isValid, mintToken }} />
+				return <CreatePage {...{ title, setTitle, description, setDescription, ipfsHash, setIpfsHash, setSourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isEmpty, isValid, mintToken }} />
 			case MODAL_PAGES.OPTIONS:
 				return <OptionsPage {...{ editionCount, setEditionCount, royaltiesPercentage, setRoyaltiesPercentage, notSafeForWork, setNotSafeForWork }} />
+			case MODAL_PAGES.LOADING:
+				return <LoadingPage />
+			case MODAL_PAGES.MINTING:
+				return <MintingPage transactionHash={transactionHash} />
+			case MODAL_PAGES.SUCCESS:
+				return <SuccessPage transactionHash={transactionHash} tokenID={tokenID} shotConfetti={shotConfetti} />
 		}
 	})(modalPage)
 
 	return (
 		<Transition.Root show={open} as={Fragment}>
-			<Dialog as="div" static className="fixed z-10 inset-0 overflow-y-auto" open={open} onClose={onClose}>
+			<Dialog as="div" static className="fixed inset-0 overflow-y-auto" open={open} onClose={trueOnClose}>
+				<canvas ref={confettiCanvas} className="absolute inset-0 w-screen h-screen z-[11] pointer-events-none" />
 				<div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
 					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
-						<Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+						<Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity z-10" />
 					</Transition.Child>
 
 					{/* This element is to trick the browser into centering the modal contents. */}
@@ -128,21 +176,24 @@ const MintModal = ({ open, onClose }) => {
 					</span>
 
 					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enterTo="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 translate-y-0 sm:scale-100" leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-						<div className="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:max-w-lg sm:w-full">
-							<div className="p-4 border-b border-gray-100">
-								{modalPage === MODAL_PAGES.OPTIONS ? (
-									<div className="flex items-center justify-between">
-										<button onClick={() => setModalPage(MODAL_PAGES.GENERAL)} className="rounded-xl bg-gray-100 px-5 py-4 group">
-											<ChevronLeft className="w-auto h-3 transform group-hover:-translate-x-0.5 transition" />
-										</button>
-										<h2 className="text-gray-900 text-xl font-bold">Options</h2>
-										<div />
-									</div>
-								) : (
-									<h2 className="text-gray-900 text-xl font-bold">Create NFT</h2>
-								)}
+						<div className="inline-flex items-stretch align-bottom rounded-3xl text-left overflow-hidden transform transition-all sm:align-middle bg-black relative z-20">
+							{sourcePreview.src && <div className="p-10 flex items-center justify-center">{sourcePreview.type === 'video' ? <video src={sourcePreview.src} className="max-w-sm w-auto h-auto" autoPlay loop muted /> : <img src={sourcePreview.src} className="max-w-sm w-auto h-auto" />}</div>}
+							<div className="bg-white shadow-xl rounded-3xl sm:max-w-lg sm:w-full flex flex-col">
+								<div className="p-4 border-b border-gray-100">
+									{modalPage === MODAL_PAGES.OPTIONS ? (
+										<div className="flex items-center justify-between">
+											<button onClick={() => setModalPage(MODAL_PAGES.GENERAL)} className="rounded-xl bg-gray-100 px-5 py-4 group">
+												<ChevronLeft className="w-auto h-3 transform group-hover:-translate-x-0.5 transition" />
+											</button>
+											<h2 className="text-gray-900 text-xl font-bold">Options</h2>
+											<div />
+										</div>
+									) : (
+										<h2 className="text-gray-900 text-xl font-bold">Create NFT</h2>
+									)}
+								</div>
+								{renderedPage}
 							</div>
-							{renderedPage}
 						</div>
 					</Transition.Child>
 				</div>
@@ -151,7 +202,7 @@ const MintModal = ({ open, onClose }) => {
 	)
 }
 
-const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, setIpfsHash, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isEmpty, isValid, mintToken }) => {
+const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, setIpfsHash, setSourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isEmpty, isValid, mintToken }) => {
 	return (
 		<div>
 			<div className="p-4 border-b border-gray-100 space-y-4">
@@ -171,7 +222,7 @@ const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, se
 						</div>
 					</div>
 				</fieldset>
-				<IpfsUpload ipfsHash={ipfsHash} onChange={setIpfsHash} />
+				<IpfsUpload ipfsHash={ipfsHash} onChange={setIpfsHash} onPreview={setSourcePreview} />
 			</div>
 			<div className="p-4 border-b border-gray-100">
 				<div className="flex items-center justify-between space-x-4">
@@ -179,7 +230,7 @@ const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, se
 						<p className="font-semibold text-gray-900">Sell</p>
 						<p className="text-sm font-medium text-gray-700">Enter a fixed price to allow people to purchase your NFT.</p>
 					</div>
-					<Switch value={putOnSale} onChange={setPutOnSale} />
+					<Switch value={putOnSale} onChange={setPutOnSale} disabled />
 				</div>
 				<Transition show={putOnSale} as={Fragment} enter="transition ease-in-out duration-300 transform" enterFrom="-translate-y-full opacity-0" enterTo="translate-y-0 opacity-100">
 					<div className="mt-4 flex items-stretch justify-between space-x-2">
@@ -263,6 +314,65 @@ const OptionsPage = ({ editionCount, setEditionCount, royaltiesPercentage, setRo
 					</div>
 					<Switch value={notSafeForWork} onChange={setNotSafeForWork} />
 				</div>
+			</div>
+		</div>
+	)
+}
+
+const LoadingPage = () => {
+	return (
+		<div tabIndex="0" className="focus:outline-none p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
+			<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 border-t-indigo-500 animate-spin" />
+			<div className="space-y-1">
+				<p className="font-medium text-gray-900 text-center">We're preparing your NFT</p>
+				<p className="font-medium text-gray-900 text-center max-w-xs">We'll ask you to confirm with your preferred wallet shortly</p>
+			</div>
+		</div>
+	)
+}
+
+const MintingPage = ({ transactionHash }) => {
+	return (
+		<div className="p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
+			<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 border-t-indigo-500 animate-spin" />
+			<div className="space-y-1">
+				<p className="font-medium text-gray-900 text-center">Your NFT is being minted on the Polygon network.</p>
+				<p className="font-medium text-gray-900 text-center max-w-xs">Feel free to navigate away from this screen</p>
+			</div>
+			<Button style="tertiary" as="a" href={`https://mumbai.polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
+				<PolygonIcon className="w-4 h-4" />
+				<span className="text-sm font-medium">View on Polygon Scan</span>
+			</Button>
+		</div>
+	)
+}
+
+const SuccessPage = ({ transactionHash, tokenID, shotConfetti }) => {
+	const { myProfile, user } = useContext(AppContext)
+
+	useEffect(() => {
+		shotConfetti()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
+	return (
+		<div className="p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
+			<p className="font-medium text-5xl">🎉</p>
+			<p className="font-medium text-gray-900 text-center">
+				Your NFT has been minted on the Polygon network, you can now view it on your{' '}
+				<Link href={`/${myProfile?.username || myProfile?.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || myProfile?.wallet_addresses_excluding_email_v2?.[0]?.address || user?.publicAddress}`}>
+					<a className="font-semibold focus:outline-none focus-visible:underline">Showtime profile &rarr;</a>
+				</Link>
+			</p>
+			<div className="flex items-center space-x-4">
+				<Button style="tertiary" as="a" href={`https://mumbai.polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
+					<PolygonIcon className="w-4 h-4" />
+					<span className="text-sm font-medium">View on Polygon Scan</span>
+				</Button>
+				<a className="flex items-center bg-blue-100 text-blue-800 px-4 py-2 rounded-full space-x-2" href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://tryshowtime.com/t/${process.env.NEXT_PUBLIC_MINTING_CONTRACT}/${tokenID}`)}&text=${encodeURIComponent('🌟 Just minted an awesome new NFT on @tryShowtime!!\n')}`} target="_blank" rel="noreferrer">
+					<TwitterIcon className="w-4 h-auto" />
+					<span className="text-sm font-medium">Share it on Twitter</span>
+				</a>
 			</div>
 		</div>
 	)
