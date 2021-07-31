@@ -3,6 +3,13 @@ import ReactPlayer from 'react-player'
 import { BlurhashCanvas } from 'react-blurhash'
 
 const TokenCardImage = ({ nft }) => {
+	const is3D = false
+
+	useEffect(() => {
+		if (!is3D || window.customElements.get('model-viewer')) return
+		import('@google/model-viewer')
+	}, [])
+
 	const aRef = useRef()
 	const [hasLoadedImage, setHasLoadedImage] = useState(false)
 	const [hasLoadedAnimation, setHasLoadedAnimation] = useState(false)
@@ -30,6 +37,7 @@ const TokenCardImage = ({ nft }) => {
 				backgroundColor: nft.token_background_color ? `#${nft.token_background_color}` : 'black',
 			}}
 		>
+			{is3D && <model-viewer src="https://ipfs.io/ipfs/QmTo7pPu7pWg8ZG5dyRnqbUtM5XvzUTYHRdXL6sCWuykuo/nft.glb" class="object-cover w-full h-full" autoplay auto-rotate camera-controls ar ar-modes="scene-viewer quick-look" interaction-prompt="none" />}
 			{nft.blurhash && !hasLoadedImage && !hasLoadedAnimation && <BlurhashCanvas className="object-cover w-full h-full" hash={nft.blurhash} width={400} height={300} punch={2} />}
 			{nft.token_img_url && !(nft.token_has_video && hasLoadedAnimation) && <img src={getImageUrl(nft.token_img_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" onLoad={() => setHasLoadedImage(true)} />}
 			{nft.token_has_video && nft.animation_preview_url && (

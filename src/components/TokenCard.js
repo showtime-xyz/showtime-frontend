@@ -187,19 +187,6 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 								<TokenCardImage nft={item} />
 							</div>
 						</div>
-						{item.token_has_video || (!item.token_img_url && item.token_animation_url) ? (
-							<div
-								className="p-2.5 opacity-80 hover:opacity-100 absolute bottom-0 right-0 cursor-pointer"
-								onClick={() => {
-									mixpanel.track('Play card video')
-									setShowVideo(true)
-									setMuted(false)
-									setCurrentlyPlayingVideo(item.nft_id)
-								}}
-							>
-								<PlayIcon className="h-6 w-6 text-white filter drop-shadow" />
-							</div>
-						) : null}
 						{refreshing && (
 							<div className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center bg-white dark:bg-black bg-opacity-50 dark:bg-opacity-50">
 								<div className="inline-block w-6 h-6 border-2 border-gray-100 dark:border-gray-300 border-t-gray-800 dark:border-t-gray-800 rounded-full animate-spin mb-2" />

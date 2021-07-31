@@ -36,6 +36,13 @@ const TokenDetailBody = ({
 	parentReportModalOpen, // for full page view only, not modal view
 	parentSetReportModalOpen, // for full page view only, not modal view
 }) => {
+	const is3D = false
+
+	useEffect(() => {
+		if (!is3D || window.customElements.get('model-viewer')) return
+		import('@google/model-viewer')
+	}, [])
+
 	const context = useContext(AppContext)
 	const { isMobile } = context
 	const getBackgroundColor = () => {
@@ -170,14 +177,14 @@ const TokenDetailBody = ({
 					) : (
 						<div className="m-auto">
 							<div className="w-max p absolute right-0 m-2.5 z-0 top-14 sm:top-0">
-								{isMobile || item.token_has_video || (item.token_animation_url && !item.token_img_url) ? null : item.token_img_url ? (
+								{isMobile || item.token_has_video || (item.token_animation_url && !item.token_img_url) ? null : item.token_img_url && !is3D ? (
 									<button
 										type="button"
 										onClick={() => {
 											setLightboxOpen(true)
 											mixpanel.track('Original clicked')
 										}}
-										className="flex flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all rounded-lg p-3 hidden md:flex"
+										className="flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all rounded-lg p-3 hidden md:flex"
 									>
 										<div className="">
 											<FontAwesomeIcon icon={faExpand} width={18} height={18} />
@@ -186,21 +193,29 @@ const TokenDetailBody = ({
 									</button>
 								) : null}
 							</div>
-							<img
-								src={getImageUrl(item.token_img_url, item.token_aspect_ratio)}
-								alt={item.token_name}
-								className={fullResLoaded === true ? 'hidden' : ''}
-								style={
-									context.isMobile
-										? {
-												width: mediaWidth,
-												height: item.token_aspect_ratio ? mediaWidth / item.token_aspect_ratio : null,
-										  }
-										: { height: TOKEN_MEDIA_HEIGHT }
-								}
-							/>
+							{is3D ? (
+								<model-viewer src="https://ipfs.io/ipfs/QmTo7pPu7pWg8ZG5dyRnqbUtM5XvzUTYHRdXL6sCWuykuo/nft.glb" style={{ height: TOKEN_MEDIA_HEIGHT, width: TOKEN_MEDIA_HEIGHT, '--poster-color': 'transparent' }} autoplay auto-rotate camera-controls ar ar-modes="scene-viewer quick-look" interaction-prompt="none">
+									<span slot="interaction-prompt" />
+								</model-viewer>
+							) : (
+								<>
+									<img
+										src={getImageUrl(item.token_img_url, item.token_aspect_ratio)}
+										alt={item.token_name}
+										className={fullResLoaded === true ? 'hidden' : ''}
+										style={
+											context.isMobile
+												? {
+														width: mediaWidth,
+														height: item.token_aspect_ratio ? mediaWidth / item.token_aspect_ratio : null,
+												  }
+												: { height: TOKEN_MEDIA_HEIGHT }
+										}
+									/>
 
-							<img src={context.isMobile ? getImageUrl(item.token_img_url) : getBiggerImageUrl(item.token_img_url)} alt={item.token_name} className={fullResLoaded === true ? '' : 'hidden'} style={context.isMobile ? { width: mediaWidth } : { height: TOKEN_MEDIA_HEIGHT }} onLoad={() => setTimeout(() => setFullResLoaded(true), 100)} />
+									<img src={context.isMobile ? getImageUrl(item.token_img_url) : getBiggerImageUrl(item.token_img_url)} alt={item.token_name} className={fullResLoaded === true ? '' : 'hidden'} style={context.isMobile ? { width: mediaWidth } : { height: TOKEN_MEDIA_HEIGHT }} onLoad={() => setTimeout(() => setFullResLoaded(true), 100)} />
+								</>
+							)}
 						</div>
 					)}
 				</div>
