@@ -95,6 +95,7 @@ const MintModal = ({ open, onClose }) => {
 	}
 
 	const saveDraft = () => axios.post('/api/mint/draft', { title, description, number_of_copies: editionCount, nsfw: notSafeForWork, price: price || null, royalties: royaltiesPercentage, currency, ipfs_hash: ipfsHash, agreed_to_terms: hasAcceptedTerms, media_type: sourcePreview.type })
+	const resetDraft = () => axios.post('/api/mint/draft', { title: null, description: null, number_of_copies: 1, nsfw: false, price: null, royalties: 10, currency: 'ETH', ipfs_hash: null, agreed_to_terms: false, media_type: null })
 
 	const loadDraft = async () => {
 		const draft = await axios.get('/api/mint/draft').then(({ data }) => data)
@@ -149,6 +150,7 @@ const MintModal = ({ open, onClose }) => {
 						name: title,
 						description,
 						image: `ipfs://${ipfsHash}`,
+						...(notSafeForWork ? { attributes: [{ value: 'NSFW' }] } : {}),
 					},
 				},
 				{
@@ -200,8 +202,7 @@ const MintModal = ({ open, onClose }) => {
 				throw setModalPage(MODAL_PAGES.GENERAL)
 			})
 
-		resetForm()
-		saveDraft()
+		resetDraft()
 		setTransactionHash(transaction)
 
 		provider.once(transaction, result => {
