@@ -26,6 +26,7 @@ import { useRef } from 'react'
 import { useEffect } from 'react'
 import confetti from 'canvas-confetti'
 import { useTheme } from 'next-themes'
+import useProfile from '@/hooks/useProfile'
 
 const MODAL_PAGES = {
 	GENERAL: 'general',
@@ -37,12 +38,33 @@ const MODAL_PAGES = {
 
 const MintModal = ({ open, onClose }) => {
 	const { [FLAGS.hasMinting]: canMint } = useFlags()
+	const { myProfile } = useProfile()
 	const { resolvedTheme } = useTheme()
 	const isWeb3ModalActive = useRef(false)
 	const confettiCanvas = useRef(null)
+	const [modalPage, setModalPage] = useState(MODAL_PAGES.GENERAL)
+
+	const resetForm = () => {
+		setTitle('')
+		setDescription('')
+		setIpfsHash('')
+		setSourcePreview({ src: null, type: null })
+		setPutOnSale(false)
+		setPrice('')
+		setCurrency('ETH')
+		setEditionCount(1)
+		setRoyaltiesPercentage(10)
+		setNotSafeForWork(false)
+		setHasAcceptedTerms(false)
+		setTransactionHash('')
+		setTokenID('')
+	}
 
 	const trueOnClose = () => {
-		if (!isWeb3ModalActive.current) onClose()
+		if (isWeb3ModalActive.current || modalPage === MODAL_PAGES.LOADING) return
+
+		resetForm()
+		onClose()
 	}
 
 	const shotConfetti = () => {
@@ -61,9 +83,6 @@ const MintModal = ({ open, onClose }) => {
 
 		frame()
 	}
-
-	const [modalPage, setModalPage] = useState(MODAL_PAGES.GENERAL)
-	//const [draft, setDraft] = useState({})
 
 	const [title, setTitle] = useState('')
 	const [description, setDescription] = useState('')
@@ -119,13 +138,22 @@ const MintModal = ({ open, onClose }) => {
 		isWeb3ModalActive.current = true
 		const { biconomy, web3 } = await getBiconomy(web3Modal, () => (isWeb3ModalActive.current = false))
 		const signerAddress = await web3.getSigner().getAddress()
+
+		if (
+			!myProfile?.wallet_addresses_v2
+				?.filter(address => address.minting_enabled)
+				?.map(({ address }) => address.toLowerCase())
+				?.includes(signerAddress.toLowerCase())
+		) {
+			alert("Please use an address that's linked to your Showtime profile and has been approved for the minting beta.")
+			return setModalPage(MODAL_PAGES.GENERAL)
+		}
+
 		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MINTING_CONTRACT, minterAbi, biconomy.getSignerByAddress(signerAddress))
 
 		const { data } = await contract.populateTransaction.issueToken(signerAddress, editionCount, contentHash, 0)
 
 		const provider = biconomy.getEthersProvider()
-
-		console.log(provider)
 
 		const transaction = await provider.send('eth_sendTransaction', [
 			{
@@ -264,15 +292,7 @@ const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, se
 				</Checkbox>
 			</div>
 			<div className="p-4">
-				<div className="flex items-center justify-between">
-					{/* eslint-disable-next-line no-constant-condition */}
-					{false ? (
-						<Button style="tertiary" disabled={isEmpty}>
-							Save Draft
-						</Button>
-					) : (
-						<div />
-					)}
+				<div className="flex items-center justify-end">
 					<Button style="primary" disabled={!isValid} onClick={mintToken}>
 						Create
 					</Button>
