@@ -13,10 +13,9 @@ import TextIcon from './Icons/TextIcon'
 import FileIcon from './Icons/FileIcon'
 import CheckIcon from './Icons/CheckIcon'
 
-const IpfsUpload = ({ ipfsHash: baseIpfsHash, onChange = () => null, onPreview = () => null }) => {
+const IpfsUpload = ({ ipfsHash: baseIpfsHash, onChange = () => null, fileDetails, setFileDetails }) => {
 	const [uploadProgress, setUploadProgress] = useState(null)
 	const [ipfsHash, setIpfsHash] = useState(baseIpfsHash)
-	const [fileDetails, setFileDetails] = useState({ type: null, size: null, ext: null })
 
 	useEffect(() => {
 		onChange(ipfsHash)
@@ -34,8 +33,7 @@ const IpfsUpload = ({ ipfsHash: baseIpfsHash, onChange = () => null, onPreview =
 	const cancelUpload = () => {
 		setUploadProgress(null)
 		setIpfsHash('')
-		onPreview({ src: null, type: null })
-		setFileDetails({ type: null, size: null, ext: null })
+		setFileDetails({ type: null, size: null, ext: null, src: null })
 	}
 
 	const onFileUpload = async event => {
@@ -43,8 +41,7 @@ const IpfsUpload = ({ ipfsHash: baseIpfsHash, onChange = () => null, onPreview =
 		if (!file) return
 
 		setUploadProgress(0)
-		onPreview({ src: URL.createObjectURL(file), type: file.type.split('/')[0] })
-		setFileDetails({ type: file.type.split('/')[0], size: file.size < 1000000 ? Math.floor(file.size / 1000) + 'kb' : Math.floor(file.size / 1000000) + 'mb', ext: file.type.split('/')[1] })
+		setFileDetails({ type: file.type.split('/')[0], size: file.size < 1000000 ? Math.floor(file.size / 1000) + 'kb' : Math.floor(file.size / 1000000) + 'mb', ext: file.type.split('/')[1], src: URL.createObjectURL(file) })
 
 		const { token: pinataToken } = await axios.post('/api/pinata/generate-key').then(res => res.data)
 
@@ -69,29 +66,29 @@ const IpfsUpload = ({ ipfsHash: baseIpfsHash, onChange = () => null, onPreview =
 		<div className="flex items-center justify-between">
 			{ipfsHash ? (
 				<>
-					<div className="space-x-1.5 flex items-center">
+					<div className="space-x-1.5 flex items-center dark:text-gray-300">
 						<MintIcon type={fileDetails.type} className="w-5 h-5" />
 						<p className="text-xs font-semibold">
-							{fileDetails.size} <span className="text-gray-300">&bull;</span> {fileDetails?.ext}
+							{fileDetails.size} <span className="text-gray-300 dark:text-gray-700">&bull;</span> {fileDetails?.ext}
 						</p>
 					</div>
 					<div className="group">
 						<div className="flex items-center space-x-1.5 hover:space-x-1 group-hover:hidden">
 							<CheckIcon className="w-3 h-3 group-hover:hidden" />
-							<span className="text-gray-900 text-xs font-medium group-hover:hidden">Uploaded to IPFS</span>
+							<span className="text-gray-900 dark:text-white text-xs font-medium group-hover:hidden">Uploaded to IPFS</span>
 						</div>
 						<button onClick={cancelUpload} className="items-center space-x-1 hidden group-hover:flex">
 							<XIcon className="w-5 h-5 hidden group-hover:block" />
-							<span className="text-gray-900 text-xs font-medium hidden group-hover:inline">Remove from IPFS</span>
+							<span className="text-gray-900 dark:text-white text-xs font-medium hidden group-hover:inline">Remove from IPFS</span>
 						</button>
 					</div>
 				</>
 			) : uploadProgress != null ? (
 				<div className="flex items-center space-x-4">
-					<div className="inline-block border-2 w-5 h-5 rounded-full border-gray-100 border-t-indigo-500 animate-spin" />
-					<p className="font-semibold text-sm text-gray-700">Uploading to IPFS</p>
-					<div className="h-5 w-px bg-gray-300" />
-					<button onClick={cancelUpload} className="bg-gray-100 text-gray-900 rounded-full p-2.5 focus-visible:ring">
+					<div className="inline-block border-2 w-5 h-5 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
+					<p className="font-semibold text-sm text-gray-700 dark:text-white">Uploading to IPFS</p>
+					<div className="h-5 w-px bg-gray-300 dark:bg-gray-800" />
+					<button onClick={cancelUpload} className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white rounded-full p-2.5 focus-visible:ring">
 						<XIcon className="w-5 h-5" />
 					</button>
 				</div>
@@ -99,13 +96,13 @@ const IpfsUpload = ({ ipfsHash: baseIpfsHash, onChange = () => null, onPreview =
 				<>
 					<div className="flex items-center">
 						<div>
-							<p className="text-gray-900 text-sm font-semibold">Attachment</p>
-							<p className="text-xs font-medium text-gray-500">50mb max</p>
+							<p className="text-gray-900 dark:text-white text-sm font-semibold">Attachment</p>
+							<p className="text-xs font-medium text-gray-500 dark:text-gray-300">50mb max</p>
 						</div>
-						<div className="h-5 w-px bg-gray-300 mx-4" />
-						<div className="flex items-center space-x-2 text-gray-900">
+						<div className="h-5 w-px bg-gray-300 dark:bg-gray-700 mx-4" />
+						<div className="flex items-center space-x-2 text-gray-900 dark:text-white">
 							{MINT_TYPES.map(type => (
-								<label key={type} className="bg-gray-100 rounded-full p-2.5 cursor-pointer focus:outline-none focus-visible:ring" tabIndex="0">
+								<label key={type} className="bg-gray-100 dark:bg-gray-900 rounded-full p-2.5 cursor-pointer focus:outline-none focus-visible:ring" tabIndex="0">
 									<input onChange={onFileUpload} type="file" className="hidden" multiple={false} accept={MINT_FORMATS[type].join(',')} capture="environment" />
 									<MintIcon type={type} className="w-5 h-5" />
 								</label>
@@ -113,10 +110,10 @@ const IpfsUpload = ({ ipfsHash: baseIpfsHash, onChange = () => null, onPreview =
 						</div>
 					</div>
 					<div className="flex items-center space-x-1">
-						<span className="text-gray-700 text-xs font-medium">
-							Stored on <span className="font-semibold text-gray-900">IPFS</span>
+						<span className="text-gray-700 dark:text-gray-300 text-xs font-medium">
+							Stored on <span className="font-semibold text-gray-900 dark:text-white">IPFS</span>
 						</span>
-						<a className="cursor-help" href="https://ipfs.io/" target="_blank" rel="noreferrer">
+						<a className="cursor-help dark:text-white" href="https://ipfs.io/" target="_blank" rel="noreferrer">
 							<HelpIcon className="w-4 h-4" />
 						</a>
 					</div>

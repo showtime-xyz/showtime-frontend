@@ -32,6 +32,9 @@
         .border-t-indigo-500 {
             border-top-color: theme('colors.indigo.500');
         }
+        .border-t-cyan-400 {
+            border-top-color: theme('colors.cyan.400');
+        }
     }
 
     .no-spinners::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
