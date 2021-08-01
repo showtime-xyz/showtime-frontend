@@ -3,7 +3,7 @@ import Checkbox from '../Inputs/Checkbox'
 import Switch from '../Inputs/Switch'
 import ChevronRight from '@/components/Icons/ChevronRight'
 import Button from '../Buttons/Button'
-import { useState, Fragment, useLayoutEffect } from 'react'
+import { useState, Fragment } from 'react'
 import Dropdown from '../Dropdown'
 import ChevronLeft from '@/components/Icons/ChevronLeft'
 import PercentageIcon from '@/components/Icons/PercentageIcon'
@@ -106,10 +106,6 @@ const MintModal = ({ open, onClose }) => {
 		return true
 	}, [title, hasAcceptedTerms, putOnSale, price, currency, editionCount, royaltiesPercentage, canMint, ipfsHash])
 
-	const isEmpty = useMemo(() => {
-		return !title && !description && !ipfsHash && !hasAcceptedTerms && !price && !notSafeForWork && editionCount == 1 && royaltiesPercentage == 10 && currency == 'ETH'
-	}, [title, description, ipfsHash, hasAcceptedTerms, currency, price, notSafeForWork, editionCount, royaltiesPercentage])
-
 	const mintToken = async () => {
 		setModalPage(MODAL_PAGES.LOADING)
 
@@ -177,7 +173,7 @@ const MintModal = ({ open, onClose }) => {
 	const renderedPage = (type => {
 		switch (type) {
 			case MODAL_PAGES.GENERAL:
-				return <CreatePage {...{ title, setTitle, description, setDescription, ipfsHash, setIpfsHash, setSourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isEmpty, isValid, mintToken }} />
+				return <CreatePage {...{ title, setTitle, description, setDescription, ipfsHash, setIpfsHash, setSourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }} />
 			case MODAL_PAGES.OPTIONS:
 				return <OptionsPage {...{ editionCount, setEditionCount, royaltiesPercentage, setRoyaltiesPercentage, notSafeForWork, setNotSafeForWork }} />
 			case MODAL_PAGES.LOADING:
@@ -230,7 +226,7 @@ const MintModal = ({ open, onClose }) => {
 	)
 }
 
-const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, setIpfsHash, setSourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isEmpty, isValid, mintToken }) => {
+const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, setIpfsHash, setSourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }) => {
 	return (
 		<div>
 			<div className="p-4 border-b border-gray-100 space-y-4">
