@@ -46,8 +46,6 @@ const MintModal = ({ open, onClose }) => {
 	const confettiCanvas = useRef(null)
 	const [modalPage, setModalPage] = useState(MODAL_PAGES.GENERAL)
 
-	console.log({ isWeb3ModalActive: isWeb3ModalActive.current })
-
 	const shotConfetti = () => {
 		if (!confettiCanvas.current) return
 
@@ -96,11 +94,37 @@ const MintModal = ({ open, onClose }) => {
 		setModalPage(MODAL_PAGES.GENERAL)
 	}
 
+	const saveDraft = () => axios.post('/api/mint/draft', { title, description, number_of_copies: editionCount, nsfw: notSafeForWork, price: price || null, royalties: royaltiesPercentage, currency, ipfs_hash: ipfsHash, agreed_to_terms: hasAcceptedTerms, media_type: sourcePreview.type })
+
+	const loadDraft = async () => {
+		const draft = await axios.get('/api/mint/draft').then(({ data }) => data)
+
+		setTitle(draft.title || '')
+		setDescription(draft.description || '')
+		setHasAcceptedTerms(draft.agreed_to_terms || false)
+		setNotSafeForWork(draft.nsfw || false)
+		setPrice(draft.price || '')
+		setCurrency(draft.currency_ticker || 'ETH')
+		setEditionCount(parseInt(draft.number_of_copies) || 1)
+		setRoyaltiesPercentage(parseInt(draft.royalties) || 10)
+		setIpfsHash(draft.ipfs_hash || null)
+		if (draft.ipfs_hash) setSourcePreview({ type: draft.media_type.toLowerCase(), size: '??', ext: '??', src: `https://gateway.pinata.cloud/ipfs/${draft.ipfs_hash}` })
+	}
+
+	useEffect(() => {
+		loadDraft()
+	}, [])
+
 	const trueOnClose = () => {
 		if (isWeb3ModalActive.current || modalPage === MODAL_PAGES.LOADING) return
 
+		saveDraft().finally(() => {
+			if (modalPage === MODAL_PAGES.GENERAL) return
+
+			resetForm()
+			loadDraft()
+		})
 		onClose()
-		resetForm()
 	}
 
 	const isValid = useMemo(() => {
@@ -176,6 +200,8 @@ const MintModal = ({ open, onClose }) => {
 				throw setModalPage(MODAL_PAGES.GENERAL)
 			})
 
+		resetForm()
+		saveDraft()
 		setTransactionHash(transaction)
 
 		provider.once(transaction, result => {

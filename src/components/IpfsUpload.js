@@ -26,7 +26,6 @@ const IpfsUpload = ({ ipfsHash: baseIpfsHash, onChange = () => null, fileDetails
 		if (!baseIpfsHash || ipfsHash) return
 
 		setIpfsHash(baseIpfsHash)
-		//onPreview(`https://gateway.pinata.cloud/ipfs/${baseIpfsHash}`)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [baseIpfsHash])
 

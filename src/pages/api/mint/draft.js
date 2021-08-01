@@ -5,19 +5,20 @@ export default handler()
 	.use(middleware.auth)
 	.get(async ({ user }, res) => {
 		backend
-			.get('/v1/list_draft_nft', {
+			.get('/v1/get_draft_nft', {
 				headers: {
 					'X-Authenticated-User': user.publicAddress,
 					'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
 				},
 			})
-			.then(resp => res.json(resp.data.data.list))
+			.then(({ data: { data } }) => res.json(data))
+			.catch(() => res.status(200).json({ title: null, description: null, number_of_copies: null, nsfw: null, price: null, royalties: null, currency: null, ipfs_hash: null, agreed_to_terms: null, media_type: null }))
 	})
-	.post(async ({ user, body: { selectedWallet, name, description, copies, isAdultContent, price, royalties, currency, ipfsHash, hasVerifiedAuthorship, type, draftId } }, res) => {
+	.post(async ({ user, body: { title, description, number_of_copies, nsfw, price, royalties, currency, ipfs_hash, agreed_to_terms, media_type } }, res) => {
 		backend
 			.post(
 				'v1/set_draft_nft',
-				{ draft_id: draftId, wallet: selectedWallet, title: name, description, number_of_copies: copies, nsfw: isAdultContent, price, royalties, currency, ipfs_hash: ipfsHash, agreed_to_terms: hasVerifiedAuthorship, media_type: type.charAt(0).toUpperCase() + type.slice(1) },
+				{ title, description, number_of_copies, nsfw, price, royalties, currency, ipfs_hash, agreed_to_terms, media_type },
 				{
 					headers: {
 						'X-Authenticated-User': user.publicAddress,
