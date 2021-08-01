@@ -36,10 +36,8 @@ const TokenDetailBody = ({
 	parentReportModalOpen, // for full page view only, not modal view
 	parentSetReportModalOpen, // for full page view only, not modal view
 }) => {
-	const is3D = false
-
 	useEffect(() => {
-		if (!is3D || window.customElements.get('model-viewer')) return
+		if (!item.mime_type.startsWith('model') || window.customElements.get('model-viewer')) return
 		import('@google/model-viewer')
 	}, [])
 
@@ -177,7 +175,7 @@ const TokenDetailBody = ({
 					) : (
 						<div className="m-auto">
 							<div className="w-max p absolute right-0 m-2.5 z-0 top-14 sm:top-0">
-								{isMobile || item.token_has_video || (item.token_animation_url && !item.token_img_url) ? null : item.token_img_url && !is3D ? (
+								{isMobile || item.token_has_video || (item.token_animation_url && !item.token_img_url) ? null : item.token_img_url && !item.mime_type.startsWith('model') ? (
 									<button
 										type="button"
 										onClick={() => {
@@ -193,8 +191,8 @@ const TokenDetailBody = ({
 									</button>
 								) : null}
 							</div>
-							{is3D ? (
-								<model-viewer src="https://ipfs.io/ipfs/QmTo7pPu7pWg8ZG5dyRnqbUtM5XvzUTYHRdXL6sCWuykuo/nft.glb" style={{ height: TOKEN_MEDIA_HEIGHT, width: TOKEN_MEDIA_HEIGHT, '--poster-color': 'transparent' }} autoplay auto-rotate camera-controls ar ar-modes="scene-viewer quick-look" interaction-prompt="none">
+							{item.mime_type.startsWith('model') ? (
+								<model-viewer src={item.source_url} style={{ height: TOKEN_MEDIA_HEIGHT, width: TOKEN_MEDIA_HEIGHT, '--poster-color': 'transparent' }} autoplay auto-rotate camera-controls ar ar-modes="scene-viewer quick-look" interaction-prompt="none">
 									<span slot="interaction-prompt" />
 								</model-viewer>
 							) : (
