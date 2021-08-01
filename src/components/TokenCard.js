@@ -19,7 +19,7 @@ import { useEffect } from 'react'
 import XIcon from './Icons/XIcon'
 
 const TokenCard = ({ originalItem, isPreview = false, onPreviewClose, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
-	const { profile: myProfile } = useProfile()
+	const { myProfile } = useProfile()
 	const [item, setItem] = useState(originalItem)
 	const [showVideo, setShowVideo] = useState(isPreview)
 	const [muted, setMuted] = useState(true)
