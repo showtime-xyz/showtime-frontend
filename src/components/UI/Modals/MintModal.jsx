@@ -27,6 +27,7 @@ import { useEffect } from 'react'
 import confetti from 'canvas-confetti'
 import { useTheme } from 'next-themes'
 import useProfile from '@/hooks/useProfile'
+import { ExclamationIcon } from '@heroicons/react/outline'
 
 const MODAL_PAGES = {
 	GENERAL: 'general',
@@ -34,6 +35,7 @@ const MODAL_PAGES = {
 	LOADING: 'loading',
 	MINTING: 'minting',
 	SUCCESS: 'success',
+	CHANGE_WALLET: 'change_wallet',
 }
 
 const MintModal = ({ open, onClose }) => {
@@ -42,7 +44,7 @@ const MintModal = ({ open, onClose }) => {
 	const { resolvedTheme } = useTheme()
 	const isWeb3ModalActive = useRef(false)
 	const confettiCanvas = useRef(null)
-	const [modalPage, setModalPage] = useState(MODAL_PAGES.GENERAL)
+	const [modalPage, setModalPage] = useState(MODAL_PAGES.CHANGE_WALLET)
 
 	const resetForm = () => {
 		setTitle('')
@@ -132,7 +134,12 @@ const MintModal = ({ open, onClose }) => {
 
 		const web3Modal = getWeb3Modal({ theme: resolvedTheme })
 		isWeb3ModalActive.current = true
-		const { biconomy, web3 } = await getBiconomy(web3Modal, () => (isWeb3ModalActive.current = false))
+		const { biconomy, web3 } = await getBiconomy(web3Modal, () => (isWeb3ModalActive.current = false)).catch(error => {
+			if (error !== 'Modal closed by user') throw error
+
+			// We throw here to stop execution
+			throw setModalPage(MODAL_PAGES.GENERAL)
+		})
 		const signerAddress = await web3.getSigner().getAddress()
 
 		if (
@@ -141,8 +148,7 @@ const MintModal = ({ open, onClose }) => {
 				?.map(({ address }) => address.toLowerCase())
 				?.includes(signerAddress.toLowerCase())
 		) {
-			alert("Please use an address that's linked to your Showtime profile and has been approved for the minting beta.")
-			return setModalPage(MODAL_PAGES.GENERAL)
+			return setModalPage(MODAL_PAGES.CHANGE_WALLET)
 		}
 
 		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MINTING_CONTRACT, minterAbi, biconomy.getSignerByAddress(signerAddress))
@@ -151,14 +157,21 @@ const MintModal = ({ open, onClose }) => {
 
 		const provider = biconomy.getEthersProvider()
 
-		const transaction = await provider.send('eth_sendTransaction', [
-			{
-				data,
-				from: signerAddress,
-				to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
-				signatureType: 'EIP712_SIGN',
-			},
-		])
+		const transaction = await provider
+			.send('eth_sendTransaction', [
+				{
+					data,
+					from: signerAddress,
+					to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+					signatureType: 'EIP712_SIGN',
+				},
+			])
+			.catch(error => {
+				if (error.code != 4001) throw error
+
+				// We throw here to stop execution
+				throw setModalPage(MODAL_PAGES.GENERAL)
+			})
 
 		setTransactionHash(transaction)
 
@@ -182,6 +195,8 @@ const MintModal = ({ open, onClose }) => {
 				return <MintingPage transactionHash={transactionHash} />
 			case MODAL_PAGES.SUCCESS:
 				return <SuccessPage transactionHash={transactionHash} tokenID={tokenID} shotConfetti={shotConfetti} />
+			case MODAL_PAGES.CHANGE_WALLET:
+				return <WalletErrorPage mintToken={mintToken} />
 		}
 	})(modalPage)
 
@@ -390,6 +405,28 @@ const SuccessPage = ({ transactionHash, tokenID, shotConfetti }) => {
 					<span className="text-sm font-medium">Share it on Twitter</span>
 				</a>
 			</div>
+		</div>
+	)
+}
+
+const WalletErrorPage = ({ mintToken }) => {
+	return (
+		<div tabIndex="0" className="p-12 space-y-5 flex-1 flex flex-col items-center justify-center focus:outline-none">
+			<div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 sm:mx-0 sm:h-10 sm:w-10">
+				<ExclamationIcon className="h-6 w-6 text-yellow-600" aria-hidden="true" />
+			</div>
+			<p className="font-medium text-gray-900 text-center">The wallet you selected isn't linked to your profile.</p>
+			<p className="font-medium text-gray-900 text-center max-w-xs mx-auto">
+				You can link it from the{' '}
+				<Link href="/wallet">
+					<a className="font-semibold focus:outline-none focus-visible:underline">wallets page</a>
+				</Link>
+				, or you can{' '}
+				<button onClick={mintToken} className="font-semibold focus:outline-none focus-visible:underline">
+					try again with a different wallet
+				</button>
+				.
+			</p>
 		</div>
 	)
 }
