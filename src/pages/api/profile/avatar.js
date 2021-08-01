@@ -16,3 +16,11 @@ export default handler()
 
 		res.status(200).end()
 	})
+
+export const config = {
+	api: {
+		bodyParser: {
+			sizeLimit: '12mb',
+		},
+	},
+}

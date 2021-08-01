@@ -45,7 +45,7 @@ export const AddressCollection = ({ addresses, isMyProfile = false }) => {
 								</div>
 								{isMyProfile && (
 									<>
-										{addresses.length > 1 && <hr className="my-4 w-full dark:border-gray-800" />}
+										{addresses.length > 1 && <hr className="my-4 w-full border-gray-200 dark:border-gray-800" />}
 										<Link href="/wallet">
 											<a className="block text-center hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-400 px-4 py-3 rounded-2xl w-full font-medium transition whitespace-nowrap">Manage Wallets</a>
 										</Link>
