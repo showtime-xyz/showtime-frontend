@@ -6,6 +6,11 @@ import CommentButton from './CommentButton'
 import AppContext from '@/context/app-context'
 
 export default function ActivityImage({ nft, index, numberOfImages, openModal, spacingIndex, bottomRow, roundAllCorners, totalNumberOfImages, cardWidth }) {
+	useEffect(() => {
+		if (!nft?.mime_type?.startsWith('model') || window.customElements.get('model-viewer')) return
+		import('@google/model-viewer')
+	}, [nft?.mime_type])
+
 	const aRef = useRef()
 	const { isMobile } = useContext(AppContext)
 	const [imgWidth, setImgWidth] = useState(null)
@@ -67,6 +72,7 @@ export default function ActivityImage({ nft, index, numberOfImages, openModal, s
 			onMouseEnter={() => setIsHovering(true)}
 			onMouseLeave={() => setIsHovering(false)}
 		>
+			{nft.mime_type?.startsWith('model') && <model-viewer src={nft.source_url} class="object-cover w-full h-full" autoplay auto-rotate ar ar-modes="scene-viewer quick-look" interaction-prompt="none" />}
 			{nft.token_img_url && !((nft.token_has_video || (nft.token_animation_url && !nft.token_img_url)) && numberOfImages === 1) && <img src={numberOfImages === 1 ? getImageUrlLarge(nft.token_img_url, nft.token_aspect_ratio) : getImageUrl(nft.token_img_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" />}
 			{(nft.token_has_video || (nft.token_animation_url && !nft.token_img_url)) && (!nft.token_img_url || numberOfImages === 1) && (
 				<ReactPlayer
