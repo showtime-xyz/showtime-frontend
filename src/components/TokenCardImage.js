@@ -35,7 +35,7 @@ const TokenCardImage = ({ nft }) => {
 				backgroundColor: nft.token_background_color ? `#${nft.token_background_color}` : 'black',
 			}}
 		>
-			{nft.mime_type?.startsWith('model') && <model-viewer src={nft.source_url} class="object-cover w-full h-full" autoplay auto-rotate camera-controls ar ar-modes="scene-viewer quick-look" interaction-prompt="none" />}
+			{nft.mime_type?.startsWith('model') && <model-viewer src={nft.source_url} class="object-cover w-full h-full" autoplay auto-rotate ar ar-modes="scene-viewer quick-look" interaction-prompt="none" />}
 			{nft.blurhash && !hasLoadedImage && !hasLoadedAnimation && <BlurhashCanvas className="object-cover w-full h-full" hash={nft.blurhash} width={400} height={300} punch={2} />}
 			{nft.token_img_url && !(nft.token_has_video && hasLoadedAnimation) && <img src={getImageUrl(nft.token_img_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" onLoad={() => setHasLoadedImage(true)} />}
 			{nft.token_has_video && nft.animation_preview_url && (
