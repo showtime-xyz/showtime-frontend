@@ -37,7 +37,7 @@ const TokenDetailBody = ({
 	parentSetReportModalOpen, // for full page view only, not modal view
 }) => {
 	useEffect(() => {
-		if (!item.mime_type.startsWith('model') || window.customElements.get('model-viewer')) return
+		if (!item.mime_type?.startsWith('model') || window.customElements.get('model-viewer')) return
 		import('@google/model-viewer')
 	}, [])
 
@@ -175,7 +175,7 @@ const TokenDetailBody = ({
 					) : (
 						<div className="m-auto">
 							<div className="w-max p absolute right-0 m-2.5 z-0 top-14 sm:top-0">
-								{isMobile || item.token_has_video || (item.token_animation_url && !item.token_img_url) ? null : item.token_img_url && !item.mime_type.startsWith('model') ? (
+								{isMobile || item.token_has_video || (item.token_animation_url && !item.token_img_url) ? null : item.token_img_url && !item.mime_type?.startsWith('model') ? (
 									<button
 										type="button"
 										onClick={() => {
@@ -191,7 +191,7 @@ const TokenDetailBody = ({
 									</button>
 								) : null}
 							</div>
-							{item.mime_type.startsWith('model') ? (
+							{item.mime_type?.startsWith('model') ? (
 								<model-viewer src={item.source_url} style={{ height: TOKEN_MEDIA_HEIGHT, width: TOKEN_MEDIA_HEIGHT, '--poster-color': 'transparent' }} autoplay auto-rotate camera-controls ar ar-modes="scene-viewer quick-look" interaction-prompt="none">
 									<span slot="interaction-prompt" />
 								</model-viewer>
