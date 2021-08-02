@@ -28,6 +28,7 @@ import confetti from 'canvas-confetti'
 import { useTheme } from 'next-themes'
 import useProfile from '@/hooks/useProfile'
 import { ExclamationIcon } from '@heroicons/react/outline'
+import XIcon from '@/components/Icons/XIcon'
 
 const MODAL_PAGES = {
 	GENERAL: 'general',
@@ -232,34 +233,36 @@ const MintModal = ({ open, onClose }) => {
 
 	return (
 		<Transition.Root show={open} as={Fragment}>
-			<Dialog as="div" static className="fixed inset-0 overflow-y-auto" open={open} onClose={trueOnClose}>
+			<Dialog as="div" static className={`fixed inset-0 overflow-y-auto ${sourcePreview.src ? 'pt-[96px] md:pt-0' : ''}`} open={open} onClose={trueOnClose}>
 				<canvas ref={confettiCanvas} className="absolute inset-0 w-screen h-screen z-[11] pointer-events-none" />
-				<div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+				<div className="min-h-screen text-center">
 					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
 						<Dialog.Overlay className="fixed inset-0 bg-gray-500 dark:bg-gray-800 bg-opacity-75 dark:bg-opacity-95 transition-opacity z-10" />
 					</Transition.Child>
 
 					{/* This element is to trick the browser into centering the modal contents. */}
-					<span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
+					<span className="inline-block align-middle h-screen" aria-hidden="true">
 						&#8203;
 					</span>
 
 					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enterTo="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 translate-y-0 sm:scale-100" leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-						<div className="inline-flex items-stretch align-bottom rounded-3xl text-left overflow-hidden transform transition-all sm:align-middle bg-black dark:bg-gray-900 relative z-20">
-							{sourcePreview.src && <div className="p-10 flex items-center justify-center">{sourcePreview.type === 'video' ? <video src={sourcePreview.src} className="max-w-sm w-auto h-auto" autoPlay loop muted /> : <img src={sourcePreview.src} className="max-w-sm w-auto h-auto" />}</div>}
-							<div className="bg-white dark:bg-black shadow-xl rounded-3xl sm:max-w-lg sm:w-full flex flex-col">
-								<div className="p-4 border-b border-gray-100 dark:border-gray-900">
+						<div className="inline-flex flex-col md:flex-row items-stretch align-bottom rounded-t-3xl md:rounded-b-3xl text-left overflow-hidden transform transition-all sm:align-middle bg-black dark:bg-gray-900 relative z-20">
+							{sourcePreview.src && <div className="p-10 flex items-center justify-center">{sourcePreview.type === 'video' ? <video src={sourcePreview.src} className="md:max-w-sm w-auto h-auto" autoPlay loop muted /> : <img src={sourcePreview.src} className="md:max-w-sm w-auto h-auto" />}</div>}
+							<div className="bg-white dark:bg-black shadow-xl rounded-t-3xl md:rounded-b-3xl sm:max-w-lg sm:w-full flex flex-col">
+								<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
 									{modalPage === MODAL_PAGES.OPTIONS ? (
-										<div className="flex items-center justify-between">
+										<>
 											<button onClick={() => setModalPage(MODAL_PAGES.GENERAL)} className="rounded-xl bg-gray-100 dark:bg-gray-800 px-5 py-4 group">
 												<ChevronLeft className="w-auto h-3 transform group-hover:-translate-x-0.5 transition" />
 											</button>
 											<h2 className="text-gray-900 dark:text-white text-xl font-bold">Options</h2>
-											<div />
-										</div>
+										</>
 									) : (
 										<h2 className="text-gray-900 dark:text-white text-xl font-bold">Create NFT</h2>
 									)}
+									<button onClick={trueOnClose} className="p-3 -my-3 hover:bg-gray-100 disabled:hidden rounded-xl transition" disabled={modalPage === MODAL_PAGES.LOADING}>
+										<XIcon className="w-4 h-4" />
+									</button>
 								</div>
 								{renderedPage}
 							</div>
@@ -425,7 +428,7 @@ const SuccessPage = ({ transactionHash, tokenID, shotConfetti }) => {
 					<a className="font-semibold focus:outline-none focus-visible:underline">Showtime profile &rarr;</a>
 				</Link>
 			</p>
-			<div className="flex items-center space-x-4">
+			<div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
 				<Button style="tertiary" as="a" href={`https://mumbai.polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
 					<PolygonIcon className="w-4 h-4" />
 					<span className="text-sm font-medium">View on Polygon Scan</span>
