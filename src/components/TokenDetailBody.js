@@ -151,7 +151,7 @@ const TokenDetailBody = ({
 					</div>
 				) : null}
 				<div className={`flex flex-shrink-0 items-center md:p-12 ${item.token_has_video || (item.token_animation_url && !item.token_img_url) ? 'bg-black' : ''}`} style={item.token_has_video || (item.token_animation_url && !item.token_img_url) ? null : { backgroundColor: getBackgroundColor() }} ref={targetRef}>
-					{item.token_has_video || (item.token_animation_url && !item.token_img_url) ? (
+					{!item.mime_type?.startsWith('model') && (item.token_has_video || (item.token_animation_url && !item.token_img_url)) ? (
 						<ReactPlayer
 							url={item.token_animation_url}
 							playing={true}
