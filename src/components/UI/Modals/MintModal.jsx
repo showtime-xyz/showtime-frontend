@@ -183,7 +183,7 @@ const MintModal = ({ open, onClose }) => {
 
 		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MINTING_CONTRACT, minterAbi, biconomy.getSignerByAddress(signerAddress))
 
-		const { data } = await contract.populateTransaction.issueToken(signerAddress, editionCount, contentHash, 0)
+		const { data } = await contract.populateTransaction.issueToken(signerAddress, editionCount, contentHash, 0, signerAddress, royaltiesPercentage * 100)
 
 		const provider = biconomy.getEthersProvider()
 
@@ -197,10 +197,14 @@ const MintModal = ({ open, onClose }) => {
 				},
 			])
 			.catch(error => {
-				if (error.code != 4001) throw error
+				if (error.code === 4001) throw setModalPage(MODAL_PAGES.GENERAL)
 
-				// We throw here to stop execution
-				throw setModalPage(MODAL_PAGES.GENERAL)
+				if (JSON.parse(error?.body || error?.error?.body || '{}')?.error?.message?.includes('caller is not minter')) {
+					alert('Your address is not approved for minting.')
+					throw setModalPage(MODAL_PAGES.GENERAL)
+				}
+
+				throw error
 			})
 
 		resetDraft()
