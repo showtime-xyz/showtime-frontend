@@ -95,8 +95,8 @@ const MintModal = ({ open, onClose }) => {
 		setModalPage(MODAL_PAGES.GENERAL)
 	}
 
-	const saveDraft = () => axios.post('/api/mint/draft', { title, description, number_of_copies: editionCount, nsfw: notSafeForWork, price: price || null, royalties: royaltiesPercentage, currency, ipfs_hash: ipfsHash, agreed_to_terms: hasAcceptedTerms, media_type: sourcePreview.type })
-	const resetDraft = () => axios.post('/api/mint/draft', { title: null, description: null, number_of_copies: 1, nsfw: false, price: null, royalties: 10, currency: 'ETH', ipfs_hash: null, agreed_to_terms: false, media_type: null })
+	const saveDraft = () => axios.post('/api/mint/draft', { title, description, number_of_copies: editionCount, nsfw: notSafeForWork, price: price || null, royalties: royaltiesPercentage, currency, ipfs_hash: ipfsHash, agreed_to_terms: hasAcceptedTerms, mime_type: sourcePreview.src ? `${sourcePreview.type}/${sourcePreview.ext}` : null })
+	const markDraftMinted = () => axios.post('/api/mint/draft', { title, description, number_of_copies: editionCount, nsfw: notSafeForWork, price: price || null, royalties: royaltiesPercentage, currency, ipfs_hash: ipfsHash, agreed_to_terms: hasAcceptedTerms, mime_type: sourcePreview.src ? `${sourcePreview.type}/${sourcePreview.ext}` : null, minted: true })
 
 	const loadDraft = async () => {
 		const draft = await axios.get('/api/mint/draft').then(({ data }) => data)
@@ -110,7 +110,7 @@ const MintModal = ({ open, onClose }) => {
 		setEditionCount(parseInt(draft.number_of_copies) || 1)
 		setRoyaltiesPercentage(parseInt(draft.royalties) || 10)
 		setIpfsHash(draft.ipfs_hash || null)
-		if (draft.ipfs_hash) setSourcePreview({ type: draft.media_type.toLowerCase(), size: '??', ext: '??', src: `https://gateway.pinata.cloud/ipfs/${draft.ipfs_hash}` })
+		if (draft.ipfs_hash) setSourcePreview({ type: draft.mime_type.split('/')[0], size: '??', ext: draft.mime_type.split('/')[1], src: `https://gateway.pinata.cloud/ipfs/${draft.ipfs_hash}` })
 	}
 
 	useEffect(() => {
@@ -207,7 +207,7 @@ const MintModal = ({ open, onClose }) => {
 				throw error
 			})
 
-		resetDraft()
+		markDraftMinted()
 		setTransactionHash(transaction)
 
 		provider.once(transaction, result => {
