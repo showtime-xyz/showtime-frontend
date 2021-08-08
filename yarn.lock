@@ -12381,10 +12381,10 @@ web3@^1.4.0:
     web3-shh "1.4.0"
     web3-utils "1.4.0"
 
-web3modal@^1.9.3:
-  version "1.9.3"
-  resolved "https://registry.yarnpkg.com/web3modal/-/web3modal-1.9.3.tgz#d965e565875ad70684fb7e735a69c719eb5e8d07"
-  integrity sha512-Z8mVHeTFa9eBNKvRipJfZDoJgeHBbh/WDLjzZZLgFmoBJgT81mc5blnh4mUjtButLCJAouV8iN4+2c5ebYvJFA==
+web3modal@^1.9.4:
+  version "1.9.4"
+  resolved "https://registry.yarnpkg.com/web3modal/-/web3modal-1.9.4.tgz#c5f9b88ec38b22f1efd6960968c68fbdf1e0c4c8"
+  integrity sha512-hnbdbOjkntVFcFliXT9whb8rMk8FJ+dkQIyZlDxTnQ3pHnGTEMNCsWetA6j7CTQd5xwzdq1lYgcswXeFmSf/mA==
   dependencies:
     detect-browser "^5.1.0"
     prop-types "^15.7.2"
