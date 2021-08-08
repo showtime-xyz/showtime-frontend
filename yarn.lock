@@ -831,10 +831,10 @@
     "@hapi/cryptiles" "5.x.x"
     "@hapi/hoek" "9.x.x"
 
-"@headlessui/react@^1.0.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.3.0.tgz#62287c92604923e5dfb394483e5ec2463e1baea6"
-  integrity sha512-2gqTO6BQ3Jr8vDX1B67n1gl6MGKTt6DBmR+H0qxwj0gTMnR2+Qpktj8alRWxsZBODyOiBb77QSQpE/6gG3MX4Q==
+"@headlessui/react@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.4.0.tgz#c6d424d8ab10ac925e4423d7f3cbab02c30d736a"
+  integrity sha512-C+FmBVF6YGvqcEI5fa2dfVbEaXr2RGR6Kw1E5HXIISIZEfsrH/yuCgsjWw5nlRF9vbCxmQ/EKs64GAdKeb8gCw==
 
 "@heroicons/react@^1.0.2":
   version "1.0.2"
@@ -948,25 +948,25 @@
     express "^4.17.1"
     node-fetch "^2.6.0"
 
-"@magic-sdk/commons@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/commons/-/commons-1.1.0.tgz#253fbbb8846b79e8defacda68ac30b0ac3581e7c"
-  integrity sha512-10CHQg6lMzWALccugQ7LZC3jOYaKMaEOJTfugrjMMgVntBtRPLPrQBz8+Vw9fl4tbGWtjCWcxVsrx5Wela2DHg==
+"@magic-sdk/commons@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/commons/-/commons-1.2.0.tgz#0f8f150472b941c1df93d42bd83a596cf3724205"
+  integrity sha512-55VoaMghEuCTemhbTnWyNl94AzCZX9VqjsOx8l9kNsa6GMxbjF2a0E87HgUxK4/AOnQLi2NbPVPpklm1ASyCLw==
 
-"@magic-sdk/provider@^4.3.0":
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/provider/-/provider-4.3.0.tgz#dd2718906158fae4172c0f191198f5935af85308"
-  integrity sha512-/tqUcJwW71TcOrF+xF8m+FJN9REZrifYzG0Kon4voFfc9bJTvw/OgxFViRNbY9QLNp38iiAJVBGZCTPH7LV1WQ==
+"@magic-sdk/provider@^4.4.0":
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/provider/-/provider-4.4.0.tgz#4b00cd42717ddf58707b225dc7d6fc0bec3c9d3b"
+  integrity sha512-yT/3nLoXiiMfhXIeoGudMAOXuhzCUHaifiY8FqsOxI0e3nlfdue5FcFdCHTNnYz0/bguDEiLUr+jLPRO0V0Oqg==
   dependencies:
-    "@magic-sdk/types" "^3.1.1"
+    "@magic-sdk/types" "^3.2.0"
     eventemitter3 "^4.0.4"
     semver "^7.3.2"
     tslib "^2.0.3"
 
-"@magic-sdk/types@^3.1.1":
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/types/-/types-3.1.1.tgz#95b7d19aaa56c45b95b652860ee70d33f1d25a4b"
-  integrity sha512-k1X9/BardJobPN+/duS1ad2kIdZaags5WxlaVdtL8s9nh5AcmeV9SHsEoLySD21qnsHIDJUFZYjDfNG3onPqfw==
+"@magic-sdk/types@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/types/-/types-3.2.0.tgz#3d7fe0c8705a01ad7d85ab23311eb5fb434d1344"
+  integrity sha512-MSr9TCuGpMwQHWD1wMlSd9QCp6qGGbvcmKyP9EF36FOhyBpJyp3R3g8Jcft2nEJFFjiEjj2F64ghp8+oHXto+w==
   dependencies:
     tslib "^2.0.3"
 
@@ -7634,16 +7634,16 @@ ltgt@~2.1.1:
   resolved "https://registry.yarnpkg.com/ltgt/-/ltgt-2.1.3.tgz#10851a06d9964b971178441c23c9e52698eece34"
   integrity sha1-EIUaBtmWS5cReEQcI8nlJpjuzjQ=
 
-magic-sdk@^4.0.2:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/magic-sdk/-/magic-sdk-4.3.0.tgz#8794fe8fa2673a7c73cb61e49c5095604f92ae2c"
-  integrity sha512-Iz/SzO7hJz5Lw/CyJjTKcLgByDhLgg1rfNLHzvYLov3fcU9APAQGJqB5LCYAKI45AsLLwknS6l0gWaXhkjx51Q==
+magic-sdk@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/magic-sdk/-/magic-sdk-4.4.0.tgz#bd18e6d9bfe8b88268d600962e513112c3975086"
+  integrity sha512-WbsonXrNzuhXPlM2P58oCzIwHzvLHFHLZGHrOoMCpFOiSgplW/t/CXLDcaQw6tfG69NYa+mqDluGuM+0TI9N9g==
   dependencies:
     "@babel/core" "^7.9.6"
     "@babel/runtime" "^7.9.6"
-    "@magic-sdk/commons" "^1.1.0"
-    "@magic-sdk/provider" "^4.3.0"
-    "@magic-sdk/types" "^3.1.1"
+    "@magic-sdk/commons" "^1.2.0"
+    "@magic-sdk/provider" "^4.4.0"
+    "@magic-sdk/types" "^3.2.0"
     localforage "^1.7.4"
     localforage-driver-memory "^1.0.5"
     regenerator-runtime "0.13.5"
@@ -11613,10 +11613,10 @@ vm-browserify@1.1.2, vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
-walletlink@^2.1.0, walletlink@^2.1.6:
-  version "2.1.6"
-  resolved "https://registry.yarnpkg.com/walletlink/-/walletlink-2.1.6.tgz#4e48310af09bb0c940a156c26c1d0b1b9506ddb9"
-  integrity sha512-4M+8GrDq4zUCcRsbpBVIwMLVxJ8Fg8ybWi1E6K9d2cYHO1S9WnzsV5MN6HDyThBci00a+O3tKeUD++nVaUyA5g==
+walletlink@^2.1.0, walletlink@^2.1.7:
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/walletlink/-/walletlink-2.1.7.tgz#fdfa3760cbed2b597ebaa4583a47ca63427173f1"
+  integrity sha512-PU3Ejmmd/et5x+yzJmikzABpltqV35LZIkieE6o58UOkRQ2WT6EZu1nneFFUxLiSSy2CO+qTjIWkWtaTrgmGeA==
   dependencies:
     "@metamask/safe-event-emitter" "2.0.0"
     bind-decorator "^1.0.11"
@@ -12381,10 +12381,10 @@ web3@^1.4.0:
     web3-shh "1.4.0"
     web3-utils "1.4.0"
 
-web3modal@^1.9.3:
-  version "1.9.3"
-  resolved "https://registry.yarnpkg.com/web3modal/-/web3modal-1.9.3.tgz#d965e565875ad70684fb7e735a69c719eb5e8d07"
-  integrity sha512-Z8mVHeTFa9eBNKvRipJfZDoJgeHBbh/WDLjzZZLgFmoBJgT81mc5blnh4mUjtButLCJAouV8iN4+2c5ebYvJFA==
+web3modal@^1.9.4:
+  version "1.9.4"
+  resolved "https://registry.yarnpkg.com/web3modal/-/web3modal-1.9.4.tgz#c5f9b88ec38b22f1efd6960968c68fbdf1e0c4c8"
+  integrity sha512-hnbdbOjkntVFcFliXT9whb8rMk8FJ+dkQIyZlDxTnQ3pHnGTEMNCsWetA6j7CTQd5xwzdq1lYgcswXeFmSf/mA==
   dependencies:
     detect-browser "^5.1.0"
     prop-types "^15.7.2"
