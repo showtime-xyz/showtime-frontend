@@ -44,7 +44,7 @@
     "fortmatic": "^2.2.1",
     "libsodium-wrappers": "^0.7.9",
     "lodash": "^4.17.20",
-    "magic-sdk": "^4.0.2",
+    "magic-sdk": "^4.4.0",
     "mixpanel-browser": "^2.40.1",
     "next": "^11.0.1",
     "next-connect": "^0.10.2",
