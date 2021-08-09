@@ -1,4 +1,4 @@
-import { useState, useRef, Fragment } from 'react'
+import { useState, useRef, Fragment, useEffect } from 'react'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import LikeButton from './LikeButton'
@@ -9,12 +9,13 @@ import mixpanel from 'mixpanel-browser'
 import TokenCardImage from '@/components/TokenCardImage'
 import { formatAddressShort, truncateWithEllipses, classNames } from '@/lib/utilities'
 import axios from '@/lib/axios'
-import { MenuIcon } from '@heroicons/react/solid'
+import { MenuIcon, PlayIcon } from '@heroicons/react/solid'
 import EllipsisIcon from './Icons/EllipsisIcon'
 import BadgeIcon from './Icons/BadgeIcon'
 import { Menu, Transition } from '@headlessui/react'
 import MiniFollowButton from './MiniFollowButton'
 import useProfile from '@/hooks/useProfile'
+import OrbitIcon from './Icons/OrbitIcon'
 
 const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
 	const { myProfile } = useProfile()
@@ -22,6 +23,15 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 	const [showVideo, setShowVideo] = useState(false)
 	const [muted, setMuted] = useState(true)
 	const [refreshing, setRefreshing] = useState(false)
+	const [showModel, setShowModel] = useState(false)
+
+	// Automatically load models that have no preview image. We don't account for video here because currently token_animation_url is a glb file.
+	useEffect(() => {
+		if (!item || !item.mime_type?.startsWith('model')) return
+		if (item.token_img_url || item.token_img_original_url) return
+
+		setShowModel(true)
+	}, [item])
 
 	const divRef = useRef()
 
@@ -184,9 +194,37 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 							}}
 						>
 							<div style={{ backgroundColor: getBackgroundColor(item) }}>
-								<TokenCardImage nft={item} />
+								<TokenCardImage nft={item} showModel={showModel} />
 							</div>
 						</div>
+						{item.mime_type?.startsWith('model') ? (
+							showModel ? null : (
+								<div
+									className="p-2.5 opacity-80 hover:opacity-100 absolute bottom-0 right-0 cursor-pointer"
+									onClick={() => {
+										mixpanel.track('Load 3d model for card')
+										setShowModel(true)
+									}}
+								>
+									<div className="flex items-center space-x-1 text-white rounded-full py-1 px-2 -my-1 -mx-1 bg-black bg-opacity-40">
+										<OrbitIcon className="w-4 h-4" />
+										<span className="font-semibold">3D</span>
+									</div>
+								</div>
+							)
+						) : item.token_has_video || (!item.token_img_url && item.token_animation_url) ? (
+							<div
+								className="p-2.5 opacity-80 hover:opacity-100 absolute bottom-0 right-0 cursor-pointer"
+								onClick={() => {
+									mixpanel.track('Play card video')
+									setShowVideo(true)
+									setMuted(false)
+									setCurrentlyPlayingVideo(item.nft_id)
+								}}
+							>
+								<PlayIcon className="h-6 w-6 text-white filter drop-shadow" />
+							</div>
+						) : null}
 						{refreshing && (
 							<div className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center bg-white dark:bg-black bg-opacity-50 dark:bg-opacity-50">
 								<div className="inline-block w-6 h-6 border-2 border-gray-100 dark:border-gray-300 border-t-gray-800 dark:border-t-gray-800 rounded-full animate-spin mb-2" />
