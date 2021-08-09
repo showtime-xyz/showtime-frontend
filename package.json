@@ -12,7 +12,6 @@
     "@airgap/beacon-sdk": "^2.2.10",
     "@badrap/bar-of-progress": "^0.1.2",
     "@biconomy/mexa": "^2.0.10",
-    "@ethersproject/providers": "^5.4.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-brands-svg-icons": "^5.15.2",
     "@fortawesome/free-regular-svg-icons": "^5.15.2",
