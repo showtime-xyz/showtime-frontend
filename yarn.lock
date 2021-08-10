@@ -9692,10 +9692,10 @@ react-refresh@0.8.3:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.8.3.tgz#721d4657672d400c5e3c75d063c4a85fb2d5d68f"
   integrity sha512-X8jZHc7nCMjaCqoU+V2I0cOhNW+QMBwSUkeXnTi8IPe6zaRWfn60ZzvFDZqWPfmSJfjub7dDW1SP0jaHWLu/hg==
 
-react-scroll@^1.8.2:
-  version "1.8.2"
-  resolved "https://registry.yarnpkg.com/react-scroll/-/react-scroll-1.8.2.tgz#68e35b74ae296c88e7863393c9fd49f05afa29f5"
-  integrity sha512-f2ZEG5fsPbPTySI9ekcFpETCcNlqbmwbQj9hhzYK8tkgv+PA8APatSt66o/q0KSkDZxyT98ONTtXp9x0lyowEw==
+react-scroll@^1.8.3:
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/react-scroll/-/react-scroll-1.8.3.tgz#0aff41567808f548b1b4d893ce6bd551ba1b16ef"
+  integrity sha512-BpEMPUIkLuu3BGZYeaCxDA4tk4Hd25f7da9qGb3a2FY8gURtaVaA62q/Vk2/DChP/4GETp5WMbvkRLaMLzVgwg==
   dependencies:
     lodash.throttle "^4.1.1"
     prop-types "^15.7.2"
