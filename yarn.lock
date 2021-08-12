@@ -4910,16 +4910,16 @@ eth-provider@^0.2.5:
     ws "7.1.2"
     xhr2-cookies "1.1.0"
 
-eth-provider@^0.9.1:
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/eth-provider/-/eth-provider-0.9.1.tgz#e6ae2c0e9158b26e5cd5eca3af51e6fb1c687f82"
-  integrity sha512-/uXCJR9WNQwbj9i56oZaqyC9d2NG+oAq4w7HRICgK5dap1OsI9QqrPf2LQkxIKRlZOgE9O7A3GtJtVpY2bydaw==
+eth-provider@^0.9.3:
+  version "0.9.3"
+  resolved "https://registry.yarnpkg.com/eth-provider/-/eth-provider-0.9.3.tgz#aeb5ef6b265c709848e5091c627f5e04a309cf7f"
+  integrity sha512-D6A4JlXFIWuEkh1lebgkx98RUe2dtgNZwjlKwhRYZCd4OGqSBb6OCx9XHw9BiQdNGAxjxj38dlxBoSiGxvZAkw==
   dependencies:
-    ethereum-provider "0.4.1"
+    ethereum-provider "0.4.3"
     events "3.3.0"
     oboe "2.1.5"
     uuid "8.3.2"
-    ws "7.5.3"
+    ws "8.0.0"
     xhr2-cookies "1.1.0"
 
 eth-query@^2.0.2, eth-query@^2.1.0, eth-query@^2.1.2:
@@ -5099,10 +5099,10 @@ ethereum-provider@0.0.6:
   resolved "https://registry.yarnpkg.com/ethereum-provider/-/ethereum-provider-0.0.6.tgz#6f5a0427c34872339667d9904a8692e8992e6bf5"
   integrity sha512-DqtdXNHGi/QtOjEovNOegVVQTd8/NnH9rP27R5SU3j2LKECZbcLGIZ3Z9Ln1SDaeUC5YJGJFYQCUUjfIi7NNyQ==
 
-ethereum-provider@0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/ethereum-provider/-/ethereum-provider-0.4.1.tgz#86ca16d4c9f0ced6e0ad605ffd9a7dafc1921515"
-  integrity sha512-rz4kDSjkA3PYntSHBIUbd2+sSKUFgencQ/E2Tyqjfhi+3Ayhx3WyRLBV17cZ3rS58+QGpDO+X9t2rz0yHD4dCg==
+ethereum-provider@0.4.3:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/ethereum-provider/-/ethereum-provider-0.4.3.tgz#fb046c4c5e93875fcbfe845cad3571e2fb60ae9e"
+  integrity sha512-NVdah6tDhKO5CjBcuZ774YbiKchTy1PK/SyEsKdGA7Rv1cFg2TW0WPnzK2+BrQ6Y9XxL+wxStfWgfC4ZklRghg==
   dependencies:
     events "3.3.0"
 
@@ -12383,10 +12383,10 @@ ws@7.4.6:
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.6.tgz#5654ca8ecdeee47c33a9a4bf6d28e2be2980377c"
   integrity sha512-YmhHDO4MzaDLB+M9ym/mDA5z0naX8j7SIlT8f8z+I0VtzsRbekxEutHSme7NPS2qE8StCYQNUnfWdXta/Yu85A==
 
-ws@7.5.3:
-  version "7.5.3"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.3.tgz#160835b63c7d97bfab418fc1b8a9fced2ac01a74"
-  integrity sha512-kQ/dHIzuLrS6Je9+uv81ueZomEwH0qVYstcAQ4/Z93K8zeko9gtAbttJWzoC5ukqXY1PpoouV3+VSOqEAFt5wg==
+ws@8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.0.0.tgz#550605d13dfc1437c9ec1396975709c6d7ffc57d"
+  integrity sha512-6AcSIXpBlS0QvCVKk+3cWnWElLsA6SzC0lkQ43ciEglgXJXiCWK3/CGFEJ+Ybgp006CMibamAsqOlxE9s4AvYA==
 
 ws@^3.0.0:
   version "3.3.3"
