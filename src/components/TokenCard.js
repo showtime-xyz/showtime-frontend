@@ -1,5 +1,5 @@
 import { useState, useRef, Fragment } from 'react'
-import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
+import { DEFAULT_PROFILE_PIC, SHOWTIME_CONTRACTS } from '@/lib/constants'
 import Link from 'next/link'
 import LikeButton from './LikeButton'
 import CommentButton from './CommentButton'
@@ -18,7 +18,7 @@ import useProfile from '@/hooks/useProfile'
 import { useEffect } from 'react'
 import XIcon from './Icons/XIcon'
 
-const TokenCard = ({ originalItem, isPreview = false, onPreviewClose, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
+const TokenCard = ({ originalItem, isPreview = false, onPreviewClose, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, setTransferModal, setBurnModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
 	const { myProfile } = useProfile()
 	const [item, setItem] = useState(originalItem)
 	const [showVideo, setShowVideo] = useState(isPreview)
@@ -152,6 +152,26 @@ const TokenCard = ({ originalItem, isPreview = false, onPreviewClose, isMyProfil
 												</button>
 											)}
 										</Menu.Item>
+										{SHOWTIME_CONTRACTS.includes(item.contract_address) && item?.owner_id === myProfile.profile_id && (
+											<>
+												<Menu.Item>
+													{({ active }) => (
+														<button onClick={() => setTransferModal(item)} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+															<span className="block truncate font-medium">Transfer</span>
+														</button>
+													)}
+												</Menu.Item>
+												<hr className="border-gray-100 dark:border-gray-700 my-1" />
+
+												<Menu.Item>
+													{({ active }) => (
+														<button onClick={() => setBurnModal(item)} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-red-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+															<span className="block truncate font-medium text-red-500 dark:text-red-700">Burn</span>
+														</button>
+													)}
+												</Menu.Item>
+											</>
+										)}
 									</Menu.Items>
 								</Transition>
 							</Menu>
