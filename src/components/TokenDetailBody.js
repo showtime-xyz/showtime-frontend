@@ -23,6 +23,7 @@ import backend from '@/lib/backend'
 import UsersWhoLiked from './UsersWhoLiked'
 import MiniFollowButton from './MiniFollowButton'
 import UsersWhoOwn from './UsersWhoOwn'
+import OrbitIcon from './Icons/OrbitIcon'
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500
@@ -184,7 +185,7 @@ const TokenDetailBody = ({
 										}}
 										className="flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all rounded-lg p-3 hidden md:flex"
 									>
-										<div className="">
+										<div>
 											<FontAwesomeIcon icon={faExpand} width={18} height={18} />
 										</div>
 										<div className="ml-2 text-sm">Original</div>
@@ -192,9 +193,17 @@ const TokenDetailBody = ({
 								</div>
 							) : null}
 							{item.mime_type?.startsWith('model') ? (
-								<model-viewer src={item.source_url} class="max-w-full" style={{ height: TOKEN_MEDIA_HEIGHT, width: TOKEN_MEDIA_HEIGHT, '--poster-color': 'transparent' }} autoplay auto-rotate camera-controls ar ar-modes="scene-viewer quick-look" interaction-prompt="none">
-									<span slot="interaction-prompt" />
-								</model-viewer>
+								<div className="relative">
+									<model-viewer src={item.source_url} class="max-w-full" style={{ height: TOKEN_MEDIA_HEIGHT, width: TOKEN_MEDIA_HEIGHT, '--poster-color': 'transparent' }} autoplay auto-rotate camera-controls ar ar-modes="scene-viewer quick-look" interaction-prompt="none">
+										<span slot="interaction-prompt" />
+									</model-viewer>
+									<div className="p-2.5 absolute top-1 right-1">
+										<div className="flex items-center space-x-1 text-white rounded-full py-1 px-2 -my-1 -mx-1 bg-black bg-opacity-40">
+											<OrbitIcon className="w-4 h-4" />
+											<span className="font-semibold">3D</span>
+										</div>
+									</div>
+								</div>
 							) : (
 								<>
 									<img

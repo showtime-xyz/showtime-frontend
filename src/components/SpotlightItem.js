@@ -79,7 +79,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 						<div className="flex-1 text-right">
 							{thisItem?.mime_type?.startsWith('model') ? (
 								<div className="w-full h-full relative">
-									<model-viewer src={item.source_url} class="object-cover w-full h-full" camera-controls autoplay auto-rotate ar ar-modes="scene-viewer quick-look" interaction-prompt="none" onClick={event => event.stopPropagation()} />
+									<model-viewer src={item.source_url} class="object-cover w-full h-full min-h-[20rem] md:min-h-none" camera-controls autoplay auto-rotate ar ar-modes="scene-viewer quick-look" interaction-prompt="none" onClick={event => event.stopPropagation()} />
 									<div className="p-2.5 absolute top-1 right-1">
 										<div className="flex items-center space-x-1 text-white rounded-full py-1 px-2 -my-1 -mx-1 bg-black bg-opacity-40">
 											<OrbitIcon className="w-4 h-4" />
