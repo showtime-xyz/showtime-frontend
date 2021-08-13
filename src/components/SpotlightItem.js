@@ -1,4 +1,4 @@
-import { useRef, useContext, useState, Fragment } from 'react'
+import { useRef, useContext, useState, Fragment, useEffect } from 'react'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import LikeButton from './LikeButton'
@@ -16,8 +16,14 @@ import axios from '@/lib/axios'
 import { Menu, Transition } from '@headlessui/react'
 import EllipsisIcon from './Icons/EllipsisIcon'
 import BadgeIcon from './Icons/BadgeIcon'
+import OrbitIcon from './Icons/OrbitIcon'
 
 const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) => {
+	useEffect(() => {
+		if (!item?.mime_type?.startsWith('model') || window.customElements.get('model-viewer')) return
+		import('@google/model-viewer')
+	}, [item?.mime_type])
+
 	const [moreShown, setMoreShown] = useState(false)
 	const [imageLoaded, setImageLoaded] = useState(false)
 	const [muted, setMuted] = useState(true)
@@ -69,108 +75,116 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 
 			<CappedWidth>
 				<div className="relative">
-					<div ref={divRef} className="md:w-3/4 mx-auto flex items-center flex-col md:flex-row md:p-0">
+					<div ref={divRef} className="md:w-3/4 mx-auto flex items-stretch flex-col md:flex-row md:p-0">
 						<div className="flex-1 text-right">
-							<div>
-								{thisItem.token_has_video || (!thisItem.token_img_url && thisItem.token_animation_url) ? (
-									<>
-										<div className={`w-full h-full ${videoReady ? 'hidden' : null}`}>
-											<div className="w-full text-center flex items-center mt-24 justify-center">
-												<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
-											</div>
+							{thisItem?.mime_type?.startsWith('model') ? (
+								<div className="w-full h-full relative">
+									<model-viewer src={item.source_url} class="object-cover w-full h-full" camera-controls autoplay auto-rotate ar ar-modes="scene-viewer quick-look" interaction-prompt="none" onClick={event => event.stopPropagation()} />
+									<div className="p-2.5 absolute top-1 right-1">
+										<div className="flex items-center space-x-1 text-white rounded-full py-1 px-2 -my-1 -mx-1 bg-black bg-opacity-40">
+											<OrbitIcon className="w-4 h-4" />
+											<span className="font-semibold">3D</span>
 										</div>
-										<div className={`w-full shadow-lg h-full relative ${videoReady ? '' : 'invisible'}`}>
-											<ReactPlayer
-												url={thisItem.token_animation_url}
-												playing={currentlyPlayingVideo}
-												loop
-												controls
-												muted={muted}
-												className={'w-full h-full'}
-												width={isMobile ? '100%' : divRef?.current?.clientWidth ? divRef?.current?.clientWidth / 2 : null}
-												height={'1'}
-												playsinline
-												onReady={() => setVideoReady(true)}
-												config={{
-													file: {
-														attributes: {
-															onContextMenu: e => e.preventDefault(),
-															controlsList: 'nodownload',
-														},
+									</div>
+								</div>
+							) : thisItem.token_has_video || (!thisItem.token_img_url && thisItem.token_animation_url) ? (
+								<>
+									<div className={`w-full h-full ${videoReady ? 'hidden' : null}`}>
+										<div className="w-full text-center flex items-center mt-24 justify-center">
+											<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
+										</div>
+									</div>
+									<div className={`w-full shadow-lg h-full relative ${videoReady ? '' : 'invisible'}`}>
+										<ReactPlayer
+											url={thisItem.token_animation_url}
+											playing={currentlyPlayingVideo}
+											loop
+											controls
+											muted={muted}
+											className={'w-full h-full'}
+											width={isMobile ? '100%' : divRef?.current?.clientWidth ? divRef?.current?.clientWidth / 2 : null}
+											height={'1'}
+											playsinline
+											onReady={() => setVideoReady(true)}
+											config={{
+												file: {
+													attributes: {
+														onContextMenu: e => e.preventDefault(),
+														controlsList: 'nodownload',
 													},
-												}}
-											/>
-											{refreshing && (
-												<div className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center bg-white dark:bg-black bg-opacity-50 dark:bg-opacity-50">
-													<div className="inline-block w-6 h-6 border-2 border-gray-100 dark:border-gray-300 border-t-gray-800 dark:border-t-gray-800 rounded-full animate-spin mb-2" />
-													<p className="dark:text-gray-300">Refreshing...</p>
-												</div>
-											)}
-										</div>
-									</>
-								) : (
-									<div className="relative">
-										<div
-											onClick={() => {
-												mixpanel.track('Open NFT modal')
-												setCurrentlyOpenModal(true)
-												setMuted(true)
-												setCurrentlyPlayingVideo(false)
+												},
 											}}
-											className="cursor-pointer text-right flex flex-row"
-											ref={imgContainerRef}
-										>
-											{!imageLoaded ? (
-												<div className="w-full text-center flex items-center justify-center" style={{ height: divRef?.current?.clientWidth ? divRef?.current?.clientWidth : 375 }}>
-													<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
-												</div>
-											) : null}
-
-											<img
-												className="hover:opacity-90 transition-all shadow-lg"
-												ref={item.imageRef}
-												src={getImageUrl()}
-												alt={item.token_name}
-												onLoad={() => setImageLoaded(true)}
-												style={{
-													...(!imageLoaded
-														? { display: 'none' }
-														: isMobile
-														? {
-																backgroundColor: getBackgroundColor(item),
-																width: divRef?.current?.clientWidth,
-																height: item.token_aspect_ratio && divRef?.current?.clientWidth ? divRef?.current?.clientWidth / item.token_aspect_ratio : null,
-														  }
-														: !(item.token_aspect_ratio && imgContainerRef?.current?.clientWidth) // use defaults if aspect ratio unknown
-														? {
-																backgroundColor: getBackgroundColor(item),
-																maxHeight: 500,
-														  }
-														: imgContainerRef?.current?.clientWidth / item.token_aspect_ratio > 500 // going to be too tall, need to rescale
-														? {
-																backgroundColor: getBackgroundColor(item),
-																maxHeight: 500,
-																width: 500 / (1 / item.token_aspect_ratio),
-																height: 500,
-														  }
-														: {
-																backgroundColor: getBackgroundColor(item),
-																maxHeight: 500,
-																width: imgContainerRef?.current?.clientWidth,
-																height: item.token_aspect_ratio && imgContainerRef?.current?.clientWidth ? imgContainerRef?.current?.clientWidth / item.token_aspect_ratio : null,
-														  }),
-												}}
-											/>
-										</div>
+										/>
 										{refreshing && (
-											<div className="absolute inset-0 cursor-pointer flex items-center justify-center bg-white bg-opacity-50">
-												<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin mb-2" />
-												<div>Refreshing...</div>
+											<div className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center bg-white dark:bg-black bg-opacity-50 dark:bg-opacity-50">
+												<div className="inline-block w-6 h-6 border-2 border-gray-100 dark:border-gray-300 border-t-gray-800 dark:border-t-gray-800 rounded-full animate-spin mb-2" />
+												<p className="dark:text-gray-300">Refreshing...</p>
 											</div>
 										)}
 									</div>
-								)}
-							</div>
+								</>
+							) : (
+								<div className="relative">
+									<div
+										onClick={() => {
+											mixpanel.track('Open NFT modal')
+											setCurrentlyOpenModal(true)
+											setMuted(true)
+											setCurrentlyPlayingVideo(false)
+										}}
+										className="cursor-pointer text-right flex flex-row"
+										ref={imgContainerRef}
+									>
+										{!imageLoaded ? (
+											<div className="w-full text-center flex items-center justify-center" style={{ height: divRef?.current?.clientWidth ? divRef?.current?.clientWidth : 375 }}>
+												<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
+											</div>
+										) : null}
+
+										<img
+											className="hover:opacity-90 transition-all shadow-lg"
+											ref={item.imageRef}
+											src={getImageUrl()}
+											alt={item.token_name}
+											onLoad={() => setImageLoaded(true)}
+											style={{
+												...(!imageLoaded
+													? { display: 'none' }
+													: isMobile
+													? {
+															backgroundColor: getBackgroundColor(item),
+															width: divRef?.current?.clientWidth,
+															height: item.token_aspect_ratio && divRef?.current?.clientWidth ? divRef?.current?.clientWidth / item.token_aspect_ratio : null,
+													  }
+													: !(item.token_aspect_ratio && imgContainerRef?.current?.clientWidth) // use defaults if aspect ratio unknown
+													? {
+															backgroundColor: getBackgroundColor(item),
+															maxHeight: 500,
+													  }
+													: imgContainerRef?.current?.clientWidth / item.token_aspect_ratio > 500 // going to be too tall, need to rescale
+													? {
+															backgroundColor: getBackgroundColor(item),
+															maxHeight: 500,
+															width: 500 / (1 / item.token_aspect_ratio),
+															height: 500,
+													  }
+													: {
+															backgroundColor: getBackgroundColor(item),
+															maxHeight: 500,
+															width: imgContainerRef?.current?.clientWidth,
+															height: item.token_aspect_ratio && imgContainerRef?.current?.clientWidth ? imgContainerRef?.current?.clientWidth / item.token_aspect_ratio : null,
+													  }),
+											}}
+										/>
+									</div>
+									{refreshing && (
+										<div className="absolute inset-0 cursor-pointer flex items-center justify-center bg-white bg-opacity-50">
+											<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin mb-2" />
+											<div>Refreshing...</div>
+										</div>
+									)}
+								</div>
+							)}
 						</div>
 						<div className="flex-1 text-left mt-3 md:mt-4 md:pl-12 w-full p-6 pb-0 md:p-0">
 							<div>
