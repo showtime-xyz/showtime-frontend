@@ -2,7 +2,12 @@ import { useState, useEffect, useRef } from 'react'
 import ReactPlayer from 'react-player'
 import { BlurhashCanvas } from 'react-blurhash'
 
-const TokenCardImage = ({ nft, isPreview = false }) => {
+const TokenCardImage = ({ nft, showModel = false }) => {
+	useEffect(() => {
+		if (!nft?.mime_type?.startsWith('model') || window.customElements.get('model-viewer')) return
+		import('@google/model-viewer')
+	}, [nft?.mime_type])
+
 	const aRef = useRef()
 	const [hasLoadedImage, setHasLoadedImage] = useState(false)
 	const [hasLoadedAnimation, setHasLoadedAnimation] = useState(false)
@@ -24,7 +29,7 @@ const TokenCardImage = ({ nft, isPreview = false }) => {
 
 	return (
 		<div
-			className={`flex-1 ${isPreview ? '' : 'cursor-pointer hover:opacity-90'} overflow-hidden transition-all`}
+			className="flex-1 cursor-pointer hover:opacity-90 overflow-hidden transition-all"
 			ref={aRef}
 			style={{
 				height: imgWidth,
@@ -32,8 +37,8 @@ const TokenCardImage = ({ nft, isPreview = false }) => {
 			}}
 		>
 			{nft.blurhash && !hasLoadedImage && !hasLoadedAnimation && <BlurhashCanvas className="object-cover w-full h-full" hash={nft.blurhash} width={400} height={300} punch={2} />}
-			{nft.token_img_url && !(nft.token_has_video && hasLoadedAnimation) && <img src={getImageUrl(nft.token_img_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" onLoad={() => setHasLoadedImage(true)} />}
-			{nft.token_has_video && nft.animation_preview_url && (
+			{nft.token_img_url && !(nft.token_has_video && hasLoadedAnimation) && !(nft.mime_type?.startsWith('model') && showModel) && <img src={getImageUrl(nft.token_img_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" onLoad={() => setHasLoadedImage(true)} />}
+			{nft.animation_preview_url && nft.token_has_video && (
 				<ReactPlayer
 					url={nft?.animation_preview_url}
 					playing={true}
@@ -75,6 +80,7 @@ const TokenCardImage = ({ nft, isPreview = false }) => {
 					}}
 				/>
 			)}
+			{nft.mime_type?.startsWith('model') && showModel && <model-viewer src={nft.source_url} class="object-cover w-full h-full" camera-controls autoplay auto-rotate ar ar-modes="scene-viewer quick-look" interaction-prompt="none" onClick={event => event.stopPropagation()} />}
 		</div>
 	)
 }
