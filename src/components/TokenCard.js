@@ -1,4 +1,4 @@
-import { useState, useRef, Fragment } from 'react'
+import { useState, useRef, Fragment, useEffect } from 'react'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import LikeButton from './LikeButton'
@@ -15,6 +15,7 @@ import BadgeIcon from './Icons/BadgeIcon'
 import { Menu, Transition } from '@headlessui/react'
 import MiniFollowButton from './MiniFollowButton'
 import useProfile from '@/hooks/useProfile'
+import OrbitIcon from './Icons/OrbitIcon'
 
 const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
 	const { myProfile } = useProfile()
@@ -22,6 +23,15 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 	const [showVideo, setShowVideo] = useState(false)
 	const [muted, setMuted] = useState(true)
 	const [refreshing, setRefreshing] = useState(false)
+	const [showModel, setShowModel] = useState(false)
+
+	// Automatically load models that have no preview image. We don't account for video here because currently token_animation_url is a glb file.
+	useEffect(() => {
+		if (!item || !item.mime_type?.startsWith('model')) return
+		if (item.token_img_url || item.token_img_original_url) return
+
+		setShowModel(true)
+	}, [item])
 
 	const divRef = useRef()
 
@@ -184,10 +194,25 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 							}}
 						>
 							<div style={{ backgroundColor: getBackgroundColor(item) }}>
-								<TokenCardImage nft={item} />
+								<TokenCardImage nft={item} showModel={showModel} />
 							</div>
 						</div>
-						{item.token_has_video || (!item.token_img_url && item.token_animation_url) ? (
+						{item.mime_type?.startsWith('model') ? (
+							showModel ? null : (
+								<div
+									className="p-2.5 opacity-80 hover:opacity-100 absolute bottom-0 right-0 cursor-pointer"
+									onClick={() => {
+										mixpanel.track('Load 3d model for card')
+										setShowModel(true)
+									}}
+								>
+									<div className="flex items-center space-x-1 text-white rounded-full py-1 px-2 -my-1 -mx-1 bg-black bg-opacity-40">
+										<OrbitIcon className="w-4 h-4" />
+										<span className="font-semibold">3D</span>
+									</div>
+								</div>
+							)
+						) : item.token_has_video || (!item.token_img_url && item.token_animation_url) ? (
 							<div
 								className="p-2.5 opacity-80 hover:opacity-100 absolute bottom-0 right-0 cursor-pointer"
 								onClick={() => {

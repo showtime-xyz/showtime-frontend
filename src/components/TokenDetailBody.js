@@ -23,6 +23,7 @@ import backend from '@/lib/backend'
 import UsersWhoLiked from './UsersWhoLiked'
 import MiniFollowButton from './MiniFollowButton'
 import UsersWhoOwn from './UsersWhoOwn'
+import OrbitIcon from './Icons/OrbitIcon'
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500
@@ -36,6 +37,11 @@ const TokenDetailBody = ({
 	parentReportModalOpen, // for full page view only, not modal view
 	parentSetReportModalOpen, // for full page view only, not modal view
 }) => {
+	useEffect(() => {
+		if (!item.mime_type?.startsWith('model') || window.customElements.get('model-viewer')) return
+		import('@google/model-viewer')
+	}, [])
+
 	const context = useContext(AppContext)
 	const { isMobile } = context
 	const getBackgroundColor = () => {
@@ -146,7 +152,7 @@ const TokenDetailBody = ({
 					</div>
 				) : null}
 				<div className={`flex flex-shrink-0 items-center md:p-12 ${item.token_has_video || (item.token_animation_url && !item.token_img_url) ? 'bg-black' : ''}`} style={item.token_has_video || (item.token_animation_url && !item.token_img_url) ? null : { backgroundColor: getBackgroundColor() }} ref={targetRef}>
-					{item.token_has_video || (item.token_animation_url && !item.token_img_url) ? (
+					{!item.mime_type?.startsWith('model') && (item.token_has_video || (item.token_animation_url && !item.token_img_url)) ? (
 						<ReactPlayer
 							url={item.token_animation_url}
 							playing={true}
@@ -168,39 +174,55 @@ const TokenDetailBody = ({
 							}}
 						/>
 					) : (
-						<div className="m-auto">
-							<div className="w-max p absolute right-0 m-2.5 z-0 top-14 sm:top-0">
-								{isMobile || item.token_has_video || (item.token_animation_url && !item.token_img_url) ? null : item.token_img_url ? (
+						<div className="m-auto w-full md:w-auto">
+							{isMobile || item.token_has_video || (item.token_animation_url && !item.token_img_url) ? null : item.token_img_url && !item.mime_type?.startsWith('model') ? (
+								<div className="w-max absolute right-0 m-2.5 z-0 top-14 sm:top-0">
 									<button
 										type="button"
 										onClick={() => {
 											setLightboxOpen(true)
 											mixpanel.track('Original clicked')
 										}}
-										className="flex flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all rounded-lg p-3 hidden md:flex"
+										className="flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all rounded-lg p-3 hidden md:flex"
 									>
-										<div className="">
+										<div>
 											<FontAwesomeIcon icon={faExpand} width={18} height={18} />
 										</div>
 										<div className="ml-2 text-sm">Original</div>
 									</button>
-								) : null}
-							</div>
-							<img
-								src={getImageUrl(item.token_img_url, item.token_aspect_ratio)}
-								alt={item.token_name}
-								className={fullResLoaded === true ? 'hidden' : ''}
-								style={
-									context.isMobile
-										? {
-												width: mediaWidth,
-												height: item.token_aspect_ratio ? mediaWidth / item.token_aspect_ratio : null,
-										  }
-										: { height: TOKEN_MEDIA_HEIGHT }
-								}
-							/>
+								</div>
+							) : null}
+							{item.mime_type?.startsWith('model') ? (
+								<div className="relative">
+									<model-viewer src={item.source_url} class="max-w-full" style={{ height: TOKEN_MEDIA_HEIGHT, width: TOKEN_MEDIA_HEIGHT, '--poster-color': 'transparent' }} autoplay auto-rotate camera-controls ar ar-modes="scene-viewer quick-look" interaction-prompt="none">
+										<span slot="interaction-prompt" />
+									</model-viewer>
+									<div className="p-2.5 absolute top-1 right-1">
+										<div className="flex items-center space-x-1 text-white rounded-full py-1 px-2 -my-1 -mx-1 bg-black bg-opacity-40">
+											<OrbitIcon className="w-4 h-4" />
+											<span className="font-semibold">3D</span>
+										</div>
+									</div>
+								</div>
+							) : (
+								<>
+									<img
+										src={getImageUrl(item.token_img_url, item.token_aspect_ratio)}
+										alt={item.token_name}
+										className={fullResLoaded === true ? 'hidden' : ''}
+										style={
+											context.isMobile
+												? {
+														width: mediaWidth,
+														height: item.token_aspect_ratio ? mediaWidth / item.token_aspect_ratio : null,
+												  }
+												: { height: TOKEN_MEDIA_HEIGHT }
+										}
+									/>
 
-							<img src={context.isMobile ? getImageUrl(item.token_img_url) : getBiggerImageUrl(item.token_img_url)} alt={item.token_name} className={fullResLoaded === true ? '' : 'hidden'} style={context.isMobile ? { width: mediaWidth } : { height: TOKEN_MEDIA_HEIGHT }} onLoad={() => setTimeout(() => setFullResLoaded(true), 100)} />
+									<img src={context.isMobile ? getImageUrl(item.token_img_url) : getBiggerImageUrl(item.token_img_url)} alt={item.token_name} className={fullResLoaded === true ? '' : 'hidden'} style={context.isMobile ? { width: mediaWidth } : { height: TOKEN_MEDIA_HEIGHT }} onLoad={() => setTimeout(() => setFullResLoaded(true), 100)} />
+								</>
+							)}
 						</div>
 					)}
 				</div>

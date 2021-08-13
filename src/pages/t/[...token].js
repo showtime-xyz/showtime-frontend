@@ -7,27 +7,27 @@ import AppContext from '@/context/app-context'
 import ModalReportItem from '@/components/ModalReportItem'
 import TokenDetailBody from '@/components/TokenDetailBody'
 
-export async function getServerSideProps(context) {
-	const { res } = context
-
-	const { token: token_array } = context.query
-	const contract_address = token_array[0]
-	const token_id = token_array[1]
-
-	const response_token = await backend.get(`/v2/token/${contract_address}/${token_id}`)
-	const token = response_token.data.data.item
+export async function getServerSideProps({
+	query: {
+		token: [contract_address, token_id],
+	},
+}) {
+	const token = await backend
+		.get(`/v2/token/${contract_address}/${token_id}`)
+		.then(
+			({
+				data: {
+					data: { item },
+				},
+			}) => item
+		)
+		.catch(() => null)
 
 	if (token) {
-		return {
-			props: {
-				token,
-			}, // will be passed to the page component as props
-		}
-	} else {
-		res.writeHead(404)
-		res.end()
-		return { props: {} }
+		return { props: { token } }
 	}
+
+	return { notFound: true }
 }
 
 export default function Token({ token }) {

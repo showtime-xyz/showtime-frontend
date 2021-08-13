@@ -11,6 +11,7 @@
   "dependencies": {
     "@airgap/beacon-sdk": "^2.2.10",
     "@badrap/bar-of-progress": "^0.1.2",
+    "@google/model-viewer": "^1.7.2",
     "@ethersproject/providers": "^5.4.3",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-brands-svg-icons": "^5.15.4",
