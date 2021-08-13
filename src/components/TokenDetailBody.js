@@ -173,9 +173,9 @@ const TokenDetailBody = ({
 							}}
 						/>
 					) : (
-						<div className="m-auto">
-							<div className="w-max p absolute right-0 m-2.5 z-0 top-14 sm:top-0">
-								{isMobile || item.token_has_video || (item.token_animation_url && !item.token_img_url) ? null : item.token_img_url && !item.mime_type?.startsWith('model') ? (
+						<div className="m-auto w-full">
+							{isMobile || item.token_has_video || (item.token_animation_url && !item.token_img_url) ? null : item.token_img_url && !item.mime_type?.startsWith('model') ? (
+								<div className="w-max absolute right-0 m-2.5 z-0 top-14 sm:top-0">
 									<button
 										type="button"
 										onClick={() => {
@@ -189,10 +189,10 @@ const TokenDetailBody = ({
 										</div>
 										<div className="ml-2 text-sm">Original</div>
 									</button>
-								) : null}
-							</div>
+								</div>
+							) : null}
 							{item.mime_type?.startsWith('model') ? (
-								<model-viewer src={item.source_url} style={{ height: TOKEN_MEDIA_HEIGHT, width: TOKEN_MEDIA_HEIGHT, '--poster-color': 'transparent' }} autoplay auto-rotate camera-controls ar ar-modes="scene-viewer quick-look" interaction-prompt="none">
+								<model-viewer src={item.source_url} class="max-w-full" style={{ height: TOKEN_MEDIA_HEIGHT, width: TOKEN_MEDIA_HEIGHT, '--poster-color': 'transparent' }} autoplay auto-rotate camera-controls ar ar-modes="scene-viewer quick-look" interaction-prompt="none">
 									<span slot="interaction-prompt" />
 								</model-viewer>
 							) : (
