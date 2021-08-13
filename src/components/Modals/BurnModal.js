@@ -124,9 +124,11 @@ const BurnModal = ({ open, onClose, token }) => {
 						<div className="inline-block align-bottom rounded-t-3xl sm:rounded-b-3xl text-left overflow-hidden transform transition-all sm:align-middle bg-white shadow-xl sm:max-w-lg w-full">
 							<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
 								<h2 className="text-gray-900 dark:text-white text-xl font-bold">Burn NFT</h2>
-								<button onClick={trueOnClose} className="p-3 -my-3 hover:bg-gray-100 disabled:hidden rounded-xl transition">
-									<XIcon className="w-4 h-4" />
-								</button>
+								{modalState !== MODAL_STATES.PROCESSING && (
+									<button onClick={trueOnClose} className="p-3 -my-3 hover:bg-gray-100 disabled:hidden rounded-xl transition">
+										<XIcon className="w-4 h-4" />
+									</button>
+								)}
 							</div>
 							{renderedState}
 						</div>
