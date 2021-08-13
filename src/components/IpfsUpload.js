@@ -13,6 +13,8 @@ import TextIcon from './Icons/TextIcon'
 import FileIcon from './Icons/FileIcon'
 import CheckIcon from './Icons/CheckIcon'
 
+const MAX_FILE_SIZE = 1024 * 1024 * 50 // 50MB
+
 const IpfsUpload = ({ ipfsHash: baseIpfsHash, onChange = () => null, fileDetails, setFileDetails }) => {
 	const [uploadProgress, setUploadProgress] = useState(null)
 	const [ipfsHash, setIpfsHash] = useState(baseIpfsHash)
@@ -38,6 +40,7 @@ const IpfsUpload = ({ ipfsHash: baseIpfsHash, onChange = () => null, fileDetails
 	const onFileUpload = async event => {
 		const file = event.target.files?.[0]
 		if (!file) return
+		if (file.size > MAX_FILE_SIZE) return alert('File too big! Please use a file smaller than 50MB.')
 
 		setUploadProgress(0)
 		setFileDetails({ type: file.type.split('/')[0], size: file.size < 1000000 ? Math.floor(file.size / 1000) + 'kb' : Math.floor(file.size / 1000000) + 'mb', ext: file.type.split('/')[1], src: URL.createObjectURL(file) })
