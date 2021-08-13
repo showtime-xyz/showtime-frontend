@@ -193,3 +193,5 @@ export const MINT_FORMATS = {
 	// text: ['.txt', '.md'],
 	// file: ['.pdf', '.psd', '.ai'],
 }
+
+export const SHOWTIME_CONTRACTS = [process.env.NEXT_PUBLIC_MINTING_CONTRACT]

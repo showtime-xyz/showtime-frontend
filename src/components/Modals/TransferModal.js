@@ -1,33 +1,34 @@
 import useProfile from '@/hooks/useProfile'
+import axios from '@/lib/axios'
 import { getBiconomy } from '@/lib/biconomy'
 import getWeb3Modal from '@/lib/web3Modal'
 import { Dialog, Transition } from '@headlessui/react'
+import { ExclamationIcon } from '@heroicons/react/outline'
 import { ethers } from 'ethers'
 import { useTheme } from 'next-themes'
-import { useRef, useState } from 'react'
-import { Fragment } from 'react'
+import { useState, Fragment, useRef } from 'react'
+import useSWR from 'swr'
+import BadgeIcon from '../Icons/BadgeIcon'
+import PolygonIcon from '../Icons/PolygonIcon'
 import XIcon from '../Icons/XIcon'
 import Button from '../UI/Buttons/Button'
 import minterAbi from '@/data/ShowtimeMT.json'
-import PolygonIcon from '../Icons/PolygonIcon'
-import { ExclamationIcon } from '@heroicons/react/outline'
+
+const addressRegex = /^0x[a-fA-F0-9]{40}$/
 
 const MODAL_STATES = {
 	GENERAL: 'general',
 	PROCESSING: 'processing',
-	BURNING: 'burning',
-	BURNED: 'burned',
-	CHANGE_WALLET: 'wrong_wallet',
+	TRANSACTION: 'transaction',
+	SUCCESS: 'success',
+	CHANGE_WALLET: 'change_wallet',
 }
 
-const BurnModal = ({ open, onClose, token }) => {
+const TransferModal = ({ open, onClose, token }) => {
 	const { myProfile } = useProfile()
 	const { resolvedTheme } = useTheme()
 	const isWeb3ModalActive = useRef(false)
 	const [modalState, setModalState] = useState(MODAL_STATES.GENERAL)
-
-	const [quantity, setQuantity] = useState(1)
-	const [transactionHash, setTransactionHash] = useState(null)
 
 	const trueOnClose = () => {
 		if (isWeb3ModalActive.current || modalState === MODAL_STATES.PROCESSING) return
@@ -35,7 +36,11 @@ const BurnModal = ({ open, onClose, token }) => {
 		onClose()
 	}
 
-	const burnToken = async () => {
+	const [quantity, setQuantity] = useState(1)
+	const [address, setAddress] = useState('')
+	const [transactionHash, setTransactionHash] = useState(null)
+
+	const transferToken = async () => {
 		setModalState(MODAL_STATES.PROCESSING)
 
 		const web3Modal = getWeb3Modal({ theme: resolvedTheme })
@@ -49,6 +54,9 @@ const BurnModal = ({ open, onClose, token }) => {
 
 		const signerAddress = await web3.getSigner().getAddress()
 
+		console.log(address)
+		console.log(await web3.resolveName(address))
+
 		if (
 			!myProfile?.wallet_addresses_v2
 				?.filter(address => address.minting_enabled)
@@ -60,7 +68,7 @@ const BurnModal = ({ open, onClose, token }) => {
 
 		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MINTING_CONTRACT, minterAbi, biconomy.getSignerByAddress(signerAddress))
 
-		const { data } = await contract.populateTransaction.burn(signerAddress, token.token_id, quantity)
+		const { data } = await contract.populateTransaction.safeTransferFrom(signerAddress, address, token.token_id, quantity, 0)
 
 		const provider = biconomy.getEthersProvider()
 
@@ -76,8 +84,8 @@ const BurnModal = ({ open, onClose, token }) => {
 			.catch(error => {
 				if (error.code === 4001) throw setModalState(MODAL_STATES.GENERAL)
 
-				if (JSON.parse(error?.body || error?.error?.body || '{}')?.error?.message?.includes('burn amount exceeds balance')) {
-					alert("Burn failed: You're trying to burn more tokens than you own.")
+				if (JSON.parse(error?.body || error?.error?.body || '{}')?.error?.message?.includes('transfer amount exceeds balance')) {
+					alert("Burn failed: You're trying to transfer more tokens than you own.")
 					throw setModalState(MODAL_STATES.GENERAL)
 				}
 
@@ -87,23 +95,23 @@ const BurnModal = ({ open, onClose, token }) => {
 			})
 
 		setTransactionHash(transaction)
-		provider.once(transaction, () => setModalState(MODAL_STATES.BURNED))
+		provider.once(transaction, () => setModalState(MODAL_STATES.SUCCESS))
 
-		setModalState(MODAL_STATES.BURNING)
+		setModalState(MODAL_STATES.TRANSACTION)
 	}
 
 	const renderedState = (type => {
 		switch (type) {
 			case MODAL_STATES.GENERAL:
-				return <GeneralState maxTokens={token?.owner_token_quantity || 1} quantity={quantity} setQuantity={setQuantity} onClose={trueOnClose} burnToken={burnToken} />
+				return <GeneralState {...{ quantity, address, setAddress, setQuantity, transferToken, maxTokens: token?.owner_token_quantity || 1 }} />
 			case MODAL_STATES.PROCESSING:
 				return <LoadingState />
-			case MODAL_STATES.BURNING:
-				return <BurningState transactionHash={transactionHash} />
-			case MODAL_STATES.BURNED:
-				return <BurnedState transactionHash={transactionHash} />
+			case MODAL_STATES.TRANSACTION:
+				return <TransactionState transactionHash={transactionHash} />
+			case MODAL_STATES.SUCCESS:
+				return <SuccessState transactionHash={transactionHash} />
 			case MODAL_STATES.CHANGE_WALLET:
-				return <WalletErrorState burnToken={burnToken} />
+				return <WalletErrorState transferToken={transferToken} />
 		}
 	})(modalState)
 
@@ -123,10 +131,12 @@ const BurnModal = ({ open, onClose, token }) => {
 					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enterTo="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 translate-y-0 sm:scale-100" leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
 						<div className="inline-block align-bottom rounded-t-3xl sm:rounded-b-3xl text-left overflow-hidden transform transition-all sm:align-middle bg-white shadow-xl sm:max-w-lg sm:w-full ">
 							<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
-								<h2 className="text-gray-900 dark:text-white text-xl font-bold">Burn NFT</h2>
-								<button onClick={trueOnClose} className="p-3 -my-3 hover:bg-gray-100 disabled:hidden rounded-xl transition">
-									<XIcon className="w-4 h-4" />
-								</button>
+								<h2 className="text-gray-900 dark:text-white text-xl font-bold">Tranfer NFT</h2>
+								{modalState !== MODAL_STATES.PROCESSING && (
+									<button onClick={trueOnClose} className="p-3 -my-3 hover:bg-gray-100 disabled:hidden rounded-xl transition">
+										<XIcon className="w-4 h-4" />
+									</button>
+								)}
 							</div>
 							{renderedState}
 						</div>
@@ -137,52 +147,82 @@ const BurnModal = ({ open, onClose, token }) => {
 	)
 }
 
-const GeneralState = ({ maxTokens, quantity, setQuantity, onClose, burnToken }) => (
-	<>
-		<div className="p-4 space-y-4 border-b border-gray-100 dark:border-gray-900 text-gray-900 dark:text-white">
-			<p className="font-medium">Are you sure you want to burn this NFT?</p>
-			<p className="font-medium">This can’t be undone and it will be sent to a burn address.</p>
-		</div>
-		<div className="p-4 border-b border-gray-100 dark:border-gray-900">
-			<div className="flex items-center justify-between space-x-4">
-				<div className="flex-1">
-					<p className="font-semibold text-gray-900 dark:text-white">Quantity</p>
-					<p className="text-sm font-medium text-gray-700 dark:text-gray-300">1 by default</p>
+const GeneralState = ({ quantity, address, setAddress, setQuantity, transferToken, maxTokens }) => {
+	const { data: transferringTo, isValidating: loadingTransferAddress } = useSWR(
+		() => (addressRegex.test(address) || address.includes('.')) && `/api/profile/card?wallet=${address}`,
+		url => axios.get(url).then(res => res.data?.data?.profile)
+	)
+
+	return (
+		<>
+			<div className="p-4 border-b border-gray-100 dark:border-gray-900">
+				<div className="flex items-center justify-between space-x-4">
+					<div className="flex-1">
+						<p className="font-semibold text-gray-900 dark:text-white">Quantity</p>
+						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">1 by default</p>
+					</div>
+					<input type="number" min="1" max={maxTokens} placeholder="1" className="px-4 py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring max-w-[60px] no-spinners" value={quantity} onChange={event => setQuantity(event.target.value)} />
 				</div>
-				<input type="number" min="1" max={maxTokens} placeholder="1" className="px-4 py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring max-w-[60px] no-spinners" value={quantity} onChange={event => setQuantity(event.target.value)} />
 			</div>
-		</div>
-		<div className="p-4">
-			<div className="flex items-center justify-between">
-				<Button style="tertiary" onClick={onClose}>
-					Cancel
-				</Button>
-				<Button style="danger" onClick={burnToken}>
-					Burn
+			<div className="p-4 border-b border-gray-100 dark:border-gray-900 space-y-4">
+				<div className="flex-1">
+					<p className="font-semibold text-gray-900 dark:text-white">Receiver</p>
+					<p className="text-sm font-medium text-gray-700 dark:text-gray-300">Paste an ENS domain or Ethereum address below</p>
+				</div>
+				{transferringTo?.profile_id ? (
+					<div className="flex items-center justify-between rounded-3xl border-2 border-gray-100 p-4">
+						<div className="flex items-center space-x-2">
+							<img src={transferringTo.img_url} className="w-8 h-8 rounded-full" />
+							<div>
+								<div className="flex items-center space-x-1">
+									<p className="text-sm font-semibold text-gray-900 dark:text-white">{transferringTo.name}</p>
+									{transferringTo.verified == 1 && <BadgeIcon className="w-4 h-4 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+								</div>
+								<p className="text-xs text-gray-700 font-medium">@{transferringTo.username}</p>
+							</div>
+						</div>
+						<div>
+							<button onClick={() => setAddress('')} className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full hover">
+								<XIcon className="w-4 h-4" />
+							</button>
+						</div>
+					</div>
+				) : (
+					<input type="text" placeholder="Paste here" className="px-4 py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring w-full" value={address} onChange={event => setAddress(event.target.value)} />
+				)}
+				{loadingTransferAddress && !transferringTo && (
+					<div className="text-center w-full">
+						<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
+					</div>
+				)}
+			</div>
+			<div className="p-4">
+				<Button onClick={transferToken} style="primary" className="w-full flex items-center justify-center">
+					Transfer
 				</Button>
 			</div>
-		</div>
-	</>
-)
+		</>
+	)
+}
 
 const LoadingState = () => {
 	return (
 		<div tabIndex="0" className="focus:outline-none p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
 			<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
 			<div className="space-y-1">
-				<p className="font-medium text-gray-900 dark:text-white text-center">Preparing to burn this NFT...</p>
+				<p className="font-medium text-gray-900 dark:text-white text-center">Preparing the transfer...</p>
 				<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs">We'll ask you to confirm with your preferred wallet shortly.</p>
 			</div>
 		</div>
 	)
 }
 
-const BurningState = ({ transactionHash }) => {
+const TransactionState = ({ transactionHash }) => {
 	return (
 		<div className="p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
 			<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
 			<div className="space-y-1">
-				<p className="font-medium text-gray-900 dark:text-white text-center">Your NFT is being burned on the Polygon network.</p>
+				<p className="font-medium text-gray-900 dark:text-white text-center">Your NFT is being transferred on the Polygon network.</p>
 				<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs mx-auto">Feel free to navigate away from this screen</p>
 			</div>
 			<Button style="tertiary" as="a" href={`https://mumbai.polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
@@ -193,11 +233,11 @@ const BurningState = ({ transactionHash }) => {
 	)
 }
 
-const BurnedState = ({ transactionHash }) => {
+const SuccessState = ({ transactionHash }) => {
 	return (
 		<div className="p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
-			<p className="font-medium text-5xl">🔥</p>
-			<p className="font-medium text-gray-900 dark:text-white text-center">Your NFT has been forever burned on the Polygon network. It might still show up on your profile for a few minutes.</p>
+			<p className="font-medium text-5xl">🎉</p>
+			<p className="font-medium text-gray-900 dark:text-white text-center">Your NFT has been transferred on the Polygon network. It might still show up on your profile for a few minutes.</p>
 			<Button style="tertiary" as="a" href={`https://mumbai.polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
 				<PolygonIcon className="w-4 h-4" />
 				<span className="text-sm font-medium">View on Polygon Scan</span>
@@ -206,16 +246,16 @@ const BurnedState = ({ transactionHash }) => {
 	)
 }
 
-const WalletErrorState = ({ burnToken }) => {
+const WalletErrorState = ({ transferToken }) => {
 	return (
 		<div tabIndex="0" className="p-12 space-y-5 flex-1 flex flex-col items-center justify-center focus:outline-none">
 			<div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 sm:mx-0 sm:h-10 sm:w-10">
 				<ExclamationIcon className="h-6 w-6 text-yellow-600" aria-hidden="true" />
 			</div>
-			<p className="font-medium text-gray-900 text-center">The wallet you selected is not the owner of this NFT.</p>
+			<p className="font-medium text-gray-900 text-center">The wallet you selected does not own this NFT.</p>
 			<p className="font-medium text-gray-900 text-center max-w-xs mx-auto">
 				Please{' '}
-				<button onClick={burnToken} className="font-semibold focus:outline-none focus-visible:underline">
+				<button onClick={transferToken} className="font-semibold focus:outline-none focus-visible:underline">
 					try again with a different wallet
 				</button>
 				.
@@ -224,4 +264,4 @@ const WalletErrorState = ({ burnToken }) => {
 	)
 }
 
-export default BurnModal
+export default TransferModal
