@@ -83,8 +83,8 @@ export default function ActivityImage({ nft, index, numberOfImages, openModal, s
 			onMouseLeave={() => setIsHovering(false)}
 		>
 			{nft.mime_type?.startsWith('model') && showModel && <model-viewer src={nft.source_url} class="object-cover w-full h-full" autoplay camera-controls auto-rotate ar ar-modes="scene-viewer quick-look" interaction-prompt="none" onClick={event => event.stopPropagation()} />}
-			{nft.token_img_url && !((nft.token_has_video || (nft.token_animation_url && !nft.token_img_url)) && numberOfImages === 1) && <img src={numberOfImages === 1 ? getImageUrlLarge(nft.token_img_url, nft.token_aspect_ratio) : getImageUrl(nft.token_img_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" />}
-			{(nft.token_has_video || (nft.token_animation_url && !nft.token_img_url)) && (!nft.token_img_url || numberOfImages === 1) && (
+			{nft.token_img_url && !(((nft.token_has_video && !nft.mime_type?.startsWith('model')) || (nft.token_animation_url && !nft.token_img_url)) && numberOfImages === 1) && <img src={numberOfImages === 1 ? getImageUrlLarge(nft.token_img_url, nft.token_aspect_ratio) : getImageUrl(nft.token_img_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" />}
+			{!nft.mime_type?.startsWith('model') && (nft.token_has_video || (nft.token_animation_url && !nft.token_img_url)) && (!nft.token_img_url || numberOfImages === 1) && (
 				<ReactPlayer
 					url={nft?.token_animation_url}
 					playing={true}
