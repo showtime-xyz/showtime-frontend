@@ -78,6 +78,11 @@ const MintModal = ({ open, onClose }) => {
 	const [transactionHash, setTransactionHash] = useState('')
 	const [tokenID, setTokenID] = useState('')
 
+	useEffect(() => {
+		if (sourcePreview.type !== 'model' || window.customElements.get('model-viewer')) return
+		import('@google/model-viewer')
+	}, [sourcePreview.type])
+
 	const resetForm = () => {
 		setTitle('')
 		setDescription('')
@@ -251,7 +256,7 @@ const MintModal = ({ open, onClose }) => {
 
 					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enterTo="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 translate-y-0 sm:scale-100" leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
 						<div className="inline-flex flex-col md:flex-row items-stretch align-bottom rounded-t-3xl md:rounded-b-3xl text-left overflow-hidden transform transition-all sm:align-middle bg-black dark:bg-gray-900 relative z-20 md:max-h-[85vh]">
-							{sourcePreview.src && <div className="p-10 flex items-center justify-center">{sourcePreview.type === 'video' ? <video src={sourcePreview.src} className="md:max-w-sm w-auto h-auto max-h-full" autoPlay loop muted /> : <img src={sourcePreview.src} className="md:max-w-sm w-auto h-auto max-h-full" />}</div>}
+							{sourcePreview.src && <div className="p-10 flex items-center justify-center">{sourcePreview.type == 'model' ? <model-viewer src={sourcePreview.src} autoplay camera-controls auto-rotate ar ar-modes="scene-viewer quick-look" interaction-prompt="none" /> : sourcePreview.type === 'video' ? <video src={sourcePreview.src} className="md:max-w-sm w-auto h-auto max-h-full" autoPlay loop muted /> : <img src={sourcePreview.src} className="md:max-w-sm w-auto h-auto max-h-full" />}</div>}
 							<div className="bg-white dark:bg-black shadow-xl rounded-t-3xl md:rounded-b-3xl sm:max-w-lg sm:w-full flex flex-col">
 								<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
 									{modalPage === MODAL_PAGES.OPTIONS ? (

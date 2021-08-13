@@ -12,6 +12,7 @@ import AudioIcon from './Icons/AudioIcon'
 import TextIcon from './Icons/TextIcon'
 import FileIcon from './Icons/FileIcon'
 import CheckIcon from './Icons/CheckIcon'
+import OrbitIcon from './Icons/OrbitIcon'
 
 const MAX_FILE_SIZE = 1024 * 1024 * 50 // 50MB
 
@@ -42,8 +43,10 @@ const IpfsUpload = ({ ipfsHash: baseIpfsHash, onChange = () => null, fileDetails
 		if (!file) return
 		if (file.size > MAX_FILE_SIZE) return alert('File too big! Please use a file smaller than 50MB.')
 
+		const type = file.type.split('/')[0] || (file.name.endsWith('.glb') || file.name.endsWith('.gltf') ? 'model' : '')
+
 		setUploadProgress(0)
-		setFileDetails({ type: file.type.split('/')[0], size: file.size < 1000000 ? Math.floor(file.size / 1000) + 'kb' : Math.floor(file.size / 1000000) + 'mb', ext: file.type.split('/')[1], src: URL.createObjectURL(file) })
+		setFileDetails({ type, size: file.size < 1000000 ? Math.floor(file.size / 1000) + 'kb' : Math.floor(file.size / 1000000) + 'mb', ext: file.type.split('/')[1] || file.name.split('.').pop(), src: URL.createObjectURL(file) })
 
 		const { token: pinataToken } = await axios.post('/api/pinata/generate-key').then(res => res.data)
 
@@ -131,6 +134,8 @@ const MintIcon = ({ type, ...props }) => {
 			return <ImageIcon {...props} />
 		case 'video':
 			return <VideoIcon {...props} />
+		case 'model':
+			return <OrbitIcon {...props} />
 		case 'audio':
 			return <AudioIcon {...props} />
 		case 'text':
