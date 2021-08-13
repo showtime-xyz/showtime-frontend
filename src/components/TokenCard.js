@@ -152,7 +152,7 @@ const TokenCard = ({ originalItem, isPreview = false, onPreviewClose, isMyProfil
 												</button>
 											)}
 										</Menu.Item>
-										{SHOWTIME_CONTRACTS.includes(item.contract_address) && item?.owner_id === myProfile.profile_id && (
+										{true && item?.owner_id === myProfile.profile_id && (
 											<>
 												<Menu.Item>
 													{({ active }) => (
