@@ -6,6 +6,7 @@ import backend from '@/lib/backend'
 import AppContext from '@/context/app-context'
 import ModalReportItem from '@/components/ModalReportItem'
 import TokenDetailBody from '@/components/TokenDetailBody'
+import { CHAIN_IDENTIFIERS } from '@/lib/constants'
 
 export async function getServerSideProps({
 	query: {
@@ -19,7 +20,7 @@ export async function getServerSideProps({
 	}
 
 	const token = await backend
-		.get(`/v2/token/${contract_address}/${token_id}`)
+		.get(`/v2/token/${contract_address}/${token_id}${chain_name ? `?chain_identifier=${CHAIN_IDENTIFIERS[chain_name]}` : ''}`)
 		.then(
 			({
 				data: {

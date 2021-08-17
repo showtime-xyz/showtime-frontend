@@ -196,3 +196,10 @@ export const MINT_FORMATS = {
 }
 
 export const SHOWTIME_CONTRACTS = [process.env.NEXT_PUBLIC_MINTING_CONTRACT]
+
+export const CHAIN_IDENTIFIERS = {
+	ethereum: 1,
+	tezos: 'NetXdQprcVkpaWU',
+	polygon: 137,
+	mumbai: 80001,
+}
