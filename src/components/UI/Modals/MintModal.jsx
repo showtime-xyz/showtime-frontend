@@ -137,7 +137,7 @@ const MintModal = ({ open, onClose }) => {
 	const isValid = useMemo(() => {
 		if (!canMint || !title || !hasAcceptedTerms || !editionCount || !royaltiesPercentage || !ipfsHash) return false
 		if (putOnSale && (!price || !currency)) return false
-		if (editionCount < 1 || royaltiesPercentage > 100 || royaltiesPercentage < 0) return false
+		if (editionCount < 1 || editionCount > 10000 || royaltiesPercentage > 100 || royaltiesPercentage < 0) return false
 
 		return true
 	}, [title, hasAcceptedTerms, putOnSale, price, currency, editionCount, royaltiesPercentage, canMint, ipfsHash])
@@ -364,7 +364,7 @@ const OptionsPage = ({ editionCount, setEditionCount, royaltiesPercentage, setRo
 						<p className="font-semibold text-gray-900 dark:text-white">Number of Editions</p>
 						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">1 by default</p>
 					</div>
-					<input type="number" min="1" className="px-4 py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring" value={editionCount} onChange={event => setEditionCount(event.target.value)} />
+					<input type="number" min="1" max="10000" className="px-4 py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring" value={editionCount} onChange={event => setEditionCount(event.target.value)} />
 				</div>
 			</div>
 			<div className="p-4 border-b border-gray-100 dark:border-gray-900">
