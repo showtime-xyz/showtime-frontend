@@ -308,7 +308,10 @@ const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, se
 			<div className="p-4 border-b border-gray-100 dark:border-gray-900">
 				<div className="flex items-center justify-between space-x-4">
 					<div>
-						<p className="font-semibold text-gray-900 dark:text-white">Sell</p>
+						<p className="font-semibold text-gray-900 dark:text-white space-x-1">
+							<span>Sell</span>
+							<span className="text-xs text-gray-600 font-medium">(coming soon)</span>
+						</p>
 						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">Enter a fixed price to allow people to purchase your NFT.</p>
 					</div>
 					<Switch value={putOnSale} onChange={setPutOnSale} disabled />
