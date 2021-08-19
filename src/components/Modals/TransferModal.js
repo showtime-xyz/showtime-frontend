@@ -54,9 +54,6 @@ const TransferModal = ({ open, onClose, token }) => {
 
 		const signerAddress = await web3.getSigner().getAddress()
 
-		console.log(address)
-		console.log(await web3.resolveName(address))
-
 		if (
 			!myProfile?.wallet_addresses_v2
 				?.filter(address => address.minting_enabled)
