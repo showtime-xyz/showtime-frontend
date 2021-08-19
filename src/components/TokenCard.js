@@ -16,6 +16,7 @@ import { Menu, Transition } from '@headlessui/react'
 import MiniFollowButton from './MiniFollowButton'
 import useProfile from '@/hooks/useProfile'
 import OrbitIcon from './Icons/OrbitIcon'
+import { CHAIN_IDENTIFIERS } from '../lib/constants'
 
 const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, setTransferModal, setBurnModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
 	const { myProfile } = useProfile()
@@ -155,7 +156,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 												</button>
 											)}
 										</Menu.Item>
-										{SHOWTIME_CONTRACTS.includes(item.contract_address) && item?.owner_id === myProfile.profile_id && (
+										{SHOWTIME_CONTRACTS.includes(item.contract_address) && item?.owner_id && item?.owner_id === myProfile?.profile_id && (
 											<>
 												<Menu.Item>
 													{({ active }) => (
@@ -295,7 +296,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 									}}
 								/>
 							</div>
-							<ShareButton url={window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${item.contract_address}/${item.token_id}`} type={'item'} />
+							<ShareButton url={window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == item.chain_identifier)}/${item.contract_address}/${item.token_id}`} type={'item'} />
 						</div>
 					</div>
 				</div>
