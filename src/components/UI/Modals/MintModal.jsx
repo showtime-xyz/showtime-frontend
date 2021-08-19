@@ -453,7 +453,8 @@ const SuccessPage = ({ transactionHash, tokenID, shotConfetti }) => {
 					<PolygonIcon className="w-4 h-4" />
 					<span className="text-sm font-medium">View on Polygon Scan</span>
 				</Button>
-				<a className="flex items-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-4 py-2 rounded-full space-x-2" href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://tryshowtime.com/t/${process.env.NEXT_PUBLIC_MINTING_CONTRACT}/${tokenID}`)}&text=${encodeURIComponent('🌟 Just minted an awesome new NFT on @tryShowtime!!\n')}`} target="_blank" rel="noreferrer">
+				{/* @TODO: Update this to polygon on launch */}
+				<a className="flex items-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-4 py-2 rounded-full space-x-2" href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://tryshowtime.com/t/mumbai/${process.env.NEXT_PUBLIC_MINTING_CONTRACT}/${tokenID}`)}&text=${encodeURIComponent('🌟 Just minted an awesome new NFT on @tryShowtime!!\n')}`} target="_blank" rel="noreferrer">
 					<TwitterIcon className="w-4 h-auto" />
 					<span className="text-sm font-medium">Share it on Twitter</span>
 				</a>
