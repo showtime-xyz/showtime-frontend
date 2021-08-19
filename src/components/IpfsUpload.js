@@ -13,8 +13,15 @@ import TextIcon from './Icons/TextIcon'
 import FileIcon from './Icons/FileIcon'
 import CheckIcon from './Icons/CheckIcon'
 import OrbitIcon from './Icons/OrbitIcon'
+import Tippy from '@tippyjs/react'
 
 const MAX_FILE_SIZE = 1024 * 1024 * 50 // 50MB
+
+const FILE_TOOLTIP = {
+	image: 'Image',
+	video: 'Video',
+	model: '3D Model',
+}
 
 const IpfsUpload = ({ ipfsHash: baseIpfsHash, onChange = () => null, fileDetails, setFileDetails }) => {
 	const [uploadProgress, setUploadProgress] = useState(null)
@@ -107,10 +114,12 @@ const IpfsUpload = ({ ipfsHash: baseIpfsHash, onChange = () => null, fileDetails
 						<div className="h-5 w-px bg-gray-300 dark:bg-gray-700 mx-4" />
 						<div className="flex items-center space-x-2 text-gray-900 dark:text-white">
 							{MINT_TYPES.map(type => (
-								<label key={type} className="bg-gray-100 dark:bg-gray-900 rounded-full p-2.5 cursor-pointer focus:outline-none focus-visible:ring" tabIndex="0">
-									<input onChange={onFileUpload} type="file" className="hidden" multiple={false} accept={MINT_FORMATS[type].join(',')} capture="environment" />
-									<MintIcon type={type} className="w-5 h-5" />
-								</label>
+								<Tippy content={FILE_TOOLTIP[type]} key={type}>
+									<label className="bg-gray-100 dark:bg-gray-900 rounded-full p-2.5 cursor-pointer focus:outline-none focus-visible:ring" tabIndex="0">
+										<input onChange={onFileUpload} type="file" className="hidden" multiple={false} accept={MINT_FORMATS[type].join(',')} capture="environment" />
+										<MintIcon type={type} className="w-5 h-5" />
+									</label>
+								</Tippy>
 							))}
 						</div>
 					</div>
