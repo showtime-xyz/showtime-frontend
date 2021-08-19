@@ -423,19 +423,27 @@ const MintingPage = ({ transactionHash }) => {
 const SuccessPage = ({ transactionHash, tokenID, shotConfetti }) => {
 	const { myProfile, user } = useContext(AppContext)
 
+	const profileHref = useMemo(() => `/${myProfile?.username || myProfile?.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || myProfile?.wallet_addresses_excluding_email_v2?.[0]?.address || user?.publicAddress}`, [myProfile, user])
+
 	useEffect(() => {
 		shotConfetti()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
+
+	const visitProfile = event => {
+		event.preventDefault()
+
+		window.location = profileHref
+	}
 
 	return (
 		<div className="p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
 			<p className="font-medium text-5xl">🎉</p>
 			<p className="font-medium text-gray-900 dark:text-white text-center">
 				Your NFT has been minted on the Polygon network, you can now view it on your{' '}
-				<Link href={`/${myProfile?.username || myProfile?.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || myProfile?.wallet_addresses_excluding_email_v2?.[0]?.address || user?.publicAddress}`}>
-					<a className="font-semibold focus:outline-none focus-visible:underline">Showtime profile &rarr;</a>
-				</Link>
+				<a href={profileHref} onClick={visitProfile} className="font-semibold focus:outline-none focus-visible:underline">
+					Showtime profile &rarr;
+				</a>
 			</p>
 			<div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
 				<Button style="tertiary" as="a" href={`https://mumbai.polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
