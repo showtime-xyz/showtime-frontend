@@ -336,7 +336,7 @@ const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, se
 					<div>
 						<p className="font-semibold text-gray-900 dark:text-white">Options</p>
 						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-							{editionCount == 1 ? 'Unique' : editionCount} Edition{editionCount == 1 ? '' : 's'} / {royaltiesPercentage}% Royalties
+							{editionCount == 1 ? 'Unique' : editionCount.toLocaleString()} Edition{editionCount == 1 ? '' : 's'} / {royaltiesPercentage}% Royalties
 						</p>
 					</div>
 					<ChevronRight className="w-auto h-4 transform -translate-x-1 group-hover:translate-x-0 transition" />
@@ -360,14 +360,14 @@ const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, se
 
 const OptionsPage = ({ editionCount, setEditionCount, royaltiesPercentage, setRoyaltiesPercentage, notSafeForWork, setNotSafeForWork }) => {
 	return (
-		<div>
+		<div className="md:min-w-[30rem]">
 			<div className="p-4 border-b border-gray-100 dark:border-gray-900">
 				<div className="flex items-center justify-between space-x-4">
 					<div className="flex-1">
 						<p className="font-semibold text-gray-900 dark:text-white">Number of Editions</p>
 						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">1 by default</p>
 					</div>
-					<input type="number" min="1" max="10000" className="px-4 py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring text-right" value={editionCount} onChange={event => setEditionCount(event.target.value)} />
+					<input type="number" min="1" max="10000" className="px-4 py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring text-right" value={editionCount} onChange={event => (event.target.value > 10000 ? setEditionCount(10000) : setEditionCount(event.target.value))} />
 				</div>
 			</div>
 			<div className="p-4 border-b border-gray-100 dark:border-gray-900">
@@ -377,7 +377,7 @@ const OptionsPage = ({ editionCount, setEditionCount, royaltiesPercentage, setRo
 						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">10% by default</p>
 					</div>
 					<div className="flex items-center space-x-2">
-						<input type="number" max="69" step="10" className="px-4 max-w-[60px] py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring no-spinners font-medium text-right" value={royaltiesPercentage} onChange={event => setRoyaltiesPercentage(event.target.value)} />
+						<input type="number" min="0" max="69" step="10" className="px-4 max-w-[60px] py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring no-spinners font-medium text-right" value={royaltiesPercentage} onChange={event => (event.target.value > 69 ? setRoyaltiesPercentage(69) : setRoyaltiesPercentage(event.target.value))} />
 						<PercentageIcon className="w-4 h-4 text-gray-700 dark:text-gray-500" />
 					</div>
 				</div>
