@@ -16,7 +16,6 @@ import useProfile from '@/hooks/useProfile'
 import FireIcon from './Icons/FireIcon'
 import useFlags, { FLAGS } from '@/hooks/useFlags'
 import MintModal from './UI/Modals/MintModal'
-import PlusIcon from './Icons/PlusIcon'
 import Button from './UI/Buttons/Button'
 
 const Header = () => {
