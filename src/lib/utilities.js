@@ -87,7 +87,7 @@ export const getBidLink = item => {
 		case CONTRACTS.HICETNUNC:
 			return `https://www.hicetnunc.xyz/objkt/${item.token_id}`
 		default:
-			return `https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`
+			return `https://opensea.io/assets/${item.chain_identifier == 137 ? 'matic/' : ''}${item.contract_address}/${item.token_id}?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`
 	}
 }
 
