@@ -14,11 +14,11 @@ export default handler()
 			.then(({ data: { data } }) => res.json(data))
 			.catch(() => res.status(200).json({ title: null, description: null, number_of_copies: null, nsfw: null, price: null, royalties: null, currency: null, ipfs_hash: null, agreed_to_terms: null, mime_type: null }))
 	})
-	.post(async ({ user, body: { title, description, number_of_copies, nsfw, price, royalties, currency, ipfs_hash, agreed_to_terms, mime_type } }, res) => {
+	.post(async ({ user, body: { title, description, number_of_copies, nsfw, price, royalties, currency, ipfs_hash, agreed_to_terms, mime_type, minted } }, res) => {
 		backend
 			.post(
 				'v1/set_draft_nft',
-				{ title, description, number_of_copies, nsfw, price, royalties, currency, ipfs_hash, agreed_to_terms, mime_type },
+				{ title, description, number_of_copies, nsfw, price, royalties, currency, ipfs_hash, agreed_to_terms, mime_type, minted },
 				{
 					headers: {
 						'X-Authenticated-User': user.publicAddress,
