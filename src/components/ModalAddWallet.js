@@ -11,9 +11,12 @@ import Fortmatic from 'fortmatic'
 import ScrollableModal from './ScrollableModal'
 import axios from '@/lib/axios'
 import GreenButton from '@/components/UI/Buttons/GreenButton'
+import getWeb3Modal from '@/lib/web3Modal'
+import { useTheme } from 'next-themes'
 
 export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 	const context = useContext(AppContext)
+	const { resolvedTheme } = useTheme()
 	const [signaturePending, setSignaturePending] = useState(false)
 	const [step, setStep] = useState(1)
 
@@ -42,56 +45,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 	}, [myProvider, isOpen])
 
 	useEffect(() => {
-		if (isOpen) {
-			var providerOptions = {
-				walletconnect: {
-					package: WalletConnectProvider,
-					options: {
-						infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
-					},
-				},
-				fortmatic: {
-					package: Fortmatic, // required
-					options: {
-						key: process.env.NEXT_PUBLIC_FORTMATIC_PUB_KEY, // required
-					},
-				},
-			}
-
-			if (!context.isMobile) {
-				providerOptions = {
-					...providerOptions,
-					'custom-walletlink': {
-						display: {
-							logo: '/coinbase.svg',
-							name: 'Coinbase',
-							description: 'Use Coinbase Wallet app on mobile device',
-						},
-						options: {
-							appName: 'Showtime',
-							networkUrl: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`,
-							chainId: process.env.NEXT_PUBLIC_CHAINID,
-						},
-						package: WalletLink,
-						connector: async (_, options) => {
-							const { appName, networkUrl, chainId } = options
-							const walletLink = new WalletLink({
-								appName,
-							})
-							const provider = walletLink.makeWeb3Provider(networkUrl, chainId)
-							await provider.enable()
-							return provider
-						},
-					},
-				}
-			}
-
-			const web3Modal = new Web3Modal({
-				cacheProvider: false, // optional
-				providerOptions, // required
-			})
-			setMyWeb3Modal(web3Modal)
-		}
+		if (isOpen) setMyWeb3Modal(getWeb3Modal({ theme: resolvedTheme }))
 
 		return function cleanup() {
 			if (!myWeb3Modal) return

@@ -13,6 +13,7 @@ import ScrollableModal from './ScrollableModal'
 import axios from '@/lib/axios'
 import { useTheme } from 'next-themes'
 import useAuth from '@/hooks/useAuth'
+import getWeb3Modal from '@/lib/web3Modal'
 
 export default function Modal({ isOpen }) {
 	const context = useContext(AppContext)
@@ -54,57 +55,7 @@ export default function Modal({ isOpen }) {
 	const handleSubmitWallet = async () => {
 		mixpanel.track('Login - wallet button click')
 
-		var providerOptions = {
-			walletconnect: {
-				display: {
-					description: 'Use Rainbow & other popular wallets',
-				},
-				package: WalletConnectProvider,
-				options: {
-					infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
-				},
-			},
-			fortmatic: {
-				package: Fortmatic, // required
-				options: {
-					key: process.env.NEXT_PUBLIC_FORTMATIC_PUB_KEY, // required
-				},
-			},
-		}
-		if (!context.isMobile) {
-			providerOptions = {
-				...providerOptions,
-				'custom-walletlink': {
-					display: {
-						logo: '/coinbase.svg',
-						name: 'Coinbase',
-						description: 'Use Coinbase Wallet app on mobile device',
-					},
-					options: {
-						appName: 'Showtime', // Your app name
-						networkUrl: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`,
-						chainId: process.env.NEXT_PUBLIC_CHAINID,
-					},
-					package: WalletLink,
-					connector: async (_, options) => {
-						const { appName, networkUrl, chainId } = options
-						const walletLink = new WalletLink({
-							appName,
-						})
-						const provider = walletLink.makeWeb3Provider(networkUrl, chainId)
-						await provider.enable()
-						return provider
-					},
-				},
-			}
-		}
-
-		const web3Modal = new Web3Modal({
-			network: 'mainnet', // optional
-			cacheProvider: true, // optional
-			providerOptions, // required
-			theme: resolvedTheme,
-		})
+		const web3Modal = getWeb3Modal({ theme: resolvedTheme })
 
 		let web3
 		if (!context.web3) {

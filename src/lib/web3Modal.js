@@ -5,7 +5,7 @@ import Web3Modal from 'web3modal'
 import { Magic } from 'magic-sdk'
 
 const getWeb3Modal = ({ withMagic = false, theme } = {}) => {
-	return new Web3Modal({
+	const web3Modal = new Web3Modal({
 		network: 'mainnet',
 		cacheProvider: false,
 		providerOptions: {
@@ -69,6 +69,10 @@ const getWeb3Modal = ({ withMagic = false, theme } = {}) => {
 		},
 		theme,
 	})
+
+	web3Modal.clearCachedProvider()
+
+	return web3Modal
 }
 
 export default getWeb3Modal
