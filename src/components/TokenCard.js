@@ -159,29 +159,8 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 						</div>
 					</div>
 				</div>
-				{(item.token_has_video || (!item.token_img_url && item.token_animation_url)) && showVideo && currentlyPlayingVideo === item.nft_id ? (
-					<div className="bg-black">
-						<ReactPlayer
-							url={item.token_animation_url}
-							playing={currentlyPlayingVideo === item.nft_id || ((item.token_has_video || (!item.token_img_url && item.token_animation_url)) && !item.token_img_url)}
-							loop
-							controls
-							muted={muted}
-							width={item.imageRef?.current?.clientWidth}
-							height={item.imageRef?.current?.clientWidth}
-							playsinline
-							// Disable downloading & right click
-							config={{
-								file: {
-									attributes: {
-										onContextMenu: e => e.preventDefault(),
-										controlsList: 'nodownload',
-									},
-								},
-							}}
-						/>
-					</div>
-				) : (
+				{/* Display card content based on mime_type */}
+				{item.mime_type?.startsWith('image') && (
 					<div className="relative">
 						<div
 							className="cursor-pointer"
@@ -197,34 +176,6 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 								<TokenCardImage nft={item} showModel={showModel} />
 							</div>
 						</div>
-						{item.mime_type?.startsWith('model') ? (
-							showModel ? null : (
-								<div
-									className="p-2.5 opacity-80 hover:opacity-100 absolute bottom-0 right-0 cursor-pointer"
-									onClick={() => {
-										mixpanel.track('Load 3d model for card')
-										setShowModel(true)
-									}}
-								>
-									<div className="flex items-center space-x-1 text-white rounded-full py-1 px-2 -my-1 -mx-1 bg-black bg-opacity-40">
-										<OrbitIcon className="w-4 h-4" />
-										<span className="font-semibold">3D</span>
-									</div>
-								</div>
-							)
-						) : item.token_has_video || (!item.token_img_url && item.token_animation_url) ? (
-							<div
-								className="p-2.5 opacity-80 hover:opacity-100 absolute bottom-0 right-0 cursor-pointer"
-								onClick={() => {
-									mixpanel.track('Play card video')
-									setShowVideo(true)
-									setMuted(false)
-									setCurrentlyPlayingVideo(item.nft_id)
-								}}
-							>
-								<PlayIcon className="h-6 w-6 text-white filter drop-shadow" />
-							</div>
-						) : null}
 						{refreshing && (
 							<div className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center bg-white dark:bg-black bg-opacity-50 dark:bg-opacity-50">
 								<div className="inline-block w-6 h-6 border-2 border-gray-100 dark:border-gray-300 border-t-gray-800 dark:border-t-gray-800 rounded-full animate-spin mb-2" />
@@ -241,6 +192,206 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 						)}
 					</div>
 				)}
+				{item.mime_type?.startsWith('video') &&
+					(showVideo && currentlyPlayingVideo === item.nft_id ? (
+						<div className="bg-black">
+							<ReactPlayer
+								url={item.source_url ? item.source_url : item.token_animation_url}
+								playing={currentlyPlayingVideo === item.nft_id}
+								loop
+								controls
+								muted={muted}
+								width={item.imageRef?.current?.clientWidth}
+								height={item.imageRef?.current?.clientWidth}
+								playsinline
+								// Disable downloading & right click
+								config={{
+									file: {
+										attributes: {
+											onContextMenu: e => e.preventDefault(),
+											controlsList: 'nodownload',
+										},
+									},
+								}}
+							/>
+						</div>
+					) : (
+						<div className="relative">
+							<div
+								className="cursor-pointer"
+								onClick={() => {
+									mixpanel.track('Open NFT modal')
+									setCurrentlyOpenModal(item)
+									setShowVideo(false)
+									setMuted(true)
+									setCurrentlyPlayingVideo(null)
+								}}
+							>
+								<div style={{ backgroundColor: getBackgroundColor(item) }}>
+									<TokenCardImage nft={item} showModel={showModel} />
+								</div>
+							</div>
+
+							<div
+								className="p-2.5 opacity-80 hover:opacity-100 absolute bottom-0 right-0 cursor-pointer"
+								onClick={() => {
+									mixpanel.track('Play card video')
+									setShowVideo(true)
+									setMuted(false)
+									setCurrentlyPlayingVideo(item.nft_id)
+								}}
+							>
+								<PlayIcon className="h-6 w-6 text-white filter drop-shadow" />
+							</div>
+
+							{refreshing && (
+								<div className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center bg-white dark:bg-black bg-opacity-50 dark:bg-opacity-50">
+									<div className="inline-block w-6 h-6 border-2 border-gray-100 dark:border-gray-300 border-t-gray-800 dark:border-t-gray-800 rounded-full animate-spin mb-2" />
+									<span className="dark:text-gray-300">Refreshing...</span>
+								</div>
+							)}
+							{isChangingOrder && (
+								<div className="absolute cursor-move inset-0 flex flex-col items-center justify-center bg-white dark:bg-black bg-opacity-70 dark:bg-opacity-70">
+									<div className="p-2 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg shadow flex justify-center items-center">
+										<MenuIcon className="w-5 h-5 text-black dark:text-gray-400 mr-2" aria-hidden="true" />
+										<span className="dark:text-gray-300">Drag to Reorder</span>
+									</div>
+								</div>
+							)}
+						</div>
+					))}
+
+				{item.mime_type?.startsWith('model') && (
+					<div className="relative">
+						<div
+							className="cursor-pointer"
+							onClick={() => {
+								mixpanel.track('Open NFT modal')
+								setCurrentlyOpenModal(item)
+								setShowVideo(false)
+								setMuted(true)
+								setCurrentlyPlayingVideo(null)
+							}}
+						>
+							<div style={{ backgroundColor: getBackgroundColor(item) }}>
+								<TokenCardImage nft={item} showModel={showModel} />
+							</div>
+						</div>
+						{showModel ? null : (
+							<div
+								className="p-2.5 opacity-80 hover:opacity-100 absolute bottom-0 right-0 cursor-pointer"
+								onClick={() => {
+									mixpanel.track('Load 3d model for card')
+									setShowModel(true)
+								}}
+							>
+								<div className="flex items-center space-x-1 text-white rounded-full py-1 px-2 -my-1 -mx-1 bg-black bg-opacity-40">
+									<OrbitIcon className="w-4 h-4" />
+									<span className="font-semibold">3D</span>
+								</div>
+							</div>
+						)}
+						{refreshing && (
+							<div className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center bg-white dark:bg-black bg-opacity-50 dark:bg-opacity-50">
+								<div className="inline-block w-6 h-6 border-2 border-gray-100 dark:border-gray-300 border-t-gray-800 dark:border-t-gray-800 rounded-full animate-spin mb-2" />
+								<span className="dark:text-gray-300">Refreshing...</span>
+							</div>
+						)}
+						{isChangingOrder && (
+							<div className="absolute cursor-move inset-0 flex flex-col items-center justify-center bg-white dark:bg-black bg-opacity-70 dark:bg-opacity-70">
+								<div className="p-2 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg shadow flex justify-center items-center">
+									<MenuIcon className="w-5 h-5 text-black dark:text-gray-400 mr-2" aria-hidden="true" />
+									<span className="dark:text-gray-300">Drag to Reorder</span>
+								</div>
+							</div>
+						)}
+					</div>
+				)}
+
+				{/* Fall back to old code if missing mime_type */}
+				{!item.mime_type &&
+					((item.token_has_video || (!item.token_img_url && item.token_animation_url)) && showVideo && currentlyPlayingVideo === item.nft_id ? (
+						<div className="bg-black">
+							<ReactPlayer
+								url={item.token_animation_url}
+								playing={currentlyPlayingVideo === item.nft_id || ((item.token_has_video || (!item.token_img_url && item.token_animation_url)) && !item.token_img_url)}
+								loop
+								controls
+								muted={muted}
+								width={item.imageRef?.current?.clientWidth}
+								height={item.imageRef?.current?.clientWidth}
+								playsinline
+								// Disable downloading & right click
+								config={{
+									file: {
+										attributes: {
+											onContextMenu: e => e.preventDefault(),
+											controlsList: 'nodownload',
+										},
+									},
+								}}
+							/>
+						</div>
+					) : (
+						<div className="relative">
+							<div
+								className="cursor-pointer"
+								onClick={() => {
+									mixpanel.track('Open NFT modal')
+									setCurrentlyOpenModal(item)
+									setShowVideo(false)
+									setMuted(true)
+									setCurrentlyPlayingVideo(null)
+								}}
+							>
+								<div style={{ backgroundColor: getBackgroundColor(item) }}>
+									<TokenCardImage nft={item} showModel={showModel} />
+								</div>
+							</div>
+							{item.mime_type?.startsWith('model') ? (
+								showModel ? null : (
+									<div
+										className="p-2.5 opacity-80 hover:opacity-100 absolute bottom-0 right-0 cursor-pointer"
+										onClick={() => {
+											mixpanel.track('Load 3d model for card')
+											setShowModel(true)
+										}}
+									>
+										<div className="flex items-center space-x-1 text-white rounded-full py-1 px-2 -my-1 -mx-1 bg-black bg-opacity-40">
+											<OrbitIcon className="w-4 h-4" />
+											<span className="font-semibold">3D</span>
+										</div>
+									</div>
+								)
+							) : item.token_has_video || (!item.token_img_url && item.token_animation_url) ? (
+								<div
+									className="p-2.5 opacity-80 hover:opacity-100 absolute bottom-0 right-0 cursor-pointer"
+									onClick={() => {
+										mixpanel.track('Play card video')
+										setShowVideo(true)
+										setMuted(false)
+										setCurrentlyPlayingVideo(item.nft_id)
+									}}
+								>
+									<PlayIcon className="h-6 w-6 text-white filter drop-shadow" />
+								</div>
+							) : null}
+							{refreshing && (
+								<div className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center bg-white dark:bg-black bg-opacity-50 dark:bg-opacity-50">
+									<div className="inline-block w-6 h-6 border-2 border-gray-100 dark:border-gray-300 border-t-gray-800 dark:border-t-gray-800 rounded-full animate-spin mb-2" />
+									<span className="dark:text-gray-300">Refreshing...</span>
+								</div>
+							)}
+							{isChangingOrder && (
+								<div className="absolute cursor-move inset-0 flex flex-col items-center justify-center bg-white dark:bg-black bg-opacity-70 dark:bg-opacity-70">
+									<div className="p-2 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg shadow flex justify-center items-center">
+										<MenuIcon className="w-5 h-5 text-black dark:text-gray-400 mr-2" aria-hidden="true" />
+										<span className="dark:text-gray-300">Drag to Reorder</span>
+									</div>
+								</div>
+							)}
+						</div>
+					))}
 
 				<div className="p-4">
 					<div>
