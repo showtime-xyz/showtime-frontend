@@ -117,7 +117,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 						</div>
 
 						<div className="flex items-center space-x-2">
-							{myProfile?.profile_id !== item.creator_id && <MiniFollowButton profileId={item.creator_id} />}
+							{myProfile?.profile_id !== item.creator_id && !item.contract_is_creator && item.creator_id && <MiniFollowButton profileId={item.creator_id} />}
 							<Menu as="div" className="relative">
 								{isMyProfile && listId !== 3 ? (
 									<Menu.Button className="text-right text-gray-600 focus:outline-none rounded-xl relative hover:bg-gray-100 dark:hover:bg-gray-800 focus-visible:bg-gray-100 dark:focus-visible:bg-gray-800 py-2 -my-2 px-2 -mx-2 transition">
