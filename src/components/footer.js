@@ -9,7 +9,7 @@ import EmailIcon from './Icons/Social/EmailIcon'
 const Footer = () => {
 	return (
 		<>
-			<footer className="bg-gray-900 py-8 md:py-24 px-4 md:px-40 flex flex-col md:flex-row justify-between space-y-6 md:space-y-0 mt-12">
+			<footer className="bg-gray-900 py-8 md:py-24 px-4 md:px-40 flex flex-col md:flex-row justify-between space-y-6 md:space-y-0">
 				<div className="space-y-4">
 					<Link href="/">
 						<a className="flex items-center space-x-2" onClick={() => mixpanel.track('Footer logo click')}>
