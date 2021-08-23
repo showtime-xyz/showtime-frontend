@@ -109,7 +109,7 @@ export default function ActivityImage({ nft, index, numberOfImages, openModal, s
 									attributes: {
 										onContextMenu: e => e.preventDefault(),
 										controlsList: 'nodownload',
-										style: { objectFit: 'cover', width: '100%', height: '100%' },
+										style: numberOfImages > 1 ? { objectFit: 'cover', width: '100%', height: '100%' } : { width: '100%', height: '100%' },
 									},
 								},
 							}}
