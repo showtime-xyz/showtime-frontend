@@ -36,6 +36,7 @@ const TokenCardImage = ({ nft, showModel = false }) => {
 			}}
 		>
 			{nft.blurhash && !hasLoadedImage && !hasLoadedAnimation && <BlurhashCanvas className="object-cover w-full h-full" hash={nft.blurhash} width={400} height={300} punch={2} />}
+
 			{nft.mime_type?.startsWith('image') && <img src={getImageUrl(nft.still_preview_url ? nft.still_preview_url : nft.token_img_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" onLoad={() => setHasLoadedImage(true)} />}
 
 			{nft.mime_type?.startsWith('video') && (
@@ -64,9 +65,11 @@ const TokenCardImage = ({ nft, showModel = false }) => {
 			{nft.mime_type?.startsWith('model') && (showModel ? <model-viewer src={nft.source_url} class="object-cover w-full h-full" camera-controls autoplay auto-rotate ar ar-modes="scene-viewer quick-look" interaction-prompt="none" onClick={event => event.stopPropagation()} /> : <img src={getImageUrl(nft.still_preview_url ? nft.still_preview_url : nft.token_img_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" onLoad={() => setHasLoadedImage(true)} />)}
 
 			{/* Fall back to old code if missing mime_type */}
-			{!nft.mime_type &&
-				(nft.token_img_url && !(nft.token_has_video && hasLoadedAnimation) && !(nft.mime_type?.startsWith('model') && showModel) && <img src={getImageUrl(nft.token_img_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" onLoad={() => setHasLoadedImage(true)} />)(
-					nft.animation_preview_url && nft.token_has_video && (
+			{!nft.mime_type && (
+				<>
+					{nft.token_img_url && !(nft.token_has_video && hasLoadedAnimation) && !(nft.mime_type?.startsWith('model') && showModel) && <img src={getImageUrl(nft.token_img_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" onLoad={() => setHasLoadedImage(true)} />}
+
+					{nft.animation_preview_url && nft.token_has_video && (
 						<ReactPlayer
 							url={nft?.animation_preview_url}
 							playing={true}
@@ -87,9 +90,9 @@ const TokenCardImage = ({ nft, showModel = false }) => {
 								},
 							}}
 						/>
-					)
-				)(
-					!nft.token_img_url && !nft.animation_preview_url && (nft.token_has_video || (!nft.token_img_url && nft.token_animation_url)) && (
+					)}
+
+					{!nft.token_img_url && !nft.animation_preview_url && (nft.token_has_video || (!nft.token_img_url && nft.token_animation_url)) && (
 						<ReactPlayer
 							url={nft?.token_animation_url}
 							playing={true}
@@ -108,8 +111,9 @@ const TokenCardImage = ({ nft, showModel = false }) => {
 								},
 							}}
 						/>
-					)
-				)}
+					)}
+				</>
+			)}
 		</div>
 	)
 }
