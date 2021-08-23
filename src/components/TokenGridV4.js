@@ -124,7 +124,7 @@ const TokenGridV4 = ({ items, isDetail, onFinish, isLoading, listId, isMyProfile
 		}
 	}, [context.isMobile])
 
-	const fetchMoreData = () => {
+	const fetchMoreData = async () => {
 		if (itemsShowing + itemsToLoad > itemsList.length) {
 			setHasMore(false)
 			onFinish ? onFinish() : null
@@ -151,17 +151,31 @@ const TokenGridV4 = ({ items, isDetail, onFinish, isLoading, listId, isMyProfile
 					<ModalTokenDetail isOpen={currentlyOpenModal} setEditModalOpen={setCurrentlyOpenModal} item={currentlyOpenModal} goToNext={goToNext} goToPrevious={goToPrevious} hasNext={!(currentIndex === deduplicatedItemsList.length - 1)} hasPrevious={!(currentIndex === 0)} />
 				</>
 			) : null}
-			<InfiniteScroll style={{ overflow: null }} dataLength={itemsShowing} next={fetchMoreData} hasMore={hasMore}>
+			<InfiniteScroll
+				style={{ overflow: null }}
+				dataLength={itemsShowing}
+				next={fetchMoreData}
+				hasMore={hasMore}
+				loader={
+					!isLoading && (
+						<div className="mx-auto items-center flex justify-center overflow-hidden py-4 mt-16">
+							<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
+						</div>
+					)
+				}
+			>
 				{isLoading ? (
 					<div className="mx-auto items-center flex justify-center overflow-hidden py-4 mt-16">
 						<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 					</div>
 				) : (
-					<div className={`grid gap-6 grid-cols-1 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'}`}>
-						{deduplicatedItemsList.slice(0, itemsShowing).map(item => (
-							<TokenCard key={item.nft_id} originalItem={item} isMobile={context.isMobile} currentlyPlayingVideo={currentlyPlayingVideo} setCurrentlyPlayingVideo={setCurrentlyPlayingVideo} currentlyOpenModal={currentlyOpenModal} setCurrentlyOpenModal={setCurrentlyOpenModal} showDuplicateNFTs={showDuplicateNFTs} setShowDuplicateNFTs={setShowDuplicateNFTs} isMyProfile={isMyProfile} listId={listId} openCardMenu={openCardMenu} setOpenCardMenu={setOpenCardMenu} userHiddenItems={userHiddenItems} setUserHiddenItems={setUserHiddenItems} refreshItems={refreshItems} changeSpotlightItem={changeSpotlightItem} pageProfile={pageProfile} />
-						))}
-					</div>
+					<>
+						<div className={`grid gap-6 grid-cols-1 ${extraColumn ? 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'}`}>
+							{deduplicatedItemsList.slice(0, itemsShowing).map(item => (
+								<TokenCard key={item.nft_id} originalItem={item} isMobile={context.isMobile} currentlyPlayingVideo={currentlyPlayingVideo} setCurrentlyPlayingVideo={setCurrentlyPlayingVideo} currentlyOpenModal={currentlyOpenModal} setCurrentlyOpenModal={setCurrentlyOpenModal} showDuplicateNFTs={showDuplicateNFTs} setShowDuplicateNFTs={setShowDuplicateNFTs} isMyProfile={isMyProfile} listId={listId} openCardMenu={openCardMenu} setOpenCardMenu={setOpenCardMenu} userHiddenItems={userHiddenItems} setUserHiddenItems={setUserHiddenItems} refreshItems={refreshItems} changeSpotlightItem={changeSpotlightItem} pageProfile={pageProfile} />
+							))}
+						</div>
+					</>
 				)}
 			</InfiniteScroll>
 		</>
