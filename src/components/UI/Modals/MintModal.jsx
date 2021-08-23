@@ -367,7 +367,7 @@ const OptionsPage = ({ editionCount, setEditionCount, royaltiesPercentage, setRo
 						<p className="font-semibold text-gray-900 dark:text-white">Number of Editions</p>
 						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">1 by default</p>
 					</div>
-					<input type="number" min="1" max="10000" className="px-4 py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring text-right" value={editionCount} onChange={event => (event.target.value > 10000 ? setEditionCount(10000) : setEditionCount(event.target.value))} />
+					<input type="number" min="1" max="10000" className="px-4 py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring text-right" value={editionCount} onChange={event => (event.target.value > 10000 ? setEditionCount(10000) : event.target.value < 1 ? setEditionCount(1) : setEditionCount(event.target.value))} />
 				</div>
 			</div>
 			<div className="p-4 border-b border-gray-100 dark:border-gray-900">
@@ -377,7 +377,7 @@ const OptionsPage = ({ editionCount, setEditionCount, royaltiesPercentage, setRo
 						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">10% by default</p>
 					</div>
 					<div className="flex items-center space-x-2">
-						<input type="number" min="0" max="69" step="10" className="px-4 max-w-[60px] py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring no-spinners font-medium text-right" value={royaltiesPercentage} onChange={event => (event.target.value > 69 ? setRoyaltiesPercentage(69) : setRoyaltiesPercentage(event.target.value))} />
+						<input type="number" min="0" max="69" step="10" className="px-4 max-w-[60px] py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring no-spinners font-medium text-right" value={royaltiesPercentage} onChange={event => (event.target.value > 69 ? setRoyaltiesPercentage(69) : event.target.value < 0 ? setRoyaltiesPercentage(0) : setRoyaltiesPercentage(event.target.value))} />
 						<PercentageIcon className="w-4 h-4 text-gray-700 dark:text-gray-500" />
 					</div>
 				</div>
