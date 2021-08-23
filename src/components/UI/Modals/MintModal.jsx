@@ -426,7 +426,7 @@ const MintingPage = ({ transactionHash }) => {
 const SuccessPage = ({ transactionHash, tokenID, shotConfetti }) => {
 	const { myProfile, user } = useContext(AppContext)
 
-	const profileHref = useMemo(() => `/${myProfile?.username || myProfile?.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || myProfile?.wallet_addresses_excluding_email_v2?.[0]?.address || user?.publicAddress}`, [myProfile, user])
+	const profileHref = useMemo(() => `/${myProfile?.username || myProfile?.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || myProfile?.wallet_addresses_excluding_email_v2?.[0]?.address || user?.publicAddress}?list=created`, [myProfile, user])
 
 	useEffect(() => {
 		shotConfetti()
