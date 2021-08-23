@@ -100,8 +100,8 @@ const MintModal = ({ open, onClose }) => {
 		setModalPage(MODAL_PAGES.GENERAL)
 	}
 
-	const saveDraft = () => axios.post('/api/mint/draft', { title, description, number_of_copies: editionCount, nsfw: notSafeForWork, price: price || null, royalties: royaltiesPercentage, currency, ipfs_hash: ipfsHash, agreed_to_terms: hasAcceptedTerms, mime_type: sourcePreview.src ? `${sourcePreview.type}/${sourcePreview.ext}` : null })
-	const markDraftMinted = () => axios.post('/api/mint/draft', { title, description, number_of_copies: editionCount, nsfw: notSafeForWork, price: price || null, royalties: royaltiesPercentage, currency, ipfs_hash: ipfsHash, agreed_to_terms: hasAcceptedTerms, mime_type: sourcePreview.src ? `${sourcePreview.type}/${sourcePreview.ext}` : null, minted: true })
+	const saveDraft = () => axios.post('/api/mint/draft', { title, description, number_of_copies: editionCount, nsfw: notSafeForWork, price: price || null, royalties: royaltiesPercentage, currency, ipfs_hash: ipfsHash, agreed_to_terms: hasAcceptedTerms, mime_type: sourcePreview.src ? `${sourcePreview.type}/${sourcePreview.ext}` : null, file_size: sourcePreview.size })
+	const markDraftMinted = () => axios.post('/api/mint/draft', { title, description, number_of_copies: editionCount, nsfw: notSafeForWork, price: price || null, royalties: royaltiesPercentage, currency, ipfs_hash: ipfsHash, agreed_to_terms: hasAcceptedTerms, mime_type: sourcePreview.src ? `${sourcePreview.type}/${sourcePreview.ext}` : null, file_size: sourcePreview.size, minted: true })
 
 	const loadDraft = async () => {
 		const draft = await axios.get('/api/mint/draft').then(({ data }) => data)
@@ -115,7 +115,7 @@ const MintModal = ({ open, onClose }) => {
 		setEditionCount(parseInt(draft.number_of_copies) || 1)
 		setRoyaltiesPercentage(parseInt(draft.royalties) || 10)
 		setIpfsHash(draft.ipfs_hash || null)
-		if (draft.ipfs_hash) setSourcePreview({ type: draft.mime_type.split('/')[0], size: '??', ext: draft.mime_type.split('/')[1], src: `https://gateway.pinata.cloud/ipfs/${draft.ipfs_hash}` })
+		if (draft.ipfs_hash) setSourcePreview({ type: draft.mime_type.split('/')[0], size: draft.file_size, ext: draft.mime_type.split('/')[1], src: `https://gateway.pinata.cloud/ipfs/${draft.ipfs_hash}` })
 	}
 
 	useEffect(() => {

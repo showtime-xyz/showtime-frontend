@@ -53,7 +53,7 @@ const IpfsUpload = ({ ipfsHash: baseIpfsHash, onChange = () => null, fileDetails
 		const type = file.type.split('/')[0] || (file.name.endsWith('.glb') || file.name.endsWith('.gltf') ? 'model' : '')
 
 		setUploadProgress(0)
-		setFileDetails({ type, size: file.size < 1000000 ? Math.floor(file.size / 1000) + 'kb' : Math.floor(file.size / 1000000) + 'mb', ext: file.type.split('/')[1] || file.name.split('.').pop(), src: URL.createObjectURL(file) })
+		setFileDetails({ type, size: file.size, ext: file.type.split('/')[1] || file.name.split('.').pop(), src: URL.createObjectURL(file) })
 
 		const { token: pinataToken } = await axios.post('/api/pinata/generate-key').then(res => res.data)
 
@@ -81,18 +81,15 @@ const IpfsUpload = ({ ipfsHash: baseIpfsHash, onChange = () => null, fileDetails
 					<div className="space-x-1.5 flex items-center dark:text-gray-300">
 						<MintIcon type={fileDetails.type} className="w-5 h-5" />
 						<p className="text-xs font-semibold">
-							{fileDetails.size} <span className="text-gray-300 dark:text-gray-700">&bull;</span> {fileDetails?.ext}
+							{fileDetails.size < 1000000 ? Math.floor(fileDetails.size / 1000) + 'kb' : Math.floor(fileDetails.size / 1000000) + 'mb'} <span className="text-gray-300 dark:text-gray-700">&bull;</span> {fileDetails?.ext}
 						</p>
-					</div>
-					<div className="group">
-						<div className="flex items-center space-x-1.5 hover:space-x-1 group-hover:hidden">
-							<CheckIcon className="w-3 h-3 group-hover:hidden" />
-							<span className="text-gray-900 dark:text-white text-xs font-medium group-hover:hidden">Uploaded to IPFS</span>
-						</div>
-						<button onClick={cancelUpload} className="items-center space-x-1 hidden group-hover:flex">
-							<XIcon className="w-5 h-5 hidden group-hover:block" />
-							<span className="text-gray-900 dark:text-white text-xs font-medium hidden group-hover:inline">Remove from IPFS</span>
+						<button onClick={cancelUpload} className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white rounded-full p-1.5 -my-1 focus-visible:ring">
+							<XIcon className="w-5 h-5" />
 						</button>
+					</div>
+					<div className="flex items-center space-x-1.5">
+						<CheckIcon className="w-3 h-3" />
+						<span className="text-gray-900 dark:text-white text-xs font-medium">Uploaded to IPFS</span>
 					</div>
 				</>
 			) : uploadProgress != null ? (
