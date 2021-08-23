@@ -192,7 +192,7 @@ export default function Collection({ collection_list, collection, selected_colle
 				</CappedWidth>
 			</div>
 			<CappedWidth>
-				<div className=" flex-1 -mt-4 mx-3 lg:w-2/3 lg:pr-6 xl:w-1/2">
+				<div className=" flex-1 -mt-4 mx-3 lg:w-2/3 lg:pr-6 xl:w-1/2 ">
 					<div className="border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg shadow-md px-6 py-6 text-center flex flex-col md:flex-row items-center">
 						<div className="flex-1 mb-3 md:mb-0 dark:text-gray-300">Select a collection to browse: </div>
 						<div className="flex-1 text-left">
@@ -257,7 +257,7 @@ export default function Collection({ collection_list, collection, selected_colle
 
 				<div className="mx-auto relative mt-12 overflow-hidden">{FilterTabs}</div>
 
-				<div className="m-auto relative min-h-screen md:mx-3">
+				<div className="m-auto relative min-h-screen md:mx-3 pb-12">
 					<TokenGridV4 items={collectionItems} isLoading={isChanging} extraColumn key={`grid_${currentCollectionSlug}_${sortBy}_${randomNumber}_${isChanging}`} />
 				</div>
 			</CappedWidth>
