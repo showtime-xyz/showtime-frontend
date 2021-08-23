@@ -66,6 +66,12 @@ const TokenDetailBody = ({
 		return img_url
 	}
 
+	const getBiggestImageUrl = img_url => {
+		if (img_url && img_url.includes('https://lh3.googleusercontent.com')) img_url = img_url.split('=')[0] + '=s0'
+
+		return img_url
+	}
+
 	const [reportModalOpen, setReportModalOpen] = useState(false)
 
 	// Set dimensions of the media based on available space and original aspect ratio
@@ -116,7 +122,7 @@ const TokenDetailBody = ({
 					<ModalReportItem isOpen={reportModalOpen} setReportModalOpen={setReportModalOpen} nftId={item.nft_id} />
 				</>
 			) : null}
-			{lightboxOpen && <Lightbox mainSrc={item.token_img_original_url ? item.token_img_original_url : item.token_img_url} onCloseRequest={() => setLightboxOpen(false)} />}
+			{lightboxOpen && <Lightbox mainSrc={item.source_url ? getBiggestImageUrl(item.source_url) : item.token_img_original_url ? item.token_img_original_url : item.token_img_url} onCloseRequest={() => setLightboxOpen(false)} />}
 			<div className="flex flex-col relative dark:bg-gray-900" ref={modalRef}>
 				{isMobile ? (
 					<div className="py-4 px-4 flex flex-row">
@@ -151,6 +157,162 @@ const TokenDetailBody = ({
 						<div>&nbsp;</div>
 					</div>
 				) : null}
+				{/* Media area */}
+				<div className="flex flex-shrink-0 items-center md:p-12" style={{ backgroundColor: getBackgroundColor() }} ref={targetRef}>
+					{/* Use mime_type to display appropriate media */}
+					{item.mime_type?.startsWith('image') && (
+						<div className="m-auto w-full md:w-auto">
+							<div className="w-max absolute right-0 m-2.5 z-0 top-14 sm:top-0">
+								<button
+									type="button"
+									onClick={() => {
+										setLightboxOpen(true)
+										mixpanel.track('Original clicked')
+									}}
+									className="flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all rounded-lg p-3 hidden md:flex"
+								>
+									<div>
+										<FontAwesomeIcon icon={faExpand} width={18} height={18} />
+									</div>
+									<div className="ml-2 text-sm">Original</div>
+								</button>
+							</div>
+							<img
+								src={getImageUrl(item.source_url ? item.source_url : item.token_img_url, item.token_aspect_ratio)}
+								alt={item.token_name}
+								className={fullResLoaded === true ? 'hidden' : ''}
+								style={
+									context.isMobile
+										? {
+												width: mediaWidth,
+												height: item.token_aspect_ratio ? mediaWidth / item.token_aspect_ratio : null,
+										  }
+										: { height: TOKEN_MEDIA_HEIGHT }
+								}
+							/>
+
+							<img src={context.isMobile ? getImageUrl(item.source_url ? item.source_url : item.token_img_url) : getBiggerImageUrl(item.source_url ? item.source_url : item.token_img_url)} alt={item.token_name} className={fullResLoaded === true ? '' : 'hidden'} style={context.isMobile ? { width: mediaWidth } : { height: TOKEN_MEDIA_HEIGHT }} onLoad={() => setTimeout(() => setFullResLoaded(true), 100)} />
+						</div>
+					)}
+					{item.mime_type?.startsWith('video') && (
+						<ReactPlayer
+							url={item.source_url ? item.source_url : item.token_animation_url}
+							playing={true}
+							loop
+							controls
+							muted={muted}
+							height={mediaHeight}
+							width={mediaWidth}
+							style={{ margin: 'auto' }}
+							playsinline
+							// Disable downloading & right click
+							config={{
+								file: {
+									attributes: {
+										onContextMenu: e => e.preventDefault(),
+										controlsList: 'nodownload',
+									},
+								},
+							}}
+						/>
+					)}
+					{item.mime_type?.startsWith('model') && (
+						<div className="m-auto w-full md:w-auto">
+							<div className="relative">
+								<model-viewer src={item.source_url} class="max-w-full" style={{ height: TOKEN_MEDIA_HEIGHT, width: TOKEN_MEDIA_HEIGHT, '--poster-color': 'transparent' }} autoplay auto-rotate camera-controls ar ar-modes="scene-viewer quick-look" interaction-prompt="none">
+									<span slot="interaction-prompt" />
+								</model-viewer>
+								<div className="p-2.5 absolute top-1 right-1">
+									<div className="flex items-center space-x-1 text-white rounded-full py-1 px-2 -my-1 -mx-1 bg-black bg-opacity-40">
+										<OrbitIcon className="w-4 h-4" />
+										<span className="font-semibold">3D</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					)}
+
+					{/* Fallback to old code for missing mime_types */}
+					{!item.mime_type && (
+						<>
+							{!item.mime_type?.startsWith('model') && (item.token_has_video || (item.token_animation_url && !item.token_img_url)) ? (
+								<ReactPlayer
+									url={item.token_animation_url}
+									playing={true}
+									loop
+									controls
+									muted={muted}
+									height={mediaHeight}
+									width={mediaWidth}
+									style={{ margin: 'auto' }}
+									playsinline
+									// Disable downloading & right click
+									config={{
+										file: {
+											attributes: {
+												onContextMenu: e => e.preventDefault(),
+												controlsList: 'nodownload',
+											},
+										},
+									}}
+								/>
+							) : (
+								<div className="m-auto w-full md:w-auto">
+									{isMobile || item.token_has_video || (item.token_animation_url && !item.token_img_url) ? null : item.token_img_url && !item.mime_type?.startsWith('model') ? (
+										<div className="w-max absolute right-0 m-2.5 z-0 top-14 sm:top-0">
+											<button
+												type="button"
+												onClick={() => {
+													setLightboxOpen(true)
+													mixpanel.track('Original clicked')
+												}}
+												className="flex-row items-center bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-all rounded-lg p-3 hidden md:flex"
+											>
+												<div>
+													<FontAwesomeIcon icon={faExpand} width={18} height={18} />
+												</div>
+												<div className="ml-2 text-sm">Original</div>
+											</button>
+										</div>
+									) : null}
+									{item.mime_type?.startsWith('model') ? (
+										<div className="relative">
+											<model-viewer src={item.source_url} class="max-w-full" style={{ height: TOKEN_MEDIA_HEIGHT, width: TOKEN_MEDIA_HEIGHT, '--poster-color': 'transparent' }} autoplay auto-rotate camera-controls ar ar-modes="scene-viewer quick-look" interaction-prompt="none">
+												<span slot="interaction-prompt" />
+											</model-viewer>
+											<div className="p-2.5 absolute top-1 right-1">
+												<div className="flex items-center space-x-1 text-white rounded-full py-1 px-2 -my-1 -mx-1 bg-black bg-opacity-40">
+													<OrbitIcon className="w-4 h-4" />
+													<span className="font-semibold">3D</span>
+												</div>
+											</div>
+										</div>
+									) : (
+										<>
+											<img
+												src={getImageUrl(item.token_img_url, item.token_aspect_ratio)}
+												alt={item.token_name}
+												className={fullResLoaded === true ? 'hidden' : ''}
+												style={
+													context.isMobile
+														? {
+																width: mediaWidth,
+																height: item.token_aspect_ratio ? mediaWidth / item.token_aspect_ratio : null,
+														  }
+														: { height: TOKEN_MEDIA_HEIGHT }
+												}
+											/>
+
+											<img src={context.isMobile ? getImageUrl(item.token_img_url) : getBiggerImageUrl(item.token_img_url)} alt={item.token_name} className={fullResLoaded === true ? '' : 'hidden'} style={context.isMobile ? { width: mediaWidth } : { height: TOKEN_MEDIA_HEIGHT }} onLoad={() => setTimeout(() => setFullResLoaded(true), 100)} />
+										</>
+									)}
+								</div>
+							)}
+						</>
+					)}
+				</div>
+
+				{/*
 				<div className={`flex flex-shrink-0 items-center md:p-12 ${item.token_has_video || (item.token_animation_url && !item.token_img_url) ? 'bg-black' : ''}`} style={item.token_has_video || (item.token_animation_url && !item.token_img_url) ? null : { backgroundColor: getBackgroundColor() }} ref={targetRef}>
 					{!item.mime_type?.startsWith('model') && (item.token_has_video || (item.token_animation_url && !item.token_img_url)) ? (
 						<ReactPlayer
@@ -225,7 +387,7 @@ const TokenDetailBody = ({
 							)}
 						</div>
 					)}
-				</div>
+									</div>*/}
 				{/* Details wrapper */}
 
 				<div className="p-2 md:p-8 max-w-screen-2xl overflow-auto relative w-full m-auto">
