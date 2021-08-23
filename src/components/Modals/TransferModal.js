@@ -128,7 +128,7 @@ const TransferModal = ({ open, onClose, token }) => {
 					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enterTo="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 translate-y-0 sm:scale-100" leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
 						<div className="inline-block align-bottom rounded-t-3xl sm:rounded-b-3xl text-left overflow-hidden transform transition-all sm:align-middle bg-white shadow-xl sm:max-w-lg w-full">
 							<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
-								<h2 className="text-gray-900 dark:text-white text-xl font-bold">Tranfer NFT</h2>
+								<h2 className="text-gray-900 dark:text-white text-xl font-bold">Transfer NFT</h2>
 								{modalState !== MODAL_STATES.PROCESSING && (
 									<button onClick={trueOnClose} className="p-3 -my-3 hover:bg-gray-100 disabled:hidden rounded-xl transition">
 										<XIcon className="w-4 h-4" />
