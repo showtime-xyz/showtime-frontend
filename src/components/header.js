@@ -78,7 +78,7 @@ const Header = () => {
 						<div className={`flex-1 flex items-center justify-end ${isSearchBarOpen ? 'hidden' : ''}`}>
 							{canMint && (
 								<div className="ml-5">
-									<Button onClick={() => setMintModalOpen(true)} style="primary">
+									<Button onClick={() => setMintModalOpen(true)} style="gradient">
 										Create
 									</Button>
 								</div>
