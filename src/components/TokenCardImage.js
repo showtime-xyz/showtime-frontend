@@ -37,7 +37,7 @@ const TokenCardImage = ({ nft, showModel = false }) => {
 		>
 			{nft.blurhash && !hasLoadedImage && !hasLoadedAnimation && <BlurhashCanvas className="object-cover w-full h-full" hash={nft.blurhash} width={400} height={300} punch={2} />}
 
-			{nft.mime_type?.startsWith('image') && <img src={getImageUrl(nft.still_preview_url ? nft.still_preview_url : nft.token_img_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" onLoad={() => setHasLoadedImage(true)} />}
+			{nft.mime_type?.startsWith('image') && <img src={getImageUrl(nft.still_preview_url ? nft.still_preview_url : nft.token_img_url ? nft.token_img_url : nft.source_url, nft.token_aspect_ratio)} className="object-cover w-full h-full" onLoad={() => setHasLoadedImage(true)} />}
 
 			{nft.mime_type?.startsWith('video') && (
 				<ReactPlayer
