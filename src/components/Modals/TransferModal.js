@@ -65,7 +65,7 @@ const TransferModal = ({ open, onClose, token }) => {
 
 		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MINTING_CONTRACT, minterAbi, biconomy.getSignerByAddress(signerAddress))
 
-		const { data } = await contract.populateTransaction.safeTransferFrom(signerAddress, address, token.token_id, quantity, 0)
+		const { data } = await contract.populateTransaction.safeTransferFrom(signerAddress, address.includes('.') ? await web3.resolveName(address) : address, token.token_id, quantity, 0)
 
 		const provider = biconomy.getEthersProvider()
 
