@@ -13,6 +13,7 @@ import PolygonIcon from '../Icons/PolygonIcon'
 import XIcon from '../Icons/XIcon'
 import Button from '../UI/Buttons/Button'
 import minterAbi from '@/data/ShowtimeMT.json'
+import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 
 const addressRegex = /^0x[a-fA-F0-9]{40}$/
 
@@ -169,7 +170,7 @@ const GeneralState = ({ quantity, address, setAddress, setQuantity, transferToke
 				{transferringTo?.profile_id ? (
 					<div className="flex items-center justify-between rounded-3xl border-2 border-gray-100 p-4">
 						<div className="flex items-center space-x-2">
-							<img src={transferringTo.img_url} className="w-8 h-8 rounded-full" />
+							<img src={transferringTo.img_url || DEFAULT_PROFILE_PIC} className="w-8 h-8 rounded-full" />
 							<div>
 								<div className="flex items-center space-x-1">
 									<p className="text-sm font-semibold text-gray-900 dark:text-white">{transferringTo.name}</p>
