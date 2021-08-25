@@ -11,6 +11,8 @@ import Button from '../UI/Buttons/Button'
 import minterAbi from '@/data/ShowtimeMT.json'
 import PolygonIcon from '../Icons/PolygonIcon'
 import { ExclamationIcon } from '@heroicons/react/outline'
+import useSWR from 'swr'
+import backend from '@/lib/backend'
 
 const MODAL_STATES = {
 	GENERAL: 'general',
@@ -28,6 +30,11 @@ const BurnModal = ({ open, onClose, token }) => {
 
 	const [quantity, setQuantity] = useState(1)
 	const [transactionHash, setTransactionHash] = useState(null)
+
+	const { data: ownershipData } = useSWR(
+		() => open && myProfile && `/v1/owned_quantity?nft_id=${token.nft_id}&profile_id=${myProfile.profile_id}`,
+		url => backend.get(url).then(res => res.data?.data)
+	)
 
 	const trueOnClose = () => {
 		if (isWeb3ModalActive.current || modalState === MODAL_STATES.PROCESSING) return
@@ -95,7 +102,7 @@ const BurnModal = ({ open, onClose, token }) => {
 	const renderedState = (type => {
 		switch (type) {
 			case MODAL_STATES.GENERAL:
-				return <GeneralState maxTokens={token?.owner_token_quantity || 1} quantity={quantity} setQuantity={setQuantity} onClose={trueOnClose} burnToken={burnToken} />
+				return <GeneralState maxTokens={ownershipData?.owned_count || 1} quantity={quantity} setQuantity={setQuantity} onClose={trueOnClose} burnToken={burnToken} />
 			case MODAL_STATES.PROCESSING:
 				return <LoadingState />
 			case MODAL_STATES.BURNING:
@@ -151,7 +158,7 @@ const GeneralState = ({ maxTokens, quantity, setQuantity, onClose, burnToken }) 
 					<p className="font-semibold text-gray-900 dark:text-white">Quantity</p>
 					<p className="text-sm font-medium text-gray-700 dark:text-gray-300">1 by default</p>
 				</div>
-				<input type="number" min="1" max={maxTokens} placeholder="1" className="px-4 py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring max-w-[60px] no-spinners" value={quantity} onChange={event => (event.target.value < 1 ? setQuantity(1) : event.target.value > maxTokens ? setQuantity(maxTokens) : setQuantity(event.target.value))} />
+				<input type="number" min="1" max={maxTokens} placeholder="1" className="px-4 py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring min-w-[60px] no-spinners text-right" value={quantity} onChange={event => (event.target.value < 1 ? setQuantity(1) : event.target.value > maxTokens ? setQuantity(maxTokens) : setQuantity(event.target.value))} />
 			</div>
 		</div>
 		<div className="p-4">
