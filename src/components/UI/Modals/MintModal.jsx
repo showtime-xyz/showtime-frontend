@@ -242,7 +242,7 @@ const MintModal = ({ open, onClose }) => {
 
 	return (
 		<Transition.Root show={open} as={Fragment}>
-			<Dialog as="div" static className={`fixed inset-0 overflow-y-auto ${sourcePreview.src ? 'pt-[96px] md:pt-0' : ''}`} open={open} onClose={trueOnClose}>
+			<Dialog as="div" static className={`fixed inset-0 overflow-y-auto z-1 ${sourcePreview.src ? 'pt-[96px] md:pt-0' : ''}`} open={open} onClose={trueOnClose}>
 				<canvas ref={confettiCanvas} className="absolute inset-0 w-screen h-screen z-[11] pointer-events-none" />
 				<div className="min-h-screen text-center">
 					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
