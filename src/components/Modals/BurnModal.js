@@ -101,7 +101,7 @@ const BurnModal = ({ open, onClose, token }) => {
 			case MODAL_STATES.BURNING:
 				return <BurningState transactionHash={transactionHash} />
 			case MODAL_STATES.BURNED:
-				return <BurnedState transactionHash={transactionHash} />
+				return <BurnedState transactionHash={transactionHash} quantity={quantity} />
 			case MODAL_STATES.CHANGE_WALLET:
 				return <WalletErrorState burnToken={burnToken} />
 		}
@@ -173,7 +173,7 @@ const LoadingState = () => {
 			<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
 			<div className="space-y-1">
 				<p className="font-medium text-gray-900 dark:text-white text-center">Preparing to burn this NFT...</p>
-				<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs">We'll ask you to confirm with your preferred wallet shortly.</p>
+				<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs">We'll ask you to confirm with the wallet holding it shortly.</p>
 			</div>
 		</div>
 	)
@@ -195,11 +195,11 @@ const BurningState = ({ transactionHash }) => {
 	)
 }
 
-const BurnedState = ({ transactionHash }) => {
+const BurnedState = ({ transactionHash, quantity }) => {
 	return (
 		<div className="p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
 			<p className="font-medium text-5xl">🔥</p>
-			<p className="font-medium text-gray-900 dark:text-white text-center">Your NFT has been forever burned on the Polygon network. It might still show up on your profile for a few minutes.</p>
+			<p className="font-medium text-gray-900 dark:text-white text-center">Your NFT has been forever burned on the Polygon network. {quantity == 1 ? 'It might still show up on your profile for a few minutes' : 'The editions might still appear on your profile for a few minutes'}.</p>
 			<Button style="tertiary" as="a" href={`https://mumbai.polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
 				<PolygonIcon className="w-4 h-4" />
 				<span className="text-sm font-medium">View on Polygon Scan</span>
