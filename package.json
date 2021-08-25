@@ -45,7 +45,7 @@
     "fortmatic": "^2.2.1",
     "libsodium-wrappers": "^0.7.9",
     "lodash": "^4.17.20",
-    "magic-sdk": "^4.4.1",
+    "magic-sdk": "^4.4.2",
     "mixpanel-browser": "^2.40.1",
     "next": "^11.1.0",
     "next-connect": "^0.10.2",
@@ -76,7 +76,7 @@
     "tailwindcss": "^2.2.7",
     "use-wallet": "^0.9.0",
     "walletlink": "^2.1.7",
-    "web3": "^1.5.1",
+    "web3": "^1.5.2",
     "web3modal": "^1.9.4",
     "webpack-modules": "^1.0.0"
   },
