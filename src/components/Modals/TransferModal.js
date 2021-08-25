@@ -14,6 +14,7 @@ import XIcon from '../Icons/XIcon'
 import Button from '../UI/Buttons/Button'
 import minterAbi from '@/data/ShowtimeMT.json'
 import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
+import backend from '@/lib/backend'
 
 const addressRegex = /^0x[a-fA-F0-9]{40}$/
 
@@ -30,6 +31,11 @@ const TransferModal = ({ open, onClose, token }) => {
 	const { resolvedTheme } = useTheme()
 	const isWeb3ModalActive = useRef(false)
 	const [modalState, setModalState] = useState(MODAL_STATES.GENERAL)
+
+	const { data: ownershipData } = useSWR(
+		() => open && myProfile && `/v1/owned_quantity?nft_id=${token.nft_id}&profile_id=${myProfile.profile_id}`,
+		url => backend.get(url).then(res => res.data?.data)
+	)
 
 	const trueOnClose = () => {
 		if (isWeb3ModalActive.current || modalState === MODAL_STATES.PROCESSING) return
@@ -101,7 +107,7 @@ const TransferModal = ({ open, onClose, token }) => {
 	const renderedState = (type => {
 		switch (type) {
 			case MODAL_STATES.GENERAL:
-				return <GeneralState {...{ quantity, address, setAddress, setQuantity, transferToken, maxTokens: token?.owner_token_quantity || 1 }} />
+				return <GeneralState {...{ quantity, address, setAddress, setQuantity, transferToken, maxTokens: ownershipData?.owned_count || 1 }} />
 			case MODAL_STATES.PROCESSING:
 				return <LoadingState />
 			case MODAL_STATES.TRANSACTION:
@@ -159,7 +165,7 @@ const GeneralState = ({ quantity, address, setAddress, setQuantity, transferToke
 						<p className="font-semibold text-gray-900 dark:text-white">Quantity</p>
 						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">1 by default</p>
 					</div>
-					<input type="number" min="1" max={maxTokens} placeholder="1" className="px-4 py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring max-w-[60px] no-spinners" value={quantity} onChange={event => (event.target.value < 1 ? setQuantity(1) : event.target.value > maxTokens ? setQuantity(maxTokens) : setQuantity(event.target.value))} />
+					<input type="number" min="1" max={maxTokens} placeholder="1" className="px-4 py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring min-w-[60px] no-spinners text-right" value={quantity} onChange={event => (event.target.value < 1 ? setQuantity(1) : event.target.value > maxTokens ? setQuantity(maxTokens) : setQuantity(event.target.value))} />
 				</div>
 			</div>
 			<div className="p-4 border-b border-gray-100 dark:border-gray-900 space-y-4">
