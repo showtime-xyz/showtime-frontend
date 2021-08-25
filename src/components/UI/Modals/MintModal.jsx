@@ -125,12 +125,15 @@ const MintModal = ({ open, onClose }) => {
 	const trueOnClose = () => {
 		if (isWeb3ModalActive.current || modalPage === MODAL_PAGES.LOADING) return
 
-		saveDraft().finally(() => {
-			if (modalPage === MODAL_PAGES.GENERAL) return
+		if ([MODAL_PAGES.SUCCESS, MODAL_PAGES.MINTING].includes(modalPage)) resetForm()
+		else
+			saveDraft().finally(() => {
+				if (modalPage === MODAL_PAGES.GENERAL) return
 
-			resetForm()
-			loadDraft()
-		})
+				resetForm()
+				loadDraft()
+			})
+
 		onClose()
 	}
 
