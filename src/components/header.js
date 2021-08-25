@@ -17,6 +17,7 @@ import FireIcon from './Icons/FireIcon'
 import useFlags, { FLAGS } from '@/hooks/useFlags'
 import MintModal from './UI/Modals/MintModal'
 import Button from './UI/Buttons/Button'
+import PlusIcon from './Icons/PlusIcon'
 
 const Header = () => {
 	const { [FLAGS.hasMinting]: canMint } = useFlags()
@@ -76,16 +77,17 @@ const Header = () => {
 						{/* End desktop-only menu */}
 
 						<div className={`flex-1 flex items-center justify-end ${isSearchBarOpen ? 'hidden' : ''}`}>
-							{canMint && (
-								<div className="ml-5">
-									<Button onClick={() => setMintModalOpen(true)} style="gradient">
-										Create
-									</Button>
-								</div>
-							)}
 							{isAuthenticated && myProfile && (
 								<div className="flex-shrink ml-5">
 									<NotificationsBtn />
+								</div>
+							)}
+							{canMint && (
+								<div className="ml-5">
+									<Button onClick={() => setMintModalOpen(true)} style="gradient" className="!p-2.5 md:!px-4 md:!py-2 !rounded-xl !md:rounded-2xl">
+										<span className="hidden md:inline">Create</span>
+										<PlusIcon className="w-4 h-4 md:hidden" />
+									</Button>
 								</div>
 							)}
 							{isAuthenticated && myProfile ? (
