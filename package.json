@@ -12,7 +12,7 @@
     "@airgap/beacon-sdk": "^2.2.10",
     "@badrap/bar-of-progress": "^0.1.2",
     "@google/model-viewer": "^1.8.0",
-    "@ethersproject/providers": "^5.4.3",
+    "@ethersproject/providers": "^5.4.4",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-brands-svg-icons": "^5.15.4",
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
@@ -76,7 +76,7 @@
     "tailwindcss": "^2.2.7",
     "use-wallet": "^0.9.0",
     "walletlink": "^2.1.7",
-    "web3": "^1.5.1",
+    "web3": "^1.5.2",
     "web3modal": "^1.9.4",
     "webpack-modules": "^1.0.0"
   },
