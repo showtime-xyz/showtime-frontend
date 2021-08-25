@@ -365,8 +365,8 @@ const OptionsPage = ({ editionCount, setEditionCount, royaltiesPercentage, setRo
 	return (
 		<div className="md:min-w-[30rem]">
 			<div className="p-4 border-b border-gray-100 dark:border-gray-900">
-				<div className="flex items-center justify-between space-x-4">
-					<div className="flex-1">
+				<div className="flex items-center justify-between">
+					<div className="flex-1 mr-4">
 						<p className="font-semibold text-gray-900 dark:text-white">Number of Editions</p>
 						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">1 by default</p>
 					</div>
@@ -374,10 +374,10 @@ const OptionsPage = ({ editionCount, setEditionCount, royaltiesPercentage, setRo
 				</div>
 			</div>
 			<div className="p-4 border-b border-gray-100 dark:border-gray-900">
-				<div className="flex items-center justify-between space-x-4">
-					<div className="flex-1">
-						<p className="font-semibold text-gray-900 dark:text-white">Royalties</p>
-						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">10% by default</p>
+				<div className="flex items-center justify-between">
+					<div className="flex-1 mr-4">
+						<p className="font-semibold text-gray-900 dark:text-white">Creator Royalties</p>
+						<p className="text-sm font-medium text-gray-700 dark:text-gray-300 max-w-xs">How much you'll earn each time this NFT is resold.</p>
 					</div>
 					<div className="flex items-center space-x-2">
 						<input type="number" min="0" max="69" step="10" className="px-4 max-w-[60px] py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring no-spinners font-medium text-right" value={royaltiesPercentage} onChange={event => (event.target.value > 69 ? setRoyaltiesPercentage(69) : event.target.value < 0 ? setRoyaltiesPercentage(0) : setRoyaltiesPercentage(event.target.value))} />
