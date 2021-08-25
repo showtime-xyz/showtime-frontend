@@ -28,7 +28,7 @@
     "@tippyjs/react": "^4.2.5",
     "@walletconnect/web3-provider": "^1.5.5",
     "authereum": "^0.1.0",
-    "autoprefixer": "^10.3.1",
+    "autoprefixer": "^10.3.2",
     "awesome-debounce-promise": "^2.1.0",
     "axios": "^0.21.1",
     "blake2b": "^2.1.3",
@@ -76,7 +76,7 @@
     "tailwindcss": "^2.2.7",
     "use-wallet": "^0.9.0",
     "walletlink": "^2.1.7",
-    "web3": "^1.5.1",
+    "web3": "^1.5.2",
     "web3modal": "^1.9.4",
     "webpack-modules": "^1.0.0"
   },
