@@ -24,6 +24,7 @@ import UsersWhoLiked from './UsersWhoLiked'
 import MiniFollowButton from './MiniFollowButton'
 import UsersWhoOwn from './UsersWhoOwn'
 import OrbitIcon from './Icons/OrbitIcon'
+import { CHAIN_IDENTIFIERS } from '@/lib/constants'
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500
@@ -407,7 +408,7 @@ const TokenDetailBody = ({
 									</div>
 								</SmoothScroll>
 								<div className="p-3 rounded-full shadow-md mr-2 flex items-center justify-center">
-									<ShareButton url={typeof window !== 'undefined' && window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${item.contract_address}/${item.token_id}`} type={'item'} />
+									<ShareButton url={typeof window !== 'undefined' && window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == item.chain_identifier)}/${item.contract_address}/${item.token_id}`} type={'item'} />
 								</div>
 
 								<a href={getBidLink(item)} title={`View on ${getContractName(item)}`} target="_blank" className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1" onClick={() => mixpanel.track('OpenSea link click')} rel="noreferrer">
