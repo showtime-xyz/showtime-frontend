@@ -2,6 +2,7 @@ const { withSentryConfig } = require('@sentry/nextjs')
 
 const isDev = process.env.NODE_ENV === 'development'
 
+// These are dope
 const nextConfig = {
 	async redirects() {
 		return [
