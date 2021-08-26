@@ -110,10 +110,10 @@ const MintModal = ({ open, onClose }) => {
 		setDescription(draft.description || '')
 		setHasAcceptedTerms(draft.agreed_to_terms || false)
 		setNotSafeForWork(draft.nsfw || false)
-		setPrice(draft.price || '')
+		setPrice(draft.price ?? '')
 		setCurrency(draft.currency_ticker || 'ETH')
 		setEditionCount(parseInt(draft.number_of_copies) || 1)
-		setRoyaltiesPercentage(parseInt(draft.royalties) || 10)
+		setRoyaltiesPercentage(parseInt(draft.royalties) ?? 10)
 		setIpfsHash(draft.ipfs_hash || null)
 		if (draft.ipfs_hash) setSourcePreview({ type: draft.mime_type.split('/')[0], size: draft.file_size, ext: draft.mime_type.split('/')[1], src: `https://gateway.pinata.cloud/ipfs/${draft.ipfs_hash}` })
 	}

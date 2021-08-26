@@ -165,7 +165,7 @@ const GeneralState = ({ quantity, address, setAddress, setQuantity, transferToke
 						<p className="font-semibold text-gray-900 dark:text-white">Quantity</p>
 						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">1 by default</p>
 					</div>
-					<input type="number" min="1" max={maxTokens} placeholder="1" className="px-4 py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring min-w-[60px] no-spinners text-right" value={quantity} onChange={event => (event.target.value < 1 || event.target.value.trim() == '' ? setQuantity(1) : event.target.value > maxTokens ? setQuantity(maxTokens) : setQuantity(event.target.value))} />
+					<input type="number" min="1" max={maxTokens} placeholder="1" className="px-4 py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring min-w-[60px] no-spinners text-right" value={quantity} onChange={event => (event.target.value < 1 || event.target.value.trim() == '' ? setQuantity(1) : event.target.value > maxTokens ? setQuantity(maxTokens) : setQuantity(parseInt(event.target.value)))} />
 				</div>
 			</div>
 			<div className="p-4 border-b border-gray-100 dark:border-gray-900 space-y-4">
