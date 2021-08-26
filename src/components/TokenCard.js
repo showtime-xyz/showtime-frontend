@@ -156,7 +156,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 												</button>
 											)}
 										</Menu.Item>
-										{SHOWTIME_CONTRACTS.includes(item.contract_address) && item?.show_transfer_options && (
+										{SHOWTIME_CONTRACTS.includes(item.contract_address) && item?.show_transfer_options == 1 && (
 											<>
 												<Menu.Item>
 													{({ active }) => (
