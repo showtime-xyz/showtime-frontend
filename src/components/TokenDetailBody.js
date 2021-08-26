@@ -572,6 +572,12 @@ const TokenDetailBody = ({
 					{/* OpenSea Link */}
 
 					<div className="m-4 flex text-sm">
+						{item.chain_identifier === 137 && (
+							<>
+								<div className="text-gray-500 hover:text-stpink cursor-pointer whitespace-nowrap">Polygon NFT</div>
+								<div className="my-4">·</div>
+							</>
+						)}
 						{(CONTRACTS.HICETNUNC, CONTRACTS.KALAMINT).includes(item.contract_address) ? null : (
 							<>
 								<a
