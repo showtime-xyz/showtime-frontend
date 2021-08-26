@@ -15,6 +15,11 @@ const nextConfig = {
 				destination: 'https://showtime.nolt.io',
 				permanent: true,
 			},
+			{
+				source: '/claim',
+				destination: 'https://claim.tryshowtime.com/',
+				permanent: true,
+			},
 		]
 	},
 }
