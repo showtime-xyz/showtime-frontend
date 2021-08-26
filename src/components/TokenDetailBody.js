@@ -515,15 +515,16 @@ const TokenDetailBody = ({
 								<div className="mt-8">
 									<div className="md:text-lg py-4 dark:text-gray-500 flex items-center space-x-2">
 										{['137', '80001'].includes(item.chain_identifier) && (
-											<Tippy content="This NFT is part of the Polygon sidechain">
+											<Tippy content="This NFT is on the Polygon chain">
 												<PolygonIcon className="w-4 h-4" />
 											</Tippy>
 										)}
 										{item.chain_identifier == 'NetXdQprcVkpaWU' && (
-											<Tippy content="This NFT is part of the Tezos blockchain">
+											<Tippy content="This NFT is on the Tezos chain">
 												<TezosIcon className="w-auto h-4" />
 											</Tippy>
 										)}
+
 										<span>Owner History</span>
 									</div>
 									<TokenHistoryCard
