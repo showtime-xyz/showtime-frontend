@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
 	const { resolvedTheme } = useTheme()
 
 	return (
-		<div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 tracking-wide">
+		<div className="flex flex-col min-h-screen bg-gray-50 dark:bg-black tracking-wide">
 			<Script src="https://www.googletagmanager.com/gtag/js?id=G-EJP74KCP4M" strategy="afterInteractive" />
 			<Head>
 				<link rel="icon" href="/logo_sm.jpg" />

@@ -13,9 +13,10 @@ const TokenCardImage = ({ nft, showModel = false }) => {
 	const [hasLoadedAnimation, setHasLoadedAnimation] = useState(false)
 	const [imgWidth, setImgWidth] = useState(null)
 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => {
 		setImgWidth(aRef?.current?.clientWidth)
-	}, [aRef?.current])
+	})
 
 	const getImageUrl = (img_url, token_aspect_ratio) => {
 		if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
@@ -28,7 +29,7 @@ const TokenCardImage = ({ nft, showModel = false }) => {
 
 	return (
 		<div
-			className="flex-1  cursor-pointer overflow-hidden hover:opacity-90 transition-all"
+			className="flex-1 cursor-pointer hover:opacity-90 overflow-hidden transition-all"
 			ref={aRef}
 			style={{
 				height: imgWidth,

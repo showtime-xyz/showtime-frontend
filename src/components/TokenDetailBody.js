@@ -24,6 +24,10 @@ import UsersWhoLiked from './UsersWhoLiked'
 import MiniFollowButton from './MiniFollowButton'
 import UsersWhoOwn from './UsersWhoOwn'
 import OrbitIcon from './Icons/OrbitIcon'
+import { CHAIN_IDENTIFIERS } from '@/lib/constants'
+import PolygonIcon from './Icons/PolygonIcon'
+import Tippy from '@tippyjs/react'
+import TezosIcon from './Icons/TezosIcon'
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500
@@ -407,7 +411,7 @@ const TokenDetailBody = ({
 									</div>
 								</SmoothScroll>
 								<div className="p-3 rounded-full shadow-md mr-2 flex items-center justify-center">
-									<ShareButton url={typeof window !== 'undefined' && window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${item.contract_address}/${item.token_id}`} type={'item'} />
+									<ShareButton url={typeof window !== 'undefined' && window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == item.chain_identifier)}/${item.contract_address}/${item.token_id}`} type={'item'} />
 								</div>
 
 								<a href={getBidLink(item)} title={`View on ${getContractName(item)}`} target="_blank" className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1" onClick={() => mixpanel.track('OpenSea link click')} rel="noreferrer">
@@ -509,7 +513,19 @@ const TokenDetailBody = ({
 								)}
 								{/* History Section */}
 								<div className="mt-8">
-									<div className="md:text-lg py-4 dark:text-gray-500">Owner History</div>
+									<div className="md:text-lg py-4 dark:text-gray-500 flex items-center space-x-2">
+										{['137', '80001'].includes(item.chain_identifier) && (
+											<Tippy content="This NFT is part of the Polygon sidechain">
+												<PolygonIcon className="w-4 h-4" />
+											</Tippy>
+										)}
+										{item.chain_identifier == 'NetXdQprcVkpaWU' && (
+											<Tippy content="This NFT is part of the Tezos blockchain">
+												<TezosIcon className="w-auto h-4" />
+											</Tippy>
+										)}
+										<span>Owner History</span>
+									</div>
 									<TokenHistoryCard
 										nftId={item.nft_id}
 										closeModal={() => {
@@ -574,7 +590,7 @@ const TokenDetailBody = ({
 						{(CONTRACTS.HICETNUNC, CONTRACTS.KALAMINT).includes(item.contract_address) ? null : (
 							<>
 								<a
-									href={`https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`}
+									href={`https://opensea.io/assets/${item.chain_identifier == 137 ? 'matic/' : ''}${item.contract_address}/${item.token_id}?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`}
 									title="Buy on OpenSea"
 									target="_blank"
 									onClick={() => {

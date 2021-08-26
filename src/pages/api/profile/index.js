@@ -4,15 +4,7 @@ import backend from '@/lib/backend'
 export default handler()
 	.use(middleware.auth)
 	.get(async ({ user }, res) => {
-		await backend
-			.get('/v2/myinfo', {
-				headers: {
-					'X-Authenticated-User': user.publicAddress,
-					'X-Authenticated-Email': user.email || null,
-					'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
-				},
-			})
-			.then(resp => res.json(resp.data))
+		getProfile(user).then(data => res.json(data))
 	})
 	.post(async ({ user, body }, res) => {
 		await backend.post('/v1/editname', body, {
@@ -25,3 +17,14 @@ export default handler()
 
 		res.status(200).end()
 	})
+
+const getProfile = user =>
+	backend
+		.get('/v2/myinfo', {
+			headers: {
+				'X-Authenticated-User': user.publicAddress,
+				'X-Authenticated-Email': user.email || null,
+				'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
+			},
+		})
+		.then(res => res.data)

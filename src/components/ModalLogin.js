@@ -1,18 +1,15 @@
 import { useContext, useState } from 'react'
 import mixpanel from 'mixpanel-browser'
 import { Magic } from 'magic-sdk'
-import Web3Modal from 'web3modal'
-import WalletConnectProvider from '@walletconnect/web3-provider'
-import { WalletLink } from 'walletlink'
 import backend from '@/lib/backend'
 import AppContext from '@/context/app-context'
 import CloseButton from './CloseButton'
-import Web3 from 'web3'
-import Fortmatic from 'fortmatic'
+import { ethers } from 'ethers'
 import ScrollableModal from './ScrollableModal'
 import axios from '@/lib/axios'
 import { useTheme } from 'next-themes'
 import useAuth from '@/hooks/useAuth'
+import getWeb3Modal from '@/lib/web3Modal'
 
 export default function Modal({ isOpen }) {
 	const context = useContext(AppContext)
@@ -27,8 +24,10 @@ export default function Modal({ isOpen }) {
 		const { elements } = event.target
 
 		// the magic code
+		const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY)
 		try {
-			const did = await new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY).auth.loginWithMagicLink({ email: elements.email.value })
+			const did = await magic.auth.loginWithMagicLink({ email: elements.email.value })
+			context.setWeb3(new ethers.providers.Web3Provider(magic.rpcProvider))
 
 			// Once we have the did from magic, login with our own API
 			await axios.post(
@@ -52,73 +51,23 @@ export default function Modal({ isOpen }) {
 	const handleSubmitWallet = async () => {
 		mixpanel.track('Login - wallet button click')
 
-		var providerOptions = {
-			walletconnect: {
-				display: {
-					description: 'Use Rainbow & other popular wallets',
-				},
-				package: WalletConnectProvider,
-				options: {
-					infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
-				},
-			},
-			fortmatic: {
-				package: Fortmatic, // required
-				options: {
-					key: process.env.NEXT_PUBLIC_FORTMATIC_PUB_KEY, // required
-				},
-			},
-		}
-		if (!context.isMobile) {
-			providerOptions = {
-				...providerOptions,
-				'custom-walletlink': {
-					display: {
-						logo: '/coinbase.svg',
-						name: 'Coinbase',
-						description: 'Use Coinbase Wallet app on mobile device',
-					},
-					options: {
-						appName: 'Showtime', // Your app name
-						networkUrl: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`,
-						chainId: process.env.NEXT_PUBLIC_CHAINID,
-					},
-					package: WalletLink,
-					connector: async (_, options) => {
-						const { appName, networkUrl, chainId } = options
-						const walletLink = new WalletLink({
-							appName,
-						})
-						const provider = walletLink.makeWeb3Provider(networkUrl, chainId)
-						await provider.enable()
-						return provider
-					},
-				},
-			}
-		}
+		const web3Modal = getWeb3Modal({ theme: resolvedTheme })
 
-		const web3Modal = new Web3Modal({
-			network: 'mainnet', // optional
-			cacheProvider: false, // optional
-			providerOptions, // required
-			theme: resolvedTheme,
-		})
+		let web3
+		if (!context.web3) {
+			const provider = await web3Modal.connect()
 
-		const provider = await web3Modal.connect()
+			web3 = new ethers.providers.Web3Provider(provider)
 
-		const web3 = new Web3(provider)
+			context.setWeb3(web3)
+		} else web3 = context.web3
 
-		const coinbase = await web3.eth.getCoinbase()
-		const address = coinbase.toLowerCase()
+		const address = await web3.getSigner().getAddress()
 		const response_nonce = await backend.get(`/v1/getnonce?address=${address}`)
 
 		try {
 			setSignaturePending(true)
-			const signature = await web3.eth.personal.sign(
-				process.env.NEXT_PUBLIC_SIGNING_MESSAGE + ' ' + response_nonce.data.data,
-				address,
-				'' // MetaMask will ignore the password argument here
-			)
+			const signature = await web3.getSigner().signMessage(process.env.NEXT_PUBLIC_SIGNING_MESSAGE + ' ' + response_nonce.data.data)
 
 			// login with our own API
 			await axios.post('/api/auth/login/signature', { signature, address })
