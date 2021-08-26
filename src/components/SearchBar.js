@@ -74,7 +74,7 @@ const SearchBar = ({ propagateSearchState }) => {
 						<SearchIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
 					</div>
 					<input
-						className="flex placeholder-gray-500 dark:placeholder-gray-400 dark:text-gray-300 bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150 px-2 pl-8 py-1.5 rounded-full focus:outline-none text-sm w-full"
+						className="flex placeholder-gray-500 dark:placeholder-gray-400 dark:text-gray-300 bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150 px-2 pl-8 py-2 rounded-full focus:outline-none text-sm w-full"
 						type="text"
 						placeholder="Search by name or wallet address"
 						value={searchText}

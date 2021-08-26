@@ -2,6 +2,8 @@ import nc from 'next-connect'
 import { withSentry } from '@sentry/nextjs'
 import Iron from '@hapi/iron'
 import CookieService from '@/lib/cookie'
+import { flagDefs } from '@/hooks/useFlags'
+import backend from './backend'
 
 export default () =>
 	nc({
@@ -34,6 +36,25 @@ export const middleware = {
 
 		next()
 	},
+	flags:
+		flags =>
+		async ({ user }, res, next) => {
+			const profile = await backend
+				.get('/v2/myinfo', {
+					headers: {
+						'X-Authenticated-User': user.publicAddress,
+						'X-Authenticated-Email': user.email || null,
+						'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
+					},
+				})
+				.then(({ data: { data } }) => data.profile)
+
+			if (flags.map(flagKey => flagDefs[flagKey](profile)).filter(el => !el).lenght > 0) {
+				return res.status(403).json({ error: 'Unauthorized.' })
+			}
+
+			next()
+		},
 	guest: ({ user }, res, next) => {
 		if (user) return res.status(401).json({ error: 'User is already authenticated.' })
 

@@ -184,3 +184,22 @@ export const MENTIONS_STYLE = {
 		},
 	},
 }
+
+export const MINT_TYPES = ['image', 'video', 'model' /* 'audio', 'text', 'file' */]
+export const MINT_FORMATS = {
+	image: ['.png', '.gif', '.jpg'],
+	video: ['.mp4', '.mov'],
+	model: ['.glb', '.gltf'],
+	// audio: ['.mp3', '.flac', '.wav'],
+	// text: ['.txt', '.md'],
+	// file: ['.pdf', '.psd', '.ai'],
+}
+
+export const SHOWTIME_CONTRACTS = [process.env.NEXT_PUBLIC_MINTING_CONTRACT]
+
+export const CHAIN_IDENTIFIERS = {
+	ethereum: 1,
+	tezos: 'NetXdQprcVkpaWU',
+	polygon: 137,
+	mumbai: 80001,
+}

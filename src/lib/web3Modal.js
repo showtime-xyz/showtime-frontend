@@ -1,16 +1,10 @@
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import Fortmatic from 'fortmatic'
 import { WalletLink } from 'walletlink'
-import { useTheme } from 'next-themes'
 import Web3Modal from 'web3modal'
+import { Magic } from 'magic-sdk'
 
-class DummyModal {}
-
-const useWeb3Modal = () => {
-	const { resolvedTheme } = useTheme()
-
-	if (typeof window === 'undefined') return DummyModal
-
+const getWeb3Modal = ({ withMagic = false, theme } = {}) => {
 	const web3Modal = new Web3Modal({
 		network: 'mainnet',
 		cacheProvider: false,
@@ -50,11 +44,35 @@ const useWeb3Modal = () => {
 					return provider
 				},
 			},
+			...(withMagic
+				? {
+						'custom-magiclink': {
+							display: {
+								logo: '/img/logo.png',
+								name: 'Showtime Account',
+								description: 'If you log in to Showtime with an email address, use this',
+							},
+							options: {
+								apiKey: process.env.NEXT_PUBLIC_MAGIC_PUB_KEY,
+							},
+							package: Magic,
+							connector: async (Magic, opts) => {
+								const magic = new Magic(opts.apiKey)
+
+								if (!(await magic.user.isLoggedIn())) await magic.auth.loginWithMagicLink({ email: prompt('What email do you use to log into Showtime?') })
+
+								return magic.rpcProvider
+							},
+						},
+				  }
+				: {}),
 		},
-		theme: resolvedTheme,
+		theme,
 	})
+
+	web3Modal.clearCachedProvider()
 
 	return web3Modal
 }
 
-export default useWeb3Modal
+export default getWeb3Modal

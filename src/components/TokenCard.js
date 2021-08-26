@@ -1,5 +1,5 @@
 import { useState, useRef, Fragment, useEffect } from 'react'
-import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
+import { DEFAULT_PROFILE_PIC, SHOWTIME_CONTRACTS } from '@/lib/constants'
 import Link from 'next/link'
 import LikeButton from './LikeButton'
 import CommentButton from './CommentButton'
@@ -16,8 +16,9 @@ import { Menu, Transition } from '@headlessui/react'
 import MiniFollowButton from './MiniFollowButton'
 import useProfile from '@/hooks/useProfile'
 import OrbitIcon from './Icons/OrbitIcon'
+import { CHAIN_IDENTIFIERS } from '../lib/constants'
 
-const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
+const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, setTransferModal, setBurnModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
 	const { myProfile } = useProfile()
 	const [item, setItem] = useState(originalItem)
 	const [showVideo, setShowVideo] = useState(false)
@@ -33,6 +34,10 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 		setShowModel(true)
 	}, [item])
 
+	useEffect(() => {
+		setItem(originalItem)
+	}, [originalItem])
+
 	const divRef = useRef()
 
 	const handleHide = async () => {
@@ -40,9 +45,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 		setHasUserHiddenItems(true)
 
 		// Post changes to the API
-		await axios.post(`/api/hidenft/${item.nft_id}/${listId}`, {
-			showDuplicates: showDuplicates ? 1 : 0,
-		})
+		await axios.post(`/api/hidenft/${item.nft_id}/${listId}`, { showDuplicates: showDuplicates ? 1 : 0 })
 
 		if (!showUserHiddenItems) handleRemoveItem(item.nft_id)
 
@@ -86,7 +89,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 
 	return (
 		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
-			<div ref={divRef} className={`w-full h-full md:rounded-2xl shadow-lg hover:shadow-xl transition duration-300 flex flex-col bg-white dark:bg-gray-900 ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border-t border-b md:border-l md:border-r border-transparent dark:border-gray-800'}`}>
+			<div ref={divRef} className={`w-full h-full shadow-lg ${SHOWTIME_CONTRACTS.includes(item.contract_address) ? 'shadow-brand animate-shadow-flow' : 'hover:shadow-xl'} md:rounded-2xl transition-all duration-300 transform hover:translate-y-[-2px] flex flex-col bg-white dark:bg-gray-900 ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border-t border-b md:border-l md:border-r border-transparent dark:border-gray-800'}`}>
 				<div ref={item.imageRef} className="p-4 relative">
 					<div className="flex items-center justify-between">
 						<div className="pr-2">
@@ -153,6 +156,26 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 												</button>
 											)}
 										</Menu.Item>
+										{SHOWTIME_CONTRACTS.includes(item.contract_address) && item?.show_transfer_options == 1 && (
+											<>
+												<Menu.Item>
+													{({ active }) => (
+														<button onClick={() => setTransferModal(item)} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+															<span className="block truncate font-medium">Transfer</span>
+														</button>
+													)}
+												</Menu.Item>
+												<hr className="border-gray-100 dark:border-gray-700 my-1" />
+
+												<Menu.Item>
+													{({ active }) => (
+														<button onClick={() => setBurnModal(item)} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-red-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+															<span className="block truncate font-medium text-red-500 dark:text-red-700">Burn</span>
+														</button>
+													)}
+												</Menu.Item>
+											</>
+										)}
 									</Menu.Items>
 								</Transition>
 							</Menu>
@@ -396,7 +419,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 				<div className="p-4">
 					<div>
 						<div>
-							<div
+							<p
 								onClick={() => {
 									mixpanel.track('Open NFT modal')
 									setCurrentlyOpenModal(item)
@@ -408,9 +431,8 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 								className="break-words cursor-pointer truncate text-lg font-semibold dark:text-gray-200"
 							>
 								{item.token_name}
-							</div>
+							</p>
 						</div>
-
 						<div className="mt-4 flex items-center justify-between">
 							<div className="flex items-center space-x-4">
 								<LikeButton item={item} />
@@ -425,7 +447,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 									}}
 								/>
 							</div>
-							<ShareButton url={window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${item.contract_address}/${item.token_id}`} type={'item'} />
+							<ShareButton url={window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == item.chain_identifier)}/${item.contract_address}/${item.token_id}`} type={'item'} />
 						</div>
 					</div>
 				</div>
@@ -446,10 +468,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 													</div>
 												</a>
 											</Link>
-											<div className="text-gray-500 text-sm mr-2 -ml-1 mt-px">
-												&amp; {item.owner_count - 1} other
-												{item.owner_count - 1 > 1 ? 's' : null}
-											</div>
+											{myProfile?.profile_id !== item.owner_id && <MiniFollowButton profileId={item.owner_id} />}
 										</div>
 									</div>
 								) : (

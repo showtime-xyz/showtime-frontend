@@ -3,7 +3,7 @@ import '@/styles/styles.css'
 import { DISABLE_ALL } from '@/lib/constants'
 import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
-import Router from 'next/router'
+import Router, { useRouter } from 'next/router'
 import ProgressBar from '@badrap/bar-of-progress'
 import ModalThrottleUser from '@/components/ModalThrottleUser'
 import axios from '@/lib/axios'
@@ -26,9 +26,11 @@ Router.events.on('routeChangeComplete', progress.finish)
 Router.events.on('routeChangeError', progress.finish)
 
 const App = ({ Component, pageProps }) => {
+	const router = useRouter()
 	const { revalidate } = useAuth()
 	const [myProfile, setMyProfile] = useState(null)
 	const [user, setUser] = useState()
+	const [web3, setWeb3] = useState(null)
 	const [windowSize, setWindowSize] = useState(null)
 	const [myLikes, setMyLikes] = useState(null)
 	const [myLikeCounts, setMyLikeCounts] = useState(null)
@@ -187,6 +189,8 @@ const App = ({ Component, pageProps }) => {
 
 	const injectedGlobalContext = {
 		user,
+		web3,
+		setWeb3,
 		windowSize,
 		myLikes,
 		myLikeCounts,
@@ -238,15 +242,16 @@ const App = ({ Component, pageProps }) => {
 			setMyFollows([])
 			setMyRecommendations([])
 			setMyProfile(undefined)
+			setWeb3(null)
 			mixpanel.track('Logout')
 		},
 	}
 
 	return (
-		<ThemeProvider defaultTheme="system" disableTransitionOnChange={true} attribute="class">
+		<ThemeProvider defaultTheme="light" disableTransitionOnChange={true} attribute="class">
 			<AppContext.Provider value={injectedGlobalContext}>
 				<ModalThrottleUser isOpen={throttleOpen} closeModal={() => setThrottleOpen(false)} modalContent={throttleContent} />
-				<Component {...pageProps} />
+				<Component {...pageProps} key={router.asPath} />
 			</AppContext.Provider>
 		</ThemeProvider>
 	)
