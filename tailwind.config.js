@@ -1,5 +1,8 @@
-const defaultTheme = require('tailwindcss/defaultTheme')
+const hexToRgba = require('hex-to-rgba')
 const colors = require('tailwindcss/colors')
+const defaultTheme = require('tailwindcss/defaultTheme')
+
+const buildShadow = (opacity, blur, pos, theme) => `${pos}rem 0.5rem ${blur}rem 0rem ${hexToRgba(theme('colors.rose.500'), opacity)}, -0.5rem ${pos}rem ${blur}rem 0rem ${hexToRgba(theme('colors.indigo.500'), opacity)}, 0.5rem ${pos}rem ${blur}rem 0rem ${hexToRgba(theme('colors.fuchsia.500'), opacity)}, ${pos}rem -0.5rem ${blur}rem 0rem ${hexToRgba(theme('colors.violet.500'), opacity)}`
 
 module.exports = {
 	mode: 'jit',
@@ -38,6 +41,10 @@ module.exports = {
 				gray: colors.trueGray,
 				cyan: colors.cyan,
 				yellow: colors.yellow,
+				fuchsia: colors.fuchsia,
+				violet: colors.violet,
+				indigo: colors.indigo,
+				rose: colors.rose,
 			},
 			cursor: {
 				copy: 'copy',
@@ -57,6 +64,18 @@ module.exports = {
 				1: 1,
 				2: 2,
 			},
+			boxShadow: theme => ({
+				brand: buildShadow(0.15, 1, 0, theme),
+			}),
+			animation: {
+				'shadow-flow': 'shadow-flow 4s ease-in-out infinite',
+			},
+			keyframes: theme => ({
+				'shadow-flow': {
+					'0%, 100%': { boxShadow: buildShadow(0.15, 1, 0, theme) },
+					'50%': { boxShadow: buildShadow(0.15, 1, 0.5, theme) },
+				},
+			}),
 		},
 	},
 	plugins: [
