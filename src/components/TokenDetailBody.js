@@ -25,6 +25,9 @@ import MiniFollowButton from './MiniFollowButton'
 import UsersWhoOwn from './UsersWhoOwn'
 import OrbitIcon from './Icons/OrbitIcon'
 import { CHAIN_IDENTIFIERS } from '@/lib/constants'
+import PolygonIcon from './Icons/PolygonIcon'
+import Tippy from '@tippyjs/react'
+import TezosIcon from './Icons/TezosIcon'
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500
@@ -510,7 +513,19 @@ const TokenDetailBody = ({
 								)}
 								{/* History Section */}
 								<div className="mt-8">
-									<div className="md:text-lg py-4 dark:text-gray-500">Owner History</div>
+									<div className="md:text-lg py-4 dark:text-gray-500 flex items-center space-x-2">
+										{['137', '80001'].includes(item.chain_identifier) && (
+											<Tippy content="This NFT is part of the Polygon sidechain">
+												<PolygonIcon className="w-4 h-4" />
+											</Tippy>
+										)}
+										{item.chain_identifier == 'NetXdQprcVkpaWU' && (
+											<Tippy content="This NFT is part of the Tezos blockchain">
+												<TezosIcon className="w-auto h-4" />
+											</Tippy>
+										)}
+										<span>Owner History</span>
+									</div>
 									<TokenHistoryCard
 										nftId={item.nft_id}
 										closeModal={() => {
@@ -572,12 +587,6 @@ const TokenDetailBody = ({
 					{/* OpenSea Link */}
 
 					<div className="m-4 flex text-sm">
-						{item.chain_identifier === 137 && (
-							<>
-								<div className="text-gray-500 hover:text-stpink cursor-pointer whitespace-nowrap">Polygon NFT</div>
-								<div className="my-4">·</div>
-							</>
-						)}
 						{(CONTRACTS.HICETNUNC, CONTRACTS.KALAMINT).includes(item.contract_address) ? null : (
 							<>
 								<a
