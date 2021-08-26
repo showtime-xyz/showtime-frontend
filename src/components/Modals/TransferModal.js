@@ -31,6 +31,9 @@ const TransferModal = ({ open, onClose, token }) => {
 	const { resolvedTheme } = useTheme()
 	const isWeb3ModalActive = useRef(false)
 	const [modalState, setModalState] = useState(MODAL_STATES.GENERAL)
+	const [quantity, setQuantity] = useState(1)
+	const [address, setAddress] = useState('')
+	const [transactionHash, setTransactionHash] = useState(null)
 
 	const { data: ownershipData } = useSWR(
 		() => open && myProfile && `/v1/owned_quantity?nft_id=${token.nft_id}&profile_id=${myProfile.profile_id}`,
@@ -41,11 +44,10 @@ const TransferModal = ({ open, onClose, token }) => {
 		if (isWeb3ModalActive.current || modalState === MODAL_STATES.PROCESSING) return
 
 		onClose()
+		setQuantity(1)
+		setAddress('')
+		setTransactionHash(null)
 	}
-
-	const [quantity, setQuantity] = useState(1)
-	const [address, setAddress] = useState('')
-	const [transactionHash, setTransactionHash] = useState(null)
 
 	const transferToken = async () => {
 		setModalState(MODAL_STATES.PROCESSING)

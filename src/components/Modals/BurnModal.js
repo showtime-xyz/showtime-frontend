@@ -40,6 +40,8 @@ const BurnModal = ({ open, onClose, token }) => {
 		if (isWeb3ModalActive.current || modalState === MODAL_STATES.PROCESSING) return
 
 		onClose()
+		setQuantity(1)
+		setTransactionHash(null)
 	}
 
 	const burnToken = async () => {
