@@ -58,12 +58,7 @@ const BurnModal = ({ open, onClose, token }) => {
 
 		const signerAddress = await web3.getSigner().getAddress()
 
-		if (
-			!myProfile?.wallet_addresses_v2
-				?.filter(address => address.minting_enabled)
-				?.map(({ address }) => address.toLowerCase())
-				?.includes(signerAddress.toLowerCase())
-		) {
+		if (!myProfile?.wallet_addresses_v2?.map(({ address }) => address.toLowerCase())?.includes(signerAddress.toLowerCase())) {
 			return setModalState(MODAL_STATES.CHANGE_WALLET)
 		}
 
