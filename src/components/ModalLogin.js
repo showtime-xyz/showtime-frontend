@@ -52,15 +52,7 @@ export default function Modal({ isOpen }) {
 		mixpanel.track('Login - wallet button click')
 
 		const web3Modal = getWeb3Modal({ theme: resolvedTheme })
-
-		let web3
-		if (!context.web3) {
-			const provider = await web3Modal.connect()
-
-			web3 = new ethers.providers.Web3Provider(provider)
-
-			context.setWeb3(web3)
-		} else web3 = context.web3
+		const web3 = new ethers.providers.Web3Provider(await web3Modal.connect())
 
 		const address = await web3.getSigner().getAddress()
 		const response_nonce = await backend.get(`/v1/getnonce?address=${address}`)
