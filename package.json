@@ -26,7 +26,7 @@
     "@sentry/nextjs": "^6.11.0",
     "@tailwindcss/forms": "^0.3.2",
     "@tippyjs/react": "^4.2.5",
-    "@walletconnect/web3-provider": "^1.5.5",
+    "@walletconnect/web3-provider": "^1.6.5",
     "authereum": "^0.1.0",
     "autoprefixer": "^10.3.1",
     "awesome-debounce-promise": "^2.1.0",
