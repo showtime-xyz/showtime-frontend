@@ -190,3 +190,7 @@ export const buildFormData = data => {
 
 	return formData
 }
+
+export const personalSignMessage = async (web3, message) => {
+	return web3.getSigner().provider.send('personal_sign', [message, await web3.getSigner().getAddress()])
+}

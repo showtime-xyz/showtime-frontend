@@ -10,6 +10,7 @@ import axios from '@/lib/axios'
 import { useTheme } from 'next-themes'
 import useAuth from '@/hooks/useAuth'
 import getWeb3Modal from '@/lib/web3Modal'
+import { personalSignMessage } from '@/lib/utilities'
 
 export default function Modal({ isOpen }) {
 	const context = useContext(AppContext)
@@ -52,22 +53,14 @@ export default function Modal({ isOpen }) {
 		mixpanel.track('Login - wallet button click')
 
 		const web3Modal = getWeb3Modal({ theme: resolvedTheme })
-
-		let web3
-		if (!context.web3) {
-			const provider = await web3Modal.connect()
-
-			web3 = new ethers.providers.Web3Provider(provider)
-
-			context.setWeb3(web3)
-		} else web3 = context.web3
+		const web3 = new ethers.providers.Web3Provider(await web3Modal.connect())
 
 		const address = await web3.getSigner().getAddress()
 		const response_nonce = await backend.get(`/v1/getnonce?address=${address}`)
 
 		try {
 			setSignaturePending(true)
-			const signature = await web3.getSigner().signMessage(process.env.NEXT_PUBLIC_SIGNING_MESSAGE + ' ' + response_nonce.data.data)
+			const signature = await personalSignMessage(web3, process.env.NEXT_PUBLIC_SIGNING_MESSAGE + ' ' + response_nonce.data.data)
 
 			// login with our own API
 			await axios.post('/api/auth/login/signature', { signature, address })
