@@ -10,6 +10,7 @@ import axios from '@/lib/axios'
 import { useTheme } from 'next-themes'
 import useAuth from '@/hooks/useAuth'
 import getWeb3Modal from '@/lib/web3Modal'
+import { personalSignMessage } from '@/lib/utilities'
 
 export default function Modal({ isOpen }) {
 	const context = useContext(AppContext)
@@ -59,7 +60,7 @@ export default function Modal({ isOpen }) {
 
 		try {
 			setSignaturePending(true)
-			const signature = await web3.getSigner().signMessage(process.env.NEXT_PUBLIC_SIGNING_MESSAGE + ' ' + response_nonce.data.data)
+			const signature = await personalSignMessage(web3, process.env.NEXT_PUBLIC_SIGNING_MESSAGE + ' ' + response_nonce.data.data)
 
 			// login with our own API
 			await axios.post('/api/auth/login/signature', { signature, address })

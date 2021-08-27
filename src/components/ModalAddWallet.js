@@ -9,6 +9,7 @@ import axios from '@/lib/axios'
 import GreenButton from '@/components/UI/Buttons/GreenButton'
 import getWeb3Modal from '@/lib/web3Modal'
 import { useTheme } from 'next-themes'
+import { personalSignMessage } from '@/lib/utilities'
 
 export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 	const context = useContext(AppContext)
@@ -84,7 +85,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 
 		try {
 			setSignaturePending(true)
-			const signature = await web3.getSigner().signMessage(process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + ' ' + response_nonce.data.data)
+			const signature = await personalSignMessage(web3, process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + ' ' + response_nonce.data.data)
 			setSignaturePending(false)
 			setStep(3)
 
