@@ -1,0 +1,42 @@
+import useStickyState from '@/hooks/useStickyState'
+import { Transition } from '@headlessui/react'
+import XIcon from './Icons/XIcon'
+
+const MintingBanner = () => {
+	const [show, setShow] = useStickyState(true, 'showMintBanner')
+
+	return (
+		<Transition show={show} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
+			<div className="relative bg-indigo-600">
+				<div className="max-w-7xl mx-auto py-3 px-3 sm:px-6 lg:px-8">
+					<div className="pr-16 sm:text-center sm:px-16">
+						<p className="font-medium text-white">
+							<a href="https://twitter.com/tryShowtime/status/1430898860759552008" target="_blank" className="md:hidden text-white font-bold" rel="noreferrer">
+								We're rolling out free minting! <span aria-hidden="true">&rarr;</span>
+							</a>
+							<span className="hidden md:inline">
+								Showtime is rolling out free minting!{' '}
+								<a className="text-white font-bold underline" href="https://docs.google.com/document/d/11Rwo7tfpnN1RAglW1zjk8vywcbIFb3e8yLCnCFOcMZk/edit" target="_blank" rel="noreferrer">
+									Apply now
+								</a>{' '}
+								and{' '}
+								<a className="text-white font-bold underline" href="/claim" target="_blank">
+									claim our genesis drop NFT
+								</a>{' '}
+								to celebrate.
+							</span>
+						</p>
+					</div>
+					<div className="absolute inset-y-0 right-0 pt-1 pr-1 flex items-start sm:pt-1 sm:pr-2 sm:items-start">
+						<button onClick={() => setShow(false)} type="button" className="flex p-2 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-white">
+							<span className="sr-only">Dismiss</span>
+							<XIcon className="h-6 w-6 text-white" aria-hidden="true" />
+						</button>
+					</div>
+				</div>
+			</div>
+		</Transition>
+	)
+}
+
+export default MintingBanner
