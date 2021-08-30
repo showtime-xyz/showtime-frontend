@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 
-const useStickyState = (defaultValue, key) => {
+const useStickyState = (key, defaultValue, serverValue) => {
 	const [value, setValue] = useState(() => {
-		if (typeof window == 'undefined') return defaultValue
+		if (typeof window == 'undefined') return serverValue ?? defaultValue
 
 		const stickyValue = window.localStorage.getItem(key)
 

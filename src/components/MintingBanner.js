@@ -3,7 +3,7 @@ import { Transition } from '@headlessui/react'
 import XIcon from './Icons/XIcon'
 
 const MintingBanner = () => {
-	const [show, setShow] = useStickyState(true, 'showMintBanner')
+	const [show, setShow] = useStickyState('showMintBanner', true, false)
 
 	return (
 		<Transition show={show} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
