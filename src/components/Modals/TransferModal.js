@@ -226,7 +226,7 @@ const TransactionState = ({ transactionHash }) => {
 				<p className="font-medium text-gray-900 dark:text-white text-center">Your NFT is being transferred on the Polygon network.</p>
 				<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs mx-auto">Feel free to navigate away from this screen</p>
 			</div>
-			<Button style="tertiary" as="a" href={`https://mumbai.polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
+			<Button style="tertiary" as="a" href={`https://polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
 				<PolygonIcon className="w-4 h-4" />
 				<span className="text-sm font-medium">View on Polygon Scan</span>
 			</Button>
@@ -239,7 +239,7 @@ const SuccessState = ({ transactionHash }) => {
 		<div className="p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
 			<p className="font-medium text-5xl">🎉</p>
 			<p className="font-medium text-gray-900 dark:text-white text-center">Your NFT has been transferred on the Polygon network. It might still show up on your profile for a few minutes.</p>
-			<Button style="tertiary" as="a" href={`https://mumbai.polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
+			<Button style="tertiary" as="a" href={`https://polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
 				<PolygonIcon className="w-4 h-4" />
 				<span className="text-sm font-medium">View on Polygon Scan</span>
 			</Button>
