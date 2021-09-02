@@ -427,10 +427,10 @@
   resolved "https://registry.yarnpkg.com/@badrap/bar-of-progress/-/bar-of-progress-0.1.2.tgz#5d9cf85759e1f77bddcb74398530976d87bb5077"
   integrity sha512-bCwx/HbgUfJEndzlubJF5FVQrFEcGX4HZsoCfoa+gSq37pjbJBvIyqMBLIGnb5y0ICovIrxJUxvlbmxeic0rSQ==
 
-"@biconomy/mexa@^2.0.10":
-  version "2.0.15"
-  resolved "https://registry.yarnpkg.com/@biconomy/mexa/-/mexa-2.0.15.tgz#22876068753830eb8f1b9690c9329dbc26458e9e"
-  integrity sha512-1DYbb8BW1LsectgCdL375xQ7c6LdA3RtpyCWQjnecARFtcDRCezCs+tFIlPD23dGy4S2lF5Xr5pBiJ/BHT3wHA==
+"@biconomy/mexa@^2.0.18":
+  version "2.0.18"
+  resolved "https://registry.yarnpkg.com/@biconomy/mexa/-/mexa-2.0.18.tgz#484e53d9a620ff7898cdf465e4c1e519e18d02de"
+  integrity sha512-4wj7d+zpG4MaiM4ZOvkUDf9BESz2c4KTm1zsx2eUx6raqpEZV4UZXVpOmXb3Hh7mEHpfYcCaUF08bLqj2YyMoA==
   dependencies:
     "@babel/core" "^7.12.13"
     "@babel/runtime" "^7.12.13"
@@ -5314,15 +5314,7 @@ ethereumjs-abi@0.6.5:
     bn.js "^4.10.0"
     ethereumjs-util "^4.3.0"
 
-ethereumjs-abi@0.6.8, ethereumjs-abi@^0.6.8:
-  version "0.6.8"
-  resolved "https://registry.yarnpkg.com/ethereumjs-abi/-/ethereumjs-abi-0.6.8.tgz#71bc152db099f70e62f108b7cdfca1b362c6fcae"
-  integrity sha512-Tx0r/iXI6r+lRsdvkFDlut0N08jWMnKRZ6Gkq+Nmw75lZe4e6o3EkSnkaBP5NF6+m5PTGAr9JP43N3LyeoglsA==
-  dependencies:
-    bn.js "^4.11.8"
-    ethereumjs-util "^6.0.0"
-
-"ethereumjs-abi@git+https://github.com/ethereumjs/ethereumjs-abi.git":
+ethereumjs-abi@0.6.8, ethereumjs-abi@^0.6.8, "ethereumjs-abi@git+https://github.com/ethereumjs/ethereumjs-abi.git":
   version "0.6.8"
   resolved "git+https://github.com/ethereumjs/ethereumjs-abi.git#ee3994657fa7a427238e6ba92a84d0b529bbcde0"
   dependencies:
