@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ACTIVITY_TYPES } from '@/lib/constants'
+import { ACTIVITY_TYPES, CHAIN_IDENTIFIERS } from '@/lib/constants'
 import mixpanel from 'mixpanel-browser'
 
 export default function Transfer({ act }) {
@@ -14,7 +14,7 @@ export default function Transfer({ act }) {
 				{count === 1 && (
 					<>
 						{verb}{' '}
-						<Link href={`/t/${nfts[0].contract_address}/${nfts[0].token_id}`}>
+						<Link href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == nfts[0].chain_identifier)}/${nfts[0].contract_address}/${nfts[0].token_id}`}>
 							<a className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink" onClick={() => mixpanel.track('Activity - Click on NFT title')}>
 								{nfts[0].title}
 							</a>
