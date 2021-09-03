@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import { faComment, faHeart, faUser, faAt } from '@fortawesome/free-solid-svg-icons'
 import { formatDistanceToNowStrict } from 'date-fns'
-import { getNotificationInfo, DEFAULT_PROFILE_PIC } from '@/lib/constants'
+import { getNotificationInfo, DEFAULT_PROFILE_PIC, CHAIN_IDENTIFIERS } from '@/lib/constants'
 import ModalUserList from '@/components/ModalUserList'
 import axios from '@/lib/axios'
 import ZapIcon from './Icons/ZapIcon'
@@ -180,7 +180,7 @@ export default function NotificationsBtn() {
 																{[7].includes(notif.type_id) ? 'liked your comment on ' : null}
 															</span>
 															{notif.nft__nftdisplay__name ? (
-																<Link href="/t/[...token]" as={`/t/${notif.nft__contract__address}/${notif.nft__token_identifier}`}>
+																<Link href="/t/[...token]" as={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == notif.chain_identifier)}/${notif.nft__contract__address}/${notif.nft__token_identifier}`}>
 																	<a onClick={closePanel} className="text-black dark:text-gray-200 cursor-pointer hover:text-stpink dark:hover:text-stpink">
 																		{notif.nft__nftdisplay__name}
 																	</a>
@@ -196,7 +196,7 @@ export default function NotificationsBtn() {
 												</div>
 											</div>
 										) : (
-											<Link href={getNotificationInfo(notif.type_id).goTo === 'profile' ? '/[profile]' : '/t/[...token]'} as={getNotificationInfo(notif.type_id).goTo === 'profile' ? (notif.link_to_profile__address ? `/${notif.link_to_profile__username || notif.link_to_profile__address}` : `/${myProfile?.username || user?.publicAddress}`) : `/t/${notif.nft__contract__address}/${notif.nft__token_identifier}`} key={notif.id}>
+											<Link href={getNotificationInfo(notif.type_id).goTo === 'profile' ? '/[profile]' : '/t/[...token]'} as={getNotificationInfo(notif.type_id).goTo === 'profile' ? (notif.link_to_profile__address ? `/${notif.link_to_profile__username || notif.link_to_profile__address}` : `/${myProfile?.username || user?.publicAddress}`) : `/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == notif.chain_identifier)}/${notif.nft__contract__address}/${notif.nft__token_identifier}`} key={notif.id}>
 												<div onClick={closePanel} className={`py-3 px-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all rounded-lg cursor-pointer whitespace-nowrap flex items-start w-full max-w-full ${new Date(notif.to_timestamp) > new Date(previouslyLastOpened) ? 'bg-gray-100 hover:bg-gray-200' : ''}`} key={notif.id}>
 													<div className="w-max mr-2 relative min-w-[2.25rem]">
 														<img alt={notif.name} src={notif.img_url ? notif.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 mt-1 w-9 h-9" />
