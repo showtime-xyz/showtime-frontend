@@ -29,6 +29,9 @@ import { useTheme } from 'next-themes'
 import useProfile from '@/hooks/useProfile'
 import { ExclamationIcon } from '@heroicons/react/outline'
 import XIcon from '@/components/Icons/XIcon'
+import { buildFormData } from '@/lib/utilities'
+
+const MAX_FILE_SIZE = 1024 * 1024 * 50 // 50MB
 
 const MODAL_PAGES = {
 	GENERAL: 'general',
@@ -67,6 +70,7 @@ const MintModal = ({ open, onClose }) => {
 	const [title, setTitle] = useState('')
 	const [description, setDescription] = useState('')
 	const [ipfsHash, setIpfsHash] = useState(null)
+	const [isUploading, setIsUploading] = useState(false)
 	const [sourcePreview, setSourcePreview] = useState({ type: null, size: null, ext: null, src: null })
 	const [putOnSale, setPutOnSale] = useState(false)
 	const [price, setPrice] = useState('')
@@ -135,6 +139,40 @@ const MintModal = ({ open, onClose }) => {
 			})
 
 		onClose()
+	}
+
+	const cancelUpload = () => {
+		setIsUploading(false)
+		setIpfsHash('')
+		setSourcePreview({ type: null, size: null, ext: null, src: null })
+	}
+
+	const onFileUpload = async event => {
+		const file = event.target.files?.[0]
+		if (!file) return
+		if (file.size > MAX_FILE_SIZE) return alert('File too big! Please use a file smaller than 50MB.')
+
+		const type = file.type.split('/')[0] || (file.name.endsWith('.glb') || file.name.endsWith('.gltf') ? 'model' : '')
+
+		setIsUploading(true)
+		setSourcePreview({ type, size: file.size, ext: file.type.split('/')[1] || file.name.split('.').pop(), src: URL.createObjectURL(file) })
+
+		const { token: pinataToken } = await axios.post('/api/pinata/generate-key').then(res => res.data)
+
+		const formData = buildFormData({ file, pinataMetadata: { name: uuid() } })
+
+		const { IpfsHash } = await axios
+			.post('https://api.pinata.cloud/pinning/pinFileToIPFS', formData, {
+				maxBodyLength: 'Infinity',
+				headers: {
+					Authorization: `Bearer ${pinataToken}`,
+					'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
+				},
+			})
+			.then(res => res.data)
+
+		setIpfsHash(IpfsHash)
+		setIsUploading(false)
 	}
 
 	const isValid = useMemo(() => {
@@ -229,7 +267,7 @@ const MintModal = ({ open, onClose }) => {
 	const renderedPage = (type => {
 		switch (type) {
 			case MODAL_PAGES.GENERAL:
-				return <CreatePage {...{ title, setTitle, description, setDescription, ipfsHash, setIpfsHash, sourcePreview, setSourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }} />
+				return <CreatePage {...{ title, setTitle, description, setDescription, ipfsHash, isUploading, onFileUpload, cancelUpload, sourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }} />
 			case MODAL_PAGES.OPTIONS:
 				return <OptionsPage {...{ editionCount, setEditionCount, royaltiesPercentage, setRoyaltiesPercentage, notSafeForWork, setNotSafeForWork }} />
 			case MODAL_PAGES.LOADING:
@@ -286,7 +324,7 @@ const MintModal = ({ open, onClose }) => {
 	)
 }
 
-const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, setIpfsHash, sourcePreview, setSourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }) => {
+const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, isUploading, onFileUpload, cancelUpload, sourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }) => {
 	return (
 		<div>
 			<div className="p-4 border-b border-gray-100 dark:border-gray-900 space-y-4">
@@ -306,7 +344,7 @@ const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, se
 						</div>
 					</div>
 				</fieldset>
-				<IpfsUpload ipfsHash={ipfsHash} onChange={setIpfsHash} fileDetails={sourcePreview} setFileDetails={setSourcePreview} />
+				<IpfsUpload ipfsHash={ipfsHash} onChange={onFileUpload} onCancel={cancelUpload} fileDetails={sourcePreview} isUploading={isUploading} />
 			</div>
 			<div className="p-4 border-b border-gray-100 dark:border-gray-900">
 				<div className="flex items-center justify-between space-x-4">
