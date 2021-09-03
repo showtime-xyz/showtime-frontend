@@ -45,6 +45,9 @@ const Footer = () => {
 						<a className="text-gray-200 font-bold" href="/feedback" target="_blank" rel="noopener noreferrer">
 							Feedback
 						</a>
+						<a className="text-gray-200 font-bold" href="https://jobs.lever.co/ShowtimeTechnologies" target="_blank" rel="noopener noreferrer">
+							<span>Careers</span>
+						</a>
 					</div>
 				</div>
 			</footer>
