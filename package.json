@@ -76,7 +76,7 @@
     "sotez": "^10.0.0",
     "swr": "^1.0.0",
     "tailwindcss": "^2.2.9",
-    "use-wallet": "^0.9.0",
+    "use-wallet": "^0.10.0",
     "uuid": "^8.3.2",
     "walletlink": "^2.1.7",
     "web3modal": "^1.9.4",
