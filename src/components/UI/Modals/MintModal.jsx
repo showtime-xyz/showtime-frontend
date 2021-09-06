@@ -176,7 +176,7 @@ const MintModal = ({ open, onClose }) => {
 	}
 
 	const isValid = useMemo(() => {
-		if (!canMint || !title || !hasAcceptedTerms || !editionCount || !royaltiesPercentage || !ipfsHash) return false
+		if (!canMint || !title || !hasAcceptedTerms || !editionCount || !ipfsHash) return false
 		if (putOnSale && (!price || !currency)) return false
 		if (editionCount < 1 || editionCount > 10000 || royaltiesPercentage > 69 || royaltiesPercentage < 0) return false
 
