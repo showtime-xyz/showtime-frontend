@@ -43,10 +43,10 @@ const TransferModal = ({ open, onClose, token }) => {
 	const trueOnClose = () => {
 		if (isWeb3ModalActive.current || modalState === MODAL_STATES.PROCESSING) return
 
-		onClose()
 		setQuantity(1)
 		setAddress('')
 		setTransactionHash(null)
+		onClose()
 	}
 
 	const transferToken = async () => {
