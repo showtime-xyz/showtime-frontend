@@ -5108,12 +5108,12 @@ eth-provider@^0.2.5:
     ws "7.1.2"
     xhr2-cookies "1.1.0"
 
-eth-provider@^0.9.3:
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/eth-provider/-/eth-provider-0.9.3.tgz#aeb5ef6b265c709848e5091c627f5e04a309cf7f"
-  integrity sha512-D6A4JlXFIWuEkh1lebgkx98RUe2dtgNZwjlKwhRYZCd4OGqSBb6OCx9XHw9BiQdNGAxjxj38dlxBoSiGxvZAkw==
+eth-provider@^0.9.4:
+  version "0.9.4"
+  resolved "https://registry.yarnpkg.com/eth-provider/-/eth-provider-0.9.4.tgz#ee523031e8e7340f257d669fbfc28037de8906b4"
+  integrity sha512-E54KIx4m84rJellKAzb42B0O2TKAjW24QMQZWooNEqFuj+R97uGzPt3GhLbQbQbaIM9nfwiWqnejU82PKJG9Ew==
   dependencies:
-    ethereum-provider "0.4.3"
+    ethereum-provider "0.4.4"
     events "3.3.0"
     oboe "2.1.5"
     uuid "8.3.2"
@@ -5287,10 +5287,10 @@ ethereum-provider@0.0.6:
   resolved "https://registry.yarnpkg.com/ethereum-provider/-/ethereum-provider-0.0.6.tgz#6f5a0427c34872339667d9904a8692e8992e6bf5"
   integrity sha512-DqtdXNHGi/QtOjEovNOegVVQTd8/NnH9rP27R5SU3j2LKECZbcLGIZ3Z9Ln1SDaeUC5YJGJFYQCUUjfIi7NNyQ==
 
-ethereum-provider@0.4.3:
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/ethereum-provider/-/ethereum-provider-0.4.3.tgz#fb046c4c5e93875fcbfe845cad3571e2fb60ae9e"
-  integrity sha512-NVdah6tDhKO5CjBcuZ774YbiKchTy1PK/SyEsKdGA7Rv1cFg2TW0WPnzK2+BrQ6Y9XxL+wxStfWgfC4ZklRghg==
+ethereum-provider@0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/ethereum-provider/-/ethereum-provider-0.4.4.tgz#1aed1c19460ca0ea2e7cfe4727022349fb8dc519"
+  integrity sha512-yrakFKeYnx+MMtL5Ngoy65Y6DqheG0sZRDLdvdLh0oIP5mIRj4He3P+QqKqm1yb57Th4ZbFljluqAY8ufgtfeA==
   dependencies:
     events "3.3.0"
 
