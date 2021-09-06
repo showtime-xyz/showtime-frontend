@@ -507,11 +507,11 @@ const SuccessPage = ({ transactionHash, tokenID, shotConfetti }) => {
 const WalletErrorPage = ({ mintToken }) => {
 	return (
 		<div tabIndex="0" className="p-12 space-y-5 flex-1 flex flex-col items-center justify-center focus:outline-none">
-			<div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 sm:mx-0 sm:h-10 sm:w-10">
-				<ExclamationIcon className="h-6 w-6 text-yellow-600" aria-hidden="true" />
+			<div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 dark:bg-yellow-900 sm:mx-0 sm:h-10 sm:w-10">
+				<ExclamationIcon className="h-6 w-6 text-yellow-600 dark:text-yellow-300" aria-hidden="true" />
 			</div>
-			<p className="font-medium text-gray-900 text-center">The wallet you selected isn't linked to your profile.</p>
-			<p className="font-medium text-gray-900 text-center max-w-xs mx-auto">
+			<p className="font-medium text-gray-900 dark:text-white text-center">The wallet you selected isn't linked to your profile.</p>
+			<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs mx-auto">
 				You can link it from the{' '}
 				<Link href="/wallet">
 					<a className="font-semibold focus:outline-none focus-visible:underline">wallets page</a>
