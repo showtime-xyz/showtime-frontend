@@ -18,7 +18,6 @@ import useFlags, { FLAGS } from '@/hooks/useFlags'
 import MintModal from './UI/Modals/MintModal'
 import Button from './UI/Buttons/Button'
 import PlusIcon from './Icons/PlusIcon'
-import MintingBanner from './MintingBanner'
 
 const Header = () => {
 	const { [FLAGS.hasMinting]: canMint } = useFlags()
@@ -37,7 +36,6 @@ const Header = () => {
 					<MintModal open={mintModalOpen} onClose={() => setMintModalOpen(false)} />
 				</>
 			) : null}
-			<MintingBanner />
 			<header className="px-4 pt-3 sm:py-3 bg-white dark:bg-gray-900 bg-opacity-70 dark:bg-opacity-70 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none sticky top-0 z-1">
 				<div className="max-w-screen-2xl 2xl:max-w-none 2xl:px-10 sm:px-3 mx-auto w-full">
 					<div className="flex items-center justify-between">
