@@ -1,8 +1,3 @@
-import axios from '@/lib/axios'
-import { buildFormData } from '@/lib/utilities'
-import { useState } from 'react'
-import { v4 as uuid } from 'uuid'
-import { useEffect } from 'react'
 import { MINT_FORMATS, MINT_TYPES } from '@/lib/constants'
 import HelpIcon from './Icons/HelpIcon'
 import XIcon from './Icons/XIcon'
@@ -14,8 +9,6 @@ import FileIcon from './Icons/FileIcon'
 import CheckIcon from './Icons/CheckIcon'
 import OrbitIcon from './Icons/OrbitIcon'
 import Tippy from '@tippyjs/react'
-
-const MAX_FILE_SIZE = 1024 * 1024 * 50 // 50MB
 
 const FILE_TOOLTIP = {
 	image: 'Image',
