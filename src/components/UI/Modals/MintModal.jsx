@@ -29,6 +29,9 @@ import { useTheme } from 'next-themes'
 import useProfile from '@/hooks/useProfile'
 import { ExclamationIcon } from '@heroicons/react/outline'
 import XIcon from '@/components/Icons/XIcon'
+import { buildFormData } from '@/lib/utilities'
+
+const MAX_FILE_SIZE = 1024 * 1024 * 50 // 50MB
 
 const MODAL_PAGES = {
 	GENERAL: 'general',
@@ -67,6 +70,7 @@ const MintModal = ({ open, onClose }) => {
 	const [title, setTitle] = useState('')
 	const [description, setDescription] = useState('')
 	const [ipfsHash, setIpfsHash] = useState(null)
+	const [isUploading, setIsUploading] = useState(false)
 	const [sourcePreview, setSourcePreview] = useState({ type: null, size: null, ext: null, src: null })
 	const [putOnSale, setPutOnSale] = useState(false)
 	const [price, setPrice] = useState('')
@@ -112,8 +116,8 @@ const MintModal = ({ open, onClose }) => {
 		setNotSafeForWork(draft.nsfw || false)
 		setPrice(draft.price ?? '')
 		setCurrency(draft.currency_ticker || 'ETH')
-		setEditionCount(parseInt(draft.number_of_copies) || 1)
-		setRoyaltiesPercentage(parseInt(draft.royalties) ?? 10)
+		setEditionCount(draft.number_of_copies != null ? parseInt(draft.number_of_copies) : 1)
+		setRoyaltiesPercentage(draft.royalties != null ? parseInt(draft.royalties) : 10)
 		setIpfsHash(draft.ipfs_hash || null)
 		if (draft.ipfs_hash) setSourcePreview({ type: draft.mime_type.split('/')[0], size: draft.file_size, ext: draft.mime_type.split('/')[1], src: `https://gateway.pinata.cloud/ipfs/${draft.ipfs_hash}` })
 	}
@@ -137,8 +141,42 @@ const MintModal = ({ open, onClose }) => {
 		onClose()
 	}
 
+	const cancelUpload = () => {
+		setIsUploading(false)
+		setIpfsHash('')
+		setSourcePreview({ type: null, size: null, ext: null, src: null })
+	}
+
+	const onFileUpload = async event => {
+		const file = event.target.files?.[0]
+		if (!file) return
+		if (file.size > MAX_FILE_SIZE) return alert('File too big! Please use a file smaller than 50MB.')
+
+		const type = file.type.split('/')[0] || (file.name.endsWith('.glb') || file.name.endsWith('.gltf') ? 'model' : '')
+
+		setIsUploading(true)
+		setSourcePreview({ type, size: file.size, ext: file.type.split('/')[1] || file.name.split('.').pop(), src: URL.createObjectURL(file) })
+
+		const { token: pinataToken } = await axios.post('/api/pinata/generate-key').then(res => res.data)
+
+		const formData = buildFormData({ file, pinataMetadata: { name: uuid() } })
+
+		const { IpfsHash } = await axios
+			.post('https://api.pinata.cloud/pinning/pinFileToIPFS', formData, {
+				maxBodyLength: 'Infinity',
+				headers: {
+					Authorization: `Bearer ${pinataToken}`,
+					'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
+				},
+			})
+			.then(res => res.data)
+
+		setIpfsHash(IpfsHash)
+		setIsUploading(false)
+	}
+
 	const isValid = useMemo(() => {
-		if (!canMint || !title || !hasAcceptedTerms || !editionCount || !royaltiesPercentage || !ipfsHash) return false
+		if (!canMint || !title || !hasAcceptedTerms || !editionCount || !ipfsHash) return false
 		if (putOnSale && (!price || !currency)) return false
 		if (editionCount < 1 || editionCount > 10000 || royaltiesPercentage > 69 || royaltiesPercentage < 0) return false
 
@@ -229,7 +267,7 @@ const MintModal = ({ open, onClose }) => {
 	const renderedPage = (type => {
 		switch (type) {
 			case MODAL_PAGES.GENERAL:
-				return <CreatePage {...{ title, setTitle, description, setDescription, ipfsHash, setIpfsHash, sourcePreview, setSourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }} />
+				return <CreatePage {...{ title, setTitle, description, setDescription, ipfsHash, isUploading, onFileUpload, cancelUpload, sourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }} />
 			case MODAL_PAGES.OPTIONS:
 				return <OptionsPage {...{ editionCount, setEditionCount, royaltiesPercentage, setRoyaltiesPercentage, notSafeForWork, setNotSafeForWork }} />
 			case MODAL_PAGES.LOADING:
@@ -286,7 +324,7 @@ const MintModal = ({ open, onClose }) => {
 	)
 }
 
-const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, setIpfsHash, sourcePreview, setSourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }) => {
+const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, isUploading, onFileUpload, cancelUpload, sourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }) => {
 	return (
 		<div>
 			<div className="p-4 border-b border-gray-100 dark:border-gray-900 space-y-4">
@@ -306,7 +344,7 @@ const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, se
 						</div>
 					</div>
 				</fieldset>
-				<IpfsUpload ipfsHash={ipfsHash} onChange={setIpfsHash} fileDetails={sourcePreview} setFileDetails={setSourcePreview} />
+				<IpfsUpload ipfsHash={ipfsHash} onChange={onFileUpload} onCancel={cancelUpload} fileDetails={sourcePreview} isUploading={isUploading} />
 			</div>
 			<div className="p-4 border-b border-gray-100 dark:border-gray-900">
 				<div className="flex items-center justify-between space-x-4">
@@ -469,11 +507,11 @@ const SuccessPage = ({ transactionHash, tokenID, shotConfetti }) => {
 const WalletErrorPage = ({ mintToken }) => {
 	return (
 		<div tabIndex="0" className="p-12 space-y-5 flex-1 flex flex-col items-center justify-center focus:outline-none">
-			<div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 sm:mx-0 sm:h-10 sm:w-10">
-				<ExclamationIcon className="h-6 w-6 text-yellow-600" aria-hidden="true" />
+			<div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 dark:bg-yellow-900 sm:mx-0 sm:h-10 sm:w-10">
+				<ExclamationIcon className="h-6 w-6 text-yellow-600 dark:text-yellow-300" aria-hidden="true" />
 			</div>
-			<p className="font-medium text-gray-900 text-center">The wallet you selected isn't linked to your profile.</p>
-			<p className="font-medium text-gray-900 text-center max-w-xs mx-auto">
+			<p className="font-medium text-gray-900 dark:text-white text-center">The wallet you selected isn't linked to your profile.</p>
+			<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs mx-auto">
 				You can link it from the{' '}
 				<Link href="/wallet">
 					<a className="font-semibold focus:outline-none focus-visible:underline">wallets page</a>
