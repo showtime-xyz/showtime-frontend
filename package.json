@@ -40,7 +40,7 @@
     "elliptic": "^6.5.4",
     "emoji-mart": "^3.0.1",
     "eth-provider": "^0.9.4",
-    "ethers": "^5.4.0",
+    "ethers": "^5.4.6",
     "exif-js": "^2.3.0",
     "fortmatic": "^2.2.1",
     "hex-to-rgba": "^2.0.1",
