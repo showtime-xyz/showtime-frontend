@@ -6,7 +6,7 @@ const MintingBanner = () => {
 	const [show, setShow] = useStickyState('showMintBanner', true, false)
 
 	return (
-		<Transition show={show} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
+		<Transition as="span" show={show} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
 			<div className="relative bg-gradient-to-r from-[#6366F1] dark:from-[#22D3EE] to-[#D946EF] dark:to-[#8B5CF6]">
 				<div className="max-w-7xl mx-auto py-3 px-3 sm:px-6 lg:px-8">
 					<div className="pr-16 sm:text-center sm:px-16">
