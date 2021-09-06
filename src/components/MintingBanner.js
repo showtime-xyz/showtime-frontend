@@ -1,4 +1,3 @@
-import { Fragment } from 'react'
 import XIcon from './Icons/XIcon'
 import { Transition } from '@headlessui/react'
 import useStickyState from '@/hooks/useStickyState'
