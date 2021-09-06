@@ -43,10 +43,10 @@ const TransferModal = ({ open, onClose, token }) => {
 	const trueOnClose = () => {
 		if (isWeb3ModalActive.current || modalState === MODAL_STATES.PROCESSING) return
 
-		onClose()
 		setQuantity(1)
 		setAddress('')
 		setTransactionHash(null)
+		onClose()
 	}
 
 	const transferToken = async () => {
@@ -104,7 +104,7 @@ const TransferModal = ({ open, onClose, token }) => {
 	const renderedState = (type => {
 		switch (type) {
 			case MODAL_STATES.GENERAL:
-				return <GeneralState {...{ quantity, address, setAddress, setQuantity, transferToken, maxTokens: ownershipData?.owned_count || 1 }} />
+				return <GeneralState {...{ quantity, address, setAddress, setQuantity, transferToken, maxTokens: ownershipData?.owned_count || 1, trueOnClose }} />
 			case MODAL_STATES.PROCESSING:
 				return <LoadingState />
 			case MODAL_STATES.TRANSACTION:
@@ -130,7 +130,7 @@ const TransferModal = ({ open, onClose, token }) => {
 					</span>
 
 					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enterTo="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 translate-y-0 sm:scale-100" leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-						<div className="inline-block align-bottom rounded-t-3xl sm:rounded-b-3xl text-left overflow-hidden transform transition-all sm:align-middle bg-white shadow-xl sm:max-w-lg w-full">
+						<div className="inline-block align-bottom rounded-t-3xl sm:rounded-b-3xl text-left overflow-hidden transform transition-all sm:align-middle bg-white dark:bg-black shadow-xl sm:max-w-lg w-full">
 							<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
 								<h2 className="text-gray-900 dark:text-white text-xl font-bold">Transfer NFT</h2>
 								{modalState !== MODAL_STATES.PROCESSING && (
@@ -148,7 +148,7 @@ const TransferModal = ({ open, onClose, token }) => {
 	)
 }
 
-const GeneralState = ({ quantity, address, setAddress, setQuantity, transferToken, maxTokens }) => {
+const GeneralState = ({ quantity, address, setAddress, setQuantity, transferToken, maxTokens, trueOnClose }) => {
 	const { data: transferringTo, isValidating: loadingTransferAddress } = useSWR(
 		() => (addressRegex.test(address) || address.includes('.')) && `/api/profile/card?wallet=${address}`,
 		url => axios.get(url).then(res => res.data?.data?.profile)
@@ -171,7 +171,7 @@ const GeneralState = ({ quantity, address, setAddress, setQuantity, transferToke
 					<p className="text-sm font-medium text-gray-700 dark:text-gray-300">Paste an ENS domain or Ethereum address below</p>
 				</div>
 				{transferringTo?.profile_id ? (
-					<div className="flex items-center justify-between rounded-3xl border-2 border-gray-100 p-4">
+					<div className="flex items-center justify-between rounded-3xl border-2 border-gray-100 dark:border-gray-900 p-4">
 						<div className="flex items-center space-x-2">
 							<img src={transferringTo.img_url || DEFAULT_PROFILE_PIC} className="w-8 h-8 rounded-full" />
 							<div>
@@ -179,11 +179,11 @@ const GeneralState = ({ quantity, address, setAddress, setQuantity, transferToke
 									<p className="text-sm font-semibold text-gray-900 dark:text-white">{transferringTo.name}</p>
 									{transferringTo.verified == 1 && <BadgeIcon className="w-4 h-4 text-black dark:text-white" bgClass="text-white dark:text-black" />}
 								</div>
-								<p className="text-xs text-gray-700 font-medium">@{transferringTo.username}</p>
+								<p className="text-xs text-gray-700 dark:text-gray-400 font-medium">@{transferringTo.username}</p>
 							</div>
 						</div>
 						<div>
-							<button onClick={() => setAddress('')} className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full hover">
+							<button onClick={() => setAddress('')} className="p-2 bg-gray-100 dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-full hover transition">
 								<XIcon className="w-4 h-4" />
 							</button>
 						</div>
@@ -197,8 +197,11 @@ const GeneralState = ({ quantity, address, setAddress, setQuantity, transferToke
 					</div>
 				)}
 			</div>
-			<div className="p-4">
-				<Button onClick={transferToken} style="primary" disabled={quantity < 1 || !(addressRegex.test(address) || address.includes('.'))} className="w-full flex items-center justify-center">
+			<div className="p-4 flex items-center justify-between">
+				<Button onClick={trueOnClose} style="tertiary">
+					Cancel
+				</Button>
+				<Button onClick={transferToken} style="primary" disabled={quantity < 1 || !(addressRegex.test(address) || address.includes('.'))}>
 					Transfer
 				</Button>
 			</div>
@@ -250,11 +253,11 @@ const SuccessState = ({ transactionHash }) => {
 const WalletErrorState = ({ transferToken }) => {
 	return (
 		<div tabIndex="0" className="p-12 space-y-5 flex-1 flex flex-col items-center justify-center focus:outline-none">
-			<div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 sm:mx-0 sm:h-10 sm:w-10">
-				<ExclamationIcon className="h-6 w-6 text-yellow-600" aria-hidden="true" />
+			<div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 dark:bg-yellow-900 sm:mx-0 sm:h-10 sm:w-10">
+				<ExclamationIcon className="h-6 w-6 text-yellow-600 dark:text-yellow-300" aria-hidden="true" />
 			</div>
-			<p className="font-medium text-gray-900 text-center">The wallet you selected does not own this NFT.</p>
-			<p className="font-medium text-gray-900 text-center max-w-xs mx-auto">
+			<p className="font-medium text-gray-900 dark:text-white text-center">The wallet you selected does not own this NFT.</p>
+			<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs mx-auto">
 				Please{' '}
 				<button onClick={transferToken} className="font-semibold focus:outline-none focus-visible:underline">
 					try again with a different wallet

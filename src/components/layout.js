@@ -10,8 +10,7 @@ const Layout = ({ children }) => {
 	const { resolvedTheme } = useTheme()
 
 	return (
-		<div className="flex flex-col min-h-screen bg-gray-50 dark:bg-black tracking-wide">
-			<Script src="https://www.googletagmanager.com/gtag/js?id=G-EJP74KCP4M" strategy="afterInteractive" />
+		<>
 			<Head>
 				<link rel="icon" href="/logo_sm.jpg" />
 
@@ -31,14 +30,16 @@ const Layout = ({ children }) => {
 
 				<meta name="theme-color" content={resolvedTheme === 'dark' ? '#171717' : '#ffffff'} />
 			</Head>
+			<Script src="https://www.googletagmanager.com/gtag/js?id=G-EJP74KCP4M" strategy="afterInteractive" />
+			<div className="flex flex-col min-h-screen bg-gray-50 dark:bg-black tracking-wide">
+				<Header />
+				<div className="w-full mx-auto flex-1 z-0 relative flex flex-col">
+					<main className="flex-1 flex flex-col">{children}</main>
+				</div>
 
-			<Header />
-			<div className="w-full mx-auto flex-1 z-0 relative flex flex-col ">
-				<main className="flex-1 flex flex-col">{children}</main>
+				<Footer />
 			</div>
-
-			<Footer />
-		</div>
+		</>
 	)
 }
 
