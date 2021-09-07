@@ -420,10 +420,10 @@
   resolved "https://registry.yarnpkg.com/@badrap/bar-of-progress/-/bar-of-progress-0.1.2.tgz#5d9cf85759e1f77bddcb74398530976d87bb5077"
   integrity sha512-bCwx/HbgUfJEndzlubJF5FVQrFEcGX4HZsoCfoa+gSq37pjbJBvIyqMBLIGnb5y0ICovIrxJUxvlbmxeic0rSQ==
 
-"@biconomy/mexa@^2.0.18":
-  version "2.0.18"
-  resolved "https://registry.yarnpkg.com/@biconomy/mexa/-/mexa-2.0.18.tgz#484e53d9a620ff7898cdf465e4c1e519e18d02de"
-  integrity sha512-4wj7d+zpG4MaiM4ZOvkUDf9BESz2c4KTm1zsx2eUx6raqpEZV4UZXVpOmXb3Hh7mEHpfYcCaUF08bLqj2YyMoA==
+"@biconomy/mexa@^2.0.19":
+  version "2.0.19"
+  resolved "https://registry.yarnpkg.com/@biconomy/mexa/-/mexa-2.0.19.tgz#6068b5901812eb2ea1bafa5b058b1f3ab1c5e285"
+  integrity sha512-fZcNiIySKvzJLeRa/SurUA7anRS6E/FdUFgZMME013ilKq4HNtOCHBfdudSafCvxXEMtBmFvwqk0SvFr6hOgsA==
   dependencies:
     "@babel/core" "^7.12.13"
     "@babel/runtime" "^7.12.13"
@@ -11055,7 +11055,7 @@ swarm-js@^0.1.40:
     setimmediate "^1.0.5"
     tar "^4.0.2"
     xhr-request "^1.0.1"
-    
+
 swr@^0.5.6:
   version "0.5.6"
   resolved "https://registry.yarnpkg.com/swr/-/swr-0.5.6.tgz#70bfe9bc9d7ac49a064be4a0f4acf57982e55a31"
