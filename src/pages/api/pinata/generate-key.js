@@ -1,11 +1,9 @@
-import { formatAddressShort } from '../../../lib/utilities'
-import { FLAGS } from '@/hooks/useFlags'
-import handler, { middleware } from '@/lib/api-handler'
 import axios from '@/lib/axios'
+import { formatAddressShort } from '@/lib/utilities'
+import handler, { middleware } from '@/lib/api-handler'
 
 export default handler()
 	.use(middleware.auth)
-	.use(middleware.flags([FLAGS.hasMinting]))
 	.post(async ({ user }, res) => {
 		const token = await axios
 			.post(

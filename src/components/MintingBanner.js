@@ -2,7 +2,7 @@ import XIcon from './Icons/XIcon'
 import { Transition } from '@headlessui/react'
 import useStickyState from '@/hooks/useStickyState'
 
-const MintingBanner = () => {
+const MintingBanner = ({ openMintModal }) => {
 	const [show, setShow] = useStickyState('showMintBanner', true, false)
 
 	return (
@@ -15,10 +15,10 @@ const MintingBanner = () => {
 								We're rolling out free minting! <span aria-hidden="true">&rarr;</span>
 							</a>
 							<span className="hidden md:inline">
-								Showtime is rolling out free minting!{' '}
-								<a className="text-white font-bold underline" href="https://docs.google.com/document/d/11Rwo7tfpnN1RAglW1zjk8vywcbIFb3e8yLCnCFOcMZk/edit" target="_blank" rel="noreferrer">
-									Apply now
-								</a>{' '}
+								You can now create NFTs for free (no gas costs)!{' '}
+								<button className="text-white font-bold underline" onClick={openMintModal}>
+									Get started
+								</button>{' '}
 								and{' '}
 								<a className="text-white font-bold underline" href="/claim" target="_blank">
 									claim our genesis drop NFT

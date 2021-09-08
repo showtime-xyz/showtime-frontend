@@ -10,7 +10,6 @@ import PercentageIcon from '@/components/Icons/PercentageIcon'
 import TextareaAutosize from 'react-autosize-textarea'
 import IpfsUpload from '@/components/IpfsUpload'
 import { useMemo } from 'react'
-import useFlags, { FLAGS } from '@/hooks/useFlags'
 import axios from '@/lib/axios'
 import { v4 as uuid } from 'uuid'
 import { ethers } from 'ethers'
@@ -43,7 +42,6 @@ const MODAL_PAGES = {
 }
 
 const MintModal = ({ open, onClose }) => {
-	const { [FLAGS.hasMinting]: canMint } = useFlags()
 	const { myProfile } = useProfile()
 	const { resolvedTheme } = useTheme()
 	const isWeb3ModalActive = useRef(false)
@@ -176,12 +174,12 @@ const MintModal = ({ open, onClose }) => {
 	}
 
 	const isValid = useMemo(() => {
-		if (!canMint || !title || !hasAcceptedTerms || !editionCount || !ipfsHash) return false
+		if (!title || !hasAcceptedTerms || !editionCount || !ipfsHash) return false
 		if (putOnSale && (!price || !currency)) return false
 		if (editionCount < 1 || editionCount > 10000 || royaltiesPercentage > 69 || royaltiesPercentage < 0) return false
 
 		return true
-	}, [title, hasAcceptedTerms, putOnSale, price, currency, editionCount, royaltiesPercentage, canMint, ipfsHash])
+	}, [title, hasAcceptedTerms, putOnSale, price, currency, editionCount, royaltiesPercentage, ipfsHash])
 
 	const mintToken = async () => {
 		setModalPage(MODAL_PAGES.LOADING)
@@ -218,12 +216,7 @@ const MintModal = ({ open, onClose }) => {
 		})
 		const signerAddress = await web3.getSigner().getAddress()
 
-		if (
-			!myProfile?.wallet_addresses_v2
-				?.filter(address => address.minting_enabled)
-				?.map(({ address }) => address.toLowerCase())
-				?.includes(signerAddress.toLowerCase())
-		) {
+		if (!myProfile?.wallet_addresses_v2?.map(({ address }) => address.toLowerCase())?.includes(signerAddress.toLowerCase())) {
 			return setModalPage(MODAL_PAGES.CHANGE_WALLET)
 		}
 
