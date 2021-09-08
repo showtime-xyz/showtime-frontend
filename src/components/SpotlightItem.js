@@ -303,7 +303,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 											/>
 										</div>
 										<div className="flex items-center space-x-4">
-											<ShareButton url={window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == item.chain_identifier)}${item.contract_address}/${item.token_id}`} type={'item'} />
+											<ShareButton url={window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == item.chain_identifier)}/${item.contract_address}/${item.token_id}`} type={'item'} />
 											{isMyProfile ? (
 												<Menu as="div" className="relative -mb-2">
 													<>
