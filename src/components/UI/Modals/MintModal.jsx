@@ -43,7 +43,6 @@ const MODAL_PAGES = {
 }
 
 const MintModal = ({ open, onClose }) => {
-	const { [FLAGS.hasMinting]: canMint } = useFlags()
 	const { myProfile } = useProfile()
 	const { resolvedTheme } = useTheme()
 	const isWeb3ModalActive = useRef(false)
@@ -176,12 +175,12 @@ const MintModal = ({ open, onClose }) => {
 	}
 
 	const isValid = useMemo(() => {
-		if (!canMint || !title || !hasAcceptedTerms || !editionCount || !ipfsHash) return false
+		if (!title || !hasAcceptedTerms || !editionCount || !ipfsHash) return false
 		if (putOnSale && (!price || !currency)) return false
 		if (editionCount < 1 || editionCount > 10000 || royaltiesPercentage > 69 || royaltiesPercentage < 0) return false
 
 		return true
-	}, [title, hasAcceptedTerms, putOnSale, price, currency, editionCount, royaltiesPercentage, canMint, ipfsHash])
+	}, [title, hasAcceptedTerms, putOnSale, price, currency, editionCount, royaltiesPercentage, ipfsHash])
 
 	const mintToken = async () => {
 		setModalPage(MODAL_PAGES.LOADING)
