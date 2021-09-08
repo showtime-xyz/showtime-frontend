@@ -84,14 +84,16 @@ const Header = () => {
 									<NotificationsBtn />
 								</div>
 							)}
-							<div className={`ml-5 ${canMint ? '' : 'hidden md:block'}`}>
-								<Button onClick={() => setMintModalOpen(true)} style="gradient" className="!p-2.5 md:!px-4 md:!py-2 !rounded-xl !md:rounded-2xl">
-									<span className="hidden md:inline">Create</span>
-									<PlusIcon className="w-4 h-4 md:hidden" />
-								</Button>
-							</div>
 							{isAuthenticated && myProfile ? (
-								<HeaderDropdown />
+								<>
+									<div className={`ml-5 ${canMint ? '' : 'hidden md:block'}`}>
+										<Button onClick={() => setMintModalOpen(true)} style="gradient" className="!p-2.5 md:!px-4 md:!py-2 !rounded-xl !md:rounded-2xl">
+											<span className="hidden md:inline">Create</span>
+											<PlusIcon className="w-4 h-4 md:hidden" />
+										</Button>
+									</div>
+									<HeaderDropdown />
+								</>
 							) : (
 								<div className="flex items-center space-x-2 text-sm md:text-base dark:text-gray-200 hover:text-stpink dark:hover:text-stpink cursor-pointer hover:border-stpink dark:hover:border-stpink" onClick={() => context.setLoginModalOpen(!context.loginModalOpen)}>
 									<WalletIcon className="w-5 h-5" />
