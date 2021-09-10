@@ -56,7 +56,7 @@ const IpfsUpload = ({ ipfsHash, onChange = () => null, onCancel = () => null, fi
 							{MINT_TYPES.map(type => (
 								<Tippy content={FILE_TOOLTIP[type]} key={type}>
 									<label className="bg-gray-100 dark:bg-gray-900 rounded-full p-2.5 cursor-pointer focus:outline-none focus-visible:ring" tabIndex="0">
-										<input onChange={onChange} type="file" className="hidden" multiple={false} accept={MINT_FORMATS[type].join(',')} capture="environment" />
+										<input onChange={onChange} type="file" className="hidden" multiple={false} accept={MINT_FORMATS[type].join(',')} />
 										<MintIcon type={type} className="w-5 h-5" />
 									</label>
 								</Tippy>
