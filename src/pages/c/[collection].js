@@ -24,7 +24,7 @@ export async function getServerSideProps(context) {
 			value: 'all',
 			order_by: 'visitor_count',
 			order_direction: 'desc',
-			img_url: '/logo_sm.jpg',
+			img_url: '/logo_sm.png',
 		},
 		...response_collection_list.data.data,
 	]
