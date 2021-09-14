@@ -319,67 +319,69 @@ const MintModal = ({ open, onClose }) => {
 
 const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, isUploading, onFileUpload, cancelUpload, sourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }) => {
 	return (
-		<div>
-			<div className="p-4 border-b border-gray-100 dark:border-gray-900 space-y-4">
-				<fieldset>
-					<div className="mt-1 rounded-md shadow-sm -space-y-px">
-						<div>
-							<label htmlFor="title" className="sr-only">
-								Title
-							</label>
-							<input type="text" name="title" id="title" className="px-4 py-3 relative block w-full rounded-none rounded-t-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 focus:z-10 border border-b-0 border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring" placeholder="Title" value={title} onChange={event => setTitle(event.target.value)} />
+		<>
+			<div className="flex-1 overflow-y-auto">
+				<div className="p-4 border-b border-gray-100 dark:border-gray-900 space-y-4">
+					<fieldset>
+						<div className="mt-1 rounded-md shadow-sm -space-y-px">
+							<div>
+								<label htmlFor="title" className="sr-only">
+									Title
+								</label>
+								<input type="text" name="title" id="title" className="px-4 py-3 relative block w-full rounded-none rounded-t-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 focus:z-10 border border-b-0 border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring" placeholder="Title" value={title} onChange={event => setTitle(event.target.value)} />
+							</div>
+							<div>
+								<label htmlFor="description" className="sr-only">
+									Description
+								</label>
+								<TextareaAutosize rows={2} maxRows={6} name="description" id="description" className="px-4 py-3 text-sm relative block w-full rounded-none rounded-b-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 focus:z-10 border border-gray-300 dark:border-gray-700 resize-none focus:outline-none focus-visible:ring" placeholder="Description (optional)" value={description} onChange={event => setDescription(event.target.value)} />
+							</div>
 						</div>
+					</fieldset>
+					<IpfsUpload ipfsHash={ipfsHash} onChange={onFileUpload} onCancel={cancelUpload} fileDetails={sourcePreview} isUploading={isUploading} />
+				</div>
+				<div className="p-4 border-b border-gray-100 dark:border-gray-900">
+					<div className="flex items-center justify-between space-x-4">
 						<div>
-							<label htmlFor="description" className="sr-only">
-								Description
-							</label>
-							<TextareaAutosize rows={2} maxRows={6} name="description" id="description" className="px-4 py-3 text-sm relative block w-full rounded-none rounded-b-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 focus:z-10 border border-gray-300 dark:border-gray-700 resize-none focus:outline-none focus-visible:ring" placeholder="Description (optional)" value={description} onChange={event => setDescription(event.target.value)} />
+							<p className="font-semibold text-gray-900 dark:text-white space-x-1 flex items-center">
+								<span>Sell</span>
+								<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">coming soon</span>
+							</p>
+							<p className="text-sm font-medium text-gray-700 dark:text-gray-300">Enter a fixed price to allow people to purchase your NFT.</p>
 						</div>
+						<Switch value={putOnSale} onChange={setPutOnSale} disabled />
 					</div>
-				</fieldset>
-				<IpfsUpload ipfsHash={ipfsHash} onChange={onFileUpload} onCancel={cancelUpload} fileDetails={sourcePreview} isUploading={isUploading} />
-			</div>
-			<div className="p-4 border-b border-gray-100 dark:border-gray-900">
-				<div className="flex items-center justify-between space-x-4">
-					<div>
-						<p className="font-semibold text-gray-900 dark:text-white space-x-1 flex items-center">
-							<span>Sell</span>
-							<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">coming soon</span>
-						</p>
-						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">Enter a fixed price to allow people to purchase your NFT.</p>
-					</div>
-					<Switch value={putOnSale} onChange={setPutOnSale} disabled />
+					<Transition show={putOnSale} as={Fragment} enter="transition ease-in-out duration-300 transform" enterFrom="-translate-y-full opacity-0" enterTo="translate-y-0 opacity-100">
+						<div className="mt-4 flex items-stretch justify-between space-x-2">
+							<input className="flex-1 px-4 relative block w-full rounded-xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring font-medium" placeholder="Price" value={price} onChange={event => setPrice(event.target.value)} />
+							<Dropdown
+								className="flex-1"
+								value={currency}
+								onChange={setCurrency}
+								options={[
+									{ label: 'ETH', value: 'ETH' },
+									{ label: 'USDC', value: 'USDC' },
+								]}
+							/>
+						</div>
+					</Transition>
 				</div>
-				<Transition show={putOnSale} as={Fragment} enter="transition ease-in-out duration-300 transform" enterFrom="-translate-y-full opacity-0" enterTo="translate-y-0 opacity-100">
-					<div className="mt-4 flex items-stretch justify-between space-x-2">
-						<input className="flex-1 px-4 relative block w-full rounded-xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring font-medium" placeholder="Price" value={price} onChange={event => setPrice(event.target.value)} />
-						<Dropdown
-							className="flex-1"
-							value={currency}
-							onChange={setCurrency}
-							options={[
-								{ label: 'ETH', value: 'ETH' },
-								{ label: 'USDC', value: 'USDC' },
-							]}
-						/>
+				<button onClick={() => setModalPage(MODAL_PAGES.OPTIONS)} className="p-4 border-b border-gray-100 dark:border-gray-900 w-full text-left focus-visible:ring group">
+					<div className="flex items-center justify-between space-x-4">
+						<div>
+							<p className="font-semibold text-gray-900 dark:text-white">Options</p>
+							<p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+								{editionCount == 1 ? 'Unique' : editionCount.toLocaleString()} Edition{editionCount == 1 ? '' : 's'} / {royaltiesPercentage}% Royalties
+							</p>
+						</div>
+						<ChevronRight className="w-auto h-4 transform -translate-x-1 group-hover:translate-x-0 transition" />
 					</div>
-				</Transition>
-			</div>
-			<button onClick={() => setModalPage(MODAL_PAGES.OPTIONS)} className="p-4 border-b border-gray-100 dark:border-gray-900 w-full text-left focus-visible:ring group">
-				<div className="flex items-center justify-between space-x-4">
-					<div>
-						<p className="font-semibold text-gray-900 dark:text-white">Options</p>
-						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-							{editionCount == 1 ? 'Unique' : editionCount.toLocaleString()} Edition{editionCount == 1 ? '' : 's'} / {royaltiesPercentage}% Royalties
-						</p>
-					</div>
-					<ChevronRight className="w-auto h-4 transform -translate-x-1 group-hover:translate-x-0 transition" />
+				</button>
+				<div className="p-4 border-b border-gray-100 dark:border-gray-900">
+					<Checkbox value={hasAcceptedTerms} onChange={setHasAcceptedTerms}>
+						I have the rights to publish this artwork, and understand it will be minted on the <span className="font-semibold text-gray-900 dark:text-white">Polygon</span> network.
+					</Checkbox>
 				</div>
-			</button>
-			<div className="p-4 border-b border-gray-100 dark:border-gray-900">
-				<Checkbox value={hasAcceptedTerms} onChange={setHasAcceptedTerms}>
-					I have the rights to publish this artwork, and understand it will be minted on the <span className="font-semibold text-gray-900 dark:text-white">Polygon</span> network.
-				</Checkbox>
 			</div>
 			<div className="p-4">
 				<div className="flex items-center justify-end">
@@ -388,7 +390,7 @@ const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, is
 					</Button>
 				</div>
 			</div>
-		</div>
+		</>
 	)
 }
 
