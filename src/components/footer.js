@@ -1,4 +1,4 @@
-import showtimeLogo from '../../public/img/logo.png'
+import showtimeLogo from '../../public/img/logo_sm.png'
 import mixpanel from 'mixpanel-browser'
 import Link from 'next/link'
 import TwitterIcon from './Icons/Social/TwitterIcon'
