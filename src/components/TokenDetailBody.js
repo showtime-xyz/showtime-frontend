@@ -29,7 +29,7 @@ import PolygonIcon from './Icons/PolygonIcon'
 import Tippy from '@tippyjs/react'
 import TezosIcon from './Icons/TezosIcon'
 import Image from 'next/image'
-import showtimeLogo from '@/../public/img/logo.png'
+import showtimeLogo from '@/../public/img/logo_sm.png'
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500
