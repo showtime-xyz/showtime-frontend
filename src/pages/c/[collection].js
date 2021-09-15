@@ -24,7 +24,7 @@ export async function getServerSideProps(context) {
 			value: 'all',
 			order_by: 'visitor_count',
 			order_direction: 'desc',
-			img_url: '/logo_sm.jpg',
+			img_url: '/logo_sm.png',
 		},
 		...response_collection_list.data.data,
 	]
@@ -51,34 +51,34 @@ export default function Collection({ collection_list, collection, selected_colle
 
 	const [isChanging, setIsChanging] = useState(true)
 
-	useEffect(() => {
-		setCurrentCollectionSlug(router.query.collection)
-		if (router.query.collection == 'all') {
-			setPageTitle('Discover')
-			setCurrentCollectionSlug('all')
-		}
-	}, [router.query.collection])
-
-	const onChange = async c => {
-		setSelected(c)
-		mixpanel.track('Collection filter dropdown select', {
-			collection: c['value'],
-		})
-		router.push('/c/[collection]', `/c/${c['value']}`, {
-			shallow: true,
-		})
-		setPageTitle(c['name'] === 'All leading collections' ? 'Discover' : `Discover ${c['name']}`)
-		setCurrentCollectionSlug(c['value'])
-		setCurrentCollectionName(c['name'] === 'All leading collections' ? null : c['name'])
-	}
-
 	const [collectionItems, setCollectionItems] = useState([])
-	const [currentCollectionSlug, setCurrentCollectionSlug] = useState(collection)
 	const [currentCollectionName, setCurrentCollectionName] = useState(selected_collection ? (selected_collection.name === 'All leading collections' ? null : selected_collection.name) : collection ? collection.replace(/-/g, ' ') : collection)
 	const [randomNumber, setRandomNumber] = useState(1)
 
+	const onChange = async c => {
+		mixpanel.track('Collection filter dropdown select', {
+			collection: c['value'],
+		})
+
+		router.push('/c/[collection]', `/c/${c['value']}`, {
+			shallow: true,
+		})
+	}
+
 	useEffect(() => {
 		let isSubscribed = true
+
+		const selectedValue = collection_list.filter(c => c.value == router.query.collection)[0]
+
+		setSelected(selectedValue)
+
+		if (router.query.collection == 'all') {
+			setPageTitle('Discover')
+			setCurrentCollectionName(null)
+		} else {
+			setPageTitle(selectedValue ? selectedValue.name : router.query.collection.replace(/-/g, ' '))
+			setCurrentCollectionName(selectedValue ? selectedValue.name : router.query.collection.replace(/-/g, ' '))
+		}
 
 		const getCollectionItems = async collection_name => {
 			setIsChanging(true)
@@ -100,10 +100,12 @@ export default function Collection({ collection_list, collection, selected_colle
 			setIsChanging(false)
 		}
 
-		getCollectionItems(currentCollectionSlug)
+		getCollectionItems(router.query.collection)
 
 		return () => (isSubscribed = false)
-	}, [currentCollectionSlug, sortBy, randomNumber])
+	}, [router.query.collection, sortBy, randomNumber, collection_list])
+
+	const [selected, setSelected] = useState()
 
 	const FilterTabs = (
 		<GridTabs>
@@ -157,8 +159,6 @@ export default function Collection({ collection_list, collection, selected_colle
 			/>
 		</GridTabs>
 	)
-
-	const [selected, setSelected] = useState(collection_list.filter(c => c.value == currentCollectionSlug)[0])
 
 	return (
 		<Layout key={collection}>
@@ -258,7 +258,7 @@ export default function Collection({ collection_list, collection, selected_colle
 				<div className="mx-auto relative mt-12 overflow-hidden">{FilterTabs}</div>
 
 				<div className="m-auto relative min-h-screen md:mx-3 pb-12">
-					<TokenGridV4 items={collectionItems} isLoading={isChanging} extraColumn key={`grid_${currentCollectionSlug}_${sortBy}_${randomNumber}_${isChanging}`} />
+					<TokenGridV4 items={collectionItems} isLoading={isChanging} extraColumn key={`grid_${router.query.collection}_${sortBy}_${randomNumber}_${isChanging}`} />
 				</div>
 			</CappedWidth>
 		</Layout>

@@ -345,67 +345,69 @@ const NoWalletPage = () => (
 
 const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, isUploading, onFileUpload, cancelUpload, sourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }) => {
 	return (
-		<div>
-			<div className="p-4 border-b border-gray-100 dark:border-gray-900 space-y-4">
-				<fieldset>
-					<div className="mt-1 rounded-md shadow-sm -space-y-px">
-						<div>
-							<label htmlFor="title" className="sr-only">
-								Title
-							</label>
-							<input type="text" name="title" id="title" className="px-4 py-3 relative block w-full rounded-none rounded-t-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 focus:z-10 border border-b-0 border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring" placeholder="Title" value={title} onChange={event => setTitle(event.target.value)} />
+		<>
+			<div className="flex-1 overflow-y-auto">
+				<div className="p-4 border-b border-gray-100 dark:border-gray-900 space-y-4">
+					<fieldset>
+						<div className="mt-1 rounded-md shadow-sm -space-y-px">
+							<div>
+								<label htmlFor="title" className="sr-only">
+									Title
+								</label>
+								<input type="text" name="title" id="title" className="px-4 py-3 relative block w-full rounded-none rounded-t-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 focus:z-10 border border-b-0 border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring" placeholder="Title" value={title} onChange={event => setTitle(event.target.value)} />
+							</div>
+							<div>
+								<label htmlFor="description" className="sr-only">
+									Description
+								</label>
+								<TextareaAutosize rows={2} maxRows={6} name="description" id="description" className="px-4 py-3 text-sm relative block w-full rounded-none rounded-b-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 focus:z-10 border border-gray-300 dark:border-gray-700 resize-none focus:outline-none focus-visible:ring" placeholder="Description (optional)" value={description} onChange={event => setDescription(event.target.value)} />
+							</div>
 						</div>
+					</fieldset>
+					<IpfsUpload ipfsHash={ipfsHash} onChange={onFileUpload} onCancel={cancelUpload} fileDetails={sourcePreview} isUploading={isUploading} />
+				</div>
+				<div className="p-4 border-b border-gray-100 dark:border-gray-900">
+					<div className="flex items-center justify-between space-x-4">
 						<div>
-							<label htmlFor="description" className="sr-only">
-								Description
-							</label>
-							<TextareaAutosize rows={2} maxRows={6} name="description" id="description" className="px-4 py-3 text-sm relative block w-full rounded-none rounded-b-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 focus:z-10 border border-gray-300 dark:border-gray-700 resize-none focus:outline-none focus-visible:ring" placeholder="Description (optional)" value={description} onChange={event => setDescription(event.target.value)} />
+							<p className="font-semibold text-gray-900 dark:text-white space-x-1 flex items-center">
+								<span>Sell</span>
+								<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">coming soon</span>
+							</p>
+							<p className="text-sm font-medium text-gray-700 dark:text-gray-300">Enter a fixed price to allow people to purchase your NFT.</p>
 						</div>
+						<Switch value={putOnSale} onChange={setPutOnSale} disabled />
 					</div>
-				</fieldset>
-				<IpfsUpload ipfsHash={ipfsHash} onChange={onFileUpload} onCancel={cancelUpload} fileDetails={sourcePreview} isUploading={isUploading} />
-			</div>
-			<div className="p-4 border-b border-gray-100 dark:border-gray-900">
-				<div className="flex items-center justify-between space-x-4">
-					<div>
-						<p className="font-semibold text-gray-900 dark:text-white space-x-1 flex items-center">
-							<span>Sell</span>
-							<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">coming soon</span>
-						</p>
-						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">Enter a fixed price to allow people to purchase your NFT.</p>
-					</div>
-					<Switch value={putOnSale} onChange={setPutOnSale} disabled />
+					<Transition show={putOnSale} as={Fragment} enter="transition ease-in-out duration-300 transform" enterFrom="-translate-y-full opacity-0" enterTo="translate-y-0 opacity-100">
+						<div className="mt-4 flex items-stretch justify-between space-x-2">
+							<input className="flex-1 px-4 relative block w-full rounded-xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring font-medium" placeholder="Price" value={price} onChange={event => setPrice(event.target.value)} />
+							<Dropdown
+								className="flex-1"
+								value={currency}
+								onChange={setCurrency}
+								options={[
+									{ label: 'ETH', value: 'ETH' },
+									{ label: 'USDC', value: 'USDC' },
+								]}
+							/>
+						</div>
+					</Transition>
 				</div>
-				<Transition show={putOnSale} as={Fragment} enter="transition ease-in-out duration-300 transform" enterFrom="-translate-y-full opacity-0" enterTo="translate-y-0 opacity-100">
-					<div className="mt-4 flex items-stretch justify-between space-x-2">
-						<input className="flex-1 px-4 relative block w-full rounded-xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring font-medium" placeholder="Price" value={price} onChange={event => setPrice(event.target.value)} />
-						<Dropdown
-							className="flex-1"
-							value={currency}
-							onChange={setCurrency}
-							options={[
-								{ label: 'ETH', value: 'ETH' },
-								{ label: 'USDC', value: 'USDC' },
-							]}
-						/>
+				<button onClick={() => setModalPage(MODAL_PAGES.OPTIONS)} className="p-4 border-b border-gray-100 dark:border-gray-900 w-full text-left focus-visible:ring group">
+					<div className="flex items-center justify-between space-x-4">
+						<div>
+							<p className="font-semibold text-gray-900 dark:text-white">Options</p>
+							<p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+								{editionCount == 1 ? 'Unique' : editionCount.toLocaleString()} Edition{editionCount == 1 ? '' : 's'} / {royaltiesPercentage}% Royalties
+							</p>
+						</div>
+						<ChevronRight className="w-auto h-4 transform -translate-x-1 group-hover:translate-x-0 transition" />
 					</div>
-				</Transition>
-			</div>
-			<button onClick={() => setModalPage(MODAL_PAGES.OPTIONS)} className="p-4 border-b border-gray-100 dark:border-gray-900 w-full text-left focus-visible:ring group">
-				<div className="flex items-center justify-between space-x-4">
-					<div>
-						<p className="font-semibold text-gray-900 dark:text-white">Options</p>
-						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-							{editionCount == 1 ? 'Unique' : editionCount.toLocaleString()} Edition{editionCount == 1 ? '' : 's'} / {royaltiesPercentage}% Royalties
-						</p>
-					</div>
-					<ChevronRight className="w-auto h-4 transform -translate-x-1 group-hover:translate-x-0 transition" />
+				</button>
+				<div className="p-4 border-b border-gray-100 dark:border-gray-900">
+					<Checkbox value={hasAcceptedTerms} onChange={setHasAcceptedTerms}>
+						I have the rights to publish this artwork, and understand it will be minted on the <span className="font-semibold text-gray-900 dark:text-white">Polygon</span> network.
+					</Checkbox>
 				</div>
-			</button>
-			<div className="p-4 border-b border-gray-100 dark:border-gray-900">
-				<Checkbox value={hasAcceptedTerms} onChange={setHasAcceptedTerms}>
-					I have the rights to publish this artwork, and understand it will be minted on the <span className="font-semibold text-gray-900 dark:text-white">Polygon</span> network.
-				</Checkbox>
 			</div>
 			<div className="p-4">
 				<div className="flex items-center justify-end">
@@ -414,7 +416,7 @@ const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, is
 					</Button>
 				</div>
 			</div>
-		</div>
+		</>
 	)
 }
 
@@ -475,7 +477,7 @@ const MintingPage = ({ transactionHash }) => {
 				<p className="font-medium text-gray-900 dark:text-white text-center">Your NFT is being minted on the Polygon network.</p>
 				<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs mx-auto">Feel free to navigate away from this screen</p>
 			</div>
-			<Button style="tertiary" as="a" href={`https://polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
+			<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
 				<PolygonIcon className="w-4 h-4" />
 				<span className="text-sm font-medium">View on Polygon Scan</span>
 			</Button>
@@ -509,12 +511,11 @@ const SuccessPage = ({ transactionHash, tokenID, shotConfetti }) => {
 				</a>
 			</p>
 			<div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
-				<Button style="tertiary" as="a" href={`https://polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
+				<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
 					<PolygonIcon className="w-4 h-4" />
 					<span className="text-sm font-medium">View on Polygon Scan</span>
 				</Button>
-				{/* @TODO: Update this to polygon on launch */}
-				<a className="flex items-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-4 py-2 rounded-full space-x-2" href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://tryshowtime.com/t/polygon/${process.env.NEXT_PUBLIC_MINTING_CONTRACT}/${tokenID}`)}&text=${encodeURIComponent('🌟 Just minted an awesome new NFT on @tryShowtime!!\n')}`} target="_blank" rel="noreferrer">
+				<a className="flex items-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-4 py-2 rounded-full space-x-2" href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://tryshowtime.com/t/${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai' : 'polygon'}/${process.env.NEXT_PUBLIC_MINTING_CONTRACT}/${tokenID}`)}&text=${encodeURIComponent('🌟 Just minted an awesome new NFT on @tryShowtime!!\n')}`} target="_blank" rel="noreferrer">
 					<TwitterIcon className="w-4 h-auto" />
 					<span className="text-sm font-medium">Share it on Twitter</span>
 				</a>
