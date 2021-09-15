@@ -78,7 +78,7 @@
         "tailwindcss": "^2.2.9",
         "use-wallet": "^0.10.0",
         "uuid": "^8.3.2",
-        "walletlink": "^2.1.7",
+        "walletlink": "^2.1.11",
         "web3modal": "^1.9.4",
         "webpack-modules": "^1.0.0"
     },
