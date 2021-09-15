@@ -378,7 +378,7 @@ const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, is
 			</button>
 			<div className="p-4 border-b border-gray-100 dark:border-gray-900">
 				<Checkbox value={hasAcceptedTerms} onChange={setHasAcceptedTerms}>
-					I have the rights to publish this artwork, and understand it will be minted on the <span className="font-semibold text-gray-900 dark:text-white">Polygon</span> network.
+					I have the rights to publish this artwork, and understand it will be minted on the <span className="font-semibold text-gray-900 dark:text-white">${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'Mumbai' : 'Polygon'}</span> network.
 				</Checkbox>
 			</div>
 			<div className="p-4">
