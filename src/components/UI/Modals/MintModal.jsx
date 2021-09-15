@@ -39,6 +39,7 @@ const MODAL_PAGES = {
 	MINTING: 'minting',
 	SUCCESS: 'success',
 	CHANGE_WALLET: 'change_wallet',
+	NO_WALLET: 'no_wallet',
 }
 
 const MintModal = ({ open, onClose }) => {
@@ -47,6 +48,14 @@ const MintModal = ({ open, onClose }) => {
 	const isWeb3ModalActive = useRef(false)
 	const confettiCanvas = useRef(null)
 	const [modalPage, setModalPage] = useState(MODAL_PAGES.GENERAL)
+
+	useEffect(() => {
+		if (!myProfile) return
+
+		if (myProfile.wallet_addresses_excluding_email_v2.filter(({ address }) => address.startsWith('0x')).length > 0) return
+
+		setModalPage(MODAL_PAGES.NO_WALLET)
+	}, [myProfile])
 
 	const shotConfetti = () => {
 		if (!confettiCanvas.current) return
@@ -271,6 +280,8 @@ const MintModal = ({ open, onClose }) => {
 				return <SuccessPage transactionHash={transactionHash} tokenID={tokenID} shotConfetti={shotConfetti} />
 			case MODAL_PAGES.CHANGE_WALLET:
 				return <WalletErrorPage mintToken={mintToken} />
+			case MODAL_PAGES.NO_WALLET:
+				return <NoWalletPage />
 		}
 	})(modalPage)
 
@@ -316,6 +327,21 @@ const MintModal = ({ open, onClose }) => {
 		</Transition.Root>
 	)
 }
+
+const NoWalletPage = () => (
+	<div>
+		<div className="p-4 border-b border-gray-100 dark:border-gray-900">
+			<p className="font-medium text-gray-900 dark:text-white">You’ll need to add an Ethereum wallet before creating an NFT on Showtime.</p>
+		</div>
+		<div className="p-4">
+			<Link href="/wallet">
+				<Button as="a" className="w-full flex items-center justify-center cursor-pointer" style="primary">
+					Connect a Wallet
+				</Button>
+			</Link>
+		</div>
+	</div>
+)
 
 const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, isUploading, onFileUpload, cancelUpload, sourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }) => {
 	return (
