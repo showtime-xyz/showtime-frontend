@@ -413,7 +413,7 @@ const OptionsPage = ({ editionCount, setEditionCount, royaltiesPercentage, setRo
 						<p className="text-sm font-medium text-gray-700 dark:text-gray-300 max-w-xs">How much you'll earn each time this NFT is resold.</p>
 					</div>
 					<div className="flex items-center space-x-2">
-						<input type="number" min="0" max="69" step="1" className="px-4 max-w-[60px] py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring no-spinners font-medium text-right" value={royaltiesPercentage} onChange={event => (event.target.value > 69 ? setRoyaltiesPercentage(69) : event.target.value < 0 || event.target.value.trim() == '' ? setRoyaltiesPercentage(0) : setRoyaltiesPercentage(parseInt(event.target.value)))} />
+						<input type="number" min="0" max="69" step="1" className="px-4 max-w-[60px] w-full py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring no-spinners font-medium text-right" value={royaltiesPercentage} onChange={event => (event.target.value > 69 ? setRoyaltiesPercentage(69) : event.target.value < 0 || event.target.value.trim() == '' ? setRoyaltiesPercentage(0) : setRoyaltiesPercentage(parseInt(event.target.value)))} />
 						<PercentageIcon className="w-4 h-4 text-gray-700 dark:text-gray-500" />
 					</div>
 				</div>
