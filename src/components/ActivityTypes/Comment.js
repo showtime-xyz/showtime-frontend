@@ -88,7 +88,7 @@ export default function Comment({ act }) {
 			</div>
 			{count === 1 && (
 				<div className="">
-					<div className="bg-gray-200 dark:bg-gray-800 my-2 p-2 px-4 rounded-2xl inline-block">{commentWithMentions}</div>
+					<div className="bg-gray-200 dark:bg-gray-800 dark:text-gray-300 my-2 p-2 px-4 rounded-2xl inline-block">{commentWithMentions}</div>
 				</div>
 			)}
 		</div>

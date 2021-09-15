@@ -12,7 +12,7 @@ const Layout = ({ children }) => {
 	return (
 		<>
 			<Head>
-				<link rel="icon" href="/logo_sm.jpg" />
+				<link rel="icon" href="/logo_sm.png" />
 
 				<meta name="keywords" content="showtime, ethereum, token, nft" />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0" />

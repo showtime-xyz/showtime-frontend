@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useContext } from 'react'
-import { DEFAULT_PROFILE_PIC, CONTRACTS } from '@/lib/constants'
+import { DEFAULT_PROFILE_PIC, CONTRACTS, SHOWTIME_CONTRACTS } from '@/lib/constants'
 import Link from 'next/link'
 import mixpanel from 'mixpanel-browser'
 import Lightbox from 'react-image-lightbox'
@@ -28,6 +28,8 @@ import { CHAIN_IDENTIFIERS } from '@/lib/constants'
 import PolygonIcon from './Icons/PolygonIcon'
 import Tippy from '@tippyjs/react'
 import TezosIcon from './Icons/TezosIcon'
+import Image from 'next/image'
+import showtimeLogo from '@/../public/img/logo_sm.png'
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500
@@ -398,7 +400,16 @@ const TokenDetailBody = ({
 					{/* Title and description section */}
 					<div className="flex flex-col md:flex-row pb-10 items-stretch w-full max-w-full">
 						<div className="pb-0 text-left flex-1 p-4 break-words md:max-w-[50%]">
-							<div className="text-2xl md:text-4xl dark:text-gray-200">{item.token_name}</div>
+							<div className="flex items-center space-x-3">
+								<div className="text-2xl md:text-4xl dark:text-gray-200">{item.token_name}</div>
+								{SHOWTIME_CONTRACTS.includes(item.contract_address) && (
+									<Tippy content="Created on Showtime">
+										<div className="flex items-center justify-center">
+											<Image src={showtimeLogo} width={30} height={30} className="rounded-full" />
+										</div>
+									</Tippy>
+								)}
+							</div>
 							{/* Likes & Share */}
 							{/*  */}
 							<div className="flex items-center pt-2">
