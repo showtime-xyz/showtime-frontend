@@ -498,23 +498,21 @@ const SuccessPage = ({ transactionHash, tokenID, shotConfetti }) => {
 	}
 
 	return (
-		<div className="p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
+		<div className="p-12 space-y-10 flex-1 flex flex-col items-center justify-center">
 			<p className="font-medium text-5xl">🎉</p>
-			<p className="font-medium text-gray-900 dark:text-white text-center">
-				Your NFT has been minted on the Polygon network, you can now{' '}
-				<a href={tokenURL} onClick={visitTokenPage} className="font-semibold focus:outline-none focus-visible:underline">
-					view it on Showtime &rarr;
-				</a>
-			</p>
+			<p className="font-medium text-gray-900 dark:text-white text-center !mt-6">Your NFT has been successfully minted!</p>
+			<Button style="primary" as="a" href={tokenURL} onClick={visitTokenPage} className="!mt-6">
+				View on Showtime &rarr;
+			</Button>
 			<div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
+				<a className="flex items-center bg-blue-50 dark:bg-blue-900 text-blue-500 dark:text-blue-200 px-4 py-2 rounded-full space-x-2" href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://tryshowtime.com/t/${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai' : 'polygon'}/${process.env.NEXT_PUBLIC_MINTING_CONTRACT}/${tokenID}`)}&text=${encodeURIComponent('🌟 Just minted an awesome new NFT on @tryShowtime!!\n')}`} target="_blank" rel="noreferrer">
+					<TwitterIcon className="w-4 h-auto" />
+					<span className="text-sm font-medium">Share on Twitter</span>
+				</a>
 				<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
 					<PolygonIcon className="w-4 h-4" />
-					<span className="text-sm font-medium">View on Polygon Scan</span>
+					<span className="text-sm font-medium">Polygon Scan</span>
 				</Button>
-				<a className="flex items-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-4 py-2 rounded-full space-x-2" href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://tryshowtime.com/t/${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai' : 'polygon'}/${process.env.NEXT_PUBLIC_MINTING_CONTRACT}/${tokenID}`)}&text=${encodeURIComponent('🌟 Just minted an awesome new NFT on @tryShowtime!!\n')}`} target="_blank" rel="noreferrer">
-					<TwitterIcon className="w-4 h-auto" />
-					<span className="text-sm font-medium">Share it on Twitter</span>
-				</a>
 			</div>
 		</div>
 	)
