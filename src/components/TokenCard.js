@@ -88,7 +88,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 		}
 	}
 
-	const pageProfileName = pageProfile?.name && pageProfile?.name != 'Unnamed' ? (pageProfile?.wallet_addresses_excluding_email_v2?.map(addr => addr.address)?.includes(pageProfile.name) ? formatAddressShort(pageProfile?.slug_address) : pageProfile?.name) : pageProfile?.username || pageProfile?.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(pageProfile?.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Unknown'
+	//const pageProfileName = pageProfile?.name && pageProfile?.name != 'Unnamed' ? (pageProfile?.wallet_addresses_excluding_email_v2?.map(addr => addr.address)?.includes(pageProfile.name) ? formatAddressShort(pageProfile?.slug_address) : pageProfile?.name) : pageProfile?.username || pageProfile?.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(pageProfile?.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Unknown'
 
 	return (
 		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
@@ -467,19 +467,23 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 						<div>
 							{item.owner_count && item.owner_count > 1 ? (
 								pageProfile && listId === 2 ? (
-									<div className="">
-										<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
-										<div className="flex items-center">
-											<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
-												<a className="flex flex-row items-center pr-2 ">
-													<img alt={pageProfileName} src={pageProfile.img_url ? pageProfile.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
-													<div>
-														<div className="text-sm font-semibold truncate dark:text-gray-200">{pageProfileName}</div>
+									<div className="flex items-center pt-1">
+										<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
+											<a className="flex flex-row items-center space-x-2">
+												<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8" />
+												<div>
+													<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
+													<div className="flex items-center space-x-1 -mt-0.5">
+														<div className="text-sm font-semibold truncate dark:text-gray-200">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
+														{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+														<div className="text-gray-500 text-sm mr-2 -ml-1 mt-px">
+															&amp; {item.owner_count - 1} other
+															{item.owner_count - 1 > 1 ? 's' : null}
+														</div>
 													</div>
-												</a>
-											</Link>
-											{myProfile?.profile_id !== item.owner_id && <MiniFollowButton profileId={item.owner_id} />}
-										</div>
+												</div>
+											</a>
+										</Link>
 									</div>
 								) : (
 									<span className="text-gray-500 text-sm">Multiple owners</span>

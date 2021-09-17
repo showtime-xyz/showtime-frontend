@@ -49,7 +49,7 @@ export const middleware = {
 				})
 				.then(({ data: { data } }) => data.profile)
 
-			if (flags.map(flagKey => flagDefs[flagKey](profile)).filter(el => !el).lenght > 0) {
+			if (flags.map(flagKey => flagDefs[flagKey](profile)).filter(el => !el).length > 0) {
 				return res.status(403).json({ error: 'Unauthorized.' })
 			}
 
