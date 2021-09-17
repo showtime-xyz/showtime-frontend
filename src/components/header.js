@@ -14,14 +14,14 @@ import HeaderDropdown from './HeaderDropdown'
 import useAuth from '@/hooks/useAuth'
 import useProfile from '@/hooks/useProfile'
 import FireIcon from './Icons/FireIcon'
-import useFlags, { FLAGS } from '@/hooks/useFlags'
+//import useFlags, { FLAGS } from '@/hooks/useFlags'
 import MintModal from './UI/Modals/MintModal'
 import Button from './UI/Buttons/Button'
 import PlusIcon from './Icons/PlusIcon'
 import MintingBanner from './MintingBanner'
 
 const Header = () => {
-	const { [FLAGS.hasMinting]: canMint } = useFlags()
+	//const { [FLAGS.hasMinting]: canMint } = useFlags()
 	const { asPath } = useRouter()
 	const context = useContext(AppContext)
 	const { isAuthenticated } = useAuth()
@@ -86,7 +86,7 @@ const Header = () => {
 							)}
 							{isAuthenticated && myProfile ? (
 								<>
-									<div className={`ml-5 ${canMint ? '' : 'hidden md:block'}`}>
+									<div className={'ml-5'}>
 										<Button onClick={() => setMintModalOpen(true)} style="gradient" className="!p-2.5 md:!px-4 md:!py-2 !rounded-xl !md:rounded-2xl">
 											<span className="hidden md:inline">Create</span>
 											<PlusIcon className="w-4 h-4 md:hidden" />
