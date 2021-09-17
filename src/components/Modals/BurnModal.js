@@ -193,7 +193,7 @@ const BurningState = ({ transactionHash }) => {
 			</div>
 			<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
 				<PolygonIcon className="w-4 h-4" />
-				<span className="text-sm font-medium">View on Polygon Scan</span>
+				<span className="text-sm font-medium">View on PolygonScan</span>
 			</Button>
 		</div>
 	)
@@ -206,7 +206,7 @@ const BurnedState = ({ transactionHash, quantity }) => {
 			<p className="font-medium text-gray-900 dark:text-white text-center">Your NFT has been forever burned on the Polygon network. {quantity == 1 ? 'It might still show up on your profile for a few minutes' : 'The editions might still appear on your profile for a few minutes'}.</p>
 			<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
 				<PolygonIcon className="w-4 h-4" />
-				<span className="text-sm font-medium">View on Polygon Scan</span>
+				<span className="text-sm font-medium">View on PolygonScan</span>
 			</Button>
 		</div>
 	)

@@ -477,7 +477,7 @@ const MintingPage = ({ transactionHash }) => {
 			</div>
 			<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
 				<PolygonIcon className="w-4 h-4" />
-				<span className="text-sm font-medium">View on Polygon Scan</span>
+				<span className="text-sm font-medium">View on PolygonScan</span>
 			</Button>
 		</div>
 	)
@@ -511,7 +511,7 @@ const SuccessPage = ({ transactionHash, tokenID, shotConfetti }) => {
 				</a>
 				<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
 					<PolygonIcon className="w-4 h-4" />
-					<span className="text-sm font-medium">Polygon Scan</span>
+					<span className="text-sm font-medium">PolygonScan</span>
 				</Button>
 			</div>
 		</div>
