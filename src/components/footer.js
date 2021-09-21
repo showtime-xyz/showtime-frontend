@@ -1,4 +1,4 @@
-import showtimeLogo from '../../public/img/logo_sm.png'
+import ShowtimeWordmark from './Icons/ShowtimeWordmark'
 import mixpanel from 'mixpanel-browser'
 import Link from 'next/link'
 import TwitterIcon from './Icons/Social/TwitterIcon'
@@ -13,8 +13,7 @@ const Footer = () => {
 				<div className="space-y-4 flex-1">
 					<Link href="/">
 						<a className="flex items-center space-x-2" onClick={() => mixpanel.track('Footer logo click')}>
-							<img src={showtimeLogo.src} alt="Showtime logo" className="flex-shrink-0 rounded-lg overflow-hidden w-8 h-8" />
-							<span className="font-bold text-gray-100">Showtime</span>
+							<ShowtimeWordmark className="w-auto h-8 text-white" />
 						</a>
 					</Link>
 					<p className="text-gray-400 font-medium text-sm">&copy; {new Date().getFullYear()} Showtime Technologies, Inc.</p>

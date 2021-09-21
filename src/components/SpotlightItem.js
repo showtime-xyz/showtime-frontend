@@ -241,7 +241,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 														<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Creator {item.owner_id == item.creator_id && '& Owner'}</span>
 														<div className="flex items-center space-x-1 -mt-0.5">
 															<div className="text-sm font-semibold truncate dark:text-gray-200">{item.creator_name === item.creator_address ? formatAddressShort(item.creator_address) : truncateWithEllipses(item.creator_name, 22)}</div>
-															{item.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+															{item.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5" tickClass="text-white dark:text-black" />}
 														</div>
 													</div>
 												</a>
@@ -277,7 +277,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 																	<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owner</span>
 																	<div className="flex items-center space-x-1 -mt-0.5">
 																		<div className="text-sm font-semibold truncate dark:text-gray-200">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
-																		{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+																		{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5" tickClass="text-white dark:text-black" />}
 																	</div>
 																</div>
 															</a>

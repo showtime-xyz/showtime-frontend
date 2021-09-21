@@ -42,6 +42,7 @@ module.exports = {
 				violet: colors.violet,
 				indigo: colors.indigo,
 				rose: colors.rose,
+				amber: colors.amber,
 			},
 			cursor: {
 				copy: 'copy',

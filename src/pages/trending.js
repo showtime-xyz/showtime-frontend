@@ -66,7 +66,7 @@ const Leaderboard = () => {
 				<meta name="twitter:image" content="https://storage.googleapis.com/showtime-nft-thumbnails/twitter_card_showtime.jpg" />
 			</Head>
 
-			<div className="py-12 sm:py-14 px-8 sm:px-10 text-left " style={{ background: 'linear-gradient(133deg, rgba(184,38,193,0.95) 0%, rgba(67,142,223,0.9) 50%, rgba(67,186,193,0.8) 100%)' }}>
+			<div className="py-12 sm:py-14 px-8 sm:px-10 text-left " style={{ background: 'linear-gradient(130deg, rgba(6,216,255,1) 0%, rgba(69,52,245,0.8) 48%, rgba(194,38,173,0.7) 100%)' }}>
 				<CappedWidth>
 					<div className="flex flex-row mx-3 text-white">
 						<div className="flex-1">

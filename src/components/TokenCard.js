@@ -19,6 +19,7 @@ import OrbitIcon from './Icons/OrbitIcon'
 import { CHAIN_IDENTIFIERS } from '../lib/constants'
 import showtimeLogo from '@/../public/img/logo_sm.png'
 import Image from 'next/image'
+import ShowtimeIcon from './Icons/ShowtimeIcon'
 import Tippy from '@tippyjs/react'
 
 const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, setTransferModal, setBurnModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
@@ -114,7 +115,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 											<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Created by</span>
 											<div className="flex items-center space-x-1 -mt-0.5">
 												<div className="text-sm font-semibold truncate dark:text-gray-200">{item.creator_name === item.creator_address ? formatAddressShort(item.creator_address) : truncateWithEllipses(item.creator_name, 22)}</div>
-												{item.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+												{item.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5" tickClass="text-white dark:text-black" />}
 											</div>
 										</div>
 									</a>
@@ -421,7 +422,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 
 				<div className="p-4">
 					<div>
-						<div className="flex items-center !space-x-1">
+						<div className="flex items-center !space-x-1.5">
 							<p
 								onClick={() => {
 									mixpanel.track('Open NFT modal')
@@ -438,7 +439,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 							{SHOWTIME_CONTRACTS.includes(item.contract_address) && (
 								<Tippy content="Created on Showtime">
 									<div className="flex items-center justify-center">
-										<Image src={showtimeLogo} width={20} height={20} className="rounded-full" />
+										<ShowtimeIcon className="w-5 h-5 rounded-full" />
 									</div>
 								</Tippy>
 							)}
@@ -475,7 +476,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 													<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
 													<div className="flex items-center space-x-1 -mt-0.5">
 														<div className="text-sm font-semibold truncate dark:text-gray-200">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
-														{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+														{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5" tickClass="text-white dark:text-black" />}
 														<div className="text-gray-500 text-sm mr-2 -ml-1 mt-px">
 															&amp; {item.owner_count - 1} other
 															{item.owner_count - 1 > 1 ? 's' : null}
@@ -497,7 +498,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
 												<div className="flex items-center space-x-1 -mt-0.5">
 													<div className="text-sm font-semibold truncate dark:text-gray-200">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
-													{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+													{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5" tickClass="text-white dark:text-black" />}
 												</div>
 											</div>
 										</a>
