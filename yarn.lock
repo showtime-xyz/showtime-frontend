@@ -1281,13 +1281,23 @@
     "@sentry/utils" "6.12.0"
     tslib "^1.9.3"
 
-"@sentry/integrations@6.12.0", "@sentry/integrations@^6.11.0":
+"@sentry/integrations@6.12.0":
   version "6.12.0"
   resolved "https://registry.yarnpkg.com/@sentry/integrations/-/integrations-6.12.0.tgz#d900e89c588fbe6ce1b89ce74c042574daf638bb"
   integrity sha512-M9gsVdWZp5fAFFpTjK2IBuWzW4SBxGAI3tVbYZvVx16S/BY0GsPC1dYpjJx9OTBS/8CmCWdGxnUmjACo/8w1LA==
   dependencies:
     "@sentry/types" "6.12.0"
     "@sentry/utils" "6.12.0"
+    localforage "^1.8.1"
+    tslib "^1.9.3"
+
+"@sentry/integrations@^6.13.1":
+  version "6.13.1"
+  resolved "https://registry.yarnpkg.com/@sentry/integrations/-/integrations-6.13.1.tgz#8af9468fc5522f79688880ab9ad90ac7efaf8c1a"
+  integrity sha512-QUrn3tPDY2J4T66K/xK6oIbKHMQ+foUFLtmtipS55xaThowOPVNxkNfKVwS6Jex0dIKqWPWqhjYuLHjmGQODsQ==
+  dependencies:
+    "@sentry/types" "6.13.1"
+    "@sentry/utils" "6.13.1"
     localforage "^1.8.1"
     tslib "^1.9.3"
 
@@ -1357,12 +1367,25 @@
   resolved "https://registry.yarnpkg.com/@sentry/types/-/types-6.12.0.tgz#b7395688a79403c6df8d8bb8d81deb8222519853"
   integrity sha512-urtgLzE4EDMAYQHYdkgC0Ei9QvLajodK1ntg71bGn0Pm84QUpaqpPDfHRU+i6jLeteyC7kWwa5O5W1m/jrjGXA==
 
+"@sentry/types@6.13.1":
+  version "6.13.1"
+  resolved "https://registry.yarnpkg.com/@sentry/types/-/types-6.13.1.tgz#650e5e5fe4aa415987e14cfa2ca03e5d5eb3e347"
+  integrity sha512-dYm8qv/O6QhOCmWi5rlJBX9rjEqvnjnZH1zqhQCWhMmF9aYS151Y41P1C0TS0o17Z0ClonLiYMG1J+zE/Pmtqg==
+
 "@sentry/utils@6.12.0":
   version "6.12.0"
   resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-6.12.0.tgz#3de261e8d11bdfdc7add64a3065d43517802e975"
   integrity sha512-oRHQ7TH5TSsJqoP9Gqq25Jvn9LKexXfAh/OoKwjMhYCGKGhqpDNUIZVgl9DWsGw5A5N5xnQyLOxDfyRV5RshdA==
   dependencies:
     "@sentry/types" "6.12.0"
+    tslib "^1.9.3"
+
+"@sentry/utils@6.13.1":
+  version "6.13.1"
+  resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-6.13.1.tgz#5c974c4235615ac50caed2b25c30b33a6a234425"
+  integrity sha512-qFDup/nBj2u2rAcQADFG3njVYUCo4XOQkCT7XdA5Flg1a++r6tIBdjiRyyjb8nqwHZ/OQsKr/V/EQaJiW29ETA==
+  dependencies:
+    "@sentry/types" "6.13.1"
     tslib "^1.9.3"
 
 "@sentry/webpack-plugin@1.17.1":
