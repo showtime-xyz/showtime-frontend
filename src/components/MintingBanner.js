@@ -23,14 +23,14 @@ const MintingBanner = ({ openMintModal }) => {
 								<a className="text-gray-900 dark:text-gray-100 font-bold underline" href="/claim" target="_blank">
 									claim our genesis drop NFT
 								</a>{' '}
-								to celebrate.  🎉
+								to celebrate. 🎉
 							</span>
 						</p>
 					</div>
 					<div className="absolute inset-y-0 right-0 pt-1 pr-1 flex items-start sm:pt-1 sm:pr-2 sm:items-start">
-						<button onClick={() => setShow(false)} type="button" className="flex p-2 rounded-md hover:bg-gray-200 focus:outline-none">
+						<button onClick={() => setShow(false)} type="button" className="flex p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 focus:outline-none">
 							<span className="sr-only">Dismiss</span>
-							<XIcon className="h-6 w-6 text-gray-900" aria-hidden="true" />
+							<XIcon className="h-6 w-6 text-gray-900 dark:text-gray-100" aria-hidden="true" />
 						</button>
 					</div>
 				</div>
