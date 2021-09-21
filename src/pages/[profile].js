@@ -640,9 +640,9 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 				</Head>
 
 				<div className="bg-white dark:bg-gray-900 pb-8">
-					<div className={`h-32 md:h-64 relative text-left bg-gradient-to-b from-black dark:from-gray-400 to-gray-800 dark:to-gray-100 ${cover_url ? 'bg-no-repeat bg-center bg-cover' : ''}`} style={cover_url ? { backgroundImage: `url(${getCoverUrl(cover_url)})` } : {}}>
-						{isMyProfile && (
-							<CappedWidth>
+					<CappedWidth>
+						<div className={`h-32 md:h-64 relative text-left bg-gradient-to-b from-black dark:from-gray-400 to-gray-800 dark:to-gray-100 rounded-b-[32px] -mx-6 ${cover_url ? 'bg-no-repeat bg-center bg-cover' : ''}`} style={cover_url ? { backgroundImage: `url(${getCoverUrl(cover_url)})` } : {}}>
+							{isMyProfile && (
 								<div className="relative">
 									<div
 										className="absolute top-6 right-5 2xl:right-5 text-gray-200 text-sm cursor-pointer bg-gray-900 bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 py-1 px-3 rounded-full hover:bg-opacity-60 flex items-center"
@@ -657,9 +657,9 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 										<span>Cover</span>
 									</div>
 								</div>
-							</CappedWidth>
-						)}
-					</div>
+							)}
+						</div>
+					</CappedWidth>
 					<CappedWidth>
 						<div className="mx-5">
 							<div className="flex flex-col text-left">
