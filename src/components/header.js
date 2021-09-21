@@ -9,12 +9,10 @@ import HomeIcon from './Icons/HomeIcon'
 import StarIcon from './Icons/StarIcon'
 import { useRouter } from 'next/router'
 import WalletIcon from './Icons/WalletIcon'
-import showtimeLogo from '../../public/img/logo_sm.png'
 import HeaderDropdown from './HeaderDropdown'
 import useAuth from '@/hooks/useAuth'
 import useProfile from '@/hooks/useProfile'
 import FireIcon from './Icons/FireIcon'
-//import useFlags, { FLAGS } from '@/hooks/useFlags'
 import MintModal from './UI/Modals/MintModal'
 import Button from './UI/Buttons/Button'
 import PlusIcon from './Icons/PlusIcon'
@@ -22,7 +20,6 @@ import MintingBanner from './MintingBanner'
 import ShowtimeIcon from './Icons/ShowtimeIcon'
 
 const Header = () => {
-	//const { [FLAGS.hasMinting]: canMint } = useFlags()
 	const { asPath } = useRouter()
 	const context = useContext(AppContext)
 	const { isAuthenticated } = useAuth()

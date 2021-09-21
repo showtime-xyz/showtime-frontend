@@ -17,8 +17,6 @@ import MiniFollowButton from './MiniFollowButton'
 import useProfile from '@/hooks/useProfile'
 import OrbitIcon from './Icons/OrbitIcon'
 import { CHAIN_IDENTIFIERS } from '../lib/constants'
-import showtimeLogo from '@/../public/img/logo_sm.png'
-import Image from 'next/image'
 import ShowtimeIcon from './Icons/ShowtimeIcon'
 import Tippy from '@tippyjs/react'
 
