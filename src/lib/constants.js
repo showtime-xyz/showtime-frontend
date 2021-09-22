@@ -203,3 +203,7 @@ export const CHAIN_IDENTIFIERS = {
 	polygon: 137,
 	mumbai: 80001,
 }
+
+export const LIST_CURRENCIES = {
+	TEST: '0x27D76eDf808528630d676FacF035FEe935759C4F',
+}

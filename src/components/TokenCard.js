@@ -21,7 +21,7 @@ import showtimeLogo from '@/../public/img/logo_sm.png'
 import Image from 'next/image'
 import Tippy from '@tippyjs/react'
 
-const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, setTransferModal, setBurnModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
+const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, setTransferModal, setBurnModal, setListModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
 	const { myProfile } = useProfile()
 	const [item, setItem] = useState(originalItem)
 	const [showVideo, setShowVideo] = useState(false)
@@ -132,6 +132,18 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 								) : null}
 								<Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
 									<Menu.Items className="z-1 absolute right-0 mt-2 origin-top-right border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg rounded-xl p-2 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+										{SHOWTIME_CONTRACTS.includes(item.contract_address) && item?.show_transfer_options == 1 && (
+											<>
+												<Menu.Item>
+													{({ active }) => (
+														<button onClick={() => setListModal(item)} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+															<span className="block truncate font-medium">List</span>
+														</button>
+													)}
+												</Menu.Item>
+												<hr className="border-gray-100 dark:border-gray-700 my-1" />
+											</>
+										)}
 										<Menu.Item>
 											{({ active }) => (
 												<button
