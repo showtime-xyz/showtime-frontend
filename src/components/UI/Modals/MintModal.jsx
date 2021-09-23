@@ -50,7 +50,7 @@ const MintModal = ({ open, onClose }) => {
 	useEffect(() => {
 		if (!myProfile) return
 
-		if (myProfile.wallet_addresses_excluding_email_v2.filter(({ address }) => address.startsWith('0x')).length > 0) return
+		if (myProfile.wallet_addresses_excluding_email_v2?.filter(({ address }) => address.startsWith('0x'))?.length > 0) return
 
 		setModalPage(MODAL_PAGES.NO_WALLET)
 	}, [myProfile])
