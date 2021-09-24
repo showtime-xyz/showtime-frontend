@@ -3,11 +3,10 @@ import Button from '../Buttons/Button'
 import { useState, Fragment } from 'react'
 import Dropdown from '../Dropdown'
 import { useMemo } from 'react'
-import axios from '@/lib/axios'
-import { v4 as uuid } from 'uuid'
 import { ethers } from 'ethers'
 import { getBiconomy } from '@/lib/biconomy'
 import getWeb3Modal from '@/lib/web3Modal'
+import minterAbi from '@/data/ShowtimeMT.json'
 import marketplaceAbi from '@/data/ERC1155Sale.json'
 import PolygonIcon from '@/components/Icons/PolygonIcon'
 import TwitterIcon from '@/components/Icons/Social/TwitterIcon'
@@ -108,10 +107,19 @@ const ListModal = ({ open, onClose, token }) => {
 		}
 
 		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT, marketplaceAbi, biconomy.getSignerByAddress(signerAddress))
-
-		const { data } = await contract.populateTransaction.createSale(token.token_id, editionCount, price, currency)
+		const mintContract = new ethers.Contract(process.env.NEXT_PUBLIC_MINTING_CONTRACT, minterAbi, biconomy.getSignerByAddress(signerAddress))
 
 		const provider = biconomy.getEthersProvider()
+
+		if (!(await mintContract.isApprovedForAll(signerAddress, process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT))) {
+			const { data } = await mintContract.populateTransaction.setApprovalForAll(process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT, true)
+
+			const transaction = await provider.send('eth_sendTransaction', [{ data, from: signerAddress, to: process.env.NEXT_PUBLIC_MINTING_CONTRACT, signatureType: 'EIP712_SIGN' }])
+
+			await new Promise(resolve => provider.once(transaction, resolve))
+		}
+
+		const { data } = await contract.populateTransaction.createSale(token.token_id, editionCount, price, currency)
 
 		const transaction = await provider
 			.send('eth_sendTransaction', [
