@@ -17,9 +17,11 @@ import { useTheme } from 'next-themes'
 import useProfile from '@/hooks/useProfile'
 import { ExclamationIcon } from '@heroicons/react/outline'
 import XIcon from '@/components/Icons/XIcon'
-import { LIST_CURRENCIES } from '@/lib/constants'
+import { DEFAULT_PROFILE_PIC, LIST_CURRENCIES } from '@/lib/constants'
 import useSWR from 'swr'
 import backend from '@/lib/backend'
+import { formatAddressShort, truncateWithEllipses } from '@/lib/utilities'
+import BadgeIcon from '@/components/Icons/BadgeIcon'
 
 const MODAL_PAGES = {
 	GENERAL: 'general',
@@ -164,7 +166,7 @@ const ListModal = ({ open, onClose, token }) => {
 				<canvas ref={confettiCanvas} className="absolute inset-0 w-screen h-screen z-[11] pointer-events-none" />
 				<div className="min-h-screen text-center">
 					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
-						<Dialog.Overlay className="fixed inset-0 bg-gray-500 dark:bg-gray-800 bg-opacity-75 dark:bg-opacity-95 transition-opacity z-10" />
+						<Dialog.Overlay className="fixed inset-0 bg-gray-500 dark:bg-gray-800 bg-opacity-75 dark:bg-opacity-95 transition-opacity" />
 					</Transition.Child>
 
 					{/* This element is to trick the browser into centering the modal contents. */}
@@ -173,17 +175,14 @@ const ListModal = ({ open, onClose, token }) => {
 					</span>
 
 					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enterTo="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 translate-y-0 sm:scale-100" leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-						<div className="inline-flex flex-col md:flex-row items-stretch align-bottom rounded-t-3xl md:rounded-b-3xl text-left overflow-hidden transform transition-all sm:align-middle bg-black dark:bg-gray-900 relative z-20 md:max-h-[85vh]">
-							{token && token.source_url && <div className="p-10 flex items-center justify-center">{token.mime_type.startsWith('model') ? <model-viewer src={token.source_url} autoplay camera-controls auto-rotate ar ar-modes="scene-viewer quick-look" interaction-prompt="none" /> : token.mime_type.startsWith('video') ? <video src={token.source_url} className="md:max-w-sm w-auto h-auto max-h-full" autoPlay loop muted /> : <img src={token.source_url} className="md:max-w-sm w-auto h-auto max-h-full" />}</div>}
-							<div className="bg-white dark:bg-black shadow-xl rounded-t-3xl md:rounded-b-3xl sm:max-w-lg sm:w-full flex flex-col">
-								<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
-									<h2 className="text-gray-900 dark:text-white text-xl font-bold">Create NFT</h2>
-									<button onClick={trueOnClose} className="p-3 -my-3 hover:bg-gray-100 disabled:hidden rounded-xl transition" disabled={modalPage === MODAL_PAGES.LOADING}>
-										<XIcon className="w-4 h-4" />
-									</button>
-								</div>
-								{renderedPage}
+						<div className="inline-block align-bottom rounded-t-3xl sm:rounded-b-3xl text-left overflow-hidden transform transition-all sm:align-middle bg-white dark:bg-black shadow-xl sm:max-w-lg w-full">
+							<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
+								<h2 className="text-gray-900 dark:text-white text-xl font-bold">Create NFT</h2>
+								<button onClick={trueOnClose} className="p-3 -my-3 hover:bg-gray-100 disabled:hidden rounded-xl transition" disabled={modalPage === MODAL_PAGES.LOADING}>
+									<XIcon className="w-4 h-4" />
+								</button>
 							</div>
+							{renderedPage}
 						</div>
 					</Transition.Child>
 				</div>
@@ -196,6 +195,30 @@ const ListPage = ({ token, price, setPrice, currency, setCurrency, editionCount,
 	return (
 		<>
 			<div className="flex-1 overflow-y-auto">
+				{token && (
+					<>
+						<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center space-x-4">
+							{token.source_url && <div className="w-auto h-20">{token.mime_type.startsWith('model') ? <model-viewer src={token.source_url} autoplay camera-controls auto-rotate ar ar-modes="scene-viewer quick-look" interaction-prompt="none" /> : token.mime_type.startsWith('video') ? <video src={token.source_url} className="md:max-w-sm w-auto h-auto max-h-full" autoPlay loop muted /> : <img src={token.source_url} className="md:max-w-sm w-auto h-auto max-h-full" />}</div>}
+							<div>
+								<p className="font-bold text-gray-900 dark:text-white">{token?.token_name}</p>
+								{token?.token_description && <p className="text-gray-900 dark:text-gray-300 font-medium text-sm">{token.token_description}</p>}
+							</div>
+						</div>
+						<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center">
+							<div className="flex items-center space-x-2">
+								<img alt={token.creator_name} src={token.creator_img_url ? token.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
+								<div>
+									<p className="font-medium text-gray-700 dark:text-gray-400 text-xs">Creator</p>
+									<div className="flex items-center space-x-1 -mt-0.5">
+										<p className="text-gray-900 dark:text-white font-semibold text-sm">{token.creator_name === token.creator_address ? formatAddressShort(token.creator_address) : truncateWithEllipses(token.creator_name, 22)}</p>
+										{token.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+									</div>
+								</div>
+							</div>
+							<hr className="mx-8 border-0 border-r-px dark:border-gray-800" />
+						</div>
+					</>
+				)}
 				<div className="p-4 border-b border-gray-100 dark:border-gray-900">
 					<div>
 						<p className="font-semibold text-gray-900 dark:text-white space-x-1 flex items-center">
@@ -216,10 +239,6 @@ const ListPage = ({ token, price, setPrice, currency, setCurrency, editionCount,
 						</div>
 						<input type="number" min="1" max={maxTokens} className="px-4 py-3 max-w-[60px] relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring text-right" style={{ '-moz-appearance': 'textfield' }} value={editionCount} onChange={event => (event.target.value > maxTokens ? setEditionCount(maxTokens) : event.target.value < 1 ? setEditionCount(1) : setEditionCount(parseInt(event.target.value)))} />
 					</div>
-				</div>
-				<div className="p-4 border-b border-gray-100 dark:border-gray-900">
-					<p className="font-bold text-gray-900">{token?.token_name}</p>
-					{token?.token_description && <p className="text-gray-900 font-medium text-sm mt-4">{token.token_description}</p>}
 				</div>
 			</div>
 			<div className="p-4">
