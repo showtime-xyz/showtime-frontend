@@ -281,7 +281,7 @@ const MintingPage = ({ transactionHash }) => {
 }
 
 const SuccessPage = ({ transactionHash, token, shotConfetti }) => {
-	const tokenURL = `/t/${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai' : 'polygon'}/${process.env.NEXT_PUBLIC_MINTING_CONTRACT}/${tokenID}`
+	const tokenURL = `/t/${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai' : 'polygon'}/${process.env.NEXT_PUBLIC_MINTING_CONTRACT}/${token.token_id}`
 
 	useEffect(() => {
 		shotConfetti()
