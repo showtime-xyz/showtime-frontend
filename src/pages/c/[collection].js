@@ -31,6 +31,8 @@ export async function getServerSideProps(context) {
 
 	const selected_collection = collection_list.filter(item => item.value === collection).length > 0 ? collection_list.filter(item => item.value === collection)[0] : null
 
+	console.log(collection_list)
+
 	return {
 		props: {
 			collection_list,
