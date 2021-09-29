@@ -1,24 +1,18 @@
 import { Dialog, Transition } from '@headlessui/react'
 import Button from '../Buttons/Button'
 import { useState, Fragment } from 'react'
-import Dropdown from '../Dropdown'
-import { useMemo } from 'react'
 import { ethers } from 'ethers'
 import { getBiconomy } from '@/lib/biconomy'
 import getWeb3Modal from '@/lib/web3Modal'
-import minterAbi from '@/data/ShowtimeMT.json'
 import marketplaceAbi from '@/data/ERC1155Sale.json'
 import PolygonIcon from '@/components/Icons/PolygonIcon'
-import TwitterIcon from '@/components/Icons/Social/TwitterIcon'
 import { useRef } from 'react'
 import { useEffect } from 'react'
 import { useTheme } from 'next-themes'
 import useProfile from '@/hooks/useProfile'
 import { ExclamationIcon } from '@heroicons/react/outline'
 import XIcon from '@/components/Icons/XIcon'
-import { DEFAULT_PROFILE_PIC, LIST_CURRENCIES } from '@/lib/constants'
-import useSWR from 'swr'
-import backend from '@/lib/backend'
+import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import { formatAddressShort, truncateWithEllipses } from '@/lib/utilities'
 import BadgeIcon from '@/components/Icons/BadgeIcon'
 
@@ -35,10 +29,10 @@ const UnlistModal = ({ open, onClose, token }) => {
 	const { resolvedTheme } = useTheme()
 	const isWeb3ModalActive = useRef(false)
 	const [modalPage, setModalPage] = useState(MODAL_PAGES.GENERAL)
-	const { data: ownershipData } = useSWR(
-		() => open && myProfile && `/v1/owned_quantity?nft_id=${token.nft_id}&profile_id=${myProfile.profile_id}`,
-		url => backend.get(url).then(res => res.data?.data)
-	)
+	// const { data: ownershipData } = useSWR(
+	// 	() => open && myProfile && `/v1/owned_quantity?nft_id=${token.nft_id}&profile_id=${myProfile.profile_id}`,
+	// 	url => backend.get(url).then(res => res.data?.data)
+	// )
 
 	const [transactionHash, setTransactionHash] = useState('')
 

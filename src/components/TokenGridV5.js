@@ -28,7 +28,7 @@ const TokenGridV5 = ({ dataLength, hasMore, next, isLoading, endMessage, scrollT
 	const [burnModal, setBurnModal] = useState(null)
 	const [listModal, setListModal] = useState(null)
 	const [unlistModal, setUnlistModal] = useState(null)
-	const [buyModal, setBuyModal] = useState(null)
+	const [, setBuyModal] = useState(null)
 
 	const leftPress = useKeyPress('ArrowLeft')
 	const rightPress = useKeyPress('ArrowRight')
