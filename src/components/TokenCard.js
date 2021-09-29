@@ -492,7 +492,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 								<div className="flex items-center justify-between pt-1 space-x-4">
 									<Link href="/[profile]" as={`/${item.listing.username || item.listing.address}`}>
 										<a className="flex flex-row items-center space-x-2 flex-shrink min-w-0">
-											<img alt={item.listing.name} src={DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8 flex-shrink-0" />
+											<img alt={item.listing.name} src={item.listing.img_url ? item.listing.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8 flex-shrink-0" />
 											<div className="flex-shrink min-w-0">
 												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Listed by</span>
 												<div className="flex items-center space-x-1 -mt-0.5">
