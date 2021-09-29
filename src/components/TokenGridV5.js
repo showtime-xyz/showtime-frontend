@@ -12,6 +12,7 @@ import { ReactSortable } from 'react-sortablejs'
 import BurnModal from './Modals/BurnModal'
 import TransferModal from './Modals/TransferModal'
 import ListModal from './UI/Modals/ListModal'
+import UnlistModal from './UI/Modals/UnlistModal'
 
 const TokenGridV5 = ({ dataLength, hasMore, next, isLoading, endMessage, scrollThreshold, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, items, setItems, isMyProfile, listId, detailsModalCloseOnKeyChange, changeSpotlightItem, pageProfile, isLoadingMore, isChangingOrder }) => {
 	const context = useContext(AppContext)
@@ -26,6 +27,8 @@ const TokenGridV5 = ({ dataLength, hasMore, next, isLoading, endMessage, scrollT
 	const [transferModal, setTransferModal] = useState(null)
 	const [burnModal, setBurnModal] = useState(null)
 	const [listModal, setListModal] = useState(null)
+	const [unlistModal, setUnlistModal] = useState(null)
+	const [buyModal, setBuyModal] = useState(null)
 
 	const leftPress = useKeyPress('ArrowLeft')
 	const rightPress = useKeyPress('ArrowRight')
@@ -121,6 +124,7 @@ const TokenGridV5 = ({ dataLength, hasMore, next, isLoading, endMessage, scrollT
 					<BurnModal open={!!burnModal} onClose={() => setBurnModal(null)} token={burnModal} />
 					<TransferModal open={!!transferModal} onClose={() => setTransferModal(null)} token={transferModal} />
 					<ListModal open={!!listModal} onClose={() => setListModal(null)} token={listModal} />
+					<UnlistModal open={!!unlistModal} onClose={() => setUnlistModal(null)} token={unlistModal} />
 				</>
 			) : null}
 			<InfiniteScroll style={{ overflow: null }} dataLength={dataLength} next={next} hasMore={hasMore} endMessage={endMessage} scrollThreshold={scrollThreshold}>
@@ -133,13 +137,13 @@ const TokenGridV5 = ({ dataLength, hasMore, next, isLoading, endMessage, scrollT
 						{isChangingOrder ? (
 							<ReactSortable list={itemsList} animation={200} delayOnTouchStart={true} delay={2} setList={handleSetItemsList} className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 								{itemsList.map(item => (
-									<TokenCard key={item.nft_id} originalItem={item} currentlyPlayingVideo={currentlyPlayingVideo} setCurrentlyPlayingVideo={setCurrentlyPlayingVideo} currentlyOpenModal={currentlyOpenModal} setCurrentlyOpenModal={setCurrentlyOpenModal} setTransferModal={setTransferModal} setBurnModal={setBurnModal} isMyProfile={isMyProfile} listId={listId} changeSpotlightItem={changeSpotlightItem} pageProfile={pageProfile} handleRemoveItem={handleRemoveItem} showUserHiddenItems={showUserHiddenItems} showDuplicates={showDuplicates} setHasUserHiddenItems={setHasUserHiddenItems} isChangingOrder={isChangingOrder} />
+									<TokenCard key={item.nft_id} originalItem={item} currentlyPlayingVideo={currentlyPlayingVideo} setCurrentlyPlayingVideo={setCurrentlyPlayingVideo} currentlyOpenModal={currentlyOpenModal} setCurrentlyOpenModal={setCurrentlyOpenModal} setTransferModal={setTransferModal} setBurnModal={setBurnModal} setListModal={setListModal} setUnlistModal={setUnlistModal} setBuyModal={setBuyModal} isMyProfile={isMyProfile} listId={listId} changeSpotlightItem={changeSpotlightItem} pageProfile={pageProfile} handleRemoveItem={handleRemoveItem} showUserHiddenItems={showUserHiddenItems} showDuplicates={showDuplicates} setHasUserHiddenItems={setHasUserHiddenItems} isChangingOrder={isChangingOrder} />
 								))}
 							</ReactSortable>
 						) : (
 							<div className={'grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'}>
 								{itemsList.map(item => (
-									<TokenCard key={item.nft_id} originalItem={item} currentlyPlayingVideo={currentlyPlayingVideo} setCurrentlyPlayingVideo={setCurrentlyPlayingVideo} currentlyOpenModal={currentlyOpenModal} setCurrentlyOpenModal={setCurrentlyOpenModal} setTransferModal={setTransferModal} setBurnModal={setBurnModal} setListModal={setListModal} isMyProfile={isMyProfile} listId={listId} changeSpotlightItem={changeSpotlightItem} pageProfile={pageProfile} handleRemoveItem={handleRemoveItem} showUserHiddenItems={showUserHiddenItems} showDuplicates={showDuplicates} setHasUserHiddenItems={setHasUserHiddenItems} />
+									<TokenCard key={item.nft_id} originalItem={item} currentlyPlayingVideo={currentlyPlayingVideo} setCurrentlyPlayingVideo={setCurrentlyPlayingVideo} currentlyOpenModal={currentlyOpenModal} setCurrentlyOpenModal={setCurrentlyOpenModal} setTransferModal={setTransferModal} setBurnModal={setBurnModal} setListModal={setListModal} setUnlistModal={setUnlistModal} setBuyModal={setBuyModal} isMyProfile={isMyProfile} listId={listId} changeSpotlightItem={changeSpotlightItem} pageProfile={pageProfile} handleRemoveItem={handleRemoveItem} showUserHiddenItems={showUserHiddenItems} showDuplicates={showDuplicates} setHasUserHiddenItems={setHasUserHiddenItems} />
 								))}
 							</div>
 						)}
