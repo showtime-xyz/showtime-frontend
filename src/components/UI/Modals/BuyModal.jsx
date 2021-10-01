@@ -182,7 +182,9 @@ const BuyPage = ({ token, buyToken }) => {
 							{token.source_url && <div className="w-auto h-20">{token.mime_type.startsWith('model') ? <model-viewer src={token.source_url} autoplay camera-controls auto-rotate ar ar-modes="scene-viewer quick-look" interaction-prompt="none" /> : token.mime_type.startsWith('video') ? <video src={token.source_url} className="md:max-w-sm w-auto h-auto max-h-full" autoPlay loop muted /> : <img src={token.source_url} className="md:max-w-sm w-auto h-auto max-h-full" />}</div>}
 							<div>
 								<p className="font-semibold text-gray-900 dark:text-white">{token?.token_name}</p>
-								{token?.token_description && <p className="text-gray-900 dark:text-gray-300 font-medium text-sm">{token.token_description}</p>}
+								<p className="text-gray-600 dark:text-gray-400 font-bold text-sm">
+									{parseFloat(token.listing.min_price)} ${token.listing.currency}
+								</p>
 							</div>
 						</div>
 						<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center">
@@ -207,6 +209,12 @@ const BuyPage = ({ token, buyToken }) => {
 									</div>
 								</div>
 							</div>
+						</div>
+						<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
+							<p className="text-gray-600 text-xs font-semibold">
+								{token.listing.total_listed_quantity}/{token.listing.total_edition_quantity} available
+							</p>
+							<p className="text-gray-600 text-xs font-semibold">{parseInt(token.listing.royalty_percentage)}% Royalties</p>
 						</div>
 					</>
 				)}
