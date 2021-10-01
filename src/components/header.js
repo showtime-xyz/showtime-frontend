@@ -37,18 +37,18 @@ const Header = () => {
 			) : null}
 			<MintingBanner openMintModal={() => setMintModalOpen(true)} />
 			<header className="px-4 pt-3 sm:py-3 bg-white dark:bg-gray-900 bg-opacity-70 dark:bg-opacity-70 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none sticky top-0 z-1">
-				<div className="max-w-screen-2xl 2xl:max-w-none 2xl:px-10 sm:px-3 mx-auto w-full">
+				<div className="max-w-screen-2xl 2xl:max-w-none sm:px-3 mx-auto w-full">
 					<div className="flex items-center justify-between">
 						<div className="flex-1 flex items-center space-x-4">
 							<Link href="/">
 								<a
-									className="flex flex-shrink-0"
+									className="flex flex-shrink-0 p-2 rounded-xl hover:bg-gray-100 transition group"
 									onClick={async () => {
 										mixpanel.track('Logo button click')
 										await context.setToggleRefreshFeed(!context.toggleRefreshFeed)
 									}}
 								>
-									<ShowtimeIcon className="rounded-lg overflow-hidden w-8 h-8" />
+									<ShowtimeIcon className="rounded-lg overflow-hidden w-5 h-5 fill-black group-hover:fill-gold" />
 								</a>
 							</Link>
 							<SearchBar propagateSearchState={setSearchBarOpen} />
