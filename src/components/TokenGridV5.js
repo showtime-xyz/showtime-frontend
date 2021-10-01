@@ -13,6 +13,7 @@ import BurnModal from './Modals/BurnModal'
 import TransferModal from './Modals/TransferModal'
 import ListModal from './UI/Modals/ListModal'
 import UnlistModal from './UI/Modals/UnlistModal'
+import BuyModal from './UI/Modals/BuyModal'
 
 const TokenGridV5 = ({ dataLength, hasMore, next, isLoading, endMessage, scrollThreshold, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, items, setItems, isMyProfile, listId, detailsModalCloseOnKeyChange, changeSpotlightItem, pageProfile, isLoadingMore, isChangingOrder }) => {
 	const context = useContext(AppContext)
@@ -28,7 +29,7 @@ const TokenGridV5 = ({ dataLength, hasMore, next, isLoading, endMessage, scrollT
 	const [burnModal, setBurnModal] = useState(null)
 	const [listModal, setListModal] = useState(null)
 	const [unlistModal, setUnlistModal] = useState(null)
-	const [, setBuyModal] = useState(null)
+	const [buyModal, setBuyModal] = useState(null)
 
 	const leftPress = useKeyPress('ArrowLeft')
 	const rightPress = useKeyPress('ArrowRight')
@@ -125,6 +126,7 @@ const TokenGridV5 = ({ dataLength, hasMore, next, isLoading, endMessage, scrollT
 					<TransferModal open={!!transferModal} onClose={() => setTransferModal(null)} token={transferModal} />
 					<ListModal open={!!listModal} onClose={() => setListModal(null)} token={listModal} />
 					<UnlistModal open={!!unlistModal} onClose={() => setUnlistModal(null)} token={unlistModal} />
+					<BuyModal open={!!buyModal} onClose={() => setBuyModal(null)} token={buyModal} />
 				</>
 			) : null}
 			<InfiniteScroll style={{ overflow: null }} dataLength={dataLength} next={next} hasMore={hasMore} endMessage={endMessage} scrollThreshold={scrollThreshold}>

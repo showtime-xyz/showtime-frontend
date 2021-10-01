@@ -502,7 +502,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 											</div>
 										</a>
 									</Link>
-									<button onClick={setBuyModal(item)} className="space-x-4 flex items-center flex-1 hover:bg-gray-100 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg transition">
+									<button onClick={() => setBuyModal(item)} className="space-x-4 flex items-center flex-1 hover:bg-gray-100 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg transition">
 										<div>
 											<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Available</span>
 											<p className="text-sm font-bold text-gray-900 dark:text-gray-200">
