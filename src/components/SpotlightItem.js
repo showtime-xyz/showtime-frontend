@@ -221,14 +221,14 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 									</div>
 								) : null}
 
-								<div className="border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg rounded-xl py-4 px-2 md:max-w-max">
+								<div className="border border-transparent dark:border-gray-700 bg-white dark:bg-black shadow-lg rounded-xl py-4 px-2 md:max-w-max">
 									<div className="flex flex-wrap w-full px-2 gap-y-1 gap-x-5 md:gap-0">
 										{item.contract_is_creator ? (
 											<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
 												<a className="flex flex-row items-center space-x-2">
 													<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
 													<div>
-														<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Creator</span>
+														<span className="text-xs font-medium text-gray-600 dark:text-gray-400">Creator</span>
 														<div className="text-sm font-semibold truncate -mt-0.5 dark:text-gray-200">{truncateWithEllipses(item.collection_name + ' Collection', 30)}</div>
 													</div>
 												</a>
@@ -238,7 +238,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 												<a className="flex flex-row items-center space-x-2">
 													<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
 													<div>
-														<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Creator {item.owner_id == item.creator_id && '& Owner'}</span>
+														<span className="text-xs font-medium text-gray-600 dark:text-gray-400">Creator {item.owner_id == item.creator_id && '& Owner'}</span>
 														<div className="flex items-center space-x-1 -mt-0.5">
 															<div className="text-sm font-semibold truncate dark:text-gray-200">{item.creator_name === item.creator_address ? formatAddressShort(item.creator_address) : truncateWithEllipses(item.creator_name, 22)}</div>
 															{item.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
@@ -252,7 +252,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 												<div className="w-[2px] bg-gray-100 dark:bg-gray-800 my-2.5 mx-4 hidden md:block" />
 												{item.owner_count && item.owner_count > 1 ? (
 													<div>
-														<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owner</span>
+														<span className="text-xs font-medium text-gray-600 dark:text-gray-400">Owner</span>
 														<div className="flex items-center">
 															<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
 																<a className="flex flex-row items-center pr-2 ">
@@ -274,7 +274,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 															<a className="flex flex-row items-center space-x-2">
 																<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8" />
 																<div>
-																	<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owner</span>
+																	<span className="text-xs font-medium text-gray-600 dark:text-gray-400">Owner</span>
 																	<div className="flex items-center space-x-1 -mt-0.5">
 																		<div className="text-sm font-semibold truncate dark:text-gray-200">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
 																		{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
@@ -288,7 +288,20 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 											</>
 										)}
 									</div>
-									<div className="h-px bg-gray-100 dark:bg-gray-800 mx-1 my-4" />
+									{item.listing ? (
+										<>
+											<div className="h-px bg-gray-100 dark:bg-gray-800 mx-1 mt-4 mb-2" />
+											<div className="flex items-center justify-between px-2">
+												<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+													{item.listing.total_listed_quantity}/{item.listing.total_edition_quantity} available
+												</p>
+												<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">{parseInt(item.listing.royalty_percentage)}% Royalties</p>
+											</div>
+											<div className="h-px bg-gray-100 dark:bg-gray-800 mx-1 mt-2 mb-4" />
+										</>
+									) : (
+										<div className="h-px bg-gray-100 dark:bg-gray-800 mx-1 my-4" />
+									)}
 									<div className="flex items-center justify-between px-4 space-x-4">
 										<div className="flex items-center space-x-4">
 											<LikeButton item={item} />

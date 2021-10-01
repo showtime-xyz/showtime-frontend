@@ -36,7 +36,7 @@ const Header = () => {
 				</>
 			) : null}
 			<MintingBanner openMintModal={() => setMintModalOpen(true)} />
-			<header className="px-4 pt-3 sm:py-3 bg-white dark:bg-gray-900 bg-opacity-70 dark:bg-opacity-70 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none sticky top-0 z-1">
+			<header className="px-4 pt-3 sm:py-3 bg-white dark:bg-black bg-opacity-70 dark:bg-opacity-70 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none sticky top-0 z-1">
 				<div className="max-w-screen-2xl 2xl:max-w-none sm:px-3 mx-auto w-full">
 					<div className="flex items-center justify-between">
 						<div className="flex-1 flex items-center space-x-4">
@@ -93,10 +93,10 @@ const Header = () => {
 									<HeaderDropdown />
 								</>
 							) : (
-								<div className="flex items-center space-x-2 text-sm md:text-base dark:text-gray-200 hover:text-stpink dark:hover:text-stpink cursor-pointer hover:border-stpink dark:hover:border-stpink" onClick={() => context.setLoginModalOpen(!context.loginModalOpen)}>
+								<Button style="primary" className="space-x-2" onClick={() => context.setLoginModalOpen(!context.loginModalOpen)}>
 									<WalletIcon className="w-5 h-5" />
-									<span>Sign&nbsp;in</span>
-								</div>
+									<span className="font-bold text-sm">Sign&nbsp;in</span>
+								</Button>
 							)}
 						</div>
 					</div>
