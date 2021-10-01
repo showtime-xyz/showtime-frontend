@@ -6,11 +6,11 @@ import { formatDistanceToNowStrict } from 'date-fns'
 import { getNotificationInfo, DEFAULT_PROFILE_PIC, CHAIN_IDENTIFIERS } from '@/lib/constants'
 import ModalUserList from '@/components/ModalUserList'
 import axios from '@/lib/axios'
-import ZapIcon from './Icons/ZapIcon'
 import { Popover, Transition } from '@headlessui/react'
 import { useSWRInfinite } from 'swr'
 import useAuth from '../hooks/useAuth'
 import useProfile from '@/hooks/useProfile'
+import BellIcon from '@/components/Icons/BellIcon'
 
 const NOTIFICATIONS_PER_PAGE = 7
 
@@ -70,8 +70,8 @@ export default function NotificationsBtn() {
 				<>
 					<Popover.Button data-close-notifs className="dark:text-gray-300 transition-all rounded-full cursor-pointer relative h-6 w-6 focus:outline-none">
 						<span onClick={open ? null : handlePanelOpen} className="flex items-center justify-center">
-							<ZapIcon className="w-5 h-5" />
-							{hasUnreadNotifications && <div className="bg-amber-500 absolute h-2 w-2 top-0 right-0 rounded-full" />}
+							<BellIcon className="w-5 h-5" />
+							{hasUnreadNotifications && <div className="bg-violet-500 absolute h-2 w-2 top-0 right-1 rounded-full" />}
 						</span>
 					</Popover.Button>
 					<Transition show={open} as={Fragment} enter="transition ease-out duration-200" enterFrom="transform opacity-0" enterTo="transform opacity-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100" leaveTo="transform opacity-0">
