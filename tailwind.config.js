@@ -11,6 +11,9 @@ module.exports = {
 				'screen-3xl': '1680px',
 				screen: '100vw',
 			},
+			boxShadow: {
+				dropdown: '0px 16px 48px 0px #0000001A, 0px 12px 16px 0px #0000001A, 0px 1px 3px 0px #0000000D',
+			},
 			borderRadius: {
 				inherit: 'inherit',
 			},
@@ -57,6 +60,9 @@ module.exports = {
 			},
 			whitespace: {
 				'break-spaces': 'break-spaces',
+			},
+			fill: {
+				black: 'black',
 			},
 			zIndex: {
 				1: 1,
