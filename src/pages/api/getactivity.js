@@ -5,7 +5,7 @@ export default handler().post(async ({ user, body: { page = 1, activityTypeId = 
 	if (!user && page > 8) return res.status(200).json({ data: [] })
 
 	await backend
-		.get(`/v1/activity?page=${page}&type_id=${activityTypeId}&limit=${limit}`, {
+		.get(`/v2/activity?page=${page}&type_id=${activityTypeId}&limit=${limit}`, {
 			headers: {
 				'X-Authenticated-User': user?.publicAddress || null,
 				'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
