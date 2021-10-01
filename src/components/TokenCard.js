@@ -437,7 +437,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 							{SHOWTIME_CONTRACTS.includes(item.contract_address) && (
 								<Tippy content="Created on Showtime">
 									<div className="flex items-center justify-center">
-										<ShowtimeIcon className="w-5 h-5 rounded-full" />
+										<ShowtimeIcon className="w-5 h-5 rounded-full fill-gold" />
 									</div>
 								</Tippy>
 							)}
