@@ -21,6 +21,14 @@ const iconObjects = {
 	at: faAt,
 }
 
+const NOTIFICATION_TYPES = {
+	FOLLOWED: [1],
+	LIKED: [2, 3],
+	COMMENT: [4, 5],
+	COMMENT_MENTION: [6],
+	COMMENT_LIKE: [7],
+}
+
 export default function NotificationsBtn() {
 	const { user } = useAuth()
 	const { myProfile, setMyProfile } = useProfile()
@@ -68,9 +76,9 @@ export default function NotificationsBtn() {
 		<Popover className="md:relative flex items-center justify-center">
 			{({ open }) => (
 				<>
-					<Popover.Button data-close-notifs className="dark:text-gray-300 transition-all rounded-full cursor-pointer relative h-6 w-6 focus:outline-none">
+					<Popover.Button data-close-notifs className="dark:text-white transition-all rounded-full cursor-pointer relative h-6 w-6 focus:outline-none">
 						<span onClick={open ? null : handlePanelOpen} className="flex items-center justify-center">
-							<BellIcon className="w-5 h-5" />
+							<BellIcon className="w-6 h-6" />
 							{hasUnreadNotifications && <div className="bg-violet-500 absolute h-2 w-2 top-0 right-1 rounded-full" />}
 						</span>
 					</Popover.Button>
@@ -173,11 +181,11 @@ export default function NotificationsBtn() {
 																</>
 															) : null}
 															<span className="text-gray-500">
-																{[2, 3].includes(notif.type_id) ? 'liked ' : null}
-																{[1].includes(notif.type_id) ? 'followed you' : null}
-																{[4, 5].includes(notif.type_id) ? 'commented on ' : null}
-																{[6].includes(notif.type_id) ? 'mentioned you in ' : null}
-																{[7].includes(notif.type_id) ? 'liked your comment on ' : null}
+																{NOTIFICATION_TYPES.LIKED.includes(notif.type_id) ? 'liked ' : null}
+																{NOTIFICATION_TYPES.FOLLOWED.includes(notif.type_id) ? 'followed you' : null}
+																{NOTIFICATION_TYPES.COMMENT.includes(notif.type_id) ? 'commented on ' : null}
+																{NOTIFICATION_TYPES.COMMENT_MENTION.includes(notif.type_id) ? 'mentioned you in ' : null}
+																{NOTIFICATION_TYPES.COMMENT_LIKE.includes(notif.type_id) ? 'liked your comment on ' : null}
 															</span>
 															{notif.nft__nftdisplay__name ? (
 																<Link href="/t/[...token]" as={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == notif.chain_identifier)}/${notif.nft__contract__address}/${notif.nft__token_identifier}`}>
