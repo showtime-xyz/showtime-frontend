@@ -65,7 +65,7 @@ export default function NotificationsBtn() {
 	}, [myProfile, myProfile?.notifications_last_opened, notifs])
 
 	return (
-		<Popover className="md:relative">
+		<Popover className="md:relative flex items-center justify-center">
 			{({ open }) => (
 				<>
 					<Popover.Button data-close-notifs className="dark:text-gray-300 transition-all rounded-full cursor-pointer relative h-6 w-6 focus:outline-none">

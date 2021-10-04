@@ -5,7 +5,7 @@ import SearchBar from './SearchBar'
 import AppContext from '@/context/app-context'
 import ModalLogin from './ModalLogin'
 import NotificationsBtn from './NotificationsBtn'
-import HomeIcon from './Icons/HomeIcon'
+import { HomeIconOutline, HomeIconSolid } from './Icons/HomeIcon'
 import StarIcon from './Icons/StarIcon'
 import { useRouter } from 'next/router'
 import WalletIcon from './Icons/WalletIcon'
@@ -18,6 +18,8 @@ import Button from './UI/Buttons/Button'
 import PlusIcon from './Icons/PlusIcon'
 import MintingBanner from './MintingBanner'
 import ShowtimeIcon from './Icons/ShowtimeIcon'
+import { CompassIconSolid, CompassIconOutline } from './Icons/CompassIcon'
+import { ArrowUpIconOutline, ArrowUpIconSolid } from './Icons/ArrowUpIcon'
 
 const Header = () => {
 	const { asPath } = useRouter()
@@ -56,21 +58,18 @@ const Header = () => {
 						{/* Start desktop-only menu */}
 						<div className="hidden flex-1 md:flex md:items-center md:justify-center mr-6 md:mr-0 items-center font-normal space-x-2">
 							<Link href="/">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-xl py-2 -my-1 px-3 -mx-1`} onClick={() => mixpanel.track('Discover button click')}>
-									<HomeIcon className="w-5 h-5" />
-									<span className="font-bold">Feed</span>
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-full py-3 -my-2 px-3 -mx-1`} onClick={() => mixpanel.track('Discover button click')}>
+									{asPath == '/' ? <HomeIconSolid className="w-5 h-5" /> : <HomeIconOutline className="w-5 h-5" />}
 								</a>
 							</Link>
 							<Link href="/c/spotlights">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/c/spotlights' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-xl py-2 -my-1 px-3 -mx-1`} onClick={() => mixpanel.track('Discover button click')}>
-									<StarIcon className="w-5 h-5" />
-									<span className="font-bold">Discover</span>
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/c/spotlights' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-full py-3 -my-2 px-3 -mx-1`} onClick={() => mixpanel.track('Discover button click')}>
+									{asPath == '/c/spotlights' ? <CompassIconSolid className="w-5 h-5" /> : <CompassIconOutline className="w-5 h-5" />}
 								</a>
 							</Link>
 							<Link href="/trending">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/trending' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-xl py-2 -my-1 px-3 -mx-1`} onClick={() => mixpanel.track('Trending button click')}>
-									<FireIcon className="w-5 h-5" />
-									<span className="font-bold">Trending</span>
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/trending' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-full py-3 -my-2 px-3 -mx-1`} onClick={() => mixpanel.track('Trending button click')}>
+									{asPath == '/trending' ? <ArrowUpIconSolid className="w-5 h-5" /> : <ArrowUpIconOutline className="w-5 h-5" />}
 								</a>
 							</Link>
 						</div>
@@ -106,21 +105,18 @@ const Header = () => {
 						<div className="-mx-4 mt-4 md:hidden">
 							<div className="flex-1 flex justify-around font-normal -mx-2">
 								<Link href="/">
-									<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 ${asPath == '/' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>
-										<HomeIcon className="w-5 h-5" />
-										<span>Feed</span>
+									<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 px-2 -mx-2 group ${asPath == '/' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>
+										<div className={`${asPath == '/' ? 'bg-gray-100' : 'group-hover:bg-gray-100'} p-2 -m-2 rounded-full transition`}>{asPath == '/' ? <HomeIconSolid className="w-5 h-5" /> : <HomeIconOutline className="w-5 h-5" />}</div>
 									</a>
 								</Link>
 								<Link href="/c/spotlights">
-									<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 ${asPath == '/c/spotlights' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>
-										<StarIcon className="w-5 h-5" />
-										<span>Discover</span>
+									<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 px-2 -mx-2 group ${asPath == '/c/spotlights' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>
+										<div className={`${asPath == '/c/spotlights' ? 'bg-gray-100' : 'group-hover:bg-gray-100'} p-2 -m-2 rounded-full transition`}>{asPath == '/c/spotlights' ? <CompassIconSolid className="w-5 h-5" /> : <CompassIconOutline className="w-5 h-5" />}</div>
 									</a>
 								</Link>
 								<Link href="/trending">
-									<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 ${asPath == '/trending' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Trending button click')}>
-										<FireIcon className="w-5 h-5" />
-										<span>Trending</span>
+									<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 px-2 -mx-2 group ${asPath == '/trending' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Trending button click')}>
+										<div className={`${asPath == '/trending' ? 'bg-gray-100' : 'group-hover:bg-gray-100'} p-2 -m-2 rounded-full transition`}>{asPath == '/trending' ? <ArrowUpIconSolid className="w-5 h-5" /> : <ArrowUpIconOutline className="w-5 h-5" />}</div>
 									</a>
 								</Link>
 							</div>
