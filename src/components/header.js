@@ -28,15 +28,13 @@ const Header = () => {
 	const { myProfile } = useProfile()
 	const [mintModalOpen, setMintModalOpen] = useState(false)
 	const [isSearchBarOpen, setSearchBarOpen] = useState(false)
+	const renderModalLogin = typeof document !== 'undefined'
+	const renderMintModal = typeof document !== 'undefined' && isAuthenticated
 
 	return (
 		<>
-			{typeof document !== 'undefined' ? (
-				<>
-					<ModalLogin isOpen={context.loginModalOpen} setEditModalOpen={context.setLoginModalOpen} />
-					<MintModal open={mintModalOpen} onClose={() => setMintModalOpen(false)} />
-				</>
-			) : null}
+			{renderModalLogin ? <ModalLogin isOpen={context.loginModalOpen} setEditModalOpen={context.setLoginModalOpen} /> : null}
+			{renderMintModal ? <MintModal open={mintModalOpen} onClose={() => setMintModalOpen(false)} /> : null}
 			<MintingBanner openMintModal={() => setMintModalOpen(true)} />
 			<header className="px-4 pt-3 sm:py-3 bg-white dark:bg-gray-900 bg-opacity-70 dark:bg-opacity-70 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full shadow-md dark:shadow-none sticky top-0 z-1">
 				<div className="max-w-screen-2xl 2xl:max-w-none 2xl:px-10 sm:px-3 mx-auto w-full">
