@@ -57,13 +57,13 @@ const Leaderboard = () => {
 				<meta name="description" content="Trending creators & items" />
 				<meta property="og:type" content="website" />
 				<meta name="og:description" content="Trending art & creators" />
-				<meta property="og:image" content="https://storage.googleapis.com/showtime-nft-thumbnails/twitter_card_showtime.jpg" />
+				<meta property="og:image" content="https://cdn.tryshowtime.com/twitter_card.jpg" />
 				<meta name="og:title" content="Showtime | Trending" />
 
 				<meta name="twitter:card" content="summary_large_image" />
 				<meta name="twitter:title" content="Showtime | Trending Art & Creators" />
 				<meta name="twitter:description" content="Trending" />
-				<meta name="twitter:image" content="https://storage.googleapis.com/showtime-nft-thumbnails/twitter_card_showtime.jpg" />
+				<meta name="twitter:image" content="https://cdn.tryshowtime.com/twitter_card.jpg" />
 			</Head>
 
 			<div className="py-12 sm:py-14 px-8 sm:px-10 text-left " style={{ background: 'linear-gradient(130deg, rgba(6,216,255,1) 0%, rgba(69,52,245,0.8) 48%, rgba(194,38,173,0.7) 100%)' }}>
