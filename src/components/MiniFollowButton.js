@@ -3,6 +3,7 @@ import mixpanel from 'mixpanel-browser'
 import AppContext from '@/context/app-context'
 import axios from '@/lib/axios'
 import { useMemo } from 'react'
+import Button from './UI/Buttons/Button'
 
 const MiniFollowButton = ({ profileId }) => {
 	const context = useContext(AppContext)
@@ -46,9 +47,9 @@ const MiniFollowButton = ({ profileId }) => {
 	}
 
 	return isFollowed === null ? null : !isFollowed ? (
-		<button onClick={context.disableFollows ? null : context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow} className={`text-xs font-medium text-gray-800 dark:text-gray-500 rounded-xl px-3 py-2 transition ${context.disableFollows ? 'hover:opacity-80' : 'hover:bg-gray-100 dark:hover:bg-gray-800 focus-visible:bg-gray-100 dark:focus-visible:bg-gray-800'}`}>
+		<Button style="tertiary" onClick={context.disableFollows ? null : context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow} disabled={context.disableFollows} className="text-xs">
 			Follow
-		</button>
+		</Button>
 	) : null
 }
 

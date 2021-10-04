@@ -558,19 +558,19 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 					<meta name="description" content="Explore crypto art I've created, owned, and liked" />
 					<meta property="og:type" content="website" />
 					<meta name="og:description" content="Explore crypto art I've created, owned, and liked" />
-					<meta property="og:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : DEFAULT_PROFILE_PIC} />
+					<meta property="og:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : 'https://cdn.tryshowtime.com/twitter_card.jpg'} />
 					<meta name="og:title" content={name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'} />
 
 					<meta name="twitter:card" content="summary_large_image" />
 					<meta name="twitter:title" content={name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'} />
 					<meta name="twitter:description" content="Explore crypto art I've created, owned, and liked" />
-					<meta name="twitter:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : DEFAULT_PROFILE_PIC} />
+					<meta name="twitter:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : 'https://cdn.tryshowtime.com/twitter_card.jpg'} />
 				</Head>
 
-				<div className="bg-white dark:bg-gray-900 pb-8">
-					<div className={`h-32 md:h-64 relative text-left bg-gradient-to-b from-black dark:from-gray-400 to-gray-800 dark:to-gray-100 ${cover_url ? 'bg-no-repeat bg-center bg-cover' : ''}`} style={cover_url ? { backgroundImage: `url(${getCoverUrl(cover_url)})` } : {}}>
-						{isMyProfile && (
-							<CappedWidth>
+				<div className="bg-white dark:bg-black pb-8">
+					<CappedWidth>
+						<div className={`h-32 md:h-64 relative text-left bg-gradient-to-b from-black dark:from-gray-400 to-gray-800 dark:to-gray-100 md:rounded-b-[32px] md:-mx-6 ${cover_url ? 'bg-no-repeat bg-center bg-cover' : ''}`} style={cover_url ? { backgroundImage: `url(${getCoverUrl(cover_url)})` } : {}}>
+							{isMyProfile && (
 								<div className="relative">
 									<div
 										className="absolute top-6 right-5 2xl:right-5 text-gray-200 text-sm cursor-pointer bg-gray-900 bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 py-1 px-3 rounded-full hover:bg-opacity-60 flex items-center"
@@ -585,9 +585,9 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 										<span>Cover</span>
 									</div>
 								</div>
-							</CappedWidth>
-						)}
-					</div>
+							)}
+						</div>
+					</CappedWidth>
 					<CappedWidth>
 						<div className="mx-5">
 							<div className="flex flex-col text-left">
@@ -638,7 +638,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 											<div>
 												<div className="flex items-center space-x-2">
 													<h2 className={`text-3xl md:text-4xl font-tomato font-bold text-black dark:text-white ${verified ? 'whitespace-nowrap' : ''}`}>{name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</h2>
-													{verified && <BadgeIcon className="w-5 md:w-6 h-auto text-black dark:text-white" bgClass="text-white dark:text-black" />}
+													{verified && <BadgeIcon className="w-5 md:w-6 h-auto text-black dark:text-white" tickClass="text-white dark:text-black" />}
 												</div>
 												<div className="mt-2 flex items-center space-x-2">
 													{(username || (wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0)) && <p className="flex flex-row items-center justify-start">{username && <span className="font-tomato font-bold tracking-wider dark:text-gray-300">@{username}</span>}</p>}

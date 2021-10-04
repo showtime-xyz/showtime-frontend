@@ -177,7 +177,7 @@ const GeneralState = ({ quantity, address, setAddress, setQuantity, transferToke
 							<div>
 								<div className="flex items-center space-x-1">
 									<p className="text-sm font-semibold text-gray-900 dark:text-white">{transferringTo.name}</p>
-									{transferringTo.verified == 1 && <BadgeIcon className="w-4 h-4 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+									{transferringTo.verified == 1 && <BadgeIcon className="w-4 h-4 text-black dark:text-white" tickClass="text-white dark:text-black" />}
 								</div>
 								<p className="text-xs text-gray-700 dark:text-gray-400 font-medium">@{transferringTo.username}</p>
 							</div>
