@@ -194,12 +194,7 @@ const Activity = () => {
 				</Head>
 
 				{context.user === null ? (
-					<div
-						className="py-12 sm:py-14 px-8 sm:px-10 text-left"
-						style={{
-							background: 'linear-gradient(225deg, #FFFBEB 0%, #FDE68A 23.44%, #F59E0B 69.27%)',
-						}}
-					>
+					<div className="py-12 sm:py-14 px-8 sm:px-10 text-left bg-gradient-to-tr from-violet-900 via-violet-500 to-violet-300">
 						<CappedWidth>
 							<div className="flex flex-row mx-3 text-white">
 								<div className="flex-1">
