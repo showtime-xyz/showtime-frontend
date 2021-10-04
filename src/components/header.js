@@ -18,6 +18,7 @@ import MintingBanner from './MintingBanner'
 import ShowtimeIcon from './Icons/ShowtimeIcon'
 import { CompassIconSolid, CompassIconOutline } from './Icons/CompassIcon'
 import { ArrowUpIconOutline, ArrowUpIconSolid } from './Icons/ArrowUpIcon'
+import Tippy from '@tippyjs/react'
 
 const Header = () => {
 	const { asPath } = useRouter()
@@ -55,21 +56,33 @@ const Header = () => {
 						</div>
 						{/* Start desktop-only menu */}
 						<div className="hidden flex-1 md:flex md:items-center md:justify-center mr-6 md:mr-0 items-center font-normal space-x-2">
-							<Link href="/">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-full py-3 -my-2 px-3 -mx-1`} onClick={() => mixpanel.track('Discover button click')}>
-									{asPath == '/' ? <HomeIconSolid className="w-5 h-5" /> : <HomeIconOutline className="w-5 h-5" />}
-								</a>
-							</Link>
-							<Link href="/c/showtime">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/c/showtime' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-full py-3 -my-2 px-3 -mx-1`} onClick={() => mixpanel.track('Discover button click')}>
-									{asPath == '/c/showtime' ? <CompassIconSolid className="w-5 h-5" /> : <CompassIconOutline className="w-5 h-5" />}
-								</a>
-							</Link>
-							<Link href="/trending">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/trending' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-full py-3 -my-2 px-3 -mx-1`} onClick={() => mixpanel.track('Trending button click')}>
-									{asPath == '/trending' ? <ArrowUpIconSolid className="w-5 h-5" /> : <ArrowUpIconOutline className="w-5 h-5" />}
-								</a>
-							</Link>
+							<Tippy content="Feed">
+								<div>
+									<Link href="/">
+										<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-full py-3 -my-2 px-3 -mx-1`} onClick={() => mixpanel.track('Discover button click')}>
+											{asPath == '/' ? <HomeIconSolid className="w-5 h-5" /> : <HomeIconOutline className="w-5 h-5" />}
+										</a>
+									</Link>
+								</div>
+							</Tippy>
+							<Tippy content="Discover">
+								<div>
+									<Link href="/c/showtime">
+										<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/c/showtime' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-full py-3 -my-2 px-3 -mx-1`} onClick={() => mixpanel.track('Discover button click')}>
+											{asPath == '/c/showtime' ? <CompassIconSolid className="w-5 h-5" /> : <CompassIconOutline className="w-5 h-5" />}
+										</a>
+									</Link>
+								</div>
+							</Tippy>
+							<Tippy content="Trending">
+								<div>
+									<Link href="/trending">
+										<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/trending' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-full py-3 -my-2 px-3 -mx-1`} onClick={() => mixpanel.track('Trending button click')}>
+											{asPath == '/trending' ? <ArrowUpIconSolid className="w-5 h-5" /> : <ArrowUpIconOutline className="w-5 h-5" />}
+										</a>
+									</Link>
+								</div>
+							</Tippy>
 						</div>
 						{/* End desktop-only menu */}
 
