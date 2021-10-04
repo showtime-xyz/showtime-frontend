@@ -16,7 +16,7 @@ import axios from '@/lib/axios'
 import { FingerPrintIcon, HeartIcon as HeartSolidIcon, UserIcon as UserSolidIcon, ChatAlt2Icon as CommentSolidIcon, FilterIcon } from '@heroicons/react/solid'
 import { HeartIcon as HeartOutlineIcon, UserIcon as UserOutlineIcon, ChatAlt2Icon as CommentOutlineIcon } from '@heroicons/react/outline'
 
-const ACTIVITY_PAGE_LENGTH = 2 // 5 activity items per activity page
+const ACTIVITY_PAGE_LENGTH = 5 // 5 activity items per activity page
 
 const Activity = () => {
 	const context = useContext(AppContext)
@@ -289,7 +289,7 @@ const Activity = () => {
 											)}
 										</div>
 									}
-									scrollThreshold={activityPage === 1 ? 0.1 : activityPage < 4 ? 0.3 : activityPage < 6 ? 0.7 : 0.8}
+									scrollThreshold={activityPage === 1 ? 0.2 : activityPage < 4 ? 0.3 : activityPage < 6 ? 0.7 : 0.8}
 								>
 									<ActivityFeed activity={activity} setItemOpenInModal={handleSetItemOpenInModal} key={activityTypeFilter} removeItemFromFeed={removeItemFromFeed} removeActorFromFeed={removeActorFromFeed} setReportModalIsOpen={setReportModalIsOpen} />
 								</InfiniteScroll>

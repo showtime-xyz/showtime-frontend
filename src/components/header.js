@@ -60,9 +60,9 @@ const Header = () => {
 									{asPath == '/' ? <HomeIconSolid className="w-5 h-5" /> : <HomeIconOutline className="w-5 h-5" />}
 								</a>
 							</Link>
-							<Link href="/c/spotlights">
-								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/c/spotlights' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-full py-3 -my-2 px-3 -mx-1`} onClick={() => mixpanel.track('Discover button click')}>
-									{asPath == '/c/spotlights' ? <CompassIconSolid className="w-5 h-5" /> : <CompassIconOutline className="w-5 h-5" />}
+							<Link href="/c/showtime">
+								<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/c/showtime' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-full py-3 -my-2 px-3 -mx-1`} onClick={() => mixpanel.track('Discover button click')}>
+									{asPath == '/c/showtime' ? <CompassIconSolid className="w-5 h-5" /> : <CompassIconOutline className="w-5 h-5" />}
 								</a>
 							</Link>
 							<Link href="/trending">
@@ -107,9 +107,9 @@ const Header = () => {
 										<div className={`${asPath == '/' ? 'bg-gray-100' : 'group-hover:bg-gray-100'} p-2 -m-2 rounded-full transition`}>{asPath == '/' ? <HomeIconSolid className="w-5 h-5" /> : <HomeIconOutline className="w-5 h-5" />}</div>
 									</a>
 								</Link>
-								<Link href="/c/spotlights">
-									<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 px-2 -mx-2 group ${asPath == '/c/spotlights' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>
-										<div className={`${asPath == '/c/spotlights' ? 'bg-gray-100' : 'group-hover:bg-gray-100'} p-2 -m-2 rounded-full transition`}>{asPath == '/c/spotlights' ? <CompassIconSolid className="w-5 h-5" /> : <CompassIconOutline className="w-5 h-5" />}</div>
+								<Link href="/c/showtime">
+									<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 px-2 -mx-2 group ${asPath == '/c/showtime' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>
+										<div className={`${asPath == '/c/showtime' ? 'bg-gray-100' : 'group-hover:bg-gray-100'} p-2 -m-2 rounded-full transition`}>{asPath == '/c/showtime' ? <CompassIconSolid className="w-5 h-5" /> : <CompassIconOutline className="w-5 h-5" />}</div>
 									</a>
 								</Link>
 								<Link href="/trending">
