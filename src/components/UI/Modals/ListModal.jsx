@@ -3,7 +3,7 @@ import Button from '../Buttons/Button'
 import { useState, Fragment } from 'react'
 import Dropdown from '../Dropdown'
 import { useMemo } from 'react'
-import { ethers } from 'ethers'
+import { ethers, BigNumber } from 'ethers'
 import { getBiconomy } from '@/lib/biconomy'
 import getWeb3Modal from '@/lib/web3Modal'
 import minterAbi from '@/data/ShowtimeMT.json'
@@ -22,6 +22,7 @@ import useSWR from 'swr'
 import backend from '@/lib/backend'
 import { formatAddressShort, truncateWithEllipses } from '@/lib/utilities'
 import BadgeIcon from '@/components/Icons/BadgeIcon'
+import { parseEther } from '@ethersproject/units'
 
 const MODAL_PAGES = {
 	GENERAL: 'general',
@@ -121,7 +122,7 @@ const ListModal = ({ open, onClose, token }) => {
 			await new Promise(resolve => provider.once(transaction, resolve))
 		}
 
-		const { data } = await contract.populateTransaction.createSale(token.token_id, editionCount, price, currency)
+		const { data } = await contract.populateTransaction.createSale(token.token_id, editionCount, parseEther(price) /* assuming 18 decimals */, currency)
 
 		const transaction = await provider
 			.send('eth_sendTransaction', [
@@ -133,7 +134,7 @@ const ListModal = ({ open, onClose, token }) => {
 				},
 			])
 			.catch(error => {
-				if (error.code === 4001) throw setModalPage(MODAL_PAGES.GENERAL)
+				if (error.code === 4001 || error.message == 'User declined transaction') throw setModalPage(MODAL_PAGES.GENERAL)
 
 				throw error
 			})
