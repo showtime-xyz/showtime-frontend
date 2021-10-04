@@ -169,7 +169,7 @@ export default function Collection({ collection_list, collection, selected_colle
 				<meta property="og:type" content="website" />
 				<meta name="og:description" content="Discover and showcase crypto art" />
 
-				<meta property="og:image" content={selected_collection ? selected_collection.img_url : 'https://showtime.kilkka.vercel.app/banner.png'} />
+				<meta property="og:image" content={selected_collection ? selected_collection.img_url : 'https://tryshowtime.com/banner.png'} />
 
 				<meta name="og:title" content={`Showtime | ${pageTitle}`} />
 
@@ -177,10 +177,10 @@ export default function Collection({ collection_list, collection, selected_colle
 				<meta name="twitter:title" content={`Showtime | ${pageTitle}`} />
 				<meta name="twitter:description" content="Discover and showcase crypto art" />
 
-				<meta name="twitter:image" content={selected_collection ? selected_collection.img_url : 'https://showtime.kilkka.vercel.app/banner.png'} />
+				<meta name="twitter:image" content={selected_collection ? selected_collection.img_url : 'https://tryshowtime.com/banner.png'} />
 			</Head>
 
-			<div className="py-12 sm:py-14 px-8 sm:px-10 text-left" style={{ background: 'linear-gradient(133deg, rgba(184,38,193,0.95) 0%, rgba(67,142,223,0.9) 50%, rgba(67,186,193,0.8) 100%)' }}>
+			<div className="py-12 sm:py-14 px-8 sm:px-10 text-left bg-gradient-to-r from-green-400 to-blue-400">
 				<CappedWidth>
 					<div className="flex flex-row mx-3 text-white">
 						<div className="flex-1">
