@@ -41,6 +41,8 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 
 	const { isMobile } = useContext(AppContext)
 
+	console.log(item)
+
 	const handleRefreshNFTMetadata = async () => {
 		mixpanel.track('Clicked refresh metadata')
 		setRefreshing(true)
@@ -289,6 +291,14 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 										)}
 									</div>
 									<div className="h-px bg-gray-100 dark:bg-gray-800 mx-1 my-4" />
+									{item.listing && (
+										<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
+											<p className="text-gray-600 text-xs font-semibold">
+												{item.listing.total_listed_quantity}/{item.listing.total_edition_quantity} available
+											</p>
+											<p className="text-gray-600 text-xs font-semibold">{parseInt(item.listing.royalty_percentage)}% Royalties</p>
+										</div>
+									)}
 									<div className="flex items-center justify-between px-4 space-x-4">
 										<div className="flex items-center space-x-4">
 											<LikeButton item={item} />

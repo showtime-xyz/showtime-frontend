@@ -101,7 +101,7 @@ const UnlistModal = ({ open, onClose, token }) => {
 	const renderedPage = (type => {
 		switch (type) {
 			case MODAL_PAGES.GENERAL:
-				return <UnlistPage token={token} unlistToken={unlistToken} />
+				return <UnlistPage token={token} unlistToken={unlistToken} onClose={trueOnClose} />
 			case MODAL_PAGES.LOADING:
 				return <LoadingPage />
 			case MODAL_PAGES.PROCESSING:
@@ -143,7 +143,7 @@ const UnlistModal = ({ open, onClose, token }) => {
 	)
 }
 
-const UnlistPage = ({ token, unlistToken }) => {
+const UnlistPage = ({ token, unlistToken, onClose }) => {
 	return (
 		<>
 			<div className="flex-1 overflow-y-auto">
@@ -173,11 +173,20 @@ const UnlistPage = ({ token, unlistToken }) => {
 							</div>
 							<hr className="mx-8 border-0 border-r-px dark:border-gray-800" />
 						</div>
+						<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
+							<p className="text-gray-600 text-xs font-semibold">
+								{token.listing.total_listed_quantity}/{token.listing.total_edition_quantity} available
+							</p>
+							<p className="text-gray-600 text-xs font-semibold">{parseInt(token.listing.royalty_percentage)}% Royalties</p>
+						</div>
 					</>
 				)}
 			</div>
 			<div className="p-4">
-				<div className="flex items-center justify-end">
+				<div className="flex items-center justify-between">
+					<Button style="tertiary" onClick={onClose}>
+						Cancel
+					</Button>
 					<Button style="primary" onClick={unlistToken}>
 						Unlist
 					</Button>

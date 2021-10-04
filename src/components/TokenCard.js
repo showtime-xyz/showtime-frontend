@@ -29,8 +29,6 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 	const [refreshing, setRefreshing] = useState(false)
 	const [showModel, setShowModel] = useState(false)
 
-	console.log(originalItem)
-
 	// Automatically load models that have no preview image. We don't account for video here because currently token_animation_url is a glb file.
 	useEffect(() => {
 		if (!item || !item.mime_type?.startsWith('model')) return

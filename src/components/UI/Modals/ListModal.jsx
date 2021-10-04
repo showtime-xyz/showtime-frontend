@@ -224,7 +224,7 @@ const ListPage = ({ token, price, setPrice, currency, setCurrency, editionCount,
 						<p className="font-semibold text-gray-900 dark:text-white space-x-1 flex items-center">
 							<span>Sell</span>
 						</p>
-						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">Enter a fixed price to allow people to purchase your NFT.</p>
+						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">Enter a fixed price to allow people to purchase your NFT</p>
 					</div>
 					<div className="mt-4 flex items-stretch justify-between space-x-2">
 						<input className="flex-1 px-4 relative block w-full rounded-xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring font-medium" placeholder="Price" value={price} onChange={event => setPrice(event.target.value)} />
@@ -234,17 +234,18 @@ const ListPage = ({ token, price, setPrice, currency, setCurrency, editionCount,
 				<div className="p-4 border-b border-gray-100 dark:border-gray-900">
 					<div className="flex items-center justify-between">
 						<div className="flex-1 mr-4">
-							<p className="font-semibold text-gray-900 dark:text-white">Number of Editions</p>
-							<p className="text-sm font-medium text-gray-700 dark:text-gray-300">1 by default</p>
+							<p className="font-semibold text-gray-900 dark:text-white">Copies</p>
+							<p className="text-sm font-medium text-gray-700 dark:text-gray-300">1 by default (you own {maxTokens})</p>
 						</div>
-						<input type="number" min="1" max={maxTokens} className="px-4 py-3 max-w-[60px] relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring text-right" style={{ '-moz-appearance': 'textfield' }} value={editionCount} onChange={event => (event.target.value > maxTokens ? setEditionCount(maxTokens) : event.target.value < 1 ? setEditionCount(1) : setEditionCount(parseInt(event.target.value)))} />
+						<input type="number" min="1" max={maxTokens} className="px-4 py-3 flex-1 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring text-right" style={{ '-moz-appearance': 'textfield' }} value={editionCount} onChange={event => (event.target.value > maxTokens ? setEditionCount(maxTokens) : event.target.value < 1 ? setEditionCount(1) : setEditionCount(parseInt(event.target.value)))} />
 					</div>
 				</div>
 			</div>
 			<div className="p-4">
-				<div className="flex items-center justify-end">
+				<div className="flex items-center justify-between">
+					<Button style="tertiary">Cancel</Button>
 					<Button style="primary" disabled={!isValid} onClick={listToken}>
-						List your NFT
+						List on Showtime
 					</Button>
 				</div>
 			</div>
