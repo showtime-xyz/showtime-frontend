@@ -43,13 +43,13 @@ const Header = () => {
 						<div className="flex-1 flex items-center space-x-4">
 							<Link href="/">
 								<a
-									className="flex flex-shrink-0 p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-900 transition group"
+									className="flex flex-shrink-0 p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-900 transition"
 									onClick={async () => {
 										mixpanel.track('Logo button click')
 										await context.setToggleRefreshFeed(!context.toggleRefreshFeed)
 									}}
 								>
-									<ShowtimeIcon className="rounded-lg overflow-hidden w-5 h-5 fill-black dark:fill-white group-hover:fill-gold" />
+									<ShowtimeIcon className="rounded-lg overflow-hidden w-5 h-5 fill-black dark:fill-white" />
 								</a>
 							</Link>
 							<SearchBar propagateSearchState={setSearchBarOpen} />
