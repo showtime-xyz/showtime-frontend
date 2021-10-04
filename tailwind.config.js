@@ -63,6 +63,7 @@ module.exports = {
 			},
 			fill: {
 				black: 'black',
+				white: 'white',
 			},
 			zIndex: {
 				1: 1,
