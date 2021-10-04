@@ -6,28 +6,35 @@ import backend from '@/lib/backend'
 import AppContext from '@/context/app-context'
 import ModalReportItem from '@/components/ModalReportItem'
 import TokenDetailBody from '@/components/TokenDetailBody'
+import { CHAIN_IDENTIFIERS } from '@/lib/constants'
 
-export async function getServerSideProps(context) {
-	const { res } = context
+export async function getServerSideProps({
+	query: {
+		token: [chain_name, contract_address, token_id],
+	},
+}) {
+	if (!token_id) {
+		token_id = contract_address
+		contract_address = chain_name
+		chain_name = null
+	}
 
-	const { token: token_array } = context.query
-	const contract_address = token_array[0]
-	const token_id = token_array[1]
-
-	const response_token = await backend.get(`/v2/token/${contract_address}/${token_id}`)
-	const token = response_token.data.data.item
+	const token = await backend
+		.get(`/v2/token/${contract_address}/${token_id}${chain_name ? `?chain_identifier=${CHAIN_IDENTIFIERS[chain_name]}` : ''}`)
+		.then(
+			({
+				data: {
+					data: { item },
+				},
+			}) => item
+		)
+		.catch(() => null)
 
 	if (token) {
-		return {
-			props: {
-				token,
-			}, // will be passed to the page component as props
-		}
-	} else {
-		res.writeHead(404)
-		res.end()
-		return { props: {} }
+		return { props: { token } }
 	}
+
+	return { notFound: true }
 }
 
 export default function Token({ token }) {
@@ -72,13 +79,13 @@ export default function Token({ token }) {
 					<meta name="description" content={item.token_description} />
 					<meta property="og:type" content="website" />
 					<meta name="og:description" content={item.token_description} />
-					<meta property="og:image" content={item.token_img_preview_url ? item.token_img_preview_url : null} />
+					<meta property="og:image" content={item.token_img_twitter_url ? item.token_img_twitter_url : item.token_img_url} />
 					<meta name="og:title" content={item.token_name} />
 
 					<meta name="twitter:card" content="summary_large_image" />
 					<meta name="twitter:title" content={item.token_name} />
 					<meta name="twitter:description" content={item.token_description} />
-					<meta name="twitter:image" content={item.token_img_preview_url ? item.token_img_preview_url : null} />
+					<meta name="twitter:image" content={item.token_img_twitter_url ? item.token_img_twitter_url : item.token_img_url} />
 				</Head>
 
 				<div>

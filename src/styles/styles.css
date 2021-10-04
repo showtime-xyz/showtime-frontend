@@ -19,6 +19,12 @@
 @tailwind utilities;
 
 @layer utilities {
+    @responsive {
+        .fill-gold {
+            fill: url(#paint0_linear);
+        }
+    }
+
     @variants dark {
         .border-t-gray-800 {
             border-top-color: theme('colors.gray.800');
@@ -29,6 +35,17 @@
         .border-t-gray-300 {
             border-top-color: theme('colors.gray.300');
         }
+        .border-t-indigo-500 {
+            border-top-color: theme('colors.indigo.500');
+        }
+        .border-t-cyan-400 {
+            border-top-color: theme('colors.cyan.400');
+        }
+    }
+
+    .no-spinners::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
     }
 }
 

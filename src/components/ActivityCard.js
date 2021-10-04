@@ -15,16 +15,17 @@ import axios from '@/lib/axios'
 import { DotsHorizontalIcon } from '@heroicons/react/solid'
 import ProfileHovercard from './ProfileHovercard'
 
+const getProfileImageUrl = img_url => {
+	if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
+		img_url = img_url.split('=')[0] + '=s112'
+	}
+	return img_url
+}
+
 export default function ActivityCard({ act, setItemOpenInModal, setReportModalIsOpen, removeActorFromFeed }) {
 	const context = useContext(AppContext)
-	const { id, nfts, actor_img_url, actor_name, actor_username, actor_wallet_address, actor_profile_id } = act
-	const actor = {
-		profile_img_url: actor_img_url,
-		name: actor_name,
-		username: actor_username,
-		wallet_address: actor_wallet_address,
-		profile_id: actor_profile_id,
-	}
+	const { id, nfts, actor } = act
+
 	const single = act.nfts?.length === 1
 	let content = null
 
@@ -38,10 +39,10 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 
 	const handleUnfollow = async () => {
 		// Change myLikes via setMyLikes
-		context.setMyFollows(context.myFollows.filter(f => f?.profile_id !== actor_profile_id))
-		removeActorFromFeed(actor_profile_id)
+		context.setMyFollows(context.myFollows.filter(f => f?.profile_id !== actor.profile_id))
+		removeActorFromFeed(actor.profile_id)
 		// Post changes to the API
-		await axios.post(`/api/unfollow_v2/${actor_profile_id}`)
+		await axios.post(`/api/unfollow_v2/${actor.profile_id}`)
 		mixpanel.track('Unfollowed profile from Newsfeed dropdown')
 	}
 
@@ -93,7 +94,7 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 						<Link href="/[profile]" as={`/${actor?.username || actor?.wallet_address}`}>
 							<a className="relative w-max flex-shrink-0" onClick={() => mixpanel.track('Activity - Click on user profile')}>
 								<ProfileHovercard user={actor?.profile_id}>
-									<img src={actor.profile_img_url || DEFAULT_PROFILE_PIC} className="rounded-full mr-2 w-14 h-14  hover:opacity-90 transition-all" />
+									<img src={getProfileImageUrl(actor.img_url || DEFAULT_PROFILE_PIC)} className="rounded-full mr-2 w-14 h-14  hover:opacity-90 transition-all" />
 									<div className="absolute bottom-0 right-2 rounded-full h-5 w-5 flex items-center justify-center shadow" style={{ backgroundColor: activityIconObjects[type].color }}>
 										<FontAwesomeIcon className="w-3 h-3 text-white" icon={activityIconObjects[type].icon} />
 									</div>

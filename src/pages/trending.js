@@ -57,16 +57,16 @@ const Leaderboard = () => {
 				<meta name="description" content="Trending creators & items" />
 				<meta property="og:type" content="website" />
 				<meta name="og:description" content="Trending art & creators" />
-				<meta property="og:image" content="https://storage.googleapis.com/showtime-nft-thumbnails/twitter_card_showtime.jpg" />
+				<meta property="og:image" content="https://cdn.tryshowtime.com/twitter_card.jpg" />
 				<meta name="og:title" content="Showtime | Trending" />
 
 				<meta name="twitter:card" content="summary_large_image" />
 				<meta name="twitter:title" content="Showtime | Trending Art & Creators" />
 				<meta name="twitter:description" content="Trending" />
-				<meta name="twitter:image" content="https://storage.googleapis.com/showtime-nft-thumbnails/twitter_card_showtime.jpg" />
+				<meta name="twitter:image" content="https://cdn.tryshowtime.com/twitter_card.jpg" />
 			</Head>
 
-			<div className="py-12 sm:py-14 px-8 sm:px-10 text-left " style={{ background: 'linear-gradient(133deg, rgba(184,38,193,0.95) 0%, rgba(67,142,223,0.9) 50%, rgba(67,186,193,0.8) 100%)' }}>
+			<div className="py-12 sm:py-14 px-8 sm:px-10 text-left " style={{ background: 'linear-gradient(130deg, rgba(6,216,255,1) 0%, rgba(69,52,245,0.8) 48%, rgba(194,38,173,0.7) 100%)' }}>
 				<CappedWidth>
 					<div className="flex flex-row mx-3 text-white">
 						<div className="flex-1">
@@ -107,7 +107,7 @@ const Leaderboard = () => {
 					{/* Mobile on top */}
 					<div className="block sm:hidden">{leaderboardItems && <TrendingCreators shownLeaderboardItems={shownLeaderboardItems} allLeaderboardItems={leaderboardItems} isLoading={isLoading} showAllLeaderboardItems={showAllLeaderboardItems} setShowAllLeaderboardItems={setShowAllLeaderboardItems} trendingTab={leaderboardDays} key={`creators_${leaderboardDays}`} />}</div>
 
-					<div className="col-span-2 md:col-span-2 xl:col-span-3 md:mx-3">
+					<div className="col-span-2 md:col-span-2 xl:col-span-3 md:mx-3 pb-12">
 						<TokenGridV4 items={featuredItems} isLoading={isLoadingCards} key={`grid_${leaderboardDays}_${isLoadingCards}`} />
 					</div>
 					{/* Desktop right column */}

@@ -11,6 +11,13 @@ import ActivityImages from './ActivityImages'
 import { ViewGridIcon } from '@heroicons/react/solid'
 import ProfileHovercard from './ProfileHovercard'
 
+const getProfileImageUrl = img_url => {
+	if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
+		img_url = img_url.split('=')[0] + '=s96'
+	}
+	return img_url
+}
+
 const LeaderboardItemV2 = ({ item, index, totalCount }) => {
 	const context = useContext(AppContext)
 	const topItems = item?.top_items.slice(0, 4)
@@ -62,7 +69,7 @@ const LeaderboardItemV2 = ({ item, index, totalCount }) => {
 						<ProfileHovercard user={item.profile_id} initialProfile={item}>
 							<Link href="/[profile]" as={`/${item?.username || item.address}`}>
 								<a className="cursor-pointer">
-									<img src={item?.img_url ? item?.img_url : DEFAULT_PROFILE_PIC} className="rounded-full h-12 w-12 hover:opacity-90" />
+									<img src={getProfileImageUrl(item?.img_url ? item?.img_url : DEFAULT_PROFILE_PIC)} className="rounded-full h-12 w-12 hover:opacity-90" />
 								</a>
 							</Link>
 						</ProfileHovercard>

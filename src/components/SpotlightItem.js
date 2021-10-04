@@ -1,5 +1,5 @@
-import { useRef, useContext, useState, Fragment } from 'react'
-import { DEFAULT_PROFILE_PIC } from '@/lib/constants'
+import { useRef, useContext, useState, Fragment, useEffect } from 'react'
+import { CHAIN_IDENTIFIERS, DEFAULT_PROFILE_PIC } from '@/lib/constants'
 import Link from 'next/link'
 import LikeButton from './LikeButton'
 import CommentButton from './CommentButton'
@@ -17,8 +17,14 @@ import { Menu, Transition } from '@headlessui/react'
 import EllipsisIcon from './Icons/EllipsisIcon'
 import BadgeIcon from './Icons/BadgeIcon'
 import ProfileHovercard from './ProfileHovercard'
+import OrbitIcon from './Icons/OrbitIcon'
 
 const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) => {
+	useEffect(() => {
+		if (!item?.mime_type?.startsWith('model') || window.customElements.get('model-viewer')) return
+		import('@google/model-viewer')
+	}, [item?.mime_type])
+
 	const [moreShown, setMoreShown] = useState(false)
 	const [imageLoaded, setImageLoaded] = useState(false)
 	const [muted, setMuted] = useState(true)
@@ -48,7 +54,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 	}
 
 	const getImageUrl = () => {
-		var img_url = thisItem.token_img_url ? thisItem.token_img_url : null
+		var img_url = thisItem.still_preview_url ? thisItem.still_preview_url : thisItem.token_img_url ? thisItem.token_img_url : null
 
 		if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
 			thisItem.token_aspect_ratio && Number(thisItem.token_aspect_ratio) > aspect_ratio_cutoff ? (img_url = img_url.split('=')[0] + '=w2104') : (img_url = img_url.split('=')[0] + '=w1004')
@@ -70,108 +76,116 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 
 			<CappedWidth>
 				<div className="relative">
-					<div ref={divRef} className="md:w-3/4 mx-auto flex items-center flex-col md:flex-row md:p-0">
+					<div ref={divRef} className="md:w-3/4 mx-auto flex items-stretch flex-col md:flex-row md:p-0">
 						<div className="flex-1 text-right">
-							<div>
-								{thisItem.token_has_video || (!thisItem.token_img_url && thisItem.token_animation_url) ? (
-									<>
-										<div className={`w-full h-full ${videoReady ? 'hidden' : null}`}>
-											<div className="w-full text-center flex items-center mt-24 justify-center">
-												<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
-											</div>
+							{thisItem?.mime_type?.startsWith('model') ? (
+								<div className="w-full h-full relative">
+									<model-viewer src={item.source_url} class="object-cover w-full h-full min-h-[20rem] md:min-h-none" camera-controls autoplay auto-rotate ar ar-modes="scene-viewer quick-look" interaction-prompt="none" onClick={event => event.stopPropagation()} />
+									<div className="p-2.5 absolute top-1 right-1">
+										<div className="flex items-center space-x-1 text-white rounded-full py-1 px-2 -my-1 -mx-1 bg-black bg-opacity-40">
+											<OrbitIcon className="w-4 h-4" />
+											<span className="font-semibold">3D</span>
 										</div>
-										<div className={`w-full shadow-lg h-full relative ${videoReady ? '' : 'invisible'}`}>
-											<ReactPlayer
-												url={thisItem.token_animation_url}
-												playing={currentlyPlayingVideo}
-												loop
-												controls
-												muted={muted}
-												className={'w-full h-full'}
-												width={isMobile ? '100%' : divRef?.current?.clientWidth ? divRef?.current?.clientWidth / 2 : null}
-												height={'1'}
-												playsinline
-												onReady={() => setVideoReady(true)}
-												config={{
-													file: {
-														attributes: {
-															onContextMenu: e => e.preventDefault(),
-															controlsList: 'nodownload',
-														},
+									</div>
+								</div>
+							) : thisItem.token_animation_url || thisItem?.mime_type?.startsWith('video') ? (
+								<>
+									<div className={`w-full h-full ${videoReady ? 'hidden' : null}`}>
+										<div className="w-full text-center flex items-center mt-24 justify-center">
+											<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
+										</div>
+									</div>
+									<div className={`w-full shadow-lg h-full relative ${videoReady ? '' : 'invisible'}`}>
+										<ReactPlayer
+											url={thisItem.source_url ? thisItem.source_url : thisItem.token_animation_url}
+											playing={currentlyPlayingVideo}
+											loop
+											controls
+											muted={muted}
+											className={'w-full h-full'}
+											width={isMobile ? '100%' : divRef?.current?.clientWidth ? divRef?.current?.clientWidth / 2 : null}
+											height={'1'}
+											playsinline
+											onReady={() => setVideoReady(true)}
+											config={{
+												file: {
+													attributes: {
+														onContextMenu: e => e.preventDefault(),
+														controlsList: 'nodownload',
 													},
-												}}
-											/>
-											{refreshing && (
-												<div className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center bg-white dark:bg-black bg-opacity-50 dark:bg-opacity-50">
-													<div className="inline-block w-6 h-6 border-2 border-gray-100 dark:border-gray-300 border-t-gray-800 dark:border-t-gray-800 rounded-full animate-spin mb-2" />
-													<p className="dark:text-gray-300">Refreshing...</p>
-												</div>
-											)}
-										</div>
-									</>
-								) : (
-									<div className="relative">
-										<div
-											onClick={() => {
-												mixpanel.track('Open NFT modal')
-												setCurrentlyOpenModal(true)
-												setMuted(true)
-												setCurrentlyPlayingVideo(false)
+												},
 											}}
-											className="cursor-pointer text-right flex flex-row"
-											ref={imgContainerRef}
-										>
-											{!imageLoaded ? (
-												<div className="w-full text-center flex items-center justify-center" style={{ height: divRef?.current?.clientWidth ? divRef?.current?.clientWidth : 375 }}>
-													<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
-												</div>
-											) : null}
-
-											<img
-												className="hover:opacity-90 transition-all shadow-lg"
-												ref={item.imageRef}
-												src={getImageUrl()}
-												alt={item.token_name}
-												onLoad={() => setImageLoaded(true)}
-												style={{
-													...(!imageLoaded
-														? { display: 'none' }
-														: isMobile
-														? {
-																backgroundColor: getBackgroundColor(item),
-																width: divRef?.current?.clientWidth,
-																height: item.token_aspect_ratio && divRef?.current?.clientWidth ? divRef?.current?.clientWidth / item.token_aspect_ratio : null,
-														  }
-														: !(item.token_aspect_ratio && imgContainerRef?.current?.clientWidth) // use defaults if aspect ratio unknown
-														? {
-																backgroundColor: getBackgroundColor(item),
-																maxHeight: 500,
-														  }
-														: imgContainerRef?.current?.clientWidth / item.token_aspect_ratio > 500 // going to be too tall, need to rescale
-														? {
-																backgroundColor: getBackgroundColor(item),
-																maxHeight: 500,
-																width: 500 / (1 / item.token_aspect_ratio),
-																height: 500,
-														  }
-														: {
-																backgroundColor: getBackgroundColor(item),
-																maxHeight: 500,
-																width: imgContainerRef?.current?.clientWidth,
-																height: item.token_aspect_ratio && imgContainerRef?.current?.clientWidth ? imgContainerRef?.current?.clientWidth / item.token_aspect_ratio : null,
-														  }),
-												}}
-											/>
-										</div>
+										/>
 										{refreshing && (
-											<div className="absolute inset-0 cursor-pointer flex items-center justify-center bg-white bg-opacity-50">
-												<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin mb-2" />
-												<div>Refreshing...</div>
+											<div className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center bg-white dark:bg-black bg-opacity-50 dark:bg-opacity-50">
+												<div className="inline-block w-6 h-6 border-2 border-gray-100 dark:border-gray-300 border-t-gray-800 dark:border-t-gray-800 rounded-full animate-spin mb-2" />
+												<p className="dark:text-gray-300">Refreshing...</p>
 											</div>
 										)}
 									</div>
-								)}
-							</div>
+								</>
+							) : (
+								<div className="relative">
+									<div
+										onClick={() => {
+											mixpanel.track('Open NFT modal')
+											setCurrentlyOpenModal(true)
+											setMuted(true)
+											setCurrentlyPlayingVideo(false)
+										}}
+										className="cursor-pointer text-right flex flex-row"
+										ref={imgContainerRef}
+									>
+										{!imageLoaded ? (
+											<div className="w-full text-center flex items-center justify-center" style={{ height: divRef?.current?.clientWidth ? divRef?.current?.clientWidth : 375 }}>
+												<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
+											</div>
+										) : null}
+
+										<img
+											className="hover:opacity-90 transition-all shadow-lg"
+											ref={item.imageRef}
+											src={getImageUrl()}
+											alt={item.token_name}
+											onLoad={() => setImageLoaded(true)}
+											style={{
+												...(!imageLoaded
+													? { display: 'none' }
+													: isMobile
+													? {
+															backgroundColor: getBackgroundColor(item),
+															width: divRef?.current?.clientWidth,
+															height: item.token_aspect_ratio && divRef?.current?.clientWidth ? divRef?.current?.clientWidth / item.token_aspect_ratio : null,
+													  }
+													: !(item.token_aspect_ratio && imgContainerRef?.current?.clientWidth) // use defaults if aspect ratio unknown
+													? {
+															backgroundColor: getBackgroundColor(item),
+															maxHeight: 500,
+													  }
+													: imgContainerRef?.current?.clientWidth / item.token_aspect_ratio > 500 // going to be too tall, need to rescale
+													? {
+															backgroundColor: getBackgroundColor(item),
+															maxHeight: 500,
+															width: 500 / (1 / item.token_aspect_ratio),
+															height: 500,
+													  }
+													: {
+															backgroundColor: getBackgroundColor(item),
+															maxHeight: 500,
+															width: imgContainerRef?.current?.clientWidth,
+															height: item.token_aspect_ratio && imgContainerRef?.current?.clientWidth ? imgContainerRef?.current?.clientWidth / item.token_aspect_ratio : null,
+													  }),
+											}}
+										/>
+									</div>
+									{refreshing && (
+										<div className="absolute inset-0 cursor-pointer flex items-center justify-center bg-white bg-opacity-50">
+											<div className="inline-block w-6 h-6 border-2 border-gray-100 border-t-gray-800 rounded-full animate-spin mb-2" />
+											<div>Refreshing...</div>
+										</div>
+									)}
+								</div>
+							)}
 						</div>
 						<div className="flex-1 text-left mt-3 md:mt-4 md:pl-12 w-full p-6 pb-0 md:p-0">
 							<div>
@@ -208,14 +222,14 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 									</div>
 								) : null}
 
-								<div className="border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg rounded-xl py-4 px-2 md:max-w-max">
+								<div className="border border-transparent dark:border-gray-700 bg-white dark:bg-black shadow-lg rounded-xl py-4 px-2 md:max-w-max">
 									<div className="flex flex-wrap w-full px-2 gap-y-1 gap-x-5 md:gap-0">
 										{item.contract_is_creator ? (
 											<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
 												<a className="flex flex-row items-center space-x-2">
 													<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
 													<div>
-														<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Creator</span>
+														<span className="text-xs font-medium text-gray-600 dark:text-gray-400">Creator</span>
 														<div className="text-sm font-semibold truncate -mt-0.5 dark:text-gray-200">{truncateWithEllipses(item.collection_name + ' Collection', 30)}</div>
 													</div>
 												</a>
@@ -227,11 +241,11 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 														<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
 													</ProfileHovercard>
 													<div>
-														<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Creator {item.owner_id == item.creator_id && '& Owner'}</span>
+														<span className="text-xs font-medium text-gray-600 dark:text-gray-400">Creator {item.owner_id == item.creator_id && '& Owner'}</span>
 														<ProfileHovercard user={item.creator_id}>
 															<div className="flex items-center space-x-1 -mt-0.5">
 																<div className="text-sm font-semibold truncate dark:text-gray-200">{item.creator_name === item.creator_address ? formatAddressShort(item.creator_address) : truncateWithEllipses(item.creator_name, 22)}</div>
-																{item.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+																{item.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
 															</div>
 														</ProfileHovercard>
 													</div>
@@ -243,7 +257,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 												<div className="w-[2px] bg-gray-100 dark:bg-gray-800 my-2.5 mx-4 hidden md:block" />
 												{item.owner_count && item.owner_count > 1 ? (
 													<div>
-														<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owner</span>
+														<span className="text-xs font-medium text-gray-600 dark:text-gray-400">Owner</span>
 														<div className="flex items-center">
 															<ProfileHovercard user={pageProfile.profile_id}>
 																<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
@@ -269,11 +283,11 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 																	<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8" />
 																</ProfileHovercard>
 																<div>
-																	<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owner</span>
+																	<span className="text-xs font-medium text-gray-600 dark:text-gray-400">Owner</span>
 																	<ProfileHovercard user={item.owner_id}>
 																		<div className="flex items-center space-x-1 -mt-0.5">
 																			<div className="text-sm font-semibold truncate dark:text-gray-200">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
-																			{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+																			{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
 																		</div>
 																	</ProfileHovercard>
 																</div>
@@ -285,7 +299,20 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 											</>
 										)}
 									</div>
-									<div className="h-px bg-gray-100 dark:bg-gray-800 mx-1 my-4" />
+									{item.listing ? (
+										<>
+											<div className="h-px bg-gray-100 dark:bg-gray-800 mx-1 mt-4 mb-2" />
+											<div className="flex items-center justify-between px-2">
+												<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+													{item.listing.total_listed_quantity}/{item.listing.total_edition_quantity} available
+												</p>
+												<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">{parseInt(item.listing.royalty_percentage)}% Royalties</p>
+											</div>
+											<div className="h-px bg-gray-100 dark:bg-gray-800 mx-1 mt-2 mb-4" />
+										</>
+									) : (
+										<div className="h-px bg-gray-100 dark:bg-gray-800 mx-1 my-4" />
+									)}
 									<div className="flex items-center justify-between px-4 space-x-4">
 										<div className="flex items-center space-x-4">
 											<LikeButton item={item} />
@@ -300,7 +327,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 											/>
 										</div>
 										<div className="flex items-center space-x-4">
-											<ShareButton url={window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${item.contract_address}/${item.token_id}`} type={'item'} />
+											<ShareButton url={window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == item.chain_identifier)}/${item.contract_address}/${item.token_id}`} type={'item'} />
 											{isMyProfile ? (
 												<Menu as="div" className="relative -mb-2">
 													<>

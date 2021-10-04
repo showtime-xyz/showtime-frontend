@@ -16,7 +16,7 @@ import axios from '@/lib/axios'
 import { FingerPrintIcon, HeartIcon as HeartSolidIcon, UserIcon as UserSolidIcon, ChatAlt2Icon as CommentSolidIcon, FilterIcon } from '@heroicons/react/solid'
 import { HeartIcon as HeartOutlineIcon, UserIcon as UserOutlineIcon, ChatAlt2Icon as CommentOutlineIcon } from '@heroicons/react/outline'
 
-const ACTIVITY_PAGE_LENGTH = 2 // 5 activity items per activity page
+const ACTIVITY_PAGE_LENGTH = 5 // 5 activity items per activity page
 
 const Activity = () => {
 	const context = useContext(AppContext)
@@ -184,22 +184,17 @@ const Activity = () => {
 					<meta name="description" content="Discover and showcase crypto art" />
 					<meta property="og:type" content="website" />
 					<meta name="og:description" content="Discover and showcase crypto art" />
-					<meta property="og:image" content="https://storage.googleapis.com/showtime-nft-thumbnails/twitter_card_showtime.jpg" />
+					<meta property="og:image" content="https://cdn.tryshowtime.com/twitter_card.jpg" />
 					<meta name="og:title" content="Showtime" />
 
 					<meta name="twitter:card" content="summary_large_image" />
 					<meta name="twitter:title" content="Showtime" />
 					<meta name="twitter:description" content="Discover and showcase crypto art" />
-					<meta name="twitter:image" content="https://storage.googleapis.com/showtime-nft-thumbnails/twitter_card_showtime.jpg" />
+					<meta name="twitter:image" content="https://cdn.tryshowtime.com/twitter_card.jpg" />
 				</Head>
 
 				{context.user === null ? (
-					<div
-						className="py-12 sm:py-14 px-8 sm:px-10 text-left"
-						style={{
-							background: 'linear-gradient(130deg, rgba(6,216,255,1) 0%, rgba(69,52,245,0.8) 48%, rgba(194,38,173,0.7) 100%)',
-						}}
-					>
+					<div className="py-12 sm:py-14 px-8 sm:px-10 text-left bg-gradient-to-tr from-violet-900 via-violet-500 to-violet-300">
 						<CappedWidth>
 							<div className="flex flex-row mx-3 text-white">
 								<div className="flex-1">
@@ -214,8 +209,6 @@ const Activity = () => {
 
 				<CappedWidth>
 					<div className="m-auto relative pb-8">
-						<hr className="dark:border-gray-700 mx-3" />
-
 						<div className="mb-4 sm:mb-8 mt-8 sm:mt-16 text-left px-5 sm:px-3 flex flex-row items-center">
 							<h1 className="text-lg sm:text-3xl dark:text-gray-200">News Feed</h1>
 							<div className="flex-grow"></div>
@@ -296,7 +289,7 @@ const Activity = () => {
 											)}
 										</div>
 									}
-									scrollThreshold={activityPage === 1 ? 0.1 : activityPage < 4 ? 0.3 : activityPage < 6 ? 0.7 : 0.8}
+									scrollThreshold={activityPage === 1 ? 0.2 : activityPage < 4 ? 0.3 : activityPage < 6 ? 0.7 : 0.8}
 								>
 									<ActivityFeed activity={activity} setItemOpenInModal={handleSetItemOpenInModal} key={activityTypeFilter} removeItemFromFeed={removeItemFromFeed} removeActorFromFeed={removeActorFromFeed} setReportModalIsOpen={setReportModalIsOpen} />
 								</InfiniteScroll>

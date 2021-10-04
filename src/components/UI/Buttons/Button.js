@@ -1,29 +1,46 @@
-const Button = ({ style, ...props }) => {
+import { forwardRef } from 'react'
+
+const Button = forwardRef(({ style, ...props }, ref) => {
 	switch (style) {
 		case 'primary':
-			return <PrimaryButton {...props} />
+			return <PrimaryButton ref={ref} {...props} />
+		case 'gradient':
+			return <GradientButton ref={ref} {...props} />
+		case 'danger':
+			return <DangerButton ref={ref} {...props} />
 
 		case 'tertiary':
-			return <TertiaryButton {...props} />
-
+			return <TertiaryButton ref={ref} {...props} />
 		case 'tertiary_gray':
-			return <TertiaryGrayButton {...props} />
+			return <TertiaryButton ref={ref} {...props} />
 
 		default:
 			throw new Error('No style specified')
 	}
-}
+})
 
-export const BaseButton = props => {
+Button.displayName = 'Button'
+
+export const BaseButton = forwardRef((props, ref) => {
 	const Component = props.as || 'button'
 
-	return <Component {...props} />
-}
+	return <Component {...{ ...props, ref, as: undefined }} />
+})
 
-export const PrimaryButton = ({ className, ...props }) => <BaseButton {...props} className={`border-2 border-transparent dark:border-white bg-black text-white font-medium dark:bg-transparent rounded-2xl flex items-center px-4 py-2 ${className}`} />
+BaseButton.displayName = 'BaseButton'
 
-export const TertiaryButton = ({ className, ...props }) => <BaseButton {...props} className={`relative border bg-transparent border-gray-500 dark:border-gray-300 dark:text-gray-400 rounded-2xl flex items-center px-4 py-2 ${className}`} />
+export const PrimaryButton = ({ className, iconOnly, ...props }) => <BaseButton {...props} className={`border-2 border-transparent dark:border-white bg-black text-white font-medium flex items-center ${iconOnly ? 'p-2 rounded-xl' : 'px-4 py-2 rounded-2xl'} disabled:opacity-40 disabled:cursor-not-allowed ${className}`} />
 
-export const TertiaryGrayButton = ({ className, ...props }) => <BaseButton {...props} className={`relative border border-gray-400 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-2xl flex items-center px-4 py-2 ${className}`} />
+PrimaryButton.displayName = 'PrimaryButton'
+
+export const GradientButton = ({ className, iconOnly, ...props }) => <BaseButton {...props} className={`bg-gradient-to-r from-[#6366F1] dark:from-[#22D3EE] to-[#D946EF] dark:to-[#8B5CF6] text-white font-medium flex items-center ${iconOnly ? 'p-2 rounded-xl' : 'px-4 py-2 rounded-2xl'} disabled:opacity-40 disabled:cursor-not-allowed ${className}`} />
+
+GradientButton.displayName = 'GradientButton'
+
+export const DangerButton = ({ className, iconOnly, ...props }) => <BaseButton {...props} className={`bg-red-500 dark:bg-red-700 text-white font-medium flex items-center ${iconOnly ? 'p-2 rounded-xl' : 'px-4 py-2 rounded-2xl'} disabled:opacity-40 disabled:cursor-not-allowed ${className}`} />
+
+DangerButton.displayName = 'DangerButton'
+
+export const TertiaryButton = ({ className, ...props }) => <BaseButton {...props} className={`relative bg-gray-100 text-gray-900 font-semibold dark:bg-gray-800 dark:text-gray-200 rounded-2xl flex items-center px-4 py-2 disabled:opacity-40 disabled:cursor-not-allowed ${className}`} />
 
 export default Button

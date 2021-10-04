@@ -24,12 +24,14 @@ export async function getServerSideProps(context) {
 			value: 'all',
 			order_by: 'visitor_count',
 			order_direction: 'desc',
-			img_url: '/logo_sm.jpg',
+			img_url: '/logo_sm.png',
 		},
 		...response_collection_list.data.data,
 	]
 
 	const selected_collection = collection_list.filter(item => item.value === collection).length > 0 ? collection_list.filter(item => item.value === collection)[0] : null
+
+	console.log(collection_list)
 
 	return {
 		props: {
@@ -51,34 +53,34 @@ export default function Collection({ collection_list, collection, selected_colle
 
 	const [isChanging, setIsChanging] = useState(true)
 
-	useEffect(() => {
-		setCurrentCollectionSlug(router.query.collection)
-		if (router.query.collection == 'all') {
-			setPageTitle('Discover')
-			setCurrentCollectionSlug('all')
-		}
-	}, [router.query.collection])
-
-	const onChange = async c => {
-		setSelected(c)
-		mixpanel.track('Collection filter dropdown select', {
-			collection: c['value'],
-		})
-		router.push('/c/[collection]', `/c/${c['value']}`, {
-			shallow: true,
-		})
-		setPageTitle(c['name'] === 'All leading collections' ? 'Discover' : `Discover ${c['name']}`)
-		setCurrentCollectionSlug(c['value'])
-		setCurrentCollectionName(c['name'] === 'All leading collections' ? null : c['name'])
-	}
-
 	const [collectionItems, setCollectionItems] = useState([])
-	const [currentCollectionSlug, setCurrentCollectionSlug] = useState(collection)
 	const [currentCollectionName, setCurrentCollectionName] = useState(selected_collection ? (selected_collection.name === 'All leading collections' ? null : selected_collection.name) : collection ? collection.replace(/-/g, ' ') : collection)
 	const [randomNumber, setRandomNumber] = useState(1)
 
+	const onChange = async c => {
+		mixpanel.track('Collection filter dropdown select', {
+			collection: c['value'],
+		})
+
+		router.push('/c/[collection]', `/c/${c['value']}`, {
+			shallow: true,
+		})
+	}
+
 	useEffect(() => {
 		let isSubscribed = true
+
+		const selectedValue = collection_list.filter(c => c.value == router.query.collection)[0]
+
+		setSelected(selectedValue)
+
+		if (router.query.collection == 'all') {
+			setPageTitle('Discover')
+			setCurrentCollectionName(null)
+		} else {
+			setPageTitle(selectedValue ? selectedValue.name : router.query.collection.replace(/-/g, ' '))
+			setCurrentCollectionName(selectedValue ? selectedValue.name : router.query.collection.replace(/-/g, ' '))
+		}
 
 		const getCollectionItems = async collection_name => {
 			setIsChanging(true)
@@ -100,10 +102,12 @@ export default function Collection({ collection_list, collection, selected_colle
 			setIsChanging(false)
 		}
 
-		getCollectionItems(currentCollectionSlug)
+		getCollectionItems(router.query.collection)
 
 		return () => (isSubscribed = false)
-	}, [currentCollectionSlug, sortBy, randomNumber])
+	}, [router.query.collection, sortBy, randomNumber, collection_list])
+
+	const [selected, setSelected] = useState()
 
 	const FilterTabs = (
 		<GridTabs>
@@ -158,8 +162,6 @@ export default function Collection({ collection_list, collection, selected_colle
 		</GridTabs>
 	)
 
-	const [selected, setSelected] = useState(collection_list.filter(c => c.value == currentCollectionSlug)[0])
-
 	return (
 		<Layout key={collection}>
 			<Head>
@@ -169,7 +171,7 @@ export default function Collection({ collection_list, collection, selected_colle
 				<meta property="og:type" content="website" />
 				<meta name="og:description" content="Discover and showcase crypto art" />
 
-				<meta property="og:image" content={selected_collection ? selected_collection.img_url : 'https://showtime.kilkka.vercel.app/banner.png'} />
+				<meta property="og:image" content={selected_collection ? selected_collection.img_url : 'https://cdn.tryshowtime.com/twitter_card.jpg'} />
 
 				<meta name="og:title" content={`Showtime | ${pageTitle}`} />
 
@@ -177,7 +179,7 @@ export default function Collection({ collection_list, collection, selected_colle
 				<meta name="twitter:title" content={`Showtime | ${pageTitle}`} />
 				<meta name="twitter:description" content="Discover and showcase crypto art" />
 
-				<meta name="twitter:image" content={selected_collection ? selected_collection.img_url : 'https://showtime.kilkka.vercel.app/banner.png'} />
+				<meta name="twitter:image" content={selected_collection ? selected_collection.img_url : 'https://cdn.tryshowtime.com/twitter_card.jpg'} />
 			</Head>
 
 			<div className="py-12 sm:py-14 px-8 sm:px-10 text-left bg-gradient-to-r from-green-400 to-blue-400">
@@ -192,7 +194,7 @@ export default function Collection({ collection_list, collection, selected_colle
 				</CappedWidth>
 			</div>
 			<CappedWidth>
-				<div className=" flex-1 -mt-4 mx-3 lg:w-2/3 lg:pr-6 xl:w-1/2">
+				<div className=" flex-1 -mt-4 mx-3 lg:w-2/3 lg:pr-6 xl:w-1/2 ">
 					<div className="border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg shadow-md px-6 py-6 text-center flex flex-col md:flex-row items-center">
 						<div className="flex-1 mb-3 md:mb-0 dark:text-gray-300">Select a collection to browse: </div>
 						<div className="flex-1 text-left">
@@ -257,8 +259,8 @@ export default function Collection({ collection_list, collection, selected_colle
 
 				<div className="mx-auto relative mt-12 overflow-hidden">{FilterTabs}</div>
 
-				<div className="m-auto relative min-h-screen md:mx-3">
-					<TokenGridV4 items={collectionItems} isLoading={isChanging} extraColumn key={`grid_${currentCollectionSlug}_${sortBy}_${randomNumber}_${isChanging}`} />
+				<div className="m-auto relative min-h-screen md:mx-3 pb-12">
+					<TokenGridV4 items={collectionItems} isLoading={isChanging} extraColumn key={`grid_${router.query.collection}_${sortBy}_${randomNumber}_${isChanging}`} />
 				</div>
 			</CappedWidth>
 		</Layout>

@@ -1,19 +1,19 @@
 import { useContext, useState, useEffect } from 'react'
 import mixpanel from 'mixpanel-browser'
-import Web3Modal from 'web3modal'
-import WalletConnectProvider from '@walletconnect/web3-provider'
-import { WalletLink } from 'walletlink'
 import backend from '@/lib/backend'
 import AppContext from '@/context/app-context'
 import CloseButton from './CloseButton'
-import Web3 from 'web3'
-import Fortmatic from 'fortmatic'
+import { ethers } from 'ethers'
 import ScrollableModal from './ScrollableModal'
 import axios from '@/lib/axios'
 import GreenButton from '@/components/UI/Buttons/GreenButton'
+import getWeb3Modal from '@/lib/web3Modal'
+import { useTheme } from 'next-themes'
+import { personalSignMessage } from '@/lib/utilities'
 
 export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 	const context = useContext(AppContext)
+	const { resolvedTheme } = useTheme()
 	const [signaturePending, setSignaturePending] = useState(false)
 	const [step, setStep] = useState(1)
 
@@ -23,9 +23,8 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 	const [myProvider, setMyProvider] = useState(null)
 
 	const connect = async () => {
-		const web3 = new Web3(myProvider)
-		const accounts = await web3.eth.getAccounts()
-		setAddressDetected(accounts[0])
+		const web3 = new ethers.providers.Web3Provider(myProvider)
+		setAddressDetected(await web3.getSigner().getAddress())
 
 		try {
 			myProvider.on('accountsChanged', async accounts => setAddressDetected(accounts[0]))
@@ -43,57 +42,7 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 	}, [myProvider, isOpen])
 
 	useEffect(() => {
-		if (isOpen) {
-			var providerOptions = {
-				walletconnect: {
-					package: WalletConnectProvider,
-					options: {
-						infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
-					},
-				},
-				fortmatic: {
-					package: Fortmatic, // required
-					options: {
-						key: process.env.NEXT_PUBLIC_FORTMATIC_PUB_KEY, // required
-					},
-				},
-			}
-
-			if (!context.isMobile) {
-				providerOptions = {
-					...providerOptions,
-					'custom-walletlink': {
-						display: {
-							logo: '/coinbase.svg',
-							name: 'Coinbase',
-							description: 'Use Coinbase Wallet app on mobile device',
-						},
-						options: {
-							appName: 'Showtime',
-							networkUrl: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`,
-							chainId: process.env.NEXT_PUBLIC_CHAINID,
-						},
-						package: WalletLink,
-						connector: async (_, options) => {
-							const { appName, networkUrl, chainId } = options
-							const walletLink = new WalletLink({
-								appName,
-							})
-							const provider = walletLink.makeWeb3Provider(networkUrl, chainId)
-							await provider.enable()
-							return provider
-						},
-					},
-				}
-			}
-
-			const web3Modal = new Web3Modal({
-				cacheProvider: false, // optional
-				providerOptions, // required
-				disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
-			})
-			setMyWeb3Modal(web3Modal)
-		}
+		if (isOpen) setMyWeb3Modal(getWeb3Modal({ theme: resolvedTheme }))
 
 		return function cleanup() {
 			if (!myWeb3Modal) return
@@ -120,7 +69,10 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 
 	const onConnect = async () => {
 		try {
-			setMyProvider(await myWeb3Modal.connect())
+			const provider = await myWeb3Modal.connect()
+			setMyProvider(provider)
+
+			context.setWeb3(new ethers.providers.Web3Provider(provider))
 		} catch {
 			setStep(1)
 		}
@@ -129,15 +81,11 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 	const signMessage = async () => {
 		const response_nonce = await backend.get(`/v1/getnonce?address=${addressDetected.toLowerCase()}`)
 
-		const web3 = new Web3(myProvider)
+		const web3 = new ethers.providers.Web3Provider(myProvider)
 
 		try {
 			setSignaturePending(true)
-			const signature = await web3.eth.personal.sign(
-				process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + ' ' + response_nonce.data.data,
-				addressDetected,
-				'' // MetaMask will ignore the password argument here
-			)
+			const signature = await personalSignMessage(web3, process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + ' ' + response_nonce.data.data)
 			setSignaturePending(false)
 			setStep(3)
 

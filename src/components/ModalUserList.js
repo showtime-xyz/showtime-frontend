@@ -37,7 +37,7 @@ export default function ModalUserList({ isOpen, title, users, closeModal, emptyM
 														</div>
 														<div className="flex items-center space-x-1 overflow-hidden">
 															<p className="font-semibold truncate min-w-0">{profile.name || (profile.username && `@${profile.username}`) || formatAddressShort(profile.wallet_address) || 'Unnamed'}</p>
-															{profile.verified == 1 && <BadgeIcon className="flex-shrink-0 w-3 h-auto text-black dark:text-white" bgClass="text-white dark:text-black" />}
+															{profile.verified == 1 && <BadgeIcon className="flex-shrink-0 w-3 h-auto text-black dark:text-white" tickClass="text-white dark:text-black" />}
 														</div>
 													</a>
 												</Link>

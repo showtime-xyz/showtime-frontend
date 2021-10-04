@@ -38,14 +38,14 @@ export const AddressCollection = ({ addresses, isMyProfile = false }) => {
 										.filter((a, i) => i !== 0)
 										.map(({ address, ens_domain }) => (
 											<div key={address} className="flex items-center space-x-4">
-												{address.startsWith('tz') ? <TezosIcon className="w-6 h-auto text-gray-500 dark:text-gray-600" /> : <EthereumIcon className="w-6 h-auto text-gray-500 dark:text-gray-600" />}
+												{address.startsWith('tz') ? <TezosIcon className="h-6 w-auto text-gray-500 dark:text-gray-600" /> : <EthereumIcon className="h-6 w-auto text-gray-500 dark:text-gray-600" />}
 												<AddressButton address={address} ens_domain={ens_domain} isCollection={true} />
 											</div>
 										))}
 								</div>
 								{isMyProfile && (
 									<>
-										{addresses.length > 1 && <hr className="my-4 w-full dark:border-gray-800" />}
+										{addresses.length > 1 && <hr className="my-4 w-full border-gray-200 dark:border-gray-800" />}
 										<Link href="/wallet">
 											<a className="block text-center hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-400 px-4 py-3 rounded-2xl w-full font-medium transition whitespace-nowrap">Manage Wallets</a>
 										</Link>

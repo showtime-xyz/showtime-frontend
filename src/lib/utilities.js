@@ -87,7 +87,7 @@ export const getBidLink = item => {
 		case CONTRACTS.HICETNUNC:
 			return `https://www.hicetnunc.xyz/objkt/${item.token_id}`
 		default:
-			return `https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`
+			return `https://opensea.io/assets/${item.chain_identifier == 137 ? 'matic/' : ''}${item.contract_address}/${item.token_id}?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`
 	}
 }
 
@@ -177,4 +177,20 @@ export const filterNewRecs = (newRecs, oldRecs, alreadyFollowed) => {
 		}
 	})
 	return filteredData
+}
+
+export const buildFormData = data => {
+	const formData = new FormData()
+
+	Object.entries(data).forEach(([key, value]) => {
+		if (value instanceof File || typeof value !== 'object') return formData.append(key, value)
+
+		formData.append(key, JSON.stringify(value))
+	})
+
+	return formData
+}
+
+export const personalSignMessage = async (web3, message) => {
+	return web3.getSigner().provider.send('personal_sign', [message, await web3.getSigner().getAddress()])
 }

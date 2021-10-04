@@ -28,7 +28,7 @@ export const CONTRACTS = {
 	KALAMINT: 'KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse',
 }
 
-export const DEFAULT_PROFILE_PIC = 'https://cdn.tryshowtime.com/profile_placeholder.jpg'
+export const DEFAULT_PROFILE_PIC = 'https://cdn.tryshowtime.com/profile_placeholder2.jpg'
 export const DISABLE_ALL = false
 
 // fields to sort by on profile page
@@ -183,4 +183,23 @@ export const MENTIONS_STYLE = {
 			padding: '5px 15px',
 		},
 	},
+}
+
+export const MINT_TYPES = ['image', 'video', 'model' /* 'audio', 'text', 'file' */]
+export const MINT_FORMATS = {
+	image: ['.png', '.gif', '.jpg'],
+	video: ['.mp4', '.mov'],
+	model: ['.glb', '.gltf'],
+	// audio: ['.mp3', '.flac', '.wav'],
+	// text: ['.txt', '.md'],
+	// file: ['.pdf', '.psd', '.ai'],
+}
+
+export const SHOWTIME_CONTRACTS = [process.env.NEXT_PUBLIC_MINTING_CONTRACT]
+
+export const CHAIN_IDENTIFIERS = {
+	ethereum: 1,
+	tezos: 'NetXdQprcVkpaWU',
+	polygon: 137,
+	mumbai: 80001,
 }
