@@ -27,6 +27,7 @@ import useProfile from '@/hooks/useProfile'
 import { ExclamationIcon } from '@heroicons/react/outline'
 import XIcon from '@/components/Icons/XIcon'
 import { buildFormData } from '@/lib/utilities'
+import * as Sentry from '@sentry/nextjs'
 
 const MAX_FILE_SIZE = 1024 * 1024 * 50 // 50MB
 
@@ -113,18 +114,22 @@ const MintModal = ({ open, onClose }) => {
 	const markDraftMinted = () => axios.post('/api/mint/draft', { title, description, number_of_copies: editionCount, nsfw: notSafeForWork, price: price || null, royalties: royaltiesPercentage, currency, ipfs_hash: ipfsHash, agreed_to_terms: hasAcceptedTerms, mime_type: sourcePreview.src ? `${sourcePreview.type}/${sourcePreview.ext}` : null, file_size: sourcePreview.size, minted: true })
 
 	const loadDraft = async () => {
-		const draft = await axios.get('/api/mint/draft').then(({ data }) => data)
+		try {
+			const draft = await axios.get('/api/mint/draft').then(({ data }) => data)
 
-		setTitle(draft.title || '')
-		setDescription(draft.description || '')
-		setHasAcceptedTerms(draft.agreed_to_terms || false)
-		setNotSafeForWork(draft.nsfw || false)
-		setPrice(draft.price ?? '')
-		setCurrency(draft.currency_ticker || 'ETH')
-		setEditionCount(draft.number_of_copies != null ? parseInt(draft.number_of_copies) : 1)
-		setRoyaltiesPercentage(draft.royalties != null ? parseInt(draft.royalties) : 10)
-		setIpfsHash(draft.ipfs_hash || null)
-		if (draft.ipfs_hash) setSourcePreview({ type: draft.mime_type.split('/')[0], size: draft.file_size, ext: draft.mime_type.split('/')[1], src: `https://gateway.pinata.cloud/ipfs/${draft.ipfs_hash}` })
+			setTitle(draft.title || '')
+			setDescription(draft.description || '')
+			setHasAcceptedTerms(draft.agreed_to_terms || false)
+			setNotSafeForWork(draft.nsfw || false)
+			setPrice(draft.price ?? '')
+			setCurrency(draft.currency_ticker || 'ETH')
+			setEditionCount(draft.number_of_copies != null ? parseInt(draft.number_of_copies) : 1)
+			setRoyaltiesPercentage(draft.royalties != null ? parseInt(draft.royalties) : 10)
+			setIpfsHash(draft.ipfs_hash || null)
+			if (draft.ipfs_hash) setSourcePreview({ type: draft.mime_type.split('/')[0], size: draft.file_size, ext: draft.mime_type.split('/')[1], src: `https://gateway.pinata.cloud/ipfs/${draft.ipfs_hash}` })
+		} catch (error) {
+			Sentry.captureException(error)
+		}
 	}
 
 	useEffect(() => {
