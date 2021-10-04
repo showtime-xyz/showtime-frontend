@@ -204,7 +204,7 @@ export const CHAIN_IDENTIFIERS = {
 	mumbai: 80001,
 }
 
-export const SOL_MAX_INT = 2 ** 256 - 1
+export const SOL_MAX_INT = 9007199254740990
 
 export const LIST_CURRENCIES = {
 	TEST: '0x27D76eDf808528630d676FacF035FEe935759C4F',
