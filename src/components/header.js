@@ -17,8 +17,8 @@ import PlusIcon from './Icons/PlusIcon'
 import MintingBanner from './MintingBanner'
 import ShowtimeIcon from './Icons/ShowtimeIcon'
 import { CompassIconSolid, CompassIconOutline } from './Icons/CompassIcon'
-import { ArrowUpIconOutline, ArrowUpIconSolid } from './Icons/ArrowUpIcon'
 import Tippy from '@tippyjs/react'
+import { FireIconOutline, FireIconSolid } from './Icons/FireIcon'
 
 const Header = () => {
 	const { asPath } = useRouter()
@@ -55,7 +55,7 @@ const Header = () => {
 							<SearchBar propagateSearchState={setSearchBarOpen} />
 						</div>
 						{/* Start desktop-only menu */}
-						<div className="hidden flex-1 md:flex md:items-center md:justify-center mr-6 md:mr-0 items-center font-normal space-x-2">
+						<div className="hidden flex-1 md:flex md:items-center md:justify-center mr-6 md:mr-0 items-center font-normal space-x-4">
 							<Tippy content="Feed">
 								<div>
 									<Link href="/">
@@ -78,7 +78,7 @@ const Header = () => {
 								<div>
 									<Link href="/trending">
 										<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 ${asPath == '/trending' ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-full py-3 -my-2 px-3 -mx-1`} onClick={() => mixpanel.track('Trending button click')}>
-											{asPath == '/trending' ? <ArrowUpIconSolid className="w-5 h-5" /> : <ArrowUpIconOutline className="w-5 h-5" />}
+											{asPath == '/trending' ? <FireIconSolid className="w-5 h-5" /> : <FireIconOutline className="w-5 h-5" />}
 										</a>
 									</Link>
 								</div>
@@ -127,7 +127,7 @@ const Header = () => {
 								</Link>
 								<Link href="/trending">
 									<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 px-2 -mx-2 group ${asPath == '/trending' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Trending button click')}>
-										<div className={`${asPath == '/trending' ? 'bg-gray-100' : 'group-hover:bg-gray-100'} p-2 -m-2 rounded-full transition`}>{asPath == '/trending' ? <ArrowUpIconSolid className="w-5 h-5" /> : <ArrowUpIconOutline className="w-5 h-5" />}</div>
+										<div className={`${asPath == '/trending' ? 'bg-gray-100' : 'group-hover:bg-gray-100'} p-2 -m-2 rounded-full transition`}>{asPath == '/trending' ? <FireIconSolid className="w-5 h-5" /> : <FireIconOutline className="w-5 h-5" />}</div>
 									</a>
 								</Link>
 							</div>
