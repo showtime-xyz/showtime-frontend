@@ -569,7 +569,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 
 				<div className="bg-white dark:bg-black pb-8">
 					<CappedWidth>
-						<div className={`h-32 md:h-64 relative text-left bg-gradient-to-b from-black dark:from-gray-400 to-gray-800 dark:to-gray-100 md:rounded-b-[32px] md:-mx-6 ${cover_url ? 'bg-no-repeat bg-center bg-cover' : ''}`} style={cover_url ? { backgroundImage: `url(${getCoverUrl(cover_url)})` } : {}}>
+						<div className={`h-32 md:h-64 relative text-left bg-gradient-to-bl from-violet-900 via-violet-500 to-violet-300 md:rounded-b-[32px] md:-mx-6 ${cover_url ? 'bg-no-repeat bg-center bg-cover' : ''}`} style={cover_url ? { backgroundImage: `url(${getCoverUrl(cover_url)})` } : {}}>
 							{isMyProfile && (
 								<div className="relative">
 									<div
