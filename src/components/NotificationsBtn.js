@@ -76,7 +76,7 @@ export default function NotificationsBtn() {
 		<Popover className="md:relative flex items-center justify-center">
 			{({ open }) => (
 				<>
-					<Popover.Button data-close-notifs className={`dark:text-white transition-all rounded-full cursor-pointer relative h-6 w-6 box-content focus:outline-none ${open ? 'bg-gray-100' : 'hover:bg-gray-100'} p-2 -m-2`}>
+					<Popover.Button data-close-notifs className={`dark:text-white transition rounded-full cursor-pointer relative h-6 w-6 box-content focus:outline-none ${open ? 'bg-gray-100 dark:bg-gray-900' : 'hover:bg-gray-100 dark:hover:bg-gray-900'} p-2 -m-2`}>
 						<span onClick={open ? null : handlePanelOpen} className="flex items-center justify-center">
 							<BellIcon className="w-6 h-6" />
 							{hasUnreadNotifications && <div className="bg-violet-500 absolute h-2 w-2 top-1.5 right-2.5 rounded-full" />}
