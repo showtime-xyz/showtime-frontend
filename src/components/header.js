@@ -101,7 +101,7 @@ const Header = () => {
 									<HeaderDropdown />
 								</>
 							) : (
-								<Button style="primary" className="space-x-2" onClick={() => context.setLoginModalOpen(!context.loginModalOpen)}>
+								<Button style="primary" className="space-x-2 !rounded-full" onClick={() => context.setLoginModalOpen(!context.loginModalOpen)}>
 									<WalletIcon className="w-5 h-5" />
 									<span className="font-bold text-sm">Sign&nbsp;in</span>
 								</Button>
