@@ -29,6 +29,7 @@ import PolygonIcon from './Icons/PolygonIcon'
 import Tippy from '@tippyjs/react'
 import TezosIcon from './Icons/TezosIcon'
 import Image from 'next/image'
+import ShowtimeIcon from './Icons/ShowtimeIcon'
 import showtimeLogo from '@/../public/img/logo_sm.png'
 
 // how tall the media will be
@@ -405,7 +406,7 @@ const TokenDetailBody = ({
 								{SHOWTIME_CONTRACTS.includes(item.contract_address) && (
 									<Tippy content="Created on Showtime">
 										<div className="flex items-center justify-center">
-											<Image src={showtimeLogo} width={30} height={30} className="rounded-full" />
+											<ShowtimeIcon className="w-6 h-6 fill-gold" />
 										</div>
 									</Tippy>
 								)}
