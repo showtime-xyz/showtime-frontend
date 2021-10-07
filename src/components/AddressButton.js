@@ -28,7 +28,7 @@ export const AddressCollection = ({ addresses, isMyProfile = false }) => {
 				{(addresses.length > 1 || isMyProfile) && (
 					<>
 						<Popover.Button className={({ open }) => `border rounded-full px-3 py-1 text-sm flex items-center space-x-2 text-gray-800 dark:text-white font-medium transition ${open ? 'bg-gray-100 dark:bg-gray-800 border-transparent' : 'dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 hover:border-transparent'}`}>
-							{addresses.length > 1 && <span className="font-bold">+{addresses.length - 1} more</span>}
+							{addresses.length > 1 && <span className="font-medium">+{addresses.length - 1} more</span>}
 							<ChevronDown className="w-4 h-4" />
 						</Popover.Button>
 						<Transition as={Fragment} enter="transition transform duration-100 ease-out" enterFrom="scale-95 opacity-0" enterTo="scale-100 opacity-100" leave="transition transform duration-75 ease-out" leaveFrom="scale-100 opacity-100" leaveTo="scale-95 opacity-0">
