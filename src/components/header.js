@@ -35,7 +35,7 @@ const Header = () => {
 			{renderModalLogin ? <ModalLogin isOpen={context.loginModalOpen} setEditModalOpen={context.setLoginModalOpen} /> : null}
 			{renderMintModal ? <MintModal open={mintModalOpen} onClose={() => setMintModalOpen(false)} /> : null}
 			<MintingBanner openMintModal={() => setMintModalOpen(true)} />
-			<header className="px-4 pt-3 sm:py-3 bg-white dark:bg-black bg-opacity-70 dark:bg-opacity-70 backdrop-filter backdrop-blur-lg backdrop-saturate-150 w-full border-b border-gray-200 dark:border-gray-800 sticky top-0 z-1">
+			<header className="px-4 pt-3 sm:py-3 bg-white dark:bg-black w-full border-b border-gray-200 dark:border-gray-800 sticky top-0 z-1">
 				<div className="max-w-screen-2xl 2xl:max-w-none sm:px-3 mx-auto w-full">
 					<div className="flex items-center justify-between">
 						<div className="flex-1 flex items-center space-x-4">
@@ -57,7 +57,7 @@ const Header = () => {
 							<Tippy content="Feed">
 								<div>
 									<Link href="/">
-										<a className={`text-sm md:text-base flex items-center space-x-2 ${asPath == '/' ? 'bg-gradient-to-bl from-violet-900 via-violet-500 to-violet-300 text-white' : 'text-black dark:text-gray-200 hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-full py-3 -my-2 px-3 -mx-1`} onClick={() => mixpanel.track('Discover button click')}>
+										<a className={`text-sm md:text-base flex items-center space-x-2 ${asPath == '/' ? 'bg-gradient-to-bl from-violet-900 via-violet-500 to-violet-300 text-white' : 'text-black dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900'} rounded-full py-3 -my-2 px-3 -mx-1 transition`} onClick={() => mixpanel.track('Discover button click')}>
 											{asPath == '/' ? <HomeIconSolid className="w-5 h-5" /> : <HomeIconOutline className="w-5 h-5" />}
 										</a>
 									</Link>
@@ -66,7 +66,7 @@ const Header = () => {
 							<Tippy content="Discover">
 								<div>
 									<Link href="/c/showtime">
-										<a className={`text-sm md:text-base flex items-center space-x-2 ${asPath == '/c/showtime' ? 'bg-gradient-to-bl from-violet-900 via-violet-500 to-violet-300 text-white' : 'text-black dark:text-gray-200 hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-full py-3 -my-2 px-3 -mx-1`} onClick={() => mixpanel.track('Discover button click')}>
+										<a className={`text-sm md:text-base flex items-center space-x-2 ${asPath == '/c/showtime' ? 'bg-gradient-to-bl from-violet-900 via-violet-500 to-violet-300 text-white' : 'text-black dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900'} rounded-full py-3 -my-2 px-3 -mx-1 transition`} onClick={() => mixpanel.track('Discover button click')}>
 											{asPath == '/c/showtime' ? <CompassIconSolid className="w-5 h-5" /> : <CompassIconOutline className="w-5 h-5" />}
 										</a>
 									</Link>
@@ -75,7 +75,7 @@ const Header = () => {
 							<Tippy content="Trending">
 								<div>
 									<Link href="/trending">
-										<a className={`text-sm md:text-base flex items-center space-x-2 ${asPath == '/trending' ? 'bg-gradient-to-bl from-violet-900 via-violet-500 to-violet-300 text-white' : 'text-black dark:text-gray-200 hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} rounded-full py-3 -my-2 px-3 -mx-1`} onClick={() => mixpanel.track('Trending button click')}>
+										<a className={`text-sm md:text-base flex items-center space-x-2 ${asPath == '/trending' ? 'bg-gradient-to-bl from-violet-900 via-violet-500 to-violet-300 text-white' : 'text-black dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900'} rounded-full py-3 -my-2 px-3 -mx-1 transition`} onClick={() => mixpanel.track('Trending button click')}>
 											{asPath == '/trending' ? <FireIconSolid className="w-5 h-5" /> : <FireIconOutline className="w-5 h-5" />}
 										</a>
 									</Link>

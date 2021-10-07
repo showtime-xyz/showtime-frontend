@@ -51,7 +51,7 @@ const HeaderDropdown = () => {
 			<Menu as="div" className="ml-5 md:relative flex-shrink-0">
 				{({ open }) => (
 					<>
-						<Menu.Button className={({ open }) => `max-w-xs ${open ? 'bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150' : 'hover:bg-black dark:hover:bg-white hover:bg-opacity-10 dark:hover:bg-opacity-10 hover:backdrop-filter hover:backdrop-blur-lg hover:backdrop-saturate-150'} p-1 -m-1 md:py-1 md:pl-2.5 md:pr-1 md:-my-1 md:-ml-2.5 md:-mr-1 flex items-center text-sm rounded-full focus:outline-none group`}>
+						<Menu.Button className={({ open }) => `max-w-xs ${open ? 'bg-gray-100 dark:bg-gray-900' : 'hover:bg-gray-100 dark:hover:bg-gray-900'} p-1 -m-1 md:py-1 md:pl-2.5 md:pr-1 md:-my-1 md:-ml-2.5 md:-mr-1 flex items-center text-sm rounded-full focus:outline-none group transition`}>
 							<span className="sr-only">Open user menu</span>
 							<img className="h-8 w-8 rounded-full md:mr-2" src={getSmallImageUrl(myProfile?.img_url || DEFAULT_PROFILE_PIC)} alt={myProfile?.name || myProfile?.username || myProfile?.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(myProfile?.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Profile'} />
 							<span className="hidden md:inline truncate dark:text-gray-200 transition font-semibold md:mr-2">{myProfile?.username ? `@${myProfile.username}` : myProfile?.name || myProfile?.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(myProfile?.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Profile'}</span>
