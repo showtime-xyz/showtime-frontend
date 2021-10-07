@@ -27,7 +27,7 @@ export const AddressCollection = ({ addresses, isMyProfile = false }) => {
 				<AddressButton {...firstAddress} />
 				{(addresses.length > 1 || isMyProfile) && (
 					<>
-						<Popover.Button className={({ open }) => `border rounded-full px-3 py-1 text-sm flex items-center space-x-2 text-gray-800 dark:text-white font-medium transition ${open ? 'bg-gray-100 dark:bg-gray-800 border-transparent' : 'dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 hover:border-transparent'}`}>
+						<Popover.Button className={({ open }) => `border rounded-full px-3 py-1 text-sm flex items-center space-x-2 text-gray-800 dark:text-white font-medium transition whitespace-nowrap ${open ? 'bg-gray-100 dark:bg-gray-800 border-transparent' : 'dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 hover:border-transparent'}`}>
 							{addresses.length > 1 && <span className="font-medium">+{addresses.length - 1} more</span>}
 							<ChevronDown className="w-4 h-4" />
 						</Popover.Button>
