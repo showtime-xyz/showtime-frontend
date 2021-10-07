@@ -10,6 +10,7 @@ import axios from '@/lib/axios'
 import { filterNewRecs } from '@/lib/utilities'
 import { ThemeProvider } from 'next-themes'
 import useAuth from '@/hooks/useAuth'
+import clientAccessToken from '@/lib/client-access-token'
 
 mixpanel.init('9b14512bc76f3f349c708f67ab189941')
 
@@ -187,6 +188,21 @@ const App = ({ Component, pageProps }) => {
 		}
 	}, [])
 
+	useEffect(() => {
+		const syncClearAccessToken = async data => {
+			const logoutEvent = data.key === 'logout'
+
+			if (logoutEvent) {
+				console.log('logged out from storage!', data)
+				const accessInterface = await clientAccessToken()
+				accessInterface.setAccessToken(null)
+				router.reload(window.location.pathname)
+			}
+		}
+
+		window.addEventListener('storage', syncClearAccessToken)
+	}, [])
+
 	const injectedGlobalContext = {
 		user,
 		web3,
@@ -231,6 +247,8 @@ const App = ({ Component, pageProps }) => {
 		adjustGridProperties,
 		logOut: async () => {
 			await axios.post('/api/auth/logout')
+			const accessInterface = await clientAccessToken()
+			accessInterface.setAccessToken(null)
 			revalidate()
 			setUser(null)
 			setMyLikes([])
@@ -244,6 +262,8 @@ const App = ({ Component, pageProps }) => {
 			setMyProfile(undefined)
 			setWeb3(null)
 			mixpanel.track('Logout')
+			// to support logging out from all windows
+			window.localStorage.setItem('logout', Date.now())
 		},
 	}
 

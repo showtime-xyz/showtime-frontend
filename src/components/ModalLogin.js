@@ -11,6 +11,8 @@ import { useTheme } from 'next-themes'
 import useAuth from '@/hooks/useAuth'
 import getWeb3Modal from '@/lib/web3Modal'
 import { personalSignMessage } from '@/lib/utilities'
+import clientAccessToken from '@/lib/client-access-token'
+import { captureException } from '@sentry/nextjs'
 
 export default function Modal({ isOpen }) {
 	const context = useContext(AppContext)
@@ -63,16 +65,31 @@ export default function Modal({ isOpen }) {
 			const signature = await personalSignMessage(web3, process.env.NEXT_PUBLIC_SIGNING_MESSAGE + ' ' + response_nonce.data.data)
 
 			// login with our own API
-			await axios.post('/api/auth/login/signature', { signature, address })
+			const response = await axios.post('/api/auth/login/signature', { signature, address })
+			const isValidSignature = response.status === 200
+
+			if (isValidSignature) {
+				const accessToken = response?.data?.access
+				const accessInterface = await clientAccessToken(accessToken)
+				await accessInterface.setAccessToken(accessToken)
+			}
 
 			revalidate()
 			mixpanel.track('Login success - wallet signature')
 
 			if (!context?.user) context.getUserFromCookies()
 			context.setLoginModalOpen(false)
-		} catch (err) {
-			//throw new Error("You need to sign the message to be able to log in.");
-			//console.log(err);
+		} catch (error) {
+			console.log(error)
+			if (process.env.NODE_ENV === 'development') {
+				console.error(error)
+			}
+			//TODO: update this in notion
+			captureException(error, {
+				tags: {
+					login_signature_flow: 'modalLogin.js',
+				},
+			})
 		} finally {
 			setSignaturePending(false)
 		}

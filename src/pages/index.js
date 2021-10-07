@@ -15,6 +15,7 @@ import RecommendFollowers from '@/components/RecommendFollowers'
 import axios from '@/lib/axios'
 import { FingerPrintIcon, HeartIcon as HeartSolidIcon, UserIcon as UserSolidIcon, ChatAlt2Icon as CommentSolidIcon, FilterIcon } from '@heroicons/react/solid'
 import { HeartIcon as HeartOutlineIcon, UserIcon as UserOutlineIcon, ChatAlt2Icon as CommentOutlineIcon } from '@heroicons/react/outline'
+import clientAccessToken from '@/lib/client-access-token'
 
 const ACTIVITY_PAGE_LENGTH = 5 // 5 activity items per activity page
 

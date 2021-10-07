@@ -4,8 +4,10 @@ import mixpanel from 'mixpanel-browser'
 import _ from 'lodash'
 import Tippy from '@tippyjs/react'
 import axios from '@/lib/axios'
+import axiosProtected from '@/lib/client-side-axios'
 import HeartIcon, { HeartIconSolid } from './Icons/HeartIcon'
 import useAuth from '@/hooks/useAuth'
+import { captureException } from '@sentry/nextjs'
 
 const LikeButton = ({ item }) => {
 	const { isAuthenticated } = useAuth()
@@ -20,10 +22,12 @@ const LikeButton = ({ item }) => {
 			[nft_id]: (context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id]) ? context.myLikeCounts[item?.nft_id] : item.like_count) + 1,
 		})
 
-		// Post changes to the API
 		try {
-			await axios
-				.post(`/api/like_v3/${nft_id}`)
+			// TODO: Migrate env vars to constants file
+			const endpoint = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v3/like/${nft_id}`
+			// TODO: Refactor to async await syntax
+			await axiosProtected
+				.post(endpoint)
 				.then(() => mixpanel.track('Liked item'))
 				.catch(err => {
 					if (err.response.data.code === 429) {
@@ -36,10 +40,28 @@ const LikeButton = ({ item }) => {
 						})
 						return context.setThrottleMessage(err.response.data.message)
 					}
-					console.error(err)
+					if (process.env.NODE_ENV === 'development') {
+						console.error(err)
+					}
+
+					//TODO: update this in notion
+					captureException(err, {
+						tags: {
+							nft_like: 'LikeButton.js',
+						},
+					})
 				})
 		} catch (err) {
-			console.error(err)
+			if (process.env.NODE_ENV === 'development') {
+				console.error(err)
+			}
+
+			//TODO: update this in notion
+			captureException(err, {
+				tags: {
+					nft_like: 'LikeButton.js',
+				},
+			})
 		}
 	}
 
