@@ -139,7 +139,7 @@ const SearchBar = ({ propagateSearchState }) => {
 							<input
 								className="text-sm flex placeholder-gray-500 dark:placeholder-gray-400 dark:text-gray-300 bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150 py-1.5 -my-1.5 px-1 rounded-full w-full pl-10 focus-visible:ring-1 ring-gray-300 dark:ring-gray-800 focus:outline-none"
 								type="text"
-								placeholder="Search by name or wallet address"
+								placeholder="Search by name or wallet"
 								value={searchText}
 								onFocus={() => {
 									setShowSearchResults(true)
