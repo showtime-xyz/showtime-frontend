@@ -93,7 +93,7 @@ const Header = () => {
 							{isAuthenticated && myProfile ? (
 								<>
 									<div className={'ml-5'}>
-										<Button onClick={() => setMintModalOpen(true)} style="primary" className="!p-2.5 md:!px-3.5 md:!py-1.5 !rounded-xl md:!rounded-full">
+										<Button onClick={() => setMintModalOpen(true)} style="primary" className="!p-2.5 md:!px-3.5 md:!py-1.5 !rounded-full">
 											<span className="hidden md:inline">Create</span>
 											<PlusIcon className="w-4 h-4 md:hidden" />
 										</Button>
