@@ -1,8 +1,11 @@
 import XIcon from './Icons/XIcon'
 import { Transition } from '@headlessui/react'
 import useStickyState from '@/hooks/useStickyState'
+import { useContext } from 'react'
+import AppContext from '@/context/app-context'
 
 const MintingBanner = ({ openMintModal }) => {
+	const { user, setLoginModalOpen } = useContext(AppContext)
 	const [show, setShow] = useStickyState('showMintBanner', true, false)
 
 	return (
@@ -16,7 +19,7 @@ const MintingBanner = ({ openMintModal }) => {
 							</a>
 							<span className="hidden md:inline">
 								<span className="text-xs mr-1 -mt-1 inline-block">🎉</span> You can now create NFTs for free (no gas costs)!{' '}
-								<button className="text-gray-900 dark:text-gray-100 font-bold" onClick={openMintModal}>
+								<button className="text-gray-900 dark:text-gray-100 font-bold" onClick={user ? openMintModal : () => setLoginModalOpen(true)}>
 									Get started
 								</button>{' '}
 								and{' '}
