@@ -4,7 +4,7 @@ import mixpanel from 'mixpanel-browser'
 import _ from 'lodash'
 import Tippy from '@tippyjs/react'
 import axios from '@/lib/axios'
-import axiosProtected from '@/lib/client-side-axios'
+import authAxios from '@/lib/authenticated-client-side-axios'
 import HeartIcon, { HeartIconSolid } from './Icons/HeartIcon'
 import useAuth from '@/hooks/useAuth'
 import { captureException } from '@sentry/nextjs'
@@ -23,35 +23,21 @@ const LikeButton = ({ item }) => {
 		})
 
 		try {
-			// TODO: Migrate env vars to constants file
 			const endpoint = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v3/like/${nft_id}`
-			// TODO: Refactor to async await syntax
-			await axiosProtected
-				.post(endpoint)
-				.then(() => mixpanel.track('Liked item'))
-				.catch(err => {
-					if (err.response.data.code === 429) {
-						// Change myLikes via setMyLikes
-						context.setMyLikes(context.myLikes.filter(item => !(item === nft_id)))
-
-						context.setMyLikeCounts({
-							...context.myLikeCounts,
-							[nft_id]: (context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id]) ? context.myLikeCounts[item?.nft_id] : item.like_count) - 0,
-						})
-						return context.setThrottleMessage(err.response.data.message)
-					}
-					if (process.env.NODE_ENV === 'development') {
-						console.error(err)
-					}
-
-					//TODO: update this in notion
-					captureException(err, {
-						tags: {
-							nft_like: 'LikeButton.js',
-						},
-					})
-				})
+			await authAxios.post(endpoint)
+			mixpanel.track('Liked item')
 		} catch (err) {
+			if (err.response.data.code === 429) {
+				// Change myLikes via setMyLikes
+				context.setMyLikes(context.myLikes.filter(item => !(item === nft_id)))
+
+				context.setMyLikeCounts({
+					...context.myLikeCounts,
+					[nft_id]: (context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id]) ? context.myLikeCounts[item?.nft_id] : item.like_count) - 0,
+				})
+				return context.setThrottleMessage(err.response.data.message)
+			}
+
 			if (process.env.NODE_ENV === 'development') {
 				console.error(err)
 			}

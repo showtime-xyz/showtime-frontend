@@ -193,10 +193,12 @@ const App = ({ Component, pageProps }) => {
 			const logoutEvent = data.key === 'logout'
 
 			if (logoutEvent) {
-				console.log('logged out from storage!', data)
-				const accessInterface = await clientAccessToken()
-				accessInterface.setAccessToken(null)
-				router.reload(window.location.pathname)
+				try {
+					const accessInterface = await clientAccessToken()
+					accessInterface.setAccessToken(null)
+				} finally {
+					router.reload(window.location.pathname)
+				}
 			}
 		}
 

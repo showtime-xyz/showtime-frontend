@@ -1,5 +1,8 @@
 import Axios from 'axios'
 import createAuthRefreshInterceptor from 'axios-auth-refresh'
+import Router from 'next/router'
+import { captureException } from '@sentry/nextjs'
+
 import clientAccessToken from '@/lib/client-access-token'
 
 const axios = Axios.create()
@@ -7,20 +10,43 @@ const axios = Axios.create()
 /**
  * An expired or missing access token sent to our backend services will trigger a
  * 401 response status code that we intercept to trigger a silent access token refresh.
- * On refresh success the request will be resent and on failure we force a logout.
+ * On refresh success the request will be resent and on failure we force the logout flow.
  */
 createAuthRefreshInterceptor(
 	axios,
 	async () => {
 		const accessInterface = await clientAccessToken()
+
 		try {
-			await accessInterface.refreshAccessToken()
+			const refreshedAccessTokenValue = await accessInterface.refreshAccessToken()
+
+			if (refreshedAccessTokenValue) {
+				throw 'The refresh request has failed, likely due to an expired refresh token'
+			}
+
+			return axios
 		} catch (error) {
-			await axios.post('/api/auth/logout')
+			const endpoint = '/api/auth/logout'
+			const logoutInstance = Axios.create()
+
+			if (process.env.NODE_ENV === 'development') {
+				console.error(error)
+			}
+
+			await logoutInstance.post(endpoint)
 			accessInterface.setAccessToken(null)
 			window.localStorage.setItem('logout', Date.now())
+			Router.reload(window.location.pathname)
+
+			captureException(error, {
+				tags: {
+					failed_silent_refresh: 'client-side-axios.js',
+				},
+			})
+
+			// Prevents the refresh interceptor from retrying authentication
+			return Promise.reject()
 		}
-		return axios
 	},
 	{ statusCodes: [401] }
 )
