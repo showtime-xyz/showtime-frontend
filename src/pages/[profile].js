@@ -136,12 +136,12 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 		{ initialData: false, revalidateOnMount: true, focusThrottleInterval: 60 * 1000 }
 	)
 
+	// Runs when profile switches and on initial load
 	useEffect(() => {
-		// First load stuff
 		let isSubscribed = true
 
+		// Reset these values
 		mutateFollowsYou(false, true)
-		setSpotlightItem(featured_nft)
 		setMoreBioShown(false)
 		setShowUserHiddenItems(false)
 		setShowDuplicates(false)
@@ -150,29 +150,34 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 		setMenuLists([])
 		setHasMore(true)
 		setItems([])
-
+		setSpotlightItem(featured_nft)
 		setFollowersCount(followers_count)
 
-		getTabs()
-			.then(tabsData => {
-				if (isSubscribed) {
-					setMenuLists(tabsData.lists)
-					setSelectedCreatedSortField(tabsData.lists[0].sort_id)
-					setSelectedOwnedSortField(tabsData.lists[1].sort_id)
+		// Populate the tab counts, pick an active tab, then pull the NFT list based on active tab
+		getTabs().then(tabsData => {
+			// Using isSubscribed to make sure the user hasn't navigated to a different page in the meantime
+			if (isSubscribed) {
+				// Populate the tab counts
+				setMenuLists(tabsData.lists)
 
-					const urlParams = new URLSearchParams(location.search)
-					const initialListId = urlParams.has('list') ? PROFILE_TABS.indexOf(urlParams.get('list')) : tabsData.default_list_id
-					setSelectedGrid(initialListId)
+				// Set sort & hidden NFT information, which was returned in the tab response
+				setSelectedCreatedSortField(tabsData.lists[0].sort_id)
+				setSelectedOwnedSortField(tabsData.lists[1].sort_id)
+				setHasUserHiddenItems(tabsData.lists[0].count_all_withhidden > tabsData.lists[0].count_all_nonhidden || tabsData.lists[1].count_all_withhidden > tabsData.lists[1].count_all_nonhidden)
 
-					setHasUserHiddenItems(tabsData.lists[0].count_all_withhidden > tabsData.lists[0].count_all_nonhidden || tabsData.lists[1].count_all_withhidden > tabsData.lists[1].count_all_nonhidden)
-					return initialListId
-				}
-			})
-			.then(initialListId => {
-				if (isSubscribed) {
-					handleListChange(initialListId, true)
-				}
-			})
+				// Look for ?list=X in URL, else fall back to the default specified in the tab response
+				const urlParams = new URLSearchParams(location.search)
+				const initialListId = urlParams.has('list') ? PROFILE_TABS.indexOf(urlParams.get('list')) : tabsData.default_list_id
+
+				// Set the currently active tab
+				setSelectedGrid(initialListId)
+
+				// Pull the NFT list for the currently active tab
+				setSwitchInProgress(true)
+				const sortId = initialListId === 1 ? tabsData.lists[0].sort_id : initialListId === 2 ? tabsData.lists[1].sort_id : selectedLikedSortField
+				updateItems(initialListId, sortId, 0, true, 1, showUserHiddenItems, 0, cancelTokens).then(setSwitchInProgress(false))
+			}
+		})
 
 		return () => (isSubscribed = false)
 	}, [slug_address])
@@ -288,7 +293,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 		setSwitchInProgress(false)
 	}
 
-	const handleListChange = async (listId, firstLoad) => {
+	const handleListChange = async listId => {
 		setSwitchInProgress(true)
 		setSelectedGrid(listId)
 		setCollectionId(0)
@@ -297,13 +302,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 
 		const sortId = listId === 1 ? selectedCreatedSortField : listId === 2 ? selectedOwnedSortField : selectedLikedSortField
 
-		//if (listId != defaultGrid) router.replace({ query: { ...router.query, list: PROFILE_TABS[listId] } }, undefined, { shallow: true })
-		//else router.replace({ query: Object.fromEntries(Object.entries(router.query).filter(([key]) => key != 'list')) }, undefined, { shallow: true })
-
-		// Switching to this, since React router was still reloading the page
-		if (!firstLoad) {
-			history.replaceState(undefined, undefined, `/${slug_address}?list=${PROFILE_TABS[listId]}`)
-		}
+		history.replaceState(undefined, undefined, `/${slug_address}?list=${PROFILE_TABS[listId]}`)
 
 		await updateItems(listId, sortId, 0, true, 1, showUserHiddenItems, 0, cancelTokens)
 		setSwitchInProgress(false)
@@ -712,19 +711,19 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 									{menuLists && menuLists.length > 0 && (
 										<div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:px-3 md:my-2">
 											<div className="flex items-center w-full md:w-auto">
-												<button onClick={() => handleListChange(1, false)} className={`flex-1 md:flex-initial px-4 py-3 space-x-2 flex items-center justify-center md:justify-start border-b-2 ${selectedGrid === 1 ? 'border-gray-800 dark:border-gray-300' : 'border-gray-200 dark:border-gray-700'} transition`}>
+												<button onClick={() => handleListChange(1)} className={`flex-1 md:flex-initial px-4 py-3 space-x-2 flex items-center justify-center md:justify-start border-b-2 ${selectedGrid === 1 ? 'border-gray-800 dark:border-gray-300' : 'border-gray-200 dark:border-gray-700'} transition`}>
 													<FingerprintIcon className="hidden md:block w-5 h-5 dark:text-gray-500" />
 													<p className="text-sm text-gray-500">
 														<span className="font-semibold text-gray-800 dark:text-gray-300">Created</span> <span className="hidden md:inline">{menuLists && menuLists.length > 0 ? Number(menuLists[0].count_deduplicated_nonhidden).toLocaleString() : null}</span>
 													</p>
 												</button>
-												<button onClick={() => handleListChange(2, false)} className={`flex-1 md:flex-initial px-4 py-3 space-x-2 flex items-center justify-center md:justify-start border-b-2 ${selectedGrid === 2 ? 'border-gray-800 dark:border-gray-300' : 'border-gray-200 dark:border-gray-700'} transition`}>
+												<button onClick={() => handleListChange(2)} className={`flex-1 md:flex-initial px-4 py-3 space-x-2 flex items-center justify-center md:justify-start border-b-2 ${selectedGrid === 2 ? 'border-gray-800 dark:border-gray-300' : 'border-gray-200 dark:border-gray-700'} transition`}>
 													<WalletIcon className="hidden md:block w-5 h-5 dark:text-gray-500" />
 													<p className="text-sm text-gray-500">
 														<span className="font-semibold text-gray-800 dark:text-gray-300">Owned</span> <span className="hidden md:inline">{menuLists && menuLists.length > 0 ? Number(menuLists[1].count_deduplicated_nonhidden).toLocaleString() : null}</span>
 													</p>
 												</button>
-												<button onClick={() => handleListChange(3, false)} className={`flex-1 md:flex-initial px-4 py-3 space-x-2 flex items-center justify-center md:justify-start border-b-2 ${selectedGrid === 3 ? 'border-gray-800 dark:border-gray-300' : 'border-gray-200 dark:border-gray-700'} transition`}>
+												<button onClick={() => handleListChange(3)} className={`flex-1 md:flex-initial px-4 py-3 space-x-2 flex items-center justify-center md:justify-start border-b-2 ${selectedGrid === 3 ? 'border-gray-800 dark:border-gray-300' : 'border-gray-200 dark:border-gray-700'} transition`}>
 													<HeartIcon className="hidden md:block w-5 h-5 dark:text-gray-500" />
 													<p className="text-sm text-gray-500">
 														<span className="font-semibold text-gray-800 dark:text-gray-300">Liked</span> <span className="hidden md:inline">{menuLists && menuLists.length > 0 ? Number(menuLists[2].count_deduplicated_nonhidden).toLocaleString() : null}</span>
