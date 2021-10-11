@@ -194,7 +194,7 @@ const App = ({ Component, pageProps }) => {
 
 			if (logoutEvent) {
 				try {
-					const accessInterface = await clientAccessToken()
+					const accessInterface = clientAccessToken()
 					accessInterface.setAccessToken(null)
 				} finally {
 					router.reload(window.location.pathname)
@@ -203,6 +203,42 @@ const App = ({ Component, pageProps }) => {
 		}
 
 		window.addEventListener('storage', syncClearAccessToken)
+	}, [])
+
+	/**
+	 * On initial application load refresh tokens. If not authenticated
+	 * this does not modify the application in any way.
+	 */
+	useEffect(() => {
+		try {
+			const accessInterface = clientAccessToken()
+			accessInterface.refreshAccessToken()
+		} catch (error) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error(error)
+			}
+		}
+	}, [])
+
+	/**
+	 * Route change event to refresh access token that will only initiate
+	 * a refresh if the access token is not set as is the case when a user
+	 * signs into the application from tab A while tab B is also on showtime.
+	 */
+	useEffect(() => {
+		const checkRefreshOnRouteChange = () => {
+			const accessInterface = clientAccessToken()
+			const hasAccessToken = accessInterface.getAccessToken()
+			if (!hasAccessToken) {
+				accessInterface.refreshAccessToken()
+			}
+		}
+
+		router.events.on('routeChangeStart', checkRefreshOnRouteChange)
+
+		return () => {
+			router.events.off('routeChangeStart', checkRefreshOnRouteChange)
+		}
 	}, [])
 
 	const injectedGlobalContext = {
@@ -249,7 +285,7 @@ const App = ({ Component, pageProps }) => {
 		adjustGridProperties,
 		logOut: async () => {
 			await axios.post('/api/auth/logout')
-			const accessInterface = await clientAccessToken()
+			const accessInterface = clientAccessToken()
 			accessInterface.setAccessToken(null)
 			revalidate()
 			setUser(null)
