@@ -3,14 +3,16 @@ import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'
 import _ from 'lodash'
 import Tippy from '@tippyjs/react'
-import axios from '@/lib/axios'
 import authAxios from '@/lib/authenticated-client-side-axios'
 import HeartIcon, { HeartIconSolid } from './Icons/HeartIcon'
-import useAuth from '@/hooks/useAuth'
+import clientAccessToken from '@/lib/client-access-token'
 import { captureException } from '@sentry/nextjs'
 
+const accessInterface = clientAccessToken()
+
 const LikeButton = ({ item }) => {
-	const { isAuthenticated } = useAuth()
+	const isAuthenticated = accessInterface.getAccessToken()
+
 	const context = useContext(AppContext)
 
 	const handleLike = async nft_id => {
@@ -60,9 +62,23 @@ const LikeButton = ({ item }) => {
 			[nft_id]: (context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id]) ? context.myLikeCounts[item?.nft_id] : item.like_count) - 1,
 		})
 
-		// Post changes to the API
-		await axios.post(`/api/unlike_v3/${nft_id}`)
-		mixpanel.track('Unliked item')
+		try {
+			// Post changes to the API
+			const endpoint = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v3/unlike/${nft_id}`
+			await authAxios.post(endpoint)
+			mixpanel.track('Unliked item')
+		} catch (error) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error(error)
+			}
+
+			//TODO: update this in notion
+			captureException(error, {
+				tags: {
+					nft_unlike: 'LikeButton.js',
+				},
+			})
+		}
 	}
 
 	const like_count = context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id]) ? context.myLikeCounts[item?.nft_id] : item.like_count
