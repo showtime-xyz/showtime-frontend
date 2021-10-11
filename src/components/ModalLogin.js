@@ -45,8 +45,8 @@ export default function Modal({ isOpen }) {
 
 			if (isValidSignature) {
 				const accessToken = response?.data?.access
-				const accessInterface = await clientAccessToken(accessToken)
-				await accessInterface.setAccessToken(accessToken)
+				const accessInterface = clientAccessToken(accessToken)
+				accessInterface.setAccessToken(accessToken)
 			}
 
 			mixpanel.track('Login success - email')
@@ -87,8 +87,8 @@ export default function Modal({ isOpen }) {
 
 			if (isValidSignature) {
 				const accessToken = response?.data?.access
-				const accessInterface = await clientAccessToken(accessToken)
-				await accessInterface.setAccessToken(accessToken)
+				const accessInterface = clientAccessToken(accessToken)
+				accessInterface.setAccessToken(accessToken)
 			}
 
 			revalidate()

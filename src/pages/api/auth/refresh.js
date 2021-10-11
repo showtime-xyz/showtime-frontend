@@ -46,6 +46,7 @@ export default handler().post(async (req, res) => {
 		if (process.env.NODE_ENV === 'development') {
 			console.log('error.response.status', status)
 			console.log('error.response.data', data)
+			console.log('error', error)
 		}
 
 		captureException(error, {

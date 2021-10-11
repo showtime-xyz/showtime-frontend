@@ -9,18 +9,19 @@ const axios = Axios.create()
 
 /**
  * An expired or missing access token sent to our backend services will trigger a
- * 401 response status code that we intercept to trigger a silent access token refresh.
+ * 401 or 500 response status code that we intercept to trigger a silent access token refresh.
  * On refresh success the request will be resent and on failure we force the logout flow.
  */
 createAuthRefreshInterceptor(
 	axios,
 	async () => {
-		const accessInterface = await clientAccessToken()
+		const accessInterface = clientAccessToken()
 
 		try {
 			const refreshedAccessTokenValue = await accessInterface.refreshAccessToken()
+			const invalidRefreshedAccessTokenValue = !refreshedAccessTokenValue
 
-			if (refreshedAccessTokenValue) {
+			if (invalidRefreshedAccessTokenValue) {
 				throw 'The refresh request has failed, likely due to an expired refresh token'
 			}
 
@@ -40,7 +41,7 @@ createAuthRefreshInterceptor(
 
 			captureException(error, {
 				tags: {
-					failed_silent_refresh: 'client-side-axios.js',
+					failed_silent_refresh: 'authenticated-client-side-axios.js',
 				},
 			})
 
@@ -48,7 +49,7 @@ createAuthRefreshInterceptor(
 			return Promise.reject()
 		}
 	},
-	{ statusCodes: [401] }
+	{ statusCodes: [401, 500] }
 )
 
 /**
@@ -56,7 +57,7 @@ createAuthRefreshInterceptor(
  * dynamically to ensure a request is never referencing a stale access token.
  */
 axios.interceptors.request.use(async request => {
-	const accessInterface = await clientAccessToken()
+	const accessInterface = clientAccessToken()
 	const accessToken = accessInterface.getAccessToken()
 	if (accessToken) {
 		request.headers['Authorization'] = `Bearer ${accessToken}`
