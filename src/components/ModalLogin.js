@@ -21,46 +21,63 @@ export default function Modal({ isOpen }) {
 	const [signaturePending, setSignaturePending] = useState(false)
 
 	const handleSubmitEmail = async event => {
-		mixpanel.track('Login - email button click')
-		event.preventDefault()
-
-		const { elements } = event.target
-
-		// the magic code
-		const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY)
 		try {
-			const did = await magic.auth.loginWithMagicLink({ email: elements.email.value })
-			context.setWeb3(new ethers.providers.Web3Provider(magic.rpcProvider))
+			mixpanel.track('Login - email button click')
+			event.preventDefault()
 
-			// Once we have the did from magic, login with our own API
-			await axios.post(
-				'/api/auth/login',
-				{},
-				{
-					headers: { Authorization: `Bearer ${did}` },
-				}
-			)
+			const { elements } = event.target
+
+			// Magic Link authenticates through email
+			const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY)
+			await magic.auth.loginWithMagicLink({ email: elements.email.value })
+			const web3 = new ethers.providers.Web3Provider(magic.rpcProvider)
+			context.setWeb3(web3)
+			const user = await magic.user.getMetadata()
+			const address = user.publicAddress
+
+			const response_nonce = await backend.get(`/v1/getnonce?address=${address}`)
+
+			const signature = await personalSignMessage(web3, process.env.NEXT_PUBLIC_SIGNING_MESSAGE + ' ' + response_nonce.data.data)
+
+			// Generate refresh/access token from Magic authenticated public address
+			const response = await axios.post('/api/auth/login/signature', { signature, address })
+			const isValidSignature = response.status === 200
+
+			if (isValidSignature) {
+				const accessToken = response?.data?.access
+				const accessInterface = await clientAccessToken(accessToken)
+				await accessInterface.setAccessToken(accessToken)
+			}
 
 			mixpanel.track('Login success - email')
 			revalidate()
 
 			if (!context?.user) context.getUserFromCookies()
 			context.setLoginModalOpen(false)
-		} catch {
-			/* handle errors */
+		} catch (error) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error(error)
+			}
+			//TODO: update this in notion
+			captureException(error, {
+				tags: {
+					login_signature_flow: 'modalLogin.js',
+					login_magic_link: 'modalLogin.js',
+				},
+			})
 		}
 	}
 
 	const handleSubmitWallet = async () => {
-		mixpanel.track('Login - wallet button click')
-
-		const web3Modal = getWeb3Modal({ theme: resolvedTheme })
-		const web3 = new ethers.providers.Web3Provider(await web3Modal.connect())
-
-		const address = await web3.getSigner().getAddress()
-		const response_nonce = await backend.get(`/v1/getnonce?address=${address}`)
-
 		try {
+			mixpanel.track('Login - wallet button click')
+
+			const web3Modal = getWeb3Modal({ theme: resolvedTheme })
+			const web3 = new ethers.providers.Web3Provider(await web3Modal.connect())
+
+			const address = await web3.getSigner().getAddress()
+			const response_nonce = await backend.get(`/v1/getnonce?address=${address}`)
+
 			setSignaturePending(true)
 			const signature = await personalSignMessage(web3, process.env.NEXT_PUBLIC_SIGNING_MESSAGE + ' ' + response_nonce.data.data)
 
@@ -80,7 +97,6 @@ export default function Modal({ isOpen }) {
 			if (!context?.user) context.getUserFromCookies()
 			context.setLoginModalOpen(false)
 		} catch (error) {
-			console.log(error)
 			if (process.env.NODE_ENV === 'development') {
 				console.error(error)
 			}
