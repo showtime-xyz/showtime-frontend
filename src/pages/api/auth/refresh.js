@@ -13,7 +13,6 @@ import { captureException } from '@sentry/nextjs'
  */
 export default handler().post(async (req, res) => {
 	const endpoint = '/v1/jwt/refresh'
-	const ENCRYPTION_SECRET_V2 = process.env.ENCRYPTION_SECRET_V2
 
 	try {
 		const sealedRefreshTokenCookie = CookieService.getRefreshToken(req.cookies)
@@ -22,7 +21,7 @@ export default handler().post(async (req, res) => {
 			throw 'Missing sealed refresh token cookie'
 		}
 
-		const { refreshToken } = await Iron.unseal(sealedRefreshTokenCookie, ENCRYPTION_SECRET_V2, Iron.defaults)
+		const { refreshToken } = await Iron.unseal(sealedRefreshTokenCookie, process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
 		const refreshResponse = await backend.post(endpoint, {
 			refresh: refreshToken,
@@ -31,7 +30,7 @@ export default handler().post(async (req, res) => {
 		const newAccessToken = refreshResponse?.data?.access
 		const newRefreshToken = refreshResponse?.data?.refresh
 
-		const sealedRefreshToken = await Iron.seal({ refreshToken: newRefreshToken }, ENCRYPTION_SECRET_V2, Iron.defaults)
+		const sealedRefreshToken = await Iron.seal({ refreshToken: newRefreshToken }, process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
 		CookieService.setTokenCookie({
 			res,

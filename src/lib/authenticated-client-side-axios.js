@@ -2,8 +2,7 @@ import Axios from 'axios'
 import createAuthRefreshInterceptor from 'axios-auth-refresh'
 import Router from 'next/router'
 import { captureException } from '@sentry/nextjs'
-
-import clientAccessToken from '@/lib/client-access-token'
+import ClientAccessToken from '@/lib/client-access-token'
 
 const axios = Axios.create()
 
@@ -15,10 +14,8 @@ const axios = Axios.create()
 createAuthRefreshInterceptor(
 	axios,
 	async () => {
-		const accessInterface = clientAccessToken()
-
 		try {
-			const refreshedAccessTokenValue = await accessInterface.refreshAccessToken()
+			const refreshedAccessTokenValue = await ClientAccessToken.refreshAccessToken()
 			const invalidRefreshedAccessTokenValue = !refreshedAccessTokenValue
 
 			if (invalidRefreshedAccessTokenValue) {
@@ -27,15 +24,14 @@ createAuthRefreshInterceptor(
 
 			return axios
 		} catch (error) {
-			const endpoint = '/api/auth/logout'
 			const logoutInstance = Axios.create()
 
 			if (process.env.NODE_ENV === 'development') {
 				console.error(error)
 			}
 
-			await logoutInstance.post(endpoint)
-			accessInterface.setAccessToken(null)
+			await logoutInstance.post('/api/auth/logout')
+			ClientAccessToken.setAccessToken(null)
 			window.localStorage.setItem('logout', Date.now())
 			Router.reload(window.location.pathname)
 
@@ -57,8 +53,7 @@ createAuthRefreshInterceptor(
  * dynamically to ensure a request is never referencing a stale access token.
  */
 axios.interceptors.request.use(async request => {
-	const accessInterface = clientAccessToken()
-	const accessToken = accessInterface.getAccessToken()
+	const accessToken = ClientAccessToken.getAccessToken()
 	if (accessToken) {
 		request.headers['Authorization'] = `Bearer ${accessToken}`
 	}

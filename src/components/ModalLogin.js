@@ -11,7 +11,7 @@ import { useTheme } from 'next-themes'
 import useAuth from '@/hooks/useAuth'
 import getWeb3Modal from '@/lib/web3Modal'
 import { personalSignMessage } from '@/lib/utilities'
-import clientAccessToken from '@/lib/client-access-token'
+import ClientAccessToken from '@/lib/client-access-token'
 import { captureException } from '@sentry/nextjs'
 
 export default function Modal({ isOpen }) {
@@ -45,8 +45,7 @@ export default function Modal({ isOpen }) {
 
 			if (isValidSignature) {
 				const accessToken = response?.data?.access
-				const accessInterface = clientAccessToken(accessToken)
-				accessInterface.setAccessToken(accessToken)
+				ClientAccessToken.setAccessToken(accessToken)
 			}
 
 			mixpanel.track('Login success - email')
@@ -87,8 +86,7 @@ export default function Modal({ isOpen }) {
 
 			if (isValidSignature) {
 				const accessToken = response?.data?.access
-				const accessInterface = clientAccessToken(accessToken)
-				accessInterface.setAccessToken(accessToken)
+				ClientAccessToken.setAccessToken(accessToken)
 			}
 
 			revalidate()

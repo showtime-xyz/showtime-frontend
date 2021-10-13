@@ -1,17 +1,16 @@
-import { useContext } from 'react'
-import AppContext from '@/context/app-context'
-import mixpanel from 'mixpanel-browser'
 import _ from 'lodash'
 import Tippy from '@tippyjs/react'
-import authAxios from '@/lib/authenticated-client-side-axios'
-import HeartIcon, { HeartIconSolid } from './Icons/HeartIcon'
-import clientAccessToken from '@/lib/client-access-token'
+import mixpanel from 'mixpanel-browser'
+import { useContext } from 'react'
 import { captureException } from '@sentry/nextjs'
 
-const accessInterface = clientAccessToken()
+import AppContext from '@/context/app-context'
+import authAxios from '@/lib/authenticated-client-side-axios'
+import HeartIcon, { HeartIconSolid } from './Icons/HeartIcon'
+import ClientAccessToken from '@/lib/client-access-token'
 
 const LikeButton = ({ item }) => {
-	const isAuthenticated = accessInterface.getAccessToken()
+	const isAuthenticated = ClientAccessToken.getAccessToken()
 
 	const context = useContext(AppContext)
 
@@ -25,8 +24,7 @@ const LikeButton = ({ item }) => {
 		})
 
 		try {
-			const endpoint = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v3/like/${nft_id}`
-			await authAxios.post(endpoint)
+			await authAxios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v3/like/${nft_id}`)
 			mixpanel.track('Liked item')
 		} catch (err) {
 			if (err.response.data.code === 429) {
@@ -63,9 +61,7 @@ const LikeButton = ({ item }) => {
 		})
 
 		try {
-			// Post changes to the API
-			const endpoint = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v3/unlike/${nft_id}`
-			await authAxios.post(endpoint)
+			await authAxios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v3/unlike/${nft_id}`)
 			mixpanel.track('Unliked item')
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {

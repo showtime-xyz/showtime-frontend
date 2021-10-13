@@ -10,7 +10,7 @@ import axios from '@/lib/axios'
 import { filterNewRecs } from '@/lib/utilities'
 import { ThemeProvider } from 'next-themes'
 import useAuth from '@/hooks/useAuth'
-import clientAccessToken from '@/lib/client-access-token'
+import ClientAccessToken from '@/lib/client-access-token'
 
 mixpanel.init('9b14512bc76f3f349c708f67ab189941')
 
@@ -188,17 +188,18 @@ const App = ({ Component, pageProps }) => {
 		}
 	}, [])
 
+	/**
+	 * Adds an event listener that when triggered
+	 * will force a logout across all tabs by clearing
+	 * the tabs access token and forcing a page refresh.
+	 */
 	useEffect(() => {
 		const syncClearAccessToken = async data => {
 			const logoutEvent = data.key === 'logout'
 
 			if (logoutEvent) {
-				try {
-					const accessInterface = clientAccessToken()
-					accessInterface.setAccessToken(null)
-				} finally {
-					router.reload(window.location.pathname)
-				}
+				ClientAccessToken.setAccessToken(null)
+				router.reload(window.location.pathname)
 			}
 		}
 
@@ -206,13 +207,12 @@ const App = ({ Component, pageProps }) => {
 	}, [])
 
 	/**
-	 * On initial application load refresh tokens. If not authenticated
-	 * this does not modify the application in any way.
+	 * On initial application load refresh tokens.
+	 * If not authenticated, the application won't be modified.
 	 */
 	useEffect(() => {
 		try {
-			const accessInterface = clientAccessToken()
-			accessInterface.refreshAccessToken()
+			ClientAccessToken.refreshAccessToken()
 		} catch (error) {
 			if (process.env.NODE_ENV === 'development') {
 				console.error(error)
@@ -227,10 +227,9 @@ const App = ({ Component, pageProps }) => {
 	 */
 	useEffect(() => {
 		const checkRefreshOnRouteChange = () => {
-			const accessInterface = clientAccessToken()
-			const hasAccessToken = accessInterface.getAccessToken()
-			if (!hasAccessToken) {
-				accessInterface.refreshAccessToken()
+			const missingAccessToken = !ClientAccessToken.getAccessToken()
+			if (missingAccessToken) {
+				ClientAccessToken.refreshAccessToken()
 			}
 		}
 
@@ -285,8 +284,7 @@ const App = ({ Component, pageProps }) => {
 		adjustGridProperties,
 		logOut: async () => {
 			await axios.post('/api/auth/logout')
-			const accessInterface = clientAccessToken()
-			accessInterface.setAccessToken(null)
+			ClientAccessToken.setAccessToken(null)
 			revalidate()
 			setUser(null)
 			setMyLikes([])
@@ -300,7 +298,7 @@ const App = ({ Component, pageProps }) => {
 			setMyProfile(undefined)
 			setWeb3(null)
 			mixpanel.track('Logout')
-			// to support logging out from all windows
+			// Triggers all event listeners for this key to fire. Used to force cross tab logout.
 			window.localStorage.setItem('logout', Date.now())
 		},
 	}
