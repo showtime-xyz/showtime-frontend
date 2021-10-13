@@ -46,6 +46,7 @@ export default function Modal({ isOpen }) {
 			if (isValidSignature) {
 				const accessToken = response?.data?.access
 				ClientAccessToken.setAccessToken(accessToken)
+				window.localStorage.setItem('login', Date.now())
 			}
 
 			mixpanel.track('Login success - email')
@@ -87,10 +88,11 @@ export default function Modal({ isOpen }) {
 			if (isValidSignature) {
 				const accessToken = response?.data?.access
 				ClientAccessToken.setAccessToken(accessToken)
+				window.localStorage.setItem('login', Date.now())
 			}
 
-			revalidate()
 			mixpanel.track('Login success - wallet signature')
+			revalidate()
 
 			if (!context?.user) context.getUserFromCookies()
 			context.setLoginModalOpen(false)

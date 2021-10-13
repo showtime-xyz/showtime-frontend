@@ -189,13 +189,18 @@ const App = ({ Component, pageProps }) => {
 	}, [])
 
 	/**
-	 * Adds an event listener that when triggered
-	 * will force a logout across all tabs by clearing
-	 * the tabs access token and forcing a page refresh.
+	 * Adds an event listener to manage tab persistance
+	 * will force a logout or login across all tabs by clearing
+	 * based on the triggered event.
 	 */
 	useEffect(() => {
-		const syncClearAccessToken = async data => {
+		const syncAcrossTabs = async data => {
+			const logInEvent = data.key === 'login'
 			const logoutEvent = data.key === 'logout'
+
+			if (logInEvent) {
+				router.reload(window.location.pathname)
+			}
 
 			if (logoutEvent) {
 				ClientAccessToken.setAccessToken(null)
@@ -203,7 +208,7 @@ const App = ({ Component, pageProps }) => {
 			}
 		}
 
-		window.addEventListener('storage', syncClearAccessToken)
+		window.addEventListener('storage', syncAcrossTabs)
 	}, [])
 
 	/**
