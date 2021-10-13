@@ -26,24 +26,28 @@ export default function Modal({ isOpen }) {
 			event.preventDefault()
 
 			const { elements } = event.target
+			const email = elements.email.value
 
 			// Magic Link authenticates through email
 			const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY)
-			await magic.auth.loginWithMagicLink({ email: elements.email.value })
+			const did = await magic.auth.loginWithMagicLink({ email })
 			const web3 = new ethers.providers.Web3Provider(magic.rpcProvider)
 			context.setWeb3(web3)
-			const user = await magic.user.getMetadata()
-			const address = user.publicAddress
 
-			const response_nonce = await backend.get(`/v1/getnonce?address=${address}`)
+			const response = await axios.post(
+				'/api/auth/login/magic',
+				{
+					email,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${did}`,
+					},
+				}
+			)
+			const isValidLogin = response.status === 200
 
-			const signature = await personalSignMessage(web3, process.env.NEXT_PUBLIC_SIGNING_MESSAGE + ' ' + response_nonce.data.data)
-
-			// Generate refresh/access token from Magic authenticated public address
-			const response = await axios.post('/api/auth/login/signature', { signature, address })
-			const isValidSignature = response.status === 200
-
-			if (isValidSignature) {
+			if (isValidLogin) {
 				const accessToken = response?.data?.access
 				ClientAccessToken.setAccessToken(accessToken)
 				window.localStorage.setItem('login', Date.now())
