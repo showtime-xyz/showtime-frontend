@@ -12,8 +12,6 @@ import { captureException } from '@sentry/nextjs'
  * is returned in the body.
  */
 export default handler().post(async (req, res) => {
-	const endpoint = '/v1/jwt/refresh'
-
 	try {
 		const sealedRefreshTokenCookie = CookieService.getRefreshToken(req.cookies)
 
@@ -23,7 +21,7 @@ export default handler().post(async (req, res) => {
 
 		const { refreshToken } = await Iron.unseal(sealedRefreshTokenCookie, process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
 
-		const refreshResponse = await backend.post(endpoint, {
+		const refreshResponse = await backend.post('/v1/jwt/refresh', {
 			refresh: refreshToken,
 		})
 

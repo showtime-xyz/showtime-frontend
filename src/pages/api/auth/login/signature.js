@@ -20,8 +20,8 @@ export default handler()
 			const msg = process.env.NEXT_PUBLIC_SIGNING_MESSAGE + ' ' + nonce
 
 			const loginResponse = await backend.post('/v1/login_wallet', {
-				address: address,
-				signature: signature,
+				address,
+				signature,
 			})
 
 			const accessToken = loginResponse?.data?.access
