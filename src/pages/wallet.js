@@ -128,7 +128,7 @@ const Wallet = () => {
 															<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-400">{ens_domain ? ens_domain : isMobile ? formatAddressShort(address) : address}</td>
 															<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{address.startsWith('tz') ? 'Tezos' : 'Ethereum'}</td>
 															<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-																{address.toLowerCase() === user?.publicAddress ? (
+																{address.toLowerCase() === user?.publicAddress.toLowerCase() ? (
 																	<span className="text-gray-600 dark:text-gray-500">Signed In</span>
 																) : (
 																	<button onClick={() => unlinkAddress(address)} className="text-red-600 hover:text-red-900 dark:hover:text-red-700 transition">
