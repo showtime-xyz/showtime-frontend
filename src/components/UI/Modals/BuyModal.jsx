@@ -7,7 +7,7 @@ import marketplaceAbi from '@/data/ERC1155Sale.json'
 import PolygonIcon from '@/components/Icons/PolygonIcon'
 import { useRef, useState, Fragment, useEffect } from 'react'
 import { useTheme } from 'next-themes'
-import ierc20Abi from '@/data/IERC20.json'
+import iercPermit20Abi from '@/data/IERC20Permit.json'
 import useProfile from '@/hooks/useProfile'
 import { ExclamationIcon } from '@heroicons/react/outline'
 import XIcon from '@/components/Icons/XIcon'
@@ -87,7 +87,7 @@ const BuyModal = ({ open, onClose, token }) => {
 		const provider = biconomy.getEthersProvider()
 
 		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT, marketplaceAbi, biconomy.getSignerByAddress(signerAddress))
-		const ercContract = new ethers.Contract(LIST_CURRENCIES[token.listing.currency], ierc20Abi, biconomy.getSignerByAddress(signerAddress))
+		const ercContract = new ethers.Contract(LIST_CURRENCIES[token.listing.currency], iercPermit20Abi, biconomy.getSignerByAddress(signerAddress))
 
 		if ((await ercContract.allowance(signerAddress, process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT)) < token.listing.min_price) {
 			const { data } = await ercContract.populateTransaction.approve(process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT, SOL_MAX_INT)
