@@ -83,7 +83,7 @@ export default function NotificationsBtn() {
 						</span>
 					</Popover.Button>
 					<Transition show={open} as={Fragment} enter="transition ease-out duration-200" enterFrom="transform opacity-0" enterTo="transform opacity-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100" leaveTo="transform opacity-0">
-						<button className="bg-white dark:bg-black bg-opacity-90 dark:bg-opacity-90 w-full h-screen fixed inset-x-0 top-[2.9rem] z-10 focus:outline-none md:hidden" />
+						<button className="bg-white dark:bg-black bg-opacity-90 dark:bg-opacity-90 w-full h-screen fixed inset-x-0 top-[3.5rem] z-10 focus:outline-none md:hidden" />
 					</Transition>
 					<Transition as={Fragment} enter="transition ease-out duration-200" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
 						<Popover.Panel className={'text-black dark:text-gray-200 absolute text-center top-[3.1rem] md:top-10 right-0 z-20 w-full md:min-w-[25rem]'}>
