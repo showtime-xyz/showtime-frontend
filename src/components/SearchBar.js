@@ -130,7 +130,7 @@ const SearchBar = ({ propagateSearchState }) => {
 			</div>
 			{/* Start overlay menu */}
 			{isMobileSearchOverlayOpen && (
-				<div className="visible flex flex-col bg-transparent flex-1 z-1">
+				<div className="visible flex flex-col bg-transparent flex-1 z-1 py-2">
 					<div className="flex items-center">
 						<div className="flex relative w-full" ref={searchInputContainerRef}>
 							<div className="flex absolute z-1 left-4 top-[12px] transform -translate-y-2.5 -translate-x-1 mr-3 text-black dark:text-gray-200 focus:-mt-px" isFocused={searchInputFocused}>
