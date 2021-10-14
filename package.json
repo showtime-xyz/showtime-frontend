@@ -38,7 +38,7 @@
         "canvas-confetti": "^1.4.0",
         "copy-to-clipboard": "^3.3.1",
         "croppie": "^2.6.5",
-        "date-fns": "^2.23.0",
+        "date-fns": "^2.25.0",
         "elliptic": "^6.5.4",
         "emoji-mart": "^3.0.1",
         "eth-provider": "^0.9.4",
