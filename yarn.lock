@@ -1939,7 +1939,7 @@
   resolved "https://registry.yarnpkg.com/@web3-react/types/-/types-6.0.7.tgz#34a6204224467eedc6123abaf55fbb6baeb2809f"
   integrity sha512-ofGmfDhxmNT1/P/MgVa8IKSkCStFiyvXe+U5tyZurKdrtTDFU+wJ/LxClPDtFerWpczNFPUSrKcuhfPX1sI6+A==
 
-"@web3-react/walletconnect-connector@^6.1.6":
+"@web3-react/walletconnect-connector@^6.2.4":
   version "6.2.4"
   resolved "https://registry.yarnpkg.com/@web3-react/walletconnect-connector/-/walletconnect-connector-6.2.4.tgz#0a128699fc93ddac885935f4aeca32925f6285f0"
   integrity sha512-IEVjCXrlcfVa6ggUBEyKtLRaLQuZGtT2lGuzOFtdbJJkN84u1++pzzeDrcsVhKAoS5wq33zyJT9baEbG1Aed8g==
@@ -11639,10 +11639,10 @@ use-subscription@1.5.1:
   dependencies:
     object-assign "^4.1.1"
 
-use-wallet@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/use-wallet/-/use-wallet-0.10.0.tgz#d65ca2557b196b1ac671de9a14cb2f57c5d8d71d"
-  integrity sha512-5/us1Wi6DnawIXU5Pkbytam0uG9f0QfWedGVBrWzYAgPrEphzg6mx+c6RH3jvxiEZ6jyK3kOG7S6t3FXLrZuyA==
+use-wallet@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/use-wallet/-/use-wallet-0.11.0.tgz#ab0d8c7d1b804ba53b29e5c83e30a10e935307bd"
+  integrity sha512-+Teau5CiX4ig5xtWgPL4YoXIEXTjzNk7jEsfHR9cbw2GwtbZbs6nYgTmE6KoRNIPbFon5zdIf0pBsZJK0QgxNA==
   dependencies:
     "@aragon/provided-connector" "^6.0.8"
     "@typescript-eslint/parser" "^4.1.0"
@@ -11653,7 +11653,7 @@ use-wallet@^0.10.0:
     "@web3-react/ledger-connector" "^6.1.9"
     "@web3-react/portis-connector" "^6.1.6"
     "@web3-react/torus-connector" "^6.1.7"
-    "@web3-react/walletconnect-connector" "^6.1.6"
+    "@web3-react/walletconnect-connector" "^6.2.4"
     "@web3-react/walletlink-connector" "^6.1.6"
     jsbi "^3.1.4"
     prop-types "^15.7.2"
