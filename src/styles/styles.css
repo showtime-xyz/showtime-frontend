@@ -19,6 +19,12 @@
 @tailwind utilities;
 
 @layer utilities {
+    @responsive {
+        .fill-gold {
+            fill: url(#paint0_linear);
+        }
+    }
+
     @variants dark {
         .border-t-gray-800 {
             border-top-color: theme('colors.gray.800');

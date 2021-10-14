@@ -17,8 +17,7 @@ import MiniFollowButton from './MiniFollowButton'
 import useProfile from '@/hooks/useProfile'
 import OrbitIcon from './Icons/OrbitIcon'
 import { CHAIN_IDENTIFIERS } from '../lib/constants'
-import showtimeLogo from '@/../public/img/logo_sm.png'
-import Image from 'next/image'
+import ShowtimeIcon from './Icons/ShowtimeIcon'
 import Tippy from '@tippyjs/react'
 
 const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, setTransferModal, setBurnModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
@@ -92,7 +91,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 
 	return (
 		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
-			<div ref={divRef} className={`w-full h-full shadow-lg hover:shadow-xl md:rounded-2xl transition-all duration-300 transform hover:translate-y-[-2px] flex flex-col bg-white dark:bg-gray-900 ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border-t border-b md:border-l md:border-r border-transparent dark:border-gray-800'}`}>
+			<div ref={divRef} className={`w-full h-full shadow-lg hover:shadow-xl md:rounded-2xl transition-all duration-300 transform hover:translate-y-[-2px] flex flex-col bg-white dark:bg-black ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border-t border-b md:border-l md:border-r border-transparent dark:border-gray-700'}`}>
 				<div ref={item.imageRef} className="p-4 relative">
 					<div className="flex items-center justify-between">
 						<div className="pr-2">
@@ -101,7 +100,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 									<a className="flex flex-row items-center space-x-2">
 										<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
 										<div>
-											<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Created by</span>
+											<span className="text-xs font-medium text-gray-600 dark:text-gray-400">Created by</span>
 											<div className="text-sm font-semibold truncate -mt-0.5 dark:text-gray-200">{truncateWithEllipses(item.collection_name + ' Collection', 30)}</div>
 										</div>
 									</a>
@@ -111,10 +110,10 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 									<a className="flex flex-row items-center space-x-2">
 										<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
 										<div>
-											<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Created by</span>
+											<span className="text-xs font-medium text-gray-600 dark:text-gray-400">Created by</span>
 											<div className="flex items-center space-x-1 -mt-0.5">
 												<div className="text-sm font-semibold truncate dark:text-gray-200">{item.creator_name === item.creator_address ? formatAddressShort(item.creator_address) : truncateWithEllipses(item.creator_name, 22)}</div>
-												{item.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+												{item.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
 											</div>
 										</div>
 									</a>
@@ -126,12 +125,12 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 							{myProfile?.profile_id !== item.creator_id && !item.contract_is_creator && item.creator_id && <MiniFollowButton profileId={item.creator_id} />}
 							<Menu as="div" className="relative">
 								{isMyProfile && listId !== 3 ? (
-									<Menu.Button className="text-right text-gray-600 focus:outline-none rounded-xl relative hover:bg-gray-100 dark:hover:bg-gray-800 focus-visible:bg-gray-100 dark:focus-visible:bg-gray-800 py-2 -my-2 px-2 -mx-2 transition">
+									<Menu.Button className="text-right text-gray-600 dark:text-white focus:outline-none rounded-full relative hover:bg-gray-100 dark:hover:bg-gray-800 focus-visible:bg-gray-100 dark:focus-visible:bg-gray-800 py-2 -my-2 px-2 -mx-2 transition">
 										<EllipsisIcon className="w-5 h-5" />
 									</Menu.Button>
 								) : null}
 								<Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-									<Menu.Items className="z-1 absolute right-0 mt-2 origin-top-right border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg rounded-xl p-2 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+									<Menu.Items className="z-1 absolute right-0 mt-2 origin-top-right border border-transparent dark:border-gray-700 bg-white dark:bg-black shadow-lg rounded-xl p-2 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
 										<Menu.Item>
 											{({ active }) => (
 												<button
@@ -139,7 +138,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 														mixpanel.track('Clicked Spotlight Item')
 														changeSpotlightItem(item)
 													}}
-													className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}
+													className={classNames(active ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-white', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}
 												>
 													<span className="block truncate font-medium">Spotlight Item</span>
 												</button>
@@ -147,14 +146,14 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 										</Menu.Item>
 										<Menu.Item>
 											{({ active }) => (
-												<button onClick={item.user_hidden ? handleUnhide : handleHide} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+												<button onClick={item.user_hidden ? handleUnhide : handleHide} className={classNames(active ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-white', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
 													<span className="block truncate font-medium">{item.user_hidden ? `Unhide From ${listId === 1 ? 'Created' : listId === 2 ? 'Owned' : listId === 3 ? 'Liked' : 'List'}` : `Hide From ${listId === 1 ? 'Created' : listId === 2 ? 'Owned' : listId === 3 ? 'Liked' : 'List'}`}</span>
 												</button>
 											)}
 										</Menu.Item>
 										<Menu.Item>
 											{({ active }) => (
-												<button onClick={handleRefreshNFTMetadata} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+												<button onClick={handleRefreshNFTMetadata} className={classNames(active ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-white', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
 													<span className="block truncate font-medium">Refresh Metadata</span>
 												</button>
 											)}
@@ -163,7 +162,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 											<>
 												<Menu.Item>
 													{({ active }) => (
-														<button onClick={() => setTransferModal(item)} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+														<button onClick={() => setTransferModal(item)} className={classNames(active ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-white', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
 															<span className="block truncate font-medium">Transfer</span>
 														</button>
 													)}
@@ -172,7 +171,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 
 												<Menu.Item>
 													{({ active }) => (
-														<button onClick={() => setBurnModal(item)} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-red-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+														<button onClick={() => setBurnModal(item)} className={classNames(active ? 'text-gray-900 dark:text-white bg-red-100 dark:bg-gray-800' : 'text-gray-900 dark:text-white', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
 															<span className="block truncate font-medium text-red-500 dark:text-red-700">Burn</span>
 														</button>
 													)}
@@ -421,7 +420,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 
 				<div className="p-4">
 					<div>
-						<div className="flex items-center !space-x-1">
+						<div className="flex items-center !space-x-1.5">
 							<p
 								onClick={() => {
 									mixpanel.track('Open NFT modal')
@@ -438,7 +437,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 							{SHOWTIME_CONTRACTS.includes(item.contract_address) && (
 								<Tippy content="Created on Showtime">
 									<div className="flex items-center justify-center">
-										<Image src={showtimeLogo} width={20} height={20} className="rounded-full" />
+										<ShowtimeIcon className="w-5 h-5 rounded-full fill-gold" />
 									</div>
 								</Tippy>
 							)}
@@ -475,7 +474,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 													<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
 													<div className="flex items-center space-x-1 -mt-0.5">
 														<div className="text-sm font-semibold truncate dark:text-gray-200">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
-														{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+														{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
 														<div className="text-gray-500 text-sm mr-2 -ml-1 mt-px">
 															&amp; {item.owner_count - 1} other
 															{item.owner_count - 1 > 1 ? 's' : null}
@@ -497,7 +496,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
 												<div className="flex items-center space-x-1 -mt-0.5">
 													<div className="text-sm font-semibold truncate dark:text-gray-200">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
-													{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+													{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
 												</div>
 											</div>
 										</a>

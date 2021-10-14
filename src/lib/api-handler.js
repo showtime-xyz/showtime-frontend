@@ -1,9 +1,10 @@
 import nc from 'next-connect'
-import { withSentry } from '@sentry/nextjs'
+import { withSentry, captureException } from '@sentry/nextjs'
 import Iron from '@hapi/iron'
 import CookieService from '@/lib/cookie'
 import { flagDefs } from '@/hooks/useFlags'
 import backend from './backend'
+import jwt_decode from 'jwt-decode'
 
 export default () =>
 	nc({
@@ -23,16 +24,36 @@ export default () =>
 	})
 		.use((req, res, next) => withSentry(next)(req, res))
 		.use(async (req, _, next) => {
-			await Iron.unseal(CookieService.getAuthToken(req.cookies), process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
-				.then(user => (req.user = user))
-				.catch(() => null)
+			// TODO: This entire use-case will be deprecated once full JWT is implemented.
+			try {
+				const sealedRefreshTokenCookie = CookieService.getRefreshToken(req.cookies)
+				if (sealedRefreshTokenCookie) {
+					const { refreshToken } = await Iron.unseal(sealedRefreshTokenCookie, process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+					const decodedRefreshToken = jwt_decode(refreshToken)
+					const hasAddress = decodedRefreshToken?.address
+					// TODO: Will be swapped for client side access token
+					req.user = hasAddress ? { publicAddress: decodedRefreshToken.address } : undefined
+				}
+			} catch (error) {
+				if (process.env.NODE_ENV === 'development') {
+					console.error(error)
+				}
+				//TODO: update this in notion
+				captureException(error, {
+					tags: {
+						refresh_token: 'api-handler.js',
+					},
+				})
+			}
 
 			next()
 		})
 
 export const middleware = {
-	auth: ({ user }, res, next) => {
-		if (!user) return res.status(401).json({ error: 'Unauthenticated.' })
+	auth: async (req, res, next) => {
+		// The line 74 code will continue to work because we patched the above middleware. This middleware will ago away alongside it.
+
+		if (!req.user) return res.status(401).json({ error: 'Unauthenticated.' })
 
 		next()
 	},

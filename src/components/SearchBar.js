@@ -70,13 +70,13 @@ const SearchBar = ({ propagateSearchState }) => {
 			{/* Start desktop-only menu */}
 			<div className="hidden flex-col relative w-full max-w-3xl md:flex pr-1">
 				<div className="flex relative w-full" ref={searchInputContainerRef}>
-					<div className="absolute left-2.5 top-2 transform translate-y-px pointer-events-none z-1">
+					<div className="absolute left-3 top-2.5 transform translate-y-px pointer-events-none z-1">
 						<SearchIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
 					</div>
 					<input
-						className="flex placeholder-gray-500 dark:placeholder-gray-400 dark:text-gray-300 bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150 px-2 pl-8 py-2 rounded-full focus:outline-none text-sm w-full"
+						className="flex border border-gray-300 dark:border-gray-700 text-gray-500 placeholder-gray-500 dark:text-gray-400 dark:placeholder-gray-400 bg-gray-100 dark:bg-gray-900 px-2 pl-10 py-2 rounded-full focus:outline-none text-sm font-medium w-full"
 						type="text"
-						placeholder="Search by name or wallet address"
+						placeholder="Search by name or wallet"
 						value={searchText}
 						onFocus={() => {
 							setShowSearchResults(true)
@@ -130,7 +130,7 @@ const SearchBar = ({ propagateSearchState }) => {
 			</div>
 			{/* Start overlay menu */}
 			{isMobileSearchOverlayOpen && (
-				<div className="visible flex flex-col bg-transparent flex-1 z-1">
+				<div className="visible flex flex-col bg-transparent flex-1 z-1 py-2">
 					<div className="flex items-center">
 						<div className="flex relative w-full" ref={searchInputContainerRef}>
 							<div className="flex absolute z-1 left-4 top-[12px] transform -translate-y-2.5 -translate-x-1 mr-3 text-black dark:text-gray-200 focus:-mt-px" isFocused={searchInputFocused}>
@@ -139,7 +139,7 @@ const SearchBar = ({ propagateSearchState }) => {
 							<input
 								className="text-sm flex placeholder-gray-500 dark:placeholder-gray-400 dark:text-gray-300 bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-10 backdrop-filter backdrop-blur-lg backdrop-saturate-150 py-1.5 -my-1.5 px-1 rounded-full w-full pl-10 focus-visible:ring-1 ring-gray-300 dark:ring-gray-800 focus:outline-none"
 								type="text"
-								placeholder="Search by name or wallet address"
+								placeholder="Search by name or wallet"
 								value={searchText}
 								onFocus={() => {
 									setShowSearchResults(true)

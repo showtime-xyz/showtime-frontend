@@ -6,11 +6,11 @@ import { formatDistanceToNowStrict } from 'date-fns'
 import { getNotificationInfo, DEFAULT_PROFILE_PIC, CHAIN_IDENTIFIERS } from '@/lib/constants'
 import ModalUserList from '@/components/ModalUserList'
 import axios from '@/lib/axios'
-import ZapIcon from './Icons/ZapIcon'
 import { Popover, Transition } from '@headlessui/react'
 import { useSWRInfinite } from 'swr'
 import useAuth from '../hooks/useAuth'
 import useProfile from '@/hooks/useProfile'
+import BellIcon from '@/components/Icons/BellIcon'
 
 const NOTIFICATIONS_PER_PAGE = 7
 
@@ -19,6 +19,14 @@ const iconObjects = {
 	heart: faHeart,
 	user: faUser,
 	at: faAt,
+}
+
+const NOTIFICATION_TYPES = {
+	FOLLOWED: [1],
+	LIKED: [2, 3],
+	COMMENT: [4, 5],
+	COMMENT_MENTION: [6],
+	COMMENT_LIKE: [7],
 }
 
 export default function NotificationsBtn() {
@@ -65,17 +73,17 @@ export default function NotificationsBtn() {
 	}, [myProfile, myProfile?.notifications_last_opened, notifs])
 
 	return (
-		<Popover className="md:relative">
+		<Popover className="md:relative flex items-center justify-center">
 			{({ open }) => (
 				<>
-					<Popover.Button data-close-notifs className="dark:text-gray-300 transition-all rounded-full cursor-pointer relative h-6 w-6 focus:outline-none">
+					<Popover.Button data-close-notifs className={`dark:text-white transition rounded-full cursor-pointer relative h-6 w-6 box-content focus:outline-none ${open ? 'bg-gray-100 dark:bg-gray-900' : 'hover:bg-gray-100 dark:hover:bg-gray-900'} p-2 -m-2`}>
 						<span onClick={open ? null : handlePanelOpen} className="flex items-center justify-center">
-							<ZapIcon className="w-5 h-5" />
-							{hasUnreadNotifications && <div className="bg-red-500 absolute h-2 w-2 top-0 right-0 rounded-full" />}
+							<BellIcon className="w-6 h-6" />
+							{hasUnreadNotifications && <div className="bg-violet-500 absolute h-2 w-2 top-1.5 right-2.5 rounded-full" />}
 						</span>
 					</Popover.Button>
 					<Transition show={open} as={Fragment} enter="transition ease-out duration-200" enterFrom="transform opacity-0" enterTo="transform opacity-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100" leaveTo="transform opacity-0">
-						<button className="bg-white dark:bg-black bg-opacity-90 dark:bg-opacity-90 w-full h-screen fixed inset-x-0 top-[2.9rem] z-10 focus:outline-none md:hidden" />
+						<button className="bg-white dark:bg-black bg-opacity-90 dark:bg-opacity-90 w-full h-screen fixed inset-x-0 top-[3.5rem] z-10 focus:outline-none md:hidden" />
 					</Transition>
 					<Transition as={Fragment} enter="transition ease-out duration-200" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
 						<Popover.Panel className={'text-black dark:text-gray-200 absolute text-center top-[3.1rem] md:top-10 right-0 z-20 w-full md:min-w-[25rem]'}>
@@ -173,11 +181,11 @@ export default function NotificationsBtn() {
 																</>
 															) : null}
 															<span className="text-gray-500">
-																{[2, 3].includes(notif.type_id) ? 'liked ' : null}
-																{[1].includes(notif.type_id) ? 'followed you' : null}
-																{[4, 5].includes(notif.type_id) ? 'commented on ' : null}
-																{[6].includes(notif.type_id) ? 'mentioned you in ' : null}
-																{[7].includes(notif.type_id) ? 'liked your comment on ' : null}
+																{NOTIFICATION_TYPES.LIKED.includes(notif.type_id) ? 'liked ' : null}
+																{NOTIFICATION_TYPES.FOLLOWED.includes(notif.type_id) ? 'followed you' : null}
+																{NOTIFICATION_TYPES.COMMENT.includes(notif.type_id) ? 'commented on ' : null}
+																{NOTIFICATION_TYPES.COMMENT_MENTION.includes(notif.type_id) ? 'mentioned you in ' : null}
+																{NOTIFICATION_TYPES.COMMENT_LIKE.includes(notif.type_id) ? 'liked your comment on ' : null}
 															</span>
 															{notif.nft__nftdisplay__name ? (
 																<Link href="/t/[...token]" as={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == notif.chain_identifier)}/${notif.nft__contract__address}/${notif.nft__token_identifier}`}>

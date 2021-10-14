@@ -557,19 +557,19 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 					<meta name="description" content="Explore crypto art I've created, owned, and liked" />
 					<meta property="og:type" content="website" />
 					<meta name="og:description" content="Explore crypto art I've created, owned, and liked" />
-					<meta property="og:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : DEFAULT_PROFILE_PIC} />
+					<meta property="og:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : 'https://cdn.tryshowtime.com/twitter_card.jpg'} />
 					<meta name="og:title" content={name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'} />
 
 					<meta name="twitter:card" content="summary_large_image" />
 					<meta name="twitter:title" content={name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'} />
 					<meta name="twitter:description" content="Explore crypto art I've created, owned, and liked" />
-					<meta name="twitter:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : DEFAULT_PROFILE_PIC} />
+					<meta name="twitter:image" content={featured_nft_img_url ? featured_nft_img_url : img_url ? img_url : 'https://cdn.tryshowtime.com/twitter_card.jpg'} />
 				</Head>
 
-				<div className="bg-white dark:bg-gray-900 pb-8">
-					<div className={`h-32 md:h-64 relative text-left bg-gradient-to-b from-black dark:from-gray-400 to-gray-800 dark:to-gray-100 ${cover_url ? 'bg-no-repeat bg-center bg-cover' : ''}`} style={cover_url ? { backgroundImage: `url(${getCoverUrl(cover_url)})` } : {}}>
-						{isMyProfile && (
-							<CappedWidth>
+				<div className="bg-white dark:bg-black pb-8">
+					<div className="max-w-screen-2xl md:px-3 mx-auto w-full">
+						<div className={`h-32 md:h-64 relative text-left bg-gray-50 dark:bg-gray-900 2xl:rounded-b-[32px] md:-mx-3 ${cover_url ? 'bg-no-repeat bg-center bg-cover' : ''}`} style={cover_url ? { backgroundImage: `url(${getCoverUrl(cover_url)})` } : {}}>
+							{isMyProfile && (
 								<div className="relative">
 									<div
 										className="absolute top-6 right-5 2xl:right-5 text-gray-200 text-sm cursor-pointer bg-gray-900 bg-opacity-50 backdrop-filter backdrop-blur-lg backdrop-saturate-150 py-1 px-3 rounded-full hover:bg-opacity-60 flex items-center"
@@ -584,15 +584,15 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 										<span>Cover</span>
 									</div>
 								</div>
-							</CappedWidth>
-						)}
+							)}
+						</div>
 					</div>
 					<CappedWidth>
-						<div className="mx-5">
+						<div className="mx-5 md:mx-0 lg:mx-5">
 							<div className="flex flex-col text-left">
 								<div className="z-10 pb-2 flex items-center justify-between">
 									<div className="flex items-center">
-										<div className="relative -mt-14 md:-mt-20 rounded-full border-8 border-white dark:border-gray-900 overflow-hidden group self-start">
+										<div className="relative -mt-14 md:-mt-20 rounded-full border-8 border-white dark:border-gray-900 overflow-hidden group self-start flex-shrink-0">
 											<img
 												onClick={() => {
 													if (isMyProfile) {
@@ -601,7 +601,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 													}
 												}}
 												src={img_url ? img_url : DEFAULT_PROFILE_PIC}
-												className="h-24 w-24 md:h-32 md:w-32 z-10"
+												className="h-24 w-24 md:h-32 md:w-32 z-10 flex-shrink-0"
 											/>
 											{isMyProfile && (
 												<button onClick={editPhoto} className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 bg-black bg-opacity-20 backdrop-filter backdrop-blur-lg backdrop-saturate-150 transition duration-300 flex items-center justify-center rounded-full">
@@ -611,14 +611,14 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 										</div>
 										<div className="hidden md:block">{wallet_addresses_excluding_email_v2 && <AddressCollection addresses={wallet_addresses_excluding_email_v2} isMyProfile={isMyProfile} />}</div>
 									</div>
-									<div className="flex items-center space-x-8">
+									<div className="flex items-center space-x-8 md:space-x-4 lg:space-x-8">
 										<div className="hidden md:block">
 											<FollowStats {...{ following_count, followersCount, isMyProfile, setShowFollowing, setShowFollowers }} />
 										</div>
 										<div className="flex items-center space-x-2">
 											<Button style={isMyProfile ? 'tertiary_gray' : isFollowed ? 'tertiary' : 'primary'} onClick={isAuthenticated ? (isMyProfile ? editAccount : isFollowed ? handleUnfollow : context.disableFollows ? null : handleFollow) : handleLoggedOutFollow} className={`space-x-2 ${isFollowed || isMyProfile ? 'dark:text-gray-400' : 'text-white'}`}>
 												{isMyProfile ? (
-													<span className="font-semibold">Edit Profile</span>
+													<span className="font-semibold whitespace-nowrap">Edit Profile</span>
 												) : isFollowed ? (
 													<span className="font-semibold">Following</span>
 												) : (
@@ -637,7 +637,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 											<div>
 												<div className="flex items-center space-x-2">
 													<h2 className={`text-3xl md:text-4xl font-tomato font-bold text-black dark:text-white ${verified ? 'whitespace-nowrap' : ''}`}>{name ? name : username ? username : wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0 ? (wallet_addresses_excluding_email_v2[0].ens_domain ? wallet_addresses_excluding_email_v2[0].ens_domain : formatAddressShort(wallet_addresses_excluding_email_v2[0].address)) : 'Unnamed'}</h2>
-													{verified && <BadgeIcon className="w-5 md:w-6 h-auto text-black dark:text-white" bgClass="text-white dark:text-black" />}
+													{verified && <BadgeIcon className="w-5 md:w-6 h-auto text-black dark:text-white" tickClass="text-white dark:text-black" />}
 												</div>
 												<div className="mt-2 flex items-center space-x-2">
 													{(username || (wallet_addresses_excluding_email_v2 && wallet_addresses_excluding_email_v2.length > 0)) && <p className="flex flex-row items-center justify-start">{username && <span className="font-tomato font-bold tracking-wider dark:text-gray-300">@{username}</span>}</p>}
@@ -862,14 +862,14 @@ const FollowStats = ({ following_count, followersCount, isMyProfile, setShowFoll
 	const context = useContext(AppContext)
 
 	return (
-		<div className="flex items-center space-x-6">
+		<div className="flex items-center space-x-6 md:space-x-4 lg:space-x-6">
 			<button className="cursor-pointer hover:opacity-80 transition" onClick={() => setShowFollowing(true)}>
-				<div className="text-sm mr-2 dark:text-gray-300">
+				<div className="text-sm dark:text-gray-300 whitespace-nowrap">
 					<span className="font-semibold">{Number(isMyProfile && context.myFollows ? context.myFollows.length : following_count).toLocaleString()}</span> following
 				</div>
 			</button>
 			<button className="cursor-pointer hover:opacity-80 transition" onClick={() => setShowFollowers(true)}>
-				<div className="text-sm mr-2 dark:text-gray-300">
+				<div className="text-sm dark:text-gray-300 whitespace-nowrap">
 					<span className="font-semibold">{Number(followersCount).toLocaleString()}</span> followers
 				</div>
 			</button>
