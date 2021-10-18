@@ -41,8 +41,6 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 
 	const { isMobile } = useContext(AppContext)
 
-	console.log(item)
-
 	const handleRefreshNFTMetadata = async () => {
 		mixpanel.track('Clicked refresh metadata')
 		setRefreshing(true)

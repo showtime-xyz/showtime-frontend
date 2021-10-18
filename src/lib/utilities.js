@@ -1,4 +1,4 @@
-import { CONTRACTS } from './constants'
+import { CONTRACTS, SOL_MAX_INT } from './constants'
 import removeMd from 'remove-markdown'
 
 export const classNames = (...classes) => {
@@ -193,4 +193,35 @@ export const buildFormData = data => {
 
 export const personalSignMessage = async (web3, message) => {
 	return web3.getSigner().provider.send('personal_sign', [message, await web3.getSigner().getAddress()])
+}
+
+export const signTokenPermit = async (web3, tokenAddr) => {
+	const permit = {
+		holder: await web3.getSigner().getAddress(),
+		spender: process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
+		value: SOL_MAX_INT,
+		nonce: 1,
+		deadline: Date.now() + 120,
+	}
+
+	const signature = await web3.getSigner()._signTypedData(
+		{
+			name: 'Test Token',
+			version: '1',
+			chainId: 80001,
+			verifyingContract: tokenAddr,
+		},
+		{
+			Permit: [
+				{ name: 'holder', type: 'address' },
+				{ name: 'spender', type: 'address' },
+				{ name: 'value', type: 'uint256' },
+				{ name: 'nonce', type: 'uint256' },
+				{ name: 'deadline', type: 'uint256' },
+			],
+		},
+		permit
+	)
+
+	return { holder: permit.holder, nonce: permit.nonce, deadline: permit.deadline, tokenAddr, signature }
 }

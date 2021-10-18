@@ -17,6 +17,8 @@ export default handler()
 		// If it checks out, save to a cookie
 		const msg = process.env.NEXT_PUBLIC_SIGNING_MESSAGE + ' ' + nonce
 
+		console.log(verifyMessage(msg, signature).toLowerCase(), address.toLowerCase())
+
 		if (verifyMessage(msg, signature).toLowerCase() === address.toLowerCase()) {
 			CookieService.setTokenCookie(res, await Iron.seal({ publicAddress: address.toLowerCase() }, process.env.ENCRYPTION_SECRET_V2, Iron.defaults))
 

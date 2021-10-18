@@ -12,10 +12,11 @@ import useProfile from '@/hooks/useProfile'
 import { ExclamationIcon } from '@heroicons/react/outline'
 import XIcon from '@/components/Icons/XIcon'
 import { DEFAULT_PROFILE_PIC, LIST_CURRENCIES, SOL_MAX_INT } from '@/lib/constants'
-import { formatAddressShort, truncateWithEllipses } from '@/lib/utilities'
+import { formatAddressShort, signTokenPermit, truncateWithEllipses } from '@/lib/utilities'
 import BadgeIcon from '@/components/Icons/BadgeIcon'
 import confetti from 'canvas-confetti'
 import Link from 'next/link'
+import axios from '@/lib/axios'
 
 const MODAL_PAGES = {
 	GENERAL: 'general',
@@ -79,6 +80,12 @@ const BuyModal = ({ open, onClose, token }) => {
 			throw setModalPage(MODAL_PAGES.GENERAL)
 		})
 		const signerAddress = await web3.getSigner().getAddress()
+
+		const response = await axios.post('/api/marketplace/permit', await signTokenPermit(web3, LIST_CURRENCIES[token.listing.currency])).then(res => res.data)
+
+		console.log(response)
+
+		return setModalPage(MODAL_PAGES.GENERAL)
 
 		if (!myProfile?.wallet_addresses_v2?.map(({ address }) => address.toLowerCase())?.includes(signerAddress.toLowerCase())) {
 			return setModalPage(MODAL_PAGES.CHANGE_WALLET)
