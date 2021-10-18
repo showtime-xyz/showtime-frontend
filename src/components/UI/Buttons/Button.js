@@ -29,7 +29,7 @@ export const BaseButton = forwardRef((props, ref) => {
 
 BaseButton.displayName = 'BaseButton'
 
-export const PrimaryButton = ({ className, iconOnly, ...props }) => <BaseButton {...props} className={`border border-transparent dark:border-white bg-black text-white font-semibold shadow-lg flex items-center ${iconOnly ? 'p-2 rounded-xl' : 'px-4 py-2 rounded-2xl'} disabled:opacity-40 disabled:cursor-not-allowed ${className}`} />
+export const PrimaryButton = ({ className, iconOnly, ...props }) => <BaseButton {...props} className={`border-2 border-transparent dark:border-white bg-black text-white font-medium flex items-center ${iconOnly ? 'p-2 rounded-xl' : 'px-4 py-2 rounded-2xl'} disabled:opacity-40 disabled:cursor-not-allowed ${className}`} />
 
 PrimaryButton.displayName = 'PrimaryButton'
 

@@ -10,6 +10,7 @@ import axios from '@/lib/axios'
 import { filterNewRecs } from '@/lib/utilities'
 import { ThemeProvider } from 'next-themes'
 import useAuth from '@/hooks/useAuth'
+import ClientAccessToken from '@/lib/client-access-token'
 
 mixpanel.init('9b14512bc76f3f349c708f67ab189941')
 
@@ -187,6 +188,63 @@ const App = ({ Component, pageProps }) => {
 		}
 	}, [])
 
+	/**
+	 * Adds an event listener to manage tab persistance
+	 * will force a logout or login across all tabs by clearing
+	 * based on the triggered event.
+	 */
+	useEffect(() => {
+		const syncAcrossTabs = async data => {
+			const logInEvent = data.key === 'login'
+			const logoutEvent = data.key === 'logout'
+
+			if (logInEvent) {
+				router.reload(window.location.pathname)
+			}
+
+			if (logoutEvent) {
+				ClientAccessToken.setAccessToken(null)
+				router.reload(window.location.pathname)
+			}
+		}
+
+		window.addEventListener('storage', syncAcrossTabs)
+	}, [])
+
+	/**
+	 * On initial application load refresh tokens.
+	 * If not authenticated, the application won't be modified.
+	 */
+	useEffect(() => {
+		try {
+			ClientAccessToken.refreshAccessToken()
+		} catch (error) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error(error)
+			}
+		}
+	}, [])
+
+	/**
+	 * Route change event to refresh access token that will only initiate
+	 * a refresh if the access token is not set as is the case when a user
+	 * signs into the application from tab A while tab B is also on showtime.
+	 */
+	useEffect(() => {
+		const checkRefreshOnRouteChange = () => {
+			const missingAccessToken = !ClientAccessToken.getAccessToken()
+			if (missingAccessToken) {
+				ClientAccessToken.refreshAccessToken()
+			}
+		}
+
+		router.events.on('routeChangeStart', checkRefreshOnRouteChange)
+
+		return () => {
+			router.events.off('routeChangeStart', checkRefreshOnRouteChange)
+		}
+	}, [])
+
 	const injectedGlobalContext = {
 		user,
 		web3,
@@ -231,6 +289,7 @@ const App = ({ Component, pageProps }) => {
 		adjustGridProperties,
 		logOut: async () => {
 			await axios.post('/api/auth/logout')
+			ClientAccessToken.setAccessToken(null)
 			revalidate()
 			setUser(null)
 			setMyLikes([])
@@ -244,6 +303,8 @@ const App = ({ Component, pageProps }) => {
 			setMyProfile(undefined)
 			setWeb3(null)
 			mixpanel.track('Logout')
+			// Triggers all event listeners for this key to fire. Used to force cross tab logout.
+			window.localStorage.setItem('logout', Date.now())
 		},
 	}
 

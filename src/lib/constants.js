@@ -28,7 +28,7 @@ export const CONTRACTS = {
 	KALAMINT: 'KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse',
 }
 
-export const DEFAULT_PROFILE_PIC = 'https://cdn.tryshowtime.com/profile_placeholder.jpg'
+export const DEFAULT_PROFILE_PIC = 'https://cdn.tryshowtime.com/profile_placeholder2.jpg'
 export const DISABLE_ALL = false
 
 // fields to sort by on profile page

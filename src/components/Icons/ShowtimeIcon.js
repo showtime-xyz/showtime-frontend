@@ -1,12 +1,12 @@
 const ShowtimeIcon = ({ className = '' }) => (
 	<svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-		<path fillRule="evenodd" clipRule="evenodd" d="M8.538 17.997l-6.3.344a.684.684 0 01-.61-1.057L5.075 12 1.627 6.716a.684.684 0 01.61-1.057l6.301.344L11.39.375c.253-.5.967-.5 1.22 0l2.852 5.628 6.3-.344c.56-.03.917.588.61 1.057L18.925 12l3.449 5.284a.684.684 0 01-.61 1.057l-6.3-.344-2.853 5.628c-.253.5-.967.5-1.22 0l-2.852-5.628z" fill="url(#paint0_radial)" />
-		<circle cx="12" cy="12" r="6" fill="currentColor" />
+		<path d="M11.69.255A.318.318 0 0112 0c.15 0 .28.107.31.255A14.788 14.788 0 0023.745 11.69c.148.03.255.16.255.31s-.107.28-.255.31A14.788 14.788 0 0012.31 23.745.318.318 0 0112 24a.318.318 0 01-.31-.255A14.788 14.788 0 00.255 12.31.318.318 0 010 12c0-.15.107-.28.255-.31A14.788 14.788 0 0011.69.255z" />
 		<defs>
-			<radialGradient id="paint0_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0 12 -10.4853 0 12 12)">
-				<stop offset=".604" stopOpacity="0" />
-				<stop offset="1" />
-			</radialGradient>
+			<linearGradient id="paint0_linear" x1="24" y1="0" x2="0" y2="24" gradientUnits="userSpaceOnUse">
+				<stop stopColor="#FFFBEB" />
+				<stop offset=".234" stopColor="#FDE68A" />
+				<stop offset=".693" stopColor="#F59E0B" />
+			</linearGradient>
 		</defs>
 	</svg>
 )

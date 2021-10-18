@@ -169,7 +169,7 @@ export default function Collection({ collection_list, collection, selected_colle
 				<meta property="og:type" content="website" />
 				<meta name="og:description" content="Discover and showcase crypto art" />
 
-				<meta property="og:image" content={selected_collection ? selected_collection.img_url : 'https://showtime.kilkka.vercel.app/banner.png'} />
+				<meta property="og:image" content={selected_collection ? selected_collection.img_url : 'https://cdn.tryshowtime.com/twitter_card.jpg'} />
 
 				<meta name="og:title" content={`Showtime | ${pageTitle}`} />
 
@@ -177,7 +177,7 @@ export default function Collection({ collection_list, collection, selected_colle
 				<meta name="twitter:title" content={`Showtime | ${pageTitle}`} />
 				<meta name="twitter:description" content="Discover and showcase crypto art" />
 
-				<meta name="twitter:image" content={selected_collection ? selected_collection.img_url : 'https://showtime.kilkka.vercel.app/banner.png'} />
+				<meta name="twitter:image" content={selected_collection ? selected_collection.img_url : 'https://cdn.tryshowtime.com/twitter_card.jpg'} />
 			</Head>
 
 			<div className="py-12 sm:py-14 px-8 sm:px-10 text-left bg-gradient-to-r from-green-400 to-blue-400">

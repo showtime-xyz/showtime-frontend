@@ -5,6 +5,8 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
             - name: Node.JS 14
               uses: actions/setup-node@v2
               with:
@@ -23,7 +25,7 @@ jobs:
               env:
                   CI: TRUE
             - name: Run ESLint
-              run: yarn eslint --output-file eslint_report.json --format json "src/**/*.{js,jsx}"
+              run: ESLINT_PLUGIN_DIFF_COMMIT="origin/$GITHUB_BASE_REF..." yarn eslint --output-file eslint_report.json --format json "src/**/*.{js,jsx}"
               continue-on-error: true
             - name: Annotate Code Linting Results
               uses: ataylorme/eslint-annotate-action@1.2.0

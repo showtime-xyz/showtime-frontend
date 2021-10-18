@@ -1,7 +1,8 @@
 import { serialize } from 'cookie'
 
-const TOKEN_NAME = 'api_token'
-const MAX_AGE = 60 * 60 * 24 * 365 //60 * 60 * 8;
+const REFRESH_TOKEN_NAME = 'r_t'
+// TODO: Confirm this is a year
+const MAX_AGE = 60 * 60 * 24 * 365 // 60 * 60 * 8;
 
 function createCookie(name, data, options = {}) {
 	return serialize(name, data, {
@@ -15,26 +16,22 @@ function createCookie(name, data, options = {}) {
 	})
 }
 
-function setTokenCookie(res, token) {
-	res.setHeader('Set-Cookie', [createCookie(TOKEN_NAME, token), createCookie('authed', true, { httpOnly: false })])
+function setTokenCookie({ res, sealedRefreshToken }) {
+	const cookieArray = [sealedRefreshToken ? createCookie(REFRESH_TOKEN_NAME, sealedRefreshToken) : null].filter(Boolean)
+	res.setHeader('Set-Cookie', cookieArray)
 }
 
-function getAuthToken(cookies) {
-	return cookies[TOKEN_NAME]
+function getRefreshToken(cookies) {
+	return cookies[REFRESH_TOKEN_NAME]
 }
 
 function expireTokenCookie(res) {
 	res.setHeader('Set-Cookie', [
-		createCookie(TOKEN_NAME, null, {
-			maxAge: 0,
-			expires: new Date(Date.now() - 1000),
-		}),
-		createCookie('authed', false, {
-			httpOnly: false,
+		createCookie(REFRESH_TOKEN_NAME, null, {
 			maxAge: 0,
 			expires: new Date(Date.now() - 1000),
 		}),
 	])
 }
 
-export default { setTokenCookie, getAuthToken, expireTokenCookie }
+export default { setTokenCookie, expireTokenCookie, getRefreshToken }

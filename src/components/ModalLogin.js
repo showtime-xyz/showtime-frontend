@@ -11,6 +11,8 @@ import { useTheme } from 'next-themes'
 import useAuth from '@/hooks/useAuth'
 import getWeb3Modal from '@/lib/web3Modal'
 import { personalSignMessage } from '@/lib/utilities'
+import ClientAccessToken from '@/lib/client-access-token'
+import { captureException } from '@sentry/nextjs'
 
 export default function Modal({ isOpen }) {
 	const context = useContext(AppContext)
@@ -19,60 +21,95 @@ export default function Modal({ isOpen }) {
 	const [signaturePending, setSignaturePending] = useState(false)
 
 	const handleSubmitEmail = async event => {
-		mixpanel.track('Login - email button click')
-		event.preventDefault()
-
-		const { elements } = event.target
-
-		// the magic code
-		const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY)
 		try {
-			const did = await magic.auth.loginWithMagicLink({ email: elements.email.value })
-			context.setWeb3(new ethers.providers.Web3Provider(magic.rpcProvider))
+			mixpanel.track('Login - email button click')
+			event.preventDefault()
 
-			// Once we have the did from magic, login with our own API
-			await axios.post(
-				'/api/auth/login',
-				{},
+			const { elements } = event.target
+			const email = elements.email.value
+
+			// Magic Link authenticates through email
+			const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY)
+			const did = await magic.auth.loginWithMagicLink({ email })
+			const web3 = new ethers.providers.Web3Provider(magic.rpcProvider)
+			context.setWeb3(web3)
+
+			const response = await axios.post(
+				'/api/auth/login/magic',
 				{
-					headers: { Authorization: `Bearer ${did}` },
+					email,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${did}`,
+					},
 				}
 			)
+			const isValidLogin = response.status === 200
+
+			if (isValidLogin) {
+				const accessToken = response?.data?.access
+				ClientAccessToken.setAccessToken(accessToken)
+				window.localStorage.setItem('login', Date.now())
+			}
 
 			mixpanel.track('Login success - email')
 			revalidate()
 
 			if (!context?.user) context.getUserFromCookies()
 			context.setLoginModalOpen(false)
-		} catch {
-			/* handle errors */
+		} catch (error) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error(error)
+			}
+			//TODO: update this in notion
+			captureException(error, {
+				tags: {
+					login_signature_flow: 'modalLogin.js',
+					login_magic_link: 'modalLogin.js',
+				},
+			})
 		}
 	}
 
 	const handleSubmitWallet = async () => {
-		mixpanel.track('Login - wallet button click')
-
-		const web3Modal = getWeb3Modal({ theme: resolvedTheme })
-		const web3 = new ethers.providers.Web3Provider(await web3Modal.connect())
-
-		const address = await web3.getSigner().getAddress()
-		const response_nonce = await backend.get(`/v1/getnonce?address=${address}`)
-
 		try {
+			mixpanel.track('Login - wallet button click')
+
+			const web3Modal = getWeb3Modal({ theme: resolvedTheme })
+			const web3 = new ethers.providers.Web3Provider(await web3Modal.connect())
+
+			const address = await web3.getSigner().getAddress()
+			const response_nonce = await backend.get(`/v1/getnonce?address=${address}`)
+
 			setSignaturePending(true)
 			const signature = await personalSignMessage(web3, process.env.NEXT_PUBLIC_SIGNING_MESSAGE + ' ' + response_nonce.data.data)
 
 			// login with our own API
-			await axios.post('/api/auth/login/signature', { signature, address })
+			const response = await axios.post('/api/auth/login/signature', { signature, address })
+			const isValidSignature = response.status === 200
 
-			revalidate()
+			if (isValidSignature) {
+				const accessToken = response?.data?.access
+				ClientAccessToken.setAccessToken(accessToken)
+				window.localStorage.setItem('login', Date.now())
+			}
+
 			mixpanel.track('Login success - wallet signature')
+			revalidate()
 
 			if (!context?.user) context.getUserFromCookies()
 			context.setLoginModalOpen(false)
-		} catch (err) {
-			//throw new Error("You need to sign the message to be able to log in.");
-			//console.log(err);
+		} catch (error) {
+			if (process.env.NODE_ENV === 'development') {
+				console.error(error)
+			}
+			//TODO: update this in notion
+			captureException(error, {
+				tags: {
+					login_signature_flow: 'modalLogin.js',
+				},
+			})
 		} finally {
 			setSignaturePending(false)
 		}
