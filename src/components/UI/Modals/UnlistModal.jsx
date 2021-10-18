@@ -202,7 +202,7 @@ const LoadingPage = () => {
 			<div tabIndex="0" className="focus:outline-none p-12 space-y-8 flex-1 flex flex-col items-center justify-center border-b border-gray-100">
 				<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
 				<div className="space-y-1 text-gray-900 dark:text-white  text-sm text-center font-medium leading-[1.4rem]">
-					<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs">We'll ask you to sign with your wallet shortly.</p>
+					<p>We'll ask you to sign with your wallet shortly.</p>
 				</div>
 			</div>
 			<div className="p-4">
