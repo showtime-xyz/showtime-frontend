@@ -207,5 +207,5 @@ export const CHAIN_IDENTIFIERS = {
 export const SOL_MAX_INT = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
 
 export const LIST_CURRENCIES = {
-	TEST: '0xd404017a401ff7ef65e7689630eca288e23d67a1',
+	TKN: '0xd404017a401ff7ef65e7689630eca288e23d67a1',
 }
