@@ -81,12 +81,6 @@ const BuyModal = ({ open, onClose, token }) => {
 		})
 		const signerAddress = await web3.getSigner().getAddress()
 
-		const response = await axios.post('/api/marketplace/permit', await signTokenPermit(web3, LIST_CURRENCIES[token.listing.currency])).then(res => res.data)
-
-		console.log(response)
-
-		return setModalPage(MODAL_PAGES.GENERAL)
-
 		if (!myProfile?.wallet_addresses_v2?.map(({ address }) => address.toLowerCase())?.includes(signerAddress.toLowerCase())) {
 			return setModalPage(MODAL_PAGES.CHANGE_WALLET)
 		}
@@ -96,20 +90,17 @@ const BuyModal = ({ open, onClose, token }) => {
 		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT, marketplaceAbi, biconomy.getSignerByAddress(signerAddress))
 		const ercContract = new ethers.Contract(LIST_CURRENCIES[token.listing.currency], iercPermit20Abi, biconomy.getSignerByAddress(signerAddress))
 
-		if ((await ercContract.allowance(signerAddress, process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT)) < token.listing.min_price) {
-			const { data } = await ercContract.populateTransaction.approve(process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT, SOL_MAX_INT)
-
+		if (!(await ercContract.allowance(signerAddress, process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT)).gt(ethers.utils.parseUnits(token.listing.min_price.toString(), 18))) {
 			//@TODO: An UI to ask for approval
 			alert(`We're gonna ask for permission to spend your ${token.listing.currency} now.`)
-
-			const transaction = await provider.send('eth_sendTransaction', [{ data, from: signerAddress, to: process.env.NEXT_PUBLIC_MINTING_CONTRACT, signatureType: 'EIP712_SIGN' }])
+			const transaction = await axios.post('/api/marketplace/permit', await signTokenPermit(web3, ercContract, LIST_CURRENCIES[token.listing.currency])).then(res => res.data)
 
 			window.open(`https://mumbai.polygonscan.com/tx/${transaction}`)
 
 			await new Promise(resolve => provider.once(transaction, resolve))
 		}
 
-		const { data } = await contract.populateTransaction.buy(token.listing.sale_identifier)
+		const { data } = await contract.populateTransaction.buyFor(token.listing.sale_identifier, 1, signerAddress)
 
 		const transaction = await provider
 			.send('eth_sendTransaction', [

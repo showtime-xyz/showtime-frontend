@@ -195,12 +195,13 @@ export const personalSignMessage = async (web3, message) => {
 	return web3.getSigner().provider.send('personal_sign', [message, await web3.getSigner().getAddress()])
 }
 
-export const signTokenPermit = async (web3, tokenAddr) => {
+export const signTokenPermit = async (web3, tokenContract, tokenAddr) => {
+	const userAddress = await web3.getSigner().getAddress()
 	const permit = {
-		holder: await web3.getSigner().getAddress(),
+		owner: userAddress,
 		spender: process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
 		value: SOL_MAX_INT,
-		nonce: 1,
+		nonce: await tokenContract.nonces(userAddress),
 		deadline: Date.now() + 120,
 	}
 
@@ -213,7 +214,7 @@ export const signTokenPermit = async (web3, tokenAddr) => {
 		},
 		{
 			Permit: [
-				{ name: 'holder', type: 'address' },
+				{ name: 'owner', type: 'address' },
 				{ name: 'spender', type: 'address' },
 				{ name: 'value', type: 'uint256' },
 				{ name: 'nonce', type: 'uint256' },
@@ -223,5 +224,5 @@ export const signTokenPermit = async (web3, tokenAddr) => {
 		permit
 	)
 
-	return { holder: permit.holder, nonce: permit.nonce, deadline: permit.deadline, tokenAddr, signature }
+	return { owner: permit.owner, deadline: permit.deadline, tokenAddr, signature }
 }
