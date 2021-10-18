@@ -178,8 +178,8 @@ const ListModal = ({ open, onClose, token }) => {
 					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enterTo="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 translate-y-0 sm:scale-100" leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
 						<div className="inline-block align-bottom rounded-t-3xl sm:rounded-b-3xl text-left overflow-hidden transform transition-all sm:align-middle bg-white dark:bg-black shadow-xl sm:max-w-lg w-full">
 							<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
-								<h2 className="text-gray-900 dark:text-white text-xl font-bold">List NFT</h2>
-								<button onClick={trueOnClose} className="p-3 -my-3 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:hidden rounded-xl transition" disabled={modalPage === MODAL_PAGES.LOADING}>
+								<h2 className="text-gray-900 dark:text-white text-lg font-bold">List NFT</h2>
+								<button onClick={trueOnClose} className="p-3 -my-3 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:hidden rounded-full transition bg-gray-100" disabled={modalPage === MODAL_PAGES.LOADING}>
 									<XIcon className="w-4 h-4" />
 								</button>
 							</div>
@@ -256,11 +256,22 @@ const ListPage = ({ token, price, setPrice, currency, setCurrency, editionCount,
 
 const LoadingPage = () => {
 	return (
-		<div tabIndex="0" className="focus:outline-none p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
-			<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
-			<div className="space-y-1">
-				<p className="font-medium text-gray-900 dark:text-white text-center">We're preparing your NFT</p>
-				<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs">We'll ask you to confirm with your preferred wallet shortly</p>
+		<div className="flex flex-col min-h-[344px]">
+			<div tabIndex="0" className="focus:outline-none p-12 space-y-8 flex-1 flex flex-col items-center justify-center border-b border-gray-100">
+				<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
+				<div className="space-y-1 text-gray-900 dark:text-white  text-sm text-center font-medium leading-[1.4rem]">
+					<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs">We'll ask you to sign with your wallet shortly.</p>
+				</div>
+			</div>
+			<div className="p-4">
+				<div className="flex items-center justify-between">
+					<Button style="tertiary" disabled={true}>
+						Cancel
+					</Button>
+					<Button style="primary" disabled={true}>
+						Listing...
+					</Button>
+				</div>
 			</div>
 		</div>
 	)
@@ -268,16 +279,28 @@ const LoadingPage = () => {
 
 const MintingPage = ({ transactionHash }) => {
 	return (
-		<div className="p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
-			<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
-			<div className="space-y-1">
-				<p className="font-medium text-gray-900 dark:text-white text-center">Your NFT is being listed on Showtime.</p>
-				<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs mx-auto">Feel free to navigate away from this screen.</p>
+		<div className="flex flex-col min-h-[344px]">
+			<div className="p-12 space-y-8 flex-1 flex flex-col items-center justify-center border-b border-gray-100">
+				<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
+				<div className="space-y-1 text-gray-900 dark:text-white  text-sm text-center font-medium leading-[1.4rem]">
+					<p>Your NFT is being listed on Showtime.</p>
+					<p>Feel free to navigate away from this screen.</p>
+				</div>
+				<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
+					<PolygonIcon className="w-4 h-4" />
+					<p className="text-sm font-medium">View on PolygonScan</p>
+				</Button>
 			</div>
-			<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
-				<PolygonIcon className="w-4 h-4" />
-				<span className="text-sm font-medium">View on PolygonScan</span>
-			</Button>
+			<div className="p-4">
+				<div className="flex items-center justify-between">
+					<Button style="tertiary" disabled={true}>
+						Cancel
+					</Button>
+					<Button style="primary" disabled={true}>
+						Listing...
+					</Button>
+				</div>
+			</div>
 		</div>
 	)
 }
@@ -297,7 +320,7 @@ const SuccessPage = ({ transactionHash, token, shotConfetti }) => {
 	}
 
 	return (
-		<div className="p-12 space-y-10 flex-1 flex flex-col items-center justify-center">
+		<div className="p-12 space-y-10 flex-1 flex flex-col items-center justify-center  min-h-[344px]">
 			<p className="font-medium text-5xl">🎉</p>
 			<p className="font-medium text-gray-900 dark:text-white text-center !mt-6">Your NFT has been successfully listed!</p>
 			<Button style="primary" as="a" href={tokenURL} onClick={visitTokenPage} className="!mt-6">
@@ -319,7 +342,7 @@ const SuccessPage = ({ transactionHash, token, shotConfetti }) => {
 
 const WalletErrorPage = ({ listToken }) => {
 	return (
-		<div tabIndex="0" className="p-12 space-y-5 flex-1 flex flex-col items-center justify-center focus:outline-none">
+		<div tabIndex="0" className="p-12 space-y-5 flex-1 flex flex-col items-center justify-center focus:outline-none  min-h-[344px]">
 			<div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 dark:bg-yellow-900 sm:mx-0 sm:h-10 sm:w-10">
 				<ExclamationIcon className="h-6 w-6 text-yellow-600 dark:text-yellow-300" aria-hidden="true" />
 			</div>
