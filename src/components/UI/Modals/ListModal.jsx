@@ -37,6 +37,7 @@ const ListModal = ({ open, onClose, token }) => {
 	const { resolvedTheme } = useTheme()
 	const isWeb3ModalActive = useRef(false)
 	const confettiCanvas = useRef(null)
+	const [modalVisibility, setModalVisibility] = useState(true)
 	const [modalPage, setModalPage] = useState(MODAL_PAGES.GENERAL)
 	const { data: ownershipData } = useSWR(
 		() => open && myProfile && `/v1/owned_quantity?nft_id=${token.nft_id}&profile_id=${myProfile.profile_id}`,
@@ -83,6 +84,17 @@ const ListModal = ({ open, onClose, token }) => {
 
 		resetForm()
 		onClose()
+	}
+
+	const updateModalVisibility = () => {
+		if (isWeb3ModalActive.current || modalPage === MODAL_PAGES.LOADING) return
+
+		setModalVisibility(false)
+	}
+
+	const afterModalCloseAnimation = () => {
+		trueOnClose()
+		setModalVisibility(true)
 	}
 
 	const isValid = useMemo(() => {
@@ -149,7 +161,7 @@ const ListModal = ({ open, onClose, token }) => {
 	const renderedPage = (type => {
 		switch (type) {
 			case MODAL_PAGES.GENERAL:
-				return <ListPage {...{ token, price, setPrice, currency, setCurrency, editionCount, setEditionCount, maxTokens: ownershipData?.owned_count || 1, isValid, listToken }} onClose={trueOnClose} />
+				return <ListPage {...{ token, price, setPrice, currency, setCurrency, editionCount, setEditionCount, maxTokens: ownershipData?.owned_count || 1, isValid, listToken }} onClose={updateModalVisibility} />
 			case MODAL_PAGES.LOADING:
 				return <LoadingPage />
 			case MODAL_PAGES.MINTING:
@@ -162,8 +174,8 @@ const ListModal = ({ open, onClose, token }) => {
 	})(modalPage)
 
 	return (
-		<Transition.Root show={open} as={Fragment}>
-			<Dialog as="div" static className="fixed inset-0 overflow-y-auto z-1 pt-[96px] md:pt-0" open={open} onClose={trueOnClose}>
+		<Transition.Root show={open && modalVisibility} as={Fragment} afterLeave={afterModalCloseAnimation}>
+			<Dialog as="div" static className="fixed inset-0 overflow-y-auto z-1 pt-[96px] md:pt-0" open={open} onClose={updateModalVisibility}>
 				<canvas ref={confettiCanvas} className="absolute inset-0 w-screen h-screen z-[11] pointer-events-none" />
 				<div className="min-h-screen text-center">
 					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
@@ -179,7 +191,7 @@ const ListModal = ({ open, onClose, token }) => {
 						<div className="inline-block align-bottom rounded-t-3xl sm:rounded-b-3xl text-left overflow-hidden transform transition-all sm:align-middle bg-white dark:bg-black shadow-xl sm:max-w-lg w-full">
 							<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
 								<h2 className="text-gray-900 dark:text-white text-xl font-bold">List NFT</h2>
-								<button onClick={trueOnClose} className="p-3 -my-3 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:hidden rounded-xl transition" disabled={modalPage === MODAL_PAGES.LOADING}>
+								<button onClick={updateModalVisibility} className="p-3 -my-3 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:hidden rounded-xl transition" disabled={modalPage === MODAL_PAGES.LOADING}>
 									<XIcon className="w-4 h-4" />
 								</button>
 							</div>
