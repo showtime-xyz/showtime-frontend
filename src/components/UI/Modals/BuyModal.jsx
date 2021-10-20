@@ -306,7 +306,7 @@ const MintingPage = ({ transactionHash, onClose }) => {
 						Cancel
 					</Button>
 					<Button style="primary" disabled={true}>
-						Listing...
+						Purchasing...
 					</Button>
 				</div>
 			</div>
@@ -418,7 +418,7 @@ const AllowanceProcessingPage = ({ transactionHash, onClose }) => {
 				</div>
 				<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
 					<PolygonIcon className="w-4 h-4" />
-					<span className="text-sm font-medium">View on PolygonScan</span>
+					<p className="text-sm font-medium">View on PolygonScan</p>
 				</Button>
 			</div>
 			<div className="p-4">
