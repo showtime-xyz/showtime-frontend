@@ -92,7 +92,7 @@ const BuyModal = ({ open, onClose, token }) => {
 
 		if (!(await ercContract.allowance(signerAddress, process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT)).gt(ethers.utils.parseUnits(token.listing.min_price.toString(), 18))) {
 			//@TODO: An UI to ask for approval
-			alert(`We're gonna ask for permission to spend your ${token.listing.currency} now.`)
+			alert(`We're gonna ask for permission to spend your $${token.listing.currency} now.`)
 			const transaction = await axios.post('/api/marketplace/permit', await signTokenPermit(web3, ercContract, LIST_CURRENCIES[token.listing.currency])).then(res => res.data)
 
 			window.open(`https://mumbai.polygonscan.com/tx/${transaction}`)
