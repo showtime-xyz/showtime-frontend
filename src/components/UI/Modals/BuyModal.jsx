@@ -33,6 +33,7 @@ const BuyModal = ({ open, onClose, token }) => {
 	const { resolvedTheme } = useTheme()
 	const isWeb3ModalActive = useRef(false)
 	const confettiCanvas = useRef(null)
+	const [modalVisibility, setModalVisibility] = useState(true)
 	const [modalPage, setModalPage] = useState(MODAL_PAGES.GENERAL)
 	const [quantity, setQuantity] = useState(1)
 	const [transactionHash, setTransactionHash] = useState('')
@@ -69,6 +70,17 @@ const BuyModal = ({ open, onClose, token }) => {
 
 		resetForm()
 		onClose()
+	}
+
+	const updateModalVisibility = () => {
+		if (isWeb3ModalActive.current || modalPage === MODAL_PAGES.LOADING) return
+
+		setModalVisibility(false)
+	}
+
+	const afterModalCloseAnimation = () => {
+		trueOnClose()
+		setModalVisibility(true)
 	}
 
 	const buyToken = async () => {
@@ -124,11 +136,11 @@ const BuyModal = ({ open, onClose, token }) => {
 	const renderedPage = (type => {
 		switch (type) {
 			case MODAL_PAGES.GENERAL:
-				return <BuyPage token={token} quantity={quantity} setQuantity={setQuantity} buyToken={buyToken} />
+				return <BuyPage token={token} quantity={quantity} setQuantity={setQuantity} buyToken={buyToken} onClose={updateModalVisibility} />
 			case MODAL_PAGES.LOADING:
 				return <LoadingPage />
 			case MODAL_PAGES.PROCESSING:
-				return <MintingPage transactionHash={transactionHash} />
+				return <MintingPage transactionHash={transactionHash} onClose={updateModalVisibility} />
 			case MODAL_PAGES.SUCCESS:
 				return <SuccessPage token={token} transactionHash={transactionHash} shotConfetti={shotConfetti} />
 			case MODAL_PAGES.CHANGE_WALLET:
@@ -136,13 +148,13 @@ const BuyModal = ({ open, onClose, token }) => {
 			case MODAL_PAGES.NEEDS_ALLOWANCE:
 				return <AllowanceRequiredPage token={token} isWeb3ModalActive={isWeb3ModalActive} setTransactionHash={setTransactionHash} setModalPage={setModalPage} buyToken={buyToken} />
 			case MODAL_PAGES.PROCESSING_ALLOWANCE:
-				return <AllowanceProcessingPage transactionHash={transactionHash} />
+				return <AllowanceProcessingPage transactionHash={transactionHash} onClose={updateModalVisibility} />
 		}
 	})(modalPage)
 
 	return (
-		<Transition.Root show={open} as={Fragment}>
-			<Dialog as="div" static className="fixed inset-0 overflow-y-auto z-1 pt-[96px] md:pt-0" open={open} onClose={trueOnClose}>
+		<Transition.Root show={open && modalVisibility} as={Fragment} afterLeave={afterModalCloseAnimation}>
+			<Dialog as="div" static className="fixed inset-0 overflow-y-auto z-1 pt-[96px] md:pt-0" open={open} onClose={updateModalVisibility}>
 				<canvas ref={confettiCanvas} className="absolute inset-0 w-screen h-screen z-[11] pointer-events-none" />
 				<div className="min-h-screen text-center">
 					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
@@ -157,8 +169,8 @@ const BuyModal = ({ open, onClose, token }) => {
 					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enterTo="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 translate-y-0 sm:scale-100" leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
 						<div className="inline-block align-bottom rounded-t-3xl sm:rounded-b-3xl text-left overflow-hidden transform transition-all sm:align-middle bg-white dark:bg-black shadow-xl sm:max-w-lg w-full">
 							<div className="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
-								<h2 className="text-gray-900 dark:text-white text-xl font-bold">Buy NFT</h2>
-								<button onClick={trueOnClose} className="p-3 -my-3 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:hidden rounded-xl transition" disabled={modalPage === MODAL_PAGES.LOADING}>
+								<h2 className="text-gray-900 dark:text-white text-lg font-bold">Buy NFT</h2>
+								<button onClick={updateModalVisibility} className="p-3 -my-3 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:hidden rounded-full transition bg-gray-100" disabled={modalPage === MODAL_PAGES.LOADING}>
 									<XIcon className="w-4 h-4" />
 								</button>
 							</div>
@@ -171,7 +183,7 @@ const BuyModal = ({ open, onClose, token }) => {
 	)
 }
 
-const BuyPage = ({ token, quantity, setQuantity, buyToken }) => {
+const BuyPage = ({ token, quantity, setQuantity, buyToken, onClose }) => {
 	return (
 		<>
 			<div className="flex-1 overflow-y-auto">
@@ -237,7 +249,10 @@ const BuyPage = ({ token, quantity, setQuantity, buyToken }) => {
 				)}
 			</div>
 			<div className="p-4">
-				<div className="flex items-center justify-end">
+				<div className="flex items-center justify-between">
+					<Button style="tertiary" onClick={onClose}>
+						Cancel
+					</Button>
 					<Button style="primary" onClick={buyToken}>
 						Checkout
 					</Button>
@@ -249,28 +264,52 @@ const BuyPage = ({ token, quantity, setQuantity, buyToken }) => {
 
 const LoadingPage = () => {
 	return (
-		<div tabIndex="0" className="focus:outline-none p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
-			<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
-			<div className="space-y-1">
-				<p className="font-medium text-gray-900 dark:text-white text-center">We're preparing the sale.</p>
-				<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs">We'll ask you to confirm with your preferred wallet shortly.</p>
+		<div className="flex flex-col min-h-[344px]">
+			<div tabIndex="0" className="focus:outline-none p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
+				<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
+				<div className="space-y-1 text-gray-900 dark:text-white  text-sm text-center font-medium leading-[1.4rem]">
+					<p>We're preparing the sale.</p>
+					<p>We'll ask you to confirm with your preferred wallet shortly.</p>
+				</div>
+			</div>
+			<div className="p-4">
+				<div className="flex items-center justify-between">
+					<Button style="tertiary" disabled={true}>
+						Cancel
+					</Button>
+					<Button style="primary" disabled={true}>
+						Preparing...
+					</Button>
+				</div>
 			</div>
 		</div>
 	)
 }
 
-const MintingPage = ({ transactionHash }) => {
+const MintingPage = ({ transactionHash, onClose }) => {
 	return (
-		<div className="p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
-			<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
-			<div className="space-y-1">
-				<p className="font-medium text-gray-900 dark:text-white text-center">Your NFT is currently being purchased.</p>
-				<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs mx-auto">Feel free to navigate away from this screen.</p>
+		<div className="flex flex-col min-h-[344px]">
+			<div className="p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
+				<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
+				<div className="space-y-1 text-gray-900 dark:text-white  text-sm text-center font-medium leading-[1.4rem]">
+					<p>Your NFT is currently being purchased.</p>
+					<p>Feel free to navigate away from this screen.</p>
+				</div>
+				<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
+					<PolygonIcon className="w-4 h-4" />
+					<p className="text-sm font-medium">View on PolygonScan</p>
+				</Button>
 			</div>
-			<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
-				<PolygonIcon className="w-4 h-4" />
-				<span className="text-sm font-medium">View on PolygonScan</span>
-			</Button>
+			<div className="p-4">
+				<div className="flex items-center justify-between">
+					<Button style="tertiary" onClick={onClose}>
+						Cancel
+					</Button>
+					<Button style="primary" disabled={true}>
+						Listing...
+					</Button>
+				</div>
+			</div>
 		</div>
 	)
 }
@@ -290,7 +329,7 @@ const SuccessPage = ({ transactionHash, token, shotConfetti }) => {
 	}
 
 	return (
-		<div className="p-12 space-y-10 flex-1 flex flex-col items-center justify-center">
+		<div className="p-12 space-y-10 flex-1 flex flex-col items-center justify-center min-h-[344px]">
 			<p className="font-medium text-5xl">🎉</p>
 			<p className="font-medium text-gray-900 dark:text-white text-center !mt-6">Your NFT has been successfully purchased!</p>
 			<Button style="primary" as="a" href={tokenURL} onClick={visitTokenPage} className="!mt-6">
@@ -299,7 +338,7 @@ const SuccessPage = ({ transactionHash, token, shotConfetti }) => {
 			<div className="flex items-center justify-center">
 				<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
 					<PolygonIcon className="w-4 h-4" />
-					<span className="text-sm font-medium">PolygonScan</span>
+					<p className="text-sm font-medium">PolygonScan</p>
 				</Button>
 			</div>
 		</div>
@@ -308,7 +347,7 @@ const SuccessPage = ({ transactionHash, token, shotConfetti }) => {
 
 const WalletErrorPage = ({ buyToken }) => {
 	return (
-		<div tabIndex="0" className="p-12 space-y-5 flex-1 flex flex-col items-center justify-center focus:outline-none">
+		<div tabIndex="0" className="p-12 space-y-5 flex-1 flex flex-col items-center justify-center focus:outline-none min-h-[344px]">
 			<div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 dark:bg-yellow-900 sm:mx-0 sm:h-10 sm:w-10">
 				<ExclamationIcon className="h-6 w-6 text-yellow-600 dark:text-yellow-300" aria-hidden="true" />
 			</div>
@@ -354,7 +393,7 @@ const AllowanceRequiredPage = ({ token, isWeb3ModalActive, setModalPage, setTran
 	}
 
 	return (
-		<div tabIndex="0" className="p-12 space-y-5 flex-1 flex flex-col items-center justify-center focus:outline-none">
+		<div tabIndex="0" className="p-12 space-y-5 flex-1 flex flex-col items-center justify-center focus:outline-none min-h-[344px]">
 			<div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 dark:bg-yellow-900 sm:mx-0 sm:h-10 sm:w-10">
 				<ExclamationIcon className="h-6 w-6 text-yellow-600 dark:text-yellow-300" aria-hidden="true" />
 			</div>
@@ -368,18 +407,30 @@ const AllowanceRequiredPage = ({ token, isWeb3ModalActive, setModalPage, setTran
 	)
 }
 
-const AllowanceProcessingPage = ({ transactionHash }) => {
+const AllowanceProcessingPage = ({ transactionHash, onClose }) => {
 	return (
-		<div className="p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
-			<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
-			<div className="space-y-1">
-				<p className="font-medium text-gray-900 dark:text-white text-center">We're processing your allowance approval.</p>
-				<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs mx-auto">This shouldn't take more than a few seconds, but feel free to leave the page and come back later!.</p>
+		<div className="flex flex-col min-h-[344px]">
+			<div className="p-12 space-y-8 flex-1 flex flex-col items-center justify-center min-h-[344px]">
+				<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
+				<div className="space-y-1 text-gray-900 dark:text-white  text-sm text-center font-medium leading-[1.4rem]">
+					<p>We're processing your allowance approval.</p>
+					<p>This shouldn't take more than a few seconds, but feel free to leave the page and come back later!</p>
+				</div>
+				<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
+					<PolygonIcon className="w-4 h-4" />
+					<span className="text-sm font-medium">View on PolygonScan</span>
+				</Button>
 			</div>
-			<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
-				<PolygonIcon className="w-4 h-4" />
-				<span className="text-sm font-medium">View on PolygonScan</span>
-			</Button>
+			<div className="p-4">
+				<div className="flex items-center justify-between">
+					<Button style="tertiary" onClick={onClose}>
+						Cancel
+					</Button>
+					<Button style="primary" disabled={true}>
+						Processing...
+					</Button>
+				</div>
+			</div>
 		</div>
 	)
 }
