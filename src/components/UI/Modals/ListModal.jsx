@@ -285,6 +285,10 @@ const LoadingPage = ({ transactionHash }) => {
 				<div className="space-y-1 text-gray-900 dark:text-white  text-sm text-center font-medium leading-[1.4rem]">
 					<p>We'll ask you to sign with your wallet shortly.</p>
 				</div>
+				<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
+					<PolygonIcon className="w-4 h-4" />
+					<p className="text-sm font-medium">View on PolygonScan</p>
+				</Button>
 			</div>
 			<div className="p-4">
 				<div className="flex items-center justify-between">
@@ -296,21 +300,17 @@ const LoadingPage = ({ transactionHash }) => {
 					</Button>
 				</div>
 			</div>
-			<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
-				<PolygonIcon className="w-4 h-4" />
-				<span className="text-sm font-medium">View on PolygonScan</span>
-			</Button>
 		</div>
 	)
 }
 
 const PermitLoadingPage = () => {
 	return (
-		<div tabIndex="0" className="focus:outline-none p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
+		<div tabIndex="0" className="focus:outline-none p-12 space-y-8 flex-1 flex flex-col items-center justify-center min-h-[344px]">
 			<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
-			<div className="space-y-1">
-				<p className="font-medium text-gray-900 dark:text-white text-center">We're preparing your account to sell Showtime NFTs</p>
-				<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs mx-auto">You only need to do this once, and it shouldn't take more than a few seconds.</p>
+			<div className="space-y-1 text-gray-900 dark:text-white text-sm text-center font-medium leading-[1.4rem]">
+				<p>We're preparing your account to sell Showtime NFTs</p>
+				<p>You only need to do this once, and it shouldn't take more than a few seconds.</p>
 			</div>
 		</div>
 	)
