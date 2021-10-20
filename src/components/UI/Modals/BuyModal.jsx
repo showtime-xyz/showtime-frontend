@@ -24,6 +24,8 @@ const MODAL_PAGES = {
 	PROCESSING: 'processing',
 	SUCCESS: 'success',
 	CHANGE_WALLET: 'change_wallet',
+	NEEDS_ALLOWANCE: 'needs_allowance',
+	PROCESSING_ALLOWANCE: 'processing_allowance',
 }
 
 const BuyModal = ({ open, onClose, token }) => {
@@ -32,6 +34,7 @@ const BuyModal = ({ open, onClose, token }) => {
 	const isWeb3ModalActive = useRef(false)
 	const confettiCanvas = useRef(null)
 	const [modalPage, setModalPage] = useState(MODAL_PAGES.GENERAL)
+	const [quantity, setQuantity] = useState(1)
 	const [transactionHash, setTransactionHash] = useState('')
 
 	const shotConfetti = () => {
@@ -91,16 +94,10 @@ const BuyModal = ({ open, onClose, token }) => {
 		const ercContract = new ethers.Contract(LIST_CURRENCIES[token.listing.currency], iercPermit20Abi, biconomy.getSignerByAddress(signerAddress))
 
 		if (!(await ercContract.allowance(signerAddress, process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT)).gt(ethers.utils.parseUnits(token.listing.min_price.toString(), 18))) {
-			//@TODO: An UI to ask for approval
-			alert(`We're gonna ask for permission to spend your $${token.listing.currency} now.`)
-			const transaction = await axios.post('/api/marketplace/permit', await signTokenPermit(web3, ercContract, LIST_CURRENCIES[token.listing.currency])).then(res => res.data)
-
-			window.open(`https://mumbai.polygonscan.com/tx/${transaction}`)
-
-			await new Promise(resolve => provider.once(transaction, resolve))
+			return setModalPage(MODAL_PAGES.NEEDS_ALLOWANCE)
 		}
 
-		const { data } = await contract.populateTransaction.buyFor(token.listing.sale_identifier, 1, signerAddress)
+		const { data } = await contract.populateTransaction.buyFor(token.listing.sale_identifier, quantity, signerAddress)
 
 		const transaction = await provider
 			.send('eth_sendTransaction', [
@@ -127,7 +124,7 @@ const BuyModal = ({ open, onClose, token }) => {
 	const renderedPage = (type => {
 		switch (type) {
 			case MODAL_PAGES.GENERAL:
-				return <BuyPage token={token} buyToken={buyToken} />
+				return <BuyPage token={token} quantity={quantity} setQuantity={setQuantity} buyToken={buyToken} />
 			case MODAL_PAGES.LOADING:
 				return <LoadingPage />
 			case MODAL_PAGES.PROCESSING:
@@ -136,6 +133,10 @@ const BuyModal = ({ open, onClose, token }) => {
 				return <SuccessPage token={token} transactionHash={transactionHash} shotConfetti={shotConfetti} />
 			case MODAL_PAGES.CHANGE_WALLET:
 				return <WalletErrorPage listToken={buyToken} />
+			case MODAL_PAGES.NEEDS_ALLOWANCE:
+				return <AllowanceRequiredPage token={token} isWeb3ModalActive={isWeb3ModalActive} setTransactionHash={setTransactionHash} setModalPage={setModalPage} buyToken={buyToken} />
+			case MODAL_PAGES.PROCESSING_ALLOWANCE:
+				return <AllowanceProcessingPage transactionHash={transactionHash} />
 		}
 	})(modalPage)
 
@@ -155,7 +156,7 @@ const BuyModal = ({ open, onClose, token }) => {
 
 					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enterTo="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 translate-y-0 sm:scale-100" leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
 						<div className="inline-block align-bottom rounded-t-3xl sm:rounded-b-3xl text-left overflow-hidden transform transition-all sm:align-middle bg-white dark:bg-black shadow-xl sm:max-w-lg w-full">
-							<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
+							<div className="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
 								<h2 className="text-gray-900 dark:text-white text-xl font-bold">Buy NFT</h2>
 								<button onClick={trueOnClose} className="p-3 -my-3 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:hidden rounded-xl transition" disabled={modalPage === MODAL_PAGES.LOADING}>
 									<XIcon className="w-4 h-4" />
@@ -170,13 +171,13 @@ const BuyModal = ({ open, onClose, token }) => {
 	)
 }
 
-const BuyPage = ({ token, buyToken }) => {
+const BuyPage = ({ token, quantity, setQuantity, buyToken }) => {
 	return (
 		<>
 			<div className="flex-1 overflow-y-auto">
 				{token && (
 					<>
-						<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center space-x-4">
+						<div className="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center space-x-4">
 							{token.source_url && <div className="w-auto h-20">{token.mime_type.startsWith('model') ? <model-viewer src={token.source_url} autoplay camera-controls auto-rotate ar ar-modes="scene-viewer quick-look" interaction-prompt="none" /> : token.mime_type.startsWith('video') ? <video src={token.source_url} className="md:max-w-sm w-auto h-auto max-h-full" autoPlay loop muted /> : <img src={token.source_url} className="md:max-w-sm w-auto h-auto max-h-full" />}</div>}
 							<div>
 								<p className="font-semibold text-gray-900 dark:text-white">{token?.token_name}</p>
@@ -185,7 +186,7 @@ const BuyPage = ({ token, buyToken }) => {
 								</p>
 							</div>
 						</div>
-						<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center">
+						<div className="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center">
 							<div className="flex items-center space-x-2">
 								<img alt={token.creator_name} src={token.creator_img_url ? token.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
 								<div>
@@ -197,6 +198,7 @@ const BuyPage = ({ token, buyToken }) => {
 								</div>
 							</div>
 							<hr className="mx-8 border-0 border-r-px dark:border-gray-800" />
+
 							<div className="flex items-center space-x-2">
 								<img alt={token.listing.name} src={token.listing.img_url ? token.listing.img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
 								<div>
@@ -208,11 +210,28 @@ const BuyPage = ({ token, buyToken }) => {
 								</div>
 							</div>
 						</div>
-						<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
-							<p className="text-gray-600 text-xs font-semibold">
+
+						<div className="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
+							<p className="text-gray-600 dark:text-white text-xs font-semibold">
 								{token.listing.total_listed_quantity}/{token.listing.total_edition_quantity} available
 							</p>
-							<p className="text-gray-600 text-xs font-semibold">{parseInt(token.listing.royalty_percentage)}% Royalties</p>
+							<p className="text-gray-600 dark:text-white text-xs font-semibold">{parseInt(token.listing.royalty_percentage)}% Royalties</p>
+						</div>
+						<div className="p-4 border-b border-gray-200 dark:border-gray-800">
+							<div className="flex items-center justify-between space-x-4">
+								<div className="flex-1">
+									<p className="font-semibold text-gray-900 dark:text-white">Quantity</p>
+									<p className="text-sm font-medium text-gray-700 dark:text-gray-300">1 by default</p>
+								</div>
+								<input type="number" min="1" max={token.listing.total_listed_quantity} placeholder="1" className="px-4 py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring min-w-[60px] no-spinners text-right" value={quantity} onChange={event => (event.target.value < 1 || event.target.value.trim() == '' ? setQuantity(1) : event.target.value > token.listing.total_listed_quantity ? setQuantity(token.listing.total_listed_quantity) : setQuantity(parseInt(event.target.value)))} />
+							</div>
+						</div>
+						<div className="p-4 bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
+							<div className="flex items-center space-x-2">
+								<img className="rounded-full w-5 h-5" src="https://storage.googleapis.com/showtime-cdn/showtime-icon-sm.jpg" />
+								<span className="text-gray-600 dark:text-gray-400 text-xs font-semibold">Showtime NFT</span>
+							</div>
+							<p className="text-gray-600 dark:text-gray-400 text-xs font-semibold">{token.listing.total_edition_quantity} Editions</p>
 						</div>
 					</>
 				)}
@@ -305,6 +324,62 @@ const WalletErrorPage = ({ buyToken }) => {
 				</button>
 				.
 			</p>
+		</div>
+	)
+}
+
+const AllowanceRequiredPage = ({ token, isWeb3ModalActive, setModalPage, setTransactionHash, buyToken }) => {
+	const { resolvedTheme } = useTheme()
+
+	const grantAllowance = async () => {
+		setModalPage(MODAL_PAGES.LOADING)
+		const web3Modal = getWeb3Modal({ theme: resolvedTheme })
+		isWeb3ModalActive.current = true
+		const { web3, biconomy } = await getBiconomy(web3Modal, () => (isWeb3ModalActive.current = false)).catch(error => {
+			if (error !== 'Modal closed by user') throw error
+
+			isWeb3ModalActive.current = false
+			throw setModalPage(MODAL_PAGES.GENERAL)
+		})
+		const signerAddress = await web3.getSigner().getAddress()
+		const provider = biconomy.getEthersProvider()
+
+		const ercContract = new ethers.Contract(LIST_CURRENCIES[token.listing.currency], iercPermit20Abi, biconomy.getSignerByAddress(signerAddress))
+		const transaction = await axios.post('/api/marketplace/permit', await signTokenPermit(web3, ercContract, LIST_CURRENCIES[token.listing.currency])).then(res => res.data)
+
+		setTransactionHash(transaction)
+		setModalPage(MODAL_PAGES.PROCESSING_ALLOWANCE)
+
+		provider.once(transaction, buyToken)
+	}
+
+	return (
+		<div tabIndex="0" className="p-12 space-y-5 flex-1 flex flex-col items-center justify-center focus:outline-none">
+			<div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 dark:bg-yellow-900 sm:mx-0 sm:h-10 sm:w-10">
+				<ExclamationIcon className="h-6 w-6 text-yellow-600 dark:text-yellow-300" aria-hidden="true" />
+			</div>
+			<p className="font-medium text-gray-900 dark:text-white text-center">To buy this NFT, we need permission to spend your ${token.listing.currency}.</p>
+			<div className="flex items-center justify-center">
+				<Button style="primary" onClick={grantAllowance}>
+					Grant Permission
+				</Button>
+			</div>
+		</div>
+	)
+}
+
+const AllowanceProcessingPage = ({ transactionHash }) => {
+	return (
+		<div className="p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
+			<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
+			<div className="space-y-1">
+				<p className="font-medium text-gray-900 dark:text-white text-center">We're processing your allowance approval.</p>
+				<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs mx-auto">This shouldn't take more than a few seconds, but feel free to leave the page and come back later!.</p>
+			</div>
+			<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
+				<PolygonIcon className="w-4 h-4" />
+				<span className="text-sm font-medium">View on PolygonScan</span>
+			</Button>
 		</div>
 	)
 }
