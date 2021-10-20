@@ -27,6 +27,7 @@ import { parseEther } from '@ethersproject/units'
 const MODAL_PAGES = {
 	GENERAL: 'general',
 	LOADING: 'loading',
+	PERMIT_LOADING: 'permit_loading',
 	MINTING: 'minting',
 	SUCCESS: 'success',
 	CHANGE_WALLET: 'change_wallet',
@@ -62,7 +63,7 @@ const ListModal = ({ open, onClose, token }) => {
 	}
 
 	const [price, setPrice] = useState('')
-	const [currency, setCurrency] = useState(LIST_CURRENCIES.TEST)
+	const [currency, setCurrency] = useState(LIST_CURRENCIES.TKN)
 	const [editionCount, setEditionCount] = useState(1)
 	const [transactionHash, setTransactionHash] = useState('')
 
@@ -130,8 +131,14 @@ const ListModal = ({ open, onClose, token }) => {
 			const { data } = await mintContract.populateTransaction.setApprovalForAll(process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT, true)
 
 			const transaction = await provider.send('eth_sendTransaction', [{ data, from: signerAddress, to: process.env.NEXT_PUBLIC_MINTING_CONTRACT, signatureType: 'EIP712_SIGN' }])
+			setTransactionHash(transaction)
 
-			await new Promise(resolve => provider.once(transaction, resolve))
+			await new Promise(resolve =>
+				provider.once(transaction, () => {
+					setModalPage(MODAL_PAGES.PERMIT_LOADING)
+					resolve()
+				})
+			)
 		}
 
 		const { data } = await contract.populateTransaction.createSale(token.token_id, editionCount, parseEther(price) /* assuming 18 decimals */, currency)
@@ -170,6 +177,8 @@ const ListModal = ({ open, onClose, token }) => {
 				return <SuccessPage token={token} transactionHash={transactionHash} shotConfetti={shotConfetti} />
 			case MODAL_PAGES.CHANGE_WALLET:
 				return <WalletErrorPage listToken={listToken} />
+			case MODAL_PAGES.PERMIT_LOADING:
+				return <PermitLoadingPage transactionHash={transactionHash} />
 		}
 	})(modalPage)
 
@@ -268,13 +277,29 @@ const ListPage = ({ token, price, setPrice, currency, setCurrency, editionCount,
 	)
 }
 
-const LoadingPage = () => {
+const LoadingPage = ({ transactionHash }) => {
 	return (
 		<div tabIndex="0" className="focus:outline-none p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
 			<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
 			<div className="space-y-1">
 				<p className="font-medium text-gray-900 dark:text-white text-center">We're preparing your NFT</p>
 				<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs">We'll ask you to confirm with your preferred wallet shortly</p>
+			</div>
+			<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
+				<PolygonIcon className="w-4 h-4" />
+				<span className="text-sm font-medium">View on PolygonScan</span>
+			</Button>
+		</div>
+	)
+}
+
+const PermitLoadingPage = () => {
+	return (
+		<div tabIndex="0" className="focus:outline-none p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
+			<div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
+			<div className="space-y-1">
+				<p className="font-medium text-gray-900 dark:text-white text-center">We're preparing your account to sell Showtime NFTs</p>
+				<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs mx-auto">You only need to do this once, and it shouldn't take more than a few seconds.</p>
 			</div>
 		</div>
 	)
