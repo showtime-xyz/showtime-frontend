@@ -213,7 +213,7 @@ const BuyPage = ({ token, quantity, setQuantity, buyToken }) => {
 
 						<div className="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
 							<p className="text-gray-600 dark:text-white text-xs font-semibold">
-								{token.listing.total_listed_quantity}/{token.listing.total_edition_quantity} available
+								{token.listing.quantity}/{token.listing.total_edition_quantity} available
 							</p>
 							<p className="text-gray-600 dark:text-white text-xs font-semibold">{parseInt(token.listing.royalty_percentage)}% Royalties</p>
 						</div>
@@ -223,7 +223,7 @@ const BuyPage = ({ token, quantity, setQuantity, buyToken }) => {
 									<p className="font-semibold text-gray-900 dark:text-white">Quantity</p>
 									<p className="text-sm font-medium text-gray-700 dark:text-gray-300">1 by default</p>
 								</div>
-								<input type="number" min="1" max={token.listing.total_listed_quantity} placeholder="1" className="px-4 py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring min-w-[60px] no-spinners text-right" value={quantity} onChange={event => (event.target.value < 1 || event.target.value.trim() == '' ? setQuantity(1) : event.target.value > token.listing.total_listed_quantity ? setQuantity(token.listing.total_listed_quantity) : setQuantity(parseInt(event.target.value)))} />
+								<input type="number" min="1" max={token.listing.quantity} placeholder="1" className="px-4 py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring min-w-[60px] no-spinners text-right" value={quantity} onChange={event => (event.target.value < 1 || event.target.value.trim() == '' ? setQuantity(1) : event.target.value > token.listing.total_listed_quantity ? setQuantity(token.listing.total_listed_quantity) : setQuantity(parseInt(event.target.value)))} />
 							</div>
 						</div>
 						<div className="p-4 bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
