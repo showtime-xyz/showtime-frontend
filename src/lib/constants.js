@@ -8,6 +8,7 @@ export const colors = {
 	yellow: '#f3bf4b',
 	pink: '#e45cff',
 	teal: '#1dd4e0',
+	darkgreen: '#36a93b',
 }
 export const CONTRACTS = {
 	ZORA: '0xabefbc9fd2f806065b4f3c237d4b59d9a97bcac7',
@@ -100,6 +101,13 @@ export const getNotificationInfo = type => {
 				icon: 'heart',
 				goTo: 'nft',
 				color: colors.red,
+			}
+		case 8:
+			return {
+				type: 'bought_my_piece',
+				icon: 'money',
+				goTo: 'nft',
+				color: colors.darkgreen,
 			}
 		default:
 			return {
