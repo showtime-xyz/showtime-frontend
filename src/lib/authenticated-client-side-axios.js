@@ -8,7 +8,7 @@ const axios = Axios.create()
 
 /**
  * An expired or missing access token sent to our backend services will trigger a
- * 401 or 500 response status code that we intercept to trigger a silent access token refresh.
+ * 401 response status code that we intercept to trigger a silent access token refresh.
  * On refresh success the request will be resent and on failure we force the logout flow.
  */
 createAuthRefreshInterceptor(
@@ -45,7 +45,7 @@ createAuthRefreshInterceptor(
 			return Promise.reject()
 		}
 	},
-	{ statusCodes: [401, 500] }
+	{ statusCodes: [401] }
 )
 
 /**
