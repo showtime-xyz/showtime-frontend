@@ -27,6 +27,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 	const [muted, setMuted] = useState(true)
 	const [refreshing, setRefreshing] = useState(false)
 	const [showModel, setShowModel] = useState(false)
+	const hasMatchingListing = item?.listing?.all_sellers?.find(seller => seller.profile_id === pageProfile.profile_id)
 
 	// Automatically load models that have no preview image. We don't account for video here because currently token_animation_url is a glb file.
 	useEffect(() => {
@@ -131,25 +132,23 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 									<Menu.Items className="z-1 absolute right-0 mt-2 origin-top-right border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg rounded-xl p-2 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
 										{SHOWTIME_CONTRACTS.includes(item.contract_address) && item?.show_transfer_options == 1 && (
 											<>
-												{!item.listing && (
+												{!hasMatchingListing ? (
 													<Menu.Item>
 														{({ active }) => (
-															<button onClick={() => setListModal(item)} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+															<button onClick={() => setListModal(item)} className={classNames(active ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-white', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
 																<span className="block truncate font-medium">List</span>
 															</button>
 														)}
 													</Menu.Item>
-												)}
-												{item.listing?.profile_id === pageProfile?.profile_id && (
+												) : (
 													<Menu.Item>
 														{({ active }) => (
-															<button onClick={() => setUnlistModal(item)} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+															<button onClick={() => setUnlistModal(item)} className={classNames(active ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-white', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
 																<span className="block truncate font-medium">Unlist</span>
 															</button>
 														)}
 													</Menu.Item>
 												)}
-												<hr className="border-gray-100 dark:border-gray-700 my-1" />
 											</>
 										)}
 										<Menu.Item>
@@ -188,7 +187,6 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 														</button>
 													)}
 												</Menu.Item>
-												<hr className="border-gray-100 dark:border-gray-700 my-1" />
 
 												<Menu.Item>
 													{({ active }) => (
