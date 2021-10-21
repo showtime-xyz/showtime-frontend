@@ -101,7 +101,7 @@ const UnlistModal = ({ open, onClose, token }) => {
 	const renderedPage = (type => {
 		switch (type) {
 			case MODAL_PAGES.GENERAL:
-				return <UnlistPage token={token} unlistToken={unlistToken} onClose={trueOnClose} />
+				return <UnlistPage token={token} unlistToken={unlistToken} onClose={trueOnClose} profile_id={myProfile?.profile_id} />
 			case MODAL_PAGES.LOADING:
 				return <LoadingPage />
 			case MODAL_PAGES.PROCESSING:
@@ -143,13 +143,16 @@ const UnlistModal = ({ open, onClose, token }) => {
 	)
 }
 
-const UnlistPage = ({ token, unlistToken, onClose }) => {
+const UnlistPage = ({ token, unlistToken, onClose, profile_id }) => {
+	const currentListing = token?.listing?.all_sellers?.find(seller => seller.profile_id === profile_id)
+	const hasMultipleEditions = token?.listing?.total_edition_quantity > 1
+
 	return (
 		<>
 			<div className="flex-1 overflow-y-auto">
-				<div className="p-4 border-b border-gray-100 dark:border-gray-900 space-y-2">
-					<p className="font-bold text-gray-900">Are you sure you want to unlist this NFT?</p>
-					<p className="font-medium text-gray-900">Unlisting an NFT will remove it from Showtime’s marketplace.</p>
+				<div className="p-4 border-b border-gray-100 dark:border-gray-900 space-y-2  text-gray-900 dark:text-white">
+					<p className="text-base pb-4">Are you sure you want to unlist this NFT?</p>
+					<p className="text-sm">Unlisting an NFT will remove it from Showtime’s marketplace.</p>
 				</div>
 				{token && (
 					<>
@@ -173,11 +176,9 @@ const UnlistPage = ({ token, unlistToken, onClose }) => {
 							</div>
 							<hr className="mx-8 border-0 border-r-px dark:border-gray-800" />
 						</div>
-						<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
-							<p className="text-gray-600 text-xs font-semibold">
-								{token.listing.total_listed_quantity}/{token.listing.total_edition_quantity} available
-							</p>
-							<p className="text-gray-600 text-xs font-semibold">{parseInt(token.listing.royalty_percentage)}% Royalties</p>
+						<div className={`p-4 border-b border-gray-100 dark:border-gray-900 flex items-center ${hasMultipleEditions ? 'justify-between' : 'justify-end'}`}>
+							{hasMultipleEditions && <p className="text-gray-600 text-xs font-semibold dark:text-white">{currentListing.quantity} available</p>}
+							<p className="text-gray-600 text-xs font-semibold dark:text-white">{parseInt(token.listing.royalty_percentage)}% Royalties</p>
 						</div>
 					</>
 				)}
