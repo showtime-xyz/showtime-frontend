@@ -177,7 +177,7 @@ const UnlistPage = ({ token, unlistToken, onClose, profile_id }) => {
 							<hr className="mx-8 border-0 border-r-px dark:border-gray-800" />
 						</div>
 						<div className={`p-4 border-b border-gray-100 dark:border-gray-900 flex items-center ${hasMultipleEditions ? 'justify-between' : 'justify-end'}`}>
-							{hasMultipleEditions && <p className="text-gray-600 text-xs font-semibold dark:text-white">{currentListing.quantity} available</p>}
+							{hasMultipleEditions && <p className="text-gray-600 text-xs font-semibold dark:text-white">{currentListing.quantity} listed</p>}
 							<p className="text-gray-600 text-xs font-semibold dark:text-white">{parseInt(token.listing.royalty_percentage)}% Royalties</p>
 						</div>
 					</>
