@@ -494,7 +494,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Listed by</span>
 												<div className="flex items-center space-x-1 -mt-0.5">
 													<div className="text-sm font-semibold truncate dark:text-gray-200 min-w-0">{item.listing.name === item.listing.address ? formatAddressShort(item.listing.name) : truncateWithEllipses(item.listing.name, 22)}</div>
-													{item.listing.verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+													{item.listing.verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
 												</div>
 											</div>
 										</a>
@@ -503,7 +503,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 										<div>
 											<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Available</span>
 											<p className="text-sm font-bold text-gray-900 dark:text-gray-200">
-												{item.listing.total_listed_quantity}/{item.listing.total_edition_quantity}
+												{item.listing.quantity}/{item.listing.total_edition_quantity}
 											</p>
 										</div>
 										<div>
