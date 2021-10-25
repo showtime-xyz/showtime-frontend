@@ -78,9 +78,6 @@ const MintModal = ({ open, onClose }) => {
 	const [ipfsHash, setIpfsHash] = useState(null)
 	const [isUploading, setIsUploading] = useState(false)
 	const [sourcePreview, setSourcePreview] = useState({ type: null, size: null, ext: null, src: null })
-	const [putOnSale, setPutOnSale] = useState(false)
-	const [price, setPrice] = useState('')
-	const [currency, setCurrency] = useState('ETH')
 	const [editionCount, setEditionCount] = useState(1)
 	const [royaltiesPercentage, setRoyaltiesPercentage] = useState(10)
 	const [notSafeForWork, setNotSafeForWork] = useState(false)
@@ -98,9 +95,6 @@ const MintModal = ({ open, onClose }) => {
 		setDescription('')
 		setIpfsHash('')
 		setSourcePreview({ type: null, size: null, ext: null, src: null })
-		setPutOnSale(false)
-		setPrice('')
-		setCurrency('ETH')
 		setEditionCount(1)
 		setRoyaltiesPercentage(10)
 		setNotSafeForWork(false)
@@ -110,8 +104,8 @@ const MintModal = ({ open, onClose }) => {
 		setModalPage(MODAL_PAGES.GENERAL)
 	}
 
-	const saveDraft = () => axios.post('/api/mint/draft', { title, description, number_of_copies: editionCount, nsfw: notSafeForWork, price: price || null, royalties: royaltiesPercentage, currency, ipfs_hash: ipfsHash, agreed_to_terms: hasAcceptedTerms, mime_type: sourcePreview.src ? `${sourcePreview.type}/${sourcePreview.ext}` : null, file_size: sourcePreview.size })
-	const markDraftMinted = () => axios.post('/api/mint/draft', { title, description, number_of_copies: editionCount, nsfw: notSafeForWork, price: price || null, royalties: royaltiesPercentage, currency, ipfs_hash: ipfsHash, agreed_to_terms: hasAcceptedTerms, mime_type: sourcePreview.src ? `${sourcePreview.type}/${sourcePreview.ext}` : null, file_size: sourcePreview.size, minted: true })
+	const saveDraft = () => axios.post('/api/mint/draft', { title, description, number_of_copies: editionCount, nsfw: notSafeForWork, royalties: royaltiesPercentage, ipfs_hash: ipfsHash, agreed_to_terms: hasAcceptedTerms, mime_type: sourcePreview.src ? `${sourcePreview.type}/${sourcePreview.ext}` : null, file_size: sourcePreview.size })
+	const markDraftMinted = () => axios.post('/api/mint/draft', { title, description, number_of_copies: editionCount, nsfw: notSafeForWork, royalties: royaltiesPercentage, ipfs_hash: ipfsHash, agreed_to_terms: hasAcceptedTerms, mime_type: sourcePreview.src ? `${sourcePreview.type}/${sourcePreview.ext}` : null, file_size: sourcePreview.size, minted: true })
 
 	const loadDraft = async () => {
 		try {
@@ -121,8 +115,6 @@ const MintModal = ({ open, onClose }) => {
 			setDescription(draft.description || '')
 			setHasAcceptedTerms(draft.agreed_to_terms || false)
 			setNotSafeForWork(draft.nsfw || false)
-			setPrice(draft.price ?? '')
-			setCurrency(draft.currency_ticker || 'ETH')
 			setEditionCount(draft.number_of_copies != null ? parseInt(draft.number_of_copies) : 1)
 			setRoyaltiesPercentage(draft.royalties != null ? parseInt(draft.royalties) : 10)
 			setIpfsHash(draft.ipfs_hash || null)
@@ -187,11 +179,10 @@ const MintModal = ({ open, onClose }) => {
 
 	const isValid = useMemo(() => {
 		if (!title || !hasAcceptedTerms || !editionCount || !ipfsHash) return false
-		if (putOnSale && (!price || !currency)) return false
 		if (editionCount < 1 || editionCount > 10000 || royaltiesPercentage > 69 || royaltiesPercentage < 0) return false
 
 		return true
-	}, [title, hasAcceptedTerms, putOnSale, price, currency, editionCount, royaltiesPercentage, ipfsHash])
+	}, [title, hasAcceptedTerms, editionCount, royaltiesPercentage, ipfsHash])
 
 	const mintToken = async () => {
 		setModalPage(MODAL_PAGES.LOADING)
@@ -272,7 +263,7 @@ const MintModal = ({ open, onClose }) => {
 	const renderedPage = (type => {
 		switch (type) {
 			case MODAL_PAGES.GENERAL:
-				return <CreatePage {...{ title, setTitle, description, setDescription, ipfsHash, isUploading, onFileUpload, cancelUpload, sourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }} />
+				return <CreatePage {...{ title, setTitle, description, setDescription, ipfsHash, isUploading, onFileUpload, cancelUpload, sourcePreview, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }} />
 			case MODAL_PAGES.OPTIONS:
 				return <OptionsPage {...{ editionCount, setEditionCount, royaltiesPercentage, setRoyaltiesPercentage, notSafeForWork, setNotSafeForWork }} />
 			case MODAL_PAGES.LOADING:
@@ -346,7 +337,7 @@ const NoWalletPage = () => (
 	</div>
 )
 
-const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, isUploading, onFileUpload, cancelUpload, sourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }) => {
+const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, isUploading, onFileUpload, cancelUpload, sourcePreview, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }) => {
 	return (
 		<>
 			<div className="flex-1 overflow-y-auto">
@@ -368,32 +359,6 @@ const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, is
 						</div>
 					</fieldset>
 					<IpfsUpload ipfsHash={ipfsHash} onChange={onFileUpload} onCancel={cancelUpload} fileDetails={sourcePreview} isUploading={isUploading} />
-				</div>
-				<div className="p-4 border-b border-gray-100 dark:border-gray-900">
-					<div className="flex items-center justify-between space-x-4">
-						<div>
-							<p className="font-semibold text-gray-900 dark:text-white space-x-1 flex items-center">
-								<span>Sell</span>
-								<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">coming soon</span>
-							</p>
-							<p className="text-sm font-medium text-gray-700 dark:text-gray-300">Enter a fixed price to allow people to purchase your NFT.</p>
-						</div>
-						<Switch value={putOnSale} onChange={setPutOnSale} disabled />
-					</div>
-					<Transition show={putOnSale} as={Fragment} enter="transition ease-in-out duration-300 transform" enterFrom="-translate-y-full opacity-0" enterTo="translate-y-0 opacity-100">
-						<div className="mt-4 flex items-stretch justify-between space-x-2">
-							<input className="flex-1 px-4 relative block w-full rounded-xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring font-medium" placeholder="Price" value={price} onChange={event => setPrice(event.target.value)} />
-							<Dropdown
-								className="flex-1"
-								value={currency}
-								onChange={setCurrency}
-								options={[
-									{ label: 'ETH', value: 'ETH' },
-									{ label: 'USDC', value: 'USDC' },
-								]}
-							/>
-						</div>
-					</Transition>
 				</div>
 				<button onClick={() => setModalPage(MODAL_PAGES.OPTIONS)} className="p-4 border-b border-gray-100 dark:border-gray-900 w-full text-left focus-visible:ring group">
 					<div className="flex items-center justify-between space-x-4">
