@@ -17,6 +17,7 @@ import { Menu, Transition } from '@headlessui/react'
 import EllipsisIcon from './Icons/EllipsisIcon'
 import BadgeIcon from './Icons/BadgeIcon'
 import OrbitIcon from './Icons/OrbitIcon'
+import BuyModal from './UI/Modals/BuyModal'
 
 const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) => {
 	useEffect(() => {
@@ -29,6 +30,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 	const [muted, setMuted] = useState(true)
 	const [refreshing, setRefreshing] = useState(false)
 	const [currentlyOpenModal, setCurrentlyOpenModal] = useState(false)
+	const [buyModalOpen, setBuyModalOpen] = useState(false)
 	const [currentlyPlayingVideo, setCurrentlyPlayingVideo] = useState(true)
 	const [videoReady, setVideoReady] = useState(false)
 	const [thisItem, setThisItem] = useState(item)
@@ -70,6 +72,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 			{typeof document !== 'undefined' ? (
 				<>
 					<ModalTokenDetail isOpen={currentlyOpenModal} setEditModalOpen={setCurrentlyOpenModal} item={thisItem} />
+					<BuyModal open={buyModalOpen} onClose={() => setBuyModalOpen(false)} token={thisItem} />
 				</>
 			) : null}
 
@@ -288,20 +291,17 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 											</>
 										)}
 									</div>
-									{item.listing ? (
-										<>
-											<div className="h-px bg-gray-100 dark:bg-gray-800 mx-1 mt-4 mb-2" />
-											<div className="flex items-center justify-between px-2">
-												<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
-													{item.listing.total_listed_quantity}/{item.listing.total_edition_quantity} available
-												</p>
-												<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">{parseInt(item.listing.royalty_percentage)}% Royalties</p>
-											</div>
-											<div className="h-px bg-gray-100 dark:bg-gray-800 mx-1 mt-2 mb-4" />
-										</>
-									) : (
-										<div className="h-px bg-gray-100 dark:bg-gray-800 mx-1 my-4" />
-									)}
+									<div className="flex items-center justify-between py-2 px-4 mx-[calc(-0.5rem-1px)] bg-gray-100 my-4 space-x-8">
+										<div className="flex items-center space-x-2">
+											{item.collection_img_url && <img src={item.collection_img_url} className="w-5 h-5 rounded-full" />}
+											<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">{item.collection_name}</p>
+										</div>
+										{item.listing && (
+											<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+												{item.listing.total_edition_quantity} Editions / {parseInt(item.listing.royalty_percentage)}% Royalties
+											</p>
+										)}
+									</div>
 									<div className="flex items-center justify-between px-4 space-x-4">
 										<div className="flex items-center space-x-4">
 											<LikeButton item={item} />
@@ -348,9 +348,15 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 									</div>
 								</div>
 								<div className="mt-8 inline-block">
-									<Button style="primary" as="a" href={getBidLink(item)} title={`View on ${getContractName(item)}`} target="_blank" onClick={() => mixpanel.track('OpenSea link click')} rel="noreferrer">
-										View on {getContractName(item)}
-									</Button>
+									{item.listing ? (
+										<Button style="primary" title="Buy on Showtime" onClick={() => setBuyModalOpen(true)}>
+											Buy on Showtime
+										</Button>
+									) : (
+										<Button style="primary" as="a" href={getBidLink(item)} title={`View on ${getContractName(item)}`} target="_blank" onClick={() => mixpanel.track('OpenSea link click')} rel="noreferrer">
+											View on {getContractName(item)}
+										</Button>
+									)}
 								</div>
 							</div>
 						</div>
