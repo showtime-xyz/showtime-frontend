@@ -396,7 +396,7 @@ const InvalidBalancePage = ({ buyToken, setModalPage, token }) => {
 			</p>
 			<p className="font-medium text-sm text-gray-600 dark:text-white text-center max-w-xs mx-auto">
 				Keep in mind that Showtime uses Polygon, so you may have to{' '}
-				<a className="font-semibold" href="https://wallet.polygon.technology/bridge" target="_blank">
+				<a className="font-semibold" href="https://wallet.polygon.technology/bridge" target="_blank" rel="noreferrer">
 					bridge any Ethereum assets
 				</a>{' '}
 				before using them.
