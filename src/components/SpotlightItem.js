@@ -18,8 +18,18 @@ import EllipsisIcon from './Icons/EllipsisIcon'
 import BadgeIcon from './Icons/BadgeIcon'
 import OrbitIcon from './Icons/OrbitIcon'
 import BuyModal from './UI/Modals/BuyModal'
+import useSWR from 'swr'
+import backend from '@/lib/backend'
 
 const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) => {
+	const { data: thisItem, mutate: mutateItem } = useSWR(
+		() => item && `/v1/spotlight/${item.creator_id}`,
+		url => backend.get(url).then(res => res.data.data),
+		{ initialData: item, revalidateOnMount: true, revalidateOnFocus: false }
+	)
+
+	console.log(thisItem)
+
 	useEffect(() => {
 		if (!item?.mime_type?.startsWith('model') || window.customElements.get('model-viewer')) return
 		import('@google/model-viewer')
@@ -33,7 +43,6 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 	const [buyModalOpen, setBuyModalOpen] = useState(false)
 	const [currentlyPlayingVideo, setCurrentlyPlayingVideo] = useState(true)
 	const [videoReady, setVideoReady] = useState(false)
-	const [thisItem, setThisItem] = useState(item)
 
 	const divRef = useRef()
 	const imgContainerRef = useRef()
@@ -49,7 +58,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 
 		const { data } = await axios.post(`/api/refreshmetadata/${thisItem.nft_id}`).then(res => res.data)
 
-		if (data) setThisItem(data)
+		if (data) mutateItem(data, false)
 
 		setRefreshing(false)
 	}
