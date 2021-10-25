@@ -1,5 +1,11 @@
-import { useEffect, useState } from 'react'
 import '@/styles/styles.css'
+
+import 'raf/polyfill'
+// @ts-ignore
+global.setImmediate = requestAnimationFrame
+import 'setimmediate'
+
+import { useEffect, useState } from 'react'
 import { DISABLE_ALL } from '@/lib/constants'
 import AppContext from '@/context/app-context'
 import mixpanel from 'mixpanel-browser'

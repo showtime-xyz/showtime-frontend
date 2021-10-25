@@ -1,0 +1,27 @@
+{
+	"build": {
+		"release": {
+			"releaseChannel": "production",
+			"env": {
+				"STAGE": "production"
+			}
+		},
+		"preview": {
+			"releaseChannel": "staging",
+			"distribution": "internal",
+			"android": {
+				"buildType": "apk"
+			},
+			"env": {
+				"STAGE": "staging"
+			}
+		},
+		"development": {
+			"developmentClient": true,
+			"distribution": "internal",
+			"env": {
+				"STAGE": "development"
+			}
+		}
+	}
+}
