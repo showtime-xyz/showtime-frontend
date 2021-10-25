@@ -24,6 +24,7 @@ const MODAL_PAGES = {
 	PROCESSING: 'processing',
 	SUCCESS: 'success',
 	CHANGE_WALLET: 'change_wallet',
+	NO_BALANCE: 'no_balance',
 	NEEDS_ALLOWANCE: 'needs_allowance',
 	PROCESSING_ALLOWANCE: 'processing_allowance',
 }
@@ -105,7 +106,13 @@ const BuyModal = ({ open, onClose, token }) => {
 		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT, marketplaceAbi, biconomy.getSignerByAddress(signerAddress))
 		const ercContract = new ethers.Contract(LIST_CURRENCIES[token.listing.currency], iercPermit20Abi, biconomy.getSignerByAddress(signerAddress))
 
-		if (!(await ercContract.allowance(signerAddress, process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT)).gt(ethers.utils.parseUnits(token.listing.min_price.toString(), 18))) {
+		const basePrice = ethers.utils.parseUnits(token.listing.min_price.toString(), 18)
+
+		if (!(await ercContract.balanceOf(signerAddress)).gt(basePrice)) {
+			return setModalPage(MODAL_PAGES.NO_BALANCE)
+		}
+
+		if (!(await ercContract.allowance(signerAddress, process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT)).gt(basePrice)) {
 			return setModalPage(MODAL_PAGES.NEEDS_ALLOWANCE)
 		}
 
@@ -144,7 +151,9 @@ const BuyModal = ({ open, onClose, token }) => {
 			case MODAL_PAGES.SUCCESS:
 				return <SuccessPage token={token} transactionHash={transactionHash} shotConfetti={shotConfetti} />
 			case MODAL_PAGES.CHANGE_WALLET:
-				return <WalletErrorPage listToken={buyToken} />
+				return <WalletErrorPage buyToken={buyToken} />
+			case MODAL_PAGES.NO_BALANCE:
+				return <InvalidBalancePage token={token} buyToken={buyToken} setModalPage={setModalPage} />
 			case MODAL_PAGES.NEEDS_ALLOWANCE:
 				return <AllowanceRequiredPage token={token} isWeb3ModalActive={isWeb3ModalActive} setTransactionHash={setTransactionHash} setModalPage={setModalPage} buyToken={buyToken} />
 			case MODAL_PAGES.PROCESSING_ALLOWANCE:
@@ -362,6 +371,35 @@ const WalletErrorPage = ({ buyToken }) => {
 					try again with a different wallet
 				</button>
 				.
+			</p>
+		</div>
+	)
+}
+
+const InvalidBalancePage = ({ buyToken, setModalPage, token }) => {
+	return (
+		<div tabIndex="0" className="p-12 space-y-5 flex-1 flex flex-col items-center justify-center focus:outline-none min-h-[344px]">
+			<div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 dark:bg-yellow-900 sm:mx-0 sm:h-10 sm:w-10">
+				<ExclamationIcon className="h-6 w-6 text-yellow-600 dark:text-yellow-300" aria-hidden="true" />
+			</div>
+			<p className="font-medium text-gray-900 dark:text-white text-center">You don't have enough ${token.listing.currency} on your wallet.</p>
+			<p className="font-medium text-gray-900 dark:text-white text-center max-w-xs mx-auto">
+				You can{' '}
+				<button onClick={() => setModalPage(MODAL_PAGES.GENERAL)} className="font-semibold focus:outline-none focus-visible:underline">
+					go back
+				</button>
+				, or{' '}
+				<button onClick={buyToken} className="font-semibold focus:outline-none focus-visible:underline">
+					try again with a different wallet
+				</button>
+				.
+			</p>
+			<p className="font-medium text-sm text-gray-600 dark:text-white text-center max-w-xs mx-auto">
+				Keep in mind that Showtime uses Polygon, so you may have to{' '}
+				<a className="font-semibold" href="https://wallet.polygon.technology/bridge" target="_blank">
+					bridge any Ethereum assets
+				</a>{' '}
+				before using them.
 			</p>
 		</div>
 	)
