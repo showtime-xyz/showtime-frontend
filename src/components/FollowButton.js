@@ -3,7 +3,6 @@ import mixpanel from 'mixpanel-browser'
 import AppContext from '@/context/app-context'
 import _ from 'lodash'
 import axios from '@/lib/axios'
-import UserAddIcon from './Icons/UserAddIcon'
 import Button from './UI/Buttons/Button'
 import useAuth from '@/hooks/useAuth'
 
@@ -67,14 +66,7 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 
 	return (
 		<Button style={isFollowed ? 'tertiary' : 'primary'} onClick={isAuthenticated ? (isFollowed ? handleUnfollow : context.disableFollows ? null : handleFollow) : handleLoggedOutFollow} className={`space-x-2 ${isFollowed ? '' : 'text-white'} ${hideIfFollowing ? 'hidden' : ''} ${compact ? 'py-1 px-2 text-sm' : ''}`}>
-			{isFollowed ? (
-				<span className="font-semibold">Following</span>
-			) : (
-				<>
-					<UserAddIcon className="w-5 h-5" />
-					<span className="font-semibold">Follow</span>
-				</>
-			)}
+			{isFollowed ? <span className="font-bold">Following</span> : <span className="font-bold">Follow</span>}
 		</Button>
 	)
 }

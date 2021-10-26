@@ -21,7 +21,6 @@ import { Transition, Menu } from '@headlessui/react'
 import { PencilAltIcon, DotsHorizontalIcon, HeartIcon } from '@heroicons/react/solid'
 import { UploadIcon } from '@heroicons/react/outline'
 import axios, { CancelToken, isCancel } from '@/lib/axios'
-import UserAddIcon from '@/components/Icons/UserAddIcon'
 import FollowersInCommon from '@/components/FollowersInCommon'
 import GlobeIcon from '@/components/Icons/GlobeIcon'
 import useAuth from '@/hooks/useAuth'
@@ -616,17 +615,8 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 											<FollowStats {...{ following_count, followersCount, isMyProfile, setShowFollowing, setShowFollowers }} />
 										</div>
 										<div className="flex items-center space-x-2">
-											<Button style={isMyProfile ? 'tertiary_gray' : isFollowed ? 'tertiary' : 'primary'} onClick={isAuthenticated ? (isMyProfile ? editAccount : isFollowed ? handleUnfollow : context.disableFollows ? null : handleFollow) : handleLoggedOutFollow} className={`space-x-2 ${isFollowed || isMyProfile ? 'dark:text-gray-400' : 'text-white'}`}>
-												{isMyProfile ? (
-													<span className="font-semibold whitespace-nowrap">Edit Profile</span>
-												) : isFollowed ? (
-													<span className="font-semibold">Following</span>
-												) : (
-													<>
-														<UserAddIcon className="w-5 h-5" />
-														<span className="font-semibold">{followingMe ? 'Follow Back' : 'Follow'}</span>
-													</>
-												)}
+											<Button style={isMyProfile ? 'tertiary_gray' : isFollowed ? 'tertiary' : 'primary'} onClick={isAuthenticated ? (isMyProfile ? editAccount : isFollowed ? handleUnfollow : context.disableFollows ? null : handleFollow) : handleLoggedOutFollow} className={`space-x-2 !rounded-full ${isFollowed || isMyProfile ? 'dark:text-gray-400' : 'text-white'}`}>
+												{isMyProfile ? <span className="font-semibold whitespace-nowrap">Edit Profile</span> : isFollowed ? <span className="font-bold">Following</span> : <span className="font-bold">{followingMe ? 'Follow Back' : 'Follow'}</span>}
 											</Button>
 										</div>
 									</div>
