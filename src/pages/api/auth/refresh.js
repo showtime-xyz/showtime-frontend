@@ -28,12 +28,17 @@ export default handler().post(async (req, res) => {
 		const newAccessToken = refreshResponse?.data?.access
 		const newRefreshToken = refreshResponse?.data?.refresh
 
-		const sealedRefreshToken = await Iron.seal({ refreshToken: newRefreshToken }, process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
-
-		CookieService.setTokenCookie({
-			res,
-			sealedRefreshToken,
-		})
+		/**
+		 * API will optionally return a refreshed refresh token.
+		 * Only override the cookie when a new refresh token is returned.
+		 */
+		if (newRefreshToken) {
+			const sealedRefreshToken = await Iron.seal({ refreshToken: newRefreshToken }, process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+			CookieService.setTokenCookie({
+				res,
+				sealedRefreshToken,
+			})
+		}
 
 		res.status(200).json({ access: newAccessToken })
 	} catch (error) {
