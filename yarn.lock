@@ -1047,10 +1047,10 @@
   resolved "https://registry.yarnpkg.com/@ledgerhq/logs/-/logs-4.72.0.tgz#43df23af013ad1135407e5cf33ca6e4c4c7708d5"
   integrity sha512-o+TYF8vBcyySRsb2kqBDv/KMeme8a2nwWoG+lAWzbDmWfb2/MrVWYCVYDYvjXdSoI/Cujqy1i0gIDrkdxa9chA==
 
-"@magic-sdk/admin@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/admin/-/admin-1.3.0.tgz#08d53aa39f94090221999be60660bdc50b8e6e12"
-  integrity sha512-PcDP+8i82p7e+oSohqE5dPoRyymEsoOcXaAKxK7S13TypVf1lxf4MCpBBQI7Q+nFwNa4zTRcaE6QaDdvruBDKA==
+"@magic-sdk/admin@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/admin/-/admin-1.3.1.tgz#7cad0d9a1f9db8224cbcbc5a77526941d2b1a83f"
+  integrity sha512-g1B8MHSBpJoDfFL/y7gd1YtgrwYbS7m7iRijOgiXrkMnIoid0bHgUsRS9LQKy6mImH/JleJSZcaofm2mIvs6tQ==
   dependencies:
     eth-sig-util "2.1.2"
     ethereumjs-util "^6.2.0"
