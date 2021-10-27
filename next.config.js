@@ -3,7 +3,6 @@ const { withSentryConfig } = require('@sentry/nextjs')
 const isDev = process.env.NODE_ENV === 'development'
 
 const nextConfig = {
-	swcMinify: true,
 	async redirects() {
 		return [
 			{
