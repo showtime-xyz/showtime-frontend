@@ -228,7 +228,7 @@ export const signTokenPermit = async (web3, tokenContract, tokenAddr) => {
 }
 
 export const switchToChain = (web3, chainId, chainDetails = { chainId }) => {
-	return web3.provider.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: chainId }] }).catch(error => {
+	return web3.provider.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: `0x${chainId.toString(16)}` }] }).catch(error => {
 		if (error.code !== 4902) throw error
 
 		return web3.provider.request({ method: 'wallet_addEthereumChain', params: [chainDetails] })

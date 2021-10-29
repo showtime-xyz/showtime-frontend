@@ -12,7 +12,7 @@ import useProfile from '@/hooks/useProfile'
 import { ExclamationIcon } from '@heroicons/react/outline'
 import XIcon from '@/components/Icons/XIcon'
 import { DEFAULT_PROFILE_PIC, LIST_CURRENCIES } from '@/lib/constants'
-import { formatAddressShort, signTokenPermit, truncateWithEllipses } from '@/lib/utilities'
+import { formatAddressShort, signTokenPermit, switchToChain, truncateWithEllipses } from '@/lib/utilities'
 import BadgeIcon from '@/components/Icons/BadgeIcon'
 import confetti from 'canvas-confetti'
 import Link from 'next/link'
@@ -422,7 +422,16 @@ const AllowanceRequiredPage = ({ token, isWeb3ModalActive, setModalPage, setTran
 		const provider = biconomy.getEthersProvider()
 
 		const ercContract = new ethers.Contract(LIST_CURRENCIES[token.listing.currency], iercPermit20Abi, biconomy.getSignerByAddress(signerAddress))
-		const transaction = await axios.post('/api/marketplace/permit', await signTokenPermit(web3, ercContract, LIST_CURRENCIES[token.listing.currency])).then(res => res.data)
+		const tokenPermit = await signTokenPermit(web3, ercContract, LIST_CURRENCIES[token.listing.currency]).catch(async error => {
+			if (!error.message.includes('must match the active chainId')) throw error
+
+			await switchToChain(web3, 80001, { chainId: `0x${(80001).toString(16)}`, chainName: 'Mumbai Testnet', nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 }, rpcUrls: ['https://rpc-mumbai.maticvigil.com/'], blockExplorerUrls: ['https://mumbai.polygonscan.com/'] })
+			const tokenPermit = await signTokenPermit(web3, ercContract, LIST_CURRENCIES[token.listing.currency])
+			await switchToChain(web3, 1)
+
+			return tokenPermit
+		})
+		const transaction = await axios.post('/api/marketplace/permit', tokenPermit).then(res => res.data)
 
 		setTransactionHash(transaction)
 		setModalPage(MODAL_PAGES.PROCESSING_ALLOWANCE)
