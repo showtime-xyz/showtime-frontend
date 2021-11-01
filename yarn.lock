@@ -420,19 +420,19 @@
   resolved "https://registry.yarnpkg.com/@badrap/bar-of-progress/-/bar-of-progress-0.1.2.tgz#5d9cf85759e1f77bddcb74398530976d87bb5077"
   integrity sha512-bCwx/HbgUfJEndzlubJF5FVQrFEcGX4HZsoCfoa+gSq37pjbJBvIyqMBLIGnb5y0ICovIrxJUxvlbmxeic0rSQ==
 
-"@biconomy/mexa@^2.0.19":
-  version "2.0.19"
-  resolved "https://registry.yarnpkg.com/@biconomy/mexa/-/mexa-2.0.19.tgz#6068b5901812eb2ea1bafa5b058b1f3ab1c5e285"
-  integrity sha512-fZcNiIySKvzJLeRa/SurUA7anRS6E/FdUFgZMME013ilKq4HNtOCHBfdudSafCvxXEMtBmFvwqk0SvFr6hOgsA==
+"@biconomy/mexa@^2.0.21":
+  version "2.0.21"
+  resolved "https://registry.yarnpkg.com/@biconomy/mexa/-/mexa-2.0.21.tgz#89b300f33cf211b04b020df27b7dc46b05d9cdfd"
+  integrity sha512-LR+pM3lDbjQa6a3Mjx/qPnR+dCcGTaapNxityN76Mu+K1HID0I5DUW+FiOwVYidQi0ONg6/PbICuvzGo+BUcyw==
   dependencies:
     "@babel/core" "^7.12.13"
     "@babel/runtime" "^7.12.13"
     abi-decoder "^2.2.2"
+    cross-fetch "^3.1.4"
     ethereum-tx-decoder "^3.0.0"
     ethereumjs-abi "^0.6.8"
     ethers "^5.0.24"
     events "^3.0.0"
-    node-fetch "^2.6.0"
     promise "^8.0.3"
 
 "@chaitanyapotti/random-id@^1.0.3":
@@ -4082,6 +4082,13 @@ cross-fetch@^2.1.0, cross-fetch@^2.1.1:
   dependencies:
     node-fetch "2.6.1"
     whatwg-fetch "2.0.4"
+
+cross-fetch@^3.1.4:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.4.tgz#9723f3a3a247bf8b89039f3a380a9244e8fa2f39"
+  integrity sha512-1eAtFWdIubi6T4XPy6ei9iUFoKpUkIF971QLN8lIvvvwueI65+Nw5haMNKUwfJxabqlIIDODJKGrQ66gxC0PbQ==
+  dependencies:
+    node-fetch "2.6.1"
 
 cross-spawn@^6.0.5:
   version "6.0.5"
