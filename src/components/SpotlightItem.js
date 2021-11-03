@@ -359,7 +359,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 								<div className="mt-8 inline-block">
 									{item.listing ? (
 										<Button style="primary" title="Buy on Showtime" onClick={() => setBuyModalOpen(true)}>
-											Buy on Showtime
+											Buy for {item.listing.min_price} ${item.listing.currency}
 										</Button>
 									) : (
 										<Button style="primary" as="a" href={getBidLink(item)} title={`View on ${getContractName(item)}`} target="_blank" onClick={() => mixpanel.track('OpenSea link click')} rel="noreferrer">
