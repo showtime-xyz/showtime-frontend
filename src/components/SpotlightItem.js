@@ -25,10 +25,8 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 	const { data: thisItem, mutate: mutateItem } = useSWR(
 		() => item && `/v1/spotlight/${item.creator_id}`,
 		url => backend.get(url).then(res => res.data.data),
-		{ initialData: item, revalidateOnMount: true, revalidateOnFocus: false }
+		{ initialData: item, revalidateOnMount: true, revalidateOnFocus: true }
 	)
-
-	console.log(thisItem)
 
 	useEffect(() => {
 		if (!item?.mime_type?.startsWith('model') || window.customElements.get('model-viewer')) return
