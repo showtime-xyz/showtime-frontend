@@ -229,7 +229,7 @@ const BuyPage = ({ token, quantity, setQuantity, buyToken, onClose }) => {
 									<p className="font-medium text-gray-700 dark:text-gray-400 text-xs">Created By</p>
 									<div className="flex items-center space-x-1 -mt-0.5">
 										<p className="text-gray-900 dark:text-white font-semibold text-sm">{token.creator_name === token.creator_address ? formatAddressShort(token.creator_address) : truncateWithEllipses(token.creator_name, 22)}</p>
-										{token.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+										{token.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
 									</div>
 								</div>
 							</div>
@@ -241,7 +241,7 @@ const BuyPage = ({ token, quantity, setQuantity, buyToken, onClose }) => {
 									<p className="font-medium text-gray-700 dark:text-gray-400 text-xs">Listed By</p>
 									<div className="flex items-center space-x-1 -mt-0.5">
 										<p className="text-gray-900 dark:text-white font-semibold text-sm">{token.listing.name === token.listing.address ? formatAddressShort(token.listing.name) : truncateWithEllipses(token.listing.name, 22)}</p>
-										{token.listing.verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" bgClass="text-white dark:text-black" />}
+										{token.listing.verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
 									</div>
 								</div>
 							</div>
