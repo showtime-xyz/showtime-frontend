@@ -5,7 +5,7 @@ import { getBiconomy } from '@/lib/biconomy'
 import getWeb3Modal from '@/lib/web3Modal'
 import marketplaceAbi from '@/data/ERC1155Sale.json'
 import PolygonIcon from '@/components/Icons/PolygonIcon'
-import { useRef, useState, Fragment, useEffect } from 'react'
+import { useRef, useState, Fragment, useEffect, useContext } from 'react'
 import { useTheme } from 'next-themes'
 import iercPermit20Abi from '@/data/IERC20Permit.json'
 import useProfile from '@/hooks/useProfile'
@@ -17,6 +17,7 @@ import BadgeIcon from '@/components/Icons/BadgeIcon'
 import confetti from 'canvas-confetti'
 import Link from 'next/link'
 import axios from '@/lib/axios'
+import AppContext from '@/context/app-context'
 
 const MODAL_PAGES = {
 	GENERAL: 'general',
@@ -31,6 +32,7 @@ const MODAL_PAGES = {
 
 const BuyModal = ({ open, onClose, token }) => {
 	const { myProfile } = useProfile()
+	const { loginModalOpen, setLoginModalOpen } = useContext(AppContext)
 	const { resolvedTheme } = useTheme()
 	const isWeb3ModalActive = useRef(false)
 	const confettiCanvas = useRef(null)
@@ -139,6 +141,19 @@ const BuyModal = ({ open, onClose, token }) => {
 
 		setModalPage(MODAL_PAGES.PROCESSING)
 	}
+
+	useEffect(() => {
+		if (myProfile || !open) return
+
+		setLoginModalOpen(true)
+	}, [open])
+	useEffect(() => {
+		if (myProfile || !open || loginModalOpen) return
+
+		trueOnClose()
+	}, [loginModalOpen])
+
+	if (!myProfile) return null
 
 	const renderedPage = (type => {
 		switch (type) {
