@@ -286,7 +286,7 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 const ListPage = ({ token, price, currency, setCurrency, editionCount, setEditionCount, maxTokens, isValid, listToken, onClose, hasPriceError, onChangePrice, priceErrorMessage, preventExponent }) => {
 	return (
 		<>
-			<div className="flex-1 overflow-y-auto">
+			<div className="flex-1">
 				{token && (
 					<>
 						<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center space-x-4">
@@ -311,7 +311,7 @@ const ListPage = ({ token, price, currency, setCurrency, editionCount, setEditio
 						</div>
 					</>
 				)}
-				<div className="p-4 border-b border-gray-100 dark:border-gray-900 min-h-[181px]">
+				<div className="p-4 border-b border-gray-100 dark:border-gray-900">
 					<p className="font-bold text-gray-900 dark:text-white text-sm">Set Price</p>
 					<label className="text-sm font-medium text-gray-600 dark:text-gray-300 mt-1" htmlFor="price">
 						Enter a fixed price to allow people to purchase your NFT
