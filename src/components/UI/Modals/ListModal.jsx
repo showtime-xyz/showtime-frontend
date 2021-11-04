@@ -83,6 +83,8 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 
 	const resetForm = () => {
 		setPrice('')
+		setPriceErrorMessage('')
+		setHasPriceError(false)
 		setCurrency(LIST_CURRENCIES.TKN)
 		setEditionCount(1)
 		setTransactionHash('')
