@@ -89,7 +89,6 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 
 	const updateModalVisibility = () => {
 		if (isWeb3ModalActive.current || modalPage === MODAL_PAGES.LOADING) return
-
 		setModalVisibility(false)
 	}
 
@@ -186,8 +185,9 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 	})(modalPage)
 
 	return (
-		<Transition.Root show={open && modalVisibility} as={Fragment} afterLeave={afterModalCloseAnimation}>
-			<Dialog as="div" static className="fixed inset-0 overflow-y-auto z-1 pt-[96px] md:pt-0" open={open} onClose={updateModalVisibility}>
+		<Transition.Root show={open && modalVisibility} afterLeave={afterModalCloseAnimation}>
+			<Dialog static className="fixed xs:inset-0 overflow-y-auto z-1 pt-[96px] md:pt-0 modal-mobile-position " open={open} onClose={updateModalVisibility}>
+				<div class="bg-white dark:bg-black z-20 modal-mobile-gap" />
 				<canvas ref={confettiCanvas} className="absolute inset-0 w-screen h-screen z-[11] pointer-events-none" />
 				<div className="min-h-screen text-center">
 					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
