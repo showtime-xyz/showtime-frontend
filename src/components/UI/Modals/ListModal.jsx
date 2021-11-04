@@ -33,7 +33,7 @@ const MODAL_PAGES = {
 	CHANGE_WALLET: 'change_wallet',
 }
 
-const ListModal = ({ open, onClose, token }) => {
+const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 	const { myProfile } = useProfile()
 	const { resolvedTheme } = useTheme()
 	const isWeb3ModalActive = useRef(false)
@@ -160,7 +160,10 @@ const ListModal = ({ open, onClose, token }) => {
 
 		setTransactionHash(transaction)
 
-		provider.once(transaction, () => setModalPage(MODAL_PAGES.SUCCESS))
+		provider.once(transaction, () => {
+			onSuccess()
+			setModalPage(MODAL_PAGES.SUCCESS)
+		})
 
 		setModalPage(MODAL_PAGES.MINTING)
 	}
