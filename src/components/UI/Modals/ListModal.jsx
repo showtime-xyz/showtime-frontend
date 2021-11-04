@@ -33,6 +33,13 @@ const MODAL_PAGES = {
 	CHANGE_WALLET: 'change_wallet',
 }
 
+/**
+ * Listing price range is fixed across currencies.
+ * As currency list grows this can be a candidate to be refactored into LIST_CURRENCIES
+ */
+const maxListPrice = 1000
+const minListPrice = 0.0001
+
 const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 	const { myProfile } = useProfile()
 	const { resolvedTheme } = useTheme()
@@ -63,6 +70,8 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 	}
 
 	const [price, setPrice] = useState('')
+	const [hasPriceError, setHasPriceError] = useState(false)
+	const [priceErrorMessage, setPriceErrorMessage] = useState('')
 	const [currency, setCurrency] = useState(LIST_CURRENCIES.TKN)
 	const [editionCount, setEditionCount] = useState(1)
 	const [transactionHash, setTransactionHash] = useState('')
@@ -74,7 +83,7 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 
 	const resetForm = () => {
 		setPrice('')
-		setCurrency(LIST_CURRENCIES.TEST)
+		setCurrency(LIST_CURRENCIES.TKN)
 		setEditionCount(1)
 		setTransactionHash('')
 		setModalPage(MODAL_PAGES.GENERAL)
@@ -98,12 +107,70 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 		setModalVisibility(true)
 	}
 
+	const isValidPrice = price => {
+		const belowMinPrice = price < minListPrice && price !== ''
+		const aboveMaxPrice = price > maxListPrice
+		let updatedPriceErrorMessage = ''
+		let updatedHasPriceError = false
+
+		if (belowMinPrice) {
+			updatedPriceErrorMessage = `The listing price has to be above ${minListPrice}`
+			updatedHasPriceError = true
+		}
+
+		if (aboveMaxPrice) {
+			updatedPriceErrorMessage = `The listing price has to be below ${maxListPrice}`
+			updatedHasPriceError = true
+		}
+
+		setPriceErrorMessage(updatedPriceErrorMessage)
+		setHasPriceError(updatedHasPriceError)
+	}
+
 	const isValid = useMemo(() => {
 		if (!price || !currency) return false
 		if (editionCount < 1 || editionCount > 10000) return false
+		if (hasPriceError) return false
 
 		return true
 	}, [price, currency, editionCount])
+
+	const formatPrice = price => {
+		let [whole, decimal] = price.split('.')
+
+		/**
+		 * Check to support decimals because inputs of the type number support "e" and "." with quirks that cause
+		 * onChange to not be emitted causing unexpected behaviors. src: https://github.com/facebook/react/issues/13752
+		 */
+		const missingWholeAndPrice = !whole && !price
+		const invalidDecimalLength = decimal?.length > 4
+
+		if (missingWholeAndPrice) {
+			return price
+		}
+
+		if (invalidDecimalLength) {
+			decimal = decimal.slice(0, 4)
+		}
+
+		return whole ? [whole, decimal].filter(Boolean).join('.') : [whole, decimal].join('.')
+	}
+
+	/**
+	 * Prevents "e" from being a valid price input. Inputs of the type number
+	 * support "e" as an input causing the onChange to not be emitted and causing unexpected behaviors.
+	 */
+	const preventExponent = event => {
+		if (event.key === 'e') {
+			event.preventDefault()
+		}
+	}
+
+	const onChangePrice = event => {
+		const price = formatPrice(event.target.value)
+		isValidPrice(price)
+		setPrice(price)
+	}
 
 	const listToken = async () => {
 		setModalPage(MODAL_PAGES.LOADING)
@@ -171,7 +238,7 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 	const renderedPage = (type => {
 		switch (type) {
 			case MODAL_PAGES.GENERAL:
-				return <ListPage {...{ token, price, setPrice, currency, setCurrency, editionCount, setEditionCount, maxTokens: ownershipData?.owned_count || 1, isValid, listToken }} onClose={updateModalVisibility} />
+				return <ListPage {...{ token, price, setPrice, currency, setCurrency, editionCount, setEditionCount, maxTokens: ownershipData?.owned_count || 1, isValid, listToken, hasPriceError, onChangePrice, priceErrorMessage, preventExponent }} onClose={updateModalVisibility} />
 			case MODAL_PAGES.LOADING:
 				return <LoadingPage />
 			case MODAL_PAGES.MINTING:
@@ -216,7 +283,7 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 	)
 }
 
-const ListPage = ({ token, price, setPrice, currency, setCurrency, editionCount, setEditionCount, maxTokens, isValid, listToken, onClose }) => {
+const ListPage = ({ token, price, currency, setCurrency, editionCount, setEditionCount, maxTokens, isValid, listToken, onClose, hasPriceError, onChangePrice, priceErrorMessage, preventExponent }) => {
 	return (
 		<>
 			<div className="flex-1 overflow-y-auto">
@@ -244,25 +311,28 @@ const ListPage = ({ token, price, setPrice, currency, setCurrency, editionCount,
 						</div>
 					</>
 				)}
-				<div className="p-4 border-b border-gray-100 dark:border-gray-900">
-					<div>
-						<p className="font-semibold text-gray-900 dark:text-white space-x-1 flex items-center">
-							<span>Sell</span>
-						</p>
-						<p className="text-sm font-medium text-gray-700 dark:text-gray-300">Enter a fixed price to allow people to purchase your NFT</p>
+				<div className="p-4 border-b border-gray-100 dark:border-gray-900 min-h-[181px]">
+					<p className="font-bold text-gray-900 dark:text-white text-sm">Set Price</p>
+					<label className="text-sm font-medium text-gray-600 dark:text-gray-300 mt-1" htmlFor="price">
+						Enter a fixed price to allow people to purchase your NFT
+					</label>
+					<div className="flex mt-4 space-x-2">
+						<div className="w-1/2">
+							<input id="price" name="price" className="text-sm w-full placeholder-shown:text-left text-right px-4 rounded-3xl dark:text-gray-300 bg-white dark:bg-gray-900 border  dark:border-gray-500 focus:outline-none focus-visible:ring font-semibold no-spinners h-[40px]" placeholder="Price" value={price} min=".0001" max="1000" step=".0001" inputMode="decimal" type="number" onChange={onChangePrice} onKeyDown={preventExponent} />
+						</div>
+						<Dropdown className="w-1/2" inputClassName="rounded-3xl h-[40px]" optionClassName="rounded-3xl" optionInputClassName="rounded-3xl first-of-type:mt-0 mt-2" value={currency} onChange={setCurrency} options={Object.entries(LIST_CURRENCIES).map(([ticker, address]) => ({ label: ticker, value: address }))} />
 					</div>
-					<div className="mt-4 flex items-stretch justify-between space-x-2">
-						<input className="flex-1 px-4 relative block w-full rounded-xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring font-medium" placeholder="Price" value={price} onChange={event => setPrice(event.target.value)} />
-						<Dropdown className="flex-1" value={currency} onChange={setCurrency} options={Object.entries(LIST_CURRENCIES).map(([ticker, address]) => ({ label: ticker, value: address }))} />
-					</div>
+					{hasPriceError ? <p className="font-medium text-red-500 text-xs p-2 last:block"> {priceErrorMessage} </p> : null}
 				</div>
 				<div className="p-4 border-b border-gray-100 dark:border-gray-900">
 					<div className="flex items-center justify-between">
-						<div className="flex-1 mr-4">
-							<p className="font-semibold text-gray-900 dark:text-white">Copies</p>
+						<div className="w-1/2 mr-4">
+							<label className="font-semibold text-gray-900 dark:text-white" htmlFor="copies">
+								Copies
+							</label>
 							<p className="text-sm font-medium text-gray-700 dark:text-gray-300">1 by default (you own {maxTokens})</p>
 						</div>
-						<input type="number" min="1" max={maxTokens} className="px-4 py-3 flex-1 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring text-right" style={{ '-moz-appearance': 'textfield' }} value={editionCount} onChange={event => (event.target.value > maxTokens ? setEditionCount(maxTokens) : event.target.value < 1 ? setEditionCount(1) : setEditionCount(parseInt(event.target.value)))} />
+						<input id="copies" type="number" min="1" max={maxTokens} className="px-4 h-[40px] w-1/2 rounded-3xl dark:text-gray-300 bg-white dark:bg-gray-900 border  dark:border-gray-700 focus:outline-none focus-visible:ring text-right" style={{ MozAppearance: 'textfield' }} value={editionCount} onChange={event => (event.target.value > maxTokens ? setEditionCount(maxTokens) : event.target.value < 1 ? setEditionCount(1) : setEditionCount(parseInt(event.target.value)))} />
 					</div>
 				</div>
 			</div>
