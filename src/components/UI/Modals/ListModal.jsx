@@ -270,7 +270,7 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 						<div className="inline-block align-bottom rounded-t-3xl sm:rounded-b-3xl text-left overflow-hidden transform transition-all sm:align-middle bg-white dark:bg-black shadow-xl sm:max-w-lg w-full">
 							<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
 								<h2 className="text-gray-900 dark:text-white text-lg font-bold">List NFT</h2>
-								<button onClick={updateModalVisibility} className="p-3 -my-3 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:hidden rounded-full transition bg-gray-100" disabled={modalPage === MODAL_PAGES.LOADING}>
+								<button onClick={updateModalVisibility} className="p-3 -my-3 hover:bg-gray-100 dark:hover:bg-gray-100 dark:hover:text-black disabled:hidden rounded-full transition bg-gray-100 dark:bg-gray-800" disabled={modalPage === MODAL_PAGES.LOADING}>
 									<XIcon className="w-4 h-4" />
 								</button>
 							</div>
@@ -318,7 +318,7 @@ const ListPage = ({ token, price, currency, setCurrency, editionCount, setEditio
 					</label>
 					<div className="flex mt-4 space-x-2">
 						<div className="w-1/2">
-							<input id="price" name="price" className="text-sm w-full placeholder-shown:text-left text-right px-4 rounded-3xl dark:text-gray-300 bg-white dark:bg-gray-900 border  dark:border-gray-500 focus:outline-none focus-visible:ring font-semibold no-spinners h-[40px]" placeholder="Price" value={price} min=".0001" max="1000" step=".0001" inputMode="decimal" type="number" onChange={onChangePrice} onKeyDown={preventExponent} />
+							<input id="price" name="price" className="text-sm w-full placeholder-shown:text-left text-right px-4 rounded-3xl dark:text-gray-300 bg-white dark:bg-black border  dark:border-gray-700 focus:outline-none focus-visible:ring font-semibold no-spinners h-[40px]" placeholder="Price" value={price} min=".0001" max="1000" step=".0001" inputMode="decimal" type="number" onChange={onChangePrice} onKeyDown={preventExponent} />
 						</div>
 						<Dropdown className="w-1/2" inputClassName="rounded-3xl h-[40px]" optionClassName="rounded-3xl" optionInputClassName="rounded-3xl first-of-type:mt-0 mt-2" value={currency} onChange={setCurrency} options={Object.entries(LIST_CURRENCIES).map(([ticker, address]) => ({ label: ticker, value: address }))} />
 					</div>
@@ -332,7 +332,7 @@ const ListPage = ({ token, price, currency, setCurrency, editionCount, setEditio
 							</label>
 							<p className="text-sm font-medium text-gray-700 dark:text-gray-300">1 by default (you own {maxTokens})</p>
 						</div>
-						<input id="copies" type="number" min="1" max={maxTokens} className="px-4 h-[40px] w-1/2 rounded-3xl dark:text-gray-300 bg-white dark:bg-gray-900 border  dark:border-gray-700 focus:outline-none focus-visible:ring text-right" style={{ MozAppearance: 'textfield' }} value={editionCount} onChange={event => (event.target.value > maxTokens ? setEditionCount(maxTokens) : event.target.value < 1 ? setEditionCount(1) : setEditionCount(parseInt(event.target.value)))} />
+						<input id="copies" type="number" min="1" max={maxTokens} className="px-4 h-[40px] w-1/2 rounded-3xl dark:text-gray-300 bg-white dark:bg-black border  dark:border-gray-700 focus:outline-none focus-visible:ring text-right" style={{ MozAppearance: 'textfield' }} value={editionCount} onChange={event => (event.target.value > maxTokens ? setEditionCount(maxTokens) : event.target.value < 1 ? setEditionCount(1) : setEditionCount(parseInt(event.target.value)))} />
 					</div>
 				</div>
 			</div>
