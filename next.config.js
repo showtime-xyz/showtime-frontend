@@ -4,6 +4,7 @@ const isDev = process.env.NODE_ENV === 'development'
 
 // These are dope
 const nextConfig = {
+	outputFileTracing: false, // https://github.com/vercel/next.js/issues/30601#issuecomment-961323914
 	async redirects() {
 		return [
 			{
