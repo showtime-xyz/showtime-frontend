@@ -420,19 +420,19 @@
   resolved "https://registry.yarnpkg.com/@badrap/bar-of-progress/-/bar-of-progress-0.1.2.tgz#5d9cf85759e1f77bddcb74398530976d87bb5077"
   integrity sha512-bCwx/HbgUfJEndzlubJF5FVQrFEcGX4HZsoCfoa+gSq37pjbJBvIyqMBLIGnb5y0ICovIrxJUxvlbmxeic0rSQ==
 
-"@biconomy/mexa@^2.0.19":
-  version "2.0.19"
-  resolved "https://registry.yarnpkg.com/@biconomy/mexa/-/mexa-2.0.19.tgz#6068b5901812eb2ea1bafa5b058b1f3ab1c5e285"
-  integrity sha512-fZcNiIySKvzJLeRa/SurUA7anRS6E/FdUFgZMME013ilKq4HNtOCHBfdudSafCvxXEMtBmFvwqk0SvFr6hOgsA==
+"@biconomy/mexa@^2.0.21":
+  version "2.0.21"
+  resolved "https://registry.yarnpkg.com/@biconomy/mexa/-/mexa-2.0.21.tgz#89b300f33cf211b04b020df27b7dc46b05d9cdfd"
+  integrity sha512-LR+pM3lDbjQa6a3Mjx/qPnR+dCcGTaapNxityN76Mu+K1HID0I5DUW+FiOwVYidQi0ONg6/PbICuvzGo+BUcyw==
   dependencies:
     "@babel/core" "^7.12.13"
     "@babel/runtime" "^7.12.13"
     abi-decoder "^2.2.2"
+    cross-fetch "^3.1.4"
     ethereum-tx-decoder "^3.0.0"
     ethereumjs-abi "^0.6.8"
     ethers "^5.0.24"
     events "^3.0.0"
-    node-fetch "^2.6.0"
     promise "^8.0.3"
 
 "@chaitanyapotti/random-id@^1.0.3":
@@ -899,10 +899,10 @@
   dependencies:
     prop-types "^15.7.2"
 
-"@google/model-viewer@^1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@google/model-viewer/-/model-viewer-1.8.0.tgz#398c0d9bbd3281933a3a4e6ed8f02da6789df768"
-  integrity sha512-qUwlu4q+sEFs2XOztZpaT5sGdv9G76jyLzEOdttcfAFb0/ZE0HnXU1KPN3Pq5gvdg+jW7fDUUHhsMxM1OBnpUQ==
+"@google/model-viewer@^1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@google/model-viewer/-/model-viewer-1.9.2.tgz#aa57d36b172a16622ce27397dc0250670160ff86"
+  integrity sha512-bFn6TJPvPHZDPQ0vYOx1O57A5t4cVjpxaYyYeq2OqOpbZ6+Rkq1PLdyYx8Do7Id1ZPr6WqOaIAxajZ7Jy56G/g==
 
 "@hapi/accept@5.0.2":
   version "5.0.2"
@@ -1047,10 +1047,10 @@
   resolved "https://registry.yarnpkg.com/@ledgerhq/logs/-/logs-4.72.0.tgz#43df23af013ad1135407e5cf33ca6e4c4c7708d5"
   integrity sha512-o+TYF8vBcyySRsb2kqBDv/KMeme8a2nwWoG+lAWzbDmWfb2/MrVWYCVYDYvjXdSoI/Cujqy1i0gIDrkdxa9chA==
 
-"@magic-sdk/admin@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@magic-sdk/admin/-/admin-1.3.0.tgz#08d53aa39f94090221999be60660bdc50b8e6e12"
-  integrity sha512-PcDP+8i82p7e+oSohqE5dPoRyymEsoOcXaAKxK7S13TypVf1lxf4MCpBBQI7Q+nFwNa4zTRcaE6QaDdvruBDKA==
+"@magic-sdk/admin@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@magic-sdk/admin/-/admin-1.3.1.tgz#7cad0d9a1f9db8224cbcbc5a77526941d2b1a83f"
+  integrity sha512-g1B8MHSBpJoDfFL/y7gd1YtgrwYbS7m7iRijOgiXrkMnIoid0bHgUsRS9LQKy6mImH/JleJSZcaofm2mIvs6tQ==
   dependencies:
     eth-sig-util "2.1.2"
     ethereumjs-util "^6.2.0"
@@ -4082,6 +4082,13 @@ cross-fetch@^2.1.0, cross-fetch@^2.1.1:
   dependencies:
     node-fetch "2.6.1"
     whatwg-fetch "2.0.4"
+
+cross-fetch@^3.1.4:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.4.tgz#9723f3a3a247bf8b89039f3a380a9244e8fa2f39"
+  integrity sha512-1eAtFWdIubi6T4XPy6ei9iUFoKpUkIF971QLN8lIvvvwueI65+Nw5haMNKUwfJxabqlIIDODJKGrQ66gxC0PbQ==
+  dependencies:
+    node-fetch "2.6.1"
 
 cross-spawn@^6.0.5:
   version "6.0.5"
