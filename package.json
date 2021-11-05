@@ -17,7 +17,7 @@
         "@fortawesome/free-regular-svg-icons": "^5.15.4",
         "@fortawesome/free-solid-svg-icons": "^5.15.4",
         "@fortawesome/react-fontawesome": "^0.1.15",
-        "@google/model-viewer": "^1.8.0",
+        "@google/model-viewer": "^1.9.2",
         "@hapi/iron": "^6.0.0",
         "@headlessui/react": "^1.4.1",
         "@heroicons/react": "^1.0.4",
