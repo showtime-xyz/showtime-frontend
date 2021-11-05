@@ -41,7 +41,7 @@
         "date-fns": "^2.25.0",
         "elliptic": "^6.5.4",
         "emoji-mart": "^3.0.1",
-        "eth-provider": "^0.9.4",
+        "eth-provider": "^0.9.7",
         "ethers": "^5.5.1",
         "exif-js": "^2.3.0",
         "fortmatic": "^2.2.1",
