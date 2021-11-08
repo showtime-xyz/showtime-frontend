@@ -293,7 +293,7 @@ const ListPage = ({ token, price, currency, setCurrency, editionCount, setEditio
 						<div className="w-1/2">
 							<input id="price" name="price" className="text-sm w-full placeholder-shown:text-left text-right px-4 rounded-3xl dark:text-gray-300 bg-white dark:bg-black border  dark:border-gray-700 focus:outline-none focus-visible:ring font-semibold no-spinners h-[40px]" placeholder="Price" value={price} min=".0001" max="1000" step=".0001" inputMode="decimal" type="number" onChange={onChangePrice} onKeyDown={preventExponent} />
 						</div>
-						<Dropdown className="w-1/2" inputClassName="rounded-3xl h-[40px]" optionClassName="rounded-3xl" optionInputClassName="rounded-3xl first-of-type:mt-0 mt-2" value={currency} onChange={setCurrency} options={Object.entries(LIST_CURRENCIES).map(([ticker, address]) => ({ label: ticker, value: address }))} />
+						<Dropdown className="w-1/2" inputClassName="h-[40px]" optionInputClassName="first-of-type:mt-0 mt-2" value={currency} onChange={setCurrency} options={Object.entries(LIST_CURRENCIES).map(([ticker, address]) => ({ label: ticker, value: address }))} />
 					</div>
 					{hasPriceError ? <p className="font-medium text-red-500 text-xs p-2 last:block"> {priceErrorMessage} </p> : null}
 				</div>
