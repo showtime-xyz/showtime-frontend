@@ -23,6 +23,8 @@ import backend from '@/lib/backend'
 import { formatAddressShort, truncateWithEllipses } from '@/lib/utilities'
 import BadgeIcon from '@/components/Icons/BadgeIcon'
 import { parseEther } from '@ethersproject/units'
+import { preventExponent } from '@/lib/prevent-exponent'
+import { formatPrice } from '@/lib/format-price'
 
 const MODAL_PAGES = {
 	GENERAL: 'general',
@@ -136,37 +138,6 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 
 		return true
 	}, [price, currency, editionCount])
-
-	const formatPrice = price => {
-		let [whole, decimal] = price.split('.')
-
-		/**
-		 * Check to support decimals because inputs of the type number support "e" and "." with quirks that cause
-		 * onChange to not be emitted causing unexpected behaviors. src: https://github.com/facebook/react/issues/13752
-		 */
-		const missingWholeAndPrice = !whole && !price
-		const invalidDecimalLength = decimal?.length > 4
-
-		if (missingWholeAndPrice) {
-			return price
-		}
-
-		if (invalidDecimalLength) {
-			decimal = decimal.slice(0, 4)
-		}
-
-		return whole ? [whole, decimal].filter(Boolean).join('.') : [whole, decimal].join('.')
-	}
-
-	/**
-	 * Prevents "e" from being a valid price input. Inputs of the type number
-	 * support "e" as an input causing the onChange to not be emitted and causing unexpected behaviors.
-	 */
-	const preventExponent = event => {
-		if (event.key === 'e') {
-			event.preventDefault()
-		}
-	}
 
 	const onChangePrice = event => {
 		const price = formatPrice(event.target.value)
