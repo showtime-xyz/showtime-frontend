@@ -41,7 +41,7 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 	const [modalVisibility, setModalVisibility] = useState(true)
 	const [modalPage, setModalPage] = useState(MODAL_PAGES.GENERAL)
 	const { data: ownershipData } = useSWR(
-		() => open && myProfile && `/v1/owned_quantity?nft_id=${token.nft_id}&profile_id=${myProfile.profile_id}`,
+		() => open && myProfile && token.nft_id && `/v1/owned_quantity?nft_id=${token.nft_id}&profile_id=${myProfile.profile_id}`,
 		url => backend.get(url).then(res => res.data?.data)
 	)
 
