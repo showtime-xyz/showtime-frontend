@@ -23,7 +23,7 @@ import backend from '@/lib/backend'
 
 const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) => {
 	const { data: thisItem, mutate: mutateItem } = useSWR(
-		() => item && `/v1/spotlight/${item.creator_id}`,
+		() => pageProfile && `/v1/spotlight/${pageProfile.profile_id}`,
 		url => backend.get(url).then(res => res.data.data),
 		{ initialData: item, revalidateOnMount: true, revalidateOnFocus: true }
 	)
