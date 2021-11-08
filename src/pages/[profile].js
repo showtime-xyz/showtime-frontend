@@ -811,7 +811,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 														) : null
 													) : null
 												}
-												scrollThreshold={page === 1 ? 0.5 : page < 4 ? 0.5 : page < 6 ? 0.7 : 0.8}
+												scrollThreshold={page < 4 ? 0.5 : page < 6 ? 0.7 : 0.8}
 												showUserHiddenItems={showUserHiddenItems}
 												showDuplicates={showDuplicates}
 												setHasUserHiddenItems={setHasUserHiddenItems}
@@ -834,6 +834,7 @@ const Profile = ({ profile, slug_address, followers_count, following_count, feat
 													username,
 												}} // to customize owned by list on bottom of card
 												isChangingOrder={isChangingOrder}
+												refreshCurrent={() => handleListChange(selectedGrid)}
 											/>
 										)}
 									</div>

@@ -96,6 +96,7 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 	const afterModalCloseAnimation = () => {
 		trueOnClose()
 		setModalVisibility(true)
+		if (modalPage === MODAL_PAGES.SUCCESS) onSuccess()
 	}
 
 	const isValid = useMemo(() => {
@@ -161,7 +162,6 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 		setTransactionHash(transaction)
 
 		provider.once(transaction, () => {
-			onSuccess()
 			setModalPage(MODAL_PAGES.SUCCESS)
 		})
 

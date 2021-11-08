@@ -15,7 +15,7 @@ import ListModal from './UI/Modals/ListModal'
 import UnlistModal from './UI/Modals/UnlistModal'
 import BuyModal from './UI/Modals/BuyModal'
 
-const TokenGridV5 = ({ dataLength, hasMore, next, isLoading, endMessage, scrollThreshold, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, items, setItems, isMyProfile, listId, detailsModalCloseOnKeyChange, changeSpotlightItem, pageProfile, isLoadingMore, isChangingOrder }) => {
+const TokenGridV5 = ({ dataLength, hasMore, next, isLoading, endMessage, scrollThreshold, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, items, setItems, isMyProfile, listId, detailsModalCloseOnKeyChange, changeSpotlightItem, pageProfile, isLoadingMore, isChangingOrder, refreshCurrent }) => {
 	const context = useContext(AppContext)
 	const [itemsList, setItemsList] = useState([])
 
@@ -124,8 +124,8 @@ const TokenGridV5 = ({ dataLength, hasMore, next, isLoading, endMessage, scrollT
 					<ModalTokenDetail isOpen={currentlyOpenModal} setEditModalOpen={setCurrentlyOpenModal} item={currentlyOpenModal} goToNext={goToNext} goToPrevious={goToPrevious} hasNext={!(currentIndex === itemsList.length - 1)} hasPrevious={!(currentIndex === 0)} />
 					<BurnModal open={!!burnModal} onClose={() => setBurnModal(null)} token={burnModal} />
 					<TransferModal open={!!transferModal} onClose={() => setTransferModal(null)} token={transferModal} />
-					<ListModal open={!!listModal} onClose={() => setListModal(null)} token={listModal} />
-					<UnlistModal open={!!unlistModal} onClose={() => setUnlistModal(null)} token={unlistModal} />
+					<ListModal open={!!listModal} onClose={() => setListModal(null)} token={listModal} onSuccess={refreshCurrent} />
+					<UnlistModal open={!!unlistModal} onClose={() => setUnlistModal(null)} token={unlistModal} onSuccess={refreshCurrent} />
 					<BuyModal open={!!buyModal} onClose={() => setBuyModal(null)} token={buyModal} />
 				</>
 			) : null}
