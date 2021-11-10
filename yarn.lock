@@ -104,10 +104,10 @@
     ethers "~4.0.4"
     lodash "^4.17.11"
 
-"@airgap/beacon-sdk@^2.2.10":
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/@airgap/beacon-sdk/-/beacon-sdk-2.3.1.tgz#555a76b85854914a0789eca72e591a716c1f0a21"
-  integrity sha512-KhlerqRlI9LxkxY6sq5ar5g6KuzEEGEacnMg7AWxL/Pdq3WXGfMrdzVOO+4wOgB8f1/A8MRn0l/zjwAFZqAvYA==
+"@airgap/beacon-sdk@^2.3.7":
+  version "2.3.7"
+  resolved "https://registry.yarnpkg.com/@airgap/beacon-sdk/-/beacon-sdk-2.3.7.tgz#c71dae05d88c3dac9316317f53aedd4585aec0ef"
+  integrity sha512-IcUaXvX3FNEeJOC2TzPcy7w0Zxia7a5QCvNObjeUnOlctVKna0wFb8rJq94QznBD/YHYlgyqpyZ5bqDnhDiALA==
   dependencies:
     "@types/chrome" "0.0.115"
     "@types/libsodium-wrappers" "0.7.7"
