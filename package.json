@@ -52,7 +52,7 @@
         "magic-sdk": "^4.4.1",
         "mixpanel-browser": "^2.40.1",
         "next": "^12.0.1",
-        "next-connect": "^0.10.2",
+        "next-connect": "^0.11.0",
         "next-themes": "^0.0.15",
         "patch-package": "^6.4.7",
         "postcss": "^8.3.6",
@@ -88,7 +88,7 @@
     "devDependencies": {
         "@babel/eslint-parser": "^7.15.4",
         "eslint": "^7.31.0",
-        "eslint-config-next": "^11.1.2",
+        "eslint-config-next": "^12.0.3",
         "eslint-config-prettier": "^8.3.0",
         "eslint-plugin-diff": "^1.0.12",
         "eslint-plugin-react": "^7.25.1",
