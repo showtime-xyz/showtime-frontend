@@ -113,7 +113,8 @@ const BurnModal = ({ open, onClose, token }) => {
 
 	return (
 		<Transition.Root show={open} as={Fragment}>
-			<Dialog as="div" static className="fixed inset-0 overflow-y-auto z-1" open={open} onClose={trueOnClose}>
+			<Dialog static className="xs:inset-0 fixed overflow-y-auto z-1 modal-mobile-position" open={open} onClose={trueOnClose}>
+				<div className="bg-white dark:bg-black z-20 modal-mobile-gap" />
 				<div className="min-h-screen text-center">
 					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
 						<Dialog.Overlay className="fixed inset-0 bg-gray-500 dark:bg-gray-800 bg-opacity-75 dark:bg-opacity-95 transition-opacity" />
