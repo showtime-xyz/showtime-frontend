@@ -39,8 +39,8 @@ const MODAL_PAGES = {
  * Listing price range is fixed across currencies.
  * As currency list grows this can be a candidate to be refactored into LIST_CURRENCIES
  */
-const maxListPrice = 1000
-const minListPrice = 0.0001
+const MAX_LIST_PRICE = 1000
+const MIN_LIST_PRICE = 0.0001
 
 const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 	const { myProfile } = useProfile()
@@ -112,18 +112,18 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 	}
 
 	const isValidPrice = price => {
-		const belowMinPrice = price < minListPrice && price !== ''
-		const aboveMaxPrice = price > maxListPrice
+		const belowMinPrice = price < MIN_LIST_PRICE && price !== ''
+		const aboveMaxPrice = price > MAX_LIST_PRICE
 		let updatedPriceErrorMessage = ''
 		let updatedHasPriceError = false
 
 		if (belowMinPrice) {
-			updatedPriceErrorMessage = `The listing price has to be above ${minListPrice}`
+			updatedPriceErrorMessage = `The listing price has to be above ${MIN_LIST_PRICE}`
 			updatedHasPriceError = true
 		}
 
 		if (aboveMaxPrice) {
-			updatedPriceErrorMessage = `The listing price has to be below ${maxListPrice}`
+			updatedPriceErrorMessage = `The listing price has to be below ${MAX_LIST_PRICE}`
 			updatedHasPriceError = true
 		}
 
