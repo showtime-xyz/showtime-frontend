@@ -288,10 +288,12 @@ const LoadingPage = ({ transactionHash }) => {
 				<div className="space-y-1 text-gray-900 dark:text-white  text-sm text-center font-medium leading-[1.4rem]">
 					<p>We'll ask you to sign with your wallet shortly.</p>
 				</div>
-				<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
-					<PolygonIcon className="w-4 h-4" />
-					<p className="text-sm font-medium">View on PolygonScan</p>
-				</Button>
+				{transactionHash && (
+					<Button style="tertiary" as="a" href={`https://${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai.' : ''}polygonscan.com/tx/${transactionHash}`} target="_blank" className="space-x-2">
+						<PolygonIcon className="w-4 h-4" />
+						<p className="text-sm font-medium">View on PolygonScan</p>
+					</Button>
+				)}
 			</div>
 			<div className="p-4">
 				<div className="flex items-center justify-between">
