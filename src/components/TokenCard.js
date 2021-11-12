@@ -559,7 +559,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 							{item.collection_img_url && <img src={item.collection_img_url} className="w-5 h-5 rounded-full" />}
 							<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">{item.collection_name}</p>
 						</div>
-						<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">100 Editions</p>
+						<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">{item.token_count ? `${item.token_count} Editions` : '1/1'}</p>
 					</div>
 				</div>
 			</div>
