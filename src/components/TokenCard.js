@@ -90,7 +90,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 
 	return (
 		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
-			<div ref={divRef} className={`w-full h-full shadow-lg hover:shadow-xl md:rounded-2xl transition-all duration-300 transform hover:translate-y-[-2px] flex flex-col bg-white dark:bg-black ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border-t border-b md:border-l md:border-r border-transparent dark:border-gray-700'}`}>
+			<div ref={divRef} className={`w-full h-full overflow-hidden shadow-lg hover:shadow-xl md:rounded-2xl transition-all duration-300 transform hover:translate-y-[-2px] flex flex-col bg-white dark:bg-black ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border-t border-b md:border-l md:border-r border-transparent dark:border-gray-700'}`}>
 				<div ref={item.imageRef} className="p-4 relative">
 					<div className="flex items-center justify-between">
 						<div className="pr-2">
@@ -480,7 +480,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 					</div>
 				</div>
 				<hr className="mx-4 border-gray-100 dark:border-gray-800" />
-				<div className="flex-1 flex items-end w-full">
+				<div className="flex-1 w-full">
 					<div className="px-4 pb-4 pt-1 flex flex-col w-full">
 						<div>
 							{item.listing ? (
@@ -553,6 +553,13 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 								</div>
 							) : null}
 						</div>
+					</div>
+					<div className="mt-4 px-4 py-2 bg-gray-100 dark:bg-gray-800 flex items-center justify-between">
+						<div className="flex items-center space-x-2">
+							{item.collection_img_url && <img src={item.collection_img_url} className="w-5 h-5 rounded-full" />}
+							<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">{item.collection_name}</p>
+						</div>
+						<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">100 Editions</p>
 					</div>
 				</div>
 			</div>
