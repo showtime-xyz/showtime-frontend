@@ -5206,16 +5206,16 @@ eth-provider@^0.2.5:
     ws "7.1.2"
     xhr2-cookies "1.1.0"
 
-eth-provider@^0.9.4:
-  version "0.9.4"
-  resolved "https://registry.yarnpkg.com/eth-provider/-/eth-provider-0.9.4.tgz#ee523031e8e7340f257d669fbfc28037de8906b4"
-  integrity sha512-E54KIx4m84rJellKAzb42B0O2TKAjW24QMQZWooNEqFuj+R97uGzPt3GhLbQbQbaIM9nfwiWqnejU82PKJG9Ew==
+eth-provider@^0.9.7:
+  version "0.9.7"
+  resolved "https://registry.yarnpkg.com/eth-provider/-/eth-provider-0.9.7.tgz#37ec899951e78a37431e8e6be1478713f52e3d87"
+  integrity sha512-gSMj0EHK2/CBxxnDP11nSpywDKHWhV5qbf/+JTncRuEvlXbf2APfpFFAfV7mfv/Bsv7htfVGEfM2QJR3jB+gqQ==
   dependencies:
-    ethereum-provider "0.4.4"
+    ethereum-provider "0.4.6"
     events "3.3.0"
     oboe "2.1.5"
     uuid "8.3.2"
-    ws "8.0.0"
+    ws "8.2.3"
     xhr2-cookies "1.1.0"
 
 eth-query@^2.0.2, eth-query@^2.1.0, eth-query@^2.1.2:
@@ -5385,10 +5385,10 @@ ethereum-provider@0.0.6:
   resolved "https://registry.yarnpkg.com/ethereum-provider/-/ethereum-provider-0.0.6.tgz#6f5a0427c34872339667d9904a8692e8992e6bf5"
   integrity sha512-DqtdXNHGi/QtOjEovNOegVVQTd8/NnH9rP27R5SU3j2LKECZbcLGIZ3Z9Ln1SDaeUC5YJGJFYQCUUjfIi7NNyQ==
 
-ethereum-provider@0.4.4:
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/ethereum-provider/-/ethereum-provider-0.4.4.tgz#1aed1c19460ca0ea2e7cfe4727022349fb8dc519"
-  integrity sha512-yrakFKeYnx+MMtL5Ngoy65Y6DqheG0sZRDLdvdLh0oIP5mIRj4He3P+QqKqm1yb57Th4ZbFljluqAY8ufgtfeA==
+ethereum-provider@0.4.6:
+  version "0.4.6"
+  resolved "https://registry.yarnpkg.com/ethereum-provider/-/ethereum-provider-0.4.6.tgz#e772749e7ecf280fdd632c5c12f185a87a154ca1"
+  integrity sha512-ZwXut+0sdscSkOIUfYM9ZKuIsFQf2xix5ibTYmwUCbWG1VkKHXeAWDf7sHadBXLWI/jbu1S6/b/lIucNAD+sAg==
   dependencies:
     events "3.3.0"
 
@@ -8303,10 +8303,10 @@ neo-async@^2.6.1:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
-next-connect@^0.10.2:
-  version "0.10.2"
-  resolved "https://registry.yarnpkg.com/next-connect/-/next-connect-0.10.2.tgz#b361cffe1ce0aae46f7b3c91de2871d0ab40d0f6"
-  integrity sha512-Tp9PA5YSg6aStF9TP+VmaQwvPH0tlO8VxzFP/oizD60aZwyqfK302J12V0VMlWnWJEQW5IPrblynI4bG193zwA==
+next-connect@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/next-connect/-/next-connect-0.11.0.tgz#447c7b78937ff71f36c97d03f1623a6d0264ef49"
+  integrity sha512-7VW5z9MWOpd8wnbST9dXgVd0c0V76LLLk5mBDYLSMtEC2dj3v3YF/Bl3t58cJrzm4SZ0e/s3yeD361F888u0yg==
   dependencies:
     trouter "^3.1.0"
 
@@ -12444,10 +12444,10 @@ ws@7.5.3:
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.3.tgz#160835b63c7d97bfab418fc1b8a9fced2ac01a74"
   integrity sha512-kQ/dHIzuLrS6Je9+uv81ueZomEwH0qVYstcAQ4/Z93K8zeko9gtAbttJWzoC5ukqXY1PpoouV3+VSOqEAFt5wg==
 
-ws@8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-8.0.0.tgz#550605d13dfc1437c9ec1396975709c6d7ffc57d"
-  integrity sha512-6AcSIXpBlS0QvCVKk+3cWnWElLsA6SzC0lkQ43ciEglgXJXiCWK3/CGFEJ+Ybgp006CMibamAsqOlxE9s4AvYA==
+ws@8.2.3:
+  version "8.2.3"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.2.3.tgz#63a56456db1b04367d0b721a0b80cae6d8becbba"
+  integrity sha512-wBuoj1BDpC6ZQ1B7DWQBYVLphPWkm8i9Y0/3YdHjHKHiohOJ1ws+3OccDWtH+PoC9DZD5WOTrJvNbWvjS6JWaA==
 
 ws@^3.0.0:
   version "3.3.3"
