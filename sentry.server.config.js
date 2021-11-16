@@ -7,7 +7,6 @@ import { ExtraErrorData, CaptureConsole } from '@sentry/integrations'
 
 Sentry.init({
 	dsn: process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN,
-	release: `showtime-frontend-server@${process.env.SENTRY_SERVER_RELEASE_ENVIRONMENT}`,
 	environment: process.env.SENTRY_SERVER_ENVIRONMENT,
 	tracesSampleRate: 0.2,
 	integrations: [
