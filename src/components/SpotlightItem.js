@@ -298,7 +298,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 											</>
 										)}
 									</div>
-									<div className="flex items-center justify-between py-2 px-4 mx-[calc(-0.5rem-1px)] bg-gray-100 my-4 space-x-8">
+									<div className="flex items-center justify-between py-2 px-4 mx-[calc(-0.5rem-1px)] dark:mx-[-0.5rem] bg-gray-100 dark:bg-gray-900 my-4 space-x-8">
 										<div className="flex items-center space-x-2">
 											{item.collection_img_url && <img src={item.collection_img_url} className="w-5 h-5 rounded-full" />}
 											<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">{item.collection_name}</p>
