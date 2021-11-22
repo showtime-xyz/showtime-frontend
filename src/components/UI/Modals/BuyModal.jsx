@@ -12,7 +12,7 @@ import useProfile from '@/hooks/useProfile'
 import { ExclamationIcon } from '@heroicons/react/outline'
 import XIcon from '@/components/Icons/XIcon'
 import { DEFAULT_PROFILE_PIC, LIST_CURRENCIES } from '@/lib/constants'
-import { formatAddressShort, signTokenPermit, switchToChain, truncateWithEllipses } from '@/lib/utilities'
+import { formatAddressShort, parseBalance, signTokenPermit, switchToChain, truncateWithEllipses } from '@/lib/utilities'
 import BadgeIcon from '@/components/Icons/BadgeIcon'
 import confetti from 'canvas-confetti'
 import Link from 'next/link'
@@ -108,7 +108,7 @@ const BuyModal = ({ open, onClose, token }) => {
 		const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT, marketplaceAbi, biconomy.getSignerByAddress(signerAddress))
 		const ercContract = new ethers.Contract(LIST_CURRENCIES[token.listing.currency], iercPermit20Abi, biconomy.getSignerByAddress(signerAddress))
 
-		const basePrice = ethers.utils.parseUnits(token.listing.min_price.toString(), 18)
+		const basePrice = parseBalance(token.listing.min_price.toString(), LIST_CURRENCIES[token.listing.currency])
 
 		if (!(await ercContract.balanceOf(signerAddress)).gt(basePrice)) {
 			return setModalPage(MODAL_PAGES.NO_BALANCE)

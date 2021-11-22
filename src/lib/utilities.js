@@ -1,5 +1,6 @@
-import { CONTRACTS, SOL_MAX_INT } from './constants'
+import { CONTRACTS, LIST_CURRENCIES, SOL_MAX_INT } from './constants'
 import removeMd from 'remove-markdown'
+import { parseEther, parseUnits } from '@ethersproject/units'
 
 export const classNames = (...classes) => {
 	return classes.filter(Boolean).join(' ')
@@ -233,4 +234,11 @@ export const switchToChain = (web3, chainId, chainDetails = { chainId }) => {
 
 		return web3.provider.request({ method: 'wallet_addEthereumChain', params: [chainDetails] })
 	})
+}
+
+// All our supported currencies have 18 decimals, except for USDC which has 6
+export const parseBalance = (balance, currency) => {
+	if (currency != LIST_CURRENCIES?.USDC) return parseUnits(balance, 18)
+
+	return parseUnits(balance, 6)
 }

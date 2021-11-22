@@ -20,9 +20,8 @@ import XIcon from '@/components/Icons/XIcon'
 import { DEFAULT_PROFILE_PIC, LIST_CURRENCIES } from '@/lib/constants'
 import useSWR from 'swr'
 import backend from '@/lib/backend'
-import { formatAddressShort, truncateWithEllipses } from '@/lib/utilities'
+import { formatAddressShort, parseBalance, truncateWithEllipses } from '@/lib/utilities'
 import BadgeIcon from '@/components/Icons/BadgeIcon'
-import { parseEther } from '@ethersproject/units'
 import { preventExponent } from '@/lib/prevent-exponent'
 import { formatPrice } from '@/lib/format-price'
 
@@ -181,7 +180,7 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 			)
 		}
 
-		const { data } = await contract.populateTransaction.createSale(token.token_id, editionCount, parseEther(price) /* assuming 18 decimals */, currency)
+		const { data } = await contract.populateTransaction.createSale(token.token_id, editionCount, parseBalance(price, currency), currency)
 
 		const transaction = await provider
 			.send('eth_sendTransaction', [
