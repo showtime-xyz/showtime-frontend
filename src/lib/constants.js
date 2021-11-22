@@ -216,4 +216,5 @@ export const SOL_MAX_INT = '0xffffffffffffffffffffffffffffffffffffffffffffffffff
 
 export const LIST_CURRENCIES = {
 	TKN: '0xd404017a401ff7ef65e7689630eca288e23d67a1',
+	WMATIC: '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889',
 }
