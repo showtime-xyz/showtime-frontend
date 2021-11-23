@@ -5,13 +5,13 @@ const useAuth = () => {
 	const {
 		data: user,
 		error,
-		revalidate,
+		mutate,
 	} = useSWR('/api/auth/user', url => axios.get(url).then(res => res.data), {
 		revalidateOnFocus: false,
 		shouldRetryOnError: false,
 	})
 
-	return { user, error, loading: !user && !error, isAuthenticated: Boolean(user && !error), revalidate }
+	return { user, error, loading: !user && !error, isAuthenticated: Boolean(user && !error), mutate }
 }
 
 export default useAuth

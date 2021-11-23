@@ -7,7 +7,7 @@ import { getNotificationInfo, DEFAULT_PROFILE_PIC, CHAIN_IDENTIFIERS } from '@/l
 import ModalUserList from '@/components/ModalUserList'
 import axios from '@/lib/axios'
 import { Popover, Transition } from '@headlessui/react'
-import { useSWRInfinite } from 'swr'
+import useSWRInfinite from 'swr/infinite'
 import useAuth from '../hooks/useAuth'
 import useProfile from '@/hooks/useProfile'
 import BellIcon from '@/components/Icons/BellIcon'

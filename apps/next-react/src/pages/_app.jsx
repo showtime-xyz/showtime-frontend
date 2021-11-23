@@ -40,7 +40,7 @@ const App = ({ Component, pageProps }) => {
 	useDeviceContext(tw)
 
 	const router = useRouter()
-	const { revalidate } = useAuth()
+	const { mutate } = useAuth()
 	const [myProfile, setMyProfile] = useState(null)
 	const [user, setUser] = useState()
 	const [web3, setWeb3] = useState(null)
@@ -307,7 +307,7 @@ const App = ({ Component, pageProps }) => {
 		logOut: async () => {
 			await axios.post('/api/auth/logout')
 			ClientAccessToken.setAccessToken(null)
-			revalidate()
+			mutate()
 			setUser(null)
 			setMyLikes([])
 			setMyLikeCounts({})
