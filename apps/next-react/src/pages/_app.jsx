@@ -1,14 +1,24 @@
-import { useEffect, useState } from 'react'
 import '@/styles/styles.css'
-import { DISABLE_ALL } from '@/lib/constants'
-import AppContext from '@/context/app-context'
+
+import 'raf/polyfill'
+
+import { useEffect, useState } from 'react'
 import mixpanel from 'mixpanel-browser'
 import Router, { useRouter } from 'next/router'
 import ProgressBar from '@badrap/bar-of-progress'
+import { ThemeProvider } from 'next-themes'
+import { DripsyProvider } from 'dripsy'
+import { useDeviceContext } from 'twrnc'
+import { SWRConfig, useSWRConfig } from 'swr'
+
+import { tw } from 'design-system/tailwind'
+import { theme } from 'design-system/theme'
+
+import { DISABLE_ALL } from '@/lib/constants'
+import AppContext from '@/context/app-context'
 import ModalThrottleUser from '@/components/ModalThrottleUser'
 import axios from '@/lib/axios'
 import { filterNewRecs } from '@/lib/utilities'
-import { ThemeProvider } from 'next-themes'
 import useAuth from '@/hooks/useAuth'
 import ClientAccessToken from '@/lib/client-access-token'
 
@@ -27,6 +37,8 @@ Router.events.on('routeChangeComplete', progress.finish)
 Router.events.on('routeChangeError', progress.finish)
 
 const App = ({ Component, pageProps }) => {
+	useDeviceContext(tw)
+
 	const router = useRouter()
 	const { revalidate } = useAuth()
 	const [myProfile, setMyProfile] = useState(null)
@@ -314,16 +326,18 @@ const App = ({ Component, pageProps }) => {
 	}
 
 	return (
-		<ThemeProvider defaultTheme="light" disableTransitionOnChange={true} attribute="class">
-			<AppContext.Provider value={injectedGlobalContext}>
-				<ModalThrottleUser
-					isOpen={throttleOpen}
-					closeModal={() => setThrottleOpen(false)}
-					modalContent={throttleContent}
-				/>
-				<Component {...pageProps} key={router.asPath} />
-			</AppContext.Provider>
-		</ThemeProvider>
+		<DripsyProvider theme={theme}>
+			<ThemeProvider defaultTheme="light" disableTransitionOnChange={true} attribute="class">
+				<AppContext.Provider value={injectedGlobalContext}>
+					<ModalThrottleUser
+						isOpen={throttleOpen}
+						closeModal={() => setThrottleOpen(false)}
+						modalContent={throttleContent}
+					/>
+					<Component {...pageProps} key={router.asPath} />
+				</AppContext.Provider>
+			</ThemeProvider>
+		</DripsyProvider>
 	)
 }
 

@@ -1,14 +1,13 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document'
-export default class MyDocument extends Document {
-	static async getInitialProps(ctx) {
-		const initialProps = await Document.getInitialProps(ctx)
-		return { ...initialProps }
-	}
+import { getInitialProps } from '@expo/next-adapter/document'
+import NextDocument, { Html, Head, Main, NextScript } from 'next/document'
 
+class Document extends NextDocument {
 	render() {
 		return (
-			<Html>
+			<Html lang="en">
 				<Head>
+					<meta charSet="UTF-8" />
+					<meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 					{/* preload fonts */}
 					<link rel="stylesheet" href="/fonts/showtime.css" />
 					<link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -23,13 +22,6 @@ export default class MyDocument extends Document {
 						type="font/woff2"
 						crossOrigin="anonymous"
 					/>
-					<link
-						rel="preload"
-						href="/fonts/woff/Afronaut.woff"
-						as="font"
-						type="font/woff"
-						crossOrigin="anonymous"
-					/>
 				</Head>
 				<body className="!max-w-screen">
 					{/* Here we will mount our modal portal */}
@@ -41,3 +33,7 @@ export default class MyDocument extends Document {
 		)
 	}
 }
+
+Document.getInitialProps = getInitialProps
+
+export default Document
