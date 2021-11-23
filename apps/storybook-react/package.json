@@ -23,7 +23,7 @@
 		"@storybook/addon-actions": "^6.3.12",
 		"@storybook/addon-essentials": "^6.3.12",
 		"@storybook/addon-links": "^6.3.12",
-		"@storybook/addon-react-native-web": "0.0.8-canary.13.d8a51bb.0",
+		"@storybook/addon-react-native-web": "^0.0.7",
 		"@storybook/builder-webpack5": "^6.3.12",
 		"@storybook/manager-webpack5": "^6.3.12",
 		"@storybook/react": "^6.3.12",

@@ -44,4 +44,13 @@ module.exports = {
 		...options,
 		presets: [...options.presets, ['babel-preset-expo', { jsxRuntime: 'automatic' }]],
 	}),
+	webpackFinal: async config => {
+		const { withUnimodules } = require('@expo/webpack-config/addons')
+
+		return withUnimodules(config, {
+			babel: {
+				dangerouslyAddModulePathsToTranspile: ['design-system'],
+			},
+		})
+	},
 }
