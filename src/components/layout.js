@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import PropTypes from 'prop-types'
 //import backend from "../lib/backend";
 import Footer from './footer'
 import Header from './header'
@@ -41,10 +40,6 @@ const Layout = ({ children }) => {
 			</div>
 		</>
 	)
-}
-
-Layout.propTypes = {
-	children: PropTypes.node.isRequired,
 }
 
 export default Layout
