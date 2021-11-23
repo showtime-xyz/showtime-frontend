@@ -28,7 +28,11 @@ export default () =>
 			try {
 				const sealedRefreshTokenCookie = CookieService.getRefreshToken(req.cookies)
 				if (sealedRefreshTokenCookie) {
-					const { refreshToken } = await Iron.unseal(sealedRefreshTokenCookie, process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+					const { refreshToken } = await Iron.unseal(
+						sealedRefreshTokenCookie,
+						process.env.ENCRYPTION_SECRET_V2,
+						Iron.defaults
+					)
 					const decodedRefreshToken = jwt_decode(refreshToken)
 					const hasAddress = decodedRefreshToken?.address
 					// TODO: Will be swapped for client side access token

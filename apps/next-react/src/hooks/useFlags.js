@@ -12,7 +12,13 @@ export const flagDefs = {
 const useFlags = () => {
 	const { myProfile } = useProfile()
 
-	return { ...useMemo(() => Object.fromEntries(Object.values(FLAGS).map(key => [key, flagDefs[key](myProfile)])), [myProfile]), loading: !myProfile }
+	return {
+		...useMemo(
+			() => Object.fromEntries(Object.values(FLAGS).map(key => [key, flagDefs[key](myProfile)])),
+			[myProfile]
+		),
+		loading: !myProfile,
+	}
 }
 
 export default useFlags

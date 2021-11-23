@@ -20,7 +20,11 @@ export async function getServerSideProps({
 	}
 
 	const token = await backend
-		.get(`/v2/token/${contract_address}/${token_id}${chain_name ? `?chain_identifier=${CHAIN_IDENTIFIERS[chain_name]}` : ''}`)
+		.get(
+			`/v2/token/${contract_address}/${token_id}${
+				chain_name ? `?chain_identifier=${CHAIN_IDENTIFIERS[chain_name]}` : ''
+			}`
+		)
 		.then(
 			({
 				data: {
@@ -71,7 +75,9 @@ export default function Token({ token }) {
 
 	return (
 		<>
-			{typeof document !== 'undefined' ? <ModalReportItem isOpen={reportModalOpen} setReportModalOpen={setReportModalOpen} nftId={item.nft_id} /> : null}
+			{typeof document !== 'undefined' ? (
+				<ModalReportItem isOpen={reportModalOpen} setReportModalOpen={setReportModalOpen} nftId={item.nft_id} />
+			) : null}
 			<Layout key={item.nft_id}>
 				<Head>
 					<title>{item.token_name} | Showtime</title>
@@ -79,17 +85,30 @@ export default function Token({ token }) {
 					<meta name="description" content={item.token_description} />
 					<meta property="og:type" content="website" />
 					<meta name="og:description" content={item.token_description} />
-					<meta property="og:image" content={item.token_img_twitter_url ? item.token_img_twitter_url : item.token_img_url} />
+					<meta
+						property="og:image"
+						content={item.token_img_twitter_url ? item.token_img_twitter_url : item.token_img_url}
+					/>
 					<meta name="og:title" content={item.token_name} />
 
 					<meta name="twitter:card" content="summary_large_image" />
 					<meta name="twitter:title" content={item.token_name} />
 					<meta name="twitter:description" content={item.token_description} />
-					<meta name="twitter:image" content={item.token_img_twitter_url ? item.token_img_twitter_url : item.token_img_url} />
+					<meta
+						name="twitter:image"
+						content={item.token_img_twitter_url ? item.token_img_twitter_url : item.token_img_url}
+					/>
 				</Head>
 
 				<div>
-					<TokenDetailBody item={item} muted={false} className="w-full" ownershipDetails={ownershipDetails} parentSetReportModalOpen={setReportModalOpen} parentReportModalOpen={reportModalOpen} />
+					<TokenDetailBody
+						item={item}
+						muted={false}
+						className="w-full"
+						ownershipDetails={ownershipDetails}
+						parentSetReportModalOpen={setReportModalOpen}
+						parentReportModalOpen={reportModalOpen}
+					/>
 				</div>
 			</Layout>
 		</>

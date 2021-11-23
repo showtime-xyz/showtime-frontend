@@ -28,9 +28,24 @@ const Tiles = ({ topItems, setCurrentlyOpenModal }) => {
 				{topItems.map((topItem, index) => (
 					<div key={topItem?.nft_id}>
 						{topItem?.token_img_url ? (
-							<img className="w-[27vw] h-[27vw] max-w-[27vw] max-h-[27vw] sm:w-[12vw] sm:h-[12vw] sm:max-w-[80px] sm:max-h-[80px] object-cover cursor-pointer" style={{ marginRight: index === topItems.length - 1 || context.windowSize?.width <= 420 ? 0 : 14 }} onClick={() => setCurrentlyOpenModal(topItem)} src={getSmallImageUrl(topItem?.token_img_url)} />
+							<img
+								className="w-[27vw] h-[27vw] max-w-[27vw] max-h-[27vw] sm:w-[12vw] sm:h-[12vw] sm:max-w-[80px] sm:max-h-[80px] object-cover cursor-pointer"
+								style={{
+									marginRight:
+										index === topItems.length - 1 || context.windowSize?.width <= 420 ? 0 : 14,
+								}}
+								onClick={() => setCurrentlyOpenModal(topItem)}
+								src={getSmallImageUrl(topItem?.token_img_url)}
+							/>
 						) : (
-							<div className="w-[27vw] h-[27vw] max-w-[27vw] max-h-[27vw] sm:w-[12vw] sm:h-[12vw] sm:max-w-[80px] sm:max-h-[80px] bg-black cursor-pointer" style={{ marginRight: index === topItems.length - 1 || context.windowSize?.width <= 420 ? 0 : 14 }} onClick={() => setCurrentlyOpenModal(topItem)}>
+							<div
+								className="w-[27vw] h-[27vw] max-w-[27vw] max-h-[27vw] sm:w-[12vw] sm:h-[12vw] sm:max-w-[80px] sm:max-h-[80px] bg-black cursor-pointer"
+								style={{
+									marginRight:
+										index === topItems.length - 1 || context.windowSize?.width <= 420 ? 0 : 14,
+								}}
+								onClick={() => setCurrentlyOpenModal(topItem)}
+							>
 								<ReactPlayer
 									url={topItem?.token_animation_url}
 									playing={false}
@@ -58,7 +73,14 @@ const Tiles = ({ topItems, setCurrentlyOpenModal }) => {
 	)
 }
 
-const RecommendedFollowItem = ({ item, closeModal = () => {}, liteVersion, removeRecommendation, followCallback = () => {}, leftPadding }) => {
+const RecommendedFollowItem = ({
+	item,
+	closeModal = () => {},
+	liteVersion,
+	removeRecommendation,
+	followCallback = () => {},
+	leftPadding,
+}) => {
 	const context = useContext(AppContext)
 	const [followerCount, setFollowerCount] = useState()
 	const isMyProfile = context?.myProfile?.profile_id === item?.profile_id
@@ -93,20 +115,44 @@ const RecommendedFollowItem = ({ item, closeModal = () => {}, liteVersion, remov
 		<div className="flex flex-col w-full border-t-px dark:border-gray-800 relative">
 			{typeof document !== 'undefined' ? (
 				<>
-					<ModalTokenDetail isOpen={currentlyOpenModal} setEditModalOpen={setCurrentlyOpenModal} item={currentlyOpenModal} goToNext={goToNext} goToPrevious={goToPrevious} hasNext={!(currentIndex === topItems.length - 1)} hasPrevious={!(currentIndex === 0)} />
+					<ModalTokenDetail
+						isOpen={currentlyOpenModal}
+						setEditModalOpen={setCurrentlyOpenModal}
+						item={currentlyOpenModal}
+						goToNext={goToNext}
+						goToPrevious={goToPrevious}
+						hasNext={!(currentIndex === topItems.length - 1)}
+						hasPrevious={!(currentIndex === 0)}
+					/>
 				</>
 			) : null}
-			<div className="flex flex-col sm:flex-row sm:justify-between w-full border-t dark:border-gray-800 relative p-4 group" style={{ paddingLeft: leftPadding }}>
+			<div
+				className="flex flex-col sm:flex-row sm:justify-between w-full border-t dark:border-gray-800 relative p-4 group"
+				style={{ paddingLeft: leftPadding }}
+			>
 				<div className="flex">
 					<Link href="/[profile]" as={`/${item?.username || item.address}`}>
 						<a onClick={() => closeModal()} className="min-w-[42px]">
-							<img className={`rounded-full cursor-pointer ${liteVersion ? 'w-11 h-11 mr-2.5' : 'w-20 h-20 mr-5'}`} src={item?.img_url ? item?.img_url : DEFAULT_PROFILE_PIC} />
+							<img
+								className={`rounded-full cursor-pointer ${
+									liteVersion ? 'w-11 h-11 mr-2.5' : 'w-20 h-20 mr-5'
+								}`}
+								src={item?.img_url ? item?.img_url : DEFAULT_PROFILE_PIC}
+							/>
 						</a>
 					</Link>
 					<div className={`flex flex-col justify-around truncate ${liteVersion ? 'max-w-[7.5rem]' : ''}`}>
 						<Link href="/[profile]" as={`/${item?.username || item.address}`}>
 							<a onClick={() => closeModal()}>
-								<h4 className={`font-medium cursor-pointer truncate dark:text-gray-300 hover:text-stpink dark:hover:text-stpink ${liteVersion ? 'mr-7' : 'text-lg'}`}>{truncateWithEllipses(item?.name, context.isMobile ? 19 : 30) || formatAddressShort(item.address) || 'Unnamed'}</h4>
+								<h4
+									className={`font-medium cursor-pointer truncate dark:text-gray-300 hover:text-stpink dark:hover:text-stpink ${
+										liteVersion ? 'mr-7' : 'text-lg'
+									}`}
+								>
+									{truncateWithEllipses(item?.name, context.isMobile ? 19 : 30) ||
+										formatAddressShort(item.address) ||
+										'Unnamed'}
+								</h4>
 							</a>
 						</Link>
 						{!liteVersion && (
@@ -128,14 +174,28 @@ const RecommendedFollowItem = ({ item, closeModal = () => {}, liteVersion, remov
 				<div className="flex flex-col md:flex-row w-full md:w-auto">
 					{!isMyProfile && (
 						<div className="mt-5 w-full sm:mt-0 sm:w-auto" onClick={() => followCallback(item)}>
-							<FollowButton item={item} followerCount={followerCount} setFollowerCount={setFollowerCount} compact homepage />
+							<FollowButton
+								item={item}
+								followerCount={followerCount}
+								setFollowerCount={setFollowerCount}
+								compact
+								homepage
+							/>
 						</div>
 					)}
 
-					{liteVersion && <RemoveRecommendationButton item={item} removeRecommendation={removeRecommendation} />}
+					{liteVersion && (
+						<RemoveRecommendationButton item={item} removeRecommendation={removeRecommendation} />
+					)}
 				</div>
 			</div>
-			<div style={{ paddingLeft: leftPadding }}>{context.windowSize?.width <= 420 ? <Tiles topItems={topItems.slice(0, 3)} setCurrentlyOpenModal={setCurrentlyOpenModal} /> : <Tiles topItems={topItems} setCurrentlyOpenModal={setCurrentlyOpenModal} />}</div>
+			<div style={{ paddingLeft: leftPadding }}>
+				{context.windowSize?.width <= 420 ? (
+					<Tiles topItems={topItems.slice(0, 3)} setCurrentlyOpenModal={setCurrentlyOpenModal} />
+				) : (
+					<Tiles topItems={topItems} setCurrentlyOpenModal={setCurrentlyOpenModal} />
+				)}
+			</div>
 		</div>
 	)
 }

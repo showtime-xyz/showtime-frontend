@@ -75,7 +75,9 @@ const verifySig = async function (bytes, sig, pk) {
 		case 'p2':
 			bytes = blake2b(32).update(bytes).digest()
 			pk = utility.b58cdecode(pk, curve == 'sp' ? prefix.sppk : prefix.p2pk)
-			return new EC(curve == 'sp' ? 'secp256k1' : 'p256').keyFromPublic(pk).verify(bytes, { r: sig.slice(0, 32), s: sig.slice(32) })
+			return new EC(curve == 'sp' ? 'secp256k1' : 'p256')
+				.keyFromPublic(pk)
+				.verify(bytes, { r: sig.slice(0, 32), s: sig.slice(32) })
 	}
 
 	return false

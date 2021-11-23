@@ -46,7 +46,15 @@ export default function Modal({ item, isOpen, setEditModalOpen, goToNext, goToPr
 						}}
 					>
 						<div
-							className={`cursor-pointer flex items-center justify-center ${isStacked && context.isMobile ? 'z-2 -mr-12 p-2 pr-3 sm:pr-2 opacity-40 bg-black rounded-r-full mt-[400px] w-12 h-20' : ''} ${hasPrevious ? 'visible flex-shrink md:p-4 lg:p-8 xl:p-12 text-gray-500 hover:text-gray-200' : 'invisible flex-shrink md:p-4 lg:p-8 xl:p-12 text-gray-500 hover:text-gray-200'}`}
+							className={`cursor-pointer flex items-center justify-center ${
+								isStacked && context.isMobile
+									? 'z-2 -mr-12 p-2 pr-3 sm:pr-2 opacity-40 bg-black rounded-r-full mt-[400px] w-12 h-20'
+									: ''
+							} ${
+								hasPrevious
+									? 'visible flex-shrink md:p-4 lg:p-8 xl:p-12 text-gray-500 hover:text-gray-200'
+									: 'invisible flex-shrink md:p-4 lg:p-8 xl:p-12 text-gray-500 hover:text-gray-200'
+							}`}
 							onClick={e => {
 								e.stopPropagation()
 								mixpanel.track('Prior NFT - arrow button')
@@ -55,7 +63,12 @@ export default function Modal({ item, isOpen, setEditModalOpen, goToNext, goToPr
 						>
 							<FontAwesomeIcon icon={faAngleLeft} className="!w-4 h-auto" />
 						</div>
-						<div className={`bg-white flex-grow my-8 overflow-hidden text-black w-full ${isStacked ? 'h-full overflow-auto' : 'h-[90%] rounded-lg'}`} onClick={e => e.stopPropagation()}>
+						<div
+							className={`bg-white flex-grow my-8 overflow-hidden text-black w-full ${
+								isStacked ? 'h-full overflow-auto' : 'h-[90%] rounded-lg'
+							}`}
+							onClick={e => e.stopPropagation()}
+						>
 							<div
 								onClick={() => {
 									mixpanel.track('Close NFT modal - x button')
@@ -66,11 +79,26 @@ export default function Modal({ item, isOpen, setEditModalOpen, goToNext, goToPr
 								<FontAwesomeIcon className="w-8 h-8 text-white" icon={faTimes} />
 							</div>
 							<div className="overflow-y-scroll h-full sm:rounded-lg" id="ModalTokenDetailWrapper">
-								<TokenDetailBody item={item} muted={false} className="w-full" setEditModalOpen={setEditModalOpen} ownershipDetails={ownershipDetails} isInModal />
+								<TokenDetailBody
+									item={item}
+									muted={false}
+									className="w-full"
+									setEditModalOpen={setEditModalOpen}
+									ownershipDetails={ownershipDetails}
+									isInModal
+								/>
 							</div>
 						</div>
 						<div
-							className={`cursor-pointer flex items-center justify-center ${isStacked && context.isMobile ? 'z-2 -ml-12 p-2 pl-3 sm:pl-2 opacity-40 bg-black rounded-l-full w-12 h-20 mt-[400px]' : ''} ${hasNext ? 'visible flex-shrink md:p-4 lg:p-8 xl:p-12 text-gray-500 hover:text-gray-200' : 'invisible flex-shrink md:p-4 lg:p-8 xl:p-12 text-gray-500 hover:text-gray-200'}`}
+							className={`cursor-pointer flex items-center justify-center ${
+								isStacked && context.isMobile
+									? 'z-2 -ml-12 p-2 pl-3 sm:pl-2 opacity-40 bg-black rounded-l-full w-12 h-20 mt-[400px]'
+									: ''
+							} ${
+								hasNext
+									? 'visible flex-shrink md:p-4 lg:p-8 xl:p-12 text-gray-500 hover:text-gray-200'
+									: 'invisible flex-shrink md:p-4 lg:p-8 xl:p-12 text-gray-500 hover:text-gray-200'
+							}`}
 							onClick={e => {
 								e.stopPropagation()
 								mixpanel.track('Next NFT - arrow button')

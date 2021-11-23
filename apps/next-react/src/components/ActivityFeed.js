@@ -12,7 +12,13 @@ const ActivityFeed = ({ activity, setItemOpenInModal, removeActorFromFeed, setRe
 	return (
 		<div className="sm:px-3 overflow-hidden" style={{ maxWidth: windowObj?.innerWidth }}>
 			{activity.map(act => (
-				<ActivityCard act={act} key={act.id} setItemOpenInModal={setItemOpenInModal} setReportModalIsOpen={setReportModalIsOpen} removeActorFromFeed={removeActorFromFeed} />
+				<ActivityCard
+					act={act}
+					key={act.id}
+					setItemOpenInModal={setItemOpenInModal}
+					setReportModalIsOpen={setReportModalIsOpen}
+					removeActorFromFeed={removeActorFromFeed}
+				/>
 			))}
 		</div>
 	)

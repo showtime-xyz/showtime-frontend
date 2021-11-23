@@ -23,12 +23,19 @@ const handleUsernameLookup = async (value, myProfile, setCustomURLError) => {
 
 	try {
 		if (username === null || username.toLowerCase() === myProfile?.username?.toLowerCase()) validUsername = true
-		else validUsername = await backend.get(`/v1/username_available?username=${username}`).then(res => res?.data?.data)
+		else
+			validUsername = await backend
+				.get(`/v1/username_available?username=${username}`)
+				.then(res => res?.data?.data)
 	} catch {
 		//
 	}
 
-	setCustomURLError(validUsername ? { isError: false, message: username === null ? '' : 'Username is available' } : { isError: true, message: 'Username is not available' })
+	setCustomURLError(
+		validUsername
+			? { isError: false, message: username === null ? '' : 'Username is available' }
+			: { isError: true, message: 'Username is not available' }
+	)
 
 	return validUsername
 }
@@ -72,7 +79,11 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 
 		const username = customURLValue ? customURLValue.trim() : null
 
-		if (username?.toLowerCase() != myProfile.username?.toLowerCase() && !(await handleUsernameLookup(customURLValue, myProfile, setCustomURLError))) return
+		if (
+			username?.toLowerCase() != myProfile.username?.toLowerCase() &&
+			!(await handleUsernameLookup(customURLValue, myProfile, setCustomURLError))
+		)
+			return
 
 		// Post changes to the API
 		await axios.post('/api/profile', {
@@ -80,7 +91,9 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 			bio: bioValue?.trim() || null,
 			username: username?.trim() || null,
 			website_url: websiteValue?.trim() || null,
-			links: socialLinks.filter(sl => sl.user_input?.trim()).map(sl => ({ type_id: sl.type_id, user_input: sl.user_input?.trim() ? sl.user_input.trim() : null })),
+			links: socialLinks
+				.filter(sl => sl.user_input?.trim())
+				.map(sl => ({ type_id: sl.type_id, user_input: sl.user_input?.trim() ? sl.user_input.trim() : null })),
 			default_list_id: defaultListId || '',
 			default_created_sort_id: defaultCreatedSortId,
 			default_owned_sort_id: defaultOwnedSortId,
@@ -93,7 +106,9 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 			bio: bioValue?.trim() || null,
 			username: username?.trim() || null,
 			website_url: websiteValue?.trim() || null,
-			links: socialLinks.filter(sl => sl.user_input?.trim()).map(sl => ({ ...sl, user_input: sl.user_input?.trim() })),
+			links: socialLinks
+				.filter(sl => sl.user_input?.trim())
+				.map(sl => ({ ...sl, user_input: sl.user_input?.trim() })),
 			default_list_id: defaultListId || '',
 			default_created_sort_id: defaultCreatedSortId,
 			default_owned_sort_id: defaultOwnedSortId,
@@ -102,7 +117,14 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 		setSubmitting(false)
 		setEditModalOpen(false)
 		// confirm saved correctly
-		router.push(`/${username || myProfile?.wallet_addresses_v2?.[0].ens_domain || myProfile?.wallet_addresses_v2?.[0].address || ''}`)
+		router.push(
+			`/${
+				username ||
+				myProfile?.wallet_addresses_v2?.[0].ens_domain ||
+				myProfile?.wallet_addresses_v2?.[0].address ||
+				''
+			}`
+		)
 	}
 
 	const tab_list = [
@@ -166,20 +188,39 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 							<div className="flex-1 my-4 ">
 								<div className="mb-3">
 									<p className="text-xl text-indigo-500 dark:text-indigo-400 mb-1">Profile</p>
-									{myProfile?.verified && <p className="text-gray-500 text-xs">Verified users can't change their name or username. Please contact us to modify them.</p>}
+									{myProfile?.verified && (
+										<p className="text-gray-500 text-xs">
+											Verified users can't change their name or username. Please contact us to
+											modify them.
+										</p>
+									)}
 								</div>
 
 								<div className="py-2">
 									<label htmlFor="name" className="block text-sm text-gray-700 dark:text-gray-500">
 										Name
 									</label>
-									<input name="name" placeholder="Your display name" value={nameValue ? nameValue : ''} onChange={e => setNameValue(e.target.value)} type="text" maxLength="50" disabled={myProfile?.verified} className="mt-1 dark:text-gray-300 dark:bg-gray-700 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-800 focus:border-indigo-500 dark:focus:border-indigo-800 sm:text-sm" />
-									<label htmlFor="customURL" className="mt-4 block text-sm font-medium text-gray-700 dark:text-gray-500 sm:pt-2">
+									<input
+										name="name"
+										placeholder="Your display name"
+										value={nameValue ? nameValue : ''}
+										onChange={e => setNameValue(e.target.value)}
+										type="text"
+										maxLength="50"
+										disabled={myProfile?.verified}
+										className="mt-1 dark:text-gray-300 dark:bg-gray-700 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-800 focus:border-indigo-500 dark:focus:border-indigo-800 sm:text-sm"
+									/>
+									<label
+										htmlFor="customURL"
+										className="mt-4 block text-sm font-medium text-gray-700 dark:text-gray-500 sm:pt-2"
+									>
 										Username
 									</label>
 									<div className="mt-1 ">
 										<div className="max-w-lg flex rounded-md shadow-sm">
-											<span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 dark:border-gray-700 dark:bg-gray-800 bg-gray-100 text-gray-700 dark:text-gray-500 sm:text-sm">{SHOWTIME_PROD_URL}</span>
+											<span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 dark:border-gray-700 dark:bg-gray-800 bg-gray-100 text-gray-700 dark:text-gray-500 sm:text-sm">
+												{SHOWTIME_PROD_URL}
+											</span>
 											<input
 												type="text"
 												name="customURL"
@@ -193,7 +234,11 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 													const urlRegex = /^[a-zA-Z0-9_]*$/
 													if (urlRegex.test(value)) {
 														setCustomURLValue(value)
-														handleDebouncedUsernameLookup(value, myProfile, setCustomURLError)
+														handleDebouncedUsernameLookup(
+															value,
+															myProfile,
+															setCustomURLError
+														)
 													}
 												}}
 												maxLength={30}
@@ -201,7 +246,13 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 										</div>
 									</div>
 								</div>
-								<div className={`text-xs text-right ${customURLError.message ? 'visible' : 'invisible'} ${customURLError.isError ? 'text-red-500' : 'text-green-400'}`}>&nbsp;{customURLError.message}</div>
+								<div
+									className={`text-xs text-right ${
+										customURLError.message ? 'visible' : 'invisible'
+									} ${customURLError.isError ? 'text-red-500' : 'text-green-400'}`}
+								>
+									&nbsp;{customURLError.message}
+								</div>
 								<label htmlFor="bio" className="block text-sm text-gray-700 dark:text-gray-500">
 									About Me (optional)
 								</label>
@@ -218,7 +269,9 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 									className="mt-1 dark:text-gray-300 dark:bg-gray-700 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 sm:text-sm"
 								></textarea>
 
-								<div className="text-right text-gray-500 dark:text-gray-600 text-xs">300 character limit</div>
+								<div className="text-right text-gray-500 dark:text-gray-600 text-xs">
+									300 character limit
+								</div>
 							</div>
 							<div className="w-6 flex-shrink" />
 							{/* second row */}
@@ -229,35 +282,86 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 									<div className="flex items-center">
 										<div className="flex-1">
 											<Listbox value={selectedAddSocialLink} onChange={handleSocialSelected}>
-												<Listbox.Label className="block text-sm text-gray-700 dark:text-gray-500">Add Link</Listbox.Label>
+												<Listbox.Label className="block text-sm text-gray-700 dark:text-gray-500">
+													Add Link
+												</Listbox.Label>
 												<div className="flex flex-row items-center">
 													<PlusCircleIcon className="w-5 h-5 mr-2 dark:text-gray-400" />
 													<div className="flex items-center flex-grow">
 														<div className="mt-1 relative flex-1">
 															<Listbox.Button className="bg-white dark:bg-gray-700 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 focus:border-indigo-500 dark:focus:border-indigo-700 sm:text-sm">
 																<span className="flex items-center">
-																	{selectedAddSocialLink.icon_url && <img src={selectedAddSocialLink.icon_url} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />}
-																	<span className={`${selectedAddSocialLink.icon_url ? 'ml-3' : null} block truncate dark:text-gray-400`}>{selectedAddSocialLink.name}</span>
+																	{selectedAddSocialLink.icon_url && (
+																		<img
+																			src={selectedAddSocialLink.icon_url}
+																			alt=""
+																			className="flex-shrink-0 h-6 w-6 rounded-full"
+																		/>
+																	)}
+																	<span
+																		className={`${
+																			selectedAddSocialLink.icon_url
+																				? 'ml-3'
+																				: null
+																		} block truncate dark:text-gray-400`}
+																	>
+																		{selectedAddSocialLink.name}
+																	</span>
 																	<span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-																		<SelectorIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" aria-hidden="true" />
+																		<SelectorIcon
+																			className="h-5 w-5 text-gray-400 dark:text-gray-500"
+																			aria-hidden="true"
+																		/>
 																	</span>
 																</span>
 															</Listbox.Button>
 
-															<Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+															<Transition
+																as={Fragment}
+																leave="transition ease-in duration-100"
+																leaveFrom="opacity-100"
+																leaveTo="opacity-0"
+															>
 																<Listbox.Options className="z-10 absolute mt-1 w-full border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
 																	{filteredSocialLinkOptions().map(opt => (
-																		<Listbox.Option key={opt.type_id} className={({ active }) => classNames(active ? 'text-white dark:text-gray-300 bg-indigo-600 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={opt}>
+																		<Listbox.Option
+																			key={opt.type_id}
+																			className={({ active }) =>
+																				classNames(
+																					active
+																						? 'text-white dark:text-gray-300 bg-indigo-600 dark:bg-gray-800'
+																						: 'text-gray-900 dark:text-gray-400',
+																					'cursor-default select-none relative py-2 pl-3 pr-9'
+																				)
+																			}
+																			value={opt}
+																		>
 																			{({ active }) => (
 																				<>
 																					<div className="flex items-center">
-																						<img src={opt.icon_url} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />
-																						<span className="ml-3 block truncate">{opt.name}</span>
+																						<img
+																							src={opt.icon_url}
+																							alt=""
+																							className="flex-shrink-0 h-6 w-6 rounded-full"
+																						/>
+																						<span className="ml-3 block truncate">
+																							{opt.name}
+																						</span>
 																					</div>
 
 																					{opt === selectedAddSocialLink ? (
-																						<span className={classNames(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}>
-																							<CheckIcon className="h-5 w-5" aria-hidden="true" />
+																						<span
+																							className={classNames(
+																								active
+																									? 'text-white'
+																									: 'text-indigo-600',
+																								'absolute inset-y-0 right-0 flex items-center pr-4'
+																							)}
+																						>
+																							<CheckIcon
+																								className="h-5 w-5"
+																								aria-hidden="true"
+																							/>
 																						</span>
 																					) : null}
 																				</>
@@ -274,10 +378,20 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 									</div>
 
 									<div className="my-4">
-										<label htmlFor="websiteValue" className="text-gray-700 dark:text-gray-500 text-sm">
+										<label
+											htmlFor="websiteValue"
+											className="text-gray-700 dark:text-gray-500 text-sm"
+										>
 											Website
 										</label>
-										<input name="websiteValue" placeholder="Your URL" value={websiteValue ? websiteValue : ''} onChange={e => setWebsiteValue(e.target.value)} type="url" className="mt-1 dark:text-gray-300 dark:bg-gray-700 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 sm:text-sm" />
+										<input
+											name="websiteValue"
+											placeholder="Your URL"
+											value={websiteValue ? websiteValue : ''}
+											onChange={e => setWebsiteValue(e.target.value)}
+											type="url"
+											className="mt-1 dark:text-gray-300 dark:bg-gray-700 relative w-full border border-gray-300 dark:border-gray-800 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-700 sm:text-sm"
+										/>
 									</div>
 
 									<div className="pt-2">
@@ -285,17 +399,28 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 											socialLinks.map(linkObj => (
 												<div key={linkObj.name} className="mb-4 pb-2">
 													<div className="flex items-center justify-between">
-														<label htmlFor={linkObj.name || linkObj.type__name} className="text-sm font-medium text-gray-700 dark:text-gray-500 flex flex-row">
-															<img className="h-5 w-5 mr-1" src={linkObj.icon_url || linkObj.type__icon_url} />
+														<label
+															htmlFor={linkObj.name || linkObj.type__name}
+															className="text-sm font-medium text-gray-700 dark:text-gray-500 flex flex-row"
+														>
+															<img
+																className="h-5 w-5 mr-1"
+																src={linkObj.icon_url || linkObj.type__icon_url}
+															/>
 															{linkObj.name || linkObj.type__name}
 														</label>
-														<span className="text-xs ml-2 text-gray-400 dark:text-gray-600 hover:text-red-400 cursor-pointer" onClick={() => handleRemoveSocialLink(linkObj.type_id)}>
+														<span
+															className="text-xs ml-2 text-gray-400 dark:text-gray-600 hover:text-red-400 cursor-pointer"
+															onClick={() => handleRemoveSocialLink(linkObj.type_id)}
+														>
 															Remove
 														</span>
 													</div>
 													<div className="mt-1">
 														<div className="max-w-lg flex rounded-md shadow-sm">
-															<span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-500 sm:text-sm">{linkObj.prefix || linkObj.type__prefix}</span>
+															<span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-500 sm:text-sm">
+																{linkObj.prefix || linkObj.type__prefix}
+															</span>
 															<input
 																type="text"
 																name={linkObj.name || linkObj.type__name}
@@ -330,15 +455,32 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 							{/* Third column */}
 							<div className="flex-1 my-4 md:pl-2">
 								<div>
-									<div className="text-xl text-indigo-500 dark:text-indigo-400 mt-2 pt-2 md:mt-0 md:pt-0 mb-3">Page Settings</div>
-									<div className="py-2 mb-2">
-										<Dropdown label="Default NFT List" options={tab_list} value={defaultListId} onChange={setDefaultListId} />
+									<div className="text-xl text-indigo-500 dark:text-indigo-400 mt-2 pt-2 md:mt-0 md:pt-0 mb-3">
+										Page Settings
 									</div>
 									<div className="py-2 mb-2">
-										<Dropdown label="Sort Created By" options={sortingOptionsList} value={defaultCreatedSortId} onChange={setDefaultCreatedSortId} />
+										<Dropdown
+											label="Default NFT List"
+											options={tab_list}
+											value={defaultListId}
+											onChange={setDefaultListId}
+										/>
+									</div>
+									<div className="py-2 mb-2">
+										<Dropdown
+											label="Sort Created By"
+											options={sortingOptionsList}
+											value={defaultCreatedSortId}
+											onChange={setDefaultCreatedSortId}
+										/>
 									</div>
 									<div className="py-2 mb-16">
-										<Dropdown label="Sort Owned By" options={sortingOptionsList} value={defaultOwnedSortId} onChange={value => setDefaultOwnedSortId(value)} />
+										<Dropdown
+											label="Sort Owned By"
+											options={sortingOptionsList}
+											value={defaultOwnedSortId}
+											onChange={value => setDefaultOwnedSortId(value)}
+										/>
 									</div>
 								</div>
 							</div>

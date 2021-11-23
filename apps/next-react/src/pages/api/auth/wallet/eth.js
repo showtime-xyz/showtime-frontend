@@ -10,7 +10,10 @@ export default handler()
 			data: { data: nonce },
 		} = await backend.get(`/v1/getnonce?address=${address}`)
 
-		if (verifyMessage(process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + ' ' + nonce, signature).toLowerCase() === address.toLowerCase()) {
+		if (
+			verifyMessage(process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + ' ' + nonce, signature).toLowerCase() ===
+			address.toLowerCase()
+		) {
 			await backend
 				.post(
 					'/v1/addwallet',

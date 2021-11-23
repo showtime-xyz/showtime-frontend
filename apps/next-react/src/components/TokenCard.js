@@ -20,7 +20,26 @@ import { CHAIN_IDENTIFIERS } from '../lib/constants'
 import ShowtimeIcon from './Icons/ShowtimeIcon'
 import Tippy from '@tippyjs/react'
 
-const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, setTransferModal, setBurnModal, setListModal, setUnlistModal, setBuyModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
+const TokenCard = ({
+	originalItem,
+	isMyProfile,
+	listId,
+	changeSpotlightItem,
+	currentlyPlayingVideo,
+	setCurrentlyPlayingVideo,
+	setCurrentlyOpenModal,
+	setTransferModal,
+	setBurnModal,
+	setListModal,
+	setUnlistModal,
+	setBuyModal,
+	pageProfile,
+	handleRemoveItem,
+	showUserHiddenItems,
+	showDuplicates,
+	setHasUserHiddenItems,
+	isChangingOrder,
+}) => {
 	const { myProfile } = useProfile()
 	const [item, setItem] = useState(originalItem)
 	const [showVideo, setShowVideo] = useState(false)
@@ -90,29 +109,63 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 
 	return (
 		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
-			<div ref={divRef} className={`w-full h-full overflow-hidden shadow-lg hover:shadow-xl md:rounded-2xl transition-all duration-300 transform hover:translate-y-[-2px] flex flex-col bg-white dark:bg-black ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border-t border-b md:border-l md:border-r border-transparent dark:border-gray-700'}`}>
+			<div
+				ref={divRef}
+				className={`w-full h-full overflow-hidden shadow-lg hover:shadow-xl md:rounded-2xl transition-all duration-300 transform hover:translate-y-[-2px] flex flex-col bg-white dark:bg-black ${
+					item.user_hidden ? 'opacity-50' : ''
+				} ${
+					isChangingOrder
+						? 'border-2 border-stpink dark:border-stpink'
+						: 'border-t border-b md:border-l md:border-r border-transparent dark:border-gray-700'
+				}`}
+			>
 				<div ref={item.imageRef} className="p-4 relative">
 					<div className="flex items-center justify-between">
 						<div className="pr-2">
 							{item.contract_is_creator ? (
 								<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
 									<a className="flex flex-row items-center space-x-2">
-										<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
+										<img
+											alt={item.collection_name}
+											src={
+												item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC
+											}
+											className="rounded-full w-8 h-8"
+										/>
 										<div>
-											<span className="text-xs font-medium text-gray-600 dark:text-gray-400">Created by</span>
-											<div className="text-sm font-semibold truncate -mt-0.5 dark:text-gray-200">{truncateWithEllipses(item.collection_name + ' Collection', 30)}</div>
+											<span className="text-xs font-medium text-gray-600 dark:text-gray-400">
+												Created by
+											</span>
+											<div className="text-sm font-semibold truncate -mt-0.5 dark:text-gray-200">
+												{truncateWithEllipses(item.collection_name + ' Collection', 30)}
+											</div>
 										</div>
 									</a>
 								</Link>
 							) : item.creator_address ? (
 								<Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
 									<a className="flex flex-row items-center space-x-2">
-										<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
+										<img
+											alt={item.creator_name}
+											src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC}
+											className="rounded-full w-8 h-8"
+										/>
 										<div>
-											<span className="text-xs font-medium text-gray-600 dark:text-gray-400">Created by</span>
+											<span className="text-xs font-medium text-gray-600 dark:text-gray-400">
+												Created by
+											</span>
 											<div className="flex items-center space-x-1 -mt-0.5">
-												<div className="text-sm font-semibold truncate dark:text-gray-200">{item.creator_name === item.creator_address ? formatAddressShort(item.creator_address) : truncateWithEllipses(item.creator_name, 22)}</div>
-												{item.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
+												<div className="text-sm font-semibold truncate dark:text-gray-200">
+													{item.creator_name === item.creator_address
+														? formatAddressShort(item.creator_address)
+														: truncateWithEllipses(item.creator_name, 22)}
+												</div>
+												{item.creator_verified == 1 && (
+													<BadgeIcon
+														className="w-3.5 h-3.5 text-black dark:text-white"
+														tickClass="text-white dark:text-black"
+													/>
+												)}
 											</div>
 										</div>
 									</a>
@@ -121,36 +174,64 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 						</div>
 
 						<div className="flex items-center space-x-2">
-							{myProfile?.profile_id !== item.creator_id && !item.contract_is_creator && item.creator_id && <MiniFollowButton profileId={item.creator_id} />}
+							{myProfile?.profile_id !== item.creator_id &&
+								!item.contract_is_creator &&
+								item.creator_id && <MiniFollowButton profileId={item.creator_id} />}
 							<Menu as="div" className="relative">
 								{isMyProfile && listId !== 3 ? (
 									<Menu.Button className="text-right text-gray-600 dark:text-white focus:outline-none rounded-full relative hover:bg-gray-100 dark:hover:bg-gray-800 focus-visible:bg-gray-100 dark:focus-visible:bg-gray-800 py-2 -my-2 px-2 -mx-2 transition">
 										<EllipsisIcon className="w-5 h-5" />
 									</Menu.Button>
 								) : null}
-								<Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+								<Transition
+									as={Fragment}
+									leave="transition ease-in duration-100"
+									leaveFrom="opacity-100"
+									leaveTo="opacity-0"
+								>
 									<Menu.Items className="z-1 absolute right-0 mt-2 origin-top-right border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg rounded-xl p-2 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-										{SHOWTIME_CONTRACTS.includes(item.contract_address) && item?.show_transfer_options == 1 && (
-											<>
-												{!hasMatchingListing ? (
-													<Menu.Item>
-														{({ active }) => (
-															<button onClick={() => setListModal(item)} className={classNames(active ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-white', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
-																<span className="block truncate font-medium">List</span>
-															</button>
-														)}
-													</Menu.Item>
-												) : (
-													<Menu.Item>
-														{({ active }) => (
-															<button onClick={() => setUnlistModal(item)} className={classNames(active ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-white', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
-																<span className="block truncate font-medium">Unlist</span>
-															</button>
-														)}
-													</Menu.Item>
-												)}
-											</>
-										)}
+										{SHOWTIME_CONTRACTS.includes(item.contract_address) &&
+											item?.show_transfer_options == 1 && (
+												<>
+													{!hasMatchingListing ? (
+														<Menu.Item>
+															{({ active }) => (
+																<button
+																	onClick={() => setListModal(item)}
+																	className={classNames(
+																		active
+																			? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800'
+																			: 'text-gray-900 dark:text-white',
+																		'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left'
+																	)}
+																>
+																	<span className="block truncate font-medium">
+																		List
+																	</span>
+																</button>
+															)}
+														</Menu.Item>
+													) : (
+														<Menu.Item>
+															{({ active }) => (
+																<button
+																	onClick={() => setUnlistModal(item)}
+																	className={classNames(
+																		active
+																			? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800'
+																			: 'text-gray-900 dark:text-white',
+																		'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left'
+																	)}
+																>
+																	<span className="block truncate font-medium">
+																		Unlist
+																	</span>
+																</button>
+															)}
+														</Menu.Item>
+													)}
+												</>
+											)}
 										<Menu.Item>
 											{({ active }) => (
 												<button
@@ -158,7 +239,12 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 														mixpanel.track('Clicked Spotlight Item')
 														changeSpotlightItem(item)
 													}}
-													className={classNames(active ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-white', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}
+													className={classNames(
+														active
+															? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800'
+															: 'text-gray-900 dark:text-white',
+														'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left'
+													)}
 												>
 													<span className="block truncate font-medium">Spotlight Item</span>
 												</button>
@@ -166,37 +252,94 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 										</Menu.Item>
 										<Menu.Item>
 											{({ active }) => (
-												<button onClick={item.user_hidden ? handleUnhide : handleHide} className={classNames(active ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-white', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
-													<span className="block truncate font-medium">{item.user_hidden ? `Unhide From ${listId === 1 ? 'Created' : listId === 2 ? 'Owned' : listId === 3 ? 'Liked' : 'List'}` : `Hide From ${listId === 1 ? 'Created' : listId === 2 ? 'Owned' : listId === 3 ? 'Liked' : 'List'}`}</span>
+												<button
+													onClick={item.user_hidden ? handleUnhide : handleHide}
+													className={classNames(
+														active
+															? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800'
+															: 'text-gray-900 dark:text-white',
+														'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left'
+													)}
+												>
+													<span className="block truncate font-medium">
+														{item.user_hidden
+															? `Unhide From ${
+																	listId === 1
+																		? 'Created'
+																		: listId === 2
+																		? 'Owned'
+																		: listId === 3
+																		? 'Liked'
+																		: 'List'
+															  }`
+															: `Hide From ${
+																	listId === 1
+																		? 'Created'
+																		: listId === 2
+																		? 'Owned'
+																		: listId === 3
+																		? 'Liked'
+																		: 'List'
+															  }`}
+													</span>
 												</button>
 											)}
 										</Menu.Item>
 										<Menu.Item>
 											{({ active }) => (
-												<button onClick={handleRefreshNFTMetadata} className={classNames(active ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-white', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+												<button
+													onClick={handleRefreshNFTMetadata}
+													className={classNames(
+														active
+															? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800'
+															: 'text-gray-900 dark:text-white',
+														'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left'
+													)}
+												>
 													<span className="block truncate font-medium">Refresh Metadata</span>
 												</button>
 											)}
 										</Menu.Item>
-										{SHOWTIME_CONTRACTS.includes(item.contract_address) && item?.show_transfer_options == 1 && (
-											<>
-												<Menu.Item>
-													{({ active }) => (
-														<button onClick={() => setTransferModal(item)} className={classNames(active ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-white', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
-															<span className="block truncate font-medium">Transfer</span>
-														</button>
-													)}
-												</Menu.Item>
+										{SHOWTIME_CONTRACTS.includes(item.contract_address) &&
+											item?.show_transfer_options == 1 && (
+												<>
+													<Menu.Item>
+														{({ active }) => (
+															<button
+																onClick={() => setTransferModal(item)}
+																className={classNames(
+																	active
+																		? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800'
+																		: 'text-gray-900 dark:text-white',
+																	'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left'
+																)}
+															>
+																<span className="block truncate font-medium">
+																	Transfer
+																</span>
+															</button>
+														)}
+													</Menu.Item>
 
-												<Menu.Item>
-													{({ active }) => (
-														<button onClick={() => setBurnModal(item)} className={classNames(active ? 'text-gray-900 dark:text-white bg-red-100 dark:bg-gray-800' : 'text-gray-900 dark:text-white', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
-															<span className="block truncate font-medium text-red-500 dark:text-red-700">Burn</span>
-														</button>
-													)}
-												</Menu.Item>
-											</>
-										)}
+													<Menu.Item>
+														{({ active }) => (
+															<button
+																onClick={() => setBurnModal(item)}
+																className={classNames(
+																	active
+																		? 'text-gray-900 dark:text-white bg-red-100 dark:bg-gray-800'
+																		: 'text-gray-900 dark:text-white',
+																	'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left'
+																)}
+															>
+																<span className="block truncate font-medium text-red-500 dark:text-red-700">
+																	Burn
+																</span>
+															</button>
+														)}
+													</Menu.Item>
+												</>
+											)}
 									</Menu.Items>
 								</Transition>
 							</Menu>
@@ -229,7 +372,10 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 						{isChangingOrder && (
 							<div className="absolute cursor-move inset-0 flex flex-col items-center justify-center bg-white dark:bg-black bg-opacity-70 dark:bg-opacity-70">
 								<div className="p-2 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg shadow flex justify-center items-center">
-									<MenuIcon className="w-5 h-5 text-black dark:text-gray-400 mr-2" aria-hidden="true" />
+									<MenuIcon
+										className="w-5 h-5 text-black dark:text-gray-400 mr-2"
+										aria-hidden="true"
+									/>
 									<span className="dark:text-gray-300">Drag to Reorder</span>
 								</div>
 							</div>
@@ -297,7 +443,10 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 							{isChangingOrder && (
 								<div className="absolute cursor-move inset-0 flex flex-col items-center justify-center bg-white dark:bg-black bg-opacity-70 dark:bg-opacity-70">
 									<div className="p-2 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg shadow flex justify-center items-center">
-										<MenuIcon className="w-5 h-5 text-black dark:text-gray-400 mr-2" aria-hidden="true" />
+										<MenuIcon
+											className="w-5 h-5 text-black dark:text-gray-400 mr-2"
+											aria-hidden="true"
+										/>
 										<span className="dark:text-gray-300">Drag to Reorder</span>
 									</div>
 								</div>
@@ -344,7 +493,10 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 						{isChangingOrder && (
 							<div className="absolute cursor-move inset-0 flex flex-col items-center justify-center bg-white dark:bg-black bg-opacity-70 dark:bg-opacity-70">
 								<div className="p-2 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg shadow flex justify-center items-center">
-									<MenuIcon className="w-5 h-5 text-black dark:text-gray-400 mr-2" aria-hidden="true" />
+									<MenuIcon
+										className="w-5 h-5 text-black dark:text-gray-400 mr-2"
+										aria-hidden="true"
+									/>
 									<span className="dark:text-gray-300">Drag to Reorder</span>
 								</div>
 							</div>
@@ -354,11 +506,17 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 
 				{/* Fall back to old code if missing mime_type */}
 				{!item.mime_type &&
-					((item.token_has_video || (!item.token_img_url && item.token_animation_url)) && showVideo && currentlyPlayingVideo === item.nft_id ? (
+					((item.token_has_video || (!item.token_img_url && item.token_animation_url)) &&
+					showVideo &&
+					currentlyPlayingVideo === item.nft_id ? (
 						<div className="bg-black">
 							<ReactPlayer
 								url={item.token_animation_url}
-								playing={currentlyPlayingVideo === item.nft_id || ((item.token_has_video || (!item.token_img_url && item.token_animation_url)) && !item.token_img_url)}
+								playing={
+									currentlyPlayingVideo === item.nft_id ||
+									((item.token_has_video || (!item.token_img_url && item.token_animation_url)) &&
+										!item.token_img_url)
+								}
 								loop
 								controls
 								muted={muted}
@@ -429,7 +587,10 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 							{isChangingOrder && (
 								<div className="absolute cursor-move inset-0 flex flex-col items-center justify-center bg-white dark:bg-black bg-opacity-70 dark:bg-opacity-70">
 									<div className="p-2 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg shadow flex justify-center items-center">
-										<MenuIcon className="w-5 h-5 text-black dark:text-gray-400 mr-2" aria-hidden="true" />
+										<MenuIcon
+											className="w-5 h-5 text-black dark:text-gray-400 mr-2"
+											aria-hidden="true"
+										/>
 										<span className="dark:text-gray-300">Drag to Reorder</span>
 									</div>
 								</div>
@@ -475,7 +636,18 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 									}}
 								/>
 							</div>
-							<ShareButton url={window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == item.chain_identifier)}/${item.contract_address}/${item.token_id}`} type={'item'} />
+							<ShareButton
+								url={
+									window.location.protocol +
+									'//' +
+									window.location.hostname +
+									(window.location.port ? ':' + window.location.port : '') +
+									`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
+										key => CHAIN_IDENTIFIERS[key] == item.chain_identifier
+									)}/${item.contract_address}/${item.token_id}`
+								}
+								type={'item'}
+							/>
 						</div>
 					</div>
 				</div>
@@ -486,27 +658,56 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 							<div>
 								{item.listing ? (
 									<div className="flex items-center justify-between pt-1 space-x-4">
-										<Link href="/[profile]" as={`/${item.listing.username || item.listing.address}`}>
+										<Link
+											href="/[profile]"
+											as={`/${item.listing.username || item.listing.address}`}
+										>
 											<a className="flex flex-row items-center space-x-2 flex-shrink min-w-0">
-												<img alt={item.listing.name} src={item.listing.img_url ? item.listing.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8 flex-shrink-0" />
+												<img
+													alt={item.listing.name}
+													src={
+														item.listing.img_url
+															? item.listing.img_url
+															: DEFAULT_PROFILE_PIC
+													}
+													className="rounded-full mr-1 w-8 h-8 flex-shrink-0"
+												/>
 												<div className="flex-shrink min-w-0">
-													<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Listed by</span>
+													<span className="text-xs font-medium text-gray-600 dark:text-gray-500">
+														Listed by
+													</span>
 													<div className="flex items-center space-x-1 -mt-0.5">
-														<div className="text-sm font-semibold truncate dark:text-gray-200 min-w-0">{item.listing.name === item.listing.address ? formatAddressShort(item.listing.name) : truncateWithEllipses(item.listing.name, 22)}</div>
-														{item.listing.verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
+														<div className="text-sm font-semibold truncate dark:text-gray-200 min-w-0">
+															{item.listing.name === item.listing.address
+																? formatAddressShort(item.listing.name)
+																: truncateWithEllipses(item.listing.name, 22)}
+														</div>
+														{item.listing.verified == 1 && (
+															<BadgeIcon
+																className="w-3.5 h-3.5 text-black dark:text-white"
+																tickClass="text-white dark:text-black"
+															/>
+														)}
 													</div>
 												</div>
 											</a>
 										</Link>
-										<button onClick={() => setBuyModal(item)} className="space-x-4 flex items-center flex-1 hover:bg-gray-100 dark:hover:bg-gray-900 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg transition">
+										<button
+											onClick={() => setBuyModal(item)}
+											className="space-x-4 flex items-center flex-1 hover:bg-gray-100 dark:hover:bg-gray-900 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg transition"
+										>
 											<div>
-												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Available</span>
+												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">
+													Available
+												</span>
 												<p className="text-sm font-bold text-gray-900 dark:text-gray-200">
 													{item.listing.quantity}/{item.listing.total_edition_quantity}
 												</p>
 											</div>
 											<div>
-												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Price</span>
+												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">
+													Price
+												</span>
 												<p className="text-sm font-bold text-gray-900 dark:text-gray-200 whitespace-nowrap">
 													{parseFloat(item.listing.min_price)} ${item.listing.currency}
 												</p>
@@ -516,14 +717,36 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 								) : item.owner_count && item.owner_count > 1 ? (
 									pageProfile && listId === 2 ? (
 										<div className="flex items-center pt-1">
-											<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
+											<Link
+												href="/[profile]"
+												as={`/${item?.owner_username || item.owner_address}`}
+											>
 												<a className="flex flex-row items-center space-x-2">
-													<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8" />
+													<img
+														alt={item.owner_name}
+														src={
+															item.owner_img_url
+																? item.owner_img_url
+																: DEFAULT_PROFILE_PIC
+														}
+														className="rounded-full mr-1 w-8 h-8"
+													/>
 													<div>
-														<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
+														<span className="text-xs font-medium text-gray-600 dark:text-gray-500">
+															Owned by
+														</span>
 														<div className="flex items-center space-x-1 -mt-0.5">
-															<div className="text-sm font-semibold truncate dark:text-gray-200">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
-															{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
+															<div className="text-sm font-semibold truncate dark:text-gray-200">
+																{item.owner_name === item.owner_address
+																	? formatAddressShort(item.owner_address)
+																	: truncateWithEllipses(item.owner_name, 22)}
+															</div>
+															{item.owner_verified == 1 && (
+																<BadgeIcon
+																	className="w-3.5 h-3.5 text-black dark:text-white"
+																	tickClass="text-white dark:text-black"
+																/>
+															)}
 															<div className="text-gray-500 text-sm mr-2 -ml-1 mt-px">
 																&amp; {item.owner_count - 1} other
 																{item.owner_count - 1 > 1 ? 's' : null}
@@ -540,27 +763,50 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 									<div className="flex items-center justify-between pt-1">
 										<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
 											<a className="flex flex-row items-center space-x-2">
-												<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8" />
+												<img
+													alt={item.owner_name}
+													src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC}
+													className="rounded-full mr-1 w-8 h-8"
+												/>
 												<div>
-													<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
+													<span className="text-xs font-medium text-gray-600 dark:text-gray-500">
+														Owned by
+													</span>
 													<div className="flex items-center space-x-1 -mt-0.5">
-														<div className="text-sm font-semibold truncate dark:text-gray-200">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
-														{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
+														<div className="text-sm font-semibold truncate dark:text-gray-200">
+															{item.owner_name === item.owner_address
+																? formatAddressShort(item.owner_address)
+																: truncateWithEllipses(item.owner_name, 22)}
+														</div>
+														{item.owner_verified == 1 && (
+															<BadgeIcon
+																className="w-3.5 h-3.5 text-black dark:text-white"
+																tickClass="text-white dark:text-black"
+															/>
+														)}
 													</div>
 												</div>
 											</a>
 										</Link>
-										{myProfile?.profile_id !== item.owner_id && <MiniFollowButton profileId={item.owner_id} />}
+										{myProfile?.profile_id !== item.owner_id && (
+											<MiniFollowButton profileId={item.owner_id} />
+										)}
 									</div>
 								) : null}
 							</div>
 						</div>
 						<div className="mt-4 px-4 py-2 bg-gray-100 dark:bg-gray-800 flex items-center justify-between">
 							<div className="flex items-center space-x-2">
-								{item.collection_img_url && <img src={item.collection_img_url} className="w-5 h-5 rounded-full" />}
-								<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">{item.collection_name}</p>
+								{item.collection_img_url && (
+									<img src={item.collection_img_url} className="w-5 h-5 rounded-full" />
+								)}
+								<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+									{item.collection_name}
+								</p>
 							</div>
-							<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">{item.token_count ? `${item.token_count} Editions` : '1/1'}</p>
+							<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+								{item.token_count ? `${item.token_count} Editions` : '1/1'}
+							</p>
 						</div>
 					</div>
 				</div>

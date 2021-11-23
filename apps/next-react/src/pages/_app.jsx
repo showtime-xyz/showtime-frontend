@@ -92,7 +92,9 @@ const App = ({ Component, pageProps }) => {
 
 			setMyProfile({
 				...my_info_data.data.profile,
-				notifications_last_opened: my_info_data.data.profile.notifications_last_opened ? new Date(my_info_data.data.profile.notifications_last_opened) : null,
+				notifications_last_opened: my_info_data.data.profile.notifications_last_opened
+					? new Date(my_info_data.data.profile.notifications_last_opened)
+					: null,
 				links: my_info_data.data.profile.links.map(link => ({
 					name: link.type__name,
 					prefix: link.type__prefix,
@@ -125,7 +127,9 @@ const App = ({ Component, pageProps }) => {
 
 		// get recond result if logged in
 		if (user) {
-			const { data: secondData } = await axios.post('/api/getactivityrecommendedfollows', { recache: true }).then(res => res.data)
+			const { data: secondData } = await axios
+				.post('/api/getactivityrecommendedfollows', { recache: true })
+				.then(res => res.data)
 			setRecQueue(secondData)
 		}
 		setLoadingRecommendedFollows(false)
@@ -161,7 +165,8 @@ const App = ({ Component, pageProps }) => {
 
 	//get more recs when we're at 3 recs
 	useEffect(() => {
-		if (typeof user !== 'undefined' && !loadingRecommendedFollows && recommendedFollows.length < 4) getActivityRecommendedFollowsRecache()
+		if (typeof user !== 'undefined' && !loadingRecommendedFollows && recommendedFollows.length < 4)
+			getActivityRecommendedFollowsRecache()
 	}, [recommendedFollows])
 
 	useEffect(() => {
@@ -311,7 +316,11 @@ const App = ({ Component, pageProps }) => {
 	return (
 		<ThemeProvider defaultTheme="light" disableTransitionOnChange={true} attribute="class">
 			<AppContext.Provider value={injectedGlobalContext}>
-				<ModalThrottleUser isOpen={throttleOpen} closeModal={() => setThrottleOpen(false)} modalContent={throttleContent} />
+				<ModalThrottleUser
+					isOpen={throttleOpen}
+					closeModal={() => setThrottleOpen(false)}
+					modalContent={throttleContent}
+				/>
 				<Component {...pageProps} key={router.asPath} />
 			</AppContext.Provider>
 		</ThemeProvider>

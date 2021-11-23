@@ -144,16 +144,30 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 					<div className="p-4">
 						<div ref={formRef}>
 							<CloseButton cleanupFunction={clearForm} setEditModalOpen={setEditModalOpen} />
-							<div className="dark:text-gray-300 text-2xl border-b-2 dark:border-gray-800 pb-2">Edit Cover Image</div>
+							<div className="dark:text-gray-300 text-2xl border-b-2 dark:border-gray-800 pb-2">
+								Edit Cover Image
+							</div>
 							<div className="mt-4 mb-4">
 								{image === '' && (
 									<div className="my-16">
-										<Button style="primary" className="w-full justify-center" onClick={handleClickUpload}>
+										<Button
+											style="primary"
+											className="w-full justify-center"
+											onClick={handleClickUpload}
+										>
 											Upload cover image
 										</Button>
-										<div className="text-center text-xs mt-4 text-gray-700 dark:text-gray-500">Accepts JPEG, PNG, and GIF (non-animated)</div>
+										<div className="text-center text-xs mt-4 text-gray-700 dark:text-gray-500">
+											Accepts JPEG, PNG, and GIF (non-animated)
+										</div>
 
-										<input ref={hiddenFileInput} className="hidden" id="profilePic" type="file" onChange={onChangePicture} />
+										<input
+											ref={hiddenFileInput}
+											className="hidden"
+											id="profilePic"
+											type="file"
+											onChange={onChangePicture}
+										/>
 									</div>
 								)}
 
@@ -162,7 +176,10 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 								</div>
 
 								{image !== '' && (
-									<div className="text-sm text-center cursor-pointer dark:text-gray-400" onClick={clearForm}>
+									<div
+										className="text-sm text-center cursor-pointer dark:text-gray-400"
+										onClick={clearForm}
+									>
 										Clear
 									</div>
 								)}
@@ -182,13 +199,21 @@ export default function ModalEditCover({ isOpen, setEditModalOpen }) {
 								</div>
 
 								{myProfile?.cover_url && (
-									<div className="text-sm dark:text-gray-400 ml-4 cursor-pointer" onClick={handleRemovePhoto}>
+									<div
+										className="text-sm dark:text-gray-400 ml-4 cursor-pointer"
+										onClick={handleRemovePhoto}
+									>
 										Remove
 									</div>
 								)}
 								<div className="flex-grow"></div>
 								<div>
-									<GreenButton onClick={handleSubmit} loading={saveInProgress} className={image === '' ? 'opacity-60' : ''} disabled={image === '' || saveInProgress}>
+									<GreenButton
+										onClick={handleSubmit}
+										loading={saveInProgress}
+										className={image === '' ? 'opacity-60' : ''}
+										disabled={image === '' || saveInProgress}
+									>
 										Save
 									</GreenButton>
 								</div>

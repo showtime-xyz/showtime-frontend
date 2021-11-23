@@ -20,8 +20,15 @@ export default function Comment({ act }) {
 				{count === 1 && (
 					<>
 						Commented on{' '}
-						<Link href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == nfts[0].chain_identifier)}/${nfts[0].contract_address}/${nfts[0].token_id}`}>
-							<a className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink" onClick={() => mixpanel.track('Activity - Click on NFT title')}>
+						<Link
+							href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
+								key => CHAIN_IDENTIFIERS[key] == nfts[0].chain_identifier
+							)}/${nfts[0].contract_address}/${nfts[0].token_id}`}
+						>
+							<a
+								className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink"
+								onClick={() => mixpanel.track('Activity - Click on NFT title')}
+							>
 								{nfts[0].token_name}
 							</a>
 						</Link>
@@ -31,14 +38,28 @@ export default function Comment({ act }) {
 				{count === 2 && (
 					<>
 						Commented on{' '}
-						<Link href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == nfts[0].chain_identifier)}/${nfts[0].contract_address}/${nfts[0].token_id}`}>
-							<a className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink" onClick={() => mixpanel.track('Activity - Click on NFT title')}>
+						<Link
+							href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
+								key => CHAIN_IDENTIFIERS[key] == nfts[0].chain_identifier
+							)}/${nfts[0].contract_address}/${nfts[0].token_id}`}
+						>
+							<a
+								className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink"
+								onClick={() => mixpanel.track('Activity - Click on NFT title')}
+							>
 								{nfts[0].token_name}
 							</a>
 						</Link>{' '}
 						and{' '}
-						<Link href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == nfts[1].chain_identifier)}/${nfts[1].contract_address}/${nfts[1].token_id}`}>
-							<a className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink" onClick={() => mixpanel.track('Activity - Click on NFT title')}>
+						<Link
+							href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
+								key => CHAIN_IDENTIFIERS[key] == nfts[1].chain_identifier
+							)}/${nfts[1].contract_address}/${nfts[1].token_id}`}
+						>
+							<a
+								className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink"
+								onClick={() => mixpanel.track('Activity - Click on NFT title')}
+							>
 								{nfts[1].token_name}
 							</a>
 						</Link>
@@ -48,20 +69,41 @@ export default function Comment({ act }) {
 				{count === 3 && (
 					<>
 						Commented on{' '}
-						<Link href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == nfts[0].chain_identifier)}/${nfts[0].contract_address}/${nfts[0].token_id}`}>
-							<a className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink" onClick={() => mixpanel.track('Activity - Click on NFT title')}>
+						<Link
+							href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
+								key => CHAIN_IDENTIFIERS[key] == nfts[0].chain_identifier
+							)}/${nfts[0].contract_address}/${nfts[0].token_id}`}
+						>
+							<a
+								className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink"
+								onClick={() => mixpanel.track('Activity - Click on NFT title')}
+							>
 								{nfts[0].token_name}
 							</a>
 						</Link>
 						,{' '}
-						<Link href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == nfts[1].chain_identifier)}/${nfts[1].contract_address}/${nfts[1].token_id}`}>
-							<a className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink" onClick={() => mixpanel.track('Activity - Click on NFT title')}>
+						<Link
+							href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
+								key => CHAIN_IDENTIFIERS[key] == nfts[1].chain_identifier
+							)}/${nfts[1].contract_address}/${nfts[1].token_id}`}
+						>
+							<a
+								className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink"
+								onClick={() => mixpanel.track('Activity - Click on NFT title')}
+							>
 								{nfts[1].token_name}
 							</a>
 						</Link>{' '}
 						and{' '}
-						<Link href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == nfts[2].chain_identifier)}/${nfts[2].contract_address}/${nfts[2].token_id}`}>
-							<a onClick={() => mixpanel.track('Activity - Click on NFT title')} className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink">
+						<Link
+							href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
+								key => CHAIN_IDENTIFIERS[key] == nfts[2].chain_identifier
+							)}/${nfts[2].contract_address}/${nfts[2].token_id}`}
+						>
+							<a
+								onClick={() => mixpanel.track('Activity - Click on NFT title')}
+								className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink"
+							>
 								{nfts[2].token_name}
 							</a>
 						</Link>
@@ -71,14 +113,28 @@ export default function Comment({ act }) {
 				{count > 3 && (
 					<>
 						Commented on{' '}
-						<Link href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == nfts[0].chain_identifier)}/${nfts[0].contract_address}/${nfts[0].token_id}`}>
-							<a className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink" onClick={() => mixpanel.track('Activity - Click on NFT title')}>
+						<Link
+							href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
+								key => CHAIN_IDENTIFIERS[key] == nfts[0].chain_identifier
+							)}/${nfts[0].contract_address}/${nfts[0].token_id}`}
+						>
+							<a
+								className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink"
+								onClick={() => mixpanel.track('Activity - Click on NFT title')}
+							>
 								{nfts[0].token_name}
 							</a>
 						</Link>
 						,{' '}
-						<Link href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == nfts[1].chain_identifier)}/${nfts[1].contract_address}/${nfts[1].token_id}`}>
-							<a className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink" onClick={() => mixpanel.track('Activity - Click on NFT title')}>
+						<Link
+							href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
+								key => CHAIN_IDENTIFIERS[key] == nfts[1].chain_identifier
+							)}/${nfts[1].contract_address}/${nfts[1].token_id}`}
+						>
+							<a
+								className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink"
+								onClick={() => mixpanel.track('Activity - Click on NFT title')}
+							>
 								{nfts[1].token_name}
 							</a>
 						</Link>{' '}
@@ -88,7 +144,9 @@ export default function Comment({ act }) {
 			</div>
 			{count === 1 && (
 				<div className="">
-					<div className="bg-gray-200 dark:bg-gray-800 dark:text-gray-300 my-2 p-2 px-4 rounded-2xl inline-block">{commentWithMentions}</div>
+					<div className="bg-gray-200 dark:bg-gray-800 dark:text-gray-300 my-2 p-2 px-4 rounded-2xl inline-block">
+						{commentWithMentions}
+					</div>
 				</div>
 			)}
 		</div>

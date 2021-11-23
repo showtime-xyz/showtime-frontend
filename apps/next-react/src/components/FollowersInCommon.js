@@ -36,7 +36,16 @@ const FollowersInCommon = ({ profileId }) => {
 
 	return (
 		<>
-			{typeof document !== 'undefined' && followersInCommon.count > 2 ? <ModalUserList title="Followed by" isOpen={showFollowersModal} users={followersInCommonComplete?.data?.followers || []} closeModal={() => setShowFollowersModal(false)} onRedirect={() => setShowFollowersModal(false)} emptyMessage="Loading..." /> : null}
+			{typeof document !== 'undefined' && followersInCommon.count > 2 ? (
+				<ModalUserList
+					title="Followed by"
+					isOpen={showFollowersModal}
+					users={followersInCommonComplete?.data?.followers || []}
+					closeModal={() => setShowFollowersModal(false)}
+					onRedirect={() => setShowFollowersModal(false)}
+					emptyMessage="Loading..."
+				/>
+			) : null}
 			<div className="flex items-center space-x-1">
 				<div className="text-sm dark:text-gray-400">
 					Followed by{' '}
@@ -44,15 +53,25 @@ const FollowersInCommon = ({ profileId }) => {
 						{followersInCommon.followers.slice(0, displayCount).map((follower, i) => (
 							<Fragment key={follower.profile_id}>
 								<Link href={`/${follower.username || follower.address}`}>
-									<a className="font-semibold dark:text-gray-300">{follower.username ? `@${follower.username}` : formatAddressShort(follower.address)}</a>
+									<a className="font-semibold dark:text-gray-300">
+										{follower.username
+											? `@${follower.username}`
+											: formatAddressShort(follower.address)}
+									</a>
 								</Link>
-								{(followersInCommon.count <= 3 && followersInCommon.count == i + 2 && <span>{followersInCommon.count > 2 && ','} &amp; </span>) || (followersInCommon.followers.length > i + 1 && <span>, </span>)}
+								{(followersInCommon.count <= 3 && followersInCommon.count == i + 2 && (
+									<span>{followersInCommon.count > 2 && ','} &amp; </span>
+								)) ||
+									(followersInCommon.followers.length > i + 1 && <span>, </span>)}
 							</Fragment>
 						))}
 						{followersInCommon.count > 3 && (
 							<>
 								&amp;{' '}
-								<button className="font-semibold dark:text-gray-300" onClick={() => setShowFollowersModal(true)}>
+								<button
+									className="font-semibold dark:text-gray-300"
+									onClick={() => setShowFollowersModal(true)}
+								>
 									{followersInCommon.count - 2} other{followersInCommon.count - 2 > 1 ? 's' : ''}
 								</button>{' '}
 								you follow

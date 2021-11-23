@@ -59,7 +59,10 @@ const getWeb3Modal = ({ withMagic = false, theme } = {}) => {
 							connector: async (Magic, opts) => {
 								const magic = new Magic(opts.apiKey)
 
-								if (!(await magic.user.isLoggedIn())) await magic.auth.loginWithMagicLink({ email: prompt('What email do you use to log into Showtime?') })
+								if (!(await magic.user.isLoggedIn()))
+									await magic.auth.loginWithMagicLink({
+										email: prompt('What email do you use to log into Showtime?'),
+									})
 
 								return magic.rpcProvider
 							},

@@ -35,7 +35,11 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
 	const handleFollowAll = async () => {
 		setFollowAllClicked(true)
 
-		const newProfiles = items.filter(item => !context.myFollows.map(f => f.profile_id).includes(item.profile_id) && context.myProfile?.profile_id != item.profile_id)
+		const newProfiles = items.filter(
+			item =>
+				!context.myFollows.map(f => f.profile_id).includes(item.profile_id) &&
+				context.myProfile?.profile_id != item.profile_id
+		)
 
 		// UPDATE CONTEXT
 		context.setMyFollows([...newProfiles, ...context.myFollows])
@@ -69,7 +73,11 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
 				<div className="w-full h-px bg-black bg-opacity-10" />
 
 				<div
-					className={`text-center text-sm sm:text-base mx-auto px-5 py-1 sm:px-6 sm:py-2 my-4 flex items-center w-max border-2 rounded-full  ${followAllClicked ? 'bg-white dark:bg-gray-800' : 'hover:text-stpink text-white border-stpink bg-stpink hover:bg-white dark:hover:bg-gray-800 transition-all cursor-pointer'}  `}
+					className={`text-center text-sm sm:text-base mx-auto px-5 py-1 sm:px-6 sm:py-2 my-4 flex items-center w-max border-2 rounded-full  ${
+						followAllClicked
+							? 'bg-white dark:bg-gray-800'
+							: 'hover:text-stpink text-white border-stpink bg-stpink hover:bg-white dark:hover:bg-gray-800 transition-all cursor-pointer'
+					}  `}
 					onClick={() => {
 						if (!followAllClicked) {
 							mixpanel.track('Clicked Follow All on Recommended Followers modal')
@@ -82,7 +90,13 @@ const RecommendFollowers = ({ variant = RecommendFollowersVariants.ONBOARDING, i
 				</div>
 
 				{filteredItems.map((item, index) => (
-					<RecommendedFollowItem key={item.profile_id} item={item} index={index} closeModal={() => {}} followCallback={() => finishOnboarding()} />
+					<RecommendedFollowItem
+						key={item.profile_id}
+						item={item}
+						index={index}
+						closeModal={() => {}}
+						followCallback={() => finishOnboarding()}
+					/>
 				))}
 
 				<div className="flex justify-between items-center w-full mt-6">

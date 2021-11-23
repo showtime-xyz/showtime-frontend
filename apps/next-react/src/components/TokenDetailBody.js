@@ -127,10 +127,27 @@ const TokenDetailBody = ({
 			{typeof document !== 'undefined' ? (
 				<>
 					<BuyModal open={isBuyModalOpen} onClose={() => setBuyModalOpen(false)} token={item} />
-					{parentReportModalOpen !== null && <ModalReportItem isOpen={reportModalOpen} setReportModalOpen={setReportModalOpen} nftId={item.nft_id} />}
+					{parentReportModalOpen !== null && (
+						<ModalReportItem
+							isOpen={reportModalOpen}
+							setReportModalOpen={setReportModalOpen}
+							nftId={item.nft_id}
+						/>
+					)}
 				</>
 			) : null}
-			{lightboxOpen && <Lightbox mainSrc={item.source_url ? getBiggestImageUrl(item.source_url) : item.token_img_original_url ? item.token_img_original_url : item.token_img_url} onCloseRequest={() => setLightboxOpen(false)} />}
+			{lightboxOpen && (
+				<Lightbox
+					mainSrc={
+						item.source_url
+							? getBiggestImageUrl(item.source_url)
+							: item.token_img_original_url
+							? item.token_img_original_url
+							: item.token_img_url
+					}
+					onCloseRequest={() => setLightboxOpen(false)}
+				/>
+			)}
 			<div className="flex flex-col relative dark:bg-gray-900" ref={modalRef}>
 				{isMobile ? (
 					<div className="py-4 px-4 flex flex-row">
@@ -139,9 +156,19 @@ const TokenDetailBody = ({
 								<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
 									<a className="flex flex-row items-center ">
 										<div>
-											<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
+											<img
+												alt={item.collection_name}
+												src={
+													item.collection_img_url
+														? item.collection_img_url
+														: DEFAULT_PROFILE_PIC
+												}
+												className="rounded-full w-6 h-6"
+											/>
 										</div>
-										<div className="text-gray-800 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink ml-2">{truncateWithEllipses(item.collection_name, 30)} Collection</div>
+										<div className="text-gray-800 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink ml-2">
+											{truncateWithEllipses(item.collection_name, 30)} Collection
+										</div>
 									</a>
 								</Link>
 							) : item.creator_address ? (
@@ -149,9 +176,19 @@ const TokenDetailBody = ({
 									<Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
 										<a className="flex flex-row items-center">
 											<div>
-												<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-6 h-6" />
+												<img
+													alt={item.creator_name}
+													src={
+														item.creator_img_url
+															? item.creator_img_url
+															: DEFAULT_PROFILE_PIC
+													}
+													className="rounded-full w-6 h-6"
+												/>
 											</div>
-											<div className="text-gray-800 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink ml-2">{truncateWithEllipses(item.creator_name, 22)}</div>
+											<div className="text-gray-800 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink ml-2">
+												{truncateWithEllipses(item.creator_name, 22)}
+											</div>
 										</a>
 									</Link>
 									{context.myProfile?.profile_id !== item?.creator_id && (
@@ -166,7 +203,11 @@ const TokenDetailBody = ({
 					</div>
 				) : null}
 				{/* Media area */}
-				<div className="flex flex-shrink-0 items-center md:p-12" style={{ backgroundColor: getBackgroundColor() }} ref={targetRef}>
+				<div
+					className="flex flex-shrink-0 items-center md:p-12"
+					style={{ backgroundColor: getBackgroundColor() }}
+					ref={targetRef}
+				>
 					{/* Use mime_type to display appropriate media */}
 					{item.mime_type?.startsWith('image') && (
 						<div className="m-auto w-full md:w-auto">
@@ -186,20 +227,35 @@ const TokenDetailBody = ({
 								</button>
 							</div>
 							<img
-								src={getImageUrl(item.source_url ? item.source_url : item.token_img_url, item.token_aspect_ratio)}
+								src={getImageUrl(
+									item.source_url ? item.source_url : item.token_img_url,
+									item.token_aspect_ratio
+								)}
 								alt={item.token_name}
 								className={fullResLoaded === true ? 'hidden' : ''}
 								style={
 									context.isMobile
 										? {
 												width: mediaWidth,
-												height: item.token_aspect_ratio ? mediaWidth / item.token_aspect_ratio : null,
+												height: item.token_aspect_ratio
+													? mediaWidth / item.token_aspect_ratio
+													: null,
 										  }
 										: { height: TOKEN_MEDIA_HEIGHT }
 								}
 							/>
 
-							<img src={context.isMobile ? getImageUrl(item.source_url ? item.source_url : item.token_img_url) : getBiggerImageUrl(item.source_url ? item.source_url : item.token_img_url)} alt={item.token_name} className={fullResLoaded === true ? '' : 'hidden'} style={context.isMobile ? { width: mediaWidth } : { height: TOKEN_MEDIA_HEIGHT }} onLoad={() => setTimeout(() => setFullResLoaded(true), 100)} />
+							<img
+								src={
+									context.isMobile
+										? getImageUrl(item.source_url ? item.source_url : item.token_img_url)
+										: getBiggerImageUrl(item.source_url ? item.source_url : item.token_img_url)
+								}
+								alt={item.token_name}
+								className={fullResLoaded === true ? '' : 'hidden'}
+								style={context.isMobile ? { width: mediaWidth } : { height: TOKEN_MEDIA_HEIGHT }}
+								onLoad={() => setTimeout(() => setFullResLoaded(true), 100)}
+							/>
 						</div>
 					)}
 					{item.mime_type?.startsWith('video') && (
@@ -227,7 +283,21 @@ const TokenDetailBody = ({
 					{item.mime_type?.startsWith('model') && (
 						<div className="m-auto w-full md:w-auto">
 							<div className="relative">
-								<model-viewer src={item.source_url} class="max-w-full" style={{ height: TOKEN_MEDIA_HEIGHT, width: TOKEN_MEDIA_HEIGHT, '--poster-color': 'transparent' }} autoplay auto-rotate camera-controls ar ar-modes="scene-viewer quick-look" interaction-prompt="none">
+								<model-viewer
+									src={item.source_url}
+									class="max-w-full"
+									style={{
+										height: TOKEN_MEDIA_HEIGHT,
+										width: TOKEN_MEDIA_HEIGHT,
+										'--poster-color': 'transparent',
+									}}
+									autoplay
+									auto-rotate
+									camera-controls
+									ar
+									ar-modes="scene-viewer quick-look"
+									interaction-prompt="none"
+								>
 									<span slot="interaction-prompt" />
 								</model-viewer>
 								<div className="p-2.5 absolute top-1 right-1">
@@ -243,7 +313,8 @@ const TokenDetailBody = ({
 					{/* Fallback to old code for missing mime_types */}
 					{!item.mime_type && (
 						<>
-							{!item.mime_type?.startsWith('model') && (item.token_has_video || (item.token_animation_url && !item.token_img_url)) ? (
+							{!item.mime_type?.startsWith('model') &&
+							(item.token_has_video || (item.token_animation_url && !item.token_img_url)) ? (
 								<ReactPlayer
 									url={item.token_animation_url}
 									playing={true}
@@ -266,7 +337,10 @@ const TokenDetailBody = ({
 								/>
 							) : (
 								<div className="m-auto w-full md:w-auto">
-									{isMobile || item.token_has_video || (item.token_animation_url && !item.token_img_url) ? null : item.token_img_url && !item.mime_type?.startsWith('model') ? (
+									{isMobile ||
+									item.token_has_video ||
+									(item.token_animation_url && !item.token_img_url) ? null : item.token_img_url &&
+									  !item.mime_type?.startsWith('model') ? (
 										<div className="w-max absolute right-0 m-2.5 z-0 top-14 sm:top-0">
 											<button
 												type="button"
@@ -285,7 +359,21 @@ const TokenDetailBody = ({
 									) : null}
 									{item.mime_type?.startsWith('model') ? (
 										<div className="relative">
-											<model-viewer src={item.source_url} class="max-w-full" style={{ height: TOKEN_MEDIA_HEIGHT, width: TOKEN_MEDIA_HEIGHT, '--poster-color': 'transparent' }} autoplay auto-rotate camera-controls ar ar-modes="scene-viewer quick-look" interaction-prompt="none">
+											<model-viewer
+												src={item.source_url}
+												class="max-w-full"
+												style={{
+													height: TOKEN_MEDIA_HEIGHT,
+													width: TOKEN_MEDIA_HEIGHT,
+													'--poster-color': 'transparent',
+												}}
+												autoplay
+												auto-rotate
+												camera-controls
+												ar
+												ar-modes="scene-viewer quick-look"
+												interaction-prompt="none"
+											>
 												<span slot="interaction-prompt" />
 											</model-viewer>
 											<div className="p-2.5 absolute top-1 right-1">
@@ -305,13 +393,29 @@ const TokenDetailBody = ({
 													context.isMobile
 														? {
 																width: mediaWidth,
-																height: item.token_aspect_ratio ? mediaWidth / item.token_aspect_ratio : null,
+																height: item.token_aspect_ratio
+																	? mediaWidth / item.token_aspect_ratio
+																	: null,
 														  }
 														: { height: TOKEN_MEDIA_HEIGHT }
 												}
 											/>
 
-											<img src={context.isMobile ? getImageUrl(item.token_img_url) : getBiggerImageUrl(item.token_img_url)} alt={item.token_name} className={fullResLoaded === true ? '' : 'hidden'} style={context.isMobile ? { width: mediaWidth } : { height: TOKEN_MEDIA_HEIGHT }} onLoad={() => setTimeout(() => setFullResLoaded(true), 100)} />
+											<img
+												src={
+													context.isMobile
+														? getImageUrl(item.token_img_url)
+														: getBiggerImageUrl(item.token_img_url)
+												}
+												alt={item.token_name}
+												className={fullResLoaded === true ? '' : 'hidden'}
+												style={
+													context.isMobile
+														? { width: mediaWidth }
+														: { height: TOKEN_MEDIA_HEIGHT }
+												}
+												onLoad={() => setTimeout(() => setFullResLoaded(true), 100)}
+											/>
 										</>
 									)}
 								</div>
@@ -418,23 +522,52 @@ const TokenDetailBody = ({
 								<div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
 									<LikeButton item={item} />
 								</div>
-								<SmoothScroll to="CommentsSectionScroll" containerId={isInModal ? 'ModalTokenDetailWrapper' : null} smooth={true} offset={isInModal ? 210 : -70} duration={500}>
+								<SmoothScroll
+									to="CommentsSectionScroll"
+									containerId={isInModal ? 'ModalTokenDetailWrapper' : null}
+									smooth={true}
+									offset={isInModal ? 210 : -70}
+									duration={500}
+								>
 									<div className="mr-2 text-base px-4 py-2 rounded-full shadow-md">
 										<CommentButton item={item} handleComment={() => {}} />
 									</div>
 								</SmoothScroll>
 								<div className="p-3 rounded-full shadow-md mr-2 flex items-center justify-center">
-									<ShareButton url={typeof window !== 'undefined' && window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == item.chain_identifier)}/${item.contract_address}/${item.token_id}`} type={'item'} />
+									<ShareButton
+										url={
+											typeof window !== 'undefined' &&
+											window.location.protocol +
+												'//' +
+												window.location.hostname +
+												(window.location.port ? ':' + window.location.port : '') +
+												`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
+													key => CHAIN_IDENTIFIERS[key] == item.chain_identifier
+												)}/${item.contract_address}/${item.token_id}`
+										}
+										type={'item'}
+									/>
 								</div>
 
 								{item.listing ? (
-									<button title="Buy on Showtime" className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1" onClick={() => setBuyModalOpen(true)}>
+									<button
+										title="Buy on Showtime"
+										className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1"
+										onClick={() => setBuyModalOpen(true)}
+									>
 										<span className="text-sm sm:text-base">
 											Buy for {item.listing.min_price} ${item.listing.currency}
 										</span>
 									</button>
 								) : (
-									<a href={getBidLink(item)} title={`View on ${getContractName(item)}`} target="_blank" className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1" onClick={() => mixpanel.track('OpenSea link click')} rel="noreferrer">
+									<a
+										href={getBidLink(item)}
+										title={`View on ${getContractName(item)}`}
+										target="_blank"
+										className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1"
+										onClick={() => mixpanel.track('OpenSea link click')}
+										rel="noreferrer"
+									>
 										<span className="whitespace-nowrap text-sm sm:text-base">View on</span>
 										<span className="hidden sm:inline">{getContractName(item)}</span>
 										<img src={getContractImage(item)} className="w-auto h-5 sm:hidden" />
@@ -442,20 +575,33 @@ const TokenDetailBody = ({
 								)}
 								<div className="flex-grow"></div>
 							</div>
-							{usersWhoLiked && <UsersWhoLiked users={usersWhoLiked} closeModal={() => (setEditModalOpen ? setEditModalOpen(false) : null)} />}
+							{usersWhoLiked && (
+								<UsersWhoLiked
+									users={usersWhoLiked}
+									closeModal={() => (setEditModalOpen ? setEditModalOpen(false) : null)}
+								/>
+							)}
 						</div>
 						<div className="flex-1 p-4 pb-0 md:max-w-[50%]">
 							{item.token_description && (
 								<>
 									<div className="text-gray-500 dark:text-gray-400 text-sm sm:text-base whitespace-pre-line">
 										{moreShown ? (
-											<div className="whitespace-pre-line">{removeTags(item.token_description)}</div>
+											<div className="whitespace-pre-line">
+												{removeTags(item.token_description)}
+											</div>
 										) : (
 											<div>
 												{item.token_description?.length > max_description_length ? (
 													<>
-														{truncateWithEllipses(removeTags(item.token_description), max_description_length)}{' '}
-														<a onClick={() => setMoreShown(true)} className="text-gray-900 dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-200 cursor-pointer">
+														{truncateWithEllipses(
+															removeTags(item.token_description),
+															max_description_length
+														)}{' '}
+														<a
+															onClick={() => setMoreShown(true)}
+															className="text-gray-900 dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-200 cursor-pointer"
+														>
 															{' '}
 															more
 														</a>
@@ -484,7 +630,11 @@ const TokenDetailBody = ({
 											<div>
 												<CreatorSummary
 													name={`${item.collection_name} Collection`}
-													imageUrl={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC}
+													imageUrl={
+														item.collection_img_url
+															? item.collection_img_url
+															: DEFAULT_PROFILE_PIC
+													}
 													collectionSlug={item.collection_slug}
 													closeModal={() => {
 														if (setEditModalOpen) setEditModalOpen(false)
@@ -525,11 +675,18 @@ const TokenDetailBody = ({
 											</div>
 										)}
 
-										{ownershipDetails?.multiple_owners_list && ownershipDetails.multiple_owners_list.length > 1 && (
-											<div>
-												<UsersWhoOwn users={ownershipDetails.multiple_owners_list} ownerCount={item.owner_count} closeModal={() => (setEditModalOpen ? setEditModalOpen(false) : null)} />
-											</div>
-										)}
+										{ownershipDetails?.multiple_owners_list &&
+											ownershipDetails.multiple_owners_list.length > 1 && (
+												<div>
+													<UsersWhoOwn
+														users={ownershipDetails.multiple_owners_list}
+														ownerCount={item.owner_count}
+														closeModal={() =>
+															setEditModalOpen ? setEditModalOpen(false) : null
+														}
+													/>
+												</div>
+											)}
 									</div>
 								)}
 								{/* History Section */}
@@ -578,11 +735,18 @@ const TokenDetailBody = ({
 											</div>
 										)}
 
-										{ownershipDetails?.multiple_owners_list && ownershipDetails.multiple_owners_list.length > 1 && (
-											<div>
-												<UsersWhoOwn users={ownershipDetails.multiple_owners_list} ownerCount={item.owner_count} closeModal={() => (setEditModalOpen ? setEditModalOpen(false) : null)} />
-											</div>
-										)}
+										{ownershipDetails?.multiple_owners_list &&
+											ownershipDetails.multiple_owners_list.length > 1 && (
+												<div>
+													<UsersWhoOwn
+														users={ownershipDetails.multiple_owners_list}
+														ownerCount={item.owner_count}
+														closeModal={() =>
+															setEditModalOpen ? setEditModalOpen(false) : null
+														}
+													/>
+												</div>
+											)}
 									</div>
 								)}
 								{/* Comments section */}
@@ -612,7 +776,9 @@ const TokenDetailBody = ({
 						{(CONTRACTS.HICETNUNC, CONTRACTS.KALAMINT).includes(item.contract_address) ? null : (
 							<>
 								<a
-									href={`https://opensea.io/assets/${item.chain_identifier == 137 ? 'matic/' : ''}${item.contract_address}/${item.token_id}?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`}
+									href={`https://opensea.io/assets/${item.chain_identifier == 137 ? 'matic/' : ''}${
+										item.contract_address
+									}/${item.token_id}?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`}
 									title="Buy on OpenSea"
 									target="_blank"
 									onClick={() => {
@@ -628,7 +794,9 @@ const TokenDetailBody = ({
 						)}
 						<div
 							onClick={() => {
-								parentSetReportModalOpen !== undefined ? parentSetReportModalOpen(true) : setReportModalOpen(true)
+								parentSetReportModalOpen !== undefined
+									? parentSetReportModalOpen(true)
+									: setReportModalOpen(true)
 							}}
 							className="text-gray-500 hover:text-stpink cursor-pointer whitespace-nowrap"
 						>

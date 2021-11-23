@@ -28,7 +28,11 @@ export default handler()
 			const validResponse = accessToken && refreshToken
 
 			if (validResponse) {
-				const sealedRefreshToken = await Iron.seal({ refreshToken }, process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+				const sealedRefreshToken = await Iron.seal(
+					{ refreshToken },
+					process.env.ENCRYPTION_SECRET_V2,
+					Iron.defaults
+				)
 				CookieService.setTokenCookie({
 					res,
 					sealedRefreshToken,

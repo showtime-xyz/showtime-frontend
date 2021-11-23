@@ -90,17 +90,31 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 				<div className="flex flex-row">
 					<div className="flex items-center">
 						<Link href="/[profile]" as={`/${actor?.username || actor?.wallet_address}`}>
-							<a className="relative w-max flex-shrink-0" onClick={() => mixpanel.track('Activity - Click on user profile')}>
-								<img src={getProfileImageUrl(actor.img_url || DEFAULT_PROFILE_PIC)} className="rounded-full mr-2 w-14 h-14  hover:opacity-90 transition-all" />
-								<div className="absolute bottom-0 right-2 rounded-full h-5 w-5 flex items-center justify-center shadow" style={{ backgroundColor: activityIconObjects[type].color }}>
-									<FontAwesomeIcon className="w-3 h-3 text-white" icon={activityIconObjects[type].icon} />
+							<a
+								className="relative w-max flex-shrink-0"
+								onClick={() => mixpanel.track('Activity - Click on user profile')}
+							>
+								<img
+									src={getProfileImageUrl(actor.img_url || DEFAULT_PROFILE_PIC)}
+									className="rounded-full mr-2 w-14 h-14  hover:opacity-90 transition-all"
+								/>
+								<div
+									className="absolute bottom-0 right-2 rounded-full h-5 w-5 flex items-center justify-center shadow"
+									style={{ backgroundColor: activityIconObjects[type].color }}
+								>
+									<FontAwesomeIcon
+										className="w-3 h-3 text-white"
+										icon={activityIconObjects[type].icon}
+									/>
 								</div>
 							</a>
 						</Link>
 						<div className="flex flex-col flex-1 max-w-full">
 							<Link href="/[profile]" as={`/${actor?.username || actor?.wallet_address}`}>
 								<a onClick={() => mixpanel.track('Activity - Click on user profile')}>
-									<div className="mr-2 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink text-base -mb-1">{truncateWithEllipses(actor.name, 24)}</div>
+									<div className="mr-2 dark:text-gray-300 hover:text-stpink dark:hover:text-stpink text-base -mb-1">
+										{truncateWithEllipses(actor.name, 24)}
+									</div>
 								</a>
 							</Link>
 
@@ -123,11 +137,22 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 						<div>
 							<div onClick={onCornerMenuClick} className="text-right text-gray-300 relative">
 								<DotsHorizontalIcon className="dark:text-gray-500 hover:text-stpink dark:hover:text-stpink cursor-pointer w-6 h-6" />
-								<div ref={dropdownRef} className={`absolute text-black dark:text-gray-400 text-left top-4 right-1 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 py-2 px-2 shadow-lg rounded-xl transition-all text-md transform z-1 ${isActive ? 'visible opacity-1 translate-y-1' : 'invisible opacity-0'}`}>
-									<div className="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-stpink dark:hover:text-gray-300 rounded-lg cursor-pointer whitespace-nowrap" onClick={handleUnfollow}>
+								<div
+									ref={dropdownRef}
+									className={`absolute text-black dark:text-gray-400 text-left top-4 right-1 border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 py-2 px-2 shadow-lg rounded-xl transition-all text-md transform z-1 ${
+										isActive ? 'visible opacity-1 translate-y-1' : 'invisible opacity-0'
+									}`}
+								>
+									<div
+										className="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-stpink dark:hover:text-gray-300 rounded-lg cursor-pointer whitespace-nowrap"
+										onClick={handleUnfollow}
+									>
 										Unfollow
 									</div>
-									<div className="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-stpink dark:hover:text-gray-300 rounded-lg cursor-pointer whitespace-nowrap" onClick={() => setReportModalIsOpen(id)}>
+									<div
+										className="py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-stpink dark:hover:text-gray-300 rounded-lg cursor-pointer whitespace-nowrap"
+										onClick={() => setReportModalIsOpen(id)}
+									>
 										Report
 									</div>
 								</div>
@@ -154,7 +179,10 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 								</div>
 
 								<div className="mr-4 text-base mt-2">
-									<CommentButton item={nfts[0]} handleComment={() => setItemOpenInModal({ nftGroup: nfts, index: 0 })} />
+									<CommentButton
+										item={nfts[0]}
+										handleComment={() => setItemOpenInModal({ nftGroup: nfts, index: 0 })}
+									/>
 								</div>
 							</div>
 						) : null}

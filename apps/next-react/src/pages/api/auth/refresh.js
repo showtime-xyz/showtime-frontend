@@ -19,7 +19,11 @@ export default handler().post(async (req, res) => {
 			throw 'Missing sealed refresh token cookie'
 		}
 
-		const { refreshToken } = await Iron.unseal(sealedRefreshTokenCookie, process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+		const { refreshToken } = await Iron.unseal(
+			sealedRefreshTokenCookie,
+			process.env.ENCRYPTION_SECRET_V2,
+			Iron.defaults
+		)
 
 		const refreshResponse = await backend.post('/v1/jwt/refresh', {
 			refresh: refreshToken,
@@ -33,7 +37,11 @@ export default handler().post(async (req, res) => {
 		 * Only override the cookie when a new refresh token is returned.
 		 */
 		if (newRefreshToken) {
-			const sealedRefreshToken = await Iron.seal({ refreshToken: newRefreshToken }, process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+			const sealedRefreshToken = await Iron.seal(
+				{ refreshToken: newRefreshToken },
+				process.env.ENCRYPTION_SECRET_V2,
+				Iron.defaults
+			)
 			CookieService.setTokenCookie({
 				res,
 				sealedRefreshToken,

@@ -65,7 +65,21 @@ const FollowButton = ({ item, followerCount, setFollowerCount, hideIfFollowing, 
 	}
 
 	return (
-		<Button style={isFollowed ? 'tertiary' : 'primary'} onClick={isAuthenticated ? (isFollowed ? handleUnfollow : context.disableFollows ? null : handleFollow) : handleLoggedOutFollow} className={`space-x-2 ${isFollowed ? '' : 'text-white'} ${hideIfFollowing ? 'hidden' : ''} ${compact ? 'py-1 px-2 text-sm' : ''}`}>
+		<Button
+			style={isFollowed ? 'tertiary' : 'primary'}
+			onClick={
+				isAuthenticated
+					? isFollowed
+						? handleUnfollow
+						: context.disableFollows
+						? null
+						: handleFollow
+					: handleLoggedOutFollow
+			}
+			className={`space-x-2 ${isFollowed ? '' : 'text-white'} ${hideIfFollowing ? 'hidden' : ''} ${
+				compact ? 'py-1 px-2 text-sm' : ''
+			}`}
+		>
 			{isFollowed ? <span className="font-bold">Following</span> : <span className="font-bold">Follow</span>}
 		</Button>
 	)

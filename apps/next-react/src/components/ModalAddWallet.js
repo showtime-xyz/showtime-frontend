@@ -85,7 +85,10 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 
 		try {
 			setSignaturePending(true)
-			const signature = await personalSignMessage(web3, process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + ' ' + response_nonce.data.data)
+			const signature = await personalSignMessage(
+				web3,
+				process.env.NEXT_PUBLIC_SIGNING_MESSAGE_ADD_WALLET + ' ' + response_nonce.data.data
+			)
 			setSignaturePending(false)
 			setStep(3)
 
@@ -137,35 +140,68 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 				<ScrollableModal closeModal={handleModalClose} contentWidth="30rem">
 					<div className="p-4">
 						<CloseButton setEditModalOpen={handleModalClose} />
-						<div className="dark:text-gray-300 text-2xl border-b-2 dark:border-gray-800 pb-2">{step == 1 ? 'Add Wallet' : step == 4 ? 'Success!' : signaturePending ? 'Almost there!' : walletAddresses.map(item => item.address.toLowerCase()).includes(addressDetected?.toLowerCase()) ? 'Switch Wallet' : 'Confirm Wallet'}</div>
+						<div className="dark:text-gray-300 text-2xl border-b-2 dark:border-gray-800 pb-2">
+							{step == 1
+								? 'Add Wallet'
+								: step == 4
+								? 'Success!'
+								: signaturePending
+								? 'Almost there!'
+								: walletAddresses
+										.map(item => item.address.toLowerCase())
+										.includes(addressDetected?.toLowerCase())
+								? 'Switch Wallet'
+								: 'Confirm Wallet'}
+						</div>
 						{step == 1 ? (
 							<>
-								<div className="my-4 py-4 dark:text-gray-400">Add one or more wallets to showcase all your NFTs in one place.</div>
+								<div className="my-4 py-4 dark:text-gray-400">
+									Add one or more wallets to showcase all your NFTs in one place.
+								</div>
 
-								<div className="my-4 py-4 dark:text-gray-400">If you previously signed in with the wallet you are adding, your other profile will get merged into this profile.</div>
+								<div className="my-4 py-4 dark:text-gray-400">
+									If you previously signed in with the wallet you are adding, your other profile will
+									get merged into this profile.
+								</div>
 							</>
 						) : step == 4 ? (
-							<div className="text-center py-32 px-10 dark:text-gray-400">Successfully added the wallet to your profile</div>
+							<div className="text-center py-32 px-10 dark:text-gray-400">
+								Successfully added the wallet to your profile
+							</div>
 						) : step == 3 ? null : (
 							<div>
 								{addressDetected ? (
 									signaturePending ? null : (
 										<>
-											<div className="mt-4 dark:text-gray-400">Your wallet provider is giving us a wallet with the address:</div>
+											<div className="mt-4 dark:text-gray-400">
+												Your wallet provider is giving us a wallet with the address:
+											</div>
 											<div className="mb-4 text-base text-indigo-500 dark:text-indigo-600">
 												<pre>{addressDetected}</pre>
 											</div>
 											<>
-												{walletAddresses.map(item => item.address.toLowerCase()).includes(addressDetected?.toLowerCase()) ? (
+												{walletAddresses
+													.map(item => item.address.toLowerCase())
+													.includes(addressDetected?.toLowerCase()) ? (
 													<>
 														<div className="py-4">
 															<span>
-																<span className="text-red-500 dark:text-red-700">This wallet is already on your Showtime profile. Please switch to a different wallet in your provider's menu.</span>{' '}
+																<span className="text-red-500 dark:text-red-700">
+																	This wallet is already on your Showtime profile.
+																	Please switch to a different wallet in your
+																	provider's menu.
+																</span>{' '}
 															</span>
 														</div>
 														<div className="py-4 ">
 															<div className="dark:text-gray-400">For MetaMask:</div>
-															<div className="text-gray-500">Switch wallets by clicking on the MetaMask icon in the toolbar, then clicking the circle icon on the top right (the account switcher). If you get a warning "Your current account is not connected," make sure to click "Connect."</div>
+															<div className="text-gray-500">
+																Switch wallets by clicking on the MetaMask icon in the
+																toolbar, then clicking the circle icon on the top right
+																(the account switcher). If you get a warning "Your
+																current account is not connected," make sure to click
+																"Connect."
+															</div>
 														</div>
 														<div className="py-4">
 															<div className="dark:text-gray-400">For WalletConnect:</div>
@@ -185,14 +221,23 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 													</>
 												) : (
 													<>
-														<div className="py-4 dark:text-gray-400">Please confirm this is the correct wallet and click "Sign to finish" below.</div>
+														<div className="py-4 dark:text-gray-400">
+															Please confirm this is the correct wallet and click "Sign to
+															finish" below.
+														</div>
 														{showInstructions ? (
 															<>
 																<div className="py-4 text-base">
 																	<span className="text-gray-400">
 																		For MetaMask: <br />
 																	</span>{' '}
-																	<div className="text-gray-500">Switch wallets by clicking on the MetaMask icon in the toolbar, then clicking the circle icon on the top right (the account switcher). If you get a warning "Your current account is not connected," make sure to click "Connect."</div>
+																	<div className="text-gray-500">
+																		Switch wallets by clicking on the MetaMask icon
+																		in the toolbar, then clicking the circle icon on
+																		the top right (the account switcher). If you get
+																		a warning "Your current account is not
+																		connected," make sure to click "Connect."
+																	</div>
 																</div>
 																<div className="py-4 text-base">
 																	<span className="text-gray-400">
@@ -232,16 +277,24 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 										</>
 									)
 								) : (
-									<div className="my-16 text-center dark:text-gray-400">Select a wallet provider...</div>
+									<div className="my-16 text-center dark:text-gray-400">
+										Select a wallet provider...
+									</div>
 								)}
 							</div>
 						)}
 
 						{signaturePending ? (
-							<div className="text-center py-40 px-10 dark:text-gray-400">Please sign the message we're sending to your wallet...</div>
+							<div className="text-center py-40 px-10 dark:text-gray-400">
+								Please sign the message we're sending to your wallet...
+							</div>
 						) : step == 3 ? (
-							<div className="text-center py-40 px-10 dark:text-gray-400">Adding wallet and any history, please wait...</div>
-						) : walletAddresses.map(item => item.address.toLowerCase()).includes(addressDetected?.toLowerCase()) && step != 1 ? null : (
+							<div className="text-center py-40 px-10 dark:text-gray-400">
+								Adding wallet and any history, please wait...
+							</div>
+						) : walletAddresses
+								.map(item => item.address.toLowerCase())
+								.includes(addressDetected?.toLowerCase()) && step != 1 ? null : (
 							<>
 								<div className="mt-4 mb-0 pt-4 text-center border-t-2 dark:border-gray-800">
 									{step == 1 ? (
@@ -255,7 +308,9 @@ export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
 											Select wallet to add
 										</button>
 									) : step == 4 ? null : step == 3 ? null : addressDetected ? (
-										walletAddresses.map(item => item.address.toLowerCase()).includes(addressDetected?.toLowerCase()) ? null : (
+										walletAddresses
+											.map(item => item.address.toLowerCase())
+											.includes(addressDetected?.toLowerCase()) ? null : (
 											<GreenButton className="float-none" onClick={signMessage}>
 												Sign to finish
 											</GreenButton>

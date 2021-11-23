@@ -7,11 +7,26 @@ export default handler()
 	.use(middleware.auth)
 	.post(async ({ body: { owner, deadline, signature, tokenAddr } }, res) => {
 		const { v, r, s } = ethers.utils.splitSignature(signature)
-		const wallet = new ethers.Wallet(process.env.WALLET_KEY, new ethers.providers.JsonRpcProvider(`https://polygon-${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai' : 'mainnet'}.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`))
+		const wallet = new ethers.Wallet(
+			process.env.WALLET_KEY,
+			new ethers.providers.JsonRpcProvider(
+				`https://polygon-${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai' : 'mainnet'}.infura.io/v3/${
+					process.env.NEXT_PUBLIC_INFURA_ID
+				}`
+			)
+		)
 		const tokenContract = new ethers.Contract(tokenAddr, ierc20PermitAbi, wallet)
 
 		try {
-			const tx = await tokenContract.permit(owner, process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT, SOL_MAX_INT, deadline, v, r, s)
+			const tx = await tokenContract.permit(
+				owner,
+				process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
+				SOL_MAX_INT,
+				deadline,
+				v,
+				r,
+				s
+			)
 
 			return res.status(200).send(tx.hash)
 		} catch (error) {

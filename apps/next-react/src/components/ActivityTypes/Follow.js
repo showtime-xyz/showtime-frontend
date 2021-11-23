@@ -17,8 +17,14 @@ export default function Follow({ act }) {
 				{count === 1 && (
 					<>
 						Followed{' '}
-						<Link href="/[profile]" as={`/${counterparties[0]?.username || counterparties[0]?.wallet_address}`}>
-							<a className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink" onClick={() => mixpanel.track("Activity - Clicked on Followed user's name")}>
+						<Link
+							href="/[profile]"
+							as={`/${counterparties[0]?.username || counterparties[0]?.wallet_address}`}
+						>
+							<a
+								className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink"
+								onClick={() => mixpanel.track("Activity - Clicked on Followed user's name")}
+							>
 								{truncateWithEllipses(counterparties[0].name, TRUNCATE_NAME_LENGTH)}
 							</a>
 						</Link>
@@ -28,14 +34,26 @@ export default function Follow({ act }) {
 				{count === 2 && (
 					<>
 						Followed{' '}
-						<Link href="/[profile]" as={`/${counterparties[0]?.username || counterparties[0]?.wallet_address}`}>
-							<a className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink" onClick={() => mixpanel.track("Activity - Clicked on Followed user's name")}>
+						<Link
+							href="/[profile]"
+							as={`/${counterparties[0]?.username || counterparties[0]?.wallet_address}`}
+						>
+							<a
+								className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink"
+								onClick={() => mixpanel.track("Activity - Clicked on Followed user's name")}
+							>
 								{truncateWithEllipses(counterparties[0].name, TRUNCATE_NAME_LENGTH)}
 							</a>
 						</Link>{' '}
 						and{' '}
-						<Link href="/[profile]" as={`/${counterparties[1]?.username || counterparties[1]?.wallet_address}`}>
-							<a className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink" onClick={() => mixpanel.track("Activity - Clicked on Followed user's name")}>
+						<Link
+							href="/[profile]"
+							as={`/${counterparties[1]?.username || counterparties[1]?.wallet_address}`}
+						>
+							<a
+								className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink"
+								onClick={() => mixpanel.track("Activity - Clicked on Followed user's name")}
+							>
 								{truncateWithEllipses(counterparties[1].name, TRUNCATE_NAME_LENGTH)}
 							</a>
 						</Link>
@@ -45,20 +63,38 @@ export default function Follow({ act }) {
 				{count === 3 && (
 					<>
 						Followed{' '}
-						<Link href="/[profile]" as={`/${counterparties[0]?.username || counterparties[0]?.wallet_address}`}>
-							<a className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink" onClick={() => mixpanel.track("Activity - Clicked on Followed user's name")}>
+						<Link
+							href="/[profile]"
+							as={`/${counterparties[0]?.username || counterparties[0]?.wallet_address}`}
+						>
+							<a
+								className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink"
+								onClick={() => mixpanel.track("Activity - Clicked on Followed user's name")}
+							>
 								{truncateWithEllipses(counterparties[0].name, TRUNCATE_NAME_LENGTH)}
 							</a>
 						</Link>
 						,{' '}
-						<Link href="/[profile]" as={`/${counterparties[1]?.username || counterparties[1]?.wallet_address}`}>
-							<a className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink" onClick={() => mixpanel.track("Activity - Clicked on Followed user's name")}>
+						<Link
+							href="/[profile]"
+							as={`/${counterparties[1]?.username || counterparties[1]?.wallet_address}`}
+						>
+							<a
+								className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink"
+								onClick={() => mixpanel.track("Activity - Clicked on Followed user's name")}
+							>
 								{truncateWithEllipses(counterparties[1].name, TRUNCATE_NAME_LENGTH)}
 							</a>
 						</Link>{' '}
 						and{' '}
-						<Link href="/[profile]" as={`/${counterparties[2]?.username || counterparties[2]?.wallet_address}`}>
-							<a className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink" onClick={() => mixpanel.track("Activity - Clicked on Followed user's name")}>
+						<Link
+							href="/[profile]"
+							as={`/${counterparties[2]?.username || counterparties[2]?.wallet_address}`}
+						>
+							<a
+								className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink"
+								onClick={() => mixpanel.track("Activity - Clicked on Followed user's name")}
+							>
 								{truncateWithEllipses(counterparties[2].name, TRUNCATE_NAME_LENGTH)}
 							</a>
 						</Link>
@@ -68,14 +104,26 @@ export default function Follow({ act }) {
 				{count > 3 && (
 					<>
 						Followed{' '}
-						<Link href="/[profile]" as={`/${counterparties[0]?.username || counterparties[0]?.wallet_address}`}>
-							<a className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink" onClick={() => mixpanel.track("Activity - Clicked on Followed user's name")}>
+						<Link
+							href="/[profile]"
+							as={`/${counterparties[0]?.username || counterparties[0]?.wallet_address}`}
+						>
+							<a
+								className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink"
+								onClick={() => mixpanel.track("Activity - Clicked on Followed user's name")}
+							>
 								{truncateWithEllipses(counterparties[0].name, TRUNCATE_NAME_LENGTH)}
 							</a>
 						</Link>
 						,{' '}
-						<Link href="/[profile]" as={`/${counterparties[1]?.username || counterparties[1]?.wallet_address}`}>
-							<a className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink" onClick={() => mixpanel.track("Activity - Clicked on Followed user's name")}>
+						<Link
+							href="/[profile]"
+							as={`/${counterparties[1]?.username || counterparties[1]?.wallet_address}`}
+						>
+							<a
+								className="text-black dark:text-gray-300 hover:text-stpink dark:hover:text-stpink"
+								onClick={() => mixpanel.track("Activity - Clicked on Followed user's name")}
+							>
 								{truncateWithEllipses(counterparties[1].name, TRUNCATE_NAME_LENGTH)}
 							</a>
 						</Link>{' '}

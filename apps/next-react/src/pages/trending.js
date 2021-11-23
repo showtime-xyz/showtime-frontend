@@ -38,12 +38,16 @@ const Leaderboard = () => {
 		getFeatured()
 	}, [leaderboardDays])
 
-	const shownLeaderboardItems = showAllLeaderboardItems ? leaderboardItems.slice(0, 20) : leaderboardItems.slice(0, LEADERBOARD_LIMIT)
+	const shownLeaderboardItems = showAllLeaderboardItems
+		? leaderboardItems.slice(0, 20)
+		: leaderboardItems.slice(0, LEADERBOARD_LIMIT)
 
 	useEffect(() => {
 		const getFeatured = async () => {
 			setIsLoadingCards(true)
-			setFeaturedItems(await backend.get(`/v2/featured?limit=150&days=${leaderboardDays}`).then(res => res.data.data))
+			setFeaturedItems(
+				await backend.get(`/v2/featured?limit=150&days=${leaderboardDays}`).then(res => res.data.data)
+			)
 			setIsLoadingCards(false)
 		}
 
@@ -66,7 +70,13 @@ const Leaderboard = () => {
 				<meta name="twitter:image" content="https://cdn.tryshowtime.com/twitter_card.jpg" />
 			</Head>
 
-			<div className="py-12 sm:py-14 px-8 sm:px-10 text-left " style={{ background: 'linear-gradient(130deg, rgba(6,216,255,1) 0%, rgba(69,52,245,0.8) 48%, rgba(194,38,173,0.7) 100%)' }}>
+			<div
+				className="py-12 sm:py-14 px-8 sm:px-10 text-left "
+				style={{
+					background:
+						'linear-gradient(130deg, rgba(6,216,255,1) 0%, rgba(69,52,245,0.8) 48%, rgba(194,38,173,0.7) 100%)',
+				}}
+			>
 				<CappedWidth>
 					<div className="flex flex-row mx-3 text-white">
 						<div className="flex-1">
@@ -105,13 +115,41 @@ const Leaderboard = () => {
 				</div>
 				<div className="md:grid md:grid-cols-3 xl:grid-cols-4 ">
 					{/* Mobile on top */}
-					<div className="block sm:hidden">{leaderboardItems && <TrendingCreators shownLeaderboardItems={shownLeaderboardItems} allLeaderboardItems={leaderboardItems} isLoading={isLoading} showAllLeaderboardItems={showAllLeaderboardItems} setShowAllLeaderboardItems={setShowAllLeaderboardItems} trendingTab={leaderboardDays} key={`creators_${leaderboardDays}`} />}</div>
+					<div className="block sm:hidden">
+						{leaderboardItems && (
+							<TrendingCreators
+								shownLeaderboardItems={shownLeaderboardItems}
+								allLeaderboardItems={leaderboardItems}
+								isLoading={isLoading}
+								showAllLeaderboardItems={showAllLeaderboardItems}
+								setShowAllLeaderboardItems={setShowAllLeaderboardItems}
+								trendingTab={leaderboardDays}
+								key={`creators_${leaderboardDays}`}
+							/>
+						)}
+					</div>
 
 					<div className="col-span-2 md:col-span-2 xl:col-span-3 md:mx-3 pb-12">
-						<TokenGridV4 items={featuredItems} isLoading={isLoadingCards} key={`grid_${leaderboardDays}_${isLoadingCards}`} />
+						<TokenGridV4
+							items={featuredItems}
+							isLoading={isLoadingCards}
+							key={`grid_${leaderboardDays}_${isLoadingCards}`}
+						/>
 					</div>
 					{/* Desktop right column */}
-					<div className="hidden sm:block sm:px-3">{leaderboardItems && <TrendingCreators shownLeaderboardItems={shownLeaderboardItems} allLeaderboardItems={leaderboardItems} isLoading={isLoading} showAllLeaderboardItems={showAllLeaderboardItems} setShowAllLeaderboardItems={setShowAllLeaderboardItems} trendingTab={leaderboardDays} key={`creators_r_${leaderboardDays}`} />}</div>
+					<div className="hidden sm:block sm:px-3">
+						{leaderboardItems && (
+							<TrendingCreators
+								shownLeaderboardItems={shownLeaderboardItems}
+								allLeaderboardItems={leaderboardItems}
+								isLoading={isLoading}
+								showAllLeaderboardItems={showAllLeaderboardItems}
+								setShowAllLeaderboardItems={setShowAllLeaderboardItems}
+								trendingTab={leaderboardDays}
+								key={`creators_r_${leaderboardDays}`}
+							/>
+						)}
+					</div>
 				</div>
 			</CappedWidth>
 		</Layout>

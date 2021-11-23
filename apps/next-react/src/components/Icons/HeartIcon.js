@@ -10,7 +10,11 @@ const HeartIcon = ({ className = '' }) => (
 
 export const HeartIconSolid = ({ className = '' }) => (
 	<svg className={className} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-		<path fillRule="evenodd" clipRule="evenodd" d="M14.462 2.493a6.5 6.5 0 018.99 6.007 6.499 6.499 0 01-1.905 4.597l-8.84 8.84a1 1 0 01-1.414 0l-8.84-8.84a6.501 6.501 0 019.194-9.194l.353.353.353-.353a6.5 6.5 0 012.109-1.41z" />
+		<path
+			fillRule="evenodd"
+			clipRule="evenodd"
+			d="M14.462 2.493a6.5 6.5 0 018.99 6.007 6.499 6.499 0 01-1.905 4.597l-8.84 8.84a1 1 0 01-1.414 0l-8.84-8.84a6.501 6.501 0 019.194-9.194l.353.353.353-.353a6.5 6.5 0 012.109-1.41z"
+		/>
 	</svg>
 )
 

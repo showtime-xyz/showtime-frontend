@@ -17,7 +17,9 @@ function createCookie(name, data, options = {}) {
 }
 
 function setTokenCookie({ res, sealedRefreshToken }) {
-	const cookieArray = [sealedRefreshToken ? createCookie(REFRESH_TOKEN_NAME, sealedRefreshToken) : null].filter(Boolean)
+	const cookieArray = [sealedRefreshToken ? createCookie(REFRESH_TOKEN_NAME, sealedRefreshToken) : null].filter(
+		Boolean
+	)
 	res.setHeader('Set-Cookie', cookieArray)
 }
 

@@ -5,7 +5,13 @@ const GridTabs = ({ children, title, sortingBar }) => {
 	const context = useContext(AppContext)
 
 	return (
-		<div className={`w-full ${context.isMobile ? `${sortingBar ? 'mx-4 mb-2.5' : 'mx-4 mb-5'}` : `${sortingBar ? 'mx-3 mb-2' : 'mx-3 mb-7'}`}`}>
+		<div
+			className={`w-full ${
+				context.isMobile
+					? `${sortingBar ? 'mx-4 mb-2.5' : 'mx-4 mb-5'}`
+					: `${sortingBar ? 'mx-3 mb-2' : 'mx-3 mb-7'}`
+			}`}
+		>
 			{title && <h3 className="text-2xl md:text-4xl px-2.5">{title}</h3>}
 			<div className="flex border-b dark:border-gray-800">{children}</div>
 		</div>
@@ -20,7 +26,14 @@ const GridTab = ({ label, itemCount, isActive, onClickTab }) => {
 	}
 
 	return (
-		<div className={`text-sm md:text-base w-max py-3.5 mr-6 whitespace-nowrap cursor-pointer border-b-2 ${isActive ? 'border-stpink text-stpink dark:text-gray-200' : 'dark:text-gray-400 border-transparent hover:opacity-60'} transition`} onClick={onClickTab}>
+		<div
+			className={`text-sm md:text-base w-max py-3.5 mr-6 whitespace-nowrap cursor-pointer border-b-2 ${
+				isActive
+					? 'border-stpink text-stpink dark:text-gray-200'
+					: 'dark:text-gray-400 border-transparent hover:opacity-60'
+			} transition`}
+			onClick={onClickTab}
+		>
 			{cleanItemCount() && <div className={`${isActive ? '' : 'text-gray-400'} mr-1`}>{cleanItemCount()}</div>}
 			<span>{label}</span>
 		</div>

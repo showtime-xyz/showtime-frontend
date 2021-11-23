@@ -172,7 +172,19 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 
 	useEffect(() => {
 		if (parentComment && replyActive) {
-			siblingComment ? setCommentText('@' + (siblingComment.username || siblingComment.name || `[${formatAddressShort(siblingComment.address)}](${siblingComment.address}) `)) : setCommentText('@' + (parentComment.username || parentComment.name || `[${formatAddressShort(parentComment.address)}](${parentComment.address}) `))
+			siblingComment
+				? setCommentText(
+						'@' +
+							(siblingComment.username ||
+								siblingComment.name ||
+								`[${formatAddressShort(siblingComment.address)}](${siblingComment.address}) `)
+				  )
+				: setCommentText(
+						'@' +
+							(parentComment.username ||
+								parentComment.name ||
+								`[${formatAddressShort(parentComment.address)}](${parentComment.address}) `)
+				  )
 			refArray[0]?.current?.focus()
 			setReplyActive(false)
 		}
@@ -195,7 +207,19 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 	}
 
 	const commentItem = comment => {
-		return <Comment key={comment.comment_id} comment={comment} modalRef={modalRef} closeModal={closeModal} deleteComment={deleteComment} nftOwnerId={ownerCount > 0 ? null : nftOwnerId} nftCreatorId={nftCreatorId} handleReply={handleReply} openLikedByModal={setLikedByUserList} />
+		return (
+			<Comment
+				key={comment.comment_id}
+				comment={comment}
+				modalRef={modalRef}
+				closeModal={closeModal}
+				deleteComment={deleteComment}
+				nftOwnerId={ownerCount > 0 ? null : nftOwnerId}
+				nftCreatorId={nftCreatorId}
+				handleReply={handleReply}
+				openLikedByModal={setLikedByUserList}
+			/>
+		)
 	}
 
 	const onInputFocus = isReply => {
@@ -212,7 +236,11 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 		const newInputRef = createRef()
 		refArray.push(newInputRef)
 		return (
-			<div className={`${isReply ? 'md:ml-10 ' : ''} my-2 flex ${isReply ? '' : 'md:flex-row items-center'} flex-col`}>
+			<div
+				className={`${isReply ? 'md:ml-10 ' : ''} my-2 flex ${
+					isReply ? '' : 'md:flex-row items-center'
+				} flex-col`}
+			>
 				<Menu as={Fragment}>
 					<div className="relative w-full">
 						<MentionsInput
@@ -225,15 +253,23 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 							style={MENTIONS_STYLE}
 							placeholder="Your comment..."
 							classNames={{
-								mentions: 'st-mentions-input dark:bg-gray-700 border dark:border-gray-800 rounded-lg flex-grow w-full md:w-auto mb-2 md:mb-0',
+								mentions:
+									'st-mentions-input dark:bg-gray-700 border dark:border-gray-800 rounded-lg flex-grow w-full md:w-auto mb-2 md:mb-0',
 								mentions__input: 'focus:outline-none focus-visible:ring-1 dark:text-gray-300',
-								mentions__suggestions__list: 'rounded-lg border border-transparent dark:border-gray-800 bg-white hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 dark:text-gray-400 overflow-hidden',
+								mentions__suggestions__list:
+									'rounded-lg border border-transparent dark:border-gray-800 bg-white hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 dark:text-gray-400 overflow-hidden',
 							}}
 							allowSuggestionsAboveCursor
 							allowSpaceInQuery
 							maxLength={240}
 						>
-							<Mention trigger="@" renderSuggestion={parentComment ? null : s => suggestion(s)} data={parentComment ? handleSearchQuery : handleDebouncedSearchQuery} className="border-2 border-transparent bg-purple-200 dark:bg-gray-800  rounded -ml-1.5 px-1" appendSpaceOnAdd />
+							<Mention
+								trigger="@"
+								renderSuggestion={parentComment ? null : s => suggestion(s)}
+								data={parentComment ? handleSearchQuery : handleDebouncedSearchQuery}
+								className="border-2 border-transparent bg-purple-200 dark:bg-gray-800  rounded -ml-1.5 px-1"
+								appendSpaceOnAdd
+							/>
 						</MentionsInput>
 						<Menu.Button className="hidden md:block absolute bottom-1 right-1">
 							<EmojiHappyIcon className="w-5 h-5 text-gray-500" />
@@ -241,17 +277,46 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 					</div>
 					<Menu.Items className="absolute origin-top-left z-20">
 						<Menu.Item>
-							<Picker autoFocus={true} native={true} emoji="star2" enableFrequentEmojiSort={true} theme={resolvedTheme} onSelect={emoji => setCommentText(commentText => commentText + emoji.native)} />
+							<Picker
+								autoFocus={true}
+								native={true}
+								emoji="star2"
+								enableFrequentEmojiSort={true}
+								theme={resolvedTheme}
+								onSelect={emoji => setCommentText(commentText => commentText + emoji.native)}
+							/>
 						</Menu.Item>
 					</Menu.Items>
 				</Menu>
 				<div className="flex items-center justify-between mt-2 w-full md:w-auto space-x-4">
 					{isReply && (
-						<button onClick={() => setLocalFocus(false) && setCommentText('') && setParentComment(null) && setSiblingComment(null)} className="p-4 bg-gray-200 dark:bg-gray-800 rounded-lg">
+						<button
+							onClick={() =>
+								setLocalFocus(false) &&
+								setCommentText('') &&
+								setParentComment(null) &&
+								setSiblingComment(null)
+							}
+							className="p-4 bg-gray-200 dark:bg-gray-800 rounded-lg"
+						>
 							<XIcon className="w-4 h-4 text-gray-800 dark:text-gray-500" />
 						</button>
 					)}
-					<GhostButton loading={isSubmitting && (isReply ? parentComment || siblingComment : !parentComment && !siblingComment)} onClick={!isAuthenticated ? handleLoggedOutComment : createComment} disabled={isSubmitting || !commentText || commentText === '' || commentText.trim() === '' || context.disableComments} className="md:ml-2 flex-1 md:flex-initial rounded-lg">
+					<GhostButton
+						loading={
+							isSubmitting &&
+							(isReply ? parentComment || siblingComment : !parentComment && !siblingComment)
+						}
+						onClick={!isAuthenticated ? handleLoggedOutComment : createComment}
+						disabled={
+							isSubmitting ||
+							!commentText ||
+							commentText === '' ||
+							commentText.trim() === '' ||
+							context.disableComments
+						}
+						className="md:ml-2 flex-1 md:flex-initial rounded-lg"
+					>
 						Post
 					</GhostButton>
 				</div>
@@ -273,7 +338,10 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 							{hasMoreComments && (
 								<div className="flex flex-row items-center my-2 justify-center">
 									{!loadingMoreComments ? (
-										<div className="text-center px-4 py-1 flex items-center w-max border-2 border-gray-300 dark:border-gray-800 rounded-full dark:text-gray-600 hover:text-stpink dark:hover:text-stpink hover:border-stpink cursor-pointer transition-all" onClick={handleGetMoreComments}>
+										<div
+											className="text-center px-4 py-1 flex items-center w-max border-2 border-gray-300 dark:border-gray-800 rounded-full dark:text-gray-600 hover:text-stpink dark:hover:text-stpink hover:border-stpink cursor-pointer transition-all"
+											onClick={handleGetMoreComments}
+										>
 											<div className="mr-2 text-sm">Show Earlier Comments</div>
 										</div>
 									) : (
@@ -288,13 +356,19 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 									comments?.map(comment => (
 										<div key={comment.comment_id}>
 											{commentItem(comment)}
-											{parentComment?.comment_id === comment?.comment_id && siblingComment === null && localFocus && inputItem(true)}
+											{parentComment?.comment_id === comment?.comment_id &&
+												siblingComment === null &&
+												localFocus &&
+												inputItem(true)}
 											{comment.replies?.length > 0 && (
 												<div className="ml-10">
 													{comment.replies?.map(comment => (
 														<div key={comment.comment_id}>
 															{commentItem(comment)}
-															{parentComment?.comment_id === comment?.parent_id && comment?.comment_id === siblingComment?.comment_id && localFocus && inputItem(true)}
+															{parentComment?.comment_id === comment?.parent_id &&
+																comment?.comment_id === siblingComment?.comment_id &&
+																localFocus &&
+																inputItem(true)}
 														</div>
 													))}
 												</div>
@@ -302,7 +376,9 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 										</div>
 									))
 								) : (
-									<div className="my-2 mb-3 p-3 bg-gray-100 dark:bg-gray-800 dark:text-gray-400 rounded-xl">No comments yet.</div>
+									<div className="my-2 mb-3 p-3 bg-gray-100 dark:bg-gray-800 dark:text-gray-400 rounded-xl">
+										No comments yet.
+									</div>
 								)}
 							</div>
 							{inputItem(false)}
@@ -310,7 +386,16 @@ export default function CommentsSection({ item, closeModal, modalRef, commentCou
 					</div>
 				)}
 			</div>
-			{likedByUserList && <ModalUserList onRedirect={closeModal} isOpen={likedByUserList} title="Comment Likes" closeModal={() => setLikedByUserList(null)} users={likedByUserList} emptyMessage="No one has liked this yet!" />}
+			{likedByUserList && (
+				<ModalUserList
+					onRedirect={closeModal}
+					isOpen={likedByUserList}
+					title="Comment Likes"
+					closeModal={() => setLikedByUserList(null)}
+					users={likedByUserList}
+					emptyMessage="No one has liked this yet!"
+				/>
+			)}
 		</div>
 	)
 }

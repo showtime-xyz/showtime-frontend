@@ -138,16 +138,29 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 					<div className="p-4">
 						<div ref={formRef}>
 							<CloseButton cleanupFunction={clearForm} setEditModalOpen={setEditModalOpen} />
-							<div className="dark:text-gray-300 text-3xl border-b-2 dark:border-gray-800 pb-2">Edit Photo</div>
+							<div className="dark:text-gray-300 text-3xl border-b-2 dark:border-gray-800 pb-2">
+								Edit Photo
+							</div>
 							<div className="mt-4 mb-4">
 								{image === '' && (
 									<div>
-										<div className="border-2 border-transparent text-white dark:text-gray-900 bg-stpink hover:border-stpink hover:bg-transparent hover:text-stpink dark:hover:text-stpink transition text-center mt-16  px-4 py-3  rounded-full cursor-pointer" onClick={handleClick}>
+										<div
+											className="border-2 border-transparent text-white dark:text-gray-900 bg-stpink hover:border-stpink hover:bg-transparent hover:text-stpink dark:hover:text-stpink transition text-center mt-16  px-4 py-3  rounded-full cursor-pointer"
+											onClick={handleClick}
+										>
 											Upload a photo
 										</div>
-										<div className="text-center text-xs mb-16 mt-4 text-gray-700 dark:text-gray-600">Accepts JPEG, PNG, and GIF (non-animated)</div>
+										<div className="text-center text-xs mb-16 mt-4 text-gray-700 dark:text-gray-600">
+											Accepts JPEG, PNG, and GIF (non-animated)
+										</div>
 
-										<input ref={hiddenFileInput} className="hidden" id="profilePic" type="file" onChange={onChangePicture} />
+										<input
+											ref={hiddenFileInput}
+											className="hidden"
+											id="profilePic"
+											type="file"
+											onChange={onChangePicture}
+										/>
 									</div>
 								)}
 
@@ -156,7 +169,10 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 								</div>
 
 								{image !== '' && (
-									<div className="dark:text-gray-400 text-sm text-center cursor-pointer" onClick={clearForm}>
+									<div
+										className="dark:text-gray-400 text-sm text-center cursor-pointer"
+										onClick={clearForm}
+									>
 										Clear
 									</div>
 								)}
@@ -177,13 +193,21 @@ export default function Modal({ isOpen, setEditModalOpen }) {
 								</div>
 
 								{myProfile?.img_url && (
-									<div className="dark:text-gray-400 text-sm ml-4 cursor-pointer" onClick={handleRemovePhoto}>
+									<div
+										className="dark:text-gray-400 text-sm ml-4 cursor-pointer"
+										onClick={handleRemovePhoto}
+									>
 										Remove
 									</div>
 								)}
 								<div className="flex-grow"></div>
 								<div>
-									<GreenButton loading={saveInProgress} onClick={handleSubmit} className={image === '' ? 'opacity-60' : ''} disabled={image === '' || saveInProgress}>
+									<GreenButton
+										loading={saveInProgress}
+										onClick={handleSubmit}
+										className={image === '' ? 'opacity-60' : ''}
+										disabled={image === '' || saveInProgress}
+									>
 										Save
 									</GreenButton>
 								</div>

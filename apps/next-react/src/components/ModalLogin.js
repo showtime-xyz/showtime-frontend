@@ -83,7 +83,10 @@ export default function Modal({ isOpen }) {
 			const response_nonce = await backend.get(`/v1/getnonce?address=${address}`)
 
 			setSignaturePending(true)
-			const signature = await personalSignMessage(web3, process.env.NEXT_PUBLIC_SIGNING_MESSAGE + ' ' + response_nonce.data.data)
+			const signature = await personalSignMessage(
+				web3,
+				process.env.NEXT_PUBLIC_SIGNING_MESSAGE + ' ' + response_nonce.data.data
+			)
 
 			// login with our own API
 			const response = await axios.post('/api/auth/login/signature', { signature, address })
@@ -123,7 +126,9 @@ export default function Modal({ isOpen }) {
 						<div className="text-2xl dark:text-gray-300 border-b-2 dark:border-gray-800 pb-2">Sign in</div>
 						<CloseButton setEditModalOpen={context.setLoginModalOpen} />
 						{signaturePending ? (
-							<div className="text-center py-40 dark:text-gray-400">Pushed a request to your wallet...</div>
+							<div className="text-center py-40 dark:text-gray-400">
+								Pushed a request to your wallet...
+							</div>
 						) : (
 							<>
 								<form onSubmit={handleSubmitEmail}>
@@ -132,14 +137,27 @@ export default function Modal({ isOpen }) {
 											<label htmlFor="email" className="pb-4 dark:text-gray-400">
 												Enter your email to receive a sign in link.
 											</label>
-											<div className="pt-1 pb-1 text-xs text-gray-700 dark:text-gray-500">If this is your first time, it will create a new account.</div>
+											<div className="pt-1 pb-1 text-xs text-gray-700 dark:text-gray-500">
+												If this is your first time, it will create a new account.
+											</div>
 										</div>
 										<br />
-										<input name="email" placeholder="Email" type="email" className="border-2 dark:border-gray-800 dark:bg-gray-800 w-full text-black dark:text-gray-300 rounded-lg p-3 focus:outline-none focus-visible:ring-1" autoFocus />
+										<input
+											name="email"
+											placeholder="Email"
+											type="email"
+											className="border-2 dark:border-gray-800 dark:bg-gray-800 w-full text-black dark:text-gray-300 rounded-lg p-3 focus:outline-none focus-visible:ring-1"
+											autoFocus
+										/>
 
 										<div className="pt-8 pb-8 text-gray-700 dark:text-gray-500 text-xs">
 											By signing in you agree to our{' '}
-											<a className="dark:text-gray-400" href="https://www.notion.so/Showtime-Legal-c407e36eb7cd414ca190245ca8621e68" target="_blank" rel="noreferrer">
+											<a
+												className="dark:text-gray-400"
+												href="https://www.notion.so/Showtime-Legal-c407e36eb7cd414ca190245ca8621e68"
+												target="_blank"
+												rel="noreferrer"
+											>
 												Terms &amp; Conditions
 											</a>
 											.
@@ -153,7 +171,10 @@ export default function Modal({ isOpen }) {
 								</form>
 
 								<div className="mb-4 text-center">
-									<button className="bg-black text-white dark:text-gray-300 border-black rounded-full px-6 py-2 cursor-pointer border-2 hover:text-black hover:bg-white dark:hover:bg-gray-800 dark:hover:border-gray-800 transition focus:outline-none focus-visible:ring-1" onClick={() => handleSubmitWallet()}>
+									<button
+										className="bg-black text-white dark:text-gray-300 border-black rounded-full px-6 py-2 cursor-pointer border-2 hover:text-black hover:bg-white dark:hover:bg-gray-800 dark:hover:border-gray-800 transition focus:outline-none focus-visible:ring-1"
+										onClick={() => handleSubmitWallet()}
+									>
 										<span className="text-sm md:text-base">Sign in with Wallet</span>
 									</button>
 								</div>

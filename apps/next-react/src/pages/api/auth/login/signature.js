@@ -30,7 +30,11 @@ export default handler()
 			const validMessage = verifyMessage(msg, signature).toLowerCase() === address.toLowerCase()
 
 			if (validMessage) {
-				const sealedRefreshToken = await Iron.seal({ refreshToken }, process.env.ENCRYPTION_SECRET_V2, Iron.defaults)
+				const sealedRefreshToken = await Iron.seal(
+					{ refreshToken },
+					process.env.ENCRYPTION_SECRET_V2,
+					Iron.defaults
+				)
 				CookieService.setTokenCookie({
 					res,
 					sealedRefreshToken,

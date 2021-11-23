@@ -1,4 +1,13 @@
-import { faComment, faHeart, faUser, faStore, faShoppingCart, faArrowLeft, faArrowRight, faFingerprint } from '@fortawesome/free-solid-svg-icons'
+import {
+	faComment,
+	faHeart,
+	faUser,
+	faStore,
+	faShoppingCart,
+	faArrowLeft,
+	faArrowRight,
+	faFingerprint,
+} from '@fortawesome/free-solid-svg-icons'
 
 export const colors = {
 	green: '#6bd464',

@@ -59,23 +59,41 @@ const LeaderboardItemV2 = ({ item, index, totalCount }) => {
 		<>
 			{typeof document !== 'undefined' ? (
 				<>
-					<ModalTokenDetail isOpen={currentlyOpenModal} setEditModalOpen={setCurrentlyOpenModal} item={currentlyOpenModal} goToNext={goToNext} goToPrevious={goToPrevious} hasNext={!(currentIndex === topItems.length - 1)} hasPrevious={!(currentIndex === 0)} />
+					<ModalTokenDetail
+						isOpen={currentlyOpenModal}
+						setEditModalOpen={setCurrentlyOpenModal}
+						item={currentlyOpenModal}
+						goToNext={goToNext}
+						goToPrevious={goToPrevious}
+						hasNext={!(currentIndex === topItems.length - 1)}
+						hasPrevious={!(currentIndex === 0)}
+					/>
 				</>
 			) : null}
-			<div key={item.profile_id} className={`${index == totalCount - 1 ? null : 'border-b'}  dark:border-gray-800 px-4 py-4`}>
+			<div
+				key={item.profile_id}
+				className={`${index == totalCount - 1 ? null : 'border-b'}  dark:border-gray-800 px-4 py-4`}
+			>
 				<div className="flex flex-row items-center">
 					<div className="relative mr-1 w-16 flex-none">
 						<Link href="/[profile]" as={`/${item?.username || item.address}`}>
 							<a className="cursor-pointer">
-								<img src={getProfileImageUrl(item?.img_url ? item?.img_url : DEFAULT_PROFILE_PIC)} className="rounded-full h-12 w-12 hover:opacity-90" />
+								<img
+									src={getProfileImageUrl(item?.img_url ? item?.img_url : DEFAULT_PROFILE_PIC)}
+									className="rounded-full h-12 w-12 hover:opacity-90"
+								/>
 							</a>
 						</Link>
-						<div className="absolute text-sm bottom-0 right-2 rounded-full bg-white dark:bg-gray-900 text-center self-center h-6 w-6 font-medium pt-px border border-black dark:border-gray-800 border-opacity-10 text-gray-900 dark:text-gray-200">{index + 1}</div>
+						<div className="absolute text-sm bottom-0 right-2 rounded-full bg-white dark:bg-gray-900 text-center self-center h-6 w-6 font-medium pt-px border border-black dark:border-gray-800 border-opacity-10 text-gray-900 dark:text-gray-200">
+							{index + 1}
+						</div>
 					</div>
 
 					<div className="flex items-center flex-grow overflow-hidden pr-1">
 						<Link href="/[profile]" as={`/${item?.username || item.address}`}>
-							<a className="dark:text-gray-300 hover:text-stpink dark:hover:text-stpink cursor-pointer overflow-hidden overflow-ellipsis whitespace-nowrap">{item?.name || formatAddressShort(item.address) || 'Unnamed'} </a>
+							<a className="dark:text-gray-300 hover:text-stpink dark:hover:text-stpink cursor-pointer overflow-hidden overflow-ellipsis whitespace-nowrap">
+								{item?.name || formatAddressShort(item.address) || 'Unnamed'}{' '}
+							</a>
 						</Link>
 						{context.myProfile?.profile_id !== item?.profile_id && (
 							<div className="ml-2">
@@ -84,7 +102,14 @@ const LeaderboardItemV2 = ({ item, index, totalCount }) => {
 						)}
 					</div>
 					<div>
-						<div onClick={() => setThumbnailsOpen(!thumnailsOpen)} className={`cursor-pointer rounded-full border ${thumnailsOpen ? 'border-stpink text-stpink' : 'border-gray-400 dark:border-gray-600 text-gray-600 hover:opacity-80 '} text-center p-1`}>
+						<div
+							onClick={() => setThumbnailsOpen(!thumnailsOpen)}
+							className={`cursor-pointer rounded-full border ${
+								thumnailsOpen
+									? 'border-stpink text-stpink'
+									: 'border-gray-400 dark:border-gray-600 text-gray-600 hover:opacity-80 '
+							} text-center p-1`}
+						>
 							<ViewGridIcon className="w-5 h-5" />
 						</div>
 					</div>

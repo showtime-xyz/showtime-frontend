@@ -62,23 +62,44 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 	}
 
 	const getImageUrl = () => {
-		var img_url = thisItem.still_preview_url ? thisItem.still_preview_url : thisItem.token_img_url ? thisItem.token_img_url : null
+		var img_url = thisItem.still_preview_url
+			? thisItem.still_preview_url
+			: thisItem.token_img_url
+			? thisItem.token_img_url
+			: null
 
 		if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
-			thisItem.token_aspect_ratio && Number(thisItem.token_aspect_ratio) > aspect_ratio_cutoff ? (img_url = img_url.split('=')[0] + '=w2104') : (img_url = img_url.split('=')[0] + '=w1004')
+			thisItem.token_aspect_ratio && Number(thisItem.token_aspect_ratio) > aspect_ratio_cutoff
+				? (img_url = img_url.split('=')[0] + '=w2104')
+				: (img_url = img_url.split('=')[0] + '=w1004')
 		}
 		return img_url
 	}
 
-	const getBackgroundColor = item => (item.token_background_color && item.token_background_color.length === 6 ? `#${item.token_background_color}` : null)
+	const getBackgroundColor = item =>
+		item.token_background_color && item.token_background_color.length === 6
+			? `#${item.token_background_color}`
+			: null
 
-	const pageProfileName = pageProfile?.name && pageProfile?.name != 'Unnamed' ? (pageProfile?.wallet_addresses_excluding_email_v2?.map(addr => addr.address)?.includes(pageProfile.name) ? formatAddressShort(pageProfile?.slug_address) : pageProfile?.name) : pageProfile?.username || pageProfile?.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(pageProfile?.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Unknown'
+	const pageProfileName =
+		pageProfile?.name && pageProfile?.name != 'Unnamed'
+			? pageProfile?.wallet_addresses_excluding_email_v2?.map(addr => addr.address)?.includes(pageProfile.name)
+				? formatAddressShort(pageProfile?.slug_address)
+				: pageProfile?.name
+			: pageProfile?.username ||
+			  pageProfile?.wallet_addresses_excluding_email_v2?.[0]?.ens_domain ||
+			  formatAddressShort(pageProfile?.wallet_addresses_excluding_email_v2?.[0]?.address) ||
+			  'Unknown'
 
 	return (
 		<>
 			{typeof document !== 'undefined' ? (
 				<>
-					<ModalTokenDetail isOpen={currentlyOpenModal} setEditModalOpen={setCurrentlyOpenModal} item={thisItem} />
+					<ModalTokenDetail
+						isOpen={currentlyOpenModal}
+						setEditModalOpen={setCurrentlyOpenModal}
+						item={thisItem}
+					/>
 					<BuyModal open={buyModalOpen} onClose={() => setBuyModalOpen(false)} token={thisItem} />
 				</>
 			) : null}
@@ -89,7 +110,17 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 						<div className="flex-1 text-right">
 							{thisItem?.mime_type?.startsWith('model') ? (
 								<div className="w-full h-full relative">
-									<model-viewer src={item.source_url} class="object-cover w-full h-full min-h-[20rem] md:min-h-none" camera-controls autoplay auto-rotate ar ar-modes="scene-viewer quick-look" interaction-prompt="none" onClick={event => event.stopPropagation()} />
+									<model-viewer
+										src={item.source_url}
+										class="object-cover w-full h-full min-h-[20rem] md:min-h-none"
+										camera-controls
+										autoplay
+										auto-rotate
+										ar
+										ar-modes="scene-viewer quick-look"
+										interaction-prompt="none"
+										onClick={event => event.stopPropagation()}
+									/>
 									<div className="p-2.5 absolute top-1 right-1">
 										<div className="flex items-center space-x-1 text-white rounded-full py-1 px-2 -my-1 -mx-1 bg-black bg-opacity-40">
 											<OrbitIcon className="w-4 h-4" />
@@ -104,15 +135,25 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 											<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 										</div>
 									</div>
-									<div className={`w-full shadow-lg h-full relative ${videoReady ? '' : 'invisible'}`}>
+									<div
+										className={`w-full shadow-lg h-full relative ${videoReady ? '' : 'invisible'}`}
+									>
 										<ReactPlayer
-											url={thisItem.source_url ? thisItem.source_url : thisItem.token_animation_url}
+											url={
+												thisItem.source_url ? thisItem.source_url : thisItem.token_animation_url
+											}
 											playing={currentlyPlayingVideo}
 											loop
 											controls
 											muted={muted}
 											className={'w-full h-full'}
-											width={isMobile ? '100%' : divRef?.current?.clientWidth ? divRef?.current?.clientWidth / 2 : null}
+											width={
+												isMobile
+													? '100%'
+													: divRef?.current?.clientWidth
+													? divRef?.current?.clientWidth / 2
+													: null
+											}
 											height={'1'}
 											playsinline
 											onReady={() => setVideoReady(true)}
@@ -146,7 +187,14 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 										ref={imgContainerRef}
 									>
 										{!imageLoaded ? (
-											<div className="w-full text-center flex items-center justify-center" style={{ height: divRef?.current?.clientWidth ? divRef?.current?.clientWidth : 375 }}>
+											<div
+												className="w-full text-center flex items-center justify-center"
+												style={{
+													height: divRef?.current?.clientWidth
+														? divRef?.current?.clientWidth
+														: 375,
+												}}
+											>
 												<div className="inline-block border-4 w-12 h-12 rounded-full border-gray-100 border-t-gray-800 animate-spin" />
 											</div>
 										) : null}
@@ -164,14 +212,22 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 													? {
 															backgroundColor: getBackgroundColor(item),
 															width: divRef?.current?.clientWidth,
-															height: item.token_aspect_ratio && divRef?.current?.clientWidth ? divRef?.current?.clientWidth / item.token_aspect_ratio : null,
+															height:
+																item.token_aspect_ratio && divRef?.current?.clientWidth
+																	? divRef?.current?.clientWidth /
+																	  item.token_aspect_ratio
+																	: null,
 													  }
-													: !(item.token_aspect_ratio && imgContainerRef?.current?.clientWidth) // use defaults if aspect ratio unknown
+													: !(
+															item.token_aspect_ratio &&
+															imgContainerRef?.current?.clientWidth
+													  ) // use defaults if aspect ratio unknown
 													? {
 															backgroundColor: getBackgroundColor(item),
 															maxHeight: 500,
 													  }
-													: imgContainerRef?.current?.clientWidth / item.token_aspect_ratio > 500 // going to be too tall, need to rescale
+													: imgContainerRef?.current?.clientWidth / item.token_aspect_ratio >
+													  500 // going to be too tall, need to rescale
 													? {
 															backgroundColor: getBackgroundColor(item),
 															maxHeight: 500,
@@ -182,7 +238,12 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 															backgroundColor: getBackgroundColor(item),
 															maxHeight: 500,
 															width: imgContainerRef?.current?.clientWidth,
-															height: item.token_aspect_ratio && imgContainerRef?.current?.clientWidth ? imgContainerRef?.current?.clientWidth / item.token_aspect_ratio : null,
+															height:
+																item.token_aspect_ratio &&
+																imgContainerRef?.current?.clientWidth
+																	? imgContainerRef?.current?.clientWidth /
+																	  item.token_aspect_ratio
+																	: null,
 													  }),
 											}}
 										/>
@@ -218,14 +279,22 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 										<div>
 											{item.token_description?.length > max_description_length && !moreShown ? (
 												<>
-													{truncateWithEllipses(removeTags(item.token_description), max_description_length)}{' '}
-													<a onClick={() => setMoreShown(true)} className="text-gray-900 dark:text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer">
+													{truncateWithEllipses(
+														removeTags(item.token_description),
+														max_description_length
+													)}{' '}
+													<a
+														onClick={() => setMoreShown(true)}
+														className="text-gray-900 dark:text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 cursor-pointer"
+													>
 														{' '}
 														more
 													</a>
 												</>
 											) : (
-												<div className="whitespace-pre-line">{removeTags(item.token_description)}</div>
+												<div className="whitespace-pre-line">
+													{removeTags(item.token_description)}
+												</div>
 											)}
 										</div>
 									</div>
@@ -236,22 +305,59 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 										{item.contract_is_creator ? (
 											<Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
 												<a className="flex flex-row items-center space-x-2">
-													<img alt={item.collection_name} src={item.collection_img_url ? item.collection_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
+													<img
+														alt={item.collection_name}
+														src={
+															item.collection_img_url
+																? item.collection_img_url
+																: DEFAULT_PROFILE_PIC
+														}
+														className="rounded-full w-8 h-8"
+													/>
 													<div>
-														<span className="text-xs font-medium text-gray-600 dark:text-gray-400">Creator</span>
-														<div className="text-sm font-semibold truncate -mt-0.5 dark:text-gray-200">{truncateWithEllipses(item.collection_name + ' Collection', 30)}</div>
+														<span className="text-xs font-medium text-gray-600 dark:text-gray-400">
+															Creator
+														</span>
+														<div className="text-sm font-semibold truncate -mt-0.5 dark:text-gray-200">
+															{truncateWithEllipses(
+																item.collection_name + ' Collection',
+																30
+															)}
+														</div>
 													</div>
 												</a>
 											</Link>
 										) : item.creator_address ? (
-											<Link href="/[profile]" as={`/${item?.creator_username || item.creator_address}`}>
+											<Link
+												href="/[profile]"
+												as={`/${item?.creator_username || item.creator_address}`}
+											>
 												<a className="flex flex-row items-center space-x-2">
-													<img alt={item.creator_name} src={item.creator_img_url ? item.creator_img_url : DEFAULT_PROFILE_PIC} className="rounded-full w-8 h-8" />
+													<img
+														alt={item.creator_name}
+														src={
+															item.creator_img_url
+																? item.creator_img_url
+																: DEFAULT_PROFILE_PIC
+														}
+														className="rounded-full w-8 h-8"
+													/>
 													<div>
-														<span className="text-xs font-medium text-gray-600 dark:text-gray-400">Creator {item.owner_id == item.creator_id && '& Owner'}</span>
+														<span className="text-xs font-medium text-gray-600 dark:text-gray-400">
+															Creator {item.owner_id == item.creator_id && '& Owner'}
+														</span>
 														<div className="flex items-center space-x-1 -mt-0.5">
-															<div className="text-sm font-semibold truncate dark:text-gray-200">{item.creator_name === item.creator_address ? formatAddressShort(item.creator_address) : truncateWithEllipses(item.creator_name, 22)}</div>
-															{item.creator_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
+															<div className="text-sm font-semibold truncate dark:text-gray-200">
+																{item.creator_name === item.creator_address
+																	? formatAddressShort(item.creator_address)
+																	: truncateWithEllipses(item.creator_name, 22)}
+															</div>
+															{item.creator_verified == 1 && (
+																<BadgeIcon
+																	className="w-3.5 h-3.5 text-black dark:text-white"
+																	tickClass="text-white dark:text-black"
+																/>
+															)}
 														</div>
 													</div>
 												</a>
@@ -262,13 +368,21 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 												<div className="w-[2px] bg-gray-100 dark:bg-gray-800 my-2.5 mx-4 hidden md:block" />
 												{item.owner_count && item.owner_count > 1 ? (
 													<div>
-														<span className="text-xs font-medium text-gray-600 dark:text-gray-400">Owner</span>
+														<span className="text-xs font-medium text-gray-600 dark:text-gray-400">
+															Owner
+														</span>
 														<div className="flex items-center">
 															<Link href="/[profile]" as={`/${pageProfile.slug_address}`}>
 																<a className="flex flex-row items-center pr-2 ">
-																	<img alt={pageProfileName} src={pageProfile.img_url || DEFAULT_PROFILE_PIC} className="rounded-full mr-2 h-6 w-6" />
+																	<img
+																		alt={pageProfileName}
+																		src={pageProfile.img_url || DEFAULT_PROFILE_PIC}
+																		className="rounded-full mr-2 h-6 w-6"
+																	/>
 																	<div>
-																		<div className="text-sm font-semibold truncate dark:text-gray-200">{pageProfileName}</div>
+																		<div className="text-sm font-semibold truncate dark:text-gray-200">
+																			{pageProfileName}
+																		</div>
 																	</div>
 																</a>
 															</Link>
@@ -280,14 +394,39 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 													</div>
 												) : item.owner_id ? (
 													<div className="flex flex-row items-center pt-1">
-														<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
+														<Link
+															href="/[profile]"
+															as={`/${item?.owner_username || item.owner_address}`}
+														>
 															<a className="flex flex-row items-center space-x-2">
-																<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8" />
+																<img
+																	alt={item.owner_name}
+																	src={
+																		item.owner_img_url
+																			? item.owner_img_url
+																			: DEFAULT_PROFILE_PIC
+																	}
+																	className="rounded-full mr-1 w-8 h-8"
+																/>
 																<div>
-																	<span className="text-xs font-medium text-gray-600 dark:text-gray-400">Owner</span>
+																	<span className="text-xs font-medium text-gray-600 dark:text-gray-400">
+																		Owner
+																	</span>
 																	<div className="flex items-center space-x-1 -mt-0.5">
-																		<div className="text-sm font-semibold truncate dark:text-gray-200">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
-																		{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
+																		<div className="text-sm font-semibold truncate dark:text-gray-200">
+																			{item.owner_name === item.owner_address
+																				? formatAddressShort(item.owner_address)
+																				: truncateWithEllipses(
+																						item.owner_name,
+																						22
+																				  )}
+																		</div>
+																		{item.owner_verified == 1 && (
+																			<BadgeIcon
+																				className="w-3.5 h-3.5 text-black dark:text-white"
+																				tickClass="text-white dark:text-black"
+																			/>
+																		)}
 																	</div>
 																</div>
 															</a>
@@ -300,12 +439,17 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 									</div>
 									<div className="flex items-center justify-between py-2 px-4 mx-[calc(-0.5rem-1px)] dark:mx-[-0.5rem] bg-gray-100 dark:bg-gray-900 my-4 space-x-8">
 										<div className="flex items-center space-x-2">
-											{item.collection_img_url && <img src={item.collection_img_url} className="w-5 h-5 rounded-full" />}
-											<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">{item.collection_name}</p>
+											{item.collection_img_url && (
+												<img src={item.collection_img_url} className="w-5 h-5 rounded-full" />
+											)}
+											<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+												{item.collection_name}
+											</p>
 										</div>
 										{item.listing && (
 											<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
-												{item.listing.total_edition_quantity} Editions / {parseInt(item.listing.royalty_percentage)}% Royalties
+												{item.listing.total_edition_quantity} Editions /{' '}
+												{parseInt(item.listing.royalty_percentage)}% Royalties
 											</p>
 										)}
 									</div>
@@ -323,26 +467,62 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 											/>
 										</div>
 										<div className="flex items-center space-x-4">
-											<ShareButton url={window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == item.chain_identifier)}/${item.contract_address}/${item.token_id}`} type={'item'} />
+											<ShareButton
+												url={
+													window.location.protocol +
+													'//' +
+													window.location.hostname +
+													(window.location.port ? ':' + window.location.port : '') +
+													`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
+														key => CHAIN_IDENTIFIERS[key] == item.chain_identifier
+													)}/${item.contract_address}/${item.token_id}`
+												}
+												type={'item'}
+											/>
 											{isMyProfile ? (
 												<Menu as="div" className="relative -mb-2">
 													<>
 														<Menu.Button className="text-right text-gray-600 hover:text-stpink focus:outline-none focus-visible:ring-1 relative">
 															<EllipsisIcon className="w-5 h-5" />
 														</Menu.Button>
-														<Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+														<Transition
+															as={Fragment}
+															leave="transition ease-in duration-100"
+															leaveFrom="opacity-100"
+															leaveTo="opacity-0"
+														>
 															<Menu.Items className="z-1 absolute right-0 mt-2 origin-top-right border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg rounded-xl p-2 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
 																<Menu.Item>
 																	{({ active }) => (
-																		<button onClick={removeSpotlightItem} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
-																			<span className="block truncate font-medium">Remove Spotlight</span>
+																		<button
+																			onClick={removeSpotlightItem}
+																			className={classNames(
+																				active
+																					? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800'
+																					: 'text-gray-900 dark:text-gray-400',
+																				'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left'
+																			)}
+																		>
+																			<span className="block truncate font-medium">
+																				Remove Spotlight
+																			</span>
 																		</button>
 																	)}
 																</Menu.Item>
 																<Menu.Item>
 																	{({ active }) => (
-																		<button onClick={handleRefreshNFTMetadata} className={classNames(active ? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
-																			<span className="block truncate font-medium">Refresh Metadata</span>
+																		<button
+																			onClick={handleRefreshNFTMetadata}
+																			className={classNames(
+																				active
+																					? 'text-gray-900 dark:text-gray-300 bg-gray-100 dark:bg-gray-800'
+																					: 'text-gray-900 dark:text-gray-400',
+																				'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left'
+																			)}
+																		>
+																			<span className="block truncate font-medium">
+																				Refresh Metadata
+																			</span>
 																		</button>
 																	)}
 																</Menu.Item>
@@ -356,11 +536,23 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 								</div>
 								<div className="mt-8 inline-block">
 									{item.listing ? (
-										<Button style="primary" title="Buy on Showtime" onClick={() => setBuyModalOpen(true)}>
+										<Button
+											style="primary"
+											title="Buy on Showtime"
+											onClick={() => setBuyModalOpen(true)}
+										>
 											Buy for {item.listing.min_price} ${item.listing.currency}
 										</Button>
 									) : (
-										<Button style="primary" as="a" href={getBidLink(item)} title={`View on ${getContractName(item)}`} target="_blank" onClick={() => mixpanel.track('OpenSea link click')} rel="noreferrer">
+										<Button
+											style="primary"
+											as="a"
+											href={getBidLink(item)}
+											title={`View on ${getContractName(item)}`}
+											target="_blank"
+											onClick={() => mixpanel.track('OpenSea link click')}
+											rel="noreferrer"
+										>
 											View on {getContractName(item)}
 										</Button>
 									)}

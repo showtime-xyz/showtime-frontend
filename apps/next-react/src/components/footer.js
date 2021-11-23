@@ -16,34 +16,71 @@ const Footer = () => {
 							<ShowtimeWordmark className="w-auto h-8 text-white" />
 						</a>
 					</Link>
-					<p className="text-gray-400 font-medium text-sm">&copy; {new Date().getFullYear()} Showtime Technologies, Inc.</p>
+					<p className="text-gray-400 font-medium text-sm">
+						&copy; {new Date().getFullYear()} Showtime Technologies, Inc.
+					</p>
 				</div>
 				<div className="flex justify-between flex-1">
 					<div className="space-y-4 flex flex-col">
-						<a className="text-gray-200 font-bold" href="https://jobs.lever.co/ShowtimeTechnologies" target="_blank" rel="noopener noreferrer">
+						<a
+							className="text-gray-200 font-bold"
+							href="https://jobs.lever.co/ShowtimeTechnologies"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
 							Careers
 						</a>
-						<a className="text-gray-200 font-bold" href="https://www.notion.so/Showtime-Legal-c407e36eb7cd414ca190245ca8621e68" target="_blank" rel="noopener noreferrer">
+						<a
+							className="text-gray-200 font-bold"
+							href="https://www.notion.so/Showtime-Legal-c407e36eb7cd414ca190245ca8621e68"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
 							Terms &amp; Conditions
 						</a>
-						<a className="text-gray-200 font-bold" href="/feedback" target="_blank" rel="noopener noreferrer">
+						<a
+							className="text-gray-200 font-bold"
+							href="/feedback"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
 							Feedback
 						</a>
 					</div>
 					<div className="space-y-4">
-						<a className="text-gray-200 font-bold flex items-center space-x-2" href="https://twitter.com/tryShowtime" target="_blank" rel="noopener noreferrer">
+						<a
+							className="text-gray-200 font-bold flex items-center space-x-2"
+							href="https://twitter.com/tryShowtime"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
 							<TwitterIcon className="w-4 h-4" />
 							<span>Twitter</span>
 						</a>
-						<a className="text-gray-200 font-bold flex items-center space-x-2" href="https://www.instagram.com/tryshowtime/" target="_blank" rel="noopener noreferrer">
+						<a
+							className="text-gray-200 font-bold flex items-center space-x-2"
+							href="https://www.instagram.com/tryshowtime/"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
 							<InstagramIcon className="w-4 h-4" />
 							<span>Instagram</span>
 						</a>
-						<a className="text-gray-200 font-bold flex items-center space-x-2" href="/discord" target="_blank" rel="noopener noreferrer">
+						<a
+							className="text-gray-200 font-bold flex items-center space-x-2"
+							href="/discord"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
 							<DiscordIcon className="w-4 h-4" />
 							<span>Discord</span>
 						</a>
-						<a className="text-gray-200 font-bold flex items-center space-x-2" href="mailto:help@tryshowtime.com" target="_blank" rel="noopener noreferrer">
+						<a
+							className="text-gray-200 font-bold flex items-center space-x-2"
+							href="mailto:help@tryshowtime.com"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
 							<EmailIcon className="w-4 h-auto" />
 							<span>Contact</span>
 						</a>

@@ -47,7 +47,20 @@ const MiniFollowButton = ({ profileId }) => {
 	}
 
 	return isFollowed === null ? null : !isFollowed ? (
-		<Button style="tertiary" onClick={context.disableFollows ? null : context.user ? (isFollowed ? handleUnfollow : handleFollow) : handleLoggedOutFollow} disabled={context.disableFollows} className="text-xs">
+		<Button
+			style="tertiary"
+			onClick={
+				context.disableFollows
+					? null
+					: context.user
+					? isFollowed
+						? handleUnfollow
+						: handleFollow
+					: handleLoggedOutFollow
+			}
+			disabled={context.disableFollows}
+			className="text-xs"
+		>
 			Follow
 		</Button>
 	) : null

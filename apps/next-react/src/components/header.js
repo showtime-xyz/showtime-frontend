@@ -32,7 +32,9 @@ const Header = () => {
 
 	return (
 		<>
-			{renderModalLogin ? <ModalLogin isOpen={context.loginModalOpen} setEditModalOpen={context.setLoginModalOpen} /> : null}
+			{renderModalLogin ? (
+				<ModalLogin isOpen={context.loginModalOpen} setEditModalOpen={context.setLoginModalOpen} />
+			) : null}
 			{renderMintModal ? <MintModal open={mintModalOpen} onClose={() => setMintModalOpen(false)} /> : null}
 			<MintingBanner openMintModal={() => setMintModalOpen(true)} />
 			<header className="px-4 pt-3 sm:py-3 bg-white dark:bg-black w-full border-b border-gray-200 dark:border-gray-800 sticky top-0 z-1">
@@ -57,8 +59,19 @@ const Header = () => {
 							<Tippy content="Feed">
 								<div>
 									<Link href="/">
-										<a className={`text-sm md:text-base flex items-center space-x-2 ${asPath == '/' ? 'bg-gradient-to-bl from-violet-900 via-violet-500 to-violet-300 text-white' : 'text-black dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900'} rounded-full py-3 -my-2 px-3 -mx-1 transition`} onClick={() => mixpanel.track('Discover button click')}>
-											{asPath == '/' ? <HomeIconSolid className="w-5 h-5" /> : <HomeIconOutline className="w-5 h-5" />}
+										<a
+											className={`text-sm md:text-base flex items-center space-x-2 ${
+												asPath == '/'
+													? 'bg-gradient-to-bl from-violet-900 via-violet-500 to-violet-300 text-white'
+													: 'text-black dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900'
+											} rounded-full py-3 -my-2 px-3 -mx-1 transition`}
+											onClick={() => mixpanel.track('Discover button click')}
+										>
+											{asPath == '/' ? (
+												<HomeIconSolid className="w-5 h-5" />
+											) : (
+												<HomeIconOutline className="w-5 h-5" />
+											)}
 										</a>
 									</Link>
 								</div>
@@ -66,8 +79,19 @@ const Header = () => {
 							<Tippy content="Discover">
 								<div>
 									<Link href="/c/showtime">
-										<a className={`text-sm md:text-base flex items-center space-x-2 ${asPath == '/c/showtime' ? 'bg-gradient-to-bl from-violet-900 via-violet-500 to-violet-300 text-white' : 'text-black dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900'} rounded-full py-3 -my-2 px-3 -mx-1 transition`} onClick={() => mixpanel.track('Discover button click')}>
-											{asPath == '/c/showtime' ? <CompassIconSolid className="w-5 h-5" /> : <CompassIconOutline className="w-5 h-5" />}
+										<a
+											className={`text-sm md:text-base flex items-center space-x-2 ${
+												asPath == '/c/showtime'
+													? 'bg-gradient-to-bl from-violet-900 via-violet-500 to-violet-300 text-white'
+													: 'text-black dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900'
+											} rounded-full py-3 -my-2 px-3 -mx-1 transition`}
+											onClick={() => mixpanel.track('Discover button click')}
+										>
+											{asPath == '/c/showtime' ? (
+												<CompassIconSolid className="w-5 h-5" />
+											) : (
+												<CompassIconOutline className="w-5 h-5" />
+											)}
 										</a>
 									</Link>
 								</div>
@@ -75,8 +99,19 @@ const Header = () => {
 							<Tippy content="Trending">
 								<div>
 									<Link href="/trending">
-										<a className={`text-sm md:text-base flex items-center space-x-2 ${asPath == '/trending' ? 'bg-gradient-to-bl from-violet-900 via-violet-500 to-violet-300 text-white' : 'text-black dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900'} rounded-full py-3 -my-2 px-3 -mx-1 transition`} onClick={() => mixpanel.track('Trending button click')}>
-											{asPath == '/trending' ? <FireIconSolid className="w-5 h-5" /> : <FireIconOutline className="w-5 h-5" />}
+										<a
+											className={`text-sm md:text-base flex items-center space-x-2 ${
+												asPath == '/trending'
+													? 'bg-gradient-to-bl from-violet-900 via-violet-500 to-violet-300 text-white'
+													: 'text-black dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900'
+											} rounded-full py-3 -my-2 px-3 -mx-1 transition`}
+											onClick={() => mixpanel.track('Trending button click')}
+										>
+											{asPath == '/trending' ? (
+												<FireIconSolid className="w-5 h-5" />
+											) : (
+												<FireIconOutline className="w-5 h-5" />
+											)}
 										</a>
 									</Link>
 								</div>
@@ -93,7 +128,11 @@ const Header = () => {
 							{isAuthenticated && myProfile ? (
 								<>
 									<div className={'ml-5'}>
-										<Button onClick={() => setMintModalOpen(true)} style="primary" className="!p-2.5 md:!px-3.5 md:!py-1.5 !rounded-full">
+										<Button
+											onClick={() => setMintModalOpen(true)}
+											style="primary"
+											className="!p-2.5 md:!px-3.5 md:!py-1.5 !rounded-full"
+										>
 											<span className="hidden md:inline">Create</span>
 											<PlusIcon className="w-4 h-4 md:hidden" />
 										</Button>
@@ -101,7 +140,11 @@ const Header = () => {
 									<HeaderDropdown />
 								</>
 							) : (
-								<Button style="primary" className="space-x-2 !rounded-full" onClick={() => context.setLoginModalOpen(!context.loginModalOpen)}>
+								<Button
+									style="primary"
+									className="space-x-2 !rounded-full"
+									onClick={() => context.setLoginModalOpen(!context.loginModalOpen)}
+								>
 									<WalletIcon className="w-5 h-5" />
 									<span className="font-bold text-sm">Sign&nbsp;in</span>
 								</Button>
@@ -114,18 +157,75 @@ const Header = () => {
 						<div className="-mx-4 mt-4 md:hidden">
 							<div className="flex-1 flex justify-around font-normal -mx-2">
 								<Link href="/">
-									<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 px-2 -mx-2 group ${asPath == '/' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>
-										<div className={`${asPath == '/' ? 'bg-gray-100 dark:bg-gray-900' : 'group-hover:bg-gray-100 dark:group-hover:bg-gray-900'} p-2 -m-2 rounded-full transition`}>{asPath == '/' ? <HomeIconSolid className="w-5 h-5" /> : <HomeIconOutline className="w-5 h-5" />}</div>
+									<a
+										className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 px-2 -mx-2 group ${
+											asPath == '/'
+												? 'border-gray-800'
+												: 'border-transparent hover:border-gray-400'
+										}`}
+										onClick={() => mixpanel.track('Discover button click')}
+									>
+										<div
+											className={`${
+												asPath == '/'
+													? 'bg-gray-100 dark:bg-gray-900'
+													: 'group-hover:bg-gray-100 dark:group-hover:bg-gray-900'
+											} p-2 -m-2 rounded-full transition`}
+										>
+											{asPath == '/' ? (
+												<HomeIconSolid className="w-5 h-5" />
+											) : (
+												<HomeIconOutline className="w-5 h-5" />
+											)}
+										</div>
 									</a>
 								</Link>
 								<Link href="/c/showtime">
-									<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 px-2 -mx-2 group ${asPath == '/c/showtime' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Discover button click')}>
-										<div className={`${asPath == '/c/showtime' ? 'bg-gray-100 dark:bg-gray-900' : 'group-hover:bg-gray-100 dark:group-hover:bg-gray-900'} p-2 -m-2 rounded-full transition`}>{asPath == '/c/showtime' ? <CompassIconSolid className="w-5 h-5" /> : <CompassIconOutline className="w-5 h-5" />}</div>
+									<a
+										className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 px-2 -mx-2 group ${
+											asPath == '/c/showtime'
+												? 'border-gray-800'
+												: 'border-transparent hover:border-gray-400'
+										}`}
+										onClick={() => mixpanel.track('Discover button click')}
+									>
+										<div
+											className={`${
+												asPath == '/c/showtime'
+													? 'bg-gray-100 dark:bg-gray-900'
+													: 'group-hover:bg-gray-100 dark:group-hover:bg-gray-900'
+											} p-2 -m-2 rounded-full transition`}
+										>
+											{asPath == '/c/showtime' ? (
+												<CompassIconSolid className="w-5 h-5" />
+											) : (
+												<CompassIconOutline className="w-5 h-5" />
+											)}
+										</div>
 									</a>
 								</Link>
 								<Link href="/trending">
-									<a className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 px-2 -mx-2 group ${asPath == '/trending' ? 'border-gray-800' : 'border-transparent hover:border-gray-400'}`} onClick={() => mixpanel.track('Trending button click')}>
-										<div className={`${asPath == '/trending' ? 'bg-gray-100 dark:bg-gray-900' : 'group-hover:bg-gray-100 dark:group-hover:bg-gray-900'} p-2 -m-2 rounded-full transition`}>{asPath == '/trending' ? <FireIconSolid className="w-5 h-5" /> : <FireIconOutline className="w-5 h-5" />}</div>
+									<a
+										className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 px-2 -mx-2 group ${
+											asPath == '/trending'
+												? 'border-gray-800'
+												: 'border-transparent hover:border-gray-400'
+										}`}
+										onClick={() => mixpanel.track('Trending button click')}
+									>
+										<div
+											className={`${
+												asPath == '/trending'
+													? 'bg-gray-100 dark:bg-gray-900'
+													: 'group-hover:bg-gray-100 dark:group-hover:bg-gray-900'
+											} p-2 -m-2 rounded-full transition`}
+										>
+											{asPath == '/trending' ? (
+												<FireIconSolid className="w-5 h-5" />
+											) : (
+												<FireIconOutline className="w-5 h-5" />
+											)}
+										</div>
 									</a>
 								</Link>
 							</div>

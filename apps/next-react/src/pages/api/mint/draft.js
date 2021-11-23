@@ -12,20 +12,64 @@ export default handler()
 				},
 			})
 			.then(({ data: { data } }) => res.json(data))
-			.catch(() => res.status(200).json({ title: '', description: '', number_of_copies: 1, nsfw: false, royalties: 10, ipfs_hash: null, agreed_to_terms: false, mime_type: null, file_size: 0 }))
-	})
-	.post(async ({ user, body: { title, description, number_of_copies, nsfw, royalties, ipfs_hash, agreed_to_terms, mime_type, minted, file_size } }, res) => {
-		backend
-			.post(
-				'v1/set_draft_nft',
-				{ title, description, number_of_copies, nsfw, royalties, ipfs_hash, agreed_to_terms, mime_type, file_size, minted },
-				{
-					headers: {
-						'X-Authenticated-User': user.publicAddress,
-						'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
-					},
-				}
+			.catch(() =>
+				res
+					.status(200)
+					.json({
+						title: '',
+						description: '',
+						number_of_copies: 1,
+						nsfw: false,
+						royalties: 10,
+						ipfs_hash: null,
+						agreed_to_terms: false,
+						mime_type: null,
+						file_size: 0,
+					})
 			)
-			.then(resp => res.json(resp.data.data))
-			.catch(error => res.status(error.response.status).json(error.response.data))
 	})
+	.post(
+		async (
+			{
+				user,
+				body: {
+					title,
+					description,
+					number_of_copies,
+					nsfw,
+					royalties,
+					ipfs_hash,
+					agreed_to_terms,
+					mime_type,
+					minted,
+					file_size,
+				},
+			},
+			res
+		) => {
+			backend
+				.post(
+					'v1/set_draft_nft',
+					{
+						title,
+						description,
+						number_of_copies,
+						nsfw,
+						royalties,
+						ipfs_hash,
+						agreed_to_terms,
+						mime_type,
+						file_size,
+						minted,
+					},
+					{
+						headers: {
+							'X-Authenticated-User': user.publicAddress,
+							'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
+						},
+					}
+				)
+				.then(resp => res.json(resp.data.data))
+				.catch(error => res.status(error.response.status).json(error.response.data))
+		}
+	)

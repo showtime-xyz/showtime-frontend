@@ -20,7 +20,10 @@ const LikeButton = ({ item }) => {
 
 		context.setMyLikeCounts({
 			...context.myLikeCounts,
-			[nft_id]: (context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id]) ? context.myLikeCounts[item?.nft_id] : item.like_count) + 1,
+			[nft_id]:
+				(context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id])
+					? context.myLikeCounts[item?.nft_id]
+					: item.like_count) + 1,
 		})
 
 		try {
@@ -33,7 +36,10 @@ const LikeButton = ({ item }) => {
 
 				context.setMyLikeCounts({
 					...context.myLikeCounts,
-					[nft_id]: (context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id]) ? context.myLikeCounts[item?.nft_id] : item.like_count) - 0,
+					[nft_id]:
+						(context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id])
+							? context.myLikeCounts[item?.nft_id]
+							: item.like_count) - 0,
 				})
 				return context.setThrottleMessage(err.response.data.message)
 			}
@@ -57,7 +63,10 @@ const LikeButton = ({ item }) => {
 
 		context.setMyLikeCounts({
 			...context.myLikeCounts,
-			[nft_id]: (context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id]) ? context.myLikeCounts[item?.nft_id] : item.like_count) - 1,
+			[nft_id]:
+				(context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id])
+					? context.myLikeCounts[item?.nft_id]
+					: item.like_count) - 1,
 		})
 
 		try {
@@ -77,7 +86,10 @@ const LikeButton = ({ item }) => {
 		}
 	}
 
-	const like_count = context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id]) ? context.myLikeCounts[item?.nft_id] : item.like_count
+	const like_count =
+		context.myLikeCounts && !_.isNil(context.myLikeCounts[item?.nft_id])
+			? context.myLikeCounts[item?.nft_id]
+			: item.like_count
 	const liked = context.myLikes?.includes(item.nft_id)
 
 	const handleLoggedOutLike = () => {
@@ -87,10 +99,30 @@ const LikeButton = ({ item }) => {
 
 	return (
 		<Tippy content="Sign in to like" disabled={isAuthenticated || context.isMobile}>
-			<button className="focus:outline-none hover:bg-red-50 dark:hover:bg-red-900 focus-visible:bg-red-50 dark:focus-visible:bg-red-900 px-2 -mx-2 rounded-xl group" disabled={context.disableLikes} onClick={() => (isAuthenticated ? (liked ? handleUnlike(item.nft_id) : handleLike(item.nft_id)) : handleLoggedOutLike())}>
-				<div className={`flex flex-row items-center rounded-md py-1 dark:text-gray-300 ${liked ? 'text-red-500 dark:text-red-600' : 'group-hover:text-red-400 dark:group-hover:text-red-400'} ${context.disableLikes ? 'hover:text-gray-500 text-gray-500' : ''}`}>
-					<div className={'flex'}>{liked ? <HeartIconSolid className="w-5 h-5" /> : <HeartIcon className="w-5 h-5" />}</div>
-					<div className="ml-1 whitespace-nowrap">{Number(like_count < 0 ? 0 : like_count).toLocaleString()}</div>
+			<button
+				className="focus:outline-none hover:bg-red-50 dark:hover:bg-red-900 focus-visible:bg-red-50 dark:focus-visible:bg-red-900 px-2 -mx-2 rounded-xl group"
+				disabled={context.disableLikes}
+				onClick={() =>
+					isAuthenticated
+						? liked
+							? handleUnlike(item.nft_id)
+							: handleLike(item.nft_id)
+						: handleLoggedOutLike()
+				}
+			>
+				<div
+					className={`flex flex-row items-center rounded-md py-1 dark:text-gray-300 ${
+						liked
+							? 'text-red-500 dark:text-red-600'
+							: 'group-hover:text-red-400 dark:group-hover:text-red-400'
+					} ${context.disableLikes ? 'hover:text-gray-500 text-gray-500' : ''}`}
+				>
+					<div className={'flex'}>
+						{liked ? <HeartIconSolid className="w-5 h-5" /> : <HeartIcon className="w-5 h-5" />}
+					</div>
+					<div className="ml-1 whitespace-nowrap">
+						{Number(like_count < 0 ? 0 : like_count).toLocaleString()}
+					</div>
 				</div>
 			</button>
 		</Tippy>

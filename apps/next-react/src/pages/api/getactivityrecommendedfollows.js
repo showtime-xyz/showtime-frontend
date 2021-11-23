@@ -8,5 +8,8 @@ export default handler().post(async ({ body: { recache }, user }, res) => {
 		'X-API-Key': process.env.SHOWTIME_FRONTEND_API_KEY_V2,
 	}
 
-	await (recache ? backendscripts.post('/api/v1/get_follow_suggestions?recache=1', {}, { headers }) : backend.post('/v1/get_follow_suggestions', {}, { headers })).then(resp => res.json(resp.data))
+	await (recache
+		? backendscripts.post('/api/v1/get_follow_suggestions?recache=1', {}, { headers })
+		: backend.post('/v1/get_follow_suggestions', {}, { headers })
+	).then(resp => res.json(resp.data))
 })

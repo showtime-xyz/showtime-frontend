@@ -29,7 +29,10 @@ export async function getServerSideProps(context) {
 		...response_collection_list.data.data,
 	]
 
-	const selected_collection = collection_list.filter(item => item.value === collection).length > 0 ? collection_list.filter(item => item.value === collection)[0] : null
+	const selected_collection =
+		collection_list.filter(item => item.value === collection).length > 0
+			? collection_list.filter(item => item.value === collection)[0]
+			: null
 
 	return {
 		props: {
@@ -45,14 +48,28 @@ export default function Collection({ collection_list, collection, selected_colle
 	const { isMobile } = context
 	const [sortBy, setSortby] = useState('random')
 
-	const [pageTitle, setPageTitle] = useState(selected_collection ? (selected_collection.name === 'All leading collections' ? 'Discover' : `Discover ${selected_collection.name}`) : `Discover ${collection}`)
+	const [pageTitle, setPageTitle] = useState(
+		selected_collection
+			? selected_collection.name === 'All leading collections'
+				? 'Discover'
+				: `Discover ${selected_collection.name}`
+			: `Discover ${collection}`
+	)
 
 	const router = useRouter()
 
 	const [isChanging, setIsChanging] = useState(true)
 
 	const [collectionItems, setCollectionItems] = useState([])
-	const [currentCollectionName, setCurrentCollectionName] = useState(selected_collection ? (selected_collection.name === 'All leading collections' ? null : selected_collection.name) : collection ? collection.replace(/-/g, ' ') : collection)
+	const [currentCollectionName, setCurrentCollectionName] = useState(
+		selected_collection
+			? selected_collection.name === 'All leading collections'
+				? null
+				: selected_collection.name
+			: collection
+			? collection.replace(/-/g, ' ')
+			: collection
+	)
 	const [randomNumber, setRandomNumber] = useState(1)
 
 	const onChange = async c => {
@@ -82,7 +99,9 @@ export default function Collection({ collection_list, collection, selected_colle
 
 		const getCollectionItems = async collection_name => {
 			setIsChanging(true)
-			const response_collection_items = await backend.get(`/v2/collection?limit=150&order_by=${sortBy}&collection=${collection_name}`)
+			const response_collection_items = await backend.get(
+				`/v2/collection?limit=150&order_by=${sortBy}&collection=${collection_name}`
+			)
 
 			mixpanel.track('Discover page view', {
 				collection: collection_name,
@@ -91,7 +110,9 @@ export default function Collection({ collection_list, collection, selected_colle
 
 			if (sortBy == 'random') {
 				// Resetting the cache for random items - for next load
-				backendscripts.get(`/api/v2/collection?limit=150&recache=1&order_by=${sortBy}&collection=${collection_name}`)
+				backendscripts.get(
+					`/api/v2/collection?limit=150&recache=1&order_by=${sortBy}&collection=${collection_name}`
+				)
 			}
 
 			if (isSubscribed) {
@@ -169,7 +190,14 @@ export default function Collection({ collection_list, collection, selected_colle
 				<meta property="og:type" content="website" />
 				<meta name="og:description" content="Discover and showcase crypto art" />
 
-				<meta property="og:image" content={selected_collection ? selected_collection.img_url : 'https://cdn.tryshowtime.com/twitter_card.jpg'} />
+				<meta
+					property="og:image"
+					content={
+						selected_collection
+							? selected_collection.img_url
+							: 'https://cdn.tryshowtime.com/twitter_card.jpg'
+					}
+				/>
 
 				<meta name="og:title" content={`Showtime | ${pageTitle}`} />
 
@@ -177,7 +205,14 @@ export default function Collection({ collection_list, collection, selected_colle
 				<meta name="twitter:title" content={`Showtime | ${pageTitle}`} />
 				<meta name="twitter:description" content="Discover and showcase crypto art" />
 
-				<meta name="twitter:image" content={selected_collection ? selected_collection.img_url : 'https://cdn.tryshowtime.com/twitter_card.jpg'} />
+				<meta
+					name="twitter:image"
+					content={
+						selected_collection
+							? selected_collection.img_url
+							: 'https://cdn.tryshowtime.com/twitter_card.jpg'
+					}
+				/>
 			</Head>
 
 			<div className="py-12 sm:py-14 px-8 sm:px-10 text-left bg-gradient-to-r from-green-400 to-blue-400">
@@ -185,8 +220,12 @@ export default function Collection({ collection_list, collection, selected_colle
 					<div className="flex flex-row mx-3 text-white">
 						<div className="flex-1">
 							<div className="text-xl sm:text-2xl dark:text-black">Discover</div>
-							<div className="text-3xl sm:text-6xl capitalize font-afro dark:text-black">{currentCollectionName ? currentCollectionName : 'Leading NFT'}</div>
-							<div className="text-3xl sm:text-6xl dark:text-black">{currentCollectionName ? 'Collection.' : 'Collections.'}</div>
+							<div className="text-3xl sm:text-6xl capitalize font-afro dark:text-black">
+								{currentCollectionName ? currentCollectionName : 'Leading NFT'}
+							</div>
+							<div className="text-3xl sm:text-6xl dark:text-black">
+								{currentCollectionName ? 'Collection.' : 'Collections.'}
+							</div>
 						</div>
 					</div>
 				</CappedWidth>
@@ -204,26 +243,59 @@ export default function Collection({ collection_list, collection, selected_colle
 												<span className="flex items-center">
 													{selected ? (
 														<>
-															<img src={selected.img_url} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />
-															<span className="ml-3 block truncate dark:text-gray-300">{selected.name}</span>
+															<img
+																src={selected.img_url}
+																alt=""
+																className="flex-shrink-0 h-6 w-6 rounded-full"
+															/>
+															<span className="ml-3 block truncate dark:text-gray-300">
+																{selected.name}
+															</span>
 														</>
 													) : (
 														<span>&nbsp;</span>
 													)}
 												</span>
 												<span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-													<SelectorIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" aria-hidden="true" />
+													<SelectorIcon
+														className="h-5 w-5 text-gray-400 dark:text-gray-500"
+														aria-hidden="true"
+													/>
 												</span>
 											</Listbox.Button>
 
-											<Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-												<Listbox.Options static className="absolute mt-1 w-full border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+											<Transition
+												show={open}
+												as={Fragment}
+												leave="transition ease-in duration-100"
+												leaveFrom="opacity-100"
+												leaveTo="opacity-0"
+											>
+												<Listbox.Options
+													static
+													className="absolute mt-1 w-full border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+												>
 													{collection_list.map(c => (
-														<Listbox.Option key={c.value} className={({ active }) => classNames(active ? 'text-white dark:text-gray-300 bg-indigo-600 dark:bg-gray-800' : 'text-gray-900 dark:text-gray-400', 'cursor-default select-none relative py-2 pl-3 pr-9')} value={c}>
+														<Listbox.Option
+															key={c.value}
+															className={({ active }) =>
+																classNames(
+																	active
+																		? 'text-white dark:text-gray-300 bg-indigo-600 dark:bg-gray-800'
+																		: 'text-gray-900 dark:text-gray-400',
+																	'cursor-default select-none relative py-2 pl-3 pr-9'
+																)
+															}
+															value={c}
+														>
 															{({ selected, active }) => (
 																<>
 																	<div className="flex items-center">
-																		<img src={c.img_url} alt="" className="flex-shrink-0 h-6 w-6 rounded-full" />
+																		<img
+																			src={c.img_url}
+																			alt=""
+																			className="flex-shrink-0 h-6 w-6 rounded-full"
+																		/>
 																		<span
 																			className={classNames(
 																				selected
@@ -237,8 +309,18 @@ export default function Collection({ collection_list, collection, selected_colle
 																	</div>
 
 																	{selected ? (
-																		<span className={classNames(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}>
-																			<CheckIcon className="h-5 w-5" aria-hidden="true" />
+																		<span
+																			className={classNames(
+																				active
+																					? 'text-white'
+																					: 'text-indigo-600',
+																				'absolute inset-y-0 right-0 flex items-center pr-4'
+																			)}
+																		>
+																			<CheckIcon
+																				className="h-5 w-5"
+																				aria-hidden="true"
+																			/>
 																		</span>
 																	) : null}
 																</>
@@ -258,7 +340,12 @@ export default function Collection({ collection_list, collection, selected_colle
 				<div className="mx-auto relative mt-12 overflow-hidden">{FilterTabs}</div>
 
 				<div className="m-auto relative min-h-screen md:mx-3 pb-12">
-					<TokenGridV4 items={collectionItems} isLoading={isChanging} extraColumn key={`grid_${router.query.collection}_${sortBy}_${randomNumber}_${isChanging}`} />
+					<TokenGridV4
+						items={collectionItems}
+						isLoading={isChanging}
+						extraColumn
+						key={`grid_${router.query.collection}_${sortBy}_${randomNumber}_${isChanging}`}
+					/>
 				</div>
 			</CappedWidth>
 		</Layout>

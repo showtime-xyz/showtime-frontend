@@ -29,7 +29,11 @@ const MintDropdown = () => {
 		{ type: 'file', Icon: FileIcon },
 	].filter(({ type }) => MINT_TYPES.includes(type))
 
-	const { data: drafts } = useSWR('/api/mint/drafts', url => axios.get(url).then(res => res.data), { initialData: [], revalidateOnMount: true, focusThrottleInterval: 60 * 1000 })
+	const { data: drafts } = useSWR('/api/mint/drafts', url => axios.get(url).then(res => res.data), {
+		initialData: [],
+		revalidateOnMount: true,
+		focusThrottleInterval: 60 * 1000,
+	})
 
 	return (
 		<Menu as="div" className="ml-5 md:relative">
@@ -40,15 +44,39 @@ const MintDropdown = () => {
 							<PlusIcon className="w-4 h-4" />
 						</Menu.Button>
 					</div>
-					<Transition show={open} as={Fragment} enter="transition ease-out duration-200" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
-						<Menu.Items static className="origin-top-right absolute right-0 mt-2 focus:outline-none w-full md:w-auto px-4 md:px-0">
+					<Transition
+						show={open}
+						as={Fragment}
+						enter="transition ease-out duration-200"
+						enterFrom="transform opacity-0 scale-95"
+						enterTo="transform opacity-100 scale-100"
+						leave="transition ease-in duration-75"
+						leaveFrom="transform opacity-100 scale-100"
+						leaveTo="transform opacity-0 scale-95"
+					>
+						<Menu.Items
+							static
+							className="origin-top-right absolute right-0 mt-2 focus:outline-none w-full md:w-auto px-4 md:px-0"
+						>
 							<Menu.Item>
 								<button className="bg-white dark:bg-black bg-opacity-90 dark:bg-opacity-90 w-[120vw] h-screen fixed z-10 -ml-10 focus:outline-none md:hidden" />
 							</Menu.Item>
 							<div className="mt-0.5 md:mt-0 rounded-2xl shadow-lg border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 space-y-4 divide-y divide-gray-100 dark:divide-gray-800 relative z-20 min-w-[10rem] w-full md:w-auto py-1 px-2">
 								<div className="py-1">
 									{OPTIONS.map(({ type, Icon }) => (
-										<Menu.Item key={type} as={NextLink} className={({ active }) => classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'rounded-lg w-full text-left py-2 pr-6 pl-2 text-sm font-semibold transition flex items-center space-x-2')} href={`/mint/${type}`}>
+										<Menu.Item
+											key={type}
+											as={NextLink}
+											className={({ active }) =>
+												classNames(
+													active
+														? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400'
+														: 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500',
+													'rounded-lg w-full text-left py-2 pr-6 pl-2 text-sm font-semibold transition flex items-center space-x-2'
+												)
+											}
+											href={`/mint/${type}`}
+										>
 											<Icon className="w-4 h-4" />
 											<span className="capitalize">{type}</span>
 										</Menu.Item>
@@ -58,11 +86,27 @@ const MintDropdown = () => {
 										.sort((draft1, draft2) => draft2.id - draft1.id)
 										.slice(0, 3)
 										.map(({ id, title, media_type = 'Image' }) => (
-											<Menu.Item key={id} as={NextLink} href={`/mint/${media_type.toLowerCase()}?draft=${id}`} className={({ active }) => classNames(active ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400' : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500', 'rounded-lg w-full text-left py-2 pr-6 pl-2 text-sm font-semibold transition flex items-center space-x-2')}>
-												{OPTIONS.filter(option => option.type == media_type.toLowerCase()).map(({ Icon }) => (
-													<Icon key="icon" className="w-4 h-4" />
-												))}
-												<span className="whitespace-nowrap truncate">{title || 'Untitled Draft'}</span>
+											<Menu.Item
+												key={id}
+												as={NextLink}
+												href={`/mint/${media_type.toLowerCase()}?draft=${id}`}
+												className={({ active }) =>
+													classNames(
+														active
+															? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400'
+															: 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-500',
+														'rounded-lg w-full text-left py-2 pr-6 pl-2 text-sm font-semibold transition flex items-center space-x-2'
+													)
+												}
+											>
+												{OPTIONS.filter(option => option.type == media_type.toLowerCase()).map(
+													({ Icon }) => (
+														<Icon key="icon" className="w-4 h-4" />
+													)
+												)}
+												<span className="whitespace-nowrap truncate">
+													{title || 'Untitled Draft'}
+												</span>
 											</Menu.Item>
 										))}
 								</div>
