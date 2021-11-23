@@ -3,9 +3,21 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 import * as Sentry from '@sentry/nextjs'
+import { Integrations as TracingIntegrations } from '@sentry/tracing'
 import { ExtraErrorData, CaptureConsole, Offline } from '@sentry/integrations'
 
 Sentry.init({
 	dsn: process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN,
-	integrations: [new ExtraErrorData(), new CaptureConsole(), new Offline()],
+	environment: process.env.NEXT_PUBLIC_SENTRY_CLIENT_ENVIRONMENT,
+	tracesSampleRate: 0.2,
+	integrations: [
+		new TracingIntegrations.BrowserTracing({
+			tracingOrigins: [process.env.NEXT_PUBLIC_BACKEND_URL, process.env.NEXT_PUBLIC_NOTIFICATIONS_URL],
+		}),
+		new ExtraErrorData(),
+		new CaptureConsole({
+			levels: ['warn', 'error'],
+		}),
+		new Offline(),
+	],
 })

@@ -7,5 +7,12 @@ import { ExtraErrorData, CaptureConsole } from '@sentry/integrations'
 
 Sentry.init({
 	dsn: process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN,
-	integrations: [new ExtraErrorData(), new CaptureConsole()],
+	environment: process.env.SENTRY_SERVER_ENVIRONMENT,
+	tracesSampleRate: 0.2,
+	integrations: [
+		new ExtraErrorData(),
+		new CaptureConsole({
+			levels: ['warn', 'error'],
+		}),
+	],
 })
