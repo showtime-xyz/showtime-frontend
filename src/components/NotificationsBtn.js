@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
-import { faComment, faHeart, faUser, faAt } from '@fortawesome/free-solid-svg-icons'
+import { faComment, faHeart, faUser, faAt, faMoneyBill } from '@fortawesome/free-solid-svg-icons'
 import { formatDistanceToNowStrict } from 'date-fns'
 import { getNotificationInfo, DEFAULT_PROFILE_PIC, CHAIN_IDENTIFIERS } from '@/lib/constants'
 import ModalUserList from '@/components/ModalUserList'
@@ -19,6 +19,7 @@ const iconObjects = {
 	heart: faHeart,
 	user: faUser,
 	at: faAt,
+	money: faMoneyBill,
 }
 
 const NOTIFICATION_TYPES = {
@@ -27,6 +28,7 @@ const NOTIFICATION_TYPES = {
 	COMMENT: [4, 5],
 	COMMENT_MENTION: [6],
 	COMMENT_LIKE: [7],
+	BOUGHT: [8],
 }
 
 export default function NotificationsBtn() {
@@ -186,6 +188,7 @@ export default function NotificationsBtn() {
 																{NOTIFICATION_TYPES.COMMENT.includes(notif.type_id) ? 'commented on ' : null}
 																{NOTIFICATION_TYPES.COMMENT_MENTION.includes(notif.type_id) ? 'mentioned you in ' : null}
 																{NOTIFICATION_TYPES.COMMENT_LIKE.includes(notif.type_id) ? 'liked your comment on ' : null}
+																{NOTIFICATION_TYPES.BOUGHT.includes(notif.type_id) ? 'bought ' : null}
 															</span>
 															{notif.nft__nftdisplay__name ? (
 																<Link href="/t/[...token]" as={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == notif.chain_identifier)}/${notif.nft__contract__address}/${notif.nft__token_identifier}`}>

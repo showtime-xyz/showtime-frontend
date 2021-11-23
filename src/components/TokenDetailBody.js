@@ -29,6 +29,7 @@ import PolygonIcon from './Icons/PolygonIcon'
 import Tippy from '@tippyjs/react'
 import TezosIcon from './Icons/TezosIcon'
 import ShowtimeIcon from './Icons/ShowtimeIcon'
+import BuyModal from './UI/Modals/BuyModal'
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500
@@ -78,6 +79,7 @@ const TokenDetailBody = ({
 	}
 
 	const [reportModalOpen, setReportModalOpen] = useState(false)
+	const [isBuyModalOpen, setBuyModalOpen] = useState(false)
 
 	// Set dimensions of the media based on available space and original aspect ratio
 	const targetRef = useRef()
@@ -122,9 +124,10 @@ const TokenDetailBody = ({
 
 	return (
 		<>
-			{typeof document !== 'undefined' && parentReportModalOpen !== null ? (
+			{typeof document !== 'undefined' ? (
 				<>
-					<ModalReportItem isOpen={reportModalOpen} setReportModalOpen={setReportModalOpen} nftId={item.nft_id} />
+					<BuyModal open={isBuyModalOpen} onClose={() => setBuyModalOpen(false)} token={item} />
+					{parentReportModalOpen !== null && <ModalReportItem isOpen={reportModalOpen} setReportModalOpen={setReportModalOpen} nftId={item.nft_id} />}
 				</>
 			) : null}
 			{lightboxOpen && <Lightbox mainSrc={item.source_url ? getBiggestImageUrl(item.source_url) : item.token_img_original_url ? item.token_img_original_url : item.token_img_url} onCloseRequest={() => setLightboxOpen(false)} />}
@@ -424,11 +427,19 @@ const TokenDetailBody = ({
 									<ShareButton url={typeof window !== 'undefined' && window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + `/t/${Object.keys(CHAIN_IDENTIFIERS).find(key => CHAIN_IDENTIFIERS[key] == item.chain_identifier)}/${item.contract_address}/${item.token_id}`} type={'item'} />
 								</div>
 
-								<a href={getBidLink(item)} title={`View on ${getContractName(item)}`} target="_blank" className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1" onClick={() => mixpanel.track('OpenSea link click')} rel="noreferrer">
-									<span className="whitespace-nowrap text-sm sm:text-base">View on</span>
-									<span className="hidden sm:inline">{getContractName(item)}</span>
-									<img src={getContractImage(item)} className="w-auto h-5 sm:hidden" />
-								</a>
+								{item.listing ? (
+									<button title="Buy on Showtime" className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1" onClick={() => setBuyModalOpen(true)}>
+										<span className="text-sm sm:text-base">
+											Buy for {item.listing.min_price} ${item.listing.currency}
+										</span>
+									</button>
+								) : (
+									<a href={getBidLink(item)} title={`View on ${getContractName(item)}`} target="_blank" className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1" onClick={() => mixpanel.track('OpenSea link click')} rel="noreferrer">
+										<span className="whitespace-nowrap text-sm sm:text-base">View on</span>
+										<span className="hidden sm:inline">{getContractName(item)}</span>
+										<img src={getContractImage(item)} className="w-auto h-5 sm:hidden" />
+									</a>
+								)}
 								<div className="flex-grow"></div>
 							</div>
 							{usersWhoLiked && <UsersWhoLiked users={usersWhoLiked} closeModal={() => (setEditModalOpen ? setEditModalOpen(false) : null)} />}

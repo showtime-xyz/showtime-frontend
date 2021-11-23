@@ -20,13 +20,14 @@ import { CHAIN_IDENTIFIERS } from '../lib/constants'
 import ShowtimeIcon from './Icons/ShowtimeIcon'
 import Tippy from '@tippyjs/react'
 
-const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, setTransferModal, setBurnModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
+const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, setTransferModal, setBurnModal, setListModal, setUnlistModal, setBuyModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
 	const { myProfile } = useProfile()
 	const [item, setItem] = useState(originalItem)
 	const [showVideo, setShowVideo] = useState(false)
 	const [muted, setMuted] = useState(true)
 	const [refreshing, setRefreshing] = useState(false)
 	const [showModel, setShowModel] = useState(false)
+	const hasMatchingListing = item?.listing?.all_sellers?.find(seller => seller.profile_id === pageProfile.profile_id)
 
 	// Automatically load models that have no preview image. We don't account for video here because currently token_animation_url is a glb file.
 	useEffect(() => {
@@ -87,11 +88,9 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 		}
 	}
 
-	//const pageProfileName = pageProfile?.name && pageProfile?.name != 'Unnamed' ? (pageProfile?.wallet_addresses_excluding_email_v2?.map(addr => addr.address)?.includes(pageProfile.name) ? formatAddressShort(pageProfile?.slug_address) : pageProfile?.name) : pageProfile?.username || pageProfile?.wallet_addresses_excluding_email_v2?.[0]?.ens_domain || formatAddressShort(pageProfile?.wallet_addresses_excluding_email_v2?.[0]?.address) || 'Unknown'
-
 	return (
 		<div className={`w-full h-full ${isChangingOrder ? 'cursor-move' : ''}`}>
-			<div ref={divRef} className={`w-full h-full shadow-lg hover:shadow-xl md:rounded-2xl transition-all duration-300 transform hover:translate-y-[-2px] flex flex-col bg-white dark:bg-black ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border-t border-b md:border-l md:border-r border-transparent dark:border-gray-700'}`}>
+			<div ref={divRef} className={`w-full h-full overflow-hidden shadow-lg hover:shadow-xl md:rounded-2xl transition-all duration-300 transform hover:translate-y-[-2px] flex flex-col bg-white dark:bg-black ${item.user_hidden ? 'opacity-50' : ''} ${isChangingOrder ? 'border-2 border-stpink dark:border-stpink' : 'border-t border-b md:border-l md:border-r border-transparent dark:border-gray-700'}`}>
 				<div ref={item.imageRef} className="p-4 relative">
 					<div className="flex items-center justify-between">
 						<div className="pr-2">
@@ -130,7 +129,28 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 									</Menu.Button>
 								) : null}
 								<Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-									<Menu.Items className="z-1 absolute right-0 mt-2 origin-top-right border border-transparent dark:border-gray-700 bg-white dark:bg-black shadow-lg rounded-xl p-2 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+									<Menu.Items className="z-1 absolute right-0 mt-2 origin-top-right border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg rounded-xl p-2 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+										{SHOWTIME_CONTRACTS.includes(item.contract_address) && item?.show_transfer_options == 1 && (
+											<>
+												{!hasMatchingListing ? (
+													<Menu.Item>
+														{({ active }) => (
+															<button onClick={() => setListModal(item)} className={classNames(active ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-white', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+																<span className="block truncate font-medium">List</span>
+															</button>
+														)}
+													</Menu.Item>
+												) : (
+													<Menu.Item>
+														{({ active }) => (
+															<button onClick={() => setUnlistModal(item)} className={classNames(active ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800' : 'text-gray-900 dark:text-white', 'cursor-pointer select-none rounded-xl py-3 px-3 w-full text-left')}>
+																<span className="block truncate font-medium">Unlist</span>
+															</button>
+														)}
+													</Menu.Item>
+												)}
+											</>
+										)}
 										<Menu.Item>
 											{({ active }) => (
 												<button
@@ -167,7 +187,6 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 														</button>
 													)}
 												</Menu.Item>
-												<hr className="border-gray-100 dark:border-gray-700 my-1" />
 
 												<Menu.Item>
 													{({ active }) => (
@@ -461,12 +480,64 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 					</div>
 				</div>
 				<hr className="mx-4 border-gray-100 dark:border-gray-800" />
-				<div className="flex-1 flex items-end w-full">
-					<div className="px-4 pb-4 pt-1 flex flex-col w-full">
-						<div>
-							{item.owner_count && item.owner_count > 1 ? (
-								pageProfile && listId === 2 ? (
-									<div className="flex items-center pt-1">
+				<div className="flex flex-1 items-end">
+					<div className="w-full">
+						<div className="px-4 pb-4 pt-1 flex flex-col w-full">
+							<div>
+								{item.listing ? (
+									<div className="flex items-center justify-between pt-1 space-x-4">
+										<Link href="/[profile]" as={`/${item.listing.username || item.listing.address}`}>
+											<a className="flex flex-row items-center space-x-2 flex-shrink min-w-0">
+												<img alt={item.listing.name} src={item.listing.img_url ? item.listing.img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8 flex-shrink-0" />
+												<div className="flex-shrink min-w-0">
+													<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Listed by</span>
+													<div className="flex items-center space-x-1 -mt-0.5">
+														<div className="text-sm font-semibold truncate dark:text-gray-200 min-w-0">{item.listing.name === item.listing.address ? formatAddressShort(item.listing.name) : truncateWithEllipses(item.listing.name, 22)}</div>
+														{item.listing.verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
+													</div>
+												</div>
+											</a>
+										</Link>
+										<button onClick={() => setBuyModal(item)} className="space-x-4 flex items-center flex-1 hover:bg-gray-100 dark:hover:bg-gray-900 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg transition">
+											<div>
+												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Available</span>
+												<p className="text-sm font-bold text-gray-900 dark:text-gray-200">
+													{item.listing.quantity}/{item.listing.total_edition_quantity}
+												</p>
+											</div>
+											<div>
+												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Price</span>
+												<p className="text-sm font-bold text-gray-900 dark:text-gray-200 whitespace-nowrap">
+													{parseFloat(item.listing.min_price)} ${item.listing.currency}
+												</p>
+											</div>
+										</button>
+									</div>
+								) : item.owner_count && item.owner_count > 1 ? (
+									pageProfile && listId === 2 ? (
+										<div className="flex items-center pt-1">
+											<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
+												<a className="flex flex-row items-center space-x-2">
+													<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8" />
+													<div>
+														<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
+														<div className="flex items-center space-x-1 -mt-0.5">
+															<div className="text-sm font-semibold truncate dark:text-gray-200">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
+															{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
+															<div className="text-gray-500 text-sm mr-2 -ml-1 mt-px">
+																&amp; {item.owner_count - 1} other
+																{item.owner_count - 1 > 1 ? 's' : null}
+															</div>
+														</div>
+													</div>
+												</a>
+											</Link>
+										</div>
+									) : (
+										<span className="text-gray-500 text-sm">Multiple owners</span>
+									)
+								) : item.owner_id ? (
+									<div className="flex items-center justify-between pt-1">
 										<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
 											<a className="flex flex-row items-center space-x-2">
 												<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8" />
@@ -475,35 +546,21 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 													<div className="flex items-center space-x-1 -mt-0.5">
 														<div className="text-sm font-semibold truncate dark:text-gray-200">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
 														{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
-														<div className="text-gray-500 text-sm mr-2 -ml-1 mt-px">
-															&amp; {item.owner_count - 1} other
-															{item.owner_count - 1 > 1 ? 's' : null}
-														</div>
 													</div>
 												</div>
 											</a>
 										</Link>
+										{myProfile?.profile_id !== item.owner_id && <MiniFollowButton profileId={item.owner_id} />}
 									</div>
-								) : (
-									<span className="text-gray-500 text-sm">Multiple owners</span>
-								)
-							) : item.owner_id ? (
-								<div className="flex items-center justify-between pt-1">
-									<Link href="/[profile]" as={`/${item?.owner_username || item.owner_address}`}>
-										<a className="flex flex-row items-center space-x-2">
-											<img alt={item.owner_name} src={item.owner_img_url ? item.owner_img_url : DEFAULT_PROFILE_PIC} className="rounded-full mr-1 w-8 h-8" />
-											<div>
-												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">Owned by</span>
-												<div className="flex items-center space-x-1 -mt-0.5">
-													<div className="text-sm font-semibold truncate dark:text-gray-200">{item.owner_name === item.owner_address ? formatAddressShort(item.owner_address) : truncateWithEllipses(item.owner_name, 22)}</div>
-													{item.owner_verified == 1 && <BadgeIcon className="w-3.5 h-3.5 text-black dark:text-white" tickClass="text-white dark:text-black" />}
-												</div>
-											</div>
-										</a>
-									</Link>
-									{myProfile?.profile_id !== item.owner_id && <MiniFollowButton profileId={item.owner_id} />}
-								</div>
-							) : null}
+								) : null}
+							</div>
+						</div>
+						<div className="mt-4 px-4 py-2 bg-gray-100 dark:bg-gray-800 flex items-center justify-between">
+							<div className="flex items-center space-x-2">
+								{item.collection_img_url && <img src={item.collection_img_url} className="w-5 h-5 rounded-full" />}
+								<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">{item.collection_name}</p>
+							</div>
+							<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">{item.token_count ? `${item.token_count} Editions` : '1/1'}</p>
 						</div>
 					</div>
 				</div>

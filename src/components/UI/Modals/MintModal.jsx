@@ -4,7 +4,6 @@ import Switch from '../Inputs/Switch'
 import ChevronRight from '@/components/Icons/ChevronRight'
 import Button from '../Buttons/Button'
 import { useState, Fragment } from 'react'
-import Dropdown from '../Dropdown'
 import ChevronLeft from '@/components/Icons/ChevronLeft'
 import PercentageIcon from '@/components/Icons/PercentageIcon'
 import TextareaAutosize from 'react-autosize-textarea'
@@ -28,6 +27,7 @@ import { ExclamationIcon } from '@heroicons/react/outline'
 import XIcon from '@/components/Icons/XIcon'
 import { buildFormData } from '@/lib/utilities'
 import * as Sentry from '@sentry/nextjs'
+import ListModal from './ListModal'
 
 const MAX_FILE_SIZE = 1024 * 1024 * 50 // 50MB
 
@@ -78,15 +78,13 @@ const MintModal = ({ open, onClose }) => {
 	const [ipfsHash, setIpfsHash] = useState(null)
 	const [isUploading, setIsUploading] = useState(false)
 	const [sourcePreview, setSourcePreview] = useState({ type: null, size: null, ext: null, src: null })
-	const [putOnSale, setPutOnSale] = useState(false)
-	const [price, setPrice] = useState('')
-	const [currency, setCurrency] = useState('ETH')
 	const [editionCount, setEditionCount] = useState(1)
 	const [royaltiesPercentage, setRoyaltiesPercentage] = useState(10)
 	const [notSafeForWork, setNotSafeForWork] = useState(false)
 	const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false)
 	const [transactionHash, setTransactionHash] = useState('')
 	const [tokenID, setTokenID] = useState('')
+	const [listModalOpen, setListModalOpen] = useState(false)
 
 	useEffect(() => {
 		if (sourcePreview.type !== 'model' || window.customElements.get('model-viewer')) return
@@ -98,9 +96,6 @@ const MintModal = ({ open, onClose }) => {
 		setDescription('')
 		setIpfsHash('')
 		setSourcePreview({ type: null, size: null, ext: null, src: null })
-		setPutOnSale(false)
-		setPrice('')
-		setCurrency('ETH')
 		setEditionCount(1)
 		setRoyaltiesPercentage(10)
 		setNotSafeForWork(false)
@@ -110,8 +105,8 @@ const MintModal = ({ open, onClose }) => {
 		setModalPage(MODAL_PAGES.GENERAL)
 	}
 
-	const saveDraft = () => axios.post('/api/mint/draft', { title, description, number_of_copies: editionCount, nsfw: notSafeForWork, price: price || null, royalties: royaltiesPercentage, currency, ipfs_hash: ipfsHash, agreed_to_terms: hasAcceptedTerms, mime_type: sourcePreview.src ? `${sourcePreview.type}/${sourcePreview.ext}` : null, file_size: sourcePreview.size })
-	const markDraftMinted = () => axios.post('/api/mint/draft', { title, description, number_of_copies: editionCount, nsfw: notSafeForWork, price: price || null, royalties: royaltiesPercentage, currency, ipfs_hash: ipfsHash, agreed_to_terms: hasAcceptedTerms, mime_type: sourcePreview.src ? `${sourcePreview.type}/${sourcePreview.ext}` : null, file_size: sourcePreview.size, minted: true })
+	const saveDraft = () => axios.post('/api/mint/draft', { title, description, number_of_copies: editionCount, nsfw: notSafeForWork, royalties: royaltiesPercentage, ipfs_hash: ipfsHash, agreed_to_terms: hasAcceptedTerms, mime_type: sourcePreview.src ? `${sourcePreview.type}/${sourcePreview.ext}` : null, file_size: sourcePreview.size })
+	const markDraftMinted = () => axios.post('/api/mint/draft', { title, description, number_of_copies: editionCount, nsfw: notSafeForWork, royalties: royaltiesPercentage, ipfs_hash: ipfsHash, agreed_to_terms: hasAcceptedTerms, mime_type: sourcePreview.src ? `${sourcePreview.type}/${sourcePreview.ext}` : null, file_size: sourcePreview.size, minted: true })
 
 	const loadDraft = async () => {
 		try {
@@ -121,8 +116,6 @@ const MintModal = ({ open, onClose }) => {
 			setDescription(draft.description || '')
 			setHasAcceptedTerms(draft.agreed_to_terms || false)
 			setNotSafeForWork(draft.nsfw || false)
-			setPrice(draft.price ?? '')
-			setCurrency(draft.currency_ticker || 'ETH')
 			setEditionCount(draft.number_of_copies != null ? parseInt(draft.number_of_copies) : 1)
 			setRoyaltiesPercentage(draft.royalties != null ? parseInt(draft.royalties) : 10)
 			setIpfsHash(draft.ipfs_hash || null)
@@ -149,6 +142,11 @@ const MintModal = ({ open, onClose }) => {
 			})
 
 		onClose()
+	}
+
+	const openListModal = () => {
+		trueOnClose()
+		setListModalOpen(true)
 	}
 
 	const cancelUpload = () => {
@@ -187,11 +185,10 @@ const MintModal = ({ open, onClose }) => {
 
 	const isValid = useMemo(() => {
 		if (!title || !hasAcceptedTerms || !editionCount || !ipfsHash) return false
-		if (putOnSale && (!price || !currency)) return false
 		if (editionCount < 1 || editionCount > 10000 || royaltiesPercentage > 69 || royaltiesPercentage < 0) return false
 
 		return true
-	}, [title, hasAcceptedTerms, putOnSale, price, currency, editionCount, royaltiesPercentage, ipfsHash])
+	}, [title, hasAcceptedTerms, editionCount, royaltiesPercentage, ipfsHash])
 
 	const mintToken = async () => {
 		setModalPage(MODAL_PAGES.LOADING)
@@ -272,7 +269,7 @@ const MintModal = ({ open, onClose }) => {
 	const renderedPage = (type => {
 		switch (type) {
 			case MODAL_PAGES.GENERAL:
-				return <CreatePage {...{ title, setTitle, description, setDescription, ipfsHash, isUploading, onFileUpload, cancelUpload, sourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }} />
+				return <CreatePage {...{ title, setTitle, description, setDescription, ipfsHash, isUploading, onFileUpload, cancelUpload, sourcePreview, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }} />
 			case MODAL_PAGES.OPTIONS:
 				return <OptionsPage {...{ editionCount, setEditionCount, royaltiesPercentage, setRoyaltiesPercentage, notSafeForWork, setNotSafeForWork }} />
 			case MODAL_PAGES.LOADING:
@@ -280,7 +277,7 @@ const MintModal = ({ open, onClose }) => {
 			case MODAL_PAGES.MINTING:
 				return <MintingPage transactionHash={transactionHash} />
 			case MODAL_PAGES.SUCCESS:
-				return <SuccessPage transactionHash={transactionHash} tokenID={tokenID} shotConfetti={shotConfetti} />
+				return <SuccessPage transactionHash={transactionHash} tokenID={tokenID} shotConfetti={shotConfetti} listToken={openListModal} />
 			case MODAL_PAGES.CHANGE_WALLET:
 				return <WalletErrorPage mintToken={mintToken} />
 			case MODAL_PAGES.NO_WALLET:
@@ -289,45 +286,49 @@ const MintModal = ({ open, onClose }) => {
 	})(modalPage)
 
 	return (
-		<Transition.Root show={open} as={Fragment}>
-			<Dialog as="div" static className={`fixed inset-0 overflow-y-auto z-1 ${sourcePreview.src ? 'pt-[96px] md:pt-0' : ''}`} open={open} onClose={trueOnClose}>
-				<canvas ref={confettiCanvas} className="absolute inset-0 w-screen h-screen z-[11] pointer-events-none" />
-				<div className="min-h-screen text-center">
-					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
-						<Dialog.Overlay className="fixed inset-0 bg-gray-500 dark:bg-gray-800 bg-opacity-75 dark:bg-opacity-95 transition-opacity z-10" />
-					</Transition.Child>
+		<>
+			<ListModal open={listModalOpen} onClose={() => setListModalOpen(false)} token={{ token_id: tokenID, mime_type: `${sourcePreview.type}/${sourcePreview.ext}`, source_url: ipfsHash, token_description: description, creator_name: myProfile?.name, creator_img_url: myProfile?.img_url, creator_verified: myProfile?.verified ? 1 : 0 }} />
+			<Transition.Root show={open} as={Fragment}>
+				<Dialog static className={`xs:inset-0 modal-mobile-position fixed overflow-y-auto z-1 ${sourcePreview.src ? 'pt-[96px] md:pt-0' : ''}`} open={open} onClose={trueOnClose}>
+					<div className="bg-white dark:bg-black z-20 modal-mobile-gap" />
+					<canvas ref={confettiCanvas} className="absolute inset-0 w-screen h-screen z-[11] pointer-events-none" />
+					<div className="min-h-screen text-center">
+						<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
+							<Dialog.Overlay className="fixed inset-0 bg-gray-500 dark:bg-gray-800 bg-opacity-75 dark:bg-opacity-95 transition-opacity z-10" />
+						</Transition.Child>
 
-					{/* This element is to trick the browser into centering the modal contents. */}
-					<span className="inline-block align-middle h-screen" aria-hidden="true">
-						&#8203;
-					</span>
+						{/* This element is to trick the browser into centering the modal contents. */}
+						<span className="inline-block align-middle h-screen" aria-hidden="true">
+							&#8203;
+						</span>
 
-					<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enterTo="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 translate-y-0 sm:scale-100" leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-						<div className="inline-flex flex-col md:flex-row items-stretch align-bottom rounded-t-3xl md:rounded-b-3xl text-left overflow-hidden transform transition-all sm:align-middle bg-black dark:bg-gray-900 relative z-20 md:max-h-[85vh]">
-							{sourcePreview.src && <div className="p-10 flex items-center justify-center">{sourcePreview.type == 'model' ? <model-viewer src={sourcePreview.src} autoplay camera-controls auto-rotate ar ar-modes="scene-viewer quick-look" interaction-prompt="none" /> : sourcePreview.type === 'video' ? <video src={sourcePreview.src} className="md:max-w-sm w-auto h-auto max-h-full" autoPlay loop muted /> : <img src={sourcePreview.src} className="md:max-w-sm w-auto h-auto max-h-full" />}</div>}
-							<div className="bg-white dark:bg-black shadow-xl rounded-t-3xl md:rounded-b-3xl sm:max-w-lg sm:w-full flex flex-col">
-								<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
-									{modalPage === MODAL_PAGES.OPTIONS ? (
-										<>
-											<button onClick={() => setModalPage(MODAL_PAGES.GENERAL)} className="rounded-xl bg-gray-100 dark:bg-gray-800 px-5 py-4 group">
-												<ChevronLeft className="w-auto h-3 transform group-hover:-translate-x-0.5 transition" />
-											</button>
-											<h2 className="text-gray-900 dark:text-white text-xl font-bold">Options</h2>
-										</>
-									) : (
-										<h2 className="text-gray-900 dark:text-white text-xl font-bold">Create NFT</h2>
-									)}
-									<button onClick={trueOnClose} className="p-3 -my-3 hover:bg-gray-100 disabled:hidden rounded-xl transition" disabled={modalPage === MODAL_PAGES.LOADING}>
-										<XIcon className="w-4 h-4" />
-									</button>
+						<Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enterTo="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 translate-y-0 sm:scale-100" leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+							<div className="inline-flex flex-col md:flex-row items-stretch align-bottom rounded-t-3xl md:rounded-b-3xl text-left overflow-hidden transform transition-all sm:align-middle bg-black dark:bg-gray-900 relative z-20 md:max-h-[85vh]">
+								{sourcePreview.src && <div className="p-10 flex items-center justify-center">{sourcePreview.type == 'model' ? <model-viewer src={sourcePreview.src} autoplay camera-controls auto-rotate ar ar-modes="scene-viewer quick-look" interaction-prompt="none" /> : sourcePreview.type === 'video' ? <video src={sourcePreview.src} className="md:max-w-sm w-auto h-auto max-h-full" autoPlay loop muted /> : <img src={sourcePreview.src} className="md:max-w-sm w-auto h-auto max-h-full" />}</div>}
+								<div className="bg-white dark:bg-black shadow-xl rounded-t-3xl md:rounded-b-3xl sm:max-w-lg sm:w-full flex flex-col">
+									<div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
+										{modalPage === MODAL_PAGES.OPTIONS ? (
+											<>
+												<button onClick={() => setModalPage(MODAL_PAGES.GENERAL)} className="rounded-xl bg-gray-100 dark:bg-gray-800 px-5 py-4 group">
+													<ChevronLeft className="w-auto h-3 transform group-hover:-translate-x-0.5 transition" />
+												</button>
+												<h2 className="text-gray-900 dark:text-white text-xl font-bold">Options</h2>
+											</>
+										) : (
+											<h2 className="text-gray-900 dark:text-white text-xl font-bold">Create NFT</h2>
+										)}
+										<button onClick={trueOnClose} className="p-3 -my-3 hover:bg-gray-100 disabled:hidden rounded-xl transition" disabled={modalPage === MODAL_PAGES.LOADING}>
+											<XIcon className="w-4 h-4" />
+										</button>
+									</div>
+									{renderedPage}
 								</div>
-								{renderedPage}
 							</div>
-						</div>
-					</Transition.Child>
-				</div>
-			</Dialog>
-		</Transition.Root>
+						</Transition.Child>
+					</div>
+				</Dialog>
+			</Transition.Root>
+		</>
 	)
 }
 
@@ -346,7 +347,7 @@ const NoWalletPage = () => (
 	</div>
 )
 
-const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, isUploading, onFileUpload, cancelUpload, sourcePreview, putOnSale, setPutOnSale, price, setPrice, currency, setCurrency, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }) => {
+const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, isUploading, onFileUpload, cancelUpload, sourcePreview, editionCount, royaltiesPercentage, setModalPage, hasAcceptedTerms, setHasAcceptedTerms, isValid, mintToken }) => {
 	return (
 		<>
 			<div className="flex-1 overflow-y-auto">
@@ -368,32 +369,6 @@ const CreatePage = ({ title, setTitle, description, setDescription, ipfsHash, is
 						</div>
 					</fieldset>
 					<IpfsUpload ipfsHash={ipfsHash} onChange={onFileUpload} onCancel={cancelUpload} fileDetails={sourcePreview} isUploading={isUploading} />
-				</div>
-				<div className="p-4 border-b border-gray-100 dark:border-gray-900">
-					<div className="flex items-center justify-between space-x-4">
-						<div>
-							<p className="font-semibold text-gray-900 dark:text-white space-x-1 flex items-center">
-								<span>Sell</span>
-								<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">coming soon</span>
-							</p>
-							<p className="text-sm font-medium text-gray-700 dark:text-gray-300">Enter a fixed price to allow people to purchase your NFT.</p>
-						</div>
-						<Switch value={putOnSale} onChange={setPutOnSale} disabled />
-					</div>
-					<Transition show={putOnSale} as={Fragment} enter="transition ease-in-out duration-300 transform" enterFrom="-translate-y-full opacity-0" enterTo="translate-y-0 opacity-100">
-						<div className="mt-4 flex items-stretch justify-between space-x-2">
-							<input className="flex-1 px-4 relative block w-full rounded-xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring font-medium" placeholder="Price" value={price} onChange={event => setPrice(event.target.value)} />
-							<Dropdown
-								className="flex-1"
-								value={currency}
-								onChange={setCurrency}
-								options={[
-									{ label: 'ETH', value: 'ETH' },
-									{ label: 'USDC', value: 'USDC' },
-								]}
-							/>
-						</div>
-					</Transition>
 				</div>
 				<button onClick={() => setModalPage(MODAL_PAGES.OPTIONS)} className="p-4 border-b border-gray-100 dark:border-gray-900 w-full text-left focus-visible:ring group">
 					<div className="flex items-center justify-between space-x-4">
@@ -488,7 +463,7 @@ const MintingPage = ({ transactionHash }) => {
 	)
 }
 
-const SuccessPage = ({ transactionHash, tokenID, shotConfetti }) => {
+const SuccessPage = ({ transactionHash, tokenID, shotConfetti, listToken }) => {
 	const tokenURL = `/t/${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai' : 'polygon'}/${process.env.NEXT_PUBLIC_MINTING_CONTRACT}/${tokenID}`
 
 	useEffect(() => {
@@ -506,9 +481,14 @@ const SuccessPage = ({ transactionHash, tokenID, shotConfetti }) => {
 		<div className="p-12 space-y-10 flex-1 flex flex-col items-center justify-center">
 			<p className="font-medium text-5xl">🎉</p>
 			<p className="font-medium text-gray-900 dark:text-white text-center !mt-6">Your NFT has been successfully minted!</p>
-			<Button style="primary" as="a" href={tokenURL} onClick={visitTokenPage} className="!mt-6">
-				View on Showtime &rarr;
-			</Button>
+			<div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
+				<Button style="primary" onClick={listToken} className="!mt-6">
+					List for sale
+				</Button>
+				<Button style="primary" as="a" href={tokenURL} onClick={visitTokenPage} className="!mt-6">
+					View on Showtime &rarr;
+				</Button>
+			</div>
 			<div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
 				<a className="flex items-center bg-blue-50 dark:bg-blue-900 text-blue-500 dark:text-blue-200 px-4 py-2 rounded-full space-x-2" href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://tryshowtime.com/t/${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai' : 'polygon'}/${process.env.NEXT_PUBLIC_MINTING_CONTRACT}/${tokenID}`)}&text=${encodeURIComponent('🌟 Just minted an awesome new NFT on @tryShowtime!!\n')}`} target="_blank" rel="noreferrer">
 					<TwitterIcon className="w-4 h-auto" />

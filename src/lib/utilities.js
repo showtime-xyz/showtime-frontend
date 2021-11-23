@@ -1,5 +1,6 @@
-import { CONTRACTS } from './constants'
+import { CONTRACTS, LIST_CURRENCIES, SOL_MAX_INT } from './constants'
 import removeMd from 'remove-markdown'
+import { parseEther, parseUnits } from '@ethersproject/units'
 
 export const classNames = (...classes) => {
 	return classes.filter(Boolean).join(' ')
@@ -193,4 +194,51 @@ export const buildFormData = data => {
 
 export const personalSignMessage = async (web3, message) => {
 	return web3.getSigner().provider.send('personal_sign', [message, await web3.getSigner().getAddress()])
+}
+
+export const signTokenPermit = async (web3, tokenContract, tokenAddr) => {
+	const userAddress = await web3.getSigner().getAddress()
+	const permit = {
+		owner: userAddress,
+		spender: process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
+		value: SOL_MAX_INT,
+		nonce: await tokenContract.nonces(userAddress),
+		deadline: Date.now() + 120,
+	}
+
+	const signature = await web3.getSigner()._signTypedData(
+		{
+			name: 'Test Token',
+			version: '1',
+			chainId: 80001,
+			verifyingContract: tokenAddr,
+		},
+		{
+			Permit: [
+				{ name: 'owner', type: 'address' },
+				{ name: 'spender', type: 'address' },
+				{ name: 'value', type: 'uint256' },
+				{ name: 'nonce', type: 'uint256' },
+				{ name: 'deadline', type: 'uint256' },
+			],
+		},
+		permit
+	)
+
+	return { owner: permit.owner, deadline: permit.deadline, tokenAddr, signature }
+}
+
+export const switchToChain = (web3, chainId, chainDetails = { chainId }) => {
+	return web3.provider.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: `0x${chainId.toString(16)}` }] }).catch(error => {
+		if (error.code !== 4902) throw error
+
+		return web3.provider.request({ method: 'wallet_addEthereumChain', params: [chainDetails] })
+	})
+}
+
+// All our supported currencies have 18 decimals, except for USDC which has 6
+export const parseBalance = (balance, currency) => {
+	if (currency != LIST_CURRENCIES?.USDC) return parseUnits(balance, 18)
+
+	return parseUnits(balance, 6)
 }
