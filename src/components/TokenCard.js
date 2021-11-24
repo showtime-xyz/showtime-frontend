@@ -19,9 +19,11 @@ import OrbitIcon from './Icons/OrbitIcon'
 import { CHAIN_IDENTIFIERS } from '../lib/constants'
 import ShowtimeIcon from './Icons/ShowtimeIcon'
 import Tippy from '@tippyjs/react'
+import useFlags, { FLAGS } from '@/hooks/useFlags'
 
 const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, currentlyPlayingVideo, setCurrentlyPlayingVideo, setCurrentlyOpenModal, setTransferModal, setBurnModal, setListModal, setUnlistModal, setBuyModal, pageProfile, handleRemoveItem, showUserHiddenItems, showDuplicates, setHasUserHiddenItems, isChangingOrder }) => {
 	const { myProfile } = useProfile()
+	const { [FLAGS.hasMinting]: canList } = useFlags()
 	const [item, setItem] = useState(originalItem)
 	const [showVideo, setShowVideo] = useState(false)
 	const [muted, setMuted] = useState(true)
@@ -130,7 +132,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 								) : null}
 								<Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
 									<Menu.Items className="z-1 absolute right-0 mt-2 origin-top-right border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg rounded-xl p-2 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-										{SHOWTIME_CONTRACTS.includes(item.contract_address) && item?.show_transfer_options == 1 && (
+										{canList && SHOWTIME_CONTRACTS.includes(item.contract_address) && item?.show_transfer_options == 1 && (
 											<>
 												{!hasMatchingListing ? (
 													<Menu.Item>
@@ -484,7 +486,7 @@ const TokenCard = ({ originalItem, isMyProfile, listId, changeSpotlightItem, cur
 					<div className="w-full">
 						<div className="px-4 pb-4 pt-1 flex flex-col w-full">
 							<div>
-								{item.listing ? (
+								{canList && item.listing ? (
 									<div className="flex items-center justify-between pt-1 space-x-4">
 										<Link href="/[profile]" as={`/${item.listing.username || item.listing.address}`}>
 											<a className="flex flex-row items-center space-x-2 flex-shrink min-w-0">
