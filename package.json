@@ -6,6 +6,7 @@
 		"@types/react": "~17.0.36",
 		"@types/react-native": "~0.66.5",
 		"patch-package": "^6.4.7",
+		"prettier": "^2.4.1",
 		"turbo": "^0.8.4"
 	},
 	"workspaces": [
