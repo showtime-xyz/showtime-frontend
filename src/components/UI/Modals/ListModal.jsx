@@ -203,7 +203,7 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 	const renderedPage = (type => {
 		switch (type) {
 			case MODAL_PAGES.GENERAL:
-				return <ListPage {...{ token, price, setPrice, currency, setCurrency, editionCount, setEditionCount, maxTokens: ownershipData?.owned_count || token._owned_count || 1, isValid, listToken, hasPriceError, onChangePrice, priceErrorMessage, preventExponent }} onClose={updateModalVisibility} />
+				return <ListPage {...{ token, price, setPrice, currency, setCurrency, editionCount, setEditionCount, maxTokens: ownershipData?.owned_count || token?._owned_count || 1, isValid, listToken, hasPriceError, onChangePrice, priceErrorMessage, preventExponent }} onClose={updateModalVisibility} />
 			case MODAL_PAGES.LOADING:
 				return <LoadingPage />
 			case MODAL_PAGES.MINTING:
