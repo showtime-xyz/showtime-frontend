@@ -145,7 +145,7 @@ const MintModal = ({ open, onClose }) => {
 	}
 
 	const openListModal = () => {
-		trueOnClose()
+		onClose()
 		setListModalOpen(true)
 	}
 
@@ -287,7 +287,7 @@ const MintModal = ({ open, onClose }) => {
 
 	return (
 		<>
-			<ListModal open={listModalOpen} onClose={() => setListModalOpen(false)} token={{ token_id: tokenID, mime_type: `${sourcePreview.type}/${sourcePreview.ext}`, source_url: ipfsHash, token_description: description, creator_name: myProfile?.name, creator_img_url: myProfile?.img_url, creator_verified: myProfile?.verified ? 1 : 0 }} />
+			<ListModal open={listModalOpen} onClose={() => setListModalOpen(false)} token={{ token_id: tokenID, mime_type: `${sourcePreview.type}/${sourcePreview.ext}`, source_url: `https://gateway.pinata.cloud/ipfs/${ipfsHash}`, token_name: title, token_description: description, creator_name: myProfile?.name, creator_img_url: myProfile?.img_url, creator_verified: myProfile?.verified ? 1 : 0, _owned_count: editionCount }} />
 			<Transition.Root show={open} as={Fragment}>
 				<Dialog static className={`xs:inset-0 modal-mobile-position fixed overflow-y-auto z-1 ${sourcePreview.src ? 'pt-[96px] md:pt-0' : ''}`} open={open} onClose={trueOnClose}>
 					<div className="bg-white dark:bg-black z-20 modal-mobile-gap" />
