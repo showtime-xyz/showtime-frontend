@@ -39,7 +39,6 @@ const MODAL_PAGES = {
  * As currency list grows this can be a candidate to be refactored into LIST_CURRENCIES
  */
 const MAX_LIST_PRICE = 1000
-const MIN_LIST_PRICE = 0.0001
 
 const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 	const { myProfile } = useProfile()
@@ -111,15 +110,9 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 	}
 
 	const isValidPrice = price => {
-		const belowMinPrice = price < MIN_LIST_PRICE && price !== ''
 		const aboveMaxPrice = price > MAX_LIST_PRICE
 		let updatedPriceErrorMessage = ''
 		let updatedHasPriceError = false
-
-		if (belowMinPrice) {
-			updatedPriceErrorMessage = `The listing price has to be above ${MIN_LIST_PRICE}`
-			updatedHasPriceError = true
-		}
 
 		if (aboveMaxPrice) {
 			updatedPriceErrorMessage = `The listing price has to be below ${MAX_LIST_PRICE}`
@@ -136,7 +129,7 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 		if (hasPriceError) return false
 
 		return true
-	}, [price, currency, editionCount])
+	}, [price, currency, editionCount, hasPriceError])
 
 	const onChangePrice = event => {
 		const price = formatPrice(event.target.value)
