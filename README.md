@@ -159,6 +159,7 @@ Vercel + Expo
 
 GitHub Actions
 
+-   ESLint: `.github/workflows/lint.yml`
 -   PR previews: `.github/workflows/preview.yml`
 -   Build and Submit: `.github/workflows/build-and-submit.yml`
 
