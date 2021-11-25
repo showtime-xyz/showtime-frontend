@@ -28,6 +28,7 @@ import XIcon from '@/components/Icons/XIcon'
 import { buildFormData } from '@/lib/utilities'
 import * as Sentry from '@sentry/nextjs'
 import ListModal from './ListModal'
+import useFlags, { FLAGS } from '@/hooks/useFlags'
 
 const MAX_FILE_SIZE = 1024 * 1024 * 50 // 50MB
 
@@ -145,7 +146,7 @@ const MintModal = ({ open, onClose }) => {
 	}
 
 	const openListModal = () => {
-		trueOnClose()
+		onClose()
 		setListModalOpen(true)
 	}
 
@@ -287,7 +288,7 @@ const MintModal = ({ open, onClose }) => {
 
 	return (
 		<>
-			<ListModal open={listModalOpen} onClose={() => setListModalOpen(false)} token={{ token_id: tokenID, mime_type: `${sourcePreview.type}/${sourcePreview.ext}`, source_url: ipfsHash, token_description: description, creator_name: myProfile?.name, creator_img_url: myProfile?.img_url, creator_verified: myProfile?.verified ? 1 : 0 }} />
+			<ListModal open={listModalOpen} onClose={() => setListModalOpen(false)} token={{ token_id: tokenID, mime_type: `${sourcePreview.type}/${sourcePreview.ext}`, source_url: `https://gateway.pinata.cloud/ipfs/${ipfsHash}`, token_name: title, token_description: description, creator_name: myProfile?.name, creator_img_url: myProfile?.img_url, creator_verified: myProfile?.verified ? 1 : 0, _owned_count: editionCount }} />
 			<Transition.Root show={open} as={Fragment}>
 				<Dialog static className={`xs:inset-0 modal-mobile-position fixed overflow-y-auto z-1 ${sourcePreview.src ? 'pt-[96px] md:pt-0' : ''}`} open={open} onClose={trueOnClose}>
 					<div className="bg-white dark:bg-black z-20 modal-mobile-gap" />
@@ -464,6 +465,7 @@ const MintingPage = ({ transactionHash }) => {
 }
 
 const SuccessPage = ({ transactionHash, tokenID, shotConfetti, listToken }) => {
+	const { [FLAGS.hasMinting]: canList } = useFlags()
 	const tokenURL = `/t/${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai' : 'polygon'}/${process.env.NEXT_PUBLIC_MINTING_CONTRACT}/${tokenID}`
 
 	useEffect(() => {
@@ -482,9 +484,11 @@ const SuccessPage = ({ transactionHash, tokenID, shotConfetti, listToken }) => {
 			<p className="font-medium text-5xl">🎉</p>
 			<p className="font-medium text-gray-900 dark:text-white text-center !mt-6">Your NFT has been successfully minted!</p>
 			<div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
-				<Button style="primary" onClick={listToken} className="!mt-6">
-					List for sale
-				</Button>
+				{canList && (
+					<Button style="primary" onClick={listToken} className="!mt-6">
+						List for sale
+					</Button>
+				)}
 				<Button style="primary" as="a" href={tokenURL} onClick={visitTokenPage} className="!mt-6">
 					View on Showtime &rarr;
 				</Button>
