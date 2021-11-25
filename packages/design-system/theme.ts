@@ -76,6 +76,10 @@ const theme = makeTheme({
 			...textSizes['text-4xl'],
 		},
 	},
+	// TODO: Add font weights mapping here. Dripsy uses this for intellisense and we can also add custom mapping
+	fontWeights: {
+		// bold: '100',
+	}
 })
 
 type MyTheme = typeof theme

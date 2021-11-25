@@ -4,8 +4,6 @@ import { enableScreens, enableFreeze, FullWindowOverlay } from 'react-native-scr
 import { StatusBar, setStatusBarStyle } from 'expo-status-bar'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { DripsyProvider } from 'dripsy'
-import { useFonts } from 'expo-font'
-import AppLoading from 'expo-app-loading'
 import { useDeviceContext } from 'twrnc'
 // import * as Sentry from 'sentry-expo'
 import { MMKV } from 'react-native-mmkv'
@@ -288,22 +286,6 @@ function AppContextProvider({ children }: { children: React.ReactNode }): JSX.El
 }
 
 function App() {
-	const [fontsLoaded, error] = useFonts({
-		'Inter-Black': require('./assets/fonts/Inter-Black.otf'),
-		'Inter-Bold': require('./assets/fonts/Inter-Bold.otf'),
-		'Inter-ExtraBold': require('./assets/fonts/Inter-ExtraBold.otf'),
-		'Inter-ExtraLight': require('./assets/fonts/Inter-ExtraLight.otf'),
-		'Inter-Light': require('./assets/fonts/Inter-Light.otf'),
-		'Inter-Medium': require('./assets/fonts/Inter-Medium.otf'),
-		Inter: require('./assets/fonts/Inter-Regular.otf'),
-		'Inter-Regular': require('./assets/fonts/Inter-Regular.otf'),
-		'Inter-SemiBold': require('./assets/fonts/Inter-SemiBold.otf'),
-		'Inter-Thin': require('./assets/fonts/Inter-Thin.otf'),
-	})
-
-	if (error) {
-		console.error(error)
-	}
 
 	return (
 		<DripsyProvider theme={theme}>
@@ -332,7 +314,7 @@ function App() {
 								<>
 									{/* TODO: change this when we update the splash screen */}
 									<StatusBar style="dark" />
-									{!fontsLoaded ? <AppLoading /> : <NextTabNavigator />}
+									<NextTabNavigator />
 								</>
 							</AppContextProvider>
 						</WalletConnectProvider>

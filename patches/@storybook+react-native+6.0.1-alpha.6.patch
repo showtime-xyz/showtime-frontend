@@ -1,0 +1,23 @@
+diff --git a/node_modules/@storybook/react-native/dist/preview/loadCsf.js b/node_modules/@storybook/react-native/dist/preview/loadCsf.js
+index aeb7f20..dcae2ae 100644
+--- a/node_modules/@storybook/react-native/dist/preview/loadCsf.js
++++ b/node_modules/@storybook/react-native/dist/preview/loadCsf.js
+@@ -11,6 +11,8 @@ var __rest = (this && this.__rest) || function (s, e) {
+ };
+ import { logger } from '@storybook/client-logger';
+ import { isExportStory, storyNameFromExport, toId } from '@storybook/csf';
++import { FORCE_RE_RENDER } from '@storybook/core-events';
++
+ import './global';
+ const deprecatedStoryAnnotationWarning = () => logger.log(`
+     CSF .story annotations deprecated; annotate story functions directly:
+@@ -171,5 +173,9 @@ export const loadCsf = ({ clientApi, storyStore, configApi, }) =>
+     if (typeof m === 'string') {
+         throw new Error(`Invalid module '${m}'. Did you forget to pass \`module\` as the second argument to \`configure\`"?`);
+     }
++    if (m && m.hot) {
++        m.hot.accept()
++        storyStore._channel.emit(FORCE_RE_RENDER)
++    }
+     configApi.configure(loadStories(loadable, framework, { clientApi, storyStore }), m);
+ };
