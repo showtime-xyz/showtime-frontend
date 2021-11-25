@@ -17,7 +17,7 @@ import { captureException } from '@sentry/nextjs'
 export default function Modal({ isOpen }) {
 	const context = useContext(AppContext)
 	const { resolvedTheme } = useTheme()
-	const { revalidate } = useAuth()
+	const { mutate } = useAuth()
 	const [signaturePending, setSignaturePending] = useState(false)
 
 	const handleSubmitEmail = async event => {
@@ -54,7 +54,7 @@ export default function Modal({ isOpen }) {
 			}
 
 			mixpanel.track('Login success - email')
-			revalidate()
+			mutate()
 
 			if (!context?.user) context.getUserFromCookies()
 			context.setLoginModalOpen(false)
@@ -99,7 +99,7 @@ export default function Modal({ isOpen }) {
 			}
 
 			mixpanel.track('Login success - wallet signature')
-			revalidate()
+			mutate()
 
 			if (!context?.user) context.getUserFromCookies()
 			context.setLoginModalOpen(false)
