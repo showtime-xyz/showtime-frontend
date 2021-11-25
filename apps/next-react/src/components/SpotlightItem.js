@@ -62,10 +62,10 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 	}
 
 	const getImageUrl = () => {
-		var img_url = thisItem.still_preview_url
-			? thisItem.still_preview_url
-			: thisItem.token_img_url
-			? thisItem.token_img_url
+		var img_url = thisItem?.still_preview_url
+			? thisItem?.still_preview_url
+			: thisItem?.token_img_url
+			? thisItem?.token_img_url
 			: null
 
 		if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
@@ -128,7 +128,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 										</div>
 									</div>
 								</div>
-							) : thisItem.token_animation_url || thisItem?.mime_type?.startsWith('video') ? (
+							) : thisItem?.token_animation_url || thisItem?.mime_type?.startsWith('video') ? (
 								<>
 									<div className={`w-full h-full ${videoReady ? 'hidden' : null}`}>
 										<div className="w-full text-center flex items-center mt-24 justify-center">
@@ -140,7 +140,9 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 									>
 										<ReactPlayer
 											url={
-												thisItem.source_url ? thisItem.source_url : thisItem.token_animation_url
+												thisItem.source_url
+													? thisItem.source_url
+													: thisItem?.token_animation_url
 											}
 											playing={currentlyPlayingVideo}
 											loop
