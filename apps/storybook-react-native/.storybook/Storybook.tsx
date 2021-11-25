@@ -8,6 +8,7 @@ const StorybookUIRoot = getStorybookUI({
 	asyncStorage: AsyncStorage,
 	onDeviceUI: false,
 	disableWebsockets: true,
+	shouldPersistSelection: true,
 })
 
 export default StorybookUIRoot

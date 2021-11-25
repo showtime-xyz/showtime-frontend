@@ -1,9 +1,8 @@
 module.exports = {
 	stories: [
-		'../stories/**/*.stories.mdx',
-		'../stories/**/*.stories.@(js|jsx|ts|tsx)',
-		'../../../packages/app/**/*.stories.@(js|jsx|ts|tsx)',
-		'../../../packages/design-system/**/*.stories.@(js|jsx|ts|tsx)',
+		'../stories/**/*.stories.@(js|jsx|ts|tsx|mdx)',
+		'../../../packages/app/**/*.stories.@(js|jsx|ts|tsx|mdx)',
+		'../../../packages/design-system/**/*.stories.@(js|jsx|ts|tsx|mdx)',
 	],
 	addons: [
 		'@storybook/addon-ondevice-notes',

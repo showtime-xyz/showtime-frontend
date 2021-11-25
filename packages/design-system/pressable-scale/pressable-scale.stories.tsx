@@ -10,7 +10,7 @@ export default {
 } as Meta
 
 export const Primary: React.VFC<{}> = () => (
-	<Pressable tw="bg-black text-white p-2 rounded-full text-center">
-		<Text>Press Me</Text>
+	<Pressable tw="bg-black p-2 rounded-full w-auto">
+		<Text tw="text-white text-center">Press Me</Text>
 	</Pressable>
 )
