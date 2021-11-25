@@ -50,6 +50,6 @@ export default handler()
 					login_magic_flow: 'magic.js',
 				},
 			})
+			res.end()
 		}
-		res.end()
 	})
