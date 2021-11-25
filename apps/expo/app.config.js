@@ -30,7 +30,7 @@ export default {
 	name: 'Showtime',
 	description: 'Discover and showcase crypto art',
 	slug: 'showtime',
-	scheme: 'showtime',
+	scheme: config.scheme,
 	owner: 'tryshowtime',
 	icon: config.icon,
 	version: '0.0.1',
