@@ -1,7 +1,7 @@
-import { withBackgrounds } from '@storybook/addon-ondevice-backgrounds'
 import { DripsyProvider } from 'dripsy'
 import { theme } from 'design-system/theme'
 import { useFonts } from 'expo-font'
+import { View } from 'react-native'
 
 const FontsLoader = ({ children }) => {
 	const [fontsLoaded, error] = useFonts({
@@ -27,19 +27,19 @@ const FontsLoader = ({ children }) => {
 }
 
 export const decorators = [
-	withBackgrounds,
 	Story => (
 		<DripsyProvider theme={theme}>
-			<FontsLoader>
-				<Story />
-			</FontsLoader>
+			<MainAxisCenter>
+				<FontsLoader>
+					<Story />
+				</FontsLoader>
+			</MainAxisCenter>
 		</DripsyProvider>
 	),
 ]
-export const parameters = {
-	backgrounds: [
-		{ name: 'plain', value: 'white', default: true },
-		{ name: 'warm', value: 'hotpink' },
-		{ name: 'cool', value: 'deepskyblue' },
-	],
+
+const MainAxisCenter = ({ children }) => {
+	return <View style={{ flex: 1, justifyContent: 'center' }}>{children}</View>
 }
+
+export const parameters = {}
