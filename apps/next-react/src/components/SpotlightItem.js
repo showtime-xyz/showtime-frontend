@@ -20,8 +20,10 @@ import OrbitIcon from './Icons/OrbitIcon'
 import BuyModal from './UI/Modals/BuyModal'
 import useSWR from 'swr'
 import backend from '@/lib/backend'
+import useFlags, { FLAGS } from '@/hooks/useFlags'
 
 const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) => {
+	const { [FLAGS.hasMinting]: canList } = useFlags()
 	const { data: thisItem, mutate: mutateItem } = useSWR(
 		() => pageProfile && `/v1/spotlight/${pageProfile.profile_id}`,
 		url => backend.get(url).then(res => res.data.data),
@@ -448,7 +450,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 												{item.collection_name}
 											</p>
 										</div>
-										{item.listing && (
+										{canList && item.listing && (
 											<p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
 												{item.listing.total_edition_quantity} Editions /{' '}
 												{parseInt(item.listing.royalty_percentage)}% Royalties
@@ -537,7 +539,7 @@ const SpotlightItem = ({ isMyProfile, pageProfile, item, removeSpotlightItem }) 
 									</div>
 								</div>
 								<div className="mt-8 inline-block">
-									{item.listing ? (
+									{canList && item.listing ? (
 										<Button
 											style="primary"
 											title="Buy on Showtime"
