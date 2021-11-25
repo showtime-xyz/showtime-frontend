@@ -57,7 +57,7 @@
         "patch-package": "^6.4.7",
         "postcss": "^8.3.6",
         "postcss-flexbugs-fixes": "^5.0.2",
-        "postcss-preset-env": "^6.7.0",
+        "postcss-preset-env": "^7.0.1",
         "postinstall-postinstall": "^2.1.0",
         "preact": "^10.5.14",
         "prettier": "^2.3.2",
