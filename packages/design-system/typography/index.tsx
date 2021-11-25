@@ -39,43 +39,106 @@ const createTextSize = ({
 	fontSize,
 	lineHeight: leading,
 	letterSpacing,
+	marginCorrection,
 }: {
 	fontSize: number
 	lineHeight: number
 	letterSpacing: number
+	marginCorrection: {
+		ios: number
+		android: number
+	}
 }) => {
-	return {
+	const styles = {
 		letterSpacing,
 		...capsize({
 			fontMetrics,
 			fontSize,
 			leading,
 		}),
+	} as const
+
+	const marginCorrectionForPlatform =
+		Platform.OS === 'ios' || Platform.OS === 'android' ? marginCorrection[Platform.OS] : 0
+
+	return {
+		...styles,
+		marginTop: PixelRatio.roundToNearestPixel(styles.marginTop + marginCorrectionForPlatform),
+		marginBottom: PixelRatio.roundToNearestPixel(styles.marginBottom - marginCorrectionForPlatform),
 	}
 }
 
-export const headingSizes = {
-	title: createTextSize({
-		fontSize: 23,
-		letterSpacing: 0.6,
-		lineHeight: 27,
-	}),
-	heading: createTextSize({
-		fontSize: 20,
-		letterSpacing: 0.6,
-		lineHeight: 24,
-	}),
-} as const
-
 export const textSizes = {
-	body: createTextSize({
-		fontSize: 16,
-		letterSpacing: 0.5,
-		lineHeight: 24,
+	'text-xs': createTextSize({
+		fontSize: 12,
+		letterSpacing: 0.6,
+		lineHeight: 15,
+		marginCorrection: {
+			android: -0.1,
+			ios: -0.3,
+		},
 	}),
-	small: createTextSize({
+	'text-sm': createTextSize({
 		fontSize: 14,
 		letterSpacing: 0.6,
 		lineHeight: 17,
+		marginCorrection: {
+			android: -0.1,
+			ios: -0.3,
+		},
+	}),
+	'text-base': createTextSize({
+		fontSize: 16,
+		letterSpacing: 0.5,
+		lineHeight: 19,
+		marginCorrection: {
+			android: -0.1,
+			ios: -0.5,
+		},
+	}),
+	'text-lg': createTextSize({
+		fontSize: 18,
+		letterSpacing: 0.5,
+		lineHeight: 21,
+		marginCorrection: {
+			android: 0.2,
+			ios: 0,
+		},
+	}),
+	'text-xl': createTextSize({
+		fontSize: 20,
+		letterSpacing: 0.6,
+		lineHeight: 23,
+		marginCorrection: {
+			android: 0,
+			ios: -0.5,
+		},
+	}),
+	'text-2xl': createTextSize({
+		fontSize: 24,
+		letterSpacing: 0.6,
+		lineHeight: 27,
+		marginCorrection: {
+			android: -0.3,
+			ios: -0.3,
+		},
+	}),
+	'text-3xl': createTextSize({
+		fontSize: 30,
+		letterSpacing: 0.6,
+		lineHeight: 33,
+		marginCorrection: {
+			android: -0.3,
+			ios: -0.3,
+		},
+	}),
+	'text-4xl': createTextSize({
+		fontSize: 36,
+		letterSpacing: 0.6,
+		lineHeight: 41,
+		marginCorrection: {
+			android: -0.3,
+			ios: -0.3,
+		},
 	}),
 } as const

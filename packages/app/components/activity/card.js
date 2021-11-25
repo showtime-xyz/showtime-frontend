@@ -115,7 +115,10 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 						<View tw="flex-col max-w-full h-10 justify-between">
 							<Link href={`/${actor?.username || actor?.wallet_address}`}>
 								<Pressable onPress={() => mixpanel.track('Activity - Click on user profile')}>
-									<Text tw="dark:text-gray-300 hover:text-stpink dark:hover:text-stpink text-base">
+									<Text
+										variant="text-base"
+										tw="dark:text-gray-300 hover:text-stpink dark:hover:text-stpink"
+									>
 										{truncateWithEllipses(actor.name, 24)}
 									</Text>
 								</Pressable>
@@ -124,14 +127,14 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 							{actor.username && (
 								<Link href={`/${actor?.username || actor?.wallet_address}`}>
 									<Pressable onPress={() => mixpanel.track('Activity - Click on user profile')}>
-										<Text variant="small" tw="text-gray-400 text-xs">
+										<Text variant="text-xs" tw="text-gray-400">
 											@{actor.username}
 										</Text>
 									</Pressable>
 								</Link>
 							)}
 
-							<Text variant="small" tw="text-gray-400 text-xs">
+							<Text variant="text-xs" tw="text-gray-400">
 								{formatDistanceToNowStrict(new Date(`${act.timestamp}Z`), {
 									addSuffix: true,
 								})}
@@ -180,11 +183,11 @@ export default function ActivityCard({ act, setItemOpenInModal, setReportModalIs
 						</View>
 						{single ? (
 							<View tw="flex-row items-center pt-2 ml-4 mb-4">
-								<View tw="mr-4 text-base mt-2">
+								<View tw="mr-4 mt-2">
 									<LikeButton item={nfts[0]} />
 								</View>
 
-								<View tw="mr-4 text-base mt-2">
+								<View tw="mr-4 mt-2">
 									<CommentButton
 										item={nfts[0]}
 										handleComment={() => setItemOpenInModal({ nftGroup: nfts, index: 0 })}

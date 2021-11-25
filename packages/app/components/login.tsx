@@ -200,7 +200,7 @@ export function Login() {
 							If this is your first time, it will create a new account on Showtime.
 						</Text>
 						<View tw="py-4 flex-row justify-center">
-							<Text tw="text-gray-600 dark:text-gray-400 text-xs text-center">
+							<Text variant="text-xs" tw="text-gray-600 dark:text-gray-400 text-center">
 								By signing in you agree to our{' '}
 							</Text>
 							<Pressable
@@ -210,11 +210,13 @@ export function Login() {
 									)
 								}}
 							>
-								<Text tw="text-black dark:text-white font-bold text-xs text-center">
+								<Text variant="text-xs" tw="text-black dark:text-white font-bold text-center">
 									Terms &amp; Conditions
 								</Text>
 							</Pressable>
-							<Text tw="text-gray-600 dark:text-gray-400 text-xs text-center">.</Text>
+							<Text variant="text-xs" tw="text-gray-600 dark:text-gray-400 text-center">
+								.
+							</Text>
 						</View>
 
 						<View tw="mb-4">

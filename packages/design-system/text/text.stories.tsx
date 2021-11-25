@@ -8,10 +8,18 @@ export default {
 	title: 'Components/Text',
 } as Meta
 
-export const Small: React.VFC<{}> = () => <Text variant="small">Hello World</Text>
+export const TextXS: React.VFC<{}> = () => <Text variant="text-xs">Hello World</Text>
 
-export const Body: React.VFC<{}> = () => <Text variant="body">Hello World</Text>
+export const TextSM: React.VFC<{}> = () => <Text variant="text-sm">Hello World</Text>
 
-export const Heading: React.VFC<{}> = () => <Text variant="heading">Hello World</Text>
+export const TextBase: React.VFC<{}> = () => <Text variant="text-base">Hello World</Text>
 
-export const Title: React.VFC<{}> = () => <Text variant="title">Hello World</Text>
+export const TextLG: React.VFC<{}> = () => <Text variant="text-lg">Hello World</Text>
+
+export const TextXL: React.VFC<{}> = () => <Text variant="text-xl">Hello World</Text>
+
+export const Text2XL: React.VFC<{}> = () => <Text variant="text-2xl">Hello World</Text>
+
+export const Text3XL: React.VFC<{}> = () => <Text variant="text-3xl">Hello World</Text>
+
+export const Text4XL: React.VFC<{}> = () => <Text variant="text-4xl">Hello World</Text>

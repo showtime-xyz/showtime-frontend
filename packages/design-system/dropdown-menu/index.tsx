@@ -5,6 +5,7 @@ import { MotiView } from 'moti'
 import Animated, { useDerivedValue, useSharedValue } from 'react-native-reanimated'
 
 import { tw as tailwind } from 'design-system/tailwind'
+import { Text } from 'design-system'
 
 const DropdownMenuRoot = DropdownMenu.Root
 
@@ -111,8 +112,10 @@ const DropdownMenuCheckboxItem = DropdownMenu.menuify(
 const StyledDropdownMenuItemTitle = styled(DropdownMenu.ItemTitle)()
 
 const DropdownMenuItemTitle = DropdownMenu.menuify(
-	(props: { tw?: string } & ComponentProps<typeof DropdownMenu.ItemTitle>) => (
-		<StyledDropdownMenuItemTitle {...props} sx={tailwind.style(props.tw)} />
+	(props: ComponentProps<typeof Text> & ComponentProps<typeof DropdownMenu.ItemTitle>) => (
+		<StyledDropdownMenuItemTitle>
+			<Text {...props} />
+		</StyledDropdownMenuItemTitle>
 	),
 	'ItemTitle'
 )
@@ -120,8 +123,10 @@ const DropdownMenuItemTitle = DropdownMenu.menuify(
 const StyledDropdownMenuItemSubtitle = styled(DropdownMenu.ItemSubtitle)()
 
 const DropdownMenuItemSubtitle = DropdownMenu.menuify(
-	(props: { tw?: string } & ComponentProps<typeof DropdownMenu.ItemSubtitle>) => (
-		<StyledDropdownMenuItemSubtitle {...props} sx={tailwind.style(props.tw)} />
+	(props: ComponentProps<typeof Text> & ComponentProps<typeof DropdownMenu.ItemSubtitle>) => (
+		<StyledDropdownMenuItemSubtitle {...props}>
+			<Text {...props} />
+		</StyledDropdownMenuItemSubtitle>
 	),
 	'ItemSubtitle'
 )

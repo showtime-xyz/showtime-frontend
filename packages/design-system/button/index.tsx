@@ -2,6 +2,7 @@ import { forwardRef } from 'react'
 
 import { Text } from 'design-system/text'
 import { Pressable, Props as PressableScaleProps } from 'design-system/pressable-scale'
+import { tw as tailwind } from 'design-system/tailwind'
 
 type Props = {
 	tw?: string
@@ -72,6 +73,7 @@ export const TertiaryButton = ({ tw, iconOnly, size, ...props }: Props) => (
 
 TertiaryButton.displayName = 'TertiaryButton'
 
-export const ButtonLabel = ({ tw, ...props }: { tw?: string; children?: React.ReactNode }) => (
-	<Text {...props} tw={`text-white dark:text-black font-bold text-sm md:text-base ${tw ? tw : ''}`} />
-)
+export const ButtonLabel = ({ tw, ...props }: { tw?: string; children?: React.ReactNode }) => {
+	// TODO: md:text-base
+	return <Text variant="text-sm" {...props} tw={`text-white dark:text-black font-bold ${tw ? tw : ''}`} />
+}

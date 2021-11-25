@@ -23,7 +23,9 @@ export function Header(props: Props) {
 					/>
 				</Button>
 			</View>
-			<Text tw="dark:text-white font-bold text-lg">{props.title}</Text>
+			<Text variant="text-lg" tw="dark:text-white font-bold">
+				{props.title}
+			</Text>
 			<View tw="w-8 h-8">
 				<Button onPress={router.pop} variant="tertiary" tw="hidden h-8 rounded-full p-2" iconOnly={true}>
 					<MoreHorizontal
