@@ -58,8 +58,7 @@ const createTextSize = ({
 		}),
 	} as const
 
-	const marginCorrectionForPlatform =
-		Platform.OS === 'ios' || Platform.OS === 'android' ? marginCorrection[Platform.OS] : 0
+	const marginCorrectionForPlatform = marginCorrection[Platform.OS] ?? 0
 
 	return {
 		...styles,
