@@ -7,7 +7,8 @@ import '@storybook/addon-ondevice-controls/register'
 import '@storybook/addon-ondevice-backgrounds/register'
 import '@storybook/addon-ondevice-actions/register'
 
-import { argsEnhancers } from '@storybook/addon-actions/dist/modern/preset/addArgs'
+// This seems to break fast refresh
+// import { argsEnhancers } from '@storybook/addon-actions/dist/modern/preset/addArgs'
 
 import { decorators, parameters } from './preview'
 
@@ -19,7 +20,8 @@ if (parameters) {
 	addParameters(parameters)
 }
 
-argsEnhancers.forEach(enhancer => addArgsEnhancer(enhancer))
+// This seems to break fast refresh
+// argsEnhancers.forEach(enhancer => addArgsEnhancer(enhancer))
 
 const getStories = () => {
 	return [

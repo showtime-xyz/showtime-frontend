@@ -1,0 +1,39 @@
+diff --git a/node_modules/@storybook/client-api/dist/cjs/story_store.js b/node_modules/@storybook/client-api/dist/cjs/story_store.js
+index 2ce0751..c3586a3 100644
+--- a/node_modules/@storybook/client-api/dist/cjs/story_store.js
++++ b/node_modules/@storybook/client-api/dist/cjs/story_store.js
+@@ -517,7 +517,7 @@ var StoryStore = /*#__PURE__*/function () {
+       function _safeAdd(items, collection, caption) {
+         items.forEach(function (item) {
+           if (collection.includes(item)) {
+-            _clientLogger.logger.warn("You tried to add a duplicate ".concat(caption, ", this is not expected"), item);
++            // _clientLogger.logger.warn("You tried to add a duplicate ".concat(caption, ", this is not expected"), item);
+           } else {
+             collection.push(item);
+           }
+diff --git a/node_modules/@storybook/client-api/dist/esm/story_store.js b/node_modules/@storybook/client-api/dist/esm/story_store.js
+index e884215..9f47cf1 100644
+--- a/node_modules/@storybook/client-api/dist/esm/story_store.js
++++ b/node_modules/@storybook/client-api/dist/esm/story_store.js
+@@ -466,7 +466,7 @@ var StoryStore = /*#__PURE__*/function () {
+       function _safeAdd(items, collection, caption) {
+         items.forEach(function (item) {
+           if (collection.includes(item)) {
+-            logger.warn("You tried to add a duplicate ".concat(caption, ", this is not expected"), item);
++            // logger.warn("You tried to add a duplicate ".concat(caption, ", this is not expected"), item);
+           } else {
+             collection.push(item);
+           }
+diff --git a/node_modules/@storybook/client-api/dist/modern/story_store.js b/node_modules/@storybook/client-api/dist/modern/story_store.js
+index d1e0e21..a9acdfd 100644
+--- a/node_modules/@storybook/client-api/dist/modern/story_store.js
++++ b/node_modules/@storybook/client-api/dist/modern/story_store.js
+@@ -361,7 +361,7 @@ export default class StoryStore {
+     function _safeAdd(items, collection, caption) {
+       items.forEach(item => {
+         if (collection.includes(item)) {
+-          logger.warn(`You tried to add a duplicate ${caption}, this is not expected`, item);
++          // logger.warn(`You tried to add a duplicate ${caption}, this is not expected`, item);
+         } else {
+           collection.push(item);
+         }
