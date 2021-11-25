@@ -7,13 +7,13 @@ const envConfig = {
 	development: {
 		scheme: `${SCHEME}.development`,
 		icon: './assets/icon.development.png',
-		foregroundImage: './assets/adaptive-icon.development.png',
+		foregroundImage: './assets/adaptive-icon.png',
 		backgroundImage: './assets/adaptive-icon-background.development.png',
 	},
 	staging: {
 		scheme: `${SCHEME}.staging`,
 		icon: './assets/icon.staging.png',
-		foregroundImage: './assets/adaptive-icon.staging.png',
+		foregroundImage: './assets/adaptive-icon.png',
 		backgroundImage: './assets/adaptive-icon-background.staging.png',
 	},
 	production: {
