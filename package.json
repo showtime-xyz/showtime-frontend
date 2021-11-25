@@ -86,7 +86,7 @@
         "webpack-modules": "^1.0.0"
     },
     "devDependencies": {
-        "@babel/eslint-parser": "^7.15.4",
+        "@babel/eslint-parser": "^7.16.3",
         "eslint": "^7.31.0",
         "eslint-config-next": "^11.1.2",
         "eslint-config-prettier": "^8.3.0",
