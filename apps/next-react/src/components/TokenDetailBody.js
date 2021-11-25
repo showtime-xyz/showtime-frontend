@@ -30,6 +30,7 @@ import Tippy from '@tippyjs/react'
 import TezosIcon from './Icons/TezosIcon'
 import ShowtimeIcon from './Icons/ShowtimeIcon'
 import BuyModal from './UI/Modals/BuyModal'
+import useFlags, { FLAGS } from '@/hooks/useFlags'
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500
@@ -43,6 +44,7 @@ const TokenDetailBody = ({
 	parentReportModalOpen, // for full page view only, not modal view
 	parentSetReportModalOpen, // for full page view only, not modal view
 }) => {
+	const { [FLAGS.hasMinting]: canList } = useFlags()
 	useEffect(() => {
 		if (!item.mime_type?.startsWith('model') || window.customElements.get('model-viewer')) return
 		import('@google/model-viewer')
@@ -549,7 +551,7 @@ const TokenDetailBody = ({
 									/>
 								</div>
 
-								{item.listing ? (
+								{canList && item.listing ? (
 									<button
 										title="Buy on Showtime"
 										className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1"
