@@ -117,7 +117,9 @@
     "use-unmount-signal": "^1.0.0",
     "util": "~0.12.4",
     "uuid": "^8.3.2",
-    "vm-browserify": "1.1.2"
+    "vm-browserify": "1.1.2",
+    "react-native-pager-view": "^5.4.9",
+    "react-native-tab-view": "^3.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
