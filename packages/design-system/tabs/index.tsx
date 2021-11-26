@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useWindowDimensions } from 'react-native'
+import { Animated, useWindowDimensions } from 'react-native'
 import { Pressable } from '../pressable-scale'
 import { View } from '../view'
 import { Text } from '../text'
@@ -46,20 +46,24 @@ TabsContent.displayName = 'TabsContent'
 TabsList.displayName = 'TabsList'
 TabsContent.displayName = 'TabsContent'
 
-const FirstRoute = () => (
-	<View style={{ backgroundColor: '#ff4081', flex: 1 }}>
-		<Text>hello</Text>
-	</View>
-)
+const SecondRoute = () => <View tw="bg-gray-200" style={{ flex: 1 }}></View>
 
-const SecondRoute = () => (
-	<View style={{ backgroundColor: '#673ab7', flex: 1 }}>
-		<Text>hello 22</Text>
-	</View>
-)
+const getTranslateX = (position: Animated.AnimatedInterpolation, routes: any) => {
+	const inputRange = routes.map((_, i) => i)
+
+	const outputRange = inputRange.map(index => index * TAB_BAR_WIDTH)
+
+	const translateX = position.interpolate({
+		inputRange,
+		outputRange,
+		extrapolate: 'clamp',
+	})
+
+	return translateX
+}
 
 const renderScene = SceneMap({
-	created: FirstRoute,
+	created: SecondRoute,
 	owned: SecondRoute,
 	listed: SecondRoute,
 	liked: SecondRoute,
@@ -79,18 +83,12 @@ export function Tabs() {
 	])
 
 	const TabBarItem = React.useCallback((props: TabBarItemProps<TabParam>) => {
-		const isSelected = props.navigationState.routes[props.navigationState.index].key === props.route.key
-
 		return (
 			<Pressable
 				onPress={props.onPress}
 				{...props}
 				sx={{
-					marginY: 10,
-					paddingY: 4,
-					width: TAB_BAR_WIDTH,
-					borderRadius: 999,
-					backgroundColor: isSelected ? '#E4E4E7' : undefined,
+					marginY: 16,
 				}}
 			>
 				<View
@@ -100,6 +98,7 @@ export function Tabs() {
 						justifyContent: 'center',
 						paddingY: 8,
 						paddingX: 16,
+						width: TAB_BAR_WIDTH,
 					}}
 				>
 					<Text style={{ fontWeight: '700', fontSize: 14, marginRight: 2 }}>{props.route.title}</Text>
@@ -109,14 +108,53 @@ export function Tabs() {
 		)
 	}, [])
 
+	const renderIndicator = React.useCallback(props => {
+		const { position, navigationState } = props
+		const { routes } = navigationState
+		const transform = []
+		const translateX = getTranslateX(position, routes)
+
+		transform.push({ translateX })
+
+		return (
+			<>
+				<Animated.View
+					pointerEvents="none"
+					style={{
+						height: 35,
+						top: 12,
+						width: TAB_BAR_WIDTH,
+						backgroundColor: 'rgba(0, 0, 0, 0.1)',
+						position: 'absolute',
+						borderRadius: 999,
+						zIndex: 1,
+						transform,
+					}}
+				/>
+				<Animated.View
+					pointerEvents="none"
+					style={{
+						height: 2,
+						bottom: 0,
+						width: TAB_BAR_WIDTH,
+						backgroundColor: 'rgba(0, 0, 0, 0.8)',
+						position: 'absolute',
+						zIndex: 1,
+						transform,
+					}}
+				/>
+			</>
+		)
+	}, [])
+
 	const CustomTabBar = React.useCallback((props: any) => {
 		return (
 			<TabBar
 				{...props}
+				renderIndicator={renderIndicator}
 				renderTabBarItem={TabBarItem}
 				tabStyle={{ width: TAB_BAR_WIDTH }}
 				indicatorStyle={{ backgroundColor: '#18181B' }}
-				indicatorContainerStyle={{ borderBottomWidth: 1 }}
 				style={{ backgroundColor: 'white' }}
 				scrollEnabled
 			/>
@@ -129,25 +167,8 @@ export function Tabs() {
 			renderScene={renderScene}
 			onIndexChange={setIndex}
 			initialLayout={{ width: layout.width }}
-			swipeEnabled={false}
 			renderTabBar={CustomTabBar}
 			lazy
 		/>
 	)
 }
-
-type TabsRootProps = {
-	children: Array<typeof TabsList | typeof TabsContent>
-} & TabsContextValue
-
-export const TabsRoot = (props: TabsRootProps) => {
-	const tabRoutes = []
-	// React.Children.forEach(child => {})
-}
-// API
-/* 
-<Tabs>
-    <Tabs.List>
-
-</Tabs> 
-*/
