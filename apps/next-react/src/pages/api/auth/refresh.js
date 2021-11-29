@@ -68,6 +68,6 @@ export default handler().post(async (req, res) => {
 		if (status) {
 			res.status(status)
 		}
-		res.end()
 	}
+	res.end()
 })
