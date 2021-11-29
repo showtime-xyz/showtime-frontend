@@ -1,19 +1,19 @@
 name: Expo Preview
 
 on:
-  pull_request:
-    paths:
-      - 'package.json'
-      - 'apps/expo/package.json'
-      - 'apps/expo/app.config.js'
-      - 'apps/expo/.env.*'
-      - '**/*.js'
-      - '**/*.jsx'
-      - '**/*.ts'
-      - '**/*.tsx'
-      - '.github/workflows/**'
-      - '**.patch'
-      - '**.lock'
+    pull_request:
+        paths:
+            - 'package.json'
+            - 'apps/expo/package.json'
+            - 'apps/expo/app.config.js'
+            - 'apps/expo/.env.*'
+            - '**/*.js'
+            - '**/*.jsx'
+            - '**/*.ts'
+            - '**/*.tsx'
+            - '.github/workflows/**'
+            - '**.patch'
+            - '**.lock'
 
 jobs:
     pr-preview:
@@ -29,14 +29,14 @@ jobs:
                   node-version: 14.x
 
             - uses: 8BitJonny/gh-get-current-pr@1.3.0
-               id: PR
-               name: Check if we're in a PR
-                with:
-                    github-token: ${{ secrets.GITHUB_TOKEN }}
-                    # Verbose setting SHA when using Pull_Request event trigger to fix #16
-                    sha: ${{ github.event.pull_request.head.sha }}
-                    # Only return if PR is still open
-                    filterOutClosed: true
+              id: PR
+              name: Check if we're in a PR
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  # Verbose setting SHA when using Pull_Request event trigger to fix #16
+                  sha: ${{ github.event.pull_request.head.sha }}
+                  # Only return if PR is still open
+                  filterOutClosed: true
 
             - name: Find yarn cache
               id: yarn-cache-path
