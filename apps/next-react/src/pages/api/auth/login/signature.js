@@ -56,6 +56,6 @@ export default handler()
 					login_signature_flow: 'signature.js',
 				},
 			})
-			res.end()
 		}
+		res.end()
 	})
