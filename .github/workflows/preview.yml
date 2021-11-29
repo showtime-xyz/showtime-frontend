@@ -1,5 +1,9 @@
 name: Expo Preview
 
+defaults:
+    run:
+        working-directory: apps/expo
+
 on:
     pull_request:
         paths:
@@ -14,6 +18,10 @@ on:
             - '.github/workflows/**'
             - '**.patch'
             - '**.lock'
+
+concurrency:
+    group: ${{ github.event_name }}-${{ github.ref }}
+    cancel-in-progress: true
 
 jobs:
     pr-preview:
@@ -70,6 +78,10 @@ jobs:
                   scheme: io.showtime.development
               id: preview
 
+            - name: Preview Deep Link
+              id: publish-url
+              run: echo "::set-output name=url::io.showtime.development://expo-development-client/?url=${{ steps.preview.outputs.EXPO_MANIFEST_URL }}"
+
             - name: Find PR Comment
               uses: peter-evans/find-comment@v1
               if: success() && steps.PR.outputs.number != ''
@@ -88,9 +100,12 @@ jobs:
                   body: |
                       ## PR Preview
 
-                      Awesome! You can [preview the PR here](${{ steps.preview.outputs.EXPO_QR_CODE_URL }}).<br><br>
-                      <a href="${{ steps.publish.outputs.EXPO_QR_CODE_URL }}"><img src="${{ steps.preview.outputs.EXPO_QR_CODE_URL }}" height="512px" width="512px"></a>
-                      <br><br>
+                      This pull request preview deployment is now available.
+
+                      ✅ Preview: [${{ steps.publish-url.outputs.url }}](${{ steps.publish-url.outputs.url }})
+
+                      <a href="${{ steps.publish-url.outputs.url }}"><img src="${{ steps.preview.outputs.EXPO_QR_CODE_URL }}" height="512px" width="512px"></a>
+
                       ${{ steps.publish.outputs.EXPO_NEW_BUILD_IS_REQUIRED_MESSAGE }}
 
                       Comment ID: ${{ steps.existing-comment.outputs.comment-id }}
