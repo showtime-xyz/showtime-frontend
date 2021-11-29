@@ -33,7 +33,7 @@ export default {
 	scheme: config.scheme,
 	owner: 'tryshowtime',
 	icon: config.icon,
-	version: '0.0.1',
+	version: '1.0.0',
 	userInterfaceStyle: 'automatic',
 	splash: {
 		image: './assets/splash.png',
@@ -42,6 +42,7 @@ export default {
 	},
 	ios: {
 		bundleIdentifier: config.scheme,
+		buildNumber: '1.0.0',
 		supportsTablet: true,
 		jsEngine: 'hermes',
 		backgroundColor: '#FFFFFF',
