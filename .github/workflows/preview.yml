@@ -57,7 +57,7 @@ jobs:
                   eas-cache: true
                   expo-cache: true
                   expo-version: 4.x
-                  expo-token: ${{ secrets.EXPO_TOKEN }}
+                  token: ${{ secrets.EXPO_TOKEN }}
 
             - name: Publish to Expo & create a QR code
               uses: expo/expo-preview-action@v1
