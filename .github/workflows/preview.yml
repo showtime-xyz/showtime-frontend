@@ -17,7 +17,7 @@ on:
 
 jobs:
     pr-preview:
-        name: Expo PR Preview
+        name: PR Preview
         runs-on: ubuntu-latest
         steps:
             - name: Set up repository
@@ -63,12 +63,14 @@ jobs:
 
             - name: Publish to Expo & create a QR code
               uses: expo/expo-preview-action@v1
-              if: success() && steps.PR.outputs.number
+              if: success() && steps.PR.outputs.number != ''
+              env:
+                  STAGE: development
               with:
                   channel: pr-${{ steps.PR.outputs.number }}
                   project-root: apps/expo
-                  scheme: ${{ steps.dotenv.outputs.EXPO_APP_SCHEME }}
-                  id: preview
+                  scheme: io.showtime.development
+              id: preview
 
             - name: Find PR Comment
               uses: peter-evans/find-comment@v1
