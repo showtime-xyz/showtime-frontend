@@ -33,9 +33,7 @@ jobs:
               name: Check if we're in a PR
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
-                  # Verbose setting SHA when using Pull_Request event trigger to fix #16
                   sha: ${{ github.event.pull_request.head.sha }}
-                  # Only return if PR is still open
                   filterOutClosed: true
 
             - name: Find yarn cache
