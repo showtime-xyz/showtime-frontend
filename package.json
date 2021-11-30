@@ -60,7 +60,7 @@
         "postcss-preset-env": "^6.7.0",
         "postinstall-postinstall": "^2.1.0",
         "preact": "^10.5.14",
-        "prettier": "^2.3.2",
+        "prettier": "^2.5.0",
         "react": "^17.0.2",
         "react-autosize-textarea": "^7.1.0",
         "react-blurhash": "^0.1.3",
