@@ -1,174 +1,133 @@
-import * as React from 'react'
-import { Animated, useWindowDimensions } from 'react-native'
-import { Pressable } from '../pressable-scale'
-import { View } from '../view'
-import { Text } from '../text'
-import { TabView, SceneMap, SceneRendererProps, NavigationState, TabBar, TabBarItemProps } from 'react-native-tab-view'
+import React from 'react'
+import { View, StyleSheet, ListRenderItem, Text } from 'react-native'
+import { TabBarProps, Tabs as CollapsibleTabs } from 'react-native-collapsible-tab-view'
+import { MaterialTabBar } from './MaterialTabBar'
 
-// fix width is required for indicator scroll animation!
-const TAB_BAR_WIDTH = 120
+const HEADER_HEIGHT = 250
 
-type TabsContextValue = {
-	value: null | string
-	onValueChange: (value: string) => void
+const DATA = [0, 1, 2, 3, 4]
+const identity = (v: unknown): string => v + ''
+
+const Header = () => {
+	return <View style={styles.header} />
 }
 
-const TabsRootContext = React.createContext<TabsContextValue | null>(null)
-
-type TabTriggerProps = {
-	value: string
-	children: React.ReactNode
+type TabProps = {
+	name: string
+	tabTrigger: React.ReactNode
+	tabContent: React.ReactNode
 }
 
-const TabTrigger = (props: TabTriggerProps) => {
-	return props.children
+type TabsContainer = {
+	renderHeader?: React.FC<TabBarProps>
+	headerHeight?: number
+	children?: React.ReactElement<TabProps>[] | React.ReactElement<TabProps>
 }
 
-type TabsListProps = {
-	children: Array<typeof TabTrigger> | typeof TabTrigger
-}
-
-const TabsList = (_props: TabsListProps) => {
+const Tab = (_props: TabProps) => {
 	return null
 }
 
-type TabsContentProps = {
-	children: React.ReactNode
-	value: string
+const TabsContainer = (props: TabsContainer) => {
+	const newChildren = React.useMemo(
+		() =>
+			React.Children.map(props.children, c => {
+				return (
+					<CollapsibleTabs.Tab name={c.props.name} label={c.props.tabTrigger}>
+						{c.props.tabContent}
+					</CollapsibleTabs.Tab>
+				)
+			}),
+		[props.children]
+	)
+
+	return (
+		<CollapsibleTabs.Container
+			renderHeader={props.renderHeader}
+			headerHeight={props.headerHeight}
+			renderTabBar={props => <MaterialTabBar {...props} scrollEnabled />}
+		>
+			{newChildren}
+		</CollapsibleTabs.Container>
+	)
 }
 
-const TabsContent = (_props: TabsContentProps) => {
-	return null
-}
-
-TabsContent.displayName = 'TabsContent'
-
-TabsList.displayName = 'TabsList'
-TabsContent.displayName = 'TabsContent'
-
-const SecondRoute = () => <View tw="bg-gray-200" style={{ flex: 1 }}></View>
-
-const getTranslateX = (position: Animated.AnimatedInterpolation, routes: any) => {
-	const inputRange = routes.map((_, i) => i)
-
-	const outputRange = inputRange.map(index => index * TAB_BAR_WIDTH)
-
-	const translateX = position.interpolate({
-		inputRange,
-		outputRange,
-		extrapolate: 'clamp',
-	})
-
-	return translateX
-}
-
-const renderScene = SceneMap({
-	created: SecondRoute,
-	owned: SecondRoute,
-	listed: SecondRoute,
-	liked: SecondRoute,
-})
-
-type TabParam = { key: string; title: string; subtitle: string }
-
-export function Tabs() {
-	const layout = useWindowDimensions()
-
-	const [index, setIndex] = React.useState(0)
-	const [routes] = React.useState<Array<TabParam>>([
-		{ key: 'created', title: 'Created', subtitle: '145' },
-		{ key: 'owned', title: 'Owned', subtitle: '78' },
-		{ key: 'listed', title: 'Listed', subtitle: '13' },
-		{ key: 'liked', title: 'Liked', subtitle: '14' },
-	])
-
-	const TabBarItem = React.useCallback((props: TabBarItemProps<TabParam>) => {
-		return (
-			<Pressable
-				onPress={props.onPress}
-				{...props}
-				sx={{
-					marginY: 16,
-				}}
-			>
-				<View
-					sx={{
-						flexDirection: 'row',
-						alignItems: 'center',
-						justifyContent: 'center',
-						paddingY: 8,
-						paddingX: 16,
-						width: TAB_BAR_WIDTH,
-					}}
-				>
-					<Text style={{ fontWeight: '700', fontSize: 14, marginRight: 2 }}>{props.route.title}</Text>
-					<Text style={{ fontWeight: '500', fontSize: 14 }}>{props.route.subtitle}</Text>
-				</View>
-			</Pressable>
-		)
-	}, [])
-
-	const renderIndicator = React.useCallback(props => {
-		const { position, navigationState } = props
-		const { routes } = navigationState
-		const transform = []
-		const translateX = getTranslateX(position, routes)
-
-		transform.push({ translateX })
-
-		return (
-			<>
-				<Animated.View
-					pointerEvents="none"
-					style={{
-						height: 35,
-						top: 12,
-						width: TAB_BAR_WIDTH,
-						backgroundColor: 'rgba(0, 0, 0, 0.1)',
-						position: 'absolute',
-						borderRadius: 999,
-						zIndex: 1,
-						transform,
-					}}
-				/>
-				<Animated.View
-					pointerEvents="none"
-					style={{
-						height: 2,
-						bottom: 0,
-						width: TAB_BAR_WIDTH,
-						backgroundColor: 'rgba(0, 0, 0, 0.8)',
-						position: 'absolute',
-						zIndex: 1,
-						transform,
-					}}
-				/>
-			</>
-		)
-	}, [])
-
-	const CustomTabBar = React.useCallback((props: any) => {
-		return (
-			<TabBar
-				{...props}
-				renderIndicator={renderIndicator}
-				renderTabBarItem={TabBarItem}
-				tabStyle={{ width: TAB_BAR_WIDTH }}
-				indicatorStyle={{ backgroundColor: '#18181B' }}
-				style={{ backgroundColor: 'white' }}
-				scrollEnabled
-			/>
-		)
+export const Tabs: React.FC = () => {
+	const renderItem: ListRenderItem<number> = React.useCallback(({ index }) => {
+		return <View style={[styles.box, index % 2 === 0 ? styles.boxB : styles.boxA]} />
 	}, [])
 
 	return (
-		<TabView
-			navigationState={{ index, routes }}
-			renderScene={renderScene}
-			onIndexChange={setIndex}
-			initialLayout={{ width: layout.width }}
-			renderTabBar={CustomTabBar}
-			lazy
-		/>
+		<TabsContainer renderHeader={Header} headerHeight={HEADER_HEIGHT}>
+			<Tab
+				name="A"
+				tabTrigger={
+					<View style={{ flexDirection: 'row' }}>
+						<Text style={{ marginRight: 4, fontWeight: '600' }}>Created</Text>
+						<Text>145</Text>
+					</View>
+				}
+				tabContent={<CollapsibleTabs.FlatList data={DATA} renderItem={renderItem} keyExtractor={identity} />}
+			/>
+			<Tab
+				name="B"
+				tabTrigger={
+					<View style={{ flexDirection: 'row' }}>
+						<Text style={{ marginRight: 4, fontWeight: '600' }}>Owned</Text>
+						<Text>78</Text>
+					</View>
+				}
+				tabContent={
+					<CollapsibleTabs.ScrollView>
+						<View style={[styles.box, styles.boxA]} />
+						<View style={[styles.box, styles.boxB]} />
+					</CollapsibleTabs.ScrollView>
+				}
+			/>
+			<Tab
+				name="C"
+				tabTrigger={
+					<View style={{ flexDirection: 'row' }}>
+						<Text style={{ marginRight: 4, fontWeight: '600' }}>Listed</Text>
+						<Text>13</Text>
+					</View>
+				}
+				tabContent={<CollapsibleTabs.FlatList data={DATA} renderItem={renderItem} keyExtractor={identity} />}
+			/>
+			<Tab
+				name="L"
+				tabTrigger={
+					<View style={{ flexDirection: 'row' }}>
+						<Text style={{ marginRight: 4, fontWeight: '600' }}>Liked</Text>
+						<Text>198</Text>
+					</View>
+				}
+				tabContent={<CollapsibleTabs.FlatList data={DATA} renderItem={renderItem} keyExtractor={identity} />}
+			/>
+		</TabsContainer>
 	)
 }
+
+const styles = StyleSheet.create({
+	box: {
+		height: 250,
+		width: '100%',
+	},
+	boxA: {
+		backgroundColor: 'white',
+	},
+	boxB: {
+		backgroundColor: '#D8D8D8',
+	},
+	header: {
+		height: HEADER_HEIGHT,
+		width: '100%',
+		backgroundColor: 'white',
+	},
+	indicator: {
+		height: 4,
+		backgroundColor: '#2196f3',
+		position: 'absolute',
+		bottom: 0,
+	},
+})
