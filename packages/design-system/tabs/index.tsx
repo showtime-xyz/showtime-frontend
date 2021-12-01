@@ -21,6 +21,7 @@ type TabsContainer = {
 	renderHeader?: React.FC<TabBarProps>
 	headerHeight?: number
 	children?: React.ReactElement<TabProps>[] | React.ReactElement<TabProps>
+	lazy?: boolean
 }
 
 export const Tab = (_props: TabProps) => {
@@ -44,6 +45,7 @@ const TabsContainer = (props: TabsContainer) => {
 		<CollapsibleTabs.Container
 			renderHeader={props.renderHeader}
 			headerHeight={props.headerHeight}
+			lazy={props.lazy ?? true}
 			renderTabBar={props => <MaterialTabBar {...props} scrollEnabled />}
 		>
 			{newChildren}
