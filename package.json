@@ -23,6 +23,7 @@
 		"dev:next:react": "yarn workspace @showtime/next-react dev",
 		"dev:next:react-native": "yarn workspace @showtime/next-react-native dev",
 		"dev:storybook:react": "yarn workspace @showtime/storybook-react storybook",
+		"dev:storybook:react-native": "yarn workspace @showtime/storybook-react-native start",
 		"build": "yarn turbo run build --ignore='packages/**/*' --ignore='apps/**/*' --ignore='!/apps/next-react/**/*'",
 		"postinstall": "patch-package"
 	},

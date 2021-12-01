@@ -4369,6 +4369,16 @@
     "@sentry/utils" "6.12.0"
     tslib "^1.9.3"
 
+"@sentry/browser@6.13.2":
+  version "6.13.2"
+  resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-6.13.2.tgz#8b731ecf8c3cdd92a4b6893a26f975fd5844056d"
+  integrity sha512-bkFXK4vAp2UX/4rQY0pj2Iky55Gnwr79CtveoeeMshoLy5iDgZ8gvnLNAz7om4B9OQk1u7NzLEa4IXAmHTUyag==
+  dependencies:
+    "@sentry/core" "6.13.2"
+    "@sentry/types" "6.13.2"
+    "@sentry/utils" "6.13.2"
+    tslib "^1.9.3"
+
 "@sentry/browser@6.15.0":
   version "6.15.0"
   resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-6.15.0.tgz#7a1d316dd31cedee446e359a21774bf93d1e553d"
@@ -4424,6 +4434,17 @@
     "@sentry/utils" "6.12.0"
     tslib "^1.9.3"
 
+"@sentry/core@6.13.2":
+  version "6.13.2"
+  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-6.13.2.tgz#2ce164f81667aa89cd116f807d772b4718434583"
+  integrity sha512-snXNNFLwlS7yYxKTX4DBXebvJK+6ikBWN6noQ1CHowvM3ReFBlrdrs0Z0SsSFEzXm2S4q7f6HHbm66GSQZ/8FQ==
+  dependencies:
+    "@sentry/hub" "6.13.2"
+    "@sentry/minimal" "6.13.2"
+    "@sentry/types" "6.13.2"
+    "@sentry/utils" "6.13.2"
+    tslib "^1.9.3"
+
 "@sentry/core@6.13.3":
   version "6.13.3"
   resolved "https://registry.yarnpkg.com/@sentry/core/-/core-6.13.3.tgz#5cbbb995128e793ebebcbf1d3b7514e0e5e8b221"
@@ -4455,6 +4476,15 @@
     "@sentry/utils" "6.12.0"
     tslib "^1.9.3"
 
+"@sentry/hub@6.13.2":
+  version "6.13.2"
+  resolved "https://registry.yarnpkg.com/@sentry/hub/-/hub-6.13.2.tgz#ebc66fd55c96c7686a53ffd3521b6a63f883bb79"
+  integrity sha512-sppSuJdNMiMC/vFm/dQowCBh11uTrmvks00fc190YWgxHshodJwXMdpc+pN61VSOmy2QA4MbQ5aMAgHzPzel3A==
+  dependencies:
+    "@sentry/types" "6.13.2"
+    "@sentry/utils" "6.13.2"
+    tslib "^1.9.3"
+
 "@sentry/hub@6.13.3":
   version "6.13.3"
   resolved "https://registry.yarnpkg.com/@sentry/hub/-/hub-6.13.3.tgz#cc09623a69b5343315fdb61c7fdd0be74b72299f"
@@ -4480,6 +4510,16 @@
   dependencies:
     "@sentry/types" "6.12.0"
     "@sentry/utils" "6.12.0"
+    localforage "^1.8.1"
+    tslib "^1.9.3"
+
+"@sentry/integrations@6.13.2":
+  version "6.13.2"
+  resolved "https://registry.yarnpkg.com/@sentry/integrations/-/integrations-6.13.2.tgz#906f2dd920439e5886f479a6da57f9c5d928f656"
+  integrity sha512-CzxMtNr4nkZbifD0Rb6tXwqfqm+fWKl4IQTaFrJ92VNdgihBMVWYmflRqkMkGh1iFN8bVPpXrGyplY5tFN+2kA==
+  dependencies:
+    "@sentry/types" "6.13.2"
+    "@sentry/utils" "6.13.2"
     localforage "^1.8.1"
     tslib "^1.9.3"
 
@@ -4512,6 +4552,15 @@
     "@sentry/types" "6.12.0"
     tslib "^1.9.3"
 
+"@sentry/minimal@6.13.2":
+  version "6.13.2"
+  resolved "https://registry.yarnpkg.com/@sentry/minimal/-/minimal-6.13.2.tgz#de3ecc62b9463bf56ccdbcf4c75f7ea1aeeebc11"
+  integrity sha512-6iJfEvHzzpGBHDfLxSHcGObh73XU1OSQKWjuhDOe7UQDyI4BQmTfcXAC+Fr8sm8C/tIsmpVi/XJhs8cubFdSMw==
+  dependencies:
+    "@sentry/hub" "6.13.2"
+    "@sentry/types" "6.13.2"
+    tslib "^1.9.3"
+
 "@sentry/minimal@6.13.3":
   version "6.13.3"
   resolved "https://registry.yarnpkg.com/@sentry/minimal/-/minimal-6.13.3.tgz#a675a79bcc830142e4f95e6198a2efde2cd3901e"
@@ -4530,6 +4579,20 @@
     "@sentry/types" "6.15.0"
     tslib "^1.9.3"
 
+"@sentry/nextjs@6.13.2":
+  version "6.13.2"
+  resolved "https://registry.yarnpkg.com/@sentry/nextjs/-/nextjs-6.13.2.tgz#edcd6c42e9dd11d3a8195a14ff122526c26e0e46"
+  integrity sha512-GDdvF9ksQHVhUOcC9/8AG43CTGFDi4G8FP7JbMjP6S9xrQi75pw0F/LQuV4tBeO8mv8cXCWxul8C06LQ4VnGag==
+  dependencies:
+    "@sentry/core" "6.13.2"
+    "@sentry/integrations" "6.13.2"
+    "@sentry/node" "6.13.2"
+    "@sentry/react" "6.13.2"
+    "@sentry/tracing" "6.13.2"
+    "@sentry/utils" "6.13.2"
+    "@sentry/webpack-plugin" "1.17.1"
+    tslib "^1.9.3"
+
 "@sentry/nextjs@^6.15.0":
   version "6.15.0"
   resolved "https://registry.yarnpkg.com/@sentry/nextjs/-/nextjs-6.15.0.tgz#e5515f60e1d84b114c445b0ddcecca2993105ec8"
@@ -4543,6 +4606,21 @@
     "@sentry/tracing" "6.15.0"
     "@sentry/utils" "6.15.0"
     "@sentry/webpack-plugin" "1.18.3"
+    tslib "^1.9.3"
+
+"@sentry/node@6.13.2":
+  version "6.13.2"
+  resolved "https://registry.yarnpkg.com/@sentry/node/-/node-6.13.2.tgz#6f5ee51eacad19b59e6ffb70b2d0e14396fd6233"
+  integrity sha512-0Vw22amG143MTiNaSny66YGU3+uW7HxyGI9TLGE7aJY1nNmC0DE+OgqQYGBRCrrPu+VFXRDxrOg9b15A1gKqjA==
+  dependencies:
+    "@sentry/core" "6.13.2"
+    "@sentry/hub" "6.13.2"
+    "@sentry/tracing" "6.13.2"
+    "@sentry/types" "6.13.2"
+    "@sentry/utils" "6.13.2"
+    cookie "^0.4.1"
+    https-proxy-agent "^5.0.0"
+    lru_map "^0.3.3"
     tslib "^1.9.3"
 
 "@sentry/node@6.15.0":
@@ -4602,6 +4680,18 @@
     hoist-non-react-statics "^3.3.2"
     tslib "^1.9.3"
 
+"@sentry/react@6.13.2":
+  version "6.13.2"
+  resolved "https://registry.yarnpkg.com/@sentry/react/-/react-6.13.2.tgz#481f1549b1509b4d94eb943934ebeba6430a1a8f"
+  integrity sha512-aLkWyn697LTcmK1PPnUg5UJcyBUPoI68motqgBY53SIYDAwOeYNUQt2aanDuOTY5aE2PdnJwU48klA8vuYkoRQ==
+  dependencies:
+    "@sentry/browser" "6.13.2"
+    "@sentry/minimal" "6.13.2"
+    "@sentry/types" "6.13.2"
+    "@sentry/utils" "6.13.2"
+    hoist-non-react-statics "^3.3.2"
+    tslib "^1.9.3"
+
 "@sentry/react@6.15.0":
   version "6.15.0"
   resolved "https://registry.yarnpkg.com/@sentry/react/-/react-6.15.0.tgz#4a1a3f39f61c03a675b90a114ff79a9163bcbe3b"
@@ -4625,6 +4715,17 @@
     "@sentry/utils" "6.12.0"
     tslib "^1.9.3"
 
+"@sentry/tracing@6.13.2":
+  version "6.13.2"
+  resolved "https://registry.yarnpkg.com/@sentry/tracing/-/tracing-6.13.2.tgz#512389ba459f48ae75e14f1528ab062dc46e4956"
+  integrity sha512-bHJz+C/nd6biWTNcYAu91JeRilsvVgaye4POkdzWSmD0XoLWHVMrpCQobGpXe7onkp2noU3YQjhqgtBqPHtnpw==
+  dependencies:
+    "@sentry/hub" "6.13.2"
+    "@sentry/minimal" "6.13.2"
+    "@sentry/types" "6.13.2"
+    "@sentry/utils" "6.13.2"
+    tslib "^1.9.3"
+
 "@sentry/tracing@6.15.0":
   version "6.15.0"
   resolved "https://registry.yarnpkg.com/@sentry/tracing/-/tracing-6.15.0.tgz#5a5f08ee6b9cc1189227536fca053cd23488600d"
@@ -4640,6 +4741,11 @@
   version "6.12.0"
   resolved "https://registry.yarnpkg.com/@sentry/types/-/types-6.12.0.tgz#b7395688a79403c6df8d8bb8d81deb8222519853"
   integrity sha512-urtgLzE4EDMAYQHYdkgC0Ei9QvLajodK1ntg71bGn0Pm84QUpaqpPDfHRU+i6jLeteyC7kWwa5O5W1m/jrjGXA==
+
+"@sentry/types@6.13.2":
+  version "6.13.2"
+  resolved "https://registry.yarnpkg.com/@sentry/types/-/types-6.13.2.tgz#8388d5b92ea8608936e7aae842801dc90e0184e6"
+  integrity sha512-6WjGj/VjjN8LZDtqJH5ikeB1o39rO1gYS6anBxiS3d0sXNBb3Ux0pNNDFoBxQpOhmdDHXYS57MEptX9EV82gmg==
 
 "@sentry/types@6.13.3", "@sentry/types@^6.12.0":
   version "6.13.3"
@@ -4659,6 +4765,14 @@
     "@sentry/types" "6.12.0"
     tslib "^1.9.3"
 
+"@sentry/utils@6.13.2":
+  version "6.13.2"
+  resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-6.13.2.tgz#fb8010e7b67cc8c084d8067d64ef25289269cda5"
+  integrity sha512-foF4PbxqPMWNbuqdXkdoOmKm3quu3PP7Q7j/0pXkri4DtCuvF/lKY92mbY0V9rHS/phCoj+3/Se5JvM2ymh2/w==
+  dependencies:
+    "@sentry/types" "6.13.2"
+    tslib "^1.9.3"
+
 "@sentry/utils@6.13.3":
   version "6.13.3"
   resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-6.13.3.tgz#188754d40afe693c3fcae410f9322531588a9926"
@@ -4674,6 +4788,13 @@
   dependencies:
     "@sentry/types" "6.15.0"
     tslib "^1.9.3"
+
+"@sentry/webpack-plugin@1.17.1":
+  version "1.17.1"
+  resolved "https://registry.yarnpkg.com/@sentry/webpack-plugin/-/webpack-plugin-1.17.1.tgz#1b3ebbe9991e4d77125ace2b24594059a088268a"
+  integrity sha512-L47a0hxano4a+9jbvQSBzHCT1Ph8fYAvGGUvFg8qc69yXS9si5lXRNIH/pavN6mqJjhQjAcEsEp+vxgvT4xZDQ==
+  dependencies:
+    "@sentry/cli" "^1.68.0"
 
 "@sentry/webpack-plugin@1.18.3":
   version "1.18.3"
@@ -4917,10 +5038,10 @@
     prop-types "^15.7.2"
     simple-markdown "^0.7.3"
 
-"@storybook/addon-react-native-web@0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@storybook/addon-react-native-web/-/addon-react-native-web-0.0.7.tgz#6729bf0fe8ec7e621134e0f24574310413269a7f"
-  integrity sha512-ON0Gy+ps0UeNJUgWgv8TzGiVrcH2N+CFxuHC7TEcazWzz/oBBzyilSLnY/T+f3b1dAAE3sbVI3fuKVQpB5oqfA==
+"@storybook/addon-react-native-web@0.0.13-canary.23.e150058.0":
+  version "0.0.13-canary.23.e150058.0"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-react-native-web/-/addon-react-native-web-0.0.13-canary.23.e150058.0.tgz#c1411dd1e44d4fddaf3ab2174d2d1f897469b176"
+  integrity sha512-+8uFAjZR2pbH8GAGTwHivrdmcIK/WQ8XHQUljWrhD5jbGv+LmiGNOvzhQO1d70lUrOtuLDzjkG4iuDFSi2Wb3g==
 
 "@storybook/addon-toolbars@6.3.12":
   version "6.3.12"
@@ -5891,6 +6012,11 @@
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@types/http-cache-semantics/-/http-cache-semantics-4.0.1.tgz#0ea7b61496902b95890dc4c3a116b60cb8dae812"
   integrity sha512-SZs7ekbP8CN0txVG2xVRH6EgKmEm31BOxA07vkFaETzZz1xh+cbt8BcI0slpymvwhx5dlFnQG2rTlPVQn+iRPQ==
+
+"@types/invariant@^2.2.35":
+  version "2.2.35"
+  resolved "https://registry.yarnpkg.com/@types/invariant/-/invariant-2.2.35.tgz#cd3ebf581a6557452735688d8daba6cf0bd5a3be"
+  integrity sha512-DxX1V9P8zdJPYQat1gHyY0xj3efl8gnMVjiM9iCY6y27lj+PoQWkgjt8jDqmovPqULkKVpKRg8J36iQiA+EtEg==
 
 "@types/is-function@^1.0.0":
   version "1.0.1"
@@ -19035,14 +19161,17 @@ react-native-randombytes@^3.0.0, react-native-randombytes@^3.5.1:
     buffer "^4.9.1"
     sjcl "^1.0.3"
 
-react-native-reanimated@^2.2.3:
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.2.3.tgz#edecfe477ad9efac6f006f7e1194e8c9aa4fc6d5"
-  integrity sha512-d+BV39Jp4Om0ZkgVjop672/004ytlTfDT01EloO3HFZs9wR2QTuCjekq8yi3xl0G2xGZKd4DXhvqabIa7OnMYA==
+react-native-reanimated@^2.3.0-beta.4:
+  version "2.3.0-beta.4"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.3.0-beta.4.tgz#2475a14d4d3dae13fa17a88048e80e3757b90983"
+  integrity sha512-Mgau59ok18vh2srA3bzguRc6ecwsZqjQ2xJ6uuXG6FVbB3Nrxz/ordbnCF0CqnJwp7qHXkUKH6YNARifskYvTg==
   dependencies:
     "@babel/plugin-transform-object-assign" "^7.10.4"
-    fbjs "^3.0.0"
+    "@types/invariant" "^2.2.35"
+    invariant "^2.2.4"
+    lodash.isequal "^4.5.0"
     mockdate "^3.0.2"
+    react-native-screens "^3.4.0"
     string-hash-64 "^1.0.3"
 
 react-native-redash@^16.1.1:
@@ -19059,7 +19188,7 @@ react-native-safe-area-context@3.3.2:
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-3.3.2.tgz#9549a2ce580f2374edb05e49d661258d1b8bcaed"
   integrity sha512-yOwiiPJ1rk+/nfK13eafbpW6sKW0jOnsRem2C1LPJjM3tfTof6hlvV5eWHATye3XOpu2cJ7N+HdkUvUDGwFD2Q==
 
-react-native-screens@^3.9.0:
+react-native-screens@^3.4.0, react-native-screens@^3.9.0:
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-3.9.0.tgz#39b79f0e50b9d68ec822d333bc76e7aaee90f3fd"
   integrity sha512-TP/kASLQ/2iGCz4/n9CHeveKC9urzbfYXFH+1TfBnqaBwjIszhVuadiIOQ0qWKdSs6qnBR2xPTp9U18sNoc34A==
@@ -21790,11 +21919,6 @@ typescript@4.5.2, typescript@^4.5.2:
   version "4.5.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.5.2.tgz#8ac1fba9f52256fdb06fb89e4122fa6a346c2998"
   integrity sha512-5BlMof9H1yGt0P8/WF+wPNw6GfctgGjXp5hkblpyT+8rkASSmkUKMXrxR0Xg8ThVCi/JnHQiKXeBaEwCeQwMFw==
-
-typescript@~4.3.5:
-  version "4.3.5"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.3.5.tgz#4d1c37cc16e893973c45a06886b7113234f119f4"
-  integrity sha512-DqQgihaQ9cUrskJo9kIyW/+g0Vxsk8cDtZ52a3NGh0YNTfpUSArXSohyUGnvbPazEPLu398C0UxmKSOrPumUzA==
 
 ua-parser-js@^0.7.19, ua-parser-js@^0.7.30:
   version "0.7.30"

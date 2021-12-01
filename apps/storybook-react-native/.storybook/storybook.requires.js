@@ -16,6 +16,7 @@ const getStories = () => {
 	return [
 		require('../../../packages/design-system/pressable-scale/pressable-scale.stories.tsx'),
 		require('../../../packages/design-system/tabs/tabs.stories.tsx'),
+		require('../../../packages/design-system/skeleton/skeleton.stories.tsx'),
 		require('../../../packages/design-system/text/text.stories.tsx'),
 	]
 }
