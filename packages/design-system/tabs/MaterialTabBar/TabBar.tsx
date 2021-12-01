@@ -216,7 +216,6 @@ const styles = StyleSheet.create({
 	contentContainer: {
 		flexDirection: 'row',
 		flexWrap: 'nowrap',
-		paddingVertical: 15,
 		alignItems: 'center',
 		paddingHorizontal: 10,
 	},

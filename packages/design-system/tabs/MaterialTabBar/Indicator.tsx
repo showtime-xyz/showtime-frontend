@@ -79,16 +79,18 @@ const Indicator: React.FC<IndicatorProps> = ({ indexDecimal, itemsLayout, style,
 
 const styles = StyleSheet.create({
 	indicator: {
-		height: '100%',
+		height: '70%',
 		backgroundColor: 'rgba(0, 0, 0, 0.1)',
 		position: 'absolute',
 		borderRadius: 999,
+		left: 0,
 	},
 	indicatorLine: {
 		height: 2,
 		backgroundColor: 'rgb(0, 0, 0)',
 		position: 'absolute',
 		bottom: 0,
+		left: 0,
 	},
 })
 

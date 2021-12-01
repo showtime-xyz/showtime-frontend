@@ -47,7 +47,7 @@ export const MaterialTabItem = <T extends TabName = any>({
 					flexDirection: 'row',
 					alignItems: 'center',
 					justifyContent: 'center',
-					paddingY: 8,
+					paddingY: 16,
 					paddingX: 16,
 				}}
 			>
