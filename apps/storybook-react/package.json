@@ -17,6 +17,7 @@
 		"next": "12.0.4",
 		"react": "17.0.2",
 		"react-dom": "17.0.2",
+		"react-native-collapsible-tab-view": "^4.4.0",
 		"react-native-web": "0.17.5"
 	},
 	"devDependencies": {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, ListRenderItem, Text } from 'react-native'
+import { View, StyleSheet, ListRenderItem, Text, ScrollView } from 'react-native'
 import { TabBarProps, Tabs as CollapsibleTabs } from 'react-native-collapsible-tab-view'
 import { MaterialTabBar } from './MaterialTabBar'
 
@@ -13,7 +13,6 @@ const Header = () => {
 }
 
 type TabProps = {
-	name: string
 	tabTrigger: React.ReactNode
 	tabContent: React.ReactNode
 }
@@ -24,16 +23,16 @@ type TabsContainer = {
 	children?: React.ReactElement<TabProps>[] | React.ReactElement<TabProps>
 }
 
-const Tab = (_props: TabProps) => {
+export const Tab = (_props: TabProps) => {
 	return null
 }
 
 const TabsContainer = (props: TabsContainer) => {
 	const newChildren = React.useMemo(
 		() =>
-			React.Children.map(props.children, c => {
+			React.Children.map(props.children, (c, index) => {
 				return (
-					<CollapsibleTabs.Tab name={c.props.name} label={c.props.tabTrigger}>
+					<CollapsibleTabs.Tab name={index.toString()} label={c.props.tabTrigger}>
 						{c.props.tabContent}
 					</CollapsibleTabs.Tab>
 				)
@@ -60,7 +59,6 @@ export const Tabs: React.FC = () => {
 	return (
 		<TabsContainer renderHeader={Header} headerHeight={HEADER_HEIGHT}>
 			<Tab
-				name="A"
 				tabTrigger={
 					<View style={{ flexDirection: 'row' }}>
 						<Text style={{ marginRight: 4, fontWeight: '600' }}>Created</Text>
@@ -70,7 +68,6 @@ export const Tabs: React.FC = () => {
 				tabContent={<CollapsibleTabs.FlatList data={DATA} renderItem={renderItem} keyExtractor={identity} />}
 			/>
 			<Tab
-				name="B"
 				tabTrigger={
 					<View style={{ flexDirection: 'row' }}>
 						<Text style={{ marginRight: 4, fontWeight: '600' }}>Owned</Text>
@@ -78,6 +75,7 @@ export const Tabs: React.FC = () => {
 					</View>
 				}
 				tabContent={
+					//@ts-ignore
 					<CollapsibleTabs.ScrollView>
 						<View style={[styles.box, styles.boxA]} />
 						<View style={[styles.box, styles.boxB]} />
@@ -85,7 +83,6 @@ export const Tabs: React.FC = () => {
 				}
 			/>
 			<Tab
-				name="C"
 				tabTrigger={
 					<View style={{ flexDirection: 'row' }}>
 						<Text style={{ marginRight: 4, fontWeight: '600' }}>Listed</Text>
@@ -95,7 +92,6 @@ export const Tabs: React.FC = () => {
 				tabContent={<CollapsibleTabs.FlatList data={DATA} renderItem={renderItem} keyExtractor={identity} />}
 			/>
 			<Tab
-				name="L"
 				tabTrigger={
 					<View style={{ flexDirection: 'row' }}>
 						<Text style={{ marginRight: 4, fontWeight: '600' }}>Liked</Text>
@@ -131,3 +127,11 @@ const styles = StyleSheet.create({
 		bottom: 0,
 	},
 })
+
+export const Tabsv2 = {
+	Tab,
+	Container: TabsContainer,
+	ScrollView: CollapsibleTabs.ScrollView as unknown as typeof ScrollView,
+	FlatList: CollapsibleTabs.FlatList,
+	SectionList: CollapsibleTabs.SectionList,
+}
