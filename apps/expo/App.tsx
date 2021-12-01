@@ -1,3 +1,5 @@
+// Run GitHub Action
+
 import { useState, useEffect } from 'react'
 import { AppState, LogBox, useColorScheme, Platform } from 'react-native'
 import { enableScreens, enableFreeze, FullWindowOverlay } from 'react-native-screens'
@@ -286,7 +288,6 @@ function AppContextProvider({ children }: { children: React.ReactNode }): JSX.El
 }
 
 function App() {
-
 	return (
 		<DripsyProvider theme={theme}>
 			<SafeAreaProvider style={{ backgroundColor: 'black' }}>
