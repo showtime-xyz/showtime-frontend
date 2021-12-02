@@ -23,7 +23,8 @@
 		"build:production": "STAGE=production eas build --profile production --platform all",
 		"build:production:ios": "STAGE=production eas build --profile production --platform ios",
 		"build:production:android": "STAGE=production eas build --profile production --platform android",
-		"adb:reverse": "adb reverse tcp:3000 tcp:3000"
+		"adb:reverse": "adb reverse tcp:3000 tcp:3000",
+		"eas-build-post-install": "react-native link"
 	},
 	"dependencies": {
 		"@capsizecss/core": "^3.0.0",
@@ -32,7 +33,7 @@
 		"@magic-sdk/react-native": "^6.2.1",
 		"@motify/interactions": "^0.16.1",
 		"@motify/skeleton": "^0.16.1",
-		"@react-native-async-storage/async-storage": "^1.15.11",
+		"@react-native-async-storage/async-storage": "^1.15.14",
 		"@react-native-community/netinfo": "7.1.2",
 		"@react-navigation/bottom-tabs": "^6.0.9",
 		"@react-navigation/native": "^6.0.6",
