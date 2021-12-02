@@ -22,7 +22,7 @@
 	"devDependencies": {
 		"@babel/core": "^7.16.0",
 		"@storybook/addon-actions": "^6.3.12",
-		"@storybook/addon-essentials": "^6.3.12",
+		"@storybook/addon-essentials": "^6.4.4",
 		"@storybook/addon-links": "^6.3.12",
 		"@storybook/addon-react-native-web": "0.0.13-canary.23.e150058.0",
 		"@storybook/builder-webpack5": "^6.3.12",
