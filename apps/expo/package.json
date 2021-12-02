@@ -23,7 +23,8 @@
 		"build:production": "STAGE=production eas build --profile production --platform all",
 		"build:production:ios": "STAGE=production eas build --profile production --platform ios",
 		"build:production:android": "STAGE=production eas build --profile production --platform android",
-		"adb:reverse": "adb reverse tcp:3000 tcp:3000"
+		"adb:reverse": "adb reverse tcp:3000 tcp:3000",
+		"eas-build-post-install": "react-native link"
 	},
 	"dependencies": {
 		"@capsizecss/core": "^3.0.0",

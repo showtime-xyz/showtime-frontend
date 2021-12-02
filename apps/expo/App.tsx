@@ -1,5 +1,3 @@
-// Run GitHub Action
-
 import { useState, useEffect } from 'react'
 import { AppState, LogBox, useColorScheme, Platform } from 'react-native'
 import { enableScreens, enableFreeze, FullWindowOverlay } from 'react-native-screens'
