@@ -23,7 +23,8 @@
 		"build:production": "STAGE=production eas build --profile production --platform all",
 		"build:production:ios": "STAGE=production eas build --profile production --platform ios",
 		"build:production:android": "STAGE=production eas build --profile production --platform android",
-		"adb:reverse": "adb reverse tcp:3000 tcp:3000"
+		"adb:reverse": "adb reverse tcp:3000 tcp:3000",
+		"eas-build-post-install": "react-native link"
 	},
 	"dependencies": {
 		"@capsizecss/core": "^3.0.0",
@@ -96,7 +97,7 @@
 		"react-native-ios-context-menu": "1.3.0",
 		"react-native-level-fs": "^3.0.0",
 		"react-native-localhost": "^1.0.0",
-		"react-native-mmkv": "1.3.2",
+		"react-native-mmkv": "1.5.3",
 		"react-native-os": "^1.0.1",
 		"react-native-popper": "^0.3.2",
 		"react-native-randombytes": "^3.0.0",
