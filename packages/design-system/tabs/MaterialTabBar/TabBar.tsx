@@ -213,7 +213,7 @@ const MemoizedTabBar = React.memo(MaterialTabBar)
 
 export { MemoizedTabBar as MaterialTabBar }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
 	contentContainer: {
 		flexDirection: 'row',
 		flexWrap: 'nowrap',

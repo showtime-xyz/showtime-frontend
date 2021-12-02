@@ -1,52 +1,22 @@
 import React from 'react'
 import { ScrollView } from 'react-native'
-import { TabBarProps, Tabs as CollapsibleTabs } from 'react-native-collapsible-tab-view'
+import { Tabs as CollapsibleTabs } from 'react-native-collapsible-tab-view'
 import { TAB_BAR_HEIGHT } from './MaterialTabBar/TabBar'
 import { MaterialTabBar } from './MaterialTabBar'
-
-type TabProps = {
-	tabTrigger: React.ReactNode
-	tabContent: React.ReactNode
-}
-
-type TabsContainer = {
-	/**
-	 * Render a custom Header component
-	 */
-	renderHeader?: React.FC<TabBarProps>
-	/**
-	 * Is optional, but will optimize the first render.
-	 */
-	headerHeight?: number
-	children?: React.ReactElement<TabProps>[] | React.ReactElement<TabProps>
-	/**
-	 * Whether tab content should be lazily mounted
-	 * @default true
-	 */
-	lazy?: boolean
-	/**
-	 * Header minimum height when collapsed
-	 */
-	minHeaderHeight?: number
-	/**
-	 * Header minimum height when collapsed
-	 *  @default 64
-	 */
-	tabBarHeight?: number
-}
+import { TabProps, TabsContainerProps } from './types'
 
 export const Tab = (_props: TabProps) => {
 	return null
 }
 
-const TabsContainer = (props: TabsContainer) => {
+const TabsContainer = (props: TabsContainerProps) => {
 	const newChildren = React.useMemo(
 		() =>
 			React.Children.map(props.children, (c, index) => {
 				return (
 					<CollapsibleTabs.Tab
-						name={index.toString()}
-						//@ts-ignore we're using this label field to render custom component
+						name={c.props.value ?? index.toString()}
+						//@ts-ignore - we're using this label field to render custom component
 						label={c.props.tabTrigger}
 					>
 						{c.props.tabContent}
@@ -67,6 +37,7 @@ const TabsContainer = (props: TabsContainer) => {
 			renderTabBar={TabBar}
 			minHeaderHeight={props.minHeaderHeight}
 			tabBarHeight={TAB_BAR_HEIGHT}
+			initialTabName={props.defaultValue}
 		>
 			{newChildren}
 		</CollapsibleTabs.Container>

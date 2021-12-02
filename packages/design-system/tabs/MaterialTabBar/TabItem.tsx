@@ -6,6 +6,8 @@ import { TabName } from './types'
 import { MaterialTabItemProps } from './types'
 
 const DEFAULT_COLOR = 'rgba(0, 0, 0, 1)'
+export const TAB_ITEM_HEIGHT = 32
+
 /**
  * Any additional props are passed to the pressable component.
  */
@@ -45,12 +47,12 @@ export const MaterialTabItem = <T extends TabName = any>({
 	)
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
 	tabItem: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
-		paddingVertical: 16,
 		paddingHorizontal: 16,
+		height: TAB_ITEM_HEIGHT,
 	},
 })

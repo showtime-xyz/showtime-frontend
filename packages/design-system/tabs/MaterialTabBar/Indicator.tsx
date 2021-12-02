@@ -1,9 +1,11 @@
 import React from 'react'
-import { StyleSheet, I18nManager, View } from 'react-native'
+import { StyleSheet, I18nManager } from 'react-native'
 import { tw as tailwind } from 'design-system/tailwind'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming, interpolate } from 'react-native-reanimated'
-
 import { IndicatorProps } from './types'
+
+// Alpha color. Todo: add a tailwind token
+export const TAB_BAR_ACTIVE_BG = 'rgba(0, 0, 0, 0.09)'
 
 const Indicator: React.FC<IndicatorProps> = ({ indexDecimal, itemsLayout, style, fadeIn = false }) => {
 	const opacity = useSharedValue(1)
@@ -80,7 +82,7 @@ const Indicator: React.FC<IndicatorProps> = ({ indexDecimal, itemsLayout, style,
 
 const styles = StyleSheet.create({
 	indicator: {
-		backgroundColor: 'rgba(0, 0, 0, 0.09)',
+		backgroundColor: TAB_BAR_ACTIVE_BG,
 		position: 'absolute',
 		borderRadius: 999,
 		paddingVertical: 18,
