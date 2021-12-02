@@ -1,6 +1,6 @@
 import React from 'react'
 import { Meta } from '@storybook/react'
-import { Tabsv2 } from './index'
+import { Tabs } from './index'
 import { Text } from '../text'
 import { StyleSheet, View } from 'react-native'
 
@@ -13,49 +13,31 @@ export const ScrollableTabs: React.FC = () => {
 	}, [])
 
 	return (
-		<Tabsv2.Container>
-			<Tabsv2.Tab
-				tabTrigger={
-					<View style={{ flexDirection: 'row' }}>
-						<Text style={{ marginRight: 4, fontWeight: '600' }}>Created</Text>
-						<Text>145</Text>
-					</View>
-				}
-				tabContent={<Tabsv2.FlatList data={DATA} renderItem={renderItem} keyExtractor={identity} />}
-			/>
-			<Tabsv2.Tab
-				tabTrigger={
-					<View style={{ flexDirection: 'row' }}>
-						<Text style={{ marginRight: 4, fontWeight: '600' }}>Owned</Text>
-						<Text>78</Text>
-					</View>
-				}
-				tabContent={
-					<Tabsv2.ScrollView>
-						<View style={[styles.box, styles.boxA]} />
-						<View style={[styles.box, styles.boxB]} />
-					</Tabsv2.ScrollView>
-				}
-			/>
-			<Tabsv2.Tab
-				tabTrigger={
-					<View style={{ flexDirection: 'row' }}>
-						<Text style={{ marginRight: 4, fontWeight: '600' }}>Listed</Text>
-						<Text>13</Text>
-					</View>
-				}
-				tabContent={<Tabsv2.FlatList data={DATA} renderItem={renderItem} keyExtractor={identity} />}
-			/>
-			<Tabsv2.Tab
-				tabTrigger={
-					<View style={{ flexDirection: 'row' }}>
-						<Text style={{ marginRight: 4, fontWeight: '600' }}>Liked</Text>
-						<Text>198</Text>
-					</View>
-				}
-				tabContent={<Tabsv2.FlatList data={DATA} renderItem={renderItem} keyExtractor={identity} />}
-			/>
-		</Tabsv2.Container>
+		<Tabs.Container>
+			{[
+				{ name: 'Created', count: 145 },
+				{ name: 'Owned', count: 13 },
+				{ name: 'Listed', count: 13 },
+				{ name: 'Liked', count: 198 },
+			].map(a => {
+				return (
+					<Tabs.Tab
+						key={a.name}
+						tabTrigger={
+							<View style={{ flexDirection: 'row' }}>
+								<Text variant="text-sm" sx={{ fontWeight: '700', marginRight: 4 }}>
+									{a.name}
+								</Text>
+								<Text variant="text-sm" sx={{ fontWeight: '400' }}>
+									{a.count}
+								</Text>
+							</View>
+						}
+						tabContent={<Tabs.FlatList data={DATA} renderItem={renderItem} keyExtractor={identity} />}
+					/>
+				)
+			})}
+		</Tabs.Container>
 	)
 }
 
@@ -69,49 +51,31 @@ export const TabsWithHeader: React.FC = () => {
 	}
 
 	return (
-		<Tabsv2.Container renderHeader={Header}>
-			<Tabsv2.Tab
-				tabTrigger={
-					<View style={{ flexDirection: 'row' }}>
-						<Text style={{ marginRight: 4, fontWeight: '600' }}>Created</Text>
-						<Text>145</Text>
-					</View>
-				}
-				tabContent={<Tabsv2.FlatList data={DATA} renderItem={renderItem} keyExtractor={identity} />}
-			/>
-			<Tabsv2.Tab
-				tabTrigger={
-					<View style={{ flexDirection: 'row' }}>
-						<Text style={{ marginRight: 4, fontWeight: '600' }}>Owned</Text>
-						<Text>78</Text>
-					</View>
-				}
-				tabContent={
-					<Tabsv2.ScrollView>
-						<View style={[styles.box, styles.boxA]} />
-						<View style={[styles.box, styles.boxB]} />
-					</Tabsv2.ScrollView>
-				}
-			/>
-			<Tabsv2.Tab
-				tabTrigger={
-					<View style={{ flexDirection: 'row' }}>
-						<Text style={{ marginRight: 4, fontWeight: '600' }}>Listed</Text>
-						<Text>13</Text>
-					</View>
-				}
-				tabContent={<Tabsv2.FlatList data={DATA} renderItem={renderItem} keyExtractor={identity} />}
-			/>
-			<Tabsv2.Tab
-				tabTrigger={
-					<View style={{ flexDirection: 'row' }}>
-						<Text style={{ marginRight: 4, fontWeight: '600' }}>Liked</Text>
-						<Text>198</Text>
-					</View>
-				}
-				tabContent={<Tabsv2.FlatList data={DATA} renderItem={renderItem} keyExtractor={identity} />}
-			/>
-		</Tabsv2.Container>
+		<Tabs.Container renderHeader={Header}>
+			{[
+				{ name: 'Created', count: 145 },
+				{ name: 'Owned', count: 13 },
+				{ name: 'Listed', count: 13 },
+				{ name: 'Liked', count: 198 },
+			].map(a => {
+				return (
+					<Tabs.Tab
+						key={a.name}
+						tabTrigger={
+							<View style={{ flexDirection: 'row' }}>
+								<Text variant="text-sm" sx={{ fontWeight: '700', marginRight: 4 }}>
+									{a.name}
+								</Text>
+								<Text variant="text-sm" sx={{ fontWeight: '400' }}>
+									{a.count}
+								</Text>
+							</View>
+						}
+						tabContent={<Tabs.FlatList data={DATA} renderItem={renderItem} keyExtractor={identity} />}
+					/>
+				)
+			})}
+		</Tabs.Container>
 	)
 }
 
@@ -140,6 +104,6 @@ const styles = StyleSheet.create({
 })
 
 export default {
-	component: Tabsv2.Container,
+	component: Tabs.Container,
 	title: 'Components/Tabs',
 } as Meta

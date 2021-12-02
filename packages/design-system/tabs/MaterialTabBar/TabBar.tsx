@@ -14,6 +14,7 @@ import { Indicator } from './Indicator'
 import { MaterialTabItem } from './TabItem'
 import { MaterialTabBarProps, ItemLayout } from './types'
 
+export const TAB_BAR_HEIGHT = 64
 /**
  * Basic usage looks like this:
  *
@@ -218,5 +219,6 @@ const styles = StyleSheet.create({
 		flexWrap: 'nowrap',
 		alignItems: 'center',
 		paddingHorizontal: 10,
+		height: TAB_BAR_HEIGHT,
 	},
 })

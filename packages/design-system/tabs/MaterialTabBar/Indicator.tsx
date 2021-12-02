@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, I18nManager, View } from 'react-native'
+import { tw as tailwind } from 'design-system/tailwind'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming, interpolate } from 'react-native-reanimated'
 
 import { IndicatorProps } from './types'
@@ -72,22 +73,21 @@ const Indicator: React.FC<IndicatorProps> = ({ indexDecimal, itemsLayout, style,
 	return (
 		<>
 			<Animated.View style={[stylez2, styles.indicator, style]} />
-			<Animated.View style={[stylez, styles.indicatorLine, style]} />
+			<Animated.View style={[stylez, styles.indicatorLine, style, tailwind.style('bg-gray-900')]} />
 		</>
 	)
 }
 
 const styles = StyleSheet.create({
 	indicator: {
-		height: '70%',
-		backgroundColor: 'rgba(0, 0, 0, 0.1)',
+		backgroundColor: 'rgba(0, 0, 0, 0.09)',
 		position: 'absolute',
 		borderRadius: 999,
+		paddingVertical: 18,
 		left: 0,
 	},
 	indicatorLine: {
 		height: 2,
-		backgroundColor: 'rgb(0, 0, 0)',
 		position: 'absolute',
 		bottom: 0,
 		left: 0,

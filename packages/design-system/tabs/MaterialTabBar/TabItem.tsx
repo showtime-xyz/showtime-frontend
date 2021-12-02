@@ -4,9 +4,7 @@ import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated
 
 import { TabName } from './types'
 import { MaterialTabItemProps } from './types'
-import { View } from '../../view'
 
-export const TABBAR_HEIGHT = 48
 const DEFAULT_COLOR = 'rgba(0, 0, 0, 1)'
 /**
  * Any additional props are passed to the pressable component.
@@ -42,51 +40,17 @@ export const MaterialTabItem = <T extends TabName = any>({
 
 	return (
 		<Pressable onPress={() => onPress(name)} onLayout={onLayout} {...rest}>
-			<View
-				sx={{
-					flexDirection: 'row',
-					alignItems: 'center',
-					justifyContent: 'center',
-					paddingY: 16,
-					paddingX: 16,
-				}}
-			>
-				{label}
-			</View>
-		</Pressable>
-	)
-	return (
-		<Pressable
-			onLayout={onLayout}
-			style={({ pressed }) => [
-				{ opacity: pressed ? pressOpacity : 1 },
-				!scrollEnabled && styles.grow,
-				styles.item,
-				style,
-			]}
-			onPress={() => onPress(name)}
-			android_ripple={{
-				borderless: true,
-				color: pressColor,
-			}}
-			{...rest}
-		>
-			<Animated.Text style={[styles.label, stylez, labelStyle]}>{label}</Animated.Text>
+			<Animated.View style={[styles.tabItem, stylez]}>{label}</Animated.View>
 		</Pressable>
 	)
 }
 
 const styles = StyleSheet.create({
-	grow: {
-		flex: 1,
-	},
-	item: {
+	tabItem: {
+		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
-		paddingHorizontal: 10,
-		// height: TABBAR_HEIGHT,
-	},
-	label: {
-		margin: 4,
+		paddingVertical: 16,
+		paddingHorizontal: 16,
 	},
 })
