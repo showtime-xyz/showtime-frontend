@@ -286,7 +286,6 @@ function AppContextProvider({ children }: { children: React.ReactNode }): JSX.El
 }
 
 function App() {
-
 	return (
 		<DripsyProvider theme={theme}>
 			<SafeAreaProvider style={{ backgroundColor: 'black' }}>
