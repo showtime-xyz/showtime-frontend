@@ -33,7 +33,7 @@ const TabsContainer = (props: TabsContainerProps) => {
 			renderHeader={props.renderHeader}
 			headerHeight={props.headerHeight}
 			lazy={props.lazy ?? true}
-			cancelLazyFadeIn
+			// pagerProps={{ scrollEnabled: false }}
 			renderTabBar={TabBar}
 			minHeaderHeight={props.minHeaderHeight}
 			tabBarHeight={TAB_BAR_HEIGHT}

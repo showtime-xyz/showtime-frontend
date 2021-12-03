@@ -2,9 +2,10 @@ import React from 'react'
 import { Meta } from '@storybook/react'
 import { Tabs } from './index'
 import { Text } from '../text'
-import { StyleSheet, View } from 'react-native'
+import { Dimensions, Image, StyleSheet, View } from 'react-native'
 
-const DATA = [0, 1, 2, 3, 4]
+const DATA = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+
 const identity = (v: unknown): string => v + ''
 
 export const ScrollableTabs: React.FC = () => {
@@ -47,7 +48,16 @@ export const TabsWithHeader: React.FC = () => {
 	}, [])
 
 	const Header = () => {
-		return <View style={styles.header} />
+		return (
+			<View style={styles.header} pointerEvents="none">
+				<Image
+					source={{
+						uri: 'https://images.unsplash.com/photo-1559065188-2537766d864b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
+					}}
+					style={{ width: Dimensions.get('window').width, aspectRatio: 1.49 }}
+				/>
+			</View>
+		)
 	}
 
 	return (
@@ -81,7 +91,7 @@ export const TabsWithHeader: React.FC = () => {
 
 const styles = StyleSheet.create({
 	box: {
-		height: 250,
+		height: 100,
 		width: '100%',
 	},
 	boxA: {
@@ -91,7 +101,6 @@ const styles = StyleSheet.create({
 		backgroundColor: '#D8D8D8',
 	},
 	header: {
-		height: 200,
 		width: '100%',
 		backgroundColor: 'white',
 	},
