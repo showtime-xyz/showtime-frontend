@@ -3,13 +3,24 @@ import {ScrollView, Pressable, View} from 'react-native'
 import PagerView from 'react-native-pager-view';
 const TabContext = React.createContext();
 
-const Root = ({Header, children, tabBarHeight, headerHeight, initialIndex, onIndexChange}) => {
+const Root = ({Header, children, tabBarHeight, tabItemWidth, headerHeight, initialIndex, onIndexChange: onIndexChangeProp}) => {
     const pagerRef = React.useRef();
+    const tabBarRef = React.useRef();
     let listChild
     let restChildren = [];
+    let prevIndex = React.useRef(initialIndex ?? 0);
+
+    const onIndexChange = (newIndex) => {
+        if (newIndex > prevIndex) {
+            tabBarRef.current.scrollTo({x: tabItemWidth * (newIndex + 1) })
+        } else {
+            tabBarRef.current.scrollTo({x: tabItemWidth  * (newIndex - 1) })
+        }
+        prevIndex.current = newIndex;
+        onIndexChangeProp(newIndex)
+    }
 
      React.Children.forEach(children, c  => {
-         console.log("f ", c)
         if (c.type === List) {
             listChild = c;
         } else {
@@ -17,7 +28,7 @@ const Root = ({Header, children, tabBarHeight, headerHeight, initialIndex, onInd
         }
     })
 
-    return <TabContext.Provider value={{tabBarHeight, headerHeight, initialIndex, onIndexChange,pagerRef}}>
+    return <TabContext.Provider value={{tabBarHeight, headerHeight, initialIndex,tabBarRef, onIndexChange,pagerRef}}>
         <View style={{position:'absolute', zIndex:1}} pointerEvents="box-none">
             <Header />
             {listChild}
@@ -27,12 +38,12 @@ const Root = ({Header, children, tabBarHeight, headerHeight, initialIndex, onInd
 }
 
 const List = ({children, ...props}) => {
-    const {tabBarHeight} = useContext(TabContext)
+    const {tabBarHeight, tabBarRef} = useContext(TabContext)
     const newChildren = React.Children.map(children, (c, index) => {
         return React.cloneElement(c, {index})
     })
 
-    return  <ScrollView bounces={false} showsHorizontalScrollIndicator={false} horizontal style={{height: tabBarHeight}} {...props}>
+    return  <ScrollView bounces={false} ref={tabBarRef} showsHorizontalScrollIndicator={false} horizontal style={{height: tabBarHeight}} {...props}>
         {newChildren}
         </ScrollView>
 }
@@ -42,7 +53,7 @@ List.displayName = "List"
 const Pager = ({children}) => {
     const {initialIndex, onIndexChange} = useContext(TabContext)
     const {tabBarHeight,pagerRef} = useContext(TabContext)
-    return <PagerView style={{flex:1 }} ref={pagerRef} initialPage={initialIndex} onIndexChange={onIndexChange}>
+    return <PagerView style={{flex:1 }} ref={pagerRef} initialPage={initialIndex} onPageSelected={(e) => onIndexChange(e.nativeEvent.position)}>
         {children}
     </PagerView>
 }

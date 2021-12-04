@@ -48,6 +48,7 @@ export const ScrollableTabs: React.FC = () => {
 				headerHeight={headerHeight}
 				tabBarHeight={tabbarHeight}
 				onIndexChange={onIndexChange}
+				tabItemWidth={tabItemWidth}
 			>
 				<Tabs.List>
 					<Tabs.Trigger style={{ height: 50, width: tabItemWidth, backgroundColor: 'white', borderWidth: 1 }}>
