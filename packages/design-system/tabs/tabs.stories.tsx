@@ -1,33 +1,25 @@
 import React, { useContext, useEffect } from 'react'
 import { Meta } from '@storybook/react'
 import { Text } from '../text'
-import { ActivityIndicator, Dimensions, Image, StyleSheet, View } from 'react-native'
+import { ActivityIndicator, Dimensions, StyleSheet, View } from 'react-native'
 import { Tabs } from './tablib'
-import { NativeViewGestureHandler, PanGestureHandler } from 'react-native-gesture-handler'
-import Animated, {
-	useAnimatedGestureHandler,
-	useAnimatedReaction,
-	useSharedValue,
-	useAnimatedStyle,
-	withTiming,
-	interpolate,
-	runOnJS,
-} from 'react-native-reanimated'
+import Animated, { useAnimatedReaction, useAnimatedStyle, withTiming, runOnJS } from 'react-native-reanimated'
 import { Animated as OldAnimated } from 'react-native'
 import { TabContext } from './tablib'
 
-const tabbarHeight = 50
-const tabItemWidth = 100
+const tabbarHeight = 55
+const tabItemWidth = 120
 
 const Header = () => {
+	const windowWidth = Dimensions.get('window').width
 	return (
 		<Animated.View style={[{ width: '100%' }]} pointerEvents="none">
-			<Image
+			<Animated.Image
 				source={{
 					uri:
 						'https://images.unsplash.com/photo-1559065188-2537766d864b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
 				}}
-				style={{ width: Dimensions.get('window').width, aspectRatio: 1.49 }}
+				style={[{ aspectRatio: 1.49, width: windowWidth }]}
 			/>
 		</Animated.View>
 	)
@@ -67,18 +59,45 @@ const Indicator = () => {
 	return (
 		<OldAnimated.View
 			style={[
-				{ position: 'absolute', height: 2, backgroundColor: 'yellow', width: tabItemWidth, bottom: 0 },
-				{ transform: [{ translateX }] },
+				{
+					transform: [{ translateX }],
+					position: 'absolute',
+					width: tabItemWidth,
+					height: '100%',
+					justifyContent: 'center',
+				},
 			]}
-		/>
+		>
+			<View
+				style={{
+					height: 2,
+					backgroundColor: 'black',
+					position: 'absolute',
+					zIndex: 9999,
+					width: tabItemWidth,
+					bottom: 0,
+				}}
+			/>
+			<View
+				style={[
+					{
+						backgroundColor: 'rgba(0, 0, 0, 0.1)',
+						height: '70%',
+						width: tabItemWidth,
+						borderRadius: 999,
+					},
+				]}
+			/>
+		</OldAnimated.View>
 	)
 }
 
-const PullToRefresh = () => {
+const PullToRefresh = ({ onRefresh }) => {
 	const { pullToRefreshY, refreshGestureState } = useContext(TabContext)
 	const [refreshState, setRefreshState] = React.useState('idle')
 
-	const onRefresh = () => {
+	const onRefreshHandler = () => {
+		onRefresh()
 		setTimeout(() => {
 			refreshGestureState.value = 'idle'
 		}, 4000)
@@ -93,9 +112,15 @@ const PullToRefresh = () => {
 		}
 	)
 
+	const containerStyle = useAnimatedStyle(() => {
+		return {
+			opacity: refreshGestureState.value !== 'idle' ? withTiming(1) : withTiming(0),
+		}
+	})
+
 	useEffect(() => {
 		if (refreshState === 'refreshing') {
-			onRefresh()
+			onRefreshHandler()
 		}
 	}, [refreshState])
 
@@ -108,66 +133,80 @@ const PullToRefresh = () => {
 					justifyContent: 'center',
 					alignItems: 'center',
 					width: '100%',
-					top: 40,
+					backgroundColor: 'rgba(0, 0, 0, 0.1)',
+					height: 40,
 				},
+				containerStyle,
 			]}
 			pointerEvents="none"
 		>
-			{refreshState === 'pulling' && <Text>Release to refresh</Text>}
-			{refreshState === 'cancelling' && <Text>Pull to refresh</Text>}
-			{refreshState === 'refreshing' && <ActivityIndicator color="black" size="large" />}
+			{refreshState === 'pulling' && <Text style={{ color: 'white' }}>Release to refresh</Text>}
+			{refreshState === 'cancelling' && <Text style={{ color: 'white' }}>Pull to refresh</Text>}
+			{refreshState === 'refreshing' && <ActivityIndicator color="white" size="small" />}
 		</Animated.View>
 	)
 }
 
 export const ScrollableTabs: React.FC = () => {
-	const onIndexChange = () => {}
-	const [refreshing, setRefreshing] = React.useState(false)
+	const onIndexChange = index => {
+		console.log('Dd ', index)
+	}
 
 	const onRefresh = () => {
-		setRefreshing(true)
-		setTimeout(() => {
-			setRefreshing(false)
-		}, 4000)
+		console.log('refresh current index or profile!')
 	}
+
+	const data = [
+		{ name: 'Created', count: 145 },
+		{ name: 'Owned', count: 13 },
+		{ name: 'Listed', count: 13 },
+		{ name: 'Liked', count: 198 },
+	]
 
 	return (
 		<View style={{ flex: 1 }}>
 			<Tabs.Root tabBarHeight={tabbarHeight} onIndexChange={onIndexChange}>
+				<PullToRefresh onRefresh={onRefresh} />
 				<Tabs.Header>
 					<Header />
 				</Tabs.Header>
-
-				<PullToRefresh />
-
-				<Tabs.List>
-					<Tabs.Trigger style={{ height: 50, width: tabItemWidth, backgroundColor: 'white', borderWidth: 1 }}>
-						<Text>1</Text>
-					</Tabs.Trigger>
-					<Tabs.Trigger style={{ height: 50, width: tabItemWidth, backgroundColor: 'white', borderWidth: 1 }}>
-						<Text>2</Text>
-					</Tabs.Trigger>
-					<Tabs.Trigger style={{ height: 50, width: tabItemWidth, backgroundColor: 'white', borderWidth: 1 }}>
-						<Text>3</Text>
-					</Tabs.Trigger>
-					<Tabs.Trigger style={{ height: 50, width: tabItemWidth, backgroundColor: 'white', borderWidth: 1 }}>
-						<Text>4</Text>
-					</Tabs.Trigger>
-					<Tabs.Trigger style={{ height: 50, width: tabItemWidth, backgroundColor: 'white', borderWidth: 1 }}>
-						<Text>5</Text>
-					</Tabs.Trigger>
-					<Tabs.Trigger style={{ height: 50, width: tabItemWidth, backgroundColor: 'white', borderWidth: 1 }}>
-						<Text>6</Text>
-					</Tabs.Trigger>
+				<Tabs.List
+					contentContainerStyle={{
+						alignItems: 'center',
+					}}
+					style={{
+						paddingHorizontal: 10,
+						backgroundColor: 'white',
+					}}
+				>
 					<Indicator />
+					{data.map(d => {
+						return (
+							<Tabs.Trigger
+								style={{
+									width: tabItemWidth,
+									justifyContent: 'center',
+									alignItems: 'center',
+									height: '100%',
+								}}
+								key={d.name}
+							>
+								<View style={{ flexDirection: 'row' }}>
+									<Text variant="text-sm" sx={{ fontWeight: '700', marginRight: 4 }}>
+										{d.name}
+									</Text>
+									<Text variant="text-sm" sx={{ fontWeight: '400' }}>
+										{d.count}
+									</Text>
+								</View>
+							</Tabs.Trigger>
+						)
+					})}
 				</Tabs.List>
 				<Tabs.Pager>
-					<PagerChild />
-					<PagerChild bg={'black'} />
-					<PagerChild bg={'grey'} />
-					<PagerChild bg={'purple'} />
-					<PagerChild bg={'brown'} />
-					<PagerChild bg={'green'} />
+					{data.map(d => {
+						return <PagerChild key={d.name} />
+					})}
 				</Tabs.Pager>
 			</Tabs.Root>
 		</View>
@@ -177,9 +216,9 @@ export const ScrollableTabs: React.FC = () => {
 const PagerChild = ({ bg }) => {
 	return (
 		<Tabs.ScrollView bounces={false}>
-			<View style={{ height: 200, backgroundColor: bg ?? 'pink' }} />
-			<View style={{ height: 300, backgroundColor: 'yellow' }} />
-			<View style={{ height: 200, backgroundColor: bg ?? 'pink' }} />
+			<View style={{ height: 200, backgroundColor: bg ?? 'grey' }} />
+			<View style={{ height: 300, backgroundColor: 'black' }} />
+			<View style={{ height: 200, backgroundColor: bg ?? 'white' }} />
 			<View style={{ height: 300, backgroundColor: 'yellow' }} />
 			<View style={{ height: 200, backgroundColor: 'pink' }} />
 		</Tabs.ScrollView>
