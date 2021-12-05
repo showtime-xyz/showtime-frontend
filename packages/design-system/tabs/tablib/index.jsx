@@ -1,7 +1,8 @@
 import React,{useContext} from 'react'
 import {Pressable, View, Animated, useWindowDimensions} from 'react-native'
 import {PagerView} from 'react-native-pager-view';
-import Reanimated, {useSharedValue,useDerivedValue,scrollTo,useAnimatedRef, runOnJS, useAnimatedReaction, Extrapolate, interpolate,useAnimatedScrollHandler,useAnimatedStyle} from 'react-native-reanimated';
+import Reanimated, {useSharedValue,useDerivedValue,scrollTo,useAnimatedRef, useAnimatedGestureHandler, runOnJS, useAnimatedReaction, Extrapolate, interpolate,useAnimatedScrollHandler,useAnimatedStyle} from 'react-native-reanimated';
+import { NativeViewGestureHandler, PanGestureHandler } from 'react-native-gesture-handler'
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 export const TabContext = React.createContext();
 const TabIndexContext = React.createContext();
@@ -19,7 +20,7 @@ export default function mergeRef(
     };
   }
 
-const Root = ({Header, children, tabBarHeight, initialIndex, onIndexChange: onIndexChangeProp}) => {
+const Root = ({ children, tabBarHeight, initialIndex, onIndexChange: onIndexChangeProp}) => {
     const pagerRef = React.useRef();
     const tabBarRef = React.useRef();
     let listChild
@@ -31,8 +32,12 @@ const Root = ({Header, children, tabBarHeight, initialIndex, onIndexChange: onIn
     const translateY = useSharedValue(0);
     const [headerHeight, setHeaderHeight] = React.useState(0);
     const requestOtherViewsToSyncTheirScrollPosition = useSharedValue(false);
+    const pullToRefreshY = useSharedValue(0);
     const tablistScrollRef = useAnimatedRef();
     const tabItemLayouts = [];
+    const refreshGestureState = useSharedValue('idle');
+
+    let headerChild
 
     const onIndexChange = (newIndex) => {
        
@@ -43,6 +48,8 @@ const Root = ({Header, children, tabBarHeight, initialIndex, onIndexChange: onIn
      React.Children.forEach(children, c  => {
         if (c.type === List) {
             listChild = c;
+        } else if (c.type === Header){
+            headerChild = c
         } else {
             restChildren.push(c)
         }
@@ -54,10 +61,10 @@ const Root = ({Header, children, tabBarHeight, initialIndex, onIndexChange: onIn
 	}, [headerHeight])
 
 
-    return <TabContext.Provider value={{tabBarHeight,index,tabItemLayouts, tablistScrollRef, requestOtherViewsToSyncTheirScrollPosition, translateY,scrollY, offset, position, headerHeight, initialIndex,tabBarRef, onIndexChange,pagerRef}}>
+    return <TabContext.Provider value={{tabBarHeight,pullToRefreshY,refreshGestureState, index,tabItemLayouts, tablistScrollRef, requestOtherViewsToSyncTheirScrollPosition, translateY,scrollY, offset, position, headerHeight, initialIndex,tabBarRef, onIndexChange,pagerRef}}>
         <Reanimated.View style={[{position:'absolute', zIndex:1}, animatedStyle]} pointerEvents="box-none">
             <View onLayout={e => setHeaderHeight(e.nativeEvent.layout.height)} pointerEvents="box-none">
-                <Header />
+                {headerChild}
             </View>
             {listChild}
         </Reanimated.View>
@@ -81,9 +88,11 @@ const List = ({children, ...props}) => {
 
     useDerivedValue(() => {
         if (prevIndex.value) {
-            const itemLayoutX = tabItemLayouts[index.value].value.x;
-            const itemWidth = tabItemLayouts[index.value].value.width;
-            runOnJS(scrollTo)(itemLayoutX - windowWidth / 2 + itemWidth / 2)
+            if (tabItemLayouts[index.value].value) {
+                const itemLayoutX = tabItemLayouts[index.value].value.x;
+                const itemWidth = tabItemLayouts[index.value].value.width;
+                runOnJS(scrollTo)(itemLayoutX - windowWidth / 2 + itemWidth / 2)
+            }
         }
         prevIndex.value = index.value;
     }, [windowWidth])
@@ -145,10 +154,11 @@ const Trigger = ({children, index, ...props}) => {
 }
 
 const TabScrollView = React.forwardRef(({children, ...props}, ref) => {
-    const {headerHeight, requestOtherViewsToSyncTheirScrollPosition, tabBarHeight, translateY, index } = useContext(TabContext)
+    const {headerHeight,pullToRefreshY, requestOtherViewsToSyncTheirScrollPosition, refreshGestureState, tabBarHeight, translateY, index } = useContext(TabContext)
     const elementIndex = React.useContext(TabIndexContext).index;
     const aref = useAnimatedRef();
     const scrollY = useSharedValue(0)
+    const enablePullToRefresh = useSharedValue(true)
 
     const scrollHandler = useAnimatedScrollHandler({
         onBeginDrag() {
@@ -162,17 +172,22 @@ const TabScrollView = React.forwardRef(({children, ...props}, ref) => {
             if (elementIndex === index.value) {
                 scrollY.value = e.contentOffset.y 
                 translateY.value = interpolate(scrollY.value, [0, headerHeight], [0, -headerHeight], Extrapolate.CLAMP)
+                if (e.contentOffset.y === 0) {
+                    enablePullToRefresh.value = true
+                } else {
+                    enablePullToRefresh.value = false
+                }
             }
         },
-        onEndDrag() {
+        onEndDrag(e) {
             requestOtherViewsToSyncTheirScrollPosition.value = true
         },
-        onMomentumEnd() {
+        onMomentumEnd(e) {
             requestOtherViewsToSyncTheirScrollPosition.value = true
         }
     })
 
-    useDerivedValue(( ) => {
+    useDerivedValue(() => {
         if (index.value !== elementIndex && requestOtherViewsToSyncTheirScrollPosition.value) {
             const nextScrollY = -1 * translateY.value;
             // if another tab just started showing header or scroll is less than translated header. 
@@ -182,11 +197,54 @@ const TabScrollView = React.forwardRef(({children, ...props}, ref) => {
         }  
     })
 
+	const panRef = React.useRef()
+	const nativeRef = React.useRef()
 
-    return <Reanimated.ScrollView scrollEventThrottle={16} onScroll={scrollHandler} ref={mergeRef([aref, ref])} contentContainerStyle={{paddingTop: tabBarHeight + headerHeight}} {...props}>
-        {children}
-    </Reanimated.ScrollView>
+
+	const gestureHandler = useAnimatedGestureHandler({
+		onActive: (e, ctx) => {
+            if (enablePullToRefresh.value &&  elementIndex === index.value) {
+                pullToRefreshY.value = e.translationY;
+                if (e.translationY > ctx.prevValue) {
+                    refreshGestureState.value = "pulling"
+                } else {
+                    refreshGestureState.value = "cancelling"
+                }
+                ctx.prevValue = e.translationY;
+            }
+		},
+        onEnd () {
+            if (elementIndex === index.value) {
+                pullToRefreshY.value = 0;
+                if (refreshGestureState.value === 'pulling') {
+                    refreshGestureState.value = "refreshing"
+                } else {
+                    refreshGestureState.value = "idle"
+                }
+            }
+        }
+	})
+
+    return   <PanGestureHandler
+			ref={panRef}
+			onGestureEvent={gestureHandler}
+			failOffsetX={[-100, 100]}
+			activeOffsetY={40}
+			simultaneousHandlers={[panRef, nativeRef]}
+		>
+			<Reanimated.View>
+				<NativeViewGestureHandler ref={nativeRef}>
+                    <Reanimated.ScrollView scrollEventThrottle={16} onScroll={scrollHandler}  ref={mergeRef([ref, aref])} contentContainerStyle={{paddingTop: tabBarHeight + headerHeight}} {...props}>
+                        {children}
+                    </Reanimated.ScrollView>
+                </NativeViewGestureHandler>
+            </Reanimated.View>
+            </PanGestureHandler>
 })
+
+const Header = (props) => {
+    return props.children
+}
 
 export const Tabs = {
     Root,
@@ -194,6 +252,7 @@ export const Tabs = {
     Pager,
     Trigger,
     View: Content,
+    Header,
     ScrollView: TabScrollView
 }
 

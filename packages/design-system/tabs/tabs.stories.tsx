@@ -1,10 +1,18 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Meta } from '@storybook/react'
 import { Text } from '../text'
-import { Dimensions, Image, StyleSheet, View } from 'react-native'
+import { ActivityIndicator, Dimensions, Image, StyleSheet, View } from 'react-native'
 import { Tabs } from './tablib'
 import { NativeViewGestureHandler, PanGestureHandler } from 'react-native-gesture-handler'
-import Animated, { useAnimatedReaction, runOnJS } from 'react-native-reanimated'
+import Animated, {
+	useAnimatedGestureHandler,
+	useAnimatedReaction,
+	useSharedValue,
+	useAnimatedStyle,
+	withTiming,
+	interpolate,
+	runOnJS,
+} from 'react-native-reanimated'
 import { Animated as OldAnimated } from 'react-native'
 import { TabContext } from './tablib'
 
@@ -56,14 +64,59 @@ const Indicator = () => {
 		outputRange: itemWidths,
 	})
 
-	// const currentItemWidth = tabItemLayouts[position].value.width
 	return (
 		<OldAnimated.View
 			style={[
 				{ position: 'absolute', height: 2, backgroundColor: 'yellow', width: tabItemWidth, bottom: 0 },
 				{ transform: [{ translateX }] },
 			]}
-		></OldAnimated.View>
+		/>
+	)
+}
+
+const PullToRefresh = () => {
+	const { pullToRefreshY, refreshGestureState } = useContext(TabContext)
+	const [refreshState, setRefreshState] = React.useState('idle')
+
+	const onRefresh = () => {
+		setTimeout(() => {
+			refreshGestureState.value = 'idle'
+		}, 4000)
+	}
+
+	useAnimatedReaction(
+		() => {
+			return refreshGestureState.value
+		},
+		v => {
+			runOnJS(setRefreshState)(v)
+		}
+	)
+
+	useEffect(() => {
+		if (refreshState === 'refreshing') {
+			onRefresh()
+		}
+	}, [refreshState])
+
+	return (
+		<Animated.View
+			style={[
+				{
+					zIndex: 99999,
+					position: 'absolute',
+					justifyContent: 'center',
+					alignItems: 'center',
+					width: '100%',
+					top: 40,
+				},
+			]}
+			pointerEvents="none"
+		>
+			{refreshState === 'pulling' && <Text>Release to refresh</Text>}
+			{refreshState === 'cancelling' && <Text>Pull to refresh</Text>}
+			{refreshState === 'refreshing' && <ActivityIndicator color="black" size="large" />}
+		</Animated.View>
 	)
 }
 
@@ -80,7 +133,13 @@ export const ScrollableTabs: React.FC = () => {
 
 	return (
 		<View style={{ flex: 1 }}>
-			<Tabs.Root Header={Header} tabBarHeight={tabbarHeight} onIndexChange={onIndexChange}>
+			<Tabs.Root tabBarHeight={tabbarHeight} onIndexChange={onIndexChange}>
+				<Tabs.Header>
+					<Header />
+				</Tabs.Header>
+
+				<PullToRefresh />
+
 				<Tabs.List>
 					<Tabs.Trigger style={{ height: 50, width: tabItemWidth, backgroundColor: 'white', borderWidth: 1 }}>
 						<Text>1</Text>
@@ -116,28 +175,14 @@ export const ScrollableTabs: React.FC = () => {
 }
 
 const PagerChild = ({ bg }) => {
-	const ref = React.useRef()
-	const nativeRef = React.useRef()
 	return (
-		<PanGestureHandler
-			ref={ref}
-			onGestureEvent={e => {
-				console.log('ee ', e.nativeEvent.translationY)
-			}}
-			failOffsetX={[-100, 100]}
-			activeOffsetY={40}
-			simultaneousHandlers={[ref, nativeRef]}
-		>
-			<NativeViewGestureHandler ref={nativeRef}>
-				<Tabs.ScrollView bounces={false}>
-					<View style={{ height: 200, backgroundColor: bg ?? 'pink' }} />
-					<View style={{ height: 300, backgroundColor: 'yellow' }} />
-					<View style={{ height: 200, backgroundColor: bg ?? 'pink' }} />
-					<View style={{ height: 300, backgroundColor: 'yellow' }} />
-					<View style={{ height: 200, backgroundColor: 'pink' }} />
-				</Tabs.ScrollView>
-			</NativeViewGestureHandler>
-		</PanGestureHandler>
+		<Tabs.ScrollView bounces={false}>
+			<View style={{ height: 200, backgroundColor: bg ?? 'pink' }} />
+			<View style={{ height: 300, backgroundColor: 'yellow' }} />
+			<View style={{ height: 200, backgroundColor: bg ?? 'pink' }} />
+			<View style={{ height: 300, backgroundColor: 'yellow' }} />
+			<View style={{ height: 200, backgroundColor: 'pink' }} />
+		</Tabs.ScrollView>
 	)
 }
 
