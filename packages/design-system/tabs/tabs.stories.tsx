@@ -1,14 +1,14 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Meta } from '@storybook/react'
 import { Text } from '../text'
-import { Dimensions, SafeAreaView, StyleSheet, View } from 'react-native'
+import { Dimensions, View } from 'react-native'
 import { Tabs } from './tablib'
-import Animated, { useAnimatedReaction, useAnimatedStyle, withTiming, runOnJS } from 'react-native-reanimated'
+import Animated, { useAnimatedReaction, runOnJS } from 'react-native-reanimated'
 import { Animated as OldAnimated } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { TabContext } from './tablib'
+import { useTabsContext } from './tablib'
+import { MotiView, AnimatePresence } from 'moti'
 
-const tabbarHeight = 55
+// todo - make tabitemwidth dynamic
 const tabItemWidth = 120
 
 const Header = () => {
@@ -17,8 +17,7 @@ const Header = () => {
 		<Animated.View style={[{ width: '100%' }]} pointerEvents="none">
 			<Animated.Image
 				source={{
-					uri:
-						'https://images.unsplash.com/photo-1559065188-2537766d864b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
+					uri: 'https://images.unsplash.com/photo-1559065188-2537766d864b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
 				}}
 				style={[{ aspectRatio: 1.49, width: windowWidth }]}
 			/>
@@ -26,10 +25,10 @@ const Header = () => {
 	)
 }
 
-const Indicator = () => {
-	const { offset, position, tabItemLayouts } = useContext(TabContext)
+const SelectedTabIndicator = () => {
+	const { offset, position, tabItemLayouts } = useTabsContext()
 	const newPos = OldAnimated.add(position, offset)
-	const [itemWidths, setItemWidths] = React.useState([0, 0])
+	const [itemOffsets, setItemOffsets] = React.useState([0, 0])
 
 	useAnimatedReaction(
 		() => {
@@ -46,15 +45,15 @@ const Indicator = () => {
 		},
 		values => {
 			if (values.length > 1) {
-				runOnJS(setItemWidths)(values)
+				runOnJS(setItemOffsets)(values)
 			}
 		},
 		[]
 	)
 
 	const translateX = newPos.interpolate({
-		inputRange: itemWidths.map((_v, i) => i),
-		outputRange: itemWidths,
+		inputRange: itemOffsets.map((_v, i) => i),
+		outputRange: itemOffsets,
 	})
 
 	return (
@@ -75,7 +74,7 @@ const Indicator = () => {
 					backgroundColor: 'black',
 					position: 'absolute',
 					zIndex: 9999,
-					width: tabItemWidth,
+					width: '100%',
 					bottom: 0,
 				}}
 			/>
@@ -84,7 +83,6 @@ const Indicator = () => {
 					{
 						backgroundColor: 'rgba(0, 0, 0, 0.1)',
 						height: '70%',
-						width: tabItemWidth,
 						borderRadius: 999,
 					},
 				]}
@@ -94,7 +92,7 @@ const Indicator = () => {
 }
 
 const PullToRefresh = ({ onRefresh }) => {
-	const { pullToRefreshY, refreshGestureState } = useContext(TabContext)
+	const { pullToRefreshY, refreshGestureState } = useTabsContext()
 	const [refreshState, setRefreshState] = React.useState('idle')
 
 	// const safeAreaInset = useSafeAreaInsets()
@@ -115,12 +113,6 @@ const PullToRefresh = ({ onRefresh }) => {
 		}
 	)
 
-	const containerStyle = useAnimatedStyle(() => {
-		return {
-			opacity: refreshGestureState.value !== 'idle' ? withTiming(1) : withTiming(0),
-		}
-	})
-
 	useEffect(() => {
 		if (refreshState === 'refreshing') {
 			onRefreshHandler()
@@ -128,26 +120,65 @@ const PullToRefresh = ({ onRefresh }) => {
 	}, [refreshState])
 
 	return (
-		<Animated.View
-			style={[
-				{
-					zIndex: 99999,
-					position: 'absolute',
-					justifyContent: 'center',
-					alignItems: 'center',
-					width: '100%',
-					// top: safeAreaInset.top,
-					backgroundColor: 'rgba(0, 0, 0, 0.1)',
-					height: 60,
-				},
-				containerStyle,
-			]}
-			pointerEvents="none"
+		<AnimatePresence>
+			{refreshState !== 'idle' ? (
+				<MotiView
+					from={{
+						backgroundColor: 'rgba(0, 0, 0, 0.1)',
+					}}
+					animate={{
+						backgroundColor: 'rgba(0, 0, 0, 0.2)',
+					}}
+					exit={{
+						opacity: 0,
+					}}
+					transition={{
+						loop: true,
+						type: 'timing',
+						duration: 500,
+					}}
+					style={[
+						{
+							zIndex: 1,
+							position: 'absolute',
+							justifyContent: 'center',
+							alignItems: 'center',
+							width: '100%',
+							// top: safeAreaInset.top,
+							height: 60,
+						},
+					]}
+					pointerEvents="none"
+				>
+					<MotiView from={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 200 }}>
+						{refreshState === 'pulling' && <Text style={{ color: 'white' }}>Release to refresh</Text>}
+						{refreshState === 'cancelling' && <Text style={{ color: 'white' }}>Pull to refresh</Text>}
+						{refreshState === 'refreshing' && <Text style={{ color: 'white' }}>Refreshing...</Text>}
+					</MotiView>
+				</MotiView>
+			) : null}
+		</AnimatePresence>
+	)
+}
+
+const TabItem = ({ name, count }) => {
+	return (
+		<View
+			style={{
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
+				height: '100%',
+				width: tabItemWidth,
+			}}
 		>
-			{refreshState === 'pulling' && <Text style={{ color: 'white' }}>Release to refresh</Text>}
-			{refreshState === 'cancelling' && <Text style={{ color: 'white' }}>Pull to refresh</Text>}
-			{refreshState === 'refreshing' && <Text style={{ color: 'white' }}>Refreshing...</Text>}
-		</Animated.View>
+			<Text variant="text-sm" sx={{ fontWeight: '700', marginRight: 4 }}>
+				{name}
+			</Text>
+			<Text variant="text-sm" sx={{ fontWeight: '400' }}>
+				{count}
+			</Text>
+		</View>
 	)
 }
 
@@ -171,9 +202,11 @@ export const ScrollableTabs: React.FC = () => {
 		<View style={{ flex: 1 }}>
 			<Tabs.Root onIndexChange={onIndexChange}>
 				<PullToRefresh onRefresh={onRefresh} />
+
 				<Tabs.Header>
 					<Header />
 				</Tabs.Header>
+
 				<Tabs.List
 					contentContainerStyle={{
 						alignItems: 'center',
@@ -184,33 +217,36 @@ export const ScrollableTabs: React.FC = () => {
 						height: 55,
 					}}
 				>
-					<Indicator />
 					{data.map(d => {
 						return (
-							<Tabs.Trigger
-								style={{
-									width: tabItemWidth,
-									justifyContent: 'center',
-									alignItems: 'center',
-									height: '100%',
-								}}
-								key={d.name}
-							>
-								<View style={{ flexDirection: 'row' }}>
-									<Text variant="text-sm" sx={{ fontWeight: '700', marginRight: 4 }}>
-										{d.name}
-									</Text>
-									<Text variant="text-sm" sx={{ fontWeight: '400' }}>
-										{d.count}
-									</Text>
-								</View>
+							<Tabs.Trigger key={d.name}>
+								<TabItem name={d.name} count={d.count} />
 							</Tabs.Trigger>
 						)
 					})}
+					<SelectedTabIndicator />
 				</Tabs.List>
+
 				<Tabs.Pager>
 					{data.map(d => {
-						return <PagerChild key={d.name} />
+						return (
+							<Tabs.FlatList
+								bounces={false}
+								data={[1, 2, 3, 4, 5, 6, 99, 7, 8]}
+								keyExtractor={item => item.toString()}
+								key={d.name}
+								renderItem={({ index }) => {
+									return (
+										<View
+											style={{
+												height: 200,
+												backgroundColor: ['#9CA3AF', '#FEF2F2', '#D1FAE5'][index % 3],
+											}}
+										/>
+									)
+								}}
+							/>
+						)
 					})}
 				</Tabs.Pager>
 			</Tabs.Root>
@@ -218,42 +254,7 @@ export const ScrollableTabs: React.FC = () => {
 	)
 }
 
-const PagerChild = ({ bg }) => {
-	return (
-		<Tabs.ScrollView bounces={false}>
-			<View style={{ height: 200, backgroundColor: bg ?? 'grey' }} />
-			<View style={{ height: 300, backgroundColor: 'black' }} />
-			<View style={{ height: 200, backgroundColor: bg ?? 'white' }} />
-			<View style={{ height: 300, backgroundColor: 'yellow' }} />
-			<View style={{ height: 200, backgroundColor: 'pink' }} />
-		</Tabs.ScrollView>
-	)
-}
-
-const styles = StyleSheet.create({
-	box: {
-		height: 100,
-		width: '100%',
-	},
-	boxA: {
-		backgroundColor: 'white',
-	},
-	boxB: {
-		backgroundColor: '#D8D8D8',
-	},
-	header: {
-		width: '100%',
-		backgroundColor: 'white',
-	},
-	indicator: {
-		height: 4,
-		backgroundColor: '#2196f3',
-		position: 'absolute',
-		bottom: 0,
-	},
-})
-
 export default {
-	component: Tabs.Container,
+	component: Tabs.Root,
 	title: 'Components/Tabs',
 } as Meta
