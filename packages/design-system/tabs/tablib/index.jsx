@@ -1,6 +1,6 @@
 import React,{useContext} from 'react'
-import {ScrollView, Pressable, View, Animated, PixelRatio} from 'react-native'
-import PagerView from 'react-native-pager-view';
+import {ScrollView, Pressable, View, Animated} from 'react-native'
+import {PagerView} from 'react-native-pager-view';
 import Reanimated, {useSharedValue,useDerivedValue,scrollTo,useAnimatedRef, Extrapolate, interpolate,useAnimatedScrollHandler,useAnimatedStyle} from 'react-native-reanimated';
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 export const TabContext = React.createContext();
@@ -30,6 +30,7 @@ const Root = ({Header, children, tabBarHeight, tabItemWidth,  initialIndex, onIn
     const scrollY = useSharedValue(0);
     const translateY = useSharedValue(0);
     const [headerHeight, setHeaderHeight] = React.useState(0);
+    const requestOtherViewsToSyncTheirScrollPosition = useSharedValue(false);
 
 
     const onIndexChange = (newIndex) => {
@@ -56,7 +57,7 @@ const Root = ({Header, children, tabBarHeight, tabItemWidth,  initialIndex, onIn
 	}, [headerHeight])
 
 
-    return <TabContext.Provider value={{tabBarHeight,index:prevIndex, translateY,scrollY, offset, position, headerHeight, initialIndex,tabBarRef, onIndexChange,pagerRef}}>
+    return <TabContext.Provider value={{tabBarHeight,index:prevIndex, requestOtherViewsToSyncTheirScrollPosition, translateY,scrollY, offset, position, headerHeight, initialIndex,tabBarRef, onIndexChange,pagerRef}}>
         <Reanimated.View style={[{position:'absolute', zIndex:1}, animatedStyle]} pointerEvents="box-none">
             <View onLayout={e => setHeaderHeight(e.nativeEvent.layout.height)} pointerEvents="box-none">
                 <Header />
@@ -123,32 +124,43 @@ const Trigger = ({children, index, ...props}) => {
 }
 
 const TabScrollView = React.forwardRef(({children, ...props}, ref) => {
-    const {headerHeight, tabBarHeight, translateY, index } = useContext(TabContext)
+    const {headerHeight, requestOtherViewsToSyncTheirScrollPosition, tabBarHeight, translateY, index } = useContext(TabContext)
     const elementIndex = React.useContext(TabIndexContext).index;
     const aref = useAnimatedRef();
     const scrollY = useSharedValue(0)
-   
+
     const scrollHandler = useAnimatedScrollHandler({
+        onBeginDrag() {
+            requestOtherViewsToSyncTheirScrollPosition.value = false
+        },
+        onMomentumBegin() {
+            requestOtherViewsToSyncTheirScrollPosition.value = false
+        },
         onScroll(e) {
             // only current scrollview controls the header translate, other scrollviews sync their scroll posisions
             if (elementIndex === index.value) {
                 scrollY.value = e.contentOffset.y 
                 translateY.value = interpolate(scrollY.value, [0, headerHeight], [0, -headerHeight], Extrapolate.CLAMP)
             }
+        },
+        onEndDrag() {
+            requestOtherViewsToSyncTheirScrollPosition.value = true
+        },
+        onMomentumEnd() {
+            requestOtherViewsToSyncTheirScrollPosition.value = true
         }
     })
 
-
-    useDerivedValue(() => {
-        if (index.value !== elementIndex) {
+    useDerivedValue(( ) => {
+        if (index.value !== elementIndex && requestOtherViewsToSyncTheirScrollPosition.value) {
             const nextScrollY = -1 * translateY.value;
             // if another tab just started showing header or scroll is less than translated header. 
             if (nextScrollY < headerHeight || scrollY.value < nextScrollY) {
                 scrollTo(aref, 0, nextScrollY , false);
             } 
-        }    
+        }  
+    })
 
-    });
 
     return <Reanimated.ScrollView scrollEventThrottle={16} onScroll={scrollHandler} ref={mergeRef([aref, ref])} contentContainerStyle={{paddingTop: tabBarHeight + headerHeight}} {...props}>
         {children}
