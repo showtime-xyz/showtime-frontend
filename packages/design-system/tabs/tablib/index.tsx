@@ -348,7 +348,11 @@ function makeScrollableComponent<K, T extends any>(Comp: T) {
 
 		const gestureHandler = useAnimatedGestureHandler({
 			onActive: (e, ctx: any) => {
-				if (enablePullToRefresh.value && elementIndex === index.value) {
+				if (
+					enablePullToRefresh.value &&
+					elementIndex === index.value &&
+					refreshGestureState.value !== 'refreshing'
+				) {
 					pullToRefreshY.value = e.translationY
 					if (e.translationY > ctx.lastY) {
 						refreshGestureState.value = 'pulling'
