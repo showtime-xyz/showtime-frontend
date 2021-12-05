@@ -30,7 +30,7 @@ export default function mergeRef(refs) {
 	}
 }
 
-const Root = ({ children, tabBarHeight, initialIndex, onIndexChange: onIndexChangeProp }) => {
+const Root = ({ children, tabBarHeight: initialTabBarHeight, initialIndex, onIndexChange: onIndexChangeProp }) => {
 	const pagerRef = React.useRef()
 	const tabBarRef = React.useRef()
 	let listChild
@@ -40,7 +40,10 @@ const Root = ({ children, tabBarHeight, initialIndex, onIndexChange: onIndexChan
 	const offset = React.useRef(new Animated.Value(0)).current
 	const scrollY = useSharedValue(0)
 	const translateY = useSharedValue(0)
+	// maybe change this to shared value too
 	const [headerHeight, setHeaderHeight] = React.useState(0)
+	// maybe change this to shared value too
+	const [tabBarHeight, setTabBarHeight] = React.useState(initialTabBarHeight)
 	const requestOtherViewsToSyncTheirScrollPosition = useSharedValue(false)
 	const pullToRefreshY = useSharedValue(0)
 	const tablistScrollRef = useAnimatedRef()
@@ -90,13 +93,22 @@ const Root = ({ children, tabBarHeight, initialIndex, onIndexChange: onIndexChan
 				pagerRef,
 			}}
 		>
-			<Reanimated.View style={[{ position: 'absolute', zIndex: 1 }, animatedStyle]} pointerEvents="box-none">
+			<Reanimated.View
+				style={[{ position: 'absolute', zIndex: 1, flex: 1 }, animatedStyle]}
+				pointerEvents="box-none"
+			>
 				<View onLayout={e => setHeaderHeight(e.nativeEvent.layout.height)} pointerEvents="box-none">
 					{headerChild}
 				</View>
-				{listChild}
+				<View
+					style={{ flex: 1 }}
+					onLayout={e => setTabBarHeight(e.nativeEvent.layout.height)}
+					pointerEvents="box-none"
+				>
+					{listChild}
+				</View>
 			</Reanimated.View>
-			{headerHeight || !headerChild ? restChildren : null}
+			{(headerHeight || !headerChild) && tabBarHeight ? restChildren : null}
 		</TabContext.Provider>
 	)
 }
@@ -141,7 +153,7 @@ const List = ({ children, style, ...props }) => {
 			ref={tablistScrollRef}
 			showsHorizontalScrollIndicator={false}
 			horizontal
-			style={[{ height: tabBarHeight }, style]}
+			style={style}
 			{...props}
 		>
 			{newChildren}
@@ -153,7 +165,7 @@ List.displayName = 'List'
 
 const Pager = ({ children }) => {
 	const { initialIndex, onIndexChange } = useContext(TabContext)
-	const { tabBarHeight, pagerRef, position, offset } = useContext(TabContext)
+	const { pagerRef, position, offset } = useContext(TabContext)
 	const newChildren = React.Children.map(children, (c, i) => {
 		return <TabIndexContext.Provider value={{ index: i }}>{c}</TabIndexContext.Provider>
 	})

@@ -1,10 +1,11 @@
 import React, { useContext, useEffect } from 'react'
 import { Meta } from '@storybook/react'
 import { Text } from '../text'
-import { ActivityIndicator, Dimensions, StyleSheet, View } from 'react-native'
+import { Dimensions, SafeAreaView, StyleSheet, View } from 'react-native'
 import { Tabs } from './tablib'
 import Animated, { useAnimatedReaction, useAnimatedStyle, withTiming, runOnJS } from 'react-native-reanimated'
 import { Animated as OldAnimated } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { TabContext } from './tablib'
 
 const tabbarHeight = 55
@@ -96,6 +97,8 @@ const PullToRefresh = ({ onRefresh }) => {
 	const { pullToRefreshY, refreshGestureState } = useContext(TabContext)
 	const [refreshState, setRefreshState] = React.useState('idle')
 
+	// const safeAreaInset = useSafeAreaInsets()
+
 	const onRefreshHandler = () => {
 		onRefresh()
 		setTimeout(() => {
@@ -133,8 +136,9 @@ const PullToRefresh = ({ onRefresh }) => {
 					justifyContent: 'center',
 					alignItems: 'center',
 					width: '100%',
+					// top: safeAreaInset.top,
 					backgroundColor: 'rgba(0, 0, 0, 0.1)',
-					height: 40,
+					height: 60,
 				},
 				containerStyle,
 			]}
@@ -142,7 +146,7 @@ const PullToRefresh = ({ onRefresh }) => {
 		>
 			{refreshState === 'pulling' && <Text style={{ color: 'white' }}>Release to refresh</Text>}
 			{refreshState === 'cancelling' && <Text style={{ color: 'white' }}>Pull to refresh</Text>}
-			{refreshState === 'refreshing' && <ActivityIndicator color="white" size="small" />}
+			{refreshState === 'refreshing' && <Text style={{ color: 'white' }}>Refreshing...</Text>}
 		</Animated.View>
 	)
 }
@@ -165,7 +169,7 @@ export const ScrollableTabs: React.FC = () => {
 
 	return (
 		<View style={{ flex: 1 }}>
-			<Tabs.Root tabBarHeight={tabbarHeight} onIndexChange={onIndexChange}>
+			<Tabs.Root onIndexChange={onIndexChange}>
 				<PullToRefresh onRefresh={onRefresh} />
 				<Tabs.Header>
 					<Header />
@@ -177,6 +181,7 @@ export const ScrollableTabs: React.FC = () => {
 					style={{
 						paddingHorizontal: 10,
 						backgroundColor: 'white',
+						height: 55,
 					}}
 				>
 					<Indicator />

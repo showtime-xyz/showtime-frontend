@@ -2,6 +2,7 @@ import { DripsyProvider } from 'dripsy'
 import { theme } from 'design-system/theme'
 import { useFonts } from 'expo-font'
 import { View } from 'react-native'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 const FontsLoader = ({ children }) => {
 	const [fontsLoaded, error] = useFonts({
@@ -24,11 +25,13 @@ const FontsLoader = ({ children }) => {
 export const decorators = [
 	Story => (
 		<DripsyProvider theme={theme}>
-			<MainAxisCenter>
-				<FontsLoader>
-					<Story />
-				</FontsLoader>
-			</MainAxisCenter>
+			<SafeAreaProvider>
+				<MainAxisCenter>
+					<FontsLoader>
+						<Story />
+					</FontsLoader>
+				</MainAxisCenter>
+			</SafeAreaProvider>
 		</DripsyProvider>
 	),
 ]
