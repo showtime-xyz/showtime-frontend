@@ -34,8 +34,6 @@ const Root = ({Header, children, tabBarHeight, initialIndex, onIndexChange: onIn
     const tablistScrollRef = useAnimatedRef();
     const tabItemLayouts = [];
 
-
-
     const onIndexChange = (newIndex) => {
        
         index.value = newIndex;

@@ -1,20 +1,17 @@
 import React, { useContext } from 'react'
 import { Meta } from '@storybook/react'
 import { Text } from '../text'
-import { Dimensions, Image, StyleSheet, View, ScrollView, RefreshControl } from 'react-native'
+import { Dimensions, Image, StyleSheet, View } from 'react-native'
 import { Tabs } from './tablib'
 import { NativeViewGestureHandler, PanGestureHandler } from 'react-native-gesture-handler'
-import Animated from 'react-native-reanimated'
+import Animated, { useAnimatedReaction, runOnJS } from 'react-native-reanimated'
+import { Animated as OldAnimated } from 'react-native'
 import { TabContext } from './tablib'
-
-const DATA = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
 const tabbarHeight = 50
 const tabItemWidth = 100
 
 const Header = () => {
-	const { scrollY } = useContext(TabContext)
-
 	return (
 		<Animated.View style={[{ width: '100%' }]} pointerEvents="none">
 			<Image
@@ -28,11 +25,49 @@ const Header = () => {
 	)
 }
 
-const identity = (v: unknown): string => v + ''
+const Indicator = () => {
+	const { offset, position, tabItemLayouts } = useContext(TabContext)
+	const newPos = OldAnimated.add(position, offset)
+	const [itemWidths, setItemWidths] = React.useState([0, 0])
+
+	useAnimatedReaction(
+		() => {
+			let result = []
+			let sum = 0
+			for (let i = 0; i < tabItemLayouts.length; i++) {
+				if (tabItemLayouts[i].value) {
+					const width = tabItemLayouts[i].value.width
+					result.push(sum)
+					sum = sum + width
+				}
+			}
+			return result
+		},
+		values => {
+			if (values.length > 1) {
+				runOnJS(setItemWidths)(values)
+			}
+		},
+		[]
+	)
+
+	const translateX = newPos.interpolate({
+		inputRange: itemWidths.map((_v, i) => i),
+		outputRange: itemWidths,
+	})
+
+	// const currentItemWidth = tabItemLayouts[position].value.width
+	return (
+		<OldAnimated.View
+			style={[
+				{ position: 'absolute', height: 2, backgroundColor: 'yellow', width: tabItemWidth, bottom: 0 },
+				{ transform: [{ translateX }] },
+			]}
+		></OldAnimated.View>
+	)
+}
 
 export const ScrollableTabs: React.FC = () => {
-	const [index, setIndex] = React.useState(0)
-
 	const onIndexChange = () => {}
 	const [refreshing, setRefreshing] = React.useState(false)
 
@@ -45,12 +80,7 @@ export const ScrollableTabs: React.FC = () => {
 
 	return (
 		<View style={{ flex: 1 }}>
-			<Tabs.Root
-				Header={Header}
-				tabBarHeight={tabbarHeight}
-				onIndexChange={onIndexChange}
-				tabItemWidth={tabItemWidth}
-			>
+			<Tabs.Root Header={Header} tabBarHeight={tabbarHeight} onIndexChange={onIndexChange}>
 				<Tabs.List>
 					<Tabs.Trigger style={{ height: 50, width: tabItemWidth, backgroundColor: 'white', borderWidth: 1 }}>
 						<Text>1</Text>
@@ -58,7 +88,7 @@ export const ScrollableTabs: React.FC = () => {
 					<Tabs.Trigger style={{ height: 50, width: tabItemWidth, backgroundColor: 'white', borderWidth: 1 }}>
 						<Text>2</Text>
 					</Tabs.Trigger>
-					{/* <Tabs.Trigger style={{ height: 50, width: tabItemWidth, backgroundColor: 'white', borderWidth: 1 }}>
+					<Tabs.Trigger style={{ height: 50, width: tabItemWidth, backgroundColor: 'white', borderWidth: 1 }}>
 						<Text>3</Text>
 					</Tabs.Trigger>
 					<Tabs.Trigger style={{ height: 50, width: tabItemWidth, backgroundColor: 'white', borderWidth: 1 }}>
@@ -69,15 +99,16 @@ export const ScrollableTabs: React.FC = () => {
 					</Tabs.Trigger>
 					<Tabs.Trigger style={{ height: 50, width: tabItemWidth, backgroundColor: 'white', borderWidth: 1 }}>
 						<Text>6</Text>
-					</Tabs.Trigger> */}
+					</Tabs.Trigger>
+					<Indicator />
 				</Tabs.List>
 				<Tabs.Pager>
 					<PagerChild />
 					<PagerChild bg={'black'} />
-					{/* <PagerChild bg={'grey'} />
+					<PagerChild bg={'grey'} />
 					<PagerChild bg={'purple'} />
 					<PagerChild bg={'brown'} />
-					<PagerChild bg={'green'} /> */}
+					<PagerChild bg={'green'} />
 				</Tabs.Pager>
 			</Tabs.Root>
 		</View>
@@ -87,12 +118,11 @@ export const ScrollableTabs: React.FC = () => {
 const PagerChild = ({ bg }) => {
 	const ref = React.useRef()
 	const nativeRef = React.useRef()
-
 	return (
 		<PanGestureHandler
 			ref={ref}
 			onGestureEvent={e => {
-				// console.log('ee ', e.nativeEvent.translationY)
+				console.log('ee ', e.nativeEvent.translationY)
 			}}
 			failOffsetX={[-100, 100]}
 			activeOffsetY={40}
