@@ -2,10 +2,9 @@ import React, { useContext } from 'react'
 import { Meta } from '@storybook/react'
 import { Text } from '../text'
 import { Dimensions, Image, StyleSheet, View, ScrollView, RefreshControl } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Tabs } from './tablib'
 import { NativeViewGestureHandler, PanGestureHandler } from 'react-native-gesture-handler'
-import Animated, { useAnimatedStyle } from 'react-native-reanimated'
+import Animated from 'react-native-reanimated'
 import { TabContext } from './tablib'
 
 const DATA = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
@@ -59,7 +58,7 @@ export const ScrollableTabs: React.FC = () => {
 					<Tabs.Trigger style={{ height: 50, width: tabItemWidth, backgroundColor: 'white', borderWidth: 1 }}>
 						<Text>2</Text>
 					</Tabs.Trigger>
-					<Tabs.Trigger style={{ height: 50, width: tabItemWidth, backgroundColor: 'white', borderWidth: 1 }}>
+					{/* <Tabs.Trigger style={{ height: 50, width: tabItemWidth, backgroundColor: 'white', borderWidth: 1 }}>
 						<Text>3</Text>
 					</Tabs.Trigger>
 					<Tabs.Trigger style={{ height: 50, width: tabItemWidth, backgroundColor: 'white', borderWidth: 1 }}>
@@ -70,15 +69,15 @@ export const ScrollableTabs: React.FC = () => {
 					</Tabs.Trigger>
 					<Tabs.Trigger style={{ height: 50, width: tabItemWidth, backgroundColor: 'white', borderWidth: 1 }}>
 						<Text>6</Text>
-					</Tabs.Trigger>
+					</Tabs.Trigger> */}
 				</Tabs.List>
 				<Tabs.Pager>
 					<PagerChild />
 					<PagerChild bg={'black'} />
-					<PagerChild bg={'grey'} />
+					{/* <PagerChild bg={'grey'} />
 					<PagerChild bg={'purple'} />
 					<PagerChild bg={'brown'} />
-					<PagerChild bg={'green'} />
+					<PagerChild bg={'green'} /> */}
 				</Tabs.Pager>
 			</Tabs.Root>
 		</View>
@@ -93,9 +92,9 @@ const PagerChild = ({ bg }) => {
 		<PanGestureHandler
 			ref={ref}
 			onGestureEvent={e => {
-				console.log('ee ', e.nativeEvent.translationY)
+				// console.log('ee ', e.nativeEvent.translationY)
 			}}
-			// failOffsetX={[-100, 100]}
+			failOffsetX={[-100, 100]}
 			activeOffsetY={40}
 			simultaneousHandlers={[ref, nativeRef]}
 		>
