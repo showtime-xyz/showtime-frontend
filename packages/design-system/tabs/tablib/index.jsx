@@ -1,22 +1,44 @@
 import React,{useContext} from 'react'
-import {ScrollView, Pressable, View} from 'react-native'
+import {ScrollView, Pressable, View, Animated} from 'react-native'
 import PagerView from 'react-native-pager-view';
-const TabContext = React.createContext();
+import Reanimated, {useSharedValue,useDerivedValue,scrollTo,useAnimatedRef, useAnimatedScrollHandler,useAnimatedStyle} from 'react-native-reanimated';
+const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
+export const TabContext = React.createContext();
+const TabIndexContext = React.createContext();
 
-const Root = ({Header, children, tabBarHeight, tabItemWidth, headerHeight, initialIndex, onIndexChange: onIndexChangeProp}) => {
+export default function mergeRef(
+    refs) {
+    return (value) => {
+      refs.forEach((ref) => {
+        if (typeof ref === "function") {
+          ref(value);
+        } else if (ref != null) {
+          ref.current = value;
+        }
+      });
+    };
+  }
+
+const Root = ({Header, children, tabBarHeight, tabItemWidth,  initialIndex, onIndexChange: onIndexChangeProp}) => {
     const pagerRef = React.useRef();
     const tabBarRef = React.useRef();
     let listChild
     let restChildren = [];
-    let prevIndex = React.useRef(initialIndex ?? 0);
+    let prevIndex = useSharedValue(initialIndex ?? 0);
+    const position = React.useRef(new Animated.Value(0)).current
+    const offset = React.useRef(new Animated.Value(0)).current
+    const scrollY = useSharedValue(0);
+    const translateY = useSharedValue(0);
+    const [headerHeight, setHeaderHeight] = React.useState(0);
+
 
     const onIndexChange = (newIndex) => {
-        if (newIndex > prevIndex) {
+        if (newIndex > prevIndex.value) {
             tabBarRef.current.scrollTo({x: tabItemWidth * (newIndex + 1) })
         } else {
             tabBarRef.current.scrollTo({x: tabItemWidth  * (newIndex - 1) })
         }
-        prevIndex.current = newIndex;
+        prevIndex.value = newIndex;
         onIndexChangeProp(newIndex)
     }
 
@@ -27,13 +49,21 @@ const Root = ({Header, children, tabBarHeight, tabItemWidth, headerHeight, initi
             restChildren.push(c)
         }
     })
+    const animatedStyle = useAnimatedStyle(() => {
+		return {
+			transform: [{translateY: translateY.value}],
+		}
+	}, [headerHeight])
 
-    return <TabContext.Provider value={{tabBarHeight, headerHeight, initialIndex,tabBarRef, onIndexChange,pagerRef}}>
-        <View style={{position:'absolute', zIndex:1}} pointerEvents="box-none">
-            <Header />
+
+    return <TabContext.Provider value={{tabBarHeight,index:prevIndex, translateY,scrollY, offset, position, headerHeight, initialIndex,tabBarRef, onIndexChange,pagerRef}}>
+        <Reanimated.View style={[{position:'absolute', zIndex:1}, animatedStyle]} pointerEvents="box-none">
+            <View onLayout={e => setHeaderHeight(e.nativeEvent.layout.height)} pointerEvents="box-none">
+                <Header />
+            </View>
             {listChild}
-        </View>
-        {restChildren}  
+        </Reanimated.View>
+        {headerHeight ? restChildren : null}
     </TabContext.Provider>
 }
 
@@ -50,12 +80,29 @@ const List = ({children, ...props}) => {
 
 List.displayName = "List"
 
+
 const Pager = ({children}) => {
     const {initialIndex, onIndexChange} = useContext(TabContext)
-    const {tabBarHeight,pagerRef} = useContext(TabContext)
-    return <PagerView style={{flex:1 }} ref={pagerRef} initialPage={initialIndex} onPageSelected={(e) => onIndexChange(e.nativeEvent.position)}>
-        {children}
-    </PagerView>
+    const {tabBarHeight,pagerRef, position , offset} = useContext(TabContext)
+    const newChildren = React.Children.map(children, (c,i) => {
+        return <TabIndexContext.Provider value={{index:i}}>
+            {c}
+        </TabIndexContext.Provider>
+    })
+    return <AnimatedPagerView style={{flex:1 }} ref={pagerRef} onPageScroll={Animated.event(
+        [
+          {
+            nativeEvent: {
+              position: position,
+              offset: offset,
+            },
+          },
+        ],
+        { useNativeDriver: true }
+      )
+    } initialPage={initialIndex} onPageSelected={(e) => onIndexChange(e.nativeEvent.position)}>
+        {newChildren}
+    </AnimatedPagerView>
 }
 
 const Content = ({children, ...props}) => {
@@ -76,10 +123,26 @@ const Trigger = ({children, index, ...props}) => {
 }
 
 const TabScrollView = React.forwardRef(({children, ...props}, ref) => {
-    const {headerHeight, tabBarHeight} = useContext(TabContext)
-    return <ScrollView ref={ref} contentContainerStyle={{paddingTop: tabBarHeight + headerHeight}} {...props}>
+    const {headerHeight, tabBarHeight, translateY, index } = useContext(TabContext)
+    const elementIndex = React.useContext(TabIndexContext).index;
+    const aref = useAnimatedRef();
+   
+    const scrollHandler = useAnimatedScrollHandler((e) =>{
+        // only current scrollview controls the header translate, other scrollviews sync their scroll posisions
+        if (elementIndex === index.value) {
+            translateY.value = Math.min(0,Math.max(-headerHeight, -e.contentOffset.y))
+        }
+    })
+
+    useDerivedValue(() => {
+        if (index.value !== elementIndex) {
+            scrollTo(aref, 0, -1 * translateY.value, false);
+        }
+    });
+
+    return <Reanimated.ScrollView scrollEventThrottle={16} onScroll={scrollHandler} ref={mergeRef([aref, ref])} contentContainerStyle={{paddingTop: tabBarHeight + headerHeight}} {...props}>
         {children}
-    </ScrollView>
+    </Reanimated.ScrollView>
 })
 
 export const Tabs = {

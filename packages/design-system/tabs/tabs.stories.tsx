@@ -1,20 +1,23 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Meta } from '@storybook/react'
 import { Text } from '../text'
 import { Dimensions, Image, StyleSheet, View, ScrollView, RefreshControl } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Tabs } from './tablib'
 import { NativeViewGestureHandler, PanGestureHandler } from 'react-native-gesture-handler'
+import Animated, { useAnimatedStyle } from 'react-native-reanimated'
+import { TabContext } from './tablib'
 
 const DATA = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
-const headerHeight = 240
 const tabbarHeight = 50
 const tabItemWidth = 100
 
 const Header = () => {
+	const { scrollY } = useContext(TabContext)
+
 	return (
-		<View style={{ width: '100%', height: headerHeight }} pointerEvents="none">
+		<Animated.View style={[{ width: '100%' }]} pointerEvents="none">
 			<Image
 				source={{
 					uri:
@@ -22,7 +25,7 @@ const Header = () => {
 				}}
 				style={{ width: Dimensions.get('window').width, aspectRatio: 1.49 }}
 			/>
-		</View>
+		</Animated.View>
 	)
 }
 
@@ -42,10 +45,9 @@ export const ScrollableTabs: React.FC = () => {
 	}
 
 	return (
-		<SafeAreaView style={{ flex: 1, marginTop: 45 }}>
+		<View style={{ flex: 1 }}>
 			<Tabs.Root
 				Header={Header}
-				headerHeight={headerHeight}
 				tabBarHeight={tabbarHeight}
 				onIndexChange={onIndexChange}
 				tabItemWidth={tabItemWidth}
@@ -79,7 +81,7 @@ export const ScrollableTabs: React.FC = () => {
 					<PagerChild bg={'green'} />
 				</Tabs.Pager>
 			</Tabs.Root>
-		</SafeAreaView>
+		</View>
 	)
 }
 
