@@ -32,7 +32,7 @@ export const SimpleTabs: React.FC = () => {
 
 	return (
 		<View style={{ flex: 1 }}>
-			<Tabs.Root onIndexChange={onIndexChange} lazy>
+			<Tabs.Root onIndexChange={onIndexChange}>
 				<Tabs.List
 					contentContainerStyle={{
 						alignItems: 'center',
