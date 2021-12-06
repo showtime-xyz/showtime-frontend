@@ -4,6 +4,7 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "expo start",
+		"dev": "yarn start",
 		"android": "yarn start --android",
 		"ios": "yarn start --ios",
 		"web": "yarn start --web",
