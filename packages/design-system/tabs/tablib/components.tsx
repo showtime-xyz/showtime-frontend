@@ -39,8 +39,6 @@ export const PullToRefresh = ({ onRefresh }) => {
 	const { pullToRefreshY, refreshGestureState } = useTabsContext()
 	const [refreshState, setRefreshState] = React.useState('idle')
 
-	// const safeAreaInset = useSafeAreaInsets()
-
 	const onRefreshHandler = () => {
 		onRefresh()
 		setTimeout(() => {
@@ -64,45 +62,29 @@ export const PullToRefresh = ({ onRefresh }) => {
 	}, [refreshState])
 
 	return (
+		// todo blink animation?
 		<AnimatePresence>
 			{refreshState !== 'idle' ? (
 				<MotiView
-					from={{
-						backgroundColor: 'rgba(0, 0, 0, 0.1)',
-					}}
-					animate={{
-						backgroundColor: 'rgba(0, 0, 0, 0.2)',
-					}}
-					exit={{
-						opacity: 0,
-					}}
-					transition={{
-						loop: true,
-						type: 'timing',
-						duration: 500,
-					}}
+					from={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					transition={{ duration: 200, type: 'timing' }}
+					exit={{ opacity: 0 }}
 					style={[
 						{
 							zIndex: 1,
 							position: 'absolute',
+							backgroundColor: 'rgba(0, 0, 0, 0.2)',
 							justifyContent: 'center',
 							alignItems: 'center',
 							width: '100%',
-							// top: safeAreaInset.top,
 							height: 50,
 						},
 					]}
-					pointerEvents="none"
 				>
-					<MotiView
-						from={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						transition={{ duration: 200, type: 'timing' }}
-					>
-						{refreshState === 'pulling' && <Text style={{ color: 'white' }}>Release to refresh</Text>}
-						{refreshState === 'cancelling' && <Text style={{ color: 'white' }}>Pull to refresh</Text>}
-						{refreshState === 'refreshing' && <Text style={{ color: 'white' }}>Refreshing...</Text>}
-					</MotiView>
+					{refreshState === 'pulling' && <Text style={{ color: 'white' }}>Release to refresh</Text>}
+					{refreshState === 'cancelling' && <Text style={{ color: 'white' }}>Pull to refresh</Text>}
+					{refreshState === 'refreshing' && <Text style={{ color: 'white' }}>Refreshing...</Text>}
 				</MotiView>
 			) : null}
 		</AnimatePresence>
