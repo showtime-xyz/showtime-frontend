@@ -1,8 +1,11 @@
 import React from 'react'
 import { Meta } from '@storybook/react'
-import { Dimensions, View, Image } from 'react-native'
+import { Dimensions, View, Image, StatusBar } from 'react-native'
 import { Tabs } from './tablib'
 import { PullToRefresh, SelectedTabIndicator, TabItem } from './tablib/components'
+
+// optional but passing tabListHeight will improve start time
+const TAB_LIST_HEIGHT = 55
 
 const Header = () => {
 	const windowWidth = Dimensions.get('window').width
@@ -32,7 +35,12 @@ export const SimpleTabs: React.FC = () => {
 
 	return (
 		<View style={{ flex: 1 }}>
-			<Tabs.Root onIndexChange={onIndexChange}>
+			<StatusBar backgroundColor="black" barStyle="dark-content" />
+			<Tabs.Root
+				onIndexChange={onIndexChange}
+				// passing tabListHeight will improve start time
+				tabListHeight={TAB_LIST_HEIGHT}
+			>
 				<Tabs.List
 					contentContainerStyle={{
 						alignItems: 'center',
@@ -40,7 +48,7 @@ export const SimpleTabs: React.FC = () => {
 					style={{
 						paddingHorizontal: 10,
 						backgroundColor: 'white',
-						height: 55,
+						height: TAB_LIST_HEIGHT,
 					}}
 				>
 					{data.map(d => {
@@ -83,7 +91,12 @@ export const TabsWithHeader: React.FC = () => {
 
 	return (
 		<View style={{ flex: 1 }}>
-			<Tabs.Root onIndexChange={onIndexChange} lazy>
+			<Tabs.Root
+				onIndexChange={onIndexChange}
+				// passing tabListHeight will improve start time
+				tabListHeight={TAB_LIST_HEIGHT}
+				lazy
+			>
 				{/*  no-op on web */}
 				<PullToRefresh onRefresh={onRefresh} />
 
@@ -98,7 +111,7 @@ export const TabsWithHeader: React.FC = () => {
 					style={{
 						paddingHorizontal: 10,
 						backgroundColor: 'white',
-						height: 55,
+						height: TAB_LIST_HEIGHT,
 					}}
 				>
 					{data.map(d => {
