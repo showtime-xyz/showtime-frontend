@@ -24,6 +24,7 @@ import Reanimated, {
 	interpolate,
 	useAnimatedScrollHandler,
 	useAnimatedStyle,
+	useAnimatedReaction,
 } from 'react-native-reanimated'
 import { NativeViewGestureHandler, PanGestureHandler } from 'react-native-gesture-handler'
 import { ForwardedRef } from 'markdown-to-jsx/node_modules/@types/react'
@@ -48,23 +49,26 @@ type TabsContextType = {
 	initialIndex: number
 	onIndexChange: (index: number) => void
 	pagerRef: RefObject<PagerView>
+	lazy?: boolean
 }
 
 export const TabsContext = React.createContext(null as TabsContextType)
 
-type TabRoot = {
+type TabRootProps = {
 	initialIndex?: number
 	onIndexChange?: (index: number) => void
 	tabListHeight?: number
 	children: React.ReactNode
+	lazy?: boolean
 }
 
 const Root = ({
 	children,
 	tabListHeight: initialtabListHeight,
-	initialIndex,
+	initialIndex = 0,
 	onIndexChange: onIndexChangeProp,
-}: TabRoot) => {
+	lazy,
+}: TabRootProps) => {
 	const pagerRef = React.useRef()
 	const index = useSharedValue(initialIndex ?? 0)
 	const position = React.useRef(new Animated.Value(0)).current
@@ -129,6 +133,7 @@ const Root = ({
 				initialIndex,
 				onIndexChange,
 				pagerRef,
+				lazy,
 			}}
 		>
 			<Reanimated.View style={[utilStyles.a, headerTranslateStyle]} pointerEvents="box-none">
@@ -208,14 +213,40 @@ const List = ({ children, ...props }: TabListProps) => {
 const TabIndexContext = React.createContext({} as { index: number })
 
 const Pager = ({ children }) => {
-	const { initialIndex, onIndexChange, pagerRef, position, offset } = useContext(TabsContext)
+	const { initialIndex, onIndexChange, pagerRef, position, offset, lazy, index } = useContext(TabsContext)
+
+	const [mountedIndices, setMountedIndices] = React.useState(
+		lazy ? [initialIndex] : React.Children.map(children, (_c, i) => i)
+	)
 
 	const newChildren = React.useMemo(
 		() =>
 			React.Children.map(children, (c, i) => {
-				return <TabIndexContext.Provider value={{ index: i }}>{c}</TabIndexContext.Provider>
+				const shouldLoad = mountedIndices.includes(i)
+				return (
+					// why use context if we can clone the children. do we need better composition here?
+					<TabIndexContext.Provider value={{ index: i }} key={c.key ?? i}>
+						{
+							<View style={[utilStyles.b, shouldLoad ? StyleSheet.absoluteFill : undefined]}>
+								{shouldLoad ? c : null}
+							</View>
+						}
+					</TabIndexContext.Provider>
+				)
 			}),
-		[children]
+		[children, mountedIndices]
+	)
+
+	useAnimatedReaction(
+		() => {
+			return index.value
+		},
+		(res, prev) => {
+			if (res !== prev && !mountedIndices.includes(res)) {
+				runOnJS(setMountedIndices)(mountedIndices.concat(res))
+			}
+		},
+		[mountedIndices]
 	)
 
 	return (
@@ -446,4 +477,8 @@ function mergeRef(refs) {
 
 const utilStyles = StyleSheet.create({
 	a: { position: 'absolute', zIndex: 1, flex: 1 },
+	b: {
+		flex: 1,
+		overflow: 'hidden',
+	},
 })

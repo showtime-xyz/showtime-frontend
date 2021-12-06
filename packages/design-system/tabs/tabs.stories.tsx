@@ -8,7 +8,8 @@ import { Animated as OldAnimated } from 'react-native'
 import { useTabsContext } from './tablib'
 import { MotiView, AnimatePresence } from 'moti'
 
-// todo - make tabitemwidth dynamic
+// todo - make tabitemwidth dynamic. Current limitation of pager of using vanilla animated prevents animating width indicators.
+// todo - figure out how to make reanimated native handlers work with pager view
 const tabItemWidth = 120
 
 const Header = () => {
@@ -145,12 +146,16 @@ const PullToRefresh = ({ onRefresh }) => {
 							alignItems: 'center',
 							width: '100%',
 							// top: safeAreaInset.top,
-							height: 60,
+							height: 50,
 						},
 					]}
 					pointerEvents="none"
 				>
-					<MotiView from={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 200 }}>
+					<MotiView
+						from={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						transition={{ duration: 200, type: 'timing' }}
+					>
 						{refreshState === 'pulling' && <Text style={{ color: 'white' }}>Release to refresh</Text>}
 						{refreshState === 'cancelling' && <Text style={{ color: 'white' }}>Pull to refresh</Text>}
 						{refreshState === 'refreshing' && <Text style={{ color: 'white' }}>Refreshing...</Text>}
@@ -184,11 +189,11 @@ const TabItem = ({ name, count }) => {
 
 export const ScrollableTabs: React.FC = () => {
 	const onIndexChange = index => {
-		console.log('Dd ', index)
+		console.log('index changed', index)
 	}
 
 	const onRefresh = () => {
-		console.log('refresh current index or profile!')
+		console.log('refresh page!')
 	}
 
 	const data = [
@@ -200,7 +205,7 @@ export const ScrollableTabs: React.FC = () => {
 
 	return (
 		<View style={{ flex: 1 }}>
-			<Tabs.Root onIndexChange={onIndexChange}>
+			<Tabs.Root onIndexChange={onIndexChange} lazy>
 				<PullToRefresh onRefresh={onRefresh} />
 
 				<Tabs.Header>
@@ -224,9 +229,11 @@ export const ScrollableTabs: React.FC = () => {
 							</Tabs.Trigger>
 						)
 					})}
-					<SelectedTabIndicator />
-				</Tabs.List>
 
+					{/* Line and current tab hightlight Indicator  */}
+					<SelectedTabIndicator />
+					{/* */}
+				</Tabs.List>
 				<Tabs.Pager>
 					{data.map(d => {
 						return (
