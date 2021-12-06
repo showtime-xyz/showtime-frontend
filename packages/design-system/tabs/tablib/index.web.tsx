@@ -1,10 +1,9 @@
 import React from 'react'
-import { ScrollView, FlatList, SectionList, View, Pressable } from 'react-native'
-import { styles as tabBarStyles } from '../MaterialTabBar/TabBar'
+import { ScrollView, FlatList, SectionList, View } from 'react-native'
 import * as RadixTabs from '@radix-ui/react-tabs'
 import { TabRootProps } from './types'
 
-const radixTriggerStyle = { position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }
+const radixTriggerStyle = { position: 'relative', height: '100%', display: 'flex', alignItems: 'center' } as const
 
 const Root = ({ children, initialIndex = 0, onIndexChange: onIndexChangeProp, accessibilityLabel }: TabRootProps) => {
 	const [selected, setSelected] = React.useState(initialIndex.toString() ?? '0')
@@ -60,7 +59,14 @@ const Root = ({ children, initialIndex = 0, onIndexChange: onIndexChangeProp, ac
 							const value = index.toString()
 							return (
 								<RadixTabs.Trigger value={value} key={value} style={radixTriggerStyle}>
-									<View>
+									<View
+										style={{
+											alignItems: 'center',
+											borderBottomWidth: 2,
+											borderBottomColor: selected === value ? 'black' : 'transparent',
+											paddingVertical: 8,
+										}}
+									>
 										<View
 											style={{
 												backgroundColor: selected === value ? 'rgba(0,0, 0, 0.1)' : undefined,
@@ -74,16 +80,6 @@ const Root = ({ children, initialIndex = 0, onIndexChange: onIndexChangeProp, ac
 										>
 											{t}
 										</View>
-										<View
-											pointerEvents="none"
-											style={{
-												height: 2,
-												width: '100%',
-												opacity: selected === value ? 1 : 0,
-												marginTop: 10,
-												backgroundColor: 'black',
-											}}
-										/>
 									</View>
 								</RadixTabs.Trigger>
 							)
@@ -127,5 +123,6 @@ export const Tabs = {
 	FlatList: FlatList,
 	SectionList: SectionList,
 	Trigger,
+	View,
 	List,
 }

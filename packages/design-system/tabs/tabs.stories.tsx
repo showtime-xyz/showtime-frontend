@@ -55,10 +55,10 @@ export const SimpleTabs: React.FC = () => {
 					<SelectedTabIndicator />
 				</Tabs.List>
 				<Tabs.Pager>
-					<Tabs.View style={{ height: 100, backgroundColor: 'pink' }} />
-					<Tabs.View style={{ height: 200, backgroundColor: 'yellow' }} />
-					<Tabs.View style={{ height: 300, backgroundColor: 'purple' }} />
-					<Tabs.View style={{ height: 100, backgroundColor: 'brown' }} />
+					<Tabs.View style={{ height: 100, backgroundColor: '#059669' }} />
+					<Tabs.View style={{ height: 200, backgroundColor: '#FEF2F2' }} />
+					<Tabs.View style={{ height: 300, backgroundColor: '#D1FAE5' }} />
+					<Tabs.View style={{ height: 100, backgroundColor: '#2563EB' }} />
 				</Tabs.Pager>
 			</Tabs.Root>
 		</View>
@@ -124,7 +124,7 @@ export const TabsWithHeader: React.FC = () => {
 										<View
 											style={{
 												height: 200,
-												backgroundColor: ['#000', '#FEF2F2', '#D1FAE5'][index % 3],
+												backgroundColor: ['#059669', '#FEF2F2', '#D1FAE5'][index % 3],
 											}}
 										/>
 									)
