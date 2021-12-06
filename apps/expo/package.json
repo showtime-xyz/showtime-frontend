@@ -104,7 +104,7 @@
 		"react-native-pager-view": "^5.4.9",
 		"react-native-popper": "^0.3.2",
 		"react-native-randombytes": "^3.0.0",
-		"react-native-reanimated": "^2.2.4",
+		"react-native-reanimated": "^2.3.0-beta.4",
 		"react-native-safe-area-context": "3.3.2",
 		"react-native-screens": "^3.9.0",
 		"react-native-svg": "^12.1.1",

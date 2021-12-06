@@ -1,4 +1,4 @@
-import React, { useContext, RefObject } from 'react'
+import React, { useContext, ForwardedRef } from 'react'
 import {
 	Pressable,
 	View,
@@ -6,7 +6,6 @@ import {
 	useWindowDimensions,
 	StyleSheet,
 	ScrollViewProps,
-	LayoutRectangle,
 	ViewProps,
 	PressableProps,
 	FlatList,
@@ -27,40 +26,11 @@ import Reanimated, {
 	useAnimatedReaction,
 } from 'react-native-reanimated'
 import { NativeViewGestureHandler, PanGestureHandler } from 'react-native-gesture-handler'
-import { ForwardedRef } from 'markdown-to-jsx/node_modules/@types/react'
+import { RefreshGestureState, TabListProps, TabRootProps, TabsContextType } from './types'
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView)
 
-type RefreshGestureState = 'idle' | 'pulling' | 'refreshing' | 'cancelling'
-
-type TabsContextType = {
-	tabListHeight: number
-	pullToRefreshY: Reanimated.SharedValue<number>
-	refreshGestureState: Reanimated.SharedValue<RefreshGestureState>
-	index: Reanimated.SharedValue<number>
-	tabItemLayouts: Array<Reanimated.SharedValue<LayoutRectangle | null>>
-	tablistScrollRef: RefObject<Reanimated.ScrollView>
-	requestOtherViewsToSyncTheirScrollPosition: Reanimated.SharedValue<boolean>
-	translateY: Reanimated.SharedValue<number>
-	scrollY: Reanimated.SharedValue<number>
-	offset: Animated.Value
-	position: Animated.Value
-	headerHeight: number
-	initialIndex: number
-	onIndexChange: (index: number) => void
-	pagerRef: RefObject<PagerView>
-	lazy?: boolean
-}
-
 export const TabsContext = React.createContext(null as TabsContextType)
-
-type TabRootProps = {
-	initialIndex?: number
-	onIndexChange?: (index: number) => void
-	tabListHeight?: number
-	children: React.ReactNode
-	lazy?: boolean
-}
 
 const Root = ({
 	children,
@@ -96,14 +66,16 @@ const Root = ({
 		let restChildren = []
 		let headerChild
 		React.Children.forEach(children, c => {
-			//@ts-ignore
-			if (c.type === List) {
-				tabListChild = c
+			if (React.isValidElement(c) && c) {
 				//@ts-ignore
-			} else if (c.type === Header) {
-				headerChild = c
-			} else {
-				restChildren.push(c)
+				if (c.type === List) {
+					tabListChild = c
+					//@ts-ignore
+				} else if (c.type === Header) {
+					headerChild = c
+				} else {
+					restChildren.push(c)
+				}
 			}
 		})
 		return { tabListChild, headerChild, restChildren }
@@ -154,8 +126,6 @@ const Root = ({
 	)
 }
 
-type TabListProps = ScrollViewProps
-
 const List = ({ children, ...props }: TabListProps) => {
 	const { tablistScrollRef, index, tabItemLayouts } = useContext(TabsContext)
 
@@ -164,7 +134,7 @@ const List = ({ children, ...props }: TabListProps) => {
 
 		return React.Children.map(children, c => {
 			// @ts-ignore - Todo - do better ts check here
-			if (c.type === Trigger) {
+			if (React.isValidElement(c) && c && c.type === Trigger) {
 				triggerIndex++
 				// @ts-ignore - Todo - do better ts check here
 				return React.cloneElement(c, { index: triggerIndex })
