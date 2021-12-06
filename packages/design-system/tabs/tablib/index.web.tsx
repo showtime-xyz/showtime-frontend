@@ -23,7 +23,7 @@ const Root = ({ children, initialIndex = 0, onIndexChange: onIndexChangeProp, ac
 				if (c.type === List) {
 					//@ts-ignore
 					React.Children.map(c.props.children, c => {
-						if (React.isValidElement(c) && c) {
+						if (React.isValidElement(c) && c && c.type === Trigger) {
 							tabTriggers.push(c)
 						}
 					})
