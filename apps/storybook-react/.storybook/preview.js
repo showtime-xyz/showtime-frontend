@@ -1,6 +1,5 @@
 import '../styles/globals.css'
 
-import React from 'react'
 import * as NextImage from 'next/image'
 import { DripsyProvider } from 'dripsy'
 

@@ -1,6 +1,5 @@
 // https://reactnavigation.org/docs/custom-navigators/#type-checking-navigators
 
-import React from 'react'
 import {
 	createNavigatorFactory,
 	DefaultNavigatorOptions,
