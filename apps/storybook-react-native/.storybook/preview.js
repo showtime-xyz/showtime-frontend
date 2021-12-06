@@ -3,6 +3,9 @@ import { theme } from 'design-system/theme'
 import { useFonts } from 'expo-font'
 import { View } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { useDeviceContext } from 'twrnc'
+
+import { tw } from 'design-system/tailwind'
 
 const FontsLoader = ({ children }) => {
 	const [fontsLoaded, error] = useFonts({
@@ -22,17 +25,25 @@ const FontsLoader = ({ children }) => {
 	return children
 }
 
+const TailwindDeviceContextProvider = ({ children }) => {
+	useDeviceContext(tw)
+
+	return children
+}
+
 export const decorators = [
 	Story => (
-		<DripsyProvider theme={theme}>
-			<SafeAreaProvider>
-				<MainAxisCenter>
-					<FontsLoader>
-						<Story />
-					</FontsLoader>
-				</MainAxisCenter>
-			</SafeAreaProvider>
-		</DripsyProvider>
+		<TailwindDeviceContextProvider>
+			<DripsyProvider theme={theme}>
+				<SafeAreaProvider>
+					<MainAxisCenter>
+						<FontsLoader>
+							<Story />
+						</FontsLoader>
+					</MainAxisCenter>
+				</SafeAreaProvider>
+			</DripsyProvider>
+		</TailwindDeviceContextProvider>
 	),
 ]
 
