@@ -384,8 +384,8 @@ const BuyPage = ({ token, quantity, setQuantity, buyToken, onClose }) => {
 									onChange={event =>
 										event.target.value < 1 || event.target.value.trim() == ''
 											? setQuantity(1)
-											: event.target.value > token.listing.total_listed_quantity
-											? setQuantity(token.listing.total_listed_quantity)
+											: event.target.value > token.listing.quantity
+											? setQuantity(token.listing.quantity)
 											: setQuantity(parseInt(event.target.value))
 									}
 								/>
