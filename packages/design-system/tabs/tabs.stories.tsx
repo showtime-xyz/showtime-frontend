@@ -118,7 +118,7 @@ export const TabsWithHeader: React.FC = () => {
 					{data.map((d, i) => {
 						return (
 							<Tabs.Trigger key={d.name}>
-								<TabItem name={d.name} count={d.count} selected={selected === i} />
+								<TabItem name={d.name} count={d.count} />
 							</Tabs.Trigger>
 						)
 					})}

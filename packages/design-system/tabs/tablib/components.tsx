@@ -3,7 +3,7 @@ import { Text } from '../../text'
 import React from 'react'
 import { useAnimatedReaction, runOnJS } from 'react-native-reanimated'
 import { MotiView, AnimatePresence } from 'moti'
-import { useTabsContext } from '../tablib'
+import { useTabIndexContext, useTabsContext } from '../tablib'
 import { Platform, Animated, useColorScheme } from 'react-native'
 import { tw } from '../../tailwind'
 
@@ -17,19 +17,29 @@ type TabItemProps = {
 	selected?: boolean
 }
 
-export const TabItem = ({ name, count, selected }: TabItemProps) => {
+export const TabItem = ({ name, count }: TabItemProps) => {
+	const { index } = useTabIndexContext()
+	const { position, offset } = useTabsContext()
+	const newPos = Animated.add(position, offset)
+
+	const opacity = newPos.interpolate({
+		inputRange: [index - 1, index, index + 1],
+		outputRange: [0.7, 1, 0.7],
+		extrapolate: 'clamp',
+	})
+
 	return (
-		<MotiView
-			from={{ opacity: 0.7 }}
-			animate={selected ? { opacity: 1 } : { opacity: 0.7 }}
-			transition={{ type: 'timing', duration: 100 }}
-			style={{
-				flexDirection: 'row',
-				justifyContent: 'center',
-				alignItems: 'center',
-				height: '100%',
-				width: Tab_ITEM_WIDTH,
-			}}
+		<Animated.View
+			style={[
+				{
+					flexDirection: 'row',
+					justifyContent: 'center',
+					alignItems: 'center',
+					height: '100%',
+					width: Tab_ITEM_WIDTH,
+				},
+				{ opacity },
+			]}
 		>
 			<Text variant="text-sm" sx={{ fontWeight: '700' }} tw={`text-gray-900 dark:text-white`}>
 				{name}{' '}
@@ -38,7 +48,7 @@ export const TabItem = ({ name, count, selected }: TabItemProps) => {
 			<Text variant="text-sm" sx={{ fontWeight: '400' }} tw={`text-gray-900 dark:text-white`}>
 				{count}
 			</Text>
-		</MotiView>
+		</Animated.View>
 	)
 }
 

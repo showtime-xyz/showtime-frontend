@@ -286,7 +286,7 @@ const Trigger = React.forwardRef(
 				}}
 				{...props}
 			>
-				{children}
+				<TabIndexContext.Provider value={{ index }}>{children}</TabIndexContext.Provider>
 			</Pressable>
 		)
 	}
@@ -434,6 +434,16 @@ export const useTabsContext = () => {
 
 	if (ctx === null) {
 		console.error('Make sure useTabsContext is rendered within Tabs.Root')
+	}
+
+	return ctx
+}
+
+export const useTabIndexContext = () => {
+	const ctx = useContext(TabIndexContext)
+
+	if (ctx === null) {
+		console.error('Make sure useTabIndexContext is rendered within Tabs.Trigger')
 	}
 
 	return ctx
