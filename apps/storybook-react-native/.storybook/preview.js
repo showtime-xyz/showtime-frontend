@@ -4,7 +4,6 @@ import { useFonts } from 'expo-font'
 import { useDeviceContext } from 'twrnc'
 import { View } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useDeviceContext } from 'twrnc'
 
 import { tw } from 'design-system/tailwind'
 
