@@ -22,7 +22,9 @@ const Header = () => {
 }
 
 export const SimpleTabs: React.FC = () => {
+	const [selected, setSelected] = React.useState(0)
 	const onIndexChange = index => {
+		setSelected(index)
 		console.log('index changed', index)
 	}
 
@@ -38,6 +40,7 @@ export const SimpleTabs: React.FC = () => {
 			<StatusBar backgroundColor="black" barStyle="dark-content" />
 			<Tabs.Root
 				onIndexChange={onIndexChange}
+				initialIndex={selected}
 				// passing tabListHeight will improve start time
 				tabListHeight={TAB_LIST_HEIGHT}
 			>
@@ -46,15 +49,13 @@ export const SimpleTabs: React.FC = () => {
 						alignItems: 'center',
 					}}
 					style={{
-						paddingHorizontal: 10,
-						backgroundColor: 'white',
 						height: TAB_LIST_HEIGHT,
 					}}
 				>
-					{data.map(d => {
+					{data.map((d, i) => {
 						return (
 							<Tabs.Trigger key={d.name}>
-								<TabItem name={d.name} count={d.count} />
+								<TabItem name={d.name} count={d.count} selected={selected === i} />
 							</Tabs.Trigger>
 						)
 					})}
@@ -74,7 +75,9 @@ export const SimpleTabs: React.FC = () => {
 }
 
 export const TabsWithHeader: React.FC = () => {
+	const [selected, setSelected] = React.useState(0)
 	const onIndexChange = index => {
+		setSelected(index)
 		console.log('index changed', index)
 	}
 
@@ -109,15 +112,13 @@ export const TabsWithHeader: React.FC = () => {
 						alignItems: 'center',
 					}}
 					style={{
-						paddingHorizontal: 10,
-						backgroundColor: 'white',
 						height: TAB_LIST_HEIGHT,
 					}}
 				>
-					{data.map(d => {
+					{data.map((d, i) => {
 						return (
 							<Tabs.Trigger key={d.name}>
-								<TabItem name={d.name} count={d.count} />
+								<TabItem name={d.name} count={d.count} selected={selected === i} />
 							</Tabs.Trigger>
 						)
 					})}

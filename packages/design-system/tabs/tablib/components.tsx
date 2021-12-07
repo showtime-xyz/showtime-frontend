@@ -4,15 +4,25 @@ import React from 'react'
 import { useAnimatedReaction, runOnJS } from 'react-native-reanimated'
 import { MotiView, AnimatePresence } from 'moti'
 import { useTabsContext } from '../tablib'
-import { Platform, Animated } from 'react-native'
+import { Platform, Animated, useColorScheme } from 'react-native'
+import { tw } from '../../tailwind'
 
 // todo - make tabitemwidth dynamic. Current limitation of pager of using vanilla animated prevents animating width indicators.
 // todo - figure out how to make reanimated native handlers work with pager view
 export const Tab_ITEM_WIDTH = 120
 
-export const TabItem = ({ name, count }) => {
+type TabItemProps = {
+	name: string
+	count?: number
+	selected?: boolean
+}
+
+export const TabItem = ({ name, count, selected }: TabItemProps) => {
 	return (
-		<View
+		<MotiView
+			from={{ opacity: 0.7 }}
+			animate={selected ? { opacity: 1 } : { opacity: 0.7 }}
+			transition={{ type: 'timing', duration: 100 }}
 			style={{
 				flexDirection: 'row',
 				justifyContent: 'center',
@@ -21,17 +31,22 @@ export const TabItem = ({ name, count }) => {
 				width: Tab_ITEM_WIDTH,
 			}}
 		>
-			<Text variant="text-sm" sx={{ fontWeight: '700' }}>
+			<Text variant="text-sm" sx={{ fontWeight: '700' }} tw={`text-gray-900 dark:text-white`}>
 				{name}{' '}
 			</Text>
-			<Text variant="text-sm" sx={{ fontWeight: '400' }}>
+
+			<Text variant="text-sm" sx={{ fontWeight: '400' }} tw={`text-gray-900 dark:text-white`}>
 				{count}
 			</Text>
-		</View>
+		</MotiView>
 	)
 }
 
-export const PullToRefresh = ({ onRefresh }) => {
+type PullToRefreshProps = {
+	onRefresh: () => void
+}
+
+export const PullToRefresh = ({ onRefresh }: PullToRefreshProps) => {
 	if (Platform.OS === 'web') {
 		return null
 	}
@@ -96,6 +111,9 @@ export const SelectedTabIndicator = () => {
 		return null
 	}
 
+	// todo replace with useIsDarkMode hook
+	const isDark = useColorScheme() === 'dark'
+
 	const { offset, position, tabItemLayouts } = useTabsContext()
 	const newPos = Animated.add(position, offset)
 	const [itemOffsets, setItemOffsets] = React.useState([0, 0])
@@ -139,23 +157,23 @@ export const SelectedTabIndicator = () => {
 			]}
 		>
 			<View
-				style={{
-					height: 2,
-					backgroundColor: 'black',
-					position: 'absolute',
-					zIndex: 9999,
-					width: '100%',
-					bottom: 0,
-				}}
-			/>
-			<View
 				style={[
 					{
-						backgroundColor: 'rgba(0, 0, 0, 0.1)',
-						height: '70%',
-						borderRadius: 999,
+						height: 2,
+						position: 'absolute',
+						zIndex: 9999,
+						width: '100%',
+						bottom: 0,
 					},
+					tw.style(`bg-gray-900 dark:bg-gray-100`),
 				]}
+			/>
+			<View
+				sx={{
+					backgroundColor: isDark ? 'rgba(229, 231, 235, 0.08)' : 'rgba(0, 0, 0, 0.1)',
+					height: '70%',
+					borderRadius: 999,
+				}}
 			/>
 		</Animated.View>
 	)

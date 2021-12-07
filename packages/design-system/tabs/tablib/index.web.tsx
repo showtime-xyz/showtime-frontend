@@ -1,7 +1,9 @@
 import React from 'react'
-import { ScrollView, FlatList, SectionList, View } from 'react-native'
+import { View } from '../../view'
+import { ScrollView, FlatList, SectionList } from 'react-native'
 import * as RadixTabs from '@radix-ui/react-tabs'
 import { TabRootProps } from './types'
+import { tw } from '../../tailwind'
 
 const radixTriggerStyle = { position: 'relative', height: '100%', display: 'flex', alignItems: 'center' } as const
 
@@ -48,24 +50,31 @@ const Root = ({ children, initialIndex = 0, onIndexChange: onIndexChangeProp, ac
 			<RadixTabs.Root value={selected} onValueChange={onIndexChange} activationMode="manual">
 				<RadixTabs.List aria-label={accessibilityLabel} asChild>
 					<ScrollView
-						contentContainerStyle={{
-							flexDirection: 'row',
-							flexWrap: 'nowrap',
-							alignItems: 'center',
-							paddingHorizontal: 10,
-						}}
+						contentContainerStyle={[
+							{
+								flexDirection: 'row',
+								flexWrap: 'nowrap',
+								alignItems: 'center',
+								paddingHorizontal: 10,
+							},
+							tw.style(`bg-white dark:bg-gray-900 px-2`),
+						]}
 					>
 						{tabTriggers.map((t, index) => {
 							const value = index.toString()
 							return (
 								<RadixTabs.Trigger value={value} key={value} style={radixTriggerStyle}>
 									<View
-										style={{
+										sx={{
 											alignItems: 'center',
 											borderBottomWidth: 2,
-											borderBottomColor: selected === value ? 'black' : 'transparent',
-											paddingVertical: 8,
+											paddingY: 8,
 										}}
+										tw={
+											selected === value
+												? 'border-b-gray-900 dark:border-b-gray-100'
+												: 'border-b-transparent'
+										}
 									>
 										<View
 											style={{
@@ -77,6 +86,7 @@ const Root = ({ children, initialIndex = 0, onIndexChange: onIndexChangeProp, ac
 												paddingHorizontal: 12,
 												paddingVertical: 12,
 											}}
+											tw={selected === value ? 'bg-gray-200 dark:bg-gray-800' : 'bg-transparent'}
 										>
 											{t}
 										</View>

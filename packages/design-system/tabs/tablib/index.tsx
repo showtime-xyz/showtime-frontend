@@ -1,4 +1,5 @@
 import React, { useContext, ForwardedRef } from 'react'
+import { tw } from '../../tailwind'
 import {
 	Pressable,
 	View,
@@ -126,7 +127,7 @@ const Root = ({
 	)
 }
 
-const List = ({ children, ...props }: TabListProps) => {
+const List = ({ children, style, ...props }: TabListProps) => {
 	const { tablistScrollRef, index, tabItemLayouts } = useContext(TabsContext)
 
 	const newChildren = React.useMemo(() => {
@@ -164,6 +165,10 @@ const List = ({ children, ...props }: TabListProps) => {
 		prevIndex.value = index.value
 	}, [windowWidth])
 
+	const styles = React.useMemo(() => {
+		return [tw.style(`bg-white dark:bg-gray-900 px-2`), style]
+	}, [style])
+
 	return (
 		<Reanimated.ScrollView
 			onLayout={e => {
@@ -173,6 +178,7 @@ const List = ({ children, ...props }: TabListProps) => {
 			ref={tablistScrollRef}
 			showsHorizontalScrollIndicator={false}
 			horizontal
+			style={styles}
 			{...props}
 		>
 			{newChildren}
