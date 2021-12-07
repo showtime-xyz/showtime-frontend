@@ -10,27 +10,11 @@ import { reloadAsync } from 'expo-updates'
 import LinkingContext from '@react-navigation/native/lib/module/LinkingContext'
 import type { LinkingOptions } from '@react-navigation/native'
 
+import { parseNextPath } from './parse-next-path'
+
 // hack to access getStateForAction from react-navigation's stack
 // https://github.com/react-navigation/react-navigation/blob/main/packages/routers/src/StackRouter.tsx#L224
 const stack = StackRouter({})
-
-const path = (from: Parameters<ReturnType<typeof useRouter>['push']>[0]) => {
-	let path = (typeof from == 'string' ? from : from.pathname) || ''
-
-	// replace each instance of [key] with the corresponding value from query[key]
-	// this ensures we're navigating to the correct URL
-	// it currently ignores [...param]
-	// but I can't see why you would use this with RN + Next.js
-	if (typeof from == 'object' && from.query && typeof from.query == 'object') {
-		for (const key in from.query) {
-			if (from.query[key] != null) {
-				path = path.replace(`[${key}]`, `${from.query[key]}`)
-			}
-		}
-	}
-
-	return path
-}
 
 const getPath = (navigationState: NavigationState) => {
 	return (
@@ -57,7 +41,7 @@ export function useRouter() {
 				} else {
 					const [url, as] = nextProps
 
-					const to = as ? path(as) : path(url)
+					const to = as ? parseNextPath(as) : parseNextPath(url)
 
 					if (to) {
 						linkTo(to)
@@ -73,7 +57,7 @@ export function useRouter() {
 				} else {
 					const [url, as] = nextProps
 
-					const to = as ? path(as) : path(url)
+					const to = as ? parseNextPath(as) : parseNextPath(url)
 
 					if (to) {
 						linkTo(to)

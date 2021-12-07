@@ -1,4 +1,3 @@
-import React from 'react'
 import { Meta } from '@storybook/react'
 
 import { Text } from './index'
@@ -9,6 +8,15 @@ export default {
 } as Meta
 
 export const TextXS: React.VFC<{}> = () => <Text variant="text-xs">Hello World</Text>
+
+export const TextXSBoldAndPurple: React.VFC<{}> = () => (
+	<Text variant="text-xs" tw="font-bold">
+		Hello{' '}
+		<Text variant="text-xs" tw="text-stpurple">
+			World
+		</Text>
+	</Text>
+)
 
 export const TextSM: React.VFC<{}> = () => <Text variant="text-sm">Hello World</Text>
 
