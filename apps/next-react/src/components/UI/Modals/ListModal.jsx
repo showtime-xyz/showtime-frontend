@@ -77,7 +77,9 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 	const [price, setPrice] = useState('')
 	const [hasPriceError, setHasPriceError] = useState(false)
 	const [priceErrorMessage, setPriceErrorMessage] = useState('')
-	const [currency, setCurrency] = useState(LIST_CURRENCIES.TKN)
+	const [currency, setCurrency] = useState(
+		process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? LIST_CURRENCIES.TKN : LIST_CURRENCIES.WETH
+	)
 	const [editionCount, setEditionCount] = useState(1)
 	const [transactionHash, setTransactionHash] = useState('')
 
