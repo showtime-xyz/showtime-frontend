@@ -1,4 +1,4 @@
-# Showtime App Monorepo
+# Showtime App Monorepo!
 
 Universal Showtime React app using Expo and Next.js in a monorepo.
 
