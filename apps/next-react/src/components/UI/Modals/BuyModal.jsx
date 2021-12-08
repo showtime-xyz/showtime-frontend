@@ -214,7 +214,7 @@ const BuyModal = ({ open, onClose, token }) => {
 		<Transition.Root show={open && modalVisibility} as={Fragment} afterLeave={afterModalCloseAnimation}>
 			<Dialog
 				static
-				className="fixed xs:inset-0 overflow-y-auto z-10 pt-[96px] md:pt-0 w-full modal-mobile-position"
+				className="fixed xs:inset-0 overflow-y-auto z-[2] pt-[96px] md:pt-0 w-full modal-mobile-position"
 				open={open}
 				onClose={updateModalVisibility}
 			>
