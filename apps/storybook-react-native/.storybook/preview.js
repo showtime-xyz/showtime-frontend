@@ -1,9 +1,9 @@
 import { DripsyProvider } from 'dripsy'
 import { theme } from 'design-system/theme'
 import { useFonts } from 'expo-font'
+import { useDeviceContext } from 'twrnc'
 import { View } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useDeviceContext } from 'twrnc'
 
 import { tw } from 'design-system/tailwind'
 
@@ -48,6 +48,8 @@ export const decorators = [
 ]
 
 const MainAxisCenter = ({ children }) => {
+	useDeviceContext(tw)
+
 	return <View style={{ flex: 1, justifyContent: 'center' }}>{children}</View>
 }
 

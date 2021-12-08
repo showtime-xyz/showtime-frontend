@@ -20,4 +20,6 @@ export { ActivityIndicator } from 'design-system/activity-indicator'
 
 export { Skeleton } from 'design-system/skeleton'
 
+export { Checkbox } from 'design-system/checkbox'
+
 export { Tabs } from 'design-system/tabs'
