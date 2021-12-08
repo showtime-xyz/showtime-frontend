@@ -46,6 +46,15 @@ const Footer = () => {
 						>
 							Feedback
 						</a>
+						<a
+							className="text-gray-200 font-bold"
+							href="/assets/Showtime-Assets.zip"
+							target="_blank"
+							rel="noopener noreferrer"
+							download
+						>
+							Brand Assets
+						</a>
 					</div>
 					<div className="space-y-4">
 						<a
