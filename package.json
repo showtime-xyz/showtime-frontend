@@ -25,6 +25,7 @@
 		"dev:storybook:react": "yarn workspace @showtime/storybook-react storybook",
 		"dev:storybook:react-native": "yarn workspace @showtime/storybook-react-native start",
 		"build": "yarn turbo run build --ignore='packages/**/*' --ignore='apps/**/*' --ignore='!/apps/next-react/**/*'",
+		"clean": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
 		"postinstall": "patch-package"
 	},
 	"resolutions": {
