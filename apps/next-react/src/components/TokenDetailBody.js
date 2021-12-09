@@ -554,26 +554,24 @@ const TokenDetailBody = ({
 									/>
 								</div>
 
-								{canList ? (
-									item.listing ? (
-										<button
-											title="Buy on Showtime"
-											className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1"
-											onClick={() => setBuyModalOpen(true)}
-										>
-											<span className="text-sm sm:text-base">
-												Buy for {item.listing.min_price} ${item.listing.currency}
-											</span>
-										</button>
-									) : (
-										<button
-											title="List on Showtime"
-											className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1"
-											onClick={() => setListModalOpen(true)}
-										>
-											<span className="text-sm sm:text-base">List on Showtime</span>
-										</button>
-									)
+								{canList && item.listing ? (
+									<button
+										title="Buy on Showtime"
+										className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1"
+										onClick={() => setBuyModalOpen(true)}
+									>
+										<span className="text-sm sm:text-base">
+											Buy for {item.listing.min_price} ${item.listing.currency}
+										</span>
+									</button>
+								) : canList && SHOWTIME_CONTRACTS.includes(item.contract_address) ? (
+									<button
+										title="List on Showtime"
+										className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1"
+										onClick={() => setListModalOpen(true)}
+									>
+										<span className="text-sm sm:text-base">List on Showtime</span>
+									</button>
 								) : (
 									<a
 										href={getBidLink(item)}
