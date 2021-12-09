@@ -1,7 +1,6 @@
 import { Meta } from '@storybook/react'
 import { Input, InputPressable } from './index'
 import { View } from '../view'
-import { Text } from '../text'
 import { Svg, Path } from 'react-native-svg'
 import { useIsDarkMode } from '../hooks'
 import { Label } from '../label'
@@ -42,9 +41,9 @@ const CopyIcon = () => {
 export const Inputs = () => {
 	return (
 		<View sx={{ paddingX: 10 }}>
-			<Label htmlFor="name">Simple Input</Label>
+			<Label htmlFor="email">Simple Input</Label>
 			<Spacer />
-			<Input id="name" placeholder="Placeholder" />
+			<Input type="email-address" id="email" placeholder="Email" />
 			<Spacer />
 			<Spacer />
 			<Label htmlFor="lastName">Input with left element</Label>
@@ -56,6 +55,15 @@ export const Inputs = () => {
 			<Spacer />
 			<Input id="x" leftElement={<LinkIcon />} rightElement={<CopyIcon />} placeholder="Last name" />
 			<Spacer />
+			<Spacer />
+			<Label htmlFor="y">Disabled</Label>
+			<Spacer />
+			<Input id="y" disabled placeholder="Last name" />
+			<Spacer />
+			<Spacer />
+			<Label htmlFor="z">Invalid</Label>
+			<Spacer />
+			<Input id="z" isInvalid placeholder="Last name" />
 			<Spacer />
 		</View>
 	)
