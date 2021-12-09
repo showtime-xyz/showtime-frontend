@@ -11,9 +11,10 @@ type CheckboxProps = {
 	checked: boolean
 	hitSlop?: number
 	accesibilityLabel: string
+	id?: string
 }
 
-export const Checkbox = ({ checked, onChange, hitSlop = 14, accesibilityLabel }: CheckboxProps) => {
+export const Checkbox = ({ checked, onChange, id, hitSlop = 14, accesibilityLabel }: CheckboxProps) => {
 	const handleChange = useCallback(() => {
 		onChange(!checked)
 	}, [onChange, checked])
@@ -68,6 +69,9 @@ export const Checkbox = ({ checked, onChange, hitSlop = 14, accesibilityLabel }:
 					</Svg>
 				</MotiView>
 			</View>
+			{Platform.OS === 'web' && (
+				<input type="checkbox" id={id} hidden onChange={handleChange} checked={checked} />
+			)}
 		</Pressable>
 	)
 }

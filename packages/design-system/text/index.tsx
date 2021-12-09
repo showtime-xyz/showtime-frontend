@@ -8,7 +8,7 @@ type Variant = keyof Theme['text']
 
 type TextProps = ComponentProps<typeof DripsyText>
 
-type Props = { tw?: string; variant?: Variant } & Pick<TextProps, 'onLayout' | 'children' | 'selectable' | 'sx'>
+export type Props = { tw?: string; variant?: Variant } & Pick<TextProps, 'onLayout' | 'children' | 'selectable' | 'sx'>
 
 /**
  * Text should inherit styles from parent text nodes.
