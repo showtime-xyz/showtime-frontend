@@ -1,12 +1,13 @@
-import { View, Text } from 'react-native'
 import { Footer as FooterElement } from '@expo/html-elements'
-import { tw as tailwind } from 'design-system/tailwind'
 
-const footerStyle = tailwind`px-4 lg:justify-between lg:flex-row-reverse xs:bg-red-600 md:bg-yellow-400`
+import { View, Text } from 'design-system'
+import { tw as tailwind } from 'design-system/tailwind'
 
 export const Footer = props => {
 	return (
-		<FooterElement style={footerStyle}>
+		<FooterElement
+			style={tailwind.style('px-4 lg:justify-between lg:flex-row-reverse xs:bg-red-600 md:bg-yellow-400')}
+		>
 			<Text>Placeholder List</Text>
 			<Text>Placeholder Logo</Text>
 		</FooterElement>
