@@ -211,6 +211,8 @@ const GeneralState = ({ quantity, address, setAddress, setQuantity, transferToke
 		url => axios.get(url).then(res => res.data?.data?.profile)
 	)
 
+	console.log(transferringTo)
+
 	return (
 		<>
 			<div className="p-4 border-b border-gray-100 dark:border-gray-900">
@@ -250,7 +252,9 @@ const GeneralState = ({ quantity, address, setAddress, setQuantity, transferToke
 							<div>
 								<div className="flex items-center space-x-1">
 									<p className="text-sm font-semibold text-gray-900 dark:text-white">
-										{transferringTo.name}
+										{transferringTo.name ||
+											(transferringTo.username && `@${transferringTo.username}`) ||
+											transferringTo.address}
 									</p>
 									{transferringTo.verified == 1 && (
 										<BadgeIcon
@@ -259,9 +263,11 @@ const GeneralState = ({ quantity, address, setAddress, setQuantity, transferToke
 										/>
 									)}
 								</div>
-								<p className="text-xs text-gray-700 dark:text-gray-400 font-medium">
-									@{transferringTo.username}
-								</p>
+								{transferringTo.name && (
+									<p className="text-xs text-gray-700 dark:text-gray-400 font-medium">
+										@{transferringTo.username}
+									</p>
+								)}
 							</div>
 						</div>
 						<div>
