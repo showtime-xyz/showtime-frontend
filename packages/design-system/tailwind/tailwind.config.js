@@ -70,6 +70,12 @@ module.exports = {
 				2: 2,
 			},
 		},
+		screens: {
+			xs: '475px',
+			md: '420px',
+			lg: '680px',
+			//...defaultTheme.screens,
+		},
 	},
 	// plugins: [
 	// 	require('@tailwindcss/forms')({
