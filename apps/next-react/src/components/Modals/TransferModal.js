@@ -211,8 +211,6 @@ const GeneralState = ({ quantity, address, setAddress, setQuantity, transferToke
 		url => axios.get(url).then(res => res.data?.data?.profile)
 	)
 
-	console.log(transferringTo)
-
 	return (
 		<>
 			<div className="p-4 border-b border-gray-100 dark:border-gray-900">
