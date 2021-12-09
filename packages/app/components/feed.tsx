@@ -23,10 +23,12 @@ type Props = {
 	activity: any
 	activityPage: any
 	getNext: any
-	isLoading: any
+	isLoading: boolean
+	isRefreshing: boolean
+	onRefresh: any
 }
 
-const Feed = ({ activity, activityPage, getNext, isLoading }: Props) => {
+const Feed = ({ activity, activityPage, getNext, isLoading, isRefreshing, onRefresh }: Props) => {
 	const { width } = useWindowDimensions()
 
 	const keyExtractor = useCallback(item => item.id, [])
@@ -59,8 +61,8 @@ const Feed = ({ activity, activityPage, getNext, isLoading }: Props) => {
 			onEndReached={getNext}
 			onEndReachedThreshold={activityPage === 1 ? 0.2 : activityPage < 4 ? 0.3 : activityPage < 6 ? 0.7 : 0.8}
 			removeClippedSubviews={Platform.OS !== 'web'}
-			onRefresh={() => {}}
-			refreshing={false}
+			onRefresh={onRefresh}
+			refreshing={isRefreshing}
 			numColumns={1}
 			windowSize={4}
 			initialNumToRender={2}

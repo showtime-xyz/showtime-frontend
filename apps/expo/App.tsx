@@ -143,7 +143,7 @@ function SWRProvider({ children }: { children: React.ReactNode }): JSX.Element {
 }
 
 function AppContextProvider({ children }: { children: React.ReactNode }): JSX.Element {
-	const user = useUser()
+	const { user } = useUser()
 	const router = useRouter()
 	const { mutate } = useSWRConfig()
 	const connector = useWalletConnect()
@@ -278,7 +278,6 @@ function AppContextProvider({ children }: { children: React.ReactNode }): JSX.El
 			mixpanel.track('Logout')
 			// Triggers all event listeners for this key to fire. Used to force cross tab logout.
 			setLogout(Date.now().toString())
-			router.reload()
 		},
 	}
 

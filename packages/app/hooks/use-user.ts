@@ -6,18 +6,17 @@ import { axios } from 'app/lib/axios'
 import { mixpanel } from 'app/lib/mixpanel'
 import { accessTokenManager } from 'app/lib/access-token-manager'
 
-type URL = string
-type Refresh_Status = 'IDLE' | 'REFRESHING_ACCESS_TOKEN' | 'DONE' | 'ERROR'
-type Authenticated_Status = 'IDLE' | 'AUTHENTICATED' | 'UNAUTHENTICATED'
+type RefreshStatus = 'IDLE' | 'REFRESHING_ACCESS_TOKEN' | 'DONE' | 'ERROR'
+type AuthenticatedStatus = 'IDLE' | 'AUTHENTICATED' | 'UNAUTHENTICATED'
 
 type State = {
-	refreshStatus: Refresh_Status
-	authenticationStatus: Authenticated_Status
+	refreshStatus: RefreshStatus
+	authenticationStatus: AuthenticatedStatus
 }
 
 type ActionType =
-	| { type: 'SET_REFRESH_STATUS'; payload: Refresh_Status }
-	| { type: 'SET_AUTHENTICATION_STATUS'; payload: Authenticated_Status }
+	| { type: 'SET_REFRESH_STATUS'; payload: RefreshStatus }
+	| { type: 'SET_AUTHENTICATION_STATUS'; payload: AuthenticatedStatus }
 
 const initialState: State = {
 	refreshStatus: 'IDLE',

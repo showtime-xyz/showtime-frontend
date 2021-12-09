@@ -65,7 +65,7 @@ const axiosAPI = async ({
 
 	try {
 		return await axios({
-			baseURL: url.startsWith('http') || url.startsWith('/api/') ? '' : process.env.NEXT_PUBLIC_BACKEND_URL,
+			baseURL: url.startsWith('http') ?? url.startsWith('/api/') ? '' : process.env.NEXT_PUBLIC_BACKEND_URL,
 			url,
 			method,
 			data,
