@@ -41,21 +41,15 @@ export const Inputs = () => {
 	const isDark = useIsDarkMode()
 	return (
 		<View sx={{ padding: 10, flex: 1, minHeight: 500 }} tw={isDark ? 'bg-black' : 'bg-white'}>
-			<Input label="First Name" id="firstName" leftElement={<LinkIcon />} placeholder="First name" />
+			<Input label="First Name" leftElement={<LinkIcon />} placeholder="First name" />
 			<Spacer />
-			<Input
-				label="Last Name"
-				id="lastName"
-				leftElement={<LinkIcon />}
-				rightElement={<CopyIcon />}
-				placeholder="Last name"
-			/>
+			<Input label="Last Name" leftElement={<LinkIcon />} rightElement={<CopyIcon />} placeholder="Last name" />
 			<Spacer />
-			<Input label="Email" type="email-address" id="email" placeholder="Email" />
+			<Input label="Email" type="email-address" placeholder="Email" />
 			<Spacer />
 			<Input label="Disabled" disabled placeholder="Last name" />
 			<Spacer />
-			<Input label="Amount" type="number-pad" id="amount" isInvalid placeholder="Amount" />
+			<Input label="Amount" type="number-pad" isInvalid placeholder="Amount" />
 			<Spacer />
 			<Spacer />
 		</View>
@@ -73,7 +67,8 @@ export const InputFormElements = () => {
 				isInvalid
 				helperText="Enter email linked to this account"
 				label="Email"
-				id="email"
+				// use id when placeholders don't help browser detect auto complete.
+				id="Email"
 				placeholder="xyz@abc.com"
 			/>
 		</View>
