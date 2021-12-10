@@ -226,6 +226,7 @@ export const SOL_MAX_INT = '0xffffffffffffffffffffffffffffffffffffffffffffffffff
 export const LIST_CURRENCIES = {
 	mumbai: {
 		TKN: '0xd404017a401ff7ef65e7689630eca288e23d67a1',
+		WETH: '0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa',
 	},
 	polygon: {
 		USDC: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
