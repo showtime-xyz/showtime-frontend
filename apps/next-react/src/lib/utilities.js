@@ -205,6 +205,8 @@ export const personalSignMessage = async (web3, message) => {
 }
 
 export const signTokenPermit = async (web3, tokenContract, tokenAddr) => {
+	if (tokenAddr === LIST_CURRENCIES.WETH) return signMetaTransactionRequest(web3, tokenContract, tokenAddr)
+
 	const userAddress = await web3.getSigner().getAddress()
 	const permit = {
 		owner: userAddress,
@@ -216,7 +218,7 @@ export const signTokenPermit = async (web3, tokenContract, tokenAddr) => {
 
 	const signature = await web3.getSigner()._signTypedData(
 		{
-			name: 'Test Token',
+			name: Object.keys(LIST_CURRENCIES).find(key => LIST_CURRENCIES[key] === tokenAddr),
 			version: '1',
 			chainId: 80001,
 			verifyingContract: tokenAddr,
@@ -234,6 +236,38 @@ export const signTokenPermit = async (web3, tokenContract, tokenAddr) => {
 	)
 
 	return { owner: permit.owner, deadline: permit.deadline, tokenAddr, signature }
+}
+
+export const signMetaTransactionRequest = async (web3, tokenContract, tokenAddr) => {
+	const userAddress = await web3.getSigner().getAddress()
+
+	const metatx = {
+		nonce: await tokenContract.nonces(userAddress),
+		from: userAddress,
+		functionSignature: tokenContract.interface.encodeFunctionData('approve', [
+			process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
+			-1,
+		]),
+	}
+
+	const signature = await web3.getSigner()._signTypedData(
+		{
+			name: Object.keys(LIST_CURRENCIES).find(key => LIST_CURRENCIES[key] === tokenAddr),
+			version: '1',
+			chainId: 80001,
+			verifyingContract: tokenAddr,
+		},
+		{
+			MetaTransaction: [
+				{ name: 'nonce', type: 'uint256' },
+				{ name: 'from', type: 'address' },
+				{ name: 'functionSignature', type: 'bytes' },
+			],
+		},
+		metatx
+	)
+
+	return { owner: metatx.from, fnSig: metatx.functionSignature, tokenAddr, signature }
 }
 
 export const switchToChain = (web3, chainId, chainDetails = { chainId }) => {
