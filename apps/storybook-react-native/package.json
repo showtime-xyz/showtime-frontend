@@ -1,5 +1,5 @@
 {
-	"name": "storybook-react-native",
+	"name": "@showtime/storybook-react-native",
 	"version": "1.0.0",
 	"main": "index.js",
 	"scripts": {
