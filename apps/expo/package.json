@@ -71,7 +71,7 @@
     "expo-haptics": "~11.0.3",
     "expo-linear-gradient": "^10.0.3",
     "expo-linking": "~2.4.2",
-    "expo-modules-core": "^0.4.8",
+    "expo-modules-core": "~0.4.9",
     "expo-navigation-bar": "~1.0.0",
     "expo-next-react-navigation": "^2.0.2",
     "expo-notifications": "~0.13.3",
