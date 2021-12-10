@@ -17,7 +17,7 @@ export const Primary: React.VFC<{}> = () => {
 		<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 				<Checkbox id="checkbox" accesibilityLabel="I agree" checked={checked} onChange={setChecked} />
-				<Label htmlFor="checkbox" style={{ flexDirection: 'row', marginLeft: 10, alignItems: 'center' }}>
+				<Label htmlFor="checkbox" sx={{ flexDirection: 'row', marginLeft: 10, alignItems: 'center' }}>
 					I agree
 				</Label>
 			</View>
