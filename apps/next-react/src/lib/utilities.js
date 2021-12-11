@@ -274,10 +274,10 @@ export const signMetaTransactionRequest = async (web3, tokenAddr) => {
 
 	const signature = await web3.getSigner()._signTypedData(
 		{
-			name: Object.keys(LIST_CURRENCIES).find(key => LIST_CURRENCIES[key] === tokenAddr),
+			name: '',
 			version: '1',
-			chainId: 80001,
 			verifyingContract: tokenAddr,
+			salt: '0x0000000000000000000000000000000000000000000000000000000000013881',
 		},
 		{
 			MetaTransaction: [
