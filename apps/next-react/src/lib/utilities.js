@@ -274,7 +274,7 @@ export const signMetaTransactionRequest = async (web3, tokenAddr) => {
 
 	const signature = await web3.getSigner()._signTypedData(
 		{
-			name: '',
+			name: 'Wrapped Ether',
 			version: '1',
 			verifyingContract: tokenAddr,
 			salt: '0x0000000000000000000000000000000000000000000000000000000000013881',
