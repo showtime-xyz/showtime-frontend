@@ -41,7 +41,6 @@ const MODAL_PAGES = {
 const MAX_LIST_PRICE = 1000
 
 const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
-	console.log(token)
 	const { myProfile } = useProfile()
 	const { resolvedTheme } = useTheme()
 	const isWeb3ModalActive = useRef(false)
