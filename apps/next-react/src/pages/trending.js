@@ -111,6 +111,13 @@ const Leaderboard = () => {
 								setLeaderboardDays(30)
 							}}
 						/>
+						<GridTab
+							label="All Time"
+							isActive={leaderboardDays === 10000}
+							onClickTab={() => {
+								setLeaderboardDays(10000)
+							}}
+						/>
 					</GridTabs>
 				</div>
 				<div className="md:grid md:grid-cols-3 xl:grid-cols-4 ">
