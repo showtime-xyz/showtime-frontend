@@ -2,7 +2,7 @@ import handler, { middleware } from '@/lib/api-handler'
 import ierc20PermitAbi from '@/data/IERC20Permit.json'
 import ierc20MetaTxAbi from '@/data/IERC20MetaTx.json'
 import { ethers } from 'ethers'
-import { SOL_MAX_INT } from '@/lib/constants'
+import { LIST_CURRENCIES, SOL_MAX_INT } from '@/lib/constants'
 
 export default handler()
 	.use(middleware.auth)
