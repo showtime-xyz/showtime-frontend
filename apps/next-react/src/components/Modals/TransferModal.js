@@ -152,7 +152,7 @@ const TransferModal = ({ open, onClose, token }) => {
 		<Transition.Root show={open} as={Fragment}>
 			<Dialog
 				static
-				className="fixed xs:inset-0 overflow-y-auto z-1 pt-[96px] md:pt-0 modal-mobile-position w-full"
+				className="fixed xs:inset-0 overflow-y-auto z-[2] pt-[96px] md:pt-0 modal-mobile-position w-full"
 				open={open}
 				onClose={trueOnClose}
 			>
