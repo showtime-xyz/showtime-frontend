@@ -277,7 +277,7 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 		<Transition.Root show={open && modalVisibility} as={Fragment} afterLeave={afterModalCloseAnimation}>
 			<Dialog
 				static
-				className="fixed xs:inset-0 overflow-y-auto z-1 pt-[96px] md:pt-0 modal-mobile-position"
+				className="fixed xs:inset-0 overflow-y-auto z-[2] pt-[96px] md:pt-0 modal-mobile-position"
 				open={open}
 				onClose={updateModalVisibility}
 			>
