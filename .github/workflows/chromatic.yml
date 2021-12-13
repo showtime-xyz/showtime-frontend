@@ -25,6 +25,14 @@ jobs:
               with:
                   node-version: 14.x
 
+            - uses: 8BitJonny/gh-get-current-pr@1.3.0
+              id: PR
+              name: Check if we're in a PR
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  sha: ${{ github.event.pull_request.head.sha }}
+                  filterOutClosed: true
+
             - name: Find yarn cache
               id: yarn-cache-path
               run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -45,3 +53,49 @@ jobs:
                   token: ${{ secrets.GITHUB_TOKEN }}
                   projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
                   buildScriptName: build:storybook
+
+            - name: Set up Expo
+              uses: expo/expo-github-action@v6
+              with:
+                  eas-version: latest
+                  eas-cache: true
+                  expo-cache: true
+                  expo-version: 4.x
+                  token: ${{ secrets.EXPO_TOKEN }}
+
+            - name: Publish to Expo & create a QR code
+              uses: expo/expo-preview-action@v1
+              if: success() && steps.PR.outputs.number != ''
+              with:
+                  channel: pr-${{ steps.PR.outputs.number }}
+                  project-root: apps/storybook-react-native
+                  scheme: io.showtime.storybook
+              id: preview
+
+            - name: Find PR Comment
+              uses: peter-evans/find-comment@v1
+              if: success() && steps.PR.outputs.number != ''
+              id: existing-comment
+              with:
+                  issue-number: ${{ steps.PR.outputs.number }}
+                  body-includes: PR Preview - Storybook
+
+            - name: Create or update comment
+              uses: peter-evans/create-or-update-comment@v1
+              if: success() && steps.PR.outputs.number != ''
+              with:
+                  comment-id: ${{ steps.existing-comment.outputs.comment-id }}
+                  issue-number: ${{ steps.PR.outputs.number }}
+                  edit-mode: replace
+                  body: |
+                      ## PR Preview - Storybook
+
+                      This pull request preview deployment is now available.
+
+                      ✅ Preview: [${{ steps.preview.outputs.EXPO_QR_CODE_URL }}](${{ steps.preview.outputs.EXPO_QR_CODE_URL }})
+
+                      <a href="${{ steps.preview.outputs.EXPO_QR_CODE_URL }}"><img src="${{ steps.preview.outputs.EXPO_QR_CODE_URL }}" height="512px" width="512px"></a>
+
+                      ${{ steps.publish.outputs.EXPO_NEW_BUILD_IS_REQUIRED_MESSAGE }}
+
+                      Comment ID: ${{ steps.existing-comment.outputs.comment-id }}
