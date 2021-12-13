@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useCallback } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import useSWR from 'swr'
 import useUnmountSignal from 'use-unmount-signal'
 
@@ -9,35 +9,9 @@ import { accessTokenManager } from 'app/lib/access-token-manager'
 type RefreshStatus = 'IDLE' | 'REFRESHING_ACCESS_TOKEN' | 'DONE' | 'ERROR'
 type AuthenticatedStatus = 'IDLE' | 'AUTHENTICATED' | 'UNAUTHENTICATED'
 
-type State = {
-	refreshStatus: RefreshStatus
-	authenticationStatus: AuthenticatedStatus
-}
-
-type ActionType =
-	| { type: 'SET_REFRESH_STATUS'; payload: RefreshStatus }
-	| { type: 'SET_AUTHENTICATION_STATUS'; payload: AuthenticatedStatus }
-
-const initialState: State = {
-	refreshStatus: 'IDLE',
-	authenticationStatus: 'IDLE',
-}
-
-const reducer = (state: State, action: ActionType): State => {
-	switch (action.type) {
-		case 'SET_REFRESH_STATUS':
-			return { ...state, refreshStatus: action.payload }
-		case 'SET_AUTHENTICATION_STATUS':
-			return { ...state, authenticationStatus: action.payload }
-		default:
-			return { ...state }
-	}
-}
-
 const useUser = () => {
-	const [state, dispatch] = useReducer(reducer, initialState)
-	const refreshStatus = state.refreshStatus
-	const authenticationStatus = state.authenticationStatus
+	const [refreshStatus, setRefreshStatus] = useState<RefreshStatus>('IDLE')
+	const [authenticationStatus, setAuthenticationStatus] = useState<AuthenticatedStatus>('IDLE')
 	const accessToken = accessTokenManager.getAccessToken()
 
 	const unmountSignal = useUnmountSignal()
@@ -48,21 +22,21 @@ const useUser = () => {
 
 	const refreshAccessToken = useCallback(async () => {
 		try {
-			dispatch({ type: 'SET_REFRESH_STATUS', payload: 'REFRESHING_ACCESS_TOKEN' })
+			setRefreshStatus('REFRESHING_ACCESS_TOKEN')
 			const newAccessToken = await accessTokenManager.refreshAccessToken()
 			if (newAccessToken) {
-				dispatch({ type: 'SET_AUTHENTICATION_STATUS', payload: 'AUTHENTICATED' })
+				setAuthenticationStatus('AUTHENTICATED')
 			} else {
-				dispatch({ type: 'SET_AUTHENTICATION_STATUS', payload: 'UNAUTHENTICATED' })
+				setAuthenticationStatus('UNAUTHENTICATED')
 			}
-			dispatch({ type: 'SET_REFRESH_STATUS', payload: 'DONE' })
+			setRefreshStatus('DONE')
 		} catch (error) {
 			console.error(error)
-			dispatch({ type: 'SET_REFRESH_STATUS', payload: 'ERROR' })
+			setRefreshStatus('ERROR')
 		}
 
 		mutate()
-	}, [dispatch, mutate])
+	}, [mutate, setRefreshStatus, setAuthenticationStatus])
 
 	useEffect(() => {
 		refreshAccessToken()
