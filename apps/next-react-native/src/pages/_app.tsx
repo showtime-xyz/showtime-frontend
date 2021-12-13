@@ -156,7 +156,7 @@ function AppContextProvider({ children }: { children: React.ReactNode }): JSX.El
 		setRecommendedFollows,
 		setCommentInputFocused,
 		setToggleRefreshFeed,
-		logOut: async () => {
+		logOut: () => {
 			deleteCache()
 			deleteRefreshToken()
 			accessTokenManager.deleteAccessToken()

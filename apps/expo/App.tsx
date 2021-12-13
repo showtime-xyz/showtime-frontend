@@ -165,8 +165,6 @@ function AppContextProvider({ children }: { children: React.ReactNode }): JSX.El
 		}
 	}, [])
 
-	// TODO: trigger re-render when user log in or out
-
 	const [web3, setWeb3] = useState(null)
 	const [windowSize, setWindowSize] = useState(null)
 	const [myLikes, setMyLikes] = useState(null)
@@ -260,7 +258,7 @@ function AppContextProvider({ children }: { children: React.ReactNode }): JSX.El
 		setRecommendedFollows,
 		setCommentInputFocused,
 		setToggleRefreshFeed,
-		logOut: async () => {
+		logOut: () => {
 			deleteCache()
 			deleteRefreshToken()
 			accessTokenManager.deleteAccessToken()
