@@ -1,7 +1,7 @@
-import { useCallback } from 'react'
+import { useCallback, ComponentProps } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
-import { MotiView } from 'moti'
-import { Pressable, StyleSheet } from 'react-native'
+import { MotiView, AnimatePresence, motify } from 'moti'
+import { Platform, Pressable, StyleSheet } from 'react-native'
 import { View } from '../view'
 import { Extrapolate } from 'react-native-reanimated'
 import { useIsDarkMode } from '../hooks'
@@ -11,6 +11,8 @@ const height = 28
 const thumbHeight = 24
 const thumbWidth = 24
 const thumbOffset = 2
+
+const MotiGradient = motify(LinearGradient)()
 
 type SwitchProps = {
 	accessibilityLabel?: string
@@ -23,6 +25,9 @@ export const Switch = (props: SwitchProps) => {
 
 	const isDark = useIsDarkMode()
 
+	const checkedColor = ['#C4B5FD', '#8B5CF6', '#4C1D95']
+	const uncheckedColor = isDark ? ['#3F3F46', '#3F3F46', '#3F3F46'] : ['#D4D4D8', '#D4D4D8', '#D4D4D8']
+
 	return (
 		<Pressable
 			style={styles.pressableStyle}
@@ -34,19 +39,23 @@ export const Switch = (props: SwitchProps) => {
 			accessibilityLabel={accessibilityLabel}
 		>
 			<View style={styles.gradientWrapper}>
-				<LinearGradient
-					colors={
-						checked
-							? ['#C4B5FD', '#8B5CF6', '#4C1D95']
-							: isDark
-							? ['#3F3F46', '#3F3F46', '#3F3F46']
-							: ['#D4D4D8', '#D4D4D8', '#D4D4D8']
-					}
-					start={[0, 1]}
-					end={[1, 0]}
-					locations={[0, 0.4, 1]}
-					style={{ width, height }}
-				/>
+				{Platform.OS === 'web' ? (
+					<LinearGradient
+						colors={checked ? checkedColor : uncheckedColor}
+						start={[0, 1]}
+						end={[1, 0]}
+						locations={[0, 0.4, 1]}
+						style={{ width, height }}
+					/>
+				) : (
+					<AnimatedGradient
+						colors={checked ? checkedColor : uncheckedColor}
+						start={[0, 1]}
+						end={[1, 0]}
+						locations={[0, 0.4, 1]}
+						style={{ width, height }}
+					/>
+				)}
 			</View>
 			<MotiView
 				style={styles.thumbStyle}
@@ -73,3 +82,21 @@ const styles = StyleSheet.create({
 	},
 	gradientWrapper: { overflow: 'hidden', borderRadius: 999 },
 })
+
+const AnimatedGradient = ({ colors, ...rest }: ComponentProps<typeof MotiGradient>) => {
+	return (
+		<AnimatePresence initial={false}>
+			<View>
+				<MotiGradient
+					key={colors.join('')}
+					colors={colors}
+					from={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					exit={{ opacity: 0 }}
+					transition={{ type: 'timing', duration: 400 }}
+					{...rest}
+				/>
+			</View>
+		</AnimatePresence>
+	)
+}
