@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react'
+import { useEffect, useReducer, useCallback } from 'react'
 import useSWR from 'swr'
 import useUnmountSignal from 'use-unmount-signal'
 
@@ -46,25 +46,23 @@ const useUser = () => {
 		axios({ url, method: 'GET', unmountSignal })
 	)
 
-	const refreshAccessToken = async () => {
-		const shouldRefresh = !accessToken && refreshStatus === 'IDLE'
-
-		if (shouldRefresh) {
-			try {
-				dispatch({ type: 'SET_REFRESH_STATUS', payload: 'REFRESHING_ACCESS_TOKEN' })
-				const newAccessToken = await accessTokenManager.refreshAccessToken()
-				if (newAccessToken) {
-					dispatch({ type: 'SET_AUTHENTICATION_STATUS', payload: 'AUTHENTICATED' })
-				} else {
-					dispatch({ type: 'SET_AUTHENTICATION_STATUS', payload: 'UNAUTHENTICATED' })
-				}
-				dispatch({ type: 'SET_REFRESH_STATUS', payload: 'DONE' })
-			} catch (error) {
-				console.error(error)
-				dispatch({ type: 'SET_REFRESH_STATUS', payload: 'ERROR' })
+	const refreshAccessToken = useCallback(async () => {
+		try {
+			dispatch({ type: 'SET_REFRESH_STATUS', payload: 'REFRESHING_ACCESS_TOKEN' })
+			const newAccessToken = await accessTokenManager.refreshAccessToken()
+			if (newAccessToken) {
+				dispatch({ type: 'SET_AUTHENTICATION_STATUS', payload: 'AUTHENTICATED' })
+			} else {
+				dispatch({ type: 'SET_AUTHENTICATION_STATUS', payload: 'UNAUTHENTICATED' })
 			}
+			dispatch({ type: 'SET_REFRESH_STATUS', payload: 'DONE' })
+		} catch (error) {
+			console.error(error)
+			dispatch({ type: 'SET_REFRESH_STATUS', payload: 'ERROR' })
 		}
-	}
+
+		mutate()
+	}, [dispatch, mutate])
 
 	useEffect(() => {
 		refreshAccessToken()
