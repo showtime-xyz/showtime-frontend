@@ -72,8 +72,9 @@ jobs:
               if: success() && steps.PR.outputs.number != ''
               with:
                   channel: pr-${{ steps.PR.outputs.number }}
-                  project-root: apps/storybook-react-native
+                  project-flavor: expo-go
                   scheme: io.showtime.storybook
+                  project-root: apps/storybook-react-native
               id: preview
 
             - name: Find PR Comment
@@ -96,9 +97,9 @@ jobs:
 
                       This pull request preview deployment is now available.
 
-                      ✅ Preview: [${{ steps.preview.outputs.EXPO_QR_CODE_URL }}](${{ steps.preview.outputs.EXPO_QR_CODE_URL }})
+                      ✅ Preview: [${{ steps.preview.outputs.EXPO_MANIFEST_URL }}](${{ steps.preview.outputs.EXPO_MANIFEST_URL }})
 
-                      <a href="${{ steps.preview.outputs.EXPO_QR_CODE_URL }}"><img src="${{ steps.preview.outputs.EXPO_QR_CODE_URL }}" height="512px" width="512px"></a>
+                      <a href="${{ steps.preview.outputs.EXPO_MANIFEST_URL }}"><img src="${{ steps.preview.outputs.EXPO_QR_CODE_URL }}" height="512px" width="512px"></a>
 
                       ${{ steps.publish.outputs.EXPO_NEW_BUILD_IS_REQUIRED_MESSAGE }}
 
