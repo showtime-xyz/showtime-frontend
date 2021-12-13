@@ -78,7 +78,7 @@
     "expo-splash-screen": "^0.13.5",
     "expo-status-bar": "~1.1.0",
     "expo-system-ui": "~1.0.0",
-    "expo-updates": "~0.10.13",
+    "expo-updates": "^0.10.15",
     "https-browserify": "~1.0.0",
     "inherits": "^2.0.1",
     "moti": "^0.16.1",
