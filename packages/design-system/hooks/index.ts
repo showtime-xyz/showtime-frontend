@@ -31,3 +31,29 @@ export const useOnFocus = () => {
 
 	return focusHandler
 }
+
+export const useOnHover = () => {
+	const hovered = useSharedValue(0)
+	// use state on web for now till useAnimatedStyle bug is resolved
+	const [state, setHovered] = React.useState(0)
+
+	const hoverHandler = React.useMemo(() => {
+		return {
+			onHoverIn: () => {
+				hovered.value = 1
+				if (Platform.OS === 'web') {
+					setHovered(1)
+				}
+			},
+			onHoverOut: () => {
+				hovered.value = 0
+				if (Platform.OS === 'web') {
+					setHovered(0)
+				}
+			},
+			hovered: Platform.select({ default: hovered, web: { value: state } }),
+		}
+	}, [state])
+
+	return hoverHandler
+}
