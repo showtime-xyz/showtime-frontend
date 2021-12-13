@@ -1,10 +1,14 @@
-import React, { useCallback } from 'react'
-import { Pressable, View } from 'dripsy'
+import React, { useCallback,useMemo } from 'react'
+import { Pressable } from 'dripsy'
 import { Path, Svg } from 'react-native-svg'
 import { Platform } from 'react-native'
 import { MotiView } from 'moti'
 import { tw } from '../tailwind'
+import { useOnFocus, useOnHover } from '../hooks'
 import { useIsDarkMode } from '../hooks'
+import Animated, {useAnimatedStyle} from "react-native-reanimated"
+import {colors} from "../tailwind/colors"
+
 
 type CheckboxProps = {
 	onChange: (checked: boolean) => void
@@ -12,21 +16,40 @@ type CheckboxProps = {
 	hitSlop?: number
 	accesibilityLabel: string
 	id?: string
+	disabled?:boolean
 }
 
-export const Checkbox = ({ checked, onChange, id, hitSlop = 14, accesibilityLabel }: CheckboxProps) => {
+export const Checkbox = ({ checked, onChange, id, hitSlop = 14, accesibilityLabel, disabled }: CheckboxProps) => {
 	const handleChange = useCallback(() => {
 		onChange(!checked)
 	}, [onChange, checked])
 
 	const isDark = useIsDarkMode()
 
+	const {onHoverIn, onHoverOut, hovered} = useOnHover()
+	const {onFocus, onBlur, focused} = useOnFocus()
+
+	const animatedStyle = useAnimatedStyle(() => {
+		return {
+			borderColor: hovered.value ? colors.gray[400] : colors.gray[300],
+			boxShadow: Platform.OS === 'web' && focused.value ? "0px 0px 0px 4px #E4E4E7" : undefined,
+			disabled: disabled ? 0.4 : 1
+		}
+	},[focused, hovered,disabled])
+
+
 	return (
 		<Pressable
 			onPress={handleChange}
+			//@ts-ignore - web only prop
+			onHoverIn={onHoverIn}
+			onHoverOut={onHoverOut}
+			onFocus={onFocus}
+			onBlur={onBlur}
 			accessibilityRole="checkbox"
 			accessibilityState={{ checked }}
 			accessibilityLabel={accesibilityLabel}
+			disabled={disabled}
 			hitSlop={hitSlop}
 			//@ts-ignore - web only - checkbox toggle on spacebar press
 			onKeyDown={Platform.select({
@@ -36,23 +59,15 @@ export const Checkbox = ({ checked, onChange, id, hitSlop = 14, accesibilityLabe
 				default: undefined,
 			})}
 		>
-			<View
-				sx={{
+			<Animated.View
+				style={useMemo(() => ([{
 					height: 24,
 					width: 24,
 					borderRadius: 4,
 					borderWidth: 1,
-					borderColor: '#D4D4D8',
 					alignItems: 'center',
 					justifyContent: 'center',
-					shadowOffset: {
-						width: 0,
-						height: 0,
-					},
-					shadowOpacity: 0,
-					shadowRadius: 4,
-				}}
-				style={tw`bg-white dark:bg-gray-900`}
+				}, animatedStyle, tw`bg-white dark:bg-black`]), [animatedStyle])}
 			>
 				<MotiView
 					from={{ opacity: 0 }}
@@ -68,9 +83,9 @@ export const Checkbox = ({ checked, onChange, id, hitSlop = 14, accesibilityLabe
 						/>
 					</Svg>
 				</MotiView>
-			</View>
+			</Animated.View>
 			{Platform.OS === 'web' && (
-				<input type="checkbox" id={id} hidden onChange={handleChange} checked={checked} />
+				<input disabled={disabled} type="checkbox" id={id} hidden onChange={handleChange} checked={checked} />
 			)}
 		</Pressable>
 	)
