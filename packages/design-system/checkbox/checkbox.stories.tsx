@@ -15,10 +15,12 @@ export const Primary: React.VFC<{}> = () => {
 
 	return (
 		<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-			<Label style={{ flexDirection: 'row', alignItems: 'center' }}>
-				<Checkbox accesibilityLabel="I agree" checked={checked} onChange={setChecked} />
-				<Text style={{ marginLeft: 10 }}>I agree</Text>
-			</Label>
+			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+				<Checkbox id="checkbox" accesibilityLabel="I agree" checked={checked} onChange={setChecked} />
+				<Label htmlFor="checkbox" sx={{ flexDirection: 'row', marginLeft: 10, alignItems: 'center' }}>
+					I agree
+				</Label>
+			</View>
 		</View>
 	)
 }
