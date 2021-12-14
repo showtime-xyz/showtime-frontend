@@ -31,7 +31,7 @@ const theme = makeTheme({
 			semibold: webFont('Inter-SemiBold'),
 			500: webFont('Inter-SemiBold'),
 			bold: webFont('Inter-Bold'),
-			600: webFont('Inter-Bold'),
+			600: webFont('Inter-SemiBold'),
 			700: webFont('Inter-Bold'),
 			// 800: webFont('Inter-ExtraBold'),
 			// 900: webFont('Inter-Black'),
