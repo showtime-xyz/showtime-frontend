@@ -72,10 +72,13 @@ jobs:
               if: success() && steps.PR.outputs.number != ''
               with:
                   channel: pr-${{ steps.PR.outputs.number }}
-                  project-flavor: expo-go
                   scheme: io.showtime.storybook
                   project-root: apps/storybook-react-native
               id: preview
+
+            - name: Preview Deep Link
+              id: publish-url
+              run: echo "::set-output name=url::io.showtime.storybook://expo-development-client/?url=${{ steps.preview.outputs.EXPO_MANIFEST_URL }}"
 
             - name: Find PR Comment
               uses: peter-evans/find-comment@v1
@@ -97,9 +100,9 @@ jobs:
 
                       This pull request preview deployment is now available.
 
-                      ✅ Preview: [${{ steps.preview.outputs.EXPO_MANIFEST_URL }}](${{ steps.preview.outputs.EXPO_MANIFEST_URL }})
+                      ✅ Preview: [${{ steps.publish-url.outputs.url }}](${{ steps.publish-url.outputs.url }})
 
-                      <a href="${{ steps.preview.outputs.EXPO_MANIFEST_URL }}"><img src="${{ steps.preview.outputs.EXPO_QR_CODE_URL }}" height="512px" width="512px"></a>
+                      <a href="${{ steps.publish-url.outputs.url }}"><img src="${{ steps.preview.outputs.EXPO_QR_CODE_URL }}" height="512px" width="512px"></a>
 
                       ${{ steps.publish.outputs.EXPO_NEW_BUILD_IS_REQUIRED_MESSAGE }}
 
