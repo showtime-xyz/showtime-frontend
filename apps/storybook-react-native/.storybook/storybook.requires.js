@@ -14,6 +14,9 @@ if (parameters) {
 
 const getStories = () => {
 	return [
+		require('../../../packages/design-system/avatar/avatar.stories.tsx'),
+		require('../../../packages/design-system/Badge/Badge.stories.tsx'),
+		require('../../../packages/design-system/input/input.stories.tsx'),
 		require('../../../packages/design-system/checkbox/checkbox.stories.tsx'),
 		require('../../../packages/design-system/pressable-scale/pressable-scale.stories.tsx'),
 		require('../../../packages/design-system/skeleton/skeleton.stories.tsx'),
