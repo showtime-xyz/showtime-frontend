@@ -615,28 +615,21 @@ const AllowanceRequiredPage = ({ token, isWeb3ModalActive, setModalPage, setTran
 		const signerAddress = await web3.getSigner().getAddress()
 		const provider = biconomy.getEthersProvider()
 
-		const ercContract = new ethers.Contract(
-			LIST_CURRENCIES[token.listing.currency],
-			iercPermit20Abi,
-			biconomy.getSignerByAddress(signerAddress)
-		)
-		const tokenPermit = await signTokenPermit(web3, ercContract, LIST_CURRENCIES[token.listing.currency]).catch(
-			async error => {
-				if (!error.message.includes('must match the active chainId')) throw error
+		const tokenPermit = await signTokenPermit(web3, LIST_CURRENCIES[token.listing.currency]).catch(async error => {
+			if (!error.message.includes('must match the active chainId')) throw error
 
-				await switchToChain(web3, 80001, {
-					chainId: `0x${(80001).toString(16)}`,
-					chainName: 'Mumbai Testnet',
-					nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
-					rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
-					blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
-				})
-				const tokenPermit = await signTokenPermit(web3, ercContract, LIST_CURRENCIES[token.listing.currency])
-				await switchToChain(web3, 1)
+			await switchToChain(web3, 80001, {
+				chainId: `0x${(80001).toString(16)}`,
+				chainName: 'Mumbai Testnet',
+				nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
+				rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
+				blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
+			})
+			const tokenPermit = await signTokenPermit(web3, LIST_CURRENCIES[token.listing.currency])
+			await switchToChain(web3, 1)
 
-				return tokenPermit
-			}
-		)
+			return tokenPermit
+		})
 		const transaction = await axios.post('/api/marketplace/permit', tokenPermit).then(res => res.data)
 
 		setTransactionHash(transaction)

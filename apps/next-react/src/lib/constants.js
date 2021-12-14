@@ -226,12 +226,11 @@ export const SOL_MAX_INT = '0xffffffffffffffffffffffffffffffffffffffffffffffffff
 export const LIST_CURRENCIES = {
 	mumbai: {
 		TKN: '0xd404017a401ff7ef65e7689630eca288e23d67a1',
-		WMATIC: '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889',
+		WETH: '0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa',
 	},
 	polygon: {
 		USDC: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
 		WETH: '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619',
-		WMATIC: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
 		DAI: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
 	},
 }[process.env.NEXT_PUBLIC_CHAIN_ID]
