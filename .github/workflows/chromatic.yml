@@ -1,0 +1,47 @@
+name: Chromatic
+
+defaults:
+    run:
+        working-directory: apps/storybook-react
+
+on: push
+
+concurrency:
+    group: ${{ github.event_name }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    deploy-to-chromatic:
+        name: Deploy
+        runs-on: ubuntu-latest
+        steps:
+            - name: Set up repository
+              uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0 # 👈 Required to retrieve git history
+
+            - name: Set up Node
+              uses: actions/setup-node@v2
+              with:
+                  node-version: 14.x
+
+            - name: Find yarn cache
+              id: yarn-cache-path
+              run: echo "::set-output name=dir::$(yarn cache dir)"
+
+            - name: Restore cache
+              uses: actions/cache@v2
+              with:
+                  path: ${{ steps.yarn-cache-path.outputs.dir }}
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: ${{ runner.os }}-yarn-
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile --check-files
+
+            - name: Publish to Chromatic
+              uses: chromaui/action@v1
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+                  buildScriptName: build:storybook
