@@ -3504,35 +3504,19 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
   integrity sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==
 
-"@motify/components@^0.17.0-alpha.6+fc1ebb7":
-  version "0.17.0-alpha.7"
-  resolved "https://registry.yarnpkg.com/@motify/components/-/components-0.17.0-alpha.7.tgz#8edcdd834942b4a3c085aec2c16735b91d78d92c"
-  integrity sha512-0uCmwPLYRFhV4ZXDKyOqXbPsLsRB9uGOzLslM70QLxEd1zlamsOQAaoq5qRivS96lOgKIJKwgjypG3y1g0va4A==
+"@motify/components@^0.17.0-alpha.12+dab7a4f":
+  version "0.17.0-alpha.12"
+  resolved "https://registry.yarnpkg.com/@motify/components/-/components-0.17.0-alpha.12.tgz#895efa3a16e22c14108a32ccf768d63f9b3b7b77"
+  integrity sha512-6U2SxN3k8vAxwMzgCrACrCkmjFlsJqCDbPQ80WPHtu4njU4K7SWDqdE94U2ZtuY/7k2fg+MAqPBGFkdWWhIX2g==
   dependencies:
-    "@motify/core" "^0.17.0-alpha.7+3780dd4"
+    "@motify/core" "^0.17.0-alpha.12+dab7a4f"
 
-"@motify/core@^0.17.0-alpha.6+fc1ebb7", "@motify/core@^0.17.0-alpha.7+3780dd4":
-  version "0.17.0-alpha.7"
-  resolved "https://registry.yarnpkg.com/@motify/core/-/core-0.17.0-alpha.7.tgz#5789bd6684e962099d5c9c055237140c803e0ff6"
-  integrity sha512-CxJH+HvuKT0edAq9wn4COvg8Uf/0vWhIz71fPXgxabK6p8shHrrCOQgbC6jp5P9PPsornaHz0NcsL12OXDXkNg==
+"@motify/core@^0.17.0-alpha.12+dab7a4f":
+  version "0.17.0-alpha.12"
+  resolved "https://registry.yarnpkg.com/@motify/core/-/core-0.17.0-alpha.12.tgz#e4ec78fbf204bd825657d71651368bb26c227175"
+  integrity sha512-ouokPGDwi5zIROnAFv87D0YAO4DqSmf8dV41OFbXNR8mZp2jwxgEnCSkUYRVCYzygDuw/JG8Wobz0QA0HF2XqQ==
   dependencies:
     framer-motion "^3.9.1"
-
-"@motify/interactions@^0.17.0-alpha.6":
-  version "0.17.0-alpha.6"
-  resolved "https://registry.yarnpkg.com/@motify/interactions/-/interactions-0.17.0-alpha.6.tgz#7c983750ceeb950ab38d924147e6ef229e29e6ed"
-  integrity sha512-1DY335naeqqzHi2fcu+36zQmezfDbeFiQ+F/fPYjJ7fpPjST/UfJk3R9sFbKpohVgsHHMgUz90Po1OjHxF5y/A==
-  dependencies:
-    "@motify/components" "^0.17.0-alpha.6+fc1ebb7"
-    "@motify/core" "^0.17.0-alpha.6+fc1ebb7"
-
-"@motify/skeleton@^0.17.0-alpha.6":
-  version "0.17.0-alpha.6"
-  resolved "https://registry.yarnpkg.com/@motify/skeleton/-/skeleton-0.17.0-alpha.6.tgz#4ef2aeb8f3d22ca5952df3ad0923740c04e2540f"
-  integrity sha512-RzyizDd+g2JlGP4mtGQncfQxwoa9O0tLaO5k/xzCvPurdo6FMrip64tj6xJdv4/CjEDVf8m6WTXOr9+aAPNpdg==
-  dependencies:
-    "@motify/components" "^0.17.0-alpha.6+fc1ebb7"
-    "@motify/core" "^0.17.0-alpha.6+fc1ebb7"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -16618,13 +16602,13 @@ modern-normalize@^1.1.0:
   resolved "https://registry.yarnpkg.com/modern-normalize/-/modern-normalize-1.1.0.tgz#da8e80140d9221426bd4f725c6e11283d34f90b7"
   integrity sha512-2lMlY1Yc1+CUy0gw4H95uNN7vjbpoED7NNRSBHE25nWfLBdmMzFCsPshlzbxHz+gYMcBEUN8V4pU16prcdPSgA==
 
-moti@^0.17.0-alpha.6:
-  version "0.17.0-alpha.6"
-  resolved "https://registry.yarnpkg.com/moti/-/moti-0.17.0-alpha.6.tgz#9b6e2ed6dea2878f6aea2fd64a4e9defeafea728"
-  integrity sha512-CxGyeu5+d/rpFSLgkWNRMkzxz25YCX0IpLrIclVHAns4FLYXaNx17RR921I9agxJkUgt8tAS3+EDttMKjWBESw==
+moti@^0.17.0-alpha.12:
+  version "0.17.0-alpha.12"
+  resolved "https://registry.yarnpkg.com/moti/-/moti-0.17.0-alpha.12.tgz#52d90d74394ec5c63c8aa0967389bd1aae85cc00"
+  integrity sha512-uf0c0BBdWXJ03OqGY8WC26R3t7fomb9cm+nYJJQohGD8QJGzDPsDLOPozx8z4ZKT5WwcuOS3+D04G9r7tKrrEw==
   dependencies:
-    "@motify/components" "^0.17.0-alpha.6+fc1ebb7"
-    "@motify/core" "^0.17.0-alpha.6+fc1ebb7"
+    "@motify/components" "^0.17.0-alpha.12+dab7a4f"
+    "@motify/core" "^0.17.0-alpha.12+dab7a4f"
 
 move-concurrently@^1.0.1:
   version "1.0.1"
