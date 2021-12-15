@@ -16,7 +16,6 @@ const getStories = () => {
 	return [
 		require('../../../packages/design-system/activity/activity.stories.tsx'),
 		require('../../../packages/design-system/avatar/avatar.stories.tsx'),
-		require('../../../packages/design-system/badge/badge.stories.tsx'),
 		require('../../../packages/design-system/checkbox/checkbox.stories.tsx'),
 		require('../../../packages/design-system/input/input.stories.tsx'),
 		require('../../../packages/design-system/pressable-scale/pressable-scale.stories.tsx'),
@@ -25,6 +24,7 @@ const getStories = () => {
 		require('../../../packages/design-system/switch/switch.stories.tsx'),
 		require('../../../packages/design-system/tabs/tabs.stories.tsx'),
 		require('../../../packages/design-system/text/text.stories.tsx'),
+		require('../../../packages/design-system/verification-badge/badge.stories.tsx'),
 	]
 }
 

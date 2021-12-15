@@ -1,6 +1,4 @@
 import { Meta } from '@storybook/react'
-import { useIsDarkMode } from '../hooks'
-import { View } from '../view'
 
 import { VerificationBadge } from './index'
 
