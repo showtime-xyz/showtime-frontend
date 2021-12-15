@@ -3504,35 +3504,35 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
   integrity sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==
 
-"@motify/components@^0.16.1":
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/@motify/components/-/components-0.16.1.tgz#252601820910275f82df5ab277e8b710c77c4274"
-  integrity sha512-UvHpVP72TNz7kSa1cWUMFKpSqs1xPaOrAj7Xbpn5rA43ZyfY3kFg7jDZ/sMCcMJRgTRTCOna2HKYGKv7Y2eHFg==
+"@motify/components@^0.17.0-alpha.6+fc1ebb7":
+  version "0.17.0-alpha.7"
+  resolved "https://registry.yarnpkg.com/@motify/components/-/components-0.17.0-alpha.7.tgz#8edcdd834942b4a3c085aec2c16735b91d78d92c"
+  integrity sha512-0uCmwPLYRFhV4ZXDKyOqXbPsLsRB9uGOzLslM70QLxEd1zlamsOQAaoq5qRivS96lOgKIJKwgjypG3y1g0va4A==
   dependencies:
-    "@motify/core" "^0.16.1"
+    "@motify/core" "^0.17.0-alpha.7+3780dd4"
 
-"@motify/core@^0.16.1":
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/@motify/core/-/core-0.16.1.tgz#f99b2152017f2b817868f6a92d0a6fef42e2b95d"
-  integrity sha512-tmh4bSyZbMHCMKoQrSngwx5VoZgo4nb5IwZNkL8l0JZJh//spjA3dVNmDWpXwTNc53RpkTsWHFm5OWGl1kNW/w==
+"@motify/core@^0.17.0-alpha.6+fc1ebb7", "@motify/core@^0.17.0-alpha.7+3780dd4":
+  version "0.17.0-alpha.7"
+  resolved "https://registry.yarnpkg.com/@motify/core/-/core-0.17.0-alpha.7.tgz#5789bd6684e962099d5c9c055237140c803e0ff6"
+  integrity sha512-CxJH+HvuKT0edAq9wn4COvg8Uf/0vWhIz71fPXgxabK6p8shHrrCOQgbC6jp5P9PPsornaHz0NcsL12OXDXkNg==
   dependencies:
     framer-motion "^3.9.1"
 
-"@motify/interactions@^0.16.1":
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/@motify/interactions/-/interactions-0.16.1.tgz#7522c7c95e7b1d90651f27bfbeebdea6b34aab9c"
-  integrity sha512-ax5DRDKE62k81evFoA1FZxy6xLiDPj+JlP3pq/lyUi/kn3c/HxPOpkB89Nu6QDw9A1PfrA9kg1OVco3TT9nASQ==
+"@motify/interactions@^0.17.0-alpha.6":
+  version "0.17.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@motify/interactions/-/interactions-0.17.0-alpha.6.tgz#7c983750ceeb950ab38d924147e6ef229e29e6ed"
+  integrity sha512-1DY335naeqqzHi2fcu+36zQmezfDbeFiQ+F/fPYjJ7fpPjST/UfJk3R9sFbKpohVgsHHMgUz90Po1OjHxF5y/A==
   dependencies:
-    "@motify/components" "^0.16.1"
-    "@motify/core" "^0.16.1"
+    "@motify/components" "^0.17.0-alpha.6+fc1ebb7"
+    "@motify/core" "^0.17.0-alpha.6+fc1ebb7"
 
-"@motify/skeleton@^0.16.1":
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/@motify/skeleton/-/skeleton-0.16.1.tgz#a6b2e246e97b931b080ff1925e7cf225134b0de2"
-  integrity sha512-RuAVA4180lYaV9VQzbgTe4CCit4iyABnB8ozNOqn0upbcUkyESwdMg/di7j2/+eYeaNQ5iAsqe4xA51LVRDIrg==
+"@motify/skeleton@^0.17.0-alpha.6":
+  version "0.17.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@motify/skeleton/-/skeleton-0.17.0-alpha.6.tgz#4ef2aeb8f3d22ca5952df3ad0923740c04e2540f"
+  integrity sha512-RzyizDd+g2JlGP4mtGQncfQxwoa9O0tLaO5k/xzCvPurdo6FMrip64tj6xJdv4/CjEDVf8m6WTXOr9+aAPNpdg==
   dependencies:
-    "@motify/components" "^0.16.1"
-    "@motify/core" "^0.16.1"
+    "@motify/components" "^0.17.0-alpha.6+fc1ebb7"
+    "@motify/core" "^0.17.0-alpha.6+fc1ebb7"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -16618,13 +16618,13 @@ modern-normalize@^1.1.0:
   resolved "https://registry.yarnpkg.com/modern-normalize/-/modern-normalize-1.1.0.tgz#da8e80140d9221426bd4f725c6e11283d34f90b7"
   integrity sha512-2lMlY1Yc1+CUy0gw4H95uNN7vjbpoED7NNRSBHE25nWfLBdmMzFCsPshlzbxHz+gYMcBEUN8V4pU16prcdPSgA==
 
-moti@^0.16.1:
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/moti/-/moti-0.16.1.tgz#7a22cf19680a52422c199086d23dd5b085e26449"
-  integrity sha512-AgbWHRZdt7DZ0BMZ/wrY7PUpaNqTSjIeEoHi346SK75oymB1a7SiEIJnRShtS6Z5t+8YY9I+7A5Zq/vzbjlNMw==
+moti@^0.17.0-alpha.6:
+  version "0.17.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/moti/-/moti-0.17.0-alpha.6.tgz#9b6e2ed6dea2878f6aea2fd64a4e9defeafea728"
+  integrity sha512-CxGyeu5+d/rpFSLgkWNRMkzxz25YCX0IpLrIclVHAns4FLYXaNx17RR921I9agxJkUgt8tAS3+EDttMKjWBESw==
   dependencies:
-    "@motify/components" "^0.16.1"
-    "@motify/core" "^0.16.1"
+    "@motify/components" "^0.17.0-alpha.6+fc1ebb7"
+    "@motify/core" "^0.17.0-alpha.6+fc1ebb7"
 
 move-concurrently@^1.0.1:
   version "1.0.1"
