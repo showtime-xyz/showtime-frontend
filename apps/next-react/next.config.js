@@ -65,6 +65,14 @@ const nextConfig = {
 			},
 		]
 	},
+	async rewrites() {
+		return [
+			{
+				source: '/moonpay/asset_info/:contractAddr/:tokenId',
+				destination: '/api/moonpay/nft-info',
+			},
+		]
+	},
 }
 
 module.exports = withPlugins(
