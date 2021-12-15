@@ -1,11 +1,10 @@
 import { formatDistanceToNowStrict } from 'date-fns'
 
 import { ACTIVITY_TYPES, DEFAULT_PROFILE_PIC } from 'app/lib/constants'
-
 import { View } from 'design-system/view'
 import { Text } from 'design-system/text'
 import { Avatar } from 'design-system/activity/avatar'
-import { Like } from 'design-system/activity/types'
+// import { Like } from 'design-system/activity/types'
 
 const getProfileImageUrl = (imgUrl: string) => {
 	if (imgUrl && imgUrl.includes('https://lh3.googleusercontent.com')) {
@@ -37,7 +36,7 @@ function Activity({ activity }: Props) {
 							@{actor.username}{' '}
 						</Text>
 
-						{type === ACTIVITY_TYPES.LIKE && <Like act={activity} />}
+						{/* {type === ACTIVITY_TYPES.LIKE && <Like act={activity} />} */}
 
 						{/* {type === ACTIVITY_TYPES.COMMENT && <Comment act={activity} />}
 

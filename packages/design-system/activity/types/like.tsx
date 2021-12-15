@@ -1,13 +1,12 @@
-import { TextLink } from 'app/navigation/link'
 import { CHAIN_IDENTIFIERS } from 'app/lib/constants'
-import { View, Text, Pressable } from 'design-system'
-import { mixpanel } from 'app/lib/mixpanel'
+import { TextLink } from 'app/navigation/link'
+// import { mixpanel } from 'app/lib/mixpanel'
 
 type Props = {
 	act: any
 }
 
-export default function Like({ act }: Props) {
+function Like({ act }: Props) {
 	const { nfts } = act
 	const count = nfts?.length
 
@@ -116,3 +115,5 @@ export default function Like({ act }: Props) {
 		</>
 	)
 }
+
+export { Like }
