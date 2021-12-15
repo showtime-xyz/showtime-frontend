@@ -34,11 +34,11 @@ const TailwindDeviceContextProvider = ({ children }) => {
 export const decorators = [
 	Story => (
 		<TailwindDeviceContextProvider>
-			<BottomSheetModalProvider>
-				<DripsyProvider theme={theme}>
+			<DripsyProvider theme={theme}>
+				<BottomSheetModalProvider>
 					<Story />
-				</DripsyProvider>
-			</BottomSheetModalProvider>
+				</BottomSheetModalProvider>
+			</DripsyProvider>
 		</TailwindDeviceContextProvider>
 	),
 ]

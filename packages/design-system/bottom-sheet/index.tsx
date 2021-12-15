@@ -1,8 +1,7 @@
 import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
-import { useEffect } from 'react'
-import { useRef, useMemo, useCallback } from 'react'
-import { StyleSheet } from 'react-native'
+import { useRef, useMemo, useCallback, useEffect } from 'react'
 import { View } from '../view'
+import { tw } from '../tailwind'
 
 type BottomSheetProps = {
 	children?: React.ReactElement
@@ -40,9 +39,16 @@ export const BottomSheet = (props: BottomSheetProps) => {
 			onDismiss={onDismiss}
 			ref={bottomSheetModalRef}
 			index={0}
+			handleIndicatorStyle={tw.style(`bg-gray-300 dark:bg-gray-700 w-12 h-1`)}
+			backgroundStyle={useMemo(
+				() => [tw.style(`bg-white dark:bg-black`), { borderTopLeftRadius: 32, borderTopRightRadius: 32 }],
+				[]
+			)}
 			snapPoints={snapPoints}
 		>
-			{children}
+			<View tw="pt-6 px-4" sx={{ flex: 1 }}>
+				{children}
+			</View>
 		</BottomSheetModal>
 	)
 }
