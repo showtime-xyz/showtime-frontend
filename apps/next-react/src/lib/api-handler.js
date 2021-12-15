@@ -5,6 +5,7 @@ import CookieService from '@/lib/cookie'
 import { flagDefs } from '@/hooks/useFlags'
 import backend from './backend'
 import jwt_decode from 'jwt-decode'
+import { verifySignature } from './moonpay'
 
 export default () =>
 	nc({
@@ -58,6 +59,18 @@ export const middleware = {
 		// The line 74 code will continue to work because we patched the above middleware. This middleware will ago away alongside it.
 
 		if (!req.user) return res.status(401).json({ error: 'Unauthenticated.' })
+
+		next()
+	},
+	moonpay: async ({ query, body, url: uri, method }, res, next) => {
+		const isMoonpay = verifySignature(body.signature || query.signature, {
+			uri,
+			method,
+			body,
+			timestamp: body.timestamp || query.timestamp,
+		})
+
+		if (!isMoonpay) return res.status(401).json({ error: 'Unauthenticated.' })
 
 		next()
 	},
