@@ -4,6 +4,7 @@ import { useFonts } from 'expo-font'
 import { useDeviceContext } from 'twrnc'
 import { View } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 
 import { tw } from 'design-system/tailwind'
 
@@ -35,13 +36,15 @@ export const decorators = [
 	Story => (
 		<TailwindDeviceContextProvider>
 			<DripsyProvider theme={theme}>
-				<SafeAreaProvider>
-					<MainAxisCenter>
-						<FontsLoader>
-							<Story />
-						</FontsLoader>
-					</MainAxisCenter>
-				</SafeAreaProvider>
+				<BottomSheetModalProvider>
+					<SafeAreaProvider>
+						<MainAxisCenter>
+							<FontsLoader>
+								<Story />
+							</FontsLoader>
+						</MainAxisCenter>
+					</SafeAreaProvider>
+				</BottomSheetModalProvider>
 			</DripsyProvider>
 		</TailwindDeviceContextProvider>
 	),
