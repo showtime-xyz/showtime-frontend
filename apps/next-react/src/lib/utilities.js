@@ -1,6 +1,9 @@
 import { CONTRACTS, LIST_CURRENCIES, SOL_MAX_INT } from './constants'
 import removeMd from 'remove-markdown'
 import { parseEther, parseUnits } from '@ethersproject/units'
+import ierc20Permit from '@/data/IERC20Permit.json'
+import ierc20MetaTx from '@/data/IERC20MetaTx.json'
+import { ethers } from 'ethers'
 
 export const classNames = (...classes) => {
 	return classes.filter(Boolean).join(' ')
@@ -204,7 +207,19 @@ export const personalSignMessage = async (web3, message) => {
 	return web3.getSigner().provider.send('personal_sign', [message, await web3.getSigner().getAddress()])
 }
 
-export const signTokenPermit = async (web3, tokenContract, tokenAddr) => {
+export const signTokenPermit = async (web3, tokenAddr) => {
+	if (tokenAddr === LIST_CURRENCIES.WETH) return signMetaTransactionRequest(web3, tokenAddr)
+
+	const tokenContract = new ethers.Contract(
+		tokenAddr,
+		ierc20Permit,
+		new ethers.providers.JsonRpcProvider(
+			`https://polygon-${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai' : 'mainnet'}.infura.io/v3/${
+				process.env.NEXT_PUBLIC_INFURA_ID
+			}`
+		)
+	)
+
 	const userAddress = await web3.getSigner().getAddress()
 	const permit = {
 		owner: userAddress,
@@ -216,7 +231,7 @@ export const signTokenPermit = async (web3, tokenContract, tokenAddr) => {
 
 	const signature = await web3.getSigner()._signTypedData(
 		{
-			name: 'Test Token',
+			name: Object.keys(LIST_CURRENCIES).find(key => LIST_CURRENCIES[key] === tokenAddr),
 			version: '1',
 			chainId: 80001,
 			verifyingContract: tokenAddr,
@@ -234,6 +249,47 @@ export const signTokenPermit = async (web3, tokenContract, tokenAddr) => {
 	)
 
 	return { owner: permit.owner, deadline: permit.deadline, tokenAddr, signature }
+}
+
+export const signMetaTransactionRequest = async (web3, tokenAddr) => {
+	const userAddress = await web3.getSigner().getAddress()
+	const tokenContract = new ethers.Contract(
+		tokenAddr,
+		ierc20MetaTx,
+		new ethers.providers.JsonRpcProvider(
+			`https://polygon-${process.env.NEXT_PUBLIC_CHAIN_ID === 'mumbai' ? 'mumbai' : 'mainnet'}.infura.io/v3/${
+				process.env.NEXT_PUBLIC_INFURA_ID
+			}`
+		)
+	)
+
+	const metatx = {
+		nonce: await tokenContract.getNonce(userAddress),
+		from: userAddress,
+		functionSignature: tokenContract.interface.encodeFunctionData('approve', [
+			process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
+			SOL_MAX_INT,
+		]),
+	}
+
+	const signature = await web3.getSigner()._signTypedData(
+		{
+			name: 'Wrapped Ether',
+			version: '1',
+			verifyingContract: tokenAddr,
+			salt: '0x0000000000000000000000000000000000000000000000000000000000013881',
+		},
+		{
+			MetaTransaction: [
+				{ name: 'nonce', type: 'uint256' },
+				{ name: 'from', type: 'address' },
+				{ name: 'functionSignature', type: 'bytes' },
+			],
+		},
+		metatx
+	)
+
+	return { owner: metatx.from, fnSig: metatx.functionSignature, tokenAddr, signature }
 }
 
 export const switchToChain = (web3, chainId, chainDetails = { chainId }) => {

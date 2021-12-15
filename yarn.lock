@@ -123,7 +123,7 @@
     semver "^6.3.0"
     source-map "^0.5.0"
 
-"@babel/core@^7.1.0", "@babel/core@^7.12.10", "@babel/core@^7.12.3", "@babel/core@^7.12.9", "@babel/core@^7.16.0", "@babel/core@^7.7.5":
+"@babel/core@^7.1.0", "@babel/core@^7.12.10", "@babel/core@^7.12.3", "@babel/core@^7.16.0", "@babel/core@^7.7.5":
   version "7.16.0"
   resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.16.0.tgz#c4ff44046f5fe310525cc9eb4ef5147f0c5374d4"
   integrity sha512-mYZEvshBRHGsIAiyH5PzCFTCfbWfoYbO/jcSdXQSUQu1/pW0xDZAUP7KEc32heqWTAfAHhV9j1vH8Sav7l+JNQ==
@@ -11760,39 +11760,39 @@ expo-constants@^12.1.3, expo-constants@~12.1.1, expo-constants@~12.1.2, expo-con
     expo-modules-core "~0.4.4"
     uuid "^3.3.2"
 
-expo-dev-client@~0.6.3:
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/expo-dev-client/-/expo-dev-client-0.6.3.tgz#ab3f6cf31c55c96b70f029bb0733236976eafe98"
-  integrity sha512-lYhOoEBSPqsZDi2UNDZhbHbGJ5nYeudviJdnWxMdemf5RDrF0oYumceCsvNem47j+V9t3fHqWmGyvUJ6QxLcmQ==
+expo-dev-client@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/expo-dev-client/-/expo-dev-client-0.7.1.tgz#5ff089032ac952f49389086a95cfc7a9be751898"
+  integrity sha512-Wg0CC6WOF+78PZCqO5adKT/RKB12AaU3EUF4HMm7njM7Sk8fo5BO1jvcZ5c6TlAkOdgpG5ETRAw9EvkrSmjgOw==
   dependencies:
     "@expo/config-plugins" "^4.0.2"
-    expo-dev-launcher "0.8.4"
-    expo-dev-menu "0.8.4"
-    expo-dev-menu-interface "0.4.1"
+    expo-dev-launcher "0.9.0"
+    expo-dev-menu "0.8.6"
+    expo-dev-menu-interface "0.4.2"
     expo-manifests "~0.2.2"
     expo-updates-interface "~0.4.0"
 
-expo-dev-launcher@0.8.4:
-  version "0.8.4"
-  resolved "https://registry.yarnpkg.com/expo-dev-launcher/-/expo-dev-launcher-0.8.4.tgz#505a8ad5f4b31903b161d57c379247a6eef9da4c"
-  integrity sha512-bG2tpCQoxmGsTR7DecyIIOdWbJGfIuxn3YWpkiGLJ4nYokdbO5+A4WW5rl9senb9+oy4vKabKxMbn0ZVy49T5Q==
+expo-dev-launcher@0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/expo-dev-launcher/-/expo-dev-launcher-0.9.0.tgz#55b7701b4cf67588ff4c35f1e5f3328ffbd6725a"
+  integrity sha512-/pzVXpXZw4NSd+jhmvpCl3/9VC6t9lezzU2ffNKErScBXpJBSskpjsjkTYmO2TLSpaCSOTXBLw627GG9lFABHQ==
   dependencies:
     "@expo/config-plugins" "^4.0.2"
     resolve-from "^5.0.0"
     semver "^7.3.5"
 
-expo-dev-menu-interface@0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/expo-dev-menu-interface/-/expo-dev-menu-interface-0.4.1.tgz#1499992cf96f3d4ccd02eefcfc1c182f44e876c7"
-  integrity sha512-gc1w47D71Y2fRlF0k6JSVYct/aMWeZp5/QAdisqRprtZTeTXxMG9AwtT5NihrlfyaAbHE2udeB7yxBx5vH4pUQ==
+expo-dev-menu-interface@0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/expo-dev-menu-interface/-/expo-dev-menu-interface-0.4.2.tgz#061cf77dc4ccf1ea6a937983a073456895098eeb"
+  integrity sha512-OaXJTMh1RHnsunpK9iZfWeZhY4uf5GfDsd+rS4RWbdUG7u23EOf465EkcORokoPIyPV3vy3Mp2ehY2wsUJ2NDw==
 
-expo-dev-menu@0.8.4:
-  version "0.8.4"
-  resolved "https://registry.yarnpkg.com/expo-dev-menu/-/expo-dev-menu-0.8.4.tgz#2a329805abe43ab651483bea601c13b69bfc052c"
-  integrity sha512-E3cU0nnmncPg5aVs94QC09tpUAT5EDHz00qLGvB1gC0QxLlVXU6WKR8EW2of6Vd9IP+nukiGMqv9WkIiqqM/Zw==
+expo-dev-menu@0.8.6:
+  version "0.8.6"
+  resolved "https://registry.yarnpkg.com/expo-dev-menu/-/expo-dev-menu-0.8.6.tgz#a520409e55130060417b75d9bcf98b232111345f"
+  integrity sha512-lQ+prI3XQCjYwRvwEu8V1E9Y09KDROluQ1+I3VjwkjWNFdHaIqD2musO1t38mWhtAxx6hhgG82TonZrN6oiJbQ==
   dependencies:
     "@expo/config-plugins" "^4.0.2"
-    expo-dev-menu-interface "0.4.1"
+    expo-dev-menu-interface "0.4.2"
 
 expo-device@~4.0.3:
   version "4.0.3"
@@ -11992,7 +11992,7 @@ expo-structured-headers@~2.0.0:
   resolved "https://registry.yarnpkg.com/expo-structured-headers/-/expo-structured-headers-2.0.0.tgz#a30a370ad9f7bb65a03d81cadc2a0c88e038349d"
   integrity sha512-pCMjCNpVX8rTD0gwfa29ShUY2++4yxCXodvMWwQonvDtunp2UC3PlvGo82oBBOqsV0yKPN2rMO43tOYSH6lW0Q==
 
-expo-system-ui@~1.0.0:
+expo-system-ui@^1.0.0, expo-system-ui@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/expo-system-ui/-/expo-system-ui-1.0.0.tgz#10ec5a014471328861c32a9f5821ad43fecd0fb4"
   integrity sha512-opGJvBIVzlsSagKW9yRQBs28caTyYcLg+/nbFSBWKY0Qs/DyEjzoMADgBgq5sEp/F76dqtYy6MZVtGKBxlOhKw==

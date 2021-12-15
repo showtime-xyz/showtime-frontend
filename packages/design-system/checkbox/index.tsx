@@ -1,4 +1,4 @@
-import React, { useCallback,useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Pressable } from 'dripsy'
 import { Path, Svg } from 'react-native-svg'
 import { Platform } from 'react-native'
@@ -6,9 +6,8 @@ import { MotiView } from 'moti'
 import { tw } from '../tailwind'
 import { useOnFocus, useOnHover } from '../hooks'
 import { useIsDarkMode } from '../hooks'
-import Animated, {useAnimatedStyle} from "react-native-reanimated"
-import {colors} from "../tailwind/colors"
-
+import Animated, { useAnimatedStyle } from 'react-native-reanimated'
+import { colors } from '../tailwind/colors'
 
 type CheckboxProps = {
 	onChange: (checked: boolean) => void
@@ -16,7 +15,7 @@ type CheckboxProps = {
 	hitSlop?: number
 	accesibilityLabel: string
 	id?: string
-	disabled?:boolean
+	disabled?: boolean
 }
 
 export const Checkbox = ({ checked, onChange, id, hitSlop = 14, accesibilityLabel, disabled }: CheckboxProps) => {
@@ -26,17 +25,16 @@ export const Checkbox = ({ checked, onChange, id, hitSlop = 14, accesibilityLabe
 
 	const isDark = useIsDarkMode()
 
-	const {onHoverIn, onHoverOut, hovered} = useOnHover()
-	const {onFocus, onBlur, focused} = useOnFocus()
+	const { onHoverIn, onHoverOut, hovered } = useOnHover()
+	const { onFocus, onBlur, focused } = useOnFocus()
 
 	const animatedStyle = useAnimatedStyle(() => {
 		return {
 			borderColor: hovered.value ? colors.gray[400] : colors.gray[300],
-			boxShadow: Platform.OS === 'web' && focused.value ? "0px 0px 0px 4px #E4E4E7" : undefined,
-			disabled: disabled ? 0.4 : 1
+			boxShadow: Platform.OS === 'web' && focused.value ? '0px 0px 0px 4px #E4E4E7' : undefined,
+			disabled: disabled ? 0.4 : 1,
 		}
-	},[focused, hovered,disabled])
-
+	}, [focused, hovered, disabled])
 
 	return (
 		<Pressable
@@ -60,18 +58,25 @@ export const Checkbox = ({ checked, onChange, id, hitSlop = 14, accesibilityLabe
 			})}
 		>
 			<Animated.View
-				style={useMemo(() => ([{
-					height: 24,
-					width: 24,
-					borderRadius: 4,
-					borderWidth: 1,
-					alignItems: 'center',
-					justifyContent: 'center',
-				}, animatedStyle, tw`bg-white dark:bg-black`]), [animatedStyle])}
+				style={useMemo(
+					() => [
+						{
+							height: 24,
+							width: 24,
+							borderRadius: 4,
+							borderWidth: 1,
+							alignItems: 'center',
+							justifyContent: 'center',
+						},
+						animatedStyle,
+						tw`bg-white dark:bg-black`,
+					],
+					[animatedStyle]
+				)}
 			>
 				<MotiView
 					from={{ opacity: 0 }}
-					animate={{ scale: checked ? [1.08, 1] : 1, opacity: checked ? 1 : 0 }}
+					animate={{ opacity: checked ? 1 : 0 }}
 					transition={{ duration: 100, type: 'timing' }}
 				>
 					<Svg width="13" height="12" viewBox="0 0 13 12" fill="none">
