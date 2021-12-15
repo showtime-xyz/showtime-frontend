@@ -10,16 +10,7 @@ export default {
 	title: 'Components/Switch',
 } as Meta
 
-const Container = (props: any) => {
-	const isDark = useIsDarkMode()
-	return <View tw={isDark ? 'bg-gray-900 p-10' : 'bg-gray-100 p-10'}>{props.children}</View>
-}
-
 export const Basic: React.VFC<{}> = () => {
 	const [selected, setSelected] = useState(false)
-	return (
-		<Container>
-			<Switch checked={selected} onChange={setSelected} />
-		</Container>
-	)
+	return <Switch checked={selected} onChange={setSelected} />
 }

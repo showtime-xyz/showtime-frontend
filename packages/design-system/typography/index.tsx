@@ -77,6 +77,15 @@ export const textSizes = {
 			ios: -0.3,
 		},
 	}),
+	'text-xs-custom': createTextSize({
+		fontSize: 13,
+		letterSpacing: 0.6,
+		lineHeight: 16,
+		marginCorrection: {
+			android: -0.1,
+			ios: -0.3,
+		},
+	}),
 	'text-sm': createTextSize({
 		fontSize: 14,
 		letterSpacing: 0.6,

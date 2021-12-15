@@ -6,6 +6,7 @@ import { useDeviceContext } from 'twrnc'
 
 import { theme } from 'design-system/theme'
 import { tw } from 'design-system/tailwind'
+import { View } from 'design-system/view'
 
 const OriginalNextImage = NextImage.default
 
@@ -27,15 +28,15 @@ export const parameters = {
 const TailwindDeviceContextProvider = ({ children }) => {
 	useDeviceContext(tw)
 
-	return children
+	return <View tw="flex-1 h-[95vh] justify-center dark:bg-gray-900">{children}</View>
 }
 
 export const decorators = [
 	Story => (
-		<TailwindDeviceContextProvider>
-			<DripsyProvider theme={theme}>
+		<DripsyProvider theme={theme}>
+			<TailwindDeviceContextProvider>
 				<Story />
-			</DripsyProvider>
-		</TailwindDeviceContextProvider>
+			</TailwindDeviceContextProvider>
+		</DripsyProvider>
 	),
 ]
