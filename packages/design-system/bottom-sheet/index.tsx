@@ -1,9 +1,6 @@
 import { useRef, useMemo, useCallback, useEffect } from 'react'
-<<<<<<< Updated upstream
 import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 
-=======
->>>>>>> Stashed changes
 import { View } from 'design-system/view'
 import { tw } from 'design-system/tailwind'
 
