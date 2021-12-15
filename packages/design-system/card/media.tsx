@@ -6,24 +6,24 @@ import Router from 'next/router'
 import { View, Image, Pressable } from 'design-system'
 import { useRouter } from 'app/navigation/use-router'
 
-const getImageUrl = (img_url, token_aspect_ratio) => {
-	if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
-		if (token_aspect_ratio && token_aspect_ratio > 1) {
-			img_url = img_url.split('=')[0] + '=h660'
+const getImageUrl = (imgUrl: string, tokenAspectRatio: number) => {
+	if (imgUrl && imgUrl.includes('https://lh3.googleusercontent.com')) {
+		if (tokenAspectRatio && tokenAspectRatio > 1) {
+			imgUrl = imgUrl.split('=')[0] + '=h660'
 		} else {
-			img_url = img_url.split('=')[0] + '=w660'
+			imgUrl = imgUrl.split('=')[0] + '=w660'
 		}
 	}
-	return img_url
+	return imgUrl
 }
 
-const getImageUrlLarge = (img_url, token_aspect_ratio) => {
-	if (img_url && img_url.includes('https://lh3.googleusercontent.com')) {
-		if (token_aspect_ratio && token_aspect_ratio > 1) img_url = img_url.split('=')[0] + '=h1328'
-		else img_url = img_url.split('=')[0] + '=w1328'
+const getImageUrlLarge = (imgUrl: string, tokenAspectRatio: number) => {
+	if (imgUrl && imgUrl.includes('https://lh3.googleusercontent.com')) {
+		if (tokenAspectRatio && tokenAspectRatio > 1) imgUrl = imgUrl.split('=')[0] + '=h1328'
+		else imgUrl = imgUrl.split('=')[0] + '=w1328'
 	}
 
-	return img_url
+	return imgUrl
 }
 
 type Props = {

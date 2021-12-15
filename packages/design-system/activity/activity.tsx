@@ -4,7 +4,7 @@ import { ACTIVITY_TYPES, DEFAULT_PROFILE_PIC } from 'app/lib/constants'
 import { View } from 'design-system/view'
 import { Text } from 'design-system/text'
 import { Avatar } from 'design-system/activity/avatar'
-// import { Like } from 'design-system/activity/types'
+import { Like } from 'design-system/activity/types'
 
 const getProfileImageUrl = (imgUrl: string) => {
 	if (imgUrl && imgUrl.includes('https://lh3.googleusercontent.com')) {
@@ -28,7 +28,7 @@ function Activity({ activity }: Props) {
 				<View tw="justify-center ml-2">
 					<Text
 						variant="text-sm"
-						tw="text-gray-600 dark:text-gray-400"
+						tw="text-gray-600 dark:text-gray-400 max-w-[69vw]"
 						numberOfLines={2}
 						ellipsizeMode="tail"
 					>
@@ -36,7 +36,7 @@ function Activity({ activity }: Props) {
 							@{actor.username}{' '}
 						</Text>
 
-						{/* {type === ACTIVITY_TYPES.LIKE && <Like act={activity} />} */}
+						{type === ACTIVITY_TYPES.LIKE && <Like act={activity} />}
 
 						{/* {type === ACTIVITY_TYPES.COMMENT && <Comment act={activity} />}
 
