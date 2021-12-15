@@ -1,7 +1,8 @@
-import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import { useRef, useMemo, useCallback, useEffect } from 'react'
-import { View } from '../view'
-import { tw } from '../tailwind'
+import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
+
+import { View } from 'design-system/view'
+import { tw } from 'design-system/tailwind'
 
 type BottomSheetProps = {
 	children?: React.ReactElement
@@ -13,10 +14,6 @@ export const BottomSheet = (props: BottomSheetProps) => {
 	const { children, visible, onDismiss } = props
 
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null)
-
-	const handlePresentModalPress = useCallback(() => {
-		bottomSheetModalRef.current?.present()
-	}, [])
 
 	useEffect(() => {
 		if (visible) {
@@ -40,15 +37,10 @@ export const BottomSheet = (props: BottomSheetProps) => {
 			ref={bottomSheetModalRef}
 			index={0}
 			handleIndicatorStyle={tw.style(`bg-gray-300 dark:bg-gray-700 w-12 h-1`)}
-			backgroundStyle={useMemo(
-				() => [tw.style(`bg-white dark:bg-black`), { borderTopLeftRadius: 32, borderTopRightRadius: 32 }],
-				[]
-			)}
+			backgroundStyle={tw.style(`bg-white dark:bg-black rounded-t-[32px]`)}
 			snapPoints={snapPoints}
 		>
-			<View tw="pt-6 px-4" sx={{ flex: 1 }}>
-				{children}
-			</View>
+			<View tw="flex-1 pt-6 px-4">{children}</View>
 		</BottomSheetModal>
 	)
 }
