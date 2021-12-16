@@ -11,7 +11,7 @@ type TextProps = ComponentProps<typeof DripsyText>
 
 export type Props = { tw?: string; variant?: Variant; htmlFor?: string } & Pick<
 	TextProps,
-	'onLayout' | 'children' | 'selectable' | 'sx' | 'nativeID' | 'accessibilityRole'
+	'onLayout' | 'children' | 'selectable' | 'sx' | 'nativeID' | 'accessibilityRole' | 'numberOfLines' | 'ellipsizeMode'
 >
 
 /**
@@ -24,7 +24,22 @@ const ParentContext = createContext<{} | undefined>(undefined)
  * to verify if the text is rendered correctly and if Capsize is working well.
  */
 export const Text = forwardRef<TextType, Props>(
-	({ variant, onLayout, children, selectable, tw, sx, nativeID, htmlFor, accessibilityRole }, ref) => {
+	(
+		{
+			variant,
+			onLayout,
+			children,
+			selectable,
+			tw,
+			sx,
+			nativeID,
+			htmlFor,
+			accessibilityRole,
+			numberOfLines,
+			ellipsizeMode,
+		},
+		ref
+	) => {
 		const parentTw = useContext(ParentContext)
 
 		const compoundSx = { ...tailwind.style(parentTw), ...sx, ...tailwind.style(tw) }
@@ -38,6 +53,8 @@ export const Text = forwardRef<TextType, Props>(
 				onLayout={onLayout}
 				sx={compoundSx}
 				accessibilityRole={accessibilityRole}
+				numberOfLines={numberOfLines}
+				ellipsizeMode={ellipsizeMode}
 				// @ts-ignore - this prop will only work on web. Refer text.web.tsx
 				htmlFor={htmlFor}
 			>

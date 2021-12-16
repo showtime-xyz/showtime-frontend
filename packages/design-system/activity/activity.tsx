@@ -4,7 +4,7 @@ import { ACTIVITY_TYPES, DEFAULT_PROFILE_PIC } from 'app/lib/constants'
 import { View } from 'design-system/view'
 import { Text } from 'design-system/text'
 import { Avatar } from 'design-system/activity/avatar'
-import { Like } from 'design-system/activity/types'
+import { Like, Comment, Sell, Buy, Create, Follow, Transfer } from 'design-system/activity/types'
 
 const getProfileImageUrl = (imgUrl: string) => {
 	if (imgUrl && imgUrl.includes('https://lh3.googleusercontent.com')) {
@@ -38,7 +38,7 @@ function Activity({ activity }: Props) {
 
 						{type === ACTIVITY_TYPES.LIKE && <Like act={activity} />}
 
-						{/* {type === ACTIVITY_TYPES.COMMENT && <Comment act={activity} />}
+						{type === ACTIVITY_TYPES.COMMENT && <Comment act={activity} />}
 
 						{type === ACTIVITY_TYPES.SELL && <Sell act={activity} />}
 
@@ -50,7 +50,7 @@ function Activity({ activity }: Props) {
 
 						{type === ACTIVITY_TYPES.SEND && <></>}
 
-						{type === ACTIVITY_TYPES.RECEIVE && <Transfer act={activity} />} */}
+						{type === ACTIVITY_TYPES.RECEIVE && <Transfer act={activity} />}
 					</Text>
 
 					<View tw="h-2" />

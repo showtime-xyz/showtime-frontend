@@ -82,7 +82,6 @@ export const Primary: React.VFC<{}> = () => {
 				chain_identifier: '137',
 				token_listing_identifier: null,
 			},
-
 			{
 				activity_id: 827316,
 				nft_id: 76208186,

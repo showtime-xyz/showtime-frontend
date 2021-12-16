@@ -45,8 +45,7 @@ const Avatar = ({ url, icon = 'none' }: Props) => {
 				}}
 			/>
 			{icon !== 'none' ? (
-				<View tw="absolute -bottom-px -right-px rounded-full border-white dark:border-black border-2">
-					<View tw="rounded-full border-white dark:border-black" />
+				<View tw="absolute -bottom-px -right-px rounded-full border-white dark:border-black border-2 justify-center items-center">
 					<Icon width={20} height={20} color="white" />
 				</View>
 			) : null}
