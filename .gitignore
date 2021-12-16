@@ -9,7 +9,6 @@
 /coverage
 
 # next.js
-/.next/
 /out/
 
 # production
@@ -34,9 +33,10 @@ yarn-error.log*
 # vercel
 .vercel
 
-node_modules/**/*
+node_modules
+# node_modules/**/*
 .expo/*
-.next/*
+.next
 *.jks
 *.p8
 *.p12
@@ -99,3 +99,7 @@ dist/
 
 # Turborepo
 .turbo
+
+#storybook
+storybook-static
+
