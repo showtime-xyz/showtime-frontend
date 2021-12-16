@@ -4,9 +4,9 @@
 	"version": "1.0.0",
 	"license": "MIT",
 	"scripts": {
-		"dev": "next dev",
+		"dev": "yarn storybook",
+		"build": "yarn build:storybook",
 		"build:storybook": "build-storybook -s public",
-		"start": "next start",
 		"lint": "next lint",
 		"storybook": "start-storybook -p 6006 -s ./public",
 		"chromatic": "npx chromatic --project-token=aa4fa9ec8af5"

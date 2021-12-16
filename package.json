@@ -18,15 +18,32 @@
 		"packages/*"
 	],
 	"scripts": {
-		"yolo": "yarn dev:next & yarn workspace @showtime/expo ios & yarn workspace @showtime/expo android",
-		"dev:expo": "yarn workspace @showtime/expo dev",
-		"dev:next:react": "yarn workspace @showtime/next-react dev",
-		"dev:next:react-native": "yarn workspace @showtime/next-react-native dev",
-		"dev:storybook:react": "yarn workspace @showtime/storybook-react storybook",
-		"dev:storybook:react-native": "yarn workspace @showtime/storybook-react-native start",
-		"build": "yarn turbo run build --ignore='packages/**/*' --ignore='apps/**/*' --ignore='!/apps/next-react/**/*'",
-		"build:storybook": "yarn workspace @showtime/storybook-react build:storybook",
-		"clean": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
+		"dev": "yarn turbo run dev --parallel --no-cache",
+		"dev:expo": "yarn turbo run dev --parallel --no-cache  --scope=@showtime/expo",
+		"dev:next": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next-react",
+		"dev:expo-storybook": "yarn turbo run dev --parallel --no-cache --scope=@showtime/storybook-react-native",
+		"dev:next-storybook": "yarn turbo run dev --parallel --no-cache --scope=@showtime/storybook-react",
+		"dev:next-react-native": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next-react-native",
+		"dev:web": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next-react --scope=@showtime/storybook-react",
+		"dev:mobile": "yarn turbo run dev --parallel --no-cache --scope=@showtime/expo --scope=@showtime/storybook-react-native",
+		"build": "yarn turbo run build",
+		"build:expo": "yarn turbo run build --scope=@showtime/expo",
+		"build:next": "yarn turbo run build --scope=@showtime/next-react",
+		"build:expo-storybook": "yarn turbo run build --scope=@showtime/storybook-react-native",
+		"build:next-storybook": "yarn turbo run build --scope=@showtime/storybook-react",
+		"start:next": "yarn turbo run start --scope=@showtime/next-react",
+		"lint": "yarn turbo run lint",
+		"lint:expo": "yarn turbo run lint --scope=@showtime/expo",
+		"lint:next": "yarn turbo run lint --scope=@showtime/next-react",
+		"lint:expo-storybook": "yarn turbo run lint --scope=@showtime/storybook-react-native",
+		"lint:next-storybook": "yarn turbo run lint --scope=@showtime/storybook-react",
+		"lint:next-react-native": "yarn turbo run lint --scope=@showtime/next-react-native",
+		"graph": "yarn turbo:build --graph",
+		"graph:next": "yarn turbo:build:next --graph",
+		"yolo": "yarn turbo:dev:next & yarn workspace @showtime/expo ios & yarn workspace @showtime/expo android",
+		"clean": "yarn clean:turbo & yarn clean:node-modules",
+		"clean:turbo": "rm -rf ./node_modules/.cache/turbo",
+		"clean:node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
 		"postinstall": "patch-package"
 	},
 	"resolutions": {
@@ -44,8 +61,10 @@
 					"^build"
 				]
 			},
-			"test": {
-				"outputs": []
+			"start": {
+				"dependsOn": [
+					"^build"
+				]
 			},
 			"lint": {
 				"outputs": []
