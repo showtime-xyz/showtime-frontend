@@ -45,6 +45,7 @@ export const getBidLink = item => {
 		case CONTRACTS.RARIBLE_1155:
 			return `https://rarible.com/token/${item.contract_address}:${item.token_id}`
 		case CONTRACTS.KNOWNORIGIN:
+		case CONTRACTS.KNOWNORIGIN_V2:
 			if (item.token_ko_edition) {
 				return `https://knownorigin.io/gallery/${item.token_ko_edition}`
 			} else {
@@ -108,6 +109,7 @@ export const getContractName = item => {
 		case CONTRACTS.RARIBLE_1155:
 			return 'Rarible'
 		case CONTRACTS.KNOWNORIGIN:
+		case CONTRACTS.KNOWNORIGIN_V2:
 			if (item.token_ko_edition) return 'KnownOrigin'
 			else return 'OpenSea'
 		case CONTRACTS.FOUNDATION:
@@ -147,6 +149,7 @@ export const getContractImage = item => {
 		case CONTRACTS.RARIBLE_1155:
 			return '/icons/rarible.png'
 		case CONTRACTS.KNOWNORIGIN:
+		case CONTRACTS.KNOWNORIGIN_V2:
 			if (item.token_ko_edition) return '/icons/knownorigin.png'
 			else return '/icons/opensea.png'
 		case CONTRACTS.FOUNDATION:
