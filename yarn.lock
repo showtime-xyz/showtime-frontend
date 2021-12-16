@@ -3504,17 +3504,17 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
   integrity sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==
 
-"@motify/components@^0.17.0-alpha.12+dab7a4f":
-  version "0.17.0-alpha.12"
-  resolved "https://registry.yarnpkg.com/@motify/components/-/components-0.17.0-alpha.12.tgz#895efa3a16e22c14108a32ccf768d63f9b3b7b77"
-  integrity sha512-6U2SxN3k8vAxwMzgCrACrCkmjFlsJqCDbPQ80WPHtu4njU4K7SWDqdE94U2ZtuY/7k2fg+MAqPBGFkdWWhIX2g==
+"@motify/components@^0.17.1":
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/@motify/components/-/components-0.17.1.tgz#96888fb0d5c6d41f484d98c9364764e511d83086"
+  integrity sha512-nUOEuNDmnjRVFD202goOilPYtjrZGr26/VCIMnPE5Jpfs9ds/4ezIhQ75zBXd3BuCcgfMRsKrnw01/O0rdWYsg==
   dependencies:
-    "@motify/core" "^0.17.0-alpha.12+dab7a4f"
+    "@motify/core" "^0.17.1"
 
-"@motify/core@^0.17.0-alpha.12+dab7a4f":
-  version "0.17.0-alpha.12"
-  resolved "https://registry.yarnpkg.com/@motify/core/-/core-0.17.0-alpha.12.tgz#e4ec78fbf204bd825657d71651368bb26c227175"
-  integrity sha512-ouokPGDwi5zIROnAFv87D0YAO4DqSmf8dV41OFbXNR8mZp2jwxgEnCSkUYRVCYzygDuw/JG8Wobz0QA0HF2XqQ==
+"@motify/core@^0.17.1":
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/@motify/core/-/core-0.17.1.tgz#1d3f0aac54ae30a636f43d069c02c8040ca67efc"
+  integrity sha512-czFnaE4o0gCNS7F3u0CdSxzx72b6Yzw2LGD/e/J5DPM7KPL70qyzj5cZ8Rq1sKnUZMfgvCfxyGql21FbGdyhew==
   dependencies:
     framer-motion "^3.9.1"
 
@@ -16602,13 +16602,13 @@ modern-normalize@^1.1.0:
   resolved "https://registry.yarnpkg.com/modern-normalize/-/modern-normalize-1.1.0.tgz#da8e80140d9221426bd4f725c6e11283d34f90b7"
   integrity sha512-2lMlY1Yc1+CUy0gw4H95uNN7vjbpoED7NNRSBHE25nWfLBdmMzFCsPshlzbxHz+gYMcBEUN8V4pU16prcdPSgA==
 
-moti@^0.17.0-alpha.12:
-  version "0.17.0-alpha.12"
-  resolved "https://registry.yarnpkg.com/moti/-/moti-0.17.0-alpha.12.tgz#52d90d74394ec5c63c8aa0967389bd1aae85cc00"
-  integrity sha512-uf0c0BBdWXJ03OqGY8WC26R3t7fomb9cm+nYJJQohGD8QJGzDPsDLOPozx8z4ZKT5WwcuOS3+D04G9r7tKrrEw==
+moti@^0.17.1:
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/moti/-/moti-0.17.1.tgz#6c0c3c5fa76cb2cd1af86787ef5596debb87c6da"
+  integrity sha512-AFpsKkiQ6GQcqbgWCuVt+Yd4guTZdO3iRBjMkV1SYcE9vTVH2JWrG5Rk3Xu6XcxJ9jDICQ5/NJj15nbAcymrYg==
   dependencies:
-    "@motify/components" "^0.17.0-alpha.12+dab7a4f"
-    "@motify/core" "^0.17.0-alpha.12+dab7a4f"
+    "@motify/components" "^0.17.1"
+    "@motify/core" "^0.17.1"
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -19156,10 +19156,10 @@ react-native-randombytes@^3.0.0, react-native-randombytes@^3.5.1:
     buffer "^4.9.1"
     sjcl "^1.0.3"
 
-react-native-reanimated@^2.3.0-beta.4:
-  version "2.3.0-beta.4"
-  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.3.0-beta.4.tgz#2475a14d4d3dae13fa17a88048e80e3757b90983"
-  integrity sha512-Mgau59ok18vh2srA3bzguRc6ecwsZqjQ2xJ6uuXG6FVbB3Nrxz/ordbnCF0CqnJwp7qHXkUKH6YNARifskYvTg==
+react-native-reanimated@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.3.1.tgz#c7abad48f9e6c84610b0d5e270088ecd61750382"
+  integrity sha512-nzjVqwkB8eeyPKT2KoiA9EEz17ZMFSGMoOTC17Z9b5nE2Z4ZHjHM5EKhY0TlwzXFUuJAE9PhOfxF0wIO/maZSA==
   dependencies:
     "@babel/plugin-transform-object-assign" "^7.10.4"
     "@types/invariant" "^2.2.35"

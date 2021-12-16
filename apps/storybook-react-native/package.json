@@ -53,7 +53,7 @@
     "react-native": "0.64.3",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-pager-view": "^5.4.9",
-    "react-native-reanimated": "^2.3.0-beta.4",
+    "react-native-reanimated": "^2.3.1",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "^3.9.0",
     "react-native-svg": "^12.1.1",
