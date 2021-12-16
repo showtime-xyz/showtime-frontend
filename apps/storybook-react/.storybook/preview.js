@@ -6,6 +6,7 @@ import { useDeviceContext } from 'twrnc'
 
 import { theme } from 'design-system/theme'
 import { tw } from 'design-system/tailwind'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 
 const OriginalNextImage = NextImage.default
 
@@ -34,7 +35,9 @@ export const decorators = [
 	Story => (
 		<TailwindDeviceContextProvider>
 			<DripsyProvider theme={theme}>
-				<Story />
+				<BottomSheetModalProvider>
+					<Story />
+				</BottomSheetModalProvider>
 			</DripsyProvider>
 		</TailwindDeviceContextProvider>
 	),
