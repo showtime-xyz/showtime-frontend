@@ -41,12 +41,13 @@ export const getBidLink = item => {
 		case CONTRACTS.RARIBLE_1155:
 			return `https://rarible.com/token/${item.contract_address}:${item.token_id}`
 		case CONTRACTS.KNOWNORIGIN:
-		case CONTRACTS.KNOWNORIGIN_V2:
 			if (item.token_ko_edition) {
 				return `https://knownorigin.io/gallery/${item.token_ko_edition}`
 			} else {
 				return `https://opensea.io/assets/${item.contract_address}/${item.token_id}?ref=0xe3fac288a27fbdf947c234f39d6e45fb12807192`
 			}
+		case CONTRACTS.KNOWNORIGIN_V2:
+			return `https://knownorigin.io/gallery/${item.token_id.slice(0, -3)}000`
 		case CONTRACTS.PORTIONIO:
 		case CONTRACTS.PORTIONIO_1155:
 			if (item.token_img_original_url) {
@@ -105,9 +106,10 @@ export const getContractName = item => {
 		case CONTRACTS.RARIBLE_1155:
 			return 'Rarible'
 		case CONTRACTS.KNOWNORIGIN:
-		case CONTRACTS.KNOWNORIGIN_V2:
 			if (item.token_ko_edition) return 'KnownOrigin'
 			else return 'OpenSea'
+		case CONTRACTS.KNOWNORIGIN_V2:
+			return 'KnownOrigin'
 		case CONTRACTS.FOUNDATION:
 			return 'Foundation'
 		case CONTRACTS.SUPERRARE_V1:
@@ -145,9 +147,10 @@ export const getContractImage = item => {
 		case CONTRACTS.RARIBLE_1155:
 			return '/icons/rarible.png'
 		case CONTRACTS.KNOWNORIGIN:
-		case CONTRACTS.KNOWNORIGIN_V2:
 			if (item.token_ko_edition) return '/icons/knownorigin.png'
 			else return '/icons/opensea.png'
+		case CONTRACTS.KNOWNORIGIN_V2:
+			return '/icons/knownorigin.png'
 		case CONTRACTS.FOUNDATION:
 			return '/icons/foundation.png'
 		case CONTRACTS.SUPERRARE_V1:
