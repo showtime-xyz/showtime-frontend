@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "yarn start:dev-client",
     "start": "expo start --dev-client",
-    "start:dev-client": "yarn expo:prebuild && expo start --dev-client",
+    "start:dev-client": "yarn expo:prebuild && expo start --dev-client --port=8083",
     "start:dev-client:clear": "yarn start:dev-client -c",
     "eject": "expo eject",
     "expo:prebuild": "expo prebuild --skip-dependency-update react && yarn react-native link",
@@ -13,6 +13,7 @@
     "android": "yarn expo:prebuild && expo run:android",
     "postinstall": "cd ../.. && yarn patch-package",
     "publish:development": "STAGE=development expo publish",
+    "build": "yarn build:development",
     "build:development": "STAGE=development eas build --profile development --platform all",
     "build:development:ios": "STAGE=development eas build --profile development --platform ios",
     "build:development:android": "STAGE=development eas build --profile development --platform android",
