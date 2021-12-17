@@ -1,5 +1,6 @@
 import Svg, { G, Path, Defs, ClipPath } from 'react-native-svg'
-import { useIsDarkMode } from '../hooks'
+
+import { useIsDarkMode } from 'design-system/hooks'
 
 export const VerificationBadge = props => {
 	const isDark = useIsDarkMode()

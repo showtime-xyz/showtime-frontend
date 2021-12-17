@@ -3504,35 +3504,19 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
   integrity sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==
 
-"@motify/components@^0.16.1":
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/@motify/components/-/components-0.16.1.tgz#252601820910275f82df5ab277e8b710c77c4274"
-  integrity sha512-UvHpVP72TNz7kSa1cWUMFKpSqs1xPaOrAj7Xbpn5rA43ZyfY3kFg7jDZ/sMCcMJRgTRTCOna2HKYGKv7Y2eHFg==
+"@motify/components@^0.17.1":
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/@motify/components/-/components-0.17.1.tgz#96888fb0d5c6d41f484d98c9364764e511d83086"
+  integrity sha512-nUOEuNDmnjRVFD202goOilPYtjrZGr26/VCIMnPE5Jpfs9ds/4ezIhQ75zBXd3BuCcgfMRsKrnw01/O0rdWYsg==
   dependencies:
-    "@motify/core" "^0.16.1"
+    "@motify/core" "^0.17.1"
 
-"@motify/core@^0.16.1":
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/@motify/core/-/core-0.16.1.tgz#f99b2152017f2b817868f6a92d0a6fef42e2b95d"
-  integrity sha512-tmh4bSyZbMHCMKoQrSngwx5VoZgo4nb5IwZNkL8l0JZJh//spjA3dVNmDWpXwTNc53RpkTsWHFm5OWGl1kNW/w==
+"@motify/core@^0.17.1":
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/@motify/core/-/core-0.17.1.tgz#1d3f0aac54ae30a636f43d069c02c8040ca67efc"
+  integrity sha512-czFnaE4o0gCNS7F3u0CdSxzx72b6Yzw2LGD/e/J5DPM7KPL70qyzj5cZ8Rq1sKnUZMfgvCfxyGql21FbGdyhew==
   dependencies:
     framer-motion "^3.9.1"
-
-"@motify/interactions@^0.16.1":
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/@motify/interactions/-/interactions-0.16.1.tgz#7522c7c95e7b1d90651f27bfbeebdea6b34aab9c"
-  integrity sha512-ax5DRDKE62k81evFoA1FZxy6xLiDPj+JlP3pq/lyUi/kn3c/HxPOpkB89Nu6QDw9A1PfrA9kg1OVco3TT9nASQ==
-  dependencies:
-    "@motify/components" "^0.16.1"
-    "@motify/core" "^0.16.1"
-
-"@motify/skeleton@^0.16.1":
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/@motify/skeleton/-/skeleton-0.16.1.tgz#a6b2e246e97b931b080ff1925e7cf225134b0de2"
-  integrity sha512-RuAVA4180lYaV9VQzbgTe4CCit4iyABnB8ozNOqn0upbcUkyESwdMg/di7j2/+eYeaNQ5iAsqe4xA51LVRDIrg==
-  dependencies:
-    "@motify/components" "^0.16.1"
-    "@motify/core" "^0.16.1"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -16683,13 +16667,13 @@ modern-normalize@^1.1.0:
   resolved "https://registry.yarnpkg.com/modern-normalize/-/modern-normalize-1.1.0.tgz#da8e80140d9221426bd4f725c6e11283d34f90b7"
   integrity sha512-2lMlY1Yc1+CUy0gw4H95uNN7vjbpoED7NNRSBHE25nWfLBdmMzFCsPshlzbxHz+gYMcBEUN8V4pU16prcdPSgA==
 
-moti@^0.16.1:
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/moti/-/moti-0.16.1.tgz#7a22cf19680a52422c199086d23dd5b085e26449"
-  integrity sha512-AgbWHRZdt7DZ0BMZ/wrY7PUpaNqTSjIeEoHi346SK75oymB1a7SiEIJnRShtS6Z5t+8YY9I+7A5Zq/vzbjlNMw==
+moti@^0.17.1:
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/moti/-/moti-0.17.1.tgz#6c0c3c5fa76cb2cd1af86787ef5596debb87c6da"
+  integrity sha512-AFpsKkiQ6GQcqbgWCuVt+Yd4guTZdO3iRBjMkV1SYcE9vTVH2JWrG5Rk3Xu6XcxJ9jDICQ5/NJj15nbAcymrYg==
   dependencies:
-    "@motify/components" "^0.16.1"
-    "@motify/core" "^0.16.1"
+    "@motify/components" "^0.17.1"
+    "@motify/core" "^0.17.1"
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -19237,10 +19221,10 @@ react-native-randombytes@^3.0.0, react-native-randombytes@^3.5.1:
     buffer "^4.9.1"
     sjcl "^1.0.3"
 
-react-native-reanimated@^2.3.0-beta.4:
-  version "2.3.0-beta.4"
-  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.3.0-beta.4.tgz#2475a14d4d3dae13fa17a88048e80e3757b90983"
-  integrity sha512-Mgau59ok18vh2srA3bzguRc6ecwsZqjQ2xJ6uuXG6FVbB3Nrxz/ordbnCF0CqnJwp7qHXkUKH6YNARifskYvTg==
+react-native-reanimated@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.3.1.tgz#c7abad48f9e6c84610b0d5e270088ecd61750382"
+  integrity sha512-nzjVqwkB8eeyPKT2KoiA9EEz17ZMFSGMoOTC17Z9b5nE2Z4ZHjHM5EKhY0TlwzXFUuJAE9PhOfxF0wIO/maZSA==
   dependencies:
     "@babel/plugin-transform-object-assign" "^7.10.4"
     "@types/invariant" "^2.2.35"

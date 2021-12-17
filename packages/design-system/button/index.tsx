@@ -2,7 +2,6 @@ import { forwardRef } from 'react'
 
 import { Text } from 'design-system/text'
 import { Pressable, Props as PressableScaleProps } from 'design-system/pressable-scale'
-import { tw as tailwind } from 'design-system/tailwind'
 
 type Props = {
 	tw?: string

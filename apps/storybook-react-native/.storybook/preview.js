@@ -2,11 +2,11 @@ import { DripsyProvider } from 'dripsy'
 import { theme } from 'design-system/theme'
 import { useFonts } from 'expo-font'
 import { useDeviceContext } from 'twrnc'
-import { View } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 
 import { tw } from 'design-system/tailwind'
+import { View } from 'design-system/view'
 
 const FontsLoader = ({ children }) => {
 	const [fontsLoaded, error] = useFonts({
@@ -53,7 +53,7 @@ export const decorators = [
 const MainAxisCenter = ({ children }) => {
 	useDeviceContext(tw)
 
-	return <View style={{ flex: 1, justifyContent: 'center' }}>{children}</View>
+	return <View tw="flex-1 justify-center dark:bg-gray-900">{children}</View>
 }
 
 export const parameters = {}

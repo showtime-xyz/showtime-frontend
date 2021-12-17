@@ -21,8 +21,6 @@ const withTM = require('next-transpile-modules')([
 	'moti',
 	'@motify/components',
 	'@motify/core',
-	'@motify/skeleton',
-	'@motify/interactions',
 	'expo-next-react-navigation',
 	'@zeego/menu',
 	'@zeego/dropdown-menu',
@@ -42,7 +40,7 @@ const nextConfig = {
 	outputFileTracing: false, // https://github.com/vercel/next.js/issues/30601#issuecomment-961323914
 	images: {
 		disableStaticImages: true,
-		domains: ['lh3.googleusercontent.com', 'cloudflare-ipfs.com', 'cdn.tryshowtime.com'],
+		domains: ['lh3.googleusercontent.com', 'cloudflare-ipfs.com', 'cdn.tryshowtime.com', 'storage.googleapis.com'],
 	},
 	async headers() {
 		const cacheHeaders = [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }]

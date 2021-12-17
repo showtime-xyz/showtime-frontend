@@ -44,7 +44,9 @@ const Header = () => {
 							animate={useCallback(({ hovered }) => {
 								'worklet'
 
-								return hovered ? tw.style('bg-gray-100 dark:bg-gray-900 md:dark:bg-gray-800') : null
+								return hovered
+									? tw.style('bg-gray-100 dark:bg-gray-900 md:dark:bg-gray-800')
+									: tw.style('bg-white dark:bg-black md:dark:bg-gray-900')
 							}, [])}
 						>
 							<Showtime

@@ -1,21 +1,16 @@
 import React, { ComponentProps, useMemo } from 'react'
-import { MotiPressable, mergeAnimateProp } from '@motify/interactions'
-import { styled } from 'dripsy'
+import { MotiPressable, mergeAnimateProp } from 'moti/interactions'
 
 import { tw as tailwind } from 'design-system/tailwind'
 
-const StyledMotiPressable = styled(MotiPressable)()
-
-export type Props = ComponentProps<typeof StyledMotiPressable> & {
+export type Props = ComponentProps<typeof MotiPressable> & {
 	scaleTo?: number
 	tw?: string
 }
 
-export function Pressable({ animate, scaleTo = 0.95, tw, sx, ...props }: Props) {
-	// TODO: parse tw string to get hover state
-
+export function Pressable({ animate, scaleTo = 0.95, tw, style, ...props }: Props) {
 	return (
-		<StyledMotiPressable
+		<MotiPressable
 			animate={useMemo(
 				() => interaction => {
 					'worklet'
@@ -26,7 +21,7 @@ export function Pressable({ animate, scaleTo = 0.95, tw, sx, ...props }: Props) 
 				},
 				[animate, scaleTo]
 			)}
-			sx={{ ...sx, ...tailwind.style(tw) }}
+			style={[tailwind.style(tw), style]}
 			{...props}
 		/>
 	)
