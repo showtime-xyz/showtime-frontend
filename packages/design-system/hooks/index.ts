@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import { Platform, useColorScheme } from 'react-native'
 import { useSharedValue } from 'react-native-reanimated'
 
@@ -56,4 +56,16 @@ export const useOnHover = () => {
 	}, [state])
 
 	return hoverHandler
+}
+
+export function useUpdateEffect(effect, dependencies = []) {
+	const isInitialMount = useRef(true)
+
+	useEffect(() => {
+		if (isInitialMount.current) {
+			isInitialMount.current = false
+		} else {
+			return effect()
+		}
+	}, dependencies)
 }
