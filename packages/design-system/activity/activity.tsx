@@ -5,6 +5,7 @@ import { View } from 'design-system/view'
 import { Text } from 'design-system/text'
 import { Avatar } from 'design-system/activity/avatar'
 import { Like, Comment, Sell, Buy, Create, Follow, Transfer } from 'design-system/activity/types'
+import { TextLink } from 'app/navigation/link'
 
 const getProfileImageUrl = (imgUrl: string) => {
 	if (imgUrl && imgUrl.includes('https://lh3.googleusercontent.com')) {
@@ -32,9 +33,9 @@ function Activity({ activity }: Props) {
 						numberOfLines={2}
 						ellipsizeMode="tail"
 					>
-						<Text variant="text-sm" tw="text-black dark:text-white font-bold">
+						<TextLink variant="text-sm" tw="text-black dark:text-white font-bold" href="">
 							@{actor.username}{' '}
-						</Text>
+						</TextLink>
 
 						{type === ACTIVITY_TYPES.LIKE && <Like act={activity} />}
 

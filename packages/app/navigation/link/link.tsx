@@ -24,7 +24,13 @@ function Link({ viewProps, ...props }: LinkProps) {
 type TextLinkProps = Props & { textProps?: TextProps; variant?: string; tw?: string }
 
 function TextLink({ textProps, variant, tw, ...props }: TextLinkProps) {
-	return <LinkCore {...props} Component={Text} componentProps={{ ...textProps, variant, tw }} />
+	return (
+		<LinkCore
+			{...props}
+			Component={Text}
+			componentProps={{ ...textProps, variant, tw, accessibilityRole: 'link' }}
+		/>
+	)
 }
 
 export { Link, TextLink }

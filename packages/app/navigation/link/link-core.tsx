@@ -31,4 +31,5 @@ function LinkCore({
 	)
 }
 
-export { Props, LinkCore }
+export type { Props }
+export { LinkCore }
