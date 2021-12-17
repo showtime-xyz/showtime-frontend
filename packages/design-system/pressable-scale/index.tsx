@@ -8,7 +8,7 @@ export type Props = ComponentProps<typeof MotiPressable> & {
 	tw?: string
 }
 
-export function Pressable({ animate, scaleTo = 0.95, tw, ...props }: Props) {
+export function Pressable({ animate, scaleTo = 0.95, tw, style, ...props }: Props) {
 	return (
 		<MotiPressable
 			animate={useMemo(
@@ -21,7 +21,7 @@ export function Pressable({ animate, scaleTo = 0.95, tw, ...props }: Props) {
 				},
 				[animate, scaleTo]
 			)}
-			style={{ ...tailwind.style(tw) }}
+			style={[tailwind.style(tw), style]}
 			{...props}
 		/>
 	)
