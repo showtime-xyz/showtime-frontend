@@ -786,7 +786,7 @@ const TokenDetailBody = ({
 					{/* OpenSea Link */}
 
 					<div className="m-4 flex text-sm">
-						{(CONTRACTS.HICETNUNC, CONTRACTS.KALAMINT).includes(item.contract_address) ? null : (
+						{[CONTRACTS.HICETNUNC, CONTRACTS.KALAMINT].includes(item.contract_address) ? null : (
 							<>
 								<a
 									href={`https://opensea.io/assets/${item.chain_identifier == 137 ? 'matic/' : ''}${
