@@ -3,7 +3,7 @@ import Button from '../Buttons/Button'
 import { ethers } from 'ethers'
 import { getBiconomy } from '@/lib/biconomy'
 import getWeb3Modal from '@/lib/web3Modal'
-import marketplaceAbi from '@/data/ERC1155Sale.json'
+import marketplaceAbi from '@/data/ShowtimeV1Market.json'
 import PolygonIcon from '@/components/Icons/PolygonIcon'
 import { useRef, useState, Fragment, useEffect, useContext } from 'react'
 import { useTheme } from 'next-themes'
@@ -132,9 +132,12 @@ const BuyModal = ({ open, onClose, token }) => {
 			return setModalPage(MODAL_PAGES.NEEDS_ALLOWANCE)
 		}
 
-		const { data } = await contract.populateTransaction.buyFor(
+		const { data } = await contract.populateTransaction.buy(
 			token.listing.sale_identifier,
+			token.token_id,
 			quantity,
+			token.listing.min_price,
+			LIST_CURRENCIES[token.listing.currency],
 			signerAddress
 		)
 
