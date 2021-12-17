@@ -1,9 +1,5 @@
 name: Chromatic
 
-defaults:
-    run:
-        working-directory: apps/storybook-react
-
 on: push
 
 concurrency:
@@ -39,9 +35,12 @@ jobs:
             - name: Install dependencies
               run: yarn install --frozen-lockfile --check-files
 
+            - name: Build storybook
+              run: yarn build:next-storybook
+
             - name: Publish to Chromatic
               uses: chromaui/action@v1
               with:
                   token: ${{ secrets.GITHUB_TOKEN }}
                   projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-                  buildScriptName: build:next-storybook
+                  storybookBuildDir: apps/storybook-react/storybook-static
