@@ -77,7 +77,7 @@ export const textSizes = {
 			ios: -0.3,
 		},
 	}),
-	'text-xs-custom': createTextSize({
+	'text-13': createTextSize({
 		fontSize: 13,
 		letterSpacing: 0.6,
 		lineHeight: 16,
