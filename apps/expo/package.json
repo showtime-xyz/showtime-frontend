@@ -31,6 +31,7 @@
     "@dripsy/gradient": "^3.5.3",
     "@gorhom/bottom-sheet": "^4.1.4",
     "@magic-sdk/react-native": "^6.2.1",
+    "@radix-ui/react-accordion": "^0.1.5",
     "@radix-ui/react-tabs": "^0.1.1",
     "@react-native-async-storage/async-storage": "^1.15.11",
     "@react-native-community/netinfo": "7.1.2",
