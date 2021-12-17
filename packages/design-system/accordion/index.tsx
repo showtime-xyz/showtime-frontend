@@ -7,11 +7,13 @@ import Svg, { Path } from 'react-native-svg'
 import { useContext } from 'react'
 import { Text, Props as TextProps } from 'design-system/text'
 import { ViewProps } from 'design-system/view'
+import { useIsDarkMode } from '../hooks'
 
 const Chevron = () => {
 	const { value: selectedValue } = useContext(RNAccordion.RootContext)
-	const itemValue = useContext(RNAccordion.ItemContext)
+	const { value: itemValue } = useContext(RNAccordion.ItemContext)
 	const isExpanded = itemValue === selectedValue
+	const isDark = useIsDarkMode()
 
 	return (
 		<MotiView
@@ -25,7 +27,7 @@ const Chevron = () => {
 					fillRule="evenodd"
 					clipRule="evenodd"
 					d="M13.707 7.707a1 1 0 0 1-1.414 0L7 2.414 1.707 7.707A1 1 0 0 1 .293 6.293l6-6a1 1 0 0 1 1.414 0l6 6a1 1 0 0 1 0 1.414Z"
-					fill="#18181B"
+					fill={isDark ? '#FFF' : '#18181B'}
 				/>
 			</Svg>
 		</MotiView>
@@ -60,7 +62,7 @@ const Content = ({ tw = '', ...props }: ViewProps) => {
 }
 
 const Label = ({ tw = '', ...props }: TextProps) => {
-	return <Text tw={'font-bold ' + tw} {...props} />
+	return <Text tw={'font-bold text-gray-900 dark:text-white text-sm ' + tw} {...props} />
 }
 
 export const Accordion = {
