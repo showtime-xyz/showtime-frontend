@@ -33,9 +33,18 @@ const Item = ({ disabled, value, ...props }: ItemProps) => {
 }
 
 const Trigger = (props: TriggerProps) => {
-	const { handleValueChange } = useContext(RootContext)
+	const { handleValueChange, value: selectedValue } = useContext(RootContext)
 	const { value: itemValue, disabled } = useContext(ItemContext)
-	return <Pressable onPress={() => !disabled && handleValueChange(itemValue)}>{props.children}</Pressable>
+	const handlePress = () => {
+		if (!disabled) {
+			if (itemValue === selectedValue) {
+				handleValueChange(null)
+			} else {
+				handleValueChange(itemValue)
+			}
+		}
+	}
+	return <Pressable onPress={handlePress}>{props.children}</Pressable>
 }
 
 const Content = (props: ContentProps) => {

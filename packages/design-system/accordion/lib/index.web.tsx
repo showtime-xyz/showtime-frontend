@@ -24,7 +24,7 @@ const Root = (props: RootProps) => {
 
 	return (
 		<RootContext.Provider value={useMemo(() => ({ value, handleValueChange }), [value, handleValueChange])}>
-			<RadixAccordion.Root value={value} onValueChange={handleValueChange} type="single">
+			<RadixAccordion.Root value={value} onValueChange={handleValueChange} type="single" collapsible>
 				{props.children}
 			</RadixAccordion.Root>
 		</RootContext.Provider>
