@@ -173,5 +173,5 @@ export const Input = (props: InputProps) => {
 // This component adds appropriate padding to match our design system and increase the pressable area
 // Usage - with rightElement and leftElement
 export const InputPressable = (props: PressableProps) => {
-	return <Pressable {...props} sx={{ padding: 10, ...props.sx }} />
+	return <Pressable tw="p-2" {...props} />
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Meta } from '@storybook/react'
+
 import { Checkbox } from '../checkbox'
-import { Text } from '../text'
 import { View } from '../view'
 import { Label } from '../label'
 
@@ -14,13 +14,11 @@ export const Primary: React.VFC<{}> = () => {
 	const [checked, setChecked] = React.useState(false)
 
 	return (
-		<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-				<Checkbox id="checkbox" accesibilityLabel="I agree" checked={checked} onChange={setChecked} />
-				<Label htmlFor="checkbox" sx={{ flexDirection: 'row', marginLeft: 10, alignItems: 'center' }}>
-					I agree
-				</Label>
-			</View>
+		<View tw="flex-row items-center">
+			<Checkbox id="checkbox" accesibilityLabel="I agree" checked={checked} onChange={setChecked} />
+			<Label htmlFor="checkbox" tw="flex-row ml-2 items-center text-black dark:text-white">
+				I agree
+			</Label>
 		</View>
 	)
 }

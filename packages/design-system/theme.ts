@@ -42,6 +42,10 @@ const theme = makeTheme({
 			fontWeight: 'default',
 			...textSizes['text-xs'],
 		},
+		'text-13': {
+			fontWeight: 'default',
+			...textSizes['text-13'],
+		},
 		'text-sm': {
 			fontWeight: 'default',
 			...textSizes['text-sm'],

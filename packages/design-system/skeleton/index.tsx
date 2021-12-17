@@ -1,5 +1,5 @@
 import { ComponentProps } from 'react'
-import { Skeleton as MotiSkeleton } from '@motify/skeleton'
+import { Skeleton as MotiSkeleton } from 'moti/skeleton'
 import { styled } from 'dripsy'
 
 import { tw as tailwind } from 'design-system/tailwind'
