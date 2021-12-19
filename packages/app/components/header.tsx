@@ -41,13 +41,13 @@ const Header = () => {
 							onPress={() => {
 								router.push('/')
 							}}
-							animate={useCallback(({ hovered }) => {
-								'worklet'
+							// animate={useCallback(({ hovered }) => {
+							// 	'worklet'
 
-								return hovered
-									? tw.style('bg-gray-100 dark:bg-gray-900 md:dark:bg-gray-800')
-									: tw.style('bg-white dark:bg-black md:dark:bg-gray-900')
-							}, [])}
+							// 	return hovered
+							// 		? tw.style('bg-gray-100 dark:bg-gray-900 md:dark:bg-gray-800')
+							// 		: tw.style('bg-white dark:bg-black md:dark:bg-gray-900')
+							// }, [])}
 						>
 							<Showtime
 								style={tw.style('rounded-lg overflow-hidden w-6 h-6')}
