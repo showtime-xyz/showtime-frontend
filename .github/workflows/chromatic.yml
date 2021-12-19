@@ -70,4 +70,4 @@ jobs:
                   edit-mode: replace
                   body: |
                       Test From Lois
-                      lfg: ${{steps.chromatic-output.outputs.storybookUrl}}
+                      lfg: <a href="${{steps.chromatic-output.outputs.storybookUrl}}">Storybook</a>
