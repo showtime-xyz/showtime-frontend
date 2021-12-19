@@ -21,6 +21,14 @@ jobs:
               with:
                   node-version: 14.x
 
+            - uses: 8BitJonny/gh-get-current-pr@1.3.0
+              id: PR
+              name: Check if we're in a PR
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  sha: ${{ github.event.pull_request.head.sha }}
+                  filterOutClosed: true
+
             - name: Find yarn cache
               id: yarn-cache-path
               run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -39,8 +47,40 @@ jobs:
               run: yarn build:next-storybook
 
             - name: Publish to Chromatic
+              id: chromatic-output
               uses: chromaui/action@v1
               with:
                   token: ${{ secrets.GITHUB_TOKEN }}
                   projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
                   storybookBuildDir: apps/storybook-react/storybook-static
+
+            - name: Format Storybook Preview URL
+              id: format-storybook-preview-url
+              uses: mad9000/actions-find-and-replace-string@2
+              if: success() && steps.PR.outputs.number != ''
+              with:
+                  source: ${{ steps.chromatic-output.outputs.storybookUrl }}
+                  find: 'iframe.html'
+                  replace: ''
+
+            - name: Find PR Comment
+              uses: peter-evans/find-comment@v1
+              if: success() && steps.PR.outputs.number != ''
+              id: existing-comment
+              with:
+                  issue-number: ${{ steps.PR.outputs.number }}
+                  body-includes: PR Preview - Storybook on Chromatic
+
+            - name: Create or update comment
+              uses: peter-evans/create-or-update-comment@v1
+              if: success() && steps.PR.outputs.number != ''
+              with:
+                  comment-id: ${{ steps.existing-comment.outputs.comment-id }}
+                  issue-number: ${{ steps.PR.outputs.number }}
+                  edit-mode: replace
+                  body: |
+                      ## PR Preview - Storybook on Chromatic
+
+                      ✅ Preview: <a href="${{steps.format-storybook-preview-url.outputs.value}}">The Storybook preview URL for this Pull Request</a>
+
+                      ✅ Build: <a href="${{ steps.chromatic-output.outputs.buildUrl}}"> The Chromatic build URL for this Pull Request</a>
