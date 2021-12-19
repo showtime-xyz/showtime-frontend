@@ -19,13 +19,13 @@ function TabBarIcon({ tab, children }) {
 			onPress={() => {
 				router.push(tab)
 			}}
-			animate={useCallback(({ hovered }) => {
-				'worklet'
+			// animate={useCallback(({ hovered }) => {
+			// 	'worklet'
 
-				return hovered
-					? tw.style('bg-gray-100 dark:bg-gray-800 md:dark:bg-gray-700')
-					: tw.style('bg-white dark:bg-gray-900 md:dark:bg-gray-800')
-			}, [])}
+			// 	return hovered
+			// 		? tw.style('bg-gray-100 dark:bg-gray-800 md:dark:bg-gray-700')
+			// 		: tw.style('bg-white dark:bg-gray-900 md:dark:bg-gray-800')
+			// }, [])}
 		>
 			{children}
 		</Pressable>
