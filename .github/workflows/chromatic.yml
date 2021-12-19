@@ -70,4 +70,4 @@ jobs:
                   edit-mode: replace
                   body: |
                       Test From Lois
-                      ${{join(steps.run_tests.outputs.*, '\n')}}
+                      ${{join(steps.chromatic-output.outputs.*, '\n')}}
