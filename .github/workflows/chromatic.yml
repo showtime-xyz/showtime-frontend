@@ -79,4 +79,7 @@ jobs:
                   edit-mode: replace
                   body: |
                       Test From Lois
-                      lfg: <a href="${{steps.format-storybook-preview-url.outputs.main}}">Storybook Preview url</a>
+                      lfg: <a href="${{steps.format-storybook-preview-url.outputs.value}}">Storybook Preview url</a>
+
+                      formatted: ${{ steps.format-storybook-preview-url.outputs.value }}
+                      not: ${{ steps.chromatic-output.outputs.storybookUrl }} 
