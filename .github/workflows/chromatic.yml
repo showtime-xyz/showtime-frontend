@@ -70,4 +70,4 @@ jobs:
                   edit-mode: replace
                   body: |
                       Test From Lois
-                      ${{join(steps.chromatic-output.outputs.*, '\n')}}
+                      lfg: ${{steps.chromatic-output.outputs.storybookUrl}}
