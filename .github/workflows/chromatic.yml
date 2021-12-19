@@ -61,6 +61,15 @@ jobs:
                   issue-number: ${{ steps.PR.outputs.number }}
                   body-includes: PR Preview
 
+            - name: Format Storybook Preview URL
+              id: format-storybook-preview-url
+              uses: mad9000/actions-find-and-replace-string@2
+              if: success() && steps.PR.outputs.number != ''
+              with:
+                  source: ${{ steps.chromatic-output.outputs.storybookUrl }}
+                  find: 'iframe.html'
+                  replace: ''
+
             - name: Create or update comment
               uses: peter-evans/create-or-update-comment@v1
               if: success() && steps.PR.outputs.number != ''
@@ -70,4 +79,4 @@ jobs:
                   edit-mode: replace
                   body: |
                       Test From Lois
-                      lfg: <a href="${{steps.chromatic-output.outputs.storybookUrl}}">Storybook</a>
+                      lfg: <a href="${{steps.format-storybook-preview-url.outputs.main}}">Storybook Preview url</a>
