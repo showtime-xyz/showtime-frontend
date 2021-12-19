@@ -69,7 +69,7 @@ jobs:
               id: existing-comment
               with:
                   issue-number: ${{ steps.PR.outputs.number }}
-                  body-includes: PR Preview
+                  body-includes: PR Preview - Storybook on Chromatic
 
             - name: Create or update comment
               uses: peter-evans/create-or-update-comment@v1
