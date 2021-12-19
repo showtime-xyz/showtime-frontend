@@ -81,4 +81,6 @@ jobs:
                   body: |
                       ## PR Preview - Storybook on Chromatic
 
-                      ✅ Preview: <a href="${{steps.format-storybook-preview-url.outputs.value}}" target="_blank">The Storybook preview URL for your current Pull Request</a>
+                      ✅ Preview: <a href="${{steps.format-storybook-preview-url.outputs.value}}">The Storybook preview URL for this Pull Request</a>
+
+                      ✅ Build: <a href="${{ steps.chromatic-output.outputs.buildUrl}}"> The Chromatic build URL for this Pull Request</a>
