@@ -8,6 +8,7 @@ type Props = {
 	title?: string
 	height?: number
 	width?: number
+	close?: () => void
 }
 
 export function Modal(props: Props) {
@@ -15,7 +16,11 @@ export function Modal(props: Props) {
 
 	return (
 		<>
-			<View tw="absolute top-0 right-0 bottom-0 left-0 opacity-90 dark:opacity-85 bg-gray-200 dark:bg-black" />
+			<View
+				// @ts-ignore
+				onClick={props.close}
+				tw="absolute top-0 right-0 bottom-0 left-0 opacity-90 dark:opacity-85 bg-gray-200 dark:bg-black"
+			/>
 			<View
 				tw="z-99999 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 shadow-lg md:shadow-sm ios:w-full ios:h-full absolute ios:relative lg:relative bottom-0 min-w-[100vw] md:min-w-0 lg:max-h-[600px] lg:max-w-[420px] md:border-t md:border-l md:border-r md:border-b rounded-t-3xl md:rounded-b-3xl ios:rounded-t-none"
 				sx={
@@ -24,7 +29,7 @@ export function Modal(props: Props) {
 						: {}
 				}
 			>
-				<Header title={props.title} />
+				<Header title={props.title} close={props.close} />
 				<View tw="p-6">{props.children}</View>
 			</View>
 		</>
