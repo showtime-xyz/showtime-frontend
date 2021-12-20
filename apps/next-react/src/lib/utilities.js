@@ -239,7 +239,7 @@ export const signTokenPermit = async (web3, tokenAddr) => {
 		{
 			name: Object.keys(LIST_CURRENCIES).find(key => LIST_CURRENCIES[key] === tokenAddr),
 			version: '1',
-			chainId: 80001,
+			chainId: process.env.NEXT_PUBLIC_CHAIN_ID == 'mumbai' ? 80001 : 137,
 			verifyingContract: tokenAddr,
 		},
 		{
