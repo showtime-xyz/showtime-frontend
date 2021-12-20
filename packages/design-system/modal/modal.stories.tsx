@@ -23,7 +23,7 @@ export const Basic: React.VFC<{}> = () => {
 				<Text tw="text-white dark:text-black">Open modal</Text>
 			</Button>
 			{visible && (
-				<Modal title={'Modal'} close={() => setVisible(false)}>
+				<Modal title={'Modal'}  close={() => setVisible(false)}>
 					<View>
 						<Text tw="dark:text-white text-black">Hello world</Text>
 					</View>

@@ -21,16 +21,20 @@ export function ModalSheet({ visible = true, ...props}: Props) {
 	)
 
 	if (width >= 1024) {
-		return (
-			<Modal key={`modalsheet-${props.title}`} title={props.title} close={props.onClose}>
+		return visible ? (
+			<Modal key={`modalsheet-${props.title}-lg`} title={props.title} close={() => {
+				// TODO: extract `onClose` to a proper unmount transition completion event.
+				props.close()
+				props.onClose();
+			}}>
 				{props.children}
 			</Modal>
-		)
+		) : null
 	}
 
 	return (
 		<BottomSheet
-			key={`modalsheet-${props.title}`}
+			key={`modalsheet-${props.title}-sm`}
 			visible={visible}
 			handleComponent={renderHandleComponent}
 			onDismiss={props.onClose}
