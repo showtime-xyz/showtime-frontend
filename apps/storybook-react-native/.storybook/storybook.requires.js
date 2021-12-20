@@ -25,6 +25,8 @@ const getStories = () => {
     require("../../../packages/design-system/bottom-sheet/bottom-sheet.stories.tsx"),
     require("../../../packages/design-system/checkbox/checkbox.stories.tsx"),
     require("../../../packages/design-system/input/input.stories.tsx"),
+    require("../../../packages/design-system/modal-sheet/modal-sheet.stories.tsx"),
+    require("../../../packages/design-system/modal/modal.stories.tsx"),
     require("../../../packages/design-system/pressable-scale/pressable-scale.stories.tsx"),
     require("../../../packages/design-system/skeleton/skeleton.stories.tsx"),
     require("../../../packages/design-system/spinner/spinner.stories.tsx"),
