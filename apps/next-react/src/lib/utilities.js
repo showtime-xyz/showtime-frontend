@@ -214,7 +214,8 @@ export const personalSignMessage = async (web3, message) => {
 }
 
 export const signTokenPermit = async (web3, tokenAddr) => {
-	if (tokenAddr === LIST_CURRENCIES.WETH) return signMetaTransactionRequest(web3, tokenAddr)
+	if ([LIST_CURRENCIES.WETH, LIST_CURRENCIES.DAI].includes(tokenAddr))
+		return signMetaTransactionRequest(web3, tokenAddr)
 
 	const tokenContract = new ethers.Contract(
 		tokenAddr,
@@ -280,10 +281,10 @@ export const signMetaTransactionRequest = async (web3, tokenAddr) => {
 
 	const signature = await web3.getSigner()._signTypedData(
 		{
-			name: 'Wrapped Ether',
+			name: tokenAddr === LIST_CURRENCIES.WETH ? 'Wrapped Ether' : '(PoS) Dai Stablecoin',
 			version: '1',
 			verifyingContract: tokenAddr,
-			salt: '0x0000000000000000000000000000000000000000000000000000000000013881',
+			salt: process.env.NEXT_PUBLIC_CHAIN_ID == 'mumbai' ? 80001 : 137,
 		},
 		{
 			MetaTransaction: [
