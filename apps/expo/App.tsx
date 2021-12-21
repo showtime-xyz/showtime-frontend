@@ -30,6 +30,7 @@ import { deleteCache } from 'app/lib/delete-cache'
 import { useUser } from 'app/hooks/use-user'
 import { useRouter } from 'app/navigation/use-router'
 import { deleteRefreshToken } from 'app/lib/refresh-token'
+import { ToastProvider } from 'design-system/toast'
 
 enableScreens(true)
 // enableFreeze(true)
@@ -286,36 +287,38 @@ function App() {
 	return (
 		<DripsyProvider theme={theme}>
 			<SafeAreaProvider style={{ backgroundColor: 'black' }}>
-				<NavigationProvider>
-					<SWRProvider>
-						<WalletConnectProvider
-							clientMeta={{
-								description: 'Connect with Showtime',
-								url: 'https://showtime.io',
-								icons: ['https://showtime.io/logo.jpg'],
-								name: 'Showtime',
-								// @ts-expect-error
-								scheme: 'showtime://',
-							}}
-							redirectUrl="showtime://"
-							storageOptions={{
-								// @ts-ignore
-								asyncStorage: AsyncStorage,
-							}}
-							renderQrcodeModal={(props: RenderQrcodeModalProps): JSX.Element => (
-								<QRCodeModal {...props} />
-							)}
-						>
-							<AppContextProvider>
-								<>
-									{/* TODO: change this when we update the splash screen */}
-									<StatusBar style="dark" />
-									<NextTabNavigator />
-								</>
-							</AppContextProvider>
-						</WalletConnectProvider>
-					</SWRProvider>
-				</NavigationProvider>
+				<ToastProvider>
+					<NavigationProvider>
+						<SWRProvider>
+							<WalletConnectProvider
+								clientMeta={{
+									description: 'Connect with Showtime',
+									url: 'https://showtime.io',
+									icons: ['https://showtime.io/logo.jpg'],
+									name: 'Showtime',
+									// @ts-expect-error
+									scheme: 'showtime://',
+								}}
+								redirectUrl="showtime://"
+								storageOptions={{
+									// @ts-ignore
+									asyncStorage: AsyncStorage,
+								}}
+								renderQrcodeModal={(props: RenderQrcodeModalProps): JSX.Element => (
+									<QRCodeModal {...props} />
+								)}
+							>
+								<AppContextProvider>
+									<>
+										{/* TODO: change this when we update the splash screen */}
+										<StatusBar style="dark" />
+										<NextTabNavigator />
+									</>
+								</AppContextProvider>
+							</WalletConnectProvider>
+						</SWRProvider>
+					</NavigationProvider>
+				</ToastProvider>
 			</SafeAreaProvider>
 		</DripsyProvider>
 	)
