@@ -40,6 +40,7 @@ import ShowtimeIcon from "./Icons/ShowtimeIcon";
 import BuyModal from "./UI/Modals/BuyModal";
 import useFlags, { FLAGS } from "@/hooks/useFlags";
 import ListModal from "./UI/Modals/ListModal";
+import useProfile from "@/hooks/useProfile";
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500;
@@ -149,6 +150,12 @@ const TokenDetailBody = ({
     getUsersWhoLiked();
     setMoreShown(false);
   }, [item]);
+
+  const { myProfile } = useProfile();
+
+  const ifListedIsOwner =
+    myProfile?.profile_id === item?.listing?.profile_id &&
+    typeof myProfile?.profile_id === "number";
 
   return (
     <>
@@ -619,13 +626,18 @@ const TokenDetailBody = ({
 
                 {canList && item.listing ? (
                   <button
+                    disabled={ifListedIsOwner}
                     title="Buy on Showtime"
-                    className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1"
+                    className={`border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1 ${
+                      ifListedIsOwner ? "bg-gray-100 cursor-default" : null
+                    }`}
                     onClick={() => setBuyModalOpen(true)}
                   >
-                    <span className="text-sm sm:text-base">
-                      Buy for {item.listing.min_price} ${item.listing.currency}
-                    </span>
+                    <p className="text-sm sm:text-base">
+                      {ifListedIsOwner
+                        ? `Listed for ${item.listing.min_price} ${item.listing.currency}`
+                        : `Buy for ${item.listing.min_price} ${item.listing.currency}`}
+                    </p>
                   </button>
                 ) : canList &&
                   SHOWTIME_CONTRACTS.includes(item.contract_address) ? (
