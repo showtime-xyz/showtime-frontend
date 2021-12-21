@@ -14,6 +14,7 @@
     "publish:development": "STAGE=development expo publish",
     "publish:staging": "STAGE=staging expo publish --release-channel=staging",
     "publish:production": "STAGE=production expo publish --release-channel=production",
+    "build": "yarn build:production",
     "build:development": "STAGE=development eas build --profile development --platform all",
     "build:development:ios": "STAGE=development eas build --profile development --platform ios",
     "build:development:android": "STAGE=development eas build --profile development --platform android",

@@ -709,7 +709,7 @@ const TokenCard = ({
 											</div>
 											<div>
 												<span className="text-xs font-medium text-gray-600 dark:text-gray-500">
-													Price
+													Buy
 												</span>
 												<p className="text-sm font-bold text-gray-900 dark:text-gray-200 whitespace-nowrap">
 													{parseFloat(item.listing.min_price)} ${item.listing.currency}

@@ -124,7 +124,7 @@ const BuyModal = ({ open, onClose, token }) => {
 
 		const basePrice = parseBalance(token.listing.min_price.toString(), LIST_CURRENCIES[token.listing.currency])
 
-		if (!(await ercContract.balanceOf(signerAddress)).gt(basePrice)) {
+		if (!(await ercContract.balanceOf(signerAddress)).gte(basePrice)) {
 			return setModalPage(MODAL_PAGES.NO_BALANCE)
 		}
 
@@ -622,11 +622,19 @@ const AllowanceRequiredPage = ({ token, isWeb3ModalActive, setModalPage, setTran
 			if (!error.message.includes('must match the active chainId')) throw error
 
 			await switchToChain(web3, 80001, {
-				chainId: `0x${(80001).toString(16)}`,
-				chainName: 'Mumbai Testnet',
+				chainId: `0x${(process.env.NEXT_PUBLIC_CHAIN_ID == 'mumbai' ? 80001 : 137).toString(16)}`,
+				chainName: process.env.NEXT_PUBLIC_CHAIN_ID == 'mumbai' ? 'Mumbai Testnet' : 'Polygon',
 				nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
-				rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
-				blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
+				rpcUrls: [
+					process.env.NEXT_PUBLIC_CHAIN_ID == 'mumbai'
+						? 'https://rpc-mumbai.maticvigil.com/'
+						: 'https://rpc-mainnet.maticvigil.com/',
+				],
+				blockExplorerUrls: [
+					process.env.NEXT_PUBLIC_CHAIN_ID == 'mumbai'
+						? 'https://mumbai.polygonscan.com/'
+						: 'https://polygonscan.com/',
+				],
 			})
 			const tokenPermit = await signTokenPermit(web3, LIST_CURRENCIES[token.listing.currency])
 			await switchToChain(web3, 1)
