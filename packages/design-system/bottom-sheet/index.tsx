@@ -1,17 +1,18 @@
 import { useRef, useMemo, useCallback, useEffect } from 'react'
-import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
+import { BottomSheetModal, BottomSheetBackdrop, BottomSheetHandleProps } from '@gorhom/bottom-sheet'
 
 import { View } from 'design-system/view'
 import { tw } from 'design-system/tailwind'
 
 type BottomSheetProps = {
 	children?: React.ReactElement
+	handleComponent?: React.FC<BottomSheetHandleProps>
 	visible?: boolean
 	onDismiss?: () => void
 }
 
 export const BottomSheet = (props: BottomSheetProps) => {
-	const { children, visible, onDismiss } = props
+	const { children, visible, handleComponent, onDismiss } = props
 
 	const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
@@ -19,7 +20,7 @@ export const BottomSheet = (props: BottomSheetProps) => {
 		if (visible) {
 			bottomSheetModalRef.current?.present()
 		} else {
-			bottomSheetModalRef.current?.close()
+			bottomSheetModalRef.current?.dismiss()
 		}
 	}, [visible])
 
@@ -33,6 +34,7 @@ export const BottomSheet = (props: BottomSheetProps) => {
 	return (
 		<BottomSheetModal
 			backdropComponent={renderBackdrop}
+			handleComponent={handleComponent}
 			onDismiss={onDismiss}
 			ref={bottomSheetModalRef}
 			index={0}
