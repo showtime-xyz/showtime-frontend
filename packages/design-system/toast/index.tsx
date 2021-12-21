@@ -1,31 +1,30 @@
 import { Text } from 'design-system/text'
-import { Portal } from './portal'
-import React, { useState, useImperativeHandle } from 'react'
+import React, { useState, useRef, createContext, useMemo, useContext } from 'react'
 import { MotiView, AnimatePresence } from 'moti'
+import { View } from 'react-native'
 import { AccessibilityInfo, LayoutChangeEvent, StyleSheet } from 'react-native'
 import { tw } from 'design-system/tailwind'
 
 type ShowParams = { message?: string; hideAfter?: number; element?: React.ReactElement }
 
-type Toast = {
+type ToastContext = {
 	show: (params: ShowParams) => void
 	hide: () => void
 	isVisible: boolean
 }
 
-export const Toast = React.createRef<Toast | undefined>()
+const ToastContext = createContext<ToastContext | undefined>(undefined)
 
-const TOAST_DIMENSIONS = { width: 244, height: 60 }
-const SAFE_AREA_TOP = 44
+const SAFE_AREA_TOP = 20
 
 export const ToastProvider = ({ children }: any) => {
 	const [show, setShow] = useState(false)
 	const [message, setMessage] = useState<string | undefined>()
 	const [render, setRender] = useState<React.ReactElement | null>()
 	const [layout, setLayout] = useState<LayoutChangeEvent['nativeEvent']['layout'] | undefined>()
+	const hideTimeoutRef = useRef<any>(null)
 
-	useImperativeHandle(
-		Toast,
+	const value = useMemo(
 		() => ({
 			show: ({ message, hideAfter, element }: ShowParams) => {
 				if (!show) {
@@ -38,7 +37,7 @@ export const ToastProvider = ({ children }: any) => {
 					}
 
 					if (hideAfter) {
-						setTimeout(() => {
+						hideTimeoutRef.current = setTimeout(() => {
 							setShow(false)
 						}, hideAfter)
 					}
@@ -46,6 +45,9 @@ export const ToastProvider = ({ children }: any) => {
 			},
 			hide: () => {
 				setShow(false)
+				if (hideTimeoutRef.current) {
+					clearTimeout(hideTimeoutRef.current)
+				}
 			},
 			isVisible: show,
 		}),
@@ -55,11 +57,11 @@ export const ToastProvider = ({ children }: any) => {
 	const toastHeight = layout?.height ?? 0
 
 	return (
-		<>
+		<ToastContext.Provider value={value}>
 			{children}
 			<AnimatePresence>
 				{show ? (
-					<Portal>
+					<View style={StyleSheet.absoluteFill} pointerEvents="box-none">
 						<MotiView
 							style={[
 								styles.toastContainer,
@@ -72,15 +74,6 @@ export const ToastProvider = ({ children }: any) => {
 							animate={{ translateY: SAFE_AREA_TOP }}
 							exit={{ translateY: -toastHeight }}
 							transition={{ type: 'timing', duration: 350 }}
-							onDidAnimate={(key, finished, _value, fourth) => {
-								if (
-									key === 'translateY' &&
-									finished &&
-									fourth.attemptedValue === -TOAST_DIMENSIONS.height
-								) {
-									setLayout(undefined)
-								}
-							}}
 							onLayout={e => {
 								setLayout(e.nativeEvent.layout)
 							}}
@@ -91,10 +84,10 @@ export const ToastProvider = ({ children }: any) => {
 								<Text tw="text-center p-4 dark:text-white text-gray-900">{message}</Text>
 							)}
 						</MotiView>
-					</Portal>
+					</View>
 				) : null}
 			</AnimatePresence>
-		</>
+		</ToastContext.Provider>
 	)
 }
 
@@ -112,3 +105,12 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 })
+
+export const useToast = () => {
+	const toast = useContext(ToastContext)
+	if (toast === null) {
+		console.error('Trying to use useToast without a ToastProvider')
+	}
+
+	return toast
+}
