@@ -8,6 +8,7 @@ import { theme } from 'design-system/theme'
 import { tw } from 'design-system/tailwind'
 import { View } from 'design-system/view'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import { ToastProvider } from 'design-system/toast'
 
 const OriginalNextImage = NextImage.default
 
@@ -37,7 +38,9 @@ export const decorators = [
 		<DripsyProvider theme={theme}>
 			<TailwindDeviceContextProvider>
 				<BottomSheetModalProvider>
-					<Story />
+					<ToastProvider>
+						<Story />
+					</ToastProvider>
 				</BottomSheetModalProvider>
 			</TailwindDeviceContextProvider>
 		</DripsyProvider>

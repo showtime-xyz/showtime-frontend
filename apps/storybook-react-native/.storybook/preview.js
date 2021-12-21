@@ -4,6 +4,7 @@ import { useFonts } from 'expo-font'
 import { useDeviceContext } from 'twrnc'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import { ToastProvider } from 'design-system/toast'
 
 import { tw } from 'design-system/tailwind'
 import { View } from 'design-system/view'
@@ -38,11 +39,13 @@ export const decorators = [
 			<DripsyProvider theme={theme}>
 				<BottomSheetModalProvider>
 					<SafeAreaProvider>
-						<MainAxisCenter>
-							<FontsLoader>
-								<Story />
-							</FontsLoader>
-						</MainAxisCenter>
+						<ToastProvider>
+							<MainAxisCenter>
+								<FontsLoader>
+									<Story />
+								</FontsLoader>
+							</MainAxisCenter>
+						</ToastProvider>
 					</SafeAreaProvider>
 				</BottomSheetModalProvider>
 			</DripsyProvider>
