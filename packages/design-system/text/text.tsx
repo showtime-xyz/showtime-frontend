@@ -1,1 +1,1 @@
-export { Text } from 'dripsy'
+export { Text } from "dripsy";

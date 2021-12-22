@@ -1,0 +1,7 @@
+node_modules
+apps/*/node_modules
+.yarn
+.vercel
+.expo
+.next
+.turbo

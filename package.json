@@ -1,127 +1,128 @@
 {
-	"name": "showtime",
-	"private": true,
-	"license": "MIT",
-	"devDependencies": {
-		"@types/react": "~17.0.36",
-		"@types/react-native": "~0.66.5",
-		"patch-package": "^6.4.7",
-		"prettier": "^2.4.1",
-		"turbo": "^1.0.16"
-	},
-	"workspaces": [
-		"apps/expo",
-		"apps/next-react",
-		"apps/next-react-native",
-		"apps/storybook-react",
-		"apps/storybook-react-native",
-		"packages/*"
-	],
-	"scripts": {
-		"dev": "yarn turbo run dev --parallel --no-cache",
-		"dev:expo": "yarn turbo run dev --parallel --no-cache  --scope=@showtime/expo",
-		"dev:next": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next-react",
-		"dev:expo-storybook": "yarn turbo run dev --parallel --no-cache --scope=@showtime/storybook-react-native",
-		"dev:next-storybook": "yarn turbo run dev --parallel --no-cache --scope=@showtime/storybook-react",
-		"dev:next-react-native": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next-react-native",
-		"dev:web": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next-react --scope=@showtime/storybook-react",
-		"dev:mobile": "yarn turbo run dev --parallel --no-cache --scope=@showtime/expo --scope=@showtime/storybook-react-native",
-		"build": "yarn turbo run build",
-		"build:expo": "yarn turbo run build --scope=@showtime/expo",
-		"build:next": "yarn turbo run build --scope=@showtime/next-react",
-		"build:expo-storybook": "yarn turbo run build --scope=@showtime/storybook-react-native",
-		"build:next-storybook": "yarn turbo run build --scope=@showtime/storybook-react",
-		"start:next": "yarn turbo run start --scope=@showtime/next-react",
-		"lint": "yarn turbo run lint",
-		"lint:expo": "yarn turbo run lint --scope=@showtime/expo",
-		"lint:next": "yarn turbo run lint --scope=@showtime/next-react",
-		"lint:expo-storybook": "yarn turbo run lint --scope=@showtime/storybook-react-native",
-		"lint:next-storybook": "yarn turbo run lint --scope=@showtime/storybook-react",
-		"lint:next-react-native": "yarn turbo run lint --scope=@showtime/next-react-native",
-		"graph": "yarn turbo:build --graph",
-		"graph:next": "yarn turbo:build:next --graph",
-		"yolo": "yarn turbo:dev:next & yarn workspace @showtime/expo ios & yarn workspace @showtime/expo android",
-		"clean": "yarn clean:turbo & yarn clean:node-modules",
-		"clean:turbo": "rm -rf ./node_modules/.cache/turbo",
-		"clean:node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
-		"postinstall": "patch-package"
-	},
-	"resolutions": {
-		"babel-preset-expo": "^8.5.1",
-		"react": "17.0.2",
-		"react-dom": "17.0.2",
-		"react-native-svg": "^12.1.1",
-		"expo-linear-gradient": "^11.0.0"
-	},
-	"turbo": {
-		"baseBranch": "origin/main",
-		"pipeline": {
-			"build": {
-				"dependsOn": [
-					"^build"
-				]
-			},
-			"start": {
-				"dependsOn": [
-					"^build"
-				]
-			},
-			"lint": {
-				"outputs": []
-			},
-			"dev": {
-				"cache": false
-			}
-		}
-	},
-	"react-native": {
-		"zlib": "browserify-zlib",
-		"console": "console-browserify",
-		"constants": "constants-browserify",
-		"crypto": "react-native-crypto",
-		"dns": "dns.js",
-		"domain": "domain-browser",
-		"http": "@tradle/react-native-http",
-		"https": "https-browserify",
-		"os": "react-native-os",
-		"path": "path-browserify",
-		"querystring": "querystring-es3",
-		"fs": "react-native-level-fs",
-		"_stream_transform": "readable-stream/transform",
-		"_stream_readable": "readable-stream/readable",
-		"_stream_writable": "readable-stream/writable",
-		"_stream_duplex": "readable-stream/duplex",
-		"_stream_passthrough": "readable-stream/passthrough",
-		"dgram": "react-native-udp",
-		"stream": "stream-browserify",
-		"timers": "timers-browserify",
-		"tty": "tty-browserify",
-		"vm": "vm-browserify",
-		"tls": false
-	},
-	"browser": {
-		"zlib": "browserify-zlib",
-		"console": "console-browserify",
-		"constants": "constants-browserify",
-		"crypto": "react-native-crypto",
-		"dns": "dns.js",
-		"domain": "domain-browser",
-		"http": "@tradle/react-native-http",
-		"https": "https-browserify",
-		"os": "react-native-os",
-		"path": "path-browserify",
-		"querystring": "querystring-es3",
-		"fs": "react-native-level-fs",
-		"_stream_transform": "readable-stream/transform",
-		"_stream_readable": "readable-stream/readable",
-		"_stream_writable": "readable-stream/writable",
-		"_stream_duplex": "readable-stream/duplex",
-		"_stream_passthrough": "readable-stream/passthrough",
-		"dgram": "react-native-udp",
-		"stream": "stream-browserify",
-		"timers": "timers-browserify",
-		"tty": "tty-browserify",
-		"vm": "vm-browserify",
-		"tls": false
-	}
+  "name": "showtime",
+  "private": true,
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "~17.0.36",
+    "@types/react-native": "~0.66.5",
+    "patch-package": "^6.4.7",
+    "prettier": "^2.4.1",
+    "turbo": "^1.0.16",
+    "eslint-plugin-prettier": "^4.0.0"
+  },
+  "workspaces": [
+    "apps/expo",
+    "apps/next-react",
+    "apps/next-react-native",
+    "apps/storybook-react",
+    "apps/storybook-react-native",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "yarn turbo run dev --parallel --no-cache",
+    "dev:expo": "yarn turbo run dev --parallel --no-cache  --scope=@showtime/expo",
+    "dev:next": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next-react",
+    "dev:expo-storybook": "yarn turbo run dev --parallel --no-cache --scope=@showtime/storybook-react-native",
+    "dev:next-storybook": "yarn turbo run dev --parallel --no-cache --scope=@showtime/storybook-react",
+    "dev:next-react-native": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next-react-native",
+    "dev:web": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next-react --scope=@showtime/storybook-react",
+    "dev:mobile": "yarn turbo run dev --parallel --no-cache --scope=@showtime/expo --scope=@showtime/storybook-react-native",
+    "build": "yarn turbo run build",
+    "build:expo": "yarn turbo run build --scope=@showtime/expo",
+    "build:next": "yarn turbo run build --scope=@showtime/next-react",
+    "build:expo-storybook": "yarn turbo run build --scope=@showtime/storybook-react-native",
+    "build:next-storybook": "yarn turbo run build --scope=@showtime/storybook-react",
+    "start:next": "yarn turbo run start --scope=@showtime/next-react",
+    "lint": "yarn turbo run lint",
+    "lint:expo": "yarn turbo run lint --scope=@showtime/expo",
+    "lint:next": "yarn turbo run lint --scope=@showtime/next-react",
+    "lint:expo-storybook": "yarn turbo run lint --scope=@showtime/storybook-react-native",
+    "lint:next-storybook": "yarn turbo run lint --scope=@showtime/storybook-react",
+    "lint:next-react-native": "yarn turbo run lint --scope=@showtime/next-react-native",
+    "graph": "yarn turbo:build --graph",
+    "graph:next": "yarn turbo:build:next --graph",
+    "yolo": "yarn turbo:dev:next & yarn workspace @showtime/expo ios & yarn workspace @showtime/expo android",
+    "clean": "yarn clean:turbo & yarn clean:node-modules",
+    "clean:turbo": "rm -rf ./node_modules/.cache/turbo",
+    "clean:node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
+    "postinstall": "patch-package"
+  },
+  "resolutions": {
+    "babel-preset-expo": "^8.5.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-native-svg": "^12.1.1",
+    "expo-linear-gradient": "^11.0.0"
+  },
+  "turbo": {
+    "baseBranch": "origin/main",
+    "pipeline": {
+      "build": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "start": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "lint": {
+        "outputs": []
+      },
+      "dev": {
+        "cache": false
+      }
+    }
+  },
+  "react-native": {
+    "zlib": "browserify-zlib",
+    "console": "console-browserify",
+    "constants": "constants-browserify",
+    "crypto": "react-native-crypto",
+    "dns": "dns.js",
+    "domain": "domain-browser",
+    "http": "@tradle/react-native-http",
+    "https": "https-browserify",
+    "os": "react-native-os",
+    "path": "path-browserify",
+    "querystring": "querystring-es3",
+    "fs": "react-native-level-fs",
+    "_stream_transform": "readable-stream/transform",
+    "_stream_readable": "readable-stream/readable",
+    "_stream_writable": "readable-stream/writable",
+    "_stream_duplex": "readable-stream/duplex",
+    "_stream_passthrough": "readable-stream/passthrough",
+    "dgram": "react-native-udp",
+    "stream": "stream-browserify",
+    "timers": "timers-browserify",
+    "tty": "tty-browserify",
+    "vm": "vm-browserify",
+    "tls": false
+  },
+  "browser": {
+    "zlib": "browserify-zlib",
+    "console": "console-browserify",
+    "constants": "constants-browserify",
+    "crypto": "react-native-crypto",
+    "dns": "dns.js",
+    "domain": "domain-browser",
+    "http": "@tradle/react-native-http",
+    "https": "https-browserify",
+    "os": "react-native-os",
+    "path": "path-browserify",
+    "querystring": "querystring-es3",
+    "fs": "react-native-level-fs",
+    "_stream_transform": "readable-stream/transform",
+    "_stream_readable": "readable-stream/readable",
+    "_stream_writable": "readable-stream/writable",
+    "_stream_duplex": "readable-stream/duplex",
+    "_stream_passthrough": "readable-stream/passthrough",
+    "dgram": "react-native-udp",
+    "stream": "stream-browserify",
+    "timers": "timers-browserify",
+    "tty": "tty-browserify",
+    "vm": "vm-browserify",
+    "tls": false
+  }
 }

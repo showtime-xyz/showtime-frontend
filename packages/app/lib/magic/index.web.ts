@@ -1,6 +1,6 @@
-import { Fragment } from 'react'
-import { Magic } from 'magic-sdk'
+import { Fragment } from "react";
+import { Magic } from "magic-sdk";
 
-const Relayer = Fragment
+const Relayer = Fragment;
 
-export { Magic, Relayer }
+export { Magic, Relayer };

@@ -1,6 +1,6 @@
-import { MMKV } from 'react-native-mmkv'
+import { MMKV } from "react-native-mmkv";
 
 export function deleteCache() {
-	const storage = new MMKV()
-	storage.delete('app-cache')
+  const storage = new MMKV();
+  storage.delete("app-cache");
 }
