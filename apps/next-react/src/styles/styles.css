@@ -67,3 +67,8 @@
 .emoji-mart-bar {
   @apply hidden;
 }
+
+/* Default Z-index for web3modal is 2, which doesn't play nice with our buyModal */
+.web3modal-modal-lightbox {
+  z-index: 10 !important;
+}
