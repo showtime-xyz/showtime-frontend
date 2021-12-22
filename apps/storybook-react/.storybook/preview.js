@@ -1,48 +1,50 @@
-import '../styles/globals.css'
+import "../styles/globals.css";
 
-import * as NextImage from 'next/image'
-import { DripsyProvider } from 'dripsy'
-import { useDeviceContext } from 'twrnc'
+import * as NextImage from "next/image";
+import { DripsyProvider } from "dripsy";
+import { useDeviceContext } from "twrnc";
 
-import { theme } from 'design-system/theme'
-import { tw } from 'design-system/tailwind'
-import { View } from 'design-system/view'
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
-import { ToastProvider } from 'design-system/toast'
+import { theme } from "design-system/theme";
+import { tw } from "design-system/tailwind";
+import { View } from "design-system/view";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { ToastProvider } from "design-system/toast";
 
-const OriginalNextImage = NextImage.default
+const OriginalNextImage = NextImage.default;
 
-Object.defineProperty(NextImage, 'default', {
-	configurable: true,
-	value: props => <OriginalNextImage {...props} unoptimized />,
-})
+Object.defineProperty(NextImage, "default", {
+  configurable: true,
+  value: (props) => <OriginalNextImage {...props} unoptimized />,
+});
 
 export const parameters = {
-	actions: { argTypesRegex: '^on[A-Z].*' },
-	controls: {
-		matchers: {
-			color: /(background|color)$/i,
-			date: /Date$/,
-		},
-	},
-}
+  actions: { argTypesRegex: "^on[A-Z].*" },
+  controls: {
+    matchers: {
+      color: /(background|color)$/i,
+      date: /Date$/,
+    },
+  },
+};
 
 const TailwindDeviceContextProvider = ({ children }) => {
-	useDeviceContext(tw)
+  useDeviceContext(tw);
 
-	return <View tw="flex-1 h-[95vh] justify-center dark:bg-gray-900">{children}</View>
-}
+  return (
+    <View tw="flex-1 h-[95vh] justify-center dark:bg-gray-900">{children}</View>
+  );
+};
 
 export const decorators = [
-	Story => (
-		<DripsyProvider theme={theme}>
-			<TailwindDeviceContextProvider>
-				<BottomSheetModalProvider>
-					<ToastProvider>
-						<Story />
-					</ToastProvider>
-				</BottomSheetModalProvider>
-			</TailwindDeviceContextProvider>
-		</DripsyProvider>
-	),
-]
+  (Story) => (
+    <DripsyProvider theme={theme}>
+      <TailwindDeviceContextProvider>
+        <BottomSheetModalProvider>
+          <ToastProvider>
+            <Story />
+          </ToastProvider>
+        </BottomSheetModalProvider>
+      </TailwindDeviceContextProvider>
+    </DripsyProvider>
+  ),
+];

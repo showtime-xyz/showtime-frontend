@@ -1,2 +1,2 @@
-export { Link, TextLink } from './link'
-export { LinkCore } from './link-core'
+export { Link, TextLink } from "./link";
+export { LinkCore } from "./link-core";

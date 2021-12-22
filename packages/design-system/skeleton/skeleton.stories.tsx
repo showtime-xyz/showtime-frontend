@@ -1,10 +1,10 @@
-import { Meta } from '@storybook/react'
+import { Meta } from "@storybook/react";
 
-import { Skeleton } from './index'
+import { Skeleton } from "./index";
 
 export default {
-	component: Skeleton,
-	title: 'Components/Skeleton',
-} as Meta
+  component: Skeleton,
+  title: "Components/Skeleton",
+} as Meta;
 
-export const SkeletonBlack: React.VFC<{}> = () => <Skeleton />
+export const SkeletonBlack: React.VFC<{}> = () => <Skeleton />;
