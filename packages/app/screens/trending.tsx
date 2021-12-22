@@ -1,5 +1,5 @@
 function TrendingScreen() {
-	return null
+  return null;
 }
 
-export { TrendingScreen }
+export { TrendingScreen };

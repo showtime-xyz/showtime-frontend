@@ -1,137 +1,149 @@
-import { useCallback, useMemo, useContext } from 'react'
-import { useRouter as useNextRouter, NextRouter } from 'next/router'
-import { useLinkTo, useNavigation, useNavigationState } from '@react-navigation/native'
-import { StackRouter } from '@react-navigation/routers'
-import { StackActions, getPathFromState, NavigationState } from '@react-navigation/native'
-import { reloadAsync } from 'expo-updates'
+import { useCallback, useMemo, useContext } from "react";
+import { useRouter as useNextRouter, NextRouter } from "next/router";
+import {
+  useLinkTo,
+  useNavigation,
+  useNavigationState,
+} from "@react-navigation/native";
+import { StackRouter } from "@react-navigation/routers";
+import {
+  StackActions,
+  getPathFromState,
+  NavigationState,
+} from "@react-navigation/native";
+import { reloadAsync } from "expo-updates";
 
 // this is scary...
 // but react navigation doesn't expose LinkingContext 😬
-import LinkingContext from '@react-navigation/native/lib/module/LinkingContext'
-import type { LinkingOptions } from '@react-navigation/native'
+import LinkingContext from "@react-navigation/native/lib/module/LinkingContext";
+import type { LinkingOptions } from "@react-navigation/native";
 
-import { parseNextPath } from './parse-next-path'
+import { parseNextPath } from "./parse-next-path";
 
 // hack to access getStateForAction from react-navigation's stack
 // https://github.com/react-navigation/react-navigation/blob/main/packages/routers/src/StackRouter.tsx#L224
-const stack = StackRouter({})
+const stack = StackRouter({});
 
 const getPath = (navigationState: NavigationState) => {
-	return (
-		navigationState?.routes?.[navigationState?.index]?.path ??
-		navigationState?.routes?.[navigationState?.index]?.state?.routes[0]?.path ??
-		'/'
-	)
-}
+  return (
+    navigationState?.routes?.[navigationState?.index]?.path ??
+    navigationState?.routes?.[navigationState?.index]?.state?.routes[0]?.path ??
+    "/"
+  );
+};
 
 export function useRouter() {
-	const linkTo = useLinkTo()
-	const router = useNextRouter()
-	const navigation = useNavigation()
-	const navigationState = useNavigationState(state => state)
-	const linking = useContext(LinkingContext) as {
-		options?: LinkingOptions<ReactNavigation.RootParamList>
-	}
+  const linkTo = useLinkTo();
+  const router = useNextRouter();
+  const navigation = useNavigation();
+  const navigationState = useNavigationState((state) => state);
+  const linking = useContext(LinkingContext) as {
+    options?: LinkingOptions<ReactNavigation.RootParamList>;
+  };
 
-	return {
-		push: useCallback(
-			(...nextProps: Parameters<NextRouter['push']>) => {
-				if (router) {
-					router.push(...nextProps)
-				} else {
-					const [url, as] = nextProps
+  return {
+    push: useCallback(
+      (...nextProps: Parameters<NextRouter["push"]>) => {
+        if (router) {
+          router.push(...nextProps);
+        } else {
+          const [url, as] = nextProps;
 
-					const to = as ? parseNextPath(as) : parseNextPath(url)
+          const to = as ? parseNextPath(as) : parseNextPath(url);
 
-					if (to) {
-						linkTo(to)
-					}
-				}
-			},
-			[linkTo, router]
-		),
-		replace: useCallback(
-			(...nextProps: Parameters<NextRouter['replace']>) => {
-				if (router) {
-					router.replace(...nextProps)
-				} else {
-					const [url, as] = nextProps
+          if (to) {
+            linkTo(to);
+          }
+        }
+      },
+      [linkTo, router]
+    ),
+    replace: useCallback(
+      (...nextProps: Parameters<NextRouter["replace"]>) => {
+        if (router) {
+          router.replace(...nextProps);
+        } else {
+          const [url, as] = nextProps;
 
-					const to = as ? parseNextPath(as) : parseNextPath(url)
+          const to = as ? parseNextPath(as) : parseNextPath(url);
 
-					if (to) {
-						linkTo(to)
-					}
-				}
-			},
-			[linkTo, router]
-		),
-		back: useCallback(
-			(...nextProps: Parameters<NextRouter['back']>) => {
-				if (router) {
-					router.back(...nextProps)
-				} else {
-					navigation.goBack()
-				}
-			},
-			[router, navigation]
-		),
-		pop: useCallback(() => {
-			if (router) {
-				const nextState = stack.getStateForAction(
-					{
-						type: 'stack',
-						key: navigationState.key,
-						index: navigationState.index,
-						routes: navigationState.routes,
-						routeNames: navigationState.routeNames,
-						stale: navigationState.stale,
-					},
-					StackActions.pop(),
-					// @ts-expect-error pop doesn't need the dict here, it's okay
-					// https://github.com/react-navigation/react-navigation/blob/main/packages/routers/src/StackRouter.tsx#L317
-					{}
-				)
+          if (to) {
+            linkTo(to);
+          }
+        }
+      },
+      [linkTo, router]
+    ),
+    back: useCallback(
+      (...nextProps: Parameters<NextRouter["back"]>) => {
+        if (router) {
+          router.back(...nextProps);
+        } else {
+          navigation.goBack();
+        }
+      },
+      [router, navigation]
+    ),
+    pop: useCallback(() => {
+      if (router) {
+        const nextState = stack.getStateForAction(
+          {
+            type: "stack",
+            key: navigationState.key,
+            index: navigationState.index,
+            routes: navigationState.routes,
+            routeNames: navigationState.routeNames,
+            stale: navigationState.stale,
+          },
+          StackActions.pop(),
+          // @ts-expect-error pop doesn't need the dict here, it's okay
+          // https://github.com/react-navigation/react-navigation/blob/main/packages/routers/src/StackRouter.tsx#L317
+          {}
+        );
 
-				if (nextState) {
-					let path = nextState.index != undefined ? nextState.routes[nextState.index]?.path : undefined
+        if (nextState) {
+          let path =
+            nextState.index != undefined
+              ? nextState.routes[nextState.index]?.path
+              : undefined;
 
-					if (!path) {
-						const getPath = linking?.options?.getPathFromState ?? getPathFromState
-						path = getPath(nextState, linking?.options?.config)
-					}
+          if (!path) {
+            const getPath =
+              linking?.options?.getPathFromState ?? getPathFromState;
+            path = getPath(nextState, linking?.options?.config);
+          }
 
-					if (path != undefined) {
-						router.replace(path)
-					}
-				}
-			} else {
-				navigation.dispatch(StackActions.pop())
-			}
-		}, [router, navigation, navigationState]),
-		prefetch: useCallback(
-			(...nextProps: Parameters<NextRouter['prefetch']>) => {
-				if (router) {
-					router.prefetch(...nextProps)
-				}
-			},
-			[router]
-		),
-		pathname: useMemo(() => {
-			if (router) {
-				return router.pathname
-			} else {
-				const pathname = getPath(navigationState)
+          if (path != undefined) {
+            router.replace(path);
+          }
+        }
+      } else {
+        navigation.dispatch(StackActions.pop());
+      }
+    }, [router, navigation, navigationState]),
+    prefetch: useCallback(
+      (...nextProps: Parameters<NextRouter["prefetch"]>) => {
+        if (router) {
+          router.prefetch(...nextProps);
+        }
+      },
+      [router]
+    ),
+    pathname: useMemo(() => {
+      if (router) {
+        return router.pathname;
+      } else {
+        const pathname = getPath(navigationState);
 
-				return pathname
-			}
-		}, [router, navigationState]),
-		reload: useCallback(async () => {
-			if (router) {
-				router.reload()
-			} else {
-				await reloadAsync()
-			}
-		}, [router]),
-	}
+        return pathname;
+      }
+    }, [router, navigationState]),
+    reload: useCallback(async () => {
+      if (router) {
+        router.reload();
+      } else {
+        await reloadAsync();
+      }
+    }, [router]),
+  };
 }

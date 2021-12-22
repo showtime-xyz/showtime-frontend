@@ -1,24 +1,27 @@
-import { useMemo } from 'react'
-import useProfile from './useProfile'
+import { useMemo } from "react";
+import useProfile from "./useProfile";
 
 export const FLAGS = {
-	hasMinting: 'mint',
-}
+  hasMinting: "mint",
+};
 
 export const flagDefs = {
-	[FLAGS.hasMinting]: profile => profile?.minting_enabled || false,
-}
+  [FLAGS.hasMinting]: (profile) => profile?.minting_enabled || false,
+};
 
 const useFlags = () => {
-	const { myProfile } = useProfile()
+  const { myProfile } = useProfile();
 
-	return {
-		...useMemo(
-			() => Object.fromEntries(Object.values(FLAGS).map(key => [key, flagDefs[key](myProfile)])),
-			[myProfile]
-		),
-		loading: !myProfile,
-	}
-}
+  return {
+    ...useMemo(
+      () =>
+        Object.fromEntries(
+          Object.values(FLAGS).map((key) => [key, flagDefs[key](myProfile)])
+        ),
+      [myProfile]
+    ),
+    loading: !myProfile,
+  };
+};
 
-export default useFlags
+export default useFlags;

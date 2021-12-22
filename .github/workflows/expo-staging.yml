@@ -1,56 +1,56 @@
 name: Expo Staging
 
 defaults:
-    run:
-        working-directory: apps/expo
+  run:
+    working-directory: apps/expo
 
 on:
-    push:
-        branches:
-            - staging
+  push:
+    branches:
+      - staging
 
 concurrency:
-    group: ${{ github.event_name }}-${{ github.ref }}
-    cancel-in-progress: true
+  group: ${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-    staging:
-        name: Deploy Staging
-        runs-on: ubuntu-latest
-        steps:
-            - name: Set up repository
-              uses: actions/checkout@v2
+  staging:
+    name: Deploy Staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up repository
+        uses: actions/checkout@v2
 
-            - name: Set up Node
-              uses: actions/setup-node@v2
-              with:
-                  node-version: 14.x
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
 
-            - name: Find yarn cache
-              id: yarn-cache-path
-              run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Find yarn cache
+        id: yarn-cache-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
 
-            - name: Restore cache
-              uses: actions/cache@v2
-              with:
-                  path: ${{ steps.yarn-cache-path.outputs.dir }}
-                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-                  restore-keys: ${{ runner.os }}-yarn-
+      - name: Restore cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
 
-            - name: Install dependencies
-              run: yarn install --frozen-lockfile --check-files
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --check-files
 
-            - name: Set up Expo
-              uses: expo/expo-github-action@v6
-              with:
-                  eas-version: latest
-                  eas-cache: true
-                  expo-cache: true
-                  expo-version: 4.x
-                  token: ${{ secrets.EXPO_TOKEN }}
+      - name: Set up Expo
+        uses: expo/expo-github-action@v6
+        with:
+          eas-version: latest
+          eas-cache: true
+          expo-cache: true
+          expo-version: 4.x
+          token: ${{ secrets.EXPO_TOKEN }}
 
-            - name: Expo publish
-              run: STAGE=staging expo publish --release-channel=staging
+      - name: Expo publish
+        run: STAGE=staging expo publish --release-channel=staging
 
-            - name: Build on EAS
-              run: STAGE=staging eas build --profile preview --platform all --non-interactive --no-wait
+      - name: Build on EAS
+        run: STAGE=staging eas build --profile preview --platform all --non-interactive --no-wait

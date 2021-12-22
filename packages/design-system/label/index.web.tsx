@@ -1,3 +1,3 @@
-import { Text } from '../text'
+import { Text } from "../text";
 
-export const Label = props => <Text {...props} accessibilityRole="label" />
+export const Label = (props) => <Text {...props} accessibilityRole="label" />;

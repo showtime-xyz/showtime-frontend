@@ -1,8 +1,8 @@
-import AppContext from '@/context/app-context'
-import { useContext } from 'react'
+import AppContext from "@/context/app-context";
+import { useContext } from "react";
 
 export default function useProfile() {
-	const { myProfile, setMyProfile } = useContext(AppContext)
+  const { myProfile, setMyProfile } = useContext(AppContext);
 
-	return { myProfile, setMyProfile }
+  return { myProfile, setMyProfile };
 }

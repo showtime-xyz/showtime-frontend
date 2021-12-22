@@ -1,5 +1,5 @@
-import axios from 'axios'
+import axios from "axios";
 
 export default axios.create({
-	baseURL: process.env.NEXT_PUBLIC_SCRIPTS_URL,
-})
+  baseURL: process.env.NEXT_PUBLIC_SCRIPTS_URL,
+});

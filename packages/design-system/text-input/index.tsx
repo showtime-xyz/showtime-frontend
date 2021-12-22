@@ -1,12 +1,12 @@
-import { ComponentProps } from 'react'
-import { TextInput as DripsyTextInput } from 'dripsy'
+import { ComponentProps } from "react";
+import { TextInput as DripsyTextInput } from "dripsy";
 
-import { tw as tailwind } from 'design-system/tailwind'
+import { tw as tailwind } from "design-system/tailwind";
 
-type TextInputProps = { tw?: string } & ComponentProps<typeof DripsyTextInput>
+type TextInputProps = { tw?: string } & ComponentProps<typeof DripsyTextInput>;
 
 function TextInput({ tw, ...props }: TextInputProps) {
-	return <DripsyTextInput sx={tailwind.style(tw)} {...props} />
+  return <DripsyTextInput sx={tailwind.style(tw)} {...props} />;
 }
 
-export { TextInput }
+export { TextInput };
