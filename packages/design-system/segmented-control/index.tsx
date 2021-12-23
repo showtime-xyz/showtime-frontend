@@ -4,9 +4,9 @@ import {
   NativeSegmentedControlIOSChangeEvent,
   NativeSyntheticEvent,
 } from "react-native";
-import {colors} from "design-system/tailwind/colors";
-import {useIsDarkMode} from "design-system/hooks";
-import {tw} from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
+import { useIsDarkMode } from "design-system/hooks";
+import { tw } from "design-system/tailwind";
 
 type SegmentedControlProps = {
   values: Array<string>;
@@ -30,11 +30,11 @@ export const SegmentedControl = (props: SegmentedControlProps) => {
       values={values}
       selectedIndex={selectedIndex}
       onChange={handleChange}
-      style={tw.style('rounded-lg')}
+      style={tw.style("rounded-lg")}
       backgroundColor={isDark ? colors.gray[900] : colors.gray[100]}
       tintColor={isDark ? colors.white : colors.gray[900]}
-      fontStyle={tw.style('font-bold dark:text-gray-400 text-gray-600')}
-      activeFontStyle={tw.style('font-bold dark:text-gray-900 text-white')}
+      fontStyle={tw.style("font-bold dark:text-gray-400 text-gray-600")}
+      activeFontStyle={tw.style("font-bold dark:text-gray-900 text-white")}
     />
   );
 };
