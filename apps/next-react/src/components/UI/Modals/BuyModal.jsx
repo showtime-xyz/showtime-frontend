@@ -115,6 +115,7 @@ const BuyModal = ({ open, onClose, token }) => {
     setModalPage(MODAL_PAGES.LOADING);
 
     const web3Modal = getWeb3Modal({ theme: resolvedTheme });
+
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,
@@ -125,6 +126,7 @@ const BuyModal = ({ open, onClose, token }) => {
       isWeb3ModalActive.current = false;
       throw setModalPage(MODAL_PAGES.GENERAL);
     });
+
     const signerAddress = await web3.getSigner().getAddress();
 
     if (
@@ -172,7 +174,7 @@ const BuyModal = ({ open, onClose, token }) => {
       token.listing.sale_identifier,
       token.token_id,
       quantity,
-      token.listing.min_price,
+      basePrice,
       LIST_CURRENCIES[token.listing.currency],
       signerAddress
     );
@@ -721,19 +723,20 @@ const AllowanceRequiredPage = ({
 
   const grantAllowance = async () => {
     setModalPage(MODAL_PAGES.LOADING);
+
     const web3Modal = getWeb3Modal({ theme: resolvedTheme });
     isWeb3ModalActive.current = true;
-    const { web3, biconomy } = await getBiconomy(
-      web3Modal,
-      () => (isWeb3ModalActive.current = false)
+
+    const web3 = new ethers.providers.Web3Provider(
+      await web3Modal.connect()
     ).catch((error) => {
       if (error !== "Modal closed by user") throw error;
 
       isWeb3ModalActive.current = false;
       throw setModalPage(MODAL_PAGES.GENERAL);
     });
-    const signerAddress = await web3.getSigner().getAddress();
-    const provider = biconomy.getEthersProvider();
+
+    isWeb3ModalActive.current = false;
 
     const tokenPermit = await signTokenPermit(
       web3,
@@ -777,7 +780,7 @@ const AllowanceRequiredPage = ({
     setTransactionHash(transaction);
     setModalPage(MODAL_PAGES.PROCESSING_ALLOWANCE);
 
-    provider.once(transaction, buyToken);
+    web3.once(transaction, buyToken);
   };
 
   return (

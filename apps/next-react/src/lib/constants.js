@@ -228,7 +228,7 @@ export const CHAIN_IDENTIFIERS = {
 };
 
 export const SOL_MAX_INT =
-  "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
+  "115792089237316195423570985008687907853269984665640564039457584007913129639930";
 
 export const LIST_CURRENCIES = {
   mumbai: {
