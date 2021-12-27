@@ -27,6 +27,7 @@ import BuyModal from "./UI/Modals/BuyModal";
 import useSWR from "swr";
 import backend from "@/lib/backend";
 import useFlags, { FLAGS } from "@/hooks/useFlags";
+import useProfile from "@/hooks/useProfile";
 
 const SpotlightItem = ({
   isMyProfile,
@@ -114,6 +115,12 @@ const SpotlightItem = ({
           pageProfile?.wallet_addresses_excluding_email_v2?.[0]?.address
         ) ||
         "Unknown";
+
+  const { myProfile } = useProfile();
+
+  const ifListedIsOwner =
+    myProfile?.profile_id === thisItem?.listing?.profile_id &&
+    typeof myProfile?.profile_id === "number";
 
   return (
     <>
@@ -597,11 +604,14 @@ const SpotlightItem = ({
                 <div className="mt-8 inline-block">
                   {canList && item.listing ? (
                     <Button
+                      disabled={ifListedIsOwner}
                       style="primary"
                       title="Buy on Showtime"
                       onClick={() => setBuyModalOpen(true)}
                     >
-                      Buy for {item.listing.min_price} ${item.listing.currency}
+                      {ifListedIsOwner
+                        ? `Listed for ${item.listing.min_price} ${item.listing.currency}`
+                        : `Buy for ${item.listing.min_price} ${item.listing.currency}`}
                     </Button>
                   ) : (
                     <Button

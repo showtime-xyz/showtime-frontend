@@ -55,6 +55,9 @@ const TokenCard = ({
   const hasMatchingListing = item?.listing?.all_sellers?.find(
     (seller) => seller.profile_id === pageProfile.profile_id
   );
+  const ifListedIsOwner =
+    myProfile?.profile_id === item?.listing?.profile_id &&
+    typeof myProfile?.profile_id === "number";
 
   // Automatically load models that have no preview image. We don't account for video here because currently token_animation_url is a glb file.
   useEffect(() => {
@@ -732,29 +735,52 @@ const TokenCard = ({
                         </div>
                       </a>
                     </Link>
-                    <button
-                      onClick={() => setBuyModal(item)}
-                      className="space-x-4 flex items-center flex-1 hover:bg-gray-100 dark:hover:bg-gray-900 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg transition"
-                    >
-                      <div>
-                        <span className="text-xs font-medium text-gray-600 dark:text-gray-500">
-                          Available
-                        </span>
-                        <p className="text-sm font-bold text-gray-900 dark:text-gray-200">
-                          {item.listing.quantity}/
-                          {item.listing.total_edition_quantity}
-                        </p>
-                      </div>
-                      <div>
-                        <span className="text-xs font-medium text-gray-600 dark:text-gray-500">
-                          Buy
-                        </span>
-                        <p className="text-sm font-bold text-gray-900 dark:text-gray-200 whitespace-nowrap">
-                          {parseFloat(item.listing.min_price)} $
-                          {item.listing.currency}
-                        </p>
-                      </div>
-                    </button>
+                    {ifListedIsOwner ? (
+                      <section className="space-x-4 flex items-center flex-1 hover:bg-gray-100 dark:hover:bg-gray-900 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg transition bg-gray-100 dark:bg-gray-900">
+                        <div>
+                          <span className="text-xs font-medium text-gray-600 dark:text-gray-500">
+                            Available
+                          </span>
+                          <p className="text-sm font-bold text-gray-900 dark:text-gray-200">
+                            {item.listing.quantity}/
+                            {item.listing.total_edition_quantity}
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-xs font-medium text-gray-600 dark:text-gray-500">
+                            Listed for
+                          </span>
+                          <p className="text-sm font-bold text-gray-900 dark:text-gray-200 whitespace-nowrap">
+                            {parseFloat(item.listing.min_price)} $
+                            {item.listing.currency}
+                          </p>
+                        </div>
+                      </section>
+                    ) : (
+                      <button
+                        onClick={() => setBuyModal(item)}
+                        className="space-x-4 flex items-center flex-1 hover:bg-gray-100 dark:hover:bg-gray-900 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg transition"
+                      >
+                        <div>
+                          <span className="text-xs font-medium text-gray-600 dark:text-gray-500">
+                            Available
+                          </span>
+                          <p className="text-sm font-bold text-gray-900 dark:text-gray-200">
+                            {item.listing.quantity}/
+                            {item.listing.total_edition_quantity}
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-xs font-medium text-gray-600 dark:text-gray-500">
+                            Buy
+                          </span>
+                          <p className="text-sm font-bold text-gray-900 dark:text-gray-200 whitespace-nowrap">
+                            {parseFloat(item.listing.min_price)} $
+                            {item.listing.currency}
+                          </p>
+                        </div>
+                      </button>
+                    )}
                   </div>
                 ) : item.owner_count && item.owner_count > 1 ? (
                   pageProfile && listId === 2 ? (
