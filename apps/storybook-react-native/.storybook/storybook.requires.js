@@ -35,6 +35,8 @@ const getStories = () => {
     require("../../../packages/design-system/tabs/tabs.stories.tsx"),
     require("../../../packages/design-system/text/text.stories.tsx"),
     require("../../../packages/design-system/toast/toast.stories.tsx"),
+    require("../../../packages/design-system/data-pill/data-pill.stories.tsx"),
+    require("../../../packages/design-system/segmented-control/segmented-control.stories.tsx"),
   ];
 };
 

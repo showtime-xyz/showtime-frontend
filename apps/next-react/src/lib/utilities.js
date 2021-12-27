@@ -307,7 +307,10 @@ export const signMetaTransactionRequest = async (web3, tokenAddr) => {
           : "(PoS) Dai Stablecoin",
       version: "1",
       verifyingContract: tokenAddr,
-      salt: process.env.NEXT_PUBLIC_CHAIN_ID == "mumbai" ? 80001 : 137,
+      salt:
+        process.env.NEXT_PUBLIC_CHAIN_ID == "mumbai"
+          ? "0x0000000000000000000000000000000000000000000000000000000000013881"
+          : "0x0000000000000000000000000000000000000000000000000000000000000089",
     },
     {
       MetaTransaction: [

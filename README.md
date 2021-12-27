@@ -128,6 +128,18 @@ Turbo pipelines are configured within the root directory [package.json](./packag
 - `yarn lint:next-storybook` runs the lint script for [@showtime/next-storybook](/apps/next-storybook)
 - `yarn lint:next-react-native` runs the lint script for [@showtime/next-react-native](/apps/next-react-native)
 
+#### Formatting
+
+The formatting rules are the ones from `prettier/recommended`. The actual formatting is done via `eslint`.
+
+To get formatting on save in VS Code, install the `eslint` extension and add the following setting:
+
+```json
+"editor.codeActionsOnSave": {
+  "source.fixAll.eslint": true
+}
+```
+
 #### Graph
 
 - `yarn turbo:graph` generates the current [task graph](https://turborepo.org/docs/reference/command-line-reference#--graph) for all [application](/apps)
