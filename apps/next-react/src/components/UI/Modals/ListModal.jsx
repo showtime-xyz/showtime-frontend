@@ -394,6 +394,7 @@ const ListPage = ({
   priceErrorMessage,
   preventExponent,
 }) => {
+  const ownsSingleToken = 1 === maxTokens;
   return (
     <>
       <div className="flex-1">
@@ -534,6 +535,7 @@ const ListPage = ({
               </p>
             </div>
             <input
+              disabled={ownsSingleToken}
               id="copies"
               type="number"
               min="1"
