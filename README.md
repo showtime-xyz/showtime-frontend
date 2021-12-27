@@ -273,6 +273,11 @@ Using `dotenv` for the Expo app. Next.js is automatically picking up the `.env.l
 
 Pro tip: you can add `tw` to `Tailwind CSS: Class Attributes` VS Code extension setting to get IntelliSense working.
 
+Pro tip: Ignore a list of commits within `git-blame` by default on version `>2.23`
+```
+git config blame.ignoreRevsFile .git-blame-ignore-revs
+```
+
 ### Root
 
 - Don't add any package here
