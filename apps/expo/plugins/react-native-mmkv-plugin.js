@@ -123,10 +123,6 @@ const withMainApplication = (config) => {
     }`
         );
 
-        if (mainApplication.includes("getJSMainModuleName()")) {
-          mainApplication = mainApplication.replace();
-        }
-
         return mainApplication;
       });
 
