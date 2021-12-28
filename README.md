@@ -150,6 +150,7 @@ To get formatting on save in VS Code, install the `eslint` extension and add the
 - `clean` removes all monorepo node_modules and clears the turbo cache
 - `clean:turbo` clears the turbo cache
 - `clean:node-modules` removes all node_modules
+- `clean:native` runs yarn clean and removes android, iOS folders from expo and storybook-react-native apps.
 
 ### Enable Remote Cache
 
@@ -274,6 +275,7 @@ Using `dotenv` for the Expo app. Next.js is automatically picking up the `.env.l
 Pro tip: you can add `tw` to `Tailwind CSS: Class Attributes` VS Code extension setting to get IntelliSense working.
 
 Pro tip: Ignore a list of commits within `git-blame` by default on version `>2.23`
+
 ```
 git config blame.ignoreRevsFile .git-blame-ignore-revs
 ```
