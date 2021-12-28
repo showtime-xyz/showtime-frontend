@@ -10939,6 +10939,21 @@ expo-updates@~0.11.2:
     resolve-from "^5.0.0"
     uuid "^3.4.0"
 
+expo-updates@~0.11.3:
+  version "0.11.3"
+  resolved "https://registry.yarnpkg.com/expo-updates/-/expo-updates-0.11.3.tgz#5dcd27ea7de47b6b222c525541a2e0dc91d6191e"
+  integrity sha512-W8oXaH0MKaH5ZLszupnm904A4epBjgvjPEfuIjy3JybTU+JC8319gqsOZ7nWBxZZck67utxHAlyJ9Ks/CcqFmA==
+  dependencies:
+    "@expo/config" "^6.0.6"
+    "@expo/config-plugins" "^4.0.2"
+    "@expo/metro-config" "~0.2.6"
+    expo-manifests "~0.2.2"
+    expo-structured-headers "~2.1.0"
+    expo-updates-interface "~0.5.0"
+    fbemitter "^2.1.1"
+    resolve-from "^5.0.0"
+    uuid "^3.4.0"
+
 expo-web-browser@~10.1.0:
   version "10.1.0"
   resolved "https://registry.yarnpkg.com/expo-web-browser/-/expo-web-browser-10.1.0.tgz#fd91695c44e0f3006da3089f230573c1cb3b026a"
@@ -16775,7 +16790,7 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@^2.2.1, prettier@^2.4.1:
+prettier@^2.4.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.5.1.tgz#fff75fa9d519c54cf0fce328c1017d94546bc56a"
   integrity sha512-vBZcPRUR5MZJwoyi3ZoyQlc1rXeEck8KgeC9AwwOn+exuxLxq5toTRDTSaVrXHxelDMHy9zlicw8u66yxoSUFg==

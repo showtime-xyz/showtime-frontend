@@ -107,31 +107,21 @@ const withMainApplication = (config) => {
     "android",
     async (config) => {
       await editMainApplication(config, (mainApplication) => {
-        const projectRoot = config.modRequest.projectRoot;
-        const packageRoot = getPackageRoot(projectRoot);
-        const packageName = getCurrentPackageName(projectRoot, packageRoot);
-        const importStatement = `import ${packageName}.MMKVJSIModulePackage;`;
-
-        if (
-          !mainApplication.includes(importStatement) &&
-          mainApplication.includes(
-            "import com.swmansion.reanimated.ReanimatedJSIModulePackage;"
-          )
-        ) {
-          mainApplication = mainApplication.replace(
-            "import com.swmansion.reanimated.ReanimatedJSIModulePackage;",
-            importStatement
-          );
-        }
-
-        if (
-          mainApplication.includes("return new ReanimatedJSIModulePackage();")
-        ) {
-          mainApplication = mainApplication.replace(
-            "return new ReanimatedJSIModulePackage();",
-            "return new MMKVJSIModulePackage();"
-          );
-        }
+        mainApplication = mainApplication.replace(
+          `    @Override
+    protected String getJSMainModuleName() {
+      return "index";
+    }`,
+          `    @Override
+    protected String getJSMainModuleName() {
+      return "index";
+    }
+    
+    @Override
+    protected JSIModulePackage getJSIModulePackage() {
+      return new MMKVJSIModulePackage();
+    }`
+        );
 
         return mainApplication;
       });
