@@ -1,8 +1,14 @@
-import { CONTRACTS, LIST_CURRENCIES, SOL_MAX_INT } from "./constants";
+import {
+  CONTRACTS,
+  CURRENCY_NAMES,
+  LIST_CURRENCIES,
+  SOL_MAX_INT,
+} from "./constants";
 import removeMd from "remove-markdown";
-import { parseEther, parseUnits } from "@ethersproject/units";
+import { parseUnits } from "@ethersproject/units";
 import ierc20Permit from "@/data/IERC20Permit.json";
 import ierc20MetaTx from "@/data/IERC20MetaTx.json";
+import ierc20MetaTxNonces from "@/data/IERC20MetaTxNonces.json";
 import { ethers } from "ethers";
 
 export const classNames = (...classes) => {
@@ -227,7 +233,11 @@ export const personalSignMessage = async (web3, message) => {
 };
 
 export const signTokenPermit = async (web3, tokenAddr) => {
-  if ([LIST_CURRENCIES.WETH, LIST_CURRENCIES.DAI].includes(tokenAddr))
+  if (
+    [LIST_CURRENCIES.WETH, LIST_CURRENCIES.DAI, LIST_CURRENCIES.USDC].includes(
+      tokenAddr
+    )
+  )
     return signMetaTransactionRequest(web3, tokenAddr);
 
   const tokenContract = new ethers.Contract(
@@ -251,9 +261,7 @@ export const signTokenPermit = async (web3, tokenAddr) => {
 
   const signature = await web3.getSigner()._signTypedData(
     {
-      name: Object.keys(LIST_CURRENCIES).find(
-        (key) => LIST_CURRENCIES[key] === tokenAddr
-      ),
+      name: CURRENCY_NAMES[tokenAddr],
       version: "1",
       chainId: process.env.NEXT_PUBLIC_CHAIN_ID == "mumbai" ? 80001 : 137,
       verifyingContract: tokenAddr,
@@ -280,18 +288,36 @@ export const signTokenPermit = async (web3, tokenAddr) => {
 
 export const signMetaTransactionRequest = async (web3, tokenAddr) => {
   const userAddress = await web3.getSigner().getAddress();
-  const tokenContract = new ethers.Contract(
-    tokenAddr,
-    ierc20MetaTx,
-    new ethers.providers.JsonRpcProvider(
-      `https://polygon-${
-        process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai" : "mainnet"
-      }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
-    )
-  );
+  let tokenContract, nonce;
+
+  if (tokenAddr === LIST_CURRENCIES.USDC) {
+    tokenContract = new ethers.Contract(
+      tokenAddr,
+      ierc20MetaTxNonces,
+      new ethers.providers.JsonRpcProvider(
+        `https://polygon-${
+          process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai" : "mainnet"
+        }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
+      )
+    );
+
+    nonce = await tokenContract.nonces(userAddress);
+  } else {
+    tokenContract = new ethers.Contract(
+      tokenAddr,
+      ierc20MetaTx,
+      new ethers.providers.JsonRpcProvider(
+        `https://polygon-${
+          process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai" : "mainnet"
+        }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
+      )
+    );
+
+    nonce = await tokenContract.getNonce(userAddress);
+  }
 
   const metatx = {
-    nonce: await tokenContract.getNonce(userAddress),
+    nonce,
     from: userAddress,
     functionSignature: tokenContract.interface.encodeFunctionData("approve", [
       process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
@@ -301,10 +327,7 @@ export const signMetaTransactionRequest = async (web3, tokenAddr) => {
 
   const signature = await web3.getSigner()._signTypedData(
     {
-      name:
-        tokenAddr === LIST_CURRENCIES.WETH
-          ? "Wrapped Ether"
-          : "(PoS) Dai Stablecoin",
+      name: CURRENCY_NAMES[tokenAddr],
       version: "1",
       verifyingContract: tokenAddr,
       salt:

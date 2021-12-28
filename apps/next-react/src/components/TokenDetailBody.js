@@ -153,6 +153,9 @@ const TokenDetailBody = ({
 
   const { myProfile } = useProfile();
 
+  const isOwnedByUser =
+    typeof myProfile?.profile_id === "number" &&
+    myProfile?.profile_id === item?.owner_id;
   const ifListedIsOwner =
     myProfile?.profile_id === item?.listing?.profile_id &&
     typeof myProfile?.profile_id === "number";
@@ -640,6 +643,7 @@ const TokenDetailBody = ({
                     </p>
                   </button>
                 ) : canList &&
+                  isOwnedByUser &&
                   SHOWTIME_CONTRACTS.includes(item.contract_address) ? (
                   <button
                     title="List on Showtime"

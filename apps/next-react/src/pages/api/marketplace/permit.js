@@ -17,10 +17,13 @@ export default handler()
     );
 
     try {
-      const tx =
-        body.tokenAddr === LIST_CURRENCIES.WETH
-          ? await executeMetaTx(wallet, body)
-          : await submitErc20Permit(wallet, body);
+      const tx = [
+        LIST_CURRENCIES.WETH,
+        LIST_CURRENCIES.DAI,
+        LIST_CURRENCIES.USDC,
+      ].includes(body.tokenAddr)
+        ? await executeMetaTx(wallet, body)
+        : await submitErc20Permit(wallet, body);
 
       return res.status(200).send(tx.hash);
     } catch (errorMsg) {

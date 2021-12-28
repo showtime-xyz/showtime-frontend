@@ -728,13 +728,13 @@ const AllowanceRequiredPage = ({
     isWeb3ModalActive.current = true;
 
     const web3 = new ethers.providers.Web3Provider(
-      await web3Modal.connect()
-    ).catch((error) => {
-      if (error !== "Modal closed by user") throw error;
+      await web3Modal.connect().catch((error) => {
+        if (error !== "Modal closed by user") throw error;
 
-      isWeb3ModalActive.current = false;
-      throw setModalPage(MODAL_PAGES.GENERAL);
-    });
+        isWeb3ModalActive.current = false;
+        throw setModalPage(MODAL_PAGES.GENERAL);
+      })
+    );
 
     isWeb3ModalActive.current = false;
 

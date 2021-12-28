@@ -235,10 +235,25 @@ export const LIST_CURRENCIES = {
     TKN: "0xd404017a401ff7ef65e7689630eca288e23d67a1",
     WETH: "0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa",
     DAI: "0x5A01Ea01Ba9A8DC2B066714A65E61a78838B1b9e",
+    USDC: "0xe6b8a5CF854791412c1f6EFC7CAf629f5Df1c747",
   },
   polygon: {
     USDC: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
     WETH: "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
     DAI: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
+  },
+}[process.env.NEXT_PUBLIC_CHAIN_ID];
+
+export const CURRENCY_NAMES = {
+  mumbai: {
+    [LIST_CURRENCIES?.TKN]: "Test Token",
+    [LIST_CURRENCIES?.WETH]: "Wrapped Ether",
+    [LIST_CURRENCIES?.DAI]: "(PoS) Dai Stablecoin",
+    [LIST_CURRENCIES?.USDC]: "Mumbai USD Coin",
+  },
+  polygon: {
+    [LIST_CURRENCIES?.USDC]: "USD Coin (PoS)",
+    [LIST_CURRENCIES?.WETH]: "Wrapped Ether",
+    [LIST_CURRENCIES?.DAI]: "(PoS) Dai Stablecoin",
   },
 }[process.env.NEXT_PUBLIC_CHAIN_ID];
