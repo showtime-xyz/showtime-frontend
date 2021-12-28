@@ -119,7 +119,7 @@ const withMainApplication = (config) => {
     
     @Override
     protected JSIModulePackage getJSIModulePackage() {
-      return new MMKVJSIModulePackage(); // <-- your package's name
+      return new MMKVJSIModulePackage();
     }`
         );
 
