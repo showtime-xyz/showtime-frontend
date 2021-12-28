@@ -1,3 +1,5 @@
+import 'expo-dev-client';
+
 import "expo-dev-client";
 import "expo-dev-launcher";
 import "expo/build/Expo.fx";
