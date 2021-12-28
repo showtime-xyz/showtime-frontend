@@ -69,6 +69,7 @@ export default {
     STAGE: process.env.STAGE,
   },
   plugins: [
+    "@config-plugins/detox",
     "./plugins/react-native-mmkv-plugin.js",
     [
       "./plugins/with-pick-first.js",
