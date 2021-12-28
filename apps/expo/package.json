@@ -66,7 +66,7 @@
     "expo-av": "~10.2.0",
     "expo-blur": "~11.0.0",
     "expo-constants": "~13.0.0",
-    "expo-dev-client": "~0.7.2",
+    "expo-dev-client": "~0.8.0",
     "expo-device": "~4.1.0",
     "expo-font": "~10.0.4",
     "expo-haptics": "~11.1.0",
