@@ -37,6 +37,7 @@ const nextConfig = {
     ignoreDevErrors: true,
     ignoreBuildErrors: true,
   },
+  productionBrowserSourceMaps: process.env.ENABLE_SOURCE_MAPS,
   outputFileTracing: false, // https://github.com/vercel/next.js/issues/30601#issuecomment-961323914
   images: {
     disableStaticImages: true,
