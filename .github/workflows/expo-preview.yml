@@ -1,0 +1,111 @@
+name: Expo Preview
+
+defaults:
+  run:
+    working-directory: apps/expo
+
+on:
+  pull_request:
+    paths:
+      - "package.json"
+      - "apps/expo/package.json"
+      - "apps/expo/app.config.js"
+      - "apps/expo/.env.*"
+      - "**/*.js"
+      - "**/*.jsx"
+      - "**/*.ts"
+      - "**/*.tsx"
+      - ".github/workflows/**"
+      - "**.patch"
+      - "**.lock"
+
+concurrency:
+  group: ${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pr-preview:
+    name: PR Preview
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - uses: 8BitJonny/gh-get-current-pr@1.3.0
+        id: PR
+        name: Check if we're in a PR
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          sha: ${{ github.event.pull_request.head.sha }}
+          filterOutClosed: true
+
+      - name: Find yarn cache
+        id: yarn-cache-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Restore cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --check-files
+
+      - name: Set up Expo
+        uses: expo/expo-github-action@v6
+        with:
+          eas-version: latest
+          eas-cache: true
+          expo-cache: true
+          expo-version: 4.x
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Publish to Expo & create a QR code
+        uses: expo/expo-preview-action@v1
+        if: success() && steps.PR.outputs.number != ''
+        env:
+          STAGE: development
+        with:
+          channel: pr-${{ steps.PR.outputs.number }}
+          project-root: apps/expo
+          scheme: io.showtime.development
+        id: preview
+
+      - name: Preview Deep Link
+        id: publish-url
+        run: echo "::set-output name=url::io.showtime.development://expo-development-client/?url=${{ steps.preview.outputs.EXPO_MANIFEST_URL }}"
+
+      - name: Find PR Comment
+        uses: peter-evans/find-comment@v1
+        if: success() && steps.PR.outputs.number != ''
+        id: existing-comment
+        with:
+          issue-number: ${{ steps.PR.outputs.number }}
+          body-includes: PR Preview - App
+
+      - name: Create or update comment
+        uses: peter-evans/create-or-update-comment@v1
+        if: success() && steps.PR.outputs.number != ''
+        with:
+          comment-id: ${{ steps.existing-comment.outputs.comment-id }}
+          issue-number: ${{ steps.PR.outputs.number }}
+          edit-mode: replace
+          body: |
+            ## PR Preview - App
+
+            This pull request preview deployment is now available.
+
+            ✅ Preview: [${{ steps.publish-url.outputs.url }}](${{ steps.publish-url.outputs.url }})
+
+            <a href="${{ steps.publish-url.outputs.url }}"><img src="${{ steps.preview.outputs.EXPO_QR_CODE_URL }}" height="512px" width="512px"></a>
+
+            ${{ steps.publish.outputs.EXPO_NEW_BUILD_IS_REQUIRED_MESSAGE }}
+
+            Comment ID: ${{ steps.existing-comment.outputs.comment-id }}
