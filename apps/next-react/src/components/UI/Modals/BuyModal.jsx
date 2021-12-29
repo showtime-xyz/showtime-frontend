@@ -165,7 +165,7 @@ const BuyModal = ({ open, onClose, token }) => {
           signerAddress,
           process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT
         )
-      ).gt(basePrice)
+      ).gte(basePrice)
     ) {
       return setModalPage(MODAL_PAGES.NEEDS_ALLOWANCE);
     }
