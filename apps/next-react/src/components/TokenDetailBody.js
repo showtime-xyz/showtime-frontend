@@ -638,8 +638,8 @@ const TokenDetailBody = ({
                   >
                     <p className="text-sm sm:text-base">
                       {ifListedIsOwner
-                        ? `Listed for ${item.listing.min_price} ${item.listing.currency}`
-                        : `Buy for ${item.listing.min_price} ${item.listing.currency}`}
+                        ? `Listed for ${item.listing.min_price} $${item.listing.currency}`
+                        : `Buy for ${item.listing.min_price} $${item.listing.currency}`}
                     </p>
                   </button>
                 ) : canList &&
