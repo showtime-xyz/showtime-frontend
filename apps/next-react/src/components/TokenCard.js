@@ -721,9 +721,11 @@ const TokenCard = ({
                           </span>
                           <div className="flex items-center space-x-1 -mt-0.5">
                             <div className="text-sm font-semibold truncate dark:text-gray-200 min-w-0">
-                              {item.listing.name === item.listing.address
-                                ? formatAddressShort(item.listing.name)
-                                : truncateWithEllipses(item.listing.name, 22)}
+                              {item.listing.name
+                                ? item.listing.name === item.listing.address
+                                  ? formatAddressShort(item.listing.name)
+                                  : truncateWithEllipses(item.listing.name, 22)
+                                : formatAddressShort(item.listing.name)}
                             </div>
                             {item.listing.verified == 1 && (
                               <BadgeIcon
