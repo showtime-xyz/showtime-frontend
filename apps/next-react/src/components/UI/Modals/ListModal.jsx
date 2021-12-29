@@ -142,11 +142,19 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 
   const isValidPrice = (price) => {
     const aboveMaxPrice = price > MAX_LIST_PRICE;
+    const belowMinPrice = price < 0;
+
     let updatedPriceErrorMessage = "";
     let updatedHasPriceError = false;
 
     if (aboveMaxPrice) {
       updatedPriceErrorMessage = `The listing price has to be below ${MAX_LIST_PRICE}`;
+      updatedHasPriceError = true;
+    }
+
+    if (belowMinPrice) {
+      updatedPriceErrorMessage =
+        "The listing price cannot be a negative number";
       updatedHasPriceError = true;
     }
 
@@ -492,7 +500,7 @@ const ListPage = ({
                 className="text-sm w-full placeholder-shown:text-left text-right px-4 rounded-3xl dark:text-gray-300 bg-white dark:bg-black border  dark:border-gray-700 focus:outline-none focus-visible:ring font-semibold no-spinners h-[40px]"
                 placeholder="Price"
                 value={price}
-                min=".0001"
+                min="0"
                 max="1000"
                 step=".0001"
                 inputMode="decimal"
