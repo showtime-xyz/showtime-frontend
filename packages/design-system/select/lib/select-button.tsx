@@ -8,8 +8,9 @@ import { tw, } from "../../tailwind";
 import { colors } from "../../tailwind/colors";
 import { SelectProps } from "../types";
 
-interface SelectButtonProps extends Pick<SelectProps, "size" | "label"> {
-  open?: boolean;
+interface SelectButtonProps extends Pick<SelectProps, "size"> {
+  open: boolean;
+  label: string;
   disabled?: boolean;
   onClick?: () => void;
 }
