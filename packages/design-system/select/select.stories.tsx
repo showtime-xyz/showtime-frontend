@@ -19,30 +19,47 @@ const options = [
 
 const Container = (props: any) => {
   return (
-    <View
-      tw={"items-center p-10"}
-      style={{ flex: 1 }}
-    >
+    <View tw={"items-center p-10"} style={{ flex: 1 }}>
       {props.children}
     </View>
   );
 };
 
-export const Basic: React.FC<{}> = () => {
-  const [value, setValue] = useState(1);
+export const Regular: React.FC = () => {
+  const [value, setValue] = useState(-1);
   return (
     <Container>
       <Select
         value={value}
-        label={options[value].label}
         options={options}
+        tw="min-w-min"
         onChange={setValue}
       />
-      <View tw="m-2" />
+    </Container>
+  );
+};
+
+export const Small: React.FC = () => {
+  const [value, setValue] = useState(-1);
+  return (
+    <Container>
       <Select
         value={value}
-        label={options[value].label}
+        options={options}
         size="small"
+        onChange={setValue}
+      />
+    </Container>
+  );
+};
+
+export const Disabled: React.FC = () => {
+  const [value, setValue] = useState(-1);
+  return (
+    <Container>
+      <Select
+        value={value}
+        disabled
         options={options}
         onChange={setValue}
       />
@@ -51,6 +68,6 @@ export const Basic: React.FC<{}> = () => {
 };
 
 export default {
-  component: Basic,
+  component: Regular,
   title: "Components/Select",
 };
