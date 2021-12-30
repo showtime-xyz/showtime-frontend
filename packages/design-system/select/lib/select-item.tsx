@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 import { Pressable } from "dripsy";
 import { useIsDarkMode, useOnHover, useOnPress } from "../../hooks";
@@ -8,9 +8,11 @@ import { colors } from "../../tailwind/colors";
 import { SelectProps } from "../types";
 
 interface SelectItemProps extends Pick<SelectProps, "size"> {
+  value: string | number;
   label: string;
   disabled?: boolean;
-  onClick?: () => void;
+  onPress?: (value: string | number) => void;
+  onClick?: (e: any) => void;
 }
 
 const BACKGROUND_MAPPER = {
@@ -20,8 +22,10 @@ const BACKGROUND_MAPPER = {
 
 export const SelectItem: React.FC<SelectItemProps> = ({
   label,
+  value,
   disabled,
   size,
+  onPress,
   onClick,
   ...rest
 }) => {
@@ -48,12 +52,25 @@ export const SelectItem: React.FC<SelectItemProps> = ({
     []
   );
   //#endregion
+  
+  //#region callbacks
+  const handlePress = useCallback((e) => {
+    if(onClick) {
+      onClick(e)
+    }
+
+    if(onPress) {
+      onPress(value)
+    }
+  }, [value])
+  //#endregion
+
   return (
     <Pressable
       //@ts-ignore - web only prop
       onHoverIn={onHoverIn}
       onHoverOut={onHoverOut}
-      onPress={onClick}
+      onPress={handlePress}
       {...rest}
     >
       <Animated.View style={containerStyle}>

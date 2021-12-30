@@ -13,6 +13,7 @@ interface SelectButtonProps extends Pick<SelectProps, "size"> {
   label: string;
   disabled?: boolean;
   onClick?: () => void;
+  onPress?: () => void;
 }
 
 const BACKGROUND_MAPPER = {
@@ -22,7 +23,7 @@ const BACKGROUND_MAPPER = {
 };
 
 export const SelectButton: React.FC<SelectButtonProps> = forwardRef(
-  ({ label, open, disabled, size, onClick, ...rest }, ref) => {
+  ({ label, open, disabled, size, onPress, onClick, ...rest }, ref) => {
     //#region hooks
     const isDarkMode = useIsDarkMode();
     const { onHoverIn, onHoverOut, hovered } = useOnHover();
@@ -59,7 +60,7 @@ export const SelectButton: React.FC<SelectButtonProps> = forwardRef(
         //@ts-ignore - web only prop
         onHoverIn={onHoverIn}
         onHoverOut={onHoverOut}
-        onPress={onClick}
+        onPress={onPress || onClick}
         onPressIn={onPressIn}
         onPressOut={onPressOut}
         disabled={disabled}
