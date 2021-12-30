@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from "react";
-import { Platform, useColorScheme } from "react-native";
+import React, { useRef, useEffect, useState } from "react";
+import { LayoutChangeEvent, Platform, useColorScheme } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 
 export const useIsDarkMode = () => {
@@ -69,3 +69,14 @@ export function useUpdateEffect(effect, dependencies = []) {
     }
   }, dependencies);
 }
+
+export const useLayout = () => {
+  const [layout, setLayout] = useState<
+    LayoutChangeEvent["nativeEvent"]["layout"] | undefined
+  >();
+  const onLayout = (e) => {
+    setLayout(e.nativeEvent.layout);
+  };
+
+  return { onLayout, layout };
+};
