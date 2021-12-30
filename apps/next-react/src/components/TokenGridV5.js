@@ -185,7 +185,7 @@ const TokenGridV5 = ({
           <BuyModal
             open={!!buyModal}
             onClose={() => setBuyModal(null)}
-            token={buyModal}
+            token={buyModal} // BuyModal value is the individual item in items
           />
         </>
       ) : null}
