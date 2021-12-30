@@ -33,18 +33,27 @@ export const PinchToZoom = ({ children }) => {
 
   const handler = useAnimatedGestureHandler<PinchGestureHandlerGestureEvent>({
     onStart(e, ctx: any) {
-      origin.x.value = e.focalX;
-      origin.y.value = e.focalY;
-
-      ctx.offsetFromFocalX = origin.x.value;
-      ctx.offsetFromFocalY = origin.y.value;
-      ctx.prevTranslateOriginX = origin.x.value;
-      ctx.prevTranslateOriginY = origin.y.value;
-      ctx.prevPointers = e.numberOfPointers;
+      // On android, we get focalX and focalY always 0 in onStart callback
+      // 😢 https://github.com/software-mansion/react-native-gesture-handler/issues/546
+      ctx.start = true;
     },
 
     onActive(e, ctx: any) {
+      if (ctx.start) {
+        origin.x.value = e.focalX;
+        origin.y.value = e.focalY;
+
+        ctx.offsetFromFocalX = origin.x.value;
+        ctx.offsetFromFocalY = origin.y.value;
+        ctx.prevTranslateOriginX = origin.x.value;
+        ctx.prevTranslateOriginY = origin.y.value;
+        ctx.prevPointers = e.numberOfPointers;
+
+        ctx.start = false;
+      }
+
       scale.value = e.scale;
+
       if (ctx.prevPointers !== e.numberOfPointers) {
         ctx.offsetFromFocalX = e.focalX;
         ctx.offsetFromFocalY = e.focalY;
@@ -95,7 +104,7 @@ export const PinchToZoom = ({ children }) => {
         { translateY: -(imageTop + origin.y.value) },
       ],
     };
-  }, []);
+  }, [imageTop, imageLeft]);
 
   const clonedChildren = useMemo(
     () =>
