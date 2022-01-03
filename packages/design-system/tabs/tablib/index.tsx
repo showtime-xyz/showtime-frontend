@@ -402,7 +402,9 @@ function makeScrollableComponent<K, T extends any>(Comp: T) {
           refreshGestureState.value !== "refreshing"
         ) {
           pullToRefreshY.value = e.translationY;
-          if (e.translationY > ctx.lastY) {
+          if (e.translationY < 100) {
+            refreshGestureState.value = "cancelling";
+          } else if (e.translationY > ctx.lastY) {
             refreshGestureState.value = "pulling";
             ctx.lastPullingY = e.translationY;
           } else if (e.translationY < ctx.lastPullingY - 40) {
