@@ -28,7 +28,6 @@ import XIcon from "@/components/Icons/XIcon";
 import { buildFormData } from "@/lib/utilities";
 import * as Sentry from "@sentry/nextjs";
 import ListModal from "./ListModal";
-import useFlags, { FLAGS } from "@/hooks/useFlags";
 
 const MAX_FILE_SIZE = 1024 * 1024 * 50; // 50MB
 
@@ -825,7 +824,6 @@ const MintingPage = ({ transactionHash }) => {
 };
 
 const SuccessPage = ({ transactionHash, tokenID, shotConfetti, listToken }) => {
-  const { [FLAGS.hasMinting]: canList } = useFlags();
   const tokenURL = `/t/${
     process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai" : "polygon"
   }/${process.env.NEXT_PUBLIC_MINTING_CONTRACT}/${tokenID}`;
@@ -848,11 +846,9 @@ const SuccessPage = ({ transactionHash, tokenID, shotConfetti, listToken }) => {
         Your NFT has been successfully minted!
       </p>
       <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
-        {canList && (
-          <Button style="primary" onClick={listToken} className="!mt-6">
-            List for sale
-          </Button>
-        )}
+        <Button style="primary" onClick={listToken} className="!mt-6">
+          List for sale
+        </Button>
         <Button
           style="primary"
           as="a"
