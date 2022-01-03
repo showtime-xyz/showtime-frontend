@@ -8,6 +8,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { tw as tailwind } from "design-system/tailwind";
+import type { TW } from "design-system/tailwind/types";
 import { Text } from "design-system";
 
 const DropdownMenuRoot = DropdownMenu.Root;
@@ -17,7 +18,7 @@ const DropdownMenuGroup = DropdownMenu.Group;
 const DropdownMenuTrigger = DropdownMenu.Trigger;
 
 const DropdownMenuContent = DropdownMenu.menuify(
-  (props: { tw?: string | string[] } & ComponentProps<typeof DropdownMenu.Content>) => (
+  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.Content>) => (
     <DropdownMenu.Content {...props} style={tailwind.style(props.tw)} />
   ),
   "Content"
@@ -90,7 +91,7 @@ const DropdownMenuItem = DropdownMenu.menuify(
     onBlur,
     onFocus,
     ...props
-  }: { tw?: string | string[] } & ComponentProps<typeof DropdownMenu.Item>) => {
+  }: { tw?: TW } & ComponentProps<typeof DropdownMenu.Item>) => {
     const { isFocused, handleBlur, handleFocus } = useFocusedItem({
       onFocus,
       onBlur,
@@ -118,7 +119,7 @@ const DropdownMenuCheckboxItem = DropdownMenu.menuify(
     onBlur,
     onFocus,
     ...props
-  }: { tw?: string | string[] } & ComponentProps<typeof DropdownMenu.CheckboxItem>) => {
+  }: { tw?: TW } & ComponentProps<typeof DropdownMenu.CheckboxItem>) => {
     const { isFocused, handleBlur, handleFocus } = useFocusedItem({
       onFocus,
       onBlur,
@@ -172,7 +173,7 @@ const DropdownMenuItemSubtitle = DropdownMenu.menuify(
 
 const DropdownMenuItemIndicator = DropdownMenu.menuify(
   (
-    props: { tw?: string | string[] } & ComponentProps<typeof DropdownMenu.ItemIndicator>
+    props: { tw?: TW } & ComponentProps<typeof DropdownMenu.ItemIndicator>
   ) => (
     <DropdownMenu.ItemIndicator {...props} style={tailwind.style(props.tw)} />
   ),
@@ -180,7 +181,7 @@ const DropdownMenuItemIndicator = DropdownMenu.menuify(
 );
 
 const DropdownMenuSeparator = DropdownMenu.menuify(
-  (props: { tw?: string | string[] } & ComponentProps<typeof DropdownMenu.Separator>) => (
+  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.Separator>) => (
     <DropdownMenu.Separator {...props} style={tailwind.style(props.tw)} />
   ),
   "Separator"
@@ -193,7 +194,7 @@ const DropdownMenuTriggerItem = DropdownMenu.menuify(
     onBlur,
     onFocus,
     ...props
-  }: { tw?: string | string[] } & ComponentProps<typeof DropdownMenu.TriggerItem>) => {
+  }: { tw?: TW } & ComponentProps<typeof DropdownMenu.TriggerItem>) => {
     const { isFocused, handleBlur, handleFocus } = useFocusedItem({
       onFocus,
       onBlur,
@@ -215,21 +216,21 @@ const DropdownMenuTriggerItem = DropdownMenu.menuify(
 );
 
 const DropdownMenuItemIcon = DropdownMenu.menuify(
-  (props: { tw?: string | string[] } & ComponentProps<typeof DropdownMenu.ItemIcon>) => (
+  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.ItemIcon>) => (
     <DropdownMenu.ItemIcon {...props} style={tailwind.style(props.tw)} />
   ),
   "ItemIcon"
 );
 
 const DropdownMenuItemImage = DropdownMenu.menuify(
-  (props: { tw?: string | string[] } & ComponentProps<typeof DropdownMenu.ItemImage>) => (
+  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.ItemImage>) => (
     <DropdownMenu.ItemImage {...props} style={tailwind.style(props.tw)} />
   ),
   "ItemImage"
 );
 
 const DropdownMenuLabel = DropdownMenu.menuify(
-  (props: { tw?: string | string[] } & ComponentProps<typeof DropdownMenu.Label>) => (
+  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.Label>) => (
     <DropdownMenu.Label {...props} style={tailwind.style(props.tw)} />
   ),
   "Label"

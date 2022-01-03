@@ -9,6 +9,7 @@ import { decode } from "blurhash";
 import { getImgFromArr } from "array-to-image";
 
 import { tw as tailwind } from "design-system/tailwind";
+import type { TW } from "design-system/tailwind/types";
 import { View } from "design-system";
 
 const resizeModeToObjectFit = (resizeMode: ImageResizeMode) => {
@@ -92,7 +93,7 @@ function Img({
   );
 }
 
-type ImageProps = { tw?: string | string[] } & ComponentProps<typeof Img>;
+type ImageProps = { tw?: TW } & ComponentProps<typeof Img>;
 
 function StyledImage({ tw, ...props }: ImageProps) {
   const width = Number(tailwind.style(tw).width);

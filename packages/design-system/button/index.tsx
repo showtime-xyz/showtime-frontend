@@ -5,9 +5,10 @@ import {
   Pressable,
   Props as PressableScaleProps,
 } from "design-system/pressable-scale";
+import type { TW } from "design-system/tailwind/types";
 
 type Props = {
-  tw?: string | string[];
+  tw?: TW;
   iconOnly?: boolean;
   variant?: "primary" | "danger" | "tertiary";
   size?: "small" | "regular";
@@ -79,7 +80,7 @@ export const ButtonLabel = ({
   tw,
   ...props
 }: {
-  tw?: string | string[];
+  tw?: TW;
   children?: React.ReactNode;
 }) => {
   // TODO: md:text-base
