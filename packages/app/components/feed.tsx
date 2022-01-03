@@ -145,6 +145,7 @@ const Feed = ({ activity, activityPage, getNext, isLoading }: Props) => {
           scrollEventThrottle={16}
           onEndReached={getNext}
           ref={listRef1}
+          style={tw.style("bg-white dark:bg-black")}
           onEndReachedThreshold={
             activityPage === 1
               ? 0.2

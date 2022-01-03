@@ -447,14 +447,12 @@ function makeScrollableComponent<
               <Comp
                 scrollEventThrottle={16}
                 onScroll={scrollHandler}
-                bouncesZoom={false}
                 alwaysBounceHorizontal={false}
                 automaticallyAdjustContentInsets={false}
                 ref={mergeRef([ref, aref])}
                 contentContainerStyle={{
                   paddingTop: tabListHeight + headerHeight,
                 }}
-                bounces={false}
                 ListHeaderComponent={() => (
                   <PullToRefresh
                     isRefreshing={refreshing}
