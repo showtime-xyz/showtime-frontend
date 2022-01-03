@@ -58,6 +58,32 @@ export const useOnHover = () => {
   return hoverHandler;
 };
 
+export const useOnPress = () => {
+  const pressed = useSharedValue(0);
+  // use state on web for now till useAnimatedStyle bug is resolved
+  const [state, setPressed] = React.useState(0);
+
+  const pressHandler = React.useMemo(() => {
+    return {
+      onPressIn: () => {
+        pressed.value = 1;
+        if (Platform.OS === "web") {
+          setPressed(1);
+        }
+      },
+      onPressOut: () => {
+        pressed.value = 0;
+        if (Platform.OS === "web") {
+          setPressed(0);
+        }
+      },
+      pressed: Platform.select({ default: pressed, web: { value: state } }),
+    };
+  }, [state]);
+
+  return pressHandler;
+}
+
 export function useUpdateEffect(effect, dependencies = []) {
   const isInitialMount = useRef(true);
 

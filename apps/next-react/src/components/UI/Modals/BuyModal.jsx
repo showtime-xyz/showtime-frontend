@@ -435,11 +435,11 @@ const BuyPage = ({ token, quantity, setQuantity, buyToken, onClose }) => {
                   </p>
                   <div className="flex items-center space-x-1 -mt-0.5">
                     <p className="text-gray-900 dark:text-white font-semibold text-sm">
-                      {item.listing.name
-                        ? item.listing.name === item.listing.address
-                          ? formatAddressShort(item.listing.name)
-                          : truncateWithEllipses(item.listing.name, 22)
-                        : formatAddressShort(item.listing.name)}
+                      {token.listing.name
+                        ? token.listing.name === token.listing.address
+                          ? formatAddressShort(token.listing.name)
+                          : truncateWithEllipses(token.listing.name, 22)
+                        : formatAddressShort(token.listing.name)}
                     </p>
                     {token.listing.verified == 1 && (
                       <BadgeIcon

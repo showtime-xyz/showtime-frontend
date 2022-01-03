@@ -23,7 +23,8 @@ class Document extends NextDocument {
             crossOrigin="anonymous"
           />
         </Head>
-        <body className="!max-w-screen">
+        {/* overflow-y-visible resolves applied css reset issue caused by `@expo/next-adapter/document`*/}
+        <body className="!max-w-screen overflow-y-visible">
           {/* Here we will mount our modal portal */}
           <div id="modal" />
           <Main />
