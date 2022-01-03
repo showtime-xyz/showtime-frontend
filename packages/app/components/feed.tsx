@@ -2,16 +2,16 @@ import { useCallback, useState } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
-import { View, ActivityIndicator } from "design-system";
+import { View, ActivityIndicator, Text } from "design-system";
 import { Card } from "design-system/card";
-import Animated, {
-  useAnimatedScrollHandler,
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
-import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
-const TAB_LIST_HEIGHT = 55;
+import {
+  Tabs,
+  TabItem,
+  SelectedTabIndicator,
+  PullToRefresh,
+} from "design-system/tabs";
+import { tw } from "design-system/tailwind";
+const TAB_LIST_HEIGHT = 64;
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
   const tabBarHeight = useBottomTabBarHeight();
@@ -53,7 +53,6 @@ const Feed = ({
   const onIndexChange = (index) => {
     setSelected(index);
     console.log("index changed", index);
-    hidden.value = false;
   };
 
   const keyExtractor = useCallback((item) => item.id, []);
@@ -83,48 +82,31 @@ const Feed = ({
     [isLoading]
   );
 
-  const offsetY = useSharedValue(0);
-  const hidden = useSharedValue(false);
-
-  const listScrollHandler = useAnimatedScrollHandler({
-    onScroll: (e) => {
-      if (e.contentOffset.y <= 0) {
-        hidden.value = false;
-        offsetY.value = e.contentOffset.y;
-      } else if (offsetY.value + 55 < e.contentOffset.y) {
-        hidden.value = true;
-        offsetY.value = e.contentOffset.y;
-      } else if (offsetY.value - 55 > e.contentOffset.y) {
-        hidden.value = false;
-        offsetY.value = e.contentOffset.y;
-      }
-    },
-  });
-
-  const listStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateY: hidden.value
-            ? withTiming(-55, { duration: 300 })
-            : withTiming(0, { duration: 300 }),
-        },
-      ],
-    };
-  }, []);
-
   return (
     <Tabs.Root
       onIndexChange={onIndexChange}
       initialIndex={selected}
       tabListHeight={TAB_LIST_HEIGHT}
     >
+      <PullToRefresh isRefreshing={isRefreshing} onRefresh={onRefresh} />
+      <Tabs.Header>
+        <View tw="bg-white dark:bg-black">
+          <Text
+            tw="pt-8 px-4 text-gray-900 dark:text-white font-bold"
+            sx={{ fontSize: 22 }}
+          >
+            Home
+          </Text>
+        </View>
+      </Tabs.Header>
       <Tabs.List
         style={[
           {
             height: TAB_LIST_HEIGHT,
+            ...tw.style(
+              "dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900"
+            ),
           },
-          listStyle,
         ]}
       >
         <Tabs.Trigger>
@@ -146,15 +128,14 @@ const Feed = ({
         <SelectedTabIndicator />
       </Tabs.List>
       <Tabs.Pager>
-        <Animated.FlatList
+        <Tabs.FlatList
           data={activity}
           keyExtractor={keyExtractor}
           renderItem={renderItem}
-          onScroll={listScrollHandler}
+          bounces={false}
           getItemLayout={getItemLayout}
           scrollEventThrottle={16}
           onEndReached={getNext}
-          style={[{ top: 55 }, listStyle]}
           onEndReachedThreshold={
             activityPage === 1
               ? 0.2
@@ -165,8 +146,6 @@ const Feed = ({
               : 0.8
           }
           removeClippedSubviews={Platform.OS !== "web"}
-          onRefresh={onRefresh}
-          refreshing={isRefreshing}
           numColumns={1}
           windowSize={4}
           initialNumToRender={2}
