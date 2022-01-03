@@ -4,12 +4,17 @@ import { ComponentProps, createContext, forwardRef, useContext } from "react";
 import type { Text as TextType } from "react-native";
 
 import { tw as tailwind } from "design-system/tailwind";
+import type { TW } from "design-system/tailwind/types";
 
 type Variant = keyof Theme["text"];
 
 type TextProps = ComponentProps<typeof DripsyText>;
 
-export type Props = { tw?: string; variant?: Variant; htmlFor?: string } & Pick<
+export type Props = {
+  tw?: TW;
+  variant?: Variant;
+  htmlFor?: string;
+} & Pick<
   TextProps,
   | "onLayout"
   | "children"

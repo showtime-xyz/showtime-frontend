@@ -1,10 +1,12 @@
+import type { TW } from "design-system/tailwind/types";
+
 export interface SelectProps {
   value?: string | number,
   placeholder?: string;
   options?: SelectOption[],
   size?: 'small' | 'regular',
   disabled?: boolean,
-  tw?: string,
+  tw?: TW,
   onChange?: (value: string | number) => void;
 }
 

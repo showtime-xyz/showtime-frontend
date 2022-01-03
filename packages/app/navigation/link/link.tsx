@@ -3,6 +3,7 @@ import { Platform, TextProps, ViewProps } from "react-native";
 import { Pressable } from "design-system/pressable-scale";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
+import type { TW } from "design-system/tailwind/types";
 
 import { Props, LinkCore } from "app/navigation/link/link-core";
 
@@ -24,7 +25,7 @@ function Link({ viewProps, ...props }: LinkProps) {
 type TextLinkProps = Props & {
   textProps?: TextProps;
   variant?: string;
-  tw?: string;
+  tw?: TW;
 };
 
 function TextLink({ textProps, variant, tw, ...props }: TextLinkProps) {
