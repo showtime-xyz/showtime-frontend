@@ -454,6 +454,7 @@ function makeScrollableComponent<
                 contentContainerStyle={{
                   paddingTop: tabListHeight + headerHeight,
                 }}
+                bounces={false}
                 ListHeaderComponent={() => (
                   <PullToRefresh
                     isRefreshing={refreshing}
