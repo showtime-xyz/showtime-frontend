@@ -1,4 +1,4 @@
-import React, { useContext, ForwardedRef } from "react";
+import React, { useContext, ForwardedRef, useEffect } from "react";
 import { tw } from "../../tailwind";
 import {
   Pressable,
@@ -11,6 +11,7 @@ import {
   PressableProps,
   FlatList,
   FlatListProps,
+  Platform,
 } from "react-native";
 import PagerView from "react-native-pager-view";
 import Reanimated, {
@@ -23,6 +24,7 @@ import Reanimated, {
   Extrapolate,
   interpolate,
   useAnimatedScrollHandler,
+  withTiming,
   useAnimatedStyle,
   useAnimatedReaction,
 } from "react-native-reanimated";
@@ -36,6 +38,9 @@ import {
   TabRootProps,
   TabsContextType,
 } from "./types";
+import { ActivityIndicator } from "design-system/activity-indicator";
+import { Text } from "design-system/text";
+import { MotiView } from "moti";
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
@@ -330,129 +335,139 @@ const Trigger = React.forwardRef(
   }
 );
 
-function makeScrollableComponent<K, T extends any>(Comp: T) {
-  return React.forwardRef((props: K, ref: ForwardedRef<T>) => {
-    const {
-      headerHeight,
-      pullToRefreshY,
-      requestOtherViewsToSyncTheirScrollPosition,
-      refreshGestureState,
-      tabListHeight,
-      translateY,
-      index,
-    } = useContext(TabsContext);
-    const elementIndex = React.useContext(TabIndexContext).index;
-    const aref = useAnimatedRef<Reanimated.ScrollView>();
-    const scrollY = useSharedValue(0);
-    const enablePullToRefresh = useSharedValue(true);
+function makeScrollableComponent<
+  K extends object & { onRefresh?: any; refreshing?: any },
+  T extends any
+>(Comp: T) {
+  return React.forwardRef(
+    ({ refreshing, onRefresh, ...props }: K, ref: ForwardedRef<T>) => {
+      const {
+        headerHeight,
+        pullToRefreshY,
+        requestOtherViewsToSyncTheirScrollPosition,
+        refreshGestureState,
+        tabListHeight,
+        translateY,
 
-    const scrollHandler = useAnimatedScrollHandler({
-      onBeginDrag() {
-        requestOtherViewsToSyncTheirScrollPosition.value = false;
-      },
-      onMomentumBegin() {
-        requestOtherViewsToSyncTheirScrollPosition.value = false;
-      },
-      onScroll(e) {
-        // only current scrollview controls the header translate, other scrollviews sync their scroll posisions
-        if (elementIndex === index.value) {
-          scrollY.value = e.contentOffset.y;
-          translateY.value = interpolate(
-            scrollY.value,
-            [0, headerHeight],
-            [0, -headerHeight],
-            Extrapolate.CLAMP
-          );
-          if (e.contentOffset.y <= 0) {
-            enablePullToRefresh.value = true;
-          } else {
-            enablePullToRefresh.value = false;
+        index,
+      } = useContext(TabsContext);
+      const elementIndex = React.useContext(TabIndexContext).index;
+      const aref = useAnimatedRef<Reanimated.ScrollView>();
+      const scrollY = useSharedValue(0);
+      const enablePullToRefresh = useSharedValue(true);
+
+      const scrollHandler = useAnimatedScrollHandler({
+        onBeginDrag() {
+          requestOtherViewsToSyncTheirScrollPosition.value = false;
+        },
+        onMomentumBegin() {
+          requestOtherViewsToSyncTheirScrollPosition.value = false;
+        },
+        onScroll(e) {
+          // only current scrollview controls the header translate, other scrollviews sync their scroll posisions
+          if (elementIndex === index.value) {
+            scrollY.value = e.contentOffset.y;
+            translateY.value = interpolate(
+              scrollY.value,
+              [0, headerHeight],
+              [0, -headerHeight],
+              Extrapolate.CLAMP
+            );
+            if (e.contentOffset.y <= 0) {
+              enablePullToRefresh.value = true;
+            } else {
+              enablePullToRefresh.value = false;
+            }
           }
-        }
-      },
-      onEndDrag(e) {
-        requestOtherViewsToSyncTheirScrollPosition.value = true;
-      },
-      onMomentumEnd(e) {
-        requestOtherViewsToSyncTheirScrollPosition.value = true;
-      },
-    });
+        },
+        onEndDrag(e) {
+          requestOtherViewsToSyncTheirScrollPosition.value = true;
+        },
+        onMomentumEnd(e) {
+          requestOtherViewsToSyncTheirScrollPosition.value = true;
+        },
+      });
 
-    useDerivedValue(() => {
-      if (
-        index.value !== elementIndex &&
-        requestOtherViewsToSyncTheirScrollPosition.value
-      ) {
-        const nextScrollY = -1 * translateY.value;
-        // if another tab just started showing header or scroll is less than translated header.
-        if (nextScrollY < headerHeight || scrollY.value < nextScrollY) {
-          scrollTo(aref, 0, nextScrollY, false);
-        }
-      }
-    });
-
-    const panRef = React.useRef();
-    const nativeRef = React.useRef();
-
-    const gestureHandler = useAnimatedGestureHandler({
-      onActive: (e, ctx: any) => {
+      useDerivedValue(() => {
         if (
-          enablePullToRefresh.value &&
-          elementIndex === index.value &&
-          refreshGestureState.value !== "refreshing"
+          index.value !== elementIndex &&
+          requestOtherViewsToSyncTheirScrollPosition.value
         ) {
-          pullToRefreshY.value = e.translationY;
-          if (e.translationY < 100) {
-            refreshGestureState.value = "cancelling";
-          } else if (e.translationY > ctx.lastY) {
-            refreshGestureState.value = "pulling";
-            ctx.lastPullingY = e.translationY;
-          } else if (e.translationY < ctx.lastPullingY - 40) {
-            refreshGestureState.value = "cancelling";
-          }
-          ctx.lastY = e.translationY;
-        }
-      },
-      onEnd() {
-        if (elementIndex === index.value) {
-          pullToRefreshY.value = 0;
-          if (refreshGestureState.value === "pulling") {
-            refreshGestureState.value = "refreshing";
-          } else {
-            refreshGestureState.value = "idle";
+          const nextScrollY = -1 * translateY.value;
+          // if another tab just started showing header or scroll is less than translated header.
+          if (nextScrollY < headerHeight || scrollY.value < nextScrollY) {
+            scrollTo(aref, 0, nextScrollY, false);
           }
         }
-      },
-    });
+      });
 
-    return (
-      <PanGestureHandler
-        ref={panRef}
-        onGestureEvent={gestureHandler}
-        failOffsetX={[-100, 100]}
-        activeOffsetY={60}
-        simultaneousHandlers={[panRef, nativeRef]}
-      >
-        <Reanimated.View>
-          <NativeViewGestureHandler ref={nativeRef}>
-            {/* @ts-ignore - don't know how to fix this */}
-            <Comp
-              scrollEventThrottle={16}
-              onScroll={scrollHandler}
-              bouncesZoom={false}
-              alwaysBounceHorizontal={false}
-              automaticallyAdjustContentInsets={false}
-              ref={mergeRef([ref, aref])}
-              contentContainerStyle={{
-                paddingTop: tabListHeight + headerHeight,
-              }}
-              {...props}
-            />
-          </NativeViewGestureHandler>
-        </Reanimated.View>
-      </PanGestureHandler>
-    );
-  });
+      const panRef = React.useRef();
+      const nativeRef = React.useRef();
+
+      const gestureHandler = useAnimatedGestureHandler({
+        onActive: (e, ctx: any) => {
+          if (
+            enablePullToRefresh.value &&
+            elementIndex === index.value &&
+            refreshGestureState.value !== "refreshing"
+          ) {
+            pullToRefreshY.value = e.translationY;
+            if (e.translationY > ctx.lastY) {
+              refreshGestureState.value = "pulling";
+              ctx.lastPullingY = e.translationY;
+            } else if (e.translationY < ctx.lastPullingY - 40) {
+              refreshGestureState.value = "cancelling";
+            }
+            ctx.lastY = e.translationY;
+          }
+        },
+        onEnd() {
+          if (elementIndex === index.value) {
+            pullToRefreshY.value = 0;
+            if (refreshGestureState.value === "pulling") {
+              refreshGestureState.value = "refreshing";
+            } else if (refreshGestureState.value !== "refreshing") {
+              refreshGestureState.value = "idle";
+            }
+          }
+        },
+      });
+
+      return (
+        <PanGestureHandler
+          ref={panRef}
+          onGestureEvent={gestureHandler}
+          failOffsetX={[-100, 100]}
+          activeOffsetY={80}
+          simultaneousHandlers={[panRef, nativeRef]}
+        >
+          <Reanimated.View>
+            <NativeViewGestureHandler ref={nativeRef}>
+              {/* @ts-ignore - don't know how to fix this */}
+              <Comp
+                scrollEventThrottle={16}
+                onScroll={scrollHandler}
+                bouncesZoom={false}
+                alwaysBounceHorizontal={false}
+                automaticallyAdjustContentInsets={false}
+                ref={mergeRef([ref, aref])}
+                contentContainerStyle={{
+                  paddingTop: tabListHeight + headerHeight,
+                }}
+                ListHeaderComponent={() => (
+                  <PullToRefresh
+                    isRefreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                )}
+                {...props}
+              />
+            </NativeViewGestureHandler>
+          </Reanimated.View>
+        </PanGestureHandler>
+      );
+    }
+  );
 }
 
 const TabScrollView = makeScrollableComponent<
@@ -521,3 +536,84 @@ const utilStyles = StyleSheet.create({
     overflow: "hidden",
   },
 });
+
+type PullToRefreshProps = {
+  onRefresh: () => void;
+  isRefreshing?: boolean;
+};
+
+export const PullToRefresh = ({
+  onRefresh,
+  isRefreshing,
+}: PullToRefreshProps) => {
+  if (Platform.OS === "web") {
+    return null;
+  }
+
+  const { refreshGestureState } = useTabsContext();
+  const [refreshState, setRefreshState] = React.useState("idle");
+
+  useEffect(() => {
+    if (isRefreshing) {
+      setRefreshState("refreshing");
+    } else {
+      refreshGestureState.value = "idle";
+    }
+  }, [isRefreshing]);
+
+  useAnimatedReaction(
+    () => {
+      return refreshGestureState.value;
+    },
+    (v) => {
+      if (v === "refreshing") {
+        runOnJS(onRefresh)();
+      } else {
+        runOnJS(setRefreshState)(v);
+      }
+    },
+    []
+  );
+
+  const style = useAnimatedStyle(() => {
+    if (refreshGestureState.value === "refreshing") {
+      return { height: 50 };
+    } else if (refreshGestureState.value === "pulling") {
+      return {
+        height: withTiming(50, { duration: 400 }),
+      };
+    } else {
+      return {
+        height: withTiming(0, { duration: 400 }),
+      };
+    }
+  });
+
+  return (
+    <Reanimated.View
+      style={[
+        style,
+        tw.style("items-center justify-center bg-white dark:bg-black"),
+      ]}
+    >
+      <MotiView
+        from={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 200, type: "timing" }}
+        exit={{ opacity: 0 }}
+      >
+        {refreshState === "pulling" && (
+          <Text tw="dark:text-white text-gray-900 text-sm">
+            Release to refresh
+          </Text>
+        )}
+        {refreshState === "cancelling" && (
+          <Text tw="dark:text-white text-gray-900 text-sm">
+            Pull to refresh
+          </Text>
+        )}
+        {refreshState === "refreshing" && <ActivityIndicator />}
+      </MotiView>
+    </Reanimated.View>
+  );
+};

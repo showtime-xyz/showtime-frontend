@@ -40,14 +40,7 @@ type Props = {
   onRefresh: any;
 };
 
-const Feed = ({
-  activity,
-  activityPage,
-  getNext,
-  isLoading,
-  isRefreshing,
-  onRefresh,
-}: Props) => {
+const Feed = ({ activity, activityPage, getNext, isLoading }: Props) => {
   const { width } = useWindowDimensions();
 
   const [selected, setSelected] = useState(0);
@@ -89,13 +82,20 @@ const Feed = ({
   useScrollToTop(listRef1);
   useScrollToTop(listRef2);
 
+  const [isRefreshing, setRefreshing] = useState(false);
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 3000);
+  };
+
   return (
     <Tabs.Root
       onIndexChange={onIndexChange}
       initialIndex={selected}
       tabListHeight={TAB_LIST_HEIGHT}
     >
-      <PullToRefresh isRefreshing={isRefreshing} onRefresh={onRefresh} />
       <Tabs.Header>
         <View tw="bg-white dark:bg-black">
           <Text
@@ -139,7 +139,8 @@ const Feed = ({
           data={activity}
           keyExtractor={keyExtractor}
           renderItem={renderItem}
-          bounces={false}
+          refreshing={isRefreshing}
+          onRefresh={onRefresh}
           getItemLayout={getItemLayout}
           scrollEventThrottle={16}
           onEndReached={getNext}
@@ -170,6 +171,8 @@ const Feed = ({
           scrollEventThrottle={16}
           onEndReached={getNext}
           ref={listRef2}
+          refreshing={isRefreshing}
+          onRefresh={onRefresh}
           onEndReachedThreshold={
             activityPage === 1
               ? 0.2
