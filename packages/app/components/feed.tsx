@@ -1,6 +1,7 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useScrollToTop } from "@react-navigation/native";
 
 import { View, ActivityIndicator, Text } from "design-system";
 import { Card } from "design-system/card";
@@ -82,6 +83,12 @@ const Feed = ({
     [isLoading]
   );
 
+  const listRef1 = useRef(null);
+  const listRef2 = useRef(null);
+
+  useScrollToTop(listRef1);
+  useScrollToTop(listRef2);
+
   return (
     <Tabs.Root
       onIndexChange={onIndexChange}
@@ -136,6 +143,7 @@ const Feed = ({
           getItemLayout={getItemLayout}
           scrollEventThrottle={16}
           onEndReached={getNext}
+          ref={listRef1}
           onEndReachedThreshold={
             activityPage === 1
               ? 0.2
@@ -153,7 +161,31 @@ const Feed = ({
           ListFooterComponent={ListFooterComponent}
         />
         <Tabs.View style={{ height: 200, backgroundColor: "#FEF2F2" }} />
-        <Tabs.View style={{ height: 300, backgroundColor: "#D1FAE5" }} />
+        <Tabs.FlatList
+          data={activity}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+          bounces={false}
+          getItemLayout={getItemLayout}
+          scrollEventThrottle={16}
+          onEndReached={getNext}
+          ref={listRef2}
+          onEndReachedThreshold={
+            activityPage === 1
+              ? 0.2
+              : activityPage < 4
+              ? 0.3
+              : activityPage < 6
+              ? 0.7
+              : 0.8
+          }
+          removeClippedSubviews={Platform.OS !== "web"}
+          numColumns={1}
+          windowSize={4}
+          initialNumToRender={2}
+          alwaysBounceVertical={false}
+          ListFooterComponent={ListFooterComponent}
+        />
         <Tabs.View style={{ height: 100, backgroundColor: "#2563EB" }} />
       </Tabs.Pager>
     </Tabs.Root>

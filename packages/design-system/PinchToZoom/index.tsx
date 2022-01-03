@@ -24,6 +24,7 @@ const useLayout = () => {
 
 export const PinchToZoom = ({ children }) => {
   const scale = useSharedValue(1);
+  const zIndex = useSharedValue(1);
   const origin = { x: useSharedValue(0), y: useSharedValue(0) };
   const translation = { x: useSharedValue(0), y: useSharedValue(0) };
   const { onLayout, layout } = useLayout();
@@ -67,6 +68,8 @@ export const PinchToZoom = ({ children }) => {
       translation.y.value = ctx.translateOriginY - origin.y.value;
 
       ctx.prevPointers = e.numberOfPointers;
+
+      zIndex.value = 10;
     },
     onEnd() {
       scale.value = withSpring(1, {
@@ -81,6 +84,8 @@ export const PinchToZoom = ({ children }) => {
         stiffness: 60,
         overshootClamping: true,
       });
+
+      zIndex.value = 1;
     },
   });
 
@@ -89,6 +94,7 @@ export const PinchToZoom = ({ children }) => {
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
+      zIndex: zIndex.value,
       transform: [
         { translateX: translation.x.value },
         {
@@ -106,17 +112,11 @@ export const PinchToZoom = ({ children }) => {
     };
   }, [imageTopForSettingTransformOrigin, imageLeftForSettingTransformOrigin]);
 
-  const clonedChildren = useMemo(
-    () =>
-      React.cloneElement(children, {
-        style: [StyleSheet.flatten(children.props.style), animatedStyles],
-      }),
-    [children]
-  );
-
   return (
     <PinchGestureHandler onGestureEvent={handler}>
-      <Animated.View onLayout={onLayout}>{clonedChildren}</Animated.View>
+      <Animated.View onLayout={onLayout} style={animatedStyles}>
+        {children}
+      </Animated.View>
     </PinchGestureHandler>
   );
 };

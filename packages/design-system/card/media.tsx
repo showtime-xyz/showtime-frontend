@@ -3,7 +3,8 @@ import { FlatList, useWindowDimensions } from "react-native";
 import { Video } from "expo-av";
 import Router from "next/router";
 
-import { View, Image, Pressable } from "design-system";
+import { View, Image } from "design-system";
+import { Pressable } from "react-native";
 import { useRouter } from "app/navigation/use-router";
 
 const getImageUrl = (imgUrl: string, tokenAspectRatio: number) => {

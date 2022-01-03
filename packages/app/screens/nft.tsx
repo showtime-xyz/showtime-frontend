@@ -9,6 +9,7 @@ import { axios } from "app/lib/axios";
 import { Close, MoreHorizontal } from "design-system/icon";
 import { useRouter } from "app/navigation/use-router";
 import { tw } from "design-system/tailwind";
+import { PinchToZoom } from "design-system/PinchToZoom";
 
 type Query = {
   id: string;
@@ -67,7 +68,9 @@ function NftScreen() {
         </View>
       </View>
 
-      <Media nfts={[nft]} />
+      <PinchToZoom>
+        <Media nfts={[nft]} />
+      </PinchToZoom>
     </View>
   );
 }

@@ -12,7 +12,8 @@ import { View } from "design-system";
 function Img({ source, width, height, ...props }: ReactNativeImageProps) {
   return (
     <ReactNativeImage
-      source={source}
+      // @ts-ignore
+      source={source.uri ? { uri: source.uri, cache: "force-cache" } : source}
       width={width}
       height={height}
       resizeMode="cover" // Default
