@@ -9,7 +9,8 @@ interface SelectListProps {
 export const SelectList: React.FC<SelectListProps> = forwardRef(
   ({ open, children, ...rest }, ref) => {
     const containerStyle = useMemo(
-      () => tw`z-20	absolute w-full top-100% p-1 mt-2 bg-white dark:bg-black rounded-2xl`,
+      () =>
+        tw`z-20 absolute w-full top-100% p-1 mt-2 bg-white dark:bg-black rounded-2xl`,
       []
     );
     return open ? (
