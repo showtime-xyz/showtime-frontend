@@ -3,7 +3,7 @@ import { ActivityIndicator as DripsyActivityIndicator } from "dripsy";
 
 import { tw as tailwind } from "design-system/tailwind";
 
-type ActivityIndicatorProps = { tw?: string } & ComponentProps<
+type ActivityIndicatorProps = { tw?: string | string[] } & ComponentProps<
   typeof DripsyActivityIndicator
 >;
 

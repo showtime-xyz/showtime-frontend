@@ -3,7 +3,7 @@ import { ScrollView as DripsyScrollView } from "dripsy";
 
 import { tw as tailwind } from "design-system/tailwind";
 
-type ScrollViewProps = { tw?: string } & ComponentProps<
+type ScrollViewProps = { tw?: string | string[] } & ComponentProps<
   typeof DripsyScrollView
 >;
 

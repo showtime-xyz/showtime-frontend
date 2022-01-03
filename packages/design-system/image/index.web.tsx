@@ -92,7 +92,7 @@ function Img({
   );
 }
 
-type ImageProps = { tw?: string } & ComponentProps<typeof Img>;
+type ImageProps = { tw?: string | string[] } & ComponentProps<typeof Img>;
 
 function StyledImage({ tw, ...props }: ImageProps) {
   const width = Number(tailwind.style(tw).width);

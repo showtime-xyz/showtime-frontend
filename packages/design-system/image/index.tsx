@@ -27,7 +27,7 @@ function Img({ source, width, height, ...props }: ReactNativeImageProps) {
 }
 
 type ImageProps = {
-  tw?: string;
+  tw?: string | string[];
   alt?: string;
   blurhash?: string;
 } & ComponentProps<typeof Img>;

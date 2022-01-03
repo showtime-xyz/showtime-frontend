@@ -7,7 +7,7 @@ import { tw as tailwind } from "design-system/tailwind";
 const StyledSkeleton = styled(MotiSkeleton)();
 
 type Props = ComponentProps<typeof StyledSkeleton> & {
-  tw?: string;
+  tw?: string | string[];
 };
 
 function Skeleton({ tw, sx, ...props }: Props) {

@@ -5,7 +5,7 @@ import { tw as tailwind } from "design-system/tailwind";
 
 export type Props = ComponentProps<typeof MotiPressable> & {
   scaleTo?: number;
-  tw?: string;
+  tw?: string | string[];
 };
 
 export function Pressable({

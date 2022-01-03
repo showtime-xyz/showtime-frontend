@@ -9,7 +9,11 @@ type Variant = keyof Theme["text"];
 
 type TextProps = ComponentProps<typeof DripsyText>;
 
-export type Props = { tw?: string; variant?: Variant; htmlFor?: string } & Pick<
+export type Props = {
+  tw?: string | string[];
+  variant?: Variant;
+  htmlFor?: string;
+} & Pick<
   TextProps,
   | "onLayout"
   | "children"

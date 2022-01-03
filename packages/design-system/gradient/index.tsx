@@ -3,7 +3,7 @@ import { Gradient as DripsyGradient } from "@dripsy/gradient";
 
 import { tw as tailwind } from "design-system/tailwind";
 
-type GradientProps = { tw?: string; borderRadius?: number } & ComponentProps<
+type GradientProps = { tw?: string | string[]; borderRadius?: number } & ComponentProps<
   typeof DripsyGradient
 >;
 

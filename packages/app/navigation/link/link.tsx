@@ -24,7 +24,7 @@ function Link({ viewProps, ...props }: LinkProps) {
 type TextLinkProps = Props & {
   textProps?: TextProps;
   variant?: string;
-  tw?: string;
+  tw?: string | string[];
 };
 
 function TextLink({ textProps, variant, tw, ...props }: TextLinkProps) {
