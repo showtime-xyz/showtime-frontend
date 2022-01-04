@@ -1,8 +1,7 @@
 import { View } from "../view";
+import type { ModalProps } from "./types";
 
-export type ModalBackdropProps = {
-  close?: () => void;
-};
+interface ModalBackdropProps extends Pick<ModalProps, 'close'> {}
 
 export function ModalBackdrop({ close }: ModalBackdropProps) {
   return (
