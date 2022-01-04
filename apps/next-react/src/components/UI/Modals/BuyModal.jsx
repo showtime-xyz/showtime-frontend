@@ -495,7 +495,7 @@ const BuyPage = ({ token, quantity, setQuantity, buyToken, onClose }) => {
                   src="https://storage.googleapis.com/showtime-cdn/showtime-icon-sm.jpg"
                 />
                 <span className="text-gray-600 dark:text-gray-400 text-xs font-semibold">
-                  Showtime NFT
+                  Showtime
                 </span>
               </div>
               <p className="text-gray-600 dark:text-gray-400 text-xs font-semibold">
