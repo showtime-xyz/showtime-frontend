@@ -458,7 +458,7 @@ const MintModal = ({ open, onClose }) => {
       <Transition.Root show={open} as={Fragment}>
         <Dialog
           static
-          className={`xs:inset-0 modal-mobile-position fixed overflow-y-auto z-1 ${
+          className={`inset-0 modal-mobile-position fixed overflow-y-auto z-1 ${
             sourcePreview.src ? "pt-[96px] md:pt-0" : ""
           }`}
           open={open}
