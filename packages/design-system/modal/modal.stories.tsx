@@ -16,7 +16,7 @@ const Container = (props: any) => {
 };
 
 export const Basic: React.VFC<{}> = () => {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
   return (
     <Container>
       <Button onPress={() => setVisible(!visible)}>
@@ -54,7 +54,7 @@ export const Basic: React.VFC<{}> = () => {
 };
 
 export const AutoHeight: React.VFC<{}> = () => {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
   return (
     <Container>
       <Button onPress={() => setVisible(!visible)}>
