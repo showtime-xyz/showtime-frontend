@@ -1,10 +1,10 @@
 import { Meta } from "@storybook/react";
 
-import { Platform } from "./platform";
+import { Collection } from "./collection";
 
 export default {
-  component: Platform,
-  title: "Components/Card/Rows/Platform",
+  component: Collection,
+  title: "Components/Card/Rows/Collection",
 } as Meta;
 
 export const Basic: React.VFC<{}> = () => {
@@ -58,10 +58,10 @@ export const Basic: React.VFC<{}> = () => {
     mime_type: "image/png",
     chain_identifier: "137",
     token_listing_identifier: null,
-    collection_name: "Showtime NFT",
+    collection_name: "Showtime",
     collection_img_url:
       "https://storage.googleapis.com/showtime-cdn/showtime-icon-sm.jpg",
   };
 
-  return <Platform nft={nft} />;
+  return <Collection nft={nft} />;
 };
