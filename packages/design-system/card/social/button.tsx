@@ -14,22 +14,6 @@ type Props = {
   onPress?: () => void;
 };
 
-// Format big numbers
-function formatNumber(number: number) {
-  if (number > 1000000) {
-    return `${(number / 1000000).toFixed(1)}m`;
-  } else if (number > 1000) {
-    return `${(number / 1000).toFixed(1)}k`;
-  } else {
-    return number;
-  }
-}
-
-// Capitalize first letter of string
-function formatString(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
 function Button({
   variant,
   state = "default",
@@ -52,38 +36,10 @@ function Button({
       ? MessageFilled
       : Boost;
   const backgroundColor = "bg-gray-100";
-  const backgroundHoverColor =
-    variant === "like"
-      ? "bg-red-50"
-      : variant === "comment"
-      ? "bg-indigo-50"
-      : variant === "boost"
-      ? "bg-green-50"
-      : "";
-  const iconActiveColor =
-    variant === "like"
-      ? tw.color("red-500")
-      : variant === "comment"
-      ? tw.color("indigo-600")
-      : variant === "boost"
-      ? tw.color("green-600")
-      : tw.color("gray-400");
-  const textActiveColor =
-    variant === "like"
-      ? tw.style("text-red-500")
-      : variant === "comment"
-      ? tw.style("text-indigo-600 dark:text-indigo-500")
-      : variant === "boost"
-      ? tw.style("text-green-600 dark:text-green-500")
-      : tw.style("text-gray-600 dark:text-gray-400");
-  const hoverColor =
-    variant === "like"
-      ? tw.color("red-500")
-      : variant === "comment"
-      ? tw.color("indigo-500")
-      : variant === "boost"
-      ? tw.color("green-500")
-      : "";
+  const backgroundHoverColor = getBackgroundHoverColor(variant);
+  const iconActiveColor = getIconActiveColor(variant);
+  const textActiveColor = getTextActiveColor(variant);
+  const hoverColor = getHoverColor(variant);
   const defaultColor = active
     ? textActiveColor
     : tw.style("text-gray-600 dark:text-gray-400");
@@ -107,7 +63,7 @@ function Button({
         "h-8 p-2 flex-row items-center rounded-full dark:bg-gray-900",
         isHovered ? backgroundHoverColor : backgroundColor,
         isPressed && !isDisabled ? "dark:bg-gray-800" : "",
-        isDisabled ? "opacity-40 cursor-not-allowed" : "",
+        isDisabled ? "opacity-40" : "", // TODO: add `cursor-not-allowed` utility to twrnc
       ]}
       onHoverIn={onHoverIn}
       onHoverOut={onHoverOut}
@@ -119,7 +75,13 @@ function Button({
       <Icon
         width={16}
         height={16}
-        color={active ? iconActiveColor : isHovered && !isDisabled ? hoverColor : tw.color("gray-400")}
+        color={
+          active
+            ? iconActiveColor
+            : isHovered && !isDisabled
+            ? hoverColor
+            : tw.color("gray-400")
+        }
       />
       <Text
         variant="text-13"
@@ -127,10 +89,82 @@ function Button({
         // @ts-ignore
         sx={textStyle}
       >
-          {count > 0 ? formatNumber(count) : formatString(variant)}
+        {count > 0 ? formatNumber(count) : formatString(variant)}
       </Text>
     </Pressable>
   );
+}
+
+// Format big numbers
+function formatNumber(number: number) {
+  if (number > 1000000) {
+    return `${(number / 1000000).toFixed(1)}m`;
+  } else if (number > 1000) {
+    return `${(number / 1000).toFixed(1)}k`;
+  } else {
+    return number;
+  }
+}
+
+// Capitalize first letter of string
+function formatString(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// Get background hover color
+function getBackgroundHoverColor(variant: Props["variant"]) {
+  switch (variant) {
+    case "like":
+      return "bg-red-50";
+    case "comment":
+      return "bg-indigo-50";
+    case "boost":
+      return "bg-green-50";
+    default:
+      return "";
+  }
+}
+
+// Get icon active color
+function getIconActiveColor(variant: Props["variant"]) {
+    switch (variant) {
+      case "like":
+        return tw.color("red-500");
+      case "comment":
+        return tw.color("indigo-600");
+      case "boost":
+        return tw.color("green-600");
+      default:
+        return tw.color("gray-400");
+    }
+}
+
+// Get text active color
+function getTextActiveColor(variant: Props["variant"]) {
+  switch (variant) {
+    case "like":
+      return tw.style("text-red-500");
+    case "comment":
+      return tw.style("text-indigo-600 dark:text-indigo-500");
+    case "boost":
+      return tw.style("text-green-600 dark:text-green-500");
+    default:
+      return tw.style("text-gray-600 dark:text-gray-400");
+  }
+}
+
+// Get hover color
+function getHoverColor(variant: Props["variant"]) {
+  switch (variant) {
+    case "like":
+      return tw.color("red-500");
+    case "comment":
+      return tw.color("indigo-500");
+    case "boost":
+      return tw.color("green-500");
+    default:
+      return "";
+  }
 }
 
 export { Button };
