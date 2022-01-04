@@ -1,7 +1,6 @@
 import { Meta } from "@storybook/react";
 
 import { Spinner } from "./index";
-import { View } from "../view";
 
 export default {
   component: Spinner,
