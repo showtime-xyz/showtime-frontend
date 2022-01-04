@@ -6,7 +6,7 @@ import { colors } from "../../tailwind/colors";
 import ChevronDown from "../../icon/ChevronDown";
 
 interface ChevronDownIconProps extends SvgProps {
-  open: boolean
+  open: boolean;
 }
 
 export const ChevronDownIcon: React.FC<ChevronDownIconProps> = ({
@@ -26,7 +26,10 @@ export const ChevronDownIcon: React.FC<ChevronDownIconProps> = ({
         easing: Easing.bezier(0.87, 0, 0.13, 1),
       }}
     >
-      <ChevronDown fill={isDarkMode ? colors.gray[100] : colors.gray[900] } {...rest} />
+      <ChevronDown
+        fill={isDarkMode ? colors.gray[100] : colors.gray[900]}
+        {...rest}
+      />
     </MotiView>
   );
 };

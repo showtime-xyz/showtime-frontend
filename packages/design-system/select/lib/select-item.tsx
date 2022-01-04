@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 import { Pressable } from "dripsy";
-import { useIsDarkMode, useOnHover, useOnPress } from "../../hooks";
+import { useIsDarkMode, useOnHover } from "../../hooks";
 import { Text } from "../../text";
 import { tw } from "../../tailwind";
 import { colors } from "../../tailwind/colors";
@@ -52,17 +52,20 @@ export const SelectItem: React.FC<SelectItemProps> = ({
     []
   );
   //#endregion
-  
-  //#region callbacks
-  const handlePress = useCallback((e) => {
-    if(onClick) {
-      onClick(e)
-    }
 
-    if(onPress) {
-      onPress(value)
-    }
-  }, [value])
+  //#region callbacks
+  const handlePress = useCallback(
+    (e) => {
+      if (onClick) {
+        onClick(e);
+      }
+
+      if (onPress) {
+        onPress(value);
+      }
+    },
+    [value, onClick, onPress]
+  );
   //#endregion
 
   return (

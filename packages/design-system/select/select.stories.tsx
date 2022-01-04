@@ -57,12 +57,7 @@ export const Disabled: React.FC = () => {
   const [value, setValue] = useState(-1);
   return (
     <Container>
-      <Select
-        value={value}
-        disabled
-        options={options}
-        onChange={setValue}
-      />
+      <Select value={value} disabled options={options} onChange={setValue} />
     </Container>
   );
 };

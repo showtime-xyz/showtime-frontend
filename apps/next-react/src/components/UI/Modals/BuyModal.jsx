@@ -495,7 +495,7 @@ const BuyPage = ({ token, quantity, setQuantity, buyToken, onClose }) => {
                   src="https://storage.googleapis.com/showtime-cdn/showtime-icon-sm.jpg"
                 />
                 <span className="text-gray-600 dark:text-gray-400 text-xs font-semibold">
-                  Showtime NFT
+                  Showtime
                 </span>
               </div>
               <p className="text-gray-600 dark:text-gray-400 text-xs font-semibold">
@@ -782,7 +782,7 @@ const AllowanceRequiredPage = ({
     setTransactionHash(transaction);
     setModalPage(MODAL_PAGES.PROCESSING_ALLOWANCE);
 
-    web3.once(transaction, buyToken);
+    web3.waitForTransaction(transaction).then(buyToken)
   };
 
   return (

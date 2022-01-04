@@ -82,7 +82,7 @@ export const useOnPress = () => {
   }, [state]);
 
   return pressHandler;
-}
+};
 
 export function useUpdateEffect(effect, dependencies = []) {
   const isInitialMount = useRef(true);
