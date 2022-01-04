@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Media } from "design-system/card/media";
 import { View } from "design-system/view";
 import { Activity } from "design-system/activity";
@@ -7,7 +8,7 @@ type Props = {
   variant: "nft" | "activity" | "market";
 };
 
-function Card({ act, variant }: Props) {
+function CardImpl({ act, variant }: Props) {
   const { id, nfts, actor } = act;
 
   return (
@@ -18,4 +19,4 @@ function Card({ act, variant }: Props) {
   );
 }
 
-export { Card };
+export const Card = memo(CardImpl);
