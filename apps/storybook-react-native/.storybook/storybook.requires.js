@@ -23,6 +23,8 @@ const getStories = () => {
     require("../../../packages/design-system/activity/activity.stories.tsx"),
     require("../../../packages/design-system/avatar/avatar.stories.tsx"),
     require("../../../packages/design-system/bottom-sheet/bottom-sheet.stories.tsx"),
+    require("../../../packages/design-system/card/social/button.stories.tsx"),
+    require("../../../packages/design-system/card/social/index.stories.tsx"),
     require("../../../packages/design-system/checkbox/checkbox.stories.tsx"),
     require("../../../packages/design-system/data-pill/data-pill.stories.tsx"),
     require("../../../packages/design-system/input/input.stories.tsx"),
