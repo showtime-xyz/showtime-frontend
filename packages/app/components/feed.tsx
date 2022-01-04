@@ -155,37 +155,14 @@ const Feed = ({ activity, activityPage, getNext, isLoading }: Props) => {
           ListFooterComponent={ListFooterComponent}
         />
         <Tabs.View style={{ height: 200, backgroundColor: "#FEF2F2" }} />
-        <Tabs.FlatList
-          data={activity}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          bounces={false}
-          getItemLayout={getItemLayout}
-          scrollEventThrottle={16}
-          onEndReached={getNext}
-          ref={listRef2}
-          refreshing={isRefreshing}
-          onRefresh={onRefresh}
-          onEndReachedThreshold={
-            activityPage === 1
-              ? 0.2
-              : activityPage < 4
-              ? 0.3
-              : activityPage < 6
-              ? 0.7
-              : 0.8
-          }
-          removeClippedSubviews={Platform.OS !== "web"}
-          numColumns={1}
-          windowSize={4}
-          initialNumToRender={2}
-          alwaysBounceVertical={false}
-          ListFooterComponent={ListFooterComponent}
-        />
+        <Tabs.View style={{ height: 200, backgroundColor: "#FEF2F2" }} />
+
         <Tabs.View style={{ height: 100, backgroundColor: "#2563EB" }} />
       </Tabs.Pager>
     </Tabs.Root>
   );
 };
+
+const AllActivityList = () => {};
 
 export { Feed };
