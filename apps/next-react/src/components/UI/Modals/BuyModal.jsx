@@ -782,7 +782,7 @@ const AllowanceRequiredPage = ({
     setTransactionHash(transaction);
     setModalPage(MODAL_PAGES.PROCESSING_ALLOWANCE);
 
-    web3.once(transaction, buyToken);
+    web3.waitForTransaction(transaction).then(buyToken)
   };
 
   return (
