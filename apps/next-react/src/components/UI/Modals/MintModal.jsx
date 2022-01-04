@@ -46,7 +46,11 @@ const MintModal = ({ open, onClose }) => {
   const { resolvedTheme } = useTheme();
   const isWeb3ModalActive = useRef(false);
   const confettiCanvas = useRef(null);
-  const [modalPage, setModalPage] = useState(myProfile?.wallet_addresses_excluding_email_v2?.length === 0 ? MODAL_PAGES.NO_WALLET : MODAL_PAGES.GENERAL);
+  const [modalPage, setModalPage] = useState(
+    myProfile?.wallet_addresses_excluding_email_v2?.length === 0
+      ? MODAL_PAGES.NO_WALLET
+      : MODAL_PAGES.GENERAL
+  );
 
   useEffect(() => {
     if (myProfile?.wallet_addresses_excluding_email_v2?.length === 0) {
@@ -124,7 +128,11 @@ const MintModal = ({ open, onClose }) => {
     setHasAcceptedTerms(false);
     setTransactionHash("");
     setTokenID("");
-    setModalPage(myProfile?.wallet_addresses_excluding_email_v2?.length === 0 ? MODAL_PAGES.NO_WALLET : MODAL_PAGES.GENERAL);
+    setModalPage(
+      myProfile?.wallet_addresses_excluding_email_v2?.length === 0
+        ? MODAL_PAGES.NO_WALLET
+        : MODAL_PAGES.GENERAL
+    );
   };
 
   const saveDraft = () =>
