@@ -6,6 +6,7 @@ const ACTIVITY_PAGE_LENGTH = 5; // 5 activity items per activity page
 const useInfiniteListLoader = (fetcher) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState("");
   const page = useRef(1);
 
@@ -22,6 +23,7 @@ const useInfiniteListLoader = (fetcher) => {
       setError("Something went wrong!");
     } finally {
       setIsLoading(false);
+      setIsRefreshing(false);
     }
   };
 
@@ -30,15 +32,20 @@ const useInfiniteListLoader = (fetcher) => {
     error,
     data,
     isLoading: data.length === 0 && isLoading,
-    isRefreshing: page.current === 1 && isLoading,
+    isRefreshing,
     isLoadingMore: page.current > 1 && isLoading,
     fetchMore: () => {
-      page.current++;
-      fetch();
+      if (!isLoading) {
+        page.current++;
+        fetch();
+      }
     },
     refresh: () => {
-      page.current = 1;
-      fetch();
+      if (!isRefreshing) {
+        setIsRefreshing(true);
+        page.current = 1;
+        fetch();
+      }
     },
     retry: () => {
       fetch();
@@ -58,8 +65,10 @@ export const useAllActivity = () => {
     retry,
     isRefreshing,
   } = useInfiniteListLoader((page) => {
+    const url = `/v2/activity?page=${page}&type_id=0&limit=${ACTIVITY_PAGE_LENGTH}`;
+
     return axios({
-      url: `/v2/activity?page=${page}&type_id=0&limit=${ACTIVITY_PAGE_LENGTH}`,
+      url,
       method: "GET",
     });
   });

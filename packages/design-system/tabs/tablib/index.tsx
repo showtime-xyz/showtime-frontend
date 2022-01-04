@@ -550,7 +550,9 @@ export const PullToRefresh = ({
   }
 
   const { refreshGestureState } = useTabsContext();
-  const [refreshState, setRefreshState] = React.useState("idle");
+  const [refreshState, setRefreshState] = React.useState(
+    isRefreshing ? "refreshing" : "idle"
+  );
 
   useEffect(() => {
     if (isRefreshing) {
@@ -567,11 +569,10 @@ export const PullToRefresh = ({
     (v) => {
       if (v === "refreshing") {
         runOnJS(onRefresh)();
-      } else {
-        runOnJS(setRefreshState)(v);
       }
+      runOnJS(setRefreshState)(v);
     },
-    []
+    [onRefresh]
   );
 
   const style = useAnimatedStyle(() => {
