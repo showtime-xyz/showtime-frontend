@@ -38,7 +38,6 @@ import Tippy from "@tippyjs/react";
 import TezosIcon from "./Icons/TezosIcon";
 import ShowtimeIcon from "./Icons/ShowtimeIcon";
 import BuyModal from "./UI/Modals/BuyModal";
-import useFlags, { FLAGS } from "@/hooks/useFlags";
 import ListModal from "./UI/Modals/ListModal";
 import useProfile from "@/hooks/useProfile";
 
@@ -54,7 +53,6 @@ const TokenDetailBody = ({
   parentReportModalOpen, // for full page view only, not modal view
   parentSetReportModalOpen, // for full page view only, not modal view
 }) => {
-  const { [FLAGS.hasMinting]: canList } = useFlags();
   useEffect(() => {
     if (
       !item.mime_type?.startsWith("model") ||
@@ -627,7 +625,7 @@ const TokenDetailBody = ({
                   />
                 </div>
 
-                {canList && item.listing ? (
+                {item.listing ? (
                   <button
                     disabled={ifListedIsOwner}
                     title="Buy on Showtime"
@@ -642,8 +640,7 @@ const TokenDetailBody = ({
                         : `Buy for ${item.listing.min_price} $${item.listing.currency}`}
                     </p>
                   </button>
-                ) : canList &&
-                  isOwnedByUser &&
+                ) : isOwnedByUser &&
                   SHOWTIME_CONTRACTS.includes(item.contract_address) ? (
                   <button
                     title="List on Showtime"

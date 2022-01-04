@@ -26,7 +26,6 @@ import OrbitIcon from "./Icons/OrbitIcon";
 import BuyModal from "./UI/Modals/BuyModal";
 import useSWR from "swr";
 import backend from "@/lib/backend";
-import useFlags, { FLAGS } from "@/hooks/useFlags";
 import useProfile from "@/hooks/useProfile";
 
 const SpotlightItem = ({
@@ -35,7 +34,6 @@ const SpotlightItem = ({
   item,
   removeSpotlightItem,
 }) => {
-  const { [FLAGS.hasMinting]: canList } = useFlags();
   const { data: thisItem, mutate: mutateItem } = useSWR(
     () => pageProfile && `/v1/spotlight/${pageProfile.profile_id}`,
     (url) => backend.get(url).then((res) => res.data.data),
@@ -510,7 +508,7 @@ const SpotlightItem = ({
                         {item.collection_name}
                       </p>
                     </div>
-                    {canList && item.listing && (
+                    {item.listing && (
                       <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
                         {item.listing.total_edition_quantity} Editions /{" "}
                         {parseInt(item.listing.royalty_percentage)}% Royalties
@@ -602,7 +600,7 @@ const SpotlightItem = ({
                   </div>
                 </div>
                 <div className="mt-8 inline-block">
-                  {canList && item.listing ? (
+                  {item.listing ? (
                     <Button
                       disabled={ifListedIsOwner}
                       style="primary"
