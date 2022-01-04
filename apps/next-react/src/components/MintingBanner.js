@@ -34,23 +34,13 @@ const MintingBanner = ({ openMintModal }) => {
               </a>
               <span className="hidden md:inline">
                 <span className="text-xs mr-1 -mt-1 inline-block">🎉</span> You
-                can now create NFTs for free (no gas costs)!{" "}
+                can now create, buy and sell NFTs for free (no gas costs)!{" "}
                 <button
                   className="text-gray-900 dark:text-gray-100 font-bold"
                   onClick={user ? openMintModal : () => setLoginModalOpen(true)}
                 >
                   Get started
-                </button>{" "}
-                and{" "}
-                <a
-                  className="text-gray-900 dark:text-gray-100 font-bold"
-                  href="/claim"
-                  target="_blank"
-                >
-                  claim our genesis drop NFT
-                </a>{" "}
-                to celebrate.
-              </span>
+                </button>.
             </p>
           </div>
           <div className="absolute inset-y-0 right-2 flex items-center">
