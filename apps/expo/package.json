@@ -99,7 +99,7 @@
     "react-native-ios-context-menu": "1.7.0",
     "react-native-level-fs": "^3.0.0",
     "react-native-localhost": "^1.0.0",
-    "react-native-mmkv": "1.3.2",
+    "react-native-mmkv": "^1.6.1",
     "react-native-os": "^1.0.1",
     "react-native-pager-view": "^5.4.9",
     "react-native-popper": "^0.3.2",
