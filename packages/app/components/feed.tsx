@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useScrollToTop } from "@react-navigation/native";
+import { useAllActivity } from "app/hooks/service-hooks";
 
 import { View, Spinner, Text } from "design-system";
 import { Card } from "design-system/card";
@@ -35,54 +36,11 @@ type Props = {
   onRefresh: any;
 };
 
-const Feed = ({ activity, activityPage, getNext, isLoading }: Props) => {
-  const { width } = useWindowDimensions();
-
+const Feed = () => {
   const [selected, setSelected] = useState(0);
   const onIndexChange = (index) => {
     setSelected(index);
     console.log("index changed", index);
-  };
-
-  const keyExtractor = useCallback((item) => item.id, []);
-
-  const renderItem = useCallback(
-    ({ item }) => <Card act={item} variant="activity" />,
-    []
-  );
-
-  const getItemLayout = useCallback(
-    (data, index) => {
-      const itemHeight = data?.[index]?.nfts.length === 2 ? width / 2 : width;
-      const headerHeight = 0;
-      const footerHeight = 0;
-
-      return {
-        length: itemHeight + headerHeight + footerHeight,
-        offset: (itemHeight + headerHeight + footerHeight) * index,
-        index,
-      };
-    },
-    [width]
-  );
-
-  const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoading} />,
-    [isLoading]
-  );
-
-  const listRef1 = useRef(null);
-  const listRef2 = useRef(null);
-
-  useScrollToTop(listRef1);
-  useScrollToTop(listRef2);
-
-  const [isRefreshing, setRefreshing] = useState(false);
-  const onRefresh = () => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 3000);
   };
 
   return (
@@ -127,33 +85,7 @@ const Feed = ({ activity, activityPage, getNext, isLoading }: Props) => {
         <SelectedTabIndicator />
       </Tabs.List>
       <Tabs.Pager>
-        <Tabs.FlatList
-          data={activity}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          refreshing={isRefreshing}
-          onRefresh={onRefresh}
-          getItemLayout={getItemLayout}
-          scrollEventThrottle={16}
-          onEndReached={getNext}
-          ref={listRef1}
-          style={tw.style("bg-white dark:bg-black")}
-          onEndReachedThreshold={
-            activityPage === 1
-              ? 0.2
-              : activityPage < 4
-              ? 0.3
-              : activityPage < 6
-              ? 0.7
-              : 0.8
-          }
-          removeClippedSubviews={Platform.OS !== "web"}
-          numColumns={1}
-          windowSize={4}
-          initialNumToRender={2}
-          alwaysBounceVertical={false}
-          ListFooterComponent={ListFooterComponent}
-        />
+        <AllActivityList />
         <Tabs.View style={{ height: 200, backgroundColor: "#FEF2F2" }} />
         <Tabs.View style={{ height: 200, backgroundColor: "#FEF2F2" }} />
 
@@ -163,6 +95,80 @@ const Feed = ({ activity, activityPage, getNext, isLoading }: Props) => {
   );
 };
 
-const AllActivityList = () => {};
+const AllActivityList = () => {
+  const { width } = useWindowDimensions();
+  const {
+    isLoading,
+    size,
+    activity,
+    getNext,
+    onRefresh: mutate,
+  } = useAllActivity();
+
+  const keyExtractor = useCallback((item) => item.id, []);
+
+  const renderItem = useCallback(
+    ({ item }) => <Card act={item} variant="activity" />,
+    []
+  );
+
+  const listRef1 = useRef(null);
+  const listRef2 = useRef(null);
+
+  useScrollToTop(listRef1);
+  useScrollToTop(listRef2);
+
+  const [isRefreshing, setRefreshing] = useState(false);
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 3000);
+  };
+
+  const getItemLayout = useCallback(
+    (data, index) => {
+      const itemHeight = data?.[index]?.nfts.length === 2 ? width / 2 : width;
+      const headerHeight = 0;
+      const footerHeight = 0;
+
+      return {
+        length: itemHeight + headerHeight + footerHeight,
+        offset: (itemHeight + headerHeight + footerHeight) * index,
+        index,
+      };
+    },
+    [width]
+  );
+
+  const ListFooterComponent = useCallback(
+    () => <Footer isLoading={isLoading} />,
+    [isLoading]
+  );
+
+  return (
+    <Tabs.FlatList
+      data={activity}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
+      refreshing={isRefreshing}
+      onRefresh={onRefresh}
+      getItemLayout={getItemLayout}
+      scrollEventThrottle={16}
+      onEndReached={getNext}
+      ref={listRef1}
+      style={tw.style("bg-white dark:bg-black")}
+      onEndReachedThreshold={
+        size === 1 ? 0.2 : size < 4 ? 0.3 : size < 6 ? 0.7 : 0.8
+      }
+      removeClippedSubviews={Platform.OS !== "web"}
+      numColumns={1}
+      windowSize={4}
+      initialNumToRender={2}
+      alwaysBounceVertical={false}
+      ListFooterComponent={ListFooterComponent}
+    />
+  );
+};
 
 export { Feed };
