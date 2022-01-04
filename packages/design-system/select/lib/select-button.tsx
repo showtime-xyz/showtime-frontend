@@ -4,7 +4,7 @@ import { Pressable } from "dripsy";
 import { useIsDarkMode, useOnHover, useOnPress } from "../../hooks";
 import { Text } from "../../text";
 import { ChevronDownIcon } from "./chevron-down-icon";
-import { tw, } from "../../tailwind";
+import { tw } from "../../tailwind";
 import { colors } from "../../tailwind/colors";
 import { SelectProps } from "../types";
 
@@ -47,7 +47,9 @@ export const SelectButton: React.FC<SelectButtonProps> = forwardRef(
 
     const containerStyle = useMemo(
       () => [
-        tw`${size === "regular" ? "px-4 py-3" : "px-3 py-2"} flex-row items-center justify-between rounded-full`,
+        tw`${
+          size === "regular" ? "px-4 py-3" : "px-3 py-2"
+        } flex-row items-center justify-between rounded-full`,
         containerAnimatedStyle,
       ],
       [containerAnimatedStyle, size]
@@ -67,7 +69,11 @@ export const SelectButton: React.FC<SelectButtonProps> = forwardRef(
         {...rest}
       >
         <Animated.View style={containerStyle}>
-          <Text tw={`font-bold text-gray-900 dark:text-gray-100 ${ size === 'regular' ? 'text-sm' : 'text-xs'} mr-2`}>
+          <Text
+            tw={`font-bold text-gray-900 dark:text-gray-100 ${
+              size === "regular" ? "text-sm" : "text-xs"
+            } mr-2`}
+          >
             {label}
           </Text>
           <ChevronDownIcon
