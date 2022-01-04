@@ -3,14 +3,9 @@ import { Platform, useWindowDimensions } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useScrollToTop } from "@react-navigation/native";
 
-import { View, ActivityIndicator, Text } from "design-system";
+import { View, Spinner, Text } from "design-system";
 import { Card } from "design-system/card";
-import {
-  Tabs,
-  TabItem,
-  SelectedTabIndicator,
-  PullToRefresh,
-} from "design-system/tabs";
+import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 const TAB_LIST_HEIGHT = 64;
 
@@ -23,7 +18,7 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
         tw="h-16 items-center justify-center mt-6 px-3"
         sx={{ marginBottom: tabBarHeight }}
       >
-        <ActivityIndicator />
+        <Spinner size="small" />
       </View>
     );
   }
