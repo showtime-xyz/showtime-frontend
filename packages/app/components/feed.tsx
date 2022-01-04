@@ -1,8 +1,8 @@
 import { useCallback, useRef, useState } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import { Platform } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useScrollToTop } from "@react-navigation/native";
-import { useAllActivity } from "app/hooks/service-hooks";
+import { useActivity } from "app/hooks/service-hooks";
 
 import { View, Spinner, Text } from "design-system";
 import { Card } from "design-system/card";
@@ -48,6 +48,7 @@ const Feed = () => {
       onIndexChange={onIndexChange}
       initialIndex={selected}
       tabListHeight={TAB_LIST_HEIGHT}
+      lazy
     >
       <Tabs.Header>
         <View tw="bg-white dark:bg-black">
@@ -82,23 +83,222 @@ const Feed = () => {
           <TabItem name={"Comments"} selected={selected === 3} />
         </Tabs.Trigger>
 
+        <Tabs.Trigger>
+          <TabItem name={"Follows"} selected={selected === 4} />
+        </Tabs.Trigger>
+
         <SelectedTabIndicator />
       </Tabs.List>
       <Tabs.Pager>
         <AllActivityList />
-        <Tabs.View style={{ height: 200, backgroundColor: "#FEF2F2" }} />
-        <Tabs.View style={{ height: 200, backgroundColor: "#FEF2F2" }} />
-
-        <Tabs.View style={{ height: 100, backgroundColor: "#2563EB" }} />
+        <CreationList />
+        <LikesList />
+        <CommentsList />
+        <FollowsList />
       </Tabs.Pager>
     </Tabs.Root>
   );
 };
 
-const AllActivityList = () => {
-  const { width } = useWindowDimensions();
+const CreationList = () => {
   const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
-    useAllActivity();
+    useActivity({ typeId: 3 });
+
+  const keyExtractor = useCallback((item) => item.id, []);
+
+  const renderItem = useCallback(
+    ({ item }) => <Card act={item} variant="activity" />,
+    []
+  );
+
+  const listRef = useRef(null);
+
+  useScrollToTop(listRef);
+
+  const ListFooterComponent = useCallback(
+    () => <Footer isLoading={isLoadingMore} />,
+    [isLoadingMore]
+  );
+
+  if (isLoading) {
+    return (
+      <View tw="items-center justify-center flex-1">
+        <Spinner />
+      </View>
+    );
+  }
+
+  return (
+    <Tabs.FlatList
+      data={data}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
+      refreshing={isRefreshing}
+      onRefresh={refresh}
+      onEndReached={fetchMore}
+      ref={listRef}
+      style={tw.style("bg-white dark:bg-black")}
+      onEndReachedThreshold={0.6}
+      removeClippedSubviews={Platform.OS !== "web"}
+      numColumns={1}
+      windowSize={4}
+      initialNumToRender={2}
+      alwaysBounceVertical={false}
+      ListFooterComponent={ListFooterComponent}
+    />
+  );
+};
+
+const LikesList = () => {
+  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
+    useActivity({ typeId: 1 });
+
+  const keyExtractor = useCallback((item) => item.id, []);
+
+  const renderItem = useCallback(
+    ({ item }) => <Card act={item} variant="activity" />,
+    []
+  );
+
+  const listRef = useRef(null);
+
+  useScrollToTop(listRef);
+
+  const ListFooterComponent = useCallback(
+    () => <Footer isLoading={isLoadingMore} />,
+    [isLoadingMore]
+  );
+
+  if (isLoading) {
+    return (
+      <View tw="items-center justify-center flex-1">
+        <Spinner />
+      </View>
+    );
+  }
+
+  return (
+    <Tabs.FlatList
+      data={data}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
+      refreshing={isRefreshing}
+      onRefresh={refresh}
+      onEndReached={fetchMore}
+      ref={listRef}
+      style={tw.style("bg-white dark:bg-black")}
+      onEndReachedThreshold={0.6}
+      removeClippedSubviews={Platform.OS !== "web"}
+      numColumns={1}
+      windowSize={4}
+      initialNumToRender={2}
+      alwaysBounceVertical={false}
+      ListFooterComponent={ListFooterComponent}
+    />
+  );
+};
+
+const CommentsList = () => {
+  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
+    useActivity({ typeId: 2 });
+
+  const keyExtractor = useCallback((item) => item.id, []);
+
+  const renderItem = useCallback(
+    ({ item }) => <Card act={item} variant="activity" />,
+    []
+  );
+
+  const listRef = useRef(null);
+
+  useScrollToTop(listRef);
+
+  const ListFooterComponent = useCallback(
+    () => <Footer isLoading={isLoadingMore} />,
+    [isLoadingMore]
+  );
+
+  if (isLoading) {
+    return (
+      <View tw="items-center justify-center flex-1">
+        <Spinner />
+      </View>
+    );
+  }
+
+  return (
+    <Tabs.FlatList
+      data={data}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
+      refreshing={isRefreshing}
+      onRefresh={refresh}
+      onEndReached={fetchMore}
+      ref={listRef}
+      style={tw.style("bg-white dark:bg-black")}
+      onEndReachedThreshold={0.6}
+      removeClippedSubviews={Platform.OS !== "web"}
+      numColumns={1}
+      windowSize={4}
+      initialNumToRender={2}
+      alwaysBounceVertical={false}
+      ListFooterComponent={ListFooterComponent}
+    />
+  );
+};
+
+const FollowsList = () => {
+  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
+    useActivity({ typeId: 4, limit: 10 });
+
+  const keyExtractor = useCallback((item) => item.id, []);
+
+  const renderItem = useCallback(
+    ({ item }) => <Card act={item} variant="activity" />,
+    []
+  );
+
+  const listRef = useRef(null);
+
+  useScrollToTop(listRef);
+
+  const ListFooterComponent = useCallback(
+    () => <Footer isLoading={isLoadingMore} />,
+    [isLoadingMore]
+  );
+
+  if (isLoading) {
+    return (
+      <View tw="items-center justify-center flex-1">
+        <Spinner />
+      </View>
+    );
+  }
+
+  return (
+    <Tabs.FlatList
+      data={data}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
+      refreshing={isRefreshing}
+      onRefresh={refresh}
+      onEndReached={fetchMore}
+      ref={listRef}
+      style={tw.style("bg-white dark:bg-black")}
+      onEndReachedThreshold={0.6}
+      removeClippedSubviews={Platform.OS !== "web"}
+      numColumns={1}
+      windowSize={4}
+      initialNumToRender={10}
+      alwaysBounceVertical={false}
+      ListFooterComponent={ListFooterComponent}
+    />
+  );
+};
+
+const AllActivityList = () => {
+  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
+    useActivity({ typeId: 0 });
 
   const keyExtractor = useCallback((item) => item.id, []);
 

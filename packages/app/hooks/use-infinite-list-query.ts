@@ -2,14 +2,15 @@ import { useState, useRef } from "react";
 
 export const useInfiniteListQuery = (fetcher) => {
   const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [error, setError] = useState("");
   const page = useRef(1);
 
   const fetch = async () => {
     try {
-      setIsLoading(true);
+      setIsFetching(true);
       const body = await fetcher(page.current);
       if (page.current === 1) {
         setData(body.data);
@@ -18,9 +19,9 @@ export const useInfiniteListQuery = (fetcher) => {
       }
     } catch (e) {
       setError("Something went wrong!");
+      console.error(e);
     } finally {
-      setIsLoading(false);
-      setIsRefreshing(false);
+      setIsFetching(false);
     }
   };
 
@@ -28,20 +29,23 @@ export const useInfiniteListQuery = (fetcher) => {
     fetch,
     error,
     data,
-    isLoading: data.length === 0 && isLoading,
+    isLoading: data.length === 0 && isFetching,
     isRefreshing,
-    isLoadingMore: page.current > 1 && isLoading,
-    fetchMore: () => {
-      if (!isLoading) {
+    isLoadingMore,
+    fetchMore: async () => {
+      if (!isLoadingMore) {
+        setIsLoadingMore(true);
         page.current++;
-        fetch();
+        await fetch();
+        setIsLoadingMore(false);
       }
     },
-    refresh: () => {
+    refresh: async () => {
       if (!isRefreshing) {
         setIsRefreshing(true);
         page.current = 1;
-        fetch();
+        await fetch();
+        setIsRefreshing(false);
       }
     },
     retry: () => {

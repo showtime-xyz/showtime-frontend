@@ -14,7 +14,7 @@ function CardImpl({ act, variant }: Props) {
   return (
     <View tw="bg-white dark:bg-black">
       {variant === "activity" && <Activity activity={act} />}
-      <Media nfts={nfts} />
+      <Media nfts={nfts ?? []} />
     </View>
   );
 }

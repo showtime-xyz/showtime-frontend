@@ -2,9 +2,13 @@ import { useEffect } from "react";
 import { axios } from "app/lib/axios";
 import { useInfiniteListQuery } from "./use-infinite-list-query";
 
-const ACTIVITY_PAGE_LENGTH = 5; // 5 activity items per activity page
-
-export const useAllActivity = () => {
+export const useActivity = ({
+  typeId,
+  limit = 5,
+}: {
+  typeId: number;
+  limit?: number;
+}) => {
   const {
     fetch,
     data,
@@ -16,8 +20,7 @@ export const useAllActivity = () => {
     retry,
     isRefreshing,
   } = useInfiniteListQuery((page) => {
-    const url = `/v2/activity?page=${page}&type_id=0&limit=${ACTIVITY_PAGE_LENGTH}`;
-
+    const url = `/v2/activity?page=${page}&type_id=${typeId}&limit=${limit}`;
     return axios({
       url,
       method: "GET",

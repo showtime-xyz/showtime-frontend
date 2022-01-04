@@ -186,7 +186,7 @@ const List = ({ children, style, ...props }: TabListProps) => {
   }, [windowWidth]);
 
   const styles = React.useMemo(() => {
-    return [tw.style(`bg-white dark:bg-gray-900 px-2`), style];
+    return [tw.style(`bg-white dark:bg-gray-900`), style];
   }, [style]);
 
   return (
@@ -199,6 +199,9 @@ const List = ({ children, style, ...props }: TabListProps) => {
       showsHorizontalScrollIndicator={false}
       horizontal
       style={styles}
+      contentContainerStyle={{
+        paddingHorizontal: 16,
+      }}
       {...props}
     >
       {newChildren}
@@ -548,11 +551,10 @@ export const PullToRefresh = ({
   if (Platform.OS === "web") {
     return null;
   }
+  const { index: elementIndex } = useTabIndexContext();
 
-  const { refreshGestureState } = useTabsContext();
-  const [refreshState, setRefreshState] = React.useState(
-    isRefreshing ? "refreshing" : "idle"
-  );
+  const { refreshGestureState, index } = useTabsContext();
+  const [refreshState, setRefreshState] = React.useState("idle");
 
   useEffect(() => {
     if (isRefreshing) {
@@ -567,15 +569,23 @@ export const PullToRefresh = ({
       return refreshGestureState.value;
     },
     (v) => {
+      if (elementIndex !== index.value) {
+        return;
+      }
       if (v === "refreshing") {
         runOnJS(onRefresh)();
+      } else {
+        runOnJS(setRefreshState)(v);
       }
-      runOnJS(setRefreshState)(v);
     },
-    [onRefresh]
+    [onRefresh, elementIndex]
   );
 
   const style = useAnimatedStyle(() => {
+    if (elementIndex !== index.value) {
+      return {};
+    }
+
     if (refreshGestureState.value === "refreshing") {
       return { height: 50 };
     } else if (refreshGestureState.value === "pulling") {
@@ -587,7 +597,9 @@ export const PullToRefresh = ({
         height: withTiming(0, { duration: 400 }),
       };
     }
-  });
+  }, [elementIndex]);
+
+  // console.log("lol ", refreshGestureState.value, isRefreshing, refreshState);
 
   return (
     <Reanimated.View style={[style, tw.style("items-center justify-center")]}>

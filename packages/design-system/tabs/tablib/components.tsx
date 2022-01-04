@@ -104,6 +104,7 @@ export const SelectedTabIndicator = () => {
           transform: [{ translateX }],
           position: "absolute",
           width: Tab_ITEM_WIDTH,
+          left: 16,
           height: "100%",
           justifyContent: "center",
         },
