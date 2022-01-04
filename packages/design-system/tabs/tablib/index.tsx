@@ -38,7 +38,7 @@ import {
   TabRootProps,
   TabsContextType,
 } from "./types";
-import { ActivityIndicator } from "design-system/activity-indicator";
+import { Spinner } from "design-system/spinner";
 import { Text } from "design-system/text";
 import { MotiView } from "moti";
 
@@ -611,7 +611,7 @@ export const PullToRefresh = ({
             Pull to refresh
           </Text>
         )}
-        {refreshState === "refreshing" && <ActivityIndicator />}
+        {refreshState === "refreshing" && <Spinner />}
       </MotiView>
     </Reanimated.View>
   );

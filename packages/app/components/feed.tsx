@@ -98,10 +98,7 @@ const Feed = ({ activity, activityPage, getNext, isLoading }: Props) => {
     >
       <Tabs.Header>
         <View tw="bg-white dark:bg-black">
-          <Text
-            tw="pt-8 px-4 text-gray-900 dark:text-white font-bold"
-            sx={{ fontSize: 22 }}
-          >
+          <Text tw="px-4 pt-4 text-gray-900 dark:text-white font-bold text-3xl">
             Home
           </Text>
         </View>
