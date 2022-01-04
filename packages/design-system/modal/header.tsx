@@ -11,7 +11,7 @@ type Props = {
 
 export function Header(props: Props) {
   return (
-    <View tw="p-6 h-16 border-b border-gray-200 dark:border-gray-700 flex-row items-center justify-between">
+    <View tw="p-6 h-16 flex-row items-center justify-between">
       <View tw="w-8 h-8">
         <Button
           onPress={props.close}

@@ -1,42 +1,93 @@
-import { Platform, useWindowDimensions } from "react-native";
-
+import React from "react";
+import { Platform, StyleSheet } from "react-native";
+import { SxProp } from "dripsy";
 import { View } from "design-system/view";
-import { Header } from "design-system/modal/header";
+import { Header } from "./header";
+import { ModalBackdrop } from "./backdrop";
 
 type Props = {
+  /**
+   * Defines the modal content.
+   */
   children: React.ReactNode;
+  /**
+   * Defines the modal title.
+   *
+   * @default undefined
+   */
   title?: string;
-  height?: number;
-  width?: number;
+  /**
+   * Defines the height style, set it empty to let
+   * the modal be auto height.
+   *
+   * @default "max-h-280px"
+   */
+  height?: string;
+  /**
+   * Defines the width style.
+   *
+   * @default "w-10/12 max-w-480px md:w-480px lg:w-480px"
+   */
+  width?: string;
+  /**
+   * Defines the action to be fried to close
+   * the modal.
+   *
+   * @default undefined
+   */
   close?: () => void;
 };
 
-export function Modal(props: Props) {
-  const { width } = useWindowDimensions();
-
+export function Modal({
+  title,
+  width = "w-10/12 max-w-480px md:w-480px lg:w-480px",
+  height = "max-h-280px",
+  close,
+  children,
+}: Props) {
   return (
-    <>
+    <View
+      tw="z-99999 ios:absolute android:absolute top-0 right-0 bottom-0 left-0"
+      sx={stylesX.container}
+    >
+      <ModalBackdrop close={close} />
       <View
-        // @ts-ignore
-        onClick={props.close}
-        tw="absolute top-0 right-0 bottom-0 left-0 opacity-90 dark:opacity-85 bg-gray-200 dark:bg-black"
-      />
-      <View
-        tw="z-99999 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 shadow-lg md:shadow-sm ios:w-full ios:h-full absolute ios:relative lg:relative bottom-0 min-w-[100vw] md:min-w-0 lg:max-h-[600px] lg:max-w-[420px] md:border-t md:border-l md:border-r md:border-b rounded-t-3xl md:rounded-b-3xl ios:rounded-t-none"
-        sx={
-          Platform.OS === "web" && width > 1024
-            ? {
-                position: "fixed",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-              }
-            : {}
-        }
+        tw={[
+          "flex overflow-hidden",
+          "bg-white dark:bg-black",
+          "shadow-lg shadow-black dark:shadow-white",
+          width,
+          height,
+        ]}
+        sx={stylesX.modal}
+        style={styles.modal}
       >
-        <Header title={props.title} close={props.close} />
-        <View tw="p-6">{props.children}</View>
+        <Header title={title} close={close} />
+        <View tw="flex-1 p-6 bg-gray-100 dark:bg-gray-900" sx={stylesX.content}>
+          {children}
+        </View>
       </View>
-    </>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  modal: {
+    borderRadius: 32,
+  },
+});
+
+const stylesX = {
+  container:
+    Platform.OS === "web" ? ({ position: "fixed" } as SxProp) : undefined,
+  modal:
+    Platform.OS === "web"
+      ? ({
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        } as SxProp)
+      : undefined,
+  content: { overflowY: "scroll" } as SxProp,
+};
