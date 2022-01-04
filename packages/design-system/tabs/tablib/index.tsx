@@ -218,6 +218,7 @@ const Pager = ({ children }) => {
     pagerRef,
     position,
     offset,
+    translateY,
     lazy,
     index,
   } = useContext(TabsContext);
@@ -255,6 +256,7 @@ const Pager = ({ children }) => {
     },
     (res, prev) => {
       if (res !== prev && !mountedIndices.includes(res)) {
+        translateY.value = withTiming(0);
         runOnJS(setMountedIndices)(mountedIndices.concat(res));
       }
     },
