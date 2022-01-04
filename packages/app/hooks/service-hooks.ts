@@ -1,71 +1,82 @@
-import { useState, useEffect, useCallback } from "react";
-import useSWRInfinite from "swr/infinite";
+import { useState, useEffect, useRef } from "react";
 import { axios } from "app/lib/axios";
-import { useUser } from "app/hooks/use-user";
 
 const ACTIVITY_PAGE_LENGTH = 5; // 5 activity items per activity page
 
-export const useAllActivity = () => {
-  const { user } = useUser();
-  const userId = user?.data?.profile?.profile_id;
-  const { data, size, setSize, mutate } = useSWRInfinite(
-    (index) => [
-      `/v2/activity?page=${index + 1}&type_id=0&limit=${ACTIVITY_PAGE_LENGTH}`,
-      userId,
-    ],
-    (url) => axios({ url, method: "GET" }),
-    {
-      initialSize: 2,
-      revalidateAll: true,
+const useInfiniteListLoader = (fetcher) => {
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const page = useRef(1);
+
+  const fetch = async () => {
+    try {
+      setIsLoading(true);
+      const body = await fetcher(page.current);
+      if (page.current === 1) {
+        setData(body.data);
+      } else {
+        setData([...data, ...body.data]);
+      }
+    } catch (e) {
+      setError("Something went wrong!");
+    } finally {
+      setIsLoading(false);
     }
-  );
-
-  const [activity, setActivity] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-
-  useEffect(() => {
-    const newData = data?.[size - 1]?.data;
-
-    if (!newData) {
-      // No data, clean activity feed
-      setActivity([]);
-    } else if (size === 2) {
-      // Size 2 means it's the first request,
-      // i.e. the beginning of the activity feed
-      setActivity([...newData]);
-    } else {
-      // Load more
-      setActivity([...activity, ...newData]);
-    }
-
-    setIsLoading(false);
-    setIsRefreshing(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
-
-  useEffect(() => {
-    if (userId) {
-      mutate();
-    }
-  }, [userId]);
-
-  const getNext = useCallback(async () => {
-    if (isLoading) return null;
-
-    setSize(size + 1);
-    setIsLoading(true);
-  }, [isLoading, setSize, size]);
+  };
 
   return {
-    isLoading,
-    onRefresh: () => {
-      setIsRefreshing(true);
-      mutate();
+    fetch,
+    error,
+    data,
+    isLoading: data.length === 0 && isLoading,
+    isRefreshing: page.current === 1 && isLoading,
+    isLoadingMore: page.current > 1 && isLoading,
+    fetchMore: () => {
+      page.current++;
+      fetch();
     },
-    getNext,
-    size,
-    activity,
+    refresh: () => {
+      page.current = 1;
+      fetch();
+    },
+    retry: () => {
+      fetch();
+    },
+  };
+};
+
+export const useAllActivity = () => {
+  const {
+    fetch,
+    data,
+    error,
+    fetchMore,
+    isLoading,
+    isLoadingMore,
+    refresh,
+    retry,
+    isRefreshing,
+  } = useInfiniteListLoader((page) => {
+    return axios({
+      url: `/v2/activity?page=${page}&type_id=0&limit=${ACTIVITY_PAGE_LENGTH}`,
+      method: "GET",
+    });
+  });
+
+  useEffect(() => {
+    fetch();
+  }, []);
+
+  return {
+    data,
+    error,
+    fetch,
+    refresh,
+    fetchMore,
+    retry,
+    isLoading,
+    isLoadingMore,
     isRefreshing,
   };
 };

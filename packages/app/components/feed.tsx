@@ -97,13 +97,8 @@ const Feed = () => {
 
 const AllActivityList = () => {
   const { width } = useWindowDimensions();
-  const {
-    isLoading,
-    size,
-    activity,
-    getNext,
-    onRefresh: mutate,
-  } = useAllActivity();
+  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
+    useAllActivity();
 
   const keyExtractor = useCallback((item) => item.id, []);
 
@@ -112,55 +107,34 @@ const AllActivityList = () => {
     []
   );
 
-  const listRef1 = useRef(null);
-  const listRef2 = useRef(null);
+  const listRef = useRef(null);
 
-  useScrollToTop(listRef1);
-  useScrollToTop(listRef2);
-
-  const [isRefreshing, setRefreshing] = useState(false);
-  const onRefresh = () => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 3000);
-  };
-
-  const getItemLayout = useCallback(
-    (data, index) => {
-      const itemHeight = data?.[index]?.nfts.length === 2 ? width / 2 : width;
-      const headerHeight = 0;
-      const footerHeight = 0;
-
-      return {
-        length: itemHeight + headerHeight + footerHeight,
-        offset: (itemHeight + headerHeight + footerHeight) * index,
-        index,
-      };
-    },
-    [width]
-  );
+  useScrollToTop(listRef);
 
   const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoading} />,
-    [isLoading]
+    () => <Footer isLoading={isLoadingMore} />,
+    [isLoadingMore]
   );
+
+  if (isLoading) {
+    return (
+      <View tw="items-center justify-center flex-1">
+        <Spinner />
+      </View>
+    );
+  }
 
   return (
     <Tabs.FlatList
-      data={activity}
+      data={data}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
       refreshing={isRefreshing}
-      onRefresh={onRefresh}
-      getItemLayout={getItemLayout}
-      scrollEventThrottle={16}
-      onEndReached={getNext}
-      ref={listRef1}
+      onRefresh={refresh}
+      onEndReached={fetchMore}
+      ref={listRef}
       style={tw.style("bg-white dark:bg-black")}
-      onEndReachedThreshold={
-        size === 1 ? 0.2 : size < 4 ? 0.3 : size < 6 ? 0.7 : 0.8
-      }
+      onEndReachedThreshold={0.6}
       removeClippedSubviews={Platform.OS !== "web"}
       numColumns={1}
       windowSize={4}
