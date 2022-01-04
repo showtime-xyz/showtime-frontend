@@ -44,59 +44,61 @@ const Feed = () => {
   };
 
   return (
-    <Tabs.Root
-      onIndexChange={onIndexChange}
-      initialIndex={selected}
-      tabListHeight={TAB_LIST_HEIGHT}
-      lazy
-    >
-      <Tabs.Header>
-        <View tw="bg-white dark:bg-black">
-          <Text tw="px-4 pt-4 text-gray-900 dark:text-white font-bold text-3xl">
-            Home
-          </Text>
-        </View>
-      </Tabs.Header>
-      <Tabs.List
-        style={[
-          {
-            height: TAB_LIST_HEIGHT,
-            ...tw.style(
-              "dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900"
-            ),
-          },
-        ]}
+    <View tw="bg-white dark:bg-black flex-1">
+      <Tabs.Root
+        onIndexChange={onIndexChange}
+        initialIndex={selected}
+        tabListHeight={TAB_LIST_HEIGHT}
+        lazy
       >
-        <Tabs.Trigger>
-          <TabItem name={"All Activity"} selected={selected === 0} />
-        </Tabs.Trigger>
+        <Tabs.Header>
+          <View tw="bg-white dark:bg-black">
+            <Text tw="px-4 pt-4 text-gray-900 dark:text-white font-bold text-3xl">
+              Home
+            </Text>
+          </View>
+        </Tabs.Header>
+        <Tabs.List
+          style={[
+            {
+              height: TAB_LIST_HEIGHT,
+              ...tw.style(
+                "dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900"
+              ),
+            },
+          ]}
+        >
+          <Tabs.Trigger>
+            <TabItem name="All Activity" selected={selected === 0} />
+          </Tabs.Trigger>
 
-        <Tabs.Trigger>
-          <TabItem name={"Creations"} selected={selected === 1} />
-        </Tabs.Trigger>
+          <Tabs.Trigger>
+            <TabItem name="Creations" selected={selected === 1} />
+          </Tabs.Trigger>
 
-        <Tabs.Trigger>
-          <TabItem name={"Likes"} selected={selected === 2} />
-        </Tabs.Trigger>
+          <Tabs.Trigger>
+            <TabItem name="Likes" selected={selected === 2} />
+          </Tabs.Trigger>
 
-        <Tabs.Trigger>
-          <TabItem name={"Comments"} selected={selected === 3} />
-        </Tabs.Trigger>
+          <Tabs.Trigger>
+            <TabItem name="Comments" selected={selected === 3} />
+          </Tabs.Trigger>
 
-        <Tabs.Trigger>
-          <TabItem name={"Follows"} selected={selected === 4} />
-        </Tabs.Trigger>
+          <Tabs.Trigger>
+            <TabItem name="Follows" selected={selected === 4} />
+          </Tabs.Trigger>
 
-        <SelectedTabIndicator />
-      </Tabs.List>
-      <Tabs.Pager>
-        <AllActivityList />
-        <CreationList />
-        <LikesList />
-        <CommentsList />
-        <FollowsList />
-      </Tabs.Pager>
-    </Tabs.Root>
+          <SelectedTabIndicator />
+        </Tabs.List>
+        <Tabs.Pager>
+          <AllActivityList />
+          <CreationList />
+          <LikesList />
+          <CommentsList />
+          <FollowsList />
+        </Tabs.Pager>
+      </Tabs.Root>
+    </View>
   );
 };
 
@@ -137,7 +139,6 @@ const CreationList = () => {
       onRefresh={refresh}
       onEndReached={fetchMore}
       ref={listRef}
-      style={tw.style("bg-white dark:bg-black")}
       onEndReachedThreshold={0.6}
       removeClippedSubviews={Platform.OS !== "web"}
       numColumns={1}
@@ -186,7 +187,6 @@ const LikesList = () => {
       onRefresh={refresh}
       onEndReached={fetchMore}
       ref={listRef}
-      style={tw.style("bg-white dark:bg-black")}
       onEndReachedThreshold={0.6}
       removeClippedSubviews={Platform.OS !== "web"}
       numColumns={1}
@@ -235,7 +235,6 @@ const CommentsList = () => {
       onRefresh={refresh}
       onEndReached={fetchMore}
       ref={listRef}
-      style={tw.style("bg-white dark:bg-black")}
       onEndReachedThreshold={0.6}
       removeClippedSubviews={Platform.OS !== "web"}
       numColumns={1}
@@ -284,7 +283,6 @@ const FollowsList = () => {
       onRefresh={refresh}
       onEndReached={fetchMore}
       ref={listRef}
-      style={tw.style("bg-white dark:bg-black")}
       onEndReachedThreshold={0.6}
       removeClippedSubviews={Platform.OS !== "web"}
       numColumns={1}
@@ -333,7 +331,6 @@ const AllActivityList = () => {
       onRefresh={refresh}
       onEndReached={fetchMore}
       ref={listRef}
-      style={tw.style("bg-white dark:bg-black")}
       onEndReachedThreshold={0.6}
       removeClippedSubviews={Platform.OS !== "web"}
       numColumns={1}
