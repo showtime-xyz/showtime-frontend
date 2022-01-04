@@ -590,12 +590,7 @@ export const PullToRefresh = ({
   });
 
   return (
-    <Reanimated.View
-      style={[
-        style,
-        tw.style("items-center justify-center bg-white dark:bg-black"),
-      ]}
-    >
+    <Reanimated.View style={[style, tw.style("items-center justify-center")]}>
       <MotiView
         from={{ opacity: 0 }}
         animate={{ opacity: 1 }}
