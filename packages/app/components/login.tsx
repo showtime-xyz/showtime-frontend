@@ -58,7 +58,11 @@ export function Login() {
     connector.on("connect", () => {
       handleSubmitWallet();
     });
-  }, []);
+
+    if (connector.connected) {
+      handleSubmitWallet();
+    }
+  }, [connector?.connected]);
 
   const handleSubmitEmail = useCallback(
     async ({ email }: EmailForm) => {
@@ -211,7 +215,7 @@ export function Login() {
     } finally {
       setSignaturePending(false);
     }
-  }, [context, connector, setWalletName]);
+  }, [context, connector?.connected, setWalletName]);
 
   return (
     <>
