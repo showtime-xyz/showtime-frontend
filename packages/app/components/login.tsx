@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback } from "react";
+import { useContext, useState, useCallback, useEffect } from "react";
 import { Platform, Linking } from "react-native";
 import { captureException } from "@sentry/nextjs";
 import { useForm, Controller } from "react-hook-form";
@@ -41,6 +41,7 @@ export function Login() {
   const context = useContext(AppContext);
   const connector = useWalletConnect();
   const [signaturePending, setSignaturePending] = useState(false);
+  const [walletName, setWalletName] = useState("");
   const { mutate } = useSWRConfig();
 
   const {
@@ -52,6 +53,16 @@ export function Login() {
     mode: "onBlur",
     reValidateMode: "onChange",
   });
+
+  useEffect(() => {
+    connector.on("connect", () => {
+      handleSubmitWallet();
+    });
+
+    if (connector.connected) {
+      handleSubmitWallet();
+    }
+  }, [connector?.connected]);
 
   const handleSubmitEmail = useCallback(
     async ({ email }: EmailForm) => {
@@ -137,18 +148,19 @@ export function Login() {
           process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + response?.data
         );
       } else {
-        await connector.connect();
         if (!connector.connected) {
-          return;
+          return await connector.connect();
         }
 
-        address = connector.session?.accounts[0];
+        address = connector?.session?.accounts[0];
         const response = await axios({
           url: `/v1/getnonce?address=${address}`,
           method: "GET",
         });
 
         setSignaturePending(true);
+        setWalletName(connector?._peerMeta?.name);
+
         const msgParams = [
           convertUtf8ToHex(
             `Sign into Showtime with this wallet. ${response?.data}`
@@ -203,7 +215,7 @@ export function Login() {
     } finally {
       setSignaturePending(false);
     }
-  }, [context]);
+  }, [context, connector?.connected, setWalletName]);
 
   return (
     <>
@@ -211,7 +223,9 @@ export function Login() {
         {signaturePending ? (
           <View tw="py-40">
             <Text tw="text-center dark:text-gray-400">
-              Pushed a request to your wallet...
+              {walletName !== ""
+                ? `Pushed a request to ${walletName}... Please check your wallet.`
+                : `Pushed a request to your wallet...`}
             </Text>
           </View>
         ) : (

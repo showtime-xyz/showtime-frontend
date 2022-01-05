@@ -311,6 +311,14 @@ function AppContextProvider({
 }
 
 function App() {
+  const scheme = `io.showtime${
+    process.env.STAGE === "development"
+      ? ".development"
+      : process.env.STAGE === "staging"
+      ? ".staging"
+      : ""
+  }`;
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <DripsyProvider theme={theme}>
@@ -322,12 +330,14 @@ function App() {
                   clientMeta={{
                     description: "Connect with Showtime",
                     url: "https://showtime.io",
-                    icons: ["https://showtime.io/logo.jpg"],
+                    icons: [
+                      "https://storage.googleapis.com/showtime-cdn/showtime-icon-sm.jpg",
+                    ],
                     name: "Showtime",
                     // @ts-expect-error
-                    scheme: "showtime://",
+                    scheme: scheme,
                   }}
-                  redirectUrl="showtime://"
+                  redirectUrl={`${scheme}://`}
                   storageOptions={{
                     // @ts-ignore
                     asyncStorage: AsyncStorage,
