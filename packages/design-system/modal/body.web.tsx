@@ -1,5 +1,4 @@
 import React from "react";
-import { Platform } from "react-native";
 import { SxProp } from "dripsy";
 import { View } from "../view";
 import { BODY_CONTAINER_TW, BODY_TW } from "./constants";

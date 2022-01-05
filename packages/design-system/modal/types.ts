@@ -31,4 +31,10 @@ export interface ModalProps {
    * @default undefined
    */
   close?: () => void;
+  /**
+   * Defines the callback when the modal dismiss.
+   * 
+   * @default undefined
+   */
+   onDismiss?: () => void;
 }

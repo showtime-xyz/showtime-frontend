@@ -17,10 +17,11 @@ export function Modal({
   width = DEFAULT_WIDTH,
   height = DEFAULT_HEIGHT,
   close,
+  onDismiss,
   children,
 }: ModalProps) {
   return (
-    <RNModal transparent={true} statusBarTranslucent={true}>
+    <RNModal transparent={true} statusBarTranslucent={true} onDismiss={onDismiss}>
       <View tw={CONTAINER_TW}>
         <ModalBackdrop close={close} />
         <View
