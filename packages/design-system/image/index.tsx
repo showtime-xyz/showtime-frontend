@@ -7,7 +7,8 @@ import {
 import { Blurhash } from "react-native-blurhash";
 
 import { tw as tailwind } from "design-system/tailwind";
-import { View } from "design-system";
+import type { TW } from "design-system/tailwind/types";
+//import { View } from "design-system";
 
 function Img({ source, width, height, ...props }: ReactNativeImageProps) {
   return (
@@ -28,7 +29,7 @@ function Img({ source, width, height, ...props }: ReactNativeImageProps) {
 }
 
 type ImageProps = {
-  tw?: string;
+  tw?: TW;
   alt?: string;
   blurhash?: string;
 } & ComponentProps<typeof Img>;

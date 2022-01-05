@@ -165,7 +165,7 @@ const BuyModal = ({ open, onClose, token }) => {
           signerAddress,
           process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT
         )
-      ).gt(basePrice)
+      ).gte(basePrice)
     ) {
       return setModalPage(MODAL_PAGES.NEEDS_ALLOWANCE);
     }
@@ -435,9 +435,11 @@ const BuyPage = ({ token, quantity, setQuantity, buyToken, onClose }) => {
                   </p>
                   <div className="flex items-center space-x-1 -mt-0.5">
                     <p className="text-gray-900 dark:text-white font-semibold text-sm">
-                      {token.listing.name === token.listing.address
-                        ? formatAddressShort(token.listing.name)
-                        : truncateWithEllipses(token.listing.name, 22)}
+                      {token.listing.name
+                        ? token.listing.name === token.listing.address
+                          ? formatAddressShort(token.listing.name)
+                          : truncateWithEllipses(token.listing.name, 22)
+                        : formatAddressShort(token.listing.name)}
                     </p>
                     {token.listing.verified == 1 && (
                       <BadgeIcon
@@ -493,7 +495,7 @@ const BuyPage = ({ token, quantity, setQuantity, buyToken, onClose }) => {
                   src="https://storage.googleapis.com/showtime-cdn/showtime-icon-sm.jpg"
                 />
                 <span className="text-gray-600 dark:text-gray-400 text-xs font-semibold">
-                  Showtime NFT
+                  Showtime
                 </span>
               </div>
               <p className="text-gray-600 dark:text-gray-400 text-xs font-semibold">
@@ -780,7 +782,7 @@ const AllowanceRequiredPage = ({
     setTransactionHash(transaction);
     setModalPage(MODAL_PAGES.PROCESSING_ALLOWANCE);
 
-    web3.once(transaction, buyToken);
+    web3.waitForTransaction(transaction).then(buyToken)
   };
 
   return (

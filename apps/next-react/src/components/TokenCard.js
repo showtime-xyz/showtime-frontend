@@ -23,7 +23,6 @@ import OrbitIcon from "./Icons/OrbitIcon";
 import { CHAIN_IDENTIFIERS } from "../lib/constants";
 import ShowtimeIcon from "./Icons/ShowtimeIcon";
 import Tippy from "@tippyjs/react";
-import useFlags, { FLAGS } from "@/hooks/useFlags";
 
 const TokenCard = ({
   originalItem,
@@ -46,7 +45,6 @@ const TokenCard = ({
   isChangingOrder,
 }) => {
   const { myProfile } = useProfile();
-  const { [FLAGS.hasMinting]: canList } = useFlags();
   const [item, setItem] = useState(originalItem);
   const [showVideo, setShowVideo] = useState(false);
   const [muted, setMuted] = useState(true);
@@ -223,8 +221,7 @@ const TokenCard = ({
                   leaveTo="opacity-0"
                 >
                   <Menu.Items className="z-1 absolute right-0 mt-2 origin-top-right border border-transparent dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg rounded-xl p-2 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                    {canList &&
-                      SHOWTIME_CONTRACTS.includes(item.contract_address) &&
+                    {SHOWTIME_CONTRACTS.includes(item.contract_address) &&
                       item?.show_transfer_options == 1 && (
                         <>
                           {!hasMatchingListing ? (
@@ -699,7 +696,7 @@ const TokenCard = ({
           <div className="w-full">
             <div className="px-4 pb-4 pt-1 flex flex-col w-full">
               <div>
-                {canList && item.listing ? (
+                {item.listing ? (
                   <div className="flex items-center justify-between pt-1 space-x-4">
                     <Link
                       href="/[profile]"
@@ -721,9 +718,11 @@ const TokenCard = ({
                           </span>
                           <div className="flex items-center space-x-1 -mt-0.5">
                             <div className="text-sm font-semibold truncate dark:text-gray-200 min-w-0">
-                              {item.listing.name === item.listing.address
-                                ? formatAddressShort(item.listing.name)
-                                : truncateWithEllipses(item.listing.name, 22)}
+                              {item.listing.name
+                                ? item.listing.name === item.listing.address
+                                  ? formatAddressShort(item.listing.name)
+                                  : truncateWithEllipses(item.listing.name, 22)
+                                : formatAddressShort(item.listing.name)}
                             </div>
                             {item.listing.verified == 1 && (
                               <BadgeIcon
@@ -736,16 +735,7 @@ const TokenCard = ({
                       </a>
                     </Link>
                     {ifListedIsOwner ? (
-                      <section className="space-x-4 flex items-center flex-1 hover:bg-gray-100 dark:hover:bg-gray-900 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg transition bg-gray-100 dark:bg-gray-900">
-                        <div>
-                          <span className="text-xs font-medium text-gray-600 dark:text-gray-500">
-                            Available
-                          </span>
-                          <p className="text-sm font-bold text-gray-900 dark:text-gray-200">
-                            {item.listing.quantity}/
-                            {item.listing.total_edition_quantity}
-                          </p>
-                        </div>
+                      <section className="space-x-4 flex items-end hover:bg-gray-100 dark:hover:bg-gray-900 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg transition bg-gray-100 dark:bg-gray-900">
                         <div>
                           <span className="text-xs font-medium text-gray-600 dark:text-gray-500">
                             Listed for
@@ -759,19 +749,10 @@ const TokenCard = ({
                     ) : (
                       <button
                         onClick={() => setBuyModal(item)}
-                        className="space-x-4 flex items-center flex-1 hover:bg-gray-100 dark:hover:bg-gray-900 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg transition"
+                        className="space-x-4 flex items-end hover:bg-gray-100 dark:hover:bg-gray-900 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg transition"
                       >
-                        <div>
-                          <span className="text-xs font-medium text-gray-600 dark:text-gray-500">
-                            Available
-                          </span>
-                          <p className="text-sm font-bold text-gray-900 dark:text-gray-200">
-                            {item.listing.quantity}/
-                            {item.listing.total_edition_quantity}
-                          </p>
-                        </div>
-                        <div>
-                          <span className="text-xs font-medium text-gray-600 dark:text-gray-500">
+                        <div className="text-right">
+                          <span className="text-xs text-right font-medium text-gray-600 dark:text-gray-500">
                             Buy
                           </span>
                           <p className="text-sm font-bold text-gray-900 dark:text-gray-200 whitespace-nowrap">
