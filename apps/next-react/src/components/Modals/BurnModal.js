@@ -150,7 +150,7 @@ const BurnModal = ({ open, onClose, token }) => {
     <Transition.Root show={open} as={Fragment}>
       <Dialog
         static
-        className="xs:inset-0 fixed overflow-y-auto z-[2] modal-mobile-position"
+        className="inset-0 fixed overflow-y-auto z-[2] modal-mobile-position"
         open={open}
         onClose={trueOnClose}
       >

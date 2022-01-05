@@ -281,7 +281,7 @@ const BuyModal = ({ open, onClose, token }) => {
     >
       <Dialog
         static
-        className="fixed xs:inset-0 overflow-y-auto z-[2] pt-[96px] md:pt-0 w-full modal-mobile-position"
+        className="fixed inset-0 overflow-y-auto z-[2] pt-[96px] md:pt-0 w-full modal-mobile-position"
         open={open}
         onClose={updateModalVisibility}
       >
@@ -782,7 +782,7 @@ const AllowanceRequiredPage = ({
     setTransactionHash(transaction);
     setModalPage(MODAL_PAGES.PROCESSING_ALLOWANCE);
 
-    web3.waitForTransaction(transaction).then(buyToken)
+    web3.waitForTransaction(transaction).then(buyToken);
   };
 
   return (
