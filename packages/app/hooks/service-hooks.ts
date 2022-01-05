@@ -25,7 +25,6 @@ import { useInfiniteListQuery } from "./use-infinite-list-query";
 //     fetcher,
 //     {
 //       onSuccess() {
-//         console.log("da mn", isRefreshing);
 //         setRefreshing(false);
 //       },
 //     }

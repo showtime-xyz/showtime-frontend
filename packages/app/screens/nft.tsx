@@ -9,7 +9,7 @@ import { axios } from "app/lib/axios";
 import { Close, MoreHorizontal } from "design-system/icon";
 import { useRouter } from "app/navigation/use-router";
 import { tw } from "design-system/tailwind";
-import { PinchToZoom } from "design-system/PinchToZoom";
+import { PinchToZoom } from "design-system/pinch-to-zoom";
 
 type Query = {
   id: string;

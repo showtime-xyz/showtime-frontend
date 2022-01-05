@@ -601,7 +601,6 @@ export const PullToRefresh = ({
     }
   }, [elementIndex]);
 
-  // console.log("lol ", refreshGestureState.value, isRefreshing, refreshState);
 
   return (
     <Reanimated.View style={[style, tw.style("items-center justify-center")]}>

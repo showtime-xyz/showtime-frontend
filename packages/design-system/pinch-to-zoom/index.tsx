@@ -1,5 +1,4 @@
-import React, { useMemo, useState } from "react";
-import { LayoutChangeEvent, StyleSheet } from "react-native";
+import React from "react";
 import {
   PinchGestureHandler,
   PinchGestureHandlerGestureEvent,
@@ -10,17 +9,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-
-const useLayout = () => {
-  const [layout, setLayout] = useState<
-    LayoutChangeEvent["nativeEvent"]["layout"] | undefined
-  >();
-  const onLayout = (e) => {
-    setLayout(e.nativeEvent.layout);
-  };
-
-  return { onLayout, layout };
-};
+import { useLayout } from "../hooks";
 
 export const PinchToZoom = ({ children }) => {
   const scale = useSharedValue(1);
