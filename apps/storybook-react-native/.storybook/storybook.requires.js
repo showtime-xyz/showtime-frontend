@@ -27,6 +27,7 @@ const getStories = () => {
     require("../../../packages/design-system/card/social/button.stories.tsx"),
     require("../../../packages/design-system/card/social/index.stories.tsx"),
     require("../../../packages/design-system/checkbox/checkbox.stories.tsx"),
+    require("../../../packages/design-system/creator-preview/creator-preview.stories.tsx"),
     require("../../../packages/design-system/data-pill/data-pill.stories.tsx"),
     require("../../../packages/design-system/input/input.stories.tsx"),
     require("../../../packages/design-system/modal-sheet/modal-sheet.stories.tsx"),

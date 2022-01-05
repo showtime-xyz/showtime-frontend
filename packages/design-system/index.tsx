@@ -22,6 +22,8 @@ export { Skeleton } from "design-system/skeleton";
 
 export { Checkbox } from "design-system/checkbox";
 
-export { Tabs } from "design-system/tabs";
+export { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 
 export { Spinner } from "design-system/spinner";
+
+export { CreatorPreview } from "design-system/creator-preview";
