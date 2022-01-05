@@ -127,6 +127,7 @@ export const useTrendingCreators = ({
     isLoading,
     isLoadingMore,
     refresh,
+    status,
     retry,
     isRefreshing,
   } = useInfiniteListQuery((page) => {
@@ -143,6 +144,7 @@ export const useTrendingCreators = ({
     error,
     fetch,
     refresh,
+    status,
     fetchMore,
     retry,
     isLoading,

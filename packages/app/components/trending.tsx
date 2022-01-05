@@ -16,7 +16,6 @@ import { Platform } from "react-native";
 
 const TAB_LIST_HEIGHT = 64;
 
-
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
   const tabBarHeight = useBottomTabBarHeight();
 
@@ -82,12 +81,20 @@ export const Trending = () => {
 };
 
 const TabList = ({ days }: { days: number }) => {
-  const { data, isLoadingMore, isLoading, isRefreshing, refresh, fetchMore } = useTrendingCreators({
+  const {
+    data,
+    isLoadingMore,
+    isLoading,
+    status,
+    isRefreshing,
+    refresh,
+    fetchMore,
+  } = useTrendingCreators({
     days,
   });
   const keyExtractor = useCallback((item, index) => {
-     return index.toString()
-    }, []);
+    return index.toString();
+  }, []);
 
   const renderItem = useCallback(
     ({ item }) => <CreatorPreview creator={item} />,
@@ -110,6 +117,15 @@ const TabList = ({ days }: { days: number }) => {
       </View>
     );
   }
+
+  if (data.length === 0 && status === "success") {
+    return (
+      <View tw="items-center justify-center flex-1">
+        <Text tw="text-gray-900 dark:text-white">No data found</Text>
+      </View>
+    );
+  }
+
   return (
     <Tabs.FlatList
       data={data}
