@@ -23,3 +23,5 @@ export { Skeleton } from "design-system/skeleton";
 export { Checkbox } from "design-system/checkbox";
 
 export { Tabs } from "design-system/tabs";
+
+export { Spinner } from "design-system/spinner";
