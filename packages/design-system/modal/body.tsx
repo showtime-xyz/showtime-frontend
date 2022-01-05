@@ -7,12 +7,11 @@ import type { ModalProps } from "./types";
 interface ModalBodyProps extends Pick<ModalProps, "children"> {}
 
 export function ModalBody({ children }: ModalBodyProps) {
+  const containerStyle = tw.style(BODY_CONTAINER_TW)
+  const contentContainerStyle = tw.style(BODY_TW)
   return (
     <ScrollView style={containerStyle} contentContainerStyle={contentContainerStyle}>
       {children}
     </ScrollView>
   );
 }
-
-const containerStyle = tw.style(BODY_CONTAINER_TW)
-const contentContainerStyle = tw.style(BODY_TW)
