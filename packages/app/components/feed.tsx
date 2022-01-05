@@ -38,15 +38,11 @@ type Props = {
 
 const Feed = () => {
   const [selected, setSelected] = useState(0);
-  const onIndexChange = (index) => {
-    setSelected(index);
-    console.log("index changed", index);
-  };
 
   return (
     <View tw="bg-white dark:bg-black flex-1">
       <Tabs.Root
-        onIndexChange={onIndexChange}
+        onIndexChange={setSelected}
         initialIndex={selected}
         tabListHeight={TAB_LIST_HEIGHT}
         lazy
