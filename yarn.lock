@@ -17507,10 +17507,10 @@ react-native-localhost@^1.0.0:
     app-root-path "^3.0.0"
     ip "^1.1.5"
 
-react-native-mmkv@1.3.2:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/react-native-mmkv/-/react-native-mmkv-1.3.2.tgz#fb5a3f4f369076c50fa07338c6f24ad02c9342ba"
-  integrity sha512-A1ztKk3YJobuq9LAS3o7LJnxqw8yUKwACRsoVXUYPWw0RbwjmE10Ogdz8axrSIGHd6gjKeIrLgS5eetcj27pCA==
+react-native-mmkv@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/react-native-mmkv/-/react-native-mmkv-1.6.2.tgz#2945203a3a8278f5c2cb935bf9bb789bbe5fa91e"
+  integrity sha512-sNPzTQdVHuwQsjsF8rAUYYrZQHU733TOk7FT87tJqaPYbkm6jumat8THbnk+gIWkH03DZfEDD8xsBy6G0++kBQ==
 
 react-native-modal-datetime-picker@^10.1.0:
   version "10.2.0"
