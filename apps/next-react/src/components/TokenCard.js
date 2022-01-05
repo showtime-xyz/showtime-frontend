@@ -50,9 +50,9 @@ const TokenCard = ({
   const [muted, setMuted] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [showModel, setShowModel] = useState(false);
-  const hasMatchingListing = item?.listing?.all_sellers?.find(
-    (seller) => seller.profile_id === pageProfile.profile_id
-  );
+  const hasMatchingListing = item?.listing?.all_sellers?.find((seller) => {
+    return seller.profile_id === pageProfile?.profile_id;
+  });
   const ifListedIsOwner =
     myProfile?.profile_id === item?.listing?.profile_id &&
     typeof myProfile?.profile_id === "number";
