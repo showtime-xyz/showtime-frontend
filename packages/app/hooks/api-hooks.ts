@@ -167,7 +167,7 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
     retry,
     isRefreshing,
   } = useInfiniteListQuery((page) => {
-    const url = `/v2/featured?page=${page}&days=${days}&recache=1&limit=10`;
+    const url = `/v2/featured?page=${page}&days=${days}&limit=10`;
     return fetcher(url);
   });
 
