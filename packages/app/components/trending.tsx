@@ -269,8 +269,8 @@ const Media = memo(({ item }: { item: NFT }) => {
           uri: item.animation_preview_url,
         }}
         style={style}
+        useNativeControls
         isLooping
-        shouldPlay
         isMuted
       />
     );
