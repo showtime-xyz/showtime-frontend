@@ -1,6 +1,10 @@
 import { forwardRef } from "react";
 
 import { Text } from "design-system/text";
+import { View } from "design-system/view";
+import { Close } from "design-system/icon"
+import { tw } from "design-system/tailwind";
+
 import {
   Pressable,
   Props as PressableScaleProps,
@@ -32,7 +36,7 @@ export const Button = forwardRef(({ variant, ...props }: Props, ref) => {
 Button.displayName = "Button";
 
 export const BaseButton = forwardRef(({ ...props }: Props, ref) => {
-  return <Pressable {...{ ...props, ref }} />;
+  return <Pressable accessibilityRole="button" {...{ ...props, ref }} />;
 });
 
 BaseButton.displayName = "BaseButton";
@@ -92,3 +96,33 @@ export const ButtonLabel = ({
     />
   );
 };
+
+/**
+ * 
+ * Dark mode + Hover
+ * cc: https://github.com/jaredh159/tailwind-react-native-classnames/issues/79
+ */
+export const ButtonClose = ({
+  ...props
+}) => {
+  return (
+    <View tw="w-12 h-12">
+    <Button
+      onPress={props.close}
+      variant="tertiary"
+      tw="h-8 rounded-full p-2"
+      iconOnly={true}
+      animate={{ borderColor: 'red' }}
+      { ...props}
+    >
+      <Close
+        width={24}
+        height={24}
+        color={
+          tw.style("bg-black dark:bg-yellow-300")?.backgroundColor as string
+        }
+      />
+    </Button>
+  </View>
+  )
+}

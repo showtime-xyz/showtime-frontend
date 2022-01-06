@@ -29,6 +29,10 @@ import BadgeIcon from "@/components/Icons/BadgeIcon";
 import { preventExponent } from "@/lib/prevent-exponent";
 import { formatPrice } from "@/lib/format-price";
 
+import { Button as DSButton, ButtonClose } from "design-system/button";
+import { Close } from "design-system/icon";
+import { tw } from "design-system/tailwind";
+
 const MODAL_PAGES = {
   GENERAL: "general",
   LOADING: "loading",
@@ -369,13 +373,13 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
                 <h2 className="text-gray-900 dark:text-white text-lg font-bold">
                   List NFT
                 </h2>
-                <button
-                  onClick={updateModalVisibility}
+                <ButtonClose onPress={updateModalVisibility} />
+                {/* <button
                   className="p-3 -my-3 hover:bg-gray-100 dark:hover:bg-gray-100 dark:hover:text-black disabled:hidden rounded-full transition bg-gray-100 dark:bg-gray-800"
                   disabled={modalPage === MODAL_PAGES.LOADING}
                 >
                   <XIcon className="w-4 h-4" />
-                </button>
+                </button> */}
               </div>
               {renderedPage}
             </div>
