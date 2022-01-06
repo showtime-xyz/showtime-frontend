@@ -132,10 +132,9 @@ const CreatorsList = ({
     return index.toString();
   }, []);
 
-  const renderItem = useCallback(
-    ({ item }) => <CreatorPreview creator={item} />,
-    []
-  );
+  const renderItem = useCallback(({ item }) => {
+    return <CreatorPreview creator={item} />;
+  }, []);
 
   const listRef = useRef(null);
 
