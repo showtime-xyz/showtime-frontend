@@ -131,7 +131,43 @@ export const useTrendingCreators = ({
     retry,
     isRefreshing,
   } = useInfiniteListQuery((page) => {
-    const url = `/v1/leaderboard?page=${page}&days=${days}`;
+    const url = `/v1/leaderboard?page=${page}&days=${days}&limit=15`;
+    return fetcher(url);
+  });
+
+  useEffect(() => {
+    fetch();
+  }, []);
+
+  return {
+    data,
+    error,
+    fetch,
+    refresh,
+    status,
+    fetchMore,
+    retry,
+    isLoading,
+    isLoadingMore,
+    isRefreshing,
+  };
+};
+
+
+export const useTrendingNFTS = ({ days }: { days: number }) => {
+  const {
+    fetch,
+    data,
+    error,
+    fetchMore,
+    isLoading,
+    isLoadingMore,
+    refresh,
+    status,
+    retry,
+    isRefreshing,
+  } = useInfiniteListQuery((page) => {
+    const url = `/v2/featured?page=${page}&days=${days}&recache=1&limit=10`;
     return fetcher(url);
   });
 

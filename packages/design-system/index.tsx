@@ -27,3 +27,5 @@ export { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 export { Spinner } from "design-system/spinner";
 
 export { CreatorPreview } from "design-system/creator-preview";
+
+export { SegmentedControl } from "design-system/segmented-control";

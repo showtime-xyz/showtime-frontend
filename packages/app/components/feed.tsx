@@ -40,7 +40,7 @@ const Feed = () => {
         lazy
       >
         <Tabs.Header>
-          <View tw="bg-white dark:bg-black p-4">
+          <View tw="bg-white dark:bg-black pt-4 pl-4 pb-[3px]">
             <Text tw="text-gray-900 dark:text-white font-bold text-3xl">
               Home
             </Text>
