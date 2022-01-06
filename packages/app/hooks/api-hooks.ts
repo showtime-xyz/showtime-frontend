@@ -113,17 +113,11 @@ export const useActivity = ({
   };
 };
 
-
-export const useTrendingCreators = ({
-  days,
-}: {
-  days: number;
-}) => {
+export const useTrendingCreators = ({ days }: { days: number }) => {
   const {
     fetch,
     data,
     error,
-    fetchMore,
     isLoading,
     isLoadingMore,
     refresh,
@@ -145,7 +139,8 @@ export const useTrendingCreators = ({
     fetch,
     refresh,
     status,
-    fetchMore,
+    // This API is not paginated, so is is a noop
+    fetchMore: () => {},
     retry,
     isLoading,
     isLoadingMore,
