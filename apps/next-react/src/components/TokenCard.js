@@ -735,16 +735,14 @@ const TokenCard = ({
                       </a>
                     </Link>
                     {ifListedIsOwner ? (
-                      <section className="space-x-4 flex items-end hover:bg-gray-100 dark:hover:bg-gray-900 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg transition bg-gray-100 dark:bg-gray-900">
-                        <div>
-                          <span className="text-xs font-medium text-gray-600 dark:text-gray-500">
-                            Listed for
-                          </span>
-                          <p className="text-sm font-bold text-gray-900 dark:text-gray-200 whitespace-nowrap">
-                            {parseFloat(item.listing.min_price)} $
-                            {item.listing.currency}
-                          </p>
-                        </div>
+                      <section className="space-x-4 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg">
+                        <p className="text-xs font-medium text-gray-600 dark:text-gray-500">
+                          Listed for
+                        </p>
+                        <p className="text-sm font-bold text-gray-900 dark:text-gray-200 whitespace-nowrap">
+                          {parseFloat(item.listing.min_price)}{" "}
+                          {item.listing.currency}
+                        </p>
                       </section>
                     ) : (
                       <button

@@ -601,16 +601,22 @@ const SpotlightItem = ({
                 </div>
                 <div className="mt-8 inline-block">
                   {item.listing ? (
-                    <Button
-                      disabled={ifListedIsOwner}
-                      style="primary"
-                      title="Buy on Showtime"
-                      onClick={() => setBuyModalOpen(true)}
-                    >
-                      {ifListedIsOwner
-                        ? `Listed for ${item.listing.min_price} ${item.listing.currency}`
-                        : `Buy for ${item.listing.min_price} ${item.listing.currency}`}
-                    </Button>
+                    <>
+                      {ifListedIsOwner ? (
+                        <p className="font-medium text-gray-500">
+                          {`Listed for ${item.listing.min_price} ${item.listing.currency}`}
+                        </p>
+                      ) : (
+                        <Button
+                          disabled={ifListedIsOwner}
+                          style="primary"
+                          title="Buy on Showtime"
+                          onClick={() => setBuyModalOpen(true)}
+                        >
+                          {`Buy for ${item.listing.min_price} ${item.listing.currency}`}
+                        </Button>
+                      )}
+                    </>
                   ) : (
                     <Button
                       style="primary"
