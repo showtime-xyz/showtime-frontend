@@ -47,13 +47,13 @@ const MintModal = ({ open, onClose }) => {
   const isWeb3ModalActive = useRef(false);
   const confettiCanvas = useRef(null);
   const [modalPage, setModalPage] = useState(
-    myProfile?.wallet_addresses_excluding_email_v2?.length === 0
+    myProfile?.wallet_addresses_v2?.length === 0
       ? MODAL_PAGES.NO_WALLET
       : MODAL_PAGES.GENERAL
   );
 
   useEffect(() => {
-    if (myProfile?.wallet_addresses_excluding_email_v2?.length === 0) {
+    if (myProfile?.wallet_addresses_v2?.length === 0) {
       setModalPage(MODAL_PAGES.NO_WALLET);
     }
   }, [myProfile]);
