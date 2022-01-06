@@ -73,7 +73,7 @@ const UnlistModal = ({ open, onClose, onSuccess = () => null, token }) => {
   const unlistToken = async () => {
     setModalPage(MODAL_PAGES.LOADING);
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme });
+    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic: true });
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,
