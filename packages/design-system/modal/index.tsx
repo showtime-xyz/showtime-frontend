@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal as RNModal } from "react-native";
+import { Modal as RNModal, Platform } from "react-native";
 import { View } from "design-system/view";
 import { Header } from "./header";
 import { ModalBackdrop } from "./backdrop";
@@ -12,29 +12,35 @@ import {
 } from "./constants";
 import type { ModalProps } from "./types";
 
+const ModalContainer = Platform.select({
+  ios: ({ children }) => children,
+  default: ({ children }) => <RNModal transparent={true}>{children}</RNModal>,
+});
+
 export function Modal({
   title,
   width = DEFAULT_WIDTH,
   height = DEFAULT_HEIGHT,
+  bodyTW,
   close,
   onDismiss,
   children,
 }: ModalProps) {
   return (
-    <RNModal transparent={true} statusBarTranslucent={true} onDismiss={onDismiss}>
+    <ModalContainer>
       <View tw={CONTAINER_TW}>
         <ModalBackdrop close={close} />
         <View
           tw={[
-            MODAL_TW,
             width,
             height.length === 0 || !height ? "max-h-screen" : height,
+            MODAL_TW,
           ]}
         >
           <Header title={title} close={close} />
-          <ModalBody>{children}</ModalBody>
+          <ModalBody tw={bodyTW}>{children}</ModalBody>
         </View>
       </View>
-    </RNModal>
+    </ModalContainer>
   );
 }

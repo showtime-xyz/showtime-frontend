@@ -11,12 +11,12 @@ type Props = {
 
 export function Header(props: Props) {
   return (
-    <View tw="p-6 h-16 flex-row items-center justify-between">
-      <View tw="w-8 h-8">
+    <View tw="p-[16px] flex-row items-center justify-between">
+      <View tw="w-[48px] h-[48px] justify-center items-center">
         <Button
           onPress={props.close}
           variant="tertiary"
-          tw="h-8 rounded-full p-2"
+          tw="rounded-full h-[48px] w-[48px]"
           iconOnly={true}
         >
           <Close

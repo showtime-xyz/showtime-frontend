@@ -25,6 +25,12 @@ export interface ModalProps {
    */
   width?: string;
   /**
+   * Defines the body tailwind style.
+   * 
+   * @default undefined
+   */
+  bodyTW?: string;
+  /**
    * Defines the action to be fried to close
    * the modal.
    *
