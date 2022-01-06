@@ -18,6 +18,7 @@ export type TabListProps = ScrollViewProps;
 export type RefreshGestureState =
   | "idle"
   | "pulling"
+  | "refresh"
   | "refreshing"
   | "cancelling";
 

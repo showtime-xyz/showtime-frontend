@@ -39,7 +39,6 @@ import {
 } from "./types";
 import { Spinner } from "design-system/spinner";
 import { Text } from "design-system/text";
-import { MotiView } from "moti";
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
@@ -438,6 +437,7 @@ function makeScrollableComponent<
           if (
             enablePullToRefresh.value &&
             elementIndex === index.value &&
+            refreshGestureState.value !== "refresh" &&
             refreshGestureState.value !== "refreshing"
           ) {
             pullToRefreshY.value = e.translationY;
@@ -454,8 +454,11 @@ function makeScrollableComponent<
           if (elementIndex === index.value) {
             pullToRefreshY.value = 0;
             if (refreshGestureState.value === "pulling") {
-              refreshGestureState.value = "refreshing";
-            } else if (refreshGestureState.value !== "refreshing") {
+              refreshGestureState.value = "refresh";
+            } else if (
+              refreshGestureState.value !== "refresh" &&
+              refreshGestureState.value !== "refreshing"
+            ) {
               refreshGestureState.value = "idle";
             }
           }
@@ -587,9 +590,12 @@ export const PullToRefresh = ({
   const { refreshGestureState, index } = useTabsContext();
   const [refreshState, setRefreshState] = React.useState("idle");
 
+  const showSpinner =
+    refreshState === "refresh" || refreshState === "refreshing";
+
   useEffect(() => {
     if (isRefreshing) {
-      setRefreshState("refreshing");
+      refreshGestureState.value = "refreshing";
     } else {
       refreshGestureState.value = "idle";
     }
@@ -599,15 +605,14 @@ export const PullToRefresh = ({
     () => {
       return refreshGestureState.value;
     },
-    (v) => {
-      if (elementIndex !== index.value) {
+    (v, n) => {
+      if (elementIndex !== index.value || v === n) {
         return;
       }
-      if (v === "refreshing") {
+      if (v === "refresh") {
         runOnJS(onRefresh)();
-      } else {
-        runOnJS(setRefreshState)(v);
       }
+      runOnJS(setRefreshState)(v);
     },
     [onRefresh, elementIndex]
   );
@@ -617,9 +622,11 @@ export const PullToRefresh = ({
       return {};
     }
 
-    if (refreshGestureState.value === "refreshing") {
-      return { height: 50 };
-    } else if (refreshGestureState.value === "pulling") {
+    if (
+      refreshGestureState.value === "pulling" ||
+      refreshGestureState.value === "refresh" ||
+      refreshGestureState.value === "refreshing"
+    ) {
       return {
         height: withTiming(50, { duration: 400 }),
       };
@@ -628,28 +635,20 @@ export const PullToRefresh = ({
         height: withTiming(0, { duration: 400 }),
       };
     }
-  }, [elementIndex]);
+  }, [elementIndex, refreshGestureState.value]);
 
   return (
     <Reanimated.View style={[style, tw.style("items-center justify-center")]}>
-      <MotiView
-        from={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 200, type: "timing" }}
-        exit={{ opacity: 0 }}
-      >
-        {refreshState === "pulling" && (
-          <Text tw="dark:text-white text-gray-900 text-sm">
-            Release to refresh
-          </Text>
-        )}
-        {refreshState === "cancelling" && (
-          <Text tw="dark:text-white text-gray-900 text-sm">
-            Pull to refresh
-          </Text>
-        )}
-        {refreshState === "refreshing" && <Spinner />}
-      </MotiView>
+      {refreshState === "pulling" && (
+        <Text tw="dark:text-white text-gray-900 text-sm">
+          Release to refresh
+        </Text>
+      )}
+      {refreshState === "cancelling" && (
+        <Text tw="dark:text-white text-gray-900 text-sm">Pull to refresh</Text>
+      )}
+
+      {showSpinner ? <Spinner /> : null}
     </Reanimated.View>
   );
 };
