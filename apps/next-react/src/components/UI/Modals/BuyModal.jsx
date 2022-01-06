@@ -30,6 +30,7 @@ const MODAL_PAGES = {
   LOADING: "loading",
   PROCESSING: "processing",
   SUCCESS: "success",
+  NO_WALLET: "no_wallet",
   CHANGE_WALLET: "change_wallet",
   NO_BALANCE: "no_balance",
   NEEDS_ALLOWANCE: "needs_allowance",
@@ -43,9 +44,18 @@ const BuyModal = ({ open, onClose, token }) => {
   const isWeb3ModalActive = useRef(false);
   const confettiCanvas = useRef(null);
   const [modalVisibility, setModalVisibility] = useState(true);
-  const [modalPage, setModalPage] = useState(MODAL_PAGES.GENERAL);
+  const [modalPage, setModalPage] = useState(myProfile?.wallet_addresses_excluding_email_v2?.length === 0
+      ? MODAL_PAGES.NO_WALLET
+      : MODAL_PAGES.GENERAL
+    );
   const [quantity, setQuantity] = useState(1);
   const [transactionHash, setTransactionHash] = useState("");
+
+  useEffect(() => {
+    if (myProfile?.wallet_addresses_excluding_email_v2?.length === 0) {
+      setModalPage(MODAL_PAGES.NO_WALLET);
+    }
+  }, [myProfile]);
 
   const shotConfetti = () => {
     if (!confettiCanvas.current) return;
@@ -243,6 +253,8 @@ const BuyModal = ({ open, onClose, token }) => {
             shotConfetti={shotConfetti}
           />
         );
+      case MODAL_PAGES.NO_WALLET:
+        return <NoWalletPage />;
       case MODAL_PAGES.CHANGE_WALLET:
         return <WalletErrorPage buyToken={buyToken} />;
       case MODAL_PAGES.NO_BALANCE:
@@ -630,6 +642,28 @@ const SuccessPage = ({ transactionHash, token, shotConfetti }) => {
     </div>
   );
 };
+
+const NoWalletPage = () => (
+    <div>
+      <div className="p-4 border-b border-gray-100 dark:border-gray-900">
+        <p className="font-medium text-gray-900 dark:text-white">
+          You’ll need to connect an Ethereum wallet before buying an NFT on
+          Showtime.
+        </p>
+      </div>
+      <div className="p-4">
+        <Link href="/wallet">
+          <Button
+            as="a"
+            className="w-full flex items-center justify-center cursor-pointer"
+            style="primary"
+          >
+            Connect a Wallet
+          </Button>
+        </Link>
+      </div>
+    </div>
+);
 
 const WalletErrorPage = ({ buyToken }) => {
   return (
