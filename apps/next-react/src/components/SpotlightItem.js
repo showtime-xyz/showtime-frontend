@@ -613,7 +613,7 @@ const SpotlightItem = ({
                           title="Buy on Showtime"
                           onClick={() => setBuyModalOpen(true)}
                         >
-                          {`Buy for ${item.listing.min_price} ${item.listing.currency}`}
+                          {`Price ${item.listing.min_price} ${item.listing.currency}`}
                         </Button>
                       )}
                     </>

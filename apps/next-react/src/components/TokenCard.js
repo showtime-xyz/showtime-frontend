@@ -751,7 +751,7 @@ const TokenCard = ({
                       >
                         <div className="text-right">
                           <span className="text-xs text-right font-medium text-gray-600 dark:text-gray-500">
-                            Buy
+                            Price
                           </span>
                           <p className="text-sm font-bold text-gray-900 dark:text-gray-200 whitespace-nowrap">
                             {parseFloat(item.listing.min_price)}{" "}

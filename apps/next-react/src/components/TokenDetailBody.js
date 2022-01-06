@@ -638,7 +638,7 @@ const TokenDetailBody = ({
                         onClick={() => setBuyModalOpen(true)}
                       >
                         <p className="text-sm sm:text-base">
-                          {`Buy for ${item.listing.min_price} ${item.listing.currency}`}
+                          {`Price ${item.listing.min_price} ${item.listing.currency}`}
                         </p>
                       </button>
                     )}
