@@ -129,7 +129,7 @@ const MintModal = ({ open, onClose }) => {
     setTransactionHash("");
     setTokenID("");
     setModalPage(
-      myProfile?.wallet_addresses_excluding_email_v2?.length === 0
+      myProfile?.wallet_addresses_v2?.length === 0
         ? MODAL_PAGES.NO_WALLET
         : MODAL_PAGES.GENERAL
     );
