@@ -606,9 +606,15 @@ export const PullToRefresh = ({
       return refreshGestureState.value;
     },
     (v, n) => {
-      if (elementIndex !== index.value || v === n) {
+      // Todo: make refresh gesture state local to list
+      // when tab changes we initialize the refresh gesture state to 1, so reset the local state here.
+      if (elementIndex !== index.value && v === "idle") {
+        runOnJS(setRefreshState)(v);
         return;
       }
+
+      if (elementIndex !== index.value || v == n) return;
+
       if (v === "refresh") {
         runOnJS(onRefresh)();
       }
