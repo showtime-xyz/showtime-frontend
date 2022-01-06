@@ -53,8 +53,10 @@ export const PinchToZoom = ({ children }) => {
       ctx.translateOriginY =
         ctx.prevTranslateOriginY + e.focalY - ctx.offsetFromFocalY;
 
-      translation.x.value = ctx.translateOriginX - origin.x.value;
-      translation.y.value = ctx.translateOriginY - origin.y.value;
+      if (scale.value > 1) {
+        translation.x.value = ctx.translateOriginX - origin.x.value;
+        translation.y.value = ctx.translateOriginY - origin.y.value;
+      }
 
       ctx.prevPointers = e.numberOfPointers;
 

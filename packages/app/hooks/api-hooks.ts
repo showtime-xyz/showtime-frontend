@@ -92,7 +92,7 @@ export const useActivity = ({
     retry,
     isRefreshing,
   } = useInfiniteListQuery((page) => {
-    const url = `/v2/activity?page=${page}&type_id=${typeId}&limit=${limit}`;
+    const url = `/v2/activity_without_auth?page=${page}&type_id=${typeId}&limit=${limit}`;
     return fetcher(url);
   });
 
@@ -105,6 +105,77 @@ export const useActivity = ({
     error,
     fetch,
     refresh,
+    fetchMore,
+    retry,
+    isLoading,
+    isLoadingMore,
+    isRefreshing,
+  };
+};
+
+export const useTrendingCreators = ({ days }: { days: number }) => {
+  const {
+    fetch,
+    data,
+    error,
+    isLoading,
+    isLoadingMore,
+    refresh,
+    status,
+    retry,
+    isRefreshing,
+  } = useInfiniteListQuery((page) => {
+    const url = `/v1/leaderboard?page=${page}&days=${days}&limit=15`;
+    return fetcher(url);
+  });
+
+  useEffect(() => {
+    fetch();
+  }, []);
+
+  return {
+    data,
+    error,
+    fetch,
+    refresh,
+    status,
+    // This API is not paginated, so is is a noop
+    fetchMore: () => {},
+    retry,
+    isLoading,
+    isLoadingMore,
+    isRefreshing,
+  };
+};
+
+
+export const useTrendingNFTS = ({ days }: { days: number }) => {
+  const {
+    fetch,
+    data,
+    error,
+    fetchMore,
+    isLoading,
+    isLoadingMore,
+    refresh,
+    status,
+    retry,
+    isRefreshing,
+  } = useInfiniteListQuery((page) => {
+    const url = `/v2/featured?page=${page}&days=${days}&limit=10`;
+    return fetcher(url);
+  });
+
+  useEffect(() => {
+    fetch();
+  }, []);
+
+  return {
+    data,
+    error,
+    fetch,
+    refresh,
+    status,
     fetchMore,
     retry,
     isLoading,
