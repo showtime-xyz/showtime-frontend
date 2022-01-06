@@ -29,9 +29,7 @@ import BadgeIcon from "@/components/Icons/BadgeIcon";
 import { preventExponent } from "@/lib/prevent-exponent";
 import { formatPrice } from "@/lib/format-price";
 
-import { Button as DSButton, ButtonClose } from "design-system/button";
-import { Close } from "design-system/icon";
-import { tw } from "design-system/tailwind";
+import { ButtonClose } from "design-system/button";
 
 const MODAL_PAGES = {
   GENERAL: "general",
