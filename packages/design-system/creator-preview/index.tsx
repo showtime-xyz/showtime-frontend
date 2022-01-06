@@ -17,7 +17,7 @@ type Props = {
 
 export const ITEM_COLLAPSED_HEIGHT = 64;
 export const ITEM_EXPANDED_HEIGHT =
-  Dimensions.get("window").width / 2 - 10 + ITEM_COLLAPSED_HEIGHT;
+  Dimensions.get("window").width / 2 + ITEM_COLLAPSED_HEIGHT + 20;
 
 export const CreatorPreview = memo((props: Props) => {
   const isDark = useIsDarkMode();
