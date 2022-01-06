@@ -128,8 +128,8 @@ const CreatorsList = ({
     days,
   });
 
-  const keyExtractor = useCallback((_item, index) => {
-    return index.toString();
+  const keyExtractor = useCallback((item) => {
+    return item.profile_id;
   }, []);
 
   const renderItem = useCallback(({ item }) => {
