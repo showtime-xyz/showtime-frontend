@@ -20,7 +20,10 @@ import { Menu, Transition } from "@headlessui/react";
 import MiniFollowButton from "./MiniFollowButton";
 import useProfile from "@/hooks/useProfile";
 import OrbitIcon from "./Icons/OrbitIcon";
-import { CHAIN_IDENTIFIERS } from "../lib/constants";
+import {
+  CHAIN_IDENTIFIERS,
+  COLLECTION_NAME_TRUNCATE_LENGTH,
+} from "../lib/constants";
 import ShowtimeIcon from "./Icons/ShowtimeIcon";
 import Tippy from "@tippyjs/react";
 
@@ -50,9 +53,9 @@ const TokenCard = ({
   const [muted, setMuted] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [showModel, setShowModel] = useState(false);
-  const hasMatchingListing = item?.listing?.all_sellers?.find(
-    (seller) => seller.profile_id === pageProfile.profile_id
-  );
+  const hasMatchingListing = item?.listing?.all_sellers?.find((seller) => {
+    return seller.profile_id === pageProfile?.profile_id;
+  });
   const ifListedIsOwner =
     myProfile?.profile_id === item?.listing?.profile_id &&
     typeof myProfile?.profile_id === "number";
@@ -862,7 +865,10 @@ const TokenCard = ({
                   />
                 )}
                 <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
-                  {item.collection_name}
+                  {truncateWithEllipses(
+                    item.collection_name,
+                    COLLECTION_NAME_TRUNCATE_LENGTH
+                  )}
                 </p>
               </div>
               <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">

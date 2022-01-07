@@ -51,7 +51,7 @@ const BurnModal = ({ open, onClose, token }) => {
   const burnToken = async () => {
     setModalState(MODAL_STATES.PROCESSING);
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme });
+    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic: true });
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,
@@ -150,7 +150,7 @@ const BurnModal = ({ open, onClose, token }) => {
     <Transition.Root show={open} as={Fragment}>
       <Dialog
         static
-        className="xs:inset-0 fixed overflow-y-auto z-[2] modal-mobile-position"
+        className="inset-0 fixed overflow-y-auto z-[2] modal-mobile-position"
         open={open}
         onClose={trueOnClose}
       >

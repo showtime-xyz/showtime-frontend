@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Media } from "design-system/card/media";
 import { View } from "design-system/view";
 import { Activity } from "design-system/activity";
@@ -8,17 +9,17 @@ type Props = {
   variant: "nft" | "activity" | "market";
 };
 
-function Card({ act, variant }: Props) {
+function CardImpl({ act, variant }: Props) {
   const { id, nfts, actor } = act;
   const single = act.nfts?.length === 1;
 
   return (
     <View tw="bg-white dark:bg-black">
       {variant === "activity" && <Activity activity={act} />}
-      <Media nfts={nfts} />
+      <Media nfts={nfts ?? []} />
       {single && <Social nft={nfts[0]} />}
     </View>
   );
 }
 
-export { Card };
+export const Card = memo(CardImpl);

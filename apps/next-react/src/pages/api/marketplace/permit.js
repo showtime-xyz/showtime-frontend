@@ -3,6 +3,7 @@ import ierc20PermitAbi from "@/data/IERC20Permit.json";
 import ierc20MetaTxAbi from "@/data/IERC20MetaTx.json";
 import { ethers } from "ethers";
 import { LIST_CURRENCIES, SOL_MAX_INT } from "@/lib/constants";
+import { adjustGasPrice } from "@/lib/adjust-gas-price";
 
 export default handler()
   .use(middleware.auth)
@@ -33,7 +34,7 @@ export default handler()
     }
   });
 
-const submitErc20Permit = (wallet, permit) => {
+const submitErc20Permit = async (wallet, permit) => {
   const { v, r, s } = ethers.utils.splitSignature(permit.signature);
   const tokenContract = new ethers.Contract(
     permit.tokenAddr,
@@ -42,6 +43,8 @@ const submitErc20Permit = (wallet, permit) => {
   );
 
   try {
+    const gasPrice = await adjustGasPrice(wallet);
+
     return tokenContract.permit(
       permit.owner,
       process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
@@ -49,21 +52,22 @@ const submitErc20Permit = (wallet, permit) => {
       permit.deadline,
       v,
       r,
-      s
+      s,
+      {
+        gasPrice,
+      }
     );
   } catch (error) {
     const revertMessage = JSON.parse(error?.error?.error?.body || "{}")?.error
       ?.message;
-
     if (!revertMessage) {
       throw "Something went wrong.";
     }
-
     throw revertMessage.split("execution reverted: ")[1];
   }
 };
 
-const executeMetaTx = (wallet, metatx) => {
+const executeMetaTx = async (wallet, metatx) => {
   const { r, s, v } = ethers.utils.splitSignature(metatx.signature);
   const tokenContract = new ethers.Contract(
     metatx.tokenAddr,
@@ -72,12 +76,17 @@ const executeMetaTx = (wallet, metatx) => {
   );
 
   try {
+    const gasPrice = await adjustGasPrice(wallet);
+
     return tokenContract.executeMetaTransaction(
       metatx.owner,
       metatx.fnSig,
       r,
       s,
-      v
+      v,
+      {
+        gasPrice,
+      }
     );
   } catch (error) {
     const revertMessage = JSON.parse(error?.error?.error?.body || "{}")?.error

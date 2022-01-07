@@ -1,0 +1,58 @@
+export type NFT = {
+  nft_id: number;
+  contract_address: string;
+  token_id: string;
+  like_count: number;
+  token_name: string;
+  token_description: string;
+  token_img_url: string;
+  token_img_original_url: string;
+  token_has_video: number;
+  token_animation_url?: any;
+  animation_preview_url?: any;
+  blurhash: string;
+  token_background_color?: any;
+  token_aspect_ratio: string;
+  token_hidden: number;
+  creator_id: number;
+  creator_name: string;
+  creator_address: string;
+  creator_address_nonens: string;
+  creator_img_url?: any;
+  multiple_owners: number;
+  owner_id: number;
+  owner_name: string;
+  owner_address: string;
+  owner_img_url?: string;
+  token_creator_followers_only: number;
+  creator_username?: string;
+  creator_verified: number;
+  owner_username?: string;
+  owner_verified: number;
+  comment_count: number;
+  owner_count: number;
+  token_count: number;
+  token_ko_edition?: string;
+  token_edition_identifier?: string;
+  source_url: string;
+  still_preview_url: string;
+  mime_type: string;
+  chain_identifier: string;
+  token_listing_identifier?: string;
+  collection_name: string;
+  collection_slug: string;
+  collection_img_url?: string;
+  contract_is_creator: number;
+};
+
+export type Creator = {
+  profile_id: number;
+  name?: string;
+  username?: string;
+  address: string;
+  img_url?: string;
+  love_count: number;
+  verified: number;
+  top_items: NFT[];
+};
+

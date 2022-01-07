@@ -2,16 +2,15 @@ import Svg, { G, Path, Defs, ClipPath } from "react-native-svg";
 
 import { useIsDarkMode } from "design-system/hooks";
 
-export const VerificationBadge = (props) => {
+export const VerificationBadge = ( {size} : {size?: number }) => {
   const isDark = useIsDarkMode();
-
+  let actualSize = size ?? 24
   return (
     <Svg
-      width={24}
-      height={24}
+      width={actualSize}
+      height={actualSize}
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      viewBox="0 0 24 24"
     >
       <G clipPath="url(#a)">
         <Path

@@ -56,7 +56,7 @@ const TransferModal = ({ open, onClose, token }) => {
   const transferToken = async () => {
     setModalState(MODAL_STATES.PROCESSING);
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme });
+    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic: true });
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,
@@ -161,7 +161,7 @@ const TransferModal = ({ open, onClose, token }) => {
     <Transition.Root show={open} as={Fragment}>
       <Dialog
         static
-        className="fixed xs:inset-0 overflow-y-auto z-[2] pt-[96px] md:pt-0 modal-mobile-position w-full"
+        className="fixed inset-0 overflow-y-auto z-[2] pt-[96px] md:pt-0 modal-mobile-position w-full"
         open={open}
         onClose={trueOnClose}
       >

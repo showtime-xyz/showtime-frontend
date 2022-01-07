@@ -47,13 +47,13 @@ const MintModal = ({ open, onClose }) => {
   const isWeb3ModalActive = useRef(false);
   const confettiCanvas = useRef(null);
   const [modalPage, setModalPage] = useState(
-    myProfile?.wallet_addresses_excluding_email_v2?.length === 0
+    myProfile?.wallet_addresses_v2?.length === 0
       ? MODAL_PAGES.NO_WALLET
       : MODAL_PAGES.GENERAL
   );
 
   useEffect(() => {
-    if (myProfile?.wallet_addresses_excluding_email_v2?.length === 0) {
+    if (myProfile?.wallet_addresses_v2?.length === 0) {
       setModalPage(MODAL_PAGES.NO_WALLET);
     }
   }, [myProfile]);
@@ -129,7 +129,7 @@ const MintModal = ({ open, onClose }) => {
     setTransactionHash("");
     setTokenID("");
     setModalPage(
-      myProfile?.wallet_addresses_excluding_email_v2?.length === 0
+      myProfile?.wallet_addresses_v2?.length === 0
         ? MODAL_PAGES.NO_WALLET
         : MODAL_PAGES.GENERAL
     );
@@ -303,7 +303,7 @@ const MintModal = ({ open, onClose }) => {
       )
       .then((res) => res.data);
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme });
+    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic: true });
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,

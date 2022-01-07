@@ -179,7 +179,7 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
   const listToken = async () => {
     setModalPage(MODAL_PAGES.LOADING);
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme });
+    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic: true });
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,
@@ -325,7 +325,7 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
     >
       <Dialog
         static
-        className="fixed xs:inset-0 overflow-y-auto z-[2] pt-[96px] md:pt-0 modal-mobile-position"
+        className="fixed inset-0 overflow-y-auto z-[2] pt-[96px] md:pt-0 modal-mobile-position"
         open={open}
         onClose={updateModalVisibility}
       >
