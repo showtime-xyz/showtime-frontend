@@ -6,10 +6,14 @@ import { Accordion } from "design-system/accordion";
 import { Button } from "design-system/button";
 import { ChevronUp } from "design-system/icon";
 import { Video } from "expo-av";
-import { memo, useCallback, useContext, useMemo, useState } from "react";
+import { memo, useCallback, useContext } from "react";
 import { useIsDarkMode } from "../hooks";
 import { Creator, NFT } from "app/types";
 import { Dimensions } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from "react-native-reanimated";
 
 type Props = {
   creator: Creator;
@@ -21,22 +25,22 @@ export const ITEM_EXPANDED_HEIGHT =
 
 export const CreatorPreview = memo((props: Props) => {
   const isDark = useIsDarkMode();
-  const [isExpanded, setExpanded] = useState(false);
+  const isExpanded = useSharedValue(false);
+  const style = useAnimatedStyle(() => ({
+    height: isExpanded.value ? ITEM_EXPANDED_HEIGHT : ITEM_COLLAPSED_HEIGHT,
+    overflow: "hidden",
+  }));
+
   return (
-    <View
-      style={useMemo(() => ({
-        height: isExpanded ? ITEM_EXPANDED_HEIGHT : ITEM_COLLAPSED_HEIGHT,
-        overflow: "hidden",
-      }),[isExpanded])}
-    >
+    <Animated.View style={style}>
       <Accordion.Root
         onValueChange={useCallback((v) => {
           if (v) {
-            setExpanded(true);
+            isExpanded.value = true;
           } else {
-            setExpanded(false);
+            isExpanded.value = false;
           }
-        },[setExpanded])}
+        }, [])}
       >
         <Accordion.Item
           value="hello"
@@ -97,7 +101,7 @@ export const CreatorPreview = memo((props: Props) => {
           </Accordion.Content>
         </Accordion.Item>
       </Accordion.Root>
-    </View>
+    </Animated.View>
   );
 });
 
