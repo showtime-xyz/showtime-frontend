@@ -1,78 +1,6 @@
-import { useEffect } from "react";
-import { axios } from "app/lib/axios";
-import { useInfiniteListQuery } from "./use-infinite-list-query";
-// import useSWRInfinite from "swr/infinite";
-// import { useInfiniteListQuery } from "./use-infinite-list-query";
-
-// export const useActivity = ({
-//   typeId,
-//   limit = 5,
-// }: {
-//   typeId: number;
-//   limit?: number;
-// }) => {
-//   const [isRefreshing, setRefreshing] = useState(false);
-//   const {
-//     data: pages,
-//     error,
-//     mutate,
-//     size,
-//     setSize,
-//     isValidating,
-//   } = useSWRInfinite(
-//     (index) =>
-//       `/v2/activity?page=${index + 1}&type_id=${typeId}&limit=${limit}`,
-//     fetcher,
-//     {
-//       onSuccess() {
-//         setRefreshing(false);
-//       },
-//     }
-//   );
-
-//   const isLoadingInitialData = !pages && !error;
-//   // const isRefreshing = isValidating && pages && pages.length === size;
-//   const isLoadingMore =
-//     isLoadingInitialData ||
-//     (size > 0 && pages && typeof pages[size - 1] === "undefined");
-
-//   const newData = useMemo(() => {
-//     let newData = [];
-//     if (pages) {
-//       pages.forEach((p) => {
-//         if (p) {
-//           newData = newData.concat(p.data);
-//         }
-//       });
-//     }
-//     return newData;
-//   }, [pages]);
-
-//   return {
-//     data: newData,
-//     error,
-//     fetch,
-//     refresh: () => {
-//       if (!isRefreshing) {
-//         setRefreshing(true);
-//         setSize(1);
-//       }
-//     },
-//     fetchMore: () => {
-//       if (!isValidating) {
-//         setSize(size + 1);
-//       }
-//     },
-//     retry: mutate,
-//     isLoading: isLoadingInitialData,
-//     isLoadingMore,
-//     isRefreshing,
-//   };
-// };
-
-const fetcher = (url) => {
-  return axios({ url, method: "GET" });
-};
+import { useCallback } from "react";
+import { useInfiniteListQuerySWR } from "./use-infinite-list-query";
+import { useUser } from "./use-user";
 
 export const useActivity = ({
   typeId,
@@ -81,34 +9,48 @@ export const useActivity = ({
   typeId: number;
   limit?: number;
 }) => {
-  const {
-    fetch,
-    data,
-    error,
-    fetchMore,
-    isLoading,
-    isLoadingMore,
-    refresh,
-    retry,
-    isRefreshing,
-  } = useInfiniteListQuery((page) => {
-    const url = `/v2/activity?page=${page}&type_id=${typeId}&limit=${limit}`;
-    return fetcher(url);
-  });
+  const { isAuthenticated } = useUser();
 
-  useEffect(() => {
-    fetch();
-  }, []);
+  const activityURLFn = useCallback(
+    (index) => {
+      const url = `/v2/${
+        isAuthenticated ? "activity_with_auth" : "activity_without_auth"
+      }?page=${index + 1}&type_id=${typeId}&limit=${limit}`;
+      return url;
+    },
+    [typeId, limit, isAuthenticated]
+  );
 
+  const queryState = useInfiniteListQuerySWR<any>(activityURLFn);
+  return queryState;
+};
+
+export const useTrendingCreators = ({ days }: { days: number }) => {
+  const trendingCreatorsUrlFn = useCallback(
+    (index) => {
+      const url = `/v1/leaderboard?page=${index + 1}&days=${days}&limit=15`;
+      return url;
+    },
+    [days]
+  );
+
+  const queryState = useInfiniteListQuerySWR<any>(trendingCreatorsUrlFn);
   return {
-    data,
-    error,
-    fetch,
-    refresh,
-    fetchMore,
-    retry,
-    isLoading,
-    isLoadingMore,
-    isRefreshing,
+    ...queryState,
+    fetchMore: useCallback(() => {}, []),
   };
+};
+
+export const useTrendingNFTS = ({ days }: { days: number }) => {
+  const trendingCreatorsUrlFn = useCallback(
+    (index) => {
+      const url = `/v2/featured?page=${index + 1}&days=${days}&limit=10`;
+      return url;
+    },
+    [days]
+  );
+
+  const queryState = useInfiniteListQuerySWR<any>(trendingCreatorsUrlFn);
+
+  return queryState;
 };

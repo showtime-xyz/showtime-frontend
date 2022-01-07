@@ -20,7 +20,10 @@ import { Menu, Transition } from "@headlessui/react";
 import MiniFollowButton from "./MiniFollowButton";
 import useProfile from "@/hooks/useProfile";
 import OrbitIcon from "./Icons/OrbitIcon";
-import { CHAIN_IDENTIFIERS } from "../lib/constants";
+import {
+  CHAIN_IDENTIFIERS,
+  COLLECTION_NAME_TRUNCATE_LENGTH,
+} from "../lib/constants";
 
 const TokenCard = ({
   originalItem,
@@ -841,7 +844,10 @@ const TokenCard = ({
                   />
                 )}
                 <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
-                  {item.collection_name}
+                  {truncateWithEllipses(
+                    item.collection_name,
+                    COLLECTION_NAME_TRUNCATE_LENGTH
+                  )}
                 </p>
               </div>
               <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">

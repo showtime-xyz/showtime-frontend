@@ -1,4 +1,4 @@
-import React, { useContext, ForwardedRef, useEffect } from "react";
+import React, { useContext, ForwardedRef, useEffect, useMemo } from "react";
 import { tw } from "../../tailwind";
 import {
   Pressable,
@@ -10,8 +10,8 @@ import {
   ViewProps,
   PressableProps,
   FlatList,
-  FlatListProps,
   Platform,
+  Dimensions,
 } from "react-native";
 import PagerView from "react-native-pager-view";
 import Reanimated, {
@@ -40,7 +40,8 @@ import {
 } from "./types";
 import { Spinner } from "design-system/spinner";
 import { Text } from "design-system/text";
-import { MotiView } from "moti";
+
+const windowHeight = Dimensions.get("window").height;
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
@@ -57,7 +58,6 @@ const Root = ({
   const index = useSharedValue(initialIndex ?? 0);
   const position = React.useRef(new Animated.Value(0)).current;
   const offset = React.useRef(new Animated.Value(0)).current;
-  const scrollY = useSharedValue(0);
   const translateY = useSharedValue(0);
   // maybe change this to shared value too
   const [headerHeight, setHeaderHeight] = React.useState(0);
@@ -102,6 +102,18 @@ const Root = ({
     };
   });
 
+  useAnimatedReaction(
+    () => {
+      return index.value;
+    },
+    (v, newV) => {
+      if (v !== newV) {
+        requestOtherViewsToSyncTheirScrollPosition.value = false;
+        refreshGestureState.value = "idle";
+      }
+    }
+  );
+
   return (
     <TabsContext.Provider
       value={{
@@ -113,7 +125,6 @@ const Root = ({
         tablistScrollRef,
         requestOtherViewsToSyncTheirScrollPosition,
         translateY,
-        scrollY,
         offset,
         position,
         headerHeight,
@@ -147,7 +158,12 @@ const Root = ({
   );
 };
 
-const List = ({ children, style, ...props }: TabListProps) => {
+const List = ({
+  children,
+  style,
+  contentContainerStyle,
+  ...props
+}: TabListProps) => {
   const { tablistScrollRef, index, tabItemLayouts } = useContext(TabsContext);
 
   const newChildren = React.useMemo(() => {
@@ -199,9 +215,16 @@ const List = ({ children, style, ...props }: TabListProps) => {
       showsHorizontalScrollIndicator={false}
       horizontal
       style={styles}
-      contentContainerStyle={{
-        paddingHorizontal: 16,
-      }}
+      contentContainerStyle={useMemo(
+        () =>
+          StyleSheet.flatten([
+            {
+              paddingHorizontal: 16,
+            },
+            contentContainerStyle,
+          ]),
+        [contentContainerStyle]
+      )}
       {...props}
     >
       {newChildren}
@@ -256,7 +279,7 @@ const Pager = ({ children }) => {
     },
     (res, prev) => {
       if (res !== prev && !mountedIndices.includes(res)) {
-        translateY.value = withTiming(0);
+        translateY.value = withTiming(0, { duration: 400 });
         runOnJS(setMountedIndices)(mountedIndices.concat(res));
       }
     },
@@ -341,11 +364,18 @@ const Trigger = React.forwardRef(
 );
 
 function makeScrollableComponent<
-  K extends object & { onRefresh?: any; refreshing?: any },
+  K extends object & {
+    onRefresh?: any;
+    ListHeaderComponent?: React.ReactElement;
+    refreshing?: any;
+  },
   T extends any
 >(Comp: T) {
   return React.forwardRef(
-    ({ refreshing, onRefresh, ...props }: K, ref: ForwardedRef<T>) => {
+    (
+      { refreshing, onRefresh, ListHeaderComponent, ...props }: K,
+      ref: ForwardedRef<T>
+    ) => {
       const {
         headerHeight,
         pullToRefreshY,
@@ -353,7 +383,6 @@ function makeScrollableComponent<
         refreshGestureState,
         tabListHeight,
         translateY,
-
         index,
       } = useContext(TabsContext);
       const elementIndex = React.useContext(TabIndexContext).index;
@@ -369,20 +398,17 @@ function makeScrollableComponent<
           requestOtherViewsToSyncTheirScrollPosition.value = false;
         },
         onScroll(e) {
-          // only current scrollview controls the header translate, other scrollviews sync their scroll posisions
-          if (elementIndex === index.value) {
-            scrollY.value = e.contentOffset.y;
-            translateY.value = interpolate(
-              scrollY.value,
-              [0, headerHeight],
-              [0, -headerHeight],
-              Extrapolate.CLAMP
-            );
-            if (e.contentOffset.y <= 0) {
-              enablePullToRefresh.value = true;
-            } else {
-              enablePullToRefresh.value = false;
-            }
+          scrollY.value = e.contentOffset.y;
+          translateY.value = interpolate(
+            scrollY.value,
+            [0, headerHeight],
+            [0, -headerHeight],
+            Extrapolate.CLAMP
+          );
+          if (e.contentOffset.y <= 0) {
+            enablePullToRefresh.value = true;
+          } else {
+            enablePullToRefresh.value = false;
           }
         },
         onEndDrag(e) {
@@ -406,6 +432,17 @@ function makeScrollableComponent<
         }
       });
 
+      // Set the initial scroll on mount
+      useEffect(() => {
+        if (index.value === elementIndex) {
+          const nextScrollY = -1 * translateY.value;
+          // if another tab just started showing header or scroll is less than translated header.
+          if (nextScrollY < headerHeight || scrollY.value < nextScrollY) {
+            scrollTo(aref, 0, nextScrollY, false);
+          }
+        }
+      }, []);
+
       const panRef = React.useRef();
       const nativeRef = React.useRef();
 
@@ -414,6 +451,7 @@ function makeScrollableComponent<
           if (
             enablePullToRefresh.value &&
             elementIndex === index.value &&
+            refreshGestureState.value !== "refresh" &&
             refreshGestureState.value !== "refreshing"
           ) {
             pullToRefreshY.value = e.translationY;
@@ -430,8 +468,11 @@ function makeScrollableComponent<
           if (elementIndex === index.value) {
             pullToRefreshY.value = 0;
             if (refreshGestureState.value === "pulling") {
-              refreshGestureState.value = "refreshing";
-            } else if (refreshGestureState.value !== "refreshing") {
+              refreshGestureState.value = "refresh";
+            } else if (
+              refreshGestureState.value !== "refresh" &&
+              refreshGestureState.value !== "refreshing"
+            ) {
               refreshGestureState.value = "idle";
             }
           }
@@ -455,14 +496,25 @@ function makeScrollableComponent<
                 alwaysBounceHorizontal={false}
                 automaticallyAdjustContentInsets={false}
                 ref={mergeRef([ref, aref])}
-                contentContainerStyle={{
-                  paddingTop: tabListHeight + headerHeight,
-                }}
-                ListHeaderComponent={() => (
-                  <PullToRefresh
-                    isRefreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />
+                contentOffset={{ y: -1 * translateY.value }}
+                contentContainerStyle={useMemo(
+                  () => ({
+                    paddingTop: tabListHeight + headerHeight,
+                    minHeight: windowHeight,
+                  }),
+                  [tabListHeight, headerHeight]
+                )}
+                ListHeaderComponent={useMemo(
+                  () => (
+                    <>
+                      <PullToRefresh
+                        isRefreshing={refreshing}
+                        onRefresh={onRefresh}
+                      />
+                      {ListHeaderComponent}
+                    </>
+                  ),
+                  [refreshing, onRefresh, ListHeaderComponent]
                 )}
                 {...props}
               />
@@ -479,10 +531,9 @@ const TabScrollView = makeScrollableComponent<
   typeof Reanimated.ScrollView
 >(Reanimated.ScrollView);
 const AnimatedFlatList = Reanimated.createAnimatedComponent(FlatList);
-const TabFlatList = makeScrollableComponent<
-  FlatListProps<any>,
-  typeof AnimatedFlatList
->(AnimatedFlatList);
+const TabFlatList = makeScrollableComponent<any, typeof AnimatedFlatList>(
+  AnimatedFlatList
+);
 
 const Header = (props) => {
   return props.children;
@@ -558,9 +609,12 @@ export const PullToRefresh = ({
   const { refreshGestureState, index } = useTabsContext();
   const [refreshState, setRefreshState] = React.useState("idle");
 
+  const showSpinner =
+    refreshState === "refresh" || refreshState === "refreshing";
+
   useEffect(() => {
     if (isRefreshing) {
-      setRefreshState("refreshing");
+      refreshGestureState.value = "refreshing";
     } else {
       refreshGestureState.value = "idle";
     }
@@ -570,15 +624,20 @@ export const PullToRefresh = ({
     () => {
       return refreshGestureState.value;
     },
-    (v) => {
-      if (elementIndex !== index.value) {
+    (v, n) => {
+      // Todo: make refresh gesture state local to list
+      // when tab changes we initialize the refresh gesture state to 1, so reset the local state here.
+      if (elementIndex !== index.value && v === "idle") {
+        runOnJS(setRefreshState)(v);
         return;
       }
-      if (v === "refreshing") {
+
+      if (elementIndex !== index.value || v == n) return;
+
+      if (v === "refresh") {
         runOnJS(onRefresh)();
-      } else {
-        runOnJS(setRefreshState)(v);
       }
+      runOnJS(setRefreshState)(v);
     },
     [onRefresh, elementIndex]
   );
@@ -588,9 +647,11 @@ export const PullToRefresh = ({
       return {};
     }
 
-    if (refreshGestureState.value === "refreshing") {
-      return { height: 50 };
-    } else if (refreshGestureState.value === "pulling") {
+    if (
+      refreshGestureState.value === "pulling" ||
+      refreshGestureState.value === "refresh" ||
+      refreshGestureState.value === "refreshing"
+    ) {
       return {
         height: withTiming(50, { duration: 400 }),
       };
@@ -599,29 +660,20 @@ export const PullToRefresh = ({
         height: withTiming(0, { duration: 400 }),
       };
     }
-  }, [elementIndex]);
-
+  }, [elementIndex, refreshGestureState.value]);
 
   return (
     <Reanimated.View style={[style, tw.style("items-center justify-center")]}>
-      <MotiView
-        from={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 200, type: "timing" }}
-        exit={{ opacity: 0 }}
-      >
-        {refreshState === "pulling" && (
-          <Text tw="dark:text-white text-gray-900 text-sm">
-            Release to refresh
-          </Text>
-        )}
-        {refreshState === "cancelling" && (
-          <Text tw="dark:text-white text-gray-900 text-sm">
-            Pull to refresh
-          </Text>
-        )}
-        {refreshState === "refreshing" && <Spinner />}
-      </MotiView>
+      {refreshState === "pulling" && (
+        <Text tw="dark:text-white text-gray-900 text-sm">
+          Release to refresh
+        </Text>
+      )}
+      {refreshState === "cancelling" && (
+        <Text tw="dark:text-white text-gray-900 text-sm">Pull to refresh</Text>
+      )}
+
+      {showSpinner ? <Spinner /> : null}
     </Reanimated.View>
   );
 };

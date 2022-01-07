@@ -9,7 +9,7 @@ import { Text, Props as TextProps } from "design-system/text";
 import { ViewProps } from "design-system/view";
 import { useIsDarkMode } from "../hooks";
 
-const Chevron = () => {
+const Chevron = ({ children }: { children: any }) => {
   const { value: selectedValue } = useContext(RNAccordion.RootContext);
   const { value: itemValue } = useContext(RNAccordion.ItemContext);
   const isExpanded = itemValue === selectedValue;
@@ -26,14 +26,18 @@ const Chevron = () => {
         easing: Easing.bezier(0.87, 0, 0.13, 1),
       }}
     >
-      <Svg width={14} height={8} fill="none">
-        <Path
-          fillRule="evenodd"
-          clipRule="evenodd"
-          d="M13.707 7.707a1 1 0 0 1-1.414 0L7 2.414 1.707 7.707A1 1 0 0 1 .293 6.293l6-6a1 1 0 0 1 1.414 0l6 6a1 1 0 0 1 0 1.414Z"
-          fill={isDark ? "#FFF" : "#18181B"}
-        />
-      </Svg>
+      {children ? (
+        children
+      ) : (
+        <Svg width={14} height={8} fill="none">
+          <Path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M13.707 7.707a1 1 0 0 1-1.414 0L7 2.414 1.707 7.707A1 1 0 0 1 .293 6.293l6-6a1 1 0 0 1 1.414 0l6 6a1 1 0 0 1 0 1.414Z"
+            fill={isDark ? "#FFF" : "#18181B"}
+          />
+        </Svg>
+      )}
     </MotiView>
   );
 };
@@ -42,9 +46,7 @@ const Item = ({ tw = "", disabled, ...props }: ViewProps & ItemProps) => {
   return (
     <RNAccordion.Item value={props.value} disabled={disabled}>
       <View
-        tw={`bg-white dark:bg-black rounded-2xl ${
-          disabled ? "opacity-60 " : ""
-        } ${tw}`}
+        tw={`bg-white dark:bg-black rounded-2xl ${tw}`}
         {...props}
       />
     </RNAccordion.Item>
@@ -59,7 +61,6 @@ const Trigger = ({ tw = "", ...props }: ViewProps) => {
         {...props}
       >
         {props.children}
-        <Chevron />
       </View>
     </RNAccordion.Trigger>
   );
@@ -88,4 +89,6 @@ export const Accordion = {
   Trigger,
   Content,
   Label,
+  Chevron,
+  RNAccordion,
 };

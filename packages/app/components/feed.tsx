@@ -8,6 +8,7 @@ import { View, Spinner, Text } from "design-system";
 import { Card } from "design-system/card";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
+
 const TAB_LIST_HEIGHT = 64;
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
@@ -27,15 +28,6 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
   return <View sx={{ marginBottom: tabBarHeight }}></View>;
 };
 
-type Props = {
-  activity: any;
-  activityPage: any;
-  getNext: any;
-  isLoading: boolean;
-  isRefreshing: boolean;
-  onRefresh: any;
-};
-
 const Feed = () => {
   const [selected, setSelected] = useState(0);
 
@@ -48,8 +40,8 @@ const Feed = () => {
         lazy
       >
         <Tabs.Header>
-          <View tw="bg-white dark:bg-black">
-            <Text tw="px-4 pt-4 text-gray-900 dark:text-white font-bold text-3xl">
+          <View tw="bg-white dark:bg-black pt-4 pl-4 pb-[3px]">
+            <Text tw="text-gray-900 dark:text-white font-bold text-3xl">
               Home
             </Text>
           </View>

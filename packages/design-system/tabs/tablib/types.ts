@@ -18,6 +18,7 @@ export type TabListProps = ScrollViewProps;
 export type RefreshGestureState =
   | "idle"
   | "pulling"
+  | "refresh"
   | "refreshing"
   | "cancelling";
 
@@ -30,7 +31,6 @@ export type TabsContextType = {
   tablistScrollRef: React.RefObject<Reanimated.ScrollView>;
   requestOtherViewsToSyncTheirScrollPosition: Reanimated.SharedValue<boolean>;
   translateY: Reanimated.SharedValue<number>;
-  scrollY: Reanimated.SharedValue<number>;
   offset: Animated.Value;
   position: Animated.Value;
   headerHeight: number;
