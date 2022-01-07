@@ -43,7 +43,7 @@ export const PrimaryButton = ({ tw, iconOnly, size, ...props }: Props) => (
     tw={`bg-black dark:bg-white flex-row justify-center items-center ${
       iconOnly ? "p-2 rounded-xl" : "px-4 py-2 rounded-2xl"
     } ${
-      size === "regular" ? "h-10 rounded-3xl" : ""
+      size === "regular" ? "h-[48px] rounded-3xl" : "h-[32px]"
     } disabled:opacity-40 disabled:cursor-not-allowed ${tw ? tw : ""}`}
   />
 );
@@ -56,7 +56,7 @@ export const DangerButton = ({ tw, iconOnly, size, ...props }: Props) => (
     tw={`bg-red-500 dark:bg-red-700 text-white font-medium flex-row justify-center items-center ${
       iconOnly ? "p-2 rounded-xl" : "px-4 py-2 rounded-2xl"
     } ${
-      size === "regular" ? "h-10 rounded-3xl" : ""
+      size === "regular" ? "h-[48px] rounded-3xl" : "h-[32px]"
     } disabled:opacity-40 disabled:cursor-not-allowed ${tw ? tw : ""}`}
   />
 );
@@ -69,7 +69,7 @@ export const TertiaryButton = ({ tw, iconOnly, size, ...props }: Props) => (
     tw={`relative bg-gray-100 text-gray-900 font-semibold dark:bg-gray-800 dark:text-gray-200 flex-row justify-center items-center ${
       iconOnly ? "p-2 rounded-xl" : "px-4 py-2 rounded-2xl"
     } ${
-      size === "regular" ? "h-10 rounded-3xl" : ""
+      size === "regular" ? "h-[48px] rounded-3xl" : "h-[32px]"
     } disabled:opacity-40 disabled:cursor-not-allowed ${tw ? tw : ""}`}
   />
 );
