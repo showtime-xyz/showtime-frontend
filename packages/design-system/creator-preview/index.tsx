@@ -24,19 +24,25 @@ export const CreatorPreview = memo((props: Props) => {
   const [isExpanded, setExpanded] = useState(false);
   return (
     <View
-      style={useMemo(() => ({
-        height: isExpanded ? ITEM_EXPANDED_HEIGHT : ITEM_COLLAPSED_HEIGHT,
-        overflow: "hidden",
-      }),[isExpanded])}
+      style={useMemo(
+        () => ({
+          height: isExpanded ? ITEM_EXPANDED_HEIGHT : ITEM_COLLAPSED_HEIGHT,
+          overflow: "hidden",
+        }),
+        [isExpanded]
+      )}
     >
       <Accordion.Root
-        onValueChange={useCallback((v) => {
-          if (v) {
-            setExpanded(true);
-          } else {
-            setExpanded(false);
-          }
-        },[setExpanded])}
+        onValueChange={useCallback(
+          (v) => {
+            if (v) {
+              setExpanded(true);
+            } else {
+              setExpanded(false);
+            }
+          },
+          [setExpanded]
+        )}
       >
         <Accordion.Item
           value="hello"
