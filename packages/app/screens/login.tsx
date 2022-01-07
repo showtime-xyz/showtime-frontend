@@ -4,9 +4,13 @@ import { useRouter } from "app/navigation/use-router";
 
 export function LoginScreen() {
   const router = useRouter();
-
   return (
-    <Modal title="Sign In" close={router.pop}>
+    <Modal
+      title="Sign In"
+      close={router.pop}
+      height=""
+      bodyTW="bg-white dark:bg-black"
+    >
       <Login />
     </Modal>
   );

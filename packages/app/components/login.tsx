@@ -219,83 +219,81 @@ export function Login() {
 
   return (
     <>
-      <ScrollView tw="h-120 md:h-60">
-        {signaturePending ? (
-          <View tw="py-40">
-            <Text tw="text-center dark:text-gray-400">
-              {walletName !== ""
-                ? `Pushed a request to ${walletName}... Please check your wallet.`
-                : `Pushed a request to your wallet...`}
+      {signaturePending ? (
+        <View tw="py-40">
+          <Text tw="text-center dark:text-gray-400">
+            {walletName !== ""
+              ? `Pushed a request to ${walletName}... Please check your wallet.`
+              : `Pushed a request to your wallet...`}
+          </Text>
+        </View>
+      ) : (
+        <View>
+          <Text tw="text-gray-900 dark:text-white mb-[10px] text-center font-semibold">
+            If this is your first time, it will create a new account on
+            Showtime.
+          </Text>
+          <View tw="flex-row justify-center mb-[32px]">
+            <Text
+              variant="text-xs"
+              tw="text-gray-600 dark:text-gray-400 text-center"
+            >
+              By signing in you agree to our{" "}
+            </Text>
+            <Pressable
+              onPress={() => {
+                Linking.openURL(
+                  "https://www.notion.so/Showtime-Legal-c407e36eb7cd414ca190245ca8621e68"
+                );
+              }}
+            >
+              <Text
+                variant="text-xs"
+                tw="text-black dark:text-white font-bold text-center"
+              >
+                Terms &amp; Conditions
+              </Text>
+            </Pressable>
+            <Text
+              variant="text-xs"
+              tw="text-gray-600 dark:text-gray-400 text-center"
+            >
+              .
             </Text>
           </View>
-        ) : (
-          <View tw="px-4">
-            <Text tw="text-gray-900 dark:text-white mb-4 text-center">
-              If this is your first time, it will create a new account on
-              Showtime.
-            </Text>
-            <View tw="py-4 flex-row justify-center">
-              <Text
-                variant="text-xs"
-                tw="text-gray-600 dark:text-gray-400 text-center"
-              >
-                By signing in you agree to our{" "}
-              </Text>
-              <Pressable
-                onPress={() => {
-                  Linking.openURL(
-                    "https://www.notion.so/Showtime-Legal-c407e36eb7cd414ca190245ca8621e68"
-                  );
-                }}
-              >
-                <Text
-                  variant="text-xs"
-                  tw="text-black dark:text-white font-bold text-center"
-                >
-                  Terms &amp; Conditions
-                </Text>
-              </Pressable>
-              <Text
-                variant="text-xs"
-                tw="text-gray-600 dark:text-gray-400 text-center"
-              >
-                .
-              </Text>
-            </View>
 
-            <View tw="mb-4">
-              <Button
-                onPress={() => handleSubmitWallet()}
-                variant="primary"
-                size="regular"
-              >
-                <Ethereum
-                  width={24}
-                  height={24}
-                  color={
-                    tw.style("bg-white dark:bg-black")
-                      ?.backgroundColor as string
-                  }
-                />
-                <ButtonLabel tw="ml-2">Sign in with Wallet</ButtonLabel>
-              </Button>
-            </View>
+          <View tw="mb-[16px]">
+            <Button
+              onPress={() => handleSubmitWallet()}
+              variant="primary"
+              size="regular"
+            >
+              <ButtonLabel>Sign in with Wallet</ButtonLabel>
+            </Button>
+          </View>
 
-            <Text tw="py-6 text-gray-700 dark:text-gray-600 text-center">
+          <View tw="mb-[16px] mx-[-16px] bg-gray-100 dark:bg-gray-900">
+            <Text tw="my-[8px] font-bold text-sm text-gray-600 dark:text-gray-400 text-center">
               — or —
             </Text>
-            <Text tw="mb-4 dark:text-white text-center">
-              Enter your email to receive a sign in link
+          </View>
+
+          <Text tw="mb-[16px] font-medium text-gray-900 dark:text-white text-center">
+            Enter your email to receive a sign in link
+          </Text>
+          <View tw="p-[16px] mb-[16px] rounded-[16px] bg-gray-100 dark:bg-gray-900">
+            <Text tw="mb-[8px] font-bold text-sm text-gray-900 dark:text-white">
+              Email address
             </Text>
             <Controller
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                  tw="mb-4 border-2 dark:border-gray-800 dark:bg-gray-800 w-full text-black dark:text-gray-300 rounded-lg p-3 focus:outline-none focus-visible:ring-1"
+                  tw="w-full text-black dark:text-gray-300 rounded-lg focus:outline-none focus-visible:ring-1"
                   onBlur={onBlur}
                   onChangeText={(value) => onChange(value)}
                   value={value}
-                  placeholder="Email"
+                  placeholder="Enter your email address"
                   autoCapitalize="none"
                   autoCorrect={false}
                   textContentType="emailAddress"
@@ -305,21 +303,21 @@ export function Login() {
               rules={{ required: true }}
               defaultValue=""
             />
-            {/* {errors.email && <Text sx={{ fontSize: 12, textAlign: 'center' }}>This is required.</Text>} */}
-
-            <Button
-              onPress={handleSubmit(handleSubmitEmail)}
-              variant="tertiary"
-              size="regular"
-            >
-              <ButtonLabel tw="text-black dark:text-white">
-                Sign in with Email
-              </ButtonLabel>
-            </Button>
           </View>
-        )}
-        <Relayer />
-      </ScrollView>
+          {/* {errors.email && <Text sx={{ fontSize: 12, textAlign: 'center' }}>This is required.</Text>} */}
+
+          <Button
+            onPress={handleSubmit(handleSubmitEmail)}
+            variant="tertiary"
+            size="regular"
+          >
+            <ButtonLabel tw="text-black dark:text-white">
+              Sign in with Email
+            </ButtonLabel>
+          </Button>
+        </View>
+      )}
+      <Relayer />
     </>
   );
 }
