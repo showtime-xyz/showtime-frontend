@@ -5,6 +5,7 @@ import useUnmountSignal from "use-unmount-signal";
 import { axios } from "app/lib/axios";
 import { mixpanel } from "app/lib/mixpanel";
 import { accessTokenManager } from "app/lib/access-token-manager";
+import { useAccessToken } from "app/lib/access-token";
 
 type RefreshStatus = "IDLE" | "REFRESHING_ACCESS_TOKEN" | "DONE" | "ERROR";
 type AuthenticatedStatus = "IDLE" | "AUTHENTICATED" | "UNAUTHENTICATED";
@@ -13,7 +14,7 @@ const useUser = () => {
   const [refreshStatus, setRefreshStatus] = useState<RefreshStatus>("IDLE");
   const [authenticationStatus, setAuthenticationStatus] =
     useState<AuthenticatedStatus>("IDLE");
-  const accessToken = accessTokenManager.getAccessToken();
+  const accessToken = useAccessToken();
 
   const unmountSignal = useUnmountSignal();
   const url = "/v2/myinfo";

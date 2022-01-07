@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useInfiniteListQuerySWR } from "./use-infinite-list-query";
+import { useUser } from "./use-user";
 
 export const useActivity = ({
   typeId,
@@ -8,14 +9,16 @@ export const useActivity = ({
   typeId: number;
   limit?: number;
 }) => {
+  const { isAuthenticated } = useUser();
+
   const activityURLFn = useCallback(
     (index) => {
-      const url = `/v2/activity_without_auth?page=${
-        index + 1
-      }&type_id=${typeId}&limit=${limit}`;
+      const url = `/v2/${
+        isAuthenticated ? "activity_with_auth" : "activity_without_auth"
+      }?page=${index + 1}&type_id=${typeId}&limit=${limit}`;
       return url;
     },
-    [typeId, limit]
+    [typeId, limit, isAuthenticated]
   );
 
   const queryState = useInfiniteListQuerySWR<any>(activityURLFn);
