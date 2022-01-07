@@ -120,6 +120,9 @@ const SpotlightItem = ({
     myProfile?.profile_id === thisItem?.listing?.profile_id &&
     typeof myProfile?.profile_id === "number";
 
+  const freeItem = item?.listing?.min_price === 0;
+  const singleEdition = item?.listing?.total_edition_quantity === 1;
+
   return (
     <>
       {typeof document !== "undefined" ? (
@@ -510,8 +513,9 @@ const SpotlightItem = ({
                     </div>
                     {item.listing && (
                       <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
-                        {item.listing.total_edition_quantity} Editions /{" "}
-                        {parseInt(item.listing.royalty_percentage)}% Royalties
+                        {singleEdition
+                          ? `${item.listing.total_edition_quantity} Edition`
+                          : `${item.listing.total_edition_quantity} Editions`}
                       </p>
                     )}
                   </div>
@@ -603,8 +607,14 @@ const SpotlightItem = ({
                   {item.listing ? (
                     <>
                       {ifListedIsOwner ? (
-                        <p className="font-medium text-gray-500">
-                          {`Listed for ${item.listing.min_price} ${item.listing.currency}`}
+                        <p className="px-4 text-sm sm:text-base dark:text-gray-500">
+                          {freeItem ? (
+                            "Listed for Free"
+                          ) : (
+                            <>
+                              {`Price ${item.listing.min_price} ${item.listing.currency}`}
+                            </>
+                          )}
                         </p>
                       ) : (
                         <Button
@@ -613,7 +623,15 @@ const SpotlightItem = ({
                           title="Buy on Showtime"
                           onClick={() => setBuyModalOpen(true)}
                         >
-                          {`Price ${item.listing.min_price} ${item.listing.currency}`}
+                          <p className="text-sm sm:text-base">
+                            {freeItem ? (
+                              "Price Free"
+                            ) : (
+                              <>
+                                {`Price ${item.listing.min_price} ${item.listing.currency}`}
+                              </>
+                            )}
+                          </p>
                         </Button>
                       )}
                     </>

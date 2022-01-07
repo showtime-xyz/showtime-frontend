@@ -154,9 +154,12 @@ const TokenDetailBody = ({
   const isOwnedByUser =
     typeof myProfile?.profile_id === "number" &&
     myProfile?.profile_id === item?.owner_id;
+
   const ifListedIsOwner =
     myProfile?.profile_id === item?.listing?.profile_id &&
     typeof myProfile?.profile_id === "number";
+
+  const freeItem = item?.listing?.min_price === 0;
 
   return (
     <>
@@ -629,7 +632,13 @@ const TokenDetailBody = ({
                   <>
                     {ifListedIsOwner ? (
                       <p className="px-4 text-sm sm:text-base dark:text-gray-500">
-                        {`Listed for ${item.listing.min_price} ${item.listing.currency}`}
+                        {freeItem ? (
+                          "Listed for Free"
+                        ) : (
+                          <>
+                            {`Price ${item.listing.min_price} ${item.listing.currency}`}
+                          </>
+                        )}
                       </p>
                     ) : (
                       <button
@@ -638,7 +647,13 @@ const TokenDetailBody = ({
                         onClick={() => setBuyModalOpen(true)}
                       >
                         <p className="text-sm sm:text-base">
-                          {`Price ${item.listing.min_price} ${item.listing.currency}`}
+                          {freeItem ? (
+                            "Price Free"
+                          ) : (
+                            <>
+                              {`Price ${item.listing.min_price} ${item.listing.currency}`}
+                            </>
+                          )}
                         </p>
                       </button>
                     )}
