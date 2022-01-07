@@ -1,10 +1,13 @@
-import { Modal } from 'design-system'
-import { Login } from 'app/components/login'
+import { Modal } from "design-system";
+import { Login } from "app/components/login";
+import { useRouter } from "app/navigation/use-router";
 
 export function LoginScreen() {
-	return (
-		<Modal title="Sign In">
-			<Login />
-		</Modal>
-	)
+  const router = useRouter();
+
+  return (
+    <Modal title="Sign In" close={router.pop}>
+      <Login />
+    </Modal>
+  );
 }

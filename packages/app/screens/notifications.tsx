@@ -1,5 +1,5 @@
 function NotificationsScreen() {
-	return null
+  return null;
 }
 
-export { NotificationsScreen }
+export { NotificationsScreen };

@@ -1,16 +1,39 @@
-import { MMKV } from 'react-native-mmkv'
+import { useEffect, useState } from "react";
+import { MMKV } from "react-native-mmkv";
+
+const accessTokenStorage = new MMKV();
+const ACCESS_TOKEN_STRING = "access-token";
 
 export function setAccessToken(token: string) {
-	const storage = new MMKV()
-	storage.set('access-token', token)
+  accessTokenStorage.set(ACCESS_TOKEN_STRING, token);
 }
 
 export function getAccessToken() {
-	const storage = new MMKV()
-	return storage.getString('access-token')
+  return accessTokenStorage.getString(ACCESS_TOKEN_STRING);
 }
 
 export function deleteAccessToken() {
-	const storage = new MMKV()
-	storage.delete('access-token')
+  accessTokenStorage.delete(ACCESS_TOKEN_STRING);
+}
+
+export function useAccessToken() {
+  const [accessToken, setAccessToken] = useState(() =>
+    accessTokenStorage.getString(ACCESS_TOKEN_STRING)
+  );
+
+  useEffect(() => {
+    const listener = accessTokenStorage.addOnValueChangedListener(
+      (changedKey) => {
+        if (changedKey === ACCESS_TOKEN_STRING) {
+          const newValue = accessTokenStorage.getString(ACCESS_TOKEN_STRING);
+          setAccessToken(newValue);
+        }
+      }
+    );
+    return () => {
+      listener.remove();
+    };
+  }, []);
+
+  return accessToken;
 }

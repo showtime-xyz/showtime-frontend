@@ -1,3 +1,3 @@
-import { Platform } from 'react-native'
+import { Platform } from "react-native";
 
-export const isServer = Platform.OS === 'web' && typeof window === 'undefined'
+export const isServer = Platform.OS === "web" && typeof window === "undefined";

@@ -1,1 +1,1 @@
-export { default } from 'app/pages/discover'
+export { default } from "app/pages/discover";

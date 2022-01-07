@@ -1,5 +1,5 @@
 function DiscoverScreen() {
-	return null
+  return null;
 }
 
-export { DiscoverScreen }
+export { DiscoverScreen };

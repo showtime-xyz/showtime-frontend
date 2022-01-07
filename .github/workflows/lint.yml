@@ -3,48 +3,48 @@ name: Lint
 on: [pull_request]
 
 jobs:
-    build:
-        name: Run ESLint
-        runs-on: ubuntu-latest
-        steps:
-            - name: Set up repository
-              uses: actions/checkout@v2
-              with:
-                  fetch-depth: 0
+  build:
+    name: Run ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
-            - name: Set up Node
-              uses: actions/setup-node@v2
-              with:
-                  node-version: 14.x
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
 
-            - name: Obtain Yarn Cache directory
-              id: yarn-cache-path
-              run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Obtain Yarn Cache directory
+        id: yarn-cache-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
 
-            - name: Cache Yarn dependencies
-              uses: actions/cache@v2
-              with:
-                  path: ${{ steps.yarn-cache-path.outputs.dir }}
-                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-                  restore-keys: ${{ runner.os }}-yarn-
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
 
-            - name: Install dependencies
-              run: yarn install --frozen-lockfile --check-files
-              env:
-                  CI: TRUE
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --check-files
+        env:
+          CI: TRUE
 
-            - name: Run ESLint
-              run: ESLINT_PLUGIN_DIFF_COMMIT="origin/$GITHUB_BASE_REF..." yarn eslint --output-file eslint_report.json --format json "apps/next-react/*.{js,jsx,ts,tsx}"
-              continue-on-error: true
+      - name: Run ESLint
+        run: ESLINT_PLUGIN_DIFF_COMMIT="origin/$GITHUB_BASE_REF..." yarn eslint --output-file eslint_report.json --format json "apps/next-react/*.{js,jsx,ts,tsx}"
+        continue-on-error: true
 
-            - name: Annotate Code Linting Results
-              uses: ataylorme/eslint-annotate-action@1.2.0
-              with:
-                  repo-token: '${{ secrets.GITHUB_TOKEN }}'
-                  report-json: 'eslint_report.json'
+      - name: Annotate Code Linting Results
+        uses: ataylorme/eslint-annotate-action@1.2.0
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          report-json: "eslint_report.json"
 
-            - name: Upload ESLint report
-              uses: actions/upload-artifact@v2
-              with:
-                  name: eslint_report.json
-                  path: eslint_report.json
+      - name: Upload ESLint report
+        uses: actions/upload-artifact@v2
+        with:
+          name: eslint_report.json
+          path: eslint_report.json

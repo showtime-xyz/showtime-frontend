@@ -1,0 +1,31 @@
+diff --git a/node_modules/@react-native-segmented-control/segmented-control/js/SegmentedControlTab.js b/node_modules/@react-native-segmented-control/segmented-control/js/SegmentedControlTab.js
+index 85bb622..30132d2 100644
+--- a/node_modules/@react-native-segmented-control/segmented-control/js/SegmentedControlTab.js
++++ b/node_modules/@react-native-segmented-control/segmented-control/js/SegmentedControlTab.js
+@@ -14,7 +14,7 @@ import {
+   View,
+   useColorScheme,
+ } from 'react-native';
+-
++import { Pressable } from "react-native"
+ import type {FontStyle, ViewStyle} from './types';
+ 
+ type Props = $ReadOnly<{|
+@@ -83,7 +83,7 @@ export const SegmentedControlTab = ({
+   };
+ 
+   return (
+-    <TouchableOpacity
++    <Pressable
+       style={[styles.container, tabStyle]}
+       disabled={!enabled}
+       onPress={onSelect}
+@@ -97,7 +97,7 @@ export const SegmentedControlTab = ({
+           <Text style={[idleStyle, selected && activeStyle]}>{value}</Text>
+         )}
+       </View>
+-    </TouchableOpacity>
++    </Pressable>
+   );
+ };
+ 

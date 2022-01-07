@@ -1,3 +1,3 @@
 export function deleteCache() {
-	localStorage.removeItem('app-cache')
+  localStorage.removeItem("app-cache");
 }

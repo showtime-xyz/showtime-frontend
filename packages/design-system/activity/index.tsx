@@ -1,1 +1,1 @@
-export { Activity } from './activity'
+export { Activity } from "./activity";

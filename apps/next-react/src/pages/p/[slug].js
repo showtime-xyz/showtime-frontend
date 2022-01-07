@@ -1,12 +1,12 @@
 export async function getServerSideProps({ query: { slug } }) {
-	return {
-		redirect: {
-			destination: `/${slug}`,
-			permanent: true,
-		},
-	}
+  return {
+    redirect: {
+      destination: `/${slug}`,
+      permanent: true,
+    },
+  };
 }
 
-const RedirectURL = () => null
+const RedirectURL = () => null;
 
-export default RedirectURL
+export default RedirectURL;

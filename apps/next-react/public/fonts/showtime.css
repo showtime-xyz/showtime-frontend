@@ -4,24 +4,27 @@
 
 /* Afronaut */
 @font-face {
-	font-family: Afronaut;
-	src: url('/fonts/eot/Afronaut.eot'); /* IE9 Compat Modes */
-	src: url('/fonts/eot/Afronaut.eot?#iefix') format('embedded-opentype'),
-		/* IE6-IE8 */ url('/fonts/woff2/Afronaut.woff2') format('woff2'),
-		/* Super Modern Browsers */ url('/fonts/woff/Afronaut.woff') format('woff'); /* Pretty Modern Browsers */
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
+  font-family: Afronaut;
+  src: url("/fonts/eot/Afronaut.eot"); /* IE9 Compat Modes */
+  src: url("/fonts/eot/Afronaut.eot?#iefix") format("embedded-opentype"),
+    /* IE6-IE8 */ url("/fonts/woff2/Afronaut.woff2") format("woff2"),
+    /* Super Modern Browsers */ url("/fonts/woff/Afronaut.woff") format("woff"); /* Pretty Modern Browsers */
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
 /* Tomato Grotesk Medium */
 @font-face {
-	font-family: Tomato Grotesk;
-	src: url('/fonts/eot/Tomato Grotesk Medium.eot'); /* IE9 Compat Modes */
-	src: url('/fonts/eot/Tomato Grotesk Medium.eot?#iefix') format('embedded-opentype'),
-		/* IE6-IE8 */ url('/fonts/woff2/Tomato Grotesk Medium.woff2') format('woff2'),
-		/* Super Modern Browsers */ url('/fonts/woff/Tomato Grotesk Medium.woff') format('woff'); /* Pretty Modern Browsers */
-	font-weight: 500;
-	font-style: normal;
-	font-display: swap;
+  font-family: Tomato Grotesk;
+  src: url("/fonts/eot/Tomato Grotesk Medium.eot"); /* IE9 Compat Modes */
+  src: url("/fonts/eot/Tomato Grotesk Medium.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-IE8 */ url("/fonts/woff2/Tomato Grotesk Medium.woff2")
+      format("woff2"),
+    /* Super Modern Browsers */ url("/fonts/woff/Tomato Grotesk Medium.woff")
+      format("woff"); /* Pretty Modern Browsers */
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
 }
