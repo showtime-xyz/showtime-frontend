@@ -432,6 +432,17 @@ function makeScrollableComponent<
         }
       });
 
+      // Set the initial scroll on mount
+      useEffect(() => {
+        if (index.value === elementIndex) {
+          const nextScrollY = -1 * translateY.value;
+          // if another tab just started showing header or scroll is less than translated header.
+          if (nextScrollY < headerHeight || scrollY.value < nextScrollY) {
+            scrollTo(aref, 0, nextScrollY, false);
+          }
+        }
+      }, []);
+
       const panRef = React.useRef();
       const nativeRef = React.useRef();
 
@@ -485,6 +496,7 @@ function makeScrollableComponent<
                 alwaysBounceHorizontal={false}
                 automaticallyAdjustContentInsets={false}
                 ref={mergeRef([ref, aref])}
+                contentOffset={{ y: -1 * translateY.value }}
                 contentContainerStyle={useMemo(
                   () => ({
                     paddingTop: tabListHeight + headerHeight,
