@@ -40,7 +40,7 @@
     "@react-navigation/native-stack": "^6.2.5",
     "@react-navigation/stack": "^6.0.11",
     "@sentry/react-native": "^3.2.3",
-    "@shopify/react-native-skia": "https://github.com/Shopify/react-native-skia/releases/download/v0.1.43-alpha/shopify-react-native-skia-0.1.43.tgz",
+    "@shopify/react-native-skia": "https://github.com/Shopify/react-native-skia/releases/download/v0.1.62-alpha/shopify-react-native-skia-0.1.62.tgz",
     "@tradle/react-native-http": "^2.0.0",
     "@walletconnect/react-native-dapp": "^1.6.6",
     "@zeego/dropdown-menu": "0.0.2-alpha.28",

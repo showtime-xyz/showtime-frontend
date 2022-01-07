@@ -4872,6 +4872,12 @@
   dependencies:
     react-reconciler "^0.26.2"
 
+"@shopify/react-native-skia@https://github.com/Shopify/react-native-skia/releases/download/v0.1.62-alpha/shopify-react-native-skia-0.1.62.tgz":
+  version "0.1.62"
+  resolved "https://github.com/Shopify/react-native-skia/releases/download/v0.1.62-alpha/shopify-react-native-skia-0.1.62.tgz#2ca7b6bdf01f0600e6fe2000dfef08392cc88b21"
+  dependencies:
+    react-reconciler "^0.26.2"
+
 "@sideway/address@^4.1.0":
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/@sideway/address/-/address-4.1.2.tgz#811b84333a335739d3969cfc434736268170cad1"
