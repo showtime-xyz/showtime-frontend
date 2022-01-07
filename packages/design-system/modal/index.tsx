@@ -1,5 +1,6 @@
 import React from "react";
-import { Modal as RNModal, Platform } from "react-native";
+import { Modal as RNModal, Platform, StyleSheet } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { View } from "design-system/view";
 import { Header } from "./header";
 import { ModalBackdrop } from "./backdrop";
@@ -14,6 +15,13 @@ import type { ModalProps } from "./types";
 
 const ModalContainer = Platform.select({
   ios: ({ children }) => children,
+  android: ({ children }) => (
+    <RNModal transparent={true}>
+      <GestureHandlerRootView style={StyleSheet.absoluteFill}>
+        {children}
+      </GestureHandlerRootView>
+    </RNModal>
+  ),
   default: ({ children }) => <RNModal transparent={true}>{children}</RNModal>,
 });
 
