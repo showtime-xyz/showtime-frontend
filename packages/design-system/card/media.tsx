@@ -7,6 +7,8 @@ import { mixpanel } from "app/lib/mixpanel";
 
 import { View, Image } from "design-system";
 import { Video } from "design-system/video";
+import { Model } from "design-system/model";
+import { PinchToZoom } from "design-system/pinch-to-zoom";
 
 const getImageUrl = (imgUrl: string, tokenAspectRatio: number) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
@@ -60,7 +62,6 @@ function Media({ nfts }: Props) {
     ({ item }) => {
       if (!item) return null;
 
-      // TODO: how to handle `image/svg+xml`?
       return (
         <View
           tw={[
@@ -76,30 +77,32 @@ function Media({ nfts }: Props) {
               mixpanel.track("Activity - Click on NFT image, open modal");
             }}
           >
-            {(item.mime_type?.startsWith("image") ||
-              item.mime_type?.startsWith("model")) && (
-              <Image
-                source={{
-                  uri:
-                    count === 1
-                      ? getImageUrlLarge(
-                          item.still_preview_url
-                            ? item.still_preview_url
-                            : item.token_img_url,
-                          item.token_aspect_ratio
-                        )
-                      : getImageUrl(
-                          item.still_preview_url
-                            ? item.still_preview_url
-                            : item.token_img_url,
-                          item.token_aspect_ratio
-                        ),
-                }}
-                tw={count > 1 ? "w-[50vw] h-[50vw]" : "w-[100vw] h-[100vw]"}
-                blurhash={item.blurhash}
-                resizeMode="cover"
-              />
-            )}
+            {item.mime_type?.startsWith("image") &&
+              item.mime_type !== "image/svg+xml" && (
+                <PinchToZoom>
+                  <Image
+                    source={{
+                      uri:
+                        count === 1
+                          ? getImageUrlLarge(
+                              item.still_preview_url
+                                ? item.still_preview_url
+                                : item.token_img_url,
+                              item.token_aspect_ratio
+                            )
+                          : getImageUrl(
+                              item.still_preview_url
+                                ? item.still_preview_url
+                                : item.token_img_url,
+                              item.token_aspect_ratio
+                            ),
+                    }}
+                    tw={count > 1 ? "w-[50vw] h-[50vw]" : "w-[100vw] h-[100vw]"}
+                    blurhash={item.blurhash}
+                    resizeMode="cover"
+                  />
+                </PinchToZoom>
+              )}
 
             {item.mime_type?.startsWith("video") && (
               <Video
@@ -117,6 +120,19 @@ function Media({ nfts }: Props) {
                 resizeMode="cover"
                 useNativeControls={count === 1}
               />
+            )}
+
+            {item.mime_type?.startsWith("model") && (
+              <View
+                tw={count > 1 ? "w-[50vw] h-[50vw]" : "w-[100vw] h-[100vw]"}
+              >
+                <Model
+                  url={item.source_url}
+                  fallbackUrl={item.still_preview_url}
+                  count={count}
+                  blurhash={item.blurhash}
+                />
+              </View>
             )}
           </Pressable>
         </View>
