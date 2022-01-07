@@ -3820,12 +3820,6 @@
   dependencies:
     "@sentry/cli" "^1.70.1"
 
-"@shopify/react-native-skia@https://github.com/Shopify/react-native-skia/releases/download/v0.1.43-alpha/shopify-react-native-skia-0.1.43.tgz":
-  version "0.1.43"
-  resolved "https://github.com/Shopify/react-native-skia/releases/download/v0.1.43-alpha/shopify-react-native-skia-0.1.43.tgz#262bd0229fe431ef8fc2d58580a624c28d2c7b92"
-  dependencies:
-    react-reconciler "^0.26.2"
-
 "@shopify/react-native-skia@https://github.com/Shopify/react-native-skia/releases/download/v0.1.62-alpha/shopify-react-native-skia-0.1.62.tgz":
   version "0.1.62"
   resolved "https://github.com/Shopify/react-native-skia/releases/download/v0.1.62-alpha/shopify-react-native-skia-0.1.62.tgz#2ca7b6bdf01f0600e6fe2000dfef08392cc88b21"

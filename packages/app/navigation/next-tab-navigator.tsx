@@ -1,8 +1,8 @@
 import { useWindowDimensions, useColorScheme, StyleSheet } from "react-native";
-import { BlurView } from "expo-blur";
 import dynamic from "next/dynamic";
 
 import { Header } from "app/components/header";
+import { BlurredBackground } from "design-system/blurred-background";
 
 import { NextNavigationProps } from "./types";
 import { createNextTabNavigator } from "./universal-tab-navigator";
@@ -55,11 +55,7 @@ export function NextTabNavigator({
         ],
         tabBarBackground: () =>
           width >= 768 ? null : (
-            <BlurView
-              tint={isDark ? "dark" : "light"}
-              intensity={95}
-              style={StyleSheet.absoluteFill}
-            />
+            <BlurredBackground isDark={isDark} width={width} height={50} />
           ),
       }}
       Component={Component}

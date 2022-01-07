@@ -29,7 +29,7 @@
     "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-native-community/datetimepicker": "4.0.0",
     "@react-native-community/slider": "4.1.12",
-    "@shopify/react-native-skia": "https://github.com/Shopify/react-native-skia/releases/download/v0.1.43-alpha/shopify-react-native-skia-0.1.43.tgz",
+    "@shopify/react-native-skia": "https://github.com/Shopify/react-native-skia/releases/download/v0.1.62-alpha/shopify-react-native-skia-0.1.62.tgz",
     "@react-native-segmented-control/segmented-control": "^2.4.0",
     "@storybook/addon-actions": "^6.3.12",
     "@storybook/addon-controls": "^6.3.12",

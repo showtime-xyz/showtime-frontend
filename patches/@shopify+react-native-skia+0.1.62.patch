@@ -1,0 +1,206 @@
+diff --git a/node_modules/@shopify/react-native-skia/android/CMakeLists.txt b/node_modules/@shopify/react-native-skia/android/CMakeLists.txt
+index 7fad1ba..35cb2e1 100644
+--- a/node_modules/@shopify/react-native-skia/android/CMakeLists.txt
++++ b/node_modules/@shopify/react-native-skia/android/CMakeLists.txt
+@@ -16,6 +16,13 @@ file(GLOB libfbjni_include_DIRS "${build_DIR}/fbjni-*-headers.jar/")
+ 
+ link_directories(../libs/android/${ANDROID_ABI}/)
+ 
++if(${REACT_NATIVE_VERSION} LESS 66)
++        set (
++                INCLUDE_JSI_CPP
++                "${NODE_MODULES_DIR}/react-native/ReactCommon/jsi/jsi/jsi.cpp"
++        )
++endif()
++
+ add_library(
+         ${PACKAGE_NAME}
+         SHARED
+@@ -28,6 +35,8 @@ add_library(
+ 
+         "${PROJECT_SOURCE_DIR}/cpp/rnskia/RNSkManager.cpp"
+         "${PROJECT_SOURCE_DIR}/cpp/rnskia/RNSkDrawView.cpp"
++
++        ${INCLUDE_JSI_CPP} # only on older RN versions
+ )
+ 
+ 
+@@ -76,18 +85,23 @@ set_property(TARGET svg PROPERTY IMPORTED_LOCATION "${SKIA_LIBS_PATH}/libsvg.a")
+ add_library(skshaper STATIC IMPORTED)
+ set_property(TARGET skshaper PROPERTY IMPORTED_LOCATION "${SKIA_LIBS_PATH}/libskshaper.a")
+ 
+-
+ find_library(
+         LOG_LIB
+         log
+ )
+ 
+-find_library(
+-        JSI_LIB
+-        jsi
+-        PATHS ${LIBRN_DIR}
+-        NO_CMAKE_FIND_ROOT_PATH
+-)
++if(${REACT_NATIVE_VERSION} LESS 66)
++        # JSI lib didn't exist on RN 0.65 and before. Simply omit it.
++        set (JSI_LIB "")
++else()
++        # RN 0.66 distributes libjsi.so, can be used instead of compiling jsi.cpp manually.
++        find_library(
++                JSI_LIB
++                jsi
++                PATHS ${LIBRN_DIR}
++                NO_CMAKE_FIND_ROOT_PATH
++        )
++endif()
+ 
+ find_library(
+         REACT_LIB
+diff --git a/node_modules/@shopify/react-native-skia/android/build.gradle b/node_modules/@shopify/react-native-skia/android/build.gradle
+index 598a1bd..403d40b 100644
+--- a/node_modules/@shopify/react-native-skia/android/build.gradle
++++ b/node_modules/@shopify/react-native-skia/android/build.gradle
+@@ -13,6 +13,26 @@
+ // FBJNI build is based on:
+ // https://github.com/facebookincubator/fbjni/blob/main/docs/android_setup.md
+ 
++import java.nio.file.Paths
++
++static def findNodeModules(baseDir) {
++  def basePath = baseDir.toPath().normalize()
++  // Node's module resolution algorithm searches up to the root directory,
++  // after which the base path will be null
++  while (basePath) {
++    def nodeModulesPath = Paths.get(basePath.toString(), "node_modules")
++    def reactNativePath = Paths.get(nodeModulesPath.toString(), "react-native")
++    if (nodeModulesPath.toFile().exists() && reactNativePath.toFile().exists()) {
++      return nodeModulesPath.toString()
++    }
++    basePath = basePath.getParent()
++  }
++  throw new GradleException("react-native-skia: Failed to find node_modules/ path!")
++}
++
++def nodeModules = findNodeModules(projectDir)
++logger.warn("react-native-skia: node_modules/ found at: ${nodeModules}")
++
+ // These defaults should reflect the SDK versions used by
+ // the minimum React Native version supported.
+ def DEFAULT_COMPILE_SDK_VERSION = 28
+@@ -44,6 +64,10 @@ buildscript {
+     }
+ }
+ 
++def reactProperties = new Properties()
++file("$nodeModules/react-native/ReactAndroid/gradle.properties").withInputStream { reactProperties.load(it) }
++def REACT_NATIVE_VERSION = reactProperties.getProperty("VERSION_NAME").split("\\.")[1].toInteger()
++
+ android {
+     compileSdkVersion safeExtGet('compileSdkVersion', DEFAULT_COMPILE_SDK_VERSION)
+     buildToolsVersion safeExtGet('buildToolsVersion', DEFAULT_BUILD_TOOLS_VERSION)
+@@ -57,7 +81,9 @@ android {
+             cmake {
+                 cppFlags "-fexceptions", "-frtti", "-std=c++1y", "-DONANDROID"
+                 abiFilters 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+-                arguments '-DANDROID_STL=c++_shared'
++                arguments '-DANDROID_STL=c++_shared',
++                          "-DREACT_NATIVE_VERSION=${REACT_NATIVE_VERSION}",
++                          "-DNODE_MODULES_DIR=${nodeModules}"
+             }
+         }
+     }
+@@ -99,11 +125,11 @@ repositories {
+     mavenLocal()
+     maven {
+         // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+-        url "$rootDir/../node_modules/react-native/android"
++        url "$rootDir/../../../node_modules/react-native/android"
+     }
+     maven {
+         // Android JSC is installed from npm
+-        url "$rootDir/../node_modules/jsc-android/dist"
++        url "$rootDir/../../../node_modules/jsc-android/dist"
+     }
+     google()
+ }
+@@ -117,7 +143,7 @@ dependencies {
+     //noinspection GradleDynamicVersion
+     extractJNI("com.facebook.fbjni:fbjni:0.2.2")
+ 
+-    def rnAAR = fileTree("${rootDir}/../node_modules/react-native/android").matching({ it.include "**/**/*.aar" }).singleFile
++    def rnAAR = fileTree("${rootDir}/../../../node_modules/react-native/android").matching({ it.include "**/**/*.aar" }).singleFile
+     extractJNI(files(rnAAR))
+ }
+ 
+diff --git a/node_modules/@shopify/react-native-skia/android/cpp/api b/node_modules/@shopify/react-native-skia/android/cpp/api
+index 6a24438..fc43789 120000
+--- a/node_modules/@shopify/react-native-skia/android/cpp/api
++++ b/node_modules/@shopify/react-native-skia/android/cpp/api
+@@ -1 +1 @@
+-/private/var/folders/xh/dcsbm3cs0jbd26v04n3lnqwr0000gn/T/tmp-69746bKtXNPG6X7lX/node_modules/@shopify/react-native-skia/cpp/api
+\ No newline at end of file
++/Users/axel/Documents/showtime/showtime-frontend/node_modules/@shopify/react-native-skia/cpp/api
+\ No newline at end of file
+diff --git a/node_modules/@shopify/react-native-skia/android/cpp/jsi b/node_modules/@shopify/react-native-skia/android/cpp/jsi
+index bd107a4..d861994 120000
+--- a/node_modules/@shopify/react-native-skia/android/cpp/jsi
++++ b/node_modules/@shopify/react-native-skia/android/cpp/jsi
+@@ -1 +1 @@
+-/private/var/folders/xh/dcsbm3cs0jbd26v04n3lnqwr0000gn/T/tmp-69746bKtXNPG6X7lX/node_modules/@shopify/react-native-skia/cpp/jsi
+\ No newline at end of file
++/Users/axel/Documents/showtime/showtime-frontend/node_modules/@shopify/react-native-skia/cpp/jsi
+\ No newline at end of file
+diff --git a/node_modules/@shopify/react-native-skia/android/cpp/rnskia b/node_modules/@shopify/react-native-skia/android/cpp/rnskia
+index 9533c7b..25a02a3 120000
+--- a/node_modules/@shopify/react-native-skia/android/cpp/rnskia
++++ b/node_modules/@shopify/react-native-skia/android/cpp/rnskia
+@@ -1 +1 @@
+-/private/var/folders/xh/dcsbm3cs0jbd26v04n3lnqwr0000gn/T/tmp-69746bKtXNPG6X7lX/node_modules/@shopify/react-native-skia/cpp/rnskia
+\ No newline at end of file
++/Users/axel/Documents/showtime/showtime-frontend/node_modules/@shopify/react-native-skia/cpp/rnskia
+\ No newline at end of file
+diff --git a/node_modules/@shopify/react-native-skia/android/cpp/skia b/node_modules/@shopify/react-native-skia/android/cpp/skia
+index 07e8a11..960a25d 120000
+--- a/node_modules/@shopify/react-native-skia/android/cpp/skia
++++ b/node_modules/@shopify/react-native-skia/android/cpp/skia
+@@ -1 +1 @@
+-/private/var/folders/xh/dcsbm3cs0jbd26v04n3lnqwr0000gn/T/tmp-69746bKtXNPG6X7lX/node_modules/@shopify/react-native-skia/cpp/skia
+\ No newline at end of file
++/Users/axel/Documents/showtime/showtime-frontend/node_modules/@shopify/react-native-skia/cpp/skia
+\ No newline at end of file
+diff --git a/node_modules/@shopify/react-native-skia/android/cpp/utils b/node_modules/@shopify/react-native-skia/android/cpp/utils
+index 0a46e7a..f84d18c 120000
+--- a/node_modules/@shopify/react-native-skia/android/cpp/utils
++++ b/node_modules/@shopify/react-native-skia/android/cpp/utils
+@@ -1 +1 @@
+-/private/var/folders/xh/dcsbm3cs0jbd26v04n3lnqwr0000gn/T/tmp-69746bKtXNPG6X7lX/node_modules/@shopify/react-native-skia/cpp/utils
+\ No newline at end of file
++/Users/axel/Documents/showtime/showtime-frontend/node_modules/@shopify/react-native-skia/cpp/utils
+\ No newline at end of file
+diff --git a/node_modules/@shopify/react-native-skia/android/src/main/java/com/shopify/reactnative/skia/PlatformContext.java b/node_modules/@shopify/react-native-skia/android/src/main/java/com/shopify/reactnative/skia/PlatformContext.java
+index 533426e..d655168 100644
+--- a/node_modules/@shopify/react-native-skia/android/src/main/java/com/shopify/reactnative/skia/PlatformContext.java
++++ b/node_modules/@shopify/react-native-skia/android/src/main/java/com/shopify/reactnative/skia/PlatformContext.java
+@@ -66,14 +66,14 @@ public class PlatformContext {
+         Choreographer.getInstance().postFrameCallback(frameCallback);
+     }
+ 
+-    public void raise(String message) {
+-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+-            @Override
+-            public void run() {
+-                mContext.handleException(new Exception(message));
+-            }
+-        });
+-    }
++    // public void raise(String message) {
++    //     new Handler(Looper.getMainLooper()).post(new Runnable() {
++    //         @Override
++    //         public void run() {
++    //             mContext.handleException(new Exception(message));
++    //         }
++    //     });
++    // }
+ 
+     public void beginDrawLoop() {
+         if (_drawLoopActive) {
