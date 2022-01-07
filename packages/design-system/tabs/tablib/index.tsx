@@ -11,6 +11,7 @@ import {
   PressableProps,
   FlatList,
   Platform,
+  Dimensions,
 } from "react-native";
 import PagerView from "react-native-pager-view";
 import Reanimated, {
@@ -39,6 +40,8 @@ import {
 } from "./types";
 import { Spinner } from "design-system/spinner";
 import { Text } from "design-system/text";
+
+const windowHeight = Dimensions.get("window").height;
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
@@ -482,9 +485,13 @@ function makeScrollableComponent<
                 alwaysBounceHorizontal={false}
                 automaticallyAdjustContentInsets={false}
                 ref={mergeRef([ref, aref])}
-                contentContainerStyle={{
-                  paddingTop: tabListHeight + headerHeight,
-                }}
+                contentContainerStyle={useMemo(
+                  () => ({
+                    paddingTop: tabListHeight + headerHeight,
+                    minHeight: windowHeight,
+                  }),
+                  [tabListHeight, headerHeight]
+                )}
                 ListHeaderComponent={useMemo(
                   () => (
                     <>

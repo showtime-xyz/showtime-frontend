@@ -1,4 +1,4 @@
-import { ReactElement, useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import {
   View,
   Spinner,
@@ -91,42 +91,36 @@ const TabListContainer = ({ days }: { days: number }) => {
 
   const SelectionControl = useMemo(
     () => (
-      <View tw="p-4">
-        <SegmentedControl
-          values={["CREATORS", "NFTS"]}
-          onChange={setSelected}
-          selectedIndex={selected}
-        />
-      </View>
+      <SegmentedControl
+        values={["CREATORS", "NFTS"]}
+        onChange={setSelected}
+        selectedIndex={selected}
+      />
     ),
     [selected, setSelected]
   );
 
-  if (selected === 0) {
-    return <CreatorsList days={days} ListHeaderComponent={SelectionControl} />;
-  } else {
-    return <NFTSList days={days} ListHeaderComponent={SelectionControl} />;
-  }
+  return useMemo(
+    () =>
+      [
+        <CreatorsList days={days} SelectionControl={SelectionControl} />,
+        <NFTSList days={days} SelectionControl={SelectionControl} />,
+      ][selected],
+    [selected, days, SelectionControl]
+  );
 };
 
 const CreatorsList = ({
   days,
-  ListHeaderComponent,
+  SelectionControl,
 }: {
   days: number;
-  ListHeaderComponent: ReactElement;
+  SelectionControl: any;
 }) => {
-  const {
-    data,
-    isLoadingMore,
-    isLoading,
-    status,
-    isRefreshing,
-    refresh,
-    fetchMore,
-  } = useTrendingCreators({
-    days,
-  });
+  const { data, isLoadingMore, isLoading, isRefreshing, refresh, fetchMore } =
+    useTrendingCreators({
+      days,
+    });
 
   const keyExtractor = useCallback((item) => {
     return item.profile_id;
@@ -143,6 +137,24 @@ const CreatorsList = ({
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,
     [isLoadingMore]
+  );
+
+  const ListHeaderComponent = useMemo(
+    () => (
+      <View tw="p-4">
+        {SelectionControl}
+        {data.length === 0 && !isLoading ? (
+          <View tw="items-center justify-center mt-20">
+            <Text tw="text-gray-900 dark:text-white">No results found</Text>
+          </View>
+        ) : isLoading ? (
+          <View tw="items-center justify-center mt-20">
+            <Spinner />
+          </View>
+        ) : null}
+      </View>
+    ),
+    [SelectionControl, data, isLoading]
   );
 
   return (
@@ -164,15 +176,6 @@ const CreatorsList = ({
         alwaysBounceVertical={false}
         ListFooterComponent={ListFooterComponent}
       />
-      {data.length === 0 && status === "success" ? (
-        <View tw="items-center justify-center">
-          <Text tw="text-gray-900 dark:text-white">No results found</Text>
-        </View>
-      ) : isLoading ? (
-        <View tw="items-center justify-center">
-          <Spinner />
-        </View>
-      ) : null}
     </View>
   );
 };
@@ -182,22 +185,15 @@ const ITEM_SIZE = Dimensions.get("window").width / 2;
 
 const NFTSList = ({
   days,
-  ListHeaderComponent,
+  SelectionControl,
 }: {
   days: number;
-  ListHeaderComponent: ReactElement;
+  SelectionControl: any;
 }) => {
-  const {
-    data,
-    isLoadingMore,
-    isLoading,
-    status,
-    isRefreshing,
-    refresh,
-    fetchMore,
-  } = useTrendingNFTS({
-    days,
-  });
+  const { data, isLoadingMore, isLoading, isRefreshing, refresh, fetchMore } =
+    useTrendingNFTS({
+      days,
+    });
 
   const keyExtractor = useCallback((_item, index) => {
     return index.toString();
@@ -217,6 +213,24 @@ const NFTSList = ({
   const getItemLayout = useCallback((_data, index) => {
     return { length: ITEM_SIZE, offset: ITEM_SIZE * index, index };
   }, []);
+
+  const ListHeaderComponent = useMemo(
+    () => (
+      <View tw="p-4">
+        {SelectionControl}
+        {data.length === 0 && !isLoading ? (
+          <View tw="items-center justify-center mt-20">
+            <Text tw="text-gray-900 dark:text-white">No results found</Text>
+          </View>
+        ) : isLoading ? (
+          <View tw="items-center justify-center mt-20">
+            <Spinner />
+          </View>
+        ) : null}
+      </View>
+    ),
+    [SelectionControl, data, isLoading]
+  );
 
   return (
     <View tw="flex-1">
@@ -239,15 +253,6 @@ const NFTSList = ({
         ListFooterComponent={ListFooterComponent}
         style={useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), [])}
       />
-      {data.length === 0 && status === "success" ? (
-        <View tw="items-center justify-center">
-          <Text tw="text-gray-900 dark:text-white">No results found</Text>
-        </View>
-      ) : isLoading ? (
-        <View tw="items-center justify-center">
-          <Spinner />
-        </View>
-      ) : null}
     </View>
   );
 };
