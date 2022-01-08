@@ -63,14 +63,20 @@ const PinchToZoom = ({ children, onGestureEnd, onDoubleTap }) => {
     });
 
   const zoomGesture = Gesture.Pinch()
-    .onBegin((e) => {
+    .onBegin(() => {
       zoomState.value = "start";
       savedScale.value = scale.value;
-      scaleOrigin.x.value = e.focalX;
-      scaleOrigin.y.value = e.focalY;
     })
     .onUpdate((event) => {
+      // Setting scaleOrigin on active instead of begin because of an issue in android.
+      // This PR should fix it. https://github.com/software-mansion/react-native-gesture-handler/pull/1798
+      if (zoomState.value === "start") {
+        scaleOrigin.x.value = event.focalX;
+        scaleOrigin.y.value = event.focalY;
+      }
+
       scale.value = savedScale.value * event.scale;
+      zoomState.value = "active";
     })
     .onEnd(() => {
       zoomState.value = "ended";
