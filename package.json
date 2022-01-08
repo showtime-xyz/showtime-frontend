@@ -5,10 +5,10 @@
   "devDependencies": {
     "@types/react": "~17.0.36",
     "@types/react-native": "~0.66.5",
+    "eslint-plugin-prettier": "^4.0.0",
     "patch-package": "^6.4.7",
     "prettier": "^2.4.1",
-    "turbo": "^1.0.16",
-    "eslint-plugin-prettier": "^4.0.0"
+    "turbo": "^1.0.16"
   },
   "workspaces": [
     "apps/expo",
@@ -102,28 +102,29 @@
     "tls": false
   },
   "browser": {
-    "zlib": "browserify-zlib",
+    "_stream_duplex": "readable-stream/duplex",
+    "_stream_passthrough": "readable-stream/passthrough",
+    "_stream_readable": "readable-stream/readable",
+    "_stream_transform": "readable-stream/transform",
+    "_stream_writable": "readable-stream/writable",
     "console": "console-browserify",
     "constants": "constants-browserify",
     "crypto": "react-native-crypto",
+    "dgram": "react-native-udp",
     "dns": "dns.js",
     "domain": "domain-browser",
+    "fs": "react-native-level-fs",
     "http": "@tradle/react-native-http",
     "https": "https-browserify",
     "os": "react-native-os",
     "path": "path-browserify",
     "querystring": "querystring-es3",
-    "fs": "react-native-level-fs",
-    "_stream_transform": "readable-stream/transform",
-    "_stream_readable": "readable-stream/readable",
-    "_stream_writable": "readable-stream/writable",
-    "_stream_duplex": "readable-stream/duplex",
-    "_stream_passthrough": "readable-stream/passthrough",
-    "dgram": "react-native-udp",
     "stream": "stream-browserify",
     "timers": "timers-browserify",
+    "tls": false,
     "tty": "tty-browserify",
     "vm": "vm-browserify",
-    "tls": false
-  }
+    "zlib": "browserify-zlib"
+  },
+  "packageManager": "yarn@3.1.1"
 }
