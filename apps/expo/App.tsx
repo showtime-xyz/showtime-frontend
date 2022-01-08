@@ -1,5 +1,4 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Image, Text, View } from "react-native";
+import { StyleSheet, Image } from "react-native";
 import {
   Gesture,
   GestureDetector,
@@ -9,7 +8,6 @@ import Animated, {
   useAnimatedReaction,
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
   withTiming,
 } from "react-native-reanimated";
 
@@ -23,8 +21,6 @@ const PinchToZoom = ({
   const start = { x: useSharedValue(0), y: useSharedValue(0) };
   const scale = useSharedValue(1);
   const savedScale = useSharedValue(1);
-  const rotation = useSharedValue(0);
-  const savedRotation = useSharedValue(0);
   const dragState = useSharedValue("idle");
   const zoomState = useSharedValue("idle");
 
@@ -34,7 +30,6 @@ const PinchToZoom = ({
         { translateX: offset.x.value },
         { translateY: offset.y.value },
         { scale: scale.value },
-        { rotateZ: `${rotation.value}rad` },
       ],
     };
   });
@@ -76,14 +71,6 @@ const PinchToZoom = ({
       zoomState.value = "ended";
     });
 
-  const rotateGesture = Gesture.Rotation()
-    .onUpdate((event) => {
-      rotation.value = savedRotation.value + event.rotation;
-    })
-    .onEnd(() => {
-      savedRotation.value = rotation.value;
-    });
-
   const composed = Gesture.Exclusive(
     Gesture.Simultaneous(dragGesture, zoomGesture),
     doubleTapGesture
@@ -96,6 +83,8 @@ const PinchToZoom = ({
     (hasEnded) => {
       if (hasEnded) {
         onGestureEnd?.({ scale, offset, start });
+        zoomState.value = "idle";
+        dragState.value = "idle";
       }
     }
   );
@@ -120,6 +109,7 @@ export default function App() {
       <PinchToZoom
         onGestureEnd={({ scale, offset }) => {
           "worklet";
+          // zoom out on gesture end
           scale.value = withTiming(1, { duration: 500 });
           offset.x.value = withTiming(0, { duration: 500 });
           offset.y.value = withTiming(0, { duration: 500 });
@@ -127,11 +117,14 @@ export default function App() {
         enableDoubleTap
         onDoubleTap={({ scale, offset }) => {
           "worklet";
+          // zoom out if zoomed in
           if (scale.value > 1) {
             offset.x.value = withTiming(0, { duration: 500 });
             offset.y.value = withTiming(0, { duration: 500 });
             scale.value = withTiming(1, { duration: 500 });
-          } else {
+          }
+          // zoom in
+          else {
             scale.value = withTiming(2);
           }
         }}
