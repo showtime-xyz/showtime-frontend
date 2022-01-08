@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { StyleSheet, Image } from "react-native";
 import {
   Gesture,
@@ -6,34 +5,24 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
 import Animated, {
-  runOnJS,
   useAnimatedReaction,
   useAnimatedStyle,
-  useDerivedValue,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
 
 const useViewDimension = () => {
-  const [dimension, setDimension] = useState({ height: 0, width: 0 });
+  const dimension = { width: useSharedValue(0), height: useSharedValue(0) };
   return {
     onLayout: (e) => {
-      setDimension({
-        width: e.nativeEvent.layout.width,
-        height: e.nativeEvent.layout.height,
-      });
+      dimension.height.value = e.nativeEvent.layout.height;
+      dimension.width.value = e.nativeEvent.layout.width;
     },
-    width: dimension.width,
-    height: dimension.height,
+    dimension,
   };
 };
 
-const PinchToZoom = ({
-  children,
-  onGestureEnd,
-  onDoubleTap,
-  enableDoubleTap = false,
-}) => {
+const PinchToZoom = ({ children, onGestureEnd, onDoubleTap }) => {
   const offset = { x: useSharedValue(0), y: useSharedValue(0) };
   const start = { x: useSharedValue(0), y: useSharedValue(0) };
   const scaleOrigin = { x: useSharedValue(0), y: useSharedValue(0) };
@@ -41,7 +30,7 @@ const PinchToZoom = ({
   const savedScale = useSharedValue(1);
   const dragState = useSharedValue("idle");
   const zoomState = useSharedValue("idle");
-  const { width, height, onLayout } = useViewDimension();
+  const { dimension, onLayout } = useViewDimension();
 
   const dragGesture = Gesture.Pan()
     .onBegin(() => {
@@ -60,11 +49,16 @@ const PinchToZoom = ({
     });
 
   const doubleTapGesture = Gesture.Tap()
-    .enabled(enableDoubleTap)
+    .enabled(typeof onDoubleTap === "function")
     .numberOfTaps(2)
-    .onEnd((_event, success) => {
+    .onEnd((e, success) => {
       if (success) {
-        onDoubleTap?.({ scale, offset });
+        // Only set starting origin on zoom in.
+        if (scale.value === 1) {
+          scaleOrigin.x.value = e.x;
+          scaleOrigin.y.value = e.y;
+        }
+        onDoubleTap({ scale, offset });
       }
     });
 
@@ -99,12 +93,28 @@ const PinchToZoom = ({
       }
     }
   );
+
   const animatedStyles = useAnimatedStyle(() => {
+    const transformOriginTop =
+      -dimension.height.value / 2 + scaleOrigin.y.value;
+    const transformOriginLeft =
+      -dimension.width.value / 2 + scaleOrigin.x.value;
+
     return {
       transform: [
         { translateX: offset.x.value },
         { translateY: offset.y.value },
+        {
+          translateX: transformOriginLeft,
+        },
+        { translateY: transformOriginTop },
         { scale: scale.value },
+        {
+          translateX: -transformOriginLeft,
+        },
+        {
+          translateY: -transformOriginTop,
+        },
       ],
     };
   });
@@ -129,27 +139,24 @@ export default function App() {
       }}
     >
       <PinchToZoom
-        onGestureEnd={({ scale, offset, start }) => {
+        onGestureEnd={({ scale, offset }) => {
           "worklet";
           // zoom out on gesture end
           scale.value = withTiming(1, { duration: 500 });
           offset.x.value = withTiming(0, { duration: 500 });
           offset.y.value = withTiming(0, { duration: 500 });
-          start.x.value = withTiming(0, { duration: 500 });
-          start.y.value = withTiming(0, { duration: 500 });
         }}
-        enableDoubleTap
         onDoubleTap={({ scale, offset }) => {
           "worklet";
           // zoom out if zoomed in
           if (scale.value > 1) {
-            offset.x.value = withTiming(0, { duration: 500 });
-            offset.y.value = withTiming(0, { duration: 500 });
-            scale.value = withTiming(1, { duration: 500 });
+            offset.x.value = withTiming(0);
+            offset.y.value = withTiming(0);
+            scale.value = withTiming(1);
           }
           // zoom in
           else {
-            scale.value = withTiming(2);
+            scale.value = withTiming(4);
           }
         }}
       >
