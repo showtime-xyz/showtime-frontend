@@ -33,7 +33,7 @@ const PinchToZoom = ({ children, onGestureEnd, onDoubleTap }) => {
   const { dimension, onLayout } = useViewDimension();
 
   const dragGesture = Gesture.Pan()
-    .onBegin(() => {
+    .onStart(() => {
       dragState.value = "start";
       start.x.value = offset.x.value;
       start.y.value = offset.y.value;
@@ -63,7 +63,7 @@ const PinchToZoom = ({ children, onGestureEnd, onDoubleTap }) => {
     });
 
   const zoomGesture = Gesture.Pinch()
-    .onBegin(() => {
+    .onStart(() => {
       zoomState.value = "start";
       savedScale.value = scale.value;
     })
