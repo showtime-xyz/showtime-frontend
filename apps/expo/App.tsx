@@ -147,7 +147,7 @@ export default function App() {
       <PinchToZoom
         onGestureEnd={({ scale, offset }) => {
           "worklet";
-          // zoom out on gesture end
+          // Reset zoom and position on gesture end
           scale.value = withTiming(1, { duration: 500 });
           offset.x.value = withTiming(0, { duration: 500 });
           offset.y.value = withTiming(0, { duration: 500 });
