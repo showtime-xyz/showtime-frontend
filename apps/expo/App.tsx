@@ -32,16 +32,29 @@ const PinchToZoom = ({ children, onGestureEnd, onDoubleTap }) => {
   const zoomState = useSharedValue("idle");
   const { dimension, onLayout } = useViewDimension();
 
+  // If we don't handle this case, it can cause initial zoom in jank if user has done pan gesture and didn't release their fingers and started zooming in!
+  // Proper solution for this is enabling Pan gesture only when a user is zoomed in, this currently doesn't seem to be possible with gesture-handler
+  // Perfect solution would be to set enabled property of PanGestureHandler with a state (which doesn't work)
+  const anEdgeCaseAdjustment = { x: useSharedValue(0), y: useSharedValue(0) };
+
   const dragGesture = Gesture.Pan()
     .onStart(() => {
       dragState.value = "start";
       start.x.value = offset.x.value;
       start.y.value = offset.y.value;
+
+      anEdgeCaseAdjustment.x.value = 0;
+      anEdgeCaseAdjustment.y.value = 0;
     })
     .onUpdate((e) => {
       if (scale.value > 1) {
-        offset.x.value = e.translationX + start.x.value;
-        offset.y.value = e.translationY + start.y.value;
+        offset.x.value =
+          e.translationX - anEdgeCaseAdjustment.x.value + start.x.value;
+        offset.y.value =
+          e.translationY - anEdgeCaseAdjustment.y.value + start.y.value;
+      } else {
+        anEdgeCaseAdjustment.x.value = e.translationX;
+        anEdgeCaseAdjustment.y.value = e.translationY;
       }
     })
     .onEnd(() => {
@@ -70,7 +83,8 @@ const PinchToZoom = ({ children, onGestureEnd, onDoubleTap }) => {
     .onUpdate((event) => {
       // Setting scaleOrigin on active instead of begin because of an issue in android.
       // This PR should fix it. https://github.com/software-mansion/react-native-gesture-handler/pull/1798
-      if (zoomState.value === "start") {
+      // Also we set scale translate origin on start. Not sure but Pan translate's don't behave very well with zoomed in (scale > 1) Views
+      if (zoomState.value === "start" && scale.value === 1) {
         scaleOrigin.x.value = event.focalX;
         scaleOrigin.y.value = event.focalY;
       }
@@ -148,9 +162,9 @@ export default function App() {
         onGestureEnd={({ scale, offset }) => {
           "worklet";
           // Reset zoom and position on gesture end
-          scale.value = withTiming(1, { duration: 500 });
-          offset.x.value = withTiming(0, { duration: 500 });
-          offset.y.value = withTiming(0, { duration: 500 });
+          scale.value = withTiming(1);
+          offset.x.value = withTiming(0);
+          offset.y.value = withTiming(0);
         }}
         onDoubleTap={({ scale, offset }) => {
           "worklet";
