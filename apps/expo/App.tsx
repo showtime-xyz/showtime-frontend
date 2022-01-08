@@ -74,11 +74,14 @@ const PinchToZoom = ({ children, onGestureEnd, onDoubleTap }) => {
           scaleOrigin.x.value = e.x;
           scaleOrigin.y.value = e.y;
         }
-        onDoubleTap({ scale, offset });
-        // If user has zoomed in, we enable pan
-        if (scale.value > 0) {
+        // If user is zoomed in, they're probably gonna zoom out on double tap, so disable pan
+        // probably bad assumption, figure out later
+        if (scale.value > 1) {
+          enablePanGesutreHandler.value = false;
+        } else {
           enablePanGesutreHandler.value = true;
         }
+        onDoubleTap({ scale, offset });
       }
     });
 
