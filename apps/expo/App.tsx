@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { StyleSheet, Image } from "react-native";
 import {
   Gesture,
@@ -5,11 +6,26 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
 import Animated, {
+  runOnJS,
   useAnimatedReaction,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+
+const useViewDimension = () => {
+  const [dimension, setDimension] = useState({ height: 0, width: 0 });
+  return {
+    onLayout: (e) => {
+      setDimension({
+        width: e.nativeEvent.width,
+        height: e.nativeEvent.height,
+      });
+    },
+    ...dimension,
+  };
+};
 
 const PinchToZoom = ({
   children,
@@ -19,20 +35,13 @@ const PinchToZoom = ({
 }) => {
   const offset = { x: useSharedValue(0), y: useSharedValue(0) };
   const start = { x: useSharedValue(0), y: useSharedValue(0) };
+  const scaleOrigin = { x: useSharedValue(0), y: useSharedValue(0) };
   const scale = useSharedValue(1);
   const savedScale = useSharedValue(1);
   const dragState = useSharedValue("idle");
   const zoomState = useSharedValue("idle");
-
-  const animatedStyles = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { translateX: offset.x.value },
-        { translateY: offset.y.value },
-        { scale: scale.value },
-      ],
-    };
-  });
+  const { width, height, onLayout } = useViewDimension();
+  const [isZoomStarted, setIsZoomStarted] = useState(false);
 
   const dragGesture = Gesture.Pan()
     .onBegin(() => {
@@ -41,10 +50,8 @@ const PinchToZoom = ({
       start.y.value = offset.y.value;
     })
     .onUpdate((e) => {
-      if (scale.value > 1) {
-        offset.x.value = e.translationX + start.x.value;
-        offset.y.value = e.translationY + start.y.value;
-      }
+      offset.x.value = e.translationX + start.x.value;
+      offset.y.value = e.translationY + start.y.value;
     })
     .onEnd(() => {
       dragState.value = "ended";
@@ -60,9 +67,11 @@ const PinchToZoom = ({
     });
 
   const zoomGesture = Gesture.Pinch()
-    .onBegin(() => {
+    .onBegin((e) => {
       zoomState.value = "start";
       savedScale.value = scale.value;
+      scaleOrigin.x.value = e.focalX;
+      scaleOrigin.y.value = e.focalY;
     })
     .onUpdate((event) => {
       scale.value = savedScale.value * event.scale;
@@ -76,22 +85,47 @@ const PinchToZoom = ({
     doubleTapGesture
   );
 
-  useAnimatedReaction(
-    () => {
-      return zoomState.value === "ended" && dragState.value === "ended";
-    },
-    (hasEnded) => {
-      if (hasEnded) {
-        onGestureEnd?.({ scale, offset, start });
-        zoomState.value = "idle";
-        dragState.value = "idle";
-      }
+  useDerivedValue(() => {
+    if (zoomState.value === "ended" && dragState.value === "ended") {
+      onGestureEnd?.({ scale, offset, start });
     }
-  );
+    if (zoomState.value === "ended") {
+      zoomState.value = "idle";
+    }
+
+    if (dragState.value === "ended") {
+      dragState.value = "idle";
+    }
+  });
+
+  // useAnimatedReaction(
+  //   () => {
+  //     return scale.value > 1;
+  //   },
+  //   (started) => {
+  //     if (started) {
+  //       runOnJS(setIsZoomStarted)(true);
+  //     } else {
+  //       runOnJS(setIsZoomStarted)(false);
+  //     }
+  //   }
+  // );
+
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: offset.x.value },
+        { translateY: offset.y.value },
+        { scale: scale.value },
+      ],
+    };
+  });
 
   return (
     <GestureDetector gesture={composed}>
-      <Animated.View style={animatedStyles}>{children}</Animated.View>
+      <Animated.View style={animatedStyles} onLayout={onLayout}>
+        {children}
+      </Animated.View>
     </GestureDetector>
   );
 };
@@ -107,12 +141,14 @@ export default function App() {
       }}
     >
       <PinchToZoom
-        onGestureEnd={({ scale, offset }) => {
+        onGestureEnd={({ scale, offset, start }) => {
           "worklet";
           // zoom out on gesture end
           scale.value = withTiming(1, { duration: 500 });
           offset.x.value = withTiming(0, { duration: 500 });
           offset.y.value = withTiming(0, { duration: 500 });
+          start.x.value = withTiming(0, { duration: 500 });
+          start.y.value = withTiming(0, { duration: 500 });
         }}
         enableDoubleTap
         onDoubleTap={({ scale, offset }) => {
