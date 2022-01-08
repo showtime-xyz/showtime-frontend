@@ -42,7 +42,6 @@ const PinchToZoom = ({
   const dragState = useSharedValue("idle");
   const zoomState = useSharedValue("idle");
   const { width, height, onLayout } = useViewDimension();
-  const [isZoomStarted, setIsZoomStarted] = useState(false);
 
   const dragGesture = Gesture.Pan()
     .onBegin(() => {
@@ -88,31 +87,18 @@ const PinchToZoom = ({
     doubleTapGesture
   );
 
-  useDerivedValue(() => {
-    if (zoomState.value === "ended" && dragState.value === "ended") {
-      onGestureEnd?.({ scale, offset, start });
+  useAnimatedReaction(
+    () => {
+      return zoomState.value === "ended" && dragState.value === "ended";
+    },
+    (ended) => {
+      if (ended) {
+        onGestureEnd?.({ scale, offset, start });
+        dragState.value = "idle";
+        zoomState.value = "idle";
+      }
     }
-    if (zoomState.value === "ended") {
-      zoomState.value = "idle";
-    }
-
-    if (dragState.value === "ended") {
-      dragState.value = "idle";
-    }
-  });
-
-  // useAnimatedReaction(
-  //   () => {
-  //     return scale.value > 1;
-  //   },
-  //   (started) => {
-  //     if (started) {
-  //       runOnJS(setIsZoomStarted)(true);
-  //     } else {
-  //       runOnJS(setIsZoomStarted)(false);
-  //     }
-  //   }
-  // );
+  );
   const animatedStyles = useAnimatedStyle(() => {
     return {
       transform: [
