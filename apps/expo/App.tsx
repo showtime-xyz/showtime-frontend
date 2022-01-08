@@ -51,8 +51,10 @@ const PinchToZoom = ({
       start.y.value = offset.y.value;
     })
     .onUpdate((e) => {
-      offset.x.value = e.translationX + start.x.value;
-      offset.y.value = e.translationY + start.y.value;
+      if (scale.value > 1) {
+        offset.x.value = e.translationX + start.x.value;
+        offset.y.value = e.translationY + start.y.value;
+      }
     })
     .onEnd(() => {
       dragState.value = "ended";
