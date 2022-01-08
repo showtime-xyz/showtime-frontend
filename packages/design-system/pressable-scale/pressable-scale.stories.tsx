@@ -1,7 +1,7 @@
 import { Meta } from "@storybook/react";
 
 import { Pressable } from "./index";
-import { Text } from "../text";
+import { Text } from "@showtime/universal-ui.text";
 
 export default {
   component: Pressable,

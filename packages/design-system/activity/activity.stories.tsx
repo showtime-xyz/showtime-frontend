@@ -1,5 +1,5 @@
 import { Meta } from "@storybook/react";
-import { View } from "design-system/view";
+import { View } from "@showtime/universal-ui.view";
 
 import {
   Liked,
@@ -7,7 +7,7 @@ import {
   Transfer,
   Purchased,
   Followed,
-} from "design-system/icon";
+} from "@showtime/universal-ui.icon";
 
 import { Activity } from "./index";
 

@@ -1,6 +1,6 @@
 import { Image } from "dripsy";
-import { View } from "../view";
-import { tw } from "../tailwind";
+import { View } from "@showtime/universal-ui.view";
+import { tw } from "@showtime/universal-ui.tailwind";
 import { StyleSheet } from "react-native";
 
 type AvatarProps = {

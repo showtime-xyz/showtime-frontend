@@ -4,9 +4,9 @@ import {
   NativeSegmentedControlIOSChangeEvent,
   NativeSyntheticEvent,
 } from "react-native";
-import { colors } from "design-system/tailwind/colors";
-import { useIsDarkMode } from "design-system/hooks";
-import { tw } from "design-system/tailwind";
+import { colors } from "@showtime/universal-ui.tailwind";
+import { useIsDarkMode } from "@showtime/universal-ui.hooks";
+import { tw } from "@showtime/universal-ui.tailwind";
 
 type SegmentedControlProps = {
   values: Array<string>;

@@ -1,5 +1,5 @@
 import React, { useContext, ForwardedRef, useEffect, useMemo } from "react";
-import { tw } from "../../tailwind";
+import { tw } from "@showtime/universal-ui.tailwind";
 import {
   Pressable,
   View,
@@ -38,8 +38,8 @@ import {
   TabRootProps,
   TabsContextType,
 } from "./types";
-import { Spinner } from "design-system/spinner";
-import { Text } from "design-system/text";
+import { Spinner } from "@showtime/universal-ui.spinner";
+import { Text } from "@showtime/universal-ui.text";
 
 const windowHeight = Dimensions.get("window").height;
 

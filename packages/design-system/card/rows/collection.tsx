@@ -1,6 +1,6 @@
-import { View } from "design-system/view";
-import { Text } from "design-system/text";
-import { Image } from "design-system/image";
+import { View } from "@showtime/universal-ui.view";
+import { Text } from "@showtime/universal-ui.text";
+import { Image } from "@showtime/universal-ui.image";
 
 function Collection({ nft }) {
   return (

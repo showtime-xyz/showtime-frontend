@@ -3,11 +3,11 @@ import { Pressable } from "dripsy";
 import { Path, Svg } from "react-native-svg";
 import { Platform } from "react-native";
 import { MotiView } from "moti";
-import { tw } from "../tailwind";
-import { useOnFocus, useOnHover } from "../hooks";
-import { useIsDarkMode } from "../hooks";
+import { tw } from "@showtime/universal-ui.tailwind";
+import { useOnFocus, useOnHover } from "@showtime/universal-ui.hooks";
+import { useIsDarkMode } from "@showtime/universal-ui.hooks";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
-import { colors } from "../tailwind/colors";
+import { colors } from "@showtime/universal-ui.tailwind";
 
 type CheckboxProps = {
   onChange: (checked: boolean) => void;

@@ -1,13 +1,14 @@
 import { Accordion as RNAccordion } from "./lib";
 import { ItemProps } from "./lib/types";
-import { View } from "design-system/view";
 import { MotiView } from "moti";
 import { Easing } from "react-native-reanimated";
 import Svg, { Path } from "react-native-svg";
 import { useContext } from "react";
-import { Text, Props as TextProps } from "design-system/text";
-import { ViewProps } from "design-system/view";
-import { useIsDarkMode } from "../hooks";
+
+import { View } from "@showtime/universal-ui.view";
+import { Text, Props as TextProps } from "@showtime/universal-ui.text";
+import { ViewProps } from "@showtime/universal-ui.view";
+import { useIsDarkMode } from "@showtime/universal-ui.hooks";
 
 const Chevron = ({ children }: { children: any }) => {
   const { value: selectedValue } = useContext(RNAccordion.RootContext);
@@ -45,10 +46,7 @@ const Chevron = ({ children }: { children: any }) => {
 const Item = ({ tw = "", disabled, ...props }: ViewProps & ItemProps) => {
   return (
     <RNAccordion.Item value={props.value} disabled={disabled}>
-      <View
-        tw={`bg-white dark:bg-black rounded-2xl ${tw}`}
-        {...props}
-      />
+      <View tw={`bg-white dark:bg-black rounded-2xl ${tw}`} {...props} />
     </RNAccordion.Item>
   );
 };

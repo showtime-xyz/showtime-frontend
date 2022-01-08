@@ -5,8 +5,8 @@ import {
   BottomSheetHandleProps,
 } from "@gorhom/bottom-sheet";
 
-import { View } from "design-system/view";
-import { tw } from "design-system/tailwind";
+import { View } from "@showtime/universal-ui.view";
+import { tw } from "@showtime/universal-ui.tailwind";
 
 type BottomSheetProps = {
   children?: React.ReactElement;

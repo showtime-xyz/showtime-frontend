@@ -1,10 +1,10 @@
 import { Meta } from "@storybook/react";
 
 import { useToast } from "./index";
-import { Button } from "design-system/button";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
-import { Spinner } from "design-system/spinner";
+import { Button } from "@showtime/universal-ui.button";
+import { Text } from "@showtime/universal-ui.text";
+import { View } from "@showtime/universal-ui.view";
+import { Spinner } from "@showtime/universal-ui.spinner";
 
 export default {
   component: Spinner,

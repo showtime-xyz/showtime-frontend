@@ -1,4 +1,4 @@
-import { View } from "../view";
+import { View } from "@showtime/universal-ui.view";
 import type { ModalProps } from "./types";
 
 interface ModalBackdropProps extends Pick<ModalProps, 'close'> {}

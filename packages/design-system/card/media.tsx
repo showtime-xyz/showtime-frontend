@@ -1,10 +1,10 @@
 import { useCallback } from "react";
-import { FlatList, useWindowDimensions } from "react-native";
+import { Pressable, FlatList, useWindowDimensions } from "react-native";
 import { Video } from "expo-av";
 import Router from "next/router";
 
-import { View, Image } from "design-system";
-import { Pressable } from "react-native";
+import { View } from "@showtime/universal-ui.view";
+import { Image } from "@showtime/universal-ui.image";
 import { useRouter } from "app/navigation/use-router";
 
 const getImageUrl = (imgUrl: string, tokenAspectRatio: number) => {

@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo } from "react";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 import { Pressable } from "dripsy";
-import { useIsDarkMode, useOnHover } from "../../hooks";
-import { Text } from "../../text";
-import { tw } from "../../tailwind";
-import { colors } from "../../tailwind/colors";
+import { useIsDarkMode, useOnHover } from "@showtime/universal-ui.hooks";
+import { Text } from "@showtime/universal-ui.text";
+import { tw } from "@showtime/universal-ui.tailwind";
+import { colors } from "@showtime/universal-ui.tailwind";
 import { SelectProps } from "../types";
 
 interface SelectItemProps extends Pick<SelectProps, "size"> {

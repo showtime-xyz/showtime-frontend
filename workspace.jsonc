@@ -1,0 +1,93 @@
+/**
+ * this is the main configuration file of your bit workspace.
+ * for full documentation, please see: https://harmony-docs.bit.dev/workspace/configurations
+ **/ {
+  "$schema": "https://static.bit.dev/teambit/schemas/schema.json",
+  /**
+   * main configuration of the Bit workspace.
+   **/
+  "teambit.workspace/workspace": {
+    /**
+     * the name of the component workspace. used for development purposes.
+     **/
+    "name": "showtime",
+    /**
+     * set the icon to be shown on the Bit server.
+     **/
+    "icon": "https://static.bit.dev/bit-logo.svg",
+    /**
+     * default directory to place a component during `bit import` and `bit create`.
+     * the following placeholders are available:
+     * name - component name includes namespace, e.g. 'ui/button'.
+     * scopeId - full scope-id includes the owner, e.g. 'teambit.compilation'.
+     * scope - scope name only, e.g. 'compilation'.
+     * owner - owner name in bit.dev, e.g. 'teambit'.
+     **/
+    "defaultDirectory": "packages/design-system",
+    /**
+     * default scope for all components in workspace.
+     **/
+    "defaultScope": "showtime.universal-ui"
+  },
+  /**
+   * main configuration for component dependency resolution.
+   **/
+  "teambit.dependencies/dependency-resolver": {
+    /**
+     * choose the package manager for Bit to use. you can choose between 'yarn', 'pnpm'
+     */
+    "packageManager": "teambit.dependencies/yarn",
+    "policy": {
+      "dependencies": {},
+      "peerDependencies": {
+        "@capsizecss/core": "3.0.0",
+        "@dripsy/gradient": "3.6.0",
+        "@gorhom/bottom-sheet": "4.1.5",
+        "@headlessui/react": "1.4.2",
+        "@radix-ui/react-accordion": "0.1.5",
+        "@radix-ui/react-tabs": "0.1.4",
+        "@react-native-segmented-control/segmented-control": "2.4.0",
+        "@sentry/nextjs": "6.16.1",
+        "@storybook/react": "6.4.9",
+        "@zeego/dropdown-menu": "0.0.2-alpha.28",
+        "array-to-image": "1.0.0",
+        "blurhash": "1.1.4",
+        "date-fns": "2.28.0",
+        "dripsy": "3.6.0",
+        "expo-av": "10.2.0",
+        "expo-linear-gradient": "11.0.0",
+        "moti": "0.17.1",
+        "next": "12.0.7",
+        "react": "17.0.2",
+        "react-dom": "17.0.2",
+        "react-native": "0.64.3",
+        "react-native-blurhash": "1.1.8",
+        "react-native-gesture-handler": "2.1.0",
+        "react-native-pager-view": "5.4.9",
+        "react-native-reanimated": "2.3.1",
+        "react-native-svg": "12.2.0",
+        "react-native-web": "0.17.5",
+        "tailwindcss": "3.0.12",
+        "twrnc": "2.2.0"
+      }
+    }
+  },
+  /**
+   * workspace variants allow to set different subsets of configuration for components in your
+   * workspace. this is extremely useful for upgrading, aligning and building components with a new
+   * set of dependencies. a rule can be a directory or a component-id/namespace, in which case,
+   * wrap the rule with curly brackets (e.g. `"{ui/*}": {}`)
+   * see https://harmony-docs.bit.dev/aspects/variants for more info.
+   **/
+  "teambit.workspace/variants": {
+    /**
+     * "*" is a special rule which applied on all components in the workspace.
+     **/
+    "*": {
+      /**
+       * uncomment to apply the chosen environment on all components.
+       **/
+      // "teambit.react/react": { }
+    }
+  }
+}

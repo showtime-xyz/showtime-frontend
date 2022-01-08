@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { SelectButton } from "./lib/select-button";
 import { SelectItem } from "./lib/select-item";
-import { BottomSheet } from "../bottom-sheet";
+import { BottomSheet } from "@showtime/universal-ui.bottom-sheet";
 import { SelectProps } from "./types";
 
 const keyExtractor = (item) => `select-item-${item.value}`;

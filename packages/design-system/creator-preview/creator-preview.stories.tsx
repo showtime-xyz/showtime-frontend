@@ -1,7 +1,7 @@
 import React from "react";
 import { Meta } from "@storybook/react";
 import { CreatorPreview } from "../creator-preview";
-import { View } from "../view";
+import { View } from "@showtime/universal-ui.view";
 
 export default {
   component: CreatorPreview,

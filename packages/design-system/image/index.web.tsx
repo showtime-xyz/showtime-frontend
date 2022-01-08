@@ -8,9 +8,9 @@ import Image from "next/image";
 import { decode } from "blurhash";
 import { getImgFromArr } from "array-to-image";
 
-import { tw as tailwind } from "design-system/tailwind";
-import type { TW } from "design-system/tailwind/types";
-import { View } from "design-system";
+import { tw as tailwind } from "@showtime/universal-ui.tailwind";
+import type { TW } from "@showtime/universal-ui.tailwind";
+import { View } from "@showtime/universal-ui.view";
 
 const resizeModeToObjectFit = (resizeMode: ImageResizeMode) => {
   switch (resizeMode) {

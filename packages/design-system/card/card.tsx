@@ -1,8 +1,8 @@
 import { memo } from "react";
-import { Media } from "design-system/card/media";
-import { View } from "design-system/view";
-import { Activity } from "design-system/activity";
-import { Social } from "design-system/card/social";
+import { Media } from "@showtime/universal-ui.card/media";
+import { View } from "@showtime/universal-ui.view";
+import { Activity } from "@showtime/universal-ui.activity";
+import { Social } from "@showtime/universal-ui.card/social";
 
 type Props = {
   act: any;

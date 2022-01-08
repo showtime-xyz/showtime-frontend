@@ -9,7 +9,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import { useLayout } from "../hooks";
+import { useLayout } from "@showtime/universal-ui.hooks";
 
 export const PinchToZoom = ({ children }) => {
   const scale = useSharedValue(1);

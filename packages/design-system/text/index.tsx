@@ -3,8 +3,8 @@ import { Theme } from "dripsy";
 import { ComponentProps, createContext, forwardRef, useContext } from "react";
 import type { Text as TextType } from "react-native";
 
-import { tw as tailwind } from "design-system/tailwind";
-import type { TW } from "design-system/tailwind/types";
+import { tw as tailwind } from "@showtime/universal-ui.tailwind";
+import type { TW } from "@showtime/universal-ui.tailwind";
 
 type Variant = keyof Theme["text"];
 

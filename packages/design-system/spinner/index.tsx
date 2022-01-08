@@ -7,7 +7,7 @@ import Animated, {
   withRepeat,
   useAnimatedStyle,
 } from "react-native-reanimated";
-import { useIsDarkMode } from "../hooks";
+import { useIsDarkMode } from "@showtime/universal-ui.hooks";
 import { Platform, StyleSheet } from "react-native";
 
 type SpinnerProps = {

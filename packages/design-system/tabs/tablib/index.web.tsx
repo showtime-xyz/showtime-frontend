@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
-import { View } from "../../view";
+import { View } from "@showtime/universal-ui.view";
 import { ScrollView, FlatList, SectionList, Animated } from "react-native";
 import * as RadixTabs from "@radix-ui/react-tabs";
 import { TabRootProps } from "./types";
-import { tw } from "../../tailwind";
+import { tw } from "@showtime/universal-ui.tailwind";
 
 const radixTriggerStyle = {
   position: "relative",

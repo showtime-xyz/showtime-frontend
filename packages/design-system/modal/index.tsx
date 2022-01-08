@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal as RNModal, Platform, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { View } from "design-system/view";
+import { View } from "@showtime/universal-ui.view";
 import { Header } from "./header";
 import { ModalBackdrop } from "./backdrop";
 import { ModalBody } from "./body";
@@ -52,3 +52,5 @@ export function Modal({
     </ModalContainer>
   );
 }
+
+export { Header };

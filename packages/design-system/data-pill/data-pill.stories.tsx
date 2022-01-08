@@ -1,7 +1,7 @@
 import { Meta } from "@storybook/react";
 
 import { DataPill } from "./index";
-import { View } from "../view";
+import { View } from "@showtime/universal-ui.view";
 
 export default {
   component: DataPill,

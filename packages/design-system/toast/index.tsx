@@ -1,4 +1,4 @@
-import { Text } from "design-system/text";
+import { Text } from "@showtime/universal-ui.text";
 import React, {
   useState,
   useRef,
@@ -9,7 +9,7 @@ import React, {
 import { MotiView, AnimatePresence } from "moti";
 import { View } from "react-native";
 import { AccessibilityInfo, LayoutChangeEvent, StyleSheet } from "react-native";
-import { tw } from "design-system/tailwind";
+import { tw } from "@showtime/universal-ui.tailwind";
 
 type ShowParams = {
   message?: string;

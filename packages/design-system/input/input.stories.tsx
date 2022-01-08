@@ -1,8 +1,8 @@
 import { Meta } from "@storybook/react";
 import { Input, InputPressable } from "./index";
-import { View } from "../view";
+import { View } from "@showtime/universal-ui.view";
 import { Svg, Path } from "react-native-svg";
-import { useIsDarkMode } from "../hooks";
+import { useIsDarkMode } from "@showtime/universal-ui.hooks";
 
 const LinkIcon = () => {
   const isDark = useIsDarkMode();

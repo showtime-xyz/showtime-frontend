@@ -2,9 +2,9 @@ import { useCallback } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
 import { Pressable, StyleSheet } from "react-native";
-import { View } from "../view";
+import { View } from "@showtime/universal-ui.view";
 import { Extrapolate } from "react-native-reanimated";
-import { useIsDarkMode } from "../hooks";
+import { useIsDarkMode } from "@showtime/universal-ui.hooks";
 
 const width = 50;
 const height = 28;

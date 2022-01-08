@@ -1,10 +1,10 @@
-import { View } from "../../view";
-import { Text } from "../../text";
+import { View } from "@showtime/universal-ui.view";
+import { Text } from "@showtime/universal-ui.text";
 import React from "react";
 import { useAnimatedReaction, runOnJS } from "react-native-reanimated";
 import { useTabIndexContext, useTabsContext } from "../tablib";
 import { Platform, Animated, useColorScheme } from "react-native";
-import { tw } from "design-system/tailwind";
+import { tw } from "@showtime/universal-ui.tailwind";
 
 // todo - make tabitemwidth dynamic. Current limitation of pager of using vanilla animated prevents animating width indicators.
 // todo - figure out how to make reanimated native handlers work with pager view

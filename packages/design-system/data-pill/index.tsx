@@ -1,5 +1,5 @@
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
+import { Text } from "@showtime/universal-ui.text";
+import { View } from "@showtime/universal-ui.view";
 
 type DataPillProps = {
   type?: "primary" | "secondary";

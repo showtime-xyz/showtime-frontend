@@ -1,9 +1,9 @@
 import { formatDistanceToNowStrict } from "date-fns";
 
 import { ACTIVITY_TYPES, DEFAULT_PROFILE_PIC } from "app/lib/constants";
-import { View } from "design-system/view";
-import { Text } from "design-system/text";
-import { Avatar } from "design-system/activity/avatar";
+import { View } from "@showtime/universal-ui.view";
+import { Text } from "@showtime/universal-ui.text";
+import { Avatar } from "@showtime/universal-ui.activity/avatar";
 import {
   Like,
   Comment,
@@ -12,7 +12,7 @@ import {
   Create,
   Follow,
   Transfer,
-} from "design-system/activity/types";
+} from "@showtime/universal-ui.activity/types";
 import { TextLink } from "app/navigation/link";
 
 const getProfileImageUrl = (imgUrl: string) => {

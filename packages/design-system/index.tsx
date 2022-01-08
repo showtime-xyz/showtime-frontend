@@ -1,31 +1,35 @@
-export { View } from "design-system/view";
+export { View } from "@showtime/universal-ui.view";
 
-export { ScrollView } from "design-system/scroll-view";
+export { ScrollView } from "@showtime/universal-ui.scroll-view";
 
-export { Text } from "design-system/text";
+export { Text } from "@showtime/universal-ui.text";
 
-export { TextInput } from "design-system/text-input";
+export { TextInput } from "@showtime/universal-ui.text-input";
 
-export { Gradient } from "design-system/gradient";
+export { Gradient } from "@showtime/universal-ui.gradient";
 
-export { Pressable } from "design-system/pressable-scale";
+export { Pressable } from "@showtime/universal-ui.pressable-scale";
 
-export { Button, ButtonLabel } from "design-system/button";
+export { Button, ButtonLabel } from "@showtime/universal-ui.button";
 
-export { Image } from "design-system/image";
+export { Image } from "@showtime/universal-ui.image";
 
-export { Modal } from "design-system/modal";
+export { Modal } from "@showtime/universal-ui.modal";
 
-export { ActivityIndicator } from "design-system/activity-indicator";
+export { ActivityIndicator } from "@showtime/universal-ui.activity-indicator";
 
-export { Skeleton } from "design-system/skeleton";
+export { Skeleton } from "@showtime/universal-ui.skeleton";
 
-export { Checkbox } from "design-system/checkbox";
+export { Checkbox } from "@showtime/universal-ui.checkbox";
 
-export { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
+export {
+  Tabs,
+  TabItem,
+  SelectedTabIndicator,
+} from "@showtime/universal-ui.tabs";
 
-export { Spinner } from "design-system/spinner";
+export { Spinner } from "@showtime/universal-ui.spinner";
 
-export { CreatorPreview } from "design-system/creator-preview";
+export { CreatorPreview } from "@showtime/universal-ui.creator-preview";
 
-export { SegmentedControl } from "design-system/segmented-control";
+export { SegmentedControl } from "@showtime/universal-ui.segmented-control";

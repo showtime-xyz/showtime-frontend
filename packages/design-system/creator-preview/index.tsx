@@ -1,13 +1,13 @@
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
-import { Image } from "design-system/image";
-import { VerificationBadge } from "design-system/verification-badge";
-import { Accordion } from "design-system/accordion";
-import { Button } from "design-system/button";
-import { ChevronUp } from "design-system/icon";
+import { Text } from "@showtime/universal-ui.text";
+import { View } from "@showtime/universal-ui.view";
+import { Image } from "@showtime/universal-ui.image";
+import { VerificationBadge } from "@showtime/universal-ui.verification-badge";
+import { Accordion } from "@showtime/universal-ui.accordion";
+import { Button } from "@showtime/universal-ui.button";
+import { ChevronUp } from "@showtime/universal-ui.icon";
 import { Video } from "expo-av";
 import { memo, useCallback, useContext } from "react";
-import { useIsDarkMode } from "../hooks";
+import { useIsDarkMode } from "@showtime/universal-ui.hooks";
 import { Creator, NFT } from "app/types";
 import { Dimensions } from "react-native";
 import Animated, {

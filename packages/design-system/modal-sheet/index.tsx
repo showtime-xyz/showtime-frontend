@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
 import { useWindowDimensions } from "react-native";
-import { Modal } from "../modal";
-import { BottomSheet } from "../bottom-sheet";
-import { Header } from "../modal/header";
+import { Modal } from "@showtime/universal-ui.modal";
+import { BottomSheet } from "@showtime/universal-ui.bottom-sheet";
+import { Header } from "@showtime/universal-ui.modal";
 
 type Props = {
   children: React.ReactElement;

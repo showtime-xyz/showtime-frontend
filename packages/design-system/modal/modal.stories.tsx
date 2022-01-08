@@ -2,9 +2,9 @@ import { Meta } from "@storybook/react";
 
 import { Modal } from "./index";
 import { useState } from "react";
-import { View } from "../view";
-import { Button } from "../button";
-import { Text } from "../text";
+import { View } from "@showtime/universal-ui.view";
+import { Button } from "@showtime/universal-ui.button";
+import { Text } from "@showtime/universal-ui.text";
 
 export default {
   component: Modal,

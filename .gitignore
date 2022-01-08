@@ -103,3 +103,6 @@ dist/
 #storybook
 storybook-static
 
+# Bit
+public
+.yarn/install-state.gz

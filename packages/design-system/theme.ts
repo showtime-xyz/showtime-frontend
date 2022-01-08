@@ -1,7 +1,7 @@
 import { makeTheme } from "dripsy";
 import { Platform } from "react-native";
 
-import { fontFamily, textSizes } from "design-system/typography";
+import { fontFamily, textSizes } from "@showtime/universal-ui.typography";
 
 const webFont = (font: string) => {
   return Platform.select({

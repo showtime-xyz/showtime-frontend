@@ -7,7 +7,7 @@ import React, {
   forwardRef,
 } from "react";
 import { Pressable } from "react-native";
-import { useUpdateEffect } from "design-system/hooks";
+import { useUpdateEffect } from "@showtime/universal-ui.hooks";
 import { AnimateHeight } from "../animate-height";
 import { RootProps, ContentProps, ItemProps, TriggerProps } from "./types";
 import { RootContext, ItemContext } from "./common";

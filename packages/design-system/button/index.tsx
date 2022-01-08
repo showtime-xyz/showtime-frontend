@@ -1,11 +1,11 @@
 import { forwardRef } from "react";
 
-import { Text } from "design-system/text";
+import { Text } from "@showtime/universal-ui.text";
 import {
   Pressable,
   Props as PressableScaleProps,
-} from "design-system/pressable-scale";
-import type { TW } from "design-system/tailwind/types";
+} from "@showtime/universal-ui.pressable-scale";
+import type { TW } from "@showtime/universal-ui.tailwind";
 
 type Props = {
   tw?: TW;

@@ -1,12 +1,12 @@
-import { Image } from "design-system/image";
-import { View } from "design-system/view";
+import { Image } from "@showtime/universal-ui.image";
+import { View } from "@showtime/universal-ui.view";
 import {
   Liked,
   Commented,
   Transfer,
   Purchased,
   Followed,
-} from "design-system/icon";
+} from "@showtime/universal-ui.icon";
 
 type Props = {
   url: string;

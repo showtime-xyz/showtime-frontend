@@ -1,8 +1,8 @@
-import { View } from "design-system/view";
-import { Text } from "design-system/text";
-import { Button } from "design-system/button";
-import { Close, MoreHorizontal } from "design-system/icon";
-import { tw } from "design-system/tailwind";
+import { View } from "@showtime/universal-ui.view";
+import { Text } from "@showtime/universal-ui.text";
+import { Button } from "@showtime/universal-ui.button";
+import { Close, MoreHorizontal } from "@showtime/universal-ui.icon";
+import { tw } from "@showtime/universal-ui.tailwind";
 
 type Props = {
   title?: string;

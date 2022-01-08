@@ -1,6 +1,6 @@
 import React from "react";
 import { SxProp } from "dripsy";
-import { View } from "../view";
+import { View } from "@showtime/universal-ui.view";
 import { BODY_CONTAINER_TW, BODY_TW } from "./constants";
 import type { ModalProps } from "./types";
 

@@ -1,8 +1,8 @@
 import { ComponentProps } from "react";
 import { ActivityIndicator as DripsyActivityIndicator } from "dripsy";
 
-import { tw as tailwind } from "design-system/tailwind";
-import type { TW } from "design-system/tailwind/types";
+import { tw as tailwind } from "@showtime/universal-ui.tailwind";
+import type { TW } from "@showtime/universal-ui.tailwind";
 
 type ActivityIndicatorProps = { tw?: TW } & ComponentProps<
   typeof DripsyActivityIndicator

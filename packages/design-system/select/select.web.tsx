@@ -1,6 +1,6 @@
 import React from "react";
 import { Listbox } from "@headlessui/react";
-import { View } from "../view";
+import { View } from "@showtime/universal-ui.view";
 import { SelectButton } from "./lib/select-button";
 import { SelectItem } from "./lib/select-item";
 import { SelectList } from "./lib/select-list.web";

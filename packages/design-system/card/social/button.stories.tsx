@@ -1,5 +1,5 @@
 import { Meta } from "@storybook/react";
-import { View } from "design-system/view";
+import { View } from "@showtime/universal-ui.view";
 
 import { Button } from "./button";
 

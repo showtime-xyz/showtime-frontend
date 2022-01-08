@@ -1,8 +1,8 @@
 import { ComponentProps } from "react";
 import { Gradient as DripsyGradient } from "@dripsy/gradient";
 
-import { tw as tailwind } from "design-system/tailwind";
-import type { TW } from "design-system/tailwind/types";
+import { tw as tailwind } from "@showtime/universal-ui.tailwind";
+import type { TW } from "@showtime/universal-ui.tailwind";
 
 type GradientProps = { tw?: TW; borderRadius?: number } & ComponentProps<
   typeof DripsyGradient

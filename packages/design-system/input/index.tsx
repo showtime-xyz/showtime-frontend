@@ -1,14 +1,17 @@
 import { useMemo } from "react";
 import { TextInput } from "dripsy";
-import { Pressable, Props as PressableProps } from "../pressable-scale";
-import { View } from "../view";
-import { Text } from "../text";
-import { tw } from "../tailwind";
+import {
+  Pressable,
+  Props as PressableProps,
+} from "@showtime/universal-ui.pressable-scale";
+import { View } from "@showtime/universal-ui.view";
+import { Text } from "@showtime/universal-ui.text";
+import { tw } from "@showtime/universal-ui.tailwind";
 import { Platform, TextInputProps, useColorScheme } from "react-native";
-import { useOnFocus, useIsDarkMode } from "../hooks";
+import { useOnFocus, useIsDarkMode } from "@showtime/universal-ui.hooks";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
-import { colors } from "../tailwind/colors";
-import { Label } from "../label";
+import { colors } from "@showtime/universal-ui.tailwind";
+import { Label } from "@showtime/universal-ui.label";
 
 type InputProps = {
   leftElement?: React.ReactElement;

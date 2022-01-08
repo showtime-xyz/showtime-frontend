@@ -1,6 +1,6 @@
 import React from "react";
 import { ScrollView } from "react-native";
-import { tw as tailwind } from "../tailwind";
+import { tw as tailwind } from "@showtime/universal-ui.tailwind";
 import { BODY_CONTAINER_TW, BODY_TW } from "./constants";
 import type { ModalProps } from "./types";
 

@@ -1,6 +1,6 @@
 import { MotiView, AnimatePresence } from "moti";
 import { forwardRef, useMemo } from "react";
-import { tw } from "../../tailwind";
+import { tw } from "@showtime/universal-ui.tailwind";
 
 interface SelectListProps {
   open: boolean;

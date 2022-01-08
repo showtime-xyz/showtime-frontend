@@ -7,9 +7,9 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
-import { tw as tailwind } from "design-system/tailwind";
-import type { TW } from "design-system/tailwind/types";
-import { Text } from "design-system";
+import { tw as tailwind } from "@showtime/universal-ui.tailwind";
+import type { TW } from "@showtime/universal-ui.tailwind";
+import { Text } from "@showtime/universal-ui.text";
 
 const DropdownMenuRoot = DropdownMenu.Root;
 
@@ -172,9 +172,7 @@ const DropdownMenuItemSubtitle = DropdownMenu.menuify(
 );
 
 const DropdownMenuItemIndicator = DropdownMenu.menuify(
-  (
-    props: { tw?: TW } & ComponentProps<typeof DropdownMenu.ItemIndicator>
-  ) => (
+  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.ItemIndicator>) => (
     <DropdownMenu.ItemIndicator {...props} style={tailwind.style(props.tw)} />
   ),
   "ItemIndicator"

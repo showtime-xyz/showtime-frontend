@@ -1,5 +1,5 @@
-import { View } from "design-system/view";
-import { Button } from "design-system/card/social/button";
+import { View } from "@showtime/universal-ui.view";
+import { Button } from "@showtime/universal-ui.card/social/button";
 
 function Social({ nft }) {
   return (

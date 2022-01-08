@@ -6,9 +6,8 @@ import {
 } from "react-native";
 import { Blurhash } from "react-native-blurhash";
 
-import { tw as tailwind } from "design-system/tailwind";
-import type { TW } from "design-system/tailwind/types";
-//import { View } from "design-system";
+import { tw as tailwind } from "@showtime/universal-ui.tailwind";
+import type { TW } from "@showtime/universal-ui.tailwind";
 
 function Img({ source, width, height, ...props }: ReactNativeImageProps) {
   return (

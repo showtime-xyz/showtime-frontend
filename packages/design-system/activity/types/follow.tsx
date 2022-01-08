@@ -1,6 +1,4 @@
 import { Link, TextLink } from "app/navigation/link";
-import { View, Text, Pressable } from "design-system";
-import { mixpanel } from "app/lib/mixpanel";
 import { truncateWithEllipses } from "app/lib/utilities";
 // import UserImageList from 'app/components/user-image-list'
 

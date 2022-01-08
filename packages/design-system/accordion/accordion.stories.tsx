@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/react";
-import { View } from "../view";
-import { Text } from "../text";
+import { View } from "@showtime/universal-ui.view";
+import { Text } from "@showtime/universal-ui.text";
 import { Accordion } from "./index";
 
 export default {
