@@ -37,9 +37,6 @@ const PinchToZoom = ({ children, onGestureEnd, onDoubleTap }) => {
   // Perfect solution would be to set enabled property of PanGestureHandler with a state (which doesn't work)
   const anEdgeCaseAdjustment = { x: useSharedValue(0), y: useSharedValue(0) };
 
-  // If user has zoomed in, enable pan
-  const enablePanGesutreHandler = useSharedValue(false);
-
   const dragGesture = Gesture.Pan()
     .onStart(() => {
       dragState.value = "start";
@@ -50,7 +47,7 @@ const PinchToZoom = ({ children, onGestureEnd, onDoubleTap }) => {
       anEdgeCaseAdjustment.y.value = 0;
     })
     .onUpdate((e) => {
-      if (enablePanGesutreHandler.value) {
+      if (scale.value > 1) {
         offset.x.value =
           e.translationX - anEdgeCaseAdjustment.x.value + start.x.value;
         offset.y.value =
@@ -74,13 +71,6 @@ const PinchToZoom = ({ children, onGestureEnd, onDoubleTap }) => {
           scaleOrigin.x.value = e.x;
           scaleOrigin.y.value = e.y;
         }
-        // If user is zoomed in, they're probably gonna zoom out on double tap, so disable pan
-        // probably bad assumption, figure out later
-        if (scale.value > 1) {
-          enablePanGesutreHandler.value = false;
-        } else {
-          enablePanGesutreHandler.value = true;
-        }
         onDoubleTap({ scale, offset });
       }
     });
@@ -89,7 +79,6 @@ const PinchToZoom = ({ children, onGestureEnd, onDoubleTap }) => {
     .onStart(() => {
       zoomState.value = "start";
       savedScale.value = scale.value;
-      enablePanGesutreHandler.value = true;
     })
     .onUpdate((event) => {
       // Setting scaleOrigin on active instead of begin because of an issue in android.
@@ -121,7 +110,6 @@ const PinchToZoom = ({ children, onGestureEnd, onDoubleTap }) => {
         onGestureEnd?.({ scale, offset, start });
         dragState.value = "idle";
         zoomState.value = "idle";
-        enablePanGesutreHandler.value = false;
       }
     }
   );
