@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import { Platform } from "react-native";
+import { Alert, Platform } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useScrollToTop } from "@react-navigation/native";
 import { useActivity } from "app/hooks/api-hooks";
@@ -50,7 +50,7 @@ const ProfileTop = ({ profile }) => {
       {/* Gradient */}
       <View tw="bg-gray-400" style={{ height: 104 }} pointerEvents="none" />
 
-      <View tw="bg-white dark:bg-black px-2" pointerEvents="none">
+      <View tw="bg-white dark:bg-black px-2" pointerEvents="box-none">
         <View tw="flex-row justify-between pr-2">
           <View tw="flex-row items-end">
             <Image
@@ -138,14 +138,24 @@ const ProfileTop = ({ profile }) => {
 
           <View pointerEvents="box-none">
             <View tw="flex-row items-center my-4" pointerEvents="box-none">
-              <Text tw="text-gray-600 dark:text-gray-400 font-medium text-xs">
+              <Text tw="text-gray-600 dark:text-gray-400 font-medium">
                 Followed by{" "}
-                <Text tw="dark:text-white text-gray-900 font-bold">@am</Text>,{" "}
-                <Text tw="dark:text-white text-gray-900">@m1guelpf</Text> &{" "}
-                <Text tw="dark:text-white text-gray-900 font-bold">
+              </Text>
+              <Pressable onPress={() => Alert.alert("hi 1")}>
+                <Text tw="dark:text-white text-gray-900 font-bold text-xs">
+                  @am ,{" "}
+                </Text>
+              </Pressable>
+              <Pressable onPress={() => Alert.alert("hi 2")}>
+                <Text tw="dark:text-white text-gray-900 font-bold text-xs">
+                  @m1guelpf &{" "}
+                </Text>
+              </Pressable>
+              <Pressable onPress={() => Alert.alert("hi 3")}>
+                <Text tw="dark:text-white text-gray-900 font-bold text-xs">
                   12 others
                 </Text>
-              </Text>
+              </Pressable>
             </View>
           </View>
         </View>
