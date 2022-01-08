@@ -26,10 +26,10 @@ export const Avatar = (props: AvatarProps) => {
               tw.style("border-white dark:border-black"),
             ]}
           ></View>
-          <Image
+          {/* <Image
             source={require("../../../apps/expo/assets/social_token.png")}
             style={styles.socialToken}
-          />
+          /> */}
         </View>
       ) : null}
     </View>

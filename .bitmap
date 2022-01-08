@@ -15,12 +15,6 @@
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/accordion"
     },
-    "activity": {
-        "scope": "",
-        "version": "",
-        "mainFile": "index.tsx",
-        "rootDir": "packages/design-system/activity"
-    },
     "activity-indicator": {
         "scope": "",
         "version": "",

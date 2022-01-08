@@ -8,7 +8,7 @@ import { ChevronUp } from "@showtime/universal-ui.icon";
 import { Video } from "expo-av";
 import { memo, useCallback, useContext } from "react";
 import { useIsDarkMode } from "@showtime/universal-ui.hooks";
-import { Creator, NFT } from "app/types";
+// import { Creator, NFT } from "app/types";
 import { Dimensions } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -16,7 +16,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 type Props = {
-  creator: Creator;
+  creator: any;
 };
 
 export const ITEM_COLLAPSED_HEIGHT = 64;
@@ -107,7 +107,7 @@ export const CreatorPreview = memo((props: Props) => {
 
 const ITEM_SIZE = Dimensions.get("window").width / 2 - 10;
 
-const Media = ({ item }: { item: NFT }) => {
+const Media = ({ item }: { item: any }) => {
   const { value: selectedValue } = useContext(
     Accordion.RNAccordion.RootContext
   );

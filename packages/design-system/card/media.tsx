@@ -5,7 +5,7 @@ import Router from "next/router";
 
 import { View } from "@showtime/universal-ui.view";
 import { Image } from "@showtime/universal-ui.image";
-import { useRouter } from "app/navigation/use-router";
+// import { useRouter } from "app/navigation/use-router";
 
 const getImageUrl = (imgUrl: string, tokenAspectRatio: number) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
@@ -33,25 +33,25 @@ type Props = {
 };
 
 function Media({ nfts }: Props) {
-  const router = useRouter();
+  // const router = useRouter();
   const { width } = useWindowDimensions();
   const count = nfts.length;
 
-  const openNFT = useCallback(
-    (id: string) => {
-      const as = `/nft/${id}`;
+  // const openNFT = useCallback(
+  //   (id: string) => {
+  //     const as = `/nft/${id}`;
 
-      const href = Router.router
-        ? {
-            pathname: Router.pathname,
-            query: { ...Router.query, id },
-          }
-        : as;
+  //     const href = Router.router
+  //       ? {
+  //           pathname: Router.pathname,
+  //           query: { ...Router.query, id },
+  //         }
+  //       : as;
 
-      router.push(href, as, { shallow: true });
-    },
-    [router, Router]
-  );
+  //     router.push(href, as, { shallow: true });
+  //   },
+  //   [router, Router]
+  // );
 
   const keyExtractor = useCallback((item) => item?.nft_id?.toString(), []);
 

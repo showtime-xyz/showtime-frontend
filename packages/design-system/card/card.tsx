@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { Media } from "@showtime/universal-ui.card/media";
 import { View } from "@showtime/universal-ui.view";
-import { Activity } from "@showtime/universal-ui.activity";
+// import { Activity } from "@showtime/universal-ui.activity";
 import { Social } from "@showtime/universal-ui.card/social";
 
 type Props = {
@@ -15,7 +15,7 @@ function CardImpl({ act, variant }: Props) {
 
   return (
     <View tw="bg-white dark:bg-black">
-      {variant === "activity" && <Activity activity={act} />}
+      {/* {variant === "activity" && <Activity activity={act} />} */}
       <Media nfts={nfts ?? []} />
       {single && <Social nft={nfts[0]} />}
     </View>
