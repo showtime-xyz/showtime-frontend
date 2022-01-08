@@ -19,11 +19,12 @@ const useViewDimension = () => {
   return {
     onLayout: (e) => {
       setDimension({
-        width: e.nativeEvent.width,
-        height: e.nativeEvent.height,
+        width: e.nativeEvent.layout.width,
+        height: e.nativeEvent.layout.height,
       });
     },
-    ...dimension,
+    width: dimension.width,
+    height: dimension.height,
   };
 };
 
@@ -110,7 +111,6 @@ const PinchToZoom = ({
   //     }
   //   }
   // );
-
   const animatedStyles = useAnimatedStyle(() => {
     return {
       transform: [
