@@ -390,15 +390,19 @@ function makeScrollableComponent<K extends object, T extends any>(Comp: T) {
 
     const topHeight = headerHeight + tabListHeight;
 
+    const scrollToOffset = (offset) => {
+      _ref.current.scrollToOffset({ offset, animated: false });
+    };
+
     // sync other flatlist's scroll position if header is translated
     useDerivedValue(() => {
       if (
         index.value !== elementIndex &&
         requestOtherViewsToSyncTheirScrollPosition.value
       ) {
-        const nextScrollY = -1 * translateY.value;
-        if (nextScrollY < headerHeight || scrollY.value < nextScrollY) {
-          scrollTo(aref, 0, nextScrollY, false);
+        const absTranslateY = -1 * translateY.value;
+        if (absTranslateY < headerHeight || scrollY.value < absTranslateY) {
+          runOnJS(scrollToOffset)(absTranslateY);
         }
       }
     });
