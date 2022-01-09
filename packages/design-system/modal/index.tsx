@@ -1,5 +1,10 @@
 import React from "react";
-import { Modal as RNModal, Platform, StyleSheet } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Modal as RNModal,
+  Platform,
+  StyleSheet,
+} from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { View } from "design-system/view";
 import { Header } from "./header";
@@ -14,15 +19,36 @@ import {
 import type { ModalProps } from "./types";
 
 const ModalContainer = Platform.select({
-  ios: ({ children }) => children,
-  android: ({ children }) => (
-    <RNModal transparent={true}>
+  ios: ({ onDismiss: _, children }) => children,
+  android: ({ children, onDismiss }) => (
+    <RNModal onDismiss={onDismiss} transparent={true}>
       <GestureHandlerRootView style={StyleSheet.absoluteFill}>
         {children}
       </GestureHandlerRootView>
     </RNModal>
   ),
-  default: ({ children }) => <RNModal transparent={true}>{children}</RNModal>,
+  default: ({ children, onDismiss }) => (
+    <RNModal onDismiss={onDismiss} transparent={true}>
+      {children}
+    </RNModal>
+  ),
+});
+
+const ModalKeyboardAvoidingView: React.FC<{
+  keyboardVerticalOffset: number;
+  style: any;
+}> = Platform.select({
+  web: ({ children }) => children as any,
+  default: ({ keyboardVerticalOffset, style, children }) => (
+    <KeyboardAvoidingView
+      pointerEvents="box-none"
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={keyboardVerticalOffset}
+      style={style}
+    >
+      {children}
+    </KeyboardAvoidingView>
+  ),
 });
 
 export function Modal({
@@ -30,24 +56,33 @@ export function Modal({
   width = DEFAULT_WIDTH,
   height = DEFAULT_HEIGHT,
   bodyTW,
+  keyboardVerticalOffset = 0,
   close,
   onDismiss,
   children,
 }: ModalProps) {
   return (
-    <ModalContainer>
+    <ModalContainer onDismiss={onDismiss}>
       <View tw={CONTAINER_TW}>
         <ModalBackdrop close={close} />
-        <View
-          tw={[
-            width,
-            height.length === 0 || !height ? "max-h-screen" : height,
-            MODAL_TW,
-          ]}
+        <ModalKeyboardAvoidingView
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            justifyContent: "flex-end",
+          }}
+          keyboardVerticalOffset={keyboardVerticalOffset}
         >
-          <Header title={title} close={close} />
-          <ModalBody tw={bodyTW}>{children}</ModalBody>
-        </View>
+          <View
+            tw={[
+              width,
+              height.length === 0 || !height ? "max-h-screen" : height,
+              MODAL_TW,
+            ]}
+          >
+            <Header title={title} close={close} />
+            <ModalBody tw={bodyTW}>{children}</ModalBody>
+          </View>
+        </ModalKeyboardAvoidingView>
       </View>
     </ModalContainer>
   );

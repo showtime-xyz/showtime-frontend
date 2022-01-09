@@ -1,4 +1,5 @@
 import type React from "react";
+import type { TW } from "../tailwind/types";
 
 export interface ModalProps {
   /**
@@ -26,10 +27,17 @@ export interface ModalProps {
   width?: string;
   /**
    * Defines the body tailwind style.
-   * 
+   *
    * @default undefined
    */
-  bodyTW?: string;
+  bodyTW?: TW;
+  /**
+   * Defines the keyboard vertical offset, usually
+   * the header height.
+   *
+   * @default 0
+   */
+  keyboardVerticalOffset?: number;
   /**
    * Defines the action to be fried to close
    * the modal.
@@ -39,8 +47,8 @@ export interface ModalProps {
   close?: () => void;
   /**
    * Defines the callback when the modal dismiss.
-   * 
+   *
    * @default undefined
    */
-   onDismiss?: () => void;
+  onDismiss?: () => void;
 }
