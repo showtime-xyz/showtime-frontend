@@ -361,6 +361,8 @@ function makeScrollableComponent<K extends object, T extends any>(Comp: T) {
     const elementIndex = React.useContext(TabIndexContext).index;
     const aref = useAnimatedRef<Reanimated.ScrollView>();
     const scrollY = useSharedValue(0);
+    const TRANSLATION_Y_OFFSET =
+      Platform.OS === "ios" ? headerHeight + tabListHeight : 0;
 
     const scrollHandler = useAnimatedScrollHandler({
       onBeginDrag() {
@@ -370,7 +372,7 @@ function makeScrollableComponent<K extends object, T extends any>(Comp: T) {
         requestOtherViewsToSyncTheirScrollPosition.value = false;
       },
       onScroll(e) {
-        scrollY.value = e.contentOffset.y;
+        scrollY.value = e.contentOffset.y + TRANSLATION_Y_OFFSET;
         translateY.value = interpolate(
           scrollY.value,
           [0, headerHeight],
