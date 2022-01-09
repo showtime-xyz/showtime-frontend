@@ -1,7 +1,6 @@
-import { useContext, useState, useCallback, useEffect } from "react";
+import { useContext, useState, useCallback, useEffect, useMemo } from "react";
 import { Platform, Linking } from "react-native";
 import { captureException } from "@sentry/nextjs";
-import { useForm, Controller } from "react-hook-form";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { convertUtf8ToHex } from "@walletconnect/utils";
 import { useSWRConfig } from "swr";
@@ -17,112 +16,134 @@ import { accessTokenManager } from "app/lib/access-token-manager";
 import { setLogin } from "app/lib/login";
 import { mixpanel } from "app/lib/mixpanel";
 
-import {
-  View,
-  ScrollView,
-  Text,
-  TextInput,
-  Button,
-  ButtonLabel,
-  Pressable,
-} from "design-system";
-import { tw } from "design-system/tailwind";
+import { View, Text, Button, ButtonLabel, Pressable } from "design-system";
 import { useRouter } from "app/navigation/use-router";
-import { Ethereum } from "design-system/icon";
 import { setRefreshToken } from "app/lib/refresh-token";
-
-type EmailForm = {
-  email: string;
-};
+import {
+  LoginPhoneNumberField,
+  LoginPhoneNumberFieldValues,
+} from "./login-phone-number-field";
+import { LoginEmailField, LoginEmailFieldValues } from "./login-email-field";
 
 // TODO: loading state
 export function Login() {
   const router = useRouter();
   const context = useContext(AppContext);
   const connector = useWalletConnect();
+  const [loading, setLoading] = useState(false);
   const [signaturePending, setSignaturePending] = useState(false);
   const [walletName, setWalletName] = useState("");
   const { mutate } = useSWRConfig();
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    setError,
-  } = useForm({
-    mode: "onBlur",
-    reValidateMode: "onChange",
-  });
+  //#region methods
+  const handleLogin = useCallback(async (payload: object) => {
+    try {
+      const Web3Provider = (await import("@ethersproject/providers"))
+        .Web3Provider;
 
-  useEffect(() => {
-    connector.on("connect", () => {
-      handleSubmitWallet();
-    });
+      // @ts-ignore
+      const web3 = new Web3Provider(magic.rpcProvider);
+      context.setWeb3(web3);
 
-    if (connector.connected) {
-      handleSubmitWallet();
+      const response = await axios({
+        url: "/v1/login_magic",
+        method: "POST",
+        data: payload,
+      });
+
+      const accessToken = response?.access;
+      const refreshToken = response?.refresh;
+      const validResponse = accessToken && refreshToken;
+
+      if (validResponse) {
+        // TODO:
+        // const sealedRefreshToken = await Iron.seal(
+        // 	{ refreshToken },
+        // 	process.env.ENCRYPTION_SECRET_V2,
+        // 	Iron.defaults
+        // )
+        // setRefreshToken(sealedRefreshToken)
+        setRefreshToken(refreshToken);
+        accessTokenManager.setAccessToken(accessToken);
+        setLogin(Date.now().toString());
+      } else {
+        throw "Login failed";
+      }
+
+      mutate(null);
+    } catch (error) {
+      if (process.env.NODE_ENV === "development") {
+        console.error(error);
+      }
+
+      captureException(error, {
+        tags: {
+          login_signature_flow: "modalLogin.js",
+          login_magic_link: "modalLogin.js",
+        },
+      });
     }
-  }, [connector?.connected]);
+  }, []);
 
+  const handleLoginError = useCallback((error) => {
+    if (process.env.NODE_ENV === "development") {
+      console.error(error);
+    }
+
+    captureException(error, {
+      tags: {
+        login_signature_flow: "modalLogin.js",
+        login_magic_link: "modalLogin.js",
+      },
+    });
+  }, []);
+  //#endregion
+
+  //#region callbacks
   const handleSubmitEmail = useCallback(
-    async ({ email }: EmailForm) => {
+    async ({ email }: LoginEmailFieldValues) => {
       try {
-        const Web3Provider = (await import("@ethersproject/providers"))
-          .Web3Provider;
-
         mixpanel.track("Login - email button click");
 
-        // Magic Link authenticates through email
         const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY);
         const did = await magic.auth.loginWithMagicLink({ email });
-        // @ts-ignore
-        const web3 = new Web3Provider(magic.rpcProvider);
-        context.setWeb3(web3);
 
-        const response = await axios({
-          url: "/v1/login_magic",
-          method: "POST",
-          data: { email, did },
+        await handleLogin({
+          did,
+          email,
         });
 
-        const accessToken = response?.access;
-        const refreshToken = response?.refresh;
-        const validResponse = accessToken && refreshToken;
-
-        if (validResponse) {
-          // TODO:
-          // const sealedRefreshToken = await Iron.seal(
-          // 	{ refreshToken },
-          // 	process.env.ENCRYPTION_SECRET_V2,
-          // 	Iron.defaults
-          // )
-          // setRefreshToken(sealedRefreshToken)
-          setRefreshToken(refreshToken);
-          accessTokenManager.setAccessToken(accessToken);
-          setLogin(Date.now().toString());
-        } else {
-          throw "Login failed";
-        }
-
-        mutate(null);
         mixpanel.track("Login success - email");
         router.pop();
       } catch (error) {
-        if (process.env.NODE_ENV === "development") {
-          console.error(error);
-        }
-
-        captureException(error, {
-          tags: {
-            login_signature_flow: "modalLogin.js",
-            login_magic_link: "modalLogin.js",
-          },
-        });
+        handleLoginError(error);
       }
     },
-    [context, router]
+    [handleLogin, handleLoginError]
   );
+  const handleSubmitPhoneNumber = useCallback(
+    async ({ phoneNumber }: LoginPhoneNumberFieldValues) => {
+      try {
+        mixpanel.track("Login - phone number button click");
 
+        const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY);
+        const did = await magic.auth.loginWithSMS({
+          phoneNumber,
+        });
+
+        await handleLogin({
+          did,
+          phoneNumber,
+        });
+
+        mixpanel.track("Login success - phone number");
+        router.pop();
+      } catch (error) {
+        handleLoginError(error);
+      }
+    },
+    [handleLogin, handleLoginError]
+  );
   const handleSubmitWallet = useCallback(async () => {
     try {
       let address: string;
@@ -159,6 +180,7 @@ export function Login() {
         });
 
         setSignaturePending(true);
+        // @ts-ignore
         setWalletName(connector?._peerMeta?.name);
 
         const msgParams = [
@@ -216,9 +238,27 @@ export function Login() {
       setSignaturePending(false);
     }
   }, [context, connector?.connected, setWalletName]);
+  //#endregion
 
+  //#region effects
+  useEffect(() => {
+    connector.on("connect", () => {
+      handleSubmitWallet();
+    });
+
+    if (connector.connected) {
+      handleSubmitWallet();
+    }
+  }, [connector?.connected]);
+  //#endregion
   return (
-    <>
+    <View
+      style={{
+        justifyContent: "center",
+        alignContent: "stretch",
+        alignItems: "stretch",
+      }}
+    >
       {signaturePending ? (
         <View tw="py-40">
           <Text tw="text-center dark:text-gray-400">
@@ -278,46 +318,19 @@ export function Login() {
             </Text>
           </View>
 
-          <Text tw="mb-[16px] font-medium text-gray-900 dark:text-white text-center">
-            Enter your email to receive a sign in link
-          </Text>
-          <View tw="p-[16px] mb-[16px] rounded-[16px] bg-gray-100 dark:bg-gray-900">
-            <Text tw="mb-[8px] font-bold text-sm text-gray-900 dark:text-white">
-              Email address
-            </Text>
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  tw="w-full text-black dark:text-gray-300 rounded-lg focus:outline-none focus-visible:ring-1"
-                  onBlur={onBlur}
-                  onChangeText={(value) => onChange(value)}
-                  value={value}
-                  placeholder="Enter your email address"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  textContentType="emailAddress"
-                />
-              )}
-              name="email"
-              rules={{ required: true }}
-              defaultValue=""
-            />
-          </View>
-          {/* {errors.email && <Text sx={{ fontSize: 12, textAlign: 'center' }}>This is required.</Text>} */}
+          <LoginEmailField onSubmit={handleSubmitEmail} />
 
-          <Button
-            onPress={handleSubmit(handleSubmitEmail)}
-            variant="tertiary"
-            size="regular"
-          >
-            <ButtonLabel tw="text-black dark:text-white">
-              Sign in with Email
-            </ButtonLabel>
-          </Button>
+          <View tw="mb-[16px] mx-[-16px] bg-gray-100 dark:bg-gray-900">
+            <Text tw="my-[8px] font-bold text-sm text-gray-600 dark:text-gray-400 text-center">
+              — or —
+            </Text>
+          </View>
+
+          <LoginPhoneNumberField onSubmit={handleSubmitPhoneNumber} />
         </View>
       )}
+
       <Relayer />
-    </>
+    </View>
   );
 }
