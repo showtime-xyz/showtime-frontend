@@ -24,8 +24,6 @@ import {
   CHAIN_IDENTIFIERS,
   COLLECTION_NAME_TRUNCATE_LENGTH,
 } from "../lib/constants";
-import ShowtimeIcon from "./Icons/ShowtimeIcon";
-import Tippy from "@tippyjs/react";
 
 const TokenCard = ({
   originalItem,
@@ -53,12 +51,13 @@ const TokenCard = ({
   const [muted, setMuted] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [showModel, setShowModel] = useState(false);
+
   const hasMatchingListing = item?.listing?.all_sellers?.find((seller) => {
     return seller.profile_id === pageProfile?.profile_id;
   });
-  const ifListedIsOwner =
-    myProfile?.profile_id === item?.listing?.profile_id &&
-    typeof myProfile?.profile_id === "number";
+
+  const freeListedItem = item?.listing?.min_price === 0;
+  const singleItem = item?.token_count === 1;
 
   // Automatically load models that have no preview image. We don't account for video here because currently token_animation_url is a glb file.
   useEffect(() => {
@@ -657,13 +656,6 @@ const TokenCard = ({
               >
                 {item.token_name}
               </p>
-              {SHOWTIME_CONTRACTS.includes(item.contract_address) && (
-                <Tippy content="Created on Showtime">
-                  <div className="flex items-center justify-center">
-                    <ShowtimeIcon className="w-5 h-5 rounded-full fill-gold" />
-                  </div>
-                </Tippy>
-              )}
             </div>
             <div className="mt-4 flex items-center justify-between">
               <div className="flex items-center space-x-4">
@@ -737,34 +729,21 @@ const TokenCard = ({
                         </div>
                       </a>
                     </Link>
-                    {ifListedIsOwner ? (
-                      <section className="space-x-4 flex items-end hover:bg-gray-100 dark:hover:bg-gray-900 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg transition bg-gray-100 dark:bg-gray-900">
-                        <div>
-                          <span className="text-xs font-medium text-gray-600 dark:text-gray-500">
-                            Listed for
-                          </span>
-                          <p className="text-sm font-bold text-gray-900 dark:text-gray-200 whitespace-nowrap">
-                            {parseFloat(item.listing.min_price)} $
+                    <section className="space-x-4 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg">
+                      <p className="text-right text-xs font-medium text-gray-600 dark:text-gray-500">
+                        Price
+                      </p>
+                      <p className="text-sm font-bold text-gray-900 dark:text-gray-200 whitespace-nowrap">
+                        {freeListedItem ? (
+                          "Free"
+                        ) : (
+                          <>
+                            {parseFloat(item.listing.min_price)}{" "}
                             {item.listing.currency}
-                          </p>
-                        </div>
-                      </section>
-                    ) : (
-                      <button
-                        onClick={() => setBuyModal(item)}
-                        className="space-x-4 flex items-end hover:bg-gray-100 dark:hover:bg-gray-900 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg transition"
-                      >
-                        <div className="text-right">
-                          <span className="text-xs text-right font-medium text-gray-600 dark:text-gray-500">
-                            Buy
-                          </span>
-                          <p className="text-sm font-bold text-gray-900 dark:text-gray-200 whitespace-nowrap">
-                            {parseFloat(item.listing.min_price)} $
-                            {item.listing.currency}
-                          </p>
-                        </div>
-                      </button>
-                    )}
+                          </>
+                        )}
+                      </p>
+                    </section>
                   </div>
                 ) : item.owner_count && item.owner_count > 1 ? (
                   pageProfile && listId === 2 ? (
@@ -873,10 +852,11 @@ const TokenCard = ({
                   </p>
                 </div>
                 <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
-                  {item.token_count ? `${item.token_count} Editions` : "1/1"}
+                  {singleItem || !item.token_count
+                    ? "1 Edition"
+                    : `${item.token_count} Editions`}
                 </p>
               </div>
-            </Link>
           </div>
         </div>
       </div>

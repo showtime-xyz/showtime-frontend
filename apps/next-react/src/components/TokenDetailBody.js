@@ -154,9 +154,12 @@ const TokenDetailBody = ({
   const isOwnedByUser =
     typeof myProfile?.profile_id === "number" &&
     myProfile?.profile_id === item?.owner_id;
+
   const ifListedIsOwner =
     myProfile?.profile_id === item?.listing?.profile_id &&
     typeof myProfile?.profile_id === "number";
+
+  const freeItem = item?.listing?.min_price === 0;
 
   return (
     <>
@@ -626,20 +629,35 @@ const TokenDetailBody = ({
                 </div>
 
                 {item.listing ? (
-                  <button
-                    disabled={ifListedIsOwner}
-                    title="Buy on Showtime"
-                    className={`border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1 ${
-                      ifListedIsOwner ? "bg-gray-100 cursor-default" : null
-                    }`}
-                    onClick={() => setBuyModalOpen(true)}
-                  >
-                    <p className="text-sm sm:text-base">
-                      {ifListedIsOwner
-                        ? `Listed for ${item.listing.min_price} $${item.listing.currency}`
-                        : `Buy for ${item.listing.min_price} $${item.listing.currency}`}
-                    </p>
-                  </button>
+                  <>
+                    {ifListedIsOwner ? (
+                      <p className="px-4 text-sm sm:text-base dark:text-gray-500">
+                        {freeItem ? (
+                          "Listed for Free"
+                        ) : (
+                          <>
+                            {`Price ${item.listing.min_price} ${item.listing.currency}`}
+                          </>
+                        )}
+                      </p>
+                    ) : (
+                      <button
+                        title="Buy on Showtime"
+                        className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1"
+                        onClick={() => setBuyModalOpen(true)}
+                      >
+                        <p className="text-sm sm:text-base">
+                          {freeItem ? (
+                            "Price Free"
+                          ) : (
+                            <>
+                              {`Price ${item.listing.min_price} ${item.listing.currency}`}
+                            </>
+                          )}
+                        </p>
+                      </button>
+                    )}
+                  </>
                 ) : isOwnedByUser &&
                   SHOWTIME_CONTRACTS.includes(item.contract_address) ? (
                   <button
