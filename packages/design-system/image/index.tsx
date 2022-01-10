@@ -41,6 +41,7 @@ function StyledImage({ tw, style, blurhash, ...props }: ImageProps) {
 
   // <View sx={{ borderRadius, overflow: 'hidden' }}>
 
+  // TODO: fix Blurhash on Android
   if (blurhash && Platform.OS === "ios") {
     return (
       <Blurhash
