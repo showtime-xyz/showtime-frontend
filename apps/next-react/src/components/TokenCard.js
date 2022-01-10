@@ -837,7 +837,7 @@ const TokenCard = ({
             </div>
             <Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
               <div className="mt-4 px-4 py-2 bg-gray-100 dark:bg-gray-800 flex items-center justify-between">
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 cursor-pointer">
                   {item.collection_img_url && (
                     <img
                       src={item.collection_img_url}
