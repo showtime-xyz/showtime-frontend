@@ -10,7 +10,7 @@ import { Image } from "design-system/image";
 import { VerificationBadge } from "../../design-system/verification-badge";
 
 const TAB_LIST_HEIGHT = 64;
-const TOKEN_BADGE_HEIGHT = 32;
+const TOKEN_BADGE_HEIGHT = 28;
 const COVER_IMAGE_HEIGHT = 104;
 
 const SocialTokenBadgeIcon = () => {
@@ -62,7 +62,7 @@ const ProfileTop = ({ profile }) => {
                 tw="border-white h-[144px] w-[144px] dark:border-gray-900 rounded-full border-8"
               />
             </View>
-            <View tw="bg-white dark:bg-gray-900 p-2 rounded-full absolute right-2 bottom-2">
+            <View tw="bg-white dark:bg-gray-900 p-1 rounded-full absolute right-2 bottom-2">
               <SocialTokenBadgeIcon />
             </View>
           </View>
@@ -98,10 +98,10 @@ const ProfileTop = ({ profile }) => {
               ) : null}
 
               {profile.followsYou ? (
-                <View tw="bg-gray-100 dark:bg-gray-900 ml-2 px-2 py-1 rounded-full">
+                <View tw="bg-gray-100 dark:bg-gray-900 ml-2 h-[23px] px-2 justify-center rounded-full">
                   <Text
                     variant="text-xs"
-                    tw="dark:text-gray-400 text-gray-500 font-600"
+                    tw="dark:text-gray-400 text-gray-500 font-semibold"
                   >
                     Follows You
                   </Text>
