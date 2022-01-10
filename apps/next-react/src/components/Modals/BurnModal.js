@@ -13,6 +13,7 @@ import PolygonIcon from "../Icons/PolygonIcon";
 import { ExclamationIcon } from "@heroicons/react/outline";
 import useSWR from "swr";
 import backend from "@/lib/backend";
+import useFlags, { FLAGS } from "@/hooks/useFlags";
 
 const MODAL_STATES = {
   GENERAL: "general",
@@ -30,6 +31,9 @@ const BurnModal = ({ open, onClose, token }) => {
 
   const [quantity, setQuantity] = useState(1);
   const [transactionHash, setTransactionHash] = useState(null);
+
+  const flags = useFlags();
+  const enableMagicTX = flags[FLAGS.enableMagicTX];
 
   const { data: ownershipData } = useSWR(
     () =>
@@ -50,8 +54,9 @@ const BurnModal = ({ open, onClose, token }) => {
 
   const burnToken = async () => {
     setModalState(MODAL_STATES.PROCESSING);
+    const withMagic = enableMagicTX;
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic: true });
+    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic });
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,

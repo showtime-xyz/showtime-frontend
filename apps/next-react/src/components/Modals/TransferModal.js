@@ -15,6 +15,7 @@ import Button from "../UI/Buttons/Button";
 import minterAbi from "@/data/ShowtimeMT.json";
 import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
 import backend from "@/lib/backend";
+import useFlags, { FLAGS } from "@/hooks/useFlags";
 
 const addressRegex = /^0x[a-fA-F0-9]{40}$/;
 
@@ -34,6 +35,9 @@ const TransferModal = ({ open, onClose, token }) => {
   const [quantity, setQuantity] = useState(1);
   const [address, setAddress] = useState("");
   const [transactionHash, setTransactionHash] = useState(null);
+
+  const flags = useFlags();
+  const enableMagicTX = flags[FLAGS.enableMagicTX];
 
   const { data: ownershipData } = useSWR(
     () =>
@@ -55,8 +59,9 @@ const TransferModal = ({ open, onClose, token }) => {
 
   const transferToken = async () => {
     setModalState(MODAL_STATES.PROCESSING);
+    const withMagic = enableMagicTX;
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic: true });
+    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic });
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,

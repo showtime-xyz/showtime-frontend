@@ -28,6 +28,7 @@ import {
 import BadgeIcon from "@/components/Icons/BadgeIcon";
 import { preventExponent } from "@/lib/prevent-exponent";
 import { formatPrice } from "@/lib/format-price";
+import useFlags, { FLAGS } from "@/hooks/useFlags";
 
 const MODAL_PAGES = {
   GENERAL: "general",
@@ -59,6 +60,9 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
       `/v1/owned_quantity?nft_id=${token.nft_id}&profile_id=${myProfile.profile_id}`,
     (url) => backend.get(url).then((res) => res.data?.data)
   );
+
+  const flags = useFlags();
+  const enableMagicTX = flags[FLAGS.enableMagicTX];
 
   const shotConfetti = () => {
     if (!confettiCanvas.current) return;
@@ -178,8 +182,9 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 
   const listToken = async () => {
     setModalPage(MODAL_PAGES.LOADING);
+    const withMagic = enableMagicTX;
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic: true });
+    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic });
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,
