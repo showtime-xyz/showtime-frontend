@@ -1,5 +1,5 @@
 import { Profile } from "../types";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { NFT } from "../types";
 import { useInfiniteListQuerySWR, fetcher } from "./use-infinite-list-query";
 import useSWR from "swr";
@@ -25,7 +25,20 @@ export const useActivity = ({
   );
 
   const queryState = useInfiniteListQuerySWR<any>(activityURLFn);
-  return queryState;
+
+  const newData = useMemo(() => {
+    let newData = [];
+    if (queryState.data) {
+      queryState.data.forEach((p) => {
+        if (p) {
+          newData = newData.concat(p.data);
+        }
+      });
+    }
+    return newData;
+  }, [queryState.data]);
+
+  return { ...queryState, data: newData };
 };
 
 export const useTrendingCreators = ({ days }: { days: number }) => {
@@ -55,7 +68,19 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
 
   const queryState = useInfiniteListQuerySWR<any>(trendingCreatorsUrlFn);
 
-  return queryState;
+  const newData = useMemo(() => {
+    let newData = [];
+    if (queryState.data) {
+      queryState.data.forEach((p) => {
+        if (p) {
+          newData = newData.concat(p.data);
+        }
+      });
+    }
+    return newData;
+  }, [queryState.data]);
+
+  return { ...queryState, data: newData };
 };
 
 export const useUserProfile = ({ address }: { address: string }) => {
@@ -87,4 +112,65 @@ export const useCurrentUserProfile = () => {
   );
 
   return { data, loading: !data, error };
+};
+
+type UserProfileNFTs = {
+  profileId?: number;
+  listId: 1 | 2 | 3;
+  sortId?: number;
+  showDuplicates?: number;
+  showHidden?: number;
+  collectionId?: number;
+};
+
+type UseProfileNFTs = {
+  data: {
+    items: Array<NFT>;
+    hasMore: boolean;
+  };
+};
+
+export const useProfileNFTs = (params: UserProfileNFTs) => {
+  const {
+    profileId,
+    listId,
+    sortId = 1,
+    showDuplicates = 0,
+    showHidden = 0,
+    collectionId = 0,
+  } = params;
+
+  const trendingCreatorsUrlFn = useCallback(
+    (index) => {
+      const url = `v1/profile_nfts?profile_id=${profileId}&page=${
+        index + 1
+      }&limit=${8}&list_id=${listId}&sort_id=${sortId}&show_hidden=0&show_duplicates=0&collection_id=0`;
+      return url;
+    },
+    [profileId, listId, sortId, showDuplicates, showHidden, collectionId]
+  );
+
+  const queryState = useInfiniteListQuerySWR<UseProfileNFTs>(
+    params.profileId ? trendingCreatorsUrlFn : null
+  );
+
+  const newData = useMemo(() => {
+    let newData = [];
+    if (queryState.data) {
+      queryState.data.forEach((p) => {
+        if (p) {
+          newData = newData.concat(p.data.items);
+        }
+      });
+    }
+    return newData;
+  }, [queryState.data]);
+
+  const fetchMore = () => {
+    if (queryState.data?.[queryState.data.length - 1].data.hasMore) {
+      queryState.fetchMore();
+    }
+  };
+
+  return { ...queryState, fetchMore, data: newData };
 };

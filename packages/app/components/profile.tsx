@@ -1,7 +1,11 @@
-import { useCallback, useState } from "react";
-import { Platform } from "react-native";
+import { memo, useCallback, useMemo, useState } from "react";
+import { Dimensions, Platform } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { useActivity, useCurrentUserProfile } from "app/hooks/api-hooks";
+import {
+  useActivity,
+  useCurrentUserProfile,
+  useProfileNFTs,
+} from "app/hooks/api-hooks";
 import { View, Spinner, Text, Skeleton } from "design-system";
 import { Card } from "design-system/card";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
@@ -10,6 +14,9 @@ import { Image } from "design-system/image";
 import { VerificationBadge } from "../../design-system/verification-badge";
 import { getProfileImage, getProfileName } from "../utilities";
 import Animated, { FadeIn } from "react-native-reanimated";
+import { useUser } from "../hooks/use-user";
+import { NFT } from "../types";
+import { Video } from "expo-av";
 
 const TAB_LIST_HEIGHT = 64;
 const TOKEN_BADGE_HEIGHT = 28;
@@ -82,7 +89,7 @@ const ProfileTabs = () => {
           <SelectedTabIndicator />
         </Tabs.List>
         <Tabs.Pager>
-          <AllActivityList />
+          <CreatedNFTsList />
           <CreationList />
           <LikesList />
           <CommentsList />
@@ -263,49 +270,105 @@ const FollowsList = () => {
     />
   );
 };
+const GAP_BETWEEN_ITEMS = 1;
+const ITEM_SIZE = Dimensions.get("window").width / 2;
 
-const AllActivityList = () => {
+const CreatedNFTsList = () => {
+  const { user } = useUser();
   const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
-    useActivity({ typeId: 0 });
+    useProfileNFTs({ listId: 1, profileId: user?.data.profile.profile_id });
 
-  const keyExtractor = useCallback((item) => item.id, []);
+  const keyExtractor = useCallback((item) => {
+    return item.nft_id;
+  }, []);
 
-  const renderItem = useCallback(
-    ({ item }) => <Card act={item} variant="activity" />,
-    []
-  );
+  const renderItem = useCallback(({ item }) => <Media item={item} />, []);
 
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,
     [isLoadingMore]
   );
 
-  if (isLoading) {
-    return (
-      <View tw="items-center justify-center flex-1">
-        <Spinner />
+  const getItemLayout = useCallback((_data, index) => {
+    return { length: ITEM_SIZE, offset: ITEM_SIZE * index, index };
+  }, []);
+
+  const ListHeaderComponent = useMemo(
+    () => (
+      <View tw="p-4">
+        {data.length === 0 && !isLoading ? (
+          <View tw="items-center justify-center mt-20">
+            <Text tw="text-gray-900 dark:text-white">No results found</Text>
+          </View>
+        ) : isLoading ? (
+          <View tw="items-center justify-center mt-20">
+            <Spinner />
+          </View>
+        ) : null}
       </View>
+    ),
+    [data, isLoading]
+  );
+
+  return (
+    <View tw="flex-1">
+      <Tabs.FlatList
+        data={data}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        refreshing={isRefreshing}
+        onRefresh={refresh}
+        onEndReached={fetchMore}
+        onEndReachedThreshold={0.6}
+        removeClippedSubviews={Platform.OS !== "web"}
+        ListHeaderComponent={ListHeaderComponent}
+        numColumns={2}
+        getItemLayout={getItemLayout}
+        windowSize={4}
+        initialNumToRender={10}
+        alwaysBounceVertical={false}
+        ListFooterComponent={ListFooterComponent}
+        style={useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), [])}
+      />
+    </View>
+  );
+};
+
+const Media = memo(function Media({ item }: { item: NFT }) {
+  const style = useMemo(() => {
+    return {
+      width: ITEM_SIZE - GAP_BETWEEN_ITEMS,
+      height: ITEM_SIZE - GAP_BETWEEN_ITEMS,
+      margin: GAP_BETWEEN_ITEMS,
+    };
+  }, []);
+
+  if (item.mime_type?.startsWith("video")) {
+    return (
+      <Video
+        source={{
+          uri: item.animation_preview_url,
+        }}
+        style={style}
+        useNativeControls
+        isLooping
+        isMuted
+      />
+    );
+  } else if (item.mime_type?.startsWith("image")) {
+    return (
+      <Image
+        source={{
+          uri: item.still_preview_url,
+        }}
+        alt={item.token_name}
+        style={style}
+      />
     );
   }
 
-  return (
-    <Tabs.FlatList
-      data={data}
-      keyExtractor={keyExtractor}
-      renderItem={renderItem}
-      refreshing={isRefreshing}
-      onRefresh={refresh}
-      onEndReached={fetchMore}
-      onEndReachedThreshold={0.6}
-      removeClippedSubviews={Platform.OS !== "web"}
-      numColumns={1}
-      windowSize={4}
-      initialNumToRender={2}
-      alwaysBounceVertical={false}
-      ListFooterComponent={ListFooterComponent}
-    />
-  );
-};
+  return null;
+});
 
 const ProfileTop = () => {
   const { data: profileData, loading } = useCurrentUserProfile();
