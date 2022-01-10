@@ -19,18 +19,16 @@ import { mixpanel } from "app/lib/mixpanel";
 import { View, Text, Button, ButtonLabel, Pressable } from "design-system";
 import { useRouter } from "app/navigation/use-router";
 import { setRefreshToken } from "app/lib/refresh-token";
-import {
-  LoginPhoneNumberField,
-  LoginPhoneNumberFieldValues,
-} from "./login-phone-number-field";
-import { LoginEmailField, LoginEmailFieldValues } from "./login-email-field";
+import { LoginContactDetailsField } from "./login-contact-details-field";
+
+const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY);
 
 // TODO: loading state
 export function Login() {
   const router = useRouter();
   const context = useContext(AppContext);
   const connector = useWalletConnect();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [signaturePending, setSignaturePending] = useState(false);
   const [walletName, setWalletName] = useState("");
   const { mutate } = useSWRConfig();
@@ -45,6 +43,11 @@ export function Login() {
       const web3 = new Web3Provider(magic.rpcProvider);
       context.setWeb3(web3);
 
+      console.log({
+        url: "/v1/login_magic",
+        method: "POST",
+        data: payload,
+      });
       const response = await axios({
         url: "/v1/login_magic",
         method: "POST",
@@ -54,6 +57,8 @@ export function Login() {
       const accessToken = response?.access;
       const refreshToken = response?.refresh;
       const validResponse = accessToken && refreshToken;
+
+      console.log(response);
 
       if (validResponse) {
         // TODO:
@@ -86,6 +91,8 @@ export function Login() {
   }, []);
 
   const handleLoginError = useCallback((error) => {
+    setLoading(false);
+
     if (process.env.NODE_ENV === "development") {
       console.error(error);
     }
@@ -101,11 +108,11 @@ export function Login() {
 
   //#region callbacks
   const handleSubmitEmail = useCallback(
-    async ({ email }: LoginEmailFieldValues) => {
+    async (email: string) => {
       try {
+        setLoading(true);
         mixpanel.track("Login - email button click");
 
-        const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY);
         const did = await magic.auth.loginWithMagicLink({ email });
 
         await handleLogin({
@@ -122,11 +129,10 @@ export function Login() {
     [handleLogin, handleLoginError]
   );
   const handleSubmitPhoneNumber = useCallback(
-    async ({ phoneNumber }: LoginPhoneNumberFieldValues) => {
+    async (phoneNumber: string) => {
       try {
         mixpanel.track("Login - phone number button click");
 
-        const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY);
         const did = await magic.auth.loginWithSMS({
           phoneNumber,
         });
@@ -301,7 +307,6 @@ export function Login() {
               .
             </Text>
           </View>
-
           <View tw="mb-[16px]">
             <Button
               onPress={() => handleSubmitWallet()}
@@ -311,22 +316,15 @@ export function Login() {
               <ButtonLabel>Sign in with Wallet</ButtonLabel>
             </Button>
           </View>
-
           <View tw="mb-[16px] mx-[-16px] bg-gray-100 dark:bg-gray-900">
             <Text tw="my-[8px] font-bold text-sm text-gray-600 dark:text-gray-400 text-center">
               — or —
             </Text>
           </View>
-
-          <LoginEmailField onSubmit={handleSubmitEmail} />
-
-          <View tw="mb-[16px] mx-[-16px] bg-gray-100 dark:bg-gray-900">
-            <Text tw="my-[8px] font-bold text-sm text-gray-600 dark:text-gray-400 text-center">
-              — or —
-            </Text>
-          </View>
-
-          <LoginPhoneNumberField onSubmit={handleSubmitPhoneNumber} />
+          <LoginContactDetailsField
+            onSubmitEmail={handleSubmitEmail}
+            onSubmitPhoneNumber={handleSubmitPhoneNumber}
+          />
         </View>
       )}
 
