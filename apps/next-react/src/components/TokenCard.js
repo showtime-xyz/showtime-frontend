@@ -857,6 +857,7 @@ const TokenCard = ({
                     : `${item.token_count} Editions`}
                 </p>
               </div>
+            </Link>
           </div>
         </div>
       </div>
