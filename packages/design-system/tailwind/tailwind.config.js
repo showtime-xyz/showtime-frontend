@@ -1,4 +1,4 @@
-const colors = require("./colors");
+const { colors } = require("./colors");
 const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
@@ -14,6 +14,7 @@ module.exports = {
       boxShadow: {
         dropdown:
           "0px 16px 48px 0px #0000001A, 0px 12px 16px 0px #0000001A, 0px 1px 3px 0px #0000000D",
+        modal: "0px 16px 48px 0px #00000033, 0px 12px 16px 0px #00000066, 0px 0px 2px 0px #FFFFFF80",
       },
       borderRadius: {
         inherit: "inherit",
