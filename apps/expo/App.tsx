@@ -1,201 +1,366 @@
-import { StyleSheet, Image } from "react-native";
+import { useState, useEffect } from "react";
+import { AppState, LogBox, useColorScheme, Platform } from "react-native";
 import {
-  Gesture,
-  GestureDetector,
-  GestureHandlerRootView,
-} from "react-native-gesture-handler";
-import Animated, {
-  useAnimatedReaction,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
+  enableScreens,
+  enableFreeze,
+  FullWindowOverlay,
+} from "react-native-screens";
+import { StatusBar, setStatusBarStyle } from "expo-status-bar";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { DripsyProvider } from "dripsy";
+import { useDeviceContext } from "twrnc";
+// import * as Sentry from 'sentry-expo'
+import { MMKV } from "react-native-mmkv";
+import { SWRConfig, useSWRConfig } from "swr";
+import WalletConnectProvider, {
+  useWalletConnect,
+  RenderQrcodeModalProps,
+  QrcodeModal,
+} from "@walletconnect/react-native-dapp";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import NetInfo from "@react-native-community/netinfo";
+import { useNavigation } from "@react-navigation/native";
+import * as NavigationBar from "expo-navigation-bar";
 
-const useViewDimension = () => {
-  const dimension = { width: useSharedValue(0), height: useSharedValue(0) };
-  return {
-    onLayout: (e) => {
-      dimension.height.value = e.nativeEvent.layout.height;
-      dimension.width.value = e.nativeEvent.layout.width;
-    },
-    dimension,
-  };
-};
+import { tw } from "design-system/tailwind";
+import { theme } from "design-system/theme";
+import { NavigationProvider } from "app/navigation";
+import { NextTabNavigator } from "app/navigation/next-tab-navigator";
+import { accessTokenManager } from "app/lib/access-token-manager";
+import { AppContext } from "app/context/app-context";
+import { setLogout } from "app/lib/logout";
+import { mixpanel } from "app/lib/mixpanel";
+import { deleteCache } from "app/lib/delete-cache";
+import { useUser } from "app/hooks/use-user";
+import { useRouter } from "app/navigation/use-router";
+import { deleteRefreshToken } from "app/lib/refresh-token";
+import { ToastProvider } from "design-system/toast";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-const PinchToZoom = ({ children, onGestureEnd, onDoubleTap }) => {
-  const offset = { x: useSharedValue(0), y: useSharedValue(0) };
-  const start = { x: useSharedValue(0), y: useSharedValue(0) };
-  const scaleOrigin = { x: useSharedValue(0), y: useSharedValue(0) };
-  const scale = useSharedValue(1);
-  const savedScale = useSharedValue(1);
-  const dragState = useSharedValue("idle");
-  const zoomState = useSharedValue("idle");
-  const { dimension, onLayout } = useViewDimension();
+enableScreens(true);
+// enableFreeze(true)
 
-  // If we don't handle this case, it can cause initial zoom in jank if user has done pan gesture and didn't release their fingers and started zooming in!
-  // Proper solution for this is enabling Pan gesture only when a user is zoomed in, this currently doesn't seem to be possible with gesture-handler
-  // Perfect solution would be to set enabled property of PanGestureHandler with a state (which doesn't work)
-  const anEdgeCaseAdjustment = { x: useSharedValue(0), y: useSharedValue(0) };
+// Sentry.init({
+// 	dsn: 'https://a0b390d1d15543a8a85ab594eb4b0c50@o614247.ingest.sentry.io/5860034',
+// 	enableInExpoDevelopment: true,
+// 	debug: process.env.STAGE === 'development',
+// })
 
-  const dragGesture = Gesture.Pan()
-    .onStart(() => {
-      dragState.value = "start";
-      start.x.value = offset.x.value;
-      start.y.value = offset.y.value;
+LogBox.ignoreLogs([
+  "Constants.deviceYearClass",
+  "No native splash screen",
+  "The provided value 'ms-stream' is not a valid 'responseType'.",
+  "The provided value 'moz-chunked-arraybuffer' is not a valid 'responseType'.",
+]);
 
-      anEdgeCaseAdjustment.x.value = 0;
-      anEdgeCaseAdjustment.y.value = 0;
-    })
-    .onUpdate((e) => {
-      if (scale.value > 1) {
-        offset.x.value =
-          e.translationX - anEdgeCaseAdjustment.x.value + start.x.value;
-        offset.y.value =
-          e.translationY - anEdgeCaseAdjustment.y.value + start.y.value;
-      } else {
-        anEdgeCaseAdjustment.x.value = e.translationX;
-        anEdgeCaseAdjustment.y.value = e.translationY;
-      }
-    })
-    .onEnd(() => {
-      dragState.value = "ended";
-    });
-
-  const doubleTapGesture = Gesture.Tap()
-    .enabled(typeof onDoubleTap === "function")
-    .numberOfTaps(2)
-    .onEnd((e, success) => {
-      if (success) {
-        // Only set starting origin on zoom in.
-        if (scale.value === 1) {
-          scaleOrigin.x.value = e.x;
-          scaleOrigin.y.value = e.y;
-        }
-        onDoubleTap({ scale, offset });
-      }
-    });
-
-  const zoomGesture = Gesture.Pinch()
-    .onStart(() => {
-      zoomState.value = "start";
-      savedScale.value = scale.value;
-    })
-    .onUpdate((event) => {
-      // Setting scaleOrigin on active instead of begin because of an issue in android.
-      // This PR should fix it. https://github.com/software-mansion/react-native-gesture-handler/pull/1798
-      // Also we set scale translate origin on start. Not sure but Pan translate's don't behave very well with zoomed in (scale > 1) Views
-      if (zoomState.value === "start" && scale.value === 1) {
-        scaleOrigin.x.value = event.focalX;
-        scaleOrigin.y.value = event.focalY;
-      }
-
-      scale.value = savedScale.value * event.scale;
-      zoomState.value = "active";
-    })
-    .onEnd(() => {
-      zoomState.value = "ended";
-    });
-
-  const composed = Gesture.Exclusive(
-    Gesture.Simultaneous(dragGesture, zoomGesture),
-    doubleTapGesture
-  );
-
-  useAnimatedReaction(
-    () => {
-      return zoomState.value === "ended" && dragState.value === "ended";
-    },
-    (ended) => {
-      if (ended) {
-        onGestureEnd?.({ scale, offset, start });
-        dragState.value = "idle";
-        zoomState.value = "idle";
-      }
-    }
-  );
-
-  const animatedStyles = useAnimatedStyle(() => {
-    const transformOriginTop =
-      -dimension.height.value / 2 + scaleOrigin.y.value;
-    const transformOriginLeft =
-      -dimension.width.value / 2 + scaleOrigin.x.value;
-
-    return {
-      transform: [
-        { translateX: offset.x.value },
-        { translateY: offset.y.value },
-        {
-          translateX: transformOriginLeft,
-        },
-        { translateY: transformOriginTop },
-        { scale: scale.value },
-        {
-          translateX: -transformOriginLeft,
-        },
-        {
-          translateY: -transformOriginTop,
-        },
-      ],
-    };
-  });
+function QRCodeModal(props: RenderQrcodeModalProps): JSX.Element {
+  if (!props.visible) {
+    return null;
+  }
 
   return (
-    <GestureDetector gesture={composed}>
-      <Animated.View style={animatedStyles} onLayout={onLayout}>
-        {children}
-      </Animated.View>
-    </GestureDetector>
-  );
-};
-
-export default function App() {
-  return (
-    <GestureHandlerRootView
+    <FullWindowOverlay
       style={{
-        flex: 1,
+        position: "absolute",
+        width: "100%",
+        height: "100%",
         justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "black",
       }}
     >
-      <PinchToZoom
-        onGestureEnd={({ scale, offset }) => {
-          "worklet";
-          // Reset zoom and position on gesture end
-          scale.value = withTiming(1);
-          offset.x.value = withTiming(0);
-          offset.y.value = withTiming(0);
-        }}
-        onDoubleTap={({ scale, offset }) => {
-          "worklet";
-          // zoom out if zoomed in
-          if (scale.value > 1) {
-            offset.x.value = withTiming(0);
-            offset.y.value = withTiming(0);
-            scale.value = withTiming(1);
-          }
-          // zoom in
-          else {
-            scale.value = withTiming(4);
-          }
-        }}
-      >
-        <Image
-          style={{ height: 235, width: 354 }}
-          source={{
-            uri: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=874&q=80",
-          }}
-        />
-      </PinchToZoom>
+      <QrcodeModal division={4} {...props} />
+    </FullWindowOverlay>
+  );
+}
+
+function mmkvProvider() {
+  const storage = new MMKV();
+  const appCache = storage.getString("app-cache");
+  const map = new Map(appCache ? JSON.parse(appCache) : []);
+
+  AppState.addEventListener("change", () => {
+    const appCache = JSON.stringify(Array.from(map.entries()));
+    storage.set("app-cache", appCache);
+  });
+
+  return map;
+}
+
+function SWRProvider({ children }: { children: React.ReactNode }): JSX.Element {
+  const navigation = useNavigation();
+
+  return (
+    <SWRConfig
+      value={{
+        provider: mmkvProvider,
+        isVisible: () => {
+          return AppState.currentState === "active";
+        },
+        isOnline: () => {
+          return true;
+          // return NetInfo.fetch().then((state) => state.isConnected)
+        },
+        // TODO: tab focus too
+        initFocus(callback) {
+          let appState = AppState.currentState;
+
+          const onAppStateChange = (nextAppState) => {
+            /* If it's resuming from background or inactive mode to active one */
+            if (
+              appState.match(/inactive|background/) &&
+              nextAppState === "active"
+            ) {
+              callback();
+            }
+            appState = nextAppState;
+          };
+
+          // Subscribe to the app state change events
+          const subscription = AppState.addEventListener(
+            "change",
+            onAppStateChange
+          );
+
+          // Subscribe to the navigation events
+          const unsubscribe = navigation.addListener("focus", callback);
+
+          return () => {
+            subscription.remove();
+            unsubscribe();
+          };
+        },
+        initReconnect(callback) {
+          let netInfoState = {
+            isConnected: undefined,
+            isInternetReachable: undefined,
+          };
+
+          NetInfo.fetch().then((state) => {
+            netInfoState = state;
+          });
+
+          // Subscribe to the network change events
+          const unsubscribe = NetInfo.addEventListener((nextNetInfoState) => {
+            if (
+              netInfoState.isInternetReachable === false &&
+              nextNetInfoState.isConnected === true &&
+              nextNetInfoState.isInternetReachable === true
+            ) {
+              callback();
+            }
+            netInfoState = nextNetInfoState;
+          });
+
+          return () => {
+            unsubscribe();
+          };
+        },
+      }}
+    >
+      {children}
+    </SWRConfig>
+  );
+}
+
+function AppContextProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}): JSX.Element {
+  const { user } = useUser();
+  const router = useRouter();
+  const { mutate } = useSWRConfig();
+  const connector = useWalletConnect();
+  useDeviceContext(tw);
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === "dark";
+
+  useEffect(() => {
+    if (Platform.OS === "android") {
+      if (isDark) {
+        NavigationBar.setBackgroundColorAsync("#000");
+        NavigationBar.setButtonStyleAsync("light");
+        setStatusBarStyle("dark");
+      } else {
+        NavigationBar.setBackgroundColorAsync("#FFF");
+        NavigationBar.setButtonStyleAsync("dark");
+        setStatusBarStyle("light");
+      }
+    }
+  }, []);
+
+  const [web3, setWeb3] = useState(null);
+  const [windowSize, setWindowSize] = useState(null);
+  const [myLikes, setMyLikes] = useState(null);
+  const [myLikeCounts, setMyLikeCounts] = useState(null);
+  const [myCommentLikes, setMyCommentLikes] = useState(null);
+  const [myCommentLikeCounts, setMyCommentLikeCounts] = useState(null);
+  const [myComments, setMyComments] = useState(null);
+  const [myCommentCounts, setMyCommentCounts] = useState(null);
+  const [myFollows, setMyFollows] = useState(null);
+  const [myRecommendations, setMyRecommendations] = useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const [isMobile, setIsMobile] = useState(null);
+  const [toggleRefreshFeed, setToggleRefreshFeed] = useState(false);
+  const [throttleMessage, setThrottleMessage] = useState(null);
+  // const [throttleOpen, setThrottleOpen] = useState(false)
+  // const [throttleContent, setThrottleContent] = useState('')
+  // eslint-disable-next-line no-unused-vars
+  const [disableLikes, setDisableLikes] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [disableComments, setDisableComments] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [disableFollows, setDisableFollows] = useState(false);
+  // const [recQueue, setRecQueue] = useState([])
+  // eslint-disable-next-line no-unused-vars
+  const [loadingRecommendedFollows, setLoadingRecommendedFollows] =
+    useState(true);
+  const [recommendedFollows, setRecommendedFollows] = useState([]);
+  const [commentInputFocused, setCommentInputFocused] = useState(false);
+
+  // useEffect(() => {
+  // 	if (infoData) {
+  // 		setMyProfile({
+  // 			...infoData.data.profile,
+  // 			notifications_last_opened: infoData.data.profile.notifications_last_opened
+  // 				? new Date(infoData.data.profile.notifications_last_opened)
+  // 				: null,
+  // 			links: infoData.data.profile.links.map(link => ({
+  // 				name: link.type__name,
+  // 				prefix: link.type__prefix,
+  // 				icon_url: link.type__icon_url,
+  // 				type_id: link.type_id,
+  // 				user_input: link.user_input,
+  // 			})),
+  // 		})
+  // 		setMyLikes(infoData.data.likes_nft)
+  // 		setMyCommentLikes(infoData.data.likes_comment)
+  // 		setMyComments(infoData.data.comments)
+  // 		setMyFollows(infoData.data.follows)
+
+  // 		// Load up the recommendations async if we are onboarding
+  // 		if (infoData.data.profile.has_onboarded == false) {
+  // 			const my_rec_data = await axios({
+  // 				url: '/v1/follow_recommendations_onboarding',
+  // 				method: 'GET',
+  // 			})
+  // 			setMyRecommendations(my_rec_data.data)
+  // 		}
+  // 	}
+  // }, [infoData, setMyProfile, setMyLikes, setMyCommentLikes, setMyComments, setMyFollows])
+
+  const injectedGlobalContext = {
+    web3,
+    setWeb3,
+    windowSize,
+    myLikes,
+    myLikeCounts,
+    myCommentLikes,
+    myCommentLikeCounts,
+    myComments,
+    myCommentCounts,
+    myFollows,
+    myRecommendations,
+    isMobile,
+    toggleRefreshFeed,
+    throttleMessage,
+    disableLikes,
+    disableComments,
+    disableFollows,
+    recommendedFollows,
+    loadingRecommendedFollows,
+    commentInputFocused,
+    setWindowSize,
+    setMyLikes,
+    setMyLikeCounts,
+    setMyCommentLikes,
+    setMyCommentLikeCounts,
+    setMyComments,
+    setMyCommentCounts,
+    setMyFollows,
+    setMyRecommendations,
+    setThrottleMessage,
+    setRecommendedFollows,
+    setCommentInputFocused,
+    setToggleRefreshFeed,
+    logOut: () => {
+      deleteCache();
+      deleteRefreshToken();
+      accessTokenManager.deleteAccessToken();
+      mutate(null);
+      connector.killSession();
+      setMyLikes([]);
+      setMyLikeCounts({});
+      setMyCommentLikes([]);
+      setMyCommentLikeCounts({});
+      setMyComments([]);
+      setMyCommentCounts({});
+      setMyFollows([]);
+      setMyRecommendations([]);
+      setWeb3(null);
+      mixpanel.track("Logout");
+      // Triggers all event listeners for this key to fire. Used to force cross tab logout.
+      setLogout(Date.now().toString());
+    },
+  };
+
+  return (
+    <AppContext.Provider value={injectedGlobalContext}>
+      {children}
+    </AppContext.Provider>
+  );
+}
+
+function App() {
+  const scheme = `io.showtime${
+    process.env.STAGE === "development"
+      ? ".development"
+      : process.env.STAGE === "staging"
+      ? ".staging"
+      : ""
+  }`;
+
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <DripsyProvider theme={theme}>
+        <SafeAreaProvider style={{ backgroundColor: "black" }}>
+          <ToastProvider>
+            <NavigationProvider>
+              <SWRProvider>
+                <WalletConnectProvider
+                  clientMeta={{
+                    description: "Connect with Showtime",
+                    url: "https://showtime.io",
+                    icons: [
+                      "https://storage.googleapis.com/showtime-cdn/showtime-icon-sm.jpg",
+                    ],
+                    name: "Showtime",
+                    // @ts-expect-error
+                    scheme: scheme,
+                  }}
+                  redirectUrl={`${scheme}://`}
+                  storageOptions={{
+                    // @ts-ignore
+                    asyncStorage: AsyncStorage,
+                  }}
+                  renderQrcodeModal={(
+                    props: RenderQrcodeModalProps
+                  ): JSX.Element => <QRCodeModal {...props} />}
+                >
+                  <AppContextProvider>
+                    <>
+                      {/* TODO: change this when we update the splash screen */}
+                      <StatusBar style="dark" />
+                      <NextTabNavigator />
+                    </>
+                  </AppContextProvider>
+                </WalletConnectProvider>
+              </SWRProvider>
+            </NavigationProvider>
+          </ToastProvider>
+        </SafeAreaProvider>
+      </DripsyProvider>
     </GestureHandlerRootView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+export default App;

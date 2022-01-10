@@ -27,7 +27,6 @@ import Reanimated, {
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useAnimatedReaction,
-  runOnUI,
 } from "react-native-reanimated";
 import { TabListProps, TabRootProps, TabsContextType } from "./types";
 import { useScrollToTop } from "@react-navigation/native";

@@ -1,24 +1,23 @@
-import { useCallback, useMemo, useRef, useState } from "react";
-import { Alert, Platform } from "react-native";
+import { useCallback, useState } from "react";
+import { Platform, Pressable } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { useScrollToTop } from "@react-navigation/native";
 import { useActivity } from "app/hooks/api-hooks";
-
-import { View, Spinner, Text, Pressable } from "design-system";
+import { View, Spinner, Text } from "design-system";
 import { Card } from "design-system/card";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 import { Image } from "design-system/image";
-import { useIsDarkMode } from "../../design-system/hooks";
 import { VerificationBadge } from "../../design-system/verification-badge";
 
 const TAB_LIST_HEIGHT = 64;
+const TOKEN_BADGE_HEIGHT = 32;
+const COVER_IMAGE_HEIGHT = 104;
 
 const SocialTokenBadgeIcon = () => {
   return (
     <Image
       source={require("../../../apps/expo/assets/social_token.png")}
-      style={{ height: 32, width: 32 }}
+      style={{ height: TOKEN_BADGE_HEIGHT, width: TOKEN_BADGE_HEIGHT }}
     />
   );
 };
@@ -29,15 +28,14 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
   if (isLoading) {
     return (
       <View
-        tw="h-16 items-center justify-center mt-6 px-3"
-        sx={{ marginBottom: tabBarHeight }}
+        tw={`h-16 items-center justify-center mt-6 px-3 mb-[${tabBarHeight}px]`}
       >
         <Spinner size="small" />
       </View>
     );
   }
 
-  return <View sx={{ marginBottom: tabBarHeight }}></View>;
+  return <View tw={`mb-[${tabBarHeight}px]`} />;
 };
 
 const Profile = () => {
@@ -48,45 +46,32 @@ const ProfileTop = ({ profile }) => {
   return (
     <View pointerEvents="box-none">
       {/* Gradient */}
-      <View tw="bg-gray-400" style={{ height: 104 }} pointerEvents="none" />
+      <View
+        tw={`bg-gray-400 h-[${COVER_IMAGE_HEIGHT}px]`}
+        pointerEvents="none"
+      />
 
       <View tw="bg-white dark:bg-black px-2" pointerEvents="box-none">
         <View tw="flex-row justify-between pr-2">
           <View tw="flex-row items-end">
-            <Image
-              source={{
-                uri: profile.avatar,
-              }}
-              style={useMemo(
-                () => ({
-                  height: 144,
-                  width: 144,
-                  borderRadius: 999,
-                  marginTop: -72,
-                  borderWidth: 8,
-                  ...tw.style("border-white dark:border-gray-900"),
-                }),
-                []
-              )}
-            />
-            <View
-              style={useMemo(
-                () => ({
-                  padding: 4,
-                  borderRadius: 9999,
-                  position: "absolute",
-                  right: 4,
-                  bottom: 4,
-                  ...tw.style("bg-white dark:bg-gray-900"),
-                }),
-                []
-              )}
-            >
+            <View tw="bg-gray-100 h-[144px] w-[144px] rounded-full mt-[-72px]">
+              <Image
+                source={{
+                  uri: profile.avatar,
+                }}
+                tw="border-white h-[144px] w-[144px] dark:border-gray-900 rounded-full border-8"
+              />
+            </View>
+            <View tw="bg-white dark:bg-gray-900 p-2 rounded-full absolute right-2 bottom-2">
               <SocialTokenBadgeIcon />
             </View>
           </View>
 
-          <Pressable tw="bg-black rounded-full dark:bg-white items-center justify-center flex-row mt-4 h-[48px] w-[80px]">
+          <Pressable
+            style={tw.style(
+              "bg-black rounded-full dark:bg-white items-center justify-center flex-row mt-4 h-[48px] w-[80px]"
+            )}
+          >
             <Text tw="text-white text-center dark:text-gray-900 font-bold">
               Follow
             </Text>
@@ -100,7 +85,7 @@ const ProfileTop = ({ profile }) => {
             </Text>
             <View tw="flex-row items-center mt-[10px]">
               <Text
-                variant="text-md"
+                variant="text-base"
                 tw="text-gray-900 dark:text-white font-semibold"
               >
                 {profile.username}
@@ -126,11 +111,11 @@ const ProfileTop = ({ profile }) => {
           </View>
 
           <View tw="mt-[18px] flex-row" pointerEvents="box-none">
-            <Text tw="text-sm text-gray-900 dark:text-white font-semibold">
+            <Text tw="text-sm text-gray-900 dark:text-white font-bold">
               {profile.following} <Text tw="font-medium">following</Text>
             </Text>
             <View tw="ml-8">
-              <Text tw="text-sm text-gray-900 dark:text-white font-medium">
+              <Text tw="text-sm text-gray-900 dark:text-white font-bold">
                 {profile.followers} <Text tw="font-medium">followers</Text>
               </Text>
             </View>
@@ -138,22 +123,12 @@ const ProfileTop = ({ profile }) => {
 
           <View pointerEvents="box-none">
             <View tw="flex-row items-center my-4" pointerEvents="box-none">
-              <Text tw="text-gray-600 dark:text-gray-400 font-medium">
+              <Text tw="text-gray-600 dark:text-gray-400 font-medium text-xs">
                 Followed by{" "}
               </Text>
-              <Pressable onPress={() => Alert.alert("hi 1")}>
+              <Pressable>
                 <Text tw="dark:text-white text-gray-900 font-bold text-xs">
-                  @am ,{" "}
-                </Text>
-              </Pressable>
-              <Pressable onPress={() => Alert.alert("hi 2")}>
-                <Text tw="dark:text-white text-gray-900 font-bold text-xs">
-                  @m1guelpf &{" "}
-                </Text>
-              </Pressable>
-              <Pressable onPress={() => Alert.alert("hi 3")}>
-                <Text tw="dark:text-white text-gray-900 font-bold text-xs">
-                  12 others
+                  @m1guelpf
                 </Text>
               </Pressable>
             </View>
@@ -190,14 +165,9 @@ const ProfileTabs = () => {
           />
         </Tabs.Header>
         <Tabs.List
-          style={[
-            {
-              height: TAB_LIST_HEIGHT,
-              ...tw.style(
-                "dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900"
-              ),
-            },
-          ]}
+          style={tw.style(
+            `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900`
+          )}
         >
           <Tabs.Trigger>
             <TabItem name="Created" selected={selected === 0} />
@@ -239,10 +209,6 @@ const CreationList = () => {
     []
   );
 
-  const listRef = useRef(null);
-
-  useScrollToTop(listRef);
-
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,
     [isLoadingMore]
@@ -264,7 +230,6 @@ const CreationList = () => {
       refreshing={isRefreshing}
       onRefresh={refresh}
       onEndReached={fetchMore}
-      ref={listRef}
       onEndReachedThreshold={0.6}
       removeClippedSubviews={Platform.OS !== "web"}
       numColumns={1}
@@ -287,10 +252,6 @@ const LikesList = () => {
     []
   );
 
-  const listRef = useRef(null);
-
-  useScrollToTop(listRef);
-
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,
     [isLoadingMore]
@@ -312,7 +273,6 @@ const LikesList = () => {
       refreshing={isRefreshing}
       onRefresh={refresh}
       onEndReached={fetchMore}
-      ref={listRef}
       onEndReachedThreshold={0.6}
       removeClippedSubviews={Platform.OS !== "web"}
       numColumns={1}
@@ -335,10 +295,6 @@ const CommentsList = () => {
     []
   );
 
-  const listRef = useRef(null);
-
-  useScrollToTop(listRef);
-
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,
     [isLoadingMore]
@@ -360,7 +316,6 @@ const CommentsList = () => {
       refreshing={isRefreshing}
       onRefresh={refresh}
       onEndReached={fetchMore}
-      ref={listRef}
       onEndReachedThreshold={0.6}
       removeClippedSubviews={Platform.OS !== "web"}
       numColumns={1}
@@ -383,10 +338,6 @@ const FollowsList = () => {
     []
   );
 
-  const listRef = useRef(null);
-
-  useScrollToTop(listRef);
-
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,
     [isLoadingMore]
@@ -408,7 +359,6 @@ const FollowsList = () => {
       refreshing={isRefreshing}
       onRefresh={refresh}
       onEndReached={fetchMore}
-      ref={listRef}
       onEndReachedThreshold={0.6}
       removeClippedSubviews={Platform.OS !== "web"}
       numColumns={1}
@@ -431,10 +381,6 @@ const AllActivityList = () => {
     []
   );
 
-  const listRef = useRef(null);
-
-  useScrollToTop(listRef);
-
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,
     [isLoadingMore]
@@ -456,7 +402,6 @@ const AllActivityList = () => {
       refreshing={isRefreshing}
       onRefresh={refresh}
       onEndReached={fetchMore}
-      ref={listRef}
       onEndReachedThreshold={0.6}
       removeClippedSubviews={Platform.OS !== "web"}
       numColumns={1}
