@@ -856,25 +856,27 @@ const TokenCard = ({
                 ) : null}
               </div>
             </div>
-            <div className="mt-4 px-4 py-2 bg-gray-100 dark:bg-gray-800 flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                {item.collection_img_url && (
-                  <img
-                    src={item.collection_img_url}
-                    className="w-5 h-5 rounded-full"
-                  />
-                )}
-                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
-                  {truncateWithEllipses(
-                    item.collection_name,
-                    COLLECTION_NAME_TRUNCATE_LENGTH
+            <Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
+              <div className="mt-4 px-4 py-2 bg-gray-100 dark:bg-gray-800 flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  {item.collection_img_url && (
+                    <img
+                      src={item.collection_img_url}
+                      className="w-5 h-5 rounded-full"
+                    />
                   )}
+                  <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+                    {truncateWithEllipses(
+                      item.collection_name,
+                      COLLECTION_NAME_TRUNCATE_LENGTH
+                    )}
+                  </p>
+                </div>
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+                  {item.token_count ? `${item.token_count} Editions` : "1/1"}
                 </p>
               </div>
-              <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
-                {item.token_count ? `${item.token_count} Editions` : "1/1"}
-              </p>
-            </div>
+            </Link>
           </div>
         </div>
       </div>
