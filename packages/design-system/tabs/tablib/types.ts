@@ -19,7 +19,6 @@ export type TabsContextType = {
   tabListHeight: number;
   index: Reanimated.SharedValue<number>;
   tabItemLayouts: Array<Reanimated.SharedValue<LayoutRectangle | null>>;
-  tablistScrollRef: React.RefObject<Reanimated.ScrollView>;
   requestOtherViewsToSyncTheirScrollPosition: Reanimated.SharedValue<boolean>;
   translateY: Reanimated.SharedValue<number>;
   offset: Animated.Value;

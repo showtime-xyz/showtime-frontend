@@ -55,7 +55,6 @@ const Root = ({
   const [tabListHeight, setTabListHeight] =
     React.useState(initialtabListHeight);
   const requestOtherViewsToSyncTheirScrollPosition = useSharedValue(false);
-  const tablistScrollRef = useAnimatedRef<Reanimated.ScrollView>();
   const tabItemLayouts = [];
 
   const onIndexChange = (newIndex) => {
@@ -107,7 +106,6 @@ const Root = ({
         tabListHeight,
         index,
         tabItemLayouts,
-        tablistScrollRef,
         requestOtherViewsToSyncTheirScrollPosition,
         translateY,
         offset,
@@ -149,7 +147,8 @@ const List = ({
   contentContainerStyle,
   ...props
 }: TabListProps) => {
-  const { tablistScrollRef, index, tabItemLayouts } = useContext(TabsContext);
+  const { index, tabItemLayouts } = useContext(TabsContext);
+  const tabListRef = useRef<Reanimated.ScrollView>();
 
   const newChildren = React.useMemo(() => {
     let triggerIndex = -1;
@@ -172,7 +171,7 @@ const List = ({
 
   const scrollTo = (x) => {
     // @ts-ignore getNode will be removed in future, need to update typings
-    tablistScrollRef.current.scrollTo({ x });
+    tabListRef.current.scrollTo({ x });
   };
 
   useDerivedValue(() => {
@@ -196,7 +195,7 @@ const List = ({
         listWidth.value = e.nativeEvent.layout.width;
       }}
       bounces={false}
-      ref={tablistScrollRef}
+      ref={tabListRef}
       showsHorizontalScrollIndicator={false}
       horizontal
       style={styles}
