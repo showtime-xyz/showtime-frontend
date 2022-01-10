@@ -19,7 +19,9 @@ function Collection({ nft }) {
           </Text>
         </View>
         <Text tw="text-xs font-bold text-gray-600 dark:text-gray-400">
-          {nft.token_count ? `${nft.token_count} Editions` : "1/1"}
+          {!nft.token_count || nft.token_count === 1
+            ? "1 Edition"
+            : `${nft.token_count} Editions`}
         </Text>
       </View>
     </Link>
