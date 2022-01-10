@@ -16,7 +16,14 @@ import { accessTokenManager } from "app/lib/access-token-manager";
 import { setLogin } from "app/lib/login";
 import { mixpanel } from "app/lib/mixpanel";
 
-import { View, Text, Button, ButtonLabel, Pressable } from "design-system";
+import {
+  View,
+  Text,
+  Button,
+  ButtonLabel,
+  Pressable,
+  Spinner,
+} from "design-system";
 import { useRouter } from "app/navigation/use-router";
 import { setRefreshToken } from "app/lib/refresh-token";
 import { LoginContactDetailsField } from "./login-contact-details-field";
@@ -28,7 +35,7 @@ export function Login() {
   const router = useRouter();
   const context = useContext(AppContext);
   const connector = useWalletConnect();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [signaturePending, setSignaturePending] = useState(false);
   const [walletName, setWalletName] = useState("");
   const { mutate } = useSWRConfig();
@@ -325,6 +332,12 @@ export function Login() {
             onSubmitEmail={handleSubmitEmail}
             onSubmitPhoneNumber={handleSubmitPhoneNumber}
           />
+        </View>
+      )}
+
+      {loading && (
+        <View tw="absolute top--2 right-0 bottom--2 left-0 opacity-95 dark:opacity-85 bg-white dark:bg-black justify-center items-center">
+          <Spinner />
         </View>
       )}
 
