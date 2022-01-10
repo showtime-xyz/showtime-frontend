@@ -50,11 +50,6 @@ export function Login() {
       const web3 = new Web3Provider(magic.rpcProvider);
       context.setWeb3(web3);
 
-      console.log({
-        url: "/v1/login_magic",
-        method: "POST",
-        data: payload,
-      });
       const response = await axios({
         url: "/v1/login_magic",
         method: "POST",
@@ -64,8 +59,6 @@ export function Login() {
       const accessToken = response?.access;
       const refreshToken = response?.refresh;
       const validResponse = accessToken && refreshToken;
-
-      console.log(response);
 
       if (validResponse) {
         // TODO:
