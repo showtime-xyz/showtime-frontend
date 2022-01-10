@@ -77,6 +77,14 @@ function Media({ nfts }: Props) {
               mixpanel.track("Activity - Click on NFT image, open modal");
             }}
           >
+            {item.mime_type === "image/svg+xml" && (
+              <>
+                {
+                  // TODO: implement SVG rendering
+                }
+              </>
+            )}
+
             {item.mime_type?.startsWith("image") &&
               item.mime_type !== "image/svg+xml" && (
                 <PinchToZoom>
