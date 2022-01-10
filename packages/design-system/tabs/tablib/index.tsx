@@ -410,6 +410,8 @@ function makeScrollableComponent<K extends object, T extends any>(Comp: T) {
           scrollY.value + translateYOffset < absTranslateY
         ) {
           scrollTo(aref, 0, absTranslateY - translateYOffset, false);
+          // manually set scrollY because onScroll of other lists's won't be triggered
+          scrollY.value = absTranslateY - translateYOffset;
         }
       }
     }, [translateYOffset]);
