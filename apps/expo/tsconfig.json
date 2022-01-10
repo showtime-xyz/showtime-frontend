@@ -8,6 +8,7 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "strict": false,
+    "strictNullChecks": true,
     "target": "esnext",
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
