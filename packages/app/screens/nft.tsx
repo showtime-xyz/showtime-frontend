@@ -10,6 +10,10 @@ import { Close, MoreHorizontal } from "design-system/icon";
 import { useRouter } from "app/navigation/use-router";
 import { tw } from "design-system/tailwind";
 import { PinchToZoom } from "design-system/pinch-to-zoom";
+import { Social } from "design-system/card/social";
+import { Collection } from "design-system/card/rows/collection";
+import { Title } from "design-system/card/rows/title";
+import { Description } from "design-system/card/rows/description";
 
 type Query = {
   id: string;
@@ -32,7 +36,7 @@ function NftScreen() {
   }
 
   return (
-    <View tw="flex-1 bg-gray-200 dark:bg-gray-900">
+    <View tw="flex-1 bg-gray-200 dark:bg-black">
       <View tw="p-6 h-16 flex-row items-center justify-between">
         <View tw="w-8 h-8">
           <Button
@@ -71,6 +75,14 @@ function NftScreen() {
       <PinchToZoom>
         <Media nfts={[nft]} />
       </PinchToZoom>
+
+      <Social nft={nft} />
+
+      <Title nft={nft} />
+
+      <Description nft={nft} />
+
+      <Collection nft={nft} />
     </View>
   );
 }

@@ -2,6 +2,8 @@ import { View } from "design-system/view";
 import { Button } from "design-system/card/social/button";
 
 function Social({ nft }) {
+  if (!nft) return null;
+
   return (
     <View tw="p-4 bg-white dark:bg-black flex-row justify-between">
       <View tw="flex-row">

@@ -3,6 +3,8 @@ import { Text } from "design-system/text";
 import { Image } from "design-system/image";
 
 function Collection({ nft }) {
+  if (!nft) return null;
+
   return (
     <View tw="px-4 py-2 bg-gray-100 dark:bg-gray-900 flex-row items-center justify-between">
       <View tw="flex-row items-center">

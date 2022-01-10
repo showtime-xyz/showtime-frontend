@@ -17,6 +17,7 @@ export type Props = {
 } & Pick<
   TextProps,
   | "onLayout"
+  | "onTextLayout"
   | "children"
   | "selectable"
   | "sx"
@@ -40,6 +41,7 @@ export const Text = forwardRef<TextType, Props>(
     {
       variant,
       onLayout,
+      onTextLayout,
       children,
       selectable,
       tw,
@@ -67,6 +69,7 @@ export const Text = forwardRef<TextType, Props>(
         variant={variant}
         selectable={selectable}
         onLayout={onLayout}
+        onTextLayout={onTextLayout}
         sx={compoundSx}
         accessibilityRole={accessibilityRole}
         numberOfLines={numberOfLines}
