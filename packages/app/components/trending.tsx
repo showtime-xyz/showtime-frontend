@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   View,
   Spinner,
@@ -11,7 +11,6 @@ import {
 } from "design-system";
 import { tw } from "design-system/tailwind";
 import { useTrendingCreators, useTrendingNFTS } from "../hooks/api-hooks";
-import { useScrollToTop } from "@react-navigation/native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { Dimensions, Platform } from "react-native";
 import { Video } from "expo-av";
@@ -130,10 +129,6 @@ const CreatorsList = ({
     return <CreatorPreview creator={item} />;
   }, []);
 
-  const listRef = useRef(null);
-
-  useScrollToTop(listRef);
-
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,
     [isLoadingMore]
@@ -166,7 +161,6 @@ const CreatorsList = ({
         refreshing={isRefreshing}
         onRefresh={refresh}
         onEndReached={fetchMore}
-        ref={listRef}
         onEndReachedThreshold={0.6}
         removeClippedSubviews={Platform.OS !== "web"}
         ListHeaderComponent={ListHeaderComponent}
@@ -200,10 +194,6 @@ const NFTSList = ({
   }, []);
 
   const renderItem = useCallback(({ item }) => <Media item={item} />, []);
-
-  const listRef = useRef(null);
-
-  useScrollToTop(listRef);
 
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,
@@ -241,7 +231,6 @@ const NFTSList = ({
         refreshing={isRefreshing}
         onRefresh={refresh}
         onEndReached={fetchMore}
-        ref={listRef}
         onEndReachedThreshold={0.6}
         removeClippedSubviews={Platform.OS !== "web"}
         ListHeaderComponent={ListHeaderComponent}
