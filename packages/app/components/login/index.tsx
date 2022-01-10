@@ -131,6 +131,7 @@ export function Login() {
   const handleSubmitPhoneNumber = useCallback(
     async (phoneNumber: string) => {
       try {
+        setLoading(true);
         mixpanel.track("Login - phone number button click");
 
         const did = await magic.auth.loginWithSMS({
@@ -139,7 +140,7 @@ export function Login() {
 
         await handleLogin({
           did,
-          phoneNumber,
+          phone_number: phoneNumber,
         });
 
         mixpanel.track("Login success - phone number");
