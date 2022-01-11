@@ -2,6 +2,9 @@ import { memo, useCallback, useMemo, useReducer, useState } from "react";
 import { Dimensions, Platform, Pressable, useColorScheme } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import {
+  Collection,
+  defaultFilters,
+  List,
   useProfileNFTs,
   useProfileNftTabs,
   useUserProfile,
@@ -78,9 +81,9 @@ const Profile = ({ address }: { address?: string }) => {
           {data?.data.lists.map((list) => {
             return (
               <TabList
-                listId={list.id}
                 key={list.id}
                 profileId={profileData?.data.profile.profile_id}
+                list={list}
               />
             );
           })}
@@ -93,42 +96,41 @@ const Profile = ({ address }: { address?: string }) => {
 const GAP_BETWEEN_ITEMS = 2;
 const ITEM_SIZE = Dimensions.get("window").width / 2;
 
-const TabList = ({
-  listId,
-  profileId,
-}: {
-  listId: number;
-  profileId?: number;
-}) => {
-  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
-    useProfileNFTs({ listId, profileId });
-
+const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
   const keyExtractor = useCallback((item) => {
     return item.nft_id;
   }, []);
 
-  const [filter, dispatch] = useReducer(
-    (state, action) => {
-      switch (action.type) {
-        case "collection_change":
-          return { ...state, collectionId: action.payload };
-        case "sort_change":
-          return { ...state, sortId: action.payload };
-      }
-    },
-    {
-      sortId: 1,
-      collectionId: 0,
+  const [filter, dispatch] = useReducer((state, action) => {
+    switch (action.type) {
+      case "collection_change":
+        return { ...state, collectionId: action.payload };
+      case "sort_change":
+        return { ...state, sortId: action.payload };
     }
+  }, defaultFilters);
+
+  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
+    useProfileNFTs({
+      listId: list.id,
+      profileId,
+      collectionId: filter.collectionId,
+      sortId: filter.sortId,
+    });
+
+  const onCollectionChange = useCallback(
+    (value) => {
+      dispatch({ type: "collection_change", payload: value });
+    },
+    [dispatch]
   );
 
-  const onCollectionChange = (value) => {
-    dispatch({ type: "collection_change", payload: value });
-  };
-
-  const onSortChange = (value) => {
-    dispatch({ type: "sort_change", payload: value });
-  };
+  const onSortChange = useCallback(
+    (value) => {
+      dispatch({ type: "sort_change", payload: value });
+    },
+    [dispatch]
+  );
 
   const renderItem = useCallback(({ item }) => <Media item={item} />, []);
 
@@ -148,6 +150,7 @@ const TabList = ({
           onCollectionChange={onCollectionChange}
           onSortChange={onSortChange}
           collectionId={filter.collectionId}
+          collections={list.collections}
           sortId={filter.sortId}
         />
         {data.length === 0 && !isLoading ? (
@@ -161,7 +164,14 @@ const TabList = ({
         ) : null}
       </View>
     ),
-    [data, isLoading, filter]
+    [
+      data,
+      isLoading,
+      filter,
+      onCollectionChange,
+      onSortChange,
+      list.collections,
+    ]
   );
 
   return (
@@ -363,22 +373,21 @@ const ProfileTop = ({ address }: { address?: string }) => {
   );
 };
 
-const options = [
-  {
-    value: 0,
-    label: "Option A",
-  },
-  {
-    value: 1,
-    label: "Option B",
-  },
-  {
-    value: 2,
-    label: "Option C",
-  },
-];
+type FilterProps = {
+  onCollectionChange: (id: string | number) => void;
+  collections: Collection[];
+  onSortChange: (id: string | number) => void;
+  collectionId: number;
+  sortId: number;
+};
 
-const Filter = ({ onCollectionChange, onSortChange, collectionId, sortId }) => {
+const Filter = ({
+  onCollectionChange,
+  collections,
+  onSortChange,
+  collectionId,
+  sortId,
+}: FilterProps) => {
   const sortFields = getSortFields();
 
   return (
@@ -386,7 +395,10 @@ const Filter = ({ onCollectionChange, onSortChange, collectionId, sortId }) => {
       <Select
         value={collectionId}
         onChange={onCollectionChange}
-        options={options}
+        options={collections.map((collection) => ({
+          value: collection.collection_id,
+          label: collection.collection_name,
+        }))}
         size="small"
         placeholder="Collection"
       />
@@ -397,7 +409,7 @@ const Filter = ({ onCollectionChange, onSortChange, collectionId, sortId }) => {
         size="small"
         placeholder="Sort"
       />
-      <Pressable
+      {/* <Pressable
         style={tw.style(
           "bg-black rounded-full dark:bg-white items-center justify-center flex-row px-3 py-2"
         )}
@@ -405,7 +417,7 @@ const Filter = ({ onCollectionChange, onSortChange, collectionId, sortId }) => {
         <Text tw="text-white text-center dark:text-gray-900 font-bold text-xs">
           Customize
         </Text>
-      </Pressable>
+      </Pressable> */}
     </View>
   );
 };

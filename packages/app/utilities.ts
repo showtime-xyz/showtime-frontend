@@ -63,7 +63,7 @@ export const SORT_FIELDS = {
     value: 3,
   },
   COMMENT_COUNT: { label: "Comments", key: "comment_count", id: 4, value: 4 },
-  CUSTOM: { label: "Custom", key: "custom", id: 5, value: 5 },
+  // CUSTOM: { label: "Custom", key: "custom", id: 5, value: 5 },
 };
 
 export const getSortFields = () => {

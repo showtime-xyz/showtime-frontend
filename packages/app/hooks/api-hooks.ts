@@ -129,21 +129,28 @@ type UseProfileNFTs = {
   };
 };
 
+export const defaultFilters = {
+  showDuplicates: 0,
+  showHidden: 0,
+  collectionId: 0,
+  sortId: 1,
+};
+
 export const useProfileNFTs = (params: UserProfileNFTs) => {
   const {
     profileId,
     listId,
-    sortId = 1,
-    showDuplicates = 0,
-    showHidden = 0,
-    collectionId = 0,
+    sortId = defaultFilters.sortId,
+    showDuplicates = defaultFilters.showDuplicates,
+    showHidden = defaultFilters.showHidden,
+    collectionId = defaultFilters.collectionId,
   } = params;
 
   const trendingCreatorsUrlFn = useCallback(
     (index) => {
       const url = `v1/profile_nfts?profile_id=${profileId}&page=${
         index + 1
-      }&limit=${8}&list_id=${listId}&sort_id=${sortId}&show_hidden=0&show_duplicates=0&collection_id=0`;
+      }&limit=${8}&list_id=${listId}&sort_id=${sortId}&show_hidden=${showHidden}&show_duplicates=${showDuplicates}&collection_id=${collectionId}`;
       return url;
     },
     [profileId, listId, sortId, showDuplicates, showHidden, collectionId]
@@ -174,25 +181,29 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
   return { ...queryState, fetchMore, data: newData };
 };
 
+export type Collection = {
+  collection_id: number;
+  collection_name: string;
+  collection_img_url: string;
+  count?: number;
+};
+
+export type List = {
+  id: number;
+  name: string;
+  count_deduplicated_nonhidden: number;
+  count_deduplicated_withhidden: number;
+  count_all_nonhidden: number;
+  count_all_withhidden: number;
+  sort_id: number;
+  collections: Array<Collection>;
+  has_custom_sort: boolean;
+};
+
 type ProfileTabsAPI = {
   data: {
     default_list_id: number;
-    lists: Array<{
-      id: number;
-      name: string;
-      count_deduplicated_nonhidden: number;
-      count_deduplicated_withhidden: number;
-      count_all_nonhidden: number;
-      count_all_withhidden: number;
-      sort_id: number;
-      collections: Array<{
-        collection_id: number;
-        collection_name: string;
-        collection_img_url: string;
-        count?: number;
-      }>;
-      has_custom_sort: boolean;
-    }>;
+    lists: Array<List>;
   };
 };
 
