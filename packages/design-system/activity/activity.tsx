@@ -14,6 +14,8 @@ import {
   Transfer,
 } from "design-system/activity/types";
 import { TextLink } from "app/navigation/link";
+import { Pressable } from "react-native";
+import { useRouter } from "app/navigation/use-router";
 
 const getProfileImageUrl = (imgUrl: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
@@ -28,14 +30,19 @@ type Props = {
 
 function Activity({ activity }: Props) {
   const { type, actor } = activity;
+  const router = useRouter();
 
   return (
     <View tw="p-4">
       <View tw="h-12 flex-row">
-        <Avatar
-          url={getProfileImageUrl(actor.img_url ?? DEFAULT_PROFILE_PIC)}
-          icon={type}
-        />
+        <Pressable
+          onPress={() => router.push("/profile/" + actor.wallet_address)}
+        >
+          <Avatar
+            url={getProfileImageUrl(actor.img_url ?? DEFAULT_PROFILE_PIC)}
+            icon={type}
+          />
+        </Pressable>
 
         <View tw="justify-center ml-2">
           <Text
@@ -47,7 +54,7 @@ function Activity({ activity }: Props) {
             <TextLink
               variant="text-sm"
               tw="text-black dark:text-white font-bold"
-              href=""
+              href={"/profile/" + actor.wallet_address}
             >
               @{actor.username}{" "}
             </TextLink>

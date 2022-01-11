@@ -39,20 +39,13 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
   return <View tw={`mb-[${tabBarHeight}px]`} />;
 };
 
-const ProfileScreen = () => {
-  const { user } = useUser();
-  return (
-    <Profile
-      address={
-        user?.data.profile.wallet_addresses_excluding_email_v2[0].address
-      }
-    />
-  );
+const ProfileScreen = ({ walletAddress }: { walletAddress: string }) => {
+  return <Profile address={walletAddress} />;
 };
 
 const Profile = ({ address }: { address?: string }) => {
   const { data: profileData } = useUserProfile({ address });
-  const { data, loading } = useProfileNftTabs({
+  const { data } = useProfileNftTabs({
     profileId: profileData?.data.profile.profile_id,
   });
   const [selected, setSelected] = useState(0);
