@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense } from "react";
+import { useState, Suspense } from "react";
 import useUnmountSignal from "use-unmount-signal";
 import useSWR from "swr";
 
@@ -14,6 +14,7 @@ import { Social } from "design-system/card/social";
 import { Collection } from "design-system/card/rows/collection";
 import { Title } from "design-system/card/rows/title";
 import { Description } from "design-system/card/rows/description";
+import { Comments } from "design-system/comments";
 import type { NFT } from "app/types";
 import { useHideNavigationElements } from "app/navigation/use-navigation-elements";
 
@@ -75,19 +76,21 @@ function NftScreen() {
         </View>
       </View>
 
-      <ScrollView>
-        <PinchToZoom>
-          <Media nfts={[nft]} />
-        </PinchToZoom>
+      <PinchToZoom>
+        <Media nfts={[nft]} />
+      </PinchToZoom>
 
-        <Social nft={nft} />
+      <Social nft={nft} />
 
-        <Title nft={nft} />
+      <Title nft={nft} />
 
-        <Description nft={nft} />
+      <Description nft={nft} />
 
-        <Collection nft={nft} />
-      </ScrollView>
+      <Collection nft={nft} />
+
+      <Suspense fallback={<Spinner />}>
+        <Comments nft={nft} />
+      </Suspense>
     </View>
   );
 }
