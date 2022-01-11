@@ -201,7 +201,7 @@ const TokenDetailBody = ({
           <div className="py-4 px-4 flex flex-row">
             <div className="flex-shrink">
               {item.contract_is_creator ? (
-                <Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
+                <Link href={`/c/${item.collection_slug}`}>
                   <a className="flex flex-row items-center ">
                     <div>
                       <img

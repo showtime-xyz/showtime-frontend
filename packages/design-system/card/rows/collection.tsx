@@ -5,7 +5,7 @@ import { Link } from "app/navigation/link";
 
 function Collection({ nft }) {
   return (
-    <Link href="/c/[collection]" as={`/c/${nft.collection_slug}`}>
+    <Link href={`/c/${nft.collection_slug}`}>
       <View tw="px-4 py-2 bg-gray-100 dark:bg-gray-900 flex-row items-center justify-between">
         <View tw="flex-row items-center">
           {nft.collection_img_url && (

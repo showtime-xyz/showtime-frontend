@@ -142,7 +142,7 @@ const TokenCard = ({
           <div className="flex items-center justify-between">
             <div className="pr-2">
               {item.contract_is_creator ? (
-                <Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
+                <Link href={`/c/${item.collection_slug}`}>
                   <a className="flex flex-row items-center space-x-2">
                     <img
                       alt={item.collection_name}
@@ -835,7 +835,7 @@ const TokenCard = ({
                 ) : null}
               </div>
             </div>
-            <Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
+            <Link href={`/c/${item.collection_slug}`}>
               <div className="mt-4 px-4 py-2 bg-gray-100 dark:bg-gray-800 flex items-center justify-between">
                 <div className="flex items-center space-x-2 cursor-pointer">
                   {item.collection_img_url && (
