@@ -143,7 +143,7 @@ const TabList = ({
 
   const ListHeaderComponent = useMemo(
     () => (
-      <View tw="p-3">
+      <View tw="p-4">
         <Filter
           onCollectionChange={onCollectionChange}
           onSortChange={onSortChange}
@@ -288,7 +288,7 @@ const ProfileTop = ({ address }: { address?: string }) => {
             ) : null}
 
             {username ? (
-              <View tw="flex-row items-center mt-3">
+              <View tw="flex-row items-center mt-2">
                 <Animated.View entering={FadeIn}>
                   <Text
                     variant="text-base"
@@ -332,7 +332,7 @@ const ProfileTop = ({ address }: { address?: string }) => {
             </View>
           ) : null}
 
-          <View tw="flex-row mt-3" pointerEvents="box-none">
+          <View tw="flex-row mt-4" pointerEvents="box-none">
             <Text tw="text-sm text-gray-900 dark:text-white font-bold">
               {profileData?.data.following_count}{" "}
               <Text tw="font-medium">following</Text>

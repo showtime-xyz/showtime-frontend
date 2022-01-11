@@ -51,8 +51,22 @@ export const useTrendingCreators = ({ days }: { days: number }) => {
   );
 
   const queryState = useInfiniteListQuerySWR<any>(trendingCreatorsUrlFn);
+
+  const newData = useMemo(() => {
+    let newData = [];
+    if (queryState.data) {
+      queryState.data.forEach((p) => {
+        if (p) {
+          newData = newData.concat(p.data);
+        }
+      });
+    }
+    return newData;
+  }, [queryState.data]);
+
   return {
     ...queryState,
+    data: newData,
     fetchMore: useCallback(() => {}, []),
   };
 };
