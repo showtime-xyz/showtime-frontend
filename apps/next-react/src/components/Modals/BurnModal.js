@@ -54,9 +54,11 @@ const BurnModal = ({ open, onClose, token }) => {
 
   const burnToken = async () => {
     setModalState(MODAL_STATES.PROCESSING);
-    const withMagic = enableMagicTX;
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic });
+    const web3Modal = getWeb3Modal({
+      theme: resolvedTheme,
+      withMagic: enableMagicTX,
+    });
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,

@@ -182,9 +182,11 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 
   const listToken = async () => {
     setModalPage(MODAL_PAGES.LOADING);
-    const withMagic = enableMagicTX;
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic });
+    const web3Modal = getWeb3Modal({
+      theme: resolvedTheme,
+      withMagic: enableMagicTX,
+    });
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,

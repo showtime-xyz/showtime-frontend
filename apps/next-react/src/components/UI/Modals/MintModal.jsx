@@ -297,7 +297,6 @@ const MintModal = ({ open, onClose }) => {
 
   const mintToken = async () => {
     setModalPage(MODAL_PAGES.LOADING);
-    const withMagic = enableMagicTX;
 
     const { token: pinataToken } = await axios
       .post("/api/pinata/generate-key")
@@ -323,7 +322,10 @@ const MintModal = ({ open, onClose }) => {
       )
       .then((res) => res.data);
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic });
+    const web3Modal = getWeb3Modal({
+      theme: resolvedTheme,
+      withMagic: enableMagicTX,
+    });
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,

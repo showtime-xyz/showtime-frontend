@@ -128,9 +128,11 @@ const BuyModal = ({ open, onClose, token }) => {
 
   const buyToken = async () => {
     setModalPage(MODAL_PAGES.LOADING);
-    const withMagic = enableMagicTX;
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic });
+    const web3Modal = getWeb3Modal({
+      theme: resolvedTheme,
+      withMagic: enableMagicTX,
+    });
 
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
@@ -767,9 +769,11 @@ const AllowanceRequiredPage = ({
 
   const grantAllowance = async () => {
     setModalPage(MODAL_PAGES.LOADING);
-    const withMagic = enableMagicTX;
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic });
+    const web3Modal = getWeb3Modal({
+      theme: resolvedTheme,
+      withMagic: enableMagicTX,
+    });
     isWeb3ModalActive.current = true;
 
     const web3 = new ethers.providers.Web3Provider(
