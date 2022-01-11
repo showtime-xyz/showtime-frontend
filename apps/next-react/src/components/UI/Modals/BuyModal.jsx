@@ -46,9 +46,9 @@ const BuyModal = ({ open, onClose, token }) => {
   const confettiCanvas = useRef(null);
   const [modalVisibility, setModalVisibility] = useState(true);
   const [modalPage, setModalPage] = useState(
-    myProfile?.wallet_addresses_excluding_email_v2?.length === 0
-      ? MODAL_PAGES.NO_WALLET
-      : MODAL_PAGES.GENERAL
+    Boolean(myProfile?.wallet_addresses_excluding_email_v2?.length)
+      ? MODAL_PAGES.GENERAL
+      : MODAL_PAGES.NO_WALLET
   );
   const [quantity, setQuantity] = useState(1);
   const [transactionHash, setTransactionHash] = useState("");
@@ -57,7 +57,7 @@ const BuyModal = ({ open, onClose, token }) => {
   const enableMagicTX = flags[FLAGS.enableMagicTX];
 
   useEffect(() => {
-    if (myProfile?.wallet_addresses_excluding_email_v2?.length === 0) {
+    if (!Boolean(myProfile?.wallet_addresses_excluding_email_v2?.length)) {
       setModalPage(MODAL_PAGES.NO_WALLET);
     }
   }, [myProfile]);

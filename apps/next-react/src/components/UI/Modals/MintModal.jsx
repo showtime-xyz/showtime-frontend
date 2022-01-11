@@ -49,27 +49,18 @@ const MintModal = ({ open, onClose }) => {
   const confettiCanvas = useRef(null);
   const flags = useFlags();
   const enableMagicTX = flags[FLAGS.enableMagicTX];
-  const hasNoWalletAddress = myProfile?.wallet_addresses_v2?.length === 0;
-  const hasNoWalletAddressExcludingEmail =
-    myProfile?.wallet_addresses_excluding_email_v2?.length === 0;
+  const hasWalletAddress = Boolean(myProfile?.wallet_addresses_v2?.length);
+  const hasWalletAddressExcludingEmail = Boolean(
+    myProfile?.wallet_addresses_excluding_email_v2?.length
+  );
 
   const setDefaultModalPage = () => {
     if (enableMagicTX) {
-      return hasNoWalletAddress ? MODAL_PAGES.NO_WALLET : MODAL_PAGES.GENERAL;
+      return hasWalletAddress ? MODAL_PAGES.GENERAL : MODAL_PAGES.NO_WALLET;
     } else {
-      return hasNoWalletAddressExcludingEmail
-        ? MODAL_PAGES.NO_WALLET
-        : MODAL_PAGES.GENERAL;
-    }
-  };
-
-  const setNoWalletPage = () => {
-    if (enableMagicTX && hasNoWalletAddress) {
-      return setModalPage(MODAL_PAGES.NO_WALLET);
-    }
-
-    if (!enableMagicTX && hasNoWalletAddressExcludingEmail) {
-      return setModalPage(MODAL_PAGES.NO_WALLET);
+      return hasWalletAddressExcludingEmail
+        ? MODAL_PAGES.GENERAL
+        : MODAL_PAGES.NO_WALLET;
     }
   };
 
@@ -78,7 +69,7 @@ const MintModal = ({ open, onClose }) => {
   });
 
   useEffect(() => {
-    setNoWalletPage();
+    setModalPage(setDefaultModalPage);
   }, [myProfile]);
 
   const shotConfetti = () => {
