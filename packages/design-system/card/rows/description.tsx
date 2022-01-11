@@ -4,6 +4,11 @@ import { LayoutAnimation, UIManager, Platform } from "react-native";
 import { View } from "design-system/view";
 import { Text } from "design-system/text";
 import { Pressable } from "design-system/pressable-scale";
+import type { NFT } from "app/types";
+
+type Props = {
+  nft?: NFT;
+};
 
 const animation = LayoutAnimation.create(
   300,
@@ -11,7 +16,7 @@ const animation = LayoutAnimation.create(
   LayoutAnimation.Properties.opacity
 );
 
-function Description({ nft }) {
+function Description({ nft }: Props) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showMore, setShowMore] = useState(false);
   const [showLess, setShowLess] = useState(false);

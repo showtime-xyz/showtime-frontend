@@ -1,7 +1,12 @@
 import { View } from "design-system/view";
 import { Text } from "design-system/text";
+import type { NFT } from "app/types";
 
-function Title({ nft }) {
+type Props = {
+  nft?: NFT;
+};
+
+function Title({ nft }: Props) {
   if (!nft) return null;
 
   return (

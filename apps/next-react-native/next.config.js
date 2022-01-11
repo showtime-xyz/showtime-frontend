@@ -32,6 +32,8 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
     esmExternals: "loose",
+    reactRoot: true,
+    // concurrentFeatures: true,
   },
   typescript: {
     ignoreDevErrors: true,

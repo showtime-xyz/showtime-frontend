@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { Suspense, useCallback, useMemo, useState } from "react";
 import {
   View,
   Spinner,
@@ -102,8 +102,12 @@ const TabListContainer = ({ days }: { days: number }) => {
   return useMemo(
     () =>
       [
-        <CreatorsList days={days} SelectionControl={SelectionControl} />,
-        <NFTSList days={days} SelectionControl={SelectionControl} />,
+        <Suspense fallback={<Spinner size="small" />}>
+          <CreatorsList days={days} SelectionControl={SelectionControl} />
+        </Suspense>,
+        <Suspense fallback={<Spinner size="small" />}>
+          <NFTSList days={days} SelectionControl={SelectionControl} />
+        </Suspense>,
       ][selected],
     [selected, days, SelectionControl]
   );

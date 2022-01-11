@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Router from "next/router";
 
 import { useRouter } from "app/navigation/use-router";
+import { useNavigationElements } from "app/navigation/use-navigation-elements";
 import { View, Pressable, Button, ButtonLabel } from "design-system";
 import { Showtime, Wallet, Plus } from "design-system/icon";
 import { tw } from "design-system/tailwind";
@@ -16,6 +17,7 @@ const Header = () => {
   const { isLoading, isAuthenticated } = useUser();
   const [isSearchBarOpen, setSearchBarOpen] = useState(false);
   const { top: safeAreaTop } = useSafeAreaInsets();
+  const { isHeaderHidden } = useNavigationElements();
 
   const openLogin = useCallback(() => {
     const as = `${router.pathname !== "/" ? router.pathname : ""}/login`;
@@ -29,6 +31,15 @@ const Header = () => {
 
     router.push(href, as, { shallow: true });
   }, [router, Router]);
+
+  if (isHeaderHidden) {
+    return (
+      <View
+        sx={{ paddingTop: safeAreaTop }}
+        tw="bg-white dark:bg-black md:dark:bg-gray-900"
+      />
+    );
+  }
 
   return (
     <View

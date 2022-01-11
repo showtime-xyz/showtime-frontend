@@ -33,6 +33,7 @@ export const useInfiniteListQuerySWR = <T>(
     isValidating,
   } = useSWRInfinite(urlFunction, fetcher, {
     revalidateFirstPage: false,
+    suspense: true,
   });
 
   const isLoadingInitialData = !pages && !error;

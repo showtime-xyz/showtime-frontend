@@ -1,4 +1,4 @@
-import { useRef, useMemo, useEffect } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import { Platform, useColorScheme } from "react-native";
 import { useRouter } from "next/router";
 import {
@@ -9,6 +9,7 @@ import {
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 import { linking } from "app/navigation/linking";
+import { NavigationElementsProvider } from "app/navigation/navigation-elements-context";
 
 function LinkTo() {
   const linkTo = useLinkTo();
@@ -59,6 +60,8 @@ export function NavigationProvider({
   const linkingConfig = useLinkingConfig(trackedLinking);
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
+  const [isHeaderHidden, setIsHeaderHidden] = useState(false);
+  const [isTabBarHidden, setIsTabBarHidden] = useState(false);
 
   return (
     <NavigationContainer
@@ -82,7 +85,18 @@ export function NavigationProvider({
       }}
     >
       <LinkTo />
-      <BottomSheetModalProvider>{children}</BottomSheetModalProvider>
+      <BottomSheetModalProvider>
+        <NavigationElementsProvider
+          value={{
+            isHeaderHidden,
+            setIsHeaderHidden,
+            isTabBarHidden,
+            setIsTabBarHidden,
+          }}
+        >
+          {children}
+        </NavigationElementsProvider>
+      </BottomSheetModalProvider>
     </NavigationContainer>
   );
 }

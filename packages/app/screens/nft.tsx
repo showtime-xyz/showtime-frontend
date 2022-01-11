@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import useUnmountSignal from "use-unmount-signal";
 import useSWR from "swr";
 
-import { View, Text, Button } from "design-system";
+import { View, ScrollView, Button, Spinner } from "design-system";
 import { Media } from "design-system/card/media";
 import { createParam } from "app/navigation/use-param";
 import { axios } from "app/lib/axios";
@@ -14,6 +14,8 @@ import { Social } from "design-system/card/social";
 import { Collection } from "design-system/card/rows/collection";
 import { Title } from "design-system/card/rows/title";
 import { Description } from "design-system/card/rows/description";
+import type { NFT } from "app/types";
+import { useHideNavigationElements } from "app/navigation/use-navigation-elements";
 
 type Query = {
   id: string;
@@ -22,6 +24,7 @@ type Query = {
 const { useParam } = createParam<Query>();
 
 function NftScreen() {
+  useHideNavigationElements();
   const router = useRouter();
   const unmountSignal = useUnmountSignal();
   const [nftId, setNftId] = useParam("id");
@@ -29,7 +32,7 @@ function NftScreen() {
   const { data, error } = useSWR([url], (url) =>
     axios({ url, method: "GET", unmountSignal })
   );
-  const nft = data?.data;
+  const nft = data?.data as NFT;
 
   if (error) {
     console.error(error);
@@ -72,17 +75,19 @@ function NftScreen() {
         </View>
       </View>
 
-      <PinchToZoom>
-        <Media nfts={[nft]} />
-      </PinchToZoom>
+      <ScrollView>
+        <PinchToZoom>
+          <Media nfts={[nft]} />
+        </PinchToZoom>
 
-      <Social nft={nft} />
+        <Social nft={nft} />
 
-      <Title nft={nft} />
+        <Title nft={nft} />
 
-      <Description nft={nft} />
+        <Description nft={nft} />
 
-      <Collection nft={nft} />
+        <Collection nft={nft} />
+      </ScrollView>
     </View>
   );
 }
