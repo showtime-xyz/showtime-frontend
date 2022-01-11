@@ -4,7 +4,7 @@ import type { NavigatorScreenParams } from "@react-navigation/native";
 type HomeStackParams = {
   home: undefined;
   login: undefined;
-  profile: { id: number };
+  profile: { walletAddress: number };
   nft: { id: number };
 };
 

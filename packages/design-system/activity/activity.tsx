@@ -1,5 +1,6 @@
 import { formatDistanceToNowStrict } from "date-fns";
 
+import Router from "next/router";
 import { ACTIVITY_TYPES, DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import { View } from "design-system/view";
 import { Text } from "design-system/text";
@@ -31,13 +32,23 @@ type Props = {
 function Activity({ activity }: Props) {
   const { type, actor } = activity;
   const router = useRouter();
+  const openProfile = (walletAddress: string) => {
+    const as = `/profile/${walletAddress}`;
+
+    const href = Router.router
+      ? {
+          pathname: Router.pathname,
+          query: { ...Router.query, walletAddress },
+        }
+      : as;
+
+    router.push(href, as, { shallow: true });
+  };
 
   return (
     <View tw="p-4">
       <View tw="h-12 flex-row">
-        <Pressable
-          onPress={() => router.push("/profile/" + actor.wallet_address)}
-        >
+        <Pressable onPress={() => openProfile(actor.wallet_address)}>
           <Avatar
             url={getProfileImageUrl(actor.img_url ?? DEFAULT_PROFILE_PIC)}
             icon={type}

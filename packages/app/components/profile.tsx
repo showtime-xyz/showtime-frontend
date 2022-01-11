@@ -238,8 +238,8 @@ const ProfileTop = ({ address }: { address?: string }) => {
   const colorMode = useColorScheme();
 
   return (
-    <View pointerEvents="box-none">
-      <View tw={`bg-gray-100 h-[${COVER_IMAGE_HEIGHT}px]`} pointerEvents="none">
+    <View>
+      <View tw={`bg-gray-100 h-[${COVER_IMAGE_HEIGHT}px]`}>
         <Image
           source={{ uri: profileData?.data.profile.cover_url }}
           tw={`h-[${COVER_IMAGE_HEIGHT}px] w-100vw`}
@@ -247,7 +247,7 @@ const ProfileTop = ({ address }: { address?: string }) => {
         />
       </View>
 
-      <View tw="bg-white dark:bg-black px-2" pointerEvents="box-none">
+      <View tw="bg-white dark:bg-black px-2">
         <View tw="flex-row justify-between pr-2">
           <View tw="flex-row items-end">
             <View tw="bg-gray-100 h-[144px] w-[144px] rounded-full mt-[-72px]">
@@ -278,8 +278,8 @@ const ProfileTop = ({ address }: { address?: string }) => {
           </Pressable> */}
         </View>
 
-        <View tw="px-2 py-3" pointerEvents="box-none">
-          <View pointerEvents="none">
+        <View tw="px-2 py-3">
+          <View>
             {name ? (
               <Animated.View entering={FadeIn}>
                 <Text
@@ -332,17 +332,12 @@ const ProfileTop = ({ address }: { address?: string }) => {
           </View>
 
           {bio ? (
-            <View tw="flex-row items-center mt-3" pointerEvents="box-none">
-              <Text
-                tw="text-sm text-gray-600 dark:text-gray-400"
-                pointerEvents="none"
-              >
-                {bio}
-              </Text>
+            <View tw="flex-row items-center mt-3">
+              <Text tw="text-sm text-gray-600 dark:text-gray-400">{bio}</Text>
             </View>
           ) : null}
 
-          <View tw="flex-row mt-4" pointerEvents="box-none">
+          <View tw="flex-row mt-4">
             <Text tw="text-sm text-gray-900 dark:text-white font-bold">
               {profileData?.data.following_count}{" "}
               <Text tw="font-medium">following</Text>
@@ -355,8 +350,8 @@ const ProfileTop = ({ address }: { address?: string }) => {
             </View>
           </View>
 
-          {/* <View pointerEvents="box-none" tw="mt-4">
-            <View tw="flex-row items-center" pointerEvents="box-none">
+          {/* <View>
+            <View tw="flex-row items-center">
               <Text tw="text-gray-600 dark:text-gray-400 font-medium text-xs">
                 Followed by{" "}
               </Text>

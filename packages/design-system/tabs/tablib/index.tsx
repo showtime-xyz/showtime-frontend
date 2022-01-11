@@ -1,10 +1,6 @@
-import React, {
-  useContext,
-  ForwardedRef,
-  useMemo,
-  useRef,
-  useEffect,
-} from "react";
+//@ts-nocheck- Todo fix typings
+
+import React, { useContext, ForwardedRef, useMemo, useRef } from "react";
 import { tw } from "../../tailwind";
 import {
   Pressable,

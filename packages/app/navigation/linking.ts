@@ -14,7 +14,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
           home: "",
           login: "/login",
           nft: "/nft/:id",
-          profile: "/profile/:id",
+          profile: "/profile/:walletAddress",
         },
       },
       discoverTab: {

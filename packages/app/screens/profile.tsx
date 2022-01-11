@@ -2,17 +2,22 @@ import { useEffect } from "react";
 
 import { mixpanel } from "app/lib/mixpanel";
 import { Profile } from "app/components/profile";
-import { useRouter } from "../navigation/use-router";
+import { createParam } from "../navigation/use-param";
+
+type Query = {
+  walletAddress: string;
+};
+
+const { useParam } = createParam<Query>();
 
 const ProfileScreen = () => {
   useEffect(() => {
     mixpanel.track("Profile view");
   }, []);
 
-  const router = useRouter();
-  const walletAddress = router.pathname.split("/")[2];
+  const [walletAddress, setWalletAddress] = useParam("walletAddress");
 
-  return <Profile walletAddress={walletAddress} />;
+  return <Profile walletAddress={walletAddress as string} />;
 };
 
 export { ProfileScreen };
