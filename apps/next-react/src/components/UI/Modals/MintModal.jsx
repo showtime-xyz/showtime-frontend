@@ -28,6 +28,7 @@ import XIcon from "@/components/Icons/XIcon";
 import { buildFormData } from "@/lib/utilities";
 import * as Sentry from "@sentry/nextjs";
 import ListModal from "./ListModal";
+import useFlags, { FLAGS } from "@/hooks/useFlags";
 
 const MAX_FILE_SIZE = 1024 * 1024 * 50; // 50MB
 
@@ -46,16 +47,38 @@ const MintModal = ({ open, onClose }) => {
   const { resolvedTheme } = useTheme();
   const isWeb3ModalActive = useRef(false);
   const confettiCanvas = useRef(null);
-  const [modalPage, setModalPage] = useState(
-    myProfile?.wallet_addresses_v2?.length === 0
-      ? MODAL_PAGES.NO_WALLET
-      : MODAL_PAGES.GENERAL
-  );
+  const flags = useFlags();
+  const enableMagicTX = flags[FLAGS.enableMagicTX];
+  const hasNoWalletAddress = myProfile?.wallet_addresses_v2?.length === 0;
+  const hasNoWalletAddressExcludingEmail =
+    myProfile?.wallet_addresses_excluding_email_v2?.length === 0;
+
+  const setDefaultModalPage = () => {
+    if (enableMagicTX) {
+      return hasNoWalletAddress ? MODAL_PAGES.NO_WALLET : MODAL_PAGES.GENERAL;
+    } else {
+      return hasNoWalletAddressExcludingEmail
+        ? MODAL_PAGES.NO_WALLET
+        : MODAL_PAGES.GENERAL;
+    }
+  };
+
+  const setNoWalletPage = () => {
+    if (enableMagicTX && hasNoWalletAddress) {
+      return setModalPage(MODAL_PAGES.NO_WALLET);
+    }
+
+    if (!enableMagicTX && hasNoWalletAddressExcludingEmail) {
+      return setModalPage(MODAL_PAGES.NO_WALLET);
+    }
+  };
+
+  const [modalPage, setModalPage] = useState(() => {
+    return setDefaultModalPage();
+  });
 
   useEffect(() => {
-    if (myProfile?.wallet_addresses_v2?.length === 0) {
-      setModalPage(MODAL_PAGES.NO_WALLET);
-    }
+    setNoWalletPage();
   }, [myProfile]);
 
   const shotConfetti = () => {
@@ -128,11 +151,7 @@ const MintModal = ({ open, onClose }) => {
     setHasAcceptedTerms(false);
     setTransactionHash("");
     setTokenID("");
-    setModalPage(
-      myProfile?.wallet_addresses_v2?.length === 0
-        ? MODAL_PAGES.NO_WALLET
-        : MODAL_PAGES.GENERAL
-    );
+    setDefaultModalPage();
   };
 
   const saveDraft = () =>
@@ -278,6 +297,7 @@ const MintModal = ({ open, onClose }) => {
 
   const mintToken = async () => {
     setModalPage(MODAL_PAGES.LOADING);
+    const withMagic = enableMagicTX;
 
     const { token: pinataToken } = await axios
       .post("/api/pinata/generate-key")
@@ -303,7 +323,7 @@ const MintModal = ({ open, onClose }) => {
       )
       .then((res) => res.data);
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic: true });
+    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic });
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,
