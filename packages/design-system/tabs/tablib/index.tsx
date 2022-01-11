@@ -472,7 +472,7 @@ function makeScrollableComponent<K extends object, T extends any>(Comp: T) {
         contentContainerStyle={useMemo(
           () => ({
             paddingTop: Platform.OS === "android" ? topHeight : 0,
-            minHeight: windowHeight,
+            minHeight: windowHeight + topHeight,
           }),
           [topHeight]
         )}
