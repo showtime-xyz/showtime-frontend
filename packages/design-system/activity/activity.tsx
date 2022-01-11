@@ -1,6 +1,5 @@
 import { formatDistanceToNowStrict } from "date-fns";
 
-import Router from "next/router";
 import { ACTIVITY_TYPES, DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import { View } from "design-system/view";
 import { Text } from "design-system/text";
@@ -15,7 +14,7 @@ import {
   Transfer,
 } from "design-system/activity/types";
 import { Pressable } from "react-native";
-import { useRouter } from "app/navigation/use-router";
+import { useProfileNavigation } from "app/navigation/app-navigation";
 
 const getProfileImageUrl = (imgUrl: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
@@ -32,20 +31,7 @@ const hitSlop = { top: 10, bottom: 10, left: 10, right: 10 };
 
 function Activity({ activity }: Props) {
   const { type, actor } = activity;
-  const router = useRouter();
-
-  const openProfile = () => {
-    const as = `/profile/${actor.wallet_address}`;
-
-    const href = Router.router
-      ? {
-          pathname: Router.pathname,
-          query: { ...Router.query, walletAddress: actor.wallet_address },
-        }
-      : as;
-
-    router.push(href, as, { shallow: true });
-  };
+  const openProfile = useProfileNavigation(actor.wallet_address);
 
   return (
     <View tw="p-4">
