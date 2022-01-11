@@ -33,7 +33,7 @@ const nextConfig = {
     optimizeCss: true,
     esmExternals: "loose",
     reactRoot: true,
-    // concurrentFeatures: true,
+    // TODO: enable `concurrentFeatures: true`
   },
   typescript: {
     ignoreDevErrors: true,

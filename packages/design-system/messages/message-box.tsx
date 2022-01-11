@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import {
   Platform,
-  PixelRatio,
   Animated,
   NativeSyntheticEvent,
   TextInputKeyPressEventData,
@@ -44,15 +43,13 @@ function MessageBox({
   const insets = useSafeAreaInsets();
 
   const [message, setMessage] = useState("");
-  const [attachment, setAttachment] = useState(null);
   const inputContainerRef = useRef(null);
 
   const { userAgent, isMobileWeb } = useIsMobileWeb();
   const isSafari = /^((?!chrome|android|crios|fxios).)*safari/i.test(userAgent);
-  const fuckingKeyboard = isSafari;
 
   useEffect(() => {
-    if (fuckingKeyboard) {
+    if (isSafari) {
       if (inputContainerRef.current) {
         inputContainerRef.current.addEventListener(
           "touchmove",
@@ -65,7 +62,7 @@ function MessageBox({
     }
 
     return () => {
-      if (fuckingKeyboard) {
+      if (isSafari) {
         if (inputContainerRef.current) {
           inputContainerRef.current.removeEventListener("touchmove", (e) => {
             e.preventDefault();
@@ -73,7 +70,7 @@ function MessageBox({
         }
       }
     };
-  }, [inputContainerRef.current]);
+  }, [isSafari, inputContainerRef.current]);
 
   const useListenersOnAndroid = true;
   const { keyboardEndPositionY, keyboardHeight } = useKeyboardDimensions(
