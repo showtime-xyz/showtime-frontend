@@ -1,8 +1,13 @@
 import { View } from "design-system/view";
 import { Text } from "design-system/text";
 import { Image } from "design-system/image";
+import type { NFT } from "app/types";
 
-function Collection({ nft }) {
+type Props = {
+  nft?: NFT;
+};
+
+function Collection({ nft }: Props) {
   if (!nft) return null;
 
   return (
@@ -19,7 +24,9 @@ function Collection({ nft }) {
         </Text>
       </View>
       <Text tw="text-xs font-bold text-gray-600 dark:text-gray-400">
-        {nft.token_count ? `${nft.token_count} Editions` : "1/1"}
+        {!nft.token_count || nft.token_count === 1
+          ? "1 Edition"
+          : `${nft.token_count} Editions`}
       </Text>
     </View>
   );
