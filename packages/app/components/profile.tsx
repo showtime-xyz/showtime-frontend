@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo, useReducer, useState } from "react";
-import { Dimensions, Platform, Pressable, useColorScheme } from "react-native";
+import { Dimensions, Platform, useColorScheme } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import {
   Collection,
@@ -19,7 +19,6 @@ import Animated, { FadeIn } from "react-native-reanimated";
 import { useUser } from "../hooks/use-user";
 import { NFT } from "../types";
 import { Video } from "expo-av";
-import PagerView from "react-native-pager-view";
 
 const TAB_LIST_HEIGHT = 64;
 const COVER_IMAGE_HEIGHT = 104;
@@ -40,11 +39,15 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
   return <View tw={`mb-[${tabBarHeight}px]`} />;
 };
 
-const testUser = "suicidalhamster";
-
 const ProfileScreen = () => {
   const { user } = useUser();
-  return <Profile address={"suicidalhamster"} />;
+  return (
+    <Profile
+      address={
+        user?.data.profile.wallet_addresses_excluding_email_v2[0].address
+      }
+    />
+  );
 };
 
 const Profile = ({ address }: { address?: string }) => {
@@ -101,7 +104,7 @@ const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
     return item.nft_id;
   }, []);
 
-  const [filter, dispatch] = useReducer((state, action) => {
+  const [filter, dispatch] = useReducer((state: any, action: any) => {
     switch (action.type) {
       case "collection_change":
         return { ...state, collectionId: action.payload };
@@ -243,7 +246,7 @@ const ProfileTop = ({ address }: { address?: string }) => {
 
   return (
     <View pointerEvents="box-none">
-      <View tw={`bg-gray-400 h-[${COVER_IMAGE_HEIGHT}px]`} pointerEvents="none">
+      <View tw={`bg-gray-100 h-[${COVER_IMAGE_HEIGHT}px]`} pointerEvents="none">
         <Image
           source={{ uri: profileData?.data.profile.cover_url }}
           tw={`h-[${COVER_IMAGE_HEIGHT}px] w-100vw`}
@@ -294,7 +297,7 @@ const ProfileTop = ({ address }: { address?: string }) => {
                 </Text>
               </Animated.View>
             ) : loading ? (
-              <Skeleton height={32} width={150} colorMode={colorMode} />
+              <Skeleton height={32} width={150} colorMode={colorMode as any} />
             ) : null}
 
             {username ? (
@@ -326,7 +329,11 @@ const ProfileTop = ({ address }: { address?: string }) => {
               </View>
             ) : loading ? (
               <View tw="flex-row items-center mt-3">
-                <Skeleton height={12} width={100} colorMode={colorMode} />
+                <Skeleton
+                  height={12}
+                  width={100}
+                  colorMode={colorMode as any}
+                />
               </View>
             ) : null}
           </View>

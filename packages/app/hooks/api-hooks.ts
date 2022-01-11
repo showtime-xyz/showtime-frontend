@@ -27,7 +27,7 @@ export const useActivity = ({
   const queryState = useInfiniteListQuerySWR<any>(activityURLFn);
 
   const newData = useMemo(() => {
-    let newData = [];
+    let newData: any = [];
     if (queryState.data) {
       queryState.data.forEach((p) => {
         if (p) {
@@ -53,7 +53,7 @@ export const useTrendingCreators = ({ days }: { days: number }) => {
   const queryState = useInfiniteListQuerySWR<any>(trendingCreatorsUrlFn);
 
   const newData = useMemo(() => {
-    let newData = [];
+    let newData: any = [];
     if (queryState.data) {
       queryState.data.forEach((p) => {
         if (p) {
@@ -83,7 +83,7 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
   const queryState = useInfiniteListQuerySWR<any>(trendingCreatorsUrlFn);
 
   const newData = useMemo(() => {
-    let newData = [];
+    let newData: any = [];
     if (queryState.data) {
       queryState.data.forEach((p) => {
         if (p) {
@@ -97,7 +97,7 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
   return { ...queryState, data: newData };
 };
 
-export const useUserProfile = ({ address }: { address: string }) => {
+export const useUserProfile = ({ address }: { address?: string }) => {
   const { data, error } = useSWR<{ data: UserProfile }>(
     address ? "/v4/profile_server/" + address : null,
     fetcher
@@ -161,7 +161,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
   );
 
   const newData = useMemo(() => {
-    let newData = [];
+    let newData: NFT[] = [];
     if (queryState.data) {
       queryState.data.forEach((p) => {
         if (p) {
