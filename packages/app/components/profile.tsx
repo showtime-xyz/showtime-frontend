@@ -1,35 +1,25 @@
-import { memo, useCallback, useMemo, useState } from "react";
-import { Dimensions, Platform, Pressable } from "react-native";
+import { memo, useCallback, useMemo, useReducer, useState } from "react";
+import { Dimensions, Platform, Pressable, useColorScheme } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import {
-  useActivity,
-  useCurrentUserProfile,
   useProfileNFTs,
+  useProfileNftTabs,
+  useUserProfile,
 } from "app/hooks/api-hooks";
-import { View, Spinner, Text, Skeleton } from "design-system";
-import { Card } from "design-system/card";
+import { View, Spinner, Text, Skeleton, Select } from "design-system";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 import { Image } from "design-system/image";
 import { VerificationBadge } from "../../design-system/verification-badge";
-import { getProfileImage, getProfileName } from "../utilities";
+import { getProfileImage, getProfileName, getSortFields } from "../utilities";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { useUser } from "../hooks/use-user";
 import { NFT } from "../types";
 import { Video } from "expo-av";
+import PagerView from "react-native-pager-view";
 
 const TAB_LIST_HEIGHT = 64;
-const TOKEN_BADGE_HEIGHT = 28;
 const COVER_IMAGE_HEIGHT = 104;
-
-const SocialTokenBadgeIcon = () => {
-  return (
-    <Image
-      source={require("../../../apps/expo/assets/social_token.png")}
-      style={{ height: TOKEN_BADGE_HEIGHT, width: TOKEN_BADGE_HEIGHT }}
-    />
-  );
-};
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
   const tabBarHeight = useBottomTabBarHeight();
@@ -47,11 +37,18 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
   return <View tw={`mb-[${tabBarHeight}px]`} />;
 };
 
-const Profile = () => {
-  return <ProfileTabs />;
+const testUser = "suicidalhamster";
+
+const ProfileScreen = () => {
+  const { user } = useUser();
+  return <Profile address={"suicidalhamster"} />;
 };
 
-const ProfileTabs = () => {
+const Profile = ({ address }: { address?: string }) => {
+  const { data: profileData } = useUserProfile({ address });
+  const { data, loading } = useProfileNftTabs({
+    profileId: profileData?.data.profile.profile_id,
+  });
   const [selected, setSelected] = useState(0);
 
   return (
@@ -63,224 +60,75 @@ const ProfileTabs = () => {
         lazy
       >
         <Tabs.Header>
-          <ProfileTop />
+          <ProfileTop address={address} />
         </Tabs.Header>
         <Tabs.List
           style={tw.style(
             `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900`
           )}
         >
-          <Tabs.Trigger>
-            <TabItem name="Created" selected={selected === 0} />
-          </Tabs.Trigger>
-
-          <Tabs.Trigger>
-            <TabItem name="Owned" selected={selected === 1} />
-          </Tabs.Trigger>
-
-          <Tabs.Trigger>
-            <TabItem name="Listed" selected={selected === 2} />
-          </Tabs.Trigger>
-
-          <Tabs.Trigger>
-            <TabItem name="Liked" selected={selected === 3} />
-          </Tabs.Trigger>
-
+          {data?.data.lists.map((list, index) => (
+            <Tabs.Trigger key={list.id}>
+              <TabItem name={list.name} selected={selected === index} />
+            </Tabs.Trigger>
+          ))}
           <SelectedTabIndicator />
         </Tabs.List>
         <Tabs.Pager>
-          <CreatedNFTsList />
-          <CreationList />
-          <LikesList />
-          <CommentsList />
+          {data?.data.lists.map((list) => {
+            return (
+              <TabList
+                listId={list.id}
+                key={list.id}
+                profileId={profileData?.data.profile.profile_id}
+              />
+            );
+          })}
         </Tabs.Pager>
       </Tabs.Root>
     </View>
   );
 };
 
-const CreationList = () => {
-  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
-    useActivity({ typeId: 3 });
-
-  const keyExtractor = useCallback((item) => item.id, []);
-
-  const renderItem = useCallback(
-    ({ item }) => <Card act={item} variant="activity" />,
-    []
-  );
-
-  const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoadingMore} />,
-    [isLoadingMore]
-  );
-
-  if (isLoading) {
-    return (
-      <View tw="items-center justify-center flex-1">
-        <Spinner />
-      </View>
-    );
-  }
-
-  return (
-    <Tabs.FlatList
-      data={data}
-      keyExtractor={keyExtractor}
-      renderItem={renderItem}
-      refreshing={isRefreshing}
-      onRefresh={refresh}
-      onEndReached={fetchMore}
-      onEndReachedThreshold={0.6}
-      removeClippedSubviews={Platform.OS !== "web"}
-      numColumns={1}
-      windowSize={4}
-      initialNumToRender={2}
-      alwaysBounceVertical={false}
-      ListFooterComponent={ListFooterComponent}
-    />
-  );
-};
-
-const LikesList = () => {
-  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
-    useActivity({ typeId: 1 });
-
-  const keyExtractor = useCallback((item) => item.id, []);
-
-  const renderItem = useCallback(
-    ({ item }) => <Card act={item} variant="activity" />,
-    []
-  );
-
-  const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoadingMore} />,
-    [isLoadingMore]
-  );
-
-  if (isLoading) {
-    return (
-      <View tw="items-center justify-center flex-1">
-        <Spinner />
-      </View>
-    );
-  }
-
-  return (
-    <Tabs.FlatList
-      data={data}
-      keyExtractor={keyExtractor}
-      renderItem={renderItem}
-      refreshing={isRefreshing}
-      onRefresh={refresh}
-      onEndReached={fetchMore}
-      onEndReachedThreshold={0.6}
-      removeClippedSubviews={Platform.OS !== "web"}
-      numColumns={1}
-      windowSize={4}
-      initialNumToRender={2}
-      alwaysBounceVertical={false}
-      ListFooterComponent={ListFooterComponent}
-    />
-  );
-};
-
-const CommentsList = () => {
-  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
-    useActivity({ typeId: 2 });
-
-  const keyExtractor = useCallback((item) => item.id, []);
-
-  const renderItem = useCallback(
-    ({ item }) => <Card act={item} variant="activity" />,
-    []
-  );
-
-  const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoadingMore} />,
-    [isLoadingMore]
-  );
-
-  if (isLoading) {
-    return (
-      <View tw="items-center justify-center flex-1">
-        <Spinner />
-      </View>
-    );
-  }
-
-  return (
-    <Tabs.FlatList
-      data={data}
-      keyExtractor={keyExtractor}
-      renderItem={renderItem}
-      refreshing={isRefreshing}
-      onRefresh={refresh}
-      onEndReached={fetchMore}
-      onEndReachedThreshold={0.6}
-      removeClippedSubviews={Platform.OS !== "web"}
-      numColumns={1}
-      windowSize={4}
-      initialNumToRender={2}
-      alwaysBounceVertical={false}
-      ListFooterComponent={ListFooterComponent}
-    />
-  );
-};
-
-const FollowsList = () => {
-  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
-    useActivity({ typeId: 4, limit: 10 });
-
-  const keyExtractor = useCallback((item) => item.id, []);
-
-  const renderItem = useCallback(
-    ({ item }) => <Card act={item} variant="activity" />,
-    []
-  );
-
-  const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoadingMore} />,
-    [isLoadingMore]
-  );
-
-  if (isLoading) {
-    return (
-      <View tw="items-center justify-center flex-1">
-        <Spinner />
-      </View>
-    );
-  }
-
-  return (
-    <Tabs.FlatList
-      data={data}
-      keyExtractor={keyExtractor}
-      renderItem={renderItem}
-      refreshing={isRefreshing}
-      onRefresh={refresh}
-      onEndReached={fetchMore}
-      onEndReachedThreshold={0.6}
-      removeClippedSubviews={Platform.OS !== "web"}
-      numColumns={1}
-      windowSize={4}
-      initialNumToRender={10}
-      alwaysBounceVertical={false}
-      ListFooterComponent={ListFooterComponent}
-    />
-  );
-};
-const GAP_BETWEEN_ITEMS = 1;
+const GAP_BETWEEN_ITEMS = 2;
 const ITEM_SIZE = Dimensions.get("window").width / 2;
 
-const CreatedNFTsList = () => {
-  const { user } = useUser();
+const TabList = ({
+  listId,
+  profileId,
+}: {
+  listId: number;
+  profileId?: number;
+}) => {
   const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
-    useProfileNFTs({ listId: 1, profileId: user?.data.profile.profile_id });
+    useProfileNFTs({ listId, profileId });
 
   const keyExtractor = useCallback((item) => {
     return item.nft_id;
   }, []);
+
+  const [filter, dispatch] = useReducer(
+    (state, action) => {
+      switch (action.type) {
+        case "collection_change":
+          return { ...state, collectionId: action.payload };
+        case "sort_change":
+          return { ...state, sortId: action.payload };
+      }
+    },
+    {
+      sortId: 1,
+      collectionId: 0,
+    }
+  );
+
+  const onCollectionChange = (value) => {
+    dispatch({ type: "collection_change", payload: value });
+  };
+
+  const onSortChange = (value) => {
+    dispatch({ type: "sort_change", payload: value });
+  };
 
   const renderItem = useCallback(({ item }) => <Media item={item} />, []);
 
@@ -296,6 +144,12 @@ const CreatedNFTsList = () => {
   const ListHeaderComponent = useMemo(
     () => (
       <View tw="p-3">
+        <Filter
+          onCollectionChange={onCollectionChange}
+          onSortChange={onSortChange}
+          collectionId={filter.collectionId}
+          sortId={filter.sortId}
+        />
         {data.length === 0 && !isLoading ? (
           <View tw="items-center justify-center mt-20">
             <Text tw="text-gray-900 dark:text-white">No results found</Text>
@@ -307,7 +161,7 @@ const CreatedNFTsList = () => {
         ) : null}
       </View>
     ),
-    [data, isLoading]
+    [data, isLoading, filter]
   );
 
   return (
@@ -370,19 +224,19 @@ const Media = memo(function Media({ item }: { item: NFT }) {
   return null;
 });
 
-const ProfileTop = () => {
-  const { data: profileData, loading } = useCurrentUserProfile();
-
+const ProfileTop = ({ address }: { address?: string }) => {
+  const { data: profileData, loading } = useUserProfile({ address });
   const name = getProfileName(profileData?.data.profile);
   const username = profileData?.data.profile.username;
   const bio = profileData?.data.profile.bio;
+  const colorMode = useColorScheme();
 
   return (
     <View pointerEvents="box-none">
       <View tw={`bg-gray-400 h-[${COVER_IMAGE_HEIGHT}px]`} pointerEvents="none">
         <Image
           source={{ uri: profileData?.data.profile.cover_url }}
-          tw={`h-[${COVER_IMAGE_HEIGHT}px] w-full`}
+          tw={`h-[${COVER_IMAGE_HEIGHT}px] w-100vw`}
           alt="Cover image"
         />
       </View>
@@ -400,7 +254,10 @@ const ProfileTop = () => {
               />
             </View>
             {/* <View tw="bg-white dark:bg-gray-900 p-1 rounded-full absolute right-2 bottom-2">
-              <SocialTokenBadgeIcon />
+              <Image
+                  source={require("../../../apps/expo/assets/social_token.png")}
+                  style={{ height: TOKEN_BADGE_HEIGHT, width: 28 }}
+                />
             </View> */}
           </View>
 
@@ -427,7 +284,7 @@ const ProfileTop = () => {
                 </Text>
               </Animated.View>
             ) : loading ? (
-              <Skeleton height={32} width={150} />
+              <Skeleton height={32} width={150} colorMode={colorMode} />
             ) : null}
 
             {username ? (
@@ -459,14 +316,19 @@ const ProfileTop = () => {
               </View>
             ) : loading ? (
               <View tw="flex-row items-center mt-3">
-                <Skeleton height={12} width={100} />
+                <Skeleton height={12} width={100} colorMode={colorMode} />
               </View>
             ) : null}
           </View>
 
           {bio ? (
-            <View tw="flex-row items-center mt-3">
-              <Text tw="text-sm text-gray-600 dark:text-gray-400">{bio}</Text>
+            <View tw="flex-row items-center mt-3" pointerEvents="box-none">
+              <Text
+                tw="text-sm text-gray-600 dark:text-gray-400"
+                pointerEvents="none"
+              >
+                {bio}
+              </Text>
             </View>
           ) : null}
 
@@ -483,7 +345,7 @@ const ProfileTop = () => {
             </View>
           </View>
 
-          <View pointerEvents="box-none" tw="mt-4">
+          {/* <View pointerEvents="box-none" tw="mt-4">
             <View tw="flex-row items-center" pointerEvents="box-none">
               <Text tw="text-gray-600 dark:text-gray-400 font-medium text-xs">
                 Followed by{" "}
@@ -494,10 +356,58 @@ const ProfileTop = () => {
                 </Text>
               </Pressable>
             </View>
-          </View>
+          </View> */}
         </View>
       </View>
     </View>
   );
 };
-export { Profile };
+
+const options = [
+  {
+    value: 0,
+    label: "Option A",
+  },
+  {
+    value: 1,
+    label: "Option B",
+  },
+  {
+    value: 2,
+    label: "Option C",
+  },
+];
+
+const Filter = ({ onCollectionChange, onSortChange, collectionId, sortId }) => {
+  const sortFields = getSortFields();
+
+  return (
+    <View tw="flex-row justify-around">
+      <Select
+        value={collectionId}
+        onChange={onCollectionChange}
+        options={options}
+        size="small"
+        placeholder="Collection"
+      />
+      <Select
+        value={sortId}
+        onChange={onSortChange}
+        options={sortFields}
+        size="small"
+        placeholder="Sort"
+      />
+      <Pressable
+        style={tw.style(
+          "bg-black rounded-full dark:bg-white items-center justify-center flex-row px-3 py-2"
+        )}
+      >
+        <Text tw="text-white text-center dark:text-gray-900 font-bold text-xs">
+          Customize
+        </Text>
+      </Pressable>
+    </View>
+  );
+};
+
+export { ProfileScreen as Profile };

@@ -1,4 +1,10 @@
-import React, { useContext, ForwardedRef, useMemo, useRef } from "react";
+import React, {
+  useContext,
+  ForwardedRef,
+  useMemo,
+  useRef,
+  useEffect,
+} from "react";
 import { tw } from "../../tailwind";
 import {
   Pressable,
@@ -141,7 +147,23 @@ const Root = ({
   );
 };
 
-const List = ({
+const List = (props: TabListProps) => {
+  let hasTrigger = false;
+  // Todo fix dynamically loading tab items. Currently we load tab items if tab trigger is present
+  React.Children.map(props.children, (c) => {
+    if (React.isValidElement(c) && c && c.type === Trigger) {
+      hasTrigger = true;
+    }
+  });
+
+  if (hasTrigger) {
+    return <ListImpl {...props} />;
+  }
+
+  return null;
+};
+
+const ListImpl = ({
   children,
   style,
   contentContainerStyle,
@@ -225,7 +247,6 @@ const Pager = ({ children }) => {
     pagerRef,
     position,
     offset,
-    translateY,
     lazy,
     index,
   } = useContext(TabsContext);

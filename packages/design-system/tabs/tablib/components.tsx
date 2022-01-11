@@ -89,7 +89,7 @@ export const SelectedTabIndicator = () => {
         runOnJS(setItemOffsets)(values);
       }
     },
-    []
+    [tabItemLayouts]
   );
 
   const translateX = newPos.interpolate({

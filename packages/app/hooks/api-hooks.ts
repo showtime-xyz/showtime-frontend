@@ -84,14 +84,12 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
 };
 
 export const useUserProfile = ({ address }: { address: string }) => {
-  const trendingCreatorsUrlFn = useCallback(() => {
-    const url = `/v4/profile_server?${address}`;
-    return url;
-  }, [address]);
-  const queryState = useInfiniteListQuerySWR<UserProfile>(
-    trendingCreatorsUrlFn
+  const { data, error } = useSWR<{ data: UserProfile }>(
+    address ? "/v4/profile_server/" + address : null,
+    fetcher
   );
-  return queryState;
+
+  return { data, loading: !data, error };
 };
 
 export interface UserProfile {
@@ -101,22 +99,9 @@ export interface UserProfile {
   featured_nft: NFT;
 }
 
-export const useCurrentUserProfile = () => {
-  const { user } = useUser();
-
-  const { data, error } = useSWR<{ data: UserProfile }>(
-    user && user.data.profile && user.data.profile.wallet_addresses.length > 0
-      ? "/v4/profile_server/" + user.data.profile.wallet_addresses[0]
-      : null,
-    fetcher
-  );
-
-  return { data, loading: !data, error };
-};
-
 type UserProfileNFTs = {
   profileId?: number;
-  listId: 1 | 2 | 3;
+  listId: number;
   sortId?: number;
   showDuplicates?: number;
   showHidden?: number;
@@ -173,4 +158,35 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
   };
 
   return { ...queryState, fetchMore, data: newData };
+};
+
+type ProfileTabsAPI = {
+  data: {
+    default_list_id: number;
+    lists: Array<{
+      id: number;
+      name: string;
+      count_deduplicated_nonhidden: number;
+      count_deduplicated_withhidden: number;
+      count_all_nonhidden: number;
+      count_all_withhidden: number;
+      sort_id: number;
+      collections: Array<{
+        collection_id: number;
+        collection_name: string;
+        collection_img_url: string;
+        count?: number;
+      }>;
+      has_custom_sort: boolean;
+    }>;
+  };
+};
+
+export const useProfileNftTabs = ({ profileId }: { profileId?: number }) => {
+  const { data, error } = useSWR<ProfileTabsAPI>(
+    profileId ? "/v1/profile_tabs/" + profileId : null,
+    fetcher
+  );
+
+  return { data, loading: !data, error };
 };

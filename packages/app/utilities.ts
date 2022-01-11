@@ -47,3 +47,25 @@ const DEFAULT_PROFILE_PIC =
 export const getProfileImage = (profile?: Profile) => {
   return profile?.img_url ?? DEFAULT_PROFILE_PIC;
 };
+
+export const SORT_FIELDS = {
+  LIKE_COUNT: { label: "Popularity", key: "like_count", id: 1, value: 1 },
+  NEWEST: {
+    label: "Newest",
+    key: "newest",
+    id: 2,
+    value: 2,
+  },
+  OLDEST: {
+    label: "Oldest",
+    key: "oldest",
+    id: 3,
+    value: 3,
+  },
+  COMMENT_COUNT: { label: "Comments", key: "comment_count", id: 4, value: 4 },
+  CUSTOM: { label: "Custom", key: "custom", id: 5, value: 5 },
+};
+
+export const getSortFields = () => {
+  return [...Object.keys(SORT_FIELDS).map((key) => SORT_FIELDS[key])];
+};
