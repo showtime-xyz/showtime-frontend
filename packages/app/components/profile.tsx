@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo, useState } from "react";
-import { Dimensions, Platform } from "react-native";
+import { Dimensions, Platform, Pressable } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import {
   useActivity,
@@ -378,10 +378,13 @@ const ProfileTop = () => {
 
   return (
     <View pointerEvents="box-none">
-      <View
-        tw={`bg-gray-400 h-[${COVER_IMAGE_HEIGHT}px]`}
-        pointerEvents="none"
-      />
+      <View tw={`bg-gray-400 h-[${COVER_IMAGE_HEIGHT}px]`} pointerEvents="none">
+        <Image
+          source={{ uri: profileData?.data.profile.cover_url }}
+          tw={`h-[${COVER_IMAGE_HEIGHT}px] w-full`}
+          alt="Cover image"
+        />
+      </View>
 
       <View tw="bg-white dark:bg-black px-2" pointerEvents="box-none">
         <View tw="flex-row justify-between pr-2">
@@ -395,9 +398,9 @@ const ProfileTop = () => {
                 tw="border-white h-[144px] w-[144px] dark:border-gray-900 rounded-full border-8"
               />
             </View>
-            <View tw="bg-white dark:bg-gray-900 p-1 rounded-full absolute right-2 bottom-2">
+            {/* <View tw="bg-white dark:bg-gray-900 p-1 rounded-full absolute right-2 bottom-2">
               <SocialTokenBadgeIcon />
-            </View>
+            </View> */}
           </View>
 
           {/* <Pressable
@@ -411,7 +414,7 @@ const ProfileTop = () => {
           </Pressable> */}
         </View>
 
-        <View tw="px-2 pt-[10px]" pointerEvents="box-none">
+        <View tw="px-2 py-3" pointerEvents="box-none">
           <View pointerEvents="none">
             {name ? (
               <Animated.View entering={FadeIn}>
@@ -426,8 +429,8 @@ const ProfileTop = () => {
               <Skeleton height={32} width={150} />
             ) : null}
 
-            <View tw="flex-row items-center mt-[10px]">
-              {username ? (
+            {username ? (
+              <View tw="flex-row items-center mt-3">
                 <Animated.View entering={FadeIn}>
                   <Text
                     variant="text-base"
@@ -436,17 +439,13 @@ const ProfileTop = () => {
                     @{username}
                   </Text>
                 </Animated.View>
-              ) : loading ? (
-                <Skeleton height={12} width={100} />
-              ) : null}
 
-              {profileData?.data.profile.verified ? (
-                <View tw="ml-1">
-                  <VerificationBadge size={16} />
-                </View>
-              ) : null}
-
-              {/* {profileData?.data ? (
+                {profileData?.data.profile.verified ? (
+                  <View tw="ml-1">
+                    <VerificationBadge size={16} />
+                  </View>
+                ) : null}
+                {/* {profileData?.data ? (
                 <View tw="bg-gray-100 dark:bg-gray-900 ml-2 h-[23px] px-2 justify-center rounded-full">
                   <Text
                     variant="text-xs"
@@ -456,10 +455,15 @@ const ProfileTop = () => {
                   </Text>
                 </View>
               ) : null} */}
-            </View>
+              </View>
+            ) : loading ? (
+              <View tw="flex-row items-center mt-3">
+                <Skeleton height={12} width={100} />
+              </View>
+            ) : null}
           </View>
 
-          <View tw="mt-[18px] mb-1 flex-row" pointerEvents="box-none">
+          <View tw="flex-row mt-3" pointerEvents="box-none">
             <Text tw="text-sm text-gray-900 dark:text-white font-bold">
               {profileData?.data.following_count}{" "}
               <Text tw="font-medium">following</Text>
@@ -472,8 +476,8 @@ const ProfileTop = () => {
             </View>
           </View>
 
-          {/* <View pointerEvents="box-none">
-            <View tw="flex-row items-center my-4" pointerEvents="box-none">
+          <View pointerEvents="box-none" tw="mt-4">
+            <View tw="flex-row items-center" pointerEvents="box-none">
               <Text tw="text-gray-600 dark:text-gray-400 font-medium text-xs">
                 Followed by{" "}
               </Text>
@@ -483,7 +487,7 @@ const ProfileTop = () => {
                 </Text>
               </Pressable>
             </View>
-          </View> */}
+          </View>
         </View>
       </View>
     </View>
