@@ -16,6 +16,9 @@ import { useKeyboardDimensions } from "app/hooks/use-keyboard-dimensions";
 import { useIsDarkMode } from "design-system/hooks";
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
 
+export const SCROLL_HEIGHT = 48;
+export const PADDING_HEIGHT = 32;
+
 type Props = {
   scrollToBottom: () => void;
   onFocus: () => void;
@@ -126,7 +129,7 @@ function MessageBox({
           scrollToBottom();
         }
       } else {
-        setScrollHeight(40);
+        setScrollHeight(SCROLL_HEIGHT);
       }
     }
   };
@@ -145,7 +148,7 @@ function MessageBox({
       ref={inputContainerRef}
       tw={[
         "bg-white dark:bg-black flex-1 w-full py-4 ios:absolute android:absolute web:fixed",
-        `h-[${scrollHeight + 32}px]`,
+        `h-[${scrollHeight + PADDING_HEIGHT}px]`,
         `bottom-[${messageBoxBottom}px] right-0 left-0`,
       ]}
       // @ts-expect-error
@@ -188,7 +191,9 @@ function MessageBox({
             }}
             onContentSizeChange={({ nativeEvent }) => {
               if (Platform.OS !== "web") {
-                setScrollHeight(22 + nativeEvent.contentSize.height);
+                setScrollHeight(
+                  PADDING_HEIGHT + nativeEvent.contentSize.height
+                );
               }
             }}
             blurOnSubmit={true}

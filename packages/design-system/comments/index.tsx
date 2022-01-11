@@ -3,8 +3,11 @@ import { Platform, FlatList, Keyboard } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { View, Text } from "design-system";
-import { tw as tailwind } from "design-system/tailwind";
-import { MessageBox } from "design-system/messages";
+import {
+  MessageBox,
+  SCROLL_HEIGHT,
+  PADDING_HEIGHT,
+} from "design-system/messages";
 import { useComments } from "app/hooks/api-hooks";
 import { usePanResponder } from "app/hooks/use-pan-responder";
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
@@ -19,7 +22,7 @@ function Comments({ nft }: Props) {
   const insets = useSafeAreaInsets();
   const isDark = useIsDarkMode();
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
-  const [scrollHeight, setScrollHeight] = useState(48);
+  const [scrollHeight, setScrollHeight] = useState(SCROLL_HEIGHT);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const { isMobileWeb } = useIsMobileWeb();
 
@@ -54,7 +57,7 @@ function Comments({ nft }: Props) {
 
   const { panHandlers, positionY } = usePanResponder();
 
-  const messageBoxHeight = scrollHeight + 32; // 48 input + 32 padding
+  const messageBoxHeight = scrollHeight + PADDING_HEIGHT; // 48 input + 32 padding
   let messagesListBottom = 0;
   if (!isKeyboardOpen && Platform.OS === "web") {
     messagesListBottom = insets.bottom + messageBoxHeight;
