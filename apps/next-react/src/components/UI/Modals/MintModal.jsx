@@ -69,7 +69,7 @@ const MintModal = ({ open, onClose }) => {
   });
 
   useEffect(() => {
-    setModalPage(setDefaultModalPage);
+    setModalPage(setDefaultModalPage());
   }, [myProfile]);
 
   const shotConfetti = () => {
