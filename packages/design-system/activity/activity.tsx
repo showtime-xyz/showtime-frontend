@@ -14,7 +14,6 @@ import {
   Follow,
   Transfer,
 } from "design-system/activity/types";
-import { TextLink } from "app/navigation/link";
 import { Pressable } from "react-native";
 import { useRouter } from "app/navigation/use-router";
 
@@ -29,16 +28,19 @@ type Props = {
   activity: any;
 };
 
+const hitSlop = { top: 10, bottom: 10, left: 10, right: 10 };
+
 function Activity({ activity }: Props) {
   const { type, actor } = activity;
   const router = useRouter();
-  const openProfile = (walletAddress: string) => {
-    const as = `/profile/${walletAddress}`;
+
+  const openProfile = () => {
+    const as = `/profile/${actor.wallet_address}`;
 
     const href = Router.router
       ? {
           pathname: Router.pathname,
-          query: { ...Router.query, walletAddress },
+          query: { ...Router.query, walletAddress: actor.wallet_address },
         }
       : as;
 
@@ -48,7 +50,7 @@ function Activity({ activity }: Props) {
   return (
     <View tw="p-4">
       <View tw="h-12 flex-row">
-        <Pressable onPress={() => openProfile(actor.wallet_address)}>
+        <Pressable onPress={openProfile}>
           <Avatar
             url={getProfileImageUrl(actor.img_url ?? DEFAULT_PROFILE_PIC)}
             icon={type}
@@ -62,13 +64,11 @@ function Activity({ activity }: Props) {
             numberOfLines={2}
             ellipsizeMode="tail"
           >
-            <TextLink
-              variant="text-sm"
-              tw="text-black dark:text-white font-bold"
-              href={"/profile/" + actor.wallet_address}
-            >
-              @{actor.username}{" "}
-            </TextLink>
+            <Pressable onPress={openProfile} hitSlop={hitSlop}>
+              <Text variant="text-sm" tw="text-black dark:text-white font-bold">
+                @{actor.username}{" "}
+              </Text>
+            </Pressable>
 
             {type === ACTIVITY_TYPES.LIKE && <Like act={activity} />}
 
