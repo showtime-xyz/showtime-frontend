@@ -295,7 +295,7 @@ const CreatedNFTsList = () => {
 
   const ListHeaderComponent = useMemo(
     () => (
-      <View tw="p-4">
+      <View tw="p-3">
         {data.length === 0 && !isLoading ? (
           <View tw="items-center justify-center mt-20">
             <Text tw="text-gray-900 dark:text-white">No results found</Text>
@@ -375,6 +375,7 @@ const ProfileTop = () => {
 
   const name = getProfileName(profileData?.data.profile);
   const username = profileData?.data.profile.username;
+  const bio = profileData?.data.profile.bio;
 
   return (
     <View pointerEvents="box-none">
@@ -462,6 +463,12 @@ const ProfileTop = () => {
               </View>
             ) : null}
           </View>
+
+          {bio ? (
+            <View tw="flex-row items-center mt-3">
+              <Text tw="text-sm text-gray-600 dark:text-gray-400">{bio}</Text>
+            </View>
+          ) : null}
 
           <View tw="flex-row mt-3" pointerEvents="box-none">
             <Text tw="text-sm text-gray-900 dark:text-white font-bold">
