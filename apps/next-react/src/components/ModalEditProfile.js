@@ -542,7 +542,11 @@ export default function Modal({ isOpen, setEditModalOpen }) {
             {/* Submit section */}
             <div>
               <div className="border-t-2 dark:border-gray-800 pt-4">
-                <GreenButton type="submit" loading={submitting}>
+                <GreenButton
+                  type="submit"
+                  loading={submitting}
+                  disabled={customURLError?.isError}
+                >
                   Save changes
                 </GreenButton>
                 <GhostButton

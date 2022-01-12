@@ -21,8 +21,8 @@ export type TabsContextType = {
   tabItemLayouts: Array<Reanimated.SharedValue<LayoutRectangle | null>>;
   requestOtherViewsToSyncTheirScrollPosition: Reanimated.SharedValue<boolean>;
   translateY: Reanimated.SharedValue<number>;
-  offset: Animated.Value;
-  position: Animated.Value;
+  offset: Reanimated.SharedValue<number>;
+  position: Reanimated.SharedValue<number>;
   headerHeight: number;
   initialIndex: number;
   onIndexChange: (index: number) => void;

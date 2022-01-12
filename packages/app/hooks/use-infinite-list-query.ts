@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback, useEffect } from "react";
 import useSWRInfinite from "swr/infinite";
 import { axios } from "app/lib/axios";
 
-const fetcher = (url) => {
+export const fetcher = (url) => {
   return axios({ url, method: "GET" });
 };
 
@@ -18,7 +18,7 @@ type UseInfiniteListQueryReturn<T> = {
 };
 
 export const useInfiniteListQuerySWR = <T>(
-  urlFunction: (page) => string
+  urlFunction: ((page) => string) | null
 ): UseInfiniteListQueryReturn<T> => {
   // Todo:: on Refresh, swr will refetch all the page APIs. This may appear weird at first, but I guess could be better for UX
   // We don't want to show loading indicator till all of the requests succeed, so we'll add our refreshing state
@@ -31,7 +31,7 @@ export const useInfiniteListQuerySWR = <T>(
     size,
     setSize,
     isValidating,
-  } = useSWRInfinite(urlFunction, fetcher, {
+  } = useSWRInfinite<T>(urlFunction, fetcher, {
     revalidateFirstPage: false,
     suspense: true,
   });
@@ -41,18 +41,6 @@ export const useInfiniteListQuerySWR = <T>(
   const isLoadingMore =
     size > 0 && pages && typeof pages[size - 1] === "undefined";
 
-  const newData = useMemo(() => {
-    let newData = [];
-    if (pages) {
-      pages.forEach((p) => {
-        if (p) {
-          newData = newData.concat(p.data);
-        }
-      });
-    }
-    return newData;
-  }, [pages]);
-
   useEffect(() => {
     if (!isRefreshingSWR) {
       setRefreshing(false);
@@ -60,7 +48,7 @@ export const useInfiniteListQuerySWR = <T>(
   }, [isRefreshingSWR]);
 
   return {
-    data: newData,
+    data: pages,
     error,
     refresh: () => {
       setRefreshing(true);

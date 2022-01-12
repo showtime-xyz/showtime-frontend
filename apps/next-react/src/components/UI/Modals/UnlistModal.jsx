@@ -15,6 +15,7 @@ import XIcon from "@/components/Icons/XIcon";
 import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
 import { formatAddressShort, truncateWithEllipses } from "@/lib/utilities";
 import BadgeIcon from "@/components/Icons/BadgeIcon";
+import useFlags, { FLAGS } from "@/hooks/useFlags";
 
 const MODAL_PAGES = {
   GENERAL: "general",
@@ -34,6 +35,9 @@ const UnlistModal = ({ open, onClose, onSuccess = () => null, token }) => {
   // 	() => open && myProfile && `/v1/owned_quantity?nft_id=${token.nft_id}&profile_id=${myProfile.profile_id}`,
   // 	url => backend.get(url).then(res => res.data?.data)
   // )
+
+  const flags = useFlags();
+  const enableMagicTX = flags[FLAGS.enableMagicTX];
 
   const [transactionHash, setTransactionHash] = useState("");
 
@@ -73,7 +77,10 @@ const UnlistModal = ({ open, onClose, onSuccess = () => null, token }) => {
   const unlistToken = async () => {
     setModalPage(MODAL_PAGES.LOADING);
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic: true });
+    const web3Modal = getWeb3Modal({
+      theme: resolvedTheme,
+      withMagic: enableMagicTX,
+    });
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,
