@@ -293,8 +293,7 @@ export function Camera({
     <Animated.View
       style={{
         flex: 1,
-        alignContent: "center",
-        justifyContent: "center",
+        backgroundColor: "black",
       }}
     >
       <StatusBar style="auto" />

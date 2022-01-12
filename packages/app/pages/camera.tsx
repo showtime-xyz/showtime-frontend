@@ -12,6 +12,9 @@ const LoginScreen = dynamic<JSX.Element>(() =>
 const NftScreen = dynamic<JSX.Element>(() =>
   import("app/screens/nft").then((mod) => mod.NftScreen)
 );
+const CreateScreen = dynamic<JSX.Element>(() =>
+  import("app/screens/create").then((mod) => mod.CreateScreen)
+);
 
 const CameraStack = createStackNavigator<CameraStackParams>();
 
@@ -38,6 +41,7 @@ function CameraNavigator() {
       >
         <CameraStack.Screen name="login" component={LoginScreen} />
         <CameraStack.Screen name="nft" component={NftScreen} />
+        <CameraStack.Screen name="create" component={CreateScreen} />
       </CameraStack.Group>
     </CameraStack.Navigator>
   );

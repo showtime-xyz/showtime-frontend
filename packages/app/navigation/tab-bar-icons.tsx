@@ -1,6 +1,6 @@
 import { useColorScheme } from "react-native";
 
-import { View, Gradient, Pressable, Button } from "design-system";
+import { View, Pressable, Button } from "design-system";
 import { tw } from "design-system/tailwind";
 import {
   Home,

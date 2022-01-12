@@ -1,6 +1,5 @@
 import React, { useCallback } from "react";
 import { View } from "dripsy";
-import { useNavigation } from "@react-navigation/native";
 import Animated, {
   SlideInDown,
   SlideOutDown,
@@ -8,6 +7,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
+import { useRouter } from "app/navigation/use-router";
 import { ImagePickerButton } from "design-system/image-picker";
 import { IconFlashBoltActive } from "design-system/icon/IconFlashBoltActive";
 import { IconFlashBoltInactive } from "design-system/icon/IconFlashBoltInactive";
@@ -42,7 +42,7 @@ export function CameraButtons({
   setFlash,
   takePhoto,
 }: Props) {
-  const navigation = useNavigation();
+  const router = useRouter();
 
   const onFlashPressed = useCallback(() => {
     if (flash === "auto") setFlash("on");
@@ -98,9 +98,10 @@ export function CameraButtons({
       ) : (
         <ImagePickerButton
           onPick={(photo) => {
-            navigation.navigate("Create", {
-              photos: [...photos, photo],
-            });
+            // navigation.navigate("Create", {
+            //   photos: [...photos, photo],
+            // });
+            router.push("/camera/create");
           }}
           type="camera"
         />
@@ -145,9 +146,10 @@ export function CameraButtons({
               alignItems: "center",
             }}
             onPress={() => {
-              navigation.navigate("Create", {
-                photos,
-              });
+              // navigation.navigate("Create", {
+              //   photos,
+              // });
+              router.push("/camera/create");
               nbPop.value = withTiming(0, { duration: 500 });
               setIsPopping(false);
             }}

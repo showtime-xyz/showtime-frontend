@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Platform, Alert } from "react-native";
 import { View, Text } from "dripsy";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useTimer } from "use-timer";
 import { useSharedValue, withTiming } from "react-native-reanimated";
+import { useNavigation } from "@react-navigation/native";
 
 import { Camera } from "app/components/camera";
-// import type { CameraScreenProps } from 'app/navigation/types';
+import { useRouter } from "app/navigation/use-router";
 
-// CameraScreenProps
-export function CameraScreen({ navigation, route }: any) {
-  const user = route?.params?.user;
+export function CameraScreen() {
+  const router = useRouter();
+  const navigation = useNavigation();
   const [render, setRender] = useState(false);
   const [hasPermission, setHasPermission] = useState(null);
   const [photos, setPhotos] = useState([]);
@@ -22,10 +22,7 @@ export function CameraScreen({ navigation, route }: any) {
     endTime: 1,
     onTimeOver: () => {
       if (photos.length >= 1 && isPopping) {
-        navigation.navigate("Tag", {
-          photos,
-          taggedUser: user,
-        });
+        router.push("/camera/create");
         nbPop.value = withTiming(0, { duration: 500 });
       } else {
         setPhotos([]);
@@ -69,9 +66,7 @@ export function CameraScreen({ navigation, route }: any) {
                 {
                   text: "Continue Posting",
                   onPress: () => {
-                    navigation.navigate("Tag", {
-                      photos,
-                    });
+                    router.push("/camera/create");
                   },
                 },
                 {
@@ -104,10 +99,7 @@ export function CameraScreen({ navigation, route }: any) {
           burstCaptureTimer.status === "STOPPED")
       ) {
         setIsPopping(false);
-        navigation.navigate("Tag", {
-          photos,
-          taggedUser: user,
-        });
+        router.push("/camera/create");
         nbPop.value = withTiming(0, { duration: 500 });
       }
     },
@@ -123,22 +115,16 @@ export function CameraScreen({ navigation, route }: any) {
   }
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView
-        style={{ flex: 1, justifyContent: "center", backgroundColor: "black" }}
-      >
-        <Camera
-          photos={photos}
-          setPhotos={setPhotos}
-          isPopping={isPopping}
-          setIsPopping={setIsPopping}
-          burstCaptureTimer={burstCaptureTimer}
-          captureThrottleTimer={captureThrottleTimer}
-          canPop={canPop}
-          setCanPop={setCanPop}
-          nbPop={nbPop}
-        />
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <Camera
+      photos={photos}
+      setPhotos={setPhotos}
+      isPopping={isPopping}
+      setIsPopping={setIsPopping}
+      burstCaptureTimer={burstCaptureTimer}
+      captureThrottleTimer={captureThrottleTimer}
+      canPop={canPop}
+      setCanPop={setCanPop}
+      nbPop={nbPop}
+    />
   );
 }

@@ -17,6 +17,7 @@ type CameraStackParams = {
   camera: undefined;
   login: undefined;
   nft: { id: number };
+  create: undefined;
 };
 
 type TrendingStackParams = {
