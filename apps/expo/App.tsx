@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { AppState, LogBox, useColorScheme, Platform } from "react-native";
 import {
   enableScreens,
-  enableFreeze,
+  // enableFreeze,
   FullWindowOverlay,
 } from "react-native-screens";
 import { StatusBar, setStatusBarStyle } from "expo-status-bar";
@@ -21,6 +21,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
 import { useNavigation } from "@react-navigation/native";
 import * as NavigationBar from "expo-navigation-bar";
+import * as SystemUI from "expo-system-ui";
 
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
@@ -117,7 +118,7 @@ function SWRProvider({ children }: { children: React.ReactNode }): JSX.Element {
           };
 
           // Subscribe to the app state change events
-          const subscription = AppState.addEventListener(
+          const listener = AppState.addEventListener(
             "change",
             onAppStateChange
           );
@@ -126,7 +127,9 @@ function SWRProvider({ children }: { children: React.ReactNode }): JSX.Element {
           const unsubscribe = navigation.addListener("focus", callback);
 
           return () => {
-            subscription.remove();
+            if (listener) {
+              listener.remove();
+            }
             unsubscribe();
           };
         },
@@ -187,6 +190,12 @@ function AppContextProvider({
         NavigationBar.setButtonStyleAsync("dark");
         setStatusBarStyle("light");
       }
+    }
+
+    if (isDark) {
+      SystemUI.setBackgroundColorAsync("black");
+    } else {
+      SystemUI.setBackgroundColorAsync("white");
     }
   }, []);
 

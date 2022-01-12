@@ -13,6 +13,12 @@ type DiscoverStackParams = {
   nft: { id: number };
 };
 
+type CameraStackParams = {
+  camera: undefined;
+  login: undefined;
+  nft: { id: number };
+};
+
 type TrendingStackParams = {
   trending: undefined;
   login: undefined;
@@ -34,6 +40,7 @@ type NextNavigationProps = {
 type BottomTabNavigatorParams = {
   homeTab: NavigatorScreenParams<HomeStackParams>;
   discoverTab: NavigatorScreenParams<DiscoverStackParams>;
+  cameraTab: NavigatorScreenParams<CameraStackParams>;
   trendingTab: NavigatorScreenParams<TrendingStackParams>;
   notificationsTab: NavigatorScreenParams<NotificationsStackParams>;
 };
@@ -49,6 +56,7 @@ export type {
   HomeStackParams,
   DiscoverStackParams,
   TrendingStackParams,
+  CameraStackParams,
   NotificationsStackParams,
   BottomTabNavigatorParams,
 };
