@@ -141,7 +141,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
                         </a>
                       </Link>
                     ) : (
-                      <div className="text-gray-400">Burned</div>
+                      <div className="text-gray-400">Deleted</div>
                     )}
                   </td>
                   {nftHistory.multiple && (

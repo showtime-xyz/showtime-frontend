@@ -119,7 +119,7 @@ const TransferModal = ({ open, onClose, token }) => {
           )?.error?.message?.includes("transfer amount exceeds balance")
         ) {
           alert(
-            "Burn failed: You're trying to transfer more tokens than you own."
+            "Transfer failed: You're trying to transfer more tokens than you own."
           );
           throw setModalState(MODAL_STATES.GENERAL);
         }
