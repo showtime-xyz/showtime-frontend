@@ -18,8 +18,6 @@ import { Image } from "design-system/image";
 import { memo } from "react";
 import { NFT } from "app/types";
 
-const TAB_LIST_HEIGHT = 64;
-
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
   const tabBarHeight = useBottomTabBarHeight();
 
@@ -51,14 +49,8 @@ export const Trending = () => {
           </View>
         </Tabs.Header>
         <Tabs.List
-          style={useMemo(
-            () => ({
-              height: TAB_LIST_HEIGHT,
-              ...tw.style(
-                "dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900"
-              ),
-            }),
-            []
+          style={tw.style(
+            "dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900"
           )}
         >
           <Tabs.Trigger>

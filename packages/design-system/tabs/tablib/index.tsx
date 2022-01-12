@@ -33,6 +33,8 @@ import { TabListProps, TabRootProps, TabsContextType } from "./types";
 import { useScrollToTop } from "@react-navigation/native";
 import { usePageScrollHandler } from "./usePagerScrollHandler";
 
+const TAB_LIST_HEIGHT = 48;
+
 const windowHeight = Dimensions.get("window").height;
 
 const AnimatedPagerView = Reanimated.createAnimatedComponent(PagerView);
@@ -41,7 +43,7 @@ export const TabsContext = React.createContext(null as TabsContextType);
 
 const Root = ({
   children,
-  tabListHeight: initialtabListHeight,
+  tabListHeight: initialtabListHeight = TAB_LIST_HEIGHT,
   initialIndex = 0,
   onIndexChange: onIndexChangeProp,
   lazy,
@@ -204,7 +206,10 @@ const ListImpl = ({
   }, [windowWidth]);
 
   const styles = React.useMemo(() => {
-    return [tw.style(`bg-white dark:bg-gray-900`), style];
+    return StyleSheet.flatten([
+      tw.style(`bg-white dark:bg-gray-900 h-[${TAB_LIST_HEIGHT}px]`),
+      style,
+    ]);
   }, [style]);
 
   return (
@@ -218,13 +223,7 @@ const ListImpl = ({
       horizontal
       style={styles}
       contentContainerStyle={useMemo(
-        () =>
-          StyleSheet.flatten([
-            {
-              paddingHorizontal: 16,
-            },
-            contentContainerStyle,
-          ]),
+        () => StyleSheet.flatten([contentContainerStyle]),
         [contentContainerStyle]
       )}
       {...props}
