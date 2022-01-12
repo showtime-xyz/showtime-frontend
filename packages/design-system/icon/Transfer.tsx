@@ -12,7 +12,7 @@ const SvgTransfer = (props: SvgProps) => (
   >
     <Path
       d="M0 10C0 4.477 4.477 0 10 0s10 4.477 10 10-4.477 10-10 10S0 15.523 0 10Z"
-      fill="#8B5CF6"
+      fill="#27272A"
     />
     <Path
       fillRule="evenodd"

@@ -26,6 +26,16 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
           nft: "/nft/:id",
         },
       },
+      cameraTab: {
+        path: "camera",
+        initialRouteName: "camera",
+        screens: {
+          camera: "",
+          login: "/login",
+          nft: "/nft/:id",
+          create: "/create",
+        },
+      },
       trendingTab: {
         path: "trending",
         initialRouteName: "trending",
