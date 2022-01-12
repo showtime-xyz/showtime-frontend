@@ -290,7 +290,12 @@ const ProfileTop = ({ address }: { address?: string }) => {
                 </Text>
               </Animated.View>
             ) : loading ? (
-              <Skeleton height={32} width={150} colorMode={colorMode as any} />
+              <Skeleton
+                show={loading}
+                height={32}
+                width={150}
+                colorMode={colorMode as any}
+              />
             ) : null}
 
             {username ? (
@@ -324,6 +329,7 @@ const ProfileTop = ({ address }: { address?: string }) => {
               <View tw="flex-row items-center mt-3">
                 <Skeleton
                   height={12}
+                  show={loading}
                   width={100}
                   colorMode={colorMode as any}
                 />

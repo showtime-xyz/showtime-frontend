@@ -145,7 +145,7 @@ const Root = ({
 
 const List = (props: TabListProps) => {
   let hasTrigger = false;
-  // Todo fix dynamically loading tab items. Currently we load tab items if tab trigger is present
+  // TODO: fix dynamically loading tab items. Currently we load tab items if tab trigger is present
   React.Children.map(props.children, (c) => {
     if (React.isValidElement(c) && c && c.type === Trigger) {
       hasTrigger = true;
