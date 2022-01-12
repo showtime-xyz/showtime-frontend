@@ -29,3 +29,5 @@ export { Spinner } from "design-system/spinner";
 export { CreatorPreview } from "design-system/creator-preview";
 
 export { SegmentedControl } from "design-system/segmented-control";
+
+export { Select } from "design-system/select";

@@ -15,6 +15,7 @@ import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import { formatAddressShort } from "app/lib/utilities";
 import { AppContext } from "app/context/app-context";
 import { useUser } from "app/hooks/use-user";
+import { useProfileNavigation } from "../navigation/app-navigation";
 
 const getSmallImageUrl = (imgUrl: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
@@ -26,6 +27,9 @@ const getSmallImageUrl = (imgUrl: string) => {
 function HeaderDropdown() {
   const { user } = useUser();
   const context = useContext(AppContext);
+  const openProfile = useProfileNavigation(
+    user?.data.profile.wallet_addresses_excluding_email_v2[0].address
+  );
 
   return (
     <DropdownMenuRoot>
@@ -35,16 +39,17 @@ function HeaderDropdown() {
             tw="h-8 w-8 rounded-full"
             source={{
               uri: getSmallImageUrl(
-                user?.profile?.img_url || DEFAULT_PROFILE_PIC
+                user?.data.profile?.img_url || DEFAULT_PROFILE_PIC
               ),
             }}
             alt={
-              user?.profile?.name ||
-              user?.profile?.username ||
-              user?.profile?.wallet_addresses_excluding_email_v2?.[0]
+              user?.data.profile?.name ||
+              user?.data.profile?.username ||
+              user?.data.profile?.wallet_addresses_excluding_email_v2?.[0]
                 ?.ens_domain ||
               formatAddressShort(
-                user?.profile?.wallet_addresses_excluding_email_v2?.[0]?.address
+                user?.data.profile?.wallet_addresses_excluding_email_v2?.[0]
+                  ?.address
               ) ||
               "Profile"
             }
@@ -57,7 +62,7 @@ function HeaderDropdown() {
         tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
       >
         <DropdownMenuItem
-          onSelect={() => {}}
+          onSelect={openProfile}
           key="your-profile"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
