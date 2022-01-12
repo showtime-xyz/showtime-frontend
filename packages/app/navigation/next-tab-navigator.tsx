@@ -3,7 +3,7 @@ import { BlurView } from "expo-blur";
 import dynamic from "next/dynamic";
 
 import { Header } from "app/components/header";
-
+import { useNavigationElements } from "./use-navigation-elements";
 import { NextNavigationProps } from "./types";
 import { createNextTabNavigator } from "./universal-tab-navigator";
 import {
@@ -27,6 +27,7 @@ export function NextTabNavigator({
   const { width } = useWindowDimensions();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
+  const { isTabBarHidden } = useNavigationElements();
 
   return (
     <BottomTab.Navigator
@@ -51,6 +52,10 @@ export function NextTabNavigator({
             top: 0,
             left: width / 2 - 100,
             maxWidth: 200,
+          },
+          isTabBarHidden && {
+            display: "none",
+            bottom: -100,
           },
         ],
         tabBarBackground: () =>

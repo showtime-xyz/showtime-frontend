@@ -52,6 +52,7 @@ LogBox.ignoreLogs([
   "The provided value 'ms-stream' is not a valid 'responseType'.",
   "The provided value 'moz-chunked-arraybuffer' is not a valid 'responseType'.",
   "Constants.platform.ios.model has been deprecated in favor of expo-device's Device.modelName property.",
+  "ExponentGLView",
 ]);
 
 function QRCodeModal(props: RenderQrcodeModalProps): JSX.Element {

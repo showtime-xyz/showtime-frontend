@@ -75,13 +75,17 @@ Storybook config: `apps/storybook-react/.storybook/*`
 
 `cd apps/storybook-react`
 
-`yarn storybook` to start Storybook
+`yarn dev` to start Storybook
 
 ### Storybook (React Native)
 
 > Storybook for React Native
 
-// TODO: create Expo app and add Storybook
+Storybook config: `apps/storybook-react-native/.storybook/*`
+
+`cd apps/storybook-react-native`
+
+`yarn dev` to start Storybook
 
 ## Usage
 

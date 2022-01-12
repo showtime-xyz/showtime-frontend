@@ -53,6 +53,7 @@ export { default as PolygonScan } from "./PolygonScan";
 export { default as Purchased } from "./Purchased";
 export { default as Search } from "./Search";
 export { default as SearchFilled } from "./SearchFilled";
+export { default as Send } from "./Send";
 export { default as Share } from "./Share";
 export { default as Showtime } from "./Showtime";
 export { default as Smile } from "./Smile";

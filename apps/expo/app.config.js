@@ -55,6 +55,7 @@ export default {
       backgroundImage: config.backgroundImage,
     },
     jsEngine: "hermes",
+    softwareKeyboardLayoutMode: "pan",
   },
   androidNavigationBar: {
     barStyle: "dark-content",

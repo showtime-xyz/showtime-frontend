@@ -215,3 +215,17 @@ export const useProfileNftTabs = ({ profileId }: { profileId?: number }) => {
 
   return { data, loading: !data, error };
 };
+
+export const useComments = ({ nftId }: { nftId: number }) => {
+  const commentsUrlFn = useCallback(
+    (index) => {
+      const url = `/v2/comments/${nftId}?limit=10`;
+      return url;
+    },
+    [nftId]
+  );
+
+  const queryState = useInfiniteListQuerySWR<any>(commentsUrlFn);
+
+  return queryState;
+};
