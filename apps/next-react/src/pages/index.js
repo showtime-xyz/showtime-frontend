@@ -245,19 +245,9 @@ const Activity = () => {
         </Head>
 
         {context.user === null ? (
-          <div className="py-12 sm:py-14 px-8 sm:px-10 text-left bg-gradient-to-tr from-violet-900 via-violet-500 to-violet-300">
+          <div className="py-12 sm:pt-48 sm:py-14 px-8 sm:px-10 text-left bg-cover bg-center" style={{ backgroundImage: 'url(/img/gradient.png)' }}>
             <CappedWidth>
-              <div className="flex flex-row mx-3 text-white">
-                <div className="flex-1">
-                  <div className="text-xl sm:text-2xl">
-                    Discover &amp; Showcase
-                  </div>
-                  <div className="text-4xl sm:text-6xl font-afro">
-                    Your Favorite
-                  </div>
-                  <div className="text-4xl sm:text-6xl">Crypto Art.</div>
-                </div>
-              </div>
+              <p className="font-tomato font-semibold text-5xl text-black">discover, create, collect</p>
             </CappedWidth>
           </div>
         ) : null}
