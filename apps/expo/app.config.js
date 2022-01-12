@@ -37,8 +37,8 @@ export default {
   userInterfaceStyle: "automatic",
   splash: {
     image: "./assets/splash.png",
-    resizeMode: "contain",
-    backgroundColor: "#000000",
+    resizeMode: "cover",
+    backgroundColor: "#FFFFFF",
   },
   ios: {
     bundleIdentifier: config.scheme,
