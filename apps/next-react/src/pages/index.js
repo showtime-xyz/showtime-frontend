@@ -265,9 +265,7 @@ const Activity = () => {
         <CappedWidth>
           <div className="m-auto relative pb-8">
             <div className="mb-4 sm:mb-8 mt-8 sm:mt-16 text-left px-5 sm:px-3 flex flex-row items-center">
-              <h1 className="text-lg sm:text-3xl dark:text-gray-200">
-                News Feed
-              </h1>
+              <div className="flex-grow"></div>
               <div className="flex-grow"></div>
               <div
                 className="hover:text-stpink sm:hidden mr-1"
@@ -294,7 +292,7 @@ const Activity = () => {
                         : "text-gray-500"
                     } hover:text-stblue cursor-pointer transition-all flex flex-row items-center`}
                   >
-                    All News
+                    All
                   </div>
                   <div
                     onClick={() => handleFilterClick(3)}

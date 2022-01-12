@@ -66,7 +66,7 @@ const Header = () => {
             </div>
             {/* Start desktop-only menu */}
             <div className="hidden flex-1 md:flex md:items-center md:justify-center mr-6 md:mr-0 items-center font-normal space-x-4">
-              <Tippy content="Feed">
+              <Tippy content="Home">
                 <div>
                   <Link href="/">
                     <a
