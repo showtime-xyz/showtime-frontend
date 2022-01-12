@@ -1,15 +1,15 @@
-import { View } from "../../view";
-import { Text } from "../../text";
-import React from "react";
+import { Platform, useColorScheme } from "react-native";
 import Animated, {
   useAnimatedStyle,
   Extrapolate,
   interpolate,
   useDerivedValue,
 } from "react-native-reanimated";
-import { useTabIndexContext, useTabsContext } from "../tablib";
-import { Platform, useColorScheme } from "react-native";
+import React from "react";
 import { tw } from "design-system/tailwind";
+import { View } from "../../view";
+import { Text } from "../../text";
+import { useTabIndexContext, useTabsContext } from "../tablib";
 
 type TabItemProps = {
   name: string;
@@ -75,7 +75,6 @@ export const SelectedTabIndicator = () => {
   const isDark = useColorScheme() === "dark";
 
   const { offset, position, tabItemLayouts } = useTabsContext();
-  // const [itemOffsets, setItemOffsets] = React.useState([0, 0]);
 
   const itemOffsets = useDerivedValue(() => {
     let result = [];
