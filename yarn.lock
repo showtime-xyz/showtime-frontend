@@ -17924,10 +17924,10 @@ react-native-swipe-gestures@^1.0.5:
   resolved "https://registry.yarnpkg.com/react-native-swipe-gestures/-/react-native-swipe-gestures-1.0.5.tgz#a172cb0f3e7478ccd681fd36b8bfbcdd098bde7c"
   integrity sha512-Ns7Bn9H/Tyw278+5SQx9oAblDZ7JixyzeOczcBK8dipQk2pD7Djkcfnf1nB/8RErAmMLL9iXgW0QHqiII8AhKw==
 
-react-native-vision-camera@^2.11.2:
-  version "2.11.2"
-  resolved "https://registry.yarnpkg.com/react-native-vision-camera/-/react-native-vision-camera-2.11.2.tgz#72a10c4f454263b871f789d0452dbd5944e93500"
-  integrity sha512-ANr9zIpxv0v3QaHfIKomrteLPlrj3bJmYPsmZa0rbgZJRhj5pTJVAp41EsgeXuZkENmlQzhMQ8G+ZHZsYj/6jw==
+react-native-vision-camera@^2.12.0:
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/react-native-vision-camera/-/react-native-vision-camera-2.12.0.tgz#e174798e04676c57ec2633222a954156fd77e48c"
+  integrity sha512-sc6h1OS8Xei/w6roeHix7bcJC6ml8fW+w1slWxQDYYsch1tb65xflMVQ71SNjyE9FN3KyrojLEqZqgN4iDzL9g==
 
 react-native-web@0.17.1:
   version "0.17.1"
