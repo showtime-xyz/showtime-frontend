@@ -280,7 +280,12 @@ const ProfileTop = ({ address }: { address?: string }) => {
 
         <View tw="px-2 py-3">
           <View>
-            {name ? (
+            <Skeleton
+              height={24}
+              width={150}
+              show={loading}
+              colorMode={colorMode as any}
+            >
               <Animated.View entering={FadeIn}>
                 <Text
                   tw="dark:text-white text-gray-900 text-2xl font-bold"
@@ -289,23 +294,23 @@ const ProfileTop = ({ address }: { address?: string }) => {
                   {name}
                 </Text>
               </Animated.View>
-            ) : loading ? (
-              <Skeleton
-                show={loading}
-                height={32}
-                width={150}
-                colorMode={colorMode as any}
-              />
-            ) : null}
+            </Skeleton>
 
-            {username ? (
-              <View tw="flex-row items-center mt-2">
+            <View tw="h-2" />
+
+            <Skeleton
+              height={12}
+              width={100}
+              show={loading}
+              colorMode={colorMode as any}
+            >
+              <View tw="flex-row items-center">
                 <Animated.View entering={FadeIn}>
                   <Text
                     variant="text-base"
                     tw="text-gray-900 dark:text-white font-semibold"
                   >
-                    @{username}
+                    {username ? `@${username}` : null}
                   </Text>
                 </Animated.View>
 
@@ -325,16 +330,7 @@ const ProfileTop = ({ address }: { address?: string }) => {
                 </View>
               ) : null} */}
               </View>
-            ) : loading ? (
-              <View tw="flex-row items-center mt-3">
-                <Skeleton
-                  height={12}
-                  show={loading}
-                  width={100}
-                  colorMode={colorMode as any}
-                />
-              </View>
-            ) : null}
+            </Skeleton>
           </View>
 
           {bio ? (
