@@ -69,7 +69,9 @@ export async function getStaticProps({ params: { profile: slug_address } }) {
   } catch (err) {
     if (err.response.status == 400) {
       return { redirect: { destination: "/", permanent: false } };
-    } else return { notFound: true, revalidate: 1 };
+    } else {
+      return { notFound: true, revalidate: 1 };
+    }
   }
 }
 
