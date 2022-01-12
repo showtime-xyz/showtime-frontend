@@ -1,9 +1,15 @@
 import { View } from "../../view";
 import { Text } from "../../text";
 import React from "react";
-import { useAnimatedReaction, runOnJS } from "react-native-reanimated";
+import Animated, {
+  useAnimatedReaction,
+  runOnJS,
+  useAnimatedStyle,
+  Extrapolate,
+  interpolate,
+} from "react-native-reanimated";
 import { useTabIndexContext, useTabsContext } from "../tablib";
-import { Platform, Animated, useColorScheme } from "react-native";
+import { Platform, useColorScheme } from "react-native";
 import { tw } from "design-system/tailwind";
 
 // todo - make tabitemwidth dynamic. Current limitation of pager of using vanilla animated prevents animating width indicators.
@@ -19,12 +25,18 @@ type TabItemProps = {
 export const TabItem = ({ name, count }: TabItemProps) => {
   const { index } = useTabIndexContext();
   const { position, offset } = useTabsContext();
-  const newPos = Animated.add(position, offset);
 
-  const opacity = newPos.interpolate({
-    inputRange: [index - 1, index, index + 1],
-    outputRange: [0.7, 1, 0.7],
-    extrapolate: "clamp",
+  const animatedStyle = useAnimatedStyle(() => {
+    const newPos = position.value + offset.value;
+
+    return {
+      opacity: interpolate(
+        newPos,
+        [index - 1, index, index + 1],
+        [0.7, 1, 0.7],
+        Extrapolate.CLAMP
+      ),
+    };
   });
 
   return (
@@ -37,7 +49,7 @@ export const TabItem = ({ name, count }: TabItemProps) => {
           height: "100%",
           width: Tab_ITEM_WIDTH,
         },
-        { opacity },
+        animatedStyle,
       ]}
     >
       <Text
@@ -68,7 +80,6 @@ export const SelectedTabIndicator = () => {
   const isDark = useColorScheme() === "dark";
 
   const { offset, position, tabItemLayouts } = useTabsContext();
-  const newPos = Animated.add(position, offset);
   const [itemOffsets, setItemOffsets] = React.useState([0, 0]);
 
   useAnimatedReaction(
@@ -92,22 +103,34 @@ export const SelectedTabIndicator = () => {
     [tabItemLayouts]
   );
 
-  const translateX = newPos.interpolate({
-    inputRange: itemOffsets.map((_v, i) => i),
-    outputRange: itemOffsets,
+  const animatedStyle = useAnimatedStyle(() => {
+    const newPos = position.value + offset.value;
+
+    return {
+      transform: [
+        {
+          translateX: interpolate(
+            newPos,
+            itemOffsets.map((_v, i) => i),
+            itemOffsets,
+            Extrapolate.CLAMP
+          ),
+        },
+      ],
+    };
   });
 
   return (
     <Animated.View
       style={[
         {
-          transform: [{ translateX }],
           position: "absolute",
           width: Tab_ITEM_WIDTH,
           left: 16,
           height: "100%",
           justifyContent: "center",
         },
+        animatedStyle,
       ]}
     >
       <View
