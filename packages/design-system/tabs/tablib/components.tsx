@@ -80,7 +80,6 @@ export const SelectedTabIndicator = () => {
   const isDark = useColorScheme() === "dark";
 
   const { offset, position, tabItemLayouts } = useTabsContext();
-  // const newPos = Animated.add(position, offset);
   const [itemOffsets, setItemOffsets] = React.useState([0, 0]);
 
   useAnimatedReaction(
