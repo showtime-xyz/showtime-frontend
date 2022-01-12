@@ -1,7 +1,6 @@
-import { useCallback } from "react";
 import { useColorScheme } from "react-native";
 
-import { View, Gradient, Pressable } from "design-system";
+import { View, Pressable, Button } from "design-system";
 import { tw } from "design-system/tailwind";
 import {
   Home,
@@ -12,6 +11,7 @@ import {
   HotFilled,
   Bell,
   BellFilled,
+  Plus,
 } from "design-system/icon";
 import { useRouter } from "app/navigation/use-router";
 
@@ -20,7 +20,9 @@ function TabBarIcon({ tab, children }) {
 
   return (
     <Pressable
-      tw="bg-white dark:bg-gray-900 md:dark:bg-gray-800 rounded-[20] w-10 h-10 items-center justify-center"
+      tw={[
+        "md:bg-white md:dark:bg-gray-800 rounded-[20] w-10 h-10 items-center justify-center",
+      ]}
       // @ts-expect-error web only
       onMouseEnter={() => {
         router.prefetch(tab);
@@ -49,11 +51,6 @@ export const HomeTabBarIcon = ({ color, focused }) => {
     <TabBarIcon tab="/">
       {focused ? (
         <View tw="rounded-[20] w-10 h-10 items-center justify-center">
-          <Gradient
-            borderRadius={20}
-            colors={["#4C1D95", "#8B5CF6", "#C4B5FD"]}
-            locations={[0, 0.6, 1]}
-          />
           <HomeFilled
             style={tw.style("z-1")}
             width={24}
@@ -76,11 +73,6 @@ export const DiscoverTabBarIcon = ({ color, focused }) => {
     <TabBarIcon tab="/discover">
       {focused ? (
         <View tw="rounded-[20] w-10 h-10 items-center justify-center">
-          <Gradient
-            borderRadius={20}
-            colors={["#4C1D95", "#8B5CF6", "#C4B5FD"]}
-            locations={[0, 0.6, 1]}
-          />
           <CompassFilled
             style={tw.style("z-1")}
             width={24}
@@ -95,6 +87,20 @@ export const DiscoverTabBarIcon = ({ color, focused }) => {
   );
 };
 
+export const CameraTabBarIcon = ({ color, focused }) => {
+  return (
+    <TabBarIcon tab="/camera">
+      <Button variant="primary" tw="rounded-full h-12 w-12 z-1">
+        <Plus
+          width={24}
+          height={24}
+          color={tw.style("bg-white dark:bg-black")?.backgroundColor as string}
+        />
+      </Button>
+    </TabBarIcon>
+  );
+};
+
 export const TrendingTabBarIcon = ({ color, focused }) => {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
@@ -103,11 +109,6 @@ export const TrendingTabBarIcon = ({ color, focused }) => {
     <TabBarIcon tab="/trending">
       {focused ? (
         <View tw="rounded-[20] w-10 h-10 items-center justify-center">
-          <Gradient
-            borderRadius={20}
-            colors={["#4C1D95", "#8B5CF6", "#C4B5FD"]}
-            locations={[0, 0.6, 1]}
-          />
           <HotFilled
             style={tw.style("z-1")}
             width={24}
@@ -130,11 +131,6 @@ export const NotificationsTabBarIcon = ({ color, focused }) => {
     <TabBarIcon tab="/notifications">
       {focused ? (
         <View tw="rounded-[20] w-10 h-10 items-center justify-center">
-          <Gradient
-            borderRadius={20}
-            colors={["#4C1D95", "#8B5CF6", "#C4B5FD"]}
-            locations={[0, 0.6, 1]}
-          />
           <BellFilled
             style={tw.style("z-1")}
             width={24}

@@ -4,6 +4,7 @@ import type { NavigatorScreenParams } from "@react-navigation/native";
 type HomeStackParams = {
   home: undefined;
   login: undefined;
+  profile: { walletAddress: number };
   nft: { id: number };
 };
 
@@ -11,6 +12,13 @@ type DiscoverStackParams = {
   discover: undefined;
   login: undefined;
   nft: { id: number };
+};
+
+type CameraStackParams = {
+  camera: undefined;
+  login: undefined;
+  nft: { id: number };
+  create: undefined;
 };
 
 type TrendingStackParams = {
@@ -34,6 +42,7 @@ type NextNavigationProps = {
 type BottomTabNavigatorParams = {
   homeTab: NavigatorScreenParams<HomeStackParams>;
   discoverTab: NavigatorScreenParams<DiscoverStackParams>;
+  cameraTab: NavigatorScreenParams<CameraStackParams>;
   trendingTab: NavigatorScreenParams<TrendingStackParams>;
   notificationsTab: NavigatorScreenParams<NotificationsStackParams>;
 };
@@ -49,6 +58,7 @@ export type {
   HomeStackParams,
   DiscoverStackParams,
   TrendingStackParams,
+  CameraStackParams,
   NotificationsStackParams,
   BottomTabNavigatorParams,
 };

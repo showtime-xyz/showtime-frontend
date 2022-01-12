@@ -164,6 +164,10 @@ export function createParam<
       [name, stableStringify, stableParamsToClear]
     );
 
+    useEffect(() => {
+      setNativeState(router?.params?.[name]);
+    }, [router?.params?.[name]]);
+
     const webParam: string | undefined = router.getParam(name as string);
 
     const state = useMemo<ParsedType>(() => {

@@ -2561,6 +2561,13 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
+"@koale/useworker@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@koale/useworker/-/useworker-4.0.2.tgz#cb540a2581cd6025307c3ca6685bc60748773e58"
+  integrity sha512-xPIPADtom8/3/4FLNj7MvNcBM/Z2FleH85Fdx2O869eoKW8+PoEgtSVvoxWjCWMA46Sm9A5/R1TyzNGc+yM0wg==
+  dependencies:
+    dequal "^1.0.0"
+
 "@magic-sdk/admin@^1.3.2":
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/@magic-sdk/admin/-/admin-1.3.2.tgz#ad66b691ca97a3693b278ef17aace37bd0fa392a"
@@ -9246,6 +9253,11 @@ depd@~1.1.2:
   resolved "https://registry.yarnpkg.com/depd/-/depd-1.1.2.tgz#9bcd52e14c097763e749b274c4346ed2e560b5a9"
   integrity sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak=
 
+dequal@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/dequal/-/dequal-1.0.1.tgz#dbbf9795ec626e9da8bd68782f4add1d23700d8b"
+  integrity sha512-Fx8jxibzkJX2aJgyfSdLhr9tlRoTnHKrRJuu2XHlAgKioN2j19/Bcbe0d4mFXYZ3+wpE2KVobUVTfDutcD17xQ==
+
 dequal@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/dequal/-/dequal-2.0.2.tgz#85ca22025e3a87e65ef75a7a437b35284a7e319d"
@@ -10862,6 +10874,15 @@ expo-blur@~11.0.0:
   resolved "https://registry.yarnpkg.com/expo-blur/-/expo-blur-11.0.0.tgz#3542afed5c0037554657d98c31a5933dd78098dd"
   integrity sha512-EmIYXFwaqvVDhV4JnG9+nENU7FGZkCcuYZhoOOHjnHyADCGNsT6LIVv9/Q/rO0+qWJJxlUG6bziPHC2wbWcC9A==
 
+expo-camera@^12.1.0:
+  version "12.1.0"
+  resolved "https://registry.yarnpkg.com/expo-camera/-/expo-camera-12.1.0.tgz#d968b282d2155956655e217b35bade66ed361ad7"
+  integrity sha512-FWzgexrsd1v2XYmtXpeZsXMJf2G6ctX7wmU3xi2KEL7vYMdrCCZi+aX5vj7WQz5DDEu/TH1fkHnqU/hek8ZGMA==
+  dependencies:
+    "@expo/config-plugins" "^4.0.2"
+    "@koale/useworker" "^4.0.2"
+    invariant "^2.2.4"
+
 expo-constants@~12.1.3:
   version "12.1.3"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-12.1.3.tgz#bec48a42a7760b010450961c209bb4b1158b9cd6"
@@ -10967,6 +10988,14 @@ expo-haptics@~11.1.0:
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/expo-haptics/-/expo-haptics-11.1.0.tgz#946206d7d28bd6f17da7ae3e4074d8560032e2f4"
   integrity sha512-1hLvj5mpeC0451LduG6Eati8tS4YEwxECBGoyQagTGbqttlEundNn1P4Qyr7T1rSOnoMgmQatd7sdbbYxeeKMQ==
+
+expo-image-picker@^12.0.1:
+  version "12.0.1"
+  resolved "https://registry.yarnpkg.com/expo-image-picker/-/expo-image-picker-12.0.1.tgz#2d46648b82422124f53a0aa6c186c4035ad31e8d"
+  integrity sha512-0utJK87zQH9jeOKlK51x/AXg43msef8qY+oib7TR12jVa6uuPmO8TcMgzr1UZ7DIsxlkMRId/cvBWzMu2BnJcg==
+  dependencies:
+    "@expo/config-plugins" "^4.0.2"
+    uuid "7.0.2"
 
 expo-json-utils@~0.2.0:
   version "0.2.0"
@@ -17962,6 +17991,11 @@ react-native-swipe-gestures@^1.0.5:
   resolved "https://registry.yarnpkg.com/react-native-swipe-gestures/-/react-native-swipe-gestures-1.0.5.tgz#a172cb0f3e7478ccd681fd36b8bfbcdd098bde7c"
   integrity sha512-Ns7Bn9H/Tyw278+5SQx9oAblDZ7JixyzeOczcBK8dipQk2pD7Djkcfnf1nB/8RErAmMLL9iXgW0QHqiII8AhKw==
 
+react-native-vision-camera@^2.12.0:
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/react-native-vision-camera/-/react-native-vision-camera-2.12.0.tgz#e174798e04676c57ec2633222a954156fd77e48c"
+  integrity sha512-sc6h1OS8Xei/w6roeHix7bcJC6ml8fW+w1slWxQDYYsch1tb65xflMVQ71SNjyE9FN3KyrojLEqZqgN4iDzL9g==
+
 react-native-web@0.17.1:
   version "0.17.1"
   resolved "https://registry.yarnpkg.com/react-native-web/-/react-native-web-0.17.1.tgz#90d473c89dd99b88bc9830b2a9fcdd2fc5f04902"
@@ -20943,6 +20977,11 @@ use-subscription@1.5.1, use-subscription@^1.0.0:
   integrity sha512-Xv2a1P/yReAjAbhylMfFplFKj9GssgTwN7RlcTxBujFQcloStWNDQdc4g4NRWH9xS4i/FDk04vQBptAXoF3VcA==
   dependencies:
     object-assign "^4.1.1"
+
+use-timer@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/use-timer/-/use-timer-2.0.1.tgz#eef400a83e3fa4af9896fdd6d07d34f676e9373c"
+  integrity sha512-ESFkDYZluJZ+G/CaoOBFxg0TjuG7kgNFNhIFZhqv14ho2WIZwuxkRnEURhyLm9I4vNz+ea9ZowNaOkExDAM+6Q==
 
 use-unmount-signal@^1.0.0:
   version "1.0.0"

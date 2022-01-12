@@ -261,3 +261,5 @@ export const CURRENCY_NAMES = {
 export const GAS_PRICE_PERCENTAGE = "30";
 
 export const COLLECTION_NAME_TRUNCATE_LENGTH = 22;
+
+export const ENABLE_MAGIC_TX = false;

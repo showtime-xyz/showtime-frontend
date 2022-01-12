@@ -14,6 +14,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
           home: "",
           login: "/login",
           nft: "/nft/:id",
+          profile: "/profile/:walletAddress",
         },
       },
       discoverTab: {
@@ -23,6 +24,16 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
           discover: "",
           login: "/login",
           nft: "/nft/:id",
+        },
+      },
+      cameraTab: {
+        path: "camera",
+        initialRouteName: "camera",
+        screens: {
+          camera: "",
+          login: "/login",
+          nft: "/nft/:id",
+          create: "/create",
         },
       },
       trendingTab: {

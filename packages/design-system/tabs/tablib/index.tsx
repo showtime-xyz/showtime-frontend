@@ -1,9 +1,10 @@
+//@ts-nocheck- Todo fix typings
+
 import React, { useContext, ForwardedRef, useMemo, useRef } from "react";
 import { tw } from "../../tailwind";
 import {
   Pressable,
   View,
-  Animated,
   useWindowDimensions,
   StyleSheet,
   ScrollViewProps,
@@ -30,10 +31,11 @@ import Reanimated, {
 } from "react-native-reanimated";
 import { TabListProps, TabRootProps, TabsContextType } from "./types";
 import { useScrollToTop } from "@react-navigation/native";
+import { usePageScrollHandler } from "./usePagerScrollHandler";
 
 const windowHeight = Dimensions.get("window").height;
 
-const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
+const AnimatedPagerView = Reanimated.createAnimatedComponent(PagerView);
 
 export const TabsContext = React.createContext(null as TabsContextType);
 
@@ -46,8 +48,8 @@ const Root = ({
 }: TabRootProps) => {
   const pagerRef = React.useRef();
   const index = useSharedValue(initialIndex ?? 0);
-  const position = React.useRef(new Animated.Value(0)).current;
-  const offset = React.useRef(new Animated.Value(0)).current;
+  const position = useSharedValue(0);
+  const offset = useSharedValue(0);
   const translateY = useSharedValue(0);
   // maybe change this to shared value too
   const [headerHeight, setHeaderHeight] = React.useState(0);
@@ -141,7 +143,23 @@ const Root = ({
   );
 };
 
-const List = ({
+const List = (props: TabListProps) => {
+  let hasTrigger = false;
+  // TODO: fix dynamically loading tab items. Currently we load tab items if tab trigger is present
+  React.Children.map(props.children, (c) => {
+    if (React.isValidElement(c) && c && c.type === Trigger) {
+      hasTrigger = true;
+    }
+  });
+
+  if (hasTrigger) {
+    return <ListImpl {...props} />;
+  }
+
+  return null;
+};
+
+const ListImpl = ({
   children,
   style,
   contentContainerStyle,
@@ -225,7 +243,6 @@ const Pager = ({ children }) => {
     pagerRef,
     position,
     offset,
-    translateY,
     lazy,
     index,
   } = useContext(TabsContext);
@@ -269,22 +286,20 @@ const Pager = ({ children }) => {
     [mountedIndices]
   );
 
+  const handler = usePageScrollHandler({
+    onPageScroll: (e: any) => {
+      "worklet";
+      offset.value = e.offset;
+      position.value = e.position;
+    },
+  });
+
   return (
     <AnimatedPagerView
       style={{ flex: 1 }}
       ref={pagerRef}
       // Todo - make this work with reanimated event handlers
-      onPageScroll={Animated.event(
-        [
-          {
-            nativeEvent: {
-              position: position,
-              offset: offset,
-            },
-          },
-        ],
-        { useNativeDriver: true }
-      )}
+      onPageScroll={handler}
       initialPage={initialIndex}
       onPageSelected={(e) => onIndexChange(e.nativeEvent.position)}
     >
@@ -451,7 +466,7 @@ function makeScrollableComponent<K extends object, T extends any>(Comp: T) {
         contentContainerStyle={useMemo(
           () => ({
             paddingTop: Platform.OS === "android" ? topHeight : 0,
-            minHeight: windowHeight,
+            minHeight: windowHeight + topHeight,
           }),
           [topHeight]
         )}
