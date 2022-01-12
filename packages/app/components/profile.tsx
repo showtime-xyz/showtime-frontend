@@ -20,6 +20,7 @@ import { useUser } from "../hooks/use-user";
 import { NFT } from "../types";
 import { Video } from "expo-av";
 
+const TAB_LIST_HEIGHT = 64;
 const COVER_IMAGE_HEIGHT = 104;
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
@@ -51,13 +52,18 @@ const Profile = ({ address }: { address?: string }) => {
 
   return (
     <View tw="bg-white dark:bg-black flex-1">
-      <Tabs.Root onIndexChange={setSelected} initialIndex={selected} lazy>
+      <Tabs.Root
+        onIndexChange={setSelected}
+        initialIndex={selected}
+        tabListHeight={TAB_LIST_HEIGHT}
+        lazy
+      >
         <Tabs.Header>
           <ProfileTop address={address} />
         </Tabs.Header>
         <Tabs.List
           style={tw.style(
-            "dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900"
+            `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900`
           )}
         >
           {data?.data.lists.map((list, index) => (

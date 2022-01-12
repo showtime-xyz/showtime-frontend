@@ -9,9 +9,12 @@ import Animated, {
   interpolate,
 } from "react-native-reanimated";
 import { useTabIndexContext, useTabsContext } from "../tablib";
-import { Platform } from "react-native";
+import { Platform, useColorScheme } from "react-native";
 import { tw } from "design-system/tailwind";
-import { useIsDarkMode } from "../../hooks";
+
+// todo - make tabitemwidth dynamic. Current limitation of pager of using vanilla animated prevents animating width indicators.
+// todo - figure out how to make reanimated native handlers work with pager view
+export const Tab_ITEM_WIDTH = 120;
 
 type TabItemProps = {
   name: string;
@@ -44,7 +47,7 @@ export const TabItem = ({ name, count }: TabItemProps) => {
           justifyContent: "center",
           alignItems: "center",
           height: "100%",
-          paddingHorizontal: 16,
+          width: Tab_ITEM_WIDTH,
         },
         animatedStyle,
       ]}
@@ -74,7 +77,7 @@ export const SelectedTabIndicator = () => {
   }
 
   // todo replace with useIsDarkMode hook
-  // const isDark = useIsDarkMode();
+  const isDark = useColorScheme() === "dark";
 
   const { offset, position, tabItemLayouts } = useTabsContext();
   const [itemOffsets, setItemOffsets] = React.useState([0, 0]);
@@ -85,9 +88,7 @@ export const SelectedTabIndicator = () => {
       let sum = 0;
       for (let i = 0; i < tabItemLayouts.length; i++) {
         if (tabItemLayouts[i].value) {
-          const width = tabItemLayouts[i].value
-            ? tabItemLayouts[i].value.width
-            : 0;
+          const width = tabItemLayouts[i].value.width;
           result.push(sum);
           sum = sum + width;
         }
@@ -99,25 +100,23 @@ export const SelectedTabIndicator = () => {
         runOnJS(setItemOffsets)(values);
       }
     },
-    []
+    [tabItemLayouts]
   );
 
   const animatedStyle = useAnimatedStyle(() => {
     const newPos = position.value + offset.value;
-    const tabIndices = tabItemLayouts.map((_v, i) => i);
-    const tabWidths = tabItemLayouts.map((v) => (v.value ? v.value.width : 0));
+
     return {
       transform: [
         {
           translateX: interpolate(
             newPos,
-            tabIndices,
+            itemOffsets.map((_v, i) => i),
             itemOffsets,
             Extrapolate.CLAMP
           ),
         },
       ],
-      width: interpolate(newPos, tabIndices, tabWidths, Extrapolate.CLAMP),
     };
   });
 
@@ -126,10 +125,10 @@ export const SelectedTabIndicator = () => {
       style={[
         {
           position: "absolute",
+          width: Tab_ITEM_WIDTH,
+          left: 16,
           height: "100%",
-          justifyContent: "flex-end",
-          alignItems: "center",
-          paddingHorizontal: 16,
+          justifyContent: "center",
         },
         animatedStyle,
       ]}
@@ -138,12 +137,16 @@ export const SelectedTabIndicator = () => {
         style={[
           {
             height: 2,
+            position: "absolute",
+            zIndex: 9999,
             width: "100%",
+            // negative bottom to accomodate border bottom of 1px
+            bottom: -1,
           },
           tw.style(`bg-gray-900 dark:bg-gray-100`),
         ]}
       />
-      {/* <View
+      <View
         sx={{
           backgroundColor: isDark
             ? "rgba(229, 231, 235, 0.1)"
@@ -151,7 +154,7 @@ export const SelectedTabIndicator = () => {
           padding: 16,
           borderRadius: 999,
         }}
-      /> */}
+      />
     </Animated.View>
   );
 };

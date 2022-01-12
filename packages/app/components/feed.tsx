@@ -8,6 +8,8 @@ import { Card } from "design-system/card";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 
+const TAB_LIST_HEIGHT = 64;
+
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
   const tabBarHeight = useBottomTabBarHeight();
 
@@ -30,7 +32,12 @@ const Feed = () => {
 
   return (
     <View tw="bg-white dark:bg-black flex-1">
-      <Tabs.Root onIndexChange={setSelected} initialIndex={selected} lazy>
+      <Tabs.Root
+        onIndexChange={setSelected}
+        initialIndex={selected}
+        tabListHeight={TAB_LIST_HEIGHT}
+        lazy
+      >
         <Tabs.Header>
           <View tw="bg-white dark:bg-black pt-4 pl-4 pb-[3px]">
             <Text tw="text-gray-900 dark:text-white font-bold text-3xl">
@@ -39,9 +46,14 @@ const Feed = () => {
           </View>
         </Tabs.Header>
         <Tabs.List
-          style={tw.style(
-            "dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900"
-          )}
+          style={[
+            {
+              height: TAB_LIST_HEIGHT,
+              ...tw.style(
+                "dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900"
+              ),
+            },
+          ]}
         >
           <Tabs.Trigger>
             <TabItem name="All Activity" selected={selected === 0} />
