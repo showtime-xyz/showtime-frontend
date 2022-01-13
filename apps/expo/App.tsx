@@ -190,7 +190,7 @@ function AppContextProvider({
   // User can override color scheme
   const userColorScheme = useUserColorScheme();
   // Use the user color scheme if it's set
-  const [colorScheme, setColorScheme] = useAppColorScheme(
+  const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(
     tw,
     userColorScheme ?? deviceColorScheme
   );
