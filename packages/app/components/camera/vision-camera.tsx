@@ -296,7 +296,6 @@ export function Camera({
         backgroundColor: "black",
       }}
     >
-      <StatusBar style="auto" />
       <Animated.View style={{ height: "70%" }}>
         {device != null && (
           <PinchGestureHandler

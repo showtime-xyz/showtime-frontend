@@ -105,8 +105,6 @@ export function Camera({
         justifyContent: "center",
       }}
     >
-      <StatusBar style="auto" />
-
       <View sx={{ height: "70%" }}>
         {isActive && (
           <ExpoCamera

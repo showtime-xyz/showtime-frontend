@@ -72,7 +72,7 @@ function AppContextProvider({
 }
 
 export default function App({ Component, pageProps }: AppProps) {
-  useDeviceContext(tw);
+  useDeviceContext(tw, { withDeviceColorScheme: false });
 
   return (
     <>

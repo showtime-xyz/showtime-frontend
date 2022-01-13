@@ -1,9 +1,25 @@
 import React, { useRef, useEffect, useState } from "react";
-import { LayoutChangeEvent, Platform, useColorScheme } from "react-native";
+import {
+  LayoutChangeEvent,
+  Platform,
+  useColorScheme as useDeviceColorScheme,
+} from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 
+import { useColorScheme as useUserColorScheme } from "app/lib/color-scheme";
+
+export const useColorScheme = () => {
+  const userColorScheme = useUserColorScheme();
+  const deviceColorScheme = useDeviceColorScheme();
+
+  return userColorScheme ?? deviceColorScheme;
+};
+
 export const useIsDarkMode = () => {
-  return useColorScheme() === "dark";
+  const userColorScheme = useUserColorScheme();
+  const deviceColorScheme = useDeviceColorScheme();
+
+  return userColorScheme === "dark" ?? deviceColorScheme === "dark";
 };
 
 export const useOnFocus = () => {
