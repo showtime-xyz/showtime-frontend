@@ -25,6 +25,11 @@ const handleUsernameLookup = async (value, myProfile, setCustomURLError) => {
   const username = value ? value.trim() : null;
   let validUsername = false;
 
+  if (username.length < 3) {
+    setCustomURLError({ isError: true, message: "Username must be longer than 2 characters" })
+    return false;
+  }
+
   try {
     if (
       username === null ||
