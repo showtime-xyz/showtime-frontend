@@ -28,7 +28,7 @@ function HeaderDropdown() {
   const { user } = useUser();
   const context = useContext(AppContext);
   const openProfile = useProfileNavigation(
-    user?.data.profile.wallet_addresses_excluding_email_v2[0].address
+    user?.data?.profile?.wallet_addresses_v2?.[0]?.address
   );
 
   return (
@@ -43,12 +43,12 @@ function HeaderDropdown() {
               ),
             }}
             alt={
-              user?.data.profile?.name ||
-              user?.data.profile?.username ||
-              user?.data.profile?.wallet_addresses_excluding_email_v2?.[0]
+              user?.data?.profile?.name ||
+              user?.data?.profile?.username ||
+              user?.data?.profile?.wallet_addresses_excluding_email_v2?.[0]
                 ?.ens_domain ||
               formatAddressShort(
-                user?.data.profile?.wallet_addresses_excluding_email_v2?.[0]
+                user?.data?.profile?.wallet_addresses_excluding_email_v2?.[0]
                   ?.address
               ) ||
               "Profile"
@@ -68,25 +68,6 @@ function HeaderDropdown() {
         >
           <DropdownMenuItemTitle tw="text-black dark:text-white">
             Your Profile
-          </DropdownMenuItemTitle>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onSelect={() => {}}
-          key="settings"
-          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
-        >
-          <DropdownMenuItemTitle tw="text-black dark:text-white">
-            Settings
-          </DropdownMenuItemTitle>
-        </DropdownMenuItem>
-
-        <DropdownMenuItem
-          onSelect={() => {}}
-          key="add-eth"
-          tw="h-8 rounded-full flex-1 mx-1 my-2 bg-gray-900 dark:bg-white justify-center items-center"
-        >
-          <DropdownMenuItemTitle tw="text-white dark:text-black font-bold">
-            Add ETH
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
