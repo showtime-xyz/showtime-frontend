@@ -48,8 +48,11 @@ export function Fieldset(props: FieldsetProps) {
       </Label>
       <View tw="mt-4 flex-row items-center">
         <TextInput
-          tw="text-base flex-1 text-black dark:text-gray-300 focus:outline-none focus-visible:ring-1"
+          tw="flex-1 text-black dark:text-gray-300 focus:outline-none focus-visible:ring-1"
           {...textInputProps}
+          style={{
+            fontSize: 16,
+          }}
           editable={disabled}
           nativeID={inputId}
           accessibilityLabel={accessibilityLabel}
