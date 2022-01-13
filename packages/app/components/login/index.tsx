@@ -112,6 +112,7 @@ export function Login() {
                     label="Phone number"
                     placeholder="Enter your phone number"
                     keyboardType="phone-pad"
+                    textContentType="telephoneNumber"
                     signInButtonLabel="Send"
                     onSubmit={handleSubmitPhoneNumber}
                   />
@@ -138,6 +139,7 @@ export function Login() {
                     label="Email address"
                     placeholder="Enter your email address"
                     keyboardType="email-address"
+                    textContentType="emailAddress"
                     signInButtonLabel="Send"
                     onSubmit={handleSubmitEmail}
                   />
