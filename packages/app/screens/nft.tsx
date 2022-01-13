@@ -3,7 +3,7 @@ import useUnmountSignal from "use-unmount-signal";
 import useSWR from "swr";
 
 import { View, ScrollView, Button, Spinner } from "design-system";
-import { Media } from "design-system/card/media";
+import { Media } from "design-system/media";
 import { createParam } from "app/navigation/use-param";
 import { axios } from "app/lib/axios";
 import { Close, MoreHorizontal } from "design-system/icon";
@@ -77,7 +77,7 @@ function NftScreen() {
       </View>
 
       <PinchToZoom>
-        <Media nfts={[nft]} />
+        <Media item={nft} count={1} />
       </PinchToZoom>
 
       <Social nft={nft} />

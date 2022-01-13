@@ -32,4 +32,6 @@ export { SegmentedControl } from "design-system/segmented-control";
 
 export { Select } from "design-system/select";
 
+export { Media } from "design-system/media";
+
 export { Fieldset } from "design-system/fieldset";
