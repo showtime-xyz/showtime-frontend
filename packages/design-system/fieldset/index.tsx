@@ -71,7 +71,9 @@ export function Fieldset(props: FieldsetProps) {
             default: undefined,
           })}
         />
-        {select ? <Select size="small" {...select} /> : null}
+        {select ? (
+          <Select disabled={disabled} size="small" {...select} />
+        ) : null}
       </View>
       {errorText ? (
         <Text
