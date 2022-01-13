@@ -1,4 +1,7 @@
 import { Suspense, useCallback, useMemo, useState } from "react";
+import { Dimensions, Platform } from "react-native";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+
 import {
   View,
   Spinner,
@@ -8,15 +11,10 @@ import {
   SelectedTabIndicator,
   CreatorPreview,
   SegmentedControl,
+  Media,
 } from "design-system";
 import { tw } from "design-system/tailwind";
-import { useTrendingCreators, useTrendingNFTS } from "../hooks/api-hooks";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { Dimensions, Platform } from "react-native";
-import { Video } from "expo-av";
-import { Image } from "design-system/image";
-import { memo } from "react";
-import { NFT } from "app/types";
+import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 
 const TAB_LIST_HEIGHT = 64;
 
@@ -197,7 +195,10 @@ const NFTSList = ({
     return index.toString();
   }, []);
 
-  const renderItem = useCallback(({ item }) => <Media item={item} />, []);
+  const renderItem = useCallback(
+    ({ item }) => <Media item={item} count={2} />,
+    []
+  );
 
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,
@@ -249,38 +250,3 @@ const NFTSList = ({
     </View>
   );
 };
-
-const Media = memo(({ item }: { item: NFT }) => {
-  const style = useMemo(() => {
-    return {
-      width: ITEM_SIZE - GAP_BETWEEN_ITEMS,
-      height: ITEM_SIZE - GAP_BETWEEN_ITEMS,
-      margin: GAP_BETWEEN_ITEMS,
-    };
-  }, [item]);
-
-  if (item.mime_type?.startsWith("video")) {
-    return (
-      <Video
-        source={{
-          uri: item.animation_preview_url,
-        }}
-        style={style}
-        useNativeControls
-        isLooping
-        isMuted
-      />
-    );
-  } else if (item.mime_type?.startsWith("image")) {
-    return (
-      <Image
-        source={{
-          uri: item.still_preview_url,
-        }}
-        style={style}
-      />
-    );
-  }
-
-  return null;
-});

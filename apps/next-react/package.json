@@ -10,7 +10,7 @@
     "postinstall": "cd ../.. && yarn patch-package"
   },
   "dependencies": {
-    "@airgap/beacon-sdk": "^2.3.7",
+    "@airgap/beacon-sdk": "^2.3.9",
     "@badrap/bar-of-progress": "^0.1.2",
     "@biconomy/mexa": "^2.0.22",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
