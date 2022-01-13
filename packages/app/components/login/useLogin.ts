@@ -112,6 +112,8 @@ export const useLogin = () => {
       mixpanel.track("Login success - wallet signature");
       router.pop();
     } catch (error) {
+      magic.user.logout();
+
       if (process.env.NODE_ENV === "development") {
         console.error(error);
       }
@@ -161,6 +163,7 @@ export const useLogin = () => {
 
       mutate(null);
     } catch (error) {
+      magic.user.logout();
       if (process.env.NODE_ENV === "development") {
         console.error(error);
       }
