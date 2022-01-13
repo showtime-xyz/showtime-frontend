@@ -78,16 +78,14 @@ export const SelectedTabIndicator = () => {
 
   const itemOffsets = useDerivedValue(() => {
     let result = [];
-    let sum = 0;
+
     for (let i = 0; i < tabItemLayouts.length; i++) {
       if (tabItemLayouts[i].value) {
-        const width = tabItemLayouts[i].value?.width ?? 0;
-        result.push(sum);
-        sum = sum + width;
+        result.push(tabItemLayouts[i].value!.x);
       }
     }
     return result;
-  });
+  }, [tabItemLayouts]);
 
   const animatedStyle = useAnimatedStyle(() => {
     if (itemOffsets.value.length === 0) {
@@ -118,7 +116,6 @@ export const SelectedTabIndicator = () => {
       style={[
         {
           position: "absolute",
-          left: 16,
           height: "100%",
           justifyContent: "center",
         },
