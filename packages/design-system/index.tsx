@@ -31,3 +31,5 @@ export { CreatorPreview } from "design-system/creator-preview";
 export { SegmentedControl } from "design-system/segmented-control";
 
 export { Select } from "design-system/select";
+
+export { Fieldset } from "design-system/fieldset";
