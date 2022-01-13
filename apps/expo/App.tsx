@@ -284,8 +284,7 @@ function App() {
                 >
                   <AppContextProvider>
                     <>
-                      {/* TODO: change this when we update the splash screen */}
-                      <StatusBar style="dark" />
+                      <StatusBar style="auto" />
                       <NextTabNavigator />
                     </>
                   </AppContextProvider>
