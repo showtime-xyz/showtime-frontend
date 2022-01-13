@@ -1,4 +1,11 @@
-import { memo, useCallback, useMemo, useReducer, useState } from "react";
+import {
+  Suspense,
+  memo,
+  useCallback,
+  useMemo,
+  useReducer,
+  useState,
+} from "react";
 import { Dimensions, Platform, useColorScheme } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import {
@@ -76,11 +83,13 @@ const Profile = ({ address }: { address?: string }) => {
         <Tabs.Pager>
           {data?.data.lists.map((list) => {
             return (
-              <TabList
-                key={list.id}
-                profileId={profileData?.data.profile.profile_id}
-                list={list}
-              />
+              <Suspense fallback={<Spinner size="small" />}>
+                <TabList
+                  key={list.id}
+                  profileId={profileData?.data.profile.profile_id}
+                  list={list}
+                />
+              </Suspense>
             );
           })}
         </Tabs.Pager>
