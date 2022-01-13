@@ -94,19 +94,17 @@ export const SelectedTabIndicator = () => {
       return {};
     }
 
+    const input = itemOffsets.value.map((_v, i) => i);
+    const output = tabItemLayouts.map((item) => item.value?.width ?? 0);
+
     const newPos = position.value + offset.value;
     return {
-      width: interpolate(
-        newPos,
-        itemOffsets.value.map((_v, i) => i),
-        tabItemLayouts.map((item) => item.value?.width ?? 0),
-        Extrapolate.CLAMP
-      ),
+      width: interpolate(newPos, input, output, Extrapolate.CLAMP),
       transform: [
         {
           translateX: interpolate(
             newPos,
-            itemOffsets.value.map((_v, i) => i),
+            input,
             itemOffsets.value,
             Extrapolate.CLAMP
           ),
@@ -145,7 +143,7 @@ export const SelectedTabIndicator = () => {
           backgroundColor: isDark
             ? "rgba(229, 231, 235, 0.1)"
             : "rgba(0, 0, 0, 0.1)",
-          padding: 16,
+          paddingY: 16,
           borderRadius: 999,
         }}
       />

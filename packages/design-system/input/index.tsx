@@ -39,7 +39,7 @@ const boxShadow = {
 
 let idCounter = 0;
 // Replace this with useId from React 18. Currently we're doing client side rendering, so probably this is safe!
-const useId = (id?: string) => {
+export const useId = (id?: string) => {
   const newId = useMemo(() => {
     if (id) {
       return id;

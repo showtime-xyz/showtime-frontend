@@ -23,9 +23,7 @@ import { Image } from "design-system/image";
 import { VerificationBadge } from "design-system/verification-badge";
 import { useColorScheme } from "design-system/hooks";
 import { getProfileImage, getProfileName, getSortFields } from "../utilities";
-import Animated, { FadeIn } from "react-native-reanimated";
-import { NFT } from "../types";
-import { Video } from "expo-av";
+import { Media } from "design-system/media";
 
 const TAB_LIST_HEIGHT = 64;
 const COVER_IMAGE_HEIGHT = 104;
@@ -135,7 +133,10 @@ const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
     [dispatch]
   );
 
-  const renderItem = useCallback(({ item }) => <Media item={item} />, []);
+  const renderItem = useCallback(
+    ({ item }) => <Media item={item} count={2} />,
+    []
+  );
 
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,
@@ -200,42 +201,6 @@ const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
     </View>
   );
 };
-
-const Media = memo(function Media({ item }: { item: NFT }) {
-  const style = useMemo(() => {
-    return {
-      width: ITEM_SIZE - GAP_BETWEEN_ITEMS,
-      height: ITEM_SIZE - GAP_BETWEEN_ITEMS,
-      margin: GAP_BETWEEN_ITEMS,
-    };
-  }, []);
-
-  if (item.mime_type?.startsWith("video")) {
-    return (
-      <Video
-        source={{
-          uri: item.animation_preview_url,
-        }}
-        style={style}
-        useNativeControls
-        isLooping
-        isMuted
-      />
-    );
-  } else if (item.mime_type?.startsWith("image")) {
-    return (
-      <Image
-        source={{
-          uri: item.still_preview_url,
-        }}
-        alt={item.token_name}
-        style={style}
-      />
-    );
-  }
-
-  return null;
-});
 
 const ProfileTop = ({ address }: { address?: string }) => {
   const { data: profileData, loading } = useUserProfile({ address });
