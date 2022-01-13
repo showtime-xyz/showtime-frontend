@@ -1,20 +1,15 @@
-import { View } from "../../view";
-import { Text } from "../../text";
-import React from "react";
+import { Platform, useColorScheme } from "react-native";
 import Animated, {
-  useAnimatedReaction,
-  runOnJS,
   useAnimatedStyle,
   Extrapolate,
   interpolate,
+  useDerivedValue,
 } from "react-native-reanimated";
-import { useTabIndexContext, useTabsContext } from "../tablib";
-import { Platform, useColorScheme } from "react-native";
+import React from "react";
 import { tw } from "design-system/tailwind";
-
-// todo - make tabitemwidth dynamic. Current limitation of pager of using vanilla animated prevents animating width indicators.
-// todo - figure out how to make reanimated native handlers work with pager view
-export const Tab_ITEM_WIDTH = 120;
+import { View } from "../../view";
+import { Text } from "../../text";
+import { useTabIndexContext, useTabsContext } from "../tablib";
 
 type TabItemProps = {
   name: string;
@@ -47,7 +42,7 @@ export const TabItem = ({ name, count }: TabItemProps) => {
           justifyContent: "center",
           alignItems: "center",
           height: "100%",
-          width: Tab_ITEM_WIDTH,
+          marginHorizontal: 16,
         },
         animatedStyle,
       ]}
@@ -80,39 +75,39 @@ export const SelectedTabIndicator = () => {
   const isDark = useColorScheme() === "dark";
 
   const { offset, position, tabItemLayouts } = useTabsContext();
-  const [itemOffsets, setItemOffsets] = React.useState([0, 0]);
 
-  useAnimatedReaction(
-    () => {
-      let result = [];
-      let sum = 0;
-      for (let i = 0; i < tabItemLayouts.length; i++) {
-        if (tabItemLayouts[i].value) {
-          const width = tabItemLayouts[i].value.width;
-          result.push(sum);
-          sum = sum + width;
-        }
+  const itemOffsets = useDerivedValue(() => {
+    let result = [];
+    let sum = 0;
+    for (let i = 0; i < tabItemLayouts.length; i++) {
+      if (tabItemLayouts[i].value) {
+        const width = tabItemLayouts[i].value?.width ?? 0;
+        result.push(sum);
+        sum = sum + width;
       }
-      return result;
-    },
-    (values) => {
-      if (values.length > 1) {
-        runOnJS(setItemOffsets)(values);
-      }
-    },
-    [tabItemLayouts]
-  );
+    }
+    return result;
+  });
 
   const animatedStyle = useAnimatedStyle(() => {
-    const newPos = position.value + offset.value;
+    if (itemOffsets.value.length === 0) {
+      return {};
+    }
 
+    const newPos = position.value + offset.value;
     return {
+      width: interpolate(
+        newPos,
+        itemOffsets.value.map((_v, i) => i),
+        tabItemLayouts.map((item) => item.value?.width ?? 0),
+        Extrapolate.CLAMP
+      ),
       transform: [
         {
           translateX: interpolate(
             newPos,
-            itemOffsets.map((_v, i) => i),
-            itemOffsets,
+            itemOffsets.value.map((_v, i) => i),
+            itemOffsets.value,
             Extrapolate.CLAMP
           ),
         },
@@ -125,7 +120,6 @@ export const SelectedTabIndicator = () => {
       style={[
         {
           position: "absolute",
-          width: Tab_ITEM_WIDTH,
           left: 16,
           height: "100%",
           justifyContent: "center",
