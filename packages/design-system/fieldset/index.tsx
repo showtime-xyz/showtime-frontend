@@ -31,7 +31,7 @@ export function Fieldset(props: FieldsetProps) {
   } = props;
   let style = "bg-gray-100 dark:bg-gray-900";
   if (disabled) {
-    style += "opacity-40";
+    style += " opacity-40";
   }
   const isDark = useIsDarkMode();
   const inputId = useId();
