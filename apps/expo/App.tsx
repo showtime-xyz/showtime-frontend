@@ -194,6 +194,9 @@ function AppContextProvider({
     tw,
     userColorScheme ?? deviceColorScheme
   );
+
+  // setting it before useEffect or else we'll see a flash of white paint before
+  useState(() => setColorScheme(colorScheme));
   const isDark = colorScheme === "dark";
 
   useEffect(() => {

@@ -1,5 +1,3 @@
-import { memo } from "react";
-
 import { Grid } from "design-system/card/grid";
 import { View } from "design-system/view";
 import { Activity } from "design-system/activity";
@@ -7,6 +5,7 @@ import { Social } from "design-system/card/social";
 import { Collection } from "design-system/card/rows/collection";
 import { Title } from "design-system/card/rows/title";
 import { Media } from "design-system/media";
+import { withMemoAndColorScheme } from "app/components/memoWithTheme";
 
 type Props = {
   act: any;
@@ -34,4 +33,4 @@ function CardImpl({ act, variant }: Props) {
   );
 }
 
-export const Card = memo(CardImpl);
+export const Card = withMemoAndColorScheme(CardImpl);

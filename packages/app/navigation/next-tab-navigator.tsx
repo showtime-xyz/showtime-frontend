@@ -15,6 +15,7 @@ import {
   TrendingTabBarIcon,
   NotificationsTabBarIcon,
 } from "./tab-bar-icons";
+import { useColorScheme } from "design-system/hooks";
 
 const HomeNavigator = dynamic(() => import("../pages/home"));
 const DiscoverNavigator = dynamic(() => import("../pages/discover"));
