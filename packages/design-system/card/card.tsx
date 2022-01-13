@@ -1,10 +1,12 @@
 import { memo } from "react";
-import { Media } from "design-system/card/media";
+
+import { Grid } from "design-system/card/grid";
 import { View } from "design-system/view";
 import { Activity } from "design-system/activity";
 import { Social } from "design-system/card/social";
 import { Collection } from "design-system/card/rows/collection";
 import { Title } from "design-system/card/rows/title";
+import { Media } from "design-system/media";
 
 type Props = {
   act: any;
@@ -19,7 +21,7 @@ function CardImpl({ act, variant }: Props) {
     <View tw="bg-white dark:bg-black">
       {variant === "activity" && <Activity activity={act} />}
 
-      <Media nfts={nfts ?? []} />
+      {single ? <Media item={nfts[0]} count={1} /> : <Grid nfts={nfts ?? []} />}
 
       {variant === "nft" && <Title nft={nfts[0]} />}
 
