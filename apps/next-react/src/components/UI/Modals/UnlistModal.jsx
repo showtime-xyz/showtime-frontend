@@ -13,7 +13,11 @@ import useProfile from "@/hooks/useProfile";
 import { ExclamationIcon } from "@heroicons/react/outline";
 import XIcon from "@/components/Icons/XIcon";
 import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
-import { formatAddressShort, truncateWithEllipses } from "@/lib/utilities";
+import {
+  formatAddressShort,
+  truncateWithEllipses,
+  findListingItemByOwner,
+} from "@/lib/utilities";
 import BadgeIcon from "@/components/Icons/BadgeIcon";
 import useFlags, { FLAGS } from "@/hooks/useFlags";
 
@@ -76,6 +80,7 @@ const UnlistModal = ({ open, onClose, onSuccess = () => null, token }) => {
 
   const unlistToken = async () => {
     setModalPage(MODAL_PAGES.LOADING);
+    const ownerItem = findListingItemByOwner(token, myProfile.profile_id);
 
     const web3Modal = getWeb3Modal({
       theme: resolvedTheme,
@@ -110,7 +115,7 @@ const UnlistModal = ({ open, onClose, onSuccess = () => null, token }) => {
     const provider = biconomy.getEthersProvider();
 
     const { data } = await contract.populateTransaction.cancelSale(
-      token.listing.sale_identifier
+      ownerItem.sale_identifier
     );
 
     const transaction = await provider
@@ -225,9 +230,7 @@ const UnlistModal = ({ open, onClose, onSuccess = () => null, token }) => {
 };
 
 const UnlistPage = ({ token, unlistToken, onClose, profile_id }) => {
-  const currentListing = token?.listing?.all_sellers?.find(
-    (seller) => seller.profile_id === profile_id
-  );
+  const currentListing = findListingItemByOwner(token, profile_id);
   const hasMultipleEditions = token?.listing?.total_edition_quantity > 1;
 
   return (
