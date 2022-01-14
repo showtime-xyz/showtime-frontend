@@ -24,6 +24,7 @@ import {
   CHAIN_IDENTIFIERS,
   COLLECTION_NAME_TRUNCATE_LENGTH,
 } from "../lib/constants";
+import { findListingItemByOwner } from "@/lib/utilities";
 
 const TokenCard = ({
   originalItem,
@@ -52,10 +53,10 @@ const TokenCard = ({
   const [refreshing, setRefreshing] = useState(false);
   const [showModel, setShowModel] = useState(false);
 
-  const hasMatchingListing = item?.listing?.all_sellers?.find((seller) => {
-    return seller.profile_id === pageProfile?.profile_id;
-  });
-
+  const hasMatchingListing = findListingItemByOwner(
+    item,
+    pageProfile?.profile_id
+  );
   const freeListedItem = item?.listing?.min_price === 0;
   const singleItem = item?.token_count === 1;
 
