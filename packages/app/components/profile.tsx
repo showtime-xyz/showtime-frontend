@@ -1,5 +1,12 @@
-import { useCallback, useMemo, useReducer, useState } from "react";
-import { Dimensions, Platform, useColorScheme } from "react-native";
+import {
+  Suspense,
+  memo,
+  useCallback,
+  useMemo,
+  useReducer,
+  useState,
+} from "react";
+import { Dimensions, Platform } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import {
   Collection,
@@ -14,8 +21,8 @@ import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 import { Image } from "design-system/image";
 import { VerificationBadge } from "design-system/verification-badge";
+import { useColorScheme } from "design-system/hooks";
 import { getProfileImage, getProfileName, getSortFields } from "../utilities";
-import Animated, { FadeIn } from "react-native-reanimated";
 import { Media } from "design-system/media";
 
 const TAB_LIST_HEIGHT = 64;

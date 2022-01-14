@@ -3,7 +3,6 @@ import { useWindowDimensions } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Router from "next/router";
-import Animated, { FadeIn, SlideOutUp } from "react-native-reanimated";
 
 import { useRouter } from "app/navigation/use-router";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
@@ -53,7 +52,6 @@ const Header = () => {
         safeAreaTop ? `pt-[${safeAreaTop}px]` : "",
       ]}
     >
-      <StatusBar style="auto" />
       <View tw="px-4 bg-white dark:bg-black md:dark:bg-gray-900 w-full border-b border-gray-100 dark:border-gray-900 h-14">
         <View tw="flex-row items-center justify-between py-2">
           <View>

@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext } from "react";
+import { useCallback, useContext } from "react";
 import { Dimensions } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -15,6 +15,7 @@ import { ChevronUp } from "design-system/icon";
 import { useIsDarkMode } from "design-system/hooks";
 import { Media } from "design-system/media";
 import type { Creator, NFT } from "app/types";
+import { withMemoAndColorScheme } from "app/components/memoWithTheme";
 
 type Props = {
   creator: Creator;
@@ -24,7 +25,7 @@ export const ITEM_COLLAPSED_HEIGHT = 64;
 export const ITEM_EXPANDED_HEIGHT =
   Dimensions.get("window").width / 2 + ITEM_COLLAPSED_HEIGHT + 20;
 
-export const CreatorPreview = memo((props: Props) => {
+export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
   const isDark = useIsDarkMode();
   const isExpanded = useSharedValue(false);
   const style = useAnimatedStyle(() => ({
