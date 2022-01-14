@@ -129,13 +129,15 @@ const Root = ({
         >
           {headerChild}
         </View>
-        <View
-          style={{ flex: 1 }}
-          onLayout={(e) => setTabListHeight(e.nativeEvent.layout.height)}
-          pointerEvents="box-none"
-        >
-          {tabListChild}
-        </View>
+        {tabListChild && (
+          <View
+            style={{ flex: 1 }}
+            onLayout={(e) => setTabListHeight(e.nativeEvent.layout.height)}
+            pointerEvents="box-none"
+          >
+            {tabListChild}
+          </View>
+        )}
       </Reanimated.View>
       {/* mount children only when tabBar and header heights are known */}
       {(headerHeight || !headerChild) && tabListHeight ? restChildren : null}
