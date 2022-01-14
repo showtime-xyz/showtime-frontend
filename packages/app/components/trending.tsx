@@ -53,7 +53,7 @@ export const Trending = () => {
             () => ({
               height: TAB_LIST_HEIGHT,
               ...tw.style(
-                "dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900"
+                "dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 w-screen"
               ),
             }),
             []

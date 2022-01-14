@@ -19,7 +19,7 @@ function TabBarIcon({ tab, children }) {
   return (
     <Pressable
       tw={[
-        "md:bg-white md:dark:bg-gray-800 rounded-[20] w-10 h-10 items-center justify-center",
+        "md:bg-white md:dark:bg-gray-800 rounded-[20] w-12 h-12 items-center justify-center",
       ]}
       // @ts-expect-error web only
       onMouseEnter={() => {
@@ -82,7 +82,7 @@ export const DiscoverTabBarIcon = ({ color, focused }) => {
 export const CameraTabBarIcon = ({ color, focused }) => {
   return (
     <TabBarIcon tab="/camera">
-      <Button variant="primary" tw="rounded-full h-12 w-12 z-1">
+      <Button variant="primary" tw="rounded-full h-12 w-12">
         <Plus
           width={24}
           height={24}
