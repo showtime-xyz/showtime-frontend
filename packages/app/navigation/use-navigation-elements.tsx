@@ -34,3 +34,17 @@ export function useHideNavigationElements() {
     }
   }, []);
 }
+
+export function useHideHeader() {
+  const { setIsHeaderHidden } = useNavigationElements();
+
+  useEffect(() => {
+    if (Platform.OS !== "ios") {
+      setIsHeaderHidden(true);
+
+      return () => {
+        setIsHeaderHidden(false);
+      };
+    }
+  }, []);
+}

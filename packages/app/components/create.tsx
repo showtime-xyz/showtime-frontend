@@ -1,12 +1,4 @@
-import {
-  View,
-  Text,
-  Fieldset,
-  ScrollView,
-  Select,
-  Checkbox,
-} from "design-system";
-import { useIsDarkMode } from "design-system/hooks";
+import { View, Text, Fieldset, Select, Checkbox } from "design-system";
 import { Close } from "design-system/icon";
 import { Image } from "design-system/image";
 import { tw } from "design-system/tailwind";
@@ -48,20 +40,10 @@ function CloseButton({
 }
 
 function Create() {
-  const isDark = useIsDarkMode();
-
   const [checked, setChecked] = useState(false);
 
   return (
-    <ScrollView tw="p-4">
-      <View tw="flex-row items-center">
-        <CloseButton variant={isDark ? "dark" : "light"} onPress={() => {}} />
-        <View tw="absolute w-full items-center">
-          <Text tw="text-xl text-gray-900 dark:text-white font-bold">
-            Create NFT
-          </Text>
-        </View>
-      </View>
+    <View tw="p-4">
       <View tw="mt-11 flex-row">
         <Image
           source={{
@@ -121,7 +103,7 @@ function Create() {
           </Text>
         </Pressable>
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
