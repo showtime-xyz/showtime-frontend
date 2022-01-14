@@ -1,16 +1,16 @@
-import { Platform, useColorScheme } from "react-native";
+import { Platform } from "react-native";
 import Animated, {
   useAnimatedStyle,
   Extrapolate,
   interpolate,
   useDerivedValue,
 } from "react-native-reanimated";
-import React from "react";
+
 import { tw } from "design-system/tailwind";
-import { View } from "../../view";
-import { Text } from "../../text";
-import { useTabIndexContext, useTabsContext } from "../tablib";
-import { useIsDarkMode } from "../../hooks";
+import { useIsDarkMode } from "design-system/hooks";
+import { View } from "design-system/view";
+import { Text } from "design-system/text";
+import { useTabIndexContext, useTabsContext } from "design-system/tabs/tablib";
 
 type TabItemProps = {
   name: string;

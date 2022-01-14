@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo, useEffect } from "react";
-import { Platform, useColorScheme } from "react-native";
+import { Platform } from "react-native";
 import { useRouter } from "next/router";
 import {
   NavigationContainer,
@@ -10,6 +10,7 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 import { linking } from "app/navigation/linking";
 import { NavigationElementsProvider } from "app/navigation/navigation-elements-context";
+import { useIsDarkMode } from "design-system/hooks";
 
 function LinkTo() {
   const linkTo = useLinkTo();
@@ -58,8 +59,7 @@ export function NavigationProvider({
 }) {
   const trackedLinking = useRef(linking);
   const linkingConfig = useLinkingConfig(trackedLinking);
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const isDark = useIsDarkMode();
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const [isTabBarHidden, setIsTabBarHidden] = useState(false);
 

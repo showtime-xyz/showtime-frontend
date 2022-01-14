@@ -12,6 +12,7 @@ import { Image } from "design-system/image";
 import { Video } from "design-system/video";
 import { Model } from "design-system/model";
 import { PinchToZoom } from "design-system/pinch-to-zoom";
+import { withMemoAndColorScheme } from "app/components/memoWithTheme";
 
 const getImageUrl = (imgUrl: string, tokenAspectRatio: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
@@ -144,6 +145,6 @@ function Media({ item, count }: Props) {
   );
 }
 
-const MemoizedMedia = memo(Media);
+const MemoizedMedia = withMemoAndColorScheme(Media);
 
 export { MemoizedMedia as Media };

@@ -1,8 +1,9 @@
-import { useWindowDimensions, useColorScheme, StyleSheet } from "react-native";
+import { useWindowDimensions, StyleSheet } from "react-native";
 import { BlurView } from "expo-blur";
 import dynamic from "next/dynamic";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { tw } from "design-system/tailwind";
 import { Header } from "app/components/header";
 import { useNavigationElements } from "./use-navigation-elements";
 import { NextNavigationProps } from "./types";
@@ -28,10 +29,11 @@ export function NextTabNavigator({
   Component,
 }: NextNavigationProps) {
   const { width } = useWindowDimensions();
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
   const { isTabBarHidden } = useNavigationElements();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
+
+  const color = tw.style("bg-black dark:bg-white")?.backgroundColor as string;
+  const tint = color === "#000" ? "light" : "dark";
 
   return (
     <BottomTab.Navigator
@@ -39,8 +41,8 @@ export function NextTabNavigator({
       screenOptions={{
         header: () => <Header />,
         headerShown: true,
-        tabBarActiveTintColor: isDark ? "#fff" : "#000",
-        tabBarInactiveTintColor: isDark ? "#fff" : "#000",
+        tabBarActiveTintColor: color,
+        tabBarInactiveTintColor: color,
         tabBarShowLabel: false,
         tabBarHideOnKeyboard: true,
         tabBarStyle: [
@@ -66,7 +68,7 @@ export function NextTabNavigator({
         tabBarBackground: () =>
           width >= 768 ? null : (
             <BlurView
-              tint={isDark ? "dark" : "light"}
+              tint={tint}
               intensity={95}
               style={StyleSheet.absoluteFill}
             />

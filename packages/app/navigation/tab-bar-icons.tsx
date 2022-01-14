@@ -1,5 +1,3 @@
-import { useColorScheme } from "react-native";
-
 import { View, Pressable, Button } from "design-system";
 import { tw } from "design-system/tailwind";
 import {
@@ -44,9 +42,6 @@ function TabBarIcon({ tab, children }) {
 }
 
 export const HomeTabBarIcon = ({ color, focused }) => {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
-
   return (
     <TabBarIcon tab="/">
       {focused ? (
@@ -55,7 +50,7 @@ export const HomeTabBarIcon = ({ color, focused }) => {
             style={tw.style("z-1")}
             width={24}
             height={24}
-            color={focused && !isDark ? "#fff" : color}
+            color={color}
           />
         </View>
       ) : (
@@ -66,9 +61,6 @@ export const HomeTabBarIcon = ({ color, focused }) => {
 };
 
 export const DiscoverTabBarIcon = ({ color, focused }) => {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
-
   return (
     <TabBarIcon tab="/discover">
       {focused ? (
@@ -77,7 +69,7 @@ export const DiscoverTabBarIcon = ({ color, focused }) => {
             style={tw.style("z-1")}
             width={24}
             height={24}
-            color={focused && !isDark ? "#fff" : color}
+            color={color}
           />
         </View>
       ) : (
@@ -102,9 +94,6 @@ export const CameraTabBarIcon = ({ color, focused }) => {
 };
 
 export const TrendingTabBarIcon = ({ color, focused }) => {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
-
   return (
     <TabBarIcon tab="/trending">
       {focused ? (
@@ -113,7 +102,7 @@ export const TrendingTabBarIcon = ({ color, focused }) => {
             style={tw.style("z-1")}
             width={24}
             height={24}
-            color={focused && !isDark ? "#fff" : color}
+            color={color}
           />
         </View>
       ) : (
@@ -124,9 +113,6 @@ export const TrendingTabBarIcon = ({ color, focused }) => {
 };
 
 export const NotificationsTabBarIcon = ({ color, focused }) => {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
-
   return (
     <TabBarIcon tab="/notifications">
       {focused ? (
@@ -135,7 +121,7 @@ export const NotificationsTabBarIcon = ({ color, focused }) => {
             style={tw.style("z-1")}
             width={24}
             height={24}
-            color={focused && !isDark ? "#fff" : color}
+            color={color}
           />
         </View>
       ) : (

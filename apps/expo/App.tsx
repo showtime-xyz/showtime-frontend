@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { AppState, LogBox, useColorScheme, Platform } from "react-native";
+import {
+  AppState,
+  LogBox,
+  Platform,
+  useColorScheme as useDeviceColorScheme,
+} from "react-native";
 import {
   enableScreens,
   // enableFreeze,
@@ -8,7 +13,7 @@ import {
 import { StatusBar, setStatusBarStyle } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { DripsyProvider } from "dripsy";
-import { useDeviceContext } from "twrnc";
+import { useDeviceContext, useAppColorScheme } from "twrnc";
 // import * as Sentry from 'sentry-expo'
 import { MMKV } from "react-native-mmkv";
 import { SWRConfig, useSWRConfig } from "swr";
@@ -33,10 +38,13 @@ import { setLogout } from "app/lib/logout";
 import { mixpanel } from "app/lib/mixpanel";
 import { deleteCache } from "app/lib/delete-cache";
 import { useUser } from "app/hooks/use-user";
-import { useRouter } from "app/navigation/use-router";
 import { deleteRefreshToken } from "app/lib/refresh-token";
 import { ToastProvider } from "design-system/toast";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import {
+  setColorScheme as setUserColorScheme,
+  useColorScheme as useUserColorScheme,
+} from "app/lib/color-scheme";
 
 enableScreens(true);
 // enableFreeze(true)
@@ -172,34 +180,47 @@ function AppContextProvider({
   children: React.ReactNode;
 }): JSX.Element {
   const { user } = useUser();
-  const router = useRouter();
   const { mutate } = useSWRConfig();
   const connector = useWalletConnect();
-  useDeviceContext(tw);
-  const colorScheme = useColorScheme();
+  const [web3, setWeb3] = useState(null);
+
+  useDeviceContext(tw, { withDeviceColorScheme: false });
+  // Default to device color scheme
+  const deviceColorScheme = useDeviceColorScheme();
+  // User can override color scheme
+  const userColorScheme = useUserColorScheme();
+  // Use the user color scheme if it's set
+  const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(
+    tw,
+    userColorScheme ?? deviceColorScheme
+  );
+
+  // setting it before useEffect or else we'll see a flash of white paint before
+  useState(() => setColorScheme(colorScheme));
   const isDark = colorScheme === "dark";
 
   useEffect(() => {
-    if (Platform.OS === "android") {
-      if (isDark) {
+    if (isDark) {
+      if (Platform.OS === "android") {
         NavigationBar.setBackgroundColorAsync("#000");
         NavigationBar.setButtonStyleAsync("light");
-        setStatusBarStyle("dark");
-      } else {
+      }
+
+      tw.setColorScheme("dark");
+      SystemUI.setBackgroundColorAsync("black");
+      setStatusBarStyle("light");
+    } else {
+      if (Platform.OS === "android") {
         NavigationBar.setBackgroundColorAsync("#FFF");
         NavigationBar.setButtonStyleAsync("dark");
-        setStatusBarStyle("light");
       }
-    }
 
-    if (isDark) {
-      SystemUI.setBackgroundColorAsync("black");
-    } else {
+      tw.setColorScheme("light");
       SystemUI.setBackgroundColorAsync("white");
+      setStatusBarStyle("dark");
     }
-  }, []);
+  }, [isDark]);
 
-  const [web3, setWeb3] = useState(null);
   const injectedGlobalContext = {
     web3,
     setWeb3,
@@ -213,6 +234,11 @@ function AppContextProvider({
       mixpanel.track("Logout");
       // Triggers all event listeners for this key to fire. Used to force cross tab logout.
       setLogout(Date.now().toString());
+    },
+    colorScheme,
+    setColorScheme: (newColorScheme: "light" | "dark") => {
+      setColorScheme(newColorScheme);
+      setUserColorScheme(newColorScheme);
     },
   };
 
@@ -261,8 +287,7 @@ function App() {
                 >
                   <AppContextProvider>
                     <>
-                      {/* TODO: change this when we update the splash screen */}
-                      <StatusBar style="dark" />
+                      <StatusBar style="auto" />
                       <NextTabNavigator />
                     </>
                   </AppContextProvider>

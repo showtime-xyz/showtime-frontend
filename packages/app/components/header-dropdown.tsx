@@ -15,7 +15,7 @@ import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import { formatAddressShort } from "app/lib/utilities";
 import { AppContext } from "app/context/app-context";
 import { useUser } from "app/hooks/use-user";
-import { useProfileNavigation } from "../navigation/app-navigation";
+import { useProfileNavigation } from "app/navigation/app-navigation";
 
 const getSmallImageUrl = (imgUrl: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
@@ -85,6 +85,7 @@ function HeaderDropdown() {
             </DropdownMenuTriggerItem>
             <DropdownMenuContent tw="w-30 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow">
               <DropdownMenuItem
+                onSelect={() => context.setColorScheme("light")}
                 key="nested-group-1"
                 tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
               >
@@ -93,6 +94,7 @@ function HeaderDropdown() {
                 </DropdownMenuItemTitle>
               </DropdownMenuItem>
               <DropdownMenuItem
+                onSelect={() => context.setColorScheme("dark")}
                 key="nested-group-2"
                 tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
               >
