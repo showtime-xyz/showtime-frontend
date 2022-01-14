@@ -8,8 +8,8 @@ type HomeStackParams = {
   nft: { id: number };
 };
 
-type DiscoverStackParams = {
-  discover: undefined;
+type TrendingStackParams = {
+  trending: undefined;
   login: undefined;
   nft: { id: number };
 };
@@ -21,8 +21,8 @@ type CameraStackParams = {
   create: undefined;
 };
 
-type TrendingStackParams = {
-  trending: undefined;
+type MarketplaceStackParams = {
+  marketplace: undefined;
   login: undefined;
   nft: { id: number };
 };
@@ -41,9 +41,9 @@ type NextNavigationProps = {
 
 type BottomTabNavigatorParams = {
   homeTab: NavigatorScreenParams<HomeStackParams>;
-  discoverTab: NavigatorScreenParams<DiscoverStackParams>;
-  cameraTab: NavigatorScreenParams<CameraStackParams>;
   trendingTab: NavigatorScreenParams<TrendingStackParams>;
+  cameraTab: NavigatorScreenParams<CameraStackParams>;
+  marketplaceTab: NavigatorScreenParams<MarketplaceStackParams>;
   notificationsTab: NavigatorScreenParams<NotificationsStackParams>;
 };
 
@@ -56,7 +56,7 @@ declare global {
 export type {
   NextNavigationProps,
   HomeStackParams,
-  DiscoverStackParams,
+  MarketplaceStackParams,
   TrendingStackParams,
   CameraStackParams,
   NotificationsStackParams,

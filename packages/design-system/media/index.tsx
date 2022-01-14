@@ -47,7 +47,8 @@ function Media({ item, count }: Props) {
 
   const openNFT = useCallback(
     (id: string) => {
-      const as = `${router.pathname !== "/" ? router.pathname : ""}/nft/${id}`;
+      const path = router.pathname.startsWith("/trending") ? "/trending" : "";
+      const as = `${path}/nft/${id}`;
 
       const href = Router.router
         ? {

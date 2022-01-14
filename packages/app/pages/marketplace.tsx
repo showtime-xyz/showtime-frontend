@@ -2,8 +2,8 @@ import { Platform } from "react-native";
 import dynamic from "next/dynamic";
 
 import createStackNavigator from "app/navigation/create-stack-navigator";
-import { DiscoverScreen } from "app/screens/discover";
-import { DiscoverStackParams } from "app/navigation/types";
+import { MarketplaceScreen } from "app/screens/marketplace";
+import { MarketplaceStackParams } from "app/navigation/types";
 import { navigatorScreenOptions } from "app/navigation/navigator-screen-options";
 
 const LoginScreen = dynamic<JSX.Element>(() =>
@@ -13,22 +13,22 @@ const NftScreen = dynamic<JSX.Element>(() =>
   import("app/screens/nft").then((mod) => mod.NftScreen)
 );
 
-const DiscoverStack = createStackNavigator<DiscoverStackParams>();
+const MarketplaceStack = createStackNavigator<MarketplaceStackParams>();
 
-function DiscoverNavigator() {
+function MarketplaceNavigator() {
   return (
-    <DiscoverStack.Navigator
+    <MarketplaceStack.Navigator
       // @ts-ignore
       screenOptions={navigatorScreenOptions}
     >
-      <DiscoverStack.Group>
-        <DiscoverStack.Screen
-          name="discover"
-          component={DiscoverScreen}
-          options={{ title: "Discover", headerTitle: "Discover" }}
+      <MarketplaceStack.Group>
+        <MarketplaceStack.Screen
+          name="Marketplace"
+          component={MarketplaceScreen}
+          options={{ title: "Marketplace", headerTitle: "Marketplace" }}
         />
-      </DiscoverStack.Group>
-      <DiscoverStack.Group
+      </MarketplaceStack.Group>
+      <MarketplaceStack.Group
         screenOptions={{
           headerShown: false,
           animation: Platform.OS === "ios" ? "default" : "fade",
@@ -36,11 +36,11 @@ function DiscoverNavigator() {
             Platform.OS === "ios" ? "formSheet" : "transparentModal",
         }}
       >
-        <DiscoverStack.Screen name="login" component={LoginScreen} />
-        <DiscoverStack.Screen name="nft" component={NftScreen} />
-      </DiscoverStack.Group>
-    </DiscoverStack.Navigator>
+        <MarketplaceStack.Screen name="login" component={LoginScreen} />
+        <MarketplaceStack.Screen name="nft" component={NftScreen} />
+      </MarketplaceStack.Group>
+    </MarketplaceStack.Navigator>
   );
 }
 
-export default DiscoverNavigator;
+export default MarketplaceNavigator;

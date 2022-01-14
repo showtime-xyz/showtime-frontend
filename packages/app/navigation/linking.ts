@@ -17,11 +17,11 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
           profile: "/profile/:walletAddress",
         },
       },
-      discoverTab: {
-        path: "discover",
-        initialRouteName: "discover",
+      trendingTab: {
+        path: "trending",
+        initialRouteName: "trending",
         screens: {
-          discover: "",
+          trending: "",
           login: "/login",
           nft: "/nft/:id",
         },
@@ -36,11 +36,11 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
           create: "/create",
         },
       },
-      trendingTab: {
-        path: "trending",
-        initialRouteName: "trending",
+      marketplaceTab: {
+        path: "marketplace",
+        initialRouteName: "marketplace",
         screens: {
-          trending: "",
+          marketplace: "",
           login: "/login",
           nft: "/nft/:id",
         },

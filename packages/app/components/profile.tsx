@@ -1,13 +1,8 @@
-import {
-  Suspense,
-  memo,
-  useCallback,
-  useMemo,
-  useReducer,
-  useState,
-} from "react";
+import { Suspense, useCallback, useMemo, useReducer, useState } from "react";
 import { Dimensions, Platform } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import Animated, { FadeIn } from "react-native-reanimated";
+
 import {
   Collection,
   defaultFilters,

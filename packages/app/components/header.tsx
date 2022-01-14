@@ -1,6 +1,5 @@
 import { useState, useCallback } from "react";
 import { useWindowDimensions } from "react-native";
-import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Router from "next/router";
 
