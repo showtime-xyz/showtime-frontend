@@ -1,7 +1,7 @@
-import * as React from 'react';
-import Svg, { SvgProps, Defs, ClipPath, Path, G } from 'react-native-svg';
+import * as React from "react";
+import Svg, { SvgProps, Defs, ClipPath, Path, G } from "react-native-svg";
 
-function IconFlashBoltActive(props: SvgProps) {
+export default function IconFlashBoltActive(props: SvgProps) {
   return (
     <Svg
       xmlns="http://www.w3.org/2000/svg"
@@ -24,5 +24,3 @@ function IconFlashBoltActive(props: SvgProps) {
     </Svg>
   );
 }
-
-export { IconFlashBoltActive };
