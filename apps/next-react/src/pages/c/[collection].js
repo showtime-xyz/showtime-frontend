@@ -182,16 +182,6 @@ export default function Collection({
           mixpanel.track("Recently sold button clicked");
         }}
       />
-      {!isMobile && (
-        <GridTab
-          label="Oldest"
-          isActive={sortBy === "oldest"}
-          onClickTab={() => {
-            setSortby("oldest");
-            mixpanel.track("Oldest button clicked");
-          }}
-        />
-      )}
     </GridTabs>
   );
 
