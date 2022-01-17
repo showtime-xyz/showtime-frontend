@@ -4,6 +4,7 @@ import { Image } from "design-system/image";
 import { tw } from "design-system/tailwind";
 import { useState } from "react";
 import { Pressable } from "react-native";
+import { useMintNFT } from "../hooks/api-hooks";
 
 function CloseButton({
   onPress,
@@ -38,9 +39,16 @@ function CloseButton({
     </Pressable>
   );
 }
-
+const dummyFilePath = "";
 function Create() {
   const [checked, setChecked] = useState(false);
+  useMintNFT({
+    filePath:
+      "file:///Users/nishanbende/Library/Developer/CoreSimulator/Devices/A1ABD6FC-87E9-48E6-A372-89B5E425B947/data/Containers/Data/Application/470B5899-4BBB-4510-8675-8C3A5FE01121/Documents/test.jpg",
+    title: "Nature",
+    description: "A beautiful nature",
+    notSafeForWork: false,
+  });
 
   return (
     <View tw="p-4">

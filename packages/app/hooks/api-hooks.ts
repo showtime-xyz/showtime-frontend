@@ -1,9 +1,14 @@
 import { Profile } from "../types";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useReducer } from "react";
 import { NFT } from "../types";
 import { useInfiniteListQuerySWR, fetcher } from "./use-infinite-list-query";
 import useSWR from "swr";
 import { useUser } from "./use-user";
+import { v4 as uuid } from "uuid";
+import axios from "axios";
+import * as FileSystem from "expo-file-system";
+import { Alert } from "react-native";
+import { formatAddressShort } from "../utilities";
 
 export const useActivity = ({
   typeId,
@@ -228,4 +233,198 @@ export const useComments = ({ nftId }: { nftId: number }) => {
   const queryState = useInfiniteListQuerySWR<any>(commentsUrlFn);
 
   return queryState;
+};
+
+type MintNFTType = {
+  status:
+    | "idle"
+    | "fileUpload"
+    | "fileUploadError"
+    | "minting"
+    | "mintingError";
+};
+
+const initialMintNFTState: MintNFTType = {
+  status: "idle",
+};
+
+const mintNFTReducer = (state: MintNFTType, action: any): MintNFTType => {
+  switch (action.type) {
+    case "fileUpload":
+      return { ...state, status: "fileUpload" };
+    case "fileUploadError":
+      return { ...state, status: "fileUploadError" };
+    case "minting":
+      return { ...state, status: "minting" };
+    case "mintingError":
+      return { ...state, status: "mintingError" };
+    default:
+      return state;
+  }
+};
+
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
+
+type UseMintNFT = {
+  filePath: string;
+  title: string;
+  description: string;
+  notSafeForWork: boolean;
+};
+
+const supportedImageExtensions = ["jpg", "jpeg", "png", "gif"];
+const supportedVideoExtensions = ["mp4", "mov", "avi", "mkv", "webm"];
+
+const getFileNameAndType = (filePath: string) => {
+  const fileName = filePath.split("/").pop();
+  const fileExtension = fileName?.split(".").pop();
+  if (fileExtension && supportedImageExtensions.includes(fileExtension)) {
+    return {
+      name: fileName,
+      type: "image/" + fileExtension,
+    };
+  } else if (
+    fileExtension &&
+    supportedVideoExtensions.includes(fileExtension)
+  ) {
+    return {
+      name: fileName,
+      type: "video/" + fileExtension,
+    };
+  }
+};
+
+const testAddress = "0x3CFa5Fe88512Db62e40d0F91b7E59af34C1b098f";
+
+export const useMintNFT = ({
+  filePath,
+  title,
+  description,
+  notSafeForWork,
+}: UseMintNFT) => {
+  const [state, dispatch] = useReducer(mintNFTReducer, initialMintNFTState);
+  const { user } = useUser();
+  let userAddress = user ? user.publicAddress : testAddress;
+  async function uploadFile() {
+    if (userAddress) {
+      const fileInfo = await FileSystem.getInfoAsync(filePath);
+      if (typeof fileInfo.size === "number" && fileInfo.size > MAX_FILE_SIZE) {
+        // TODO: improve alert
+        Alert.alert("File too big! Please use a file smaller than 50MB.");
+        return;
+      }
+
+      const fileMetaData = getFileNameAndType(filePath);
+
+      if (fileMetaData) {
+        const pinataToken = await axios
+          .post(
+            "https://api.pinata.cloud/users/generateApiKey",
+            {
+              maxUses: 1,
+              keyName: `${formatAddressShort(userAddress)}'s key`,
+              permissions: {
+                endpoints: {
+                  pinning: {
+                    pinFileToIPFS: true,
+                    pinJSONToIPFS: true,
+                  },
+                },
+              },
+            },
+
+            {
+              headers: {
+                Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJkZWZjNDc5YS01ODhlLTQ2ZWYtYjY3Zi01ZWYzYTUwYjEzYzUiLCJlbWFpbCI6ImFsZXgua2lsa2thQHRyeXNob3d0aW1lLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImlkIjoiTllDMSIsImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxfV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2V9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiJhNTkxMzIyNzVjZTUzMGVjYjE2NSIsInNjb3BlZEtleVNlY3JldCI6IjNiMjkxOTFkZDI4Nzc3Njk5NmQ0ZmZkOGJmZTcwZTE4MDU5YjE2ZmJhOWE0ZDhhYjE0YjkzMjMwZjU0YTE0ZjEiLCJpYXQiOjE2MjUxNTQzNzd9.7630gOVEohas0G-OWl2xPdXUJRWdOxJDHkFen1cO7Ak`,
+              },
+            }
+          )
+          .then((res) => res.data.JWT);
+
+        const formData = new FormData();
+
+        formData.append("file", {
+          uri: filePath,
+          name: fileMetaData.name,
+          type: fileMetaData.type,
+        });
+
+        formData.append(
+          "pinataMetadata",
+          JSON.stringify({
+            name: uuid(),
+          })
+        );
+
+        const data = await axios
+          .post("https://api.pinata.cloud/pinning/pinFileToIPFS", formData, {
+            headers: {
+              Authorization: `Bearer ${pinataToken}`,
+              "Content-Type": `multipart/form-data`,
+            },
+          })
+          .then((res) => res.data);
+
+        console.log("uploaded!! ", data);
+
+        return data;
+      }
+    }
+  }
+
+  async function mintToken(ipfsHash: string) {
+    const pinataToken = await axios
+      .post("/api/pinata/generate-key")
+      .then((res) => res.data.token);
+
+    const contentHash = await axios
+      .post(
+        "https://api.pinata.cloud/pinning/pinJSONToIPFS",
+        {
+          pinataMetadata: { name: uuid() },
+          pinataContent: {
+            name: title,
+            description,
+            image: `ipfs://${ipfsHash}`,
+            ...(notSafeForWork ? { attributes: [{ value: "NSFW" }] } : {}),
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${pinataToken}`,
+          },
+        }
+      )
+      .then((res) => res.data.IpfsHash);
+  }
+
+  async function mintTokenPipeline(filePath: string) {
+    let ipfsHash = "";
+    try {
+      dispatch({ type: "fileUpload" });
+      ipfsHash = await uploadFile();
+    } catch (e) {
+      console.error("File upload error", e);
+      dispatch({ type: "fileUploadError" });
+      return;
+    }
+
+    if (ipfsHash) {
+      try {
+        dispatch({ type: "minting" });
+        // await mintToken(ipfsHash);
+      } catch (e) {
+        dispatch({ type: "mintingError" });
+        return;
+      }
+    }
+  }
+
+  useEffect(() => {
+    mintTokenPipeline(filePath);
+  }, []);
+
+  console.log("state ", state);
+
+  // return { data, loading: !data, error };
 };
