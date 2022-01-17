@@ -75,7 +75,7 @@ const Header = () => {
                           ? "bg-gradient-to-bl from-violet-900 via-violet-500 to-violet-300 text-white"
                           : "text-black dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900"
                       } rounded-full py-3 -my-2 px-3 -mx-1 transition`}
-                      onClick={() => mixpanel.track("Discover button click")}
+                      onClick={() => mixpanel.track("Feed button click")}
                     >
                       {asPath == "/" ? (
                         <HomeIconSolid className="w-5 h-5" />
@@ -179,7 +179,7 @@ const Header = () => {
                         ? "border-gray-800"
                         : "border-transparent hover:border-gray-400"
                     }`}
-                    onClick={() => mixpanel.track("Discover button click")}
+                    onClick={() => mixpanel.track("Feed button click")}
                   >
                     <div
                       className={`${
