@@ -196,7 +196,7 @@ const Header = () => {
                     </div>
                   </a>
                 </Link>
-                <Link href="/c/showtime">
+                <Link href="/c/showtime-marketplace">
                   <a
                     className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 px-2 -mx-2 group ${
                       asPath == "/c/showtime"
@@ -207,12 +207,12 @@ const Header = () => {
                   >
                     <div
                       className={`${
-                        asPath == "/c/showtime"
+                        asPath == "/c/showtime-marketplace"
                           ? "bg-gray-100 dark:bg-gray-900"
                           : "group-hover:bg-gray-100 dark:group-hover:bg-gray-900"
                       } p-2 -m-2 rounded-full transition`}
                     >
-                      {asPath == "/c/showtime" ? (
+                      {asPath == "/c/showtime-marketplace" ? (
                         <CompassIconSolid className="w-5 h-5" />
                       ) : (
                         <CompassIconOutline className="w-5 h-5" />
