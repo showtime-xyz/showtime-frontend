@@ -371,7 +371,7 @@ const TokenCard = ({
                                 )}
                               >
                                 <span className="block truncate font-medium text-red-500 dark:text-red-700">
-                                  Burn
+                                  Delete
                                 </span>
                               </button>
                             )}

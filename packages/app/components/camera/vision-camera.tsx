@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import { AnimatePresence, View as MotiView } from "moti";
 import {
   PinchGestureHandler,
@@ -25,13 +25,17 @@ import {
 } from "react-native-vision-camera";
 import { useIsFocused } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 import { useIsForeground } from "app/hooks/use-is-foreground";
 import { CameraButtons } from "app/components/camera/camera-buttons";
 import { Pressable } from "design-system/pressable-scale";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
-import { IconFlashBoltActive, IconFlashBoltInactive } from "design-system/icon";
+import { Flash, FlashOff } from "design-system/icon";
 import { View } from "design-system/view";
+import { tw } from "design-system/tailwind";
+import { useRouter } from "app/navigation/use-router";
+import { Image } from "design-system/image";
 
 // Multi camera on Android not yet supported by CameraX
 // "Thanks for the request. Currently CameraX does not support the multi camera API but as more device adopt them, we will enable support at the appropriate time. Thanks."
@@ -53,6 +57,8 @@ type Props = {
   captureThrottleTimer: any;
   canPop: boolean;
   setCanPop: (canPop: boolean) => void;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
 };
 
 export function Camera({
@@ -62,10 +68,13 @@ export function Camera({
   captureThrottleTimer,
   canPop,
   setCanPop,
+  isLoading,
+  setIsLoading,
 }: Props) {
+  const router = useRouter();
+  const tabBarHeight = useBottomTabBarHeight();
   const camera = useRef<VisionCamera>(null);
   const [showPop, setShowPop] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [isCameraInitialized, setIsCameraInitialized] = useState(false);
   const zoom = useSharedValue(0);
 
@@ -77,12 +86,14 @@ export function Camera({
   // Hide header when camera is active
   const { setIsHeaderHidden } = useNavigationElements();
   useEffect(() => {
-    setIsHeaderHidden(isFocused ? true : false);
+    setIsHeaderHidden(
+      isFocused || router?.pathname?.startsWith("/camera") ? true : false
+    );
 
     return () => {
       setIsHeaderHidden(false);
     };
-  }, [isFocused]);
+  }, [isFocused, router?.pathname]);
 
   const [cameraPosition, setCameraPosition] = useState<"front" | "back">(
     "back"
@@ -114,7 +125,7 @@ export function Camera({
     return device.formats.sort(sortFormats);
   }, [device?.formats]);
 
-  const [is60Fps, setIs60Fps] = useState(true);
+  const [is60Fps, setIs60Fps] = useState(false);
   const fps = useMemo(() => {
     if (!is60Fps) return 30;
 
@@ -159,9 +170,11 @@ export function Camera({
       result = result.filter((f) => f.supportsVideoHDR || f.supportsPhotoHDR);
     }
 
-    // find the first format that includes the given FPS
-    return result.find((f) =>
-      f.frameRateRanges.some((r) => frameRateIncluded(r, fps))
+    // Find the first format that includes the given FPS and is the highest photo quality
+    return result.find(
+      (f) =>
+        f.frameRateRanges.some((r) => frameRateIncluded(r, fps)) &&
+        f.isHighestPhotoQualitySupported
     );
   }, [formats, fps, enableHdr]);
 
@@ -200,14 +213,14 @@ export function Camera({
 
   const onFocus = useCallback(
     async ({ nativeEvent }) => {
-      if (device.supportsFocus) {
+      if (device?.supportsFocus) {
         const focus = {
           x: nativeEvent.x as number,
           y: nativeEvent.y as number,
         };
         setFocus(focus);
         setShowFocus(true);
-        await camera.current.focus(focus);
+        await camera.current?.focus(focus);
         setShowFocus(false);
       }
     },
@@ -255,7 +268,6 @@ export function Camera({
   const takePhoto = useCallback(async () => {
     try {
       if (camera.current == null) throw new Error("Camera ref is null!");
-      if (photos.length > 9) return;
 
       // Reset timer if running
       burstCaptureTimer.reset();
@@ -283,29 +295,11 @@ export function Camera({
     }
   }, [camera, takePhotoOptions, photos]);
 
+  const photoUri = photos?.[0]?.uri;
+
   return (
     <View tw="bg-white dark:bg-black">
-      <View tw="py-8 px-6 flex-row justify-end">
-        <Pressable
-          style={{
-            width: 45,
-            height: 45,
-            backgroundColor: flash === "on" ? "#ff6300" : "#252628",
-            borderRadius: 45 / 2,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          onPress={onFlashPressed}
-        >
-          {flash === "off" ? (
-            <IconFlashBoltInactive color="white" width={24} height={24} />
-          ) : (
-            <IconFlashBoltActive color="white" width={20} height={20} />
-          )}
-        </Pressable>
-      </View>
-
-      <Animated.View style={{ height: "80%" }}>
+      <Animated.View style={{ height: photoUri ? 0 : "100%" }}>
         {device != null && (
           <PinchGestureHandler
             onGestureEvent={onPinchGesture}
@@ -390,7 +384,52 @@ export function Camera({
         </AnimatePresence>
       </Animated.View>
 
-      <View tw="absolute right-0 bottom-10 left-0 bg-gray-100 dark:bg-gray-900 opacity-95">
+      {photoUri && (
+        <View tw="w-screen h-screen bg-gray-100 dark:bg-gray-900 opacity-95">
+          <Image source={{ uri: photoUri }} tw="w-screen h-screen" />
+        </View>
+      )}
+
+      <View tw="absolute top-0 right-0 left-0 bg-gray-100 dark:bg-gray-900 opacity-95">
+        <View tw="py-8 px-4 flex-row justify-end">
+          <Pressable
+            tw="w-12 h-12 rounded-full justify-center items-center bg-white dark:bg-black"
+            onPress={onFlashPressed}
+          >
+            {flash === "off" ? (
+              <FlashOff
+                color={
+                  tw.style("bg-black dark:bg-white")?.backgroundColor as string
+                }
+                width={24}
+                height={24}
+              />
+            ) : (
+              <Flash
+                color={
+                  flash === "on"
+                    ? tw.color("amber-500")
+                    : (tw.style("bg-black dark:bg-white")
+                        ?.backgroundColor as string)
+                }
+                width={21}
+                height={21}
+              />
+            )}
+          </Pressable>
+        </View>
+      </View>
+
+      <View
+        tw={[
+          "absolute right-0 left-0 bg-gray-100 dark:bg-gray-900 opacity-95",
+          Platform.OS === "android"
+            ? `bottom-[100px]`
+            : photoUri
+            ? `bottom-[${tabBarHeight + 46}px]`
+            : `bottom-[${tabBarHeight - 1}px]`,
+        ]}
+      >
         <CameraButtons
           photos={photos}
           setPhotos={setPhotos}

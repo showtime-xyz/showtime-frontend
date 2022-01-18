@@ -1914,7 +1914,7 @@
     xcode "^3.0.1"
     xml2js "^0.4.23"
 
-"@expo/config-plugins@^4.0.14":
+"@expo/config-plugins@^4.0.14", "@expo/config-plugins@^4.0.15":
   version "4.0.15"
   resolved "https://registry.yarnpkg.com/@expo/config-plugins/-/config-plugins-4.0.15.tgz#cc170a0cf890973b6491cf357540e9955296019c"
   integrity sha512-QqxVEt2bFu3ZuI1soULRJv7i0Zrg/FMZ0IxNV7Y3AjH7fhtUJH3pPo9f6MURvqNr+PLxhBlkofkWfunrVejSkw==
@@ -10868,6 +10868,14 @@ expo-camera@^12.1.0:
     "@koale/useworker" "^4.0.2"
     invariant "^2.2.4"
 
+expo-community-flipper@^44.0.0:
+  version "44.0.0"
+  resolved "https://registry.yarnpkg.com/expo-community-flipper/-/expo-community-flipper-44.0.0.tgz#08c39f1a11d783bcc4b55661d96bd3762b28cdaa"
+  integrity sha512-/YS132X3Pu4xVD6sDW/R5ZJWMF6BfkmjbtDhBWLbJVecMAYAbtZGMAxDjS6Z3YJODab3eMHFV0KAnmrseQFM4w==
+  dependencies:
+    "@expo/config-plugins" "^4.0.15"
+    resolve-from "^5.0.0"
+
 expo-constants@~13.0.0:
   version "13.0.0"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-13.0.0.tgz#e167b0e4d064029e53a0bc89c8cffcb7cb8f2a0a"
@@ -17744,6 +17752,11 @@ react-native-crypto@^2.0.1, react-native-crypto@^2.1.0:
     pbkdf2 "3.0.8"
     public-encrypt "^4.0.0"
     randomfill "^1.0.3"
+
+react-native-flipper@^0.127.0:
+  version "0.127.0"
+  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.127.0.tgz#4d4040c0d0a45136b9bbabdc801d3e32d385de73"
+  integrity sha512-qloUyUOs9MoMVncIDDWeOxAPbomWJ3e4y0SgyCgq8joJEOXC7RvPWeEfUXp0EPyNhHGQV9a4RwzF6BWKFCR3Kg==
 
 react-native-gesture-handler@^2.1.1:
   version "2.1.1"
