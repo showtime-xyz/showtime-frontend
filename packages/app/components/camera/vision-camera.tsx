@@ -30,8 +30,10 @@ import { useIsForeground } from "app/hooks/use-is-foreground";
 import { CameraButtons } from "app/components/camera/camera-buttons";
 import { Pressable } from "design-system/pressable-scale";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
-import { IconFlashBoltActive, IconFlashBoltInactive } from "design-system/icon";
+import { Flash, FlashOff } from "design-system/icon";
 import { View } from "design-system/view";
+import { tw } from "design-system/tailwind";
+import { useRouter } from "app/navigation/use-router";
 
 // Multi camera on Android not yet supported by CameraX
 // "Thanks for the request. Currently CameraX does not support the multi camera API but as more device adopt them, we will enable support at the appropriate time. Thanks."
@@ -63,6 +65,7 @@ export function Camera({
   canPop,
   setCanPop,
 }: Props) {
+  const router = useRouter();
   const camera = useRef<VisionCamera>(null);
   const [showPop, setShowPop] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -77,12 +80,14 @@ export function Camera({
   // Hide header when camera is active
   const { setIsHeaderHidden } = useNavigationElements();
   useEffect(() => {
-    setIsHeaderHidden(isFocused ? true : false);
+    setIsHeaderHidden(
+      isFocused || router?.pathname?.startsWith("/camera") ? true : false
+    );
 
     return () => {
       setIsHeaderHidden(false);
     };
-  }, [isFocused]);
+  }, [isFocused, router?.pathname]);
 
   const [cameraPosition, setCameraPosition] = useState<"front" | "back">(
     "back"
@@ -200,14 +205,14 @@ export function Camera({
 
   const onFocus = useCallback(
     async ({ nativeEvent }) => {
-      if (device.supportsFocus) {
+      if (device?.supportsFocus) {
         const focus = {
           x: nativeEvent.x as number,
           y: nativeEvent.y as number,
         };
         setFocus(focus);
         setShowFocus(true);
-        await camera.current.focus(focus);
+        await camera.current?.focus(focus);
         setShowFocus(false);
       }
     },
@@ -285,27 +290,7 @@ export function Camera({
 
   return (
     <View tw="bg-white dark:bg-black">
-      <View tw="py-8 px-6 flex-row justify-end">
-        <Pressable
-          style={{
-            width: 45,
-            height: 45,
-            backgroundColor: flash === "on" ? "#ff6300" : "#252628",
-            borderRadius: 45 / 2,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          onPress={onFlashPressed}
-        >
-          {flash === "off" ? (
-            <IconFlashBoltInactive color="white" width={24} height={24} />
-          ) : (
-            <IconFlashBoltActive color="white" width={20} height={20} />
-          )}
-        </Pressable>
-      </View>
-
-      <Animated.View style={{ height: "80%" }}>
+      <Animated.View style={{ height: "100%" }}>
         {device != null && (
           <PinchGestureHandler
             onGestureEvent={onPinchGesture}
@@ -390,7 +375,37 @@ export function Camera({
         </AnimatePresence>
       </Animated.View>
 
-      <View tw="absolute right-0 bottom-10 left-0 bg-gray-100 dark:bg-gray-900 opacity-95">
+      <View tw="absolute top-0 right-0 left-0 bg-gray-100 dark:bg-gray-900 opacity-95">
+        <View tw="py-8 px-4 flex-row justify-end">
+          <Pressable
+            tw="w-12 h-12 rounded-full justify-center items-center bg-white dark:bg-black"
+            onPress={onFlashPressed}
+          >
+            {flash === "off" ? (
+              <FlashOff
+                color={
+                  tw.style("bg-black dark:bg-white")?.backgroundColor as string
+                }
+                width={24}
+                height={24}
+              />
+            ) : (
+              <Flash
+                color={
+                  flash === "on"
+                    ? tw.color("amber-500")
+                    : (tw.style("bg-black dark:bg-white")
+                        ?.backgroundColor as string)
+                }
+                width={21}
+                height={21}
+              />
+            )}
+          </Pressable>
+        </View>
+      </View>
+
+      <View tw="absolute right-0 bottom-24 left-0 bg-gray-100 dark:bg-gray-900 opacity-95">
         <CameraButtons
           photos={photos}
           setPhotos={setPhotos}

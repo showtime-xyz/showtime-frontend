@@ -15,9 +15,10 @@ export async function pickImage({ onPick }: Props) {
 
   try {
     const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsMultipleSelection: false,
       allowsEditing: true,
-      aspect: [2, 3],
+      aspect: [1, 1],
       quality: 1,
     });
 
