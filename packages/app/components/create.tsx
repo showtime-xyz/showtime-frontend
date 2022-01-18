@@ -42,7 +42,7 @@ function CloseButton({
 
 const fakeData = {
   filePath:
-    "file:///var/mobile/Containers/Data/Application/E47B3A69-8DE8-4295-B640-A872E399B54D/Documents/test.jpg",
+    "file:///var/mobile/Containers/Data/Application/595265EC-921B-4CA0-968E-D4828F96DF41/Documents/test.jpg",
   title: "Nature",
   description: "A beautiful nature",
   notSafeForWork: false,

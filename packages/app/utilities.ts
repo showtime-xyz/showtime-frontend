@@ -89,9 +89,13 @@ export const getBiconomy = async (connector: any) => {
             connector
               .signTypedData(params)
               .then((res: string) => {
+                console.log("received signature from wallet ", res);
                 resolve(res);
               })
               .catch((err: any) => {
+                // TODO: this never gets logged!
+                console.log("received error on signing ");
+                console.error(err);
                 reject(err);
               });
           }

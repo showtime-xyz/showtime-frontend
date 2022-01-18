@@ -85,7 +85,7 @@ function QRCodeModal(props: RenderQrcodeModalProps): JSX.Element {
 }
 
 // FileSystem.downloadAsync(
-//   "https://images.unsplash.com/photo-1439853949127-fa647821eba0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
+//   "https://lh3.googleusercontent.com/eDuDBbt8CfAClm4XAfRPf63lZ0DCcf1elQai_43gcmnWr8nuwjXoAZF3xwmWnh5yt8BCA2URJzIJijSVjpUjBVCK-kMi7RZwTuSx=w660",
 //   FileSystem.documentDirectory + "test.jpg"
 // )
 //   .then(({ uri }) => {

@@ -248,25 +248,42 @@ type MintNFTType = {
     | "mintingSuccess";
 
   tokenId?: string;
+  transaction?: string;
 };
 
 const initialMintNFTState: MintNFTType = {
   status: "idle",
   tokenId: undefined,
+  transaction: undefined,
 };
 
 const mintNFTReducer = (state: MintNFTType, action: any): MintNFTType => {
   switch (action.type) {
     case "fileUpload":
-      return { ...state, status: "fileUpload", tokenId: undefined };
+      return {
+        ...state,
+        status: "fileUpload",
+        tokenId: undefined,
+        transaction: undefined,
+      };
     case "fileUploadError":
       return { ...state, status: "fileUploadError" };
     case "minting":
-      return { ...state, status: "minting", tokenId: undefined };
+      return {
+        ...state,
+        status: "minting",
+        tokenId: undefined,
+        transaction: undefined,
+      };
     case "mintingError":
       return { ...state, status: "mintingError" };
     case "mintingSuccess":
-      return { ...state, status: "mintingSuccess", tokenId: action.tokenId };
+      return {
+        ...state,
+        status: "mintingSuccess",
+        tokenId: action.tokenId,
+        transaction: action.transaction,
+      };
     default:
       return state;
   }
@@ -340,6 +357,7 @@ export const useMintNFT = () => {
   const connector = useWalletConnect();
   async function uploadFile(params: UseMintNFT) {
     if (userAddress) {
+      const fileMetaData = getFileNameAndType(params.filePath);
       const fileInfo = await FileSystem.getInfoAsync(params.filePath);
       if (typeof fileInfo.size === "number" && fileInfo.size > MAX_FILE_SIZE) {
         // TODO: improve alert
@@ -347,7 +365,7 @@ export const useMintNFT = () => {
         return;
       }
 
-      const fileMetaData = getFileNameAndType(params.filePath);
+      console.log("Received file meta data ", fileMetaData);
 
       if (fileMetaData) {
         const pinataToken = await getPinataToken(userAddress);
@@ -356,7 +374,7 @@ export const useMintNFT = () => {
 
         formData.append("file", {
           //@ts-ignore
-          uri: filePath,
+          uri: params.filePath,
           name: fileMetaData.name,
           type: fileMetaData.type,
         });
@@ -376,6 +394,8 @@ export const useMintNFT = () => {
             },
           })
           .then((res) => res.data.IpfsHash);
+
+        console.log("Uploaded file to ipfs ", fileIpfsHash);
 
         if (fileIpfsHash) {
           const pinataToken = await getPinataToken(userAddress);
@@ -401,6 +421,7 @@ export const useMintNFT = () => {
               }
             )
             .then((res) => res.data.IpfsHash);
+          console.log("Uploaded nft json to ipfs ", nftJson);
 
           return nftJson;
         }
@@ -433,60 +454,64 @@ export const useMintNFT = () => {
     );
     const provider = biconomy.getEthersProvider();
 
-    if (connector.connected) {
-      const transaction = await provider
-        .send("eth_sendTransaction", [
-          {
-            data,
-            from: userAddress,
-            to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
-            signatureType: "EIP712_SIGN",
-          },
-        ])
-        .catch((error: any) => {
-          // TODO: Add a proper error message. Find what 4001 means
-          if (error.code === 4001) {
-            throw new Error("Something went wrong");
-          }
+    console.log("** minting: opening wallet for signing **");
 
-          if (
-            JSON.parse(
-              error?.body || error?.error?.body || "{}"
-            )?.error?.message?.includes("caller is not minter")
-          ) {
-            throw new Error("Your address is not approved for minting");
-          }
+    const transaction = await provider
+      .send("eth_sendTransaction", [
+        {
+          data,
+          from: userAddress,
+          to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+          signatureType: "EIP712_SIGN",
+        },
+      ])
+      .catch((error: any) => {
+        // TODO: Add a proper error message. Find what 4001 means
+        if (error.code === 4001) {
+          throw new Error("Something went wrong");
+        }
 
-          throw error;
-        });
+        if (
+          JSON.parse(
+            error?.body || error?.error?.body || "{}"
+          )?.error?.message?.includes("caller is not minter")
+        ) {
+          throw new Error("Your address is not approved for minting");
+        }
 
-      // console.log("transaction hash ", transaction);
-
-      provider.once(transaction, (result: any) => {
-        // console.log(
-        //   "token id! ",
-        //   contract.interface
-        //     .decodeFunctionResult("issueToken", result.logs[0].data)[0]
-        //     .toNumber()
-        // );
-        dispatch({
-          type: "mintingSuccess",
-          tokenId: contract.interface
-            .decodeFunctionResult("issueToken", result.logs[0].data)[0]
-            .toNumber(),
-        });
+        throw error;
       });
-    }
+
+    // console.log("transaction hash ", transaction);
+
+    provider.once(transaction, (result: any) => {
+      // console.log(
+      //   "token id! ",
+      //   contract.interface
+      //     .decodeFunctionResult("issueToken", result.logs[0].data)[0]
+      //     .toNumber()
+      // );
+      dispatch({
+        type: "mintingSuccess",
+        tokenId: contract.interface
+          .decodeFunctionResult("issueToken", result.logs[0].data)[0]
+          .toNumber(),
+        transaction: transaction,
+      });
+    });
   }
 
   async function mintTokenPipeline(params: UseMintNFT) {
     let nftJsonIpfsHash;
 
-    if (connector.connected) {
+    if (connector.connected && user?.data) {
+      console.log("** Begin file upload **");
       try {
         dispatch({ type: "fileUpload" });
         nftJsonIpfsHash = await uploadFile(params);
+        console.log("** File upload success **");
       } catch (e) {
+        console.error("file upload error ", e);
         dispatch({ type: "fileUploadError" });
         throw e;
       }
@@ -494,7 +519,9 @@ export const useMintNFT = () => {
       if (nftJsonIpfsHash) {
         try {
           dispatch({ type: "minting" });
+          console.log("** Begin minting **");
           await mintToken({ nftJsonIpfsHash, ...params });
+          console.log("** minting success **");
         } catch (e) {
           dispatch({ type: "mintingError" });
           throw e;
