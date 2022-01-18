@@ -1,11 +1,14 @@
 import { View, Text, Fieldset, Select, Checkbox, Button } from "design-system";
-import { Close } from "design-system/icon";
+import { ChevronUp, Close } from "design-system/icon";
 import { Image } from "design-system/image";
 import { tw } from "design-system/tailwind";
 import { useState } from "react";
-import { Pressable } from "react-native";
+import { Pressable, ScrollView } from "react-native";
 import { useMintNFT } from "../hooks/api-hooks";
 import * as FileSystem from "expo-file-system";
+import { Accordion } from "design-system";
+import { useIsDarkMode } from "design-system/hooks";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 function CloseButton({
   onPress,
@@ -67,75 +70,115 @@ function Create() {
       });
   };
 
+  const isDark = useIsDarkMode();
+  const tabBarHeight = useBottomTabBarHeight();
+
   return (
-    <View tw="p-4">
-      <View tw="mt-11 flex-row">
-        <Image
-          source={{
-            uri: "https://lh3.googleusercontent.com/PUGdxrLBiiJqxFRNfJWkVpyE3xuXC2XXsjYSgeuzX-XM_3ApI7ydBd-E1M3POKp_B8miwtoS4FHhDAiwhyNnxX1S_ktvj-1DvZIe=w1328",
-          }}
-          style={{ width: 84, height: 84, borderRadius: 20 }}
-        />
-        <View tw="absolute top-1 left-1">
-          <CloseButton size="md" variant="dark" onPress={() => {}} />
+    <View tw="flex-1">
+      <ScrollView>
+        <View tw="p-4">
+          <View tw="mt-11 flex-row">
+            <Image
+              source={{
+                uri: "https://lh3.googleusercontent.com/PUGdxrLBiiJqxFRNfJWkVpyE3xuXC2XXsjYSgeuzX-XM_3ApI7ydBd-E1M3POKp_B8miwtoS4FHhDAiwhyNnxX1S_ktvj-1DvZIe=w1328",
+              }}
+              style={{ width: 84, height: 84, borderRadius: 20 }}
+            />
+            <View tw="ml-2 flex-1">
+              <Fieldset
+                label="Add a title"
+                placeholder="What's the title of your nft?"
+              />
+            </View>
+          </View>
+
+          <View tw="mt-4 flex-row">
+            <Fieldset
+              tw="flex-1"
+              label="Copies"
+              placeholder="1"
+              helperText="1 by default"
+              keyboardType="numeric"
+            />
+            <Fieldset
+              label="Price"
+              placeholder="Amount"
+              tw="ml-4 flex-1"
+              helperText="Add a price if you wish to sell this NFT."
+              keyboardType="numeric"
+              select={{
+                options: [{ label: "ETH", value: "a" }],
+                placeholder: "ETH",
+                value: "a",
+              }}
+            />
+          </View>
+
+          <View tw="mt-4">
+            <Accordion.Root>
+              <Accordion.Item value="hello">
+                <Accordion.Trigger>
+                  <Accordion.Label>Options</Accordion.Label>
+                  <Accordion.Chevron>
+                    <Button variant="tertiary" tw="rounded-full h-8 w-8">
+                      <ChevronUp color={isDark ? "#fff" : "#000"} />
+                    </Button>
+                  </Accordion.Chevron>
+                </Accordion.Trigger>
+                <Accordion.Content>
+                  <Fieldset
+                    label="Description"
+                    placeholder="Add a description"
+                  />
+                  <View tw="flex-row mt-4">
+                    <Fieldset
+                      label="Choose a collection"
+                      placeholder="Collection"
+                      selectOnly
+                      helperText="Add to an existing collection."
+                      tw="w-[48%]"
+                      select={{
+                        options: [{ label: "ETH", value: "a" }],
+                        placeholder: "ETH",
+                        value: "a",
+                        size: "regular",
+                      }}
+                    />
+                    <Fieldset
+                      label="Creator Royalties"
+                      placeholder="10%"
+                      tw="ml-4 w-[48%]"
+                      helperText="How much you'll earn each time this NFT is sold."
+                      keyboardType="numeric"
+                    />
+                  </View>
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion.Root>
+          </View>
+
+          <View tw="mt-8 flex-row">
+            <Checkbox
+              onChange={(v) => setChecked(v)}
+              checked={checked}
+              accesibilityLabel="I agree to the terms and conditions"
+            />
+            <Pressable onPress={() => setChecked(!checked)}>
+              <Text tw="ml-4 text-gray-600 dark:text-gray-400 text-sm">
+                I have the rights to publish this artwork, and understand it
+                will be minted on the Polygon network.
+              </Text>
+            </Pressable>
+          </View>
         </View>
-        <View tw="ml-2 flex-1">
-          <Fieldset
-            label="Add a title"
-            placeholder="What's the title of your nft?"
-          />
-        </View>
-      </View>
-
-      <View tw="mt-4 flex-row">
-        <Fieldset
-          tw="flex-1"
-          label="Copies"
-          placeholder="1"
-          helperText="1 by default"
-          keyboardType="numeric"
-        />
-        <Fieldset
-          label="Price"
-          placeholder="Amount"
-          tw="ml-4 flex-1"
-          helperText="Add a price if you wish to sell this NFT."
-          keyboardType="numeric"
-          select={{
-            options: [{ label: "ETH", value: "a" }],
-            placeholder: "ETH",
-            value: "a",
-          }}
-        />
-      </View>
-
-      <View tw="mt-4">
-        <Select
-          options={[{ label: "Option A", value: "a" }]}
-          placeholder="Collection"
-          value="a"
-        />
-      </View>
-
-      <View tw="mt-8 flex-row">
-        <Checkbox
-          onChange={(v) => setChecked(v)}
-          checked={checked}
-          accesibilityLabel="I agree to the terms and conditions"
-        />
-        <Pressable onPress={() => setChecked(!checked)}>
-          <Text tw="ml-4 text-gray-600 dark:text-gray-400 text-sm">
-            I have the rights to publish this artwork, and understand it will be
-            minted on the Polygon network.
+      </ScrollView>
+      <View tw="absolute px-4 w-full" style={{ bottom: tabBarHeight + 16 }}>
+        <Button onPress={handleSubmit} disabled={state.status !== "idle"}>
+          <Text tw="text-white dark:text-gray-900 text-sm">
+            {state.status === "idle" ? "Create" : state.status}
           </Text>
-        </Pressable>
+        </Button>
       </View>
-
-      <Button onPress={handleSubmit} disabled={state.status !== "idle"}>
-        <Text tw="ml-4 text-white dark:text-gray-900 text-sm">
-          {state.status === "idle" ? "Create" : state.status}
-        </Text>
-      </Button>
     </View>
   );
 }

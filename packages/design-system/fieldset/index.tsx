@@ -16,6 +16,7 @@ type FieldsetProps = {
   disabled?: boolean;
   tw?: string;
   select?: SelectProps;
+  selectOnly?: boolean;
 } & TextInputProps;
 
 export function Fieldset(props: FieldsetProps) {
@@ -27,6 +28,7 @@ export function Fieldset(props: FieldsetProps) {
     disabled,
     select,
     tw: twProp = "",
+    selectOnly,
     ...textInputProps
   } = props;
   let style = "bg-gray-100 dark:bg-gray-900";
@@ -47,33 +49,38 @@ export function Fieldset(props: FieldsetProps) {
         {label}
       </Label>
       <View tw="mt-4 flex-row items-center">
-        <TextInput
-          tw="flex-1 text-black dark:text-gray-300 focus:outline-none focus-visible:ring-1"
-          {...textInputProps}
-          style={{
-            fontSize: 16,
-          }}
-          editable={disabled}
-          nativeID={inputId}
-          accessibilityLabel={accessibilityLabel}
-          placeholderTextColor={
-            isDark ? tw.color("gray-400") : tw.color("gray-600")
-          }
-          selectionColor={isDark ? tw.color("gray-300") : tw.color("gray-700")}
-          //@ts-ignore - web only
-          accessibilityDescribedBy={Platform.select({
-            web: helperText ? helperTextId : undefined,
-            default: undefined,
-          })}
-          accessibilityErrorMessage={Platform.select({
-            web: errorText ? errorTextId : undefined,
-            default: undefined,
-          })}
-          accessibilityInvalid={Platform.select({
-            web: errorText ? true : false,
-            default: undefined,
-          })}
-        />
+        {!selectOnly ? (
+          <TextInput
+            tw="flex-1 text-black dark:text-gray-300 focus:outline-none focus-visible:ring-1"
+            {...textInputProps}
+            style={{
+              fontSize: 16,
+            }}
+            editable={disabled}
+            nativeID={inputId}
+            accessibilityLabel={accessibilityLabel}
+            placeholderTextColor={
+              isDark ? tw.color("gray-400") : tw.color("gray-600")
+            }
+            selectionColor={
+              isDark ? tw.color("gray-300") : tw.color("gray-700")
+            }
+            //@ts-ignore - web only
+            accessibilityDescribedBy={Platform.select({
+              web: helperText ? helperTextId : undefined,
+              default: undefined,
+            })}
+            accessibilityErrorMessage={Platform.select({
+              web: errorText ? errorTextId : undefined,
+              default: undefined,
+            })}
+            accessibilityInvalid={Platform.select({
+              web: errorText ? true : false,
+              default: undefined,
+            })}
+          />
+        ) : null}
+
         {select ? (
           <Select disabled={disabled} size="small" {...select} />
         ) : null}

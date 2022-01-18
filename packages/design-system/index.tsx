@@ -35,3 +35,5 @@ export { Select } from "design-system/select";
 export { Media } from "design-system/media";
 
 export { Fieldset } from "design-system/fieldset";
+
+export { Accordion } from "design-system/accordion";

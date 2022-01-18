@@ -14,11 +14,7 @@ const CreateScreen = () => {
     mixpanel.track("Create page view");
   }, []);
 
-  return (
-    <Modal title="Create" close={router.pop} height="h-[90vh]">
-      <Create />
-    </Modal>
-  );
+  return <Create />;
 };
 
 export { CreateScreen };
