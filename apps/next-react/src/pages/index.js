@@ -245,9 +245,14 @@ const Activity = () => {
         </Head>
 
         {context.user === null ? (
-          <div className="py-12 sm:pt-48 sm:py-14 px-8 sm:px-10 text-left bg-cover bg-center" style={{ backgroundImage: 'url(/img/gradient.png)' }}>
+          <div
+            className="py-12 sm:pt-48 sm:py-14 px-8 sm:px-10 text-left bg-cover bg-center"
+            style={{ backgroundImage: "url(/img/gradient.png)" }}
+          >
             <CappedWidth>
-              <p className="font-tomato font-semibold text-5xl text-black">discover, create, collect</p>
+              <p className="font-tomato font-semibold text-5xl text-black">
+                discover, create, collect
+              </p>
             </CappedWidth>
           </div>
         ) : null}
@@ -347,7 +352,7 @@ const Activity = () => {
                 {context.user === undefined ? null : context.user === null ? (
                   <div className="flex flex-1 items-center justify-center mb-6 sm:px-3">
                     <div className="text-gray-400 shadow-md bg-white dark:bg-gray-800 sm:rounded-lg w-full px-4 py-6 text-center">
-                      <span>News Feed preview.</span>{" "}
+                      <span>Feed preview.</span>{" "}
                       <span
                         className="cursor-pointer text-gray-800 dark:text-gray-200 hover:text-stpink dark:hover:text-stpink"
                         onClick={() => context.setLoginModalOpen(true)}
