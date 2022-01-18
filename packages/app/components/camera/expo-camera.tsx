@@ -16,6 +16,8 @@ type Props = {
   captureThrottleTimer: any;
   canPop: boolean;
   setCanPop: (canPop: boolean) => void;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
 };
 
 export function Camera({
@@ -25,10 +27,11 @@ export function Camera({
   captureThrottleTimer,
   canPop,
   setCanPop,
+  isLoading,
+  setIsLoading,
 }: Props) {
   const camera = useRef<ExpoCamera>(null);
   const [showPop, setShowPop] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   // Check if camera screen is active
   const isFocused = useIsFocused();

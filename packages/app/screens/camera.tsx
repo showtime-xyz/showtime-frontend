@@ -14,11 +14,13 @@ function CameraScreen() {
   const [hasPermission, setHasPermission] = useState(null);
   const [photos, setPhotos] = useState([]);
   const [canPop, setCanPop] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const burstCaptureTimer = useTimer({
     interval: 6000,
     endTime: 1,
     onTimeOver: () => {
       if (photos.length >= 1) {
+        setIsLoading(false);
         router.push("/camera/create");
       } else {
         setPhotos([]);
@@ -66,6 +68,7 @@ function CameraScreen() {
                 {
                   text: "Delete",
                   onPress: () => {
+                    setIsLoading(false);
                     setPhotos([]);
                     setRender(!render);
                   },
@@ -81,20 +84,6 @@ function CameraScreen() {
       return unsubscribe;
     },
     [navigation, photos]
-  );
-
-  useEffect(
-    function didPop() {
-      if (
-        photos.length >= 9 ||
-        (photos.length <= 1 &&
-          photos.length >= 9 &&
-          burstCaptureTimer.status === "STOPPED")
-      ) {
-        router.push("/camera/create");
-      }
-    },
-    [photos, burstCaptureTimer.status]
   );
 
   if (Platform.OS !== "web" && hasPermission === null) {
@@ -113,6 +102,8 @@ function CameraScreen() {
       captureThrottleTimer={captureThrottleTimer}
       canPop={canPop}
       setCanPop={setCanPop}
+      isLoading={isLoading}
+      setIsLoading={setIsLoading}
     />
   );
 }

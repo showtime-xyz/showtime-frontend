@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import { AnimatePresence, View as MotiView } from "moti";
 import {
   PinchGestureHandler,
@@ -25,6 +25,7 @@ import {
 } from "react-native-vision-camera";
 import { useIsFocused } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 import { useIsForeground } from "app/hooks/use-is-foreground";
 import { CameraButtons } from "app/components/camera/camera-buttons";
@@ -34,6 +35,7 @@ import { Flash, FlashOff } from "design-system/icon";
 import { View } from "design-system/view";
 import { tw } from "design-system/tailwind";
 import { useRouter } from "app/navigation/use-router";
+import { Image } from "design-system/image";
 
 // Multi camera on Android not yet supported by CameraX
 // "Thanks for the request. Currently CameraX does not support the multi camera API but as more device adopt them, we will enable support at the appropriate time. Thanks."
@@ -55,6 +57,8 @@ type Props = {
   captureThrottleTimer: any;
   canPop: boolean;
   setCanPop: (canPop: boolean) => void;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
 };
 
 export function Camera({
@@ -64,11 +68,13 @@ export function Camera({
   captureThrottleTimer,
   canPop,
   setCanPop,
+  isLoading,
+  setIsLoading,
 }: Props) {
   const router = useRouter();
+  const tabBarHeight = useBottomTabBarHeight();
   const camera = useRef<VisionCamera>(null);
   const [showPop, setShowPop] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [isCameraInitialized, setIsCameraInitialized] = useState(false);
   const zoom = useSharedValue(0);
 
@@ -119,7 +125,7 @@ export function Camera({
     return device.formats.sort(sortFormats);
   }, [device?.formats]);
 
-  const [is60Fps, setIs60Fps] = useState(true);
+  const [is60Fps, setIs60Fps] = useState(false);
   const fps = useMemo(() => {
     if (!is60Fps) return 30;
 
@@ -164,9 +170,11 @@ export function Camera({
       result = result.filter((f) => f.supportsVideoHDR || f.supportsPhotoHDR);
     }
 
-    // find the first format that includes the given FPS
-    return result.find((f) =>
-      f.frameRateRanges.some((r) => frameRateIncluded(r, fps))
+    // Find the first format that includes the given FPS and is the highest photo quality
+    return result.find(
+      (f) =>
+        f.frameRateRanges.some((r) => frameRateIncluded(r, fps)) &&
+        f.isHighestPhotoQualitySupported
     );
   }, [formats, fps, enableHdr]);
 
@@ -260,7 +268,6 @@ export function Camera({
   const takePhoto = useCallback(async () => {
     try {
       if (camera.current == null) throw new Error("Camera ref is null!");
-      if (photos.length > 9) return;
 
       // Reset timer if running
       burstCaptureTimer.reset();
@@ -288,9 +295,11 @@ export function Camera({
     }
   }, [camera, takePhotoOptions, photos]);
 
+  const photoUri = photos?.[0]?.uri;
+
   return (
     <View tw="bg-white dark:bg-black">
-      <Animated.View style={{ height: "100%" }}>
+      <Animated.View style={{ height: photoUri ? 0 : "100%" }}>
         {device != null && (
           <PinchGestureHandler
             onGestureEvent={onPinchGesture}
@@ -375,6 +384,12 @@ export function Camera({
         </AnimatePresence>
       </Animated.View>
 
+      {photoUri && (
+        <View tw="w-screen h-screen bg-gray-100 dark:bg-gray-900 opacity-95">
+          <Image source={{ uri: photoUri }} tw="w-screen h-screen" />
+        </View>
+      )}
+
       <View tw="absolute top-0 right-0 left-0 bg-gray-100 dark:bg-gray-900 opacity-95">
         <View tw="py-8 px-4 flex-row justify-end">
           <Pressable
@@ -405,7 +420,16 @@ export function Camera({
         </View>
       </View>
 
-      <View tw="absolute right-0 bottom-24 left-0 bg-gray-100 dark:bg-gray-900 opacity-95">
+      <View
+        tw={[
+          "absolute right-0 left-0 bg-gray-100 dark:bg-gray-900 opacity-95",
+          Platform.OS === "android"
+            ? `bottom-[100px]`
+            : photoUri
+            ? `bottom-[${tabBarHeight + 46}px]`
+            : `bottom-[${tabBarHeight - 1}px]`,
+        ]}
+      >
         <CameraButtons
           photos={photos}
           setPhotos={setPhotos}
