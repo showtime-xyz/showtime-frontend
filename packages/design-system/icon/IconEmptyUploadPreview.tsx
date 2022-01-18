@@ -1,7 +1,7 @@
-import * as React from 'react';
-import Svg, { SvgProps, Path } from 'react-native-svg';
+import * as React from "react";
+import Svg, { SvgProps, Path } from "react-native-svg";
 
-function IconEmptyUploadPreview(props: SvgProps) {
+export default function IconEmptyUploadPreview(props: SvgProps) {
   return (
     <Svg
       xmlns="http://www.w3.org/2000/svg"
@@ -18,5 +18,3 @@ function IconEmptyUploadPreview(props: SvgProps) {
     </Svg>
   );
 }
-
-export { IconEmptyUploadPreview };

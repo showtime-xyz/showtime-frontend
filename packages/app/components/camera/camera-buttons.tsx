@@ -1,5 +1,3 @@
-import React, { useCallback } from "react";
-import { View } from "dripsy";
 import Animated, {
   SlideInDown,
   SlideOutDown,
@@ -9,86 +7,52 @@ import Animated, {
 
 import { useRouter } from "app/navigation/use-router";
 import { ImagePickerButton } from "design-system/image-picker";
-import { IconFlashBoltActive } from "design-system/icon/IconFlashBoltActive";
-import { IconFlashBoltInactive } from "design-system/icon/IconFlashBoltInactive";
-import { IconClose } from "design-system/icon/IconClose";
-import { IconCheck } from "design-system/icon/IconCheck";
+import { Flip, IconClose, IconCheck } from "design-system/icon";
 import { Pressable } from "design-system/pressable-scale";
+import { View } from "design-system/view";
+import { CircularProgress } from "app/components/circular-progress";
 
 type Props = {
   photos: { uri: string }[];
   setPhotos: (photos: { uri: string }[]) => void;
-  isPopping: boolean;
-  setIsPopping: (isPopping: boolean) => void;
   canPop: boolean;
-  nbPop: Animated.SharedValue<number>;
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
-  flash: "auto" | "on" | "off";
-  setFlash: (flash: "auto" | "on" | "off") => void;
   takePhoto: () => void;
+  cameraPosition: "front" | "back";
+  setCameraPosition: (cameraPosition: "front" | "back") => void;
 };
 
 export function CameraButtons({
   photos,
   setPhotos,
-  isPopping,
-  setIsPopping,
   canPop,
-  nbPop,
   isLoading,
   setIsLoading,
-  flash,
-  setFlash,
   takePhoto,
+  cameraPosition,
+  setCameraPosition,
 }: Props) {
   const router = useRouter();
 
-  const onFlashPressed = useCallback(() => {
-    if (flash === "auto") setFlash("on");
-    if (flash === "on") setFlash("off");
-    if (flash === "off") setFlash("auto");
-  }, [flash]);
-
-  const progress = useDerivedValue(() => {
-    return withTiming(nbPop.value * 0.111, { duration: 50 });
-  });
-
   const loading = useDerivedValue(() => {
     return withTiming(isLoading ? 0 : 1, {
-      duration: isPopping && isLoading ? 6000 : 0,
+      duration: isLoading ? 6000 : 0,
     });
   });
 
   return (
-    <View
-      sx={{
-        paddingY: 32,
-        paddingX: 24,
-        justifyContent: "space-between",
-        alignItems: "center",
-        flexDirection: "row",
-      }}
-    >
-      {isPopping ? (
+    <View tw="py-8 px-6 justify-between items-center flex-row">
+      {isLoading ? (
         <Animated.View
           entering={SlideInDown}
           exiting={SlideOutDown}
           style={{ zIndex: 1 }}
         >
           <Pressable
-            style={{
-              width: 45,
-              height: 45,
-              backgroundColor: "#252628",
-              borderRadius: 45 / 2,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+            tw="h-12 w-12 bg-gray-800 rounded-md justify-center items-center"
             onPress={() => {
               setPhotos([]);
-              nbPop.value = withTiming(0, { duration: 500 });
-              setIsPopping(false);
               setIsLoading(false);
             }}
           >
@@ -98,60 +62,42 @@ export function CameraButtons({
       ) : (
         <ImagePickerButton
           onPick={(photo) => {
-            // navigation.navigate("Create", {
-            //   photos: [...photos, photo],
-            // });
             router.push("/camera/create");
           }}
           type="camera"
         />
       )}
 
-      <View
-        sx={{
-          width: 83,
-          height: 83,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Pressable
-          style={{
-            width: 70,
-            height: 70,
-            borderRadius: 70 / 2,
-            backgroundColor: "white",
-          }}
-          onPress={takePhoto}
-          disabled={!canPop && photos.length < 9}
-        />
+      <View tw="h-[83px] w-[83px] justify-center items-center">
+        <View tw="absolute">
+          <View tw="w-20 h-20 rounded-full bg-white" />
+        </View>
+
+        <View tw="rounded-full border-4 border-black bg-black">
+          <Pressable
+            tw="w-[64px] h-[64px] rounded-full bg-white"
+            onPress={takePhoto}
+            disabled={!canPop && photos.length < 9}
+          />
+        </View>
       </View>
 
-      {isPopping ? (
-        <View
-          sx={{
-            width: 45,
-            height: 45,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+      {isLoading ? (
+        <View tw="h-12 w-12 justify-center items-center">
+          <View tw="absolute">
+            <CircularProgress
+              size={50}
+              strokeWidth={1.5}
+              progress={loading}
+              showOverlay={false}
+              strokeColor="black"
+            />
+          </View>
+
           <Pressable
-            style={{
-              width: 45,
-              height: 45,
-              backgroundColor: "#252628",
-              borderRadius: 45 / 2,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+            tw="h-12 w-12 bg-gray-800 rounded-full justify-center items-center"
             onPress={() => {
-              // navigation.navigate("Create", {
-              //   photos,
-              // });
               router.push("/camera/create");
-              nbPop.value = withTiming(0, { duration: 500 });
-              setIsPopping(false);
             }}
           >
             <IconCheck color="white" width={18} height={18} />
@@ -159,21 +105,12 @@ export function CameraButtons({
         </View>
       ) : (
         <Pressable
-          style={{
-            width: 45,
-            height: 45,
-            backgroundColor: flash === "on" ? "#ff6300" : "#252628",
-            borderRadius: 45 / 2,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          onPress={onFlashPressed}
+          tw="h-12 w-12 bg-gray-800 rounded-full justify-center items-center"
+          onPress={() =>
+            setCameraPosition(cameraPosition === "front" ? "back" : "front")
+          }
         >
-          {flash === "off" ? (
-            <IconFlashBoltInactive color="white" width={24} height={24} />
-          ) : (
-            <IconFlashBoltActive color="white" width={20} height={20} />
-          )}
+          <Flip color="white" width={24} height={24} />
         </Pressable>
       )}
     </View>

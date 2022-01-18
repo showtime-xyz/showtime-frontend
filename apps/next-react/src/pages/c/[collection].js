@@ -1,17 +1,17 @@
-import { useState, useEffect, useContext, Fragment } from "react";
-import Head from "next/head";
+import CappedWidth from "@/components/CappedWidth";
+import { GridTab, GridTabs } from "@/components/GridTabs";
 import Layout from "@/components/layout";
 import TokenGridV4 from "@/components/TokenGridV4";
-import { useRouter } from "next/router";
+import AppContext from "@/context/app-context";
 import backend from "@/lib/backend";
 import backendscripts from "@/lib/backend-scripts";
-import AppContext from "@/context/app-context";
-import mixpanel from "mixpanel-browser";
-import { GridTabs, GridTab } from "@/components/GridTabs";
-import CappedWidth from "@/components/CappedWidth";
+import { classNames } from "@/lib/utilities";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
-import { classNames } from "@/lib/utilities";
+import mixpanel from "mixpanel-browser";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { Fragment, useContext, useEffect, useState } from "react";
 
 export async function getServerSideProps(context) {
   const { collection } = context.query;
@@ -50,7 +50,7 @@ export default function Collection({
 }) {
   const context = useContext(AppContext);
   const { isMobile } = context;
-  const [sortBy, setSortby] = useState("random");
+  const [sortBy, setSortby] = useState("trending");
 
   const [pageTitle, setPageTitle] = useState(
     selected_collection
@@ -145,6 +145,22 @@ export default function Collection({
   const FilterTabs = (
     <GridTabs>
       <GridTab
+        label="Trending"
+        isActive={sortBy === "trending"}
+        onClickTab={() => {
+          setSortby("trending");
+          mixpanel.track("Trending button clicked");
+        }}
+      />
+      <GridTab
+        label="Newest"
+        isActive={sortBy === "newest"}
+        onClickTab={() => {
+          setSortby("newest");
+          mixpanel.track("Newest button clicked");
+        }}
+      />
+      <GridTab
         label="Random"
         isActive={sortBy === "random"}
         onClickTab={() => {
@@ -166,14 +182,6 @@ export default function Collection({
           mixpanel.track("Recently sold button clicked");
         }}
       />
-      <GridTab
-        label="Newest"
-        isActive={sortBy === "newest"}
-        onClickTab={() => {
-          setSortby("newest");
-          mixpanel.track("Newest button clicked");
-        }}
-      />
       {!isMobile && (
         <GridTab
           label="Oldest"
@@ -184,14 +192,6 @@ export default function Collection({
           }}
         />
       )}
-      <GridTab
-        label="Trending"
-        isActive={sortBy === "trending"}
-        onClickTab={() => {
-          setSortby("trending");
-          mixpanel.track("Trending button clicked");
-        }}
-      />
     </GridTabs>
   );
 

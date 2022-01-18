@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { StyleSheet } from "react-native";
-import { StatusBar } from "expo-status-bar";
 import { AnimatePresence, View as MotiView } from "moti";
 import {
   PinchGestureHandler,
@@ -13,7 +12,6 @@ import Animated, {
   useAnimatedGestureHandler,
   useAnimatedProps,
   useSharedValue,
-  withTiming,
 } from "react-native-reanimated";
 import {
   Camera as VisionCamera,
@@ -30,8 +28,10 @@ import * as Haptics from "expo-haptics";
 
 import { useIsForeground } from "app/hooks/use-is-foreground";
 import { CameraButtons } from "app/components/camera/camera-buttons";
-import { CameraFrame } from "app/components/camera/camera-frame";
+import { Pressable } from "design-system/pressable-scale";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
+import { IconFlashBoltActive, IconFlashBoltInactive } from "design-system/icon";
+import { View } from "design-system/view";
 
 // Multi camera on Android not yet supported by CameraX
 // "Thanks for the request. Currently CameraX does not support the multi camera API but as more device adopt them, we will enable support at the appropriate time. Thanks."
@@ -49,25 +49,19 @@ const SCALE_FULL_ZOOM = 3;
 type Props = {
   photos: { uri: string }[];
   setPhotos: (photos: { uri: string }[]) => void;
-  isPopping: boolean;
-  setIsPopping: (isPopping: boolean) => void;
   burstCaptureTimer: any;
   captureThrottleTimer: any;
   canPop: boolean;
   setCanPop: (canPop: boolean) => void;
-  nbPop: Animated.SharedValue<number>;
 };
 
 export function Camera({
   photos,
   setPhotos,
-  isPopping,
-  setIsPopping,
   burstCaptureTimer,
   captureThrottleTimer,
   canPop,
   setCanPop,
-  nbPop,
 }: Props) {
   const camera = useRef<VisionCamera>(null);
   const [showPop, setShowPop] = useState(false);
@@ -94,7 +88,7 @@ export function Camera({
     "back"
   );
   const [flash, setFlash] = useState<"off" | "on" | "auto">("auto");
-  const [enableHdr, setEnableHdr] = useState(false);
+  const [enableHdr, setEnableHdr] = useState(true);
   const [enableNightMode, setEnableNightMode] = useState(false);
   const takePhotoOptions = useMemo<TakePhotoOptions & TakeSnapshotOptions>(
     () => ({
@@ -149,6 +143,7 @@ export function Camera({
     // If nothing blocks us from using it, we default to 60 FPS.
     return 60;
   }, [
+    cameraPosition,
     device?.supportsLowLightBoost,
     enableHdr,
     enableNightMode,
@@ -219,6 +214,12 @@ export function Camera({
     [device, setFocus]
   );
 
+  const onFlashPressed = useCallback(() => {
+    if (flash === "auto") setFlash("on");
+    if (flash === "on") setFlash("off");
+    if (flash === "off") setFlash("auto");
+  }, [flash]);
+
   useEffect(() => {
     // Run everytime the neutralZoomScaled value changes. (reset zoom when device changes)
     zoom.value = neutralZoomIn;
@@ -254,10 +255,7 @@ export function Camera({
   const takePhoto = useCallback(async () => {
     try {
       if (camera.current == null) throw new Error("Camera ref is null!");
-      if (photos.length > 9 || nbPop.value > 9) return;
-
-      // Pop progress
-      nbPop.value = withTiming(nbPop.value + 1, { duration: 50 });
+      if (photos.length > 9) return;
 
       // Reset timer if running
       burstCaptureTimer.reset();
@@ -268,7 +266,6 @@ export function Camera({
 
       // Feedback
       setIsLoading(false);
-      setIsPopping(true);
       setShowPop(true);
       setTimeout(() => setShowPop(false), 10);
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -279,24 +276,36 @@ export function Camera({
       setPhotos([...photos, { uri: `file://${photo.path}` }]);
 
       // Start timer
-      burstCaptureTimer.start();
-
       setIsLoading(true);
+      burstCaptureTimer.start();
     } catch (e) {
-      nbPop.value = nbPop.value - 1;
-      setIsPopping(false);
       console.error("Failed to take photo!", e);
     }
   }, [camera, takePhotoOptions, photos]);
 
   return (
-    <Animated.View
-      style={{
-        flex: 1,
-        backgroundColor: "black",
-      }}
-    >
-      <Animated.View style={{ height: "70%" }}>
+    <View tw="bg-white dark:bg-black">
+      <View tw="py-8 px-6 flex-row justify-end">
+        <Pressable
+          style={{
+            width: 45,
+            height: 45,
+            backgroundColor: flash === "on" ? "#ff6300" : "#252628",
+            borderRadius: 45 / 2,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onPress={onFlashPressed}
+        >
+          {flash === "off" ? (
+            <IconFlashBoltInactive color="white" width={24} height={24} />
+          ) : (
+            <IconFlashBoltActive color="white" width={20} height={20} />
+          )}
+        </Pressable>
+      </View>
+
+      <Animated.View style={{ height: "80%" }}>
         {device != null && (
           <PinchGestureHandler
             onGestureEvent={onPinchGesture}
@@ -379,23 +388,20 @@ export function Camera({
             />
           )}
         </AnimatePresence>
-
-        <CameraFrame />
       </Animated.View>
 
-      <CameraButtons
-        photos={photos}
-        setPhotos={setPhotos}
-        isPopping={isPopping}
-        setIsPopping={setIsPopping}
-        canPop={canPop}
-        nbPop={nbPop}
-        isLoading={isLoading}
-        setIsLoading={setIsLoading}
-        flash={flash}
-        setFlash={setFlash}
-        takePhoto={takePhoto}
-      />
-    </Animated.View>
+      <View tw="absolute right-0 bottom-10 left-0 bg-gray-100 dark:bg-gray-900 opacity-95">
+        <CameraButtons
+          photos={photos}
+          setPhotos={setPhotos}
+          canPop={canPop}
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+          takePhoto={takePhoto}
+          cameraPosition={cameraPosition}
+          setCameraPosition={setCameraPosition}
+        />
+      </View>
+    </View>
   );
 }

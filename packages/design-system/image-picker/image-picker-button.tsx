@@ -1,7 +1,5 @@
-import React from "react";
-import { Pressable } from "dripsy";
-
-import { IconEmptyUploadPreview } from "design-system/icon/IconEmptyUploadPreview";
+import { Pressable } from "design-system/pressable-scale";
+import { IconEmptyUploadPreview } from "design-system/icon";
 import { pickImage } from "./pick-image";
 
 export function ImagePickerButton({
@@ -26,24 +24,10 @@ export function ImagePickerButton({
   // TODO: show first picture available in image gallery if permissions are OK and is type camera
   return (
     <Pressable
-      sx={
+      tw={
         type === "profilePhoto"
-          ? {
-              width: 80,
-              height: 80,
-              backgroundColor: "#1C1E1F",
-              borderRadius: 80 / 2,
-              justifyContent: "center",
-              alignItems: "center",
-            }
-          : {
-              width: 45,
-              height: 45,
-              backgroundColor: "#252628",
-              borderRadius: 4,
-              justifyContent: "center",
-              alignItems: "center",
-            }
+          ? "w-20 h-20 bg-gray-800 rounded-full justify-center items-center"
+          : "w-12 h-12 bg-gray-800 rounded-md justify-center items-center"
       }
       onPress={() => {
         pickImage({

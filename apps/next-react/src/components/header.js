@@ -1,24 +1,24 @@
-import { useContext, useState } from "react";
-import Link from "next/link";
-import mixpanel from "mixpanel-browser";
-import SearchBar from "./SearchBar";
 import AppContext from "@/context/app-context";
-import ModalLogin from "./ModalLogin";
-import NotificationsBtn from "./NotificationsBtn";
-import { HomeIconOutline, HomeIconSolid } from "./Icons/HomeIcon";
-import { useRouter } from "next/router";
-import WalletIcon from "./Icons/WalletIcon";
-import HeaderDropdown from "./HeaderDropdown";
 import useAuth from "@/hooks/useAuth";
 import useProfile from "@/hooks/useProfile";
-import MintModal from "./UI/Modals/MintModal";
-import Button from "./UI/Buttons/Button";
-import PlusIcon from "./Icons/PlusIcon";
-import MintingBanner from "./MintingBanner";
-import ShowtimeIcon from "./Icons/ShowtimeIcon";
-import { CompassIconSolid, CompassIconOutline } from "./Icons/CompassIcon";
 import Tippy from "@tippyjs/react";
+import mixpanel from "mixpanel-browser";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useContext, useState } from "react";
+import HeaderDropdown from "./HeaderDropdown";
+import { CompassIconOutline, CompassIconSolid } from "./Icons/CompassIcon";
 import { FireIconOutline, FireIconSolid } from "./Icons/FireIcon";
+import { HomeIconOutline, HomeIconSolid } from "./Icons/HomeIcon";
+import PlusIcon from "./Icons/PlusIcon";
+import ShowtimeIcon from "./Icons/ShowtimeIcon";
+import WalletIcon from "./Icons/WalletIcon";
+import MintingBanner from "./MintingBanner";
+import ModalLogin from "./ModalLogin";
+import NotificationsBtn from "./NotificationsBtn";
+import SearchBar from "./SearchBar";
+import Button from "./UI/Buttons/Button";
+import MintModal from "./UI/Modals/MintModal";
 
 const Header = () => {
   const { asPath } = useRouter();
@@ -75,7 +75,7 @@ const Header = () => {
                           ? "bg-gradient-to-bl from-violet-900 via-violet-500 to-violet-300 text-white"
                           : "text-black dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900"
                       } rounded-full py-3 -my-2 px-3 -mx-1 transition`}
-                      onClick={() => mixpanel.track("Discover button click")}
+                      onClick={() => mixpanel.track("Feed button click")}
                     >
                       {asPath == "/" ? (
                         <HomeIconSolid className="w-5 h-5" />
@@ -88,16 +88,16 @@ const Header = () => {
               </Tippy>
               <Tippy content="Discover">
                 <div>
-                  <Link href="/c/showtime">
+                  <Link href="/c/showtime-marketplace">
                     <a
                       className={`text-sm md:text-base flex items-center space-x-2 ${
-                        asPath == "/c/showtime"
+                        asPath == "/c/showtime-marketplace"
                           ? "bg-gradient-to-bl from-violet-900 via-violet-500 to-violet-300 text-white"
                           : "text-black dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900"
                       } rounded-full py-3 -my-2 px-3 -mx-1 transition`}
                       onClick={() => mixpanel.track("Discover button click")}
                     >
-                      {asPath == "/c/showtime" ? (
+                      {asPath == "/c/showtime-marketplace" ? (
                         <CompassIconSolid className="w-5 h-5" />
                       ) : (
                         <CompassIconOutline className="w-5 h-5" />
@@ -179,7 +179,7 @@ const Header = () => {
                         ? "border-gray-800"
                         : "border-transparent hover:border-gray-400"
                     }`}
-                    onClick={() => mixpanel.track("Discover button click")}
+                    onClick={() => mixpanel.track("Feed button click")}
                   >
                     <div
                       className={`${
@@ -196,7 +196,7 @@ const Header = () => {
                     </div>
                   </a>
                 </Link>
-                <Link href="/c/showtime">
+                <Link href="/c/showtime-marketplace">
                   <a
                     className={`text-black dark:text-gray-200 text-sm md:text-base flex items-center space-x-2 border-b-2 pb-3 px-2 -mx-2 group ${
                       asPath == "/c/showtime"
@@ -207,12 +207,12 @@ const Header = () => {
                   >
                     <div
                       className={`${
-                        asPath == "/c/showtime"
+                        asPath == "/c/showtime-marketplace"
                           ? "bg-gray-100 dark:bg-gray-900"
                           : "group-hover:bg-gray-100 dark:group-hover:bg-gray-900"
                       } p-2 -m-2 rounded-full transition`}
                     >
-                      {asPath == "/c/showtime" ? (
+                      {asPath == "/c/showtime-marketplace" ? (
                         <CompassIconSolid className="w-5 h-5" />
                       ) : (
                         <CompassIconOutline className="w-5 h-5" />

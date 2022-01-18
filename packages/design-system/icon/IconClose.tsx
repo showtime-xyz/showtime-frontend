@@ -1,7 +1,7 @@
-import * as React from 'react';
-import Svg, { SvgProps, Defs, ClipPath, Path, G } from 'react-native-svg';
+import * as React from "react";
+import Svg, { SvgProps, Defs, ClipPath, Path, G } from "react-native-svg";
 
-function IconClose(props: SvgProps) {
+export default function IconClose(props: SvgProps) {
   return (
     <Svg
       xmlns="http://www.w3.org/2000/svg"
@@ -21,5 +21,3 @@ function IconClose(props: SvgProps) {
     </Svg>
   );
 }
-
-export { IconClose };
