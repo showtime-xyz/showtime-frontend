@@ -5,6 +5,7 @@ import { tw } from "design-system/tailwind";
 import { useState } from "react";
 import { Pressable } from "react-native";
 import { useMintNFT } from "../hooks/api-hooks";
+import * as FileSystem from "expo-file-system";
 
 function CloseButton({
   onPress,
@@ -40,22 +41,30 @@ function CloseButton({
   );
 }
 
-const fakeData = {
-  filePath:
-    "file:///var/mobile/Containers/Data/Application/595265EC-921B-4CA0-968E-D4828F96DF41/Documents/test.jpg",
-  title: "Nature",
-  description: "A beautiful nature",
-  notSafeForWork: false,
-  editionCount: 1,
-  royaltiesPercentage: 10,
-};
-
 function Create() {
   const [checked, setChecked] = useState(false);
   const { startMinting, state } = useMintNFT();
   console.log("state ", state);
   const handleSubmit = () => {
-    startMinting(fakeData);
+    FileSystem.downloadAsync(
+      "https://lh3.googleusercontent.com/eDuDBbt8CfAClm4XAfRPf63lZ0DCcf1elQai_43gcmnWr8nuwjXoAZF3xwmWnh5yt8BCA2URJzIJijSVjpUjBVCK-kMi7RZwTuSx=w660",
+      FileSystem.documentDirectory + "test.jpg"
+    )
+      .then(({ uri }) => {
+        const fakeData = {
+          filePath: uri,
+          title: "Nature",
+          description: "A beautiful nature",
+          notSafeForWork: false,
+          editionCount: 1,
+          royaltiesPercentage: 10,
+        };
+        console.log("Finished downloading to ", uri);
+        startMinting(fakeData);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -122,8 +131,10 @@ function Create() {
         </Pressable>
       </View>
 
-      <Button onPress={handleSubmit}>
-        <Text tw="ml-4 text-white dark:text-gray-900 text-sm">Create</Text>
+      <Button onPress={handleSubmit} disabled={state.status !== "idle"}>
+        <Text tw="ml-4 text-white dark:text-gray-900 text-sm">
+          {state.status === "idle" ? "Create" : state.status}
+        </Text>
       </Button>
     </View>
   );
