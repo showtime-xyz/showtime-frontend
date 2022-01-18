@@ -79,7 +79,7 @@ export const SelectItem: React.FC<SelectItemProps> = ({
       <Animated.View style={containerStyle}>
         <Text
           tw={`font-medium text-gray-900 dark:text-white ${
-            size === "regular" ? "text-sm" : "text-xs"
+            size === "regular" ? "text-sm" : "text-sm"
           }`}
         >
           {label}

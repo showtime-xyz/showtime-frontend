@@ -25,6 +25,11 @@ const handleUsernameLookup = async (value, myProfile, setCustomURLError) => {
   const username = value ? value.trim() : null;
   let validUsername = false;
 
+  if (username.length < 3) {
+    setCustomURLError({ isError: true, message: "Username must be longer than 2 characters" })
+    return false;
+  }
+
   try {
     if (
       username === null ||
@@ -542,7 +547,11 @@ export default function Modal({ isOpen, setEditModalOpen }) {
             {/* Submit section */}
             <div>
               <div className="border-t-2 dark:border-gray-800 pt-4">
-                <GreenButton type="submit" loading={submitting}>
+                <GreenButton
+                  type="submit"
+                  loading={submitting}
+                  disabled={customURLError?.isError}
+                >
                   Save changes
                 </GreenButton>
                 <GhostButton

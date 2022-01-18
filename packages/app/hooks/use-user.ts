@@ -6,9 +6,24 @@ import { axios } from "app/lib/axios";
 import { mixpanel } from "app/lib/mixpanel";
 import { accessTokenManager } from "app/lib/access-token-manager";
 import { useAccessToken } from "app/lib/access-token";
+import { Profile } from "../types";
 
 type RefreshStatus = "IDLE" | "REFRESHING_ACCESS_TOKEN" | "DONE" | "ERROR";
 type AuthenticatedStatus = "IDLE" | "AUTHENTICATED" | "UNAUTHENTICATED";
+
+type Follow = {
+  profile_id: number;
+};
+
+type MyInfoData = {
+  data: {
+    follows: Follow[];
+    profile: Profile;
+    likes_nft: number[];
+    likes_comment: number[];
+    comments: number[];
+  };
+};
 
 const useUser = () => {
   const [refreshStatus, setRefreshStatus] = useState<RefreshStatus>("IDLE");
@@ -22,7 +37,7 @@ const useUser = () => {
     data: user,
     error,
     mutate,
-  } = useSWR(accessToken ? [url] : null, (url) =>
+  } = useSWR<MyInfoData>(accessToken ? [url] : null, (url) =>
     axios({ url, method: "GET", unmountSignal })
   );
 
@@ -50,8 +65,8 @@ const useUser = () => {
 
   useEffect(() => {
     if (user) {
+      //@ts-ignore - there's no publicAddress in API response of myInfo. Verify this is correct
       mixpanel.identify(user.publicAddress);
-
       // if (user.email) {
       // 	mixpanel.people.set({
       // 		$email: user.email, // only reserved properties need the $

@@ -1,6 +1,8 @@
 import { getInitialProps } from "@expo/next-adapter/document";
 import NextDocument, { Html, Head, Main, NextScript } from "next/document";
 
+// TODO: Error: `getInitialProps` in Document component is not supported with `concurrentFeatures` enabled.
+
 class Document extends NextDocument {
   render() {
     return (

@@ -1,7 +1,6 @@
-import { useCallback, useRef, useState } from "react";
+import { Suspense, useCallback, useRef, useState } from "react";
 import { Platform } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { useScrollToTop } from "@react-navigation/native";
 import { useActivity } from "app/hooks/api-hooks";
 
 import { View, Spinner, Text } from "design-system";
@@ -79,11 +78,21 @@ const Feed = () => {
           <SelectedTabIndicator />
         </Tabs.List>
         <Tabs.Pager>
-          <AllActivityList />
-          <CreationList />
-          <LikesList />
-          <CommentsList />
-          <FollowsList />
+          <Suspense fallback={<Spinner size="small" />}>
+            <AllActivityList />
+          </Suspense>
+          <Suspense fallback={<Spinner size="small" />}>
+            <CreationList />
+          </Suspense>
+          <Suspense fallback={<Spinner size="small" />}>
+            <LikesList />
+          </Suspense>
+          <Suspense fallback={<Spinner size="small" />}>
+            <CommentsList />
+          </Suspense>
+          <Suspense fallback={<Spinner size="small" />}>
+            <FollowsList />
+          </Suspense>
         </Tabs.Pager>
       </Tabs.Root>
     </View>
@@ -100,10 +109,6 @@ const CreationList = () => {
     ({ item }) => <Card act={item} variant="activity" />,
     []
   );
-
-  const listRef = useRef(null);
-
-  useScrollToTop(listRef);
 
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,
@@ -126,7 +131,6 @@ const CreationList = () => {
       refreshing={isRefreshing}
       onRefresh={refresh}
       onEndReached={fetchMore}
-      ref={listRef}
       onEndReachedThreshold={0.6}
       removeClippedSubviews={Platform.OS !== "web"}
       numColumns={1}
@@ -149,10 +153,6 @@ const LikesList = () => {
     []
   );
 
-  const listRef = useRef(null);
-
-  useScrollToTop(listRef);
-
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,
     [isLoadingMore]
@@ -174,7 +174,6 @@ const LikesList = () => {
       refreshing={isRefreshing}
       onRefresh={refresh}
       onEndReached={fetchMore}
-      ref={listRef}
       onEndReachedThreshold={0.6}
       removeClippedSubviews={Platform.OS !== "web"}
       numColumns={1}
@@ -197,10 +196,6 @@ const CommentsList = () => {
     []
   );
 
-  const listRef = useRef(null);
-
-  useScrollToTop(listRef);
-
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,
     [isLoadingMore]
@@ -222,7 +217,6 @@ const CommentsList = () => {
       refreshing={isRefreshing}
       onRefresh={refresh}
       onEndReached={fetchMore}
-      ref={listRef}
       onEndReachedThreshold={0.6}
       removeClippedSubviews={Platform.OS !== "web"}
       numColumns={1}
@@ -245,10 +239,6 @@ const FollowsList = () => {
     []
   );
 
-  const listRef = useRef(null);
-
-  useScrollToTop(listRef);
-
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,
     [isLoadingMore]
@@ -270,7 +260,6 @@ const FollowsList = () => {
       refreshing={isRefreshing}
       onRefresh={refresh}
       onEndReached={fetchMore}
-      ref={listRef}
       onEndReachedThreshold={0.6}
       removeClippedSubviews={Platform.OS !== "web"}
       numColumns={1}
@@ -293,10 +282,6 @@ const AllActivityList = () => {
     []
   );
 
-  const listRef = useRef(null);
-
-  useScrollToTop(listRef);
-
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,
     [isLoadingMore]
@@ -318,7 +303,6 @@ const AllActivityList = () => {
       refreshing={isRefreshing}
       onRefresh={refresh}
       onEndReached={fetchMore}
-      ref={listRef}
       onEndReachedThreshold={0.6}
       removeClippedSubviews={Platform.OS !== "web"}
       numColumns={1}

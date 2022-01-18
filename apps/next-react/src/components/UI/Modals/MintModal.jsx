@@ -28,6 +28,7 @@ import XIcon from "@/components/Icons/XIcon";
 import { buildFormData } from "@/lib/utilities";
 import * as Sentry from "@sentry/nextjs";
 import ListModal from "./ListModal";
+import useFlags, { FLAGS } from "@/hooks/useFlags";
 
 const MAX_FILE_SIZE = 1024 * 1024 * 50; // 50MB
 
@@ -46,16 +47,29 @@ const MintModal = ({ open, onClose }) => {
   const { resolvedTheme } = useTheme();
   const isWeb3ModalActive = useRef(false);
   const confettiCanvas = useRef(null);
-  const [modalPage, setModalPage] = useState(
-    myProfile?.wallet_addresses_v2?.length === 0
-      ? MODAL_PAGES.NO_WALLET
-      : MODAL_PAGES.GENERAL
+  const flags = useFlags();
+  const enableMagicTX = flags[FLAGS.enableMagicTX];
+  const hasWalletAddress = Boolean(myProfile?.wallet_addresses_v2?.length);
+  const hasWalletAddressExcludingEmail = Boolean(
+    myProfile?.wallet_addresses_excluding_email_v2?.length
   );
 
-  useEffect(() => {
-    if (myProfile?.wallet_addresses_v2?.length === 0) {
-      setModalPage(MODAL_PAGES.NO_WALLET);
+  const setDefaultModalPage = () => {
+    if (enableMagicTX) {
+      return hasWalletAddress ? MODAL_PAGES.GENERAL : MODAL_PAGES.NO_WALLET;
+    } else {
+      return hasWalletAddressExcludingEmail
+        ? MODAL_PAGES.GENERAL
+        : MODAL_PAGES.NO_WALLET;
     }
+  };
+
+  const [modalPage, setModalPage] = useState(() => {
+    return setDefaultModalPage();
+  });
+
+  useEffect(() => {
+    setModalPage(setDefaultModalPage());
   }, [myProfile]);
 
   const shotConfetti = () => {
@@ -128,11 +142,7 @@ const MintModal = ({ open, onClose }) => {
     setHasAcceptedTerms(false);
     setTransactionHash("");
     setTokenID("");
-    setModalPage(
-      myProfile?.wallet_addresses_v2?.length === 0
-        ? MODAL_PAGES.NO_WALLET
-        : MODAL_PAGES.GENERAL
-    );
+    setDefaultModalPage();
   };
 
   const saveDraft = () =>
@@ -303,7 +313,10 @@ const MintModal = ({ open, onClose }) => {
       )
       .then((res) => res.data);
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic: true });
+    const web3Modal = getWeb3Modal({
+      theme: resolvedTheme,
+      withMagic: enableMagicTX,
+    });
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,

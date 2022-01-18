@@ -8,31 +8,45 @@
       },
       "android": {
         "autoIncrement": true,
-        "buildType": "app-bundle"
+        "buildType": "app-bundle",
+        "image": "latest"
       },
       "env": {
         "STAGE": "production"
       },
-      "node": "14.18.1"
+      "node": "14.18.1",
+      "cache": {
+        "key": "showtime-2"
+      }
     },
     "preview": {
       "releaseChannel": "staging",
       "distribution": "internal",
       "android": {
-        "buildType": "apk"
+        "buildType": "apk",
+        "image": "latest"
       },
       "env": {
         "STAGE": "staging"
       },
-      "node": "14.18.1"
+      "node": "14.18.1",
+      "cache": {
+        "key": "showtime-2"
+      }
     },
     "development": {
       "developmentClient": true,
       "distribution": "internal",
+      "android": {
+        "image": "latest"
+      },
       "env": {
         "STAGE": "development"
       },
-      "node": "14.18.1"
+      "node": "14.18.1",
+      "cache": {
+        "key": "showtime-2"
+      }
     }
   },
   "cli": {

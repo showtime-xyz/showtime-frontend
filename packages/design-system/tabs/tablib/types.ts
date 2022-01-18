@@ -15,24 +15,14 @@ export type TabRootProps = {
 
 export type TabListProps = ScrollViewProps;
 
-export type RefreshGestureState =
-  | "idle"
-  | "pulling"
-  | "refresh"
-  | "refreshing"
-  | "cancelling";
-
 export type TabsContextType = {
   tabListHeight: number;
-  pullToRefreshY: Reanimated.SharedValue<number>;
-  refreshGestureState: Reanimated.SharedValue<RefreshGestureState>;
   index: Reanimated.SharedValue<number>;
   tabItemLayouts: Array<Reanimated.SharedValue<LayoutRectangle | null>>;
-  tablistScrollRef: React.RefObject<Reanimated.ScrollView>;
   requestOtherViewsToSyncTheirScrollPosition: Reanimated.SharedValue<boolean>;
   translateY: Reanimated.SharedValue<number>;
-  offset: Animated.Value;
-  position: Animated.Value;
+  offset: Reanimated.SharedValue<number>;
+  position: Reanimated.SharedValue<number>;
   headerHeight: number;
   initialIndex: number;
   onIndexChange: (index: number) => void;

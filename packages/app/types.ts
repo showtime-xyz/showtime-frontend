@@ -56,3 +56,43 @@ export type Creator = {
   top_items: NFT[];
 };
 
+export interface WalletAddressesV2 {
+  address: string;
+  ens_domain: string;
+  is_email: number;
+}
+
+export interface WalletAddressesExcludingEmailV2 {
+  address: string;
+  ens_domain: string;
+}
+
+export interface Link {
+  id: number;
+  user_input: string;
+  type_id: number;
+  type__name: string;
+  type__prefix: string;
+  type__icon_url: string;
+}
+
+export interface Profile {
+  profile_id: number;
+  name: string;
+  verified: boolean;
+  img_url: string;
+  cover_url: string;
+  minting_enabled: boolean;
+  wallet_addresses: string[];
+  wallet_addresses_v2: WalletAddressesV2[];
+  wallet_addresses_excluding_email_v2: WalletAddressesExcludingEmailV2[];
+  bio: string;
+  website_url: string;
+  username: string;
+  default_list_id: number;
+  default_created_sort_id: number;
+  default_owned_sort_id: number;
+  notifications_last_opened: Date;
+  has_onboarded: boolean;
+  links: Link[];
+}
