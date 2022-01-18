@@ -246,24 +246,27 @@ type MintNFTType = {
     | "minting"
     | "mintingError"
     | "mintingSuccess";
+
+  tokenId?: string;
 };
 
 const initialMintNFTState: MintNFTType = {
   status: "idle",
+  tokenId: undefined,
 };
 
 const mintNFTReducer = (state: MintNFTType, action: any): MintNFTType => {
   switch (action.type) {
     case "fileUpload":
-      return { ...state, status: "fileUpload" };
+      return { ...state, status: "fileUpload", tokenId: undefined };
     case "fileUploadError":
       return { ...state, status: "fileUploadError" };
     case "minting":
-      return { ...state, status: "minting" };
+      return { ...state, status: "minting", tokenId: undefined };
     case "mintingError":
       return { ...state, status: "mintingError" };
     case "mintingSuccess":
-      return { ...state, status: "mintingSuccess" };
+      return { ...state, status: "mintingSuccess", tokenId: action.tokenId };
     default:
       return state;
   }
@@ -320,14 +323,13 @@ const getPinataToken = (publicAddress: string) => {
 
       {
         headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJkZWZjNDc5YS01ODhlLTQ2ZWYtYjY3Zi01ZWYzYTUwYjEzYzUiLCJlbWFpbCI6ImFsZXgua2lsa2thQHRyeXNob3d0aW1lLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImlkIjoiTllDMSIsImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxfV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2V9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiJhNTkxMzIyNzVjZTUzMGVjYjE2NSIsInNjb3BlZEtleVNlY3JldCI6IjNiMjkxOTFkZDI4Nzc3Njk5NmQ0ZmZkOGJmZTcwZTE4MDU5YjE2ZmJhOWE0ZDhhYjE0YjkzMjMwZjU0YTE0ZjEiLCJpYXQiOjE2MjUxNTQzNzd9.7630gOVEohas0G-OWl2xPdXUJRWdOxJDHkFen1cO7Ak`,
+          // TODO: Move this to new pinata backend API
+          Authorization: `Bearer ${process.env.PINATA_TOKEN}`,
         },
       }
     )
     .then((res) => res.data.JWT);
 };
-
-const testAddress = "0x3CFa5Fe88512Db62e40d0F91b7E59af34C1b098f";
 
 export const useMintNFT = ({
   filePath,
@@ -339,10 +341,9 @@ export const useMintNFT = ({
 }: UseMintNFT) => {
   const [state, dispatch] = useReducer(mintNFTReducer, initialMintNFTState);
   const { user } = useUser();
-  let userAddress = user
-    ? user.data.profile.wallet_addresses_excluding_email_v2[0].address
-    : testAddress;
-  console.log("user address ", userAddress);
+  let userAddress =
+    user?.data.profile.wallet_addresses_excluding_email_v2[0].address;
+
   const connector = useWalletConnect();
   async function uploadFile() {
     if (userAddress) {
@@ -361,6 +362,7 @@ export const useMintNFT = ({
         const formData = new FormData();
 
         formData.append("file", {
+          //@ts-ignore
           uri: filePath,
           name: fileMetaData.name,
           type: fileMetaData.type,
@@ -381,8 +383,6 @@ export const useMintNFT = ({
             },
           })
           .then((res) => res.data.IpfsHash);
-
-        console.log("File uploaed!! ", fileIpfsHash);
 
         if (fileIpfsHash) {
           const pinataToken = await getPinataToken(userAddress);
@@ -409,8 +409,6 @@ export const useMintNFT = ({
             )
             .then((res) => res.data.IpfsHash);
 
-          console.log("NFT JSON uploaded ", nftJson);
-
           return nftJson;
         }
       }
@@ -418,10 +416,10 @@ export const useMintNFT = ({
   }
 
   async function mintToken(nftJsonIpfsHash: string) {
-    const { biconomy, web3 } = await getBiconomy(connector);
+    const { biconomy } = await getBiconomy(connector);
 
-    // const signerAddress = await web3.getSigner().getAddress();
     const contract = new ethers.Contract(
+      //@ts-ignore
       process.env.NEXT_PUBLIC_MINTING_CONTRACT,
       minterAbi,
       biconomy.getSignerByAddress(userAddress)
@@ -463,47 +461,44 @@ export const useMintNFT = ({
 
           throw error;
         });
-      console.log("transaction hash ", transaction);
+
+      // console.log("transaction hash ", transaction);
 
       provider.once(transaction, (result: any) => {
-        // setTokenID(
+        // console.log(
+        //   "token id! ",
         //   contract.interface
         //     .decodeFunctionResult("issueToken", result.logs[0].data)[0]
         //     .toNumber()
         // );
-        console.log(
-          "token id! ",
-          contract.interface
+        dispatch({
+          type: "mintingSuccess",
+          tokenId: contract.interface
             .decodeFunctionResult("issueToken", result.logs[0].data)[0]
-            .toNumber()
-        );
-        dispatch({ type: "mintingSuccess" });
-        console.log();
+            .toNumber(),
+        });
       });
     }
   }
 
   async function mintTokenPipeline() {
-    let nftJsonHash = "QmPqPnGHwqYxa1mqnMb2DYAAhcThUw7NN5dGrJtgu8B22N";
+    let nftJsonHash;
 
-    // try {
-    //   dispatch({ type: "fileUpload" });
-    //   const nftJsonHash = await uploadFile();
-    // } catch (e) {
-    //   console.error("File upload error", e);
-    //   dispatch({ type: "fileUploadError" });
-    //   return;
-    // }
+    try {
+      dispatch({ type: "fileUpload" });
+      nftJsonHash = await uploadFile();
+    } catch (e) {
+      dispatch({ type: "fileUploadError" });
+      throw e;
+    }
 
     if (nftJsonHash) {
       try {
         dispatch({ type: "minting" });
         await mintToken(nftJsonHash);
       } catch (e) {
-        throw e;
-        console.log("errror ", e);
         dispatch({ type: "mintingError" });
-        return;
+        throw e;
       }
     }
   }
@@ -516,5 +511,5 @@ export const useMintNFT = ({
 
   console.log("state ", state);
 
-  // return { data, loading: !data, error };
+  return { state };
 };

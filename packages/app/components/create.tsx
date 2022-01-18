@@ -39,7 +39,7 @@ function CloseButton({
     </Pressable>
   );
 }
-const dummyFilePath = "";
+
 function Create() {
   const [checked, setChecked] = useState(false);
   useMintNFT({
@@ -48,6 +48,8 @@ function Create() {
     title: "Nature",
     description: "A beautiful nature",
     notSafeForWork: false,
+    editionCount: 1,
+    royaltiesPercentage: 10,
   });
 
   return (

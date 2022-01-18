@@ -72,30 +72,7 @@ export const getSortFields = () => {
   return [...Object.keys(SORT_FIELDS).map((key) => SORT_FIELDS[key])];
 };
 
-const getProviderFromWallectConnect = (connector) => {
-  return {
-    ...connector,
-    sign: (...params) => {},
-  };
-};
-
-export const getBiconomy = async (connector) => {
-  const WalletConnectProvider = (await import("@walletconnect/web3-provider"))
-    .default;
-
-  const provider = new WalletConnectProvider({
-    infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
-  });
-
-  // provider.accounts = connector.accounts;
-  // const provider = getProviderFromWallectConnect(connector);
-  const web3 = new ethers.providers.Web3Provider(provider);
-
-  // const newProvider = {
-  //   ...web3.provider,
-  //   ...connector,
-  // };
-
+export const getBiconomy = async (connector: any) => {
   const biconomy = new Biconomy(
     new ethers.providers.JsonRpcProvider(
       `https://polygon-${
@@ -104,22 +81,23 @@ export const getBiconomy = async (connector) => {
     ),
     {
       apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY,
-      signFunction: (signedDataType, params) => {
+
+      // TODO: add walletconnect connector instance support in biconomy
+      signFunction: (signedDataType: string, params: any) => {
         return new Promise((resolve, reject) => {
-          console.log("signer fun ");
           if (signedDataType === "eth_signTypedData_v4") {
             connector
               .signTypedData(params)
-              .then((res) => {
+              .then((res: string) => {
                 resolve(res);
               })
-              .catch((err) => {
+              .catch((err: any) => {
                 reject(err);
               });
           }
         });
       },
-      debug: true,
+      // debug: true,
     }
   );
 
@@ -127,5 +105,5 @@ export const getBiconomy = async (connector) => {
     biconomy.onEvent(biconomy.READY, resolve).onEvent(biconomy.ERROR, reject)
   );
 
-  return { biconomy, web3 };
+  return { biconomy, connector };
 };
