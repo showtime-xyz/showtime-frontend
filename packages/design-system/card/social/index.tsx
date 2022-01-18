@@ -12,9 +12,9 @@ function Social({ nft }) {
         <Button variant="comment" count={nft.comment_count} />
       </View>
 
-      <View>
+      {/* <View>
         <Button variant="boost" count={0} />
-      </View>
+      </View> */}
     </View>
   );
 }
