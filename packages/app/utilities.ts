@@ -1,5 +1,5 @@
 import { Profile } from "./types";
-import { Biconomy } from "app/biconomy-sdk/src";
+import { Biconomy } from "@biconomy/mexa";
 import { ethers } from "ethers";
 
 export const formatAddressShort = (address) => {
@@ -104,14 +104,20 @@ export const getBiconomy = async (connector) => {
     ),
     {
       apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY,
-      walletProvider: {
-        send: async (...params) => {
-          if (params[0].method === "eth_signTypedData_v4") {
-            const res = await connector.sendCustomRequest(params);
-            console.log("ress", res);
-            return res;
+      signFunction: (signedDataType, params) => {
+        return new Promise((resolve, reject) => {
+          console.log("signer fun ");
+          if (signedDataType === "eth_signTypedData_v4") {
+            connector
+              .signTypedData(params)
+              .then((res) => {
+                resolve(res);
+              })
+              .catch((err) => {
+                reject(err);
+              });
           }
-        },
+        });
       },
       debug: true,
     }

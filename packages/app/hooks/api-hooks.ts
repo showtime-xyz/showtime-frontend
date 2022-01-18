@@ -436,117 +436,51 @@ export const useMintNFT = ({
       royaltiesPercentage * 100
     );
     const provider = biconomy.getEthersProvider();
-    // connector.sendCustomRequest({
-    //   batchId: 0,
-    //   batchNonce: 0,
-    //   data: "0x66250b430000000000000000000000003cfa5fe88512db62e40d0f91b7e59af34c1b098f000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000001200000000000000000000000003cfa5fe88512db62e40d0f91b7e59af34c1b098f00000000000000000000000000000000000000000000000000000000000003e8000000000000000000000000000000000000000000000000000000000000002e516d5071506e47487771597861316d716e4d623244594141686354685577374e4e356447724a746775384232324e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000",
-    //   deadline: 1642426871,
-    //   from: "0x3CFa5Fe88512Db62e40d0F91b7E59af34C1b098f",
-    //   to: "0x09f3a26302e1c45f0d78be5d592f52b6fca43811",
-    //   token: "0x0000000000000000000000000000000000000000",
-    //   tokenGasPrice: "0",
-    //   txGas: 174897,
-    // });
 
-    // connector.sendTransaction({
-    //   type: "EIP712_SIGN",
-    //   data,
-    //   from: userAddress,
-    //   to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
-    // });
+    if (connector.connected) {
+      const transaction = await provider
+        .send("eth_sendTransaction", [
+          {
+            data,
+            from: userAddress,
+            to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+            signatureType: "EIP712_SIGN",
+          },
+        ])
+        .catch((error: any) => {
+          // TODO: Add a proper error message. Find what 4001 means
+          if (error.code === 4001) {
+            throw new Error("Something went wrong");
+          }
 
-    // if (connector.connected) {
-    // const request = {
-    //   types: {
-    //     EIP712Domain: [
-    //       { name: "name", type: "string" },
-    //       { name: "version", type: "string" },
-    //       { name: "verifyingContract", type: "address" },
-    //       { name: "salt", type: "bytes32" },
-    //     ],
-    //     ERC20ForwardRequest: [
-    //       { name: "from", type: "address" },
-    //       { name: "to", type: "address" },
-    //       { name: "token", type: "address" },
-    //       { name: "txGas", type: "uint256" },
-    //       { name: "tokenGasPrice", type: "uint256" },
-    //       { name: "batchId", type: "uint256" },
-    //       { name: "batchNonce", type: "uint256" },
-    //       { name: "deadline", type: "uint256" },
-    //       { name: "data", type: "bytes" },
-    //     ],
-    //   },
-    //   domain: {
-    //     name: "Biconomy Forwarder",
-    //     version: "1",
-    //     verifyingContract: "0x9399BB24DBB5C4b782C70c2969F58716Ebbd6a3b",
-    //     salt: "0x0000000000000000000000000000000000000000000000000000000000013881",
-    //   },
-    //   primaryType: "ERC20ForwardRequest",
-    //   message: {
-    //     from: "0x3CFa5Fe88512Db62e40d0F91b7E59af34C1b098f",
-    //     to: "0x09f3a26302e1c45f0d78be5d592f52b6fca43811",
-    //     token: "0x0000000000000000000000000000000000000000",
-    //     txGas: 174897,
-    //     tokenGasPrice: "0",
-    //     batchId: 0,
-    //     batchNonce: 0,
-    //     deadline: 1642429576,
-    //     data: "0x66250b430000000000000000000000003cfa5fe88512db62e40d0f91b7e59af34c1b098f000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000001200000000000000000000000003cfa5fe88512db62e40d0f91b7e59af34c1b098f00000000000000000000000000000000000000000000000000000000000003e8000000000000000000000000000000000000000000000000000000000000002e516d5071506e47487771597861316d716e4d623244594141686354685577374e4e356447724a746775384232324e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000",
-    //   },
-    // };
+          if (
+            JSON.parse(
+              error?.body || error?.error?.body || "{}"
+            )?.error?.message?.includes("caller is not minter")
+          ) {
+            throw new Error("Your address is not approved for minting");
+          }
 
-    // const msgParams = [
-    //   userAddress, // Required
-    //   request, // Required
-    // ];
+          throw error;
+        });
+      console.log("transaction hash ", transaction);
 
-    // const res = await connector.signTypedData(msgParams);
-    // }
-
-    const transaction = await provider
-      .send("eth_sendTransaction", [
-        {
-          data,
-          from: userAddress,
-          to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
-          signatureType: "EIP712_SIGN",
-        },
-      ])
-      .catch((error: any) => {
-        // TODO: Add a proper error message. Find what 4001 means
-        if (error.code === 4001) {
-          throw new Error("Something went wrong");
-        }
-
-        if (
-          JSON.parse(
-            error?.body || error?.error?.body || "{}"
-          )?.error?.message?.includes("caller is not minter")
-        ) {
-          throw new Error("Your address is not approved for minting");
-        }
-
-        throw error;
+      provider.once(transaction, (result: any) => {
+        // setTokenID(
+        //   contract.interface
+        //     .decodeFunctionResult("issueToken", result.logs[0].data)[0]
+        //     .toNumber()
+        // );
+        console.log(
+          "token id! ",
+          contract.interface
+            .decodeFunctionResult("issueToken", result.logs[0].data)[0]
+            .toNumber()
+        );
+        dispatch({ type: "mintingSuccess" });
+        console.log();
       });
-
-    console.log("transaction hash ", transaction);
-
-    provider.once(transaction, (result: any) => {
-      // setTokenID(
-      //   contract.interface
-      //     .decodeFunctionResult("issueToken", result.logs[0].data)[0]
-      //     .toNumber()
-      // );
-      console.log(
-        "token id! ",
-        contract.interface
-          .decodeFunctionResult("issueToken", result.logs[0].data)[0]
-          .toNumber()
-      );
-      dispatch({ type: "mintingSuccess" });
-      console.log();
-    });
+    }
   }
 
   async function mintTokenPipeline() {
