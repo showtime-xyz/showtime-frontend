@@ -49,13 +49,12 @@ export const BaseButton = forwardRef<any, BaseButtonProps>(
 
     //#region renderings
     const renderChildren = useMemo(() => {
-      if (typeof children === "string") {
-        return <Text tw={labelStyle}>{children}</Text>;
-      }
-
       const iconSize = ICON_SIZE_TW[size];
-
       return React.Children.map(children, (child) => {
+        if (typeof child === "string") {
+          return <Text tw={labelStyle}>{child}</Text>;
+        }
+
         // @ts-ignore
         return React.cloneElement(child, {
           tw: labelStyle,
@@ -67,7 +66,6 @@ export const BaseButton = forwardRef<any, BaseButtonProps>(
       });
     }, [size, iconColor, labelStyle, children]);
 
-    console.log("containerStyle", containerStyle);
     return (
       <Pressable
         ref={ref}
