@@ -75,7 +75,7 @@ function Create() {
 
   return (
     <View tw="flex-1">
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: tabBarHeight + 100 }}>
         <View tw="p-4">
           <View tw="mt-11 flex-row">
             <Image
@@ -173,7 +173,11 @@ function Create() {
         </View>
       </ScrollView>
       <View tw="absolute px-4 w-full" style={{ bottom: tabBarHeight + 16 }}>
-        <Button onPress={handleSubmit} disabled={state.status !== "idle"}>
+        <Button
+          onPress={handleSubmit}
+          disabled={state.status !== "idle"}
+          tw="h-12 rounded-full"
+        >
           <Text tw="text-white dark:text-gray-900 text-sm">
             {state.status === "idle" ? "Create" : state.status}
           </Text>
