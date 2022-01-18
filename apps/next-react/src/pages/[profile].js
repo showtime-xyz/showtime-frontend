@@ -42,6 +42,7 @@ import Dropdown from "@/components/UI/Dropdown";
 import Button from "@/components/UI/Buttons/Button";
 import useProfile from "@/hooks/useProfile";
 import useSWR from "swr";
+import ShoppingCartIcon from "@/components/Icons/ShoppingCartIcon";
 
 export async function getStaticProps({ params: { profile: slug_address } }) {
   if (slug_address.includes("apple-touch-icon"))
@@ -91,6 +92,7 @@ const Profile = ({
   const context = useContext(AppContext);
 
   const [cancelTokenArray, setCancelTokens] = useState([
+    CancelToken.source(),
     CancelToken.source(),
     CancelToken.source(),
     CancelToken.source(),
@@ -1189,6 +1191,28 @@ const Profile = ({
                                   ).toLocaleString()
                                 : null}
                             </span>
+                          </p>
+                        </button>
+                        <button
+                          onClick={() => handleListChange(4)}
+                          className={`flex-1 md:flex-initial px-4 py-3 space-x-2 flex items-center justify-center md:justify-start border-b-2 ${
+                            selectedGrid === 4
+                              ? "border-gray-800 dark:border-gray-300"
+                              : "border-gray-200 dark:border-gray-700"
+                          } transition`}
+                        >
+                          <ShoppingCartIcon className="hidden md:block w-5 h-5 dark:text-gray-500" />
+                          <p className="text-sm text-gray-500">
+                            <span className="font-semibold text-gray-800 dark:text-gray-300">
+                              Listed
+                            </span>{" "}
+                            {/* <span className="hidden md:inline">
+                              {menuLists && menuLists.length > 0
+                                ? Number(
+                                    menuLists[1].count_deduplicated_nonhidden
+                                  ).toLocaleString()
+                                : null}
+                            </span> */}
                           </p>
                         </button>
                         <button
