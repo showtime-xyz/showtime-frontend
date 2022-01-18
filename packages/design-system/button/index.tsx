@@ -1,111 +1,83 @@
-import { forwardRef } from "react";
+import React from "react";
+import { tw as tailwind } from "design-system/tailwind";
+import { BaseButton } from "./button-base";
 
-import { Text } from "design-system/text";
-import {
-  Pressable,
-  Props as PressableScaleProps,
-} from "design-system/pressable-scale";
-import type { TW } from "design-system/tailwind/types";
+import type { ButtonProps, BaseButtonProps } from "./types";
 
-type Props = {
-  tw?: TW;
-  iconOnly?: boolean;
-  variant?: "primary" | "danger" | "tertiary";
-  size?: "small" | "regular";
-  children?: React.ReactNode;
-  ref?: any;
-} & PressableScaleProps;
+export { ButtonLabel } from "./button-label";
 
-export const Button = forwardRef(({ variant, ...props }: Props, ref) => {
+export function Button({
+  variant = "primary",
+  size = "regular",
+  iconOnly = false,
+  ...props
+}: ButtonProps) {
   switch (variant) {
     case "primary":
-      return <PrimaryButton ref={ref} {...props} />;
+      return <PrimaryButton size={size} iconOnly={iconOnly} {...props} />;
     case "danger":
-      return <DangerButton ref={ref} {...props} />;
+      return <DangerButton size={size} iconOnly={iconOnly} {...props} />;
     case "tertiary":
-      return <TertiaryButton ref={ref} {...props} />;
+      return <TertiaryButton size={size} iconOnly={iconOnly} {...props} />;
+    case "secondary":
+      return <SecondaryButton size={size} iconOnly={iconOnly} {...props} />;
     default:
-      return <PrimaryButton ref={ref} {...props} />;
+      return <PrimaryButton size={size} iconOnly={iconOnly} {...props} />;
   }
-});
+}
 
-Button.displayName = "Button";
-
-export const BaseButton = forwardRef(({ ...props }: Props, ref) => {
-  return <Pressable {...{ ...props, ref }} />;
-});
-
-BaseButton.displayName = "BaseButton";
-
-export const PrimaryButton = ({ tw = "", iconOnly, size, ...props }: Props) => (
-  <BaseButton
-    {...props}
-    tw={[
-      `bg-black dark:bg-white flex-row justify-center items-center ${
-        iconOnly ? "p-2 rounded-xl" : "px-4 py-2 rounded-2xl"
-      } ${
-        size === "regular" ? "h-[48px] rounded-3xl" : "h-[32px]"
-      } disabled:opacity-40 disabled:cursor-not-allowed`,
-      typeof tw === "string" ? tw ?? "" : tw?.join(" "),
-    ]}
-  />
-);
-
-PrimaryButton.displayName = "PrimaryButton";
-
-export const DangerButton = ({ tw = "", iconOnly, size, ...props }: Props) => (
-  <BaseButton
-    {...props}
-    tw={[
-      `bg-red-500 dark:bg-red-700 text-white font-medium flex-row justify-center items-center ${
-        iconOnly ? "p-2 rounded-xl" : "px-4 py-2 rounded-2xl"
-      } ${
-        size === "regular" ? "h-[48px] rounded-3xl" : "h-[32px]"
-      } disabled:opacity-40 disabled:cursor-not-allowed`,
-      typeof tw === "string" ? tw ?? "" : tw?.join(" "),
-    ]}
-  />
-);
-
-DangerButton.displayName = "DangerButton";
-
-export const TertiaryButton = ({
-  tw = "",
-  iconOnly,
-  size,
-  ...props
-}: Props) => (
-  <BaseButton
-    {...props}
-    tw={[
-      `relative bg-gray-100 text-gray-900 font-semibold dark:bg-gray-800 dark:text-gray-200 flex-row justify-center items-center ${
-        iconOnly ? "p-2 rounded-xl" : "px-4 py-2 rounded-2xl"
-      } ${
-        size === "regular" ? "h-[48px] rounded-3xl" : "h-[32px]"
-      } disabled:opacity-40 disabled:cursor-not-allowed`,
-      typeof tw === "string" ? tw ?? "" : tw?.join(" "),
-    ]}
-  />
-);
-
-TertiaryButton.displayName = "TertiaryButton";
-
-export const ButtonLabel = ({
-  tw = "",
-  ...props
-}: {
-  tw?: TW;
-  children?: React.ReactNode;
-}) => {
-  // TODO: md:text-base
+export function PrimaryButton({ tw = "", ...props }: BaseButtonProps) {
   return (
-    <Text
-      variant="text-sm"
+    <BaseButton
       {...props}
       tw={[
-        "text-white dark:text-black font-bold",
-        typeof tw === "string" ? tw : tw?.join(" "),
+        `bg-gray-900 dark:bg-white`,
+        typeof tw === "string" ? tw ?? "" : tw?.join(" "),
       ]}
+      labelTW="text-white dark:text-black"
+      iconColor={tailwind.color("white dark:gray-900")}
     />
   );
-};
+}
+
+export function SecondaryButton({ tw = "", ...props }: BaseButtonProps) {
+  return (
+    <BaseButton
+      {...props}
+      tw={[
+        `bg-white dark:bg-black`,
+        typeof tw === "string" ? tw ?? "" : tw?.join(" "),
+      ]}
+      labelTW="text-gray-900 dark:text-white"
+      iconColor={tailwind.color("gray-900 dark:white")}
+    />
+  );
+}
+
+export function TertiaryButton({ tw = "", ...props }: BaseButtonProps) {
+  return (
+    <BaseButton
+      {...props}
+      tw={[
+        `bg-gray-100 dark:bg-gray-900`,
+        typeof tw === "string" ? tw ?? "" : tw?.join(" "),
+      ]}
+      labelTW="text-gray-900 dark:text-white"
+      iconColor={tailwind.color("gray-900 dark:white")}
+    />
+  );
+}
+
+export function DangerButton({ tw = "", ...props }: BaseButtonProps) {
+  return (
+    <BaseButton
+      {...props}
+      tw={[
+        `bg-red-500 dark:bg-red-700`,
+        typeof tw === "string" ? tw ?? "" : tw?.join(" "),
+      ]}
+      labelTW="text-white"
+      iconColor="white"
+    />
+  );
+}
