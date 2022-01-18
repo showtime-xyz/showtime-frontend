@@ -6,6 +6,7 @@ import { HomeStackParams } from "app/navigation/types";
 import { navigatorScreenOptions } from "app/navigation/navigator-screen-options";
 import { ProfileScreen } from "../screens/profile";
 import { HomeScreen } from "../screens/home";
+import { CreateScreen } from "../screens/create";
 
 const LoginScreen = dynamic<JSX.Element>(() =>
   import("app/screens/login").then((mod) => mod.LoginScreen)
@@ -25,7 +26,7 @@ function HomeNavigator() {
       <HomeStack.Group>
         <HomeStack.Screen
           name="home"
-          component={HomeScreen}
+          component={CreateScreen}
           options={{ title: "Home", headerTitle: "Showtime" }}
         />
       </HomeStack.Group>

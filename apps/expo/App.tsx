@@ -45,6 +45,7 @@ import {
   setColorScheme as setUserColorScheme,
   useColorScheme as useUserColorScheme,
 } from "app/lib/color-scheme";
+import * as FileSystem from "expo-file-system";
 
 enableScreens(true);
 // enableFreeze(true)
@@ -82,6 +83,17 @@ function QRCodeModal(props: RenderQrcodeModalProps): JSX.Element {
     </FullWindowOverlay>
   );
 }
+
+// FileSystem.downloadAsync(
+//   "https://images.unsplash.com/photo-1439853949127-fa647821eba0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
+//   FileSystem.documentDirectory + "test.jpg"
+// )
+//   .then(({ uri }) => {
+//     console.log("Finished downloading to ", uri);
+//   })
+//   .catch((error) => {
+//     console.error(error);
+//   });
 
 function mmkvProvider() {
   const storage = new MMKV();

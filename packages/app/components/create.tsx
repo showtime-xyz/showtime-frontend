@@ -44,7 +44,7 @@ function Create() {
   const [checked, setChecked] = useState(false);
   useMintNFT({
     filePath:
-      "file:///Users/nishanbende/Library/Developer/CoreSimulator/Devices/A1ABD6FC-87E9-48E6-A372-89B5E425B947/data/Containers/Data/Application/470B5899-4BBB-4510-8675-8C3A5FE01121/Documents/test.jpg",
+      "file:///var/mobile/Containers/Data/Application/E47B3A69-8DE8-4295-B640-A872E399B54D/Documents/test.jpg",
     title: "Nature",
     description: "A beautiful nature",
     notSafeForWork: false,

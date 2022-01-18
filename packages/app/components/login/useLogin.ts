@@ -78,6 +78,7 @@ export const useLogin = () => {
         ];
 
         signature = await connector.signPersonalMessage(msgParams);
+        console.log("personal signature ", signature);
       }
 
       const response = await axios({

@@ -1,4 +1,6 @@
 import { Profile } from "./types";
+import { Biconomy } from "app/biconomy-sdk/src";
+import { ethers } from "ethers";
 
 export const formatAddressShort = (address) => {
   if (!address) return null;
@@ -68,4 +70,56 @@ export const SORT_FIELDS = {
 
 export const getSortFields = () => {
   return [...Object.keys(SORT_FIELDS).map((key) => SORT_FIELDS[key])];
+};
+
+const getProviderFromWallectConnect = (connector) => {
+  return {
+    ...connector,
+    sign: (...params) => {},
+  };
+};
+
+export const getBiconomy = async (connector) => {
+  const WalletConnectProvider = (await import("@walletconnect/web3-provider"))
+    .default;
+
+  const provider = new WalletConnectProvider({
+    infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
+  });
+
+  // provider.accounts = connector.accounts;
+  // const provider = getProviderFromWallectConnect(connector);
+  const web3 = new ethers.providers.Web3Provider(provider);
+
+  // const newProvider = {
+  //   ...web3.provider,
+  //   ...connector,
+  // };
+
+  const biconomy = new Biconomy(
+    new ethers.providers.JsonRpcProvider(
+      `https://polygon-${
+        process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai" : "mainnet"
+      }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
+    ),
+    {
+      apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY,
+      walletProvider: {
+        send: async (...params) => {
+          if (params[0].method === "eth_signTypedData_v4") {
+            const res = await connector.sendCustomRequest(params);
+            console.log("ress", res);
+            return res;
+          }
+        },
+      },
+      debug: true,
+    }
+  );
+
+  await new Promise((resolve, reject) =>
+    biconomy.onEvent(biconomy.READY, resolve).onEvent(biconomy.ERROR, reject)
+  );
+
+  return { biconomy, web3 };
 };

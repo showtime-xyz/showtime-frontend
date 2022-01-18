@@ -8,8 +8,12 @@ import { v4 as uuid } from "uuid";
 import axios from "axios";
 import * as FileSystem from "expo-file-system";
 import { Alert } from "react-native";
-import { formatAddressShort } from "../utilities";
+import { formatAddressShort, getBiconomy } from "../utilities";
+import { ethers } from "ethers";
+import minterAbi from "app/abi/ShowtimeMT.json";
+import { useWalletConnect } from "@walletconnect/react-native-dapp";
 
+console.log("app env ", process.env);
 export const useActivity = ({
   typeId,
   limit = 5,
@@ -56,7 +60,6 @@ export const useTrendingCreators = ({ days }: { days: number }) => {
   );
 
   const queryState = useInfiniteListQuerySWR<any>(trendingCreatorsUrlFn);
-
   const newData = useMemo(() => {
     let newData: any = [];
     if (queryState.data) {
@@ -241,7 +244,8 @@ type MintNFTType = {
     | "fileUpload"
     | "fileUploadError"
     | "minting"
-    | "mintingError";
+    | "mintingError"
+    | "mintingSuccess";
 };
 
 const initialMintNFTState: MintNFTType = {
@@ -258,6 +262,8 @@ const mintNFTReducer = (state: MintNFTType, action: any): MintNFTType => {
       return { ...state, status: "minting" };
     case "mintingError":
       return { ...state, status: "mintingError" };
+    case "mintingSuccess":
+      return { ...state, status: "mintingSuccess" };
     default:
       return state;
   }
@@ -270,6 +276,8 @@ type UseMintNFT = {
   title: string;
   description: string;
   notSafeForWork: boolean;
+  editionCount: number;
+  royaltiesPercentage: number;
 };
 
 const supportedImageExtensions = ["jpg", "jpeg", "png", "gif"];
@@ -293,6 +301,31 @@ const getFileNameAndType = (filePath: string) => {
     };
   }
 };
+const getPinataToken = (publicAddress: string) => {
+  return axios
+    .post(
+      "https://api.pinata.cloud/users/generateApiKey",
+      {
+        maxUses: 1,
+        keyName: `${formatAddressShort(publicAddress)}'s key`,
+        permissions: {
+          endpoints: {
+            pinning: {
+              pinFileToIPFS: true,
+              pinJSONToIPFS: true,
+            },
+          },
+        },
+      },
+
+      {
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJkZWZjNDc5YS01ODhlLTQ2ZWYtYjY3Zi01ZWYzYTUwYjEzYzUiLCJlbWFpbCI6ImFsZXgua2lsa2thQHRyeXNob3d0aW1lLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImlkIjoiTllDMSIsImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxfV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2V9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiJhNTkxMzIyNzVjZTUzMGVjYjE2NSIsInNjb3BlZEtleVNlY3JldCI6IjNiMjkxOTFkZDI4Nzc3Njk5NmQ0ZmZkOGJmZTcwZTE4MDU5YjE2ZmJhOWE0ZDhhYjE0YjkzMjMwZjU0YTE0ZjEiLCJpYXQiOjE2MjUxNTQzNzd9.7630gOVEohas0G-OWl2xPdXUJRWdOxJDHkFen1cO7Ak`,
+        },
+      }
+    )
+    .then((res) => res.data.JWT);
+};
 
 const testAddress = "0x3CFa5Fe88512Db62e40d0F91b7E59af34C1b098f";
 
@@ -301,10 +334,16 @@ export const useMintNFT = ({
   title,
   description,
   notSafeForWork,
+  editionCount = 1,
+  royaltiesPercentage = 10,
 }: UseMintNFT) => {
   const [state, dispatch] = useReducer(mintNFTReducer, initialMintNFTState);
   const { user } = useUser();
-  let userAddress = user ? user.publicAddress : testAddress;
+  let userAddress = user
+    ? user.data.profile.wallet_addresses_excluding_email_v2[0].address
+    : testAddress;
+  console.log("user address ", userAddress);
+  const connector = useWalletConnect();
   async function uploadFile() {
     if (userAddress) {
       const fileInfo = await FileSystem.getInfoAsync(filePath);
@@ -317,29 +356,7 @@ export const useMintNFT = ({
       const fileMetaData = getFileNameAndType(filePath);
 
       if (fileMetaData) {
-        const pinataToken = await axios
-          .post(
-            "https://api.pinata.cloud/users/generateApiKey",
-            {
-              maxUses: 1,
-              keyName: `${formatAddressShort(userAddress)}'s key`,
-              permissions: {
-                endpoints: {
-                  pinning: {
-                    pinFileToIPFS: true,
-                    pinJSONToIPFS: true,
-                  },
-                },
-              },
-            },
-
-            {
-              headers: {
-                Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJkZWZjNDc5YS01ODhlLTQ2ZWYtYjY3Zi01ZWYzYTUwYjEzYzUiLCJlbWFpbCI6ImFsZXgua2lsa2thQHRyeXNob3d0aW1lLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImlkIjoiTllDMSIsImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxfV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2V9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiJhNTkxMzIyNzVjZTUzMGVjYjE2NSIsInNjb3BlZEtleVNlY3JldCI6IjNiMjkxOTFkZDI4Nzc3Njk5NmQ0ZmZkOGJmZTcwZTE4MDU5YjE2ZmJhOWE0ZDhhYjE0YjkzMjMwZjU0YTE0ZjEiLCJpYXQiOjE2MjUxNTQzNzd9.7630gOVEohas0G-OWl2xPdXUJRWdOxJDHkFen1cO7Ak`,
-              },
-            }
-          )
-          .then((res) => res.data.JWT);
+        const pinataToken = await getPinataToken(userAddress);
 
         const formData = new FormData();
 
@@ -356,64 +373,201 @@ export const useMintNFT = ({
           })
         );
 
-        const data = await axios
+        const fileIpfsHash = await axios
           .post("https://api.pinata.cloud/pinning/pinFileToIPFS", formData, {
             headers: {
               Authorization: `Bearer ${pinataToken}`,
               "Content-Type": `multipart/form-data`,
             },
           })
-          .then((res) => res.data);
+          .then((res) => res.data.IpfsHash);
 
-        console.log("uploaded!! ", data);
+        console.log("File uploaed!! ", fileIpfsHash);
 
-        return data;
+        if (fileIpfsHash) {
+          const pinataToken = await getPinataToken(userAddress);
+
+          const nftJson = await axios
+            .post(
+              "https://api.pinata.cloud/pinning/pinJSONToIPFS",
+              {
+                pinataMetadata: { name: uuid() },
+                pinataContent: {
+                  name: title,
+                  description,
+                  image: `ipfs://${fileIpfsHash}`,
+                  ...(notSafeForWork
+                    ? { attributes: [{ value: "NSFW" }] }
+                    : {}),
+                },
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${pinataToken}`,
+                },
+              }
+            )
+            .then((res) => res.data.IpfsHash);
+
+          console.log("NFT JSON uploaded ", nftJson);
+
+          return nftJson;
+        }
       }
     }
   }
 
-  async function mintToken(ipfsHash: string) {
-    const pinataToken = await axios
-      .post("/api/pinata/generate-key")
-      .then((res) => res.data.token);
+  async function mintToken(nftJsonIpfsHash: string) {
+    const { biconomy, web3 } = await getBiconomy(connector);
 
-    const contentHash = await axios
-      .post(
-        "https://api.pinata.cloud/pinning/pinJSONToIPFS",
+    // const signerAddress = await web3.getSigner().getAddress();
+    const contract = new ethers.Contract(
+      process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+      minterAbi,
+      biconomy.getSignerByAddress(userAddress)
+    );
+
+    const { data } = await contract.populateTransaction.issueToken(
+      userAddress,
+      editionCount,
+      nftJsonIpfsHash,
+      0,
+      userAddress,
+      royaltiesPercentage * 100
+    );
+    const provider = biconomy.getEthersProvider();
+    // connector.sendCustomRequest({
+    //   batchId: 0,
+    //   batchNonce: 0,
+    //   data: "0x66250b430000000000000000000000003cfa5fe88512db62e40d0f91b7e59af34c1b098f000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000001200000000000000000000000003cfa5fe88512db62e40d0f91b7e59af34c1b098f00000000000000000000000000000000000000000000000000000000000003e8000000000000000000000000000000000000000000000000000000000000002e516d5071506e47487771597861316d716e4d623244594141686354685577374e4e356447724a746775384232324e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000",
+    //   deadline: 1642426871,
+    //   from: "0x3CFa5Fe88512Db62e40d0F91b7E59af34C1b098f",
+    //   to: "0x09f3a26302e1c45f0d78be5d592f52b6fca43811",
+    //   token: "0x0000000000000000000000000000000000000000",
+    //   tokenGasPrice: "0",
+    //   txGas: 174897,
+    // });
+
+    // connector.sendTransaction({
+    //   type: "EIP712_SIGN",
+    //   data,
+    //   from: userAddress,
+    //   to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+    // });
+
+    // if (connector.connected) {
+    // const request = {
+    //   types: {
+    //     EIP712Domain: [
+    //       { name: "name", type: "string" },
+    //       { name: "version", type: "string" },
+    //       { name: "verifyingContract", type: "address" },
+    //       { name: "salt", type: "bytes32" },
+    //     ],
+    //     ERC20ForwardRequest: [
+    //       { name: "from", type: "address" },
+    //       { name: "to", type: "address" },
+    //       { name: "token", type: "address" },
+    //       { name: "txGas", type: "uint256" },
+    //       { name: "tokenGasPrice", type: "uint256" },
+    //       { name: "batchId", type: "uint256" },
+    //       { name: "batchNonce", type: "uint256" },
+    //       { name: "deadline", type: "uint256" },
+    //       { name: "data", type: "bytes" },
+    //     ],
+    //   },
+    //   domain: {
+    //     name: "Biconomy Forwarder",
+    //     version: "1",
+    //     verifyingContract: "0x9399BB24DBB5C4b782C70c2969F58716Ebbd6a3b",
+    //     salt: "0x0000000000000000000000000000000000000000000000000000000000013881",
+    //   },
+    //   primaryType: "ERC20ForwardRequest",
+    //   message: {
+    //     from: "0x3CFa5Fe88512Db62e40d0F91b7E59af34C1b098f",
+    //     to: "0x09f3a26302e1c45f0d78be5d592f52b6fca43811",
+    //     token: "0x0000000000000000000000000000000000000000",
+    //     txGas: 174897,
+    //     tokenGasPrice: "0",
+    //     batchId: 0,
+    //     batchNonce: 0,
+    //     deadline: 1642429576,
+    //     data: "0x66250b430000000000000000000000003cfa5fe88512db62e40d0f91b7e59af34c1b098f000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000001200000000000000000000000003cfa5fe88512db62e40d0f91b7e59af34c1b098f00000000000000000000000000000000000000000000000000000000000003e8000000000000000000000000000000000000000000000000000000000000002e516d5071506e47487771597861316d716e4d623244594141686354685577374e4e356447724a746775384232324e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000",
+    //   },
+    // };
+
+    // const msgParams = [
+    //   userAddress, // Required
+    //   request, // Required
+    // ];
+
+    // const res = await connector.signTypedData(msgParams);
+    // }
+
+    const transaction = await provider
+      .send("eth_sendTransaction", [
         {
-          pinataMetadata: { name: uuid() },
-          pinataContent: {
-            name: title,
-            description,
-            image: `ipfs://${ipfsHash}`,
-            ...(notSafeForWork ? { attributes: [{ value: "NSFW" }] } : {}),
-          },
+          data,
+          from: userAddress,
+          to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+          signatureType: "EIP712_SIGN",
         },
-        {
-          headers: {
-            Authorization: `Bearer ${pinataToken}`,
-          },
+      ])
+      .catch((error: any) => {
+        // TODO: Add a proper error message. Find what 4001 means
+        if (error.code === 4001) {
+          throw new Error("Something went wrong");
         }
-      )
-      .then((res) => res.data.IpfsHash);
+
+        if (
+          JSON.parse(
+            error?.body || error?.error?.body || "{}"
+          )?.error?.message?.includes("caller is not minter")
+        ) {
+          throw new Error("Your address is not approved for minting");
+        }
+
+        throw error;
+      });
+
+    console.log("transaction hash ", transaction);
+
+    provider.once(transaction, (result: any) => {
+      // setTokenID(
+      //   contract.interface
+      //     .decodeFunctionResult("issueToken", result.logs[0].data)[0]
+      //     .toNumber()
+      // );
+      console.log(
+        "token id! ",
+        contract.interface
+          .decodeFunctionResult("issueToken", result.logs[0].data)[0]
+          .toNumber()
+      );
+      dispatch({ type: "mintingSuccess" });
+      console.log();
+    });
   }
 
-  async function mintTokenPipeline(filePath: string) {
-    let ipfsHash = "";
-    try {
-      dispatch({ type: "fileUpload" });
-      ipfsHash = await uploadFile();
-    } catch (e) {
-      console.error("File upload error", e);
-      dispatch({ type: "fileUploadError" });
-      return;
-    }
+  async function mintTokenPipeline() {
+    let nftJsonHash = "QmPqPnGHwqYxa1mqnMb2DYAAhcThUw7NN5dGrJtgu8B22N";
 
-    if (ipfsHash) {
+    // try {
+    //   dispatch({ type: "fileUpload" });
+    //   const nftJsonHash = await uploadFile();
+    // } catch (e) {
+    //   console.error("File upload error", e);
+    //   dispatch({ type: "fileUploadError" });
+    //   return;
+    // }
+
+    if (nftJsonHash) {
       try {
         dispatch({ type: "minting" });
-        // await mintToken(ipfsHash);
+        await mintToken(nftJsonHash);
       } catch (e) {
+        throw e;
+        console.log("errror ", e);
         dispatch({ type: "mintingError" });
         return;
       }
@@ -421,8 +575,10 @@ export const useMintNFT = ({
   }
 
   useEffect(() => {
-    mintTokenPipeline(filePath);
-  }, []);
+    if (connector.connected) {
+      mintTokenPipeline();
+    }
+  }, [connector]);
 
   console.log("state ", state);
 

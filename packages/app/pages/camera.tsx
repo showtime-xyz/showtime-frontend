@@ -22,6 +22,7 @@ function CameraNavigator() {
   return (
     <CameraStack.Navigator
       // @ts-ignore
+      initialRouteName="create"
       screenOptions={navigatorScreenOptions}
     >
       <CameraStack.Group>

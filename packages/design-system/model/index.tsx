@@ -1,7 +1,6 @@
 import React, { Suspense } from "react";
 
 // import { Canvas, useFrame } from "./react-three-fiber";
-import { useGLTF } from "./use-gltf";
 import { Image } from "design-system/image";
 
 type Props = {
@@ -12,9 +11,8 @@ type Props = {
 };
 
 function Model({ url }: { url: string }) {
-  const { scene } = useGLTF(url);
   // useFrame(() => (scene.rotation.y += 0.01));
-
+  return null;
   return <primitive object={scene} />;
 }
 
