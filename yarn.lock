@@ -3525,6 +3525,23 @@
   dependencies:
     "@babel/runtime" "^7.6.2"
 
+"@react-three/fiber@https://pkg.csb.dev/pmndrs/react-three-fiber/commit/61888404/@react-three/fiber":
+  version "8.0.0-beta-04"
+  resolved "https://pkg.csb.dev/pmndrs/react-three-fiber/commit/61888404/@react-three/fiber#782026b7759cff3a76c23942cfe4c35390583091"
+  dependencies:
+    "@babel/runtime" "^7.15.4"
+    expo-asset "~8.4.4"
+    expo-gl "~11.0.3"
+    expo-gl-cpp "~11.0.1"
+    react-merge-refs "^1.1.0"
+    react-reconciler "^0.27.0-rc.0"
+    react-use-measure "^2.1.1"
+    resize-observer-polyfill "^1.5.1"
+    scheduler "0.21.0-rc.0"
+    suspend-react "^0.0.8"
+    utility-types "^3.10.0"
+    zustand "^3.5.10"
+
 "@react-types/button@^3.4.1":
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/@react-types/button/-/button-3.4.1.tgz#715ac9d4997c79233be4d9020b58f85936b8252b"
@@ -5563,6 +5580,11 @@
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/@types/tapable/-/tapable-1.0.8.tgz#b94a4391c85666c7b73299fd3ad79d4faa435310"
   integrity sha512-ipixuVrh2OdNmauvtT51o3d8z12p6LtFW9in7U79der/kwejjdNchQC5UMn5u/KxNoM7VHHOs/l8KS8uHxhODQ==
+
+"@types/three@^0.136.1":
+  version "0.136.1"
+  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.136.1.tgz#030fc01cdc5ce82cad93db17b94a24515cb4b50e"
+  integrity sha512-gzTw6RR4dU8sGf+RpLBWWKHRVIJ4gwKVQPk+IFCgha04Efg/itXYUalX6iBcYeSmaDu0qE5M7uTq0XLQpU4FAg==
 
 "@types/uglify-js@*":
   version "3.13.1"
@@ -9039,6 +9061,11 @@ debounce-promise@^3.1.0:
   resolved "https://registry.yarnpkg.com/debounce-promise/-/debounce-promise-3.1.2.tgz#320fb8c7d15a344455cd33cee5ab63530b6dc7c5"
   integrity sha512-rZHcgBkbYavBeD9ej6sP56XfG53d51CD4dnaw989YX/nZ/ZJfgRx/9ePKmTNiUiyQvh4mtrMoS3OAWW+yoYtpg==
 
+debounce@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/debounce/-/debounce-1.2.1.tgz#38881d8f4166a5c5848020c11827b834bcb3e0a5"
+  integrity sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==
+
 debug@2, debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.0, debug@^2.6.9:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
@@ -10911,6 +10938,11 @@ expo-font@~10.0.4:
   dependencies:
     fontfaceobserver "^2.1.0"
 
+expo-gl-cpp@~11.0.1:
+  version "11.0.1"
+  resolved "https://registry.yarnpkg.com/expo-gl-cpp/-/expo-gl-cpp-11.0.1.tgz#1d90283bb6d013847622d293c5c8071d02158a4d"
+  integrity sha512-+h0OVlJVtZRPHCU8ZF/owplMo1Kn8ixKnwTHOD9cAZht1dM/q7xLJBncxy1ItbGvC3LqfT7Dm+Vet7LnI3mo+g==
+
 expo-gl-cpp@~11.1.0:
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/expo-gl-cpp/-/expo-gl-cpp-11.1.0.tgz#84c8f688b7009ca8944523866fd8e16bc195889d"
@@ -10922,6 +10954,15 @@ expo-gl@^11.1.1:
   integrity sha512-1bpPGmLnn6H4vs9X019zxMAlOdSqIyyWAT/yJC7f/qGzs9lTPM6STN3N+7fVMtPkXaCMyvyJL8vFJQ75+YmGpQ==
   dependencies:
     expo-gl-cpp "~11.1.0"
+    invariant "^2.2.4"
+
+expo-gl@~11.0.3:
+  version "11.0.3"
+  resolved "https://registry.yarnpkg.com/expo-gl/-/expo-gl-11.0.3.tgz#5e0e02f1033a53d47001a2273a380a3c5149cac6"
+  integrity sha512-dIVQh4T4IY++jFs+wepx4xA9F3e7pwwWPpuRHh/BaMGPEHb1bITD8sgJENP6iFTD1IlV6308+q4PQcdq7w+4Jg==
+  dependencies:
+    expo-gl-cpp "~11.0.1"
+    expo-modules-core "~0.4.4"
     invariant "^2.2.4"
 
 expo-haptics@~11.1.0:
@@ -11006,6 +11047,14 @@ expo-modules-core@0.6.3:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-0.6.3.tgz#e5326169a888144f2691ffd49b7686dfac235227"
   integrity sha512-VLVQ6mK9rQHdcV+dn2keXsnDGR8OehUHkSAeZ88e5N8j1zjBo/9SI2/R7v3jBj+1Adg/wmVc5vyJzqnj2hlM2w==
+  dependencies:
+    compare-versions "^3.4.0"
+    invariant "^2.2.4"
+
+expo-modules-core@~0.4.4:
+  version "0.4.10"
+  resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-0.4.10.tgz#6c7e7e211b3056fc23a462e9faea88cc7653fe9b"
+  integrity sha512-uCZA3QzF0syRaHwYY99iaNhnye4vSQGsJ/y6IAiesXdbeVahWibX4G1KoKNPUyNsKXIM4tqA+4yByUSvJe4AAw==
   dependencies:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
@@ -17651,6 +17700,11 @@ react-mentions@^4.1.1:
     prop-types "^15.5.8"
     substyle "^9.1.0"
 
+react-merge-refs@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-merge-refs/-/react-merge-refs-1.1.0.tgz#73d88b892c6c68cbb7a66e0800faa374f4c38b06"
+  integrity sha512-alTKsjEL0dKH/ru1Iyn7vliS2QRcBp9zZPGoWxUOvRGWPUYgjo+V01is7p04It6KhgrzhJGnIj9GgX8W4bZoCQ==
+
 react-modal@^3.11.1:
   version "3.14.4"
   resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-3.14.4.tgz#2ca7e8e9a180955e5c9508c228b73167c1e6f6a3"
@@ -17936,6 +17990,15 @@ react-popper@^2.2.4:
     react-fast-compare "^3.0.1"
     warning "^4.0.2"
 
+react-reconciler@^0.27.0-rc.0:
+  version "0.27.0-rc.0-next-fe905f152-20220107"
+  resolved "https://registry.yarnpkg.com/react-reconciler/-/react-reconciler-0.27.0-rc.0-next-fe905f152-20220107.tgz#8961e72ab6a89a775beee7a9a30557641a9c6dd9"
+  integrity sha512-CiBwR3xG/yV7oA42S55bFD7wu/3myqI7pcfdJ0h0sAeiQrN9b/wOXlMpyd3etctS36DIilLIRZbt/b1+xLmHPA==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    scheduler "0.21.0-rc.0-next-fe905f152-20220107"
+
 react-refresh@0.8.3, react-refresh@^0.8.3:
   version "0.8.3"
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.8.3.tgz#721d4657672d400c5e3c75d063c4a85fb2d5d68f"
@@ -18059,6 +18122,13 @@ react-textarea-autosize@^8.3.0:
     "@babel/runtime" "^7.10.2"
     use-composed-ref "^1.0.0"
     use-latest "^1.0.0"
+
+react-use-measure@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/react-use-measure/-/react-use-measure-2.1.1.tgz#5824537f4ee01c9469c45d5f7a8446177c6cc4ba"
+  integrity sha512-nocZhN26cproIiIduswYpV5y5lQpSQS1y/4KuvUCjSKmw7ZWIS/+g3aFnX3WdBkyuGUtTLif3UTqnLLhbDoQig==
+  dependencies:
+    debounce "^1.2.1"
 
 react@18.0.0-rc.0, react@^16.8.6:
   version "18.0.0-rc.0"
@@ -18677,6 +18747,22 @@ sax@>=0.6.0, sax@^1.2.1, sax@^1.2.4, sax@~1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
+
+scheduler@0.21.0-rc.0:
+  version "0.21.0-rc.0"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.21.0-rc.0.tgz#b144edba3c465055a954565f45e2dd6d2ddb872b"
+  integrity sha512-MfZpwy4cMUg1qdgxMPIIemU+R7+pcPIuw/6CzB4ixIBlfKBGqkIum19lk82oWZWgETVMBNtZtaP+S2NoQcqWAg==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+
+scheduler@0.21.0-rc.0-next-fe905f152-20220107:
+  version "0.21.0-rc.0-next-fe905f152-20220107"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.21.0-rc.0-next-fe905f152-20220107.tgz#410f6df2f39d5543b00f98fbad7de6c9b374df89"
+  integrity sha512-+sY0WajWdMjoxbmHM8P6P1FKGw8sSVKKG/HthqTFQFPxVGbKLmV1BiFPaVF9gOyQWqmnLYSXJMN+4Bs5ZygsTw==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
 
 scheduler@^0.20.1, scheduler@^0.20.2:
   version "0.20.2"
@@ -19772,6 +19858,11 @@ supports-color@^8.0.0:
   dependencies:
     has-flag "^4.0.0"
 
+suspend-react@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/suspend-react/-/suspend-react-0.0.8.tgz#b0740c1386b4eb652f17affe4339915ee268bd31"
+  integrity sha512-ZC3r8Hu1y0dIThzsGw0RLZplnX9yXwfItcvaIzJc2VQVi8TGyGDlu92syMB5ulybfvGLHAI5Ghzlk23UBPF8xg==
+
 svg-arc-to-cubic-bezier@^3.0.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/svg-arc-to-cubic-bezier/-/svg-arc-to-cubic-bezier-3.2.0.tgz#390c450035ae1c4a0104d90650304c3bc814abe6"
@@ -20057,6 +20148,11 @@ thenify-all@^1.0.0:
   integrity sha512-RVZSIV5IG10Hk3enotrhvz0T9em6cyHBLkH/YAZuKqd8hRkKhSfCGIcP2KUY0EPxndzANBmNllzWPwak+bheSw==
   dependencies:
     any-promise "^1.0.0"
+
+three@^0.136.0:
+  version "0.136.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.136.0.tgz#b1504db021b46398ef468aa7849f3dcabb814f50"
+  integrity sha512-+fEMX7nYLz2ZesVP/dyifli5Jf8gR3XPAnFJveQ80aMhibFduzrADnjMbARXh8+W9qLK7rshJCjAIL/6cDxC+A==
 
 throat@^5.0.0:
   version "5.0.0"
@@ -20863,6 +20959,11 @@ utila@~0.4:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/utila/-/utila-0.4.0.tgz#8a16a05d445657a3aea5eecc5b12a4fa5379772c"
   integrity sha1-ihagXURWV6Oupe7MWxKk+lN5dyw=
+
+utility-types@^3.10.0:
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/utility-types/-/utility-types-3.10.0.tgz#ea4148f9a741015f05ed74fd615e1d20e6bed82b"
+  integrity sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==
 
 utils-merge@1.0.1:
   version "1.0.1"
@@ -21956,6 +22057,11 @@ yup@^0.32.11:
     nanoclone "^0.2.1"
     property-expr "^2.0.4"
     toposort "^2.0.2"
+
+zustand@^3.5.10:
+  version "3.6.9"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-3.6.9.tgz#f61a756ddea9f95c7ee7cfd3af2f88c10078afbc"
+  integrity sha512-OvDNu/jEWpRnEC7k8xh8GKjqYog7td6FZrLMuHs/IeI8WhrCwV+FngVuwMIFhp5kysZXr6emaeReMqjLGaldAQ==
 
 zwitch@^1.0.0:
   version "1.0.5"

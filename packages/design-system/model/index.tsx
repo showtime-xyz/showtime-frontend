@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 
-// import { Canvas, useFrame } from "./react-three-fiber";
-// import { useGLTF } from "./use-gltf";
+import { Canvas, useFrame } from "./react-three-fiber";
+import { useGLTF } from "./use-gltf";
 import { Image } from "design-system/image";
 
 type Props = {
@@ -11,12 +11,12 @@ type Props = {
   count: number;
 };
 
-// function Model({ url }: { url: string }) {
-//   const { scene } = useGLTF(url);
-//   // useFrame(() => (scene.rotation.y += 0.01));
+function Model({ url }: { url: string }) {
+  const { scene } = useGLTF(url);
+  // useFrame(() => (scene.rotation.y += 0.01));
 
-//   return <primitive object={scene} />;
-// }
+  return <primitive object={scene} />;
+}
 
 // TODO: implement touch events à la `OrbitControls`
 // Event (prop)	Description	Implementation
@@ -28,24 +28,24 @@ type Props = {
 // onPointerMove	called when press moves	onPressMove
 
 function ModelViewer({ url, fallbackUrl, blurhash, count }: Props) {
-  return (
-    <Image
-      source={{
-        uri: fallbackUrl,
-      }}
-      tw={count > 1 ? "w-[50vw] h-[50vw]" : "w-[100vw] h-[100vw]"}
-      blurhash={blurhash}
-      resizeMode="cover"
-    />
-  );
-
   // return (
-  //   <Canvas gl={{ physicallyCorrectLights: true }}>
-  //     <Suspense fallback={null}>
-  //       <Model url={url} />
-  //     </Suspense>
-  //   </Canvas>
+  //   <Image
+  //     source={{
+  //       uri: fallbackUrl,
+  //     }}
+  //     tw={count > 1 ? "w-[50vw] h-[50vw]" : "w-[100vw] h-[100vw]"}
+  //     blurhash={blurhash}
+  //     resizeMode="cover"
+  //   />
   // );
+
+  return (
+    <Canvas>
+      <Suspense fallback={null}>
+        <Model url={url} />
+      </Suspense>
+    </Canvas>
+  );
 }
 
 export { ModelViewer as Model };
