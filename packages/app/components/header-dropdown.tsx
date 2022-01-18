@@ -67,7 +67,7 @@ function HeaderDropdown() {
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
           <DropdownMenuItemTitle tw="text-black dark:text-white">
-            My Profile
+            Profile
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
