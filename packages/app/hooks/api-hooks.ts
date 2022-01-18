@@ -331,30 +331,23 @@ const getPinataToken = (publicAddress: string) => {
     .then((res) => res.data.JWT);
 };
 
-export const useMintNFT = ({
-  filePath,
-  title,
-  description,
-  notSafeForWork,
-  editionCount = 1,
-  royaltiesPercentage = 10,
-}: UseMintNFT) => {
+export const useMintNFT = () => {
   const [state, dispatch] = useReducer(mintNFTReducer, initialMintNFTState);
   const { user } = useUser();
   let userAddress =
     user?.data.profile.wallet_addresses_excluding_email_v2[0].address;
 
   const connector = useWalletConnect();
-  async function uploadFile() {
+  async function uploadFile(params: UseMintNFT) {
     if (userAddress) {
-      const fileInfo = await FileSystem.getInfoAsync(filePath);
+      const fileInfo = await FileSystem.getInfoAsync(params.filePath);
       if (typeof fileInfo.size === "number" && fileInfo.size > MAX_FILE_SIZE) {
         // TODO: improve alert
         Alert.alert("File too big! Please use a file smaller than 50MB.");
         return;
       }
 
-      const fileMetaData = getFileNameAndType(filePath);
+      const fileMetaData = getFileNameAndType(params.filePath);
 
       if (fileMetaData) {
         const pinataToken = await getPinataToken(userAddress);
@@ -393,10 +386,10 @@ export const useMintNFT = ({
               {
                 pinataMetadata: { name: uuid() },
                 pinataContent: {
-                  name: title,
-                  description,
+                  name: params.title,
+                  description: params.description,
                   image: `ipfs://${fileIpfsHash}`,
-                  ...(notSafeForWork
+                  ...(params.notSafeForWork
                     ? { attributes: [{ value: "NSFW" }] }
                     : {}),
                 },
@@ -415,7 +408,12 @@ export const useMintNFT = ({
     }
   }
 
-  async function mintToken(nftJsonIpfsHash: string) {
+  async function mintToken({
+    nftJsonIpfsHash,
+    ...params
+  }: {
+    nftJsonIpfsHash: string;
+  } & UseMintNFT) {
     const { biconomy } = await getBiconomy(connector);
 
     const contract = new ethers.Contract(
@@ -427,11 +425,11 @@ export const useMintNFT = ({
 
     const { data } = await contract.populateTransaction.issueToken(
       userAddress,
-      editionCount,
+      params.editionCount,
       nftJsonIpfsHash,
       0,
       userAddress,
-      royaltiesPercentage * 100
+      params.royaltiesPercentage * 100
     );
     const provider = biconomy.getEthersProvider();
 
@@ -481,35 +479,34 @@ export const useMintNFT = ({
     }
   }
 
-  async function mintTokenPipeline() {
-    let nftJsonHash;
+  async function mintTokenPipeline(params: UseMintNFT) {
+    let nftJsonIpfsHash;
 
-    try {
-      dispatch({ type: "fileUpload" });
-      nftJsonHash = await uploadFile();
-    } catch (e) {
-      dispatch({ type: "fileUploadError" });
-      throw e;
-    }
-
-    if (nftJsonHash) {
+    if (connector.connected) {
       try {
-        dispatch({ type: "minting" });
-        await mintToken(nftJsonHash);
+        dispatch({ type: "fileUpload" });
+        nftJsonIpfsHash = await uploadFile(params);
       } catch (e) {
-        dispatch({ type: "mintingError" });
+        dispatch({ type: "fileUploadError" });
         throw e;
       }
+
+      if (nftJsonIpfsHash) {
+        try {
+          dispatch({ type: "minting" });
+          await mintToken({ nftJsonIpfsHash, ...params });
+        } catch (e) {
+          dispatch({ type: "mintingError" });
+          throw e;
+        }
+      }
+    } else {
+      // TODO: better error handling. Maybe show login screen
+      Alert.alert("Please login with a wallet");
     }
   }
 
-  useEffect(() => {
-    if (connector.connected) {
-      mintTokenPipeline();
-    }
-  }, [connector]);
-
   console.log("state ", state);
 
-  return { state };
+  return { state, startMinting: mintTokenPipeline };
 };

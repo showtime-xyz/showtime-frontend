@@ -1,4 +1,4 @@
-import { View, Text, Fieldset, Select, Checkbox } from "design-system";
+import { View, Text, Fieldset, Select, Checkbox, Button } from "design-system";
 import { Close } from "design-system/icon";
 import { Image } from "design-system/image";
 import { tw } from "design-system/tailwind";
@@ -40,17 +40,23 @@ function CloseButton({
   );
 }
 
+const fakeData = {
+  filePath:
+    "file:///var/mobile/Containers/Data/Application/E47B3A69-8DE8-4295-B640-A872E399B54D/Documents/test.jpg",
+  title: "Nature",
+  description: "A beautiful nature",
+  notSafeForWork: false,
+  editionCount: 1,
+  royaltiesPercentage: 10,
+};
+
 function Create() {
   const [checked, setChecked] = useState(false);
-  useMintNFT({
-    filePath:
-      "file:///var/mobile/Containers/Data/Application/E47B3A69-8DE8-4295-B640-A872E399B54D/Documents/test.jpg",
-    title: "Nature",
-    description: "A beautiful nature",
-    notSafeForWork: false,
-    editionCount: 1,
-    royaltiesPercentage: 10,
-  });
+  const { startMinting, state } = useMintNFT();
+  console.log("state ", state);
+  const handleSubmit = () => {
+    startMinting(fakeData);
+  };
 
   return (
     <View tw="p-4">
@@ -78,12 +84,14 @@ function Create() {
           label="Copies"
           placeholder="1"
           helperText="1 by default"
+          keyboardType="numeric"
         />
         <Fieldset
           label="Price"
           placeholder="Amount"
           tw="ml-4 flex-1"
           helperText="Add a price if you wish to sell this NFT."
+          keyboardType="numeric"
           select={{
             options: [{ label: "ETH", value: "a" }],
             placeholder: "ETH",
@@ -113,6 +121,10 @@ function Create() {
           </Text>
         </Pressable>
       </View>
+
+      <Button onPress={handleSubmit}>
+        <Text tw="ml-4 text-white dark:text-gray-900 text-sm">Create</Text>
+      </Button>
     </View>
   );
 }
