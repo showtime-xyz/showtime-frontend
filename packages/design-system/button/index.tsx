@@ -37,47 +37,61 @@ export const BaseButton = forwardRef(({ ...props }: Props, ref) => {
 
 BaseButton.displayName = "BaseButton";
 
-export const PrimaryButton = ({ tw, iconOnly, size, ...props }: Props) => (
+export const PrimaryButton = ({ tw = "", iconOnly, size, ...props }: Props) => (
   <BaseButton
     {...props}
-    tw={`bg-black dark:bg-white flex-row justify-center items-center ${
-      iconOnly ? "p-2 rounded-xl" : "px-4 py-2 rounded-2xl"
-    } ${
-      size === "regular" ? "h-[48px] rounded-3xl" : "h-[32px]"
-    } disabled:opacity-40 disabled:cursor-not-allowed ${tw ? tw : ""}`}
+    tw={[
+      `bg-black dark:bg-white flex-row justify-center items-center ${
+        iconOnly ? "p-2 rounded-xl" : "px-4 py-2 rounded-2xl"
+      } ${
+        size === "regular" ? "h-[48px] rounded-3xl" : "h-[32px]"
+      } disabled:opacity-40 disabled:cursor-not-allowed`,
+      typeof tw === "string" ? tw ?? "" : tw?.join(" "),
+    ]}
   />
 );
 
 PrimaryButton.displayName = "PrimaryButton";
 
-export const DangerButton = ({ tw, iconOnly, size, ...props }: Props) => (
+export const DangerButton = ({ tw = "", iconOnly, size, ...props }: Props) => (
   <BaseButton
     {...props}
-    tw={`bg-red-500 dark:bg-red-700 text-white font-medium flex-row justify-center items-center ${
-      iconOnly ? "p-2 rounded-xl" : "px-4 py-2 rounded-2xl"
-    } ${
-      size === "regular" ? "h-[48px] rounded-3xl" : "h-[32px]"
-    } disabled:opacity-40 disabled:cursor-not-allowed ${tw ? tw : ""}`}
+    tw={[
+      `bg-red-500 dark:bg-red-700 text-white font-medium flex-row justify-center items-center ${
+        iconOnly ? "p-2 rounded-xl" : "px-4 py-2 rounded-2xl"
+      } ${
+        size === "regular" ? "h-[48px] rounded-3xl" : "h-[32px]"
+      } disabled:opacity-40 disabled:cursor-not-allowed`,
+      typeof tw === "string" ? tw ?? "" : tw?.join(" "),
+    ]}
   />
 );
 
 DangerButton.displayName = "DangerButton";
 
-export const TertiaryButton = ({ tw, iconOnly, size, ...props }: Props) => (
+export const TertiaryButton = ({
+  tw = "",
+  iconOnly,
+  size,
+  ...props
+}: Props) => (
   <BaseButton
     {...props}
-    tw={`relative bg-gray-100 text-gray-900 font-semibold dark:bg-gray-800 dark:text-gray-200 flex-row justify-center items-center ${
-      iconOnly ? "p-2 rounded-xl" : "px-4 py-2 rounded-2xl"
-    } ${
-      size === "regular" ? "h-[48px] rounded-3xl" : "h-[32px]"
-    } disabled:opacity-40 disabled:cursor-not-allowed ${tw ? tw : ""}`}
+    tw={[
+      `relative bg-gray-100 text-gray-900 font-semibold dark:bg-gray-800 dark:text-gray-200 flex-row justify-center items-center ${
+        iconOnly ? "p-2 rounded-xl" : "px-4 py-2 rounded-2xl"
+      } ${
+        size === "regular" ? "h-[48px] rounded-3xl" : "h-[32px]"
+      } disabled:opacity-40 disabled:cursor-not-allowed`,
+      typeof tw === "string" ? tw ?? "" : tw?.join(" "),
+    ]}
   />
 );
 
 TertiaryButton.displayName = "TertiaryButton";
 
 export const ButtonLabel = ({
-  tw,
+  tw = "",
   ...props
 }: {
   tw?: TW;
@@ -88,7 +102,10 @@ export const ButtonLabel = ({
     <Text
       variant="text-sm"
       {...props}
-      tw={`text-white dark:text-black font-bold ${tw ? tw : ""}`}
+      tw={[
+        "text-white dark:text-black font-bold",
+        typeof tw === "string" ? tw : tw?.join(" "),
+      ]}
     />
   );
 };

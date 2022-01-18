@@ -10,16 +10,16 @@ import { NextNavigationProps } from "./types";
 import { createNextTabNavigator } from "./universal-tab-navigator";
 import {
   HomeTabBarIcon,
-  DiscoverTabBarIcon,
-  CameraTabBarIcon,
   TrendingTabBarIcon,
+  CameraTabBarIcon,
+  MarketplaceTabBarIcon,
   NotificationsTabBarIcon,
 } from "./tab-bar-icons";
 
 const HomeNavigator = dynamic(() => import("../pages/home"));
-const DiscoverNavigator = dynamic(() => import("../pages/discover"));
-const CameraNavigator = dynamic(() => import("../pages/camera"));
 const TrendingNavigator = dynamic(() => import("../pages/trending"));
+const CameraNavigator = dynamic(() => import("../pages/camera"));
+const MarketplaceNavigator = dynamic(() => import("../pages/marketplace"));
 const NotificationsNavigator = dynamic(() => import("../pages/notifications"));
 
 const BottomTab = createNextTabNavigator();
@@ -85,10 +85,10 @@ export function NextTabNavigator({
         }}
       />
       <BottomTab.Screen
-        name="discoverTab"
-        component={DiscoverNavigator}
+        name="trendingTab"
+        component={TrendingNavigator}
         options={{
-          tabBarIcon: DiscoverTabBarIcon,
+          tabBarIcon: TrendingTabBarIcon,
         }}
       />
       {width < 768 && (
@@ -101,10 +101,10 @@ export function NextTabNavigator({
         />
       )}
       <BottomTab.Screen
-        name="trendingTab"
-        component={TrendingNavigator}
+        name="marketplaceTab"
+        component={MarketplaceNavigator}
         options={{
-          tabBarIcon: TrendingTabBarIcon,
+          tabBarIcon: MarketplaceTabBarIcon,
         }}
       />
       {width < 768 && (

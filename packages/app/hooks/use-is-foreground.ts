@@ -10,7 +10,11 @@ export const useIsForeground = (): boolean => {
     };
     const listener = AppState.addEventListener("change", onChange);
 
-    return () => listener.remove();
+    return () => {
+      if (listener) {
+        listener.remove();
+      }
+    };
   }, [setIsForeground]);
 
   return isForeground;

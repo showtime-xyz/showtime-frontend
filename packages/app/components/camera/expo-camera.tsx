@@ -1,39 +1,30 @@
 import { useRef, useState, useCallback, useEffect } from "react";
 import { StyleSheet } from "react-native";
-import { StatusBar } from "expo-status-bar";
 import { View } from "dripsy";
 import { AnimatePresence, View as MotiView } from "moti";
-import Animated, { withTiming } from "react-native-reanimated";
 import { Camera as ExpoCamera } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
 
 import { useIsForeground } from "app/hooks/use-is-foreground";
 import { CameraButtons } from "app/components/camera/camera-buttons";
-import { CameraFrame } from "app/components/camera/camera-frame";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
 type Props = {
   photos: { uri: string }[];
   setPhotos: (photos: { uri: string }[]) => void;
-  isPopping: boolean;
-  setIsPopping: (isPopping: boolean) => void;
   burstCaptureTimer: any;
   captureThrottleTimer: any;
   canPop: boolean;
   setCanPop: (canPop: boolean) => void;
-  nbPop: Animated.SharedValue<number>;
 };
 
 export function Camera({
   photos,
   setPhotos,
-  isPopping,
-  setIsPopping,
   burstCaptureTimer,
   captureThrottleTimer,
   canPop,
   setCanPop,
-  nbPop,
 }: Props) {
   const camera = useRef<ExpoCamera>(null);
   const [showPop, setShowPop] = useState(false);
@@ -59,10 +50,7 @@ export function Camera({
   const takePhoto = useCallback(async () => {
     try {
       if (camera.current == null) throw new Error("Camera ref is null!");
-      if (photos.length > 9 || nbPop.value > 9) return;
-
-      // Pop progress
-      nbPop.value = withTiming(nbPop.value + 1, { duration: 50 });
+      if (photos.length > 9) return;
 
       // Reset timer if running
       burstCaptureTimer.reset();
@@ -73,7 +61,6 @@ export function Camera({
 
       // Feedback
       setIsLoading(false);
-      setIsPopping(true);
       setShowPop(true);
       setTimeout(() => setShowPop(false), 10);
       // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -91,8 +78,6 @@ export function Camera({
 
       setIsLoading(true);
     } catch (e) {
-      nbPop.value = nbPop.value - 1;
-      setIsPopping(false);
       console.error("Failed to take photo!", e);
     }
   }, [camera, photos]);
@@ -135,17 +120,12 @@ export function Camera({
             />
           )}
         </AnimatePresence>
-
-        <CameraFrame />
       </View>
 
       <CameraButtons
         photos={photos}
         setPhotos={setPhotos}
-        isPopping={isPopping}
-        setIsPopping={setIsPopping}
         canPop={canPop}
-        nbPop={nbPop}
         isLoading={isLoading}
         setIsLoading={setIsLoading}
         flash={flash}

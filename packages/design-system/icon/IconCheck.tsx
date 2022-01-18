@@ -1,7 +1,7 @@
-import * as React from 'react';
-import Svg, { SvgProps, Defs, ClipPath, Path, G, Rect } from 'react-native-svg';
+import * as React from "react";
+import Svg, { SvgProps, Defs, ClipPath, Path, G, Rect } from "react-native-svg";
 
-function IconCheck(props: SvgProps) {
+export default function IconCheck(props: SvgProps) {
   return (
     <Svg
       xmlns="http://www.w3.org/2000/svg"
@@ -29,5 +29,3 @@ function IconCheck(props: SvgProps) {
     </Svg>
   );
 }
-
-export { IconCheck };

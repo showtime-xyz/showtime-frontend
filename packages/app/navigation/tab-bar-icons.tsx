@@ -60,9 +60,9 @@ export const HomeTabBarIcon = ({ color, focused }) => {
   );
 };
 
-export const DiscoverTabBarIcon = ({ color, focused }) => {
+export const MarketplaceTabBarIcon = ({ color, focused }) => {
   return (
-    <TabBarIcon tab="/discover">
+    <TabBarIcon tab="/marketplace">
       {focused ? (
         <View tw="rounded-[20] w-10 h-10 items-center justify-center">
           <CompassFilled
@@ -82,11 +82,21 @@ export const DiscoverTabBarIcon = ({ color, focused }) => {
 export const CameraTabBarIcon = ({ color, focused }) => {
   return (
     <TabBarIcon tab="/camera">
-      <Button variant="primary" tw="rounded-full h-12 w-12">
+      <Button
+        variant="primary"
+        tw={[
+          "rounded-full h-12 w-12",
+          focused ? "bg-gray-100 dark:bg-gray-900" : "",
+        ]}
+      >
         <Plus
           width={24}
           height={24}
-          color={tw.style("bg-white dark:bg-black")?.backgroundColor as string}
+          color={
+            tw.style(
+              focused ? "bg-black dark:bg-white" : "bg-white dark:bg-black"
+            )?.backgroundColor as string
+          }
         />
       </Button>
     </TabBarIcon>
