@@ -3,81 +3,83 @@ import { tw as tailwind } from "design-system/tailwind";
 import { BaseButton } from "./button-base";
 
 import type { ButtonProps, BaseButtonProps } from "./types";
+import { CONTAINER_BACKGROUND_MAPPER, ICON_COLOR_TW_MAPPER } from "./constants";
 
 export { ButtonLabel } from "./button-label";
 
 export function Button({
+  tw = "",
   variant = "primary",
   size = "regular",
   iconOnly = false,
   ...props
 }: ButtonProps) {
+  const _tw = typeof tw === "string" ? tw ?? "" : tw?.join(" ");
+
   switch (variant) {
     case "primary":
-      return <PrimaryButton size={size} iconOnly={iconOnly} {...props} />;
+      return (
+        <PrimaryButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
+      );
     case "danger":
-      return <DangerButton size={size} iconOnly={iconOnly} {...props} />;
+      return (
+        <DangerButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
+      );
     case "tertiary":
-      return <TertiaryButton size={size} iconOnly={iconOnly} {...props} />;
+      return (
+        <TertiaryButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
+      );
     case "secondary":
-      return <SecondaryButton size={size} iconOnly={iconOnly} {...props} />;
+      return (
+        <SecondaryButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
+      );
     default:
-      return <PrimaryButton size={size} iconOnly={iconOnly} {...props} />;
+      return (
+        <PrimaryButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
+      );
   }
 }
 
-export function PrimaryButton({ tw = "", ...props }: BaseButtonProps) {
+export function PrimaryButton(props: ButtonProps) {
   return (
     <BaseButton
-      {...props}
-      tw={[
-        `bg-gray-900 dark:bg-white`,
-        typeof tw === "string" ? tw ?? "" : tw?.join(" "),
-      ]}
+      {...(props as any)}
       labelTW="text-white dark:text-black"
-      iconColor={tailwind.color("white dark:gray-900")}
+      iconColor={ICON_COLOR_TW_MAPPER.primary}
+      backgroundColors={CONTAINER_BACKGROUND_MAPPER["primary"]}
     />
   );
 }
 
-export function SecondaryButton({ tw = "", ...props }: BaseButtonProps) {
+export function SecondaryButton(props: ButtonProps) {
   return (
     <BaseButton
-      {...props}
-      tw={[
-        `bg-white dark:bg-black`,
-        typeof tw === "string" ? tw ?? "" : tw?.join(" "),
-      ]}
+      {...(props as any)}
       labelTW="text-gray-900 dark:text-white"
-      iconColor={tailwind.color("gray-900 dark:white")}
+      iconColor={ICON_COLOR_TW_MAPPER.secondary}
+      backgroundColors={CONTAINER_BACKGROUND_MAPPER["secondary"]}
     />
   );
 }
 
-export function TertiaryButton({ tw = "", ...props }: BaseButtonProps) {
+export function TertiaryButton(props: ButtonProps) {
   return (
     <BaseButton
-      {...props}
-      tw={[
-        `bg-gray-100 dark:bg-gray-900`,
-        typeof tw === "string" ? tw ?? "" : tw?.join(" "),
-      ]}
+      {...(props as any)}
       labelTW="text-gray-900 dark:text-white"
-      iconColor={tailwind.color("gray-900 dark:white")}
+      iconColor={ICON_COLOR_TW_MAPPER.tertiary}
+      backgroundColors={CONTAINER_BACKGROUND_MAPPER["tertiary"]}
     />
   );
 }
 
-export function DangerButton({ tw = "", ...props }: BaseButtonProps) {
+export function DangerButton(props: ButtonProps) {
   return (
     <BaseButton
-      {...props}
-      tw={[
-        `bg-red-500 dark:bg-red-700`,
-        typeof tw === "string" ? tw ?? "" : tw?.join(" "),
-      ]}
+      {...(props as any)}
       labelTW="text-white"
-      iconColor="white"
+      iconColor={ICON_COLOR_TW_MAPPER.danger}
+      backgroundColors={CONTAINER_BACKGROUND_MAPPER["danger"]}
     />
   );
 }

@@ -30,10 +30,17 @@ export type BaseButtonProps = {
    */
   labelTW?: TW;
   /**
+   * Defines the background state colors.
+   */
+  backgroundColors: {
+    default: string[];
+    pressed: string[];
+  };
+  /**
    * Defines the button icons colour.
    * @default white|black
    */
-  iconColor?: string;
+  iconColor: string;
   /**
    * Defines if the button will only contains
    * an icon or not.
@@ -45,5 +52,6 @@ export type BaseButtonProps = {
    * @default regular
    */
   size: ButtonSize;
+
   children?: React.ReactNode | string;
 } & PressableScaleProps;
