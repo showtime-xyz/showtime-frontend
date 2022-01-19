@@ -86,12 +86,7 @@ export function Fieldset(props: FieldsetProps) {
         ) : null}
       </View>
       {errorText ? (
-        <Text
-          nativeID={errorTextId}
-          tw="mt-4 text-sm text-red-500 font-semibold"
-        >
-          {errorText}
-        </Text>
+        <ErrorText nativeID={errorTextId}>{errorText}</ErrorText>
       ) : null}
       {helperText ? (
         <>
@@ -107,3 +102,17 @@ export function Fieldset(props: FieldsetProps) {
     </View>
   );
 }
+
+export const ErrorText = ({
+  children,
+  nativeID,
+}: {
+  children: string;
+  nativeID?: string;
+}) => {
+  return (
+    <Text nativeID={nativeID} tw="mt-4 text-sm text-red-500 font-semibold">
+      {children}
+    </Text>
+  );
+};
