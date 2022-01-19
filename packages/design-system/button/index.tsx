@@ -1,5 +1,4 @@
 import React from "react";
-import { tw as tailwind } from "design-system/tailwind";
 import { BaseButton } from "./button-base";
 
 import type { ButtonProps, BaseButtonProps } from "./types";
@@ -10,7 +9,7 @@ export { ButtonLabel } from "./button-label";
 export function Button({
   tw = "",
   variant = "primary",
-  size = "regular",
+  size = "small",
   iconOnly = false,
   ...props
 }: ButtonProps) {

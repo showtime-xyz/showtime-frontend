@@ -49,7 +49,7 @@ export type BaseButtonProps = {
   iconOnly: boolean;
   /**
    * Defines the button size.
-   * @default regular
+   * @default small
    */
   size: ButtonSize;
 

@@ -64,23 +64,30 @@ export function BaseButton({
   //#region renderings
   const renderChildren = useMemo(() => {
     const iconSize = ICON_SIZE_TW[size];
-    return React.Children.map(children, (child) => {
+    return React.Children.map(children, (child: any) => {
       if (typeof child === "string") {
         return <Text tw={labelStyle}>{child}</Text>;
       }
 
       // @ts-ignore
       return React.cloneElement(child, {
-        tw: labelStyle,
+        ...child.props,
+        tw: [
+          ...labelStyle,
+          child?.props?.tw
+            ? typeof child?.props?.tw === "string"
+              ? child?.props?.tw
+              : child?.props?.tw.join(" ")
+            : "",
+        ],
         ...iconSize,
         color: iconColor,
-        // @ts-ignore
-        ...child.props,
       });
     });
   }, [size, iconColor, labelStyle, children]);
   return (
     <Pressable
+      {...props}
       tw={containerStyle}
       style={containerAnimatedStyle}
       pressedValue={animatedPressed}
