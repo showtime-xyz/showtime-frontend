@@ -1,6 +1,7 @@
 import { View, Text, Fieldset, Select, Checkbox, Button } from "design-system";
 import { ChevronUp } from "design-system/icon";
 import { Image } from "design-system/image";
+import { Video } from "design-system/video";
 import { Pressable, ScrollView } from "react-native";
 import { useMintNFT } from "../hooks/api-hooks";
 import { Accordion } from "design-system";
@@ -113,13 +114,17 @@ function Create({ uri }: { uri: string }) {
 
   const isDark = useIsDarkMode();
   const tabBarHeight = useBottomTabBarHeight();
+  const isVideo = ["mp4", "mov", "avi", "mkv", "webm"]
+    .map((ext) => uri.endsWith(`.${ext}`))
+    .includes(true);
+  const Preview = isVideo ? Video : Image;
 
   return (
     <View tw="flex-1">
       <ScrollView contentContainerStyle={{ paddingBottom: tabBarHeight + 100 }}>
         <View tw="p-4">
           <View tw="mt-11 flex-row">
-            <Image
+            <Preview
               source={{
                 uri,
               }}
