@@ -1,5 +1,12 @@
 import { Profile } from "../types";
-import { useCallback, useEffect, useMemo, useReducer } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from "react";
 import { NFT } from "../types";
 import { useInfiniteListQuerySWR, fetcher } from "./use-infinite-list-query";
 import useSWR from "swr";
@@ -12,6 +19,8 @@ import { formatAddressShort, getBiconomy } from "../utilities";
 import { ethers } from "ethers";
 import minterAbi from "app/abi/ShowtimeMT.json";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
+import { AppContext } from "../context/app-context";
+import { magic } from "../lib/magic";
 
 console.log("app env ", process.env);
 export const useActivity = ({
@@ -351,10 +360,28 @@ const getPinataToken = (publicAddress: string) => {
 export const useMintNFT = () => {
   const [state, dispatch] = useReducer(mintNFTReducer, initialMintNFTState);
   const { user } = useUser();
-  let userAddress =
-    user?.data.profile.wallet_addresses_excluding_email_v2[0].address;
+  const [userAddress, setUserAddress] = useState<string>();
+  const context = useContext(AppContext);
+
+  useEffect(() => {
+    // Web3 is initialised for magic users
+    if (context.web3) {
+      const signer = context.web3.getSigner();
+      signer.getAddress().then((addr: string) => {
+        setUserAddress(addr);
+      });
+    } else if (
+      user?.data &&
+      user?.data.profile.wallet_addresses_excluding_email_v2[0]
+    ) {
+      setUserAddress(
+        user.data.profile.wallet_addresses_excluding_email_v2[0].address
+      );
+    }
+  }, [user, context.web3]);
 
   const connector = useWalletConnect();
+
   async function uploadFile(params: UseMintNFT) {
     if (userAddress) {
       const fileMetaData = getFileNameAndType(params.filePath);
@@ -435,7 +462,7 @@ export const useMintNFT = () => {
   }: {
     nftJsonIpfsHash: string;
   } & UseMintNFT) {
-    const { biconomy } = await getBiconomy(connector);
+    const { biconomy } = await getBiconomy(connector, context.web3);
 
     const contract = new ethers.Contract(
       //@ts-ignore
@@ -504,7 +531,7 @@ export const useMintNFT = () => {
   async function mintTokenPipeline(params: UseMintNFT) {
     let nftJsonIpfsHash;
 
-    if (connector.connected && user?.data) {
+    if (userAddress) {
       console.log("** Begin file upload **");
       try {
         dispatch({ type: "fileUpload" });

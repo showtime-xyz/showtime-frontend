@@ -1,5 +1,4 @@
 import React from "react";
-import { Relayer } from "app/lib/magic";
 import { View, Spinner } from "design-system";
 
 interface LoginContainerProps {
@@ -27,8 +26,6 @@ export function LoginContainer({
           <Spinner />
         </View>
       )}
-
-      <Relayer />
     </View>
   );
 }

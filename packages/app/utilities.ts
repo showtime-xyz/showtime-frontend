@@ -72,7 +72,32 @@ export const getSortFields = () => {
   return [...Object.keys(SORT_FIELDS).map((key) => SORT_FIELDS[key])];
 };
 
-export const getBiconomy = async (connector: any) => {
+export const getBiconomy = async (connector: any, provider: any) => {
+  // Here provider refers to magic rpc provider and connector could be wallet connect's connector instance
+  const walletProvider = provider
+    ? {
+        walletProvider: provider.provider,
+      }
+    : {
+        signFunction: (signedDataType: string, params: any) => {
+          return new Promise((resolve, reject) => {
+            if (signedDataType === "eth_signTypedData_v4") {
+              connector
+                .signTypedData(params)
+                .then((res: string) => {
+                  console.log("received signature from wallet ", res);
+                  resolve(res);
+                })
+                .catch((err: any) => {
+                  // TODO: this never gets logged!
+                  console.log("received error on signing ");
+                  console.error(err);
+                  reject(err);
+                });
+            }
+          });
+        },
+      };
   const biconomy = new Biconomy(
     new ethers.providers.JsonRpcProvider(
       `https://polygon-${
@@ -81,26 +106,8 @@ export const getBiconomy = async (connector: any) => {
     ),
     {
       apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY,
-
       // TODO: add walletconnect connector instance support in biconomy
-      signFunction: (signedDataType: string, params: any) => {
-        return new Promise((resolve, reject) => {
-          if (signedDataType === "eth_signTypedData_v4") {
-            connector
-              .signTypedData(params)
-              .then((res: string) => {
-                console.log("received signature from wallet ", res);
-                resolve(res);
-              })
-              .catch((err: any) => {
-                // TODO: this never gets logged!
-                console.log("received error on signing ");
-                console.error(err);
-                reject(err);
-              });
-          }
-        });
-      },
+      ...walletProvider,
       // debug: true,
     }
   );

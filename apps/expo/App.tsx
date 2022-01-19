@@ -45,6 +45,8 @@ import {
   setColorScheme as setUserColorScheme,
   useColorScheme as useUserColorScheme,
 } from "app/lib/color-scheme";
+import { magic, Relayer } from "app/lib/magic";
+import { ethers } from "ethers";
 
 enableScreens(true);
 // enableFreeze(true)
@@ -221,10 +223,18 @@ function AppContextProvider({
     }
   }, [isDark]);
 
+  useEffect(() => {
+    magic.user.isLoggedIn().then(() => {
+      const provider = new ethers.providers.Web3Provider(magic.rpcProvider);
+      setWeb3(provider);
+    });
+  }, []);
+
   const injectedGlobalContext = {
     web3,
     setWeb3,
     logOut: () => {
+      magic.user.logout();
       deleteCache();
       deleteRefreshToken();
       accessTokenManager.deleteAccessToken();
@@ -297,6 +307,7 @@ function App() {
           </ToastProvider>
         </SafeAreaProvider>
       </DripsyProvider>
+      <Relayer />
     </GestureHandlerRootView>
   );
 }
