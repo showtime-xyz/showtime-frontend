@@ -7,10 +7,11 @@ import Animated, {
 
 import { useRouter } from "app/navigation/use-router";
 import { ImagePickerButton } from "design-system/image-picker";
-import { Flip, IconClose, IconCheck } from "design-system/icon";
+import { Flip, Close, Check } from "design-system/icon";
 import { Pressable } from "design-system/pressable-scale";
 import { View } from "design-system/view";
 import { CircularProgress } from "app/components/circular-progress";
+import { tw } from "design-system/tailwind";
 
 type Props = {
   photos: { uri: string }[];
@@ -50,13 +51,19 @@ export function CameraButtons({
           style={{ zIndex: 1 }}
         >
           <Pressable
-            tw="h-12 w-12 bg-gray-800 rounded-md justify-center items-center"
+            tw="h-12 w-12 bg-white dark:bg-black rounded-full justify-center items-center"
             onPress={() => {
               setPhotos([]);
               setIsLoading(false);
             }}
           >
-            <IconClose color="white" width={15} height={15} />
+            <Close
+              color={
+                tw.style("bg-black dark:bg-white")?.backgroundColor as string
+              }
+              width={24}
+              height={24}
+            />
           </Pressable>
         </Animated.View>
       ) : (
@@ -70,12 +77,12 @@ export function CameraButtons({
 
       <View tw="h-[83px] w-[83px] justify-center items-center">
         <View tw="absolute">
-          <View tw="w-20 h-20 rounded-full bg-white" />
+          <View tw="w-20 h-20 rounded-full bg-black dark:bg-white" />
         </View>
 
-        <View tw="rounded-full border-4 border-black bg-black">
+        <View tw="rounded-full border-4 border-white dark:border-black bg-white dark:bg-black">
           <Pressable
-            tw="w-[64px] h-[64px] rounded-full bg-white"
+            tw="w-[64px] h-[64px] rounded-full bg-black dark:bg-white"
             onPress={takePhoto}
             disabled={!canPop && photos.length < 9}
           />
@@ -95,22 +102,34 @@ export function CameraButtons({
           </View>
 
           <Pressable
-            tw="h-12 w-12 bg-gray-800 rounded-full justify-center items-center"
+            tw="h-12 w-12 bg-white dark:bg-black rounded-full justify-center items-center"
             onPress={() => {
               router.push("/camera/create");
             }}
           >
-            <IconCheck color="white" width={18} height={18} />
+            <Check
+              color={
+                tw.style("bg-black dark:bg-white")?.backgroundColor as string
+              }
+              width={24}
+              height={24}
+            />
           </Pressable>
         </View>
       ) : (
         <Pressable
-          tw="h-12 w-12 bg-gray-800 rounded-full justify-center items-center"
+          tw="h-12 w-12 bg-white dark:bg-black rounded-full justify-center items-center"
           onPress={() =>
             setCameraPosition(cameraPosition === "front" ? "back" : "front")
           }
         >
-          <Flip color="white" width={24} height={24} />
+          <Flip
+            color={
+              tw.style("bg-black dark:bg-white")?.backgroundColor as string
+            }
+            width={24}
+            height={24}
+          />
         </Pressable>
       )}
     </View>

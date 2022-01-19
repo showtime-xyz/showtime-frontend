@@ -29,7 +29,11 @@ function CameraNavigator() {
         <CameraStack.Screen
           name="camera"
           component={CameraScreen}
-          options={{ title: "Camera", headerTitle: "Camera" }}
+          options={{
+            title: "Camera",
+            headerTitle: "Camera",
+            headerShown: false,
+          }}
         />
       </CameraStack.Group>
       <CameraStack.Group
@@ -40,9 +44,27 @@ function CameraNavigator() {
             Platform.OS === "ios" ? "formSheet" : "transparentModal",
         }}
       >
-        <CameraStack.Screen name="login" component={LoginScreen} />
-        <CameraStack.Screen name="nft" component={NftScreen} />
-        <CameraStack.Screen name="create" component={CreateScreen} />
+        <CameraStack.Screen
+          name="login"
+          component={LoginScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <CameraStack.Screen
+          name="nft"
+          component={NftScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <CameraStack.Screen
+          name="create"
+          component={CreateScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
       </CameraStack.Group>
     </CameraStack.Navigator>
   );

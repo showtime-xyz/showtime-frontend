@@ -1,5 +1,6 @@
 import { Pressable } from "design-system/pressable-scale";
-import { IconEmptyUploadPreview } from "design-system/icon";
+import { Image } from "design-system/icon";
+import { tw } from "design-system/tailwind";
 import { pickImage } from "./pick-image";
 
 export function ImagePickerButton({
@@ -26,8 +27,8 @@ export function ImagePickerButton({
     <Pressable
       tw={
         type === "profilePhoto"
-          ? "w-20 h-20 bg-gray-800 rounded-full justify-center items-center"
-          : "w-12 h-12 bg-gray-800 rounded-md justify-center items-center"
+          ? "w-20 h-20 bg-white dark:bg-black rounded-full justify-center items-center"
+          : "w-12 h-12 bg-white dark:bg-black rounded-full justify-center items-center"
       }
       onPress={() => {
         pickImage({
@@ -50,7 +51,11 @@ export function ImagePickerButton({
         </View>
       )}*/}
 
-      <IconEmptyUploadPreview color="white" width={25} height={25} />
+      <Image
+        color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+        width={24}
+        height={24}
+      />
     </Pressable>
   );
 }
