@@ -74,7 +74,7 @@ const createNFTValidationSchema = yup.object({
   description: yup.string(),
 });
 
-function Create() {
+function Create({ uri }: { uri: string }) {
   const { startMinting, state } = useMintNFT();
   const handleSubmitForm = (values: any) => {
     startMinting(values);
@@ -121,7 +121,7 @@ function Create() {
           <View tw="mt-11 flex-row">
             <Image
               source={{
-                uri: "https://lh3.googleusercontent.com/PUGdxrLBiiJqxFRNfJWkVpyE3xuXC2XXsjYSgeuzX-XM_3ApI7ydBd-E1M3POKp_B8miwtoS4FHhDAiwhyNnxX1S_ktvj-1DvZIe=w1328",
+                uri,
               }}
               style={{ width: 84, height: 84, borderRadius: 20 }}
             />

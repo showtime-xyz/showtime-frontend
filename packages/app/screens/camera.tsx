@@ -21,7 +21,7 @@ function CameraScreen() {
     onTimeOver: () => {
       if (photos.length >= 1) {
         setIsLoading(false);
-        router.push("/camera/create");
+        router.push(`/camera/create?uri=${photos[0].uri}`);
       } else {
         setPhotos([]);
       }
@@ -62,7 +62,7 @@ function CameraScreen() {
                 {
                   text: "Continue Posting",
                   onPress: () => {
-                    router.push("/camera/create");
+                    router.push(`/camera/create?uri=${photos[0].uri}`);
                   },
                 },
                 {
