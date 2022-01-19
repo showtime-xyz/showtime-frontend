@@ -45,8 +45,10 @@ import {
   setColorScheme as setUserColorScheme,
   useColorScheme as useUserColorScheme,
 } from "app/lib/color-scheme";
-import { magic, Relayer } from "app/lib/magic";
+import { magic } from "app/lib/magic";
+import { Relayer } from "app/lib/magic";
 import { ethers } from "ethers";
+import { Modal } from "react-native";
 
 enableScreens(true);
 // enableFreeze(true)
@@ -185,6 +187,7 @@ function AppContextProvider({
   const { mutate } = useSWRConfig();
   const connector = useWalletConnect();
   const [web3, setWeb3] = useState(null);
+  const [mountRelayerOnApp, setMountRelayerOnApp] = useState(true);
 
   useDeviceContext(tw, { withDeviceColorScheme: false });
   // Default to device color scheme
@@ -225,14 +228,17 @@ function AppContextProvider({
 
   useEffect(() => {
     magic.user.isLoggedIn().then(() => {
-      const provider = new ethers.providers.Web3Provider(magic.rpcProvider);
-      setWeb3(provider);
+      if (magic.rpcProvider) {
+        const provider = new ethers.providers.Web3Provider(magic.rpcProvider);
+        setWeb3(provider);
+      }
     });
   }, []);
 
   const injectedGlobalContext = {
     web3,
     setWeb3,
+    setMountRelayerOnApp,
     logOut: () => {
       magic.user.logout();
       deleteCache();
@@ -255,6 +261,8 @@ function AppContextProvider({
   return (
     <AppContext.Provider value={injectedGlobalContext}>
       {children}
+      {/* TODO: Open Relayer on FullWindow, need change in relayer source */}
+      {mountRelayerOnApp ? <Relayer /> : null}
     </AppContext.Provider>
   );
 }
@@ -307,7 +315,6 @@ function App() {
           </ToastProvider>
         </SafeAreaProvider>
       </DripsyProvider>
-      <Relayer />
     </GestureHandlerRootView>
   );
 }

@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Spinner } from "design-system";
+import { AppContext } from "../../context/app-context";
+import { Relayer } from "../../lib/magic";
 
 interface LoginContainerProps {
   loading?: boolean;
@@ -10,6 +12,17 @@ export function LoginContainer({
   loading = false,
   children,
 }: LoginContainerProps) {
+  const context = useContext(AppContext);
+  const [mountRelayer, setMountRelayer] = useState(false);
+
+  useEffect(() => {
+    context.setMountRelayerOnApp(false);
+    setMountRelayer(true);
+    return () => {
+      context.setMountRelayerOnApp(true);
+    };
+  }, []);
+
   return (
     <View
       style={{
@@ -26,6 +39,7 @@ export function LoginContainer({
           <Spinner />
         </View>
       )}
+      {mountRelayer ? <Relayer /> : null}
     </View>
   );
 }

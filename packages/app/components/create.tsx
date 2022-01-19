@@ -179,7 +179,16 @@ function Create() {
           tw="h-12 rounded-full"
         >
           <Text tw="text-white dark:text-gray-900 text-sm">
-            {state.status === "idle" ? "Create" : state.status}
+            {state.status === "idle"
+              ? "Create"
+              : state.status === "fileUpload"
+              ? "Uploading..."
+              : state.status === "minting"
+              ? "Minting..."
+              : state.status === "mintingError" ||
+                state.status === "fileUploadError"
+              ? "Failed. Retry"
+              : "Success!"}
           </Text>
         </Button>
       </View>

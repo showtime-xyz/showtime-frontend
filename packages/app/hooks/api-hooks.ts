@@ -20,7 +20,6 @@ import { ethers } from "ethers";
 import minterAbi from "app/abi/ShowtimeMT.json";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { AppContext } from "../context/app-context";
-import { magic } from "../lib/magic";
 
 console.log("app env ", process.env);
 export const useActivity = ({
@@ -364,19 +363,20 @@ export const useMintNFT = () => {
   const context = useContext(AppContext);
 
   useEffect(() => {
-    // Web3 is initialised for magic users
-    if (context.web3) {
-      const signer = context.web3.getSigner();
-      signer.getAddress().then((addr: string) => {
-        setUserAddress(addr);
-      });
-    } else if (
+    if (
       user?.data &&
       user?.data.profile.wallet_addresses_excluding_email_v2[0]
     ) {
       setUserAddress(
         user.data.profile.wallet_addresses_excluding_email_v2[0].address
       );
+    }
+    // Web3 is initialised for magic users
+    else if (context.web3) {
+      const signer = context.web3.getSigner();
+      signer.getAddress().then((addr: string) => {
+        setUserAddress(addr);
+      });
     }
   }, [user, context.web3]);
 
@@ -462,70 +462,73 @@ export const useMintNFT = () => {
   }: {
     nftJsonIpfsHash: string;
   } & UseMintNFT) {
-    const { biconomy } = await getBiconomy(connector, context.web3);
+    return new Promise<{ transaction: string; tokenId: number }>(
+      async (resolve, reject) => {
+        const { biconomy } = await getBiconomy(connector, context.web3);
 
-    const contract = new ethers.Contract(
-      //@ts-ignore
-      process.env.NEXT_PUBLIC_MINTING_CONTRACT,
-      minterAbi,
-      biconomy.getSignerByAddress(userAddress)
+        const contract = new ethers.Contract(
+          //@ts-ignore
+          process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+          minterAbi,
+          biconomy.getSignerByAddress(userAddress)
+        );
+
+        const { data } = await contract.populateTransaction.issueToken(
+          userAddress,
+          params.editionCount,
+          nftJsonIpfsHash,
+          0,
+          userAddress,
+          params.royaltiesPercentage * 100
+        );
+        const provider = biconomy.getEthersProvider();
+
+        console.log("** minting: opening wallet for signing **");
+
+        const transaction = await provider
+          .send("eth_sendTransaction", [
+            {
+              data,
+              from: userAddress,
+              to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+              signatureType: "EIP712_SIGN",
+            },
+          ])
+          .catch((error: any) => {
+            // TODO: Add a proper error message. Find what 4001 means
+            if (error.code === 4001) {
+              reject("Something went wrong");
+            }
+
+            if (
+              JSON.parse(
+                error?.body || error?.error?.body || "{}"
+              )?.error?.message?.includes("caller is not minter")
+            ) {
+              reject("Your address is not approved for minting");
+            }
+
+            reject("Something went wrong");
+          });
+
+        // console.log("transaction hash ", transaction);
+
+        provider.once(transaction, (result: any) => {
+          // console.log(
+          //   "token id! ",
+          //   contract.interface
+          //     .decodeFunctionResult("issueToken", result.logs[0].data)[0]
+          //     .toNumber()
+          // );
+          resolve({
+            tokenId: contract.interface
+              .decodeFunctionResult("issueToken", result.logs[0].data)[0]
+              .toNumber(),
+            transaction: transaction,
+          });
+        });
+      }
     );
-
-    const { data } = await contract.populateTransaction.issueToken(
-      userAddress,
-      params.editionCount,
-      nftJsonIpfsHash,
-      0,
-      userAddress,
-      params.royaltiesPercentage * 100
-    );
-    const provider = biconomy.getEthersProvider();
-
-    console.log("** minting: opening wallet for signing **");
-
-    const transaction = await provider
-      .send("eth_sendTransaction", [
-        {
-          data,
-          from: userAddress,
-          to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
-          signatureType: "EIP712_SIGN",
-        },
-      ])
-      .catch((error: any) => {
-        // TODO: Add a proper error message. Find what 4001 means
-        if (error.code === 4001) {
-          throw new Error("Something went wrong");
-        }
-
-        if (
-          JSON.parse(
-            error?.body || error?.error?.body || "{}"
-          )?.error?.message?.includes("caller is not minter")
-        ) {
-          throw new Error("Your address is not approved for minting");
-        }
-
-        throw error;
-      });
-
-    // console.log("transaction hash ", transaction);
-
-    provider.once(transaction, (result: any) => {
-      // console.log(
-      //   "token id! ",
-      //   contract.interface
-      //     .decodeFunctionResult("issueToken", result.logs[0].data)[0]
-      //     .toNumber()
-      // );
-      dispatch({
-        type: "mintingSuccess",
-        tokenId: contract.interface
-          .decodeFunctionResult("issueToken", result.logs[0].data)[0]
-          .toNumber(),
-        transaction: transaction,
-      });
-    });
   }
 
   async function mintTokenPipeline(params: UseMintNFT) {
@@ -547,7 +550,12 @@ export const useMintNFT = () => {
         try {
           dispatch({ type: "minting" });
           console.log("** Begin minting **");
-          await mintToken({ nftJsonIpfsHash, ...params });
+          const response = await mintToken({ nftJsonIpfsHash, ...params });
+          dispatch({
+            type: "mintingSuccess",
+            tokenId: response.tokenId,
+            transaction: response.tokenId,
+          });
           console.log("** minting success **");
         } catch (e) {
           dispatch({ type: "mintingError" });
@@ -556,7 +564,9 @@ export const useMintNFT = () => {
       }
     } else {
       // TODO: better error handling. Maybe show login screen
-      Alert.alert("Please login with a wallet");
+      Alert.alert(
+        "Sorry! We can't find your user address. Please login with a wallet or email/phone"
+      );
     }
   }
 
