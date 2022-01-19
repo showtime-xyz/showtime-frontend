@@ -127,18 +127,29 @@ function Media({ item, count }: Props) {
             }}
             tw={count > 1 ? "w-[50vw] h-[50vw]" : "w-[100vw] h-[100vw]"}
             resizeMode="cover"
-            useNativeControls={count === 1}
           />
         )}
 
         {item?.mime_type?.startsWith("model") && (
           <View tw={count > 1 ? "w-[50vw] h-[50vw]" : "w-[100vw] h-[100vw]"}>
-            <Model
-              url={item?.source_url}
-              fallbackUrl={item?.still_preview_url}
-              count={count}
-              blurhash={item?.blurhash}
-            />
+            {count === 1 ? (
+              <Model
+                url={item.source_url}
+                fallbackUrl={item.still_preview_url}
+                count={count}
+                blurhash={item.blurhash}
+              />
+            ) : (
+              <Image
+                alt={item.token_name}
+                source={{
+                  uri: item.still_preview_url,
+                }}
+                tw={count > 1 ? "w-[50vw] h-[50vw]" : "w-[100vw] h-[100vw]"}
+                blurhash={item.blurhash}
+                resizeMode="cover"
+              />
+            )}
           </View>
         )}
       </Pressable>

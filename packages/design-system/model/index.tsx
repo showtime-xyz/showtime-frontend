@@ -30,6 +30,7 @@ function Model({ url }: { url: string }) {
 // onPointerMove	called when press moves	onPressMove
 
 function ModelViewer({ url, fallbackUrl, blurhash, count }: Props) {
+  // TODO: fix remote `.gltf` loading
   if (url.endsWith(".gltf")) {
     return (
       <Image
