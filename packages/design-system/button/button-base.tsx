@@ -71,6 +71,8 @@ export function BaseButton({
 
       // @ts-ignore
       return React.cloneElement(child, {
+        color: iconColor,
+        ...iconSize,
         ...child.props,
         tw: [
           ...labelStyle,
@@ -80,8 +82,6 @@ export function BaseButton({
               : child?.props?.tw.join(" ")
             : "",
         ],
-        ...iconSize,
-        color: iconColor,
       });
     });
   }, [size, iconColor, labelStyle, children]);
