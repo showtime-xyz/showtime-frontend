@@ -16,6 +16,6 @@ config.resolver.nodeModulesPath = [
 ];
 config.resolver.extraNodeModules = extraNodeModules;
 config.resolver.assetExts = ["glb", "png", "jpg"];
-// config.transformer.minifierPath = 'metro-minify-esbuild'
+// config.transformer.minifierPath = "metro-minify-esbuild";
 
 module.exports = config;
