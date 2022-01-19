@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { Suspense, useCallback, useRef, useState } from "react";
 import { Platform } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useActivity } from "app/hooks/api-hooks";
@@ -78,11 +78,21 @@ const Feed = () => {
           <SelectedTabIndicator />
         </Tabs.List>
         <Tabs.Pager>
-          <AllActivityList />
-          <CreationList />
-          <LikesList />
-          <CommentsList />
-          <FollowsList />
+          <Suspense fallback={<Spinner size="small" />}>
+            <AllActivityList />
+          </Suspense>
+          <Suspense fallback={<Spinner size="small" />}>
+            <CreationList />
+          </Suspense>
+          <Suspense fallback={<Spinner size="small" />}>
+            <LikesList />
+          </Suspense>
+          <Suspense fallback={<Spinner size="small" />}>
+            <CommentsList />
+          </Suspense>
+          <Suspense fallback={<Spinner size="small" />}>
+            <FollowsList />
+          </Suspense>
         </Tabs.Pager>
       </Tabs.Root>
     </View>

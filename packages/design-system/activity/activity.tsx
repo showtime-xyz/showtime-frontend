@@ -13,7 +13,8 @@ import {
   Follow,
   Transfer,
 } from "design-system/activity/types";
-import { TextLink } from "app/navigation/link";
+import { Pressable } from "react-native";
+import { useProfileNavigation } from "app/navigation/app-navigation";
 
 const getProfileImageUrl = (imgUrl: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
@@ -26,16 +27,21 @@ type Props = {
   activity: any;
 };
 
+const hitSlop = { top: 10, bottom: 10, left: 10, right: 10 };
+
 function Activity({ activity }: Props) {
   const { type, actor } = activity;
+  const openProfile = useProfileNavigation(actor.wallet_address);
 
   return (
     <View tw="p-4">
       <View tw="h-12 flex-row">
-        <Avatar
-          url={getProfileImageUrl(actor.img_url ?? DEFAULT_PROFILE_PIC)}
-          icon={type}
-        />
+        <Pressable onPress={openProfile}>
+          <Avatar
+            url={getProfileImageUrl(actor.img_url ?? DEFAULT_PROFILE_PIC)}
+            icon={type}
+          />
+        </Pressable>
 
         <View tw="justify-center ml-2">
           <Text
@@ -44,13 +50,11 @@ function Activity({ activity }: Props) {
             numberOfLines={2}
             ellipsizeMode="tail"
           >
-            <TextLink
-              variant="text-sm"
-              tw="text-black dark:text-white font-bold"
-              href=""
-            >
-              @{actor.username}{" "}
-            </TextLink>
+            <Pressable onPress={openProfile} hitSlop={hitSlop}>
+              <Text variant="text-sm" tw="text-black dark:text-white font-bold">
+                @{actor.username}{" "}
+              </Text>
+            </Pressable>
 
             {type === ACTIVITY_TYPES.LIKE && <Like act={activity} />}
 

@@ -1,9 +1,10 @@
-import { useState, useCallback, useContext } from "react";
-import { StatusBar } from "expo-status-bar";
+import { useState, useCallback } from "react";
+import { useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Router from "next/router";
 
 import { useRouter } from "app/navigation/use-router";
+import { useNavigationElements } from "app/navigation/use-navigation-elements";
 import { View, Pressable, Button, ButtonLabel } from "design-system";
 import { Showtime, Wallet, Plus } from "design-system/icon";
 import { tw } from "design-system/tailwind";
@@ -16,6 +17,8 @@ const Header = () => {
   const { isLoading, isAuthenticated } = useUser();
   const [isSearchBarOpen, setSearchBarOpen] = useState(false);
   const { top: safeAreaTop } = useSafeAreaInsets();
+  const { isHeaderHidden } = useNavigationElements();
+  const { width } = useWindowDimensions();
 
   const openLogin = useCallback(() => {
     const as = `${router.pathname !== "/" ? router.pathname : ""}/login`;
@@ -30,12 +33,24 @@ const Header = () => {
     router.push(href, as, { shallow: true });
   }, [router, Router]);
 
+  if (isHeaderHidden) {
+    return (
+      <View
+        tw={[
+          "bg-white dark:bg-black md:dark:bg-gray-900",
+          safeAreaTop ? `pt-[${safeAreaTop}px]` : "",
+        ]}
+      />
+    );
+  }
+
   return (
     <View
-      sx={{ paddingTop: safeAreaTop }}
-      tw="bg-white dark:bg-black md:dark:bg-gray-900"
+      tw={[
+        "bg-white dark:bg-black md:dark:bg-gray-900",
+        safeAreaTop ? `pt-[${safeAreaTop}px]` : "",
+      ]}
     >
-      <StatusBar style="auto" />
       <View tw="px-4 bg-white dark:bg-black md:dark:bg-gray-900 w-full border-b border-gray-100 dark:border-gray-900 h-14">
         <View tw="flex-row items-center justify-between py-2">
           <View>
@@ -72,24 +87,26 @@ const Header = () => {
               )}
               {isAuthenticated ? (
                 <>
-                  <View tw="mx-3">
-                    <Button
-                      onPress={() => {}}
-                      variant="primary"
-                      tw="p-2.5 md:px-3.5 md:py-1.5 rounded-full h-10 w-10 md:w-auto"
-                    >
-                      <ButtonLabel tw="hidden md:flex">Create</ButtonLabel>
-                      <Plus
-                        style={tw.style("md:hidden")}
-                        width={20}
-                        height={20}
-                        color={
-                          tw.style("bg-white dark:bg-black")
-                            ?.backgroundColor as string
-                        }
-                      />
-                    </Button>
-                  </View>
+                  {width > 768 && (
+                    <View tw="mx-3">
+                      <Button
+                        onPress={() => {}}
+                        variant="primary"
+                        tw="p-2.5 md:px-3.5 md:py-1.5 rounded-full h-10 w-10 md:w-auto"
+                      >
+                        <ButtonLabel tw="hidden md:flex">Create</ButtonLabel>
+                        <Plus
+                          style={tw.style("md:hidden")}
+                          width={20}
+                          height={20}
+                          color={
+                            tw.style("bg-white dark:bg-black")
+                              ?.backgroundColor as string
+                          }
+                        />
+                      </Button>
+                    </View>
+                  )}
 
                   <HeaderDropdown />
                 </>

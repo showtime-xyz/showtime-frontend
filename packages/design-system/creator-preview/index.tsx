@@ -1,3 +1,10 @@
+import { useCallback, useContext } from "react";
+import { Dimensions } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from "react-native-reanimated";
+
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 import { Image } from "design-system/image";
@@ -5,15 +12,10 @@ import { VerificationBadge } from "design-system/verification-badge";
 import { Accordion } from "design-system/accordion";
 import { Button } from "design-system/button";
 import { ChevronUp } from "design-system/icon";
-import { Video } from "expo-av";
-import { memo, useCallback, useContext } from "react";
-import { useIsDarkMode } from "../hooks";
-import { Creator, NFT } from "app/types";
-import { Dimensions } from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-} from "react-native-reanimated";
+import { useIsDarkMode } from "design-system/hooks";
+import { Media } from "design-system/media";
+import type { Creator, NFT } from "app/types";
+import { withMemoAndColorScheme } from "app/components/memoWithTheme";
 
 type Props = {
   creator: Creator;
@@ -23,7 +25,7 @@ export const ITEM_COLLAPSED_HEIGHT = 64;
 export const ITEM_EXPANDED_HEIGHT =
   Dimensions.get("window").width / 2 + ITEM_COLLAPSED_HEIGHT + 20;
 
-export const CreatorPreview = memo((props: Props) => {
+export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
   const isDark = useIsDarkMode();
   const isExpanded = useSharedValue(false);
   const style = useAnimatedStyle(() => ({
@@ -93,7 +95,7 @@ export const CreatorPreview = memo((props: Props) => {
               {props.creator.top_items.slice(0, 2).map((item) => {
                 return (
                   <View tw="mr-2 rounded-lg overflow-hidden" key={item.nft_id}>
-                    <Media item={item} />
+                    <Item item={item} />
                   </View>
                 );
               })}
@@ -107,7 +109,7 @@ export const CreatorPreview = memo((props: Props) => {
 
 const ITEM_SIZE = Dimensions.get("window").width / 2 - 10;
 
-const Media = ({ item }: { item: NFT }) => {
+const Item = ({ item }: { item: NFT }) => {
   const { value: selectedValue } = useContext(
     Accordion.RNAccordion.RootContext
   );
@@ -125,36 +127,5 @@ const Media = ({ item }: { item: NFT }) => {
     );
   }
 
-  if (item.mime_type?.startsWith("video")) {
-    return (
-      <Video
-        source={{
-          uri: item.animation_preview_url,
-        }}
-        style={{
-          height: ITEM_SIZE,
-          width: ITEM_SIZE,
-        }}
-        useNativeControls
-        resizeMode="contain"
-        isLooping
-        isMuted
-      />
-    );
-  } else if (item.mime_type?.startsWith("image")) {
-    return (
-      <Image
-        source={{
-          uri: item.still_preview_url,
-        }}
-        style={{
-          height: ITEM_SIZE,
-          width: ITEM_SIZE,
-        }}
-        resizeMode="cover"
-      />
-    );
-  }
-
-  return null;
+  return <Media item={item} count={2} />;
 };

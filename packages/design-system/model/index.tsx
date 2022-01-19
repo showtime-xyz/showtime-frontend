@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 
 // import { Canvas, useFrame } from "./react-three-fiber";
-import { useGLTF } from "./use-gltf";
+// import { useGLTF } from "./use-gltf";
 import { Image } from "design-system/image";
 
 type Props = {
@@ -11,12 +11,12 @@ type Props = {
   count: number;
 };
 
-function Model({ url }: { url: string }) {
-  const { scene } = useGLTF(url);
-  // useFrame(() => (scene.rotation.y += 0.01));
+// function Model({ url }: { url: string }) {
+//   const { scene } = useGLTF(url);
+//   // useFrame(() => (scene.rotation.y += 0.01));
 
-  return <primitive object={scene} />;
-}
+//   return <primitive object={scene} />;
+// }
 
 // TODO: implement touch events à la `OrbitControls`
 // Event (prop)	Description	Implementation

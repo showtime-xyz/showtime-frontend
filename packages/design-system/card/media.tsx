@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { Pressable, FlatList, useWindowDimensions } from "react-native";
 import Router from "next/router";
+import { SvgUri } from "react-native-svg";
 
 import { useRouter } from "app/navigation/use-router";
 import { mixpanel } from "app/lib/mixpanel";
@@ -39,6 +40,7 @@ function Media({ nfts }: Props) {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const count = nfts.length;
+  const isNftModal = router?.pathname.includes("/nft");
 
   const openNFT = useCallback(
     (id: string) => {
@@ -76,13 +78,14 @@ function Media({ nfts }: Props) {
               openNFT(item.nft_id?.toString());
               mixpanel.track("Activity - Click on NFT image, open modal");
             }}
+            disabled={isNftModal}
           >
             {item.mime_type === "image/svg+xml" && (
-              <>
-                {
-                  // TODO: implement SVG rendering
-                }
-              </>
+              <SvgUri
+                width={count > 1 ? width / 2 : width}
+                height={count > 1 ? width / 2 : width}
+                uri={item.token_img_url}
+              />
             )}
 
             {item.mime_type?.startsWith("image") &&
@@ -146,7 +149,7 @@ function Media({ nfts }: Props) {
         </View>
       );
     },
-    [count]
+    [count, isNftModal]
   );
 
   const getItemLayout = useCallback(

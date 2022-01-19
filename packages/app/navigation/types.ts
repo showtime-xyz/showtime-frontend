@@ -4,17 +4,25 @@ import type { NavigatorScreenParams } from "@react-navigation/native";
 type HomeStackParams = {
   home: undefined;
   login: undefined;
-  nft: { id: number };
-};
-
-type DiscoverStackParams = {
-  discover: undefined;
-  login: undefined;
+  profile: { walletAddress: number };
   nft: { id: number };
 };
 
 type TrendingStackParams = {
   trending: undefined;
+  login: undefined;
+  nft: { id: number };
+};
+
+type CameraStackParams = {
+  camera: undefined;
+  login: undefined;
+  nft: { id: number };
+  create: undefined;
+};
+
+type MarketplaceStackParams = {
+  marketplace: undefined;
   login: undefined;
   nft: { id: number };
 };
@@ -33,8 +41,9 @@ type NextNavigationProps = {
 
 type BottomTabNavigatorParams = {
   homeTab: NavigatorScreenParams<HomeStackParams>;
-  discoverTab: NavigatorScreenParams<DiscoverStackParams>;
   trendingTab: NavigatorScreenParams<TrendingStackParams>;
+  cameraTab: NavigatorScreenParams<CameraStackParams>;
+  marketplaceTab: NavigatorScreenParams<MarketplaceStackParams>;
   notificationsTab: NavigatorScreenParams<NotificationsStackParams>;
 };
 
@@ -47,8 +56,9 @@ declare global {
 export type {
   NextNavigationProps,
   HomeStackParams,
-  DiscoverStackParams,
+  MarketplaceStackParams,
   TrendingStackParams,
+  CameraStackParams,
   NotificationsStackParams,
   BottomTabNavigatorParams,
 };

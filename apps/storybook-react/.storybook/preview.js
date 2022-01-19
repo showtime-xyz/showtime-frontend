@@ -10,6 +10,15 @@ import { View } from "design-system/view";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { ToastProvider } from "design-system/toast";
 
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { enableScreens } from "react-native-screens";
+import { linking } from "app/navigation/linking";
+
+enableScreens(true);
+
+const Stack = createNativeStackNavigator();
+
 const OriginalNextImage = NextImage.default;
 
 Object.defineProperty(NextImage, "default", {
@@ -41,7 +50,11 @@ export const decorators = [
       <TailwindDeviceContextProvider>
         <BottomSheetModalProvider>
           <ToastProvider>
-            <Story />
+            <NavigationContainer linking={linking}>
+              <Stack.Navigator screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="Storybook" component={Story} />
+              </Stack.Navigator>
+            </NavigationContainer>
           </ToastProvider>
         </BottomSheetModalProvider>
       </TailwindDeviceContextProvider>

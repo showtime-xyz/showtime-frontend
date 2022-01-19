@@ -28,7 +28,7 @@ const config = envConfig[STAGE ?? "development"];
 
 export default {
   name: "Showtime",
-  description: "Discover and showcase crypto art",
+  description: "The web3 social network",
   slug: "showtime",
   scheme: config.scheme,
   owner: "tryshowtime",
@@ -55,6 +55,7 @@ export default {
       backgroundImage: config.backgroundImage,
     },
     jsEngine: "hermes",
+    softwareKeyboardLayoutMode: "pan",
   },
   androidNavigationBar: {
     barStyle: "dark-content",
@@ -69,6 +70,17 @@ export default {
     STAGE: process.env.STAGE,
   },
   plugins: [
+    [
+      "react-native-vision-camera",
+      {
+        cameraPermissionText: "$(PRODUCT_NAME) needs access to your Camera.",
+        enableMicrophonePermission: true,
+        microphonePermissionText:
+          "$(PRODUCT_NAME) needs access to your Microphone.",
+        disableFrameProcessors: true,
+      },
+    ],
+    ["./plugins/with-compile-sdk-version.js", 31],
     "./plugins/react-native-mmkv-plugin.js",
     [
       "./plugins/with-pick-first.js",
@@ -76,5 +88,6 @@ export default {
         paths: ["lib/**/libreactnativejni.so"],
       },
     ],
+    "expo-community-flipper",
   ],
 };
