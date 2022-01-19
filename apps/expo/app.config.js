@@ -84,6 +84,12 @@ export default {
         disableFrameProcessors: true,
       },
     ],
+    [
+      "expo-image-picker",
+      {
+        photosPermission: "$(PRODUCT_NAME) needs access to your photos.",
+      },
+    ],
     ["./plugins/with-compile-sdk-version.js", 31],
     "./plugins/react-native-mmkv-plugin.js",
     [
