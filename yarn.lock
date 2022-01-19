@@ -10951,19 +10951,6 @@ expo-gl-cpp@~11.0.1:
   resolved "https://registry.yarnpkg.com/expo-gl-cpp/-/expo-gl-cpp-11.0.1.tgz#1d90283bb6d013847622d293c5c8071d02158a4d"
   integrity sha512-+h0OVlJVtZRPHCU8ZF/owplMo1Kn8ixKnwTHOD9cAZht1dM/q7xLJBncxy1ItbGvC3LqfT7Dm+Vet7LnI3mo+g==
 
-expo-gl-cpp@~11.1.0:
-  version "11.1.0"
-  resolved "https://registry.yarnpkg.com/expo-gl-cpp/-/expo-gl-cpp-11.1.0.tgz#84c8f688b7009ca8944523866fd8e16bc195889d"
-  integrity sha512-tIbMex36+pn81cuPatWfLMkOcqUTiBOEQg3NJrp1XGio7xqDQga1OKk1vaYsxrGPhZHNx3Qv5iS83t4EGJ1RTw==
-
-expo-gl@^11.1.1:
-  version "11.1.1"
-  resolved "https://registry.yarnpkg.com/expo-gl/-/expo-gl-11.1.1.tgz#2d611f3cff7422e591274d8b91334b2973a7132b"
-  integrity sha512-1bpPGmLnn6H4vs9X019zxMAlOdSqIyyWAT/yJC7f/qGzs9lTPM6STN3N+7fVMtPkXaCMyvyJL8vFJQ75+YmGpQ==
-  dependencies:
-    expo-gl-cpp "~11.1.0"
-    invariant "^2.2.4"
-
 expo-gl@~11.0.3:
   version "11.0.3"
   resolved "https://registry.yarnpkg.com/expo-gl/-/expo-gl-11.0.3.tgz#5e0e02f1033a53d47001a2273a380a3c5149cac6"
@@ -17723,6 +17710,11 @@ react-modal@^3.11.1:
     react-lifecycles-compat "^3.0.0"
     warning "^4.0.3"
 
+react-native-blob-jsi-helper@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-blob-jsi-helper/-/react-native-blob-jsi-helper-0.2.0.tgz#064f6469f9cd2dc8a67642a475c5b72baa46ce4c"
+  integrity sha512-FBnyn+4mxtgCtZulcdkKILFlNA3dcqwJEi6bUgDDVxLh5BzIHaWDH/0eVtLJzcY/vv6oz5LpCiDhWm6vGKUqHw==
+
 react-native-blurhash@1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/react-native-blurhash/-/react-native-blurhash-1.1.5.tgz#27545afb126347059a3a9324f5c3640a94b1ec53"
@@ -17753,10 +17745,10 @@ react-native-crypto@^2.0.1, react-native-crypto@^2.1.0:
     public-encrypt "^4.0.0"
     randomfill "^1.0.3"
 
-react-native-flipper@^0.127.0:
-  version "0.127.0"
-  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.127.0.tgz#4d4040c0d0a45136b9bbabdc801d3e32d385de73"
-  integrity sha512-qloUyUOs9MoMVncIDDWeOxAPbomWJ3e4y0SgyCgq8joJEOXC7RvPWeEfUXp0EPyNhHGQV9a4RwzF6BWKFCR3Kg==
+react-native-flipper@^0.128.4:
+  version "0.128.4"
+  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.128.4.tgz#c9ed83fc7220cf0c42f26253152bc274de8cec90"
+  integrity sha512-o/Hc3iPmMX6VsbDSn4sW0E3LU10e7teBg8NgmGsyXK/RBXXJcF9pLHxs5snLwXszklK3ZyZL+pQq3b8X00lb8A==
 
 react-native-gesture-handler@^2.1.1:
   version "2.1.1"
