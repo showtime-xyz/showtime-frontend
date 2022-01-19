@@ -66,8 +66,8 @@
     "expo-application": "~4.0.1",
     "expo-av": "~10.2.0",
     "expo-blur": "~11.0.0",
-    "expo-community-flipper": "^44.0.0",
     "expo-camera": "^12.1.0",
+    "expo-community-flipper": "^44.0.0",
     "expo-constants": "~13.0.0",
     "expo-dev-client": "~0.8.0",
     "expo-device": "~4.1.0",
@@ -135,7 +135,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
-    "esbuild": "^0.13.15",
+    "esbuild": "^0.14.11",
     "metro-minify-esbuild": "^0.1.0",
     "typescript": "4.5.2"
   },

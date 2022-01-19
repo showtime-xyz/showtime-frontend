@@ -67,7 +67,7 @@ jobs:
           expo-version: 4.x
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: EAS Update & create a QR code
+      - name: EAS Update
         if: success() && steps.PR.outputs.number != ''
         run: STAGE=development eas update --branch pr-${{ steps.PR.outputs.number }} --message "Deploy to PR preview"
 
