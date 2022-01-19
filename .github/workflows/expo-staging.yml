@@ -49,8 +49,8 @@ jobs:
           expo-version: 4.x
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Expo publish
-        run: STAGE=staging expo publish --release-channel=staging
+      - name: EAS Update
+        run: STAGE=staging eas update --branch staging --message "Deploy to staging"
 
       - name: Build on EAS
         run: STAGE=staging eas build --profile preview --platform all --non-interactive --no-wait

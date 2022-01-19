@@ -65,6 +65,10 @@ export default {
   orientation: "portrait",
   updates: {
     fallbackToCacheTimeout: 0,
+    url: "https://u.expo.dev/45cbf5d5-24fe-4aa6-9580-acf540651abd",
+  },
+  runtimeVersion: {
+    policy: "sdkVersion", // https://docs.expo.dev/eas-update/runtime-versions/
   },
   extra: {
     STAGE: process.env.STAGE,
@@ -73,10 +77,10 @@ export default {
     [
       "react-native-vision-camera",
       {
-        cameraPermissionText: "$(PRODUCT_NAME) needs access to your Camera.",
+        cameraPermissionText: "$(PRODUCT_NAME) needs access to your camera.",
         enableMicrophonePermission: true,
         microphonePermissionText:
-          "$(PRODUCT_NAME) needs access to your Microphone.",
+          "$(PRODUCT_NAME) needs access to your microphone.",
         disableFrameProcessors: true,
       },
     ],
