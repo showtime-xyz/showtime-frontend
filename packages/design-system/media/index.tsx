@@ -127,7 +127,6 @@ function Media({ item, count }: Props) {
             }}
             tw={count > 1 ? "w-[50vw] h-[50vw]" : "w-[100vw] h-[100vw]"}
             resizeMode="cover"
-            useNativeControls={count === 1}
           />
         )}
 
