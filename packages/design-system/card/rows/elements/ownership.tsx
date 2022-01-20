@@ -1,5 +1,6 @@
 import React from "react";
 import { Image } from "design-system/image";
+import { Text } from "design-system/text";
 import { View } from "design-system/view";
 import { Skeleton } from "design-system/skeleton";
 import { useNFTOwnership } from "app/hooks/api/use-nft-ownership";
@@ -63,14 +64,30 @@ export function Ownership({ nft }: Props) {
   }
 
   return (
-    <OwnershipContainer count={data?.owner_count ?? nft.owner_count}>
-      {data?.multiple_owners_list.slice(0, 4).map((owner) => (
-        <Image
-          key={`nft-${nft.nft_id}-owner-${owner.profile_id}`}
-          tw="w-[14px] h-[14px] rounded-full bg-gray-200 dark:bg-gray-800"
-          source={{ uri: owner.img_url }}
-        />
-      ))}
-    </OwnershipContainer>
+    <View tw="flex flex-row">
+      <View tw="mr-1">
+        <Text
+          sx={{ fontSize: 12 }}
+          tw="mb-0 text-right text-gray-600 dark:text-gray-400 font-semibold"
+        >
+          Owners
+        </Text>
+        <Text
+          sx={{ fontSize: 13, lineHeight: 13 }}
+          tw="text-right text-gray-900 dark:text-white font-semibold"
+        >
+          Multiple
+        </Text>
+      </View>
+      <OwnershipContainer count={data?.owner_count ?? nft.owner_count}>
+        {data?.multiple_owners_list.slice(0, 4).map((owner) => (
+          <Image
+            key={`nft-${nft.nft_id}-owner-${owner.profile_id}`}
+            tw="w-[14px] h-[14px] rounded-full bg-gray-200 dark:bg-gray-800"
+            source={{ uri: owner.img_url }}
+          />
+        ))}
+      </OwnershipContainer>
+    </View>
   );
 }
