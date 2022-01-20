@@ -20,7 +20,7 @@ function Grid({ nfts }: Props) {
     ({ item }) => {
       if (!item) return null;
 
-      return <Media item={item} count={count} />;
+      return <Media item={item} numColumns={2} />;
     },
     [count]
   );

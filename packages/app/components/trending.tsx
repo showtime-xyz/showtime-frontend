@@ -177,7 +177,7 @@ const CreatorsList = ({
 };
 
 const GAP_BETWEEN_ITEMS = 1;
-const ITEM_SIZE = Dimensions.get("window").width / 2;
+const ITEM_SIZE = Dimensions.get("window").width / 3;
 
 const NFTSList = ({
   days,
@@ -196,7 +196,7 @@ const NFTSList = ({
   }, []);
 
   const renderItem = useCallback(
-    ({ item }) => <Media item={item} count={2} />,
+    ({ item }) => <Media item={item} numColumns={3} />,
     []
   );
 
@@ -239,10 +239,10 @@ const NFTSList = ({
         onEndReachedThreshold={0.6}
         removeClippedSubviews={Platform.OS !== "web"}
         ListHeaderComponent={ListHeaderComponent}
-        numColumns={2}
+        numColumns={3}
         getItemLayout={getItemLayout}
-        windowSize={4}
-        initialNumToRender={10}
+        windowSize={6}
+        initialNumToRender={9}
         alwaysBounceVertical={false}
         ListFooterComponent={ListFooterComponent}
         style={useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), [])}

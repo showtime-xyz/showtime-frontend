@@ -90,8 +90,8 @@ const Profile = ({ address }: { address?: string }) => {
   );
 };
 
-const GAP_BETWEEN_ITEMS = 2;
-const ITEM_SIZE = Dimensions.get("window").width / 2;
+const GAP_BETWEEN_ITEMS = 1;
+const ITEM_SIZE = Dimensions.get("window").width / 3;
 
 const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
   const keyExtractor = useCallback((item) => {
@@ -130,7 +130,7 @@ const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
   );
 
   const renderItem = useCallback(
-    ({ item }) => <Media item={item} count={2} />,
+    ({ item }) => <Media item={item} numColumns={3} />,
     []
   );
 
@@ -186,10 +186,10 @@ const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
         onEndReachedThreshold={0.6}
         removeClippedSubviews={Platform.OS !== "web"}
         ListHeaderComponent={ListHeaderComponent}
-        numColumns={2}
+        numColumns={3}
         getItemLayout={getItemLayout}
-        windowSize={4}
-        initialNumToRender={10}
+        windowSize={6}
+        initialNumToRender={9}
         alwaysBounceVertical={false}
         ListFooterComponent={ListFooterComponent}
         style={useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), [])}

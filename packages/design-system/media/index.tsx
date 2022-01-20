@@ -37,10 +37,11 @@ const getImageUrlLarge = (imgUrl: string, tokenAspectRatio: string) => {
 
 type Props = {
   item: NFT;
-  count: number;
+  numColumns: number;
+  tw?: string;
 };
 
-function Media({ item, count }: Props) {
+function Media({ item, numColumns, tw }: Props) {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const isNftModal = router?.pathname.includes("/nft");
@@ -62,10 +63,18 @@ function Media({ item, count }: Props) {
     [router, Router]
   );
 
+  const size = tw
+    ? tw
+    : numColumns === 3
+    ? "w-[33vw] h-[33vw]"
+    : numColumns === 2
+    ? "w-[50vw] h-[50vw]"
+    : "w-[100vw] h-[100vw]";
+
   return (
     <View
       tw={[
-        count >= 2 ? "m-[2px]" : "",
+        numColumns >= 3 ? "m-[1px]" : numColumns === 2 ? "m-[2px]" : "",
         item?.token_background_color
           ? `bg-[#${item?.token_background_color}]`
           : "bg-black",
@@ -80,8 +89,20 @@ function Media({ item, count }: Props) {
       >
         {item?.mime_type === "image/svg+xml" && (
           <SvgUri
-            width={count > 1 ? width / 2 : width}
-            height={count > 1 ? width / 2 : width}
+            width={
+              numColumns === 3
+                ? width / 3
+                : numColumns === 2
+                ? width / 2
+                : width
+            }
+            height={
+              numColumns === 3
+                ? width / 3
+                : numColumns === 2
+                ? width / 2
+                : width
+            }
             uri={item?.token_img_url}
           />
         )}
@@ -92,7 +113,7 @@ function Media({ item, count }: Props) {
               <Image
                 source={{
                   uri:
-                    count === 1
+                    numColumns === 1
                       ? getImageUrlLarge(
                           item?.still_preview_url
                             ? item?.still_preview_url
@@ -106,7 +127,7 @@ function Media({ item, count }: Props) {
                           item?.token_aspect_ratio
                         ),
                 }}
-                tw={count > 1 ? "w-[50vw] h-[50vw]" : "w-[100vw] h-[100vw]"}
+                tw={size}
                 blurhash={item?.blurhash}
                 resizeMode="cover"
               />
@@ -125,17 +146,17 @@ function Media({ item, count }: Props) {
             posterSource={{
               uri: item?.still_preview_url,
             }}
-            tw={count > 1 ? "w-[50vw] h-[50vw]" : "w-[100vw] h-[100vw]"}
+            tw={size}
             resizeMode="cover"
           />
         )}
 
         {item?.mime_type?.startsWith("model") && (
-          <View tw={count > 1 ? "w-[50vw] h-[50vw]" : "w-[100vw] h-[100vw]"}>
+          <View tw={size}>
             <Model
               url={item?.source_url}
               fallbackUrl={item?.still_preview_url}
-              count={count}
+              numColumns={numColumns}
               blurhash={item?.blurhash}
             />
           </View>

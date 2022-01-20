@@ -8,7 +8,7 @@ type Props = {
   url: string;
   fallbackUrl: string;
   blurhash: string;
-  count: number;
+  numColumns: number;
 };
 
 // function Model({ url }: { url: string }) {
@@ -27,13 +27,19 @@ type Props = {
 // onPointerUp	called when press ends	onPressOut
 // onPointerMove	called when press moves	onPressMove
 
-function ModelViewer({ url, fallbackUrl, blurhash, count }: Props) {
+function ModelViewer({ url, fallbackUrl, blurhash, numColumns }: Props) {
   return (
     <Image
       source={{
         uri: fallbackUrl,
       }}
-      tw={count > 1 ? "w-[50vw] h-[50vw]" : "w-[100vw] h-[100vw]"}
+      tw={
+        numColumns === 3
+          ? "w-[33vw] h-[33vw]"
+          : numColumns === 2
+          ? "w-[50vw] h-[50vw]"
+          : "w-[100vw] h-[100vw]"
+      }
       blurhash={blurhash}
       resizeMode="cover"
     />
