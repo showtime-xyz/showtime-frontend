@@ -20,7 +20,11 @@ function CardImpl({ act, variant }: Props) {
     <View tw="bg-white dark:bg-black">
       {variant === "activity" && <Activity activity={act} />}
 
-      {single ? <Media item={nfts[0]} count={1} /> : <Grid nfts={nfts ?? []} />}
+      {single ? (
+        <Media item={nfts[0]} numColumns={1} />
+      ) : (
+        <Grid nfts={nfts ?? []} />
+      )}
 
       {variant === "nft" && <Title nft={nfts[0]} />}
 

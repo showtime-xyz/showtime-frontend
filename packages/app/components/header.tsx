@@ -119,7 +119,12 @@ const Header = () => {
                   }}
                   variant="primary"
                 >
-                  <Wallet />
+                  <Wallet
+                    color={
+                      tw.style("bg-white dark:bg-black")
+                        ?.backgroundColor as string
+                    }
+                  />
                   <ButtonLabel tw="pl-2">Sign&nbsp;in</ButtonLabel>
                 </Button>
               )}
