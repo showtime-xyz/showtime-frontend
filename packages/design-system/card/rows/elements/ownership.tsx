@@ -34,7 +34,7 @@ export function Ownership({ nft }: Props) {
 
   const { data, loading, error } = useNFTOwnership(nft.nft_id);
 
-  if (loading) {
+  if (loading || error) {
     return (
       <OwnershipContainer count={nft.owner_count}>
         {Array(nft.owner_count)
