@@ -49,7 +49,7 @@ export const TabItem = ({ name, count }: TabItemProps) => {
       ]}
     >
       <Text
-        variant="text-13"
+        variant="text-sm"
         sx={{ fontWeight: "700" }}
         tw={`text-gray-900 dark:text-white`}
       >
@@ -57,7 +57,7 @@ export const TabItem = ({ name, count }: TabItemProps) => {
       </Text>
 
       <Text
-        variant="text-13"
+        variant="text-sm"
         sx={{ fontWeight: "400" }}
         tw={`text-gray-900 dark:text-white`}
       >

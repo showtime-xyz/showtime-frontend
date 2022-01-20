@@ -13,8 +13,9 @@ import {
   Follow,
   Transfer,
 } from "design-system/activity/types";
-import { Pressable } from "react-native";
+import { Pressable } from "design-system/pressable-scale";
 import { useProfileNavigation } from "app/navigation/app-navigation";
+import { ActivityDropdown } from "design-system/activity/activity-dropdown";
 
 const getProfileImageUrl = (imgUrl: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
@@ -35,7 +36,7 @@ function Activity({ activity }: Props) {
 
   return (
     <View tw="p-4">
-      <View tw="h-12 flex-row">
+      <View tw="h-12 flex-row justify-between">
         <Pressable onPress={openProfile}>
           <Avatar
             url={getProfileImageUrl(actor.img_url ?? DEFAULT_PROFILE_PIC)}
@@ -43,7 +44,7 @@ function Activity({ activity }: Props) {
           />
         </Pressable>
 
-        <View tw="justify-center ml-2">
+        <View tw="items-start justify-center ml-2 w-[69vw]">
           <Text
             variant="text-sm"
             tw="text-gray-600 dark:text-gray-400 max-w-[69vw]"
@@ -80,6 +81,10 @@ function Activity({ activity }: Props) {
               addSuffix: true,
             })}
           </Text>
+        </View>
+
+        <View tw="justify-center">
+          <ActivityDropdown />
         </View>
       </View>
     </View>
