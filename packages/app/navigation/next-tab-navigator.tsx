@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { tw } from "design-system/tailwind";
-import { Header } from "app/components/header";
+import { HeaderLeft, HeaderRight } from "app/components/header";
 import { useNavigationElements } from "./use-navigation-elements";
 import { NextNavigationProps } from "./types";
 import { createNextTabNavigator } from "./universal-tab-navigator";
@@ -15,6 +15,7 @@ import {
   MarketplaceTabBarIcon,
   NotificationsTabBarIcon,
 } from "./tab-bar-icons";
+import { useIsDarkMode } from "design-system/hooks";
 
 const HomeNavigator = dynamic(() => import("../pages/home"));
 const TrendingNavigator = dynamic(() => import("../pages/trending"));
@@ -34,13 +35,24 @@ export function NextTabNavigator({
 
   const color = tw.style("bg-black dark:bg-white")?.backgroundColor as string;
   const tint = color === "#000" ? "light" : "dark";
+  const isDark = useIsDarkMode();
 
   return (
     <BottomTab.Navigator
       initialRouteName="homeTab"
       screenOptions={{
-        header: () => <Header />,
-        headerShown: true,
+        headerLeft: HeaderLeft,
+        headerRight: HeaderRight,
+        headerTitle: "",
+        headerTintColor: "#000",
+        //@ts-ignore
+        headerStyle: {
+          backgroundColor: isDark ? "black" : "white",
+          // below removes the border bottom line on header on iOS
+          shadowOffset: {
+            height: 0,
+          },
+        },
         tabBarActiveTintColor: color,
         tabBarInactiveTintColor: color,
         tabBarShowLabel: false,
@@ -97,6 +109,7 @@ export function NextTabNavigator({
           component={CameraNavigator}
           options={{
             tabBarIcon: CameraTabBarIcon,
+            headerShown: false,
           }}
         />
       )}

@@ -101,6 +101,5 @@ export default {
         paths: ["lib/**/libreactnativejni.so"],
       },
     ],
-    "expo-community-flipper",
   ],
 };

@@ -11,7 +11,6 @@ export type TabRootProps = {
   children: React.ReactNode;
   lazy?: boolean;
   accessibilityLabel?: string;
-  tabItemLayouts: Array<Reanimated.SharedValue<LayoutRectangle>>;
 };
 
 export type TabListProps = ScrollViewProps;
