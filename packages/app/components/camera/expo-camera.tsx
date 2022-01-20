@@ -7,7 +7,6 @@ import { useIsFocused } from "@react-navigation/native";
 
 import { useIsForeground } from "app/hooks/use-is-foreground";
 import { CameraButtons } from "app/components/camera/camera-buttons";
-import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
 type Props = {
   photos: { uri: string }[];
@@ -37,16 +36,6 @@ export function Camera({
   const isFocused = useIsFocused();
   const isForeground = useIsForeground();
   const isActive = isFocused && isForeground;
-
-  // Hide header when camera is active
-  const { setIsHeaderHidden } = useNavigationElements();
-  useEffect(() => {
-    setIsHeaderHidden(isFocused ? true : false);
-
-    return () => {
-      setIsHeaderHidden(false);
-    };
-  }, [isActive]);
 
   const [flash, setFlash] = useState<"off" | "on" | "auto">("auto");
 

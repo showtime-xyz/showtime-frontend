@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { MMKV } from "react-native-mmkv";
+import { useColorScheme as useDeviceColorScheme } from "react-native";
 
 const storage = new MMKV();
 const COLOR_SCHEME_STRING = "color-scheme";
@@ -17,7 +18,10 @@ export function deleteColorScheme() {
 }
 
 export function useColorScheme() {
-  const [colorScheme, setColorScheme] = useState(() => getColorScheme());
+  const deviceColorScheme = useDeviceColorScheme();
+  const [colorScheme, setColorScheme] = useState(
+    () => getColorScheme() ?? deviceColorScheme
+  );
 
   useEffect(() => {
     const listener = storage.addOnValueChangedListener((changedKey) => {

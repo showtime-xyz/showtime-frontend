@@ -72,6 +72,9 @@ export default {
   },
   extra: {
     STAGE: process.env.STAGE,
+    eas: {
+      projectId: "45cbf5d5-24fe-4aa6-9580-acf540651abd",
+    },
   },
   plugins: [
     [
@@ -98,6 +101,5 @@ export default {
         paths: ["lib/**/libreactnativejni.so"],
       },
     ],
-    "expo-community-flipper",
   ],
 };
