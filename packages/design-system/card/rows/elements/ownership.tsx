@@ -65,18 +65,11 @@ export function Ownership({ nft }: Props) {
   return (
     <OwnershipContainer count={data?.owner_count ?? nft.owner_count}>
       {data?.multiple_owners_list.slice(0, 4).map((owner) => (
-        <Skeleton
-          key={`nft-${nft.nft_id}-owner-${owner.profile_id}-skeleton`}
-          tw="w-[14px] h-[14px]"
-          radius="round"
-          show={loading}
-        >
-          <Image
-            key={`nft-${nft.nft_id}-owner-${owner.profile_id}`}
-            tw="w-[14px] h-[14px] rounded-full bg-gray-200 dark:bg-gray-800"
-            source={{ uri: owner.img_url }}
-          />
-        </Skeleton>
+        <Image
+          key={`nft-${nft.nft_id}-owner-${owner.profile_id}`}
+          tw="w-[14px] h-[14px] rounded-full bg-gray-200 dark:bg-gray-800"
+          source={{ uri: owner.img_url }}
+        />
       ))}
     </OwnershipContainer>
   );
