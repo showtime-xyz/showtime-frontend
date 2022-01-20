@@ -73,7 +73,7 @@ jobs:
 
       - name: Preview Deep Link
         id: publish-url
-        run: echo "::set-output name=url::io.showtime.development://expo-development-client/?url=https://u.expo.dev/45cbf5d5-24fe-4aa6-9580-acf540651abd?channel-name=pr-${{ steps.PR.outputs.number }}"
+        run: echo "::set-output name=url::exp+io.showtime.development://expo-development-client/?url=https://u.expo.dev/45cbf5d5-24fe-4aa6-9580-acf540651abd?channel-name=pr-${{ steps.PR.outputs.number }}"
 
       - name: Find PR Comment
         uses: peter-evans/find-comment@v1
@@ -97,6 +97,6 @@ jobs:
 
             ✅ Preview: <a href="${{ steps.publish-url.outputs.url }}">${{ steps.publish-url.outputs.url }}</a>
 
-            <a href="${{ steps.publish-url.outputs.url }}"><img src="https://us-central1-exponentjs.cloudfunctions.net/generateQRCode/development-client?appScheme=io.showtime.development&url=https://u.expo.dev/45cbf5d5-24fe-4aa6-9580-acf540651abd?channel-name=pr-${{ steps.PR.outputs.number }}" height="512px" width="512px"></a>
+            <a href="${{ steps.publish-url.outputs.url }}"><img src="https://api.qrserver.com/v1/create-qr-code/?size=512x512&data=${{ steps.publish-url.outputs.url }}" height="512px" width="512px" /></a>
 
             Comment ID: ${{ steps.existing-comment.outputs.comment-id }}
