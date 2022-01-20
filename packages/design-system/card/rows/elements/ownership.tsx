@@ -3,6 +3,7 @@ import { Image } from "design-system/image";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 import { Skeleton } from "design-system/skeleton";
+import { useIsDarkMode } from "design-system/hooks";
 import { useNFTOwnership } from "app/hooks/api/use-nft-ownership";
 import { NFT } from "app/types";
 
@@ -33,9 +34,10 @@ function OwnershipContainer({
 export function Ownership({ nft }: Props) {
   if (!nft) return null;
 
+  const isDarkMode = useIsDarkMode();
   const { data, loading, error } = useNFTOwnership(nft.nft_id);
 
-  if (loading || error) {
+  if (loading) {
     return (
       <OwnershipContainer count={nft.owner_count}>
         {Array(nft.owner_count)
@@ -46,6 +48,7 @@ export function Ownership({ nft }: Props) {
               key={`nft-${nft.nft_id}-owner-${index}-skeleton`}
               width={14}
               height={14}
+              colorMode={isDarkMode ? "dark" : "light"}
               radius="round"
               show={true}
             />
