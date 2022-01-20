@@ -94,7 +94,7 @@ function Create({ uri }: { uri: string }) {
                     value={value}
                     errorText={errors.title?.message}
                     onBlur={onBlur}
-                    onChangeText={(text) => onChange(text)}
+                    onChangeText={onChange}
                   />
                 )}
               />
@@ -116,7 +116,7 @@ function Create({ uri }: { uri: string }) {
                     keyboardType="numeric"
                     errorText={errors.editionCount?.message}
                     value={value.toString()}
-                    onChangeText={(text) => onChange(text)}
+                    onChangeText={onChange}
                     returnKeyType="done"
                   />
                 );
@@ -163,7 +163,7 @@ function Create({ uri }: { uri: string }) {
                         placeholder="Add a description"
                         onBlur={onBlur}
                         value={value}
-                        onChangeText={(v) => onChange(v)}
+                        onChangeText={onChange}
                       />
                     )}
                   />
@@ -199,7 +199,7 @@ function Create({ uri }: { uri: string }) {
                           // tw="ml-4 w-[48%]"
                           value={value}
                           onBlur={onBlur}
-                          onChangeText={(v) => onChange(v)}
+                          onChangeText={onChange}
                           helperText="How much you'll earn each time this NFT is sold."
                           keyboardType="numeric"
                           returnKeyType="done"
