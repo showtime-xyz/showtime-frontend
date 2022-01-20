@@ -98,7 +98,11 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
     ...queryState,
     data,
     fetchMore: () => {
-      if (queryState.data && queryState.data[0]) {
+      if (
+        queryState.data &&
+        queryState.data[0] &&
+        data.length < queryState.data[0].data.length
+      ) {
         const data = queryState.data[0].data;
         const nextData = data.slice(currentPage.current * limit, limit);
         currentPage.current++;
