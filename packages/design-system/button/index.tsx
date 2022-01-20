@@ -1,111 +1,82 @@
-import { forwardRef } from "react";
+import { BaseButton } from "./button-base";
+import { CONTAINER_BACKGROUND_MAPPER, ICON_COLOR_TW_MAPPER } from "./constants";
+import type { ButtonProps } from "./types";
 
-import { Text } from "design-system/text";
-import {
-  Pressable,
-  Props as PressableScaleProps,
-} from "design-system/pressable-scale";
-import type { TW } from "design-system/tailwind/types";
+export { ButtonLabel } from "./button-label";
 
-type Props = {
-  tw?: TW;
-  iconOnly?: boolean;
-  variant?: "primary" | "danger" | "tertiary";
-  size?: "small" | "regular";
-  children?: React.ReactNode;
-  ref?: any;
-} & PressableScaleProps;
+export function Button({
+  tw = "",
+  variant = "primary",
+  size = "small",
+  iconOnly = false,
+  ...props
+}: ButtonProps) {
+  const _tw = typeof tw === "string" ? tw ?? "" : tw?.join(" ");
 
-export const Button = forwardRef(({ variant, ...props }: Props, ref) => {
   switch (variant) {
     case "primary":
-      return <PrimaryButton ref={ref} {...props} />;
+      return (
+        <PrimaryButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
+      );
     case "danger":
-      return <DangerButton ref={ref} {...props} />;
+      return (
+        <DangerButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
+      );
     case "tertiary":
-      return <TertiaryButton ref={ref} {...props} />;
+      return (
+        <TertiaryButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
+      );
+    case "secondary":
+      return (
+        <SecondaryButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
+      );
     default:
-      return <PrimaryButton ref={ref} {...props} />;
+      return (
+        <PrimaryButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
+      );
   }
-});
+}
 
-Button.displayName = "Button";
-
-export const BaseButton = forwardRef(({ ...props }: Props, ref) => {
-  return <Pressable {...{ ...props, ref }} />;
-});
-
-BaseButton.displayName = "BaseButton";
-
-export const PrimaryButton = ({ tw = "", iconOnly, size, ...props }: Props) => (
-  <BaseButton
-    {...props}
-    tw={[
-      `bg-black dark:bg-white flex-row justify-center items-center ${
-        iconOnly ? "p-2 rounded-xl" : "px-4 py-2 rounded-2xl"
-      } ${
-        size === "regular" ? "h-[48px] rounded-3xl" : "h-[32px]"
-      } disabled:opacity-40 disabled:cursor-not-allowed`,
-      typeof tw === "string" ? tw ?? "" : tw?.join(" "),
-    ]}
-  />
-);
-
-PrimaryButton.displayName = "PrimaryButton";
-
-export const DangerButton = ({ tw = "", iconOnly, size, ...props }: Props) => (
-  <BaseButton
-    {...props}
-    tw={[
-      `bg-red-500 dark:bg-red-700 text-white font-medium flex-row justify-center items-center ${
-        iconOnly ? "p-2 rounded-xl" : "px-4 py-2 rounded-2xl"
-      } ${
-        size === "regular" ? "h-[48px] rounded-3xl" : "h-[32px]"
-      } disabled:opacity-40 disabled:cursor-not-allowed`,
-      typeof tw === "string" ? tw ?? "" : tw?.join(" "),
-    ]}
-  />
-);
-
-DangerButton.displayName = "DangerButton";
-
-export const TertiaryButton = ({
-  tw = "",
-  iconOnly,
-  size,
-  ...props
-}: Props) => (
-  <BaseButton
-    {...props}
-    tw={[
-      `relative bg-gray-100 text-gray-900 font-semibold dark:bg-gray-800 dark:text-gray-200 flex-row justify-center items-center ${
-        iconOnly ? "p-2 rounded-xl" : "px-4 py-2 rounded-2xl"
-      } ${
-        size === "regular" ? "h-[48px] rounded-3xl" : "h-[32px]"
-      } disabled:opacity-40 disabled:cursor-not-allowed`,
-      typeof tw === "string" ? tw ?? "" : tw?.join(" "),
-    ]}
-  />
-);
-
-TertiaryButton.displayName = "TertiaryButton";
-
-export const ButtonLabel = ({
-  tw = "",
-  ...props
-}: {
-  tw?: TW;
-  children?: React.ReactNode;
-}) => {
-  // TODO: md:text-base
+export function PrimaryButton(props: ButtonProps) {
   return (
-    <Text
-      variant="text-sm"
-      {...props}
-      tw={[
-        "text-white dark:text-black font-bold",
-        typeof tw === "string" ? tw : tw?.join(" "),
-      ]}
+    <BaseButton
+      {...(props as any)}
+      labelTW="text-white dark:text-black"
+      iconColor={ICON_COLOR_TW_MAPPER.primary}
+      backgroundColors={CONTAINER_BACKGROUND_MAPPER["primary"]}
     />
   );
-};
+}
+
+export function SecondaryButton(props: ButtonProps) {
+  return (
+    <BaseButton
+      {...(props as any)}
+      labelTW="text-gray-900 dark:text-white"
+      iconColor={ICON_COLOR_TW_MAPPER.secondary}
+      backgroundColors={CONTAINER_BACKGROUND_MAPPER["secondary"]}
+    />
+  );
+}
+
+export function TertiaryButton(props: ButtonProps) {
+  return (
+    <BaseButton
+      {...(props as any)}
+      labelTW="text-gray-900 dark:text-white"
+      iconColor={ICON_COLOR_TW_MAPPER.tertiary}
+      backgroundColors={CONTAINER_BACKGROUND_MAPPER["tertiary"]}
+    />
+  );
+}
+
+export function DangerButton(props: ButtonProps) {
+  return (
+    <BaseButton
+      {...(props as any)}
+      labelTW="text-white"
+      iconColor={ICON_COLOR_TW_MAPPER.danger}
+      backgroundColors={CONTAINER_BACKGROUND_MAPPER["danger"]}
+    />
+  );
+}

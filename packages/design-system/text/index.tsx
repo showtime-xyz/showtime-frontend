@@ -9,7 +9,7 @@ import { ViewProps } from "../view";
 
 type Variant = keyof Theme["text"];
 
-type TextProps = ComponentProps<typeof DripsyText>;
+export type TextProps = ComponentProps<typeof DripsyText>;
 
 export type Props = {
   tw?: TW;
