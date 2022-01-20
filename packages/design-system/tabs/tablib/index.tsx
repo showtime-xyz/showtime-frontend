@@ -14,6 +14,7 @@ import {
   Platform,
   Dimensions,
   FlatListProps,
+  LayoutRectangle,
 } from "react-native";
 import PagerView from "react-native-pager-view";
 import Reanimated, {
@@ -37,7 +38,9 @@ const windowHeight = Dimensions.get("window").height;
 
 const AnimatedPagerView = Reanimated.createAnimatedComponent(PagerView);
 
-export const TabsContext = React.createContext(null as TabsContextType);
+export const TabsContext = React.createContext(
+  null as unknown as TabsContextType
+);
 
 const Root = ({
   children,
@@ -57,7 +60,7 @@ const Root = ({
   const [tabListHeight, setTabListHeight] =
     React.useState(initialtabListHeight);
   const requestOtherViewsToSyncTheirScrollPosition = useSharedValue(false);
-  const tabItemLayouts = [];
+  const tabItemLayouts: Array<Reanimated.SharedValue<LayoutRectangle>> = [];
 
   const onIndexChange = (newIndex) => {
     index.value = newIndex;
@@ -196,7 +199,7 @@ const ListImpl = ({
 
   useDerivedValue(() => {
     if (prevIndex.value) {
-      if (tabItemLayouts[index.value].value) {
+      if (tabItemLayouts[index.value] && tabItemLayouts[index.value].value) {
         const itemLayoutX = tabItemLayouts[index.value].value.x;
         const itemWidth = tabItemLayouts[index.value].value.width;
         runOnJS(scrollTo)(itemLayoutX - windowWidth / 2 + itemWidth / 2);
