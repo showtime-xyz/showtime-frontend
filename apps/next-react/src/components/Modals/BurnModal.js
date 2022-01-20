@@ -111,7 +111,9 @@ const BurnModal = ({ open, onClose, token }) => {
             error?.body || error?.error?.body || "{}"
           )?.error?.message?.includes("burn amount exceeds balance")
         ) {
-          alert("Delete failed: You're trying to delete more tokens than you own.");
+          alert(
+            "Delete failed: You're trying to delete more tokens than you own."
+          );
           throw setModalState(MODAL_STATES.GENERAL);
         }
 
@@ -226,7 +228,8 @@ const GeneralState = ({
     <div className="p-4 space-y-4 border-b border-gray-100 dark:border-gray-900 text-gray-900 dark:text-white">
       <p className="font-medium">Are you sure you want to delete this NFT?</p>
       <p className="font-medium">
-        The NFT will be transferred to a burn address. This can’t be undone.
+        The NFT will be transferred to a burn address (that nobody can access).
+        This can’t be undone.
       </p>
     </div>
     <div className="p-4 border-b border-gray-100 dark:border-gray-900">
