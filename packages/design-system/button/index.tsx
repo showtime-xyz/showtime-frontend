@@ -1,8 +1,6 @@
-import React from "react";
 import { BaseButton } from "./button-base";
-
-import type { ButtonProps, BaseButtonProps } from "./types";
 import { CONTAINER_BACKGROUND_MAPPER, ICON_COLOR_TW_MAPPER } from "./constants";
+import type { ButtonProps } from "./types";
 
 export { ButtonLabel } from "./button-label";
 

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { Children, cloneElement, useMemo } from "react";
 import { useSharedValue, useAnimatedStyle } from "react-native-reanimated";
 import { useIsDarkMode } from "../hooks";
 import { Pressable } from "design-system/pressable-scale";
@@ -64,13 +64,13 @@ export function BaseButton({
   //#region renderings
   const renderChildren = useMemo(() => {
     const iconSize = ICON_SIZE_TW[size];
-    return React.Children.map(children, (child: any) => {
+    return Children.map(children, (child: any) => {
       if (typeof child === "string") {
         return <Text tw={labelStyle}>{child}</Text>;
       }
 
       // @ts-ignore
-      return React.cloneElement(child, {
+      return cloneElement(child, {
         color: iconColor,
         ...iconSize,
         ...child.props,

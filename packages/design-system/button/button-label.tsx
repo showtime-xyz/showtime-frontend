@@ -1,6 +1,5 @@
-import React from "react";
-import type { TW } from "design-system/tailwind/types";
 import { Text, Props } from "../text";
+import type { TW } from "design-system/tailwind/types";
 
 type ButtonLabelProps = {
   labelTW?: TW;
