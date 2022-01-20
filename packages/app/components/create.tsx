@@ -67,9 +67,9 @@ function Create({ uri }: { uri: string }) {
 
   const isDark = useIsDarkMode();
   const tabBarHeight = useBottomTabBarHeight();
-  const isVideo = supportedVideoExtensions
-    .map((ext) => uri.endsWith(`.${ext}`))
-    .includes(true);
+  const fileExtension = uri.split(".").pop();
+  const isVideo =
+    fileExtension && supportedVideoExtensions.includes(fileExtension);
   const Preview = isVideo ? Video : Image;
 
   return (
