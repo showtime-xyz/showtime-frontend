@@ -205,8 +205,8 @@ const NFTSList = ({
       days,
     });
 
-  const keyExtractor = useCallback((_item, index) => {
-    return index.toString();
+  const keyExtractor = useCallback((item) => {
+    return item.nft_id.toString();
   }, []);
 
   const renderItem = useCallback(
