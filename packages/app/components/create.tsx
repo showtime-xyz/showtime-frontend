@@ -3,7 +3,11 @@ import { ChevronUp } from "design-system/icon";
 import { Image } from "design-system/image";
 import { Video } from "design-system/video";
 import { Pressable, ScrollView } from "react-native";
-import { useMintNFT } from "../hooks/api-hooks";
+import {
+  supportedVideoExtensions,
+  UseMintNFT,
+  useMintNFT,
+} from "app/hooks/use-mint-nft";
 import { Accordion } from "design-system";
 import { useIsDarkMode } from "design-system/hooks";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
@@ -18,40 +22,6 @@ const defaultValues = {
   notSafeForWork: false,
   hasAcceptedTerms: false,
 };
-
-// function CloseButton({
-//   onPress,
-//   variant = "light",
-//   size = "lg",
-// }: {
-//   onPress: () => void;
-//   variant?: "light" | "dark";
-//   size?: "lg" | "md";
-// }) {
-//   const dimension = size === "lg" ? 48 : 24;
-
-//   return (
-//     <Pressable
-//       onPress={onPress}
-//       style={{
-//         width: dimension,
-//         height: dimension,
-//         borderRadius: dimension / 2,
-//         backgroundColor: tw.color(
-//           variant === "light" ? "gray-100" : "gray-900"
-//         ),
-//         alignItems: "center",
-//         justifyContent: "center",
-//       }}
-//     >
-//       <Close
-//         width={size === "lg" ? 24 : 18}
-//         height={size === "lg" ? 24 : 18}
-//         color={variant === "light" ? "#000" : "#fff"}
-//       />
-//     </Pressable>
-//   );
-// }
 
 const createNFTValidationSchema = yup.object({
   editionCount: yup
@@ -77,27 +47,10 @@ const createNFTValidationSchema = yup.object({
 
 function Create({ uri }: { uri: string }) {
   const { startMinting, state } = useMintNFT();
-  const handleSubmitForm = (values: any) => {
-    startMinting(values);
-
-    // FileSystem.downloadAsync(
-    //   "https://lh3.googleusercontent.com/eDuDBbt8CfAClm4XAfRPf63lZ0DCcf1elQai_43gcmnWr8nuwjXoAZF3xwmWnh5yt8BCA2URJzIJijSVjpUjBVCK-kMi7RZwTuSx=w660",
-    //   FileSystem.documentDirectory + "test.jpg"
-    // )
-    //   .then(({ uri }) => {
-    //     const fakeData = {
-    //       filePath: uri,
-    //       title: "Nature",
-    //       description: "A beautiful nature",
-    //       notSafeForWork: false,
-    //       editionCount: 1,
-    //       royaltiesPercentage: 10,
-    //     };
-    //     console.log("Finished downloading to ", uri);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
+  const handleSubmitForm = (values: Omit<UseMintNFT, "filePath">) => {
+    console.log("** Submiting minting form **", values);
+    const valuesWithFilePath = { ...values, filePath: uri };
+    startMinting(valuesWithFilePath);
   };
 
   const {
@@ -114,7 +67,7 @@ function Create({ uri }: { uri: string }) {
 
   const isDark = useIsDarkMode();
   const tabBarHeight = useBottomTabBarHeight();
-  const isVideo = ["mp4", "mov", "avi", "mkv", "webm"]
+  const isVideo = supportedVideoExtensions
     .map((ext) => uri.endsWith(`.${ext}`))
     .includes(true);
   const Preview = isVideo ? Video : Image;
@@ -289,7 +242,7 @@ function Create({ uri }: { uri: string }) {
       <View tw="absolute px-4 w-full" style={{ bottom: tabBarHeight + 16 }}>
         <Button
           onPress={handleSubmit(handleSubmitForm)}
-          disabled={state.status !== "idle"}
+          // disabled={state.status !== "idle"}
           tw="h-12 rounded-full"
         >
           <Text tw="text-white dark:text-gray-900 text-sm">

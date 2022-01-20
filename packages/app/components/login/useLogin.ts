@@ -107,6 +107,7 @@ export const useLogin = () => {
         // Expire the nonce after successful login
         axios({ url: `/v1/rotatenonce?address=${address}`, method: "POST" });
       } else {
+        console.error("Login failed ", response);
         throw "Login failed";
       }
 

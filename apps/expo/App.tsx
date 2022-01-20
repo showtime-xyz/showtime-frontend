@@ -227,8 +227,8 @@ function AppContextProvider({
   }, [isDark]);
 
   useEffect(() => {
-    magic.user.isLoggedIn().then(() => {
-      if (magic.rpcProvider) {
+    magic.user.isLoggedIn().then((isLoggedIn) => {
+      if (magic.rpcProvider && isLoggedIn) {
         const provider = new ethers.providers.Web3Provider(magic.rpcProvider);
         setWeb3(provider);
       }

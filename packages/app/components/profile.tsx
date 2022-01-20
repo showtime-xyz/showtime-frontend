@@ -76,9 +76,8 @@ const Profile = ({ address }: { address?: string }) => {
         <Tabs.Pager>
           {data?.data.lists.map((list) => {
             return (
-              <Suspense fallback={<Spinner size="small" />}>
+              <Suspense fallback={<Spinner size="small" />} key={list.id}>
                 <TabList
-                  key={list.id}
                   profileId={profileData?.data.profile.profile_id}
                   list={list}
                 />
