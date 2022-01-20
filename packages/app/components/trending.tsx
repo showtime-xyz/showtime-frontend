@@ -177,7 +177,7 @@ const CreatorsList = ({
 };
 
 const GAP_BETWEEN_ITEMS = 1;
-const ITEM_SIZE = Dimensions.get("window").width / 2;
+const ITEM_SIZE = Dimensions.get("window").width / 3;
 
 const NFTSList = ({
   days,
