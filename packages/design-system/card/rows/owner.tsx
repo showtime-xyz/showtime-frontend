@@ -1,0 +1,26 @@
+import { View } from "design-system/view";
+import { Button } from "design-system/button";
+import { MoreHorizontal } from "design-system/icon";
+import { Creator } from "./elements/creator";
+import type { NFT } from "app/types";
+
+type Props = {
+  nft?: NFT;
+  options?: boolean;
+};
+
+function Owner({ nft }: Props) {
+  if (!nft) return null;
+
+  return (
+    <View tw="p-3 flex flex-row items-center justify-between bg-white dark:bg-black">
+      <Creator nft={nft} />
+
+      <Button variant="tertiary" size="small" iconOnly={true}>
+        <MoreHorizontal />
+      </Button>
+    </View>
+  );
+}
+
+export { Owner };
