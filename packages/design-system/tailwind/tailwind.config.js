@@ -6,6 +6,15 @@ module.exports = {
   purge: ["./src/**/*.{js,ts,jsx,tsx}"],
   darkMode: "class",
   theme: {
+    spacing: {
+      0: "4px",
+      1: "8px",
+      2: "12px",
+      3: "16px",
+      4: "24px",
+      5: "32px",
+      6: "48px",
+    },
     extend: {
       maxWidth: {
         "screen-3xl": "1680px",
@@ -14,7 +23,8 @@ module.exports = {
       boxShadow: {
         dropdown:
           "0px 16px 48px 0px #0000001A, 0px 12px 16px 0px #0000001A, 0px 1px 3px 0px #0000000D",
-        modal: "0px 16px 48px 0px #00000033, 0px 12px 16px 0px #00000066, 0px 0px 2px 0px #FFFFFF80",
+        modal:
+          "0px 16px 48px 0px #00000033, 0px 12px 16px 0px #00000066, 0px 0px 2px 0px #FFFFFF80",
       },
       borderRadius: {
         inherit: "inherit",
