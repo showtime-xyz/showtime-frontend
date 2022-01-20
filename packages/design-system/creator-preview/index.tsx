@@ -23,7 +23,7 @@ type Props = {
 
 export const ITEM_COLLAPSED_HEIGHT = 64;
 export const ITEM_EXPANDED_HEIGHT =
-  Dimensions.get("window").width / 2 + ITEM_COLLAPSED_HEIGHT + 20;
+  Dimensions.get("window").width / 3 + ITEM_COLLAPSED_HEIGHT + 24;
 
 export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
   const isDark = useIsDarkMode();
@@ -46,7 +46,6 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
       >
         <Accordion.Item
           value="hello"
-          tw="mb-4"
           disabled={props.creator.top_items.length === 0}
         >
           <Accordion.Trigger>
@@ -91,10 +90,10 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
             </View>
           </Accordion.Trigger>
           <Accordion.Content>
-            <View tw="flex-1 flex-row mb-2" style={{ margin: -10 }}>
-              {props.creator.top_items.slice(0, 2).map((item) => {
+            <View tw="flex-row justify-center -mt-3">
+              {props.creator.top_items.slice(0, 3).map((item) => {
                 return (
-                  <View tw="mr-2 rounded-lg overflow-hidden" key={item.nft_id}>
+                  <View tw="mx-1 rounded-3xl overflow-hidden" key={item.nft_id}>
                     <Item item={item} />
                   </View>
                 );
@@ -107,7 +106,7 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
   );
 });
 
-const ITEM_SIZE = Dimensions.get("window").width / 2 - 10;
+const ITEM_SIZE = Dimensions.get("window").width / 3 - 20;
 
 const Item = ({ item }: { item: NFT }) => {
   const { value: selectedValue } = useContext(
@@ -127,5 +126,7 @@ const Item = ({ item }: { item: NFT }) => {
     );
   }
 
-  return <Media item={item} count={2} />;
+  return (
+    <Media item={item} numColumns={3} tw="w-[30vw] h-[30vw] rounded-2xl" />
+  );
 };

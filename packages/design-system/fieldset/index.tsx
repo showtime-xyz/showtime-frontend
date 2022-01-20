@@ -42,10 +42,7 @@ export function Fieldset(props: FieldsetProps) {
 
   return (
     <View tw={`p-4 rounded-4 ${style} ${twProp}`}>
-      <Label
-        htmlFor={inputId}
-        tw="font-bold Lab-sm text-gray-900 dark:text-white"
-      >
+      <Label htmlFor={inputId} tw="font-bold text-gray-900 dark:text-white">
         {label}
       </Label>
       <View tw="mt-4 flex-row items-center">

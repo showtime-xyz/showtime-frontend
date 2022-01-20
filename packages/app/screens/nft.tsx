@@ -63,7 +63,7 @@ function NftScreen() {
       </View>
 
       <PinchToZoom>
-        <Media item={nft} count={1} />
+        <Media item={nft} numColumns={1} />
       </PinchToZoom>
 
       <Collection nft={nft} />
