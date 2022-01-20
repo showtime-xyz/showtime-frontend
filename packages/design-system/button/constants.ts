@@ -61,10 +61,10 @@ const ICON_SIZE_TW = {
 };
 
 const ICON_COLOR_TW_MAPPER = {
-  primary: tailwind.color("white dark:gray-900") ?? "",
-  secondary: tailwind.color("gray-900 dark:white") ?? "",
-  tertiary: tailwind.color("gray-900 dark:white") ?? "",
-  danger: "white",
+  primary: ["white", colors.gray[900]],
+  secondary: [colors.gray[900], "white"],
+  tertiary: [colors.gray[900], "white"],
+  danger: ["white", "white"],
 };
 
 export {
