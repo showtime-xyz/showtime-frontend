@@ -1710,6 +1710,11 @@
     "@ethersproject/logger" "^5.5.0"
     hash.js "1.1.7"
 
+"@ethersproject/shims@^5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@ethersproject/shims/-/shims-5.5.0.tgz#e7102871135e4272928926c5f376fea13d799b05"
+  integrity sha512-Mx8KzgM3RIW1oLHLzJV8R0Ca3zEju6kfo0h8upFZHqSfB1ai9Jz5n3R5tHTGCcPAL4r+Dvclt9ZW3s63wNQPgg==
+
 "@ethersproject/signing-key@5.5.0", "@ethersproject/signing-key@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@ethersproject/signing-key/-/signing-key-5.5.0.tgz#2aa37169ce7e01e3e80f2c14325f624c29cedbe0"
@@ -5575,6 +5580,11 @@
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/@types/unist/-/unist-2.0.6.tgz#250a7b16c3b91f672a24552ec64678eeb1d3a08d"
   integrity sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==
+
+"@types/uuid@^8.3.4":
+  version "8.3.4"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-8.3.4.tgz#bd86a43617df0594787d38b735f55c805becf1bc"
+  integrity sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==
 
 "@types/webpack-env@^1.16.0":
   version "1.16.3"
@@ -17721,10 +17731,10 @@ react-native-gesture-handler@^2.1.1:
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
-react-native-get-random-values@^1.7.1:
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/react-native-get-random-values/-/react-native-get-random-values-1.7.1.tgz#6dbeff54c7528763f209e0e7c991f1c78dcc6801"
-  integrity sha512-VXWdk73N7pQMEAcM9pvZv+yuWmu2qQrS0QldhdgYmo7dmPHb3x/7tvQKDxkR9gy9/+SoS2uQq9eq06sZ200piA==
+react-native-get-random-values@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/react-native-get-random-values/-/react-native-get-random-values-1.7.2.tgz#60a9b6497d22e713779b71139f016a5fcec7ac04"
+  integrity sha512-28KRYGpIG/upV8+k/qFA+TwGW+yGjmtOHaCduJHpOQK1QUTyhiA6E2IgL4UvvU2dybeCTYFmUi9wcEQ0GiWe5g==
   dependencies:
     fast-base64-decode "^1.0.0"
 

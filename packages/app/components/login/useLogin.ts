@@ -15,6 +15,7 @@ import { setRefreshToken } from "app/lib/refresh-token";
 import { accessTokenManager } from "app/lib/access-token-manager";
 import { setLogin } from "app/lib/login";
 import { mixpanel } from "app/lib/mixpanel";
+import { ethers } from "ethers";
 
 export const useLogin = () => {
   //#region state
@@ -78,6 +79,7 @@ export const useLogin = () => {
         ];
 
         signature = await connector.signPersonalMessage(msgParams);
+        console.log("personal signature ", signature);
       }
 
       const response = await axios({
@@ -105,6 +107,7 @@ export const useLogin = () => {
         // Expire the nonce after successful login
         axios({ url: `/v1/rotatenonce?address=${address}`, method: "POST" });
       } else {
+        console.error("Login failed ", response);
         throw "Login failed";
       }
 
@@ -129,11 +132,8 @@ export const useLogin = () => {
   }, [context, connector?.connected, setWalletName]);
   const handleLogin = useCallback(async (payload: object) => {
     try {
-      const Web3Provider = (await import("@ethersproject/providers"))
-        .Web3Provider;
-
       // @ts-ignore
-      const web3 = new Web3Provider(magic.rpcProvider);
+      const web3 = new ethers.providers.Web3Provider(magic.rpcProvider);
       context.setWeb3(web3);
 
       const response = await axios({
