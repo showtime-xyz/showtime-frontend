@@ -272,7 +272,7 @@ export const useMyInfo = () => {
         {
           data: {
             ...data,
-            follows: [...data?.data.follows, { profile_id }],
+            follows: [...data.data.follows, { profile_id }],
           },
         },
         false
