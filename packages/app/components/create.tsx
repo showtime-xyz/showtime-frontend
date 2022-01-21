@@ -82,8 +82,8 @@ function Create({ uri }: { uri: string }) {
       <CreateScrollView
         contentContainerStyle={{ paddingBottom: tabBarHeight + 100 }}
       >
-        <View tw="p-4">
-          <View tw="mt-11 flex-row">
+        <View tw="px-3 py-4">
+          <View tw="flex-row">
             <Preview
               source={{
                 uri,
