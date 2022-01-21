@@ -72,7 +72,7 @@ export type UseMintNFT = {
   royaltiesPercentage: number;
 };
 
-export const supportedImageExtensions = ["jpg", "jpeg", "png", "gif"];
+export const supportedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
 export const supportedVideoExtensions = ["mp4", "mov", "avi", "mkv", "webm"];
 
 const getFileNameAndType = (filePath: string) => {
