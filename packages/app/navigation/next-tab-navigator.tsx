@@ -1,4 +1,4 @@
-import { useWindowDimensions, StyleSheet } from "react-native";
+import { useWindowDimensions, Platform, StyleSheet } from "react-native";
 import { BlurView } from "expo-blur";
 import dynamic from "next/dynamic";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -16,6 +16,7 @@ import {
   NotificationsTabBarIcon,
 } from "./tab-bar-icons";
 import { useIsDarkMode } from "design-system/hooks";
+import { View } from "design-system";
 
 const HomeNavigator = dynamic(() => import("../pages/home"));
 const TrendingNavigator = dynamic(() => import("../pages/trending"));
@@ -79,11 +80,20 @@ export function NextTabNavigator({
         ],
         tabBarBackground: () =>
           width >= 768 ? null : (
-            <BlurView
-              tint={tint}
-              intensity={95}
-              style={StyleSheet.absoluteFill}
-            />
+            <>
+              {Platform.OS === "android" ? (
+                <View
+                  tw="bg-white dark:bg-black opacity-95"
+                  style={StyleSheet.absoluteFill}
+                />
+              ) : (
+                <BlurView
+                  tint={tint}
+                  intensity={95}
+                  style={StyleSheet.absoluteFill}
+                />
+              )}
+            </>
           ),
       }}
       Component={Component}
