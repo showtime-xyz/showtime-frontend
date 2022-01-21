@@ -4,6 +4,8 @@ import { NFT } from "../types";
 import { useInfiniteListQuerySWR, fetcher } from "./use-infinite-list-query";
 import useSWR, { useSWRConfig } from "swr";
 import { useUser } from "./use-user";
+import { axios } from "../lib/axios";
+import { useRouter } from "../navigation/use-router";
 
 export const useActivity = ({
   typeId,
@@ -257,8 +259,9 @@ type MyInfo = {
 
 export const useMyInfo = () => {
   const user = useUser();
-  const queryKey = "/v2/my_info";
+  const queryKey = "/v2/myinfo";
   const { mutate } = useSWRConfig();
+  const router = useRouter();
 
   const { data, error } = useSWR<MyInfo>(
     user.isAuthenticated ? queryKey : null,
@@ -307,44 +310,77 @@ export const useMyInfo = () => {
     }
   };
 
-  const addLike = async (nft_id: number) => {
-    if (data) {
-      mutate(
-        queryKey,
-        {
-          data: {
-            ...data,
-            likes_nft: [...data.data.likes_nft, nft_id],
+  const like = useCallback(
+    async (nft_id: number) => {
+      if (!user.isAuthenticated) {
+        router.push("/login");
+        // TODO: perform the action post login
+        return;
+      }
+
+      if (data) {
+        mutate(
+          queryKey,
+          {
+            data: {
+              ...data.data,
+              likes_nft: [...data.data.likes_nft, nft_id],
+            },
           },
-        },
-        false
-      );
+          false
+        );
 
-      // trigger api call here
-      // await axios(newName);
+        await axios({
+          url: `/v3/like/${nft_id}`,
+          method: "POST",
+        });
 
-      mutate(queryKey);
-    }
-  };
+        mutate(queryKey);
+      }
+    },
+    [data, user.isAuthenticated]
+  );
 
-  const removeLike = async (nft_id: number) => {
-    if (data) {
-      mutate(
-        queryKey,
-        {
-          data: {
-            ...data,
-            likes_nft: data.data.likes_nft.filter((id) => id !== nft_id),
+  const unlike = useCallback(
+    async (nft_id: number) => {
+      if (!user.isAuthenticated) {
+        router.push("/login");
+        // TODO: perform the action post login
+        return;
+      }
+
+      if (data) {
+        mutate(
+          queryKey,
+          {
+            data: {
+              ...data.data,
+              likes_nft: data.data.likes_nft.filter((id) => id !== nft_id),
+            },
           },
-        },
-        false
-      );
+          false
+        );
 
-      // trigger api call here
-      // await axios(newName);
-      mutate(queryKey);
-    }
-  };
+        await axios({
+          url: `/v3/unlike/${nft_id}`,
+          method: "POST",
+        });
+
+        mutate(queryKey);
+      }
+    },
+    [data, user.isAuthenticated]
+  );
+
+  const isLiked = useCallback(
+    (nft_id: number) => {
+      if (data) {
+        return data.data.likes_nft.includes(nft_id);
+      }
+      return false;
+    },
+    [data]
+  );
 
   return {
     data,
@@ -352,7 +388,8 @@ export const useMyInfo = () => {
     error,
     addFollow,
     removeFollow,
-    addLike,
-    removeLike,
+    like,
+    unlike,
+    isLiked,
   };
 };
