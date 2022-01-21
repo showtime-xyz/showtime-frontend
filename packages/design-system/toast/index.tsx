@@ -1,14 +1,14 @@
-import { Text } from "design-system/text";
-import React, {
-  useState,
-  useRef,
-  createContext,
-  useMemo,
-  useContext,
-} from "react";
+import { useState, useRef, createContext, useMemo, useContext } from "react";
+import {
+  View,
+  AccessibilityInfo,
+  LayoutChangeEvent,
+  StyleSheet,
+} from "react-native";
 import { MotiView, AnimatePresence } from "moti";
-import { View } from "react-native";
-import { AccessibilityInfo, LayoutChangeEvent, StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { Text } from "design-system/text";
 import { tw } from "design-system/tailwind";
 
 type ShowParams = {
@@ -25,8 +25,6 @@ type ToastContext = {
 
 const ToastContext = createContext<ToastContext | undefined>(undefined);
 
-const SAFE_AREA_TOP = 20;
-
 export const ToastProvider = ({ children }: any) => {
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState<string | undefined>();
@@ -35,6 +33,7 @@ export const ToastProvider = ({ children }: any) => {
     LayoutChangeEvent["nativeEvent"]["layout"] | undefined
   >();
   const hideTimeoutRef = useRef<any>(null);
+  const { top: safeAreaTop } = useSafeAreaInsets();
 
   const value = useMemo(
     () => ({
@@ -85,7 +84,7 @@ export const ToastProvider = ({ children }: any) => {
               accessibilityLiveRegion="polite"
               pointerEvents="box-none"
               from={{ translateY: -toastHeight }}
-              animate={{ translateY: SAFE_AREA_TOP }}
+              animate={{ translateY: safeAreaTop === 0 ? 20 : safeAreaTop }}
               exit={{ translateY: -toastHeight }}
               transition={{ type: "timing", duration: 350 }}
               onLayout={(e) => {
