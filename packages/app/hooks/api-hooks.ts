@@ -2,7 +2,7 @@ import { Profile } from "../types";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { NFT } from "../types";
 import { useInfiniteListQuerySWR, fetcher } from "./use-infinite-list-query";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { useUser } from "./use-user";
 
 export const useActivity = ({
@@ -243,4 +243,69 @@ export const useComments = ({ nftId }: { nftId: number }) => {
   const queryState = useInfiniteListQuerySWR<any>(commentsUrlFn);
 
   return queryState;
+};
+
+type MyInfo = {
+  data: {
+    follows: Array<{ profile_id: number }>;
+    profile: Profile;
+    likes_nft: number[];
+    likes_comment: any[];
+    comments: number[];
+  };
+};
+
+export const useMyInfo = () => {
+  const user = useUser();
+  const queryKey = "/v2/my_info";
+  const { mutate } = useSWRConfig();
+
+  const { data, error } = useSWR<MyInfo>(
+    user.isAuthenticated ? queryKey : null,
+    fetcher
+  );
+
+  const addFollow = async (profile_id: number) => {
+    if (data) {
+      mutate(
+        queryKey,
+        {
+          data: {
+            ...data,
+            follows: [...data?.data.follows, { profile_id }],
+          },
+        },
+        false
+      );
+
+      // trigger api call here
+      // await axios(newName);
+
+      mutate(queryKey);
+    }
+  };
+
+  const removeFollow = async (profile_id: number) => {
+    if (data) {
+      mutate(
+        queryKey,
+        {
+          data: {
+            ...data,
+            follows: data.data.follows.filter(
+              (follow) => follow.profile_id !== profile_id
+            ),
+          },
+        },
+        false
+      );
+
+      // trigger api call here
+      // await axios(newName);
+
+      mutate(queryKey);
+    }
+  };
+
+  return { data, loading: !data, error, addFollow, removeFollow };
 };
