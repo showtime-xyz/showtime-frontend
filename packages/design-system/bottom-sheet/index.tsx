@@ -13,10 +13,11 @@ type BottomSheetProps = {
   handleComponent?: React.FC<BottomSheetHandleProps>;
   visible?: boolean;
   onDismiss?: () => void;
+  snapPoints?: string[];
 };
 
 export const BottomSheet = (props: BottomSheetProps) => {
-  const { children, visible, handleComponent, onDismiss } = props;
+  const { children, visible, handleComponent, onDismiss, snapPoints } = props;
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
@@ -28,7 +29,7 @@ export const BottomSheet = (props: BottomSheetProps) => {
     }
   }, [visible]);
 
-  const snapPoints = useMemo(() => ["50%", "75%"], []);
+  const defaultSnapPoints = useMemo(() => ["50%", "75%"], []);
 
   const renderBackdrop = useCallback(
     (props) => (
@@ -50,7 +51,7 @@ export const BottomSheet = (props: BottomSheetProps) => {
       index={0}
       handleIndicatorStyle={tw.style(`bg-gray-300 dark:bg-gray-700 w-12 h-1`)}
       backgroundStyle={tw.style(`bg-white dark:bg-black rounded-t-[32px]`)}
-      snapPoints={snapPoints}
+      snapPoints={snapPoints ?? defaultSnapPoints}
     >
       <View tw="flex-1 pt-6 px-4">{children}</View>
     </BottomSheetModal>
