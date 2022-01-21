@@ -84,7 +84,7 @@ function Activity({ activity }: Props) {
         </View>
 
         <View tw="justify-center">
-          <ActivityDropdown />
+          <ActivityDropdown activity={activity} />
         </View>
       </View>
     </View>
