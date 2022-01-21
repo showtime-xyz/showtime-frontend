@@ -58,13 +58,16 @@ export type Creator = {
 
 export interface WalletAddressesV2 {
   address: string;
-  ens_domain: string;
+  ens_domain?: string;
+  minting_enabled: boolean;
+  email: string;
   is_email: number;
 }
 
 export interface WalletAddressesExcludingEmailV2 {
   address: string;
-  ens_domain: string;
+  ens_domain?: string;
+  minting_enabled: boolean;
 }
 
 export interface Link {

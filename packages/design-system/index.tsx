@@ -16,6 +16,8 @@ export { Image } from "design-system/image";
 
 export { Modal } from "design-system/modal";
 
+export { ModalSheet } from "design-system/modal-sheet";
+
 export { ActivityIndicator } from "design-system/activity-indicator";
 
 export { Skeleton } from "design-system/skeleton";

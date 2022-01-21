@@ -1,8 +1,8 @@
 import { Profile } from "../types";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { NFT } from "../types";
 import { useInfiniteListQuerySWR, fetcher } from "./use-infinite-list-query";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { useUser } from "./use-user";
 
 export const useActivity = ({
@@ -71,29 +71,45 @@ export const useTrendingCreators = ({ days }: { days: number }) => {
 };
 
 export const useTrendingNFTS = ({ days }: { days: number }) => {
-  const trendingCreatorsUrlFn = useCallback(
-    (index) => {
-      const url = `/v2/featured?page=${index + 1}&days=${days}&limit=10`;
-      return url;
-    },
-    [days]
-  );
+  const trendingCreatorsUrlFn = useCallback(() => {
+    const url = `/v2/featured?days=${days}&limit=150`;
+    return url;
+  }, [days]);
 
   const queryState = useInfiniteListQuerySWR<any>(trendingCreatorsUrlFn);
+  const limit = 15;
+  const [data, setData] = useState<any>(
+    queryState.data && queryState.data[0]
+      ? queryState.data[0].data.slice(0, limit)
+      : []
+  );
+  const currentPage = useRef(0);
 
-  const newData = useMemo(() => {
-    let newData: any = [];
-    if (queryState.data) {
-      queryState.data.forEach((p) => {
-        if (p) {
-          newData = newData.concat(p.data);
-        }
-      });
+  useEffect(() => {
+    if (queryState.data && queryState.data[0] && data.length === 0) {
+      const data = queryState.data[0].data;
+      const nextData = data.slice(0, limit);
+      currentPage.current = 1;
+      setData(nextData);
     }
-    return newData;
   }, [queryState.data]);
 
-  return { ...queryState, data: newData };
+  return {
+    ...queryState,
+    data,
+    fetchMore: () => {
+      if (
+        queryState.data &&
+        queryState.data[0] &&
+        data.length < queryState.data[0].data.length
+      ) {
+        const data = queryState.data[0].data;
+        const nextData = data.slice(currentPage.current * limit, limit);
+        currentPage.current++;
+        setData([...data, ...nextData]);
+      }
+    },
+  };
 };
 
 export const useUserProfile = ({ address }: { address?: string }) => {
@@ -227,4 +243,116 @@ export const useComments = ({ nftId }: { nftId: number }) => {
   const queryState = useInfiniteListQuerySWR<any>(commentsUrlFn);
 
   return queryState;
+};
+
+type MyInfo = {
+  data: {
+    follows: Array<{ profile_id: number }>;
+    profile: Profile;
+    likes_nft: number[];
+    likes_comment: any[];
+    comments: number[];
+  };
+};
+
+export const useMyInfo = () => {
+  const user = useUser();
+  const queryKey = "/v2/my_info";
+  const { mutate } = useSWRConfig();
+
+  const { data, error } = useSWR<MyInfo>(
+    user.isAuthenticated ? queryKey : null,
+    fetcher
+  );
+
+  const addFollow = async (profile_id: number) => {
+    if (data) {
+      mutate(
+        queryKey,
+        {
+          data: {
+            ...data,
+            follows: [...data.data.follows, { profile_id }],
+          },
+        },
+        false
+      );
+
+      // trigger api call here
+      // await axios(newName);
+
+      mutate(queryKey);
+    }
+  };
+
+  const removeFollow = async (profile_id: number) => {
+    if (data) {
+      mutate(
+        queryKey,
+        {
+          data: {
+            ...data,
+            follows: data.data.follows.filter(
+              (follow) => follow.profile_id !== profile_id
+            ),
+          },
+        },
+        false
+      );
+
+      // trigger api call here
+      // await axios(newName);
+
+      mutate(queryKey);
+    }
+  };
+
+  const addLike = async (nft_id: number) => {
+    if (data) {
+      mutate(
+        queryKey,
+        {
+          data: {
+            ...data,
+            likes_nft: [...data.data.likes_nft, nft_id],
+          },
+        },
+        false
+      );
+
+      // trigger api call here
+      // await axios(newName);
+
+      mutate(queryKey);
+    }
+  };
+
+  const removeLike = async (nft_id: number) => {
+    if (data) {
+      mutate(
+        queryKey,
+        {
+          data: {
+            ...data,
+            likes_nft: data.data.likes_nft.filter((id) => id !== nft_id),
+          },
+        },
+        false
+      );
+
+      // trigger api call here
+      // await axios(newName);
+      mutate(queryKey);
+    }
+  };
+
+  return {
+    data,
+    loading: !data,
+    error,
+    addFollow,
+    removeFollow,
+    addLike,
+    removeLike,
+  };
 };
