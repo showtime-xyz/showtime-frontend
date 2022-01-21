@@ -43,22 +43,18 @@ function NftScreen() {
   return (
     <View tw="flex-1 bg-gray-200 dark:bg-black">
       <View tw="p-6 h-16 flex-row items-center justify-between">
-        <View tw="w-8 h-8">
-          <Button
-            onPress={router.pop}
-            variant="tertiary"
-            tw="h-8 rounded-full p-2"
-            iconOnly={true}
-          >
-            <Close
-              width={24}
-              height={24}
-              color={
-                tw.style("bg-black dark:bg-white")?.backgroundColor as string
-              }
-            />
-          </Button>
-        </View>
+        <Button
+          onPress={router.pop}
+          variant="tertiary"
+          iconOnly={true}
+          size="regular"
+        >
+          <Close
+            color={
+              tw.style("bg-black dark:bg-white")?.backgroundColor as string
+            }
+          />
+        </Button>
         <NFTDropdown nft={nft} />
       </View>
 

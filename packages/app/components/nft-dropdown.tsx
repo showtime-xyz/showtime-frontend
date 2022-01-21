@@ -10,26 +10,29 @@ import { View, Button } from "design-system";
 import { MoreHorizontal } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 import type { NFT } from "app/types";
+import { useCurrentUserId } from "app/hooks/use-current-user-id";
 
 type Props = {
   nft: NFT;
 };
 
 function NFTDropdown({ nft }: Props) {
+  const userId = useCurrentUserId();
+  const isOwner = Boolean(
+    nft?.owner_id === userId ||
+      nft?.multiple_owners_list?.find((owner) => owner.profile_id === userId)
+  );
+
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <View tw="w-8 h-8">
-          <Button variant="tertiary" tw="h-8 rounded-full p-2" iconOnly={true}>
-            <MoreHorizontal
-              width={24}
-              height={24}
-              color={
-                tw.style("bg-black dark:bg-white")?.backgroundColor as string
-              }
-            />
-          </Button>
-        </View>
+        <Button variant="tertiary" iconOnly={true} size="regular">
+          <MoreHorizontal
+            color={
+              tw.style("bg-black dark:bg-white")?.backgroundColor as string
+            }
+          />
+        </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
@@ -38,26 +41,62 @@ function NFTDropdown({ nft }: Props) {
       >
         <DropdownMenuItem
           onSelect={() => {}}
-          key="transfer"
+          key="copy-link"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
           <DropdownMenuItemTitle tw="text-black dark:text-white">
-            Transfer
+            Copy Link
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 
-        <DropdownMenuItem
-          destructive
+        {/* <DropdownMenuItem
           onSelect={() => {}}
-          key="delete"
+          key="refresh-metadata"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
           <DropdownMenuItemTitle tw="text-black dark:text-white">
-            Delete
+            Refresh Metadata
           </DropdownMenuItemTitle>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
+
+        {!isOwner && (
+          <DropdownMenuItem
+            onSelect={() => {}}
+            key="report"
+            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          >
+            <DropdownMenuItemTitle tw="text-black dark:text-white">
+              Report
+            </DropdownMenuItemTitle>
+          </DropdownMenuItem>
+        )}
+
+        {isOwner && (
+          <DropdownMenuItem
+            onSelect={() => {}}
+            key="transfer"
+            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          >
+            <DropdownMenuItemTitle tw="text-black dark:text-white">
+              Transfer
+            </DropdownMenuItemTitle>
+          </DropdownMenuItem>
+        )}
+
+        {isOwner && (
+          <DropdownMenuItem
+            destructive
+            onSelect={() => {}}
+            key="delete"
+            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          >
+            <DropdownMenuItemTitle tw="text-black dark:text-white">
+              Delete
+            </DropdownMenuItemTitle>
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenuRoot>
   );
