@@ -2,8 +2,15 @@ import { View } from "design-system/view";
 import { Text } from "design-system/text";
 import { Image } from "design-system/image";
 import { VerificationBadge } from "design-system/verification-badge";
-
+import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import type { NFT } from "app/types";
+
+const getProfileImageUrl = (imgUrl: string) => {
+  if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
+    imgUrl = imgUrl.split("=")[0] + "=s112";
+  }
+  return imgUrl;
+};
 
 type Props = {
   nft?: NFT;
@@ -19,7 +26,9 @@ export function Creator({ nft }: Props) {
         tw="w-[32px] h-[32px] rounded-full"
         width={32}
         height={32}
-        source={{ uri: nft.creator_img_url }}
+        source={{
+          uri: getProfileImageUrl(nft.creator_img_url ?? DEFAULT_PROFILE_PIC),
+        }}
       />
       <View tw="ml-1 justify-center">
         <Text

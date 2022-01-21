@@ -35,8 +35,8 @@ function Activity({ activity }: Props) {
   const openProfile = useProfileNavigation(actor.wallet_address);
 
   return (
-    <View tw="p-4">
-      <View tw="h-12 flex-row justify-between">
+    <View tw="p-3">
+      <View tw="flex-row justify-between">
         <Pressable onPress={openProfile}>
           <Avatar
             url={getProfileImageUrl(actor.img_url ?? DEFAULT_PROFILE_PIC)}

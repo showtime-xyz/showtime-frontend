@@ -5,11 +5,19 @@ import { View } from "design-system/view";
 import { Skeleton } from "design-system/skeleton";
 import { useIsDarkMode } from "design-system/hooks";
 import { useNFTOwnership } from "app/hooks/api/use-nft-ownership";
+import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import { NFT } from "app/types";
 
 type Props = {
   nft?: NFT;
   options?: boolean;
+};
+
+const getProfileImageUrl = (imgUrl: string) => {
+  if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
+    imgUrl = imgUrl.split("=")[0] + "=s112";
+  }
+  return imgUrl;
 };
 
 function OwnershipContainer({
@@ -61,7 +69,11 @@ export function Ownership({ nft }: Props) {
     return (
       <Image
         tw="w-[32px] h-[32px] rounded-full"
-        source={{ uri: data?.multiple_owners_list[0].img_url }}
+        source={{
+          uri: getProfileImageUrl(
+            data?.multiple_owners_list[0].img_url ?? DEFAULT_PROFILE_PIC
+          ),
+        }}
       />
     );
   }
@@ -87,7 +99,9 @@ export function Ownership({ nft }: Props) {
           <Image
             key={`nft-${nft.nft_id}-owner-${owner.profile_id}`}
             tw="w-[14px] h-[14px] rounded-full bg-gray-200 dark:bg-gray-800"
-            source={{ uri: owner.img_url }}
+            source={{
+              uri: getProfileImageUrl(owner.img_url ?? DEFAULT_PROFILE_PIC),
+            }}
           />
         ))}
       </OwnershipContainer>
