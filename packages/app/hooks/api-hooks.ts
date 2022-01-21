@@ -1,5 +1,5 @@
 import { Profile } from "../types";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { NFT } from "../types";
 import { useInfiniteListQuerySWR, fetcher } from "./use-infinite-list-query";
 import useSWR from "swr";
@@ -71,29 +71,45 @@ export const useTrendingCreators = ({ days }: { days: number }) => {
 };
 
 export const useTrendingNFTS = ({ days }: { days: number }) => {
-  const trendingCreatorsUrlFn = useCallback(
-    (index) => {
-      const url = `/v2/featured?page=${index + 1}&days=${days}&limit=10`;
-      return url;
-    },
-    [days]
-  );
+  const trendingCreatorsUrlFn = useCallback(() => {
+    const url = `/v2/featured?days=${days}&limit=150`;
+    return url;
+  }, [days]);
 
   const queryState = useInfiniteListQuerySWR<any>(trendingCreatorsUrlFn);
+  const limit = 15;
+  const [data, setData] = useState<any>(
+    queryState.data && queryState.data[0]
+      ? queryState.data[0].data.slice(0, limit)
+      : []
+  );
+  const currentPage = useRef(0);
 
-  const newData = useMemo(() => {
-    let newData: any = [];
-    if (queryState.data) {
-      queryState.data.forEach((p) => {
-        if (p) {
-          newData = newData.concat(p.data);
-        }
-      });
+  useEffect(() => {
+    if (queryState.data && queryState.data[0] && data.length === 0) {
+      const data = queryState.data[0].data;
+      const nextData = data.slice(0, limit);
+      currentPage.current = 1;
+      setData(nextData);
     }
-    return newData;
   }, [queryState.data]);
 
-  return { ...queryState, data: newData };
+  return {
+    ...queryState,
+    data,
+    fetchMore: () => {
+      if (
+        queryState.data &&
+        queryState.data[0] &&
+        data.length < queryState.data[0].data.length
+      ) {
+        const data = queryState.data[0].data;
+        const nextData = data.slice(currentPage.current * limit, limit);
+        currentPage.current++;
+        setData([...data, ...nextData]);
+      }
+    },
+  };
 };
 
 export const useUserProfile = ({ address }: { address?: string }) => {

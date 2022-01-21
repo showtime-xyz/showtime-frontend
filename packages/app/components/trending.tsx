@@ -100,10 +100,24 @@ const TabListContainer = ({ days }: { days: number }) => {
   return useMemo(
     () =>
       [
-        <Suspense fallback={<Spinner size="small" />}>
+        <Suspense
+          fallback={
+            <View tw="p-4">
+              {SelectionControl}
+              <Spinner size="small" />
+            </View>
+          }
+        >
           <CreatorsList days={days} SelectionControl={SelectionControl} />
         </Suspense>,
-        <Suspense fallback={<Spinner size="small" />}>
+        <Suspense
+          fallback={
+            <View tw="p-4">
+              {SelectionControl}
+              <Spinner size="small" />
+            </View>
+          }
+        >
           <NFTSList days={days} SelectionControl={SelectionControl} />
         </Suspense>,
       ][selected],
@@ -191,8 +205,8 @@ const NFTSList = ({
       days,
     });
 
-  const keyExtractor = useCallback((_item, index) => {
-    return index.toString();
+  const keyExtractor = useCallback((item) => {
+    return item.nft_id.toString();
   }, []);
 
   const renderItem = useCallback(
