@@ -82,11 +82,10 @@ export const MarketplaceTabBarIcon = ({ color, focused }) => {
 export const CameraTabBarIcon = ({ color, focused }) => {
   return (
     <TabBarIcon tab="/camera">
-      <Button
-        variant="primary"
+      <View
         tw={[
-          "rounded-full h-12 w-12",
-          focused ? "bg-gray-100 dark:bg-gray-900" : "",
+          "rounded-full h-12 w-12 justify-center items-center",
+          focused ? "bg-gray-100 dark:bg-gray-900" : "bg-black dark:bg-white",
         ]}
       >
         <Plus
@@ -98,7 +97,7 @@ export const CameraTabBarIcon = ({ color, focused }) => {
             )?.backgroundColor as string
           }
         />
-      </Button>
+      </View>
     </TabBarIcon>
   );
 };

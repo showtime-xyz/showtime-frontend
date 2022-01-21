@@ -21,7 +21,10 @@ function Collection({ nft }: Props) {
               tw="w-5 h-5 rounded-full"
             />
           )}
-          <Text tw="ml-2 text-xs font-bold text-gray-600 dark:text-gray-400">
+          <Text
+            tw="ml-2 text-xs font-bold text-gray-600 dark:text-gray-400 w-[65vw]"
+            numberOfLines={1}
+          >
             {nft.collection_name}
           </Text>
         </View>
