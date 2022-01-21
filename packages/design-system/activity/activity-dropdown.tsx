@@ -9,8 +9,15 @@ import {
 import { View, Button } from "design-system";
 import { MoreHorizontal } from "design-system/icon";
 import { tw } from "design-system/tailwind";
+import { useReport } from "app/hooks/use-report";
 
-function ActivityDropdown() {
+type Props = {
+  activity: any; // TODO: add Activity type
+};
+
+function ActivityDropdown({ activity }: Props) {
+  const { report } = useReport();
+
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
@@ -44,7 +51,7 @@ function ActivityDropdown() {
         <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 
         <DropdownMenuItem
-          onSelect={() => {}}
+          onSelect={() => report({ activityId: activity.id })}
           key="report"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
