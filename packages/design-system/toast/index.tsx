@@ -1,5 +1,6 @@
 import { useState, useRef, createContext, useMemo, useContext } from "react";
 import {
+  Platform,
   View,
   AccessibilityInfo,
   LayoutChangeEvent,
@@ -25,6 +26,8 @@ type ToastContext = {
 
 const ToastContext = createContext<ToastContext | undefined>(undefined);
 
+const SAFE_AREA_TOP = 20;
+
 export const ToastProvider = ({ children }: any) => {
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState<string | undefined>();
@@ -33,7 +36,8 @@ export const ToastProvider = ({ children }: any) => {
     LayoutChangeEvent["nativeEvent"]["layout"] | undefined
   >();
   const hideTimeoutRef = useRef<any>(null);
-  const { top: safeAreaTop } = useSafeAreaInsets();
+  const { top: safeAreaTop } =
+    Platform.OS === "web" ? { top: SAFE_AREA_TOP } : useSafeAreaInsets();
 
   const value = useMemo(
     () => ({
@@ -84,7 +88,9 @@ export const ToastProvider = ({ children }: any) => {
               accessibilityLiveRegion="polite"
               pointerEvents="box-none"
               from={{ translateY: -toastHeight }}
-              animate={{ translateY: safeAreaTop === 0 ? 20 : safeAreaTop }}
+              animate={{
+                translateY: safeAreaTop === 0 ? SAFE_AREA_TOP : safeAreaTop,
+              }}
               exit={{ translateY: -toastHeight }}
               transition={{ type: "timing", duration: 350 }}
               onLayout={(e) => {
