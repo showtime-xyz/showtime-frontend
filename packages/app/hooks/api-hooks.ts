@@ -1,9 +1,11 @@
-import { Profile } from "../types";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { NFT } from "../types";
-import { useInfiniteListQuerySWR, fetcher } from "./use-infinite-list-query";
 import useSWR, { useSWRConfig } from "swr";
+
+import { NFT, Profile } from "../types";
+import { useInfiniteListQuerySWR, fetcher } from "./use-infinite-list-query";
 import { useUser } from "./use-user";
+import { axios } from "app/lib/axios";
+import { mixpanel } from "app/lib/mixpanel";
 
 export const useActivity = ({
   typeId,
@@ -265,47 +267,67 @@ export const useMyInfo = () => {
     fetcher
   );
 
-  const addFollow = async (profile_id: number) => {
-    if (data) {
-      mutate(
-        queryKey,
-        {
-          data: {
-            ...data,
-            follows: [...data.data.follows, { profile_id }],
+  const addFollow = useCallback(
+    async (profileId: number) => {
+      if (!user) {
+        // TODO: open login
+        mixpanel.track("Follow but logged out");
+        return;
+      }
+
+      if (data) {
+        mutate(
+          queryKey,
+          {
+            data: {
+              ...data,
+              follows: [...data.data.follows, { profile_id: profileId }],
+            },
           },
-        },
-        false
-      );
+          false
+        );
 
-      // trigger api call here
-      // await axios(newName);
+        try {
+          await axios({ url: `/v2/follow/${profileId}`, method: "POST" });
+          mixpanel.track("Followed profile");
+        } catch (err) {
+          console.error(err);
+        }
 
-      mutate(queryKey);
-    }
-  };
+        mutate(queryKey);
+      }
+    },
+    [user, data]
+  );
 
-  const removeFollow = async (profile_id: number) => {
-    if (data) {
-      mutate(
-        queryKey,
-        {
-          data: {
-            ...data,
-            follows: data.data.follows.filter(
-              (follow) => follow.profile_id !== profile_id
-            ),
+  const removeFollow = useCallback(
+    async (profileId: number) => {
+      if (data) {
+        mutate(
+          queryKey,
+          {
+            data: {
+              ...data,
+              follows: data.data.follows.filter(
+                (follow) => follow.profile_id !== profileId
+              ),
+            },
           },
-        },
-        false
-      );
+          false
+        );
 
-      // trigger api call here
-      // await axios(newName);
+        try {
+          await axios({ url: `/v2/unfollow/${profileId}`, method: "POST" });
+          mixpanel.track("Unfollowed profile");
+        } catch (err) {
+          console.error(err);
+        }
 
-      mutate(queryKey);
-    }
-  };
+        mutate(queryKey);
+      }
+    },
+    [user, data]
+  );
 
   const addLike = async (nft_id: number) => {
     if (data) {
