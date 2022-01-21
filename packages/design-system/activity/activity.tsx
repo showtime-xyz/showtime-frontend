@@ -35,7 +35,7 @@ function Activity({ activity }: Props) {
   const openProfile = useProfileNavigation(actor.wallet_address);
 
   return (
-    <View tw="p-3">
+    <View tw="px-3 py-1">
       <View tw="flex-row justify-between">
         <Pressable onPress={openProfile}>
           <Avatar

@@ -39,7 +39,7 @@ export function Creator({ nft }: Props) {
         </Text>
         <View tw="h-[12px] flex flex-row items-center">
           <Text
-            sx={{ fontSize: 13, lineHeight: 13 }}
+            sx={{ fontSize: 13, lineHeight: 15 }}
             tw="text-gray-900 dark:text-white font-semibold"
           >
             @{nft.creator_username}
