@@ -1,8 +1,10 @@
-import { View, Text, Fieldset, Select, Checkbox, Button } from "design-system";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { Platform, Pressable, ScrollView } from "react-native";
+
+import { View, Text, Fieldset, Checkbox, Button } from "design-system";
 import { ChevronUp } from "design-system/icon";
 import { Image } from "design-system/image";
 import { Video } from "design-system/video";
-import { Pressable, ScrollView } from "react-native";
 import {
   supportedVideoExtensions,
   UseMintNFT,
@@ -66,15 +68,20 @@ function Create({ uri }: { uri: string }) {
   //#endregion
 
   const isDark = useIsDarkMode();
-  const tabBarHeight = useBottomTabBarHeight();
+  const tabBarHeight = Platform.OS === "android" ? 50 : useBottomTabBarHeight();
   const fileExtension = uri.split(".").pop();
   const isVideo =
     fileExtension && supportedVideoExtensions.includes(fileExtension);
   const Preview = isVideo ? Video : Image;
 
+  const CreateScrollView =
+    Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
+
   return (
     <View tw="flex-1">
-      <ScrollView contentContainerStyle={{ paddingBottom: tabBarHeight + 100 }}>
+      <CreateScrollView
+        contentContainerStyle={{ paddingBottom: tabBarHeight + 100 }}
+      >
         <View tw="px-3 py-4">
           <View tw="flex-row">
             <Preview
@@ -238,7 +245,7 @@ function Create({ uri }: { uri: string }) {
             )}
           />
         </View>
-      </ScrollView>
+      </CreateScrollView>
       <View tw="absolute px-4 w-full" style={{ bottom: tabBarHeight + 16 }}>
         <Button
           onPress={handleSubmit(handleSubmitForm)}
