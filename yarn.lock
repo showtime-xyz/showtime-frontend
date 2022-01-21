@@ -17799,6 +17799,13 @@ react-native-qrcode-svg@6.0.6:
     prop-types "^15.5.10"
     qrcode "^1.3.2"
 
+react-native-quick-base64@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-quick-base64/-/react-native-quick-base64-2.0.0.tgz#13f4e807d09119323561ac88cbb9526dee92e22e"
+  integrity sha512-mzrgq4Jy4doOsxWVsYHiOx+LEzzuFh8pLG6nBPB3wlbFcfc8zVkPOVSYGXWRe2L+jrawL/htsEIAOyozZm1mNQ==
+  dependencies:
+    base64-js "^1.5.1"
+
 react-native-randombytes@^3.0.0, react-native-randombytes@^3.5.1:
   version "3.6.1"
   resolved "https://registry.yarnpkg.com/react-native-randombytes/-/react-native-randombytes-3.6.1.tgz#cac578093b5ca38e3e085becffdc6cbcf6f0d654"
