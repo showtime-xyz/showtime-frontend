@@ -307,5 +307,52 @@ export const useMyInfo = () => {
     }
   };
 
-  return { data, loading: !data, error, addFollow, removeFollow };
+  const addLike = async (nft_id: number) => {
+    if (data) {
+      mutate(
+        queryKey,
+        {
+          data: {
+            ...data,
+            likes_nft: [...data.data.likes_nft, nft_id],
+          },
+        },
+        false
+      );
+
+      // trigger api call here
+      // await axios(newName);
+
+      mutate(queryKey);
+    }
+  };
+
+  const removeLike = async (nft_id: number) => {
+    if (data) {
+      mutate(
+        queryKey,
+        {
+          data: {
+            ...data,
+            likes_nft: data.data.likes_nft.filter((id) => id !== nft_id),
+          },
+        },
+        false
+      );
+
+      // trigger api call here
+      // await axios(newName);
+      mutate(queryKey);
+    }
+  };
+
+  return {
+    data,
+    loading: !data,
+    error,
+    addFollow,
+    removeFollow,
+    addLike,
+    removeLike,
+  };
 };
