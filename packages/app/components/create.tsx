@@ -77,6 +77,12 @@ function Create({ uri }: { uri: string }) {
   const CreateScrollView =
     Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
 
+  // enable submission only on idle or error state.
+  const enable =
+    state.status === "idle" ||
+    state.status === "fileUploadError" ||
+    state.status === "mintingError";
+
   return (
     <View tw="flex-1">
       <CreateScrollView
@@ -249,8 +255,8 @@ function Create({ uri }: { uri: string }) {
       <View tw="absolute px-4 w-full" style={{ bottom: tabBarHeight + 16 }}>
         <Button
           onPress={handleSubmit(handleSubmitForm)}
-          // disabled={state.status !== "idle"}
           tw="h-12 rounded-full"
+          disabled={!enable}
         >
           <Text tw="text-white dark:text-gray-900 text-sm">
             {state.status === "idle"

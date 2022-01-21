@@ -11,6 +11,8 @@ import { MoreHorizontal } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 import type { NFT } from "app/types";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
+import { useReport } from "app/hooks/use-report";
+import { useRouter } from "app/navigation/use-router";
 
 type Props = {
   nft: NFT;
@@ -22,6 +24,8 @@ function NFTDropdown({ nft }: Props) {
     nft?.owner_id === userId ||
       nft?.multiple_owners_list?.find((owner) => owner.profile_id === userId)
   );
+  const { report } = useReport();
+  const router = useRouter();
 
   return (
     <DropdownMenuRoot>
@@ -63,7 +67,10 @@ function NFTDropdown({ nft }: Props) {
 
         {!isOwner && (
           <DropdownMenuItem
-            onSelect={() => {}}
+            onSelect={async () => {
+              await report({ nftId: nft.token_id });
+              router.pop();
+            }}
             key="report"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >
