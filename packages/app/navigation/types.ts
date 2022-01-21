@@ -6,6 +6,7 @@ type HomeStackParams = {
   login: undefined;
   nft: { id: number };
   profile: { walletAddress: number };
+  settings: { walletAddress: number };
 };
 
 type TrendingStackParams = {
