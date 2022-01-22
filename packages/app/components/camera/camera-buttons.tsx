@@ -107,7 +107,7 @@ export function CameraButtons({
             </View>
 
             <Pressable
-              tw="h-12 w-12 bg-white dark:bg-black rounded-full justify-center items-center"
+              tw="h-12 w-12 bg-white dark:bg-black rounded-full justify-center items-center z-10"
               onPress={() => {
                 router.push(`/camera/create?uri=${photos[0].uri}`);
               }}

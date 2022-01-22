@@ -128,7 +128,7 @@ function Create({ uri }: { uri: string }) {
                     onBlur={onBlur}
                     keyboardType="numeric"
                     errorText={errors.editionCount?.message}
-                    value={value.toString()}
+                    value={value?.toString()}
                     onChangeText={onChange}
                     returnKeyType="done"
                   />
