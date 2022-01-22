@@ -32,8 +32,8 @@ function Social({ nft }: { nft: NFT }) {
             }
           }, [isLikedNft, like, unlike, likeCount])}
         />
-        <View tw="ml-2" />
-        <Button variant="comment" count={nft.comment_count} />
+        {/* <View tw="ml-2" />
+        <Button variant="comment" count={nft.comment_count} /> */}
       </View>
 
       {/* <View>
