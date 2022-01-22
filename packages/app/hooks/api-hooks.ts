@@ -143,7 +143,7 @@ type UserProfileNFTs = {
 type UseProfileNFTs = {
   data: {
     items: Array<NFT>;
-    hasMore: boolean;
+    has_more: boolean;
   };
 };
 
@@ -191,7 +191,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
   }, [queryState.data]);
 
   const fetchMore = () => {
-    if (queryState.data?.[queryState.data.length - 1].data.hasMore) {
+    if (queryState.data?.[queryState.data.length - 1].data.has_more) {
       queryState.fetchMore();
     }
   };
