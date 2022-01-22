@@ -2,7 +2,7 @@ import { useState, Suspense } from "react";
 import useUnmountSignal from "use-unmount-signal";
 import useSWR from "swr";
 
-import { View, Button, Spinner } from "design-system";
+import { View, Button, Spinner, ScrollView } from "design-system";
 import { Media } from "design-system/media";
 import { createParam } from "app/navigation/use-param";
 import { axios } from "app/lib/axios";
@@ -18,6 +18,7 @@ import { Description } from "design-system/card/rows/description";
 import type { NFT } from "app/types";
 import { useHideNavigationElements } from "app/navigation/use-navigation-elements";
 import { NFTDropdown } from "app/components/nft-dropdown";
+import { Owner } from "design-system/card/rows/owner";
 import { LikedBy } from "design-system/liked-by";
 
 type Query = {
@@ -59,19 +60,23 @@ function NftScreen() {
         <NFTDropdown nft={nft} />
       </View>
 
-      <PinchToZoom>
-        <Media item={nft} numColumns={1} />
-      </PinchToZoom>
+      <ScrollView>
+        <PinchToZoom>
+          <Media item={nft} numColumns={1} />
+        </PinchToZoom>
 
-      <Collection nft={nft} />
+        <Collection nft={nft} />
 
-      <Social nft={nft} />
+        <Social nft={nft} />
 
-      <Title nft={nft} />
+        <Title nft={nft} />
 
-      <Description nft={nft} />
+        <Description nft={nft} />
 
-      <LikedBy nft={nft} />
+        <Owner nft={nft} price={true} />
+
+        <LikedBy nft={nft} />
+      </ScrollView>
 
       {/* <Suspense fallback={<Spinner />}>
         <Comments nft={nft} />
