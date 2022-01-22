@@ -168,7 +168,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
     (index) => {
       const url = `v1/profile_nfts?profile_id=${profileId}&page=${
         index + 1
-      }&limit=${8}&list_id=${listId}&sort_id=${sortId}&show_hidden=${showHidden}&show_duplicates=${showDuplicates}&collection_id=${collectionId}`;
+      }&limit=${12}&list_id=${listId}&sort_id=${sortId}&show_hidden=${showHidden}&show_duplicates=${showDuplicates}&collection_id=${collectionId}`;
       return url;
     },
     [profileId, listId, sortId, showDuplicates, showHidden, collectionId]
