@@ -259,21 +259,21 @@ type MyInfo = {
 };
 
 export const useMyInfo = () => {
-  const user = useUser();
+  const { isAuthenticated } = useUser();
   const queryKey = "/v2/myinfo";
   const { mutate } = useSWRConfig();
   const router = useRouter();
 
   const { data, error } = useSWR<MyInfo>(
-    user.isAuthenticated ? queryKey : null,
+    isAuthenticated ? queryKey : null,
     fetcher
   );
 
-  const addFollow = useCallback(
+  const follow = useCallback(
     async (profileId: number) => {
-      if (!user) {
-        // TODO: open login
+      if (!isAuthenticated) {
         mixpanel.track("Follow but logged out");
+        router.push("/login");
         return;
       }
 
@@ -282,7 +282,7 @@ export const useMyInfo = () => {
           queryKey,
           {
             data: {
-              ...data,
+              ...data.data,
               follows: [...data.data.follows, { profile_id: profileId }],
             },
           },
@@ -299,17 +299,17 @@ export const useMyInfo = () => {
         mutate(queryKey);
       }
     },
-    [user, data]
+    [isAuthenticated, data]
   );
 
-  const removeFollow = useCallback(
+  const unfollow = useCallback(
     async (profileId: number) => {
       if (data) {
         mutate(
           queryKey,
           {
             data: {
-              ...data,
+              ...data.data,
               follows: data.data.follows.filter(
                 (follow) => follow.profile_id !== profileId
               ),
@@ -328,15 +328,24 @@ export const useMyInfo = () => {
         mutate(queryKey);
       }
     },
-    [user, data]
+    [data]
+  );
+
+  const isFollowing = useCallback(
+    (userId: number) => {
+      return Boolean(
+        data?.data?.follows?.find((follow) => follow.profile_id === userId)
+      );
+    },
+    [data]
   );
 
   const like = useCallback(
-    async (nft_id: number) => {
-      if (!user.isAuthenticated) {
+    async (nftId: number) => {
+      if (!isAuthenticated) {
         router.push("/login");
         // TODO: perform the action post login
-        return;
+        return false;
       }
 
       if (data) {
@@ -345,60 +354,53 @@ export const useMyInfo = () => {
           {
             data: {
               ...data.data,
-              likes_nft: [...data.data.likes_nft, nft_id],
+              likes_nft: [...data.data.likes_nft, nftId],
             },
           },
           false
         );
 
         await axios({
-          url: `/v3/like/${nft_id}`,
+          url: `/v3/like/${nftId}`,
           method: "POST",
         });
 
         mutate(queryKey);
+
+        return true;
       }
     },
-    [data, user.isAuthenticated]
+    [data, isAuthenticated]
   );
 
   const unlike = useCallback(
-    async (nft_id: number) => {
-      if (!user.isAuthenticated) {
-        router.push("/login");
-        // TODO: perform the action post login
-        return;
-      }
-
+    async (nftId: number) => {
       if (data) {
         mutate(
           queryKey,
           {
             data: {
               ...data.data,
-              likes_nft: data.data.likes_nft.filter((id) => id !== nft_id),
+              likes_nft: data.data.likes_nft.filter((id) => id !== nftId),
             },
           },
           false
         );
 
         await axios({
-          url: `/v3/unlike/${nft_id}`,
+          url: `/v3/unlike/${nftId}`,
           method: "POST",
         });
 
         mutate(queryKey);
       }
     },
-    [data, user.isAuthenticated]
+    [data]
   );
 
   const isLiked = useCallback(
-    (nft_id: number) => {
-      if (data) {
-        return data.data.likes_nft.includes(nft_id);
-      }
-      return false;
+    (nftId: number) => {
+      return data?.data?.likes_nft?.includes(nftId);
     },
     [data]
   );
@@ -407,8 +409,9 @@ export const useMyInfo = () => {
     data,
     loading: !data,
     error,
-    addFollow,
-    removeFollow,
+    follow,
+    unfollow,
+    isFollowing,
     like,
     unlike,
     isLiked,
