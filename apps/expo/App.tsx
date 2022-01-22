@@ -48,7 +48,7 @@ import {
 import { magic } from "app/lib/magic";
 import { Relayer } from "app/lib/magic";
 import { ethers } from "ethers";
-import { Modal } from "react-native";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 enableScreens(true);
 // enableFreeze(true)
@@ -304,10 +304,10 @@ function App() {
                   ): JSX.Element => <QRCodeModal {...props} />}
                 >
                   <AppContextProvider>
-                    <>
+                    <BottomSheetModalProvider>
                       <StatusBar style="auto" />
                       <NextTabNavigator />
-                    </>
+                    </BottomSheetModalProvider>
                   </AppContextProvider>
                 </WalletConnectProvider>
               </SWRProvider>
