@@ -40,7 +40,7 @@ export type BaseButtonProps = {
    * Defines the button icons colour.
    * @default white|black
    */
-  iconColor: string;
+  iconColor: string[];
   /**
    * Defines if the button will only contains
    * an icon or not.

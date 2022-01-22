@@ -14,7 +14,7 @@ function Social({ nft }: { nft: NFT }) {
   const [likeCount, setLikeCount] = useState(nft.like_count);
 
   return (
-    <View tw="p-4 bg-white dark:bg-black flex-row justify-between">
+    <View tw="px-4 py-2 bg-white dark:bg-black flex-row justify-between">
       <View tw="flex-row">
         <Button
           variant="like"
