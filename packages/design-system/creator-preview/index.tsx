@@ -1,4 +1,4 @@
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import { Dimensions } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -14,8 +14,11 @@ import { Button } from "design-system/button";
 import { ChevronUp } from "design-system/icon";
 import { useIsDarkMode } from "design-system/hooks";
 import { Media } from "design-system/media";
+import { Pressable } from "design-system/pressable-scale";
 import type { Creator, NFT } from "app/types";
 import { withMemoAndColorScheme } from "app/components/memoWithTheme";
+import { useMyInfo } from "app/hooks/api-hooks";
+import { useProfileNavigation } from "app/navigation/app-navigation";
 
 type Props = {
   creator: Creator;
@@ -32,6 +35,13 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
     height: isExpanded.value ? ITEM_EXPANDED_HEIGHT : ITEM_COLLAPSED_HEIGHT,
     overflow: "hidden",
   }));
+  const openProfile = useProfileNavigation(props.creator.address);
+  const { isFollowing, follow, unfollow } = useMyInfo();
+  const creatorId = props.creator.profile_id;
+  const isFollowingCreator = useMemo(
+    () => isFollowing(creatorId),
+    [creatorId, isFollowing]
+  );
 
   return (
     <Animated.View style={style}>
@@ -48,36 +58,46 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
           value="hello"
           disabled={props.creator.top_items.length === 0}
         >
-          <Accordion.Trigger>
-            <View tw="w-full">
-              <View tw="flex-row justify-between">
-                <View tw="flex-row items-center">
-                  <View tw="h-8 w-8 bg-gray-200 rounded-full mr-2">
-                    <Image
-                      source={{ uri: props.creator.img_url }}
-                      tw="h-8 w-8 rounded-full"
-                    />
-                  </View>
-                  <View>
-                    <Text tw="text-xs text-gray-600 dark:text-gray-400 font-semibold">
-                      {props.creator.name}
+          <View tw="w-full">
+            <View tw="flex-row justify-between items-center">
+              <Pressable onPress={openProfile} tw="flex-row items-center">
+                <View tw="h-8 w-8 bg-gray-200 rounded-full mr-2">
+                  <Image
+                    source={{ uri: props.creator.img_url }}
+                    tw="h-8 w-8 rounded-full"
+                  />
+                </View>
+                <View>
+                  <Text tw="text-xs text-gray-600 dark:text-gray-400 font-semibold">
+                    {props.creator.name}
+                  </Text>
+                  <View tw="items-center flex-row">
+                    <Text tw="mt-[1px] text-sm text-gray-900 dark:text-white font-semibold mr-1">
+                      @{props.creator.username}
                     </Text>
-                    <View tw="items-center flex-row">
-                      <Text tw="mt-[1px] text-sm text-gray-900 dark:text-white font-semibold mr-1">
-                        @{props.creator.username}
-                      </Text>
-                      <View tw="mt-1">
-                        <VerificationBadge size={14} />
-                      </View>
+                    <View tw="mt-1">
+                      <VerificationBadge size={14} />
                     </View>
                   </View>
                 </View>
-                <View tw="flex-row">
-                  <Button variant="tertiary" tw="h-8 mr-2">
-                    <Text tw="text-gray-900 font-bold text-sm dark:text-white">
-                      Follow
-                    </Text>
-                  </Button>
+              </Pressable>
+              <View tw="flex-row justify-center items-center">
+                <Button
+                  variant="tertiary"
+                  tw="h-8 mr-2"
+                  onPress={() => {
+                    if (isFollowingCreator) {
+                      unfollow(creatorId);
+                    } else {
+                      follow(creatorId);
+                    }
+                  }}
+                >
+                  <Text tw="text-gray-900 font-bold text-sm dark:text-white">
+                    {isFollowingCreator ? "Unfollow" : "Follow"}
+                  </Text>
+                </Button>
+                <Accordion.Trigger>
                   {props.creator.top_items.length > 0 ? (
                     <Accordion.Chevron>
                       <Button variant="tertiary" tw="rounded-full h-8 w-8">
@@ -85,10 +105,10 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
                       </Button>
                     </Accordion.Chevron>
                   ) : null}
-                </View>
+                </Accordion.Trigger>
               </View>
             </View>
-          </Accordion.Trigger>
+          </View>
           <Accordion.Content>
             <View tw="flex-row justify-center -mt-3">
               {props.creator.top_items.slice(0, 3).map((item) => {

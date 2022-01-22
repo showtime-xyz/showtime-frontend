@@ -4,9 +4,11 @@ import { useRouter } from "./use-router";
 
 export const useProfileNavigation = (address?: string) => {
   const router = useRouter();
+
   return useCallback(() => {
     if (address) {
-      const as = `/profile/${address}`;
+      const path = router.pathname.startsWith("/trending") ? "/trending" : "";
+      const as = `${path}/profile/${address}`;
 
       const href = Router.router
         ? {

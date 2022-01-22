@@ -12,6 +12,9 @@ const LoginScreen = dynamic<JSX.Element>(() =>
 const NftScreen = dynamic<JSX.Element>(() =>
   import("app/screens/nft").then((mod) => mod.NftScreen)
 );
+const ProfileScreen = dynamic<JSX.Element>(() =>
+  import("app/screens/profile").then((mod) => mod.ProfileScreen)
+);
 
 const TrendingStack = createStackNavigator<TrendingStackParams>();
 
@@ -27,6 +30,7 @@ function TrendingNavigator() {
           component={TrendingScreen}
           options={{ title: "Trending", headerTitle: "Trending" }}
         />
+        <TrendingStack.Screen name="profile" component={ProfileScreen} />
       </TrendingStack.Group>
       <TrendingStack.Group
         screenOptions={{
