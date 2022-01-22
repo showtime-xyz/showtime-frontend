@@ -42,7 +42,7 @@ export function Login() {
           data: yup
             .string()
             .phone("US", false, "Please enter a valid phone number.")
-            .required(),
+            .required("Please enter a valid phone number."),
         })
         .required(),
     []
@@ -55,7 +55,7 @@ export function Login() {
           data: yup
             .string()
             .email("Please enter a valid email address.")
-            .required(),
+            .required("Please enter a valid email address."),
         })
         .required(),
     []
@@ -84,7 +84,7 @@ export function Login() {
             style={{
               marginLeft: -16,
               marginRight: -16,
-              height: 358,
+              height: 376,
             }}
           >
             <Tabs.Root
