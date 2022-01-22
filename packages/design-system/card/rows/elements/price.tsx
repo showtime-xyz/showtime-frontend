@@ -21,11 +21,9 @@ export function Price({ nft }: Props) {
   //#region variables
   const price = useMemo(() => {
     const index = (data?.card_summary.length ?? 0) - 1;
-
     if (index === -1) {
       return "";
     }
-
     return `${data?.card_summary[index].listing?.min_price} ${data?.card_summary[index].listing?.currency}`;
   }, [data]);
   //#endregion
