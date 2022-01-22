@@ -4,6 +4,7 @@ import { AvatarGroup } from "design-system/avatar-group";
 import { Skeleton } from "design-system/skeleton";
 import { useLikes } from "app/hooks/api/use-likes";
 import { useIsDarkMode } from "../hooks";
+import { Fragment } from "react";
 
 interface Props {
   nft?: any;
@@ -32,12 +33,12 @@ export function LikedBy({ nft }: Props) {
         {!loading ? (
           <Text tw="text-xs text-gray-600 font-semibold">
             {data?.likers.slice(0, 2).map((like, index) => (
-              <>
+              <Fragment key={`liked-by-user-${like.profile_id}`}>
                 <Text tw="font-bold	text-black dark:text-white">
                   @{like.username}
                 </Text>
                 {index === 0 && data?.likers.length > 1 && <Text>,&nbsp;</Text>}
-              </>
+              </Fragment>
             ))}
             &nbsp;
             {(data?.likers.length ?? 0) > 2 && (
