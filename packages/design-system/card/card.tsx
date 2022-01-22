@@ -4,7 +4,7 @@ import { Activity } from "design-system/activity";
 import { Social } from "design-system/card/social";
 import { Collection } from "design-system/card/rows/collection";
 import { Title } from "design-system/card/rows/title";
-import { Owner } from "design-system/card/rows/owner";
+// import { Owner } from "design-system/card/rows/owner";
 import { Media } from "design-system/media";
 import { withMemoAndColorScheme } from "app/components/memoWithTheme";
 
@@ -34,7 +34,7 @@ function CardImpl({ act, variant }: Props) {
 
         {single && <Social nft={nfts[0]} />}
 
-        <Owner nft={nfts[0]} price={true} />
+        {/* <Owner nft={nfts[0]} price={true} /> */}
 
         {single && <Collection nft={nfts[0]} />}
       </View>
