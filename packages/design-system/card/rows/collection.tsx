@@ -13,7 +13,7 @@ function Collection({ nft }: Props) {
 
   return (
     // <Link href={`/c/${nft.collection_slug}`}>
-    <View tw="px-4 py-2 flex-row items-center justify-between">
+    <View tw="h-9 px-4 py-2 flex-row items-center justify-between">
       <View tw="flex-row items-center">
         {nft.collection_img_url && (
           <Image
