@@ -89,12 +89,12 @@ function Create({ uri }: { uri: string }) {
         contentContainerStyle={{ paddingBottom: tabBarHeight + 100 }}
       >
         <View tw="px-3 py-4">
-          <View tw="flex-row">
+          <View tw="flex-row items-center">
             <Preview
               source={{
                 uri,
               }}
-              style={{ width: 84, height: 84, borderRadius: 20 }}
+              tw="w-20 h-20 rounded-2xl"
             />
             <View tw="ml-2 flex-1">
               <Controller
