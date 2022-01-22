@@ -26,12 +26,12 @@ export function AvatarGroup({ count, profiles }: AvatarGroupProps) {
   //#endregion
 
   return (
-    <View tw={["flex-row min-h-[28px]", `w-[${count * 20}px]`]}>
+    <View tw={["flex-row min-h-[28px]", `w-[${count * 22}px]`]}>
       {profiles?.slice(0, 3).map((profile, index) => (
         <Image
           key={`avatar-${profile.profile_id}`}
           tw={[
-            "w-[28px] h-[28px] rounded-full border-2 ml-[-2px]",
+            "w-[28px] h-[28px] rounded-full border-2 bg-gray-100 dark:bg-gray-900",
             `left-[${-(index * 8)}px]`,
             isDarkMode ? "border-black" : "border-white",
           ]}

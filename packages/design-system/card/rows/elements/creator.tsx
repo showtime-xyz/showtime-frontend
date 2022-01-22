@@ -24,8 +24,6 @@ export function Creator({ nft }: Props) {
     <View tw="flex flex-row">
       <Image
         tw="w-[32px] h-[32px] rounded-full"
-        width={32}
-        height={32}
         source={{
           uri: getProfileImageUrl(nft.creator_img_url ?? DEFAULT_PROFILE_PIC),
         }}

@@ -1,5 +1,6 @@
 import { View } from "design-system/view";
 import { Text } from "design-system/text";
+import { AvatarGroup } from "design-system/avatar-group";
 import { Skeleton } from "design-system/skeleton";
 import { useLikes } from "app/hooks/api/use-likes";
 import { useIsDarkMode } from "../hooks";
@@ -16,8 +17,12 @@ export function LikedBy({ nft }: Props) {
 
   if (!nft) return null;
   return (
-    <View tw="px-4 py-2 flex flex-row bg-white justify-start	items-center">
-      <Text tw="text-xs text-gray-600 font-semibold">Liked by&nbsp;</Text>
+    <View tw="px-4 py-2 flex flex-row justify-start	items-center">
+      <AvatarGroup
+        count={Math.min(3, nft.like_count)}
+        profiles={data?.likers}
+      />
+      <Text tw="ml-2 text-xs text-gray-600 font-semibold">Liked by&nbsp;</Text>
       <Skeleton
         show={loading}
         height={10}
