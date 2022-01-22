@@ -1,23 +1,53 @@
 import { View } from "design-system/view";
 import { Text } from "design-system/text";
+import { Skeleton } from "design-system/skeleton";
 import { useLikes } from "app/hooks/api/use-likes";
+import { useIsDarkMode } from "../hooks";
 
 interface Props {
   nft: any;
 }
 
-/**
- * TODO(gorhom): use avatar group once it is available.
- */
-
 export function LikedBy({ nft }: Props) {
+  //#region hooks
+  const isDarkMode = useIsDarkMode();
+  const { data, loading } = useLikes(nft.nft_id);
+  //#endregion
+
   if (!nft) return null;
-
-  const {} = useLikes(nft.nft_id);
-
   return (
-    <View tw="flex h-[32px] bg-white justify-center">
-      <Text>Liked by </Text>
+    <View tw="px-4 py-2 flex flex-row bg-white justify-start	items-center">
+      <Text tw="text-xs text-gray-600 font-semibold">Liked by&nbsp;</Text>
+      <Skeleton
+        show={loading}
+        height={10}
+        width={150}
+        colorMode={isDarkMode ? "dark" : "light"}
+      >
+        {!loading ? (
+          <Text tw="text-xs text-gray-600 font-semibold">
+            {data?.likers.slice(0, 2).map((like, index) => (
+              <>
+                <Text tw="font-bold	text-black dark:text-white ">
+                  @{like.username}
+                </Text>
+                {index === 0 && <Text>,&nbsp;</Text>}
+              </>
+            ))}
+            &nbsp;
+            {(data?.likers.length ?? 0) > 2 && (
+              <>
+                <Text>&amp;&nbsp;</Text>
+                <Text tw="font-bold	text-black dark:text-white">
+                  {`${data?.likers.length ?? 0} others`}
+                </Text>
+              </>
+            )}
+          </Text>
+        ) : (
+          (null as any)
+        )}
+      </Skeleton>
     </View>
   );
 }
