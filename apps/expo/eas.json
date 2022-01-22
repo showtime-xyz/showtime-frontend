@@ -3,11 +3,7 @@
     "production": {
       "releaseChannel": "production",
       "distribution": "store",
-      "ios": {
-        "autoIncrement": true
-      },
       "android": {
-        "autoIncrement": true,
         "buildType": "app-bundle",
         "image": "latest"
       },
