@@ -24,6 +24,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
           trending: "",
           login: "/login",
           nft: "/nft/:id",
+          profile: "/profile/:walletAddress",
         },
       },
       cameraTab: {

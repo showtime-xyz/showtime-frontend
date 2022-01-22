@@ -43,7 +43,7 @@ export function PrimaryButton(props: ButtonProps) {
       {...(props as any)}
       labelTW="text-white dark:text-black"
       iconColor={ICON_COLOR_TW_MAPPER.primary}
-      backgroundColors={CONTAINER_BACKGROUND_MAPPER["primary"]}
+      backgroundColors={CONTAINER_BACKGROUND_MAPPER.primary}
     />
   );
 }
@@ -54,7 +54,7 @@ export function SecondaryButton(props: ButtonProps) {
       {...(props as any)}
       labelTW="text-gray-900 dark:text-white"
       iconColor={ICON_COLOR_TW_MAPPER.secondary}
-      backgroundColors={CONTAINER_BACKGROUND_MAPPER["secondary"]}
+      backgroundColors={CONTAINER_BACKGROUND_MAPPER.secondary}
     />
   );
 }
@@ -65,7 +65,7 @@ export function TertiaryButton(props: ButtonProps) {
       {...(props as any)}
       labelTW="text-gray-900 dark:text-white"
       iconColor={ICON_COLOR_TW_MAPPER.tertiary}
-      backgroundColors={CONTAINER_BACKGROUND_MAPPER["tertiary"]}
+      backgroundColors={CONTAINER_BACKGROUND_MAPPER.tertiary}
     />
   );
 }
@@ -76,7 +76,7 @@ export function DangerButton(props: ButtonProps) {
       {...(props as any)}
       labelTW="text-white"
       iconColor={ICON_COLOR_TW_MAPPER.danger}
-      backgroundColors={CONTAINER_BACKGROUND_MAPPER["danger"]}
+      backgroundColors={CONTAINER_BACKGROUND_MAPPER.danger}
     />
   );
 }

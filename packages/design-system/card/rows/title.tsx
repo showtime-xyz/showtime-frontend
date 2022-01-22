@@ -10,7 +10,7 @@ function Title({ nft }: Props) {
   if (!nft) return null;
 
   return (
-    <View tw="p-4 bg-white dark:bg-black">
+    <View tw="px-4 py-2 bg-white dark:bg-black">
       <Text tw="text-black dark:text-white font-semibold" variant="text-lg">
         {nft.token_name}
       </Text>

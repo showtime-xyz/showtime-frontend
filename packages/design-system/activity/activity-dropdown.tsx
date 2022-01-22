@@ -10,6 +10,8 @@ import { View, Button } from "design-system";
 import { MoreHorizontal } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 import { useReport } from "app/hooks/use-report";
+import { useMyInfo } from "app/hooks/api-hooks";
+import { useUser } from "app/hooks/use-user";
 
 type Props = {
   activity: any; // TODO: add Activity type
@@ -17,6 +19,8 @@ type Props = {
 
 function ActivityDropdown({ activity }: Props) {
   const { report } = useReport();
+  const { unfollow } = useMyInfo();
+  const { isAuthenticated } = useUser();
 
   return (
     <DropdownMenuRoot>
@@ -38,15 +42,17 @@ function ActivityDropdown({ activity }: Props) {
         loop
         tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
       >
-        <DropdownMenuItem
-          onSelect={() => {}}
-          key="unfollow"
-          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
-        >
-          <DropdownMenuItemTitle tw="text-black dark:text-white">
-            Unfollow
-          </DropdownMenuItemTitle>
-        </DropdownMenuItem>
+        {isAuthenticated && (
+          <DropdownMenuItem
+            onSelect={() => unfollow(activity.actor_id)}
+            key="unfollow"
+            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          >
+            <DropdownMenuItemTitle tw="text-black dark:text-white">
+              Unfollow
+            </DropdownMenuItemTitle>
+          </DropdownMenuItem>
+        )}
 
         <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 

@@ -22,7 +22,7 @@ export function BaseButton({
   labelTW = "",
   backgroundColors,
   iconOnly,
-  iconColor = "black",
+  iconColor = ["white", "black"],
   children,
   ...props
 }: BaseButtonProps) {
@@ -71,7 +71,7 @@ export function BaseButton({
 
       // @ts-ignore
       return cloneElement(child, {
-        color: iconColor,
+        color: iconColor[isDarkMode ? 1 : 0],
         ...iconSize,
         ...child.props,
         tw: [
@@ -84,7 +84,7 @@ export function BaseButton({
         ],
       });
     });
-  }, [size, iconColor, labelStyle, children]);
+  }, [size, iconColor, labelStyle, children, isDarkMode]);
   return (
     <Pressable
       {...props}

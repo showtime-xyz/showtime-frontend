@@ -1,11 +1,12 @@
-import { Profile } from "../types";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { NFT } from "../types";
-import { useInfiniteListQuerySWR, fetcher } from "./use-infinite-list-query";
 import useSWR, { useSWRConfig } from "swr";
+
+import { NFT, Profile } from "../types";
+import { useInfiniteListQuerySWR, fetcher } from "./use-infinite-list-query";
 import { useUser } from "./use-user";
-import { axios } from "../lib/axios";
-import { useRouter } from "../navigation/use-router";
+import { axios } from "app/lib/axios";
+import { mixpanel } from "app/lib/mixpanel";
+import { useRouter } from "app/navigation/use-router";
 
 export const useActivity = ({
   typeId,
@@ -258,63 +259,21 @@ type MyInfo = {
 };
 
 export const useMyInfo = () => {
-  const user = useUser();
+  const { isAuthenticated } = useUser();
   const queryKey = "/v2/myinfo";
   const { mutate } = useSWRConfig();
   const router = useRouter();
 
   const { data, error } = useSWR<MyInfo>(
-    user.isAuthenticated ? queryKey : null,
+    isAuthenticated ? queryKey : null,
     fetcher
   );
 
-  const addFollow = async (profile_id: number) => {
-    if (data) {
-      mutate(
-        queryKey,
-        {
-          data: {
-            ...data,
-            follows: [...data.data.follows, { profile_id }],
-          },
-        },
-        false
-      );
-
-      // trigger api call here
-      // await axios(newName);
-
-      mutate(queryKey);
-    }
-  };
-
-  const removeFollow = async (profile_id: number) => {
-    if (data) {
-      mutate(
-        queryKey,
-        {
-          data: {
-            ...data,
-            follows: data.data.follows.filter(
-              (follow) => follow.profile_id !== profile_id
-            ),
-          },
-        },
-        false
-      );
-
-      // trigger api call here
-      // await axios(newName);
-
-      mutate(queryKey);
-    }
-  };
-
-  const like = useCallback(
-    async (nft_id: number) => {
-      if (!user.isAuthenticated) {
+  const follow = useCallback(
+    async (profileId: number) => {
+      if (!isAuthenticated) {
+        mixpanel.track("Follow but logged out");
         router.push("/login");
-        // TODO: perform the action post login
         return;
       }
 
@@ -324,60 +283,124 @@ export const useMyInfo = () => {
           {
             data: {
               ...data.data,
-              likes_nft: [...data.data.likes_nft, nft_id],
+              follows: [...data.data.follows, { profile_id: profileId }],
+            },
+          },
+          false
+        );
+
+        try {
+          await axios({ url: `/v2/follow/${profileId}`, method: "POST" });
+          mixpanel.track("Followed profile");
+        } catch (err) {
+          console.error(err);
+        }
+
+        mutate(queryKey);
+      }
+    },
+    [isAuthenticated, data]
+  );
+
+  const unfollow = useCallback(
+    async (profileId: number) => {
+      if (data) {
+        mutate(
+          queryKey,
+          {
+            data: {
+              ...data.data,
+              follows: data.data.follows.filter(
+                (follow) => follow.profile_id !== profileId
+              ),
+            },
+          },
+          false
+        );
+
+        try {
+          await axios({ url: `/v2/unfollow/${profileId}`, method: "POST" });
+          mixpanel.track("Unfollowed profile");
+        } catch (err) {
+          console.error(err);
+        }
+
+        mutate(queryKey);
+      }
+    },
+    [data]
+  );
+
+  const isFollowing = useCallback(
+    (userId: number) => {
+      return Boolean(
+        data?.data?.follows?.find((follow) => follow.profile_id === userId)
+      );
+    },
+    [data]
+  );
+
+  const like = useCallback(
+    async (nftId: number) => {
+      if (!isAuthenticated) {
+        router.push("/login");
+        // TODO: perform the action post login
+        return false;
+      }
+
+      if (data) {
+        mutate(
+          queryKey,
+          {
+            data: {
+              ...data.data,
+              likes_nft: [...data.data.likes_nft, nftId],
             },
           },
           false
         );
 
         await axios({
-          url: `/v3/like/${nft_id}`,
+          url: `/v3/like/${nftId}`,
           method: "POST",
         });
 
         mutate(queryKey);
+
+        return true;
       }
     },
-    [data, user.isAuthenticated]
+    [data, isAuthenticated]
   );
 
   const unlike = useCallback(
-    async (nft_id: number) => {
-      if (!user.isAuthenticated) {
-        router.push("/login");
-        // TODO: perform the action post login
-        return;
-      }
-
+    async (nftId: number) => {
       if (data) {
         mutate(
           queryKey,
           {
             data: {
               ...data.data,
-              likes_nft: data.data.likes_nft.filter((id) => id !== nft_id),
+              likes_nft: data.data.likes_nft.filter((id) => id !== nftId),
             },
           },
           false
         );
 
         await axios({
-          url: `/v3/unlike/${nft_id}`,
+          url: `/v3/unlike/${nftId}`,
           method: "POST",
         });
 
         mutate(queryKey);
       }
     },
-    [data, user.isAuthenticated]
+    [data]
   );
 
   const isLiked = useCallback(
-    (nft_id: number) => {
-      if (data) {
-        return data.data.likes_nft.includes(nft_id);
-      }
-      return false;
+    (nftId: number) => {
+      return data?.data?.likes_nft?.includes(nftId);
     },
     [data]
   );
@@ -386,8 +409,9 @@ export const useMyInfo = () => {
     data,
     loading: !data,
     error,
-    addFollow,
-    removeFollow,
+    follow,
+    unfollow,
+    isFollowing,
     like,
     unlike,
     isLiked,

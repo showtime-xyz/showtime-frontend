@@ -14,19 +14,21 @@ function Social({ nft }: { nft: NFT }) {
   const [likeCount, setLikeCount] = useState(nft.like_count);
 
   return (
-    <View tw="p-4 bg-white dark:bg-black flex-row justify-between">
+    <View tw="px-4 py-2 bg-white dark:bg-black flex-row justify-between">
       <View tw="flex-row">
         <Button
           variant="like"
           count={likeCount}
           active={isLikedNft}
-          onPress={useCallback(() => {
+          onPress={useCallback(async () => {
             if (isLikedNft) {
               unlike(nft.nft_id);
               setLikeCount(likeCount - 1);
             } else {
-              like(nft.nft_id);
-              setLikeCount(likeCount + 1);
+              const isSuccessfullyLiked = await like(nft.nft_id);
+              if (isSuccessfullyLiked) {
+                setLikeCount(likeCount + 1);
+              }
             }
           }, [isLikedNft, like, unlike, likeCount])}
         />
