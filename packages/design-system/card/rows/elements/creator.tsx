@@ -30,10 +30,10 @@ export function Creator({ nft }: Props) {
           uri: getProfileImageUrl(nft.creator_img_url ?? DEFAULT_PROFILE_PIC),
         }}
       />
-      <View tw="ml-1 justify-center">
+      <View tw="ml-2 justify-center">
         <Text
           sx={{ fontSize: 12, lineHeight: 12 }}
-          tw="mb-0 text-gray-600 dark:text-gray-400 font-semibold"
+          tw="mb-1 text-gray-600 dark:text-gray-400 font-semibold"
         >
           {nft.creator_name}
         </Text>

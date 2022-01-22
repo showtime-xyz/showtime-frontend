@@ -19,10 +19,10 @@ function CardImpl({ act, variant }: Props) {
 
   return (
     <>
-      <View tw="py-1 bg-white dark:bg-black" shouldRasterizeIOS={true}>
+      <View tw="py-2 bg-white dark:bg-black" shouldRasterizeIOS={true}>
         {variant === "activity" && <Activity activity={act} />}
 
-        <View tw={"py-1"}>
+        <View tw={"py-2"}>
           {single ? (
             <Media item={nfts[0]} numColumns={1} />
           ) : (

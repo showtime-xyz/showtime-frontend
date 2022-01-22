@@ -31,7 +31,7 @@ function OwnershipContainer({
   ) : (
     <View
       tw={[
-        "flex flex-row	flex-wrap justify-between w-[30px] h-[30px]",
+        "flex flex-row flex-wrap justify-between w-[30px] h-[30px]",
         count < 3 ? "content-center" : "content-between",
       ]}
       children={children}
@@ -80,10 +80,10 @@ export function Ownership({ nft }: Props) {
 
   return (
     <View tw="flex flex-row">
-      <View tw="mr-1">
+      <View tw="mr-2">
         <Text
           sx={{ fontSize: 12 }}
-          tw="mb-0 text-right text-gray-600 dark:text-gray-400 font-semibold"
+          tw="mb-1 text-right text-gray-600 dark:text-gray-400 font-semibold"
         >
           Owners
         </Text>

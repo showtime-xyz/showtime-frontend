@@ -41,7 +41,7 @@ export function Price({ nft }: Props) {
     <View tw="flex justify-end">
       <Text
         sx={{ fontSize: 12 }}
-        tw="mb-0 text-right text-gray-600 dark:text-gray-400 font-semibold"
+        tw="mb-1 text-right text-gray-600 dark:text-gray-400 font-semibold"
       >
         🏷 Price
       </Text>

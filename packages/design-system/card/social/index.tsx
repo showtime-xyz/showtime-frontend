@@ -5,7 +5,7 @@ function Social({ nft }) {
   if (!nft) return null;
 
   return (
-    <View tw="px-3 py-1 bg-white dark:bg-black flex-row justify-between">
+    <View tw="px-4 py-2 bg-white dark:bg-black flex-row justify-between">
       <View tw="flex-row">
         <Button variant="like" count={nft.like_count} />
         <View tw="ml-2" />

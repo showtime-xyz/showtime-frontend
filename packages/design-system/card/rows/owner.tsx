@@ -16,7 +16,7 @@ function Owner({ options, price, nft }: Props) {
   if (!nft) return null;
 
   return (
-    <View tw="px-3 py-1 flex flex-row items-center justify-between bg-white dark:bg-black">
+    <View tw="px-4 py-2 flex flex-row items-center justify-between bg-white dark:bg-black">
       <Creator nft={nft} />
 
       {options ? (
