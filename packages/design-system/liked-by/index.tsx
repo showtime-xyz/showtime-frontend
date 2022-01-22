@@ -6,16 +6,16 @@ import { useLikes } from "app/hooks/api/use-likes";
 import { useIsDarkMode } from "../hooks";
 
 interface Props {
-  nft: any;
+  nft?: any;
 }
 
 export function LikedBy({ nft }: Props) {
   //#region hooks
   const isDarkMode = useIsDarkMode();
-  const { data, loading } = useLikes(nft.nft_id);
+  const { data, loading } = useLikes(nft?.nft_id);
   //#endregion
 
-  if (!nft) return null;
+  if (!nft || nft.like_count === 0) return null;
   return (
     <View tw="px-4 py-2 flex flex-row justify-start	items-center">
       <AvatarGroup
@@ -33,10 +33,10 @@ export function LikedBy({ nft }: Props) {
           <Text tw="text-xs text-gray-600 font-semibold">
             {data?.likers.slice(0, 2).map((like, index) => (
               <>
-                <Text tw="font-bold	text-black dark:text-white ">
+                <Text tw="font-bold	text-black dark:text-white">
                   @{like.username}
                 </Text>
-                {index === 0 && <Text>,&nbsp;</Text>}
+                {index === 0 && data?.likers.length > 1 && <Text>,&nbsp;</Text>}
               </>
             ))}
             &nbsp;

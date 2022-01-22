@@ -18,6 +18,7 @@ import { Description } from "design-system/card/rows/description";
 import type { NFT } from "app/types";
 import { useHideNavigationElements } from "app/navigation/use-navigation-elements";
 import { NFTDropdown } from "app/components/nft-dropdown";
+import { LikedBy } from "design-system/liked-by";
 
 type Query = {
   id: string;
@@ -69,6 +70,8 @@ function NftScreen() {
       <Title nft={nft} />
 
       <Description nft={nft} />
+
+      <LikedBy nft={nft} />
 
       {/* <Suspense fallback={<Spinner />}>
         <Comments nft={nft} />

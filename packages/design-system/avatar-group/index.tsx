@@ -26,7 +26,9 @@ export function AvatarGroup({ count, profiles }: AvatarGroupProps) {
   //#endregion
 
   return (
-    <View tw={["flex-row min-h-[28px]", `w-[${count * 22}px]`]}>
+    <View
+      tw={["flex-row min-h-[28px]", `w-[${count * 28 - (count - 1) * 8}px]`]}
+    >
       {profiles?.slice(0, 3).map((profile, index) => (
         <Image
           key={`avatar-${profile.profile_id}`}
