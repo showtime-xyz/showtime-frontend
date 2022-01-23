@@ -101,24 +101,10 @@ const TabListContainer = ({ days }: { days: number }) => {
   return useMemo(
     () =>
       [
-        <Suspense
-          fallback={
-            <View tw="p-4">
-              {SelectionControl}
-              <Spinner size="small" />
-            </View>
-          }
-        >
+        <Suspense fallback={<Spinner size="small" />}>
           <CreatorsList days={days} SelectionControl={SelectionControl} />
         </Suspense>,
-        <Suspense
-          fallback={
-            <View tw="p-4">
-              {SelectionControl}
-              <Spinner size="small" />
-            </View>
-          }
-        >
+        <Suspense fallback={<Spinner size="small" />}>
           <NFTSList days={days} SelectionControl={SelectionControl} />
         </Suspense>,
       ][selected],
@@ -169,7 +155,10 @@ const CreatorsList = ({
 
   const ListHeaderComponent = useMemo(
     () => (
-      <View tw="p-4">
+      <View
+        tw="p-4 dark:border-gray-900 border-gray-100"
+        style={{ borderBottomWidth: 1 }}
+      >
         {SelectionControl}
         {data.length === 0 && !isLoading ? (
           <View tw="items-center justify-center mt-20">
@@ -244,7 +233,10 @@ const NFTSList = ({
 
   const ListHeaderComponent = useMemo(
     () => (
-      <View tw="p-4">
+      <View
+        tw="p-4 dark:border-gray-900 border-gray-100"
+        style={{ borderBottomWidth: 1 }}
+      >
         {SelectionControl}
         {data.length === 0 && !isLoading ? (
           <View tw="items-center justify-center mt-20">
