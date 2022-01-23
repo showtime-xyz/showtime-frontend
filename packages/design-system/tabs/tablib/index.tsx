@@ -33,6 +33,7 @@ import Reanimated, {
 import { TabListProps, TabRootProps, TabsContextType } from "./types";
 import { useScrollToTop } from "@react-navigation/native";
 import { usePageScrollHandler } from "./usePagerScrollHandler";
+import { VisibilityTrackerFlatlist } from "app/components/VisibilityTrackerFlatlist";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -486,7 +487,9 @@ const TabScrollView = makeScrollableComponent<
   ScrollViewProps,
   typeof Reanimated.ScrollView
 >(Reanimated.ScrollView);
-const AnimatedFlatList = Reanimated.createAnimatedComponent(FlatList);
+const AnimatedFlatList = Reanimated.createAnimatedComponent(
+  VisibilityTrackerFlatlist
+);
 const TabFlatList = makeScrollableComponent<
   FlatListProps<any>,
   typeof AnimatedFlatList
