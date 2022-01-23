@@ -15,6 +15,7 @@ import {
 } from "design-system";
 import { tw } from "design-system/tailwind";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
+import { cardSize } from "design-system/creator-preview";
 
 const TAB_LIST_HEIGHT = 64;
 
@@ -137,6 +138,8 @@ const CreatorsList = ({
       days,
     });
 
+  const separatorHeight = 8;
+
   const keyExtractor = useCallback((item) => {
     return item.profile_id;
   }, []);
@@ -148,6 +151,20 @@ const CreatorsList = ({
   const ListFooterComponent = useCallback(
     () => <Footer isLoading={isLoadingMore} />,
     [isLoadingMore]
+  );
+
+  const ItemSeparatorComponent = useCallback(
+    () => <View tw={`bg-gray-200 dark:bg-gray-800 h-[${separatorHeight}px]`} />,
+    []
+  );
+
+  const getItemLayout = useCallback(
+    (_data, index) => ({
+      length: cardSize + separatorHeight,
+      offset: cardSize + separatorHeight * index,
+      index,
+    }),
+    []
   );
 
   const ListHeaderComponent = useMemo(
@@ -182,9 +199,11 @@ const CreatorsList = ({
         ListHeaderComponent={ListHeaderComponent}
         numColumns={1}
         windowSize={4}
-        initialNumToRender={10}
+        initialNumToRender={4}
         alwaysBounceVertical={false}
         ListFooterComponent={ListFooterComponent}
+        ItemSeparatorComponent={ItemSeparatorComponent}
+        getItemLayout={getItemLayout}
       />
     </View>
   );
