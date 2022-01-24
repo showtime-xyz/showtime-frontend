@@ -19,11 +19,12 @@ export function LikedBy({ nft }: Props) {
   if (!nft || nft.like_count === 0) return null;
   return (
     <View tw="px-4 py-2 flex flex-row justify-start	items-center">
-      <AvatarGroup
+      {/* <AvatarGroup
         count={Math.min(3, nft.like_count)}
         profiles={data?.likers}
-      />
-      <Text tw="ml-2 text-xs text-gray-600 font-semibold">Liked by&nbsp;</Text>
+      /> */}
+      {/* ml-2 */}
+      <Text tw="text-xs text-gray-600 font-semibold">Liked by&nbsp;</Text>
       <Skeleton
         show={loading}
         height={10}
