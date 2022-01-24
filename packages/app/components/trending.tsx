@@ -15,6 +15,7 @@ import {
 } from "design-system";
 import { tw } from "design-system/tailwind";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
+import { cardSize } from "design-system/creator-preview";
 
 const TAB_LIST_HEIGHT = 64;
 
@@ -100,24 +101,10 @@ const TabListContainer = ({ days }: { days: number }) => {
   return useMemo(
     () =>
       [
-        <Suspense
-          fallback={
-            <View tw="p-4">
-              {SelectionControl}
-              <Spinner size="small" />
-            </View>
-          }
-        >
+        <Suspense fallback={<Spinner size="small" />}>
           <CreatorsList days={days} SelectionControl={SelectionControl} />
         </Suspense>,
-        <Suspense
-          fallback={
-            <View tw="p-4">
-              {SelectionControl}
-              <Spinner size="small" />
-            </View>
-          }
-        >
+        <Suspense fallback={<Spinner size="small" />}>
           <NFTSList days={days} SelectionControl={SelectionControl} />
         </Suspense>,
       ][selected],
@@ -137,6 +124,8 @@ const CreatorsList = ({
       days,
     });
 
+  const separatorHeight = 8;
+
   const keyExtractor = useCallback((item) => {
     return item.profile_id;
   }, []);
@@ -150,9 +139,26 @@ const CreatorsList = ({
     [isLoadingMore]
   );
 
+  const ItemSeparatorComponent = useCallback(
+    () => <View tw={`bg-gray-200 dark:bg-gray-800 h-[${separatorHeight}px]`} />,
+    []
+  );
+
+  const getItemLayout = useCallback(
+    (_data, index) => ({
+      length: cardSize + separatorHeight,
+      offset: cardSize + separatorHeight * index,
+      index,
+    }),
+    []
+  );
+
   const ListHeaderComponent = useMemo(
     () => (
-      <View tw="p-4">
+      <View
+        tw="p-4 dark:border-gray-900 border-gray-100"
+        style={{ borderBottomWidth: 1 }}
+      >
         {SelectionControl}
         {data.length === 0 && !isLoading ? (
           <View tw="items-center justify-center mt-20">
@@ -182,9 +188,11 @@ const CreatorsList = ({
         ListHeaderComponent={ListHeaderComponent}
         numColumns={1}
         windowSize={4}
-        initialNumToRender={10}
+        initialNumToRender={4}
         alwaysBounceVertical={false}
         ListFooterComponent={ListFooterComponent}
+        ItemSeparatorComponent={ItemSeparatorComponent}
+        getItemLayout={getItemLayout}
       />
     </View>
   );
@@ -225,7 +233,10 @@ const NFTSList = ({
 
   const ListHeaderComponent = useMemo(
     () => (
-      <View tw="p-4">
+      <View
+        tw="p-4 dark:border-gray-900 border-gray-100"
+        style={{ borderBottomWidth: 1 }}
+      >
         {SelectionControl}
         {data.length === 0 && !isLoading ? (
           <View tw="items-center justify-center mt-20">
