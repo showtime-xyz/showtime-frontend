@@ -1,5 +1,6 @@
 import { ComponentProps, useRef, useState } from "react";
 import { Video as ExpoVideo } from "expo-av";
+import FastImage from "react-native-fast-image";
 
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
@@ -12,17 +13,30 @@ type VideoProps = {
 
 function Video({ tw, nftId, style, ...props }: VideoProps) {
   const videoRef = useRef<ExpoVideo>(null);
-  usePlayVideoOnVisible(videoRef);
+  const { id } = usePlayVideoOnVisible(videoRef, props.source);
+  const isItemInList = typeof id !== "undefined";
 
   return (
-    <ExpoVideo
-      ref={videoRef}
-      style={[style, tailwind.style(tw)]}
-      isMuted
-      useNativeControls={false}
-      resizeMode="cover"
-      {...props}
-    />
+    <>
+      {isItemInList && props.posterSource ? (
+        //@ts-ignore
+        <FastImage
+          source={props.posterSource}
+          style={[style, tailwind.style(tw)]}
+        />
+      ) : (
+        <ExpoVideo
+          ref={videoRef}
+          style={[style, tailwind.style(tw)]}
+          isMuted
+          useNativeControls={true}
+          resizeMode="cover"
+          shouldPlay={true}
+          source={props.source}
+          posterSource={props.posterSource}
+        />
+      )}
+    </>
   );
 }
 

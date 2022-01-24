@@ -1,6 +1,12 @@
 //@ts-nocheck- Todo fix typings
 
-import React, { useContext, ForwardedRef, useMemo, useRef } from "react";
+import React, {
+  useContext,
+  ForwardedRef,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { tw } from "../../tailwind";
 import {
   Pressable,
@@ -17,6 +23,7 @@ import {
   LayoutRectangle,
 } from "react-native";
 import PagerView from "react-native-pager-view";
+import { useIsFocused } from "@react-navigation/native";
 import Reanimated, {
   useSharedValue,
   useDerivedValue,
@@ -551,3 +558,30 @@ const utilStyles = StyleSheet.create({
     overflow: "hidden",
   },
 });
+
+export const useIsTabFocused = () => {
+  const tabsCtx = useContext(TabsContext) ?? { index: undefined };
+  const tabItemCtx = useContext(TabIndexContext);
+  const isFocused = useIsFocused();
+  const [tabFocused, setTabFocused] = useState(isFocused);
+
+  useAnimatedReaction(
+    () => {
+      return tabsCtx.index.value;
+    },
+    (v) => {
+      // If item is in a list
+      if (typeof tabItemCtx.index === "number") {
+        // we check that this list is focused
+        if (v === tabItemCtx.index) {
+          runOnJS(setTabFocused)(true);
+        } else {
+          runOnJS(setTabFocused)(false);
+        }
+      }
+    },
+    []
+  );
+
+  return tabFocused && isFocused;
+};
