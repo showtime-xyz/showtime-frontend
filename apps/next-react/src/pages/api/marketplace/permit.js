@@ -2,8 +2,8 @@ import handler, { middleware } from "@/lib/api-handler";
 import ierc20PermitAbi from "@/data/IERC20Permit.json";
 import ierc20MetaTxAbi from "@/data/IERC20MetaTx.json";
 import { ethers } from "ethers";
+import { suggestFees } from "eip1559-fee-suggestions-ethers";
 import { LIST_CURRENCIES, SOL_MAX_INT } from "@/lib/constants";
-import { adjustGasPrice } from "@/lib/adjust-gas-price";
 
 export default handler()
   .use(middleware.auth)
@@ -43,7 +43,12 @@ const submitErc20Permit = async (wallet, permit) => {
   );
 
   try {
-    const gasPrice = await adjustGasPrice(wallet);
+    const feeSuggestion = await suggestFees(wallet.provider);
+    const baseFeeInWei = parseInt(feeSuggestion.baseFeeSuggestion);
+    const maxPriorityFeePerGas = parseInt(
+      feeSuggestion.maxPriorityFeeSuggestions.urgent
+    );
+    const maxFeePerGas = baseFeeInWei + maxPriorityFeePerGas;
 
     return tokenContract.permit(
       permit.owner,
@@ -54,7 +59,8 @@ const submitErc20Permit = async (wallet, permit) => {
       r,
       s,
       {
-        gasPrice,
+        maxFeePerGas,
+        maxPriorityFeePerGas
       }
     );
   } catch (error) {
@@ -76,7 +82,10 @@ const executeMetaTx = async (wallet, metatx) => {
   );
 
   try {
-    const gasPrice = await adjustGasPrice(wallet);
+    const feeSuggestion = await suggestFees(wallet.provider);
+    const baseFeeInWei = parseInt(feeSuggestion.baseFeeSuggestion);
+    const maxPriorityFeePerGas = parseInt(feeSuggestion.maxPriorityFeeSuggestions.urgent);
+    const maxFeePerGas = baseFeeInWei + maxPriorityFeePerGas;
 
     return tokenContract.executeMetaTransaction(
       metatx.owner,
@@ -85,7 +94,8 @@ const executeMetaTx = async (wallet, metatx) => {
       s,
       v,
       {
-        gasPrice,
+        maxFeePerGas,
+        maxPriorityFeePerGas
       }
     );
   } catch (error) {
