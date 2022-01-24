@@ -8,10 +8,9 @@ import { usePlayVideoOnVisible } from "app/components/VisibilityTrackerFlatlist"
 
 type VideoProps = {
   tw?: TW;
-  nftId?: string;
 } & ComponentProps<typeof ExpoVideo>;
 
-function Video({ tw, nftId, style, ...props }: VideoProps) {
+function Video({ tw, style, ...props }: VideoProps) {
   const videoRef = useRef<ExpoVideo>(null);
   const { id } = usePlayVideoOnVisible(videoRef, props.source);
   const isItemInList = typeof id !== "undefined";
