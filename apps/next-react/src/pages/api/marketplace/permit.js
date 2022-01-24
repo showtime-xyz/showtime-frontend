@@ -4,6 +4,7 @@ import ierc20MetaTxAbi from "@/data/IERC20MetaTx.json";
 import { ethers } from "ethers";
 import { suggestFees } from "eip1559-fee-suggestions-ethers";
 import { LIST_CURRENCIES, SOL_MAX_INT } from "@/lib/constants";
+import { captureException } from "@sentry/nextjs";
 
 export default handler()
   .use(middleware.auth)
@@ -28,7 +29,13 @@ export default handler()
 
       return res.status(200).send(tx.hash);
     } catch (errorMsg) {
-      res
+      console.log("Permit:", errorMsg)
+      captureException(error, {
+        tags: {
+          permits: "permit.js",
+        },
+      });
+      return res
         .status(errorMsg === "Something went wrong." ? 500 : 400)
         .send(errorMsg);
     }
