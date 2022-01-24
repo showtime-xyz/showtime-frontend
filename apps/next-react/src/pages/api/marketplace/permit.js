@@ -44,6 +44,11 @@ const submitErc20Permit = async (wallet, permit) => {
 
   try {
     const feeSuggestion = await suggestFees(wallet.provider);
+    const baseFeeInWei = parseInt(feeSuggestion.baseFeeSuggestion);
+    const maxPriorityFeePerGas = parseInt(
+      feeSuggestion.maxPriorityFeeSuggestions.urgent
+    );
+    const maxFeePerGas = baseFeeInWei + maxPriorityFeePerGas;
 
     return tokenContract.permit(
       permit.owner,
@@ -54,8 +59,8 @@ const submitErc20Permit = async (wallet, permit) => {
       r,
       s,
       {
-        maxFeePerGas: feeSuggestion.baseFeeSuggestion,
-        maxPriorityFeePerGas: feeSuggestion.maxPriorityFeeSuggestions.urgent,
+        maxFeePerGas,
+        maxPriorityFeePerGas
       }
     );
   } catch (error) {
@@ -78,6 +83,9 @@ const executeMetaTx = async (wallet, metatx) => {
 
   try {
     const feeSuggestion = await suggestFees(wallet.provider);
+    const baseFeeInWei = parseInt(feeSuggestion.baseFeeSuggestion);
+    const maxPriorityFeePerGas = parseInt(feeSuggestion.maxPriorityFeeSuggestions.urgent);
+    const maxFeePerGas = baseFeeInWei + maxPriorityFeePerGas;
 
     return tokenContract.executeMetaTransaction(
       metatx.owner,
@@ -86,8 +94,8 @@ const executeMetaTx = async (wallet, metatx) => {
       s,
       v,
       {
-        maxFeePerGas: feeSuggestion.baseFeeSuggestion,
-        maxPriorityFeePerGas: feeSuggestion.maxPriorityFeeSuggestions.urgent,
+        maxFeePerGas,
+        maxPriorityFeePerGas
       }
     );
   } catch (error) {
