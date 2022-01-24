@@ -2,7 +2,7 @@ import handler, { middleware } from "@/lib/api-handler";
 import ierc20PermitAbi from "@/data/IERC20Permit.json";
 import ierc20MetaTxAbi from "@/data/IERC20MetaTx.json";
 import { ethers } from "ethers";
-import { suggestFee } from "eip1559-fee-suggestions-ethers";
+import { suggestFees } from "eip1559-fee-suggestions-ethers";
 import { LIST_CURRENCIES, SOL_MAX_INT } from "@/lib/constants";
 
 export default handler()
@@ -43,7 +43,7 @@ const submitErc20Permit = async (wallet, permit) => {
   );
 
   try {
-    const feeSuggestion = await suggestFee(wallet.provider);
+    const feeSuggestion = await suggestFees(wallet.provider);
 
     return tokenContract.permit(
       permit.owner,
@@ -77,7 +77,7 @@ const executeMetaTx = async (wallet, metatx) => {
   );
 
   try {
-    const feeSuggestion = await suggestFee(wallet.provider);
+    const feeSuggestion = await suggestFees(wallet.provider);
 
     return tokenContract.executeMetaTransaction(
       metatx.owner,
