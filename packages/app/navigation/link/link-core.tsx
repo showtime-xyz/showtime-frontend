@@ -3,31 +3,32 @@ import { useLinkProps } from "@react-navigation/native";
 import NextLink from "next/link";
 
 import { parseNextPath } from "app/navigation/parse-next-path";
+import { Pressable } from "design-system/pressable-scale";
 
 type Props = {
   children: React.ReactNode;
+  hitSlop?: { top: number; bottom: number; left: number; right: number };
 } & Omit<ComponentProps<typeof NextLink>, "passHref">;
 
 function LinkCore({
   children,
   href,
   as,
+  hitSlop,
   componentProps,
   Component,
-  ...props
 }: Props & {
   Component: ComponentType<any>;
   componentProps?: any;
 }) {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const linkProps = useLinkProps({
-    to: parseNextPath(as ?? href), // TODO: should this prefer href or as?
+    to: parseNextPath(href),
   });
 
   return (
-    <Component {...componentProps} {...linkProps}>
-      {children}
-    </Component>
+    <Pressable {...linkProps} hitSlop={hitSlop}>
+      <Component {...componentProps}>{children}</Component>
+    </Pressable>
   );
 }
 
