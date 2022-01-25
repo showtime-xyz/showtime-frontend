@@ -137,11 +137,12 @@ function Media({ item, numColumns, tw }: Props) {
         {item?.mime_type?.startsWith("video") && (
           <Video
             source={{
-              uri: item?.animation_preview_url
-                ? item?.animation_preview_url
-                : item?.source_url
-                ? item?.source_url
-                : item?.token_animation_url,
+              uri:
+                item?.animation_preview_url && numColumns > 1
+                  ? item?.animation_preview_url
+                  : item?.source_url
+                  ? item?.source_url
+                  : item?.token_animation_url,
             }}
             posterSource={{
               uri: item?.still_preview_url,
