@@ -27,23 +27,23 @@ export const usePlayVideoOnVisible = () => {
 
   // we mount or unmount the Video depending on the focus state
   useEffect(() => {
-    if (!isListFocused) {
-      setMounted(false);
-    } else if (context.value.includes(id)) {
-      setMounted(true);
+    if (isItemInList) {
+      if (!isListFocused) {
+        setMounted(false);
+      } else if (context.value.includes(id)) {
+        setMounted(true);
+      }
     }
-  }, [isListFocused, id]);
+  }, [isItemInList.valueOf, isListFocused, id]);
 
   // we mount or unmount the Video depending on the list visibility state
   useAnimatedReaction(
     () => context.value,
     (ctx) => {
-      if (Array.isArray(ctx)) {
-        if (isItemInList && ctx.includes(id)) {
-          runOnJS(playVideo)();
-        } else if (isItemInList && !ctx.includes(id)) {
-          runOnJS(pauseVideo)();
-        }
+      if (isItemInList && ctx.includes(id)) {
+        runOnJS(playVideo)();
+      } else if (isItemInList && !ctx.includes(id)) {
+        runOnJS(pauseVideo)();
       }
     },
     []

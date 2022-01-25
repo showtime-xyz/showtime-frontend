@@ -560,7 +560,7 @@ const utilStyles = StyleSheet.create({
 });
 
 export const useIsTabFocused = () => {
-  const tabsCtx = useContext(TabsContext) ?? { index: undefined };
+  const tabsCtx = useContext(TabsContext) ?? { index: { value: undefined } };
   const tabItemCtx = useContext(TabIndexContext);
   const isFocused = useIsFocused();
   const [tabFocused, setTabFocused] = useState(isFocused);

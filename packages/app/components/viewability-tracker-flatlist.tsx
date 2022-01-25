@@ -1,18 +1,20 @@
-import { createContext, forwardRef, useCallback, useMemo } from "react";
-import { FlatList, FlatListProps } from "react-native";
+import { createContext, forwardRef, useCallback } from "react";
+import { FlatList, FlatListProps, ViewToken } from "react-native";
 import Animated, { useSharedValue } from "react-native-reanimated";
 
 const MAX_VIEWABLE_ITEMS = 4;
 
+type ViewabilityItemsContextType = string[];
+
 export const ViewabilityItemsContext = createContext<
-  Animated.SharedValue<any[]>
+  Animated.SharedValue<ViewabilityItemsContextType>
 >({
   value: [],
 });
 
 export const ViewabilityTrackerFlatlist = forwardRef(
   (props: FlatListProps<any>, ref: any) => {
-    const visibleItems = useSharedValue<any[]>([]);
+    const visibleItems = useSharedValue<ViewabilityItemsContextType>([]);
 
     const { keyExtractor, renderItem: _renderItem } = props;
 
@@ -28,10 +30,9 @@ export const ViewabilityTrackerFlatlist = forwardRef(
     );
 
     const onViewableItemsChanged = useCallback(({ viewableItems }: any) => {
-      // TODO: change this to object for faster lookups, has at max 4 values so this doesn't look that bad
       visibleItems.value = viewableItems
         .slice(0, MAX_VIEWABLE_ITEMS)
-        .map((v: any) => v.key);
+        .map((item: any) => item.key);
     }, []);
 
     return (
@@ -40,10 +41,6 @@ export const ViewabilityTrackerFlatlist = forwardRef(
           {...props}
           onViewableItemsChanged={onViewableItemsChanged}
           ref={ref}
-          viewabilityConfig={useMemo(
-            () => ({ itemVisiblePercentThreshold: 70 }),
-            []
-          )}
           renderItem={renderItem}
         />
       </ViewabilityItemsContext.Provider>
