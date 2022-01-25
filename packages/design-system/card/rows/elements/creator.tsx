@@ -4,6 +4,8 @@ import { Image } from "design-system/image";
 import { VerificationBadge } from "design-system/verification-badge";
 import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import type { NFT } from "app/types";
+import { useRouter } from "app/navigation/use-router";
+import { Link } from "app/navigation/link";
 
 const getProfileImageUrl = (imgUrl: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
@@ -18,10 +20,17 @@ type Props = {
 };
 
 export function Creator({ nft }: Props) {
+  const router = useRouter();
+
   if (!nft) return null;
 
   return (
-    <View tw="flex flex-row">
+    <Link
+      href={`${
+        router.pathname.startsWith("/trending") ? "/trending" : ""
+      }/profile/${nft.creator_address}`}
+      tw="flex flex-row"
+    >
       <Image
         tw="w-[32px] h-[32px] rounded-full"
         source={{
@@ -47,6 +56,6 @@ export function Creator({ nft }: Props) {
           ) : null}
         </View>
       </View>
-    </View>
+    </Link>
   );
 }

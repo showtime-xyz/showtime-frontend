@@ -12,7 +12,7 @@ import { Image } from "design-system/image";
 import { Video } from "design-system/video";
 import { Model } from "design-system/model";
 import { PinchToZoom } from "design-system/pinch-to-zoom";
-import { withMemoAndColorScheme } from "app/components/memoWithTheme";
+import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 
 const getImageUrl = (imgUrl: string, tokenAspectRatio: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
@@ -137,11 +137,12 @@ function Media({ item, numColumns, tw }: Props) {
         {item?.mime_type?.startsWith("video") && (
           <Video
             source={{
-              uri: item?.animation_preview_url
-                ? item?.animation_preview_url
-                : item?.source_url
-                ? item?.source_url
-                : item?.token_animation_url,
+              uri:
+                item?.animation_preview_url && numColumns > 1
+                  ? item?.animation_preview_url
+                  : item?.source_url
+                  ? item?.source_url
+                  : item?.token_animation_url,
             }}
             posterSource={{
               uri: item?.still_preview_url,

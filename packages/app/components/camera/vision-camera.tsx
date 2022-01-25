@@ -172,23 +172,11 @@ export function Camera({
   const maxZoomFactor = device?.maxZoom ?? 1;
   const maxZoomFactorClamped = Math.min(maxZoomFactor, MAX_ZOOM_FACTOR);
 
-  const neutralZoomOut =
-    (neutralZoomFactor - minZoomFactor) / (maxZoomFactor - minZoomFactor);
-  const neutralZoomIn = (neutralZoomOut / maxZoomFactorClamped) * maxZoomFactor;
-  const maxZoomOut = maxZoomFactorClamped / maxZoomFactor;
-
   const cameraAnimatedProps = useAnimatedProps(() => {
-    const z = interpolate(
-      zoom.value,
-      [0, neutralZoomIn, 1],
-      [0, neutralZoomOut, maxZoomOut],
-      Extrapolate.CLAMP
-    );
-
     return {
-      zoom: isNaN(z) ? 0 : z,
+      zoom: neutralZoomFactor,
     };
-  }, [maxZoomOut, neutralZoomOut, neutralZoomIn, zoom]);
+  }, [neutralZoomFactor]);
 
   // Camera callbacks
   const onError = useCallback((error: CameraRuntimeError) => {
@@ -221,9 +209,9 @@ export function Camera({
   }, [flash]);
 
   useEffect(() => {
-    // Run everytime the neutralZoomScaled value changes. (reset zoom when device changes)
-    zoom.value = neutralZoomIn;
-  }, [neutralZoomIn, zoom]);
+    // Reset zoom when device changes
+    zoom.value = neutralZoomFactor;
+  }, [neutralZoomFactor, zoom]);
 
   // The gesture handler maps the linear pinch gesture (0 - 1) to an exponential curve since a camera's zoom
   // function does not appear linear to the user. (aka zoom 0.1 -> 0.2 does not look equal in difference as 0.8 -> 0.9)

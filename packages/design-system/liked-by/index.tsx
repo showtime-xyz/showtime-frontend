@@ -1,10 +1,13 @@
+import { Fragment } from "react";
+
 import { View } from "design-system/view";
 import { Text } from "design-system/text";
-import { AvatarGroup } from "design-system/avatar-group";
 import { Skeleton } from "design-system/skeleton";
 import { useLikes } from "app/hooks/api/use-likes";
 import { useIsDarkMode } from "../hooks";
-import { Fragment } from "react";
+import { TextLink } from "app/navigation/link";
+import { useRouter } from "app/navigation/use-router";
+import { formatAddressShort } from "app/lib/utilities";
 
 interface Props {
   nft?: any;
@@ -12,19 +15,18 @@ interface Props {
 
 export function LikedBy({ nft }: Props) {
   //#region hooks
+  const router = useRouter();
   const isDarkMode = useIsDarkMode();
   const { data, loading } = useLikes(nft?.nft_id);
   //#endregion
 
   if (!nft || nft.like_count === 0) return null;
+
   return (
     <View tw="px-4 py-2 flex flex-row justify-start	items-center">
-      {/* <AvatarGroup
-        count={Math.min(3, nft.like_count)}
-        profiles={data?.likers}
-      /> */}
-      {/* ml-2 */}
-      <Text tw="text-xs text-gray-600 font-semibold">Liked by&nbsp;</Text>
+      <Text variant="text-xs" tw="text-gray-600 font-semibold">
+        Liked by&nbsp;
+      </Text>
       <Skeleton
         show={loading}
         height={10}
@@ -32,20 +34,35 @@ export function LikedBy({ nft }: Props) {
         colorMode={isDarkMode ? "dark" : "light"}
       >
         {!loading ? (
-          <Text tw="text-xs text-gray-600 font-semibold">
+          <Text variant="text-xs" tw="text-gray-600 font-semibold">
             {data?.likers.slice(0, 2).map((like, index) => (
               <Fragment key={`liked-by-user-${like.profile_id}`}>
-                <Text tw="font-bold	text-black dark:text-white">
-                  @{like.username}
-                </Text>
-                {index === 0 && data?.likers.length > 1 && <Text>,&nbsp;</Text>}
+                <TextLink
+                  variant="text-xs"
+                  href={`${
+                    router.pathname.startsWith("/trending") ? "/trending" : ""
+                  }/profile/${like.wallet_address}`}
+                  tw="font-bold	text-black dark:text-white"
+                >
+                  {like.username ? (
+                    <>@{like.username}</>
+                  ) : (
+                    <>{formatAddressShort(like.wallet_address)}</>
+                  )}
+                </TextLink>
+                {index === 0 && data?.likers.length > 1 && (
+                  <Text variant="text-xs">,&nbsp;</Text>
+                )}
               </Fragment>
             ))}
             &nbsp;
             {(data?.likers.length ?? 0) > 2 && (
               <>
-                <Text>&amp;&nbsp;</Text>
-                <Text tw="font-bold	text-black dark:text-white">
+                <Text variant="text-xs">&amp;&nbsp;</Text>
+                <Text
+                  variant="text-xs"
+                  tw="font-bold text-black dark:text-white"
+                >
                   {`${data?.likers.length ?? 0} others`}
                 </Text>
               </>
