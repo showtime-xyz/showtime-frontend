@@ -4,22 +4,22 @@ import { useIsTabFocused } from "design-system/tabs/tablib";
 import {
   ItemKeyContext,
   ViewabilityItemsContext,
-} from "./viewability-tracker-flatlist";
+} from "app/components/viewability-tracker-flatlist";
 
-export const usePlayVideoOnVisible = () => {
+export const useViewabilityMount = () => {
   const id = useContext(ItemKeyContext);
   const context = useContext(ViewabilityItemsContext);
   const isItemInList = typeof id !== "undefined";
   const [mounted, setMounted] = useState(false);
   let isListFocused = useIsTabFocused();
 
-  const playVideo = () => {
+  const mount = () => {
     if (!mounted) {
       setMounted(true);
     }
   };
 
-  const pauseVideo = () => {
+  const unmount = () => {
     if (mounted) {
       setMounted(false);
     }
@@ -41,9 +41,9 @@ export const usePlayVideoOnVisible = () => {
     () => context.value,
     (ctx) => {
       if (isItemInList && ctx.includes(id)) {
-        runOnJS(playVideo)();
+        runOnJS(mount)();
       } else if (isItemInList && !ctx.includes(id)) {
-        runOnJS(pauseVideo)();
+        runOnJS(unmount)();
       }
     },
     []

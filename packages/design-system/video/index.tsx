@@ -4,8 +4,8 @@ import FastImage from "react-native-fast-image";
 
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
-import { usePlayVideoOnVisible } from "app/components/VisibilityTrackerFlatlist";
 import { StyleSheet, View } from "react-native";
+import { useViewabilityMount } from "app/hooks/use-viewability-mount";
 
 type VideoProps = {
   tw?: TW;
@@ -13,7 +13,7 @@ type VideoProps = {
 
 function Video({ tw, style, ...props }: VideoProps) {
   const videoRef = useRef<ExpoVideo>(null);
-  const { id, mounted } = usePlayVideoOnVisible();
+  const { id, mounted } = useViewabilityMount();
   const isItemInList = typeof id !== "undefined";
   const [readyToPlay, setReadyToPlay] = useState(false);
 
@@ -61,7 +61,7 @@ function Video({ tw, style, ...props }: VideoProps) {
             ref={videoRef}
             style={StyleSheet.absoluteFill}
             isMuted
-            useNativeControls={false}
+            useNativeControls={__DEV__}
             resizeMode="cover"
             shouldPlay
             source={props.source}
