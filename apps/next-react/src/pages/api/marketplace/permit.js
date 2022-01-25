@@ -29,7 +29,7 @@ export default handler()
 
       return res.status(200).send(tx.hash);
     } catch (errorMsg) {
-      console.log("Permit:", errorMsg)
+      console.log("Permit:", errorMsg);
       captureException(error, {
         tags: {
           permits: "permit.js",
@@ -67,10 +67,11 @@ const submitErc20Permit = async (wallet, permit) => {
       s,
       {
         maxFeePerGas,
-        maxPriorityFeePerGas
+        maxPriorityFeePerGas,
       }
     );
   } catch (error) {
+    console.log("submitErc20Permit Permit:", error);
     const revertMessage = JSON.parse(error?.error?.error?.body || "{}")?.error
       ?.message;
     if (!revertMessage) {
@@ -91,7 +92,9 @@ const executeMetaTx = async (wallet, metatx) => {
   try {
     const feeSuggestion = await suggestFees(wallet.provider);
     const baseFeeInWei = parseInt(feeSuggestion.baseFeeSuggestion);
-    const maxPriorityFeePerGas = parseInt(feeSuggestion.maxPriorityFeeSuggestions.urgent);
+    const maxPriorityFeePerGas = parseInt(
+      feeSuggestion.maxPriorityFeeSuggestions.urgent
+    );
     const maxFeePerGas = baseFeeInWei + maxPriorityFeePerGas;
 
     return tokenContract.executeMetaTransaction(
@@ -102,10 +105,11 @@ const executeMetaTx = async (wallet, metatx) => {
       v,
       {
         maxFeePerGas,
-        maxPriorityFeePerGas
+        maxPriorityFeePerGas,
       }
     );
   } catch (error) {
+    console.log("ExecuteMetaTx Permit:", error);
     const revertMessage = JSON.parse(error?.error?.error?.body || "{}")?.error
       ?.message;
 
