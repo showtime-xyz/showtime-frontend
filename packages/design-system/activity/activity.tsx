@@ -15,6 +15,7 @@ import {
 } from "design-system/activity/types";
 import { ActivityDropdown } from "design-system/activity/activity-dropdown";
 import { Link, TextLink } from "app/navigation/link";
+import { formatAddressShort } from "app/lib/utilities";
 
 const getProfileImageUrl = (imgUrl: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
@@ -52,7 +53,11 @@ function Activity({ activity }: Props) {
               variant="text-sm"
               tw="text-black dark:text-white font-bold"
             >
-              @{actor.username}{" "}
+              {actor.username ? (
+                <>@{actor.username}</>
+              ) : (
+                <>{formatAddressShort(actor.wallet_address)}</>
+              )}{" "}
             </TextLink>
 
             {type === ACTIVITY_TYPES.LIKE && <Like act={activity} />}

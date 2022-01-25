@@ -69,13 +69,13 @@ function NftScreen() {
 
         <Social nft={nft} />
 
+        <LikedBy nft={nft} />
+
         <Title nft={nft} />
 
         <Description nft={nft} />
 
         <Owner nft={nft} price={true} />
-
-        <LikedBy nft={nft} />
       </ScrollView>
 
       {/* <Suspense fallback={<Spinner />}>
