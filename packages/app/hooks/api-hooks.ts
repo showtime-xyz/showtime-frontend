@@ -80,24 +80,38 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
   }, [days]);
 
   const queryState = useInfiniteListQuerySWR<any>(trendingCreatorsUrlFn);
-  const newData = useMemo(() => {
-    let newData: any = [];
-    if (queryState.data) {
-      queryState.data.forEach((p) => {
-        if (p) {
-          newData = newData.concat(p.data);
-        }
-      });
-    }
-    return newData;
-  }, [queryState.data]);
+  const limit = 15;
+  const [data, setData] = useState<any>(
+    queryState.data && queryState.data[0]
+      ? queryState.data[0].data.slice(0, limit)
+      : []
+  );
+  const currentPage = useRef(0);
 
-  useEffect(() => {}, [queryState.data]);
+  useEffect(() => {
+    if (queryState.data && queryState.data[0] && data.length === 0) {
+      const data = queryState.data[0].data;
+      const nextData = data.slice(0, limit);
+      currentPage.current = 1;
+      setData(nextData);
+    }
+  }, [queryState.data]);
 
   return {
     ...queryState,
-    data: newData,
-    fetchMore: () => {},
+    data,
+    fetchMore: () => {
+      if (
+        queryState.data &&
+        queryState.data[0] &&
+        data.length < queryState.data[0].data.length
+      ) {
+        const data = queryState.data[0].data;
+        const nextData = data.slice(currentPage.current * limit, limit);
+        currentPage.current++;
+        setData([...data, ...nextData]);
+      }
+    },
   };
 };
 

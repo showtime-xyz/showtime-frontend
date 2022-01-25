@@ -34,7 +34,7 @@ export const useViewabilityMount = () => {
         setMounted(true);
       }
     }
-  }, [isItemInList.valueOf, isListFocused, id]);
+  }, [isItemInList, isListFocused, id]);
 
   // we mount or unmount the Video depending on the list visibility state
   useAnimatedReaction(
