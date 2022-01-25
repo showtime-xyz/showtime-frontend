@@ -1,8 +1,10 @@
+import { useCallback } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Platform } from "react-native";
 import { Modal } from "design-system";
 import { Login } from "app/components/login";
 import { useRouter } from "app/navigation/use-router";
+import { createParam } from "app/navigation/use-param";
 
 /**
  * extracted these number from react-navigation
@@ -14,9 +16,33 @@ const modalPresentationHeight = Platform.isPad
   ? 12
   : 0;
 
+type Query = {
+  redirect_url: string;
+};
+
+const { useParam } = createParam<Query>();
+
 export function LoginScreen() {
+  //#region hooks
+  const [redirect_url] = useParam("redirect_url");
   const router = useRouter();
   const { top: topSafeArea } = useSafeAreaInsets();
+  //#endregion
+
+  //#region callbacks
+  const handleOnLogin = useCallback(() => {
+    if (redirect_url && redirect_url.length > 0) {
+      /**
+       * TODO: we need to get rid off this.
+       */
+      router.pop();
+      router.push(decodeURIComponent(redirect_url));
+    } else {
+      router.pop();
+    }
+  }, [redirect_url, router]);
+  //#endregion
+
   return (
     <Modal
       title="Sign In"
@@ -25,7 +51,7 @@ export function LoginScreen() {
       keyboardVerticalOffset={topSafeArea + modalPresentationHeight}
       bodyTW="bg-white dark:bg-black"
     >
-      <Login />
+      <Login onLogin={handleOnLogin} />
     </Modal>
   );
 }

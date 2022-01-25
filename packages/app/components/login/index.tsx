@@ -18,7 +18,11 @@ import { StyleSheet } from "react-native";
 
 const TAB_LIST_HEIGHT = 56;
 
-export function Login() {
+interface LoginProps {
+  onLogin?: () => void;
+}
+
+export function Login({ onLogin }: LoginProps) {
   //#region state
   const [selected, setSelected] = useState(0);
   //#endregion
@@ -31,7 +35,7 @@ export function Login() {
     handleSubmitEmail,
     handleSubmitPhoneNumber,
     handleSubmitWallet,
-  } = useLogin();
+  } = useLogin(onLogin);
   //#endregion
 
   //#region variables
