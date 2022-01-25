@@ -69,7 +69,7 @@ export function CameraButtons({
       ) : (
         <ImagePickerButton
           onPick={(photo) => {
-            router.push("/camera/create");
+            router.push(`/camera/create?uri=${photo.uri}`);
           }}
           type="camera"
         />
@@ -90,32 +90,38 @@ export function CameraButtons({
       </View>
 
       {isLoading ? (
-        <View tw="h-12 w-12 justify-center items-center">
-          <View tw="absolute">
-            <CircularProgress
-              size={50}
-              strokeWidth={1.5}
-              progress={loading}
-              showOverlay={false}
-              strokeColor="black"
-            />
-          </View>
+        <Animated.View
+          entering={SlideInDown}
+          exiting={SlideOutDown}
+          style={{ zIndex: 1 }}
+        >
+          <View tw="h-12 w-12 justify-center items-center">
+            <View tw="absolute">
+              <CircularProgress
+                size={50}
+                strokeWidth={1.5}
+                progress={loading}
+                showOverlay={false}
+                strokeColor="black"
+              />
+            </View>
 
-          <Pressable
-            tw="h-12 w-12 bg-white dark:bg-black rounded-full justify-center items-center"
-            onPress={() => {
-              router.push("/camera/create");
-            }}
-          >
-            <Check
-              color={
-                tw.style("bg-black dark:bg-white")?.backgroundColor as string
-              }
-              width={24}
-              height={24}
-            />
-          </Pressable>
-        </View>
+            <Pressable
+              tw="h-12 w-12 bg-white dark:bg-black rounded-full justify-center items-center z-10"
+              onPress={() => {
+                router.push(`/camera/create?uri=${photos[0].uri}`);
+              }}
+            >
+              <Check
+                color={
+                  tw.style("bg-black dark:bg-white")?.backgroundColor as string
+                }
+                width={24}
+                height={24}
+              />
+            </Pressable>
+          </View>
+        </Animated.View>
       ) : (
         <Pressable
           tw="h-12 w-12 bg-white dark:bg-black rounded-full justify-center items-center"

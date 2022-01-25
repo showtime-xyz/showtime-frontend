@@ -1,5 +1,5 @@
 import { Suspense, useCallback, useMemo, useReducer, useState } from "react";
-import { Dimensions, Platform } from "react-native";
+import { Dimensions, Platform, useWindowDimensions } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import Animated, { FadeIn } from "react-native-reanimated";
 
@@ -76,9 +76,8 @@ const Profile = ({ address }: { address?: string }) => {
         <Tabs.Pager>
           {data?.data.lists.map((list) => {
             return (
-              <Suspense fallback={<Spinner size="small" />}>
+              <Suspense fallback={<Spinner size="small" />} key={list.id}>
                 <TabList
-                  key={list.id}
                   profileId={profileData?.data.profile.profile_id}
                   list={list}
                 />
@@ -91,8 +90,8 @@ const Profile = ({ address }: { address?: string }) => {
   );
 };
 
-const GAP_BETWEEN_ITEMS = 2;
-const ITEM_SIZE = Dimensions.get("window").width / 2;
+const GAP_BETWEEN_ITEMS = 1;
+const ITEM_SIZE = Dimensions.get("window").width / 3;
 
 const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
   const keyExtractor = useCallback((item) => {
@@ -131,7 +130,7 @@ const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
   );
 
   const renderItem = useCallback(
-    ({ item }) => <Media item={item} count={2} />,
+    ({ item }) => <Media item={item} numColumns={3} />,
     []
   );
 
@@ -187,10 +186,10 @@ const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
         onEndReachedThreshold={0.6}
         removeClippedSubviews={Platform.OS !== "web"}
         ListHeaderComponent={ListHeaderComponent}
-        numColumns={2}
+        numColumns={3}
         getItemLayout={getItemLayout}
-        windowSize={4}
-        initialNumToRender={10}
+        windowSize={6}
+        initialNumToRender={9}
         alwaysBounceVertical={false}
         ListFooterComponent={ListFooterComponent}
         style={useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), [])}
@@ -205,28 +204,48 @@ const ProfileTop = ({ address }: { address?: string }) => {
   const username = profileData?.data.profile.username;
   const bio = profileData?.data.profile.bio;
   const colorMode = useColorScheme();
+  const { width } = useWindowDimensions();
 
   return (
     <View>
-      <View tw={`bg-gray-100 h-[${COVER_IMAGE_HEIGHT}px]`}>
-        <Image
-          source={{ uri: profileData?.data.profile.cover_url }}
-          tw={`h-[${COVER_IMAGE_HEIGHT}px] w-100vw`}
-          alt="Cover image"
-        />
+      <View tw={`bg-gray-100 dark:bg-gray-900 h-[${COVER_IMAGE_HEIGHT}px]`}>
+        <Skeleton
+          height={COVER_IMAGE_HEIGHT}
+          width={width}
+          show={loading}
+          colorMode={colorMode as any}
+        >
+          <Animated.View entering={FadeIn}>
+            <Image
+              source={{ uri: profileData?.data.profile.cover_url }}
+              tw={`h-[${COVER_IMAGE_HEIGHT}px] w-100vw`}
+              alt="Cover image"
+            />
+          </Animated.View>
+        </Skeleton>
       </View>
 
       <View tw="bg-white dark:bg-black px-2">
         <View tw="flex-row justify-between pr-2">
           <View tw="flex-row items-end">
-            <View tw="bg-gray-100 h-[144px] w-[144px] rounded-full mt-[-72px]">
-              <Image
-                source={{
-                  uri: getProfileImage(profileData?.data.profile),
-                }}
-                alt="Profile avatar"
-                tw="border-white h-[144px] w-[144px] dark:border-gray-900 rounded-full border-8"
-              />
+            <View tw="bg-gray-100 dark:bg-gray-900 h-[144px] w-[144px] rounded-full mt-[-72px]">
+              <Skeleton
+                height={144}
+                width={144}
+                show={loading}
+                colorMode={colorMode as any}
+                radius={99999}
+              >
+                <Animated.View entering={FadeIn}>
+                  <Image
+                    source={{
+                      uri: getProfileImage(profileData?.data.profile),
+                    }}
+                    alt="Profile avatar"
+                    tw="border-white h-[144px] w-[144px] dark:border-gray-900 rounded-full border-8"
+                  />
+                </Animated.View>
+              </Skeleton>
             </View>
             {/* <View tw="bg-white dark:bg-gray-900 p-1 rounded-full absolute right-2 bottom-2">
               <Image

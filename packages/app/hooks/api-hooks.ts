@@ -1,9 +1,12 @@
-import { Profile } from "../types";
-import { useCallback, useMemo } from "react";
-import { NFT } from "../types";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import useSWR, { useSWRConfig } from "swr";
+
+import { NFT, Profile } from "../types";
 import { useInfiniteListQuerySWR, fetcher } from "./use-infinite-list-query";
-import useSWR from "swr";
 import { useUser } from "./use-user";
+import { axios } from "app/lib/axios";
+import { mixpanel } from "app/lib/mixpanel";
+import { useRouter } from "app/navigation/use-router";
 
 export const useActivity = ({
   typeId,
@@ -51,7 +54,6 @@ export const useTrendingCreators = ({ days }: { days: number }) => {
   );
 
   const queryState = useInfiniteListQuerySWR<any>(trendingCreatorsUrlFn);
-
   const newData = useMemo(() => {
     let newData: any = [];
     if (queryState.data) {
@@ -72,29 +74,45 @@ export const useTrendingCreators = ({ days }: { days: number }) => {
 };
 
 export const useTrendingNFTS = ({ days }: { days: number }) => {
-  const trendingCreatorsUrlFn = useCallback(
-    (index) => {
-      const url = `/v2/featured?page=${index + 1}&days=${days}&limit=10`;
-      return url;
-    },
-    [days]
-  );
+  const trendingCreatorsUrlFn = useCallback(() => {
+    const url = `/v2/featured?days=${days}&limit=150`;
+    return url;
+  }, [days]);
 
   const queryState = useInfiniteListQuerySWR<any>(trendingCreatorsUrlFn);
+  const limit = 15;
+  const [data, setData] = useState<any>(
+    queryState.data && queryState.data[0]
+      ? queryState.data[0].data.slice(0, limit)
+      : []
+  );
+  const currentPage = useRef(0);
 
-  const newData = useMemo(() => {
-    let newData: any = [];
-    if (queryState.data) {
-      queryState.data.forEach((p) => {
-        if (p) {
-          newData = newData.concat(p.data);
-        }
-      });
+  useEffect(() => {
+    if (queryState.data && queryState.data[0] && data.length === 0) {
+      const data = queryState.data[0].data;
+      const nextData = data.slice(0, limit);
+      currentPage.current = 1;
+      setData(nextData);
     }
-    return newData;
   }, [queryState.data]);
 
-  return { ...queryState, data: newData };
+  return {
+    ...queryState,
+    data,
+    fetchMore: () => {
+      if (
+        queryState.data &&
+        queryState.data[0] &&
+        data.length < queryState.data[0].data.length
+      ) {
+        const data = queryState.data[0].data;
+        const nextData = data.slice(currentPage.current * limit, limit);
+        currentPage.current++;
+        setData([...data, ...nextData]);
+      }
+    },
+  };
 };
 
 export const useUserProfile = ({ address }: { address?: string }) => {
@@ -125,7 +143,7 @@ type UserProfileNFTs = {
 type UseProfileNFTs = {
   data: {
     items: Array<NFT>;
-    hasMore: boolean;
+    has_more: boolean;
   };
 };
 
@@ -150,7 +168,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
     (index) => {
       const url = `v1/profile_nfts?profile_id=${profileId}&page=${
         index + 1
-      }&limit=${8}&list_id=${listId}&sort_id=${sortId}&show_hidden=${showHidden}&show_duplicates=${showDuplicates}&collection_id=${collectionId}`;
+      }&limit=${12}&list_id=${listId}&sort_id=${sortId}&show_hidden=${showHidden}&show_duplicates=${showDuplicates}&collection_id=${collectionId}`;
       return url;
     },
     [profileId, listId, sortId, showDuplicates, showHidden, collectionId]
@@ -173,7 +191,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
   }, [queryState.data]);
 
   const fetchMore = () => {
-    if (queryState.data?.[queryState.data.length - 1].data.hasMore) {
+    if (queryState.data?.[queryState.data.length - 1].data.has_more) {
       queryState.fetchMore();
     }
   };
@@ -228,4 +246,174 @@ export const useComments = ({ nftId }: { nftId: number }) => {
   const queryState = useInfiniteListQuerySWR<any>(commentsUrlFn);
 
   return queryState;
+};
+
+type MyInfo = {
+  data: {
+    follows: Array<{ profile_id: number }>;
+    profile: Profile;
+    likes_nft: number[];
+    likes_comment: any[];
+    comments: number[];
+  };
+};
+
+export const useMyInfo = () => {
+  const { isAuthenticated } = useUser();
+  const queryKey = "/v2/myinfo";
+  const { mutate } = useSWRConfig();
+  const router = useRouter();
+
+  const { data, error } = useSWR<MyInfo>(
+    isAuthenticated ? queryKey : null,
+    fetcher
+  );
+
+  const follow = useCallback(
+    async (profileId: number) => {
+      if (!isAuthenticated) {
+        mixpanel.track("Follow but logged out");
+        router.push("/login");
+        return;
+      }
+
+      if (data) {
+        mutate(
+          queryKey,
+          {
+            data: {
+              ...data.data,
+              follows: [...data.data.follows, { profile_id: profileId }],
+            },
+          },
+          false
+        );
+
+        try {
+          await axios({ url: `/v2/follow/${profileId}`, method: "POST" });
+          mixpanel.track("Followed profile");
+        } catch (err) {
+          console.error(err);
+        }
+
+        mutate(queryKey);
+      }
+    },
+    [isAuthenticated, data]
+  );
+
+  const unfollow = useCallback(
+    async (profileId: number) => {
+      if (data) {
+        mutate(
+          queryKey,
+          {
+            data: {
+              ...data.data,
+              follows: data.data.follows.filter(
+                (follow) => follow.profile_id !== profileId
+              ),
+            },
+          },
+          false
+        );
+
+        try {
+          await axios({ url: `/v2/unfollow/${profileId}`, method: "POST" });
+          mixpanel.track("Unfollowed profile");
+        } catch (err) {
+          console.error(err);
+        }
+
+        mutate(queryKey);
+      }
+    },
+    [data]
+  );
+
+  const isFollowing = useCallback(
+    (userId: number) => {
+      return Boolean(
+        data?.data?.follows?.find((follow) => follow.profile_id === userId)
+      );
+    },
+    [data]
+  );
+
+  const like = useCallback(
+    async (nftId: number) => {
+      if (!isAuthenticated) {
+        router.push("/login");
+        // TODO: perform the action post login
+        return false;
+      }
+
+      if (data) {
+        mutate(
+          queryKey,
+          {
+            data: {
+              ...data.data,
+              likes_nft: [...data.data.likes_nft, nftId],
+            },
+          },
+          false
+        );
+
+        await axios({
+          url: `/v3/like/${nftId}`,
+          method: "POST",
+        });
+
+        mutate(queryKey);
+
+        return true;
+      }
+    },
+    [data, isAuthenticated]
+  );
+
+  const unlike = useCallback(
+    async (nftId: number) => {
+      if (data) {
+        mutate(
+          queryKey,
+          {
+            data: {
+              ...data.data,
+              likes_nft: data.data.likes_nft.filter((id) => id !== nftId),
+            },
+          },
+          false
+        );
+
+        await axios({
+          url: `/v3/unlike/${nftId}`,
+          method: "POST",
+        });
+
+        mutate(queryKey);
+      }
+    },
+    [data]
+  );
+
+  const isLiked = useCallback(
+    (nftId: number) => {
+      return data?.data?.likes_nft?.includes(nftId);
+    },
+    [data]
+  );
+
+  return {
+    data,
+    loading: !data,
+    error,
+    follow,
+    unfollow,
+    isFollowing,
+    like,
+    unlike,
+    isLiked,
+  };
 };

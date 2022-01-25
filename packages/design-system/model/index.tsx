@@ -10,7 +10,7 @@ type Props = {
   url: string;
   fallbackUrl: string;
   blurhash: string;
-  count: number;
+  numColumns: number;
 };
 
 function Model({ url }: { url: string }) {
@@ -29,7 +29,7 @@ function Model({ url }: { url: string }) {
 // onPointerUp	called when press ends	onPressOut
 // onPointerMove	called when press moves	onPressMove
 
-function ModelViewer({ url, fallbackUrl, blurhash, count }: Props) {
+function ModelViewer({ url, fallbackUrl, blurhash, numColumns }: Props) {
   // TODO: fix remote `.gltf` loading
   if (url.endsWith(".gltf")) {
     return (
@@ -37,7 +37,7 @@ function ModelViewer({ url, fallbackUrl, blurhash, count }: Props) {
         source={{
           uri: fallbackUrl,
         }}
-        tw={count > 1 ? "w-[50vw] h-[50vw]" : "w-[100vw] h-[100vw]"}
+        tw={numColumns > 1 ? "w-[50vw] h-[50vw]" : "w-[100vw] h-[100vw]"}
         blurhash={blurhash}
         resizeMode="cover"
       />

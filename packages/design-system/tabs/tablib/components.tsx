@@ -49,7 +49,7 @@ export const TabItem = ({ name, count }: TabItemProps) => {
       ]}
     >
       <Text
-        variant="text-13"
+        variant="text-sm"
         sx={{ fontWeight: "700" }}
         tw={`text-gray-900 dark:text-white`}
       >
@@ -57,7 +57,7 @@ export const TabItem = ({ name, count }: TabItemProps) => {
       </Text>
 
       <Text
-        variant="text-13"
+        variant="text-sm"
         sx={{ fontWeight: "400" }}
         tw={`text-gray-900 dark:text-white`}
       >
@@ -76,39 +76,33 @@ export const SelectedTabIndicator = () => {
 
   const { offset, position, tabItemLayouts } = useTabsContext();
 
-  const itemOffsets = useDerivedValue(() => {
-    let result = [];
-
-    for (let i = 0; i < tabItemLayouts.length; i++) {
-      if (tabItemLayouts[i].value) {
-        result.push(tabItemLayouts[i].value!.x);
-      }
-    }
-    return result;
-  }, [tabItemLayouts]);
-
   const animatedStyle = useAnimatedStyle(() => {
-    if (itemOffsets.value.length === 0) {
-      return {};
-    }
-
-    const input = itemOffsets.value.map((_v, i) => i);
-    const output = tabItemLayouts.map((item) => item.value?.width ?? 0);
-
+    const input = tabItemLayouts.map((_v, i) => i);
+    const translateOutput = tabItemLayouts.map((v) => v.value?.x);
+    const widthOutput = tabItemLayouts.map((v) => v.value?.width);
     const newPos = position.value + offset.value;
-    return {
-      width: interpolate(newPos, input, output, Extrapolate.CLAMP),
-      transform: [
-        {
-          translateX: interpolate(
-            newPos,
-            input,
-            itemOffsets.value,
-            Extrapolate.CLAMP
-          ),
-        },
-      ],
-    };
+    if (
+      translateOutput.some((v) => v === undefined) ||
+      widthOutput.some((v) => v === undefined)
+    ) {
+      return {};
+    } else {
+      return {
+        //@ts-ignore - widthOut won't be undefined as we check above
+        width: interpolate(newPos, input, widthOutput, Extrapolate.CLAMP),
+        transform: [
+          {
+            translateX: interpolate(
+              newPos,
+              input,
+              //@ts-ignore - translateOutput won't be undefined as we check above
+              translateOutput,
+              Extrapolate.CLAMP
+            ),
+          },
+        ],
+      };
+    }
   });
 
   return (

@@ -6,7 +6,6 @@ import {
   useLinkTo,
   LinkingOptions,
 } from "@react-navigation/native";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 import { linking } from "app/navigation/linking";
 import { NavigationElementsProvider } from "app/navigation/navigation-elements-context";
@@ -85,18 +84,16 @@ export function NavigationProvider({
       }}
     >
       <LinkTo />
-      <BottomSheetModalProvider>
-        <NavigationElementsProvider
-          value={{
-            isHeaderHidden,
-            setIsHeaderHidden,
-            isTabBarHidden,
-            setIsTabBarHidden,
-          }}
-        >
-          {children}
-        </NavigationElementsProvider>
-      </BottomSheetModalProvider>
+      <NavigationElementsProvider
+        value={{
+          isHeaderHidden,
+          setIsHeaderHidden,
+          isTabBarHidden,
+          setIsTabBarHidden,
+        }}
+      >
+        {children}
+      </NavigationElementsProvider>
     </NavigationContainer>
   );
 }

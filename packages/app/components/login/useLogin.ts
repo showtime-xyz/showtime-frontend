@@ -78,6 +78,7 @@ export const useLogin = () => {
         ];
 
         signature = await connector.signPersonalMessage(msgParams);
+        console.log("personal signature ", signature);
       }
 
       const response = await axios({
@@ -105,6 +106,7 @@ export const useLogin = () => {
         // Expire the nonce after successful login
         axios({ url: `/v1/rotatenonce?address=${address}`, method: "POST" });
       } else {
+        console.error("Login failed ", response);
         throw "Login failed";
       }
 
@@ -131,7 +133,6 @@ export const useLogin = () => {
     try {
       const Web3Provider = (await import("@ethersproject/providers"))
         .Web3Provider;
-
       // @ts-ignore
       const web3 = new Web3Provider(magic.rpcProvider);
       context.setWeb3(web3);

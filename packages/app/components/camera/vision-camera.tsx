@@ -30,7 +30,6 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useIsForeground } from "app/hooks/use-is-foreground";
 import { CameraButtons } from "app/components/camera/camera-buttons";
 import { Pressable } from "design-system/pressable-scale";
-import { useNavigationElements } from "app/navigation/use-navigation-elements";
 import { Flash, FlashOff } from "design-system/icon";
 import { View } from "design-system/view";
 import { tw } from "design-system/tailwind";
@@ -82,18 +81,6 @@ export function Camera({
   const isFocused = useIsFocused();
   const isForeground = useIsForeground();
   const isActive = isFocused && isForeground;
-
-  // Hide header when camera is active
-  const { setIsHeaderHidden } = useNavigationElements();
-  useEffect(() => {
-    setIsHeaderHidden(
-      isFocused || router?.pathname?.startsWith("/camera") ? true : false
-    );
-
-    return () => {
-      setIsHeaderHidden(false);
-    };
-  }, [isFocused, router?.pathname]);
 
   const [cameraPosition, setCameraPosition] = useState<"front" | "back">(
     "back"
@@ -185,23 +172,11 @@ export function Camera({
   const maxZoomFactor = device?.maxZoom ?? 1;
   const maxZoomFactorClamped = Math.min(maxZoomFactor, MAX_ZOOM_FACTOR);
 
-  const neutralZoomOut =
-    (neutralZoomFactor - minZoomFactor) / (maxZoomFactor - minZoomFactor);
-  const neutralZoomIn = (neutralZoomOut / maxZoomFactorClamped) * maxZoomFactor;
-  const maxZoomOut = maxZoomFactorClamped / maxZoomFactor;
-
   const cameraAnimatedProps = useAnimatedProps(() => {
-    const z = interpolate(
-      zoom.value,
-      [0, neutralZoomIn, 1],
-      [0, neutralZoomOut, maxZoomOut],
-      Extrapolate.CLAMP
-    );
-
     return {
-      zoom: isNaN(z) ? 0 : z,
+      zoom: neutralZoomFactor,
     };
-  }, [maxZoomOut, neutralZoomOut, neutralZoomIn, zoom]);
+  }, [neutralZoomFactor]);
 
   // Camera callbacks
   const onError = useCallback((error: CameraRuntimeError) => {
@@ -234,9 +209,9 @@ export function Camera({
   }, [flash]);
 
   useEffect(() => {
-    // Run everytime the neutralZoomScaled value changes. (reset zoom when device changes)
-    zoom.value = neutralZoomIn;
-  }, [neutralZoomIn, zoom]);
+    // Reset zoom when device changes
+    zoom.value = neutralZoomFactor;
+  }, [neutralZoomFactor, zoom]);
 
   // The gesture handler maps the linear pinch gesture (0 - 1) to an exponential curve since a camera's zoom
   // function does not appear linear to the user. (aka zoom 0.1 -> 0.2 does not look equal in difference as 0.8 -> 0.9)
@@ -385,7 +360,10 @@ export function Camera({
       </Animated.View>
 
       {photoUri && (
-        <View tw="w-screen h-screen bg-gray-100 dark:bg-gray-900 opacity-95">
+        <View
+          style={{ height: "100%" }}
+          tw="w-screen bg-gray-100 dark:bg-gray-900 opacity-95"
+        >
           <Image source={{ uri: photoUri }} tw="w-screen h-screen" />
         </View>
       )}
@@ -393,7 +371,7 @@ export function Camera({
       <View tw="absolute top-0 right-0 left-0 bg-gray-100 dark:bg-gray-900 opacity-95">
         <View tw="py-8 px-4 flex-row justify-end">
           <Pressable
-            tw="w-12 h-12 rounded-full justify-center items-center bg-white dark:bg-black"
+            tw="w-12 h-12 mt-4 rounded-full justify-center items-center bg-white dark:bg-black"
             onPress={onFlashPressed}
           >
             {flash === "off" ? (
@@ -423,11 +401,7 @@ export function Camera({
       <View
         tw={[
           "absolute right-0 left-0 bg-gray-100 dark:bg-gray-900 opacity-95",
-          Platform.OS === "android"
-            ? `bottom-[100px]`
-            : photoUri
-            ? `bottom-[${tabBarHeight + 46}px]`
-            : `bottom-[${tabBarHeight - 1}px]`,
+          `bottom-[${tabBarHeight - 1}px]`,
         ]}
       >
         <CameraButtons

@@ -1,5 +1,5 @@
 import { TextLink } from "app/navigation/link";
-import { ACTIVITY_TYPES, CHAIN_IDENTIFIERS } from "app/lib/constants";
+import { ACTIVITY_TYPES } from "app/lib/constants";
 
 function Transfer({ act }) {
   const { nfts, type } = act;
@@ -15,9 +15,7 @@ function Transfer({ act }) {
           <TextLink
             variant="text-sm"
             tw="text-black dark:text-white font-bold"
-            href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
-              (key) => CHAIN_IDENTIFIERS[key] == nfts[0].chain_identifier
-            )}/${nfts[0].contract_address}/${nfts[0].token_id}`}
+            href={`/nft/${nfts[0].nft_id}`}
           >
             {nfts[0].title}
           </TextLink>{" "}
@@ -25,9 +23,7 @@ function Transfer({ act }) {
           <TextLink
             variant="text-sm"
             tw="text-black dark:text-white font-bold"
-            href={`/${
-              act.counterparty?.username || act.counterparty?.wallet_address
-            }`}
+            href={`/profile/${act.counterparty?.wallet_address}`}
           >
             {act.counterparty?.name}
           </TextLink>

@@ -1,4 +1,6 @@
 import { Profile } from "./types";
+import { Biconomy } from "@biconomy/mexa";
+import { ethers } from "ethers";
 
 export const formatAddressShort = (address) => {
   if (!address) return null;
@@ -68,4 +70,51 @@ export const SORT_FIELDS = {
 
 export const getSortFields = () => {
   return [...Object.keys(SORT_FIELDS).map((key) => SORT_FIELDS[key])];
+};
+
+export const getBiconomy = async (connector: any, provider: any) => {
+  // Here provider refers to magic rpc provider and connector could be wallet connect's connector instance
+  const walletProvider = provider
+    ? {
+        walletProvider: provider.provider,
+      }
+    : {
+        signFunction: (signedDataType: string, params: any) => {
+          return new Promise((resolve, reject) => {
+            if (signedDataType === "eth_signTypedData_v4") {
+              connector
+                .signTypedData(params)
+                .then((res: string) => {
+                  console.log("received signature from wallet ", res);
+                  resolve(res);
+                })
+                .catch((err: any) => {
+                  // TODO: this never gets logged!
+                  console.log("received error on signing ");
+                  console.error(err);
+                  reject(err);
+                });
+            }
+          });
+        },
+      };
+  const biconomy = new Biconomy(
+    new ethers.providers.JsonRpcProvider(
+      `https://polygon-${
+        process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai" : "mainnet"
+      }.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
+    ),
+    {
+      apiKey: process.env.NEXT_PUBLIC_BICONOMY_KEY,
+      // TODO: add walletconnect connector instance support in biconomy
+      ...walletProvider,
+      // debug: true,
+    }
+  );
+
+  await new Promise((resolve, reject) =>
+    biconomy.onEvent(biconomy.READY, resolve).onEvent(biconomy.ERROR, reject)
+  );
+
+  return { biconomy, connector };
 };

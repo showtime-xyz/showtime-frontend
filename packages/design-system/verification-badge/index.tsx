@@ -1,14 +1,18 @@
-import Svg, { G, Path, Defs, ClipPath } from "react-native-svg";
+import Svg, { G, Path, Defs, ClipPath, SvgProps } from "react-native-svg";
 
 import { useIsDarkMode } from "design-system/hooks";
 
-export const VerificationBadge = ( {size} : {size?: number }) => {
+export const VerificationBadge = ({
+  size,
+  ...props
+}: { size?: number } & SvgProps) => {
   const isDark = useIsDarkMode();
-  let actualSize = size ?? 24
+  let actualSize = size ?? 24;
   return (
     <Svg
       width={actualSize}
       height={actualSize}
+      {...props}
       fill="none"
       viewBox="0 0 24 24"
     >

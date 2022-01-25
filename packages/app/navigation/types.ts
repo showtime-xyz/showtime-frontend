@@ -4,14 +4,15 @@ import type { NavigatorScreenParams } from "@react-navigation/native";
 type HomeStackParams = {
   home: undefined;
   login: undefined;
-  profile: { walletAddress: number };
   nft: { id: number };
+  profile: { walletAddress: number };
 };
 
 type TrendingStackParams = {
   trending: undefined;
   login: undefined;
   nft: { id: number };
+  profile: { walletAddress: number };
 };
 
 type CameraStackParams = {

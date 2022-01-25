@@ -2,11 +2,11 @@ import { useState, Suspense } from "react";
 import useUnmountSignal from "use-unmount-signal";
 import useSWR from "swr";
 
-import { View, ScrollView, Button, Spinner } from "design-system";
+import { View, Button, Spinner, ScrollView } from "design-system";
 import { Media } from "design-system/media";
 import { createParam } from "app/navigation/use-param";
 import { axios } from "app/lib/axios";
-import { Close, MoreHorizontal } from "design-system/icon";
+import { Close } from "design-system/icon";
 import { useRouter } from "app/navigation/use-router";
 import { tw } from "design-system/tailwind";
 import { PinchToZoom } from "design-system/pinch-to-zoom";
@@ -14,9 +14,12 @@ import { Social } from "design-system/card/social";
 import { Collection } from "design-system/card/rows/collection";
 import { Title } from "design-system/card/rows/title";
 import { Description } from "design-system/card/rows/description";
-import { Comments } from "design-system/comments";
+// import { Comments } from "design-system/comments";
 import type { NFT } from "app/types";
 import { useHideNavigationElements } from "app/navigation/use-navigation-elements";
+import { NFTDropdown } from "app/components/nft-dropdown";
+import { Owner } from "design-system/card/rows/owner";
+import { LikedBy } from "design-system/liked-by";
 
 type Query = {
   id: string;
@@ -42,55 +45,42 @@ function NftScreen() {
   return (
     <View tw="flex-1 bg-gray-200 dark:bg-black">
       <View tw="p-6 h-16 flex-row items-center justify-between">
-        <View tw="w-8 h-8">
-          <Button
-            onPress={router.pop}
-            variant="tertiary"
-            tw="h-8 rounded-full p-2"
-            iconOnly={true}
-          >
-            <Close
-              width={24}
-              height={24}
-              color={
-                tw.style("bg-black dark:bg-white")?.backgroundColor as string
-              }
-            />
-          </Button>
-        </View>
-        <View tw="w-8 h-8">
-          <Button
-            onPress={router.pop}
-            variant="tertiary"
-            tw="h-8 rounded-full p-2"
-            iconOnly={true}
-          >
-            <MoreHorizontal
-              width={24}
-              height={24}
-              color={
-                tw.style("bg-black dark:bg-white")?.backgroundColor as string
-              }
-            />
-          </Button>
-        </View>
+        <Button
+          onPress={router.pop}
+          variant="tertiary"
+          iconOnly={true}
+          size="regular"
+        >
+          <Close
+            color={
+              tw.style("bg-black dark:bg-white")?.backgroundColor as string
+            }
+          />
+        </Button>
+        <NFTDropdown nft={nft} />
       </View>
 
-      <PinchToZoom>
-        <Media item={nft} count={1} />
-      </PinchToZoom>
+      <ScrollView>
+        <PinchToZoom>
+          <Media item={nft} numColumns={1} />
+        </PinchToZoom>
 
-      <Social nft={nft} />
+        <Collection nft={nft} />
 
-      <Title nft={nft} />
+        <Social nft={nft} />
 
-      <Description nft={nft} />
+        <LikedBy nft={nft} />
 
-      <Collection nft={nft} />
+        <Title nft={nft} />
 
-      <Suspense fallback={<Spinner />}>
+        <Description nft={nft} />
+
+        <Owner nft={nft} price={true} />
+      </ScrollView>
+
+      {/* <Suspense fallback={<Spinner />}>
         <Comments nft={nft} />
-      </Suspense>
+      </Suspense> */}
     </View>
   );
 }

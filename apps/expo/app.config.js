@@ -33,7 +33,7 @@ export default {
   scheme: config.scheme,
   owner: "tryshowtime",
   icon: config.icon,
-  version: "1.0.0",
+  version: "1.0.1",
   userInterfaceStyle: "automatic",
   splash: {
     image: "./assets/splash.png",
@@ -42,14 +42,14 @@ export default {
   },
   ios: {
     bundleIdentifier: config.scheme,
-    buildNumber: "1.0.0",
+    buildNumber: "1.0.1",
     supportsTablet: true,
     jsEngine: "hermes",
     backgroundColor: "#FFFFFF",
   },
   android: {
     package: config.scheme,
-    versionCode: 1,
+    versionCode: 2,
     adaptiveIcon: {
       foregroundImage: config.foregroundImage,
       backgroundImage: config.backgroundImage,
@@ -65,19 +65,32 @@ export default {
   orientation: "portrait",
   updates: {
     fallbackToCacheTimeout: 0,
+    url: "https://u.expo.dev/45cbf5d5-24fe-4aa6-9580-acf540651abd",
+  },
+  runtimeVersion: {
+    policy: "sdkVersion", // https://docs.expo.dev/eas-update/runtime-versions/
   },
   extra: {
     STAGE: process.env.STAGE,
+    eas: {
+      projectId: "45cbf5d5-24fe-4aa6-9580-acf540651abd",
+    },
   },
   plugins: [
     [
       "react-native-vision-camera",
       {
-        cameraPermissionText: "$(PRODUCT_NAME) needs access to your Camera.",
+        cameraPermissionText: "$(PRODUCT_NAME) needs access to your camera.",
         enableMicrophonePermission: true,
         microphonePermissionText:
-          "$(PRODUCT_NAME) needs access to your Microphone.",
+          "$(PRODUCT_NAME) needs access to your microphone.",
         disableFrameProcessors: true,
+      },
+    ],
+    [
+      "expo-image-picker",
+      {
+        photosPermission: "$(PRODUCT_NAME) needs access to your photos.",
       },
     ],
     ["./plugins/with-compile-sdk-version.js", 31],
@@ -89,5 +102,6 @@ export default {
       },
     ],
     "expo-community-flipper",
+    "./plugins/with-android-manifest.js",
   ],
 };

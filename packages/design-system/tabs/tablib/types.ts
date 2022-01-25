@@ -1,5 +1,5 @@
 import React from "react";
-import { Animated, LayoutRectangle } from "react-native";
+import { LayoutRectangle } from "react-native";
 import PagerView from "react-native-pager-view";
 import Reanimated from "react-native-reanimated";
 import { ScrollViewProps } from "react-native";

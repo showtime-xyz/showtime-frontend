@@ -1,6 +1,12 @@
 //@ts-nocheck- Todo fix typings
 
-import React, { useContext, ForwardedRef, useMemo, useRef } from "react";
+import React, {
+  useContext,
+  ForwardedRef,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { tw } from "../../tailwind";
 import {
   Pressable,
@@ -14,8 +20,10 @@ import {
   Platform,
   Dimensions,
   FlatListProps,
+  LayoutRectangle,
 } from "react-native";
 import PagerView from "react-native-pager-view";
+import { useIsFocused } from "@react-navigation/native";
 import Reanimated, {
   useSharedValue,
   useDerivedValue,
@@ -32,12 +40,15 @@ import Reanimated, {
 import { TabListProps, TabRootProps, TabsContextType } from "./types";
 import { useScrollToTop } from "@react-navigation/native";
 import { usePageScrollHandler } from "./usePagerScrollHandler";
+import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
 
 const windowHeight = Dimensions.get("window").height;
 
 const AnimatedPagerView = Reanimated.createAnimatedComponent(PagerView);
 
-export const TabsContext = React.createContext(null as TabsContextType);
+export const TabsContext = React.createContext(
+  null as unknown as TabsContextType
+);
 
 const Root = ({
   children,
@@ -57,7 +68,7 @@ const Root = ({
   const [tabListHeight, setTabListHeight] =
     React.useState(initialtabListHeight);
   const requestOtherViewsToSyncTheirScrollPosition = useSharedValue(false);
-  const tabItemLayouts = [];
+  const tabItemLayouts: Array<Reanimated.SharedValue<LayoutRectangle>> = [];
 
   const onIndexChange = (newIndex) => {
     index.value = newIndex;
@@ -196,7 +207,7 @@ const ListImpl = ({
 
   useDerivedValue(() => {
     if (prevIndex.value) {
-      if (tabItemLayouts[index.value].value) {
+      if (tabItemLayouts[index.value] && tabItemLayouts[index.value].value) {
         const itemLayoutX = tabItemLayouts[index.value].value.x;
         const itemWidth = tabItemLayouts[index.value].value.width;
         runOnJS(scrollTo)(itemLayoutX - windowWidth / 2 + itemWidth / 2);
@@ -483,7 +494,9 @@ const TabScrollView = makeScrollableComponent<
   ScrollViewProps,
   typeof Reanimated.ScrollView
 >(Reanimated.ScrollView);
-const AnimatedFlatList = Reanimated.createAnimatedComponent(FlatList);
+const AnimatedFlatList = Reanimated.createAnimatedComponent(
+  ViewabilityTrackerFlatlist
+);
 const TabFlatList = makeScrollableComponent<
   FlatListProps<any>,
   typeof AnimatedFlatList
@@ -545,3 +558,30 @@ const utilStyles = StyleSheet.create({
     overflow: "hidden",
   },
 });
+
+export const useIsTabFocused = () => {
+  const tabsCtx = useContext(TabsContext) ?? { index: { value: undefined } };
+  const tabItemCtx = useContext(TabIndexContext);
+  const isFocused = useIsFocused();
+  const [tabFocused, setTabFocused] = useState(isFocused);
+
+  useAnimatedReaction(
+    () => {
+      return tabsCtx.index.value;
+    },
+    (v) => {
+      // If item is in a list
+      if (typeof tabItemCtx.index === "number") {
+        // we check that this list is focused
+        if (v === tabItemCtx.index) {
+          runOnJS(setTabFocused)(true);
+        } else {
+          runOnJS(setTabFocused)(false);
+        }
+      }
+    },
+    []
+  );
+
+  return tabFocused && isFocused;
+};

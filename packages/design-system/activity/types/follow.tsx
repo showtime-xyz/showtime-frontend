@@ -1,8 +1,5 @@
-import { Link, TextLink } from "app/navigation/link";
-import { View, Text, Pressable } from "design-system";
-import { mixpanel } from "app/lib/mixpanel";
+import { TextLink } from "app/navigation/link";
 import { truncateWithEllipses } from "app/lib/utilities";
-// import UserImageList from 'app/components/user-image-list'
 
 const TRUNCATE_NAME_LENGTH = 24;
 
@@ -19,9 +16,7 @@ function Follow({ act }) {
             <TextLink
               variant="text-sm"
               tw="text-black dark:text-white font-bold"
-              href={`/${
-                counterparties[0]?.username || counterparties[0]?.wallet_address
-              }`}
+              href={`/profile/${counterparties[0]?.wallet_address}`}
             >
               {truncateWithEllipses(
                 counterparties[0].name,
@@ -37,9 +32,7 @@ function Follow({ act }) {
             <TextLink
               variant="text-sm"
               tw="text-black dark:text-white font-bold"
-              href={`/${
-                counterparties[0]?.username || counterparties[0]?.wallet_address
-              }`}
+              href={`/profile/${counterparties[0]?.wallet_address}`}
             >
               {truncateWithEllipses(
                 counterparties[0].name,
@@ -50,9 +43,7 @@ function Follow({ act }) {
             <TextLink
               variant="text-sm"
               tw="text-black dark:text-white font-bold"
-              href={`/${
-                counterparties[1]?.username || counterparties[1]?.wallet_address
-              }`}
+              href={`/profile/${counterparties[1]?.wallet_address}`}
             >
               {truncateWithEllipses(
                 counterparties[1].name,
@@ -68,9 +59,7 @@ function Follow({ act }) {
             <TextLink
               variant="text-sm"
               tw="text-black dark:text-white font-bold"
-              href={`/${
-                counterparties[0]?.username || counterparties[0]?.wallet_address
-              }`}
+              href={`/profile/${counterparties[0]?.wallet_address}`}
             >
               {truncateWithEllipses(
                 counterparties[0].name,
@@ -81,9 +70,7 @@ function Follow({ act }) {
             <TextLink
               variant="text-sm"
               tw="text-black dark:text-white font-bold"
-              href={`/${
-                counterparties[1]?.username || counterparties[1]?.wallet_address
-              }`}
+              href={`/profile/${counterparties[1]?.wallet_address}`}
             >
               {truncateWithEllipses(
                 counterparties[1].name,
@@ -94,9 +81,7 @@ function Follow({ act }) {
             <TextLink
               variant="text-sm"
               tw="text-black dark:text-white font-bold"
-              href={`/${
-                counterparties[2]?.username || counterparties[2]?.wallet_address
-              }`}
+              href={`/profile/${counterparties[2]?.wallet_address}`}
             >
               {truncateWithEllipses(
                 counterparties[2].name,
@@ -112,9 +97,7 @@ function Follow({ act }) {
             <TextLink
               variant="text-sm"
               tw="text-black dark:text-white font-bold"
-              href={`/${
-                counterparties[0]?.username || counterparties[0]?.wallet_address
-              }`}
+              href={`/profile/${counterparties[0]?.wallet_address}`}
             >
               {truncateWithEllipses(
                 counterparties[0].name,
@@ -125,9 +108,7 @@ function Follow({ act }) {
             <TextLink
               variant="text-sm"
               tw="text-black dark:text-white font-bold"
-              href={`/${
-                counterparties[1]?.username || counterparties[1]?.wallet_address
-              }`}
+              href={`/profile/${counterparties[1]?.wallet_address}`}
             >
               {truncateWithEllipses(
                 counterparties[1].name,
@@ -138,9 +119,6 @@ function Follow({ act }) {
           </>
         )}
       </>
-      {/* <View tw="flex mt-2 mb-4">
-				<UserImageList users={counterparties.slice(0, isMobile ? 5 : 7)} />
-			</> */}
     </>
   );
 }

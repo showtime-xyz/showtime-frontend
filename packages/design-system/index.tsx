@@ -16,6 +16,8 @@ export { Image } from "design-system/image";
 
 export { Modal } from "design-system/modal";
 
+export { ModalSheet } from "design-system/modal-sheet";
+
 export { ActivityIndicator } from "design-system/activity-indicator";
 
 export { Skeleton } from "design-system/skeleton";
@@ -35,3 +37,5 @@ export { Select } from "design-system/select";
 export { Media } from "design-system/media";
 
 export { Fieldset } from "design-system/fieldset";
+
+export { Accordion } from "design-system/accordion";

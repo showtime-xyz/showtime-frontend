@@ -13,8 +13,9 @@ import {
   Follow,
   Transfer,
 } from "design-system/activity/types";
-import { Pressable } from "react-native";
-import { useProfileNavigation } from "app/navigation/app-navigation";
+import { ActivityDropdown } from "design-system/activity/activity-dropdown";
+import { Link, TextLink } from "app/navigation/link";
+import { formatAddressShort } from "app/lib/utilities";
 
 const getProfileImageUrl = (imgUrl: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
@@ -27,34 +28,37 @@ type Props = {
   activity: any;
 };
 
-const hitSlop = { top: 10, bottom: 10, left: 10, right: 10 };
-
 function Activity({ activity }: Props) {
   const { type, actor } = activity;
-  const openProfile = useProfileNavigation(actor.wallet_address);
 
   return (
-    <View tw="p-4">
-      <View tw="h-12 flex-row">
-        <Pressable onPress={openProfile}>
+    <View tw="px-4 py-2">
+      <View tw="flex-row justify-between">
+        <Link href={`/profile/${actor.wallet_address}`}>
           <Avatar
             url={getProfileImageUrl(actor.img_url ?? DEFAULT_PROFILE_PIC)}
             icon={type}
           />
-        </Pressable>
+        </Link>
 
-        <View tw="justify-center ml-2">
+        <View tw="items-start justify-center ml-2 w-[69vw]">
           <Text
             variant="text-sm"
             tw="text-gray-600 dark:text-gray-400 max-w-[69vw]"
             numberOfLines={2}
             ellipsizeMode="tail"
           >
-            <Pressable onPress={openProfile} hitSlop={hitSlop}>
-              <Text variant="text-sm" tw="text-black dark:text-white font-bold">
-                @{actor.username}{" "}
-              </Text>
-            </Pressable>
+            <TextLink
+              href={`/profile/${actor.wallet_address}`}
+              variant="text-sm"
+              tw="text-black dark:text-white font-bold"
+            >
+              {actor.username ? (
+                <>@{actor.username}</>
+              ) : (
+                <>{formatAddressShort(actor.wallet_address)}</>
+              )}{" "}
+            </TextLink>
 
             {type === ACTIVITY_TYPES.LIKE && <Like act={activity} />}
 
@@ -80,6 +84,10 @@ function Activity({ activity }: Props) {
               addSuffix: true,
             })}
           </Text>
+        </View>
+
+        <View tw="justify-center">
+          <ActivityDropdown activity={activity} />
         </View>
       </View>
     </View>

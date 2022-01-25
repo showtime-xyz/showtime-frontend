@@ -45,6 +45,10 @@ import {
   setColorScheme as setUserColorScheme,
   useColorScheme as useUserColorScheme,
 } from "app/lib/color-scheme";
+import { magic } from "app/lib/magic";
+import { Relayer } from "app/lib/magic";
+import { ethers } from "ethers";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 enableScreens(true);
 // enableFreeze(true)
@@ -183,6 +187,7 @@ function AppContextProvider({
   const { mutate } = useSWRConfig();
   const connector = useWalletConnect();
   const [web3, setWeb3] = useState(null);
+  const [mountRelayerOnApp, setMountRelayerOnApp] = useState(true);
 
   useDeviceContext(tw, { withDeviceColorScheme: false });
   // Default to device color scheme
@@ -221,10 +226,21 @@ function AppContextProvider({
     }
   }, [isDark]);
 
+  useEffect(() => {
+    magic.user.isLoggedIn().then((isLoggedIn) => {
+      if (magic.rpcProvider && isLoggedIn) {
+        const provider = new ethers.providers.Web3Provider(magic.rpcProvider);
+        setWeb3(provider);
+      }
+    });
+  }, []);
+
   const injectedGlobalContext = {
     web3,
     setWeb3,
+    setMountRelayerOnApp,
     logOut: () => {
+      magic.user.logout();
       deleteCache();
       deleteRefreshToken();
       accessTokenManager.deleteAccessToken();
@@ -245,6 +261,8 @@ function AppContextProvider({
   return (
     <AppContext.Provider value={injectedGlobalContext}>
       {children}
+      {/* TODO: Open Relayer on FullWindow, need change in relayer source */}
+      {mountRelayerOnApp ? <Relayer /> : null}
     </AppContext.Provider>
   );
 }
@@ -286,10 +304,10 @@ function App() {
                   ): JSX.Element => <QRCodeModal {...props} />}
                 >
                   <AppContextProvider>
-                    <>
+                    <BottomSheetModalProvider>
                       <StatusBar style="auto" />
                       <NextTabNavigator />
-                    </>
+                    </BottomSheetModalProvider>
                   </AppContextProvider>
                 </WalletConnectProvider>
               </SWRProvider>

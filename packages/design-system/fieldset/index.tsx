@@ -16,6 +16,7 @@ type FieldsetProps = {
   disabled?: boolean;
   tw?: string;
   select?: SelectProps;
+  selectOnly?: boolean;
 } & TextInputProps;
 
 export function Fieldset(props: FieldsetProps) {
@@ -27,6 +28,7 @@ export function Fieldset(props: FieldsetProps) {
     disabled,
     select,
     tw: twProp = "",
+    selectOnly,
     ...textInputProps
   } = props;
   let style = "bg-gray-100 dark:bg-gray-900";
@@ -40,51 +42,48 @@ export function Fieldset(props: FieldsetProps) {
 
   return (
     <View tw={`p-4 rounded-4 ${style} ${twProp}`}>
-      <Label
-        htmlFor={inputId}
-        tw="font-bold Lab-sm text-gray-900 dark:text-white"
-      >
+      <Label htmlFor={inputId} tw="font-bold text-gray-900 dark:text-white">
         {label}
       </Label>
       <View tw="mt-4 flex-row items-center">
-        <TextInput
-          tw="flex-1 text-black dark:text-gray-300 focus:outline-none focus-visible:ring-1"
-          {...textInputProps}
-          style={{
-            fontSize: 16,
-          }}
-          editable={disabled}
-          nativeID={inputId}
-          accessibilityLabel={accessibilityLabel}
-          placeholderTextColor={
-            isDark ? tw.color("gray-400") : tw.color("gray-600")
-          }
-          selectionColor={isDark ? tw.color("gray-300") : tw.color("gray-700")}
-          //@ts-ignore - web only
-          accessibilityDescribedBy={Platform.select({
-            web: helperText ? helperTextId : undefined,
-            default: undefined,
-          })}
-          accessibilityErrorMessage={Platform.select({
-            web: errorText ? errorTextId : undefined,
-            default: undefined,
-          })}
-          accessibilityInvalid={Platform.select({
-            web: errorText ? true : false,
-            default: undefined,
-          })}
-        />
+        {!selectOnly ? (
+          <TextInput
+            tw="flex-1 text-black dark:text-gray-300 focus:outline-none focus-visible:ring-1"
+            {...textInputProps}
+            style={{
+              fontSize: 16,
+            }}
+            editable={disabled}
+            nativeID={inputId}
+            accessibilityLabel={accessibilityLabel}
+            placeholderTextColor={
+              isDark ? tw.color("gray-400") : tw.color("gray-600")
+            }
+            selectionColor={
+              isDark ? tw.color("gray-300") : tw.color("gray-700")
+            }
+            //@ts-ignore - web only
+            accessibilityDescribedBy={Platform.select({
+              web: helperText ? helperTextId : undefined,
+              default: undefined,
+            })}
+            accessibilityErrorMessage={Platform.select({
+              web: errorText ? errorTextId : undefined,
+              default: undefined,
+            })}
+            accessibilityInvalid={Platform.select({
+              web: errorText ? true : false,
+              default: undefined,
+            })}
+          />
+        ) : null}
+
         {select ? (
           <Select disabled={disabled} size="small" {...select} />
         ) : null}
       </View>
       {errorText ? (
-        <Text
-          nativeID={errorTextId}
-          tw="mt-4 text-sm text-red-500 font-semibold"
-        >
-          {errorText}
-        </Text>
+        <ErrorText nativeID={errorTextId}>{errorText}</ErrorText>
       ) : null}
       {helperText ? (
         <>
@@ -100,3 +99,17 @@ export function Fieldset(props: FieldsetProps) {
     </View>
   );
 }
+
+export const ErrorText = ({
+  children,
+  nativeID,
+}: {
+  children: string;
+  nativeID?: string;
+}) => {
+  return (
+    <Text nativeID={nativeID} tw="mt-4 text-sm text-red-500 font-semibold">
+      {children}
+    </Text>
+  );
+};
