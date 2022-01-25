@@ -49,7 +49,7 @@ export default {
   },
   android: {
     package: config.scheme,
-    versionCode: 1,
+    versionCode: 2,
     adaptiveIcon: {
       foregroundImage: config.foregroundImage,
       backgroundImage: config.backgroundImage,
