@@ -12,7 +12,7 @@ import { Image } from "design-system/image";
 import { Video } from "design-system/video";
 import { Model } from "design-system/model";
 import { PinchToZoom } from "design-system/pinch-to-zoom";
-import { withMemoAndColorScheme } from "app/components/memoWithTheme";
+import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 
 const getImageUrl = (imgUrl: string, tokenAspectRatio: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {

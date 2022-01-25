@@ -6,7 +6,7 @@ import { Collection } from "design-system/card/rows/collection";
 import { Title } from "design-system/card/rows/title";
 // import { Owner } from "design-system/card/rows/owner";
 import { Media } from "design-system/media";
-import { withMemoAndColorScheme } from "app/components/memoWithTheme";
+import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 
 type Props = {
   act: any;

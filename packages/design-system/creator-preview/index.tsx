@@ -7,7 +7,7 @@ import { VerificationBadge } from "design-system/verification-badge";
 import { Button } from "design-system/button";
 import { Media } from "design-system/media";
 import type { Creator } from "app/types";
-import { withMemoAndColorScheme } from "app/components/memoWithTheme";
+import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { Link } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
