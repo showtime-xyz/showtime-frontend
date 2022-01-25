@@ -1,4 +1,4 @@
-import { createContext, forwardRef, useCallback } from "react";
+import { createContext, forwardRef, useCallback, useMemo } from "react";
 import { FlatList, FlatListProps, ViewToken } from "react-native";
 import Animated, { useSharedValue } from "react-native-reanimated";
 
@@ -41,6 +41,13 @@ export const ViewabilityTrackerFlatlist = forwardRef(
           {...props}
           onViewableItemsChanged={onViewableItemsChanged}
           ref={ref}
+          viewabilityConfig={useMemo(
+            () => ({
+              itemVisiblePercentThreshold: 50,
+              minimumViewTime: 100,
+            }),
+            []
+          )}
           renderItem={renderItem}
         />
       </ViewabilityItemsContext.Provider>
