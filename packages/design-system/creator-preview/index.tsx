@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Dimensions } from "react-native";
+
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 import { Image } from "design-system/image";
@@ -11,6 +12,7 @@ import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { Link } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
+import { formatAddressShort } from "app/lib/utilities";
 
 type Props = {
   creator: Creator;
@@ -49,11 +51,17 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
           <View>
             <View tw="items-center flex-row">
               <Text tw="text-sm text-gray-900 dark:text-white font-semibold mr-1">
-                @{props.creator.username}
+                {props.creator.username ? (
+                  <>@{props.creator.username}</>
+                ) : (
+                  <>{formatAddressShort(props.creator.address)}</>
+                )}
               </Text>
-              <View>
-                <VerificationBadge size={14} />
-              </View>
+              {Boolean(props.creator.verified) && (
+                <View>
+                  <VerificationBadge size={14} />
+                </View>
+              )}
             </View>
           </View>
         </Link>
