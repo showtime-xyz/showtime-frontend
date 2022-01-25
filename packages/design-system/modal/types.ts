@@ -1,11 +1,19 @@
 import type React from "react";
 import type { TW } from "../tailwind/types";
 
+export interface ModalWrapperProps {
+  tw?: TW;
+}
+
 export interface ModalProps {
   /**
    * Defines the modal content.
    */
   children: React.ReactNode;
+  /**
+   * Defines the modal wrapper.
+   */
+  modalWrapper?: React.FC<ModalWrapperProps> | null;
   /**
    * Defines the modal title.
    *
