@@ -19,7 +19,7 @@ export default () =>
         return res.status(500).json(err.response);
       }
 
-      if (err.response.data.error.code === 429)
+      if (err.response?.data?.error?.code === 429)
         return res.status(429).send(err.response.data.error);
       res.status(500).send("Internal Server Error");
     },
