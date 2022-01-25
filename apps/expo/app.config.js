@@ -33,7 +33,7 @@ export default {
   scheme: config.scheme,
   owner: "tryshowtime",
   icon: config.icon,
-  version: "1.0.0",
+  version: "1.0.1",
   userInterfaceStyle: "automatic",
   splash: {
     image: "./assets/splash.png",
@@ -42,7 +42,7 @@ export default {
   },
   ios: {
     bundleIdentifier: config.scheme,
-    buildNumber: "1.0.0",
+    buildNumber: "1.0.1",
     supportsTablet: true,
     jsEngine: "hermes",
     backgroundColor: "#FFFFFF",
@@ -102,5 +102,6 @@ export default {
       },
     ],
     "expo-community-flipper",
+    "./plugins/with-android-manifest.js",
   ],
 };

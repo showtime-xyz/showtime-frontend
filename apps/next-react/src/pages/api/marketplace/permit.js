@@ -2,8 +2,9 @@ import handler, { middleware } from "@/lib/api-handler";
 import ierc20PermitAbi from "@/data/IERC20Permit.json";
 import ierc20MetaTxAbi from "@/data/IERC20MetaTx.json";
 import { ethers } from "ethers";
+import { suggestFees } from "@rainbow-me/fee-suggestions";
 import { LIST_CURRENCIES, SOL_MAX_INT } from "@/lib/constants";
-import { adjustGasPrice } from "@/lib/adjust-gas-price";
+import { captureException } from "@sentry/nextjs";
 
 export default handler()
   .use(middleware.auth)
@@ -28,7 +29,13 @@ export default handler()
 
       return res.status(200).send(tx.hash);
     } catch (errorMsg) {
-      res
+      console.log("Permit:", errorMsg);
+      captureException(error, {
+        tags: {
+          permits: "permit.js",
+        },
+      });
+      return res
         .status(errorMsg === "Something went wrong." ? 500 : 400)
         .send(errorMsg);
     }
@@ -43,7 +50,12 @@ const submitErc20Permit = async (wallet, permit) => {
   );
 
   try {
-    const gasPrice = await adjustGasPrice(wallet);
+    const feeSuggestion = await suggestFees(wallet.provider);
+    const baseFeeInWei = parseInt(feeSuggestion.baseFeeSuggestion);
+    const maxPriorityFeePerGas = parseInt(
+      feeSuggestion.maxPriorityFeeSuggestions.urgent
+    );
+    const maxFeePerGas = baseFeeInWei + maxPriorityFeePerGas;
 
     return tokenContract.permit(
       permit.owner,
@@ -54,10 +66,12 @@ const submitErc20Permit = async (wallet, permit) => {
       r,
       s,
       {
-        gasPrice,
+        maxFeePerGas,
+        maxPriorityFeePerGas,
       }
     );
   } catch (error) {
+    console.log("submitErc20Permit Permit:", error);
     const revertMessage = JSON.parse(error?.error?.error?.body || "{}")?.error
       ?.message;
     if (!revertMessage) {
@@ -76,7 +90,12 @@ const executeMetaTx = async (wallet, metatx) => {
   );
 
   try {
-    const gasPrice = await adjustGasPrice(wallet);
+    const feeSuggestion = await suggestFees(wallet.provider);
+    const baseFeeInWei = parseInt(feeSuggestion.baseFeeSuggestion);
+    const maxPriorityFeePerGas = parseInt(
+      feeSuggestion.maxPriorityFeeSuggestions.urgent
+    );
+    const maxFeePerGas = baseFeeInWei + maxPriorityFeePerGas;
 
     return tokenContract.executeMetaTransaction(
       metatx.owner,
@@ -85,10 +104,12 @@ const executeMetaTx = async (wallet, metatx) => {
       s,
       v,
       {
-        gasPrice,
+        maxFeePerGas,
+        maxPriorityFeePerGas,
       }
     );
   } catch (error) {
+    console.log("ExecuteMetaTx Permit:", error);
     const revertMessage = JSON.parse(error?.error?.error?.body || "{}")?.error
       ?.message;
 
