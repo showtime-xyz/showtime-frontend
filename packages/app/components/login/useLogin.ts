@@ -154,8 +154,6 @@ export const useLogin = (onLogin?: () => void) => {
       const refreshToken = response?.refresh;
       const validResponse = accessToken && refreshToken;
 
-      console.log("response", response);
-
       if (validResponse) {
         // TODO:
         // const sealedRefreshToken = await Iron.seal(
