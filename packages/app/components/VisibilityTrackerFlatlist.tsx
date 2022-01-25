@@ -5,11 +5,11 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useRef,
+  useImperativeHandle,
+  useMemo,
   useState,
 } from "react";
-import { useIsFocused } from "@react-navigation/native";
-import { FlatList, FlatListProps, ViewToken } from "react-native";
+import { FlatList, FlatListProps } from "react-native";
 import { Video as ExpoVideo } from "expo-av";
 import Animated, {
   useSharedValue,
@@ -30,7 +30,7 @@ const VisibilityItemsContext = createContext<
 
 export const VisibilityTrackerFlatlist = forwardRef(
   (props: FlatListProps<any>, ref: any) => {
-    const visibleItems = useSharedValue<VisibileItemsContextType>({});
+    const visibleItems = useSharedValue<VisibileItemsContextType>([]);
 
     const { keyExtractor, renderItem: _renderItem } = props;
 
@@ -45,27 +45,9 @@ export const VisibilityTrackerFlatlist = forwardRef(
       [_renderItem, keyExtractor]
     );
 
-    const onViewableItemsChanged = useCallback(
-      ({ changed, viewableItems }: any) => {
-        let finalItems = viewableItems.value;
-        viewableItems.forEach((v: ViewToken) => {
-          finalItems = {
-            ...finalItems,
-            [v.key]: v.isViewable,
-          };
-        });
-
-        changed.forEach((v: ViewToken) => {
-          finalItems = {
-            ...finalItems,
-            [v.key]: v.isViewable,
-          };
-        });
-
-        visibleItems.value = finalItems;
-      },
-      []
-    );
+    const onViewableItemsChanged = useCallback(({ viewableItems }: any) => {
+      visibleItems.value = viewableItems.slice(0, 4).map((v: any) => v.key);
+    }, []);
 
     return (
       <VisibilityItemsContext.Provider value={visibleItems}>
@@ -73,6 +55,10 @@ export const VisibilityTrackerFlatlist = forwardRef(
           {...props}
           onViewableItemsChanged={onViewableItemsChanged}
           ref={ref}
+          viewabilityConfig={useMemo(
+            () => ({ itemVisiblePercentThreshold: 70 }),
+            []
+          )}
           renderItem={renderItem}
         />
       </VisibilityItemsContext.Provider>
@@ -132,29 +118,47 @@ let VideoInstanceManager = (maxInstances: number) => {
 
 const videoInstance = VideoInstanceManager(3);
 
+let mountedVideRefs: any = [];
+
 export const usePlayVideoOnVisible = (
   videoRef: RefObject<ExpoVideo> | null,
   source: any
 ) => {
   const id = useContext(ItemKeyContext);
-  // const context = useContext(VisibilityItemsContext);
-  // const isItemInList = typeof id !== "undefined";
+  const context = useContext(VisibilityItemsContext);
+  const isItemInList = typeof id !== "undefined";
 
   const [mounted, setMounted] = useState(false);
   // const loading = useRef(false);
-  // let isListFocused = useIsTabFocused();
+  let isListFocused = useIsTabFocused();
 
-  // const playVideo = () => {
-  //   if (!mounted) {
-  //     videoInstance.onAddInstance(id);
-  //   }
-  // };
+  useImperativeHandle(videoRef, () => ({
+    cleanUp: () => {
+      console.log("clean up");
+      setMounted(false);
+    },
+  }));
 
-  // const pauseVideo = () => {
-  //   if (mounted) {
-  //     videoInstance.onRemoveInstance(id);
-  //   }
-  // };
+  const playVideo = () => {
+    if (!mounted) {
+      setMounted(true);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      mountedVideRefs = mountedVideRefs.filter(
+        (v: any) => v.current !== videoRef?.current
+      );
+    };
+  }, []);
+
+  const pauseVideo = () => {
+    if (mounted) {
+      // videoInstance.onRemoveInstance(id);
+      setMounted(false);
+    }
+  };
 
   // useEffect(() => {
   //   const listener = videoInstance.subscribe(id, (mount) => {
@@ -166,14 +170,13 @@ export const usePlayVideoOnVisible = (
   //   };
   // }, [id]);
 
-  // useEffect(() => {
-  //   if (!isListFocused) {
-  //     videoRef?.current?.unloadAsync();
-  //     videoInstance.onRemoveInstance(id);
-  //   } else if (id && context.value[id]) {
-  //     videoInstance.onAddInstance(id);
-  //   }
-  // }, [isListFocused, id]);
+  useEffect(() => {
+    if (!isListFocused) {
+      setMounted(false);
+    } else if (context.value.includes(id)) {
+      setMounted(true);
+    }
+  }, [isListFocused, id]);
 
   // useEffect(() => {
   //   async function loadVideo() {
@@ -200,17 +203,17 @@ export const usePlayVideoOnVisible = (
   //   };
   // }, [mounted, source]);
 
-  // useAnimatedReaction(
-  //   () => context.value,
-  //   (ctx) => {
-  //     if (isItemInList && ctx[id] === true) {
-  //       runOnJS(playVideo)();
-  //     } else if (isItemInList && ctx[id] === false) {
-  //       runOnJS(pauseVideo)();
-  //     }
-  //   },
-  //   []
-  // );
+  useAnimatedReaction(
+    () => context.value,
+    (ctx) => {
+      if (isItemInList && ctx.includes(id)) {
+        runOnJS(playVideo)();
+      } else if (isItemInList && !ctx.includes(id)) {
+        runOnJS(pauseVideo)();
+      }
+    },
+    []
+  );
 
   return {
     mounted,
