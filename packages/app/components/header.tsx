@@ -39,7 +39,7 @@ const HeaderRight = () => {
             </View>
           )}
           {isAuthenticated ? (
-            <>
+            <View tw="bg-white dark:bg-black">
               {width > 768 && (
                 <View tw="mx-3">
                   <Button
@@ -62,7 +62,7 @@ const HeaderRight = () => {
               )}
 
               <HeaderDropdown />
-            </>
+            </View>
           ) : (
             <Button
               onPress={() => {

@@ -1,4 +1,6 @@
 import "dotenv/config";
+import semver from "semver";
+import packageJSON from "../../package.json";
 
 const STAGE = process.env.STAGE;
 const SCHEME = process.env.SCHEME ?? "io.showtime";
@@ -25,6 +27,8 @@ const envConfig = {
 };
 
 const config = envConfig[STAGE ?? "development"];
+const version = packageJSON.version;
+const majorVersion = semver.major(version);
 
 export default {
   name: "Showtime",
@@ -33,7 +37,7 @@ export default {
   scheme: config.scheme,
   owner: "tryshowtime",
   icon: config.icon,
-  version: "1.0.1",
+  version: version.toString(),
   userInterfaceStyle: "automatic",
   splash: {
     image: "./assets/splash.png",
@@ -42,14 +46,14 @@ export default {
   },
   ios: {
     bundleIdentifier: config.scheme,
-    buildNumber: "1.0.1",
+    buildNumber: majorVersion.toString(),
     supportsTablet: true,
     jsEngine: "hermes",
     backgroundColor: "#FFFFFF",
   },
   android: {
     package: config.scheme,
-    versionCode: 2,
+    versionCode: majorVersion,
     adaptiveIcon: {
       foregroundImage: config.foregroundImage,
       backgroundImage: config.backgroundImage,
@@ -67,9 +71,11 @@ export default {
     fallbackToCacheTimeout: 0,
     url: "https://u.expo.dev/45cbf5d5-24fe-4aa6-9580-acf540651abd",
   },
-  runtimeVersion: {
-    policy: "sdkVersion", // https://docs.expo.dev/eas-update/runtime-versions/
-  },
+  // We use the major version for the runtime version so it's in sync
+  // with the native app version and should prevent us from sending an update
+  // without the correct native build.
+  // Learn more: https://docs.expo.dev/eas-update/runtime-versions
+  runtimeVersion: majorVersion,
   extra: {
     STAGE: process.env.STAGE,
     eas: {

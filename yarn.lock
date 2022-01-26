@@ -10873,6 +10873,14 @@ expo-constants@~13.0.0:
     "@expo/config" "^6.0.6"
     uuid "^3.3.2"
 
+expo-constants@~13.0.1:
+  version "13.0.1"
+  resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-13.0.1.tgz#fda7e0908f4d66f73f706cc8446148efe6767dd9"
+  integrity sha512-48rhXCZMJGVx/v4DEd9PqTY6V/xLgtWHBy8nos27QIpYCyiC27I3QUQEUI1T3MXUwBsIR4LLJuwnD/4IfftrBw==
+  dependencies:
+    "@expo/config" "^6.0.6"
+    uuid "^3.3.2"
+
 expo-dev-client@~0.8.2:
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/expo-dev-client/-/expo-dev-client-0.8.2.tgz#857a6542da713a47c787dedeeb3d492fe3afbe77"
@@ -11134,10 +11142,10 @@ expo-updates-interface@~0.5.0:
   resolved "https://registry.yarnpkg.com/expo-updates-interface/-/expo-updates-interface-0.5.0.tgz#30b05b9e190b3e2662d7cc26cd84d305d7ab4217"
   integrity sha512-3Yhip5LQ6x1nQ/2Xm/uP3Oeann7YkaBwsdUpxbcMtn2Ayucuu9U7r9ltwzBFxC4RWebfhXGJZ5+gx85y0leGXQ==
 
-expo-updates@~0.11.4:
-  version "0.11.4"
-  resolved "https://registry.yarnpkg.com/expo-updates/-/expo-updates-0.11.4.tgz#201c67406d541b80081819740e216ba8cc2fa85d"
-  integrity sha512-4szF44gK2mqILL7XSpv1V6fjs8FK+EXv6+vGMwzUa9SYWI1XliP/mAMGfJOYZkJlcegX/AOmmF7fSsIt++qciQ==
+expo-updates@~0.11.5:
+  version "0.11.5"
+  resolved "https://registry.yarnpkg.com/expo-updates/-/expo-updates-0.11.5.tgz#a62349a954c97032646182092e6d3df480e3a7e3"
+  integrity sha512-mG6IMlwg+OSnZFZo8U4pk72lDEbTppNjCnCKJdNtTLz0qRoGW8jcSjmNg6Se5uOHe2DAV/LMUR0t/m7hnoaOfQ==
   dependencies:
     "@expo/config" "^6.0.6"
     "@expo/config-plugins" "^4.0.2"
