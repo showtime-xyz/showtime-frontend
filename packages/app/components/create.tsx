@@ -6,9 +6,9 @@ import { ChevronUp } from "design-system/icon";
 import { Image } from "design-system/image";
 import { Video } from "design-system/video";
 import {
+  MintNFTType,
   supportedVideoExtensions,
   UseMintNFT,
-  useMintNFT,
 } from "app/hooks/use-mint-nft";
 import { Accordion } from "design-system";
 import { useIsDarkMode } from "design-system/hooks";
@@ -47,8 +47,13 @@ const createNFTValidationSchema = yup.object({
   description: yup.string(),
 });
 
-function Create({ uri }: { uri: string }) {
-  const { startMinting, state } = useMintNFT();
+interface CreateProps {
+  uri: string;
+  state: MintNFTType;
+  startMinting: (params: UseMintNFT) => Promise<void>;
+}
+
+function Create({ uri, state, startMinting }: CreateProps) {
   const handleSubmitForm = (values: Omit<UseMintNFT, "filePath">) => {
     console.log("** Submiting minting form **", values);
     const valuesWithFilePath = { ...values, filePath: uri };

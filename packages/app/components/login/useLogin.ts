@@ -3,7 +3,6 @@ import { Platform } from "react-native";
 import { captureException } from "@sentry/nextjs";
 import { useSWRConfig } from "swr";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
-import { useRouter } from "app/navigation/use-router";
 import { magic } from "app/lib/magic";
 import { axios } from "app/lib/axios";
 // @ts-ignore
@@ -16,7 +15,7 @@ import { accessTokenManager } from "app/lib/access-token-manager";
 import { setLogin } from "app/lib/login";
 import { mixpanel } from "app/lib/mixpanel";
 
-export const useLogin = () => {
+export const useLogin = (onLogin?: () => void) => {
   //#region state
   const [signaturePending, setSignaturePending] = useState(false);
   const [walletName, setWalletName] = useState("");
@@ -25,13 +24,23 @@ export const useLogin = () => {
   //#endregion
 
   //#region hooks
-  const router = useRouter();
   const { mutate } = useSWRConfig();
   const connector = useWalletConnect();
   const context = useContext(AppContext);
   //#endregion
 
   //#region methods
+  const handleOnLoginSuccess = useCallback(
+    (source: string) => {
+      mutate(null);
+      mixpanel.track(`Login success - ${source}`);
+
+      if (onLogin) {
+        onLogin();
+      }
+    },
+    [mutate, onLogin]
+  );
   const handleSubmitWallet = useCallback(async () => {
     try {
       let address: string;
@@ -112,9 +121,7 @@ export const useLogin = () => {
         throw "Login failed";
       }
 
-      mutate(null);
-      mixpanel.track("Login success - wallet signature");
-      router.pop();
+      handleOnLoginSuccess("wallet signature");
     } catch (error) {
       magic.user.logout();
 
@@ -131,7 +138,7 @@ export const useLogin = () => {
       setSignaturePending(false);
       loginRequested.current = false;
     }
-  }, [context, connector?.connected, setWalletName]);
+  }, [context, connector?.connected, setWalletName, handleOnLoginSuccess]);
   const handleLogin = useCallback(async (payload: object) => {
     try {
       const Web3Provider = (await import("@ethersproject/providers"))
@@ -164,8 +171,6 @@ export const useLogin = () => {
       } else {
         throw "Login failed";
       }
-
-      mutate(null);
     } catch (error) {
       magic.user.logout();
       if (process.env.NODE_ENV === "development") {
@@ -207,13 +212,12 @@ export const useLogin = () => {
           email,
         });
 
-        mixpanel.track("Login success - email");
-        router.pop();
+        handleOnLoginSuccess("email");
       } catch (error) {
         handleLoginError(error);
       }
     },
-    [handleLogin, handleLoginError]
+    [handleLogin, handleLoginError, handleOnLoginSuccess]
   );
   const handleSubmitPhoneNumber = useCallback(
     async (phoneNumber: string) => {
@@ -230,8 +234,7 @@ export const useLogin = () => {
           phone_number: phoneNumber,
         });
 
-        mixpanel.track("Login success - phone number");
-        router.pop();
+        handleOnLoginSuccess("phone number");
       } catch (error) {
         handleLoginError(error);
       }
