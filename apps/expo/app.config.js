@@ -75,7 +75,7 @@ export default {
   // with the native app version and should prevent us from sending an update
   // without the correct native build.
   // Learn more: https://docs.expo.dev/eas-update/runtime-versions
-  runtimeVersion: majorVersion,
+  runtimeVersion: majorVersion.toString(),
   extra: {
     STAGE: process.env.STAGE,
     eas: {
