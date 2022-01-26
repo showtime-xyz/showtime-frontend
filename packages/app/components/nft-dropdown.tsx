@@ -14,7 +14,7 @@ import type { NFT } from "app/types";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useReport } from "app/hooks/use-report";
 import { useRouter } from "app/navigation/use-router";
-import { CHAIN_IDENTIFIERS } from "../lib/constants";
+import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 
 type Props = {
   nft: NFT;
@@ -29,7 +29,7 @@ function NFTDropdown({ nft }: Props) {
   const { report } = useReport();
   const router = useRouter();
 
-  const token_chain_name = Object.keys(CHAIN_IDENTIFIERS).find(
+  const tokenChainName = Object.keys(CHAIN_IDENTIFIERS).find(
     (key) => CHAIN_IDENTIFIERS[key] == nft.chain_identifier
   );
 
@@ -52,7 +52,7 @@ function NFTDropdown({ nft }: Props) {
         <DropdownMenuItem
           onSelect={() =>
             Share.share({
-              url: `https://showtime.io/t/${token_chain_name}/${nft.contract_address}/${nft.token_id}`,
+              url: `https://showtime.io/t/${tokenChainName}/${nft.contract_address}/${nft.token_id}`,
             })
           }
           key="copy-link"
