@@ -11398,11 +11398,6 @@ fake-merkle-patricia-tree@^1.0.1:
   dependencies:
     checkpoint-store "^1.1.0"
 
-fast-base64-decode@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/fast-base64-decode/-/fast-base64-decode-1.0.0.tgz#b434a0dd7d92b12b43f26819300d2dafb83ee418"
-  integrity sha512-qwaScUgUGBYeDNRnbc/KyllVU88Jk1pRHPStuF/lO7B0/RTRLj7U0lkdTAutlBblY08rwZDff6tNU9cjv6j//Q==
-
 fast-deep-equal@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-2.0.1.tgz#7b05218ddf9667bf7f370bf7fdb2cb15fdd0aa49"
@@ -17858,13 +17853,6 @@ react-native-gesture-handler@^2.1.1:
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
-react-native-get-random-values@^1.7.2:
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/react-native-get-random-values/-/react-native-get-random-values-1.7.2.tgz#60a9b6497d22e713779b71139f016a5fcec7ac04"
-  integrity sha512-28KRYGpIG/upV8+k/qFA+TwGW+yGjmtOHaCduJHpOQK1QUTyhiA6E2IgL4UvvU2dybeCTYFmUi9wcEQ0GiWe5g==
-  dependencies:
-    fast-base64-decode "^1.0.0"
-
 react-native-ios-context-menu@1.7.0, react-native-ios-context-menu@^1.3.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/react-native-ios-context-menu/-/react-native-ios-context-menu-1.7.0.tgz#6fd1c8c62784e5bab31ad7b0f5e2884f46bb47c2"
@@ -17937,6 +17925,11 @@ react-native-quick-base64@^2.0.2:
   integrity sha512-bLIAOUhQ0JaVQ9RSQoQdt/lV5/XHpq982J1UwN+Gj42A2GfNtqT8kJzaLjJLO6rWhMZ7iVJeFJIVcTf90pWoJQ==
   dependencies:
     base64-js "^1.5.1"
+
+react-native-random-values-jsi-helper@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-random-values-jsi-helper/-/react-native-random-values-jsi-helper-1.0.1.tgz#024252f3cbcd571dacbdfafcb63969875b7f9485"
+  integrity sha512-qt1UP7vnPzW1GKN+NCTy/Gnmsyv3fh5yPiqh7i2gXK08/Zj9RqAsGVxAooeTMhXUqaBdUTBcv6prGDyZCNaBkQ==
 
 react-native-randombytes@^3.0.0, react-native-randombytes@^3.5.1:
   version "3.6.1"
