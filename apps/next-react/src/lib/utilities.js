@@ -383,3 +383,5 @@ export const findListingItemByOwner = (item, profileID) => {
 
   return listedItem;
 };
+
+export const toWei = (number) => Math.floor(number * 10 ** 9);

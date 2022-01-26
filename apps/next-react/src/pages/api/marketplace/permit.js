@@ -1,9 +1,10 @@
+import axios from "@/lib/axios";
 import handler, { middleware } from "@/lib/api-handler";
 import ierc20PermitAbi from "@/data/IERC20Permit.json";
 import ierc20MetaTxAbi from "@/data/IERC20MetaTx.json";
 import { ethers } from "ethers";
-import { suggestFees } from "@rainbow-me/fee-suggestions";
 import { LIST_CURRENCIES, SOL_MAX_INT } from "@/lib/constants";
+import { toWei } from "@/lib/utilities";
 import { captureException } from "@sentry/nextjs";
 
 export default handler()
@@ -19,13 +20,26 @@ export default handler()
     );
 
     try {
+      const gasStationResponse = await axios.get(
+        `https://${process.env.GAS_STATION}`
+      );
+      const feeSuggestion = gasStationResponse.data;
+      const maxFee =
+        feeSuggestion.fast.maxFee + feeSuggestion.fast.maxPriorityFee;
+      const maxPriorityFee = feeSuggestion.fast.maxPriorityFee;
+
+      const txOptions = {
+        maxFeePerGas: toWei(maxFee),
+        maxPriorityFeePerGas: toWei(maxPriorityFee),
+      };
+
       const tx = [
         LIST_CURRENCIES.WETH,
         LIST_CURRENCIES.DAI,
         LIST_CURRENCIES.USDC,
       ].includes(body.tokenAddr)
-        ? await executeMetaTx(wallet, body)
-        : await submitErc20Permit(wallet, body);
+        ? await executeMetaTx(wallet, body, txOptions)
+        : await submitErc20Permit(wallet, body, txOptions);
 
       return res.status(200).send(tx.hash);
     } catch (errorMsg) {
@@ -41,7 +55,7 @@ export default handler()
     }
   });
 
-const submitErc20Permit = async (wallet, permit) => {
+const submitErc20Permit = async (wallet, permit, options) => {
   const { v, r, s } = ethers.utils.splitSignature(permit.signature);
   const tokenContract = new ethers.Contract(
     permit.tokenAddr,
@@ -50,13 +64,6 @@ const submitErc20Permit = async (wallet, permit) => {
   );
 
   try {
-    const feeSuggestion = await suggestFees(wallet.provider);
-    const baseFeeInWei = parseInt(feeSuggestion.baseFeeSuggestion);
-    const maxPriorityFeePerGas = parseInt(
-      feeSuggestion.maxPriorityFeeSuggestions.urgent
-    );
-    const maxFeePerGas = baseFeeInWei + maxPriorityFeePerGas;
-
     return tokenContract.permit(
       permit.owner,
       process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
@@ -65,10 +72,7 @@ const submitErc20Permit = async (wallet, permit) => {
       v,
       r,
       s,
-      {
-        maxFeePerGas,
-        maxPriorityFeePerGas,
-      }
+      options
     );
   } catch (error) {
     console.log("submitErc20Permit Permit:", error);
@@ -81,7 +85,7 @@ const submitErc20Permit = async (wallet, permit) => {
   }
 };
 
-const executeMetaTx = async (wallet, metatx) => {
+const executeMetaTx = async (wallet, metatx, options) => {
   const { r, s, v } = ethers.utils.splitSignature(metatx.signature);
   const tokenContract = new ethers.Contract(
     metatx.tokenAddr,
@@ -90,23 +94,13 @@ const executeMetaTx = async (wallet, metatx) => {
   );
 
   try {
-    const feeSuggestion = await suggestFees(wallet.provider);
-    const baseFeeInWei = parseInt(feeSuggestion.baseFeeSuggestion);
-    const maxPriorityFeePerGas = parseInt(
-      feeSuggestion.maxPriorityFeeSuggestions.urgent
-    );
-    const maxFeePerGas = baseFeeInWei + maxPriorityFeePerGas;
-
     return tokenContract.executeMetaTransaction(
       metatx.owner,
       metatx.fnSig,
       r,
       s,
       v,
-      {
-        maxFeePerGas,
-        maxPriorityFeePerGas,
-      }
+      options
     );
   } catch (error) {
     console.log("ExecuteMetaTx Permit:", error);
