@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Platform } from "react-native";
 import { captureException } from "@sentry/nextjs";
 import { useSWRConfig } from "swr";
@@ -21,6 +21,7 @@ export const useLogin = () => {
   const [signaturePending, setSignaturePending] = useState(false);
   const [walletName, setWalletName] = useState("");
   const [loading, setLoading] = useState(false);
+  const loginRequested = useRef(false);
   //#endregion
 
   //#region hooks
@@ -57,6 +58,7 @@ export const useLogin = () => {
         );
       } else {
         if (!connector.connected) {
+          loginRequested.current = true;
           return await connector.connect();
         }
 
@@ -127,6 +129,7 @@ export const useLogin = () => {
       });
     } finally {
       setSignaturePending(false);
+      loginRequested.current = false;
     }
   }, [context, connector?.connected, setWalletName]);
   const handleLogin = useCallback(async (payload: object) => {
@@ -239,11 +242,7 @@ export const useLogin = () => {
 
   //#region effects
   useEffect(() => {
-    connector.on("connect", () => {
-      handleSubmitWallet();
-    });
-
-    if (connector.connected) {
+    if (connector.connected && loginRequested.current) {
       handleSubmitWallet();
     }
   }, [connector?.connected]);
