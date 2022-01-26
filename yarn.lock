@@ -17926,10 +17926,10 @@ react-native-quick-base64@^2.0.2:
   dependencies:
     base64-js "^1.5.1"
 
-react-native-random-values-jsi-helper@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-random-values-jsi-helper/-/react-native-random-values-jsi-helper-1.0.1.tgz#024252f3cbcd571dacbdfafcb63969875b7f9485"
-  integrity sha512-qt1UP7vnPzW1GKN+NCTy/Gnmsyv3fh5yPiqh7i2gXK08/Zj9RqAsGVxAooeTMhXUqaBdUTBcv6prGDyZCNaBkQ==
+react-native-random-values-jsi-helper@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-random-values-jsi-helper/-/react-native-random-values-jsi-helper-1.0.2.tgz#1fe64eba1062233e19f5bf49183ae6f4455efdfd"
+  integrity sha512-9Nm6PRhLjcO/3hi7LK18riLSMeFweq0KK4d+LOoUed2j1WKGpnjWzcR3JhAWyY4KvOcY0Pz//EI9DotWxQ0u8w==
 
 react-native-randombytes@^3.0.0, react-native-randombytes@^3.5.1:
   version "3.6.1"
