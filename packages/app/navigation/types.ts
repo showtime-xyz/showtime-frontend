@@ -5,7 +5,7 @@ type HomeStackParams = {
   home: undefined;
   login: undefined;
   nft: { id: number };
-  burn: { nftId: number };
+  burn: undefined;
   profile: { walletAddress: number };
   settings: undefined;
 };
