@@ -47,6 +47,9 @@
   },
   "submit": {
     "production": {
+      "android": {
+        "serviceAccountKeyPath": "./service-account-key.json"
+      },
       "ios": {
         "appName": "Showtime: NFT Social Network",
         "ascAppId": "1606611688",
