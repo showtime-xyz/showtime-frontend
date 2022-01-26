@@ -98,14 +98,17 @@ const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
     return item.nft_id;
   }, []);
 
-  const [filter, dispatch] = useReducer((state: any, action: any) => {
-    switch (action.type) {
-      case "collection_change":
-        return { ...state, collectionId: action.payload };
-      case "sort_change":
-        return { ...state, sortId: action.payload };
-    }
-  }, defaultFilters);
+  const [filter, dispatch] = useReducer(
+    (state: any, action: any) => {
+      switch (action.type) {
+        case "collection_change":
+          return { ...state, collectionId: action.payload };
+        case "sort_change":
+          return { ...state, sortId: action.payload };
+      }
+    },
+    { ...defaultFilters, sortId: list.sort_id }
+  );
 
   const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
     useProfileNFTs({
