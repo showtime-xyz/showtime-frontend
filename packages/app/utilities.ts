@@ -118,3 +118,5 @@ export const getBiconomy = async (connector: any, provider: any) => {
 
   return { biconomy, connector };
 };
+
+export const NFT_DETAIL_API = "/v2/nft_detail";

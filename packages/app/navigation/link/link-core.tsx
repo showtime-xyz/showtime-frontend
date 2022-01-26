@@ -4,7 +4,6 @@ import NextLink from "next/link";
 
 import { parseNextPath } from "app/navigation/parse-next-path";
 import { useRouter } from "app/navigation/use-router";
-import { Pressable } from "design-system/pressable-scale";
 
 type Props = {
   children: React.ReactNode;
@@ -28,8 +27,9 @@ function LinkCore({
   });
 
   return (
-    <Pressable
+    <Component
       {...linkProps}
+      {...componentProps}
       onPress={() => {
         // If we are currently in NFT modal,
         // we need to close it before navigating to new page
@@ -38,10 +38,9 @@ function LinkCore({
         }
         linkProps.onPress();
       }}
-      hitSlop={hitSlop}
     >
-      <Component {...componentProps}>{children}</Component>
-    </Pressable>
+      {children}
+    </Component>
   );
 }
 
