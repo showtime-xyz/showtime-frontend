@@ -1,3 +1,4 @@
+import { Share } from "react-native";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -13,6 +14,7 @@ import type { NFT } from "app/types";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useReport } from "app/hooks/use-report";
 import { useRouter } from "app/navigation/use-router";
+import { CHAIN_IDENTIFIERS } from "../lib/constants";
 
 type Props = {
   nft: NFT;
@@ -26,6 +28,10 @@ function NFTDropdown({ nft }: Props) {
   );
   const { report } = useReport();
   const router = useRouter();
+
+  const token_chain_name = Object.keys(CHAIN_IDENTIFIERS).find(
+    (key) => CHAIN_IDENTIFIERS[key] == nft.chain_identifier
+  );
 
   return (
     <DropdownMenuRoot>
@@ -44,12 +50,16 @@ function NFTDropdown({ nft }: Props) {
         tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
       >
         <DropdownMenuItem
-          onSelect={() => {}}
+          onSelect={() =>
+            Share.share({
+              url: `https://showtime.io/t/${token_chain_name}/${nft.contract_address}/${nft.token_id}`,
+            })
+          }
           key="copy-link"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
           <DropdownMenuItemTitle tw="text-black dark:text-white">
-            Copy Link
+            Share
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
