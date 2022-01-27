@@ -1,4 +1,5 @@
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import useSWR from "swr";
 import { Platform, ScrollView } from "react-native";
 
 import { View, Text, Fieldset, Button } from "design-system";
@@ -7,6 +8,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useForm, Controller } from "react-hook-form";
 import { yup } from "app/lib/yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { NFT } from "app/types";
 
 const defaultValues = {
   copies: 1,
@@ -25,9 +27,17 @@ function Delete({ nftId }: { nftId: number }) {
   const { startBurning, state } = useBurnNFT();
   const handleSubmitForm = (values: Omit<UseBurnNFT, "filePath">) => {
     console.log("** Submiting burning form **", values);
-    startBurning({ ...values, tokenId: nftId });
+    startBurning({ ...values, tokenId: nft.token_id });
   };
 
+  const { data, error, mutate } = useSWR(`/v2/nft_detail/${nftId}`, (url) =>
+    axios({ url, method: "GET" })
+  );
+  const nft = data?.data as NFT;
+
+  if (error) {
+    console.error(error);
+  }
   const {
     control,
     handleSubmit,
