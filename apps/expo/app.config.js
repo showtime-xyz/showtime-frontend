@@ -50,6 +50,9 @@ export default {
     supportsTablet: true,
     jsEngine: "hermes",
     backgroundColor: "#FFFFFF",
+    config: {
+      usesNonExemptEncryption: false,
+    },
   },
   android: {
     package: config.scheme,
