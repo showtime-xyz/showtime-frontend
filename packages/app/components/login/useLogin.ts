@@ -15,6 +15,7 @@ import { accessTokenManager } from "app/lib/access-token-manager";
 import { setLogin } from "app/lib/login";
 import { mixpanel } from "app/lib/mixpanel";
 import { useFetchOnAppForeground } from "../../hooks/use-fetch-on-app-foreground";
+import { USER_API_KEY } from "app/hooks/use-user";
 
 type IStatus =
   | "idle"
@@ -100,7 +101,7 @@ export const useLogin = (onLogin?: () => void) => {
   //#region methods
   const handleOnLoginSuccess = useCallback(
     (source: string) => {
-      mutate(null);
+      mutate(USER_API_KEY);
       mixpanel.track(`Login success - ${source}`);
       dispatch({
         type: "success",
