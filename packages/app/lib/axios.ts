@@ -50,17 +50,14 @@ if (Platform.OS === "web") {
   );
 }
 
-const axiosAPI = async ({
-  url,
-  method,
-  data,
-  unmountSignal,
-}: {
+export type AxiosParams = {
   url: string;
   method: Method;
   data?: any;
   unmountSignal?: AbortSignal;
-}) => {
+};
+
+const axiosAPI = async ({ url, method, data, unmountSignal }: AxiosParams) => {
   const accessToken = accessTokenManager.getAccessToken();
   const authorizationHeader = data?.did
     ? data?.did
