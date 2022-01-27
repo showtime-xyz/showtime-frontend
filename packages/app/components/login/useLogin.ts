@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useReducer, useRef } from "react";
 import { Platform } from "react-native";
 import { captureException } from "@sentry/nextjs";
 import { useSWRConfig } from "swr";
@@ -14,19 +14,87 @@ import { setRefreshToken } from "app/lib/refresh-token";
 import { accessTokenManager } from "app/lib/access-token-manager";
 import { setLogin } from "app/lib/login";
 import { mixpanel } from "app/lib/mixpanel";
+import { useFetchOnAppForeground } from "../../hooks/use-fetch-on-app-foreground";
+
+type IStatus =
+  | "idle"
+  | "requestedWalletConnect"
+  | "waitingForSignature"
+  | "requestingNonce"
+  | "loading"
+  | "success"
+  | "error";
+
+type ILoginState = {
+  status: IStatus;
+  error: null;
+  walletName?: string;
+};
+
+const initialState: ILoginState = {
+  status: "idle" as IStatus,
+  error: null,
+  walletName: undefined,
+};
+
+const loginReducer = (
+  state: ILoginState,
+  action: { type: IStatus; payload?: any }
+): ILoginState => {
+  switch (action.type) {
+    case "requestedWalletConnect":
+      return { ...state, status: "requestedWalletConnect" };
+    case "requestingNonce":
+      return { ...state, status: "requestingNonce" };
+    case "waitingForSignature":
+      return {
+        ...state,
+        status: "waitingForSignature",
+        walletName: action.payload,
+      };
+    case "loading":
+      return { ...state, status: "loading" };
+    case "success":
+      return { ...state, status: "success" };
+    case "error":
+      return { ...state, status: "error" };
+    default:
+      return state;
+  }
+};
 
 export const useLogin = (onLogin?: () => void) => {
-  //#region state
-  const [signaturePending, setSignaturePending] = useState(false);
-  const [walletName, setWalletName] = useState("");
-  const [loading, setLoading] = useState(false);
-  const loginRequested = useRef(false);
-  //#endregion
+  const [state, dispatch] = useReducer(loginReducer, initialState);
+  const statusRef = useRef<IStatus>();
 
   //#region hooks
   const { mutate } = useSWRConfig();
   const connector = useWalletConnect();
   const context = useContext(AppContext);
+  const fetchOnForeground = useFetchOnAppForeground();
+  //#endregion
+
+  //#region effects
+  useEffect(() => {
+    statusRef.current = state.status;
+  }, [state.status]);
+  useEffect(() => {
+    // on unmount
+    return () => {
+      // if user leaves the login page with unsuccessful attempts, we logout, so it clears wallet connect sessions
+      if (statusRef.current !== "success") {
+        console.log("logging out from login modal");
+        context.logOut();
+      }
+    };
+  }, []);
+  useEffect(() => {
+    // TODO: The below call is responsible for signature verification post wallet connection
+    // We should move it in a separate function to avoid confusion
+    if (connector.connected && state.status === "requestedWalletConnect") {
+      handleSubmitWallet();
+    }
+  }, [connector?.connected, state.status]);
   //#endregion
 
   //#region methods
@@ -34,7 +102,9 @@ export const useLogin = (onLogin?: () => void) => {
     (source: string) => {
       mutate(null);
       mixpanel.track(`Login success - ${source}`);
-
+      dispatch({
+        type: "success",
+      });
       if (onLogin) {
         onLogin();
       }
@@ -52,38 +122,56 @@ export const useLogin = (onLogin?: () => void) => {
         mixpanel.track("Login - wallet button click");
 
         const web3Modal = await getWeb3Modal();
+
+        dispatch({
+          type: "requestedWalletConnect",
+        });
+
         const web3 = new Web3Provider(await web3Modal.connect());
 
         address = await web3.getSigner().getAddress();
+        dispatch({
+          type: "requestingNonce",
+        });
         const response = await axios({
           url: `/v1/getnonce?address=${address}`,
           method: "GET",
         });
 
-        setSignaturePending(true);
+        dispatch({
+          type: "waitingForSignature",
+          payload: web3Modal.selectedWallet.name,
+        });
+
         signature = await personalSignMessage(
           web3,
           process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + response?.data
         );
       } else {
         if (!connector.connected) {
-          loginRequested.current = true;
+          dispatch({ type: "requestedWalletConnect" });
           return await connector.connect();
         }
 
         address = connector?.session?.accounts[0];
-        const response = await axios({
+
+        dispatch({
+          type: "requestingNonce",
+        });
+
+        const response = await fetchOnForeground({
           url: `/v1/getnonce?address=${address}`,
           method: "GET",
         });
 
-        setSignaturePending(true);
-        // @ts-ignore
-        setWalletName(connector?._peerMeta?.name);
+        dispatch({
+          type: "waitingForSignature",
+          payload: connector?.peerMeta?.name,
+        });
 
         const msgParams = [
           convertUtf8ToHex(
-            `Sign into Showtime with this wallet. ${response?.data}`
+            process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + response?.data
           ),
           address.toLowerCase(),
         ];
@@ -92,7 +180,11 @@ export const useLogin = (onLogin?: () => void) => {
         console.log("personal signature ", signature);
       }
 
-      const response = await axios({
+      dispatch({
+        type: "loading",
+      });
+
+      const response = await fetchOnForeground({
         url: "/v1/login_wallet",
         method: "POST",
         data: { signature, address },
@@ -101,6 +193,7 @@ export const useLogin = (onLogin?: () => void) => {
       const accessToken = response?.access;
       const refreshToken = response?.refresh;
       const validResponse = accessToken && refreshToken;
+      console.log("login wallet response ", response);
 
       if (validResponse) {
         // TODO:
@@ -123,22 +216,21 @@ export const useLogin = (onLogin?: () => void) => {
 
       handleOnLoginSuccess("wallet signature");
     } catch (error) {
-      magic.user.logout();
+      // If there's an error, we don't know if it was from wallet connect or our API, so we logout.
+      // This makes sure we get to see the walletconnect select wallet modal again.
+      context.logOut();
 
-      if (process.env.NODE_ENV === "development") {
-        console.error(error);
-      }
+      dispatch({ type: "error" });
+
+      console.error(error);
 
       captureException(error, {
         tags: {
           login_signature_flow: "modalLogin.js",
         },
       });
-    } finally {
-      setSignaturePending(false);
-      loginRequested.current = false;
     }
-  }, [context, connector?.connected, setWalletName, handleOnLoginSuccess]);
+  }, [context, connector?.connected, handleOnLoginSuccess]);
   const handleLogin = useCallback(async (payload: object) => {
     try {
       const Web3Provider = (await import("@ethersproject/providers"))
@@ -147,7 +239,7 @@ export const useLogin = (onLogin?: () => void) => {
       const web3 = new Web3Provider(magic.rpcProvider);
       context.setWeb3(web3);
 
-      const response = await axios({
+      const response = await fetchOnForeground({
         url: "/v1/login_magic",
         method: "POST",
         data: payload,
@@ -169,10 +261,10 @@ export const useLogin = (onLogin?: () => void) => {
         accessTokenManager.setAccessToken(accessToken);
         setLogin(Date.now().toString());
       } else {
+        console.error("login with magic failed ", response);
         throw "Login failed";
       }
     } catch (error) {
-      magic.user.logout();
       if (process.env.NODE_ENV === "development") {
         console.error(error);
       }
@@ -186,8 +278,6 @@ export const useLogin = (onLogin?: () => void) => {
     }
   }, []);
   const handleLoginError = useCallback((error) => {
-    setLoading(false);
-
     if (process.env.NODE_ENV === "development") {
       console.error(error);
     }
@@ -202,7 +292,7 @@ export const useLogin = (onLogin?: () => void) => {
   const handleSubmitEmail = useCallback(
     async (email: string) => {
       try {
-        setLoading(true);
+        dispatch({ type: "loading" });
         mixpanel.track("Login - email button click");
 
         const did = await magic.auth.loginWithMagicLink({ email });
@@ -214,6 +304,8 @@ export const useLogin = (onLogin?: () => void) => {
 
         handleOnLoginSuccess("email");
       } catch (error) {
+        dispatch({ type: "error" });
+        context.logOut();
         handleLoginError(error);
       }
     },
@@ -222,7 +314,7 @@ export const useLogin = (onLogin?: () => void) => {
   const handleSubmitPhoneNumber = useCallback(
     async (phoneNumber: string) => {
       try {
-        setLoading(true);
+        dispatch({ type: "loading" });
         mixpanel.track("Login - phone number button click");
 
         const did = await magic.auth.loginWithSMS({
@@ -236,24 +328,19 @@ export const useLogin = (onLogin?: () => void) => {
 
         handleOnLoginSuccess("phone number");
       } catch (error) {
+        context.logOut();
         handleLoginError(error);
+        dispatch({ type: "error" });
       }
     },
     [handleLogin, handleLoginError]
   );
   //#endregion
 
-  //#region effects
-  useEffect(() => {
-    if (connector.connected && loginRequested.current) {
-      handleSubmitWallet();
-    }
-  }, [connector?.connected]);
-  //#endregion
+  console.log("status ", state.status);
+
   return {
-    loading,
-    signaturePending,
-    walletName,
+    state,
 
     handleSubmitWallet,
 
