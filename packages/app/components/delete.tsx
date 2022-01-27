@@ -80,7 +80,6 @@ function Delete({ nftId }: { nftId: number }) {
   // enable submission only on idle or error state.
   const enable = state.status === "idle" || state.status === "burningError";
 
-  // @TODO: Should this be part of the hook?
   useEffect(() => {
     if (state.status != "burningSuccess") return;
 
