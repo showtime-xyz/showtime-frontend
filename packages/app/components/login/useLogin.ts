@@ -15,6 +15,7 @@ import { setRefreshToken } from "app/lib/refresh-token";
 import { accessTokenManager } from "app/lib/access-token-manager";
 import { setLogin } from "app/lib/login";
 import { mixpanel } from "app/lib/mixpanel";
+import { useFetchOnAppForeground } from "../../hooks/use-fetch-on-app-foreground";
 
 export const useLogin = () => {
   //#region state
@@ -22,6 +23,7 @@ export const useLogin = () => {
   const [walletName, setWalletName] = useState("");
   const [loading, setLoading] = useState(false);
   const loginRequested = useRef(false);
+  const fetchOnForeground = useFetchOnAppForeground();
   //#endregion
 
   //#region hooks
@@ -65,7 +67,7 @@ export const useLogin = () => {
         }
 
         address = connector?.session?.accounts[0];
-        const response = await axios({
+        const response = await fetchOnForeground({
           url: `/v1/getnonce?address=${address}`,
           method: "GET",
         });
@@ -85,7 +87,7 @@ export const useLogin = () => {
         console.log("personal signature ", signature);
       }
 
-      const response = await axios({
+      const response = await fetchOnForeground({
         url: "/v1/login_wallet",
         method: "POST",
         data: { signature, address },
@@ -156,7 +158,7 @@ export const useLogin = () => {
       const web3 = new Web3Provider(magic.rpcProvider);
       context.setWeb3(web3);
 
-      const response = await axios({
+      const response = await fetchOnForeground({
         url: "/v1/login_magic",
         method: "POST",
         data: payload,
