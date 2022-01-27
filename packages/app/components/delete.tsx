@@ -23,6 +23,7 @@ const defaultValues = {
 };
 
 function Delete({ nftId }: { nftId: number }) {
+  const router = useRouter();
   const { user } = useUser();
   const { startBurning, state } = useBurnNFT();
   const handleSubmitForm = (values: Omit<UseBurnNFT, "filePath">) => {
