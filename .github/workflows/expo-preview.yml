@@ -69,7 +69,7 @@ jobs:
 
       - name: EAS Update
         if: success() && steps.PR.outputs.number != ''
-        run: STAGE=development eas update --branch pr-${{ steps.PR.outputs.number }} --message "Deploy to PR preview"
+        run: STAGE=staging eas update --branch pr-${{ steps.PR.outputs.number }} --message "Deploy to PR preview"
 
       - name: Preview Deep Link
         id: publish-url
