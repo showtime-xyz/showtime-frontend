@@ -5,6 +5,7 @@ import { View } from "design-system/view";
 import type { TW } from "design-system/tailwind/types";
 
 import { Props, LinkCore } from "app/navigation/link/link-core";
+import { useMemo } from "react";
 
 type LinkProps = Props & { viewProps?: ViewProps; tw?: TW };
 
@@ -38,7 +39,15 @@ function TextLink({
       {...props}
       hitSlop={hitSlop ?? DEFAULT_TEXT_LINK_HIT_SLOP}
       Component={Text}
-      componentProps={{ ...textProps, variant, tw, accessibilityRole: "link" }}
+      componentProps={useMemo(
+        () => ({
+          ...textProps,
+          variant,
+          tw,
+          accessibilityRole: "link",
+        }),
+        [variant, tw, textProps]
+      )}
     />
   );
 }

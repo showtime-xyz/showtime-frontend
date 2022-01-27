@@ -20,6 +20,7 @@ import { useHideNavigationElements } from "app/navigation/use-navigation-element
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { Owner } from "design-system/card/rows/owner";
 import { LikedBy } from "design-system/liked-by";
+import { NFT_DETAIL_API } from "app/utilities";
 
 type Query = {
   id: string;
@@ -32,8 +33,7 @@ function NftScreen() {
   const router = useRouter();
   const unmountSignal = useUnmountSignal();
   const [nftId, setNftId] = useParam("id");
-  const [url, setUrl] = useState(`/v2/nft_detail/${nftId}`);
-  const { data, error } = useSWR([url], (url) =>
+  const { data, error } = useSWR(`${NFT_DETAIL_API}/${nftId}`, (url) =>
     axios({ url, method: "GET", unmountSignal })
   );
   const nft = data?.data as NFT;

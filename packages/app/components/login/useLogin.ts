@@ -3,7 +3,6 @@ import { Platform } from "react-native";
 import { captureException } from "@sentry/nextjs";
 import { useSWRConfig } from "swr";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
-import { useRouter } from "app/navigation/use-router";
 import { magic } from "app/lib/magic";
 import { axios } from "app/lib/axios";
 // @ts-ignore
@@ -64,12 +63,11 @@ const loginReducer = (
   }
 };
 
-export const useLogin = () => {
+export const useLogin = (onLogin?: () => void) => {
   const [state, dispatch] = useReducer(loginReducer, initialState);
   const statusRef = useRef<IStatus>();
 
   //#region hooks
-  const router = useRouter();
   const { mutate } = useSWRConfig();
   const connector = useWalletConnect();
   const context = useContext(AppContext);
@@ -100,6 +98,19 @@ export const useLogin = () => {
   //#endregion
 
   //#region methods
+  const handleOnLoginSuccess = useCallback(
+    (source: string) => {
+      mutate(null);
+      mixpanel.track(`Login success - ${source}`);
+      dispatch({
+        type: "success",
+      });
+      if (onLogin) {
+        onLogin();
+      }
+    },
+    [mutate, onLogin]
+  );
   const handleSubmitWallet = useCallback(async () => {
     try {
       let address: string;
@@ -203,14 +214,7 @@ export const useLogin = () => {
         throw "Login failed";
       }
 
-      mutate(null);
-      mixpanel.track("Login success - wallet signature");
-
-      dispatch({
-        type: "success",
-      });
-
-      router.pop();
+      handleOnLoginSuccess("wallet signature");
     } catch (error) {
       // If there's an error, we don't know if it was from wallet connect or our API, so we logout.
       // This makes sure we get to see the walletconnect select wallet modal again.
@@ -226,8 +230,7 @@ export const useLogin = () => {
         },
       });
     }
-  }, [context, connector?.connected]);
-
+  }, [context, connector?.connected, handleOnLoginSuccess]);
   const handleLogin = useCallback(async (payload: object) => {
     try {
       const Web3Provider = (await import("@ethersproject/providers"))
@@ -261,8 +264,6 @@ export const useLogin = () => {
         console.error("login with magic failed ", response);
         throw "Login failed";
       }
-
-      mutate(null);
     } catch (error) {
       if (process.env.NODE_ENV === "development") {
         console.error(error);
@@ -301,16 +302,14 @@ export const useLogin = () => {
           email,
         });
 
-        mixpanel.track("Login success - email");
-        dispatch({ type: "success" });
-        router.pop();
+        handleOnLoginSuccess("email");
       } catch (error) {
         dispatch({ type: "error" });
         context.logOut();
         handleLoginError(error);
       }
     },
-    [handleLogin, handleLoginError]
+    [handleLogin, handleLoginError, handleOnLoginSuccess]
   );
   const handleSubmitPhoneNumber = useCallback(
     async (phoneNumber: string) => {
