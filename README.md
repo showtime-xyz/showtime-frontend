@@ -206,8 +206,7 @@ yarn android
 - For subsequent developments, we can simple start javascript bundler, no need to build dev client again. Run below command to start the bundler.
 
 ```
-cd apps/expo
-yarn start
+yarn dev:expo
 ```
 
 #### Local
