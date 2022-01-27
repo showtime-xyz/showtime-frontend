@@ -341,7 +341,6 @@ export const useLogin = (onLogin?: () => void) => {
 
   return {
     state,
-    walletName: state.walletName,
 
     handleSubmitWallet,
 
