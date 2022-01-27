@@ -1,5 +1,6 @@
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import useSWR from "swr";
+import { useEffect, useMemo } from "react";
 import { Platform, ScrollView } from "react-native";
 
 import { View, Text, Fieldset, Button } from "design-system";
@@ -7,23 +8,17 @@ import { UseBurnNFT, useBurnNFT } from "app/hooks/use-burn-nft";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useForm, Controller } from "react-hook-form";
 import { yup } from "app/lib/yup";
+import { axios } from "app/lib/axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { NFT } from "app/types";
+import { useUser } from "../hooks/use-user";
 
 const defaultValues = {
   copies: 1,
 };
 
-const createBurnValidationSchema = yup.object({
-  copies: yup
-    .number()
-    .required()
-    .min(1)
-    .max(10000)
-    .default(defaultValues.copies),
-});
-
 function Delete({ nftId }: { nftId: number }) {
+  const { user } = useUser();
   const { startBurning, state } = useBurnNFT();
   const handleSubmitForm = (values: Omit<UseBurnNFT, "filePath">) => {
     console.log("** Submiting burning form **", values);
@@ -38,6 +33,28 @@ function Delete({ nftId }: { nftId: number }) {
   if (error) {
     console.error(error);
   }
+
+  const { data: ownershipData } = useSWR(
+    () =>
+      nft &&
+      user &&
+      `/v1/owned_quantity?nft_id=${nft.nft_id}&profile_id=${user.data.profile.profile_id}`,
+    (url) => axios({ url, method: "GET" }).then((res) => res?.data)
+  );
+
+  const createBurnValidationSchema = useMemo(
+    () =>
+      yup.object({
+        copies: yup
+          .number()
+          .required()
+          .min(1)
+          .max(ownershipData?.owned_count ?? 1)
+          .default(defaultValues.copies),
+      }),
+    [ownershipData]
+  );
+
   const {
     control,
     handleSubmit,
@@ -74,7 +91,11 @@ function Delete({ nftId }: { nftId: number }) {
                     tw="flex-1"
                     label="Copies"
                     placeholder="1"
-                    helperText="1 by default, you own 3"
+                    helperText={`1 by default${
+                      ownershipData
+                        ? `, you own ${ownershipData.owned_count}`
+                        : ""
+                    }`}
                     onBlur={onBlur}
                     keyboardType="numeric"
                     errorText={errors.editionCount?.message}
