@@ -326,11 +326,7 @@ export const useLogin = (onLogin?: () => void) => {
           phone_number: phoneNumber,
         });
 
-        mixpanel.track("Login success - phone number");
-
-        dispatch({ type: "success" });
-
-        router.pop();
+        handleOnLoginSuccess("phone number");
       } catch (error) {
         context.logOut();
         handleLoginError(error);
