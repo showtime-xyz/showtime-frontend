@@ -16,14 +16,14 @@ export class ExpoMixpanelAnalytics {
   storage: MMKV;
   storageKey: string;
   userId?: string | null;
-  clientId?: string;
+  clientId?: string | null;
   platform?: string;
-  model?: string;
+  model?: string | null;
   queue: any[] = [];
   constants: { [key: string]: string | number | void } = {};
   superProps: any = {};
 
-  constructor(token, storageKey = "mixpanel:super:props") {
+  constructor(token = "", storageKey = "mixpanel:super:props") {
     this.storage = new MMKV();
     this.storageKey = storageKey;
 
