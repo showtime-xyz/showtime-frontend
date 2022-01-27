@@ -90,7 +90,7 @@ export const useLogin = (onLogin?: () => void) => {
   }, []);
   useEffect(() => {
     // TODO: The below call is responsible for signature verification post wallet connection
-    // We should separate in a separate function to avoid confusion
+    // We should move it in a separate function to avoid confusion
     if (connector.connected && state.status === "requestedWalletConnect") {
       handleSubmitWallet();
     }
