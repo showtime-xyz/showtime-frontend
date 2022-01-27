@@ -52,10 +52,14 @@ export const useBurnNFT = () => {
   useEffect(() => {
     if (
       user?.data &&
-      user?.data.profile.wallet_addresses_excluding_email_v2[0]
+      user?.data.profile.wallet_addresses_excluding_email_v2.filter((addr) =>
+        addr.address.startsWith("0x")
+      )[0]
     ) {
       setUserAddress(
-        user.data.profile.wallet_addresses_excluding_email_v2[0].address
+        user.data.profile.wallet_addresses_excluding_email_v2.filter((addr) =>
+          addr.address.startsWith("0x")
+        )[0].address
       );
     }
     // Web3 is initialised for magic users
