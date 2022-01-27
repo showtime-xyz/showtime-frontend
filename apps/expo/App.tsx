@@ -31,6 +31,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ethers } from "ethers";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import LogRocket from "@logrocket/react-native";
+import * as Notifications from "expo-notifications";
 
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
@@ -50,6 +51,7 @@ import {
 } from "app/lib/color-scheme";
 import { magic } from "app/lib/magic";
 import { Relayer } from "app/lib/magic";
+import { registerForPushNotificationsAsync } from "app/lib/register-push-notification";
 
 enableScreens(true);
 // enableFreeze(true)
@@ -189,6 +191,7 @@ function AppContextProvider({
   const connector = useWalletConnect();
   const [web3, setWeb3] = useState(null);
   const [mountRelayerOnApp, setMountRelayerOnApp] = useState(true);
+  const [notification, setNotification] = useState(null);
 
   useDeviceContext(tw, { withDeviceColorScheme: false });
   // Default to device color scheme
@@ -234,6 +237,71 @@ function AppContextProvider({
         setWeb3(provider);
       }
     });
+  }, []);
+
+  useEffect(() => {
+    const register = async () => {
+      // Handle registration for push notification
+      await registerForPushNotificationsAsync({
+        userId: user.data.profile.profile_id,
+      });
+    };
+
+    if (user?.data?.profile?.profile_id) register();
+  }, [user?.data?.profile?.profile_id]);
+
+  useEffect(() => {
+    let shouldShowNotification = true;
+    if (notification) {
+      // TODO:
+      // const content = notification?.request?.content?.data?.body?.path;
+      // const currentScreen = '';
+      // const destinationScreen = '';
+      // Don't show if already on the same screen as the destination screen
+      // shouldShowNotification = currentScreen !== destinationScreen;
+    }
+
+    // priority: AndroidNotificationPriority.HIGH,
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: shouldShowNotification,
+        shouldPlaySound: shouldShowNotification,
+        shouldSetBadge: false, // shouldShowNotification
+      }),
+    });
+  }, [notification]);
+
+  // Handle push notifications
+  useEffect(() => {
+    // Handle notifications that are received while the app is open.
+    const notificationListener = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        setNotification(notification);
+      }
+    );
+
+    return () =>
+      Notifications.removeNotificationSubscription(notificationListener);
+  }, []);
+
+  // Listeners registered by this method will be called whenever a user interacts with a notification (eg. taps on it).
+  useEffect(() => {
+    const responseListener =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        const content =
+          Platform.OS === "ios"
+            ? response?.notification?.request?.content?.data?.body?.path
+            : response?.notification?.request?.content?.data?.path;
+
+        console.log(content);
+
+        // Notifications.dismissNotificationAsync(
+        //   response?.notification?.request?.identifier
+        // );
+        // Notifications.setBadgeCountAsync(0);
+      });
+
+    return () => Notifications.removeNotificationSubscription(responseListener);
   }, []);
 
   const injectedGlobalContext = {
