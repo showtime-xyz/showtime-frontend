@@ -43,6 +43,7 @@ import Button from "@/components/UI/Buttons/Button";
 import useProfile from "@/hooks/useProfile";
 import useSWR from "swr";
 import reactStringReplace from "react-string-replace";
+import Link from "next/link";
 
 export async function getStaticProps({ params: { profile: slug_address } }) {
   if (slug_address.includes("apple-touch-icon"))
