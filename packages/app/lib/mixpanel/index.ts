@@ -91,7 +91,7 @@ export class ExpoMixpanelAnalytics {
     this._flush();
   }
 
-  identify(userId?: string) {
+  identify(userId?: string | null) {
     this.userId = userId;
   }
 
