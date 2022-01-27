@@ -181,9 +181,34 @@ To verify, build and delete your local turbo cache with:
    ```
 1. Then run the same build again. If things are working properly, turbo should not execute tasks locally
 
-### Mobile Development Client
+## Mobile Development Client
 
 You can create a [development client](https://docs.expo.dev/clients/introduction/) in local or in the cloud.
+
+### Expo dev client
+
+- We're using expo dev client for development builds which allows us to add custom/third party native libraries while preserving the expo like developer experience. Read more about custom dev clients [here](https://docs.expo.dev/development/introduction/)
+- You only need to build and install custom dev client in below cases.
+
+1. If you don't have it installed on your phone or simulator
+2. If you make any changes on native side or add a new native library
+
+- To install dev client, plug your device and run below commands. This will install the dev client and start the javascript bundler.
+
+```
+// For iOS
+yarn ios -d
+
+// For android
+yarn android
+```
+
+- For subsequent developments, we can simple start javascript bundler, no need to build dev client again. Run below command to start the bundler.
+
+```
+cd apps/expo
+yarn start
+```
 
 #### Local
 
