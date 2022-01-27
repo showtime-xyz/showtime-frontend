@@ -29,11 +29,13 @@ export const useLogin = () => {
   const { mutate } = useSWRConfig();
   const connector = useWalletConnect();
   const context = useContext(AppContext);
+  const logInSuccess = useRef(false);
   //#endregion
 
   //#region methods
   const handleSubmitWallet = useCallback(async () => {
     try {
+      logInSuccess.current = false;
       let address: string;
       let signature: string;
 
@@ -92,6 +94,7 @@ export const useLogin = () => {
       const accessToken = response?.access;
       const refreshToken = response?.refresh;
       const validResponse = accessToken && refreshToken;
+      console.log("login wallet response ", response);
 
       if (validResponse) {
         // TODO:
@@ -114,9 +117,10 @@ export const useLogin = () => {
 
       mutate(null);
       mixpanel.track("Login success - wallet signature");
+      logInSuccess.current = true;
       router.pop();
     } catch (error) {
-      magic.user.logout();
+      context.logOut();
 
       if (process.env.NODE_ENV === "development") {
         console.error(error);
@@ -132,6 +136,18 @@ export const useLogin = () => {
       loginRequested.current = false;
     }
   }, [context, connector?.connected, setWalletName]);
+
+  useEffect(() => {
+    return () => {
+      // if user is able to visit signing page, probably means the wallet was connected, but signature request failed and they were not logged in
+      // So killing session makes sure they see the walletconnect select wallet screen again
+      if (!logInSuccess.current) {
+        console.log("logging out from login modal");
+        context.logOut();
+      }
+    };
+  }, []);
+
   const handleLogin = useCallback(async (payload: object) => {
     try {
       const Web3Provider = (await import("@ethersproject/providers"))
@@ -167,7 +183,6 @@ export const useLogin = () => {
 
       mutate(null);
     } catch (error) {
-      magic.user.logout();
       if (process.env.NODE_ENV === "development") {
         console.error(error);
       }
@@ -196,6 +211,7 @@ export const useLogin = () => {
   }, []);
   const handleSubmitEmail = useCallback(
     async (email: string) => {
+      logInSuccess.current = false;
       try {
         setLoading(true);
         mixpanel.track("Login - email button click");
@@ -208,8 +224,10 @@ export const useLogin = () => {
         });
 
         mixpanel.track("Login success - email");
+        logInSuccess.current = true;
         router.pop();
       } catch (error) {
+        context.logOut();
         handleLoginError(error);
       }
     },
@@ -217,6 +235,7 @@ export const useLogin = () => {
   );
   const handleSubmitPhoneNumber = useCallback(
     async (phoneNumber: string) => {
+      logInSuccess.current = false;
       try {
         setLoading(true);
         mixpanel.track("Login - phone number button click");
@@ -231,8 +250,10 @@ export const useLogin = () => {
         });
 
         mixpanel.track("Login success - phone number");
+        logInSuccess.current = true;
         router.pop();
       } catch (error) {
+        context.logOut();
         handleLoginError(error);
       }
     },
