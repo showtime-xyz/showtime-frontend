@@ -7,6 +7,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 import { yup } from "app/lib/yup";
 import { axios } from "app/lib/axios";
+import { useRouter } from "app/navigation/use-router";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { View, Text, Fieldset, Button, Media } from "design-system";
 import { Collection } from "design-system/card/rows/collection";
@@ -77,6 +78,18 @@ function Delete({ nftId }: { nftId: number }) {
 
   // enable submission only on idle or error state.
   const enable = state.status === "idle" || state.status === "burningError";
+
+  // @TODO: Should this be part of the hook?
+  useEffect(() => {
+    if (state.status != "burningSuccess") return;
+
+    // @TODO: Maybe we should optimistically decrease edition count?
+    mutate(`/v2/nft_detail/${nftId}`);
+
+    // We're popping twice here to also close the NFT page behind this modal
+    router.pop();
+    router.pop();
+  }, [state.status]);
 
   return (
     <View tw="flex-1">
