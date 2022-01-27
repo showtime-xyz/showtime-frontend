@@ -15,6 +15,9 @@ const NftScreen = dynamic<JSX.Element>(() =>
 const ProfileScreen = dynamic<JSX.Element>(() =>
   import("app/screens/profile").then((mod) => mod.ProfileScreen)
 );
+const TransferNftScreen = dynamic<JSX.Element>(() =>
+  import("app/screens/transferNft").then((mod) => mod.TransferNftScreen)
+);
 
 const HomeStack = createStackNavigator<HomeStackParams>();
 
@@ -42,6 +45,7 @@ function HomeNavigator() {
       >
         <HomeStack.Screen name="login" component={LoginScreen} />
         <HomeStack.Screen name="nft" component={NftScreen} />
+        <HomeStack.Screen name="transferNft" component={TransferNftScreen} />
       </HomeStack.Group>
     </HomeStack.Navigator>
   );
