@@ -17,6 +17,8 @@ const SettingsScreen = () => {
 
   const [walletAddress, setWalletAddress] = useParam("walletAddress");
 
+  console.log("walletAddress", walletAddress);
+
   return <Settings />;
 };
 

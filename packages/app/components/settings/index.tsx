@@ -1,13 +1,38 @@
 import { useState, Suspense } from "react";
-import { View, Spinner, Text } from "design-system";
+import { View, Spinner, Text, Button } from "design-system";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 import { Dimensions } from "react-native";
 
 // move to constant
 const TAB_LIST_HEIGHT = 64;
+const CONTENT_START = TAB_LIST_HEIGHT * 2;
+// variant="text-3xl" no intillisense
 
-// switch theme will cause tab eeror
+const Setting = (props) => {
+  const children = props.children;
+  return (
+    <View tw={["flex-1", "pt-4", "px-4", `mt-[${CONTENT_START}px]`]}>
+      {children}
+    </View>
+  );
+};
+
+const SettingSubTitle = (props) => {
+  const children = props.children;
+  return <View tw="flex flex-row justify-between">{children}</View>;
+};
+
+const SettingSlot = (props) => {
+  const children = props.children;
+  return (
+    <View tw="flex flex-row justify-between">
+      <Text tw="text-gray-900 dark:text-white">Icon</Text>
+      <Text tw="text-gray-900 dark:text-white">Multi</Text>
+      <Text tw="text-gray-900 dark:text-white">Button w/ Label</Text>
+    </View>
+  );
+};
 
 const SettingsTabs = () => {
   const [selected, setSelected] = useState(0);
@@ -32,14 +57,9 @@ const SettingsTabs = () => {
             justifyContent: "space-between",
             width: Dimensions.get("window").width,
           }}
-          style={[
-            {
-              height: TAB_LIST_HEIGHT,
-              ...tw.style(
-                "dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900"
-              ),
-            },
-          ]}
+          style={tw.style(
+            `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900`
+          )}
         >
           <Tabs.Trigger>
             <TabItem name="Wallets" selected={selected === 0} />
@@ -48,15 +68,26 @@ const SettingsTabs = () => {
           <Tabs.Trigger>
             <TabItem name="Email Addresses" selected={selected === 1} />
           </Tabs.Trigger>
-          <SelectedTabIndicator />
+          <SelectedTabIndicator disableBackground={true} />
         </Tabs.List>
         <Tabs.Pager>
-          <Suspense fallback={<Spinner size="small" />}>
-            <Text>k</Text>
-          </Suspense>
-          <Suspense fallback={<Spinner size="small" />}>
-            <Text>k</Text>
-          </Suspense>
+          <Setting>
+            <SettingSubTitle>
+              <Text tw="text-gray-900 dark:text-white font-bold text-xl">
+                Your Wallets
+              </Text>
+              <Button>Add Wallet</Button>
+            </SettingSubTitle>
+            <SettingSlot />
+          </Setting>
+          <Setting>
+            <SettingSubTitle>
+              <Text tw="text-gray-900 dark:text-white font-bold text-xl">
+                Manage your emails
+              </Text>
+              <Button>Add Wallet</Button>
+            </SettingSubTitle>
+          </Setting>
         </Tabs.Pager>
       </Tabs.Root>
     </View>
@@ -64,9 +95,5 @@ const SettingsTabs = () => {
 };
 
 export function Settings() {
-  return (
-    <View>
-      <SettingsTabs />
-    </View>
-  );
+  return <SettingsTabs />;
 }

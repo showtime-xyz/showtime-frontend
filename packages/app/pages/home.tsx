@@ -5,7 +5,6 @@ import createStackNavigator from "app/navigation/create-stack-navigator";
 import { HomeStackParams } from "app/navigation/types";
 import { navigatorScreenOptions } from "app/navigation/navigator-screen-options";
 import { HomeScreen } from "app/screens/home";
-import { SettingsScreen } from "app/screens/settings";
 
 const LoginScreen = dynamic<JSX.Element>(() =>
   import("app/screens/login").then((mod) => mod.LoginScreen)
@@ -15,6 +14,10 @@ const NftScreen = dynamic<JSX.Element>(() =>
 );
 const ProfileScreen = dynamic<JSX.Element>(() =>
   import("app/screens/profile").then((mod) => mod.ProfileScreen)
+);
+
+const SettingsScreen = dynamic<JSX.Element>(() =>
+  import("app/screens/settings").then((mod) => mod.SettingsScreen)
 );
 
 const HomeStack = createStackNavigator<HomeStackParams>();
@@ -32,6 +35,7 @@ function HomeNavigator() {
           options={{ title: "Home", headerTitle: "Showtime" }}
         />
         <HomeStack.Screen name="profile" component={ProfileScreen} />
+        <HomeStack.Screen name="settings" component={SettingsScreen} />
       </HomeStack.Group>
       <HomeStack.Group
         screenOptions={{
@@ -44,8 +48,6 @@ function HomeNavigator() {
         <HomeStack.Screen name="login" component={LoginScreen} />
         <HomeStack.Screen name="nft" component={NftScreen} />
       </HomeStack.Group>
-      <HomeStack.Screen name="profile" component={ProfileScreen} />
-      <HomeStack.Screen name="settings" component={SettingsScreen} />
     </HomeStack.Navigator>
   );
 }
