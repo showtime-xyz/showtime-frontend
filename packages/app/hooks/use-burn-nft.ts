@@ -1,11 +1,12 @@
-import { Alert } from "react-native";
-import { useContext, useEffect, useReducer, useState } from "react";
-import { getBiconomy } from "../utilities";
 import { ethers } from "ethers";
-import minterAbi from "app/abi/ShowtimeMT.json";
+import { Alert } from "react-native";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
-import { AppContext } from "../context/app-context";
+import { useContext, useEffect, useReducer, useState } from "react";
+
 import { useUser } from "./use-user";
+import { getBiconomy } from "app/utilities";
+import minterAbi from "app/abi/ShowtimeMT.json";
+import { AppContext } from "app/context/app-context";
 
 type BurnNFTType = {
   status: "idle" | "burning" | "burningError" | "burningSuccess";

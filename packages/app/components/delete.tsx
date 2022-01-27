@@ -5,18 +5,18 @@ import { useForm, Controller } from "react-hook-form";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
+import { NFT } from "app/types";
 import { yup } from "app/lib/yup";
 import { axios } from "app/lib/axios";
+import { Owner } from "design-system/card";
+import { tw } from "design-system/tailwind";
+import { useUser } from "app/hooks/use-user";
+import { PolygonScan } from "design-system/icon";
 import { useRouter } from "app/navigation/use-router";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { View, Text, Fieldset, Button, Media } from "design-system";
 import { Collection } from "design-system/card/rows/collection";
 import { UseBurnNFT, useBurnNFT } from "app/hooks/use-burn-nft";
-import { NFT } from "app/types";
-import { PolygonScan } from "design-system/icon";
-import { tw } from "design-system/tailwind";
-import { Owner } from "design-system/card";
-import { useUser } from "../hooks/use-user";
+import { View, Text, Fieldset, Button, Media } from "design-system";
 
 const defaultValues = {
   copies: 1,
