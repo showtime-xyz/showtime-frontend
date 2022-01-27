@@ -2,6 +2,7 @@ import { Suspense, useCallback, useMemo, useReducer, useState } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import Animated, { FadeIn } from "react-native-reanimated";
+import reactStringReplace from "react-string-replace";
 
 import {
   Collection,
@@ -19,6 +20,7 @@ import { VerificationBadge } from "design-system/verification-badge";
 import { useColorScheme } from "design-system/hooks";
 import { getProfileImage, getProfileName, getSortFields } from "../utilities";
 import { Media } from "design-system/media";
+import { useRouter } from "app/navigation/use-router";
 
 const TAB_LIST_HEIGHT = 64;
 const COVER_IMAGE_HEIGHT = 104;
@@ -202,12 +204,29 @@ const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
 };
 
 const ProfileTop = ({ address }: { address?: string }) => {
+  const router = useRouter();
   const { data: profileData, loading } = useUserProfile({ address });
   const name = getProfileName(profileData?.data.profile);
   const username = profileData?.data.profile.username;
   const bio = profileData?.data.profile.bio;
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
+
+  const bioWithMentions = reactStringReplace(
+    bio,
+    /@([\w\d-]+?)\b/g,
+    (username: string, i: number) => {
+      return (
+        <Text
+          tw="font-bold text-black dark:text-white"
+          onPress={() => router.push(`/profile/${username}`)}
+          key={i}
+        >
+          @{username}
+        </Text>
+      );
+    }
+  );
 
   return (
     <View>
@@ -326,7 +345,9 @@ const ProfileTop = ({ address }: { address?: string }) => {
 
           {bio ? (
             <View tw="flex-row items-center mt-3">
-              <Text tw="text-sm text-gray-600 dark:text-gray-400">{bio}</Text>
+              <Text tw="text-sm text-gray-600 dark:text-gray-400">
+                {bioWithMentions}
+              </Text>
             </View>
           ) : null}
 
