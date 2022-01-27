@@ -34,6 +34,7 @@ const DeleteScreen = () => {
       close={router.pop}
       snapPoints={snapPoints}
       height="h-[90vh]"
+      bodyTW="bg-white dark:bg-black"
     >
       <Delete nftId={nftId} />
     </DeleteModal>

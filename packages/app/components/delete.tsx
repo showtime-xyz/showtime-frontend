@@ -1,16 +1,20 @@
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import useSWR from "swr";
 import { useEffect, useMemo } from "react";
 import { Platform, ScrollView } from "react-native";
-
-import { View, Text, Fieldset, Button } from "design-system";
-import { UseBurnNFT, useBurnNFT } from "app/hooks/use-burn-nft";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useForm, Controller } from "react-hook-form";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+
 import { yup } from "app/lib/yup";
 import { axios } from "app/lib/axios";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { View, Text, Fieldset, Button, Media } from "design-system";
+import { Collection } from "design-system/card/rows/collection";
+import { UseBurnNFT, useBurnNFT } from "app/hooks/use-burn-nft";
 import { NFT } from "app/types";
+import { PolygonScan } from "design-system/icon";
+import { tw } from "design-system/tailwind";
+import { Owner } from "design-system/card";
 import { useUser } from "../hooks/use-user";
 
 const defaultValues = {
@@ -65,7 +69,6 @@ function Delete({ nftId }: { nftId: number }) {
     reValidateMode: "onChange",
     defaultValues,
   });
-  //#endregion
 
   const tabBarHeight = Platform.OS === "android" ? 50 : useBottomTabBarHeight();
 
@@ -81,6 +84,46 @@ function Delete({ nftId }: { nftId: number }) {
         contentContainerStyle={{ paddingBottom: tabBarHeight + 100 }}
       >
         <View tw="px-3 py-4">
+          <View tw="mb-4">
+            <Text
+              variant="text-xl"
+              tw="font-bold text-black dark:text-white mb-4"
+            >
+              Are you sure you want to delete this NFT?
+            </Text>
+            <Text variant="text-sm" tw="text-black dark:text-white">
+              This can’t be undone and it will be sent to a burn address.
+            </Text>
+          </View>
+          <View tw="border-b border-gray-100 dark:border-gray-900 -mx-2">
+            <Collection nft={nft} />
+          </View>
+          <View tw="p-4 flex-row items-center -mx-2">
+            <View tw="w-20 h-20 mr-4">
+              <Media item={nft} tw="w-20 h-20" />
+            </View>
+            <View>
+              <Text
+                variant="text-lg"
+                tw="font-medium text-black dark:text-white mb-2"
+              >
+                {nft?.token_name}
+              </Text>
+              <View tw="flex-row items-center">
+                <PolygonScan
+                  width={16}
+                  height={16}
+                  color={tw.style("text-gray-500").color as string}
+                />
+                <Text variant="text-xs" tw="ml-1 font-bold text-gray-500">
+                  Minted 4 months ago
+                </Text>
+              </View>
+            </View>
+          </View>
+          <View tw="-mx-2">
+            <Owner nft={nft} price={true} />
+          </View>
           <View tw="mt-4 flex-row">
             <Controller
               control={control}
@@ -88,7 +131,7 @@ function Delete({ nftId }: { nftId: number }) {
               render={({ field: { onChange, onBlur, value } }) => {
                 return (
                   <Fieldset
-                    tw="flex-1"
+                    tw="flex-1 bg-gray-100"
                     label="Copies"
                     placeholder="1"
                     helperText={`1 by default${
