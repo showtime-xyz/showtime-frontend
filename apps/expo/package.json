@@ -14,7 +14,6 @@
     "update:development": "STAGE=development eas update --branch default",
     "update:staging": "STAGE=staging eas update --branch staging",
     "update:production": "STAGE=production eas update --branch production",
-    "build": "yarn build:production",
     "build:development": "STAGE=development eas build --profile development --platform all",
     "build:development:ios": "STAGE=development eas build --profile development --platform ios",
     "build:development:android": "STAGE=development eas build --profile development --platform android",
@@ -26,6 +25,7 @@
     "build:production:android": "STAGE=production eas build --profile production --platform android",
     "submit:ios": "STAGE=production eas submit --platform ios",
     "submit:android": "STAGE=production eas submit --platform android",
+    "deploy:production": "echo 'Do not do this unless you know what you are doing!' && yarn update:production --message 'Deploy to production' && yarn build:production --auto-submit",
     "adb:reverse": "adb reverse tcp:3000 tcp:3000",
     "eas-build-post-install": "react-native link"
   },
