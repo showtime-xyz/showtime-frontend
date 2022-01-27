@@ -98,7 +98,7 @@ function Delete({ nftId }: { nftId: number }) {
                     }`}
                     onBlur={onBlur}
                     keyboardType="numeric"
-                    errorText={errors.editionCount?.message}
+                    errorText={errors.copies?.message}
                     value={value?.toString()}
                     onChangeText={onChange}
                     returnKeyType="done"
