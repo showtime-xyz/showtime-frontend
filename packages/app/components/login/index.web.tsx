@@ -10,9 +10,7 @@ import { useLogin } from "./useLogin";
 export function Login() {
   //#region hooks
   const {
-    loading,
-    signaturePending,
-    walletName,
+    state,
     handleSubmitWallet,
     handleSubmitEmail,
     handleSubmitPhoneNumber,
@@ -58,12 +56,14 @@ export function Login() {
   );
   //#endregion
   return (
-    <LoginContainer loading={loading}>
-      {signaturePending ? (
+    <LoginContainer
+      loading={state.status === "loading" || state.status === "requestingNonce"}
+    >
+      {state.status === "waitingForSignature" ? (
         <View tw="py-40">
           <Text tw="text-center dark:text-gray-400">
-            {walletName !== ""
-              ? `Pushed a request to ${walletName}... Please check your wallet.`
+            {state.walletName !== ""
+              ? `Pushed a request to ${state.walletName}... Please check your wallet.`
               : `Pushed a request to your wallet...`}
           </Text>
         </View>

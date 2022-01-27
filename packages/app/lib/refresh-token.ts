@@ -1,16 +1,16 @@
 import { MMKV } from "react-native-mmkv";
 
+const storage = new MMKV();
+const tokenKey = "refresh-token";
+
 export function setRefreshToken(token: string) {
-  const storage = new MMKV();
-  storage.set("refresh-token", token);
+  storage.set(tokenKey, token);
 }
 
 export function getRefreshToken() {
-  const storage = new MMKV();
-  return storage.getString("refresh-token");
+  return storage.getString(tokenKey);
 }
 
 export function deleteRefreshToken() {
-  const storage = new MMKV();
-  storage.delete("refresh-token");
+  storage.delete(tokenKey);
 }
