@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import useSWR from "swr";
 import useUnmountSignal from "use-unmount-signal";
+import LogRocket from "@logrocket/react-native";
 
 import { axios } from "app/lib/axios";
 import { mixpanel } from "app/lib/mixpanel";
@@ -65,18 +66,15 @@ const useUser = () => {
 
   useEffect(() => {
     if (user) {
-      //@ts-ignore - there's no publicAddress in API response of myInfo. Verify this is correct
-      mixpanel.identify(user.publicAddress);
-      // if (user.email) {
-      // 	mixpanel.people.set({
-      // 		$email: user.email, // only reserved properties need the $
-      // 		USER_ID: user.publicAddress, // use human-readable names
-      // 	})
-      // } else {
-      // 	mixpanel.people.set({
-      // 		USER_ID: user.publicAddress, // use human-readable names
-      // 	})
-      // }
+      mixpanel.identify(user.data.profile.profile_id.toString());
+      LogRocket.identify(user.data.profile.profile_id.toString());
+
+      LogRocket.getSessionURL((sessionURL: string) => {
+        mixpanel.track("LogRocket", { sessionURL: sessionURL });
+        // Sentry.configureScope(scope => {
+        //   scope.setExtra("sessionURL", sessionURL);
+        // });
+      });
     }
   }, [user]);
 

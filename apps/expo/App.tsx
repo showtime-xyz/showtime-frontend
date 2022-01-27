@@ -27,6 +27,10 @@ import NetInfo from "@react-native-community/netinfo";
 import { useNavigation } from "@react-navigation/native";
 import * as NavigationBar from "expo-navigation-bar";
 import * as SystemUI from "expo-system-ui";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { ethers } from "ethers";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import LogRocket from "@logrocket/react-native";
 
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
@@ -40,15 +44,12 @@ import { deleteCache } from "app/lib/delete-cache";
 import { useUser } from "app/hooks/use-user";
 import { deleteRefreshToken } from "app/lib/refresh-token";
 import { ToastProvider } from "design-system/toast";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import {
   setColorScheme as setUserColorScheme,
   useColorScheme as useUserColorScheme,
 } from "app/lib/color-scheme";
 import { magic } from "app/lib/magic";
 import { Relayer } from "app/lib/magic";
-import { ethers } from "ethers";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 enableScreens(true);
 // enableFreeze(true)
@@ -268,6 +269,14 @@ function AppContextProvider({
 }
 
 function App() {
+  useEffect(() => {
+    if (process.env.STAGE !== "development") {
+      LogRocket.init("oulg1q/showtime", {
+        redactionTags: ["data-private"],
+      });
+    }
+  }, []);
+
   const scheme = `io.showtime${
     process.env.STAGE === "development"
       ? ".development"
