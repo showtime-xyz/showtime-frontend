@@ -94,7 +94,7 @@ function Create({ uri, state, startMinting }: CreateProps) {
         contentContainerStyle={{ paddingBottom: tabBarHeight + 100 }}
       >
         <View tw="px-3 py-4">
-          <View tw="flex-row items-center">
+          <View tw="flex-row items-center" testID="data-private">
             <Preview
               source={{
                 uri,
@@ -113,6 +113,7 @@ function Create({ uri, state, startMinting }: CreateProps) {
                     errorText={errors.title?.message}
                     onBlur={onBlur}
                     onChangeText={onChange}
+                    testID="data-private"
                   />
                 )}
               />
