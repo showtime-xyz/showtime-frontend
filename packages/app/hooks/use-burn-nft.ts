@@ -40,7 +40,7 @@ const burnNFTReducer = (state: BurnNFTType, action: any): BurnNFTType => {
 
 export type UseBurnNFT = {
   copies: number;
-  tokenId: number;
+  tokenId: string;
 };
 
 export const useBurnNFT = () => {
@@ -112,7 +112,7 @@ export const useBurnNFT = () => {
           reject("Something went wrong");
         });
 
-      // console.log("transaction hash ", transaction);
+      console.log("transaction hash ", transaction);
 
       provider.once(transaction, () => resolve({ transaction: transaction }));
     });
