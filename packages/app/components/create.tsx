@@ -83,10 +83,11 @@ function Create({ uri, state, startMinting }: CreateProps) {
     Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
 
   // enable submission only on idle or error state.
-  const enable =
-    state.status === "idle" ||
-    state.status === "fileUploadError" ||
+  const isError =
+    state.status === "mediaUploadError" ||
+    state.status === "nftJSONUploadError" ||
     state.status === "mintingError";
+  const enable = state.status === "idle" || isError;
 
   return (
     <View tw="flex-1">
@@ -257,27 +258,42 @@ function Create({ uri, state, startMinting }: CreateProps) {
             )}
           />
         </View>
+
+        <View tw="mt-8 px-4 w-full">
+          <Button
+            onPress={handleSubmit(handleSubmitForm)}
+            tw="h-12 rounded-full"
+            disabled={!enable}
+          >
+            <Text tw="text-white dark:text-gray-900 text-sm">
+              {state.status === "idle"
+                ? "Create"
+                : state.status === "mediaUpload" ||
+                  state.status === "nftJSONUpload"
+                ? "Uploading..."
+                : state.status === "mintingSuccess"
+                ? "Success!"
+                : isError
+                ? "Failed. Retry"
+                : "Minting..."}
+            </Text>
+          </Button>
+
+          <View tw="h-12 mt-4">
+            {state.status === "minting" && !state.isMagic ? (
+              <Button
+                onPress={handleSubmit(handleSubmitForm)}
+                tw="h-12"
+                variant="tertiary"
+              >
+                <Text tw="text-gray-900 dark:text-white text-sm">
+                  Did't receive signature request yet?
+                </Text>
+              </Button>
+            ) : null}
+          </View>
+        </View>
       </CreateScrollView>
-      <View tw="absolute px-4 w-full" style={{ bottom: tabBarHeight + 16 }}>
-        <Button
-          onPress={handleSubmit(handleSubmitForm)}
-          tw="h-12 rounded-full"
-          disabled={!enable}
-        >
-          <Text tw="text-white dark:text-gray-900 text-sm">
-            {state.status === "idle"
-              ? "Create"
-              : state.status === "fileUpload"
-              ? "Uploading..."
-              : state.status === "minting"
-              ? "Minting..."
-              : state.status === "mintingError" ||
-                state.status === "fileUploadError"
-              ? "Failed. Retry"
-              : "Success!"}
-          </Text>
-        </Button>
-      </View>
     </View>
   );
 }
