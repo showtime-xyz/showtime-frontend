@@ -144,14 +144,14 @@ const CreatorsList = ({
     []
   );
 
-  const getItemLayout = useCallback(
-    (_data, index) => ({
-      length: cardSize + separatorHeight,
-      offset: cardSize + separatorHeight * index,
+  const getItemLayout = useCallback((_data, index) => {
+    const cardHeight = cardSize + separatorHeight;
+    return {
+      length: cardHeight,
+      offset: cardHeight * index,
       index,
-    }),
-    []
-  );
+    };
+  }, []);
 
   const ListHeaderComponent = useMemo(
     () => (
@@ -187,7 +187,7 @@ const CreatorsList = ({
         removeClippedSubviews={Platform.OS !== "web"}
         ListHeaderComponent={ListHeaderComponent}
         numColumns={1}
-        windowSize={4}
+        windowSize={2}
         initialNumToRender={4}
         alwaysBounceVertical={false}
         ListFooterComponent={ListFooterComponent}
