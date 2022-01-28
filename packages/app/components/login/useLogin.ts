@@ -15,6 +15,7 @@ import { accessTokenManager } from "app/lib/access-token-manager";
 import { setLogin } from "app/lib/login";
 import { mixpanel } from "app/lib/mixpanel";
 import { useFetchOnAppForeground } from "../../hooks/use-fetch-on-app-foreground";
+import { MY_INFO_KEY } from "../../hooks/use-user";
 
 type IStatus =
   | "idle"
@@ -99,20 +100,18 @@ export const useLogin = (onLogin?: () => void) => {
   //#endregion
 
   //#region methods
-  const handleOnLoginSuccess = useCallback(
-    (source: string) => {
-      mutate(null);
-      mixpanel.track(`Login success - ${source}`);
-      dispatch({
-        type: "success",
-      });
-      if (onLogin) {
-        onLogin();
-      }
-    },
-    [mutate, onLogin]
-  );
-  const handleSubmitWallet = useCallback(async () => {
+  const handleOnLoginSuccess = (source: string) => {
+    mutate(MY_INFO_KEY);
+    mixpanel.track(`Login success - ${source}`);
+    dispatch({
+      type: "success",
+    });
+    if (onLogin) {
+      onLogin();
+    }
+  };
+
+  const handleSubmitWallet = async () => {
     try {
       let address: string;
       let signature: string;
@@ -231,8 +230,8 @@ export const useLogin = (onLogin?: () => void) => {
         },
       });
     }
-  }, [context, connector?.connected, handleOnLoginSuccess]);
-  const handleLogin = useCallback(async (payload: object) => {
+  };
+  const handleLogin = async (payload: object) => {
     try {
       const Web3Provider = (await import("@ethersproject/providers"))
         .Web3Provider;
@@ -240,7 +239,7 @@ export const useLogin = (onLogin?: () => void) => {
       const web3 = new Web3Provider(magic.rpcProvider);
       context.setWeb3(web3);
 
-      const response = await fetchOnForeground({
+      const response = await axios({
         url: "/v1/login_magic",
         method: "POST",
         data: payload,
@@ -277,8 +276,9 @@ export const useLogin = (onLogin?: () => void) => {
         },
       });
     }
-  }, []);
-  const handleLoginError = useCallback((error) => {
+  };
+
+  const handleLoginError = (error) => {
     if (process.env.NODE_ENV === "development") {
       console.error(error);
     }
@@ -289,53 +289,50 @@ export const useLogin = (onLogin?: () => void) => {
         login_magic_link: "modalLogin.js",
       },
     });
-  }, []);
-  const handleSubmitEmail = useCallback(
-    async (email: string) => {
-      try {
-        dispatch({ type: "loading" });
-        mixpanel.track("Login - email button click");
+  };
 
-        const did = await magic.auth.loginWithMagicLink({ email });
+  const handleSubmitEmail = async (email: string) => {
+    try {
+      dispatch({ type: "loading" });
+      mixpanel.track("Login - email button click");
 
-        await handleLogin({
-          did,
-          email,
-        });
+      const did = await magic.auth.loginWithMagicLink({ email });
 
-        handleOnLoginSuccess("email");
-      } catch (error) {
-        dispatch({ type: "error" });
-        context.logOut();
-        handleLoginError(error);
-      }
-    },
-    [handleLogin, handleLoginError, handleOnLoginSuccess]
-  );
-  const handleSubmitPhoneNumber = useCallback(
-    async (phoneNumber: string) => {
-      try {
-        dispatch({ type: "loading" });
-        mixpanel.track("Login - phone number button click");
+      await handleLogin({
+        did,
+        email,
+      });
 
-        const did = await magic.auth.loginWithSMS({
-          phoneNumber,
-        });
+      handleOnLoginSuccess("email");
+    } catch (error) {
+      dispatch({ type: "error" });
+      context.logOut();
+      handleLoginError(error);
+    }
+  };
 
-        await handleLogin({
-          did,
-          phone_number: phoneNumber,
-        });
+  const handleSubmitPhoneNumber = async (phoneNumber: string) => {
+    try {
+      dispatch({ type: "loading" });
+      mixpanel.track("Login - phone number button click");
 
-        handleOnLoginSuccess("phone number");
-      } catch (error) {
-        context.logOut();
-        handleLoginError(error);
-        dispatch({ type: "error" });
-      }
-    },
-    [handleLogin, handleLoginError]
-  );
+      const did = await magic.auth.loginWithSMS({
+        phoneNumber,
+      });
+
+      await handleLogin({
+        did,
+        phone_number: phoneNumber,
+      });
+
+      handleOnLoginSuccess("phone number");
+    } catch (error) {
+      context.logOut();
+      handleLoginError(error);
+      dispatch({ type: "error" });
+    }
+  };
+
   //#endregion
 
   console.log("status ", state.status);
