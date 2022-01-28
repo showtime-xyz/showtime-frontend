@@ -1,11 +1,12 @@
 import Animated, { FadeIn } from "react-native-reanimated";
 import { View, Text, Button, Skeleton } from "design-system";
-import { Ethereum, MoreHorizontal, Tezos } from "design-system/icon";
+import { Ethereum, Tezos } from "design-system/icon";
 import { useColorScheme } from "design-system/hooks";
 import { formatAddressShort } from "app/lib/utilities";
 import { DataPill } from "design-system/data-pill";
 import { WalletAddressesExcludingEmailV2 } from "app/types";
 import { SettingSubTitle } from "./settings-subtitle";
+import { AddressMenu } from "./address-menu";
 
 type Props = {
   address: WalletAddressesExcludingEmailV2["address"];
@@ -24,7 +25,12 @@ export const SettingsWalletSlotHeader = (props: WalletSlotHeaderProps) => {
       <Text tw="text-gray-900 dark:text-white font-bold text-xl">
         Your Wallets
       </Text>
-      <Button variant="tertiary" size="regular" onPress={onPress}>
+      <Button
+        variant="tertiary"
+        size="regular"
+        onPress={onPress}
+        disabled={true}
+      >
         Add Wallet
       </Button>
     </SettingSubTitle>
@@ -117,9 +123,7 @@ export const SettingsWalletSlot = (props: Props) => {
         <Text tw="text-gray-900 dark:text-white text-xs pb-3">{address}</Text>
       </View>
       <View tw="flex justify-center">
-        <Button iconOnly={true} variant="tertiary">
-          <MoreHorizontal />
-        </Button>
+        <AddressMenu address={address} ctaCopy="Delete Wallet" />
       </View>
     </View>
   );

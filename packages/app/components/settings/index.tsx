@@ -16,7 +16,7 @@ import {
   SettingsWalletSlotHeader,
   SettingsWalletSlotSkeleton,
 } from "./settings-wallet-slot";
-import { ManageWallet } from "./manage-wallet";
+import { ManageAddress } from "./manage-address";
 import { SlotSeparator } from "./slot-separator";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 
@@ -116,7 +116,7 @@ const SettingsTabs = () => {
           />
         </Tabs.Pager>
       </Tabs.Root>
-      <ManageWallet
+      <ManageAddress
         viewManagedWallet={viewManagedWallet}
         setViewManagedWallet={setViewManagedWallet}
       />

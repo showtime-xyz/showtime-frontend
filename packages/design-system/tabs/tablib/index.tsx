@@ -36,19 +36,13 @@ import Reanimated, {
   useAnimatedStyle,
   useAnimatedReaction,
 } from "react-native-reanimated";
-<<<<<<< HEAD
-
 import { tw } from "design-system/tailwind";
-import { TabListProps, TabRootProps, TabsContextType } from "./types";
-=======
 import {
   TabListProps,
   TabRootProps,
   TabsContextType,
   ExtendObject,
 } from "./types";
-import { useScrollToTop } from "@react-navigation/native";
->>>>>>> d74cad04 (feature(settings): work in progress update on settings page)
 import { usePageScrollHandler } from "./usePagerScrollHandler";
 import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
 
