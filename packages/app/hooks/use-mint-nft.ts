@@ -1,15 +1,14 @@
 import { Alert } from "react-native";
-import { useContext, useEffect, useReducer, useRef, useState } from "react";
+import { useContext, useReducer, useRef } from "react";
 import { v4 as uuid } from "uuid";
 import { axios as showtimeAPIAxios } from "app/lib/axios";
 import axios from "axios";
 import * as FileSystem from "expo-file-system";
-import { formatAddressShort, getBiconomy } from "../utilities";
+import { getBiconomy } from "../utilities";
 import { ethers } from "ethers";
 import minterAbi from "app/abi/ShowtimeMT.json";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { AppContext } from "../context/app-context";
-import { useUser } from "./use-user";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
@@ -160,32 +159,8 @@ const getPinataToken = () => {
 
 export const useMintNFT = () => {
   const [state, dispatch] = useReducer(mintNFTReducer, initialMintNFTState);
-  const { user } = useUser();
-  const [userAddress, setUserAddress] = useState<string>();
   const context = useContext(AppContext);
   const biconomyRef = useRef<any>();
-
-  useEffect(() => {
-    if (
-      user?.data &&
-      user?.data.profile.wallet_addresses_excluding_email_v2.filter((addr) =>
-        addr.address.startsWith("0x")
-      )[0]
-    ) {
-      setUserAddress(
-        user.data.profile.wallet_addresses_excluding_email_v2.filter((addr) =>
-          addr.address.startsWith("0x")
-        )[0].address
-      );
-    }
-    // Web3 is initialised for magic users
-    else if (context.web3) {
-      const signer = context.web3.getSigner();
-      signer.getAddress().then((addr: string) => {
-        setUserAddress(addr);
-      });
-    }
-  }, [user, context.web3]);
 
   const connector = useWalletConnect();
 
@@ -282,6 +257,8 @@ export const useMintNFT = () => {
     }
   }
 
+  console.log("efkfekfek");
+
   async function mintNFT(params: UseMintNFT) {
     let nftJsonIpfsHash;
 
@@ -291,15 +268,31 @@ export const useMintNFT = () => {
       nftJsonIpfsHash = await uploadNFTJson(params);
     }
 
+    let userAddress;
     try {
       const isMagic = !!context.web3;
+      if (isMagic) {
+        const signer = context.web3.getSigner();
+        const addr = await signer.getAddress();
+        userAddress = addr;
+      } else {
+        userAddress = connector.accounts.filter((addr) =>
+          addr.startsWith("0x")
+        )[0];
+      }
+
+      console.log("user address for minting ", userAddress);
+
+      if (!userAddress) {
+        Alert.alert("Sorry! seems like you are not connected to the wallet");
+        return;
+      }
+
       dispatch({ type: "minting", payload: { isMagic } });
 
-      if (!biconomyRef.current) {
-        biconomyRef.current = await (
-          await getBiconomy(connector, context.web3)
-        ).biconomy;
-      }
+      biconomyRef.current = await (
+        await getBiconomy(connector, context.web3)
+      ).biconomy;
 
       const contract = new ethers.Contract(
         //@ts-ignore
@@ -366,18 +359,7 @@ export const useMintNFT = () => {
     }
   }
 
-  async function mintNFTPipeline(params: UseMintNFT) {
-    if (userAddress) {
-      mintNFT(params);
-    } else {
-      // TODO: better error handling. Maybe show login screen
-      Alert.alert(
-        "Sorry! We can't find your user address. Please login with a wallet or email/phone"
-      );
-    }
-  }
-
   console.log("minting state ", state);
 
-  return { state, startMinting: mintNFTPipeline };
+  return { state, startMinting: mintNFT };
 };
