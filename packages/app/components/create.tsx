@@ -105,7 +105,7 @@ function Create({ uri, state, startMinting }: CreateProps) {
         }, 1000);
       }
     },
-    [state.status]
+    [state.status, user]
   );
 
   return (
