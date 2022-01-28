@@ -33,10 +33,11 @@ function NftScreen() {
   const router = useRouter();
   const unmountSignal = useUnmountSignal();
   const [nftId, setNftId] = useParam("id");
-  const { data, error } = useSWR(`${NFT_DETAIL_API}/${nftId}`, (url) =>
-    axios({ url, method: "GET", unmountSignal })
+  const { data, error } = useSWR<{ data: NFT }>(
+    `${NFT_DETAIL_API}/${nftId}`,
+    (url) => axios({ url, method: "GET", unmountSignal })
   );
-  const nft = data?.data as NFT;
+  const nft = data?.data;
 
   if (error) {
     console.error(error);

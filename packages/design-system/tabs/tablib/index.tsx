@@ -7,7 +7,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { tw } from "../../tailwind";
 import {
   Pressable,
   View,
@@ -23,7 +22,7 @@ import {
   LayoutRectangle,
 } from "react-native";
 import PagerView from "react-native-pager-view";
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useScrollToTop } from "@react-navigation/native";
 import Reanimated, {
   useSharedValue,
   useDerivedValue,
@@ -37,8 +36,9 @@ import Reanimated, {
   useAnimatedStyle,
   useAnimatedReaction,
 } from "react-native-reanimated";
+
+import { tw } from "design-system/tailwind";
 import { TabListProps, TabRootProps, TabsContextType } from "./types";
-import { useScrollToTop } from "@react-navigation/native";
 import { usePageScrollHandler } from "./usePagerScrollHandler";
 import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
 
@@ -215,6 +215,14 @@ const ListImpl = ({
     }
     prevIndex.value = index.value;
   }, [windowWidth]);
+
+  useScrollToTop(
+    React.useRef({
+      scrollToTop: () => {
+        runOnUI(scrollTo)(0);
+      },
+    })
+  );
 
   const styles = React.useMemo(() => {
     return [tw.style(`bg-white dark:bg-gray-900`), style];

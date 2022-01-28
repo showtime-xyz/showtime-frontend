@@ -43,7 +43,6 @@ import { AppContext } from "app/context/app-context";
 import { setLogout } from "app/lib/logout";
 import { mixpanel } from "app/lib/mixpanel";
 import { deleteCache } from "app/lib/delete-cache";
-import { useUser } from "app/hooks/use-user";
 import { deleteRefreshToken } from "app/lib/refresh-token";
 import { ToastProvider } from "design-system/toast";
 import {

@@ -1,31 +1,17 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { Platform } from "react-native";
+import { useCallback, useContext } from "react";
 import { captureException } from "@sentry/nextjs";
 import { useSWRConfig } from "swr";
-import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { magic } from "app/lib/magic";
-import { axios } from "app/lib/axios";
-// @ts-ignore
-import getWeb3Modal from "app/lib/web3-modal";
 import { AppContext } from "app/context/app-context";
-import { convertUtf8ToHex } from "@walletconnect/utils";
-import { personalSignMessage } from "app/lib/utilities";
-import { setRefreshToken } from "app/lib/refresh-token";
-import { accessTokenManager } from "app/lib/access-token-manager";
-import { setLogin } from "app/lib/login";
 import { mixpanel } from "app/lib/mixpanel";
 import { useMagicLogin } from "app/hooks/auth/use-magic-login";
 import { useWalletLogin } from "app/hooks/auth/use-wallet-login";
 import { useAuth } from "app/hooks/auth/use-auth";
+import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 
 export const useLogin = (onLogin?: () => void) => {
   //#region state
-  // const [signaturePending, setSignaturePending] = useState(false);
-  // // const [walletName, setWalletName] = useState("");
-  // const loginRequested = useRef(false);
-
   const { authenticationStatus } = useAuth();
-
   const {
     loginWithWallet,
     walletName,
@@ -42,7 +28,7 @@ export const useLogin = (onLogin?: () => void) => {
   //#region methods
   const handleLoginSuccess = useCallback(
     (source: string) => {
-      mutate(null);
+      mutate(MY_INFO_ENDPOINT);
       mixpanel.track(`Login success - ${source}`);
 
       if (onLogin) {
@@ -96,7 +82,7 @@ export const useLogin = (onLogin?: () => void) => {
         handleLoginFailure(error);
       }
     },
-    [loginWithEmail, handleLoginFailure, handleLoginSuccess]
+    [loginWithEmail, handleLoginFailure, handleLoginSuccess, context.setWeb3]
   );
   const handleSubmitPhoneNumber = useCallback(
     async function handleSubmitPhoneNumber(phoneNumber: string) {
@@ -116,16 +102,13 @@ export const useLogin = (onLogin?: () => void) => {
         handleLoginFailure(error);
       }
     },
-    [handleLoginSuccess, handleLoginFailure]
+    [
+      loginWithPhoneNumber,
+      handleLoginSuccess,
+      handleLoginFailure,
+      context.setWeb3,
+    ]
   );
-  //#endregion
-
-  //#region effects
-  // useEffect(() => {
-  //   if (connector.connected && loginRequested.current) {
-  //     handleSubmitWallet();
-  //   }
-  // }, [connector?.connected]);
   //#endregion
   return {
     loading: authenticationStatus === "AUTHENTICATING",

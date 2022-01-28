@@ -4,7 +4,7 @@ import { useMyInfo } from "app/hooks/api-hooks";
 import { useCallback, useMemo, useState } from "react";
 import { NFT } from "app/types";
 
-function Social({ nft }: { nft: NFT }) {
+function Social({ nft }: { nft?: NFT }) {
   if (!nft) return null;
 
   const { isLiked, like, unlike } = useMyInfo();
