@@ -23,6 +23,7 @@ export const useProfileNavigation = (address?: string) => {
 };
 
 export const useSettingsNavigation = (address?: string) => {
+  // TODO: Support trending, marketplace, notifications
   const router = useRouter();
   return useCallback(() => {
     if (address) {
