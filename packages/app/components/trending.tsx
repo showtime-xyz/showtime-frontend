@@ -187,7 +187,7 @@ const CreatorsList = ({
         removeClippedSubviews={Platform.OS !== "web"}
         ListHeaderComponent={ListHeaderComponent}
         numColumns={1}
-        windowSize={2}
+        windowSize={4}
         initialNumToRender={4}
         alwaysBounceVertical={false}
         ListFooterComponent={ListFooterComponent}
