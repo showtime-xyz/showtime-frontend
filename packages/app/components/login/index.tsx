@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { StyleSheet } from "react-native";
 import { yup } from "app/lib/yup";
 
 import {
@@ -10,11 +11,10 @@ import {
   Button,
   ButtonLabel,
 } from "design-system";
-import { useLogin } from "./useLogin";
+import { useLogin } from "./use-login";
 import { LoginInputField } from "./login-input-field";
 import { LoginHeader } from "./login-header";
 import { LoginContainer } from "./login-container";
-import { StyleSheet } from "react-native";
 
 const TAB_LIST_HEIGHT = 56;
 
@@ -29,7 +29,9 @@ export function Login({ onLogin }: LoginProps) {
 
   //#region hooks
   const {
-    state,
+    walletStatus,
+    walletName,
+    loading,
     handleSubmitEmail,
     handleSubmitPhoneNumber,
     handleSubmitWallet,
@@ -69,14 +71,12 @@ export function Login({ onLogin }: LoginProps) {
   //#endregion
 
   return (
-    <LoginContainer
-      loading={state.status === "loading" || state.status === "requestingNonce"}
-    >
-      {state.status === "waitingForSignature" ? (
+    <LoginContainer loading={loading}>
+      {walletStatus === "FETCHING_SIGNATURE" ? (
         <View tw="py-40">
           <Text tw="text-center dark:text-gray-400">
-            {state.walletName !== ""
-              ? `Pushed a request to ${state.walletName}... Please check your wallet.`
+            {walletName !== ""
+              ? `Pushed a request to ${walletName}... Please check your wallet.`
               : `Pushed a request to your wallet...`}
           </Text>
         </View>

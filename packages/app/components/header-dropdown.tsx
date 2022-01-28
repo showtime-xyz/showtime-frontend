@@ -15,6 +15,7 @@ import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import { formatAddressShort } from "app/lib/utilities";
 import { AppContext } from "app/context/app-context";
 import { useUser } from "app/hooks/use-user";
+import { useAuth } from "app/hooks/auth/use-auth";
 import { useProfileNavigation } from "app/navigation/app-navigation";
 
 const getSmallImageUrl = (imgUrl: string) => {
@@ -26,6 +27,7 @@ const getSmallImageUrl = (imgUrl: string) => {
 
 function HeaderDropdown() {
   const { user } = useUser();
+  const { logout } = useAuth();
   const context = useContext(AppContext);
   const openProfile = useProfileNavigation(
     user?.data?.profile?.wallet_addresses_v2?.[0]?.address
@@ -110,9 +112,7 @@ function HeaderDropdown() {
 
         <DropdownMenuItem
           destructive
-          onSelect={() => {
-            context.logOut();
-          }}
+          onSelect={logout}
           key="sign-out"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
