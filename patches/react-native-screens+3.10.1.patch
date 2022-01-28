@@ -1,0 +1,17 @@
+diff --git a/node_modules/react-native-screens/ios/RNSFullWindowOverlay.m b/node_modules/react-native-screens/ios/RNSFullWindowOverlay.m
+index b8c13e2..ff59642 100644
+--- a/node_modules/react-native-screens/ios/RNSFullWindowOverlay.m
++++ b/node_modules/react-native-screens/ios/RNSFullWindowOverlay.m
+@@ -76,7 +76,11 @@ - (void)didMoveToWindow
+ {
+   if (self.window == nil) {
+     [self hide];
+-    [_touchHandler detachFromView:_container];
++      
++    if (_container != nil){
++        [_touchHandler detachFromView:_container];
++    }
++   
+   } else {
+     if (_touchHandler == nil) {
+       _touchHandler = [[RCTTouchHandler alloc] initWithBridge:_bridge];
