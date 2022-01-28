@@ -212,20 +212,24 @@ const ProfileTop = ({ address }: { address?: string }) => {
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
 
-  const bioWithMentions = reactStringReplace(
-    bio,
-    /@([\w\d-]+?)\b/g,
-    (username: string, i: number) => {
-      return (
-        <Text
-          tw="font-bold text-black dark:text-white"
-          onPress={() => router.push(`/profile/${username}`)}
-          key={i}
-        >
-          @{username}
-        </Text>
-      );
-    }
+  const bioWithMentions = useMemo(
+    () =>
+      reactStringReplace(
+        bio,
+        /@([\w\d-]+?)\b/g,
+        (username: string, i: number) => {
+          return (
+            <Text
+              tw="font-bold text-black dark:text-white"
+              onPress={() => router.push(`/profile/${username}`)}
+              key={i}
+            >
+              @{username}
+            </Text>
+          );
+        }
+      ),
+    [bio]
   );
 
   return (
