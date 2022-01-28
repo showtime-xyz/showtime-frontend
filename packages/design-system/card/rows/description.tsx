@@ -5,6 +5,7 @@ import { View } from "design-system/view";
 import { Text } from "design-system/text";
 import { Pressable } from "design-system/pressable-scale";
 import type { NFT } from "app/types";
+import { removeTags } from "app/utilities";
 
 type Props = {
   nft?: NFT;
@@ -74,7 +75,7 @@ function Description({ nft }: Props) {
         numberOfLines={numberOfLines}
         onTextLayout={onTextLayout}
       >
-        {nft.token_description}
+        {removeTags(nft.token_description)}
       </Text>
 
       {(showMore || showLess) && (
