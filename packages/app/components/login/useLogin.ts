@@ -89,6 +89,7 @@ export const useLogin = (onLogin?: () => void) => {
     };
   }, []);
   useEffect(() => {
+    console.log("connected status ", connector.connected);
     // TODO: The below call is responsible for signature verification post wallet connection
     // We should move it in a separate function to avoid confusion
     if (connector.connected && state.status === "requestedWalletConnect") {
