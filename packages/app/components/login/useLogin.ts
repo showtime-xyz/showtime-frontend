@@ -239,7 +239,7 @@ export const useLogin = (onLogin?: () => void) => {
       const web3 = new Web3Provider(magic.rpcProvider);
       context.setWeb3(web3);
 
-      const response = await axios({
+      const response = await fetchOnForeground({
         url: "/v1/login_magic",
         method: "POST",
         data: payload,
