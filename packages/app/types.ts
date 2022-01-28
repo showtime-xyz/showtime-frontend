@@ -99,3 +99,10 @@ export interface Profile {
   has_onboarded: boolean;
   links: Link[];
 }
+
+export type AuthenticationStatus =
+  | "IDLE"
+  | "REFRESHING"
+  | "AUTHENTICATING"
+  | "AUTHENTICATED"
+  | "UNAUTHENTICATED";

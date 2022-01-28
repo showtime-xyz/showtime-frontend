@@ -35,6 +35,8 @@ import LogRocket from "@logrocket/react-native";
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
 import { NavigationProvider } from "app/navigation";
+import { AuthProvider } from "app/providers/auth-provider";
+import { UserProvider } from "app/providers/user-provider";
 import { NextTabNavigator } from "app/navigation/next-tab-navigator";
 import { accessTokenManager } from "app/lib/access-token-manager";
 import { AppContext } from "app/context/app-context";
@@ -184,7 +186,6 @@ function AppContextProvider({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
-  const { user } = useUser();
   const { mutate } = useSWRConfig();
   const connector = useWalletConnect();
   const [web3, setWeb3] = useState(null);
@@ -313,10 +314,14 @@ function App() {
                   ): JSX.Element => <QRCodeModal {...props} />}
                 >
                   <AppContextProvider>
-                    <BottomSheetModalProvider>
-                      <StatusBar style="auto" />
-                      <NextTabNavigator />
-                    </BottomSheetModalProvider>
+                    <AuthProvider>
+                      <UserProvider>
+                        <BottomSheetModalProvider>
+                          <StatusBar style="auto" />
+                          <NextTabNavigator />
+                        </BottomSheetModalProvider>
+                      </UserProvider>
+                    </AuthProvider>
                   </AppContextProvider>
                 </WalletConnectProvider>
               </SWRProvider>
