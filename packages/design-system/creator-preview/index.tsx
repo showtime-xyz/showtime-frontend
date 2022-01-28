@@ -78,22 +78,14 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
             }}
           >
             <Text tw="text-gray-900 font-bold text-sm dark:text-white">
-              {isFollowingCreator ? "Unfollow" : "Follow"}
+              {isFollowingCreator ? "Following" : "Follow"}
             </Text>
           </Button>
         </View>
       </View>
-      <View tw="flex-row justify-center mt-4 mx-[-4px]">
+      <View tw="flex-row justify-center mt-4 mx-[-1px]">
         {props.creator.top_items.slice(0, 3).map((item) => {
-          return (
-            <View tw="rounded-3xl mx-[4px] overflow-hidden" key={item.nft_id}>
-              <Media
-                item={item}
-                numColumns={3}
-                tw={`rounded-2xl w-[${mediaDimension}px] h-[${mediaDimension}px]`}
-              />
-            </View>
-          );
+          return <Media key={item.nft_id} item={item} numColumns={3} />;
         })}
       </View>
     </View>
