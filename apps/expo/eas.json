@@ -48,7 +48,8 @@
   "submit": {
     "production": {
       "android": {
-        "serviceAccountKeyPath": "./service-account-key.json"
+        "serviceAccountKeyPath": "./service-account-key.json",
+        "track": "beta"
       },
       "ios": {
         "appName": "Showtime: NFT Social Network",
