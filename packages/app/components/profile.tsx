@@ -231,7 +231,7 @@ const ProfileTop = ({ address }: { address?: string }) => {
       <View tw="bg-white dark:bg-black px-2">
         <View tw="flex-row justify-between pr-2">
           <View tw="flex-row items-end">
-            <View tw="bg-gray-100 dark:bg-gray-900 h-[144px] w-[144px] rounded-full mt-[-72px]">
+            <View tw="bg-white dark:bg-gray-900 rounded-full mt-[-72px] p-2">
               <Skeleton
                 height={144}
                 width={144}
@@ -245,7 +245,7 @@ const ProfileTop = ({ address }: { address?: string }) => {
                       uri: getProfileImage(profileData?.data.profile),
                     }}
                     alt="Profile avatar"
-                    tw="border-white h-[144px] w-[144px] dark:border-gray-900 rounded-full border-8"
+                    tw="border-white h-[144px] w-[144px] rounded-full"
                   />
                 </Animated.View>
               </Skeleton>
