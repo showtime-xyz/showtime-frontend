@@ -26,6 +26,8 @@ type MyInfoData = {
   };
 };
 
+export const MY_INFO_KEY = "/v2/myinfo";
+
 const useUser = () => {
   const [refreshStatus, setRefreshStatus] = useState<RefreshStatus>("IDLE");
   const [authenticationStatus, setAuthenticationStatus] =
@@ -33,12 +35,11 @@ const useUser = () => {
   const accessToken = useAccessToken();
 
   const unmountSignal = useUnmountSignal();
-  const url = "/v2/myinfo";
   const {
     data: user,
     error,
     mutate,
-  } = useSWR<MyInfoData>(accessToken ? [url] : null, (url) =>
+  } = useSWR<MyInfoData>(accessToken ? MY_INFO_KEY : null, (url) =>
     axios({ url, method: "GET", unmountSignal })
   );
 

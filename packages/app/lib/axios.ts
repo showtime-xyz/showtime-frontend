@@ -65,21 +65,25 @@ const axiosAPI = async ({ url, method, data, unmountSignal }: AxiosParams) => {
     ? `Bearer ${accessToken}`
     : null;
 
+  const request = {
+    baseURL:
+      url.startsWith("http") || url.startsWith("/api/")
+        ? ""
+        : process.env.NEXT_PUBLIC_BACKEND_URL,
+    url,
+    method,
+    data,
+    signal: unmountSignal,
+    headers: {
+      Authorization: authorizationHeader,
+    },
+  };
+
+  // console.log("request to the server ", request);
   try {
-    return await axios({
-      baseURL:
-        url.startsWith("http") || url.startsWith("/api/")
-          ? ""
-          : process.env.NEXT_PUBLIC_BACKEND_URL,
-      url,
-      method,
-      data,
-      signal: unmountSignal,
-      headers: {
-        Authorization: authorizationHeader,
-      },
-    }).then((res) => res.data);
+    return await axios(request).then((res) => res.data);
   } catch (error) {
+    console.error(error);
     // console.error(error)
   }
 };

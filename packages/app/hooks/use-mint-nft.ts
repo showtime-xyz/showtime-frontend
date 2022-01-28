@@ -1,6 +1,7 @@
 import { Alert } from "react-native";
 import { useContext, useEffect, useReducer, useState } from "react";
 import { v4 as uuid } from "uuid";
+import { axios as showtimeAPIAxios } from "app/lib/axios";
 import axios from "axios";
 import * as FileSystem from "expo-file-system";
 import { formatAddressShort, getBiconomy } from "../utilities";
@@ -93,31 +94,11 @@ const getFileNameAndType = (filePath: string) => {
     };
   }
 };
-const getPinataToken = (publicAddress: string) => {
-  return axios
-    .post(
-      "https://api.pinata.cloud/users/generateApiKey",
-      {
-        maxUses: 1,
-        keyName: `${formatAddressShort(publicAddress)}'s key`,
-        permissions: {
-          endpoints: {
-            pinning: {
-              pinFileToIPFS: true,
-              pinJSONToIPFS: true,
-            },
-          },
-        },
-      },
-
-      {
-        headers: {
-          // TODO: Move this to new pinata backend API
-          Authorization: `Bearer ${process.env.PINATA_TOKEN}`,
-        },
-      }
-    )
-    .then((res) => res.data.JWT);
+const getPinataToken = () => {
+  return showtimeAPIAxios({
+    url: "/v1/pinata/key",
+    method: "POST",
+  }).then((res) => res.token);
 };
 
 export const useMintNFT = () => {
@@ -163,7 +144,7 @@ export const useMintNFT = () => {
       console.log("Received file meta data ", fileMetaData);
 
       if (fileMetaData) {
-        const pinataToken = await getPinataToken(userAddress);
+        const pinataToken = await getPinataToken();
 
         const formData = new FormData();
 
@@ -193,7 +174,7 @@ export const useMintNFT = () => {
         console.log("Uploaded file to ipfs ", fileIpfsHash);
 
         if (fileIpfsHash) {
-          const pinataToken = await getPinataToken(userAddress);
+          const pinataToken = await getPinataToken();
 
           const nftJson = await axios
             .post(
