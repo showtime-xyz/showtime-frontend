@@ -341,11 +341,11 @@ index 0000000..9de5ce3
 +}
 +
 +module.exports = fetchOnAppForeground;
-diff --git a/node_modules/@biconomy/mexa/common-js/fetch-on-web-foreground.js b/node_modules/@biconomy/mexa/common-js/fetch-on-web-foreground.js
+diff --git a/node_modules/@biconomy/mexa/common-js/fetch-on-app-foreground.js b/node_modules/@biconomy/mexa/common-js/fetch-on-app-foreground.js
 new file mode 100644
 index 0000000..bf5936e
 --- /dev/null
-+++ b/node_modules/@biconomy/mexa/common-js/fetch-on-web-foreground.js
++++ b/node_modules/@biconomy/mexa/common-js/fetch-on-app-foreground.js
 @@ -0,0 +1,2 @@
 +const fetchOnAppForeground = require("cross-fetch");
 +module.exports = fetchOnAppForeground;
