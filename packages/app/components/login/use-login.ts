@@ -8,6 +8,7 @@ import { useMagicLogin } from "app/hooks/auth/use-magic-login";
 import { useWalletLogin } from "app/hooks/auth/use-wallet-login";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useStableBlurEffect } from "app/hooks/use-stable-blur-effect";
+import { useWeb3 } from "app/hooks/use-web3";
 
 export const useLogin = (onLogin?: () => void) => {
   //#region state
@@ -22,7 +23,7 @@ export const useLogin = (onLogin?: () => void) => {
 
   //#region hooks
   const { mutate } = useSWRConfig();
-  const context = useContext(AppContext);
+  const { setWeb3 } = useWeb3();
   //#endregion
 
   //#region methods
@@ -71,7 +72,7 @@ export const useLogin = (onLogin?: () => void) => {
           .Web3Provider;
         // @ts-ignore
         const web3 = new Web3Provider(magic.rpcProvider);
-        context.setWeb3(web3);
+        setWeb3(web3);
 
         await loginWithEmail(email);
 
@@ -80,7 +81,7 @@ export const useLogin = (onLogin?: () => void) => {
         handleLoginFailure(error);
       }
     },
-    [loginWithEmail, handleLoginFailure, handleLoginSuccess, context.setWeb3]
+    [loginWithEmail, handleLoginFailure, handleLoginSuccess, setWeb3]
   );
   const handleSubmitPhoneNumber = useCallback(
     async function handleSubmitPhoneNumber(phoneNumber: string) {
@@ -91,7 +92,7 @@ export const useLogin = (onLogin?: () => void) => {
           .Web3Provider;
         // @ts-ignore
         const web3 = new Web3Provider(magic.rpcProvider);
-        context.setWeb3(web3);
+        setWeb3(web3);
 
         await loginWithPhoneNumber(phoneNumber);
 
@@ -100,12 +101,7 @@ export const useLogin = (onLogin?: () => void) => {
         handleLoginFailure(error);
       }
     },
-    [
-      loginWithPhoneNumber,
-      handleLoginSuccess,
-      handleLoginFailure,
-      context.setWeb3,
-    ]
+    [loginWithPhoneNumber, handleLoginSuccess, handleLoginFailure, setWeb3]
   );
 
   /**
