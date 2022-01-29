@@ -23,7 +23,7 @@ const TransferNftScreen = () => {
   //#endregion
 
   //#region variables
-  const snapPoints = useMemo(() => ["80%"], []);
+  const snapPoints = useMemo(() => ["90%"], []);
   const TransferModal = Platform.OS === "android" ? ModalSheet : Modal;
   //#endregion
 
@@ -34,6 +34,7 @@ const TransferNftScreen = () => {
       snapPoints={snapPoints}
       height="h-[80vh]"
       bodyTW="bg-white dark:bg-black"
+      bodyContentTW="p-0"
     >
       <TransferNft nftId={nftId} />
     </TransferModal>

@@ -32,6 +32,12 @@ export interface ModalProps {
    */
   bodyTW?: TW;
   /**
+   * Defines the body ScrollView content tailwind style.
+   *
+   * @default undefined
+   */
+  bodyContentTW?: TW;
+  /**
    * Defines the keyboard vertical offset, usually
    * the header height.
    *

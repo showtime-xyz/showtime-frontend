@@ -56,6 +56,7 @@ export function Modal({
   width = DEFAULT_WIDTH,
   height = DEFAULT_HEIGHT,
   bodyTW,
+  bodyContentTW,
   keyboardVerticalOffset = 0,
   close,
   onDismiss,
@@ -80,7 +81,9 @@ export function Modal({
             ]}
           >
             <Header title={title} close={close} />
-            <ModalBody tw={bodyTW}>{children}</ModalBody>
+            <ModalBody tw={bodyTW} contentTW={bodyContentTW}>
+              {children}
+            </ModalBody>
           </View>
         </ModalKeyboardAvoidingView>
       </View>

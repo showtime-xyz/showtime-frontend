@@ -1,6 +1,7 @@
 import { View } from "design-system/view";
 import { Button } from "design-system/button";
 import { MoreHorizontal } from "design-system/icon";
+import type { TW } from "design-system/tailwind/types";
 import { Creator } from "./elements/creator";
 import type { NFT } from "app/types";
 import { Ownership } from "./elements/ownership";
@@ -10,13 +11,18 @@ type Props = {
   nft?: NFT;
   options?: boolean;
   price?: boolean;
+  tw?: TW;
 };
 
-function Owner({ options, price, nft }: Props) {
+function Owner({ options, price, nft, tw = "" }: Props) {
   if (!nft) return null;
 
+  const defaultStyle =
+    "px-4 py-2 flex flex-row items-center justify-between bg-white dark:bg-black";
+  const containerStyle = [defaultStyle, tw] as TW;
+
   return (
-    <View tw="px-4 py-2 flex flex-row items-center justify-between bg-white dark:bg-black">
+    <View tw={containerStyle}>
       <Creator nft={nft} />
 
       {options ? (

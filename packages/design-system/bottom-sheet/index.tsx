@@ -7,6 +7,7 @@ import {
 
 import { View } from "design-system/view";
 import { tw } from "design-system/tailwind";
+import { TW } from "design-system/tailwind/types";
 
 type BottomSheetProps = {
   children?: React.ReactElement;
@@ -14,10 +15,21 @@ type BottomSheetProps = {
   visible?: boolean;
   onDismiss?: () => void;
   snapPoints?: string[];
+  bodyContentTW?: TW;
 };
 
 export const BottomSheet = (props: BottomSheetProps) => {
-  const { children, visible, handleComponent, onDismiss, snapPoints } = props;
+  const {
+    children,
+    visible,
+    handleComponent,
+    onDismiss,
+    snapPoints,
+    bodyContentTW,
+  } = props;
+
+  const defaultStyle = "flex-1 pt-6 px-4";
+  const contentStyle = [defaultStyle, bodyContentTW] as TW;
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
@@ -53,7 +65,7 @@ export const BottomSheet = (props: BottomSheetProps) => {
       backgroundStyle={tw.style(`bg-white dark:bg-black rounded-t-[32px]`)}
       snapPoints={snapPoints ?? defaultSnapPoints}
     >
-      <View tw="flex-1 pt-6 px-4">{children}</View>
+      <View tw={contentStyle}>{children}</View>
     </BottomSheetModal>
   );
 };

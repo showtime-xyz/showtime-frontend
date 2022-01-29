@@ -82,7 +82,7 @@ function NFTDropdown({ nft }: Props) {
 
         {isOwner && (
           <DropdownMenuItem
-            onSelect={() => router.push(`/transferNft/${nft.token_id}`)}
+            onSelect={() => router.push(`/transferNft/${nft.nft_id}`)}
             key="transfer"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >
