@@ -1,65 +1,120 @@
 import { Alert } from "react-native";
-import { useContext, useEffect, useReducer, useState } from "react";
+import { useContext, useReducer, useRef } from "react";
 import { v4 as uuid } from "uuid";
 import { axios as showtimeAPIAxios } from "app/lib/axios";
 import axios from "axios";
 import * as FileSystem from "expo-file-system";
-import { formatAddressShort, getBiconomy } from "../utilities";
+import { getBiconomy } from "../utilities";
 import { ethers } from "ethers";
 import minterAbi from "app/abi/ShowtimeMT.json";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
-import { AppContext } from "../context/app-context";
-import { useUser } from "./use-user";
 import { useWeb3 } from "./use-web3";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
-export type MintNFTType = {
-  status:
-    | "idle"
-    | "fileUpload"
-    | "fileUploadError"
-    | "minting"
-    | "mintingError"
-    | "mintingSuccess";
+type MintNFTStatus =
+  | "idle"
+  | "mediaUpload"
+  | "mediaUploadError"
+  | "mediaUploadSuccess"
+  | "nftJSONUpload"
+  | "nftJSONUploadSuccess"
+  | "nftJSONUploadError"
+  | "minting"
+  | "mintingError"
+  | "mintingSuccess"
+  | "transactionCompleted";
 
+export type MintNFTType = {
+  status: MintNFTStatus;
   tokenId?: string;
   transaction?: string;
+  mediaIPFSHash?: string;
+  nftIPFSHash?: string;
+  isMagic?: boolean;
 };
 
 const initialMintNFTState: MintNFTType = {
-  status: "idle",
+  status: "idle" as MintNFTStatus,
+  mediaIPFSHash: undefined,
+  nftIPFSHash: undefined,
   tokenId: undefined,
   transaction: undefined,
+  isMagic: undefined,
 };
 
-const mintNFTReducer = (state: MintNFTType, action: any): MintNFTType => {
+type ActionPayload = {
+  mediaIPFSHash?: string;
+  tokenId?: string;
+  transaction?: string;
+  nftIPFSHash?: string;
+  isMagic?: boolean;
+};
+
+const mintNFTReducer = (
+  state: MintNFTType,
+  action: { type: MintNFTStatus; payload?: ActionPayload }
+): MintNFTType => {
   switch (action.type) {
-    case "fileUpload":
+    case "mediaUpload":
       return {
         ...state,
-        status: "fileUpload",
+        status: "mediaUpload",
+        mediaIPFSHash: undefined,
         tokenId: undefined,
         transaction: undefined,
       };
-    case "fileUploadError":
-      return { ...state, status: "fileUploadError" };
+    case "mediaUploadSuccess":
+      return {
+        ...state,
+        status: "mediaUploadSuccess",
+        mediaIPFSHash: action.payload?.mediaIPFSHash,
+      };
+    case "mediaUploadError":
+      return {
+        ...state,
+        status: "mediaUploadError",
+      };
+    case "nftJSONUpload":
+      return {
+        ...state,
+        nftIPFSHash: undefined,
+        status: "nftJSONUpload",
+      };
+    case "nftJSONUploadSuccess":
+      return {
+        ...state,
+        status: "nftJSONUploadSuccess",
+        nftIPFSHash: action.payload?.nftIPFSHash,
+      };
+    case "transactionCompleted":
+      return {
+        ...state,
+        status: "transactionCompleted",
+        transaction: action.payload?.transaction,
+      };
+    case "nftJSONUploadError":
+      return {
+        ...state,
+        status: "nftJSONUploadError",
+      };
     case "minting":
       return {
         ...state,
         status: "minting",
         tokenId: undefined,
         transaction: undefined,
+        isMagic: action.payload?.isMagic,
       };
-    case "mintingError":
-      return { ...state, status: "mintingError" };
     case "mintingSuccess":
       return {
         ...state,
         status: "mintingSuccess",
-        tokenId: action.tokenId,
-        transaction: action.transaction,
+        tokenId: action.payload?.tokenId,
+        transaction: action.payload?.transaction,
       };
+    case "mintingError":
+      return { ...state, status: "mintingError" };
     default:
       return state;
   }
@@ -104,37 +159,14 @@ const getPinataToken = () => {
 
 export const useMintNFT = () => {
   const [state, dispatch] = useReducer(mintNFTReducer, initialMintNFTState);
-  const { user } = useUser();
-  const [userAddress, setUserAddress] = useState<string>();
-  const context = useContext(AppContext);
+  const biconomyRef = useRef<any>();
   const { web3 } = useWeb3();
-
-  useEffect(() => {
-    if (
-      user?.data &&
-      user?.data.profile.wallet_addresses_excluding_email_v2.filter((addr) =>
-        addr.address.startsWith("0x")
-      )[0]
-    ) {
-      setUserAddress(
-        user.data.profile.wallet_addresses_excluding_email_v2.filter((addr) =>
-          addr.address.startsWith("0x")
-        )[0].address
-      );
-    }
-    // Web3 is initialised for magic users
-    else if (web3) {
-      const signer = web3.getSigner();
-      signer.getAddress().then((addr: string) => {
-        setUserAddress(addr);
-      });
-    }
-  }, [user, web3]);
 
   const connector = useWalletConnect();
 
-  async function uploadFile(params: UseMintNFT) {
-    if (userAddress) {
+  async function uploadMedia(params: UseMintNFT) {
+    // Media Upload
+    try {
       const fileMetaData = getFileNameAndType(params.filePath);
       const fileInfo = await FileSystem.getInfoAsync(params.filePath);
       if (typeof fileInfo.size === "number" && fileInfo.size > MAX_FILE_SIZE) {
@@ -146,8 +178,9 @@ export const useMintNFT = () => {
       console.log("Received file meta data ", fileMetaData);
 
       if (fileMetaData) {
-        const pinataToken = await getPinataToken();
+        dispatch({ type: "mediaUpload" });
 
+        const pinataToken = await getPinataToken();
         const formData = new FormData();
 
         formData.append("file", {
@@ -164,165 +197,165 @@ export const useMintNFT = () => {
           })
         );
 
-        const fileIpfsHash = await axios
+        const mediaIPFSHash = await axios
           .post("https://api.pinata.cloud/pinning/pinFileToIPFS", formData, {
             headers: {
               Authorization: `Bearer ${pinataToken}`,
               "Content-Type": `multipart/form-data`,
             },
           })
-          .then((res) => res.data.IpfsHash);
-
-        console.log("Uploaded file to ipfs ", fileIpfsHash);
-
-        if (fileIpfsHash) {
-          const pinataToken = await getPinataToken();
-
-          const nftJson = await axios
-            .post(
-              "https://api.pinata.cloud/pinning/pinJSONToIPFS",
-              {
-                pinataMetadata: { name: uuid() },
-                pinataContent: {
-                  name: params.title,
-                  description: params.description,
-                  image: `ipfs://${fileIpfsHash}`,
-                  ...(params.notSafeForWork
-                    ? { attributes: [{ value: "NSFW" }] }
-                    : {}),
-                },
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${pinataToken}`,
-                },
-              }
-            )
-            .then((res) => res.data.IpfsHash);
-          console.log("Uploaded nft json to ipfs ", nftJson);
-
-          return nftJson;
-        }
+          .then((res: any) => res.data.IpfsHash);
+        console.log("Uploaded file to ipfs ", mediaIPFSHash);
+        dispatch({ type: "mediaUploadSuccess", payload: { mediaIPFSHash } });
+        return mediaIPFSHash;
       }
+    } catch (error) {
+      console.error("media upload failed", error);
+      dispatch({ type: "mediaUploadError" });
     }
   }
 
-  async function mintToken({
-    nftJsonIpfsHash,
-    ...params
-  }: {
-    nftJsonIpfsHash: string;
-  } & UseMintNFT) {
-    return new Promise<{ transaction: string; tokenId: number }>(
-      async (resolve, reject) => {
-        const { biconomy } = await getBiconomy(connector, web3);
-
-        const contract = new ethers.Contract(
-          //@ts-ignore
-          process.env.NEXT_PUBLIC_MINTING_CONTRACT,
-          minterAbi,
-          biconomy.getSignerByAddress(userAddress)
-        );
-
-        const { data } = await contract.populateTransaction.issueToken(
-          userAddress,
-          params.editionCount,
-          nftJsonIpfsHash,
-          0,
-          userAddress,
-          params.royaltiesPercentage * 100
-        );
-        const provider = biconomy.getEthersProvider();
-
-        console.log("** minting: opening wallet for signing **");
-
-        const transaction = await provider
-          .send("eth_sendTransaction", [
+  async function uploadNFTJson(params: UseMintNFT) {
+    let mediaIpfsHash;
+    if (state.mediaIPFSHash) {
+      mediaIpfsHash = state.mediaIPFSHash;
+    } else {
+      mediaIpfsHash = await uploadMedia(params);
+    }
+    try {
+      if (mediaIpfsHash) {
+        dispatch({ type: "nftJSONUpload" });
+        const pinataToken = await getPinataToken();
+        const nftIPFSHash = await axios
+          .post(
+            "https://api.pinata.cloud/pinning/pinJSONToIPFS",
             {
-              data,
-              from: userAddress,
-              to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
-              signatureType: "EIP712_SIGN",
+              pinataMetadata: { name: uuid() },
+              pinataContent: {
+                name: params.title,
+                description: params.description,
+                image: `ipfs://${mediaIpfsHash}`,
+                ...(params.notSafeForWork
+                  ? { attributes: [{ value: "NSFW" }] }
+                  : {}),
+              },
             },
-          ])
-          .catch((error: any) => {
-            console.error(error);
-            // TODO: Add a proper error message. Find what 4001 means
-            if (error.code === 4001) {
-              reject("Something went wrong");
+            {
+              headers: {
+                Authorization: `Bearer ${pinataToken}`,
+              },
             }
+          )
+          .then((res: any) => res.data.IpfsHash);
+        dispatch({ type: "nftJSONUploadSuccess", payload: { nftIPFSHash } });
+        console.log("Uploaded nft json to ipfs ", nftIPFSHash);
+        return nftIPFSHash;
+      }
+    } catch (e) {
+      console.error("NFT upload error ", e);
+      dispatch({ type: "nftJSONUploadError" });
+    }
+  }
 
-            if (
-              JSON.parse(
-                error?.body || error?.error?.body || "{}"
-              )?.error?.message?.includes("caller is not minter")
-            ) {
-              reject("Your address is not approved for minting");
-            }
+  async function mintNFT(params: UseMintNFT) {
+    let nftJsonIpfsHash;
 
-            reject("Something went wrong");
-          });
+    if (state.nftIPFSHash) {
+      nftJsonIpfsHash = state.nftIPFSHash;
+    } else {
+      nftJsonIpfsHash = await uploadNFTJson(params);
+    }
 
-        // console.log("transaction hash ", transaction);
+    let userAddress;
+    try {
+      const isMagic = !!web3;
+      if (isMagic) {
+        const signer = web3.getSigner();
+        const addr = await signer.getAddress();
+        userAddress = addr;
+      } else {
+        userAddress = connector.accounts.filter((addr) =>
+          addr.startsWith("0x")
+        )[0];
+      }
 
-        provider.once(transaction, (result: any) => {
-          // console.log(
-          //   "token id! ",
-          //   contract.interface
-          //     .decodeFunctionResult("issueToken", result.logs[0].data)[0]
-          //     .toNumber()
-          // );
-          resolve({
+      console.log("user address for minting ", userAddress);
+
+      if (!userAddress) {
+        Alert.alert("Sorry! seems like you are not connected to the wallet");
+        return;
+      }
+
+      dispatch({ type: "minting", payload: { isMagic } });
+
+      biconomyRef.current = await (await getBiconomy(connector, web3)).biconomy;
+
+      const contract = new ethers.Contract(
+        //@ts-ignore
+        process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+        minterAbi,
+        biconomyRef.current.getSignerByAddress(userAddress)
+      );
+
+      const { data } = await contract.populateTransaction.issueToken(
+        userAddress,
+        params.editionCount,
+        nftJsonIpfsHash,
+        0,
+        userAddress,
+        params.royaltiesPercentage * 100
+      );
+
+      const provider = biconomyRef.current.getEthersProvider();
+      console.log("** minting: opening wallet for signing **");
+
+      const transaction = await provider
+        .send("eth_sendTransaction", [
+          {
+            data,
+            from: userAddress,
+            to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+            signatureType: "EIP712_SIGN",
+          },
+        ])
+        .catch((error: any) => {
+          console.error("eth send transaction failure ", error);
+          throw error;
+        });
+
+      dispatch({
+        type: "transactionCompleted",
+        payload: {
+          transaction,
+        },
+      });
+
+      provider.once(transaction, (result: any) => {
+        // console.log(
+        //   "token id! ",
+        //   contract.interface
+        //     .decodeFunctionResult("issueToken", result.logs[0].data)[0]
+        //     .toNumber()
+        // );
+        dispatch({
+          type: "mintingSuccess",
+          payload: {
             tokenId: contract.interface
               .decodeFunctionResult("issueToken", result.logs[0].data)[0]
               .toNumber(),
             transaction: transaction,
-          });
+          },
         });
-      }
-    );
-  }
-
-  async function mintTokenPipeline(params: UseMintNFT) {
-    let nftJsonIpfsHash;
-
-    if (userAddress) {
-      console.log("** Begin file upload **");
-      try {
-        dispatch({ type: "fileUpload" });
-        nftJsonIpfsHash = await uploadFile(params);
-        console.log("** File upload success **");
-      } catch (e) {
-        console.error("file upload error ", e);
-        dispatch({ type: "fileUploadError" });
-        throw e;
-      }
-
-      if (nftJsonIpfsHash) {
-        try {
-          dispatch({ type: "minting" });
-          console.log("** Begin minting **");
-          const response = await mintToken({ nftJsonIpfsHash, ...params });
-          dispatch({
-            type: "mintingSuccess",
-            tokenId: response.tokenId,
-            transaction: response.tokenId,
-          });
-          console.log("** minting success **");
-        } catch (e) {
-          dispatch({ type: "mintingError" });
-          throw e;
-        }
-      }
-    } else {
-      // TODO: better error handling. Maybe show login screen
-      Alert.alert(
-        "Sorry! We can't find your user address. Please login with a wallet or email/phone"
-      );
+      });
+    } catch (error) {
+      console.error("Minting error ", error);
+      dispatch({
+        type: "mintingError",
+      });
     }
   }
 
-  console.log("state ", state);
+  console.log("minting state ", state);
 
-  return { state, startMinting: mintTokenPipeline };
+  return { state, startMinting: mintNFT };
 };
