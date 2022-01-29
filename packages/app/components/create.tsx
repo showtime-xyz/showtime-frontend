@@ -1,5 +1,6 @@
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { useEffect } from "react";
 import { Platform, Pressable, ScrollView } from "react-native";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
 import { View, Text, Fieldset, Checkbox, Button } from "design-system";
 import { ChevronUp } from "design-system/icon";
@@ -17,6 +18,8 @@ import { useForm, Controller } from "react-hook-form";
 import { yup } from "app/lib/yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ErrorText } from "design-system/fieldset";
+import { useRouter } from "app/navigation/use-router";
+import { useUser } from "app/hooks/use-user";
 
 const defaultValues = {
   editionCount: 1,
@@ -54,6 +57,9 @@ interface CreateProps {
 }
 
 function Create({ uri, state, startMinting }: CreateProps) {
+  const router = useRouter();
+  const { user } = useUser();
+
   const handleSubmitForm = (values: Omit<UseMintNFT, "filePath">) => {
     console.log("** Submiting minting form **", values);
     const valuesWithFilePath = { ...values, filePath: uri };
@@ -88,6 +94,20 @@ function Create({ uri, state, startMinting }: CreateProps) {
     state.status === "nftJSONUploadError" ||
     state.status === "mintingError";
   const enable = state.status === "idle" || isError;
+
+  useEffect(
+    function redirectAfterSuccess() {
+      if (state.status === "mintingSuccess") {
+        setTimeout(() => {
+          router.pop();
+          router.push(
+            `/profile/${user?.data?.profile?.wallet_addresses_v2?.[0]?.address}`
+          );
+        }, 1000);
+      }
+    },
+    [state.status, user]
+  );
 
   return (
     <View tw="flex-1">
