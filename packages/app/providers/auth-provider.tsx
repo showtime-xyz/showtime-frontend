@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
+import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { AuthContext } from "app/context/auth-context";
 import { axios } from "app/lib/axios";
 import { magic } from "app/lib/magic";
@@ -7,9 +8,10 @@ import { mixpanel } from "app/lib/mixpanel";
 import { deleteCache } from "app/lib/delete-cache";
 import { deleteRefreshToken } from "app/lib/refresh-token";
 import { deleteAccessToken, getAccessToken } from "app/lib/access-token";
-import { setLogin } from "app/lib/login";
-import { setLogout } from "app/lib/logout";
+import * as loginStorage from "app/lib/login";
+import * as logoutStorage from "app/lib/logout";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
+import { useWeb3 } from "app/hooks/use-web3";
 import { AuthenticationStatus } from "../types";
 
 interface AuthProviderProps {
@@ -24,10 +26,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   //#region hooks
   const { mutate } = useSWRConfig();
+  const connector = useWalletConnect();
+  const { setWeb3 } = useWeb3();
   const { setTokens, refreshTokens } = useAccessTokenManager();
   //#endregion
 
-  //#region login / logout
+  //#region methods
   const login = useCallback(
     async function login(endpoint: string, data: object) {
       const response = await axios({
@@ -42,7 +46,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       if (validResponse) {
         setTokens(accessToken, refreshToken);
-        setLogin(Date.now().toString());
+        loginStorage.setLogin(Date.now().toString());
         setAuthenticationStatus("AUTHENTICATED");
         return;
       }
@@ -52,23 +56,37 @@ export function AuthProvider({ children }: AuthProviderProps) {
     },
     [setTokens, setAuthenticationStatus]
   );
-  const logout = useCallback(async function logout() {
-    setAuthenticationStatus("UNAUTHENTICATED");
-    magic.user.logout();
+  /**
+   * Log out the customer if logged in, and clear auth cache.
+   */
+  const logout = useCallback(
+    async function logout() {
+      const wasUserLoggedIn = loginStorage.getLogin();
 
-    deleteCache();
-    deleteRefreshToken();
-    deleteAccessToken();
+      if (wasUserLoggedIn && wasUserLoggedIn.length > 0) {
+        magic.user.logout();
+        mixpanel.track("Logout");
 
-    await mutate(null);
-    // TODO(gorhom): move web3 context into a separate
-    // provider.
-    // connector.killSession();
-    // setWeb3(null);
-    mixpanel.track("Logout");
-    // Triggers all event listeners for this key to fire. Used to force cross tab logout.
-    setLogout(Date.now().toString());
-  }, []);
+        loginStorage.deleteLogin();
+        logoutStorage.setLogout(Date.now().toString());
+      }
+
+      deleteCache();
+      deleteRefreshToken();
+      deleteAccessToken();
+
+      if (wasUserLoggedIn) {
+        await mutate(null);
+        if (connector && connector.killSession) {
+          await connector.killSession();
+        }
+      }
+
+      setWeb3(undefined);
+      setAuthenticationStatus("UNAUTHENTICATED");
+    },
+    [connector]
+  );
   //#endregion
 
   //#region variables
@@ -99,8 +117,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         await refreshTokens();
         setAuthenticationStatus("AUTHENTICATED");
       } catch (error) {
-        console.error(error);
-        logout();
+        await logout();
       }
     }
 

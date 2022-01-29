@@ -16,9 +16,8 @@ import { DripsyProvider } from "dripsy";
 import { useDeviceContext, useAppColorScheme } from "twrnc";
 // import * as Sentry from 'sentry-expo'
 import { MMKV } from "react-native-mmkv";
-import { SWRConfig, useSWRConfig } from "swr";
+import { SWRConfig } from "swr";
 import WalletConnectProvider, {
-  useWalletConnect,
   RenderQrcodeModalProps,
   QrcodeModal,
 } from "@walletconnect/react-native-dapp";
@@ -37,19 +36,14 @@ import { theme } from "design-system/theme";
 import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
 import { UserProvider } from "app/providers/user-provider";
+import { Web3Provider } from "app/providers/web3-provider";
 import { NextTabNavigator } from "app/navigation/next-tab-navigator";
-import { accessTokenManager } from "app/lib/access-token-manager";
 import { AppContext } from "app/context/app-context";
-import { setLogout } from "app/lib/logout";
-import { mixpanel } from "app/lib/mixpanel";
-import { deleteCache } from "app/lib/delete-cache";
-import { deleteRefreshToken } from "app/lib/refresh-token";
 import { ToastProvider } from "design-system/toast";
 import {
   setColorScheme as setUserColorScheme,
   useColorScheme as useUserColorScheme,
 } from "app/lib/color-scheme";
-import { magic } from "app/lib/magic";
 import { Relayer } from "app/lib/magic";
 
 enableScreens(true);
@@ -185,9 +179,6 @@ function AppContextProvider({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
-  const { mutate } = useSWRConfig();
-  const connector = useWalletConnect();
-  const [web3, setWeb3] = useState(null);
   const [mountRelayerOnApp, setMountRelayerOnApp] = useState(true);
 
   useDeviceContext(tw, { withDeviceColorScheme: false });
@@ -227,31 +218,17 @@ function AppContextProvider({
     }
   }, [isDark]);
 
-  useEffect(() => {
-    magic.user.isLoggedIn().then((isLoggedIn) => {
-      if (magic.rpcProvider && isLoggedIn) {
-        const provider = new ethers.providers.Web3Provider(magic.rpcProvider);
-        setWeb3(provider);
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   magic.user.isLoggedIn().then((isLoggedIn) => {
+  //     if (magic.rpcProvider && isLoggedIn) {
+  //       const provider = new ethers.providers.Web3Provider(magic.rpcProvider);
+  //       setWeb3(provider);
+  //     }
+  //   });
+  // }, []);
 
   const injectedGlobalContext = {
-    web3,
-    setWeb3,
     setMountRelayerOnApp,
-    logOut: () => {
-      magic.user.logout();
-      deleteCache();
-      deleteRefreshToken();
-      accessTokenManager.deleteAccessToken();
-      mutate(null);
-      connector.killSession();
-      setWeb3(null);
-      mixpanel.track("Logout");
-      // Triggers all event listeners for this key to fire. Used to force cross tab logout.
-      setLogout(Date.now().toString());
-    },
     colorScheme,
     setColorScheme: (newColorScheme: "light" | "dark") => {
       setColorScheme(newColorScheme);
@@ -312,16 +289,18 @@ function App() {
                     props: RenderQrcodeModalProps
                   ): JSX.Element => <QRCodeModal {...props} />}
                 >
-                  <AppContextProvider>
-                    <AuthProvider>
-                      <UserProvider>
-                        <BottomSheetModalProvider>
-                          <StatusBar style="auto" />
-                          <NextTabNavigator />
-                        </BottomSheetModalProvider>
-                      </UserProvider>
-                    </AuthProvider>
-                  </AppContextProvider>
+                  <Web3Provider>
+                    <AppContextProvider>
+                      <AuthProvider>
+                        <UserProvider>
+                          <BottomSheetModalProvider>
+                            <StatusBar style="auto" />
+                            <NextTabNavigator />
+                          </BottomSheetModalProvider>
+                        </UserProvider>
+                      </AuthProvider>
+                    </AppContextProvider>
+                  </Web3Provider>
                 </WalletConnectProvider>
               </SWRProvider>
             </NavigationProvider>

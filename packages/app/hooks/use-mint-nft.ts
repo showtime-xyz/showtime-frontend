@@ -10,6 +10,7 @@ import minterAbi from "app/abi/ShowtimeMT.json";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { AppContext } from "../context/app-context";
 import { useUser } from "./use-user";
+import { useWeb3 } from "./use-web3";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
@@ -106,6 +107,7 @@ export const useMintNFT = () => {
   const { user } = useUser();
   const [userAddress, setUserAddress] = useState<string>();
   const context = useContext(AppContext);
+  const { web3 } = useWeb3();
 
   useEffect(() => {
     if (
@@ -121,13 +123,13 @@ export const useMintNFT = () => {
       );
     }
     // Web3 is initialised for magic users
-    else if (context.web3) {
-      const signer = context.web3.getSigner();
+    else if (web3) {
+      const signer = web3.getSigner();
       signer.getAddress().then((addr: string) => {
         setUserAddress(addr);
       });
     }
-  }, [user, context.web3]);
+  }, [user, web3]);
 
   const connector = useWalletConnect();
 
@@ -213,7 +215,7 @@ export const useMintNFT = () => {
   } & UseMintNFT) {
     return new Promise<{ transaction: string; tokenId: number }>(
       async (resolve, reject) => {
-        const { biconomy } = await getBiconomy(connector, context.web3);
+        const { biconomy } = await getBiconomy(connector, web3);
 
         const contract = new ethers.Contract(
           //@ts-ignore
