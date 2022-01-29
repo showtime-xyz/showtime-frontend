@@ -257,8 +257,6 @@ export const useMintNFT = () => {
     }
   }
 
-  console.log("efkfekfek");
-
   async function mintNFT(params: UseMintNFT) {
     let nftJsonIpfsHash;
 
