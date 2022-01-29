@@ -1,7 +1,16 @@
 diff --git a/node_modules/@biconomy/mexa/common-js/Biconomy.js b/node_modules/@biconomy/mexa/common-js/Biconomy.js
-index 0f16988..e545c24 100644
+index 0f16988..c8d2129 100644
 --- a/node_modules/@biconomy/mexa/common-js/Biconomy.js
 +++ b/node_modules/@biconomy/mexa/common-js/Biconomy.js
+@@ -46,7 +46,7 @@ var _require4 = require("./abis"),
+     biconomyForwarderAbi = _require4.biconomyForwarderAbi,
+     transferHandlerAbi = _require4.transferHandlerAbi;
+ 
+-var fetch = require("cross-fetch");
++var fetch = require("./fetch-on-app-foreground");
+ 
+ var decoderMap = {},
+     smartContractMap = {},
 @@ -97,6 +97,7 @@ function Biconomy(provider, options) {
    this.originalProvider = provider;
    this.isEthersProviderPresent = false;
@@ -18,7 +27,7 @@ index 0f16988..e545c24 100644
  
 -  var targetProvider = getTargetProvider(engine);
 +  var signFunction = engine.signFunction;
-   
+ 
 -  if (!targetProvider) {
 -    throw new Error("Unable to get provider information passed to Biconomy");
 +  if (!signFunction) {
@@ -100,7 +109,7 @@ index 0f16988..e545c24 100644
 +  if (!targetProvider && !signFunction) {
 +    throw new Error("Unable to get provider information passed to Biconomy");
 +  }
-    
+ 
 -            case 22:
 -            case "end":
 -              return _context4.stop();
@@ -108,7 +117,7 @@ index 0f16988..e545c24 100644
 -        }
 -      }, _callee4, null, [[2, 12]]);
 -    }));
-       
+ 
 -    return function (_x15, _x16) {
 -      return _ref4.apply(this, arguments);
 -    };
@@ -276,3 +285,67 @@ index 0f16988..e545c24 100644
    return promise;
  }
  
+diff --git a/node_modules/@biconomy/mexa/common-js/fetch-on-app-foreground.android.js b/node_modules/@biconomy/mexa/common-js/fetch-on-app-foreground.android.js
+new file mode 100644
+index 0000000..9de5ce3
+--- /dev/null
++++ b/node_modules/@biconomy/mexa/common-js/fetch-on-app-foreground.android.js
+@@ -0,0 +1,22 @@
++import { AppState } from "react-native";
++
++function fetchOnAppForeground(...params) {
++  if (AppState.currentState === "active") {
++    console.log("was active while fetch");
++    return fetch(...params);
++  } else {
++    return new Promise((resolve, reject) => {
++      function fetchData(state) {
++        if (state === "active") {
++          console.log("calling foreground fetch");
++          fetch(...params).then(resolve).catch(reject);
++          AppState.removeEventListener("change", fetchData);
++        }
++      }
++
++      AppState.addEventListener("change", fetchData);
++    });
++  }
++}
++
++module.exports = fetchOnAppForeground;
+diff --git a/node_modules/@biconomy/mexa/common-js/fetch-on-app-foreground.ios.js b/node_modules/@biconomy/mexa/common-js/fetch-on-app-foreground.ios.js
+new file mode 100644
+index 0000000..9de5ce3
+--- /dev/null
++++ b/node_modules/@biconomy/mexa/common-js/fetch-on-app-foreground.ios.js
+@@ -0,0 +1,22 @@
++import { AppState } from "react-native";
++
++function fetchOnAppForeground(...params) {
++  if (AppState.currentState === "active") {
++    console.log("was active while fetch");
++    return fetch(...params);
++  } else {
++    return new Promise((resolve, reject) => {
++      function fetchData(state) {
++        if (state === "active") {
++          console.log("calling foreground fetch");
++          fetch(...params).then(resolve).catch(reject);
++          AppState.removeEventListener("change", fetchData);
++        }
++      }
++
++      AppState.addEventListener("change", fetchData);
++    });
++  }
++}
++
++module.exports = fetchOnAppForeground;
+diff --git a/node_modules/@biconomy/mexa/common-js/fetch-on-web-foreground.js b/node_modules/@biconomy/mexa/common-js/fetch-on-web-foreground.js
+new file mode 100644
+index 0000000..bf5936e
+--- /dev/null
++++ b/node_modules/@biconomy/mexa/common-js/fetch-on-web-foreground.js
+@@ -0,0 +1,2 @@
++const fetchOnAppForeground = require("cross-fetch");
++module.exports = fetchOnAppForeground;
