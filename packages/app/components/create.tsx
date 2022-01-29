@@ -287,7 +287,7 @@ function Create({ uri, state, startMinting }: CreateProps) {
                 variant="tertiary"
               >
                 <Text tw="text-gray-900 dark:text-white text-sm">
-                  Did't receive signature request yet?
+                  Didn't receive the signature request yet?
                 </Text>
               </Button>
             ) : null}
