@@ -144,14 +144,14 @@ const CreatorsList = ({
     []
   );
 
-  const getItemLayout = useCallback(
-    (_data, index) => ({
-      length: cardSize + separatorHeight,
-      offset: cardSize + separatorHeight * index,
+  const getItemLayout = useCallback((_data, index) => {
+    const cardHeight = cardSize + separatorHeight;
+    return {
+      length: cardHeight,
+      offset: cardHeight * index,
       index,
-    }),
-    []
-  );
+    };
+  }, []);
 
   const ListHeaderComponent = useMemo(
     () => (

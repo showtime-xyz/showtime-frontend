@@ -43,6 +43,7 @@ export type NFT = {
   collection_slug: string;
   collection_img_url?: string;
   contract_is_creator: number;
+  multiple_owners_list: Array<Profile>;
 };
 
 export type Creator = {
