@@ -1,4 +1,4 @@
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useEffect, useRef } from "react";
 import { captureException } from "@sentry/nextjs";
 import { useSWRConfig } from "swr";
 import { magic } from "app/lib/magic";
@@ -7,11 +7,11 @@ import { mixpanel } from "app/lib/mixpanel";
 import { useMagicLogin } from "app/hooks/auth/use-magic-login";
 import { useWalletLogin } from "app/hooks/auth/use-wallet-login";
 import { useAuth } from "app/hooks/auth/use-auth";
-import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
+import { useStableBlurEffect } from "app/hooks/use-stable-blur-effect";
 
 export const useLogin = (onLogin?: () => void) => {
   //#region state
-  const { authenticationStatus } = useAuth();
+  const { authenticationStatus, logout } = useAuth();
   const {
     loginWithWallet,
     walletName,
@@ -28,9 +28,7 @@ export const useLogin = (onLogin?: () => void) => {
   //#region methods
   const handleLoginSuccess = useCallback(
     (source: string) => {
-      mutate(MY_INFO_ENDPOINT);
       mixpanel.track(`Login success - ${source}`);
-
       if (onLogin) {
         onLogin();
       }
@@ -38,7 +36,7 @@ export const useLogin = (onLogin?: () => void) => {
     [mutate, onLogin]
   );
   const handleLoginFailure = useCallback(function handleLoginFailure(error) {
-    if (process.env.NODE_ENV === "development") {
+    if (process.env.NODE_ENV === "development" || __DEV__) {
       console.error(error);
     }
 
@@ -109,8 +107,24 @@ export const useLogin = (onLogin?: () => void) => {
       context.setWeb3,
     ]
   );
+
+  /**
+   * We make sure to prevent/stop the authentication state,
+   * when customer closes the login modal.
+   */
+  const handleBlur = useCallback(() => {
+    if (authenticationStatus === "AUTHENTICATING") {
+      logout();
+    }
+  }, [logout, authenticationStatus]);
   //#endregion
+
+  //#region effects
+  useStableBlurEffect(handleBlur);
+  //#endregion
+
   return {
+    authenticationStatus,
     loading: authenticationStatus === "AUTHENTICATING",
     walletName,
     walletStatus,

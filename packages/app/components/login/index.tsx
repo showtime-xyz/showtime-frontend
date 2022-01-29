@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { StyleSheet } from "react-native";
 import { yup } from "app/lib/yup";
 
@@ -69,7 +69,6 @@ export function Login({ onLogin }: LoginProps) {
     []
   );
   //#endregion
-
   return (
     <LoginContainer loading={loading}>
       {walletStatus === "FETCHING_SIGNATURE" ? (
