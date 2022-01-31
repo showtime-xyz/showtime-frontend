@@ -18,7 +18,7 @@ type Props = {
 };
 
 function ActivityDropdown({ activity }: Props) {
-  const { report } = useReport();
+  const { reportNFT } = useReport();
   const { unfollow } = useMyInfo();
   const { isAuthenticated } = useUser();
 
@@ -57,7 +57,7 @@ function ActivityDropdown({ activity }: Props) {
         <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 
         <DropdownMenuItem
-          onSelect={() => report({ activityId: activity.id })}
+          onSelect={() => reportNFT({ activityId: activity.id })}
           key="report"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
