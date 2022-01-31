@@ -1,4 +1,4 @@
-import { View, Pressable, Button } from "design-system";
+import { View, Pressable } from "design-system";
 import { tw } from "design-system/tailwind";
 import {
   Home,
@@ -12,33 +12,37 @@ import {
   Plus,
 } from "design-system/icon";
 import { useRouter } from "app/navigation/use-router";
+import { Platform } from "react-native";
 
 function TabBarIcon({ tab, children }) {
   const router = useRouter();
+  if (Platform.OS === "web") {
+    return (
+      <Pressable
+        tw={[
+          "md:bg-white md:dark:bg-gray-800 rounded-[20] w-12 h-12 items-center justify-center",
+        ]}
+        // @ts-expect-error web only
+        onMouseEnter={() => {
+          router.prefetch(tab);
+        }}
+        onPress={() => {
+          router.push(tab);
+        }}
+        // animate={useCallback(({ hovered }) => {
+        // 	'worklet'
 
-  return (
-    <Pressable
-      tw={[
-        "md:bg-white md:dark:bg-gray-800 rounded-[20] w-12 h-12 items-center justify-center",
-      ]}
-      // @ts-expect-error web only
-      onMouseEnter={() => {
-        router.prefetch(tab);
-      }}
-      onPress={() => {
-        router.push(tab);
-      }}
-      // animate={useCallback(({ hovered }) => {
-      // 	'worklet'
+        // 	return hovered
+        // 		? tw.style('bg-gray-100 dark:bg-gray-800 md:dark:bg-gray-700')
+        // 		: tw.style('bg-white dark:bg-gray-900 md:dark:bg-gray-800')
+        // }, [])}
+      >
+        {children}
+      </Pressable>
+    );
+  }
 
-      // 	return hovered
-      // 		? tw.style('bg-gray-100 dark:bg-gray-800 md:dark:bg-gray-700')
-      // 		: tw.style('bg-white dark:bg-gray-900 md:dark:bg-gray-800')
-      // }, [])}
-    >
-      {children}
-    </Pressable>
-  );
+  return children;
 }
 
 export const HomeTabBarIcon = ({ color, focused }) => {
