@@ -103,7 +103,6 @@ function TransferNft({ nftId }: { nftId?: string }) {
                   width={14}
                 />
                 <Text tw="text-gray-500 font-bold pl-1" variant="text-xs">
-                  Minted
                   {`Minted ${formatDistanceToNowStrict(
                     new Date(nft?.token_created),
                     {

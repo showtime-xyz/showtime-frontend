@@ -17,14 +17,14 @@ type Props = {
 function Owner({ options, price, nft, tw = "" }: Props) {
   if (!nft) return null;
 
-  const defaultStyle =
-    "px-4 py-2 flex flex-row items-center justify-between bg-white dark:bg-black";
-  const containerStyle = [defaultStyle, tw] as TW;
-
   return (
-    <View tw={containerStyle}>
+    <View
+      tw={[
+        "px-4 py-2 flex flex-row items-center justify-between bg-white dark:bg-black",
+        tw,
+      ]}
+    >
       <Creator nft={nft} />
-
       {options ? (
         <Button variant="tertiary" size="small" iconOnly={true}>
           <MoreHorizontal />

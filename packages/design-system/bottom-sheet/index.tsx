@@ -25,11 +25,8 @@ export const BottomSheet = (props: BottomSheetProps) => {
     handleComponent,
     onDismiss,
     snapPoints,
-    bodyContentTW,
+    bodyContentTW = "",
   } = props;
-
-  const defaultStyle = "flex-1 pt-6 px-4";
-  const contentStyle = [defaultStyle, bodyContentTW] as TW;
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
@@ -65,7 +62,7 @@ export const BottomSheet = (props: BottomSheetProps) => {
       backgroundStyle={tw.style(`bg-white dark:bg-black rounded-t-[32px]`)}
       snapPoints={snapPoints ?? defaultSnapPoints}
     >
-      <View tw={contentStyle}>{children}</View>
+      <View tw={["flex-1 pt-6 px-4", bodyContentTW]} />
     </BottomSheetModal>
   );
 };

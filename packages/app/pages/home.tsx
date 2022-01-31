@@ -45,7 +45,7 @@ function HomeNavigator() {
       >
         <HomeStack.Screen name="login" component={LoginScreen} />
         <HomeStack.Screen name="nft" component={NftScreen} />
-        <HomeStack.Screen name="transferNft" component={TransferNftScreen} />
+        <HomeStack.Screen name="nftTransfer" component={TransferNftScreen} />
       </HomeStack.Group>
     </HomeStack.Navigator>
   );
