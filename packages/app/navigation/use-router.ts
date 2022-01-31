@@ -28,6 +28,7 @@ const getPath = (navigationState: NavigationState) => {
   return (
     navigationState?.routes?.[navigationState?.index]?.path ??
     navigationState?.routes?.[navigationState?.index]?.state?.routes[0]?.path ??
+    "/" + navigationState?.routes?.[navigationState?.index]?.name ??
     "/"
   );
 };
