@@ -1,5 +1,5 @@
 import { Alert } from "react-native";
-import { useContext, useReducer, useRef } from "react";
+import { useContext, useEffect, useReducer, useRef } from "react";
 import { v4 as uuid } from "uuid";
 import { axios as showtimeAPIAxios } from "app/lib/axios";
 import axios from "axios";
@@ -161,8 +161,17 @@ export const useMintNFT = () => {
   const [state, dispatch] = useReducer(mintNFTReducer, initialMintNFTState);
   const context = useContext(AppContext);
   const biconomyRef = useRef<any>();
-
+  const isMagic = !!context.web3;
   const connector = useWalletConnect();
+
+  const mintNftParams = useRef<any>(null);
+
+  useEffect(() => {
+    if (mintNftParams.current && connector.connected) {
+      console.log("connected to wallet, resuming mint request");
+      mintNFT(mintNftParams.current);
+    }
+  }, [connector.connected]);
 
   async function uploadMedia(params: UseMintNFT) {
     // Media Upload
@@ -258,6 +267,7 @@ export const useMintNFT = () => {
   }
 
   async function mintNFT(params: UseMintNFT) {
+    mintNftParams.current = null;
     let nftJsonIpfsHash;
 
     if (state.nftIPFSHash) {
@@ -268,15 +278,21 @@ export const useMintNFT = () => {
 
     let userAddress;
     try {
-      const isMagic = !!context.web3;
       if (isMagic) {
         const signer = context.web3.getSigner();
         const addr = await signer.getAddress();
         userAddress = addr;
       } else {
-        userAddress = connector.accounts.filter((addr) =>
-          addr.startsWith("0x")
-        )[0];
+        if (connector.connected) {
+          userAddress = connector.accounts.filter((addr) =>
+            addr.startsWith("0x")
+          )[0];
+        } else {
+          await connector.connect();
+          console.log("Not connected to wallet, sending connect request");
+          mintNftParams.current = params;
+          return;
+        }
       }
 
       console.log("user address for minting ", userAddress);
