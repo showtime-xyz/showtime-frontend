@@ -16,6 +16,10 @@ const ProfileScreen = dynamic<JSX.Element>(() =>
   import("app/screens/profile").then((mod) => mod.ProfileScreen)
 );
 
+const SettingsScreen = dynamic<JSX.Element>(() =>
+  import("app/screens/settings").then((mod) => mod.SettingsScreen)
+);
+
 const TrendingStack = createStackNavigator<TrendingStackParams>();
 
 function TrendingNavigator() {
@@ -31,6 +35,7 @@ function TrendingNavigator() {
           options={{ title: "Trending", headerTitle: "Trending" }}
         />
         <TrendingStack.Screen name="profile" component={ProfileScreen} />
+        <TrendingStack.Screen name="settings" component={SettingsScreen} />
       </TrendingStack.Group>
       <TrendingStack.Group
         screenOptions={{

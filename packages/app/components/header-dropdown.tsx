@@ -15,7 +15,10 @@ import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import { formatAddressShort } from "app/lib/utilities";
 import { AppContext } from "app/context/app-context";
 import { useUser } from "app/hooks/use-user";
-import { useProfileNavigation } from "app/navigation/app-navigation";
+import {
+  useProfileNavigation,
+  useSettingsNavigation,
+} from "app/navigation/app-navigation";
 
 const getSmallImageUrl = (imgUrl: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
@@ -28,6 +31,9 @@ function HeaderDropdown() {
   const { user } = useUser();
   const context = useContext(AppContext);
   const openProfile = useProfileNavigation(
+    user?.data?.profile?.wallet_addresses_v2?.[0]?.address
+  );
+  const openSettings = useSettingsNavigation(
     user?.data?.profile?.wallet_addresses_v2?.[0]?.address
   );
 
@@ -105,6 +111,18 @@ function HeaderDropdown() {
             </DropdownMenuContent>
           </DropdownMenuRoot>
         </DropdownMenuGroup>
+
+        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+
+        <DropdownMenuItem
+          onSelect={openSettings}
+          key="your-settings"
+          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+        >
+          <DropdownMenuItemTitle tw="text-black dark:text-white">
+            Settings
+          </DropdownMenuItemTitle>
+        </DropdownMenuItem>
 
         <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 
