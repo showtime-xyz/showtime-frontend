@@ -63,7 +63,7 @@ export function Login({ onLogin }: LoginProps) {
     []
   );
   const tabsData = useMemo(
-    () => [{ name: "Sign in with SMS" }, { name: "Other options" }],
+    () => [{ name: "Phone number" }, { name: "Wallet or email" }],
     []
   );
   //#endregion
