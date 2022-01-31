@@ -61,6 +61,14 @@ export const SettingsEmailSkeletonSlot = () => {
   );
 };
 
+export const SettingsEmailSlotPlaceholder = () => {
+  return (
+    <Text tw="text-gray-900 dark:text-white text-base font-bold p-4">
+      No email connected to your profile.
+    </Text>
+  );
+};
+
 export const SettingsEmailSlot = (props: EmailSlotProps) => {
   const email = props.email;
   return (

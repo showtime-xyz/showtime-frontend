@@ -10,11 +10,13 @@ import {
   SettingsEmailSlot,
   SettingEmailSlotHeader,
   SettingsEmailSkeletonSlot,
+  SettingsEmailSlotPlaceholder,
 } from "./settings-email-slot";
 import {
   SettingsWalletSlot,
   SettingsWalletSlotHeader,
   SettingsWalletSlotSkeleton,
+  SettingsWalletSlotPlaceholder,
 } from "./settings-wallet-slot";
 import { ManageAddress } from "./manage-address";
 import { SlotSeparator } from "./slot-separator";
@@ -88,7 +90,14 @@ const SettingsTabs = () => {
             keyExtractor={keyExtractor}
             renderItem={renderWallet}
             removeClippedSubviews={Platform.OS !== "web"}
-            ListEmptyComponent={<SettingsWalletSlotSkeleton />}
+            ListEmptyComponent={() => {
+              const hasNoWallet = Boolean(wallets);
+              if (hasNoWallet) {
+                return <SettingsWalletSlotPlaceholder />;
+              }
+
+              return <SettingsWalletSlotSkeleton />;
+            }}
             ListHeaderComponent={
               <SettingsWalletSlotHeader
                 onPress={() => setViewManagedWallet(true)}
@@ -104,7 +113,14 @@ const SettingsTabs = () => {
             keyExtractor={keyExtractor}
             renderItem={renderEmail}
             removeClippedSubviews={Platform.OS !== "web"}
-            ListEmptyComponent={<SettingsEmailSkeletonSlot />}
+            ListEmptyComponent={() => {
+              const hasNoEmails = Boolean(emailWallets);
+              if (hasNoEmails) {
+                return <SettingsEmailSlotPlaceholder />;
+              }
+
+              return <SettingsEmailSkeletonSlot />;
+            }}
             ListHeaderComponent={
               <SettingEmailSlotHeader
                 onPress={() => setViewManagedWallet(true)}

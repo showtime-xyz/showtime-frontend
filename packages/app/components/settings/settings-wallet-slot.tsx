@@ -98,6 +98,14 @@ export const SettingsWalletSlotSkeleton = () => {
   );
 };
 
+export const SettingsWalletSlotPlaceholder = () => {
+  return (
+    <Text tw="text-gray-900 dark:text-white text-base font-bold p-4">
+      No wallet connected to your profile.
+    </Text>
+  );
+};
+
 export const SettingsWalletSlot = (props: Props) => {
   const address = props.address;
   const ensDomain = props.ensDomain;
