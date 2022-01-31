@@ -62,8 +62,6 @@ function TransferNft({ nftId }: { nftId?: string }) {
 
   if (!nft) return null;
 
-  console.log({ nft });
-
   const TransferNftScrollView =
     Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
 
