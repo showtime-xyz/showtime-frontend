@@ -1,0 +1,18 @@
+diff --git a/node_modules/@react-navigation/bottom-tabs/src/views/BottomTabView.tsx b/node_modules/@react-navigation/bottom-tabs/src/views/BottomTabView.tsx
+index 63a0895..81dd041 100644
+--- a/node_modules/@react-navigation/bottom-tabs/src/views/BottomTabView.tsx
++++ b/node_modules/@react-navigation/bottom-tabs/src/views/BottomTabView.tsx
+@@ -109,11 +109,12 @@ export default function BottomTabView(props: Props) {
+           }
+ 
+           const {
+-            header = ({ layout, options }: BottomTabHeaderProps) => (
++            header = ({ layout, route, navigation, options }: BottomTabHeaderProps) => (
+               <Header
+                 {...options}
+                 layout={layout}
+                 title={getHeaderTitle(options, route.name)}
++                canGoBack={Boolean(!route.params?.initial && route.params?.screen)}
+               />
+             ),
+           } = descriptor.options;

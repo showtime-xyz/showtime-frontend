@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { tw } from "design-system/tailwind";
-import { HeaderLeft, HeaderRight } from "app/components/header";
+import { HeaderLeft, HeaderCenter, HeaderRight } from "app/components/header";
 import { useNavigationElements } from "./use-navigation-elements";
 import { NextNavigationProps } from "./types";
 import { createNextTabNavigator } from "./universal-tab-navigator";
@@ -32,7 +32,7 @@ export function NextTabNavigator({
 }: NextNavigationProps) {
   const { width } = useWindowDimensions();
   const { isTabBarHidden } = useNavigationElements();
-  const { bottom: safeAreaBottom } = useSafeAreaInsets();
+  const { top: safeAreaTop, bottom: safeAreaBottom } = useSafeAreaInsets();
 
   const color = tw.style("bg-black dark:bg-white")?.backgroundColor as string;
   const tint = color === "#000" ? "light" : "dark";
@@ -43,16 +43,21 @@ export function NextTabNavigator({
       initialRouteName="homeTab"
       screenOptions={{
         headerLeft: HeaderLeft,
+        headerTitle: HeaderCenter,
+        headerTitleAlign: "center",
         headerRight: HeaderRight,
-        headerTitle: "",
         headerTintColor: "#000",
-        //@ts-ignore
+        // headerTransparent: true,
+        // headerBlurEffect: "dark",
+        headerBackVisible: true,
+        headerShadowVisible: false,
+        // @ts-ignore
         headerStyle: {
+          height: 64 + safeAreaTop,
           backgroundColor: isDark ? "black" : "white",
-          // below removes the border bottom line on header on iOS
-          shadowOffset: {
-            height: 0,
-          },
+          // Similar to `headerShadowVisible` but for web
+          // @ts-ignore
+          borderBottomWidth: 0,
         },
         tabBarActiveTintColor: color,
         tabBarInactiveTintColor: color,

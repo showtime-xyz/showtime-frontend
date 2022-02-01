@@ -1,10 +1,11 @@
 import { useState, useCallback } from "react";
 import { useWindowDimensions } from "react-native";
 import Router from "next/router";
+import Animated, { SlideInRight, SlideOutLeft } from "react-native-reanimated";
 
 import { useRouter } from "app/navigation/use-router";
 import { View, Pressable, Button, ButtonLabel } from "design-system";
-import { Showtime, Wallet, Plus } from "design-system/icon";
+import { Showtime, Wallet, Plus, Search, ArrowLeft } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 import { useUser } from "app/hooks/use-user";
 import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
@@ -30,7 +31,7 @@ const HeaderRight = () => {
   }, [router, Router]);
 
   return (
-    <View tw="pr-4">
+    <View tw="mr-4 mb-2">
       {!isLoading && (
         <View tw={`${isSearchBarOpen ? "hidden" : ""} flex-row items-center`}>
           {isAuthenticated && (
@@ -39,7 +40,7 @@ const HeaderRight = () => {
             </View>
           )}
           {isAuthenticated ? (
-            <View tw="bg-white dark:bg-black">
+            <View>
               {width > 768 && (
                 <View tw="mx-3">
                   <Button
@@ -86,11 +87,44 @@ const HeaderRight = () => {
   );
 };
 
-const HeaderLeft = () => {
+const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
   const router = useRouter();
+  const Icon = canGoBack ? ArrowLeft : Search;
+
+  return (
+    <View>
+      <Pressable
+        tw="w-12 h-12 ml-4 mb-2 rounded-full bg-gray-100 dark:bg-gray-900 items-center justify-center"
+        onPress={() => {
+          if (canGoBack) {
+            router.pop();
+          }
+        }}
+        // animate={useCallback(({ hovered }) => {
+        // 	'worklet'
+
+        // 	return hovered
+        // 		? tw.style('bg-gray-100 dark:bg-gray-900 md:dark:bg-gray-800')
+        // 		: tw.style('bg-white dark:bg-black md:dark:bg-gray-900')
+        // }, [])}
+      >
+        <Icon
+          style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
+          color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+          width={24}
+          height={24}
+        />
+      </Pressable>
+    </View>
+  );
+};
+
+const HeaderCenter = () => {
+  const router = useRouter();
+
   return (
     <Pressable
-      tw="w-10 h-10 pl-4 rounded-full"
+      tw="w-12 h-12 rounded-full items-center justify-center mb-2"
       onPress={() => {
         router.push("/");
       }}
@@ -105,8 +139,11 @@ const HeaderLeft = () => {
       <Showtime
         style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
         color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+        width={24}
+        height={24}
       />
     </Pressable>
   );
 };
-export { HeaderRight, HeaderLeft };
+
+export { HeaderLeft, HeaderCenter, HeaderRight };
