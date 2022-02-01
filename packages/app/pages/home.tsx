@@ -34,19 +34,7 @@ function HomeNavigator() {
           component={HomeScreen}
           options={{ title: "Home", headerTitle: "Showtime" }}
         />
-        <HomeStack.Screen name="profile" component={ProfileScreen} />
         <HomeStack.Screen name="settings" component={SettingsScreen} />
-      </HomeStack.Group>
-      <HomeStack.Group
-        screenOptions={{
-          headerShown: false,
-          animation: Platform.OS === "ios" ? "default" : "fade",
-          presentation:
-            Platform.OS === "ios" ? "formSheet" : "transparentModal",
-        }}
-      >
-        <HomeStack.Screen name="login" component={LoginScreen} />
-        <HomeStack.Screen name="nft" component={NftScreen} />
       </HomeStack.Group>
     </HomeStack.Navigator>
   );

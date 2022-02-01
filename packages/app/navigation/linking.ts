@@ -6,54 +6,38 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
   prefixes: [Linking.makeUrl("/")],
   config: {
     screens: {
-      // Bottom Tab Navigator
-      homeTab: {
-        path: "",
-        initialRouteName: "home",
+      login: "login",
+      nft: "nft/:id",
+      create: "create",
+      profile: "profile/:walletAddress",
+      root: {
         screens: {
-          home: "",
-          login: "/login",
-          nft: "/nft/:id",
-          profile: "/profile/:walletAddress",
-          settings: "/settings/:walletAddress",
-        },
-      },
-      trendingTab: {
-        path: "trending",
-        initialRouteName: "trending",
-        screens: {
-          trending: "",
-          login: "/login",
-          nft: "/nft/:id",
-          profile: "/profile/:walletAddress",
-        },
-      },
-      cameraTab: {
-        path: "camera",
-        initialRouteName: "camera",
-        screens: {
-          camera: "",
-          login: "/login",
-          nft: "/nft/:id",
-          create: "/create",
-        },
-      },
-      marketplaceTab: {
-        path: "marketplace",
-        initialRouteName: "marketplace",
-        screens: {
-          marketplace: "",
-          login: "/login",
-          nft: "/nft/:id",
-        },
-      },
-      notificationsTab: {
-        path: "notifications",
-        initialRouteName: "notifications",
-        screens: {
-          notifications: "",
-          login: "/login",
-          nft: "/nft/:id",
+          // Bottom Tab Navigator
+          homeTab: {
+            screens: {
+              home: "home",
+            },
+          },
+          trendingTab: {
+            screens: {
+              trending: "trending",
+            },
+          },
+          cameraTab: {
+            screens: {
+              camera: "camera",
+            },
+          },
+          marketplaceTab: {
+            screens: {
+              marketplace: "marketplace",
+            },
+          },
+          notificationsTab: {
+            screens: {
+              notifications: "notifications",
+            },
+          },
         },
       },
     },

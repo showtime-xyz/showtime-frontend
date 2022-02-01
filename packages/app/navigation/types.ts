@@ -53,9 +53,9 @@ type BottomTabNavigatorParams = {
 };
 
 declare global {
-  namespace ReactNavigation {
-    interface RootParamList extends BottomTabNavigatorParams {}
-  }
+  // namespace ReactNavigation {
+  //   interface RootParamList extends BottomTabNavigatorParams {}
+  // }
 }
 
 export type {

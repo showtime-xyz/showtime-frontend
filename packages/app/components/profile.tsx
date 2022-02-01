@@ -1,6 +1,5 @@
 import { Suspense, useCallback, useMemo, useReducer, useState } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import Animated, { FadeIn } from "react-native-reanimated";
 import reactStringReplace from "react-string-replace";
 
@@ -30,19 +29,14 @@ const TAB_LIST_HEIGHT = 64;
 const COVER_IMAGE_HEIGHT = 104;
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
-  const tabBarHeight = useBottomTabBarHeight();
-
   if (isLoading) {
     return (
-      <View
-        tw={`h-16 items-center justify-center mt-6 px-3 mb-[${tabBarHeight}px]`}
-      >
+      <View tw={`h-16 items-center justify-center mt-6 px-3`}>
         <Spinner size="small" />
       </View>
     );
   }
-
-  return <View tw={`mb-[${tabBarHeight}px]`} />;
+  return null;
 };
 
 const ProfileScreen = ({ walletAddress }: { walletAddress: string }) => {
