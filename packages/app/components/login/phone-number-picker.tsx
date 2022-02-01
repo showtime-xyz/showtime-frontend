@@ -82,6 +82,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
                 setSearch("");
                 setModalVisible(true);
               }}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               tw="flex-row items-center justify-center"
             >
               <Text
