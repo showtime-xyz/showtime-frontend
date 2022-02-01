@@ -14,9 +14,9 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 import data, { CountryDataType } from "./country-code-data";
-import { View } from "..";
-import { tw } from "../tailwind";
-import { Check } from "../icon";
+import { View } from "design-system/view";
+import { tw } from "design-system/tailwind";
+import { Check } from "design-system/icon";
 
 type CountryCodePickerProps = {
   value: string;
@@ -48,7 +48,9 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
   return (
     <PickerContext.Provider value={contextValue}>
       <FlatList
-        ItemSeparatorComponent={() => <View tw="h-[1px] bg-gray-200 w-full" />}
+        ItemSeparatorComponent={() => (
+          <View tw="h-[1px] dark:bg-gray-800 bg-gray-200 w-full" />
+        )}
         renderItem={useCallback(({ item }) => {
           return <PickerItem item={item} />;
         }, [])}
@@ -75,8 +77,8 @@ const PickerItem = memo(({ item }: { item: CountryDataType }) => {
 
   return (
     <Pressable onPress={handleChange}>
-      <View tw="flex-row px-8 py-5 items-center">
-        <Text tw="text-sm font-semibold">
+      <View tw="dark:bg-black flex-row px-8 py-5 items-center">
+        <Text tw="text-sm font-semibold dark:text-white">
           {item.emoji} {item.name} ({item.dial_code})
         </Text>
         <Animated.View style={[style, { marginLeft: "auto" }]}>

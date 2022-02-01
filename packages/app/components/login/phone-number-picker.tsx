@@ -1,12 +1,15 @@
-import { Modal, Pressable, SafeAreaView } from "react-native";
-import { CountryCodePicker, View, Text } from "design-system";
-import { useMemo, useState } from "react";
-import { yup } from "../../lib/yup";
+import { Modal, Platform } from "react-native";
+import { CountryCodePicker, View, Text, Pressable } from "design-system";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { yup } from "app/lib/yup";
 import { LoginInputField } from "./login-input-field";
 import { Button } from "design-system/button";
-import { ChevronLeft, Search } from "design-system/icon";
+import { ChevronLeft, Close, Search } from "design-system/icon";
+import { Input } from "design-system/input";
 import { tw } from "design-system/tailwind";
 import data from "design-system/country-code-picker/country-code-data";
+import Animated, { FadeIn } from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type PhoneNumberPickerProp = {
   handleSubmitPhoneNumber: any;
@@ -14,6 +17,7 @@ type PhoneNumberPickerProp = {
 
 export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [search, setSearch] = useState("");
   const [country, setCountry] = useState("US");
 
   const selectedCountry = useMemo(() => {
@@ -25,55 +29,85 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
       yup
         .object({
           data: yup
-            .string()
-            .phone("US", false, "Please enter a valid phone number.")
-            .required("Please enter a valid phone number."),
+            .number()
+            .required("Please enter a valid phone number.")
+            .typeError("Please enter a valid phone number."),
         })
         .required(),
     []
   );
 
+  const filteredData = useMemo(() => {
+    return search
+      ? data.filter((item) => {
+          return item.name.toLowerCase().includes(search.toLowerCase());
+        })
+      : data;
+  }, [search]);
+
   return (
     <>
       <Modal
         visible={modalVisible}
-        onDismiss={() => setModalVisible(false)}
+        onRequestClose={() => setModalVisible(false)}
         animationType="slide"
       >
-        <SafeAreaView>
+        <SafeAreaView style={tw.style("dark:bg-black")}>
           <Header
             title="Choose your country"
             close={() => setModalVisible(false)}
+            onSearchSubmit={(value) => setSearch(value)}
           />
-          <View tw="bg-white dark:bg-gray-900">
-            <CountryCodePicker
-              data={data}
-              value={country}
-              onChange={setCountry}
-            />
-          </View>
         </SafeAreaView>
+        <CountryCodePicker
+          tw="bg-white dark:bg-gray-900"
+          data={filteredData}
+          value={country}
+          onChange={useCallback((value) => {
+            setCountry(value);
+            setModalVisible(false);
+          }, [])}
+        />
       </Modal>
       <LoginInputField
         key="login-phone-number-field"
         validationSchema={phoneNumberValidationSchema}
         label="Phone number"
         placeholder="Enter your phone number"
-        keyboardType="phone-pad"
-        textContentType="telephoneNumber"
+        keyboardType="numeric"
         signInButtonLabel="Send"
-        leftElement={
-          <Pressable
-            onPress={() => {
-              setModalVisible(true);
-            }}
-          >
-            <Text tw="pt-[6px]">
-              {selectedCountry?.emoji} {selectedCountry?.dial_code}{" "}
-            </Text>
-          </Pressable>
-        }
-        onSubmit={props.handleSubmitPhoneNumber}
+        leftElement={useMemo(() => {
+          return (
+            <Pressable
+              onPress={() => {
+                setSearch("");
+                setModalVisible(true);
+              }}
+              tw="flex-row items-center justify-center"
+            >
+              <Text
+                sx={{
+                  // this hack is needed to make image align with text
+                  marginTop: Platform.select({
+                    ios: 2,
+                    android: -4,
+                    default: 0,
+                  }),
+                  marginRight: 1,
+                }}
+              >
+                {selectedCountry?.emoji}
+              </Text>
+              <Text tw="font-semibold text-gray-600 dark:text-gray-400">
+                {selectedCountry?.dial_code}{" "}
+              </Text>
+            </Pressable>
+          );
+        }, [selectedCountry])}
+        onSubmit={useCallback(
+          (v) => props.handleSubmitPhoneNumber(selectedCountry?.dial_code + v),
+          [props.handleSubmitPhoneNumber]
+        )}
       />
     </>
   );
@@ -82,11 +116,30 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
 type Props = {
   title?: string;
   close?: () => void;
+  onSearchSubmit: (search: string) => void;
 };
 
-export function Header({ title, close }: Props) {
+export function Header({ title, close, onSearchSubmit }: Props) {
+  const [showSearch, setShowSearch] = useState(false);
+  const searchDebounceTimeout = useRef<any>(null);
+
+  const handleSearch = (text: string) => {
+    if (searchDebounceTimeout.current) {
+      clearTimeout(searchDebounceTimeout.current);
+    }
+    searchDebounceTimeout.current = setTimeout(() => {
+      onSearchSubmit(text);
+    }, 40);
+  };
+
+  useEffect(() => {
+    if (!showSearch) {
+      onSearchSubmit("");
+    }
+  }, [showSearch]);
+
   return (
-    <View tw="p-4 flex-row items-center justify-between">
+    <View tw="p-4 flex-row items-center justify-between dark:bg-black">
       <View tw="w-12 h-12 justify-center items-center">
         <Button
           onPress={close}
@@ -103,23 +156,42 @@ export function Header({ title, close }: Props) {
           />
         </Button>
       </View>
-      <Text variant="text-lg" tw="dark:text-white font-bold">
-        {title}
-      </Text>
+
+      <Animated.View layout={FadeIn}>
+        {showSearch ? (
+          <View tw="w-[210px]">
+            <Input placeholder="Search" autoFocus onChangeText={handleSearch} />
+          </View>
+        ) : (
+          <Text variant="text-lg" tw="dark:text-white font-bold">
+            {title}
+          </Text>
+        )}
+      </Animated.View>
       <View tw="w-12 h-12 justify-center items-center">
         <Button
-          onPress={close}
+          onPress={() => setShowSearch(!showSearch)}
           variant="tertiary"
           tw="rounded-full h-12 w-12"
           iconOnly={true}
         >
-          <Search
-            width={24}
-            height={24}
-            color={
-              tw.style("bg-black dark:bg-white")?.backgroundColor as string
-            }
-          />
+          {showSearch ? (
+            <Close
+              width={24}
+              height={24}
+              color={
+                tw.style("bg-black dark:bg-white")?.backgroundColor as string
+              }
+            />
+          ) : (
+            <Search
+              width={24}
+              height={24}
+              color={
+                tw.style("bg-black dark:bg-white")?.backgroundColor as string
+              }
+            />
+          )}
         </Button>
       </View>
     </View>
