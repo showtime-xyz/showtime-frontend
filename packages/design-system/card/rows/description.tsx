@@ -1,10 +1,11 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { LayoutAnimation, UIManager, Platform } from "react-native";
 
 import { View } from "design-system/view";
 import { Text } from "design-system/text";
 import { Pressable } from "design-system/pressable-scale";
 import type { NFT } from "app/types";
+import { removeTags } from "app/utilities";
 
 type Props = {
   nft?: NFT;
@@ -35,6 +36,14 @@ function Description({ nft }: Props) {
       };
     }
   }, []);
+
+  const description = useMemo(
+    () =>
+      nft && nft.token_description
+        ? removeTags(nft.token_description)
+        : undefined,
+    [nft]
+  );
 
   const onTextLayout = useCallback(
     (e) => {
@@ -74,7 +83,7 @@ function Description({ nft }: Props) {
         numberOfLines={numberOfLines}
         onTextLayout={onTextLayout}
       >
-        {nft.token_description}
+        {description}
       </Text>
 
       {(showMore || showLess) && (

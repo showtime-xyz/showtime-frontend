@@ -17,7 +17,7 @@ import { useRouter } from "app/navigation/use-router";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 
 type Props = {
-  nft: NFT;
+  nft?: NFT;
 };
 
 function NFTDropdown({ nft }: Props) {
@@ -26,11 +26,11 @@ function NFTDropdown({ nft }: Props) {
     nft?.owner_id === userId ||
       nft?.multiple_owners_list?.find((owner) => owner.profile_id === userId)
   );
-  const { report } = useReport();
+  const { reportNFT } = useReport();
   const router = useRouter();
 
   const tokenChainName = Object.keys(CHAIN_IDENTIFIERS).find(
-    (key) => CHAIN_IDENTIFIERS[key] == nft.chain_identifier
+    (key) => CHAIN_IDENTIFIERS[key] == nft?.chain_identifier
   );
 
   return (
@@ -52,7 +52,7 @@ function NFTDropdown({ nft }: Props) {
         <DropdownMenuItem
           onSelect={() =>
             Share.share({
-              url: `https://showtime.io/t/${tokenChainName}/${nft.contract_address}/${nft.token_id}`,
+              url: `https://showtime.io/t/${tokenChainName}/${nft?.contract_address}/${nft?.token_id}`,
             })
           }
           key="copy-link"
@@ -78,7 +78,7 @@ function NFTDropdown({ nft }: Props) {
         {!isOwner && (
           <DropdownMenuItem
             onSelect={async () => {
-              await report({ nftId: nft.token_id });
+              await reportNFT({ nftId: nft?.token_id });
               router.pop();
             }}
             key="report"

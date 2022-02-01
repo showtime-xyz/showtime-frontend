@@ -12,7 +12,7 @@ import {
   useProfileNftTabs,
   useUserProfile,
 } from "app/hooks/api-hooks";
-import { View, Spinner, Text, Skeleton, Select } from "design-system";
+import { View, Spinner, Text, Skeleton, Select, Button } from "design-system";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 import { Image } from "design-system/image";
@@ -22,6 +22,9 @@ import { getProfileImage, getProfileName, getSortFields } from "../utilities";
 import { Media } from "design-system/media";
 import { useRouter } from "app/navigation/use-router";
 import { TextLink } from "app/navigation/link";
+import { ProfileDropdown } from "app/components/profile-dropdown";
+import { useMyInfo } from "app/hooks/api-hooks";
+import { useCurrentUserId } from "app/hooks/use-current-user-id";
 
 const TAB_LIST_HEIGHT = 64;
 const COVER_IMAGE_HEIGHT = 104;
@@ -206,12 +209,19 @@ const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
 
 const ProfileTop = ({ address }: { address?: string }) => {
   const router = useRouter();
+  const userId = useCurrentUserId();
   const { data: profileData, loading } = useUserProfile({ address });
   const name = getProfileName(profileData?.data.profile);
   const username = profileData?.data.profile.username;
   const bio = profileData?.data.profile.bio;
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
+  const { isFollowing, follow, unfollow } = useMyInfo();
+  const profileId = profileData?.data.profile.profile_id;
+  const isFollowingUser = useMemo(
+    () => profileId && isFollowing(profileId),
+    [profileId, isFollowing]
+  );
 
   const bioWithMentions = useMemo(
     () =>
@@ -257,7 +267,7 @@ const ProfileTop = ({ address }: { address?: string }) => {
       <View tw="bg-white dark:bg-black px-2">
         <View tw="flex-row justify-between pr-2">
           <View tw="flex-row items-end">
-            <View tw="bg-gray-100 dark:bg-gray-900 h-[144px] w-[144px] rounded-full mt-[-72px]">
+            <View tw="bg-white dark:bg-gray-900 rounded-full mt-[-72px] p-2">
               <Skeleton
                 height={144}
                 width={144}
@@ -271,28 +281,31 @@ const ProfileTop = ({ address }: { address?: string }) => {
                       uri: getProfileImage(profileData?.data.profile),
                     }}
                     alt="Profile avatar"
-                    tw="border-white h-[144px] w-[144px] dark:border-gray-900 rounded-full border-8"
+                    tw="border-white h-[144px] w-[144px] rounded-full"
                   />
                 </Animated.View>
               </Skeleton>
             </View>
-            {/* <View tw="bg-white dark:bg-gray-900 p-1 rounded-full absolute right-2 bottom-2">
-              <Image
-                  source={require("../../../apps/expo/assets/social_token.png")}
-                  style={{ height: TOKEN_BADGE_HEIGHT, width: 28 }}
-                />
-            </View> */}
           </View>
 
-          {/* <Pressable
-            style={tw.style(
-              "bg-black rounded-full dark:bg-white items-center justify-center flex-row mt-4 h-[48px] w-[80px]"
-            )}
-          >
-            <Text tw="text-white text-center dark:text-gray-900 font-bold">
-              Follow
-            </Text>
-          </Pressable> */}
+          {profileId && userId !== profileId && (
+            <View tw="flex-row items-center">
+              <ProfileDropdown user={profileData?.data.profile} />
+              <View tw="w-2" />
+              <Button
+                size="regular"
+                onPress={() => {
+                  if (isFollowingUser) {
+                    unfollow(profileId);
+                  } else {
+                    follow(profileId);
+                  }
+                }}
+              >
+                {isFollowingUser ? "Following" : "Follow"}
+              </Button>
+            </View>
+          )}
         </View>
 
         <View tw="px-2 py-3">
