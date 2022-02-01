@@ -60,7 +60,6 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
           />
         </SafeAreaView>
         <CountryCodePicker
-          tw="bg-white dark:bg-gray-900"
           data={filteredData}
           value={country}
           onChange={useCallback((value) => {

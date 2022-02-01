@@ -22,7 +22,6 @@ type CountryCodePickerProps = {
   value: string;
   onChange: (value: string) => void;
   data?: CountryDataType[];
-  tw?: string;
 };
 
 const PickerContext = createContext<any>(null);
@@ -54,7 +53,7 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
         renderItem={useCallback(({ item }) => {
           return <PickerItem item={item} />;
         }, [])}
-        style={tw.style(props.tw ?? "")}
+        style={tw.style("dark:bg-black")}
         keyExtractor={useCallback((item) => item.code, [])}
         data={props.data ?? data}
       />
