@@ -105,7 +105,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
         }, [selectedCountry])}
         onSubmit={useCallback(
           (v) => props.handleSubmitPhoneNumber(selectedCountry?.dial_code + v),
-          [props.handleSubmitPhoneNumber]
+          [props.handleSubmitPhoneNumber, selectedCountry]
         )}
       />
     </>
