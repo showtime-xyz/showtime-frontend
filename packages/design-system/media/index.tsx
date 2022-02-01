@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { Pressable, useWindowDimensions } from "react-native";
 import Router from "next/router";
-import { SvgUri } from "react-native-svg";
+// import { SvgUri } from "react-native-svg";
 import { useSWRConfig } from "swr";
 
 import { useRouter } from "app/navigation/use-router";
@@ -93,7 +93,7 @@ function Media({ item, numColumns, tw }: Props) {
         }}
         disabled={isNftModal}
       >
-        {item?.mime_type === "image/svg+xml" && (
+        {/* {item?.mime_type === "image/svg+xml" && (
           <SvgUri
             width={
               numColumns === 3
@@ -111,7 +111,7 @@ function Media({ item, numColumns, tw }: Props) {
             }
             uri={item?.token_img_url}
           />
-        )}
+        )} */}
 
         {item?.mime_type?.startsWith("image") &&
           item?.mime_type !== "image/svg+xml" && (
