@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { LayoutAnimation, UIManager, Platform } from "react-native";
 
 import { View } from "design-system/view";
@@ -36,6 +36,14 @@ function Description({ nft }: Props) {
       };
     }
   }, []);
+
+  const description = useMemo(
+    () =>
+      nft && nft.token_description
+        ? removeTags(nft.token_description)
+        : undefined,
+    [nft]
+  );
 
   const onTextLayout = useCallback(
     (e) => {
@@ -75,7 +83,7 @@ function Description({ nft }: Props) {
         numberOfLines={numberOfLines}
         onTextLayout={onTextLayout}
       >
-        {removeTags(nft.token_description)}
+        {description}
       </Text>
 
       {(showMore || showLess) && (
