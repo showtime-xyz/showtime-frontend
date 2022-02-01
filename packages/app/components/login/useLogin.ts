@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useReducer, useRef } from "react";
 import { Platform } from "react-native";
 import { captureException } from "@sentry/nextjs";
 import { useSWRConfig } from "swr";
-import { useWalletConnect } from "@walletconnect/react-native-dapp";
+import { useWalletConnect } from "app/lib/walletconnect";
 import { magic } from "app/lib/magic";
 import { axios } from "app/lib/axios";
 // @ts-ignore

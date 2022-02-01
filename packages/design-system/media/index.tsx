@@ -93,26 +93,6 @@ function Media({ item, numColumns, tw }: Props) {
         }}
         disabled={isNftModal}
       >
-        {item?.mime_type === "image/svg+xml" && (
-          <SvgUri
-            width={
-              numColumns === 3
-                ? width / 3
-                : numColumns === 2
-                ? width / 2
-                : width
-            }
-            height={
-              numColumns === 3
-                ? width / 3
-                : numColumns === 2
-                ? width / 2
-                : width
-            }
-            uri={item?.token_img_url}
-          />
-        )}
-
         {item?.mime_type?.startsWith("image") &&
           item?.mime_type !== "image/svg+xml" && (
             <PinchToZoom>
