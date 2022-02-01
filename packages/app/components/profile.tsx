@@ -21,6 +21,7 @@ import { useColorScheme } from "design-system/hooks";
 import { getProfileImage, getProfileName, getSortFields } from "../utilities";
 import { Media } from "design-system/media";
 import { useRouter } from "app/navigation/use-router";
+import { TextLink } from "app/navigation/link";
 
 const TAB_LIST_HEIGHT = 64;
 const COVER_IMAGE_HEIGHT = 104;
@@ -219,13 +220,15 @@ const ProfileTop = ({ address }: { address?: string }) => {
         /@([\w\d-]+?)\b/g,
         (username: string, i: number) => {
           return (
-            <Text
+            <TextLink
+              href={`${
+                router.pathname.startsWith("/trending") ? "/trending" : ""
+              }/profile/${username}`}
               tw="font-bold text-black dark:text-white"
-              onPress={() => router.push(`/profile/${username}`)}
               key={i}
             >
               @{username}
-            </Text>
+            </TextLink>
           );
         }
       ),
