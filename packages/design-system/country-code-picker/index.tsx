@@ -78,7 +78,7 @@ const PickerItem = memo(({ item }: { item: CountryDataType }) => {
   return (
     <Pressable onPress={handleChange}>
       <View tw="dark:bg-black flex-row px-8 py-5 items-center">
-        <Text tw="text-sm font-semibold dark:text-white">
+        <Text tw="text-sm font-semibold dark:text-gray-100">
           {item.emoji} {item.name} ({item.dial_code})
         </Text>
         <Animated.View style={[style, { marginLeft: "auto" }]}>
