@@ -47,8 +47,11 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
   return (
     <PickerContext.Provider value={contextValue}>
       <FlatList
-        ItemSeparatorComponent={() => (
-          <View tw="h-[1px] dark:bg-gray-800 bg-gray-200 w-full" />
+        ItemSeparatorComponent={useCallback(
+          () => (
+            <View tw="h-[1px] dark:bg-gray-800 bg-gray-200 w-full" />
+          ),
+          []
         )}
         renderItem={useCallback(({ item }) => {
           return <PickerItem item={item} />;
