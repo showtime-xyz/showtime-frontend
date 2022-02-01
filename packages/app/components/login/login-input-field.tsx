@@ -15,6 +15,7 @@ interface LoginInputFieldProps
   placeholder?: string;
   signInButtonLabel?: string;
   validationSchema: yup.AnyObjectSchema;
+  leftElement?: React.ReactNode;
   // eslint-disable-next-line no-unused-vars
   onSubmit: (value: string) => void;
 }
@@ -26,6 +27,7 @@ export function LoginInputField({
   keyboardType = "default",
   textContentType = "none",
   validationSchema,
+  leftElement,
   onSubmit,
 }: LoginInputFieldProps) {
   //#region hooks
@@ -64,6 +66,7 @@ export function LoginInputField({
             autoCorrect={false}
             keyboardType={keyboardType}
             textContentType={textContentType}
+            leftElement={leftElement}
             returnKeyType="go"
           />
         )}
