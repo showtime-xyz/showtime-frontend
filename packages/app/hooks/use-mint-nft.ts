@@ -284,9 +284,9 @@ export const useMintNFT = () => {
         userAddress = addr;
       } else {
         if (connector.connected) {
-          userAddress = connector.accounts.filter((addr) =>
+          [userAddress] = connector.accounts.filter((addr) =>
             addr.startsWith("0x")
-          )[0];
+          );
         } else {
           await connector.connect();
           console.log("Not connected to wallet, sending connect request");
