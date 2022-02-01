@@ -30,7 +30,7 @@ const HeaderRight = () => {
   }, [router, Router]);
 
   return (
-    <View tw="mr-4 mb-2">
+    <View>
       {!isLoading && (
         <View tw={`${isSearchBarOpen ? "hidden" : ""} flex-row items-center`}>
           {isAuthenticated && (
@@ -92,7 +92,7 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
 
   return (
     <Pressable
-      tw="w-12 h-12 ml-4 mb-2 rounded-full bg-gray-100 dark:bg-gray-900 items-center justify-center"
+      tw="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-900 items-center justify-center"
       onPress={() => {
         if (canGoBack) {
           router.pop();
@@ -121,7 +121,7 @@ const HeaderCenter = () => {
 
   return (
     <Pressable
-      tw="w-12 h-12 rounded-full items-center justify-center mb-2"
+      tw="w-12 h-12 rounded-full items-center justify-center"
       onPress={() => {
         router.push("/");
       }}

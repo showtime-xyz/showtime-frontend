@@ -28,11 +28,7 @@ function CameraNavigator() {
         <CameraStack.Screen
           name="camera"
           component={CameraScreen}
-          options={{
-            title: "Camera",
-            headerTitle: "Camera",
-            headerShown: false,
-          }}
+          options={{ headerShown: false }}
         />
       </CameraStack.Group>
       <CameraStack.Group

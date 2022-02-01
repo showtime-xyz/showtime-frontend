@@ -4,7 +4,6 @@ import dynamic from "next/dynamic";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { tw } from "design-system/tailwind";
-import { HeaderLeft, HeaderCenter, HeaderRight } from "app/components/header";
 import { useNavigationElements } from "./use-navigation-elements";
 import { NextNavigationProps } from "./types";
 import { createNextTabNavigator } from "./universal-tab-navigator";
@@ -42,23 +41,8 @@ export function NextTabNavigator({
     <BottomTab.Navigator
       initialRouteName="homeTab"
       screenOptions={{
-        headerLeft: HeaderLeft,
-        headerTitle: HeaderCenter,
-        headerTitleAlign: "center",
-        headerRight: HeaderRight,
-        headerTintColor: "#000",
-        // headerTransparent: true,
-        // headerBlurEffect: "dark",
-        headerBackVisible: true,
-        headerShadowVisible: false,
-        // @ts-ignore
-        headerStyle: {
-          height: 64 + safeAreaTop,
-          backgroundColor: isDark ? "black" : "white",
-          // Similar to `headerShadowVisible` but for web
-          // @ts-ignore
-          borderBottomWidth: 0,
-        },
+        lazy: false,
+        headerShown: false,
         tabBarActiveTintColor: color,
         tabBarInactiveTintColor: color,
         tabBarShowLabel: false,
