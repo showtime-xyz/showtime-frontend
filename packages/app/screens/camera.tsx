@@ -92,6 +92,7 @@ function CameraScreen() {
       canPop={canPop}
       setCanPop={setCanPop}
       isLoading={isLoading}
+      postPhoto={postPhoto}
       setIsLoading={setIsLoading}
     />
   );
