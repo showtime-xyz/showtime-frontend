@@ -35,18 +35,6 @@ function CameraNavigator() {
           }}
         />
       </CameraStack.Group>
-      <CameraStack.Group
-        screenOptions={{
-          headerShown: false,
-          animation: Platform.OS === "ios" ? "default" : "fade",
-          presentation:
-            Platform.OS === "ios" ? "formSheet" : "transparentModal",
-        }}
-      >
-        <CameraStack.Screen name="login" component={LoginScreen} />
-        <CameraStack.Screen name="nft" component={NftScreen} />
-        <CameraStack.Screen name="create" component={CreateScreen} />
-      </CameraStack.Group>
     </CameraStack.Navigator>
   );
 }

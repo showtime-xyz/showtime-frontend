@@ -232,49 +232,36 @@ export const useLogin = (onLogin?: () => void) => {
     }
   };
   const handleLogin = async (payload: object) => {
-    try {
-      const Web3Provider = (await import("@ethersproject/providers"))
-        .Web3Provider;
-      // @ts-ignore
-      const web3 = new Web3Provider(magic.rpcProvider);
-      context.setWeb3(web3);
+    const Web3Provider = (await import("@ethersproject/providers"))
+      .Web3Provider;
+    // @ts-ignore
+    const web3 = new Web3Provider(magic.rpcProvider);
+    context.setWeb3(web3);
 
-      const response = await fetchOnForeground({
-        url: "/v1/login_magic",
-        method: "POST",
-        data: payload,
-      });
+    const response = await fetchOnForeground({
+      url: "/v1/login_magic",
+      method: "POST",
+      data: payload,
+    });
 
-      const accessToken = response?.access;
-      const refreshToken = response?.refresh;
-      const validResponse = accessToken && refreshToken;
+    const accessToken = response?.access;
+    const refreshToken = response?.refresh;
+    const validResponse = accessToken && refreshToken;
 
-      if (validResponse) {
-        // TODO:
-        // const sealedRefreshToken = await Iron.seal(
-        // 	{ refreshToken },
-        // 	process.env.ENCRYPTION_SECRET_V2,
-        // 	Iron.defaults
-        // )
-        // setRefreshToken(sealedRefreshToken)
-        setRefreshToken(refreshToken);
-        accessTokenManager.setAccessToken(accessToken);
-        setLogin(Date.now().toString());
-      } else {
-        console.error("login with magic failed ", response);
-        throw "Login failed";
-      }
-    } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error(error);
-      }
-
-      captureException(error, {
-        tags: {
-          login_signature_flow: "modalLogin.js",
-          login_magic_link: "modalLogin.js",
-        },
-      });
+    if (validResponse) {
+      // TODO:
+      // const sealedRefreshToken = await Iron.seal(
+      // 	{ refreshToken },
+      // 	process.env.ENCRYPTION_SECRET_V2,
+      // 	Iron.defaults
+      // )
+      // setRefreshToken(sealedRefreshToken)
+      setRefreshToken(refreshToken);
+      accessTokenManager.setAccessToken(accessToken);
+      setLogin(Date.now().toString());
+    } else {
+      console.error("login with magic failed ", response);
+      throw "Login failed";
     }
   };
 

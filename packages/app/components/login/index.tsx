@@ -15,6 +15,7 @@ import { LoginInputField } from "./login-input-field";
 import { LoginHeader } from "./login-header";
 import { LoginContainer } from "./login-container";
 import { StyleSheet } from "react-native";
+import { PhoneNumberPicker } from "./phone-number-picker";
 
 const TAB_LIST_HEIGHT = 56;
 
@@ -110,15 +111,8 @@ export function Login({ onLogin }: LoginProps) {
               </View>
               <Tabs.Pager>
                 <Tabs.View style={styles.tabListItemContainer}>
-                  <LoginInputField
-                    key="login-phone-number-field"
-                    validationSchema={phoneNumberValidationSchema}
-                    label="Phone number"
-                    placeholder="Enter your phone number"
-                    keyboardType="phone-pad"
-                    textContentType="telephoneNumber"
-                    signInButtonLabel="Send"
-                    onSubmit={handleSubmitPhoneNumber}
+                  <PhoneNumberPicker
+                    handleSubmitPhoneNumber={handleSubmitPhoneNumber}
                   />
                 </Tabs.View>
 

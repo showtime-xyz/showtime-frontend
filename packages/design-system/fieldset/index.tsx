@@ -17,6 +17,7 @@ type FieldsetProps = {
   tw?: string;
   select?: SelectProps;
   selectOnly?: boolean;
+  leftElement?: React.ReactNode;
 } & TextInputProps;
 
 export function Fieldset(props: FieldsetProps) {
@@ -28,6 +29,7 @@ export function Fieldset(props: FieldsetProps) {
     disabled,
     select,
     tw: twProp = "",
+    leftElement,
     selectOnly,
     ...textInputProps
   } = props;
@@ -46,6 +48,7 @@ export function Fieldset(props: FieldsetProps) {
         {label}
       </Label>
       <View tw="mt-4 flex-row items-center">
+        {leftElement}
         {!selectOnly ? (
           <TextInput
             tw="flex-1 text-black dark:text-gray-300 focus:outline-none focus-visible:ring-1"
