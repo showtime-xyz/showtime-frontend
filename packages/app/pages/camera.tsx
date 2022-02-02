@@ -24,13 +24,11 @@ function CameraNavigator() {
       // @ts-ignore
       screenOptions={screenOptions}
     >
-      <CameraStack.Group>
-        <CameraStack.Screen
-          name="camera"
-          component={CameraScreen}
-          options={{ headerShown: false }}
-        />
-      </CameraStack.Group>
+      <CameraStack.Screen
+        name="camera"
+        component={CameraScreen}
+        options={{ headerShown: false }}
+      />
     </CameraStack.Navigator>
   );
 }

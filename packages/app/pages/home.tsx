@@ -29,10 +29,11 @@ function HomeNavigator() {
   const isDark = useIsDarkMode();
 
   return (
-    <HomeStack.Navigator screenOptions={screenOptions({ safeAreaTop, isDark })}>
-      <HomeStack.Group>
-        <HomeStack.Screen name="home" component={HomeScreen} />
-      </HomeStack.Group>
+    <HomeStack.Navigator
+      // @ts-ignore
+      screenOptions={screenOptions({ safeAreaTop, isDark })}
+    >
+      <HomeStack.Screen name="home" component={HomeScreen} />
     </HomeStack.Navigator>
   );
 }

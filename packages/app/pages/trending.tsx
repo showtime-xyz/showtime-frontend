@@ -20,11 +20,10 @@ function TrendingNavigator() {
 
   return (
     <TrendingStack.Navigator
+      // @ts-ignore
       screenOptions={screenOptions({ safeAreaTop, isDark })}
     >
-      <TrendingStack.Group>
-        <TrendingStack.Screen name="trending" component={TrendingScreen} />
-      </TrendingStack.Group>
+      <TrendingStack.Screen name="trending" component={TrendingScreen} />
     </TrendingStack.Navigator>
   );
 }

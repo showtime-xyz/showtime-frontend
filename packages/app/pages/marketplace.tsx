@@ -23,14 +23,13 @@ function MarketplaceNavigator() {
 
   return (
     <MarketplaceStack.Navigator
+      // @ts-ignore
       screenOptions={screenOptions({ safeAreaTop, isDark })}
     >
-      <MarketplaceStack.Group>
-        <MarketplaceStack.Screen
-          name="marketplace"
-          component={MarketplaceScreen}
-        />
-      </MarketplaceStack.Group>
+      <MarketplaceStack.Screen
+        name="marketplace"
+        component={MarketplaceScreen}
+      />
     </MarketplaceStack.Navigator>
   );
 }

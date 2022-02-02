@@ -8,6 +8,7 @@ const HomeScreen = withColorScheme(() => {
   useEffect(() => {
     mixpanel.track("Home page view");
   }, []);
+
   return <Feed />;
 });
 

@@ -16,14 +16,13 @@ function NotificationsNavigator() {
 
   return (
     <NotificationsStack.Navigator
+      // @ts-ignore
       screenOptions={screenOptions({ safeAreaTop, isDark })}
     >
-      <NotificationsStack.Group>
-        <NotificationsStack.Screen
-          name="notifications"
-          component={NotificationsScreen}
-        />
-      </NotificationsStack.Group>
+      <NotificationsStack.Screen
+        name="notifications"
+        component={NotificationsScreen}
+      />
     </NotificationsStack.Navigator>
   );
 }

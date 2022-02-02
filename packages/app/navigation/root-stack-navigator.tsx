@@ -27,16 +27,13 @@ export function RootStackNavigator() {
       />
 
       {/* Screens accessible in most of the navigators */}
-      <Stack.Screen
-        name="profile"
-        component={ProfileScreen}
-        options={screenOptions({ safeAreaTop, isDark })}
-      />
-      <Stack.Screen
-        name="settings"
-        component={SettingsScreen}
-        options={screenOptions({ safeAreaTop, isDark })}
-      />
+      <Stack.Group
+        // @ts-ignore
+        screenOptions={screenOptions({ safeAreaTop, isDark })}
+      >
+        <Stack.Screen name="profile" component={ProfileScreen} />
+        <Stack.Screen name="settings" component={SettingsScreen} />
+      </Stack.Group>
 
       {/* Modals */}
       <Stack.Group
