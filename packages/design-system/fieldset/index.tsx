@@ -1,3 +1,4 @@
+import { MutableRefObject, ComponentType } from "react";
 import { View } from "design-system/view";
 import { Text } from "design-system/text";
 import { TextInput, TextInputProps } from "design-system/text-input";
@@ -18,6 +19,8 @@ type FieldsetProps = {
   select?: SelectProps;
   selectOnly?: boolean;
   leftElement?: React.ReactNode;
+  Component?: ComponentType;
+  componentRef?: MutableRefObject<ComponentType | undefined>;
 } & TextInputProps;
 
 export function Fieldset(props: FieldsetProps) {
@@ -31,6 +34,7 @@ export function Fieldset(props: FieldsetProps) {
     tw: twProp = "",
     leftElement,
     selectOnly,
+    Component = TextInput,
     ...textInputProps
   } = props;
   let style = "bg-gray-100 dark:bg-gray-900";
@@ -50,7 +54,7 @@ export function Fieldset(props: FieldsetProps) {
       <View tw="mt-4 flex-row items-center">
         {leftElement}
         {!selectOnly ? (
-          <TextInput
+          <Component
             tw="flex-1 text-black dark:text-gray-300 focus:outline-none focus-visible:ring-1"
             {...textInputProps}
             style={{
