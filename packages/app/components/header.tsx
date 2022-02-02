@@ -4,11 +4,18 @@ import Router from "next/router";
 
 import { useRouter } from "app/navigation/use-router";
 import { View, Pressable, Button, ButtonLabel } from "design-system";
-import { Showtime, Wallet, Plus, Search, ArrowLeft } from "design-system/icon";
+import {
+  Showtime,
+  ShowtimeGradient,
+  Plus,
+  Search,
+  ArrowLeft,
+} from "design-system/icon";
 import { tw } from "design-system/tailwind";
 import { useUser } from "app/hooks/use-user";
 import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
 import { HeaderDropdown } from "app/components/header-dropdown";
+import { useIsDarkMode } from "design-system/hooks";
 
 const HeaderRight = () => {
   const router = useRouter();
@@ -56,13 +63,10 @@ const HeaderRight = () => {
                 router.push("/login");
               }}
               variant="primary"
+              size="regular"
+              labelTW="font-semibold"
             >
-              <Wallet
-                color={
-                  tw.style("bg-white dark:bg-black")?.backgroundColor as string
-                }
-              />
-              <ButtonLabel tw="pl-2">Sign&nbsp;in</ButtonLabel>
+              Sign&nbsp;In
             </Button>
           )}
         </View>
@@ -103,6 +107,7 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
 
 const HeaderCenter = () => {
   const router = useRouter();
+  const isDark = useIsDarkMode();
 
   return (
     <Pressable
@@ -118,12 +123,21 @@ const HeaderCenter = () => {
       // 		: tw.style('bg-white dark:bg-black md:dark:bg-gray-900')
       // }, [])}
     >
-      <Showtime
-        style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
-        color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
-        width={24}
-        height={24}
-      />
+      {isDark ? (
+        <ShowtimeGradient
+          style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
+          color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+          width={24}
+          height={24}
+        />
+      ) : (
+        <Showtime
+          style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
+          color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+          width={24}
+          height={24}
+        />
+      )}
     </Pressable>
   );
 };
