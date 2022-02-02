@@ -68,7 +68,7 @@ function NftScreen() {
         <NFTDropdown nft={nft} />
       </View>
 
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="handled">
         <PinchToZoom>
           <Media item={nft} numColumns={1} />
         </PinchToZoom>
