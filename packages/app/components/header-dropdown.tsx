@@ -79,38 +79,36 @@ function HeaderDropdown() {
 
         <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 
-        <DropdownMenuGroup>
-          <DropdownMenuRoot>
-            <DropdownMenuTriggerItem
-              key="nested-group-trigger"
+        <DropdownMenuRoot>
+          <DropdownMenuTriggerItem
+            key="nested-group-trigger"
+            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          >
+            <DropdownMenuItemTitle tw="text-black dark:text-white">
+              Theme
+            </DropdownMenuItemTitle>
+          </DropdownMenuTriggerItem>
+          <DropdownMenuContent tw="w-30 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow">
+            <DropdownMenuItem
+              onSelect={() => context.setColorScheme("light")}
+              key="nested-group-1"
               tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
             >
               <DropdownMenuItemTitle tw="text-black dark:text-white">
-                Theme
+                Light
               </DropdownMenuItemTitle>
-            </DropdownMenuTriggerItem>
-            <DropdownMenuContent tw="w-30 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow">
-              <DropdownMenuItem
-                onSelect={() => context.setColorScheme("light")}
-                key="nested-group-1"
-                tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
-              >
-                <DropdownMenuItemTitle tw="text-black dark:text-white">
-                  Light
-                </DropdownMenuItemTitle>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onSelect={() => context.setColorScheme("dark")}
-                key="nested-group-2"
-                tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
-              >
-                <DropdownMenuItemTitle tw="text-black dark:text-white">
-                  Dark
-                </DropdownMenuItemTitle>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenuRoot>
-        </DropdownMenuGroup>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => context.setColorScheme("dark")}
+              key="nested-group-2"
+              tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+            >
+              <DropdownMenuItemTitle tw="text-black dark:text-white">
+                Dark
+              </DropdownMenuItemTitle>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenuRoot>
 
         <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 
