@@ -17,10 +17,10 @@ import { useDeviceContext, useAppColorScheme } from "twrnc";
 // import * as Sentry from 'sentry-expo'
 import { MMKV } from "react-native-mmkv";
 import { SWRConfig } from "swr";
-import WalletConnectProvider, {
-  RenderQrcodeModalProps,
-  QrcodeModal,
-} from "@walletconnect/react-native-dapp";
+// import WalletConnectProvider, {
+//   RenderQrcodeModalProps,
+//   QrcodeModal,
+// } from "@walletconnect/react-native-dapp";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
 import { useNavigation } from "@react-navigation/native";
@@ -37,6 +37,7 @@ import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { Web3Provider } from "app/providers/web3-provider";
+import { WalletConnectProvider } from "app/providers/wallet-connect-provider";
 import { NextTabNavigator } from "app/navigation/next-tab-navigator";
 import { AppContext } from "app/context/app-context";
 import { ToastProvider } from "design-system/toast";
@@ -65,24 +66,24 @@ LogBox.ignoreLogs([
   "ExponentGLView",
 ]);
 
-function QRCodeModal(props: RenderQrcodeModalProps): JSX.Element {
-  if (!props.visible) {
-    return null;
-  }
+// function QRCodeModal(props: RenderQrcodeModalProps): JSX.Element {
+//   if (!props.visible) {
+//     return null;
+//   }
 
-  return (
-    <FullWindowOverlay
-      style={{
-        position: "absolute",
-        width: "100%",
-        height: "100%",
-        justifyContent: "center",
-      }}
-    >
-      <QrcodeModal division={4} {...props} />
-    </FullWindowOverlay>
-  );
-}
+//   return (
+//     <FullWindowOverlay
+//       style={{
+//         position: "absolute",
+//         width: "100%",
+//         height: "100%",
+//         justifyContent: "center",
+//       }}
+//     >
+//       <QrcodeModal division={4} {...props} />
+//     </FullWindowOverlay>
+//   );
+// }
 
 function mmkvProvider() {
   const storage = new MMKV();
@@ -263,6 +264,8 @@ function App() {
       : ""
   }`;
 
+  console.log("App", scheme);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <DripsyProvider theme={theme}>
@@ -270,26 +273,7 @@ function App() {
           <ToastProvider>
             <NavigationProvider>
               <SWRProvider>
-                <WalletConnectProvider
-                  clientMeta={{
-                    description: "Connect with Showtime",
-                    url: "https://showtime.io",
-                    icons: [
-                      "https://storage.googleapis.com/showtime-cdn/showtime-icon-sm.jpg",
-                    ],
-                    name: "Showtime",
-                    // @ts-expect-error
-                    scheme: scheme,
-                  }}
-                  redirectUrl={`${scheme}://`}
-                  storageOptions={{
-                    // @ts-ignore
-                    asyncStorage: AsyncStorage,
-                  }}
-                  renderQrcodeModal={(
-                    props: RenderQrcodeModalProps
-                  ): JSX.Element => <QRCodeModal {...props} />}
-                >
+                <WalletConnectProvider>
                   <Web3Provider>
                     <AppContextProvider>
                       <AuthProvider>

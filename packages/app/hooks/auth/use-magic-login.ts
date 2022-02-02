@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { mixpanel } from "app/lib/mixpanel";
 import { magic } from "app/lib/magic";
 import { useAuth } from "./use-auth";
 
@@ -22,6 +23,8 @@ export function useMagicLogin() {
           did,
           phone_number: phoneNumber,
         });
+
+        mixpanel.track(`Login success - phone number`);
       } catch (error) {
         logout();
         throw error;
@@ -39,6 +42,8 @@ export function useMagicLogin() {
           did,
           email,
         });
+
+        mixpanel.track(`Login success - email`);
       } catch (error) {
         logout();
         throw error;

@@ -74,9 +74,13 @@ const axiosAPI = async ({ url, method, data, unmountSignal }: AxiosParams) => {
     method,
     data,
     signal: unmountSignal,
-    headers: {
-      Authorization: authorizationHeader,
-    },
+    ...(authorizationHeader
+      ? {
+          headers: {
+            Authorization: authorizationHeader,
+          },
+        }
+      : {}),
   };
 
   // console.log("request to the server ", request);

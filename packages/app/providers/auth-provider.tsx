@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
+import useUnmountSignal from "use-unmount-signal";
 import { AuthContext } from "app/context/auth-context";
 import { axios } from "app/lib/axios";
 import { magic } from "app/lib/magic";
@@ -27,6 +28,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   //#region hooks
   const { mutate } = useSWRConfig();
   const connector = useWalletConnect();
+  const unmountSignal = useUnmountSignal();
   const { setWeb3 } = useWeb3();
   const { setTokens, refreshTokens } = useAccessTokenManager();
   //#endregion
@@ -38,6 +40,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         url: `/v1/${endpoint}`,
         method: "POST",
         data,
+        unmountSignal,
       });
 
       const accessToken = response?.access;
@@ -54,7 +57,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setAuthenticationStatus("UNAUTHENTICATED");
       throw "Login failed";
     },
-    [setTokens, setAuthenticationStatus]
+    [setTokens, setAuthenticationStatus, unmountSignal]
   );
   /**
    * Log out the customer if logged in, and clear auth cache.
@@ -77,7 +80,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       if (wasUserLoggedIn) {
         await mutate(null);
-        if (connector && connector.killSession) {
+        if (connector && connector.connected) {
           await connector.killSession();
         }
       }
@@ -111,18 +114,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   //#region effects
   useEffect(() => {
-    async function doRefreshToken() {
-      setAuthenticationStatus("REFRESHING");
-      try {
-        await refreshTokens();
-        setAuthenticationStatus("AUTHENTICATED");
-      } catch (error) {
-        await logout();
+    if (authenticationStatus === "IDLE") {
+      async function doRefreshToken() {
+        setAuthenticationStatus("REFRESHING");
+        try {
+          await refreshTokens();
+          setAuthenticationStatus("AUTHENTICATED");
+        } catch (error) {
+          await logout();
+        }
       }
+      doRefreshToken();
     }
-
-    doRefreshToken();
-  }, [logout, refreshTokens]);
+  }, [authenticationStatus, logout, refreshTokens]);
   //#endregion
   return (
     <AuthContext.Provider value={authenticationContextValue}>

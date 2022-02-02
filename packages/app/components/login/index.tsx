@@ -71,7 +71,12 @@ export function Login({ onLogin }: LoginProps) {
   );
   //#endregion
   return (
-    <LoginContainer loading={loading}>
+    <LoginContainer
+      loading={
+        loading &&
+        (walletStatus !== "FETCHING_NONCE" || walletStatus !== "FETCHING_NONCE")
+      }
+    >
       {walletStatus === "FETCHING_SIGNATURE" ? (
         <View tw="py-40">
           <Text tw="text-center dark:text-gray-400">

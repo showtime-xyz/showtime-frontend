@@ -1,110 +1,145 @@
-import { useCallback, useRef, useState } from "react";
-import { Platform } from "react-native";
+import { useCallback, useEffect } from "react";
+import { mixpanel } from "app/lib/mixpanel";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { convertUtf8ToHex } from "@walletconnect/utils";
-import { personalSignMessage } from "app/lib/utilities";
 import { axios } from "app/lib/axios";
-// @ts-ignore
-import getWeb3Modal from "app/lib/web3-modal";
 import { useAuth } from "./use-auth";
-import { useFetchOnAppForeground } from "../use-fetch-on-app-foreground";
+import { useStableCallback } from "../use-stable-callback";
+import { useWalletLoginState } from "./use-wallet-login-state";
 
 const LOGIN_WALLET_ENDPOINT = "login_wallet";
 
-type WalletConnectionStatus =
-  | "IDLE"
-  | "FETCHING_SIGNATURE"
-  | "FETCHING_NONCE"
-  | "DONE";
-
 export function useWalletLogin() {
-  //#region states
-  const [status, setStatus] = useState<WalletConnectionStatus>("IDLE");
-  const walletName = useRef("");
-  //#endregion
-
   //#region hooks
   const walletConnector = useWalletConnect();
-  const { setAuthenticationStatus, login, logout } = useAuth();
-  const fetchOnForeground = useFetchOnAppForeground();
+  const { setAuthenticationStatus, login: _login, logout } = useAuth();
+  const { status, name, address, signature, nonce, error, dispatch } =
+    useWalletLoginState();
   //#endregion
 
   //#region methods
-  const loginWithWallet = useCallback(
-    async function loginWithWallet() {
-      setAuthenticationStatus("AUTHENTICATING");
-      try {
-        let address: string;
-        let signature: string;
-
-        if (Platform.OS === "web") {
-          const Web3Provider = (await import("@ethersproject/providers"))
-            .Web3Provider;
-          const web3Modal = await getWeb3Modal();
-          const web3 = new Web3Provider(await web3Modal.connect());
-
-          address = await web3.getSigner().getAddress();
-
-          setStatus("FETCHING_NONCE");
-          const getNonceResponse = await axios({
-            url: `/v1/getnonce?address=${address}`,
-            method: "GET",
-          });
-
-          walletName.current = web3Modal.selectedWallet.name;
-
-          setStatus("FETCHING_SIGNATURE");
-          signature = await personalSignMessage(
-            web3,
-            process.env.NEXT_PUBLIC_SIGNING_MESSAGE +
-              " " +
-              getNonceResponse?.data
-          );
-        } else {
-          if (!walletConnector.connected) {
-            await walletConnector.connect();
-          }
-
-          address = walletConnector.session.accounts[0];
-
-          setStatus("FETCHING_NONCE");
-          const getNonceResponse = await fetchOnForeground({
-            url: `/v1/getnonce?address=${address}`,
-            method: "GET",
-          });
-
-          walletName.current = walletConnector.peerMeta?.name ?? "";
-
-          const messageParams = [
-            convertUtf8ToHex(
-              process.env.NEXT_PUBLIC_SIGNING_MESSAGE +
-                " " +
-                getNonceResponse?.data
-            ),
-            address.toLowerCase(),
-          ];
-          setStatus("FETCHING_SIGNATURE");
-          signature = await walletConnector.signPersonalMessage(messageParams);
+  const connectToWallet = useCallback(
+    async function connectToWallet() {
+      dispatch("CONNECT_TO_WALLET_REQUEST");
+      let walletName, walletAddress;
+      if (!walletConnector.connected) {
+        try {
+          const wallet = await walletConnector.connect();
+          // @ts-ignore
+          walletName = wallet.peerMeta?.name;
+          walletAddress = wallet.accounts[0];
+        } catch (error) {
+          dispatch("ERROR", { error });
+          return;
         }
-
-        await login(LOGIN_WALLET_ENDPOINT, { signature, address });
-
-        // Expire the nonce after successful login
+      } else {
+        walletName = walletConnector.peerMeta?.name;
+        walletAddress = walletConnector.session.accounts[0];
+      }
+      dispatch("CONNECT_TO_WALLET_SUCCESS", {
+        name: walletName,
+        address: walletAddress,
+      });
+    },
+    [dispatch, walletConnector]
+  );
+  const fetchNonce = useCallback(
+    async function fetchNonce() {
+      dispatch("FETCH_NONCE_REQUEST");
+      try {
+        const response = await axios({
+          url: `/v1/getnonce?address=${address}`,
+          method: "GET",
+        });
+        dispatch("FETCH_NONCE_SUCCESS", {
+          nonce: response?.data,
+        });
+      } catch (error) {
+        dispatch("ERROR", { error });
+      }
+    },
+    [address, dispatch]
+  );
+  const expireNonce = useCallback(
+    async function expireNonce() {
+      dispatch("EXPIRE_NONCE_REQUEST");
+      try {
         await axios({
           url: `/v1/rotatenonce?address=${address}`,
           method: "POST",
         });
-
-        setStatus("DONE");
+        dispatch("EXPIRE_NONCE_SUCCESS");
       } catch (error) {
-        setStatus("IDLE");
-        logout();
-        throw error;
+        dispatch("ERROR", { error });
       }
     },
-    [walletConnector, fetchOnForeground, login, logout]
+    [address, dispatch]
   );
+  const signPersonalMessage = useCallback(
+    async function signPersonalMessage() {
+      dispatch("SIGN_PERSONAL_MESSAGE_REQUEST");
+      try {
+        const messageParams = [
+          convertUtf8ToHex(
+            process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + nonce
+          ),
+          address!.toLowerCase(),
+        ];
+        const _signature = await walletConnector.signPersonalMessage(
+          messageParams
+        );
+        dispatch("SIGN_PERSONAL_MESSAGE_SUCCESS", { signature: _signature });
+      } catch (error) {
+        dispatch("ERROR", { error });
+      }
+    },
+    [nonce, address, dispatch, walletConnector]
+  );
+  const login = useCallback(
+    async function login() {
+      dispatch("LOG_IN_REQUEST");
+      try {
+        await _login(LOGIN_WALLET_ENDPOINT, {
+          signature: signature,
+          address: address,
+        });
+        dispatch("LOG_IN_SUCCESS");
+      } catch (error) {
+        dispatch("ERROR", { error });
+      }
+    },
+    [dispatch, address, signature, _login]
+  );
+  const loginWithWallet = useCallback(
+    async function loginWithWallet() {
+      setAuthenticationStatus("AUTHENTICATING");
+      connectToWallet();
+    },
+    [connectToWallet, setAuthenticationStatus]
+  );
+  const continueLoginIn = useStableCallback(() => {
+    if (status === "CONNECTED_TO_WALLET" && (!address || !name)) {
+      connectToWallet();
+    } else if (status === "CONNECTED_TO_WALLET" && address && name) {
+      fetchNonce();
+    } else if (status === "FETCHED_NONCE" && nonce) {
+      signPersonalMessage();
+    } else if (status === "SIGNED_PERSONAL_MESSAGE" && signature) {
+      login();
+    } else if (status === "LOGGED_IN") {
+      expireNonce();
+    } else if (status === "EXPIRED_NONCE") {
+      mixpanel.track(`Login success - wallet`);
+    } else if (status === "ERRORED") {
+      logout();
+    }
+  });
   //#endregion
 
-  return { loginWithWallet, status, walletName: walletName.current };
+  //#region effects
+  useEffect(() => {
+    continueLoginIn();
+  }, [continueLoginIn, status]);
+  //#endregion
+  return { loginWithWallet, status, name, error };
 }
