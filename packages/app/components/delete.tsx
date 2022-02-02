@@ -35,7 +35,7 @@ function Delete({ nftId }: { nftId: number }) {
     axios({ url, method: "GET" })
   );
   const nft = data?.data as NFT;
-  console.log("nft", nft);
+
   if (error) {
     console.error(error);
   }
@@ -47,6 +47,10 @@ function Delete({ nftId }: { nftId: number }) {
       `/v1/owned_quantity?nft_id=${nft.nft_id}&profile_id=${user.data.profile.profile_id}`,
     (url) => axios({ url, method: "GET" }).then((res) => res?.data)
   );
+
+  const tabBarHeight = Platform.OS === "android" ? 50 : useBottomTabBarHeight();
+
+  const ownsMultiple = ownershipData?.owned_count > 1;
 
   const createBurnValidationSchema = useMemo(
     () =>
@@ -72,8 +76,6 @@ function Delete({ nftId }: { nftId: number }) {
     defaultValues,
   });
 
-  const tabBarHeight = Platform.OS === "android" ? 50 : useBottomTabBarHeight();
-
   const CreateScrollView =
     Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
 
@@ -90,6 +92,14 @@ function Delete({ nftId }: { nftId: number }) {
     router.pop();
     router.pop();
   }, [state.status]);
+
+  const deleteButtonStyle = ownsMultiple
+    ? {
+        bottom: tabBarHeight + 16,
+      }
+    : {
+        bottom: 0,
+      };
 
   return (
     <View tw="flex-1">
@@ -142,35 +152,37 @@ function Delete({ nftId }: { nftId: number }) {
           <View tw="-mx-2">
             <Owner nft={nft} price={true} />
           </View>
-          <View tw="mt-4 flex-row">
-            <Controller
-              control={control}
-              name="copies"
-              render={({ field: { onChange, onBlur, value } }) => {
-                return (
-                  <Fieldset
-                    tw="flex-1 bg-gray-100"
-                    label="Copies"
-                    placeholder="1"
-                    helperText={`1 by default${
-                      ownershipData
-                        ? `, you own ${ownershipData.owned_count}`
-                        : ""
-                    }`}
-                    onBlur={onBlur}
-                    keyboardType="numeric"
-                    errorText={errors.copies?.message}
-                    value={value?.toString()}
-                    onChangeText={onChange}
-                    returnKeyType="done"
-                  />
-                );
-              }}
-            />
-          </View>
+          {ownsMultiple ? (
+            <View tw="mt-4 flex-row">
+              <Controller
+                control={control}
+                name="copies"
+                render={({ field: { onChange, onBlur, value } }) => {
+                  return (
+                    <Fieldset
+                      tw="flex-1 bg-gray-100"
+                      label="Copies"
+                      placeholder="1"
+                      helperText={`1 by default${
+                        ownershipData
+                          ? `, you own ${ownershipData.owned_count}`
+                          : ""
+                      }`}
+                      onBlur={onBlur}
+                      keyboardType="numeric"
+                      errorText={errors.copies?.message}
+                      value={value?.toString()}
+                      onChangeText={onChange}
+                      returnKeyType="done"
+                    />
+                  );
+                }}
+              />
+            </View>
+          ) : null}
         </View>
       </CreateScrollView>
-      <View tw="absolute px-4 w-full" style={{ bottom: tabBarHeight + 16 }}>
+      <View tw="absolute px-4 w-full" style={deleteButtonStyle}>
         <Button
           onPress={handleSubmit(handleSubmitForm)}
           tw="h-12 rounded-full"
