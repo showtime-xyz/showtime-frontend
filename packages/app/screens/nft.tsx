@@ -1,5 +1,7 @@
+import { Platform } from "react-native";
 import useUnmountSignal from "use-unmount-signal";
 import useSWR from "swr";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { View, Button, ScrollView } from "design-system";
 import { Media } from "design-system/media";
@@ -15,7 +17,6 @@ import { Title } from "design-system/card/rows/title";
 import { Description } from "design-system/card/rows/description";
 // import { Comments } from "design-system/comments";
 import type { NFT } from "app/types";
-import { useHideNavigationElements } from "app/navigation/use-navigation-elements";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { Owner } from "design-system/card/rows/owner";
 import { LikedBy } from "design-system/liked-by";
@@ -28,7 +29,7 @@ type Query = {
 const { useParam } = createParam<Query>();
 
 function NftScreen() {
-  useHideNavigationElements();
+  const { top: topSafeArea } = useSafeAreaInsets();
   const router = useRouter();
   const unmountSignal = useUnmountSignal();
   const [nftId, setNftId] = useParam("id");
@@ -43,8 +44,15 @@ function NftScreen() {
   }
 
   return (
-    <View tw="flex-1 bg-gray-200 dark:bg-black">
-      <View tw="p-6 h-16 flex-row items-center justify-between">
+    <View
+      tw={[
+        "flex-1 bg-gray-200 dark:bg-black",
+        Platform.OS === "web" || Platform.OS === "android"
+          ? `pt-[${topSafeArea}px]`
+          : "",
+      ]}
+    >
+      <View tw="p-4 h-16 flex-row items-center justify-between">
         <Button
           onPress={router.pop}
           variant="tertiary"
