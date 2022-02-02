@@ -35,7 +35,6 @@ import LogRocket from "@logrocket/react-native";
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
 import { NavigationProvider } from "app/navigation";
-import { NextTabNavigator } from "app/navigation/next-tab-navigator";
 import { accessTokenManager } from "app/lib/access-token-manager";
 import { AppContext } from "app/context/app-context";
 import { setLogout } from "app/lib/logout";
@@ -50,6 +49,7 @@ import {
 } from "app/lib/color-scheme";
 import { magic } from "app/lib/magic";
 import { Relayer } from "app/lib/magic";
+import { RootStackNavigator } from "app/navigation/root-stack-navigator";
 
 enableScreens(true);
 // enableFreeze(true)
@@ -315,7 +315,7 @@ function App() {
                   <AppContextProvider>
                     <BottomSheetModalProvider>
                       <StatusBar style="auto" />
-                      <NextTabNavigator />
+                      <RootStackNavigator />
                     </BottomSheetModalProvider>
                   </AppContextProvider>
                 </WalletConnectProvider>

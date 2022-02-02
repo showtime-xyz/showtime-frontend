@@ -58,6 +58,7 @@ type Props = {
   setCanPop: (canPop: boolean) => void;
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
+  postPhoto: (uri: string) => void;
 };
 
 export function Camera({
@@ -69,6 +70,7 @@ export function Camera({
   setCanPop,
   isLoading,
   setIsLoading,
+  postPhoto,
 }: Props) {
   const router = useRouter();
   const tabBarHeight = useBottomTabBarHeight();
@@ -413,6 +415,7 @@ export function Camera({
           takePhoto={takePhoto}
           cameraPosition={cameraPosition}
           setCameraPosition={setCameraPosition}
+          postPhoto={postPhoto}
         />
       </View>
     </View>
