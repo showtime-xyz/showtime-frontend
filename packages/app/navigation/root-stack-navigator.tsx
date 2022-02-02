@@ -12,7 +12,7 @@ export function RootStackNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="root"
+        name="bottomTabs"
         component={NextTabNavigator}
         options={{ headerShown: false }}
       />

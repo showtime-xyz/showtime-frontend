@@ -7,8 +7,7 @@ export const useProfileNavigation = (address?: string) => {
 
   return useCallback(() => {
     if (address) {
-      const path = router.pathname.startsWith("/trending") ? "/trending" : "";
-      const as = `${path}/profile/${address}`;
+      const as = `/profile/${address}`;
 
       const href = Router.router
         ? {

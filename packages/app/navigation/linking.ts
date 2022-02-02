@@ -6,38 +6,18 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
   prefixes: [Linking.makeUrl("/")],
   config: {
     screens: {
-      login: "login",
-      nft: "nft/:id",
-      create: "create",
-      profile: "profile/:walletAddress",
-      root: {
+      login: "/login",
+      nft: "/nft/:id",
+      create: "/create",
+      profile: "/profile/:walletAddress",
+      bottomTabs: {
         screens: {
           // Bottom Tab Navigator
-          homeTab: {
-            screens: {
-              home: "home",
-            },
-          },
-          trendingTab: {
-            screens: {
-              trending: "trending",
-            },
-          },
-          cameraTab: {
-            screens: {
-              camera: "camera",
-            },
-          },
-          marketplaceTab: {
-            screens: {
-              marketplace: "marketplace",
-            },
-          },
-          notificationsTab: {
-            screens: {
-              notifications: "notifications",
-            },
-          },
+          homeTab: "/home",
+          trendingTab: "/trending",
+          cameraTab: "/camera",
+          marketplaceTab: "/marketplace",
+          notificationsTab: "/notifications",
         },
       },
     },

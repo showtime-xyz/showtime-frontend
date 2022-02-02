@@ -24,9 +24,7 @@ function CameraScreen() {
       if (isAuthenticated) {
         router.push(createPostURL);
       } else {
-        router.push(
-          `/camera/login?redirect_url=${encodeURIComponent(createPostURL)}`
-        );
+        router.push(`/login?redirect_url=${encodeURIComponent(createPostURL)}`);
       }
     },
     [router, isAuthenticated]

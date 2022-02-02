@@ -16,19 +16,6 @@ const HeaderRight = () => {
   const [isSearchBarOpen, setSearchBarOpen] = useState(false);
   const { width } = useWindowDimensions();
 
-  const openLogin = useCallback(() => {
-    const as = `${router.pathname !== "/" ? router.pathname : ""}/login`;
-
-    const href = Router.router
-      ? {
-          pathname: Router.pathname,
-          query: { ...Router.query },
-        }
-      : as;
-
-    router.push(href, as, { shallow: true });
-  }, [router, Router]);
-
   return (
     <View tw="pr-4">
       {!isLoading && (
@@ -66,9 +53,7 @@ const HeaderRight = () => {
           ) : (
             <Button
               onPress={() => {
-                if (!router.pathname.includes("/login")) {
-                  openLogin();
-                }
+                router.push("/login");
               }}
               variant="primary"
             >
@@ -92,7 +77,7 @@ const HeaderLeft = () => {
     <Pressable
       tw="w-10 h-10 pl-4 rounded-full"
       onPress={() => {
-        router.push("/");
+        router.push("/home");
       }}
       // animate={useCallback(({ hovered }) => {
       // 	'worklet'
