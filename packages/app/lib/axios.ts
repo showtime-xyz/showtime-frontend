@@ -83,6 +83,7 @@ const axiosAPI = async ({ url, method, data, unmountSignal }: AxiosParams) => {
   try {
     return await axios(request).then((res) => res.data);
   } catch (error) {
+    console.log("failed request ", request);
     console.error(error);
     // console.error(error)
   }

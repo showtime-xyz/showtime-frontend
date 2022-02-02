@@ -54,8 +54,7 @@ function Media({ item, numColumns, tw }: Props) {
       mutate(`${NFT_DETAIL_API}/${id}`, {
         data: item,
       });
-      const path = router.pathname.startsWith("/trending") ? "/trending" : "";
-      const as = `${path}/nft/${id}`;
+      const as = `/nft/${id}`;
 
       const href = Router.router
         ? {

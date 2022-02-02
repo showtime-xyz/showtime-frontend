@@ -20,13 +20,11 @@ function CameraScreen() {
 
   const postPhoto = useCallback(
     (photoURI: string) => {
-      const createPostURL = `/camera/create?uri=${photoURI}`;
+      const createPostURL = `/create?uri=${photoURI}`;
       if (isAuthenticated) {
         router.push(createPostURL);
       } else {
-        router.push(
-          `/camera/login?redirect_url=${encodeURIComponent(createPostURL)}`
-        );
+        router.push(`/login?redirect_url=${encodeURIComponent(createPostURL)}`);
       }
     },
     [router, isAuthenticated]
@@ -94,6 +92,7 @@ function CameraScreen() {
       canPop={canPop}
       setCanPop={setCanPop}
       isLoading={isLoading}
+      postPhoto={postPhoto}
       setIsLoading={setIsLoading}
     />
   );
