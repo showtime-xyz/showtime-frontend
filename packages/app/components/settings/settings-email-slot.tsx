@@ -1,35 +1,40 @@
+import { useContext, useEffect, useState, useCallback } from "react";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { View, Text, Button, Skeleton } from "design-system";
-import { MoreHorizontal } from "design-system/icon";
 import { useColorScheme } from "design-system/hooks";
-import { SettingSubTitle } from "./settings-subtitle";
 import { WalletAddressesV2 } from "app/types";
+import { DataPill } from "design-system/data-pill";
+import { AppContext } from "app/context/app-context";
+import { magic } from "app/lib/magic";
 import { AddressMenu } from "./address-menu";
+import { AddEmail } from "./add-email";
+import { SettingSubTitle } from "./settings-subtitle";
 
 export type EmailSlotProps = {
   email: WalletAddressesV2["email"];
 };
 
-type EmailSlotHeaderProps = {
-  onPress: () => void;
-};
-
-export const SettingEmailSlotHeader = (props: EmailSlotHeaderProps) => {
-  const onPress = props?.onPress;
+export const SettingEmailSlotHeader = () => {
+  const [viewAddEmail, setViewAddEmail] = useState(false);
   return (
-    <SettingSubTitle>
-      <Text tw="text-gray-900 dark:text-white font-bold text-xl">
-        Manage your emails
-      </Text>
-      <Button
-        variant="tertiary"
-        size="regular"
-        onPress={onPress}
-        disabled={true}
-      >
-        Add Wallet
-      </Button>
-    </SettingSubTitle>
+    <View>
+      <SettingSubTitle>
+        <Text tw="text-gray-900 dark:text-white font-bold text-xl">
+          Manage your emails
+        </Text>
+        <Button
+          variant="primary"
+          size="small"
+          onPress={() => setViewAddEmail(true)}
+        >
+          Add Email
+        </Button>
+      </SettingSubTitle>
+      <AddEmail
+        visibility={viewAddEmail}
+        dismiss={() => setViewAddEmail(false)}
+      />
+    </View>
   );
 };
 
@@ -70,14 +75,45 @@ export const SettingsEmailSlotPlaceholder = () => {
 };
 
 export const SettingsEmailSlot = (props: EmailSlotProps) => {
+  const [isCurrentEmail, setIsCurrentEmail] = useState(false);
+  const [magicAddress, setMagicAddress] = useState<string>();
+  const context = useContext(AppContext);
   const email = props.email;
+  const isMagic = !!context.web3;
+
+  const getCurrentMagicUser = useCallback(async () => {
+    if (isMagic) {
+      const magicMetaData = await magic.user.getMetadata();
+      const currentEmail = magicMetaData.email;
+      const currentMagicAddress = magicMetaData.publicAddress;
+      const isMatchingMagic =
+        currentEmail?.toLowerCase() === email?.toLowerCase();
+      if (isMatchingMagic) {
+        setIsCurrentEmail(true);
+      }
+
+      if (isMatchingMagic && currentMagicAddress) {
+        setMagicAddress(currentMagicAddress);
+      }
+    }
+  }, [isMagic, email]);
+
+  useEffect(() => {
+    getCurrentMagicUser();
+  }, [getCurrentMagicUser]);
+
   return (
     <View tw="flex-1 flex-row justify-between w-full p-4 items-center">
       <View tw="flex-1">
-        <Text tw="text-gray-900 dark:text-white font-bold">{email}</Text>
+        <Text tw="text-gray-900 dark:text-white font-bold pb-3">{email}</Text>
+        {isCurrentEmail ? (
+          <View tw="flex flex-row">
+            <DataPill label="Current" type="secondary" />
+          </View>
+        ) : null}
       </View>
       <View tw="flex justify-center">
-        <AddressMenu email={email} ctaCopy="Delete Email Address" />
+        <AddressMenu address={magicAddress} ctaCopy="Delete Email Address" />
       </View>
     </View>
   );

@@ -50,20 +50,37 @@ if (Platform.OS === "web") {
   );
 }
 
+export type AxiosOverrides = {
+  forceAccessTokenAuthorization: boolean;
+};
+
 export type AxiosParams = {
   url: string;
   method: Method;
   data?: any;
   unmountSignal?: AbortSignal;
+  overrides?: AxiosOverrides;
 };
 
-const axiosAPI = async ({ url, method, data, unmountSignal }: AxiosParams) => {
+const axiosAPI = async ({
+  url,
+  method,
+  data,
+  unmountSignal,
+  overrides,
+}: AxiosParams) => {
   const accessToken = accessTokenManager.getAccessToken();
-  const authorizationHeader = data?.did
+  const forceAccessTokenAuthorization =
+    overrides?.forceAccessTokenAuthorization;
+  let authorizationHeader = data?.did
     ? data?.did
     : accessToken
     ? `Bearer ${accessToken}`
     : null;
+
+  if (forceAccessTokenAuthorization) {
+    authorizationHeader = accessToken ? `Bearer ${accessToken}` : null;
+  }
 
   const request = {
     baseURL:
@@ -84,8 +101,8 @@ const axiosAPI = async ({ url, method, data, unmountSignal }: AxiosParams) => {
     return await axios(request).then((res) => res.data);
   } catch (error) {
     console.log("failed request ", request);
+    // TODO: Evaluate if we should continue to allow axios to swallow errors
     console.error(error);
-    // console.error(error)
   }
 };
 

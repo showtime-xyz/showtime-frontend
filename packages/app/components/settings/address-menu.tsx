@@ -1,4 +1,4 @@
-import { Text, Button } from "design-system";
+import { Button } from "design-system";
 import { MoreHorizontal } from "design-system/icon";
 import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
 import {
@@ -8,7 +8,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
-import { axios } from "app/lib/axios";
+import { useManageAccount } from "app/hooks/use-manage-account";
 
 type AddressMenuProps = {
   address?: WalletAddressesExcludingEmailV2["address"];
@@ -17,21 +17,11 @@ type AddressMenuProps = {
 };
 
 export const AddressMenu = (props: AddressMenuProps) => {
+  const { removeAccount } = useManageAccount();
   const address = props.address;
   const ctaCopy = props.ctaCopy;
+  const disableDelete = !address;
 
-  const removeAddress = async () => {
-    try {
-      await axios({
-        url: "/v1/removewallet",
-        method: "POST",
-        data: { address },
-      });
-    } catch (error) {
-      // TODO: handle error recovery
-      console.log("error", error);
-    }
-  };
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
@@ -44,7 +34,9 @@ export const AddressMenu = (props: AddressMenuProps) => {
         tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
       >
         <DropdownMenuItem
-          onSelect={removeAddress}
+          disabled={disableDelete}
+          // @ts-ignore
+          onSelect={() => removeAccount(address)}
           key="your-profile"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           destructive

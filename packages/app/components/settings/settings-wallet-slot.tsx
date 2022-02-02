@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import Animated, { FadeIn } from "react-native-reanimated";
+import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { View, Text, Button, Skeleton } from "design-system";
 import { Ethereum, Tezos } from "design-system/icon";
 import { useColorScheme } from "design-system/hooks";
@@ -7,6 +9,7 @@ import { DataPill } from "design-system/data-pill";
 import { WalletAddressesExcludingEmailV2 } from "app/types";
 import { SettingSubTitle } from "./settings-subtitle";
 import { AddressMenu } from "./address-menu";
+import { AppContext } from "app/context/app-context";
 
 type Props = {
   address: WalletAddressesExcludingEmailV2["address"];
@@ -14,23 +17,13 @@ type Props = {
   mintingEnabled?: WalletAddressesExcludingEmailV2["minting_enabled"];
 };
 
-type WalletSlotHeaderProps = {
-  onPress: () => void;
-};
-
-export const SettingsWalletSlotHeader = (props: WalletSlotHeaderProps) => {
-  const onPress = props?.onPress;
+export const SettingsWalletSlotHeader = () => {
   return (
     <SettingSubTitle>
       <Text tw="text-gray-900 dark:text-white font-bold text-xl">
         Your Wallets
       </Text>
-      <Button
-        variant="tertiary"
-        size="regular"
-        onPress={onPress}
-        disabled={true}
-      >
+      <Button variant="primary" size="small">
         Add Wallet
       </Button>
     </SettingSubTitle>
@@ -107,11 +100,18 @@ export const SettingsWalletSlotPlaceholder = () => {
 };
 
 export const SettingsWalletSlot = (props: Props) => {
+  const context = useContext(AppContext);
+  const connector = useWalletConnect();
+  const notMagic = !!context.web3 === false;
   const address = props.address;
   const ensDomain = props.ensDomain;
   const mintingEnabled = props.mintingEnabled;
   const display = ensDomain ? ensDomain : formatAddressShort(address);
   const isEthereumAddress = address.startsWith("0x");
+  const [connectedAddress] = connector?.session?.accounts;
+  const isConnectedAddress = notMagic && connectedAddress;
+  const multiplePills = isConnectedAddress && mintingEnabled;
+
   return (
     <View tw="flex-1 flex-row justify-between w-full p-4 max-h-[150px]">
       <View tw="justify-center">
@@ -123,11 +123,15 @@ export const SettingsWalletSlot = (props: Props) => {
         <Text tw="text-gray-900 dark:text-white pb-3 text-base font-bold">
           {display}
         </Text>
-        {mintingEnabled ? (
-          <View tw="pb-3 flex flex-row">
+        <View tw="pb-3 flex flex-row">
+          {isConnectedAddress ? (
+            <DataPill label="Current" type="secondary" />
+          ) : null}
+          {multiplePills ? <View tw="pr-2" /> : null}
+          {mintingEnabled ? (
             <DataPill label="🔨 Minting Enabled" type="primary" />
-          </View>
-        ) : null}
+          ) : null}
+        </View>
         <Text tw="text-gray-900 dark:text-white text-xs pb-3">{address}</Text>
       </View>
       <View tw="flex justify-center">
