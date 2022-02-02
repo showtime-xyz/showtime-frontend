@@ -1,8 +1,7 @@
-import { useState, Suspense } from "react";
 import useUnmountSignal from "use-unmount-signal";
 import useSWR from "swr";
 
-import { View, Button, Spinner, ScrollView } from "design-system";
+import { View, Button, ScrollView } from "design-system";
 import { Media } from "design-system/media";
 import { createParam } from "app/navigation/use-param";
 import { axios } from "app/lib/axios";

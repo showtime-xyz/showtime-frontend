@@ -18,6 +18,10 @@ type TabItemProps = {
   selected?: boolean;
 };
 
+type SelectedTabIndicatorProps = {
+  disableBackground?: boolean;
+};
+
 export const TabItem = ({ name, count }: TabItemProps) => {
   const { index } = useTabIndexContext();
   const { position, offset } = useTabsContext();
@@ -67,7 +71,9 @@ export const TabItem = ({ name, count }: TabItemProps) => {
   );
 };
 
-export const SelectedTabIndicator = () => {
+export const SelectedTabIndicator = (props: SelectedTabIndicatorProps) => {
+  const disableBackground = props.disableBackground;
+
   if (Platform.OS === "web") {
     return null;
   }
@@ -129,15 +135,17 @@ export const SelectedTabIndicator = () => {
           tw.style(`bg-gray-900 dark:bg-gray-100`),
         ]}
       />
-      <View
-        sx={{
-          backgroundColor: isDark
-            ? "rgba(229, 231, 235, 0.1)"
-            : "rgba(0, 0, 0, 0.1)",
-          paddingY: 16,
-          borderRadius: 999,
-        }}
-      />
+      {disableBackground ? null : (
+        <View
+          sx={{
+            backgroundColor: isDark
+              ? "rgba(229, 231, 235, 0.1)"
+              : "rgba(0, 0, 0, 0.1)",
+            paddingY: 16,
+            borderRadius: 999,
+          }}
+        />
+      )}
     </Animated.View>
   );
 };

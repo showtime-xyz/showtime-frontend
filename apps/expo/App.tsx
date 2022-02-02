@@ -45,6 +45,7 @@ import {
   useColorScheme as useUserColorScheme,
 } from "app/lib/color-scheme";
 import { Relayer } from "app/lib/magic";
+import { RootStackNavigator } from "app/navigation/root-stack-navigator";
 
 enableScreens(true);
 // enableFreeze(true)
@@ -295,7 +296,7 @@ function App() {
                         <UserProvider>
                           <BottomSheetModalProvider>
                             <StatusBar style="auto" />
-                            <NextTabNavigator />
+                            <RootStackNavigator />
                           </BottomSheetModalProvider>
                         </UserProvider>
                       </AuthProvider>

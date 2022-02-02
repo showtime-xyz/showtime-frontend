@@ -10,12 +10,18 @@ export const DataPill = (props: DataPillProps) => {
   const { type = "primary", label } = props;
 
   return (
-    <View tw="dark:bg-gray-900 bg-gray-100 items-center justify-center py-2 px-2 rounded-full">
+    <View
+      tw={`items-center justify-center py-2 px-2 rounded-full ${
+        type === "primary"
+          ? "dark:bg-gray-900 bg-gray-100 "
+          : " bg-gray-900 dark:bg-gray-100"
+      }`}
+    >
       <Text
         tw={`font-medium text-xs ${
           type === "primary"
-            ? "text-gray-900 dark:text-white"
-            : "text-gray-600 dark:text-gray-400 "
+            ? "text-gray-500 "
+            : " text-white dark:text-gray-900"
         }`}
       >
         {label}

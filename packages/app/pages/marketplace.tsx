@@ -28,17 +28,6 @@ function MarketplaceNavigator() {
           options={{ title: "Marketplace", headerTitle: "Marketplace" }}
         />
       </MarketplaceStack.Group>
-      <MarketplaceStack.Group
-        screenOptions={{
-          headerShown: false,
-          animation: Platform.OS === "ios" ? "default" : "fade",
-          presentation:
-            Platform.OS === "ios" ? "formSheet" : "transparentModal",
-        }}
-      >
-        <MarketplaceStack.Screen name="login" component={LoginScreen} />
-        <MarketplaceStack.Screen name="nft" component={NftScreen} />
-      </MarketplaceStack.Group>
     </MarketplaceStack.Navigator>
   );
 }

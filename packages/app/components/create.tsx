@@ -13,7 +13,6 @@ import {
 } from "app/hooks/use-mint-nft";
 import { Accordion } from "design-system";
 import { useIsDarkMode } from "design-system/hooks";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useForm, Controller } from "react-hook-form";
 import { yup } from "app/lib/yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -79,7 +78,6 @@ function Create({ uri, state, startMinting }: CreateProps) {
   //#endregion
 
   const isDark = useIsDarkMode();
-  const tabBarHeight = Platform.OS === "android" ? 50 : useBottomTabBarHeight();
   const fileExtension = uri.split(".").pop();
   const isVideo =
     fileExtension && supportedVideoExtensions.includes(fileExtension);
@@ -111,9 +109,7 @@ function Create({ uri, state, startMinting }: CreateProps) {
 
   return (
     <View tw="flex-1">
-      <CreateScrollView
-        contentContainerStyle={{ paddingBottom: tabBarHeight + 100 }}
-      >
+      <CreateScrollView>
         <View tw="px-3 py-4">
           <View tw="flex-row items-center" testID="data-private">
             <Preview

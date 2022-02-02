@@ -16,6 +16,7 @@ import { useRouter } from "app/navigation/use-router";
 function TabBarIcon({ tab, children }) {
   const router = useRouter();
 
+  return children;
   return (
     <Pressable
       tw={[

@@ -1,5 +1,5 @@
 import { Alert } from "react-native";
-import { useContext, useReducer, useRef } from "react";
+import { useContext, useEffect, useReducer, useRef } from "react";
 import { v4 as uuid } from "uuid";
 import { axios as showtimeAPIAxios } from "app/lib/axios";
 import axios from "axios";
@@ -7,8 +7,8 @@ import * as FileSystem from "expo-file-system";
 import { getBiconomy } from "../utilities";
 import { ethers } from "ethers";
 import minterAbi from "app/abi/ShowtimeMT.json";
-import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { useWeb3 } from "./use-web3";
+import { useWalletConnect } from "app/lib/walletconnect";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
@@ -162,7 +162,17 @@ export const useMintNFT = () => {
   const biconomyRef = useRef<any>();
   const { web3 } = useWeb3();
 
+  const isMagic = !!web3;
   const connector = useWalletConnect();
+
+  const mintNftParams = useRef<any>(null);
+
+  useEffect(() => {
+    if (mintNftParams.current && connector.connected) {
+      console.log("connected to wallet, resuming mint request");
+      mintNFT(mintNftParams.current);
+    }
+  }, [connector.connected]);
 
   async function uploadMedia(params: UseMintNFT) {
     // Media Upload
@@ -258,6 +268,7 @@ export const useMintNFT = () => {
   }
 
   async function mintNFT(params: UseMintNFT) {
+    mintNftParams.current = null;
     let nftJsonIpfsHash;
 
     if (state.nftIPFSHash) {
@@ -274,9 +285,16 @@ export const useMintNFT = () => {
         const addr = await signer.getAddress();
         userAddress = addr;
       } else {
-        userAddress = connector.accounts.filter((addr) =>
-          addr.startsWith("0x")
-        )[0];
+        if (connector.connected) {
+          [userAddress] = connector.accounts.filter((addr) =>
+            addr.startsWith("0x")
+          );
+        } else {
+          await connector.connect();
+          console.log("Not connected to wallet, sending connect request");
+          mintNftParams.current = params;
+          return;
+        }
       }
 
       console.log("user address for minting ", userAddress);
