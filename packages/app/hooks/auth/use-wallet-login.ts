@@ -6,12 +6,14 @@ import { axios } from "app/lib/axios";
 import { useAuth } from "./use-auth";
 import { useStableCallback } from "../use-stable-callback";
 import { useWalletLoginState } from "./use-wallet-login-state";
+import { useNonce } from "./use-nonce";
 
 const LOGIN_WALLET_ENDPOINT = "login_wallet";
 
 export function useWalletLogin() {
   //#region hooks
   const walletConnector = useWalletConnect();
+  const { getNonce, rotateNonce } = useNonce();
   const { setAuthenticationStatus, login: _login, logout } = useAuth();
   const { status, name, address, signature, nonce, error, dispatch } =
     useWalletLoginState();
@@ -47,33 +49,27 @@ export function useWalletLogin() {
     async function fetchNonce() {
       dispatch("FETCH_NONCE_REQUEST");
       try {
-        const response = await axios({
-          url: `/v1/getnonce?address=${address}`,
-          method: "GET",
-        });
+        const response = await getNonce(address!);
         dispatch("FETCH_NONCE_SUCCESS", {
-          nonce: response?.data,
+          nonce: response,
         });
       } catch (error) {
         dispatch("ERROR", { error });
       }
     },
-    [address, dispatch]
+    [address, getNonce, dispatch]
   );
   const expireNonce = useCallback(
     async function expireNonce() {
       dispatch("EXPIRE_NONCE_REQUEST");
       try {
-        await axios({
-          url: `/v1/rotatenonce?address=${address}`,
-          method: "POST",
-        });
+        await rotateNonce(address!);
         dispatch("EXPIRE_NONCE_SUCCESS");
       } catch (error) {
         dispatch("ERROR", { error });
       }
     },
-    [address, dispatch]
+    [address, rotateNonce, dispatch]
   );
   const signPersonalMessage = useCallback(
     async function signPersonalMessage() {
