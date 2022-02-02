@@ -4,7 +4,7 @@ import { Platform, ScrollView } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-
+import { formatDistanceToNowStrict } from "date-fns";
 import { NFT } from "app/types";
 import { yup } from "app/lib/yup";
 import { axios } from "app/lib/axios";
@@ -35,7 +35,7 @@ function Delete({ nftId }: { nftId: number }) {
     axios({ url, method: "GET" })
   );
   const nft = data?.data as NFT;
-
+  console.log("nft", nft);
   if (error) {
     console.error(error);
   }
@@ -129,7 +129,12 @@ function Delete({ nftId }: { nftId: number }) {
                   color={tw.style("text-gray-500").color as string}
                 />
                 <Text variant="text-xs" tw="ml-1 font-bold text-gray-500">
-                  Minted 4 months ago
+                  {`Minted ${formatDistanceToNowStrict(
+                    new Date(nft?.token_created),
+                    {
+                      addSuffix: true,
+                    }
+                  )}`}
                 </Text>
               </View>
             </View>
