@@ -105,6 +105,7 @@ function walletLoginStateReducer(
 
     case "ERROR":
       return {
+        ...INITIAL_WALLET_LOGIN_STATE,
         status: "ERRORED",
         error: action.payload.error,
       };

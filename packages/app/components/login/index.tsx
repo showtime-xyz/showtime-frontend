@@ -40,6 +40,17 @@ export function Login({ onLogin }: LoginProps) {
   //#endregion
 
   //#region variables
+  const isConnectingToWallet = useMemo(
+    () =>
+      [
+        "CONNECTING_TO_WALLET",
+        "CONNECTED_TO_WALLET",
+        "FETCHING_NONCE",
+        "FETCHED_NONCE",
+        "SIGNING_PERSONAL_MESSAGE",
+      ].includes(walletStatus),
+    [walletStatus]
+  );
   const phoneNumberValidationSchema = useMemo(
     () =>
       yup
@@ -71,16 +82,11 @@ export function Login({ onLogin }: LoginProps) {
   );
   //#endregion
   return (
-    <LoginContainer
-      loading={
-        loading &&
-        (walletStatus !== "FETCHING_NONCE" || walletStatus !== "FETCHING_NONCE")
-      }
-    >
-      {walletStatus === "FETCHING_SIGNATURE" ? (
+    <LoginContainer loading={loading && !isConnectingToWallet}>
+      {isConnectingToWallet ? (
         <View tw="py-40">
           <Text tw="text-center dark:text-gray-400">
-            {walletName !== ""
+            {walletName
               ? `Pushed a request to ${walletName}... Please check your wallet.`
               : `Pushed a request to your wallet...`}
           </Text>
