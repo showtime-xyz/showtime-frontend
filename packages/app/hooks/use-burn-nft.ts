@@ -48,31 +48,32 @@ export const useBurnNFT = () => {
   const [state, dispatch] = useReducer(burnNFTReducer, initialBurnNFTState);
   const { user } = useUser();
   const [userAddress, setUserAddress] = useState<string>();
+  const connector = useWalletConnect();
   const context = useContext(AppContext);
 
-  useEffect(() => {
-    if (
-      user?.data &&
-      user?.data.profile.wallet_addresses_excluding_email_v2.filter((addr) =>
-        addr.address.startsWith("0x")
-      )[0]
-    ) {
-      setUserAddress(
-        user.data.profile.wallet_addresses_excluding_email_v2.filter((addr) =>
-          addr.address.startsWith("0x")
-        )[0].address
-      );
-    }
-    // Web3 is initialised for magic users
-    else if (context.web3) {
-      const signer = context.web3.getSigner();
-      signer.getAddress().then((addr: string) => {
-        setUserAddress(addr);
-      });
-    }
-  }, [user, context.web3]);
+  const getActiveUserAddress = async () => {
+    const isMagic = !!context.web3;
 
-  const connector = useWalletConnect();
+    if (isMagic) {
+      const signer = context.web3.getSigner();
+      const activeMagicAddress = await signer.getAddress();
+      setUserAddress(activeMagicAddress);
+    } else if (connector.connected) {
+      const [connectorAddress] = connector.accounts.filter((address) =>
+        address.startsWith("0x")
+      );
+      if (connectorAddress) {
+        setUserAddress(connectorAddress);
+      }
+    } else {
+      await connector.connect();
+      console.log("Not connected to wallet, sending connect request");
+    }
+  };
+
+  useEffect(() => {
+    getActiveUserAddress();
+  }, [user, context.web3]);
 
   async function burnToken({ ...params }: UseBurnNFT) {
     return new Promise<{ transaction: string }>(async (resolve, reject) => {
