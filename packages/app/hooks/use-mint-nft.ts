@@ -7,7 +7,7 @@ import * as FileSystem from "expo-file-system";
 import { getBiconomy } from "../utilities";
 import { ethers } from "ethers";
 import minterAbi from "app/abi/ShowtimeMT.json";
-import { useWalletConnect } from "@walletconnect/react-native-dapp";
+import { useWalletConnect } from "app/lib/walletconnect";
 import { AppContext } from "../context/app-context";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes

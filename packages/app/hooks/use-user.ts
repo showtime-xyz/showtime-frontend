@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import useSWR from "swr";
 import useUnmountSignal from "use-unmount-signal";
-import LogRocket from "@logrocket/react-native";
 
+import LogRocket from "app/lib/logrocket";
 import { axios } from "app/lib/axios";
 import { mixpanel } from "app/lib/mixpanel";
 import { accessTokenManager } from "app/lib/access-token-manager";
