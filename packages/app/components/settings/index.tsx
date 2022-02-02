@@ -1,5 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Dimensions, Platform } from "react-native";
+import { useRouter } from "app/navigation/use-router";
 import { tw } from "design-system/tailwind";
 import { useUser } from "app/hooks/use-user";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
@@ -42,7 +43,8 @@ const renderWallet = ({ item }: { item: WalletAddressesExcludingEmailV2 }) => {
 
 const SettingsTabs = () => {
   const [selected, setSelected] = useState(0);
-  const { user } = useUser();
+  const { user, isAuthenticated } = useUser();
+  const router = useRouter();
   const emailWallets = useMemo(
     () =>
       user?.data.profile.wallet_addresses_v2.filter(
@@ -52,6 +54,13 @@ const SettingsTabs = () => {
   );
   const wallets = user?.data.profile.wallet_addresses_excluding_email_v2;
   const keyExtractor = (wallet: WalletAddressesV2) => wallet.address;
+
+  useEffect(() => {
+    const isUnauthenticated = !isAuthenticated;
+    if (isUnauthenticated) {
+      router.pop();
+    }
+  }, [isAuthenticated]);
 
   return (
     <View tw="bg-white dark:bg-black flex-1">
