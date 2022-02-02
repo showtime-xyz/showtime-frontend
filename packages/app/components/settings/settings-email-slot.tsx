@@ -76,25 +76,31 @@ export const SettingsEmailSlotPlaceholder = () => {
 
 export const SettingsEmailSlot = (props: EmailSlotProps) => {
   const [isCurrentEmail, setIsCurrentEmail] = useState(false);
+  const [magicAddress, setMagicAddress] = useState<string>();
   const context = useContext(AppContext);
   const email = props.email;
   const isMagic = !!context.web3;
 
-  const getCurrentMagicEmail = useCallback(async () => {
+  const getCurrentMagicUser = useCallback(async () => {
     if (isMagic) {
       const magicMetaData = await magic.user.getMetadata();
       const currentEmail = magicMetaData.email;
+      const currentMagicAddress = magicMetaData.publicAddress;
       const isMatchingMagic =
         currentEmail?.toLowerCase() === email?.toLowerCase();
       if (isMatchingMagic) {
         setIsCurrentEmail(true);
       }
+
+      if (isMatchingMagic && currentMagicAddress) {
+        setMagicAddress(currentMagicAddress);
+      }
     }
   }, [isMagic, email]);
 
   useEffect(() => {
-    getCurrentMagicEmail();
-  }, [getCurrentMagicEmail]);
+    getCurrentMagicUser();
+  }, [getCurrentMagicUser]);
 
   return (
     <View tw="flex-1 flex-row justify-between w-full p-4 items-center">
@@ -107,7 +113,7 @@ export const SettingsEmailSlot = (props: EmailSlotProps) => {
         ) : null}
       </View>
       <View tw="flex justify-center">
-        <AddressMenu email={email} ctaCopy="Delete Email Address" />
+        <AddressMenu address={magicAddress} ctaCopy="Delete Email Address" />
       </View>
     </View>
   );
