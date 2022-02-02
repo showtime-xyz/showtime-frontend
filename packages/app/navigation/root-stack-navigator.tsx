@@ -12,17 +12,22 @@ const Stack = createNativeStackNavigator();
 export function RootStackNavigator() {
   return (
     <Stack.Navigator>
+      {/* Bottom tab navigator */}
       <Stack.Screen
         name="bottomTabs"
         component={NextTabNavigator}
         options={{ headerShown: false }}
       />
+
+      {/* Screens accessible in most of the navigators */}
       <Stack.Screen
         name="profile"
         component={ProfileScreen}
         // options={{ headerShown: false }}
       />
       <Stack.Screen name="settings" component={SettingsScreen} />
+
+      {/* Modals */}
       <Stack.Group
         screenOptions={{
           headerShown: false,
