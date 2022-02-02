@@ -24,7 +24,6 @@ function TrendingNavigator() {
           component={TrendingScreen}
           options={{ title: "Trending", headerTitle: "Trending" }}
         />
-        <TrendingStack.Screen name="settings" component={SettingsScreen} />
       </TrendingStack.Group>
     </TrendingStack.Navigator>
   );

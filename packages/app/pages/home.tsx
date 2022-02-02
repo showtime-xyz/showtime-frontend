@@ -34,7 +34,6 @@ function HomeNavigator() {
           component={HomeScreen}
           options={{ title: "Home", headerTitle: "Showtime" }}
         />
-        <HomeStack.Screen name="settings" component={SettingsScreen} />
       </HomeStack.Group>
     </HomeStack.Navigator>
   );

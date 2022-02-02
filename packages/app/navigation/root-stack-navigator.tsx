@@ -4,6 +4,7 @@ import { CreateScreen } from "../screens/create";
 import { LoginScreen } from "../screens/login";
 import { NftScreen } from "../screens/nft";
 import { ProfileScreen } from "../screens/profile";
+import { SettingsScreen } from "../screens/settings";
 import { NextTabNavigator } from "./next-tab-navigator";
 
 const Stack = createNativeStackNavigator();
@@ -16,7 +17,12 @@ export function RootStackNavigator() {
         component={NextTabNavigator}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="profile" component={ProfileScreen} />
+      <Stack.Screen
+        name="profile"
+        component={ProfileScreen}
+        // options={{ headerShown: false }}
+      />
+      <Stack.Screen name="settings" component={SettingsScreen} />
       <Stack.Group
         screenOptions={{
           headerShown: false,
