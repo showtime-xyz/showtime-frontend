@@ -40,7 +40,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="login" component={LoginScreen} />
         <Stack.Screen name="nft" component={NftScreen} />
         <Stack.Screen name="create" component={CreateScreen} />
-        <Stack.Screen name="delete" component={DeleteScreen} />
+        <Stack.Screen name="burn" component={DeleteScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );

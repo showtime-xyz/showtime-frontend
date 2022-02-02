@@ -3,7 +3,6 @@ import { useEffect, useMemo } from "react";
 import { Platform, ScrollView } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { formatDistanceToNowStrict } from "date-fns";
 import { NFT } from "app/types";
 import { yup } from "app/lib/yup";
@@ -48,8 +47,6 @@ function Delete({ nftId }: { nftId: number }) {
     (url) => axios({ url, method: "GET" }).then((res) => res?.data)
   );
 
-  const tabBarHeight = Platform.OS === "android" ? 50 : useBottomTabBarHeight();
-
   const ownsMultiple = ownershipData?.owned_count > 1;
 
   const createBurnValidationSchema = useMemo(
@@ -93,20 +90,10 @@ function Delete({ nftId }: { nftId: number }) {
     router.pop();
   }, [state.status]);
 
-  const deleteButtonStyle = ownsMultiple
-    ? {
-        bottom: tabBarHeight + 16,
-      }
-    : {
-        bottom: 0,
-      };
-
   return (
     <View tw="flex-1">
-      <CreateScrollView
-        contentContainerStyle={{ paddingBottom: tabBarHeight + 100 }}
-      >
-        <View tw="px-3 py-4">
+      <CreateScrollView>
+        <View tw="px-3 py-4 flex-1">
           <View tw="mb-4">
             <Text
               variant="text-xl"
@@ -138,14 +125,16 @@ function Delete({ nftId }: { nftId: number }) {
                   height={16}
                   color={tw.style("text-gray-500").color as string}
                 />
-                <Text variant="text-xs" tw="ml-1 font-bold text-gray-500">
-                  {`Minted ${formatDistanceToNowStrict(
-                    new Date(nft?.token_created),
-                    {
-                      addSuffix: true,
-                    }
-                  )}`}
-                </Text>
+                {nft?.token_created ? (
+                  <Text variant="text-xs" tw="ml-1 font-bold text-gray-500">
+                    {`Minted ${formatDistanceToNowStrict(
+                      new Date(nft?.token_created),
+                      {
+                        addSuffix: true,
+                      }
+                    )}`}
+                  </Text>
+                ) : null}
               </View>
             </View>
           </View>
@@ -182,7 +171,7 @@ function Delete({ nftId }: { nftId: number }) {
           ) : null}
         </View>
       </CreateScrollView>
-      <View tw="absolute px-4 w-full" style={deleteButtonStyle}>
+      <View tw="p-4 w-full">
         <Button
           onPress={handleSubmit(handleSubmitForm)}
           tw="h-12 rounded-full"
