@@ -16,6 +16,7 @@ import { useUser } from "app/hooks/use-user";
 import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { useIsDarkMode } from "design-system/hooks";
+import { useToast } from "design-system/toast";
 
 const HeaderRight = () => {
   const router = useRouter();
@@ -76,6 +77,7 @@ const HeaderRight = () => {
 };
 
 const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
+  const toast = useToast();
   const router = useRouter();
   const Icon = canGoBack ? ArrowLeft : Search;
 
@@ -85,6 +87,8 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
       onPress={() => {
         if (canGoBack) {
           router.pop();
+        } else {
+          toast?.show({ message: "🚧 Coming soon", hideAfter: 4000 });
         }
       }}
       // animate={useCallback(({ hovered }) => {
