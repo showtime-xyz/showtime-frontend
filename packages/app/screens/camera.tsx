@@ -20,7 +20,7 @@ function CameraScreen() {
 
   const postPhoto = useCallback(
     (photoURI: string) => {
-      const createPostURL = `/camera/create?uri=${photoURI}`;
+      const createPostURL = `/create?uri=${photoURI}`;
       if (isAuthenticated) {
         router.push(createPostURL);
       } else {

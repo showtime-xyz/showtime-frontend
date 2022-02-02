@@ -77,7 +77,7 @@ const HeaderLeft = () => {
     <Pressable
       tw="w-10 h-10 pl-4 rounded-full"
       onPress={() => {
-        router.push("/home");
+        router.push("/");
       }}
       // animate={useCallback(({ hovered }) => {
       // 	'worklet'

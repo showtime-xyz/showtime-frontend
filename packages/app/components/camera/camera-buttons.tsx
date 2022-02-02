@@ -69,7 +69,7 @@ export function CameraButtons({
       ) : (
         <ImagePickerButton
           onPick={(photo) => {
-            router.push(`/camera/create?uri=${photo.uri}`);
+            router.push(`/create?uri=${photo.uri}`);
           }}
           type="camera"
         />
@@ -109,7 +109,7 @@ export function CameraButtons({
             <Pressable
               tw="h-12 w-12 bg-white dark:bg-black rounded-full justify-center items-center z-10"
               onPress={() => {
-                router.push(`/camera/create?uri=${photos[0].uri}`);
+                router.push(`/create?uri=${photos[0].uri}`);
               }}
             >
               <Check
