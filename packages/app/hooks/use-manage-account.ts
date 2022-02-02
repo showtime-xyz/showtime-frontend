@@ -1,9 +1,12 @@
 import { useCallback } from "react";
 import { useToast } from "design-system/toast";
 import { axios } from "app/lib/axios";
+import { useSWRConfig } from "swr";
+import { USER_API_KEY } from "app/hooks/use-user";
 
 export function useManageAccount() {
   const toast = useToast();
+  const { mutate } = useSWRConfig();
 
   const addEmail = useCallback(
     async (email: string, did: string) => {
@@ -16,6 +19,8 @@ export function useManageAccount() {
             forceAccessTokenAuthorization: true,
           },
         });
+
+        mutate(USER_API_KEY);
 
         toast?.show({
           message: "Email added and will soon appear on your profile",
@@ -40,6 +45,8 @@ export function useManageAccount() {
           method: "POST",
           data: { address },
         });
+
+        mutate(USER_API_KEY);
 
         toast?.show({
           message: "Account removed and will disappear from your profile soon",

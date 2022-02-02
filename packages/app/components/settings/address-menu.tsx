@@ -1,4 +1,4 @@
-import { Text, Button } from "design-system";
+import { Button } from "design-system";
 import { MoreHorizontal } from "design-system/icon";
 import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
 import {

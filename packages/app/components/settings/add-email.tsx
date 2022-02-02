@@ -1,5 +1,4 @@
 import { useMemo, useCallback } from "react";
-import { useSWRConfig } from "swr";
 import { magic } from "app/lib/magic";
 import { View, Text } from "design-system";
 import { EmailInput } from "./email-input";
@@ -13,7 +12,6 @@ type AddEmailProps = {
 };
 
 export const AddEmail = (props: AddEmailProps) => {
-  const { mutate } = useSWRConfig();
   const { addEmail } = useManageAccount();
   const dismiss = props.dismiss;
   const visibility = props.visibility;
@@ -25,7 +23,6 @@ export const AddEmail = (props: AddEmailProps) => {
       if (did) {
         await addEmail(email, did);
         dismiss();
-        mutate(USER_API_KEY);
       }
     } catch (error) {
       console.log("Error:", error);
