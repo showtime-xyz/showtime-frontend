@@ -1,15 +1,22 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Platform } from "react-native";
-import { CreateScreen } from "../screens/create";
-import { LoginScreen } from "../screens/login";
-import { NftScreen } from "../screens/nft";
-import { ProfileScreen } from "../screens/profile";
-import { SettingsScreen } from "../screens/settings";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { CreateScreen } from "app/screens/create";
+import { LoginScreen } from "app/screens/login";
+import { NftScreen } from "app/screens/nft";
+import { ProfileScreen } from "app/screens/profile";
+import { SettingsScreen } from "app/screens/settings";
 import { NextTabNavigator } from "./next-tab-navigator";
+import { screenOptions } from "app/navigation/navigator-screen-options";
+import { useIsDarkMode } from "design-system/hooks";
 
 const Stack = createNativeStackNavigator();
 
 export function RootStackNavigator() {
+  const { top: safeAreaTop } = useSafeAreaInsets();
+  const isDark = useIsDarkMode();
+
   return (
     <Stack.Navigator>
       {/* Bottom tab navigator */}
@@ -23,9 +30,13 @@ export function RootStackNavigator() {
       <Stack.Screen
         name="profile"
         component={ProfileScreen}
-        // options={{ headerShown: false }}
+        options={screenOptions({ safeAreaTop, isDark })}
       />
-      <Stack.Screen name="settings" component={SettingsScreen} />
+      <Stack.Screen
+        name="settings"
+        component={SettingsScreen}
+        options={screenOptions({ safeAreaTop, isDark })}
+      />
 
       {/* Modals */}
       <Stack.Group

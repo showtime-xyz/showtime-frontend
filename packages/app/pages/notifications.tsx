@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import createStackNavigator from "app/navigation/create-stack-navigator";
 import { NotificationsScreen } from "app/screens/notifications";
 import { NotificationsStackParams } from "app/navigation/types";
-import { navigatorScreenOptions } from "app/navigation/navigator-screen-options";
+import { screenOptions } from "app/navigation/navigator-screen-options";
 import { useIsDarkMode } from "design-system/hooks";
 
 const NotificationsStack = createStackNavigator<NotificationsStackParams>();
@@ -16,8 +16,7 @@ function NotificationsNavigator() {
 
   return (
     <NotificationsStack.Navigator
-      // @ts-ignore
-      screenOptions={navigatorScreenOptions({ safeAreaTop, isDark })}
+      screenOptions={screenOptions({ safeAreaTop, isDark })}
     >
       <NotificationsStack.Group>
         <NotificationsStack.Screen

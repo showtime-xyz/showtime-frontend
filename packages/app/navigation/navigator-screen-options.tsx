@@ -1,6 +1,8 @@
+import type { DefaultNavigatorOptions } from "@react-navigation/core";
+
 import { HeaderLeft, HeaderCenter, HeaderRight } from "app/components/header";
 
-export const navigatorScreenOptions = ({
+export const screenOptions = ({
   safeAreaTop,
   isDark,
 }: {
@@ -11,7 +13,7 @@ export const navigatorScreenOptions = ({
   headerShown: true,
   headerLeft: HeaderLeft,
   headerTitle: HeaderCenter,
-  headerTitleAlign: "center",
+  headerTitleAlign: "center" as "center",
   headerRight: HeaderRight,
   headerTintColor: "#000",
   // headerTransparent: true,

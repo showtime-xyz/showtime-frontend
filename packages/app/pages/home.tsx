@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import createStackNavigator from "app/navigation/create-stack-navigator";
 import { HomeStackParams } from "app/navigation/types";
-import { navigatorScreenOptions } from "app/navigation/navigator-screen-options";
+import { screenOptions } from "app/navigation/navigator-screen-options";
 import { HomeScreen } from "app/screens/home";
 import { useIsDarkMode } from "design-system/hooks";
 
@@ -29,16 +29,9 @@ function HomeNavigator() {
   const isDark = useIsDarkMode();
 
   return (
-    <HomeStack.Navigator
-      // @ts-ignore
-      screenOptions={navigatorScreenOptions({ safeAreaTop, isDark })}
-    >
+    <HomeStack.Navigator screenOptions={screenOptions({ safeAreaTop, isDark })}>
       <HomeStack.Group>
-        <HomeStack.Screen
-          name="home"
-          component={HomeScreen}
-          options={{ title: "Home", headerTitle: "Showtime" }}
-        />
+        <HomeStack.Screen name="home" component={HomeScreen} />
       </HomeStack.Group>
     </HomeStack.Navigator>
   );

@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import createStackNavigator from "app/navigation/create-stack-navigator";
 import { MarketplaceScreen } from "app/screens/marketplace";
 import { MarketplaceStackParams } from "app/navigation/types";
-import { navigatorScreenOptions } from "app/navigation/navigator-screen-options";
+import { screenOptions } from "app/navigation/navigator-screen-options";
 import { useIsDarkMode } from "design-system/hooks";
 
 const LoginScreen = dynamic<JSX.Element>(() =>
@@ -23,8 +23,7 @@ function MarketplaceNavigator() {
 
   return (
     <MarketplaceStack.Navigator
-      // @ts-ignore
-      screenOptions={navigatorScreenOptions({ safeAreaTop, isDark })}
+      screenOptions={screenOptions({ safeAreaTop, isDark })}
     >
       <MarketplaceStack.Group>
         <MarketplaceStack.Screen
