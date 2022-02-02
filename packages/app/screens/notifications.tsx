@@ -1,6 +1,7 @@
 import { View, Text } from "design-system";
+import { withColorScheme } from "app/components/memo-with-theme";
 
-function NotificationsScreen() {
+const NotificationsScreen = withColorScheme(() => {
   return (
     <View tw="p-4">
       <Text variant="text-xl" tw="font-bold text-black dark:text-white">
@@ -12,6 +13,6 @@ function NotificationsScreen() {
       </Text>
     </View>
   );
-}
+});
 
 export { NotificationsScreen };
