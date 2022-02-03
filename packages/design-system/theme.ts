@@ -36,9 +36,9 @@ const theme = makeTheme({
       // 800: webFont('Inter-ExtraBold'),
       // 900: webFont('Inter-Black'),
     },
-    TomatoGrotesk: {
-      default: webFont("TomatoGrotesk-Medium"),
-      800: webFont("TomatoGrotesk-Medium"), // TODO: ExtraBold
+    SpaceGrotesk: {
+      default: webFont("SpaceGrotesk-Regular"),
+      bold: webFont("SpaceGrotesk-Bold"),
     },
   },
   text: {
@@ -64,8 +64,8 @@ const theme = makeTheme({
       ...textSizes["text-base"],
     },
     "text-lg": {
-      fontFamily: "TomatoGrotesk",
-      fontWeight: 800,
+      fontFamily: "SpaceGrotesk",
+      fontWeight: "bold",
       ...textSizes["text-lg"],
     },
     "text-xl": {
@@ -73,8 +73,8 @@ const theme = makeTheme({
       ...textSizes["text-xl"],
     },
     "text-2xl": {
-      fontFamily: "TomatoGrotesk",
-      fontWeight: 800,
+      fontFamily: "SpaceGrotesk",
+      fontWeight: "bold",
       ...textSizes["text-2xl"],
     },
     "text-3xl": {
