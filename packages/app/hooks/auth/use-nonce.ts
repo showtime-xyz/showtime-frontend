@@ -1,9 +1,11 @@
 import { useCallback } from "react";
-import { axios } from "app/lib/axios";
+import { useFetchOnAppForeground } from "../use-fetch-on-app-foreground";
 
 export function useNonce() {
+  const fetchOnAppForeground = useFetchOnAppForeground();
+
   const getNonce = useCallback(async function getNonce(address: string) {
-    const response = await axios({
+    const response = await fetchOnAppForeground({
       url: `/v1/getnonce?address=${address}`,
       method: "GET",
     });
@@ -11,7 +13,7 @@ export function useNonce() {
     return response.data as string;
   }, []);
   const rotateNonce = useCallback(async function expireNonce(address: string) {
-    await axios({
+    await fetchOnAppForeground({
       url: `/v1/rotatenonce?address=${address}`,
       method: "POST",
     });
