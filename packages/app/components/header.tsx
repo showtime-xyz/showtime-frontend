@@ -27,14 +27,19 @@ const HeaderRight = () => {
   return (
     <View>
       {!isLoading && (
-        <View tw={`${isSearchBarOpen ? "hidden" : ""} flex-row items-center`}>
+        <View
+          tw={[
+            isSearchBarOpen ? "hidden" : "",
+            "flex-row items-center bg-white dark:bg-black",
+          ]}
+        >
           {isAuthenticated && (
             <View tw="hidden md:flex">
               <NotificationsTabBarIcon color="white" focused={false} />
             </View>
           )}
           {isAuthenticated ? (
-            <View>
+            <View tw="bg-white dark:bg-black">
               {width > 768 && (
                 <View tw="mx-3">
                   <Button
@@ -64,7 +69,7 @@ const HeaderRight = () => {
                 router.push("/login");
               }}
               variant="primary"
-              size="regular"
+              size="small"
               labelTW="font-semibold"
             >
               Sign&nbsp;In
@@ -83,7 +88,8 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
 
   return (
     <Pressable
-      tw="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-900 items-center justify-center"
+      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      tw="w-6 h-6 rounded-full items-center justify-center"
       onPress={() => {
         if (canGoBack) {
           router.pop();
@@ -115,6 +121,7 @@ const HeaderCenter = () => {
 
   return (
     <Pressable
+      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       tw="w-12 h-12 rounded-full items-center justify-center"
       onPress={() => {
         router.push("/");

@@ -36,13 +36,11 @@ function NFTDropdown({ nft }: Props) {
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <Button variant="tertiary" iconOnly={true} size="regular" asChild>
-          <MoreHorizontal
-            color={
-              tw.style("bg-black dark:bg-white")?.backgroundColor as string
-            }
-          />
-        </Button>
+        <MoreHorizontal
+          color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+          width={24}
+          height={24}
+        />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
