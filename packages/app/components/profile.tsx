@@ -1,4 +1,11 @@
-import { Suspense, useCallback, useMemo, useReducer, useState } from "react";
+import {
+  Suspense,
+  useCallback,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 import reactStringReplace from "react-string-replace";
 
@@ -207,6 +214,7 @@ const ProfileTop = ({ address }: { address?: string }) => {
   const name = getProfileName(profileData?.data.profile);
   const username = profileData?.data.profile.username;
   const bio = profileData?.data.profile.bio;
+  const hasLinksInBio = useRef<boolean>(false);
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
   const { isFollowing, follow, unfollow } = useMyInfo();
@@ -222,6 +230,7 @@ const ProfileTop = ({ address }: { address?: string }) => {
         bio,
         /@([\w\d-]+?)\b/g,
         (username: string, i: number) => {
+          hasLinksInBio.current = true;
           return (
             <TextLink
               href={`${
@@ -352,7 +361,10 @@ const ProfileTop = ({ address }: { address?: string }) => {
           </View>
 
           {bio ? (
-            <View tw="flex-row items-center mt-3" pointerEvents="box-none">
+            <View
+              tw="flex-row items-center mt-3"
+              pointerEvents={hasLinksInBio.current ? "box-none" : "none"}
+            >
               <Text tw="text-sm text-gray-600 dark:text-gray-400">
                 {bioWithMentions}
               </Text>
