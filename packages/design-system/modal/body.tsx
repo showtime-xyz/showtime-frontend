@@ -19,6 +19,7 @@ export function ModalBody({ tw, children }: ModalBodyProps) {
       ref={scrollViewRef}
       style={containerStyle}
       contentContainerStyle={contentContainerStyle}
+      keyboardShouldPersistTaps="handled"
     >
       {children}
     </ScrollView>

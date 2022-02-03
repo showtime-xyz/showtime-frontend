@@ -47,6 +47,7 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
   return (
     <PickerContext.Provider value={contextValue}>
       <FlatList
+        keyboardShouldPersistTaps="handled"
         ItemSeparatorComponent={useCallback(
           () => (
             <View tw="h-[1px] dark:bg-gray-800 bg-gray-200 w-full" />

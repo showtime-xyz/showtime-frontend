@@ -70,7 +70,7 @@ export function NavigationProvider({
         dark: isDark,
         colors: {
           primary: "#fff",
-          background: isDark ? "#27272A" : "#fff",
+          background: isDark ? "#000" : "#fff",
           card: "#000",
           text: isDark ? "#fff" : "#000",
           border: "rgb(39, 39, 41)",

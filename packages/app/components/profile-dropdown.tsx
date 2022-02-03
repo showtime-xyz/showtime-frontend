@@ -15,12 +15,14 @@ import type { Profile } from "app/types";
 import { useReport } from "app/hooks/use-report";
 import { useRouter } from "app/navigation/use-router";
 import { useMyInfo } from "app/hooks/api-hooks";
+import { useUser } from "app/hooks/use-user";
 
 type Props = {
   user: Profile;
 };
 
 function ProfileDropdown({ user }: Props) {
+  const { isAuthenticated } = useUser();
   const { isFollowing, follow, unfollow } = useMyInfo();
   const { reportUser, blockUser } = useReport();
   const router = useRouter();
@@ -57,21 +59,25 @@ function ProfileDropdown({ user }: Props) {
 
         <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 
-        <DropdownMenuItem
-          onSelect={async () => {
-            await unfollow(user.profile_id);
-            await blockUser({ userId: user.profile_id });
-            router.pop();
-          }}
-          key="block"
-          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
-        >
-          <DropdownMenuItemTitle tw="text-black dark:text-white">
-            Block
-          </DropdownMenuItemTitle>
-        </DropdownMenuItem>
+        {isAuthenticated && (
+          <DropdownMenuItem
+            onSelect={async () => {
+              await unfollow(user.profile_id);
+              await blockUser({ userId: user.profile_id });
+              router.pop();
+            }}
+            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+            key="block"
+          >
+            <DropdownMenuItemTitle tw="text-black dark:text-white">
+              Block
+            </DropdownMenuItemTitle>
+          </DropdownMenuItem>
+        )}
 
-        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+        {isAuthenticated && (
+          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+        )}
 
         <DropdownMenuItem
           onSelect={async () => {

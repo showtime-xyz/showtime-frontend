@@ -54,7 +54,7 @@ const SettingsTabs = () => {
   const keyExtractor = (wallet: WalletAddressesV2) => wallet.address;
 
   return (
-    <View tw="bg-white dark:bg-black flex-1">
+    <View tw="bg-white dark:bg-black h-[100vh]">
       <Tabs.Root
         onIndexChange={setSelected}
         initialIndex={selected}

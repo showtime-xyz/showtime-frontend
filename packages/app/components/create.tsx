@@ -109,7 +109,7 @@ function Create({ uri, state, startMinting }: CreateProps) {
 
   return (
     <View tw="flex-1">
-      <CreateScrollView>
+      <CreateScrollView keyboardShouldPersistTaps="handled">
         <View tw="px-3 py-4">
           <View tw="flex-row items-center" testID="data-private">
             <Preview

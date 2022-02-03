@@ -248,13 +248,11 @@ const ProfileTop = ({ address }: { address?: string }) => {
           show={loading}
           colorMode={colorMode as any}
         >
-          <Animated.View entering={FadeIn}>
-            <Image
-              source={{ uri: profileData?.data.profile.cover_url }}
-              tw={`h-[${COVER_IMAGE_HEIGHT}px] w-100vw`}
-              alt="Cover image"
-            />
-          </Animated.View>
+          <Image
+            source={{ uri: profileData?.data.profile.cover_url }}
+            tw={`h-[${COVER_IMAGE_HEIGHT}px] w-100vw`}
+            alt="Cover image"
+          />
         </Skeleton>
       </View>
 
@@ -263,21 +261,19 @@ const ProfileTop = ({ address }: { address?: string }) => {
           <View tw="flex-row items-end">
             <View tw="bg-white dark:bg-gray-900 rounded-full mt-[-72px] p-2">
               <Skeleton
-                height={144}
-                width={144}
+                height={128}
+                width={128}
                 show={loading}
                 colorMode={colorMode as any}
                 radius={99999}
               >
-                <Animated.View entering={FadeIn}>
-                  <Image
-                    source={{
-                      uri: getProfileImage(profileData?.data.profile),
-                    }}
-                    alt="Profile avatar"
-                    tw="border-white h-[144px] w-[144px] rounded-full"
-                  />
-                </Animated.View>
+                <Image
+                  source={{
+                    uri: getProfileImage(profileData?.data.profile),
+                  }}
+                  alt="Profile avatar"
+                  tw="border-white h-[128px] w-[128px] rounded-full"
+                />
               </Skeleton>
             </View>
           </View>
@@ -310,14 +306,12 @@ const ProfileTop = ({ address }: { address?: string }) => {
               show={loading}
               colorMode={colorMode as any}
             >
-              <Animated.View entering={FadeIn}>
-                <Text
-                  tw="dark:text-white text-gray-900 text-2xl font-bold"
-                  numberOfLines={1}
-                >
-                  {name}
-                </Text>
-              </Animated.View>
+              <Text
+                tw="dark:text-white text-gray-900 text-2xl font-bold"
+                numberOfLines={1}
+              >
+                {name}
+              </Text>
             </Skeleton>
 
             <View tw="h-2" />
@@ -329,14 +323,12 @@ const ProfileTop = ({ address }: { address?: string }) => {
               colorMode={colorMode as any}
             >
               <View tw="flex-row items-center">
-                <Animated.View entering={FadeIn}>
-                  <Text
-                    variant="text-base"
-                    tw="text-gray-900 dark:text-white font-semibold"
-                  >
-                    {username ? `@${username}` : null}
-                  </Text>
-                </Animated.View>
+                <Text
+                  variant="text-base"
+                  tw="text-gray-900 dark:text-white font-semibold"
+                >
+                  {username ? `@${username}` : null}
+                </Text>
 
                 {profileData?.data.profile.verified ? (
                   <View tw="ml-1">

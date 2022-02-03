@@ -59,7 +59,9 @@ function ActivityDropdown({ activity }: Props) {
           </DropdownMenuItem>
         )}
 
-        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+        {isAuthenticated && (
+          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+        )}
 
         <DropdownMenuItem
           onSelect={() => reportNFT({ activityId: activity.id })}

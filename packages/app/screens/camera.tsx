@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Platform, Alert } from "react-native";
+import { Platform } from "react-native";
 import { View, Text } from "dripsy";
 import { useTimer } from "use-timer";
 import { useNavigation } from "@react-navigation/native";
