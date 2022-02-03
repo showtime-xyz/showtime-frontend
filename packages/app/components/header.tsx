@@ -83,7 +83,8 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
 
   return (
     <Pressable
-      tw="w-12 h-12 rounded-full items-center justify-center"
+      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      tw="w-6 h-6 rounded-full items-center justify-center"
       onPress={() => {
         if (canGoBack) {
           router.pop();
