@@ -1,6 +1,12 @@
-import { Suspense, useCallback, useMemo, useReducer, useState } from "react";
+import {
+  Suspense,
+  useCallback,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
 import reactStringReplace from "react-string-replace";
 
 import {
@@ -240,6 +246,7 @@ const ProfileTop = ({
   const name = getProfileName(profileData?.data.profile);
   const username = profileData?.data.profile.username;
   const bio = profileData?.data.profile.bio;
+  const hasLinksInBio = useRef<boolean>(false);
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
   const { isFollowing, follow, unfollow } = useMyInfo();
@@ -256,6 +263,7 @@ const ProfileTop = ({
         bio,
         /@([\w\d-]+?)\b/g,
         (username: string, i: number) => {
+          hasLinksInBio.current = true;
           return (
             <TextLink
               href={`${
@@ -273,8 +281,11 @@ const ProfileTop = ({
   );
 
   return (
-    <View>
-      <View tw={`bg-gray-100 dark:bg-gray-900 h-[${COVER_IMAGE_HEIGHT}px]`}>
+    <View pointerEvents="box-none">
+      <View
+        tw={`bg-gray-100 dark:bg-gray-900 h-[${COVER_IMAGE_HEIGHT}px]`}
+        pointerEvents="none"
+      >
         <Skeleton
           height={COVER_IMAGE_HEIGHT}
           width={width}
@@ -289,9 +300,9 @@ const ProfileTop = ({
         </Skeleton>
       </View>
 
-      <View tw="bg-white dark:bg-black px-2">
-        <View tw="flex-row justify-between pr-2">
-          <View tw="flex-row items-end">
+      <View tw="bg-white dark:bg-black px-2" pointerEvents="box-none">
+        <View tw="flex-row justify-between pr-2" pointerEvents="box-none">
+          <View tw="flex-row items-end" pointerEvents="none">
             <View tw="bg-white dark:bg-gray-900 rounded-full mt-[-72px] p-2">
               <Skeleton
                 height={128}
@@ -314,7 +325,7 @@ const ProfileTop = ({
           </View>
 
           {isBlocked ? (
-            <View tw="flex-row items-center">
+            <View tw="flex-row items-center" pointerEvents="box-none">
               <Button
                 size="regular"
                 onPress={() => {
@@ -327,7 +338,7 @@ const ProfileTop = ({
           ) : (
             profileId &&
             userId !== profileId && (
-              <View tw="flex-row items-center">
+              <View tw="flex-row items-center" pointerEvents="box-none">
                 <ProfileDropdown user={profileData?.data.profile} />
                 <View tw="w-2" />
                 <Button
@@ -347,8 +358,8 @@ const ProfileTop = ({
           )}
         </View>
 
-        <View tw="px-2 py-3">
-          <View>
+        <View tw="px-2 py-3" pointerEvents="box-none">
+          <View pointerEvents="none">
             <Skeleton
               height={24}
               width={150}
@@ -400,19 +411,22 @@ const ProfileTop = ({
           </View>
 
           {bio ? (
-            <View tw="flex-row items-center mt-3">
+            <View
+              tw="flex-row items-center mt-3"
+              pointerEvents={hasLinksInBio.current ? "box-none" : "none"}
+            >
               <Text tw="text-sm text-gray-600 dark:text-gray-400">
                 {bioWithMentions}
               </Text>
             </View>
           ) : null}
 
-          <View tw="flex-row mt-4">
+          <View tw="flex-row mt-4" pointerEvents="box-none">
             <Text tw="text-sm text-gray-900 dark:text-white font-bold">
               {profileData?.data.following_count}{" "}
               <Text tw="font-medium">following</Text>
             </Text>
-            <View tw="ml-8">
+            <View tw="ml-8" pointerEvents="box-none">
               <Text tw="text-sm text-gray-900 dark:text-white font-bold">
                 {profileData?.data.followers_count}{" "}
                 <Text tw="font-medium">followers</Text>
