@@ -1,3 +1,5 @@
+import { useSWRConfig } from "swr";
+
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -18,7 +20,8 @@ type Props = {
 };
 
 function ActivityDropdown({ activity }: Props) {
-  const { reportNFT } = useReport();
+  const { mutate } = useSWRConfig();
+  const { report } = useReport();
   const { unfollow } = useMyInfo();
   const { isAuthenticated } = useUser();
 
@@ -49,7 +52,10 @@ function ActivityDropdown({ activity }: Props) {
       >
         {isAuthenticated && (
           <DropdownMenuItem
-            onSelect={() => unfollow(activity.actor_id)}
+            onSelect={async () => {
+              await unfollow(activity.actor_id);
+              mutate(null);
+            }}
             key="unfollow"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >
@@ -64,7 +70,9 @@ function ActivityDropdown({ activity }: Props) {
         )}
 
         <DropdownMenuItem
-          onSelect={() => reportNFT({ activityId: activity.id })}
+          onSelect={() => {
+            report({ activityId: activity.id });
+          }}
           key="report"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >

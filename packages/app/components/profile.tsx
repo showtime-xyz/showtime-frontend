@@ -24,6 +24,7 @@ import { TextLink } from "app/navigation/link";
 import { ProfileDropdown } from "app/components/profile-dropdown";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
+import { useBlock } from "app/hooks/use-block";
 
 const TAB_LIST_HEIGHT = 64;
 const COVER_IMAGE_HEIGHT = 104;
@@ -46,8 +47,14 @@ const ProfileScreen = ({ walletAddress }: { walletAddress: string }) => {
 const Profile = ({ address }: { address?: string }) => {
   const { data: profileData } = useUserProfile({ address });
   const { data } = useProfileNftTabs({
-    profileId: profileData?.data.profile.profile_id,
+    profileId: profileData?.data?.profile.profile_id,
   });
+  const { data: myInfoData } = useMyInfo();
+  const isBlocked = Boolean(
+    myInfoData?.data?.blocked_profile_ids?.find(
+      (id) => id === profileData?.data?.profile.profile_id
+    )
+  );
   const [selected, setSelected] = useState(0);
 
   return (
@@ -59,7 +66,7 @@ const Profile = ({ address }: { address?: string }) => {
         lazy
       >
         <Tabs.Header>
-          <ProfileTop address={address} />
+          <ProfileTop address={address} isBlocked={isBlocked} />
         </Tabs.Header>
         <Tabs.List
           style={tw.style(
@@ -78,7 +85,9 @@ const Profile = ({ address }: { address?: string }) => {
             return (
               <Suspense fallback={<Spinner size="small" />} key={list.id}>
                 <TabList
+                  username={profileData?.data.profile.username}
                   profileId={profileData?.data.profile.profile_id}
+                  isBlocked={isBlocked}
                   list={list}
                 />
               </Suspense>
@@ -93,7 +102,17 @@ const Profile = ({ address }: { address?: string }) => {
 const GAP_BETWEEN_ITEMS = 1;
 const ITEM_SIZE = Dimensions.get("window").width / 3;
 
-const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
+const TabList = ({
+  username,
+  profileId,
+  isBlocked,
+  list,
+}: {
+  username?: string;
+  profileId?: number;
+  isBlocked?: boolean;
+  list: List;
+}) => {
   const keyExtractor = useCallback((item) => {
     return item.nft_id;
   }, []);
@@ -156,7 +175,13 @@ const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
           collections={list.collections}
           sortId={filter.sortId}
         />
-        {data.length === 0 && !isLoading ? (
+        {isBlocked ? (
+          <View tw="items-center justify-center mt-8">
+            <Text tw="text-gray-900 dark:text-white">
+              <Text tw="font-bold">@{username}</Text> is blocked
+            </Text>
+          </View>
+        ) : data.length === 0 && !isLoading ? (
           <View tw="items-center justify-center mt-20">
             <Text tw="text-gray-900 dark:text-white">No results found</Text>
           </View>
@@ -174,13 +199,14 @@ const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
       onCollectionChange,
       onSortChange,
       list.collections,
+      isBlocked,
     ]
   );
 
   return (
     <View tw="flex-1">
       <Tabs.FlatList
-        data={data}
+        data={isBlocked ? null : data}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
         refreshing={isRefreshing}
@@ -201,7 +227,13 @@ const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
   );
 };
 
-const ProfileTop = ({ address }: { address?: string }) => {
+const ProfileTop = ({
+  address,
+  isBlocked,
+}: {
+  address?: string;
+  isBlocked: boolean;
+}) => {
   const router = useRouter();
   const userId = useCurrentUserId();
   const { data: profileData, loading } = useUserProfile({ address });
@@ -216,6 +248,7 @@ const ProfileTop = ({ address }: { address?: string }) => {
     () => profileId && isFollowing(profileId),
     [profileId, isFollowing]
   );
+  const { unblock } = useBlock();
 
   const bioWithMentions = useMemo(
     () =>
@@ -278,23 +311,37 @@ const ProfileTop = ({ address }: { address?: string }) => {
             </View>
           </View>
 
-          {profileId && userId !== profileId && (
+          {isBlocked ? (
             <View tw="flex-row items-center">
-              <ProfileDropdown user={profileData?.data.profile} />
-              <View tw="w-2" />
               <Button
                 size="regular"
                 onPress={() => {
-                  if (isFollowingUser) {
-                    unfollow(profileId);
-                  } else {
-                    follow(profileId);
-                  }
+                  unblock(profileId);
                 }}
               >
-                {isFollowingUser ? "Following" : "Follow"}
+                Unblock
               </Button>
             </View>
+          ) : (
+            profileId &&
+            userId !== profileId && (
+              <View tw="flex-row items-center">
+                <ProfileDropdown user={profileData?.data.profile} />
+                <View tw="w-2" />
+                <Button
+                  size="regular"
+                  onPress={() => {
+                    if (isFollowingUser) {
+                      unfollow(profileId);
+                    } else {
+                      follow(profileId);
+                    }
+                  }}
+                >
+                  {isFollowingUser ? "Following" : "Follow"}
+                </Button>
+              </View>
+            )
           )}
         </View>
 
