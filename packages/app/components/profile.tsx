@@ -267,13 +267,15 @@ const ProfileTop = ({ address }: { address?: string }) => {
                 colorMode={colorMode as any}
                 radius={99999}
               >
-                <Image
-                  source={{
-                    uri: getProfileImage(profileData?.data.profile),
-                  }}
-                  alt="Profile avatar"
-                  tw="border-white h-[128px] w-[128px] rounded-full"
-                />
+                {profileData && (
+                  <Image
+                    source={{
+                      uri: getProfileImage(profileData?.data.profile),
+                    }}
+                    alt="Profile avatar"
+                    tw="border-white h-[128px] w-[128px] rounded-full"
+                  />
+                )}
               </Skeleton>
             </View>
           </View>
@@ -307,7 +309,8 @@ const ProfileTop = ({ address }: { address?: string }) => {
               colorMode={colorMode as any}
             >
               <Text
-                tw="dark:text-white text-gray-900 text-2xl font-bold"
+                variant="text-2xl"
+                tw="dark:text-white text-gray-900 font-extrabold"
                 numberOfLines={1}
               >
                 {name}

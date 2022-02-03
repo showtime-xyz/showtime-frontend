@@ -16,6 +16,7 @@ const FontsLoader = ({ children }) => {
     Inter: require("../assets/fonts/Inter-Regular.otf"),
     "Inter-Regular": require("../assets/fonts/Inter-Regular.otf"),
     "Inter-SemiBold": require("../assets/fonts/Inter-SemiBold.otf"),
+    "TomatoGrotesk-Medium": require("../assets/fonts/TomatoGrotesk-Medium.otf"),
   });
 
   if (!fontsLoaded) return null;
