@@ -3,7 +3,7 @@ import useUnmountSignal from "use-unmount-signal";
 import useSWR from "swr";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, Button, ScrollView } from "design-system";
+import { View, Pressable, ScrollView } from "design-system";
 import { Media } from "design-system/media";
 import { createParam } from "app/navigation/use-param";
 import { axios } from "app/lib/axios";
@@ -46,34 +46,31 @@ function NftScreen() {
   return (
     <View
       tw={[
-        "flex-1 bg-gray-200 dark:bg-black",
+        "flex-1 bg-white dark:bg-black",
         Platform.OS === "web" || Platform.OS === "android"
           ? `pt-[${topSafeArea}px]`
           : "",
       ]}
     >
-      <View tw="p-4 h-16 flex-row items-center justify-between">
-        <Button
-          onPress={router.pop}
-          variant="tertiary"
-          iconOnly={true}
-          size="regular"
-        >
+      <View tw="px-4 h-16 flex-row items-center justify-between">
+        <Pressable onPress={router.pop}>
           <Close
             color={
               tw.style("bg-black dark:bg-white")?.backgroundColor as string
             }
+            width={24}
+            height={24}
           />
-        </Button>
+        </Pressable>
         <NFTDropdown nft={nft} />
       </View>
 
       <ScrollView keyboardShouldPersistTaps="handled">
+        <Collection nft={nft} />
+
         <PinchToZoom>
           <Media item={nft} numColumns={1} />
         </PinchToZoom>
-
-        <Collection nft={nft} />
 
         <Social nft={nft} />
 

@@ -14,8 +14,8 @@ import { tw } from "design-system/tailwind";
 import type { Profile } from "app/types";
 import { useReport } from "app/hooks/use-report";
 import { useRouter } from "app/navigation/use-router";
-import { useMyInfo } from "app/hooks/api-hooks";
 import { useUser } from "app/hooks/use-user";
+import { useBlock } from "app/hooks/use-block";
 
 type Props = {
   user: Profile;
@@ -23,8 +23,8 @@ type Props = {
 
 function ProfileDropdown({ user }: Props) {
   const { isAuthenticated } = useUser();
-  const { isFollowing, follow, unfollow } = useMyInfo();
-  const { reportUser, blockUser } = useReport();
+  const { report } = useReport();
+  const { block } = useBlock();
   const router = useRouter();
 
   return (
@@ -62,8 +62,7 @@ function ProfileDropdown({ user }: Props) {
         {isAuthenticated && (
           <DropdownMenuItem
             onSelect={async () => {
-              await unfollow(user.profile_id);
-              await blockUser({ userId: user.profile_id });
+              await block(user.profile_id);
               router.pop();
             }}
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
@@ -81,8 +80,7 @@ function ProfileDropdown({ user }: Props) {
 
         <DropdownMenuItem
           onSelect={async () => {
-            await unfollow(user.profile_id);
-            await reportUser({ userId: user.profile_id });
+            await report({ userId: user.profile_id });
             router.pop();
           }}
           key="report"

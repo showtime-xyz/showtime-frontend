@@ -26,7 +26,7 @@ function NFTDropdown({ nft }: Props) {
     nft?.owner_id === userId ||
       nft?.multiple_owners_list?.find((owner) => owner.profile_id === userId)
   );
-  const { reportNFT } = useReport();
+  const { report } = useReport();
   const router = useRouter();
 
   const tokenChainName = Object.keys(CHAIN_IDENTIFIERS).find(
@@ -36,13 +36,11 @@ function NFTDropdown({ nft }: Props) {
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <Button variant="tertiary" iconOnly={true} size="regular" asChild>
-          <MoreHorizontal
-            color={
-              tw.style("bg-black dark:bg-white")?.backgroundColor as string
-            }
-          />
-        </Button>
+        <MoreHorizontal
+          color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+          width={24}
+          height={24}
+        />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
@@ -78,7 +76,7 @@ function NFTDropdown({ nft }: Props) {
         {!isOwner && (
           <DropdownMenuItem
             onSelect={async () => {
-              await reportNFT({ nftId: nft?.token_id });
+              await report({ nftId: nft?.token_id });
               router.pop();
             }}
             key="report"

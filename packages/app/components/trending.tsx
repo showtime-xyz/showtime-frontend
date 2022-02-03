@@ -44,7 +44,10 @@ export const Trending = () => {
       <Tabs.Root onIndexChange={setSelected} initialIndex={selected} lazy>
         <Tabs.Header>
           <View tw="bg-white dark:bg-black pt-4 pl-4 pb-[3px]">
-            <Text tw="text-gray-900 dark:text-white font-bold text-3xl">
+            <Text
+              variant="text-2xl"
+              tw="text-gray-900 dark:text-white font-extrabold"
+            >
               Trending
             </Text>
           </View>
