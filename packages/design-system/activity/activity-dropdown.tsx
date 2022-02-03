@@ -26,7 +26,12 @@ function ActivityDropdown({ activity }: Props) {
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
         <View tw="w-8 h-8">
-          <Button variant="tertiary" tw="h-8 rounded-full p-2" iconOnly={true}>
+          <Button
+            variant="tertiary"
+            tw="h-8 rounded-full p-2"
+            iconOnly={true}
+            asChild
+          >
             <MoreHorizontal
               width={24}
               height={24}

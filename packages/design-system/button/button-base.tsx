@@ -3,6 +3,8 @@ import { useSharedValue, useAnimatedStyle } from "react-native-reanimated";
 import { useIsDarkMode } from "../hooks";
 import { Pressable } from "design-system/pressable-scale";
 import { Text } from "design-system/text";
+import Animated from "react-native-reanimated";
+import { tw as tailwind } from "design-system/tailwind";
 
 import {
   CONTAINER_HEIGHT_TW,
@@ -24,6 +26,7 @@ export function BaseButton({
   iconOnly,
   iconColor = ["white", "black"],
   children,
+  asChild,
   ...props
 }: BaseButtonProps) {
   //#region variables
@@ -85,6 +88,20 @@ export function BaseButton({
       });
     });
   }, [size, iconColor, labelStyle, children, isDarkMode]);
+
+  if (asChild) {
+    return (
+      <Animated.View
+        style={useMemo(
+          () => [containerAnimatedStyle, tailwind.style(containerStyle)],
+          [containerAnimatedStyle, containerStyle]
+        )}
+      >
+        {renderChildren}
+      </Animated.View>
+    );
+  }
+
   return (
     <Pressable
       {...props}
