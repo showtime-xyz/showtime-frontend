@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Dimensions, Platform } from "react-native";
-import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
-import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 import { useUser } from "app/hooks/use-user";
+import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
+import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
 import { View, Text } from "design-system";
 import {
   EmailSlotProps,
@@ -18,7 +18,6 @@ import {
   SettingsWalletSlotSkeleton,
   SettingsWalletSlotPlaceholder,
 } from "./settings-wallet-slot";
-import { ManageAddress } from "./manage-address";
 import { SlotSeparator } from "./slot-separator";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
 
@@ -43,10 +42,13 @@ const renderWallet = ({ item }: { item: WalletAddressesExcludingEmailV2 }) => {
 
 const SettingsTabs = () => {
   const [selected, setSelected] = useState(0);
-  const [viewManagedWallet, setViewManagedWallet] = useState(false);
   const { user } = useUser();
-  const emailWallets = user?.data.profile.wallet_addresses_v2.filter(
-    (wallet) => wallet.is_email
+  const emailWallets = useMemo(
+    () =>
+      user?.data.profile.wallet_addresses_v2.filter(
+        (wallet) => wallet.is_email
+      ),
+    [user?.data.profile.wallet_addresses_v2]
   );
   const wallets = user?.data.profile.wallet_addresses_excluding_email_v2;
   const keyExtractor = (wallet: WalletAddressesV2) => wallet.address;
@@ -95,14 +97,9 @@ const SettingsTabs = () => {
               if (hasNoWallet) {
                 return <SettingsWalletSlotPlaceholder />;
               }
-
               return <SettingsWalletSlotSkeleton />;
             }}
-            ListHeaderComponent={
-              <SettingsWalletSlotHeader
-                onPress={() => setViewManagedWallet(true)}
-              />
-            }
+            ListHeaderComponent={<SettingsWalletSlotHeader />}
             alwaysBounceVertical={false}
             minHeight={Dimensions.get("window").height}
             ItemSeparatorComponent={() => <SlotSeparator />}
@@ -118,24 +115,15 @@ const SettingsTabs = () => {
               if (hasNoEmails) {
                 return <SettingsEmailSlotPlaceholder />;
               }
-
               return <SettingsEmailSkeletonSlot />;
             }}
-            ListHeaderComponent={
-              <SettingEmailSlotHeader
-                onPress={() => setViewManagedWallet(true)}
-              />
-            }
+            ListHeaderComponent={<SettingEmailSlotHeader />}
             alwaysBounceVertical={false}
             minHeight={Dimensions.get("window").height}
             ItemSeparatorComponent={() => <SlotSeparator />}
           />
         </Tabs.Pager>
       </Tabs.Root>
-      <ManageAddress
-        viewManagedWallet={viewManagedWallet}
-        setViewManagedWallet={setViewManagedWallet}
-      />
     </View>
   );
 };

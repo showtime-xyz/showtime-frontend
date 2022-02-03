@@ -14,6 +14,7 @@ const LoginScreen = dynamic<JSX.Element>(() =>
 const NftScreen = dynamic<JSX.Element>(() =>
   import("app/screens/nft").then((mod) => mod.NftScreen)
 );
+
 const ProfileScreen = dynamic<JSX.Element>(() =>
   import("app/screens/profile").then((mod) => mod.ProfileScreen)
 );
