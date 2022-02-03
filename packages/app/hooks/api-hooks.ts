@@ -255,6 +255,7 @@ type MyInfo = {
     likes_nft: number[];
     likes_comment: any[];
     comments: number[];
+    blocked_profile_ids: number[];
   };
 };
 
