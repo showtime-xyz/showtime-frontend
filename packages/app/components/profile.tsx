@@ -1,6 +1,5 @@
 import { Suspense, useCallback, useMemo, useReducer, useState } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
 import reactStringReplace from "react-string-replace";
 
 import {
@@ -240,7 +239,7 @@ const ProfileTop = ({ address }: { address?: string }) => {
   );
 
   return (
-    <View>
+    <View pointerEvents="none">
       <View tw={`bg-gray-100 dark:bg-gray-900 h-[${COVER_IMAGE_HEIGHT}px]`}>
         <Skeleton
           height={COVER_IMAGE_HEIGHT}
