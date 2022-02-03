@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Platform } from "react-native";
 import { CreateScreen } from "../screens/create";
+import { DeleteScreen } from "../screens/delete";
 import { LoginScreen } from "../screens/login";
 import { NftScreen } from "../screens/nft";
 import { ProfileScreen } from "../screens/profile";
@@ -39,6 +40,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="login" component={LoginScreen} />
         <Stack.Screen name="nft" component={NftScreen} />
         <Stack.Screen name="create" component={CreateScreen} />
+        <Stack.Screen name="burn" component={DeleteScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );
