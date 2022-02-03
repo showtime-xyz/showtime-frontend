@@ -41,7 +41,6 @@ export function NextTabNavigator({
     <BottomTab.Navigator
       initialRouteName="homeTab"
       screenOptions={{
-        lazy: false,
         headerShown: false,
         tabBarActiveTintColor: color,
         tabBarInactiveTintColor: color,

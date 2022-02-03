@@ -64,7 +64,7 @@ const HeaderRight = () => {
                 router.push("/login");
               }}
               variant="primary"
-              size="regular"
+              size="small"
               labelTW="font-semibold"
             >
               Sign&nbsp;In
@@ -83,7 +83,7 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
 
   return (
     <Pressable
-      tw="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-900 items-center justify-center"
+      tw="w-12 h-12 rounded-full items-center justify-center"
       onPress={() => {
         if (canGoBack) {
           router.pop();

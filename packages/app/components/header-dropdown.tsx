@@ -40,7 +40,7 @@ function HeaderDropdown() {
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <View tw="h-12 w-12 bg-gray-100 dark:bg-gray-900 items-center justify-center rounded-full">
+        <View tw="h-8 w-8 bg-gray-100 dark:bg-gray-900 items-center justify-center rounded-full">
           <Image
             tw="h-8 w-8 rounded-full"
             source={{
