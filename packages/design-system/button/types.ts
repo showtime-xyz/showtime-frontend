@@ -13,6 +13,7 @@ export type ButtonProps = {
    */
   variant?: ButtonVariant;
   children?: React.ReactNode | string;
+  asChild?: boolean;
 } & PressableScaleProps &
   Partial<Pick<BaseButtonProps, "tw" | "labelTW" | "iconOnly" | "size">>;
 
@@ -54,4 +55,9 @@ export type BaseButtonProps = {
   size: ButtonSize;
 
   children?: React.ReactNode | string;
+
+  /**
+   * Renders the child of button as the Button
+   */
+  asChild?: boolean;
 } & PressableScaleProps;
