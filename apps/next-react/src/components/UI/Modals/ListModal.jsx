@@ -28,6 +28,7 @@ import {
 import BadgeIcon from "@/components/Icons/BadgeIcon";
 import { preventExponent } from "@/lib/prevent-exponent";
 import { formatPrice } from "@/lib/format-price";
+import useFlags, { FLAGS } from "@/hooks/useFlags";
 
 const MODAL_PAGES = {
   GENERAL: "general",
@@ -59,6 +60,9 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
       `/v1/owned_quantity?nft_id=${token.nft_id}&profile_id=${myProfile.profile_id}`,
     (url) => backend.get(url).then((res) => res.data?.data)
   );
+
+  const flags = useFlags();
+  const enableMagicTX = flags[FLAGS.enableMagicTX];
 
   const shotConfetti = () => {
     if (!confettiCanvas.current) return;
@@ -142,11 +146,19 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
 
   const isValidPrice = (price) => {
     const aboveMaxPrice = price > MAX_LIST_PRICE;
+    const belowMinPrice = price < 0;
+
     let updatedPriceErrorMessage = "";
     let updatedHasPriceError = false;
 
     if (aboveMaxPrice) {
       updatedPriceErrorMessage = `The listing price has to be below ${MAX_LIST_PRICE}`;
+      updatedHasPriceError = true;
+    }
+
+    if (belowMinPrice) {
+      updatedPriceErrorMessage =
+        "The listing price cannot be a negative number";
       updatedHasPriceError = true;
     }
 
@@ -171,7 +183,10 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
   const listToken = async () => {
     setModalPage(MODAL_PAGES.LOADING);
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme });
+    const web3Modal = getWeb3Modal({
+      theme: resolvedTheme,
+      withMagic: enableMagicTX,
+    });
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,
@@ -317,7 +332,7 @@ const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
     >
       <Dialog
         static
-        className="fixed xs:inset-0 overflow-y-auto z-[2] pt-[96px] md:pt-0 modal-mobile-position"
+        className="fixed inset-0 overflow-y-auto z-[2] pt-[96px] md:pt-0 modal-mobile-position"
         open={open}
         onClose={updateModalVisibility}
       >
@@ -492,7 +507,7 @@ const ListPage = ({
                 className="text-sm w-full placeholder-shown:text-left text-right px-4 rounded-3xl dark:text-gray-300 bg-white dark:bg-black border  dark:border-gray-700 focus:outline-none focus-visible:ring font-semibold no-spinners h-[40px]"
                 placeholder="Price"
                 value={price}
-                min=".0001"
+                min="0"
                 max="1000"
                 step=".0001"
                 inputMode="decimal"

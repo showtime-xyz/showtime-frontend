@@ -23,33 +23,23 @@ const MintingBanner = ({ openMintModal }) => {
         <div className="max-w-7xl mx-auto py-3 px-3 sm:px-6 lg:px-8">
           <div className="pr-16 sm:text-center sm:px-16">
             <p className="font-medium text-gray-900 dark:text-gray-100">
-              <a
-                href="https://twitter.com/tryShowtime/status/1430898860759552008"
-                target="_blank"
-                className="md:hidden text-gray-900 dark:text-gray-100 font-bold"
-                rel="noreferrer"
+              <button
+                onClick={user ? openMintModal : () => setLoginModalOpen(true)}
+                className="md:hidden text-gray-900 dark:text-gray-100 font-bold text-left"
               >
-                We're rolling out free minting!{" "}
+                You can now create, buy and sell NFTs for free!{" "}
                 <span aria-hidden="true">&rarr;</span>
-              </a>
+              </button>
               <span className="hidden md:inline">
                 <span className="text-xs mr-1 -mt-1 inline-block">🎉</span> You
-                can now create NFTs for free (no gas costs)!{" "}
+                can now create, buy and sell NFTs for free (no gas costs)!{" "}
                 <button
                   className="text-gray-900 dark:text-gray-100 font-bold"
                   onClick={user ? openMintModal : () => setLoginModalOpen(true)}
                 >
                   Get started
-                </button>{" "}
-                and{" "}
-                <a
-                  className="text-gray-900 dark:text-gray-100 font-bold"
-                  href="/claim"
-                  target="_blank"
-                >
-                  claim our genesis drop NFT
-                </a>{" "}
-                to celebrate.
+                </button>
+                .
               </span>
             </p>
           </div>

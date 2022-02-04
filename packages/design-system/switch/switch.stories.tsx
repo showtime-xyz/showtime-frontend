@@ -1,7 +1,5 @@
 import { Meta } from "@storybook/react";
 import { useState } from "react";
-import { useIsDarkMode } from "../hooks";
-import { View } from "../view";
 
 import { Switch } from "./index";
 

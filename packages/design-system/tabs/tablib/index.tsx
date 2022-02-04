@@ -1,45 +1,58 @@
-import React, { useContext, ForwardedRef } from "react";
-import { tw } from "../../tailwind";
+//@ts-nocheck- Todo fix typings
+
+import React, {
+  useContext,
+  ForwardedRef,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   Pressable,
   View,
-  Animated,
   useWindowDimensions,
   StyleSheet,
   ScrollViewProps,
   ViewProps,
   PressableProps,
   FlatList,
+  Platform,
+  Dimensions,
   FlatListProps,
+  LayoutRectangle,
 } from "react-native";
 import PagerView from "react-native-pager-view";
+import { useIsFocused, useScrollToTop } from "@react-navigation/native";
 import Reanimated, {
   useSharedValue,
   useDerivedValue,
   scrollTo,
   useAnimatedRef,
-  useAnimatedGestureHandler,
   runOnJS,
+  runOnUI,
   Extrapolate,
   interpolate,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useAnimatedReaction,
 } from "react-native-reanimated";
+import { tw } from "design-system/tailwind";
 import {
-  NativeViewGestureHandler,
-  PanGestureHandler,
-} from "react-native-gesture-handler";
-import {
-  RefreshGestureState,
   TabListProps,
   TabRootProps,
   TabsContextType,
+  ExtendObject,
 } from "./types";
+import { usePageScrollHandler } from "./usePagerScrollHandler";
+import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
 
-const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
+const windowHeight = Dimensions.get("window").height;
 
-export const TabsContext = React.createContext(null as TabsContextType);
+const AnimatedPagerView = Reanimated.createAnimatedComponent(PagerView);
+
+export const TabsContext = React.createContext(
+  null as unknown as TabsContextType
+);
 
 const Root = ({
   children,
@@ -50,9 +63,8 @@ const Root = ({
 }: TabRootProps) => {
   const pagerRef = React.useRef();
   const index = useSharedValue(initialIndex ?? 0);
-  const position = React.useRef(new Animated.Value(0)).current;
-  const offset = React.useRef(new Animated.Value(0)).current;
-  const scrollY = useSharedValue(0);
+  const position = useSharedValue(0);
+  const offset = useSharedValue(0);
   const translateY = useSharedValue(0);
   // maybe change this to shared value too
   const [headerHeight, setHeaderHeight] = React.useState(0);
@@ -60,10 +72,7 @@ const Root = ({
   const [tabListHeight, setTabListHeight] =
     React.useState(initialtabListHeight);
   const requestOtherViewsToSyncTheirScrollPosition = useSharedValue(false);
-  const pullToRefreshY = useSharedValue(0);
-  const tablistScrollRef = useAnimatedRef<Reanimated.ScrollView>();
-  const tabItemLayouts = [];
-  const refreshGestureState = useSharedValue<RefreshGestureState>("idle");
+  const tabItemLayouts: Array<Reanimated.SharedValue<LayoutRectangle>> = [];
 
   const onIndexChange = (newIndex) => {
     index.value = newIndex;
@@ -97,18 +106,25 @@ const Root = ({
     };
   });
 
+  useAnimatedReaction(
+    () => {
+      return index.value;
+    },
+    (v, newV) => {
+      if (v !== newV) {
+        requestOtherViewsToSyncTheirScrollPosition.value = false;
+      }
+    }
+  );
+
   return (
     <TabsContext.Provider
       value={{
         tabListHeight,
-        pullToRefreshY,
-        refreshGestureState,
         index,
         tabItemLayouts,
-        tablistScrollRef,
         requestOtherViewsToSyncTheirScrollPosition,
         translateY,
-        scrollY,
         offset,
         position,
         headerHeight,
@@ -128,13 +144,15 @@ const Root = ({
         >
           {headerChild}
         </View>
-        <View
-          style={{ flex: 1 }}
-          onLayout={(e) => setTabListHeight(e.nativeEvent.layout.height)}
-          pointerEvents="box-none"
-        >
-          {tabListChild}
-        </View>
+        {tabListChild && (
+          <View
+            style={{ flex: 1 }}
+            onLayout={(e) => setTabListHeight(e.nativeEvent.layout.height)}
+            pointerEvents="box-none"
+          >
+            {tabListChild}
+          </View>
+        )}
       </Reanimated.View>
       {/* mount children only when tabBar and header heights are known */}
       {(headerHeight || !headerChild) && tabListHeight ? restChildren : null}
@@ -142,8 +160,30 @@ const Root = ({
   );
 };
 
-const List = ({ children, style, ...props }: TabListProps) => {
-  const { tablistScrollRef, index, tabItemLayouts } = useContext(TabsContext);
+const List = (props: TabListProps) => {
+  let hasTrigger = false;
+  // TODO: fix dynamically loading tab items. Currently we load tab items if tab trigger is present
+  React.Children.map(props.children, (c) => {
+    if (React.isValidElement(c) && c && c.type === Trigger) {
+      hasTrigger = true;
+    }
+  });
+
+  if (hasTrigger) {
+    return <ListImpl {...props} />;
+  }
+
+  return null;
+};
+
+const ListImpl = ({
+  children,
+  style,
+  contentContainerStyle,
+  ...props
+}: TabListProps) => {
+  const { index, tabItemLayouts } = useContext(TabsContext);
+  const tabListRef = useRef<Reanimated.ScrollView>();
 
   const newChildren = React.useMemo(() => {
     let triggerIndex = -1;
@@ -166,12 +206,12 @@ const List = ({ children, style, ...props }: TabListProps) => {
 
   const scrollTo = (x) => {
     // @ts-ignore getNode will be removed in future, need to update typings
-    tablistScrollRef.current.scrollTo({ x });
+    tabListRef.current.scrollTo({ x });
   };
 
   useDerivedValue(() => {
     if (prevIndex.value) {
-      if (tabItemLayouts[index.value].value) {
+      if (tabItemLayouts[index.value] && tabItemLayouts[index.value].value) {
         const itemLayoutX = tabItemLayouts[index.value].value.x;
         const itemWidth = tabItemLayouts[index.value].value.width;
         runOnJS(scrollTo)(itemLayoutX - windowWidth / 2 + itemWidth / 2);
@@ -180,8 +220,16 @@ const List = ({ children, style, ...props }: TabListProps) => {
     prevIndex.value = index.value;
   }, [windowWidth]);
 
+  useScrollToTop(
+    React.useRef({
+      scrollToTop: () => {
+        runOnUI(scrollTo)(0);
+      },
+    })
+  );
+
   const styles = React.useMemo(() => {
-    return [tw.style(`bg-white dark:bg-gray-900 px-2`), style];
+    return [tw.style(`bg-white dark:bg-gray-900`), style];
   }, [style]);
 
   return (
@@ -190,10 +238,20 @@ const List = ({ children, style, ...props }: TabListProps) => {
         listWidth.value = e.nativeEvent.layout.width;
       }}
       bounces={false}
-      ref={tablistScrollRef}
+      ref={tabListRef}
       showsHorizontalScrollIndicator={false}
       horizontal
       style={styles}
+      contentContainerStyle={useMemo(
+        () =>
+          StyleSheet.flatten([
+            {
+              paddingHorizontal: 16,
+            },
+            contentContainerStyle,
+          ]),
+        [contentContainerStyle]
+      )}
       {...props}
     >
       {newChildren}
@@ -253,22 +311,20 @@ const Pager = ({ children }) => {
     [mountedIndices]
   );
 
+  const handler = usePageScrollHandler({
+    onPageScroll: (e: any) => {
+      "worklet";
+      offset.value = e.offset;
+      position.value = e.position;
+    },
+  });
+
   return (
     <AnimatedPagerView
       style={{ flex: 1 }}
       ref={pagerRef}
       // Todo - make this work with reanimated event handlers
-      onPageScroll={Animated.event(
-        [
-          {
-            nativeEvent: {
-              position: position,
-              offset: offset,
-            },
-          },
-        ],
-        { useNativeDriver: true }
-      )}
+      onPageScroll={handler}
       initialPage={initialIndex}
       onPageSelected={(e) => onIndexChange(e.nativeEvent.position)}
     >
@@ -330,13 +386,13 @@ const Trigger = React.forwardRef(
   }
 );
 
-function makeScrollableComponent<K, T extends any>(Comp: T) {
+function makeScrollableComponent<K extends ExtendObject, T extends any>(
+  Comp: T
+) {
   return React.forwardRef((props: K, ref: ForwardedRef<T>) => {
     const {
       headerHeight,
-      pullToRefreshY,
       requestOtherViewsToSyncTheirScrollPosition,
-      refreshGestureState,
       tabListHeight,
       translateY,
       index,
@@ -344,7 +400,9 @@ function makeScrollableComponent<K, T extends any>(Comp: T) {
     const elementIndex = React.useContext(TabIndexContext).index;
     const aref = useAnimatedRef<Reanimated.ScrollView>();
     const scrollY = useSharedValue(0);
-    const enablePullToRefresh = useSharedValue(true);
+    const topHeight = headerHeight + tabListHeight;
+    const translateYOffset = Platform.OS === "ios" ? topHeight : 0;
+    const minHeight = props.minHeight ?? windowHeight + topHeight;
 
     const scrollHandler = useAnimatedScrollHandler({
       onBeginDrag() {
@@ -354,101 +412,95 @@ function makeScrollableComponent<K, T extends any>(Comp: T) {
         requestOtherViewsToSyncTheirScrollPosition.value = false;
       },
       onScroll(e) {
-        // only current scrollview controls the header translate, other scrollviews sync their scroll posisions
-        if (elementIndex === index.value) {
+        // Todo - this is a hack to make sure we change header when listening current flatlist scrolls. Other flatlist scroll events may be triggered as we try to adjust their scroll positions to accommodate header
+        if (index.value === elementIndex) {
           scrollY.value = e.contentOffset.y;
-          translateY.value = interpolate(
-            scrollY.value,
-            [0, headerHeight],
-            [0, -headerHeight],
-            Extrapolate.CLAMP
-          );
-          if (e.contentOffset.y <= 0) {
-            enablePullToRefresh.value = true;
+          if (Platform.OS === "ios") {
+            translateY.value = interpolate(
+              scrollY.value,
+              [-translateYOffset, -tabListHeight],
+              [0, -headerHeight],
+              Extrapolate.CLAMP
+            );
           } else {
-            enablePullToRefresh.value = false;
+            translateY.value = interpolate(
+              scrollY.value,
+              [0, headerHeight],
+              [0, -headerHeight],
+              Extrapolate.CLAMP
+            );
           }
         }
       },
-      onEndDrag(e) {
+      onEndDrag() {
         requestOtherViewsToSyncTheirScrollPosition.value = true;
       },
-      onMomentumEnd(e) {
+      onMomentumEnd() {
         requestOtherViewsToSyncTheirScrollPosition.value = true;
       },
     });
 
+    // sync other flatlist's scroll position if header is translated
     useDerivedValue(() => {
       if (
         index.value !== elementIndex &&
         requestOtherViewsToSyncTheirScrollPosition.value
       ) {
-        const nextScrollY = -1 * translateY.value;
-        // if another tab just started showing header or scroll is less than translated header.
-        if (nextScrollY < headerHeight || scrollY.value < nextScrollY) {
-          scrollTo(aref, 0, nextScrollY, false);
+        const absTranslateY = -1 * translateY.value;
+        if (
+          absTranslateY < headerHeight ||
+          scrollY.value + translateYOffset < absTranslateY
+        ) {
+          scrollTo(aref, 0, absTranslateY - translateYOffset, false);
+          // manually set scrollY because onScroll of other lists's won't be triggered
+          scrollY.value = absTranslateY - translateYOffset;
         }
       }
-    });
+    }, [translateYOffset]);
 
-    const panRef = React.useRef();
-    const nativeRef = React.useRef();
+    const _ref = useRef<FlatList>(null);
 
-    const gestureHandler = useAnimatedGestureHandler({
-      onActive: (e, ctx: any) => {
-        if (
-          enablePullToRefresh.value &&
-          elementIndex === index.value &&
-          refreshGestureState.value !== "refreshing"
-        ) {
-          pullToRefreshY.value = e.translationY;
-          if (e.translationY > ctx.lastY) {
-            refreshGestureState.value = "pulling";
-            ctx.lastPullingY = e.translationY;
-          } else if (e.translationY < ctx.lastPullingY - 40) {
-            refreshGestureState.value = "cancelling";
-          }
-          ctx.lastY = e.translationY;
-        }
-      },
-      onEnd() {
-        if (elementIndex === index.value) {
-          pullToRefreshY.value = 0;
-          if (refreshGestureState.value === "pulling") {
-            refreshGestureState.value = "refreshing";
-          } else {
-            refreshGestureState.value = "idle";
-          }
-        }
-      },
-    });
+    useScrollToTop(
+      React.useRef({
+        scrollToTop: () => {
+          runOnUI(scrollTo)(aref, 0, -translateYOffset, true);
+        },
+      })
+    );
 
     return (
-      <PanGestureHandler
-        ref={panRef}
-        onGestureEvent={gestureHandler}
-        failOffsetX={[-100, 100]}
-        activeOffsetY={60}
-        simultaneousHandlers={[panRef, nativeRef]}
-      >
-        <Reanimated.View>
-          <NativeViewGestureHandler ref={nativeRef}>
-            {/* @ts-ignore - don't know how to fix this */}
-            <Comp
-              scrollEventThrottle={16}
-              onScroll={scrollHandler}
-              bouncesZoom={false}
-              alwaysBounceHorizontal={false}
-              automaticallyAdjustContentInsets={false}
-              ref={mergeRef([ref, aref])}
-              contentContainerStyle={{
-                paddingTop: tabListHeight + headerHeight,
-              }}
-              {...props}
-            />
-          </NativeViewGestureHandler>
-        </Reanimated.View>
-      </PanGestureHandler>
+      // @ts-ignore
+      <Comp
+        scrollEventThrottle={16}
+        onScroll={scrollHandler}
+        alwaysBounceHorizontal={false}
+        automaticallyAdjustContentInsets={false}
+        ref={mergeRef([ref, aref, _ref])}
+        contentOffset={useMemo(
+          () => ({
+            y:
+              Platform.OS === "ios"
+                ? -topHeight + -1 * translateY.value
+                : -1 * translateY.value,
+          }),
+          [topHeight]
+        )}
+        contentInset={useMemo(
+          () => ({
+            top: Platform.OS === "ios" ? topHeight : 0,
+          }),
+          [topHeight]
+        )}
+        contentContainerStyle={useMemo(
+          () => ({
+            paddingTop: Platform.OS === "android" ? topHeight : 0,
+            minHeight,
+          }),
+          [topHeight]
+        )}
+        progressViewOffset={topHeight}
+        {...props}
+      />
     );
   });
 }
@@ -457,9 +509,15 @@ const TabScrollView = makeScrollableComponent<
   ScrollViewProps,
   typeof Reanimated.ScrollView
 >(Reanimated.ScrollView);
-const AnimatedFlatList = Reanimated.createAnimatedComponent(FlatList);
+const AnimatedFlatList = Reanimated.createAnimatedComponent(
+  ViewabilityTrackerFlatlist
+);
+
+interface ExtendedFlatListProps extends FlatListProps<any> {
+  minHeight?: number;
+}
 const TabFlatList = makeScrollableComponent<
-  FlatListProps<any>,
+  ExtendedFlatListProps,
   typeof AnimatedFlatList
 >(AnimatedFlatList);
 
@@ -519,3 +577,30 @@ const utilStyles = StyleSheet.create({
     overflow: "hidden",
   },
 });
+
+export const useIsTabFocused = () => {
+  const tabsCtx = useContext(TabsContext) ?? { index: { value: undefined } };
+  const tabItemCtx = useContext(TabIndexContext);
+  const isFocused = useIsFocused();
+  const [tabFocused, setTabFocused] = useState(isFocused);
+
+  useAnimatedReaction(
+    () => {
+      return tabsCtx.index.value;
+    },
+    (v) => {
+      // If item is in a list
+      if (typeof tabItemCtx.index === "number") {
+        // we check that this list is focused
+        if (v === tabItemCtx.index) {
+          runOnJS(setTabFocused)(true);
+        } else {
+          runOnJS(setTabFocused)(false);
+        }
+      }
+    },
+    []
+  );
+
+  return tabFocused && isFocused;
+};

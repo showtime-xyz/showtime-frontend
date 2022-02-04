@@ -11,15 +11,31 @@ import { useIsDarkMode } from "../hooks";
 import { Platform, StyleSheet } from "react-native";
 
 type SpinnerProps = {
-  size?: number;
+  size?: "large" | "medium" | "small";
 };
 
 const duration = 750;
 const defaultSize = 32;
 
 export const Spinner = (props: SpinnerProps) => {
-  const { size = defaultSize } = props;
+  const { size = "medium" } = props;
   const transition = useSharedValue(0);
+  let actualSize = defaultSize;
+
+  switch (size) {
+    case "large": {
+      actualSize = 48;
+      break;
+    }
+    case "medium": {
+      actualSize = 32;
+      break;
+    }
+    case "small": {
+      actualSize = 24;
+      break;
+    }
+  }
 
   const isDark = useIsDarkMode();
 
@@ -58,10 +74,10 @@ export const Spinner = (props: SpinnerProps) => {
 
   return (
     <Animated.View
-      style={[{ height: size, width: size }, animationStyle]}
+      style={[{ height: actualSize, width: actualSize }, animationStyle]}
       accessibilityRole="progressbar"
     >
-      <Svg width={size} height={size} viewBox="0 0 32 32">
+      <Svg width={actualSize} height={actualSize} viewBox="0 0 32 32">
         <Circle
           cx={16}
           cy={16}

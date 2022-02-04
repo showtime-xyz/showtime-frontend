@@ -3,22 +3,10 @@ import { createContext } from "react";
 type AppContextType = {
   web3: any;
   setWeb3: any;
-  windowSize: any;
-  setWindowSize: any;
-  isMobile: any;
-  toggleRefreshFeed: any;
-  throttleMessage: any;
-  disableLikes: any;
-  disableComments: any;
-  disableFollows: any;
-  recommendedFollows: any;
-  loadingRecommendedFollows: any;
-  commentInputFocused: any;
-  setThrottleMessage: any;
-  setRecommendedFollows: any;
-  setCommentInputFocused: any;
-  setToggleRefreshFeed: any;
   logOut: any;
+  colorScheme: "light" | "dark";
+  setColorScheme: (colorScheme: "light" | "dark") => void;
+  setMountRelayerOnApp: (hide: boolean) => void;
 };
 
 const AppContext = createContext({} as AppContextType);

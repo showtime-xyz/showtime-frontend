@@ -1,5 +1,4 @@
 import { TextLink } from "app/navigation/link";
-import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 
 function Buy({ act }) {
   const { nfts } = act;
@@ -13,9 +12,7 @@ function Buy({ act }) {
           <TextLink
             variant="text-sm"
             tw="text-black dark:text-white font-bold"
-            href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
-              (key) => CHAIN_IDENTIFIERS[key] == nfts[0].chain_identifier
-            )}/${nfts[0].contract_address}/${nfts[0].token_id}`}
+            href={`/nft/${nfts[0].nft_id}`}
           >
             {nfts[0].title}
           </TextLink>{" "}
@@ -23,7 +20,7 @@ function Buy({ act }) {
           <TextLink
             variant="text-sm"
             tw="text-black dark:text-white font-bold"
-            href={`/${act.seller?.username || act.seller?.wallet_address}`}
+            href={`/profile/${act.seller?.wallet_address}`}
           >
             {act.seller?.name}
           </TextLink>
@@ -36,9 +33,7 @@ function Buy({ act }) {
           <TextLink
             variant="text-sm"
             tw="text-black dark:text-white font-bold"
-            href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
-              (key) => CHAIN_IDENTIFIERS[key] == nfts[0].chain_identifier
-            )}/${nfts[0].contract_address}/${nfts[0].token_id}`}
+            href={`/nft/${nfts[0].nft_id}`}
           >
             {nfts[0].title}
           </TextLink>{" "}
@@ -46,9 +41,7 @@ function Buy({ act }) {
           <TextLink
             variant="text-sm"
             tw="text-black dark:text-white font-bold"
-            href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
-              (key) => CHAIN_IDENTIFIERS[key] == nfts[1].chain_identifier
-            )}/${nfts[1].contract_address}/${nfts[1].token_id}`}
+            href={`/nft/${nfts[1].nft_id}`}
           >
             {nfts[1].title}
           </TextLink>
@@ -61,9 +54,7 @@ function Buy({ act }) {
           <TextLink
             variant="text-sm"
             tw="text-black dark:text-white font-bold"
-            href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
-              (key) => CHAIN_IDENTIFIERS[key] == nfts[0].chain_identifier
-            )}/${nfts[0].contract_address}/${nfts[0].token_id}`}
+            href={`/nft/${nfts[0].nft_id}`}
           >
             {nfts[0].title}
           </TextLink>
@@ -71,9 +62,7 @@ function Buy({ act }) {
           <TextLink
             variant="text-sm"
             tw="text-black dark:text-white font-bold"
-            href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
-              (key) => CHAIN_IDENTIFIERS[key] == nfts[1].chain_identifier
-            )}/${nfts[1].contract_address}/${nfts[1].token_id}`}
+            href={`/nft/${nfts[1].nft_id}`}
           >
             {nfts[1].title}
           </TextLink>{" "}
@@ -81,9 +70,7 @@ function Buy({ act }) {
           <TextLink
             variant="text-sm"
             tw="text-black dark:text-white font-bold"
-            href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
-              (key) => CHAIN_IDENTIFIERS[key] == nfts[2].chain_identifier
-            )}/${nfts[2].contract_address}/${nfts[2].token_id}`}
+            href={`/nft/${nfts[2].nft_id}`}
           >
             {nfts[2].title}
           </TextLink>
@@ -96,9 +83,7 @@ function Buy({ act }) {
           <TextLink
             variant="text-sm"
             tw="text-black dark:text-white font-bold"
-            href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
-              (key) => CHAIN_IDENTIFIERS[key] == nfts[0].chain_identifier
-            )}/${nfts[0].contract_address}/${nfts[0].token_id}`}
+            href={`/nft/${nfts[0].nft_id}`}
           >
             {nfts[0].title}
           </TextLink>
@@ -106,9 +91,7 @@ function Buy({ act }) {
           <TextLink
             variant="text-sm"
             tw="text-black dark:text-white font-bold"
-            href={`/t/${Object.keys(CHAIN_IDENTIFIERS).find(
-              (key) => CHAIN_IDENTIFIERS[key] == nfts[1].chain_identifier
-            )}/${nfts[1].contract_address}/${nfts[1].token_id}`}
+            href={`/nft/${nfts[1].nft_id}`}
           >
             {nfts[1].title}
           </TextLink>{" "}

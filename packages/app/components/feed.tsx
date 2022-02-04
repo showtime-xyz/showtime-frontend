@@ -1,8 +1,9 @@
-import { useCallback } from "react";
-import { FlatList, Platform, useWindowDimensions } from "react-native";
+import { Suspense, useCallback } from "react";
+import { FlatList, Platform } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useActivity } from "app/hooks/api-hooks";
 
-import { View, ActivityIndicator } from "design-system";
+import { View, Spinner, Text } from "design-system";
 import { Card } from "design-system/card";
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
@@ -14,7 +15,7 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
         tw="h-16 items-center justify-center mt-6 px-3"
         sx={{ marginBottom: tabBarHeight }}
       >
-        <ActivityIndicator />
+        <Spinner size="small" />
       </View>
     );
   }
@@ -22,24 +23,19 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
   return <View sx={{ marginBottom: tabBarHeight }}></View>;
 };
 
-type Props = {
-  activity: any;
-  activityPage: any;
-  getNext: any;
-  isLoading: boolean;
-  isRefreshing: boolean;
-  onRefresh: any;
+const Feed = () => {
+  return (
+    <View tw="bg-white dark:bg-black flex-1">
+      <Suspense fallback={<Spinner size="small" />}>
+        <AllActivityList />
+      </Suspense>
+    </View>
+  );
 };
 
-const Feed = ({
-  activity,
-  activityPage,
-  getNext,
-  isLoading,
-  isRefreshing,
-  onRefresh,
-}: Props) => {
-  const { width } = useWindowDimensions();
+const AllActivityList = () => {
+  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
+    useActivity({ typeId: 0 });
 
   const keyExtractor = useCallback((item) => item.id, []);
 
@@ -48,49 +44,48 @@ const Feed = ({
     []
   );
 
-  const getItemLayout = useCallback(
-    (data, index) => {
-      const itemHeight = data?.[index]?.nfts.length === 2 ? width / 2 : width;
-      const headerHeight = 0;
-      const footerHeight = 0;
-
-      return {
-        length: itemHeight + headerHeight + footerHeight,
-        offset: (itemHeight + headerHeight + footerHeight) * index,
-        index,
-      };
-    },
-    [width]
+  const ListHeaderComponent = useCallback(
+    () => (
+      <View tw="bg-white dark:bg-black pt-4 pl-4 pb-[3px]">
+        <Text
+          variant="text-2xl"
+          tw="text-gray-900 dark:text-white font-extrabold"
+        >
+          Home
+        </Text>
+      </View>
+    ),
+    []
   );
 
   const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoading} />,
-    [isLoading]
+    () => <Footer isLoading={isLoadingMore} />,
+    [isLoadingMore]
   );
+
+  if (isLoading) {
+    return (
+      <View tw="items-center justify-center flex-1">
+        <Spinner />
+      </View>
+    );
+  }
 
   return (
     <FlatList
-      data={activity}
+      data={data}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
-      getItemLayout={getItemLayout}
-      onEndReached={getNext}
-      onEndReachedThreshold={
-        activityPage === 1
-          ? 0.2
-          : activityPage < 4
-          ? 0.3
-          : activityPage < 6
-          ? 0.7
-          : 0.8
-      }
-      removeClippedSubviews={Platform.OS !== "web"}
-      onRefresh={onRefresh}
       refreshing={isRefreshing}
+      onRefresh={refresh}
+      onEndReached={fetchMore}
+      onEndReachedThreshold={0.6}
+      removeClippedSubviews={Platform.OS !== "web"}
       numColumns={1}
       windowSize={4}
       initialNumToRender={2}
       alwaysBounceVertical={false}
+      ListHeaderComponent={ListHeaderComponent}
       ListFooterComponent={ListFooterComponent}
     />
   );

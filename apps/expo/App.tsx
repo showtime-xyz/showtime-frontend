@@ -1,14 +1,19 @@
 import { useState, useEffect } from "react";
-import { AppState, LogBox, useColorScheme, Platform } from "react-native";
+import {
+  AppState,
+  LogBox,
+  Platform,
+  useColorScheme as useDeviceColorScheme,
+} from "react-native";
 import {
   enableScreens,
-  enableFreeze,
+  // enableFreeze,
   FullWindowOverlay,
 } from "react-native-screens";
 import { StatusBar, setStatusBarStyle } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { DripsyProvider } from "dripsy";
-import { useDeviceContext } from "twrnc";
+import { useDeviceContext, useAppColorScheme } from "twrnc";
 // import * as Sentry from 'sentry-expo'
 import { MMKV } from "react-native-mmkv";
 import { SWRConfig, useSWRConfig } from "swr";
@@ -21,20 +26,30 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
 import { useNavigation } from "@react-navigation/native";
 import * as NavigationBar from "expo-navigation-bar";
+import * as SystemUI from "expo-system-ui";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { ethers } from "ethers";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import LogRocket from "@logrocket/react-native";
 
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
 import { NavigationProvider } from "app/navigation";
-import { NextTabNavigator } from "app/navigation/next-tab-navigator";
 import { accessTokenManager } from "app/lib/access-token-manager";
 import { AppContext } from "app/context/app-context";
 import { setLogout } from "app/lib/logout";
 import { mixpanel } from "app/lib/mixpanel";
 import { deleteCache } from "app/lib/delete-cache";
 import { useUser } from "app/hooks/use-user";
-import { useRouter } from "app/navigation/use-router";
 import { deleteRefreshToken } from "app/lib/refresh-token";
 import { ToastProvider } from "design-system/toast";
+import {
+  setColorScheme as setUserColorScheme,
+  useColorScheme as useUserColorScheme,
+} from "app/lib/color-scheme";
+import { magic } from "app/lib/magic";
+import { Relayer } from "app/lib/magic";
+import { RootStackNavigator } from "app/navigation/root-stack-navigator";
 
 enableScreens(true);
 // enableFreeze(true)
@@ -50,6 +65,8 @@ LogBox.ignoreLogs([
   "No native splash screen",
   "The provided value 'ms-stream' is not a valid 'responseType'.",
   "The provided value 'moz-chunked-arraybuffer' is not a valid 'responseType'.",
+  "Constants.platform.ios.model has been deprecated in favor of expo-device's Device.modelName property.",
+  "ExponentGLView",
 ]);
 
 function QRCodeModal(props: RenderQrcodeModalProps): JSX.Element {
@@ -114,7 +131,7 @@ function SWRProvider({ children }: { children: React.ReactNode }): JSX.Element {
           };
 
           // Subscribe to the app state change events
-          const subscription = AppState.addEventListener(
+          const listener = AppState.addEventListener(
             "change",
             onAppStateChange
           );
@@ -123,7 +140,9 @@ function SWRProvider({ children }: { children: React.ReactNode }): JSX.Element {
           const unsubscribe = navigation.addListener("focus", callback);
 
           return () => {
-            subscription.remove();
+            if (listener) {
+              listener.remove();
+            }
             unsubscribe();
           };
         },
@@ -166,187 +185,146 @@ function AppContextProvider({
   children: React.ReactNode;
 }): JSX.Element {
   const { user } = useUser();
-  const router = useRouter();
   const { mutate } = useSWRConfig();
   const connector = useWalletConnect();
-  useDeviceContext(tw);
-  const colorScheme = useColorScheme();
+  const [web3, setWeb3] = useState(null);
+  const [mountRelayerOnApp, setMountRelayerOnApp] = useState(true);
+
+  useDeviceContext(tw, { withDeviceColorScheme: false });
+  // Default to device color scheme
+  const deviceColorScheme = useDeviceColorScheme();
+  // User can override color scheme
+  const userColorScheme = useUserColorScheme();
+  // Use the user color scheme if it's set
+  const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(
+    tw,
+    userColorScheme ?? deviceColorScheme
+  );
+
+  // setting it before useEffect or else we'll see a flash of white paint before
+  useState(() => setColorScheme(colorScheme));
   const isDark = colorScheme === "dark";
 
   useEffect(() => {
-    if (Platform.OS === "android") {
-      if (isDark) {
+    if (isDark) {
+      if (Platform.OS === "android") {
         NavigationBar.setBackgroundColorAsync("#000");
         NavigationBar.setButtonStyleAsync("light");
-        setStatusBarStyle("dark");
-      } else {
+      }
+
+      tw.setColorScheme("dark");
+      SystemUI.setBackgroundColorAsync("black");
+      setStatusBarStyle("light");
+    } else {
+      if (Platform.OS === "android") {
         NavigationBar.setBackgroundColorAsync("#FFF");
         NavigationBar.setButtonStyleAsync("dark");
-        setStatusBarStyle("light");
       }
+
+      tw.setColorScheme("light");
+      SystemUI.setBackgroundColorAsync("white");
+      setStatusBarStyle("dark");
     }
+  }, [isDark]);
+
+  useEffect(() => {
+    magic.user.isLoggedIn().then((isLoggedIn) => {
+      if (magic.rpcProvider && isLoggedIn) {
+        const provider = new ethers.providers.Web3Provider(magic.rpcProvider);
+        setWeb3(provider);
+      }
+    });
   }, []);
-
-  const [web3, setWeb3] = useState(null);
-  const [windowSize, setWindowSize] = useState(null);
-  const [myLikes, setMyLikes] = useState(null);
-  const [myLikeCounts, setMyLikeCounts] = useState(null);
-  const [myCommentLikes, setMyCommentLikes] = useState(null);
-  const [myCommentLikeCounts, setMyCommentLikeCounts] = useState(null);
-  const [myComments, setMyComments] = useState(null);
-  const [myCommentCounts, setMyCommentCounts] = useState(null);
-  const [myFollows, setMyFollows] = useState(null);
-  const [myRecommendations, setMyRecommendations] = useState(null);
-  // eslint-disable-next-line no-unused-vars
-  const [isMobile, setIsMobile] = useState(null);
-  const [toggleRefreshFeed, setToggleRefreshFeed] = useState(false);
-  const [throttleMessage, setThrottleMessage] = useState(null);
-  // const [throttleOpen, setThrottleOpen] = useState(false)
-  // const [throttleContent, setThrottleContent] = useState('')
-  // eslint-disable-next-line no-unused-vars
-  const [disableLikes, setDisableLikes] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [disableComments, setDisableComments] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [disableFollows, setDisableFollows] = useState(false);
-  // const [recQueue, setRecQueue] = useState([])
-  // eslint-disable-next-line no-unused-vars
-  const [loadingRecommendedFollows, setLoadingRecommendedFollows] =
-    useState(true);
-  const [recommendedFollows, setRecommendedFollows] = useState([]);
-  const [commentInputFocused, setCommentInputFocused] = useState(false);
-
-  // useEffect(() => {
-  // 	if (infoData) {
-  // 		setMyProfile({
-  // 			...infoData.data.profile,
-  // 			notifications_last_opened: infoData.data.profile.notifications_last_opened
-  // 				? new Date(infoData.data.profile.notifications_last_opened)
-  // 				: null,
-  // 			links: infoData.data.profile.links.map(link => ({
-  // 				name: link.type__name,
-  // 				prefix: link.type__prefix,
-  // 				icon_url: link.type__icon_url,
-  // 				type_id: link.type_id,
-  // 				user_input: link.user_input,
-  // 			})),
-  // 		})
-  // 		setMyLikes(infoData.data.likes_nft)
-  // 		setMyCommentLikes(infoData.data.likes_comment)
-  // 		setMyComments(infoData.data.comments)
-  // 		setMyFollows(infoData.data.follows)
-
-  // 		// Load up the recommendations async if we are onboarding
-  // 		if (infoData.data.profile.has_onboarded == false) {
-  // 			const my_rec_data = await axios({
-  // 				url: '/v1/follow_recommendations_onboarding',
-  // 				method: 'GET',
-  // 			})
-  // 			setMyRecommendations(my_rec_data.data)
-  // 		}
-  // 	}
-  // }, [infoData, setMyProfile, setMyLikes, setMyCommentLikes, setMyComments, setMyFollows])
 
   const injectedGlobalContext = {
     web3,
     setWeb3,
-    windowSize,
-    myLikes,
-    myLikeCounts,
-    myCommentLikes,
-    myCommentLikeCounts,
-    myComments,
-    myCommentCounts,
-    myFollows,
-    myRecommendations,
-    isMobile,
-    toggleRefreshFeed,
-    throttleMessage,
-    disableLikes,
-    disableComments,
-    disableFollows,
-    recommendedFollows,
-    loadingRecommendedFollows,
-    commentInputFocused,
-    setWindowSize,
-    setMyLikes,
-    setMyLikeCounts,
-    setMyCommentLikes,
-    setMyCommentLikeCounts,
-    setMyComments,
-    setMyCommentCounts,
-    setMyFollows,
-    setMyRecommendations,
-    setThrottleMessage,
-    setRecommendedFollows,
-    setCommentInputFocused,
-    setToggleRefreshFeed,
+    setMountRelayerOnApp,
     logOut: () => {
+      magic.user.logout();
       deleteCache();
       deleteRefreshToken();
       accessTokenManager.deleteAccessToken();
       mutate(null);
       connector.killSession();
-      setMyLikes([]);
-      setMyLikeCounts({});
-      setMyCommentLikes([]);
-      setMyCommentLikeCounts({});
-      setMyComments([]);
-      setMyCommentCounts({});
-      setMyFollows([]);
-      setMyRecommendations([]);
       setWeb3(null);
       mixpanel.track("Logout");
       // Triggers all event listeners for this key to fire. Used to force cross tab logout.
       setLogout(Date.now().toString());
+    },
+    colorScheme,
+    setColorScheme: (newColorScheme: "light" | "dark") => {
+      setColorScheme(newColorScheme);
+      setUserColorScheme(newColorScheme);
     },
   };
 
   return (
     <AppContext.Provider value={injectedGlobalContext}>
       {children}
+      {/* TODO: Open Relayer on FullWindow, need change in relayer source */}
+      {mountRelayerOnApp ? <Relayer /> : null}
     </AppContext.Provider>
   );
 }
 
 function App() {
+  useEffect(() => {
+    if (process.env.STAGE !== "development") {
+      LogRocket.init("oulg1q/showtime", {
+        redactionTags: ["data-private"],
+      });
+    }
+  }, []);
+
+  const scheme = `io.showtime${
+    process.env.STAGE === "development"
+      ? ".development"
+      : process.env.STAGE === "staging"
+      ? ".staging"
+      : ""
+  }`;
+
   return (
-    <DripsyProvider theme={theme}>
-      <SafeAreaProvider style={{ backgroundColor: "black" }}>
-        <ToastProvider>
-          <NavigationProvider>
-            <SWRProvider>
-              <WalletConnectProvider
-                clientMeta={{
-                  description: "Connect with Showtime",
-                  url: "https://showtime.io",
-                  icons: ["https://showtime.io/logo.jpg"],
-                  name: "Showtime",
-                  // @ts-expect-error
-                  scheme: "showtime://",
-                }}
-                redirectUrl="showtime://"
-                storageOptions={{
-                  // @ts-ignore
-                  asyncStorage: AsyncStorage,
-                }}
-                renderQrcodeModal={(
-                  props: RenderQrcodeModalProps
-                ): JSX.Element => <QRCodeModal {...props} />}
-              >
-                <AppContextProvider>
-                  <>
-                    {/* TODO: change this when we update the splash screen */}
-                    <StatusBar style="dark" />
-                    <NextTabNavigator />
-                  </>
-                </AppContextProvider>
-              </WalletConnectProvider>
-            </SWRProvider>
-          </NavigationProvider>
-        </ToastProvider>
-      </SafeAreaProvider>
-    </DripsyProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <DripsyProvider theme={theme}>
+        <SafeAreaProvider style={{ backgroundColor: "black" }}>
+          <ToastProvider>
+            <NavigationProvider>
+              <SWRProvider>
+                <WalletConnectProvider
+                  clientMeta={{
+                    description: "Connect with Showtime",
+                    url: "https://showtime.io",
+                    icons: [
+                      "https://storage.googleapis.com/showtime-cdn/showtime-icon-sm.jpg",
+                    ],
+                    name: "Showtime",
+                    // @ts-expect-error
+                    scheme: scheme,
+                  }}
+                  redirectUrl={`${scheme}://`}
+                  storageOptions={{
+                    // @ts-ignore
+                    asyncStorage: AsyncStorage,
+                  }}
+                  renderQrcodeModal={(
+                    props: RenderQrcodeModalProps
+                  ): JSX.Element => <QRCodeModal {...props} />}
+                >
+                  <AppContextProvider>
+                    <BottomSheetModalProvider>
+                      <StatusBar style="auto" />
+                      <RootStackNavigator />
+                    </BottomSheetModalProvider>
+                  </AppContextProvider>
+                </WalletConnectProvider>
+              </SWRProvider>
+            </NavigationProvider>
+          </ToastProvider>
+        </SafeAreaProvider>
+      </DripsyProvider>
+    </GestureHandlerRootView>
   );
 }
 

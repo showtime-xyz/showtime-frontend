@@ -2,26 +2,44 @@ import { useEffect, useState, useCallback } from "react";
 import useSWR from "swr";
 import useUnmountSignal from "use-unmount-signal";
 
+import LogRocket from "app/lib/logrocket";
 import { axios } from "app/lib/axios";
 import { mixpanel } from "app/lib/mixpanel";
 import { accessTokenManager } from "app/lib/access-token-manager";
+import { useAccessToken } from "app/lib/access-token";
+import { Profile } from "../types";
 
 type RefreshStatus = "IDLE" | "REFRESHING_ACCESS_TOKEN" | "DONE" | "ERROR";
 type AuthenticatedStatus = "IDLE" | "AUTHENTICATED" | "UNAUTHENTICATED";
+
+type Follow = {
+  profile_id: number;
+};
+
+type MyInfoData = {
+  data: {
+    follows: Follow[];
+    profile: Profile;
+    likes_nft: number[];
+    likes_comment: number[];
+    comments: number[];
+  };
+};
+
+export const USER_API_KEY = "/v2/myinfo";
 
 const useUser = () => {
   const [refreshStatus, setRefreshStatus] = useState<RefreshStatus>("IDLE");
   const [authenticationStatus, setAuthenticationStatus] =
     useState<AuthenticatedStatus>("IDLE");
-  const accessToken = accessTokenManager.getAccessToken();
+  const accessToken = useAccessToken();
 
   const unmountSignal = useUnmountSignal();
-  const url = "/v2/myinfo";
   const {
     data: user,
     error,
     mutate,
-  } = useSWR(accessToken ? [url] : null, (url) =>
+  } = useSWR<MyInfoData>(accessToken ? USER_API_KEY : null, (url) =>
     axios({ url, method: "GET", unmountSignal })
   );
 
@@ -49,18 +67,15 @@ const useUser = () => {
 
   useEffect(() => {
     if (user) {
-      mixpanel.identify(user.publicAddress);
+      mixpanel.identify(user.data.profile.profile_id.toString());
+      LogRocket.identify(user.data.profile.profile_id.toString());
 
-      // if (user.email) {
-      // 	mixpanel.people.set({
-      // 		$email: user.email, // only reserved properties need the $
-      // 		USER_ID: user.publicAddress, // use human-readable names
-      // 	})
-      // } else {
-      // 	mixpanel.people.set({
-      // 		USER_ID: user.publicAddress, // use human-readable names
-      // 	})
-      // }
+      LogRocket.getSessionURL((sessionURL: string) => {
+        mixpanel.track("LogRocket", { sessionURL: sessionURL });
+        // Sentry.configureScope(scope => {
+        //   scope.setExtra("sessionURL", sessionURL);
+        // });
+      });
     }
   }, [user]);
 

@@ -4,14 +4,22 @@ import { ComponentProps, createContext, forwardRef, useContext } from "react";
 import type { Text as TextType } from "react-native";
 
 import { tw as tailwind } from "design-system/tailwind";
+import type { TW } from "design-system/tailwind/types";
+import { ViewProps } from "../view";
 
 type Variant = keyof Theme["text"];
 
-type TextProps = ComponentProps<typeof DripsyText>;
+export type TextProps = ComponentProps<typeof DripsyText>;
 
-export type Props = { tw?: string; variant?: Variant; htmlFor?: string } & Pick<
+export type Props = {
+  tw?: TW;
+  variant?: Variant;
+  htmlFor?: string;
+  pointerEvents?: ViewProps["pointerEvents"];
+} & Pick<
   TextProps,
   | "onLayout"
+  | "onTextLayout"
   | "children"
   | "selectable"
   | "sx"
@@ -19,6 +27,7 @@ export type Props = { tw?: string; variant?: Variant; htmlFor?: string } & Pick<
   | "accessibilityRole"
   | "numberOfLines"
   | "ellipsizeMode"
+  | "onPress"
 >;
 
 /**
@@ -35,6 +44,7 @@ export const Text = forwardRef<TextType, Props>(
     {
       variant,
       onLayout,
+      onTextLayout,
       children,
       selectable,
       tw,
@@ -44,6 +54,8 @@ export const Text = forwardRef<TextType, Props>(
       accessibilityRole,
       numberOfLines,
       ellipsizeMode,
+      pointerEvents,
+      onPress,
     },
     ref
   ) => {
@@ -62,12 +74,15 @@ export const Text = forwardRef<TextType, Props>(
         variant={variant}
         selectable={selectable}
         onLayout={onLayout}
+        onTextLayout={onTextLayout}
         sx={compoundSx}
         accessibilityRole={accessibilityRole}
         numberOfLines={numberOfLines}
         ellipsizeMode={ellipsizeMode}
+        onPress={onPress}
         // @ts-ignore - this prop will only work on web. Refer text.web.tsx
         htmlFor={htmlFor}
+        pointerEvents={pointerEvents}
       >
         <ParentContext.Provider value={compoundSx}>
           {children}

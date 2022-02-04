@@ -1,0 +1,25 @@
+diff --git a/node_modules/react-native-pager-view/ios/ReactNativePageView.m b/node_modules/react-native-pager-view/ios/ReactNativePageView.m
+index bebfb39..a9a8d3a 100644
+--- a/node_modules/react-native-pager-view/ios/ReactNativePageView.m
++++ b/node_modules/react-native-pager-view/ios/ReactNativePageView.m
+@@ -1,6 +1,6 @@
+ 
+ #import "ReactNativePageView.h"
+-#import "React/RCTLog.h"
++#import <React/RCTLog.h>
+ #import <React/RCTViewManager.h>
+ 
+ #import "UIViewController+CreateExtension.h"
+@@ -167,6 +167,12 @@ - (void)setupInitialController {
+                             direction:UIPageViewControllerNavigationDirectionForward
+                              animated:YES
+              shouldCallOnPageSelected:YES];
++
++        
++        
++        if (self.reactViewController.navigationController != nil) {
++            [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:self.reactViewController.navigationController.interactivePopGestureRecognizer];
++        }
+     }
+ }
+ 

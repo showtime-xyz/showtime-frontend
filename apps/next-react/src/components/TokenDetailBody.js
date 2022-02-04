@@ -38,7 +38,6 @@ import Tippy from "@tippyjs/react";
 import TezosIcon from "./Icons/TezosIcon";
 import ShowtimeIcon from "./Icons/ShowtimeIcon";
 import BuyModal from "./UI/Modals/BuyModal";
-import useFlags, { FLAGS } from "@/hooks/useFlags";
 import ListModal from "./UI/Modals/ListModal";
 import useProfile from "@/hooks/useProfile";
 
@@ -54,7 +53,6 @@ const TokenDetailBody = ({
   parentReportModalOpen, // for full page view only, not modal view
   parentSetReportModalOpen, // for full page view only, not modal view
 }) => {
-  const { [FLAGS.hasMinting]: canList } = useFlags();
   useEffect(() => {
     if (
       !item.mime_type?.startsWith("model") ||
@@ -156,9 +154,12 @@ const TokenDetailBody = ({
   const isOwnedByUser =
     typeof myProfile?.profile_id === "number" &&
     myProfile?.profile_id === item?.owner_id;
+
   const ifListedIsOwner =
     myProfile?.profile_id === item?.listing?.profile_id &&
     typeof myProfile?.profile_id === "number";
+
+  const freeItem = item?.listing?.min_price === 0;
 
   return (
     <>
@@ -200,7 +201,7 @@ const TokenDetailBody = ({
           <div className="py-4 px-4 flex flex-row">
             <div className="flex-shrink">
               {item.contract_is_creator ? (
-                <Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
+                <Link href={`/c/${item.collection_slug}`}>
                   <a className="flex flex-row items-center ">
                     <div>
                       <img
@@ -627,23 +628,37 @@ const TokenDetailBody = ({
                   />
                 </div>
 
-                {canList && item.listing ? (
-                  <button
-                    disabled={ifListedIsOwner}
-                    title="Buy on Showtime"
-                    className={`border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1 ${
-                      ifListedIsOwner ? "bg-gray-100 cursor-default" : null
-                    }`}
-                    onClick={() => setBuyModalOpen(true)}
-                  >
-                    <p className="text-sm sm:text-base">
-                      {ifListedIsOwner
-                        ? `Listed for ${item.listing.min_price} ${item.listing.currency}`
-                        : `Buy for ${item.listing.min_price} ${item.listing.currency}`}
-                    </p>
-                  </button>
-                ) : canList &&
-                  isOwnedByUser &&
+                {item.listing ? (
+                  <>
+                    {ifListedIsOwner ? (
+                      <p className="px-4 text-sm sm:text-base dark:text-gray-500">
+                        {freeItem ? (
+                          "Listed for Free"
+                        ) : (
+                          <>
+                            {`Price ${item.listing.min_price} ${item.listing.currency}`}
+                          </>
+                        )}
+                      </p>
+                    ) : (
+                      <button
+                        title="Buy on Showtime"
+                        className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1"
+                        onClick={() => setBuyModalOpen(true)}
+                      >
+                        <p className="text-sm sm:text-base">
+                          {freeItem ? (
+                            "Price Free"
+                          ) : (
+                            <>
+                              {`Price ${item.listing.min_price} ${item.listing.currency}`}
+                            </>
+                          )}
+                        </p>
+                      </button>
+                    )}
+                  </>
+                ) : isOwnedByUser &&
                   SHOWTIME_CONTRACTS.includes(item.contract_address) ? (
                   <button
                     title="List on Showtime"

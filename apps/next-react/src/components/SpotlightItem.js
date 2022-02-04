@@ -26,7 +26,6 @@ import OrbitIcon from "./Icons/OrbitIcon";
 import BuyModal from "./UI/Modals/BuyModal";
 import useSWR from "swr";
 import backend from "@/lib/backend";
-import useFlags, { FLAGS } from "@/hooks/useFlags";
 import useProfile from "@/hooks/useProfile";
 
 const SpotlightItem = ({
@@ -35,7 +34,6 @@ const SpotlightItem = ({
   item,
   removeSpotlightItem,
 }) => {
-  const { [FLAGS.hasMinting]: canList } = useFlags();
   const { data: thisItem, mutate: mutateItem } = useSWR(
     () => pageProfile && `/v1/spotlight/${pageProfile.profile_id}`,
     (url) => backend.get(url).then((res) => res.data.data),
@@ -121,6 +119,9 @@ const SpotlightItem = ({
   const ifListedIsOwner =
     myProfile?.profile_id === thisItem?.listing?.profile_id &&
     typeof myProfile?.profile_id === "number";
+
+  const freeItem = item?.listing?.min_price === 0;
+  const singleEdition = item?.listing?.total_edition_quantity === 1;
 
   return (
     <>
@@ -510,10 +511,11 @@ const SpotlightItem = ({
                         {item.collection_name}
                       </p>
                     </div>
-                    {canList && item.listing && (
+                    {item.listing && (
                       <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
-                        {item.listing.total_edition_quantity} Editions /{" "}
-                        {parseInt(item.listing.royalty_percentage)}% Royalties
+                        {singleEdition
+                          ? `${item.listing.total_edition_quantity} Edition`
+                          : `${item.listing.total_edition_quantity} Editions`}
                       </p>
                     )}
                   </div>
@@ -602,17 +604,37 @@ const SpotlightItem = ({
                   </div>
                 </div>
                 <div className="mt-8 inline-block">
-                  {canList && item.listing ? (
-                    <Button
-                      disabled={ifListedIsOwner}
-                      style="primary"
-                      title="Buy on Showtime"
-                      onClick={() => setBuyModalOpen(true)}
-                    >
-                      {ifListedIsOwner
-                        ? `Listed for ${item.listing.min_price} ${item.listing.currency}`
-                        : `Buy for ${item.listing.min_price} ${item.listing.currency}`}
-                    </Button>
+                  {item.listing ? (
+                    <>
+                      {ifListedIsOwner ? (
+                        <p className="px-4 text-sm sm:text-base dark:text-gray-500">
+                          {freeItem ? (
+                            "Listed for Free"
+                          ) : (
+                            <>
+                              {`Price ${item.listing.min_price} ${item.listing.currency}`}
+                            </>
+                          )}
+                        </p>
+                      ) : (
+                        <Button
+                          disabled={ifListedIsOwner}
+                          style="primary"
+                          title="Buy on Showtime"
+                          onClick={() => setBuyModalOpen(true)}
+                        >
+                          <p className="text-sm sm:text-base">
+                            {freeItem ? (
+                              "Price Free"
+                            ) : (
+                              <>
+                                {`Price ${item.listing.min_price} ${item.listing.currency}`}
+                              </>
+                            )}
+                          </p>
+                        </Button>
+                      )}
+                    </>
                   ) : (
                     <Button
                       style="primary"

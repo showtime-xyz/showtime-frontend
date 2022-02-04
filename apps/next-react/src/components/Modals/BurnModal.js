@@ -13,6 +13,7 @@ import PolygonIcon from "../Icons/PolygonIcon";
 import { ExclamationIcon } from "@heroicons/react/outline";
 import useSWR from "swr";
 import backend from "@/lib/backend";
+import useFlags, { FLAGS } from "@/hooks/useFlags";
 
 const MODAL_STATES = {
   GENERAL: "general",
@@ -30,6 +31,9 @@ const BurnModal = ({ open, onClose, token }) => {
 
   const [quantity, setQuantity] = useState(1);
   const [transactionHash, setTransactionHash] = useState(null);
+
+  const flags = useFlags();
+  const enableMagicTX = flags[FLAGS.enableMagicTX];
 
   const { data: ownershipData } = useSWR(
     () =>
@@ -51,7 +55,10 @@ const BurnModal = ({ open, onClose, token }) => {
   const burnToken = async () => {
     setModalState(MODAL_STATES.PROCESSING);
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme });
+    const web3Modal = getWeb3Modal({
+      theme: resolvedTheme,
+      withMagic: enableMagicTX,
+    });
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,
@@ -104,7 +111,9 @@ const BurnModal = ({ open, onClose, token }) => {
             error?.body || error?.error?.body || "{}"
           )?.error?.message?.includes("burn amount exceeds balance")
         ) {
-          alert("Burn failed: You're trying to burn more tokens than you own.");
+          alert(
+            "Delete failed: You're trying to delete more tokens than you own."
+          );
           throw setModalState(MODAL_STATES.GENERAL);
         }
 
@@ -150,7 +159,7 @@ const BurnModal = ({ open, onClose, token }) => {
     <Transition.Root show={open} as={Fragment}>
       <Dialog
         static
-        className="xs:inset-0 fixed overflow-y-auto z-[2] modal-mobile-position"
+        className="inset-0 fixed overflow-y-auto z-[2] modal-mobile-position"
         open={open}
         onClose={trueOnClose}
       >
@@ -188,7 +197,7 @@ const BurnModal = ({ open, onClose, token }) => {
             <div className="inline-block align-bottom rounded-t-3xl sm:rounded-b-3xl text-left overflow-hidden transform transition-all sm:align-middle bg-white dark:bg-black shadow-xl sm:max-w-lg w-full">
               <div className="p-4 border-b border-gray-100 dark:border-gray-900 flex items-center justify-between">
                 <h2 className="text-gray-900 dark:text-white text-xl font-bold">
-                  Burn NFT
+                  Delete NFT
                 </h2>
                 {modalState !== MODAL_STATES.PROCESSING && (
                   <button
@@ -217,9 +226,10 @@ const GeneralState = ({
 }) => (
   <>
     <div className="p-4 space-y-4 border-b border-gray-100 dark:border-gray-900 text-gray-900 dark:text-white">
-      <p className="font-medium">Are you sure you want to burn this NFT?</p>
+      <p className="font-medium">Are you sure you want to delete this NFT?</p>
       <p className="font-medium">
-        This can’t be undone and it will be sent to a burn address.
+        The NFT will be transferred to a burn address (that nobody can access).
+        This can’t be undone.
       </p>
     </div>
     <div className="p-4 border-b border-gray-100 dark:border-gray-900">
@@ -255,7 +265,7 @@ const GeneralState = ({
           Cancel
         </Button>
         <Button style="danger" onClick={burnToken}>
-          Burn
+          Delete
         </Button>
       </div>
     </div>
@@ -271,7 +281,7 @@ const LoadingState = () => {
       <div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
       <div className="space-y-1">
         <p className="font-medium text-gray-900 dark:text-white text-center">
-          Preparing to burn this NFT...
+          Preparing to delete this NFT...
         </p>
         <p className="font-medium text-gray-900 dark:text-white text-center max-w-xs">
           We'll ask you to confirm with the wallet holding it shortly.
@@ -287,7 +297,7 @@ const BurningState = ({ transactionHash }) => {
       <div className="inline-block border-2 w-6 h-6 rounded-full border-gray-100 dark:border-gray-700 border-t-indigo-500 dark:border-t-cyan-400 animate-spin" />
       <div className="space-y-1">
         <p className="font-medium text-gray-900 dark:text-white text-center">
-          Your NFT is being burned on the Polygon network.
+          Your NFT is being deleted on the Polygon network.
         </p>
         <p className="font-medium text-gray-900 dark:text-white text-center max-w-xs mx-auto">
           Feel free to navigate away from this screen
@@ -314,7 +324,7 @@ const BurnedState = ({ transactionHash, quantity }) => {
     <div className="p-12 space-y-8 flex-1 flex flex-col items-center justify-center">
       <p className="font-medium text-5xl">🔥</p>
       <p className="font-medium text-gray-900 dark:text-white text-center">
-        Your NFT has been forever burned on the Polygon network.{" "}
+        Your NFT has been forever deleted on the Polygon network.{" "}
         {quantity == 1
           ? "It might still show up on your profile for a few minutes"
           : "The editions might still appear on your profile for a few minutes"}

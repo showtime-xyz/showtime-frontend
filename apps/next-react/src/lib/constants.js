@@ -257,3 +257,9 @@ export const CURRENCY_NAMES = {
     [LIST_CURRENCIES?.DAI]: "(PoS) Dai Stablecoin",
   },
 }[process.env.NEXT_PUBLIC_CHAIN_ID];
+
+export const GAS_PRICE_PERCENTAGE = "30";
+
+export const COLLECTION_NAME_TRUNCATE_LENGTH = 22;
+
+export const ENABLE_MAGIC_TX = false;

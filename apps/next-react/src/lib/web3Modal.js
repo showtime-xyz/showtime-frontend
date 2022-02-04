@@ -48,7 +48,7 @@ const getWeb3Modal = ({ withMagic = false, theme } = {}) => {
         ? {
             "custom-magiclink": {
               display: {
-                logo: "/img/logo_sm.png",
+                logo: "/logo.png",
                 name: "Showtime Account",
                 description:
                   "If you log in to Showtime with an email address, use this",

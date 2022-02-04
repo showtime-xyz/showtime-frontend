@@ -1,9 +1,25 @@
-import React, { useRef, useEffect } from "react";
-import { Platform, useColorScheme } from "react-native";
+import React, { useRef, useEffect, useState } from "react";
+import {
+  LayoutChangeEvent,
+  Platform,
+  useColorScheme as useDeviceColorScheme,
+} from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 
+import { useColorScheme as useUserColorScheme } from "app/lib/color-scheme";
+
+export const useColorScheme = () => {
+  const userColorScheme = useUserColorScheme();
+  const deviceColorScheme = useDeviceColorScheme();
+
+  return userColorScheme ?? deviceColorScheme;
+};
+
 export const useIsDarkMode = () => {
-  return useColorScheme() === "dark";
+  const userColorScheme = useUserColorScheme();
+  const deviceColorScheme = useDeviceColorScheme();
+
+  return userColorScheme === "dark" ?? deviceColorScheme === "dark";
 };
 
 export const useOnFocus = () => {
@@ -58,6 +74,32 @@ export const useOnHover = () => {
   return hoverHandler;
 };
 
+export const useOnPress = () => {
+  const pressed = useSharedValue(0);
+  // use state on web for now till useAnimatedStyle bug is resolved
+  const [state, setPressed] = React.useState(0);
+
+  const pressHandler = React.useMemo(() => {
+    return {
+      onPressIn: () => {
+        pressed.value = 1;
+        if (Platform.OS === "web") {
+          setPressed(1);
+        }
+      },
+      onPressOut: () => {
+        pressed.value = 0;
+        if (Platform.OS === "web") {
+          setPressed(0);
+        }
+      },
+      pressed: Platform.select({ default: pressed, web: { value: state } }),
+    };
+  }, [state]);
+
+  return pressHandler;
+};
+
 export function useUpdateEffect(effect, dependencies = []) {
   const isInitialMount = useRef(true);
 
@@ -69,3 +111,14 @@ export function useUpdateEffect(effect, dependencies = []) {
     }
   }, dependencies);
 }
+
+export const useLayout = () => {
+  const [layout, setLayout] = useState<
+    LayoutChangeEvent["nativeEvent"]["layout"] | undefined
+  >();
+  const onLayout = (e) => {
+    setLayout(e.nativeEvent.layout);
+  };
+
+  return { onLayout, layout };
+};

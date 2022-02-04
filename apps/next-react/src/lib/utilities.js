@@ -375,3 +375,13 @@ export const parseBalance = (balance, currency) => {
 
   return parseUnits(balance, 6);
 };
+
+export const findListingItemByOwner = (item, profileID) => {
+  const listedItem = item?.listing?.all_sellers?.find((seller) => {
+    return seller.profile_id === profileID;
+  });
+
+  return listedItem;
+};
+
+export const toWei = (number) => Math.floor(number * 10 ** 9);

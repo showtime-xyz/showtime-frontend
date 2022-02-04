@@ -1,5 +1,6 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback } from "react";
 import { useWindowDimensions } from "react-native";
+
 import { Modal } from "../modal";
 import { BottomSheet } from "../bottom-sheet";
 import { Header } from "../modal/header";
@@ -10,6 +11,7 @@ type Props = {
   visible?: boolean;
   close?: () => void;
   onClose?: () => void;
+  snapPoints?: string[];
 };
 
 export function ModalSheet({ visible = true, ...props }: Props) {
@@ -44,6 +46,7 @@ export function ModalSheet({ visible = true, ...props }: Props) {
       visible={visible}
       handleComponent={renderHandleComponent}
       onDismiss={props.onClose}
+      snapPoints={props.snapPoints}
     >
       {props.children}
     </BottomSheet>

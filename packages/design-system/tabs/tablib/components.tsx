@@ -1,15 +1,16 @@
-import { View } from "../../view";
-import { Text } from "../../text";
-import React from "react";
-import { useAnimatedReaction, runOnJS } from "react-native-reanimated";
-import { MotiView, AnimatePresence } from "moti";
-import { useTabIndexContext, useTabsContext } from "../tablib";
-import { Platform, Animated, useColorScheme } from "react-native";
-import { tw } from "../../tailwind";
+import { Platform } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  Extrapolate,
+  interpolate,
+  useDerivedValue,
+} from "react-native-reanimated";
 
-// todo - make tabitemwidth dynamic. Current limitation of pager of using vanilla animated prevents animating width indicators.
-// todo - figure out how to make reanimated native handlers work with pager view
-export const Tab_ITEM_WIDTH = 120;
+import { tw } from "design-system/tailwind";
+import { useIsDarkMode } from "design-system/hooks";
+import { View } from "design-system/view";
+import { Text } from "design-system/text";
+import { useTabIndexContext, useTabsContext } from "design-system/tabs/tablib";
 
 type TabItemProps = {
   name: string;
@@ -17,15 +18,25 @@ type TabItemProps = {
   selected?: boolean;
 };
 
+type SelectedTabIndicatorProps = {
+  disableBackground?: boolean;
+};
+
 export const TabItem = ({ name, count }: TabItemProps) => {
   const { index } = useTabIndexContext();
   const { position, offset } = useTabsContext();
-  const newPos = Animated.add(position, offset);
 
-  const opacity = newPos.interpolate({
-    inputRange: [index - 1, index, index + 1],
-    outputRange: [0.7, 1, 0.7],
-    extrapolate: "clamp",
+  const animatedStyle = useAnimatedStyle(() => {
+    const newPos = position.value + offset.value;
+
+    return {
+      opacity: interpolate(
+        newPos,
+        [index - 1, index, index + 1],
+        [0.7, 1, 0.7],
+        Extrapolate.CLAMP
+      ),
+    };
   });
 
   return (
@@ -36,9 +47,9 @@ export const TabItem = ({ name, count }: TabItemProps) => {
           justifyContent: "center",
           alignItems: "center",
           height: "100%",
-          width: Tab_ITEM_WIDTH,
+          marginHorizontal: 16,
         },
-        { opacity },
+        animatedStyle,
       ]}
     >
       <Text
@@ -60,124 +71,55 @@ export const TabItem = ({ name, count }: TabItemProps) => {
   );
 };
 
-type PullToRefreshProps = {
-  onRefresh: () => void;
-};
+export const SelectedTabIndicator = (props: SelectedTabIndicatorProps) => {
+  const disableBackground = props.disableBackground;
 
-export const PullToRefresh = ({ onRefresh }: PullToRefreshProps) => {
   if (Platform.OS === "web") {
     return null;
   }
 
-  const { pullToRefreshY, refreshGestureState } = useTabsContext();
-  const [refreshState, setRefreshState] = React.useState("idle");
-
-  const onRefreshHandler = () => {
-    onRefresh();
-    setTimeout(() => {
-      refreshGestureState.value = "idle";
-    }, 4000);
-  };
-
-  useAnimatedReaction(
-    () => {
-      return refreshGestureState.value;
-    },
-    (v) => {
-      runOnJS(setRefreshState)(v);
-    }
-  );
-
-  React.useEffect(() => {
-    if (refreshState === "refreshing") {
-      onRefreshHandler();
-    }
-  }, [refreshState]);
-
-  return (
-    // todo blink animation?
-    <AnimatePresence>
-      {refreshState !== "idle" ? (
-        <MotiView
-          from={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 200, type: "timing" }}
-          exit={{ opacity: 0 }}
-          style={[
-            {
-              zIndex: 1,
-              position: "absolute",
-              backgroundColor: "rgba(0, 0, 0, 0.2)",
-              justifyContent: "center",
-              alignItems: "center",
-              width: "100%",
-              height: 50,
-            },
-          ]}
-        >
-          {refreshState === "pulling" && (
-            <Text style={{ color: "white" }}>Release to refresh</Text>
-          )}
-          {refreshState === "cancelling" && (
-            <Text style={{ color: "white" }}>Pull to refresh</Text>
-          )}
-          {refreshState === "refreshing" && (
-            <Text style={{ color: "white" }}>Refreshing...</Text>
-          )}
-        </MotiView>
-      ) : null}
-    </AnimatePresence>
-  );
-};
-
-export const SelectedTabIndicator = () => {
-  if (Platform.OS === "web") {
-    return null;
-  }
-
-  // todo replace with useIsDarkMode hook
-  const isDark = useColorScheme() === "dark";
+  const isDark = useIsDarkMode();
 
   const { offset, position, tabItemLayouts } = useTabsContext();
-  const newPos = Animated.add(position, offset);
-  const [itemOffsets, setItemOffsets] = React.useState([0, 0]);
 
-  useAnimatedReaction(
-    () => {
-      let result = [];
-      let sum = 0;
-      for (let i = 0; i < tabItemLayouts.length; i++) {
-        if (tabItemLayouts[i].value) {
-          const width = tabItemLayouts[i].value.width;
-          result.push(sum);
-          sum = sum + width;
-        }
-      }
-      return result;
-    },
-    (values) => {
-      if (values.length > 1) {
-        runOnJS(setItemOffsets)(values);
-      }
-    },
-    []
-  );
-
-  const translateX = newPos.interpolate({
-    inputRange: itemOffsets.map((_v, i) => i),
-    outputRange: itemOffsets,
+  const animatedStyle = useAnimatedStyle(() => {
+    const input = tabItemLayouts.map((_v, i) => i);
+    const translateOutput = tabItemLayouts.map((v) => v.value?.x);
+    const widthOutput = tabItemLayouts.map((v) => v.value?.width);
+    const newPos = position.value + offset.value;
+    if (
+      translateOutput.some((v) => v === undefined) ||
+      widthOutput.some((v) => v === undefined)
+    ) {
+      return {};
+    } else {
+      return {
+        //@ts-ignore - widthOut won't be undefined as we check above
+        width: interpolate(newPos, input, widthOutput, Extrapolate.CLAMP),
+        transform: [
+          {
+            translateX: interpolate(
+              newPos,
+              input,
+              //@ts-ignore - translateOutput won't be undefined as we check above
+              translateOutput,
+              Extrapolate.CLAMP
+            ),
+          },
+        ],
+      };
+    }
   });
 
   return (
     <Animated.View
       style={[
         {
-          transform: [{ translateX }],
           position: "absolute",
-          width: Tab_ITEM_WIDTH,
           height: "100%",
           justifyContent: "center",
         },
+        animatedStyle,
       ]}
     >
       <View
@@ -187,20 +129,23 @@ export const SelectedTabIndicator = () => {
             position: "absolute",
             zIndex: 9999,
             width: "100%",
-            bottom: 0,
+            // negative bottom to accomodate border bottom of 1px
+            bottom: -1,
           },
           tw.style(`bg-gray-900 dark:bg-gray-100`),
         ]}
       />
-      <View
-        sx={{
-          backgroundColor: isDark
-            ? "rgba(229, 231, 235, 0.08)"
-            : "rgba(0, 0, 0, 0.1)",
-          height: "70%",
-          borderRadius: 999,
-        }}
-      />
+      {disableBackground ? null : (
+        <View
+          sx={{
+            backgroundColor: isDark
+              ? "rgba(229, 231, 235, 0.1)"
+              : "rgba(0, 0, 0, 0.1)",
+            paddingY: 16,
+            borderRadius: 999,
+          }}
+        />
+      )}
     </Animated.View>
   );
 };

@@ -100,6 +100,8 @@ dist/
 # Turborepo
 .turbo
 
-#storybook
+# Storybook
 storybook-static
 
+# Secrets
+apps/expo/service-account-key.json

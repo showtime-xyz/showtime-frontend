@@ -42,6 +42,8 @@ import Dropdown from "@/components/UI/Dropdown";
 import Button from "@/components/UI/Buttons/Button";
 import useProfile from "@/hooks/useProfile";
 import useSWR from "swr";
+import reactStringReplace from "react-string-replace";
+import Link from "next/link";
 
 export async function getStaticProps({ params: { profile: slug_address } }) {
   if (slug_address.includes("apple-touch-icon"))
@@ -67,9 +69,11 @@ export async function getStaticProps({ params: { profile: slug_address } }) {
       revalidate: 2,
     };
   } catch (err) {
-    if (err.response.status == 400)
+    if (err.response.status == 400) {
       return { redirect: { destination: "/", permanent: false } };
-    else return { notFound: true };
+    } else {
+      return { notFound: true, revalidate: 1 };
+    }
   }
 }
 
@@ -303,6 +307,30 @@ const Profile = ({
 
   const [collectionId, setCollectionId] = useState(0);
   const [isRefreshingCards, setIsRefreshingCards] = useState(false);
+
+  const shortBioWithMentions = reactStringReplace(
+    truncateWithEllipses(bio, initialBioLength),
+    /@([\w\d-]+?)\b/g,
+    (username, i) => {
+      return (
+        <Link href="/[profile]" as={`/${username}`} key={i}>
+          <a className="font-semibold">@{username}</a>
+        </Link>
+      );
+    }
+  );
+
+  const bioWithMentions = reactStringReplace(
+    bio,
+    /@([\w\d-]+?)\b/g,
+    (username, i) => {
+      return (
+        <Link href="/[profile]" as={`/${username}`} key={i}>
+          <a className="font-semibold">@{username}</a>
+        </Link>
+      );
+    }
+  );
 
   const updateItems = async (
     listId,
@@ -1051,8 +1079,8 @@ const Profile = ({
                         {bio ? (
                           <div className="text-black dark:text-gray-400 text-sm max-w-2xl text-left md:text-base mt-4 block break-words">
                             {moreBioShown
-                              ? bio
-                              : truncateWithEllipses(bio, initialBioLength)}
+                              ? bioWithMentions
+                              : shortBioWithMentions}
                             {!moreBioShown &&
                               bio &&
                               bio.length > initialBioLength && (

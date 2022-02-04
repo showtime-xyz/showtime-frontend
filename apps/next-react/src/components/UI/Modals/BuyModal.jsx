@@ -24,12 +24,14 @@ import confetti from "canvas-confetti";
 import Link from "next/link";
 import axios from "@/lib/axios";
 import AppContext from "@/context/app-context";
+import useFlags, { FLAGS } from "@/hooks/useFlags";
 
 const MODAL_PAGES = {
   GENERAL: "general",
   LOADING: "loading",
   PROCESSING: "processing",
   SUCCESS: "success",
+  NO_WALLET: "no_wallet",
   CHANGE_WALLET: "change_wallet",
   NO_BALANCE: "no_balance",
   NEEDS_ALLOWANCE: "needs_allowance",
@@ -43,9 +45,22 @@ const BuyModal = ({ open, onClose, token }) => {
   const isWeb3ModalActive = useRef(false);
   const confettiCanvas = useRef(null);
   const [modalVisibility, setModalVisibility] = useState(true);
-  const [modalPage, setModalPage] = useState(MODAL_PAGES.GENERAL);
+  const [modalPage, setModalPage] = useState(
+    Boolean(myProfile?.wallet_addresses_excluding_email_v2?.length)
+      ? MODAL_PAGES.GENERAL
+      : MODAL_PAGES.NO_WALLET
+  );
   const [quantity, setQuantity] = useState(1);
   const [transactionHash, setTransactionHash] = useState("");
+
+  const flags = useFlags();
+  const enableMagicTX = flags[FLAGS.enableMagicTX];
+
+  useEffect(() => {
+    if (!Boolean(myProfile?.wallet_addresses_excluding_email_v2?.length)) {
+      setModalPage(MODAL_PAGES.NO_WALLET);
+    }
+  }, [myProfile]);
 
   const shotConfetti = () => {
     if (!confettiCanvas.current) return;
@@ -114,7 +129,10 @@ const BuyModal = ({ open, onClose, token }) => {
   const buyToken = async () => {
     setModalPage(MODAL_PAGES.LOADING);
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme });
+    const web3Modal = getWeb3Modal({
+      theme: resolvedTheme,
+      withMagic: enableMagicTX,
+    });
 
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
@@ -165,7 +183,7 @@ const BuyModal = ({ open, onClose, token }) => {
           signerAddress,
           process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT
         )
-      ).gt(basePrice)
+      ).gte(basePrice)
     ) {
       return setModalPage(MODAL_PAGES.NEEDS_ALLOWANCE);
     }
@@ -243,6 +261,8 @@ const BuyModal = ({ open, onClose, token }) => {
             shotConfetti={shotConfetti}
           />
         );
+      case MODAL_PAGES.NO_WALLET:
+        return <NoWalletPage />;
       case MODAL_PAGES.CHANGE_WALLET:
         return <WalletErrorPage buyToken={buyToken} />;
       case MODAL_PAGES.NO_BALANCE:
@@ -281,7 +301,7 @@ const BuyModal = ({ open, onClose, token }) => {
     >
       <Dialog
         static
-        className="fixed xs:inset-0 overflow-y-auto z-[2] pt-[96px] md:pt-0 w-full modal-mobile-position"
+        className="fixed inset-0 overflow-y-auto z-[2] pt-[96px] md:pt-0 w-full modal-mobile-position"
         open={open}
         onClose={updateModalVisibility}
       >
@@ -435,9 +455,11 @@ const BuyPage = ({ token, quantity, setQuantity, buyToken, onClose }) => {
                   </p>
                   <div className="flex items-center space-x-1 -mt-0.5">
                     <p className="text-gray-900 dark:text-white font-semibold text-sm">
-                      {token.listing.name === token.listing.address
-                        ? formatAddressShort(token.listing.name)
-                        : truncateWithEllipses(token.listing.name, 22)}
+                      {token.listing.name
+                        ? token.listing.name === token.listing.address
+                          ? formatAddressShort(token.listing.name)
+                          : truncateWithEllipses(token.listing.name, 22)
+                        : formatAddressShort(token.listing.name)}
                     </p>
                     {token.listing.verified == 1 && (
                       <BadgeIcon
@@ -493,7 +515,7 @@ const BuyPage = ({ token, quantity, setQuantity, buyToken, onClose }) => {
                   src="https://storage.googleapis.com/showtime-cdn/showtime-icon-sm.jpg"
                 />
                 <span className="text-gray-600 dark:text-gray-400 text-xs font-semibold">
-                  Showtime NFT
+                  Showtime
                 </span>
               </div>
               <p className="text-gray-600 dark:text-gray-400 text-xs font-semibold">
@@ -629,6 +651,28 @@ const SuccessPage = ({ transactionHash, token, shotConfetti }) => {
   );
 };
 
+const NoWalletPage = () => (
+  <div>
+    <div className="p-4 border-b border-gray-100 dark:border-gray-900">
+      <p className="font-medium text-gray-900 dark:text-white">
+        You’ll need to connect an Ethereum wallet before buying an NFT on
+        Showtime.
+      </p>
+    </div>
+    <div className="p-4">
+      <Link href="/wallet">
+        <Button
+          as="a"
+          className="w-full flex items-center justify-center cursor-pointer"
+          style="primary"
+        >
+          Connect a Wallet
+        </Button>
+      </Link>
+    </div>
+  </div>
+);
+
 const WalletErrorPage = ({ buyToken }) => {
   return (
     <div
@@ -720,11 +764,16 @@ const AllowanceRequiredPage = ({
   buyToken,
 }) => {
   const { resolvedTheme } = useTheme();
+  const flags = useFlags();
+  const enableMagicTX = flags[FLAGS.enableMagicTX];
 
   const grantAllowance = async () => {
     setModalPage(MODAL_PAGES.LOADING);
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme });
+    const web3Modal = getWeb3Modal({
+      theme: resolvedTheme,
+      withMagic: enableMagicTX,
+    });
     isWeb3ModalActive.current = true;
 
     const web3 = new ethers.providers.Web3Provider(
@@ -780,7 +829,7 @@ const AllowanceRequiredPage = ({
     setTransactionHash(transaction);
     setModalPage(MODAL_PAGES.PROCESSING_ALLOWANCE);
 
-    web3.once(transaction, buyToken);
+    web3.waitForTransaction(transaction).then(buyToken);
   };
 
   return (

@@ -47,19 +47,29 @@ const MintModal = ({ open, onClose }) => {
   const { resolvedTheme } = useTheme();
   const isWeb3ModalActive = useRef(false);
   const confettiCanvas = useRef(null);
-  const [modalPage, setModalPage] = useState(MODAL_PAGES.GENERAL);
+  const flags = useFlags();
+  const enableMagicTX = flags[FLAGS.enableMagicTX];
+  const hasWalletAddress = Boolean(myProfile?.wallet_addresses_v2?.length);
+  const hasWalletAddressExcludingEmail = Boolean(
+    myProfile?.wallet_addresses_excluding_email_v2?.length
+  );
+
+  const setDefaultModalPage = () => {
+    if (enableMagicTX) {
+      return hasWalletAddress ? MODAL_PAGES.GENERAL : MODAL_PAGES.NO_WALLET;
+    } else {
+      return hasWalletAddressExcludingEmail
+        ? MODAL_PAGES.GENERAL
+        : MODAL_PAGES.NO_WALLET;
+    }
+  };
+
+  const [modalPage, setModalPage] = useState(() => {
+    return setDefaultModalPage();
+  });
 
   useEffect(() => {
-    if (!myProfile) return;
-
-    if (
-      myProfile.wallet_addresses_excluding_email_v2?.filter(({ address }) =>
-        address.startsWith("0x")
-      )?.length > 0
-    )
-      return;
-
-    setModalPage(MODAL_PAGES.NO_WALLET);
+    setModalPage(setDefaultModalPage());
   }, [myProfile]);
 
   const shotConfetti = () => {
@@ -132,7 +142,7 @@ const MintModal = ({ open, onClose }) => {
     setHasAcceptedTerms(false);
     setTransactionHash("");
     setTokenID("");
-    setModalPage(MODAL_PAGES.GENERAL);
+    setDefaultModalPage();
   };
 
   const saveDraft = () =>
@@ -303,7 +313,10 @@ const MintModal = ({ open, onClose }) => {
       )
       .then((res) => res.data);
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme });
+    const web3Modal = getWeb3Modal({
+      theme: resolvedTheme,
+      withMagic: enableMagicTX,
+    });
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,
@@ -458,7 +471,7 @@ const MintModal = ({ open, onClose }) => {
       <Transition.Root show={open} as={Fragment}>
         <Dialog
           static
-          className={`xs:inset-0 modal-mobile-position fixed overflow-y-auto z-1 ${
+          className={`inset-0 modal-mobile-position fixed overflow-y-auto z-1 ${
             sourcePreview.src ? "pt-[96px] md:pt-0" : ""
           }`}
           open={open}
@@ -825,7 +838,6 @@ const MintingPage = ({ transactionHash }) => {
 };
 
 const SuccessPage = ({ transactionHash, tokenID, shotConfetti, listToken }) => {
-  const { [FLAGS.hasMinting]: canList } = useFlags();
   const tokenURL = `/t/${
     process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai" : "polygon"
   }/${process.env.NEXT_PUBLIC_MINTING_CONTRACT}/${tokenID}`;
@@ -848,11 +860,9 @@ const SuccessPage = ({ transactionHash, tokenID, shotConfetti, listToken }) => {
         Your NFT has been successfully minted!
       </p>
       <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
-        {canList && (
-          <Button style="primary" onClick={listToken} className="!mt-6">
-            List for sale
-          </Button>
-        )}
+        <Button style="primary" onClick={listToken} className="!mt-6">
+          List for sale
+        </Button>
         <Button
           style="primary"
           as="a"

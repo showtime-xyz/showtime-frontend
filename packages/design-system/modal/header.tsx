@@ -9,14 +9,14 @@ type Props = {
   close?: () => void;
 };
 
-export function Header(props: Props) {
+export function Header({ title, close }: Props) {
   return (
-    <View tw="p-6 h-16 border-b border-gray-200 dark:border-gray-700 flex-row items-center justify-between">
-      <View tw="w-8 h-8">
+    <View tw="p-[16px] flex-row items-center justify-between">
+      <View tw="w-[48px] h-[48px] justify-center items-center">
         <Button
-          onPress={props.close}
+          onPress={close}
           variant="tertiary"
-          tw="h-8 rounded-full p-2"
+          tw="rounded-full h-[48px] w-[48px]"
           iconOnly={true}
         >
           <Close
@@ -29,11 +29,11 @@ export function Header(props: Props) {
         </Button>
       </View>
       <Text variant="text-lg" tw="dark:text-white font-bold">
-        {props.title}
+        {title}
       </Text>
       <View tw="w-8 h-8">
         <Button
-          onPress={props.close}
+          onPress={close}
           variant="tertiary"
           tw="hidden h-8 rounded-full p-2"
           iconOnly={true}

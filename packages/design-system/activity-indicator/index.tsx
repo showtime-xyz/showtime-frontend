@@ -2,8 +2,9 @@ import { ComponentProps } from "react";
 import { ActivityIndicator as DripsyActivityIndicator } from "dripsy";
 
 import { tw as tailwind } from "design-system/tailwind";
+import type { TW } from "design-system/tailwind/types";
 
-type ActivityIndicatorProps = { tw?: string } & ComponentProps<
+type ActivityIndicatorProps = { tw?: TW } & ComponentProps<
   typeof DripsyActivityIndicator
 >;
 

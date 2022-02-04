@@ -3,29 +3,42 @@ import { useLinkProps } from "@react-navigation/native";
 import NextLink from "next/link";
 
 import { parseNextPath } from "app/navigation/parse-next-path";
+import { useRouter } from "app/navigation/use-router";
 
 type Props = {
   children: React.ReactNode;
+  hitSlop?: { top: number; bottom: number; left: number; right: number };
 } & Omit<ComponentProps<typeof NextLink>, "passHref">;
 
 function LinkCore({
   children,
   href,
   as,
+  hitSlop,
   componentProps,
   Component,
-  ...props
 }: Props & {
   Component: ComponentType<any>;
   componentProps?: any;
 }) {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const router = useRouter();
   const linkProps = useLinkProps({
-    to: parseNextPath(as ?? href), // TODO: should this prefer href or as?
+    to: parseNextPath(href),
   });
 
   return (
-    <Component {...componentProps} {...linkProps}>
+    <Component
+      {...linkProps}
+      {...componentProps}
+      onPress={() => {
+        // If we are currently in NFT modal,
+        // we need to close it before navigating to new page
+        if (router?.pathname?.includes("/nft/")) {
+          router.pop();
+        }
+        linkProps.onPress();
+      }}
+    >
       {children}
     </Component>
   );

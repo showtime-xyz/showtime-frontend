@@ -10,7 +10,7 @@
     "postinstall": "cd ../.. && yarn patch-package"
   },
   "dependencies": {
-    "@airgap/beacon-sdk": "^2.3.7",
+    "@airgap/beacon-sdk": "^2.3.9",
     "@badrap/bar-of-progress": "^0.1.2",
     "@biconomy/mexa": "^2.0.22",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
@@ -27,7 +27,7 @@
     "@sentry/nextjs": "6.13.2",
     "@tailwindcss/forms": "^0.3.2",
     "@tippyjs/react": "^4.2.6",
-    "@walletconnect/web3-provider": "^1.6.5",
+    "@walletconnect/web3-provider": "^1.7.1",
     "app": "*",
     "array-to-image": "^1.0.0",
     "autoprefixer": "^10.4.0",

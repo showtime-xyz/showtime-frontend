@@ -50,8 +50,8 @@ jobs:
           expo-version: 4.x
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Expo publish
-        run: STAGE=production expo publish --release-channel=production
+      - name: EAS Update
+        run: STAGE=production eas update --branch production --message "Deploy to production"
 
       - name: Build on EAS
         run: STAGE=production eas build --platform all --non-interactive --no-wait --auto-submit

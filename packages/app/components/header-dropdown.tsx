@@ -15,6 +15,10 @@ import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import { formatAddressShort } from "app/lib/utilities";
 import { AppContext } from "app/context/app-context";
 import { useUser } from "app/hooks/use-user";
+import {
+  useProfileNavigation,
+  useSettingsNavigation,
+} from "app/navigation/app-navigation";
 
 const getSmallImageUrl = (imgUrl: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
@@ -26,25 +30,32 @@ const getSmallImageUrl = (imgUrl: string) => {
 function HeaderDropdown() {
   const { user } = useUser();
   const context = useContext(AppContext);
+  const openProfile = useProfileNavigation(
+    user?.data?.profile?.wallet_addresses_v2?.[0]?.address
+  );
+  const openSettings = useSettingsNavigation(
+    user?.data?.profile?.wallet_addresses_v2?.[0]?.address
+  );
 
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <View tw="h-10 w-10 bg-gray-100 dark:bg-black items-center justify-center rounded-full">
+        <View tw="h-8 w-8 items-center justify-center rounded-full">
           <Image
             tw="h-8 w-8 rounded-full"
             source={{
               uri: getSmallImageUrl(
-                user?.profile?.img_url || DEFAULT_PROFILE_PIC
+                user?.data.profile?.img_url || DEFAULT_PROFILE_PIC
               ),
             }}
             alt={
-              user?.profile?.name ||
-              user?.profile?.username ||
-              user?.profile?.wallet_addresses_excluding_email_v2?.[0]
+              user?.data?.profile?.name ||
+              user?.data?.profile?.username ||
+              user?.data?.profile?.wallet_addresses_excluding_email_v2?.[0]
                 ?.ens_domain ||
               formatAddressShort(
-                user?.profile?.wallet_addresses_excluding_email_v2?.[0]?.address
+                user?.data?.profile?.wallet_addresses_excluding_email_v2?.[0]
+                  ?.address
               ) ||
               "Profile"
             }
@@ -57,66 +68,59 @@ function HeaderDropdown() {
         tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
       >
         <DropdownMenuItem
-          onSelect={() => {}}
+          onSelect={openProfile}
           key="your-profile"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
           <DropdownMenuItemTitle tw="text-black dark:text-white">
-            Your Profile
+            Profile
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
+
+        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+
+        <DropdownMenuRoot>
+          <DropdownMenuTriggerItem
+            key="nested-group-trigger"
+            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          >
+            <DropdownMenuItemTitle tw="text-black dark:text-white">
+              Theme
+            </DropdownMenuItemTitle>
+          </DropdownMenuTriggerItem>
+          <DropdownMenuContent tw="w-30 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow">
+            <DropdownMenuItem
+              onSelect={() => context.setColorScheme("light")}
+              key="nested-group-1"
+              tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+            >
+              <DropdownMenuItemTitle tw="text-black dark:text-white">
+                Light
+              </DropdownMenuItemTitle>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => context.setColorScheme("dark")}
+              key="nested-group-2"
+              tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+            >
+              <DropdownMenuItemTitle tw="text-black dark:text-white">
+                Dark
+              </DropdownMenuItemTitle>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenuRoot>
+
+        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+
         <DropdownMenuItem
-          onSelect={() => {}}
-          key="settings"
+          onSelect={openSettings}
+          key="your-settings"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
           <DropdownMenuItemTitle tw="text-black dark:text-white">
             Settings
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
-
-        <DropdownMenuItem
-          onSelect={() => {}}
-          key="add-eth"
-          tw="h-8 rounded-full flex-1 mx-1 my-2 bg-gray-900 dark:bg-white justify-center items-center"
-        >
-          <DropdownMenuItemTitle tw="text-white dark:text-black font-bold">
-            Add ETH
-          </DropdownMenuItemTitle>
-        </DropdownMenuItem>
-
-        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
-
-        <DropdownMenuGroup>
-          <DropdownMenuRoot>
-            <DropdownMenuTriggerItem
-              key="nested-group-trigger"
-              tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
-            >
-              <DropdownMenuItemTitle tw="text-black dark:text-white">
-                Theme
-              </DropdownMenuItemTitle>
-            </DropdownMenuTriggerItem>
-            <DropdownMenuContent tw="w-30 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow">
-              <DropdownMenuItem
-                key="nested-group-1"
-                tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
-              >
-                <DropdownMenuItemTitle tw="text-black dark:text-white">
-                  Light
-                </DropdownMenuItemTitle>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                key="nested-group-2"
-                tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
-              >
-                <DropdownMenuItemTitle tw="text-black dark:text-white">
-                  Dark
-                </DropdownMenuItemTitle>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenuRoot>
-        </DropdownMenuGroup>
 
         <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 
