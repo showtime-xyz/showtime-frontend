@@ -64,15 +64,15 @@ export const Trending = () => {
           )}
         >
           <Tabs.Trigger>
-            <TabItem name="24 hours" selected={selected === 0} />
+            <TabItem name="Today" selected={selected === 0} />
           </Tabs.Trigger>
 
           <Tabs.Trigger>
-            <TabItem name="7 days" selected={selected === 1} />
+            <TabItem name="This week" selected={selected === 1} />
           </Tabs.Trigger>
 
           <Tabs.Trigger>
-            <TabItem name="30 days" selected={selected === 2} />
+            <TabItem name="This month" selected={selected === 2} />
           </Tabs.Trigger>
 
           <SelectedTabIndicator />
