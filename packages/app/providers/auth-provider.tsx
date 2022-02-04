@@ -3,7 +3,6 @@ import { useSWRConfig } from "swr";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import useUnmountSignal from "use-unmount-signal";
 import { AuthContext } from "app/context/auth-context";
-import { axios } from "app/lib/axios";
 import { magic } from "app/lib/magic";
 import { mixpanel } from "app/lib/mixpanel";
 import { deleteCache } from "app/lib/delete-cache";
@@ -12,8 +11,9 @@ import { deleteAccessToken, getAccessToken } from "app/lib/access-token";
 import * as loginStorage from "app/lib/login";
 import * as logoutStorage from "app/lib/logout";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
+import { useFetchOnAppForeground } from "app/hooks/use-fetch-on-app-foreground";
 import { useWeb3 } from "app/hooks/use-web3";
-import { AuthenticationStatus } from "../types";
+import type { AuthenticationStatus } from "../types";
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -31,12 +31,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const unmountSignal = useUnmountSignal();
   const { setWeb3 } = useWeb3();
   const { setTokens, refreshTokens } = useAccessTokenManager();
+  const fetchOnAppForeground = useFetchOnAppForeground();
   //#endregion
 
   //#region methods
   const login = useCallback(
     async function login(endpoint: string, data: object) {
-      const response = await axios({
+      const response = await fetchOnAppForeground({
         url: `/v1/${endpoint}`,
         method: "POST",
         data,
