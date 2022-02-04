@@ -1,11 +1,38 @@
+import { useCallback, useMemo, useState } from "react";
+import { useSWRConfig } from "swr";
+import Router from "next/router";
+
+import { useRouter } from "app/navigation/use-router";
 import { View } from "design-system/view";
 import { Button } from "design-system/card/social/button";
 import { useMyInfo } from "app/hooks/api-hooks";
-import { useCallback, useMemo, useState } from "react";
 import { NFT } from "app/types";
+import { NFT_DETAIL_API } from "app/utilities";
 
 function Social({ nft }: { nft?: NFT }) {
   if (!nft) return null;
+
+  const router = useRouter();
+  const { mutate } = useSWRConfig();
+
+  const openNFT = useCallback(
+    (id: string) => {
+      mutate(`${NFT_DETAIL_API}/${nft.nft_id}`, {
+        data: nft,
+      });
+      const as = `/nft/${nft.nft_id}`;
+
+      const href = Router.router
+        ? {
+            pathname: Router.pathname,
+            query: { ...Router.query, id },
+          }
+        : as;
+
+      router.push(href, as, { shallow: true });
+    },
+    [router, Router]
+  );
 
   const { isLiked, like, unlike } = useMyInfo();
 
@@ -32,8 +59,14 @@ function Social({ nft }: { nft?: NFT }) {
             }
           }, [isLikedNft, like, unlike, likeCount])}
         />
-        {/* <View tw="ml-2" />
-        <Button variant="comment" count={nft.comment_count} /> */}
+        <View tw="ml-2" />
+        {/* <Button
+          variant="comment"
+          count={nft.comment_count}
+          onPress={() => {
+            openNFT(nft.nft_id.toString());
+          }}
+        /> */}
       </View>
 
       {/* <View>

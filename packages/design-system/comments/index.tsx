@@ -2,7 +2,8 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { Platform, FlatList, Keyboard } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, Text } from "design-system";
+import { View } from "design-system/view";
+import { Text } from "design-system/text";
 import {
   MessageBox,
   SCROLL_HEIGHT,
@@ -95,10 +96,10 @@ function Comments({ nft }: Props) {
 
   // TODO: getItemLayout
 
-  const comments = data?.[0]?.comments;
+  const comments = data?.[0]?.data?.comments;
 
   return (
-    <View tw="flex-1 z-1 bg-white dark:bg-black">
+    <View tw="bg-white dark:bg-black">
       <FlatList
         ref={flatListRef}
         data={comments}

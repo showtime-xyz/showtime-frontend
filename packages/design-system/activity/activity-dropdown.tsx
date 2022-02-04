@@ -8,7 +8,8 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "design-system/dropdown-menu";
-import { View, Button } from "design-system";
+import { View } from "design-system/view";
+import { Button } from "design-system/button";
 import { MoreHorizontal } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 import { useReport } from "app/hooks/use-report";
