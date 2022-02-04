@@ -27,7 +27,6 @@ import { useNavigation } from "@react-navigation/native";
 import * as NavigationBar from "expo-navigation-bar";
 import * as SystemUI from "expo-system-ui";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { ethers } from "ethers";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import LogRocket from "@logrocket/react-native";
 
@@ -38,14 +37,12 @@ import { AuthProvider } from "app/providers/auth-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { Web3Provider } from "app/providers/web3-provider";
 import { WalletConnectProvider } from "app/providers/wallet-connect-provider";
-import { NextTabNavigator } from "app/navigation/next-tab-navigator";
 import { AppContext } from "app/context/app-context";
 import { ToastProvider } from "design-system/toast";
 import {
   setColorScheme as setUserColorScheme,
   useColorScheme as useUserColorScheme,
 } from "app/lib/color-scheme";
-import { Relayer } from "app/lib/magic";
 import { RootStackNavigator } from "app/navigation/root-stack-navigator";
 
 enableScreens(true);
@@ -181,8 +178,6 @@ function AppContextProvider({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
-  const [mountRelayerOnApp, setMountRelayerOnApp] = useState(true);
-
   useDeviceContext(tw, { withDeviceColorScheme: false });
   // Default to device color scheme
   const deviceColorScheme = useDeviceColorScheme();
@@ -220,17 +215,7 @@ function AppContextProvider({
     }
   }, [isDark]);
 
-  // useEffect(() => {
-  //   magic.user.isLoggedIn().then((isLoggedIn) => {
-  //     if (magic.rpcProvider && isLoggedIn) {
-  //       const provider = new ethers.providers.Web3Provider(magic.rpcProvider);
-  //       setWeb3(provider);
-  //     }
-  //   });
-  // }, []);
-
   const injectedGlobalContext = {
-    setMountRelayerOnApp,
     colorScheme,
     setColorScheme: (newColorScheme: "light" | "dark") => {
       setColorScheme(newColorScheme);
@@ -241,8 +226,6 @@ function AppContextProvider({
   return (
     <AppContext.Provider value={injectedGlobalContext}>
       {children}
-      {/* TODO: Open Relayer on FullWindow, need change in relayer source */}
-      {mountRelayerOnApp ? <Relayer /> : null}
     </AppContext.Provider>
   );
 }
