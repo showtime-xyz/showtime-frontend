@@ -11,6 +11,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       create: "create",
       burn: "burn",
       search: "search",
+      list: "list",
       profile: "profile/:walletAddress",
       settings: "settings/:walletAddress",
       bottomTabs: {
