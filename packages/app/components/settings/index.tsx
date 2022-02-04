@@ -81,12 +81,8 @@ const SettingsTabs = () => {
           </View>
         </Tabs.Header>
         <Tabs.List
-          contentContainerStyle={{
-            justifyContent: "space-between",
-            width: Dimensions.get("window").width,
-          }}
           style={tw.style(
-            `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900`
+            `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 w-screen`
           )}
         >
           <Tabs.Trigger>
