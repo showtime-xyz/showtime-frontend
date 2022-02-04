@@ -5,23 +5,13 @@ import {
   Platform,
   useColorScheme as useDeviceColorScheme,
 } from "react-native";
-import {
-  enableScreens,
-  // enableFreeze,
-  FullWindowOverlay,
-} from "react-native-screens";
+import { enableScreens } from "react-native-screens";
 import { StatusBar, setStatusBarStyle } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { DripsyProvider } from "dripsy";
 import { useDeviceContext, useAppColorScheme } from "twrnc";
-// import * as Sentry from 'sentry-expo'
 import { MMKV } from "react-native-mmkv";
 import { SWRConfig } from "swr";
-// import WalletConnectProvider, {
-//   RenderQrcodeModalProps,
-//   QrcodeModal,
-// } from "@walletconnect/react-native-dapp";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
 import { useNavigation } from "@react-navigation/native";
 import * as NavigationBar from "expo-navigation-bar";
@@ -62,25 +52,6 @@ LogBox.ignoreLogs([
   "Constants.platform.ios.model has been deprecated in favor of expo-device's Device.modelName property.",
   "ExponentGLView",
 ]);
-
-// function QRCodeModal(props: RenderQrcodeModalProps): JSX.Element {
-//   if (!props.visible) {
-//     return null;
-//   }
-
-//   return (
-//     <FullWindowOverlay
-//       style={{
-//         position: "absolute",
-//         width: "100%",
-//         height: "100%",
-//         justifyContent: "center",
-//       }}
-//     >
-//       <QrcodeModal division={4} {...props} />
-//     </FullWindowOverlay>
-//   );
-// }
 
 function mmkvProvider() {
   const storage = new MMKV();

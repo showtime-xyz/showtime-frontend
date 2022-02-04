@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Spinner } from "design-system";
-import { Relayer } from "../../lib/magic";
-import { Web3Context } from "app/context/web3-context";
+import { useWeb3 } from "app/hooks/use-web3";
+import { Relayer } from "app/lib/magic";
 
 interface LoginContainerProps {
   loading?: boolean;
@@ -12,16 +12,16 @@ export function LoginContainer({
   loading = false,
   children,
 }: LoginContainerProps) {
-  const context = useContext(Web3Context);
+  const { setMountRelayerOnApp } = useWeb3();
   const [mountRelayer, setMountRelayer] = useState(false);
 
   useEffect(() => {
-    context?.setMountRelayerOnApp(false);
+    setMountRelayerOnApp(false);
     setMountRelayer(true);
     return () => {
-      context?.setMountRelayerOnApp(true);
+      setMountRelayerOnApp(true);
     };
-  }, [context?.setMountRelayerOnApp]);
+  }, [setMountRelayerOnApp]);
 
   return (
     <View
