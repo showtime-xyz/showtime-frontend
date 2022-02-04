@@ -101,8 +101,8 @@ const axiosAPI = async ({
     return await axios(request).then((res) => res.data);
   } catch (error) {
     console.log("failed request ", request);
-    // TODO: Evaluate if we should continue to allow axios to swallow errors
     console.error(error);
+    throw error;
   }
 };
 
