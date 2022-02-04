@@ -1420,10 +1420,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@biconomy/mexa@^2.0.26":
-  version "2.0.26"
-  resolved "https://registry.yarnpkg.com/@biconomy/mexa/-/mexa-2.0.26.tgz#76dde2c5264c79c8e29115e7a20b0b742f6f28f6"
-  integrity sha512-y6zwUKclgLlNmFHI0Rc1yq/rBfHV0X6d0s9v9MNji92YjXw7IM94jeZDL8PLb9MCgQ++9QGe9UKEABMbA/rQAw==
+"@biconomy/mexa@2.0.24":
+  version "2.0.24"
+  resolved "https://registry.yarnpkg.com/@biconomy/mexa/-/mexa-2.0.24.tgz#212971ac0a3bb909da95eab1640caa5c3e72d2b3"
+  integrity sha512-gPlpqUYMJ/I/n45U8H5hoftjlP8BxdggRm20dVAwpEs1XnuupSYd70QNgYN1aTpisqA16wtLiR2p5eiAR+Q/Ug==
   dependencies:
     "@babel/core" "^7.12.13"
     "@babel/runtime" "^7.12.13"

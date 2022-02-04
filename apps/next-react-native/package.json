@@ -12,7 +12,7 @@
   "dependencies": {
     "@airgap/beacon-sdk": "^2.3.9",
     "@badrap/bar-of-progress": "^0.1.2",
-    "@biconomy/mexa": "^2.0.26",
+    "@biconomy/mexa": "2.0.24",
     "@google/model-viewer": "^1.10.1",
     "@hapi/iron": "^6.0.0",
     "@magic-sdk/admin": "^1.3.4",

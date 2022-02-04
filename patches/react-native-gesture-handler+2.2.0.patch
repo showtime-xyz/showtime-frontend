@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-gesture-handler/ios/RNGestureHandlerManager.m b/node_modules/react-native-gesture-handler/ios/RNGestureHandlerManager.m
+index 8d726f8..ef288b9 100644
+--- a/node_modules/react-native-gesture-handler/ios/RNGestureHandlerManager.m
++++ b/node_modules/react-native-gesture-handler/ios/RNGestureHandlerManager.m
+@@ -11,7 +11,7 @@
+ #if __has_include(<React/RCTRootContentView.h>)
+ #import <React/RCTRootContentView.h>
+ #else
+-#import "RCTRootContentView.h"
++#import <React/RCTRootContentView.h>
+ #endif
+ 
+ #import "RNGestureHandlerState.h"
