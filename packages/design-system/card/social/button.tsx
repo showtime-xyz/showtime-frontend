@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 
-import { Pressable, Text } from "design-system";
+import { Pressable } from "design-system/pressable-scale";
+import { Text } from "design-system/text";
 import { HeartFilled, MessageFilled, Boost } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 import { useOnPress, useOnHover } from "design-system/hooks";
@@ -127,16 +128,16 @@ function getBackgroundHoverColor(variant: Props["variant"]) {
 
 // Get icon active color
 function getIconActiveColor(variant: Props["variant"]) {
-    switch (variant) {
-      case "like":
-        return tw.color("red-500");
-      case "comment":
-        return tw.color("indigo-600");
-      case "boost":
-        return tw.color("green-600");
-      default:
-        return tw.color("gray-400");
-    }
+  switch (variant) {
+    case "like":
+      return tw.color("red-500");
+    case "comment":
+      return tw.color("indigo-600");
+    case "boost":
+      return tw.color("green-600");
+    default:
+      return tw.color("gray-400");
+  }
 }
 
 // Get text active color
