@@ -7,8 +7,8 @@ import * as FileSystem from "expo-file-system";
 import { getBiconomy } from "../utilities";
 import { ethers } from "ethers";
 import minterAbi from "app/abi/ShowtimeMT.json";
+import { useWeb3 } from "./use-web3";
 import { useWalletConnect } from "app/lib/walletconnect";
-import { AppContext } from "../context/app-context";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
@@ -159,9 +159,10 @@ const getPinataToken = () => {
 
 export const useMintNFT = () => {
   const [state, dispatch] = useReducer(mintNFTReducer, initialMintNFTState);
-  const context = useContext(AppContext);
   const biconomyRef = useRef<any>();
-  const isMagic = !!context.web3;
+  const { web3 } = useWeb3();
+
+  const isMagic = !!web3;
   const connector = useWalletConnect();
 
   const mintNftParams = useRef<any>(null);
@@ -278,8 +279,9 @@ export const useMintNFT = () => {
 
     let userAddress;
     try {
+      const isMagic = !!web3;
       if (isMagic) {
-        const signer = context.web3.getSigner();
+        const signer = web3.getSigner();
         const addr = await signer.getAddress();
         userAddress = addr;
       } else {
@@ -304,9 +306,7 @@ export const useMintNFT = () => {
 
       dispatch({ type: "minting", payload: { isMagic } });
 
-      biconomyRef.current = await (
-        await getBiconomy(connector, context.web3)
-      ).biconomy;
+      biconomyRef.current = await (await getBiconomy(connector, web3)).biconomy;
 
       const contract = new ethers.Contract(
         //@ts-ignore
