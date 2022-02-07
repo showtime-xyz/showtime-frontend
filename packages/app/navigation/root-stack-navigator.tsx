@@ -11,6 +11,7 @@ import { SettingsScreen } from "app/screens/settings";
 import { NextTabNavigator } from "./next-tab-navigator";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { useIsDarkMode } from "design-system/hooks";
+import { SearchScreen } from "app/screens/search";
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,7 @@ export function RootStackNavigator() {
       >
         <Stack.Screen name="profile" component={ProfileScreen} />
         <Stack.Screen name="settings" component={SettingsScreen} />
+        <Stack.Screen name="search" component={SearchScreen} />
       </Stack.Group>
 
       {/* Modals */}

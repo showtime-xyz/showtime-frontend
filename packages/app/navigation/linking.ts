@@ -9,6 +9,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       nft: "nft/:id",
       create: "create",
       burn: "burn",
+      search: "search",
       profile: "profile/:walletAddress",
       settings: "settings/:walletAddress",
       bottomTabs: {
