@@ -108,9 +108,13 @@ export function useWalletLogin() {
   const loginWithWallet = useCallback(
     async function loginWithWallet() {
       setAuthenticationStatus("AUTHENTICATING");
+      // We kill the session if connected so we can show select wallet popup again
+      if (walletConnector.connected) {
+        await walletConnector.killSession();
+      }
       connectToWallet();
     },
-    [connectToWallet, setAuthenticationStatus]
+    [connectToWallet, setAuthenticationStatus, walletConnector]
   );
   const continueLoginIn = useStableCallback(() => {
     if (status === "CONNECTED_TO_WALLET" && (!address || !name)) {
