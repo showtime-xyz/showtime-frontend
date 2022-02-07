@@ -38,43 +38,44 @@ const HeaderRight = () => {
               <NotificationsTabBarIcon color="white" focused={false} />
             </View>
           )}
-          {isAuthenticated ? (
-            <View tw="bg-white dark:bg-black">
-              {width > 768 && (
-                <View tw="mx-3">
-                  <Button
-                    onPress={() => {}}
-                    variant="primary"
-                    tw="p-2.5 md:px-3.5 md:py-1.5 rounded-full h-10 w-10 md:w-auto"
-                  >
-                    <ButtonLabel tw="hidden md:flex">Create</ButtonLabel>
-                    <Plus
-                      style={tw.style("md:hidden")}
-                      width={20}
-                      height={20}
-                      color={
-                        tw.style("bg-white dark:bg-black")
-                          ?.backgroundColor as string
-                      }
-                    />
-                  </Button>
-                </View>
-              )}
-
-              <HeaderDropdown />
-            </View>
-          ) : (
-            <Button
-              onPress={() => {
-                router.push("/login");
-              }}
-              variant="primary"
-              size="small"
-              labelTW="font-semibold"
-            >
-              Sign&nbsp;In
-            </Button>
-          )}
+          <View tw="bg-white dark:bg-black w-20 items-end">
+            {isAuthenticated && width > 768 && (
+              <View tw="mx-3">
+                <Button
+                  onPress={() => {}}
+                  variant="primary"
+                  tw="p-2.5 md:px-3.5 md:py-1.5 rounded-full h-10 w-10 md:w-auto"
+                >
+                  <ButtonLabel tw="hidden md:flex">Create</ButtonLabel>
+                  <Plus
+                    style={tw.style("md:hidden")}
+                    width={20}
+                    height={20}
+                    color={
+                      tw.style("bg-white dark:bg-black")
+                        ?.backgroundColor as string
+                    }
+                  />
+                </Button>
+              </View>
+            )}
+            {isAuthenticated ? (
+              <View tw="bg-white dark:bg-black w-20 items-end">
+                <HeaderDropdown />
+              </View>
+            ) : (
+              <Button
+                onPress={() => {
+                  router.push("/login");
+                }}
+                variant="primary"
+                size="small"
+                labelTW="font-semibold"
+              >
+                Sign&nbsp;In
+              </Button>
+            )}
+          </View>
         </View>
       )}
     </View>
@@ -94,6 +95,7 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
         if (canGoBack) {
           router.pop();
         } else {
+          // router.push("/search");
           toast?.show({ message: "🚧 Coming soon", hideAfter: 4000 });
         }
       }}

@@ -22,8 +22,10 @@ function Social({ nft }: { nft?: NFT }) {
           active={isLikedNft}
           onPress={useCallback(async () => {
             if (isLikedNft) {
-              unlike(nft.nft_id);
-              setLikeCount(likeCount - 1);
+              const isSuccessfullyUnlike = await unlike(nft.nft_id);
+              if (isSuccessfullyUnlike) {
+                setLikeCount(likeCount - 1);
+              }
             } else {
               const isSuccessfullyLiked = await like(nft.nft_id);
               if (isSuccessfullyLiked) {

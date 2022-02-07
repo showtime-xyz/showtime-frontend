@@ -54,7 +54,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
       >
         <SafeAreaView style={tw.style("dark:bg-black")}>
           <Header
-            title="Choose your country"
+            title="Select country"
             close={() => setModalVisible(false)}
             onSearchSubmit={(value) => setSearch(value)}
           />
