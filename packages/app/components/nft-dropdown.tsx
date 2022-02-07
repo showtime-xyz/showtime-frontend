@@ -1,3 +1,4 @@
+import { useState, useContext, useEffect } from "react";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -6,12 +7,12 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "design-system/dropdown-menu";
-import { View, Button } from "design-system";
+import { Button } from "design-system";
 import { MoreHorizontal } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 import type { NFT } from "app/types";
-import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useReport } from "app/hooks/use-report";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useRouter } from "app/navigation/use-router";
 
 type Props = {
@@ -19,13 +20,15 @@ type Props = {
 };
 
 function NFTDropdown({ nft }: Props) {
-  const userId = useCurrentUserId();
-  const isOwner = Boolean(
-    nft?.owner_id === userId ||
-      nft?.multiple_owners_list?.find((owner) => owner.profile_id === userId)
-  );
+  const { userAddress } = useCurrentUserAddress();
+  const [isOwner, setIsOwner] = useState(false);
+
   const { report } = useReport();
   const router = useRouter();
+
+  useEffect(() => {
+    setIsOwner(nft?.owner_address === userAddress);
+  }, [userAddress]);
 
   return (
     <DropdownMenuRoot>

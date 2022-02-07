@@ -25,6 +25,7 @@ export type NFT = {
   owner_name: string;
   owner_address: string;
   owner_img_url?: string;
+  multiple_owners_list?: Array<any>
   token_creator_followers_only: number;
   creator_username?: string;
   creator_verified: number;

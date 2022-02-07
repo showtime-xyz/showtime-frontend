@@ -1,49 +1,64 @@
-import { useState } from "react";
-import { Platform } from "react-native";
+import { useState, useEffect } from "react";
+import { Platform, Linking } from "react-native";
 import useUnmountSignal from "use-unmount-signal";
 import useSWR from "swr";
 import { formatDistanceToNowStrict } from "date-fns";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useForm, Controller } from "react-hook-form";
 
 import { View, Text, Fieldset, Button, ScrollView } from "design-system";
-import { ArrowRight, PolygonScan } from "design-system/icon";
+import { ArrowRight, PolygonScan, Check } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 import { Image } from "design-system/image";
 import { Video } from "design-system/video";
+import { Spinner } from "design-system/spinner";
 import { Collection } from "design-system/card/rows/collection";
 import { Owner } from "design-system/card/rows/owner";
 import { axios } from "app/lib/axios";
 import { yup } from "app/lib/yup";
 import type { NFT } from "app/types";
 import { supportedVideoExtensions } from "app/hooks/use-mint-nft";
+import { useTransferNFT } from "app/hooks/use-transfer-nft";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { useForm, Controller } from "react-hook-form";
 
-const defaultValues = {
-  copiesCount: 1,
-  receiver: "",
+type FormData = {
+  quantity: number;
+  receiverAddress: string;
 };
 
-const transferNFTValidationSchema = yup.object({
-  copiesCount: yup
-    .number()
-    .typeError("must be a number")
-    .required()
-    .min(1)
-    .max(10000)
-    .default(defaultValues.copiesCount),
-  receiver: yup.string().required().default(defaultValues.receiver),
-});
-
 function TransferNft({ nftId }: { nftId?: string }) {
+  const { startTransfer, state } = useTransferNFT();
+  const { userAddress } = useCurrentUserAddress();
+
   const [url] = useState(`/v2/nft_detail/${nftId}`);
+  const [maxQuantity, setMaxQuantity] = useState(0);
   const unmountSignal = useUnmountSignal();
   const { data, error } = useSWR([url], (url) =>
     axios({ url, method: "GET", unmountSignal })
   );
 
   const nft = data?.data as NFT;
+
+  const defaultValues = {
+    quantity: 1,
+    receiverAddress: "",
+  };
+
+  const transferNFTValidationSchema = yup.object({
+    quantity: yup
+      .number()
+      .typeError("must be a number")
+      .required()
+      .min(1)
+      .max(maxQuantity)
+      .default(defaultValues.quantity),
+    receiverAddress: yup
+      .string()
+      .required()
+      .default(defaultValues.receiverAddress),
+  });
 
   const {
     control,
@@ -55,6 +70,27 @@ function TransferNft({ nftId }: { nftId?: string }) {
     reValidateMode: "onChange",
     defaultValues,
   });
+
+  useEffect(() => {
+    const owner = nft?.multiple_owners_list?.find(
+      (owner) => owner.address === userAddress
+    );
+    if (owner?.quantity) {
+      setMaxQuantity(owner?.quantity);
+    }
+  }, [nft, userAddress]);
+
+  function handleSubmitTransfer({ quantity, receiverAddress }: FormData) {
+    startTransfer({ nft, receiverAddress, quantity });
+  }
+
+  function handleOpenPolygonScan() {
+    Linking.openURL(
+      `https://${
+        process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai" ? "mumbai." : ""
+      }polygonscan.com/tx/${state.transaction}`
+    );
+  }
 
   if (error) {
     console.error(error);
@@ -70,6 +106,44 @@ function TransferNft({ nftId }: { nftId?: string }) {
   const isVideo =
     fileExtension && supportedVideoExtensions.includes(fileExtension);
   const Preview = isVideo ? Video : Image;
+
+  if (state.status === "transfering" || state.status === "transferingSuccess") {
+    return (
+      <View tw="flex-1 justify-center items-center p-4 h-full">
+        {state.status === "transfering" ? (
+          <Spinner />
+        ) : (
+          <Check
+            style={tw.style("rounded-lg overflow-hidden")}
+            color={
+              tw.style("bg-black dark:bg-white")?.backgroundColor as string
+            }
+            width={32}
+            height={32}
+          />
+        )}
+
+        <Text tw="text-center text-black dark:text-white py-8">
+          {state.status === "transfering"
+            ? `Your NFT is being transferred. Feel free to navigate away from this screen.`
+            : "The transaction has been completed!"}
+        </Text>
+        {state.transaction && (
+          <Button onPress={handleOpenPolygonScan} variant="tertiary">
+            <PolygonScan
+              style={tw.style("rounded-lg overflow-hidden ")}
+              color={
+                tw.style("bg-black dark:bg-white")?.backgroundColor as string
+              }
+            />
+            <Text tw="text-black dark:text-white text-sm pl-2">
+              View on Polygon Scan
+            </Text>
+          </Button>
+        )}
+      </View>
+    );
+  }
 
   return (
     <View tw="flex-1">
@@ -117,7 +191,7 @@ function TransferNft({ nftId }: { nftId?: string }) {
           <View tw="mt-4 flex-row">
             <Controller
               control={control}
-              name="copiesCount"
+              name="quantity"
               render={({ field: { onChange, onBlur, value } }) => {
                 return (
                   <Fieldset
@@ -127,7 +201,7 @@ function TransferNft({ nftId }: { nftId?: string }) {
                     helperText="1 by default"
                     onBlur={onBlur}
                     keyboardType="numeric"
-                    errorText={errors.copiesCount?.message}
+                    errorText={errors.quantity?.message}
                     value={value?.toString()}
                     onChangeText={onChange}
                     returnKeyType="done"
@@ -140,7 +214,7 @@ function TransferNft({ nftId }: { nftId?: string }) {
           <View tw="mt-4 flex-row">
             <Controller
               control={control}
-              name="receiver"
+              name="receiverAddress"
               render={({ field: { onChange, onBlur, value } }) => {
                 return (
                   <Fieldset
@@ -149,7 +223,7 @@ function TransferNft({ nftId }: { nftId?: string }) {
                     placeholder="eg: @showtime, showtime.eth, 0x..."
                     helperText="Type username, ENS, or Ethereum address"
                     onBlur={onBlur}
-                    errorText={errors.receiver?.message}
+                    errorText={errors.receiverAddress?.message}
                     value={value?.toString()}
                     onChangeText={onChange}
                     returnKeyType="done"
@@ -161,7 +235,10 @@ function TransferNft({ nftId }: { nftId?: string }) {
         </View>
       </TransferNftScrollView>
       <View tw="absolute px-4 w-full" style={{ bottom: tabBarHeight + 16 }}>
-        <Button onPress={() => {}} tw="h-12 rounded-full">
+        <Button
+          onPress={handleSubmit(handleSubmitTransfer)}
+          tw="h-12 rounded-full"
+        >
           <Text tw="text-white dark:text-gray-900 text-sm pr-2">Transfer</Text>
           <ArrowRight
             style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
