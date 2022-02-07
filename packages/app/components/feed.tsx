@@ -1,10 +1,12 @@
-import { Suspense, useCallback } from "react";
-import { FlatList, Platform } from "react-native";
+import React, { Suspense, useCallback, useRef } from "react";
+import { Platform, FlatList } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useScrollToTop } from "@react-navigation/native";
 import { useActivity } from "app/hooks/api-hooks";
 
 import { View, Spinner, Text } from "design-system";
 import { Card } from "design-system/card";
+import { ViewabilityTrackerFlatlist } from "./viewability-tracker-flatlist";
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
   const tabBarHeight = useBottomTabBarHeight();
@@ -26,7 +28,13 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
 const Feed = () => {
   return (
     <View tw="bg-white dark:bg-black flex-1">
-      <Suspense fallback={<Spinner size="small" />}>
+      <Suspense
+        fallback={
+          <View tw="pt-8 items-center">
+            <Spinner size="small" />
+          </View>
+        }
+      >
         <AllActivityList />
       </Suspense>
     </View>
@@ -36,6 +44,9 @@ const Feed = () => {
 const AllActivityList = () => {
   const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
     useActivity({ typeId: 0 });
+  const listRef = useRef<FlatList>(null);
+
+  useScrollToTop(listRef);
 
   const keyExtractor = useCallback((item) => item.id, []);
 
@@ -72,8 +83,9 @@ const AllActivityList = () => {
   }
 
   return (
-    <FlatList
+    <ViewabilityTrackerFlatlist
       data={data}
+      ref={listRef}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
       refreshing={isRefreshing}
