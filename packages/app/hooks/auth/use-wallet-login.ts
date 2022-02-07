@@ -22,25 +22,14 @@ export function useWalletLogin() {
   const connectToWallet = useCallback(
     async function connectToWallet() {
       dispatch("CONNECT_TO_WALLET_REQUEST");
-      let walletName, walletAddress;
       if (!walletConnector.connected) {
         try {
-          const wallet = await walletConnector.connect();
-          // @ts-ignore
-          walletName = wallet.peerMeta?.name;
-          walletAddress = wallet.accounts[0];
+          await walletConnector.connect();
         } catch (error) {
           dispatch("ERROR", { error });
           return;
         }
-      } else {
-        walletName = walletConnector.peerMeta?.name;
-        walletAddress = walletConnector.session.accounts[0];
       }
-      dispatch("CONNECT_TO_WALLET_SUCCESS", {
-        name: walletName,
-        address: walletAddress,
-      });
     },
     [dispatch, walletConnector]
   );
@@ -108,10 +97,6 @@ export function useWalletLogin() {
   const loginWithWallet = useCallback(
     async function loginWithWallet() {
       setAuthenticationStatus("AUTHENTICATING");
-      // We kill the session if connected so select wallet popup appears again
-      if (walletConnector.connected) {
-        await walletConnector.killSession();
-      }
       connectToWallet();
     },
     [connectToWallet, setAuthenticationStatus, walletConnector]
@@ -139,6 +124,25 @@ export function useWalletLogin() {
   useEffect(() => {
     continueLoginIn();
   }, [continueLoginIn, status]);
+  useEffect(() => {
+    // Signing requests post await connector.connect doesn't work everytime and throws session disconnected error
+    // so we only consider session is established when connector.connected is true
+    if (status === "CONNECTING_TO_WALLET" && walletConnector.connected) {
+      const walletName = walletConnector.peerMeta?.name;
+      const walletAddress = walletConnector.session.accounts.filter((addr) =>
+        addr.startsWith("0x")
+      )[0];
+      dispatch("CONNECT_TO_WALLET_SUCCESS", {
+        name: walletName,
+        address: walletAddress,
+      });
+    }
+  }, [status, dispatch, walletConnector]);
+
+  if (__DEV__) {
+    console.log("wallet connection status ", status, walletConnector.connected);
+  }
+
   //#endregion
   return { loginWithWallet, status, name, error };
 }

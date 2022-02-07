@@ -68,26 +68,25 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const wasUserLoggedIn = loginStorage.getLogin();
 
       if (wasUserLoggedIn && wasUserLoggedIn.length > 0) {
-        magic.user.logout();
         mixpanel.track("Logout");
-
-        loginStorage.deleteLogin();
-        logoutStorage.setLogout(Date.now().toString());
       }
+
+      loginStorage.deleteLogin();
+      logoutStorage.setLogout(Date.now().toString());
 
       deleteCache();
       deleteRefreshToken();
       deleteAccessToken();
 
-      if (wasUserLoggedIn) {
-        await mutate(null);
-        if (connector && connector.connected) {
-          await connector.killSession();
-        }
+      if (connector && connector.connected) {
+        connector.killSession();
       }
+
+      magic.user.logout();
 
       setWeb3(undefined);
       setAuthenticationStatus("UNAUTHENTICATED");
+      mutate(null);
     },
     [connector]
   );
