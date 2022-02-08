@@ -65,6 +65,7 @@ const ICON_COLOR_TW_MAPPER = {
   secondary: [colors.gray[900], "white"],
   tertiary: [colors.gray[900], "white"],
   danger: ["white", "white"],
+  text: [colors.gray[500], colors.gray[500]],
 };
 
 export {
