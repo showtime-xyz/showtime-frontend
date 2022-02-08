@@ -8,8 +8,6 @@ function useCurrentUserAddress() {
   const context = useContext(AppContext);
 
   useEffect(() => {
-    console.log(user)
-
     if (
       user?.data &&
       user?.data.profile.wallet_addresses_v2[0]
