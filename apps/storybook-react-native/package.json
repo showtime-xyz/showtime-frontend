@@ -45,7 +45,7 @@
     "expo-asset": "~8.4.4",
     "expo-av": "~10.2.0",
     "expo-constants": "~13.0.1",
-    "expo-dev-client": "~0.8.3",
+    "expo-dev-client": "~0.8.4",
     "expo-font": "~10.0.4",
     "expo-gl": "^11.1.1",
     "expo-linear-gradient": "~11.0.1",
