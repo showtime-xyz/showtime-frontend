@@ -7,7 +7,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { tw } from "../../tailwind";
 import {
   Pressable,
   View,
@@ -23,7 +22,7 @@ import {
   LayoutRectangle,
 } from "react-native";
 import PagerView from "react-native-pager-view";
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useScrollToTop } from "@react-navigation/native";
 import Reanimated, {
   useSharedValue,
   useDerivedValue,
@@ -37,8 +36,13 @@ import Reanimated, {
   useAnimatedStyle,
   useAnimatedReaction,
 } from "react-native-reanimated";
-import { TabListProps, TabRootProps, TabsContextType } from "./types";
-import { useScrollToTop } from "@react-navigation/native";
+import { tw } from "design-system/tailwind";
+import {
+  TabListProps,
+  TabRootProps,
+  TabsContextType,
+  ExtendObject,
+} from "./types";
 import { usePageScrollHandler } from "./usePagerScrollHandler";
 import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
 
@@ -216,6 +220,14 @@ const ListImpl = ({
     prevIndex.value = index.value;
   }, [windowWidth]);
 
+  useScrollToTop(
+    React.useRef({
+      scrollToTop: () => {
+        runOnUI(scrollTo)(0);
+      },
+    })
+  );
+
   const styles = React.useMemo(() => {
     return [tw.style(`bg-white dark:bg-gray-900`), style];
   }, [style]);
@@ -374,7 +386,9 @@ const Trigger = React.forwardRef(
   }
 );
 
-function makeScrollableComponent<K extends object, T extends any>(Comp: T) {
+function makeScrollableComponent<K extends ExtendObject, T extends any>(
+  Comp: T
+) {
   return React.forwardRef((props: K, ref: ForwardedRef<T>) => {
     const {
       headerHeight,
@@ -388,6 +402,7 @@ function makeScrollableComponent<K extends object, T extends any>(Comp: T) {
     const scrollY = useSharedValue(0);
     const topHeight = headerHeight + tabListHeight;
     const translateYOffset = Platform.OS === "ios" ? topHeight : 0;
+    const minHeight = props.minHeight ?? windowHeight + topHeight;
 
     const scrollHandler = useAnimatedScrollHandler({
       onBeginDrag() {
@@ -397,7 +412,7 @@ function makeScrollableComponent<K extends object, T extends any>(Comp: T) {
         requestOtherViewsToSyncTheirScrollPosition.value = false;
       },
       onScroll(e) {
-        // Todo - this is a hack to make sure we change header when listening current flatlist scrolls. Other flatlist scroll events may be triggered as we try to adjust their scroll positions to accomodate header
+        // Todo - this is a hack to make sure we change header when listening current flatlist scrolls. Other flatlist scroll events may be triggered as we try to adjust their scroll positions to accommodate header
         if (index.value === elementIndex) {
           scrollY.value = e.contentOffset.y;
           if (Platform.OS === "ios") {
@@ -479,7 +494,7 @@ function makeScrollableComponent<K extends object, T extends any>(Comp: T) {
         contentContainerStyle={useMemo(
           () => ({
             paddingTop: Platform.OS === "android" ? topHeight : 0,
-            minHeight: windowHeight + topHeight,
+            minHeight,
           }),
           [topHeight]
         )}
@@ -497,8 +512,12 @@ const TabScrollView = makeScrollableComponent<
 const AnimatedFlatList = Reanimated.createAnimatedComponent(
   ViewabilityTrackerFlatlist
 );
+
+interface ExtendedFlatListProps extends FlatListProps<any> {
+  minHeight?: number;
+}
 const TabFlatList = makeScrollableComponent<
-  FlatListProps<any>,
+  ExtendedFlatListProps,
   typeof AnimatedFlatList
 >(AnimatedFlatList);
 

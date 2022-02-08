@@ -1,7 +1,13 @@
-import { Suspense, useCallback, useMemo, useReducer, useState } from "react";
+import {
+  Suspense,
+  useCallback,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import Animated, { FadeIn } from "react-native-reanimated";
+import reactStringReplace from "react-string-replace";
 
 import {
   Collection,
@@ -11,7 +17,7 @@ import {
   useProfileNftTabs,
   useUserProfile,
 } from "app/hooks/api-hooks";
-import { View, Spinner, Text, Skeleton, Select } from "design-system";
+import { View, Spinner, Text, Skeleton, Select, Button } from "design-system";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 import { Image } from "design-system/image";
@@ -19,24 +25,25 @@ import { VerificationBadge } from "design-system/verification-badge";
 import { useColorScheme } from "design-system/hooks";
 import { getProfileImage, getProfileName, getSortFields } from "../utilities";
 import { Media } from "design-system/media";
+import { useRouter } from "app/navigation/use-router";
+import { TextLink } from "app/navigation/link";
+import { ProfileDropdown } from "app/components/profile-dropdown";
+import { useMyInfo } from "app/hooks/api-hooks";
+import { useCurrentUserId } from "app/hooks/use-current-user-id";
+import { useBlock } from "app/hooks/use-block";
 
 const TAB_LIST_HEIGHT = 64;
 const COVER_IMAGE_HEIGHT = 104;
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
-  const tabBarHeight = useBottomTabBarHeight();
-
   if (isLoading) {
     return (
-      <View
-        tw={`h-16 items-center justify-center mt-6 px-3 mb-[${tabBarHeight}px]`}
-      >
+      <View tw={`h-16 items-center justify-center mt-6 px-3`}>
         <Spinner size="small" />
       </View>
     );
   }
-
-  return <View tw={`mb-[${tabBarHeight}px]`} />;
+  return null;
 };
 
 const ProfileScreen = ({ walletAddress }: { walletAddress: string }) => {
@@ -46,8 +53,14 @@ const ProfileScreen = ({ walletAddress }: { walletAddress: string }) => {
 const Profile = ({ address }: { address?: string }) => {
   const { data: profileData } = useUserProfile({ address });
   const { data } = useProfileNftTabs({
-    profileId: profileData?.data.profile.profile_id,
+    profileId: profileData?.data?.profile.profile_id,
   });
+  const { data: myInfoData } = useMyInfo();
+  const isBlocked = Boolean(
+    myInfoData?.data?.blocked_profile_ids?.find(
+      (id) => id === profileData?.data?.profile.profile_id
+    )
+  );
   const [selected, setSelected] = useState(0);
 
   return (
@@ -59,7 +72,7 @@ const Profile = ({ address }: { address?: string }) => {
         lazy
       >
         <Tabs.Header>
-          <ProfileTop address={address} />
+          <ProfileTop address={address} isBlocked={isBlocked} />
         </Tabs.Header>
         <Tabs.List
           style={tw.style(
@@ -78,7 +91,9 @@ const Profile = ({ address }: { address?: string }) => {
             return (
               <Suspense fallback={<Spinner size="small" />} key={list.id}>
                 <TabList
+                  username={profileData?.data.profile.username}
                   profileId={profileData?.data.profile.profile_id}
+                  isBlocked={isBlocked}
                   list={list}
                 />
               </Suspense>
@@ -93,7 +108,17 @@ const Profile = ({ address }: { address?: string }) => {
 const GAP_BETWEEN_ITEMS = 1;
 const ITEM_SIZE = Dimensions.get("window").width / 3;
 
-const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
+const TabList = ({
+  username,
+  profileId,
+  isBlocked,
+  list,
+}: {
+  username?: string;
+  profileId?: number;
+  isBlocked?: boolean;
+  list: List;
+}) => {
   const keyExtractor = useCallback((item) => {
     return item.nft_id;
   }, []);
@@ -156,7 +181,13 @@ const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
           collections={list.collections}
           sortId={filter.sortId}
         />
-        {data.length === 0 && !isLoading ? (
+        {isBlocked ? (
+          <View tw="items-center justify-center mt-8">
+            <Text tw="text-gray-900 dark:text-white">
+              <Text tw="font-bold">@{username}</Text> is blocked
+            </Text>
+          </View>
+        ) : data.length === 0 && !isLoading ? (
           <View tw="items-center justify-center mt-20">
             <Text tw="text-gray-900 dark:text-white">No results found</Text>
           </View>
@@ -174,13 +205,14 @@ const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
       onCollectionChange,
       onSortChange,
       list.collections,
+      isBlocked,
     ]
   );
 
   return (
     <View tw="flex-1">
       <Tabs.FlatList
-        data={data}
+        data={isBlocked ? null : data}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
         refreshing={isRefreshing}
@@ -201,90 +233,146 @@ const TabList = ({ profileId, list }: { profileId?: number; list: List }) => {
   );
 };
 
-const ProfileTop = ({ address }: { address?: string }) => {
+const ProfileTop = ({
+  address,
+  isBlocked,
+}: {
+  address?: string;
+  isBlocked: boolean;
+}) => {
+  const router = useRouter();
+  const userId = useCurrentUserId();
   const { data: profileData, loading } = useUserProfile({ address });
   const name = getProfileName(profileData?.data.profile);
   const username = profileData?.data.profile.username;
   const bio = profileData?.data.profile.bio;
+  const hasLinksInBio = useRef<boolean>(false);
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
+  const { isFollowing, follow, unfollow } = useMyInfo();
+  const profileId = profileData?.data.profile.profile_id;
+  const isFollowingUser = useMemo(
+    () => profileId && isFollowing(profileId),
+    [profileId, isFollowing]
+  );
+  const { unblock } = useBlock();
+
+  const bioWithMentions = useMemo(
+    () =>
+      reactStringReplace(
+        bio,
+        /@([\w\d-]+?)\b/g,
+        (username: string, i: number) => {
+          hasLinksInBio.current = true;
+          return (
+            <TextLink
+              href={`${
+                router.pathname.startsWith("/trending") ? "/trending" : ""
+              }/profile/${username}`}
+              tw="font-bold text-black dark:text-white"
+              key={i}
+            >
+              @{username}
+            </TextLink>
+          );
+        }
+      ),
+    [bio]
+  );
 
   return (
-    <View>
-      <View tw={`bg-gray-100 dark:bg-gray-900 h-[${COVER_IMAGE_HEIGHT}px]`}>
+    <View pointerEvents="box-none">
+      <View
+        tw={`bg-gray-100 dark:bg-gray-900 h-[${COVER_IMAGE_HEIGHT}px]`}
+        pointerEvents="none"
+      >
         <Skeleton
           height={COVER_IMAGE_HEIGHT}
           width={width}
           show={loading}
           colorMode={colorMode as any}
         >
-          <Animated.View entering={FadeIn}>
-            <Image
-              source={{ uri: profileData?.data.profile.cover_url }}
-              tw={`h-[${COVER_IMAGE_HEIGHT}px] w-100vw`}
-              alt="Cover image"
-            />
-          </Animated.View>
+          <Image
+            source={{ uri: profileData?.data.profile.cover_url }}
+            tw={`h-[${COVER_IMAGE_HEIGHT}px] w-100vw`}
+            alt="Cover image"
+          />
         </Skeleton>
       </View>
 
-      <View tw="bg-white dark:bg-black px-2">
-        <View tw="flex-row justify-between pr-2">
-          <View tw="flex-row items-end">
-            <View tw="bg-gray-100 dark:bg-gray-900 h-[144px] w-[144px] rounded-full mt-[-72px]">
+      <View tw="bg-white dark:bg-black px-2" pointerEvents="box-none">
+        <View tw="flex-row justify-between pr-2" pointerEvents="box-none">
+          <View tw="flex-row items-end" pointerEvents="none">
+            <View tw="bg-white dark:bg-gray-900 rounded-full mt-[-72px] p-2">
               <Skeleton
-                height={144}
-                width={144}
+                height={128}
+                width={128}
                 show={loading}
                 colorMode={colorMode as any}
                 radius={99999}
               >
-                <Animated.View entering={FadeIn}>
+                {profileData && (
                   <Image
                     source={{
                       uri: getProfileImage(profileData?.data.profile),
                     }}
                     alt="Profile avatar"
-                    tw="border-white h-[144px] w-[144px] dark:border-gray-900 rounded-full border-8"
+                    tw="border-white h-[128px] w-[128px] rounded-full"
                   />
-                </Animated.View>
+                )}
               </Skeleton>
             </View>
-            {/* <View tw="bg-white dark:bg-gray-900 p-1 rounded-full absolute right-2 bottom-2">
-              <Image
-                  source={require("../../../apps/expo/assets/social_token.png")}
-                  style={{ height: TOKEN_BADGE_HEIGHT, width: 28 }}
-                />
-            </View> */}
           </View>
 
-          {/* <Pressable
-            style={tw.style(
-              "bg-black rounded-full dark:bg-white items-center justify-center flex-row mt-4 h-[48px] w-[80px]"
-            )}
-          >
-            <Text tw="text-white text-center dark:text-gray-900 font-bold">
-              Follow
-            </Text>
-          </Pressable> */}
+          {isBlocked ? (
+            <View tw="flex-row items-center" pointerEvents="box-none">
+              <Button
+                size="regular"
+                onPress={() => {
+                  unblock(profileId);
+                }}
+              >
+                Unblock
+              </Button>
+            </View>
+          ) : (
+            profileId &&
+            userId !== profileId && (
+              <View tw="flex-row items-center" pointerEvents="box-none">
+                <ProfileDropdown user={profileData?.data.profile} />
+                <View tw="w-2" />
+                <Button
+                  size="regular"
+                  onPress={() => {
+                    if (isFollowingUser) {
+                      unfollow(profileId);
+                    } else {
+                      follow(profileId);
+                    }
+                  }}
+                >
+                  {isFollowingUser ? "Following" : "Follow"}
+                </Button>
+              </View>
+            )
+          )}
         </View>
 
-        <View tw="px-2 py-3">
-          <View>
+        <View tw="px-2 py-3" pointerEvents="box-none">
+          <View pointerEvents="none">
             <Skeleton
               height={24}
               width={150}
               show={loading}
               colorMode={colorMode as any}
             >
-              <Animated.View entering={FadeIn}>
-                <Text
-                  tw="dark:text-white text-gray-900 text-2xl font-bold"
-                  numberOfLines={1}
-                >
-                  {name}
-                </Text>
-              </Animated.View>
+              <Text
+                variant="text-2xl"
+                tw="dark:text-white text-gray-900 font-extrabold"
+                numberOfLines={1}
+              >
+                {name}
+              </Text>
             </Skeleton>
 
             <View tw="h-2" />
@@ -296,14 +384,12 @@ const ProfileTop = ({ address }: { address?: string }) => {
               colorMode={colorMode as any}
             >
               <View tw="flex-row items-center">
-                <Animated.View entering={FadeIn}>
-                  <Text
-                    variant="text-base"
-                    tw="text-gray-900 dark:text-white font-semibold"
-                  >
-                    {username ? `@${username}` : null}
-                  </Text>
-                </Animated.View>
+                <Text
+                  variant="text-base"
+                  tw="text-gray-900 dark:text-white font-semibold"
+                >
+                  {username ? `@${username}` : null}
+                </Text>
 
                 {profileData?.data.profile.verified ? (
                   <View tw="ml-1">
@@ -325,17 +411,22 @@ const ProfileTop = ({ address }: { address?: string }) => {
           </View>
 
           {bio ? (
-            <View tw="flex-row items-center mt-3">
-              <Text tw="text-sm text-gray-600 dark:text-gray-400">{bio}</Text>
+            <View
+              tw="flex-row items-center mt-3"
+              pointerEvents={hasLinksInBio.current ? "box-none" : "none"}
+            >
+              <Text tw="text-sm text-gray-600 dark:text-gray-400">
+                {bioWithMentions}
+              </Text>
             </View>
           ) : null}
 
-          <View tw="flex-row mt-4">
+          <View tw="flex-row mt-4" pointerEvents="box-none">
             <Text tw="text-sm text-gray-900 dark:text-white font-bold">
               {profileData?.data.following_count}{" "}
               <Text tw="font-medium">following</Text>
             </Text>
-            <View tw="ml-8">
+            <View tw="ml-8" pointerEvents="box-none">
               <Text tw="text-sm text-gray-900 dark:text-white font-bold">
                 {profileData?.data.followers_count}{" "}
                 <Text tw="font-medium">followers</Text>

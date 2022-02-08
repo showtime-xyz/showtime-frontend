@@ -17,7 +17,7 @@ import { useRouter } from "app/navigation/use-router";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 
 type Props = {
-  nft: NFT;
+  nft?: NFT;
 };
 
 function NFTDropdown({ nft }: Props) {
@@ -30,19 +30,17 @@ function NFTDropdown({ nft }: Props) {
   const router = useRouter();
 
   const tokenChainName = Object.keys(CHAIN_IDENTIFIERS).find(
-    (key) => CHAIN_IDENTIFIERS[key] == nft.chain_identifier
+    (key) => CHAIN_IDENTIFIERS[key] == nft?.chain_identifier
   );
 
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <Button variant="tertiary" iconOnly={true} size="regular">
-          <MoreHorizontal
-            color={
-              tw.style("bg-black dark:bg-white")?.backgroundColor as string
-            }
-          />
-        </Button>
+        <MoreHorizontal
+          color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+          width={24}
+          height={24}
+        />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
@@ -52,7 +50,7 @@ function NFTDropdown({ nft }: Props) {
         <DropdownMenuItem
           onSelect={() =>
             Share.share({
-              url: `https://showtime.io/t/${tokenChainName}/${nft.contract_address}/${nft.token_id}`,
+              url: `https://showtime.io/t/${tokenChainName}/${nft?.contract_address}/${nft?.token_id}`,
             })
           }
           key="copy-link"
@@ -78,7 +76,7 @@ function NFTDropdown({ nft }: Props) {
         {!isOwner && (
           <DropdownMenuItem
             onSelect={async () => {
-              await report({ nftId: nft.token_id });
+              await report({ nftId: nft?.token_id });
               router.pop();
             }}
             key="report"
@@ -105,7 +103,7 @@ function NFTDropdown({ nft }: Props) {
         {isOwner && (
           <DropdownMenuItem
             destructive
-            onSelect={() => {}}
+            onSelect={() => router.push(`/burn?nftId=${nft.nft_id}`)}
             key="delete"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >

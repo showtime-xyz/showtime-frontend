@@ -255,6 +255,7 @@ type MyInfo = {
     likes_nft: number[];
     likes_comment: any[];
     comments: number[];
+    blocked_profile_ids: number[];
   };
 };
 
@@ -349,25 +350,30 @@ export const useMyInfo = () => {
       }
 
       if (data) {
-        mutate(
-          queryKey,
-          {
-            data: {
-              ...data.data,
-              likes_nft: [...data.data.likes_nft, nftId],
+        try {
+          mutate(
+            queryKey,
+            {
+              data: {
+                ...data.data,
+                likes_nft: [...data.data.likes_nft, nftId],
+              },
             },
-          },
-          false
-        );
+            false
+          );
 
-        await axios({
-          url: `/v3/like/${nftId}`,
-          method: "POST",
-        });
+          await axios({
+            url: `/v3/like/${nftId}`,
+            method: "POST",
+          });
 
-        mutate(queryKey);
+          mutate(queryKey);
 
-        return true;
+          return true;
+        } catch (error) {
+          mutate(queryKey);
+          return false;
+        }
       }
     },
     [data, isAuthenticated]
@@ -376,23 +382,29 @@ export const useMyInfo = () => {
   const unlike = useCallback(
     async (nftId: number) => {
       if (data) {
-        mutate(
-          queryKey,
-          {
-            data: {
-              ...data.data,
-              likes_nft: data.data.likes_nft.filter((id) => id !== nftId),
+        try {
+          mutate(
+            queryKey,
+            {
+              data: {
+                ...data.data,
+                likes_nft: data.data.likes_nft.filter((id) => id !== nftId),
+              },
             },
-          },
-          false
-        );
+            false
+          );
 
-        await axios({
-          url: `/v3/unlike/${nftId}`,
-          method: "POST",
-        });
+          await axios({
+            url: `/v3/unlike/${nftId}`,
+            method: "POST",
+          });
 
-        mutate(queryKey);
+          mutate(queryKey);
+          return true;
+        } catch (error) {
+          mutate(queryKey);
+          return false;
+        }
       }
     },
     [data]

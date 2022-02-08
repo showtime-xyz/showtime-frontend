@@ -5,30 +5,18 @@ import {
   Platform,
   useColorScheme as useDeviceColorScheme,
 } from "react-native";
-import {
-  enableScreens,
-  // enableFreeze,
-  FullWindowOverlay,
-} from "react-native-screens";
+import { enableScreens } from "react-native-screens";
 import { StatusBar, setStatusBarStyle } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { DripsyProvider } from "dripsy";
 import { useDeviceContext, useAppColorScheme } from "twrnc";
-// import * as Sentry from 'sentry-expo'
 import { MMKV } from "react-native-mmkv";
-import { SWRConfig, useSWRConfig } from "swr";
-import WalletConnectProvider, {
-  useWalletConnect,
-  RenderQrcodeModalProps,
-  QrcodeModal,
-} from "@walletconnect/react-native-dapp";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SWRConfig } from "swr";
 import NetInfo from "@react-native-community/netinfo";
 import { useNavigation } from "@react-navigation/native";
 import * as NavigationBar from "expo-navigation-bar";
 import * as SystemUI from "expo-system-ui";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { ethers } from "ethers";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import LogRocket from "@logrocket/react-native";
 import * as Notifications from "expo-notifications";
@@ -36,22 +24,17 @@ import * as Notifications from "expo-notifications";
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
 import { NavigationProvider } from "app/navigation";
-import { NextTabNavigator } from "app/navigation/next-tab-navigator";
-import { accessTokenManager } from "app/lib/access-token-manager";
+import { AuthProvider } from "app/providers/auth-provider";
+import { UserProvider } from "app/providers/user-provider";
+import { Web3Provider } from "app/providers/web3-provider";
+import { WalletConnectProvider } from "app/providers/wallet-connect-provider";
 import { AppContext } from "app/context/app-context";
-import { setLogout } from "app/lib/logout";
-import { mixpanel } from "app/lib/mixpanel";
-import { deleteCache } from "app/lib/delete-cache";
-import { useUser } from "app/hooks/use-user";
-import { deleteRefreshToken } from "app/lib/refresh-token";
 import { ToastProvider } from "design-system/toast";
 import {
   setColorScheme as setUserColorScheme,
   useColorScheme as useUserColorScheme,
 } from "app/lib/color-scheme";
-import { magic } from "app/lib/magic";
-import { Relayer } from "app/lib/magic";
-import { registerForPushNotificationsAsync } from "app/lib/register-push-notification";
+import { RootStackNavigator } from "app/navigation/root-stack-navigator";
 
 enableScreens(true);
 // enableFreeze(true)
@@ -70,25 +53,6 @@ LogBox.ignoreLogs([
   "Constants.platform.ios.model has been deprecated in favor of expo-device's Device.modelName property.",
   "ExponentGLView",
 ]);
-
-function QRCodeModal(props: RenderQrcodeModalProps): JSX.Element {
-  if (!props.visible) {
-    return null;
-  }
-
-  return (
-    <FullWindowOverlay
-      style={{
-        position: "absolute",
-        width: "100%",
-        height: "100%",
-        justifyContent: "center",
-      }}
-    >
-      <QrcodeModal division={4} {...props} />
-    </FullWindowOverlay>
-  );
-}
 
 function mmkvProvider() {
   const storage = new MMKV();
@@ -186,13 +150,7 @@ function AppContextProvider({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
-  const { user } = useUser();
-  const { mutate } = useSWRConfig();
-  const connector = useWalletConnect();
-  const [web3, setWeb3] = useState(null);
-  const [mountRelayerOnApp, setMountRelayerOnApp] = useState(true);
   const [notification, setNotification] = useState(null);
-
   useDeviceContext(tw, { withDeviceColorScheme: false });
   // Default to device color scheme
   const deviceColorScheme = useDeviceColorScheme();
@@ -229,26 +187,6 @@ function AppContextProvider({
       setStatusBarStyle("dark");
     }
   }, [isDark]);
-
-  useEffect(() => {
-    magic.user.isLoggedIn().then((isLoggedIn) => {
-      if (magic.rpcProvider && isLoggedIn) {
-        const provider = new ethers.providers.Web3Provider(magic.rpcProvider);
-        setWeb3(provider);
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    const register = async () => {
-      // Handle registration for push notification
-      await registerForPushNotificationsAsync({
-        userId: user.data.profile.profile_id,
-      });
-    };
-
-    if (user?.data?.profile?.profile_id) register();
-  }, [user?.data?.profile?.profile_id]);
 
   useEffect(() => {
     let shouldShowNotification = true;
@@ -305,33 +243,17 @@ function AppContextProvider({
   }, []);
 
   const injectedGlobalContext = {
-    web3,
-    setWeb3,
-    setMountRelayerOnApp,
-    logOut: () => {
-      magic.user.logout();
-      deleteCache();
-      deleteRefreshToken();
-      accessTokenManager.deleteAccessToken();
-      mutate(null);
-      connector.killSession();
-      setWeb3(null);
-      mixpanel.track("Logout");
-      // Triggers all event listeners for this key to fire. Used to force cross tab logout.
-      setLogout(Date.now().toString());
-    },
     colorScheme,
     setColorScheme: (newColorScheme: "light" | "dark") => {
       setColorScheme(newColorScheme);
       setUserColorScheme(newColorScheme);
     },
+    // TODO: notification?
   };
 
   return (
     <AppContext.Provider value={injectedGlobalContext}>
       {children}
-      {/* TODO: Open Relayer on FullWindow, need change in relayer source */}
-      {mountRelayerOnApp ? <Relayer /> : null}
     </AppContext.Provider>
   );
 }
@@ -353,6 +275,8 @@ function App() {
       : ""
   }`;
 
+  console.log("App", scheme);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <DripsyProvider theme={theme}>
@@ -360,32 +284,19 @@ function App() {
           <ToastProvider>
             <NavigationProvider>
               <SWRProvider>
-                <WalletConnectProvider
-                  clientMeta={{
-                    description: "Connect with Showtime",
-                    url: "https://showtime.io",
-                    icons: [
-                      "https://storage.googleapis.com/showtime-cdn/showtime-icon-sm.jpg",
-                    ],
-                    name: "Showtime",
-                    // @ts-expect-error
-                    scheme: scheme,
-                  }}
-                  redirectUrl={`${scheme}://`}
-                  storageOptions={{
-                    // @ts-ignore
-                    asyncStorage: AsyncStorage,
-                  }}
-                  renderQrcodeModal={(
-                    props: RenderQrcodeModalProps
-                  ): JSX.Element => <QRCodeModal {...props} />}
-                >
-                  <AppContextProvider>
-                    <BottomSheetModalProvider>
-                      <StatusBar style="auto" />
-                      <NextTabNavigator />
-                    </BottomSheetModalProvider>
-                  </AppContextProvider>
+                <WalletConnectProvider>
+                  <Web3Provider>
+                    <AppContextProvider>
+                      <AuthProvider>
+                        <UserProvider>
+                          <BottomSheetModalProvider>
+                            <StatusBar style="auto" />
+                            <RootStackNavigator />
+                          </BottomSheetModalProvider>
+                        </UserProvider>
+                      </AuthProvider>
+                    </AppContextProvider>
+                  </Web3Provider>
                 </WalletConnectProvider>
               </SWRProvider>
             </NavigationProvider>

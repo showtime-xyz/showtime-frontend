@@ -5,7 +5,9 @@ type HomeStackParams = {
   home: undefined;
   login: undefined;
   nft: { id: number };
+  burn: undefined;
   profile: { walletAddress: number };
+  settings: undefined;
 };
 
 type TrendingStackParams = {
@@ -13,6 +15,7 @@ type TrendingStackParams = {
   login: undefined;
   nft: { id: number };
   profile: { walletAddress: number };
+  settings: undefined;
 };
 
 type CameraStackParams = {
@@ -26,12 +29,14 @@ type MarketplaceStackParams = {
   marketplace: undefined;
   login: undefined;
   nft: { id: number };
+  settings: undefined;
 };
 
 type NotificationsStackParams = {
   notifications: undefined;
   login: undefined;
   nft: { id: number };
+  settings: undefined;
 };
 
 type NextPageProps = any;
@@ -49,9 +54,9 @@ type BottomTabNavigatorParams = {
 };
 
 declare global {
-  namespace ReactNavigation {
-    interface RootParamList extends BottomTabNavigatorParams {}
-  }
+  // namespace ReactNavigation {
+  //   interface RootParamList extends BottomTabNavigatorParams {}
+  // }
 }
 
 export type {

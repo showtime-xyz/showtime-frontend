@@ -8,7 +8,9 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, TextInput, Button } from "design-system";
+import { View } from "design-system/view";
+import { TextInput } from "design-system/text-input";
+import { Button } from "design-system/button";
 import { tw as tailwind } from "design-system/tailwind";
 import { Send } from "design-system/icon";
 import { useKeyboardDimensions } from "app/hooks/use-keyboard-dimensions";

@@ -1,17 +1,18 @@
 import { View, Text } from "design-system";
+import { withColorScheme } from "app/components/memo-with-theme";
 
-function NotificationsScreen() {
+const NotificationsScreen = withColorScheme(() => {
   return (
     <View tw="p-4">
-      <Text variant="text-xl" tw="font-bold text-black dark:text-white">
+      <Text variant="text-2xl" tw="font-extrabold text-black dark:text-white">
         Notifications
       </Text>
-      <View tw="h-3" />
+      <View tw="h-6" />
       <Text tw="font-semibold text-gray-600 dark:text-gray-400">
         🚧 Coming soon
       </Text>
     </View>
   );
-}
+});
 
 export { NotificationsScreen };
