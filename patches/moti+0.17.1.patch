@@ -1,0 +1,17 @@
+diff --git a/node_modules/moti/build/interactions/pressable/pressable.js b/node_modules/moti/build/interactions/pressable/pressable.js
+index 17dd332..0365b0d 100644
+--- a/node_modules/moti/build/interactions/pressable/pressable.js
++++ b/node_modules/moti/build/interactions/pressable/pressable.js
+@@ -1,11 +1,10 @@
+ import React, { useMemo, forwardRef } from 'react';
+ import { Platform, Pressable } from 'react-native';
+-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+ import Animated, { useSharedValue, runOnJS, useDerivedValue, } from 'react-native-reanimated';
+ import { MotiView } from '@motify/components';
+ import { MotiPressableContext, useMotiPressableContext, INTERACTION_CONTAINER_ID, } from './context';
+ import { Hoverable } from './hoverable';
+-const AnimatedTouchable = Animated.createAnimatedComponent(TouchableWithoutFeedback);
++const AnimatedTouchable = Animated.createAnimatedComponent(Pressable);
+ export const MotiPressable = forwardRef(function MotiPressable(props, ref) {
+     const { animate, from, exit, children, exitTransition, transition: transitionProp, style, onPressOut, onPressIn, onHoverIn, onHoverOut, onPress, onLongPress, hitSlop, disabled, containerStyle, dangerouslySilenceDuplicateIdsWarning = false, id, hoveredValue, pressedValue, onLayout, onContainerLayout, 
+     // Accessibility props
