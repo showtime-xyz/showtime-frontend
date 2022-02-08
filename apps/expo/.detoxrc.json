@@ -31,10 +31,16 @@
         "type": "iPhone 12"
       }
     },
-    "emulator": {
+    "emulator.m1pro": {
       "type": "android.emulator",
       "device": {
         "avdName": "Pixel_3a_API_31_arm64-v8a"
+      }
+    },
+    "emulator.gh": {
+      "type": "android.emulator",
+      "device": {
+        "avdName": "Pixel_API_29_AOSP"
       }
     }
   },
@@ -48,11 +54,19 @@
       "app": "ios.debug"
     },
     "android.emu.debug": {
-      "device": "emulator",
+      "device": "emulator.m1pro",
       "app": "android.debug"
     },
     "android.emu.release": {
-      "device": "emulator",
+      "device": "emulator.m1pro",
+      "app": "android.release"
+    },
+    "android.emu.gh.debug": {
+      "device": "emulator.gh",
+      "app": "android.debug"
+    },
+    "android.emu.gh.release": {
+      "device": "emulator.gh",
       "app": "android.release"
     }
   }
