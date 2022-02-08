@@ -114,9 +114,9 @@ function NFTDropdown({ nft }: Props) {
           </DropdownMenuItem>
         )}
 
-        {isOwner && (
+        {isOwner && nft && (
           <DropdownMenuItem
-            onSelect={() => router.push(`/list`)}
+            onSelect={() => router.push(`/nft/${nft.nft_id}/list`)}
             key="list"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >
