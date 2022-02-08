@@ -50,6 +50,15 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --check-files
 
+      - name: Set up Expo
+        uses: expo/expo-github-action@v6
+        with:
+          eas-version: latest
+          eas-cache: true
+          expo-cache: true
+          expo-version: 4.x
+          token: ${{ secrets.EXPO_TOKEN }}
+
       - name: Run expo prebuild
         run: yarn expo:prebuild
 
