@@ -1,4 +1,4 @@
-name: Detox (iOS)
+name: Detox
 
 defaults:
   run:
@@ -20,7 +20,7 @@ on:
       - "**.lock"
 
 concurrency:
-  group: ${{ github.event_name }}-${{ github.ref }}
+  group: ${{ github.event_name }}-${{ github.ref }}-detox-ios
   cancel-in-progress: true
 
 jobs:
