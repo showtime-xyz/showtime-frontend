@@ -67,9 +67,7 @@ export function UserProvider({ children }: UserProviderProps) {
         });
 
         // Handle registration for push notification
-        await registerForPushNotificationsAsync({
-          userId: data.data.profile.profile_id,
-        });
+        await registerForPushNotificationsAsync();
       }
     };
 

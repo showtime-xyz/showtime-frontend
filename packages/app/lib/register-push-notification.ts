@@ -2,37 +2,19 @@ import { Platform } from "react-native";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 
+import { axios } from "app/lib/axios";
+
+const PlatformExpo = 1;
+const PlatformWeb = 2;
+const PlatformIos = 3;
+const PlatformAndroid = 4;
+
 async function getNotificationPermissionStatus() {
   const status = await Notifications.getPermissionsAsync();
   return status.granted; // || status.ios ? status.ios.status === 3 : false;
 }
 
-async function updateNativeDevicePushToken(
-  userId: number,
-  devicePushToken: Notifications.DevicePushToken
-) {
-  // TODO: store native device push token in database
-}
-
-async function updateWebDevicePushToken(
-  userId: number,
-  devicePushToken: Notifications.WebDevicePushToken
-) {
-  // TODO: store web device push token in database
-}
-
-async function updateExpoPushToken(
-  userId: number,
-  expoPushToken: Notifications.ExpoPushToken
-) {
-  // TODO: store expo push token in database
-}
-
-async function registerForPushNotificationsAsync({
-  userId,
-}: {
-  userId?: number;
-}) {
+async function registerForPushNotificationsAsync() {
   if (!Device.isDevice) {
     return;
   }
@@ -78,13 +60,22 @@ async function registerForPushNotificationsAsync({
   const devicePushToken = await Notifications.getDevicePushTokenAsync();
   console.log(devicePushToken);
 
-  if (userId) {
-    if (devicePushToken.type === "web") {
-      updateWebDevicePushToken(userId, devicePushToken);
-    } else {
-      updateNativeDevicePushToken(userId, devicePushToken);
-    }
-  }
+  // Save the device token to the database
+  await axios({
+    url: `/v1/notifications/device/token`,
+    method: "POST",
+    data: {
+      platform:
+        devicePushToken.type === "web" && Platform.OS === "web"
+          ? PlatformWeb
+          : devicePushToken.type === "ios" && Platform.OS === "ios"
+          ? PlatformIos
+          : devicePushToken.type === "android" && Platform.OS === "android"
+          ? PlatformAndroid
+          : 0,
+      token: devicePushToken.data,
+    },
+  });
 
   // Get the expo token
   const expoPushToken = await Notifications.getExpoPushTokenAsync({
@@ -92,12 +83,17 @@ async function registerForPushNotificationsAsync({
     applicationId,
     devicePushToken,
   });
-
   console.log(expoPushToken);
 
-  if (userId) {
-    updateExpoPushToken(userId, expoPushToken);
-  }
+  // Save the expo token to the database
+  await axios({
+    url: `/v1/notifications/device/token`,
+    method: "POST",
+    data: {
+      platform: PlatformExpo,
+      token: expoPushToken.data,
+    },
+  });
 }
 
 export { registerForPushNotificationsAsync };
