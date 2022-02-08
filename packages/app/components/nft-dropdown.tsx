@@ -8,7 +8,6 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "design-system/dropdown-menu";
-import { Button } from "design-system";
 import { MoreHorizontal } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 import type { NFT } from "app/types";

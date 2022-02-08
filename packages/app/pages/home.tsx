@@ -26,6 +26,10 @@ const SettingsScreen = dynamic<JSX.Element>(() =>
   import("app/screens/settings").then((mod) => mod.SettingsScreen)
 );
 
+const SettingsScreen = dynamic<JSX.Element>(() =>
+  import("app/screens/settings").then((mod) => mod.SettingsScreen)
+);
+
 const HomeStack = createStackNavigator<HomeStackParams>();
 
 function HomeNavigator() {

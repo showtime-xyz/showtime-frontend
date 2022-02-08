@@ -120,11 +120,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         try {
           await refreshTokens();
           setAuthenticationStatus("AUTHENTICATED");
-        } catch (error: any) {
-          console.log(
-            "AuthProvider",
-            typeof error === "string" ? error : error.message || "unknown"
-          );
+        } catch (error) {
           await logout();
         }
       }

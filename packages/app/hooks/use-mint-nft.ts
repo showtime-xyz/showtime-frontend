@@ -8,7 +8,7 @@ import { getBiconomy } from "../utilities";
 import { ethers } from "ethers";
 import minterAbi from "app/abi/ShowtimeMT.json";
 import { useWeb3 } from "./use-web3";
-import { useWalletConnect } from "@walletconnect/react-native-dapp";
+import { useWalletConnect } from "app/lib/walletconnect";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
