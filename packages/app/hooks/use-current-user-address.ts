@@ -8,12 +8,14 @@ function useCurrentUserAddress() {
   const context = useContext(AppContext);
 
   useEffect(() => {
+    console.log(user)
+
     if (
       user?.data &&
-      user?.data.profile.wallet_addresses_excluding_email_v2[0]
+      user?.data.profile.wallet_addresses_v2[0]
     ) {
       setUserAddress(
-        user.data.profile.wallet_addresses_excluding_email_v2[0].address
+        user.data.profile.wallet_addresses_v2[0].address
       );
     }
     // Web3 is initialised for magic users

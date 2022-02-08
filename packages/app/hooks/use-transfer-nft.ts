@@ -1,11 +1,12 @@
 import { NFT } from 'app/types';
 import { Alert } from "react-native";
-import { useContext, useReducer, useCallback } from "react";
+import { useContext, useReducer, useCallback, useRef } from "react";
 import {  getBiconomy } from "../utilities";
 import { ethers } from "ethers";
 import transfererAbi from "app/abi/ShowtimeMT.json";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
-import { AppContext } from "../context/app-context";
+import { useWeb3 } from "./use-web3";
+import { AppContext } from "app/context/app-context";
 import { useCurrentUserAddress } from "./use-current-user-address";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
@@ -58,7 +59,9 @@ export type UseTransferNFT = {
 
 export const useTransferNFT = () => {
   const [state, dispatch] = useReducer(transferNFTReducer, initialTransferNFTState);
+  const biconomyRef = useRef<any>();
   const { userAddress } = useCurrentUserAddress();
+  const { web3 } = useWeb3();
   const context = useContext(AppContext);
 
   const connector = useWalletConnect();
@@ -70,13 +73,13 @@ export const useTransferNFT = () => {
   }: UseTransferNFT) {
     return new Promise<{ transaction: string; tokenId: number }>(
       async (resolve, reject) => {
-        const { biconomy } = await getBiconomy(connector, context.web3);
+        biconomyRef.current = await (await getBiconomy(connector, web3)).biconomy;
       
         const contract = new ethers.Contract(
           //@ts-ignore
           nft.contract_address,
           transfererAbi,
-          biconomy.getSignerByAddress(userAddress)
+          biconomyRef.current.getSignerByAddress(userAddress)
         );
 
         const { data } = await contract.populateTransaction.safeTransferFrom(
@@ -86,7 +89,7 @@ export const useTransferNFT = () => {
           quantity,
           0, 
         );
-        const provider = biconomy.getEthersProvider();
+        const provider = biconomyRef.current.getEthersProvider();
 
         console.log("** transfer: opening wallet for signing **");
 
@@ -150,6 +153,9 @@ export const useTransferNFT = () => {
         console.log("** transfer success **");
       } catch (e) {
         dispatch({ type: "transferingError" });
+        Alert.alert(
+          "Sorry! Something went wrong"
+        );
         throw e;
       }
     } else {

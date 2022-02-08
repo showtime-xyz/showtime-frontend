@@ -44,7 +44,10 @@ export const Trending = () => {
       <Tabs.Root onIndexChange={setSelected} initialIndex={selected} lazy>
         <Tabs.Header>
           <View tw="bg-white dark:bg-black pt-4 pl-4 pb-[3px]">
-            <Text tw="text-gray-900 dark:text-white font-bold text-3xl">
+            <Text
+              variant="text-2xl"
+              tw="text-gray-900 dark:text-white font-extrabold"
+            >
               Trending
             </Text>
           </View>
@@ -61,15 +64,15 @@ export const Trending = () => {
           )}
         >
           <Tabs.Trigger>
-            <TabItem name="24 hours" selected={selected === 0} />
+            <TabItem name="Today" selected={selected === 0} />
           </Tabs.Trigger>
 
           <Tabs.Trigger>
-            <TabItem name="7 days" selected={selected === 1} />
+            <TabItem name="This week" selected={selected === 1} />
           </Tabs.Trigger>
 
           <Tabs.Trigger>
-            <TabItem name="30 days" selected={selected === 2} />
+            <TabItem name="This month" selected={selected === 2} />
           </Tabs.Trigger>
 
           <SelectedTabIndicator />
@@ -144,14 +147,14 @@ const CreatorsList = ({
     []
   );
 
-  const getItemLayout = useCallback(
-    (_data, index) => ({
-      length: cardSize + separatorHeight,
-      offset: cardSize + separatorHeight * index,
+  const getItemLayout = useCallback((_data, index) => {
+    const cardHeight = cardSize + separatorHeight;
+    return {
+      length: cardHeight,
+      offset: cardHeight * index,
       index,
-    }),
-    []
-  );
+    };
+  }, []);
 
   const ListHeaderComponent = useMemo(
     () => (

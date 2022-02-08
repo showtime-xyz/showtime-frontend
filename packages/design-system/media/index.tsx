@@ -1,7 +1,8 @@
-import { memo, useCallback } from "react";
+import { useCallback } from "react";
 import { Pressable, useWindowDimensions } from "react-native";
 import Router from "next/router";
-import { SvgUri } from "react-native-svg";
+// import { SvgUri } from "react-native-svg";
+import { useSWRConfig } from "swr";
 
 import { useRouter } from "app/navigation/use-router";
 import { mixpanel } from "app/lib/mixpanel";
@@ -13,6 +14,7 @@ import { Video } from "design-system/video";
 import { Model } from "design-system/model";
 import { PinchToZoom } from "design-system/pinch-to-zoom";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
+import { NFT_DETAIL_API } from "app/utilities";
 
 const getImageUrl = (imgUrl: string, tokenAspectRatio: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
@@ -45,11 +47,14 @@ function Media({ item, numColumns, tw }: Props) {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const isNftModal = router?.pathname.includes("/nft");
+  const { mutate } = useSWRConfig();
 
   const openNFT = useCallback(
     (id: string) => {
-      const path = router.pathname.startsWith("/trending") ? "/trending" : "";
-      const as = `${path}/nft/${id}`;
+      mutate(`${NFT_DETAIL_API}/${id}`, {
+        data: item,
+      });
+      const as = `/nft/${id}`;
 
       const href = Router.router
         ? {
@@ -87,7 +92,7 @@ function Media({ item, numColumns, tw }: Props) {
         }}
         disabled={isNftModal}
       >
-        {item?.mime_type === "image/svg+xml" && (
+        {/* {item?.mime_type === "image/svg+xml" && (
           <SvgUri
             width={
               numColumns === 3
@@ -105,7 +110,7 @@ function Media({ item, numColumns, tw }: Props) {
             }
             uri={item?.token_img_url}
           />
-        )}
+        )} */}
 
         {item?.mime_type?.startsWith("image") &&
           item?.mime_type !== "image/svg+xml" && (

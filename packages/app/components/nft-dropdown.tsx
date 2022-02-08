@@ -1,4 +1,5 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { Share } from "react-native";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -14,9 +15,10 @@ import type { NFT } from "app/types";
 import { useReport } from "app/hooks/use-report";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useRouter } from "app/navigation/use-router";
+import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 
 type Props = {
-  nft: NFT;
+  nft?: NFT;
 };
 
 function NFTDropdown({ nft }: Props) {
@@ -27,19 +29,22 @@ function NFTDropdown({ nft }: Props) {
   const router = useRouter();
 
   useEffect(() => {
+    console.log({ userAddress });
     setIsOwner(nft?.owner_address === userAddress);
   }, [userAddress]);
+
+  const tokenChainName = Object.keys(CHAIN_IDENTIFIERS).find(
+    (key) => CHAIN_IDENTIFIERS[key] == nft?.chain_identifier
+  );
 
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <Button variant="tertiary" iconOnly={true} size="regular">
-          <MoreHorizontal
-            color={
-              tw.style("bg-black dark:bg-white")?.backgroundColor as string
-            }
-          />
-        </Button>
+        <MoreHorizontal
+          color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+          width={24}
+          height={24}
+        />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
@@ -47,12 +52,16 @@ function NFTDropdown({ nft }: Props) {
         tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
       >
         <DropdownMenuItem
-          onSelect={() => {}}
+          onSelect={() =>
+            Share.share({
+              url: `https://showtime.io/t/${tokenChainName}/${nft?.contract_address}/${nft?.token_id}`,
+            })
+          }
           key="copy-link"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
           <DropdownMenuItemTitle tw="text-black dark:text-white">
-            Copy Link
+            Share
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
@@ -71,7 +80,7 @@ function NFTDropdown({ nft }: Props) {
         {!isOwner && (
           <DropdownMenuItem
             onSelect={async () => {
-              await report({ nftId: nft.token_id });
+              await report({ nftId: nft?.token_id });
               router.pop();
             }}
             key="report"
@@ -85,7 +94,7 @@ function NFTDropdown({ nft }: Props) {
 
         {isOwner && (
           <DropdownMenuItem
-            onSelect={() => router.push(`/nft/${nft.nft_id}/transfer`)}
+            onSelect={() => router.push(`/nft/${nft?.nft_id}/transfer`)}
             key="transfer"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >
@@ -98,7 +107,7 @@ function NFTDropdown({ nft }: Props) {
         {isOwner && (
           <DropdownMenuItem
             destructive
-            onSelect={() => {}}
+            onSelect={() => router.push(`/burn?nftId=${nft?.nft_id}`)}
             key="delete"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >

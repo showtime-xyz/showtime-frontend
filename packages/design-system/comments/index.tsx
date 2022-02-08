@@ -2,7 +2,8 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { Platform, FlatList, Keyboard } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, Text } from "design-system";
+import { View } from "design-system/view";
+import { Text } from "design-system/text";
 import {
   MessageBox,
   SCROLL_HEIGHT,

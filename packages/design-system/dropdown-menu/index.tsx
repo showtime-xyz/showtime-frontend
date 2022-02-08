@@ -9,7 +9,7 @@ import Animated, {
 
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
-import { Text } from "design-system";
+import { Text } from "design-system/text";
 
 const DropdownMenuRoot = DropdownMenu.Root;
 
@@ -172,9 +172,7 @@ const DropdownMenuItemSubtitle = DropdownMenu.menuify(
 );
 
 const DropdownMenuItemIndicator = DropdownMenu.menuify(
-  (
-    props: { tw?: TW } & ComponentProps<typeof DropdownMenu.ItemIndicator>
-  ) => (
+  (props: { tw?: TW } & ComponentProps<typeof DropdownMenu.ItemIndicator>) => (
     <DropdownMenu.ItemIndicator {...props} style={tailwind.style(props.tw)} />
   ),
   "ItemIndicator"

@@ -5,14 +5,14 @@ import { View, Text, Button, ButtonLabel } from "design-system";
 import { LoginInputField } from "./login-input-field";
 import { LoginContainer } from "./login-container";
 import { LoginHeader } from "./login-header";
-import { useLogin } from "./useLogin";
+import { useLogin } from "./use-login";
 
 export function Login() {
   //#region hooks
   const {
-    loading,
-    signaturePending,
+    walletStatus,
     walletName,
+    loading,
     handleSubmitWallet,
     handleSubmitEmail,
     handleSubmitPhoneNumber,
@@ -59,7 +59,7 @@ export function Login() {
   //#endregion
   return (
     <LoginContainer loading={loading}>
-      {signaturePending ? (
+      {walletStatus === "FETCHING_SIGNATURE" ? (
         <View tw="py-40">
           <Text tw="text-center dark:text-gray-400">
             {walletName !== ""

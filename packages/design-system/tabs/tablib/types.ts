@@ -15,6 +15,10 @@ export type TabRootProps = {
 
 export type TabListProps = ScrollViewProps;
 
+export interface ExtendObject extends Object {
+  minHeight?: number;
+}
+
 export type TabsContextType = {
   tabListHeight: number;
   index: Reanimated.SharedValue<number>;

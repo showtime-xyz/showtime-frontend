@@ -4,7 +4,6 @@ import useUnmountSignal from "use-unmount-signal";
 import useSWR from "swr";
 import { formatDistanceToNowStrict } from "date-fns";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useForm, Controller } from "react-hook-form";
 
 import { View, Text, Fieldset, Button, ScrollView } from "design-system";
@@ -101,7 +100,6 @@ function TransferNft({ nftId }: { nftId?: string }) {
   const TransferNftScrollView =
     Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
 
-  const tabBarHeight = Platform.OS === "android" ? 0 : useBottomTabBarHeight();
   const fileExtension = nft?.token_img_url.split(".").pop();
   const isVideo =
     fileExtension && supportedVideoExtensions.includes(fileExtension);
@@ -147,9 +145,7 @@ function TransferNft({ nftId }: { nftId?: string }) {
 
   return (
     <View tw="flex-1">
-      <TransferNftScrollView
-        contentContainerStyle={{ paddingBottom: tabBarHeight + 80 }}
-      >
+      <TransferNftScrollView contentContainerStyle={{ paddingBottom: 80 }}>
         <Collection nft={nft} />
 
         <View tw="p-[16px]">
@@ -234,7 +230,7 @@ function TransferNft({ nftId }: { nftId?: string }) {
           </View>
         </View>
       </TransferNftScrollView>
-      <View tw="absolute px-4 w-full" style={{ bottom: tabBarHeight + 16 }}>
+      <View tw="absolute px-4 w-full" style={{ bottom: 16 }}>
         <Button
           onPress={handleSubmit(handleSubmitTransfer)}
           tw="h-12 rounded-full"

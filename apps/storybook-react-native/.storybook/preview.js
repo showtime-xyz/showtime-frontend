@@ -5,6 +5,7 @@ import { useDeviceContext } from "twrnc";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { ToastProvider } from "design-system/toast";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { tw } from "design-system/tailwind";
 import { View } from "design-system/view";
@@ -16,6 +17,8 @@ const FontsLoader = ({ children }) => {
     Inter: require("../assets/fonts/Inter-Regular.otf"),
     "Inter-Regular": require("../assets/fonts/Inter-Regular.otf"),
     "Inter-SemiBold": require("../assets/fonts/Inter-SemiBold.otf"),
+    "SpaceGrotesk-Regular": require("../assets/fonts/SpaceGrotesk-Regular.otf"),
+    "SpaceGrotesk-Bold": require("../assets/fonts/SpaceGrotesk-Bold.otf"),
   });
 
   if (!fontsLoaded) return null;
@@ -35,21 +38,23 @@ const TailwindDeviceContextProvider = ({ children }) => {
 
 export const decorators = [
   (Story) => (
-    <TailwindDeviceContextProvider>
-      <DripsyProvider theme={theme}>
-        <BottomSheetModalProvider>
-          <SafeAreaProvider>
-            <ToastProvider>
-              <MainAxisCenter>
-                <FontsLoader>
-                  <Story />
-                </FontsLoader>
-              </MainAxisCenter>
-            </ToastProvider>
-          </SafeAreaProvider>
-        </BottomSheetModalProvider>
-      </DripsyProvider>
-    </TailwindDeviceContextProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <TailwindDeviceContextProvider>
+        <DripsyProvider theme={theme}>
+          <BottomSheetModalProvider>
+            <SafeAreaProvider>
+              <ToastProvider>
+                <MainAxisCenter>
+                  <FontsLoader>
+                    <Story />
+                  </FontsLoader>
+                </MainAxisCenter>
+              </ToastProvider>
+            </SafeAreaProvider>
+          </BottomSheetModalProvider>
+        </DripsyProvider>
+      </TailwindDeviceContextProvider>
+    </GestureHandlerRootView>
   ),
 ];
 

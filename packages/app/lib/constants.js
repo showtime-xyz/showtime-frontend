@@ -218,3 +218,5 @@ export const CHAIN_IDENTIFIERS = {
   polygon: 137,
   mumbai: 80001,
 };
+
+export const TAB_LIST_HEIGHT = 64;

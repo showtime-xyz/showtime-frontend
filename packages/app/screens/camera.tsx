@@ -1,13 +1,15 @@
-import { useState, useEffect } from "react";
-import { Platform, Alert } from "react-native";
+import { useState, useEffect, useCallback } from "react";
+import { Platform } from "react-native";
 import { View, Text } from "dripsy";
 import { useTimer } from "use-timer";
 import { useNavigation } from "@react-navigation/native";
 
 import { Camera } from "app/components/camera";
 import { useRouter } from "app/navigation/use-router";
+import { useUser } from "app/hooks/use-user";
 
 function CameraScreen() {
+  const { isAuthenticated } = useUser();
   const router = useRouter();
   const navigation = useNavigation();
   const [render, setRender] = useState(false);
@@ -15,13 +17,27 @@ function CameraScreen() {
   const [photos, setPhotos] = useState([]);
   const [canPop, setCanPop] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+
+  const postPhoto = useCallback(
+    (photoURI: string) => {
+      const createPostURL = `/create?uri=${photoURI}`;
+      if (isAuthenticated) {
+        router.push(createPostURL);
+      } else {
+        router.push(`/login?redirect_url=${encodeURIComponent(createPostURL)}`);
+      }
+    },
+    [router, isAuthenticated]
+  );
+
   const burstCaptureTimer = useTimer({
     interval: 6000,
     endTime: 1,
     onTimeOver: () => {
       if (photos.length >= 1) {
         setIsLoading(false);
-        router.push(`/camera/create?uri=${photos[0].uri}`);
+        //@ts-ignore
+        postPhoto(photos[0].uri);
       } else {
         setPhotos([]);
       }
@@ -49,41 +65,14 @@ function CameraScreen() {
 
   useEffect(
     function checkIfContinueOrDelete() {
-      const unsubscribe = navigation.addListener("focus", () => {
-        if (photos.length !== 0) {
-          if (Platform.OS === "web") {
-            setPhotos([]);
-            setRender(!render);
-          } else {
-            Alert.alert(
-              "Did you want to delete your photo?",
-              "",
-              [
-                {
-                  text: "Continue Posting",
-                  onPress: () => {
-                    router.push(`/camera/create?uri=${photos[0].uri}`);
-                  },
-                },
-                {
-                  text: "Delete",
-                  onPress: () => {
-                    setIsLoading(false);
-                    setPhotos([]);
-                    setRender(!render);
-                  },
-                  style: "destructive",
-                },
-              ],
-              { cancelable: false }
-            );
-          }
-        }
+      const unsubscribe = navigation.addListener("focus", (e) => {
+        setPhotos([]);
+        setRender(!render);
       });
 
       return unsubscribe;
     },
-    [navigation, photos]
+    [navigation, render]
   );
 
   if (Platform.OS !== "web" && hasPermission === null) {
@@ -103,6 +92,7 @@ function CameraScreen() {
       canPop={canPop}
       setCanPop={setCanPop}
       isLoading={isLoading}
+      postPhoto={postPhoto}
       setIsLoading={setIsLoading}
     />
   );

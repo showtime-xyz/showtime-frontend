@@ -1,6 +1,7 @@
 import { Profile } from "./types";
 import { Biconomy } from "@biconomy/mexa";
 import { ethers } from "ethers";
+import removeMd from "remove-markdown";
 
 export const formatAddressShort = (address) => {
   if (!address) return null;
@@ -117,4 +118,10 @@ export const getBiconomy = async (connector: any, provider: any) => {
   );
 
   return { biconomy, connector };
+};
+
+export const NFT_DETAIL_API = "/v2/nft_detail";
+
+export const removeTags = (text: string) => {
+  return removeMd(text.replace(/(<([^>]+)>)/gi, " "));
 };

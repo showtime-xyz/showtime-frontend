@@ -1,22 +1,24 @@
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { useEffect } from "react";
 import { Platform, Pressable, ScrollView } from "react-native";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
 import { View, Text, Fieldset, Checkbox, Button } from "design-system";
 import { ChevronUp } from "design-system/icon";
 import { Image } from "design-system/image";
 import { Video } from "design-system/video";
 import {
+  MintNFTType,
   supportedVideoExtensions,
   UseMintNFT,
-  useMintNFT,
 } from "app/hooks/use-mint-nft";
 import { Accordion } from "design-system";
 import { useIsDarkMode } from "design-system/hooks";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useForm, Controller } from "react-hook-form";
 import { yup } from "app/lib/yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ErrorText } from "design-system/fieldset";
+import { useRouter } from "app/navigation/use-router";
+import { useUser } from "app/hooks/use-user";
 
 const defaultValues = {
   editionCount: 1,
@@ -47,8 +49,16 @@ const createNFTValidationSchema = yup.object({
   description: yup.string(),
 });
 
-function Create({ uri }: { uri: string }) {
-  const { startMinting, state } = useMintNFT();
+interface CreateProps {
+  uri: string;
+  state: MintNFTType;
+  startMinting: (params: UseMintNFT) => Promise<void>;
+}
+
+function Create({ uri, state, startMinting }: CreateProps) {
+  const router = useRouter();
+  const { user } = useUser();
+
   const handleSubmitForm = (values: Omit<UseMintNFT, "filePath">) => {
     console.log("** Submiting minting form **", values);
     const valuesWithFilePath = { ...values, filePath: uri };
@@ -68,7 +78,6 @@ function Create({ uri }: { uri: string }) {
   //#endregion
 
   const isDark = useIsDarkMode();
-  const tabBarHeight = Platform.OS === "android" ? 50 : useBottomTabBarHeight();
   const fileExtension = uri.split(".").pop();
   const isVideo =
     fileExtension && supportedVideoExtensions.includes(fileExtension);
@@ -78,18 +87,31 @@ function Create({ uri }: { uri: string }) {
     Platform.OS === "android" ? BottomSheetScrollView : ScrollView;
 
   // enable submission only on idle or error state.
-  const enable =
-    state.status === "idle" ||
-    state.status === "fileUploadError" ||
+  const isError =
+    state.status === "mediaUploadError" ||
+    state.status === "nftJSONUploadError" ||
     state.status === "mintingError";
+  const enable = state.status === "idle" || isError;
+
+  useEffect(
+    function redirectAfterSuccess() {
+      if (state.status === "mintingSuccess") {
+        setTimeout(() => {
+          router.pop();
+          router.push(
+            `/profile/${user?.data?.profile?.wallet_addresses_v2?.[0]?.address}`
+          );
+        }, 1000);
+      }
+    },
+    [state.status, user]
+  );
 
   return (
     <View tw="flex-1">
-      <CreateScrollView
-        contentContainerStyle={{ paddingBottom: tabBarHeight + 100 }}
-      >
+      <CreateScrollView keyboardShouldPersistTaps="handled">
         <View tw="px-3 py-4">
-          <View tw="flex-row items-center">
+          <View tw="flex-row items-center" testID="data-private">
             <Preview
               source={{
                 uri,
@@ -108,6 +130,7 @@ function Create({ uri }: { uri: string }) {
                     errorText={errors.title?.message}
                     onBlur={onBlur}
                     onChangeText={onChange}
+                    testID="data-private"
                   />
                 )}
               />
@@ -251,27 +274,42 @@ function Create({ uri }: { uri: string }) {
             )}
           />
         </View>
+
+        <View tw="mt-8 px-4 w-full">
+          <Button
+            onPress={handleSubmit(handleSubmitForm)}
+            tw="h-12 rounded-full"
+            disabled={!enable}
+          >
+            <Text tw="text-white dark:text-gray-900 text-sm">
+              {state.status === "idle"
+                ? "Create"
+                : state.status === "mediaUpload" ||
+                  state.status === "nftJSONUpload"
+                ? "Uploading..."
+                : state.status === "mintingSuccess"
+                ? "Success!"
+                : isError
+                ? "Failed. Retry"
+                : "Minting..."}
+            </Text>
+          </Button>
+
+          <View tw="h-12 mt-4">
+            {state.status === "minting" && !state.isMagic ? (
+              <Button
+                onPress={handleSubmit(handleSubmitForm)}
+                tw="h-12"
+                variant="tertiary"
+              >
+                <Text tw="text-gray-900 dark:text-white text-sm">
+                  Didn't receive the signature request yet?
+                </Text>
+              </Button>
+            ) : null}
+          </View>
+        </View>
       </CreateScrollView>
-      <View tw="absolute px-4 w-full" style={{ bottom: tabBarHeight + 16 }}>
-        <Button
-          onPress={handleSubmit(handleSubmitForm)}
-          tw="h-12 rounded-full"
-          disabled={!enable}
-        >
-          <Text tw="text-white dark:text-gray-900 text-sm">
-            {state.status === "idle"
-              ? "Create"
-              : state.status === "fileUpload"
-              ? "Uploading..."
-              : state.status === "minting"
-              ? "Minting..."
-              : state.status === "mintingError" ||
-                state.status === "fileUploadError"
-              ? "Failed. Retry"
-              : "Success!"}
-          </Text>
-        </Button>
-      </View>
     </View>
   );
 }

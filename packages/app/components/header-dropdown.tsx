@@ -15,7 +15,11 @@ import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import { formatAddressShort } from "app/lib/utilities";
 import { AppContext } from "app/context/app-context";
 import { useUser } from "app/hooks/use-user";
-import { useProfileNavigation } from "app/navigation/app-navigation";
+import { useAuth } from "app/hooks/auth/use-auth";
+import {
+  useProfileNavigation,
+  useSettingsNavigation,
+} from "app/navigation/app-navigation";
 
 const getSmallImageUrl = (imgUrl: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
@@ -26,15 +30,19 @@ const getSmallImageUrl = (imgUrl: string) => {
 
 function HeaderDropdown() {
   const { user } = useUser();
+  const { logout } = useAuth();
   const context = useContext(AppContext);
   const openProfile = useProfileNavigation(
+    user?.data?.profile?.wallet_addresses_v2?.[0]?.address
+  );
+  const openSettings = useSettingsNavigation(
     user?.data?.profile?.wallet_addresses_v2?.[0]?.address
   );
 
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <View tw="h-10 w-10 bg-gray-100 dark:bg-black items-center justify-center rounded-full">
+        <View tw="h-8 w-8 items-center justify-center rounded-full">
           <Image
             tw="h-8 w-8 rounded-full"
             source={{
@@ -73,46 +81,54 @@ function HeaderDropdown() {
 
         <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 
-        <DropdownMenuGroup>
-          <DropdownMenuRoot>
-            <DropdownMenuTriggerItem
-              key="nested-group-trigger"
+        <DropdownMenuRoot>
+          <DropdownMenuTriggerItem
+            key="nested-group-trigger"
+            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          >
+            <DropdownMenuItemTitle tw="text-black dark:text-white">
+              Theme
+            </DropdownMenuItemTitle>
+          </DropdownMenuTriggerItem>
+          <DropdownMenuContent tw="w-30 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow">
+            <DropdownMenuItem
+              onSelect={() => context.setColorScheme("light")}
+              key="nested-group-1"
               tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
             >
               <DropdownMenuItemTitle tw="text-black dark:text-white">
-                Theme
+                Light
               </DropdownMenuItemTitle>
-            </DropdownMenuTriggerItem>
-            <DropdownMenuContent tw="w-30 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow">
-              <DropdownMenuItem
-                onSelect={() => context.setColorScheme("light")}
-                key="nested-group-1"
-                tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
-              >
-                <DropdownMenuItemTitle tw="text-black dark:text-white">
-                  Light
-                </DropdownMenuItemTitle>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onSelect={() => context.setColorScheme("dark")}
-                key="nested-group-2"
-                tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
-              >
-                <DropdownMenuItemTitle tw="text-black dark:text-white">
-                  Dark
-                </DropdownMenuItemTitle>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenuRoot>
-        </DropdownMenuGroup>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => context.setColorScheme("dark")}
+              key="nested-group-2"
+              tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+            >
+              <DropdownMenuItemTitle tw="text-black dark:text-white">
+                Dark
+              </DropdownMenuItemTitle>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenuRoot>
+
+        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+
+        <DropdownMenuItem
+          onSelect={openSettings}
+          key="your-settings"
+          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+        >
+          <DropdownMenuItemTitle tw="text-black dark:text-white">
+            Settings
+          </DropdownMenuItemTitle>
+        </DropdownMenuItem>
 
         <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 
         <DropdownMenuItem
           destructive
-          onSelect={() => {
-            context.logOut();
-          }}
+          onSelect={logout}
           key="sign-out"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >

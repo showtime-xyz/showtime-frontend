@@ -1,5 +1,6 @@
 {
   "name": "showtime",
+  "version": "7.0.0",
   "private": true,
   "license": "MIT",
   "devDependencies": {
@@ -53,7 +54,7 @@
     "react": "18.0.0-rc.0",
     "react-dom": "18.0.0-rc.0",
     "react-native-svg": "^12.1.1",
-    "expo-linear-gradient": "^11.0.0"
+    "expo-linear-gradient": "~11.0.1"
   },
   "turbo": {
     "baseBranch": "origin/main",

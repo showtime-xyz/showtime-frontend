@@ -23,7 +23,7 @@ export function LikedBy({ nft }: Props) {
   if (!nft || nft.like_count === 0) return null;
 
   return (
-    <View tw="px-4 py-2 flex flex-row justify-start	items-center">
+    <View tw="bg-white dark:bg-black px-4 py-2 flex flex-row justify-start	items-center">
       <Text variant="text-xs" tw="text-gray-600 font-semibold">
         Liked by&nbsp;
       </Text>

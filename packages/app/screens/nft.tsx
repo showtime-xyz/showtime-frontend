@@ -1,8 +1,9 @@
-import { useState, Suspense } from "react";
+import { Platform } from "react-native";
 import useUnmountSignal from "use-unmount-signal";
 import useSWR from "swr";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, Button, Spinner, ScrollView } from "design-system";
+import { View, Pressable, ScrollView } from "design-system";
 import { Media } from "design-system/media";
 import { createParam } from "app/navigation/use-param";
 import { axios } from "app/lib/axios";
@@ -16,10 +17,10 @@ import { Title } from "design-system/card/rows/title";
 import { Description } from "design-system/card/rows/description";
 // import { Comments } from "design-system/comments";
 import type { NFT } from "app/types";
-import { useHideNavigationElements } from "app/navigation/use-navigation-elements";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { Owner } from "design-system/card/rows/owner";
 import { LikedBy } from "design-system/liked-by";
+import { NFT_DETAIL_API } from "app/utilities";
 
 type Query = {
   id: string;
@@ -28,44 +29,48 @@ type Query = {
 const { useParam } = createParam<Query>();
 
 function NftScreen() {
-  useHideNavigationElements();
+  const { top: topSafeArea } = useSafeAreaInsets();
   const router = useRouter();
   const unmountSignal = useUnmountSignal();
   const [nftId, setNftId] = useParam("id");
-  const [url, setUrl] = useState(`/v2/nft_detail/${nftId}`);
-  const { data, error } = useSWR([url], (url) =>
-    axios({ url, method: "GET", unmountSignal })
+  const { data, error } = useSWR<{ data: NFT }>(
+    `${NFT_DETAIL_API}/${nftId}`,
+    (url) => axios({ url, method: "GET", unmountSignal })
   );
-  const nft = data?.data as NFT;
+  const nft = data?.data;
 
   if (error) {
     console.error(error);
   }
 
   return (
-    <View tw="flex-1 bg-gray-200 dark:bg-black">
-      <View tw="p-6 h-16 flex-row items-center justify-between">
-        <Button
-          onPress={router.pop}
-          variant="tertiary"
-          iconOnly={true}
-          size="regular"
-        >
+    <View
+      tw={[
+        "flex-1 bg-white dark:bg-black",
+        Platform.OS === "web" || Platform.OS === "android"
+          ? `pt-[${topSafeArea}px]`
+          : "",
+      ]}
+    >
+      <View tw="px-4 h-16 flex-row items-center justify-between">
+        <Pressable onPress={router.pop}>
           <Close
             color={
               tw.style("bg-black dark:bg-white")?.backgroundColor as string
             }
+            width={24}
+            height={24}
           />
-        </Button>
+        </Pressable>
         <NFTDropdown nft={nft} />
       </View>
 
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="handled">
+        <Collection nft={nft} />
+
         <PinchToZoom>
           <Media item={nft} numColumns={1} />
         </PinchToZoom>
-
-        <Collection nft={nft} />
 
         <Social nft={nft} />
 

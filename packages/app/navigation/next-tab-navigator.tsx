@@ -4,7 +4,6 @@ import dynamic from "next/dynamic";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { tw } from "design-system/tailwind";
-import { HeaderLeft, HeaderRight } from "app/components/header";
 import { useNavigationElements } from "./use-navigation-elements";
 import { NextNavigationProps } from "./types";
 import { createNextTabNavigator } from "./universal-tab-navigator";
@@ -32,7 +31,7 @@ export function NextTabNavigator({
 }: NextNavigationProps) {
   const { width } = useWindowDimensions();
   const { isTabBarHidden } = useNavigationElements();
-  const { bottom: safeAreaBottom } = useSafeAreaInsets();
+  const { top: safeAreaTop, bottom: safeAreaBottom } = useSafeAreaInsets();
 
   const color = tw.style("bg-black dark:bg-white")?.backgroundColor as string;
   const tint = color === "#000" ? "light" : "dark";
@@ -42,18 +41,8 @@ export function NextTabNavigator({
     <BottomTab.Navigator
       initialRouteName="homeTab"
       screenOptions={{
-        headerLeft: HeaderLeft,
-        headerRight: HeaderRight,
-        headerTitle: "",
-        headerTintColor: "#000",
-        //@ts-ignore
-        headerStyle: {
-          backgroundColor: isDark ? "black" : "white",
-          // below removes the border bottom line on header on iOS
-          shadowOffset: {
-            height: 0,
-          },
-        },
+        lazy: Platform.OS === "android" ? false : true,
+        headerShown: false,
         tabBarActiveTintColor: color,
         tabBarInactiveTintColor: color,
         tabBarShowLabel: false,

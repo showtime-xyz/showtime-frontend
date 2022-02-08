@@ -10,7 +10,7 @@ import { getImgFromArr } from "array-to-image";
 
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
-import { View } from "design-system";
+import { View } from "design-system/view";
 
 const resizeModeToObjectFit = (resizeMode: ImageResizeMode) => {
   switch (resizeMode) {

@@ -45,6 +45,7 @@ export type NFT = {
   collection_slug: string;
   collection_img_url?: string;
   contract_is_creator: number;
+  multiple_owners_list: Array<Profile>;
 };
 
 export type Creator = {
@@ -101,3 +102,39 @@ export interface Profile {
   has_onboarded: boolean;
   links: Link[];
 }
+
+type FollowType = {
+  profile_id: number;
+};
+
+export type UserType = {
+  data: {
+    follows: FollowType[];
+    profile: Profile;
+    likes_nft: number[];
+    likes_comment: number[];
+    comments: number[];
+  };
+};
+
+export type AuthenticationStatus =
+  | "IDLE"
+  | "REFRESHING"
+  | "AUTHENTICATING"
+  | "AUTHENTICATED"
+  | "UNAUTHENTICATED";
+
+export type WalletConnectionStatus =
+  | "IDLE"
+  | "CONNECTING_TO_WALLET"
+  | "CONNECTED_TO_WALLET"
+  | "FETCHING_NONCE"
+  | "FETCHED_NONCE"
+  | "SIGNING_PERSONAL_MESSAGE"
+  | "SIGNED_PERSONAL_MESSAGE"
+  | "LOGGING_IN"
+  | "LOGGED_IN"
+  | "EXPIRING_NONCE"
+  | "EXPIRED_NONCE"
+  | "CONNECTED"
+  | "ERRORED";

@@ -25,6 +25,7 @@ type InputProps = {
   errorText?: string;
   helperText?: string;
   accessibilityLabel?: string;
+  autoFocus?: boolean;
 };
 
 const borderColor = {
@@ -66,6 +67,7 @@ export const Input = (props: InputProps) => {
     type,
     isInvalid,
     accessibilityLabel,
+    autoFocus,
   } = props;
   const { onFocus, onBlur, focused } = useOnFocus();
   const colorScheme = useColorScheme();
@@ -143,6 +145,7 @@ export const Input = (props: InputProps) => {
           selectionColor={isDark ? colors.gray["300"] : colors.gray["700"]}
           keyboardType={type}
           disabled={disabled}
+          autoFocus={autoFocus}
           accessibilityLabel={accessibilityLabel}
           accessibilityDescribedBy={Platform.select({
             web: helperText ? helperTextId : undefined,
