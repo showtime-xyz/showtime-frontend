@@ -75,3 +75,7 @@ web-build/
 dist/
 
 # @end expo-cli
+
+# Detox
+
+.artifacts/*

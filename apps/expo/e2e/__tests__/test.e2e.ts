@@ -1,3 +1,5 @@
+import { by, device, element, expect } from "detox";
+
 describe("Showtime", () => {
   beforeAll(async () => {
     await device.launchApp();
