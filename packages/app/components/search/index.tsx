@@ -33,8 +33,8 @@ export const Search = () => {
   // https://github.com/facebook/react-native/issues/23364#issuecomment-642518054
   // PR - https://github.com/facebook/react-native/pull/31943
   const keyboardDismissProp = Platform.select({
-    ios: { keyboardDismissMode: "on-drag" },
-    android: { onScrollEndDrag: Keyboard.dismiss },
+    ios: { keyboardDismissMode: "on-drag" } as const,
+    android: { onScrollEndDrag: Keyboard.dismiss } as const,
   });
 
   return (
