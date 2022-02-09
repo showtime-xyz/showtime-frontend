@@ -13,6 +13,8 @@ configuration=$2
 # YES or NO
 UseModernBuildSystem=${3:-"NO"}
 
+pwd
+
 xcodebuild \
   -workspace ios/$iosName.xcworkspace \
   -scheme $iosName \

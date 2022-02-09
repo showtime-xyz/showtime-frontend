@@ -79,3 +79,4 @@ dist/
 # Detox
 
 .artifacts/*
+*.log
