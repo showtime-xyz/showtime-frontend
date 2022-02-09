@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { StyleSheet } from "react-native";
-import { View, Image, Text, Button } from "design-system";
+import { formatDistanceToNowStrict } from "date-fns";
+import { View, Image, Text } from "design-system";
 import { VerificationBadge } from "design-system/verification-badge";
 import { HeartFilled, MessageFilled } from "design-system/icon";
 import { TextButton } from "design-system/button";
@@ -17,10 +18,35 @@ const getProfileImageUrl = (imgUrl: string) => {
 interface CommentRowProps {
   hasParent?: boolean;
   hasComments?: boolean;
+  content?: string;
+  likeCount?: number;
+  commentCount?: number;
+  createdAt?: string;
   nft?: NFT;
 }
 
-export function CommentRow({ hasParent, hasComments, nft }: CommentRowProps) {
+export function CommentRow({
+  content = "",
+  likeCount = 0,
+  commentCount = 0,
+  createdAt,
+  hasParent,
+  hasComments,
+  nft,
+}: CommentRowProps) {
+  //#region variables
+  const createdAtText = useMemo(
+    () =>
+      createdAt
+        ? formatDistanceToNowStrict(new Date(createdAt), {
+            addSuffix: true,
+          })
+        : undefined,
+    [createdAt]
+  );
+  //#endregion
+
+  //#region styles
   const nestedLineTW = useMemo(
     () => [
       "absolute",
@@ -42,6 +68,7 @@ export function CommentRow({ hasParent, hasComments, nft }: CommentRowProps) {
     ],
     [hasParent]
   );
+  //#region
 
   if (!nft) {
     return null;
@@ -77,20 +104,22 @@ export function CommentRow({ hasParent, hasComments, nft }: CommentRowProps) {
           tw="text-gray-900 dark:text-gray-100"
           sx={{ fontSize: 13, lineHeight: 15 }}
         >
-          This is a comment, This is a comment, This is a comment
+          {content}
         </Text>
 
         <View tw="flex-row mt-2 mb--2">
           <TextButton tw="px-2">
-            <HeartFilled /> 15
+            <HeartFilled /> {`${likeCount}`}
           </TextButton>
           <TextButton tw="px-2">
-            <MessageFilled /> 15
+            <MessageFilled /> {`${commentCount}`}
           </TextButton>
-          <View tw="flex-1 flex-row items-center justify-end">
-            <Text tw="text-gray-500 font-bold mr--1.5" variant="text-xs">
-              1 min ago&nbsp; •
-            </Text>
+          <View tw="flex-1 flex-row mr--4 items-center justify-end">
+            {createdAtText && (
+              <Text tw="text-gray-500 font-bold mr--1.5" variant="text-xs">
+                {`${createdAtText}  •`}
+              </Text>
+            )}
             <TextButton>Delete</TextButton>
           </View>
         </View>
