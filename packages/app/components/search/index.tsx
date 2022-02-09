@@ -10,7 +10,6 @@ import { Text } from "design-system/text";
 import { tw } from "design-system/tailwind";
 import { VerificationBadge } from "design-system/verification-badge";
 import { formatAddressShort } from "app/utilities";
-import { useRouter } from "app/navigation/use-router";
 import { Link } from "app/navigation/link";
 import { Image } from "design-system/image";
 import { Pressable } from "design-system/pressable-scale";
@@ -95,15 +94,8 @@ export const Search = () => {
 };
 
 const SearchItem = ({ item }: { item: SearchResponseItem }) => {
-  const router = useRouter();
-
   return (
-    <Link
-      href={`${
-        router.pathname.startsWith("/trending") ? "/trending" : ""
-      }/profile/${item.address0}`}
-      tw="p-4"
-    >
+    <Link href={`/profile/${item.address0}`} tw="p-4">
       <View tw="flex-row justify-between items-center">
         <View tw="flex-row">
           <View tw="h-8 w-8 bg-gray-200 rounded-full mr-2">
