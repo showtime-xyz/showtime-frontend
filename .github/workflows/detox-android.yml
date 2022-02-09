@@ -69,7 +69,7 @@ jobs:
           architecture: "x64"
 
       - name: Build app
-        run: yarn detox build --configuration android.emu.gh.debug
+        run: yarn detox build --configuration android.emu.gh.release
 
       - name: Run Detox
         uses: reactivecircus/android-emulator-runner@v2
@@ -79,4 +79,4 @@ jobs:
           arch: x86_64
           profile: pixel
           avd-name: Pixel_API_29_AOSP
-          script: yarn detox test --configuration android.emu.gh.debug --headless
+          script: yarn detox test --configuration android.emu.gh.release --headless

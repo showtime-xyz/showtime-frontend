@@ -66,7 +66,7 @@ jobs:
         run: brew tap wix/brew && brew install applesimutils
 
       - name: Build app
-        run: yarn detox build --configuration ios.sim.debug
+        run: yarn detox build --configuration ios.sim.release
 
       - name: Run Detox
-        run: yarn detox test --configuration ios.sim.debug
+        run: yarn detox test --configuration ios.sim.release
