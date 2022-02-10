@@ -3,7 +3,6 @@ import Animated, {
   useAnimatedStyle,
   Extrapolate,
   interpolate,
-  useDerivedValue,
 } from "react-native-reanimated";
 
 import { tw } from "design-system/tailwind";
@@ -11,6 +10,8 @@ import { useIsDarkMode } from "design-system/hooks";
 import { View } from "design-system/view";
 import { Text } from "design-system/text";
 import { useTabIndexContext, useTabsContext } from "design-system/tabs/tablib";
+
+const TAB_ITEM_PADDING_HORIZONTAL = 16;
 
 type TabItemProps = {
   name: string;
@@ -47,7 +48,7 @@ export const TabItem = ({ name, count }: TabItemProps) => {
           justifyContent: "center",
           alignItems: "center",
           height: "100%",
-          marginHorizontal: 16,
+          paddingHorizontal: TAB_ITEM_PADDING_HORIZONTAL,
         },
         animatedStyle,
       ]}
@@ -84,8 +85,8 @@ export const SelectedTabIndicator = (props: SelectedTabIndicatorProps) => {
 
   const animatedStyle = useAnimatedStyle(() => {
     const input = tabItemLayouts.map((_v, i) => i);
-    const translateOutput = tabItemLayouts.map((v) => v.value?.x);
-    const widthOutput = tabItemLayouts.map((v) => v.value?.width);
+    let translateOutput = tabItemLayouts.map((v) => v.value?.x);
+    let widthOutput = tabItemLayouts.map((v) => v.value?.width);
     const newPos = position.value + offset.value;
     if (
       translateOutput.some((v) => v === undefined) ||
@@ -93,6 +94,13 @@ export const SelectedTabIndicator = (props: SelectedTabIndicatorProps) => {
     ) {
       return {};
     } else {
+      widthOutput = widthOutput.map((e) =>
+        typeof e === "number" ? e - TAB_ITEM_PADDING_HORIZONTAL * 2 : 0
+      );
+      translateOutput = translateOutput.map((e) =>
+        typeof e === "number" ? e + TAB_ITEM_PADDING_HORIZONTAL : 0
+      );
+
       return {
         //@ts-ignore - widthOut won't be undefined as we check above
         width: interpolate(newPos, input, widthOutput, Extrapolate.CLAMP),
@@ -135,7 +143,7 @@ export const SelectedTabIndicator = (props: SelectedTabIndicatorProps) => {
           tw.style(`bg-gray-900 dark:bg-gray-100`),
         ]}
       />
-      {disableBackground ? null : (
+      {/* {disableBackground ? null : (
         <View
           sx={{
             backgroundColor: isDark
@@ -145,7 +153,7 @@ export const SelectedTabIndicator = (props: SelectedTabIndicatorProps) => {
             borderRadius: 999,
           }}
         />
-      )}
+      )} */}
     </Animated.View>
   );
 };

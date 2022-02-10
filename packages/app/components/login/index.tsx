@@ -16,8 +16,7 @@ import { LoginInputField } from "./login-input-field";
 import { LoginHeader } from "./login-header";
 import { LoginContainer } from "./login-container";
 import { PhoneNumberPicker } from "./phone-number-picker";
-
-const TAB_LIST_HEIGHT = 56;
+import { TAB_LIST_HEIGHT } from "app/lib/constants";
 
 interface LoginProps {
   onLogin?: () => void;

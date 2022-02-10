@@ -219,4 +219,5 @@ export const CHAIN_IDENTIFIERS = {
   mumbai: 80001,
 };
 
-export const TAB_LIST_HEIGHT = 64;
+// static height can improve tabs list initial rendering
+export const TAB_LIST_HEIGHT = 50;

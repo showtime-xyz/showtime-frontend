@@ -176,12 +176,7 @@ const List = (props: TabListProps) => {
   return null;
 };
 
-const ListImpl = ({
-  children,
-  style,
-  contentContainerStyle,
-  ...props
-}: TabListProps) => {
+const ListImpl = ({ children, style, ...props }: TabListProps) => {
   const { index, tabItemLayouts } = useContext(TabsContext);
   const tabListRef = useRef<Reanimated.ScrollView>();
 
@@ -242,16 +237,6 @@ const ListImpl = ({
       showsHorizontalScrollIndicator={false}
       horizontal
       style={styles}
-      contentContainerStyle={useMemo(
-        () =>
-          StyleSheet.flatten([
-            {
-              paddingHorizontal: 16,
-            },
-            contentContainerStyle,
-          ]),
-        [contentContainerStyle]
-      )}
       {...props}
     >
       {newChildren}
