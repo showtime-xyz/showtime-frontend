@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { forwardRef, useMemo } from "react";
 import { Platform, TextInputProps } from "react-native";
 import { TextInput } from "dripsy";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
@@ -53,7 +53,7 @@ export const useId = (id?: string) => {
   return newId;
 };
 
-export const Input = (props: InputProps) => {
+export const Input = forwardRef((props: InputProps, ref: any) => {
   const {
     leftElement,
     rightElement,
@@ -159,6 +159,7 @@ export const Input = (props: InputProps) => {
             web: isInvalid,
             default: undefined,
           })}
+          ref={ref}
         />
         {rightElement && (
           <View sx={{ marginLeft: "auto" }}>{rightElement}</View>
@@ -186,7 +187,7 @@ export const Input = (props: InputProps) => {
       ) : null}
     </View>
   );
-};
+});
 
 // This component adds appropriate padding to match our design system and increase the pressable area
 // Usage - with rightElement and leftElement

@@ -47,11 +47,7 @@ export function useAccessTokenManager() {
       setRefreshToken(_refreshToken);
 
       isRefreshing.current = false;
-    } catch (error) {
-      if (__DEV__) {
-        console.error(error);
-      }
-
+    } catch (error: any) {
       isRefreshing.current = false;
 
       accessTokenStorage.deleteAccessToken();
@@ -64,7 +60,9 @@ export function useAccessTokenManager() {
         },
       });
 
-      throw "Failed to refresh tokens";
+      throw `Failed to refresh tokens. ${
+        typeof error === "string" ? error : error.message || ""
+      }`;
     }
   }, []);
   //#endregion

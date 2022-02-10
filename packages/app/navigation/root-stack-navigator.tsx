@@ -36,7 +36,13 @@ export function RootStackNavigator() {
       >
         <Stack.Screen name="profile" component={ProfileScreen} />
         <Stack.Screen name="settings" component={SettingsScreen} />
-        <Stack.Screen name="search" component={SearchScreen} />
+        <Stack.Screen
+          name="search"
+          component={SearchScreen}
+          options={{
+            animation: "none",
+          }}
+        />
       </Stack.Group>
 
       {/* Modals */}

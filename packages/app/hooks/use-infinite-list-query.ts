@@ -62,7 +62,7 @@ export const useInfiniteListQuerySWR = <T>(
       if (!isLoadingMore) {
         setSize((size) => size + 1);
       }
-    }, [isLoadingMore]),
+    }, [isLoadingMore, setSize]),
     retry: mutate,
     isLoading: isLoadingInitialData,
     isLoadingMore,

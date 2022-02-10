@@ -95,8 +95,7 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
         if (canGoBack) {
           router.pop();
         } else {
-          // router.push("/search");
-          toast?.show({ message: "🚧 Coming soon", hideAfter: 4000 });
+          router.push("/search");
         }
       }}
       // animate={useCallback(({ hovered }) => {
