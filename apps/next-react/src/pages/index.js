@@ -1,18 +1,20 @@
 import { useState, useEffect, useContext } from "react";
-import Head from "next/head";
-import _ from "lodash";
-import Layout from "@/components/layout";
-import CappedWidth from "@/components/CappedWidth";
-import InfiniteScroll from "react-infinite-scroll-component";
-import AppContext from "@/context/app-context";
-import mixpanel from "mixpanel-browser";
-import useKeyPress from "@/hooks/useKeyPress";
+
 import ActivityFeed from "@/components/ActivityFeed";
-import ModalTokenDetail from "@/components/ModalTokenDetail";
 import ActivityRecommendedFollows from "@/components/ActivityRecommendedFollows";
+import CappedWidth from "@/components/CappedWidth";
 import ModalReportItem from "@/components/ModalReportItem";
+import ModalTokenDetail from "@/components/ModalTokenDetail";
 import RecommendFollowers from "@/components/RecommendFollowers";
+import Layout from "@/components/layout";
+import AppContext from "@/context/app-context";
+import useKeyPress from "@/hooks/useKeyPress";
 import axios from "@/lib/axios";
+import {
+  HeartIcon as HeartOutlineIcon,
+  UserIcon as UserOutlineIcon,
+  ChatAlt2Icon as CommentOutlineIcon,
+} from "@heroicons/react/outline";
 import {
   FingerPrintIcon,
   HeartIcon as HeartSolidIcon,
@@ -20,11 +22,10 @@ import {
   ChatAlt2Icon as CommentSolidIcon,
   FilterIcon,
 } from "@heroicons/react/solid";
-import {
-  HeartIcon as HeartOutlineIcon,
-  UserIcon as UserOutlineIcon,
-  ChatAlt2Icon as CommentOutlineIcon,
-} from "@heroicons/react/outline";
+import _ from "lodash";
+import mixpanel from "mixpanel-browser";
+import Head from "next/head";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const ACTIVITY_PAGE_LENGTH = 5; // 5 activity items per activity page
 

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
+
 import mixpanel from "mixpanel-browser";
+
 import CloseButton from "./CloseButton";
 import ScrollableModal from "./ScrollableModal";
 

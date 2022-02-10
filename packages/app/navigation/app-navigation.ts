@@ -1,5 +1,7 @@
-import Router from "next/router";
 import { useCallback } from "react";
+
+import Router from "next/router";
+
 import { useRouter } from "./use-router";
 
 export const useProfileNavigation = (address?: string) => {

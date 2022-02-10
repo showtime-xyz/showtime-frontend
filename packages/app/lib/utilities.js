@@ -1,5 +1,6 @@
-import { CONTRACTS } from "./constants";
 import removeMd from "remove-markdown";
+
+import { CONTRACTS } from "./constants";
 
 export const classNames = (...classes) => {
   return classes.filter(Boolean).join(" ");

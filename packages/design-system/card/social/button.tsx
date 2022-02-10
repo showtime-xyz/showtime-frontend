@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 
-import { Pressable } from "design-system/pressable-scale";
-import { Text } from "design-system/text";
-import { HeartFilled, MessageFilled, Boost } from "design-system/icon";
-import { tw } from "design-system/tailwind";
 import { useOnPress, useOnHover } from "design-system/hooks";
+import { HeartFilled, MessageFilled, Boost } from "design-system/icon";
+import { Pressable } from "design-system/pressable-scale";
+import { tw } from "design-system/tailwind";
+import { Text } from "design-system/text";
 
 type Props = {
   variant: "like" | "comment" | "boost";

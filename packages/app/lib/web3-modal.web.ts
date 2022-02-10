@@ -1,4 +1,5 @@
 import Fortmatic from "fortmatic";
+
 import { Magic } from "app/lib/magic";
 
 // theme

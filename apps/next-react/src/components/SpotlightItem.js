@@ -1,12 +1,10 @@
 import { useRef, useContext, useState, Fragment, useEffect } from "react";
-import { CHAIN_IDENTIFIERS, DEFAULT_PROFILE_PIC } from "@/lib/constants";
-import Link from "next/link";
-import LikeButton from "./LikeButton";
-import CommentButton from "./CommentButton";
-import ShareButton from "./ShareButton";
-import ReactPlayer from "react-player";
-import mixpanel from "mixpanel-browser";
+
 import AppContext from "@/context/app-context";
+import useProfile from "@/hooks/useProfile";
+import axios from "@/lib/axios";
+import backend from "@/lib/backend";
+import { CHAIN_IDENTIFIERS, DEFAULT_PROFILE_PIC } from "@/lib/constants";
 import {
   getBidLink,
   getContractName,
@@ -14,19 +12,23 @@ import {
   formatAddressShort,
   classNames,
 } from "@/lib/utilities";
-import ModalTokenDetail from "./ModalTokenDetail";
-import CappedWidth from "./CappedWidth";
-import { truncateWithEllipses } from "../lib/utilities";
-import Button from "./UI/Buttons/Button";
-import axios from "@/lib/axios";
 import { Menu, Transition } from "@headlessui/react";
-import EllipsisIcon from "./Icons/EllipsisIcon";
-import BadgeIcon from "./Icons/BadgeIcon";
-import OrbitIcon from "./Icons/OrbitIcon";
-import BuyModal from "./UI/Modals/BuyModal";
+import mixpanel from "mixpanel-browser";
+import Link from "next/link";
+import ReactPlayer from "react-player";
 import useSWR from "swr";
-import backend from "@/lib/backend";
-import useProfile from "@/hooks/useProfile";
+
+import { truncateWithEllipses } from "../lib/utilities";
+import CappedWidth from "./CappedWidth";
+import CommentButton from "./CommentButton";
+import BadgeIcon from "./Icons/BadgeIcon";
+import EllipsisIcon from "./Icons/EllipsisIcon";
+import OrbitIcon from "./Icons/OrbitIcon";
+import LikeButton from "./LikeButton";
+import ModalTokenDetail from "./ModalTokenDetail";
+import ShareButton from "./ShareButton";
+import Button from "./UI/Buttons/Button";
+import BuyModal from "./UI/Modals/BuyModal";
 
 const SpotlightItem = ({
   isMyProfile,

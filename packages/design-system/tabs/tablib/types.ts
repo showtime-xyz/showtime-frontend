@@ -1,8 +1,9 @@
 import React from "react";
 import { LayoutRectangle } from "react-native";
+import { ScrollViewProps } from "react-native";
+
 import PagerView from "react-native-pager-view";
 import Reanimated from "react-native-reanimated";
-import { ScrollViewProps } from "react-native";
 
 export type TabRootProps = {
   initialIndex?: number;

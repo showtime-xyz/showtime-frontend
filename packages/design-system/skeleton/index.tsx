@@ -1,6 +1,7 @@
 import { ComponentProps } from "react";
-import { Skeleton as MotiSkeleton } from "moti/skeleton";
+
 import { styled } from "dripsy";
+import { Skeleton as MotiSkeleton } from "moti/skeleton";
 
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";

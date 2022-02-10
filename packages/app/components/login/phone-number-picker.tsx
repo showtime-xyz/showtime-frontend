@@ -1,15 +1,19 @@
-import { Modal, Platform } from "react-native";
-import { CountryCodePicker, View, Text, Pressable } from "design-system";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Modal, Platform } from "react-native";
+
+import Animated, { FadeIn } from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 import { yup } from "app/lib/yup";
-import { LoginInputField } from "./login-input-field";
+
+import { CountryCodePicker, View, Text, Pressable } from "design-system";
 import { Button } from "design-system/button";
+import data from "design-system/country-code-picker/country-code-data";
 import { ChevronLeft, Close, Search } from "design-system/icon";
 import { Input } from "design-system/input";
 import { tw } from "design-system/tailwind";
-import data from "design-system/country-code-picker/country-code-data";
-import Animated, { FadeIn } from "react-native-reanimated";
-import { SafeAreaView } from "react-native-safe-area-context";
+
+import { LoginInputField } from "./login-input-field";
 
 type PhoneNumberPickerProp = {
   handleSubmitPhoneNumber: any;

@@ -1,5 +1,5 @@
-import { TextLink } from "app/navigation/link";
 import { truncateWithEllipses } from "app/lib/utilities";
+import { TextLink } from "app/navigation/link";
 
 const TRUNCATE_NAME_LENGTH = 24;
 

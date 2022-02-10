@@ -1,8 +1,8 @@
+import ClientAccessToken from "@/lib/client-access-token";
+import { captureException } from "@sentry/nextjs";
 import Axios from "axios";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 import Router from "next/router";
-import { captureException } from "@sentry/nextjs";
-import ClientAccessToken from "@/lib/client-access-token";
 
 const axios = Axios.create();
 

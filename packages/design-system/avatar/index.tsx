@@ -1,7 +1,9 @@
-import { Image } from "dripsy";
-import { View } from "../view";
-import { tw } from "../tailwind";
 import { StyleSheet } from "react-native";
+
+import { Image } from "dripsy";
+
+import { tw } from "../tailwind";
+import { View } from "../view";
 
 type AvatarProps = {
   avatarUrl: string;

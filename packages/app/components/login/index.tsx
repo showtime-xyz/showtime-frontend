@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { StyleSheet } from "react-native";
+
+import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import { yup } from "app/lib/yup";
 
 import {
@@ -11,12 +13,12 @@ import {
   Button,
   ButtonLabel,
 } from "design-system";
-import { useLogin } from "./use-login";
-import { LoginInputField } from "./login-input-field";
-import { LoginHeader } from "./login-header";
+
 import { LoginContainer } from "./login-container";
+import { LoginHeader } from "./login-header";
+import { LoginInputField } from "./login-input-field";
 import { PhoneNumberPicker } from "./phone-number-picker";
-import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import { useLogin } from "./use-login";
 
 interface LoginProps {
   onLogin?: () => void;

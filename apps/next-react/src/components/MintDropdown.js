@@ -1,10 +1,12 @@
+import { Fragment } from "react";
+
 import axios from "@/lib/axios";
 import { MINT_TYPES } from "@/lib/constants";
 import { classNames } from "@/lib/utilities";
 import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
-import { Fragment } from "react";
 import useSWR from "swr";
+
 import AudioIcon from "./Icons/AudioIcon";
 import FileIcon from "./Icons/FileIcon";
 import ImageIcon from "./Icons/ImageIcon";

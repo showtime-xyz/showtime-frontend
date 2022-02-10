@@ -1,12 +1,13 @@
 import { useWindowDimensions, Platform, StyleSheet } from "react-native";
+
 import { BlurView } from "expo-blur";
 import dynamic from "next/dynamic";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { View } from "design-system";
+import { useIsDarkMode } from "design-system/hooks";
 import { tw } from "design-system/tailwind";
-import { useNavigationElements } from "./use-navigation-elements";
-import { NextNavigationProps } from "./types";
-import { createNextTabNavigator } from "./universal-tab-navigator";
+
 import {
   HomeTabBarIcon,
   TrendingTabBarIcon,
@@ -14,8 +15,9 @@ import {
   MarketplaceTabBarIcon,
   NotificationsTabBarIcon,
 } from "./tab-bar-icons";
-import { useIsDarkMode } from "design-system/hooks";
-import { View } from "design-system";
+import { NextNavigationProps } from "./types";
+import { createNextTabNavigator } from "./universal-tab-navigator";
+import { useNavigationElements } from "./use-navigation-elements";
 
 const HomeNavigator = dynamic(() => import("../pages/home"));
 const TrendingNavigator = dynamic(() => import("../pages/trending"));

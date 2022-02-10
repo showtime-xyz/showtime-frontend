@@ -1,14 +1,16 @@
 import { useEffect, useMemo } from "react";
 import { Alert, Platform } from "react-native";
+
 import { useNavigation } from "@react-navigation/native";
 
-import { mixpanel } from "app/lib/mixpanel";
 import { Create } from "app/components/create";
-import { useRouter } from "app/navigation/use-router";
-import { useHideHeader } from "app/navigation/use-navigation-elements";
-import { Modal, ModalSheet } from "design-system";
-import { createParam } from "app/navigation/use-param";
 import { useMintNFT } from "app/hooks/use-mint-nft";
+import { mixpanel } from "app/lib/mixpanel";
+import { useHideHeader } from "app/navigation/use-navigation-elements";
+import { createParam } from "app/navigation/use-param";
+import { useRouter } from "app/navigation/use-router";
+
+import { Modal, ModalSheet } from "design-system";
 
 type Query = {
   uri: string;

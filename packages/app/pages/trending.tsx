@@ -1,11 +1,13 @@
 import { Platform } from "react-native";
+
 import dynamic from "next/dynamic";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import createStackNavigator from "app/navigation/create-stack-navigator";
-import { TrendingScreen } from "app/screens/trending";
-import { TrendingStackParams } from "app/navigation/types";
 import { screenOptions } from "app/navigation/navigator-screen-options";
+import { TrendingStackParams } from "app/navigation/types";
+import { TrendingScreen } from "app/screens/trending";
+
 import { useIsDarkMode } from "design-system/hooks";
 
 const SettingsScreen = dynamic<JSX.Element>(() =>

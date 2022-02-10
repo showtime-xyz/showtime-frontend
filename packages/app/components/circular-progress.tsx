@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
-import Svg, { Circle } from "react-native-svg";
+
 import Animated, { useAnimatedProps } from "react-native-reanimated";
+import Svg, { Circle } from "react-native-svg";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 

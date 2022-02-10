@@ -1,8 +1,10 @@
+import { Fragment, useState } from "react";
+
 import axios from "@/lib/axios";
 import { formatAddressShort } from "@/lib/utilities";
 import Link from "next/link";
-import { Fragment, useState } from "react";
 import useSWR from "swr";
+
 import ModalUserList from "./ModalUserList";
 import UserImageList from "./UserImageList";
 

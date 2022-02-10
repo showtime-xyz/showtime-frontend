@@ -1,10 +1,11 @@
+import { useState } from "react";
+
 import { Meta } from "@storybook/react";
 
-import { Modal } from "./index";
-import { useState } from "react";
-import { View } from "../view";
 import { Button } from "../button";
 import { Text } from "../text";
+import { View } from "../view";
+import { Modal } from "./index";
 
 export default {
   component: Modal,

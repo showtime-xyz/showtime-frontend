@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 
+import { withColorScheme } from "app/components/memo-with-theme";
 import { Trending } from "app/components/trending";
 import { mixpanel } from "app/lib/mixpanel";
-import { withColorScheme } from "app/components/memo-with-theme";
 
 const TrendingScreen = withColorScheme(() => {
   useEffect(() => {

@@ -1,5 +1,3 @@
-import { Image } from "design-system/image";
-import { View } from "design-system/view";
 import {
   Liked,
   Commented,
@@ -7,6 +5,8 @@ import {
   Purchased,
   Followed,
 } from "design-system/icon";
+import { Image } from "design-system/image";
+import { View } from "design-system/view";
 
 type Props = {
   url: string;

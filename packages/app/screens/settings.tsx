@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 
-import { mixpanel } from "app/lib/mixpanel";
-import { Settings } from "app/components/settings";
 import { withColorScheme } from "app/components/memo-with-theme";
+import { Settings } from "app/components/settings";
+import { mixpanel } from "app/lib/mixpanel";
 
 const SettingsScreen = withColorScheme(() => {
   useEffect(() => {

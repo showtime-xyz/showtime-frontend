@@ -1,9 +1,10 @@
+import { useTheme } from "next-themes";
 import Head from "next/head";
+import Script from "next/script";
+
 //import backend from "../lib/backend";
 import Footer from "./footer";
 import Header from "./header";
-import { useTheme } from "next-themes";
-import Script from "next/script";
 
 const Layout = ({ children }) => {
   const { resolvedTheme } = useTheme();

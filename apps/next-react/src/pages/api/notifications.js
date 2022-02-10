@@ -1,6 +1,6 @@
 import handler, { middleware } from "@/lib/api-handler";
-import backendnotifications from "@/lib/backend-notifications";
 import backend from "@/lib/backend";
+import backendnotifications from "@/lib/backend-notifications";
 
 export default handler()
   .use(middleware.auth)

@@ -1,15 +1,16 @@
 import { Platform } from "react-native";
+
 import Animated, {
   useAnimatedStyle,
   Extrapolate,
   interpolate,
 } from "react-native-reanimated";
 
-import { tw } from "design-system/tailwind";
 import { useIsDarkMode } from "design-system/hooks";
-import { View } from "design-system/view";
-import { Text } from "design-system/text";
 import { useTabIndexContext, useTabsContext } from "design-system/tabs/tablib";
+import { tw } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 const TAB_ITEM_PADDING_HORIZONTAL = 16;
 

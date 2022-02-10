@@ -1,4 +1,5 @@
 import { ComponentProps } from "react";
+
 import { ScrollView as DripsyScrollView } from "dripsy";
 
 import { tw as tailwind } from "design-system/tailwind";

@@ -1,9 +1,10 @@
 import React, { useRef } from "react";
 import { ScrollView } from "react-native";
+
 import { tw as tailwind } from "../tailwind";
+import type { TW } from "../tailwind/types";
 import { BODY_CONTAINER_TW, BODY_TW } from "./constants";
 import type { ModalProps } from "./types";
-import type { TW } from "../tailwind/types";
 
 interface ModalBodyProps extends Pick<ModalProps, "children"> {
   tw?: TW;

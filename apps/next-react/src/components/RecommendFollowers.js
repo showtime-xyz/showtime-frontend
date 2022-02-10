@@ -1,10 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import mixpanel from "mixpanel-browser";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDown, faPlus } from "@fortawesome/free-solid-svg-icons";
+
 import AppContext from "@/context/app-context";
-import RecommendedFollowItem from "./RecommendedFollowItem";
 import axios from "@/lib/axios";
+import { faArrowDown, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import mixpanel from "mixpanel-browser";
+
+import RecommendedFollowItem from "./RecommendedFollowItem";
 
 const RecommendFollowersVariants = {
   ONBOARDING: "ONBOARDING",

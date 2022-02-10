@@ -1,12 +1,13 @@
 import { useEffect, useMemo } from "react";
 import { Platform } from "react-native";
 
-import { mixpanel } from "app/lib/mixpanel";
 import { Delete } from "app/components/delete";
-import { useRouter } from "app/navigation/use-router";
+import { mixpanel } from "app/lib/mixpanel";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
-import { Modal, ModalSheet } from "design-system";
 import { createParam } from "app/navigation/use-param";
+import { useRouter } from "app/navigation/use-router";
+
+import { Modal, ModalSheet } from "design-system";
 
 type Query = {
   nftId: number;

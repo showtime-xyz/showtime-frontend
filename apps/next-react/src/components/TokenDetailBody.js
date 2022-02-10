@@ -1,45 +1,47 @@
 import { useState, useRef, useEffect, useContext } from "react";
+
+import AppContext from "@/context/app-context";
+import useProfile from "@/hooks/useProfile";
+import backend from "@/lib/backend";
 import {
   DEFAULT_PROFILE_PIC,
   CONTRACTS,
   SHOWTIME_CONTRACTS,
 } from "@/lib/constants";
-import Link from "next/link";
-import mixpanel from "mixpanel-browser";
-import Lightbox from "react-image-lightbox";
-import "react-image-lightbox/style.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExpand } from "@fortawesome/free-solid-svg-icons";
-import { Link as SmoothScroll } from "react-scroll";
-import ModalReportItem from "./ModalReportItem";
-import ReactPlayer from "react-player";
-import LikeButton from "./LikeButton";
-import ShareButton from "./ShareButton";
-import CommentButton from "./CommentButton";
-import AppContext from "@/context/app-context";
-import CreatorSummary from "./CreatorSummary";
+import { CHAIN_IDENTIFIERS } from "@/lib/constants";
 import {
   getContractImage,
   removeTags,
   truncateWithEllipses,
 } from "@/lib/utilities";
-import UserTimestampCard from "./UserTimestampCard";
-import TokenHistoryCard from "./TokenHistoryCard";
-import CommentsSection from "./CommentsSection";
 import { getBidLink, getContractName } from "@/lib/utilities";
-import backend from "@/lib/backend";
-import UsersWhoLiked from "./UsersWhoLiked";
-import MiniFollowButton from "./MiniFollowButton";
-import UsersWhoOwn from "./UsersWhoOwn";
-import OrbitIcon from "./Icons/OrbitIcon";
-import { CHAIN_IDENTIFIERS } from "@/lib/constants";
-import PolygonIcon from "./Icons/PolygonIcon";
+import { faExpand } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tippy from "@tippyjs/react";
-import TezosIcon from "./Icons/TezosIcon";
+import mixpanel from "mixpanel-browser";
+import Link from "next/link";
+import Lightbox from "react-image-lightbox";
+import "react-image-lightbox/style.css";
+import ReactPlayer from "react-player";
+import { Link as SmoothScroll } from "react-scroll";
+
+import CommentButton from "./CommentButton";
+import CommentsSection from "./CommentsSection";
+import CreatorSummary from "./CreatorSummary";
+import OrbitIcon from "./Icons/OrbitIcon";
+import PolygonIcon from "./Icons/PolygonIcon";
 import ShowtimeIcon from "./Icons/ShowtimeIcon";
+import TezosIcon from "./Icons/TezosIcon";
+import LikeButton from "./LikeButton";
+import MiniFollowButton from "./MiniFollowButton";
+import ModalReportItem from "./ModalReportItem";
+import ShareButton from "./ShareButton";
+import TokenHistoryCard from "./TokenHistoryCard";
 import BuyModal from "./UI/Modals/BuyModal";
 import ListModal from "./UI/Modals/ListModal";
-import useProfile from "@/hooks/useProfile";
+import UserTimestampCard from "./UserTimestampCard";
+import UsersWhoLiked from "./UsersWhoLiked";
+import UsersWhoOwn from "./UsersWhoOwn";
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500;

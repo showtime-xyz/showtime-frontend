@@ -1,25 +1,27 @@
-import { Dialog, Transition } from "@headlessui/react";
-import Button from "../Buttons/Button";
 import { useState, Fragment } from "react";
-import { ethers } from "ethers";
-import { getBiconomy } from "@/lib/biconomy";
-import getWeb3Modal from "@/lib/web3Modal";
-import marketplaceAbi from "@/data/ShowtimeV1Market.json";
-import PolygonIcon from "@/components/Icons/PolygonIcon";
 import { useRef } from "react";
 import { useEffect } from "react";
-import { useTheme } from "next-themes";
-import useProfile from "@/hooks/useProfile";
-import { ExclamationIcon } from "@heroicons/react/outline";
+
+import BadgeIcon from "@/components/Icons/BadgeIcon";
+import PolygonIcon from "@/components/Icons/PolygonIcon";
 import XIcon from "@/components/Icons/XIcon";
+import marketplaceAbi from "@/data/ShowtimeV1Market.json";
+import useFlags, { FLAGS } from "@/hooks/useFlags";
+import useProfile from "@/hooks/useProfile";
+import { getBiconomy } from "@/lib/biconomy";
 import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
 import {
   formatAddressShort,
   truncateWithEllipses,
   findListingItemByOwner,
 } from "@/lib/utilities";
-import BadgeIcon from "@/components/Icons/BadgeIcon";
-import useFlags, { FLAGS } from "@/hooks/useFlags";
+import getWeb3Modal from "@/lib/web3Modal";
+import { Dialog, Transition } from "@headlessui/react";
+import { ExclamationIcon } from "@heroicons/react/outline";
+import { ethers } from "ethers";
+import { useTheme } from "next-themes";
+
+import Button from "../Buttons/Button";
 
 const MODAL_PAGES = {
   GENERAL: "general",

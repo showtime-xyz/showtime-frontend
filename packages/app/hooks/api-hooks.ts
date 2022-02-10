@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
 import useSWR, { useSWRConfig } from "swr";
+
+import { axios } from "app/lib/axios";
+import { mixpanel } from "app/lib/mixpanel";
+import { useRouter } from "app/navigation/use-router";
 
 import { NFT, Profile } from "../types";
 import { useInfiniteListQuerySWR, fetcher } from "./use-infinite-list-query";
 import { useUser } from "./use-user";
-import { axios } from "app/lib/axios";
-import { mixpanel } from "app/lib/mixpanel";
-import { useRouter } from "app/navigation/use-router";
 
 export const useActivity = ({
   typeId,

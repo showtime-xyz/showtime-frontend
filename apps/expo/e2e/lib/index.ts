@@ -1,6 +1,7 @@
 import { device } from "detox";
 import * as fs from "fs";
 import * as path from "path";
+
 import { setStatusBar } from "./set-status-bar";
 
 export function getOutputDir(projectRoot: string, locale: string) {

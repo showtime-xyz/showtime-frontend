@@ -1,11 +1,12 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { LayoutAnimation, UIManager, Platform } from "react-native";
 
-import { View } from "design-system/view";
-import { Text } from "design-system/text";
-import { Pressable } from "design-system/pressable-scale";
 import type { NFT } from "app/types";
 import { removeTags } from "app/utilities";
+
+import { Pressable } from "design-system/pressable-scale";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 type Props = {
   nft?: NFT;

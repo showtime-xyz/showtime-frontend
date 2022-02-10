@@ -1,30 +1,32 @@
 import { useState, useRef, Fragment, useEffect } from "react";
-import { DEFAULT_PROFILE_PIC, SHOWTIME_CONTRACTS } from "@/lib/constants";
-import Link from "next/link";
-import LikeButton from "./LikeButton";
-import CommentButton from "./CommentButton";
-import ShareButton from "./ShareButton";
-import ReactPlayer from "react-player";
-import mixpanel from "mixpanel-browser";
+
 import TokenCardImage from "@/components/TokenCardImage";
+import useProfile from "@/hooks/useProfile";
+import axios from "@/lib/axios";
+import { DEFAULT_PROFILE_PIC, SHOWTIME_CONTRACTS } from "@/lib/constants";
 import {
   formatAddressShort,
   truncateWithEllipses,
   classNames,
 } from "@/lib/utilities";
-import axios from "@/lib/axios";
-import { MenuIcon, PlayIcon } from "@heroicons/react/solid";
-import EllipsisIcon from "./Icons/EllipsisIcon";
-import BadgeIcon from "./Icons/BadgeIcon";
+import { findListingItemByOwner } from "@/lib/utilities";
 import { Menu, Transition } from "@headlessui/react";
-import MiniFollowButton from "./MiniFollowButton";
-import useProfile from "@/hooks/useProfile";
-import OrbitIcon from "./Icons/OrbitIcon";
+import { MenuIcon, PlayIcon } from "@heroicons/react/solid";
+import mixpanel from "mixpanel-browser";
+import Link from "next/link";
+import ReactPlayer from "react-player";
+
 import {
   CHAIN_IDENTIFIERS,
   COLLECTION_NAME_TRUNCATE_LENGTH,
 } from "../lib/constants";
-import { findListingItemByOwner } from "@/lib/utilities";
+import CommentButton from "./CommentButton";
+import BadgeIcon from "./Icons/BadgeIcon";
+import EllipsisIcon from "./Icons/EllipsisIcon";
+import OrbitIcon from "./Icons/OrbitIcon";
+import LikeButton from "./LikeButton";
+import MiniFollowButton from "./MiniFollowButton";
+import ShareButton from "./ShareButton";
 
 const TokenCard = ({
   originalItem,

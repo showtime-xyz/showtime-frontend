@@ -1,7 +1,7 @@
-import Link from "next/link";
-import mixpanel from "mixpanel-browser";
-import reactStringReplace from "react-string-replace";
 import { CHAIN_IDENTIFIERS } from "@/lib/constants";
+import mixpanel from "mixpanel-browser";
+import Link from "next/link";
+import reactStringReplace from "react-string-replace";
 
 export default function Comment({ act }) {
   const { nfts, comments } = act;

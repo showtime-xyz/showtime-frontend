@@ -1,15 +1,16 @@
+import ierc20MetaTx from "@/data/IERC20MetaTx.json";
+import ierc20MetaTxNonces from "@/data/IERC20MetaTxNonces.json";
+import ierc20Permit from "@/data/IERC20Permit.json";
+import { parseUnits } from "@ethersproject/units";
+import { ethers } from "ethers";
+import removeMd from "remove-markdown";
+
 import {
   CONTRACTS,
   CURRENCY_NAMES,
   LIST_CURRENCIES,
   SOL_MAX_INT,
 } from "./constants";
-import removeMd from "remove-markdown";
-import { parseUnits } from "@ethersproject/units";
-import ierc20Permit from "@/data/IERC20Permit.json";
-import ierc20MetaTx from "@/data/IERC20MetaTx.json";
-import ierc20MetaTxNonces from "@/data/IERC20MetaTxNonces.json";
-import { ethers } from "ethers";
 
 export const classNames = (...classes) => {
   return classes.filter(Boolean).join(" ");

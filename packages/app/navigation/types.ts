@@ -1,5 +1,5 @@
-import type { NextComponentType, NextPageContext } from "next";
 import type { NavigatorScreenParams } from "@react-navigation/native";
+import type { NextComponentType, NextPageContext } from "next";
 
 type HomeStackParams = {
   home: undefined;

@@ -1,6 +1,8 @@
 import { useCallback } from "react";
-import { mixpanel } from "app/lib/mixpanel";
+
 import { magic } from "app/lib/magic";
+import { mixpanel } from "app/lib/mixpanel";
+
 import { useAuth } from "./use-auth";
 
 const LOGIN_MAGIC_ENDPOINT = "login_magic";

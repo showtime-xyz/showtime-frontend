@@ -1,14 +1,14 @@
 import Iron from "@hapi/iron";
-import jwtDecode from "jwt-decode";
 import { captureException } from "@sentry/nextjs";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 
-import { setLogout } from "app/lib/logout";
 import {
   setAccessToken,
   getAccessToken,
   deleteAccessToken,
 } from "app/lib/access-token";
+import { setLogout } from "app/lib/logout";
 import {
   setRefreshToken,
   getRefreshToken,

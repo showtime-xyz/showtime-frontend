@@ -107,7 +107,7 @@ const withMainApplication = (config) => {
     "android",
     async (config) => {
       await editMainApplication(config, (mainApplication) => {
-        if (mainApplication.includes('return new MMKVJSIModulePackage();')) {
+        if (mainApplication.includes("return new MMKVJSIModulePackage();")) {
           return mainApplication;
         }
 

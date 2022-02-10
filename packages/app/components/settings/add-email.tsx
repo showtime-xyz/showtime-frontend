@@ -1,10 +1,13 @@
 import { useMemo, useCallback } from "react";
-import { magic } from "app/lib/magic";
-import { View, Text } from "design-system";
-import { EmailInput } from "./email-input";
-import { USER_API_KEY } from "app/hooks/use-user";
-import { BottomSheet } from "design-system/bottom-sheet";
+
 import { useManageAccount } from "app/hooks/use-manage-account";
+import { USER_API_KEY } from "app/hooks/use-user";
+import { magic } from "app/lib/magic";
+
+import { View, Text } from "design-system";
+import { BottomSheet } from "design-system/bottom-sheet";
+
+import { EmailInput } from "./email-input";
 
 type AddEmailProps = {
   visibility: boolean;

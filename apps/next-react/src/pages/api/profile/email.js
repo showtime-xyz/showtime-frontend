@@ -1,6 +1,6 @@
-import { Magic } from "@magic-sdk/admin";
 import handler, { middleware } from "@/lib/api-handler";
 import backend from "@/lib/backend";
+import { Magic } from "@magic-sdk/admin";
 
 export default handler()
   .use(middleware.auth)
