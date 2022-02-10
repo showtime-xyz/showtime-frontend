@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useRef, useState, useEffect } from "react";
-import { useRouting } from "expo-next-react-navigation";
 import { Platform } from "react-native";
+
+import { useRouting } from "expo-next-react-navigation";
 import Router from "next/router";
 
 function useStable<T>(value: T) {

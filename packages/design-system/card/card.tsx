@@ -1,12 +1,13 @@
-import { Grid } from "design-system/card/grid";
-import { View } from "design-system/view";
+import { withMemoAndColorScheme } from "app/components/memo-with-theme";
+
 import { Activity } from "design-system/activity";
-import { Social } from "design-system/card/social";
+import { Grid } from "design-system/card/grid";
 import { Collection } from "design-system/card/rows/collection";
 import { Title } from "design-system/card/rows/title";
+import { Social } from "design-system/card/social";
 // import { Owner } from "design-system/card/rows/owner";
 import { Media } from "design-system/media";
-import { withMemoAndColorScheme } from "app/components/memo-with-theme";
+import { View } from "design-system/view";
 
 type Props = {
   act: any;

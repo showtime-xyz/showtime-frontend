@@ -1,13 +1,15 @@
 import { useCallback, useEffect } from "react";
+
 import { mixpanel } from "app/lib/mixpanel";
 import { personalSignMessage } from "app/lib/utilities";
 // @ts-ignore
 import getWeb3Modal from "app/lib/web3-modal";
-import { useAuth } from "./use-auth";
-import { useWalletLoginState } from "./use-wallet-login-state";
-import { useNonce } from "./use-nonce";
+
 import { useStableCallback } from "../use-stable-callback";
 import { useWeb3 } from "../use-web3";
+import { useAuth } from "./use-auth";
+import { useNonce } from "./use-nonce";
+import { useWalletLoginState } from "./use-wallet-login-state";
 
 const LOGIN_WALLET_ENDPOINT = "login_wallet";
 

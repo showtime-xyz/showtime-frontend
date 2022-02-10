@@ -1,20 +1,21 @@
 import { useCallback } from "react";
 import { Pressable, useWindowDimensions } from "react-native";
+
 import Router from "next/router";
 // import { SvgUri } from "react-native-svg";
 import { useSWRConfig } from "swr";
 
-import { useRouter } from "app/navigation/use-router";
+import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { mixpanel } from "app/lib/mixpanel";
+import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
+import { NFT_DETAIL_API } from "app/utilities";
 
-import { View } from "design-system/view";
 import { Image } from "design-system/image";
-import { Video } from "design-system/video";
 import { Model } from "design-system/model";
 import { PinchToZoom } from "design-system/pinch-to-zoom";
-import { withMemoAndColorScheme } from "app/components/memo-with-theme";
-import { NFT_DETAIL_API } from "app/utilities";
+import { Video } from "design-system/video";
+import { View } from "design-system/view";
 
 const getImageUrl = (imgUrl: string, tokenAspectRatio: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {

@@ -1,12 +1,14 @@
+import { Fragment, useState } from "react";
+
 import { formatAddressShort, copyToClipBoard } from "@/lib/utilities";
-import CopyIcon from "./Icons/CopyIcon";
-import ChevronDown from "./Icons/ChevronDown";
 import { Popover, Transition } from "@headlessui/react";
+import { CheckIcon } from "@heroicons/react/outline";
+import Link from "next/link";
+
+import ChevronDown from "./Icons/ChevronDown";
+import CopyIcon from "./Icons/CopyIcon";
 import EthereumIcon from "./Icons/EthereumIcon";
 import TezosIcon from "./Icons/TezosIcon";
-import Link from "next/link";
-import { Fragment, useState } from "react";
-import { CheckIcon } from "@heroicons/react/outline";
 
 export const AddressCollection = ({ addresses, isMyProfile = false }) => {
   // Make sure Ethereum addresses always show up first

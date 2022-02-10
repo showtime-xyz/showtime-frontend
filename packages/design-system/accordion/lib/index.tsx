@@ -1,9 +1,11 @@
 import React, { useMemo, useCallback, useState, useContext } from "react";
 import { Pressable } from "react-native";
+
 import { useUpdateEffect } from "design-system/hooks";
+
 import { AnimateHeight } from "../animate-height";
-import { RootProps, ContentProps, ItemProps, TriggerProps } from "./types";
 import { RootContext, ItemContext } from "./common";
+import { RootProps, ContentProps, ItemProps, TriggerProps } from "./types";
 
 const Root = (props: RootProps) => {
   const { value: propValue, onValueChange } = props;

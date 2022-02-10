@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
+
 import { Web3Provider as EthersWeb3Provider } from "@ethersproject/providers";
+
 import { Web3Context } from "app/context/web3-context";
 import { magic, Relayer } from "app/lib/magic";
 

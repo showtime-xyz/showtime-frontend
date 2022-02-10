@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import Svg, { SvgProps, Rect } from "react-native-svg";
 
 function SvgSingle(props: SvgProps) {

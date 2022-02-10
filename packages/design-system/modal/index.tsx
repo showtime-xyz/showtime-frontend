@@ -1,16 +1,18 @@
 import React, { useMemo } from "react";
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
+
 import { View } from "design-system/view";
-import { Header } from "./header";
+
 import { ModalBackdrop } from "./backdrop";
 import { ModalBody } from "./body";
-import { createModalContainer } from "./container";
 import {
   DEFAULT_HEIGHT,
   DEFAULT_WIDTH,
   CONTAINER_TW,
   MODAL_TW,
 } from "./constants";
+import { createModalContainer } from "./container";
+import { Header } from "./header";
 import type { ModalProps } from "./types";
 
 const ModalKeyboardAvoidingView: React.FC<{

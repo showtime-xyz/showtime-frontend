@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
 import { Share } from "react-native";
+
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { useReport } from "app/hooks/use-report";
+import { CHAIN_IDENTIFIERS } from "app/lib/constants";
+import { useRouter } from "app/navigation/use-router";
+import type { NFT } from "app/types";
+
+import { View, Button } from "design-system";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -10,11 +18,6 @@ import {
 } from "design-system/dropdown-menu";
 import { MoreHorizontal } from "design-system/icon";
 import { tw } from "design-system/tailwind";
-import type { NFT } from "app/types";
-import { useReport } from "app/hooks/use-report";
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { useRouter } from "app/navigation/use-router";
-import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 
 type Props = {
   nft?: NFT;

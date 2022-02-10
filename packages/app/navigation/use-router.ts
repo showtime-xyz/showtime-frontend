@@ -1,22 +1,22 @@
 import { useCallback, useMemo, useContext } from "react";
-import { useRouter as useNextRouter, NextRouter } from "next/router";
+
 import {
   useLinkTo,
   useNavigation,
   useNavigationState,
 } from "@react-navigation/native";
-import { StackRouter } from "@react-navigation/routers";
 import {
   StackActions,
   getPathFromState,
   NavigationState,
 } from "@react-navigation/native";
-import { reloadAsync } from "expo-updates";
-
+import type { LinkingOptions } from "@react-navigation/native";
 // this is scary...
 // but react navigation doesn't expose LinkingContext 😬
 import LinkingContext from "@react-navigation/native/lib/module/LinkingContext";
-import type { LinkingOptions } from "@react-navigation/native";
+import { StackRouter } from "@react-navigation/routers";
+import { reloadAsync } from "expo-updates";
+import { useRouter as useNextRouter, NextRouter } from "next/router";
 
 import { parseNextPath } from "./parse-next-path";
 

@@ -1,5 +1,5 @@
-import backend from "@/lib/backend";
 import handler, { middleware } from "@/lib/api-handler";
+import backend from "@/lib/backend";
 
 export default handler()
   .use(middleware.auth)

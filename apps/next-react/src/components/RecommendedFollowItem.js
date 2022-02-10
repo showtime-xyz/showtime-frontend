@@ -1,15 +1,17 @@
 import { useContext, useEffect, useState } from "react";
-import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
-import ReactPlayer from "react-player";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faUser } from "@fortawesome/free-regular-svg-icons";
-import Link from "next/link";
-import mixpanel from "mixpanel-browser";
-import useKeyPress from "@/hooks/useKeyPress";
-import ModalTokenDetail from "./ModalTokenDetail";
-import FollowButton from "./FollowButton";
+
 import AppContext from "@/context/app-context";
+import useKeyPress from "@/hooks/useKeyPress";
+import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
 import { formatAddressShort, truncateWithEllipses } from "@/lib/utilities";
+import { faHeart, faUser } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import mixpanel from "mixpanel-browser";
+import Link from "next/link";
+import ReactPlayer from "react-player";
+
+import FollowButton from "./FollowButton";
+import ModalTokenDetail from "./ModalTokenDetail";
 import RemoveRecommendationButton from "./RemoveRecommendationButton";
 
 const getSmallImageUrl = (img_url) => {

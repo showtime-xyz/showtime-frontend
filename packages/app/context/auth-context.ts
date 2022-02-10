@@ -1,4 +1,5 @@
 import { createContext } from "react";
+
 import type { AuthenticationStatus } from "../types";
 
 type AuthContextType = {

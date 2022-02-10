@@ -1,18 +1,20 @@
 import { useContext, useState } from "react";
-import mixpanel from "mixpanel-browser";
-import { Magic } from "magic-sdk";
-import backend from "@/lib/backend";
+
 import AppContext from "@/context/app-context";
-import CloseButton from "./CloseButton";
-import { ethers } from "ethers";
-import ScrollableModal from "./ScrollableModal";
-import axios from "@/lib/axios";
-import { useTheme } from "next-themes";
 import useAuth from "@/hooks/useAuth";
-import getWeb3Modal from "@/lib/web3Modal";
-import { personalSignMessage } from "@/lib/utilities";
+import axios from "@/lib/axios";
+import backend from "@/lib/backend";
 import ClientAccessToken from "@/lib/client-access-token";
+import { personalSignMessage } from "@/lib/utilities";
+import getWeb3Modal from "@/lib/web3Modal";
 import { captureException } from "@sentry/nextjs";
+import { ethers } from "ethers";
+import { Magic } from "magic-sdk";
+import mixpanel from "mixpanel-browser";
+import { useTheme } from "next-themes";
+
+import CloseButton from "./CloseButton";
+import ScrollableModal from "./ScrollableModal";
 
 export default function Modal({ isOpen }) {
   const context = useContext(AppContext);

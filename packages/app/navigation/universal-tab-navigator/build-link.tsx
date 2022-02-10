@@ -4,18 +4,15 @@
 // it's used under the hood only.
 // it also still works if enabled !== true, since we want to build a link even when that's the case
 // compare to: https://github.com/react-navigation/react-navigation/blob/e947943ace33086405210e9454329be47d76478f/packages/native/src/useLinkBuilder.tsx#L48
+import * as React from "react";
 
 import {
   getPathFromState,
-  NavigationHelpers,
-  //   NavigationHelpersContext,
+  NavigationHelpers, //   NavigationHelpersContext,
   NavigationProp,
   ParamListBase,
 } from "@react-navigation/core";
-import * as React from "react";
-
 import { LinkingOptions } from "@react-navigation/native";
-
 // this is scary...
 // but react navigation doesn't expose LinkingContext 😬
 import LinkingContext from "@react-navigation/native/lib/module/LinkingContext";

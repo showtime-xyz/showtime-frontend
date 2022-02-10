@@ -1,15 +1,17 @@
 import { useContext, useEffect, useState } from "react";
-import mixpanel from "mixpanel-browser";
-import ClientOnlyPortal from "./ClientOnlyPortal";
+
 import AppContext from "@/context/app-context";
-import TokenDetailBody from "./TokenDetailBody";
 import backend from "@/lib/backend";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleRight,
   faAngleLeft,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import mixpanel from "mixpanel-browser";
+
+import ClientOnlyPortal from "./ClientOnlyPortal";
+import TokenDetailBody from "./TokenDetailBody";
 
 export default function Modal({
   item,

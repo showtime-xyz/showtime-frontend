@@ -1,7 +1,7 @@
 import { Meta } from "@storybook/react";
 
-import { Fieldset } from "./index";
 import { View } from "../view";
+import { Fieldset } from "./index";
 
 export default {
   component: Fieldset,

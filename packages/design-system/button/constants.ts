@@ -1,5 +1,5 @@
-import { colors } from "design-system/tailwind/colors";
 import { tw as tailwind } from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
 
 const CONTAINER_TW =
   "rounded-full flex-row justify-center items-center " +

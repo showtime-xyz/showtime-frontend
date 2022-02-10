@@ -1,4 +1,5 @@
 import useSWR from "swr";
+
 import useDebounce from "app/hooks/use-debounce";
 import { fetcher } from "app/hooks/use-infinite-list-query";
 

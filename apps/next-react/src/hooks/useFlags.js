@@ -1,6 +1,8 @@
 import { useMemo } from "react";
-import useProfile from "./useProfile";
+
 import { ENABLE_MAGIC_TX } from "@/lib/constants";
+
+import useProfile from "./useProfile";
 
 export const FLAGS = {
   hasMinting: "mint",

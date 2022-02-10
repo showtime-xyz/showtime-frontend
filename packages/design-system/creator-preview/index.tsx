@@ -1,17 +1,18 @@
 import { useMemo } from "react";
 import { Dimensions } from "react-native";
 
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
-import { Image } from "design-system/image";
-import { VerificationBadge } from "design-system/verification-badge";
-import { Button } from "design-system/button";
-import { Media } from "design-system/media";
-import type { Creator } from "app/types";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useMyInfo } from "app/hooks/api-hooks";
-import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/lib/utilities";
+import { Link } from "app/navigation/link";
+import type { Creator } from "app/types";
+
+import { Button } from "design-system/button";
+import { Image } from "design-system/image";
+import { Media } from "design-system/media";
+import { Text } from "design-system/text";
+import { VerificationBadge } from "design-system/verification-badge";
+import { View } from "design-system/view";
 
 type Props = {
   creator: Creator;

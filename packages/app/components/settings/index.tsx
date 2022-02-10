@@ -1,11 +1,15 @@
 import { useState, useMemo, useEffect } from "react";
 import { Dimensions, Platform } from "react-native";
-import { useRouter } from "app/navigation/use-router";
-import { tw } from "design-system/tailwind";
+
 import { useUser } from "app/hooks/use-user";
-import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
+import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import { useRouter } from "app/navigation/use-router";
 import { WalletAddressesExcludingEmailV2, WalletAddressesV2 } from "app/types";
+
 import { View, Text } from "design-system";
+import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
+import { tw } from "design-system/tailwind";
+
 import {
   EmailSlotProps,
   SettingsEmailSlot,
@@ -20,7 +24,6 @@ import {
   SettingsWalletSlotPlaceholder,
 } from "./settings-wallet-slot";
 import { SlotSeparator } from "./slot-separator";
-import { TAB_LIST_HEIGHT } from "app/lib/constants";
 
 const renderEmail = ({ item }: { item: EmailSlotProps }) => {
   const email = item.email;

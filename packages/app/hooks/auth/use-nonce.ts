@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+
 import { useFetchOnAppForeground } from "../use-fetch-on-app-foreground";
 
 export function useNonce() {

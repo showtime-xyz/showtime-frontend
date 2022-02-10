@@ -1,7 +1,9 @@
+import { Fragment, useContext, useEffect, useState } from "react";
+
 import CappedWidth from "@/components/CappedWidth";
 import { GridTab, GridTabs } from "@/components/GridTabs";
-import Layout from "@/components/layout";
 import TokenGridV4 from "@/components/TokenGridV4";
+import Layout from "@/components/layout";
 import AppContext from "@/context/app-context";
 import backend from "@/lib/backend";
 import backendscripts from "@/lib/backend-scripts";
@@ -11,7 +13,6 @@ import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import mixpanel from "mixpanel-browser";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { Fragment, useContext, useEffect, useState } from "react";
 
 export async function getServerSideProps(context) {
   const { collection } = context.query;

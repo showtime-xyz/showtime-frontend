@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import { useWindowDimensions } from "react-native";
 
-import { Modal } from "../modal";
 import { BottomSheet } from "../bottom-sheet";
+import { Modal } from "../modal";
 import { Header } from "../modal/header";
 import { TW } from "../tailwind/types";
 

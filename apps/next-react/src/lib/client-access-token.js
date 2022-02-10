@@ -1,7 +1,7 @@
 import axios from "@/lib/axios";
-import Router from "next/router";
-import jwt_decode from "jwt-decode";
 import { captureException } from "@sentry/nextjs";
+import jwt_decode from "jwt-decode";
+import Router from "next/router";
 
 class ClientAccessToken {
   #accessToken;
