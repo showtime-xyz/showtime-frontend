@@ -92,7 +92,7 @@ const SettingsTabs = () => {
           <Tabs.Trigger>
             <TabItem name="Email Addresses" selected={selected === 1} />
           </Tabs.Trigger>
-          <SelectedTabIndicator disableBackground={true} />
+          <SelectedTabIndicator />
         </Tabs.List>
         <Tabs.Pager>
           <Tabs.FlatList

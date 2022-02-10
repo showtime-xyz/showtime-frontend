@@ -19,10 +19,6 @@ type TabItemProps = {
   selected?: boolean;
 };
 
-type SelectedTabIndicatorProps = {
-  disableBackground?: boolean;
-};
-
 export const TabItem = ({ name, count }: TabItemProps) => {
   const { index } = useTabIndexContext();
   const { position, offset } = useTabsContext();
@@ -73,9 +69,7 @@ export const TabItem = ({ name, count }: TabItemProps) => {
   );
 };
 
-export const SelectedTabIndicator = (props: SelectedTabIndicatorProps) => {
-  const disableBackground = props.disableBackground;
-
+export const SelectedTabIndicator = () => {
   if (Platform.OS === "web") {
     return null;
   }
