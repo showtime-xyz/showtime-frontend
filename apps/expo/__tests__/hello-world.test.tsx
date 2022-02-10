@@ -1,13 +1,16 @@
+import preloadAll from "jest-next-dynamic";
 import { render } from "@testing-library/react-native";
-import { View, Text } from "react-native";
+import App from "../App";
 
-test("hello world", () => {
-  const { debug, getByText } = render(
-    <View>
-      <Text>hello world</Text>
-    </View>
-  );
-  debug();
-  const node = getByText("hello world");
-  expect(node).toBeDefined();
+describe("mounts app", () => {
+  const { getByTestId, debug } = render(<App />);
+  beforeAll(async () => {
+    await preloadAll();
+  });
+
+  test("mounts feed", async () => {
+    debug();
+    const homeText = getByTestId("homeFeed");
+    expect(homeText).toBeDefined();
+  });
 });

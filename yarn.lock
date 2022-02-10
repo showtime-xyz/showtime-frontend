@@ -2796,7 +2796,7 @@
     slash "^3.0.0"
     strip-ansi "^6.0.0"
 
-"@jest/create-cache-key-function@^26.5.0", "@jest/create-cache-key-function@^26.6.2", "@jest/create-cache-key-function@^27.0.2":
+"@jest/create-cache-key-function@^26.5.0", "@jest/create-cache-key-function@^26.6.2", "@jest/create-cache-key-function@^27.0.1":
   version "27.5.1"
   resolved "https://registry.yarnpkg.com/@jest/create-cache-key-function/-/create-cache-key-function-27.5.1.tgz#7448fae15602ea95c828f5eceed35c202a820b31"
   integrity sha512-dmH1yW+makpTSURTy8VzdUwFnfQh1G8R+DxO2Ho2FFmBbKFEVm+3jWdvFhE2VqB/LATCTokkP0dotjyQyw5/AQ==
@@ -14817,6 +14817,11 @@ jest-mock@^27.5.1:
   dependencies:
     "@jest/types" "^27.5.1"
     "@types/node" "*"
+
+jest-next-dynamic@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/jest-next-dynamic/-/jest-next-dynamic-1.0.1.tgz#b8af62babeda3cff0cf0a6e0af6de3a9dfc8d6cd"
+  integrity sha512-peo9yRvUn8u6PZro9AzzjxpgUc+1NZhZMan+1xzk7Bz1vA0d5IC2Iw8E7bkC2cwl9AG3XxTaqPVAXbC3aMbVkw==
 
 jest-pnp-resolver@^1.2.2:
   version "1.2.2"

@@ -27,7 +27,7 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
 
 const Feed = () => {
   return (
-    <View tw="bg-white dark:bg-black flex-1">
+    <View tw="bg-white dark:bg-black flex-1" testID="homeFeed">
       <Suspense
         fallback={
           <View tw="pt-8 items-center">
