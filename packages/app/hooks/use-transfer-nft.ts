@@ -118,7 +118,7 @@ export const useTransferNFT = () => {
               reject("Your address is not approved for transfering");
             }
 
-            console.log("Something went wrong")
+            console.log("Something went wrong", error)
             reject("Something went wrong");
           });
 
