@@ -1,3 +1,5 @@
 {
-  "bracketSpacing": true
+  "bracketSpacing": true,
+  "importOrder": ["^app/(.*)$", "^design-system(.*)$", "^[./]"],
+  "importOrderSeparation": true
 }
