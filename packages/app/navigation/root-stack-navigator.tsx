@@ -10,10 +10,11 @@ import { NftScreen } from "app/screens/nft";
 import { ProfileScreen } from "app/screens/profile";
 import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
+import { TransferNftScreen } from "app/screens/transfer-nft";
+import { DeleteScreen } from "app/screens/delete";
 
 import { useIsDarkMode } from "design-system/hooks";
 
-import { DeleteScreen } from "../screens/delete";
 import { NextTabNavigator } from "./next-tab-navigator";
 
 const Stack = createNativeStackNavigator();
@@ -58,6 +59,7 @@ export function RootStackNavigator() {
       >
         <Stack.Screen name="login" component={LoginScreen} />
         <Stack.Screen name="nft" component={NftScreen} />
+        <Stack.Screen name="transferNft" component={TransferNftScreen} />
         <Stack.Screen name="create" component={CreateScreen} />
         <Stack.Screen name="burn" component={DeleteScreen} />
       </Stack.Group>

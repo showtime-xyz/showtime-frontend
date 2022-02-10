@@ -7,6 +7,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
     screens: {
       login: "login",
       nft: "nft/:id",
+      transferNft: "nft/:id/transfer",
       create: "create",
       burn: "burn",
       search: "search",
