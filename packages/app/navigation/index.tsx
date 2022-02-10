@@ -64,7 +64,9 @@ export function NavigationProvider({
 
   return (
     <NavigationContainer
-      linking={linkingConfig.linking}
+      linking={
+        process.env.NODE_ENV !== "test" ? linkingConfig.linking : undefined
+      }
       onReady={linkingConfig.onReady}
       theme={{
         dark: isDark,
