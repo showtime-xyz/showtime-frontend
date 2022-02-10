@@ -28,7 +28,7 @@ function NFTDropdown({ nft }: Props) {
   const router = useRouter();
 
   useEffect(() => {
-    setIsOwner(nft?.owner_address === userAddress);
+    setIsOwner(nft?.owner_address.toLowerCase() === userAddress.toLowerCase());
   }, [userAddress]);
 
   const tokenChainName = Object.keys(CHAIN_IDENTIFIERS).find(

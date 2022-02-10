@@ -104,9 +104,10 @@ export const useTransferNFT = () => {
           ])
           .catch((error: any) => {
             console.error(error);
-            // TODO: Add a proper error message. Find what 4001 means
+            
             if (error.code === 4001) {
-              reject("Something went wrong");
+              // https://eips.ethereum.org/EIPS/eip-1193
+              reject("Your request is rejected.");
             }
 
             if (

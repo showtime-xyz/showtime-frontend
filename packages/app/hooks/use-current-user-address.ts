@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
+import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { useUser } from "app/hooks/use-user";
 import { AppContext } from "app/context/app-context";
 
@@ -6,9 +7,14 @@ function useCurrentUserAddress() {
   const { user } = useUser();
   const [userAddress, setUserAddress] = useState('');
   const context = useContext(AppContext);
+  const connector = useWalletConnect();
+  const [connectedAddress] = connector?.session?.accounts;
 
   useEffect(() => {
-    if (
+    if (connector.connected && connectedAddress) {
+      setUserAddress(connectedAddress)
+    }
+    else if (
       user?.data &&
       user?.data.profile.wallet_addresses_v2[0]
     ) {
