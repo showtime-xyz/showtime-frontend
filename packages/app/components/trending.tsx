@@ -16,8 +16,7 @@ import {
 import { tw } from "design-system/tailwind";
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { cardSize } from "design-system/creator-preview";
-
-const TAB_LIST_HEIGHT = 64;
+import { TAB_LIST_HEIGHT } from "app/lib/constants";
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
   const tabBarHeight = useBottomTabBarHeight();
