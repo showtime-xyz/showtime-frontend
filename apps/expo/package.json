@@ -153,6 +153,7 @@
     "@types/uuid": "^8.3.4",
     "esbuild": "^0.14.11",
     "jest": "^27.5.1",
+    "jest-expo": "^44.0.1",
     "metro-minify-esbuild": "^0.1.0",
     "react-test-renderer": "18.0.0-rc.0",
     "typescript": "4.5.2"
@@ -209,9 +210,12 @@
     "tls": false
   },
   "jest": {
-    "preset": "react-native",
+    "preset": "jest-expo",
     "setupFilesAfterEnv": [
       "@testing-library/jest-native/extend-expect"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|dripsy|@dripsy/.*|@walletconnect/.*|@motify/.*|moti|@biconomy/.*)"
     ]
   }
 }

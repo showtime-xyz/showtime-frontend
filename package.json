@@ -54,7 +54,8 @@
     "react": "18.0.0-rc.0",
     "react-dom": "18.0.0-rc.0",
     "react-native-svg": "^12.1.1",
-    "expo-linear-gradient": "~11.0.1"
+    "expo-linear-gradient": "~11.0.1",
+    "@jest/create-cache-key-function": "^27.0.2"
   },
   "turbo": {
     "baseBranch": "origin/main",
