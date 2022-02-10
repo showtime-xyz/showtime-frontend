@@ -31,8 +31,8 @@ import { ProfileDropdown } from "app/components/profile-dropdown";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useBlock } from "app/hooks/use-block";
+import { TAB_LIST_HEIGHT } from "app/lib/constants";
 
-const TAB_LIST_HEIGHT = 64;
 const COVER_IMAGE_HEIGHT = 104;
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
