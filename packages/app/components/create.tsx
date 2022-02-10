@@ -13,8 +13,14 @@ import { useUser } from "app/hooks/use-user";
 import { yup } from "app/lib/yup";
 import { useRouter } from "app/navigation/use-router";
 
-import { View, Text, Fieldset, Checkbox, Button } from "design-system";
-import { Accordion } from "design-system";
+import {
+  View,
+  Text,
+  Fieldset,
+  Checkbox,
+  Button,
+  Accordion,
+} from "design-system";
 import { ErrorText } from "design-system/fieldset";
 import { useIsDarkMode } from "design-system/hooks";
 import { ChevronUp } from "design-system/icon";
