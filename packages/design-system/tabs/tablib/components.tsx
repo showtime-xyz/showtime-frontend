@@ -58,16 +58,17 @@ export const TabItem = ({ name, count }: TabItemProps) => {
         sx={{ fontWeight: "700" }}
         tw={`text-gray-900 dark:text-white`}
       >
-        {name}{" "}
+        {name}
       </Text>
-
-      <Text
-        variant="text-sm"
-        sx={{ fontWeight: "400" }}
-        tw={`text-gray-900 dark:text-white`}
-      >
-        {count}
-      </Text>
+      {count ? (
+        <Text
+          variant="text-sm"
+          sx={{ fontWeight: "400" }}
+          tw={`text-gray-900 dark:text-white`}
+        >
+          {" " + count}
+        </Text>
+      ) : null}
     </Animated.View>
   );
 };
