@@ -1,8 +1,9 @@
+import { useEffect } from "react";
+import { Platform, Pressable, ScrollView } from "react-native";
+
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { Platform, Pressable, ScrollView } from "react-native";
+import { Controller, useForm } from "react-hook-form";
 
 import {
   MintNFTType,
@@ -14,12 +15,12 @@ import { yup } from "app/lib/yup";
 import { useRouter } from "app/navigation/use-router";
 
 import {
-  View,
-  Text,
-  Fieldset,
-  Checkbox,
-  Button,
   Accordion,
+  Button,
+  Checkbox,
+  Fieldset,
+  Text,
+  View,
 } from "design-system";
 import { ErrorText } from "design-system/fieldset";
 import { useIsDarkMode } from "design-system/hooks";

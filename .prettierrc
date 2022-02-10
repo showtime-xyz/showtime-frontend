@@ -1,5 +1,11 @@
 {
   "bracketSpacing": true,
-  "importOrder": ["^app/(.*)$", "^design-system(.*)$", "^[./]"],
+  "importOrder": [
+    "^(react|react-native)$",
+    "<THIRD_PARTY_MODULES>",
+    "^app/(.*)$",
+    "^design-system(.*)$",
+    "^[./]"
+  ],
   "importOrderSeparation": true
 }
