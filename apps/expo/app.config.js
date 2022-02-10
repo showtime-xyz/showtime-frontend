@@ -86,6 +86,7 @@ export default {
     },
   },
   plugins: [
+    "@config-plugins/detox",
     [
       "react-native-vision-camera",
       {
@@ -113,5 +114,6 @@ export default {
     "expo-community-flipper",
     "./plugins/with-android-manifest.js",
     "@logrocket/react-native",
+    "./plugins/with-hermes-ios-m1-workaround.js",
   ],
 };
