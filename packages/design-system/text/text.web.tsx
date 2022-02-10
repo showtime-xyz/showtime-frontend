@@ -1,6 +1,7 @@
 import { ComponentProps, forwardRef, useMemo } from "react";
-import { Text as DripsyText, createThemedComponent } from "dripsy";
 import { StyleSheet, Text as TextType } from "react-native";
+
+import { Text as DripsyText, createThemedComponent } from "dripsy";
 import { unstable_createElement } from "react-native-web";
 
 // https://github.com/necolas/react-native-web/blob/master/packages/react-native-web/src/exports/View/index.js#L133

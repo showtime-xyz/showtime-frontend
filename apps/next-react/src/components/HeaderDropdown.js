@@ -1,3 +1,8 @@
+import { useState } from "react";
+import { useEffect } from "react";
+import { useContext } from "react";
+import { Fragment } from "react";
+
 import AppContext from "@/context/app-context";
 import useAuth from "@/hooks/useAuth";
 import useProfile from "@/hooks/useProfile";
@@ -6,10 +11,7 @@ import { classNames, formatAddressShort } from "@/lib/utilities";
 import { Menu, Transition } from "@headlessui/react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { useState } from "react";
-import { useEffect } from "react";
-import { useContext } from "react";
-import { Fragment } from "react";
+
 import ModalAddEmail from "./ModalAddEmail";
 import Dropdown from "./UI/Dropdown";
 

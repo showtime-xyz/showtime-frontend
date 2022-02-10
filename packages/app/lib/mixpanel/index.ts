@@ -1,10 +1,10 @@
 // Modified version of https://github.com/bothrs/expo-mixpanel-analytics
-
 import { Platform, Dimensions } from "react-native";
-import { MMKV } from "react-native-mmkv";
+
+import { Buffer } from "buffer";
 import Constants from "expo-constants";
 import * as Device from "expo-device";
-import { Buffer } from "buffer";
+import { MMKV } from "react-native-mmkv";
 
 import { getInstallationId } from "app/lib/get-installation-id";
 

@@ -1,5 +1,5 @@
-import * as Linking from "expo-linking";
 import type { LinkingOptions } from "@react-navigation/native";
+import * as Linking from "expo-linking";
 
 const linking: LinkingOptions<ReactNavigation.RootParamList> = {
   prefixes: [Linking.makeUrl("/")],

@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import Svg, {
   SvgProps,
   G,
@@ -9,6 +10,7 @@ import Svg, {
   Stop,
   ClipPath,
 } from "react-native-svg";
+
 /* SVGR has dropped some elements not supported by react-native-svg: filter */
 
 function SvgSocialToken(props: SvgProps) {

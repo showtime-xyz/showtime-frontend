@@ -1,4 +1,5 @@
 import type React from "react";
+
 import type { TW } from "../tailwind/types";
 
 export interface ModalWrapperProps {

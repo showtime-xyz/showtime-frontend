@@ -1,3 +1,11 @@
 {
-  "bracketSpacing": true
+  "bracketSpacing": true,
+  "importOrder": [
+    "^(react|react-native)$",
+    "<THIRD_PARTY_MODULES>",
+    "^app/(.*)$",
+    "^design-system(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true
 }

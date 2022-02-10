@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import ReactPlayer from "react-player";
+
 import { BlurhashCanvas } from "react-blurhash";
+import ReactPlayer from "react-player";
 
 const TokenCardImage = ({ nft, showModel = false }) => {
   useEffect(() => {

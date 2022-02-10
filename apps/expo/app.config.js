@@ -1,5 +1,6 @@
 import "dotenv/config";
 import semver from "semver";
+
 import packageJSON from "../../package.json";
 
 const STAGE = process.env.STAGE;

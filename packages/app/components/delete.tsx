@@ -1,21 +1,24 @@
-import useSWR from "swr";
 import { useEffect, useMemo } from "react";
 import { Platform, ScrollView } from "react-native";
-import { useForm, Controller } from "react-hook-form";
+
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import { formatDistanceToNowStrict } from "date-fns";
-import { NFT } from "app/types";
-import { yup } from "app/lib/yup";
-import { axios } from "app/lib/axios";
-import { Owner } from "design-system/card";
-import { tw } from "design-system/tailwind";
-import { useUser } from "app/hooks/use-user";
-import { PolygonScan } from "design-system/icon";
-import { useRouter } from "app/navigation/use-router";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Collection } from "design-system/card/rows/collection";
+import { formatDistanceToNowStrict } from "date-fns";
+import { useForm, Controller } from "react-hook-form";
+import useSWR from "swr";
+
 import { UseBurnNFT, useBurnNFT } from "app/hooks/use-burn-nft";
+import { useUser } from "app/hooks/use-user";
+import { axios } from "app/lib/axios";
+import { yup } from "app/lib/yup";
+import { useRouter } from "app/navigation/use-router";
+import { NFT } from "app/types";
+
 import { View, Text, Fieldset, Button, Media } from "design-system";
+import { Owner } from "design-system/card";
+import { Collection } from "design-system/card/rows/collection";
+import { PolygonScan } from "design-system/icon";
+import { tw } from "design-system/tailwind";
 
 const defaultValues = {
   copies: 1,

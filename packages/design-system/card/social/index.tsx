@@ -1,8 +1,10 @@
-import { View } from "design-system/view";
-import { Button } from "design-system/card/social/button";
-import { useMyInfo } from "app/hooks/api-hooks";
 import { useCallback, useMemo, useState } from "react";
+
+import { useMyInfo } from "app/hooks/api-hooks";
 import { NFT } from "app/types";
+
+import { Button } from "design-system/card/social/button";
+import { View } from "design-system/view";
 
 function Social({ nft }: { nft?: NFT }) {
   if (!nft) return null;

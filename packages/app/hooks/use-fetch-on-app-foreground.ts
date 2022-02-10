@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { AppState, AppStateStatus } from "react-native";
+
 import { axios, AxiosParams } from "app/lib/axios";
 
 export const useFetchOnAppForeground = () => {

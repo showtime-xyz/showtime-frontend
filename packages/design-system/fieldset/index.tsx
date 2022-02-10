@@ -1,14 +1,15 @@
 import { MutableRefObject, ComponentType } from "react";
-import { View } from "design-system/view";
+import { Platform } from "react-native";
+
+import { useIsDarkMode } from "design-system/hooks";
+import { useId } from "design-system/input";
+import { Label } from "design-system/label";
+import { Select } from "design-system/select";
+import { SelectProps } from "design-system/select/types";
+import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
 import { TextInput, TextInputProps } from "design-system/text-input";
-import { Label } from "design-system/label";
-import { useId } from "design-system/input";
-import { Platform } from "react-native";
-import { useIsDarkMode } from "design-system/hooks";
-import { tw } from "design-system/tailwind";
-import { SelectProps } from "design-system/select/types";
-import { Select } from "design-system/select";
+import { View } from "design-system/view";
 
 type FieldsetProps = {
   errorText?: string;

@@ -1,11 +1,12 @@
+import useProfile from "@/hooks/useProfile";
 import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
-import ClientOnlyPortal from "./ClientOnlyPortal";
+import { formatAddressShort } from "@/lib/utilities";
 import Link from "next/link";
+
+import ClientOnlyPortal from "./ClientOnlyPortal";
 import CloseButton from "./CloseButton";
 import FollowButton from "./FollowButton";
 import BadgeIcon from "./Icons/BadgeIcon";
-import useProfile from "@/hooks/useProfile";
-import { formatAddressShort } from "@/lib/utilities";
 
 export default function ModalUserList({
   isOpen,

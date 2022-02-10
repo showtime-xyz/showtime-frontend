@@ -1,9 +1,11 @@
 import { useContext } from "react";
-import Link from "next/link";
-import UserImageList from "../UserImageList";
-import mixpanel from "mixpanel-browser";
-import { truncateWithEllipses } from "@/lib/utilities";
+
 import AppContext from "@/context/app-context";
+import { truncateWithEllipses } from "@/lib/utilities";
+import mixpanel from "mixpanel-browser";
+import Link from "next/link";
+
+import UserImageList from "../UserImageList";
 
 const TRUNCATE_NAME_LENGTH = 24;
 

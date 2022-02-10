@@ -1,9 +1,9 @@
-import { prefix, utility } from "sotez";
-import sodium from "libsodium-wrappers";
-import { ec as EC } from "elliptic";
-import blake2b from "blake2b";
 import handler, { middleware } from "@/lib/api-handler";
 import backend from "@/lib/backend";
+import blake2b from "blake2b";
+import { ec as EC } from "elliptic";
+import sodium from "libsodium-wrappers";
+import { prefix, utility } from "sotez";
 
 export default handler()
   .use(middleware.auth)

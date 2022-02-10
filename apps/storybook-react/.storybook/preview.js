@@ -1,19 +1,19 @@
-import "../styles/globals.css";
-
-import * as NextImage from "next/image";
-import { DripsyProvider } from "dripsy";
-import { useDeviceContext } from "twrnc";
-
-import { theme } from "design-system/theme";
-import { tw } from "design-system/tailwind";
-import { View } from "design-system/view";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { ToastProvider } from "design-system/toast";
-
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { DripsyProvider } from "dripsy";
+import * as NextImage from "next/image";
 import { enableScreens } from "react-native-screens";
+import { useDeviceContext } from "twrnc";
+
 import { linking } from "app/navigation/linking";
+
+import { tw } from "design-system/tailwind";
+import { theme } from "design-system/theme";
+import { ToastProvider } from "design-system/toast";
+import { View } from "design-system/view";
+
+import "../styles/globals.css";
 
 enableScreens(true);
 

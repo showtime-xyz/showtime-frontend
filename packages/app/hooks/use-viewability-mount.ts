@@ -1,10 +1,13 @@
 import { useContext, useEffect, useState } from "react";
+
 import { useAnimatedReaction, runOnJS } from "react-native-reanimated";
-import { useIsTabFocused } from "design-system/tabs/tablib";
+
 import {
   ItemKeyContext,
   ViewabilityItemsContext,
 } from "app/components/viewability-tracker-flatlist";
+
+import { useIsTabFocused } from "design-system/tabs/tablib";
 
 export const useViewabilityMount = () => {
   const id = useContext(ItemKeyContext);

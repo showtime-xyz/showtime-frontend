@@ -1,30 +1,31 @@
-import "../styles/styles.css";
-
-import "raf/polyfill";
-
 import { useState, useEffect } from "react";
+
+import { DripsyProvider } from "dripsy";
+import { AppProps } from "next/app";
+import Head from "next/head";
+import "raf/polyfill";
 // import { useRouter } from 'next/router'
 // import { enableFreeze } from 'react-native-screens'
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import Head from "next/head";
-import { AppProps } from "next/app";
-import { DripsyProvider } from "dripsy";
-import { useDeviceContext } from "twrnc";
 import { SWRConfig, useSWRConfig } from "swr";
+import { useDeviceContext } from "twrnc";
 
-import { accessTokenManager } from "app/lib/access-token-manager";
-import { tw } from "design-system/tailwind";
-import { theme } from "design-system/theme";
-import { NavigationProvider } from "app/navigation";
-import { NextTabNavigator } from "app/navigation/next-tab-navigator";
-import { isServer } from "app/lib/is-server";
 import { AppContext } from "app/context/app-context";
+import { useUser } from "app/hooks/use-user";
+import { accessTokenManager } from "app/lib/access-token-manager";
+import { deleteCache } from "app/lib/delete-cache";
+import { isServer } from "app/lib/is-server";
 import { setLogout } from "app/lib/logout";
 import { mixpanel } from "app/lib/mixpanel";
-import { deleteCache } from "app/lib/delete-cache";
-import { useRouter } from "app/navigation/use-router";
-import { useUser } from "app/hooks/use-user";
 import { deleteRefreshToken } from "app/lib/refresh-token";
+import { NavigationProvider } from "app/navigation";
+import { NextTabNavigator } from "app/navigation/next-tab-navigator";
+import { useRouter } from "app/navigation/use-router";
+
+import { tw } from "design-system/tailwind";
+import { theme } from "design-system/theme";
+
+import "../styles/styles.css";
 
 // enableFreeze(true)
 

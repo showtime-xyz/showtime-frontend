@@ -1,14 +1,15 @@
 import { useEffect, useMemo, ReactNode } from "react";
+
 import LogRocket from "@logrocket/react-native";
 import useSWR from "swr";
 import useUnmountSignal from "use-unmount-signal";
 
-import { mixpanel } from "app/lib/mixpanel";
-import { axios } from "app/lib/axios";
 import { UserContext } from "app/context/user-context";
 import { useAuth } from "app/hooks/auth/use-auth";
-import { UserType } from "app/types";
+import { axios } from "app/lib/axios";
+import { mixpanel } from "app/lib/mixpanel";
 import { registerForPushNotificationsAsync } from "app/lib/register-push-notification";
+import { UserType } from "app/types";
 
 interface UserProviderProps {
   children: ReactNode;

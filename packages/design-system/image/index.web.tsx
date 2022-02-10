@@ -4,9 +4,10 @@ import {
   ImageURISource,
   ImageResizeMode,
 } from "react-native";
-import Image from "next/image";
-import { decode } from "blurhash";
+
 import { getImgFromArr } from "array-to-image";
+import { decode } from "blurhash";
+import Image from "next/image";
 
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";

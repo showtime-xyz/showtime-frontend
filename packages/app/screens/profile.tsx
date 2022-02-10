@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 
-import { mixpanel } from "app/lib/mixpanel";
-import { Profile } from "app/components/profile";
-import { createParam } from "app/navigation/use-param";
 import { withColorScheme } from "app/components/memo-with-theme";
+import { Profile } from "app/components/profile";
+import { mixpanel } from "app/lib/mixpanel";
+import { createParam } from "app/navigation/use-param";
 
 type Query = {
   walletAddress: string;

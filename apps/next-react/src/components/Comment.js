@@ -1,13 +1,15 @@
 import { useRef, useState, useContext } from "react";
-import Link from "next/link";
-import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
-import { formatDistanceToNowStrict, subSeconds } from "date-fns";
-import useDetectOutsideClick from "@/hooks/useDetectOutsideClick";
+
 import AppContext from "@/context/app-context";
-import reactStringReplace from "react-string-replace";
+import useDetectOutsideClick from "@/hooks/useDetectOutsideClick";
+import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
 import { formatAddressShort } from "@/lib/utilities";
-import CommentLikeButton from "./CommentLikeButton";
 import { DotsHorizontalIcon, ReplyIcon } from "@heroicons/react/solid";
+import { formatDistanceToNowStrict, subSeconds } from "date-fns";
+import Link from "next/link";
+import reactStringReplace from "react-string-replace";
+
+import CommentLikeButton from "./CommentLikeButton";
 
 export default function Comment({
   comment,

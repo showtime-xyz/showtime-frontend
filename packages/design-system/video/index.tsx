@@ -1,11 +1,13 @@
 import { ComponentProps, useEffect, useRef, useState } from "react";
+import { StyleSheet, View } from "react-native";
+
 import { Video as ExpoVideo } from "expo-av";
 import FastImage from "react-native-fast-image";
 
+import { useViewabilityMount } from "app/hooks/use-viewability-mount";
+
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
-import { StyleSheet, View } from "react-native";
-import { useViewabilityMount } from "app/hooks/use-viewability-mount";
 
 type VideoProps = {
   tw?: TW;

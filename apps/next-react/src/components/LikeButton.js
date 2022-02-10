@@ -1,13 +1,14 @@
-import _ from "lodash";
-import Tippy from "@tippyjs/react";
-import mixpanel from "mixpanel-browser";
 import { useContext } from "react";
-import { captureException } from "@sentry/nextjs";
 
 import AppContext from "@/context/app-context";
 import authAxios from "@/lib/authenticated-client-side-axios";
-import HeartIcon, { HeartIconSolid } from "./Icons/HeartIcon";
 import ClientAccessToken from "@/lib/client-access-token";
+import { captureException } from "@sentry/nextjs";
+import Tippy from "@tippyjs/react";
+import _ from "lodash";
+import mixpanel from "mixpanel-browser";
+
+import HeartIcon, { HeartIconSolid } from "./Icons/HeartIcon";
 
 const LikeButton = ({ item }) => {
   const isAuthenticated = ClientAccessToken.getAccessToken();

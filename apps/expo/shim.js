@@ -1,6 +1,7 @@
 import { Platform } from "react-native";
-import { btoa, atob, toByteArray } from "react-native-quick-base64";
+
 import "react-native-get-random-values";
+import { btoa, atob, toByteArray } from "react-native-quick-base64";
 
 if (typeof __dirname === "undefined") global.__dirname = "/";
 if (typeof __filename === "undefined") global.__filename = "";

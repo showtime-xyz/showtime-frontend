@@ -1,5 +1,6 @@
-import { View, Text } from "design-system";
 import { withColorScheme } from "app/components/memo-with-theme";
+
+import { View, Text } from "design-system";
 
 const NotificationsScreen = withColorScheme(() => {
   return (

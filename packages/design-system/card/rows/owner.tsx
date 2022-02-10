@@ -1,8 +1,10 @@
-import { View } from "design-system/view";
+import type { NFT } from "app/types";
+
 import { Button } from "design-system/button";
 import { MoreHorizontal } from "design-system/icon";
+import { View } from "design-system/view";
+
 import { Creator } from "./elements/creator";
-import type { NFT } from "app/types";
 import { Ownership } from "./elements/ownership";
 import { Price } from "./elements/price";
 

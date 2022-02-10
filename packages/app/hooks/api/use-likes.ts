@@ -1,4 +1,5 @@
 import useSWR from "swr";
+
 import { fetcher } from "../use-infinite-list-query";
 
 export interface Liker {

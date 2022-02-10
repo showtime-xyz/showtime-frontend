@@ -1,7 +1,7 @@
 import { Meta } from "@storybook/react";
 
-import { Pressable } from "./index";
 import { Text } from "../text";
+import { Pressable } from "./index";
 
 export default {
   component: Pressable,

@@ -1,5 +1,4 @@
 import { Meta } from "@storybook/react";
-import { View } from "design-system/view";
 
 import {
   Liked,
@@ -8,6 +7,7 @@ import {
   Purchased,
   Followed,
 } from "design-system/icon";
+import { View } from "design-system/view";
 
 import { Activity } from "./index";
 

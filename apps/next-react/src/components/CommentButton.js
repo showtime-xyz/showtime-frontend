@@ -1,9 +1,11 @@
 import { useContext } from "react";
+
 import AppContext from "@/context/app-context";
-import mixpanel from "mixpanel-browser";
-import CommentIcon, { CommentIconSolid } from "./Icons/CommentIcon";
-import Tippy from "@tippyjs/react";
 import useAuth from "@/hooks/useAuth";
+import Tippy from "@tippyjs/react";
+import mixpanel from "mixpanel-browser";
+
+import CommentIcon, { CommentIconSolid } from "./Icons/CommentIcon";
 
 const CommentButton = ({ item, handleComment }) => {
   const { isAuthenticated } = useAuth();

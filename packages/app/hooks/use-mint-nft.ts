@@ -1,14 +1,17 @@
-import { Alert } from "react-native";
 import { useContext, useEffect, useReducer, useRef } from "react";
-import { v4 as uuid } from "uuid";
-import { axios as showtimeAPIAxios } from "app/lib/axios";
+import { Alert } from "react-native";
+
 import axios from "axios";
-import * as FileSystem from "expo-file-system";
-import { getBiconomy } from "../utilities";
 import { ethers } from "ethers";
+import * as FileSystem from "expo-file-system";
+import { v4 as uuid } from "uuid";
+
 import minterAbi from "app/abi/ShowtimeMT.json";
-import { useWeb3 } from "./use-web3";
+import { axios as showtimeAPIAxios } from "app/lib/axios";
 import { useWalletConnect } from "app/lib/walletconnect";
+
+import { getBiconomy } from "../utilities";
+import { useWeb3 } from "./use-web3";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 

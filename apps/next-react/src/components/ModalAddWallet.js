@@ -1,15 +1,17 @@
 import { useContext, useState, useEffect } from "react";
-import mixpanel from "mixpanel-browser";
-import backend from "@/lib/backend";
-import AppContext from "@/context/app-context";
-import CloseButton from "./CloseButton";
-import { ethers } from "ethers";
-import ScrollableModal from "./ScrollableModal";
-import axios from "@/lib/axios";
+
 import GreenButton from "@/components/UI/Buttons/GreenButton";
-import getWeb3Modal from "@/lib/web3Modal";
-import { useTheme } from "next-themes";
+import AppContext from "@/context/app-context";
+import axios from "@/lib/axios";
+import backend from "@/lib/backend";
 import { personalSignMessage } from "@/lib/utilities";
+import getWeb3Modal from "@/lib/web3Modal";
+import { ethers } from "ethers";
+import mixpanel from "mixpanel-browser";
+import { useTheme } from "next-themes";
+
+import CloseButton from "./CloseButton";
+import ScrollableModal from "./ScrollableModal";
 
 export default function Modal({ isOpen, setWalletModalOpen, walletAddresses }) {
   const context = useContext(AppContext);

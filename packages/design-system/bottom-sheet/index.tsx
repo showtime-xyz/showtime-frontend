@@ -7,15 +7,17 @@ import {
   MutableRefObject,
   ComponentType,
 } from "react";
+
 import {
   BottomSheetModal,
   BottomSheetBackdrop,
   BottomSheetHandleProps,
   BottomSheetTextInput as BottomSheetInput,
 } from "@gorhom/bottom-sheet";
-import { View } from "design-system/view";
+
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
+import { View } from "design-system/view";
 
 type BottomSheetProps = {
   children?: React.ReactElement;

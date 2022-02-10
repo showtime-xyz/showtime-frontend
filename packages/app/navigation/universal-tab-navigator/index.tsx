@@ -1,5 +1,12 @@
 // https://reactnavigation.org/docs/custom-navigators/#type-checking-navigators
+import { Children, useCallback, cloneElement } from "react";
 
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  BottomTabNavigationOptions,
+  BottomTabNavigationEventMap,
+  BottomTabNavigationConfig,
+} from "@react-navigation/bottom-tabs/lib/typescript/src/types";
 import {
   createNavigatorFactory,
   DefaultNavigatorOptions,
@@ -8,15 +15,9 @@ import {
   TabRouterOptions,
 } from "@react-navigation/native";
 import { useRouter } from "next/router";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  BottomTabNavigationOptions,
-  BottomTabNavigationEventMap,
-  BottomTabNavigationConfig,
-} from "@react-navigation/bottom-tabs/lib/typescript/src/types";
-import { useBuildLink } from "./build-link";
-import { Children, useCallback, cloneElement } from "react";
+
 import { NextNavigationProps } from "../types";
+import { useBuildLink } from "./build-link";
 
 const { Navigator } = createBottomTabNavigator();
 

@@ -1,6 +1,6 @@
 // From https://forums.expo.dev/t/constants-installationid-how-to-implement-it-on-your-own/50003/15
-
 import { Platform } from "react-native";
+
 import * as Application from "expo-application";
 import uuidv4 from "uuid/v4";
 import uuidv5 from "uuid/v5";

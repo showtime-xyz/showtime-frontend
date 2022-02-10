@@ -1,5 +1,5 @@
-import { ethers } from "ethers";
 import { GAS_PRICE_PERCENTAGE } from "@/lib/constants";
+import { ethers } from "ethers";
 
 /**
  * Calculate and return the estimated gas price for a transaction

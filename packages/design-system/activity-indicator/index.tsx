@@ -1,4 +1,5 @@
 import { ComponentProps } from "react";
+
 import { ActivityIndicator as DripsyActivityIndicator } from "dripsy";
 
 import { tw as tailwind } from "design-system/tailwind";

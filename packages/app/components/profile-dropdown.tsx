@@ -1,5 +1,12 @@
 import { Share } from "react-native";
 
+import { useBlock } from "app/hooks/use-block";
+import { useReport } from "app/hooks/use-report";
+import { useUser } from "app/hooks/use-user";
+import { useRouter } from "app/navigation/use-router";
+import type { Profile } from "app/types";
+
+import { Button } from "design-system";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -8,14 +15,8 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "design-system/dropdown-menu";
-import { Button } from "design-system";
 import { MoreHorizontal } from "design-system/icon";
 import { tw } from "design-system/tailwind";
-import type { Profile } from "app/types";
-import { useReport } from "app/hooks/use-report";
-import { useRouter } from "app/navigation/use-router";
-import { useUser } from "app/hooks/use-user";
-import { useBlock } from "app/hooks/use-block";
 
 type Props = {
   user: Profile;
