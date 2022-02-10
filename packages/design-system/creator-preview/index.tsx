@@ -11,7 +11,6 @@ import type { Creator } from "app/types";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { Link } from "app/navigation/link";
-import { useRouter } from "app/navigation/use-router";
 import { formatAddressShort } from "app/lib/utilities";
 
 type Props = {
@@ -22,7 +21,6 @@ const mediaDimension = Dimensions.get("window").width / 3 - 16;
 export const cardSize = 64 + mediaDimension + 16;
 
 export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
-  const router = useRouter();
   const { isFollowing, follow, unfollow } = useMyInfo();
   const creatorId = props.creator.profile_id;
   const isFollowingCreator = useMemo(
@@ -37,9 +35,7 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
     >
       <View tw="flex-row justify-between items-center">
         <Link
-          href={`${
-            router.pathname.startsWith("/trending") ? "/trending" : ""
-          }/profile/${props.creator.address}`}
+          href={`/profile/${props.creator.address}`}
           tw="flex-row items-center"
         >
           <View tw="h-8 w-8 bg-gray-200 rounded-full mr-2">

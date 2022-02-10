@@ -44,7 +44,7 @@ export type NFT = {
   collection_slug: string;
   collection_img_url?: string;
   contract_is_creator: number;
-  multiple_owners_list: Array<Profile>;
+  multiple_owners_list: Array<OwnersListOwner>;
 };
 
 export type Creator = {
@@ -137,3 +137,14 @@ export type WalletConnectionStatus =
   | "EXPIRED_NONCE"
   | "CONNECTED"
   | "ERRORED";
+
+export interface OwnersListOwner {
+  profile_id: number;
+  name: string;
+  img_url: string;
+  quantity: number;
+  username: string;
+  verified: boolean;
+  address: string;
+  wallet_address: string;
+}

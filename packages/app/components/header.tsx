@@ -60,7 +60,9 @@ const HeaderRight = () => {
               </View>
             )}
             {isAuthenticated ? (
-              <HeaderDropdown />
+              <View tw="bg-white dark:bg-black w-20 items-end">
+                <HeaderDropdown />
+              </View>
             ) : (
               <Button
                 onPress={() => {
@@ -93,8 +95,7 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
         if (canGoBack) {
           router.pop();
         } else {
-          // router.push("/search");
-          toast?.show({ message: "🚧 Coming soon", hideAfter: 4000 });
+          router.push("/search");
         }
       }}
       // animate={useCallback(({ hovered }) => {
