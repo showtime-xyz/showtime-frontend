@@ -29,7 +29,7 @@ function NFTDropdown({ nft }: Props) {
 
   useEffect(() => {
     setIsOwner(nft?.owner_address.toLowerCase() === userAddress.toLowerCase());
-  }, [userAddress]);
+  }, [nft, userAddress]);
 
   const tokenChainName = Object.keys(CHAIN_IDENTIFIERS).find(
     (key) => CHAIN_IDENTIFIERS[key] == nft?.chain_identifier
