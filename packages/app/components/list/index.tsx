@@ -1,16 +1,14 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
-
-import { View, Text, Button } from "design-system";
 import { Platform, ScrollView } from "react-native";
-import { Modal, ModalSheet } from "design-system";
-import { useMemo } from "react";
+import { useMemo, useReducer } from "react";
 import { useRouter } from "app/navigation/use-router";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { ListingModal } from "./listing-modal";
 import { ListingCard } from "./listing-card";
 import { useUser } from "app/hooks/use-user";
 import { AppContext } from "app/context/app-context";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 type Props = {
   nftId?: string;
@@ -22,19 +20,30 @@ const ListingScrollView =
 const List = (props: Props) => {
   const nftId = props.nftId;
   const router = useRouter();
-  const connector = useWalletConnect();
-
   const context = useContext(AppContext);
-  // test when this is multiple?
-  const connectedAddresses = connector?.session?.accounts;
-  const connectedAddress = connectedAddresses[0];
-
+  const connector = useWalletConnect();
   const { user, isAuthenticated } = useUser();
+  const [activeAddress, setActiveAddress] = useState<string>();
+  const isWalletConnectSession = connector.connected;
+  const isMagic = Boolean(context.web3);
 
-  console.log("user", user);
-  console.log("connectedAddresses", connectedAddresses);
-  console.log("connectedAddress", connectedAddress);
+  const getActiveAddress = async () => {
+    if (isWalletConnectSession) {
+      const [connectedAddress] = connector?.session?.accounts;
+      setActiveAddress(connectedAddress);
+    }
 
+    // Only use magic if it's active + no wallet
+    if (isMagic && !isWalletConnectSession) {
+      const signer = context.web3.getSigner();
+      const magicAddress = await signer.getAddress();
+      setActiveAddress(magicAddress);
+    }
+  };
+
+  /**
+   * Redirect on log out
+   */
   useEffect(() => {
     const isUnauthenticated = !isAuthenticated;
     if (isUnauthenticated) {
@@ -42,12 +51,19 @@ const List = (props: Props) => {
     }
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    getActiveAddress();
+  }, [isWalletConnectSession, isMagic]);
+
+  console.log("active address", activeAddress);
   return (
-    <ListingModal>
-      <ListingScrollView contentContainerStyle={{ paddingBottom: 80 }}>
-        <ListingCard nftId={nftId} />
-      </ListingScrollView>
-    </ListingModal>
+    <BottomSheetModalProvider>
+      <ListingModal>
+        <ListingScrollView contentContainerStyle={{ paddingBottom: 80 }}>
+          <ListingCard nftId={nftId} address={activeAddress} />
+        </ListingScrollView>
+      </ListingModal>
+    </BottomSheetModalProvider>
   );
 };
 

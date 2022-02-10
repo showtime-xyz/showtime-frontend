@@ -7,7 +7,7 @@ import removeMd from "remove-markdown";
 import { BYPASS_EMAIL } from "app/lib/constants";
 import { magic, Magic } from "app/lib/magic";
 
-import { Profile } from "./types";
+import { Profile, NFT } from "./types";
 
 export const formatAddressShort = (address) => {
   if (!address) return null;
@@ -146,6 +146,7 @@ export function flattenChildren(children: React.ReactNode): ReactChildArray {
     return flatChildren;
   }, []);
 }
+
 /**
  * Under matching conditions return an instance of magic in test mode
  */
@@ -173,4 +174,15 @@ export const overrideMagicInstance = (email: string) => {
   }
 
   return magic;
+};
+
+export const findListingItemByOwner = (
+  nft: NFT | undefined,
+  profileID: Profile["profile_id"] | undefined
+) => {
+  const listedNFT = nft?.listing?.all_sellers?.find((seller) => {
+    return seller.profile_id === profileID;
+  });
+
+  return listedNFT;
 };

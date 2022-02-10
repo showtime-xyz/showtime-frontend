@@ -14,9 +14,10 @@ type Props = {
   options?: boolean;
   price?: boolean;
   tw?: TW;
+  toggleCreatorName?: boolean;
 };
 
-function Owner({ options, price, nft, tw = "" }: Props) {
+function Owner({ options, price, nft, tw = "", toggleCreatorName }: Props) {
   if (!nft) return null;
 
   return (
@@ -26,7 +27,8 @@ function Owner({ options, price, nft, tw = "" }: Props) {
         tw,
       ]}
     >
-      <Creator nft={nft} />
+      <Creator nft={nft} toggleCreatorName={toggleCreatorName} />
+
       {options ? (
         <Button variant="tertiary" size="small" iconOnly={true}>
           <MoreHorizontal />
