@@ -28,8 +28,7 @@
     "deploy:production": "echo 'Do not do this unless you know what you are doing!' && yarn update:production --message 'Deploy to production' && yarn build:production --auto-submit",
     "adb:reverse": "adb reverse tcp:3000 tcp:3000",
     "eas-build-post-install": "react-native link",
-    "test": "node_modules/.bin/jest",
-    "test:debug": "node --inspect-brk node_modules/jest/bin/jest.js --runInBand"
+    "test": "node_modules/.bin/jest"
   },
   "dependencies": {
     "@capsizecss/core": "^3.0.0",
