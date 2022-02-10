@@ -12,7 +12,7 @@ import { NextTabNavigator } from "./next-tab-navigator";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { useIsDarkMode } from "design-system/hooks";
 import { SearchScreen } from "app/screens/search";
-import { TransferNftScreen } from "app/screens/transferNft";
+import { TransferNftScreen } from "app/screens/transfer-nft";
 
 const Stack = createNativeStackNavigator();
 
@@ -50,7 +50,7 @@ export function RootStackNavigator() {
       >
         <Stack.Screen name="login" component={LoginScreen} />
         <Stack.Screen name="nft" component={NftScreen} />
-        <Stack.Screen name="nftTransfer" component={TransferNftScreen} />
+        <Stack.Screen name="transferNft" component={TransferNftScreen} />
         <Stack.Screen name="create" component={CreateScreen} />
         <Stack.Screen name="burn" component={DeleteScreen} />
       </Stack.Group>

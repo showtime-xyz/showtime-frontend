@@ -19,11 +19,7 @@ const ProfileScreen = dynamic<JSX.Element>(() =>
   import("app/screens/profile").then((mod) => mod.ProfileScreen)
 );
 const TransferNftScreen = dynamic<JSX.Element>(() =>
-  import("app/screens/transferNft").then((mod) => mod.TransferNftScreen)
-);
-
-const SettingsScreen = dynamic<JSX.Element>(() =>
-  import("app/screens/settings").then((mod) => mod.SettingsScreen)
+  import("app/screens/transfer-nft").then((mod) => mod.TransferNftScreen)
 );
 
 const SettingsScreen = dynamic<JSX.Element>(() =>
