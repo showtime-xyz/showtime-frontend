@@ -10,6 +10,9 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import LogRocket from "@logrocket/react-native";
 import NetInfo from "@react-native-community/netinfo";
 import { useNavigation } from "@react-navigation/native";
+import rudderClient, {
+  RUDDER_LOG_LEVEL,
+} from "@rudderstack/rudder-sdk-react-native";
 import { DripsyProvider } from "dripsy";
 import * as NavigationBar from "expo-navigation-bar";
 import * as Notifications from "expo-notifications";
@@ -55,6 +58,12 @@ LogBox.ignoreLogs([
   "Constants.platform.ios.model has been deprecated in favor of expo-device's Device.modelName property.",
   "ExponentGLView",
 ]);
+
+const rudderConfig = {
+  dataPlaneUrl: "https://tryshowtimjtc.dataplane.rudderstack.com",
+  trackAppLifecycleEvents: true,
+  logLevel: RUDDER_LOG_LEVEL.INFO, // DEBUG
+};
 
 function mmkvProvider() {
   const storage = new MMKV();
@@ -267,6 +276,14 @@ function App() {
         redactionTags: ["data-private"],
       });
     }
+  }, []);
+
+  useEffect(() => {
+    const initAnalytics = async () => {
+      await rudderClient.setup(process.env.RUDDERSTACK_WRITE_KEY, rudderConfig);
+    };
+
+    initAnalytics();
   }, []);
 
   const scheme = `io.showtime${

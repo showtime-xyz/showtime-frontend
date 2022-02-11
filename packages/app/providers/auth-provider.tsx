@@ -15,6 +15,7 @@ import * as logoutStorage from "app/lib/logout";
 import { magic } from "app/lib/magic";
 import { mixpanel } from "app/lib/mixpanel";
 import { deleteRefreshToken } from "app/lib/refresh-token";
+import { rudder } from "app/lib/rudderstack";
 
 import type { AuthenticationStatus } from "../types";
 
@@ -73,6 +74,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (wasUserLoggedIn && wasUserLoggedIn.length > 0) {
         mixpanel.track("Logout");
       }
+      await rudder.reset();
 
       loginStorage.deleteLogin();
       logoutStorage.setLogout(Date.now().toString());
