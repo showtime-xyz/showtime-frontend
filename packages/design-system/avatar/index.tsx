@@ -1,6 +1,7 @@
 import { ReactNode, useMemo } from "react";
 
 import { Image } from "../image";
+import { TW } from "../tailwind/types";
 import { View } from "../view";
 import { CONTAINER_TW, IMAGE_TW, DEFAULT_AVATAR_PIC } from "./constants";
 
@@ -8,6 +9,7 @@ export type AvatarProps = {
   url?: string;
   size?: number;
   borderWidth?: number;
+  tw?: TW;
   children?: ReactNode;
 };
 
@@ -22,6 +24,7 @@ export const Avatar = ({
   url,
   borderWidth = 0,
   size = 32,
+  tw = "",
   children,
 }: AvatarProps) => {
   const imageSource = useMemo(
@@ -30,7 +33,11 @@ export const Avatar = ({
   );
 
   const containerTW = useMemo(
-    () => [`w-[${size}px] h-[${size}px]`, CONTAINER_TW],
+    () => [
+      ...(typeof tw === "string" ? [tw] : tw),
+      `w-[${size}px] h-[${size}px]`,
+      CONTAINER_TW,
+    ],
     [size]
   );
   const imageTW = useMemo(
