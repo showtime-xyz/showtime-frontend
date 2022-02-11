@@ -12030,10 +12030,10 @@ expo-haptics@~11.1.0:
   resolved "https://registry.yarnpkg.com/expo-haptics/-/expo-haptics-11.1.0.tgz#946206d7d28bd6f17da7ae3e4074d8560032e2f4"
   integrity sha512-1hLvj5mpeC0451LduG6Eati8tS4YEwxECBGoyQagTGbqttlEundNn1P4Qyr7T1rSOnoMgmQatd7sdbbYxeeKMQ==
 
-expo-image-picker@^12.0.1:
-  version "12.0.1"
-  resolved "https://registry.yarnpkg.com/expo-image-picker/-/expo-image-picker-12.0.1.tgz#2d46648b82422124f53a0aa6c186c4035ad31e8d"
-  integrity sha512-0utJK87zQH9jeOKlK51x/AXg43msef8qY+oib7TR12jVa6uuPmO8TcMgzr1UZ7DIsxlkMRId/cvBWzMu2BnJcg==
+expo-image-picker@^12.0.2:
+  version "12.0.2"
+  resolved "https://registry.yarnpkg.com/expo-image-picker/-/expo-image-picker-12.0.2.tgz#4789c5419208ff8ede557784368a7f18f3878c30"
+  integrity sha512-rAoNGtofV5cg3UN+cdIGDVfbMvbutBX6uNV7jCIEw/WZxZlbW+R7HC8l5lGDFtoLVqcpkHE/6JpAXvESxVSAOA==
   dependencies:
     "@expo/config-plugins" "^4.0.2"
     uuid "7.0.2"
@@ -19420,10 +19420,10 @@ react-native-fast-image@^8.5.11:
   resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.5.11.tgz#e3dc969d0e4e8df026646bf18194465aa55cbc2b"
   integrity sha512-cNW4bIJg3nvKaheG8vGMfqCt5LMWX9MS5+wMudgKIHbGO51spRr4sgnlhVgwHLcZ5aeNOVJ8CPRxDIWKRq/0QA==
 
-react-native-flipper@^0.129.0:
-  version "0.129.0"
-  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.129.0.tgz#b2f3626291a61de4eb662adedd290e0d0ab33fd9"
-  integrity sha512-m4chCu4Hx9FqH21ZtOD3FKusVf4BkmSiOfr1RLyuXnoRp+wVerx/QL/3sG8T5Pe1l5/xTyzuO16a/niQpU7krw==
+react-native-flipper@^0.131.1:
+  version "0.131.1"
+  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.131.1.tgz#b1a43e40a442187fa78c5ed6d478471ff4a2686c"
+  integrity sha512-X65VbZgwVRVYAc3OBdHi0h8dJR/Mgxdg8WoQLGgaYyhHcaqsF06GjOzBJLwNjN3TK5Gih228IFqLqI9Rwl2dEA==
 
 react-native-gesture-handler@^2.1.1:
   version "2.1.1"
@@ -19521,7 +19521,7 @@ react-native-quick-base64@^2.0.2:
   dependencies:
     base64-js "^1.5.1"
 
-react-native-randombytes@^3.0.0, react-native-randombytes@^3.5.1:
+react-native-randombytes@^3.5.1, react-native-randombytes@^3.6.1:
   version "3.6.1"
   resolved "https://registry.yarnpkg.com/react-native-randombytes/-/react-native-randombytes-3.6.1.tgz#cac578093b5ca38e3e085becffdc6cbcf6f0d654"
   integrity sha512-qxkwMbOZ0Hff1V7VqpaWrR6ItkA+oF6bnI79Qp9F3Tk8WBsdKDi6m1mi3dEdFWePoRLrhJ2L03rU0yabst1tVw==
