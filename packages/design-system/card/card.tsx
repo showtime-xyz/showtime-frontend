@@ -1,6 +1,6 @@
+import { Activity } from "app/components/activity";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 
-import { Activity } from "design-system/activity";
 import { Grid } from "design-system/card/grid";
 import { Collection } from "design-system/card/rows/collection";
 import { Title } from "design-system/card/rows/title";

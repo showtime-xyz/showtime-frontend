@@ -1,11 +1,7 @@
 import { formatDistanceToNowStrict } from "date-fns";
 
-import { ACTIVITY_TYPES, DEFAULT_PROFILE_PIC } from "app/lib/constants";
-import { formatAddressShort } from "app/lib/utilities";
-import { Link, TextLink } from "app/navigation/link";
-
-import { ActivityDropdown } from "design-system/activity/activity-dropdown";
-import { Avatar } from "design-system/activity/avatar";
+import { ActivityDropdown } from "app/components/activity/activity-dropdown";
+import { Avatar } from "app/components/activity/avatar";
 import {
   Like,
   Comment,
@@ -14,7 +10,11 @@ import {
   Create,
   Follow,
   Transfer,
-} from "design-system/activity/types";
+} from "app/components/activity/types";
+import { ACTIVITY_TYPES, DEFAULT_PROFILE_PIC } from "app/lib/constants";
+import { formatAddressShort } from "app/lib/utilities";
+import { Link, TextLink } from "app/navigation/link";
+
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
