@@ -5,13 +5,13 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { CreateScreen } from "app/screens/create";
+import { DeleteScreen } from "app/screens/delete";
 import { LoginScreen } from "app/screens/login";
 import { NftScreen } from "app/screens/nft";
 import { ProfileScreen } from "app/screens/profile";
 import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { TransferNftScreen } from "app/screens/transfer-nft";
-import { DeleteScreen } from "app/screens/delete";
 
 import { useIsDarkMode } from "design-system/hooks";
 
