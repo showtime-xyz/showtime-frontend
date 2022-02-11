@@ -1,5 +1,6 @@
-import { makeTheme } from "dripsy";
 import { Platform } from "react-native";
+
+import { makeTheme } from "dripsy";
 
 import { fontFamily, textSizes } from "design-system/typography";
 

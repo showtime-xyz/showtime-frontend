@@ -4,6 +4,7 @@ import {
   Platform,
   useColorScheme as useDeviceColorScheme,
 } from "react-native";
+
 import { useSharedValue } from "react-native-reanimated";
 
 import { useColorScheme as useUserColorScheme } from "app/lib/color-scheme";

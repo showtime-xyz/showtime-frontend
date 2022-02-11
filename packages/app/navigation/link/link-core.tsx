@@ -1,4 +1,5 @@
 import type { ComponentProps, ComponentType } from "react";
+
 import { useLinkProps } from "@react-navigation/native";
 import NextLink from "next/link";
 

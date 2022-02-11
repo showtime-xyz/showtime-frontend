@@ -1,5 +1,16 @@
 import { useContext } from "react";
 
+import { AppContext } from "app/context/app-context";
+import { useAuth } from "app/hooks/auth/use-auth";
+import { useUser } from "app/hooks/use-user";
+import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
+import { formatAddressShort } from "app/lib/utilities";
+import {
+  useProfileNavigation,
+  useSettingsNavigation,
+} from "app/navigation/app-navigation";
+
+import { View, Image } from "design-system";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -10,16 +21,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuGroup,
 } from "design-system/dropdown-menu";
-import { View, Image } from "design-system";
-import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
-import { formatAddressShort } from "app/lib/utilities";
-import { AppContext } from "app/context/app-context";
-import { useUser } from "app/hooks/use-user";
-import { useAuth } from "app/hooks/auth/use-auth";
-import {
-  useProfileNavigation,
-  useSettingsNavigation,
-} from "app/navigation/app-navigation";
 
 const getSmallImageUrl = (imgUrl: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {

@@ -1,8 +1,11 @@
 import { useCallback } from "react";
-import { useToast } from "design-system/toast";
-import { axios } from "app/lib/axios";
+
 import { useSWRConfig } from "swr";
+
 import { USER_API_KEY } from "app/hooks/use-user";
+import { axios } from "app/lib/axios";
+
+import { useToast } from "design-system/toast";
 
 export function useManageAccount() {
   const toast = useToast();

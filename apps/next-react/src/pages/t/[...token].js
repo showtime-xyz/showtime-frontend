@@ -1,12 +1,13 @@
 import { useState, useEffect, useContext } from "react";
-import Head from "next/head";
-import mixpanel from "mixpanel-browser";
-import Layout from "@/components/layout";
-import backend from "@/lib/backend";
-import AppContext from "@/context/app-context";
+
 import ModalReportItem from "@/components/ModalReportItem";
 import TokenDetailBody from "@/components/TokenDetailBody";
+import Layout from "@/components/layout";
+import AppContext from "@/context/app-context";
+import backend from "@/lib/backend";
 import { CHAIN_IDENTIFIERS } from "@/lib/constants";
+import mixpanel from "mixpanel-browser";
+import Head from "next/head";
 
 export async function getServerSideProps({
   query: {

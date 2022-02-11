@@ -1,5 +1,5 @@
-import * as Linking from "expo-linking";
 import type { LinkingOptions } from "@react-navigation/native";
+import * as Linking from "expo-linking";
 
 const linking: LinkingOptions<ReactNavigation.RootParamList> = {
   prefixes: [Linking.makeUrl("/")],
@@ -7,6 +7,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
     screens: {
       login: "login",
       nft: "nft/:id",
+      transferNft: "nft/:id/transfer",
       create: "create",
       burn: "burn",
       search: "search",

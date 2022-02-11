@@ -1,9 +1,15 @@
 import { useState, useCallback } from "react";
 import { useWindowDimensions } from "react-native";
+
 import Router from "next/router";
 
+import { HeaderDropdown } from "app/components/header-dropdown";
+import { useUser } from "app/hooks/use-user";
+import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useRouter } from "app/navigation/use-router";
+
 import { View, Pressable, Button, ButtonLabel } from "design-system";
+import { useIsDarkMode } from "design-system/hooks";
 import {
   Showtime,
   ShowtimeGradient,
@@ -12,10 +18,6 @@ import {
   ArrowLeft,
 } from "design-system/icon";
 import { tw } from "design-system/tailwind";
-import { useUser } from "app/hooks/use-user";
-import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
-import { HeaderDropdown } from "app/components/header-dropdown";
-import { useIsDarkMode } from "design-system/hooks";
 import { useToast } from "design-system/toast";
 
 const HeaderRight = () => {
@@ -95,8 +97,7 @@ const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
         if (canGoBack) {
           router.pop();
         } else {
-          // router.push("/search");
-          toast?.show({ message: "🚧 Coming soon", hideAfter: 4000 });
+          router.push("/search");
         }
       }}
       // animate={useCallback(({ hovered }) => {

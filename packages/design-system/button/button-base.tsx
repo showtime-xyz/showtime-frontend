@@ -1,11 +1,13 @@
 import { Children, cloneElement, useMemo } from "react";
-import { useSharedValue, useAnimatedStyle } from "react-native-reanimated";
-import { useIsDarkMode } from "../hooks";
-import { Pressable } from "design-system/pressable-scale";
-import { Text } from "design-system/text";
-import Animated from "react-native-reanimated";
-import { tw as tailwind } from "design-system/tailwind";
 
+import { useSharedValue, useAnimatedStyle } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
+
+import { Pressable } from "design-system/pressable-scale";
+import { tw as tailwind } from "design-system/tailwind";
+import { Text } from "design-system/text";
+
+import { useIsDarkMode } from "../hooks";
 import {
   CONTAINER_HEIGHT_TW,
   CONTAINER_ICON_PADDING_TW,
@@ -15,7 +17,6 @@ import {
   LABEL_SIZE_TW,
   LABEL_WEIGHT_TW,
 } from "./constants";
-
 import type { BaseButtonProps } from "./types";
 
 export function BaseButton({

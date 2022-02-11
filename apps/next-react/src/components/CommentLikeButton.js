@@ -1,11 +1,12 @@
 import { useContext } from "react";
+
 import AppContext from "@/context/app-context";
-import mixpanel from "mixpanel-browser";
-import _ from "lodash";
+import axios from "@/lib/axios";
 import { HeartIcon as HeartIconOutline } from "@heroicons/react/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/solid";
 import Tippy from "@tippyjs/react";
-import axios from "@/lib/axios";
+import _ from "lodash";
+import mixpanel from "mixpanel-browser";
 
 const CommentLikeButton = ({ comment, openLikedByModal }) => {
   const context = useContext(AppContext);

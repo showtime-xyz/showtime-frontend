@@ -1,8 +1,9 @@
 import { Platform } from "react-native";
+
+import { captureException } from "@sentry/nextjs";
 import axios from "axios";
 import type { Method } from "axios";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
-import { captureException } from "@sentry/nextjs";
 
 import { accessTokenManager } from "app/lib/access-token-manager";
 import { setLogout } from "app/lib/logout";

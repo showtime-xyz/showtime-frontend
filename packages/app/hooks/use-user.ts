@@ -1,4 +1,5 @@
 import { useContext } from "react";
+
 import { UserContext } from "app/context/user-context";
 
 export function useUser() {

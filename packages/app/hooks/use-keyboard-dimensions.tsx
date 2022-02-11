@@ -1,5 +1,4 @@
 // From https://github.com/flyerhq/react-native-keyboard-accessory-view/blob/main/src/hooks/useKeyboardDimensions.tsx
-
 import * as React from "react";
 import {
   Dimensions,
@@ -10,6 +9,7 @@ import {
   Platform,
   ScaledSize,
 } from "react-native";
+
 import { useSafeAreaFrame } from "react-native-safe-area-context";
 
 /**

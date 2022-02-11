@@ -1,0 +1,82 @@
+name: Detox
+
+defaults:
+  run:
+    working-directory: apps/expo
+
+on:
+  pull_request:
+    paths:
+      - "package.json"
+      - "apps/expo/package.json"
+      - "apps/expo/app.config.js"
+      - "apps/expo/.env.*"
+      - "**/*.js"
+      - "**/*.jsx"
+      - "**/*.ts"
+      - "**/*.tsx"
+      - ".github/workflows/**"
+      - "**.patch"
+      - "**.lock"
+
+concurrency:
+  group: ${{ github.event_name }}-${{ github.ref }}-detox-android
+  cancel-in-progress: true
+
+jobs:
+  detox-android:
+    name: Detox (Android)
+    runs-on: macOS-latest
+    steps:
+      - name: Set up repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Find yarn cache
+        id: yarn-cache-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Restore cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --check-files
+
+      - name: Set up Expo
+        uses: expo/expo-github-action@v6
+        with:
+          eas-version: latest
+          eas-cache: true
+          expo-cache: true
+          expo-version: 4.x
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Run expo prebuild
+        run: yarn expo:prebuild
+
+      - name: Install Java JDK
+        uses: joschi/setup-jdk@v2
+        with:
+          java-version: "openjdk8"
+          architecture: "x64"
+
+      - name: Build app
+        run: yarn detox build --configuration android.emu.gh.release
+
+      - name: Run Detox
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          target: default
+          arch: x86_64
+          profile: pixel
+          avd-name: Pixel_API_29_AOSP
+          script: yarn detox test --configuration android.emu.gh.release --headless

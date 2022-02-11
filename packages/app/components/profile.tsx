@@ -7,8 +7,10 @@ import {
   useState,
 } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
+
 import reactStringReplace from "react-string-replace";
 
+import { ProfileDropdown } from "app/components/profile-dropdown";
 import {
   Collection,
   defaultFilters,
@@ -17,22 +19,23 @@ import {
   useProfileNftTabs,
   useUserProfile,
 } from "app/hooks/api-hooks";
+import { useMyInfo } from "app/hooks/api-hooks";
+import { useBlock } from "app/hooks/use-block";
+import { useCurrentUserId } from "app/hooks/use-current-user-id";
+import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import { TextLink } from "app/navigation/link";
+import { useRouter } from "app/navigation/use-router";
+
 import { View, Spinner, Text, Skeleton, Select, Button } from "design-system";
+import { useColorScheme } from "design-system/hooks";
+import { Image } from "design-system/image";
+import { Media } from "design-system/media";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
-import { Image } from "design-system/image";
 import { VerificationBadge } from "design-system/verification-badge";
-import { useColorScheme } from "design-system/hooks";
-import { getProfileImage, getProfileName, getSortFields } from "../utilities";
-import { Media } from "design-system/media";
-import { useRouter } from "app/navigation/use-router";
-import { TextLink } from "app/navigation/link";
-import { ProfileDropdown } from "app/components/profile-dropdown";
-import { useMyInfo } from "app/hooks/api-hooks";
-import { useCurrentUserId } from "app/hooks/use-current-user-id";
-import { useBlock } from "app/hooks/use-block";
 
-const TAB_LIST_HEIGHT = 64;
+import { getProfileImage, getProfileName, getSortFields } from "../utilities";
+
 const COVER_IMAGE_HEIGHT = 104;
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {

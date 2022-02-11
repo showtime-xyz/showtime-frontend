@@ -1,5 +1,6 @@
+import { useRouter } from "app/navigation/use-router";
+
 import { View, Pressable, Button } from "design-system";
-import { tw } from "design-system/tailwind";
 import {
   Home,
   HomeFilled,
@@ -11,7 +12,7 @@ import {
   BellFilled,
   Plus,
 } from "design-system/icon";
-import { useRouter } from "app/navigation/use-router";
+import { tw } from "design-system/tailwind";
 
 function TabBarIcon({ tab, children }) {
   const router = useRouter();

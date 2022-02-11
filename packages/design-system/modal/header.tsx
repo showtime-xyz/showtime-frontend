@@ -1,8 +1,8 @@
-import { View } from "design-system/view";
-import { Text } from "design-system/text";
 import { Button } from "design-system/button";
 import { Close, MoreHorizontal } from "design-system/icon";
 import { tw } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 type Props = {
   title?: string;

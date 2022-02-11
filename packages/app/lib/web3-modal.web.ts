@@ -1,4 +1,5 @@
 import Fortmatic from "fortmatic";
+
 import { Magic } from "app/lib/magic";
 
 // theme
@@ -63,7 +64,7 @@ const getWeb3Modal = async ({ withMagic = false } = {}) => {
               connector: async (Magic, opts) => {
                 const magic = new Magic(opts.apiKey);
 
-                if (!(await magic.user.isLoggedIn()))
+                if (!(await magic?.user?.isLoggedIn()))
                   await magic.auth.loginWithMagicLink({
                     email: prompt(
                       "What email do you use to log into Showtime?"

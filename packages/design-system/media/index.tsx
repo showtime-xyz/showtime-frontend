@@ -1,20 +1,21 @@
 import { useCallback } from "react";
 import { Pressable, useWindowDimensions } from "react-native";
+
 import Router from "next/router";
 // import { SvgUri } from "react-native-svg";
 import { useSWRConfig } from "swr";
 
-import { useRouter } from "app/navigation/use-router";
+import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { mixpanel } from "app/lib/mixpanel";
+import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
+import { NFT_DETAIL_API } from "app/utilities";
 
-import { View } from "design-system/view";
 import { Image } from "design-system/image";
-import { Video } from "design-system/video";
 import { Model } from "design-system/model";
 import { PinchToZoom } from "design-system/pinch-to-zoom";
-import { withMemoAndColorScheme } from "app/components/memo-with-theme";
-import { NFT_DETAIL_API } from "app/utilities";
+import { Video } from "design-system/video";
+import { View } from "design-system/view";
 
 const getImageUrl = (imgUrl: string, tokenAspectRatio: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
@@ -92,25 +93,23 @@ function Media({ item, numColumns, tw }: Props) {
         }}
         disabled={isNftModal}
       >
-        {/* {item?.mime_type === "image/svg+xml" && (
-          <SvgUri
-            width={
-              numColumns === 3
-                ? width / 3
-                : numColumns === 2
-                ? width / 2
-                : width
-            }
-            height={
-              numColumns === 3
-                ? width / 3
-                : numColumns === 2
-                ? width / 2
-                : width
-            }
-            uri={item?.token_img_url}
-          />
-        )} */}
+        {(item?.mime_type === "image/svg+xml" ||
+          item?.token_img_url.includes(".svg")) && (
+          <PinchToZoom>
+            <Image
+              source={{
+                uri: `${
+                  process.env.NEXT_PUBLIC_BACKEND_URL
+                }/v1/media/format/img?url=${encodeURIComponent(
+                  item?.token_img_url
+                )}`,
+              }}
+              tw={size}
+              blurhash={item?.blurhash}
+              resizeMode="cover"
+            />
+          </PinchToZoom>
+        )}
 
         {item?.mime_type?.startsWith("image") &&
           item?.mime_type !== "image/svg+xml" && (

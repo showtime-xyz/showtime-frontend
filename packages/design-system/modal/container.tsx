@@ -1,5 +1,7 @@
 import { Platform, StyleSheet, Modal as RNModal } from "react-native";
+
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+
 import { CONTAINER_TW } from "./constants";
 import type { ModalWrapperProps } from "./types";
 

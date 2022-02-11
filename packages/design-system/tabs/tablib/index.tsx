@@ -1,5 +1,4 @@
 //@ts-nocheck- Todo fix typings
-
 import React, {
   useContext,
   ForwardedRef,
@@ -21,8 +20,9 @@ import {
   FlatListProps,
   LayoutRectangle,
 } from "react-native";
-import PagerView from "react-native-pager-view";
+
 import { useIsFocused, useScrollToTop } from "@react-navigation/native";
+import PagerView from "react-native-pager-view";
 import Reanimated, {
   useSharedValue,
   useDerivedValue,
@@ -36,7 +36,11 @@ import Reanimated, {
   useAnimatedStyle,
   useAnimatedReaction,
 } from "react-native-reanimated";
+
+import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
+
 import { tw } from "design-system/tailwind";
+
 import {
   TabListProps,
   TabRootProps,
@@ -44,7 +48,6 @@ import {
   ExtendObject,
 } from "./types";
 import { usePageScrollHandler } from "./usePagerScrollHandler";
-import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -176,12 +179,7 @@ const List = (props: TabListProps) => {
   return null;
 };
 
-const ListImpl = ({
-  children,
-  style,
-  contentContainerStyle,
-  ...props
-}: TabListProps) => {
+const ListImpl = ({ children, style, ...props }: TabListProps) => {
   const { index, tabItemLayouts } = useContext(TabsContext);
   const tabListRef = useRef<Reanimated.ScrollView>();
 
@@ -242,16 +240,6 @@ const ListImpl = ({
       showsHorizontalScrollIndicator={false}
       horizontal
       style={styles}
-      contentContainerStyle={useMemo(
-        () =>
-          StyleSheet.flatten([
-            {
-              paddingHorizontal: 16,
-            },
-            contentContainerStyle,
-          ]),
-        [contentContainerStyle]
-      )}
       {...props}
     >
       {newChildren}

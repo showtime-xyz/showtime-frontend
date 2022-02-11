@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, Spinner } from "design-system";
+
 import { useWeb3 } from "app/hooks/use-web3";
 import { Relayer } from "app/lib/magic";
+
+import { View, Spinner } from "design-system";
 
 interface LoginContainerProps {
   loading?: boolean;

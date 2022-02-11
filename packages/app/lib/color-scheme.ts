@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { MMKV } from "react-native-mmkv";
 import { useColorScheme as useDeviceColorScheme } from "react-native";
+
+import { MMKV } from "react-native-mmkv";
 
 const storage = new MMKV();
 const COLOR_SCHEME_STRING = "color-scheme";

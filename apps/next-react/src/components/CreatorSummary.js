@@ -1,9 +1,11 @@
 import { useContext } from "react";
-import Link from "next/link";
-import { truncateWithEllipses } from "@/lib/utilities";
-import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
-import FollowButton from "./FollowButton";
+
 import AppContext from "@/context/app-context";
+import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
+import { truncateWithEllipses } from "@/lib/utilities";
+import Link from "next/link";
+
+import FollowButton from "./FollowButton";
 
 export default function CreatorSummary({
   name,

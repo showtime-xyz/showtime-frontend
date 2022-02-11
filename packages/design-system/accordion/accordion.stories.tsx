@@ -1,6 +1,7 @@
 import { Meta } from "@storybook/react";
-import { View } from "../view";
+
 import { Text } from "../text";
+import { View } from "../view";
 import { Accordion } from "./index";
 
 export default {

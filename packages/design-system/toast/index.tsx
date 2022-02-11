@@ -6,11 +6,12 @@ import {
   LayoutChangeEvent,
   StyleSheet,
 } from "react-native";
+
 import { MotiView, AnimatePresence } from "moti";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { Text } from "design-system/text";
 import { tw } from "design-system/tailwind";
+import { Text } from "design-system/text";
 
 type ShowParams = {
   message?: string;

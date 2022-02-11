@@ -1,4 +1,13 @@
+import { useState, useEffect } from "react";
 import { Share } from "react-native";
+
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { useReport } from "app/hooks/use-report";
+import { CHAIN_IDENTIFIERS } from "app/lib/constants";
+import { useRouter } from "app/navigation/use-router";
+import type { NFT } from "app/types";
+
+import { View, Button } from "design-system";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -7,27 +16,23 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "design-system/dropdown-menu";
-import { View, Button } from "design-system";
 import { MoreHorizontal } from "design-system/icon";
 import { tw } from "design-system/tailwind";
-import type { NFT } from "app/types";
-import { useCurrentUserId } from "app/hooks/use-current-user-id";
-import { useReport } from "app/hooks/use-report";
-import { useRouter } from "app/navigation/use-router";
-import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 
 type Props = {
   nft?: NFT;
 };
 
 function NFTDropdown({ nft }: Props) {
-  const userId = useCurrentUserId();
-  const isOwner = Boolean(
-    nft?.owner_id === userId ||
-      nft?.multiple_owners_list?.find((owner) => owner.profile_id === userId)
-  );
+  const { userAddress } = useCurrentUserAddress();
+  const [isOwner, setIsOwner] = useState(false);
+
   const { report } = useReport();
   const router = useRouter();
+
+  useEffect(() => {
+    setIsOwner(nft?.owner_address.toLowerCase() === userAddress.toLowerCase());
+  }, [nft, userAddress]);
 
   const tokenChainName = Object.keys(CHAIN_IDENTIFIERS).find(
     (key) => CHAIN_IDENTIFIERS[key] == nft?.chain_identifier
@@ -90,7 +95,7 @@ function NFTDropdown({ nft }: Props) {
 
         {isOwner && (
           <DropdownMenuItem
-            onSelect={() => {}}
+            onSelect={() => router.push(`/nft/${nft?.nft_id}/transfer`)}
             key="transfer"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >
@@ -103,7 +108,7 @@ function NFTDropdown({ nft }: Props) {
         {isOwner && (
           <DropdownMenuItem
             destructive
-            onSelect={() => router.push(`/burn?nftId=${nft.nft_id}`)}
+            onSelect={() => router.push(`/burn?nftId=${nft?.nft_id}`)}
             key="delete"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >

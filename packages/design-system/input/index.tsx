@@ -1,15 +1,16 @@
-import { useMemo } from "react";
+import { forwardRef, useMemo } from "react";
 import { Platform, TextInputProps } from "react-native";
+
 import { TextInput } from "dripsy";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
-import { Pressable, Props as PressableProps } from "../pressable-scale";
-import { View } from "../view";
-import { Text } from "../text";
-import { tw } from "../tailwind";
 import { useOnFocus, useIsDarkMode, useColorScheme } from "../hooks";
-import { colors } from "../tailwind/colors";
 import { Label } from "../label";
+import { Pressable, Props as PressableProps } from "../pressable-scale";
+import { tw } from "../tailwind";
+import { colors } from "../tailwind/colors";
+import { Text } from "../text";
+import { View } from "../view";
 
 type InputProps = {
   leftElement?: React.ReactElement;
@@ -53,7 +54,7 @@ export const useId = (id?: string) => {
   return newId;
 };
 
-export const Input = (props: InputProps) => {
+export const Input = forwardRef((props: InputProps, ref: any) => {
   const {
     leftElement,
     rightElement,
@@ -159,6 +160,7 @@ export const Input = (props: InputProps) => {
             web: isInvalid,
             default: undefined,
           })}
+          ref={ref}
         />
         {rightElement && (
           <View sx={{ marginLeft: "auto" }}>{rightElement}</View>
@@ -186,7 +188,7 @@ export const Input = (props: InputProps) => {
       ) : null}
     </View>
   );
-};
+});
 
 // This component adds appropriate padding to match our design system and increase the pressable area
 // Usage - with rightElement and leftElement

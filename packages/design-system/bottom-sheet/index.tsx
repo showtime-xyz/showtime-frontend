@@ -7,15 +7,17 @@ import {
   MutableRefObject,
   ComponentType,
 } from "react";
+
 import {
   BottomSheetModal,
   BottomSheetBackdrop,
   BottomSheetHandleProps,
   BottomSheetTextInput as BottomSheetInput,
 } from "@gorhom/bottom-sheet";
-import { View } from "design-system/view";
+
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
+import { View } from "design-system/view";
 
 type BottomSheetProps = {
   children?: React.ReactElement;
@@ -23,10 +25,18 @@ type BottomSheetProps = {
   visible?: boolean;
   onDismiss?: () => void;
   snapPoints?: string[];
+  bodyContentTW?: TW;
 };
 
 export const BottomSheet = (props: BottomSheetProps) => {
-  const { children, visible, handleComponent, onDismiss, snapPoints } = props;
+  const {
+    children,
+    visible,
+    handleComponent,
+    onDismiss,
+    snapPoints,
+    bodyContentTW = "",
+  } = props;
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
@@ -66,7 +76,7 @@ export const BottomSheet = (props: BottomSheetProps) => {
       )}
       snapPoints={snapPoints ?? defaultSnapPoints}
     >
-      <View tw="flex-1 pt-6 px-4">{children}</View>
+      <View tw={["flex-1 pt-6 px-4", bodyContentTW]} />
     </BottomSheetModal>
   );
 };

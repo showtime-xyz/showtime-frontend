@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
+
 import { Web3Provider as EthersWeb3Provider } from "@ethersproject/providers";
+
 import { Web3Context } from "app/context/web3-context";
 import { magic, Relayer } from "app/lib/magic";
 
@@ -24,7 +26,7 @@ export function Web3Provider({ children }: Web3ProviderProps) {
   );
 
   useEffect(() => {
-    magic.user.isLoggedIn().then((isLoggedIn) => {
+    magic?.user?.isLoggedIn().then((isLoggedIn) => {
       if (magic.rpcProvider && isLoggedIn) {
         const provider = new EthersWeb3Provider(magic.rpcProvider);
         setWeb3(provider);

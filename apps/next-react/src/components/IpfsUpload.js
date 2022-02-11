@@ -1,14 +1,15 @@
 import { MINT_FORMATS, MINT_TYPES } from "@/lib/constants";
-import HelpIcon from "./Icons/HelpIcon";
-import XIcon from "./Icons/XIcon";
-import ImageIcon from "./Icons/ImageIcon";
-import VideoIcon from "./Icons/VideoIcon";
-import AudioIcon from "./Icons/AudioIcon";
-import TextIcon from "./Icons/TextIcon";
-import FileIcon from "./Icons/FileIcon";
-import CheckIcon from "./Icons/CheckIcon";
-import OrbitIcon from "./Icons/OrbitIcon";
 import Tippy from "@tippyjs/react";
+
+import AudioIcon from "./Icons/AudioIcon";
+import CheckIcon from "./Icons/CheckIcon";
+import FileIcon from "./Icons/FileIcon";
+import HelpIcon from "./Icons/HelpIcon";
+import ImageIcon from "./Icons/ImageIcon";
+import OrbitIcon from "./Icons/OrbitIcon";
+import TextIcon from "./Icons/TextIcon";
+import VideoIcon from "./Icons/VideoIcon";
+import XIcon from "./Icons/XIcon";
 
 const FILE_TOOLTIP = {
   image: "Image",

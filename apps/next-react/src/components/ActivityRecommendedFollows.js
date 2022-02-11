@@ -1,8 +1,10 @@
 import { useContext } from "react";
+
 import AppContext from "@/context/app-context";
-import RecommendedFollowItem from "./RecommendedFollowItem";
-import mixpanel from "mixpanel-browser";
 import axios from "@/lib/axios";
+import mixpanel from "mixpanel-browser";
+
+import RecommendedFollowItem from "./RecommendedFollowItem";
 
 export default function ActivityRecommendedFollows() {
   const context = useContext(AppContext);

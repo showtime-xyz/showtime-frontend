@@ -1,10 +1,11 @@
 import { useState, useContext, useEffect } from "react";
+
 import LeaderboardItemV2 from "@/components/LeaderboardItemV2";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import AppContext from "@/context/app-context";
-import mixpanel from "mixpanel-browser";
 import axios from "@/lib/axios";
 import { ArrowDownIcon, PlusIcon } from "@heroicons/react/solid";
+import mixpanel from "mixpanel-browser";
 
 const TrendingCreators = ({
   shownLeaderboardItems,

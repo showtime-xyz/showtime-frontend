@@ -1,6 +1,7 @@
-import Layout from "@/components/layout";
-import MintModal from "@/components/UI/Modals/MintModal";
 import { useState } from "react";
+
+import MintModal from "@/components/UI/Modals/MintModal";
+import Layout from "@/components/layout";
 
 const ModalTest = () => {
   const [mintModalOpen, setMintModalOpen] = useState(true);

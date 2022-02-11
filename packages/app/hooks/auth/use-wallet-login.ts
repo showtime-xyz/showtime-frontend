@@ -1,11 +1,14 @@
 import { useCallback, useEffect } from "react";
-import { mixpanel } from "app/lib/mixpanel";
-import { useWalletConnect } from "@walletconnect/react-native-dapp";
+
 import { convertUtf8ToHex } from "@walletconnect/utils";
-import { useAuth } from "./use-auth";
-import { useWalletLoginState } from "./use-wallet-login-state";
-import { useNonce } from "./use-nonce";
+
+import { mixpanel } from "app/lib/mixpanel";
+import { useWalletConnect } from "app/lib/walletconnect";
+
 import { useStableCallback } from "../use-stable-callback";
+import { useAuth } from "./use-auth";
+import { useNonce } from "./use-nonce";
+import { useWalletLoginState } from "./use-wallet-login-state";
 
 const LOGIN_WALLET_ENDPOINT = "login_wallet";
 

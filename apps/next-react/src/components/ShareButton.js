@@ -1,8 +1,10 @@
-import mixpanel from "mixpanel-browser";
-import copy from "copy-to-clipboard";
-import Tippy from "@tippyjs/react";
 import { useState, useContext } from "react";
+
 import AppContext from "@/context/app-context";
+import Tippy from "@tippyjs/react";
+import copy from "copy-to-clipboard";
+import mixpanel from "mixpanel-browser";
+
 import ShareIcon from "./Icons/ShareIcon";
 
 const ShareButton = ({ url, type }) => {

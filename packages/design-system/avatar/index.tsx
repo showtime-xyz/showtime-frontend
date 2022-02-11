@@ -1,6 +1,7 @@
 import { ReactNode, useMemo } from "react";
-import { View } from "../view";
+
 import { Image } from "../image";
+import { View } from "../view";
 import { CONTAINER_TW, IMAGE_TW, DEFAULT_AVATAR_PIC } from "./constants";
 
 export type AvatarProps = {

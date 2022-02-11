@@ -1,26 +1,28 @@
 import { Platform } from "react-native";
-import useUnmountSignal from "use-unmount-signal";
-import useSWR from "swr";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, Pressable, ScrollView } from "design-system";
-import { Media } from "design-system/media";
-import { createParam } from "app/navigation/use-param";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import useSWR from "swr";
+import useUnmountSignal from "use-unmount-signal";
+
+import { NFTDropdown } from "app/components/nft-dropdown";
 import { axios } from "app/lib/axios";
-import { Close } from "design-system/icon";
+import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
-import { tw } from "design-system/tailwind";
-import { PinchToZoom } from "design-system/pinch-to-zoom";
-import { Social } from "design-system/card/social";
-import { Collection } from "design-system/card/rows/collection";
-import { Title } from "design-system/card/rows/title";
-import { Description } from "design-system/card/rows/description";
 // import { Comments } from "design-system/comments";
 import type { NFT } from "app/types";
-import { NFTDropdown } from "app/components/nft-dropdown";
-import { Owner } from "design-system/card/rows/owner";
-import { LikedBy } from "design-system/liked-by";
 import { NFT_DETAIL_API } from "app/utilities";
+
+import { View, Pressable, ScrollView } from "design-system";
+import { Collection } from "design-system/card/rows/collection";
+import { Description } from "design-system/card/rows/description";
+import { Owner } from "design-system/card/rows/owner";
+import { Title } from "design-system/card/rows/title";
+import { Social } from "design-system/card/social";
+import { Close } from "design-system/icon";
+import { LikedBy } from "design-system/liked-by";
+import { Media } from "design-system/media";
+import { PinchToZoom } from "design-system/pinch-to-zoom";
+import { tw } from "design-system/tailwind";
 
 type Query = {
   id: string;

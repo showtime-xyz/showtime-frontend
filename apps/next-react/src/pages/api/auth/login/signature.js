@@ -1,9 +1,9 @@
-import Iron from "@hapi/iron";
-import CookieService from "@/lib/cookie";
-import backend from "@/lib/backend";
-import { verifyMessage } from "ethers/lib/utils";
 import handler, { middleware } from "@/lib/api-handler";
+import backend from "@/lib/backend";
+import CookieService from "@/lib/cookie";
+import Iron from "@hapi/iron";
 import { captureException } from "@sentry/nextjs";
+import { verifyMessage } from "ethers/lib/utils";
 
 export default handler()
   .use(middleware.guest)

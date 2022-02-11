@@ -1,4 +1,5 @@
 import { ComponentProps } from "react";
+
 import { Video as ExpoVideo } from "expo-av";
 
 import type { TW } from "design-system/tailwind/types";

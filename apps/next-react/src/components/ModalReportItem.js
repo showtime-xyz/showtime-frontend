@@ -1,10 +1,12 @@
 import { useState } from "react";
+
+import axios from "@/lib/axios";
 import mixpanel from "mixpanel-browser";
+
 import CloseButton from "./CloseButton";
 import ScrollableModal from "./ScrollableModal";
-import axios from "@/lib/axios";
-import GreenButton from "./UI/Buttons/GreenButton";
 import GhostButton from "./UI/Buttons/GhostButton";
+import GreenButton from "./UI/Buttons/GreenButton";
 
 export default function Modal({
   isOpen,

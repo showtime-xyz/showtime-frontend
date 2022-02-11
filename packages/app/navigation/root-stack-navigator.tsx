@@ -1,17 +1,21 @@
 import { Platform } from "react-native";
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { screenOptions } from "app/navigation/navigator-screen-options";
 import { CreateScreen } from "app/screens/create";
-import { DeleteScreen } from "../screens/delete";
+import { DeleteScreen } from "app/screens/delete";
 import { LoginScreen } from "app/screens/login";
 import { NftScreen } from "app/screens/nft";
 import { ProfileScreen } from "app/screens/profile";
-import { SettingsScreen } from "app/screens/settings";
-import { NextTabNavigator } from "./next-tab-navigator";
-import { screenOptions } from "app/navigation/navigator-screen-options";
-import { useIsDarkMode } from "design-system/hooks";
 import { SearchScreen } from "app/screens/search";
+import { SettingsScreen } from "app/screens/settings";
+import { TransferNftScreen } from "app/screens/transfer-nft";
+
+import { useIsDarkMode } from "design-system/hooks";
+
+import { NextTabNavigator } from "./next-tab-navigator";
 
 const Stack = createNativeStackNavigator();
 
@@ -35,7 +39,13 @@ export function RootStackNavigator() {
       >
         <Stack.Screen name="profile" component={ProfileScreen} />
         <Stack.Screen name="settings" component={SettingsScreen} />
-        <Stack.Screen name="search" component={SearchScreen} />
+        <Stack.Screen
+          name="search"
+          component={SearchScreen}
+          options={{
+            animation: "none",
+          }}
+        />
       </Stack.Group>
 
       {/* Modals */}
@@ -49,6 +59,7 @@ export function RootStackNavigator() {
       >
         <Stack.Screen name="login" component={LoginScreen} />
         <Stack.Screen name="nft" component={NftScreen} />
+        <Stack.Screen name="transferNft" component={TransferNftScreen} />
         <Stack.Screen name="create" component={CreateScreen} />
         <Stack.Screen name="burn" component={DeleteScreen} />
       </Stack.Group>

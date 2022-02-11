@@ -1,4 +1,5 @@
 import type { ComponentProps, ComponentType } from "react";
+
 import NextLink from "next/link";
 
 type Props = {

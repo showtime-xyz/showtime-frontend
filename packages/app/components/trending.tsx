@@ -1,6 +1,10 @@
 import { Suspense, useCallback, useMemo, useState } from "react";
 import { Dimensions, Platform } from "react-native";
+
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+
+import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
+import { TAB_LIST_HEIGHT } from "app/lib/constants";
 
 import {
   View,
@@ -13,11 +17,8 @@ import {
   SegmentedControl,
   Media,
 } from "design-system";
-import { tw } from "design-system/tailwind";
-import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { cardSize } from "design-system/creator-preview";
-
-const TAB_LIST_HEIGHT = 64;
+import { tw } from "design-system/tailwind";
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
   const tabBarHeight = useBottomTabBarHeight();

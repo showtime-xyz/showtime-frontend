@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from "react";
-import _ from "lodash";
+
 import AppContext from "@/context/app-context";
 import { XIcon } from "@heroicons/react/solid";
+import _ from "lodash";
 
 const RemoveRecommendationButton = ({ item, removeRecommendation }) => {
   const context = useContext(AppContext);

@@ -1,11 +1,13 @@
 import { Platform } from "react-native";
+
 import dynamic from "next/dynamic";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import createStackNavigator from "app/navigation/create-stack-navigator";
-import { MarketplaceScreen } from "app/screens/marketplace";
-import { MarketplaceStackParams } from "app/navigation/types";
 import { screenOptions } from "app/navigation/navigator-screen-options";
+import { MarketplaceStackParams } from "app/navigation/types";
+import { MarketplaceScreen } from "app/screens/marketplace";
+
 import { useIsDarkMode } from "design-system/hooks";
 
 const LoginScreen = dynamic<JSX.Element>(() =>

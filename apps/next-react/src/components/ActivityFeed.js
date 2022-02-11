@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+
 import ActivityCard from "./ActivityCard";
 
 const ActivityFeed = ({
