@@ -1,39 +1,38 @@
 import { useMemo } from "react";
 import { StyleSheet } from "react-native";
+
 import { formatDistanceToNowStrict } from "date-fns";
-import { View, Image, Text } from "design-system";
-import { VerificationBadge } from "design-system/verification-badge";
-import { HeartFilled, MessageFilled } from "design-system/icon";
+
+import { Avatar } from "design-system/avatar";
 import { TextButton } from "design-system/button";
-import { DEFAULT_PROFILE_PIC } from "../../lib/constants";
-import type { NFT } from "app/types";
+import { HeartFilled, MessageFilled } from "design-system/icon";
+import { Text } from "design-system/text";
+import { VerificationBadge } from "design-system/verification-badge";
+import { View } from "design-system/view";
 
-const getProfileImageUrl = (imgUrl: string) => {
-  if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
-    imgUrl = imgUrl.split("=")[0] + "=s112";
-  }
-  return imgUrl;
-};
-
-interface CommentRowProps {
+interface MessageRowProps {
+  username?: string;
+  userAvatar?: string;
+  userVerified?: boolean | 0 | 1;
   hasParent?: boolean;
-  hasComments?: boolean;
+  hasReplies?: boolean;
   content?: string;
   likeCount?: number;
-  commentCount?: number;
+  replayCount?: number;
   createdAt?: string;
-  nft?: NFT;
 }
 
-export function CommentRow({
+export function MessageRow({
+  username,
+  userAvatar,
+  userVerified = false,
   content = "",
   likeCount = 0,
-  commentCount = 0,
+  replayCount = 0,
   createdAt,
   hasParent,
-  hasComments,
-  nft,
-}: CommentRowProps) {
+  hasReplies,
+}: MessageRowProps) {
   //#region variables
   const createdAtText = useMemo(
     () =>
@@ -51,17 +50,18 @@ export function CommentRow({
     () => [
       "absolute",
       "left-1/2",
-      hasComments ? "right--1/2" : "right-1/2",
-      hasComments ? "top-4 bottom-[-16px]" : "top-[-16px] left--5 h-[28px]",
+      hasReplies ? "right--1/2" : "right-1/2",
+      hasReplies ? "top-4 bottom-[-16px]" : "top-[-16px] left--5 h-[28px]",
       "border-[#27272A]",
     ],
-    [hasComments]
+    [hasReplies]
   );
   const nestedLineStyle = useMemo(
     () => [
       styles.nestedLine,
       hasParent
         ? {
+            borderBottomWidth: 1,
             borderBottomLeftRadius: 12,
           }
         : undefined,
@@ -69,23 +69,14 @@ export function CommentRow({
     [hasParent]
   );
   //#region
-
-  if (!nft) {
-    return null;
-  }
   return (
     <View tw="flex flex-row p-4 bg-white dark:bg-black">
       {hasParent && <View tw="ml-8" collapsable={true} />}
       <View tw="items-center">
-        {(hasComments || hasParent) && (
+        {(hasReplies || hasParent) && (
           <View tw={nestedLineTW} style={nestedLineStyle} />
         )}
-        <Image
-          tw="w-[24px] h-[24px] rounded-full"
-          source={{
-            uri: getProfileImageUrl(nft?.owner_img_url ?? DEFAULT_PROFILE_PIC),
-          }}
-        />
+        <Avatar url={userAvatar} size={24} />
       </View>
       <View tw="flex-1 ml-2">
         <View tw="mb-3 h-[12px] flex-row items-center">
@@ -93,9 +84,9 @@ export function CommentRow({
             sx={{ fontSize: 13, lineHeight: 15 }}
             tw="text-gray-900 dark:text-white font-semibold"
           >
-            @{nft.creator_username}
+            @{username}
           </Text>
-          {nft.creator_verified ? (
+          {userVerified ? (
             <VerificationBadge style={{ marginLeft: 4 }} size={12} />
           ) : null}
         </View>
@@ -112,7 +103,7 @@ export function CommentRow({
             <HeartFilled /> {`${likeCount}`}
           </TextButton>
           <TextButton tw="px-2">
-            <MessageFilled /> {`${commentCount}`}
+            <MessageFilled /> {`${replayCount}`}
           </TextButton>
           <View tw="flex-1 flex-row mr--4 items-center justify-end">
             {createdAtText && (
@@ -131,6 +122,7 @@ export function CommentRow({
 const styles = StyleSheet.create({
   nestedLine: {
     borderLeftWidth: 1,
-    borderBottomWidth: 1,
   },
 });
+
+// export const MessageRow = () => <Text>Test</Text>;

@@ -1,12 +1,12 @@
-import { TextButton } from "design-system/button";
 import { View } from "design-system";
+import { TextButton } from "design-system/button";
 
-interface CommentMoreProps {
+interface MessageMoreProps {
   count?: number;
   onPress?: () => void;
 }
 
-export function CommentMore({ count = 0, onPress }: CommentMoreProps) {
+export function MessageMore({ count = 0, onPress }: MessageMoreProps) {
   if (count === 0) {
     return null;
   }
