@@ -1,6 +1,7 @@
 {
   "bracketSpacing": true,
   "importOrder": [
+    "./shim",
     "^(react|react-native)$",
     "<THIRD_PARTY_MODULES>",
     "^app/(.*)$",

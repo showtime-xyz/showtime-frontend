@@ -93,25 +93,23 @@ function Media({ item, numColumns, tw }: Props) {
         }}
         disabled={isNftModal}
       >
-        {/* {item?.mime_type === "image/svg+xml" && (
-          <SvgUri
-            width={
-              numColumns === 3
-                ? width / 3
-                : numColumns === 2
-                ? width / 2
-                : width
-            }
-            height={
-              numColumns === 3
-                ? width / 3
-                : numColumns === 2
-                ? width / 2
-                : width
-            }
-            uri={item?.token_img_url}
-          />
-        )} */}
+        {(item?.mime_type === "image/svg+xml" ||
+          item?.token_img_url.includes(".svg")) && (
+          <PinchToZoom>
+            <Image
+              source={{
+                uri: `${
+                  process.env.NEXT_PUBLIC_BACKEND_URL
+                }/v1/media/format/img?url=${encodeURIComponent(
+                  item?.token_img_url
+                )}`,
+              }}
+              tw={size}
+              blurhash={item?.blurhash}
+              resizeMode="cover"
+            />
+          </PinchToZoom>
+        )}
 
         {item?.mime_type?.startsWith("image") &&
           item?.mime_type !== "image/svg+xml" && (
