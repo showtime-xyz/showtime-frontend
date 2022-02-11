@@ -12,7 +12,8 @@ const customNodeOptions = {
 
 if (isMumbai) {
   console.log("Magic network is connecting to Mumbai testnet");
-  customNodeOptions.rpcUrl = "https://rpc-mumbai.maticvigil.com/";
+  customNodeOptions.rpcUrl =
+    "https://polygon-mumbai.g.alchemy.com/v2/kh3WGQQaRugQsUXXLN8LkOBdIQzh86yL";
   customNodeOptions.chainId = 80001;
 }
 
