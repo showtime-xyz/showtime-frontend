@@ -62,7 +62,24 @@ const getWeb3Modal = async ({ withMagic = false } = {}) => {
               },
               package: Magic,
               connector: async (Magic, opts) => {
-                const magic = new Magic(opts.apiKey);
+                const isMumbai = process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai";
+
+                // Default to polygon chain
+                const customNodeOptions = {
+                  rpcUrl: "https://rpc-mainnet.maticvigil.com/",
+                  chainId: 137,
+                };
+
+                if (isMumbai) {
+                  console.log("Magic network is connecting to Mumbai testnet");
+                  customNodeOptions.rpcUrl =
+                    "https://rpc-mumbai.maticvigil.com/";
+                  customNodeOptions.chainId = 80001;
+                }
+
+                const magic = new Magic(opts.apiKey, {
+                  network: customNodeOptions,
+                });
 
                 if (!(await magic.user.isLoggedIn()))
                   await magic.auth.loginWithMagicLink({

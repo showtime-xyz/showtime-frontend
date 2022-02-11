@@ -2,13 +2,27 @@ import handler, { middleware } from "@/lib/api-handler";
 import backend from "@/lib/backend";
 import { Magic } from "@magic-sdk/admin";
 
+const isMumbai = process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai";
+
+// Default to polygon chain
+const customNodeOptions = {
+  rpcUrl: "https://rpc-mainnet.maticvigil.com/",
+  chainId: 137,
+};
+
+if (isMumbai) {
+  console.log("Magic network is connecting to Mumbai testnet");
+  customNodeOptions.rpcUrl = "https://rpc-mumbai.maticvigil.com/";
+  customNodeOptions.chainId = 80001;
+}
+
 export default handler()
   .use(middleware.auth)
   .post(async ({ user, headers: { authorization } }, res) => {
     // exchange the did from Magic for some user data
-    const new_user = await new Magic(
-      process.env.MAGIC_SECRET_KEY
-    ).users.getMetadataByToken(authorization.split("Bearer").pop().trim());
+    const new_user = await new Magic(process.env.MAGIC_SECRET_KEY, {
+      network: customNodeOptions,
+    }).users.getMetadataByToken(authorization.split("Bearer").pop().trim());
 
     await backend.post(
       "/v1/addwallet",

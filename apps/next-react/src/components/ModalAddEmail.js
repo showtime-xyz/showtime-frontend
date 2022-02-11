@@ -20,9 +20,23 @@ const ModalAddEmail = ({ isOpen, setEmailModalOpen, setHasEmailAddress }) => {
 
     // the magic code
     try {
-      const did = await new Magic(
-        process.env.NEXT_PUBLIC_MAGIC_PUB_KEY
-      ).auth.loginWithMagicLink({
+      const isMumbai = process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai";
+
+      // Default to polygon chain
+      const customNodeOptions = {
+        rpcUrl: "https://rpc-mainnet.maticvigil.com/",
+        chainId: 137,
+      };
+
+      if (isMumbai) {
+        console.log("Magic network is connecting to Mumbai testnet");
+        customNodeOptions.rpcUrl = "https://rpc-mumbai.maticvigil.com/";
+        customNodeOptions.chainId = 80001;
+      }
+
+      const did = await new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY, {
+        network: customNodeOptions,
+      }).auth.loginWithMagicLink({
         email: elements.email.value,
       });
 
