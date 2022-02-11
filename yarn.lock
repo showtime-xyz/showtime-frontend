@@ -1495,6 +1495,11 @@
     events "^3.0.0"
     promise "^8.0.3"
 
+"@builder.io/partytown@^0.3.4":
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@builder.io/partytown/-/partytown-0.3.4.tgz#c588841d4af67171aa5dc1a914a6d0b6f61bbd74"
+  integrity sha512-lKFoVDoP/kiR7O4gjHFGnMKTIpJIvXoc0S+AcL0683NUUVWTMLy299lyB/0ClxNHVVqG+ebJGkzc/vXlP6sONw==
+
 "@capsizecss/core@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@capsizecss/core/-/core-3.0.0.tgz#81b2fb222bd9716d211e4ddd0dc9cc42f71b4f37"

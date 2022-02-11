@@ -87,7 +87,7 @@ export const SettingsEmailSlot = (props: EmailSlotProps) => {
 
   const getCurrentMagicUser = useCallback(async () => {
     if (isMagic) {
-      const magicMetaData = await magic.user.getMetadata();
+      const magicMetaData = await magic?.user?.getMetadata();
       const currentEmail = magicMetaData.email;
       const currentMagicAddress = magicMetaData.publicAddress;
       const isMatchingMagic =

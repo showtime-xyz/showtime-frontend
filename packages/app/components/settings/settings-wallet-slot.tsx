@@ -1,10 +1,10 @@
 import { useContext } from "react";
 
-import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import Animated, { FadeIn } from "react-native-reanimated";
 
 import { AppContext } from "app/context/app-context";
 import { formatAddressShort } from "app/lib/utilities";
+import { useWalletConnect } from "app/lib/walletconnect";
 import { WalletAddressesExcludingEmailV2 } from "app/types";
 
 import { View, Text, Button, Skeleton } from "design-system";

@@ -1,12 +1,12 @@
 import { useEffect, useMemo, ReactNode } from "react";
 
-import LogRocket from "@logrocket/react-native";
 import useSWR from "swr";
 import useUnmountSignal from "use-unmount-signal";
 
 import { UserContext } from "app/context/user-context";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { axios } from "app/lib/axios";
+import LogRocket from "app/lib/logrocket";
 import { mixpanel } from "app/lib/mixpanel";
 import { registerForPushNotificationsAsync } from "app/lib/register-push-notification";
 import { rudder } from "app/lib/rudderstack";

@@ -1,3 +1,5 @@
+import { isServer } from "app/lib/is-server";
+
 export interface Analytics {
   page: (url: string) => void;
   track: (
@@ -13,6 +15,8 @@ export interface AnalyticsWindow extends Window {
   rudderanalytics: Analytics;
 }
 
-const rudder = (window as Window as AnalyticsWindow).rudderanalytics;
+const rudder = isServer
+  ? {}
+  : (window as Window as AnalyticsWindow).rudderanalytics;
 
 export { rudder };

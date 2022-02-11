@@ -1,9 +1,9 @@
 import { useCallback, useEffect } from "react";
 
-import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { convertUtf8ToHex } from "@walletconnect/utils";
 
 import { mixpanel } from "app/lib/mixpanel";
+import { useWalletConnect } from "app/lib/walletconnect";
 
 import { useStableCallback } from "../use-stable-callback";
 import { useAuth } from "./use-auth";
