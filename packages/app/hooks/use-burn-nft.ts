@@ -1,11 +1,11 @@
 import { useContext, useEffect, useReducer, useState } from "react";
 import { Alert } from "react-native";
 
-import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { ethers } from "ethers";
 
 import minterAbi from "app/abi/ShowtimeMT.json";
 import { AppContext } from "app/context/app-context";
+import { useWalletConnect } from "app/lib/walletconnect";
 import { getBiconomy } from "app/utilities";
 
 import { useUser } from "./use-user";

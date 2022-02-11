@@ -26,7 +26,7 @@ export function Web3Provider({ children }: Web3ProviderProps) {
   );
 
   useEffect(() => {
-    magic.user.isLoggedIn().then((isLoggedIn) => {
+    magic?.user?.isLoggedIn().then((isLoggedIn) => {
       if (magic.rpcProvider && isLoggedIn) {
         const provider = new EthersWeb3Provider(magic.rpcProvider);
         setWeb3(provider);
