@@ -44,34 +44,4 @@ export default {
   web: {
     favicon: "./assets/favicon.png",
   },
-  plugins: [
-    "@config-plugins/detox",
-    [
-      "react-native-vision-camera",
-      {
-        cameraPermissionText: "$(PRODUCT_NAME) needs access to your camera.",
-        enableMicrophonePermission: true,
-        microphonePermissionText:
-          "$(PRODUCT_NAME) needs access to your microphone.",
-        disableFrameProcessors: true,
-      },
-    ],
-    [
-      "expo-image-picker",
-      {
-        photosPermission: "$(PRODUCT_NAME) needs access to your photos.",
-      },
-    ],
-    ["./plugins/with-compile-sdk-version.js", 31],
-    "./plugins/react-native-mmkv-plugin.js",
-    [
-      "./plugins/with-pick-first.js",
-      {
-        paths: ["lib/**/libreactnativejni.so"],
-      },
-    ],
-    "expo-community-flipper",
-    "./plugins/with-android-manifest.js",
-    "./plugins/with-hermes-ios-m1-workaround.js",
-  ],
 };
