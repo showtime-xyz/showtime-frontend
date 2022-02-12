@@ -19482,10 +19482,10 @@ react-native-get-random-values@^1.7.2:
   dependencies:
     fast-base64-decode "^1.0.0"
 
-react-native-ios-context-menu@^1.3.0, react-native-ios-context-menu@^1.7.4:
-  version "1.7.4"
-  resolved "https://registry.yarnpkg.com/react-native-ios-context-menu/-/react-native-ios-context-menu-1.7.4.tgz#37f3d32b292eef43f6126d9d708fafc471b1f442"
-  integrity sha512-qOu6VFVP2KH92HuXSzy6y86pKSfrkovJuWwXVnzc5PK6m40+H5+Ah8moUr5/yQJSD3FwlmqfKhyDMFO5MSlaBg==
+react-native-ios-context-menu@1.3.0, react-native-ios-context-menu@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-ios-context-menu/-/react-native-ios-context-menu-1.3.0.tgz#b877cbe9594afccfeb2f1659ee4aae829b986fc5"
+  integrity sha512-7Af/5T9LGwdw+127UeiKrdCzlT247Puunts6pQ7HuKSW/33ZVJpxshDYjPiKEDYL94g5TDlIEsI93RC59x1Slw==
 
 react-native-level-fs@^3.0.0:
   version "3.0.1"
