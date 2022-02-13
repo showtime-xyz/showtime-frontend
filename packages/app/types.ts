@@ -5,7 +5,7 @@ export type NFT = {
   like_count: number;
   token_name: string;
   token_description: string;
-  token_img_url: string;
+  token_img_url?: string;
   token_img_original_url: string;
   token_has_video: number;
   token_animation_url?: any;
@@ -23,7 +23,7 @@ export type NFT = {
   multiple_owners: number;
   owner_id: number;
   owner_name: string;
-  owner_address: string;
+  owner_address?: string;
   owner_img_url?: string;
   token_creator_followers_only: number;
   creator_username?: string;

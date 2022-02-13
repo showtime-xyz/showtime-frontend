@@ -17,7 +17,7 @@ import { PinchToZoom } from "design-system/pinch-to-zoom";
 import { Video } from "design-system/video";
 import { View } from "design-system/view";
 
-const getImageUrl = (imgUrl: string, tokenAspectRatio: string) => {
+const getImageUrl = (tokenAspectRatio: string, imgUrl?: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
     if (tokenAspectRatio && Number(tokenAspectRatio) > 1) {
       imgUrl = imgUrl.split("=")[0] + "=h660";
@@ -28,7 +28,7 @@ const getImageUrl = (imgUrl: string, tokenAspectRatio: string) => {
   return imgUrl;
 };
 
-const getImageUrlLarge = (imgUrl: string, tokenAspectRatio: string) => {
+const getImageUrlLarge = (tokenAspectRatio: string, imgUrl?: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
     if (tokenAspectRatio && Number(tokenAspectRatio) > 1)
       imgUrl = imgUrl.split("=")[0] + "=h1328";
@@ -46,9 +46,30 @@ type Props = {
 
 function Media({ item, numColumns, tw }: Props) {
   const router = useRouter();
-  const { width } = useWindowDimensions();
   const isNftModal = router?.pathname.includes("/nft");
   const { mutate } = useSWRConfig();
+
+  const imageUri =
+    numColumns === 1
+      ? getImageUrlLarge(
+          item?.token_aspect_ratio,
+          item?.still_preview_url
+            ? item?.still_preview_url
+            : item?.token_img_url
+        )
+      : getImageUrl(
+          item?.token_aspect_ratio,
+          item?.still_preview_url
+            ? item?.still_preview_url
+            : item?.token_img_url
+        );
+
+  const videoUri =
+    item?.animation_preview_url && numColumns > 1
+      ? item?.animation_preview_url
+      : item?.source_url
+      ? item?.source_url
+      : item?.token_animation_url;
 
   const openNFT = useCallback(
     (id: string) => {
@@ -93,60 +114,40 @@ function Media({ item, numColumns, tw }: Props) {
         }}
         disabled={isNftModal}
       >
-        {(item?.mime_type === "image/svg+xml" ||
-          item?.token_img_url.includes(".svg")) && (
+        {imageUri &&
+        (item?.mime_type === "image/svg+xml" || imageUri.includes(".svg")) ? (
           <PinchToZoom>
             <Image
               source={{
                 uri: `${
                   process.env.NEXT_PUBLIC_BACKEND_URL
-                }/v1/media/format/img?url=${encodeURIComponent(
-                  item?.token_img_url
-                )}`,
+                }/v1/media/format/img?url=${encodeURIComponent(imageUri)}`,
               }}
               tw={size}
               blurhash={item?.blurhash}
               resizeMode="cover"
             />
           </PinchToZoom>
-        )}
+        ) : null}
 
         {item?.mime_type?.startsWith("image") &&
-          item?.mime_type !== "image/svg+xml" && (
-            <PinchToZoom>
-              <Image
-                source={{
-                  uri:
-                    numColumns === 1
-                      ? getImageUrlLarge(
-                          item?.still_preview_url
-                            ? item?.still_preview_url
-                            : item?.token_img_url,
-                          item?.token_aspect_ratio
-                        )
-                      : getImageUrl(
-                          item?.still_preview_url
-                            ? item?.still_preview_url
-                            : item?.token_img_url,
-                          item?.token_aspect_ratio
-                        ),
-                }}
-                tw={size}
-                blurhash={item?.blurhash}
-                resizeMode="cover"
-              />
-            </PinchToZoom>
-          )}
+        item?.mime_type !== "image/svg+xml" ? (
+          <PinchToZoom>
+            <Image
+              source={{
+                uri: imageUri,
+              }}
+              tw={size}
+              blurhash={item?.blurhash}
+              resizeMode="cover"
+            />
+          </PinchToZoom>
+        ) : null}
 
-        {item?.mime_type?.startsWith("video") && (
+        {item?.mime_type?.startsWith("video") ? (
           <Video
             source={{
-              uri:
-                item?.animation_preview_url && numColumns > 1
-                  ? item?.animation_preview_url
-                  : item?.source_url
-                  ? item?.source_url
-                  : item?.token_animation_url,
+              uri: videoUri,
             }}
             posterSource={{
               uri: item?.still_preview_url,
@@ -154,9 +155,9 @@ function Media({ item, numColumns, tw }: Props) {
             tw={size}
             resizeMode="cover"
           />
-        )}
+        ) : null}
 
-        {item?.mime_type?.startsWith("model") && (
+        {item?.mime_type?.startsWith("model") ? (
           <View tw={size}>
             <Model
               url={item?.source_url}
@@ -165,7 +166,7 @@ function Media({ item, numColumns, tw }: Props) {
               blurhash={item?.blurhash}
             />
           </View>
-        )}
+        ) : null}
       </Pressable>
     </View>
   );
