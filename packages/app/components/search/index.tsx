@@ -121,7 +121,7 @@ const SearchItem = ({ item }: { item: SearchResponseItem }) => {
                 {item.username ? (
                   <>@{item.username}</>
                 ) : (
-                  <>{formatAddressShort(item.wallet_address)}</>
+                  <>{formatAddressShort(item.address0)}</>
                 )}
               </Text>
               {Boolean(item.verified) && (
