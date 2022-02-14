@@ -1,4 +1,5 @@
 import {
+  memo,
   Suspense,
   useCallback,
   useMemo,
@@ -8,6 +9,7 @@ import {
 } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
+import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import reactStringReplace from "react-string-replace";
 
 import { ProfileDropdown } from "app/components/profile-dropdown";
@@ -23,18 +25,31 @@ import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import { Link } from "app/navigation/link";
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
 import { View, Spinner, Text, Skeleton, Select, Button } from "design-system";
+import { BottomSheet } from "design-system/bottom-sheet";
 import { useColorScheme } from "design-system/hooks";
 import { Image } from "design-system/image";
 import { Media } from "design-system/media";
+import { Pressable } from "design-system/pressable-scale";
 import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 import { VerificationBadge } from "design-system/verification-badge";
 
-import { getProfileImage, getProfileName, getSortFields } from "../utilities";
+import {
+  FollowerUser,
+  useFollowersList,
+} from "../hooks/api/use-followers-list";
+import { useFollowingList } from "../hooks/api/use-following-list";
+import {
+  formatAddressShort,
+  getProfileImage,
+  getProfileName,
+  getSortFields,
+} from "../utilities";
 
 const COVER_IMAGE_HEIGHT = 104;
 
@@ -259,6 +274,9 @@ const ProfileTop = ({
     [profileId, isFollowing]
   );
   const { unblock } = useBlock();
+  const [showBottomSheet, setShowBottomSheet] = useState<
+    "followers" | "following" | null
+  >(null);
 
   const bioWithMentions = useMemo(
     () =>
@@ -284,122 +302,123 @@ const ProfileTop = ({
   );
 
   return (
-    <View pointerEvents="box-none">
-      <View
-        tw={`bg-gray-100 dark:bg-gray-900 h-[${COVER_IMAGE_HEIGHT}px]`}
-        pointerEvents="none"
-      >
-        <Skeleton
-          height={COVER_IMAGE_HEIGHT}
-          width={width}
-          show={loading}
-          colorMode={colorMode as any}
+    <>
+      <View pointerEvents="box-none">
+        <View
+          tw={`bg-gray-100 dark:bg-gray-900 h-[${COVER_IMAGE_HEIGHT}px]`}
+          pointerEvents="none"
         >
-          <Image
-            source={{ uri: profileData?.data.profile.cover_url }}
-            tw={`h-[${COVER_IMAGE_HEIGHT}px] w-100vw`}
-            alt="Cover image"
-          />
-        </Skeleton>
-      </View>
+          <Skeleton
+            height={COVER_IMAGE_HEIGHT}
+            width={width}
+            show={loading}
+            colorMode={colorMode as any}
+          >
+            <Image
+              source={{ uri: profileData?.data.profile.cover_url }}
+              tw={`h-[${COVER_IMAGE_HEIGHT}px] w-100vw`}
+              alt="Cover image"
+            />
+          </Skeleton>
+        </View>
 
-      <View tw="bg-white dark:bg-black px-2" pointerEvents="box-none">
-        <View tw="flex-row justify-between pr-2" pointerEvents="box-none">
-          <View tw="flex-row items-end" pointerEvents="none">
-            <View tw="bg-white dark:bg-gray-900 rounded-full mt-[-72px] p-2">
-              <Skeleton
-                height={128}
-                width={128}
-                show={loading}
-                colorMode={colorMode as any}
-                radius={99999}
-              >
-                {profileData && (
-                  <Image
-                    source={{
-                      uri: getProfileImage(profileData?.data.profile),
-                    }}
-                    alt="Profile avatar"
-                    tw="border-white h-[128px] w-[128px] rounded-full"
-                  />
-                )}
-              </Skeleton>
+        <View tw="bg-white dark:bg-black px-2" pointerEvents="box-none">
+          <View tw="flex-row justify-between pr-2" pointerEvents="box-none">
+            <View tw="flex-row items-end" pointerEvents="none">
+              <View tw="bg-white dark:bg-gray-900 rounded-full mt-[-72px] p-2">
+                <Skeleton
+                  height={128}
+                  width={128}
+                  show={loading}
+                  colorMode={colorMode as any}
+                  radius={99999}
+                >
+                  {profileData && (
+                    <Image
+                      source={{
+                        uri: getProfileImage(profileData?.data.profile),
+                      }}
+                      alt="Profile avatar"
+                      tw="border-white h-[128px] w-[128px] rounded-full"
+                    />
+                  )}
+                </Skeleton>
+              </View>
             </View>
-          </View>
 
-          {isBlocked ? (
-            <View tw="flex-row items-center" pointerEvents="box-none">
-              <Button
-                size="regular"
-                onPress={() => {
-                  unblock(profileId);
-                }}
-              >
-                Unblock
-              </Button>
-            </View>
-          ) : (
-            profileId &&
-            userId !== profileId && (
+            {isBlocked ? (
               <View tw="flex-row items-center" pointerEvents="box-none">
-                <ProfileDropdown user={profileData?.data.profile} />
-                <View tw="w-2" />
                 <Button
                   size="regular"
                   onPress={() => {
-                    if (isFollowingUser) {
-                      unfollow(profileId);
-                    } else {
-                      follow(profileId);
-                    }
+                    unblock(profileId);
                   }}
                 >
-                  {isFollowingUser ? "Following" : "Follow"}
+                  Unblock
                 </Button>
               </View>
-            )
-          )}
-        </View>
+            ) : (
+              profileId &&
+              userId !== profileId && (
+                <View tw="flex-row items-center" pointerEvents="box-none">
+                  <ProfileDropdown user={profileData?.data.profile} />
+                  <View tw="w-2" />
+                  <Button
+                    size="regular"
+                    onPress={() => {
+                      if (isFollowingUser) {
+                        unfollow(profileId);
+                      } else {
+                        follow(profileId);
+                      }
+                    }}
+                  >
+                    {isFollowingUser ? "Following" : "Follow"}
+                  </Button>
+                </View>
+              )
+            )}
+          </View>
 
-        <View tw="px-2 py-3" pointerEvents="box-none">
-          <View pointerEvents="none">
-            <Skeleton
-              height={24}
-              width={150}
-              show={loading}
-              colorMode={colorMode as any}
-            >
-              <Text
-                variant="text-2xl"
-                tw="dark:text-white text-gray-900 font-extrabold"
-                numberOfLines={1}
+          <View tw="px-2 py-3" pointerEvents="box-none">
+            <View pointerEvents="none">
+              <Skeleton
+                height={24}
+                width={150}
+                show={loading}
+                colorMode={colorMode as any}
               >
-                {name}
-              </Text>
-            </Skeleton>
-
-            <View tw="h-2" />
-
-            <Skeleton
-              height={12}
-              width={100}
-              show={loading}
-              colorMode={colorMode as any}
-            >
-              <View tw="flex-row items-center">
                 <Text
-                  variant="text-base"
-                  tw="text-gray-900 dark:text-white font-semibold"
+                  variant="text-2xl"
+                  tw="dark:text-white text-gray-900 font-extrabold"
+                  numberOfLines={1}
                 >
-                  {username ? `@${username}` : null}
+                  {name}
                 </Text>
+              </Skeleton>
 
-                {profileData?.data.profile.verified ? (
-                  <View tw="ml-1">
-                    <VerificationBadge size={16} />
-                  </View>
-                ) : null}
-                {/* {profileData?.data ? (
+              <View tw="h-2" />
+
+              <Skeleton
+                height={12}
+                width={100}
+                show={loading}
+                colorMode={colorMode as any}
+              >
+                <View tw="flex-row items-center">
+                  <Text
+                    variant="text-base"
+                    tw="text-gray-900 dark:text-white font-semibold"
+                  >
+                    {username ? `@${username}` : null}
+                  </Text>
+
+                  {profileData?.data.profile.verified ? (
+                    <View tw="ml-1">
+                      <VerificationBadge size={16} />
+                    </View>
+                  ) : null}
+                  {/* {profileData?.data ? (
                 <View tw="bg-gray-100 dark:bg-gray-900 ml-2 h-[23px] px-2 justify-center rounded-full">
                   <Text
                     variant="text-xs"
@@ -409,35 +428,37 @@ const ProfileTop = ({
                   </Text>
                 </View>
               ) : null} */}
+                </View>
+              </Skeleton>
+            </View>
+
+            {bio ? (
+              <View
+                tw="flex-row items-center mt-3"
+                pointerEvents={hasLinksInBio.current ? "box-none" : "none"}
+              >
+                <Text tw="text-sm text-gray-600 dark:text-gray-400">
+                  {bioWithMentions}
+                </Text>
               </View>
-            </Skeleton>
-          </View>
-
-          {bio ? (
-            <View
-              tw="flex-row items-center mt-3"
-              pointerEvents={hasLinksInBio.current ? "box-none" : "none"}
-            >
-              <Text tw="text-sm text-gray-600 dark:text-gray-400">
-                {bioWithMentions}
-              </Text>
+            ) : null}
+            <View tw="flex-row mt-4" pointerEvents="box-none">
+              <Pressable onPress={() => setShowBottomSheet("following")}>
+                <Text tw="text-sm text-gray-900 dark:text-white font-bold">
+                  {profileData?.data.following_count}{" "}
+                  <Text tw="font-medium">following</Text>
+                </Text>
+              </Pressable>
+              <View tw="ml-8" pointerEvents="box-none">
+                <Pressable onPress={() => setShowBottomSheet("followers")}>
+                  <Text tw="text-sm text-gray-900 dark:text-white font-bold">
+                    {profileData?.data.followers_count}{" "}
+                    <Text tw="font-medium">followers</Text>
+                  </Text>
+                </Pressable>
+              </View>
             </View>
-          ) : null}
-
-          <View tw="flex-row mt-4" pointerEvents="box-none">
-            <Text tw="text-sm text-gray-900 dark:text-white font-bold">
-              {profileData?.data.following_count}{" "}
-              <Text tw="font-medium">following</Text>
-            </Text>
-            <View tw="ml-8" pointerEvents="box-none">
-              <Text tw="text-sm text-gray-900 dark:text-white font-bold">
-                {profileData?.data.followers_count}{" "}
-                <Text tw="font-medium">followers</Text>
-              </Text>
-            </View>
-          </View>
-
-          {/* <View>
+            {/* <View>
             <View tw="flex-row items-center">
               <Text tw="text-gray-600 dark:text-gray-400 font-medium text-xs">
                 Followed by{" "}
@@ -449,10 +470,169 @@ const ProfileTop = ({
               </Pressable>
             </View>
           </View> */}
+          </View>
         </View>
       </View>
-    </View>
+      <BottomSheet
+        snapPoints={["75%", "90%"]}
+        visible={
+          showBottomSheet === "followers" || showBottomSheet === "following"
+        }
+        onDismiss={() => setShowBottomSheet(null)}
+      >
+        {showBottomSheet === "followers" ? (
+          <FollowersList
+            profileId={profileId}
+            isFollowingUser={isFollowing}
+            follow={follow}
+            unFollow={unfollow}
+            hideSheet={() => setShowBottomSheet(null)}
+          />
+        ) : showBottomSheet === "following" ? (
+          <FollowingList
+            profileId={profileId}
+            isFollowingUser={isFollowing}
+            follow={follow}
+            unFollow={unfollow}
+            hideSheet={() => setShowBottomSheet(null)}
+          />
+        ) : (
+          <></>
+        )}
+      </BottomSheet>
+    </>
   );
+};
+
+type FollowingListProp = {
+  follow: (profileId: number) => void;
+  unFollow: (profileId: number) => void;
+  hideSheet: () => void;
+};
+
+const FollowingListUser = memo(
+  ({
+    item,
+    isFollowingUser,
+    follow,
+    unFollow,
+    hideSheet,
+  }: { item: FollowerUser; isFollowingUser: boolean } & FollowingListProp) => {
+    return (
+      <Link
+        href={`/profile/${item.wallet_address}`}
+        tw="p-4"
+        onPress={hideSheet}
+      >
+        <View tw="flex-row justify-between items-center">
+          <View tw="flex-row">
+            <View tw="h-8 w-8 bg-gray-200 rounded-full mr-2">
+              <Image source={{ uri: item.img_url }} tw="h-8 w-8 rounded-full" />
+            </View>
+            <View tw="mr-1 justify-between">
+              <Text tw="text-sm text-gray-600 dark:text-gray-300 font-semibold">
+                {item.name}
+              </Text>
+              <View tw="items-center flex-row">
+                <Text tw="text-sm text-gray-900 dark:text-white font-semibold">
+                  {item.username ? (
+                    <>@{item.username}</>
+                  ) : (
+                    <>{formatAddressShort(item.wallet_address)}</>
+                  )}
+                </Text>
+                {Boolean(item.verified) && (
+                  <View tw="ml-1">
+                    <VerificationBadge size={14} />
+                  </View>
+                )}
+              </View>
+            </View>
+          </View>
+          {isFollowingUser ? (
+            <Button
+              onPress={() => unFollow(item.profile_id)}
+              variant="tertiary"
+            >
+              Following
+            </Button>
+          ) : (
+            <Button onPress={() => follow(item.profile_id)}>Follow</Button>
+          )}
+        </View>
+      </Link>
+    );
+  }
+);
+const FollowersList = (
+  props: {
+    profileId?: number;
+    isFollowingUser: (profileId: number) => boolean;
+  } & FollowingListProp
+) => {
+  const { data } = useFollowersList(props.profileId);
+  const keyExtractor = useCallback((item) => item.id, []);
+  const renderItem = useCallback(
+    ({ item }: { item: FollowerUser }) => {
+      return (
+        <FollowingListUser
+          item={item}
+          isFollowingUser={props.isFollowingUser(item.profile_id)}
+          follow={props.follow}
+          unFollow={props.unFollow}
+          hideSheet={props.hideSheet}
+        />
+      );
+    },
+    [props.isFollowingUser, props.unFollow, props.follow, props.hideSheet]
+  );
+
+  if (data && data.list) {
+    return (
+      <BottomSheetFlatList
+        data={data.list}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+      />
+    );
+  }
+  return <></>;
+};
+
+const FollowingList = (
+  props: {
+    profileId?: number;
+    isFollowingUser: (profileId: number) => boolean;
+  } & FollowingListProp
+) => {
+  const { data } = useFollowingList(props.profileId);
+  const keyExtractor = useCallback((item) => item.id, []);
+  const renderItem = useCallback(
+    ({ item }: { item: FollowerUser }) => {
+      return (
+        <FollowingListUser
+          item={item}
+          isFollowingUser={props.isFollowingUser(item.profile_id)}
+          follow={props.follow}
+          unFollow={props.unFollow}
+          hideSheet={props.hideSheet}
+        />
+      );
+    },
+    [props.isFollowingUser, props.unFollow, props.follow, props.hideSheet]
+  );
+
+  if (data && data.list) {
+    return (
+      <BottomSheetFlatList
+        data={data.list}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+      />
+    );
+  }
+
+  return <></>;
 };
 
 type FilterProps = {
