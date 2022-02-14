@@ -73,3 +73,4 @@ export { default as ZapFilled } from "./ZapFilled";
 export { default as FlashOff } from "./FlashOff";
 export { default as Flash } from "./Flash";
 export { default as Flip } from "./Flip";
+export { default as Play } from "./Play";
