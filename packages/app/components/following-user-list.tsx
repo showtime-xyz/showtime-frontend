@@ -2,19 +2,18 @@ import { memo, useCallback } from "react";
 
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
+import {
+  FollowerUser,
+  useFollowersList,
+} from "app/hooks/api/use-followers-list";
+import { useFollowingList } from "app/hooks/api/use-following-list";
 import { Link } from "app/navigation/link";
+import { formatAddressShort } from "app/utilities";
 
 import { View, Text, Skeleton, Button } from "design-system";
 import { useColorScheme } from "design-system/hooks";
 import { Image } from "design-system/image";
 import { VerificationBadge } from "design-system/verification-badge";
-
-import {
-  FollowerUser,
-  useFollowersList,
-} from "../hooks/api/use-followers-list";
-import { useFollowingList } from "../hooks/api/use-following-list";
-import { formatAddressShort, getSortFields } from "../utilities";
 
 type FollowingListProp = {
   follow: (profileId: number) => void;
@@ -41,21 +40,26 @@ const FollowingListUser = memo(
       <View
         tw={`flex-row justify-between items-center h-[${ITEM_HEIGHT}px] overflow-hidden`}
       >
-        <Link
-          href={`/profile/${item.wallet_address}`}
-          tw="p-4"
-          onPress={hideSheet}
-        >
+        <Link href={`/profile/${item.wallet_address}`} onPress={hideSheet}>
           <View tw="flex-row">
             <View tw="h-8 w-8 bg-gray-200 rounded-full mr-2">
               <Image source={{ uri: item.img_url }} tw="h-8 w-8 rounded-full" />
             </View>
-            <View tw="mr-1 justify-between">
-              <Text tw="text-sm text-gray-600 dark:text-gray-300 font-semibold">
-                {item.name}
-              </Text>
+            <View tw="mr-1 justify-center">
+              {item.name ? (
+                <Text
+                  tw="text-sm text-gray-600 dark:text-gray-300 font-semibold mb-[1px] max-w-[150px]"
+                  numberOfLines={1}
+                >
+                  {item.name}
+                </Text>
+              ) : null}
+
               <View tw="items-center flex-row">
-                <Text tw="text-sm text-gray-900 dark:text-white font-semibold">
+                <Text
+                  tw="text-sm text-gray-900 dark:text-white font-semibold max-w-[150px]"
+                  numberOfLines={1}
+                >
                   {item.username ? (
                     <>@{item.username}</>
                   ) : (
