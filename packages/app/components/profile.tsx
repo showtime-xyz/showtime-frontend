@@ -1,5 +1,4 @@
 import {
-  memo,
   Suspense,
   useCallback,
   useMemo,
@@ -9,7 +8,6 @@ import {
 } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import reactStringReplace from "react-string-replace";
 
 import { ProfileDropdown } from "app/components/profile-dropdown";
@@ -25,12 +23,18 @@ import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
-import { Link } from "app/navigation/link";
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 
-import { View, Spinner, Text, Skeleton, Select, Button } from "design-system";
-import { BottomSheet } from "design-system/bottom-sheet";
+import {
+  View,
+  Spinner,
+  Text,
+  Skeleton,
+  Button,
+  ModalSheet,
+  Select,
+} from "design-system";
 import { useColorScheme } from "design-system/hooks";
 import { Image } from "design-system/image";
 import { Media } from "design-system/media";
@@ -39,17 +43,8 @@ import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
 import { tw } from "design-system/tailwind";
 import { VerificationBadge } from "design-system/verification-badge";
 
-import {
-  FollowerUser,
-  useFollowersList,
-} from "../hooks/api/use-followers-list";
-import { useFollowingList } from "../hooks/api/use-following-list";
-import {
-  formatAddressShort,
-  getProfileImage,
-  getProfileName,
-  getSortFields,
-} from "../utilities";
+import { getProfileImage, getProfileName, getSortFields } from "../utilities";
+import { FollowersList, FollowingList } from "./following-user-list";
 
 const COVER_IMAGE_HEIGHT = 104;
 
@@ -473,12 +468,13 @@ const ProfileTop = ({
           </View>
         </View>
       </View>
-      <BottomSheet
+      <ModalSheet
         snapPoints={["75%", "90%"]}
+        title={showBottomSheet === "followers" ? "Followers" : "Following"}
         visible={
           showBottomSheet === "followers" || showBottomSheet === "following"
         }
-        onDismiss={() => setShowBottomSheet(null)}
+        close={() => setShowBottomSheet(null)}
       >
         {showBottomSheet === "followers" ? (
           <FollowersList
@@ -499,140 +495,9 @@ const ProfileTop = ({
         ) : (
           <></>
         )}
-      </BottomSheet>
+      </ModalSheet>
     </>
   );
-};
-
-type FollowingListProp = {
-  follow: (profileId: number) => void;
-  unFollow: (profileId: number) => void;
-  hideSheet: () => void;
-};
-
-const FollowingListUser = memo(
-  ({
-    item,
-    isFollowingUser,
-    follow,
-    unFollow,
-    hideSheet,
-  }: { item: FollowerUser; isFollowingUser: boolean } & FollowingListProp) => {
-    return (
-      <Link
-        href={`/profile/${item.wallet_address}`}
-        tw="p-4"
-        onPress={hideSheet}
-      >
-        <View tw="flex-row justify-between items-center">
-          <View tw="flex-row">
-            <View tw="h-8 w-8 bg-gray-200 rounded-full mr-2">
-              <Image source={{ uri: item.img_url }} tw="h-8 w-8 rounded-full" />
-            </View>
-            <View tw="mr-1 justify-between">
-              <Text tw="text-sm text-gray-600 dark:text-gray-300 font-semibold">
-                {item.name}
-              </Text>
-              <View tw="items-center flex-row">
-                <Text tw="text-sm text-gray-900 dark:text-white font-semibold">
-                  {item.username ? (
-                    <>@{item.username}</>
-                  ) : (
-                    <>{formatAddressShort(item.wallet_address)}</>
-                  )}
-                </Text>
-                {Boolean(item.verified) && (
-                  <View tw="ml-1">
-                    <VerificationBadge size={14} />
-                  </View>
-                )}
-              </View>
-            </View>
-          </View>
-          {isFollowingUser ? (
-            <Button
-              onPress={() => unFollow(item.profile_id)}
-              variant="tertiary"
-            >
-              Following
-            </Button>
-          ) : (
-            <Button onPress={() => follow(item.profile_id)}>Follow</Button>
-          )}
-        </View>
-      </Link>
-    );
-  }
-);
-const FollowersList = (
-  props: {
-    profileId?: number;
-    isFollowingUser: (profileId: number) => boolean;
-  } & FollowingListProp
-) => {
-  const { data } = useFollowersList(props.profileId);
-  const keyExtractor = useCallback((item) => item.id, []);
-  const renderItem = useCallback(
-    ({ item }: { item: FollowerUser }) => {
-      return (
-        <FollowingListUser
-          item={item}
-          isFollowingUser={props.isFollowingUser(item.profile_id)}
-          follow={props.follow}
-          unFollow={props.unFollow}
-          hideSheet={props.hideSheet}
-        />
-      );
-    },
-    [props.isFollowingUser, props.unFollow, props.follow, props.hideSheet]
-  );
-
-  if (data && data.list) {
-    return (
-      <BottomSheetFlatList
-        data={data.list}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-      />
-    );
-  }
-  return <></>;
-};
-
-const FollowingList = (
-  props: {
-    profileId?: number;
-    isFollowingUser: (profileId: number) => boolean;
-  } & FollowingListProp
-) => {
-  const { data } = useFollowingList(props.profileId);
-  const keyExtractor = useCallback((item) => item.id, []);
-  const renderItem = useCallback(
-    ({ item }: { item: FollowerUser }) => {
-      return (
-        <FollowingListUser
-          item={item}
-          isFollowingUser={props.isFollowingUser(item.profile_id)}
-          follow={props.follow}
-          unFollow={props.unFollow}
-          hideSheet={props.hideSheet}
-        />
-      );
-    },
-    [props.isFollowingUser, props.unFollow, props.follow, props.hideSheet]
-  );
-
-  if (data && data.list) {
-    return (
-      <BottomSheetFlatList
-        data={data.list}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-      />
-    );
-  }
-
-  return <></>;
 };
 
 type FilterProps = {
