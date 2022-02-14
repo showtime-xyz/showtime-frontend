@@ -76,7 +76,7 @@ export const BottomSheet = (props: BottomSheetProps) => {
       )}
       snapPoints={snapPoints ?? defaultSnapPoints}
     >
-      <View tw={["flex-1 pt-6 px-4", bodyContentTW]} />
+      <View tw={["flex-1 pt-6 px-4", bodyContentTW]}>{children}</View>
     </BottomSheetModal>
   );
 };
