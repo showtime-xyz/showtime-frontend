@@ -22,6 +22,13 @@ type FollowingListProp = {
   hideSheet: () => void;
 };
 
+const SEPARATOR_HEIGHT = 1;
+const Separator = () => (
+  <View tw={`bg-gray-200 dark:bg-gray-800 h-[${SEPARATOR_HEIGHT}px]`} />
+);
+
+const ITEM_HEIGHT = 64 + SEPARATOR_HEIGHT;
+
 const FollowingListUser = memo(
   ({
     item,
@@ -31,12 +38,14 @@ const FollowingListUser = memo(
     hideSheet,
   }: { item: FollowerUser; isFollowingUser: boolean } & FollowingListProp) => {
     return (
-      <Link
-        href={`/profile/${item.wallet_address}`}
-        tw="p-4"
-        onPress={hideSheet}
+      <View
+        tw={`flex-row justify-between items-center h-[${ITEM_HEIGHT}px] overflow-hidden`}
       >
-        <View tw="flex-row justify-between items-center">
+        <Link
+          href={`/profile/${item.wallet_address}`}
+          tw="p-4"
+          onPress={hideSheet}
+        >
           <View tw="flex-row">
             <View tw="h-8 w-8 bg-gray-200 rounded-full mr-2">
               <Image source={{ uri: item.img_url }} tw="h-8 w-8 rounded-full" />
@@ -61,18 +70,15 @@ const FollowingListUser = memo(
               </View>
             </View>
           </View>
-          {isFollowingUser ? (
-            <Button
-              onPress={() => unFollow(item.profile_id)}
-              variant="tertiary"
-            >
-              Following
-            </Button>
-          ) : (
-            <Button onPress={() => follow(item.profile_id)}>Follow</Button>
-          )}
-        </View>
-      </Link>
+        </Link>
+        {isFollowingUser ? (
+          <Button onPress={() => unFollow(item.profile_id)} variant="tertiary">
+            Following
+          </Button>
+        ) : (
+          <Button onPress={() => follow(item.profile_id)}>Follow</Button>
+        )}
+      </View>
     );
   }
 );
@@ -85,6 +91,14 @@ export const FollowersList = (
 ) => {
   const { data, loading } = useFollowersList(props.profileId);
   const keyExtractor = useCallback((item) => item.id, []);
+  const getItemLayout = useCallback(
+    (_, index) => ({
+      length: ITEM_HEIGHT,
+      offset: ITEM_HEIGHT * index,
+      index,
+    }),
+    []
+  );
   const renderItem = useCallback(
     ({ item }: { item: FollowerUser }) => {
       return (
@@ -108,6 +122,8 @@ export const FollowersList = (
         renderItem={renderItem}
         windowSize={10}
         initialNumToRender={10}
+        getItemLayout={getItemLayout}
+        ItemSeparatorComponent={Separator}
       />
     );
   } else if (loading) {
@@ -127,6 +143,14 @@ export const FollowingList = (
 ) => {
   const { data, loading } = useFollowingList(props.profileId);
   const keyExtractor = useCallback((item) => item.id, []);
+  const getItemLayout = useCallback(
+    (_, index) => ({
+      length: ITEM_HEIGHT,
+      offset: ITEM_HEIGHT * index,
+      index,
+    }),
+    []
+  );
   const renderItem = useCallback(
     ({ item }: { item: FollowerUser }) => {
       return (
@@ -150,6 +174,8 @@ export const FollowingList = (
         renderItem={renderItem}
         windowSize={10}
         initialNumToRender={10}
+        getItemLayout={getItemLayout}
+        ItemSeparatorComponent={Separator}
       />
     );
   } else if (loading) {
