@@ -6,6 +6,10 @@ module.exports = (config) => {
       "android:exported"
     ] = "true";
 
+    config.modResults.manifest.application[0].activity[0].$[
+      "android:usesCleartextTraffic"
+    ] = "true";
+
     return config;
   });
 };

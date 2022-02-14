@@ -475,6 +475,7 @@ const ProfileTop = ({
           showBottomSheet === "followers" || showBottomSheet === "following"
         }
         close={() => setShowBottomSheet(null)}
+        onClose={() => setShowBottomSheet(null)}
       >
         {showBottomSheet === "followers" ? (
           <FollowersList
