@@ -106,6 +106,8 @@ export const FollowersList = (
         data={data.list}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
+        windowSize={10}
+        initialNumToRender={10}
       />
     );
   } else if (loading) {
@@ -146,6 +148,8 @@ export const FollowingList = (
         data={data.list}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
+        windowSize={10}
+        initialNumToRender={10}
       />
     );
   } else if (loading) {
