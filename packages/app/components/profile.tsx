@@ -469,7 +469,7 @@ const ProfileTop = ({
         </View>
       </View>
       <ModalSheet
-        snapPoints={["75%", "90%"]}
+        snapPoints={["90%"]}
         title={showBottomSheet === "followers" ? "Followers" : "Following"}
         visible={
           showBottomSheet === "followers" || showBottomSheet === "following"
