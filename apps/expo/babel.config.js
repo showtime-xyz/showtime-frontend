@@ -9,11 +9,17 @@ module.exports = function (api) {
     path: envPath,
   });
 
+  let plugins = [
+    ["inline-dotenv", { path: envPath }],
+    "react-native-reanimated/plugin",
+  ];
+
+  if (process.env.NODE_ENV === "test") {
+    plugins.push("dynamic-import-node");
+  }
+
   return {
     presets: [["babel-preset-expo", { jsxRuntime: "automatic" }]],
-    plugins: [
-      ["inline-dotenv", { path: envPath }],
-      "react-native-reanimated/plugin",
-    ],
+    plugins,
   };
 };

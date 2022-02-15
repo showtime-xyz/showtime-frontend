@@ -39,7 +39,8 @@
     "submit:android": "STAGE=production eas submit --platform android",
     "deploy:production": "echo 'Do not do this unless you know what you are doing!' && yarn update:production --message 'Deploy to production' && yarn build:production --auto-submit && say done",
     "adb:reverse": "adb reverse tcp:3000 tcp:3000",
-    "eas-build-post-install": "react-native link"
+    "eas-build-post-install": "react-native link",
+    "test": "node_modules/.bin/jest ./component-tests"
   },
   "dependencies": {
     "@capsizecss/core": "^3.0.0",
@@ -60,6 +61,8 @@
     "@react-navigation/stack": "^6.1.0",
     "@rudderstack/rudder-sdk-react-native": "^1.2.0",
     "@sentry/react-native": "^3.2.3",
+    "@testing-library/jest-native": "^4.0.4",
+    "@testing-library/react-native": "^9.0.0",
     "@tradle/react-native-http": "^2.0.0",
     "@walletconnect/react-native-dapp": "^1.7.1",
     "@zeego/dropdown-menu": "0.0.2-alpha.28",
@@ -158,16 +161,20 @@
     "yup-phone": "^1.3.2"
   },
   "devDependencies": {
+    "@types/jest": "^27.4.0",
+    "babel-plugin-dynamic-import-node": "^2.3.3",
+    "jest": "^27.5.1",
+    "jest-expo": "^44.0.1",
+    "jest-next-dynamic": "^1.0.1",
+    "react-test-renderer": "18.0.0-rc.0",
     "@babel/core": "^7.16.5",
     "@babel/runtime": "^7.16.5",
     "@config-plugins/detox": "^1.1.0",
     "@expo/xcpretty": "^4.1.0",
-    "@types/jest": "^27.0.3",
     "@types/uuid": "^8.3.4",
     "babel-jest": "^27.4.5",
     "detox": "^19.4.1",
     "esbuild": "^0.14.11",
-    "jest": "^27.4.5",
     "jest-circus": "^27.4.5",
     "metro-minify-esbuild": "^0.1.0",
     "ts-jest": "^27.1.2",
@@ -223,5 +230,14 @@
     "tty": "tty-browserify",
     "vm": "vm-browserify",
     "tls": false
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "setupFilesAfterEnv": [
+      "@testing-library/jest-native/extend-expect"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|dripsy|@dripsy/.*|@walletconnect/.*|@motify/.*|moti|@biconomy/.*)"
+    ]
   }
 }
