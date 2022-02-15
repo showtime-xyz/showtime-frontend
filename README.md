@@ -23,7 +23,7 @@ You'll find included:
 
 ## Architecture
 
-Introduction: [Universal Design System](https://axeldelafosse.com/blog/universal-design-system) by Axel Delafoss
+Introduction: [Universal Design System](https://axeldelafosse.com/blog/universal-design-system) by Axel Delafosse
 
 ### App
 
