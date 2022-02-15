@@ -1,4 +1,5 @@
 import { Platform } from "react-native";
+
 import localhost from "react-native-localhost";
 
 function getAPIUrl(uri: string) {

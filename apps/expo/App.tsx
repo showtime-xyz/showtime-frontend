@@ -5,36 +5,41 @@ import {
   Platform,
   useColorScheme as useDeviceColorScheme,
 } from "react-native";
-import { enableScreens } from "react-native-screens";
-import { StatusBar, setStatusBarStyle } from "expo-status-bar";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { DripsyProvider } from "dripsy";
-import { useDeviceContext, useAppColorScheme } from "twrnc";
-import { MMKV } from "react-native-mmkv";
-import { SWRConfig } from "swr";
-import NetInfo from "@react-native-community/netinfo";
-import { useNavigation } from "@react-navigation/native";
-import * as NavigationBar from "expo-navigation-bar";
-import * as SystemUI from "expo-system-ui";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import LogRocket from "@logrocket/react-native";
+import NetInfo from "@react-native-community/netinfo";
+import { useNavigation } from "@react-navigation/native";
+import rudderClient, {
+  RUDDER_LOG_LEVEL,
+} from "@rudderstack/rudder-sdk-react-native";
+import { DripsyProvider } from "dripsy";
+import * as NavigationBar from "expo-navigation-bar";
 import * as Notifications from "expo-notifications";
+import { StatusBar, setStatusBarStyle } from "expo-status-bar";
+import * as SystemUI from "expo-system-ui";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { MMKV } from "react-native-mmkv";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { enableScreens } from "react-native-screens";
+import { SWRConfig } from "swr";
+import { useDeviceContext, useAppColorScheme } from "twrnc";
 
-import { tw } from "design-system/tailwind";
-import { theme } from "design-system/theme";
-import { NavigationProvider } from "app/navigation";
-import { AuthProvider } from "app/providers/auth-provider";
-import { UserProvider } from "app/providers/user-provider";
-import { Web3Provider } from "app/providers/web3-provider";
-import { WalletConnectProvider } from "app/providers/wallet-connect-provider";
 import { AppContext } from "app/context/app-context";
-import { ToastProvider } from "design-system/toast";
 import {
   setColorScheme as setUserColorScheme,
   useColorScheme as useUserColorScheme,
 } from "app/lib/color-scheme";
+import { NavigationProvider } from "app/navigation";
 import { RootStackNavigator } from "app/navigation/root-stack-navigator";
+import { AuthProvider } from "app/providers/auth-provider";
+import { UserProvider } from "app/providers/user-provider";
+import { WalletConnectProvider } from "app/providers/wallet-connect-provider";
+import { Web3Provider } from "app/providers/web3-provider";
+
+import { tw } from "design-system/tailwind";
+import { theme } from "design-system/theme";
+import { ToastProvider } from "design-system/toast";
 
 enableScreens(true);
 // enableFreeze(true)
@@ -53,6 +58,12 @@ LogBox.ignoreLogs([
   "Constants.platform.ios.model has been deprecated in favor of expo-device's Device.modelName property.",
   "ExponentGLView",
 ]);
+
+const rudderConfig = {
+  dataPlaneUrl: "https://tryshowtimjtc.dataplane.rudderstack.com",
+  trackAppLifecycleEvents: true,
+  logLevel: RUDDER_LOG_LEVEL.INFO, // DEBUG
+};
 
 function mmkvProvider() {
   const storage = new MMKV();
@@ -265,6 +276,14 @@ function App() {
         redactionTags: ["data-private"],
       });
     }
+  }, []);
+
+  useEffect(() => {
+    const initAnalytics = async () => {
+      await rudderClient.setup(process.env.RUDDERSTACK_WRITE_KEY, rudderConfig);
+    };
+
+    initAnalytics();
   }, []);
 
   const scheme = `io.showtime${

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View as MotiView, TransitionConfig, useDynamicAnimation } from "moti";
 import { StyleSheet, Platform } from "react-native";
+
+import { View as MotiView, TransitionConfig, useDynamicAnimation } from "moti";
 
 type Props = {
   children?: React.ReactNode;

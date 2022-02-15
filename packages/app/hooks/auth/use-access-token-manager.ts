@@ -1,10 +1,12 @@
 import { useCallback, useRef } from "react";
+
+import { captureException } from "@sentry/nextjs";
 // import Iron from "@hapi/iron";
 import axios from "axios";
-import { captureException } from "@sentry/nextjs";
+
 import * as accessTokenStorage from "app/lib/access-token";
-import * as refreshTokenStorage from "app/lib/refresh-token";
 import { setLogout } from "app/lib/logout";
+import * as refreshTokenStorage from "app/lib/refresh-token";
 
 export function useAccessTokenManager() {
   const isRefreshing = useRef(false);

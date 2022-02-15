@@ -1,13 +1,13 @@
-import { DripsyProvider } from "dripsy";
-import { theme } from "design-system/theme";
-import { useFonts } from "expo-font";
-import { useDeviceContext } from "twrnc";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { ToastProvider } from "design-system/toast";
+import { DripsyProvider } from "dripsy";
+import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useDeviceContext } from "twrnc";
 
 import { tw } from "design-system/tailwind";
+import { theme } from "design-system/theme";
+import { ToastProvider } from "design-system/toast";
 import { View } from "design-system/view";
 
 const FontsLoader = ({ children }) => {

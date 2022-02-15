@@ -1,12 +1,14 @@
 import { useCallback, useContext, useEffect, useRef } from "react";
+
 import { captureException } from "@sentry/nextjs";
-import { magic } from "app/lib/magic";
-import { mixpanel } from "app/lib/mixpanel";
+
+import { useAuth } from "app/hooks/auth/use-auth";
 import { useMagicLogin } from "app/hooks/auth/use-magic-login";
 import { useWalletLogin } from "app/hooks/auth/use-wallet-login";
-import { useAuth } from "app/hooks/auth/use-auth";
 import { useStableBlurEffect } from "app/hooks/use-stable-blur-effect";
 import { useWeb3 } from "app/hooks/use-web3";
+import { magic } from "app/lib/magic";
+import { mixpanel } from "app/lib/mixpanel";
 
 type LoginSource = "undetermined" | "magic" | "wallet";
 

@@ -1,10 +1,13 @@
 import { useCallback } from "react";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Platform } from "react-native";
-import { Modal } from "design-system";
+
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import { Login } from "app/components/login";
-import { useRouter } from "app/navigation/use-router";
 import { createParam } from "app/navigation/use-param";
+import { useRouter } from "app/navigation/use-router";
+
+import { Modal } from "design-system";
 
 /**
  * extracted these number from react-navigation

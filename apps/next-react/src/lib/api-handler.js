@@ -1,10 +1,11 @@
-import nc from "next-connect";
-import { withSentry, captureException } from "@sentry/nextjs";
-import Iron from "@hapi/iron";
-import CookieService from "@/lib/cookie";
 import { flagDefs } from "@/hooks/useFlags";
-import backend from "./backend";
+import CookieService from "@/lib/cookie";
+import Iron from "@hapi/iron";
+import { withSentry, captureException } from "@sentry/nextjs";
 import jwt_decode from "jwt-decode";
+import nc from "next-connect";
+
+import backend from "./backend";
 
 export default () =>
   nc({

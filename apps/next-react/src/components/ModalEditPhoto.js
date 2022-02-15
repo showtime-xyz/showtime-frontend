@@ -1,13 +1,15 @@
 import { useState, useRef } from "react";
-import mixpanel from "mixpanel-browser";
-import "croppie/croppie.css";
+
+import useProfile from "@/hooks/useProfile";
+import axios from "@/lib/axios";
 import Croppie from "croppie";
+import "croppie/croppie.css";
+import mixpanel from "mixpanel-browser";
+
 import CloseButton from "./CloseButton";
 import ScrollableModal from "./ScrollableModal";
 import GhostButton from "./UI/Buttons/GhostButton";
 import GreenButton from "./UI/Buttons/GreenButton";
-import axios from "@/lib/axios";
-import useProfile from "@/hooks/useProfile";
 
 export default function Modal({ isOpen, setEditModalOpen }) {
   const { myProfile, setMyProfile } = useProfile();

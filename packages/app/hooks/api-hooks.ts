@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
 import useSWR, { useSWRConfig } from "swr";
+
+import { axios } from "app/lib/axios";
+import { mixpanel } from "app/lib/mixpanel";
+import { useRouter } from "app/navigation/use-router";
 
 import { NFT, Profile } from "../types";
 import { useInfiniteListQuerySWR, fetcher } from "./use-infinite-list-query";
 import { useUser } from "./use-user";
-import { axios } from "app/lib/axios";
-import { mixpanel } from "app/lib/mixpanel";
-import { useRouter } from "app/navigation/use-router";
 
 export const useActivity = ({
   typeId,
@@ -32,9 +34,23 @@ export const useActivity = ({
   const newData = useMemo(() => {
     let newData: any = [];
     if (queryState.data) {
-      queryState.data.forEach((p) => {
-        if (p) {
-          newData = newData.concat(p.data);
+      // filter if duplicate data shows up in pagingation. Flatlist starts acting weird on receiving duplicates
+      // It can happen if database is updating and we are fetching new data.
+      // As new post shows on top, fetching next page can have same post as previous page.
+      // TODO: Cursor based pagination in API?
+      queryState.data.forEach((page) => {
+        if (page) {
+          page.data = page.data.filter((d: any) => {
+            const v = newData.find((x: any) => x.id === d.id);
+            if (v === undefined) {
+              if (__DEV__) {
+                console.log("duplicate record in feed ", d.id);
+              }
+              return true;
+            }
+            return false;
+          });
+          newData = newData.concat(page.data);
         }
       });
     }

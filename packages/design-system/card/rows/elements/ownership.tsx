@@ -1,12 +1,14 @@
 import React from "react";
-import { Image } from "design-system/image";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
-import { Skeleton } from "design-system/skeleton";
-import { useIsDarkMode } from "design-system/hooks";
+
 import { useNFTOwnership } from "app/hooks/api/use-nft-ownership";
 import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import { NFT } from "app/types";
+
+import { useIsDarkMode } from "design-system/hooks";
+import { Image } from "design-system/image";
+import { Skeleton } from "design-system/skeleton";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 type Props = {
   nft?: NFT;

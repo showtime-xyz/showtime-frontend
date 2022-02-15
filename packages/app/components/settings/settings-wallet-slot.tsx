@@ -1,15 +1,19 @@
 import { useContext } from "react";
+
 import Animated, { FadeIn } from "react-native-reanimated";
-import { useWalletConnect } from "@walletconnect/react-native-dapp";
-import { View, Text, Button, Skeleton } from "design-system";
-import { Ethereum, Tezos } from "design-system/icon";
-import { useColorScheme } from "design-system/hooks";
-import { formatAddressShort } from "app/lib/utilities";
-import { DataPill } from "design-system/data-pill";
-import { WalletAddressesExcludingEmailV2 } from "app/types";
-import { SettingSubTitle } from "./settings-subtitle";
-import { AddressMenu } from "./address-menu";
+
 import { AppContext } from "app/context/app-context";
+import { formatAddressShort } from "app/lib/utilities";
+import { useWalletConnect } from "app/lib/walletconnect";
+import { WalletAddressesExcludingEmailV2 } from "app/types";
+
+import { View, Text, Button, Skeleton } from "design-system";
+import { DataPill } from "design-system/data-pill";
+import { useColorScheme } from "design-system/hooks";
+import { Ethereum, Tezos } from "design-system/icon";
+
+import { AddressMenu } from "./address-menu";
+import { SettingSubTitle } from "./settings-subtitle";
 
 type Props = {
   address: WalletAddressesExcludingEmailV2["address"];

@@ -1,9 +1,12 @@
 import React, { useCallback } from "react";
-import { Button, ButtonLabel, Fieldset } from "design-system";
-import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { yup } from "app/lib/yup";
 import { TextInputProps } from "react-native";
+
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm, Controller } from "react-hook-form";
+
+import { yup } from "app/lib/yup";
+
+import { Button, ButtonLabel, Fieldset } from "design-system";
 
 type FormData = {
   data?: string;

@@ -1,19 +1,21 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Platform, FlatList, Keyboard } from "react-native";
+
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View } from "design-system/view";
-import { Text } from "design-system/text";
+import { useComments } from "app/hooks/api-hooks";
+import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
+import { usePanResponder } from "app/hooks/use-pan-responder";
+import type { NFT } from "app/types";
+
+import { useIsDarkMode } from "design-system/hooks";
 import {
   MessageBox,
   SCROLL_HEIGHT,
   PADDING_HEIGHT,
 } from "design-system/messages";
-import { useComments } from "app/hooks/api-hooks";
-import { usePanResponder } from "app/hooks/use-pan-responder";
-import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
-import type { NFT } from "app/types";
-import { useIsDarkMode } from "design-system/hooks";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 type Props = {
   nft?: NFT;

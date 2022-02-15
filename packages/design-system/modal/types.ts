@@ -1,4 +1,5 @@
 import type React from "react";
+
 import type { TW } from "../tailwind/types";
 
 export interface ModalWrapperProps {
@@ -39,6 +40,12 @@ export interface ModalProps {
    * @default undefined
    */
   bodyTW?: TW;
+  /**
+   * Defines the body ScrollView content tailwind style.
+   *
+   * @default undefined
+   */
+  bodyContentTW?: TW;
   /**
    * Defines the keyboard vertical offset, usually
    * the header height.

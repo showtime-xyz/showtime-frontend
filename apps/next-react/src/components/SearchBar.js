@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState } from "react";
+
+import useKeyPress from "@/hooks/useKeyPress";
+import useOnClickOutside from "@/hooks/useOnClickOutside";
+import backend from "@/lib/backend";
 import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
 import AwesomeDebouncePromise from "awesome-debounce-promise";
 import mixpanel from "mixpanel-browser";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import backend from "@/lib/backend";
-import useKeyPress from "@/hooks/useKeyPress";
-import useOnClickOutside from "@/hooks/useOnClickOutside";
-import LoadingSpinner from "./LoadingSpinner";
+
 import SearchIcon from "./Icons/SearchIcon";
 import XIcon from "./Icons/XIcon";
+import LoadingSpinner from "./LoadingSpinner";
 
 const handleSearchQuery = AwesomeDebouncePromise(
   async (searchText, setSearchResults, setIsLoading) => {

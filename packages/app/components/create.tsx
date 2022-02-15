@@ -1,24 +1,32 @@
 import { useEffect } from "react";
 import { Platform, Pressable, ScrollView } from "react-native";
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
-import { View, Text, Fieldset, Checkbox, Button } from "design-system";
-import { ChevronUp } from "design-system/icon";
-import { Image } from "design-system/image";
-import { Video } from "design-system/video";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Controller, useForm } from "react-hook-form";
+
 import {
   MintNFTType,
   supportedVideoExtensions,
   UseMintNFT,
 } from "app/hooks/use-mint-nft";
-import { Accordion } from "design-system";
-import { useIsDarkMode } from "design-system/hooks";
-import { useForm, Controller } from "react-hook-form";
-import { yup } from "app/lib/yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { ErrorText } from "design-system/fieldset";
-import { useRouter } from "app/navigation/use-router";
 import { useUser } from "app/hooks/use-user";
+import { yup } from "app/lib/yup";
+import { useRouter } from "app/navigation/use-router";
+
+import {
+  Accordion,
+  Button,
+  Checkbox,
+  Fieldset,
+  Text,
+  View,
+} from "design-system";
+import { ErrorText } from "design-system/fieldset";
+import { useIsDarkMode } from "design-system/hooks";
+import { ChevronUp } from "design-system/icon";
+import { Image } from "design-system/image";
+import { Video } from "design-system/video";
 
 const defaultValues = {
   editionCount: 1,

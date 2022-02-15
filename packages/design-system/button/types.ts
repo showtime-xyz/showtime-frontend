@@ -1,8 +1,14 @@
 import type React from "react";
+
 import type { Props as PressableScaleProps } from "design-system/pressable-scale";
 import type { TW } from "design-system/tailwind/types";
 
-export type ButtonVariant = "primary" | "danger" | "tertiary" | "secondary";
+export type ButtonVariant =
+  | "primary"
+  | "danger"
+  | "tertiary"
+  | "secondary"
+  | "text";
 
 export type ButtonSize = "small" | "regular";
 

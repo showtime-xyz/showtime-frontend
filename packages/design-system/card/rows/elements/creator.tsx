@@ -1,11 +1,12 @@
-import { View } from "design-system/view";
-import { Text } from "design-system/text";
-import { Image } from "design-system/image";
-import { VerificationBadge } from "design-system/verification-badge";
 import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
-import type { NFT } from "app/types";
-import { useRouter } from "app/navigation/use-router";
 import { Link } from "app/navigation/link";
+import { useRouter } from "app/navigation/use-router";
+import type { NFT } from "app/types";
+
+import { Image } from "design-system/image";
+import { Text } from "design-system/text";
+import { VerificationBadge } from "design-system/verification-badge";
+import { View } from "design-system/view";
 
 const getProfileImageUrl = (imgUrl: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {

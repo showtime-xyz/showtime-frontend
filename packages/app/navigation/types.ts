@@ -1,10 +1,11 @@
-import type { NextComponentType, NextPageContext } from "next";
 import type { NavigatorScreenParams } from "@react-navigation/native";
+import type { NextComponentType, NextPageContext } from "next";
 
 type HomeStackParams = {
   home: undefined;
   login: undefined;
   nft: { id: number };
+  nftTransfer: { id: number };
   burn: undefined;
   profile: { walletAddress: number };
   settings: undefined;

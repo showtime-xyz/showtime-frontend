@@ -1,18 +1,22 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+
 import { useSWRConfig } from "swr";
-import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import useUnmountSignal from "use-unmount-signal";
+
 import { AuthContext } from "app/context/auth-context";
-import { magic } from "app/lib/magic";
-import { mixpanel } from "app/lib/mixpanel";
-import { deleteCache } from "app/lib/delete-cache";
-import { deleteRefreshToken } from "app/lib/refresh-token";
-import { deleteAccessToken, getAccessToken } from "app/lib/access-token";
-import * as loginStorage from "app/lib/login";
-import * as logoutStorage from "app/lib/logout";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { useFetchOnAppForeground } from "app/hooks/use-fetch-on-app-foreground";
 import { useWeb3 } from "app/hooks/use-web3";
+import { deleteAccessToken, getAccessToken } from "app/lib/access-token";
+import { deleteCache } from "app/lib/delete-cache";
+import * as loginStorage from "app/lib/login";
+import * as logoutStorage from "app/lib/logout";
+import { magic } from "app/lib/magic";
+import { mixpanel } from "app/lib/mixpanel";
+import { deleteRefreshToken } from "app/lib/refresh-token";
+import { rudder } from "app/lib/rudderstack";
+import { useWalletConnect } from "app/lib/walletconnect";
+
 import type { AuthenticationStatus } from "../types";
 
 interface AuthProviderProps {
@@ -70,6 +74,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (wasUserLoggedIn && wasUserLoggedIn.length > 0) {
         mixpanel.track("Logout");
       }
+      await rudder.reset();
 
       loginStorage.deleteLogin();
       logoutStorage.setLogout(Date.now().toString());
@@ -82,7 +87,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         connector.killSession();
       }
 
-      magic.user.logout();
+      magic?.user?.logout();
 
       setWeb3(undefined);
       setAuthenticationStatus("UNAUTHENTICATED");

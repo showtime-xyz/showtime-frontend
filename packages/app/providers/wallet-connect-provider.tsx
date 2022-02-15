@@ -1,9 +1,10 @@
 import { memo } from "react";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import WCProvider, {
   RenderQrcodeModalProps,
   QrcodeModal,
 } from "@walletconnect/react-native-dapp";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FullWindowOverlay } from "react-native-screens";
 
 const scheme = `io.showtime${

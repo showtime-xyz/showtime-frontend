@@ -1,7 +1,8 @@
-import { Profile } from "./types";
 import { Biconomy } from "@biconomy/mexa";
 import { ethers } from "ethers";
 import removeMd from "remove-markdown";
+
+import { Profile } from "./types";
 
 export const formatAddressShort = (address) => {
   if (!address) return null;

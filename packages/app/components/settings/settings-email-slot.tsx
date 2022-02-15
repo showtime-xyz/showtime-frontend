@@ -1,13 +1,17 @@
 import { useContext, useEffect, useState, useCallback } from "react";
+
 import Animated, { FadeIn } from "react-native-reanimated";
-import { View, Text, Button, Skeleton } from "design-system";
-import { useColorScheme } from "design-system/hooks";
-import { WalletAddressesV2 } from "app/types";
-import { DataPill } from "design-system/data-pill";
+
 import { AppContext } from "app/context/app-context";
 import { magic } from "app/lib/magic";
-import { AddressMenu } from "./address-menu";
+import { WalletAddressesV2 } from "app/types";
+
+import { View, Text, Button, Skeleton } from "design-system";
+import { DataPill } from "design-system/data-pill";
+import { useColorScheme } from "design-system/hooks";
+
 import { AddEmail } from "./add-email";
+import { AddressMenu } from "./address-menu";
 import { SettingSubTitle } from "./settings-subtitle";
 
 export type EmailSlotProps = {
@@ -83,7 +87,7 @@ export const SettingsEmailSlot = (props: EmailSlotProps) => {
 
   const getCurrentMagicUser = useCallback(async () => {
     if (isMagic) {
-      const magicMetaData = await magic.user.getMetadata();
+      const magicMetaData = await magic?.user?.getMetadata();
       const currentEmail = magicMetaData.email;
       const currentMagicAddress = magicMetaData.publicAddress;
       const isMatchingMagic =

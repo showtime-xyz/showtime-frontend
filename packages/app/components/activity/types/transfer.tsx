@@ -1,5 +1,5 @@
-import { TextLink } from "app/navigation/link";
 import { ACTIVITY_TYPES } from "app/lib/constants";
+import { TextLink } from "app/navigation/link";
 
 function Transfer({ act }) {
   const { nfts, type } = act;

@@ -7,16 +7,19 @@ import {
   useMemo,
 } from "react";
 import { FlatList } from "react-native";
-import { Pressable } from "design-system/pressable-scale";
-import { Text } from "design-system/text";
+
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
-import data, { CountryDataType } from "./country-code-data";
-import { View } from "design-system/view";
-import { tw } from "design-system/tailwind";
+
 import { Check } from "design-system/icon";
+import { Pressable } from "design-system/pressable-scale";
+import { tw } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
+
+import data, { CountryDataType } from "./country-code-data";
 
 type CountryCodePickerProps = {
   value: string;

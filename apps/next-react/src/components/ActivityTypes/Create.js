@@ -1,6 +1,6 @@
-import Link from "next/link";
-import mixpanel from "mixpanel-browser";
 import { CHAIN_IDENTIFIERS } from "@/lib/constants";
+import mixpanel from "mixpanel-browser";
+import Link from "next/link";
 
 export default function Create({ act }) {
   const { nfts } = act;

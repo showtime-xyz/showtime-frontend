@@ -1,11 +1,13 @@
 import { Platform } from "react-native";
+
 import dynamic from "next/dynamic";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import createStackNavigator from "app/navigation/create-stack-navigator";
-import { HomeStackParams } from "app/navigation/types";
 import { screenOptions } from "app/navigation/navigator-screen-options";
+import { HomeStackParams } from "app/navigation/types";
 import { HomeScreen } from "app/screens/home";
+
 import { useIsDarkMode } from "design-system/hooks";
 
 const LoginScreen = dynamic<JSX.Element>(() =>
@@ -17,6 +19,9 @@ const NftScreen = dynamic<JSX.Element>(() =>
 
 const ProfileScreen = dynamic<JSX.Element>(() =>
   import("app/screens/profile").then((mod) => mod.ProfileScreen)
+);
+const TransferNftScreen = dynamic<JSX.Element>(() =>
+  import("app/screens/transfer-nft").then((mod) => mod.TransferNftScreen)
 );
 
 const SettingsScreen = dynamic<JSX.Element>(() =>

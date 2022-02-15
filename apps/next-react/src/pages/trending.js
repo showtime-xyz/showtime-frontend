@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
-import Head from "next/head";
-import Layout from "@/components/layout";
-import backend from "@/lib/backend";
-import mixpanel from "mixpanel-browser";
-import { GridTab, GridTabs } from "@/components/GridTabs";
+
 import CappedWidth from "@/components/CappedWidth";
+import { GridTab, GridTabs } from "@/components/GridTabs";
 import TokenGridV4 from "@/components/TokenGridV4";
 import TrendingCreators from "@/components/TrendingCreators";
+import Layout from "@/components/layout";
 import useAuth from "@/hooks/useAuth";
+import backend from "@/lib/backend";
+import mixpanel from "mixpanel-browser";
+import Head from "next/head";
 
 // how many leaders to show on first load
 const LEADERBOARD_LIMIT = 10;
@@ -85,9 +86,7 @@ const Leaderboard = () => {
         />
       </Head>
 
-      <div
-        className="py-12 sm:py-14 px-8 sm:px-10 text-left bg-gradient-to-tr from-violet-900 via-violet-500 to-violet-300"
-      >
+      <div className="py-12 sm:py-14 px-8 sm:px-10 text-left bg-gradient-to-tr from-violet-900 via-violet-500 to-violet-300">
         <CappedWidth>
           <div className="flex flex-row mx-3 text-white">
             <div className="flex-1">

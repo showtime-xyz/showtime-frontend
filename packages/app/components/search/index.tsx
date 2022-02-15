@@ -1,20 +1,22 @@
-import { Keyboard, Platform, TextInput } from "react-native";
-import { Input } from "design-system/input";
-import SearchIcon from "design-system/icon/Search";
-import CloseIcon from "design-system/icon/Close";
-import { View } from "design-system/view";
-import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { useCallback, useRef, useState } from "react";
+import { Keyboard, Platform, TextInput } from "react-native";
 import { FlatList } from "react-native";
-import { Text } from "design-system/text";
-import { tw } from "design-system/tailwind";
-import { VerificationBadge } from "design-system/verification-badge";
-import { formatAddressShort } from "app/utilities";
+
+import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { Link } from "app/navigation/link";
+import { formatAddressShort } from "app/utilities";
+
+import { useColorScheme } from "design-system/hooks";
+import CloseIcon from "design-system/icon/Close";
+import SearchIcon from "design-system/icon/Search";
 import { Image } from "design-system/image";
+import { Input } from "design-system/input";
 import { Pressable } from "design-system/pressable-scale";
 import { Skeleton } from "design-system/skeleton";
-import { useColorScheme } from "design-system/hooks";
+import { tw } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { VerificationBadge } from "design-system/verification-badge";
+import { View } from "design-system/view";
 
 export const Search = () => {
   const [term, setTerm] = useState("");

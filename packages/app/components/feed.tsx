@@ -1,11 +1,14 @@
 import React, { Suspense, useCallback, useRef } from "react";
 import { Platform, FlatList } from "react-native";
+
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useScrollToTop } from "@react-navigation/native";
+
 import { useActivity } from "app/hooks/api-hooks";
 
 import { View, Spinner, Text } from "design-system";
 import { Card } from "design-system/card";
+
 import { ViewabilityTrackerFlatlist } from "./viewability-tracker-flatlist";
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {

@@ -1,6 +1,8 @@
-import { View } from "design-system/view";
-import { Image } from "design-system/image";
 import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
+
+import { Image } from "design-system/image";
+import { View } from "design-system/view";
+
 import { useIsDarkMode } from "../hooks";
 
 const getProfileImageUrl = (imgUrl: string) => {

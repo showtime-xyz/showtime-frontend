@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
 import mixpanel from "mixpanel-browser";
+import Link from "next/link";
 
 export default function UserImageList({ users, sizeClass = "h-12 w-12" }) {
   if (!users) return null;

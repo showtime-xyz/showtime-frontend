@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from "react";
-import Svg, { Circle } from "react-native-svg";
+import { Platform, StyleSheet } from "react-native";
+
 import Animated, {
   Easing,
   useSharedValue,
@@ -7,8 +8,9 @@ import Animated, {
   withRepeat,
   useAnimatedStyle,
 } from "react-native-reanimated";
+import Svg, { Circle } from "react-native-svg";
+
 import { useIsDarkMode } from "../hooks";
-import { Platform, StyleSheet } from "react-native";
 
 type SpinnerProps = {
   size?: "large" | "medium" | "small";

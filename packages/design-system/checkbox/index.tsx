@@ -1,12 +1,14 @@
 import React, { useCallback, useMemo } from "react";
-import { Pressable } from "dripsy";
-import { Path, Svg } from "react-native-svg";
 import { Platform } from "react-native";
+
+import { Pressable } from "dripsy";
 import { MotiView } from "moti";
-import { tw } from "../tailwind";
+import Animated, { useAnimatedStyle } from "react-native-reanimated";
+import { Path, Svg } from "react-native-svg";
+
 import { useOnFocus, useOnHover } from "../hooks";
 import { useIsDarkMode } from "../hooks";
-import Animated, { useAnimatedStyle } from "react-native-reanimated";
+import { tw } from "../tailwind";
 import { colors } from "../tailwind/colors";
 
 type CheckboxProps = {

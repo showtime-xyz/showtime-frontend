@@ -1,11 +1,13 @@
 import { useState } from "react";
-import mixpanel from "mixpanel-browser";
-import CloseButton from "./CloseButton";
-import { Magic } from "magic-sdk";
-import ScrollableModal from "./ScrollableModal";
+
 import axios from "@/lib/axios";
-import GreenButton from "./UI/Buttons/GreenButton";
+import { Magic } from "magic-sdk";
+import mixpanel from "mixpanel-browser";
+
+import CloseButton from "./CloseButton";
+import ScrollableModal from "./ScrollableModal";
 import GhostButton from "./UI/Buttons/GhostButton";
+import GreenButton from "./UI/Buttons/GreenButton";
 
 const ModalAddEmail = ({ isOpen, setEmailModalOpen, setHasEmailAddress }) => {
   const [emailValue, setEmailValue] = useState(null);
