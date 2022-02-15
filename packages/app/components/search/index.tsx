@@ -103,12 +103,21 @@ const SearchItem = ({ item }: { item: SearchResponseItem }) => {
           <View tw="h-8 w-8 bg-gray-200 rounded-full mr-2">
             <Image source={{ uri: item.img_url }} tw="h-8 w-8 rounded-full" />
           </View>
-          <View tw="mr-1 justify-between">
-            <Text tw="text-sm text-gray-600 dark:text-gray-300 font-semibold">
-              {item.name}
-            </Text>
+          <View tw="mr-1 justify-center">
+            {item.name ? (
+              <Text
+                tw="text-sm text-gray-600 dark:text-gray-300 font-semibold mb-[1px]"
+                numberOfLines={1}
+              >
+                {item.name}
+              </Text>
+            ) : null}
+
             <View tw="items-center flex-row">
-              <Text tw="text-sm text-gray-900 dark:text-white font-semibold">
+              <Text
+                tw="text-sm text-gray-900 dark:text-white font-semibold"
+                numberOfLines={1}
+              >
                 {item.username ? (
                   <>@{item.username}</>
                 ) : (

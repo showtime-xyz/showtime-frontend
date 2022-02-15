@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+
 import { withColorScheme } from "app/components/memo-with-theme";
 import { Profile } from "app/components/profile";
 import { mixpanel } from "app/lib/mixpanel";
@@ -18,7 +20,11 @@ const ProfileScreen = withColorScheme(() => {
 
   const [walletAddress, setWalletAddress] = useParam("walletAddress");
 
-  return <Profile walletAddress={walletAddress as string} />;
+  return (
+    <BottomSheetModalProvider>
+      <Profile walletAddress={walletAddress as string} />
+    </BottomSheetModalProvider>
+  );
 });
 
 export { ProfileScreen };
