@@ -298,6 +298,30 @@ Using `dotenv` for the Expo app. Next.js is automatically picking up the `.env.l
 - `.env.local` in `apps/next-react`
 - `.env.local` in `apps/next-react-native`
 
+## Release Cycle
+
+### Native
+
+#### Over The Air Update (EAS Update)
+
+1. Increment the patch version in the root `package.json`
+
+2. Run `yarn update:production` in `apps/expo`
+
+3. Close and reopen the production app twice to check the new update
+
+#### Native Build (EAS Build + EAS Submit)
+
+1. Increment the major version in the root `package.json`
+
+2. Run `yarn deploy:production` in `apps/expo`
+
+3. Submit the new build for review on TestFlight and Google Play
+
+### Web
+
+TODO: CI/CD with Vercel + GitHub Actions via `/promote` Slack command
+
 ## Notes
 
 Pro tip: you can add `tw` to `Tailwind CSS: Class Attributes` VS Code extension setting to get IntelliSense working.
