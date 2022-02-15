@@ -316,7 +316,7 @@ Using `dotenv` for the Expo app. Next.js is automatically picking up the `.env.l
 
 2. Run `yarn deploy:production` in `apps/expo`
 
-3. Submit the new build for review on TestFlight and Google Play
+3. Submit the new build for review on [TestFlight](https://appstoreconnect.apple.com/apps/1606611688/testflight/ios) and [Google Play](https://play.google.com/console/u/0/developers/5865969718890177485/app-list?pli=1)
 
 ### Web
 
@@ -351,9 +351,6 @@ git config blame.ignoreRevsFile .git-blame-ignore-revs
 
 ### Quick Style Guide
 
-// TODO: define this as a team. consistency is key
-
 - Filenames: lowercase and separated by dashes
-- Imports order: import third-party packages first, then our own packages.
-  Always import React and React Native first (if imported).
+- Prefer absolute imports
 - `export { Component }` instead of `export default Component`
