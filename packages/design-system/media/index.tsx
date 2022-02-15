@@ -11,6 +11,7 @@ import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
 import { NFT_DETAIL_API } from "app/utilities";
 
+import { Play } from "design-system/icon";
 import { Image } from "design-system/image";
 import { Model } from "design-system/model";
 import { PinchToZoom } from "design-system/pinch-to-zoom";
@@ -59,7 +60,15 @@ function Media({ item, numColumns, tw }: Props) {
         )
       : getImageUrl(
           item?.token_aspect_ratio,
-          item?.still_preview_url
+          item?.mime_type === "image/gif"
+            ? // Would be cool if this was handled on the backend
+              // `still_preview_url` should be a still image
+              `${
+                process.env.NEXT_PUBLIC_BACKEND_URL
+              }/v1/media/format/img?url=${encodeURIComponent(
+                item?.still_preview_url
+              )}`
+            : item?.still_preview_url
             ? item?.still_preview_url
             : item?.token_img_url
         );
@@ -133,6 +142,11 @@ function Media({ item, numColumns, tw }: Props) {
         {item?.mime_type?.startsWith("image") &&
         item?.mime_type !== "image/svg+xml" ? (
           <PinchToZoom>
+            {numColumns > 1 && item?.mime_type === "image/gif" && (
+              <View tw="bg-transparent absolute z-1 bottom-1 right-1">
+                <Play height={24} width={24} color="white" />
+              </View>
+            )}
             <Image
               source={{
                 uri: imageUri,
@@ -145,16 +159,23 @@ function Media({ item, numColumns, tw }: Props) {
         ) : null}
 
         {item?.mime_type?.startsWith("video") ? (
-          <Video
-            source={{
-              uri: videoUri,
-            }}
-            posterSource={{
-              uri: item?.still_preview_url,
-            }}
-            tw={size}
-            resizeMode="cover"
-          />
+          <View>
+            {numColumns > 1 && (
+              <View tw="bg-transparent absolute z-1 bottom-1 right-1">
+                <Play height={24} width={24} color="white" />
+              </View>
+            )}
+            <Video
+              source={{
+                uri: videoUri,
+              }}
+              posterSource={{
+                uri: item?.still_preview_url,
+              }}
+              tw={size}
+              resizeMode="cover"
+            />
+          </View>
         ) : null}
 
         {item?.mime_type?.startsWith("model") ? (
