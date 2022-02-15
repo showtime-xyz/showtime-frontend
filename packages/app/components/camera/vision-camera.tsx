@@ -30,6 +30,7 @@ import {
 
 import { CameraButtons } from "app/components/camera/camera-buttons";
 import { useIsForeground } from "app/hooks/use-is-foreground";
+import { track } from "app/lib/analytics";
 import { useRouter } from "app/navigation/use-router";
 
 import { Flash, FlashOff } from "design-system/icon";
@@ -269,6 +270,8 @@ export function Camera({
       // Start timer
       setIsLoading(true);
       burstCaptureTimer.start();
+
+      track("Photo Taken");
     } catch (e) {
       console.error("Failed to take photo!", e);
     }
