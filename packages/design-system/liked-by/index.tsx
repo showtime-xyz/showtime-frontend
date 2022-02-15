@@ -65,7 +65,11 @@ export function LikedBy({ nft }: Props) {
                   variant="text-xs"
                   tw="font-bold text-black dark:text-white"
                 >
-                  {`${data?.likers.length ?? 0} others`}
+                  {data?.likers
+                    ? `${data.likers.length - 2} ${
+                        data.likers.length - 2 === 1 ? "other" : "others"
+                      }`
+                    : 0}
                 </Text>
               </>
             )}

@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/react";
 
-import { MessageBox } from "./message-box";
+import { MessageBox } from "./message-box-new";
 
 export default {
   component: MessageBox,

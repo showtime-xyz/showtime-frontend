@@ -1,71 +1,64 @@
-import { StyleSheet } from "react-native";
+import { ReactNode, useMemo } from "react";
 
-import { Image } from "dripsy";
-
-import { tw } from "../tailwind";
+import { Image } from "../image";
+import { TW } from "../tailwind/types";
 import { View } from "../view";
+import { CONTAINER_TW, IMAGE_TW, DEFAULT_AVATAR_PIC } from "./constants";
 
-type AvatarProps = {
-  avatarUrl: string;
-  showTokenIcon?: boolean;
+export type AvatarProps = {
+  url?: string;
+  size?: number;
+  borderWidth?: number;
+  tw?: TW;
+  children?: ReactNode;
 };
 
-export const Avatar = (props: AvatarProps) => {
-  const { avatarUrl, showTokenIcon } = props;
+const getAvatarImageUrl = (imgUrl?: string) => {
+  if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
+    imgUrl = imgUrl.split("=")[0] + "=s112";
+  }
+  return imgUrl;
+};
+
+export const Avatar = ({
+  url,
+  borderWidth = 0,
+  size = 32,
+  tw = "",
+  children,
+}: AvatarProps) => {
+  const imageSource = useMemo(
+    () => ({ uri: getAvatarImageUrl(url || DEFAULT_AVATAR_PIC) }),
+    [url]
+  );
+
+  const containerTW = useMemo(
+    () => [
+      ...(typeof tw === "string" ? [tw] : tw),
+      `w-[${size}px] h-[${size}px]`,
+      CONTAINER_TW,
+    ],
+    [size]
+  );
+  const imageTW = useMemo(
+    () => [
+      IMAGE_TW,
+      `w-[${size}px] h-[${size}px]`,
+      borderWidth > 0 ? `border-${borderWidth}` : "",
+    ],
+    [size, borderWidth]
+  );
+
   return (
-    <View>
+    <View tw={containerTW}>
       <Image
-        source={{
-          uri: avatarUrl,
-        }}
-        style={[styles.avatar, tw.style("border-white dark:border-black")]}
+        source={imageSource}
+        width={size}
+        height={size}
+        resizeMode="contain"
+        tw={imageTW}
       />
-      {showTokenIcon ? (
-        <View style={styles.wrapper}>
-          <View
-            style={[
-              styles.semiCircle,
-              tw.style("border-white dark:border-black"),
-            ]}
-          ></View>
-          <Image
-            source={require("../../../apps/expo/assets/social_token.png")}
-            style={styles.socialToken}
-          />
-        </View>
-      ) : null}
+      {children}
     </View>
   );
 };
-
-const AVATAR_SIZE = 144;
-const SOCIAL_TOKEN_SIZE = 32;
-
-const styles = StyleSheet.create({
-  wrapper: {
-    position: "absolute",
-    transform: [{ rotateZ: "-50deg" }],
-    top: 100,
-    left: 94,
-  },
-  semiCircle: {
-    borderTopLeftRadius: 999,
-    borderTopRightRadius: 999,
-    borderTopWidth: 20,
-    borderLeftWidth: 40,
-  },
-  avatar: {
-    height: AVATAR_SIZE,
-    width: AVATAR_SIZE,
-    borderRadius: 999,
-    borderWidth: 8,
-  },
-  socialToken: {
-    width: SOCIAL_TOKEN_SIZE,
-    height: SOCIAL_TOKEN_SIZE,
-    top: 4,
-    left: 4,
-    position: "absolute",
-    transform: [{ rotateZ: "50deg" }],
-  },
-});

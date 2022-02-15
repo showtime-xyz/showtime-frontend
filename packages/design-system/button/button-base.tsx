@@ -20,11 +20,11 @@ import {
 import type { BaseButtonProps } from "./types";
 
 export function BaseButton({
-  size,
+  size = "small",
   tw = "",
   labelTW = "",
   backgroundColors,
-  iconOnly,
+  iconOnly = false,
   iconColor = ["white", "black"],
   children,
   asChild,
@@ -48,12 +48,13 @@ export function BaseButton({
   );
   const containerAnimatedStyle = useAnimatedStyle(
     () => ({
-      backgroundColor:
-        backgroundColors![animatedPressed.value ? "pressed" : "default"][
-          isDarkMode ? 1 : 0
-        ],
+      backgroundColor: backgroundColors
+        ? backgroundColors[animatedPressed.value ? "pressed" : "default"][
+            isDarkMode ? 1 : 0
+          ]
+        : "transparent",
     }),
-    [animatedPressed, isDarkMode]
+    [backgroundColors, animatedPressed, isDarkMode]
   );
   const labelStyle = useMemo(
     () => [
@@ -94,8 +95,11 @@ export function BaseButton({
     return (
       <Animated.View
         style={useMemo(
-          () => [containerAnimatedStyle, tailwind.style(containerStyle)],
-          [containerAnimatedStyle, containerStyle]
+          () =>
+            backgroundColors
+              ? [containerAnimatedStyle, tailwind.style(containerStyle)]
+              : tailwind.style(containerStyle),
+          [backgroundColors, containerAnimatedStyle, containerStyle]
         )}
       >
         {renderChildren}
@@ -107,7 +111,7 @@ export function BaseButton({
     <Pressable
       {...props}
       tw={containerStyle}
-      style={containerAnimatedStyle}
+      style={backgroundColors ? containerAnimatedStyle : undefined}
       pressedValue={animatedPressed}
       children={renderChildren}
     />
