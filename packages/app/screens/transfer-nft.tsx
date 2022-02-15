@@ -2,11 +2,10 @@ import { useMemo } from "react";
 import { Platform } from "react-native";
 
 import { TransferNft } from "app/components/transfer-nft";
-import { useTrackPageViewed } from "app/lib/analytics";
-import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
-
+import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { Modal, ModalSheet } from "design-system";
+import { createParam } from "app/navigation/use-param";
 
 type Query = {
   id: string;
@@ -15,8 +14,9 @@ type Query = {
 const { useParam } = createParam<Query>();
 
 const TransferNftScreen = () => {
+  useHideHeader();
+
   //#region hooks
-  useTrackPageViewed({ name: "Transfer" });
   const router = useRouter();
   const [nftId, setNftId] = useParam("id");
 

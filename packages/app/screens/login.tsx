@@ -4,7 +4,6 @@ import { Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Login } from "app/components/login";
-import { useTrackPageViewed } from "app/lib/analytics";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
 
@@ -28,7 +27,6 @@ const { useParam } = createParam<Query>();
 
 export function LoginScreen() {
   //#region hooks
-  useTrackPageViewed({ name: "Login" });
   const [redirect_url] = useParam("redirect_url");
   const router = useRouter();
   const { top: topSafeArea } = useSafeAreaInsets();

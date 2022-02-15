@@ -2,8 +2,8 @@ import { useEffect, useMemo } from "react";
 import { Platform } from "react-native";
 
 import { Delete } from "app/components/delete";
-import { useTrackPageViewed } from "app/lib/analytics";
 import { mixpanel } from "app/lib/mixpanel";
+import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
 
@@ -16,7 +16,7 @@ type Query = {
 const { useParam } = createParam<Query>();
 
 const DeleteScreen = () => {
-  useTrackPageViewed({ name: "Delete" });
+  useHideHeader();
   const router = useRouter();
   //@TODO: Why is Typescript complaining about a missing argument here? None of the other uses with the exact same code have the same warning
   const [nftId, setNftId] = useParam("nftId");

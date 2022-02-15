@@ -5,7 +5,6 @@ import useSWR from "swr";
 import useUnmountSignal from "use-unmount-signal";
 
 import { NFTDropdown } from "app/components/nft-dropdown";
-import { useTrackPageViewed } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
@@ -32,7 +31,6 @@ type Query = {
 const { useParam } = createParam<Query>();
 
 function NftScreen() {
-  useTrackPageViewed({ name: "NFT" });
   const { top: topSafeArea } = useSafeAreaInsets();
   const router = useRouter();
   const unmountSignal = useUnmountSignal();
