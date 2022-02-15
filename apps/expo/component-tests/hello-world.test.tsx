@@ -10,7 +10,7 @@ describe("mounts app", () => {
   });
 
   test("mounts feed", async () => {
-    const homeText = getByTestId("homeFeed2");
+    const homeText = getByTestId("homeFeed");
     expect(homeText).toBeDefined();
   });
 });
