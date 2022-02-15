@@ -31,7 +31,24 @@ export default function Modal({ isOpen }) {
       const email = elements.email.value;
 
       // Magic Link authenticates through email
-      const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY);
+      const isMumbai = process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai";
+
+      // Default to polygon chain
+      const customNodeOptions = {
+        rpcUrl: "https://rpc-mainnet.maticvigil.com/",
+        chainId: 137,
+      };
+
+      if (isMumbai) {
+        console.log("Magic network is connecting to Mumbai testnet");
+        customNodeOptions.rpcUrl =
+          "https://polygon-mumbai.g.alchemy.com/v2/kh3WGQQaRugQsUXXLN8LkOBdIQzh86yL";
+        customNodeOptions.chainId = 80001;
+      }
+
+      const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY, {
+        network: customNodeOptions,
+      });
       const did = await magic.auth.loginWithMagicLink({ email });
       const web3 = new ethers.providers.Web3Provider(magic.rpcProvider);
       context.setWeb3(web3);
