@@ -7,33 +7,23 @@ export { ButtonLabel } from "./button-label";
 export function Button({
   tw = "",
   variant = "primary",
-  size = "small",
-  iconOnly = false,
   ...props
 }: ButtonProps) {
   const _tw = typeof tw === "string" ? tw ?? "" : tw?.join(" ");
 
   switch (variant) {
     case "primary":
-      return (
-        <PrimaryButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
-      );
+      return <PrimaryButton tw={_tw} {...props} />;
     case "danger":
-      return (
-        <DangerButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
-      );
+      return <DangerButton tw={_tw} {...props} />;
     case "tertiary":
-      return (
-        <TertiaryButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
-      );
+      return <TertiaryButton tw={_tw} {...props} />;
     case "secondary":
-      return (
-        <SecondaryButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
-      );
+      return <SecondaryButton tw={_tw} {...props} />;
+    case "text":
+      return <TextButton tw={_tw} {...props} />;
     default:
-      return (
-        <PrimaryButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
-      );
+      return <PrimaryButton tw={_tw} {...props} />;
   }
 }
 
@@ -77,6 +67,17 @@ export function DangerButton(props: ButtonProps) {
       labelTW="text-white"
       iconColor={ICON_COLOR_TW_MAPPER.danger}
       backgroundColors={CONTAINER_BACKGROUND_MAPPER.danger}
+    />
+  );
+}
+
+export function TextButton(props: ButtonProps) {
+  return (
+    <BaseButton
+      {...(props as any)}
+      labelTW="text-gray-500"
+      iconColor={ICON_COLOR_TW_MAPPER.text}
+      backgroundColors={undefined}
     />
   );
 }

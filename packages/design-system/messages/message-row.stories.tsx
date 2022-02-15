@@ -1,10 +1,11 @@
 import { Meta } from "@storybook/react";
 
-import { Message } from "./message";
+import { MessageMore } from "./message-more";
+import { MessageRow } from "./message-row";
 
 export default {
-  component: Message,
-  title: "Components/Messages/Message",
+  component: MessageRow,
+  title: "Components/Messages/MessageRow",
 } as Meta;
 
 const comments = [
@@ -83,9 +84,46 @@ const comments = [
 ];
 
 export const SingleMessage: React.VFC<{}> = () => (
-  <Message message={comments[0]} />
+  <MessageRow
+    username={comments[0].username}
+    userAvatar={comments[0].img_url}
+    userVerified={comments[0].verified}
+    content={comments[0].text}
+    likeCount={comments[0].like_count}
+    replayCount={comments[0].replies.length}
+    hasParent={false}
+    hasReplies={comments[0].replies.length > 0}
+    createdAt={comments[0].added}
+  />
 );
 
 export const MessageWithReply: React.VFC<{}> = () => (
-  <Message message={comments[1]} />
+  <>
+    <MessageRow
+      username={comments[1].username}
+      userAvatar={comments[1].img_url}
+      userVerified={comments[1].verified}
+      content={comments[1].text}
+      likeCount={comments[1].like_count}
+      replayCount={comments[1].replies.length}
+      hasParent={false}
+      hasReplies={comments[1].replies.length > 0}
+      createdAt={comments[1].added}
+    />
+    {comments[1].replies.map((item) => (
+      <MessageRow
+        key={item.comment_id}
+        username={item.username}
+        userAvatar={item.img_url}
+        userVerified={item.verified}
+        content={item.text}
+        likeCount={item.like_count}
+        replayCount={0}
+        hasParent={true}
+        hasReplies={false}
+        createdAt={item.added}
+      />
+    ))}
+    <MessageMore count={comments[1].replies.length} />
+  </>
 );
