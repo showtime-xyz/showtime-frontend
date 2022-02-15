@@ -1,5 +1,6 @@
-import preloadAll from "jest-next-dynamic";
 import { render } from "@testing-library/react-native";
+import preloadAll from "jest-next-dynamic";
+
 import App from "../App";
 
 describe("mounts app", () => {
@@ -9,8 +10,7 @@ describe("mounts app", () => {
   });
 
   test("mounts feed", async () => {
-    debug();
-    const homeText = getByTestId("homeFeed");
+    const homeText = getByTestId("homeFeed2");
     expect(homeText).toBeDefined();
   });
 });
