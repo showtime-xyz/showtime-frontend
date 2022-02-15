@@ -5,6 +5,7 @@ import { ethers } from "ethers";
 
 import minterAbi from "app/abi/ShowtimeMT.json";
 import { AppContext } from "app/context/app-context";
+import { track } from "app/lib/analytics";
 import { useWalletConnect } from "app/lib/walletconnect";
 import { getBiconomy } from "app/utilities";
 
@@ -130,6 +131,7 @@ export const useBurnNFT = () => {
 
         const response = await burnToken({ ...params });
         dispatch({ type: "burningSuccess", transaction: response.transaction });
+        track("NFT Burned");
 
         console.log("** burning success **");
       } catch (e) {

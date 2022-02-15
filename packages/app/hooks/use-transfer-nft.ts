@@ -5,10 +5,11 @@ import { ethers } from "ethers";
 
 import transfererAbi from "app/abi/ShowtimeMT.json";
 import { AppContext } from "app/context/app-context";
+import { track } from "app/lib/analytics";
 import { useWalletConnect } from "app/lib/walletconnect";
 import { NFT } from "app/types";
+import { getBiconomy } from "app/utilities";
 
-import { getBiconomy } from "../utilities";
 import { useCurrentUserAddress } from "./use-current-user-address";
 import { useWeb3 } from "./use-web3";
 
@@ -159,6 +160,7 @@ export const useTransferNFT = () => {
             tokenId: response.tokenId,
             transaction: response.transaction,
           });
+          track("NFT Transferred");
           console.log("** transfer success **");
         } catch (e) {
           dispatch({ type: "transferingError" });
