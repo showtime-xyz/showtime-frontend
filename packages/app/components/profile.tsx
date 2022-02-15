@@ -35,6 +35,7 @@ import {
   ModalSheet,
   Select,
 } from "design-system";
+import { Avatar } from "design-system/avatar";
 import { useColorScheme } from "design-system/hooks";
 import { Image } from "design-system/image";
 import { Media } from "design-system/media";
@@ -329,12 +330,9 @@ const ProfileTop = ({
                   radius={99999}
                 >
                   {profileData && (
-                    <Image
-                      source={{
-                        uri: getProfileImage(profileData?.data.profile),
-                      }}
-                      alt="Profile avatar"
-                      tw="border-white h-[128px] w-[128px] rounded-full"
+                    <Avatar
+                      url={getProfileImage(profileData?.data.profile)}
+                      size={128}
                     />
                   )}
                 </Skeleton>
