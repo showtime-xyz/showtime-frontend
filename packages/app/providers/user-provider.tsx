@@ -64,6 +64,7 @@ export function UserProvider({ children }: UserProviderProps) {
 
         LogRocket.getSessionURL((sessionURL: string) => {
           mixpanel.track("LogRocket", { sessionURL: sessionURL });
+          rudder.track("LogRocket", { sessionURL: sessionURL });
           // Sentry.configureScope(scope => {
           //   scope.setExtra("sessionURL", sessionURL);
           // });
