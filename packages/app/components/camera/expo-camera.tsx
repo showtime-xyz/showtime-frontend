@@ -8,6 +8,7 @@ import { AnimatePresence, View as MotiView } from "moti";
 
 import { CameraButtons } from "app/components/camera/camera-buttons";
 import { useIsForeground } from "app/hooks/use-is-foreground";
+import { track } from "app/lib/analytics";
 
 type Props = {
   photos: { uri: string }[];
@@ -70,6 +71,8 @@ export function Camera({
       burstCaptureTimer.start();
 
       setIsLoading(true);
+
+      track("Photo Taken");
     } catch (e) {
       console.error("Failed to take photo!", e);
     }

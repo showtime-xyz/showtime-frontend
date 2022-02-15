@@ -8,6 +8,7 @@ import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { useFetchOnAppForeground } from "app/hooks/use-fetch-on-app-foreground";
 import { useWeb3 } from "app/hooks/use-web3";
 import { deleteAccessToken, getAccessToken } from "app/lib/access-token";
+import { track } from "app/lib/analytics";
 import { deleteCache } from "app/lib/delete-cache";
 import * as loginStorage from "app/lib/login";
 import * as logoutStorage from "app/lib/logout";
@@ -73,6 +74,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       if (wasUserLoggedIn && wasUserLoggedIn.length > 0) {
         mixpanel.track("Logout");
+        track("User Logged Out");
       }
       await rudder.reset();
 

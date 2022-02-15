@@ -3,11 +3,11 @@ import { Share } from "react-native";
 
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useReport } from "app/hooks/use-report";
+import { track } from "app/lib/analytics";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
 
-import { View, Button } from "design-system";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -55,11 +55,18 @@ function NFTDropdown({ nft }: Props) {
         tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
       >
         <DropdownMenuItem
-          onSelect={() =>
-            Share.share({
+          onSelect={async () => {
+            const share = await Share.share({
               url: `https://showtime.io/t/${tokenChainName}/${nft?.contract_address}/${nft?.token_id}`,
-            })
-          }
+            });
+
+            if (share.action === "sharedAction") {
+              track(
+                "NFT Shared",
+                share.activityType ? { type: share.activityType } : undefined
+              );
+            }
+          }}
           key="copy-link"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >

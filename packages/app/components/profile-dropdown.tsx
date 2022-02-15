@@ -3,6 +3,7 @@ import { Share } from "react-native";
 import { useBlock } from "app/hooks/use-block";
 import { useReport } from "app/hooks/use-report";
 import { useUser } from "app/hooks/use-user";
+import { track } from "app/lib/analytics";
 import { useRouter } from "app/navigation/use-router";
 import type { Profile } from "app/types";
 
@@ -45,11 +46,21 @@ function ProfileDropdown({ user }: Props) {
         tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
       >
         <DropdownMenuItem
-          onSelect={() =>
-            Share.share({
-              url: `https://showtime.io/${user.username}`,
-            })
-          }
+          onSelect={async () => {
+            const share = await Share.share({
+              url: `https://showtime.io/${
+                user?.username ??
+                user?.wallet_addresses_excluding_email_v2?.[0]?.address
+              }`,
+            });
+
+            if (share.action === "sharedAction") {
+              track(
+                "User Shared",
+                share.activityType ? { type: share.activityType } : undefined
+              );
+            }
+          }}
           key="share"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
