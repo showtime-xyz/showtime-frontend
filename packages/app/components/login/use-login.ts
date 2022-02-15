@@ -7,6 +7,7 @@ import { useMagicLogin } from "app/hooks/auth/use-magic-login";
 import { useWalletLogin } from "app/hooks/auth/use-wallet-login";
 import { useStableBlurEffect } from "app/hooks/use-stable-blur-effect";
 import { useWeb3 } from "app/hooks/use-web3";
+import { trackButtonClicked } from "app/lib/analytics";
 import { magic } from "app/lib/magic";
 import { mixpanel } from "app/lib/mixpanel";
 
@@ -51,6 +52,7 @@ export const useLogin = (onLogin?: () => void) => {
       try {
         loginSource.current = "wallet";
         mixpanel.track("Login - wallet button click");
+        trackButtonClicked({ name: "Login with wallet" });
 
         await loginWithWallet();
       } catch (error) {
@@ -64,6 +66,7 @@ export const useLogin = (onLogin?: () => void) => {
       try {
         loginSource.current = "magic";
         mixpanel.track("Login - email button click");
+        trackButtonClicked({ name: "Login with email" });
 
         const Web3Provider = (await import("@ethersproject/providers"))
           .Web3Provider;
@@ -83,6 +86,7 @@ export const useLogin = (onLogin?: () => void) => {
       try {
         loginSource.current = "magic";
         mixpanel.track("Login - phone number button click");
+        trackButtonClicked({ name: "Login with phone number" });
 
         const Web3Provider = (await import("@ethersproject/providers"))
           .Web3Provider;
