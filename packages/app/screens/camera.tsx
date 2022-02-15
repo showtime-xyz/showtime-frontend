@@ -7,9 +7,11 @@ import { useTimer } from "use-timer";
 
 import { Camera } from "app/components/camera";
 import { useUser } from "app/hooks/use-user";
+import { useTrackPageViewed } from "app/lib/analytics";
 import { useRouter } from "app/navigation/use-router";
 
 function CameraScreen() {
+  useTrackPageViewed({ name: "Camera" });
   const { isAuthenticated } = useUser();
   const router = useRouter();
   const navigation = useNavigation();

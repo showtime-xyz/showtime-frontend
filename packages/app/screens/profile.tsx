@@ -4,6 +4,7 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 import { withColorScheme } from "app/components/memo-with-theme";
 import { Profile } from "app/components/profile";
+import { useTrackPageViewed } from "app/lib/analytics";
 import { mixpanel } from "app/lib/mixpanel";
 import { createParam } from "app/navigation/use-param";
 
@@ -17,6 +18,7 @@ const ProfileScreen = withColorScheme(() => {
   useEffect(() => {
     mixpanel.track("Profile view");
   }, []);
+  useTrackPageViewed({ name: "Profile" });
 
   const [walletAddress, setWalletAddress] = useParam("walletAddress");
 

@@ -5,8 +5,8 @@ import { useNavigation } from "@react-navigation/native";
 
 import { Create } from "app/components/create";
 import { useMintNFT } from "app/hooks/use-mint-nft";
+import { useTrackPageViewed } from "app/lib/analytics";
 import { mixpanel } from "app/lib/mixpanel";
-import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
 
@@ -19,8 +19,8 @@ type Query = {
 const { useParam } = createParam<Query>();
 
 const CreateScreen = () => {
-  useHideHeader();
   //#region hooks
+  useTrackPageViewed({ name: "Create" });
   const router = useRouter();
   const navigation = useNavigation();
   const [uri] = useParam("uri");
