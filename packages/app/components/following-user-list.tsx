@@ -94,7 +94,7 @@ export const FollowersList = (
   } & FollowingListProp
 ) => {
   const { data, loading } = useFollowersList(props.profileId);
-  const keyExtractor = useCallback((item) => item.id, []);
+  const keyExtractor = useCallback((item) => item.profile_id, []);
   const getItemLayout = useCallback(
     (_, index) => ({
       length: ITEM_HEIGHT,
@@ -146,7 +146,8 @@ export const FollowingList = (
   } & FollowingListProp
 ) => {
   const { data, loading } = useFollowingList(props.profileId);
-  const keyExtractor = useCallback((item) => item.id, []);
+  const keyExtractor = useCallback((item) => item.profile_id, []);
+
   const getItemLayout = useCallback(
     (_, index) => ({
       length: ITEM_HEIGHT,
