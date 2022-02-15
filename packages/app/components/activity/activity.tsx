@@ -38,7 +38,7 @@ function Activity({ activity }: Props) {
         <Link href={`/profile/${actor.wallet_address}`}>
           <Avatar
             url={getProfileImageUrl(actor.img_url ?? DEFAULT_PROFILE_PIC)}
-            icon={type}
+            // icon={type}
           />
         </Link>
 
