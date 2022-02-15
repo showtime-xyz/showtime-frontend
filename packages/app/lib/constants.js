@@ -221,3 +221,8 @@ export const CHAIN_IDENTIFIERS = {
 
 // static height can improve tabs list initial rendering
 export const TAB_LIST_HEIGHT = 50;
+
+export const BYPASS_EMAIL = "test+success@magic.link";
+
+export const BYPASS_EMAIL_WITH_INSECURE_KEYS =
+  "test+success_with_{0x89A3983da27fF0eFCF901F74C4df84e0450A17B7:0x19de850af732e9e5745915162d707d6d8cf013ce7b2862e93081b0c8883bdfae}@magic.link";

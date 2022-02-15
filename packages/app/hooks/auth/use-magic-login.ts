@@ -1,7 +1,9 @@
 import { useCallback } from "react";
 
+import { BYPASS_EMAIL_WITH_INSECURE_KEYS } from "app/lib/constants";
 import { magic } from "app/lib/magic";
 import { mixpanel } from "app/lib/mixpanel";
+import { overrideMagicInstance } from "app/utilities";
 
 import { useAuth } from "./use-auth";
 
@@ -37,12 +39,19 @@ export function useMagicLogin() {
   const loginWithEmail = useCallback(
     async function loginWithEmail(email: string) {
       setAuthenticationStatus("AUTHENTICATING");
-      const did = await magic.auth.loginWithMagicLink({ email });
+      const selectedMagicInstance = overrideMagicInstance(email);
+      const overrideEmail = selectedMagicInstance.testMode
+        ? BYPASS_EMAIL_WITH_INSECURE_KEYS
+        : email;
+
+      const did = await selectedMagicInstance.auth.loginWithMagicLink({
+        email: overrideEmail,
+      });
 
       try {
         await login(LOGIN_MAGIC_ENDPOINT, {
           did,
-          email,
+          email: overrideEmail,
         });
 
         mixpanel.track(`Login success - email`);
