@@ -70,7 +70,7 @@ export function MessageRow({
   );
   //#region
   return (
-    <View tw="flex flex-row p-4 bg-white dark:bg-black">
+    <View tw="flex flex-row py-4 bg-white dark:bg-black">
       {hasParent && <View tw="ml-8" collapsable={true} />}
       <View tw="items-center">
         {(hasReplies || hasParent) && (

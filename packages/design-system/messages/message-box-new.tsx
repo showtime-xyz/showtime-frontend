@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ViewStyle } from "react-native";
 
 import { Button, TextInput, View } from "design-system";
 import { Avatar } from "design-system/avatar";
@@ -7,10 +8,11 @@ import { tw } from "design-system/tailwind";
 
 interface MessageBoxProps {
   userAvatar?: string;
+  style?: ViewStyle;
   onSubmit?: (text: string) => void;
 }
 
-export function MessageBox({ userAvatar, onSubmit }: MessageBoxProps) {
+export function MessageBox({ userAvatar, style, onSubmit }: MessageBoxProps) {
   const [value, setValue] = useState("");
 
   //#region callbacks
@@ -19,7 +21,7 @@ export function MessageBox({ userAvatar, onSubmit }: MessageBoxProps) {
   //#endregion
 
   return (
-    <View tw="flex-row p-4 items-center bg-white dark:bg-black">
+    <View tw="flex-row py-4 items-center bg-white dark:bg-black" style={style}>
       <View tw="flex-1 mr-2">
         <TextInput
           value={value}
