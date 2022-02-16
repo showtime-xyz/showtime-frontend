@@ -2,6 +2,8 @@ import React, { Children, ReactElement } from "react";
 
 import { MenuView } from "@react-native-menu/menu";
 
+import { useColorScheme } from "design-system/hooks";
+
 import {
   flattenChildren,
   pickChildren,
@@ -174,6 +176,7 @@ If you want to use a custom component as your <Content />, you can use the menui
     const trigger = pickChildren<MenuTriggerProps>(props.children, Trigger);
     const content = pickChildren<MenuContentProps>(props.children, Content)
       .targetChildren?.[0];
+    const colorScheme = useColorScheme();
 
     const callbacks: Record<string, () => void> = {};
 
@@ -395,9 +398,6 @@ If you want to use a custom component as your <Content />, you can use the menui
       menuTitle = label;
     }
 
-    // const Component =
-    //   Menu === "ContextMenu" ? ContextMenuView : ContextMenuButton;
-
     return (
       <MenuView
         title={menuTitle}
@@ -406,6 +406,7 @@ If you want to use a custom component as your <Content />, you can use the menui
           callbacks[nativeEvent.event]();
         }}
         actions={menuItems}
+        colorMode={colorScheme}
       >
         {/* <View style={styles.button}>
           <Text style={styles.buttonText}>Test</Text>
