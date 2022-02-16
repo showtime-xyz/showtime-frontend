@@ -1,8 +1,8 @@
 diff --git a/node_modules/@react-native-menu/menu/ios/MenuView.swift b/node_modules/@react-native-menu/menu/ios/MenuView.swift
-index 4400f47..48b08f4 100644
+index 4400f47..3b9b4d5 100644
 --- a/node_modules/@react-native-menu/menu/ios/MenuView.swift
 +++ b/node_modules/@react-native-menu/menu/ios/MenuView.swift
-@@ -34,6 +34,19 @@ class MenuView: UIButton {
+@@ -34,6 +34,20 @@ class MenuView: UIButton {
              self.setup()
          }
      }
@@ -19,6 +19,7 @@ index 4400f47..48b08f4 100644
 +            self.setup()
 +        }
 +    }
++    
      @objc var onPressAction: RCTDirectEventBlock?
      
      @objc var shouldOpenOnLongPress: Bool = false {
