@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { screenOptions } from "app/navigation/navigator-screen-options";
+import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
 import { LoginScreen } from "app/screens/login";
@@ -59,6 +60,7 @@ export function RootStackNavigator() {
       >
         <Stack.Screen name="login" component={LoginScreen} />
         <Stack.Screen name="nft" component={NftScreen} />
+        <Stack.Screen name="comments" component={CommentsScreen} />
         <Stack.Screen name="transferNft" component={TransferNftScreen} />
         <Stack.Screen name="create" component={CreateScreen} />
         <Stack.Screen name="burn" component={DeleteScreen} />
