@@ -60,7 +60,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Run expo prebuild
-        run: detox=true yarn expo:prebuild
+        run: DETOX=true yarn expo:prebuild
 
       - name: Install Java JDK
         uses: joschi/setup-jdk@v2

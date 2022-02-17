@@ -88,7 +88,7 @@ export default {
   },
   plugins: [
     // detox adds network config xml in android. We don't need it during development. It can cause issues while connecting to metro server
-    process.env.detox ? "@config-plugins/detox" : (x) => x,
+    process.env.DETOX ? "@config-plugins/detox" : (x) => x,
     [
       "react-native-vision-camera",
       {
