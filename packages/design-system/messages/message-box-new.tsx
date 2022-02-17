@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ViewStyle } from "react-native";
 
 import { Button, TextInput, View } from "design-system";
@@ -6,24 +6,52 @@ import { Avatar } from "design-system/avatar";
 import { Send } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 
+import { Spinner } from "../spinner";
+
 interface MessageBoxProps {
+  submitting?: boolean;
   userAvatar?: string;
   style?: ViewStyle;
-  onSubmit?: (text: string) => void;
+  onSubmit?: (text: string) => Promise<boolean>;
 }
 
-export function MessageBox({ userAvatar, style, onSubmit }: MessageBoxProps) {
+export function MessageBox({
+  submitting,
+  userAvatar,
+  style,
+  onSubmit,
+}: MessageBoxProps) {
+  const inputRef = useRef<typeof TextInput>();
   const [value, setValue] = useState("");
 
   //#region callbacks
   const handleTextChange = (text: string) => setValue(text);
-  const handleSubmit = () => onSubmit?.(value);
+  const handleSubmit = async function handleSubmit() {
+    let didSubmit = false;
+    try {
+      didSubmit = (await onSubmit?.(value)) ?? false;
+    } catch (error) {
+      // TODO handle error
+    }
+
+    if (didSubmit) {
+      setValue("");
+      // @ts-ignore
+      inputRef.current.blur();
+    }
+  };
   //#endregion
 
   return (
-    <View tw="flex-row py-4 items-center bg-white dark:bg-black" style={style}>
+    <View
+      pointerEvents={submitting ? "none" : "auto"}
+      tw="flex-row py-4 items-center bg-white dark:bg-black"
+      style={style}
+    >
       <View tw="flex-1 mr-2">
         <TextInput
+          //@ts-ignore
+          ref={inputRef}
           value={value}
           placeholder="Add a comment..."
           placeholderTextColor={
@@ -39,7 +67,7 @@ export function MessageBox({ userAvatar, style, onSubmit }: MessageBoxProps) {
         <Avatar tw="absolute mt-3.5 ml-3" size={24} url={userAvatar} />
       </View>
       <Button size="regular" iconOnly={true} onPress={handleSubmit}>
-        <Send />
+        {submitting ? <Spinner size="small" /> : <Send />}
       </Button>
     </View>
   );

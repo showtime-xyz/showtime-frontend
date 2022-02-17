@@ -1,4 +1,4 @@
-import { Fragment, Suspense, useCallback } from "react";
+import { Fragment, Suspense, useCallback, useMemo } from "react";
 import {
   FlatList as RNFlatList,
   Keyboard,
@@ -8,13 +8,15 @@ import {
 
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
+import { CommentRow } from "app/components/comments/comment-row";
 import { useComments, CommentType } from "app/hooks/api/use-comments";
 import { useKeyboardDimensions } from "app/hooks/use-keyboard-dimensions";
 
 import { ActivityIndicator, Spinner, View } from "design-system";
-import { Comments as CommentsList } from "design-system/comments";
 import { MessageBox } from "design-system/messages/message-box-new";
-import { MessageRow } from "design-system/messages/message-row";
+
+import { useNewComment } from "../hooks/api/use-new-comment";
+import { useUser } from "../hooks/use-user";
 
 interface CommentsProps {
   nftId: number;
@@ -24,12 +26,19 @@ const keyExtractor = (item: CommentType) => `comment-${item.comment_id}`;
 
 export function Comments({ nftId }: CommentsProps) {
   //#region hooks
+  const { isAuthenticated } = useUser();
   const { data, isLoading } = useComments({ nftId });
+  const { newComment, submitting } = useNewComment(nftId);
   const { keyboardHeight } = useKeyboardDimensions(true);
   //#endregion
 
   //#region callbacks
-  const handleOnSubmit = useCallback((text: string) => {}, []);
+  const handleOnSubmit = useCallback(async function handleOnSubmit(
+    text: string
+  ) {
+    return await newComment(text);
+  },
+  []);
   const handleOnTouchMove = useCallback(() => {
     if (keyboardHeight > 0) {
       Keyboard.dismiss();
@@ -39,35 +48,8 @@ export function Comments({ nftId }: CommentsProps) {
 
   //#region rendering
   const renderItem = useCallback(
-    ({ item, index }: ListRenderItemInfo<CommentType>) => (
-      <Fragment key={item.comment_id}>
-        <MessageRow
-          username={item.username}
-          userAvatar={item.img_url}
-          userVerified={item.verified as any}
-          content={item.text}
-          likeCount={item.like_count}
-          replayCount={item.replies?.length}
-          hasReplies={item.replies && item.replies.length > 0}
-          hasParent={item.parent_id != undefined}
-          createdAt={item.added}
-        />
-        {item.replies?.length ?? 0 > 0
-          ? item.replies?.map((reply) => (
-              <MessageRow
-                username={reply.username}
-                userAvatar={reply.img_url}
-                userVerified={reply.verified as any}
-                content={reply.text}
-                likeCount={reply.like_count}
-                replayCount={reply.replies?.length}
-                hasReplies={reply.replies && reply.replies.length > 0}
-                hasParent={reply.parent_id != undefined}
-                createdAt={reply.added}
-              />
-            ))
-          : null}
-      </Fragment>
+    ({ item }: ListRenderItemInfo<CommentType>) => (
+      <CommentRow key={`comment-row-${item.comment_id}`} comment={item} />
     ),
     []
   );
@@ -85,10 +67,13 @@ export function Comments({ nftId }: CommentsProps) {
           windowSize={10}
           onTouchMove={handleOnTouchMove}
         />
-        <MessageBox
-          style={{ marginBottom: keyboardHeight }}
-          onSubmit={handleOnSubmit}
-        />
+        {isAuthenticated && (
+          <MessageBox
+            submitting={submitting}
+            style={{ marginBottom: keyboardHeight }}
+            onSubmit={handleOnSubmit}
+          />
+        )}
         {isLoading && (
           <View
             tw={

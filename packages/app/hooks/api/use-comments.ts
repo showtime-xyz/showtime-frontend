@@ -1,8 +1,6 @@
 import { useCallback } from "react";
 
-import useSWR from "swr";
-
-import { useInfiniteListQuerySWR, fetcher } from "../use-infinite-list-query";
+import { useInfiniteListQuerySWR } from "../use-infinite-list-query";
 
 export interface Liker {
   profile_id: number;
@@ -42,13 +40,15 @@ export interface CommentsPayload {
 }
 
 export const useComments = ({ nftId }: { nftId: number }) => {
+  //#region callbacks
   const commentsAPICall = useCallback(
-    (index) => {
+    function commentsAPICall(index) {
       const url = `/v2/comments/${nftId}?limit=10&page=${index + 1}`;
       return url;
     },
     [nftId]
   );
+  //#endregion
 
   const queryState = useInfiniteListQuerySWR<CommentsPayload>(commentsAPICall);
 

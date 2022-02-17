@@ -6,7 +6,6 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Comments } from "app/components/comments";
 import { createParam } from "app/navigation/use-param";
 import { useRouter } from "app/navigation/use-router";
-import { NFT } from "app/types";
 
 import { Modal, ModalSheet, Spinner } from "design-system";
 

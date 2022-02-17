@@ -20,6 +20,9 @@ interface MessageRowProps {
   likeCount?: number;
   replayCount?: number;
   createdAt?: string;
+
+  onLikePress?: () => void;
+  onDeletePress?: () => void;
 }
 
 export function MessageRow({
@@ -32,6 +35,8 @@ export function MessageRow({
   createdAt,
   hasParent,
   hasReplies,
+  onLikePress,
+  onDeletePress,
 }: MessageRowProps) {
   //#region variables
   const createdAtText = useMemo(
@@ -99,19 +104,23 @@ export function MessageRow({
         </Text>
 
         <View tw="flex-row mt-2 mb--2">
-          <TextButton tw="px-2">
+          <TextButton tw="px-2" onPress={onLikePress}>
             <HeartFilled /> {`${likeCount}`}
           </TextButton>
           <TextButton tw="px-2">
             <MessageFilled /> {`${replayCount}`}
           </TextButton>
-          <View tw="flex-1 flex-row mr--4 items-center justify-end">
+          <View tw="flex-1 flex-row mr--3 items-center justify-end">
             {createdAtText && (
-              <Text tw="text-gray-500 font-bold mr--1.5" variant="text-xs">
+              <Text tw="text-gray-500 font-bold" variant="text-xs">
                 {`${createdAtText}  •`}
               </Text>
             )}
-            <TextButton>Delete</TextButton>
+            {onDeletePress && (
+              <TextButton tw="ml--1.5" onPress={onDeletePress}>
+                Delete
+              </TextButton>
+            )}
           </View>
         </View>
       </View>
