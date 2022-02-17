@@ -7,6 +7,7 @@ import {
 } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
 import LogRocket from "@logrocket/react-native";
 import NetInfo from "@react-native-community/netinfo";
 import { useNavigation } from "@react-navigation/native";
@@ -26,6 +27,7 @@ import { SWRConfig } from "swr";
 import { useDeviceContext, useAppColorScheme } from "twrnc";
 
 import { AppContext } from "app/context/app-context";
+import { track } from "app/lib/analytics";
 import {
   setColorScheme as setUserColorScheme,
   useColorScheme as useUserColorScheme,
@@ -64,6 +66,16 @@ const rudderConfig = {
   trackAppLifecycleEvents: true,
   logLevel: RUDDER_LOG_LEVEL.INFO, // DEBUG
 };
+
+// Create a GrowthBook instance
+const growthbook = new GrowthBook({
+  trackingCallback: (experiment, result) => {
+    track("Experiment Viewed", {
+      experimentId: experiment.key,
+      variationId: result.variationId,
+    });
+  },
+});
 
 function mmkvProvider() {
   const storage = new MMKV();
@@ -286,6 +298,19 @@ function App() {
     initAnalytics();
   }, []);
 
+  useEffect(() => {
+    // Load feature definitions from API
+    fetch(process.env.GROWTHBOOK_FEATURES_ENDPOINT)
+      .then((res) => res.json())
+      .then((json) => {
+        growthbook.setFeatures(json.features);
+      });
+
+    // growthbook.setAttributes({
+    //   "id": "foo",
+    // })
+  }, []);
+
   const scheme = `io.showtime${
     process.env.STAGE === "development"
       ? ".development"
@@ -309,8 +334,10 @@ function App() {
                       <AuthProvider>
                         <UserProvider>
                           <BottomSheetModalProvider>
-                            <StatusBar style="auto" />
-                            <RootStackNavigator />
+                            <GrowthBookProvider growthbook={growthbook}>
+                              <StatusBar style="auto" />
+                              <RootStackNavigator />
+                            </GrowthBookProvider>
                           </BottomSheetModalProvider>
                         </UserProvider>
                       </AuthProvider>

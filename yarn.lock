@@ -2710,6 +2710,18 @@
   dependencies:
     nanoid "^3.1.23"
 
+"@growthbook/growthbook-react@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@growthbook/growthbook-react/-/growthbook-react-0.7.0.tgz#8a94a47dec60cc5ad25ea78dd97760d8f50cb401"
+  integrity sha512-3+aBMBO3PTfvxaNNiAE8nwej1fhtWwVuPZIwg2hyM4Jsrq3TjP+UPlbJNtT3VndLv5+cuzfVxMcl0Kr5ORlnww==
+  dependencies:
+    "@growthbook/growthbook" "^0.16.0"
+
+"@growthbook/growthbook@^0.16.0":
+  version "0.16.2"
+  resolved "https://registry.yarnpkg.com/@growthbook/growthbook/-/growthbook-0.16.2.tgz#e5e5041992be66c684bc058832d925f5c579a96e"
+  integrity sha512-mEPqDLDSO6n76gp9TLoyvgjkBaFKrH9BJyQNb0PwF4oXXzjbgG2qsIuNL/DKJvvkYFqOK80mbDR6C5xw9HGHyA==
+
 "@hapi/accept@5.0.2":
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/@hapi/accept/-/accept-5.0.2.tgz#ab7043b037e68b722f93f376afb05e85c0699523"
