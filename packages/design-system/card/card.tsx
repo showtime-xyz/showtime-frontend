@@ -20,10 +20,10 @@ function CardImpl({ act, variant }: Props) {
 
   return (
     <>
-      <View tw="py-2 bg-white dark:bg-black" shouldRasterizeIOS={true}>
+      <View tw="pt-2 bg-white dark:bg-black" shouldRasterizeIOS={true}>
         {variant === "activity" && <Activity activity={act} />}
 
-        <View tw={"py-2"}>
+        <View tw="py-2">
           {single ? (
             <Media item={nfts[0]} numColumns={1} />
           ) : (
@@ -37,7 +37,12 @@ function CardImpl({ act, variant }: Props) {
 
         {/* <Owner nft={nfts[0]} price={true} /> */}
 
-        {single && <Collection nft={nfts[0]} />}
+        {single && (
+          <>
+            <View tw="h-[1px] mx-4 bg-gray-100 dark:bg-gray-900" />
+            <Collection nft={nfts[0]} />
+          </>
+        )}
       </View>
       <View tw="bg-gray-200 dark:bg-gray-800 h-4 lg:hidden" />
     </>
