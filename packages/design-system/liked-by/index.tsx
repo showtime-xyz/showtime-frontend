@@ -26,7 +26,10 @@ export function LikedBy({ nft }: Props) {
 
   return (
     <View tw="bg-white dark:bg-black px-4 py-2 flex flex-row justify-start	items-center">
-      <Text variant="text-xs" tw="text-gray-600 font-semibold">
+      <Text
+        variant="text-xs"
+        tw="text-gray-600 dark:text-gray-400 font-semibold"
+      >
         Liked by&nbsp;
       </Text>
       <Skeleton
@@ -36,7 +39,10 @@ export function LikedBy({ nft }: Props) {
         colorMode={isDarkMode ? "dark" : "light"}
       >
         {!loading ? (
-          <Text variant="text-xs" tw="text-gray-600 font-semibold">
+          <Text
+            variant="text-xs"
+            tw="text-gray-600 dark:text-gray-400 font-semibold"
+          >
             {data?.likers.slice(0, 2).map((like, index) => (
               <Fragment key={`liked-by-user-${like.profile_id}`}>
                 <TextLink

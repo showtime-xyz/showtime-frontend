@@ -68,11 +68,13 @@ function NftScreen() {
       </View>
 
       <ScrollView keyboardShouldPersistTaps="handled">
-        <Collection nft={nft} />
-
         <PinchToZoom>
           <Media item={nft} numColumns={1} />
         </PinchToZoom>
+
+        <Collection nft={nft} />
+
+        <View tw="h-[1px] mx-4 bg-gray-100 dark:bg-gray-900" />
 
         <Social nft={nft} />
 
