@@ -52,8 +52,8 @@ export const TabItem = ({ name, count }: TabItemProps) => {
     >
       <RNText
         style={[
-          { fontFamily: "Inter-Bold" },
           tw.style("text-gray-900 dark:text-white text-sm"),
+          { fontFamily: "Inter-Bold" },
         ]}
       >
         {name}
