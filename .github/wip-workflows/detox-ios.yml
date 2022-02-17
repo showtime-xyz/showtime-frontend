@@ -60,7 +60,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Run expo prebuild
-        run: yarn expo:prebuild
+        run: DETOX=true yarn expo:prebuild
 
       - name: Install Detox dependencies
         run: brew tap wix/brew && brew install applesimutils
