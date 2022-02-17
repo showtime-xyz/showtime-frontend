@@ -16,7 +16,7 @@ export function Header({ title, close }: Props) {
       <View tw="h-4 items-center justify-center">
         <View tw="h-1 w-12 rounded-lg bg-gray-300 dark:bg-gray-700" />
       </View>
-      <View tw="p-[16px] h-16 flex-row items-center justify-between">
+      <View tw="px-4 h-[50px] flex-row items-center justify-between">
         <Pressable onPress={close}>
           <Close
             width={24}
