@@ -1,3 +1,5 @@
+import * as React from "react";
+
 import { Biconomy } from "@biconomy/mexa";
 import { ethers } from "ethers";
 import removeMd from "remove-markdown";
@@ -126,3 +128,18 @@ export const NFT_DETAIL_API = "/v2/nft_detail";
 export const removeTags = (text: string) => {
   return removeMd(text.replace(/(<([^>]+)>)/gi, " "));
 };
+
+type ReactChildArray = ReturnType<typeof React.Children.toArray>;
+
+export function flattenChildren(children: React.ReactNode): ReactChildArray {
+  const childrenArray = React.Children.toArray(children);
+  return childrenArray.reduce((flatChildren: ReactChildArray, child) => {
+    if ((child as React.ReactElement<any>).type === React.Fragment) {
+      return flatChildren.concat(
+        flattenChildren((child as React.ReactElement<any>).props.children)
+      );
+    }
+    flatChildren.push(child);
+    return flatChildren;
+  }, []);
+}
