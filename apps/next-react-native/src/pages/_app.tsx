@@ -1,4 +1,7 @@
-import { Partytown } from "@builder.io/partytown/react";
+import { useEffect } from "react";
+
+// import { Partytown } from "@builder.io/partytown/react";
+import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
 import { DripsyProvider } from "dripsy";
 import { AppProps } from "next/app";
 import Head from "next/head";
@@ -10,6 +13,7 @@ import { SWRConfig } from "swr";
 import { useDeviceContext } from "twrnc";
 
 import { AppContext } from "app/context/app-context";
+import { track } from "app/lib/analytics";
 import { isServer } from "app/lib/is-server";
 import { NavigationProvider } from "app/navigation";
 import { NextTabNavigator } from "app/navigation/next-tab-navigator";
@@ -24,6 +28,16 @@ import { ToastProvider } from "design-system/toast";
 import "../styles/styles.css";
 
 // enableFreeze(true)
+
+// Create a GrowthBook instance
+const growthbook = new GrowthBook({
+  trackingCallback: (experiment, result) => {
+    track("Experiment Viewed", {
+      experiment_id: experiment.key,
+      variant_id: result.variationId,
+    });
+  },
+});
 
 const RUDDERSTACK_WRITE_KEY = process.env.NEXT_PUBLIC_RUDDERSTACK_WRITE_KEY;
 const RUDDERSTACK_DATA_PLANE_URL = `https://tryshowtimjtc.dataplane.rudderstack.com`;
@@ -66,6 +80,19 @@ function AppContextProvider({
 export default function App({ Component, pageProps }: AppProps) {
   useDeviceContext(tw, { withDeviceColorScheme: false });
 
+  useEffect(() => {
+    // Load feature definitions from API
+    fetch(process.env.NEXT_PUBLIC_GROWTHBOOK_FEATURES_ENDPOINT)
+      .then((res) => res.json())
+      .then((json) => {
+        growthbook.setFeatures(json.features);
+      });
+
+    // growthbook.setAttributes({
+    //   "id": "foo",
+    // })
+  }, []);
+
   return (
     <>
       <Head>
@@ -104,10 +131,15 @@ export default function App({ Component, pageProps }: AppProps) {
                   <AppContextProvider>
                     <AuthProvider>
                       <UserProvider>
-                        <NextTabNavigator
-                          Component={Component}
-                          pageProps={pageProps}
-                        />
+                        <GrowthBookProvider growthbook={growthbook}>
+                          {
+                            // TODO: use RootStackNavigator instead?
+                          }
+                          <NextTabNavigator
+                            Component={Component}
+                            pageProps={pageProps}
+                          />
+                        </GrowthBookProvider>
                       </UserProvider>
                     </AuthProvider>
                   </AppContextProvider>

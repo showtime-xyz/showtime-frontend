@@ -1,12 +1,11 @@
 import * as React from "react";
 
 import { Biconomy } from "@biconomy/mexa";
-import { Magic } from "@magic-sdk/react-native";
 import { ethers } from "ethers";
 import removeMd from "remove-markdown";
 
 import { BYPASS_EMAIL } from "app/lib/constants";
-import { magic } from "app/lib/magic";
+import { magic, Magic } from "app/lib/magic";
 
 import { Profile } from "./types";
 
