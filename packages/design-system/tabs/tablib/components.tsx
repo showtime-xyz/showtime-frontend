@@ -1,4 +1,4 @@
-import { Platform } from "react-native";
+import { Platform, StyleSheet, Text as RNText } from "react-native";
 
 import Animated, {
   useAnimatedStyle,
@@ -50,13 +50,14 @@ export const TabItem = ({ name, count }: TabItemProps) => {
         animatedStyle,
       ]}
     >
-      <Text
-        variant="text-sm"
-        sx={{ fontWeight: "700" }}
-        tw={`text-gray-900 dark:text-white`}
+      <RNText
+        style={[
+          { fontFamily: "Inter-Bold" },
+          tw.style("text-gray-900 dark:text-white text-sm"),
+        ]}
       >
         {name}
-      </Text>
+      </RNText>
       {count ? (
         <Text
           variant="text-sm"
