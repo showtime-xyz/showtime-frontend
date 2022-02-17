@@ -179,7 +179,14 @@
     "metro-minify-esbuild": "^0.1.0",
     "react-test-renderer": "18.0.0-rc.0",
     "ts-jest": "^27.1.2",
-    "typescript": "4.5.2"
+    "typescript": "4.5.2",
+    "@storybook/addon-actions": "^6.3.12",
+    "@storybook/addon-controls": "^6.3.12",
+    "@storybook/addon-ondevice-actions": "^6.0.1-alpha.6",
+    "@storybook/addon-ondevice-backgrounds": "^6.0.1-alpha.6",
+    "@storybook/addon-ondevice-controls": "^6.0.1-alpha.6",
+    "@storybook/addon-ondevice-notes": "^6.0.1-alpha.6",
+    "@storybook/react-native": "^6.0.1-alpha.6"
   },
   "private": true,
   "version": "1.0.0",
