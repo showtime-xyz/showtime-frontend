@@ -71,8 +71,8 @@ const rudderConfig = {
 const growthbook = new GrowthBook({
   trackingCallback: (experiment, result) => {
     track("Experiment Viewed", {
-      experimentId: experiment.key,
-      variationId: result.variationId,
+      experiment_id: experiment.key,
+      variation_id: result.variationId,
     });
   },
 });
