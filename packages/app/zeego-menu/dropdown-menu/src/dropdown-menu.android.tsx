@@ -1,4 +1,4 @@
-import { createAndroidMenu } from '@zeego/menu'
+import { createIosMenu } from "../../menu/src/create-ios-menu/index.ios";
 
 const {
   Root,
@@ -15,7 +15,7 @@ const {
   CheckboxItem,
   ItemIndicator,
   Label,
-} = createAndroidMenu('DropdownMenu')
+} = createIosMenu("DropdownMenu");
 
 export {
   Root,
@@ -32,4 +32,4 @@ export {
   CheckboxItem,
   ItemIndicator,
   Label,
-}
+};
