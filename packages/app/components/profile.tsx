@@ -126,18 +126,18 @@ const Profile = ({ address }: { address?: string }) => {
             )}
           >
             <Tabs.Trigger>
-              <View tw="w-25">
-                <Skeleton colorMode={colorScheme} width={80} height={30} />
+              <View tw="w-22">
+                <Skeleton colorMode={colorScheme} width={74} height={24} />
+              </View>
+            </Tabs.Trigger>
+            <Tabs.Trigger>
+              <View tw="w-22">
+                <Skeleton colorMode={colorScheme} width={74} height={24} />
               </View>
             </Tabs.Trigger>
             <Tabs.Trigger>
               <View tw="w-20">
-                <Skeleton colorMode={colorScheme} width={60} height={30} />
-              </View>
-            </Tabs.Trigger>
-            <Tabs.Trigger>
-              <View tw="w-25">
-                <Skeleton colorMode={colorScheme} width={80} height={30} />
+                <Skeleton colorMode={colorScheme} width={70} height={24} />
               </View>
             </Tabs.Trigger>
           </Tabs.List>
