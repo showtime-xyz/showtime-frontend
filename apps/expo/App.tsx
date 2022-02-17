@@ -72,7 +72,7 @@ const growthbook = new GrowthBook({
   trackingCallback: (experiment, result) => {
     track("Experiment Viewed", {
       experiment_id: experiment.key,
-      variation_id: result.variationId,
+      variant_id: result.variationId,
     });
   },
 });
