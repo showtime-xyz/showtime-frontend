@@ -1,0 +1,110 @@
+diff --git a/node_modules/react-native-fast-image/dist/index.cjs.js b/node_modules/react-native-fast-image/dist/index.cjs.js
+index 2a49562..c18fccf 100644
+--- a/node_modules/react-native-fast-image/dist/index.cjs.js
++++ b/node_modules/react-native-fast-image/dist/index.cjs.js
+@@ -44,6 +44,7 @@ function FastImageBase({
+   // eslint-disable-next-line no-shadow
+   resizeMode = 'cover',
+   forwardedRef,
++  animate,
+   ...props
+ }) {
+   if (fallback) {
+@@ -79,7 +80,8 @@ function FastImageBase({
+     onFastImageLoad: onLoad,
+     onFastImageError: onError,
+     onFastImageLoadEnd: onLoadEnd,
+-    resizeMode: resizeMode
++    resizeMode: resizeMode,
++    animate: animate,
+   })), children);
+ }
+ 
+diff --git a/node_modules/react-native-fast-image/dist/index.js b/node_modules/react-native-fast-image/dist/index.js
+index 1fc0e9d..4ed24a6 100644
+--- a/node_modules/react-native-fast-image/dist/index.js
++++ b/node_modules/react-native-fast-image/dist/index.js
+@@ -37,6 +37,7 @@ function FastImageBase({
+   // eslint-disable-next-line no-shadow
+   resizeMode = 'cover',
+   forwardedRef,
++  animate,
+   ...props
+ }) {
+   if (fallback) {
+@@ -72,7 +73,8 @@ function FastImageBase({
+     onFastImageLoad: onLoad,
+     onFastImageError: onError,
+     onFastImageLoadEnd: onLoadEnd,
+-    resizeMode: resizeMode
++    resizeMode: resizeMode,
++    animate: animate,
+   })), children);
+ }
+ 
+diff --git a/node_modules/react-native-fast-image/ios/FastImage/FFFastImageView.h b/node_modules/react-native-fast-image/ios/FastImage/FFFastImageView.h
+index fb557cf..1453374 100644
+--- a/node_modules/react-native-fast-image/ios/FastImage/FFFastImageView.h
++++ b/node_modules/react-native-fast-image/ios/FastImage/FFFastImageView.h
+@@ -19,5 +19,6 @@
+ @property (nonatomic, strong) FFFastImageSource *source;
+ @property (nonatomic, strong) UIColor *imageColor;
+ 
++- (void) setAnimateImage: (BOOL) animate;
+ @end
+ 
+diff --git a/node_modules/react-native-fast-image/ios/FastImage/FFFastImageView.m b/node_modules/react-native-fast-image/ios/FastImage/FFFastImageView.m
+index 9c0f1d3..75afcd2 100644
+--- a/node_modules/react-native-fast-image/ios/FastImage/FFFastImageView.m
++++ b/node_modules/react-native-fast-image/ios/FastImage/FFFastImageView.m
+@@ -19,10 +19,21 @@ @implementation FFFastImageView
+ - (id) init {
+     self = [super init];
+     self.resizeMode = RCTResizeModeCover;
++    self.autoPlayAnimatedImage = NO;
+     self.clipsToBounds = YES;
+     return self;
+ }
+ 
++
++- (void) setAnimateImage: (BOOL) animate {
++    if (animate) {
++        [self startAnimating];
++    } else {
++        [self stopAnimating];
++    }
++}
++
++
+ - (void)setResizeMode:(RCTResizeMode)resizeMode {
+     if (_resizeMode != resizeMode) {
+         _resizeMode = resizeMode;
+@@ -30,6 +41,7 @@ - (void)setResizeMode:(RCTResizeMode)resizeMode {
+     }
+ }
+ 
++
+ - (void)setOnFastImageLoadEnd:(RCTDirectEventBlock)onFastImageLoadEnd {
+     _onFastImageLoadEnd = onFastImageLoadEnd;
+     if (self.hasCompleted) {
+diff --git a/node_modules/react-native-fast-image/ios/FastImage/FFFastImageViewManager.m b/node_modules/react-native-fast-image/ios/FastImage/FFFastImageViewManager.m
+index a8059af..e242e2a 100644
+--- a/node_modules/react-native-fast-image/ios/FastImage/FFFastImageViewManager.m
++++ b/node_modules/react-native-fast-image/ios/FastImage/FFFastImageViewManager.m
+@@ -21,6 +21,16 @@ - (FFFastImageView*)view {
+ RCT_EXPORT_VIEW_PROPERTY(onFastImageLoadEnd, RCTDirectEventBlock)
+ RCT_REMAP_VIEW_PROPERTY(tintColor, imageColor, UIColor)
+ 
++RCT_CUSTOM_VIEW_PROPERTY(animate, BOOL, FFFastImageView)
++{
++    BOOL animate = [RCTConvert BOOL: json];
++    if (animate == true) {
++        [view setAnimateImage: true];
++    } else if (animate == false) {
++        [view setAnimateImage: false];
++    }
++};
++
+ RCT_EXPORT_METHOD(preload:(nonnull NSArray<FFFastImageSource *> *)sources)
+ {
+     NSMutableArray *urls = [NSMutableArray arrayWithCapacity:sources.count];
