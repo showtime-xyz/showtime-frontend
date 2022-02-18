@@ -9,9 +9,18 @@ import { MessageRow } from "design-system/messages/message-row";
 
 interface CommentRowProps {
   comment: CommentType;
+
+  likeComment: (id: number) => Promise<boolean>;
+  unlikeComment: (id: number) => Promise<boolean>;
+  deleteComment: (id: number) => Promise<boolean>;
 }
 
-function CommentRowComponent({ comment }: CommentRowProps) {
+function CommentRowComponent({
+  comment,
+  likeComment,
+  unlikeComment,
+  deleteComment,
+}: CommentRowProps) {
   //#region state
   const [likeCount, setLikeCount] = useState(comment.like_count);
   //#endregion
@@ -19,9 +28,6 @@ function CommentRowComponent({ comment }: CommentRowProps) {
   //#region hooks
   const { isAuthenticated, user } = useUser();
   const router = useRouter();
-  const { likeComment, unlikeComment, deleteComment } = useComment(
-    comment.comment_id
-  );
   //#region
 
   //#region variables
@@ -44,18 +50,27 @@ function CommentRowComponent({ comment }: CommentRowProps) {
       }
 
       if (isLikedByMe) {
-        await unlikeComment();
+        await unlikeComment(comment.comment_id);
         setLikeCount((state) => state - 1);
       } else {
-        await likeComment();
+        await likeComment(comment.comment_id);
         setLikeCount((state) => state + 1);
       }
     },
-    [isAuthenticated, isLikedByMe, likeComment, unlikeComment]
+    [
+      comment.comment_id,
+      isAuthenticated,
+      isLikedByMe,
+      likeComment,
+      unlikeComment,
+    ]
   );
-  const handleOnDeletePress = useCallback(async function handleOnDeletePress() {
-    await deleteComment();
-  }, []);
+  const handleOnDeletePress = useCallback(
+    async function handleOnDeletePress() {
+      await deleteComment(comment.comment_id);
+    },
+    [comment.comment_id]
+  );
   //#endregion
 
   return (
@@ -82,6 +97,9 @@ function CommentRowComponent({ comment }: CommentRowProps) {
             <CommentRowComponent
               key={`comment-reply-${reply.comment_id}`}
               comment={reply}
+              likeComment={likeComment}
+              unlikeComment={unlikeComment}
+              deleteComment={deleteComment}
             />
           ))
         : null}

@@ -1,6 +1,11 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
-import { useInfiniteListQuerySWR } from "../use-infinite-list-query";
+import { useSWRConfig } from "swr";
+
+import { useInfiniteListQuerySWR } from "app/hooks/use-infinite-list-query";
+import { axios } from "app/lib/axios";
+import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
+import { UserType } from "app/types";
 
 export interface Liker {
   profile_id: number;
@@ -39,18 +44,172 @@ export interface CommentsPayload {
   data: Data;
 }
 
-export const useComments = ({ nftId }: { nftId: number }) => {
-  //#region callbacks
-  const commentsAPICall = useCallback(
-    function commentsAPICall(index) {
-      const url = `/v2/comments/${nftId}?limit=10&page=${index + 1}`;
-      return url;
+export const useComments = (nftId: number) => {
+  //#region state
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  //#endregion
+
+  //#region hooks
+  const { mutate } = useSWRConfig();
+  const fetchCommentsURL = useCallback(
+    function fetchCommentsURL(index) {
+      return `/v2/comments/${nftId}?limit=10&page=${index + 1}`;
     },
     [nftId]
   );
+  const {
+    data,
+    isLoading,
+    isLoadingMore,
+    isRefreshing,
+    error,
+    fetchMore,
+    refresh,
+    mutate: mutateComments,
+  } = useInfiniteListQuerySWR<CommentsPayload>(fetchCommentsURL);
   //#endregion
 
-  const queryState = useInfiniteListQuerySWR<CommentsPayload>(commentsAPICall);
+  //#region callbacks
+  const likeComment = useCallback(async function likeComment(
+    commentId: number
+  ) {
+    try {
+      await axios({
+        url: `/v1/likecomment/${commentId}`,
+        method: "POST",
+      });
 
-  return queryState;
+      // mutate customer info
+      mutate(
+        MY_INFO_ENDPOINT,
+        (data: UserType): UserType => ({
+          data: {
+            ...data.data,
+            likes_comment: [...data.data.likes_comment, commentId],
+          },
+        }),
+        true
+      );
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  },
+  []);
+  const unlikeComment = useCallback(async function unlikeComment(
+    commentId: number
+  ) {
+    try {
+      await axios({
+        url: `/v1/unlikecomment/${commentId}`,
+        method: "POST",
+      });
+
+      // mutate local data
+      mutate(
+        MY_INFO_ENDPOINT,
+        (data: UserType): UserType => ({
+          data: {
+            ...data.data,
+            likes_comment: data.data.likes_comment.filter(
+              (item) => item !== commentId
+            ),
+          },
+        }),
+        true
+      );
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  },
+  []);
+  const deleteComment = useCallback(async function deleteComment(
+    commentId: number
+  ) {
+    try {
+      await axios({
+        url: `/v1/deletecomment/${commentId}`,
+        method: "POST",
+      });
+
+      // mutate comments
+      mutateComments((data) => {
+        if (data?.[0].data?.comments) {
+          data[0].data.comments = deleteCommentRecursively(
+            commentId,
+            data[0].data.comments
+          );
+        }
+        return data;
+      }, true);
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  },
+  []);
+  const newComment = useCallback(
+    async function newComment(message: string, parentId: number | null = null) {
+      try {
+        setIsSubmitting(true);
+        await axios({
+          url: `/v1/newcomment/${nftId}`,
+          method: "POST",
+          data: JSON.stringify({
+            message,
+            parent_id: parentId,
+          }),
+        });
+
+        // refresh comments
+        mutateComments();
+        setIsSubmitting(false);
+        return true;
+      } catch (error) {
+        setIsSubmitting(false);
+        return false;
+      }
+    },
+    [nftId, mutateComments]
+  );
+  //#endregion
+
+  return {
+    data: data?.[0].data,
+
+    isSubmitting,
+    isLoading,
+    isRefreshing,
+
+    refresh,
+
+    likeComment,
+    unlikeComment,
+    deleteComment,
+    newComment,
+  };
+};
+
+const deleteCommentRecursively = (
+  commentId: number,
+  comments?: CommentType[]
+) => {
+  return (
+    comments?.reduce((result, comment) => {
+      if (comment.comment_id == commentId) {
+        return result;
+      }
+
+      if (comment.replies && comment.replies.length > 0) {
+        comment.replies = deleteCommentRecursively(commentId, comment.replies);
+      }
+
+      result.push(comment);
+      return result;
+    }, [] as CommentType[]) || []
+  );
 };

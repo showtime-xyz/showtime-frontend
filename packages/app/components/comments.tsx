@@ -11,12 +11,10 @@ import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { CommentRow } from "app/components/comments/comment-row";
 import { useComments, CommentType } from "app/hooks/api/use-comments";
 import { useKeyboardDimensions } from "app/hooks/use-keyboard-dimensions";
+import { useUser } from "app/hooks/use-user";
 
 import { ActivityIndicator, Spinner, View } from "design-system";
 import { MessageBox } from "design-system/messages/message-box-new";
-
-import { useNewComment } from "../hooks/api/use-new-comment";
-import { useUser } from "../hooks/use-user";
 
 interface CommentsProps {
   nftId: number;
@@ -27,16 +25,40 @@ const keyExtractor = (item: CommentType) => `comment-${item.comment_id}`;
 export function Comments({ nftId }: CommentsProps) {
   //#region hooks
   const { isAuthenticated } = useUser();
-  const { data, isLoading } = useComments({ nftId });
-  const { newComment, submitting } = useNewComment(nftId);
+  const {
+    data,
+    isSubmitting,
+    isLoading,
+    likeComment,
+    unlikeComment,
+    deleteComment,
+    newComment,
+    refresh,
+  } = useComments(nftId);
   const { keyboardHeight } = useKeyboardDimensions(true);
+  //#endregion
+
+  //#region variables
+  const dataReversed = useMemo(
+    () => data?.comments.slice().reverse() || [],
+    [data]
+  );
   //#endregion
 
   //#region callbacks
   const handleOnSubmit = useCallback(async function handleOnSubmit(
     text: string
   ) {
-    return await newComment(text);
+    let result = false;
+
+    try {
+      await newComment(text);
+      result = true;
+    } catch (error) {
+      // TODO
+    }
+
+    return result;
   },
   []);
   const handleOnTouchMove = useCallback(() => {
@@ -49,16 +71,22 @@ export function Comments({ nftId }: CommentsProps) {
   //#region rendering
   const renderItem = useCallback(
     ({ item }: ListRenderItemInfo<CommentType>) => (
-      <CommentRow key={`comment-row-${item.comment_id}`} comment={item} />
+      <CommentRow
+        key={`comment-row-${item.comment_id}`}
+        comment={item}
+        likeComment={likeComment}
+        unlikeComment={unlikeComment}
+        deleteComment={deleteComment}
+      />
     ),
-    []
+    [likeComment, unlikeComment, deleteComment]
   );
   const FlatList = Platform.OS === "android" ? BottomSheetFlatList : RNFlatList;
   return (
     <Suspense fallback={<Spinner size="small" />}>
       <View tw="flex-1 mt--4">
         <FlatList
-          data={data?.[0].data.comments}
+          data={dataReversed}
           refreshing={isLoading}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
@@ -69,7 +97,7 @@ export function Comments({ nftId }: CommentsProps) {
         />
         {isAuthenticated && (
           <MessageBox
-            submitting={submitting}
+            submitting={isSubmitting}
             style={{ marginBottom: keyboardHeight }}
             onSubmit={handleOnSubmit}
           />

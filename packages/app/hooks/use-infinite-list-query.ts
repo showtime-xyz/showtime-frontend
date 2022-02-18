@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 
+import type { KeyedMutator } from "swr";
 import useSWRInfinite from "swr/infinite";
 
 import { axios } from "app/lib/axios";
@@ -17,6 +18,7 @@ type UseInfiniteListQueryReturn<T> = {
   fetchMore: () => void;
   refresh: () => void;
   retry: () => void;
+  mutate: KeyedMutator<T[]>;
 };
 
 export const useInfiniteListQuerySWR = <T>(
@@ -69,6 +71,7 @@ export const useInfiniteListQuerySWR = <T>(
     isLoading: isLoadingInitialData,
     isLoadingMore,
     isRefreshing,
+    mutate,
   };
 };
 
