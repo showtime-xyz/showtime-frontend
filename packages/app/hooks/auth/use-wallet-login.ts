@@ -29,6 +29,7 @@ export function useWalletLogin() {
         try {
           await walletConnector.connect();
         } catch (error) {
+          console.log("connectToWallet error", error);
           dispatch("ERROR", { error });
           return;
         }
@@ -45,6 +46,7 @@ export function useWalletLogin() {
           nonce: response,
         });
       } catch (error) {
+        console.log("fetchNonce error", error);
         dispatch("ERROR", { error });
       }
     },
@@ -57,6 +59,7 @@ export function useWalletLogin() {
         await rotateNonce(address!);
         dispatch("EXPIRE_NONCE_SUCCESS");
       } catch (error) {
+        console.log("expirenonce error", error);
         dispatch("ERROR", { error });
       }
     },
@@ -92,6 +95,7 @@ export function useWalletLogin() {
         });
         dispatch("LOG_IN_SUCCESS");
       } catch (error) {
+        console.log("login wallet error", error);
         dispatch("ERROR", { error });
       }
     },
@@ -143,7 +147,12 @@ export function useWalletLogin() {
   }, [status, dispatch, walletConnector]);
 
   if (__DEV__) {
-    console.log("wallet connection status ", status, walletConnector.connected);
+    console.log(
+      "wallet connection status ",
+      status,
+      error,
+      walletConnector.connected
+    );
   }
 
   //#endregion
