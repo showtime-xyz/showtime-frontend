@@ -16,7 +16,7 @@ const comments = [
     commenter_profile_id: 51,
     img_url:
       "https://lh3.googleusercontent.com/oxWrFL8uDDhnir_y6FAxRDfRvp_RyFWj-LIgtxL49J97RqICaF-Kg0K2yBy7dqvaZCxsUdaul25S6S2FjCpo7bQvLXc7V3SkFzQg",
-    like_count: 0,
+    like_count: 10000000,
     likers: [],
     name: "Alex Kilkka",
     nft_id: 23882193,
@@ -93,6 +93,7 @@ export const SingleMessage: React.VFC<{}> = () => (
     replayCount={comments[0].replies.length}
     hasParent={false}
     hasReplies={comments[0].replies.length > 0}
+    likedByMe={true}
     createdAt={comments[0].added}
   />
 );
