@@ -1,6 +1,5 @@
 import { Fragment, memo, useCallback, useMemo, useState } from "react";
 
-import { useComment } from "app/hooks/api/use-comment";
 import { CommentType } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
 import { useRouter } from "app/navigation/use-router";
@@ -88,6 +87,7 @@ function CommentRowComponent({
         replayCount={comment.replies?.length}
         hasReplies={comment.replies && comment.replies.length > 0}
         hasParent={comment.parent_id != undefined}
+        likedByMe={isLikedByMe}
         createdAt={comment.added}
         onLikePress={handleOnLikePress}
         onDeletePress={isMyComment ? handleOnDeletePress : undefined}

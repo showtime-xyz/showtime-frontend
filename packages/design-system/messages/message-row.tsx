@@ -3,6 +3,8 @@ import { StyleSheet } from "react-native";
 
 import { formatDistanceToNowStrict } from "date-fns";
 
+import { getRoundedCount } from "app/utilities";
+
 import { Avatar } from "design-system/avatar";
 import { TextButton } from "design-system/button";
 import { HeartFilled, MessageFilled } from "design-system/icon";
@@ -16,6 +18,7 @@ interface MessageRowProps {
   userVerified?: boolean | 0 | 1;
   hasParent?: boolean;
   hasReplies?: boolean;
+  likedByMe?: boolean;
   content?: string;
   likeCount?: number;
   replayCount?: number;
@@ -35,6 +38,7 @@ export function MessageRow({
   createdAt,
   hasParent,
   hasReplies,
+  likedByMe,
   onLikePress,
   onDeletePress,
 }: MessageRowProps) {
@@ -104,11 +108,15 @@ export function MessageRow({
         </Text>
 
         <View tw="flex-row mt-2 mb--2">
-          <TextButton tw="px-2" onPress={onLikePress}>
-            <HeartFilled /> {`${likeCount}`}
+          <TextButton
+            tw="px-2"
+            accentColor={likedByMe ? ["black", "white"] : undefined}
+            onPress={onLikePress}
+          >
+            <HeartFilled /> {getRoundedCount(likeCount)}
           </TextButton>
           <TextButton tw="px-2">
-            <MessageFilled /> {`${replayCount}`}
+            <MessageFilled /> {getRoundedCount(replayCount)}
           </TextButton>
           <View tw="flex-1 flex-row mr--3 items-center justify-end">
             {createdAtText && (
@@ -133,5 +141,3 @@ const styles = StyleSheet.create({
     borderLeftWidth: 1,
   },
 });
-
-// export const MessageRow = () => <Text>Test</Text>;
