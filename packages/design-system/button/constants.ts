@@ -68,6 +68,8 @@ const ICON_COLOR_TW_MAPPER = {
   text: [colors.gray[500], colors.gray[500]],
 };
 
+const ACCENT_COLOR = ["white", "black"];
+
 export {
   CONTAINER_TW,
   CONTAINER_PADDING_TW,
@@ -78,4 +80,5 @@ export {
   LABEL_WEIGHT_TW,
   ICON_SIZE_TW,
   ICON_COLOR_TW_MAPPER,
+  ACCENT_COLOR,
 };
