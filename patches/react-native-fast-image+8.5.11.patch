@@ -1,3 +1,97 @@
+diff --git a/node_modules/react-native-fast-image/android/src/main/java/com/dylanvann/fastimage/FastImageViewManager.java b/node_modules/react-native-fast-image/android/src/main/java/com/dylanvann/fastimage/FastImageViewManager.java
+index 0944463..e012197 100644
+--- a/node_modules/react-native-fast-image/android/src/main/java/com/dylanvann/fastimage/FastImageViewManager.java
++++ b/node_modules/react-native-fast-image/android/src/main/java/com/dylanvann/fastimage/FastImageViewManager.java
+@@ -4,12 +4,17 @@ import android.app.Activity;
+ import android.content.Context;
+ import android.content.ContextWrapper;
+ import android.graphics.PorterDuff;
++import android.graphics.drawable.Animatable;
++import android.graphics.drawable.Drawable;
+ import android.os.Build;
+ 
+ import com.bumptech.glide.Glide;
+ import com.bumptech.glide.RequestManager;
+ import com.bumptech.glide.load.model.GlideUrl;
++import com.bumptech.glide.load.resource.gif.GifDrawable;
+ import com.bumptech.glide.request.Request;
++import com.bumptech.glide.request.target.DrawableImageViewTarget;
++import com.bumptech.glide.request.transition.Transition;
+ import com.facebook.react.bridge.ReadableMap;
+ import com.facebook.react.bridge.WritableMap;
+ import com.facebook.react.bridge.WritableNativeMap;
+@@ -31,12 +36,15 @@ import static com.dylanvann.fastimage.FastImageRequestListener.REACT_ON_ERROR_EV
+ import static com.dylanvann.fastimage.FastImageRequestListener.REACT_ON_LOAD_END_EVENT;
+ import static com.dylanvann.fastimage.FastImageRequestListener.REACT_ON_LOAD_EVENT;
+ 
++import androidx.annotation.NonNull;
++
+ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> implements FastImageProgressListener {
+ 
+     private static final String REACT_CLASS = "FastImageView";
+     private static final String REACT_ON_LOAD_START_EVENT = "onFastImageLoadStart";
+     private static final String REACT_ON_PROGRESS_EVENT = "onFastImageProgress";
+     private static final Map<String, List<FastImageViewWithUrl>> VIEWS_FOR_URLS = new WeakHashMap<>();
++    private boolean animate = false;
+ 
+     @Nullable
+     private RequestManager requestManager = null;
+@@ -113,6 +121,7 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
+         int viewId = view.getId();
+         eventEmitter.receiveEvent(viewId, REACT_ON_LOAD_START_EVENT, new WritableNativeMap());
+ 
++        final FastImageViewManager self = this;
+         if (requestManager != null) {
+             requestManager
+                     // This will make this work for remote and local images. e.g.
+@@ -124,7 +133,21 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
+                     .load(imageSource.getSourceForLoad())
+                     .apply(FastImageViewConverter.getOptions(context, imageSource, source))
+                     .listener(new FastImageRequestListener(key))
+-                    .into(view);
++//                    .into(view);
++                    .into(new DrawableImageViewTarget(view) {
++                        @Override
++                        public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
++                            if (resource instanceof GifDrawable) {
++                                GifDrawable gifDrawable = (GifDrawable) resource;
++                                if (self.animate == false) {
++                                    gifDrawable.stop();
++                                } else {
++                                    gifDrawable.start();
++                                }
++                            }
++                            view.setImageDrawable(resource);
++                        }
++                    });
+         }
+     }
+ 
+@@ -137,6 +160,24 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
+         }
+     }
+ 
++    @ReactProp(name = "animate")
++    public void setAnimate(FastImageViewWithUrl view, Boolean animate) {
++        if (animate == true) {
++            this.animate = true;
++            Drawable drawable = view.getDrawable();
++            if (drawable instanceof GifDrawable) {
++                ((GifDrawable) drawable).start();
++            }
++        } else if (animate == false) {
++            this.animate = false;
++            Drawable drawable = view.getDrawable();
++            if (drawable instanceof GifDrawable) {
++                ((GifDrawable) drawable).stop();
++            }
++        }
++    }
++
++
+     @ReactProp(name = "resizeMode")
+     public void setResizeMode(FastImageViewWithUrl view, String resizeMode) {
+         final FastImageViewWithUrl.ScaleType scaleType = FastImageViewConverter.getScaleType(resizeMode);
 diff --git a/node_modules/react-native-fast-image/dist/index.cjs.js b/node_modules/react-native-fast-image/dist/index.cjs.js
 index 2a49562..c18fccf 100644
 --- a/node_modules/react-native-fast-image/dist/index.cjs.js
