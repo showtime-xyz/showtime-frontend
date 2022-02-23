@@ -1,5 +1,6 @@
 import { Suspense, useCallback, useMemo } from "react";
 import {
+  Alert,
   FlatList as RNFlatList,
   Keyboard,
   ListRenderItemInfo,
@@ -69,6 +70,45 @@ export function Comments({ nftId }: CommentsProps) {
       Keyboard.dismiss();
     }
   }, [keyboardHeight]);
+
+  const handleOnDeleteComment = useCallback(
+    async function handleOnDeleteComment(commentId: number) {
+      const _deleteComment = async () => {
+        try {
+          await deleteComment(commentId);
+        } catch (error) {
+          Alert.alert("Error", "Cannot delete comment.", [
+            {
+              text: "Cancel",
+              style: "cancel",
+            },
+            {
+              text: "Try Again",
+              style: "destructive",
+              onPress: _deleteComment,
+            },
+          ]);
+        }
+      };
+
+      Alert.alert(
+        "Delete Comment",
+        "Are you sure you want to delete this comment?",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Delete",
+            style: "destructive",
+            onPress: _deleteComment,
+          },
+        ]
+      );
+    },
+    [deleteComment]
+  );
   //#endregion
 
   //#region rendering
@@ -79,10 +119,10 @@ export function Comments({ nftId }: CommentsProps) {
         comment={item}
         likeComment={likeComment}
         unlikeComment={unlikeComment}
-        deleteComment={deleteComment}
+        deleteComment={handleOnDeleteComment}
       />
     ),
-    [likeComment, unlikeComment, deleteComment]
+    [likeComment, unlikeComment, handleOnDeleteComment]
   );
   const FlatList = Platform.OS === "android" ? BottomSheetFlatList : RNFlatList;
   return (

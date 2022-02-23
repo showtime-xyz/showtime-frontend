@@ -11,7 +11,7 @@ interface CommentRowProps {
 
   likeComment: (id: number) => Promise<boolean>;
   unlikeComment: (id: number) => Promise<boolean>;
-  deleteComment: (id: number) => Promise<boolean>;
+  deleteComment: (id: number) => Promise<void>;
 }
 
 function CommentRowComponent({

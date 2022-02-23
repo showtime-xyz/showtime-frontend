@@ -145,10 +145,8 @@ export const useComments = (nftId: number) => {
         }
         return data;
       }, true);
-
-      return true;
     } catch (error) {
-      return false;
+      throw error;
     }
   },
   []);
