@@ -43,10 +43,10 @@ export const useActivity = ({
           page.data = page.data.filter((d: any) => {
             const v = newData.find((x: any) => x.id === d.id);
             if (v === undefined) {
-              if (__DEV__) {
-                console.log("duplicate record in feed ", d.id);
-              }
               return true;
+            }
+            if (__DEV__) {
+              console.log("duplicate record in feed ", d.id);
             }
             return false;
           });
