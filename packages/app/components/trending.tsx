@@ -18,6 +18,7 @@ import {
   Media,
 } from "design-system";
 import { cardSize } from "design-system/creator-preview";
+import { useIsDarkMode } from "design-system/hooks";
 import { tw } from "design-system/tailwind";
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
@@ -39,7 +40,7 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
 
 export const Trending = () => {
   const [selected, setSelected] = useState(0);
-
+  const isDark = useIsDarkMode();
   return (
     <View tw="bg-white dark:bg-black flex-1">
       <Tabs.Root onIndexChange={setSelected} initialIndex={selected} lazy>
@@ -61,7 +62,7 @@ export const Trending = () => {
                 "dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 w-screen"
               ),
             }),
-            []
+            [isDark]
           )}
         >
           <Tabs.Trigger>
@@ -127,7 +128,7 @@ const CreatorsList = ({
     useTrendingCreators({
       days,
     });
-
+  const isDark = useIsDarkMode();
   const separatorHeight = 8;
 
   const keyExtractor = useCallback((item) => {
@@ -145,7 +146,7 @@ const CreatorsList = ({
 
   const ItemSeparatorComponent = useCallback(
     () => <View tw={`bg-gray-200 dark:bg-gray-800 h-[${separatorHeight}px]`} />,
-    []
+    [isDark]
   );
 
   const getItemLayout = useCallback((_data, index) => {
@@ -175,7 +176,7 @@ const CreatorsList = ({
         ) : null}
       </View>
     ),
-    [SelectionControl, data, isLoading]
+    [SelectionControl, data, isLoading, isDark]
   );
 
   return (
