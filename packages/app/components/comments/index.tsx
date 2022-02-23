@@ -1,4 +1,4 @@
-import { Fragment, Suspense, useCallback, useMemo } from "react";
+import { Suspense, useCallback, useMemo } from "react";
 import {
   FlatList as RNFlatList,
   Keyboard,
@@ -13,8 +13,10 @@ import { useComments, CommentType } from "app/hooks/api/use-comments";
 import { useKeyboardDimensions } from "app/hooks/use-keyboard-dimensions";
 import { useUser } from "app/hooks/use-user";
 
-import { ActivityIndicator, Spinner, View } from "design-system";
+import { Spinner, View } from "design-system";
 import { MessageBox } from "design-system/messages/message-box-new";
+
+import { CommentsStatus } from "./comments-status";
 
 interface CommentsProps {
   nftId: number;
@@ -27,6 +29,7 @@ export function Comments({ nftId }: CommentsProps) {
   const { isAuthenticated } = useUser();
   const {
     data,
+    error,
     isSubmitting,
     isLoading,
     likeComment,
@@ -85,31 +88,28 @@ export function Comments({ nftId }: CommentsProps) {
   return (
     <Suspense fallback={<Spinner size="small" />}>
       <View tw="flex-1 mt--4">
-        <FlatList
-          data={dataReversed}
-          refreshing={isLoading}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          initialNumToRender={10}
-          maxToRenderPerBatch={10}
-          windowSize={10}
-          onTouchMove={handleOnTouchMove}
-        />
-        {isAuthenticated && (
-          <MessageBox
-            submitting={isSubmitting}
-            style={{ marginBottom: keyboardHeight }}
-            onSubmit={handleOnSubmit}
-          />
-        )}
-        {isLoading && (
-          <View
-            tw={
-              "absolute top--8 right--4 bottom-4 left--4 opacity-95 dark:opacity-85 bg-white dark:bg-black justify-center items-center"
-            }
-          >
-            <ActivityIndicator />
-          </View>
+        {isLoading || (dataReversed.length == 0 && error) ? (
+          <CommentsStatus isLoading={isLoading} error={error} />
+        ) : (
+          <>
+            <FlatList
+              data={dataReversed}
+              refreshing={isLoading}
+              renderItem={renderItem}
+              keyExtractor={keyExtractor}
+              initialNumToRender={10}
+              maxToRenderPerBatch={10}
+              windowSize={10}
+              onTouchMove={handleOnTouchMove}
+            />
+            {isAuthenticated && (
+              <MessageBox
+                submitting={isSubmitting}
+                style={{ marginBottom: keyboardHeight }}
+                onSubmit={handleOnSubmit}
+              />
+            )}
+          </>
         )}
       </View>
     </Suspense>

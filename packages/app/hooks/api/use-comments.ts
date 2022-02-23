@@ -179,6 +179,7 @@ export const useComments = (nftId: number) => {
   //#endregion
 
   return {
+    error,
     data: data?.[0].data,
 
     isSubmitting,
