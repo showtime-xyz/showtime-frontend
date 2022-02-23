@@ -166,10 +166,9 @@ export const useComments = (nftId: number) => {
         // refresh comments
         mutateComments();
         setIsSubmitting(false);
-        return true;
       } catch (error) {
         setIsSubmitting(false);
-        return false;
+        throw error;
       }
     },
     [nftId, mutateComments]

@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useMemo } from "react";
+import { Suspense, useCallback, useMemo, useRef } from "react";
 import {
   Alert,
   FlatList as RNFlatList,
@@ -15,7 +15,10 @@ import { useKeyboardDimensions } from "app/hooks/use-keyboard-dimensions";
 import { useUser } from "app/hooks/use-user";
 
 import { Spinner, View } from "design-system";
-import { MessageBox } from "design-system/messages/message-box-new";
+import {
+  MessageBox,
+  MessageBoxMethods,
+} from "design-system/messages/message-box-new";
 
 import { CommentsStatus } from "./comments-status";
 
@@ -26,6 +29,8 @@ interface CommentsProps {
 const keyExtractor = (item: CommentType) => `comment-${item.comment_id}`;
 
 export function Comments({ nftId }: CommentsProps) {
+  const inputRef = useRef<MessageBoxMethods>(null);
+
   //#region hooks
   const { isAuthenticated } = useUser();
   const {
@@ -50,26 +55,37 @@ export function Comments({ nftId }: CommentsProps) {
   //#endregion
 
   //#region callbacks
-  const handleOnSubmit = useCallback(async function handleOnSubmit(
-    text: string
-  ) {
-    let result = false;
-
-    try {
-      await newComment(text);
-      result = true;
-    } catch (error) {
-      // TODO
-    }
-
-    return result;
-  },
-  []);
   const handleOnTouchMove = useCallback(() => {
     if (keyboardHeight > 0) {
       Keyboard.dismiss();
     }
   }, [keyboardHeight]);
+
+  const handleOnSubmitComment = useCallback(
+    async function handleOnSubmitComment(text: string) {
+      const _newComment = async () => {
+        try {
+          await newComment(text);
+          inputRef.current?.reset();
+        } catch (error) {
+          Alert.alert("Error", "Cannot add comment.", [
+            {
+              text: "Cancel",
+              style: "cancel",
+            },
+            {
+              text: "Try Again",
+              style: "default",
+              onPress: _newComment,
+            },
+          ]);
+        }
+      };
+
+      await _newComment();
+    },
+    [newComment]
+  );
 
   const handleOnDeleteComment = useCallback(
     async function handleOnDeleteComment(commentId: number) {
@@ -144,9 +160,10 @@ export function Comments({ nftId }: CommentsProps) {
             />
             {isAuthenticated && (
               <MessageBox
+                ref={inputRef}
                 submitting={isSubmitting}
                 style={{ marginBottom: keyboardHeight }}
-                onSubmit={handleOnSubmit}
+                onSubmit={handleOnSubmitComment}
               />
             )}
           </>
