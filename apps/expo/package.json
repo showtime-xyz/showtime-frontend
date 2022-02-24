@@ -49,7 +49,6 @@
     "@gorhom/bottom-sheet": "^4.1.4",
     "@growthbook/growthbook-react": "^0.7.0",
     "@hookform/resolvers": "^2.8.5",
-    "@logrocket/react-native": "^0.23.1",
     "@magic-sdk/react-native": "^7.0.0",
     "@radix-ui/react-accordion": "^0.1.5",
     "@radix-ui/react-tabs": "^0.1.1",
