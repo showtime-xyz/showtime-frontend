@@ -40,7 +40,7 @@ const HeaderRight = () => {
               <NotificationsTabBarIcon color="white" focused={false} />
             </View>
           )}
-          <View tw="bg-white dark:bg-black w-20 items-end">
+          <View tw="bg-white dark:bg-black min-w-20 items-end">
             {isAuthenticated && width > 768 && (
               <View tw="mx-3">
                 <Button
