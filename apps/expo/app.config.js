@@ -115,7 +115,6 @@ export default {
     ],
     "expo-community-flipper",
     "./plugins/with-android-manifest.js",
-    "@logrocket/react-native",
     "./plugins/with-hermes-ios-m1-workaround.js",
   ],
 };
