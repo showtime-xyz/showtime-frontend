@@ -116,5 +116,19 @@ export default {
     "expo-community-flipper",
     "./plugins/with-android-manifest.js",
     "./plugins/with-hermes-ios-m1-workaround.js",
+    "sentry-expo",
   ],
+
+  hooks: {
+    postPublish: [
+      {
+        file: "sentry-expo/upload-sourcemaps",
+        config: {
+          organization: "showtime-l3",
+          project: "showtime-mobile",
+          authToken: process.env.SENTRY_AUTH_TOKEN,
+        },
+      },
+    ],
+  },
 };
