@@ -1,10 +1,10 @@
 import { useCallback, useRef } from "react";
 
 import { captureException } from "@sentry/nextjs";
-// import Iron from "@hapi/iron";
-import axios from "axios";
 
 import * as accessTokenStorage from "app/lib/access-token";
+// import Iron from "@hapi/iron";
+import { axios } from "app/lib/axios";
 import { setLogout } from "app/lib/logout";
 import * as refreshTokenStorage from "app/lib/refresh-token";
 
@@ -35,15 +35,15 @@ export function useAccessTokenManager() {
 
       // call refresh api
       const response = await axios({
-        url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/jwt/refresh`,
+        url: `/v1/jwt/refresh`,
         method: "POST",
         data: {
           refresh: sealedRefreshToken,
         },
       });
 
-      const _accessToken = response?.data?.access;
-      const _refreshToken = response?.data?.refresh;
+      const _accessToken = response?.access;
+      const _refreshToken = response?.refresh;
 
       setAccessToken(_accessToken);
       setRefreshToken(_refreshToken);
