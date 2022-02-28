@@ -13,18 +13,70 @@ import { VerificationBadge } from "design-system/verification-badge";
 import { View } from "design-system/view";
 
 interface MessageRowProps {
+  /**
+   * Defines the message owner username.
+   * @default undefined
+   */
   username?: string;
+  /**
+   * Defines the message owner avatar url.
+   * @default undefined
+   */
   userAvatar?: string;
+  /**
+   * Defines whether the message owner is verified or not.
+   * @default undefined
+   */
   userVerified?: boolean | 0 | 1;
+  /**
+   * Defines whether the message has parent or not.
+   * @default undefined
+   */
   hasParent?: boolean;
+  /**
+   * Defines whether the message has replies or not.
+   * @default undefined
+   */
   hasReplies?: boolean;
+  /**
+   * Defines whether the message liked by customer or not.
+   * @default undefined
+   */
   likedByMe?: boolean;
+  /**
+   * Defines the message content.
+   * @default undefined
+   */
   content?: string;
+  /**
+   * Defines the message position in the replies list.
+   * @default undefined
+   */
+  position?: undefined | "middle" | "last";
+  /**
+   * Defines the message likes count.
+   * @default undefined
+   */
   likeCount?: number;
+  /**
+   * Defines the message replies count.
+   * @default undefined
+   */
   replayCount?: number;
+  /**
+   * Defines the message creation date.
+   * @default undefined
+   */
   createdAt?: string;
-
+  /**
+   * Defines the like press callback
+   * @default undefined
+   */
   onLikePress?: () => void;
+  /**
+   * Defines the delete press callback
+   * @default undefined
+   */
   onDeletePress?: () => void;
 }
 
@@ -36,6 +88,7 @@ export function MessageRow({
   likeCount = 0,
   replayCount = 0,
   createdAt,
+  position,
   hasParent,
   hasReplies,
   likedByMe,
@@ -55,27 +108,35 @@ export function MessageRow({
   //#endregion
 
   //#region styles
-  const nestedLineTW = useMemo(
+  const replyVerticalLineTW = useMemo(
     () => [
       "absolute",
-      "left-1/2",
-      hasReplies ? "right--1/2" : "right-1/2",
-      hasReplies ? "top-4 bottom-[-16px]" : "top-[-16px] left--5 h-[28px]",
-      "border-[#27272A]",
+      "w-[1px]",
+      "bg-[#27272A]",
+      hasReplies
+        ? "top-4 bottom-[-16px]"
+        : position !== "last"
+        ? "top-[-16px] bottom-[-16px]"
+        : "top-[-16px] h-4",
+      hasReplies ? "left-1/2" : "left--5",
     ],
-    [hasReplies]
+    [hasReplies, position]
   );
-  const nestedLineStyle = useMemo(
-    () => [
-      styles.nestedLine,
-      hasParent
-        ? {
-            borderBottomWidth: 1,
-            borderBottomLeftRadius: 12,
-          }
-        : undefined,
-    ],
-    [hasParent]
+  const replyHorizontalLineTW = useMemo(
+    () => ["absolute", "left--5 right-0"],
+    []
+  );
+  const replyHorizontalLineStyle = useMemo(
+    () => ({
+      borderBottomLeftRadius: 12,
+      borderBottomWidth: position === "last" ? 1 : 0,
+      borderLeftWidth: position === "last" ? 1 : 0,
+      top: position !== "last" ? 12 : 0,
+      height: position === "last" ? 12 : 2,
+      backgroundColor: position !== "last" ? "#27272A" : undefined,
+      borderColor: "#27272A",
+    }),
+    [position]
   );
   //#region
   return (
@@ -83,7 +144,10 @@ export function MessageRow({
       {hasParent && <View tw="ml-8" collapsable={true} />}
       <View tw="items-center">
         {(hasReplies || hasParent) && (
-          <View tw={nestedLineTW} style={nestedLineStyle} />
+          <>
+            <View tw={replyHorizontalLineTW} style={replyHorizontalLineStyle} />
+            <View tw={replyVerticalLineTW} />
+          </>
         )}
         <Avatar url={userAvatar} size={24} />
       </View>
@@ -135,9 +199,3 @@ export function MessageRow({
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  nestedLine: {
-    borderLeftWidth: 1,
-  },
-});
