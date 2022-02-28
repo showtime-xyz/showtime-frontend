@@ -4133,9 +4133,9 @@
     tslib "^1.9.3"
 
 "@sentry/cli@^1.52.4", "@sentry/cli@^1.72.0":
-  version "1.72.2"
-  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-1.72.2.tgz#ba57d8248fe4d2836883bbe3047fdd75cd6739b3"
-  integrity sha512-H/yrxyYscOzn0YBOzPsBnIW7QxsSQrG1kQfD1FisuMhPl67D948DPkagAms4sy1v+MntBBNnD4Z+WsdRzFWXJQ==
+  version "1.73.0"
+  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-1.73.0.tgz#0d0bce913e0060ae192741c6693c57e50078c886"
+  integrity sha512-n4YINqmoncGUkLEpd4WuW+oD+aoUyQPhRbSBSYkbCFxPPmopn1VExCB2Vvzwj7vjXYRRGkix6keBMS0LLs3A3Q==
   dependencies:
     https-proxy-agent "^5.0.0"
     mkdirp "^0.5.5"
@@ -20920,7 +20920,7 @@ send@0.17.2:
     range-parser "~1.2.1"
     statuses "~1.5.0"
 
-sentry-expo@^4.0.0:
+sentry-expo@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/sentry-expo/-/sentry-expo-4.1.0.tgz#c107377e458b82a1b5a29056ede3fed348c8cac6"
   integrity sha512-37GuQMnNdUVFP8zoCr6coDkKaz9gnmPDPVKNeOL1X5Zb0NWB/scfvvZ4disHcbqaC51/z0CKZbtmDVIqu708TQ==
