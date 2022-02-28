@@ -1,9 +1,15 @@
-import "dotenv/config";
-import semver from "semver";
+const path = require("path");
+const STAGE = process.env.STAGE ?? "development";
+const envPath = path.resolve(__dirname, `.env.${STAGE}`);
 
-import packageJSON from "../../package.json";
+require("dotenv").config({
+  path: envPath,
+});
 
-const STAGE = process.env.STAGE;
+const packageJSON = require("../../package.json");
+
+const semver = require("semver");
+
 const SCHEME = process.env.SCHEME ?? "io.showtime";
 
 const envConfig = {
