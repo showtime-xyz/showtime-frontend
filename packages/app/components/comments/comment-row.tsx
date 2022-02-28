@@ -8,6 +8,7 @@ import { MessageRow } from "design-system/messages/message-row";
 
 interface CommentRowProps {
   comment: CommentType;
+  isLastReply?: boolean;
 
   likeComment: (id: number) => Promise<boolean>;
   unlikeComment: (id: number) => Promise<boolean>;
@@ -16,6 +17,7 @@ interface CommentRowProps {
 
 function CommentRowComponent({
   comment,
+  isLastReply,
   likeComment,
   unlikeComment,
   deleteComment,
@@ -89,14 +91,16 @@ function CommentRowComponent({
         hasParent={comment.parent_id != undefined}
         likedByMe={isLikedByMe}
         createdAt={comment.added}
+        position={isLastReply ? "last" : undefined}
         onLikePress={handleOnLikePress}
         onDeletePress={isMyComment ? handleOnDeletePress : undefined}
       />
       {comment.replies?.length ?? 0 > 0
-        ? comment.replies?.map((reply) => (
+        ? comment.replies?.map((reply, index) => (
             <CommentRowComponent
               key={`comment-reply-${reply.comment_id}`}
               comment={reply}
+              isLastReply={index === (comment.replies?.length ?? 0) - 1}
               likeComment={likeComment}
               unlikeComment={unlikeComment}
               deleteComment={deleteComment}

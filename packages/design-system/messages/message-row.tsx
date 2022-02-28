@@ -132,7 +132,7 @@ export function MessageRow({
       borderBottomWidth: position === "last" ? 1 : 0,
       borderLeftWidth: position === "last" ? 1 : 0,
       top: position !== "last" ? 12 : 0,
-      height: position === "last" ? 12 : 2,
+      height: position === "last" ? 12 : 1,
       backgroundColor: position !== "last" ? "#27272A" : undefined,
       borderColor: "#27272A",
     }),
