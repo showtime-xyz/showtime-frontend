@@ -39,7 +39,11 @@ function HomeNavigator() {
       // @ts-ignore
       screenOptions={screenOptions({ safeAreaTop, isDark })}
     >
-      <HomeStack.Screen name="home" component={HomeScreen} />
+      <HomeStack.Screen
+        name="home"
+        component={HomeScreen}
+        options={{ headerShown: false }}
+      />
     </HomeStack.Navigator>
   );
 }

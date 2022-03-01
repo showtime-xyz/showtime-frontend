@@ -1,11 +1,12 @@
 // import React, { Suspense, useCallback, useRef } from "react";
 // import { Platform, FlatList } from "react-native";
-import { Dimensions } from "react-native";
+import { useCallback } from "react";
+import { Dimensions, FlatList, Image } from "react-native";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { BlurView } from "expo-blur";
-import Image from "react-native-fast-image";
 
+// import Image from "react-native-fast-image";
 import { NFT } from "app/types";
 
 import { View, Text } from "design-system";
@@ -126,77 +127,410 @@ import { tw } from "design-system/tailwind";
 // };
 
 // export { Feed };
-const item = {
-  activity_id: 1129551,
-  animation_preview_url: null,
-  blurhash:
-    "yIEdx*%3E29@whxCR$t2R$jLNGs-%2oL0dNExtxISvSwj]Rpaz%2t2R+Ins=oeWEX3Sv$TRRs;xHX5NXbIjaWCWUJ{banUsEW,t6sq",
-  chain_identifier: "1",
-  collection_img_url: null,
-  collection_name: "HODL Cards",
-  collection_slug: "hodlcards",
-  comment_count: 0,
-  contract_address: "0x495f947276749ce646f68ac8c248420045cb7b5e",
-  creator_address: "pixelord.eth",
-  creator_address_nonens: "0xbdb0dd845e95d2e24b77d9bef54d4df82baf8335",
-  creator_id: 454041,
-  creator_img_url:
-    "https://storage.googleapis.com/nft-public-profile-pics/454041_1618519425.jpg",
-  creator_name: "Pixelord",
-  creator_username: "pixelord",
-  creator_verified: 0,
-  like_count: 0,
-  mime_type: "image/png",
-  multiple_owners: 0,
-  nft_id: 229145125,
-  owner_address: "0xfd9563722d3f260f21b48faf7ce05701ada479b4",
-  owner_count: 1,
-  owner_id: 1716555,
-  owner_img_url:
-    "https://storage.googleapis.com/opensea-static/opensea-profile/15.png",
-  owner_name: "schteeb",
-  owner_username: "blaze",
-  owner_verified: 0,
-  source_url:
-    "https://images.unsplash.com/photo-1489549132488-d00b7eee80f1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80",
-  still_preview_url:
-    "https://images.unsplash.com/photo-1489549132488-d00b7eee80f1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80",
-  token_animation_url: null,
-  token_aspect_ratio: "1.00000",
-  token_background_color: null,
-  token_count: 1,
-  token_created: null,
-  token_creator_followers_only: 0,
-  token_description:
-    "this is my nft title with a really, really long name, and some more text to bring it to the third line. Let's try to add one more line #awesome",
-  token_edition_identifier: null,
-  token_has_video: 0,
-  token_hidden: 0,
-  token_id:
-    "85799622320254933162115753726238912946972704429541097231840037159547361558529",
-  token_img_original_url:
-    "https://lh3.googleusercontent.com/4AB7a5qnHeKXJbO1HujyCuhnTOy1asfaT0Yx3CQA6A8L739H343WysYMlORxxH2Wtc7Esiq97obKTjOlJ7I-hJOU79tgsJYd-12N",
-  token_img_url:
-    "https://lh3.googleusercontent.com/F3zNlh90SywY3C9d3OSCo25jkzSfyOiS7euqeklsU6025D4Rf4ihGBZ7yuHRDrdUndZHPvAwJad5CEYB5_9Gwvq60lDSFgG3B93U",
-  token_ko_edition: null,
-  token_listing_identifier: null,
-  token_name: "HODL 069",
-  contract_is_creator: false,
-  multiple_owners_list: [],
-} as unknown as NFT;
+const item = [
+  {
+    activity_id: 1130126,
+    nft_id: 248570643,
+    contract_address: "0xabb3738f04dc2ec20f4ae4462c3d069d02ae045b",
+    token_id: "8244000",
+    like_count: 0,
+    token_name: "Clutter",
+    token_description: "It's too much\nIt's just too much",
+    token_img_url:
+      "https://lh3.googleusercontent.com/tPOkMUlsyTWQl5hKbCOs-KjXnU70BAPvdlPT1_pJUCko3PN8tLQRPZzyLYEJvL9itCrI0pujYwtopT9fgfRmsriZNY9GWDAjpZUC9Q",
+    token_img_original_url:
+      "https://ipfs.io/ipfs/QmXkCRiS4RPXksEFpNbVx5GF5Qu4AbqrkcxCYdUKxpAPpP/asset.png",
+    token_has_video: 0,
+    token_animation_url: null,
+    animation_preview_url: null,
+    blurhash:
+      "y2SiKn~q?]~q?]~q.8_3n*jZWVjtW;Wr-:bIRjWUWCfln~_3oKjsofjZjFbb%zjFaejFRPX9Rk_3bboLsSkWofjE-;n$V[ofRQNaWB",
+    token_background_color: null,
+    token_aspect_ratio: "0.74468",
+    token_hidden: 0,
+    creator_id: 387428,
+    creator_name: "Bilnd",
+    creator_address: "bilnd.eth",
+    creator_address_nonens: "0x9523183432407ad8cc75f5b30a2be3ab035511b2",
+    creator_img_url:
+      "https://lh3.googleusercontent.com/KuyO_hVTLCi5LcYNEzeUq7LaBxQVp7N8L6KMJF1x6ClbCGCqEJUjBZDgh3ZxyaAQuGms17Wv-TCVqvIwyhEgvFqmMXHtaJReFIDlQg",
+    multiple_owners: 0,
+    owner_id: null,
+    owner_name: null,
+    owner_address: null,
+    owner_img_url: null,
+    token_created: "2022-03-01T12:58:18",
+    token_creator_followers_only: 0,
+    creator_username: "bilnd",
+    creator_verified: 0,
+    owner_username: null,
+    owner_verified: null,
+    comment_count: 0,
+    owner_count: null,
+    token_count: null,
+    token_ko_edition: null,
+    token_edition_identifier: null,
+    source_url:
+      "https://lh3.googleusercontent.com/tPOkMUlsyTWQl5hKbCOs-KjXnU70BAPvdlPT1_pJUCko3PN8tLQRPZzyLYEJvL9itCrI0pujYwtopT9fgfRmsriZNY9GWDAjpZUC9Q",
+    still_preview_url:
+      "https://lh3.googleusercontent.com/tPOkMUlsyTWQl5hKbCOs-KjXnU70BAPvdlPT1_pJUCko3PN8tLQRPZzyLYEJvL9itCrI0pujYwtopT9fgfRmsriZNY9GWDAjpZUC9Q",
+    mime_type: "image/png",
+    chain_identifier: "1",
+    token_listing_identifier: null,
+    collection_slug: "known-origin",
+    collection_name: "KnownOrigin",
+    collection_img_url:
+      "https://lh3.googleusercontent.com/53L422-5QSOKOaWTu3-EWZkymYoyFo6L60AnxPXqz4rNgX1-E162tIljSyVOa3hyVACvJNGdih4lFummnHPx-1Fa=s60",
+  },
+  {
+    activity_id: 1130085,
+    nft_id: 248553847,
+    contract_address: "0x8e4c061b1ed11e809b2ddfb46890aa16d2f3acd0",
+    token_id: "4",
+    like_count: 0,
+    token_name: "ETHERMINE",
+    token_description:
+      "The beginning of a journey!\n\nDimensions: 4096px x 2160px\nDone in Blender and Adobe Photoshop",
+    token_img_url:
+      "https://lh3.googleusercontent.com/dNOv-yvty5B5B7u93YxYW8_Cdp2rFM0-1qshyqHZetEal0JKx0Ntv_1oRpVSDVwTC_L9vJpSOj8MgihmPdOXjiSxqOxAofJgmDPQ",
+    token_img_original_url:
+      "https://ipfs.io/ipfs/QmW3Y2GrTXNfLfAPEfATRuh21k4dDwFKsBf9CHjqv2xWZh/nft.png",
+    token_has_video: 0,
+    token_animation_url: null,
+    animation_preview_url: null,
+    blurhash:
+      "yOE{C4~p%2NHogofRj%g.7%MofjFRjs:xuxvx]WXM{V@t7bwbcWBV@oLt7WWxubHM{jYt7a}WCRjWBt7j]WBf5kCoJxat7oeWBfkj]",
+    token_background_color: null,
+    token_aspect_ratio: "1.89630",
+    token_hidden: 0,
+    creator_id: 321663,
+    creator_name: "Exolorian",
+    creator_address: "exolorian.eth",
+    creator_address_nonens: "0x29a8fcdbe61302b42b05da77c7db2ef21ff630ca",
+    creator_img_url:
+      "https://lh3.googleusercontent.com/8xy13OHe74myQBfWzcYQvS1OxUmlJSnmmeVOR2QbSIj59wNPnzCw1Go5KJzRqhoTRS_EyGrB7-XKNBcrd5V2Y5XyJ133MQRdYqJr",
+    multiple_owners: 0,
+    owner_id: null,
+    owner_name: null,
+    owner_address: null,
+    owner_img_url: null,
+    token_created: "2022-03-01T12:34:33",
+    token_creator_followers_only: 0,
+    creator_username: "exolorian",
+    creator_verified: 0,
+    owner_username: null,
+    owner_verified: null,
+    comment_count: 0,
+    owner_count: null,
+    token_count: null,
+    token_ko_edition: null,
+    token_edition_identifier: null,
+    source_url:
+      "https://lh3.googleusercontent.com/dNOv-yvty5B5B7u93YxYW8_Cdp2rFM0-1qshyqHZetEal0JKx0Ntv_1oRpVSDVwTC_L9vJpSOj8MgihmPdOXjiSxqOxAofJgmDPQ",
+    still_preview_url:
+      "https://lh3.googleusercontent.com/dNOv-yvty5B5B7u93YxYW8_Cdp2rFM0-1qshyqHZetEal0JKx0Ntv_1oRpVSDVwTC_L9vJpSOj8MgihmPdOXjiSxqOxAofJgmDPQ",
+    mime_type: "image/png",
+    chain_identifier: "1",
+    token_listing_identifier: null,
+    collection_slug: "exoarts",
+    collection_name: "ExoArts",
+    collection_img_url: null,
+  },
+  {
+    activity_id: 1130073,
+    nft_id: 248553191,
+    contract_address: "0x620b70123fb810f6c653da7644b5dd0b6312e4d8",
+    token_id: "1381",
+    like_count: 0,
+    token_name: "Space Doodle #1381",
+    token_description:
+      "Space Doodles are spaceships for your Doodle. Each Doodle in the original collection of 10,000 can launch their own personal spaceship that is generated from over 200 audio-visual traits and on-chain stats.\n\nYour Space Doodle is your Doodle and selling it will allow the new purchaser to remove the Doodle from our secure smart contract. It is highly recommended that you launch and dock your Doodles directly from https://doodles.app",
+    token_img_url:
+      "https://lh3.googleusercontent.com/4VGI09W7WPETdPZCd8BGPBCLInUXKN07wyiP_yTdVgvWqffa_Th-EXSGbwwGh9UD7x69ODmDNiEBE_sGR-AorwY9BjBdu7muzTGy",
+    token_img_original_url:
+      "https://ipfs.io/ipfs/Qme7AeWNYKiqmg26suhZNUnMbUPCAzGxdttRBszFJgquQX",
+    token_has_video: 0,
+    token_animation_url: null,
+    animation_preview_url:
+      "https://storage.googleapis.com/showtime-cdn/ipfs/video_previews/QmRJ4WjiC3YHxvyXsmfAjjjRHjGakKBK4bo5Hd5EJDfmjm_preview__1646138056.mp4",
+    blurhash:
+      "yrPY[4n-w6sEX3bbn,BHkRX5jsoIa~a|rKafW-X4ajn~bForV{sjjbW:axjZWabXV}njoaW?ayocoJX7W;aioJj[n,jbjrj[bGjYf8",
+    token_background_color: null,
+    token_aspect_ratio: "1.00000",
+    token_hidden: 0,
+    creator_id: 421121,
+    creator_name: "Archan Nair",
+    creator_address: "archann.eth",
+    creator_address_nonens: "0x4ccc0aa065a37a3589e2db6e165d2f8f522e9fa2",
+    creator_img_url:
+      "https://lh3.googleusercontent.com/hwncTXiITjtd_-SIPq_S6lMyj6qwtcw0MhN3CoDeujOBVlmEaYZ7x9tIfLH2eR45AOJ6N_iZMpfpH76XTsqZOAp2IHbc5HBGOMb3",
+    multiple_owners: 0,
+    owner_id: null,
+    owner_name: null,
+    owner_address: null,
+    owner_img_url: null,
+    token_created: "2022-03-01T12:04:45",
+    token_creator_followers_only: 0,
+    creator_username: "ArchanNair",
+    creator_verified: 0,
+    owner_username: null,
+    owner_verified: null,
+    comment_count: 0,
+    owner_count: null,
+    token_count: null,
+    token_ko_edition: null,
+    token_edition_identifier: null,
+    source_url:
+      "https://storage.googleapis.com/showtime-cdn/ipfs/originals/QmRJ4WjiC3YHxvyXsmfAjjjRHjGakKBK4bo5Hd5EJDfmjm_1646138049.mp4",
+    still_preview_url:
+      "https://lh3.googleusercontent.com/4VGI09W7WPETdPZCd8BGPBCLInUXKN07wyiP_yTdVgvWqffa_Th-EXSGbwwGh9UD7x69ODmDNiEBE_sGR-AorwY9BjBdu7muzTGy",
+    mime_type: "video/mp4",
+    chain_identifier: "1",
+    token_listing_identifier: null,
+    collection_slug: "space-doodles-official",
+    collection_name: "Space Doodles",
+    collection_img_url:
+      "https://lh3.googleusercontent.com/grtJLoHghmlq1Zh05DEc4S20t6_aESFq-nq07SyAsxDuOoRorjo1EQ9Z2L2Fb-LS7DgZt9Ar4Ra9l2KpBkSvvyu7wnVdhLkHcNFtQ8c=s120",
+  },
+  {
+    activity_id: 1130060,
+    nft_id: 241158597,
+    contract_address: "0x495f947276749ce646f68ac8c248420045cb7b5e",
+    token_id:
+      "91175939610829289325929295145181883431167439538202798815044682276669254270977",
+    like_count: 0,
+    token_name: "Lost Boy",
+    token_description: "Lost Boy \n1/1\nCustom Graffiti Wall\n-badfroot",
+    token_img_url:
+      "https://lh3.googleusercontent.com/4-Vjsid-5lUEaJ2wmwCKpTs0uWO8E5HeHD1U0njJlVJUTXVCpZp0bIHvuLOE7GPDRgbh3a42sBsLNq5E3dFnWN2pg2d-8xbI0mY",
+    token_img_original_url:
+      "https://lh3.googleusercontent.com/coh4h47souEwJuC3Sao4LSKNur4_06p_yUOawfhLf_e1IDeuBm26QELlAl1BhakMB6spXuUvzUtg2Nn_UaS8IxgQsOBuLwgLP6bS",
+    token_has_video: 0,
+    token_animation_url: null,
+    animation_preview_url: null,
+    blurhash:
+      "yME.naoL%gNG-mt6s+_MR*xwWAt7xakB.RW;%Nena$ogkC?bj]xuW.R+t7ofx^t7oJWBRjj[bIxvt7s.afadozWCkEt6adoLRjxuWB",
+    token_background_color: null,
+    token_aspect_ratio: "0.66402",
+    token_hidden: 0,
+    creator_id: 758129,
+    creator_name: "Badfroot",
+    creator_address: "badfroot.eth",
+    creator_address_nonens: "0xc993c0c7fdef0ea3df326f62ef51cd5f92954490",
+    creator_img_url:
+      "https://storage.googleapis.com/opensea-static/opensea-profile/33.png",
+    multiple_owners: 1,
+    owner_id: null,
+    owner_name: null,
+    owner_address: null,
+    owner_img_url: null,
+    token_created: null,
+    token_creator_followers_only: 0,
+    creator_username: null,
+    creator_verified: 0,
+    owner_username: null,
+    owner_verified: null,
+    comment_count: 0,
+    owner_count: null,
+    token_count: null,
+    token_ko_edition: null,
+    token_edition_identifier: null,
+    source_url:
+      "https://lh3.googleusercontent.com/4-Vjsid-5lUEaJ2wmwCKpTs0uWO8E5HeHD1U0njJlVJUTXVCpZp0bIHvuLOE7GPDRgbh3a42sBsLNq5E3dFnWN2pg2d-8xbI0mY",
+    still_preview_url:
+      "https://lh3.googleusercontent.com/4-Vjsid-5lUEaJ2wmwCKpTs0uWO8E5HeHD1U0njJlVJUTXVCpZp0bIHvuLOE7GPDRgbh3a42sBsLNq5E3dFnWN2pg2d-8xbI0mY",
+    mime_type: "image/jpeg",
+    chain_identifier: "1",
+    token_listing_identifier: null,
+    collection_slug: "thegraveyard",
+    collection_name: "The Graveyard",
+    collection_img_url: null,
+  },
+  {
+    activity_id: 1130027,
+    nft_id: 248544481,
+    contract_address: "0x6dd60e54f41de823abaed29f5527c93856071cad",
+    token_id: "1",
+    like_count: 0,
+    token_name: "Moonlight Horizon",
+    token_description:
+      "“Moonlight Horizon — where the earth meets the sky. Dreams grounded in reality, a split between two worlds.”",
+    token_img_url:
+      "https://lh3.googleusercontent.com/CRo2Qt8VwkjTRNwpdDrCU0khQ_TEM3omj0ceFIGgfD0RwaWS7thmB9xb0e6eu8n8nuJswzX6s14zPLfFoZD8RKne8XpMYXEouyV_",
+    token_img_original_url:
+      "https://ipfs.io/ipfs/QmTNqMXMnCzvtVWLJd8GEssfn3nkVq7XUjKjCAQiFcHF17/nft.mp4",
+    token_has_video: 0,
+    token_animation_url: null,
+    animation_preview_url:
+      "https://storage.googleapis.com/showtime-cdn/ipfs/video_previews/QmdnjpPN7vjxTCaeDdawyeZTv5C1E1H8XmigSBHaZ9ecHj_preview__1646137381.mp4",
+    blurhash:
+      "ylNkGuJ7bdn*f,s:R%?dn%WYbIjYW;jYAZoIofofWAazj[s=ofbEfkaeaybIbdjZf4WVoKaxW=bdWUWUfiWWjZj]t7s:R%WWjZfQj[",
+    token_background_color: null,
+    token_aspect_ratio: "1.77778",
+    token_hidden: 0,
+    creator_id: 19059,
+    creator_name: "Jessica Ticchio",
+    creator_address: "0x080b6202c0a5c464799e1e5a4aa7325eace9a5e1",
+    creator_address_nonens: "0x080b6202c0a5c464799e1e5a4aa7325eace9a5e1",
+    creator_img_url:
+      "https://storage.googleapis.com/opensea-static/opensea-profile/15.png",
+    multiple_owners: 0,
+    owner_id: null,
+    owner_name: null,
+    owner_address: null,
+    owner_img_url: null,
+    token_created: "2022-03-01T11:51:35",
+    token_creator_followers_only: 0,
+    creator_username: "JessicaTicchio",
+    creator_verified: 0,
+    owner_username: null,
+    owner_verified: null,
+    comment_count: 0,
+    owner_count: null,
+    token_count: null,
+    token_ko_edition: null,
+    token_edition_identifier: null,
+    source_url:
+      "https://storage.googleapis.com/showtime-cdn/ipfs/originals/QmdnjpPN7vjxTCaeDdawyeZTv5C1E1H8XmigSBHaZ9ecHj_1646137389.mp4",
+    still_preview_url:
+      "https://lh3.googleusercontent.com/CRo2Qt8VwkjTRNwpdDrCU0khQ_TEM3omj0ceFIGgfD0RwaWS7thmB9xb0e6eu8n8nuJswzX6s14zPLfFoZD8RKne8XpMYXEouyV_",
+    mime_type: "video/mp4",
+    chain_identifier: "1",
+    token_listing_identifier: null,
+    collection_slug: "dream-visions-v2",
+    collection_name: "Dream Visions V2",
+    collection_img_url: null,
+  },
+  {
+    activity_id: 1130027,
+    nft_id: 248519377,
+    contract_address: "0xb395005612ce8633eb82feb9ff8273299ddbd3f8",
+    token_id: "3",
+    like_count: 0,
+    token_name: "Mirage 02",
+    token_description:
+      "Part 2/3 in The Mirage Collection\n\n“I’ve always been captivated by the concept of mirages; the mind’s ability to create a visual that dances on the line of appearing both completely impossible, yet so convincingly real. Is reality an illusion or is the illusion reality?”",
+    token_img_url:
+      "https://lh3.googleusercontent.com/CnRGOAdt_Apc_FXMvCd-uhYv87cff7gc0jYGhRa6soJYSPBmD8Tn_bNOWHn0-MXRb0ZnZz4Vicod0684WxknIA6jLV7g4ei1rCE",
+    token_img_original_url:
+      "https://ipfs.io/ipfs/QmbJASJnL7QGKXugZQL7dbxczNpopRAA3SL5WMrMQAPgDP/nft.mp4",
+    token_has_video: 0,
+    token_animation_url: null,
+    animation_preview_url:
+      "https://storage.googleapis.com/showtime-cdn/ipfs/video_previews/QmeYfQLrg1iUDxkAxZcfekBVApSfmKeezxkpDokgVEvt9E_preview__1646136252.mp4",
+    blurhash:
+      "yZIYYXo#NHogs,ogRkTOofofazaya}oe00aeoIaya~fPoe%MWVjYj]bHjZayW9j@kDfPayazf5Roj[ayayj[j]j?s+aye.jsa|aykC",
+    token_background_color: null,
+    token_aspect_ratio: "0.56250",
+    token_hidden: 0,
+    creator_id: 19059,
+    creator_name: "Jessica Ticchio",
+    creator_address: "0x080b6202c0a5c464799e1e5a4aa7325eace9a5e1",
+    creator_address_nonens: "0x080b6202c0a5c464799e1e5a4aa7325eace9a5e1",
+    creator_img_url:
+      "https://storage.googleapis.com/opensea-static/opensea-profile/15.png",
+    multiple_owners: 0,
+    owner_id: null,
+    owner_name: null,
+    owner_address: null,
+    owner_img_url: null,
+    token_created: "2022-03-01T11:16:38",
+    token_creator_followers_only: 0,
+    creator_username: "JessicaTicchio",
+    creator_verified: 0,
+    owner_username: null,
+    owner_verified: null,
+    comment_count: 0,
+    owner_count: null,
+    token_count: null,
+    token_ko_edition: null,
+    token_edition_identifier: null,
+    source_url:
+      "https://storage.googleapis.com/showtime-cdn/ipfs/originals/QmeYfQLrg1iUDxkAxZcfekBVApSfmKeezxkpDokgVEvt9E_1646136265.mp4",
+    still_preview_url:
+      "https://lh3.googleusercontent.com/CnRGOAdt_Apc_FXMvCd-uhYv87cff7gc0jYGhRa6soJYSPBmD8Tn_bNOWHn0-MXRb0ZnZz4Vicod0684WxknIA6jLV7g4ei1rCE",
+    mime_type: "video/mp4",
+    chain_identifier: "1",
+    token_listing_identifier: null,
+    collection_slug: "the-mirage-collection",
+    collection_name: "The Mirage Collection",
+    collection_img_url: null,
+  },
+  {
+    activity_id: 1130027,
+    nft_id: 248519364,
+    contract_address: "0xb395005612ce8633eb82feb9ff8273299ddbd3f8",
+    token_id: "1",
+    like_count: 0,
+    token_name: "Mirage 01",
+    token_description:
+      "Part 1/3 in The Mirage Collection\n\n“I’ve always been captivated by the concept of mirages; the mind’s ability to create a visual that dances on the line of appearing both completely impossible, yet so convincingly real. Is reality an illusion or is the illusion reality?”",
+    token_img_url:
+      "https://lh3.googleusercontent.com/U_7N4hLRUjf67qR-ZXRuak7w2cB-5iBCe9pvLYRbain0M_yycRnUlekhQOSK9YZXUldqrBfmFoH2VG4ZZNjWys48h4X-JBcVDBQ8",
+    token_img_original_url:
+      "https://ipfs.io/ipfs/QmeVjrYENhyotn2jMejS5Bt9ajB4Qh2GeBYmXxcYqawTD4/nft.mp4",
+    token_has_video: 0,
+    token_animation_url: null,
+    animation_preview_url:
+      "https://storage.googleapis.com/showtime-cdn/ipfs/video_previews/QmWr2rzoXDiupEyRcMfZz2TzJ6ECEh2zGGdLj8UisKUAu5_preview__1646136127.mp4",
+    blurhash:
+      "yXK_V4a%NGkCRjoLoJPERjt7j[j@aybG9FogRjayofflf8%Maen#jsa#j]ayIpWXt8j@juWCaxsVoeRjj]jYf6kCozWBozWWa#j@fP",
+    token_background_color: null,
+    token_aspect_ratio: "1.77778",
+    token_hidden: 0,
+    creator_id: 19059,
+    creator_name: "Jessica Ticchio",
+    creator_address: "0x080b6202c0a5c464799e1e5a4aa7325eace9a5e1",
+    creator_address_nonens: "0x080b6202c0a5c464799e1e5a4aa7325eace9a5e1",
+    creator_img_url:
+      "https://storage.googleapis.com/opensea-static/opensea-profile/15.png",
+    multiple_owners: 0,
+    owner_id: null,
+    owner_name: null,
+    owner_address: null,
+    owner_img_url: null,
+    token_created: "2022-03-01T10:57:32",
+    token_creator_followers_only: 0,
+    creator_username: "JessicaTicchio",
+    creator_verified: 0,
+    owner_username: null,
+    owner_verified: null,
+    comment_count: 0,
+    owner_count: null,
+    token_count: null,
+    token_ko_edition: null,
+    token_edition_identifier: null,
+    source_url:
+      "https://storage.googleapis.com/showtime-cdn/ipfs/originals/QmWr2rzoXDiupEyRcMfZz2TzJ6ECEh2zGGdLj8UisKUAu5_1646136109.mp4",
+    still_preview_url:
+      "https://lh3.googleusercontent.com/U_7N4hLRUjf67qR-ZXRuak7w2cB-5iBCe9pvLYRbain0M_yycRnUlekhQOSK9YZXUldqrBfmFoH2VG4ZZNjWys48h4X-JBcVDBQ8",
+    mime_type: "video/mp4",
+    chain_identifier: "1",
+    token_listing_identifier: null,
+    collection_slug: "the-mirage-collection",
+    collection_name: "The Mirage Collection",
+    collection_img_url: null,
+  },
+] as unknown as NFT;
 
-const { height, width } = Dimensions.get("window");
-const headerHeight = 50;
-const bottomBarHeight = 100;
-
-const mediaHeight = height - headerHeight - bottomBarHeight;
+const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 
 const FeedItem = ({ nft }: { nft: NFT }) => {
   return (
-    <View tw="flex-1">
+    <View
+      style={{
+        height: screenHeight,
+        alignItems: "center",
+      }}
+    >
       <Image
-        source={{ uri: nft.source_url }}
-        style={{ height: mediaHeight, width }}
+        source={{ uri: nft.still_preview_url }}
+        style={{
+          aspectRatio: nft.token_aspect_ratio
+            ? 1 / Number(nft.token_aspect_ratio)
+            : 1,
+          flex: 1,
+        }}
         resizeMode="contain"
       />
       <Description nft={nft} />
@@ -207,10 +541,9 @@ const FeedItem = ({ nft }: { nft: NFT }) => {
 const Description = ({ nft }: { nft: NFT }) => {
   const isDark = useIsDarkMode();
   const tint = isDark ? "dark" : "light";
-  const bottomBarHeight = useBottomTabBarHeight();
   return (
     <BlurView
-      style={tw.style(`p-4 absolute bottom-[${bottomBarHeight}px] h-61 w-full`)}
+      style={tw.style(`p-4 absolute bottom-0 h-61 w-full`)}
       tint={tint}
       intensity={65}
     >
@@ -264,9 +597,29 @@ const Description = ({ nft }: { nft: NFT }) => {
   );
 };
 export const Feed = () => {
+  const bottomBarHeight = useBottomTabBarHeight();
   return (
-    <View tw="flex-1 bg-black">
-      <FeedItem nft={item} />
+    <View tw={`bg-black bottom-[${bottomBarHeight}px]`}>
+      <FlatList
+        keyExtractor={useCallback((_item, index) => index.toString(), [])}
+        getItemLayout={useCallback((_data, index) => {
+          return {
+            length: screenHeight,
+            offset: screenHeight * index,
+            index,
+          };
+        }, [])}
+        windowSize={3}
+        initialNumToRender={1}
+        renderItem={useCallback(
+          ({ item }) => (
+            <FeedItem nft={item} />
+          ),
+          []
+        )}
+        pagingEnabled
+        data={item}
+      />
     </View>
   );
 };
