@@ -129,39 +129,39 @@ import { tw } from "design-system/tailwind";
 // export { Feed };
 const item = [
   {
-    activity_id: 1130126,
-    nft_id: 248570643,
-    contract_address: "0xabb3738f04dc2ec20f4ae4462c3d069d02ae045b",
-    token_id: "8244000",
+    activity_id: 1130120,
+    nft_id: 248570060,
+    contract_address: "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton",
+    token_id: "686664",
     like_count: 0,
-    token_name: "Clutter",
-    token_description: "It's too much\nIt's just too much",
+    token_name: "Cell 17",
+    token_description: "Imaginary cells - Contemporary art",
     token_img_url:
-      "https://lh3.googleusercontent.com/tPOkMUlsyTWQl5hKbCOs-KjXnU70BAPvdlPT1_pJUCko3PN8tLQRPZzyLYEJvL9itCrI0pujYwtopT9fgfRmsriZNY9GWDAjpZUC9Q",
+      "https://lh3.googleusercontent.com/6vQ661XKzYyKEgG1iJ_xhnnIHbvhTcNdwr7pWdgwSXRXHVLbVpJoJyEsfehVgTUb-okC0JVL962tCMRtqlc_04bpXZ7s1rOrdVMv",
     token_img_original_url:
-      "https://ipfs.io/ipfs/QmXkCRiS4RPXksEFpNbVx5GF5Qu4AbqrkcxCYdUKxpAPpP/asset.png",
+      "https://ipfs.io/ipfs/QmSibw4YCZ8xS9wMz9Wn6Kbfqh7nRmCA2e6qd5EwNtDsDU",
     token_has_video: 0,
     token_animation_url: null,
     animation_preview_url: null,
     blurhash:
-      "y2SiKn~q?]~q?]~q.8_3n*jZWVjtW;Wr-:bIRjWUWCfln~_3oKjsofjZjFbb%zjFaejFRPX9Rk_3bboLsSkWofjE-;n$V[ofRQNaWB",
+      "yEJ8#JXT8^t88^j[9EEQxtt6WCada}WBMvxFRjR*flRjt7-pIUWXt8WBt7WA9ERlj^t6xtawoe%LM|WCf5Rjj[R*8^t7t7Rko#WBof",
     token_background_color: null,
-    token_aspect_ratio: "0.74468",
+    token_aspect_ratio: "0.799",
     token_hidden: 0,
-    creator_id: 387428,
-    creator_name: "Bilnd",
-    creator_address: "bilnd.eth",
-    creator_address_nonens: "0x9523183432407ad8cc75f5b30a2be3ab035511b2",
+    creator_id: 289170,
+    creator_name: "GinkoInTheMoon",
+    creator_address: "tz1f4xtDjVtJRq7qJsXCxqL3CweyNNQNFQ4g",
+    creator_address_nonens: "tz1f4xtDjVtJRq7qJsXCxqL3CweyNNQNFQ4g",
     creator_img_url:
-      "https://lh3.googleusercontent.com/KuyO_hVTLCi5LcYNEzeUq7LaBxQVp7N8L6KMJF1x6ClbCGCqEJUjBZDgh3ZxyaAQuGms17Wv-TCVqvIwyhEgvFqmMXHtaJReFIDlQg",
-    multiple_owners: 0,
+      "https://storage.googleapis.com/nft-public-profile-pics/289170_1620391427.jpg",
+    multiple_owners: 1,
     owner_id: null,
     owner_name: null,
     owner_address: null,
     owner_img_url: null,
-    token_created: "2022-03-01T12:58:18",
+    token_created: "2022-03-01T13:01:34",
     token_creator_followers_only: 0,
-    creator_username: "bilnd",
+    creator_username: "GinkoInTheMoon",
     creator_verified: 0,
     owner_username: null,
     owner_verified: null,
@@ -171,16 +171,16 @@ const item = [
     token_ko_edition: null,
     token_edition_identifier: null,
     source_url:
-      "https://lh3.googleusercontent.com/tPOkMUlsyTWQl5hKbCOs-KjXnU70BAPvdlPT1_pJUCko3PN8tLQRPZzyLYEJvL9itCrI0pujYwtopT9fgfRmsriZNY9GWDAjpZUC9Q",
+      "https://lh3.googleusercontent.com/BS8OgbNkiA3kgmAPleB3djKMwOyXLMPqJot5SJsuBGdHkR9a9xz0xdv76TOnirJws3e-Fg_imNVQZfGqIshYIkKw9b6aKngUt64B=w1328",
     still_preview_url:
-      "https://lh3.googleusercontent.com/tPOkMUlsyTWQl5hKbCOs-KjXnU70BAPvdlPT1_pJUCko3PN8tLQRPZzyLYEJvL9itCrI0pujYwtopT9fgfRmsriZNY9GWDAjpZUC9Q",
-    mime_type: "image/png",
-    chain_identifier: "1",
+      "https://lh3.googleusercontent.com/BS8OgbNkiA3kgmAPleB3djKMwOyXLMPqJot5SJsuBGdHkR9a9xz0xdv76TOnirJws3e-Fg_imNVQZfGqIshYIkKw9b6aKngUt64B=w1328",
+    mime_type: "image/jpeg",
+    chain_identifier: "NetXdQprcVkpaWU",
     token_listing_identifier: null,
-    collection_slug: "known-origin",
-    collection_name: "KnownOrigin",
+    collection_slug: "hic-et-nunc",
+    collection_name: "Hic Et Nunc",
     collection_img_url:
-      "https://lh3.googleusercontent.com/53L422-5QSOKOaWTu3-EWZkymYoyFo6L60AnxPXqz4rNgX1-E162tIljSyVOa3hyVACvJNGdih4lFummnHPx-1Fa=s60",
+      "https://storage.googleapis.com/showtime-nft-thumbnails/hic_et_nunc.jpg",
   },
   {
     activity_id: 1130085,
@@ -513,7 +513,7 @@ const item = [
   },
 ] as unknown as NFT;
 
-const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
+const { height: screenHeight } = Dimensions.get("screen");
 
 const FeedItem = ({ nft }: { nft: NFT }) => {
   return (
@@ -541,9 +541,10 @@ const FeedItem = ({ nft }: { nft: NFT }) => {
 const Description = ({ nft }: { nft: NFT }) => {
   const isDark = useIsDarkMode();
   const tint = isDark ? "dark" : "light";
+  const bottomBarHeight = useBottomTabBarHeight();
   return (
     <BlurView
-      style={tw.style(`p-4 absolute bottom-0 h-61 w-full`)}
+      style={tw.style(`p-4 absolute bottom-[${bottomBarHeight}px] h-61 w-full`)}
       tint={tint}
       intensity={65}
     >
@@ -597,9 +598,8 @@ const Description = ({ nft }: { nft: NFT }) => {
   );
 };
 export const Feed = () => {
-  const bottomBarHeight = useBottomTabBarHeight();
   return (
-    <View tw={`bg-black bottom-[${bottomBarHeight}px]`}>
+    <View tw={`bg-black`}>
       <FlatList
         keyExtractor={useCallback((_item, index) => index.toString(), [])}
         getItemLayout={useCallback((_data, index) => {
