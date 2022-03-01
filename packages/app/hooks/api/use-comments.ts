@@ -53,7 +53,9 @@ export const useComments = (nftId: number) => {
   const { mutate } = useSWRConfig();
   const fetchCommentsURL = useCallback(
     function fetchCommentsURL(index) {
-      return `/v2/comments/${nftId}?limit=10&page=${index + 1}`;
+      // TODO: uncomment when pagination is fixed.
+      // return `/v2/comments/${nftId}?limit=10&page=${index + 1}`;
+      return `/v2/comments/${nftId}`;
     },
     [nftId]
   );
@@ -184,6 +186,7 @@ export const useComments = (nftId: number) => {
     isRefreshing,
 
     refresh,
+    fetchMore,
 
     likeComment,
     unlikeComment,
