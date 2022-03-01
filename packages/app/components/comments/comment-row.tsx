@@ -74,6 +74,7 @@ function CommentRowComponent({
   );
   //#endregion
 
+  const isReply = comment.parent_id !== undefined;
   return (
     <Fragment key={comment.comment_id}>
       <MessageRow
@@ -86,16 +87,18 @@ function CommentRowComponent({
         userVerified={comment.verified as any}
         content={comment.text}
         likeCount={Math.max(0, likeCount)}
-        replayCount={comment.replies?.length}
-        hasReplies={comment.replies && comment.replies.length > 0}
-        hasParent={comment.parent_id != undefined}
+        replayCount={isReply ? undefined : comment.replies?.length}
+        hasReplies={
+          isReply ? false : comment.replies && comment.replies.length > 0
+        }
+        hasParent={isReply}
         likedByMe={isLikedByMe}
         createdAt={comment.added}
         position={isLastReply ? "last" : undefined}
         onLikePress={handleOnLikePress}
         onDeletePress={isMyComment ? handleOnDeletePress : undefined}
       />
-      {comment.replies?.length ?? 0 > 0
+      {!isReply && (comment.replies?.length ?? 0) > 0
         ? comment.replies?.map((reply, index) => (
             <CommentRowComponent
               key={`comment-reply-${reply.comment_id}`}

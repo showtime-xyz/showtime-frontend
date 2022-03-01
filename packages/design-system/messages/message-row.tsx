@@ -86,7 +86,7 @@ export function MessageRow({
   userVerified = false,
   content = "",
   likeCount = 0,
-  replayCount = 0,
+  replayCount,
   createdAt,
   position,
   hasParent,
@@ -179,9 +179,11 @@ export function MessageRow({
           >
             <HeartFilled /> {getRoundedCount(likeCount)}
           </TextButton>
-          <TextButton tw="px-2">
-            <MessageFilled /> {getRoundedCount(replayCount)}
-          </TextButton>
+          {replayCount != undefined && (
+            <TextButton tw="px-2">
+              <MessageFilled /> {getRoundedCount(replayCount)}
+            </TextButton>
+          )}
           <View tw="flex-1 flex-row mr--3 items-center justify-end">
             {createdAtText && (
               <Text tw="text-gray-500 font-bold" variant="text-xs">
