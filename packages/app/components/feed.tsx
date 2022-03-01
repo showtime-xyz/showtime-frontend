@@ -513,23 +513,26 @@ const item = [
   },
 ] as unknown as NFT;
 
-const { height: screenHeight } = Dimensions.get("screen");
+const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 
 const FeedItem = ({ nft }: { nft: NFT }) => {
+  const bottomBarHeight = useBottomTabBarHeight();
+
   return (
     <View
       style={{
         height: screenHeight,
         alignItems: "center",
+        width: screenWidth,
+        justifyContent: "center",
+        paddingBottom: bottomBarHeight,
       }}
     >
       <Image
         source={{ uri: nft.still_preview_url }}
         style={{
-          aspectRatio: nft.token_aspect_ratio
-            ? 1 / Number(nft.token_aspect_ratio)
-            : 1,
-          flex: 1,
+          aspectRatio: Number(nft.token_aspect_ratio),
+          width: screenWidth,
         }}
         resizeMode="contain"
       />
@@ -546,7 +549,7 @@ const Description = ({ nft }: { nft: NFT }) => {
     <BlurView
       style={tw.style(`p-4 absolute bottom-[${bottomBarHeight}px] h-61 w-full`)}
       tint={tint}
-      intensity={65}
+      intensity={60}
     >
       <View tw="flex-row justify-between">
         <View tw="flex-row">
