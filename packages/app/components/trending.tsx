@@ -5,6 +5,7 @@ import { ImageStyle } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useScrollToTop } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
+import { Blurhash } from "react-native-blurhash";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { HeaderLeft, HeaderRight } from "app/components/header";
@@ -106,10 +107,20 @@ const Description = ({ nft }: { nft: NFT }) => {
 
   return (
     <View tw="w-full flex-1">
-      <Image
-        source={{ uri: nft.still_preview_url }}
-        style={tw.style("w-full h-full absolute")}
-      />
+      {nft.blurhash ? (
+        <Blurhash
+          blurhash={nft.blurhash}
+          decodeWidth={16}
+          decodeHeight={16}
+          decodeAsync={true}
+          style={tw.style("w-full h-full absolute")}
+        />
+      ) : (
+        <Image
+          source={{ uri: nft.still_preview_url }}
+          style={tw.style("w-full h-full absolute")}
+        />
+      )}
 
       <BlurView style={tw.style(`p-4 flex-1`)} tint={tint} intensity={85}>
         <View tw="flex-row justify-between">

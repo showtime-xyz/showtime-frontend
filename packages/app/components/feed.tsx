@@ -1,16 +1,16 @@
 import React, { Suspense, useCallback, useMemo, useRef } from "react";
 import { Dimensions, FlatList, StatusBar } from "react-native";
-import { ImageStyle } from "react-native";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useScrollToTop } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
+import { Blurhash } from "react-native-blurhash";
 
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import type { NFT } from "app/types";
 
-import { View, Text, Spinner } from "design-system";
+import { View, Text, Spinner, Media } from "design-system";
 import { Avatar } from "design-system/avatar";
 import { useIsDarkMode } from "design-system/hooks";
 import {
@@ -82,10 +82,9 @@ const FeedItem = ({ nft }: { nft: NFT }) => {
       >
         <Media
           item={nft}
-          style={{
-            height: mediaHeight,
-            width: screenWidth,
-          }}
+          numColumns={1}
+          tw={`h-[${mediaHeight}px] w-[${screenWidth}px]`}
+          resizeMode="contain"
         />
       </View>
       <View tw="w-full" style={{ height: descriptionHeight }}>
@@ -102,11 +101,22 @@ const Description = ({ nft }: { nft: NFT }) => {
 
   return (
     <View tw="w-full flex-1">
-      <Image
-        source={{ uri: nft.still_preview_url }}
-        style={tw.style("w-full h-full absolute")}
-      />
-
+      <View tw="absolute w-full h-full">
+        {nft.blurhash ? (
+          <Blurhash
+            blurhash={nft.blurhash}
+            decodeWidth={16}
+            decodeHeight={16}
+            decodeAsync={true}
+            style={tw.style("w-full h-full")}
+          />
+        ) : (
+          <Image
+            source={{ uri: nft.still_preview_url }}
+            style={tw.style("w-full h-full")}
+          />
+        )}
+      </View>
       <BlurView style={tw.style(`p-4 flex-1`)} tint={tint} intensity={85}>
         <View tw="flex-row justify-between">
           <View tw="flex-row">
@@ -279,72 +289,6 @@ const getImageUrlLarge = (tokenAspectRatio: string, imgUrl?: string) => {
 
   return imgUrl;
 };
-
-type Props = {
-  item: NFT;
-  style?: ImageStyle;
-};
-
-function Media({ item, style }: Props) {
-  const imageUri = getImageUrlLarge(
-    item?.token_aspect_ratio,
-    item?.still_preview_url ? item?.still_preview_url : item?.token_img_url
-  );
-
-  const videoUri = item?.source_url
-    ? item?.source_url
-    : item?.token_animation_url;
-
-  return (
-    <View>
-      {imageUri &&
-      (item?.mime_type === "image/svg+xml" || imageUri.includes(".svg")) ? (
-        <PinchToZoom>
-          <Image
-            source={{
-              uri: `${
-                process.env.NEXT_PUBLIC_BACKEND_URL
-              }/v1/media/format/img?url=${encodeURIComponent(imageUri)}`,
-            }}
-            style={style}
-            blurhash={item?.blurhash}
-            resizeMode="contain"
-          />
-        </PinchToZoom>
-      ) : null}
-
-      {item?.mime_type?.startsWith("image") &&
-      item?.mime_type !== "image/svg+xml" ? (
-        <PinchToZoom>
-          <Image
-            source={{
-              uri: imageUri,
-            }}
-            style={style}
-            blurhash={item?.blurhash}
-            resizeMode="contain"
-          />
-        </PinchToZoom>
-      ) : null}
-
-      {item?.mime_type?.startsWith("video") ? (
-        <View>
-          <Video
-            source={{
-              uri: videoUri,
-            }}
-            posterSource={{
-              uri: item?.still_preview_url,
-            }}
-            style={style}
-            useNativeControls
-            resizeMode="contain"
-          />
-        </View>
-      ) : null}
-    </View>
-  );
-}
 
 const MemoizedMedia = withMemoAndColorScheme(Media);
 

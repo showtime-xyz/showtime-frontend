@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { Pressable, useWindowDimensions } from "react-native";
+import { Pressable } from "react-native";
 
 import Router from "next/router";
 // import { SvgUri } from "react-native-svg";
@@ -43,11 +43,14 @@ type Props = {
   item: NFT;
   numColumns: number;
   tw?: string;
+  resizeMode?: "contain";
 };
 
-function Media({ item, numColumns, tw }: Props) {
+function Media({ item, numColumns, tw, resizeMode: propResizeMode }: Props) {
+  const resizeMode = propResizeMode ?? "cover";
   const router = useRouter();
-  const isNftModal = router?.pathname.includes("/nft");
+  const disableNFTModal =
+    router?.pathname.includes("/nft") || router?.pathname === "/";
   const { mutate } = useSWRConfig();
 
   const imageUri =
@@ -121,7 +124,7 @@ function Media({ item, numColumns, tw }: Props) {
           openNFT(item?.nft_id?.toString());
           mixpanel.track("Activity - Click on NFT image, open modal");
         }}
-        disabled={isNftModal}
+        disabled={disableNFTModal}
       >
         {imageUri &&
         (item?.mime_type === "image/svg+xml" || imageUri.includes(".svg")) ? (
@@ -134,7 +137,7 @@ function Media({ item, numColumns, tw }: Props) {
               }}
               tw={size}
               blurhash={item?.blurhash}
-              resizeMode="cover"
+              resizeMode={resizeMode}
             />
           </PinchToZoom>
         ) : null}
@@ -153,7 +156,7 @@ function Media({ item, numColumns, tw }: Props) {
               }}
               tw={size}
               blurhash={item?.blurhash}
-              resizeMode="cover"
+              resizeMode={resizeMode}
             />
           </PinchToZoom>
         ) : null}
@@ -173,7 +176,7 @@ function Media({ item, numColumns, tw }: Props) {
                 uri: item?.still_preview_url,
               }}
               tw={size}
-              resizeMode="cover"
+              resizeMode={resizeMode}
             />
           </View>
         ) : null}
@@ -185,6 +188,7 @@ function Media({ item, numColumns, tw }: Props) {
               fallbackUrl={item?.still_preview_url}
               numColumns={numColumns}
               blurhash={item?.blurhash}
+              // {...mediaProps}
             />
           </View>
         ) : null}
