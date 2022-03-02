@@ -8,6 +8,7 @@ import { screenOptions } from "app/navigation/navigator-screen-options";
 import { HomeStackParams } from "app/navigation/types";
 import { HomeScreen } from "app/screens/home";
 
+import { Text } from "design-system";
 import { useIsDarkMode } from "design-system/hooks";
 
 const LoginScreen = dynamic<JSX.Element>(() =>
@@ -43,7 +44,15 @@ function HomeNavigator() {
         name="home"
         component={HomeScreen}
         options={{
-          headerShown: false,
+          headerTitle: () => (
+            <Text
+              tw="text-gray-900 dark:text-white"
+              sx={{ fontSize: 18 }}
+              variant="text-2xl"
+            >
+              Home
+            </Text>
+          ),
         }}
       />
     </HomeStack.Navigator>

@@ -1,13 +1,13 @@
 import React, { Suspense, useCallback, useMemo, useRef } from "react";
-import { Dimensions, FlatList } from "react-native";
+import { Dimensions, FlatList, StatusBar } from "react-native";
 import { ImageStyle } from "react-native";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { useHeaderHeight } from "@react-navigation/elements";
 import { useScrollToTop } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
-import { StatusBar } from "expo-status-bar";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { HeaderLeft, HeaderRight } from "app/components/header";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import type { NFT } from "app/types";
 
@@ -33,7 +33,7 @@ import { ViewabilityTrackerFlatlist } from "./viewability-tracker-flatlist";
 export const Trending = () => {
   return (
     <>
-      <StatusBar />
+      <StatusBar barStyle="light-content" />
       <View tw="flex-1" testID="homeFeed">
         <Suspense
           fallback={
@@ -51,39 +51,44 @@ export const Trending = () => {
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 
-const mediaMaxHeightRelativeToScreen = 0.6;
-const mediaMinHeightRelativeToScreen = 0.4;
+const feedItemStyle = {
+  height: screenHeight,
+  width: screenWidth,
+};
+
+const mediaMaxHeightRelativeToScreen = 0.7;
+const mediaMinHeightRelativeToScreen = 0.5;
+
 const FeedItem = ({ nft }: { nft: NFT }) => {
-  const headerTop = useHeaderHeight();
+  let mediaHeight =
+    screenWidth /
+    (isNaN(Number(nft.token_aspect_ratio))
+      ? 1
+      : Number(nft.token_aspect_ratio));
 
-  const feedItemStyle = {
-    height: screenHeight - headerTop,
-    width: screenWidth,
-    backgroundColor: "black",
-  };
-
-  const mediaHeight = Math.max(
-    Math.min(
-      screenWidth /
-        (isNaN(Number(nft.token_aspect_ratio))
-          ? 1
-          : Number(nft.token_aspect_ratio)),
-      feedItemStyle.height * mediaMaxHeightRelativeToScreen
+  const mediaContainerHeight = Math.min(
+    Math.max(
+      mediaHeight,
+      feedItemStyle.height * mediaMinHeightRelativeToScreen
     ),
-    feedItemStyle.height * mediaMinHeightRelativeToScreen
+    feedItemStyle.height * mediaMaxHeightRelativeToScreen
   );
 
-  const descriptionHeight = screenHeight - mediaHeight - headerTop;
+  mediaHeight = Math.min(mediaHeight, mediaContainerHeight);
+
+  const descriptionHeight = screenHeight - mediaContainerHeight;
 
   return (
     <View style={feedItemStyle}>
-      <View tw="flex-5 w-full items-center justify-center bg-black">
+      <View
+        tw="w-full items-center justify-end bg-black"
+        style={{ height: mediaContainerHeight }}
+      >
         <Media
           item={nft}
           style={{
-            width: screenWidth,
             height: mediaHeight,
-            backgroundColor: "black",
+            width: screenWidth,
           }}
         />
       </View>
@@ -186,7 +191,6 @@ const Description = ({ nft }: { nft: NFT }) => {
     </View>
   );
 };
-
 // 1. we keep absolute header in feed instead of native one
 // 2. Media resize mode is kept contain and 60% screen height
 // 3. Description takes 40% screen height
@@ -197,7 +201,6 @@ export const FeedList = () => {
     () => <Footer isLoading={isLoadingMore} />,
     [isLoadingMore]
   );
-  const headerHeight = useHeaderHeight();
 
   const listRef = useRef<FlatList>(null);
 
@@ -227,13 +230,14 @@ export const FeedList = () => {
 
   return (
     <>
+      <Header />
       <View tw={`bg-black`}>
         <ViewabilityTrackerFlatlist
           keyExtractor={(_item, index) => index.toString()}
           getItemLayout={(_data, index) => {
             return {
-              length: screenHeight - headerHeight,
-              offset: (screenHeight - headerHeight) * index,
+              length: screenHeight,
+              offset: screenHeight * index,
               index,
             };
           }}
@@ -245,10 +249,47 @@ export const FeedList = () => {
           onEndReachedThreshold={0.6}
           onEndReached={fetchMore}
           data={newData}
+          style={{ backgroundColor: "black" }}
+          contentContainerStyle={{ backgroundColor: "black" }}
           ListFooterComponent={ListFooterComponent}
         />
       </View>
     </>
+  );
+};
+
+const Header = () => {
+  const top = useSafeAreaInsets().top;
+
+  return (
+    <View
+      tw="absolute items-center w-full flex-row justify-between px-4"
+      sx={{ top, zIndex: 1 }}
+    >
+      <HeaderLeft color={tw.color("white") || "white"} canGoBack={false} />
+      <Text
+        tw="text-gray-100 font-bold"
+        variant="text-xl"
+        sx={{
+          fontSize: 18,
+          textShadowColor: "rgba(0, 0, 0, 0.4)",
+          textShadowOffset: { width: 0, height: 2 },
+          textShadowRadius: 4,
+        }}
+      >
+        Home
+      </Text>
+      <HeaderRight
+        variant="text"
+        textStyle={{
+          fontSize: 18,
+          textShadowColor: "rgba(0, 0, 0, 0.4)",
+          textShadowOffset: { width: 0, height: 2 },
+          textShadowRadius: 4,
+          color: "white",
+        }}
+      />
+    </View>
   );
 };
 
@@ -295,7 +336,7 @@ function Media({ item, style }: Props) {
     : item?.token_animation_url;
 
   return (
-    <View style={{ flex: 1 }}>
+    <View>
       {imageUri &&
       (item?.mime_type === "image/svg+xml" || imageUri.includes(".svg")) ? (
         <PinchToZoom>
