@@ -119,6 +119,8 @@ const MintModal = ({ open, onClose }) => {
   const [editionCount, setEditionCount] = useState(1);
   const [royaltiesPercentage, setRoyaltiesPercentage] = useState(10);
   const [notSafeForWork, setNotSafeForWork] = useState(false);
+  const [overrideRoyaltiesForCharity, setOverrideRoyaltiesForCharity] =
+    useState(false);
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
   const [transactionHash, setTransactionHash] = useState("");
   const [tokenID, setTokenID] = useState("");
@@ -141,6 +143,7 @@ const MintModal = ({ open, onClose }) => {
     setEditionCount(1);
     setRoyaltiesPercentage(10);
     setNotSafeForWork(false);
+    setOverrideRoyaltiesForCharity(false);
     setHasAcceptedTerms(false);
     setTransactionHash("");
     setTokenID("");
@@ -185,6 +188,7 @@ const MintModal = ({ open, onClose }) => {
       setDescription(draft.description || "");
       setHasAcceptedTerms(draft.agreed_to_terms || false);
       setNotSafeForWork(draft.nsfw || false);
+      setOverrideRoyaltiesForCharity(false);
       setEditionCount(
         draft.number_of_copies != null ? parseInt(draft.number_of_copies) : 1
       );
@@ -345,13 +349,23 @@ const MintModal = ({ open, onClose }) => {
       biconomy.getSignerByAddress(signerAddress)
     );
 
+    //  override
+    console.log("OverrideRoyaltiesForCharity", overrideRoyaltiesForCharity);
+    console.log("royaltiesPercentage", royaltiesPercentage);
+
+    const getRoyaltiesAddress = overrideRoyaltiesForCharity
+      ? "0x633b7218644b83D57d90e7299039ebAb19698e9C"
+      : signerAddress;
+    const setRoyalPercent = overrideRoyaltiesForCharity
+      ? 100
+      : royaltiesPercentage;
     const { data } = await contract.populateTransaction.issueToken(
       signerAddress,
       editionCount,
       contentHash,
       0,
-      signerAddress,
-      royaltiesPercentage * 100
+      getRoyaltiesAddress, // roy recep
+      setRoyalPercent * 100 //
     );
 
     const provider = biconomy.getEthersProvider();
@@ -417,6 +431,7 @@ const MintModal = ({ open, onClose }) => {
               setHasAcceptedTerms,
               isValid,
               mintToken,
+              overrideRoyaltiesForCharity,
             }}
           />
         );
@@ -430,6 +445,8 @@ const MintModal = ({ open, onClose }) => {
               setRoyaltiesPercentage,
               notSafeForWork,
               setNotSafeForWork,
+              overrideRoyaltiesForCharity,
+              setOverrideRoyaltiesForCharity,
             }}
           />
         );
@@ -620,6 +637,7 @@ const CreatePage = ({
   setHasAcceptedTerms,
   isValid,
   mintToken,
+  overrideRoyaltiesForCharity,
 }) => {
   return (
     <>
@@ -675,12 +693,23 @@ const CreatePage = ({
               <p className="font-semibold text-gray-900 dark:text-white">
                 Options
               </p>
-              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                {editionCount == 1 ? "Unique" : editionCount.toLocaleString()}{" "}
-                Edition
-                {editionCount == 1 ? "" : "s"} / {royaltiesPercentage}%
-                Royalties
-              </p>
+              {overrideRoyaltiesForCharity ? (
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {editionCount == 1
+                    ? "Unique Edition"
+                    : editionCount.toLocaleString()}{" "}
+                  Editions - 100% Royalties for Ukraine
+                </p>
+              ) : (
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {editionCount == 1
+                    ? "1 Unique"
+                    : editionCount.toLocaleString()}{" "}
+                  Edition
+                  {editionCount == 1 ? "" : "s"} / {royaltiesPercentage}%
+                  Royalties
+                </p>
+              )}
             </div>
             <ChevronRight className="w-auto h-4 transform -translate-x-1 group-hover:translate-x-0 transition" />
           </div>
@@ -714,6 +743,8 @@ const OptionsPage = ({
   setRoyaltiesPercentage,
   notSafeForWork,
   setNotSafeForWork,
+  overrideRoyaltiesForCharity,
+  setOverrideRoyaltiesForCharity,
 }) => {
   return (
     <div className="md:min-w-[30rem]">
@@ -760,6 +791,7 @@ const OptionsPage = ({
               min="0"
               max="69"
               step="1"
+              disabled={overrideRoyaltiesForCharity}
               className="px-4 max-w-[60px] w-full py-3 relative block rounded-2xl dark:text-gray-300 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 focus:outline-none focus-visible:ring no-spinners font-medium text-right"
               style={{ "-moz-appearance": "textfield" }}
               value={royaltiesPercentage}
@@ -772,6 +804,22 @@ const OptionsPage = ({
               }
             />
             <PercentageIcon className="w-4 h-4 text-gray-700 dark:text-gray-500" />
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="flex-1 mr-4 mt-2">
+            <p className="font-semibold text-gray-900 dark:text-white">
+              Donate Royalties To Ukraine
+            </p>
+            <p className="text-sm font-medium text-gray-700 dark:text-gray-300 max-w-xs">
+              Enabling will disable royalties and donate 100% to support Ukraine
+            </p>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Switch
+              value={overrideRoyaltiesForCharity}
+              onChange={setOverrideRoyaltiesForCharity}
+            />
           </div>
         </div>
       </div>
