@@ -1,5 +1,5 @@
 import React, { Suspense, useCallback, useMemo, useRef } from "react";
-import { Dimensions, FlatList, StatusBar } from "react-native";
+import { Dimensions, FlatList, StatusBar, StyleSheet } from "react-native";
 import { ImageStyle } from "react-native";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
@@ -61,6 +61,8 @@ const mediaMaxHeightRelativeToScreen = 0.65;
 const mediaMinHeightRelativeToScreen = 0.6;
 
 const FeedItem = ({ nft }: { nft: NFT }) => {
+  const isDark = useIsDarkMode();
+  const tint = isDark ? "dark" : "light";
   let mediaHeight =
     screenWidth /
     (isNaN(Number(nft.token_aspect_ratio))
@@ -81,124 +83,119 @@ const FeedItem = ({ nft }: { nft: NFT }) => {
 
   return (
     <View style={feedItemStyle}>
-      <View
-        tw="w-full items-center justify-end bg-black"
-        style={{ height: mediaContainerHeight }}
-      >
-        <Media
-          item={nft}
-          style={{
-            height: mediaHeight,
-            width: screenWidth,
-          }}
-        />
-      </View>
-      <View tw="w-full" style={{ height: descriptionHeight }}>
-        <Description nft={nft} />
-      </View>
-    </View>
-  );
-};
-
-const Description = ({ nft }: { nft: NFT }) => {
-  const isDark = useIsDarkMode();
-  const tint = isDark ? "dark" : "light";
-  const bottomBarHeight = useBottomTabBarHeight();
-
-  return (
-    <View tw="w-full flex-1">
       {nft.blurhash ? (
         <Blurhash
           blurhash={nft.blurhash}
           decodeWidth={16}
           decodeHeight={16}
           decodeAsync={true}
-          style={tw.style("w-full h-full absolute")}
+          style={StyleSheet.absoluteFill}
         />
       ) : (
         <Image
           source={{ uri: nft.still_preview_url }}
-          style={tw.style("w-full h-full absolute")}
+          style={StyleSheet.absoluteFill}
         />
       )}
-
-      <BlurView style={tw.style(`p-4 flex-1`)} tint={tint} intensity={85}>
-        <View tw="flex-row justify-between">
-          <View tw="flex-row">
-            <View tw="flex-row items-center">
-              <Heart
-                height={20}
-                width={20}
-                color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
-              />
-              <Text tw="text-xs text-gray-900 dark:text-white font-bold ml-1 ">
-                42.4k
-              </Text>
-            </View>
-
-            <View tw="flex-row items-center ml-4">
-              <Message
-                height={20}
-                width={20}
-                color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
-              />
-              <Text tw="text-xs text-gray-900 dark:text-white font-bold ml-1">
-                200
-              </Text>
-            </View>
-          </View>
-
-          <View tw="flex-row">
-            <Share
-              height={20}
-              width={20}
-              color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
-            />
-            <View tw="w-8" />
-            <MoreHorizontal
-              height={20}
-              width={20}
-              color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
-            />
-          </View>
-        </View>
-        <View tw="flex-row mt-4">
-          <Avatar url={nft.creator_img_url} size={32} />
-          <View tw="justify-around ml-1">
-            <Text tw="text-xs font-bold text-gray-900 dark:text-white">
-              {nft.owner_username ? (
-                <>@{nft.owner_username}</>
-              ) : (
-                <>{formatAddressShort(nft.owner_address)}</>
-              )}
-            </Text>
-            <Text tw="text-gray-900 text-xs dark:text-white">
-              15 minutes ago
-            </Text>
-          </View>
-        </View>
-        <View tw="mt-4">
-          <Text
-            variant="text-2xl"
-            tw="text-gray-900 dark:text-white"
-            numberOfLines={3}
-            sx={{ fontSize: 16, lineHeight: 20 }}
-          >
-            {nft.token_description}
-          </Text>
-        </View>
-
+      <BlurView style={[StyleSheet.absoluteFill]} tint={tint} intensity={85}>
         <View
-          tw="mt-auto flex-row justify-between items-center"
-          style={{ paddingBottom: bottomBarHeight }}
+          tw="w-full items-center justify-end"
+          style={{ height: mediaContainerHeight }}
         >
-          <View tw="flex-row items-center">
-            <ShowtimeGradient height={20} width={20} />
-            <Text tw="ml-2 font-bold text-xs dark:text-white">Showtime</Text>
-          </View>
-          <Text tw="text-xs text-gray-900 dark:text-white">100 Editions</Text>
+          <Media
+            item={nft}
+            style={{
+              height: mediaHeight,
+              width: screenWidth,
+            }}
+          />
+        </View>
+        <View tw="w-full" style={{ height: descriptionHeight }}>
+          <Description nft={nft} />
         </View>
       </BlurView>
+    </View>
+  );
+};
+
+const Description = ({ nft }: { nft: NFT }) => {
+  const bottomBarHeight = useBottomTabBarHeight();
+
+  return (
+    <View tw="w-full flex-1 p-4">
+      <View tw="flex-row justify-between">
+        <View tw="flex-row">
+          <View tw="flex-row items-center">
+            <Heart
+              height={20}
+              width={20}
+              color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
+            />
+            <Text tw="text-xs text-gray-900 dark:text-white font-bold ml-1 ">
+              42.4k
+            </Text>
+          </View>
+
+          <View tw="flex-row items-center ml-4">
+            <Message
+              height={20}
+              width={20}
+              color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
+            />
+            <Text tw="text-xs text-gray-900 dark:text-white font-bold ml-1">
+              200
+            </Text>
+          </View>
+        </View>
+
+        <View tw="flex-row">
+          <Share
+            height={20}
+            width={20}
+            color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
+          />
+          <View tw="w-8" />
+          <MoreHorizontal
+            height={20}
+            width={20}
+            color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
+          />
+        </View>
+      </View>
+      <View tw="flex-row mt-4">
+        <Avatar url={nft.creator_img_url} size={32} />
+        <View tw="justify-around ml-1">
+          <Text tw="text-xs font-bold text-gray-900 dark:text-white">
+            {nft.owner_username ? (
+              <>@{nft.owner_username}</>
+            ) : (
+              <>{formatAddressShort(nft.owner_address)}</>
+            )}
+          </Text>
+          <Text tw="text-gray-900 text-xs dark:text-white">15 minutes ago</Text>
+        </View>
+      </View>
+      <View tw="mt-4">
+        <Text
+          variant="text-2xl"
+          tw="text-gray-900 dark:text-white"
+          numberOfLines={3}
+          sx={{ fontSize: 16, lineHeight: 20 }}
+        >
+          {nft.token_description}
+        </Text>
+      </View>
+
+      <View
+        tw="mt-auto flex-row justify-between items-center"
+        style={{ paddingBottom: bottomBarHeight }}
+      >
+        <View tw="flex-row items-center">
+          <ShowtimeGradient height={20} width={20} />
+          <Text tw="ml-2 font-bold text-xs dark:text-white">Showtime</Text>
+        </View>
+        <Text tw="text-xs text-gray-900 dark:text-white">100 Editions</Text>
+      </View>
     </View>
   );
 };
@@ -274,7 +271,7 @@ const Header = () => {
     >
       <HeaderLeft color={tw.color("white") || "white"} canGoBack={false} />
       <Text
-        tw="text-gray-100 font-bold"
+        tw="text-white font-bold"
         variant="text-xl"
         sx={{
           fontSize: 18,
