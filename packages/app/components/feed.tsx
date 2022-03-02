@@ -50,7 +50,6 @@ export const Feed = () => {
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 const mediaMaxHeightRelativeToScreen = 0.6;
-const mediaMinHeightRelativeToScreen = 0.5;
 
 const FeedItem = ({ nft }: { nft: NFT }) => {
   const headerTop = useHeaderHeight();
@@ -67,10 +66,7 @@ const FeedItem = ({ nft }: { nft: NFT }) => {
       : Number(nft.token_aspect_ratio));
 
   const mediaContainerHeight = Math.min(
-    Math.max(
-      mediaHeight,
-      feedItemStyle.height * mediaMinHeightRelativeToScreen
-    ),
+    mediaHeight,
     feedItemStyle.height * mediaMaxHeightRelativeToScreen
   );
 

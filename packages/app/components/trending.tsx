@@ -56,8 +56,8 @@ const feedItemStyle = {
   width: screenWidth,
 };
 
-const mediaMaxHeightRelativeToScreen = 0.7;
-const mediaMinHeightRelativeToScreen = 0.5;
+const mediaMaxHeightRelativeToScreen = 0.65;
+const mediaMinHeightRelativeToScreen = 0.6;
 
 const FeedItem = ({ nft }: { nft: NFT }) => {
   let mediaHeight =
