@@ -38,6 +38,7 @@ import Reanimated, {
 } from "react-native-reanimated";
 
 import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
+import { flattenChildren } from "app/utilities";
 
 import { tw } from "design-system/tailwind";
 
@@ -87,7 +88,7 @@ const Root = ({
     let tabListChild;
     let restChildren = [];
     let headerChild;
-    React.Children.forEach(children, (c) => {
+    flattenChildren(children).forEach((c) => {
       if (React.isValidElement(c) && c) {
         //@ts-ignore
         if (c.type === List) {
@@ -166,7 +167,7 @@ const Root = ({
 const List = (props: TabListProps) => {
   let hasTrigger = false;
   // TODO: fix dynamically loading tab items. Currently we load tab items if tab trigger is present
-  React.Children.map(props.children, (c) => {
+  flattenChildren(props.children).forEach((c) => {
     if (React.isValidElement(c) && c && c.type === Trigger) {
       hasTrigger = true;
     }
@@ -186,7 +187,7 @@ const ListImpl = ({ children, style, ...props }: TabListProps) => {
   const newChildren = React.useMemo(() => {
     let triggerIndex = -1;
 
-    return React.Children.map(children, (c) => {
+    return flattenChildren(children).map((c) => {
       // @ts-ignore - Todo - do better ts check here
       if (React.isValidElement(c) && c && c.type === Trigger) {
         triggerIndex++;
@@ -261,12 +262,12 @@ const Pager = ({ children }) => {
   } = useContext(TabsContext);
 
   const [mountedIndices, setMountedIndices] = React.useState(
-    lazy ? [initialIndex] : React.Children.map(children, (_c, i) => i)
+    lazy ? [initialIndex] : flattenChildren(children).map((_c, i) => i)
   );
 
   const newChildren = React.useMemo(
     () =>
-      React.Children.map(children, (c, i) => {
+      flattenChildren(children).map((c, i) => {
         const shouldLoad = mountedIndices.includes(i);
         return (
           // why use context if we can clone the children. do we need better composition here?

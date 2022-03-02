@@ -38,7 +38,11 @@ export function RootStackNavigator() {
         // @ts-ignore
         screenOptions={screenOptions({ safeAreaTop, isDark })}
       >
-        <Stack.Screen name="profile" component={ProfileScreen} />
+        <Stack.Screen
+          name="profile"
+          component={ProfileScreen}
+          getId={({ params }) => params?.walletAddress}
+        />
         <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen
           name="search"
@@ -59,8 +63,12 @@ export function RootStackNavigator() {
         }}
       >
         <Stack.Screen name="login" component={LoginScreen} />
-        <Stack.Screen name="nft" component={NftScreen} />
         <Stack.Screen name="comments" component={CommentsScreen} />
+        <Stack.Screen
+          name="nft"
+          component={NftScreen}
+          getId={({ params }) => params?.id}
+        />
         <Stack.Screen name="transferNft" component={TransferNftScreen} />
         <Stack.Screen name="create" component={CreateScreen} />
         <Stack.Screen name="burn" component={DeleteScreen} />

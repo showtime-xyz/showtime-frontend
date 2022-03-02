@@ -66,7 +66,7 @@ const ProfileScreen = ({ walletAddress }: { walletAddress: string }) => {
 
 const Profile = ({ address }: { address?: string }) => {
   const { data: profileData } = useUserProfile({ address });
-  const { data } = useProfileNftTabs({
+  const { data, loading: tabsLoading } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
   });
   const { data: myInfoData } = useMyInfo();
@@ -76,6 +76,7 @@ const Profile = ({ address }: { address?: string }) => {
     )
   );
   const [selected, setSelected] = useState(0);
+  const colorScheme = useColorScheme();
 
   return (
     <View tw="bg-white dark:bg-black flex-1">
@@ -88,32 +89,59 @@ const Profile = ({ address }: { address?: string }) => {
         <Tabs.Header>
           <ProfileTop address={address} isBlocked={isBlocked} />
         </Tabs.Header>
-        <Tabs.List
-          style={tw.style(
-            `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900`
-          )}
-        >
-          {data?.data.lists.map((list, index) => (
-            <Tabs.Trigger key={list.id}>
-              <TabItem name={list.name} selected={selected === index} />
+        {data?.data.lists ? (
+          <>
+            <Tabs.List
+              style={tw.style(
+                `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900`
+              )}
+            >
+              {data?.data.lists.map((list, index) => (
+                <Tabs.Trigger key={list.id}>
+                  <TabItem name={list.name} selected={selected === index} />
+                </Tabs.Trigger>
+              ))}
+              <SelectedTabIndicator />
+            </Tabs.List>
+
+            <Tabs.Pager>
+              {data?.data.lists.map((list) => {
+                return (
+                  <Suspense fallback={<Spinner size="small" />} key={list.id}>
+                    <TabList
+                      username={profileData?.data.profile.username}
+                      profileId={profileData?.data.profile.profile_id}
+                      isBlocked={isBlocked}
+                      list={list}
+                    />
+                  </Suspense>
+                );
+              })}
+            </Tabs.Pager>
+          </>
+        ) : tabsLoading ? (
+          <Tabs.List
+            style={tw.style(
+              `h-[${TAB_LIST_HEIGHT}px] dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 ml-4 mt-4`
+            )}
+          >
+            <Tabs.Trigger>
+              <View tw="w-22">
+                <Skeleton colorMode={colorScheme} width={74} height={20} />
+              </View>
             </Tabs.Trigger>
-          ))}
-          <SelectedTabIndicator />
-        </Tabs.List>
-        <Tabs.Pager>
-          {data?.data.lists.map((list) => {
-            return (
-              <Suspense fallback={<Spinner size="small" />} key={list.id}>
-                <TabList
-                  username={profileData?.data.profile.username}
-                  profileId={profileData?.data.profile.profile_id}
-                  isBlocked={isBlocked}
-                  list={list}
-                />
-              </Suspense>
-            );
-          })}
-        </Tabs.Pager>
+            <Tabs.Trigger>
+              <View tw="w-22">
+                <Skeleton colorMode={colorScheme} width={74} height={20} />
+              </View>
+            </Tabs.Trigger>
+            <Tabs.Trigger>
+              <View tw="w-20">
+                <Skeleton colorMode={colorScheme} width={70} height={20} />
+              </View>
+            </Tabs.Trigger>
+          </Tabs.List>
+        ) : null}
       </Tabs.Root>
     </View>
   );

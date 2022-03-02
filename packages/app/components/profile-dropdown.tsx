@@ -71,24 +71,24 @@ function ProfileDropdown({ user }: Props) {
 
         <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 
-        {isAuthenticated && (
-          <DropdownMenuItem
-            onSelect={async () => {
+        <DropdownMenuItem
+          onSelect={async () => {
+            if (isAuthenticated) {
               await block(user.profile_id);
               router.pop();
-            }}
-            tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
-            key="block"
-          >
-            <DropdownMenuItemTitle tw="text-black dark:text-white">
-              Block
-            </DropdownMenuItemTitle>
-          </DropdownMenuItem>
-        )}
+            } else {
+              router.push("/login");
+            }
+          }}
+          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+          key="block"
+        >
+          <DropdownMenuItemTitle tw="text-black dark:text-white">
+            Block
+          </DropdownMenuItemTitle>
+        </DropdownMenuItem>
 
-        {isAuthenticated && (
-          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
-        )}
+        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 
         <DropdownMenuItem
           onSelect={async () => {

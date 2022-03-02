@@ -7,8 +7,8 @@ import { mixpanel } from "app/lib/mixpanel";
 import { useRouter } from "app/navigation/use-router";
 
 import { NFT, Profile } from "../types";
+import { useAuth } from "./auth/use-auth";
 import { useInfiniteListQuerySWR, fetcher } from "./use-infinite-list-query";
-import { useUser } from "./use-user";
 
 export const useActivity = ({
   typeId,
@@ -17,16 +17,16 @@ export const useActivity = ({
   typeId: number;
   limit?: number;
 }) => {
-  const { isAuthenticated } = useUser();
+  const { accessToken } = useAuth();
 
   const activityURLFn = useCallback(
     (index) => {
       const url = `/v2/${
-        isAuthenticated ? "activity_with_auth" : "activity_without_auth"
+        accessToken ? "activity_with_auth" : "activity_without_auth"
       }?page=${index + 1}&type_id=${typeId}&limit=${limit}`;
       return url;
     },
-    [typeId, limit, isAuthenticated]
+    [typeId, limit, accessToken]
   );
 
   const queryState = useInfiniteListQuerySWR<any>(activityURLFn);
@@ -43,10 +43,10 @@ export const useActivity = ({
           page.data = page.data.filter((d: any) => {
             const v = newData.find((x: any) => x.id === d.id);
             if (v === undefined) {
-              if (__DEV__) {
-                console.log("duplicate record in feed ", d.id);
-              }
               return true;
+            }
+            if (__DEV__) {
+              console.log("duplicate record in feed ", d.id);
             }
             return false;
           });
@@ -276,19 +276,19 @@ type MyInfo = {
 };
 
 export const useMyInfo = () => {
-  const { isAuthenticated } = useUser();
+  const { accessToken } = useAuth();
   const queryKey = "/v2/myinfo";
   const { mutate } = useSWRConfig();
   const router = useRouter();
 
   const { data, error } = useSWR<MyInfo>(
-    isAuthenticated ? queryKey : null,
+    accessToken ? queryKey : null,
     fetcher
   );
 
   const follow = useCallback(
     async (profileId: number) => {
-      if (!isAuthenticated) {
+      if (!accessToken) {
         mixpanel.track("Follow but logged out");
         router.push("/login");
         return;
@@ -316,7 +316,7 @@ export const useMyInfo = () => {
         mutate(queryKey);
       }
     },
-    [isAuthenticated, data]
+    [accessToken, data]
   );
 
   const unfollow = useCallback(
@@ -359,7 +359,7 @@ export const useMyInfo = () => {
 
   const like = useCallback(
     async (nftId: number) => {
-      if (!isAuthenticated) {
+      if (!accessToken) {
         router.push("/login");
         // TODO: perform the action post login
         return false;
@@ -392,7 +392,7 @@ export const useMyInfo = () => {
         }
       }
     },
-    [data, isAuthenticated]
+    [data, accessToken]
   );
 
   const unlike = useCallback(

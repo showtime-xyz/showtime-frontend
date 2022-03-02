@@ -7,7 +7,7 @@ import {
 } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import LogRocket from "@logrocket/react-native";
+import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
 import NetInfo from "@react-native-community/netinfo";
 import { useNavigation } from "@react-navigation/native";
 import rudderClient, {
@@ -26,6 +26,7 @@ import { SWRConfig } from "swr";
 import { useDeviceContext, useAppColorScheme } from "twrnc";
 
 import { AppContext } from "app/context/app-context";
+import { track } from "app/lib/analytics";
 import {
   setColorScheme as setUserColorScheme,
   useColorScheme as useUserColorScheme,
@@ -64,6 +65,16 @@ const rudderConfig = {
   trackAppLifecycleEvents: true,
   logLevel: RUDDER_LOG_LEVEL.INFO, // DEBUG
 };
+
+// Create a GrowthBook instance
+const growthbook = new GrowthBook({
+  trackingCallback: (experiment, result) => {
+    track("Experiment Viewed", {
+      experiment_id: experiment.key,
+      variant_id: result.variationId,
+    });
+  },
+});
 
 function mmkvProvider() {
   const storage = new MMKV();
@@ -271,19 +282,24 @@ function AppContextProvider({
 
 function App() {
   useEffect(() => {
-    if (process.env.STAGE !== "development") {
-      LogRocket.init("oulg1q/showtime", {
-        redactionTags: ["data-private"],
-      });
-    }
-  }, []);
-
-  useEffect(() => {
     const initAnalytics = async () => {
       await rudderClient.setup(process.env.RUDDERSTACK_WRITE_KEY, rudderConfig);
     };
 
     initAnalytics();
+  }, []);
+
+  useEffect(() => {
+    // Load feature definitions from API
+    fetch(process.env.GROWTHBOOK_FEATURES_ENDPOINT)
+      .then((res) => res.json())
+      .then((json) => {
+        growthbook.setFeatures(json.features);
+      });
+
+    // growthbook.setAttributes({
+    //   "id": "foo",
+    // })
   }, []);
 
   const scheme = `io.showtime${
@@ -309,8 +325,10 @@ function App() {
                       <AuthProvider>
                         <UserProvider>
                           <BottomSheetModalProvider>
-                            <StatusBar style="auto" />
-                            <RootStackNavigator />
+                            <GrowthBookProvider growthbook={growthbook}>
+                              <StatusBar style="auto" />
+                              <RootStackNavigator />
+                            </GrowthBookProvider>
                           </BottomSheetModalProvider>
                         </UserProvider>
                       </AuthProvider>

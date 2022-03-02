@@ -1,9 +1,15 @@
-import "dotenv/config";
-import semver from "semver";
+const path = require("path");
+const STAGE = process.env.STAGE ?? "development";
+const envPath = path.resolve(__dirname, `.env.${STAGE}`);
 
-import packageJSON from "../../package.json";
+require("dotenv").config({
+  path: envPath,
+});
 
-const STAGE = process.env.STAGE;
+const packageJSON = require("../../package.json");
+
+const semver = require("semver");
+
 const SCHEME = process.env.SCHEME ?? "io.showtime";
 
 const envConfig = {
@@ -87,7 +93,8 @@ export default {
     },
   },
   plugins: [
-    "@config-plugins/detox",
+    // detox adds network config xml in android. We don't need it during development. It can cause issues while connecting to metro server
+    process.env.DETOX ? "@config-plugins/detox" : (x) => x,
     [
       "react-native-vision-camera",
       {
@@ -114,7 +121,20 @@ export default {
     ],
     "expo-community-flipper",
     "./plugins/with-android-manifest.js",
-    "@logrocket/react-native",
     "./plugins/with-hermes-ios-m1-workaround.js",
+    "sentry-expo",
   ],
+
+  hooks: {
+    postPublish: [
+      {
+        file: "sentry-expo/upload-sourcemaps",
+        config: {
+          organization: "showtime-l3",
+          project: "showtime-mobile",
+          authToken: process.env.SENTRY_AUTH_TOKEN,
+        },
+      },
+    ],
+  },
 };

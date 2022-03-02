@@ -1,12 +1,13 @@
 import { ComponentProps, useMemo, useCallback } from "react";
 
-import * as DropdownMenu from "@zeego/dropdown-menu";
 import { styled } from "dripsy";
 import { MotiView } from "moti";
 import Animated, {
   useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated";
+
+import * as DropdownMenu from "app/zeego-menu/dropdown-menu/src/index";
 
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
