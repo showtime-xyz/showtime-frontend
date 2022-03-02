@@ -4,11 +4,12 @@ import { Share } from "react-native";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useReport } from "app/hooks/use-report";
+import { useUser } from "app/hooks/use-user";
 import { track } from "app/lib/analytics";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
-import { findListingItemByOwner } from "app/utilities";
+import { findListingItemByOwner, isUserAnOwner } from "app/utilities";
 
 import {
   DropdownMenuContent,
@@ -29,6 +30,7 @@ function NFTDropdown({ nft }: Props) {
   const { userAddress } = useCurrentUserAddress();
   // TODO: Is userAddress a possible sub?
   const userId = useCurrentUserId();
+  const { user } = useUser();
   const [isOwner, setIsOwner] = useState(false);
 
   const { report } = useReport();
@@ -41,6 +43,10 @@ function NFTDropdown({ nft }: Props) {
   }, [nft, userAddress]);
 
   const hasMatchingListing = findListingItemByOwner(nft, userId);
+  const hasOwnership = isUserAnOwner(
+    user?.data.profile.wallet_addresses_v2,
+    nft?.multiple_owners_list
+  );
 
   const tokenChainName = Object.keys(CHAIN_IDENTIFIERS).find(
     (key) => CHAIN_IDENTIFIERS[key] == nft?.chain_identifier
@@ -120,9 +126,9 @@ function NFTDropdown({ nft }: Props) {
           </DropdownMenuItem>
         )}
 
-        {isOwner && !hasMatchingListing && (
+        {hasOwnership && !hasMatchingListing && (
           <DropdownMenuItem
-            onSelect={() => router.push(`/nft/${nft.nft_id}/list`)}
+            onSelect={() => router.push(`/nft/${nft?.nft_id}/list`)}
             key="list"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
           >
@@ -131,8 +137,7 @@ function NFTDropdown({ nft }: Props) {
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
-
-        {isOwner && hasMatchingListing && (
+        {hasOwnership && hasMatchingListing && (
           <DropdownMenuItem
             onSelect={() => {}}
             key="unlist"
@@ -143,7 +148,6 @@ function NFTDropdown({ nft }: Props) {
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
-
         {isOwner && (
           <DropdownMenuItem
             destructive

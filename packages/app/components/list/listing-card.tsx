@@ -1,18 +1,25 @@
+import { formatDistanceToNowStrict } from "date-fns";
 import useSWR from "swr";
-import { View, Text, Fieldset } from "design-system";
-import { Media } from "design-system";
-import { useUser } from "app/hooks/use-user";
+
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { supportedVideoExtensions } from "app/hooks/use-mint-nft";
 import { axios } from "app/lib/axios";
-import { NFT, OwnersListOwner } from "app/types";
+import { NFT } from "app/types";
+import { findAddressInOwnerList } from "app/utilities";
+
+import { View, Text } from "design-system";
+import { Owner } from "design-system/card";
 import { Collection } from "design-system/card/rows/collection";
 import { PolygonScan } from "design-system/icon";
+import { Image } from "design-system/image";
 import { tw } from "design-system/tailwind";
-import { formatDistanceToNowStrict } from "date-fns";
-import { Owner } from "design-system/card";
-import { ListingForm, UnableToList } from "./listing-form";
+import { Video } from "design-system/video";
+
+import { ListingForm } from "./listing-form";
+import { ListingUnavailable } from "./listing-unavailable";
+
 type Props = {
   nftId?: string;
-  address?: string;
 };
 
 type NFT_Detail = {
@@ -21,141 +28,91 @@ type NFT_Detail = {
 
 const ListingCard = (props: Props) => {
   const nftId = props.nftId;
-  const address = props.address;
   const endpoint = nftId ? `/v2/nft_detail/${nftId}` : undefined;
-  const { user } = useUser();
+  const { userAddress: address } = useCurrentUserAddress();
 
   const { data, error, mutate } = useSWR<NFT_Detail>(endpoint, (url) =>
     axios({ url, method: "GET" })
   );
-
   const nft = data?.data;
-
-  if (error) {
-    console.log("Listing Error:", error);
-  }
-
   const isLoading = !data;
 
-  if (isLoading) {
-    // TODO: Skeleton Screens?
+  if (error) {
+    console.log(`Error in Listing Card From Endpoint ${endpoint}:`, error);
   }
 
-  // isOwner = a address matches this account
-  // isActiveAddress = the connected address owns this nft
-  // TODO: Memo + Hook
-  const owner = nft?.multiple_owners_list.reduce(
-    (
-      previousOwnerAccumulator: {
-        isOwner: boolean;
-        ownerList: OwnersListOwner[];
-        isActiveAddressOwner: boolean;
-        activeOwnerListItem?: OwnersListOwner;
-        cycled: boolean;
-      },
-      ownersListItem
-    ) => {
-      previousOwnerAccumulator.cycled = true;
-      const alreadyMatched = previousOwnerAccumulator.isActiveAddressOwner;
-
-      if (alreadyMatched) {
-        previousOwnerAccumulator.ownerList.push(ownersListItem);
-        return previousOwnerAccumulator;
-      }
-
-      const isActiveAddressOwner =
-        ownersListItem.address.toLowerCase() === address?.toLowerCase();
-
-      if (isActiveAddressOwner) {
-        previousOwnerAccumulator.isOwner = true;
-        previousOwnerAccumulator.isActiveAddressOwner = true;
-        previousOwnerAccumulator.ownerList.push(ownersListItem);
-        previousOwnerAccumulator.activeOwnerListItem = ownersListItem;
-        return previousOwnerAccumulator;
-      }
-
-      const isOwner = user?.data.profile.wallet_addresses_v2.find(
-        (wallet) =>
-          wallet.address.toLowerCase() === ownersListItem.address?.toLowerCase()
-      );
-      if (isOwner) {
-        previousOwnerAccumulator.isOwner = true;
-        previousOwnerAccumulator.ownerList.push(ownersListItem);
-        return previousOwnerAccumulator;
-      }
-
-      return previousOwnerAccumulator;
-    },
-    {
-      isOwner: false,
-      ownerList: [],
-      isActiveAddressOwner: false,
-      activeOwnerListItem: undefined,
-      cycled: false,
-    }
-  );
+  if (isLoading) {
+    // TODO: Explore skeleton screens, not high priority as endpoint is cached by this flow
+    console.log(
+      `Loading in Listing Card From Endpoint ${endpoint}:`,
+      isLoading
+    );
+  }
 
   const hasMultipleOwners = nft?.multiple_owners_list
     ? nft?.multiple_owners_list.length > 1
     : false;
 
-  // we dont know yet / own none / own sme
-  const ownedAmount =
-    owner?.activeOwnerListItem && owner?.cycled
-      ? owner?.activeOwnerListItem.quantity
-      : 0;
+  const isActiveAddressAnOwner = Boolean(
+    findAddressInOwnerList(address, nft?.multiple_owners_list)
+  );
 
-  const addressOwnsNone = ownedAmount === 0 && owner?.cycled;
+  const fileExtension = nft?.token_img_url?.split(".").pop();
+  const isVideo =
+    fileExtension && supportedVideoExtensions.includes(fileExtension);
+  const Preview = isVideo ? Video : Image;
+  const previewURI = nft?.token_img_url;
 
   return (
     <View tw="flex-1">
-      <View tw="pb-2 -mx-4">
-        <Collection nft={nft} />
-      </View>
-
-      {/* Image */}
-      <View tw="flex-row items-center">
-        <View tw="w-20 h-20 bg-white mr-4 rounded-full">
-          <Media item={nft} tw="w-20 h-20" />
-        </View>
-        <View>
-          <Text
-            variant="text-lg"
-            tw="font-medium text-black dark:text-white mb-2"
-          >
-            {nft?.token_name}
-          </Text>
-          <View tw="flex-row items-center">
-            <PolygonScan
-              width={16}
-              height={16}
-              color={tw.style("text-gray-500").color as string}
+      <Collection nft={nft} />
+      <View tw="p-4">
+        <View tw="flex-row items-center">
+          {previewURI ? (
+            <Preview
+              source={{
+                uri: previewURI,
+              }}
+              tw="w-[80px] h-[80px] rounded-2xl"
             />
-            {nft?.token_created ? (
-              <Text variant="text-xs" tw="ml-1 font-bold text-gray-500">
-                {`Minted ${formatDistanceToNowStrict(
-                  new Date(nft?.token_created),
-                  {
-                    addSuffix: true,
-                  }
-                )}`}
-              </Text>
-            ) : null}
+          ) : null}
+          <View tw="flex-1 px-4">
+            <Text variant="text-lg" tw=" text-black dark:text-white mb-2">
+              {nft?.token_name}
+            </Text>
+            <View tw="flex-row items-center">
+              <PolygonScan
+                width={14}
+                height={14}
+                color={tw.style("text-gray-500").color as string}
+              />
+              {nft?.token_created ? (
+                <Text tw="text-gray-500 font-bold pl-1" variant="text-xs">
+                  {`Minted ${formatDistanceToNowStrict(
+                    new Date(nft?.token_created),
+                    {
+                      addSuffix: true,
+                    }
+                  )}`}
+                </Text>
+              ) : null}
+            </View>
           </View>
         </View>
+        <Owner
+          nft={nft}
+          toggleCreatorName={true}
+          price={!hasMultipleOwners}
+          tw="px-0 my-4"
+        />
+        {isActiveAddressAnOwner ? (
+          <ListingForm nft={nft} />
+        ) : (
+          <ListingUnavailable nft={nft} />
+        )}
       </View>
-      <View tw="-mx-2">
-        <Owner nft={nft} toggleCreatorName={true} price={!hasMultipleOwners} />
-      </View>
-      {/* owns multiple single none split out */}
-      {addressOwnsNone ? (
-        <UnableToList isOwner={owner?.isOwner} ownerList={owner?.ownerList} />
-      ) : null}
-      {ownedAmount ? <ListingForm nft={nft} ownedAmount={ownedAmount} /> : null}
     </View>
   );
 };
-
-// clean up and huddle
 
 export { ListingCard };
