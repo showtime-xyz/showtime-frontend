@@ -27,6 +27,7 @@ import { tw } from "design-system/tailwind";
 import { Video } from "design-system/video";
 
 import { useActivity } from "../hooks/api-hooks";
+import { formatAddressShort } from "../utilities";
 import { ViewabilityTrackerFlatlist } from "./viewability-tracker-flatlist";
 
 export const Trending = () => {
@@ -109,39 +110,61 @@ const Description = ({ nft }: { nft: NFT }) => {
         <View tw="flex-row justify-between">
           <View tw="flex-row">
             <View tw="flex-row items-center">
-              <Heart height={20} width={20} color={tw.color("gray-900")} />
-              <Text tw="text-xs text-gray-900 font-bold ml-1">42.4k</Text>
+              <Heart
+                height={20}
+                width={20}
+                color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
+              />
+              <Text tw="text-xs text-gray-900 dark:text-white font-bold ml-1 ">
+                42.4k
+              </Text>
             </View>
 
             <View tw="flex-row items-center ml-4">
-              <Message height={20} width={20} color={tw.color("gray-900")} />
-              <Text tw="text-xs text-gray-900 font-bold ml-1">200</Text>
+              <Message
+                height={20}
+                width={20}
+                color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
+              />
+              <Text tw="text-xs text-gray-900 dark:text-white font-bold ml-1">
+                200
+              </Text>
             </View>
           </View>
 
           <View tw="flex-row">
-            <Share height={20} width={20} color={tw.color("gray-900")} />
+            <Share
+              height={20}
+              width={20}
+              color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
+            />
             <View tw="w-8" />
             <MoreHorizontal
               height={20}
               width={20}
-              color={tw.color("gray-900")}
+              color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
             />
           </View>
         </View>
         <View tw="flex-row mt-4">
           <Avatar url={nft.creator_img_url} size={32} />
           <View tw="justify-around ml-1">
-            <Text tw="text-xs font-bold text-gray-900">
-              @{nft.owner_username}
+            <Text tw="text-xs font-bold text-gray-900 dark:text-white">
+              {nft.owner_username ? (
+                <>@{nft.owner_username}</>
+              ) : (
+                <>{formatAddressShort(nft.owner_address)}</>
+              )}
             </Text>
-            <Text tw="text-gray-900 text-xs">15 minutes ago</Text>
+            <Text tw="text-gray-900 text-xs dark:text-white">
+              15 minutes ago
+            </Text>
           </View>
         </View>
         <View tw="mt-4">
           <Text
             variant="text-2xl"
-            tw="text-gray-900"
+            tw="text-gray-900 dark:text-white"
             numberOfLines={3}
             sx={{ fontSize: 16, lineHeight: 20 }}
           >
@@ -155,9 +178,9 @@ const Description = ({ nft }: { nft: NFT }) => {
         >
           <View tw="flex-row items-center">
             <ShowtimeGradient height={20} width={20} />
-            <Text tw="ml-2 font-bold text-xs">Showtime</Text>
+            <Text tw="ml-2 font-bold text-xs dark:text-white">Showtime</Text>
           </View>
-          <Text tw="text-xs text-gray-900">100 Editions</Text>
+          <Text tw="text-xs text-gray-900 dark:text-white">100 Editions</Text>
         </View>
       </BlurView>
     </View>
