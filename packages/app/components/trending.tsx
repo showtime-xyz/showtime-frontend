@@ -1,25 +1,233 @@
-import { Suspense, useCallback, useMemo, useState } from "react";
-import { Dimensions, Platform } from "react-native";
+import React, { Suspense, useCallback, useMemo, useRef } from "react";
+import { Dimensions, FlatList } from "react-native";
+import { ImageStyle } from "react-native";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useHeaderHeight } from "@react-navigation/elements";
+import { useScrollToTop } from "@react-navigation/native";
+import { BlurView } from "expo-blur";
+import { StatusBar } from "expo-status-bar";
 
-import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
-import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import { withMemoAndColorScheme } from "app/components/memo-with-theme";
+import type { NFT } from "app/types";
 
-import {
-  View,
-  Spinner,
-  Text,
-  Tabs,
-  TabItem,
-  SelectedTabIndicator,
-  CreatorPreview,
-  SegmentedControl,
-  Media,
-} from "design-system";
-import { cardSize } from "design-system/creator-preview";
+import { View, Text, Spinner } from "design-system";
+import { Avatar } from "design-system/avatar";
 import { useIsDarkMode } from "design-system/hooks";
+import {
+  Message,
+  Heart,
+  Share,
+  MoreHorizontal,
+  ShowtimeGradient,
+} from "design-system/icon";
+import { Image } from "design-system/image";
+import { PinchToZoom } from "design-system/pinch-to-zoom";
 import { tw } from "design-system/tailwind";
+import { Video } from "design-system/video";
+
+import { useActivity } from "../hooks/api-hooks";
+import { ViewabilityTrackerFlatlist } from "./viewability-tracker-flatlist";
+
+export const Trending = () => {
+  return (
+    <>
+      <StatusBar />
+      <View tw="flex-1" testID="homeFeed">
+        <Suspense
+          fallback={
+            <View tw="flex-1 justify-center items-center">
+              <Spinner size="small" />
+            </View>
+          }
+        >
+          <FeedList />
+        </Suspense>
+      </View>
+    </>
+  );
+};
+
+const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
+
+const mediaMaxHeightRelativeToScreen = 0.6;
+const mediaMinHeightRelativeToScreen = 0.4;
+const FeedItem = ({ nft }: { nft: NFT }) => {
+  const headerTop = useHeaderHeight();
+
+  const feedItemStyle = {
+    height: screenHeight - headerTop,
+    width: screenWidth,
+    backgroundColor: "black",
+  };
+
+  const mediaHeight = Math.max(
+    Math.min(
+      screenWidth /
+        (isNaN(Number(nft.token_aspect_ratio))
+          ? 1
+          : Number(nft.token_aspect_ratio)),
+      feedItemStyle.height * mediaMaxHeightRelativeToScreen
+    ),
+    feedItemStyle.height * mediaMinHeightRelativeToScreen
+  );
+
+  const descriptionHeight = screenHeight - mediaHeight - headerTop;
+
+  return (
+    <View style={feedItemStyle}>
+      <View tw="flex-5 w-full items-center justify-center bg-black">
+        <Media
+          item={nft}
+          style={{
+            width: screenWidth,
+            height: mediaHeight,
+            backgroundColor: "black",
+          }}
+        />
+      </View>
+      <View tw="w-full" style={{ height: descriptionHeight }}>
+        <Description nft={nft} />
+      </View>
+    </View>
+  );
+};
+
+const Description = ({ nft }: { nft: NFT }) => {
+  const isDark = useIsDarkMode();
+  const tint = isDark ? "dark" : "light";
+  const bottomBarHeight = useBottomTabBarHeight();
+
+  return (
+    <View tw="w-full flex-1">
+      <Image
+        source={{ uri: nft.still_preview_url }}
+        style={tw.style("w-full h-full absolute")}
+      />
+
+      <BlurView style={tw.style(`p-4 flex-1`)} tint={tint} intensity={85}>
+        <View tw="flex-row justify-between">
+          <View tw="flex-row">
+            <View tw="flex-row items-center">
+              <Heart height={20} width={20} color={tw.color("gray-900")} />
+              <Text tw="text-xs text-gray-900 font-bold ml-1">42.4k</Text>
+            </View>
+
+            <View tw="flex-row items-center ml-4">
+              <Message height={20} width={20} color={tw.color("gray-900")} />
+              <Text tw="text-xs text-gray-900 font-bold ml-1">200</Text>
+            </View>
+          </View>
+
+          <View tw="flex-row">
+            <Share height={20} width={20} color={tw.color("gray-900")} />
+            <View tw="w-8" />
+            <MoreHorizontal
+              height={20}
+              width={20}
+              color={tw.color("gray-900")}
+            />
+          </View>
+        </View>
+        <View tw="flex-row mt-4">
+          <Avatar url={nft.creator_img_url} size={32} />
+          <View tw="justify-around ml-1">
+            <Text tw="text-xs font-bold text-gray-900">
+              @{nft.owner_username}
+            </Text>
+            <Text tw="text-gray-900 text-xs">15 minutes ago</Text>
+          </View>
+        </View>
+        <View tw="mt-4">
+          <Text
+            variant="text-2xl"
+            tw="text-gray-900"
+            numberOfLines={3}
+            sx={{ fontSize: 16, lineHeight: 20 }}
+          >
+            {nft.token_description}
+          </Text>
+        </View>
+
+        <View
+          tw="mt-auto flex-row justify-between items-center"
+          style={{ paddingBottom: bottomBarHeight }}
+        >
+          <View tw="flex-row items-center">
+            <ShowtimeGradient height={20} width={20} />
+            <Text tw="ml-2 font-bold text-xs">Showtime</Text>
+          </View>
+          <Text tw="text-xs text-gray-900">100 Editions</Text>
+        </View>
+      </BlurView>
+    </View>
+  );
+};
+
+// 1. we keep absolute header in feed instead of native one
+// 2. Media resize mode is kept contain and 60% screen height
+// 3. Description takes 40% screen height
+export const FeedList = () => {
+  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
+    useActivity({ typeId: 0 });
+  const ListFooterComponent = useCallback(
+    () => <Footer isLoading={isLoadingMore} />,
+    [isLoadingMore]
+  );
+  const headerHeight = useHeaderHeight();
+
+  const listRef = useRef<FlatList>(null);
+
+  // useScrollToTop();
+  useScrollToTop(
+    React.useRef({
+      scrollToTop: () => {
+        listRef.current.scrollToOffset({ animated: false, offset: 0 });
+      },
+    })
+  );
+
+  const newData: any = useMemo(() => {
+    if (data && Array.isArray(data)) {
+      return data.filter((d) => d.nfts[0]);
+    }
+    return [];
+  }, [data]);
+
+  if (isLoading) {
+    return (
+      <View tw="items-center justify-center flex-1">
+        <Spinner />
+      </View>
+    );
+  }
+
+  return (
+    <>
+      <View tw={`bg-black`}>
+        <ViewabilityTrackerFlatlist
+          keyExtractor={(_item, index) => index.toString()}
+          getItemLayout={(_data, index) => {
+            return {
+              length: screenHeight - headerHeight,
+              offset: (screenHeight - headerHeight) * index,
+              index,
+            };
+          }}
+          ref={listRef}
+          windowSize={3}
+          initialNumToRender={1}
+          renderItem={({ item }) => <FeedItem nft={item.nfts[0]} />}
+          pagingEnabled
+          onEndReachedThreshold={0.6}
+          onEndReached={fetchMore}
+          data={newData}
+          ListFooterComponent={ListFooterComponent}
+        />
+      </View>
+    </>
+  );
+};
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
   const tabBarHeight = useBottomTabBarHeight();
@@ -38,245 +246,82 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
   return <View sx={{ marginBottom: tabBarHeight }}></View>;
 };
 
-export const Trending = () => {
-  const [selected, setSelected] = useState(0);
-  const isDark = useIsDarkMode();
-  return (
-    <View tw="bg-white dark:bg-black flex-1">
-      <Tabs.Root onIndexChange={setSelected} initialIndex={selected} lazy>
-        <Tabs.Header>
-          <View tw="bg-white dark:bg-black pt-4 pl-4 pb-[3px]">
-            <Text
-              variant="text-2xl"
-              tw="text-gray-900 dark:text-white font-extrabold"
-            >
-              Trending
-            </Text>
-          </View>
-        </Tabs.Header>
-        <Tabs.List
-          style={useMemo(
-            () => ({
-              height: TAB_LIST_HEIGHT,
-              ...tw.style(
-                "dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 w-screen"
-              ),
-            }),
-            [isDark]
-          )}
-        >
-          <Tabs.Trigger>
-            <TabItem name="Today" selected={selected === 0} />
-          </Tabs.Trigger>
+const getImageUrlLarge = (tokenAspectRatio: string, imgUrl?: string) => {
+  if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
+    if (tokenAspectRatio && Number(tokenAspectRatio) > 1)
+      imgUrl = imgUrl.split("=")[0] + "=h1328";
+    else imgUrl = imgUrl.split("=")[0] + "=w1328";
+  }
 
-          <Tabs.Trigger>
-            <TabItem name="This week" selected={selected === 1} />
-          </Tabs.Trigger>
-
-          <Tabs.Trigger>
-            <TabItem name="This month" selected={selected === 2} />
-          </Tabs.Trigger>
-
-          <SelectedTabIndicator />
-        </Tabs.List>
-        <Tabs.Pager>
-          <TabListContainer days={1} />
-          <TabListContainer days={7} />
-          <TabListContainer days={30} />
-        </Tabs.Pager>
-      </Tabs.Root>
-    </View>
-  );
+  return imgUrl;
 };
 
-const TabListContainer = ({ days }: { days: number }) => {
-  const [selected, setSelected] = useState(0);
-
-  const SelectionControl = useMemo(
-    () => (
-      <SegmentedControl
-        values={["CREATORS", "NFTS"]}
-        onChange={setSelected}
-        selectedIndex={selected}
-      />
-    ),
-    [selected, setSelected]
-  );
-
-  return useMemo(
-    () =>
-      [
-        <Suspense fallback={<Spinner size="small" />}>
-          <CreatorsList days={days} SelectionControl={SelectionControl} />
-        </Suspense>,
-        <Suspense fallback={<Spinner size="small" />}>
-          <NFTSList days={days} SelectionControl={SelectionControl} />
-        </Suspense>,
-      ][selected],
-    [selected, days, SelectionControl]
-  );
+type Props = {
+  item: NFT;
+  style?: ImageStyle;
 };
 
-const CreatorsList = ({
-  days,
-  SelectionControl,
-}: {
-  days: number;
-  SelectionControl: any;
-}) => {
-  const { data, isLoadingMore, isLoading, isRefreshing, refresh, fetchMore } =
-    useTrendingCreators({
-      days,
-    });
-  const isDark = useIsDarkMode();
-  const separatorHeight = 8;
-
-  const keyExtractor = useCallback((item) => {
-    return item.profile_id;
-  }, []);
-
-  const renderItem = useCallback(({ item }) => {
-    return <CreatorPreview creator={item} />;
-  }, []);
-
-  const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoadingMore} />,
-    [isLoadingMore]
+function Media({ item, style }: Props) {
+  const imageUri = getImageUrlLarge(
+    item?.token_aspect_ratio,
+    item?.still_preview_url ? item?.still_preview_url : item?.token_img_url
   );
 
-  const ItemSeparatorComponent = useCallback(
-    () => <View tw={`bg-gray-200 dark:bg-gray-800 h-[${separatorHeight}px]`} />,
-    [isDark]
-  );
-
-  const getItemLayout = useCallback((_data, index) => {
-    const cardHeight = cardSize + separatorHeight;
-    return {
-      length: cardHeight,
-      offset: cardHeight * index,
-      index,
-    };
-  }, []);
-
-  const ListHeaderComponent = useMemo(
-    () => (
-      <View
-        tw="p-4 dark:border-gray-900 border-gray-100"
-        style={{ borderBottomWidth: 1 }}
-      >
-        {SelectionControl}
-        {data.length === 0 && !isLoading ? (
-          <View tw="items-center justify-center mt-20">
-            <Text tw="text-gray-900 dark:text-white">No results found</Text>
-          </View>
-        ) : isLoading ? (
-          <View tw="items-center justify-center mt-20">
-            <Spinner />
-          </View>
-        ) : null}
-      </View>
-    ),
-    [SelectionControl, data, isLoading, isDark]
-  );
+  const videoUri = item?.source_url
+    ? item?.source_url
+    : item?.token_animation_url;
 
   return (
-    <View tw="flex-1">
-      <Tabs.FlatList
-        data={data}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        refreshing={isRefreshing}
-        onRefresh={refresh}
-        onEndReached={fetchMore}
-        onEndReachedThreshold={0.6}
-        removeClippedSubviews={Platform.OS !== "web"}
-        ListHeaderComponent={ListHeaderComponent}
-        numColumns={1}
-        windowSize={4}
-        initialNumToRender={4}
-        alwaysBounceVertical={false}
-        ListFooterComponent={ListFooterComponent}
-        ItemSeparatorComponent={ItemSeparatorComponent}
-        getItemLayout={getItemLayout}
-      />
+    <View style={{ flex: 1 }}>
+      {imageUri &&
+      (item?.mime_type === "image/svg+xml" || imageUri.includes(".svg")) ? (
+        <PinchToZoom>
+          <Image
+            source={{
+              uri: `${
+                process.env.NEXT_PUBLIC_BACKEND_URL
+              }/v1/media/format/img?url=${encodeURIComponent(imageUri)}`,
+            }}
+            style={style}
+            blurhash={item?.blurhash}
+            resizeMode="contain"
+          />
+        </PinchToZoom>
+      ) : null}
+
+      {item?.mime_type?.startsWith("image") &&
+      item?.mime_type !== "image/svg+xml" ? (
+        <PinchToZoom>
+          <Image
+            source={{
+              uri: imageUri,
+            }}
+            style={style}
+            blurhash={item?.blurhash}
+            resizeMode="contain"
+          />
+        </PinchToZoom>
+      ) : null}
+
+      {item?.mime_type?.startsWith("video") ? (
+        <View>
+          <Video
+            source={{
+              uri: videoUri,
+            }}
+            posterSource={{
+              uri: item?.still_preview_url,
+            }}
+            style={style}
+            useNativeControls
+            resizeMode="contain"
+          />
+        </View>
+      ) : null}
     </View>
   );
-};
+}
 
-const GAP_BETWEEN_ITEMS = 1;
-const ITEM_SIZE = Dimensions.get("window").width / 3;
+const MemoizedMedia = withMemoAndColorScheme(Media);
 
-const NFTSList = ({
-  days,
-  SelectionControl,
-}: {
-  days: number;
-  SelectionControl: any;
-}) => {
-  const { data, isLoadingMore, isLoading, isRefreshing, refresh, fetchMore } =
-    useTrendingNFTS({
-      days,
-    });
-
-  const keyExtractor = useCallback((item) => {
-    return item.nft_id.toString();
-  }, []);
-
-  const renderItem = useCallback(
-    ({ item }) => <Media item={item} numColumns={3} />,
-    []
-  );
-
-  const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoadingMore} />,
-    [isLoadingMore]
-  );
-
-  const getItemLayout = useCallback((_data, index) => {
-    return { length: ITEM_SIZE, offset: ITEM_SIZE * index, index };
-  }, []);
-
-  const ListHeaderComponent = useMemo(
-    () => (
-      <View
-        tw="p-4 dark:border-gray-900 border-gray-100"
-        style={{ borderBottomWidth: 1 }}
-      >
-        {SelectionControl}
-        {data.length === 0 && !isLoading ? (
-          <View tw="items-center justify-center mt-20">
-            <Text tw="text-gray-900 dark:text-white">No results found</Text>
-          </View>
-        ) : isLoading ? (
-          <View tw="items-center justify-center mt-20">
-            <Spinner />
-          </View>
-        ) : null}
-      </View>
-    ),
-    [SelectionControl, data, isLoading]
-  );
-
-  return (
-    <View tw="flex-1">
-      <Tabs.FlatList
-        data={data}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        refreshing={isRefreshing}
-        onRefresh={refresh}
-        onEndReached={fetchMore}
-        onEndReachedThreshold={0.6}
-        removeClippedSubviews={Platform.OS !== "web"}
-        ListHeaderComponent={ListHeaderComponent}
-        numColumns={3}
-        getItemLayout={getItemLayout}
-        windowSize={6}
-        initialNumToRender={9}
-        alwaysBounceVertical={false}
-        ListFooterComponent={ListFooterComponent}
-        style={useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), [])}
-      />
-    </View>
-  );
-};
+export { MemoizedMedia as Media };

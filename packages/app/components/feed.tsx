@@ -56,19 +56,34 @@ const feedItemStyle = {
   width: screenWidth,
 };
 
+const mediaMaxHeightRelativeToScreen = 0.6;
+const mediaMinHeightRelativeToScreen = 0.4;
 const FeedItem = ({ nft }: { nft: NFT }) => {
+  const mediaHeight = Math.max(
+    Math.min(
+      screenWidth /
+        (isNaN(Number(nft.token_aspect_ratio))
+          ? 1
+          : Number(nft.token_aspect_ratio)),
+      feedItemStyle.height * mediaMaxHeightRelativeToScreen
+    ),
+    feedItemStyle.height * mediaMinHeightRelativeToScreen
+  );
+
+  const descriptionHeight = screenHeight - mediaHeight;
+
   return (
     <View style={feedItemStyle}>
-      <View tw="flex-6 w-full items-center justify-center">
+      <View tw="w-full items-center justify-center bg-black">
         <Media
           item={nft}
           style={{
-            aspectRatio: Number(nft.token_aspect_ratio),
+            height: mediaHeight,
             width: screenWidth,
           }}
         />
       </View>
-      <View tw="flex-4 w-full">
+      <View tw="w-full" style={{ height: descriptionHeight }}>
         <Description nft={nft} />
       </View>
     </View>

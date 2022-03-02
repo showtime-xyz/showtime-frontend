@@ -61,7 +61,7 @@ const HeaderRight = ({
               </View>
             )}
             {isAuthenticated ? (
-              <View tw="dark:bg-black items-end">
+              <View tw="dark:bg-black rounded-full items-end">
                 <HeaderDropdown />
               </View>
             ) : variant === "text" ? (
