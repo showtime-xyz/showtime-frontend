@@ -213,13 +213,7 @@ export const FeedList = () => {
   const listRef = useRef<FlatList>(null);
 
   // useScrollToTop();
-  useScrollToTop(
-    React.useRef({
-      scrollToTop: () => {
-        listRef.current.scrollToOffset({ animated: false, offset: 0 });
-      },
-    })
-  );
+  useScrollToTop(listRef);
 
   const newData: any = useMemo(() => {
     if (data && Array.isArray(data)) {
@@ -257,6 +251,7 @@ export const FeedList = () => {
           onEndReached={fetchMore}
           data={newData}
           ListFooterComponent={ListFooterComponent}
+          showsVerticalScrollIndicator={false}
         />
       </View>
     </>
