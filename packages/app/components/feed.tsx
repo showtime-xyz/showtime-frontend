@@ -203,8 +203,8 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
         <View tw="flex-row">
           <Pressable onPress={() => handleShareNFT(nft)}>
             <Share
-              height={24}
-              width={24}
+              height={22}
+              width={22}
               //@ts-ignore
               color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
             />

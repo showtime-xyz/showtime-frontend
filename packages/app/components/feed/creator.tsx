@@ -1,3 +1,5 @@
+import { formatDistanceToNowStrict } from "date-fns";
+
 import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import { Link } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
@@ -53,12 +55,17 @@ export function Creator({ nft }: Props) {
             ) : null}
           </View>
         ) : (
-          <View tw="h-[12px] flex flex-row items-center">
+          <View>
             <Text
-              sx={{ fontSize: 13, lineHeight: 15 }}
-              tw="text-gray-900 dark:text-white font-semibold"
+              sx={{ fontSize: 13 }}
+              tw="text-gray-900 dark:text-white font-bold"
             >
-              {formatAddressShort(nft.owner_address)}
+              {formatAddressShort(nft.creator_address)}
+            </Text>
+            <Text tw="text-xs text-gray-900 dark:text-white mt-1 font-semibold">
+              {formatDistanceToNowStrict(new Date(`${nft.token_created}Z`), {
+                addSuffix: true,
+              })}
             </Text>
           </View>
         )}
