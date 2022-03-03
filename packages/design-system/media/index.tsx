@@ -1,15 +1,5 @@
-import { useCallback } from "react";
-import { Pressable } from "react-native";
-
-import Router from "next/router";
-// import { SvgUri } from "react-native-svg";
-import { useSWRConfig } from "swr";
-
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
-import { mixpanel } from "app/lib/mixpanel";
-import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
-import { NFT_DETAIL_API } from "app/utilities";
 
 import { Play } from "design-system/icon";
 import { Image } from "design-system/image";
@@ -48,10 +38,6 @@ type Props = {
 
 function Media({ item, numColumns, tw, resizeMode: propResizeMode }: Props) {
   const resizeMode = propResizeMode ?? "cover";
-  const router = useRouter();
-  const disableNFTModal =
-    router?.pathname.includes("/nft") || router?.pathname === "/";
-  const { mutate } = useSWRConfig();
 
   const imageUri =
     numColumns === 1
@@ -83,25 +69,6 @@ function Media({ item, numColumns, tw, resizeMode: propResizeMode }: Props) {
       ? item?.source_url
       : item?.token_animation_url;
 
-  const openNFT = useCallback(
-    (id: string) => {
-      mutate(`${NFT_DETAIL_API}/${id}`, {
-        data: item,
-      });
-      const as = `/nft/${id}`;
-
-      const href = Router.router
-        ? {
-            pathname: Router.pathname,
-            query: { ...Router.query, id },
-          }
-        : as;
-
-      router.push(href, as, { shallow: true });
-    },
-    [router, Router]
-  );
-
   const size = tw
     ? tw
     : numColumns === 3
@@ -119,80 +86,72 @@ function Media({ item, numColumns, tw, resizeMode: propResizeMode }: Props) {
           : "bg-black",
       ]}
     >
-      <Pressable
-        onPress={() => {
-          openNFT(item?.nft_id?.toString());
-          mixpanel.track("Activity - Click on NFT image, open modal");
-        }}
-        disabled={disableNFTModal}
-      >
-        {imageUri &&
-        (item?.mime_type === "image/svg+xml" || imageUri.includes(".svg")) ? (
-          <PinchToZoom>
-            <Image
-              source={{
-                uri: `${
-                  process.env.NEXT_PUBLIC_BACKEND_URL
-                }/v1/media/format/img?url=${encodeURIComponent(imageUri)}`,
-              }}
-              tw={size}
-              blurhash={item?.blurhash}
-              resizeMode={resizeMode}
-            />
-          </PinchToZoom>
-        ) : null}
+      {imageUri &&
+      (item?.mime_type === "image/svg+xml" || imageUri.includes(".svg")) ? (
+        <PinchToZoom>
+          <Image
+            source={{
+              uri: `${
+                process.env.NEXT_PUBLIC_BACKEND_URL
+              }/v1/media/format/img?url=${encodeURIComponent(imageUri)}`,
+            }}
+            tw={size}
+            blurhash={item?.blurhash}
+            resizeMode={resizeMode}
+          />
+        </PinchToZoom>
+      ) : null}
 
-        {item?.mime_type?.startsWith("image") &&
-        item?.mime_type !== "image/svg+xml" ? (
-          <PinchToZoom>
-            {numColumns > 1 && item?.mime_type === "image/gif" && (
-              <View tw="bg-transparent absolute z-1 bottom-1 right-1">
-                <Play height={24} width={24} color="white" />
-              </View>
-            )}
-            <Image
-              source={{
-                uri: imageUri,
-              }}
-              tw={size}
-              blurhash={item?.blurhash}
-              resizeMode={resizeMode}
-            />
-          </PinchToZoom>
-        ) : null}
+      {item?.mime_type?.startsWith("image") &&
+      item?.mime_type !== "image/svg+xml" ? (
+        <PinchToZoom>
+          {numColumns > 1 && item?.mime_type === "image/gif" && (
+            <View tw="bg-transparent absolute z-1 bottom-1 right-1">
+              <Play height={24} width={24} color="white" />
+            </View>
+          )}
+          <Image
+            source={{
+              uri: imageUri,
+            }}
+            tw={size}
+            blurhash={item?.blurhash}
+            resizeMode={resizeMode}
+          />
+        </PinchToZoom>
+      ) : null}
 
-        {item?.mime_type?.startsWith("video") ? (
-          <View>
-            {numColumns > 1 && (
-              <View tw="bg-transparent absolute z-1 bottom-1 right-1">
-                <Play height={24} width={24} color="white" />
-              </View>
-            )}
-            <Video
-              source={{
-                uri: videoUri,
-              }}
-              posterSource={{
-                uri: item?.still_preview_url,
-              }}
-              tw={size}
-              resizeMode={resizeMode}
-            />
-          </View>
-        ) : null}
+      {item?.mime_type?.startsWith("video") ? (
+        <View>
+          {numColumns > 1 && (
+            <View tw="bg-transparent absolute z-1 bottom-1 right-1">
+              <Play height={24} width={24} color="white" />
+            </View>
+          )}
+          <Video
+            source={{
+              uri: videoUri,
+            }}
+            posterSource={{
+              uri: item?.still_preview_url,
+            }}
+            tw={size}
+            resizeMode={resizeMode}
+          />
+        </View>
+      ) : null}
 
-        {item?.mime_type?.startsWith("model") ? (
-          <View tw={size}>
-            <Model
-              url={item?.source_url}
-              fallbackUrl={item?.still_preview_url}
-              numColumns={numColumns}
-              blurhash={item?.blurhash}
-              // {...mediaProps}
-            />
-          </View>
-        ) : null}
-      </Pressable>
+      {item?.mime_type?.startsWith("model") ? (
+        <View tw={size}>
+          <Model
+            url={item?.source_url}
+            fallbackUrl={item?.still_preview_url}
+            numColumns={numColumns}
+            blurhash={item?.blurhash}
+            // {...mediaProps}
+          />
+        </View>
+      ) : null}
     </View>
   );
 }

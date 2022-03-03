@@ -1,7 +1,6 @@
 import React, { useCallback, useRef } from "react";
 import { Dimensions, FlatList, Pressable } from "react-native";
 
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useScrollToTop } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
@@ -30,7 +29,9 @@ export const SwipeList = ({
   fetchMore,
   isRefreshing,
   refresh,
+  initialScrollIndex,
   isLoadingMore,
+  bottomBarHeight = 0,
 }: any) => {
   const headerHeight = useHeaderHeight();
 
@@ -39,8 +40,8 @@ export const SwipeList = ({
   useScrollToTop(listRef);
 
   const renderItem = useCallback(
-    ({ item }) => <FeedItem nft={item.nfts[0]} />,
-    []
+    ({ item }) => <FeedItem bottomBarHeight={bottomBarHeight} nft={item} />,
+    [bottomBarHeight]
   );
 
   const keyExtractor = useCallback((_item, index) => index.toString(), []);
@@ -57,8 +58,13 @@ export const SwipeList = ({
   );
 
   const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoadingMore} />,
-    [isLoadingMore]
+    () =>
+      isLoadingMore ? (
+        <View tw="w-full" sx={{ marginBottom: bottomBarHeight }}>
+          <Skeleton height={100} width={screenWidth} />
+        </View>
+      ) : null,
+    [isLoadingMore, bottomBarHeight, screenWidth]
   );
 
   return (
@@ -76,11 +82,18 @@ export const SwipeList = ({
       data={data}
       ListFooterComponent={ListFooterComponent}
       showsVerticalScrollIndicator={false}
+      initialScrollIndex={initialScrollIndex}
     />
   );
 };
 
-const FeedItem = ({ nft }: { nft: NFT }) => {
+const FeedItem = ({
+  nft,
+  bottomBarHeight = 0,
+}: {
+  nft: NFT;
+  bottomBarHeight: number;
+}) => {
   const headerTop = useHeaderHeight();
 
   const feedItemStyle = {
@@ -132,16 +145,21 @@ const FeedItem = ({ nft }: { nft: NFT }) => {
         />
       </View>
       <View tw={`w-full h-[${descriptionHeight}px]`}>
-        <NFTDetails nft={nft} />
+        <NFTDetails nft={nft} bottomBarHeight={bottomBarHeight} />
       </View>
     </View>
   );
 };
 
-const NFTDetails = ({ nft }: { nft: NFT }) => {
+const NFTDetails = ({
+  nft,
+  bottomBarHeight = 0,
+}: {
+  nft: NFT;
+  bottomBarHeight: number;
+}) => {
   const isDark = useIsDarkMode();
   const tint = isDark ? "dark" : "light";
-  const bottomBarHeight = useBottomTabBarHeight();
 
   return (
     <BlurView style={tw.style(`p-4 flex-1 w-full`)} tint={tint} intensity={85}>
@@ -197,17 +215,4 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
       </View>
     </BlurView>
   );
-};
-const Footer = (props: { isLoading: boolean }) => {
-  const tabBarHeight = useBottomTabBarHeight();
-
-  if (props.isLoading) {
-    return (
-      <View tw="w-full" sx={{ marginBottom: tabBarHeight }}>
-        <Skeleton height={100} width={screenWidth} />
-      </View>
-    );
-  }
-
-  return null;
 };

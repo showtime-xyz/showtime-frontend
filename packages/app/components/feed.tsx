@@ -1,6 +1,8 @@
 import React, { Suspense, useMemo } from "react";
 import { Dimensions, StatusBar } from "react-native";
 
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+
 import { View, Skeleton } from "design-system";
 import { useColorScheme } from "design-system/hooks";
 
@@ -41,13 +43,20 @@ export const Feed = () => {
 
 export const FeedList = () => {
   const queryState = useActivity({ typeId: 0 });
+  const bottomBarHeight = useBottomTabBarHeight();
 
   const newData: any = useMemo(() => {
     if (queryState.data && Array.isArray(queryState.data)) {
-      return queryState.data.filter((d) => d.nfts[0]);
+      return queryState.data.filter((d) => d.nfts[0]).map((d) => d.nfts[0]);
     }
     return [];
   }, [queryState.data]);
 
-  return <SwipeList {...queryState} data={newData} />;
+  return (
+    <SwipeList
+      {...queryState}
+      bottomBarHeight={bottomBarHeight}
+      data={newData}
+    />
+  );
 };
