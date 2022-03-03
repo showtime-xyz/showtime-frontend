@@ -47,18 +47,18 @@ function Like({ nft }: { nft?: NFT }) {
       }, [isLikedNft, like, unlike, likeCount])}
     >
       {isLikedNft ? (
-        <Animated.View key="liked" exiting={ZoomOut} entering={ZoomIn}>
-          <HeartFilled height={24} width={24} color={tw.color("red-500")} />
-        </Animated.View>
+        // <Animated.View key="liked" exiting={ZoomOut} entering={ZoomIn}>
+        <HeartFilled height={24} width={24} color={tw.color("red-500")} />
       ) : (
-        <Animated.View key="unliked" exiting={ZoomOut} entering={ZoomIn}>
-          <Heart
-            height={24}
-            width={24}
-            //@ts-ignore
-            color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
-          />
-        </Animated.View>
+        // </Animated.View>
+        // <Animated.View key="unliked" exiting={ZoomOut} entering={ZoomIn}>
+        <Heart
+          height={24}
+          width={24}
+          //@ts-ignore
+          color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
+        />
+        // </Animated.View>
       )}
 
       <Text tw="text-xs text-gray-900 dark:text-white font-bold ml-1 ">
