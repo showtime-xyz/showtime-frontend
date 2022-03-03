@@ -30,7 +30,6 @@ function Like({ nft }: { nft?: NFT }) {
       tw="flex-row items-center"
       hitSlop={hitSlop}
       onPress={useCallback(async () => {
-        Haptics.selectionAsync();
         if (isLikedNft) {
           setLikeCount(likeCount - 1);
           const isSuccessfullyUnlike = await unlike(nft.nft_id);
@@ -38,6 +37,7 @@ function Like({ nft }: { nft?: NFT }) {
             setLikeCount(likeCount + 1);
           }
         } else {
+          Haptics.selectionAsync();
           setLikeCount(likeCount + 1);
           const isSuccessfullyLiked = await like(nft.nft_id);
           if (!isSuccessfullyLiked) {
