@@ -6,29 +6,19 @@ import AppContext from "@/context/app-context";
 import useProfile from "@/hooks/useProfile";
 import axios from "@/lib/axios";
 import backend from "@/lib/backend";
-import { CHAIN_IDENTIFIERS, DEFAULT_PROFILE_PIC } from "@/lib/constants";
-import {
-  getBidLink,
-  getContractName,
-  removeTags,
-  formatAddressShort,
-  classNames,
-} from "@/lib/utilities";
+import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
+import { removeTags, formatAddressShort, classNames } from "@/lib/utilities";
 import { Menu, Transition } from "@headlessui/react";
-import mixpanel from "mixpanel-browser";
+// import mixpanel from "mixpanel-browser";
 import Link from "next/link";
 import ReactPlayer from "react-player";
 import useSWR from "swr";
 
 import { truncateWithEllipses } from "../lib/utilities";
 import CappedWidth from "./CappedWidth";
-import CommentButton from "./CommentButton";
 import BadgeIcon from "./Icons/BadgeIcon";
 import EllipsisIcon from "./Icons/EllipsisIcon";
 import OrbitIcon from "./Icons/OrbitIcon";
-import LikeButton from "./LikeButton";
-import ModalTokenDetail from "./ModalTokenDetail";
-import ShareButton from "./ShareButton";
 import Button from "./UI/Buttons/Button";
 import BuyModal from "./UI/Modals/BuyModal";
 
@@ -72,7 +62,7 @@ const SpotlightItem = ({
   const { isMobile } = useContext(AppContext);
 
   const handleRefreshNFTMetadata = async () => {
-    mixpanel.track("Clicked refresh metadata");
+    // mixpanel.track("Clicked refresh metadata");
     setRefreshing(true);
 
     const { data } = await axios
@@ -219,7 +209,7 @@ const SpotlightItem = ({
                 <div className="relative">
                   <div
                     onClick={() => {
-                      mixpanel.track("Open NFT modal");
+                      // mixpanel.track("Open NFT modal");
                       setCurrentlyOpenModal(true);
                       setMuted(true);
                       setCurrentlyPlayingVideo(false);
@@ -292,7 +282,7 @@ const SpotlightItem = ({
                 <div className="flex flex-row">
                   <div
                     onClick={() => {
-                      mixpanel.track("Open NFT modal");
+                      // mixpanel.track("Open NFT modal");
                       setCurrentlyOpenModal(true);
                       setMuted(true);
                       setCurrentlyPlayingVideo(false);
