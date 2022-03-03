@@ -1,5 +1,7 @@
 import { useRef, useContext, useState, Fragment, useEffect } from "react";
 
+import GlobeIcon from "@/components/Icons/GlobeIcon";
+import TwitterIcon from "@/components/Icons/Social/TwitterIcon";
 import AppContext from "@/context/app-context";
 import useProfile from "@/hooks/useProfile";
 import axios from "@/lib/axios";
@@ -119,29 +121,19 @@ const SpotlightItem = ({
 
   const { myProfile } = useProfile();
 
-  const ifListedIsOwner =
-    myProfile?.profile_id === thisItem?.listing?.profile_id &&
-    typeof myProfile?.profile_id === "number";
-
-  const freeItem = item?.listing?.min_price === 0;
   const singleEdition = item?.listing?.total_edition_quantity === 1;
 
   return (
     <>
-      {/* {typeof document !== "undefined" ? (
+      {typeof document !== "undefined" ? (
         <>
-          <ModalTokenDetail
-            isOpen={currentlyOpenModal}
-            setEditModalOpen={setCurrentlyOpenModal}
-            item={thisItem}
-          />
           <BuyModal
             open={buyModalOpen}
             onClose={() => setBuyModalOpen(false)}
             token={thisItem}
           />
         </>
-      ) : null} */}
+      ) : null}
 
       <CappedWidth>
         <div className="relative">
@@ -511,7 +503,23 @@ const SpotlightItem = ({
                   </div>
                   <div className="flex items-center justify-between px-4 space-x-4">
                     <div className="flex items-center space-x-4">
-                      <LikeButton item={item} />
+                      <a
+                        className="font-bold flex items-center space-x-2"
+                        href="https://twitter.com/Ukraine_DAO"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <TwitterIcon className="w-4 h-4" />
+                      </a>
+                      <a
+                        className="font-bold flex items-center space-x-2"
+                        href="https://www.ukrainedao.love/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <GlobeIcon className="w-4 h-4" />
+                      </a>
+
                       {/* <CommentButton
                         item={item}
                         handleComment={() => {
@@ -594,50 +602,16 @@ const SpotlightItem = ({
                   </div>
                 </div>
                 <div className="mt-8 inline-block">
-                  {item.listing ? (
-                    <>
-                      {ifListedIsOwner ? (
-                        <p className="px-4 text-sm sm:text-base dark:text-gray-500">
-                          {freeItem ? (
-                            "Listed for Free"
-                          ) : (
-                            <>
-                              {`Price ${item.listing.min_price} ${item.listing.currency}`}
-                            </>
-                          )}
-                        </p>
-                      ) : (
-                        <Button
-                          disabled={ifListedIsOwner}
-                          style="primary"
-                          title="Buy on Showtime"
-                          onClick={() => setBuyModalOpen(true)}
-                        >
-                          <p className="text-sm sm:text-base">
-                            {freeItem ? (
-                              "Price Free"
-                            ) : (
-                              <>
-                                {`Price ${item.listing.min_price} ${item.listing.currency}`}
-                              </>
-                            )}
-                          </p>
-                        </Button>
-                      )}
-                    </>
-                  ) : (
-                    <Button
-                      style="primary"
-                      as="a"
-                      // href={getBidLink(item)}
-                      // title={`View on ${getContractName(item)}`}
-                      // target="_blank"
-                      // onClick={() => mixpanel.track("OpenSea link click")}
-                      rel="noreferrer"
-                    >
-                      Donate to Ukraine
-                    </Button>
-                  )}
+                  <Button
+                    style="primary"
+                    title="Buy on Showtime"
+                    // onClick={() => setBuyModalOpen(true)}
+                  >
+                    {/* <p className="text-sm sm:text-base">
+                          {`Price ${item.listing.min_price} ${item.listing.currency}`}
+                    </p> */}
+                    <p className="text-sm sm:text-base">Price TBD</p>
+                  </Button>
                 </div>
               </div>
             </div>

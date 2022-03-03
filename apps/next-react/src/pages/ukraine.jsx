@@ -3,14 +3,16 @@ import BadgeIcon from "@/components/Icons/BadgeIcon";
 import SpotlightItem from "@/components/SpotlightItem-ukraine";
 import Layout from "@/components/layout";
 
+import bannerURL from "../../public/img/ukraine-banner.jpg";
+
 const hardcodedNFT = {
   nft_id: 17625054,
   contract_address: "0x8a13628dd5d600ca1e8bf9dbc685b735f615cb90",
   token_id: "1",
   like_count: 42,
-  token_name: "Placeholder NFT Name",
+  token_name: "Help For Ukraine 2022",
   token_description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+    "Showtime is partnering with Ukrainian artists to help raise necessary funds for organizations that are helping those suffering from the war in Ukraine. You can help by purchasing this limited-edition NFT, where all proceeds will go directly to UkraineDAO.",
   token_img_url:
     "https://lh3.googleusercontent.com/Pxg4ZXLMXPcgTZ-PbAxWcni3Cqfx2GrB7lZiFz1ryG_EE7ZdjmhOmfGjwLQE41iuUERbM7ByBc3PELYCE14nwcXHxspBMl84n6AQ",
   token_img_original_url:
@@ -70,8 +72,10 @@ export default () => {
     <Layout>
       <div className="max-w-screen-2xl md:px-3 mx-auto w-full">
         <div
-          className="h-32 md:h-64 relative text-left bg-gray-50 dark:bg-gray-900 2xl:rounded-b-[32px] md:-mx-3 bg-no-repeat bg-center bg-cover"
-          style={{ backgroundImage: `url()` }}
+          className="h-32 md:h-64 relative text-left bg-gray-50 dark:bg-gray-900 2xl:rounded-b-[32px] md:-mx-3 bg-no-repeat bg-contain bg-center xl:bg-cover"
+          style={{
+            backgroundImage: `url(${bannerURL})`,
+          }}
         ></div>
         <CappedWidth>
           <div className="mx-5 md:mx-0 lg:mx-5">
@@ -80,7 +84,7 @@ export default () => {
                 <div className="flex items-center">
                   <div className="relative -mt-14 md:-mt-20 rounded-full border-8 border-white dark:border-gray-900 overflow-hidden group self-start flex-shrink-0">
                     <img
-                      src="https://storage.googleapis.com/nft-public-profile-pics/147991_1619920081.jpg"
+                      src="https://pbs.twimg.com/profile_images/1497144819835150338/mOByMguO_400x400.jpg"
                       className="h-24 w-24 md:h-32 md:w-32 z-10 flex-shrink-0"
                     />
                     {/* {isMyProfile && (
@@ -164,7 +168,7 @@ export default () => {
                             true ? "whitespace-nowrap" : ""
                           }`}
                         >
-                          Unnamed
+                          {hardcodedNFT.token_name}
                         </h2>
                         {true && (
                           <BadgeIcon
