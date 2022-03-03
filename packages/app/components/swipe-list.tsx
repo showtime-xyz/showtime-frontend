@@ -32,16 +32,21 @@ export const SwipeList = ({
   initialScrollIndex,
   isLoadingMore,
   bottomBarHeight = 0,
+  headerHeight = 0,
 }: any) => {
-  const headerHeight = useHeaderHeight();
-
   const listRef = useRef<FlatList>(null);
 
   useScrollToTop(listRef);
 
   const renderItem = useCallback(
-    ({ item }) => <FeedItem bottomBarHeight={bottomBarHeight} nft={item} />,
-    [bottomBarHeight]
+    ({ item }) => (
+      <FeedItem
+        headerHeight={headerHeight}
+        bottomBarHeight={bottomBarHeight}
+        nft={item}
+      />
+    ),
+    [bottomBarHeight, headerHeight]
   );
 
   const keyExtractor = useCallback((_item, index) => index.toString(), []);
@@ -90,14 +95,14 @@ export const SwipeList = ({
 const FeedItem = ({
   nft,
   bottomBarHeight = 0,
+  headerHeight = 0,
 }: {
   nft: NFT;
   bottomBarHeight: number;
+  headerHeight: number;
 }) => {
-  const headerTop = useHeaderHeight();
-
   const feedItemStyle = {
-    height: screenHeight - headerTop,
+    height: screenHeight - headerHeight,
     width: screenWidth,
   };
 
@@ -114,7 +119,7 @@ const FeedItem = ({
 
   mediaHeight = Math.min(mediaHeight, mediaContainerHeight);
 
-  const descriptionHeight = screenHeight - mediaContainerHeight - headerTop;
+  const descriptionHeight = screenHeight - mediaContainerHeight - headerHeight;
 
   return (
     <View style={feedItemStyle}>
