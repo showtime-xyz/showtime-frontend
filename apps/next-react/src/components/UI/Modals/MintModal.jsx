@@ -809,10 +809,10 @@ const OptionsPage = ({
         <div className="flex items-center justify-between">
           <div className="flex-1 mr-4 mt-2">
             <p className="font-semibold text-gray-900 dark:text-white">
-              Donate Royalties To Ukraine
+              Donate Royalties to UkraineDAO
             </p>
             <p className="text-sm font-medium text-gray-700 dark:text-gray-300 max-w-xs">
-              Enabling will disable royalties and donate 100% to support Ukraine
+              Enabling will redirect 100% of the royalties to UkraineDAO
             </p>
           </div>
           <div className="flex items-center space-x-2">
