@@ -10,16 +10,15 @@ import { Blurhash } from "react-native-blurhash";
 import type { NFT } from "app/types";
 
 import { View, Text, Media, Skeleton } from "design-system";
-import { Avatar } from "design-system/avatar";
 import { useColorScheme, useIsDarkMode } from "design-system/hooks";
 import { Share } from "design-system/icon";
 import { Image } from "design-system/image";
 import { tw } from "design-system/tailwind";
 
 import { useActivity } from "../hooks/api-hooks";
-import { formatAddressShort, handleShareNFT } from "../utilities";
+import { handleShareNFT } from "../utilities";
 import { Collection } from "./feed/collection";
-import { Description } from "./feed/description";
+import { Creator } from "./feed/creator";
 import { Like } from "./feed/like";
 import { NFTDropdown } from "./nft-dropdown";
 import { ViewabilityTrackerFlatlist } from "./viewability-tracker-flatlist";
@@ -216,20 +215,17 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
         </View>
       </View>
       <View tw="flex-row mt-4">
-        <Avatar url={nft.creator_img_url} size={32} />
-        <View tw="justify-around ml-1">
-          <Text tw="text-xs font-bold text-gray-900 dark:text-white">
-            {nft.owner_username ? (
-              <>@{nft.owner_username}</>
-            ) : (
-              <>{formatAddressShort(nft.owner_address)}</>
-            )}
-          </Text>
-          <Text tw="text-gray-900 text-xs dark:text-white">15 minutes ago</Text>
-        </View>
+        <Creator nft={nft} />
       </View>
       <View tw="mt-4">
-        <Description nft={nft} />
+        <Text
+          variant="text-2xl"
+          tw="text-gray-900 dark:text-white"
+          numberOfLines={3}
+          sx={{ fontSize: 17, lineHeight: 22 }}
+        >
+          {nft.token_name}
+        </Text>
       </View>
 
       <View tw={`mt-auto pb-[${bottomBarHeight}px]`}>
