@@ -40,21 +40,7 @@ function HomeNavigator() {
       // @ts-ignore
       screenOptions={screenOptions({ safeAreaTop, isDark })}
     >
-      <HomeStack.Screen
-        name="home"
-        component={HomeScreen}
-        options={{
-          headerTitle: () => (
-            <Text
-              tw="text-gray-900 dark:text-white"
-              sx={{ fontSize: 18 }}
-              variant="text-2xl"
-            >
-              Home
-            </Text>
-          ),
-        }}
-      />
+      <HomeStack.Screen name="home" component={HomeScreen} />
     </HomeStack.Navigator>
   );
 }
