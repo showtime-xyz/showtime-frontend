@@ -287,6 +287,7 @@ export const useMintNFT = () => {
         const signer = web3.getSigner();
         const addr = await signer.getAddress();
         userAddress = addr;
+        params.royaltiesPercentage = 0;
       } else {
         if (connector.connected) {
           [userAddress] = connector.accounts.filter((addr) =>
