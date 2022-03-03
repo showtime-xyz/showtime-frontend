@@ -81,7 +81,7 @@ function Activity({ activity }: Props) {
           <View tw="h-2" />
 
           <Text variant="text-xs" tw="text-gray-600 dark:text-gray-400">
-            {formatDistanceToNowStrict(new Date(`${activity.timestamp}Z`), {
+            {formatDistanceToNowStrict(new Date(`${activity.timestamp}`), {
               addSuffix: true,
             })}
           </Text>
