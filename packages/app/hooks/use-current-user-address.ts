@@ -9,7 +9,7 @@ function useCurrentUserAddress() {
   const [userAddress, setUserAddress] = useState("");
   const context = useContext(AppContext);
   const connector = useWalletConnect();
-  const [connectedAddress] = connector?.session?.accounts;
+  const connectedAddress = connector?.session?.accounts[0];
 
   useEffect(() => {
     if (connector.connected && connectedAddress) {
