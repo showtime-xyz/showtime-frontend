@@ -28,10 +28,9 @@ type Props = {
 };
 
 function NFTDropdown({ nft }: Props) {
-  const { userAddress } = useCurrentUserAddress();
-  // TODO: Is userAddress a possible sub?
   const userId = useCurrentUserId();
   const { user } = useUser();
+  const { userAddress } = useCurrentUserAddress();
   const [isOwner, setIsOwner] = useState(false);
 
   const { report } = useReport();
