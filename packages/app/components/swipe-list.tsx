@@ -1,16 +1,20 @@
-import React, { forwardRef, useCallback, useRef } from "react";
+import React, { useCallback, useMemo, useRef } from "react";
 import {
   Dimensions,
   FlatList,
-  Platform,
   Pressable,
+  RefreshControl,
   StatusBar,
 } from "react-native";
 
 import { useScrollToTop } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
 import { Blurhash } from "react-native-blurhash";
-import { ScrollView } from "react-native-gesture-handler";
+import {
+  RecyclerListView,
+  DataProvider,
+  LayoutProvider,
+} from "recyclerlistview";
 
 import type { NFT } from "app/types";
 
@@ -28,7 +32,6 @@ import { Collection } from "./feed/collection";
 import { Creator } from "./feed/creator";
 import { Like } from "./feed/like";
 import { NFTDropdown } from "./nft-dropdown";
-import { ViewabilityTrackerFlatlist } from "./viewability-tracker-flatlist";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 const mediaMaxHeightRelativeToScreen = 0.6;
@@ -41,95 +44,98 @@ export const SwipeList = ({
   initialScrollIndex = 0,
   isLoadingMore,
   bottomBarHeight = 0,
-  headerHeight = StatusBar.currentHeight,
+  headerHeight = 0,
 }: any) => {
   const listRef = useRef<FlatList>(null);
 
   useScrollToTop(listRef);
 
-  const renderItem = useCallback(
-    ({ item }) => (
-      <FeedItem
-        headerHeight={headerHeight}
-        bottomBarHeight={bottomBarHeight}
-        nft={item}
-      />
-    ),
-    [bottomBarHeight, headerHeight]
-  );
-
-  const keyExtractor = useCallback((_item, index) => _item.nft_id, []);
-
   const itemHeight = screenHeight - headerHeight;
 
-  const getItemLayout = useCallback(
-    (_data, index) => {
-      return {
-        length: itemHeight,
-        offset: itemHeight * index,
-        index,
-      };
+  let dataProvider = useMemo(
+    () =>
+      new DataProvider((r1, r2) => {
+        return r1 !== r2;
+      }).cloneWithRows(data),
+    [data]
+  );
+
+  const _layoutProvider = useMemo(
+    () =>
+      new LayoutProvider(
+        () => {
+          return "item";
+        },
+        (_type, dim) => {
+          dim.width = screenWidth;
+          dim.height = itemHeight;
+        }
+      ),
+    [screenWidth, itemHeight]
+  );
+
+  const _rowRenderer = useCallback(
+    (_type: any, item: any) => {
+      return (
+        <FeedItem
+          itemHeight={itemHeight}
+          bottomBarHeight={bottomBarHeight}
+          nft={item}
+        />
+      );
     },
     [itemHeight]
   );
 
-  const ListFooterComponent = useCallback(() => {
-    const colorMode = useColorScheme();
-    return isLoadingMore ? (
-      <View tw="w-full" sx={{ marginBottom: bottomBarHeight }}>
-        <Skeleton height={100} width={screenWidth} colorMode={colorMode} />
-      </View>
-    ) : null;
-  }, [isLoadingMore, bottomBarHeight, screenWidth]);
+  // const ListFooterComponent = useCallback(() => {
+  //   const colorMode = useColorScheme();
+  //   return isLoadingMore ? (
+  //     <View tw="w-full">
+  //       <Skeleton height={100} width={screenWidth} colorMode={colorMode} />
+  //     </View>
+  //   ) : null;
+  // }, [isLoadingMore, bottomBarHeight, screenWidth]);
 
-  const renderScrollComponent = useCallback(
-    (props) => <ScrollView ref={listRef} {...props} />,
-    []
+  const scrollViewProps = useMemo(
+    () => ({
+      pagingEnabled: true,
+      showsVerticalScrollIndicator: false,
+      refreshControl: (
+        <RefreshControl refreshing={isRefreshing} onRefresh={refresh} />
+      ),
+    }),
+    [isRefreshing, refresh]
   );
 
   return (
-    <ViewabilityTrackerFlatlist
-      keyExtractor={keyExtractor}
-      getItemLayout={getItemLayout}
-      onRefresh={refresh}
-      refreshing={isRefreshing}
-      ref={listRef}
-      windowSize={3}
-      initialNumToRender={1}
-      renderItem={renderItem}
-      pagingEnabled
-      onEndReached={fetchMore}
-      data={data}
-      ListFooterComponent={ListFooterComponent}
-      showsVerticalScrollIndicator={false}
-      style={tw.style("dark:bg-gray-900 bg-gray-100")}
-      renderScrollComponent={renderScrollComponent}
-      // TODO: contentOffset open issue on iOS - look into it
-      // https://github.com/facebook/react-native/issues/33221
-      {...Platform.select({
-        ios: { initialScrollIndex },
-        default: {
-          contentOffset: {
-            y: initialScrollIndex * itemHeight,
-            x: 0,
-          },
-        },
-      })}
-    />
+    <>
+      <RecyclerListView
+        layoutProvider={_layoutProvider}
+        dataProvider={dataProvider}
+        rowRenderer={_rowRenderer}
+        ref={listRef}
+        initialRenderIndex={initialScrollIndex}
+        style={tw.style("dark:bg-gray-900 bg-gray-100")}
+        renderAheadOffset={screenHeight}
+        onEndReached={fetchMore}
+        onEndReachedThreshold={screenHeight}
+        scrollViewProps={scrollViewProps}
+      />
+    </>
   );
 };
 
 const FeedItem = ({
   nft,
   bottomBarHeight = 0,
-  headerHeight = 0,
+  itemHeight,
 }: {
   nft: NFT;
   bottomBarHeight: number;
-  headerHeight: number;
+  itemHeight: number;
 }) => {
   const feedItemStyle = {
-    height: screenHeight - headerHeight,
+    height: itemHeight,
     width: screenWidth,
   };
 
@@ -146,7 +152,7 @@ const FeedItem = ({
 
   mediaHeight = Math.min(mediaHeight, mediaContainerHeight);
 
-  const descriptionHeight = screenHeight - mediaContainerHeight - headerHeight;
+  const descriptionHeight = feedItemStyle.height - mediaContainerHeight;
 
   return (
     <View style={feedItemStyle}>

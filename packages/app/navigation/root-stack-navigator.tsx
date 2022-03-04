@@ -46,6 +46,7 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="profileSwipeList"
           component={ProfileSwipeListScreen}
+          options={{ headerShown: false }}
         />
         <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen
