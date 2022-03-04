@@ -97,6 +97,7 @@ export const SwipeList = ({
       data={data}
       ListFooterComponent={ListFooterComponent}
       showsVerticalScrollIndicator={false}
+      style={tw.style("dark:bg-gray-900 bg-gray-100")}
       // TODO: contentOffset open issue on iOS - look into it
       // https://github.com/facebook/react-native/issues/33221
       {...Platform.select({
