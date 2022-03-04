@@ -7,6 +7,7 @@ import { useReport } from "app/hooks/use-report";
 import { useUser } from "app/hooks/use-user";
 import { track } from "app/lib/analytics";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
+import { SHOWTIME_CONTRACTS } from "app/lib/constants";
 import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
 import { findListingItemByOwner, isUserAnOwner } from "app/utilities";
@@ -47,7 +48,9 @@ function NFTDropdown({ nft }: Props) {
     user?.data.profile.wallet_addresses_v2,
     nft?.multiple_owners_list
   );
-  // TODO has ownership + is correct contract marketplace
+
+  // Prevent web3 actions on incorrect contracts caused by environment syncs
+  const onUsableAddress = SHOWTIME_CONTRACTS.includes(nft?.contract_address);
 
   const tokenChainName = Object.keys(CHAIN_IDENTIFIERS).find(
     (key) => CHAIN_IDENTIFIERS[key] == nft?.chain_identifier
@@ -127,7 +130,7 @@ function NFTDropdown({ nft }: Props) {
           </DropdownMenuItem>
         )}
 
-        {hasOwnership && !hasMatchingListing && (
+        {hasOwnership && onUsableAddress && !hasMatchingListing && (
           <DropdownMenuItem
             onSelect={() => router.push(`/nft/${nft?.nft_id}/list`)}
             key="list"
@@ -138,7 +141,7 @@ function NFTDropdown({ nft }: Props) {
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
-        {hasOwnership && hasMatchingListing && (
+        {hasOwnership && onUsableAddress && hasMatchingListing && (
           <DropdownMenuItem
             onSelect={() => {}}
             key="unlist"

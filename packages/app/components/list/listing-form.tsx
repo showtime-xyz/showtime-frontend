@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
@@ -8,6 +8,7 @@ import { useListNFT, ListNFT, ListingValues } from "app/hooks/use-list-nft";
 import { useWeb3 } from "app/hooks/use-web3";
 import { CURRENCY_NAMES, LIST_CURRENCIES } from "app/lib/constants";
 import { yup } from "app/lib/yup";
+import { useRouter } from "app/navigation/use-router";
 import { NFT } from "app/types";
 import { findAddressInOwnerList } from "app/utilities";
 
@@ -20,10 +21,6 @@ import { tw } from "design-system/tailwind";
 type Props = {
   nft?: NFT;
 };
-
-/**
- * garantee each status has a mapped copy
- */
 
 type StatusMapping = Exclude<ListNFT["status"], "idle">;
 
@@ -58,10 +55,10 @@ const options: SelectOption[] = Object.entries(CURRENCY_NAMES).map(
 
 export const ListingForm = (props: Props) => {
   const nft = props.nft;
-  console.log("nft", nft);
-  const { listNFT, state, dispatch } = useListNFT();
-  const { web3 } = useWeb3();
+  const router = useRouter();
   const isDark = useIsDarkMode();
+  const { web3 } = useWeb3();
+  const { listNFT, state } = useListNFT();
   const { userAddress: address } = useCurrentUserAddress();
   const [currentCurrencyAddress, setCurrentCurrency] = useState<string>(
     LIST_CURRENCIES[defaultListingValues.currency]
@@ -73,11 +70,21 @@ export const ListingForm = (props: Props) => {
     address,
     nft?.multiple_owners_list
   );
+
   const ownedAmount = ownerListItem?.quantity || 1;
   const hideCopiesInput = ownedAmount === 1;
   const copiesHelperText = `1 by default, you own ${ownedAmount}`;
   const currencySymbol = CURRENCY_NAMES[currentCurrencyAddress];
   const isNotMagic = !web3;
+
+  useEffect(() => {
+    if (state.status === "listingSuccess") {
+      setTimeout(() => {
+        router.pop();
+        router.push(`/profile/${address}`);
+      }, 1000);
+    }
+  }, [state.status]);
 
   const createListValidationSchema = useMemo(
     () =>
@@ -98,28 +105,26 @@ export const ListingForm = (props: Props) => {
     reValidateMode: "onChange",
     defaultValues: defaultListingValues,
   });
+
   const isValidForm = formState.isValid && state.status === "idle";
+
+  const ctaCopy =
+    state.status === "idle"
+      ? `List for ${currentPrice} ${currencySymbol}`
+      : statusCopyMapping[state.status];
+
   const showSigningOption =
     (state.status === "listing" || state.status === "approvalRequesting") &&
     isNotMagic;
 
   const handleSubmitForm = async (values: ListingValues) => {
-    console.log("handle sub", values);
     const currencyAddress =
       values.currency === defaultCurrency
         ? LIST_CURRENCIES[defaultCurrency]
         : values.currency;
-    console.log("currencyAddress", currencyAddress);
     //@ts-ignore
     listNFT({ ...values, currency: currencyAddress, nftId: nft?.token_id });
   };
-
-  // currentCurrency is address
-  // we want the symbol
-  const ctaCopy =
-    state.status === "idle"
-      ? `List for ${currentPrice} ${currencySymbol}`
-      : statusCopyMapping[state.status];
 
   return (
     <View>

@@ -1,10 +1,9 @@
-import { useContext, useRef, useReducer, useState } from "react";
+import { useRef, useReducer } from "react";
 
 import { ethers } from "ethers";
 
 import minterAbi from "app/abi/ShowtimeMT.json";
 import marketplaceAbi from "app/abi/ShowtimeV1Market.json";
-import { AppContext } from "app/context/app-context";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useWeb3 } from "app/hooks/use-web3";
 import { useWalletConnect } from "app/lib/walletconnect";
@@ -20,12 +19,11 @@ export type ListNFT = {
     | "approvalRequesting"
     | "approvalError"
     | "approvalSuccess";
-  transaction?: string;
 };
 
 type ListNFTAction = {
-  type: ListNFT["status"];
-  transaction?: string;
+  type: "status";
+  status: ListNFT["status"];
 };
 
 export type ListingValues = {
@@ -37,43 +35,14 @@ export type ListingValues = {
 
 const initialState: ListNFT = {
   status: "idle",
-  transaction: undefined,
 };
 
 const listNFTReducer = (state: ListNFT, action: ListNFTAction): ListNFT => {
   switch (action.type) {
-    case "approvalRequesting":
+    case "status":
       return {
         ...state,
-        status: "approvalRequesting",
-        transaction: undefined,
-      };
-    case "approvalSuccess":
-      return {
-        ...state,
-        status: "approvalSuccess",
-        transaction: action.transaction,
-      };
-    case "approvalChecking":
-      return {
-        ...state,
-        status: "approvalChecking",
-      };
-    case "approvalError":
-      return { ...state, status: "approvalError" };
-    case "listing":
-      return {
-        ...state,
-        status: "listing",
-        transaction: undefined,
-      };
-    case "listingError":
-      return { ...state, status: "listingError" };
-    case "listingSuccess":
-      return {
-        ...state,
-        status: "listingSuccess",
-        transaction: action.transaction,
+        status: state.status,
       };
     default:
       return state;
@@ -81,12 +50,12 @@ const listNFTReducer = (state: ListNFT, action: ListNFTAction): ListNFT => {
 };
 
 export const useListNFT = () => {
-  const [state, dispatch] = useReducer(listNFTReducer, initialState);
-  const { web3 } = useWeb3();
-  const connector = useWalletConnect();
-  const context = useContext(AppContext);
   const biconomyRef = useRef<any>();
+  const connector = useWalletConnect();
+  const { web3 } = useWeb3();
   const { userAddress: address } = useCurrentUserAddress();
+  const [state, dispatch] = useReducer(listNFTReducer, initialState);
+
   const MARKET_PLACE_ADDRESS = process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT;
   const MINTING_ADDRESS = process.env.NEXT_PUBLIC_MINTING_CONTRACT;
 
@@ -104,12 +73,13 @@ export const useListNFT = () => {
   };
 
   /**
-   * Before an NFT owner can list they must grant us approval
+   * Check and request listing approval
    */
   const requestingListingApproval = async () => {
     return await new Promise(async (resolve, reject) => {
       try {
-        dispatch({ type: "approvalChecking" });
+        dispatch({ type: "status", status: "approvalChecking" });
+
         const { signer, provider } = await biconomy();
 
         const mintContract = new ethers.Contract(
@@ -124,17 +94,20 @@ export const useListNFT = () => {
           MARKET_PLACE_ADDRESS
         );
 
-        console.log("isApprovedToList", isApprovedToList);
         if (isApprovedToList) {
-          dispatch({ type: "approvalSuccess" });
+          dispatch({ type: "status", status: "approvalSuccess" });
+
           resolve(true);
         } else {
-          dispatch({ type: "approvalRequesting" });
-          const { data } =
+          dispatch({ type: "status", status: "approvalRequesting" });
+
+          const populatedTransaction =
             await mintContract.populateTransaction.setApprovalForAll(
               MARKET_PLACE_ADDRESS,
               true
             );
+
+          const data = populatedTransaction.data;
 
           const transaction = await provider.send("eth_sendTransaction", [
             {
@@ -146,13 +119,15 @@ export const useListNFT = () => {
           ]);
 
           provider.once(transaction, () => {
-            dispatch({ type: "approvalSuccess" });
+            dispatch({ type: "status", status: "approvalSuccess" });
+
             resolve(true);
           });
         }
       } catch (error) {
-        dispatch({ type: "approvalError" });
-        console.log("requestingListingApproval nft error", error);
+        dispatch({ type: "status", status: "approvalError" });
+
+        console.log("Error: Approval Request", error);
         reject(false);
       }
     });
@@ -161,7 +136,8 @@ export const useListNFT = () => {
   const listingToMarketPlace = async (listingValues: ListingValues) => {
     return await new Promise(async (resolve, reject) => {
       try {
-        dispatch({ type: "listing" });
+        dispatch({ type: "status", status: "listing" });
+
         const { signer, provider } = await biconomy();
         const marketContract = new ethers.Contract(
           //@ts-ignore
@@ -170,12 +146,18 @@ export const useListNFT = () => {
           signer
         );
 
-        const { data } = await marketContract.populateTransaction.createSale(
-          listingValues.nftId,
-          listingValues.editions,
-          parseBalance(listingValues.price.toString(), listingValues.currency),
-          listingValues.currency
-        );
+        const populatedTransaction =
+          await marketContract.populateTransaction.createSale(
+            listingValues.nftId,
+            listingValues.editions,
+            parseBalance(
+              listingValues.price.toString(),
+              listingValues.currency
+            ),
+            listingValues.currency
+          );
+
+        const data = populatedTransaction.data;
 
         const transaction = await provider.send("eth_sendTransaction", [
           {
@@ -187,12 +169,14 @@ export const useListNFT = () => {
         ]);
 
         provider.once(transaction, () => {
-          dispatch({ type: "listingSuccess" });
+          dispatch({ type: "status", status: "listingSuccess" });
+
           resolve(true);
         });
       } catch (error) {
-        dispatch({ type: "listingError" });
-        console.log("listingToMarketPlace nft error", error);
+        dispatch({ type: "status", status: "listingError" });
+
+        console.log("Error: Listing Request", error);
         reject(false);
       }
     });
@@ -203,7 +187,9 @@ export const useListNFT = () => {
       await requestingListingApproval();
       await listingToMarketPlace(listingValues);
     } catch (error) {
-      console.log("listing nft error", error);
+      dispatch({ type: "status", status: "listingError" });
+
+      console.log("Error: Listing Flow", error);
     }
   };
 
