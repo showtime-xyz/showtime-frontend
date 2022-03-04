@@ -8,7 +8,7 @@ const DEFAULT_HEIGHT = "max-h-280px";
 
 // tailwind classes
 const CONTAINER_TW_BASE =
-  "z-99999 items-center absolute ios:absolute android:absolute top-0 right-0 bottom-0 left-0";
+  "items-center absolute ios:absolute android:absolute top-0 right-0 bottom-0 left-0";
 const CONTAINER_TW = Platform.select({
   web: `${CONTAINER_TW_BASE} justify-center`,
   android: `${CONTAINER_TW_BASE} justify-end`,

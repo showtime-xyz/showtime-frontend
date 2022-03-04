@@ -18,9 +18,10 @@ const getProfileImageUrl = (imgUrl: string) => {
 type Props = {
   nft?: NFT;
   options?: boolean;
+  toggleCreatorName?: boolean;
 };
 
-export function Creator({ nft }: Props) {
+export function Creator({ nft, toggleCreatorName }: Props) {
   const router = useRouter();
 
   if (!nft) return null;
@@ -45,7 +46,7 @@ export function Creator({ nft }: Props) {
             nft.creator_username ? "mb-1" : ""
           } text-gray-600 dark:text-gray-400 font-semibold`}
         >
-          {nft.creator_name}
+          {toggleCreatorName ? "Creator" : nft.creator_name}
         </Text>
         {nft.creator_username && (
           <View tw="h-[12px] flex flex-row items-center">

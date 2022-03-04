@@ -45,6 +45,7 @@ export type NFT = {
   collection_img_url?: string;
   contract_is_creator: number;
   multiple_owners_list: Array<OwnersListOwner>;
+  listing: Listing;
 };
 
 export type Creator = {
@@ -147,4 +148,29 @@ export interface OwnersListOwner {
   verified: boolean;
   address: string;
   wallet_address: string;
+}
+
+export interface Listing {
+  total_edition_quantity: number;
+  quantity: number;
+  min_price: number;
+  currency: string;
+  sale_identifier: number;
+  profile_id: number;
+  username: string;
+  name: string;
+  verified: number;
+  address: string;
+  img_url: string;
+  royalty_percentage: number;
+  listing_created: string;
+  sale_contract: string;
+  all_sellers: AllSellers[];
+}
+
+export interface AllSellers {
+  profile_id: number;
+  sale_contract: string;
+  sale_identifier: number;
+  quantity: number;
 }
