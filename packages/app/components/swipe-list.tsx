@@ -7,11 +7,14 @@ import { Blurhash } from "react-native-blurhash";
 
 import type { NFT } from "app/types";
 
-import { View, Text, Media, Skeleton } from "design-system";
 import { useIsDarkMode } from "design-system/hooks";
 import { Share } from "design-system/icon";
 import { Image } from "design-system/image";
+import { Media } from "design-system/media";
+import { Skeleton } from "design-system/skeleton";
 import { tw } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { handleShareNFT } from "../utilities";
 import { Collection } from "./feed/collection";
@@ -48,7 +51,7 @@ export const SwipeList = ({
     [bottomBarHeight, headerHeight]
   );
 
-  const keyExtractor = useCallback((_item, index) => index.toString(), []);
+  const keyExtractor = useCallback((_item) => _item.nft_id.toString(), []);
 
   const getItemLayout = useCallback(
     (_data, index) => {
