@@ -55,7 +55,7 @@ export const SwipeList = ({
   let dataProvider = useMemo(
     () =>
       new DataProvider((r1, r2) => {
-        return r1 !== r2;
+        return r1.nft_id !== r2.nft_id;
       }).cloneWithRows(data),
     [data]
   );
@@ -125,69 +125,71 @@ export const SwipeList = ({
   );
 };
 
-const FeedItem = ({
-  nft,
-  bottomBarHeight = 0,
-  itemHeight,
-}: {
-  nft: NFT;
-  bottomBarHeight: number;
-  itemHeight: number;
-}) => {
-  const feedItemStyle = {
-    height: itemHeight,
-    width: screenWidth,
-  };
+const FeedItem = React.memo(
+  ({
+    nft,
+    bottomBarHeight = 0,
+    itemHeight,
+  }: {
+    nft: NFT;
+    bottomBarHeight: number;
+    itemHeight: number;
+  }) => {
+    const feedItemStyle = {
+      height: itemHeight,
+      width: screenWidth,
+    };
 
-  let mediaHeight =
-    screenWidth /
-    (isNaN(Number(nft.token_aspect_ratio))
-      ? 1
-      : Number(nft.token_aspect_ratio));
+    let mediaHeight =
+      screenWidth /
+      (isNaN(Number(nft.token_aspect_ratio))
+        ? 1
+        : Number(nft.token_aspect_ratio));
 
-  const mediaContainerHeight = Math.min(
-    mediaHeight,
-    feedItemStyle.height * mediaMaxHeightRelativeToScreen
-  );
+    const mediaContainerHeight = Math.min(
+      mediaHeight,
+      feedItemStyle.height * mediaMaxHeightRelativeToScreen
+    );
 
-  mediaHeight = Math.min(mediaHeight, mediaContainerHeight);
+    mediaHeight = Math.min(mediaHeight, mediaContainerHeight);
 
-  const descriptionHeight = feedItemStyle.height - mediaContainerHeight;
+    const descriptionHeight = feedItemStyle.height - mediaContainerHeight;
 
-  return (
-    <View style={feedItemStyle}>
-      <View tw="absolute w-full h-full">
-        {nft.blurhash ? (
-          <Blurhash
-            blurhash={nft.blurhash}
-            decodeWidth={16}
-            decodeHeight={16}
-            decodeAsync={true}
-            style={tw.style("w-full h-full")}
+    return (
+      <View style={feedItemStyle}>
+        <View tw="absolute w-full h-full">
+          {nft.blurhash ? (
+            <Blurhash
+              blurhash={nft.blurhash}
+              decodeWidth={16}
+              decodeHeight={16}
+              decodeAsync={true}
+              style={tw.style("w-full h-full")}
+            />
+          ) : (
+            <Image
+              source={{ uri: nft.still_preview_url }}
+              style={tw.style("w-full h-full")}
+            />
+          )}
+        </View>
+        <View
+          tw={`w-full items-center justify-end bg-black h-[${mediaContainerHeight}px]`}
+        >
+          <Media
+            item={nft}
+            numColumns={1}
+            tw={`h-[${mediaHeight}px] w-[${screenWidth}px]`}
+            resizeMode="contain"
           />
-        ) : (
-          <Image
-            source={{ uri: nft.still_preview_url }}
-            style={tw.style("w-full h-full")}
-          />
-        )}
+        </View>
+        <View tw={`w-full h-[${descriptionHeight}px]`}>
+          <NFTDetails nft={nft} bottomBarHeight={bottomBarHeight} />
+        </View>
       </View>
-      <View
-        tw={`w-full items-center justify-end bg-black h-[${mediaContainerHeight}px]`}
-      >
-        <Media
-          item={nft}
-          numColumns={1}
-          tw={`h-[${mediaHeight}px] w-[${screenWidth}px]`}
-          resizeMode="contain"
-        />
-      </View>
-      <View tw={`w-full h-[${descriptionHeight}px]`}>
-        <NFTDetails nft={nft} bottomBarHeight={bottomBarHeight} />
-      </View>
-    </View>
-  );
-};
+    );
+  }
+);
 
 const NFTDetails = ({
   nft,
