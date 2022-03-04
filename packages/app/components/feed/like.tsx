@@ -5,7 +5,7 @@ import * as Haptics from "expo-haptics";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { NFT } from "app/types";
 
-import { LikeButton } from "design-system";
+import { LikeButton } from "design-system/like-button";
 
 function Like({ nft }: { nft?: NFT }) {
   if (!nft) return null;
