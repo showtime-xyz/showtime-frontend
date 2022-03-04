@@ -8,63 +8,71 @@ import { AppContext } from "app/context/app-context";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useWeb3 } from "app/hooks/use-web3";
 import { useWalletConnect } from "app/lib/walletconnect";
-import { getBiconomy } from "app/utilities";
+import { getBiconomy, parseBalance } from "app/utilities";
 
-type ListNFT = {
-  listingStatus: "idle" | "listing" | "listingError" | "listingSuccess";
-  approvalStatus:
+export type ListNFT = {
+  status:
     | "idle"
-    | "checkingApproval"
-    | "requestingApproval"
+    | "listing"
+    | "listingError"
+    | "listingSuccess"
+    | "approvalChecking"
+    | "approvalRequesting"
     | "approvalError"
     | "approvalSuccess";
   transaction?: string;
 };
 
 type ListNFTAction = {
-  type: ListNFT["listingStatus"] | ListNFT["approvalStatus"];
+  type: ListNFT["status"];
   transaction?: string;
 };
 
+export type ListingValues = {
+  editions: number;
+  currency: string;
+  price: number;
+  nftId: string;
+};
+
 const initialState: ListNFT = {
-  listingStatus: "idle",
-  approvalStatus: "idle",
+  status: "idle",
   transaction: undefined,
 };
 
 const listNFTReducer = (state: ListNFT, action: ListNFTAction): ListNFT => {
   switch (action.type) {
-    case "requestingApproval":
+    case "approvalRequesting":
       return {
         ...state,
-        approvalStatus: "requestingApproval",
+        status: "approvalRequesting",
         transaction: undefined,
       };
     case "approvalSuccess":
       return {
         ...state,
-        approvalStatus: "approvalSuccess",
+        status: "approvalSuccess",
         transaction: action.transaction,
       };
-    case "checkingApproval":
+    case "approvalChecking":
       return {
         ...state,
-        approvalStatus: "checkingApproval",
+        status: "approvalChecking",
       };
     case "approvalError":
-      return { ...state, approvalStatus: "approvalError" };
+      return { ...state, status: "approvalError" };
     case "listing":
       return {
         ...state,
-        listingStatus: "listing",
+        status: "listing",
         transaction: undefined,
       };
     case "listingError":
-      return { ...state, listingStatus: "listingError" };
+      return { ...state, status: "listingError" };
     case "listingSuccess":
       return {
         ...state,
-        listingStatus: "listingSuccess",
+        status: "listingSuccess",
         transaction: action.transaction,
       };
     default:
@@ -79,6 +87,8 @@ export const useListNFT = () => {
   const context = useContext(AppContext);
   const biconomyRef = useRef<any>();
   const { userAddress: address } = useCurrentUserAddress();
+  const MARKET_PLACE_ADDRESS = process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT;
+  const MINTING_ADDRESS = process.env.NEXT_PUBLIC_MINTING_CONTRACT;
 
   const biconomy = async () => {
     const configureBiconomy = !biconomyRef.current;
@@ -97,88 +107,101 @@ export const useListNFT = () => {
    * Before an NFT owner can list they must grant us approval
    */
   const requestingListingApproval = async () => {
-    try {
-      dispatch({ type: "checkingApproval" });
-      const { signer, provider } = await biconomy();
-      const MARKET_PLACE_ADDRESS = process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT;
+    return await new Promise(async (resolve, reject) => {
+      try {
+        dispatch({ type: "approvalChecking" });
+        const { signer, provider } = await biconomy();
 
-      const mintContract = new ethers.Contract(
-        //@ts-ignore
-        process.env.NEXT_PUBLIC_MINTING_CONTRACT,
-        minterAbi,
-        signer
-      );
+        const mintContract = new ethers.Contract(
+          //@ts-ignore
+          MINTING_ADDRESS,
+          minterAbi,
+          signer
+        );
 
-      const isApprovedForAll = await mintContract.isApprovedForAll(
-        address,
-        MARKET_PLACE_ADDRESS
-      );
+        const isApprovedToList = await mintContract.isApprovedForAll(
+          address,
+          MARKET_PLACE_ADDRESS
+        );
 
-      console.log("isApprovedForAll", isApprovedForAll);
-      if (isApprovedForAll) {
-        // dispatch({ type: "approvalSuccess" });
-        // console.log("approvalSuccess");
-        const { data } =
-          await mintContract.populateTransaction.setApprovalForAll(
-            process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
-            false
-          );
+        console.log("isApprovedToList", isApprovedToList);
+        if (isApprovedToList) {
+          dispatch({ type: "approvalSuccess" });
+          resolve(true);
+        } else {
+          dispatch({ type: "approvalRequesting" });
+          const { data } =
+            await mintContract.populateTransaction.setApprovalForAll(
+              MARKET_PLACE_ADDRESS,
+              true
+            );
 
-        // TODO: Figure out how to handle unsigned request that don't error
-        // Show did not see the sig req
-        const transaction = await provider
-          .send("eth_sendTransaction", [
+          const transaction = await provider.send("eth_sendTransaction", [
             {
               data,
               from: address,
               to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
               signatureType: "EIP712_SIGN",
             },
-          ])
-          .catch((e) => console.log("hellop from e", e));
-        console.log("transaction is set to false", transaction);
-        provider.once(transaction, () => {
-          dispatch({ type: "approvalSuccess" });
-        });
-      } else {
-        dispatch({ type: "requestingApproval" });
-        const { data } =
-          await mintContract.populateTransaction.setApprovalForAll(
-            process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
-            true
-          );
+          ]);
+
+          provider.once(transaction, () => {
+            dispatch({ type: "approvalSuccess" });
+            resolve(true);
+          });
+        }
+      } catch (error) {
+        dispatch({ type: "approvalError" });
+        console.log("requestingListingApproval nft error", error);
+        reject(false);
+      }
+    });
+  };
+
+  const listingToMarketPlace = async (listingValues: ListingValues) => {
+    return await new Promise(async (resolve, reject) => {
+      try {
+        dispatch({ type: "listing" });
+        const { signer, provider } = await biconomy();
+        const marketContract = new ethers.Contract(
+          //@ts-ignore
+          MARKET_PLACE_ADDRESS,
+          marketplaceAbi,
+          signer
+        );
+
+        const { data } = await marketContract.populateTransaction.createSale(
+          listingValues.nftId,
+          listingValues.editions,
+          parseBalance(listingValues.price.toString(), listingValues.currency),
+          listingValues.currency
+        );
 
         const transaction = await provider.send("eth_sendTransaction", [
           {
             data,
             from: address,
-            to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
+            to: MARKET_PLACE_ADDRESS,
             signatureType: "EIP712_SIGN",
           },
         ]);
 
-        console.log("transaction setting it to true", transaction);
+        provider.once(transaction, () => {
+          dispatch({ type: "listingSuccess" });
+          resolve(true);
+        });
+      } catch (error) {
+        dispatch({ type: "listingError" });
+        console.log("listingToMarketPlace nft error", error);
+        reject(false);
       }
-    } catch (error) {
-      dispatch({ type: "approvalError" });
-      console.log("requestingListingApproval nft error", error);
-    }
+    });
   };
 
-  const listNFT = async () => {
+  const listNFT = async (listingValues: ListingValues) => {
     try {
-      console.log("requestingListingApproval", requestingListingApproval);
-      // // connecting to providers and contracts
-      // biconomyRef.current = await (await getBiconomy(connector, web3)).biconomy;
-      // const signer = biconomyRef.current.getSignerByAddress(address);
-      // const provider = biconomyRef.current.getEthersProvider();
       await requestingListingApproval();
-      // const marketContract = new ethers.Contract(
-      //   //@ts-ignore
-      //   process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
-      //   marketplaceAbi,
-      //   signer
-      // );
+      await listingToMarketPlace(listingValues);
     } catch (error) {
       console.log("listing nft error", error);
     }
@@ -189,23 +212,4 @@ export const useListNFT = () => {
     state,
     dispatch,
   };
-
-  //   const { data } = await mintContract.populateTransaction.setApprovalForAll(
-  //     process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
-  //     false
-  //   );
-
-  //   console.log("data", data);
-
-  //   const transaction = await provider.send("eth_sendTransaction", [
-  //     {
-  //       data,
-  //       from: address,
-  //       to: process.env.NEXT_PUBLIC_MINTING_CONTRACT,
-  //       signatureType: "EIP712_SIGN",
-  //     },
-  //   ]);
-
-  //   console.log("transaction setting it to false", transaction);
-  // }
 };

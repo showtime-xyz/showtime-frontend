@@ -1,10 +1,12 @@
 import * as React from "react";
 
 import { Biconomy } from "@biconomy/mexa";
+import { parseUnits } from "@ethersproject/units";
 import { ethers } from "ethers";
 import removeMd from "remove-markdown";
 
 import { BYPASS_EMAIL } from "app/lib/constants";
+import { LIST_CURRENCIES } from "app/lib/constants";
 import { magic, Magic } from "app/lib/magic";
 
 import { Profile, NFT, WalletAddressesV2, OwnersListOwner } from "./types";
@@ -233,4 +235,17 @@ export const findAddressInOwnerList = (
   return nftOwnerList?.find(
     (owner) => address?.toLowerCase() === owner.address?.toLowerCase()
   );
+};
+
+// All our supported currencies have 18 decimals, except for USDC which has 6
+export const parseBalance = (
+  balance: string,
+  currencyAddress: typeof LIST_CURRENCIES
+) => {
+  const isUSDC = currencyAddress === LIST_CURRENCIES?.USDC;
+  if (isUSDC) {
+    return parseUnits(balance, 6);
+  }
+
+  return parseUnits(balance, 18);
 };

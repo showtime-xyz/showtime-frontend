@@ -47,6 +47,7 @@ function NFTDropdown({ nft }: Props) {
     user?.data.profile.wallet_addresses_v2,
     nft?.multiple_owners_list
   );
+  // TODO has ownership + is correct contract marketplace
 
   const tokenChainName = Object.keys(CHAIN_IDENTIFIERS).find(
     (key) => CHAIN_IDENTIFIERS[key] == nft?.chain_identifier

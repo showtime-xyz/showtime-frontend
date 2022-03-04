@@ -4,7 +4,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
 
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { useListNFT } from "app/hooks/use-list-nft";
+import { useListNFT, ListNFT, ListingValues } from "app/hooks/use-list-nft";
+import { useWeb3 } from "app/hooks/use-web3";
 import { CURRENCY_NAMES, LIST_CURRENCIES } from "app/lib/constants";
 import { yup } from "app/lib/yup";
 import { NFT } from "app/types";
@@ -20,10 +21,32 @@ type Props = {
   nft?: NFT;
 };
 
+/**
+ * garantee each status has a mapped copy
+ */
+
+type StatusMapping = Exclude<ListNFT["status"], "idle">;
+
+type StatusCopyMapping = {
+  [Property in StatusMapping]: string;
+};
+
+const statusCopyMapping: StatusCopyMapping = {
+  approvalChecking: "Checking Listing Approval",
+  approvalRequesting: "Approval Needed",
+  approvalError: "Approval Error",
+  approvalSuccess: "Approval Success",
+  listing: "Listing!",
+  listingError: "Listing Error",
+  listingSuccess: "Listing Success",
+};
+
+const defaultCurrency = "WETH";
+
 const defaultListingValues = {
   price: 0,
-  copies: 1,
-  currency: CURRENCY_NAMES[LIST_CURRENCIES.WETH],
+  editions: 1,
+  currency: defaultCurrency,
 };
 
 const options: SelectOption[] = Object.entries(CURRENCY_NAMES).map(
@@ -35,16 +58,17 @@ const options: SelectOption[] = Object.entries(CURRENCY_NAMES).map(
 
 export const ListingForm = (props: Props) => {
   const nft = props.nft;
+  console.log("nft", nft);
   const { listNFT, state, dispatch } = useListNFT();
+  const { web3 } = useWeb3();
   const isDark = useIsDarkMode();
   const { userAddress: address } = useCurrentUserAddress();
-  const [currentCurrency, setCurrentCurrency] = useState<string>(
-    defaultListingValues.currency
+  const [currentCurrencyAddress, setCurrentCurrency] = useState<string>(
+    LIST_CURRENCIES[defaultListingValues.currency]
   );
   const [currentPrice, setCurrentPrice] = useState<number | string>(
     defaultListingValues.price
   );
-
   const ownerListItem = findAddressInOwnerList(
     address,
     nft?.multiple_owners_list
@@ -52,6 +76,8 @@ export const ListingForm = (props: Props) => {
   const ownedAmount = ownerListItem?.quantity || 1;
   const hideCopiesInput = ownedAmount === 1;
   const copiesHelperText = `1 by default, you own ${ownedAmount}`;
+  const currencySymbol = CURRENCY_NAMES[currentCurrencyAddress];
+  const isNotMagic = !web3;
 
   const createListValidationSchema = useMemo(
     () =>
@@ -60,8 +86,8 @@ export const ListingForm = (props: Props) => {
         currency: yup
           .string()
           .required()
-          .default(CURRENCY_NAMES[LIST_CURRENCIES.WETH]),
-        copies: yup.number().required().min(1).max(ownedAmount).default(1),
+          .default(LIST_CURRENCIES[defaultListingValues.currency]),
+        editions: yup.number().required().min(1).max(ownedAmount).default(1),
       }),
     []
   );
@@ -72,11 +98,28 @@ export const ListingForm = (props: Props) => {
     reValidateMode: "onChange",
     defaultValues: defaultListingValues,
   });
-  const isValid = formState.isValid;
+  const isValidForm = formState.isValid && state.status === "idle";
+  const showSigningOption =
+    (state.status === "listing" || state.status === "approvalRequesting") &&
+    isNotMagic;
 
-  const handleSubmitForm = async (values) => {
-    listNFT();
+  const handleSubmitForm = async (values: ListingValues) => {
+    console.log("handle sub", values);
+    const currencyAddress =
+      values.currency === defaultCurrency
+        ? LIST_CURRENCIES[defaultCurrency]
+        : values.currency;
+    console.log("currencyAddress", currencyAddress);
+    //@ts-ignore
+    listNFT({ ...values, currency: currencyAddress, nftId: nft?.token_id });
   };
+
+  // currentCurrency is address
+  // we want the symbol
+  const ctaCopy =
+    state.status === "idle"
+      ? `List for ${currentPrice} ${currencySymbol}`
+      : statusCopyMapping[state.status];
 
   return (
     <View>
@@ -84,9 +127,9 @@ export const ListingForm = (props: Props) => {
         <View tw="flex-row">
           <Controller
             control={control}
-            name="copies"
+            name="editions"
             render={({ field: { onChange, onBlur, value } }) => {
-              const errorText = formState.errors.copies?.message
+              const errorText = formState.errors.editions?.message
                 ? `Copies amount must be between 1 and ${ownedAmount}`
                 : undefined;
               return (
@@ -143,7 +186,7 @@ export const ListingForm = (props: Props) => {
           name="currency"
           render={(params) => {
             const {
-              field: { onChange, onBlur, value },
+              field: { onChange, value },
             } = params;
 
             return (
@@ -153,7 +196,7 @@ export const ListingForm = (props: Props) => {
                   tw="p-0 m-0"
                   select={{
                     options,
-                    placeholder: "ETH",
+                    placeholder: defaultCurrency,
                     value,
                     size: "regular",
                     onChange: (v) => {
@@ -173,8 +216,7 @@ export const ListingForm = (props: Props) => {
           onPress={handleSubmit(handleSubmitForm)}
           tw="h-12 rounded-full"
           variant="primary"
-          disabled={!isValid}
-          // dis form on sub
+          disabled={!isValidForm}
         >
           <Tag
             fill={
@@ -185,22 +227,20 @@ export const ListingForm = (props: Props) => {
             width={21}
             height={21}
           />
-          <Text tw="text-white dark:text-gray-900 text-sm pl-1">
-            List for {currentPrice} {CURRENCY_NAMES[currentCurrency]}
-          </Text>
+          <Text tw="text-white dark:text-gray-900 text-sm pl-1">{ctaCopy}</Text>
         </Button>
         <View tw="h-12 mt-4">
-          {/* {state.status === "minting" && !state.isMagic ? ( */}
-          <Button
-            onPress={handleSubmit(handleSubmitForm)}
-            tw="h-12"
-            variant="tertiary"
-          >
-            <Text tw="text-gray-900 dark:text-white text-sm">
-              Didn't receive the signature request yet?
-            </Text>
-          </Button>
-          {/* ) : null} */}
+          {showSigningOption ? (
+            <Button
+              onPress={handleSubmit(handleSubmitForm)}
+              tw="h-12"
+              variant="tertiary"
+            >
+              <Text tw="text-gray-900 dark:text-white text-sm">
+                Didn't receive the signature request yet?
+              </Text>
+            </Button>
+          ) : null}
         </View>
       </View>
     </View>
