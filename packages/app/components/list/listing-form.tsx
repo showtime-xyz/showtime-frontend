@@ -29,13 +29,13 @@ type StatusCopyMapping = {
 };
 
 const statusCopyMapping: StatusCopyMapping = {
-  approvalChecking: "Checking Listing Approval",
-  approvalRequesting: "Approval Needed",
-  approvalError: "Approval Error",
-  approvalSuccess: "Approval Success",
-  listing: "Listing!",
-  listingError: "Listing Error",
-  listingSuccess: "Listing Success",
+  approvalChecking: "Checking listing access",
+  approvalRequesting: "Requesting listing access",
+  approvalError: "Issue granting listing access",
+  approvalSuccess: "Approved for listing",
+  listing: "Listing your NFT",
+  listingError: "Issue listing your NFT",
+  listingSuccess: "Successfully listed your NFT",
 };
 
 const defaultCurrency = "WETH";

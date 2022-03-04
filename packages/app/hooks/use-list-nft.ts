@@ -42,7 +42,7 @@ const listNFTReducer = (state: ListNFT, action: ListNFTAction): ListNFT => {
     case "status":
       return {
         ...state,
-        status: state.status,
+        status: action.status,
       };
     default:
       return state;
