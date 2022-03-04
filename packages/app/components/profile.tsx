@@ -8,6 +8,7 @@ import {
 } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
+import { useNavigation } from "@react-navigation/native";
 import reactStringReplace from "react-string-replace";
 
 import { ProfileDropdown } from "app/components/profile-dropdown";
@@ -182,8 +183,7 @@ const TabList = ({
   const keyExtractor = useCallback((item) => {
     return item.nft_id;
   }, []);
-
-  const [initialScrollIndex, setInitialScrollIndex] = useState(null);
+  const navigation = useNavigation();
 
   const [filter, dispatch] = useReducer(
     (state: any, action: any) => {
@@ -221,7 +221,17 @@ const TabList = ({
 
   const renderItem = useCallback(
     ({ item, index }) => (
-      <Pressable onPress={() => setInitialScrollIndex(index)}>
+      <Pressable
+        onPress={() =>
+          navigation.navigate("profileSwipeList", {
+            initialScrollIndex: index,
+            listId: list.id,
+            profileId,
+            collectionId: filter.collectionId,
+            sortId: filter.sortId,
+          })
+        }
+      >
         <Media item={item} numColumns={3} />
       </Pressable>
     ),
@@ -296,17 +306,6 @@ const TabList = ({
         alwaysBounceVertical={false}
         ListFooterComponent={ListFooterComponent}
         style={listStyle}
-      />
-
-      <SwipeListModal
-        data={data}
-        fetchMore={fetchMore}
-        isRefreshing={isRefreshing}
-        refresh={refresh}
-        isLoadingMore={isLoadingMore}
-        initialScrollIndex={initialScrollIndex}
-        visible={typeof initialScrollIndex === "number"}
-        hide={() => setInitialScrollIndex(null)}
       />
     </View>
   );

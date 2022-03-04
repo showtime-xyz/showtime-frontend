@@ -15,6 +15,7 @@ import { TransferNftScreen } from "app/screens/transfer-nft";
 
 import { useIsDarkMode } from "design-system/hooks";
 
+import { ProfileSwipeListScreen } from "../screens/swipe-list-screens/profile-swipe-list";
 import { NextTabNavigator } from "./next-tab-navigator";
 
 const Stack = createNativeStackNavigator();
@@ -41,6 +42,10 @@ export function RootStackNavigator() {
           name="profile"
           component={ProfileScreen}
           getId={({ params }) => params?.walletAddress}
+        />
+        <Stack.Screen
+          name="profileSwipeList"
+          component={ProfileSwipeListScreen}
         />
         <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen

@@ -2,6 +2,7 @@ import { Suspense, useCallback, useMemo, useState } from "react";
 import { Dimensions, Platform } from "react-native";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useNavigation } from "@react-navigation/native";
 
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
@@ -21,8 +22,6 @@ import {
 import { cardSize } from "design-system/creator-preview";
 import { useIsDarkMode } from "design-system/hooks";
 import { tw } from "design-system/tailwind";
-
-import { SwipeListModal } from "./swipe-list-modal";
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
   const tabBarHeight = useBottomTabBarHeight();
@@ -216,6 +215,7 @@ const NFTSList = ({
   days: number;
   SelectionControl: any;
 }) => {
+  const navigation = useNavigation();
   const { data, isLoadingMore, isLoading, isRefreshing, refresh, fetchMore } =
     useTrendingNFTS({
       days,
@@ -224,11 +224,17 @@ const NFTSList = ({
   const keyExtractor = useCallback((item) => {
     return item.nft_id.toString();
   }, []);
-  const [initialScrollIndex, setInitialScrollIndex] = useState(null);
 
   const renderItem = useCallback(
     ({ item, index }) => (
-      <Pressable onPress={() => setInitialScrollIndex(index)}>
+      <Pressable
+        onPress={() =>
+          navigation.navigate("trendingNFTsSwipeList", {
+            days,
+            initialScrollIndex: index,
+          })
+        }
+      >
         <Media item={item} numColumns={3} />
       </Pressable>
     ),
@@ -284,17 +290,6 @@ const NFTSList = ({
         alwaysBounceVertical={false}
         ListFooterComponent={ListFooterComponent}
         style={useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), [])}
-      />
-
-      <SwipeListModal
-        data={data}
-        fetchMore={fetchMore}
-        isRefreshing={isRefreshing}
-        refresh={refresh}
-        isLoadingMore={isLoadingMore}
-        initialScrollIndex={initialScrollIndex}
-        visible={typeof initialScrollIndex === "number"}
-        hide={() => setInitialScrollIndex(null)}
       />
     </View>
   );

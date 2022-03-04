@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
 import { Dimensions, Pressable } from "react-native";
 
+import { useNavigation } from "@react-navigation/native";
+
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
-import { SwipeListModal } from "app/components/swipe-list-modal";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { formatAddressShort } from "app/lib/utilities";
 import { Link } from "app/navigation/link";
@@ -29,9 +30,8 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
     () => isFollowing(creatorId),
     [creatorId, isFollowing]
   );
-  const [initialScrollIndex, setInitialScrollIndex] = useState<
-    number | undefined
-  >(undefined);
+
+  const navigation = useNavigation();
 
   return (
     <View
@@ -87,20 +87,19 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
       <View tw="flex-row justify-center mt-4 mx-[-1px]">
         {props.creator.top_items.slice(0, 3).map((item, idx) => {
           return (
-            <Pressable onPress={() => setInitialScrollIndex(idx)}>
+            <Pressable
+              onPress={() =>
+                navigation.navigate("trendingCreatorSwipeList", {
+                  initialScrollIndex: idx,
+                  data: props.creator.top_items,
+                })
+              }
+            >
               <Media key={item.nft_id} item={item} numColumns={3} />
             </Pressable>
           );
         })}
       </View>
-
-      <SwipeListModal
-        data={props.creator.top_items}
-        fetchMore={() => {}}
-        initialScrollIndex={initialScrollIndex}
-        visible={typeof initialScrollIndex === "number"}
-        hide={() => setInitialScrollIndex(undefined)}
-      />
     </View>
   );
 });
