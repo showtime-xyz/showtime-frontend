@@ -1,5 +1,3 @@
-import { Platform } from "react-native";
-
 import dynamic from "next/dynamic";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -25,11 +23,7 @@ function TrendingNavigator() {
       // @ts-ignore
       screenOptions={screenOptions({ safeAreaTop, isDark })}
     >
-      <TrendingStack.Screen
-        name="trending"
-        component={TrendingScreen}
-        options={{ headerShown: false }}
-      />
+      <TrendingStack.Screen name="trending" component={TrendingScreen} />
     </TrendingStack.Navigator>
   );
 }

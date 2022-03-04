@@ -46,14 +46,32 @@ import { VerificationBadge } from "design-system/verification-badge";
 
 import { getProfileImage, getProfileName, getSortFields } from "../utilities";
 import { FollowersList, FollowingList } from "./following-user-list";
+import { SwipeListModal } from "./swipe-list-modal";
 
 const COVER_IMAGE_HEIGHT = 104;
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
+  const colorMode = useColorScheme();
+  const { width } = useWindowDimensions();
+  const squareSize = width / 3;
   if (isLoading) {
     return (
-      <View tw={`h-16 items-center justify-center mt-6 px-3`}>
-        <Spinner size="small" />
+      <View tw={`flex-row`}>
+        <Skeleton
+          colorMode={colorMode}
+          height={squareSize}
+          width={squareSize}
+        />
+        <Skeleton
+          colorMode={colorMode}
+          height={squareSize}
+          width={squareSize}
+        />
+        <Skeleton
+          colorMode={colorMode}
+          height={squareSize}
+          width={squareSize}
+        />
       </View>
     );
   }
@@ -165,6 +183,8 @@ const TabList = ({
     return item.nft_id;
   }, []);
 
+  const [initialScrollIndex, setInitialScrollIndex] = useState(null);
+
   const [filter, dispatch] = useReducer(
     (state: any, action: any) => {
       switch (action.type) {
@@ -200,7 +220,11 @@ const TabList = ({
   );
 
   const renderItem = useCallback(
-    ({ item }) => <Media item={item} numColumns={3} />,
+    ({ item, index }) => (
+      <Pressable onPress={() => setInitialScrollIndex(index)}>
+        <Media item={item} numColumns={3} />
+      </Pressable>
+    ),
     []
   );
 
@@ -251,6 +275,8 @@ const TabList = ({
     ]
   );
 
+  const listStyle = useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), []);
+
   return (
     <View tw="flex-1">
       <Tabs.FlatList
@@ -269,7 +295,18 @@ const TabList = ({
         initialNumToRender={9}
         alwaysBounceVertical={false}
         ListFooterComponent={ListFooterComponent}
-        style={useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), [])}
+        style={listStyle}
+      />
+
+      <SwipeListModal
+        data={data.filter((d) => d)}
+        fetchMore={fetchMore}
+        isRefreshing={isRefreshing}
+        refresh={refresh}
+        isLoadingMore={isLoadingMore}
+        initialScrollIndex={initialScrollIndex}
+        visible={typeof initialScrollIndex === "number"}
+        hide={() => setInitialScrollIndex(null)}
       />
     </View>
   );
