@@ -223,16 +223,27 @@ export const ListingForm = (props: Props) => {
           variant="primary"
           disabled={!isValidForm}
         >
-          <Tag
-            fill={
-              isDark
-                ? "none"
-                : (tw.style("text-white dark:text-gray-900").color as string)
-            }
-            width={21}
-            height={21}
-          />
-          <Text tw="text-white dark:text-gray-900 text-sm pl-1">{ctaCopy}</Text>
+          {state.status === "idle" ? (
+            <>
+              <Tag
+                fill={
+                  isDark
+                    ? "none"
+                    : (tw.style("text-white dark:text-gray-900")
+                        .color as string)
+                }
+                width={21}
+                height={21}
+              />
+              <Text tw="text-white dark:text-gray-900 text-sm pl-1">
+                {ctaCopy}
+              </Text>
+            </>
+          ) : (
+            <Text tw="text-white dark:text-gray-900 text-sm pl-1">
+              {ctaCopy}
+            </Text>
+          )}
         </Button>
         <View tw="h-12 mt-4">
           {showSigningOption ? (
