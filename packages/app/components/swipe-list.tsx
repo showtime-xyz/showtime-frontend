@@ -51,7 +51,7 @@ export const SwipeList = ({
     [bottomBarHeight, headerHeight]
   );
 
-  const keyExtractor = useCallback((_item) => _item.nft_id.toString(), []);
+  const keyExtractor = useCallback((_item, index) => index.toString(), []);
 
   const getItemLayout = useCallback(
     (_data, index) => {
