@@ -1,7 +1,6 @@
 import React, { useCallback, useRef } from "react";
-import { Dimensions, FlatList, Pressable } from "react-native";
+import { Dimensions, FlatList, Pressable, StatusBar } from "react-native";
 
-import { useHeaderHeight } from "@react-navigation/elements";
 import { useScrollToTop } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
 import { Blurhash } from "react-native-blurhash";
@@ -32,7 +31,7 @@ export const SwipeList = ({
   initialScrollIndex,
   isLoadingMore,
   bottomBarHeight = 0,
-  headerHeight = 0,
+  headerHeight = StatusBar.currentHeight,
 }: any) => {
   const listRef = useRef<FlatList>(null);
 
