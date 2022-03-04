@@ -31,7 +31,7 @@ export const SwipeList = ({
   fetchMore,
   isRefreshing,
   refresh,
-  initialScrollIndex,
+  initialScrollIndex = 0,
   isLoadingMore,
   bottomBarHeight = 0,
   headerHeight = StatusBar.currentHeight,
@@ -53,15 +53,17 @@ export const SwipeList = ({
 
   const keyExtractor = useCallback((_item, index) => index.toString(), []);
 
+  const itemHeight = screenHeight - headerHeight;
+
   const getItemLayout = useCallback(
     (_data, index) => {
       return {
-        length: screenHeight - headerHeight,
-        offset: (screenHeight - headerHeight) * index,
+        length: itemHeight,
+        offset: itemHeight * index,
         index,
       };
     },
-    [headerHeight]
+    [itemHeight]
   );
 
   const ListFooterComponent = useCallback(
@@ -89,7 +91,10 @@ export const SwipeList = ({
       data={data}
       ListFooterComponent={ListFooterComponent}
       showsVerticalScrollIndicator={false}
-      initialScrollIndex={initialScrollIndex}
+      contentOffset={{
+        y: initialScrollIndex * itemHeight,
+        x: 0,
+      }}
     />
   );
 };
