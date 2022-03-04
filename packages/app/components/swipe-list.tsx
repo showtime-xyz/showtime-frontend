@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { forwardRef, useCallback, useRef } from "react";
 import {
   Dimensions,
   FlatList,
@@ -10,10 +10,11 @@ import {
 import { useScrollToTop } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
 import { Blurhash } from "react-native-blurhash";
+import { ScrollView } from "react-native-gesture-handler";
 
 import type { NFT } from "app/types";
 
-import { useIsDarkMode } from "design-system/hooks";
+import { useColorScheme, useIsDarkMode } from "design-system/hooks";
 import { Share } from "design-system/icon";
 import { Image } from "design-system/image";
 import { Media } from "design-system/media";
@@ -72,14 +73,18 @@ export const SwipeList = ({
     [itemHeight]
   );
 
-  const ListFooterComponent = useCallback(
-    () =>
-      isLoadingMore ? (
-        <View tw="w-full" sx={{ marginBottom: bottomBarHeight }}>
-          <Skeleton height={100} width={screenWidth} />
-        </View>
-      ) : null,
-    [isLoadingMore, bottomBarHeight, screenWidth]
+  const ListFooterComponent = useCallback(() => {
+    const colorMode = useColorScheme();
+    return isLoadingMore ? (
+      <View tw="w-full" sx={{ marginBottom: bottomBarHeight }}>
+        <Skeleton height={100} width={screenWidth} colorMode={colorMode} />
+      </View>
+    ) : null;
+  }, [isLoadingMore, bottomBarHeight, screenWidth]);
+
+  const renderScrollComponent = useCallback(
+    (props) => <ScrollView ref={listRef} {...props} />,
+    []
   );
 
   return (
@@ -98,6 +103,7 @@ export const SwipeList = ({
       ListFooterComponent={ListFooterComponent}
       showsVerticalScrollIndicator={false}
       style={tw.style("dark:bg-gray-900 bg-gray-100")}
+      renderScrollComponent={renderScrollComponent}
       // TODO: contentOffset open issue on iOS - look into it
       // https://github.com/facebook/react-native/issues/33221
       {...Platform.select({
