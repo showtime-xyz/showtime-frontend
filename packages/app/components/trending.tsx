@@ -287,7 +287,7 @@ const NFTSList = ({
       />
 
       <SwipeListModal
-        data={data.filter((d) => d)}
+        data={data}
         fetchMore={fetchMore}
         isRefreshing={isRefreshing}
         refresh={refresh}

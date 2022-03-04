@@ -115,7 +115,7 @@ export const SwipeListModal = ({
               </Pressable>
             </View>
             <SwipeList
-              data={data.filter((d) => d)}
+              data={data}
               fetchMore={fetchMore}
               isRefreshing={isRefreshing}
               refresh={refresh}
