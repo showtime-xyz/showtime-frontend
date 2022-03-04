@@ -1,5 +1,11 @@
 import React, { useCallback, useRef } from "react";
-import { Dimensions, FlatList, Pressable, StatusBar } from "react-native";
+import {
+  Dimensions,
+  FlatList,
+  Platform,
+  Pressable,
+  StatusBar,
+} from "react-native";
 
 import { useScrollToTop } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
@@ -51,7 +57,7 @@ export const SwipeList = ({
     [bottomBarHeight, headerHeight]
   );
 
-  const keyExtractor = useCallback((_item, index) => index.toString(), []);
+  const keyExtractor = useCallback((_item, index) => _item.nft_id, []);
 
   const itemHeight = screenHeight - headerHeight;
 
@@ -91,10 +97,17 @@ export const SwipeList = ({
       data={data}
       ListFooterComponent={ListFooterComponent}
       showsVerticalScrollIndicator={false}
-      contentOffset={{
-        y: initialScrollIndex * itemHeight,
-        x: 0,
-      }}
+      // TODO: contentOffset open issue on iOS - look into it
+      // https://github.com/facebook/react-native/issues/33221
+      {...Platform.select({
+        ios: { initialScrollIndex },
+        default: {
+          contentOffset: {
+            y: initialScrollIndex * itemHeight,
+            x: 0,
+          },
+        },
+      })}
     />
   );
 };
