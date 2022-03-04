@@ -15,7 +15,7 @@ export const SwipeListModal = ({
   hide,
 }: any) => {
   return (
-    <Modal visible={visible} animationType="slide">
+    <Modal visible={visible} transparent animationType="slide">
       <View
         style={{
           position: "absolute",

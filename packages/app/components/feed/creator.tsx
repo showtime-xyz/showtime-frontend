@@ -62,11 +62,13 @@ export function Creator({ nft }: Props) {
             >
               {formatAddressShort(nft.creator_address)}
             </Text>
-            <Text tw="text-xs text-gray-900 dark:text-white mt-1 font-semibold">
-              {formatDistanceToNowStrict(new Date(`${nft.token_created}Z`), {
-                addSuffix: true,
-              })}
-            </Text>
+            {nft.token_created ? (
+              <Text tw="text-xs text-gray-900 dark:text-white mt-1 font-semibold">
+                {formatDistanceToNowStrict(new Date(`${nft.token_created}`), {
+                  addSuffix: true,
+                })}
+              </Text>
+            ) : null}
           </View>
         )}
       </View>

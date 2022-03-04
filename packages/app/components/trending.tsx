@@ -16,10 +16,13 @@ import {
   CreatorPreview,
   SegmentedControl,
   Media,
+  Pressable,
 } from "design-system";
 import { cardSize } from "design-system/creator-preview";
 import { useIsDarkMode } from "design-system/hooks";
 import { tw } from "design-system/tailwind";
+
+import { SwipeListModal } from "./swipe-list-modal";
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
   const tabBarHeight = useBottomTabBarHeight();
@@ -221,9 +224,14 @@ const NFTSList = ({
   const keyExtractor = useCallback((item) => {
     return item.nft_id.toString();
   }, []);
+  const [initialScrollIndex, setInitialScrollIndex] = useState(null);
 
   const renderItem = useCallback(
-    ({ item }) => <Media item={item} numColumns={3} />,
+    ({ item, index }) => (
+      <Pressable onPress={() => setInitialScrollIndex(index)}>
+        <Media item={item} numColumns={3} />
+      </Pressable>
+    ),
     []
   );
 
@@ -276,6 +284,17 @@ const NFTSList = ({
         alwaysBounceVertical={false}
         ListFooterComponent={ListFooterComponent}
         style={useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), [])}
+      />
+
+      <SwipeListModal
+        data={data.filter((d) => d)}
+        fetchMore={fetchMore}
+        isRefreshing={isRefreshing}
+        refresh={refresh}
+        isLoadingMore={isLoadingMore}
+        initialScrollIndex={initialScrollIndex}
+        visible={typeof initialScrollIndex === "number"}
+        hide={() => setInitialScrollIndex(null)}
       />
     </View>
   );
