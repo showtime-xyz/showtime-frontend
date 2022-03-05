@@ -15,71 +15,27 @@ type VideoProps = {
 
 function Video({ tw, style, ...props }: VideoProps) {
   const videoRef = useRef<ExpoVideo>(null);
-  const { id, mounted } = useViewabilityMount();
-  const isItemInList = typeof id !== "undefined";
-  const [readyToPlay, setReadyToPlay] = useState(false);
+  // const [readyToPlay, setReadyToPlay] = useState(false);
 
-  useEffect(() => {
-    if (!mounted) {
-      setReadyToPlay(false);
-    }
-  }, [mounted]);
-
-  // if video is in nft view we play it
-  if (!isItemInList) {
-    return (
-      <ExpoVideo
-        ref={videoRef}
-        style={[style, tailwind.style(tw)]}
-        isMuted
-        isLooping
-        useNativeControls={true}
-        resizeMode="cover"
-        // shouldPlay={true}
-        source={props.source}
-        posterSource={props.posterSource}
-      />
-    );
-  }
+  useViewabilityMount({ videoRef, source: props.source });
 
   return (
     <>
       <View style={[style, tailwind.style(tw)]}>
-        {/* {__DEV__ ? (
-          <Text
-            style={{
-              position: "absolute",
-              fontSize: 24,
-              fontWeight: "900",
-              color: "green",
-              zIndex: 99,
-            }}
-          >
-            {mounted && readyToPlay ? "true " + id : "false " + id}
-          </Text>
-        ) : null} */}
-
-        {mounted ? (
-          <ExpoVideo
-            ref={videoRef}
-            style={StyleSheet.absoluteFill}
-            isMuted
-            useNativeControls={true}
-            resizeMode="cover"
-            // shouldPlay
-            source={props.source}
-            isLooping
-            onReadyForDisplay={() => setReadyToPlay(true)}
-          />
-        ) : null}
-
-        {!readyToPlay && props.posterSource ? (
+        <ExpoVideo
+          ref={videoRef}
+          style={StyleSheet.absoluteFill}
+          useNativeControls={true}
+          resizeMode="cover"
+          // onReadyForDisplay={() => setReadyToPlay(true)}
+        />
+        {/* {!readyToPlay && props.posterSource ? (
           <FastImage
             //@ts-ignore
             source={props.posterSource}
             style={StyleSheet.absoluteFill}
           />
-        ) : null}
+        ) : null} */}
       </View>
     </>
   );
