@@ -33,9 +33,9 @@ function Video({ tw, style, ...props }: VideoProps) {
         style={[style, tailwind.style(tw)]}
         isMuted
         isLooping
-        useNativeControls={false}
+        useNativeControls={true}
         resizeMode="cover"
-        shouldPlay={true}
+        // shouldPlay={true}
         source={props.source}
         posterSource={props.posterSource}
       />
@@ -64,9 +64,9 @@ function Video({ tw, style, ...props }: VideoProps) {
             ref={videoRef}
             style={StyleSheet.absoluteFill}
             isMuted
-            useNativeControls={false}
+            useNativeControls={true}
             resizeMode="cover"
-            shouldPlay
+            // shouldPlay
             source={props.source}
             isLooping
             onReadyForDisplay={() => setReadyToPlay(true)}

@@ -1,28 +1,17 @@
 import React, { useCallback, useMemo, useRef } from "react";
-import {
-  Dimensions,
-  FlatList,
-  Pressable,
-  RefreshControl,
-  StatusBar,
-} from "react-native";
+import { Dimensions, FlatList, Pressable, RefreshControl } from "react-native";
 
 import { useScrollToTop } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
 import { Blurhash } from "react-native-blurhash";
-import {
-  RecyclerListView,
-  DataProvider,
-  LayoutProvider,
-} from "recyclerlistview";
+import { DataProvider, LayoutProvider } from "recyclerlistview";
 
 import type { NFT } from "app/types";
 
-import { useColorScheme, useIsDarkMode } from "design-system/hooks";
+import { useIsDarkMode } from "design-system/hooks";
 import { Share } from "design-system/icon";
 import { Image } from "design-system/image";
 import { Media } from "design-system/media";
-import { Skeleton } from "design-system/skeleton";
 import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
@@ -32,6 +21,7 @@ import { Collection } from "./feed/collection";
 import { Creator } from "./feed/creator";
 import { Like } from "./feed/like";
 import { NFTDropdown } from "./nft-dropdown";
+import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 const mediaMaxHeightRelativeToScreen = 0.6;
@@ -108,20 +98,18 @@ export const SwipeList = ({
   );
 
   return (
-    <>
-      <RecyclerListView
-        layoutProvider={_layoutProvider}
-        dataProvider={dataProvider}
-        rowRenderer={_rowRenderer}
-        ref={listRef}
-        initialRenderIndex={initialScrollIndex}
-        style={tw.style("dark:bg-gray-900 bg-gray-100")}
-        renderAheadOffset={screenHeight}
-        onEndReached={fetchMore}
-        onEndReachedThreshold={screenHeight}
-        scrollViewProps={scrollViewProps}
-      />
-    </>
+    <ViewabilityTrackerRecyclerList
+      layoutProvider={_layoutProvider}
+      dataProvider={dataProvider}
+      rowRenderer={_rowRenderer}
+      ref={listRef}
+      initialRenderIndex={initialScrollIndex}
+      style={tw.style("dark:bg-gray-900 bg-gray-100")}
+      renderAheadOffset={screenHeight}
+      onEndReached={fetchMore}
+      onEndReachedThreshold={screenHeight}
+      scrollViewProps={scrollViewProps}
+    />
   );
 };
 
