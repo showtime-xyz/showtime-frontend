@@ -10,6 +10,8 @@ import {
 
 import { useIsTabFocused } from "design-system/tabs/tablib";
 
+import { useVideoConfig } from "../context/video-config-context";
+
 export const useViewabilityMount = ({
   videoRef,
   source,
@@ -21,14 +23,15 @@ export const useViewabilityMount = ({
   const context = useContext(ViewabilityItemsContext);
   const isItemInList = typeof id !== "undefined";
   const loaded = useRef(false);
+  const videoConfig = useVideoConfig();
   let isListFocused = useIsTabFocused();
 
   const mount = () => {
     if (!loaded.current) {
       videoRef.current?.loadAsync(source, {
         shouldPlay: true,
-        isMuted: true,
         isLooping: true,
+        isMuted: videoConfig?.isMuted,
       });
       if (__DEV__) console.log("📽 : loading ", id);
     }

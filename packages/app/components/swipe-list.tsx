@@ -16,6 +16,7 @@ import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
+import { VideoConfigContext } from "../context/video-config-context";
 import { handleShareNFT } from "../utilities";
 import { Collection } from "./feed/collection";
 import { Creator } from "./feed/creator";
@@ -97,19 +98,29 @@ export const SwipeList = ({
     [isRefreshing, refresh]
   );
 
+  const videoConfig = useMemo(
+    () => ({
+      isMuted: false,
+      useNativeControls: true,
+    }),
+    []
+  );
+
   return (
-    <ViewabilityTrackerRecyclerList
-      layoutProvider={_layoutProvider}
-      dataProvider={dataProvider}
-      rowRenderer={_rowRenderer}
-      ref={listRef}
-      initialRenderIndex={initialScrollIndex}
-      style={tw.style("dark:bg-gray-900 bg-gray-100")}
-      renderAheadOffset={screenHeight}
-      onEndReached={fetchMore}
-      onEndReachedThreshold={screenHeight}
-      scrollViewProps={scrollViewProps}
-    />
+    <VideoConfigContext.Provider value={videoConfig}>
+      <ViewabilityTrackerRecyclerList
+        layoutProvider={_layoutProvider}
+        dataProvider={dataProvider}
+        rowRenderer={_rowRenderer}
+        ref={listRef}
+        initialRenderIndex={initialScrollIndex}
+        style={tw.style("dark:bg-gray-900 bg-gray-100")}
+        renderAheadOffset={screenHeight}
+        onEndReached={fetchMore}
+        onEndReachedThreshold={screenHeight}
+        scrollViewProps={scrollViewProps}
+      />
+    </VideoConfigContext.Provider>
   );
 };
 
