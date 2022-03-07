@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import { useRouter } from "app/navigation/use-router";
 
 import {
   View,
@@ -214,6 +215,8 @@ const NFTSList = ({
   SelectionControl: any;
 }) => {
   const navigation = useNavigation();
+  const router = useRouter();
+
   const { data, isLoadingMore, isLoading, isRefreshing, refresh, fetchMore } =
     useTrendingNFTS({
       days,
@@ -227,11 +230,9 @@ const NFTSList = ({
     ({ item, index }) => (
       <Pressable
         onPress={() =>
-          navigation.navigate("swipeList", {
-            days,
-            initialScrollIndex: index,
-            type: "trendingNFTs",
-          })
+          router.push(
+            `/swipeList?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`
+          )
         }
       >
         <Media item={item} numColumns={3} />

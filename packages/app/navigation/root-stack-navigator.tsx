@@ -51,7 +51,11 @@ export function RootStackNavigator() {
             animation: "none",
           }}
         />
-        <Stack.Screen name="swipeList" component={SwipeListScreen} />
+        <Stack.Screen
+          name="swipeList"
+          component={SwipeListScreen}
+          getId={({ params }) => params?.type}
+        />
       </Stack.Group>
 
       {/* Modals */}

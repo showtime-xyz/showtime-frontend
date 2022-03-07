@@ -182,7 +182,7 @@ const TabList = ({
   const keyExtractor = useCallback((item) => {
     return item.nft_id;
   }, []);
-  const navigation = useNavigation();
+  const router = useRouter();
 
   const [filter, dispatch] = useReducer(
     (state: any, action: any) => {
@@ -221,16 +221,11 @@ const TabList = ({
   const renderItem = useCallback(
     ({ item, index }) => (
       <Pressable
-        onPress={() =>
-          navigation.navigate("swipeList", {
-            initialScrollIndex: index,
-            listId: list.id,
-            profileId,
-            collectionId: filter.collectionId,
-            sortId: filter.sortId,
-            type: "profile",
-          })
-        }
+        onPress={() => {
+          router.push(
+            `/swipeList?initialScrollIndex=${index}&listId=${list.id}&profileId=${profileId}&collectionId=${filter.collectionId}&sortId=${filter.sortId}&type=profile`
+          );
+        }}
       >
         <Media item={item} numColumns={3} />
       </Pressable>

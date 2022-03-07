@@ -4,22 +4,10 @@ import { useHeaderHeight } from "@react-navigation/elements";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { SwipeList } from "app/components/swipe-list";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
-import { mixpanel } from "app/lib/mixpanel";
-import { createParam } from "app/navigation/use-param";
-
-import { useProfileNFTs } from "../hooks/api-hooks";
-
-type Query = {
-  type: string;
-};
-
-const { useParam } = createParam<Query>();
+import { useProfileNFTs } from "app/hooks/api-hooks";
 
 export const SwipeListScreen = withColorScheme(({ route }) => {
-  //   useEffect(() => {
-  //     mixpanel.track("Profile view");
-  //   }, []);
-  const { type } = route.params;
+  const type = route.params.type;
 
   const getComponent = () => {
     switch (type) {
@@ -58,7 +46,7 @@ const ProfileSwipeList = ({ route }: any) => {
       isRefreshing={isRefreshing}
       refresh={refresh}
       isLoadingMore={isLoadingMore}
-      initialScrollIndex={initialScrollIndex}
+      initialScrollIndex={Number(initialScrollIndex)}
       headerHeight={headerHeight}
     />
   );
@@ -80,7 +68,7 @@ const TrendingNFTsSwipeList = ({ route }) => {
       isRefreshing={isRefreshing}
       refresh={refresh}
       isLoadingMore={isLoadingMore}
-      initialScrollIndex={initialScrollIndex}
+      initialScrollIndex={Number(initialScrollIndex)}
       headerHeight={headerHeight}
     />
   );
@@ -94,7 +82,7 @@ export const TrendingCreatorSwipeList = withColorScheme(({ route }) => {
   return (
     <SwipeList
       data={data}
-      initialScrollIndex={initialScrollIndex}
+      initialScrollIndex={Number(initialScrollIndex)}
       headerHeight={headerHeight}
     />
   );
