@@ -79,7 +79,7 @@ export function DangerButton(props: ButtonProps) {
 }
 
 export function TextButton({
-  labelTW: _labelTW = "text-gray-500",
+  labelTW: _labelTW,
   accentColor,
   ...props
 }: ButtonProps) {
@@ -87,9 +87,9 @@ export function TextButton({
     () =>
       accentColor
         ? typeof accentColor === "string"
-          ? `text-${accentColor}`
-          : `text-${accentColor[0]} dark:text-${accentColor[1]}`
-        : _labelTW,
+          ? `text-[${accentColor}]`
+          : `text-[${accentColor[0]}] dark:text-[${accentColor[1]}]`
+        : `text-[${ICON_COLOR_TW_MAPPER.text[0]}] dark:text-[${ICON_COLOR_TW_MAPPER.text[1]}]`,
     [_labelTW, accentColor]
   );
   const iconColor = useMemo(
