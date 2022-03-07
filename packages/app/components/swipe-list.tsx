@@ -7,6 +7,7 @@ import { Blurhash } from "react-native-blurhash";
 import { DataProvider, LayoutProvider } from "recyclerlistview";
 
 import { Collection } from "app/components/feed/collection";
+import { CommentButton } from "app/components/feed/comment-button";
 import { Creator } from "app/components/feed/creator";
 import { Like } from "app/components/feed/like";
 import { NFTDropdown } from "app/components/nft-dropdown";
@@ -205,20 +206,7 @@ const NFTDetails = ({
       <View tw="flex-row justify-between">
         <View tw="flex-row">
           <Like nft={nft} />
-
-          <View tw="flex-row items-center ml-4">
-            {/* Comments here */}
-
-            {/* <Message
-              height={24}
-              width={24}
-              //@ts-ignore
-              color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
-            />
-            <Text tw="text-xs text-gray-900 dark:text-white font-bold ml-1">
-              240
-            </Text> */}
-          </View>
+          <CommentButton nft={nft} />
         </View>
 
         <View tw="flex-row">
