@@ -53,27 +53,38 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
   const colorMode = useColorScheme();
   const { width } = useWindowDimensions();
   const squareSize = width / 3;
+
   if (isLoading) {
     return (
-      <View tw={`flex-row`}>
-        <Skeleton
-          colorMode={colorMode}
-          height={squareSize}
-          width={squareSize}
-        />
-        <Skeleton
-          colorMode={colorMode}
-          height={squareSize}
-          width={squareSize}
-        />
-        <Skeleton
-          colorMode={colorMode}
-          height={squareSize}
-          width={squareSize}
-        />
+      <View tw="flex-row">
+        <View tw="mt-[1px] mr-[1px]">
+          <Skeleton
+            colorMode={colorMode}
+            height={squareSize}
+            width={squareSize}
+            radius={0}
+          />
+        </View>
+        <View tw="mt-[1px] mx-[1px]">
+          <Skeleton
+            colorMode={colorMode}
+            height={squareSize}
+            width={squareSize - 2}
+            radius={0}
+          />
+        </View>
+        <View tw="mt-[1px] ml-[1px]">
+          <Skeleton
+            colorMode={colorMode}
+            height={squareSize}
+            width={squareSize}
+            radius={0}
+          />
+        </View>
       </View>
     );
   }
+
   return null;
 };
 
