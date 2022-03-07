@@ -13,6 +13,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       search: "search",
       profile: "profile/:walletAddress",
       settings: "settings/:walletAddress",
+      swipeList: "swipeList",
       bottomTabs: {
         screens: {
           // Bottom Tab Navigator

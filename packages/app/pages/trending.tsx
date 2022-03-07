@@ -8,9 +8,6 @@ import { TrendingScreen } from "app/screens/trending";
 
 import { useIsDarkMode } from "design-system/hooks";
 
-import { TrendingCreatorSwipeList } from "../screens/swipe-list-screens/trending-creator-swipe-list";
-import { TrendingNFTsSwipeListScreen } from "../screens/swipe-list-screens/trending-nfts-swipe-list";
-
 const SettingsScreen = dynamic<JSX.Element>(() =>
   import("app/screens/settings").then((mod) => mod.SettingsScreen)
 );
@@ -27,14 +24,6 @@ function TrendingNavigator() {
       screenOptions={screenOptions({ safeAreaTop, isDark })}
     >
       <TrendingStack.Screen name="trending" component={TrendingScreen} />
-      <TrendingStack.Screen
-        name="trendingNFTsSwipeList"
-        component={TrendingNFTsSwipeListScreen}
-      />
-      <TrendingStack.Screen
-        name="trendingCreatorSwipeList"
-        component={TrendingCreatorSwipeList}
-      />
     </TrendingStack.Navigator>
   );
 }

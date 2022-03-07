@@ -14,9 +14,9 @@ import Animated, {
   runOnUI,
 } from "react-native-reanimated";
 
-import { ArrowLeft } from "design-system/icon";
+import { SwipeList } from "app/components/swipe-list";
 
-import { SwipeList } from "./swipe-list";
+import { ArrowLeft } from "design-system/icon";
 
 const screenWidth = Dimensions.get("screen").width;
 

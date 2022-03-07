@@ -227,9 +227,10 @@ const NFTSList = ({
     ({ item, index }) => (
       <Pressable
         onPress={() =>
-          navigation.navigate("trendingNFTsSwipeList", {
+          navigation.navigate("swipeList", {
             days,
             initialScrollIndex: index,
+            type: "trendingNFTs",
           })
         }
       >

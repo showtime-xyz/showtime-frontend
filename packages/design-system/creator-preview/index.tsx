@@ -1,13 +1,13 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Dimensions, Pressable } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useMyInfo } from "app/hooks/api-hooks";
-import { formatAddressShort } from "app/lib/utilities";
 import { Link } from "app/navigation/link";
 import type { Creator } from "app/types";
+import { formatAddressShort } from "app/utilities";
 
 import { Button } from "design-system/button";
 import { Image } from "design-system/image";
@@ -89,9 +89,10 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
           return (
             <Pressable
               onPress={() =>
-                navigation.navigate("trendingCreatorSwipeList", {
+                navigation.navigate("swipeList", {
                   initialScrollIndex: idx,
                   data: props.creator.top_items,
+                  type: "trendingCreator",
                 })
               }
             >

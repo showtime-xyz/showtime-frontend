@@ -11,11 +11,11 @@ import { NftScreen } from "app/screens/nft";
 import { ProfileScreen } from "app/screens/profile";
 import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
+import { SwipeListScreen } from "app/screens/swipe-list";
 import { TransferNftScreen } from "app/screens/transfer-nft";
 
 import { useIsDarkMode } from "design-system/hooks";
 
-import { ProfileSwipeListScreen } from "../screens/swipe-list-screens/profile-swipe-list";
 import { NextTabNavigator } from "./next-tab-navigator";
 
 const Stack = createNativeStackNavigator();
@@ -43,11 +43,6 @@ export function RootStackNavigator() {
           component={ProfileScreen}
           getId={({ params }) => params?.walletAddress}
         />
-        <Stack.Screen
-          name="profileSwipeList"
-          component={ProfileSwipeListScreen}
-          options={{ headerShown: false }}
-        />
         <Stack.Screen name="settings" component={SettingsScreen} />
         <Stack.Screen
           name="search"
@@ -56,6 +51,7 @@ export function RootStackNavigator() {
             animation: "none",
           }}
         />
+        <Stack.Screen name="swipeList" component={SwipeListScreen} />
       </Stack.Group>
 
       {/* Modals */}

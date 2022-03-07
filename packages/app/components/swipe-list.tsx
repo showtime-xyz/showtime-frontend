@@ -6,7 +6,13 @@ import { BlurView } from "expo-blur";
 import { Blurhash } from "react-native-blurhash";
 import { DataProvider, LayoutProvider } from "recyclerlistview";
 
+import { Collection } from "app/components/feed/collection";
+import { Creator } from "app/components/feed/creator";
+import { Like } from "app/components/feed/like";
+import { NFTDropdown } from "app/components/nft-dropdown";
+import { VideoConfigContext } from "app/context/video-config-context";
 import type { NFT } from "app/types";
+import { handleShareNFT } from "app/utilities";
 
 import { useIsDarkMode } from "design-system/hooks";
 import { Share } from "design-system/icon";
@@ -16,12 +22,6 @@ import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
-import { VideoConfigContext } from "../context/video-config-context";
-import { handleShareNFT } from "../utilities";
-import { Collection } from "./feed/collection";
-import { Creator } from "./feed/creator";
-import { Like } from "./feed/like";
-import { NFTDropdown } from "./nft-dropdown";
 import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");

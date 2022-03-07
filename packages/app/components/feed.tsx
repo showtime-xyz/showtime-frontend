@@ -4,11 +4,11 @@ import { Dimensions, StatusBar } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useHeaderHeight } from "@react-navigation/elements";
 
+import { SwipeList } from "app/components/swipe-list";
+import { useActivity } from "app/hooks/api-hooks";
+
 import { View, Skeleton } from "design-system";
 import { useColorScheme } from "design-system/hooks";
-
-import { useActivity } from "../hooks/api-hooks";
-import { SwipeList } from "./swipe-list";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 

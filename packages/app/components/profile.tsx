@@ -47,7 +47,6 @@ import { VerificationBadge } from "design-system/verification-badge";
 
 import { getProfileImage, getProfileName, getSortFields } from "../utilities";
 import { FollowersList, FollowingList } from "./following-user-list";
-import { SwipeListModal } from "./swipe-list-modal";
 
 const COVER_IMAGE_HEIGHT = 104;
 
@@ -223,12 +222,13 @@ const TabList = ({
     ({ item, index }) => (
       <Pressable
         onPress={() =>
-          navigation.navigate("profileSwipeList", {
+          navigation.navigate("swipeList", {
             initialScrollIndex: index,
             listId: list.id,
             profileId,
             collectionId: filter.collectionId,
             sortId: filter.sortId,
+            type: "profile",
           })
         }
       >
