@@ -7,10 +7,12 @@ import { getRoundedCount } from "app/utilities";
 
 import { Avatar } from "design-system/avatar";
 import { TextButton } from "design-system/button";
-import { HeartFilled, MessageFilled } from "design-system/icon";
+import { HeartFilled, Heart } from "design-system/icon";
 import { Text } from "design-system/text";
 import { VerificationBadge } from "design-system/verification-badge";
 import { View } from "design-system/view";
+
+import { colors } from "../tailwind/colors";
 
 interface MessageRowProps {
   /**
@@ -171,19 +173,24 @@ export function MessageRow({
           {content}
         </Text>
 
-        <View tw="flex-row mt-2 mb--2">
+        <View tw="flex-row ml--2 mt-2 mb--2">
           <TextButton
             tw="px-2"
-            accentColor={likedByMe ? ["black", "white"] : undefined}
+            accentColor={
+              likedByMe
+                ? ["black", "white"]
+                : [colors.gray[500], colors.gray[500]]
+            }
             onPress={onLikePress}
           >
-            <HeartFilled /> {getRoundedCount(likeCount)}
+            {likedByMe ? <HeartFilled /> : <Heart />}
+            {` ${getRoundedCount(likeCount)}`}
           </TextButton>
-          {replayCount != undefined && (
+          {/* TODO: re-enable when replies pagination is implemented {replayCount != undefined && (
             <TextButton tw="px-2">
               <MessageFilled /> {getRoundedCount(replayCount)}
             </TextButton>
-          )}
+          )} */}
           <View tw="flex-1 flex-row mr--3 items-center justify-end">
             {createdAtText && (
               <Text tw="text-gray-500 font-bold" variant="text-xs">
