@@ -1,109 +1,66 @@
-import React, { Suspense, useCallback, useRef } from "react";
-import { Platform, FlatList } from "react-native";
+import React, { Suspense, useMemo } from "react";
+import { Dimensions, StatusBar } from "react-native";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { useScrollToTop } from "@react-navigation/native";
+import { useHeaderHeight } from "@react-navigation/elements";
 
+import { SwipeList } from "app/components/swipe-list";
 import { useActivity } from "app/hooks/api-hooks";
 
-import { View, Spinner, Text } from "design-system";
-import { Card } from "design-system/card";
+import { View, Skeleton } from "design-system";
+import { useColorScheme } from "design-system/hooks";
 
-import { ViewabilityTrackerFlatlist } from "./viewability-tracker-flatlist";
+const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 
-const Footer = ({ isLoading }: { isLoading: boolean }) => {
-  const tabBarHeight = useBottomTabBarHeight();
-
-  if (isLoading) {
-    return (
-      <View
-        tw="h-16 items-center justify-center mt-6 px-3"
-        sx={{ marginBottom: tabBarHeight }}
-      >
-        <Spinner size="small" />
-      </View>
-    );
-  }
-
-  return <View sx={{ marginBottom: tabBarHeight }}></View>;
-};
-
-const Feed = () => {
+export const Feed = () => {
+  const colorScheme = useColorScheme();
   return (
-    <View tw="bg-white dark:bg-black flex-1" testID="homeFeed">
-      <Suspense
-        fallback={
-          <View tw="pt-8 items-center">
-            <Spinner size="small" />
-          </View>
-        }
-      >
-        <AllActivityList />
-      </Suspense>
-    </View>
-  );
-};
-
-const AllActivityList = () => {
-  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
-    useActivity({ typeId: 0 });
-  const listRef = useRef<FlatList>(null);
-
-  useScrollToTop(listRef);
-
-  const keyExtractor = useCallback((item) => item.id, []);
-
-  const renderItem = useCallback(
-    ({ item }) => <Card act={item} variant="activity" />,
-    []
-  );
-
-  const ListHeaderComponent = useCallback(
-    () => (
-      <View tw="bg-white dark:bg-black pt-4 pl-4 pb-[3px]">
-        <Text
-          variant="text-2xl"
-          tw="text-gray-900 dark:text-white font-extrabold"
+    <>
+      <StatusBar barStyle="light-content" />
+      <View tw="flex-1" testID="homeFeed">
+        <Suspense
+          fallback={
+            <View tw="items-center">
+              <Skeleton
+                colorMode={colorScheme}
+                height={screenHeight - 300}
+                width={screenWidth}
+              />
+              <View tw="h-2" />
+              <Skeleton
+                colorMode={colorScheme}
+                height={300}
+                width={screenWidth}
+              />
+            </View>
+          }
         >
-          Home
-        </Text>
+          <FeedList />
+        </Suspense>
       </View>
-    ),
-    []
+    </>
   );
+};
 
-  const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoadingMore} />,
-    [isLoadingMore]
-  );
+export const FeedList = () => {
+  const queryState = useActivity({ typeId: 0 });
+  const bottomBarHeight = useBottomTabBarHeight();
 
-  if (isLoading) {
-    return (
-      <View tw="items-center justify-center flex-1">
-        <Spinner />
-      </View>
-    );
-  }
+  const newData: any = useMemo(() => {
+    if (queryState.data && Array.isArray(queryState.data)) {
+      return queryState.data.filter((d) => d.nfts[0]).map((d) => d.nfts[0]);
+    }
+    return [];
+  }, [queryState.data]);
+
+  const headerHeight = useHeaderHeight();
 
   return (
-    <ViewabilityTrackerFlatlist
-      data={data}
-      ref={listRef}
-      keyExtractor={keyExtractor}
-      renderItem={renderItem}
-      refreshing={isRefreshing}
-      onRefresh={refresh}
-      onEndReached={fetchMore}
-      onEndReachedThreshold={0.6}
-      removeClippedSubviews={Platform.OS !== "web"}
-      numColumns={1}
-      windowSize={4}
-      initialNumToRender={2}
-      alwaysBounceVertical={false}
-      ListHeaderComponent={ListHeaderComponent}
-      ListFooterComponent={ListFooterComponent}
+    <SwipeList
+      {...queryState}
+      bottomBarHeight={bottomBarHeight}
+      headerHeight={headerHeight}
+      data={newData}
     />
   );
 };
-
-export { Feed };

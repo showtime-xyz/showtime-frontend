@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Share } from "react-native";
 
 import { Biconomy } from "@biconomy/mexa";
 import { parseUnits } from "@ethersproject/units";
@@ -9,6 +10,8 @@ import { BYPASS_EMAIL } from "app/lib/constants";
 import { LIST_CURRENCIES } from "app/lib/constants";
 import { magic, Magic } from "app/lib/magic";
 
+import { track } from "./lib/analytics";
+import { CHAIN_IDENTIFIERS } from "./lib/constants";
 import { Profile, NFT, WalletAddressesV2, OwnersListOwner } from "./types";
 
 export const formatAddressShort = (address) => {
@@ -176,6 +179,36 @@ export const overrideMagicInstance = (email: string) => {
   }
 
   return magic;
+};
+
+// Format big numbers
+export function formatNumber(number: number) {
+  if (number > 1000000) {
+    return `${(number / 1000000).toFixed(1)}m`;
+  } else if (number > 1000) {
+    return `${(number / 1000).toFixed(1)}k`;
+  } else {
+    return number;
+  }
+}
+
+export const handleShareNFT = async (nft?: NFT) => {
+  if (nft) {
+    const tokenChainName = Object.keys(CHAIN_IDENTIFIERS).find(
+      //@ts-ignore
+      (key) => CHAIN_IDENTIFIERS[key] == nft?.chain_identifier
+    );
+    const share = await Share.share({
+      url: `https://showtime.io/t/${tokenChainName}/${nft?.contract_address}/${nft?.token_id}`,
+    });
+
+    if (share.action === "sharedAction") {
+      track(
+        "NFT Shared",
+        share.activityType ? { type: share.activityType } : undefined
+      );
+    }
+  }
 };
 
 export const findListingItemByOwner = (

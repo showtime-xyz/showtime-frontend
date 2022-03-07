@@ -101,6 +101,7 @@ function SWRProvider({ children }: { children: React.ReactNode }): JSX.Element {
         },
         isOnline: () => {
           return true;
+
           // return NetInfo.fetch().then((state) => state.isConnected)
         },
         // TODO: tab focus too

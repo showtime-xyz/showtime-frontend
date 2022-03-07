@@ -23,6 +23,8 @@ import {
 import { MoreHorizontal } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 
+import { handleShareNFT } from "../utilities";
+
 type Props = {
   nft?: NFT;
 };
@@ -70,18 +72,7 @@ function NFTDropdown({ nft }: Props) {
         tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
       >
         <DropdownMenuItem
-          onSelect={async () => {
-            const share = await Share.share({
-              url: `https://showtime.io/t/${tokenChainName}/${nft?.contract_address}/${nft?.token_id}`,
-            });
-
-            if (share.action === "sharedAction") {
-              track(
-                "NFT Shared",
-                share.activityType ? { type: share.activityType } : undefined
-              );
-            }
-          }}
+          onSelect={() => handleShareNFT(nft)}
           key="copy-link"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >

@@ -5,6 +5,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import { useRouter } from "app/navigation/use-router";
 
 import {
   View,
@@ -16,6 +17,7 @@ import {
   CreatorPreview,
   SegmentedControl,
   Media,
+  Pressable,
 } from "design-system";
 import { cardSize } from "design-system/creator-preview";
 import { useIsDarkMode } from "design-system/hooks";
@@ -180,26 +182,24 @@ const CreatorsList = ({
   );
 
   return (
-    <View tw="flex-1">
-      <Tabs.FlatList
-        data={data}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        refreshing={isRefreshing}
-        onRefresh={refresh}
-        onEndReached={fetchMore}
-        onEndReachedThreshold={0.6}
-        removeClippedSubviews={Platform.OS !== "web"}
-        ListHeaderComponent={ListHeaderComponent}
-        numColumns={1}
-        windowSize={4}
-        initialNumToRender={4}
-        alwaysBounceVertical={false}
-        ListFooterComponent={ListFooterComponent}
-        ItemSeparatorComponent={ItemSeparatorComponent}
-        getItemLayout={getItemLayout}
-      />
-    </View>
+    <Tabs.FlatList
+      data={data}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
+      refreshing={isRefreshing}
+      onRefresh={refresh}
+      onEndReached={fetchMore}
+      onEndReachedThreshold={0.6}
+      removeClippedSubviews={Platform.OS !== "web"}
+      ListHeaderComponent={ListHeaderComponent}
+      numColumns={1}
+      windowSize={4}
+      initialNumToRender={4}
+      alwaysBounceVertical={false}
+      ListFooterComponent={ListFooterComponent}
+      ItemSeparatorComponent={ItemSeparatorComponent}
+      getItemLayout={getItemLayout}
+    />
   );
 };
 
@@ -213,6 +213,8 @@ const NFTSList = ({
   days: number;
   SelectionControl: any;
 }) => {
+  const router = useRouter();
+
   const { data, isLoadingMore, isLoading, isRefreshing, refresh, fetchMore } =
     useTrendingNFTS({
       days,
@@ -223,7 +225,17 @@ const NFTSList = ({
   }, []);
 
   const renderItem = useCallback(
-    ({ item }) => <Media item={item} numColumns={3} />,
+    ({ item, index }) => (
+      <Pressable
+        onPress={() =>
+          router.push(
+            `/swipeList?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`
+          )
+        }
+      >
+        <Media item={item} numColumns={3} />
+      </Pressable>
+    ),
     []
   );
 
