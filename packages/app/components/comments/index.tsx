@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useMemo, useRef } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import {
   Alert,
   FlatList as RNFlatList,
@@ -14,7 +14,7 @@ import { useComments, CommentType } from "app/hooks/api/use-comments";
 import { useKeyboardDimensions } from "app/hooks/use-keyboard-dimensions";
 import { useUser } from "app/hooks/use-user";
 
-import { Spinner, View } from "design-system";
+import { View } from "design-system";
 import {
   MessageBox,
   MessageBoxMethods,
@@ -38,6 +38,7 @@ export function Comments({ nftId }: CommentsProps) {
     error,
     isSubmitting,
     isLoading,
+    isRefreshing,
     likeComment,
     unlikeComment,
     deleteComment,
@@ -141,35 +142,34 @@ export function Comments({ nftId }: CommentsProps) {
     [likeComment, unlikeComment, handleOnDeleteComment]
   );
   const FlatList = Platform.OS === "android" ? BottomSheetFlatList : RNFlatList;
+
   return (
-    <Suspense fallback={<Spinner size="small" />}>
-      <View tw="flex-1 mt--4">
-        {isLoading || (dataReversed.length == 0 && error) ? (
-          <CommentsStatus isLoading={isLoading} error={error} />
-        ) : (
-          <>
-            <FlatList
-              data={dataReversed}
-              refreshing={isLoading}
-              renderItem={renderItem}
-              keyExtractor={keyExtractor}
-              initialNumToRender={10}
-              maxToRenderPerBatch={10}
-              windowSize={10}
-              onTouchMove={handleOnTouchMove}
+    <View tw="flex-1 mt--4">
+      {isLoading || (dataReversed.length == 0 && error) ? (
+        <CommentsStatus isLoading={isLoading} error={error} />
+      ) : (
+        <>
+          <FlatList
+            data={dataReversed}
+            refreshing={isLoading}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            initialNumToRender={5}
+            maxToRenderPerBatch={5}
+            windowSize={5}
+            onTouchMove={handleOnTouchMove}
+          />
+          {isAuthenticated && (
+            <MessageBox
+              ref={inputRef}
+              submitting={isSubmitting}
+              style={{ marginBottom: keyboardHeight }}
+              onSubmit={handleOnSubmitComment}
             />
-            {isAuthenticated && (
-              <MessageBox
-                ref={inputRef}
-                submitting={isSubmitting}
-                style={{ marginBottom: keyboardHeight }}
-                onSubmit={handleOnSubmitComment}
-              />
-            )}
-          </>
-        )}
-      </View>
-    </Suspense>
+          )}
+        </>
+      )}
+    </View>
   );
   //#endregion
 }
