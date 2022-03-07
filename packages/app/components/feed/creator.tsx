@@ -1,7 +1,10 @@
+import { formatDistanceToNowStrict } from "date-fns";
+
 import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import { Link } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
 import type { NFT } from "app/types";
+import { formatAddressShort } from "app/utilities";
 
 import { Image } from "design-system/image";
 import { Text } from "design-system/text";
@@ -18,10 +21,9 @@ const getProfileImageUrl = (imgUrl: string) => {
 type Props = {
   nft?: NFT;
   options?: boolean;
-  toggleCreatorName?: boolean;
 };
 
-export function Creator({ nft, toggleCreatorName }: Props) {
+export function Creator({ nft }: Props) {
   const router = useRouter();
 
   if (!nft) return null;
@@ -40,15 +42,7 @@ export function Creator({ nft, toggleCreatorName }: Props) {
         }}
       />
       <View tw="ml-2 justify-center">
-        <Text
-          sx={{ fontSize: 12, lineHeight: 12 }}
-          tw={`${
-            nft.creator_username ? "mb-1" : ""
-          } text-gray-600 dark:text-gray-400 font-semibold`}
-        >
-          {toggleCreatorName ? "Creator" : nft.creator_name}
-        </Text>
-        {nft.creator_username && (
+        {nft.creator_username ? (
           <View tw="h-[12px] flex flex-row items-center">
             <Text
               sx={{ fontSize: 13, lineHeight: 15 }}
@@ -58,6 +52,22 @@ export function Creator({ nft, toggleCreatorName }: Props) {
             </Text>
             {nft.creator_verified ? (
               <VerificationBadge style={{ marginLeft: 4 }} size={12} />
+            ) : null}
+          </View>
+        ) : (
+          <View>
+            <Text
+              sx={{ fontSize: 13 }}
+              tw="text-gray-900 dark:text-white font-bold"
+            >
+              {formatAddressShort(nft.creator_address)}
+            </Text>
+            {nft.token_created ? (
+              <Text tw="text-xs text-gray-900 dark:text-white mt-1 font-semibold">
+                {formatDistanceToNowStrict(new Date(`${nft.token_created}`), {
+                  addSuffix: true,
+                })}
+              </Text>
             ) : null}
           </View>
         )}

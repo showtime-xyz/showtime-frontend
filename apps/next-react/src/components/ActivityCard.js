@@ -168,7 +168,7 @@ export default function ActivityCard({
                 </Link>
               )}
               <div className="text-gray-400 text-xs">
-                {formatDistanceToNowStrict(new Date(`${act.timestamp}Z`), {
+                {formatDistanceToNowStrict(new Date(act.timestamp), {
                   addSuffix: true,
                 })}
               </div>

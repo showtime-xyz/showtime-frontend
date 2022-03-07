@@ -11,6 +11,7 @@ import {
   UseMintNFT,
 } from "app/hooks/use-mint-nft";
 import { useUser } from "app/hooks/use-user";
+import { useWeb3 } from "app/hooks/use-web3";
 import { yup } from "app/lib/yup";
 import { useRouter } from "app/navigation/use-router";
 
@@ -66,6 +67,9 @@ interface CreateProps {
 function Create({ uri, state, startMinting }: CreateProps) {
   const router = useRouter();
   const { user } = useUser();
+  const { web3 } = useWeb3();
+
+  const isNotMagic = !web3;
 
   const handleSubmitForm = (values: Omit<UseMintNFT, "filePath">) => {
     console.log("** Submiting minting form **", values);
@@ -233,24 +237,26 @@ function Create({ uri, state, startMinting }: CreateProps) {
                         />
                       )}
                     /> */}
-                    <Controller
-                      control={control}
-                      name="royaltiesPercentage"
-                      render={({ field: { onChange, onBlur, value } }) => (
-                        <Fieldset
-                          label="Creator Royalties"
-                          placeholder="10%"
-                          // tw="ml-4 w-[48%]"
-                          value={value}
-                          onBlur={onBlur}
-                          onChangeText={onChange}
-                          helperText="How much you'll earn each time this NFT is sold."
-                          keyboardType="numeric"
-                          returnKeyType="done"
-                          errorText={errors.royaltiesPercentage?.message}
-                        />
-                      )}
-                    />
+                    {isNotMagic ? (
+                      <Controller
+                        control={control}
+                        name="royaltiesPercentage"
+                        render={({ field: { onChange, onBlur, value } }) => (
+                          <Fieldset
+                            label="Creator Royalties"
+                            placeholder="10%"
+                            // tw="ml-4 w-[48%]"
+                            value={value}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            helperText="How much you'll earn each time this NFT is sold."
+                            keyboardType="numeric"
+                            returnKeyType="done"
+                            errorText={errors.royaltiesPercentage?.message}
+                          />
+                        )}
+                      />
+                    ) : null}
                   </View>
                 </Accordion.Content>
               </Accordion.Item>

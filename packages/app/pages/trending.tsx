@@ -1,5 +1,3 @@
-import { Platform } from "react-native";
-
 import dynamic from "next/dynamic";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 

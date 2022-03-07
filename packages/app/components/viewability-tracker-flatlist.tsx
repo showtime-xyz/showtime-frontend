@@ -5,7 +5,7 @@ import Animated, { useSharedValue } from "react-native-reanimated";
 
 const MAX_VIEWABLE_ITEMS = 4;
 
-type ViewabilityItemsContextType = string[];
+type ViewabilityItemsContextType = any[];
 
 export const ViewabilityItemsContext = createContext<
   Animated.SharedValue<ViewabilityItemsContextType>
@@ -56,4 +56,4 @@ export const ViewabilityTrackerFlatlist = forwardRef(
   }
 );
 
-export const ItemKeyContext = createContext<string | undefined>(undefined);
+export const ItemKeyContext = createContext<any | undefined>(undefined);

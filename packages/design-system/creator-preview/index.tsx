@@ -1,11 +1,13 @@
 import { useMemo } from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, Pressable } from "react-native";
+
+import { useNavigation } from "@react-navigation/native";
 
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useMyInfo } from "app/hooks/api-hooks";
-import { formatAddressShort } from "app/lib/utilities";
 import { Link } from "app/navigation/link";
 import type { Creator } from "app/types";
+import { formatAddressShort } from "app/utilities";
 
 import { Button } from "design-system/button";
 import { Image } from "design-system/image";
@@ -28,6 +30,8 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
     () => isFollowing(creatorId),
     [creatorId, isFollowing]
   );
+
+  const navigation = useNavigation();
 
   return (
     <View
@@ -81,8 +85,20 @@ export const CreatorPreview = withMemoAndColorScheme((props: Props) => {
         </View>
       </View>
       <View tw="flex-row justify-center mt-4 mx-[-1px]">
-        {props.creator.top_items.slice(0, 3).map((item) => {
-          return <Media key={item.nft_id} item={item} numColumns={3} />;
+        {props.creator.top_items.slice(0, 3).map((item, idx) => {
+          return (
+            <Pressable
+              onPress={() =>
+                navigation.navigate("swipeList", {
+                  initialScrollIndex: idx,
+                  data: props.creator.top_items,
+                  type: "trendingCreator",
+                })
+              }
+            >
+              <Media key={item.nft_id} item={item} numColumns={3} />
+            </Pressable>
+          );
         })}
       </View>
     </View>

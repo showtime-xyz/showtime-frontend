@@ -50,13 +50,41 @@ import { FollowersList, FollowingList } from "./following-user-list";
 const COVER_IMAGE_HEIGHT = 104;
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
+  const colorMode = useColorScheme();
+  const { width } = useWindowDimensions();
+  const squareSize = width / 3;
+
   if (isLoading) {
     return (
-      <View tw={`h-16 items-center justify-center mt-6 px-3`}>
-        <Spinner size="small" />
+      <View tw="flex-row">
+        <View tw="mt-[1px] mr-[1px]">
+          <Skeleton
+            colorMode={colorMode}
+            height={squareSize}
+            width={squareSize}
+            radius={0}
+          />
+        </View>
+        <View tw="mt-[1px] mx-[1px]">
+          <Skeleton
+            colorMode={colorMode}
+            height={squareSize}
+            width={squareSize - 2}
+            radius={0}
+          />
+        </View>
+        <View tw="mt-[1px] ml-[1px]">
+          <Skeleton
+            colorMode={colorMode}
+            height={squareSize}
+            width={squareSize}
+            radius={0}
+          />
+        </View>
       </View>
     );
   }
+
   return null;
 };
 
@@ -164,6 +192,7 @@ const TabList = ({
   const keyExtractor = useCallback((item) => {
     return item.nft_id;
   }, []);
+  const router = useRouter();
 
   const [filter, dispatch] = useReducer(
     (state: any, action: any) => {
@@ -200,7 +229,17 @@ const TabList = ({
   );
 
   const renderItem = useCallback(
-    ({ item }) => <Media item={item} numColumns={3} />,
+    ({ item, index }) => (
+      <Pressable
+        onPress={() => {
+          router.push(
+            `/swipeList?initialScrollIndex=${index}&listId=${list.id}&profileId=${profileId}&collectionId=${filter.collectionId}&sortId=${filter.sortId}&type=profile`
+          );
+        }}
+      >
+        <Media item={item} numColumns={3} />
+      </Pressable>
+    ),
     []
   );
 
@@ -251,6 +290,8 @@ const TabList = ({
     ]
   );
 
+  const listStyle = useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), []);
+
   return (
     <View tw="flex-1">
       <Tabs.FlatList
@@ -269,7 +310,7 @@ const TabList = ({
         initialNumToRender={9}
         alwaysBounceVertical={false}
         ListFooterComponent={ListFooterComponent}
-        style={useMemo(() => ({ margin: -GAP_BETWEEN_ITEMS }), [])}
+        style={listStyle}
       />
     </View>
   );

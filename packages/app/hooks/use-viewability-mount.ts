@@ -1,5 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { RefObject, useContext, useEffect, useRef, useState } from "react";
 
+import { Video } from "expo-av";
 import { useAnimatedReaction, runOnJS } from "react-native-reanimated";
 
 import {
@@ -9,32 +10,49 @@ import {
 
 import { useIsTabFocused } from "design-system/tabs/tablib";
 
-export const useViewabilityMount = () => {
+import { useVideoConfig } from "../context/video-config-context";
+
+export const useViewabilityMount = ({
+  videoRef,
+  source,
+}: {
+  videoRef: RefObject<Video>;
+  source: any;
+}) => {
   const id = useContext(ItemKeyContext);
   const context = useContext(ViewabilityItemsContext);
   const isItemInList = typeof id !== "undefined";
-  const [mounted, setMounted] = useState(false);
+  const loaded = useRef(false);
+  const videoConfig = useVideoConfig();
   let isListFocused = useIsTabFocused();
 
   const mount = () => {
-    if (!mounted) {
-      setMounted(true);
+    if (!loaded.current) {
+      videoRef.current?.loadAsync(source, {
+        shouldPlay: true,
+        isLooping: true,
+        isMuted: videoConfig?.isMuted,
+      });
+      // if (__DEV__) console.log("📽 : loading ", id);
     }
+    loaded.current = true;
   };
 
   const unmount = () => {
-    if (mounted) {
-      setMounted(false);
+    if (loaded.current) {
+      videoRef.current?.unloadAsync();
+      if (__DEV__) console.log("📽 : unloading ", id);
     }
+    loaded.current = false;
   };
 
   // we mount or unmount the Video depending on the focus state
   useEffect(() => {
     if (isItemInList) {
       if (!isListFocused) {
-        setMounted(false);
+        unmount();
       } else if (context.value.includes(id)) {
-        setMounted(true);
+        mount();
       }
     }
   }, [isItemInList, isListFocused, id]);
@@ -53,7 +71,6 @@ export const useViewabilityMount = () => {
   );
 
   return {
-    mounted,
     id,
   };
 };

@@ -7,11 +7,13 @@ import { screenOptions } from "app/navigation/navigator-screen-options";
 import { CommentsScreen } from "app/screens/comments";
 import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
+import { ListScreen } from "app/screens/list";
 import { LoginScreen } from "app/screens/login";
 import { NftScreen } from "app/screens/nft";
 import { ProfileScreen } from "app/screens/profile";
 import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
+import { SwipeListScreen } from "app/screens/swipe-list";
 import { TransferNftScreen } from "app/screens/transfer-nft";
 
 import { useIsDarkMode } from "design-system/hooks";
@@ -51,6 +53,11 @@ export function RootStackNavigator() {
             animation: "none",
           }}
         />
+        <Stack.Screen
+          name="swipeList"
+          component={SwipeListScreen}
+          getId={({ params }) => params?.type}
+        />
       </Stack.Group>
 
       {/* Modals */}
@@ -72,6 +79,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="transferNft" component={TransferNftScreen} />
         <Stack.Screen name="create" component={CreateScreen} />
         <Stack.Screen name="burn" component={DeleteScreen} />
+        <Stack.Screen name="list" component={ListScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );
