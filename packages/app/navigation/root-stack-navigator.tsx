@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { CreateScreen } from "app/screens/create";
 import { DeleteScreen } from "app/screens/delete";
+import { ListScreen } from "app/screens/list";
 import { LoginScreen } from "app/screens/login";
 import { NftScreen } from "app/screens/nft";
 import { ProfileScreen } from "app/screens/profile";
@@ -76,6 +77,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="transferNft" component={TransferNftScreen} />
         <Stack.Screen name="create" component={CreateScreen} />
         <Stack.Screen name="burn" component={DeleteScreen} />
+        <Stack.Screen name="list" component={ListScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );

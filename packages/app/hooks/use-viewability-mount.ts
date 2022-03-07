@@ -33,7 +33,7 @@ export const useViewabilityMount = ({
         isLooping: true,
         isMuted: videoConfig?.isMuted,
       });
-      if (__DEV__) console.log("📽 : loading ", id);
+      // if (__DEV__) console.log("📽 : loading ", id);
     }
     loaded.current = true;
   };
