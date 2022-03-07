@@ -11,7 +11,7 @@ import {
 import { truncateWithEllipses } from "@/lib/utilities";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DotsHorizontalIcon } from "@heroicons/react/solid";
-import { formatDistanceToNowStrict } from "date-fns";
+import { formatDistanceToNowStrict, parseISO } from "date-fns";
 import mixpanel from "mixpanel-browser";
 import Link from "next/link";
 
@@ -168,9 +168,11 @@ export default function ActivityCard({
                 </Link>
               )}
               <div className="text-gray-400 text-xs">
-                {formatDistanceToNowStrict(new Date(`${act.timestamp}Z`), {
-                  addSuffix: true,
-                })}
+                {act.timestamp && typeof act.timestamp === "string"
+                  ? formatDistanceToNowStrict(parseISO(act.timestamp), {
+                      addSuffix: true,
+                    })
+                  : null}
               </div>
             </div>
           </div>
