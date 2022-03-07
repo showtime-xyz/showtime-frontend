@@ -52,7 +52,7 @@ export function NextTabNavigator({
         tabBarStyle: [
           {
             // backgroundColor: isDark ? 'rgba(0, 0, 0, 0.95)' : 'rgba(228, 228, 231, 0.95)',
-            height: 56 + safeAreaBottom,
+            height: 64 + safeAreaBottom,
             backgroundColor: "transparent",
             borderTopColor: "transparent",
             position: "absolute",

@@ -8,7 +8,6 @@ import { screenOptions } from "app/navigation/navigator-screen-options";
 import { HomeStackParams } from "app/navigation/types";
 import { HomeScreen } from "app/screens/home";
 
-import { Text } from "design-system";
 import { useIsDarkMode } from "design-system/hooks";
 
 const LoginScreen = dynamic<JSX.Element>(() =>

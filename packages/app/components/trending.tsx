@@ -2,7 +2,6 @@ import { Suspense, useCallback, useMemo, useState } from "react";
 import { Dimensions, Platform } from "react-native";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { useNavigation } from "@react-navigation/native";
 
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
@@ -214,7 +213,6 @@ const NFTSList = ({
   days: number;
   SelectionControl: any;
 }) => {
-  const navigation = useNavigation();
   const router = useRouter();
 
   const { data, isLoadingMore, isLoading, isRefreshing, refresh, fetchMore } =

@@ -1,4 +1,3 @@
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useHeaderHeight } from "@react-navigation/elements";
 
 import { withColorScheme } from "app/components/memo-with-theme";
@@ -9,20 +8,16 @@ import { useProfileNFTs } from "app/hooks/api-hooks";
 export const SwipeListScreen = withColorScheme(({ route }) => {
   const type = route.params.type;
 
-  const getComponent = () => {
-    switch (type) {
-      case "profile":
-        return <ProfileSwipeList route={route} />;
-      case "trendingNFTs":
-        return <TrendingNFTsSwipeList route={route} />;
-      case "trendingCreator":
-        return <TrendingCreatorSwipeList route={route} />;
-      default:
-        return null;
-    }
-  };
-
-  return <BottomSheetModalProvider>{getComponent()}</BottomSheetModalProvider>;
+  switch (type) {
+    case "profile":
+      return <ProfileSwipeList route={route} />;
+    case "trendingNFTs":
+      return <TrendingNFTsSwipeList route={route} />;
+    case "trendingCreator":
+      return <TrendingCreatorSwipeList route={route} />;
+    default:
+      return null;
+  }
 });
 
 const ProfileSwipeList = ({ route }: any) => {

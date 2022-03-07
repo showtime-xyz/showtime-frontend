@@ -86,7 +86,7 @@ export const CameraTabBarIcon = ({ color, focused }) => {
     <TabBarIcon tab="/camera">
       <View
         tw={[
-          "rounded-full h-12 w-12 justify-center items-center mt-1",
+          "rounded-full h-12 w-12 justify-center items-center",
           focused ? "bg-gray-100 dark:bg-gray-900" : "bg-black dark:bg-white",
         ]}
       >

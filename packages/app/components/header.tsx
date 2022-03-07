@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { Text, TextStyle, useWindowDimensions } from "react-native";
+import { useState, useCallback } from "react";
+import { useWindowDimensions } from "react-native";
+
+import Router from "next/router";
 
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { useUser } from "app/hooks/use-user";
@@ -18,13 +20,7 @@ import {
 import { tw } from "design-system/tailwind";
 import { useToast } from "design-system/toast";
 
-const HeaderRight = ({
-  variant,
-  textStyle,
-}: {
-  variant?: "text";
-  textStyle?: TextStyle;
-}) => {
+const HeaderRight = () => {
   const router = useRouter();
   const { isLoading, isAuthenticated } = useUser();
   const [isSearchBarOpen, setSearchBarOpen] = useState(false);
@@ -33,13 +29,18 @@ const HeaderRight = ({
   return (
     <View>
       {!isLoading && (
-        <View tw={[isSearchBarOpen ? "hidden" : "", "flex-row items-center"]}>
+        <View
+          tw={[
+            isSearchBarOpen ? "hidden" : "",
+            "flex-row items-center bg-white dark:bg-black",
+          ]}
+        >
           {isAuthenticated && (
             <View tw="hidden md:flex">
               <NotificationsTabBarIcon color="white" focused={false} />
             </View>
           )}
-          <View tw="items-end min-w-8">
+          <View tw="bg-white dark:bg-black min-w-20 items-end">
             {isAuthenticated && width > 768 && (
               <View tw="mx-3">
                 <Button
@@ -61,17 +62,9 @@ const HeaderRight = ({
               </View>
             )}
             {isAuthenticated ? (
-              <View tw="dark:bg-black rounded-full items-end">
+              <View tw="bg-white dark:bg-black w-20 items-end">
                 <HeaderDropdown />
               </View>
-            ) : variant === "text" ? (
-              <Pressable
-                onPress={() => {
-                  router.push("/login");
-                }}
-              >
-                <Text style={textStyle}>Sign&nbsp;In</Text>
-              </Pressable>
             ) : (
               <Button
                 onPress={() => {
@@ -91,13 +84,7 @@ const HeaderRight = ({
   );
 };
 
-const HeaderLeft = ({
-  canGoBack,
-  color,
-}: {
-  canGoBack: boolean;
-  color: string;
-}) => {
+const HeaderLeft = ({ canGoBack }: { canGoBack: boolean }) => {
   const toast = useToast();
   const router = useRouter();
   const Icon = canGoBack ? ArrowLeft : Search;
@@ -123,11 +110,7 @@ const HeaderLeft = ({
     >
       <Icon
         style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
-        color={
-          color
-            ? color
-            : (tw.style("bg-black dark:bg-white")?.backgroundColor as string)
-        }
+        color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
         width={24}
         height={24}
       />

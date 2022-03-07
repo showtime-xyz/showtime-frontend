@@ -8,7 +8,6 @@ import {
 } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
 import reactStringReplace from "react-string-replace";
 
 import { ProfileDropdown } from "app/components/profile-dropdown";
