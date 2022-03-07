@@ -1,9 +1,6 @@
 import { useMemo } from "react";
-import { StyleSheet } from "react-native";
 
 import { formatDistanceToNowStrict } from "date-fns";
-
-import { getRoundedCount } from "app/utilities";
 
 import { Avatar } from "design-system/avatar";
 import { TextButton } from "design-system/button";
@@ -59,12 +56,12 @@ interface MessageRowProps {
    * Defines the message likes count.
    * @default undefined
    */
-  likeCount?: number;
+  likeCount?: number | string;
   /**
    * Defines the message replies count.
    * @default undefined
    */
-  replayCount?: number;
+  replayCount?: number | string;
   /**
    * Defines the message creation date.
    * @default undefined
@@ -184,11 +181,11 @@ export function MessageRow({
             onPress={onLikePress}
           >
             {likedByMe ? <HeartFilled /> : <Heart />}
-            {` ${getRoundedCount(likeCount)}`}
+            {` ${likeCount}`}
           </TextButton>
           {/* TODO: re-enable when replies pagination is implemented {replayCount != undefined && (
             <TextButton tw="px-2">
-              <MessageFilled /> {getRoundedCount(replayCount)}
+              <MessageFilled /> {replayCount}
             </TextButton>
           )} */}
           <View tw="flex-1 flex-row mr--3 items-center justify-end">

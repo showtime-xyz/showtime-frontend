@@ -142,8 +142,8 @@ const comments = [
 export const SingleMessage: React.VFC<{}> = () => (
   <MessageRow
     username={comments[0].username}
-    userAvatar={comments[0].img_url}
-    userVerified={comments[0].verified}
+    userAvatar={comments[0].img_url!}
+    userVerified={comments[0].verified as any}
     content={comments[0].text}
     likeCount={comments[0].like_count}
     replayCount={comments[0].replies.length}
@@ -158,8 +158,8 @@ export const MessageWithReply: React.VFC<{}> = () => (
   <>
     <MessageRow
       username={comments[1].username}
-      userAvatar={comments[1].img_url}
-      userVerified={comments[1].verified}
+      userAvatar={comments[1].img_url!}
+      userVerified={comments[1].verified as any}
       content={comments[1].text}
       likeCount={comments[1].like_count}
       replayCount={comments[1].replies.length}
@@ -172,7 +172,7 @@ export const MessageWithReply: React.VFC<{}> = () => (
         key={item.comment_id}
         username={item.username}
         userAvatar={item.img_url}
-        userVerified={item.verified}
+        userVerified={item.verified as any}
         position={index === comments[1].replies.length - 1 ? "last" : "middle"}
         content={item.text}
         likeCount={item.like_count}

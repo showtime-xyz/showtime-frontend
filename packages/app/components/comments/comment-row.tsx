@@ -3,6 +3,7 @@ import { Fragment, memo, useCallback, useMemo, useState } from "react";
 import { CommentType } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
 import { useRouter } from "app/navigation/use-router";
+import { getRoundedCount } from "app/utilities";
 
 import { MessageRow } from "design-system/messages/message-row";
 
@@ -86,8 +87,10 @@ function CommentRowComponent({
         userAvatar={comment.img_url}
         userVerified={comment.verified as any}
         content={comment.text}
-        likeCount={Math.max(0, likeCount)}
-        replayCount={isReply ? undefined : comment.replies?.length}
+        likeCount={getRoundedCount(Math.max(0, likeCount))}
+        replayCount={
+          isReply ? undefined : getRoundedCount(comment.replies?.length)
+        }
         hasReplies={
           isReply ? false : comment.replies && comment.replies.length > 0
         }
