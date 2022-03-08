@@ -51,7 +51,9 @@ function NFTDropdown({ nft }: Props) {
   );
 
   // Prevent web3 actions on incorrect contracts caused by environment syncs
-  const onUsableAddress = SHOWTIME_CONTRACTS.includes(nft?.contract_address);
+  const usableContractAddress = SHOWTIME_CONTRACTS.includes(
+    nft?.contract_address
+  );
 
   const tokenChainName = Object.keys(CHAIN_IDENTIFIERS).find(
     (key) => CHAIN_IDENTIFIERS[key] == nft?.chain_identifier
@@ -120,7 +122,7 @@ function NFTDropdown({ nft }: Props) {
           </DropdownMenuItem>
         )}
 
-        {hasOwnership && onUsableAddress && !hasMatchingListing && (
+        {hasOwnership && usableContractAddress && !hasMatchingListing && (
           <DropdownMenuItem
             onSelect={() => router.push(`/nft/${nft?.nft_id}/list`)}
             key="list"
@@ -131,7 +133,7 @@ function NFTDropdown({ nft }: Props) {
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
-        {hasOwnership && onUsableAddress && hasMatchingListing && (
+        {hasOwnership && usableContractAddress && hasMatchingListing && (
           <DropdownMenuItem
             onSelect={() => {}}
             key="unlist"
