@@ -28,12 +28,21 @@ const SpotlightItem = ({
   item,
   removeSpotlightItem,
 }) => {
-  const { mutate: mutateItem } = useSWR(
-    () => pageProfile && `/v1/spotlight/${pageProfile.profile_id}`,
+  // const { data: Lois, mutate: mutateItem } = useSWR(
+  //   () => pageProfile && `/v1/nft_detail/258511874`,
+  //   (url) => backend.get(url).then((res) => res.data.data),
+  //   { initialData: item, revalidateOnMount: true, revalidateOnFocus: true }
+  // );
+  // const thisItem = item;
+
+  const { data: thisItem, mutate: mutateItem } = useSWR(
+    () => pageProfile && `/v1/nft_detail/258511874`,
     (url) => backend.get(url).then((res) => res.data.data),
     { initialData: item, revalidateOnMount: true, revalidateOnFocus: true }
   );
-  const thisItem = item;
+
+  console.log("thisItem", thisItem);
+  console.log("item", item);
 
   useEffect(() => {
     if (
@@ -214,7 +223,7 @@ const SpotlightItem = ({
                       setMuted(true);
                       setCurrentlyPlayingVideo(false);
                     }}
-                    className="cursor-pointer text-right flex flex-row"
+                    className="text-right flex flex-row"
                     ref={imgContainerRef}
                   >
                     <img
@@ -595,12 +604,9 @@ const SpotlightItem = ({
                   <Button
                     style="primary"
                     title="Buy on Showtime"
-                    // onClick={() => setBuyModalOpen(true)}
+                    onClick={() => setBuyModalOpen(true)}
                   >
-                    {/* <p className="text-sm sm:text-base">
-                          {`Price ${item.listing.min_price} ${item.listing.currency}`}
-                    </p> */}
-                    <p className="text-sm sm:text-base">Price TBD</p>
+                    <p className="text-sm sm:text-base">Price 1 USDC</p>
                   </Button>
                 </div>
               </div>
