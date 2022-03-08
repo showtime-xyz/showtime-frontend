@@ -50,6 +50,7 @@ export function CommentsScreen() {
       height="h-[90vh]"
       close={handleClose}
       onClose={handleOnClose}
+      bodyTW="bg-white dark:bg-black"
     >
       <Suspense
         fallback={<CommentsStatus isLoading={true} error={undefined} />}
