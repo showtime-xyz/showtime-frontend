@@ -58,7 +58,7 @@ export const FeedList = () => {
   return (
     <SwipeList
       {...queryState}
-      bottomBarHeight={bottomBarHeight}
+      bottomPadding={bottomBarHeight}
       headerHeight={headerHeight}
       data={newData}
     />

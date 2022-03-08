@@ -27,9 +27,10 @@ import { handleShareNFT } from "../utilities";
 
 type Props = {
   nft?: NFT;
+  iconColor?: string;
 };
 
-function NFTDropdown({ nft }: Props) {
+function NFTDropdown({ nft, iconColor }: Props) {
   const userId = useCurrentUserId();
   const { user } = useUser();
   const { userAddress } = useCurrentUserAddress();
@@ -61,7 +62,10 @@ function NFTDropdown({ nft }: Props) {
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
         <MoreHorizontal
-          color={tw.style("bg-black dark:bg-white")?.backgroundColor as string}
+          color={
+            iconColor ??
+            (tw.style("bg-black dark:bg-white")?.backgroundColor as string)
+          }
           width={24}
           height={24}
         />

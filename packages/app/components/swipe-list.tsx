@@ -25,7 +25,7 @@ import { View } from "design-system/view";
 import { ViewabilityTrackerRecyclerList } from "./viewability-tracker-swipe-list";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
-const mediaMaxHeightRelativeToScreen = 0.6;
+const mediaMaxHeightRelativeToScreen = 1;
 
 export const SwipeList = ({
   data,
@@ -34,7 +34,7 @@ export const SwipeList = ({
   refresh,
   initialScrollIndex = 0,
   isLoadingMore,
-  bottomBarHeight = 0,
+  bottomPadding = 0,
   headerHeight = 0,
 }: any) => {
   const listRef = useRef<FlatList>(null);
@@ -70,7 +70,7 @@ export const SwipeList = ({
       return (
         <FeedItem
           itemHeight={itemHeight}
-          bottomBarHeight={bottomBarHeight}
+          bottomPadding={bottomPadding}
           nft={item}
         />
       );
@@ -127,11 +127,11 @@ export const SwipeList = ({
 const FeedItem = React.memo(
   ({
     nft,
-    bottomBarHeight = 0,
+    bottomPadding = 0,
     itemHeight,
   }: {
     nft: NFT;
-    bottomBarHeight: number;
+    bottomPadding: number;
     itemHeight: number;
   }) => {
     const feedItemStyle = {
@@ -152,10 +152,13 @@ const FeedItem = React.memo(
 
     mediaHeight = Math.min(mediaHeight, mediaContainerHeight);
 
-    const descriptionHeight = feedItemStyle.height - mediaContainerHeight;
+    const isDark = useIsDarkMode();
+    const tint = isDark ? "dark" : "light";
+
+    console.log(bottomPadding);
 
     return (
-      <View style={feedItemStyle}>
+      <BlurView style={tw.style(`flex-1 w-full`)} tint={tint} intensity={85}>
         <View tw="absolute w-full h-full">
           {nft.blurhash ? (
             <Blurhash
@@ -172,8 +175,13 @@ const FeedItem = React.memo(
             />
           )}
         </View>
+        <View tw="z-1 p-4">
+          <Collection nft={nft} />
+        </View>
         <View
-          tw={`w-full items-center justify-end bg-black h-[${mediaContainerHeight}px]`}
+          tw={`absolute h-[${
+            itemHeight - bottomPadding - 50
+          }px] justify-center`}
         >
           <Media
             item={nft}
@@ -182,66 +190,31 @@ const FeedItem = React.memo(
             resizeMode="contain"
           />
         </View>
-        <View tw={`w-full h-[${descriptionHeight}px]`}>
-          <NFTDetails nft={nft} bottomBarHeight={bottomBarHeight} />
+        <View
+          tw={`z-1 absolute ${
+            bottomPadding && bottomPadding !== 0
+              ? `bottom-[${bottomPadding}px]`
+              : "bottom-0"
+          } right-0 left-0`}
+        >
+          <NFTDetails nft={nft} />
         </View>
-      </View>
+      </BlurView>
     );
   }
 );
 
-const NFTDetails = ({
-  nft,
-  bottomBarHeight = 0,
-}: {
-  nft: NFT;
-  bottomBarHeight: number;
-}) => {
-  const isDark = useIsDarkMode();
-  const tint = isDark ? "dark" : "light";
-
+const NFTDetails = ({ nft }: { nft: NFT }) => {
   return (
-    <BlurView style={tw.style(`p-4 flex-1 w-full`)} tint={tint} intensity={85}>
-      <View tw="flex-row justify-between">
-        <View tw="flex-row">
-          <Like nft={nft} />
-
-          <View tw="flex-row items-center ml-4">
-            {/* Comments here */}
-
-            {/* <Message
-              height={24}
-              width={24}
-              //@ts-ignore
-              color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
-            />
-            <Text tw="text-xs text-gray-900 dark:text-white font-bold ml-1">
-              240
-            </Text> */}
-          </View>
-        </View>
-
-        <View tw="flex-row">
-          <Pressable onPress={() => handleShareNFT(nft)}>
-            <Share
-              height={22}
-              width={22}
-              //@ts-ignore
-              color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
-            />
-          </Pressable>
-
-          <View tw="w-8" />
-          <NFTDropdown nft={nft} />
-        </View>
-      </View>
-      <View tw="flex-row mt-4">
-        <Creator nft={nft} />
-      </View>
+    <View tw="px-4">
       <View tw="mt-4">
+        <View tw="flex-row mt-4">
+          <Creator nft={nft} />
+        </View>
+
         <Text
           variant="text-2xl"
-          tw="text-gray-900 dark:text-white"
+          tw="text-white mt-4"
           numberOfLines={3}
           sx={{ fontSize: 17, lineHeight: 22 }}
         >
@@ -249,9 +222,20 @@ const NFTDetails = ({
         </Text>
       </View>
 
-      <View tw={`mt-auto pb-[${bottomBarHeight}px]`}>
-        <Collection nft={nft} />
+      <View tw="flex-row justify-between my-4">
+        <View tw="flex-row">
+          <Like nft={nft} />
+        </View>
+
+        <View tw="flex-row">
+          <Pressable onPress={() => handleShareNFT(nft)}>
+            <Share height={22} width={22} color="#fff" />
+          </Pressable>
+
+          <View tw="w-8" />
+          <NFTDropdown nft={nft} iconColor="#fff" />
+        </View>
       </View>
-    </BlurView>
+    </View>
   );
 };

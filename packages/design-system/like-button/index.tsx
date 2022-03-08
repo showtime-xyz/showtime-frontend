@@ -24,16 +24,11 @@ export function LikeButton({
       ) : (
         // </Animated.View>
         // <Animated.View key="unliked" exiting={ZoomOut} entering={ZoomIn}>
-        <Heart
-          height={24}
-          width={24}
-          //@ts-ignore
-          color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
-        />
+        <Heart height={24} width={24} color="#fff" />
         // </Animated.View>
       )}
 
-      <Text tw="text-xs text-gray-900 dark:text-white font-bold ml-1 ">
+      <Text tw="text-xs text-white font-bold ml-1 ">
         {likeCount > 0 ? formatNumber(likeCount) : undefined}
       </Text>
     </Pressable>
