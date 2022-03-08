@@ -29,13 +29,13 @@ type StatusCopyMapping = {
 };
 
 const statusCopyMapping: StatusCopyMapping = {
-  approvalChecking: "Checking listing access",
-  approvalRequesting: "Requesting listing access",
-  approvalError: "Issue granting listing access",
-  approvalSuccess: "Approved for listing",
-  listing: "Listing your NFT",
-  listingError: "Issue listing your NFT",
-  listingSuccess: "Successfully listed your NFT",
+  approvalChecking: "Approve Listing",
+  approvalRequesting: "Requesting listing approval...",
+  approvalError: "Listing approval denied. Please try again.",
+  approvalSuccess: "Successfully approved",
+  listing: "Listing your NFT...",
+  listingError: "Can't list your NFT. Please try again.",
+  listingSuccess: "Success! Your NFT is on sale. Redirecting...",
 };
 
 const defaultCurrency = "WETH";
@@ -108,10 +108,23 @@ export const ListingForm = (props: Props) => {
 
   const isValidForm = formState.isValid && state.status === "idle";
 
-  const ctaCopy =
-    state.status === "idle"
-      ? `List for ${currentPrice} ${currencySymbol}`
-      : statusCopyMapping[state.status];
+  const deriveCTACopy = () => {
+    const displayFreeListingCopy =
+      state.status === "idle" && currentPrice === 0;
+
+    if (displayFreeListingCopy) {
+      return "Free";
+    }
+
+    // Typescript won't guard properly if extracted into a variable
+    if (state.status !== "idle") {
+      return statusCopyMapping[state.status];
+    }
+
+    return `List for ${currentPrice} ${currencySymbol}`;
+  };
+
+  const ctaCopy = deriveCTACopy();
 
   const showSigningOption =
     (state.status === "listing" || state.status === "approvalRequesting") &&
