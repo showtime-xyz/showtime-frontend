@@ -357,7 +357,7 @@ const MintModal = ({ open, onClose }) => {
       ? "0x633b7218644b83D57d90e7299039ebAb19698e9C"
       : signerAddress;
     const setRoyalPercent = overrideRoyaltiesForCharity
-      ? 100
+      ? 50
       : royaltiesPercentage;
     const { data } = await contract.populateTransaction.issueToken(
       signerAddress,
@@ -767,7 +767,7 @@ const OptionsPage = ({
             value={editionCount}
             onChange={(event) =>
               event.target.value > 10000
-                ? setEditionCount(10000)
+                ? setEditionCount(event.target.value)
                 : event.target.value < 1
                 ? setEditionCount(1)
                 : setEditionCount(parseInt(event.target.value))
