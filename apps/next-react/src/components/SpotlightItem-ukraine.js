@@ -36,7 +36,7 @@ const SpotlightItem = ({
   // const thisItem = item;
 
   const { data: thisItem, mutate: mutateItem } = useSWR(
-    () => pageProfile && `/v1/nft_detail/258511874`,
+    () => pageProfile && `/v2/nft_detail/258511874`,
     (url) => backend.get(url).then((res) => res.data.data),
     { initialData: item, revalidateOnMount: true, revalidateOnFocus: true }
   );
