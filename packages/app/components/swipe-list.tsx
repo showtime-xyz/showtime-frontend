@@ -206,6 +206,7 @@ const NFTDetails = ({
       <View tw="flex-row justify-between">
         <View tw="flex-row">
           <Like nft={nft} />
+          <View tw="w-6" />
           <CommentButton nft={nft} />
         </View>
 
@@ -218,7 +219,6 @@ const NFTDetails = ({
               color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
             />
           </Pressable>
-
           <View tw="w-8" />
           <NFTDropdown nft={nft} />
         </View>

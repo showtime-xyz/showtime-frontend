@@ -23,8 +23,9 @@ export function CommentButton({ nft }: CommentButtonProps) {
   }
 
   return (
-    <TextButton size="regular" tw="my--3" onPress={handleOnPress}>
-      <Message /> {getRoundedCount(nft.comment_count)}
+    <TextButton size="regular" tw="p-0 h-auto" onPress={handleOnPress}>
+      <Message height={24} width={24} />{" "}
+      {nft?.comment_count > 0 ? getRoundedCount(nft.comment_count) : ""}
     </TextButton>
   );
 }
