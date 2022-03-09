@@ -1,6 +1,9 @@
-import { withColorScheme } from "app/components/memo-with-theme";
+import { Suspense } from "react";
 
-import { View, Text } from "design-system";
+import { withColorScheme } from "app/components/memo-with-theme";
+import { Notifications } from "app/components/notifications";
+
+import { View, Text, Spinner } from "design-system";
 
 const NotificationsScreen = withColorScheme(() => {
   return (
@@ -12,6 +15,9 @@ const NotificationsScreen = withColorScheme(() => {
       <Text tw="font-semibold text-gray-600 dark:text-gray-400">
         🚧 Coming soon
       </Text>
+      <Suspense fallback={<Spinner size="medium" />}>
+        <Notifications />
+      </Suspense>
     </View>
   );
 });
