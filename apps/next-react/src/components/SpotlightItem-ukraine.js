@@ -19,6 +19,7 @@ import CappedWidth from "./CappedWidth";
 import BadgeIcon from "./Icons/BadgeIcon";
 import EllipsisIcon from "./Icons/EllipsisIcon";
 import OrbitIcon from "./Icons/OrbitIcon";
+import ModalTokenDetail from "./ModalTokenDetail";
 import Button from "./UI/Buttons/Button";
 import BuyModal from "./UI/Modals/BuyModal";
 
@@ -126,6 +127,11 @@ const SpotlightItem = ({
     <>
       {typeof document !== "undefined" ? (
         <>
+          <ModalTokenDetail
+            isOpen={currentlyOpenModal}
+            setEditModalOpen={setCurrentlyOpenModal}
+            item={thisItem}
+          />
           <BuyModal
             open={buyModalOpen}
             onClose={() => setBuyModalOpen(false)}
