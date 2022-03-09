@@ -47,6 +47,8 @@ import Link from "next/link";
 import reactStringReplace from "react-string-replace";
 import useSWR from "swr";
 
+import UkraineProfile from "./ukraine";
+
 export async function getStaticProps({ params: { profile: slug_address } }) {
   if (slug_address.includes("apple-touch-icon"))
     return { props: {}, notFound: true };
@@ -1618,4 +1620,21 @@ const LinkCollection = ({
   </div>
 );
 
-export default Profile;
+/**
+ * To reroute in app routing to the proper charity page view
+ * Traditional redirection happens at file: apps/next-react/next.config.js
+ */
+const ProfileReroute = (props) => {
+  const slug = props.slug_address?.toLowerCase();
+  const ukraineProfileAddress =
+    "0x3a99ea152Dd2eAcc8E95aDdFb943e714Db9ECC22".toLowerCase();
+  const ukraineUsername = "ukraine";
+
+  if (slug === ukraineProfileAddress || slug === ukraineUsername) {
+    return <UkraineProfile {...props} />;
+  }
+
+  return <Profile {...props} />;
+};
+
+export default ProfileReroute;
