@@ -110,7 +110,7 @@ export default () => {
     <Layout>
       <div className="max-w-screen-2xl md:px-3 mx-auto w-full">
         <div
-          className="h-32 md:h-64 relative text-left bg-gray-50 dark:bg-gray-900 2xl:rounded-b-[32px] md:-mx-3 bg-no-repeat bg-contain bg-center xl:bg-cover"
+          className="h-32 md:h-64 relative text-left bg-gray-50 dark:bg-gray-900 2xl:rounded-b-[32px] md:-mx-3 bg-no-repeat bg-center bg-cover"
           style={{
             backgroundImage: `url(${bannerURL})`,
           }}
