@@ -10,7 +10,7 @@ const NotificationsScreen = withColorScheme(() => {
     <Suspense
       fallback={
         <View tw="mt-10 items-center justify-center">
-          <Spinner size="medium" />
+          <Spinner size="small" />
         </View>
       }
     >

@@ -29,8 +29,8 @@ type NotificationCardProp = { notification: NotificationType };
 export const Notifications = () => {
   const { data, fetchMore, refresh, isRefreshing, isLoadingMore } =
     useNotifications();
-  const { isAuthenticated } = useUser();
-  const router = useRouter();
+  //   const { isAuthenticated } = useUser();
+  //   const router = useRouter();
 
   const renderItem = useCallback(({ item }: { item: NotificationType }) => {
     return <NotificationCard notification={item} />;
@@ -55,24 +55,12 @@ export const Notifications = () => {
   );
 
   const ListEmptyComponent = useCallback(
-    () =>
-      isAuthenticated ? (
-        <View tw="h-full items-center justify-center">
-          <Text tw="dark:text-gray-100 text-gray-900">No Results found</Text>
-        </View>
-      ) : (
-        <View tw="h-full items-center justify-center">
-          <Button
-            tw="dark:text-gray-100 text-gray-900"
-            onPress={() => {
-              router.push("/login");
-            }}
-          >
-            Login to continue
-          </Button>
-        </View>
-      ),
-    [isAuthenticated]
+    () => (
+      <View tw="h-full items-center justify-center">
+        <Text tw="dark:text-gray-100 text-gray-900">No new notifications</Text>
+      </View>
+    ),
+    []
   );
 
   const listRef = useRef<any>();
