@@ -8,7 +8,10 @@ import {
   NotificationType,
   useNotifications,
 } from "app/hooks/use-notifications";
+import { useUser } from "app/hooks/use-user";
+import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 import { TextLink } from "app/navigation/link";
+import { useRouter } from "app/navigation/use-router";
 import { formatAddressShort } from "app/utilities";
 
 import { Button, Skeleton, Text, View } from "design-system";
@@ -20,10 +23,6 @@ import {
   SocialToken,
 } from "design-system/icon";
 import { colors } from "design-system/tailwind/colors";
-
-import { useUser } from "../hooks/use-user";
-import { CHAIN_IDENTIFIERS } from "../lib/constants";
-import { useRouter } from "../navigation/use-router";
 
 type NotificationCardProp = { notification: NotificationType };
 
