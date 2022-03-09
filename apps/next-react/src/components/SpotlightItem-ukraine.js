@@ -606,7 +606,7 @@ const SpotlightItem = ({
                     title="Buy on Showtime"
                     onClick={() => setBuyModalOpen(true)}
                   >
-                    <p className="text-sm sm:text-base">Price 1 USDC</p>
+                    <p className="text-sm sm:text-base">Donate 1 USDC</p>
                   </Button>
                 </div>
               </div>
