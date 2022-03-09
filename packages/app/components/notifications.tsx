@@ -10,8 +10,7 @@ import {
 } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
-import { TextLink } from "app/navigation/link";
-import { useRouter } from "app/navigation/use-router";
+import { TextLink, Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
 import { Button, Skeleton, Text, View } from "design-system";
@@ -90,26 +89,26 @@ const NotificationCard = ({ notification }: NotificationCardProp) => {
     <View tw="flex-row p-4 items-center">
       {notificationInfo.icon}
       <View tw="mx-2">
-        {/* <Link href={notificationInfo.href}> */}
-        <Avatar url={notification.img_url} size={24} />
-        {/* </Link> */}
+        <Link href={notificationInfo.href}>
+          <Avatar url={notification.img_url} size={24} />
+        </Link>
       </View>
-      <NotificationDescription notification={notification} />
+      <NotificationDescription
+        notificationInfo={notificationInfo}
+        notification={notification}
+      />
     </View>
   );
 };
 
-const NotificationDescription = ({ notification }: NotificationCardProp) => {
+const NotificationDescription = ({
+  notification,
+  notificationInfo,
+}: {
+  notification: NotificationType;
+  notificationInfo: any;
+}) => {
   const actors = notification.actors;
-  // TODO: nft detail view - reuse item from swipelist
-  //   const chain = useMemo(
-  //     () =>
-  //       Object.keys(CHAIN_IDENTIFIERS).find(
-  //         //@ts-ignore
-  //         (key) => CHAIN_IDENTIFIERS[key] == notification.chain_identifier
-  //       ),
-  //     []
-  //   );
 
   if (actors.length > 0) {
     return (
@@ -165,14 +164,14 @@ const NotificationDescription = ({ notification }: NotificationCardProp) => {
           : null}
 
         {notification.nft__nftdisplay__name ? (
-          <Text
+          <TextLink
             //@ts-ignore
             variant="text-sm"
             tw="text-black dark:text-white font-bold"
-            // href={`/nft/${chain}/${notification.nft__contract__address}/${notification.nft__token_identifier}`}
+            href={notificationInfo.href}
           >
             {notification.nft__nftdisplay__name}
-          </Text>
+          </TextLink>
         ) : null}
       </Text>
     );
