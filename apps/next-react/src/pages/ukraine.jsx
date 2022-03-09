@@ -3,7 +3,7 @@ import BadgeIcon from "@/components/Icons/BadgeIcon";
 import SpotlightItem from "@/components/SpotlightItem-ukraine";
 import Layout from "@/components/layout";
 
-import bannerURL from "../../public/img/ukraine-banner.jpeg";
+import bannerURL from "../../public/img/ukraine-banner.png";
 import pfpURL from "../../public/img/ukraine-dao-pfp.jpeg";
 
 /** Change with the NFT data post mint */

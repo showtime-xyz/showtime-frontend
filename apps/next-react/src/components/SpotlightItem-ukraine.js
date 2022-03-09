@@ -492,11 +492,11 @@ const SpotlightItem = ({
                         {item.collection_name}
                       </p>
                     </div>
-                    {item.listing && (
+                    {thisItem?.listing && (
                       <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
                         {singleEdition
-                          ? `${item.listing.total_edition_quantity} Edition`
-                          : `${item.listing.total_edition_quantity} Editions`}
+                          ? `${thisItem.listing.total_edition_quantity} Edition`
+                          : `${thisItem?.listing.total_edition_quantity} Editions`}
                       </p>
                     )}
                   </div>
