@@ -1,19 +1,21 @@
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { FlatList } from "react-native";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useScrollToTop } from "@react-navigation/native";
 
+import { useMyInfo } from "app/hooks/api-hooks";
 import {
   NotificationType,
   useNotifications,
 } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
+import { axios } from "app/lib/axios";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 import { TextLink, Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
-import { Button, Skeleton, Text, View } from "design-system";
+import { Skeleton, Spinner, Text, View } from "design-system";
 import { Avatar } from "design-system/avatar";
 import {
   HeartFilled,
@@ -26,10 +28,9 @@ import { colors } from "design-system/tailwind/colors";
 type NotificationCardProp = { notification: NotificationType };
 
 export const Notifications = () => {
-  const { data, fetchMore, refresh, isRefreshing, isLoadingMore } =
+  const { data, fetchMore, refresh, isRefreshing, isLoadingMore, isLoading } =
     useNotifications();
-  //   const { isAuthenticated } = useUser();
-  //   const router = useRouter();
+  const { refetchMyInfo } = useMyInfo();
 
   const renderItem = useCallback(({ item }: { item: NotificationType }) => {
     return <NotificationCard notification={item} />;
@@ -62,9 +63,24 @@ export const Notifications = () => {
     []
   );
 
+  useEffect(() => {
+    (async function resetNotificationLastOpenedTime() {
+      await axios({ url: "/v1/check_notifications", method: "POST" });
+      refetchMyInfo();
+    })();
+  }, [refetchMyInfo]);
+
   const listRef = useRef<any>();
 
   useScrollToTop(listRef);
+
+  if (isLoading) {
+    return (
+      <View tw="mt-10 items-center justify-center">
+        <Spinner size="small" />
+      </View>
+    );
+  }
 
   return (
     <FlatList

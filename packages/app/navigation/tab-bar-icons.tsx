@@ -1,6 +1,6 @@
 import { useRouter } from "app/navigation/use-router";
 
-import { View, Pressable, Button } from "design-system";
+import { View, Pressable } from "design-system";
 import {
   Home,
   HomeFilled,
@@ -13,6 +13,8 @@ import {
   Plus,
 } from "design-system/icon";
 import { tw } from "design-system/tailwind";
+
+import { useNotifications } from "../hooks/use-notifications";
 
 function TabBarIcon({ tab, children }) {
   const router = useRouter();
@@ -124,6 +126,8 @@ export const TrendingTabBarIcon = ({ color, focused }) => {
 };
 
 export const NotificationsTabBarIcon = ({ color, focused }) => {
+  const { hasUnreadNotification } = useNotifications();
+
   return (
     <TabBarIcon tab="/notifications">
       {focused ? (
@@ -138,6 +142,9 @@ export const NotificationsTabBarIcon = ({ color, focused }) => {
       ) : (
         <Bell style={tw.style("z-1")} width={24} height={24} color={color} />
       )}
+      {hasUnreadNotification ? (
+        <View tw="w-2 h-2 bg-violet-500 absolute rounded-full bottom-2" />
+      ) : null}
     </TabBarIcon>
   );
 };

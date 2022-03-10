@@ -256,6 +256,7 @@ type MyInfo = {
     likes_comment: any[];
     comments: number[];
     blocked_profile_ids: number[];
+    notifications_last_opened: string | null;
   };
 };
 
@@ -417,6 +418,10 @@ export const useMyInfo = () => {
     [data]
   );
 
+  const refetchMyInfo = useCallback(() => {
+    mutate(queryKey);
+  }, [mutate]);
+
   return {
     data,
     loading: !data,
@@ -427,5 +432,6 @@ export const useMyInfo = () => {
     like,
     unlike,
     isLiked,
+    refetchMyInfo,
   };
 };
