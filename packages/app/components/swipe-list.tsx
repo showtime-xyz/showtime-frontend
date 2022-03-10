@@ -124,7 +124,7 @@ export const SwipeList = ({
   );
 };
 
-const FeedItem = React.memo(
+export const FeedItem = React.memo(
   ({
     nft,
     bottomBarHeight = 0,

@@ -75,3 +75,4 @@ export { default as Flash } from "./Flash";
 export { default as Flip } from "./Flip";
 export { default as Play } from "./Play";
 export { default as PlusFilled } from "./PlusFilled";
+export { default as MarketFilled } from "./MarketFilled";
