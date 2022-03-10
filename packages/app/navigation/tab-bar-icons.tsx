@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { useRouter } from "app/navigation/use-router";
 
 import { View, Pressable } from "design-system";
@@ -126,8 +128,6 @@ export const TrendingTabBarIcon = ({ color, focused }) => {
 };
 
 export const NotificationsTabBarIcon = ({ color, focused }) => {
-  const { hasUnreadNotification } = useNotifications();
-
   return (
     <TabBarIcon tab="/notifications">
       {focused ? (
@@ -142,9 +142,17 @@ export const NotificationsTabBarIcon = ({ color, focused }) => {
       ) : (
         <Bell style={tw.style("z-1")} width={24} height={24} color={color} />
       )}
-      {hasUnreadNotification ? (
-        <View tw="w-2 h-2 bg-violet-500 absolute rounded-full bottom-2" />
-      ) : null}
+      <Suspense fallback={null}>
+        <UnreadNotificationIndicator />
+      </Suspense>
     </TabBarIcon>
   );
+};
+
+const UnreadNotificationIndicator = () => {
+  const { hasUnreadNotification } = useNotifications();
+
+  return hasUnreadNotification ? (
+    <View tw="w-2 h-2 bg-violet-500 absolute rounded-full bottom-2" />
+  ) : null;
 };

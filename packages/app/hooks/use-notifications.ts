@@ -42,11 +42,8 @@ export const useNotifications = () => {
     [isAuthenticated]
   );
 
-  // we don't want to suspend here as this is being used in bottom tab bar icon
-  const queryState = useInfiniteListQuerySWR<NotificationType>(
-    notificationsFetcher,
-    { suspense: false }
-  );
+  const queryState =
+    useInfiniteListQuerySWR<NotificationType>(notificationsFetcher);
 
   const newData = useMemo(() => {
     let newData: NotificationType[] = [];

@@ -15,7 +15,7 @@ import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 import { TextLink, Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
-import { Skeleton, Spinner, Text, View } from "design-system";
+import { Skeleton, Text, View } from "design-system";
 import { Avatar } from "design-system/avatar";
 import {
   HeartFilled,
@@ -73,14 +73,6 @@ export const Notifications = () => {
   const listRef = useRef<any>();
 
   useScrollToTop(listRef);
-
-  if (isLoading) {
-    return (
-      <View tw="mt-10 items-center justify-center">
-        <Spinner size="small" />
-      </View>
-    );
-  }
 
   return (
     <FlatList
