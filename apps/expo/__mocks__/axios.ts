@@ -48,6 +48,15 @@ module.exports = jest.fn(async (params: AxiosRequestConfig) => {
     });
   }
 
+  if (
+    params.url.includes("/api/v1/notifications") &&
+    params.method.toLowerCase() === "get"
+  ) {
+    return Promise.resolve({
+      data: { data: [] },
+    });
+  }
+
   if (params.url === "/v2/myinfo") {
     return Promise.resolve({
       data: {
