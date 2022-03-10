@@ -3,6 +3,7 @@ import { FlatList } from "react-native";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useScrollToTop } from "@react-navigation/native";
+import { formatDistanceToNowStrict } from "date-fns";
 
 import { useMyInfo } from "app/hooks/api-hooks";
 import {
@@ -21,7 +22,7 @@ import {
   HeartFilled,
   MessageFilled,
   PlusFilled,
-  SocialToken,
+  MarketFilled,
 } from "design-system/icon";
 import { colors } from "design-system/tailwind/colors";
 
@@ -50,7 +51,7 @@ export const Notifications = () => {
   }, [isLoadingMore]);
 
   const Separator = useCallback(
-    () => <View tw={`bg-gray-200 dark:bg-gray-800 h-[1px]`} />,
+    () => <View tw={`bg-gray-100 dark:bg-gray-800 h-[1px]`} />,
     []
   );
 
@@ -120,68 +121,75 @@ const NotificationDescription = ({
 
   if (actors.length > 0) {
     return (
-      <Text
-        //@ts-ignore
-        variant="text-sm"
-        tw="text-gray-600 dark:text-gray-400 max-w-[69vw]"
-        ellipsizeMode="tail"
-        sx={{ lineHeight: 22 }}
-      >
-        {actors.length == 1 ? (
-          <>
-            <ActorLink actor={actors[0]} />{" "}
-          </>
-        ) : null}
-        {actors.length == 2 ? (
-          <>
-            <ActorLink actor={actors[0]} /> and <ActorLink actor={actors[1]} />{" "}
-          </>
-        ) : null}
-        {actors.length == 3 ? (
-          <>
-            <ActorLink actor={actors[0]} />,
-            <ActorLink actor={actors[1]} /> , and{" "}
-            <ActorLink actor={actors[2]} />
-          </>
-        ) : null}
-        {actors.length > 3 ? (
-          <>
-            <ActorLink actor={actors[0]} />, <ActorLink actor={actors[1]} />,
-            and {actors.length - 2} other{" "}
-            {actors.length - 2 == 1 ? "person " : "people "}
-          </>
-        ) : null}
+      <View>
+        <Text
+          //@ts-ignore
+          tw="text-gray-600 dark:text-gray-400 max-w-[69vw]"
+          ellipsizeMode="tail"
+          sx={{ lineHeight: 20, fontSize: 13 }}
+        >
+          {actors.length == 1 ? (
+            <>
+              <ActorLink actor={actors[0]} />{" "}
+            </>
+          ) : null}
+          {actors.length == 2 ? (
+            <>
+              <ActorLink actor={actors[0]} /> and{" "}
+              <ActorLink actor={actors[1]} />{" "}
+            </>
+          ) : null}
+          {actors.length == 3 ? (
+            <>
+              <ActorLink actor={actors[0]} />,
+              <ActorLink actor={actors[1]} /> , and{" "}
+              <ActorLink actor={actors[2]} />
+            </>
+          ) : null}
+          {actors.length > 3 ? (
+            <>
+              <ActorLink actor={actors[0]} />, <ActorLink actor={actors[1]} />,
+              and {actors.length - 2} other{" "}
+              {actors.length - 2 == 1 ? "person " : "people "}
+            </>
+          ) : null}
 
-        {NOTIFICATION_TYPES.LIKED.includes(notification.type_id)
-          ? "liked "
-          : null}
-        {NOTIFICATION_TYPES.FOLLOWED.includes(notification.type_id)
-          ? "followed you"
-          : null}
-        {NOTIFICATION_TYPES.COMMENT.includes(notification.type_id)
-          ? "commented on "
-          : null}
-        {NOTIFICATION_TYPES.COMMENT_MENTION.includes(notification.type_id)
-          ? "mentioned you in "
-          : null}
-        {NOTIFICATION_TYPES.COMMENT_LIKE.includes(notification.type_id)
-          ? "liked your comment on "
-          : null}
-        {NOTIFICATION_TYPES.BOUGHT.includes(notification.type_id)
-          ? "bought "
-          : null}
+          {NOTIFICATION_TYPES.LIKED.includes(notification.type_id)
+            ? "liked "
+            : null}
+          {NOTIFICATION_TYPES.FOLLOWED.includes(notification.type_id)
+            ? "followed you"
+            : null}
+          {NOTIFICATION_TYPES.COMMENT.includes(notification.type_id)
+            ? "commented on "
+            : null}
+          {NOTIFICATION_TYPES.COMMENT_MENTION.includes(notification.type_id)
+            ? "mentioned you in "
+            : null}
+          {NOTIFICATION_TYPES.COMMENT_LIKE.includes(notification.type_id)
+            ? "liked your comment on "
+            : null}
+          {NOTIFICATION_TYPES.BOUGHT.includes(notification.type_id)
+            ? "bought "
+            : null}
 
-        {notification.nft__nftdisplay__name ? (
-          <TextLink
-            //@ts-ignore
-            variant="text-sm"
-            tw="text-black dark:text-white font-bold"
-            href={notificationInfo.href}
-          >
-            {notification.nft__nftdisplay__name}
-          </TextLink>
-        ) : null}
-      </Text>
+          {notification.nft__nftdisplay__name ? (
+            <TextLink
+              //@ts-ignore
+              variant="text-sm"
+              tw="text-black dark:text-white font-bold"
+              href={notificationInfo.href}
+            >
+              {notification.nft__nftdisplay__name}
+            </TextLink>
+          ) : null}
+        </Text>
+        <Text tw="mt-1 text-gray-500" variant="text-xs">
+          {formatDistanceToNowStrict(new Date(notification.to_timestamp), {
+            addSuffix: true,
+          })}
+        </Text>
+      </View>
     );
   }
 
@@ -293,8 +301,7 @@ export const useNotificationInfo = (notification: NotificationType) => {
     case 8:
       return {
         type: "bought_my_piece",
-        // TODO: incorrect icon
-        icon: <SocialToken width={20} height={20} color={colors.indigo[500]} />,
+        icon: <MarketFilled width={20} height={20} color={colors.amber[500]} />,
         href: nftLink,
       };
     default:
