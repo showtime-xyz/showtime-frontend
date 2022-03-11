@@ -1,7 +1,5 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { useWindowDimensions } from "react-native";
-
-import Router from "next/router";
 
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { useUser } from "app/hooks/use-user";
