@@ -154,8 +154,6 @@ export const FeedItem = React.memo(
     const isDark = useIsDarkMode();
     const tint = isDark ? "dark" : "light";
 
-    console.log(bottomPadding);
-
     return (
       <BlurView style={tw.style(`flex-1 w-full`)} tint={tint} intensity={85}>
         <View tw="absolute w-full h-full">
