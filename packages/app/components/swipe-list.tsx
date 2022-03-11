@@ -214,7 +214,7 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
 
       <Text
         variant="text-2xl"
-        tw="text-white"
+        tw="dark:text-white"
         numberOfLines={3}
         sx={{ fontSize: 17, lineHeight: 22 }}
       >
@@ -230,11 +230,16 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
 
         <View tw="flex-row">
           <Pressable onPress={() => handleShareNFT(nft)}>
-            <Share height={22} width={22} color="#fff" />
+            <Share
+              height={22}
+              width={22}
+              // @ts-ignore
+              color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
+            />
           </Pressable>
 
           <View tw="w-8" />
-          <NFTDropdown nft={nft} iconColor="#fff" />
+          <NFTDropdown nft={nft} />
         </View>
       </View>
 
