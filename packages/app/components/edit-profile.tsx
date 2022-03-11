@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
 
+import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useLinkOptions } from "app/hooks/use-link-options";
 import { useUser } from "app/hooks/use-user";
 import { useValidateUsername } from "app/hooks/use-validate-username";
@@ -15,7 +16,6 @@ import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { SORT_FIELDS } from "app/utilities";
 
 import { Accordion, Button, Fieldset, Text, View } from "design-system";
-import { Avatar } from "design-system/avatar";
 import { ChevronUp } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 
@@ -115,7 +115,9 @@ export const EditProfile = () => {
         data: newValues,
       });
 
+      // TODO: optimise to make fewer API calls!
       mutate(MY_INFO_ENDPOINT);
+      mutate(USER_PROFILE_KEY + user?.data.profile.wallet_addresses[0]);
 
       router.replace(`/profile/${user?.data.profile.wallet_addresses[0]}`);
     } catch (e) {
@@ -125,17 +127,14 @@ export const EditProfile = () => {
   };
 
   return (
-    <View tw="flex-1 pb-20 px-4">
+    <View tw="flex-1">
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior="padding"
         enabled
         keyboardVerticalOffset={95}
       >
-        <ScrollView>
-          <View tw="mt-4">
-            <Avatar url={user?.data?.profile?.img_url} size={120} />
-          </View>
+        <ScrollView contentContainerStyle={tw.style("pb-20 px-4")}>
           <View>
             <View tw="flex-row mt-4">
               <Controller

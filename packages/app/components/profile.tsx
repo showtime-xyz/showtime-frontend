@@ -419,26 +419,34 @@ const ProfileTop = ({
                   Unblock
                 </Button>
               </View>
+            ) : profileId && userId !== profileId ? (
+              <View tw="flex-row items-center" pointerEvents="box-none">
+                <ProfileDropdown user={profileData?.data.profile} />
+                <View tw="w-2" />
+                <Button
+                  size="regular"
+                  onPress={() => {
+                    if (isFollowingUser) {
+                      unfollow(profileId);
+                    } else {
+                      follow(profileId);
+                    }
+                  }}
+                >
+                  {isFollowingUser ? "Following" : "Follow"}
+                </Button>
+              </View>
             ) : (
-              profileId &&
-              userId !== profileId && (
-                <View tw="flex-row items-center" pointerEvents="box-none">
-                  <ProfileDropdown user={profileData?.data.profile} />
-                  <View tw="w-2" />
-                  <Button
-                    size="regular"
-                    onPress={() => {
-                      if (isFollowingUser) {
-                        unfollow(profileId);
-                      } else {
-                        follow(profileId);
-                      }
-                    }}
-                  >
-                    {isFollowingUser ? "Following" : "Follow"}
-                  </Button>
-                </View>
-              )
+              <View tw="flex-row items-center" pointerEvents="box-none">
+                <Button
+                  size="regular"
+                  onPress={() => {
+                    router.push("/editProfile");
+                  }}
+                >
+                  Edit profile
+                </Button>
+              </View>
             )}
           </View>
 
