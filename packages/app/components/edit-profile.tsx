@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo } from "react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
@@ -7,8 +7,11 @@ import { useSWRConfig } from "swr";
 
 import { useLinkOptions } from "app/hooks/use-link-options";
 import { useUser } from "app/hooks/use-user";
+import { useValidateUsername } from "app/hooks/use-validate-username";
 import { axios } from "app/lib/axios";
 import { yup } from "app/lib/yup";
+import { useRouter } from "app/navigation/use-router";
+import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { SORT_FIELDS } from "app/utilities";
 
 import { Accordion, Button, Fieldset, Text, View } from "design-system";
@@ -16,10 +19,11 @@ import { Avatar } from "design-system/avatar";
 import { ChevronUp } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 
-import { useRouter } from "../navigation/use-router";
-import { MY_INFO_ENDPOINT } from "../providers/user-provider";
+const editProfileValidationSchema = yup.object({
+  username: yup.string().min(3),
+  bio: yup.string().max(300),
+});
 
-const editProfileValidationSchema = yup.object({});
 const nftList = [
   { label: "Created", value: 1 },
   { label: "Owned", value: 2 },
@@ -36,9 +40,10 @@ export const EditProfile = () => {
   const { mutate } = useSWRConfig();
   const router = useRouter();
 
+  const { isValid, validate } = useValidateUsername();
   const socialLinks = useLinkOptions();
 
-  const defaultFormLinks = useMemo(() => {
+  const defaultValues = useMemo(() => {
     const links: any = {};
     if (socialLinks?.data?.data && user?.data?.profile?.links) {
       socialLinks.data.data.forEach((s) => {
@@ -52,22 +57,17 @@ export const EditProfile = () => {
       });
     }
 
-    return links;
-  }, [socialLinks?.data?.data, user?.data?.profile]);
-
-  const defaultValues = useMemo(
-    () => ({
+    return {
       name: user?.data?.profile.name,
       username: user?.data?.profile.username,
       bio: user?.data?.profile.bio,
-      links: defaultFormLinks,
+      links,
       website_url: user?.data?.profile.website_url,
       default_created_sort_id: user?.data?.profile.default_created_sort_id,
       default_list_id: user?.data?.profile.default_list_id,
       default_owned_sort_id: user?.data?.profile.default_owned_sort_id,
-    }),
-    [user?.data?.profile, defaultFormLinks]
-  );
+    };
+  }, [socialLinks?.data?.data, user?.data?.profile]);
 
   const {
     control,
@@ -86,7 +86,7 @@ export const EditProfile = () => {
     reset(defaultValues);
   }, [defaultValues]);
 
-  const handleSubmitForm = async (values: any) => {
+  const handleSubmitForm = async (values: typeof defaultValues) => {
     const links = Object.keys(values.links)
       .filter((key) => values.links[key]?.trim())
       .map((key) => {
@@ -97,7 +97,16 @@ export const EditProfile = () => {
         };
       });
 
-    const newValues = { ...values, links: links };
+    const newValues = {
+      name: values.name?.trim() || null,
+      username: values.username?.trim() || null,
+      bio: values.bio?.trim() || null,
+      links,
+      website_url: values.website_url?.trim() || null,
+      default_created_sort_id: values.default_created_sort_id,
+      default_list_id: values.default_list_id,
+      default_owned_sort_id: values.default_owned_sort_id,
+    };
 
     try {
       await axios({
@@ -132,6 +141,7 @@ export const EditProfile = () => {
                   label="Name"
                   placeholder="Your display name"
                   value={value}
+                  textContentType="name"
                   errorText={errors.name?.message}
                   onBlur={onBlur}
                   onChangeText={onChange}
@@ -141,14 +151,21 @@ export const EditProfile = () => {
 
             <Controller
               control={control}
+              rules={{
+                onChange: (v) => {
+                  validate(v.target.value);
+                },
+              }}
               name="username"
               render={({ field: { onChange, onBlur, value } }) => (
                 <Fieldset
                   tw="flex-1"
                   label="Username"
                   value={value}
+                  textContentType="username"
                   errorText={errors.username?.message}
                   onBlur={onBlur}
+                  helperText={!isValid ? "username not available" : undefined}
                   onChangeText={onChange}
                 />
               )}
@@ -164,7 +181,7 @@ export const EditProfile = () => {
                 placeholder="About me"
                 tw="mt-4"
                 value={value}
-                errorText={errors.username?.message}
+                errorText={errors.bio?.message}
                 onBlur={onBlur}
                 onChangeText={onChange}
               />
@@ -189,9 +206,10 @@ export const EditProfile = () => {
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Fieldset
                       label="Website"
+                      keyboardType="url"
+                      textContentType="URL"
                       placeholder="Your url"
                       value={value}
-                      errorText={errors.username?.message}
                       onBlur={onBlur}
                       onChangeText={onChange}
                     />
@@ -202,6 +220,7 @@ export const EditProfile = () => {
                   return (
                     <Controller
                       control={control}
+                      key={v.id}
                       name={`links[${v.id}]`}
                       render={({ field: { onChange, onBlur, value } }) => (
                         <Fieldset
