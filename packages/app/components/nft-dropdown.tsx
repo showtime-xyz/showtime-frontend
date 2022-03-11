@@ -60,8 +60,6 @@ function NFTDropdown({ nft }: Props) {
     nft?.contract_address
   );
 
-  console.log(nft);
-
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
