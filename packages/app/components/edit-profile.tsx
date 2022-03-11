@@ -1,8 +1,8 @@
 import { useEffect, useMemo } from "react";
+import { KeyboardAvoidingView, ScrollView } from "react-native";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSWRConfig } from "swr";
 
 import { useLinkOptions } from "app/hooks/use-link-options";
@@ -125,190 +125,201 @@ export const EditProfile = () => {
   };
 
   return (
-    <View tw="flex-1 pb-20">
-      <KeyboardAwareScrollView>
-        <View tw="p-4">
-          <Avatar url={user?.data?.profile?.img_url} size={50} />
-        </View>
-        <View>
-          <View tw="flex-row mt-4">
-            <Controller
-              control={control}
-              name="name"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Fieldset
-                  tw="flex-1 mr-4"
-                  label="Name"
-                  placeholder="Your display name"
-                  value={value}
-                  textContentType="name"
-                  errorText={errors.name?.message}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                />
-              )}
-            />
-
-            <Controller
-              control={control}
-              rules={{
-                onChange: (v) => {
-                  validate(v.target.value);
-                },
-              }}
-              name="username"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Fieldset
-                  tw="flex-1"
-                  label="Username"
-                  value={value}
-                  textContentType="username"
-                  errorText={errors.username?.message}
-                  onBlur={onBlur}
-                  helperText={!isValid ? "username not available" : undefined}
-                  onChangeText={onChange}
-                />
-              )}
-            />
+    <View tw="flex-1 pb-20 px-4">
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior="padding"
+        enabled
+        keyboardVerticalOffset={95}
+      >
+        <ScrollView>
+          <View tw="mt-4">
+            <Avatar url={user?.data?.profile?.img_url} size={120} />
           </View>
-
-          <Controller
-            control={control}
-            name="bio"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Fieldset
-                label="About me"
-                placeholder="About me"
-                tw="mt-4"
-                value={value}
-                errorText={errors.bio?.message}
-                onBlur={onBlur}
-                onChangeText={onChange}
+          <View>
+            <View tw="flex-row mt-4">
+              <Controller
+                control={control}
+                name="name"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Fieldset
+                    tw="flex-1 mr-4"
+                    label="Name"
+                    placeholder="Your display name"
+                    value={value}
+                    textContentType="name"
+                    errorText={errors.name?.message}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                  />
+                )}
               />
-            )}
-          />
 
-          <Accordion.Root>
-            <Accordion.Item value="options">
-              <Accordion.Trigger>
-                <Accordion.Label>Links</Accordion.Label>
-                <Accordion.Chevron>
-                  <ChevronUp
-                    //@ts-ignore
-                    color={tw.style("dark:bg-white bg-black").backgroundColor}
+              <Controller
+                control={control}
+                rules={{
+                  onChange: (v) => {
+                    validate(v.target.value);
+                  },
+                }}
+                name="username"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Fieldset
+                    tw="flex-1"
+                    label="Username"
+                    value={value}
+                    textContentType="username"
+                    errorText={errors.username?.message}
+                    onBlur={onBlur}
+                    helperText={!isValid ? "username not available" : undefined}
+                    onChangeText={onChange}
                   />
-                </Accordion.Chevron>
-              </Accordion.Trigger>
-              <Accordion.Content>
-                <Controller
-                  control={control}
-                  name="website_url"
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <Fieldset
-                      label="Website"
-                      keyboardType="url"
-                      textContentType="URL"
-                      placeholder="Your url"
-                      value={value}
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                    />
-                  )}
+                )}
+              />
+            </View>
+
+            <Controller
+              control={control}
+              name="bio"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Fieldset
+                  label="About me"
+                  placeholder="About me"
+                  tw="mt-4"
+                  value={value}
+                  errorText={errors.bio?.message}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
                 />
+              )}
+            />
 
-                {socialLinks.data?.data.map((v) => {
-                  return (
-                    <Controller
-                      control={control}
-                      key={v.id}
-                      name={`links[${v.id}]`}
-                      render={({ field: { onChange, onBlur, value } }) => (
-                        <Fieldset
-                          tw="mt-4"
-                          label={v.name}
-                          placeholder={v.name}
-                          value={value}
-                          onBlur={onBlur}
-                          onChangeText={onChange}
-                        />
-                      )}
+            <Accordion.Root>
+              <Accordion.Item value="options">
+                <Accordion.Trigger tw="px-0">
+                  <Accordion.Label>Links</Accordion.Label>
+                  <Accordion.Chevron>
+                    <ChevronUp
+                      //@ts-ignore
+                      color={tw.style("dark:bg-white bg-black").backgroundColor}
                     />
-                  );
-                })}
-              </Accordion.Content>
-            </Accordion.Item>
-          </Accordion.Root>
-
-          <Accordion.Root>
-            <Accordion.Item value="options">
-              <Accordion.Trigger>
-                <Accordion.Label>Page Settings</Accordion.Label>
-                <Accordion.Chevron>
-                  <ChevronUp
-                    //@ts-ignore
-                    color={tw.style("dark:bg-white bg-black").backgroundColor}
+                  </Accordion.Chevron>
+                </Accordion.Trigger>
+                <Accordion.Content>
+                  <Controller
+                    control={control}
+                    name="website_url"
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <Fieldset
+                        label="Website"
+                        keyboardType="url"
+                        textContentType="URL"
+                        placeholder="Your url"
+                        value={value}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                      />
+                    )}
                   />
-                </Accordion.Chevron>
-              </Accordion.Trigger>
-              <Accordion.Content>
-                <Controller
-                  control={control}
-                  name="default_list_id"
-                  render={({ field: { onChange, value } }) => (
-                    <Fieldset
-                      label="Default NFT List"
-                      selectOnly
-                      select={{
-                        options: nftList,
-                        placeholder: "Select",
-                        value: value,
-                        onChange: onChange,
-                      }}
-                    />
-                  )}
-                />
 
-                <Controller
-                  control={control}
-                  name="default_created_sort_id"
-                  render={({ field: { onChange, value } }) => (
-                    <Fieldset
-                      label="Sort Created By"
-                      selectOnly
-                      tw="mt-4"
-                      select={{
-                        options: sortingOptionsList,
-                        placeholder: "Select",
-                        value: value,
-                        onChange: onChange,
-                      }}
-                    />
-                  )}
-                />
+                  {socialLinks.data?.data.map((v) => {
+                    return (
+                      <Controller
+                        control={control}
+                        key={v.id}
+                        name={`links[${v.id}]`}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                          <Fieldset
+                            tw="mt-4"
+                            label={v.name}
+                            value={value}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            leftElement={
+                              <Text tw="dark:text-gray-400 text-gray-600">
+                                {v.prefix}
+                              </Text>
+                            }
+                          />
+                        )}
+                      />
+                    );
+                  })}
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion.Root>
 
-                <Controller
-                  control={control}
-                  name="default_owned_sort_id"
-                  render={({ field: { onChange, value } }) => (
-                    <Fieldset
-                      label="Sort Owned By"
-                      selectOnly
-                      tw="mt-4"
-                      select={{
-                        options: sortingOptionsList,
-                        placeholder: "Select",
-                        value: value,
-                        onChange: onChange,
-                      }}
+            <Accordion.Root>
+              <Accordion.Item value="options">
+                <Accordion.Trigger tw="px-0">
+                  <Accordion.Label>Page Settings</Accordion.Label>
+                  <Accordion.Chevron>
+                    <ChevronUp
+                      //@ts-ignore
+                      color={tw.style("dark:bg-white bg-black").backgroundColor}
                     />
-                  )}
-                />
-              </Accordion.Content>
-            </Accordion.Item>
-          </Accordion.Root>
-        </View>
-      </KeyboardAwareScrollView>
-      <View tw="absolute bottom-0 w-full py-10">
+                  </Accordion.Chevron>
+                </Accordion.Trigger>
+                <Accordion.Content>
+                  <Controller
+                    control={control}
+                    name="default_list_id"
+                    render={({ field: { onChange, value } }) => (
+                      <Fieldset
+                        label="Default NFT List"
+                        selectOnly
+                        select={{
+                          options: nftList,
+                          placeholder: "Select",
+                          value: value,
+                          onChange: onChange,
+                        }}
+                      />
+                    )}
+                  />
+
+                  <Controller
+                    control={control}
+                    name="default_created_sort_id"
+                    render={({ field: { onChange, value } }) => (
+                      <Fieldset
+                        label="Sort Created By"
+                        selectOnly
+                        tw="mt-4"
+                        select={{
+                          options: sortingOptionsList,
+                          placeholder: "Select",
+                          value: value,
+                          onChange: onChange,
+                        }}
+                      />
+                    )}
+                  />
+
+                  <Controller
+                    control={control}
+                    name="default_owned_sort_id"
+                    render={({ field: { onChange, value } }) => (
+                      <Fieldset
+                        label="Sort Owned By"
+                        selectOnly
+                        tw="mt-4"
+                        select={{
+                          options: sortingOptionsList,
+                          placeholder: "Select",
+                          value: value,
+                          onChange: onChange,
+                        }}
+                      />
+                    )}
+                  />
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion.Root>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+      <View tw="absolute bottom-0 w-full px-10 pb-5">
         <Button
           disabled={isSubmitting}
           tw={isSubmitting ? "opacity-50" : ""}
