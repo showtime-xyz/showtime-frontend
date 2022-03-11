@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
@@ -31,15 +31,36 @@ export const EditProfile = () => {
 
   const socialLinks = useLinkOptions();
 
-  const defaultValues = {
-    name: user?.data?.profile.name,
-    username: user?.data?.profile.username,
-    bio: user?.data?.profile.bio,
-    links: user?.data?.profile.links,
-    default_created_sort_id: user?.data?.profile.default_created_sort_id,
-    default_list_id: user?.data?.profile.default_list_id,
-    default_owned_sort_id: user?.data?.profile.default_owned_sort_id,
-  };
+  const defaultFormLinks = useMemo(() => {
+    const links: any = {};
+    if (socialLinks?.data?.data && user?.data?.profile?.links) {
+      socialLinks.data.data.forEach((s) => {
+        const foundLink = user.data.profile.links.find(
+          (l) => l.type_id === s.id
+        );
+
+        if (foundLink) {
+          links[s.id] = foundLink.user_input;
+        }
+      });
+    }
+
+    return links;
+  }, [socialLinks?.data?.data, user?.data?.profile]);
+
+  const defaultValues = useMemo(
+    () => ({
+      name: user?.data?.profile.name,
+      username: user?.data?.profile.username,
+      bio: user?.data?.profile.bio,
+      links: defaultFormLinks,
+      website_url: user?.data?.profile.website_url,
+      default_created_sort_id: user?.data?.profile.default_created_sort_id,
+      default_list_id: user?.data?.profile.default_list_id,
+      default_owned_sort_id: user?.data?.profile.default_owned_sort_id,
+    }),
+    [user?.data?.profile, defaultFormLinks]
+  );
 
   const {
     control,
@@ -54,10 +75,8 @@ export const EditProfile = () => {
   });
 
   useEffect(() => {
-    if (user?.data?.profile) {
-      reset(defaultValues);
-    }
-  }, [user?.data?.profile]);
+    reset(defaultValues);
+  }, [defaultValues]);
 
   const handleSubmitForm = (values) => {};
 
@@ -133,7 +152,7 @@ export const EditProfile = () => {
               <Accordion.Content>
                 <Controller
                   control={control}
-                  name="website"
+                  name="website_url"
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Fieldset
                       label="Website"
@@ -150,7 +169,7 @@ export const EditProfile = () => {
                   return (
                     <Controller
                       control={control}
-                      name={v.name}
+                      name={`links[${v.id}]`}
                       render={({ field: { onChange, onBlur, value } }) => (
                         <Fieldset
                           tw="mt-4"
