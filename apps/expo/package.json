@@ -118,7 +118,7 @@
     "querystring-es3": "~0.2.0",
     "react": "18.0.0-rc.0",
     "react-dom": "18.0.0-rc.0",
-    "react-hook-form": "^7.20.2",
+    "react-hook-form": "^7.27.1",
     "react-native": "0.64.3",
     "react-native-blurhash": "1.1.5",
     "react-native-crypto": "^2.1.0",
