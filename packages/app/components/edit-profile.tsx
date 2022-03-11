@@ -3,16 +3,21 @@ import { useEffect, useMemo, useRef } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useSWRConfig } from "swr";
 
 import { useLinkOptions } from "app/hooks/use-link-options";
 import { useUser } from "app/hooks/use-user";
+import { axios } from "app/lib/axios";
 import { yup } from "app/lib/yup";
 import { SORT_FIELDS } from "app/utilities";
 
-import { Accordion, Button, Fieldset, View } from "design-system";
+import { Accordion, Button, Fieldset, Text, View } from "design-system";
 import { Avatar } from "design-system/avatar";
 import { ChevronUp } from "design-system/icon";
 import { tw } from "design-system/tailwind";
+
+import { useRouter } from "../navigation/use-router";
+import { MY_INFO_ENDPOINT } from "../providers/user-provider";
 
 const editProfileValidationSchema = yup.object({});
 const nftList = [
@@ -22,12 +27,14 @@ const nftList = [
 ];
 
 const sortingOptionsList = [
+  //@ts-ignore
   ...Object.keys(SORT_FIELDS).map((key) => SORT_FIELDS[key]),
 ];
 
 export const EditProfile = () => {
   const { user } = useUser();
-  const initialised = useRef(false);
+  const { mutate } = useSWRConfig();
+  const router = useRouter();
 
   const socialLinks = useLinkOptions();
 
@@ -65,7 +72,8 @@ export const EditProfile = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    setError,
+    formState: { errors, isSubmitting },
     reset,
   } = useForm<any>({
     resolver: yupResolver(editProfileValidationSchema),
@@ -78,9 +86,34 @@ export const EditProfile = () => {
     reset(defaultValues);
   }, [defaultValues]);
 
-  const handleSubmitForm = (values) => {};
+  const handleSubmitForm = async (values: any) => {
+    const links = Object.keys(values.links)
+      .filter((key) => values.links[key]?.trim())
+      .map((key) => {
+        const typeIdInt = parseInt(key);
+        return {
+          type_id: isNaN(typeIdInt) ? key : typeIdInt,
+          user_input: values.links[key] ? values.links[key].trim() : null,
+        };
+      });
 
-  console.log("profile ", user?.data?.profile);
+    const newValues = { ...values, links: links };
+
+    try {
+      await axios({
+        url: "/v1/editname",
+        method: "POST",
+        data: newValues,
+      });
+
+      mutate(MY_INFO_ENDPOINT);
+
+      router.replace(`/profile/${user?.data.profile.wallet_addresses[0]}`);
+    } catch (e) {
+      setError("submitError", { message: "Something went wrong" });
+      console.error("edit profile failed ", e);
+    }
+  };
 
   return (
     <View tw="flex-1 pb-20">
@@ -256,8 +289,17 @@ export const EditProfile = () => {
           </Accordion.Root>
         </View>
       </KeyboardAwareScrollView>
-      <View tw="absolute bottom-10 w-full px-10">
-        <Button onPress={handleSubmit(handleSubmitForm)}>Done</Button>
+      <View tw="absolute bottom-0 w-full py-10">
+        <Button
+          disabled={isSubmitting}
+          tw={isSubmitting ? "opacity-50" : ""}
+          onPress={handleSubmit(handleSubmitForm)}
+        >
+          Done
+        </Button>
+        <Text tw="mt-1 text-red-500 text-sm text-center">
+          {errors.submitError?.message}
+        </Text>
       </View>
     </View>
   );
