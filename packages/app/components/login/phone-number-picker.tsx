@@ -124,7 +124,7 @@ type Props = {
 };
 
 export function Header({ title, close, onSearchSubmit }: Props) {
-  const [showSearch, setShowSearch] = useState(false);
+  const [showSearch, setShowSearch] = useState(true);
   const searchDebounceTimeout = useRef<any>(null);
 
   const handleSearch = (text: string) => {
