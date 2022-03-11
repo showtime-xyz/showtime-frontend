@@ -20,7 +20,7 @@ import { ChevronUp } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 
 const editProfileValidationSchema = yup.object({
-  username: yup.string().min(3),
+  username: yup.string().min(2),
   bio: yup.string().max(300),
 });
 

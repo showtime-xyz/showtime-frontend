@@ -436,7 +436,7 @@ const ProfileTop = ({
                   {isFollowingUser ? "Following" : "Follow"}
                 </Button>
               </View>
-            ) : (
+            ) : userId === profileId ? (
               <View tw="flex-row items-center" pointerEvents="box-none">
                 <Button
                   size="regular"
@@ -447,7 +447,7 @@ const ProfileTop = ({
                   Edit profile
                 </Button>
               </View>
-            )}
+            ) : null}
           </View>
 
           <View tw="px-2 py-3" pointerEvents="box-none">

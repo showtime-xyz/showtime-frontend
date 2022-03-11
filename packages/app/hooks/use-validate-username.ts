@@ -16,7 +16,7 @@ export const useValidateUsername = () => {
         username.toLowerCase() === user?.data?.profile?.username?.toLowerCase()
       ) {
         setIsValid(true);
-      } else if (username.length > 2) {
+      } else if (username.length > 1) {
         const res = await axios({
           url: `/v1/username_available?username=${username}`,
           method: "get",
