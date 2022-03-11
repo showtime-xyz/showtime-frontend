@@ -8,6 +8,7 @@ import {
 } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
+import { useHeaderHeight } from "@react-navigation/elements";
 import reactStringReplace from "react-string-replace";
 
 import { ProfileDropdown } from "app/components/profile-dropdown";
@@ -105,6 +106,7 @@ const Profile = ({ address }: { address?: string }) => {
   );
   const [selected, setSelected] = useState(0);
   const colorScheme = useColorScheme();
+  const headerHeight = useHeaderHeight();
 
   return (
     <View tw="bg-white dark:bg-black flex-1">
@@ -115,6 +117,7 @@ const Profile = ({ address }: { address?: string }) => {
         lazy
       >
         <Tabs.Header>
+          <View tw={`h-[${headerHeight}px]`} />
           <ProfileTop address={address} isBlocked={isBlocked} />
         </Tabs.Header>
         {data?.data.lists ? (

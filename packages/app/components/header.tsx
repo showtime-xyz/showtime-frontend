@@ -29,18 +29,13 @@ const HeaderRight = () => {
   return (
     <View>
       {!isLoading && (
-        <View
-          tw={[
-            isSearchBarOpen ? "hidden" : "",
-            "flex-row items-center bg-white dark:bg-black",
-          ]}
-        >
+        <View tw={[isSearchBarOpen ? "hidden" : "", "flex-row items-center"]}>
           {isAuthenticated && (
             <View tw="hidden md:flex">
               <NotificationsTabBarIcon color="white" focused={false} />
             </View>
           )}
-          <View tw="bg-white dark:bg-black min-w-20 items-end">
+          <View tw="min-w-20 items-end">
             {isAuthenticated && width > 768 && (
               <View tw="mx-3">
                 <Button
@@ -62,7 +57,7 @@ const HeaderRight = () => {
               </View>
             )}
             {isAuthenticated ? (
-              <View tw="bg-white dark:bg-black w-20 items-end">
+              <View tw="w-20 items-end">
                 <HeaderDropdown />
               </View>
             ) : (

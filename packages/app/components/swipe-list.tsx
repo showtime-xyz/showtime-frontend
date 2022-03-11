@@ -35,13 +35,12 @@ export const SwipeList = ({
   initialScrollIndex = 0,
   isLoadingMore,
   bottomPadding = 0,
-  headerHeight = 0,
 }: any) => {
   const listRef = useRef<FlatList>(null);
 
   useScrollToTop(listRef);
 
-  const itemHeight = screenHeight - headerHeight;
+  const itemHeight = screenHeight;
 
   let dataProvider = useMemo(
     () =>
@@ -175,9 +174,6 @@ const FeedItem = React.memo(
             />
           )}
         </View>
-        <View tw="z-1 p-4">
-          <Collection nft={nft} />
-        </View>
         <View
           tw={`absolute h-[${
             itemHeight - bottomPadding - 50
@@ -190,14 +186,17 @@ const FeedItem = React.memo(
             resizeMode="contain"
           />
         </View>
-        <View
-          tw={`z-1 absolute ${
-            bottomPadding && bottomPadding !== 0
-              ? `bottom-[${bottomPadding}px]`
-              : "bottom-0"
-          } right-0 left-0`}
-        >
-          <NFTDetails nft={nft} />
+        <View tw="z-1 absolute bottom-0 right-0 left-0">
+          <BlurView tint={tint} intensity={85}>
+            <NFTDetails nft={nft} />
+            <View
+              tw={`${
+                bottomPadding && bottomPadding !== 0
+                  ? `h-[${bottomPadding - 1}px]`
+                  : "h-0"
+              }`}
+            />
+          </BlurView>
         </View>
       </BlurView>
     );
@@ -207,22 +206,24 @@ const FeedItem = React.memo(
 const NFTDetails = ({ nft }: { nft: NFT }) => {
   return (
     <View tw="px-4">
-      <View tw="mt-4">
-        <View tw="flex-row mt-4">
-          <Creator nft={nft} />
-        </View>
+      <View tw="h-4" />
 
-        <Text
-          variant="text-2xl"
-          tw="text-white mt-4"
-          numberOfLines={3}
-          sx={{ fontSize: 17, lineHeight: 22 }}
-        >
-          {nft.token_name}
-        </Text>
-      </View>
+      <Creator nft={nft} />
 
-      <View tw="flex-row justify-between my-4">
+      <View tw="h-4" />
+
+      <Text
+        variant="text-2xl"
+        tw="text-white"
+        numberOfLines={3}
+        sx={{ fontSize: 17, lineHeight: 22 }}
+      >
+        {nft.token_name}
+      </Text>
+
+      <View tw="h-4" />
+
+      <View tw="flex-row justify-between">
         <View tw="flex-row">
           <Like nft={nft} />
         </View>
@@ -236,6 +237,8 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
           <NFTDropdown nft={nft} iconColor="#fff" />
         </View>
       </View>
+
+      <View tw="h-4" />
     </View>
   );
 };

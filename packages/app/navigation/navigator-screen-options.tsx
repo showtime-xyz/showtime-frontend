@@ -14,15 +14,14 @@ export const screenOptions = ({
   headerTitleAlign: "center" as "center",
   headerRight: HeaderRight,
   headerTintColor: "#000",
-  // headerTransparent: true,
-  // headerBlurEffect: isDark ? "dark" : "light",
+  headerTransparent: true,
+  headerBlurEffect: isDark ? "dark" : "light",
   headerBackVisible: false,
   headerBackTitleVisible: false,
   headerShadowVisible: false,
   // @ts-ignore
   headerStyle: {
     height: 64 + safeAreaTop,
-    backgroundColor: isDark ? "black" : "white",
     // Similar to `headerShadowVisible` but for web
     // @ts-ignore
     borderBottomWidth: 0,

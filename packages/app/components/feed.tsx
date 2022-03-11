@@ -2,7 +2,6 @@ import React, { Suspense, useMemo } from "react";
 import { Dimensions, StatusBar } from "react-native";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { useHeaderHeight } from "@react-navigation/elements";
 
 import { SwipeList } from "app/components/swipe-list";
 import { useActivity } from "app/hooks/api-hooks";
@@ -53,14 +52,7 @@ export const FeedList = () => {
     return [];
   }, [queryState.data]);
 
-  const headerHeight = useHeaderHeight();
-
   return (
-    <SwipeList
-      {...queryState}
-      bottomPadding={bottomBarHeight}
-      headerHeight={headerHeight}
-      data={newData}
-    />
+    <SwipeList {...queryState} bottomPadding={bottomBarHeight} data={newData} />
   );
 };
