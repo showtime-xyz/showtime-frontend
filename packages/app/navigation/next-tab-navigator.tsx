@@ -4,6 +4,8 @@ import { BlurView } from "expo-blur";
 import dynamic from "next/dynamic";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { useUser } from "app/hooks/use-user";
+
 import { View } from "design-system";
 import { useIsDarkMode } from "design-system/hooks";
 import { tw } from "design-system/tailwind";
@@ -34,6 +36,7 @@ export function NextTabNavigator({
   const { width } = useWindowDimensions();
   const { isTabBarHidden } = useNavigationElements();
   const { top: safeAreaTop, bottom: safeAreaBottom } = useSafeAreaInsets();
+  const { isAuthenticated } = useUser();
 
   const color = tw.style("bg-black dark:bg-white")?.backgroundColor as string;
   const tint = color === "#000" ? "light" : "dark";
@@ -64,9 +67,10 @@ export function NextTabNavigator({
             left: width / 2 - 100,
             maxWidth: 200,
           },
-          isTabBarHidden && {
+          (!isAuthenticated || isTabBarHidden) && {
             display: "none",
             bottom: -100,
+            height: 0,
           },
         ],
         tabBarBackground: () =>

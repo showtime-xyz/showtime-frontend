@@ -1,4 +1,4 @@
-import { useHeaderHeight } from "@react-navigation/elements";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { withColorScheme } from "app/components/memo-with-theme";
 import { SwipeList } from "app/components/swipe-list";
@@ -31,8 +31,7 @@ const ProfileSwipeList = ({ route }: any) => {
       collectionId,
       sortId,
     });
-
-  const headerHeight = useHeaderHeight();
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   return (
     <SwipeList
@@ -42,7 +41,7 @@ const ProfileSwipeList = ({ route }: any) => {
       refresh={refresh}
       isLoadingMore={isLoadingMore}
       initialScrollIndex={Number(initialScrollIndex)}
-      headerHeight={headerHeight}
+      bottomPadding={safeAreaBottom}
     />
   );
 };
@@ -54,7 +53,7 @@ const TrendingNFTsSwipeList = ({ route }) => {
     useTrendingNFTS({
       days,
     });
-  const headerHeight = useHeaderHeight();
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   return (
     <SwipeList
@@ -64,21 +63,20 @@ const TrendingNFTsSwipeList = ({ route }) => {
       refresh={refresh}
       isLoadingMore={isLoadingMore}
       initialScrollIndex={Number(initialScrollIndex)}
-      headerHeight={headerHeight}
+      bottomPadding={safeAreaBottom}
     />
   );
 };
 
 export const TrendingCreatorSwipeList = withColorScheme(({ route }) => {
   const { data, initialScrollIndex } = route.params;
-
-  const headerHeight = useHeaderHeight();
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   return (
     <SwipeList
       data={data}
       initialScrollIndex={Number(initialScrollIndex)}
-      headerHeight={headerHeight}
+      bottomPadding={safeAreaBottom}
     />
   );
 });
