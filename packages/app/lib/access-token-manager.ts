@@ -93,9 +93,9 @@ class AccessToken {
       // 	console.error(error)
       // }
 
-      this.deleteAccessToken();
-      deleteRefreshToken();
-      setLogout(Date.now().toString());
+      // this.deleteAccessToken();
+      // deleteRefreshToken();
+      // setLogout(Date.now().toString());
 
       captureException(error, {
         tags: {
