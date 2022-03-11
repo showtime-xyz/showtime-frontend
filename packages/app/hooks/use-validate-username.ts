@@ -40,7 +40,7 @@ export const useValidateUsername = () => {
 
     debounceTimeout.current = setTimeout(() => {
       validateUsername(value);
-    }, 200);
+    }, 400);
   }
 
   return {
