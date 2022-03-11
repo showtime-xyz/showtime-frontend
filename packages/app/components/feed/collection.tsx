@@ -25,13 +25,13 @@ function Collection({ nft }: Props) {
         <Text
           tw={`${
             nft.collection_img_url ? "ml-2" : ""
-          } font-bold text-xs text-white w-[65vw]`}
+          } font-bold text-xs dark:text-white w-[65vw]`}
           numberOfLines={1}
         >
           {nft.collection_name}
         </Text>
       </View>
-      <Text tw="text-xs text-white">
+      <Text tw="text-xs text-gray-900 dark:text-white">
         {!nft.token_count || nft.token_count === 1
           ? "1 Edition"
           : `${nft.token_count} Editions`}

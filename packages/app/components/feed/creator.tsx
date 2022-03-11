@@ -46,7 +46,7 @@ export function Creator({ nft }: Props) {
           <View tw="h-[12px] flex flex-row items-center">
             <Text
               sx={{ fontSize: 13, lineHeight: 15 }}
-              tw="text-white font-semibold"
+              tw="text-gray-900 dark:text-white font-semibold"
             >
               @{nft.creator_username}
             </Text>
@@ -56,11 +56,14 @@ export function Creator({ nft }: Props) {
           </View>
         ) : (
           <View>
-            <Text sx={{ fontSize: 13 }} tw="text-white font-bold">
+            <Text
+              sx={{ fontSize: 13 }}
+              tw="text-gray-900 dark:text-white font-bold"
+            >
               {formatAddressShort(nft.creator_address)}
             </Text>
             {nft.token_created ? (
-              <Text tw="text-xs text-white mt-1 font-semibold">
+              <Text tw="text-xs text-gray-900 dark:text-white mt-1 font-semibold">
                 {formatDistanceToNowStrict(new Date(`${nft.token_created}`), {
                   addSuffix: true,
                 })}
