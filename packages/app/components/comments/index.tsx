@@ -5,6 +5,7 @@ import {
   Keyboard,
   ListRenderItemInfo,
   Platform,
+  StyleSheet,
 } from "react-native";
 
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
@@ -144,7 +145,7 @@ export function Comments({ nftId }: CommentsProps) {
   const FlatList = Platform.OS === "android" ? BottomSheetFlatList : RNFlatList;
 
   return (
-    <View tw="flex-1 mt--4">
+    <View tw="flex-1">
       {isLoading || (dataReversed.length == 0 && error) ? (
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
@@ -157,13 +158,17 @@ export function Comments({ nftId }: CommentsProps) {
             initialNumToRender={5}
             maxToRenderPerBatch={5}
             windowSize={5}
+            contentContainerStyle={styles.container}
             onTouchMove={handleOnTouchMove}
           />
           {isAuthenticated && (
             <MessageBox
               ref={inputRef}
               submitting={isSubmitting}
-              style={{ marginBottom: keyboardHeight }}
+              style={{
+                marginBottom: Platform.OS === "android" ? keyboardHeight : 0,
+                paddingHorizontal: 16,
+              }}
               onSubmit={handleOnSubmitComment}
             />
           )}
@@ -173,3 +178,9 @@ export function Comments({ nftId }: CommentsProps) {
   );
   //#endregion
 }
+
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 16,
+  },
+});
