@@ -188,10 +188,15 @@ export function MessageRow({
               <MessageFilled /> {replayCount}
             </TextButton>
           )} */}
-          <View tw="flex-1 flex-row mr--3 items-center justify-end">
+          <View
+            tw={[
+              "flex-1 flex-row items-center justify-end",
+              onDeletePress ? "mr--3" : "",
+            ]}
+          >
             {createdAtText && (
               <Text tw="text-gray-500 font-bold" variant="text-xs">
-                {`${createdAtText}  •`}
+                {`${createdAtText}${onDeletePress ? "  •" : ""}`}
               </Text>
             )}
             {onDeletePress && (
