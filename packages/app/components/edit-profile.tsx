@@ -193,8 +193,15 @@ export const EditProfile = () => {
                 style={tw.style("w-full h-30 flex-row absolute")}
               >
                 <View tw="absolute z-10 flex-row items-center justify-end w-full p-2">
-                  <Edit height={20} width={20} color="white" />
-                  <Text tw="text-xs text-white ml-1">Cover</Text>
+                  <Edit
+                    height={20}
+                    width={20}
+                    //@ts-ignore
+                    color={tw.style("bg-black dark:bg-white").backgroundColor}
+                  />
+                  <Text tw="text-xs text-black dark:text-white ml-1">
+                    Cover
+                  </Text>
                 </View>
                 <Image source={{ uri: value }} tw="flex-1" />
               </Pressable>
@@ -221,7 +228,12 @@ export const EditProfile = () => {
                 >
                   <Image source={{ uri: value }} tw="flex-1 opacity-60" />
                   <View tw="absolute z-10 flex-1 w-full h-full items-center justify-center">
-                    <Upload height={20} width={20} color="white" />
+                    <Upload
+                      height={20}
+                      width={20}
+                      //@ts-ignore
+                      color={tw.style("bg-black dark:bg-white").backgroundColor}
+                    />
                   </View>
                 </Pressable>
               )}
