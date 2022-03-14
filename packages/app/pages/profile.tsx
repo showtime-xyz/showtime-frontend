@@ -15,8 +15,6 @@ function ProfileNavigator() {
   const isDark = useIsDarkMode();
   const { user } = useUser();
 
-  console.log(user?.data?.profile?.wallet_addresses_v2?.[0]?.address);
-
   return (
     <ProfileStack.Navigator
       // @ts-ignore
@@ -28,6 +26,7 @@ function ProfileNavigator() {
         initialParams={{
           walletAddress: user?.data?.profile?.wallet_addresses_v2?.[0]?.address,
         }}
+        getId={({ params }) => params?.walletAddress}
       />
     </ProfileStack.Navigator>
   );
