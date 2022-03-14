@@ -76,3 +76,4 @@ export { default as Flip } from "./Flip";
 export { default as Play } from "./Play";
 export { default as PlusFilled } from "./PlusFilled";
 export { default as MarketFilled } from "./MarketFilled";
+export { default as Upload } from "./Upload";
