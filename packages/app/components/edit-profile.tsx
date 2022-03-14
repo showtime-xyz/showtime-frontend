@@ -1,5 +1,10 @@
 import { useEffect, useMemo } from "react";
-import { KeyboardAvoidingView, ScrollView, Pressable } from "react-native";
+import {
+  KeyboardAvoidingView,
+  ScrollView,
+  Pressable,
+  Platform,
+} from "react-native";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as FileSystem from "expo-file-system";
@@ -173,7 +178,7 @@ export const EditProfile = () => {
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior="padding"
-        enabled
+        enabled={Platform.OS !== "android"}
         keyboardVerticalOffset={95}
       >
         <ScrollView contentContainerStyle={tw.style("pb-20")}>
@@ -434,31 +439,5 @@ export const EditProfile = () => {
         </Text>
       </View>
     </View>
-  );
-};
-
-const ImageField = ({
-  onChange,
-  value,
-  tw: twProp,
-}: {
-  onChange: any;
-  value?: string;
-  tw: string;
-}) => {
-  return (
-    <Pressable
-      onPress={() => {
-        pickImage({
-          onPick: (e) => {
-            onChange(e.uri);
-          },
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        });
-      }}
-      style={tw.style(twProp)}
-    >
-      <Image source={{ uri: value }} tw="flex-1" />
-    </Pressable>
   );
 };
