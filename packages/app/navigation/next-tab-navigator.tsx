@@ -14,8 +14,8 @@ import {
   HomeTabBarIcon,
   TrendingTabBarIcon,
   CameraTabBarIcon,
-  MarketplaceTabBarIcon,
   NotificationsTabBarIcon,
+  ProfileTabBarIcon,
 } from "./tab-bar-icons";
 import { NextNavigationProps } from "./types";
 import { createNextTabNavigator } from "./universal-tab-navigator";
@@ -24,8 +24,8 @@ import { useNavigationElements } from "./use-navigation-elements";
 const HomeNavigator = dynamic(() => import("../pages/home"));
 const TrendingNavigator = dynamic(() => import("../pages/trending"));
 const CameraNavigator = dynamic(() => import("../pages/camera"));
-const MarketplaceNavigator = dynamic(() => import("../pages/marketplace"));
 const NotificationsNavigator = dynamic(() => import("../pages/notifications"));
+const ProfileNavigator = dynamic(() => import("../pages/profile"));
 
 const BottomTab = createNextTabNavigator();
 
@@ -118,19 +118,21 @@ export function NextTabNavigator({
           }}
         />
       )}
-      <BottomTab.Screen
-        name="marketplaceTab"
-        component={MarketplaceNavigator}
-        options={{
-          tabBarIcon: MarketplaceTabBarIcon,
-        }}
-      />
       {width < 768 && (
         <BottomTab.Screen
           name="notificationsTab"
           component={NotificationsNavigator}
           options={{
             tabBarIcon: NotificationsTabBarIcon,
+          }}
+        />
+      )}
+      {width < 768 && (
+        <BottomTab.Screen
+          name="profileTab"
+          component={ProfileNavigator}
+          options={{
+            tabBarIcon: ProfileTabBarIcon,
           }}
         />
       )}
