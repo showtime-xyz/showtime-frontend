@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 
+import { ErrorBoundary } from "app/components/error-boundary";
 import { useRouter } from "app/navigation/use-router";
 
 import { View, Pressable } from "design-system";
@@ -142,9 +143,11 @@ export const NotificationsTabBarIcon = ({ color, focused }) => {
       ) : (
         <Bell style={tw.style("z-1")} width={24} height={24} color={color} />
       )}
-      <Suspense fallback={null}>
-        <UnreadNotificationIndicator />
-      </Suspense>
+      <ErrorBoundary>
+        <Suspense fallback={null}>
+          <UnreadNotificationIndicator />
+        </Suspense>
+      </ErrorBoundary>
     </TabBarIcon>
   );
 };
