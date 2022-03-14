@@ -39,6 +39,7 @@ export function Modal({
   bodyTW,
   bodyContentTW,
   keyboardVerticalOffset = 0,
+  scrollable = true,
   close,
   onDismiss,
   modalWrapper,
@@ -67,7 +68,11 @@ export function Modal({
             ]}
           >
             <Header title={title} close={close} />
-            <ModalBody tw={bodyTW} contentTW={bodyContentTW}>
+            <ModalBody
+              tw={bodyTW}
+              contentTW={bodyContentTW}
+              scrollable={scrollable}
+            >
               {children}
             </ModalBody>
           </View>
