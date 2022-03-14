@@ -22,7 +22,7 @@ type UseInfiniteListQueryReturn<T> = {
 };
 
 export const useInfiniteListQuerySWR = <T>(
-  urlFunction: ((page) => string) | null
+  urlFunction: (page: number) => string | null
 ): UseInfiniteListQueryReturn<T> => {
   // Todo:: on Refresh, swr will refetch all the page APIs. This may appear weird at first, but I guess could be better for UX
   // We don't want to show loading indicator till all of the requests succeed, so we'll add our refreshing state

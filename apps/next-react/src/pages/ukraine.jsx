@@ -3,55 +3,57 @@ import BadgeIcon from "@/components/Icons/BadgeIcon";
 import SpotlightItem from "@/components/SpotlightItem-ukraine";
 import Layout from "@/components/layout";
 
-import bannerURL from "../../public/img/ukraine-banner.jpg";
+import bannerURL from "../../public/img/ukraine-banner.png";
+import pfpURL from "../../public/img/ukraine-dao-pfp.jpeg";
 
 /** Change with the NFT data post mint */
 const hardcodedNFT = {
-  nft_id: 17625054,
+  nft_id: 258511874,
   contract_address: "0x8a13628dd5d600ca1e8bf9dbc685b735f615cb90",
-  token_id: "1",
-  like_count: 42,
-  token_name: "Help For Ukraine 2022",
+  token_id: "20649",
+  like_count: 0,
+  token_name: "I Stand With Ukraine",
   token_description:
-    "Showtime is partnering with Ukrainian artists to help raise necessary funds for organizations that are helping those suffering from the war in Ukraine. You can help by purchasing this limited-edition NFT, where all proceeds will go directly to UkraineDAO.",
+    "All sales proceeds from this donation NFT go to @UkraineDAO \ud83c\uddfa\ud83c\udde6",
   token_img_url:
-    "https://lh3.googleusercontent.com/Pxg4ZXLMXPcgTZ-PbAxWcni3Cqfx2GrB7lZiFz1ryG_EE7ZdjmhOmfGjwLQE41iuUERbM7ByBc3PELYCE14nwcXHxspBMl84n6AQ",
+    "https://lh3.googleusercontent.com/hyE-l8Hn0jXebr-vnIn_xY0ggIrwwLjXTt0Llym4gC-Ud7YN043IKHTuLQv3wiu5xU06KCXg1ivA5bSKt72vpzRWTmR3Ce27OCU",
   token_img_original_url:
-    "https://ipfs.io/ipfs/QmS3bHrWy58Gz5FMDmhgCQxiiAJ6Ct5MoQxhj2KRgFDkok",
+    "https://gateway.pinata.cloud/ipfs/QmYcVPRWNw2vkqFtk6SVbTAUTRbvZvR1FkGJ7NDWoW71vS",
   token_has_video: 0,
   token_animation_url: null,
   animation_preview_url: null,
   blurhash:
-    "yPG8^6CN06W?-,kDM~K#%KX6kBfjj[fj06X6^}j@IYa|kAW?kBj@fQazfQf7%cj@IXazt5jat5j^fkazfkj@fQj@j[fjt5j@M~a|az",
+    "ysKdVZa}obfRs+oLs+0ra#R.a#R.fQR.WFfQj@fQazfQa|NMfQs+j?s+a#obxVj?WXj?WEa#WF0rfQoba#oba#oca#fQa#fQj?a|j?",
   token_background_color: null,
   token_aspect_ratio: "1.00000",
   token_hidden: 0,
-  creator_id: 147991,
-  creator_name: "Alex Masmej",
-  creator_address: "alexmasmej.eth",
-  creator_address_nonens: "0xD3e9D60e4E4De615124D5239219F32946d10151D",
+  creator_id: 709754,
+  creator_name: "Showtime Gallery",
+  creator_ens: null,
+  creator_address: "0xe3fac288a27fbdf947c234f39d6e45fb12807192",
   creator_img_url:
-    "https://storage.googleapis.com/nft-public-profile-pics/147991_1619920081.jpg",
-  multiple_owners: 1,
-  owner_id: null,
-  owner_name: null,
-  owner_address: null,
+    "https://lh3.googleusercontent.com/32vvtI1_ia-ErhLvMfRbWH1Q2Ueqmpds_B4sU_5hjZWKmUmO1ek4OlTJEoH2DoguIVA5bYKAINCkOfq_A8wyBKjXx7TNfT4XW8g",
+  multiple_owners: 0,
+  owner_id: 14597283,
+  owner_name: "0x3a...CC22",
+  owner_address: "0x3a99ea152Dd2eAcc8E95aDdFb943e714Db9ECC22",
+  owner_ens: null,
   owner_img_url: null,
   token_img_twitter_url: null,
   token_creator_followers_only: 0,
-  creator_username: "am",
+  creator_username: "showtime",
   creator_verified: 1,
   owner_username: null,
-  owner_verified: null,
-  comment_count: 11,
-  owner_count: 5,
-  token_count: 5,
+  owner_verified: 0,
+  comment_count: 0,
+  owner_count: 1,
+  token_count: 1000000,
   token_ko_edition: null,
   token_edition_identifier: null,
   source_url:
-    "https://lh3.googleusercontent.com/Pxg4ZXLMXPcgTZ-PbAxWcni3Cqfx2GrB7lZiFz1ryG_EE7ZdjmhOmfGjwLQE41iuUERbM7ByBc3PELYCE14nwcXHxspBMl84n6AQ",
+    "https://lh3.googleusercontent.com/hyE-l8Hn0jXebr-vnIn_xY0ggIrwwLjXTt0Llym4gC-Ud7YN043IKHTuLQv3wiu5xU06KCXg1ivA5bSKt72vpzRWTmR3Ce27OCU",
   still_preview_url:
-    "https://lh3.googleusercontent.com/Pxg4ZXLMXPcgTZ-PbAxWcni3Cqfx2GrB7lZiFz1ryG_EE7ZdjmhOmfGjwLQE41iuUERbM7ByBc3PELYCE14nwcXHxspBMl84n6AQ",
+    "https://lh3.googleusercontent.com/hyE-l8Hn0jXebr-vnIn_xY0ggIrwwLjXTt0Llym4gC-Ud7YN043IKHTuLQv3wiu5xU06KCXg1ivA5bSKt72vpzRWTmR3Ce27OCU",
   mime_type: "image/png",
   chain_identifier: "137",
   token_listing_identifier: null,
@@ -60,12 +62,47 @@ const hardcodedNFT = {
   collection_img_url:
     "http://lh3.googleusercontent.com/HoSAPydLhYadm-jdgAE83mou5Fi5qbwbhv9UqcQuaHHfZreVsykcbFNLBuQhawIWLEa883DeBDprMM76oTHTAvPIrACxBHRK05h5Dw=s120",
   contract_is_creator: 0,
-  multiple_owner_pics: [
-    "https://lh3.googleusercontent.com/4NZDQhHbwkjrewCLnnuvmsXOrjNMrBCZ4xg3cS7FyJAPiT6T2vrdo3ZkVE8RwkQ-4ticjxTVjyGehJS0xOG3SW1UMEKz7qVFIjj1",
-    "https://lh3.googleusercontent.com/BupmR13IW8BOkQyeeFCOqa6KHhHa8GHormxzNN7kOF4RpVC41lGPNepLfvW4eaPpZxlLt3rk2wd91LGvp8C9K2Z7v-uZgGBE9sc",
-    "https://lh3.googleusercontent.com/oxWrFL8uDDhnir_y6FAxRDfRvp_RyFWj-LIgtxL49J97RqICaF-Kg0K2yBy7dqvaZCxsUdaul25S6S2FjCpo7bQvLXc7V3SkFzQg",
-    "https://lh3.googleusercontent.com/ZD49NfdfFcRmiens3foM_X54_pVEVm8FFWK2cdi4SsVeai8B4eR1zPIYBVy68lspSmbTSOTokS3Rfrfld50CZm_QIk1F_udpZLq6",
+  listing: {
+    total_edition_quantity: 1000000,
+    quantity: 1000000,
+    min_price: 1.0,
+    currency: "USDC",
+    sale_identifier: 9071,
+    profile_id: 14597283,
+    username: null,
+    name: null,
+    verified: 0,
+    address: "0x3a99ea152Dd2eAcc8E95aDdFb943e714Db9ECC22",
+    img_url: null,
+    royalty_percentage: "50.00",
+    listing_created: "2022-03-08T23:16:19",
+    sale_contract: "0x022F3C027572FE1b321ba7a7844ab77aC4193650",
+    all_sellers: [
+      {
+        profile_id: 14597283,
+        sale_contract: "0x022F3C027572FE1b321ba7a7844ab77aC4193650",
+        sale_identifier: 9071,
+        quantity: 1000000,
+      },
+    ],
+  },
+  creator_bio:
+    "Showtime Official Account!\n\nBuying pieces of our community's digital art to complete our collection \ud83d\udc9c",
+  token_created: "2022-03-08T18:23:34Z",
+  token_last_transferred: "2022-03-08T21:46:12Z",
+  multiple_owners_list: [
+    {
+      profile_id: 14597283,
+      name: "0x3a...CC22",
+      img_url: null,
+      quantity: 1000000,
+      username: null,
+      verified: 0,
+      address: "0x3a99ea152Dd2eAcc8E95aDdFb943e714Db9ECC22",
+      wallet_address: "0x3a99ea152Dd2eAcc8E95aDdFb943e714Db9ECC22",
+    },
   ],
+  token_quantity: 1000000,
 };
 
 export default () => {
@@ -73,7 +110,7 @@ export default () => {
     <Layout>
       <div className="max-w-screen-2xl md:px-3 mx-auto w-full">
         <div
-          className="h-32 md:h-64 relative text-left bg-gray-50 dark:bg-gray-900 2xl:rounded-b-[32px] md:-mx-3 bg-no-repeat bg-contain bg-center xl:bg-cover"
+          className="h-32 md:h-64 relative text-left bg-gray-50 dark:bg-gray-900 2xl:rounded-b-[32px] md:-mx-3 bg-no-repeat bg-center bg-cover"
           style={{
             backgroundImage: `url(${bannerURL})`,
           }}
@@ -85,7 +122,7 @@ export default () => {
                 <div className="flex items-center">
                   <div className="relative -mt-14 md:-mt-20 rounded-full border-8 border-white dark:border-gray-900 overflow-hidden group self-start flex-shrink-0">
                     <img
-                      src="https://pbs.twimg.com/profile_images/1497144819835150338/mOByMguO_400x400.jpg"
+                      src={pfpURL}
                       className="h-24 w-24 md:h-32 md:w-32 z-10 flex-shrink-0"
                     />
                   </div>

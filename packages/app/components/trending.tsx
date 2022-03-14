@@ -2,6 +2,7 @@ import { Suspense, useCallback, useMemo, useState } from "react";
 import { Dimensions, Platform } from "react-native";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useHeaderHeight } from "@react-navigation/elements";
 
 import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { TAB_LIST_HEIGHT } from "app/lib/constants";
@@ -43,10 +44,13 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
 export const Trending = () => {
   const [selected, setSelected] = useState(0);
   const isDark = useIsDarkMode();
+  const headerHeight = useHeaderHeight();
+
   return (
     <View tw="bg-white dark:bg-black flex-1">
       <Tabs.Root onIndexChange={setSelected} initialIndex={selected} lazy>
         <Tabs.Header>
+          <View tw={`h-[${headerHeight}px]`} />
           <View tw="bg-white dark:bg-black pt-4 pl-4 pb-[3px]">
             <Text
               variant="text-2xl"

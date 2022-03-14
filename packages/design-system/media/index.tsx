@@ -81,9 +81,9 @@ function Media({ item, numColumns, tw, resizeMode: propResizeMode }: Props) {
     <View
       tw={[
         numColumns >= 3 ? "m-[1px]" : numColumns === 2 ? "m-[2px]" : "",
-        item?.token_background_color
-          ? `bg-[#${item?.token_background_color}]`
-          : "bg-black",
+        // item?.token_background_color
+        //   ? `bg-[#${item?.token_background_color}]`
+        //   : "bg-black",
       ]}
     >
       {imageUri &&

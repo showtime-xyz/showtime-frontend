@@ -6,7 +6,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
   config: {
     screens: {
       login: "login",
-      nft: "nft/:id",
+      nft: "nft/:chainName/:contractAddress/:tokenId",
       comments: "comments",
       transferNft: "nft/:id/transfer",
       create: "create",
@@ -16,6 +16,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       profile: "profile/:walletAddress",
       settings: "settings/:walletAddress",
       swipeList: "swipeList",
+      editProfile: "editProfile",
       bottomTabs: {
         screens: {
           // Bottom Tab Navigator

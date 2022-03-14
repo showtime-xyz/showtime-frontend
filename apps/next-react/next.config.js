@@ -69,6 +69,11 @@ const nextConfig = {
         destination: "https://showtime.nolt.io",
         permanent: true,
       },
+      {
+        source: "/0x3a99ea152Dd2eAcc8E95aDdFb943e714Db9ECC22",
+        destination: "/ukraine",
+        permanent: true,
+      },
     ];
   },
 };

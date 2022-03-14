@@ -24,7 +24,7 @@ export function LikeButton({
         <Heart
           height={24}
           width={24}
-          //@ts-ignore
+          // @ts-ignore
           color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
         />
         // </Animated.View>

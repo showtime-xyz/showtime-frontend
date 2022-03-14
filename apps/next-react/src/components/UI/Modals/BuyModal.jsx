@@ -52,6 +52,7 @@ const BuyModal = ({ open, onClose, token }) => {
       ? MODAL_PAGES.GENERAL
       : MODAL_PAGES.NO_WALLET
   );
+
   const [quantity, setQuantity] = useState(1);
   const [transactionHash, setTransactionHash] = useState("");
 
@@ -61,6 +62,8 @@ const BuyModal = ({ open, onClose, token }) => {
   useEffect(() => {
     if (!Boolean(myProfile?.wallet_addresses_excluding_email_v2?.length)) {
       setModalPage(MODAL_PAGES.NO_WALLET);
+    } else {
+      setModalPage(MODAL_PAGES.GENERAL);
     }
   }, [myProfile]);
 

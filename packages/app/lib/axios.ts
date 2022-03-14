@@ -33,9 +33,9 @@ if (Platform.OS === "web") {
           console.error(error);
         }
 
-        accessTokenManager.deleteAccessToken();
-        deleteRefreshToken();
-        setLogout(Date.now().toString());
+        // accessTokenManager.deleteAccessToken();
+        // deleteRefreshToken();
+        // setLogout(Date.now().toString());
 
         captureException(error, {
           tags: {

@@ -115,9 +115,10 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
   };
 };
 
+export const USER_PROFILE_KEY = "/v4/profile_server/";
 export const useUserProfile = ({ address }: { address?: string }) => {
   const { data, error } = useSWR<{ data: UserProfile }>(
-    address ? "/v4/profile_server/" + address : null,
+    address ? USER_PROFILE_KEY + address : null,
     fetcher
   );
 
@@ -256,6 +257,7 @@ type MyInfo = {
     likes_comment: any[];
     comments: number[];
     blocked_profile_ids: number[];
+    notifications_last_opened: string | null;
   };
 };
 
@@ -417,6 +419,10 @@ export const useMyInfo = () => {
     [data]
   );
 
+  const refetchMyInfo = useCallback(() => {
+    mutate(queryKey);
+  }, [mutate]);
+
   return {
     data,
     loading: !data,
@@ -427,5 +433,6 @@ export const useMyInfo = () => {
     like,
     unlike,
     isLiked,
+    refetchMyInfo,
   };
 };
