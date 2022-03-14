@@ -99,8 +99,8 @@ export const SwipeList = ({
 
   const videoConfig = useMemo(
     () => ({
-      isMuted: false,
-      useNativeControls: true,
+      isMuted: true,
+      useNativeControls: false,
     }),
     []
   );
