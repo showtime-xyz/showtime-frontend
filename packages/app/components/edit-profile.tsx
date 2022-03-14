@@ -226,7 +226,7 @@ export const EditProfile = () => {
                     "w-20 h-20 rounded-full overflow-hidden border-2"
                   )}
                 >
-                  <Image source={{ uri: value }} tw="flex-1 opacity-60" />
+                  <Image source={{ uri: value }} tw="flex-1" />
                   <View tw="absolute z-10 flex-1 w-full h-full items-center justify-center">
                     <Upload
                       height={20}
