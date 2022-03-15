@@ -1,33 +1,35 @@
 import { useState, useEffect } from "react";
 import { Platform, Linking } from "react-native";
-import useUnmountSignal from "use-unmount-signal";
-import useSWR from "swr";
-import { formatDistanceToNowStrict } from "date-fns";
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import { useForm, Controller } from "react-hook-form";
 
-import { View, Text, Fieldset, Button, ScrollView } from "design-system";
-import { ArrowRight, PolygonScan, Check } from "design-system/icon";
-import { tw } from "design-system/tailwind";
-import { Image } from "design-system/image";
-import { Video } from "design-system/video";
-import { Spinner } from "design-system/spinner";
-import { Collection } from "design-system/card/rows/collection";
-import { Owner } from "design-system/card/rows/owner";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { formatDistanceToNowStrict } from "date-fns";
+import { useForm, Controller } from "react-hook-form";
+import useSWR from "swr";
+import useUnmountSignal from "use-unmount-signal";
+
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { supportedVideoExtensions } from "app/hooks/use-mint-nft";
+import { useTransferNFT } from "app/hooks/use-transfer-nft";
 import { axios } from "app/lib/axios";
 import { yup } from "app/lib/yup";
 import type { NFT } from "app/types";
-import { supportedVideoExtensions } from "app/hooks/use-mint-nft";
-import { useTransferNFT } from "app/hooks/use-transfer-nft";
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { yupResolver } from "@hookform/resolvers/yup";
+
+import { View, Text, Fieldset, Button, ScrollView } from "design-system";
+import { Collection } from "design-system/card/rows/collection";
+import { Owner } from "design-system/card/rows/owner";
+import { ArrowRight, PolygonScan, Check } from "design-system/icon";
+import { Image } from "design-system/image";
+import { Spinner } from "design-system/spinner";
+import { tw } from "design-system/tailwind";
+import { Video } from "design-system/video";
 
 type FormData = {
   quantity: number;
   receiverAddress: string;
 };
 
-function TransferNft({ nftId }: { nftId?: string }) {
+function Transfer({ nftId }: { nftId?: string }) {
   const { startTransfer, state } = useTransferNFT();
   const { userAddress } = useCurrentUserAddress();
 
@@ -248,4 +250,4 @@ function TransferNft({ nftId }: { nftId?: string }) {
   );
 }
 
-export { TransferNft };
+export { Transfer };
