@@ -3,6 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import * as Haptics from "expo-haptics";
 
 import { useMyInfo } from "app/hooks/api-hooks";
+import { useUser } from "app/hooks/use-user";
 import { NFT } from "app/types";
 
 import { LikeButton } from "design-system/like-button";
@@ -11,6 +12,7 @@ function Like({ nft }: { nft?: NFT }) {
   if (!nft) return null;
 
   const { isLiked, like, unlike } = useMyInfo();
+  const { isAuthenticated } = useUser();
 
   const isLikedNft = useMemo(() => isLiked(nft.nft_id), [isLiked, nft.nft_id]);
 
@@ -24,20 +26,23 @@ function Like({ nft }: { nft?: NFT }) {
       likeCount={likeCount}
       onPress={useCallback(async () => {
         if (isLikedNft) {
-          setLikeCount(likeCount - 1);
+          if (isAuthenticated) setLikeCount(likeCount - 1);
+
           const isSuccessfullyUnlike = await unlike(nft.nft_id);
-          if (!isSuccessfullyUnlike) {
+          if (!isSuccessfullyUnlike && isAuthenticated) {
             setLikeCount(likeCount + 1);
           }
         } else {
           Haptics.selectionAsync();
-          setLikeCount(likeCount + 1);
+
+          if (isAuthenticated) setLikeCount(likeCount + 1);
+
           const isSuccessfullyLiked = await like(nft.nft_id);
-          if (!isSuccessfullyLiked) {
+          if (!isSuccessfullyLiked && isAuthenticated) {
             setLikeCount(likeCount - 1);
           }
         }
-      }, [isLikedNft, like, unlike, likeCount])}
+      }, [isLikedNft, like, unlike, likeCount, isAuthenticated])}
     />
   );
 }
