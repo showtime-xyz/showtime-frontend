@@ -1,11 +1,12 @@
 import { useMemo } from "react";
-import { Platform } from "react-native";
+import { KeyboardAvoidingView, Platform } from "react-native";
 
 import { TransferNft } from "app/components/transfer-nft";
-import { useRouter } from "app/navigation/use-router";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
-import { Modal, ModalSheet } from "design-system";
 import { createParam } from "app/navigation/use-param";
+import { useRouter } from "app/navigation/use-router";
+
+import { Modal, ModalSheet } from "design-system";
 
 type Query = {
   id: string;
@@ -36,7 +37,13 @@ const TransferNftScreen = () => {
       bodyTW="bg-white dark:bg-black"
       bodyContentTW="p-0"
     >
-      <TransferNft nftId={nftId} />
+      <KeyboardAvoidingView
+        behavior={"padding"}
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={100}
+      >
+        <TransferNft nftId={nftId} />
+      </KeyboardAvoidingView>
     </TransferModal>
   );
 };
