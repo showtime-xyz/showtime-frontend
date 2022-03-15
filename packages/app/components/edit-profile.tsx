@@ -87,7 +87,6 @@ export const EditProfile = () => {
   }, [defaultValues]);
 
   const handleSubmitForm = async (values: typeof defaultValues) => {
-    console.log("lol ", values);
     const links = Object.keys(values.links)
       .filter((key) => values.links[key]?.trim())
       .map((key) => {
