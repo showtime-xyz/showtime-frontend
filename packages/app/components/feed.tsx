@@ -2,9 +2,11 @@ import React, { Suspense, useMemo } from "react";
 import { Dimensions, StatusBar } from "react-native";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { SwipeList } from "app/components/swipe-list";
 import { useActivity } from "app/hooks/api-hooks";
+import { useUser } from "app/hooks/use-user";
 
 import { View, Skeleton } from "design-system";
 import { useColorScheme } from "design-system/hooks";
@@ -44,6 +46,8 @@ export const Feed = () => {
 export const FeedList = () => {
   const queryState = useActivity({ typeId: 0 });
   const bottomBarHeight = useBottomTabBarHeight();
+  const { isAuthenticated } = useUser();
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   const newData: any = useMemo(() => {
     if (queryState.data && Array.isArray(queryState.data)) {
@@ -53,6 +57,10 @@ export const FeedList = () => {
   }, [queryState.data]);
 
   return (
-    <SwipeList {...queryState} bottomPadding={bottomBarHeight} data={newData} />
+    <SwipeList
+      {...queryState}
+      bottomPadding={isAuthenticated ? bottomBarHeight : safeAreaBottom}
+      data={newData}
+    />
   );
 };

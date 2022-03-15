@@ -68,9 +68,7 @@ export function NextTabNavigator({
             maxWidth: 200,
           },
           (!isAuthenticated || isTabBarHidden) && {
-            display: "none",
             bottom: -100,
-            height: 0,
           },
         ],
         tabBarBackground: () =>

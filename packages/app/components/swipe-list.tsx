@@ -75,7 +75,7 @@ export const SwipeList = ({
         />
       );
     },
-    [itemHeight]
+    [itemHeight, bottomPadding]
   );
 
   // const ListFooterComponent = useCallback(() => {
@@ -106,6 +106,8 @@ export const SwipeList = ({
     []
   );
 
+  const extendedState = useMemo(() => ({ bottomPadding }), [bottomPadding]);
+
   return (
     <VideoConfigContext.Provider value={videoConfig}>
       <ViewabilityTrackerRecyclerList
@@ -119,6 +121,7 @@ export const SwipeList = ({
         onEndReached={fetchMore}
         onEndReachedThreshold={screenHeight}
         scrollViewProps={scrollViewProps}
+        extendedState={extendedState}
       />
     </VideoConfigContext.Provider>
   );
