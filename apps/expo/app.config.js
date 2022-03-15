@@ -60,6 +60,7 @@ export default {
     config: {
       usesNonExemptEncryption: false,
     },
+    bitcode: false, // or "Debug"
   },
   android: {
     package: config.scheme,
