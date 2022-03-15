@@ -20,8 +20,8 @@ import { ChevronUp } from "design-system/icon";
 import { tw } from "design-system/tailwind";
 
 const editProfileValidationSchema = yup.object({
-  username: yup.string().min(2),
-  bio: yup.string().max(300),
+  username: yup.string().min(2).nullable(),
+  bio: yup.string().max(300).nullable(),
 });
 
 const nftList = [
@@ -87,6 +87,7 @@ export const EditProfile = () => {
   }, [defaultValues]);
 
   const handleSubmitForm = async (values: typeof defaultValues) => {
+    console.log("lol ", values);
     const links = Object.keys(values.links)
       .filter((key) => values.links[key]?.trim())
       .map((key) => {
