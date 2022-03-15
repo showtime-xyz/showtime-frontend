@@ -119,6 +119,7 @@ export const SwipeList = ({
         onEndReached={fetchMore}
         onEndReachedThreshold={screenHeight}
         scrollViewProps={scrollViewProps}
+        extendedState={bottomPadding}
       />
     </VideoConfigContext.Provider>
   );
