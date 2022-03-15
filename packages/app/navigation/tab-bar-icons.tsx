@@ -1,9 +1,12 @@
 import { Suspense } from "react";
 
 import { ErrorBoundary } from "app/components/error-boundary";
+import { useUser } from "app/hooks/use-user";
+import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
+import { formatAddressShort } from "app/lib/utilities";
 import { useRouter } from "app/navigation/use-router";
 
-import { View, Pressable } from "design-system";
+import { View, Pressable, Image } from "design-system";
 import {
   Home,
   HomeFilled,
@@ -158,4 +161,39 @@ const UnreadNotificationIndicator = () => {
   return hasUnreadNotification ? (
     <View tw="w-2 h-2 bg-violet-500 absolute rounded-full bottom-2" />
   ) : null;
+};
+
+export const ProfileTabBarIcon = () => {
+  const { user } = useUser();
+
+  return (
+    <View tw="h-8 w-8 items-center justify-center rounded-full">
+      <Image
+        tw="h-8 w-8 rounded-full"
+        source={{
+          uri: getSmallImageUrl(
+            user?.data.profile?.img_url || DEFAULT_PROFILE_PIC
+          ),
+        }}
+        alt={
+          user?.data?.profile?.name ||
+          user?.data?.profile?.username ||
+          user?.data?.profile?.wallet_addresses_excluding_email_v2?.[0]
+            ?.ens_domain ||
+          formatAddressShort(
+            user?.data?.profile?.wallet_addresses_excluding_email_v2?.[0]
+              ?.address
+          ) ||
+          "Profile"
+        }
+      />
+    </View>
+  );
+};
+
+const getSmallImageUrl = (imgUrl: string) => {
+  if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
+    imgUrl = imgUrl.split("=")[0] + "=s64";
+  }
+  return imgUrl;
 };

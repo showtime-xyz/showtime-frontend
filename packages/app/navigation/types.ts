@@ -27,15 +27,16 @@ type CameraStackParams = {
   create: undefined;
 };
 
-type MarketplaceStackParams = {
-  marketplace: undefined;
+type NotificationsStackParams = {
+  notifications: undefined;
   login: undefined;
   nft: { id: number };
   settings: undefined;
 };
 
-type NotificationsStackParams = {
-  notifications: undefined;
+type ProfileStackParams = {
+  walletAddress: undefined;
+  profile: { walletAddress: number };
   login: undefined;
   nft: { id: number };
   settings: undefined;
@@ -51,8 +52,8 @@ type BottomTabNavigatorParams = {
   homeTab: NavigatorScreenParams<HomeStackParams>;
   trendingTab: NavigatorScreenParams<TrendingStackParams>;
   cameraTab: NavigatorScreenParams<CameraStackParams>;
-  marketplaceTab: NavigatorScreenParams<MarketplaceStackParams>;
   notificationsTab: NavigatorScreenParams<NotificationsStackParams>;
+  profileTab: NavigatorScreenParams<ProfileStackParams>;
 };
 
 declare global {
@@ -64,9 +65,9 @@ declare global {
 export type {
   NextNavigationProps,
   HomeStackParams,
-  MarketplaceStackParams,
   TrendingStackParams,
   CameraStackParams,
   NotificationsStackParams,
+  ProfileStackParams,
   BottomTabNavigatorParams,
 };
