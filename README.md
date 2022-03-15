@@ -1,6 +1,6 @@
 # Showtime Monorepo
 
-The Showtime UI universal react application powered by Expo, Next.js, Storybook and the Showtime internal design system in a monorepo.
+The Showtime app powered by Expo, Next.js, Storybook and Universal UI.
 
 You'll find included:
 
@@ -220,6 +220,9 @@ yarn ios -d
 yarn android
 ```
 
+If `yarn ios -d` doesn't detect your iPhone, make sure that you have compatible
+Xcode and iOS versions.
+
 #### Cloud
 
 Use Expo Application Services to build the app:
@@ -230,7 +233,7 @@ yarn build:development
 
 This is useful if you want to build the iOS app without a Mac, for example.
 
-### Design system
+### Design system (Universal UI)
 
 React Native for Web + Tailwind + Dripsy
 
