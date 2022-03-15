@@ -231,19 +231,22 @@ const TabList = ({
     [dispatch]
   );
 
+  const onItemPress = useCallback(
+    (index: number) => {
+      router.push(
+        `/swipeList?initialScrollIndex=${index}&listId=${list.id}&profileId=${profileId}&collectionId=${filter.collectionId}&sortId=${filter.sortId}&type=profile`
+      );
+    },
+    [list.id, profileId, filter.collectionId, filter.sortId]
+  );
+
   const renderItem = useCallback(
     ({ item, index }) => (
-      <Pressable
-        onPress={() => {
-          router.push(
-            `/swipeList?initialScrollIndex=${index}&listId=${list.id}&profileId=${profileId}&collectionId=${filter.collectionId}&sortId=${filter.sortId}&type=profile`
-          );
-        }}
-      >
+      <Pressable onPress={() => onItemPress(index)}>
         <Media item={item} numColumns={3} />
       </Pressable>
     ),
-    []
+    [onItemPress]
   );
 
   const ListFooterComponent = useCallback(
