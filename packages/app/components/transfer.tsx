@@ -48,6 +48,7 @@ function Transfer({ nftId }: { nftId?: string }) {
   );
 
   const maxQuantity = ownerListItem?.quantity || 1;
+  const hideCopiesInput = maxQuantity === 1;
   const copiesHelperText = `1 by default, you own ${maxQuantity}`;
 
   const defaultValues = {
@@ -185,31 +186,33 @@ function Transfer({ nftId }: { nftId?: string }) {
 
           <Owner nft={nft} price={true} tw="px-0" />
 
-          <View tw="mt-4 flex-row">
-            <Controller
-              control={control}
-              name="quantity"
-              render={({ field: { onChange, onBlur, value } }) => {
-                const errorText = errors.quantity?.message
-                  ? `Copies amount must be between 1 and ${maxQuantity}`
-                  : undefined;
-                return (
-                  <Fieldset
-                    tw="flex-1"
-                    label="Copies"
-                    placeholder="1"
-                    helperText={copiesHelperText}
-                    onBlur={onBlur}
-                    keyboardType="numeric"
-                    errorText={errorText}
-                    value={value?.toString()}
-                    onChangeText={onChange}
-                    returnKeyType="done"
-                  />
-                );
-              }}
-            />
-          </View>
+          {!hideCopiesInput && (
+            <View tw="mt-4 flex-row">
+              <Controller
+                control={control}
+                name="quantity"
+                render={({ field: { onChange, onBlur, value } }) => {
+                  const errorText = errors.quantity?.message
+                    ? `Copies amount must be between 1 and ${maxQuantity}`
+                    : undefined;
+                  return (
+                    <Fieldset
+                      tw="flex-1"
+                      label="Copies"
+                      placeholder="1"
+                      helperText={copiesHelperText}
+                      onBlur={onBlur}
+                      keyboardType="numeric"
+                      errorText={errorText}
+                      value={value?.toString()}
+                      onChangeText={onChange}
+                      returnKeyType="done"
+                    />
+                  );
+                }}
+              />
+            </View>
+          )}
 
           <View tw="mt-4 flex-row">
             <Controller
