@@ -17,6 +17,7 @@ import { mixpanel } from "app/lib/mixpanel";
 import { deleteRefreshToken } from "app/lib/refresh-token";
 import { rudder } from "app/lib/rudderstack";
 import { useWalletConnect } from "app/lib/walletconnect";
+import { useRouter } from "app/navigation/use-router";
 
 import type { AuthenticationStatus } from "../types";
 
@@ -37,6 +38,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const { setWeb3 } = useWeb3();
   const { setTokens, refreshTokens } = useAccessTokenManager();
   const fetchOnAppForeground = useFetchOnAppForeground();
+  const router = useRouter();
   //#endregion
 
   //#region methods
@@ -94,6 +96,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setWeb3(undefined);
       setAuthenticationStatus("UNAUTHENTICATED");
       mutate(null);
+
+      router.push("/");
     },
     [connector]
   );
