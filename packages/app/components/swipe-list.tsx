@@ -75,7 +75,7 @@ export const SwipeList = ({
         />
       );
     },
-    [itemHeight]
+    [itemHeight, bottomPadding]
   );
 
   // const ListFooterComponent = useCallback(() => {
