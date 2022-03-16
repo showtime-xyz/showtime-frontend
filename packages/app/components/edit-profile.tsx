@@ -1,7 +1,14 @@
 import { useEffect, useMemo } from "react";
-import { KeyboardAvoidingView, ScrollView } from "react-native";
+import {
+  KeyboardAvoidingView,
+  ScrollView,
+  Pressable,
+  Platform,
+} from "react-native";
 
 import { yupResolver } from "@hookform/resolvers/yup";
+import * as FileSystem from "expo-file-system";
+import * as ImagePicker from "expo-image-picker";
 import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
 
@@ -15,8 +22,9 @@ import { useRouter } from "app/navigation/use-router";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { SORT_FIELDS } from "app/utilities";
 
-import { Accordion, Button, Fieldset, Text, View } from "design-system";
-import { ChevronUp } from "design-system/icon";
+import { Accordion, Button, Fieldset, Image, Text, View } from "design-system";
+import { ChevronUp, Edit, Upload } from "design-system/icon";
+import { pickImage } from "design-system/image-picker/pick-image";
 import { tw } from "design-system/tailwind";
 
 const editProfileValidationSchema = yup.object({
@@ -66,6 +74,8 @@ export const EditProfile = () => {
       default_created_sort_id: user?.data?.profile.default_created_sort_id,
       default_list_id: user?.data?.profile.default_list_id,
       default_owned_sort_id: user?.data?.profile.default_owned_sort_id,
+      profilePicture: user?.data?.profile.img_url,
+      coverPicture: user?.data?.profile.cover_url,
     };
   }, [socialLinks?.data?.data, user?.data?.profile]);
 
@@ -109,6 +119,51 @@ export const EditProfile = () => {
     };
 
     try {
+      if (
+        values.coverPicture &&
+        values.coverPicture !== defaultValues.coverPicture
+      ) {
+        const formData = new FormData();
+        formData.append("image", {
+          //@ts-ignore
+          uri: values.coverPicture,
+          type: "image/jpg",
+          name: "image.jpg",
+        });
+
+        await axios({
+          url: "/v1/profile/photo/cover",
+          method: "POST",
+          headers: {
+            "Content-Type": `multipart/form-data`,
+          },
+          data: formData,
+        });
+      }
+
+      if (
+        values.profilePicture &&
+        values.profilePicture !== defaultValues.profilePicture
+      ) {
+        const formData = new FormData();
+
+        formData.append("image", {
+          //@ts-ignore
+          uri: values.profilePicture,
+          type: "image/jpg",
+          name: "image.jpg",
+        });
+
+        await axios({
+          url: "/v1/profile/photo",
+          method: "POST",
+          headers: {
+            "Content-Type": `multipart/form-data`,
+          },
+          data: formData,
+        });
+      }
+
       await axios({
         url: "/v1/editname",
         method: "POST",
@@ -131,11 +186,72 @@ export const EditProfile = () => {
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior="padding"
-        enabled
+        enabled={Platform.OS !== "android"}
         keyboardVerticalOffset={95}
       >
-        <ScrollView contentContainerStyle={tw.style("pb-20 px-4")}>
-          <View>
+        <ScrollView contentContainerStyle={tw.style("pb-20")}>
+          <Controller
+            control={control}
+            name="coverPicture"
+            render={({ field: { onChange, value } }) => (
+              <Pressable
+                onPress={() => {
+                  pickImage({
+                    onPick: (e) => {
+                      onChange(e.uri);
+                    },
+                    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                  });
+                }}
+                style={tw.style("w-full h-30 flex-row absolute")}
+              >
+                <View tw="absolute z-10 flex-row items-center justify-end w-full p-2">
+                  <Edit
+                    height={20}
+                    width={20}
+                    //@ts-ignore
+                    color={tw.style("bg-black dark:bg-white").backgroundColor}
+                  />
+                  <Text tw="text-xs text-black dark:text-white ml-1">
+                    Cover
+                  </Text>
+                </View>
+                <Image source={{ uri: value }} tw="flex-1" />
+              </Pressable>
+            )}
+          />
+
+          <View tw="px-4 mt-20">
+            <Controller
+              control={control}
+              name="profilePicture"
+              render={({ field: { onChange, value } }) => (
+                <Pressable
+                  onPress={() => {
+                    pickImage({
+                      onPick: (e) => {
+                        onChange(e.uri);
+                      },
+                      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                    });
+                  }}
+                  style={tw.style(
+                    "w-20 h-20 rounded-full overflow-hidden border-2"
+                  )}
+                >
+                  <Image source={{ uri: value }} tw="flex-1" />
+                  <View tw="absolute z-10 flex-1 w-full h-full items-center justify-center">
+                    <Upload
+                      height={20}
+                      width={20}
+                      //@ts-ignore
+                      color={tw.style("bg-black dark:bg-white").backgroundColor}
+                    />
+                  </View>
+                </Pressable>
+              )}
+            />
+
             <View tw="flex-row mt-4">
               <Controller
                 control={control}
@@ -166,6 +282,7 @@ export const EditProfile = () => {
                   <Fieldset
                     tw="flex-1"
                     label="Username"
+                    placeholder="Enter your username"
                     value={value}
                     textContentType="username"
                     errorText={errors.username?.message}
