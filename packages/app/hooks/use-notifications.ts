@@ -35,7 +35,7 @@ export const useNotifications = () => {
     (index) => {
       const url = isAuthenticated
         ? process.env.NEXT_PUBLIC_NOTIFICATIONS_URL +
-          `/v1/notifications?page=${index + 1}&limit=15`
+          `/v1/notifications?offset=${index + 1}&limit=15`
         : null;
       return url;
     },

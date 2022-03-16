@@ -66,7 +66,11 @@ export const Notifications = () => {
 
   useEffect(() => {
     (async function resetNotificationLastOpenedTime() {
-      await axios({ url: "/v1/check_notifications", method: "POST" });
+      await axios({
+        url: "/v1/check_notifications",
+        data: {},
+        method: "POST",
+      });
       refetchMyInfo();
     })();
   }, [refetchMyInfo]);
