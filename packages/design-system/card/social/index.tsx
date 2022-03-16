@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 
 import { useMyInfo } from "app/hooks/api-hooks";
+import { useRouter } from "app/navigation/use-router";
 import { NFT } from "app/types";
 
 import { Button } from "design-system/card/social/button";
@@ -9,11 +10,17 @@ import { View } from "design-system/view";
 function Social({ nft }: { nft?: NFT }) {
   if (!nft) return null;
 
+  const router = useRouter();
+
   const { isLiked, like, unlike } = useMyInfo();
 
   const isLikedNft = useMemo(() => isLiked(nft.nft_id), [isLiked, nft.nft_id]);
 
   const [likeCount, setLikeCount] = useState(nft.like_count);
+
+  const handleCommentPress = useCallback(() => {
+    router.push(`/comments?nftId=${nft.nft_id}`);
+  }, [router, nft.nft_id]);
 
   return (
     <View tw="px-4 py-2 bg-white dark:bg-black flex-row justify-between">
@@ -36,8 +43,12 @@ function Social({ nft }: { nft?: NFT }) {
             }
           }, [isLikedNft, like, unlike, likeCount])}
         />
-        {/* <View tw="ml-2" />
-        <Button variant="comment" count={nft.comment_count} /> */}
+        <View tw="ml-2" />
+        <Button
+          variant="comment"
+          count={nft.comment_count}
+          onPress={handleCommentPress}
+        />
       </View>
 
       {/* <View>

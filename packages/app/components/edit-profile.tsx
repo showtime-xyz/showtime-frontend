@@ -28,8 +28,8 @@ import { pickImage } from "design-system/image-picker/pick-image";
 import { tw } from "design-system/tailwind";
 
 const editProfileValidationSchema = yup.object({
-  username: yup.string().min(2),
-  bio: yup.string().max(300),
+  username: yup.string().min(2).nullable(),
+  bio: yup.string().max(300).nullable(),
 });
 
 const nftList = [

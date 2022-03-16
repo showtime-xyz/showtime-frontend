@@ -3,14 +3,9 @@ import { useContext } from "react";
 import { AppContext } from "app/context/app-context";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useUser } from "app/hooks/use-user";
-import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
-import { formatAddressShort } from "app/lib/utilities";
-import {
-  useProfileNavigation,
-  useSettingsNavigation,
-} from "app/navigation/app-navigation";
+import { useSettingsNavigation } from "app/navigation/app-navigation";
 
-import { View, Image } from "design-system";
+import { View } from "design-system";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -19,23 +14,14 @@ import {
   DropdownMenuTrigger,
   DropdownMenuTriggerItem,
   DropdownMenuSeparator,
-  DropdownMenuGroup,
 } from "design-system/dropdown-menu";
-
-const getSmallImageUrl = (imgUrl: string) => {
-  if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
-    imgUrl = imgUrl.split("=")[0] + "=s64";
-  }
-  return imgUrl;
-};
+import { Settings } from "design-system/icon";
+import { tw } from "design-system/tailwind";
 
 function HeaderDropdown() {
   const { user } = useUser();
   const { logout } = useAuth();
   const context = useContext(AppContext);
-  const openProfile = useProfileNavigation(
-    user?.data?.profile?.wallet_addresses_v2?.[0]?.address
-  );
   const openSettings = useSettingsNavigation(
     user?.data?.profile?.wallet_addresses_v2?.[0]?.address
   );
@@ -44,7 +30,7 @@ function HeaderDropdown() {
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
         <View tw="h-8 w-8 items-center justify-center rounded-full">
-          <Image
+          {/* <Image
             tw="h-8 w-8 rounded-full"
             source={{
               uri: getSmallImageUrl(
@@ -62,6 +48,13 @@ function HeaderDropdown() {
               ) ||
               "Profile"
             }
+          /> */}
+          <Settings
+            width={24}
+            height={24}
+            color={
+              tw.style("bg-black dark:bg-white")?.backgroundColor as string
+            }
           />
         </View>
       </DropdownMenuTrigger>
@@ -70,13 +63,25 @@ function HeaderDropdown() {
         loop
         tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
       >
-        <DropdownMenuItem
+        {/* <DropdownMenuItem
           onSelect={openProfile}
           key="your-profile"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
         >
           <DropdownMenuItemTitle tw="text-black dark:text-white">
             Profile
+          </DropdownMenuItemTitle>
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" /> */}
+
+        <DropdownMenuItem
+          onSelect={openSettings}
+          key="your-settings"
+          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+        >
+          <DropdownMenuItemTitle tw="text-black dark:text-white">
+            Settings
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
 
@@ -112,18 +117,6 @@ function HeaderDropdown() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenuRoot>
-
-        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
-
-        <DropdownMenuItem
-          onSelect={openSettings}
-          key="your-settings"
-          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
-        >
-          <DropdownMenuItemTitle tw="text-black dark:text-white">
-            Settings
-          </DropdownMenuItemTitle>
-        </DropdownMenuItem>
 
         <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 

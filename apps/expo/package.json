@@ -8,7 +8,7 @@
     "start:dev-client:clear": "yarn start:dev-client -c",
     "eject": "expo eject",
     "expo:prebuild": "yarn expo prebuild --skip-dependency-update react && yarn react-native link",
-    "ios": "EXPO_USE_APPLE_DEVICE=1 yarn expo:prebuild && yarn expo run:ios",
+    "ios": "yarn expo:prebuild && EXPO_USE_APPLE_DEVICE=0 yarn expo run:ios",
     "e2e:ios": "DETOX=true yarn expo:prebuild && yarn e2e:ios:build && yarn e2e:ios:test",
     "e2e:ios:build": "yarn detox build --configuration ios.sim.debug",
     "e2e:ios:test": "yarn detox test --configuration ios.sim.debug",

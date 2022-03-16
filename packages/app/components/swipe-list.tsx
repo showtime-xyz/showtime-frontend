@@ -7,6 +7,7 @@ import { Blurhash } from "react-native-blurhash";
 import { DataProvider, LayoutProvider } from "recyclerlistview";
 
 import { Collection } from "app/components/feed/collection";
+import { CommentButton } from "app/components/feed/comment-button";
 import { Creator } from "app/components/feed/creator";
 import { Like } from "app/components/feed/like";
 import { NFTDropdown } from "app/components/nft-dropdown";
@@ -74,7 +75,7 @@ export const SwipeList = ({
         />
       );
     },
-    [itemHeight]
+    [itemHeight, bottomPadding]
   );
 
   // const ListFooterComponent = useCallback(() => {
@@ -99,11 +100,13 @@ export const SwipeList = ({
 
   const videoConfig = useMemo(
     () => ({
-      isMuted: false,
-      useNativeControls: true,
+      isMuted: true,
+      useNativeControls: false,
     }),
     []
   );
+
+  const extendedState = useMemo(() => ({ bottomPadding }), [bottomPadding]);
 
   return (
     <VideoConfigContext.Provider value={videoConfig}>
@@ -118,6 +121,7 @@ export const SwipeList = ({
         onEndReached={fetchMore}
         onEndReachedThreshold={screenHeight}
         scrollViewProps={scrollViewProps}
+        extendedState={extendedState}
       />
     </VideoConfigContext.Provider>
   );
@@ -224,6 +228,8 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
       <View tw="flex-row justify-between">
         <View tw="flex-row">
           <Like nft={nft} />
+          <View tw="w-6" />
+          <CommentButton nft={nft} />
         </View>
 
         <View tw="flex-row">
@@ -235,7 +241,6 @@ const NFTDetails = ({ nft }: { nft: NFT }) => {
               color={tw.style("bg-gray-900 dark:bg-white").backgroundColor}
             />
           </Pressable>
-
           <View tw="w-8" />
           <NFTDropdown nft={nft} />
         </View>
