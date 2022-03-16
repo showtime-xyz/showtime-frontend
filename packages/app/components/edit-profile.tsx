@@ -123,16 +123,21 @@ export const EditProfile = () => {
         values.coverPicture &&
         values.coverPicture !== defaultValues.coverPicture
       ) {
-        const base64 = await FileSystem.readAsStringAsync(values.coverPicture, {
-          encoding: "base64",
+        const formData = new FormData();
+        formData.append("image", {
+          //@ts-ignore
+          uri: values.coverPicture,
+          type: "image/jpg",
+          name: "image.jpg",
         });
 
-        const res = await axios({
-          url: "/v2/editcoverphoto",
+        await axios({
+          url: "/v1/profile/photo/cover",
           method: "POST",
-          data: {
-            image: base64,
+          headers: {
+            "Content-Type": `multipart/form-data`,
           },
+          data: formData,
         });
       }
 
@@ -140,19 +145,22 @@ export const EditProfile = () => {
         values.profilePicture &&
         values.profilePicture !== defaultValues.profilePicture
       ) {
-        const base64 = await FileSystem.readAsStringAsync(
-          values.profilePicture,
-          {
-            encoding: "base64",
-          }
-        );
+        const formData = new FormData();
 
-        const res = await axios({
-          url: "/v2/editphoto",
+        formData.append("image", {
+          //@ts-ignore
+          uri: values.profilePicture,
+          type: "image/jpg",
+          name: "image.jpg",
+        });
+
+        await axios({
+          url: "/v1/profile/photo",
           method: "POST",
-          data: {
-            image: base64,
+          headers: {
+            "Content-Type": `multipart/form-data`,
           },
+          data: formData,
         });
       }
 
@@ -274,6 +282,7 @@ export const EditProfile = () => {
                   <Fieldset
                     tw="flex-1"
                     label="Username"
+                    placeholder="Enter your username"
                     value={value}
                     textContentType="username"
                     errorText={errors.username?.message}
