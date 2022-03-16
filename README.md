@@ -217,11 +217,15 @@ Plug your device and build the app with Expo CLI:
 
 ```
 yarn ios -d
-yarn android
+yarn android -d
 ```
 
-If `yarn ios -d` doesn't detect your iPhone, make sure that you have compatible
+iOS: if `yarn ios -d` doesn't detect your iPhone, make sure that you have compatible
 Xcode and iOS versions.
+
+Android: if you are on a Mac M1, please install the following JDK:
+`curl -s "https://get.sdkman.io" | bash`
+`sdk install java 11.0.14-zulu`
 
 #### Cloud
 
