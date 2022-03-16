@@ -11,7 +11,7 @@ export const useFeed = () => {
 
   const feedUrlFn = useCallback(
     (index) => {
-      const url = `/v3/feed${accessToken ? "" : "/default"}?page=${
+      const url = `/v3/feed${accessToken ? "" : "/default"}?offset=${
         index + 1
       }&limit=5`;
       return url;
