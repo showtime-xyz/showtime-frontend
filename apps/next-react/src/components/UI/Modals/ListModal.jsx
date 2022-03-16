@@ -45,7 +45,7 @@ const MODAL_PAGES = {
  * Listing price range is fixed across currencies.
  * As currency list grows this can be a candidate to be refactored into LIST_CURRENCIES
  */
-const MAX_LIST_PRICE = 1000;
+const MAX_LIST_PRICE = 9_999_999_999;
 
 const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
   const { myProfile } = useProfile();
