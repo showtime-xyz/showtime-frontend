@@ -17,6 +17,7 @@ export function useNonce() {
     await fetchOnAppForeground({
       url: `/v1/rotatenonce?address=${address}`,
       method: "POST",
+      data: {},
     });
   }, []);
 

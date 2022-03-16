@@ -79,6 +79,7 @@ export const useComments = (nftId: number) => {
       await axios({
         url: `/v1/likecomment/${commentId}`,
         method: "POST",
+        data: {},
       });
 
       // mutate customer info
@@ -106,6 +107,7 @@ export const useComments = (nftId: number) => {
       await axios({
         url: `/v1/unlikecomment/${commentId}`,
         method: "POST",
+        data: {},
       });
 
       // mutate local data
@@ -135,6 +137,7 @@ export const useComments = (nftId: number) => {
       await axios({
         url: `/v1/deletecomment/${commentId}`,
         method: "POST",
+        data: {},
       });
 
       // mutate comments
