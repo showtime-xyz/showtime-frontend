@@ -117,7 +117,7 @@ const Profile = ({ address }: { address?: string }) => {
         lazy
       >
         <Tabs.Header>
-          <View tw={`h-[${headerHeight}px]`} />
+          {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
           <ProfileTop address={address} isBlocked={isBlocked} />
         </Tabs.Header>
         {data?.data.lists ? (

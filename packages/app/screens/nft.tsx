@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { Dimensions } from "react-native";
 
 import { useHeaderHeight } from "@react-navigation/elements";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { FeedItem } from "app/components/swipe-list";
 import { createParam } from "app/navigation/use-param";
@@ -52,12 +53,13 @@ const NFTDetail = () => {
     contractAddress,
   });
   const headerHeight = useHeaderHeight();
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   if (data && data.data.item) {
     return (
       <FeedItem
         itemHeight={screenHeight - headerHeight}
-        bottomBarHeight={0}
+        bottomPadding={safeAreaBottom}
         nft={data.data.item}
       />
     );

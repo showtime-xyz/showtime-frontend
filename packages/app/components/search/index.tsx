@@ -43,7 +43,7 @@ export const Search = () => {
 
   return (
     <>
-      <View tw={`h-[${headerHeight}px]`} />
+      {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
       <View tw="p-4">
         <Input
           placeholder="Search..."

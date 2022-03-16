@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 import { useHeaderHeight } from "@react-navigation/elements";
 
 import { EditProfile } from "app/components/edit-profile";
@@ -9,7 +11,7 @@ export const EditProfileScreen = () => {
 
   return (
     <>
-      <View tw={`h-[${headerHeight}px]`} />
+      {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
       <EditProfile />
     </>
   );
