@@ -220,6 +220,10 @@ yarn ios -d
 yarn android
 ```
 
+Android: if you are on a Mac M1, please install the following JDK:
+`curl -s "https://get.sdkman.io" | bash`
+`sdk install java 11.0.14-zulu`
+
 #### Cloud
 
 Use Expo Application Services to build the app:
