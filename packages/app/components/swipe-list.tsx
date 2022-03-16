@@ -10,7 +10,9 @@ import {
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useScrollToTop } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
+import * as Device from "expo-device";
 import { Blurhash } from "react-native-blurhash";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { DataProvider, LayoutProvider } from "recyclerlistview";
 
 import { CommentButton } from "app/components/feed/comment-button";
@@ -45,10 +47,15 @@ export const SwipeList = ({
 }: any) => {
   const listRef = useRef<FlatList>(null);
   const headerHeight = useHeaderHeight();
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
   useScrollToTop(listRef);
 
   const itemHeight =
-    Platform.OS === "android" ? screenHeight - headerHeight : screenHeight;
+    Platform.OS === "android"
+      ? screenHeight -
+        headerHeight -
+        (Device.modelName === "LE2113" ? 16 : safeAreaBottom)
+      : screenHeight;
 
   let dataProvider = useMemo(
     () =>
