@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 import { HeaderLeft, HeaderCenter, HeaderRight } from "app/components/header";
 
 export const screenOptions = ({
@@ -14,7 +16,7 @@ export const screenOptions = ({
   headerTitleAlign: "center" as "center",
   headerRight: HeaderRight,
   headerTintColor: "#000",
-  headerTransparent: true,
+  headerTransparent: Platform.OS === "android" ? false : true,
   headerBlurEffect: isDark ? "dark" : "light",
   headerBackVisible: false,
   headerBackTitleVisible: false,
@@ -25,6 +27,12 @@ export const screenOptions = ({
     // Similar to `headerShadowVisible` but for web
     // @ts-ignore
     borderBottomWidth: 0,
+    backgroundColor:
+      Platform.OS === "android" && isDark
+        ? "black"
+        : Platform.OS === "android" && !isDark
+        ? "white"
+        : "transparent",
   },
   cardStyle: { flex: 1, backgroundColor: "transparent" },
   cardOverlayEnabled: false,

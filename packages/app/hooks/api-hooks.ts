@@ -293,7 +293,11 @@ export const useMyInfo = () => {
         );
 
         try {
-          await axios({ url: `/v2/follow/${profileId}`, method: "POST" });
+          await axios({
+            url: `/v2/follow/${profileId}`,
+            method: "POST",
+            data: {},
+          });
           mixpanel.track("Followed profile");
         } catch (err) {
           console.error(err);
@@ -322,7 +326,11 @@ export const useMyInfo = () => {
         );
 
         try {
-          await axios({ url: `/v2/unfollow/${profileId}`, method: "POST" });
+          await axios({
+            url: `/v2/unfollow/${profileId}`,
+            method: "POST",
+            data: {},
+          });
           mixpanel.track("Unfollowed profile");
         } catch (err) {
           console.error(err);
@@ -367,6 +375,7 @@ export const useMyInfo = () => {
           await axios({
             url: `/v3/like/${nftId}`,
             method: "POST",
+            data: {},
           });
 
           mutate(queryKey);
@@ -399,6 +408,7 @@ export const useMyInfo = () => {
           await axios({
             url: `/v3/unlike/${nftId}`,
             method: "POST",
+            data: {},
           });
 
           mutate(queryKey);

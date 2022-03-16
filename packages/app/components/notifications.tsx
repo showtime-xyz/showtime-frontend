@@ -68,8 +68,8 @@ export const Notifications = () => {
     (async function resetNotificationLastOpenedTime() {
       await axios({
         url: "/v1/check_notifications",
-        data: {},
         method: "POST",
+        data: {},
       });
       refetchMyInfo();
     })();

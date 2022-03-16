@@ -157,6 +157,7 @@ const getPinataToken = () => {
   return showtimeAPIAxios({
     url: "/v1/pinata/key",
     method: "POST",
+    data: {},
   }).then((res) => res.token);
 };
 

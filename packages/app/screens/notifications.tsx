@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { Platform } from "react-native";
 
 import { useHeaderHeight } from "@react-navigation/elements";
 
@@ -12,7 +13,7 @@ const NotificationsScreen = withColorScheme(() => {
 
   return (
     <>
-      <View tw={`h-[${headerHeight}px] bg-black`} />
+      {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
       <Suspense
         fallback={
           <View tw="mt-10 items-center justify-center">

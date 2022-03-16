@@ -1,12 +1,20 @@
-import React, { useCallback, useMemo, useRef } from "react";
-import { Dimensions, FlatList, Pressable, RefreshControl } from "react-native";
+import { useCallback, useMemo, useRef, memo } from "react";
+import {
+  Dimensions,
+  FlatList,
+  Pressable,
+  RefreshControl,
+  Platform,
+} from "react-native";
 
+import { useHeaderHeight } from "@react-navigation/elements";
 import { useScrollToTop } from "@react-navigation/native";
 import { BlurView } from "expo-blur";
+import * as Device from "expo-device";
 import { Blurhash } from "react-native-blurhash";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { DataProvider, LayoutProvider } from "recyclerlistview";
 
-import { Collection } from "app/components/feed/collection";
 import { CommentButton } from "app/components/feed/comment-button";
 import { Creator } from "app/components/feed/creator";
 import { Like } from "app/components/feed/like";
@@ -38,10 +46,16 @@ export const SwipeList = ({
   bottomPadding = 0,
 }: any) => {
   const listRef = useRef<FlatList>(null);
-
+  const headerHeight = useHeaderHeight();
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
   useScrollToTop(listRef);
 
-  const itemHeight = screenHeight;
+  const itemHeight =
+    Platform.OS === "android"
+      ? screenHeight -
+        headerHeight -
+        (Device.modelName === "LE2113" ? 16 : safeAreaBottom)
+      : screenHeight;
 
   let dataProvider = useMemo(
     () =>
@@ -127,7 +141,7 @@ export const SwipeList = ({
   );
 };
 
-export const FeedItem = React.memo(
+export const FeedItem = memo(
   ({
     nft,
     bottomPadding = 0,
