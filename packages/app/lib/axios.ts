@@ -108,7 +108,7 @@ const axiosAPI = async ({
   try {
     return await axios(request).then((res) => res.data);
   } catch (error) {
-    console.log("failed request ", request, error);
+    console.log("failed request ", request);
     console.error(error);
     throw error;
   }
