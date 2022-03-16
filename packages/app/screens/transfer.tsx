@@ -1,11 +1,12 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
-import { TransferNft } from "app/components/transfer-nft";
-import { useRouter } from "app/navigation/use-router";
+import { Transfer } from "app/components/transfer";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
-import { Modal, ModalSheet } from "design-system";
 import { createParam } from "app/navigation/use-param";
+import { useRouter } from "app/navigation/use-router";
+
+import { Modal, ModalSheet } from "design-system";
 
 type Query = {
   id: string;
@@ -13,13 +14,12 @@ type Query = {
 
 const { useParam } = createParam<Query>();
 
-const TransferNftScreen = () => {
+const TransferScreen = () => {
   useHideHeader();
 
   //#region hooks
   const router = useRouter();
   const [nftId, setNftId] = useParam("id");
-
   //#endregion
 
   //#region variables
@@ -36,9 +36,9 @@ const TransferNftScreen = () => {
       bodyTW="bg-white dark:bg-black"
       bodyContentTW="p-0"
     >
-      <TransferNft nftId={nftId} />
+      <Transfer nftId={nftId} />
     </TransferModal>
   );
 };
 
-export { TransferNftScreen };
+export { TransferScreen };

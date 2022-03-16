@@ -75,6 +75,18 @@ function NFTDropdown({ nft }: Props) {
         tw="w-60 p-2 bg-white dark:bg-gray-900 rounded-2xl shadow"
       >
         <DropdownMenuItem
+          onSelect={() => router.push(`/nft/${nft?.nft_id}/details`)}
+          key="details"
+          tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
+        >
+          <DropdownMenuItemTitle tw="text-black dark:text-white">
+            Details
+          </DropdownMenuItemTitle>
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
+
+        <DropdownMenuItem
           onSelect={() => handleShareNFT(nft)}
           key="copy-link"
           tw="h-8 rounded-sm overflow-hidden flex-1 p-2"

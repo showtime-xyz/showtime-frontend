@@ -4,9 +4,13 @@ import * as ImagePicker from "expo-image-picker";
 
 type Props = {
   onPick: (attachment: any) => void;
+  mediaTypes?: ImagePicker.MediaTypeOptions;
 };
 
-export async function pickImage({ onPick }: Props) {
+export async function pickImage({
+  onPick,
+  mediaTypes = ImagePicker.MediaTypeOptions.All,
+}: Props) {
   if (Platform.OS === "ios") {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -16,7 +20,7 @@ export async function pickImage({ onPick }: Props) {
 
   try {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes,
       allowsMultipleSelection: false,
       allowsEditing: true,
       aspect: [1, 1],
