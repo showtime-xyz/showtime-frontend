@@ -37,7 +37,7 @@ const TransferScreen = () => {
       bodyContentTW="p-0"
     >
       <KeyboardAvoidingView
-        behavior={"padding"}
+        behavior="padding"
         style={{ flex: 1 }}
         keyboardVerticalOffset={100}
       >
