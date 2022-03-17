@@ -1,20 +1,24 @@
 import { Platform } from "react-native";
 
-import { HeaderLeft, HeaderCenter, HeaderRight } from "app/components/header";
+import { HeaderLeft, HeaderCenter } from "app/components/header";
 
 export const screenOptions = ({
   safeAreaTop,
   isDark,
+  headerLeft = null,
+  headerRight = null,
 }: {
   safeAreaTop: number;
   isDark: boolean;
+  headerLeft?: any;
+  headerRight?: any;
 }) => ({
   animationEnabled: true,
   headerShown: true,
-  headerLeft: HeaderLeft,
+  headerLeft: headerLeft ?? HeaderLeft,
   headerTitle: HeaderCenter,
   headerTitleAlign: "center" as "center",
-  headerRight: HeaderRight,
+  headerRight: headerRight ?? null,
   headerTintColor: "#000",
   headerTransparent: Platform.OS === "android" ? false : true,
   headerBlurEffect: isDark ? "dark" : "light",

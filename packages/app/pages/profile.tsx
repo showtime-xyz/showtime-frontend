@@ -1,5 +1,6 @@
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { HeaderRight } from "app/components/header";
 import { useUser } from "app/hooks/use-user";
 import createStackNavigator from "app/navigation/create-stack-navigator";
 import { screenOptions } from "app/navigation/navigator-screen-options";
@@ -18,7 +19,12 @@ function ProfileNavigator() {
   return (
     <ProfileStack.Navigator
       // @ts-ignore
-      screenOptions={screenOptions({ safeAreaTop, isDark })}
+      screenOptions={screenOptions({
+        safeAreaTop,
+        isDark,
+        headerLeft: () => null,
+        headerRight: HeaderRight,
+      })}
     >
       <ProfileStack.Screen
         name="profile"
