@@ -47,7 +47,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --check-files
 
-      - name: Application Version bump-application-version
+      - name: Application Version Bump
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: yarn bump-application-version
 
