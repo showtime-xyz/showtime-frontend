@@ -1,31 +1,48 @@
 import { ComponentProps } from "react";
 import {
-  Image as ReactNativeImage,
+  // Image as ReactNativeImage,
   ImageProps as ReactNativeImageProps,
   Platform,
 } from "react-native";
+
 import { Blurhash } from "react-native-blurhash";
+import FastImage from "react-native-fast-image";
 
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
-//import { View } from "design-system";
 
-function Img({ source, width, height, ...props }: ReactNativeImageProps) {
+function Img({ source, height, width, ...props }: ReactNativeImageProps) {
   return (
-    <ReactNativeImage
-      // @ts-ignore
-      source={source.uri ? { uri: source.uri, cache: "force-cache" } : source}
-      width={width}
-      height={height}
-      resizeMode="cover" // Default
-      // @ts-ignore
-      cache="force-cache" // iOS
-      // resizeMethod="resize" // Android
-      progressiveRenderingEnabled={true} // Android
-      fadeDuration={0} // Android
+    // @ts-ignore
+    <FastImage
+      source={
+        // @ts-ignore
+        source.uri
+          ? // @ts-ignore
+            { uri: source.uri, cache: FastImage.cacheControl.immutable }
+          : source
+      }
+      // width={width}
+      // height={height}
+      style={[props.style, { height, width }]}
       {...props}
     />
   );
+  // return (
+  //   <ReactNativeImage
+  //     // @ts-ignore
+  //     source={source.uri ? { uri: source.uri, cache: "force-cache" } : source}
+  //     width={width}
+  //     height={height}
+  //     resizeMode="cover" // Default
+  //     // @ts-ignore
+  //     cache="force-cache" // iOS
+  //     // resizeMethod="resize" // Android
+  //     progressiveRenderingEnabled={true} // Android
+  //     fadeDuration={0} // Android
+  //     {...props}
+  //   />
+  // );
 }
 
 type ImageProps = {
@@ -41,6 +58,7 @@ function StyledImage({ tw, style, blurhash, ...props }: ImageProps) {
 
   // <View sx={{ borderRadius, overflow: 'hidden' }}>
 
+  // TODO: fix Blurhash on Android
   if (blurhash && Platform.OS === "ios") {
     return (
       <Blurhash

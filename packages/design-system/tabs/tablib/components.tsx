@@ -1,14 +1,18 @@
-import { View } from "../../view";
-import { Text } from "../../text";
-import React from "react";
-import { useAnimatedReaction, runOnJS } from "react-native-reanimated";
-import { useTabIndexContext, useTabsContext } from "../tablib";
-import { Platform, Animated, useColorScheme } from "react-native";
-import { tw } from "design-system/tailwind";
+import { Platform, StyleSheet, Text as RNText } from "react-native";
 
-// todo - make tabitemwidth dynamic. Current limitation of pager of using vanilla animated prevents animating width indicators.
-// todo - figure out how to make reanimated native handlers work with pager view
-export const Tab_ITEM_WIDTH = 120;
+import Animated, {
+  useAnimatedStyle,
+  Extrapolate,
+  interpolate,
+} from "react-native-reanimated";
+
+import { useIsDarkMode } from "design-system/hooks";
+import { useTabIndexContext, useTabsContext } from "design-system/tabs/tablib";
+import { tw } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
+
+const TAB_ITEM_PADDING_HORIZONTAL = 16;
 
 type TabItemProps = {
   name: string;
@@ -19,12 +23,18 @@ type TabItemProps = {
 export const TabItem = ({ name, count }: TabItemProps) => {
   const { index } = useTabIndexContext();
   const { position, offset } = useTabsContext();
-  const newPos = Animated.add(position, offset);
 
-  const opacity = newPos.interpolate({
-    inputRange: [index - 1, index, index + 1],
-    outputRange: [0.7, 1, 0.7],
-    extrapolate: "clamp",
+  const animatedStyle = useAnimatedStyle(() => {
+    const newPos = position.value + offset.value;
+
+    return {
+      opacity: interpolate(
+        newPos,
+        [index - 1, index, index + 1],
+        [0.7, 1, 0.7],
+        Extrapolate.CLAMP
+      ),
+    };
   });
 
   return (
@@ -35,26 +45,28 @@ export const TabItem = ({ name, count }: TabItemProps) => {
           justifyContent: "center",
           alignItems: "center",
           height: "100%",
-          width: Tab_ITEM_WIDTH,
+          paddingHorizontal: TAB_ITEM_PADDING_HORIZONTAL,
         },
-        { opacity },
+        animatedStyle,
       ]}
     >
-      <Text
-        variant="text-sm"
-        sx={{ fontWeight: "700" }}
-        tw={`text-gray-900 dark:text-white`}
+      <RNText
+        style={[
+          tw.style("text-gray-900 dark:text-white text-sm"),
+          { fontFamily: "Inter-Bold" },
+        ]}
       >
-        {name}{" "}
-      </Text>
-
-      <Text
-        variant="text-sm"
-        sx={{ fontWeight: "400" }}
-        tw={`text-gray-900 dark:text-white`}
-      >
-        {count}
-      </Text>
+        {name}
+      </RNText>
+      {count ? (
+        <Text
+          variant="text-sm"
+          sx={{ fontWeight: "400" }}
+          tw={`text-gray-900 dark:text-white`}
+        >
+          {" " + count}
+        </Text>
+      ) : null}
     </Animated.View>
   );
 };
@@ -64,50 +76,55 @@ export const SelectedTabIndicator = () => {
     return null;
   }
 
-  // todo replace with useIsDarkMode hook
-  const isDark = useColorScheme() === "dark";
+  const isDark = useIsDarkMode();
 
   const { offset, position, tabItemLayouts } = useTabsContext();
-  const newPos = Animated.add(position, offset);
-  const [itemOffsets, setItemOffsets] = React.useState([0, 0]);
 
-  useAnimatedReaction(
-    () => {
-      let result = [];
-      let sum = 0;
-      for (let i = 0; i < tabItemLayouts.length; i++) {
-        if (tabItemLayouts[i].value) {
-          const width = tabItemLayouts[i].value.width;
-          result.push(sum);
-          sum = sum + width;
-        }
-      }
-      return result;
-    },
-    (values) => {
-      if (values.length > 1) {
-        runOnJS(setItemOffsets)(values);
-      }
-    },
-    []
-  );
+  const animatedStyle = useAnimatedStyle(() => {
+    const input = tabItemLayouts.map((_v, i) => i);
+    let translateOutput = tabItemLayouts.map((v) => v.value?.x);
+    let widthOutput = tabItemLayouts.map((v) => v.value?.width);
+    const newPos = position.value + offset.value;
+    if (
+      translateOutput.some((v) => v === undefined) ||
+      widthOutput.some((v) => v === undefined)
+    ) {
+      return {};
+    } else {
+      widthOutput = widthOutput.map((e) =>
+        typeof e === "number" ? e - TAB_ITEM_PADDING_HORIZONTAL * 2 : 0
+      );
+      translateOutput = translateOutput.map((e) =>
+        typeof e === "number" ? e + TAB_ITEM_PADDING_HORIZONTAL : 0
+      );
 
-  const translateX = newPos.interpolate({
-    inputRange: itemOffsets.map((_v, i) => i),
-    outputRange: itemOffsets,
+      return {
+        //@ts-ignore - widthOut won't be undefined as we check above
+        width: interpolate(newPos, input, widthOutput, Extrapolate.CLAMP),
+        transform: [
+          {
+            translateX: interpolate(
+              newPos,
+              input,
+              //@ts-ignore - translateOutput won't be undefined as we check above
+              translateOutput,
+              Extrapolate.CLAMP
+            ),
+          },
+        ],
+      };
+    }
   });
 
   return (
     <Animated.View
       style={[
         {
-          transform: [{ translateX }],
           position: "absolute",
-          width: Tab_ITEM_WIDTH,
-          left: 16,
           height: "100%",
           justifyContent: "center",
         },
+        animatedStyle,
       ]}
     >
       <View
@@ -123,15 +140,17 @@ export const SelectedTabIndicator = () => {
           tw.style(`bg-gray-900 dark:bg-gray-100`),
         ]}
       />
-      <View
-        sx={{
-          backgroundColor: isDark
-            ? "rgba(229, 231, 235, 0.1)"
-            : "rgba(0, 0, 0, 0.1)",
-          padding: 16,
-          borderRadius: 999,
-        }}
-      />
+      {/* {disableBackground ? null : (
+        <View
+          sx={{
+            backgroundColor: isDark
+              ? "rgba(229, 231, 235, 0.1)"
+              : "rgba(0, 0, 0, 0.1)",
+            paddingY: 16,
+            borderRadius: 999,
+          }}
+        />
+      )} */}
     </Animated.View>
   );
 };

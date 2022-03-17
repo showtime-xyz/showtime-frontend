@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { MMKV } from "react-native-mmkv";
 
 const accessTokenStorage = new MMKV();
@@ -17,15 +18,13 @@ export function deleteAccessToken() {
 }
 
 export function useAccessToken() {
-  const [accessToken, setAccessToken] = useState(() =>
-    accessTokenStorage.getString(ACCESS_TOKEN_STRING)
-  );
+  const [accessToken, setAccessToken] = useState(() => getAccessToken());
 
   useEffect(() => {
     const listener = accessTokenStorage.addOnValueChangedListener(
       (changedKey) => {
         if (changedKey === ACCESS_TOKEN_STRING) {
-          const newValue = accessTokenStorage.getString(ACCESS_TOKEN_STRING);
+          const newValue = getAccessToken();
           setAccessToken(newValue);
         }
       }

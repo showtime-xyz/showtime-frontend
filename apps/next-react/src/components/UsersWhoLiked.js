@@ -1,5 +1,7 @@
 import { useState } from "react";
+
 import Link from "next/link";
+
 import ModalUserList from "./ModalUserList";
 
 export default function UsersWhoLiked({ users, closeModal }) {

@@ -1,29 +1,39 @@
 import { useState, useEffect, Fragment } from "react";
-import AwesomeDebouncePromise from "awesome-debounce-promise";
-import { useRouter } from "next/router";
-import mixpanel from "mixpanel-browser";
+
+import useProfile from "@/hooks/useProfile";
+import axios from "@/lib/axios";
 import backend from "@/lib/backend";
 import { SORT_FIELDS } from "@/lib/constants";
-import ScrollableModal from "./ScrollableModal";
+import { classNames } from "@/lib/utilities";
 import { Listbox, Transition } from "@headlessui/react";
 import {
   CheckIcon,
   PlusCircleIcon,
   SelectorIcon,
 } from "@heroicons/react/solid";
-import { classNames } from "@/lib/utilities";
-import axios from "@/lib/axios";
-import Dropdown from "./UI/Dropdown";
-import GreenButton from "./UI/Buttons/GreenButton";
-import GhostButton from "./UI/Buttons/GhostButton";
+import AwesomeDebouncePromise from "awesome-debounce-promise";
+import mixpanel from "mixpanel-browser";
+import { useRouter } from "next/router";
+
 import CloseButton from "./CloseButton";
-import useProfile from "@/hooks/useProfile";
+import ScrollableModal from "./ScrollableModal";
+import GhostButton from "./UI/Buttons/GhostButton";
+import GreenButton from "./UI/Buttons/GreenButton";
+import Dropdown from "./UI/Dropdown";
 
 const SHOWTIME_PROD_URL = "showtime.io/";
 
 const handleUsernameLookup = async (value, myProfile, setCustomURLError) => {
   const username = value ? value.trim() : null;
   let validUsername = false;
+
+  if (username.length < 3) {
+    setCustomURLError({
+      isError: true,
+      message: "Username must be longer than 2 characters",
+    });
+    return false;
+  }
 
   try {
     if (
@@ -542,7 +552,11 @@ export default function Modal({ isOpen, setEditModalOpen }) {
             {/* Submit section */}
             <div>
               <div className="border-t-2 dark:border-gray-800 pt-4">
-                <GreenButton type="submit" loading={submitting}>
+                <GreenButton
+                  type="submit"
+                  loading={submitting}
+                  disabled={customURLError?.isError}
+                >
                   Save changes
                 </GreenButton>
                 <GhostButton

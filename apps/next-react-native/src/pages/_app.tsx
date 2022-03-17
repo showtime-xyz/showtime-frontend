@@ -1,32 +1,54 @@
-import "../styles/styles.css";
+import { useEffect } from "react";
 
+// import { Partytown } from "@builder.io/partytown/react";
+import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
+import { DripsyProvider } from "dripsy";
+import { AppProps } from "next/app";
+import Head from "next/head";
+import Script from "next/script";
 import "raf/polyfill";
-
-import { useState, useEffect } from "react";
-// import { useRouter } from 'next/router'
 // import { enableFreeze } from 'react-native-screens'
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import Head from "next/head";
-import { AppProps } from "next/app";
-import { DripsyProvider } from "dripsy";
+import { SWRConfig } from "swr";
 import { useDeviceContext } from "twrnc";
-import { SWRConfig, useSWRConfig } from "swr";
 
-import { accessTokenManager } from "app/lib/access-token-manager";
-import { tw } from "design-system/tailwind";
-import { theme } from "design-system/theme";
+import { AppContext } from "app/context/app-context";
+import { track } from "app/lib/analytics";
+import { isServer } from "app/lib/is-server";
 import { NavigationProvider } from "app/navigation";
 import { NextTabNavigator } from "app/navigation/next-tab-navigator";
-import { isServer } from "app/lib/is-server";
-import { AppContext } from "app/context/app-context";
-import { setLogout } from "app/lib/logout";
-import { mixpanel } from "app/lib/mixpanel";
-import { deleteCache } from "app/lib/delete-cache";
-import { useRouter } from "app/navigation/use-router";
-import { useUser } from "app/hooks/use-user";
-import { deleteRefreshToken } from "app/lib/refresh-token";
+import { AuthProvider } from "app/providers/auth-provider";
+import { UserProvider } from "app/providers/user-provider";
+import { Web3Provider } from "app/providers/web3-provider";
+
+import { tw } from "design-system/tailwind";
+import { theme } from "design-system/theme";
+import { ToastProvider } from "design-system/toast";
+
+import "../styles/styles.css";
 
 // enableFreeze(true)
+
+// Create a GrowthBook instance
+const growthbook = new GrowthBook({
+  trackingCallback: (experiment, result) => {
+    track("Experiment Viewed", {
+      experiment_id: experiment.key,
+      variant_id: result.variationId,
+    });
+  },
+});
+
+const RUDDERSTACK_WRITE_KEY = process.env.NEXT_PUBLIC_RUDDERSTACK_WRITE_KEY;
+const RUDDERSTACK_DATA_PLANE_URL = `https://tryshowtimjtc.dataplane.rudderstack.com`;
+
+function renderEmptyAnalyticsSnippet() {
+  return `rudderanalytics=window.rudderanalytics=[];for(var methods=["load","page","track","identify","alias","group","ready","reset","getAnonymousId","setAnonymousId"],i=0;i<methods.length;i++){var method=methods[i];rudderanalytics[method]=function(d){return function(){rudderanalytics.push([d,...arguments])}}(method)}rudderanalytics.load("${RUDDERSTACK_WRITE_KEY}","${RUDDERSTACK_DATA_PLANE_URL}",{sendAdblockPage:!1,sendAdblockPageOptions:{integrations:{All:!1,Amplitude:!1}},logLevel:"ERROR"});`;
+}
+
+function renderAnalyticsSnippet() {
+  return `!function(){var e=window.rudderanalytics=window.rudderanalytics||[];e.methods=["load","page","track","identify","alias","group","ready","reset","getAnonymousId","setAnonymousId"],e.factory=function(t){return function(){var r=Array.prototype.slice.call(arguments);return r.unshift(t),e.push(r),e}};for(var t=0;t<e.methods.length;t++){var r=e.methods[t];e[r]=e.factory(r)}e.loadJS=function(e,t){var r=document.createElement("script");r.type="text/javascript",r.async=!0,r.src="https://cdn.rudderlabs.com/v1/rudder-analytics.min.js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(r,a)},e.loadJS(),e.load(${RUDDERSTACK_WRITE_KEY},${RUDDERSTACK_DATA_PLANE_URL}),e.page()}();`;
+}
 
 function localStorageProvider() {
   const map = new Map(JSON.parse(localStorage.getItem("app-cache")) || []);
@@ -44,142 +66,9 @@ function AppContextProvider({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
-  const { user } = useUser();
-  const router = useRouter();
-  const { mutate } = useSWRConfig();
+  // TODO: color scheme
 
-  const [web3, setWeb3] = useState(null);
-  const [windowSize, setWindowSize] = useState(null);
-  const [myLikes, setMyLikes] = useState(null);
-  const [myLikeCounts, setMyLikeCounts] = useState(null);
-  const [myCommentLikes, setMyCommentLikes] = useState(null);
-  const [myCommentLikeCounts, setMyCommentLikeCounts] = useState(null);
-  const [myComments, setMyComments] = useState(null);
-  const [myCommentCounts, setMyCommentCounts] = useState(null);
-  const [myFollows, setMyFollows] = useState(null);
-  const [myRecommendations, setMyRecommendations] = useState(null);
-  // eslint-disable-next-line no-unused-vars
-  const [isMobile, setIsMobile] = useState(null);
-  const [toggleRefreshFeed, setToggleRefreshFeed] = useState(false);
-  const [throttleMessage, setThrottleMessage] = useState(null);
-  // const [throttleOpen, setThrottleOpen] = useState(false)
-  // const [throttleContent, setThrottleContent] = useState('')
-  // eslint-disable-next-line no-unused-vars
-  const [disableLikes, setDisableLikes] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [disableComments, setDisableComments] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [disableFollows, setDisableFollows] = useState(false);
-  // const [recQueue, setRecQueue] = useState([])
-  // eslint-disable-next-line no-unused-vars
-  const [loadingRecommendedFollows, setLoadingRecommendedFollows] =
-    useState(true);
-  const [recommendedFollows, setRecommendedFollows] = useState([]);
-  const [commentInputFocused, setCommentInputFocused] = useState(false);
-
-  // useEffect(() => {
-  // 	if (userData) {
-  // 		setUser(userData)
-
-  // 		mixpanel.identify(userData.publicAddress)
-
-  // 		// if (user_data.email) {
-  // 		// 	mixpanel.people.set({
-  // 		// 		$email: user_data.email, // only reserved properties need the $
-  // 		// 		USER_ID: user_data.publicAddress, // use human-readable names
-  // 		// 	})
-  // 		// } else {
-  // 		// 	mixpanel.people.set({
-  // 		// 		USER_ID: user_data.publicAddress, // use human-readable names
-  // 		// 	})
-  // 		// }
-  // 	}
-  // }, [userData, setUser, mixpanel])
-
-  // useEffect(() => {
-  // 	if (infoData) {
-  // 		setMyProfile({
-  // 			...infoData.data.profile,
-  // 			notifications_last_opened: infoData.data.profile.notifications_last_opened
-  // 				? new Date(infoData.data.profile.notifications_last_opened)
-  // 				: null,
-  // 			links: infoData.data.profile.links.map(link => ({
-  // 				name: link.type__name,
-  // 				prefix: link.type__prefix,
-  // 				icon_url: link.type__icon_url,
-  // 				type_id: link.type_id,
-  // 				user_input: link.user_input,
-  // 			})),
-  // 		})
-  // 		setMyLikes(infoData.data.likes_nft)
-  // 		setMyCommentLikes(infoData.data.likes_comment)
-  // 		setMyComments(infoData.data.comments)
-  // 		setMyFollows(infoData.data.follows)
-
-  // 		// Load up the recommendations async if we are onboarding
-  // 		if (infoData.data.profile.has_onboarded == false) {
-  // 			const my_rec_data = await axios({
-  // 				url: '/v1/follow_recommendations_onboarding',
-  // 				method: 'GET',
-  // 			})
-  // 			setMyRecommendations(my_rec_data.data)
-  // 		}
-  // 	}
-  // }, [infoData, setMyProfile, setMyLikes, setMyCommentLikes, setMyComments, setMyFollows])
-
-  const injectedGlobalContext = {
-    web3,
-    setWeb3,
-    windowSize,
-    myLikes,
-    myLikeCounts,
-    myCommentLikes,
-    myCommentLikeCounts,
-    myComments,
-    myCommentCounts,
-    myFollows,
-    myRecommendations,
-    isMobile,
-    toggleRefreshFeed,
-    throttleMessage,
-    disableLikes,
-    disableComments,
-    disableFollows,
-    recommendedFollows,
-    loadingRecommendedFollows,
-    commentInputFocused,
-    setWindowSize,
-    setMyLikes,
-    setMyLikeCounts,
-    setMyCommentLikes,
-    setMyCommentLikeCounts,
-    setMyComments,
-    setMyCommentCounts,
-    setMyFollows,
-    setMyRecommendations,
-    setThrottleMessage,
-    setRecommendedFollows,
-    setCommentInputFocused,
-    setToggleRefreshFeed,
-    logOut: () => {
-      deleteCache();
-      deleteRefreshToken();
-      accessTokenManager.deleteAccessToken();
-      mutate(null);
-      setMyLikes([]);
-      setMyLikeCounts({});
-      setMyCommentLikes([]);
-      setMyCommentLikeCounts({});
-      setMyComments([]);
-      setMyCommentCounts({});
-      setMyFollows([]);
-      setMyRecommendations([]);
-      setWeb3(null);
-      mixpanel.track("Logout");
-      // Triggers all event listeners for this key to fire. Used to force cross tab logout.
-      setLogout(Date.now().toString());
-    },
-  };
+  const injectedGlobalContext = {};
 
   return (
     <AppContext.Provider value={injectedGlobalContext}>
@@ -189,7 +78,20 @@ function AppContextProvider({
 }
 
 export default function App({ Component, pageProps }: AppProps) {
-  useDeviceContext(tw);
+  useDeviceContext(tw, { withDeviceColorScheme: false });
+
+  useEffect(() => {
+    // Load feature definitions from API
+    fetch(process.env.NEXT_PUBLIC_GROWTHBOOK_FEATURES_ENDPOINT)
+      .then((res) => res.json())
+      .then((json) => {
+        growthbook.setFeatures(json.features);
+      });
+
+    // growthbook.setAttributes({
+    //   "id": "foo",
+    // })
+  }, []);
 
   return (
     <>
@@ -202,20 +104,49 @@ export default function App({ Component, pageProps }: AppProps) {
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
           name="viewport"
         />
+
+        {/* Analytics */}
+        <script
+          dangerouslySetInnerHTML={{ __html: renderEmptyAnalyticsSnippet() }}
+        />
+        {/* <Partytown debug={true} forward={["dataLayer.push"]} /> */}
+        <Script
+          // type="text/partytown"
+          strategy="lazyOnload"
+          dangerouslySetInnerHTML={{
+            __html: renderAnalyticsSnippet(),
+          }}
+        />
       </Head>
       <DripsyProvider theme={theme}>
         <SafeAreaProvider>
-          <NavigationProvider>
-            <SWRConfig
-              value={{
-                provider: isServer ? () => new Map() : localStorageProvider,
-              }}
-            >
-              <AppContextProvider>
-                <NextTabNavigator Component={Component} pageProps={pageProps} />
-              </AppContextProvider>
-            </SWRConfig>
-          </NavigationProvider>
+          <ToastProvider>
+            <NavigationProvider>
+              <SWRConfig
+                value={{
+                  provider: isServer ? () => new Map() : localStorageProvider,
+                }}
+              >
+                <Web3Provider>
+                  <AppContextProvider>
+                    <AuthProvider>
+                      <UserProvider>
+                        <GrowthBookProvider growthbook={growthbook}>
+                          {
+                            // TODO: use RootStackNavigator instead?
+                          }
+                          <NextTabNavigator
+                            Component={Component}
+                            pageProps={pageProps}
+                          />
+                        </GrowthBookProvider>
+                      </UserProvider>
+                    </AuthProvider>
+                  </AppContextProvider>
+                </Web3Provider>
+              </SWRConfig>
+            </NavigationProvider>
+          </ToastProvider>
         </SafeAreaProvider>
       </DripsyProvider>
     </>

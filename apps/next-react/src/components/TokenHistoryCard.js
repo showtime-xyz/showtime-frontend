@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
-import { truncateWithEllipses, formatAddressShort } from "@/lib/utilities";
-import Link from "next/link";
+
 import backend from "@/lib/backend";
+import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
+import { truncateWithEllipses, formatAddressShort } from "@/lib/utilities";
+import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatDistanceToNowStrict } from "date-fns";
+import Link from "next/link";
 
 export default function TokenHistoryCard({ nftId, closeModal }) {
   const [nftHistory, setNftHistory] = useState();
@@ -141,7 +142,7 @@ export default function TokenHistoryCard({ nftId, closeModal }) {
                         </a>
                       </Link>
                     ) : (
-                      <div className="text-gray-400">Burned</div>
+                      <div className="text-gray-400">Deleted</div>
                     )}
                   </td>
                   {nftHistory.multiple && (

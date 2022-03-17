@@ -1,58 +1,34 @@
-import * as Linking from "expo-linking";
-import { getPathFromState } from "@react-navigation/native";
 import type { LinkingOptions } from "@react-navigation/native";
+import * as Linking from "expo-linking";
 
 const linking: LinkingOptions<ReactNavigation.RootParamList> = {
   prefixes: [Linking.makeUrl("/")],
   config: {
     screens: {
-      // Bottom Tab Navigator
-      homeTab: {
-        path: "",
-        initialRouteName: "home",
+      login: "login",
+      nft: "nft/:chainName/:contractAddress/:tokenId",
+      comments: "comments",
+      transfer: "nft/:id/transfer",
+      list: "nft/:id/list",
+      details: "nft/:id/details",
+      create: "create",
+      burn: "burn",
+      search: "search",
+      profile: "profile/:walletAddress",
+      settings: "settings/:walletAddress",
+      swipeList: "swipeList",
+      editProfile: "editProfile",
+      bottomTabs: {
         screens: {
-          home: "",
-          login: "/login",
-          nft: "/nft/:id",
-        },
-      },
-      discoverTab: {
-        path: "discover",
-        initialRouteName: "discover",
-        screens: {
-          discover: "",
-          login: "/login",
-          nft: "/nft/:id",
-        },
-      },
-      trendingTab: {
-        path: "trending",
-        initialRouteName: "trending",
-        screens: {
-          trending: "",
-          login: "/login",
-          nft: "/nft/:id",
-        },
-      },
-      notificationsTab: {
-        path: "notifications",
-        initialRouteName: "notifications",
-        screens: {
-          notifications: "",
-          login: "/login",
-          nft: "/nft/:id",
+          // Bottom Tab Navigator
+          homeTab: "",
+          trendingTab: "trending",
+          cameraTab: "camera",
+          marketplaceTab: "marketplace",
+          notificationsTab: "notifications",
         },
       },
     },
-  },
-  getPathFromState(state, options) {
-    const path = getPathFromState(state, options);
-
-    if (path === "/home") {
-      return "/";
-    }
-
-    return path;
   },
 };
 

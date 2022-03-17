@@ -1,0 +1,36 @@
+diff --git a/node_modules/@react-native-menu/menu/ios/MenuView.swift b/node_modules/@react-native-menu/menu/ios/MenuView.swift
+index 4400f47..3b9b4d5 100644
+--- a/node_modules/@react-native-menu/menu/ios/MenuView.swift
++++ b/node_modules/@react-native-menu/menu/ios/MenuView.swift
+@@ -34,6 +34,20 @@ class MenuView: UIButton {
+             self.setup()
+         }
+     }
++    
++    
++    @objc var colorMode: NSString? {
++        didSet {
++            if (colorMode == "dark") {
++                self.overrideUserInterfaceStyle = .dark
++            } else if (colorMode == "light") {
++                self.overrideUserInterfaceStyle = .light
++            }
++            
++            self.setup()
++        }
++    }
++    
+     @objc var onPressAction: RCTDirectEventBlock?
+     
+     @objc var shouldOpenOnLongPress: Bool = false {
+diff --git a/node_modules/@react-native-menu/menu/ios/RCTUIMenuManager.m b/node_modules/@react-native-menu/menu/ios/RCTUIMenuManager.m
+index 45543d8..a61716c 100644
+--- a/node_modules/@react-native-menu/menu/ios/RCTUIMenuManager.m
++++ b/node_modules/@react-native-menu/menu/ios/RCTUIMenuManager.m
+@@ -20,4 +20,6 @@ @interface RCT_EXTERN_MODULE(RCTUIMenu, RCTViewManager)
+  */
+ RCT_EXPORT_VIEW_PROPERTY(shouldOpenOnLongPress, BOOL)
+ 
++RCT_EXPORT_VIEW_PROPERTY(colorMode, NSString)
++
+ @end

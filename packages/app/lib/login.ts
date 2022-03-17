@@ -1,16 +1,16 @@
 import { MMKV } from "react-native-mmkv";
 
+const loginStorage = new MMKV();
+const LOGIN_STORAGE_KEY = "login";
+
 export function setLogin(login: string) {
-  const storage = new MMKV();
-  storage.set("login", login);
+  loginStorage.set(LOGIN_STORAGE_KEY, login);
 }
 
 export function getLogin() {
-  const storage = new MMKV();
-  return storage.getString("login");
+  return loginStorage.getString(LOGIN_STORAGE_KEY);
 }
 
 export function deleteLogin() {
-  const storage = new MMKV();
-  storage.delete("login");
+  loginStorage.delete(LOGIN_STORAGE_KEY);
 }

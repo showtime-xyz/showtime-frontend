@@ -1,12 +1,14 @@
-import RNSegmentedControl from "@react-native-segmented-control/segmented-control";
 import { useCallback } from "react";
 import {
   NativeSegmentedControlIOSChangeEvent,
   NativeSyntheticEvent,
 } from "react-native";
-import { colors } from "design-system/tailwind/colors";
+
+import RNSegmentedControl from "@react-native-segmented-control/segmented-control";
+
 import { useIsDarkMode } from "design-system/hooks";
 import { tw } from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
 
 type SegmentedControlProps = {
   values: Array<string>;

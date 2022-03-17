@@ -1,45 +1,47 @@
 import { useState, useRef, useEffect, useContext } from "react";
+
+import AppContext from "@/context/app-context";
+import useProfile from "@/hooks/useProfile";
+import backend from "@/lib/backend";
 import {
   DEFAULT_PROFILE_PIC,
   CONTRACTS,
   SHOWTIME_CONTRACTS,
 } from "@/lib/constants";
-import Link from "next/link";
-import mixpanel from "mixpanel-browser";
-import Lightbox from "react-image-lightbox";
-import "react-image-lightbox/style.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExpand } from "@fortawesome/free-solid-svg-icons";
-import { Link as SmoothScroll } from "react-scroll";
-import ModalReportItem from "./ModalReportItem";
-import ReactPlayer from "react-player";
-import LikeButton from "./LikeButton";
-import ShareButton from "./ShareButton";
-import CommentButton from "./CommentButton";
-import AppContext from "@/context/app-context";
-import CreatorSummary from "./CreatorSummary";
+import { CHAIN_IDENTIFIERS } from "@/lib/constants";
 import {
   getContractImage,
   removeTags,
   truncateWithEllipses,
 } from "@/lib/utilities";
-import UserTimestampCard from "./UserTimestampCard";
-import TokenHistoryCard from "./TokenHistoryCard";
-import CommentsSection from "./CommentsSection";
 import { getBidLink, getContractName } from "@/lib/utilities";
-import backend from "@/lib/backend";
-import UsersWhoLiked from "./UsersWhoLiked";
-import MiniFollowButton from "./MiniFollowButton";
-import UsersWhoOwn from "./UsersWhoOwn";
-import OrbitIcon from "./Icons/OrbitIcon";
-import { CHAIN_IDENTIFIERS } from "@/lib/constants";
-import PolygonIcon from "./Icons/PolygonIcon";
+import { faExpand } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Tippy from "@tippyjs/react";
-import TezosIcon from "./Icons/TezosIcon";
+import mixpanel from "mixpanel-browser";
+import Link from "next/link";
+import Lightbox from "react-image-lightbox";
+import "react-image-lightbox/style.css";
+import ReactPlayer from "react-player";
+import { Link as SmoothScroll } from "react-scroll";
+
+import CommentButton from "./CommentButton";
+import CommentsSection from "./CommentsSection";
+import CreatorSummary from "./CreatorSummary";
+import OrbitIcon from "./Icons/OrbitIcon";
+import PolygonIcon from "./Icons/PolygonIcon";
 import ShowtimeIcon from "./Icons/ShowtimeIcon";
+import TezosIcon from "./Icons/TezosIcon";
+import LikeButton from "./LikeButton";
+import MiniFollowButton from "./MiniFollowButton";
+import ModalReportItem from "./ModalReportItem";
+import ShareButton from "./ShareButton";
+import TokenHistoryCard from "./TokenHistoryCard";
 import BuyModal from "./UI/Modals/BuyModal";
 import ListModal from "./UI/Modals/ListModal";
-import useProfile from "@/hooks/useProfile";
+import UserTimestampCard from "./UserTimestampCard";
+import UsersWhoLiked from "./UsersWhoLiked";
+import UsersWhoOwn from "./UsersWhoOwn";
 
 // how tall the media will be
 const TOKEN_MEDIA_HEIGHT = 500;
@@ -154,9 +156,12 @@ const TokenDetailBody = ({
   const isOwnedByUser =
     typeof myProfile?.profile_id === "number" &&
     myProfile?.profile_id === item?.owner_id;
+
   const ifListedIsOwner =
     myProfile?.profile_id === item?.listing?.profile_id &&
     typeof myProfile?.profile_id === "number";
+
+  const freeItem = item?.listing?.min_price === 0;
 
   return (
     <>
@@ -198,7 +203,7 @@ const TokenDetailBody = ({
           <div className="py-4 px-4 flex flex-row">
             <div className="flex-shrink">
               {item.contract_is_creator ? (
-                <Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
+                <Link href={`/c/${item.collection_slug}`}>
                   <a className="flex flex-row items-center ">
                     <div>
                       <img
@@ -626,20 +631,35 @@ const TokenDetailBody = ({
                 </div>
 
                 {item.listing ? (
-                  <button
-                    disabled={ifListedIsOwner}
-                    title="Buy on Showtime"
-                    className={`border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1 ${
-                      ifListedIsOwner ? "bg-gray-100 cursor-default" : null
-                    }`}
-                    onClick={() => setBuyModalOpen(true)}
-                  >
-                    <p className="text-sm sm:text-base">
-                      {ifListedIsOwner
-                        ? `Listed for ${item.listing.min_price} $${item.listing.currency}`
-                        : `Buy for ${item.listing.min_price} $${item.listing.currency}`}
-                    </p>
-                  </button>
+                  <>
+                    {ifListedIsOwner ? (
+                      <p className="px-4 text-sm sm:text-base dark:text-gray-500">
+                        {freeItem ? (
+                          "Listed for Free"
+                        ) : (
+                          <>
+                            {`Price ${item.listing.min_price} ${item.listing.currency}`}
+                          </>
+                        )}
+                      </p>
+                    ) : (
+                      <button
+                        title="Buy on Showtime"
+                        className="border-2 text-gray-800 dark:text-gray-500 border-transparent shadow-md dark:shadow-none dark:border-gray-500 dark:hover:border-gray-400 hover:text-gray-900 dark:hover:text-gray-400 px-4 py-2 rounded-full transition focus:outline-none flex items-center space-x-1"
+                        onClick={() => setBuyModalOpen(true)}
+                      >
+                        <p className="text-sm sm:text-base">
+                          {freeItem ? (
+                            "Price Free"
+                          ) : (
+                            <>
+                              {`Price ${item.listing.min_price} ${item.listing.currency}`}
+                            </>
+                          )}
+                        </p>
+                      </button>
+                    )}
+                  </>
                 ) : isOwnedByUser &&
                   SHOWTIME_CONTRACTS.includes(item.contract_address) ? (
                   <button

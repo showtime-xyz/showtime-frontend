@@ -1,10 +1,12 @@
 import { useContext } from "react";
+
+import AppContext from "@/context/app-context";
 import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
 import { truncateWithEllipses } from "@/lib/utilities";
 import { format } from "date-fns";
-import FollowButton from "./FollowButton";
 import Link from "next/link";
-import AppContext from "@/context/app-context";
+
+import FollowButton from "./FollowButton";
 
 export default function UserTimestampCard({
   timestamp,

@@ -1,19 +1,21 @@
 import { useState, useEffect, useContext, createRef } from "react";
+
+import AppContext from "@/context/app-context";
+import useKeyPress from "@/hooks/useKeyPress";
+import { faThLarge } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import _ from "lodash";
 import mixpanel from "mixpanel-browser";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faThLarge } from "@fortawesome/free-solid-svg-icons";
-import AppContext from "@/context/app-context";
-import TokenCard from "./TokenCard";
-import useKeyPress from "@/hooks/useKeyPress";
-import ModalTokenDetail from "./ModalTokenDetail";
 import { ReactSortable } from "react-sortablejs";
+
+import ModalTokenDetail from "./ModalTokenDetail";
 import BurnModal from "./Modals/BurnModal";
 import TransferModal from "./Modals/TransferModal";
+import TokenCard from "./TokenCard";
+import BuyModal from "./UI/Modals/BuyModal";
 import ListModal from "./UI/Modals/ListModal";
 import UnlistModal from "./UI/Modals/UnlistModal";
-import BuyModal from "./UI/Modals/BuyModal";
 
 const TokenGridV5 = ({
   dataLength,

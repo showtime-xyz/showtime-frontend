@@ -1,78 +1,70 @@
-import { useState } from "react";
-import useUnmountSignal from "use-unmount-signal";
-import useSWR from "swr";
+import { Suspense } from "react";
+import { Dimensions } from "react-native";
 
-import { View, Text, Button } from "design-system";
-import { Media } from "design-system/card/media";
+import { useHeaderHeight } from "@react-navigation/elements";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { FeedItem } from "app/components/swipe-list";
 import { createParam } from "app/navigation/use-param";
-import { axios } from "app/lib/axios";
-import { Close, MoreHorizontal } from "design-system/icon";
-import { useRouter } from "app/navigation/use-router";
-import { tw } from "design-system/tailwind";
-import { PinchToZoom } from "design-system/pinch-to-zoom";
+
+import { Skeleton, View } from "design-system";
+import { useColorScheme } from "design-system/hooks";
+
+import { useNFTDetailByTokenId } from "../hooks/use-nft-detail-by-token-id";
 
 type Query = {
-  id: string;
+  tokenId: string;
+  contractAddress: string;
+  chainName: string;
 };
 
 const { useParam } = createParam<Query>();
+const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 
 function NftScreen() {
-  const router = useRouter();
-  const unmountSignal = useUnmountSignal();
-  const [nftId, setNftId] = useParam("id");
-  const [url, setUrl] = useState(`/v2/nft_detail/${nftId}`);
-  const { data, error } = useSWR([url], (url) =>
-    axios({ url, method: "GET", unmountSignal })
-  );
-  const nft = data?.data;
-
-  if (error) {
-    console.error(error);
-  }
+  const colorScheme = useColorScheme();
 
   return (
-    <View tw="flex-1 bg-gray-200 dark:bg-gray-900">
-      <View tw="p-6 h-16 flex-row items-center justify-between">
-        <View tw="w-8 h-8">
-          <Button
-            onPress={router.pop}
-            variant="tertiary"
-            tw="h-8 rounded-full p-2"
-            iconOnly={true}
-          >
-            <Close
-              width={24}
-              height={24}
-              color={
-                tw.style("bg-black dark:bg-white")?.backgroundColor as string
-              }
-            />
-          </Button>
+    <Suspense
+      fallback={
+        <View tw="items-center">
+          <Skeleton
+            colorMode={colorScheme}
+            height={screenHeight - 300}
+            width={screenWidth}
+          />
+          <View tw="h-2" />
+          <Skeleton colorMode={colorScheme} height={300} width={screenWidth} />
         </View>
-        <View tw="w-8 h-8">
-          <Button
-            onPress={router.pop}
-            variant="tertiary"
-            tw="h-8 rounded-full p-2"
-            iconOnly={true}
-          >
-            <MoreHorizontal
-              width={24}
-              height={24}
-              color={
-                tw.style("bg-black dark:bg-white")?.backgroundColor as string
-              }
-            />
-          </Button>
-        </View>
-      </View>
-
-      <PinchToZoom>
-        <Media nfts={[nft]} />
-      </PinchToZoom>
-    </View>
+      }
+    >
+      <NFTDetail />
+    </Suspense>
   );
 }
 
+const NFTDetail = () => {
+  const [tokenId] = useParam("tokenId");
+  const [contractAddress] = useParam("contractAddress");
+  const [chainName] = useParam("chainName");
+  const { data } = useNFTDetailByTokenId({
+    chainName,
+    tokenId,
+    contractAddress,
+  });
+  const headerHeight = useHeaderHeight();
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
+
+  if (data && data.data.item) {
+    return (
+      <FeedItem
+        itemHeight={screenHeight - headerHeight}
+        bottomPadding={safeAreaBottom}
+        nft={data.data.item}
+      />
+    );
+  }
+
+  return null;
+};
 export { NftScreen };

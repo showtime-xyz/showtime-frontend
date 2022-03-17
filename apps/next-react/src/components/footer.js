@@ -1,10 +1,11 @@
-import ShowtimeWordmark from "./Icons/ShowtimeWordmark";
 import mixpanel from "mixpanel-browser";
 import Link from "next/link";
-import TwitterIcon from "./Icons/Social/TwitterIcon";
-import InstagramIcon from "./Icons/Social/InstagramIcon";
+
+import ShowtimeWordmark from "./Icons/ShowtimeWordmark";
 import DiscordIcon from "./Icons/Social/DiscordIcon";
 import EmailIcon from "./Icons/Social/EmailIcon";
+import InstagramIcon from "./Icons/Social/InstagramIcon";
+import TwitterIcon from "./Icons/Social/TwitterIcon";
 
 const Footer = () => {
   return (

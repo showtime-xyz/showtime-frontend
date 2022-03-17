@@ -1,12 +1,10 @@
 import { useRef, useContext, useState, Fragment, useEffect } from "react";
-import { CHAIN_IDENTIFIERS, DEFAULT_PROFILE_PIC } from "@/lib/constants";
-import Link from "next/link";
-import LikeButton from "./LikeButton";
-import CommentButton from "./CommentButton";
-import ShareButton from "./ShareButton";
-import ReactPlayer from "react-player";
-import mixpanel from "mixpanel-browser";
+
 import AppContext from "@/context/app-context";
+import useProfile from "@/hooks/useProfile";
+import axios from "@/lib/axios";
+import backend from "@/lib/backend";
+import { CHAIN_IDENTIFIERS, DEFAULT_PROFILE_PIC } from "@/lib/constants";
 import {
   getBidLink,
   getContractName,
@@ -14,19 +12,23 @@ import {
   formatAddressShort,
   classNames,
 } from "@/lib/utilities";
-import ModalTokenDetail from "./ModalTokenDetail";
-import CappedWidth from "./CappedWidth";
-import { truncateWithEllipses } from "../lib/utilities";
-import Button from "./UI/Buttons/Button";
-import axios from "@/lib/axios";
 import { Menu, Transition } from "@headlessui/react";
-import EllipsisIcon from "./Icons/EllipsisIcon";
-import BadgeIcon from "./Icons/BadgeIcon";
-import OrbitIcon from "./Icons/OrbitIcon";
-import BuyModal from "./UI/Modals/BuyModal";
+import mixpanel from "mixpanel-browser";
+import Link from "next/link";
+import ReactPlayer from "react-player";
 import useSWR from "swr";
-import backend from "@/lib/backend";
-import useProfile from "@/hooks/useProfile";
+
+import { truncateWithEllipses } from "../lib/utilities";
+import CappedWidth from "./CappedWidth";
+import CommentButton from "./CommentButton";
+import BadgeIcon from "./Icons/BadgeIcon";
+import EllipsisIcon from "./Icons/EllipsisIcon";
+import OrbitIcon from "./Icons/OrbitIcon";
+import LikeButton from "./LikeButton";
+import ModalTokenDetail from "./ModalTokenDetail";
+import ShareButton from "./ShareButton";
+import Button from "./UI/Buttons/Button";
+import BuyModal from "./UI/Modals/BuyModal";
 
 const SpotlightItem = ({
   isMyProfile,
@@ -119,6 +121,9 @@ const SpotlightItem = ({
   const ifListedIsOwner =
     myProfile?.profile_id === thisItem?.listing?.profile_id &&
     typeof myProfile?.profile_id === "number";
+
+  const freeItem = item?.listing?.min_price === 0;
+  const singleEdition = item?.listing?.total_edition_quantity === 1;
 
   return (
     <>
@@ -510,8 +515,9 @@ const SpotlightItem = ({
                     </div>
                     {item.listing && (
                       <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
-                        {item.listing.total_edition_quantity} Editions /{" "}
-                        {parseInt(item.listing.royalty_percentage)}% Royalties
+                        {singleEdition
+                          ? `${item.listing.total_edition_quantity} Edition`
+                          : `${item.listing.total_edition_quantity} Editions`}
                       </p>
                     )}
                   </div>
@@ -601,16 +607,36 @@ const SpotlightItem = ({
                 </div>
                 <div className="mt-8 inline-block">
                   {item.listing ? (
-                    <Button
-                      disabled={ifListedIsOwner}
-                      style="primary"
-                      title="Buy on Showtime"
-                      onClick={() => setBuyModalOpen(true)}
-                    >
-                      {ifListedIsOwner
-                        ? `Listed for ${item.listing.min_price} ${item.listing.currency}`
-                        : `Buy for ${item.listing.min_price} ${item.listing.currency}`}
-                    </Button>
+                    <>
+                      {ifListedIsOwner ? (
+                        <p className="px-4 text-sm sm:text-base dark:text-gray-500">
+                          {freeItem ? (
+                            "Listed for Free"
+                          ) : (
+                            <>
+                              {`Price ${item.listing.min_price} ${item.listing.currency}`}
+                            </>
+                          )}
+                        </p>
+                      ) : (
+                        <Button
+                          disabled={ifListedIsOwner}
+                          style="primary"
+                          title="Buy on Showtime"
+                          onClick={() => setBuyModalOpen(true)}
+                        >
+                          <p className="text-sm sm:text-base">
+                            {freeItem ? (
+                              "Price Free"
+                            ) : (
+                              <>
+                                {`Price ${item.listing.min_price} ${item.listing.currency}`}
+                              </>
+                            )}
+                          </p>
+                        </Button>
+                      )}
+                    </>
                   ) : (
                     <Button
                       style="primary"

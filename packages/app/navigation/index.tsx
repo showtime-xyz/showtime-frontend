@@ -1,14 +1,17 @@
-import { useRef, useMemo, useEffect } from "react";
-import { Platform, useColorScheme } from "react-native";
-import { useRouter } from "next/router";
+import { useState, useRef, useMemo, useEffect } from "react";
+import { Platform } from "react-native";
+
 import {
   NavigationContainer,
   useLinkTo,
   LinkingOptions,
 } from "@react-navigation/native";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { useRouter } from "next/router";
 
 import { linking } from "app/navigation/linking";
+import { NavigationElementsProvider } from "app/navigation/navigation-elements-context";
+
+import { useIsDarkMode } from "design-system/hooks";
 
 function LinkTo() {
   const linkTo = useLinkTo();
@@ -57,18 +60,21 @@ export function NavigationProvider({
 }) {
   const trackedLinking = useRef(linking);
   const linkingConfig = useLinkingConfig(trackedLinking);
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const isDark = useIsDarkMode();
+  const [isHeaderHidden, setIsHeaderHidden] = useState(false);
+  const [isTabBarHidden, setIsTabBarHidden] = useState(false);
 
   return (
     <NavigationContainer
-      linking={linkingConfig.linking}
+      linking={
+        process.env.NODE_ENV !== "test" ? linkingConfig.linking : undefined
+      }
       onReady={linkingConfig.onReady}
       theme={{
         dark: isDark,
         colors: {
           primary: "#fff",
-          background: isDark ? "#27272A" : "#fff",
+          background: isDark ? "#000" : "#fff",
           card: "#000",
           text: isDark ? "#fff" : "#000",
           border: "rgb(39, 39, 41)",
@@ -82,7 +88,16 @@ export function NavigationProvider({
       }}
     >
       <LinkTo />
-      <BottomSheetModalProvider>{children}</BottomSheetModalProvider>
+      <NavigationElementsProvider
+        value={{
+          isHeaderHidden,
+          setIsHeaderHidden,
+          isTabBarHidden,
+          setIsTabBarHidden,
+        }}
+      >
+        {children}
+      </NavigationElementsProvider>
     </NavigationContainer>
   );
 }

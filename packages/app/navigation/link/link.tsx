@@ -1,23 +1,20 @@
-import { Platform, TextProps, ViewProps } from "react-native";
-
-import { Pressable } from "design-system/pressable-scale";
-import { Text } from "design-system/text";
-import { View } from "design-system/view";
-import type { TW } from "design-system/tailwind/types";
+import { useMemo } from "react";
+import { TextProps, ViewProps } from "react-native";
 
 import { Props, LinkCore } from "app/navigation/link/link-core";
 
-type LinkProps = Props & { viewProps?: ViewProps };
+import { Pressable } from "design-system/pressable-scale";
+import type { TW } from "design-system/tailwind/types";
+import { Text } from "design-system/text";
 
-function Link({ viewProps, ...props }: LinkProps) {
+type LinkProps = Props & { viewProps?: ViewProps; tw?: TW };
+
+function Link({ viewProps, tw, ...props }: LinkProps) {
   return (
     <LinkCore
       {...props}
-      Component={Platform.select({
-        web: View,
-        default: Pressable as any,
-      })}
-      componentProps={viewProps}
+      Component={Pressable}
+      componentProps={{ ...viewProps, tw }}
     />
   );
 }
@@ -28,12 +25,29 @@ type TextLinkProps = Props & {
   tw?: TW;
 };
 
-function TextLink({ textProps, variant, tw, ...props }: TextLinkProps) {
+const DEFAULT_TEXT_LINK_HIT_SLOP = { top: 10, bottom: 10, left: 10, right: 10 };
+
+function TextLink({
+  textProps,
+  variant,
+  tw,
+  hitSlop,
+  ...props
+}: TextLinkProps) {
   return (
     <LinkCore
       {...props}
+      hitSlop={hitSlop ?? DEFAULT_TEXT_LINK_HIT_SLOP}
       Component={Text}
-      componentProps={{ ...textProps, variant, tw, accessibilityRole: "link" }}
+      componentProps={useMemo(
+        () => ({
+          ...textProps,
+          variant,
+          tw,
+          accessibilityRole: "link",
+        }),
+        [variant, tw, textProps]
+      )}
     />
   );
 }

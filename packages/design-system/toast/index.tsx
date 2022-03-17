@@ -1,15 +1,17 @@
-import { Text } from "design-system/text";
-import React, {
-  useState,
-  useRef,
-  createContext,
-  useMemo,
-  useContext,
-} from "react";
+import { useState, useRef, createContext, useMemo, useContext } from "react";
+import {
+  Platform,
+  View,
+  AccessibilityInfo,
+  LayoutChangeEvent,
+  StyleSheet,
+} from "react-native";
+
 import { MotiView, AnimatePresence } from "moti";
-import { View } from "react-native";
-import { AccessibilityInfo, LayoutChangeEvent, StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import { tw } from "design-system/tailwind";
+import { Text } from "design-system/text";
 
 type ShowParams = {
   message?: string;
@@ -35,6 +37,8 @@ export const ToastProvider = ({ children }: any) => {
     LayoutChangeEvent["nativeEvent"]["layout"] | undefined
   >();
   const hideTimeoutRef = useRef<any>(null);
+  const { top: safeAreaTop } =
+    Platform.OS === "web" ? { top: SAFE_AREA_TOP } : useSafeAreaInsets();
 
   const value = useMemo(
     () => ({
@@ -85,7 +89,9 @@ export const ToastProvider = ({ children }: any) => {
               accessibilityLiveRegion="polite"
               pointerEvents="box-none"
               from={{ translateY: -toastHeight }}
-              animate={{ translateY: SAFE_AREA_TOP }}
+              animate={{
+                translateY: safeAreaTop === 0 ? SAFE_AREA_TOP : safeAreaTop,
+              }}
               exit={{ translateY: -toastHeight }}
               transition={{ type: "timing", duration: 350 }}
               onLayout={(e) => {

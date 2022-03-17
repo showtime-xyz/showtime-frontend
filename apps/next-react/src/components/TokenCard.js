@@ -1,31 +1,32 @@
 import { useState, useRef, Fragment, useEffect } from "react";
-import { DEFAULT_PROFILE_PIC, SHOWTIME_CONTRACTS } from "@/lib/constants";
-import Link from "next/link";
-import LikeButton from "./LikeButton";
-import CommentButton from "./CommentButton";
-import ShareButton from "./ShareButton";
-import ReactPlayer from "react-player";
-import mixpanel from "mixpanel-browser";
+
 import TokenCardImage from "@/components/TokenCardImage";
+import useProfile from "@/hooks/useProfile";
+import axios from "@/lib/axios";
+import { DEFAULT_PROFILE_PIC, SHOWTIME_CONTRACTS } from "@/lib/constants";
 import {
   formatAddressShort,
   truncateWithEllipses,
   classNames,
 } from "@/lib/utilities";
-import axios from "@/lib/axios";
-import { MenuIcon, PlayIcon } from "@heroicons/react/solid";
-import EllipsisIcon from "./Icons/EllipsisIcon";
-import BadgeIcon from "./Icons/BadgeIcon";
+import { findListingItemByOwner } from "@/lib/utilities";
 import { Menu, Transition } from "@headlessui/react";
-import MiniFollowButton from "./MiniFollowButton";
-import useProfile from "@/hooks/useProfile";
-import OrbitIcon from "./Icons/OrbitIcon";
+import { MenuIcon, PlayIcon } from "@heroicons/react/solid";
+import mixpanel from "mixpanel-browser";
+import Link from "next/link";
+import ReactPlayer from "react-player";
+
 import {
   CHAIN_IDENTIFIERS,
   COLLECTION_NAME_TRUNCATE_LENGTH,
 } from "../lib/constants";
-import ShowtimeIcon from "./Icons/ShowtimeIcon";
-import Tippy from "@tippyjs/react";
+import CommentButton from "./CommentButton";
+import BadgeIcon from "./Icons/BadgeIcon";
+import EllipsisIcon from "./Icons/EllipsisIcon";
+import OrbitIcon from "./Icons/OrbitIcon";
+import LikeButton from "./LikeButton";
+import MiniFollowButton from "./MiniFollowButton";
+import ShareButton from "./ShareButton";
 
 const TokenCard = ({
   originalItem,
@@ -53,12 +54,13 @@ const TokenCard = ({
   const [muted, setMuted] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [showModel, setShowModel] = useState(false);
-  const hasMatchingListing = item?.listing?.all_sellers?.find((seller) => {
-    return seller.profile_id === pageProfile?.profile_id;
-  });
-  const ifListedIsOwner =
-    myProfile?.profile_id === item?.listing?.profile_id &&
-    typeof myProfile?.profile_id === "number";
+
+  const hasMatchingListing = findListingItemByOwner(
+    item,
+    pageProfile?.profile_id
+  );
+  const freeListedItem = item?.listing?.min_price === 0;
+  const singleItem = item?.token_count === 1;
 
   // Automatically load models that have no preview image. We don't account for video here because currently token_animation_url is a glb file.
   useEffect(() => {
@@ -143,7 +145,7 @@ const TokenCard = ({
           <div className="flex items-center justify-between">
             <div className="pr-2">
               {item.contract_is_creator ? (
-                <Link href="/c/[collection]" as={`/c/${item.collection_slug}`}>
+                <Link href={`/c/${item.collection_slug}`}>
                   <a className="flex flex-row items-center space-x-2">
                     <img
                       alt={item.collection_name}
@@ -371,7 +373,7 @@ const TokenCard = ({
                                 )}
                               >
                                 <span className="block truncate font-medium text-red-500 dark:text-red-700">
-                                  Burn
+                                  Delete
                                 </span>
                               </button>
                             )}
@@ -657,13 +659,6 @@ const TokenCard = ({
               >
                 {item.token_name}
               </p>
-              {SHOWTIME_CONTRACTS.includes(item.contract_address) && (
-                <Tippy content="Created on Showtime">
-                  <div className="flex items-center justify-center">
-                    <ShowtimeIcon className="w-5 h-5 rounded-full fill-gold" />
-                  </div>
-                </Tippy>
-              )}
             </div>
             <div className="mt-4 flex items-center justify-between">
               <div className="flex items-center space-x-4">
@@ -737,34 +732,21 @@ const TokenCard = ({
                         </div>
                       </a>
                     </Link>
-                    {ifListedIsOwner ? (
-                      <section className="space-x-4 flex items-end hover:bg-gray-100 dark:hover:bg-gray-900 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg transition bg-gray-100 dark:bg-gray-900">
-                        <div>
-                          <span className="text-xs font-medium text-gray-600 dark:text-gray-500">
-                            Listed for
-                          </span>
-                          <p className="text-sm font-bold text-gray-900 dark:text-gray-200 whitespace-nowrap">
-                            {parseFloat(item.listing.min_price)} $
+                    <section className="space-x-4 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg">
+                      <p className="text-right text-xs font-medium text-gray-600 dark:text-gray-500">
+                        Price
+                      </p>
+                      <p className="text-sm font-bold text-gray-900 dark:text-gray-200 whitespace-nowrap">
+                        {freeListedItem ? (
+                          "Free"
+                        ) : (
+                          <>
+                            {parseFloat(item.listing.min_price)}{" "}
                             {item.listing.currency}
-                          </p>
-                        </div>
-                      </section>
-                    ) : (
-                      <button
-                        onClick={() => setBuyModal(item)}
-                        className="space-x-4 flex items-end hover:bg-gray-100 dark:hover:bg-gray-900 py-0.5 px-3 -my-0.5 -mx-3 rounded-lg transition"
-                      >
-                        <div className="text-right">
-                          <span className="text-xs text-right font-medium text-gray-600 dark:text-gray-500">
-                            Buy
-                          </span>
-                          <p className="text-sm font-bold text-gray-900 dark:text-gray-200 whitespace-nowrap">
-                            {parseFloat(item.listing.min_price)} $
-                            {item.listing.currency}
-                          </p>
-                        </div>
-                      </button>
-                    )}
+                          </>
+                        )}
+                      </p>
+                    </section>
                   </div>
                 ) : item.owner_count && item.owner_count > 1 ? (
                   pageProfile && listId === 2 ? (
@@ -856,25 +838,29 @@ const TokenCard = ({
                 ) : null}
               </div>
             </div>
-            <div className="mt-4 px-4 py-2 bg-gray-100 dark:bg-gray-800 flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                {item.collection_img_url && (
-                  <img
-                    src={item.collection_img_url}
-                    className="w-5 h-5 rounded-full"
-                  />
-                )}
-                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
-                  {truncateWithEllipses(
-                    item.collection_name,
-                    COLLECTION_NAME_TRUNCATE_LENGTH
+            <Link href={`/c/${item.collection_slug}`}>
+              <div className="mt-4 px-4 py-2 bg-gray-100 dark:bg-gray-800 flex items-center justify-between">
+                <div className="flex items-center space-x-2 cursor-pointer">
+                  {item.collection_img_url && (
+                    <img
+                      src={item.collection_img_url}
+                      className="w-5 h-5 rounded-full"
+                    />
                   )}
+                  <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+                    {truncateWithEllipses(
+                      item.collection_name,
+                      COLLECTION_NAME_TRUNCATE_LENGTH
+                    )}
+                  </p>
+                </div>
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+                  {singleItem || !item.token_count
+                    ? "1 Edition"
+                    : `${item.token_count} Editions`}
                 </p>
               </div>
-              <p className="text-xs font-semibold text-gray-600 dark:text-gray-400">
-                {item.token_count ? `${item.token_count} Editions` : "1/1"}
-              </p>
-            </div>
+            </Link>
           </div>
         </div>
       </div>

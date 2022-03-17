@@ -1,42 +1,83 @@
-import { Platform, useWindowDimensions } from "react-native";
+import React, { useMemo } from "react";
+import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 
 import { View } from "design-system/view";
-import { Header } from "design-system/modal/header";
 
-type Props = {
-  children: React.ReactNode;
-  title?: string;
-  height?: number;
-  width?: number;
-  close?: () => void;
-};
+import { ModalBackdrop } from "./backdrop";
+import { ModalBody } from "./body";
+import {
+  DEFAULT_HEIGHT,
+  DEFAULT_WIDTH,
+  CONTAINER_TW,
+  MODAL_TW,
+} from "./constants";
+import { createModalContainer } from "./container";
+import { Header } from "./header";
+import type { ModalProps } from "./types";
 
-export function Modal(props: Props) {
-  const { width } = useWindowDimensions();
+const ModalKeyboardAvoidingView: React.FC<{
+  keyboardVerticalOffset: number;
+  style: any;
+}> = Platform.select({
+  web: ({ children }) => children as any,
+  default: ({ keyboardVerticalOffset, style, children }) => (
+    <KeyboardAvoidingView
+      pointerEvents="box-none"
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={keyboardVerticalOffset}
+      style={style}
+    >
+      {children}
+    </KeyboardAvoidingView>
+  ),
+});
 
+export function Modal({
+  title,
+  width = DEFAULT_WIDTH,
+  height = DEFAULT_HEIGHT,
+  bodyTW,
+  bodyContentTW,
+  keyboardVerticalOffset = 0,
+  scrollable = true,
+  close,
+  onDismiss,
+  modalWrapper,
+  children,
+}: ModalProps) {
+  const ModalContainer = useMemo(
+    () => createModalContainer(modalWrapper),
+    [modalWrapper]
+  );
   return (
-    <>
-      <View
-        // @ts-ignore
-        onClick={props.close}
-        tw="absolute top-0 right-0 bottom-0 left-0 opacity-90 dark:opacity-85 bg-gray-200 dark:bg-black"
-      />
-      <View
-        tw="z-99999 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 shadow-lg md:shadow-sm ios:w-full ios:h-full absolute ios:relative lg:relative bottom-0 min-w-[100vw] md:min-w-0 lg:max-h-[600px] lg:max-w-[420px] md:border-t md:border-l md:border-r md:border-b rounded-t-3xl md:rounded-b-3xl ios:rounded-t-none"
-        sx={
-          Platform.OS === "web" && width > 1024
-            ? {
-                position: "fixed",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-              }
-            : {}
-        }
-      >
-        <Header title={props.title} close={props.close} />
-        <View tw="p-6">{props.children}</View>
+    <ModalContainer onDismiss={onDismiss}>
+      <View tw={CONTAINER_TW}>
+        <ModalBackdrop close={close} />
+        <ModalKeyboardAvoidingView
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            justifyContent: "flex-end",
+          }}
+          keyboardVerticalOffset={keyboardVerticalOffset}
+        >
+          <View
+            tw={[
+              width,
+              height.length === 0 || !height ? "max-h-screen" : height,
+              MODAL_TW ?? "",
+            ]}
+          >
+            <Header title={title} close={close} />
+            <ModalBody
+              tw={bodyTW}
+              contentTW={bodyContentTW}
+              scrollable={scrollable}
+            >
+              {children}
+            </ModalBody>
+          </View>
+        </ModalKeyboardAvoidingView>
       </View>
-    </>
+    </ModalContainer>
   );
 }

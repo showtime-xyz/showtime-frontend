@@ -1,15 +1,12 @@
 import React from "react";
-import { Meta } from "@storybook/react";
 import { Dimensions, View, Image, StatusBar } from "react-native";
-import { Tabs } from "./tablib";
-import {
-  PullToRefresh,
-  SelectedTabIndicator,
-  TabItem,
-} from "./tablib/components";
 
-// optional but passing tabListHeight will improve start time
-const TAB_LIST_HEIGHT = 55;
+import { Meta } from "@storybook/react";
+
+import { TAB_LIST_HEIGHT } from "app/lib/constants";
+
+import { Tabs } from "./tablib";
+import { SelectedTabIndicator, TabItem } from "./tablib/components";
 
 const Header = () => {
   const windowWidth = Dimensions.get("window").width;
@@ -108,9 +105,6 @@ export const TabsWithHeader: React.FC = () => {
         tabListHeight={TAB_LIST_HEIGHT}
         lazy
       >
-        {/*  no-op on web */}
-        <PullToRefresh onRefresh={onRefresh} />
-
         <Tabs.Header>
           <Header />
         </Tabs.Header>

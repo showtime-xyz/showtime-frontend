@@ -48,3 +48,7 @@ jobs:
         with:
           name: eslint_report.json
           path: eslint_report.json
+
+      - name: Run Tests
+        run: yarn test:expo
+        continue-on-error: false

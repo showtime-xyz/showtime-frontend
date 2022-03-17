@@ -1,14 +1,17 @@
 {
   "name": "showtime",
+  "version": "15.0.0",
   "private": true,
   "license": "MIT",
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^3.2.0",
     "@types/react": "~17.0.36",
     "@types/react-native": "~0.66.5",
+    "eslint-plugin-prettier": "^4.0.0",
     "patch-package": "^6.4.7",
     "prettier": "^2.4.1",
-    "turbo": "^1.0.16",
-    "eslint-plugin-prettier": "^4.0.0"
+    "sentry-expo": "^4.1.0",
+    "turbo": "^1.0.16"
   },
   "workspaces": [
     "apps/expo",
@@ -46,14 +49,17 @@
     "clean:turbo": "rm -rf ./node_modules/.cache/turbo",
     "clean:node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
     "postinstall": "patch-package",
-    "clean:native": "yarn clean && rm -rf apps/storybook-react-native/android && rm -rf apps/storybook-react-native/ios && rm -rf apps/expo/android && rm -rf apps/expo/ios"
+    "clean:native": "yarn clean && rm -rf apps/storybook-react-native/android && rm -rf apps/storybook-react-native/ios && rm -rf apps/expo/android && rm -rf apps/expo/ios && rm -rf apps/expo/.expo",
+    "test:expo": "cd apps/expo && yarn test"
   },
   "resolutions": {
     "babel-preset-expo": "^8.5.1",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
+    "react": "18.0.0-rc.0",
+    "react-dom": "18.0.0-rc.0",
     "react-native-svg": "^12.1.1",
-    "expo-linear-gradient": "^11.0.0"
+    "@jest/create-cache-key-function": "^27.0.1",
+    "expo-linear-gradient": "~11.0.2",
+    "react-native-ios-context-menu": "1.3.0"
   },
   "turbo": {
     "baseBranch": "origin/main",

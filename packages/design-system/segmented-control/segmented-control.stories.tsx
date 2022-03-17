@@ -1,6 +1,8 @@
-import { Meta } from "@storybook/react";
-import { SegmentedControl } from "./index";
 import { useState } from "react";
+
+import { Meta } from "@storybook/react";
+
+import { SegmentedControl } from "./index";
 
 export default {
   component: SegmentedControl,

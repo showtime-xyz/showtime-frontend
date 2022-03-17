@@ -1,0 +1,351 @@
+diff --git a/node_modules/@biconomy/mexa/common-js/Biconomy.js b/node_modules/@biconomy/mexa/common-js/Biconomy.js
+index 0f16988..c8d2129 100644
+--- a/node_modules/@biconomy/mexa/common-js/Biconomy.js
++++ b/node_modules/@biconomy/mexa/common-js/Biconomy.js
+@@ -46,7 +46,7 @@ var _require4 = require("./abis"),
+     biconomyForwarderAbi = _require4.biconomyForwarderAbi,
+     transferHandlerAbi = _require4.transferHandlerAbi;
+ 
+-var fetch = require("cross-fetch");
++var fetch = require("./fetch-on-app-foreground");
+ 
+ var decoderMap = {},
+     smartContractMap = {},
+@@ -97,6 +97,7 @@ function Biconomy(provider, options) {
+   this.originalProvider = provider;
+   this.isEthersProviderPresent = false;
+   this.canSignMessages = false;
++  this.signFunction = options.signFunction;
+ 
+   if (options.debug) {
+     config.logsEnabled = true;
+@@ -1455,98 +1456,180 @@ function getSignatureEIP712(engine, account, request) {
+   var signTypedDataType = "eth_signTypedData_v4";
+ 
+   var dataToSign = _getEIP712ForwardMessageToSign(request);
++  var targetProvider;
+ 
+-  var targetProvider = getTargetProvider(engine);
++  var signFunction = engine.signFunction;
+ 
+-  if (!targetProvider) {
+-    throw new Error("Unable to get provider information passed to Biconomy");
++  if (!signFunction) {
++    targetProvider = getTargetProvider(engine);
+   }
+ 
+-  var promise = new Promise( /*#__PURE__*/function () {
+-    var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(resolve, reject) {
+-      var signature, _getSignatureParamete, r, s, v, newSignature;
+-
+-      return _regenerator["default"].wrap(function _callee4$(_context4) {
+-        while (1) {
+-          switch (_context4.prev = _context4.next) {
+-            case 0:
+-              if (!targetProvider) {
+-                _context4.next = 21;
+-                break;
+-              }
+-
+-              if (!isEthersProvider(targetProvider)) {
+-                _context4.next = 17;
+-                break;
+-              }
+-
+-              _context4.prev = 2;
+-              _context4.next = 5;
+-              return targetProvider.send(signTypedDataType, [account, dataToSign]);
+-
+-            case 5:
+-              signature = _context4.sent;
+-              _getSignatureParamete = getSignatureParameters(signature), r = _getSignatureParamete.r, s = _getSignatureParamete.s, v = _getSignatureParamete.v;
+-              v = ethers.BigNumber.from(v).toHexString();
+-              newSignature = r + s.slice(2) + v.slice(2);
+-              resolve(newSignature);
+-              _context4.next = 15;
+-              break;
+-
+-            case 12:
+-              _context4.prev = 12;
+-              _context4.t0 = _context4["catch"](2);
+-              reject(_context4.t0);
+-
+-            case 15:
+-              _context4.next = 19;
+-              break;
+-
+-            case 17:
+-              _context4.next = 19;
+-              return targetProvider.send({
+-                jsonrpc: "2.0",
+-                id: 999999999999,
+-                method: signTypedDataType,
+-                params: [account, dataToSign]
+-              }, function (error, res) {
+-                if (error) {
+-                  reject(error);
+-                } else {
+-                  var oldSignature = res.result;
+ 
+-                  var _getSignatureParamete2 = getSignatureParameters(oldSignature),
+-                      _r = _getSignatureParamete2.r,
+-                      _s = _getSignatureParamete2.s,
+-                      _v = _getSignatureParamete2.v;
+-
+-                  _v = ethers.BigNumber.from(_v).toHexString();
+-
+-                  var _newSignature = _r + _s.slice(2) + _v.slice(2);
+-
+-                  resolve(_newSignature);
+-                }
+-              });
+-
+-            case 19:
+-              _context4.next = 22;
+-              break;
+-
+-            case 21:
+-              reject("Could not get signature from the provider passed to Biconomy. Check if you have passed a walletProvider in Biconomy Options.");
++  if (!targetProvider && !signFunction) {
++    throw new Error("Unable to get provider information passed to Biconomy");
++  }
+ 
+-            case 22:
+-            case "end":
+-              return _context4.stop();
+-          }
+-        }
+-      }, _callee4, null, [[2, 12]]);
+-    }));
+ 
+-    return function (_x15, _x16) {
+-      return _ref4.apply(this, arguments);
+-    };
+-  }());
++   var promise = new Promise(
++     /*#__PURE__*/ (function () {
++       var _ref4 = (0, _asyncToGenerator2["default"])(
++         /*#__PURE__*/ _regenerator["default"].mark(function _callee4(
++           resolve,
++           reject
++         ) {
++           var signature,
++             _getSignatureParamete,
++             r,
++             s,
++             v,
++             newSignature,
++             _signature,
++             _getSignatureParamete2,
++             _r,
++             _s,
++             _v,
++             _newSignature;
++
++           return _regenerator["default"].wrap(
++             function _callee4$(_context4) {
++               while (1) {
++                 switch ((_context4.prev = _context4.next)) {
++                   case 0:
++                     if (!signFunction) {
++                       _context4.next = 16;
++                       break;
++                     }
++
++                     _context4.prev = 1;
++                     _context4.next = 4;
++                     return signFunction(signTypedDataType, [
++                       account,
++                       dataToSign,
++                     ]);
++
++                   case 4:
++                     signature = _context4.sent;
++                     (_getSignatureParamete =
++                       getSignatureParameters(signature)),
++                       (r = _getSignatureParamete.r),
++                       (s = _getSignatureParamete.s),
++                       (v = _getSignatureParamete.v);
++                     v = ethers.BigNumber.from(v).toHexString();
++                     newSignature = r + s.slice(2) + v.slice(2);
++                     resolve(newSignature);
++                     _context4.next = 14;
++                     break;
++
++                   case 11:
++                     _context4.prev = 11;
++                     _context4.t0 = _context4["catch"](1);
++                     reject(_context4.t0);
++
++                   case 14:
++                     _context4.next = 38;
++                     break;
++
++                   case 16:
++                     if (!targetProvider) {
++                       _context4.next = 37;
++                       break;
++                     }
++
++                     if (!isEthersProvider(targetProvider)) {
++                       _context4.next = 33;
++                       break;
++                     }
++
++                     _context4.prev = 18;
++                     _context4.next = 21;
++                     return targetProvider.send(signTypedDataType, [
++                       account,
++                       dataToSign,
++                     ]);
++
++                   case 21:
++                     _signature = _context4.sent;
++                     (_getSignatureParamete2 =
++                       getSignatureParameters(_signature)),
++                       (_r = _getSignatureParamete2.r),
++                       (_s = _getSignatureParamete2.s),
++                       (_v = _getSignatureParamete2.v);
++                     _v = ethers.BigNumber.from(_v).toHexString();
++                     _newSignature = _r + _s.slice(2) + _v.slice(2);
++                     resolve(_newSignature);
++                     _context4.next = 31;
++                     break;
++
++                   case 28:
++                     _context4.prev = 28;
++                     _context4.t1 = _context4["catch"](18);
++                     reject(_context4.t1);
++
++                   case 31:
++                     _context4.next = 35;
++                     break;
++
++                   case 33:
++                     _context4.next = 35;
++                     return targetProvider.send(
++                       {
++                         jsonrpc: "2.0",
++                         id: 999999999999,
++                         method: signTypedDataType,
++                         params: [account, dataToSign],
++                       },
++                       function (error, res) {
++                         if (error) {
++                           reject(error);
++                         } else {
++                           var oldSignature = res.result;
++
++                           var _getSignatureParamete3 =
++                               getSignatureParameters(oldSignature),
++                             _r2 = _getSignatureParamete3.r,
++                             _s2 = _getSignatureParamete3.s,
++                             _v2 = _getSignatureParamete3.v;
++
++                           _v2 = ethers.BigNumber.from(_v2).toHexString();
++
++                           var _newSignature2 =
++                             _r2 + _s2.slice(2) + _v2.slice(2);
++
++                           resolve(_newSignature2);
++                         }
++                       }
++                     );
++
++                   case 35:
++                     _context4.next = 38;
++                     break;
++
++                   case 37:
++                     reject(
++                       "Could not get signature from the provider passed to Biconomy. Check if you have passed a walletProvider in Biconomy Options."
++                     );
++
++                   case 38:
++                   case "end":
++                     return _context4.stop();
++                 }
++               }
++             },
++             _callee4,
++             null,
++             [
++               [1, 11],
++               [18, 28],
++             ]
++           );
++         })
++       );
++
++       return function (_x15, _x16) {
++         return _ref4.apply(this, arguments);
++       };
++     })()
++   );
+   return promise;
+ }
+ 
+diff --git a/node_modules/@biconomy/mexa/common-js/fetch-on-app-foreground.android.js b/node_modules/@biconomy/mexa/common-js/fetch-on-app-foreground.android.js
+new file mode 100644
+index 0000000..9de5ce3
+--- /dev/null
++++ b/node_modules/@biconomy/mexa/common-js/fetch-on-app-foreground.android.js
+@@ -0,0 +1,22 @@
++import { AppState } from "react-native";
++
++function fetchOnAppForeground(...params) {
++  if (AppState.currentState === "active") {
++    console.log("was active while fetch");
++    return fetch(...params);
++  } else {
++    return new Promise((resolve, reject) => {
++      function fetchData(state) {
++        if (state === "active") {
++          console.log("calling foreground fetch");
++          fetch(...params).then(resolve).catch(reject);
++          AppState.removeEventListener("change", fetchData);
++        }
++      }
++
++      AppState.addEventListener("change", fetchData);
++    });
++  }
++}
++
++module.exports = fetchOnAppForeground;
+diff --git a/node_modules/@biconomy/mexa/common-js/fetch-on-app-foreground.ios.js b/node_modules/@biconomy/mexa/common-js/fetch-on-app-foreground.ios.js
+new file mode 100644
+index 0000000..9de5ce3
+--- /dev/null
++++ b/node_modules/@biconomy/mexa/common-js/fetch-on-app-foreground.ios.js
+@@ -0,0 +1,22 @@
++import { AppState } from "react-native";
++
++function fetchOnAppForeground(...params) {
++  if (AppState.currentState === "active") {
++    console.log("was active while fetch");
++    return fetch(...params);
++  } else {
++    return new Promise((resolve, reject) => {
++      function fetchData(state) {
++        if (state === "active") {
++          console.log("calling foreground fetch");
++          fetch(...params).then(resolve).catch(reject);
++          AppState.removeEventListener("change", fetchData);
++        }
++      }
++
++      AppState.addEventListener("change", fetchData);
++    });
++  }
++}
++
++module.exports = fetchOnAppForeground;
+diff --git a/node_modules/@biconomy/mexa/common-js/fetch-on-app-foreground.js b/node_modules/@biconomy/mexa/common-js/fetch-on-app-foreground.js
+new file mode 100644
+index 0000000..bf5936e
+--- /dev/null
++++ b/node_modules/@biconomy/mexa/common-js/fetch-on-app-foreground.js
+@@ -0,0 +1,2 @@
++const fetchOnAppForeground = require("cross-fetch");
++module.exports = fetchOnAppForeground;

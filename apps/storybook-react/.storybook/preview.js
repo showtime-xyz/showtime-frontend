@@ -1,14 +1,23 @@
-import "../styles/globals.css";
-
-import * as NextImage from "next/image";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { DripsyProvider } from "dripsy";
+import * as NextImage from "next/image";
+import { enableScreens } from "react-native-screens";
 import { useDeviceContext } from "twrnc";
 
-import { theme } from "design-system/theme";
+import { linking } from "app/navigation/linking";
+
 import { tw } from "design-system/tailwind";
-import { View } from "design-system/view";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { theme } from "design-system/theme";
 import { ToastProvider } from "design-system/toast";
+import { View } from "design-system/view";
+
+import "../styles/globals.css";
+
+enableScreens(true);
+
+const Stack = createNativeStackNavigator();
 
 const OriginalNextImage = NextImage.default;
 
@@ -41,7 +50,11 @@ export const decorators = [
       <TailwindDeviceContextProvider>
         <BottomSheetModalProvider>
           <ToastProvider>
-            <Story />
+            <NavigationContainer linking={linking}>
+              <Stack.Navigator screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="Storybook" component={Story} />
+              </Stack.Navigator>
+            </NavigationContainer>
           </ToastProvider>
         </BottomSheetModalProvider>
       </TailwindDeviceContextProvider>

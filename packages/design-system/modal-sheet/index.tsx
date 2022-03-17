@@ -1,8 +1,10 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback } from "react";
 import { useWindowDimensions } from "react-native";
-import { Modal } from "../modal";
+
 import { BottomSheet } from "../bottom-sheet";
+import { Modal } from "../modal";
 import { Header } from "../modal/header";
+import { TW } from "../tailwind/types";
 
 type Props = {
   children: React.ReactElement;
@@ -10,9 +12,11 @@ type Props = {
   visible?: boolean;
   close?: () => void;
   onClose?: () => void;
+  snapPoints?: string[];
+  bodyContentTW?: TW;
 };
 
-export function ModalSheet({ visible = true, ...props }: Props) {
+export function ModalSheet({ visible = true, bodyContentTW, ...props }: Props) {
   const { width } = useWindowDimensions();
 
   const renderHandleComponent = useCallback(
@@ -44,6 +48,8 @@ export function ModalSheet({ visible = true, ...props }: Props) {
       visible={visible}
       handleComponent={renderHandleComponent}
       onDismiss={props.onClose}
+      snapPoints={props.snapPoints}
+      bodyContentTW={bodyContentTW}
     >
       {props.children}
     </BottomSheet>

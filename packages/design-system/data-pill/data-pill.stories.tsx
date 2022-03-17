@@ -1,7 +1,7 @@
 import { Meta } from "@storybook/react";
 
-import { DataPill } from "./index";
 import { View } from "../view";
+import { DataPill } from "./index";
 
 export default {
   component: DataPill,

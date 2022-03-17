@@ -1,8 +1,10 @@
-import XIcon from "./Icons/XIcon";
-import { Transition } from "@headlessui/react";
-import useStickyState from "@/hooks/useStickyState";
 import { useContext } from "react";
+
 import AppContext from "@/context/app-context";
+import useStickyState from "@/hooks/useStickyState";
+import { Transition } from "@headlessui/react";
+
+import XIcon from "./Icons/XIcon";
 
 const MintingBanner = ({ openMintModal }) => {
   const { user, setLoginModalOpen } = useContext(AppContext);

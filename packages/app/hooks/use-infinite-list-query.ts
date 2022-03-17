@@ -1,8 +1,11 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
+
+import type { KeyedMutator } from "swr";
 import useSWRInfinite from "swr/infinite";
+
 import { axios } from "app/lib/axios";
 
-const fetcher = (url) => {
+export const fetcher = (url) => {
   return axios({ url, method: "GET" });
 };
 
@@ -15,10 +18,11 @@ type UseInfiniteListQueryReturn<T> = {
   fetchMore: () => void;
   refresh: () => void;
   retry: () => void;
+  mutate: KeyedMutator<T[]>;
 };
 
 export const useInfiniteListQuerySWR = <T>(
-  urlFunction: (page) => string
+  urlFunction: (page: number) => string | null
 ): UseInfiniteListQueryReturn<T> => {
   // Todo:: on Refresh, swr will refetch all the page APIs. This may appear weird at first, but I guess could be better for UX
   // We don't want to show loading indicator till all of the requests succeed, so we'll add our refreshing state
@@ -31,26 +35,15 @@ export const useInfiniteListQuerySWR = <T>(
     size,
     setSize,
     isValidating,
-  } = useSWRInfinite(urlFunction, fetcher, {
-    revalidateFirstPage: false,
+  } = useSWRInfinite<T>(urlFunction, fetcher, {
+    revalidateFirstPage: true,
+    suspense: true,
   });
 
   const isLoadingInitialData = !pages && !error;
   const isRefreshingSWR = isValidating && pages && pages.length === size;
   const isLoadingMore =
     size > 0 && pages && typeof pages[size - 1] === "undefined";
-
-  const newData = useMemo(() => {
-    let newData = [];
-    if (pages) {
-      pages.forEach((p) => {
-        if (p) {
-          newData = newData.concat(p.data);
-        }
-      });
-    }
-    return newData;
-  }, [pages]);
 
   useEffect(() => {
     if (!isRefreshingSWR) {
@@ -59,7 +52,7 @@ export const useInfiniteListQuerySWR = <T>(
   }, [isRefreshingSWR]);
 
   return {
-    data: newData,
+    data: pages,
     error,
     refresh: () => {
       setRefreshing(true);
@@ -73,11 +66,12 @@ export const useInfiniteListQuerySWR = <T>(
       if (!isLoadingMore) {
         setSize((size) => size + 1);
       }
-    }, [isLoadingMore]),
+    }, [isLoadingMore, setSize]),
     retry: mutate,
     isLoading: isLoadingInitialData,
     isLoadingMore,
     isRefreshing,
+    mutate,
   };
 };
 

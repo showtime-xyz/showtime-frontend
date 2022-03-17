@@ -1,38 +1,60 @@
 {
   "build": {
     "production": {
-      "releaseChannel": "production",
+      "channel": "production",
       "distribution": "store",
-      "ios": {
-        "autoIncrement": true
-      },
       "android": {
-        "autoIncrement": true,
-        "buildType": "app-bundle"
+        "buildType": "app-bundle",
+        "image": "latest"
       },
       "env": {
         "STAGE": "production"
       },
-      "node": "14.18.1"
+      "node": "14.18.1",
+      "cache": {
+        "key": "showtime-2"
+      }
     },
     "preview": {
-      "releaseChannel": "staging",
+      "channel": "staging",
       "distribution": "internal",
       "android": {
-        "buildType": "apk"
+        "buildType": "apk",
+        "image": "latest"
       },
       "env": {
         "STAGE": "staging"
       },
-      "node": "14.18.1"
+      "node": "14.18.1",
+      "cache": {
+        "key": "showtime-2"
+      }
     },
     "development": {
       "developmentClient": true,
       "distribution": "internal",
+      "android": {
+        "image": "latest"
+      },
       "env": {
         "STAGE": "development"
       },
-      "node": "14.18.1"
+      "node": "14.18.1",
+      "cache": {
+        "key": "showtime-2"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "./service-account-key.json"
+      },
+      "ios": {
+        "appName": "Showtime: NFT Social Network",
+        "ascAppId": "1606611688",
+        "appleId": "axeldelafosse@gmail.com"
+      }
     }
   },
   "cli": {

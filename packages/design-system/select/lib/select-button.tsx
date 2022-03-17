@@ -1,12 +1,14 @@
 import React, { forwardRef, memo, useMemo } from "react";
-import Animated, { useAnimatedStyle } from "react-native-reanimated";
+
 import { Pressable } from "dripsy";
+import Animated, { useAnimatedStyle } from "react-native-reanimated";
+
 import { useIsDarkMode, useOnHover, useOnPress } from "../../hooks";
-import { Text } from "../../text";
-import { ChevronDownIcon } from "./chevron-down-icon";
 import { tw } from "../../tailwind";
 import { colors } from "../../tailwind/colors";
+import { Text } from "../../text";
 import { SelectProps } from "../types";
+import { ChevronDownIcon } from "./chevron-down-icon";
 
 interface SelectButtonProps extends Pick<SelectProps, "size"> {
   open: boolean;

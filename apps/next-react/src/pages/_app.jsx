@@ -1,26 +1,24 @@
-import "@/styles/styles.css";
-
-import "raf/polyfill";
-
 import { useEffect, useState } from "react";
-import mixpanel from "mixpanel-browser";
-import Router, { useRouter } from "next/router";
+
+import ModalThrottleUser from "@/components/ModalThrottleUser";
+import AppContext from "@/context/app-context";
+import useAuth from "@/hooks/useAuth";
+import axios from "@/lib/axios";
+import ClientAccessToken from "@/lib/client-access-token";
+import { DISABLE_ALL } from "@/lib/constants";
+import { filterNewRecs } from "@/lib/utilities";
+import "@/styles/styles.css";
 import ProgressBar from "@badrap/bar-of-progress";
-import { ThemeProvider } from "next-themes";
 import { DripsyProvider } from "dripsy";
-import { useDeviceContext } from "twrnc";
+import mixpanel from "mixpanel-browser";
+import { ThemeProvider } from "next-themes";
+import Router, { useRouter } from "next/router";
+import "raf/polyfill";
 import { SWRConfig, useSWRConfig } from "swr";
+import { useDeviceContext } from "twrnc";
 
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
-
-import { DISABLE_ALL } from "@/lib/constants";
-import AppContext from "@/context/app-context";
-import ModalThrottleUser from "@/components/ModalThrottleUser";
-import axios from "@/lib/axios";
-import { filterNewRecs } from "@/lib/utilities";
-import useAuth from "@/hooks/useAuth";
-import ClientAccessToken from "@/lib/client-access-token";
 
 mixpanel.init("9b14512bc76f3f349c708f67ab189941");
 

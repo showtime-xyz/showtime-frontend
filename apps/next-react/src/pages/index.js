@@ -1,18 +1,20 @@
 import { useState, useEffect, useContext } from "react";
-import Head from "next/head";
-import _ from "lodash";
-import Layout from "@/components/layout";
-import CappedWidth from "@/components/CappedWidth";
-import InfiniteScroll from "react-infinite-scroll-component";
-import AppContext from "@/context/app-context";
-import mixpanel from "mixpanel-browser";
-import useKeyPress from "@/hooks/useKeyPress";
+
 import ActivityFeed from "@/components/ActivityFeed";
-import ModalTokenDetail from "@/components/ModalTokenDetail";
 import ActivityRecommendedFollows from "@/components/ActivityRecommendedFollows";
+import CappedWidth from "@/components/CappedWidth";
 import ModalReportItem from "@/components/ModalReportItem";
+import ModalTokenDetail from "@/components/ModalTokenDetail";
 import RecommendFollowers from "@/components/RecommendFollowers";
+import Layout from "@/components/layout";
+import AppContext from "@/context/app-context";
+import useKeyPress from "@/hooks/useKeyPress";
 import axios from "@/lib/axios";
+import {
+  HeartIcon as HeartOutlineIcon,
+  UserIcon as UserOutlineIcon,
+  ChatAlt2Icon as CommentOutlineIcon,
+} from "@heroicons/react/outline";
 import {
   FingerPrintIcon,
   HeartIcon as HeartSolidIcon,
@@ -20,11 +22,10 @@ import {
   ChatAlt2Icon as CommentSolidIcon,
   FilterIcon,
 } from "@heroicons/react/solid";
-import {
-  HeartIcon as HeartOutlineIcon,
-  UserIcon as UserOutlineIcon,
-  ChatAlt2Icon as CommentOutlineIcon,
-} from "@heroicons/react/outline";
+import _ from "lodash";
+import mixpanel from "mixpanel-browser";
+import Head from "next/head";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const ACTIVITY_PAGE_LENGTH = 5; // 5 activity items per activity page
 
@@ -245,19 +246,14 @@ const Activity = () => {
         </Head>
 
         {context.user === null ? (
-          <div className="py-12 sm:py-14 px-8 sm:px-10 text-left bg-gradient-to-tr from-violet-900 via-violet-500 to-violet-300">
+          <div
+            className="py-12 sm:pt-48 sm:py-14 px-8 sm:px-10 text-left bg-cover bg-center"
+            style={{ backgroundImage: "url(/img/gradient.png)" }}
+          >
             <CappedWidth>
-              <div className="flex flex-row mx-3 text-white">
-                <div className="flex-1">
-                  <div className="text-xl sm:text-2xl">
-                    Discover &amp; Showcase
-                  </div>
-                  <div className="text-4xl sm:text-6xl font-afro">
-                    Your Favorite
-                  </div>
-                  <div className="text-4xl sm:text-6xl">Crypto Art.</div>
-                </div>
-              </div>
+              <p className="font-tomato font-semibold text-5xl text-black">
+                discover, create, collect
+              </p>
             </CappedWidth>
           </div>
         ) : null}
@@ -265,9 +261,7 @@ const Activity = () => {
         <CappedWidth>
           <div className="m-auto relative pb-8">
             <div className="mb-4 sm:mb-8 mt-8 sm:mt-16 text-left px-5 sm:px-3 flex flex-row items-center">
-              <h1 className="text-lg sm:text-3xl dark:text-gray-200">
-                News Feed
-              </h1>
+              <div className="flex-grow"></div>
               <div className="flex-grow"></div>
               <div
                 className="hover:text-stpink sm:hidden mr-1"
@@ -294,7 +288,7 @@ const Activity = () => {
                         : "text-gray-500"
                     } hover:text-stblue cursor-pointer transition-all flex flex-row items-center`}
                   >
-                    All News
+                    All
                   </div>
                   <div
                     onClick={() => handleFilterClick(3)}
@@ -359,7 +353,7 @@ const Activity = () => {
                 {context.user === undefined ? null : context.user === null ? (
                   <div className="flex flex-1 items-center justify-center mb-6 sm:px-3">
                     <div className="text-gray-400 shadow-md bg-white dark:bg-gray-800 sm:rounded-lg w-full px-4 py-6 text-center">
-                      <span>News Feed preview.</span>{" "}
+                      <span>Feed preview.</span>{" "}
                       <span
                         className="cursor-pointer text-gray-800 dark:text-gray-200 hover:text-stpink dark:hover:text-stpink"
                         onClick={() => context.setLoginModalOpen(true)}

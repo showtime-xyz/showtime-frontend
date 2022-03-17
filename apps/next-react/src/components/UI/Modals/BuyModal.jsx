@@ -1,16 +1,15 @@
-import { Dialog, Transition } from "@headlessui/react";
-import Button from "../Buttons/Button";
-import { ethers } from "ethers";
-import { getBiconomy } from "@/lib/biconomy";
-import getWeb3Modal from "@/lib/web3Modal";
-import marketplaceAbi from "@/data/ShowtimeV1Market.json";
-import PolygonIcon from "@/components/Icons/PolygonIcon";
 import { useRef, useState, Fragment, useEffect, useContext } from "react";
-import { useTheme } from "next-themes";
-import iercPermit20Abi from "@/data/IERC20Permit.json";
-import useProfile from "@/hooks/useProfile";
-import { ExclamationIcon } from "@heroicons/react/outline";
+
+import BadgeIcon from "@/components/Icons/BadgeIcon";
+import PolygonIcon from "@/components/Icons/PolygonIcon";
 import XIcon from "@/components/Icons/XIcon";
+import AppContext from "@/context/app-context";
+import iercPermit20Abi from "@/data/IERC20Permit.json";
+import marketplaceAbi from "@/data/ShowtimeV1Market.json";
+import useFlags, { FLAGS } from "@/hooks/useFlags";
+import useProfile from "@/hooks/useProfile";
+import axios from "@/lib/axios";
+import { getBiconomy } from "@/lib/biconomy";
 import { DEFAULT_PROFILE_PIC, LIST_CURRENCIES } from "@/lib/constants";
 import {
   formatAddressShort,
@@ -19,11 +18,15 @@ import {
   switchToChain,
   truncateWithEllipses,
 } from "@/lib/utilities";
-import BadgeIcon from "@/components/Icons/BadgeIcon";
+import getWeb3Modal from "@/lib/web3Modal";
+import { Dialog, Transition } from "@headlessui/react";
+import { ExclamationIcon } from "@heroicons/react/outline";
 import confetti from "canvas-confetti";
+import { ethers } from "ethers";
+import { useTheme } from "next-themes";
 import Link from "next/link";
-import axios from "@/lib/axios";
-import AppContext from "@/context/app-context";
+
+import Button from "../Buttons/Button";
 
 const MODAL_PAGES = {
   GENERAL: "general",
@@ -44,16 +47,23 @@ const BuyModal = ({ open, onClose, token }) => {
   const isWeb3ModalActive = useRef(false);
   const confettiCanvas = useRef(null);
   const [modalVisibility, setModalVisibility] = useState(true);
-  const [modalPage, setModalPage] = useState(myProfile?.wallet_addresses_excluding_email_v2?.length === 0
-      ? MODAL_PAGES.NO_WALLET
-      : MODAL_PAGES.GENERAL
-    );
+  const [modalPage, setModalPage] = useState(
+    Boolean(myProfile?.wallet_addresses_excluding_email_v2?.length)
+      ? MODAL_PAGES.GENERAL
+      : MODAL_PAGES.NO_WALLET
+  );
+
   const [quantity, setQuantity] = useState(1);
   const [transactionHash, setTransactionHash] = useState("");
 
+  const flags = useFlags();
+  const enableMagicTX = flags[FLAGS.enableMagicTX];
+
   useEffect(() => {
-    if (myProfile?.wallet_addresses_excluding_email_v2?.length === 0) {
+    if (!Boolean(myProfile?.wallet_addresses_excluding_email_v2?.length)) {
       setModalPage(MODAL_PAGES.NO_WALLET);
+    } else {
+      setModalPage(MODAL_PAGES.GENERAL);
     }
   }, [myProfile]);
 
@@ -124,7 +134,10 @@ const BuyModal = ({ open, onClose, token }) => {
   const buyToken = async () => {
     setModalPage(MODAL_PAGES.LOADING);
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic: true });
+    const web3Modal = getWeb3Modal({
+      theme: resolvedTheme,
+      withMagic: enableMagicTX,
+    });
 
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
@@ -644,25 +657,25 @@ const SuccessPage = ({ transactionHash, token, shotConfetti }) => {
 };
 
 const NoWalletPage = () => (
-    <div>
-      <div className="p-4 border-b border-gray-100 dark:border-gray-900">
-        <p className="font-medium text-gray-900 dark:text-white">
-          You’ll need to connect an Ethereum wallet before buying an NFT on
-          Showtime.
-        </p>
-      </div>
-      <div className="p-4">
-        <Link href="/wallet">
-          <Button
-            as="a"
-            className="w-full flex items-center justify-center cursor-pointer"
-            style="primary"
-          >
-            Connect a Wallet
-          </Button>
-        </Link>
-      </div>
+  <div>
+    <div className="p-4 border-b border-gray-100 dark:border-gray-900">
+      <p className="font-medium text-gray-900 dark:text-white">
+        You’ll need to connect an Ethereum wallet before buying an NFT on
+        Showtime.
+      </p>
     </div>
+    <div className="p-4">
+      <Link href="/wallet">
+        <Button
+          as="a"
+          className="w-full flex items-center justify-center cursor-pointer"
+          style="primary"
+        >
+          Connect a Wallet
+        </Button>
+      </Link>
+    </div>
+  </div>
 );
 
 const WalletErrorPage = ({ buyToken }) => {
@@ -756,11 +769,16 @@ const AllowanceRequiredPage = ({
   buyToken,
 }) => {
   const { resolvedTheme } = useTheme();
+  const flags = useFlags();
+  const enableMagicTX = flags[FLAGS.enableMagicTX];
 
   const grantAllowance = async () => {
     setModalPage(MODAL_PAGES.LOADING);
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic: true });
+    const web3Modal = getWeb3Modal({
+      theme: resolvedTheme,
+      withMagic: enableMagicTX,
+    });
     isWeb3ModalActive.current = true;
 
     const web3 = new ethers.providers.Web3Provider(

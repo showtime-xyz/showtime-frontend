@@ -1,41 +1,46 @@
 import { useState, useEffect } from "react";
-import { AppState, LogBox, useColorScheme, Platform } from "react-native";
 import {
-  enableScreens,
-  enableFreeze,
-  FullWindowOverlay,
-} from "react-native-screens";
-import { StatusBar, setStatusBarStyle } from "expo-status-bar";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { DripsyProvider } from "dripsy";
-import { useDeviceContext } from "twrnc";
-// import * as Sentry from 'sentry-expo'
-import { MMKV } from "react-native-mmkv";
-import { SWRConfig, useSWRConfig } from "swr";
-import WalletConnectProvider, {
-  useWalletConnect,
-  RenderQrcodeModalProps,
-  QrcodeModal,
-} from "@walletconnect/react-native-dapp";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+  AppState,
+  LogBox,
+  Platform,
+  useColorScheme as useDeviceColorScheme,
+} from "react-native";
+
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
 import NetInfo from "@react-native-community/netinfo";
 import { useNavigation } from "@react-navigation/native";
+import rudderClient, {
+  RUDDER_LOG_LEVEL,
+} from "@rudderstack/rudder-sdk-react-native";
+import { DripsyProvider } from "dripsy";
 import * as NavigationBar from "expo-navigation-bar";
+import * as Notifications from "expo-notifications";
+import { StatusBar, setStatusBarStyle } from "expo-status-bar";
+import * as SystemUI from "expo-system-ui";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { MMKV } from "react-native-mmkv";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { enableScreens } from "react-native-screens";
+import { SWRConfig } from "swr";
+import { useDeviceContext, useAppColorScheme } from "twrnc";
+
+import { AppContext } from "app/context/app-context";
+import { track } from "app/lib/analytics";
+import {
+  setColorScheme as setUserColorScheme,
+  useColorScheme as useUserColorScheme,
+} from "app/lib/color-scheme";
+import { NavigationProvider } from "app/navigation";
+import { RootStackNavigator } from "app/navigation/root-stack-navigator";
+import { AuthProvider } from "app/providers/auth-provider";
+import { UserProvider } from "app/providers/user-provider";
+import { WalletConnectProvider } from "app/providers/wallet-connect-provider";
+import { Web3Provider } from "app/providers/web3-provider";
 
 import { tw } from "design-system/tailwind";
 import { theme } from "design-system/theme";
-import { NavigationProvider } from "app/navigation";
-import { NextTabNavigator } from "app/navigation/next-tab-navigator";
-import { accessTokenManager } from "app/lib/access-token-manager";
-import { AppContext } from "app/context/app-context";
-import { setLogout } from "app/lib/logout";
-import { mixpanel } from "app/lib/mixpanel";
-import { deleteCache } from "app/lib/delete-cache";
-import { useUser } from "app/hooks/use-user";
-import { useRouter } from "app/navigation/use-router";
-import { deleteRefreshToken } from "app/lib/refresh-token";
 import { ToastProvider } from "design-system/toast";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 enableScreens(true);
 // enableFreeze(true)
@@ -51,26 +56,25 @@ LogBox.ignoreLogs([
   "No native splash screen",
   "The provided value 'ms-stream' is not a valid 'responseType'.",
   "The provided value 'moz-chunked-arraybuffer' is not a valid 'responseType'.",
+  "Constants.platform.ios.model has been deprecated in favor of expo-device's Device.modelName property.",
+  "ExponentGLView",
 ]);
 
-function QRCodeModal(props: RenderQrcodeModalProps): JSX.Element {
-  if (!props.visible) {
-    return null;
-  }
+const rudderConfig = {
+  dataPlaneUrl: "https://tryshowtimjtc.dataplane.rudderstack.com",
+  trackAppLifecycleEvents: true,
+  logLevel: RUDDER_LOG_LEVEL.INFO, // DEBUG
+};
 
-  return (
-    <FullWindowOverlay
-      style={{
-        position: "absolute",
-        width: "100%",
-        height: "100%",
-        justifyContent: "center",
-      }}
-    >
-      <QrcodeModal division={4} {...props} />
-    </FullWindowOverlay>
-  );
-}
+// Create a GrowthBook instance
+const growthbook = new GrowthBook({
+  trackingCallback: (experiment, result) => {
+    track("Experiment Viewed", {
+      experiment_id: experiment.key,
+      variant_id: result.variationId,
+    });
+  },
+});
 
 function mmkvProvider() {
   const storage = new MMKV();
@@ -97,6 +101,7 @@ function SWRProvider({ children }: { children: React.ReactNode }): JSX.Element {
         },
         isOnline: () => {
           return true;
+
           // return NetInfo.fetch().then((state) => state.isConnected)
         },
         // TODO: tab focus too
@@ -115,7 +120,7 @@ function SWRProvider({ children }: { children: React.ReactNode }): JSX.Element {
           };
 
           // Subscribe to the app state change events
-          const subscription = AppState.addEventListener(
+          const listener = AppState.addEventListener(
             "change",
             onAppStateChange
           );
@@ -124,7 +129,9 @@ function SWRProvider({ children }: { children: React.ReactNode }): JSX.Element {
           const unsubscribe = navigation.addListener("focus", callback);
 
           return () => {
-            subscription.remove();
+            if (listener) {
+              listener.remove();
+            }
             unsubscribe();
           };
         },
@@ -166,141 +173,105 @@ function AppContextProvider({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
-  const { user } = useUser();
-  const router = useRouter();
-  const { mutate } = useSWRConfig();
-  const connector = useWalletConnect();
-  useDeviceContext(tw);
-  const colorScheme = useColorScheme();
+  const [notification, setNotification] = useState(null);
+  useDeviceContext(tw, { withDeviceColorScheme: false });
+  // Default to device color scheme
+  const deviceColorScheme = useDeviceColorScheme();
+  // User can override color scheme
+  const userColorScheme = useUserColorScheme();
+  // Use the user color scheme if it's set
+  const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(
+    tw,
+    userColorScheme ?? deviceColorScheme
+  );
+
+  // setting it before useEffect or else we'll see a flash of white paint before
+  useState(() => setColorScheme(colorScheme));
   const isDark = colorScheme === "dark";
 
   useEffect(() => {
-    if (Platform.OS === "android") {
-      if (isDark) {
+    if (isDark) {
+      if (Platform.OS === "android") {
         NavigationBar.setBackgroundColorAsync("#000");
         NavigationBar.setButtonStyleAsync("light");
-        setStatusBarStyle("dark");
-      } else {
+      }
+
+      tw.setColorScheme("dark");
+      SystemUI.setBackgroundColorAsync("black");
+      setStatusBarStyle("light");
+    } else {
+      if (Platform.OS === "android") {
         NavigationBar.setBackgroundColorAsync("#FFF");
         NavigationBar.setButtonStyleAsync("dark");
-        setStatusBarStyle("light");
       }
+
+      tw.setColorScheme("light");
+      SystemUI.setBackgroundColorAsync("white");
+      setStatusBarStyle("dark");
     }
+  }, [isDark]);
+
+  useEffect(() => {
+    let shouldShowNotification = true;
+    if (notification) {
+      // TODO:
+      // const content = notification?.request?.content?.data?.body?.path;
+      // const currentScreen = '';
+      // const destinationScreen = '';
+      // Don't show if already on the same screen as the destination screen
+      // shouldShowNotification = currentScreen !== destinationScreen;
+    }
+
+    // priority: AndroidNotificationPriority.HIGH,
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: shouldShowNotification,
+        shouldPlaySound: shouldShowNotification,
+        shouldSetBadge: false, // shouldShowNotification
+      }),
+    });
+  }, [notification]);
+
+  // Handle push notifications
+  useEffect(() => {
+    // Handle notifications that are received while the app is open.
+    const notificationListener = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        setNotification(notification);
+      }
+    );
+
+    return () =>
+      Notifications.removeNotificationSubscription(notificationListener);
   }, []);
 
-  const [web3, setWeb3] = useState(null);
-  const [windowSize, setWindowSize] = useState(null);
-  const [myLikes, setMyLikes] = useState(null);
-  const [myLikeCounts, setMyLikeCounts] = useState(null);
-  const [myCommentLikes, setMyCommentLikes] = useState(null);
-  const [myCommentLikeCounts, setMyCommentLikeCounts] = useState(null);
-  const [myComments, setMyComments] = useState(null);
-  const [myCommentCounts, setMyCommentCounts] = useState(null);
-  const [myFollows, setMyFollows] = useState(null);
-  const [myRecommendations, setMyRecommendations] = useState(null);
-  // eslint-disable-next-line no-unused-vars
-  const [isMobile, setIsMobile] = useState(null);
-  const [toggleRefreshFeed, setToggleRefreshFeed] = useState(false);
-  const [throttleMessage, setThrottleMessage] = useState(null);
-  // const [throttleOpen, setThrottleOpen] = useState(false)
-  // const [throttleContent, setThrottleContent] = useState('')
-  // eslint-disable-next-line no-unused-vars
-  const [disableLikes, setDisableLikes] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [disableComments, setDisableComments] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [disableFollows, setDisableFollows] = useState(false);
-  // const [recQueue, setRecQueue] = useState([])
-  // eslint-disable-next-line no-unused-vars
-  const [loadingRecommendedFollows, setLoadingRecommendedFollows] =
-    useState(true);
-  const [recommendedFollows, setRecommendedFollows] = useState([]);
-  const [commentInputFocused, setCommentInputFocused] = useState(false);
+  // Listeners registered by this method will be called whenever a user interacts with a notification (eg. taps on it).
+  useEffect(() => {
+    const responseListener =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        const content =
+          Platform.OS === "ios"
+            ? response?.notification?.request?.content?.data?.body?.path
+            : response?.notification?.request?.content?.data?.path;
 
-  // useEffect(() => {
-  // 	if (infoData) {
-  // 		setMyProfile({
-  // 			...infoData.data.profile,
-  // 			notifications_last_opened: infoData.data.profile.notifications_last_opened
-  // 				? new Date(infoData.data.profile.notifications_last_opened)
-  // 				: null,
-  // 			links: infoData.data.profile.links.map(link => ({
-  // 				name: link.type__name,
-  // 				prefix: link.type__prefix,
-  // 				icon_url: link.type__icon_url,
-  // 				type_id: link.type_id,
-  // 				user_input: link.user_input,
-  // 			})),
-  // 		})
-  // 		setMyLikes(infoData.data.likes_nft)
-  // 		setMyCommentLikes(infoData.data.likes_comment)
-  // 		setMyComments(infoData.data.comments)
-  // 		setMyFollows(infoData.data.follows)
+        console.log(content);
 
-  // 		// Load up the recommendations async if we are onboarding
-  // 		if (infoData.data.profile.has_onboarded == false) {
-  // 			const my_rec_data = await axios({
-  // 				url: '/v1/follow_recommendations_onboarding',
-  // 				method: 'GET',
-  // 			})
-  // 			setMyRecommendations(my_rec_data.data)
-  // 		}
-  // 	}
-  // }, [infoData, setMyProfile, setMyLikes, setMyCommentLikes, setMyComments, setMyFollows])
+        // Notifications.dismissNotificationAsync(
+        //   response?.notification?.request?.identifier
+        // );
+        // Notifications.setBadgeCountAsync(0);
+      });
+
+    return () => Notifications.removeNotificationSubscription(responseListener);
+  }, []);
 
   const injectedGlobalContext = {
-    web3,
-    setWeb3,
-    windowSize,
-    myLikes,
-    myLikeCounts,
-    myCommentLikes,
-    myCommentLikeCounts,
-    myComments,
-    myCommentCounts,
-    myFollows,
-    myRecommendations,
-    isMobile,
-    toggleRefreshFeed,
-    throttleMessage,
-    disableLikes,
-    disableComments,
-    disableFollows,
-    recommendedFollows,
-    loadingRecommendedFollows,
-    commentInputFocused,
-    setWindowSize,
-    setMyLikes,
-    setMyLikeCounts,
-    setMyCommentLikes,
-    setMyCommentLikeCounts,
-    setMyComments,
-    setMyCommentCounts,
-    setMyFollows,
-    setMyRecommendations,
-    setThrottleMessage,
-    setRecommendedFollows,
-    setCommentInputFocused,
-    setToggleRefreshFeed,
-    logOut: () => {
-      deleteCache();
-      deleteRefreshToken();
-      accessTokenManager.deleteAccessToken();
-      mutate(null);
-      connector.killSession();
-      setMyLikes([]);
-      setMyLikeCounts({});
-      setMyCommentLikes([]);
-      setMyCommentLikeCounts({});
-      setMyComments([]);
-      setMyCommentCounts({});
-      setMyFollows([]);
-      setMyRecommendations([]);
-      setWeb3(null);
-      mixpanel.track("Logout");
-      // Triggers all event listeners for this key to fire. Used to force cross tab logout.
-      setLogout(Date.now().toString());
+    colorScheme,
+    setColorScheme: (newColorScheme: "light" | "dark") => {
+      setColorScheme(newColorScheme);
+      setUserColorScheme(newColorScheme);
     },
+    // TODO: notification?
   };
 
   return (
@@ -311,6 +282,27 @@ function AppContextProvider({
 }
 
 function App() {
+  useEffect(() => {
+    const initAnalytics = async () => {
+      await rudderClient.setup(process.env.RUDDERSTACK_WRITE_KEY, rudderConfig);
+    };
+
+    initAnalytics();
+  }, []);
+
+  useEffect(() => {
+    // Load feature definitions from API
+    fetch(process.env.GROWTHBOOK_FEATURES_ENDPOINT)
+      .then((res) => res.json())
+      .then((json) => {
+        growthbook.setFeatures(json.features);
+      });
+
+    // growthbook.setAttributes({
+    //   "id": "foo",
+    // })
+  }, []);
+
   const scheme = `io.showtime${
     process.env.STAGE === "development"
       ? ".development"
@@ -319,6 +311,8 @@ function App() {
       : ""
   }`;
 
+  console.log("App", scheme);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <DripsyProvider theme={theme}>
@@ -326,33 +320,21 @@ function App() {
           <ToastProvider>
             <NavigationProvider>
               <SWRProvider>
-                <WalletConnectProvider
-                  clientMeta={{
-                    description: "Connect with Showtime",
-                    url: "https://showtime.io",
-                    icons: [
-                      "https://storage.googleapis.com/showtime-cdn/showtime-icon-sm.jpg",
-                    ],
-                    name: "Showtime",
-                    // @ts-expect-error
-                    scheme: scheme,
-                  }}
-                  redirectUrl={`${scheme}://`}
-                  storageOptions={{
-                    // @ts-ignore
-                    asyncStorage: AsyncStorage,
-                  }}
-                  renderQrcodeModal={(
-                    props: RenderQrcodeModalProps
-                  ): JSX.Element => <QRCodeModal {...props} />}
-                >
-                  <AppContextProvider>
-                    <>
-                      {/* TODO: change this when we update the splash screen */}
-                      <StatusBar style="dark" />
-                      <NextTabNavigator />
-                    </>
-                  </AppContextProvider>
+                <WalletConnectProvider>
+                  <Web3Provider>
+                    <AppContextProvider>
+                      <AuthProvider>
+                        <UserProvider>
+                          <BottomSheetModalProvider>
+                            <GrowthBookProvider growthbook={growthbook}>
+                              <StatusBar style="auto" />
+                              <RootStackNavigator />
+                            </GrowthBookProvider>
+                          </BottomSheetModalProvider>
+                        </UserProvider>
+                      </AuthProvider>
+                    </AppContextProvider>
+                  </Web3Provider>
                 </WalletConnectProvider>
               </SWRProvider>
             </NavigationProvider>

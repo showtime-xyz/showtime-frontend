@@ -1,20 +1,23 @@
+import { useState, Fragment, useRef } from "react";
+
+import minterAbi from "@/data/ShowtimeMT.json";
+import useFlags, { FLAGS } from "@/hooks/useFlags";
 import useProfile from "@/hooks/useProfile";
 import axios from "@/lib/axios";
+import backend from "@/lib/backend";
 import { getBiconomy } from "@/lib/biconomy";
+import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
 import getWeb3Modal from "@/lib/web3Modal";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationIcon } from "@heroicons/react/outline";
 import { ethers } from "ethers";
 import { useTheme } from "next-themes";
-import { useState, Fragment, useRef } from "react";
 import useSWR from "swr";
+
 import BadgeIcon from "../Icons/BadgeIcon";
 import PolygonIcon from "../Icons/PolygonIcon";
 import XIcon from "../Icons/XIcon";
 import Button from "../UI/Buttons/Button";
-import minterAbi from "@/data/ShowtimeMT.json";
-import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
-import backend from "@/lib/backend";
 
 const addressRegex = /^0x[a-fA-F0-9]{40}$/;
 
@@ -34,6 +37,9 @@ const TransferModal = ({ open, onClose, token }) => {
   const [quantity, setQuantity] = useState(1);
   const [address, setAddress] = useState("");
   const [transactionHash, setTransactionHash] = useState(null);
+
+  const flags = useFlags();
+  const enableMagicTX = flags[FLAGS.enableMagicTX];
 
   const { data: ownershipData } = useSWR(
     () =>
@@ -56,7 +62,10 @@ const TransferModal = ({ open, onClose, token }) => {
   const transferToken = async () => {
     setModalState(MODAL_STATES.PROCESSING);
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic: true });
+    const web3Modal = getWeb3Modal({
+      theme: resolvedTheme,
+      withMagic: enableMagicTX,
+    });
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,
@@ -112,7 +121,7 @@ const TransferModal = ({ open, onClose, token }) => {
           )?.error?.message?.includes("transfer amount exceeds balance")
         ) {
           alert(
-            "Burn failed: You're trying to transfer more tokens than you own."
+            "Transfer failed: You're trying to transfer more tokens than you own."
           );
           throw setModalState(MODAL_STATES.GENERAL);
         }

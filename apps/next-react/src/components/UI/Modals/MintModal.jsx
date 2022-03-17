@@ -1,32 +1,35 @@
-import { Dialog, Transition } from "@headlessui/react";
-import Checkbox from "../Inputs/Checkbox";
-import Switch from "../Inputs/Switch";
-import ChevronRight from "@/components/Icons/ChevronRight";
-import Button from "../Buttons/Button";
 import { useState, Fragment } from "react";
-import ChevronLeft from "@/components/Icons/ChevronLeft";
-import PercentageIcon from "@/components/Icons/PercentageIcon";
-import TextareaAutosize from "react-autosize-textarea";
-import IpfsUpload from "@/components/IpfsUpload";
 import { useMemo } from "react";
-import axios from "@/lib/axios";
-import { v4 as uuid } from "uuid";
-import { ethers } from "ethers";
-import { getBiconomy } from "@/lib/biconomy";
-import getWeb3Modal from "@/lib/web3Modal";
-import minterAbi from "@/data/ShowtimeMT.json";
-import PolygonIcon from "@/components/Icons/PolygonIcon";
-import Link from "next/link";
-import TwitterIcon from "@/components/Icons/Social/TwitterIcon";
 import { useRef } from "react";
 import { useEffect } from "react";
-import confetti from "canvas-confetti";
-import { useTheme } from "next-themes";
-import useProfile from "@/hooks/useProfile";
-import { ExclamationIcon } from "@heroicons/react/outline";
+
+import ChevronLeft from "@/components/Icons/ChevronLeft";
+import ChevronRight from "@/components/Icons/ChevronRight";
+import PercentageIcon from "@/components/Icons/PercentageIcon";
+import PolygonIcon from "@/components/Icons/PolygonIcon";
+import TwitterIcon from "@/components/Icons/Social/TwitterIcon";
 import XIcon from "@/components/Icons/XIcon";
+import IpfsUpload from "@/components/IpfsUpload";
+import minterAbi from "@/data/ShowtimeMT.json";
+import useFlags, { FLAGS } from "@/hooks/useFlags";
+import useProfile from "@/hooks/useProfile";
+import axios from "@/lib/axios";
+import { getBiconomy } from "@/lib/biconomy";
 import { buildFormData } from "@/lib/utilities";
+import getWeb3Modal from "@/lib/web3Modal";
+import { Dialog, Transition } from "@headlessui/react";
+import { ExclamationIcon } from "@heroicons/react/outline";
 import * as Sentry from "@sentry/nextjs";
+import confetti from "canvas-confetti";
+import { ethers } from "ethers";
+import { useTheme } from "next-themes";
+import Link from "next/link";
+import TextareaAutosize from "react-autosize-textarea";
+import { v4 as uuid } from "uuid";
+
+import Button from "../Buttons/Button";
+import Checkbox from "../Inputs/Checkbox";
+import Switch from "../Inputs/Switch";
 import ListModal from "./ListModal";
 
 const MAX_FILE_SIZE = 1024 * 1024 * 50; // 50MB
@@ -46,16 +49,29 @@ const MintModal = ({ open, onClose }) => {
   const { resolvedTheme } = useTheme();
   const isWeb3ModalActive = useRef(false);
   const confettiCanvas = useRef(null);
-  const [modalPage, setModalPage] = useState(
-    myProfile?.wallet_addresses_v2?.length === 0
-      ? MODAL_PAGES.NO_WALLET
-      : MODAL_PAGES.GENERAL
+  const flags = useFlags();
+  const enableMagicTX = flags[FLAGS.enableMagicTX];
+  const hasWalletAddress = Boolean(myProfile?.wallet_addresses_v2?.length);
+  const hasWalletAddressExcludingEmail = Boolean(
+    myProfile?.wallet_addresses_excluding_email_v2?.length
   );
 
-  useEffect(() => {
-    if (myProfile?.wallet_addresses_v2?.length === 0) {
-      setModalPage(MODAL_PAGES.NO_WALLET);
+  const setDefaultModalPage = () => {
+    if (enableMagicTX) {
+      return hasWalletAddress ? MODAL_PAGES.GENERAL : MODAL_PAGES.NO_WALLET;
+    } else {
+      return hasWalletAddressExcludingEmail
+        ? MODAL_PAGES.GENERAL
+        : MODAL_PAGES.NO_WALLET;
     }
+  };
+
+  const [modalPage, setModalPage] = useState(() => {
+    return setDefaultModalPage();
+  });
+
+  useEffect(() => {
+    setModalPage(setDefaultModalPage());
   }, [myProfile]);
 
   const shotConfetti = () => {
@@ -128,11 +144,7 @@ const MintModal = ({ open, onClose }) => {
     setHasAcceptedTerms(false);
     setTransactionHash("");
     setTokenID("");
-    setModalPage(
-      myProfile?.wallet_addresses_v2?.length === 0
-        ? MODAL_PAGES.NO_WALLET
-        : MODAL_PAGES.GENERAL
-    );
+    setDefaultModalPage();
   };
 
   const saveDraft = () =>
@@ -303,7 +315,10 @@ const MintModal = ({ open, onClose }) => {
       )
       .then((res) => res.data);
 
-    const web3Modal = getWeb3Modal({ theme: resolvedTheme, withMagic: true });
+    const web3Modal = getWeb3Modal({
+      theme: resolvedTheme,
+      withMagic: enableMagicTX,
+    });
     isWeb3ModalActive.current = true;
     const { biconomy, web3 } = await getBiconomy(
       web3Modal,

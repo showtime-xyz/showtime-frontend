@@ -37,4 +37,11 @@ module.exports = {
     builder: "webpack5",
   },
   typescript: { reactDocgen: false },
+  webpackFinal: async (config, { configType }) => {
+    config.resolve.fallback = {
+      stream: require.resolve("stream-browserify"),
+      crypto: require.resolve("crypto-browserify"),
+    };
+    return config;
+  },
 };
