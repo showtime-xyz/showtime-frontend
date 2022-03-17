@@ -30,25 +30,6 @@ function HeaderDropdown() {
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
         <View tw="h-8 w-8 items-center justify-center rounded-full">
-          {/* <Image
-            tw="h-8 w-8 rounded-full"
-            source={{
-              uri: getSmallImageUrl(
-                user?.data.profile?.img_url || DEFAULT_PROFILE_PIC
-              ),
-            }}
-            alt={
-              user?.data?.profile?.name ||
-              user?.data?.profile?.username ||
-              user?.data?.profile?.wallet_addresses_excluding_email_v2?.[0]
-                ?.ens_domain ||
-              formatAddressShort(
-                user?.data?.profile?.wallet_addresses_excluding_email_v2?.[0]
-                  ?.address
-              ) ||
-              "Profile"
-            }
-          /> */}
           <Settings
             width={24}
             height={24}
