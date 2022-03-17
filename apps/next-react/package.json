@@ -7,7 +7,8 @@
     "build": "next build",
     "build:analyze": "ANALYZE=true yarn build",
     "start": "next start",
-    "postinstall": "cd ../.. && yarn patch-package"
+    "postinstall": "cd ../.. && yarn patch-package",
+    "lint": "eslint  --output-file eslint_report.json --format json"
   },
   "dependencies": {
     "@airgap/beacon-sdk": "^2.3.9",
