@@ -1,24 +1,16 @@
-name: Expo Production
+name: Configuration Check
 
 defaults:
   run:
     working-directory: apps/expo
 
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
-
-concurrency:
-  group: ${{ github.event_name }}-${{ github.ref }}
-  cancel-in-progress: true
+on: workflow_dispatch
 
 jobs:
-  build-and-submit:
-    name: Build and Submit
+  versionBump:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    name: Run check
     runs-on: ubuntu-latest
-
     steps:
       - name: Set up repository
         uses: actions/checkout@v3
@@ -47,21 +39,5 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile --check-files
 
-      - name: Application Version Bump
-        if: ${{ github.event_name == 'workflow_dispatch' }}
+      - name: Run version bumping script
         run: yarn bump-application-version
-
-      - name: Set up Expo
-        uses: expo/expo-github-action@v6
-        with:
-          eas-version: latest
-          eas-cache: true
-          expo-cache: true
-          expo-version: 4.x
-          token: ${{ secrets.EXPO_TOKEN }}
-
-      - name: EAS Update
-        run: STAGE=production eas update --branch production --message "Deploy to production"
-
-      - name: Build on EAS
-        run: STAGE=production eas build --platform all --non-interactive --no-wait --auto-submit
