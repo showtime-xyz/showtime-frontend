@@ -33,35 +33,38 @@ jobs:
         with:
           node-version: 14.x
 
-      - name: Find yarn cache
-        id: yarn-cache-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+      # - name: Find yarn cache
+      #   id: yarn-cache-path
+      #   run: echo "::set-output name=dir::$(yarn cache dir)"
 
-      - name: Restore cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-
+      # - name: Restore cache
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: ${{ steps.yarn-cache-path.outputs.dir }}
+      #     key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+      #     restore-keys: ${{ runner.os }}-yarn-
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --check-files
+      # - name: Install dependencies
+      #   run: yarn install --frozen-lockfile --check-files
 
-      - name: Application Version Bump
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        run: yarn bump-application-version
+      - name: Invoke Decrypt Script
+        run: sh ../../scripts/decrypt_secret.sh
 
-      - name: Set up Expo
-        uses: expo/expo-github-action@v6
-        with:
-          eas-version: latest
-          eas-cache: true
-          expo-cache: true
-          expo-version: 4.x
-          token: ${{ secrets.EXPO_TOKEN }}
+      # - name: Application Version Bump
+      #   if: ${{ github.event_name == 'workflow_dispatch' }}
+      #   run: yarn bump-application-version
 
-      - name: EAS Update
-        run: STAGE=production eas update --branch production --message "Deploy to production"
+      # - name: Set up Expo
+      #   uses: expo/expo-github-action@v6
+      #   with:
+      #     eas-version: latest
+      #     eas-cache: true
+      #     expo-cache: true
+      #     expo-version: 4.x
+      #     token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Build on EAS
-        run: STAGE=production eas build --platform all --non-interactive --no-wait --auto-submit
+      # - name: EAS Update
+      #   run: STAGE=production eas update --branch production --message "Deploy to production"
+
+      # - name: Build on EAS
+      #   run: STAGE=production eas build --platform all --non-interactive --no-wait --auto-submit
