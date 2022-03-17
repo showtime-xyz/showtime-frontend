@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useNFTOwnership } from "app/hooks/api/use-nft-ownership";
+import { useNFTDetails } from "app/hooks/use-nft-details";
 import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
 import { NFT } from "app/types";
 
@@ -45,7 +45,7 @@ export function Ownership({ nft }: Props) {
   if (!nft) return null;
 
   const isDarkMode = useIsDarkMode();
-  const { data, loading, error } = useNFTOwnership(nft.nft_id);
+  const { data, loading, error } = useNFTDetails(nft.nft_id);
 
   if (loading) {
     return (
@@ -67,46 +67,55 @@ export function Ownership({ nft }: Props) {
     );
   }
 
-  if (nft.owner_count === 1) {
+  // if (nft.owner_count === 1) {
+  //   return (
+  //     <Image
+  //       tw="w-[32px] h-[32px] rounded-full"
+  //       source={{
+  //         uri: getProfileImageUrl(
+  //           data?.multiple_owners_list[0].img_url ?? DEFAULT_PROFILE_PIC
+  //         ),
+  //       }}
+  //     />
+  //   );
+  // }
+
+  if (
+    data?.owner_count &&
+    data.owner_count > 1 &&
+    data?.multiple_owners_list &&
+    data.multiple_owners_list?.length > 0
+  ) {
     return (
-      <Image
-        tw="w-[32px] h-[32px] rounded-full"
-        source={{
-          uri: getProfileImageUrl(
-            data?.multiple_owners_list[0].img_url ?? DEFAULT_PROFILE_PIC
-          ),
-        }}
-      />
+      <View tw="flex flex-row">
+        <View tw="mr-2">
+          <Text
+            sx={{ fontSize: 12 }}
+            tw="mb-1 text-right text-gray-600 dark:text-gray-400 font-semibold"
+          >
+            Owners
+          </Text>
+          <Text
+            sx={{ fontSize: 13, lineHeight: 13 }}
+            tw="text-right text-gray-900 dark:text-white font-semibold"
+          >
+            Multiple
+          </Text>
+        </View>
+        <OwnershipContainer count={data?.owner_count ?? nft.owner_count}>
+          {data?.multiple_owners_list?.slice(0, 4).map((owner) => (
+            <Image
+              key={`nft-${nft.nft_id}-owner-${owner.profile_id}`}
+              tw="w-[14px] h-[14px] rounded-full bg-gray-200 dark:bg-gray-800"
+              source={{
+                uri: getProfileImageUrl(owner.img_url ?? DEFAULT_PROFILE_PIC),
+              }}
+            />
+          ))}
+        </OwnershipContainer>
+      </View>
     );
   }
 
-  return (
-    <View tw="flex flex-row">
-      <View tw="mr-2">
-        <Text
-          sx={{ fontSize: 12 }}
-          tw="mb-1 text-right text-gray-600 dark:text-gray-400 font-semibold"
-        >
-          Owners
-        </Text>
-        <Text
-          sx={{ fontSize: 13, lineHeight: 13 }}
-          tw="text-right text-gray-900 dark:text-white font-semibold"
-        >
-          Multiple
-        </Text>
-      </View>
-      <OwnershipContainer count={data?.owner_count ?? nft.owner_count}>
-        {data?.multiple_owners_list.slice(0, 4).map((owner) => (
-          <Image
-            key={`nft-${nft.nft_id}-owner-${owner.profile_id}`}
-            tw="w-[14px] h-[14px] rounded-full bg-gray-200 dark:bg-gray-800"
-            source={{
-              uri: getProfileImageUrl(owner.img_url ?? DEFAULT_PROFILE_PIC),
-            }}
-          />
-        ))}
-      </OwnershipContainer>
-    </View>
-  );
+  return null;
 }

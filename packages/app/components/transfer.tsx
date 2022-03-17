@@ -14,6 +14,7 @@ import { useTransferNFT } from "app/hooks/use-transfer-nft";
 import { axios } from "app/lib/axios";
 import { yup } from "app/lib/yup";
 import type { NFT } from "app/types";
+import { findAddressInOwnerList } from "app/utilities";
 
 import { View, Text, Fieldset, Button, ScrollView } from "design-system";
 import { Collection } from "design-system/card/rows/collection";
@@ -29,18 +30,26 @@ type FormData = {
   receiverAddress: string;
 };
 
-function TransferNft({ nftId }: { nftId?: string }) {
+function Transfer({ nftId }: { nftId?: string }) {
   const { startTransfer, state } = useTransferNFT();
   const { userAddress } = useCurrentUserAddress();
 
   const [url] = useState(`/v2/nft_detail/${nftId}`);
-  const [maxQuantity, setMaxQuantity] = useState(0);
   const unmountSignal = useUnmountSignal();
   const { data, error } = useSWR([url], (url) =>
     axios({ url, method: "GET", unmountSignal })
   );
 
   const nft = data?.data as NFT;
+
+  const ownerListItem = findAddressInOwnerList(
+    userAddress,
+    nft?.multiple_owners_list
+  );
+
+  const maxQuantity = ownerListItem?.quantity || 1;
+  const hideCopiesInput = maxQuantity === 1;
+  const copiesHelperText = `1 by default, you own ${maxQuantity}`;
 
   const defaultValues = {
     quantity: 1,
@@ -71,15 +80,6 @@ function TransferNft({ nftId }: { nftId?: string }) {
     reValidateMode: "onChange",
     defaultValues,
   });
-
-  useEffect(() => {
-    const owner = nft?.multiple_owners_list?.find(
-      (owner) => owner.address === userAddress
-    );
-    if (owner?.quantity) {
-      setMaxQuantity(owner?.quantity);
-    }
-  }, [nft, userAddress]);
 
   function handleSubmitTransfer({ quantity, receiverAddress }: FormData) {
     startTransfer({ nft, receiverAddress, quantity });
@@ -186,28 +186,33 @@ function TransferNft({ nftId }: { nftId?: string }) {
 
           <Owner nft={nft} price={true} tw="px-0" />
 
-          <View tw="mt-4 flex-row">
-            <Controller
-              control={control}
-              name="quantity"
-              render={({ field: { onChange, onBlur, value } }) => {
-                return (
-                  <Fieldset
-                    tw="flex-1"
-                    label="Copies"
-                    placeholder="1"
-                    helperText="1 by default"
-                    onBlur={onBlur}
-                    keyboardType="numeric"
-                    errorText={errors.quantity?.message}
-                    value={value?.toString()}
-                    onChangeText={onChange}
-                    returnKeyType="done"
-                  />
-                );
-              }}
-            />
-          </View>
+          {!hideCopiesInput && (
+            <View tw="mt-4 flex-row">
+              <Controller
+                control={control}
+                name="quantity"
+                render={({ field: { onChange, onBlur, value } }) => {
+                  const errorText = errors.quantity?.message
+                    ? `Copies amount must be between 1 and ${maxQuantity}`
+                    : undefined;
+                  return (
+                    <Fieldset
+                      tw="flex-1"
+                      label="Copies"
+                      placeholder="1"
+                      helperText={copiesHelperText}
+                      onBlur={onBlur}
+                      keyboardType="numeric"
+                      errorText={errorText}
+                      value={value?.toString()}
+                      onChangeText={onChange}
+                      returnKeyType="done"
+                    />
+                  );
+                }}
+              />
+            </View>
+          )}
 
           <View tw="mt-4 flex-row">
             <Controller
@@ -252,4 +257,4 @@ function TransferNft({ nftId }: { nftId?: string }) {
   );
 }
 
-export { TransferNft };
+export { Transfer };

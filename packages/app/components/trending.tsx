@@ -50,7 +50,7 @@ export const Trending = () => {
     <View tw="bg-white dark:bg-black flex-1">
       <Tabs.Root onIndexChange={setSelected} initialIndex={selected} lazy>
         <Tabs.Header>
-          <View tw={`h-[${headerHeight}px]`} />
+          {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
           <View tw="bg-white dark:bg-black pt-4 pl-4 pb-[3px]">
             <Text
               variant="text-2xl"
