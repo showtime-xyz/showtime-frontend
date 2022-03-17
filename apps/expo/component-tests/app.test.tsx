@@ -22,7 +22,7 @@ describe("app mount - unauthenticated user", () => {
     expect(axios).toBeCalledWith(
       expect.objectContaining({
         method: "GET",
-        url: "/v2/activity_without_auth?page=1&type_id=0&limit=5",
+        url: "/v3/feed/default?offset=1&limit=5",
       })
     );
   });
@@ -54,7 +54,7 @@ describe("app mount - authenticated user", () => {
     expect(axios).toBeCalledWith(
       expect.objectContaining({
         method: "GET",
-        url: "/v2/activity_with_auth?page=1&type_id=0&limit=5",
+        url: "/v3/feed?offset=1&limit=5",
         headers: {
           Authorization: "Bearer " + token,
         },
