@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.event_name }}-${{ github.ref }}
@@ -20,7 +21,12 @@ jobs:
 
     steps:
       - name: Set up repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
 
       - name: Set up Node
         uses: actions/setup-node@v2
@@ -40,6 +46,10 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile --check-files
+
+      - name: Application Version bump-application-version
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: yarn bump-application-version
 
       - name: Set up Expo
         uses: expo/expo-github-action@v6
