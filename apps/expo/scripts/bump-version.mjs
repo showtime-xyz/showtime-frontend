@@ -20,6 +20,7 @@ try {
   console.log(`The starting working directory is ${chalk.blue(startingWorkingDirectory)}`)
   console.log(`The current working directory is ${chalk.blue(currentWorkingDirectory)}`)
 
+  // TODO: After initial release, update the grep specificity to match auto generated commit 
   const lastReleaseCommitIdResponse = await $`git log -1 --grep=version --pretty=format:%h`
   const lastReleaseCommitId = lastReleaseCommitIdResponse.stdout
 
