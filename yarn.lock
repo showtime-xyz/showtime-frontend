@@ -1400,6 +1400,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.17.2":
+  version "7.17.7"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.17.7.tgz#a5f3328dc41ff39d803f311cfe17703418cf9825"
+  integrity sha512-L6rvG9GDxaLgFjg41K+5Yv9OMrU98sWe+Ykmc6FDJW/+vYZMhdOMKkISgzptMaERHvS2Y2lw9MDRm2gHhlQQoA==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/runtime@^7.7.7":
   version "7.17.2"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.17.2.tgz#66f68591605e59da47523c631416b18508779941"
@@ -4075,22 +4082,18 @@
   dependencies:
     "@babel/runtime" "^7.6.2"
 
-"@react-three/fiber@https://pkg.csb.dev/pmndrs/react-three-fiber/commit/61888404/@react-three/fiber":
-  version "8.0.0-beta-04"
-  resolved "https://pkg.csb.dev/pmndrs/react-three-fiber/commit/61888404/@react-three/fiber#782026b7759cff3a76c23942cfe4c35390583091"
+"@react-three/fiber@^8.0.0-beta.3":
+  version "8.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@react-three/fiber/-/fiber-8.0.0-beta.3.tgz#79d09a55dcbe7c2de74a6c73a90d2c5a4e2442c9"
+  integrity sha512-j+uZIT1w226C+KfQA6iBEJXMbbBM7sLSnbj7a7ufQaZiWgX7cDRSjUsHsSXLa4MSMUJ4VzH0Ex7MgnhM8GYqxA==
   dependencies:
-    "@babel/runtime" "^7.15.4"
-    expo-asset "~8.4.4"
-    expo-gl "~11.0.3"
-    expo-gl-cpp "~11.0.1"
+    "@babel/runtime" "^7.17.2"
     react-merge-refs "^1.1.0"
-    react-reconciler "^0.27.0-rc.0"
+    react-reconciler "^0.27.0-rc.2"
     react-use-measure "^2.1.1"
-    resize-observer-polyfill "^1.5.1"
-    scheduler "0.21.0-rc.0"
+    scheduler "^0.21.0-rc.2"
     suspend-react "^0.0.8"
-    utility-types "^3.10.0"
-    zustand "^3.5.10"
+    zustand "^3.7.1"
 
 "@react-types/button@^3.4.1":
   version "3.4.1"
@@ -20098,14 +20101,13 @@ react-popper@^2.2.4:
     react-fast-compare "^3.0.1"
     warning "^4.0.2"
 
-react-reconciler@^0.27.0-rc.0:
-  version "0.27.0-rc.0-next-fe905f152-20220107"
-  resolved "https://registry.yarnpkg.com/react-reconciler/-/react-reconciler-0.27.0-rc.0-next-fe905f152-20220107.tgz#8961e72ab6a89a775beee7a9a30557641a9c6dd9"
-  integrity sha512-CiBwR3xG/yV7oA42S55bFD7wu/3myqI7pcfdJ0h0sAeiQrN9b/wOXlMpyd3etctS36DIilLIRZbt/b1+xLmHPA==
+react-reconciler@^0.27.0-rc.2:
+  version "0.27.0-rc.2-next-b9de50d2f-20220308"
+  resolved "https://registry.yarnpkg.com/react-reconciler/-/react-reconciler-0.27.0-rc.2-next-b9de50d2f-20220308.tgz#1d8339b9ba15c968acf7e85de6ad8ccfd8dfcf23"
+  integrity sha512-CWIju0S4aa+tDJ0jPhaDcSQgxizw7V6kL2b0lg3sNlFjOULUYdDM4qtYJ6bbitPf9lO4IxONN+0WYx9ip6UAVw==
   dependencies:
     loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    scheduler "0.21.0-rc.0-next-fe905f152-20220107"
+    scheduler "0.21.0-rc.2-next-b9de50d2f-20220308"
 
 react-refresh@0.8.3, react-refresh@^0.8.3:
   version "0.8.3"
@@ -20930,21 +20932,12 @@ saxes@^5.0.1:
   dependencies:
     xmlchars "^2.2.0"
 
-scheduler@0.21.0-rc.0:
-  version "0.21.0-rc.0"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.21.0-rc.0.tgz#b144edba3c465055a954565f45e2dd6d2ddb872b"
-  integrity sha512-MfZpwy4cMUg1qdgxMPIIemU+R7+pcPIuw/6CzB4ixIBlfKBGqkIum19lk82oWZWgETVMBNtZtaP+S2NoQcqWAg==
+scheduler@0.21.0-rc.2-next-b9de50d2f-20220308, scheduler@^0.21.0-rc.2:
+  version "0.21.0-rc.2-next-b9de50d2f-20220308"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.21.0-rc.2-next-b9de50d2f-20220308.tgz#f3e89d3670b99adf1e1091644793bd73db03cbb0"
+  integrity sha512-aBVNOtcCn7k8FUi0lsIY34DZN1SUeuAjAQB6Y55Cxrhtrx9mggUepmF5gTWn7Z2RkEhQtrp7fzmRA/24bxxNJQ==
   dependencies:
     loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-
-scheduler@0.21.0-rc.0-next-fe905f152-20220107:
-  version "0.21.0-rc.0-next-fe905f152-20220107"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.21.0-rc.0-next-fe905f152-20220107.tgz#410f6df2f39d5543b00f98fbad7de6c9b374df89"
-  integrity sha512-+sY0WajWdMjoxbmHM8P6P1FKGw8sSVKKG/HthqTFQFPxVGbKLmV1BiFPaVF9gOyQWqmnLYSXJMN+4Bs5ZygsTw==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
 
 scheduler@^0.20.1, scheduler@^0.20.2:
   version "0.20.2"
@@ -23270,11 +23263,6 @@ utila@~0.4:
   resolved "https://registry.yarnpkg.com/utila/-/utila-0.4.0.tgz#8a16a05d445657a3aea5eecc5b12a4fa5379772c"
   integrity sha1-ihagXURWV6Oupe7MWxKk+lN5dyw=
 
-utility-types@^3.10.0:
-  version "3.10.0"
-  resolved "https://registry.yarnpkg.com/utility-types/-/utility-types-3.10.0.tgz#ea4148f9a741015f05ed74fd615e1d20e6bed82b"
-  integrity sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==
-
 utils-merge@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
@@ -24447,10 +24435,10 @@ yup@^0.32.11:
     property-expr "^2.0.4"
     toposort "^2.0.2"
 
-zustand@^3.5.10:
-  version "3.6.9"
-  resolved "https://registry.yarnpkg.com/zustand/-/zustand-3.6.9.tgz#f61a756ddea9f95c7ee7cfd3af2f88c10078afbc"
-  integrity sha512-OvDNu/jEWpRnEC7k8xh8GKjqYog7td6FZrLMuHs/IeI8WhrCwV+FngVuwMIFhp5kysZXr6emaeReMqjLGaldAQ==
+zustand@^3.7.1:
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-3.7.1.tgz#7388f0a7175a6c2fd9a2880b383a4bf6cdf6b7c6"
+  integrity sha512-wHBCZlKj+bg03/hP+Tzv24YhnqqP8MCeN9ECPDXoF01062SIbnfl3j9O0znkDw1lNTY0a8WN3F///a0UhhaEqg==
 
 zwitch@^1.0.0:
   version "1.0.5"
