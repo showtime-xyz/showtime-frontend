@@ -34,7 +34,7 @@ jobs:
           CI: TRUE
 
       - name: Run ESLint
-        run: ESLINT_PLUGIN_DIFF_COMMIT="origin/$GITHUB_BASE_REF..." yarn lint"
+        run: ESLINT_PLUGIN_DIFF_COMMIT="origin/$GITHUB_BASE_REF..." yarn lint
         continue-on-error: true
 
       - name: Annotate Code Linting Results
