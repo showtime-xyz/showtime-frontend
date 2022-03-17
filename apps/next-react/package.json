@@ -12,7 +12,7 @@
   "dependencies": {
     "@airgap/beacon-sdk": "^2.3.9",
     "@badrap/bar-of-progress": "^0.1.2",
-    "@biconomy/mexa": "^2.0.22",
+    "@biconomy/mexa": "2.0.24",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",

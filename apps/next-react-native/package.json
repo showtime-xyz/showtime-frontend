@@ -12,7 +12,7 @@
   "dependencies": {
     "@airgap/beacon-sdk": "^2.3.9",
     "@badrap/bar-of-progress": "^0.1.2",
-    "@biconomy/mexa": "^2.0.22",
+    "@biconomy/mexa": "2.0.24",
     "@builder.io/partytown": "^0.3.4",
     "@google/model-viewer": "^1.9.2",
     "@growthbook/growthbook-react": "^0.7.0",
