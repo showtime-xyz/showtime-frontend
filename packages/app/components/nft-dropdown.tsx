@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 import { useSWRConfig } from "swr";
 
@@ -40,7 +40,7 @@ function NFTDropdown({ nft }: Props) {
   const { userAddress } = useCurrentUserAddress();
   const [isOwner, setIsOwner] = useState(false);
   const { report } = useReport();
-  const { unfollow } = useMyInfo();
+  const { unfollow, isFollowing } = useMyInfo();
   const { block } = useBlock();
   const router = useRouter();
   const { refresh } = useFeed();
@@ -60,6 +60,11 @@ function NFTDropdown({ nft }: Props) {
   // Prevent web3 actions on incorrect contracts caused by environment syncs
   const usableContractAddress = SHOWTIME_CONTRACTS.includes(
     nft?.contract_address
+  );
+
+  const isFollowingUser = useMemo(
+    () => nft?.owner_id && isFollowing(nft?.owner_id),
+    [nft?.owner_id, isFollowing]
   );
 
   return (
@@ -110,7 +115,7 @@ function NFTDropdown({ nft }: Props) {
           </DropdownMenuItemTitle>
         </DropdownMenuItem> */}
 
-        {!isOwner && (
+        {!isOwner && isFollowingUser && (
           <DropdownMenuItem
             onSelect={async () => {
               if (isAuthenticated) {
