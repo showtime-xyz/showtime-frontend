@@ -38,7 +38,7 @@ const mockUserProfile: Profile = {
 };
 
 module.exports = jest.fn(async (params: AxiosRequestConfig) => {
-  if (params.url === "/v2/activity_without_auth?page=1&type_id=0&limit=5") {
+  if (params.url === "/v3/feed/default?offset=1&limit=5") {
     return Promise.resolve({ data: { data: [] } });
   }
 
@@ -72,7 +72,7 @@ module.exports = jest.fn(async (params: AxiosRequestConfig) => {
     });
   }
 
-  if (params.url === "/v2/activity_with_auth?page=1&type_id=0&limit=5") {
+  if (params.url === "/v3/feed?offset=1&limit=5") {
     return Promise.resolve({ data: { data: [] } });
   }
 
