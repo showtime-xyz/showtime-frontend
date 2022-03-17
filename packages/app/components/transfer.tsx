@@ -59,14 +59,14 @@ function Transfer({ nftId }: { nftId?: string }) {
   const transferNFTValidationSchema = yup.object({
     quantity: yup
       .number()
-      .typeError("must be a number")
-      .required()
+      .typeError("Must be a number")
+      .required("Please enter number of copies")
       .min(1)
       .max(maxQuantity)
       .default(defaultValues.quantity),
     receiverAddress: yup
       .string()
-      .required()
+      .required("Please fill receiver address")
       .default(defaultValues.receiverAddress),
   });
 
@@ -236,21 +236,23 @@ function Transfer({ nftId }: { nftId?: string }) {
             />
           </View>
         </View>
+        <View tw="absolute px-4 w-full" style={{ bottom: 16 }}>
+          <Button
+            onPress={handleSubmit(handleSubmitTransfer)}
+            tw="h-12 rounded-full"
+          >
+            <Text tw="text-white dark:text-gray-900 text-sm pr-2">
+              Transfer
+            </Text>
+            <ArrowRight
+              style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
+              color={
+                tw.style("bg-white dark:bg-black")?.backgroundColor as string
+              }
+            />
+          </Button>
+        </View>
       </TransferNftScrollView>
-      <View tw="absolute px-4 w-full" style={{ bottom: 16 }}>
-        <Button
-          onPress={handleSubmit(handleSubmitTransfer)}
-          tw="h-12 rounded-full"
-        >
-          <Text tw="text-white dark:text-gray-900 text-sm pr-2">Transfer</Text>
-          <ArrowRight
-            style={tw.style("rounded-lg overflow-hidden w-6 h-6")}
-            color={
-              tw.style("bg-white dark:bg-black")?.backgroundColor as string
-            }
-          />
-        </Button>
-      </View>
     </View>
   );
 }

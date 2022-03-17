@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Platform } from "react-native";
+import { KeyboardAvoidingView, Platform } from "react-native";
 
 import { Transfer } from "app/components/transfer";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
@@ -36,7 +36,13 @@ const TransferScreen = () => {
       bodyTW="bg-white dark:bg-black"
       bodyContentTW="p-0"
     >
-      <Transfer nftId={nftId} />
+      <KeyboardAvoidingView
+        behavior="padding"
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={100}
+      >
+        <Transfer nftId={nftId} />
+      </KeyboardAvoidingView>
     </TransferModal>
   );
 };
