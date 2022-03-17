@@ -48,7 +48,10 @@ jobs:
       #   run: yarn install --frozen-lockfile --check-files
 
       - name: Invoke Decrypt Script
-        run: sh ../../scripts/decrypt_secret.sh
+        run: |
+          cd ../../scripts
+          sh ./decrypt_secret.sh
+          cd ../apps/expo
 
       # - name: Application Version Bump
       #   if: ${{ github.event_name == 'workflow_dispatch' }}
