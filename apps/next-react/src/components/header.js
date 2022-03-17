@@ -1,3 +1,5 @@
+import { useContext, useState } from "react";
+
 import AppContext from "@/context/app-context";
 import useAuth from "@/hooks/useAuth";
 import useProfile from "@/hooks/useProfile";
@@ -5,7 +7,7 @@ import Tippy from "@tippyjs/react";
 import mixpanel from "mixpanel-browser";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useContext, useState } from "react";
+
 import HeaderDropdown from "./HeaderDropdown";
 import { CompassIconOutline, CompassIconSolid } from "./Icons/CompassIcon";
 import { FireIconOutline, FireIconSolid } from "./Icons/FireIcon";

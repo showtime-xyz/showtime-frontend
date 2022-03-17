@@ -1,8 +1,11 @@
 import { useEffect } from "react";
 
-import { mixpanel } from "app/lib/mixpanel";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+
+import { withColorScheme } from "app/components/memo-with-theme";
 import { Profile } from "app/components/profile";
-import { createParam } from "../navigation/use-param";
+import { mixpanel } from "app/lib/mixpanel";
+import { createParam } from "app/navigation/use-param";
 
 type Query = {
   walletAddress: string;
@@ -10,14 +13,18 @@ type Query = {
 
 const { useParam } = createParam<Query>();
 
-const ProfileScreen = () => {
+const ProfileScreen = withColorScheme(() => {
   useEffect(() => {
     mixpanel.track("Profile view");
   }, []);
 
   const [walletAddress, setWalletAddress] = useParam("walletAddress");
 
-  return <Profile walletAddress={walletAddress as string} />;
-};
+  return (
+    <BottomSheetModalProvider>
+      <Profile walletAddress={walletAddress as string} />
+    </BottomSheetModalProvider>
+  );
+});
 
 export { ProfileScreen };

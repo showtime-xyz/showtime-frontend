@@ -1,10 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import mixpanel from "mixpanel-browser";
+
 import AppContext from "@/context/app-context";
-import _ from "lodash";
-import axios from "@/lib/axios";
-import Button from "./UI/Buttons/Button";
 import useAuth from "@/hooks/useAuth";
+import axios from "@/lib/axios";
+import _ from "lodash";
+import mixpanel from "mixpanel-browser";
+
+import Button from "./UI/Buttons/Button";
 
 const FollowButton = ({
   item,

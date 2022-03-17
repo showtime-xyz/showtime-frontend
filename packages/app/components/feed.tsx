@@ -1,317 +1,59 @@
-import { Suspense, useCallback, useRef, useState } from "react";
-import { Platform } from "react-native";
+import React, { Suspense } from "react";
+import { Dimensions, StatusBar } from "react-native";
+
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { useActivity } from "app/hooks/api-hooks";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, Spinner, Text } from "design-system";
-import { Card } from "design-system/card";
-import { Tabs, TabItem, SelectedTabIndicator } from "design-system/tabs";
-import { tw } from "design-system/tailwind";
+import { SwipeList } from "app/components/swipe-list";
+import { useFeed } from "app/hooks/use-feed";
+import { useUser } from "app/hooks/use-user";
 
-const TAB_LIST_HEIGHT = 64;
+import { View, Skeleton } from "design-system";
+import { useColorScheme } from "design-system/hooks";
 
-const Footer = ({ isLoading }: { isLoading: boolean }) => {
-  const tabBarHeight = useBottomTabBarHeight();
+const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 
-  if (isLoading) {
-    return (
-      <View
-        tw="h-16 items-center justify-center mt-6 px-3"
-        sx={{ marginBottom: tabBarHeight }}
-      >
-        <Spinner size="small" />
-      </View>
-    );
-  }
-
-  return <View sx={{ marginBottom: tabBarHeight }}></View>;
-};
-
-const Feed = () => {
-  const [selected, setSelected] = useState(0);
-
+export const Feed = () => {
+  const colorScheme = useColorScheme();
   return (
-    <View tw="bg-white dark:bg-black flex-1">
-      <Tabs.Root
-        onIndexChange={setSelected}
-        initialIndex={selected}
-        tabListHeight={TAB_LIST_HEIGHT}
-        lazy
-      >
-        <Tabs.Header>
-          <View tw="bg-white dark:bg-black pt-4 pl-4 pb-[3px]">
-            <Text tw="text-gray-900 dark:text-white font-bold text-3xl">
-              Home
-            </Text>
-          </View>
-        </Tabs.Header>
-        <Tabs.List
-          style={[
-            {
-              height: TAB_LIST_HEIGHT,
-              ...tw.style(
-                "dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900"
-              ),
-            },
-          ]}
+    <>
+      <StatusBar barStyle="light-content" />
+      <View tw="flex-1" testID="homeFeed">
+        <Suspense
+          fallback={
+            <View tw="items-center">
+              <Skeleton
+                colorMode={colorScheme}
+                height={screenHeight - 300}
+                width={screenWidth}
+              />
+              <View tw="h-2" />
+              <Skeleton
+                colorMode={colorScheme}
+                height={300}
+                width={screenWidth}
+              />
+            </View>
+          }
         >
-          <Tabs.Trigger>
-            <TabItem name="All Activity" selected={selected === 0} />
-          </Tabs.Trigger>
-
-          <Tabs.Trigger>
-            <TabItem name="Creations" selected={selected === 1} />
-          </Tabs.Trigger>
-
-          <Tabs.Trigger>
-            <TabItem name="Likes" selected={selected === 2} />
-          </Tabs.Trigger>
-
-          <Tabs.Trigger>
-            <TabItem name="Comments" selected={selected === 3} />
-          </Tabs.Trigger>
-
-          <Tabs.Trigger>
-            <TabItem name="Follows" selected={selected === 4} />
-          </Tabs.Trigger>
-
-          <SelectedTabIndicator />
-        </Tabs.List>
-        <Tabs.Pager>
-          <Suspense fallback={<Spinner size="small" />}>
-            <AllActivityList />
-          </Suspense>
-          <Suspense fallback={<Spinner size="small" />}>
-            <CreationList />
-          </Suspense>
-          <Suspense fallback={<Spinner size="small" />}>
-            <LikesList />
-          </Suspense>
-          <Suspense fallback={<Spinner size="small" />}>
-            <CommentsList />
-          </Suspense>
-          <Suspense fallback={<Spinner size="small" />}>
-            <FollowsList />
-          </Suspense>
-        </Tabs.Pager>
-      </Tabs.Root>
-    </View>
+          <FeedList />
+        </Suspense>
+      </View>
+    </>
   );
 };
 
-const CreationList = () => {
-  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
-    useActivity({ typeId: 3 });
-
-  const keyExtractor = useCallback((item) => item.id, []);
-
-  const renderItem = useCallback(
-    ({ item }) => <Card act={item} variant="activity" />,
-    []
-  );
-
-  const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoadingMore} />,
-    [isLoadingMore]
-  );
-
-  if (isLoading) {
-    return (
-      <View tw="items-center justify-center flex-1">
-        <Spinner />
-      </View>
-    );
-  }
+export const FeedList = () => {
+  const queryState = useFeed();
+  const bottomBarHeight = useBottomTabBarHeight();
+  const { isAuthenticated } = useUser();
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   return (
-    <Tabs.FlatList
-      data={data}
-      keyExtractor={keyExtractor}
-      renderItem={renderItem}
-      refreshing={isRefreshing}
-      onRefresh={refresh}
-      onEndReached={fetchMore}
-      onEndReachedThreshold={0.6}
-      removeClippedSubviews={Platform.OS !== "web"}
-      numColumns={1}
-      windowSize={4}
-      initialNumToRender={2}
-      alwaysBounceVertical={false}
-      ListFooterComponent={ListFooterComponent}
+    <SwipeList
+      {...queryState}
+      bottomPadding={isAuthenticated ? bottomBarHeight : safeAreaBottom}
+      data={queryState.data}
     />
   );
 };
-
-const LikesList = () => {
-  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
-    useActivity({ typeId: 1 });
-
-  const keyExtractor = useCallback((item) => item.id, []);
-
-  const renderItem = useCallback(
-    ({ item }) => <Card act={item} variant="activity" />,
-    []
-  );
-
-  const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoadingMore} />,
-    [isLoadingMore]
-  );
-
-  if (isLoading) {
-    return (
-      <View tw="items-center justify-center flex-1">
-        <Spinner />
-      </View>
-    );
-  }
-
-  return (
-    <Tabs.FlatList
-      data={data}
-      keyExtractor={keyExtractor}
-      renderItem={renderItem}
-      refreshing={isRefreshing}
-      onRefresh={refresh}
-      onEndReached={fetchMore}
-      onEndReachedThreshold={0.6}
-      removeClippedSubviews={Platform.OS !== "web"}
-      numColumns={1}
-      windowSize={4}
-      initialNumToRender={2}
-      alwaysBounceVertical={false}
-      ListFooterComponent={ListFooterComponent}
-    />
-  );
-};
-
-const CommentsList = () => {
-  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
-    useActivity({ typeId: 2 });
-
-  const keyExtractor = useCallback((item) => item.id, []);
-
-  const renderItem = useCallback(
-    ({ item }) => <Card act={item} variant="activity" />,
-    []
-  );
-
-  const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoadingMore} />,
-    [isLoadingMore]
-  );
-
-  if (isLoading) {
-    return (
-      <View tw="items-center justify-center flex-1">
-        <Spinner />
-      </View>
-    );
-  }
-
-  return (
-    <Tabs.FlatList
-      data={data}
-      keyExtractor={keyExtractor}
-      renderItem={renderItem}
-      refreshing={isRefreshing}
-      onRefresh={refresh}
-      onEndReached={fetchMore}
-      onEndReachedThreshold={0.6}
-      removeClippedSubviews={Platform.OS !== "web"}
-      numColumns={1}
-      windowSize={4}
-      initialNumToRender={2}
-      alwaysBounceVertical={false}
-      ListFooterComponent={ListFooterComponent}
-    />
-  );
-};
-
-const FollowsList = () => {
-  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
-    useActivity({ typeId: 4, limit: 10 });
-
-  const keyExtractor = useCallback((item) => item.id, []);
-
-  const renderItem = useCallback(
-    ({ item }) => <Card act={item} variant="activity" />,
-    []
-  );
-
-  const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoadingMore} />,
-    [isLoadingMore]
-  );
-
-  if (isLoading) {
-    return (
-      <View tw="items-center justify-center flex-1">
-        <Spinner />
-      </View>
-    );
-  }
-
-  return (
-    <Tabs.FlatList
-      data={data}
-      keyExtractor={keyExtractor}
-      renderItem={renderItem}
-      refreshing={isRefreshing}
-      onRefresh={refresh}
-      onEndReached={fetchMore}
-      onEndReachedThreshold={0.6}
-      removeClippedSubviews={Platform.OS !== "web"}
-      numColumns={1}
-      windowSize={4}
-      initialNumToRender={10}
-      alwaysBounceVertical={false}
-      ListFooterComponent={ListFooterComponent}
-    />
-  );
-};
-
-const AllActivityList = () => {
-  const { isLoading, data, fetchMore, isRefreshing, refresh, isLoadingMore } =
-    useActivity({ typeId: 0 });
-
-  const keyExtractor = useCallback((item) => item.id, []);
-
-  const renderItem = useCallback(
-    ({ item }) => <Card act={item} variant="activity" />,
-    []
-  );
-
-  const ListFooterComponent = useCallback(
-    () => <Footer isLoading={isLoadingMore} />,
-    [isLoadingMore]
-  );
-
-  if (isLoading) {
-    return (
-      <View tw="items-center justify-center flex-1">
-        <Spinner />
-      </View>
-    );
-  }
-
-  return (
-    <Tabs.FlatList
-      data={data}
-      keyExtractor={keyExtractor}
-      renderItem={renderItem}
-      refreshing={isRefreshing}
-      onRefresh={refresh}
-      onEndReached={fetchMore}
-      onEndReachedThreshold={0.6}
-      removeClippedSubviews={Platform.OS !== "web"}
-      numColumns={1}
-      windowSize={4}
-      initialNumToRender={2}
-      alwaysBounceVertical={false}
-      ListFooterComponent={ListFooterComponent}
-    />
-  );
-};
-
-export { Feed };

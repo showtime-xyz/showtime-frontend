@@ -1,6 +1,12 @@
 import { Suspense, useCallback, useMemo, useState } from "react";
 import { Dimensions, Platform } from "react-native";
+
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useHeaderHeight } from "@react-navigation/elements";
+
+import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
+import { TAB_LIST_HEIGHT } from "app/lib/constants";
+import { useRouter } from "app/navigation/use-router";
 
 import {
   View,
@@ -12,12 +18,11 @@ import {
   CreatorPreview,
   SegmentedControl,
   Media,
+  Pressable,
 } from "design-system";
-import { tw } from "design-system/tailwind";
-import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { cardSize } from "design-system/creator-preview";
-
-const TAB_LIST_HEIGHT = 64;
+import { useIsDarkMode } from "design-system/hooks";
+import { tw } from "design-system/tailwind";
 
 const Footer = ({ isLoading }: { isLoading: boolean }) => {
   const tabBarHeight = useBottomTabBarHeight();
@@ -38,13 +43,19 @@ const Footer = ({ isLoading }: { isLoading: boolean }) => {
 
 export const Trending = () => {
   const [selected, setSelected] = useState(0);
+  const isDark = useIsDarkMode();
+  const headerHeight = useHeaderHeight();
 
   return (
     <View tw="bg-white dark:bg-black flex-1">
       <Tabs.Root onIndexChange={setSelected} initialIndex={selected} lazy>
         <Tabs.Header>
+          {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
           <View tw="bg-white dark:bg-black pt-4 pl-4 pb-[3px]">
-            <Text tw="text-gray-900 dark:text-white font-bold text-3xl">
+            <Text
+              variant="text-2xl"
+              tw="text-gray-900 dark:text-white font-extrabold"
+            >
               Trending
             </Text>
           </View>
@@ -57,19 +68,19 @@ export const Trending = () => {
                 "dark:bg-black bg-white border-b border-b-gray-100 dark:border-b-gray-900 w-screen"
               ),
             }),
-            []
+            [isDark]
           )}
         >
           <Tabs.Trigger>
-            <TabItem name="24 hours" selected={selected === 0} />
+            <TabItem name="Today" selected={selected === 0} />
           </Tabs.Trigger>
 
           <Tabs.Trigger>
-            <TabItem name="7 days" selected={selected === 1} />
+            <TabItem name="This week" selected={selected === 1} />
           </Tabs.Trigger>
 
           <Tabs.Trigger>
-            <TabItem name="30 days" selected={selected === 2} />
+            <TabItem name="This month" selected={selected === 2} />
           </Tabs.Trigger>
 
           <SelectedTabIndicator />
@@ -123,7 +134,7 @@ const CreatorsList = ({
     useTrendingCreators({
       days,
     });
-
+  const isDark = useIsDarkMode();
   const separatorHeight = 8;
 
   const keyExtractor = useCallback((item) => {
@@ -141,17 +152,17 @@ const CreatorsList = ({
 
   const ItemSeparatorComponent = useCallback(
     () => <View tw={`bg-gray-200 dark:bg-gray-800 h-[${separatorHeight}px]`} />,
-    []
+    [isDark]
   );
 
-  const getItemLayout = useCallback(
-    (_data, index) => ({
-      length: cardSize + separatorHeight,
-      offset: cardSize + separatorHeight * index,
+  const getItemLayout = useCallback((_data, index) => {
+    const cardHeight = cardSize + separatorHeight;
+    return {
+      length: cardHeight,
+      offset: cardHeight * index,
       index,
-    }),
-    []
-  );
+    };
+  }, []);
 
   const ListHeaderComponent = useMemo(
     () => (
@@ -171,30 +182,28 @@ const CreatorsList = ({
         ) : null}
       </View>
     ),
-    [SelectionControl, data, isLoading]
+    [SelectionControl, data, isLoading, isDark]
   );
 
   return (
-    <View tw="flex-1">
-      <Tabs.FlatList
-        data={data}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        refreshing={isRefreshing}
-        onRefresh={refresh}
-        onEndReached={fetchMore}
-        onEndReachedThreshold={0.6}
-        removeClippedSubviews={Platform.OS !== "web"}
-        ListHeaderComponent={ListHeaderComponent}
-        numColumns={1}
-        windowSize={4}
-        initialNumToRender={4}
-        alwaysBounceVertical={false}
-        ListFooterComponent={ListFooterComponent}
-        ItemSeparatorComponent={ItemSeparatorComponent}
-        getItemLayout={getItemLayout}
-      />
-    </View>
+    <Tabs.FlatList
+      data={data}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
+      refreshing={isRefreshing}
+      onRefresh={refresh}
+      onEndReached={fetchMore}
+      onEndReachedThreshold={0.6}
+      removeClippedSubviews={Platform.OS !== "web"}
+      ListHeaderComponent={ListHeaderComponent}
+      numColumns={1}
+      windowSize={4}
+      initialNumToRender={4}
+      alwaysBounceVertical={false}
+      ListFooterComponent={ListFooterComponent}
+      ItemSeparatorComponent={ItemSeparatorComponent}
+      getItemLayout={getItemLayout}
+    />
   );
 };
 
@@ -208,6 +217,8 @@ const NFTSList = ({
   days: number;
   SelectionControl: any;
 }) => {
+  const router = useRouter();
+
   const { data, isLoadingMore, isLoading, isRefreshing, refresh, fetchMore } =
     useTrendingNFTS({
       days,
@@ -218,7 +229,17 @@ const NFTSList = ({
   }, []);
 
   const renderItem = useCallback(
-    ({ item }) => <Media item={item} numColumns={3} />,
+    ({ item, index }) => (
+      <Pressable
+        onPress={() =>
+          router.push(
+            `/swipeList?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`
+          )
+        }
+      >
+        <Media item={item} numColumns={3} />
+      </Pressable>
+    ),
     []
   );
 

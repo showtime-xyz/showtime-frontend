@@ -1,8 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import mixpanel from "mixpanel-browser";
+import { useMemo } from "react";
+
 import AppContext from "@/context/app-context";
 import axios from "@/lib/axios";
-import { useMemo } from "react";
+import mixpanel from "mixpanel-browser";
+
 import Button from "./UI/Buttons/Button";
 
 const MiniFollowButton = ({ profileId }) => {

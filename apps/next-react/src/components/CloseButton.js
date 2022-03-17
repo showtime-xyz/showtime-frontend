@@ -1,5 +1,5 @@
-import mixpanel from "mixpanel-browser";
 import { XIcon } from "@heroicons/react/solid";
+import mixpanel from "mixpanel-browser";
 
 const CloseButton = ({ setEditModalOpen, isDetailModal, cleanupFunction }) => {
   return (

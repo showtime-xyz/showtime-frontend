@@ -1,47 +1,53 @@
-/* eslint-disable react-hooks/rules-of-hooks */ // For some reason, this rule is behaving weirdly. @TODO I guess
+/* eslint-disable react-hooks/rules-of-hooks */
+// For some reason, this rule is behaving weirdly. @TODO I guess
 import { useState, useEffect, useContext, useRef, Fragment } from "react";
-import Head from "next/head";
-import mixpanel from "mixpanel-browser";
-import Tippy from "@tippyjs/react";
-import BadgeIcon from "@/components/Icons/BadgeIcon";
-import Layout from "@/components/layout";
-import CappedWidth from "@/components/CappedWidth";
-import TokenGridV5 from "@/components/TokenGridV5";
-import backend from "@/lib/backend";
-import AppContext from "@/context/app-context";
-import ModalEditProfile from "@/components/ModalEditProfile";
-import ModalEditPhoto from "@/components/ModalEditPhoto";
-import ModalEditCover from "@/components/ModalEditCover";
-import ModalUserList from "@/components/ModalUserList";
-import {
-  formatAddressShort,
-  truncateWithEllipses,
-  classNames,
-} from "@/lib/utilities";
+
 import { AddressCollection } from "@/components/AddressButton";
+import CappedWidth from "@/components/CappedWidth";
+import FollowersInCommon from "@/components/FollowersInCommon";
+import BadgeIcon from "@/components/Icons/BadgeIcon";
+import FingerprintIcon from "@/components/Icons/FingerprintIcon";
+import GlobeIcon from "@/components/Icons/GlobeIcon";
+import WalletIcon from "@/components/Icons/WalletIcon";
+import ModalEditCover from "@/components/ModalEditCover";
+import ModalEditPhoto from "@/components/ModalEditPhoto";
+import ModalEditProfile from "@/components/ModalEditProfile";
+import ModalUserList from "@/components/ModalUserList";
+import SpotlightItem from "@/components/SpotlightItem";
+import TokenGridV5 from "@/components/TokenGridV5";
+import Button from "@/components/UI/Buttons/Button";
+import Dropdown from "@/components/UI/Dropdown";
+import Layout from "@/components/layout";
+import AppContext from "@/context/app-context";
+import useAuth from "@/hooks/useAuth";
+import useProfile from "@/hooks/useProfile";
+import axios, { CancelToken, isCancel } from "@/lib/axios";
+import backend from "@/lib/backend";
 import {
   PROFILE_TABS,
   SORT_FIELDS,
   DEFAULT_PROFILE_PIC,
 } from "@/lib/constants";
-import SpotlightItem from "@/components/SpotlightItem";
+import {
+  formatAddressShort,
+  truncateWithEllipses,
+  classNames,
+} from "@/lib/utilities";
 import { Transition, Menu } from "@headlessui/react";
+import { UploadIcon } from "@heroicons/react/outline";
 import {
   PencilAltIcon,
   DotsHorizontalIcon,
   HeartIcon,
 } from "@heroicons/react/solid";
-import { UploadIcon } from "@heroicons/react/outline";
-import axios, { CancelToken, isCancel } from "@/lib/axios";
-import FollowersInCommon from "@/components/FollowersInCommon";
-import GlobeIcon from "@/components/Icons/GlobeIcon";
-import useAuth from "@/hooks/useAuth";
-import FingerprintIcon from "@/components/Icons/FingerprintIcon";
-import WalletIcon from "@/components/Icons/WalletIcon";
-import Dropdown from "@/components/UI/Dropdown";
-import Button from "@/components/UI/Buttons/Button";
-import useProfile from "@/hooks/useProfile";
+import Tippy from "@tippyjs/react";
+import mixpanel from "mixpanel-browser";
+import Head from "next/head";
+import Link from "next/link";
+import reactStringReplace from "react-string-replace";
 import useSWR from "swr";
+
+import UkraineProfile from "./ukraine";
 
 export async function getStaticProps({ params: { profile: slug_address } }) {
   if (slug_address.includes("apple-touch-icon"))
@@ -305,6 +311,30 @@ const Profile = ({
 
   const [collectionId, setCollectionId] = useState(0);
   const [isRefreshingCards, setIsRefreshingCards] = useState(false);
+
+  const shortBioWithMentions = reactStringReplace(
+    truncateWithEllipses(bio, initialBioLength),
+    /@([\w\d-]+?)\b/g,
+    (username, i) => {
+      return (
+        <Link href="/[profile]" as={`/${username}`} key={i}>
+          <a className="font-semibold">@{username}</a>
+        </Link>
+      );
+    }
+  );
+
+  const bioWithMentions = reactStringReplace(
+    bio,
+    /@([\w\d-]+?)\b/g,
+    (username, i) => {
+      return (
+        <Link href="/[profile]" as={`/${username}`} key={i}>
+          <a className="font-semibold">@{username}</a>
+        </Link>
+      );
+    }
+  );
 
   const updateItems = async (
     listId,
@@ -1053,8 +1083,8 @@ const Profile = ({
                         {bio ? (
                           <div className="text-black dark:text-gray-400 text-sm max-w-2xl text-left md:text-base mt-4 block break-words">
                             {moreBioShown
-                              ? bio
-                              : truncateWithEllipses(bio, initialBioLength)}
+                              ? bioWithMentions
+                              : shortBioWithMentions}
                             {!moreBioShown &&
                               bio &&
                               bio.length > initialBioLength && (
@@ -1590,4 +1620,21 @@ const LinkCollection = ({
   </div>
 );
 
-export default Profile;
+/**
+ * To reroute in app routing to the proper charity page view
+ * Traditional redirection happens at file: apps/next-react/next.config.js
+ */
+const ProfileReroute = (props) => {
+  const slug = props.slug_address?.toLowerCase();
+  const ukraineProfileAddress =
+    "0x3a99ea152Dd2eAcc8E95aDdFb943e714Db9ECC22".toLowerCase();
+  const ukraineUsername = "ukraine";
+
+  if (slug === ukraineProfileAddress || slug === ukraineUsername) {
+    return <UkraineProfile {...props} />;
+  }
+
+  return <Profile {...props} />;
+};
+
+export default ProfileReroute;

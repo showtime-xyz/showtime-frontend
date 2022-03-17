@@ -1,28 +1,31 @@
 import { useWindowDimensions, Platform, StyleSheet } from "react-native";
+
 import { BlurView } from "expo-blur";
 import dynamic from "next/dynamic";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { useUser } from "app/hooks/use-user";
+
+import { View } from "design-system";
+import { useIsDarkMode } from "design-system/hooks";
 import { tw } from "design-system/tailwind";
-import { HeaderLeft, HeaderRight } from "app/components/header";
-import { useNavigationElements } from "./use-navigation-elements";
-import { NextNavigationProps } from "./types";
-import { createNextTabNavigator } from "./universal-tab-navigator";
+
 import {
   HomeTabBarIcon,
   TrendingTabBarIcon,
   CameraTabBarIcon,
-  MarketplaceTabBarIcon,
   NotificationsTabBarIcon,
+  ProfileTabBarIcon,
 } from "./tab-bar-icons";
-import { useIsDarkMode } from "design-system/hooks";
-import { View } from "design-system";
+import { NextNavigationProps } from "./types";
+import { createNextTabNavigator } from "./universal-tab-navigator";
+import { useNavigationElements } from "./use-navigation-elements";
 
 const HomeNavigator = dynamic(() => import("../pages/home"));
 const TrendingNavigator = dynamic(() => import("../pages/trending"));
 const CameraNavigator = dynamic(() => import("../pages/camera"));
-const MarketplaceNavigator = dynamic(() => import("../pages/marketplace"));
 const NotificationsNavigator = dynamic(() => import("../pages/notifications"));
+const ProfileNavigator = dynamic(() => import("../pages/profile"));
 
 const BottomTab = createNextTabNavigator();
 
@@ -32,7 +35,8 @@ export function NextTabNavigator({
 }: NextNavigationProps) {
   const { width } = useWindowDimensions();
   const { isTabBarHidden } = useNavigationElements();
-  const { bottom: safeAreaBottom } = useSafeAreaInsets();
+  const { top: safeAreaTop, bottom: safeAreaBottom } = useSafeAreaInsets();
+  const { isAuthenticated } = useUser();
 
   const color = tw.style("bg-black dark:bg-white")?.backgroundColor as string;
   const tint = color === "#000" ? "light" : "dark";
@@ -42,18 +46,8 @@ export function NextTabNavigator({
     <BottomTab.Navigator
       initialRouteName="homeTab"
       screenOptions={{
-        headerLeft: HeaderLeft,
-        headerRight: HeaderRight,
-        headerTitle: "",
-        headerTintColor: "#000",
-        //@ts-ignore
-        headerStyle: {
-          backgroundColor: isDark ? "black" : "white",
-          // below removes the border bottom line on header on iOS
-          shadowOffset: {
-            height: 0,
-          },
-        },
+        lazy: Platform.OS === "android" ? false : true,
+        headerShown: false,
         tabBarActiveTintColor: color,
         tabBarInactiveTintColor: color,
         tabBarShowLabel: false,
@@ -73,8 +67,7 @@ export function NextTabNavigator({
             left: width / 2 - 100,
             maxWidth: 200,
           },
-          isTabBarHidden && {
-            display: "none",
+          (!isAuthenticated || isTabBarHidden) && {
             bottom: -100,
           },
         ],
@@ -123,19 +116,21 @@ export function NextTabNavigator({
           }}
         />
       )}
-      <BottomTab.Screen
-        name="marketplaceTab"
-        component={MarketplaceNavigator}
-        options={{
-          tabBarIcon: MarketplaceTabBarIcon,
-        }}
-      />
       {width < 768 && (
         <BottomTab.Screen
           name="notificationsTab"
           component={NotificationsNavigator}
           options={{
             tabBarIcon: NotificationsTabBarIcon,
+          }}
+        />
+      )}
+      {width < 768 && (
+        <BottomTab.Screen
+          name="profileTab"
+          component={ProfileNavigator}
+          options={{
+            tabBarIcon: ProfileTabBarIcon,
           }}
         />
       )}

@@ -218,3 +218,39 @@ export const CHAIN_IDENTIFIERS = {
   polygon: 137,
   mumbai: 80001,
 };
+
+// static height can improve tabs list initial rendering
+export const TAB_LIST_HEIGHT = 50;
+
+export const BYPASS_EMAIL = "test+success@magic.link";
+
+export const BYPASS_EMAIL_WITH_INSECURE_KEYS =
+  "test+success_with_{0x89A3983da27fF0eFCF901F74C4df84e0450A17B7:0x19de850af732e9e5745915162d707d6d8cf013ce7b2862e93081b0c8883bdfae}@magic.link";
+
+export const LIST_CURRENCIES = {
+  mumbai: {
+    TKN: "0xd404017a401ff7ef65e7689630eca288e23d67a1",
+    WETH: "0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa",
+    DAI: "0x5A01Ea01Ba9A8DC2B066714A65E61a78838B1b9e",
+    USDC: "0xe6b8a5CF854791412c1f6EFC7CAf629f5Df1c747",
+  },
+  polygon: {
+    USDC: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+    WETH: "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+    DAI: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
+  },
+}[process.env.NEXT_PUBLIC_CHAIN_ID];
+
+export const CURRENCY_NAMES = {
+  mumbai: {
+    [LIST_CURRENCIES?.TKN]: "TKN",
+    [LIST_CURRENCIES?.USDC]: "USDC",
+    [LIST_CURRENCIES?.WETH]: "WETH",
+    [LIST_CURRENCIES?.DAI]: "DAI",
+  },
+  polygon: {
+    [LIST_CURRENCIES?.USDC]: "USDC",
+    [LIST_CURRENCIES?.WETH]: "WETH",
+    [LIST_CURRENCIES?.DAI]: "DAI",
+  },
+}[process.env.NEXT_PUBLIC_CHAIN_ID];

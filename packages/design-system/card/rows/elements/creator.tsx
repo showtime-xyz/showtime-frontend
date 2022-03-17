@@ -1,11 +1,12 @@
-import { View } from "design-system/view";
-import { Text } from "design-system/text";
-import { Image } from "design-system/image";
-import { VerificationBadge } from "design-system/verification-badge";
 import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
-import type { NFT } from "app/types";
-import { useRouter } from "app/navigation/use-router";
 import { Link } from "app/navigation/link";
+import { useRouter } from "app/navigation/use-router";
+import type { NFT } from "app/types";
+
+import { Image } from "design-system/image";
+import { Text } from "design-system/text";
+import { VerificationBadge } from "design-system/verification-badge";
+import { View } from "design-system/view";
 
 const getProfileImageUrl = (imgUrl: string) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
@@ -17,9 +18,10 @@ const getProfileImageUrl = (imgUrl: string) => {
 type Props = {
   nft?: NFT;
   options?: boolean;
+  toggleCreatorName?: boolean;
 };
 
-export function Creator({ nft }: Props) {
+export function Creator({ nft, toggleCreatorName }: Props) {
   const router = useRouter();
 
   if (!nft) return null;
@@ -40,21 +42,25 @@ export function Creator({ nft }: Props) {
       <View tw="ml-2 justify-center">
         <Text
           sx={{ fontSize: 12, lineHeight: 12 }}
-          tw="mb-1 text-gray-600 dark:text-gray-400 font-semibold"
+          tw={`${
+            nft.creator_username ? "mb-1" : ""
+          } text-gray-600 dark:text-gray-400 font-semibold`}
         >
-          {nft.creator_name}
+          {toggleCreatorName ? "Creator" : nft.creator_name}
         </Text>
-        <View tw="h-[12px] flex flex-row items-center">
-          <Text
-            sx={{ fontSize: 13, lineHeight: 15 }}
-            tw="text-gray-900 dark:text-white font-semibold"
-          >
-            @{nft.creator_username}
-          </Text>
-          {nft.creator_verified ? (
-            <VerificationBadge style={{ marginLeft: 4 }} size={12} />
-          ) : null}
-        </View>
+        {nft.creator_username && (
+          <View tw="h-[12px] flex flex-row items-center">
+            <Text
+              sx={{ fontSize: 13, lineHeight: 15 }}
+              tw="text-gray-900 dark:text-white font-semibold"
+            >
+              @{nft.creator_username}
+            </Text>
+            {nft.creator_verified ? (
+              <VerificationBadge style={{ marginLeft: 4 }} size={12} />
+            ) : null}
+          </View>
+        )}
       </View>
     </Link>
   );

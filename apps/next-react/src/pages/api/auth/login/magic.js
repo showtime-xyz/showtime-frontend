@@ -1,7 +1,7 @@
-import Iron from "@hapi/iron";
-import CookieService from "@/lib/cookie";
-import backend from "@/lib/backend";
 import handler, { middleware } from "@/lib/api-handler";
+import backend from "@/lib/backend";
+import CookieService from "@/lib/cookie";
+import Iron from "@hapi/iron";
 import { captureException } from "@sentry/nextjs";
 
 export default handler()

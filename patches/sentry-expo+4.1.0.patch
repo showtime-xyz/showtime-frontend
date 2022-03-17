@@ -1,0 +1,25 @@
+diff --git a/node_modules/sentry-expo/plugin/build/withSentryIOS.js b/node_modules/sentry-expo/plugin/build/withSentryIOS.js
+index 59b34ab..d3304fe 100644
+--- a/node_modules/sentry-expo/plugin/build/withSentryIOS.js
++++ b/node_modules/sentry-expo/plugin/build/withSentryIOS.js
+@@ -53,13 +53,13 @@ function modifyExistingXcodeBuildScript(script) {
+         config_plugins_1.WarningAggregator.addWarningIOS('sentry-expo', `Unable to modify build script 'Bundle React Native code and images'. Please open a bug report at https://github.com/expo/sentry-expo.`);
+         return;
+     }
+-    let code = JSON.parse(script.shellScript);
+-    code =
+-        'export SENTRY_PROPERTIES=sentry.properties\n' +
+-            'export EXTRA_PACKAGER_ARGS="--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map"\n' +
+-            code.replace(/^.*?(packager|scripts)\/react-native-xcode\.sh\s*(\\'\\\\")?/m, (match) => "`node --print \"require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'\"` react-native xcode --force-foreground\n" +
+-                match);
+-    script.shellScript = JSON.stringify(code);
++    // let code = JSON.parse(script.shellScript);
++    // code =
++    //     'export SENTRY_PROPERTIES=sentry.properties\n' +
++    //         'export EXTRA_PACKAGER_ARGS="--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map"\n' +
++    //         code.replace(/^.*?(packager|scripts)\/react-native-xcode\.sh\s*(\\'\\\\")?/m, (match) => "`node --print \"require.resolve('@sentry/cli/package.json').slice(0, -13) + '/bin/sentry-cli'\"` react-native xcode --force-foreground\n" +
++    //             match);
++    // script.shellScript = JSON.stringify(code);
+ }
+ exports.modifyExistingXcodeBuildScript = modifyExistingXcodeBuildScript;
+ function writeSentryPropertiesTo(filepath, sentryProperties) {

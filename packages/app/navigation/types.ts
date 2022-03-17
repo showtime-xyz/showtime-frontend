@@ -1,11 +1,15 @@
-import type { NextComponentType, NextPageContext } from "next";
 import type { NavigatorScreenParams } from "@react-navigation/native";
+import type { NextComponentType, NextPageContext } from "next";
 
 type HomeStackParams = {
   home: undefined;
   login: undefined;
   nft: { id: number };
+  nftTransfer: { id: number };
+  burn: undefined;
+  list: { id: number };
   profile: { walletAddress: number };
+  settings: undefined;
 };
 
 type TrendingStackParams = {
@@ -13,6 +17,7 @@ type TrendingStackParams = {
   login: undefined;
   nft: { id: number };
   profile: { walletAddress: number };
+  settings: undefined;
 };
 
 type CameraStackParams = {
@@ -22,16 +27,19 @@ type CameraStackParams = {
   create: undefined;
 };
 
-type MarketplaceStackParams = {
-  marketplace: undefined;
-  login: undefined;
-  nft: { id: number };
-};
-
 type NotificationsStackParams = {
   notifications: undefined;
   login: undefined;
   nft: { id: number };
+  settings: undefined;
+};
+
+type ProfileStackParams = {
+  walletAddress: undefined;
+  profile: { walletAddress: number };
+  login: undefined;
+  nft: { id: number };
+  settings: undefined;
 };
 
 type NextPageProps = any;
@@ -44,22 +52,22 @@ type BottomTabNavigatorParams = {
   homeTab: NavigatorScreenParams<HomeStackParams>;
   trendingTab: NavigatorScreenParams<TrendingStackParams>;
   cameraTab: NavigatorScreenParams<CameraStackParams>;
-  marketplaceTab: NavigatorScreenParams<MarketplaceStackParams>;
   notificationsTab: NavigatorScreenParams<NotificationsStackParams>;
+  profileTab: NavigatorScreenParams<ProfileStackParams>;
 };
 
 declare global {
-  namespace ReactNavigation {
-    interface RootParamList extends BottomTabNavigatorParams {}
-  }
+  // namespace ReactNavigation {
+  //   interface RootParamList extends BottomTabNavigatorParams {}
+  // }
 }
 
 export type {
   NextNavigationProps,
   HomeStackParams,
-  MarketplaceStackParams,
   TrendingStackParams,
   CameraStackParams,
   NotificationsStackParams,
+  ProfileStackParams,
   BottomTabNavigatorParams,
 };

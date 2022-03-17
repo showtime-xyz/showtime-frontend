@@ -1,4 +1,3 @@
-import * as RadixAccordion from "@radix-ui/react-accordion";
 import React, {
   useMemo,
   useCallback,
@@ -7,10 +6,14 @@ import React, {
   forwardRef,
 } from "react";
 import { Pressable } from "react-native";
+
+import * as RadixAccordion from "@radix-ui/react-accordion";
+
 import { useUpdateEffect } from "design-system/hooks";
+
 import { AnimateHeight } from "../animate-height";
-import { RootProps, ContentProps, ItemProps, TriggerProps } from "./types";
 import { RootContext, ItemContext } from "./common";
+import { RootProps, ContentProps, ItemProps, TriggerProps } from "./types";
 
 const Root = (props: RootProps) => {
   const { value: propValue, onValueChange } = props;

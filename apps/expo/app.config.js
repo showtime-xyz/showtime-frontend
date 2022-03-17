@@ -1,6 +1,15 @@
-import "dotenv/config";
+const path = require("path");
+const STAGE = process.env.STAGE ?? "development";
+const envPath = path.resolve(__dirname, `.env.${STAGE}`);
 
-const STAGE = process.env.STAGE;
+require("dotenv").config({
+  path: envPath,
+});
+
+const packageJSON = require("../../package.json");
+
+const semver = require("semver");
+
 const SCHEME = process.env.SCHEME ?? "io.showtime";
 
 const envConfig = {
@@ -25,6 +34,8 @@ const envConfig = {
 };
 
 const config = envConfig[STAGE ?? "development"];
+const version = packageJSON.version;
+const majorVersion = semver.major(version);
 
 export default {
   name: "Showtime",
@@ -33,7 +44,7 @@ export default {
   scheme: config.scheme,
   owner: "tryshowtime",
   icon: config.icon,
-  version: "1.0.1",
+  version: version.toString(),
   userInterfaceStyle: "automatic",
   splash: {
     image: "./assets/splash.png",
@@ -42,14 +53,18 @@ export default {
   },
   ios: {
     bundleIdentifier: config.scheme,
-    buildNumber: "1.0.1",
+    buildNumber: majorVersion.toString(),
     supportsTablet: true,
     jsEngine: "hermes",
     backgroundColor: "#FFFFFF",
+    config: {
+      usesNonExemptEncryption: false,
+    },
+    bitcode: false, // or "Debug"
   },
   android: {
     package: config.scheme,
-    versionCode: 2,
+    versionCode: majorVersion,
     adaptiveIcon: {
       foregroundImage: config.foregroundImage,
       backgroundImage: config.backgroundImage,
@@ -67,9 +82,11 @@ export default {
     fallbackToCacheTimeout: 0,
     url: "https://u.expo.dev/45cbf5d5-24fe-4aa6-9580-acf540651abd",
   },
-  runtimeVersion: {
-    policy: "sdkVersion", // https://docs.expo.dev/eas-update/runtime-versions/
-  },
+  // We use the major version for the runtime version so it's in sync
+  // with the native app version and should prevent us from sending an update
+  // without the correct native build.
+  // Learn more: https://docs.expo.dev/eas-update/runtime-versions
+  runtimeVersion: majorVersion.toString(),
   extra: {
     STAGE: process.env.STAGE,
     eas: {
@@ -77,6 +94,8 @@ export default {
     },
   },
   plugins: [
+    // detox adds network config xml in android. We don't need it during development. It can cause issues while connecting to metro server
+    process.env.DETOX ? "@config-plugins/detox" : (x) => x,
     [
       "react-native-vision-camera",
       {
@@ -103,5 +122,20 @@ export default {
     ],
     "expo-community-flipper",
     "./plugins/with-android-manifest.js",
+    "./plugins/with-hermes-ios-m1-workaround.js",
+    "sentry-expo",
+    "./plugins/react-native-cronet.js",
   ],
+  hooks: {
+    postPublish: [
+      {
+        file: "sentry-expo/upload-sourcemaps",
+        config: {
+          organization: "showtime-l3",
+          project: "showtime-mobile",
+          authToken: process.env.SENTRY_AUTH_TOKEN,
+        },
+      },
+    ],
+  },
 };

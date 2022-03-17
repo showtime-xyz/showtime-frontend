@@ -1,9 +1,21 @@
 import { useContext, useRef, useEffect, useState } from "react";
+
+import AppContext from "@/context/app-context";
+import useDetectOutsideClick from "@/hooks/useDetectOutsideClick";
+import axios from "@/lib/axios";
 import {
   ACTIVITY_TYPES,
   DEFAULT_PROFILE_PIC,
   activityIconObjects,
 } from "@/lib/constants";
+import { truncateWithEllipses } from "@/lib/utilities";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { DotsHorizontalIcon } from "@heroicons/react/solid";
+import { formatDistanceToNowStrict } from "date-fns";
+import mixpanel from "mixpanel-browser";
+import Link from "next/link";
+
+import ActivityImages from "./ActivityImages";
 import {
   Like,
   Comment,
@@ -13,18 +25,8 @@ import {
   Follow,
   Transfer,
 } from "./ActivityTypes";
-import { formatDistanceToNowStrict } from "date-fns";
-import Link from "next/link";
-import AppContext from "@/context/app-context";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import LikeButton from "./LikeButton";
 import CommentButton from "./CommentButton";
-import ActivityImages from "./ActivityImages";
-import mixpanel from "mixpanel-browser";
-import useDetectOutsideClick from "@/hooks/useDetectOutsideClick";
-import { truncateWithEllipses } from "@/lib/utilities";
-import axios from "@/lib/axios";
-import { DotsHorizontalIcon } from "@heroicons/react/solid";
+import LikeButton from "./LikeButton";
 
 const getProfileImageUrl = (img_url) => {
   if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {
@@ -166,7 +168,7 @@ export default function ActivityCard({
                 </Link>
               )}
               <div className="text-gray-400 text-xs">
-                {formatDistanceToNowStrict(new Date(`${act.timestamp}Z`), {
+                {formatDistanceToNowStrict(new Date(act.timestamp), {
                   addSuffix: true,
                 })}
               </div>

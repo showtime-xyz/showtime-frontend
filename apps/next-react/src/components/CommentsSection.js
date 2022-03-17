@@ -6,23 +6,25 @@ import {
   createRef,
   Fragment,
 } from "react";
-import { DEFAULT_PROFILE_PIC, MENTIONS_STYLE } from "@/lib/constants";
+
 import AppContext from "@/context/app-context";
-import backend from "@/lib/backend";
-import mixpanel from "mixpanel-browser";
-import Comment from "./Comment";
-import { Mention, MentionsInput } from "react-mentions";
-import AwesomeDebouncePromise from "awesome-debounce-promise";
-import { formatAddressShort } from "@/lib/utilities";
+import useAuth from "@/hooks/useAuth";
 import axios from "@/lib/axios";
+import backend from "@/lib/backend";
+import { DEFAULT_PROFILE_PIC, MENTIONS_STYLE } from "@/lib/constants";
+import { formatAddressShort } from "@/lib/utilities";
+import { Menu } from "@headlessui/react";
+import { EmojiHappyIcon } from "@heroicons/react/outline";
+import { XIcon } from "@heroicons/react/solid";
+import AwesomeDebouncePromise from "awesome-debounce-promise";
+import { Picker } from "emoji-mart";
+import mixpanel from "mixpanel-browser";
+import { useTheme } from "next-themes";
+import { Mention, MentionsInput } from "react-mentions";
+
+import Comment from "./Comment";
 import ModalUserList from "./ModalUserList";
 import GhostButton from "./UI/Buttons/GhostButton";
-import { XIcon } from "@heroicons/react/solid";
-import { Picker } from "emoji-mart";
-import { useTheme } from "next-themes";
-import { EmojiHappyIcon } from "@heroicons/react/outline";
-import { Menu } from "@headlessui/react";
-import useAuth from "@/hooks/useAuth";
 
 export default function CommentsSection({
   item,

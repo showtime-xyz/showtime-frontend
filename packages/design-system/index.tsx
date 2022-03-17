@@ -39,3 +39,7 @@ export { Media } from "design-system/media";
 export { Fieldset } from "design-system/fieldset";
 
 export { Accordion } from "design-system/accordion";
+
+export { CountryCodePicker } from "design-system/country-code-picker";
+
+export { LikeButton } from "design-system/like-button";

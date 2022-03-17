@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   PinchGestureHandler,
   PinchGestureHandlerGestureEvent,
@@ -9,6 +10,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
+
 import { useLayout } from "../hooks";
 
 export const PinchToZoom = ({ children }) => {

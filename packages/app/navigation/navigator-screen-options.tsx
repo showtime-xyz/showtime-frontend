@@ -1,26 +1,43 @@
 import { Platform } from "react-native";
-import { HeaderBackButtonProps } from "@react-navigation/elements";
 
-import { HeaderBackButton } from "app/navigation/header-back-button";
-import { fontFamily } from "design-system/typography";
+import { HeaderLeft, HeaderCenter } from "app/components/header";
 
-export const navigatorScreenOptions = {
+export const screenOptions = ({
+  safeAreaTop,
+  isDark,
+  headerLeft = null,
+  headerRight = null,
+}: {
+  safeAreaTop: number;
+  isDark: boolean;
+  headerLeft?: any;
+  headerRight?: any;
+}) => ({
   animationEnabled: true,
-  headerShown: false,
-  headerShadowVisible: false,
+  headerShown: true,
+  headerLeft: headerLeft ?? HeaderLeft,
+  headerTitle: HeaderCenter,
+  headerTitleAlign: "center" as "center",
+  headerRight: headerRight ?? null,
+  headerTintColor: "#000",
+  headerTransparent: Platform.OS === "android" ? false : true,
+  headerBlurEffect: isDark ? "dark" : "light",
+  headerBackVisible: false,
   headerBackTitleVisible: false,
-  headerTitleStyle: {
-    fontFamily: fontFamily("Inter-Black"),
-  },
+  headerShadowVisible: false,
+  // @ts-ignore
   headerStyle: {
+    height: 64 + safeAreaTop,
     // Similar to `headerShadowVisible` but for web
     // @ts-ignore
     borderBottomWidth: 0,
+    backgroundColor:
+      Platform.OS === "android" && isDark
+        ? "black"
+        : Platform.OS === "android" && !isDark
+        ? "white"
+        : "transparent",
   },
-  headerLeft: Platform.select({
-    web(props: HeaderBackButtonProps) {
-      return <HeaderBackButton {...props} />;
-    },
-  }),
   cardStyle: { flex: 1, backgroundColor: "transparent" },
-};
+  cardOverlayEnabled: false,
+});

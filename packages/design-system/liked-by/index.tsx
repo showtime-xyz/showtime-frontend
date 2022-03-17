@@ -1,13 +1,15 @@
 import { Fragment } from "react";
 
-import { View } from "design-system/view";
-import { Text } from "design-system/text";
-import { Skeleton } from "design-system/skeleton";
 import { useLikes } from "app/hooks/api/use-likes";
-import { useIsDarkMode } from "../hooks";
+import { formatAddressShort } from "app/lib/utilities";
 import { TextLink } from "app/navigation/link";
 import { useRouter } from "app/navigation/use-router";
-import { formatAddressShort } from "app/lib/utilities";
+
+import { Skeleton } from "design-system/skeleton";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
+
+import { useIsDarkMode } from "../hooks";
 
 interface Props {
   nft?: any;
@@ -23,8 +25,11 @@ export function LikedBy({ nft }: Props) {
   if (!nft || nft.like_count === 0) return null;
 
   return (
-    <View tw="px-4 py-2 flex flex-row justify-start	items-center">
-      <Text variant="text-xs" tw="text-gray-600 font-semibold">
+    <View tw="bg-white dark:bg-black px-4 py-2 flex flex-row justify-start	items-center">
+      <Text
+        variant="text-xs"
+        tw="text-gray-600 dark:text-gray-400 font-semibold"
+      >
         Liked by&nbsp;
       </Text>
       <Skeleton
@@ -34,7 +39,10 @@ export function LikedBy({ nft }: Props) {
         colorMode={isDarkMode ? "dark" : "light"}
       >
         {!loading ? (
-          <Text variant="text-xs" tw="text-gray-600 font-semibold">
+          <Text
+            variant="text-xs"
+            tw="text-gray-600 dark:text-gray-400 font-semibold"
+          >
             {data?.likers.slice(0, 2).map((like, index) => (
               <Fragment key={`liked-by-user-${like.profile_id}`}>
                 <TextLink
@@ -63,7 +71,11 @@ export function LikedBy({ nft }: Props) {
                   variant="text-xs"
                   tw="font-bold text-black dark:text-white"
                 >
-                  {`${data?.likers.length ?? 0} others`}
+                  {data?.likers
+                    ? `${data.likers.length - 2} ${
+                        data.likers.length - 2 === 1 ? "other" : "others"
+                      }`
+                    : 0}
                 </Text>
               </>
             )}

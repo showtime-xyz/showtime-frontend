@@ -1,16 +1,18 @@
-import { Platform } from "react-native";
+import { Platform, StyleSheet, Text as RNText } from "react-native";
+
 import Animated, {
   useAnimatedStyle,
   Extrapolate,
   interpolate,
-  useDerivedValue,
 } from "react-native-reanimated";
 
-import { tw } from "design-system/tailwind";
 import { useIsDarkMode } from "design-system/hooks";
-import { View } from "design-system/view";
-import { Text } from "design-system/text";
 import { useTabIndexContext, useTabsContext } from "design-system/tabs/tablib";
+import { tw } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
+
+const TAB_ITEM_PADDING_HORIZONTAL = 16;
 
 type TabItemProps = {
   name: string;
@@ -43,26 +45,28 @@ export const TabItem = ({ name, count }: TabItemProps) => {
           justifyContent: "center",
           alignItems: "center",
           height: "100%",
-          marginHorizontal: 16,
+          paddingHorizontal: TAB_ITEM_PADDING_HORIZONTAL,
         },
         animatedStyle,
       ]}
     >
-      <Text
-        variant="text-sm"
-        sx={{ fontWeight: "700" }}
-        tw={`text-gray-900 dark:text-white`}
+      <RNText
+        style={[
+          tw.style("text-gray-900 dark:text-white text-sm"),
+          { fontFamily: "Inter-Bold" },
+        ]}
       >
-        {name}{" "}
-      </Text>
-
-      <Text
-        variant="text-sm"
-        sx={{ fontWeight: "400" }}
-        tw={`text-gray-900 dark:text-white`}
-      >
-        {count}
-      </Text>
+        {name}
+      </RNText>
+      {count ? (
+        <Text
+          variant="text-sm"
+          sx={{ fontWeight: "400" }}
+          tw={`text-gray-900 dark:text-white`}
+        >
+          {" " + count}
+        </Text>
+      ) : null}
     </Animated.View>
   );
 };
@@ -78,8 +82,8 @@ export const SelectedTabIndicator = () => {
 
   const animatedStyle = useAnimatedStyle(() => {
     const input = tabItemLayouts.map((_v, i) => i);
-    const translateOutput = tabItemLayouts.map((v) => v.value?.x);
-    const widthOutput = tabItemLayouts.map((v) => v.value?.width);
+    let translateOutput = tabItemLayouts.map((v) => v.value?.x);
+    let widthOutput = tabItemLayouts.map((v) => v.value?.width);
     const newPos = position.value + offset.value;
     if (
       translateOutput.some((v) => v === undefined) ||
@@ -87,6 +91,13 @@ export const SelectedTabIndicator = () => {
     ) {
       return {};
     } else {
+      widthOutput = widthOutput.map((e) =>
+        typeof e === "number" ? e - TAB_ITEM_PADDING_HORIZONTAL * 2 : 0
+      );
+      translateOutput = translateOutput.map((e) =>
+        typeof e === "number" ? e + TAB_ITEM_PADDING_HORIZONTAL : 0
+      );
+
       return {
         //@ts-ignore - widthOut won't be undefined as we check above
         width: interpolate(newPos, input, widthOutput, Extrapolate.CLAMP),
@@ -129,15 +140,17 @@ export const SelectedTabIndicator = () => {
           tw.style(`bg-gray-900 dark:bg-gray-100`),
         ]}
       />
-      <View
-        sx={{
-          backgroundColor: isDark
-            ? "rgba(229, 231, 235, 0.1)"
-            : "rgba(0, 0, 0, 0.1)",
-          paddingY: 16,
-          borderRadius: 999,
-        }}
-      />
+      {/* {disableBackground ? null : (
+        <View
+          sx={{
+            backgroundColor: isDark
+              ? "rgba(229, 231, 235, 0.1)"
+              : "rgba(0, 0, 0, 0.1)",
+            paddingY: 16,
+            borderRadius: 999,
+          }}
+        />
+      )} */}
     </Animated.View>
   );
 };

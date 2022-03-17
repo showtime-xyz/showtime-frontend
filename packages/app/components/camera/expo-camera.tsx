@@ -1,12 +1,14 @@
 import { useRef, useState, useCallback, useEffect } from "react";
 import { StyleSheet } from "react-native";
-import { View } from "dripsy";
-import { AnimatePresence, View as MotiView } from "moti";
-import { Camera as ExpoCamera } from "expo-camera";
-import { useIsFocused } from "@react-navigation/native";
 
-import { useIsForeground } from "app/hooks/use-is-foreground";
+import { useIsFocused } from "@react-navigation/native";
+import { View } from "dripsy";
+import { Camera as ExpoCamera } from "expo-camera";
+import { AnimatePresence, View as MotiView } from "moti";
+
 import { CameraButtons } from "app/components/camera/camera-buttons";
+import { useIsForeground } from "app/hooks/use-is-foreground";
+import { track } from "app/lib/analytics";
 
 type Props = {
   photos: { uri: string }[];
@@ -69,6 +71,8 @@ export function Camera({
       burstCaptureTimer.start();
 
       setIsLoading(true);
+
+      track("Photo Taken");
     } catch (e) {
       console.error("Failed to take photo!", e);
     }

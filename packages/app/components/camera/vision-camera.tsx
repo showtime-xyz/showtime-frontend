@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { StyleSheet, Platform } from "react-native";
+
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useIsFocused } from "@react-navigation/native";
+import * as Haptics from "expo-haptics";
 import { AnimatePresence, View as MotiView } from "moti";
 import {
   PinchGestureHandler,
@@ -23,18 +27,17 @@ import {
   sortFormats,
   useCameraDevices,
 } from "react-native-vision-camera";
-import { useIsFocused } from "@react-navigation/native";
-import * as Haptics from "expo-haptics";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
-import { useIsForeground } from "app/hooks/use-is-foreground";
 import { CameraButtons } from "app/components/camera/camera-buttons";
-import { Pressable } from "design-system/pressable-scale";
-import { Flash, FlashOff } from "design-system/icon";
-import { View } from "design-system/view";
-import { tw } from "design-system/tailwind";
+import { useIsForeground } from "app/hooks/use-is-foreground";
+import { track } from "app/lib/analytics";
 import { useRouter } from "app/navigation/use-router";
+
+import { Flash, FlashOff } from "design-system/icon";
 import { Image } from "design-system/image";
+import { Pressable } from "design-system/pressable-scale";
+import { tw } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 // Multi camera on Android not yet supported by CameraX
 // "Thanks for the request. Currently CameraX does not support the multi camera API but as more device adopt them, we will enable support at the appropriate time. Thanks."
@@ -58,6 +61,7 @@ type Props = {
   setCanPop: (canPop: boolean) => void;
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
+  postPhoto: (uri: string) => void;
 };
 
 export function Camera({
@@ -69,6 +73,7 @@ export function Camera({
   setCanPop,
   isLoading,
   setIsLoading,
+  postPhoto,
 }: Props) {
   const router = useRouter();
   const tabBarHeight = useBottomTabBarHeight();
@@ -265,6 +270,8 @@ export function Camera({
       // Start timer
       setIsLoading(true);
       burstCaptureTimer.start();
+
+      track("Photo Taken");
     } catch (e) {
       console.error("Failed to take photo!", e);
     }
@@ -413,6 +420,7 @@ export function Camera({
           takePhoto={takePhoto}
           cameraPosition={cameraPosition}
           setCameraPosition={setCameraPosition}
+          postPhoto={postPhoto}
         />
       </View>
     </View>

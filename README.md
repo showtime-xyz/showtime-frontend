@@ -1,6 +1,6 @@
 # Showtime Monorepo
 
-The Showtime UI universal react application powered by Expo, Next.js, Storybook and the Showtime internal design system in a monorepo.
+The Showtime app powered by Expo, Next.js, Storybook and Universal UI.
 
 You'll find included:
 
@@ -23,7 +23,7 @@ You'll find included:
 
 ## Architecture
 
-Introduction: [Universal Design System](https://axeldelafosse.com/blog/universal-design-system) by Axel Delafoss
+Introduction: [Universal Design System](https://axeldelafosse.com/blog/universal-design-system) by Axel Delafosse
 
 ### App
 
@@ -181,9 +181,33 @@ To verify, build and delete your local turbo cache with:
    ```
 1. Then run the same build again. If things are working properly, turbo should not execute tasks locally
 
-### Mobile Development Client
+## Mobile Development Client
 
 You can create a [development client](https://docs.expo.dev/clients/introduction/) in local or in the cloud.
+
+### Expo dev client
+
+- We're using expo dev client for development builds which allows us to add custom/third party native libraries while preserving the expo like developer experience. Read more about custom dev clients [here](https://docs.expo.dev/development/introduction/)
+- You only need to build and install custom dev client in below cases.
+
+1. If you don't have it installed on your phone or simulator
+2. If you make any changes on native side or add a new native library
+
+- To install dev client, plug your device and run below commands. This will install the dev client and start the javascript bundler.
+
+```
+// For iOS
+yarn ios -d
+
+// For android
+yarn android
+```
+
+- For subsequent developments, we can simple start javascript bundler, no need to build dev client again. Run below command to start the bundler.
+
+```
+yarn dev:expo
+```
 
 #### Local
 
@@ -193,8 +217,15 @@ Plug your device and build the app with Expo CLI:
 
 ```
 yarn ios -d
-yarn android
+yarn android -d
 ```
+
+iOS: if `yarn ios -d` doesn't detect your iPhone, make sure that you have compatible
+Xcode and iOS versions.
+
+Android: if you are on a Mac M1, please install the following JDK:
+`curl -s "https://get.sdkman.io" | bash`
+`sdk install java 11.0.14-zulu`
 
 #### Cloud
 
@@ -206,7 +237,7 @@ yarn build:development
 
 This is useful if you want to build the iOS app without a Mac, for example.
 
-### Design system
+### Design system (Universal UI)
 
 React Native for Web + Tailwind + Dripsy
 
@@ -274,6 +305,30 @@ Using `dotenv` for the Expo app. Next.js is automatically picking up the `.env.l
 - `.env.local` in `apps/next-react`
 - `.env.local` in `apps/next-react-native`
 
+## Release Cycle
+
+### Native
+
+#### Over The Air Update (EAS Update)
+
+1. Increment the patch version in the root `package.json`
+
+2. Run `yarn update:production` in `apps/expo`
+
+3. Close and reopen the production app twice to check the new update
+
+#### Native Build (EAS Build + EAS Submit)
+
+1. Increment the major version in the root `package.json`
+
+2. Run `yarn deploy:production` in `apps/expo`
+
+3. Submit the new build for review on [TestFlight](https://appstoreconnect.apple.com/apps/1606611688/testflight/ios) and [Google Play](https://play.google.com/console/u/0/developers/5865969718890177485/app-list?pli=1)
+
+### Web
+
+TODO: CI/CD with Vercel + GitHub Actions via `/promote` Slack command
+
 ## Notes
 
 Pro tip: you can add `tw` to `Tailwind CSS: Class Attributes` VS Code extension setting to get IntelliSense working.
@@ -303,9 +358,6 @@ git config blame.ignoreRevsFile .git-blame-ignore-revs
 
 ### Quick Style Guide
 
-// TODO: define this as a team. consistency is key
-
 - Filenames: lowercase and separated by dashes
-- Imports order: import third-party packages first, then our own packages.
-  Always import React and React Native first (if imported).
+- Prefer absolute imports
 - `export { Component }` instead of `export default Component`

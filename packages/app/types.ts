@@ -5,7 +5,7 @@ export type NFT = {
   like_count: number;
   token_name: string;
   token_description: string;
-  token_img_url: string;
+  token_img_url?: string;
   token_img_original_url: string;
   token_has_video: number;
   token_animation_url?: any;
@@ -19,10 +19,11 @@ export type NFT = {
   creator_address: string;
   creator_address_nonens: string;
   creator_img_url?: any;
+  token_created: Date;
   multiple_owners: number;
   owner_id: number;
   owner_name: string;
-  owner_address: string;
+  owner_address?: string;
   owner_img_url?: string;
   token_creator_followers_only: number;
   creator_username?: string;
@@ -43,6 +44,8 @@ export type NFT = {
   collection_slug: string;
   collection_img_url?: string;
   contract_is_creator: number;
+  multiple_owners_list: Array<OwnersListOwner>;
+  listing: Listing;
 };
 
 export type Creator = {
@@ -98,4 +101,76 @@ export interface Profile {
   notifications_last_opened: Date;
   has_onboarded: boolean;
   links: Link[];
+}
+
+type FollowType = {
+  profile_id: number;
+};
+
+export type UserType = {
+  data: {
+    follows: FollowType[];
+    profile: Profile;
+    likes_nft: number[];
+    likes_comment: number[];
+    comments: number[];
+  };
+};
+
+export type AuthenticationStatus =
+  | "IDLE"
+  | "REFRESHING"
+  | "AUTHENTICATING"
+  | "AUTHENTICATED"
+  | "UNAUTHENTICATED";
+
+export type WalletConnectionStatus =
+  | "IDLE"
+  | "CONNECTING_TO_WALLET"
+  | "CONNECTED_TO_WALLET"
+  | "FETCHING_NONCE"
+  | "FETCHED_NONCE"
+  | "SIGNING_PERSONAL_MESSAGE"
+  | "SIGNED_PERSONAL_MESSAGE"
+  | "LOGGING_IN"
+  | "LOGGED_IN"
+  | "EXPIRING_NONCE"
+  | "EXPIRED_NONCE"
+  | "CONNECTED"
+  | "ERRORED";
+
+export interface OwnersListOwner {
+  profile_id: number;
+  name: string;
+  img_url: string;
+  quantity: number;
+  username: string;
+  verified: boolean;
+  address: string;
+  wallet_address: string;
+}
+
+export interface Listing {
+  total_edition_quantity: number;
+  quantity: number;
+  min_price: number;
+  currency: string;
+  sale_identifier: number;
+  profile_id: number;
+  username: string;
+  name: string;
+  verified: number;
+  address: string;
+  img_url: string;
+  royalty_percentage: number;
+  listing_created: string;
+  sale_contract: string;
+  all_sellers: AllSellers[];
+}
+
+export interface AllSellers {
+  profile_id: number;
+  sale_contract: string;
+  sale_identifier: number;
+  quantity: number;
 }

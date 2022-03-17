@@ -5,13 +5,14 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { useRouter } from "app/navigation/use-router";
-import { ImagePickerButton } from "design-system/image-picker";
-import { Flip, Close, Check } from "design-system/icon";
-import { Pressable } from "design-system/pressable-scale";
-import { View } from "design-system/view";
 import { CircularProgress } from "app/components/circular-progress";
+import { useRouter } from "app/navigation/use-router";
+
+import { Flip, Close, Check } from "design-system/icon";
+import { ImagePickerButton } from "design-system/image-picker";
+import { Pressable } from "design-system/pressable-scale";
 import { tw } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 type Props = {
   photos: { uri: string }[];
@@ -22,6 +23,7 @@ type Props = {
   takePhoto: () => void;
   cameraPosition: "front" | "back";
   setCameraPosition: (cameraPosition: "front" | "back") => void;
+  postPhoto: (uri: string) => void;
 };
 
 export function CameraButtons({
@@ -33,6 +35,7 @@ export function CameraButtons({
   takePhoto,
   cameraPosition,
   setCameraPosition,
+  postPhoto,
 }: Props) {
   const router = useRouter();
 
@@ -69,7 +72,7 @@ export function CameraButtons({
       ) : (
         <ImagePickerButton
           onPick={(photo) => {
-            router.push(`/camera/create?uri=${photo.uri}`);
+            postPhoto(photo.uri);
           }}
           type="camera"
         />
@@ -109,7 +112,7 @@ export function CameraButtons({
             <Pressable
               tw="h-12 w-12 bg-white dark:bg-black rounded-full justify-center items-center z-10"
               onPress={() => {
-                router.push(`/camera/create?uri=${photos[0].uri}`);
+                postPhoto(photos[0].uri);
               }}
             >
               <Check

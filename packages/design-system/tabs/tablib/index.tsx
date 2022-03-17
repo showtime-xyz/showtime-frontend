@@ -1,5 +1,4 @@
 //@ts-nocheck- Todo fix typings
-
 import React, {
   useContext,
   ForwardedRef,
@@ -7,7 +6,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { tw } from "../../tailwind";
 import {
   Pressable,
   View,
@@ -22,8 +20,9 @@ import {
   FlatListProps,
   LayoutRectangle,
 } from "react-native";
+
+import { useIsFocused, useScrollToTop } from "@react-navigation/native";
 import PagerView from "react-native-pager-view";
-import { useIsFocused } from "@react-navigation/native";
 import Reanimated, {
   useSharedValue,
   useDerivedValue,
@@ -37,10 +36,19 @@ import Reanimated, {
   useAnimatedStyle,
   useAnimatedReaction,
 } from "react-native-reanimated";
-import { TabListProps, TabRootProps, TabsContextType } from "./types";
-import { useScrollToTop } from "@react-navigation/native";
-import { usePageScrollHandler } from "./usePagerScrollHandler";
+
 import { ViewabilityTrackerFlatlist } from "app/components/viewability-tracker-flatlist";
+import { flattenChildren } from "app/utilities";
+
+import { tw } from "design-system/tailwind";
+
+import {
+  TabListProps,
+  TabRootProps,
+  TabsContextType,
+  ExtendObject,
+} from "./types";
+import { usePageScrollHandler } from "./usePagerScrollHandler";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -80,7 +88,7 @@ const Root = ({
     let tabListChild;
     let restChildren = [];
     let headerChild;
-    React.Children.forEach(children, (c) => {
+    flattenChildren(children).forEach((c) => {
       if (React.isValidElement(c) && c) {
         //@ts-ignore
         if (c.type === List) {
@@ -159,7 +167,7 @@ const Root = ({
 const List = (props: TabListProps) => {
   let hasTrigger = false;
   // TODO: fix dynamically loading tab items. Currently we load tab items if tab trigger is present
-  React.Children.map(props.children, (c) => {
+  flattenChildren(props.children).forEach((c) => {
     if (React.isValidElement(c) && c && c.type === Trigger) {
       hasTrigger = true;
     }
@@ -172,19 +180,14 @@ const List = (props: TabListProps) => {
   return null;
 };
 
-const ListImpl = ({
-  children,
-  style,
-  contentContainerStyle,
-  ...props
-}: TabListProps) => {
+const ListImpl = ({ children, style, ...props }: TabListProps) => {
   const { index, tabItemLayouts } = useContext(TabsContext);
   const tabListRef = useRef<Reanimated.ScrollView>();
 
   const newChildren = React.useMemo(() => {
     let triggerIndex = -1;
 
-    return React.Children.map(children, (c) => {
+    return flattenChildren(children).map((c) => {
       // @ts-ignore - Todo - do better ts check here
       if (React.isValidElement(c) && c && c.type === Trigger) {
         triggerIndex++;
@@ -216,6 +219,14 @@ const ListImpl = ({
     prevIndex.value = index.value;
   }, [windowWidth]);
 
+  useScrollToTop(
+    React.useRef({
+      scrollToTop: () => {
+        runOnUI(scrollTo)(0);
+      },
+    })
+  );
+
   const styles = React.useMemo(() => {
     return [tw.style(`bg-white dark:bg-gray-900`), style];
   }, [style]);
@@ -230,16 +241,6 @@ const ListImpl = ({
       showsHorizontalScrollIndicator={false}
       horizontal
       style={styles}
-      contentContainerStyle={useMemo(
-        () =>
-          StyleSheet.flatten([
-            {
-              paddingHorizontal: 16,
-            },
-            contentContainerStyle,
-          ]),
-        [contentContainerStyle]
-      )}
       {...props}
     >
       {newChildren}
@@ -261,12 +262,12 @@ const Pager = ({ children }) => {
   } = useContext(TabsContext);
 
   const [mountedIndices, setMountedIndices] = React.useState(
-    lazy ? [initialIndex] : React.Children.map(children, (_c, i) => i)
+    lazy ? [initialIndex] : flattenChildren(children).map((_c, i) => i)
   );
 
   const newChildren = React.useMemo(
     () =>
-      React.Children.map(children, (c, i) => {
+      flattenChildren(children).map((c, i) => {
         const shouldLoad = mountedIndices.includes(i);
         return (
           // why use context if we can clone the children. do we need better composition here?
@@ -374,7 +375,9 @@ const Trigger = React.forwardRef(
   }
 );
 
-function makeScrollableComponent<K extends object, T extends any>(Comp: T) {
+function makeScrollableComponent<K extends ExtendObject, T extends any>(
+  Comp: T
+) {
   return React.forwardRef((props: K, ref: ForwardedRef<T>) => {
     const {
       headerHeight,
@@ -388,6 +391,7 @@ function makeScrollableComponent<K extends object, T extends any>(Comp: T) {
     const scrollY = useSharedValue(0);
     const topHeight = headerHeight + tabListHeight;
     const translateYOffset = Platform.OS === "ios" ? topHeight : 0;
+    const minHeight = props.minHeight ?? windowHeight + topHeight;
 
     const scrollHandler = useAnimatedScrollHandler({
       onBeginDrag() {
@@ -397,7 +401,7 @@ function makeScrollableComponent<K extends object, T extends any>(Comp: T) {
         requestOtherViewsToSyncTheirScrollPosition.value = false;
       },
       onScroll(e) {
-        // Todo - this is a hack to make sure we change header when listening current flatlist scrolls. Other flatlist scroll events may be triggered as we try to adjust their scroll positions to accomodate header
+        // Todo - this is a hack to make sure we change header when listening current flatlist scrolls. Other flatlist scroll events may be triggered as we try to adjust their scroll positions to accommodate header
         if (index.value === elementIndex) {
           scrollY.value = e.contentOffset.y;
           if (Platform.OS === "ios") {
@@ -479,7 +483,7 @@ function makeScrollableComponent<K extends object, T extends any>(Comp: T) {
         contentContainerStyle={useMemo(
           () => ({
             paddingTop: Platform.OS === "android" ? topHeight : 0,
-            minHeight: windowHeight + topHeight,
+            minHeight,
           }),
           [topHeight]
         )}
@@ -497,8 +501,12 @@ const TabScrollView = makeScrollableComponent<
 const AnimatedFlatList = Reanimated.createAnimatedComponent(
   ViewabilityTrackerFlatlist
 );
+
+interface ExtendedFlatListProps extends FlatListProps<any> {
+  minHeight?: number;
+}
 const TabFlatList = makeScrollableComponent<
-  FlatListProps<any>,
+  ExtendedFlatListProps,
   typeof AnimatedFlatList
 >(AnimatedFlatList);
 

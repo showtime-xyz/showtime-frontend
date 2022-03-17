@@ -1,7 +1,7 @@
 {
   "build": {
     "production": {
-      "releaseChannel": "production",
+      "channel": "production",
       "distribution": "store",
       "android": {
         "buildType": "app-bundle",
@@ -16,7 +16,7 @@
       }
     },
     "preview": {
-      "releaseChannel": "staging",
+      "channel": "staging",
       "distribution": "internal",
       "android": {
         "buildType": "apk",
@@ -42,6 +42,18 @@
       "node": "14.18.1",
       "cache": {
         "key": "showtime-2"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "./service-account-key.json"
+      },
+      "ios": {
+        "appName": "Showtime: NFT Social Network",
+        "ascAppId": "1606611688",
+        "appleId": "axeldelafosse@gmail.com"
       }
     }
   },

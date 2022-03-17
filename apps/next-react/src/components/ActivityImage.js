@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef, useContext } from "react";
-import ReactPlayer from "react-player";
-import mixpanel from "mixpanel-browser";
-import LikeButton from "./LikeButton";
-import CommentButton from "./CommentButton";
+
 import AppContext from "@/context/app-context";
+import mixpanel from "mixpanel-browser";
+import ReactPlayer from "react-player";
+
+import CommentButton from "./CommentButton";
 import OrbitIcon from "./Icons/OrbitIcon";
+import LikeButton from "./LikeButton";
 
 export default function ActivityImage({
   nft,

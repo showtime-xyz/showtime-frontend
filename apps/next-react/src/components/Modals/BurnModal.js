@@ -1,19 +1,21 @@
+import { useRef, useState } from "react";
+import { Fragment } from "react";
+
+import minterAbi from "@/data/ShowtimeMT.json";
+import useFlags, { FLAGS } from "@/hooks/useFlags";
 import useProfile from "@/hooks/useProfile";
+import backend from "@/lib/backend";
 import { getBiconomy } from "@/lib/biconomy";
 import getWeb3Modal from "@/lib/web3Modal";
 import { Dialog, Transition } from "@headlessui/react";
+import { ExclamationIcon } from "@heroicons/react/outline";
 import { ethers } from "ethers";
 import { useTheme } from "next-themes";
-import { useRef, useState } from "react";
-import { Fragment } from "react";
+import useSWR from "swr";
+
+import PolygonIcon from "../Icons/PolygonIcon";
 import XIcon from "../Icons/XIcon";
 import Button from "../UI/Buttons/Button";
-import minterAbi from "@/data/ShowtimeMT.json";
-import PolygonIcon from "../Icons/PolygonIcon";
-import { ExclamationIcon } from "@heroicons/react/outline";
-import useSWR from "swr";
-import backend from "@/lib/backend";
-import useFlags, { FLAGS } from "@/hooks/useFlags";
 
 const MODAL_STATES = {
   GENERAL: "general",

@@ -1,8 +1,14 @@
 import type React from "react";
+
 import type { Props as PressableScaleProps } from "design-system/pressable-scale";
 import type { TW } from "design-system/tailwind/types";
 
-export type ButtonVariant = "primary" | "danger" | "tertiary" | "secondary";
+export type ButtonVariant =
+  | "primary"
+  | "danger"
+  | "tertiary"
+  | "secondary"
+  | "text";
 
 export type ButtonSize = "small" | "regular";
 
@@ -13,8 +19,14 @@ export type ButtonProps = {
    */
   variant?: ButtonVariant;
   children?: React.ReactNode | string;
+  asChild?: boolean;
 } & PressableScaleProps &
-  Partial<Pick<BaseButtonProps, "tw" | "labelTW" | "iconOnly" | "size">>;
+  Partial<
+    Pick<
+      BaseButtonProps,
+      "tw" | "labelTW" | "iconOnly" | "size" | "accentColor"
+    >
+  >;
 
 export type BaseButtonProps = {
   /**
@@ -48,10 +60,20 @@ export type BaseButtonProps = {
    */
   iconOnly: boolean;
   /**
+   * Defines the button icon and text colors.
+   * @default [black, white]
+   */
+  accentColor?: string | string[];
+  /**
    * Defines the button size.
    * @default small
    */
   size: ButtonSize;
 
   children?: React.ReactNode | string;
+
+  /**
+   * Renders the child of button as the Button
+   */
+  asChild?: boolean;
 } & PressableScaleProps;

@@ -1,6 +1,8 @@
+import { Fragment } from "react";
+
 import { classNames } from "@/lib/utilities";
 import { Listbox, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+
 import ChevronDown from "../Icons/ChevronDown";
 
 // Expects an array of objects with a label and a value properties

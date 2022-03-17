@@ -1,9 +1,10 @@
 import React from "react";
+
 import { Meta } from "@storybook/react";
 
 import { Checkbox } from "../checkbox";
-import { View } from "../view";
 import { Label } from "../label";
+import { View } from "../view";
 
 export default {
   component: Checkbox,

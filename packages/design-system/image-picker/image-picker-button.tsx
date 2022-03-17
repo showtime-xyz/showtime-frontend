@@ -1,6 +1,7 @@
-import { Pressable } from "design-system/pressable-scale";
 import { Image } from "design-system/icon";
+import { Pressable } from "design-system/pressable-scale";
 import { tw } from "design-system/tailwind";
+
 import { pickImage } from "./pick-image";
 
 export function ImagePickerButton({

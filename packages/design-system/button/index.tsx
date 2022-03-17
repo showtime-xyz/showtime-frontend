@@ -1,5 +1,12 @@
+import { useMemo } from "react";
+
+import { tw } from "../tailwind";
 import { BaseButton } from "./button-base";
-import { CONTAINER_BACKGROUND_MAPPER, ICON_COLOR_TW_MAPPER } from "./constants";
+import {
+  ACCENT_COLOR,
+  CONTAINER_BACKGROUND_MAPPER,
+  ICON_COLOR_TW_MAPPER,
+} from "./constants";
 import type { ButtonProps } from "./types";
 
 export { ButtonLabel } from "./button-label";
@@ -7,33 +14,23 @@ export { ButtonLabel } from "./button-label";
 export function Button({
   tw = "",
   variant = "primary",
-  size = "small",
-  iconOnly = false,
   ...props
 }: ButtonProps) {
   const _tw = typeof tw === "string" ? tw ?? "" : tw?.join(" ");
 
   switch (variant) {
     case "primary":
-      return (
-        <PrimaryButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
-      );
+      return <PrimaryButton tw={_tw} {...props} />;
     case "danger":
-      return (
-        <DangerButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
-      );
+      return <DangerButton tw={_tw} {...props} />;
     case "tertiary":
-      return (
-        <TertiaryButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
-      );
+      return <TertiaryButton tw={_tw} {...props} />;
     case "secondary":
-      return (
-        <SecondaryButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
-      );
+      return <SecondaryButton tw={_tw} {...props} />;
+    case "text":
+      return <TextButton tw={_tw} {...props} />;
     default:
-      return (
-        <PrimaryButton tw={_tw} size={size} iconOnly={iconOnly} {...props} />
-      );
+      return <PrimaryButton tw={_tw} {...props} />;
   }
 }
 
@@ -77,6 +74,39 @@ export function DangerButton(props: ButtonProps) {
       labelTW="text-white"
       iconColor={ICON_COLOR_TW_MAPPER.danger}
       backgroundColors={CONTAINER_BACKGROUND_MAPPER.danger}
+    />
+  );
+}
+
+export function TextButton({
+  labelTW: _labelTW,
+  accentColor,
+  ...props
+}: ButtonProps) {
+  const labelTW = useMemo(
+    () =>
+      accentColor
+        ? typeof accentColor === "string"
+          ? `text-[${accentColor}]`
+          : `text-[${accentColor[0]}] dark:text-[${accentColor[1]}]`
+        : `text-[${ICON_COLOR_TW_MAPPER.text[0]}] dark:text-[${ICON_COLOR_TW_MAPPER.text[1]}]`,
+    [_labelTW, accentColor]
+  );
+  const iconColor = useMemo(
+    () =>
+      accentColor
+        ? typeof accentColor === "string"
+          ? [accentColor, accentColor]
+          : accentColor
+        : ICON_COLOR_TW_MAPPER.text,
+    [accentColor]
+  );
+  return (
+    <BaseButton
+      {...(props as any)}
+      labelTW={labelTW}
+      iconColor={iconColor}
+      backgroundColors={undefined}
     />
   );
 }

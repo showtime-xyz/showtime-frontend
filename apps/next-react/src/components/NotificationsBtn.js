@@ -1,6 +1,14 @@
 import { useState, useEffect, Fragment } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Link from "next/link";
+
+import BellIcon from "@/components/Icons/BellIcon";
+import ModalUserList from "@/components/ModalUserList";
+import useProfile from "@/hooks/useProfile";
+import axios from "@/lib/axios";
+import {
+  getNotificationInfo,
+  DEFAULT_PROFILE_PIC,
+  CHAIN_IDENTIFIERS,
+} from "@/lib/constants";
 import {
   faComment,
   faHeart,
@@ -8,19 +16,13 @@ import {
   faAt,
   faMoneyBill,
 } from "@fortawesome/free-solid-svg-icons";
-import { formatDistanceToNowStrict } from "date-fns";
-import {
-  getNotificationInfo,
-  DEFAULT_PROFILE_PIC,
-  CHAIN_IDENTIFIERS,
-} from "@/lib/constants";
-import ModalUserList from "@/components/ModalUserList";
-import axios from "@/lib/axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Popover, Transition } from "@headlessui/react";
+import { formatDistanceToNowStrict } from "date-fns";
+import Link from "next/link";
 import useSWRInfinite from "swr/infinite";
+
 import useAuth from "../hooks/useAuth";
-import useProfile from "@/hooks/useProfile";
-import BellIcon from "@/components/Icons/BellIcon";
 
 const NOTIFICATIONS_PER_PAGE = 7;
 

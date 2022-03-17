@@ -1,6 +1,6 @@
+import handler, { middleware } from "@/lib/api-handler";
 import axios from "@/lib/axios";
 import { formatAddressShort } from "@/lib/utilities";
-import handler, { middleware } from "@/lib/api-handler";
 
 export default handler()
   .use(middleware.auth)

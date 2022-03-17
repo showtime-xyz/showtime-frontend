@@ -55,8 +55,7 @@ module.exports = {
         sm2: [".875rem", "1.7rem"],
       },
       fontFamily: {
-        afro: ["Afronaut"],
-        tomato: ['"Tomato Grotesk"'],
+        space: "Space Grotesk",
         sans: ['"Inter"', ...defaultTheme.fontFamily.sans],
       },
       whitespace: {

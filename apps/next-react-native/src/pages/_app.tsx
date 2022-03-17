@@ -1,32 +1,54 @@
-import "../styles/styles.css";
+import { useEffect } from "react";
 
+// import { Partytown } from "@builder.io/partytown/react";
+import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
+import { DripsyProvider } from "dripsy";
+import { AppProps } from "next/app";
+import Head from "next/head";
+import Script from "next/script";
 import "raf/polyfill";
-
-import { useState, useEffect } from "react";
-// import { useRouter } from 'next/router'
 // import { enableFreeze } from 'react-native-screens'
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import Head from "next/head";
-import { AppProps } from "next/app";
-import { DripsyProvider } from "dripsy";
+import { SWRConfig } from "swr";
 import { useDeviceContext } from "twrnc";
-import { SWRConfig, useSWRConfig } from "swr";
 
-import { accessTokenManager } from "app/lib/access-token-manager";
-import { tw } from "design-system/tailwind";
-import { theme } from "design-system/theme";
+import { AppContext } from "app/context/app-context";
+import { track } from "app/lib/analytics";
+import { isServer } from "app/lib/is-server";
 import { NavigationProvider } from "app/navigation";
 import { NextTabNavigator } from "app/navigation/next-tab-navigator";
-import { isServer } from "app/lib/is-server";
-import { AppContext } from "app/context/app-context";
-import { setLogout } from "app/lib/logout";
-import { mixpanel } from "app/lib/mixpanel";
-import { deleteCache } from "app/lib/delete-cache";
-import { useRouter } from "app/navigation/use-router";
-import { useUser } from "app/hooks/use-user";
-import { deleteRefreshToken } from "app/lib/refresh-token";
+import { AuthProvider } from "app/providers/auth-provider";
+import { UserProvider } from "app/providers/user-provider";
+import { Web3Provider } from "app/providers/web3-provider";
+
+import { tw } from "design-system/tailwind";
+import { theme } from "design-system/theme";
+import { ToastProvider } from "design-system/toast";
+
+import "../styles/styles.css";
 
 // enableFreeze(true)
+
+// Create a GrowthBook instance
+const growthbook = new GrowthBook({
+  trackingCallback: (experiment, result) => {
+    track("Experiment Viewed", {
+      experiment_id: experiment.key,
+      variant_id: result.variationId,
+    });
+  },
+});
+
+const RUDDERSTACK_WRITE_KEY = process.env.NEXT_PUBLIC_RUDDERSTACK_WRITE_KEY;
+const RUDDERSTACK_DATA_PLANE_URL = `https://tryshowtimjtc.dataplane.rudderstack.com`;
+
+function renderEmptyAnalyticsSnippet() {
+  return `rudderanalytics=window.rudderanalytics=[];for(var methods=["load","page","track","identify","alias","group","ready","reset","getAnonymousId","setAnonymousId"],i=0;i<methods.length;i++){var method=methods[i];rudderanalytics[method]=function(d){return function(){rudderanalytics.push([d,...arguments])}}(method)}rudderanalytics.load("${RUDDERSTACK_WRITE_KEY}","${RUDDERSTACK_DATA_PLANE_URL}",{sendAdblockPage:!1,sendAdblockPageOptions:{integrations:{All:!1,Amplitude:!1}},logLevel:"ERROR"});`;
+}
+
+function renderAnalyticsSnippet() {
+  return `!function(){var e=window.rudderanalytics=window.rudderanalytics||[];e.methods=["load","page","track","identify","alias","group","ready","reset","getAnonymousId","setAnonymousId"],e.factory=function(t){return function(){var r=Array.prototype.slice.call(arguments);return r.unshift(t),e.push(r),e}};for(var t=0;t<e.methods.length;t++){var r=e.methods[t];e[r]=e.factory(r)}e.loadJS=function(e,t){var r=document.createElement("script");r.type="text/javascript",r.async=!0,r.src="https://cdn.rudderlabs.com/v1/rudder-analytics.min.js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(r,a)},e.loadJS(),e.load(${RUDDERSTACK_WRITE_KEY},${RUDDERSTACK_DATA_PLANE_URL}),e.page()}();`;
+}
 
 function localStorageProvider() {
   const map = new Map(JSON.parse(localStorage.getItem("app-cache")) || []);
@@ -44,25 +66,9 @@ function AppContextProvider({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
-  const { user } = useUser();
-  const router = useRouter();
-  const { mutate } = useSWRConfig();
+  // TODO: color scheme
 
-  const [web3, setWeb3] = useState(null);
-  const injectedGlobalContext = {
-    web3,
-    setWeb3,
-    logOut: () => {
-      deleteCache();
-      deleteRefreshToken();
-      accessTokenManager.deleteAccessToken();
-      mutate(null);
-      setWeb3(null);
-      mixpanel.track("Logout");
-      // Triggers all event listeners for this key to fire. Used to force cross tab logout.
-      setLogout(Date.now().toString());
-    },
-  };
+  const injectedGlobalContext = {};
 
   return (
     <AppContext.Provider value={injectedGlobalContext}>
@@ -73,6 +79,19 @@ function AppContextProvider({
 
 export default function App({ Component, pageProps }: AppProps) {
   useDeviceContext(tw, { withDeviceColorScheme: false });
+
+  useEffect(() => {
+    // Load feature definitions from API
+    fetch(process.env.NEXT_PUBLIC_GROWTHBOOK_FEATURES_ENDPOINT)
+      .then((res) => res.json())
+      .then((json) => {
+        growthbook.setFeatures(json.features);
+      });
+
+    // growthbook.setAttributes({
+    //   "id": "foo",
+    // })
+  }, []);
 
   return (
     <>
@@ -85,20 +104,49 @@ export default function App({ Component, pageProps }: AppProps) {
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
           name="viewport"
         />
+
+        {/* Analytics */}
+        <script
+          dangerouslySetInnerHTML={{ __html: renderEmptyAnalyticsSnippet() }}
+        />
+        {/* <Partytown debug={true} forward={["dataLayer.push"]} /> */}
+        <Script
+          // type="text/partytown"
+          strategy="lazyOnload"
+          dangerouslySetInnerHTML={{
+            __html: renderAnalyticsSnippet(),
+          }}
+        />
       </Head>
       <DripsyProvider theme={theme}>
         <SafeAreaProvider>
-          <NavigationProvider>
-            <SWRConfig
-              value={{
-                provider: isServer ? () => new Map() : localStorageProvider,
-              }}
-            >
-              <AppContextProvider>
-                <NextTabNavigator Component={Component} pageProps={pageProps} />
-              </AppContextProvider>
-            </SWRConfig>
-          </NavigationProvider>
+          <ToastProvider>
+            <NavigationProvider>
+              <SWRConfig
+                value={{
+                  provider: isServer ? () => new Map() : localStorageProvider,
+                }}
+              >
+                <Web3Provider>
+                  <AppContextProvider>
+                    <AuthProvider>
+                      <UserProvider>
+                        <GrowthBookProvider growthbook={growthbook}>
+                          {
+                            // TODO: use RootStackNavigator instead?
+                          }
+                          <NextTabNavigator
+                            Component={Component}
+                            pageProps={pageProps}
+                          />
+                        </GrowthBookProvider>
+                      </UserProvider>
+                    </AuthProvider>
+                  </AppContextProvider>
+                </Web3Provider>
+              </SWRConfig>
+            </NavigationProvider>
+          </ToastProvider>
         </SafeAreaProvider>
       </DripsyProvider>
     </>

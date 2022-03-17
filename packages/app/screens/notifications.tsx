@@ -1,17 +1,30 @@
-import { View, Text } from "design-system";
+import { Suspense } from "react";
+import { Platform } from "react-native";
 
-function NotificationsScreen() {
+import { useHeaderHeight } from "@react-navigation/elements";
+
+import { withColorScheme } from "app/components/memo-with-theme";
+import { Notifications } from "app/components/notifications";
+
+import { View, Spinner } from "design-system";
+
+const NotificationsScreen = withColorScheme(() => {
+  const headerHeight = useHeaderHeight();
+
   return (
-    <View tw="p-4">
-      <Text variant="text-xl" tw="font-bold text-black dark:text-white">
-        Notifications
-      </Text>
-      <View tw="h-3" />
-      <Text tw="font-semibold text-gray-600 dark:text-gray-400">
-        🚧 Coming soon
-      </Text>
-    </View>
+    <>
+      {Platform.OS !== "android" && <View tw={`h-[${headerHeight}px]`} />}
+      <Suspense
+        fallback={
+          <View tw="mt-10 items-center justify-center">
+            <Spinner size="small" />
+          </View>
+        }
+      >
+        <Notifications />
+      </Suspense>
+    </>
   );
-}
+});
 
 export { NotificationsScreen };

@@ -1,9 +1,13 @@
 import { Children, cloneElement, useMemo } from "react";
+
 import { useSharedValue, useAnimatedStyle } from "react-native-reanimated";
-import { useIsDarkMode } from "../hooks";
+import Animated from "react-native-reanimated";
+
 import { Pressable } from "design-system/pressable-scale";
+import { tw as tailwind } from "design-system/tailwind";
 import { Text } from "design-system/text";
 
+import { useIsDarkMode } from "../hooks";
 import {
   CONTAINER_HEIGHT_TW,
   CONTAINER_ICON_PADDING_TW,
@@ -13,17 +17,17 @@ import {
   LABEL_SIZE_TW,
   LABEL_WEIGHT_TW,
 } from "./constants";
-
 import type { BaseButtonProps } from "./types";
 
 export function BaseButton({
-  size,
+  size = "small",
   tw = "",
   labelTW = "",
   backgroundColors,
-  iconOnly,
+  iconOnly = false,
   iconColor = ["white", "black"],
   children,
+  asChild,
   ...props
 }: BaseButtonProps) {
   //#region variables
@@ -44,12 +48,13 @@ export function BaseButton({
   );
   const containerAnimatedStyle = useAnimatedStyle(
     () => ({
-      backgroundColor:
-        backgroundColors![animatedPressed.value ? "pressed" : "default"][
-          isDarkMode ? 1 : 0
-        ],
+      backgroundColor: backgroundColors
+        ? backgroundColors[animatedPressed.value ? "pressed" : "default"][
+            isDarkMode ? 1 : 0
+          ]
+        : "transparent",
     }),
-    [animatedPressed, isDarkMode]
+    [backgroundColors, animatedPressed, isDarkMode]
   );
   const labelStyle = useMemo(
     () => [
@@ -71,7 +76,10 @@ export function BaseButton({
 
       // @ts-ignore
       return cloneElement(child, {
-        color: iconColor[isDarkMode ? 1 : 0],
+        color:
+          typeof iconColor === "string"
+            ? iconColor
+            : iconColor[isDarkMode ? 1 : 0],
         ...iconSize,
         ...child.props,
         tw: [
@@ -85,11 +93,28 @@ export function BaseButton({
       });
     });
   }, [size, iconColor, labelStyle, children, isDarkMode]);
+
+  if (asChild) {
+    return (
+      <Animated.View
+        style={useMemo(
+          () =>
+            backgroundColors
+              ? [containerAnimatedStyle, tailwind.style(containerStyle)]
+              : tailwind.style(containerStyle),
+          [backgroundColors, containerAnimatedStyle, containerStyle]
+        )}
+      >
+        {renderChildren}
+      </Animated.View>
+    );
+  }
+
   return (
     <Pressable
       {...props}
       tw={containerStyle}
-      style={containerAnimatedStyle}
+      style={backgroundColors ? containerAnimatedStyle : undefined}
       pressedValue={animatedPressed}
       children={renderChildren}
     />

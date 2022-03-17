@@ -1,6 +1,7 @@
-import { View } from "design-system/view";
-import { Text } from "design-system/text";
 import type { NFT } from "app/types";
+
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 type Props = {
   nft?: NFT;

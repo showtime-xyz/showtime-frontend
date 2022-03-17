@@ -1,34 +1,36 @@
-import { Dialog, Transition } from "@headlessui/react";
-import Button from "../Buttons/Button";
 import { useState, Fragment } from "react";
-import Dropdown from "../Dropdown";
 import { useMemo } from "react";
-import { ethers } from "ethers";
-import { getBiconomy } from "@/lib/biconomy";
-import getWeb3Modal from "@/lib/web3Modal";
-import minterAbi from "@/data/ShowtimeMT.json";
-import marketplaceAbi from "@/data/ShowtimeV1Market.json";
-import PolygonIcon from "@/components/Icons/PolygonIcon";
-import TwitterIcon from "@/components/Icons/Social/TwitterIcon";
 import { useRef } from "react";
 import { useEffect } from "react";
-import confetti from "canvas-confetti";
-import { useTheme } from "next-themes";
-import useProfile from "@/hooks/useProfile";
-import { ExclamationIcon } from "@heroicons/react/outline";
+
+import BadgeIcon from "@/components/Icons/BadgeIcon";
+import PolygonIcon from "@/components/Icons/PolygonIcon";
+import TwitterIcon from "@/components/Icons/Social/TwitterIcon";
 import XIcon from "@/components/Icons/XIcon";
-import { DEFAULT_PROFILE_PIC, LIST_CURRENCIES } from "@/lib/constants";
-import useSWR from "swr";
+import minterAbi from "@/data/ShowtimeMT.json";
+import marketplaceAbi from "@/data/ShowtimeV1Market.json";
+import useFlags, { FLAGS } from "@/hooks/useFlags";
+import useProfile from "@/hooks/useProfile";
 import backend from "@/lib/backend";
+import { getBiconomy } from "@/lib/biconomy";
+import { DEFAULT_PROFILE_PIC, LIST_CURRENCIES } from "@/lib/constants";
+import { formatPrice } from "@/lib/format-price";
+import { preventExponent } from "@/lib/prevent-exponent";
 import {
   formatAddressShort,
   parseBalance,
   truncateWithEllipses,
 } from "@/lib/utilities";
-import BadgeIcon from "@/components/Icons/BadgeIcon";
-import { preventExponent } from "@/lib/prevent-exponent";
-import { formatPrice } from "@/lib/format-price";
-import useFlags, { FLAGS } from "@/hooks/useFlags";
+import getWeb3Modal from "@/lib/web3Modal";
+import { Dialog, Transition } from "@headlessui/react";
+import { ExclamationIcon } from "@heroicons/react/outline";
+import confetti from "canvas-confetti";
+import { ethers } from "ethers";
+import { useTheme } from "next-themes";
+import useSWR from "swr";
+
+import Button from "../Buttons/Button";
+import Dropdown from "../Dropdown";
 
 const MODAL_PAGES = {
   GENERAL: "general",
@@ -43,7 +45,7 @@ const MODAL_PAGES = {
  * Listing price range is fixed across currencies.
  * As currency list grows this can be a candidate to be refactored into LIST_CURRENCIES
  */
-const MAX_LIST_PRICE = 1000;
+const MAX_LIST_PRICE = 9_999_999_999;
 
 const ListModal = ({ open, onClose, onSuccess = () => null, token }) => {
   const { myProfile } = useProfile();

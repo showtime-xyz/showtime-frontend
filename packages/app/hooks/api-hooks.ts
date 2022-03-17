@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
 import useSWR, { useSWRConfig } from "swr";
 
-import { NFT, Profile } from "../types";
-import { useInfiniteListQuerySWR, fetcher } from "./use-infinite-list-query";
-import { useUser } from "./use-user";
 import { axios } from "app/lib/axios";
 import { mixpanel } from "app/lib/mixpanel";
 import { useRouter } from "app/navigation/use-router";
+
+import { NFT, Profile } from "../types";
+import { useAuth } from "./auth/use-auth";
+import { useInfiniteListQuerySWR, fetcher } from "./use-infinite-list-query";
 
 export const useActivity = ({
   typeId,
@@ -15,16 +17,16 @@ export const useActivity = ({
   typeId: number;
   limit?: number;
 }) => {
-  const { isAuthenticated } = useUser();
+  const { accessToken } = useAuth();
 
   const activityURLFn = useCallback(
     (index) => {
       const url = `/v2/${
-        isAuthenticated ? "activity_with_auth" : "activity_without_auth"
+        accessToken ? "activity_with_auth" : "activity_without_auth"
       }?page=${index + 1}&type_id=${typeId}&limit=${limit}`;
       return url;
     },
-    [typeId, limit, isAuthenticated]
+    [typeId, limit, accessToken]
   );
 
   const queryState = useInfiniteListQuerySWR<any>(activityURLFn);
@@ -32,9 +34,23 @@ export const useActivity = ({
   const newData = useMemo(() => {
     let newData: any = [];
     if (queryState.data) {
-      queryState.data.forEach((p) => {
-        if (p) {
-          newData = newData.concat(p.data);
+      // filter if duplicate data shows up in pagingation. Flatlist starts acting weird on receiving duplicates
+      // It can happen if database is updating and we are fetching new data.
+      // As new post shows on top, fetching next page can have same post as previous page.
+      // TODO: Cursor based pagination in API?
+      queryState.data.forEach((page) => {
+        if (page) {
+          page.data = page.data.filter((d: any) => {
+            const v = newData.find((x: any) => x.id === d.id);
+            if (v === undefined) {
+              return true;
+            }
+            if (__DEV__) {
+              console.log("duplicate record in feed ", d.id);
+            }
+            return false;
+          });
+          newData = newData.concat(page.data);
         }
       });
     }
@@ -80,44 +96,29 @@ export const useTrendingNFTS = ({ days }: { days: number }) => {
   }, [days]);
 
   const queryState = useInfiniteListQuerySWR<any>(trendingCreatorsUrlFn);
-  const limit = 15;
-  const [data, setData] = useState<any>(
-    queryState.data && queryState.data[0]
-      ? queryState.data[0].data.slice(0, limit)
-      : []
-  );
-  const currentPage = useRef(0);
 
-  useEffect(() => {
-    if (queryState.data && queryState.data[0] && data.length === 0) {
-      const data = queryState.data[0].data;
-      const nextData = data.slice(0, limit);
-      currentPage.current = 1;
-      setData(nextData);
+  const newData = useMemo(() => {
+    let newData: NFT[] = [];
+    if (queryState.data) {
+      queryState.data.forEach((p) => {
+        if (p) {
+          newData = newData.concat(p.data);
+        }
+      });
     }
+    return newData;
   }, [queryState.data]);
-
   return {
     ...queryState,
-    data,
-    fetchMore: () => {
-      if (
-        queryState.data &&
-        queryState.data[0] &&
-        data.length < queryState.data[0].data.length
-      ) {
-        const data = queryState.data[0].data;
-        const nextData = data.slice(currentPage.current * limit, limit);
-        currentPage.current++;
-        setData([...data, ...nextData]);
-      }
-    },
+    data: newData,
+    fetchMore: () => {},
   };
 };
 
+export const USER_PROFILE_KEY = "/v4/profile_server/";
 export const useUserProfile = ({ address }: { address?: string }) => {
   const { data, error } = useSWR<{ data: UserProfile }>(
-    address ? "/v4/profile_server/" + address : null,
+    address ? USER_PROFILE_KEY + address : null,
     fetcher
   );
 
@@ -255,23 +256,25 @@ type MyInfo = {
     likes_nft: number[];
     likes_comment: any[];
     comments: number[];
+    blocked_profile_ids: number[];
+    notifications_last_opened: string | null;
   };
 };
 
 export const useMyInfo = () => {
-  const { isAuthenticated } = useUser();
+  const { accessToken } = useAuth();
   const queryKey = "/v2/myinfo";
   const { mutate } = useSWRConfig();
   const router = useRouter();
 
   const { data, error } = useSWR<MyInfo>(
-    isAuthenticated ? queryKey : null,
+    accessToken ? queryKey : null,
     fetcher
   );
 
   const follow = useCallback(
     async (profileId: number) => {
-      if (!isAuthenticated) {
+      if (!accessToken) {
         mixpanel.track("Follow but logged out");
         router.push("/login");
         return;
@@ -290,7 +293,11 @@ export const useMyInfo = () => {
         );
 
         try {
-          await axios({ url: `/v2/follow/${profileId}`, method: "POST" });
+          await axios({
+            url: `/v2/follow/${profileId}`,
+            method: "POST",
+            data: {},
+          });
           mixpanel.track("Followed profile");
         } catch (err) {
           console.error(err);
@@ -299,7 +306,7 @@ export const useMyInfo = () => {
         mutate(queryKey);
       }
     },
-    [isAuthenticated, data]
+    [accessToken, data]
   );
 
   const unfollow = useCallback(
@@ -319,7 +326,11 @@ export const useMyInfo = () => {
         );
 
         try {
-          await axios({ url: `/v2/unfollow/${profileId}`, method: "POST" });
+          await axios({
+            url: `/v2/unfollow/${profileId}`,
+            method: "POST",
+            data: {},
+          });
           mixpanel.track("Unfollowed profile");
         } catch (err) {
           console.error(err);
@@ -342,57 +353,70 @@ export const useMyInfo = () => {
 
   const like = useCallback(
     async (nftId: number) => {
-      if (!isAuthenticated) {
+      if (!accessToken) {
         router.push("/login");
         // TODO: perform the action post login
         return false;
       }
 
       if (data) {
-        mutate(
-          queryKey,
-          {
-            data: {
-              ...data.data,
-              likes_nft: [...data.data.likes_nft, nftId],
+        try {
+          mutate(
+            queryKey,
+            {
+              data: {
+                ...data.data,
+                likes_nft: [...data.data.likes_nft, nftId],
+              },
             },
-          },
-          false
-        );
+            false
+          );
 
-        await axios({
-          url: `/v3/like/${nftId}`,
-          method: "POST",
-        });
+          await axios({
+            url: `/v3/like/${nftId}`,
+            method: "POST",
+            data: {},
+          });
 
-        mutate(queryKey);
+          mutate(queryKey);
 
-        return true;
+          return true;
+        } catch (error) {
+          mutate(queryKey);
+          return false;
+        }
       }
     },
-    [data, isAuthenticated]
+    [data, accessToken]
   );
 
   const unlike = useCallback(
     async (nftId: number) => {
       if (data) {
-        mutate(
-          queryKey,
-          {
-            data: {
-              ...data.data,
-              likes_nft: data.data.likes_nft.filter((id) => id !== nftId),
+        try {
+          mutate(
+            queryKey,
+            {
+              data: {
+                ...data.data,
+                likes_nft: data.data.likes_nft.filter((id) => id !== nftId),
+              },
             },
-          },
-          false
-        );
+            false
+          );
 
-        await axios({
-          url: `/v3/unlike/${nftId}`,
-          method: "POST",
-        });
+          await axios({
+            url: `/v3/unlike/${nftId}`,
+            method: "POST",
+            data: {},
+          });
 
-        mutate(queryKey);
+          mutate(queryKey);
+          return true;
+        } catch (error) {
+          mutate(queryKey);
+          return false;
+        }
       }
     },
     [data]
@@ -405,6 +429,10 @@ export const useMyInfo = () => {
     [data]
   );
 
+  const refetchMyInfo = useCallback(() => {
+    mutate(queryKey);
+  }, [mutate]);
+
   return {
     data,
     loading: !data,
@@ -415,5 +443,6 @@ export const useMyInfo = () => {
     like,
     unlike,
     isLiked,
+    refetchMyInfo,
   };
 };

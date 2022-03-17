@@ -1,13 +1,15 @@
-import { View } from "design-system/view";
+import { MutableRefObject, ComponentType } from "react";
+import { Platform } from "react-native";
+
+import { useIsDarkMode } from "design-system/hooks";
+import { useId } from "design-system/input";
+import { Label } from "design-system/label";
+import { Select } from "design-system/select";
+import { SelectProps } from "design-system/select/types";
+import { tw } from "design-system/tailwind";
 import { Text } from "design-system/text";
 import { TextInput, TextInputProps } from "design-system/text-input";
-import { Label } from "design-system/label";
-import { useId } from "design-system/input";
-import { Platform } from "react-native";
-import { useIsDarkMode } from "design-system/hooks";
-import { tw } from "design-system/tailwind";
-import { SelectProps } from "design-system/select/types";
-import { Select } from "design-system/select";
+import { View } from "design-system/view";
 
 type FieldsetProps = {
   errorText?: string;
@@ -17,6 +19,9 @@ type FieldsetProps = {
   tw?: string;
   select?: SelectProps;
   selectOnly?: boolean;
+  leftElement?: React.ReactNode;
+  Component?: ComponentType;
+  componentRef?: MutableRefObject<ComponentType | undefined>;
 } & TextInputProps;
 
 export function Fieldset(props: FieldsetProps) {
@@ -28,7 +33,9 @@ export function Fieldset(props: FieldsetProps) {
     disabled,
     select,
     tw: twProp = "",
+    leftElement,
     selectOnly,
+    Component = TextInput,
     ...textInputProps
   } = props;
   let style = "bg-gray-100 dark:bg-gray-900";
@@ -46,9 +53,10 @@ export function Fieldset(props: FieldsetProps) {
         {label}
       </Label>
       <View tw="mt-4 flex-row items-center">
+        {leftElement}
         {!selectOnly ? (
-          <TextInput
-            tw="flex-1 text-black dark:text-gray-300 focus:outline-none focus-visible:ring-1"
+          <Component
+            tw="flex-1 text-black dark:text-white focus:outline-none focus-visible:ring-1"
             {...textInputProps}
             style={{
               fontSize: 16,

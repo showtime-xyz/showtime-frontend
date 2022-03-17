@@ -1,23 +1,22 @@
 import { useState, useEffect, useContext } from "react";
-import Head from "next/head";
-import Layout from "@/components/layout";
-import backend from "@/lib/backend";
-import AppContext from "@/context/app-context";
-import mixpanel from "mixpanel-browser";
+
 //import { GridTab, GridTabs } from '@/components/GridTabs'
 import CappedWidth from "@/components/CappedWidth";
+import FollowButton from "@/components/FollowButton";
+import MiniFollowButton from "@/components/MiniFollowButton";
+import Layout from "@/components/layout";
+import AppContext from "@/context/app-context";
+import axios from "@/lib/axios";
+import backend from "@/lib/backend";
+import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
+import { formatAddressShort } from "@/lib/utilities";
 //import TokenGridV4 from '@/components/TokenGridV4'
 //import TrendingCreators from '@/components/TrendingCreators'
 import { CalendarIcon } from "@heroicons/react/solid";
-import Link from "next/link";
-import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
-import { formatAddressShort } from "@/lib/utilities";
-import MiniFollowButton from "@/components/MiniFollowButton";
-
-import FollowButton from "@/components/FollowButton";
-
 import { PlusIcon } from "@heroicons/react/solid";
-import axios from "@/lib/axios";
+import mixpanel from "mixpanel-browser";
+import Head from "next/head";
+import Link from "next/link";
 
 // how many leaders to show on first load
 //const LEADERBOARD_LIMIT = 100

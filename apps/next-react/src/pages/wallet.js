@@ -1,11 +1,12 @@
+import { Fragment, useContext, useEffect, useState } from "react";
+
+import ModalAddWallet from "@/components/ModalAddWallet";
 import Layout from "@/components/layout";
 import AppContext from "@/context/app-context";
-import { classNames, formatAddressShort } from "@/lib/utilities";
-import { Fragment, useContext, useEffect, useState } from "react";
-import { DAppClient, PermissionScope, SigningType } from "@airgap/beacon-sdk";
-import ModalAddWallet from "@/components/ModalAddWallet";
 import axios from "@/lib/axios";
 import backend from "@/lib/backend";
+import { classNames, formatAddressShort } from "@/lib/utilities";
+import { DAppClient, PermissionScope, SigningType } from "@airgap/beacon-sdk";
 import { Menu, Transition } from "@headlessui/react";
 import { useTheme } from "next-themes";
 

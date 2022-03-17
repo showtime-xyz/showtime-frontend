@@ -1,4 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { StyleSheet } from "react-native";
+
+import { TAB_LIST_HEIGHT } from "app/lib/constants";
 import { yup } from "app/lib/yup";
 
 import {
@@ -10,31 +13,45 @@ import {
   Button,
   ButtonLabel,
 } from "design-system";
-import { useLogin } from "./useLogin";
-import { LoginInputField } from "./login-input-field";
-import { LoginHeader } from "./login-header";
+
 import { LoginContainer } from "./login-container";
-import { StyleSheet } from "react-native";
+import { LoginHeader } from "./login-header";
+import { LoginInputField } from "./login-input-field";
+import { PhoneNumberPicker } from "./phone-number-picker";
+import { useLogin } from "./use-login";
 
-const TAB_LIST_HEIGHT = 56;
+interface LoginProps {
+  onLogin?: () => void;
+}
 
-export function Login() {
+export function Login({ onLogin }: LoginProps) {
   //#region state
   const [selected, setSelected] = useState(0);
   //#endregion
 
   //#region hooks
   const {
-    loading,
-    signaturePending,
+    walletStatus,
     walletName,
+    loading,
     handleSubmitEmail,
     handleSubmitPhoneNumber,
     handleSubmitWallet,
-  } = useLogin();
+  } = useLogin(onLogin);
   //#endregion
 
   //#region variables
+  const isConnectingToWallet = useMemo(
+    () =>
+      [
+        "CONNECTING_TO_WALLET",
+        "CONNECTED_TO_WALLET",
+        "FETCHING_NONCE",
+        "FETCHED_NONCE",
+        "SIGNING_PERSONAL_MESSAGE",
+      ].includes(walletStatus),
+    [walletStatus]
+  );
   const phoneNumberValidationSchema = useMemo(
     () =>
       yup
@@ -61,17 +78,16 @@ export function Login() {
     []
   );
   const tabsData = useMemo(
-    () => [{ name: "Sign in with SMS" }, { name: "Other options" }],
+    () => [{ name: "Phone number" }, { name: "Wallet or email" }],
     []
   );
   //#endregion
-
   return (
-    <LoginContainer loading={loading}>
-      {signaturePending ? (
+    <LoginContainer loading={loading && !isConnectingToWallet}>
+      {isConnectingToWallet ? (
         <View tw="py-40">
           <Text tw="text-center dark:text-gray-400">
-            {walletName !== ""
+            {walletName
               ? `Pushed a request to ${walletName}... Please check your wallet.`
               : `Pushed a request to your wallet...`}
           </Text>
@@ -106,15 +122,8 @@ export function Login() {
               </View>
               <Tabs.Pager>
                 <Tabs.View style={styles.tabListItemContainer}>
-                  <LoginInputField
-                    key="login-phone-number-field"
-                    validationSchema={phoneNumberValidationSchema}
-                    label="Phone number"
-                    placeholder="Enter your phone number"
-                    keyboardType="phone-pad"
-                    textContentType="telephoneNumber"
-                    signInButtonLabel="Send"
-                    onSubmit={handleSubmitPhoneNumber}
+                  <PhoneNumberPicker
+                    handleSubmitPhoneNumber={handleSubmitPhoneNumber}
                   />
                 </Tabs.View>
 

@@ -1,12 +1,23 @@
-import { useRef, useMemo, useCallback, useEffect } from "react";
+import {
+  useRef,
+  useMemo,
+  useCallback,
+  useEffect,
+  ComponentProps,
+  MutableRefObject,
+  ComponentType,
+} from "react";
+
 import {
   BottomSheetModal,
   BottomSheetBackdrop,
   BottomSheetHandleProps,
+  BottomSheetTextInput as BottomSheetInput,
 } from "@gorhom/bottom-sheet";
 
+import { tw as tailwind } from "design-system/tailwind";
+import type { TW } from "design-system/tailwind/types";
 import { View } from "design-system/view";
-import { tw } from "design-system/tailwind";
 
 type BottomSheetProps = {
   children?: React.ReactElement;
@@ -14,10 +25,18 @@ type BottomSheetProps = {
   visible?: boolean;
   onDismiss?: () => void;
   snapPoints?: string[];
+  bodyContentTW?: TW;
 };
 
 export const BottomSheet = (props: BottomSheetProps) => {
-  const { children, visible, handleComponent, onDismiss, snapPoints } = props;
+  const {
+    children,
+    visible,
+    handleComponent,
+    onDismiss,
+    snapPoints,
+    bodyContentTW = "",
+  } = props;
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
@@ -49,11 +68,33 @@ export const BottomSheet = (props: BottomSheetProps) => {
       onDismiss={onDismiss}
       ref={bottomSheetModalRef}
       index={0}
-      handleIndicatorStyle={tw.style(`bg-gray-300 dark:bg-gray-700 w-12 h-1`)}
-      backgroundStyle={tw.style(`bg-white dark:bg-black rounded-t-[32px]`)}
+      handleIndicatorStyle={tailwind.style(
+        `bg-gray-300 dark:bg-gray-700 w-12 h-1`
+      )}
+      backgroundStyle={tailwind.style(
+        `bg-white dark:bg-black rounded-t-[32px]`
+      )}
       snapPoints={snapPoints ?? defaultSnapPoints}
     >
-      <View tw="flex-1 pt-6 px-4">{children}</View>
+      <View tw={["flex-1 pt-6 px-4", bodyContentTW]}>{children}</View>
     </BottomSheetModal>
+  );
+};
+
+export type TextInputProps = {
+  tw?: TW;
+  componentRef?: MutableRefObject<ComponentType | undefined>;
+} & ComponentProps<typeof BottomSheetInput>;
+
+export const BottomSheetTextInput = (props: TextInputProps) => {
+  const { tw, style, componentRef, ...textInputProps } = props;
+  const styles = { ...tailwind.style(tw), ...(style as {}) };
+  return (
+    <BottomSheetInput
+      style={styles}
+      //@ts-ignore
+      ref={componentRef}
+      {...textInputProps}
+    />
   );
 };

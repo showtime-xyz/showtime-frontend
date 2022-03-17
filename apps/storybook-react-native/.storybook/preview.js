@@ -1,12 +1,13 @@
-import { DripsyProvider } from "dripsy";
-import { theme } from "design-system/theme";
-import { useFonts } from "expo-font";
-import { useDeviceContext } from "twrnc";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { ToastProvider } from "design-system/toast";
+import { DripsyProvider } from "dripsy";
+import { useFonts } from "expo-font";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useDeviceContext } from "twrnc";
 
 import { tw } from "design-system/tailwind";
+import { theme } from "design-system/theme";
+import { ToastProvider } from "design-system/toast";
 import { View } from "design-system/view";
 
 const FontsLoader = ({ children }) => {
@@ -16,6 +17,8 @@ const FontsLoader = ({ children }) => {
     Inter: require("../assets/fonts/Inter-Regular.otf"),
     "Inter-Regular": require("../assets/fonts/Inter-Regular.otf"),
     "Inter-SemiBold": require("../assets/fonts/Inter-SemiBold.otf"),
+    "SpaceGrotesk-Regular": require("../assets/fonts/SpaceGrotesk-Regular.otf"),
+    "SpaceGrotesk-Bold": require("../assets/fonts/SpaceGrotesk-Bold.otf"),
   });
 
   if (!fontsLoaded) return null;
@@ -35,21 +38,23 @@ const TailwindDeviceContextProvider = ({ children }) => {
 
 export const decorators = [
   (Story) => (
-    <TailwindDeviceContextProvider>
-      <DripsyProvider theme={theme}>
-        <BottomSheetModalProvider>
-          <SafeAreaProvider>
-            <ToastProvider>
-              <MainAxisCenter>
-                <FontsLoader>
-                  <Story />
-                </FontsLoader>
-              </MainAxisCenter>
-            </ToastProvider>
-          </SafeAreaProvider>
-        </BottomSheetModalProvider>
-      </DripsyProvider>
-    </TailwindDeviceContextProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <TailwindDeviceContextProvider>
+        <DripsyProvider theme={theme}>
+          <BottomSheetModalProvider>
+            <SafeAreaProvider>
+              <ToastProvider>
+                <MainAxisCenter>
+                  <FontsLoader>
+                    <Story />
+                  </FontsLoader>
+                </MainAxisCenter>
+              </ToastProvider>
+            </SafeAreaProvider>
+          </BottomSheetModalProvider>
+        </DripsyProvider>
+      </TailwindDeviceContextProvider>
+    </GestureHandlerRootView>
   ),
 ];
 

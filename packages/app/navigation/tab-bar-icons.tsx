@@ -1,5 +1,12 @@
-import { View, Pressable, Button } from "design-system";
-import { tw } from "design-system/tailwind";
+import { Suspense } from "react";
+
+import { ErrorBoundary } from "app/components/error-boundary";
+import { useUser } from "app/hooks/use-user";
+import { DEFAULT_PROFILE_PIC } from "app/lib/constants";
+import { formatAddressShort } from "app/lib/utilities";
+import { useRouter } from "app/navigation/use-router";
+
+import { View, Pressable, Image } from "design-system";
 import {
   Home,
   HomeFilled,
@@ -11,11 +18,14 @@ import {
   BellFilled,
   Plus,
 } from "design-system/icon";
-import { useRouter } from "app/navigation/use-router";
+import { tw } from "design-system/tailwind";
+
+import { useNotifications } from "../hooks/use-notifications";
 
 function TabBarIcon({ tab, children }) {
   const router = useRouter();
 
+  return children;
   return (
     <Pressable
       tw={[
@@ -136,6 +146,54 @@ export const NotificationsTabBarIcon = ({ color, focused }) => {
       ) : (
         <Bell style={tw.style("z-1")} width={24} height={24} color={color} />
       )}
+      <ErrorBoundary>
+        <Suspense fallback={null}>
+          <UnreadNotificationIndicator />
+        </Suspense>
+      </ErrorBoundary>
     </TabBarIcon>
   );
+};
+
+const UnreadNotificationIndicator = () => {
+  const { hasUnreadNotification } = useNotifications();
+
+  return hasUnreadNotification ? (
+    <View tw="w-2 h-2 bg-violet-500 absolute rounded-full bottom-2" />
+  ) : null;
+};
+
+export const ProfileTabBarIcon = () => {
+  const { user } = useUser();
+
+  return (
+    <View tw="h-8 w-8 items-center justify-center rounded-full">
+      <Image
+        tw="h-8 w-8 rounded-full"
+        source={{
+          uri: getSmallImageUrl(
+            user?.data.profile?.img_url || DEFAULT_PROFILE_PIC
+          ),
+        }}
+        alt={
+          user?.data?.profile?.name ||
+          user?.data?.profile?.username ||
+          user?.data?.profile?.wallet_addresses_excluding_email_v2?.[0]
+            ?.ens_domain ||
+          formatAddressShort(
+            user?.data?.profile?.wallet_addresses_excluding_email_v2?.[0]
+              ?.address
+          ) ||
+          "Profile"
+        }
+      />
+    </View>
+  );
+};
+
+const getSmallImageUrl = (imgUrl: string) => {
+  if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
+    imgUrl = imgUrl.split("=")[0] + "=s64";
+  }
+  return imgUrl;
 };

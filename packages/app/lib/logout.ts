@@ -1,16 +1,16 @@
 import { MMKV } from "react-native-mmkv";
 
+const logoutStorage = new MMKV();
+const LOGOUT_STORAGE_KEY = "logout";
+
 export function setLogout(logout: string) {
-  const storage = new MMKV();
-  storage.set("logout", logout);
+  logoutStorage.set(LOGOUT_STORAGE_KEY, logout);
 }
 
 export function getLogout() {
-  const storage = new MMKV();
-  return storage.getString("logout");
+  return logoutStorage.getString(LOGOUT_STORAGE_KEY);
 }
 
 export function deleteLogout() {
-  const storage = new MMKV();
-  storage.delete("logout");
+  logoutStorage.delete(LOGOUT_STORAGE_KEY);
 }

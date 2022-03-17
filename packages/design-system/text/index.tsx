@@ -1,11 +1,13 @@
-import { Text as DripsyText } from "./text";
-import { Theme } from "dripsy";
 import { ComponentProps, createContext, forwardRef, useContext } from "react";
 import type { Text as TextType } from "react-native";
 
+import { Theme } from "dripsy";
+
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
+
 import { ViewProps } from "../view";
+import { Text as DripsyText } from "./text";
 
 type Variant = keyof Theme["text"];
 
@@ -27,6 +29,7 @@ export type Props = {
   | "accessibilityRole"
   | "numberOfLines"
   | "ellipsizeMode"
+  | "onPress"
 >;
 
 /**
@@ -54,6 +57,7 @@ export const Text = forwardRef<TextType, Props>(
       numberOfLines,
       ellipsizeMode,
       pointerEvents,
+      onPress,
     },
     ref
   ) => {
@@ -77,6 +81,7 @@ export const Text = forwardRef<TextType, Props>(
         accessibilityRole={accessibilityRole}
         numberOfLines={numberOfLines}
         ellipsizeMode={ellipsizeMode}
+        onPress={onPress}
         // @ts-ignore - this prop will only work on web. Refer text.web.tsx
         htmlFor={htmlFor}
         pointerEvents={pointerEvents}

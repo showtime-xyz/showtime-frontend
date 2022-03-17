@@ -1,14 +1,16 @@
 import { useState, useContext, useEffect } from "react";
-import Link from "next/link";
-import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
-import AppContext from "@/context/app-context";
-import ModalTokenDetail from "./ModalTokenDetail";
-import useKeyPress from "@/hooks/useKeyPress";
-import { formatAddressShort } from "@/lib/utilities";
+
 import MiniFollowButton from "@/components/MiniFollowButton";
-import mixpanel from "mixpanel-browser";
-import ActivityImages from "./ActivityImages";
+import AppContext from "@/context/app-context";
+import useKeyPress from "@/hooks/useKeyPress";
+import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
+import { formatAddressShort } from "@/lib/utilities";
 import { ViewGridIcon } from "@heroicons/react/solid";
+import mixpanel from "mixpanel-browser";
+import Link from "next/link";
+
+import ActivityImages from "./ActivityImages";
+import ModalTokenDetail from "./ModalTokenDetail";
 
 const getProfileImageUrl = (img_url) => {
   if (img_url && img_url.includes("https://lh3.googleusercontent.com")) {

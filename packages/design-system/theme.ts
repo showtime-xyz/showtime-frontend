@@ -1,5 +1,6 @@
-import { makeTheme } from "dripsy";
 import { Platform } from "react-native";
+
+import { makeTheme } from "dripsy";
 
 import { fontFamily, textSizes } from "design-system/typography";
 
@@ -36,6 +37,10 @@ const theme = makeTheme({
       // 800: webFont('Inter-ExtraBold'),
       // 900: webFont('Inter-Black'),
     },
+    SpaceGrotesk: {
+      default: webFont("SpaceGrotesk-Regular"),
+      bold: webFont("SpaceGrotesk-Bold"),
+    },
   },
   text: {
     "text-xs": {
@@ -60,7 +65,8 @@ const theme = makeTheme({
       ...textSizes["text-base"],
     },
     "text-lg": {
-      fontWeight: "default",
+      fontFamily: "SpaceGrotesk",
+      fontWeight: "bold",
       ...textSizes["text-lg"],
     },
     "text-xl": {
@@ -68,7 +74,8 @@ const theme = makeTheme({
       ...textSizes["text-xl"],
     },
     "text-2xl": {
-      fontWeight: "default",
+      fontFamily: "SpaceGrotesk",
+      fontWeight: "bold",
       ...textSizes["text-2xl"],
     },
     "text-3xl": {

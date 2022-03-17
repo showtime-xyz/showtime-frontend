@@ -1,10 +1,11 @@
 import { Platform } from "react-native";
+
 import dynamic from "next/dynamic";
 
 import createStackNavigator from "app/navigation/create-stack-navigator";
-import { CameraScreen } from "app/screens/camera";
+import { screenOptions } from "app/navigation/navigator-screen-options";
 import { CameraStackParams } from "app/navigation/types";
-import { navigatorScreenOptions } from "app/navigation/navigator-screen-options";
+import { CameraScreen } from "app/screens/camera";
 
 const LoginScreen = dynamic<JSX.Element>(() =>
   import("app/screens/login").then((mod) => mod.LoginScreen)
@@ -22,49 +23,13 @@ function CameraNavigator() {
   return (
     <CameraStack.Navigator
       // @ts-ignore
-      screenOptions={navigatorScreenOptions}
+      screenOptions={screenOptions}
     >
-      <CameraStack.Group>
-        <CameraStack.Screen
-          name="camera"
-          component={CameraScreen}
-          options={{
-            title: "Camera",
-            headerTitle: "Camera",
-            headerShown: false,
-          }}
-        />
-      </CameraStack.Group>
-      <CameraStack.Group
-        screenOptions={{
-          headerShown: false,
-          animation: Platform.OS === "ios" ? "default" : "fade",
-          presentation:
-            Platform.OS === "ios" ? "formSheet" : "transparentModal",
-        }}
-      >
-        <CameraStack.Screen
-          name="login"
-          component={LoginScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <CameraStack.Screen
-          name="nft"
-          component={NftScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <CameraStack.Screen
-          name="create"
-          component={CreateScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-      </CameraStack.Group>
+      <CameraStack.Screen
+        name="camera"
+        component={CameraScreen}
+        options={{ headerShown: false }}
+      />
     </CameraStack.Navigator>
   );
 }

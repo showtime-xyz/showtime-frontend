@@ -1,5 +1,8 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
+
+import type { KeyedMutator } from "swr";
 import useSWRInfinite from "swr/infinite";
+
 import { axios } from "app/lib/axios";
 
 export const fetcher = (url) => {
@@ -15,10 +18,11 @@ type UseInfiniteListQueryReturn<T> = {
   fetchMore: () => void;
   refresh: () => void;
   retry: () => void;
+  mutate: KeyedMutator<T[]>;
 };
 
 export const useInfiniteListQuerySWR = <T>(
-  urlFunction: ((page) => string) | null
+  urlFunction: (page: number) => string | null
 ): UseInfiniteListQueryReturn<T> => {
   // Todo:: on Refresh, swr will refetch all the page APIs. This may appear weird at first, but I guess could be better for UX
   // We don't want to show loading indicator till all of the requests succeed, so we'll add our refreshing state
@@ -62,11 +66,12 @@ export const useInfiniteListQuerySWR = <T>(
       if (!isLoadingMore) {
         setSize((size) => size + 1);
       }
-    }, [isLoadingMore]),
+    }, [isLoadingMore, setSize]),
     retry: mutate,
     isLoading: isLoadingInitialData,
     isLoadingMore,
     isRefreshing,
+    mutate,
   };
 };
 

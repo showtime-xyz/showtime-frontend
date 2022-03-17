@@ -4,24 +4,27 @@ import {
   ImageProps as ReactNativeImageProps,
   Platform,
 } from "react-native";
+
 import { Blurhash } from "react-native-blurhash";
 import FastImage from "react-native-fast-image";
 
 import { tw as tailwind } from "design-system/tailwind";
 import type { TW } from "design-system/tailwind/types";
-//import { View } from "design-system";
 
-function Img({ source, width, height, ...props }: ReactNativeImageProps) {
+function Img({ source, height, width, ...props }: ReactNativeImageProps) {
   return (
+    // @ts-ignore
     <FastImage
-      // @ts-ignore
       source={
+        // @ts-ignore
         source.uri
-          ? { uri: source.uri, cache: FastImage.cacheControl.immutable }
+          ? // @ts-ignore
+            { uri: source.uri, cache: FastImage.cacheControl.immutable }
           : source
       }
-      width={width}
-      height={height}
+      // width={width}
+      // height={height}
+      style={[props.style, { height, width }]}
       {...props}
     />
   );

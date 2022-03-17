@@ -1,24 +1,27 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Platform, FlatList, Keyboard } from "react-native";
+
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, Text } from "design-system";
+import { useComments } from "app/hooks/api/use-comments";
+import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
+import { usePanResponder } from "app/hooks/use-pan-responder";
+
+import { useIsDarkMode } from "design-system/hooks";
 import {
   MessageBox,
   SCROLL_HEIGHT,
   PADDING_HEIGHT,
 } from "design-system/messages";
-import { useComments } from "app/hooks/api-hooks";
-import { usePanResponder } from "app/hooks/use-pan-responder";
-import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
-import type { NFT } from "app/types";
-import { useIsDarkMode } from "design-system/hooks";
+import { MessageRow } from "design-system/messages/message-row";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 type Props = {
-  nft?: NFT;
+  nftId: number;
 };
 
-function Comments({ nft }: Props) {
+function Comments({ nftId }: Props) {
   const insets = useSafeAreaInsets();
   const isDark = useIsDarkMode();
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
@@ -74,8 +77,10 @@ function Comments({ nft }: Props) {
 
   const { data, isLoadingMore, isLoading, isRefreshing, refresh, fetchMore } =
     useComments({
-      nftId: nft?.nft_id,
+      nftId,
     });
+
+  console.log("Comments", data);
 
   const keyExtractor = useCallback((item) => {
     return item.comment_id;
@@ -83,7 +88,7 @@ function Comments({ nft }: Props) {
 
   const renderItem = useCallback(
     ({ item }) => <Text tw="text-black dark:text-white">{item.text}</Text>,
-    // <Message message={item} />,
+    // <MessageRow />,
     []
   );
 

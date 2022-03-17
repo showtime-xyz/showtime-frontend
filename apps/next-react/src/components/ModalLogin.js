@@ -1,18 +1,20 @@
 import { useContext, useState } from "react";
-import mixpanel from "mixpanel-browser";
-import { Magic } from "magic-sdk";
-import backend from "@/lib/backend";
+
 import AppContext from "@/context/app-context";
-import CloseButton from "./CloseButton";
-import { ethers } from "ethers";
-import ScrollableModal from "./ScrollableModal";
-import axios from "@/lib/axios";
-import { useTheme } from "next-themes";
 import useAuth from "@/hooks/useAuth";
-import getWeb3Modal from "@/lib/web3Modal";
-import { personalSignMessage } from "@/lib/utilities";
+import axios from "@/lib/axios";
+import backend from "@/lib/backend";
 import ClientAccessToken from "@/lib/client-access-token";
+import { personalSignMessage } from "@/lib/utilities";
+import getWeb3Modal from "@/lib/web3Modal";
 import { captureException } from "@sentry/nextjs";
+import { ethers } from "ethers";
+import { Magic } from "magic-sdk";
+import mixpanel from "mixpanel-browser";
+import { useTheme } from "next-themes";
+
+import CloseButton from "./CloseButton";
+import ScrollableModal from "./ScrollableModal";
 
 export default function Modal({ isOpen }) {
   const context = useContext(AppContext);
@@ -29,7 +31,24 @@ export default function Modal({ isOpen }) {
       const email = elements.email.value;
 
       // Magic Link authenticates through email
-      const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY);
+      const isMumbai = process.env.NEXT_PUBLIC_CHAIN_ID === "mumbai";
+
+      // Default to polygon chain
+      const customNodeOptions = {
+        rpcUrl: "https://rpc-mainnet.maticvigil.com/",
+        chainId: 137,
+      };
+
+      if (isMumbai) {
+        console.log("Magic network is connecting to Mumbai testnet");
+        customNodeOptions.rpcUrl =
+          "https://polygon-mumbai.g.alchemy.com/v2/kh3WGQQaRugQsUXXLN8LkOBdIQzh86yL";
+        customNodeOptions.chainId = 80001;
+      }
+
+      const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUB_KEY, {
+        network: customNodeOptions,
+      });
       const did = await magic.auth.loginWithMagicLink({ email });
       const web3 = new ethers.providers.Web3Provider(magic.rpcProvider);
       context.setWeb3(web3);

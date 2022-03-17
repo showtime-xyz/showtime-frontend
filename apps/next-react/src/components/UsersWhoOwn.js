@@ -1,6 +1,8 @@
 import { useState } from "react";
+
 import { DEFAULT_PROFILE_PIC } from "@/lib/constants";
 import Link from "next/link";
+
 import ModalUserList from "./ModalUserList";
 
 const UserImagesList = ({ users }) => {

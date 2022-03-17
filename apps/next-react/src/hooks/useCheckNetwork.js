@@ -1,4 +1,5 @@
 import { useContext, useEffect } from "react";
+
 import AppContext from "@/context/app-context";
 
 export default function useCheckNetwork() {

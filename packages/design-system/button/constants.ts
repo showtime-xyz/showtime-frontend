@@ -1,5 +1,5 @@
-import { colors } from "design-system/tailwind/colors";
 import { tw as tailwind } from "design-system/tailwind";
+import { colors } from "design-system/tailwind/colors";
 
 const CONTAINER_TW =
   "rounded-full flex-row justify-center items-center " +
@@ -65,7 +65,10 @@ const ICON_COLOR_TW_MAPPER = {
   secondary: [colors.gray[900], "white"],
   tertiary: [colors.gray[900], "white"],
   danger: ["white", "white"],
+  text: [colors.gray[900], "white"],
 };
+
+const ACCENT_COLOR = ["white", "black"];
 
 export {
   CONTAINER_TW,
@@ -77,4 +80,5 @@ export {
   LABEL_WEIGHT_TW,
   ICON_SIZE_TW,
   ICON_COLOR_TW_MAPPER,
+  ACCENT_COLOR,
 };

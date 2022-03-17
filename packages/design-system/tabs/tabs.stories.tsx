@@ -1,11 +1,12 @@
 import React from "react";
-import { Meta } from "@storybook/react";
 import { Dimensions, View, Image, StatusBar } from "react-native";
+
+import { Meta } from "@storybook/react";
+
+import { TAB_LIST_HEIGHT } from "app/lib/constants";
+
 import { Tabs } from "./tablib";
 import { SelectedTabIndicator, TabItem } from "./tablib/components";
-
-// optional but passing tabListHeight will improve start time
-const TAB_LIST_HEIGHT = 55;
 
 const Header = () => {
   const windowWidth = Dimensions.get("window").width;

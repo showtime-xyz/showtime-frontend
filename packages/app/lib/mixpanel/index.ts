@@ -1,10 +1,10 @@
 // Modified version of https://github.com/bothrs/expo-mixpanel-analytics
-
 import { Platform, Dimensions } from "react-native";
-import { MMKV } from "react-native-mmkv";
+
+import { Buffer } from "buffer";
 import Constants from "expo-constants";
 import * as Device from "expo-device";
-import { Buffer } from "buffer";
+import { MMKV } from "react-native-mmkv";
 
 import { getInstallationId } from "app/lib/get-installation-id";
 
@@ -16,14 +16,14 @@ export class ExpoMixpanelAnalytics {
   storage: MMKV;
   storageKey: string;
   userId?: string | null;
-  clientId?: string;
+  clientId?: string | null;
   platform?: string;
-  model?: string;
+  model?: string | null;
   queue: any[] = [];
   constants: { [key: string]: string | number | void } = {};
   superProps: any = {};
 
-  constructor(token, storageKey = "mixpanel:super:props") {
+  constructor(token = "", storageKey = "mixpanel:super:props") {
     this.storage = new MMKV();
     this.storageKey = storageKey;
 
@@ -91,7 +91,7 @@ export class ExpoMixpanelAnalytics {
     this._flush();
   }
 
-  identify(userId?: string) {
+  identify(userId?: string | null) {
     this.userId = userId;
   }
 

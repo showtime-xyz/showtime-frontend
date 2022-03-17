@@ -6,14 +6,18 @@ import {
   TextInputKeyPressEventData,
   TextInputChangeEventData,
 } from "react-native";
+
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, TextInput, Button } from "design-system";
-import { tw as tailwind } from "design-system/tailwind";
-import { Send } from "design-system/icon";
-import { useKeyboardDimensions } from "app/hooks/use-keyboard-dimensions";
-import { useIsDarkMode } from "design-system/hooks";
 import { useIsMobileWeb } from "app/hooks/use-is-mobile-web";
+import { useKeyboardDimensions } from "app/hooks/use-keyboard-dimensions";
+
+import { Button } from "design-system/button";
+import { useIsDarkMode } from "design-system/hooks";
+import { Send } from "design-system/icon";
+import { tw as tailwind } from "design-system/tailwind";
+import { TextInput } from "design-system/text-input";
+import { View } from "design-system/view";
 
 export const SCROLL_HEIGHT = 48;
 export const PADDING_HEIGHT = 32;
