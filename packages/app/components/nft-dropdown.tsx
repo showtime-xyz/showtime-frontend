@@ -6,6 +6,7 @@ import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
+import { useFeed } from "app/hooks/use-feed";
 import { useReport } from "app/hooks/use-report";
 import { useUser } from "app/hooks/use-user";
 import { SHOWTIME_CONTRACTS } from "app/lib/constants";
@@ -42,6 +43,7 @@ function NFTDropdown({ nft }: Props) {
   const { unfollow } = useMyInfo();
   const { block } = useBlock();
   const router = useRouter();
+  const { refresh } = useFeed();
 
   useEffect(() => {
     if (nft?.owner_address) {
@@ -108,11 +110,15 @@ function NFTDropdown({ nft }: Props) {
           </DropdownMenuItemTitle>
         </DropdownMenuItem> */}
 
-        {isAuthenticated && (
+        {!isOwner && (
           <DropdownMenuItem
             onSelect={async () => {
-              await unfollow(nft?.owner_id);
-              mutate(null);
+              if (isAuthenticated) {
+                await unfollow(nft?.owner_id);
+                refresh();
+              } else {
+                router.push("/login");
+              }
             }}
             key="unfollow"
             tw="h-8 rounded-sm overflow-hidden flex-1 p-2"
@@ -123,16 +129,14 @@ function NFTDropdown({ nft }: Props) {
           </DropdownMenuItem>
         )}
 
-        {isAuthenticated && (
-          <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
-        )}
+        <DropdownMenuSeparator tw="h-[1px] m-1 bg-gray-200 dark:bg-gray-700" />
 
         {!isOwner && (
           <DropdownMenuItem
             onSelect={async () => {
               if (isAuthenticated) {
                 await block(nft?.owner_id);
-                mutate(null);
+                refresh();
               } else {
                 router.push("/login");
               }
